@@ -3,16 +3,17 @@
 @@= skipped -0, +0 lines =@@
  contextuallyTypedIifeStrict.ts(14,10): error TS18048: 'j' is possibly 'undefined'.
 -contextuallyTypedIifeStrict.ts(15,10): error TS18048: 'k' is possibly 'undefined'.
-+contextuallyTypedIifeStrict.ts(14,10): error TS2365: Operator '+' cannot be applied to types 'number | undefined' and 'number'.
  contextuallyTypedIifeStrict.ts(16,17): error TS18048: 'o' is possibly 'undefined'.
  
  
-@@= skipped -19, +19 lines =@@
-     ((j?) => j + 1)(12);
+-==== contextuallyTypedIifeStrict.ts (3 errors) ====
++==== contextuallyTypedIifeStrict.ts (2 errors) ====
+     // arrow
+     (jake => { })("build");
+     // function expression
+@@= skipped -20, +19 lines =@@
               ~
  !!! error TS18048: 'j' is possibly 'undefined'.
-+             ~~~~~
-+!!! error TS2365: Operator '+' cannot be applied to types 'number | undefined' and 'number'.
      ((k?) => k + 1)();
 -             ~
 -!!! error TS18048: 'k' is possibly 'undefined'.

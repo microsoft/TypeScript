@@ -17,12 +17,14 @@
  
      d.toString(); // error, object | null
 ->d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
  } else {
      d.toString(); // error, undefined
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  
  } else {
      d.toString(); // object
@@ -39,22 +41,26 @@
  } else {
      d.toString(); // error, object | undefined
 ->d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  }
  
  if (typeof d === 'undefined') {
-@@= skipped -13, +11 lines =@@
+@@= skipped -13, +13 lines =@@
  
  } else {
      d.toString(); // error, object | null
 ->d.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  }
  
  interface Proxy<T extends object> {}
-@@= skipped -25, +23 lines =@@
+@@= skipped -25, +25 lines =@@
  >Blah : Symbol(Blah, Decl(nonPrimitiveStrictNull.ts, 52, 24))
  
    foo: number;

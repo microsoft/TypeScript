@@ -65,12 +65,14 @@
          doSomething(() => x.length);
  >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(implicitConstParameters.ts, 41, 12))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
      }
      x = "abc";  // causes x to be considered non-const
  >x : Symbol(x, Decl(implicitConstParameters.ts, 41, 12))
-@@= skipped -22, +20 lines =@@
+@@= skipped -22, +22 lines =@@
  
          doSomething(() => y.length);
  >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))

@@ -113,7 +113,9 @@ function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue
 >name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
 
             defaultValue.name;
+>defaultValue.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
 >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
         }
     }
     else {
@@ -127,7 +129,9 @@ function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue
 >name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
 
             defaultValue.name;
+>defaultValue.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
 >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
         }
     }
 }

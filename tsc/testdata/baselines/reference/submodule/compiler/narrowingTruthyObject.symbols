@@ -10,7 +10,9 @@ function foo(x: unknown, b: boolean) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 
         x.toString();
+>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
     }
     if (typeof x === 'object' && x) {
 >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))

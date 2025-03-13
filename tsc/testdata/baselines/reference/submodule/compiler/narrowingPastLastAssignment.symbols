@@ -375,6 +375,8 @@ function f13() {
 
     return () => {
         foo.toLocaleLowerCase();
+>foo.toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
 >foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
+>toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
     }
 }

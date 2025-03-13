@@ -71,7 +71,9 @@ if (typeof d === 'object') {
 >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
 
     d.toString(); // error, object | null
+>d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 
 } else {
     d.toString(); // error, undefined
@@ -99,7 +101,9 @@ if (d === null) {
 
 } else {
     d.toString(); // error, object | undefined
+>d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 }
 
 if (typeof d === 'undefined') {
@@ -110,7 +114,9 @@ if (typeof d === 'undefined') {
 
 } else {
     d.toString(); // error, object | null
+>d.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >d : Symbol(d, Decl(nonPrimitiveStrictNull.ts, 3, 11))
+>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 }
 
 interface Proxy<T extends object> {}

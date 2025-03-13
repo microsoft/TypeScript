@@ -127,29 +127,32 @@
  >arr : Symbol(arr, Decl(inferTypePredicates.ts, 51, 8))
 ->arr // should error    .filter((obj) => obj && obj.data)    .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 ->arr // should error    .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>arr // should error    .filter((obj) => obj && obj.data)    .map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>arr // should error    .filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >arr : Symbol(arr, Decl(inferTypePredicates.ts, 51, 8))
  
      .filter((obj) => obj && obj.data)
 ->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(inferTypePredicates.ts, 52, 13))
  >obj : Symbol(obj, Decl(inferTypePredicates.ts, 52, 13))
-->obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
- >obj : Symbol(obj, Decl(inferTypePredicates.ts, 52, 13))
-->data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
+ >obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
+@@= skipped -36, +36 lines =@@
+ >data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
  
      .map(obj => JSON.parse(obj.data))  // should error
 ->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(inferTypePredicates.ts, 53, 9))
 ->JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
 +>JSON.parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
  >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
-->obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
 +>parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
+ >obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
  >obj : Symbol(obj, Decl(inferTypePredicates.ts, 53, 9))
-->data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
- 
-   );
+ >data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
+@@= skipped -13, +13 lines =@@
  
  const result2 = myArray
  >result2 : Symbol(result2, Decl(inferTypePredicates.ts, 56, 5))
@@ -226,7 +229,7 @@
  >obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
  >obj : Symbol(obj, Decl(inferTypePredicates.ts, 64, 9))
  >data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
-@@= skipped -130, +122 lines =@@
+@@= skipped -81, +81 lines =@@
  const resultBars: Bar[] = list.filter((value) => 'bar' in value);  // should ok
  >resultBars : Symbol(resultBars, Decl(inferTypePredicates.ts, 76, 5))
  >Bar : Symbol(Bar, Decl(inferTypePredicates.ts, 70, 1))

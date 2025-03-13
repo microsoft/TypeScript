@@ -88,7 +88,9 @@ function Test4(this: { no: number } | undefined) {
 
     let x: typeof this.no = 1;
 >x : Symbol(x, Decl(typeofThis.ts, 31, 7))
+>this.no : Symbol(no, Decl(typeofThis.ts, 30, 22))
 >this : Symbol(this, Decl(typeofThis.ts, 30, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 30, 22))
 }
 
 class Test5 {

@@ -4,14 +4,9 @@
 -controlFlowOptionalChain3.tsx(30,8): error TS18048: 'foo' is possibly 'undefined'.
 +controlFlowOptionalChain3.tsx(5,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
  controlFlowOptionalChain3.tsx(36,31): error TS18048: 'options' is possibly 'undefined'.
-+controlFlowOptionalChain3.tsx(36,39): error TS2339: Property 'b' does not exist on type '{ a?: boolean | undefined; b?: boolean | undefined; } | undefined'.
-+  Property 'b' does not exist on type 'undefined'.
  
  
--==== controlFlowOptionalChain3.tsx (2 errors) ====
-+==== controlFlowOptionalChain3.tsx (3 errors) ====
-     /// <reference path="/.lib/react16.d.ts" />
-     
+@@= skipped -7, +7 lines =@@
      // https://github.com/microsoft/TypeScript/issues/56482
      
      import React from "react";
@@ -20,7 +15,7 @@
      
      interface Foo {
        bar: boolean;
-@@= skipped -32, +36 lines =@@
+@@= skipped -25, +27 lines =@@
          <div>
            {foo?.bar === false && "foo"}
            {foo.bar ? "true" : "false"}
@@ -28,14 +23,4 @@
 -!!! error TS18048: 'foo' is possibly 'undefined'.
          </div>
        );
-     }
-@@= skipped -10, +8 lines =@@
-       if (options?.a === false || options.b) {
-                                   ~~~~~~~
- !!! error TS18048: 'options' is possibly 'undefined'.
-+                                          ~
-+!!! error TS2339: Property 'b' does not exist on type '{ a?: boolean | undefined; b?: boolean | undefined; } | undefined'.
-+!!! error TS2339:   Property 'b' does not exist on type 'undefined'.
-         options;
-       }
      }

@@ -31,8 +31,10 @@
  
      (results &&= (results1 &&= [])).push(100);
 ->(results &&= (results1 &&= [])).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results &&= (results1 &&= [])).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >results : Symbol(results, Decl(logicalAssignment6.ts, 8, 14))
  >results1 : Symbol(results1, Decl(logicalAssignment6.ts, 8, 44))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
  

@@ -31,7 +31,9 @@ function foo3(results: number[] | undefined, results1: number[] | undefined) {
 >results1 : Symbol(results1, Decl(logicalAssignment7.ts, 8, 44))
 
     (results &&= results1 &&= []).push(100);
+>(results &&= results1 &&= []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
 >results : Symbol(results, Decl(logicalAssignment7.ts, 8, 14))
 >results1 : Symbol(results1, Decl(logicalAssignment7.ts, 8, 44))
+>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
 }
 

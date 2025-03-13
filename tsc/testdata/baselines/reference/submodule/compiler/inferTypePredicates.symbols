@@ -168,19 +168,27 @@ const result = myArray
   .map((arr) => arr // should error
 >map : Symbol(map, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(inferTypePredicates.ts, 51, 8))
+>arr // should error    .filter((obj) => obj && obj.data)    .map : Symbol(map, Decl(lib.es5.d.ts, --, --))
+>arr // should error    .filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(inferTypePredicates.ts, 51, 8))
 
     .filter((obj) => obj && obj.data)
+>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 52, 13))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 52, 13))
+>obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 52, 13))
+>data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
 
     .map(obj => JSON.parse(obj.data))  // should error
+>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 53, 9))
 >JSON.parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >parse : Symbol(parse, Decl(lib.es5.d.ts, --, --))
+>obj.data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
 >obj : Symbol(obj, Decl(inferTypePredicates.ts, 53, 9))
+>data : Symbol(data, Decl(inferTypePredicates.ts, 44, 14))
 
   );
 

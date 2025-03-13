@@ -48,8 +48,10 @@
  
        {foo.bar ? "true" : "false"}
 ->foo.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
++>foo.bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
  >foo : Symbol(foo, Decl(controlFlowOptionalChain3.tsx, 25, 16))
 ->bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
++>bar : Symbol(bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
  
      </div>
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
@@ -57,13 +59,3 @@
    );
  }
  
-@@= skipped -28, +22 lines =@@
- >options?.a : Symbol(a, Decl(controlFlowOptionalChain3.tsx, 34, 26))
- >options : Symbol(options, Decl(controlFlowOptionalChain3.tsx, 34, 15))
- >a : Symbol(a, Decl(controlFlowOptionalChain3.tsx, 34, 26))
-->options.b : Symbol(b, Decl(controlFlowOptionalChain3.tsx, 34, 39))
- >options : Symbol(options, Decl(controlFlowOptionalChain3.tsx, 34, 15))
-->b : Symbol(b, Decl(controlFlowOptionalChain3.tsx, 34, 39))
- 
-     options;
- >options : Symbol(options, Decl(controlFlowOptionalChain3.tsx, 34, 15))

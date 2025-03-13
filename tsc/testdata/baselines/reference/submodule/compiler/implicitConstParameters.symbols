@@ -109,7 +109,9 @@ function f5(x: string | undefined) {
 
         doSomething(() => x.length);
 >doSomething : Symbol(doSomething, Decl(implicitConstParameters.ts, 0, 0))
+>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(implicitConstParameters.ts, 41, 12))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
     }
     x = "abc";  // causes x to be considered non-const
 >x : Symbol(x, Decl(implicitConstParameters.ts, 41, 12))

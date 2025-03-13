@@ -73,16 +73,7 @@
      }
  }
  
-@@= skipped -39, +39 lines =@@
- 
-     let x: typeof this.no = 1;
- >x : Symbol(x, Decl(typeofThis.ts, 31, 7))
-->this.no : Symbol(no, Decl(typeofThis.ts, 30, 22))
- >this : Symbol(this, Decl(typeofThis.ts, 30, 15))
-->no : Symbol(no, Decl(typeofThis.ts, 30, 22))
- }
- 
- class Test5 {
+@@= skipped -48, +48 lines =@@
  >Test5 : Symbol(Test5, Decl(typeofThis.ts, 32, 1))
  
      no = 1;
@@ -104,7 +95,7 @@
      }
  }
  
-@@= skipped -57, +55 lines =@@
+@@= skipped -48, +48 lines =@@
  >Test9 : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
  
      no = 0;

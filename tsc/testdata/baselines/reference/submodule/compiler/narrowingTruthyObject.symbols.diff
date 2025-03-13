@@ -5,8 +5,10 @@
  
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
      }
      if (typeof x === 'object' && x) {
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
@@ -32,7 +34,7 @@
      }
      if (b && x && typeof x === 'object') {
  >b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
-@@= skipped -28, +26 lines =@@
+@@= skipped -28, +28 lines =@@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
  
          x.toString();

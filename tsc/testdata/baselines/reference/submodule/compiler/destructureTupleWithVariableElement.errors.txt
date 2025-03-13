@@ -1,15 +1,9 @@
 destructureTupleWithVariableElement.ts(9,1): error TS18048: 's1' is possibly 'undefined'.
-destructureTupleWithVariableElement.ts(9,4): error TS2339: Property 'toUpperCase' does not exist on type 'string | undefined'.
-  Property 'toUpperCase' does not exist on type 'undefined'.
 destructureTupleWithVariableElement.ts(10,1): error TS18048: 's2' is possibly 'undefined'.
-destructureTupleWithVariableElement.ts(10,4): error TS2339: Property 'toUpperCase' does not exist on type 'string | undefined'.
-  Property 'toUpperCase' does not exist on type 'undefined'.
 destructureTupleWithVariableElement.ts(18,1): error TS18048: 's5' is possibly 'undefined'.
-destructureTupleWithVariableElement.ts(18,4): error TS2339: Property 'toUpperCase' does not exist on type 'string | undefined'.
-  Property 'toUpperCase' does not exist on type 'undefined'.
 
 
-==== destructureTupleWithVariableElement.ts (6 errors) ====
+==== destructureTupleWithVariableElement.ts (3 errors) ====
     // repro from #52302
     
     type NonEmptyStringArray = [string, ...Array<string>]
@@ -21,15 +15,9 @@ destructureTupleWithVariableElement.ts(18,4): error TS2339: Property 'toUpperCas
     s1.toUpperCase() 
     ~~
 !!! error TS18048: 's1' is possibly 'undefined'.
-       ~~~~~~~~~~~
-!!! error TS2339: Property 'toUpperCase' does not exist on type 'string | undefined'.
-!!! error TS2339:   Property 'toUpperCase' does not exist on type 'undefined'.
     s2.toUpperCase()
     ~~
 !!! error TS18048: 's2' is possibly 'undefined'.
-       ~~~~~~~~~~~
-!!! error TS2339: Property 'toUpperCase' does not exist on type 'string | undefined'.
-!!! error TS2339:   Property 'toUpperCase' does not exist on type 'undefined'.
     
     declare const strings2: [string, ...Array<string>, string]
     
@@ -40,7 +28,4 @@ destructureTupleWithVariableElement.ts(18,4): error TS2339: Property 'toUpperCas
     s5.toUpperCase()
     ~~
 !!! error TS18048: 's5' is possibly 'undefined'.
-       ~~~~~~~~~~~
-!!! error TS2339: Property 'toUpperCase' does not exist on type 'string | undefined'.
-!!! error TS2339:   Property 'toUpperCase' does not exist on type 'undefined'.
     

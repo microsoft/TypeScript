@@ -45,11 +45,13 @@
    "a" in z ? z.a.toString() : z.b.toString();
  >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
 ->z.a.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>z.a.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >z.a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
  >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))
  >a : Symbol(a, Decl(discriminateWithOptionalProperty4.ts, 3, 17), Decl(discriminateWithOptionalProperty4.ts, 3, 17))
 ->toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
 ->z.b.toString : Symbol(Array.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 +>z.b.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >z.b : Symbol(b, Decl(discriminateWithOptionalProperty4.ts, 3, 25))
  >z : Symbol(z, Decl(discriminateWithOptionalProperty4.ts, 3, 7))

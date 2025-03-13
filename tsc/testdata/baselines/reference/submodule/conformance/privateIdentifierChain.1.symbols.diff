@@ -30,6 +30,7 @@
          this?.a.#b;         // Error
 ->this?.a.#b : Symbol(A.#b, Decl(privateIdentifierChain.1.ts, 1, 9))
 ->this?.a : Symbol(A.a, Decl(privateIdentifierChain.1.ts, 0, 9))
++>this?.a.#b : Symbol(#b, Decl(privateIdentifierChain.1.ts, 1, 9))
 +>this?.a : Symbol(a, Decl(privateIdentifierChain.1.ts, 0, 9))
  >this : Symbol(A, Decl(privateIdentifierChain.1.ts, 0, 0))
 ->a : Symbol(A.a, Decl(privateIdentifierChain.1.ts, 0, 9))

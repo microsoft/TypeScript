@@ -23,10 +23,14 @@ s0.toUpperCase()
 >toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 s1.toUpperCase() 
+>s1.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 >s1 : Symbol(s1, Decl(destructureTupleWithVariableElement.ts, 5, 10))
+>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 s2.toUpperCase()
+>s2.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 >s2 : Symbol(s2, Decl(destructureTupleWithVariableElement.ts, 5, 14))
+>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 declare const strings2: [string, ...Array<string>, string]
 >strings2 : Symbol(strings2, Decl(destructureTupleWithVariableElement.ts, 11, 13))
@@ -49,5 +53,7 @@ s4.toUpperCase()
 >toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 s5.toUpperCase()
+>s5.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 >s5 : Symbol(s5, Decl(destructureTupleWithVariableElement.ts, 13, 14))
+>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
 

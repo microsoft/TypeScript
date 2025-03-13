@@ -37,5 +37,7 @@ a.left.length;
 >length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
 a.other.length;  // Error expected here
+>a.other.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(specialIntersectionsInMappedTypes.ts, 5, 5))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 

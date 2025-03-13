@@ -1,17 +1,12 @@
 narrowingTruthyObject.ts(3,9): error TS18047: 'x' is possibly 'null'.
-narrowingTruthyObject.ts(3,11): error TS2339: Property 'toString' does not exist on type 'object | null'.
-  Property 'toString' does not exist on type 'null'.
 
 
-==== narrowingTruthyObject.ts (2 errors) ====
+==== narrowingTruthyObject.ts (1 errors) ====
     function foo(x: unknown, b: boolean) {
         if (typeof x === 'object') {
             x.toString();
             ~
 !!! error TS18047: 'x' is possibly 'null'.
-              ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'object | null'.
-!!! error TS2339:   Property 'toString' does not exist on type 'null'.
         }
         if (typeof x === 'object' && x) {
             x.toString();

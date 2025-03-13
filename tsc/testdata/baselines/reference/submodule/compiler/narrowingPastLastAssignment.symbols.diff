@@ -53,7 +53,9 @@
      return () => {
          foo.toLocaleLowerCase();
 ->foo.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
++>foo.toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
  >foo : Symbol(foo, Decl(narrowingPastLastAssignment.ts, 156, 7))
 ->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
++>toLocaleLowerCase : Symbol(toLocaleLowerCase, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.string.d.ts, --, --))
      }
  }

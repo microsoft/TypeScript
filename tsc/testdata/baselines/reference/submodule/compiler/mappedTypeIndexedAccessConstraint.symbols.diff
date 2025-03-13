@@ -5,8 +5,10 @@
  
      m1.toString();  // Error
 ->m1.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>m1.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >m1 : Symbol(m1, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 33))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
      m1?.toString();
 ->m1?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
@@ -17,8 +19,10 @@
  
      m2.toString();  // Error
 ->m2.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>m2.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >m2 : Symbol(m2, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 43))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
      m2?.toString();
 ->m2?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
@@ -29,8 +33,10 @@
  
      m3.toString();  // Error
 ->m3.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>m3.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >m3 : Symbol(m3, Decl(mappedTypeIndexedAccessConstraint.ts, 10, 54))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
      m3?.toString();
 ->m3?.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
@@ -41,18 +47,20 @@
  }
  
  // Repro from #57487
-@@= skipped -57, +51 lines =@@
+@@= skipped -57, +57 lines =@@
  >mapped : Symbol(mapped, Decl(mappedTypeIndexedAccessConstraint.ts, 26, 5))
  >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 28, 54))
  >K : Symbol(K, Decl(mappedTypeIndexedAccessConstraint.ts, 28, 23))
 ->mapped[key].toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>mapped[key].toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >mapped : Symbol(mapped, Decl(mappedTypeIndexedAccessConstraint.ts, 26, 5))
  >key : Symbol(key, Decl(mappedTypeIndexedAccessConstraint.ts, 28, 54))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
++>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  
  // Additional repro from #57487
  
-@@= skipped -63, +61 lines =@@
+@@= skipped -63, +63 lines =@@
  >foo : Symbol(foo, Decl(mappedTypeIndexedAccessConstraint.ts, 45, 86))
  >v : Symbol(v, Decl(mappedTypeIndexedAccessConstraint.ts, 46, 11))
  >i : Symbol(i, Decl(mappedTypeIndexedAccessConstraint.ts, 46, 14))

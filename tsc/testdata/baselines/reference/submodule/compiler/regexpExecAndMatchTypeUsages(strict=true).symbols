@@ -15,7 +15,9 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
 >length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     matchResult[999].length;
+>matchResult[999].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     matchResult.index + 0;
 >matchResult.index : Symbol(index, Decl(lib.es5.d.ts, --, --))
@@ -23,14 +25,18 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
 >index : Symbol(index, Decl(lib.es5.d.ts, --, --))
 
     matchResult.input.length;
+>matchResult.input.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >matchResult.input : Symbol(input, Decl(lib.es5.d.ts, --, --))
 >matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
 >input : Symbol(input, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     matchResult.groups["someVariable"].length;
+>matchResult.groups["someVariable"].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >matchResult.groups : Symbol(groups, Decl(lib.es2018.regexp.d.ts, --, --))
 >matchResult : Symbol(matchResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 20))
 >groups : Symbol(groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     matchResult.groups = undefined;
 >matchResult.groups : Symbol(groups, Decl(lib.es2018.regexp.d.ts, --, --))
@@ -45,7 +51,9 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
 >length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     execResult[999].length;
+>execResult[999].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     execResult.index + 0;
 >execResult.index : Symbol(index, Decl(lib.es5.d.ts, --, --))
@@ -60,9 +68,11 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
 >length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     execResult.groups["someVariable"].length;
+>execResult.groups["someVariable"].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >execResult.groups : Symbol(groups, Decl(lib.es2018.regexp.d.ts, --, --))
 >execResult : Symbol(execResult, Decl(regexpExecAndMatchTypeUsages.ts, 0, 50))
 >groups : Symbol(groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
     execResult.groups = undefined;
 >execResult.groups : Symbol(groups, Decl(lib.es2018.regexp.d.ts, --, --))

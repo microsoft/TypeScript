@@ -6755,6 +6755,7 @@ func (c *Checker) checkNonNullTypeWithReporter(t *Type, node *ast.Node, reportEr
 		if nonNullable.flags&(TypeFlagsNullable|TypeFlagsNever) != 0 {
 			return c.errorType
 		}
+		return nonNullable
 	}
 	return t
 }

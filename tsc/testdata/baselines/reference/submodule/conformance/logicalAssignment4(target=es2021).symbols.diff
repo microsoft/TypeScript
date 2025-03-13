@@ -110,12 +110,14 @@
  
              defaultValue.name;
 ->defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
++>defaultValue.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
  >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
 ->name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
++>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
          }
      }
      else {
-@@= skipped -16, +14 lines =@@
+@@= skipped -16, +16 lines =@@
  >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
  
              thing.name;
@@ -127,8 +129,10 @@
  
              defaultValue.name;
 ->defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
++>defaultValue.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
  >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
 ->name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
++>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
          }
      }
  }

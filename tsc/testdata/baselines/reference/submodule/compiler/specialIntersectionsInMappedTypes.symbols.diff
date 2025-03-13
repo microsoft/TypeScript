@@ -14,6 +14,8 @@
  
  a.other.length;  // Error expected here
 ->a.other.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>a.other.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(specialIntersectionsInMappedTypes.ts, 5, 5))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  

@@ -8,8 +8,8 @@ inferTypePredicates.ts(14,7): error TS2322: Type '(number | null)[]' is not assi
   Type 'number | null' is not assignable to type 'number'.
     Type 'null' is not assignable to type 'number'.
 inferTypePredicates.ts(52,17): error TS18048: 'arr' is possibly 'undefined'.
-inferTypePredicates.ts(53,6): error TS2339: Property 'filter' does not exist on type 'MyObj[] | undefined'.
-  Property 'filter' does not exist on type 'undefined'.
+inferTypePredicates.ts(54,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 inferTypePredicates.ts(65,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 inferTypePredicates.ts(90,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
@@ -90,10 +90,10 @@ inferTypePredicates.ts(205,7): error TS2741: Property 'z' is missing in type 'C1
                     ~~~
 !!! error TS18048: 'arr' is possibly 'undefined'.
         .filter((obj) => obj && obj.data)
-         ~~~~~~
-!!! error TS2339: Property 'filter' does not exist on type 'MyObj[] | undefined'.
-!!! error TS2339:   Property 'filter' does not exist on type 'undefined'.
         .map(obj => JSON.parse(obj.data))  // should error
+                               ~~~~~~~~
+!!! error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'string'.
       );
     
     const result2 = myArray

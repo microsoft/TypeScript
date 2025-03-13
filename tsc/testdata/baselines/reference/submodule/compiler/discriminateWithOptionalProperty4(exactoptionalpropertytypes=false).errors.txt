@@ -1,9 +1,7 @@
 discriminateWithOptionalProperty4.ts(16,14): error TS18048: 'z.a' is possibly 'undefined'.
-discriminateWithOptionalProperty4.ts(16,18): error TS2339: Property 'toString' does not exist on type 'string[] | undefined'.
-  Property 'toString' does not exist on type 'undefined'.
 
 
-==== discriminateWithOptionalProperty4.ts (2 errors) ====
+==== discriminateWithOptionalProperty4.ts (1 errors) ====
     // https://github.com/microsoft/TypeScript/issues/55566
     
     export function main(a: string[] | undefined) {
@@ -22,8 +20,5 @@ discriminateWithOptionalProperty4.ts(16,18): error TS2339: Property 'toString' d
       "a" in z ? z.a.toString() : z.b.toString();
                  ~~~
 !!! error TS18048: 'z.a' is possibly 'undefined'.
-                     ~~~~~~~~
-!!! error TS2339: Property 'toString' does not exist on type 'string[] | undefined'.
-!!! error TS2339:   Property 'toString' does not exist on type 'undefined'.
     }
     

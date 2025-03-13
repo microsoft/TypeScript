@@ -35,10 +35,12 @@
  
      (results &&= bar?.value ?? []).push(100);
 ->(results &&= bar?.value ?? []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>(results &&= bar?.value ?? []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >results : Symbol(results, Decl(logicalAssignment8.ts, 10, 14))
  >bar?.value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
  >bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
  >value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
++>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
  

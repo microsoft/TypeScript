@@ -93,7 +93,7 @@
  
          type C = typeof foo.a.b.c;
  >C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 31, 32))
-->foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+ >foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
  >foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
 ->foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 +>foo.a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
@@ -101,10 +101,9 @@
 ->a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 +>a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
  >b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
-->c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+ >c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
  
-         for(const _ of [1]) {
- >_ : Symbol(_, Decl(narrowingOfQualifiedNames.ts, 34, 17))
+@@= skipped -33, +33 lines =@@
  
              type A = typeof foo.a;
  >A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 34, 29))
@@ -126,7 +125,7 @@
  
              type C = typeof foo.a.b.c;
  >C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 36, 36))
-->foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+ >foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
  >foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
 ->foo.a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 +>foo.a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
@@ -134,7 +133,7 @@
 ->a : Symbol(DeepOptional.a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 +>a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
  >b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
-->c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
+ >c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
  
              if (foo.a.b) {
  >foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
@@ -175,7 +174,7 @@
  >b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
  >c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
  
-@@= skipped -91, +87 lines =@@
+@@= skipped -58, +58 lines =@@
  
                      type A = typeof foo.a;
  >A : Symbol(A, Decl(narrowingOfQualifiedNames.ts, 44, 37))

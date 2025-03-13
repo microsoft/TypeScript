@@ -96,11 +96,13 @@ function init2(foo: DeepOptional) {
 
         type C = typeof foo.a.b.c;
 >C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 31, 32))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
 >foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
 >foo.a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 >foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
 >a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 >b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
 
         for(const _ of [1]) {
 >_ : Symbol(_, Decl(narrowingOfQualifiedNames.ts, 34, 17))
@@ -121,11 +123,13 @@ function init2(foo: DeepOptional) {
 
             type C = typeof foo.a.b.c;
 >C : Symbol(C, Decl(narrowingOfQualifiedNames.ts, 36, 36))
+>foo.a.b.c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
 >foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
 >foo.a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 >foo : Symbol(foo, Decl(narrowingOfQualifiedNames.ts, 28, 15))
 >a : Symbol(a, Decl(narrowingOfQualifiedNames.ts, 20, 24))
 >b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
+>c : Symbol(c, Decl(narrowingOfQualifiedNames.ts, 22, 13))
 
             if (foo.a.b) {
 >foo.a.b : Symbol(b, Decl(narrowingOfQualifiedNames.ts, 21, 9))
