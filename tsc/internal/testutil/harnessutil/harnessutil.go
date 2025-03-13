@@ -462,7 +462,6 @@ func compileFilesWithHost(
 	program := createProgram(host, options, rootFiles)
 	var diagnostics []*ast.Diagnostic
 	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(nil)...)
-	diagnostics = append(diagnostics, program.GetBindDiagnostics(nil)...)
 	diagnostics = append(diagnostics, program.GetSemanticDiagnostics(nil)...)
 	diagnostics = append(diagnostics, program.GetGlobalDiagnostics()...)
 

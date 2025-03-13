@@ -4,16 +4,13 @@ reachabilityChecks6.ts(40,10): error TS7030: Not all code paths return a value.
 reachabilityChecks6.ts(51,10): error TS7030: Not all code paths return a value.
 reachabilityChecks6.ts(79,10): error TS7030: Not all code paths return a value.
 reachabilityChecks6.ts(85,13): error TS7027: Unreachable code detected.
-reachabilityChecks6.ts(85,13): error TS7027: Unreachable code detected.
 reachabilityChecks6.ts(93,10): error TS7030: Not all code paths return a value.
-reachabilityChecks6.ts(96,13): error TS7027: Unreachable code detected.
 reachabilityChecks6.ts(96,13): error TS7027: Unreachable code detected.
 reachabilityChecks6.ts(115,10): error TS7030: Not all code paths return a value.
 reachabilityChecks6.ts(122,13): error TS7027: Unreachable code detected.
-reachabilityChecks6.ts(122,13): error TS7027: Unreachable code detected.
 
 
-==== reachabilityChecks6.ts (13 errors) ====
+==== reachabilityChecks6.ts (10 errors) ====
     function f0(x) {
         while (true);
     }
@@ -111,8 +108,6 @@ reachabilityChecks6.ts(122,13): error TS7027: Unreachable code detected.
                 return 1;
                 ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
-                ~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
             }
         }
         catch (e) {
@@ -126,8 +121,6 @@ reachabilityChecks6.ts(122,13): error TS7027: Unreachable code detected.
         try {
             while (false) {
                 return 1;
-                ~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
                 ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
             }
@@ -158,8 +151,6 @@ reachabilityChecks6.ts(122,13): error TS7027: Unreachable code detected.
                     break test;
                 } while (true);
                 x++;
-                ~~~~
-!!! error TS7027: Unreachable code detected.
                 ~~~~
 !!! error TS7027: Unreachable code detected.
             } while (true);

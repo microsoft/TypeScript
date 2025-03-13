@@ -3,15 +3,12 @@ duplicateObjectLiteralProperty.ts(5,5): error TS1117: An object literal cannot h
 duplicateObjectLiteralProperty.ts(6,5): error TS1117: An object literal cannot have multiple properties with the same name.
 duplicateObjectLiteralProperty.ts(8,9): error TS1117: An object literal cannot have multiple properties with the same name.
 duplicateObjectLiteralProperty.ts(14,9): error TS2300: Duplicate identifier 'a'.
-duplicateObjectLiteralProperty.ts(14,9): error TS2300: Duplicate identifier 'a'.
-duplicateObjectLiteralProperty.ts(15,9): error TS2300: Duplicate identifier 'a'.
 duplicateObjectLiteralProperty.ts(15,9): error TS2300: Duplicate identifier 'a'.
 duplicateObjectLiteralProperty.ts(16,9): error TS1118: An object literal cannot have multiple get/set accessors with the same name.
 duplicateObjectLiteralProperty.ts(16,9): error TS2300: Duplicate identifier 'a'.
-duplicateObjectLiteralProperty.ts(16,9): error TS2300: Duplicate identifier 'a'.
 
 
-==== duplicateObjectLiteralProperty.ts (11 errors) ====
+==== duplicateObjectLiteralProperty.ts (8 errors) ====
     var x = {
         a: 1,
         b: true, // OK
@@ -36,18 +33,12 @@ duplicateObjectLiteralProperty.ts(16,9): error TS2300: Duplicate identifier 'a'.
         get a() { return 0; },
             ~
 !!! error TS2300: Duplicate identifier 'a'.
-            ~
-!!! error TS2300: Duplicate identifier 'a'.
         set a(v: number) { },
-            ~
-!!! error TS2300: Duplicate identifier 'a'.
             ~
 !!! error TS2300: Duplicate identifier 'a'.
         get a() { return 0; }
             ~
 !!! error TS1118: An object literal cannot have multiple get/set accessors with the same name.
-            ~
-!!! error TS2300: Duplicate identifier 'a'.
             ~
 !!! error TS2300: Duplicate identifier 'a'.
     };

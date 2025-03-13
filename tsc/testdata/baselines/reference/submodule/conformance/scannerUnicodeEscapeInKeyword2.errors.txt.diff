@@ -9,16 +9,12 @@
 -file2.ts(10,5): error TS1260: Keywords cannot contain escape characters.
 -file2.ts(15,1): error TS1260: Keywords cannot contain escape characters.
 +file1.ts(1,5): error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
-+file1.ts(1,5): error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
-+file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
 +file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
  
  
 -==== file1.ts (3 errors) ====
-+==== file1.ts (2 errors) ====
++==== file1.ts (1 errors) ====
      var \u0061wait = 12; // ok
-+        ~~~~~~~~~~
-+!!! error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
 +        ~~~~~~~~~~
 +!!! error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
      async function main() {
@@ -42,14 +38,12 @@
      
      export {};
 -==== file2.ts (4 errors) ====
-+==== file2.ts (2 errors) ====
++==== file2.ts (1 errors) ====
      \u{0076}ar x = "hello"; // not ok
 -    ~~~~~~~~~~
 -!!! error TS1260: Keywords cannot contain escape characters.
      
      var \u{0061}wait = 12; // ok
-+        ~~~~~~~~~~~~
-+!!! error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
 +        ~~~~~~~~~~~~
 +!!! error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
      async function main() {

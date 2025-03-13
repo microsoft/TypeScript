@@ -1,16 +1,10 @@
 for-of52.ts(1,11): error TS2451: Cannot redeclare block-scoped variable 'v'.
-for-of52.ts(1,11): error TS2451: Cannot redeclare block-scoped variable 'v'.
-for-of52.ts(1,14): error TS2451: Cannot redeclare block-scoped variable 'v'.
 for-of52.ts(1,14): error TS2451: Cannot redeclare block-scoped variable 'v'.
 
 
-==== for-of52.ts (4 errors) ====
+==== for-of52.ts (2 errors) ====
     for (let [v, v] of [[]]) {}
               ~
-!!! error TS2451: Cannot redeclare block-scoped variable 'v'.
-              ~
-!!! error TS2451: Cannot redeclare block-scoped variable 'v'.
-                 ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'v'.
                  ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'v'.

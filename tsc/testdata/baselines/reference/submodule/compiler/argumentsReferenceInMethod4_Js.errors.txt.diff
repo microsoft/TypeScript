@@ -3,18 +3,17 @@
 @@= skipped -0, +0 lines =@@
 +/a.js(11,8): error TS2339: Property 'foo' does not exist on type 'A'.
  /a.js(16,9): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-+/a.js(16,9): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 +/a.js(21,8): error TS2339: Property 'bar' does not exist on type 'A'.
 +/a.js(26,8): error TS2339: Property 'baz' does not exist on type 'A'.
 +/a.js(31,8): error TS2339: Property 'options' does not exist on type 'A'.
  
  
 -==== /a.js (1 errors) ====
-+==== /a.js (6 errors) ====
++==== /a.js (5 errors) ====
      class A {
      	/**
      	 * @param {object} [foo={}]
-@@= skipped -12, +17 lines =@@
+@@= skipped -12, +16 lines =@@
      		 * @type object
      		 */
      		this.foo = foo;
@@ -23,14 +22,7 @@
      
      		/**
      		 * @type object
-@@= skipped -7, +9 lines =@@
-     		const arguments = this.arguments;
-     		      ~~~~~~~~~
- !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-+    		      ~~~~~~~~~
-+!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-     
-     		/**
+@@= skipped -12, +14 lines =@@
      		 * @type object
      		 */
      		this.bar = arguments.bar;

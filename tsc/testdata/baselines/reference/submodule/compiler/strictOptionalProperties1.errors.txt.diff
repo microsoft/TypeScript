@@ -38,9 +38,7 @@
    Types of property 'foo' are incompatible.
      Type 'undefined' is not assignable to type 'number'.
  strictOptionalProperties1.ts(119,5): error TS2411: Property 'bar' of type 'string | undefined' is not assignable to 'string' index type 'string'.
- strictOptionalProperties1.ts(190,15): error TS2451: Cannot redeclare block-scoped variable 'e'.
-+strictOptionalProperties1.ts(190,15): error TS2451: Cannot redeclare block-scoped variable 'e'.
- strictOptionalProperties1.ts(193,1): error TS2322: Type 'string | boolean | undefined' is not assignable to type 'string | number | undefined'.
+@@= skipped -30, +30 lines =@@
    Type 'false' is not assignable to type 'string | number | undefined'.
  strictOptionalProperties1.ts(194,1): error TS2412: Type 'string | boolean | undefined' is not assignable to type 'string | number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
    Type 'undefined' is not assignable to type 'string | number'.
@@ -49,20 +47,7 @@
    Types of property 'email' are incompatible.
      Type 'undefined' is not assignable to type 'string | number'.
  strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
-+strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
- strictOptionalProperties1.ts(210,1): error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
-   Property 'b' is incompatible with index signature.
-     Type 'string | undefined' is not assignable to type 'string | number'.
-@@= skipped -42, +44 lines =@@
-   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
- 
- 
--==== strictOptionalProperties1.ts (23 errors) ====
-+==== strictOptionalProperties1.ts (25 errors) ====
-     function f1(obj: { a?: string, b?: string | undefined }) {
-         let a = obj.a;  // string | undefined
-         let b = obj.b;  // string | undefined
-@@= skipped -79, +79 lines =@@
+@@= skipped -91, +91 lines =@@
      function f4a(t1: [number, string?], t2: [number, string?, string?]) {
          t1 = t2;  // Wasn't an error, but should be
          ~~
@@ -137,16 +122,7 @@
      const y: { foo: number } = { foo: 123, ...x };
      
      // Index signatures and strict optional properties
-@@= skipped -86, +86 lines =@@
-     declare const e: string | boolean | undefined
-                   ~
- !!! error TS2451: Cannot redeclare block-scoped variable 'e'.
-+                  ~
-+!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
-     declare const u1: U1
-     declare let u2: U2
-     u1.email = e // error, but only because boolean isn't in email's type
-@@= skipped -12, +14 lines =@@
+@@= skipped -98, +98 lines =@@
  !!! error TS2412:   Type 'undefined' is not assignable to type 'string | number'.
      u2 = {
      ~~
@@ -159,12 +135,3 @@
          name: 'hi',
          email: undefined
      }
-@@= skipped -16, +16 lines =@@
-     declare var e: {a: number, b?: string | undefined }
-                 ~
- !!! error TS2451: Cannot redeclare block-scoped variable 'e'.
-+                ~
-+!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
-     
-     a = b;
-     a = c;

@@ -1,23 +1,15 @@
 a.js(1,22): error TS2528: A module cannot have multiple default exports.
-a.js(1,22): error TS2528: A module cannot have multiple default exports.
-a.js(3,15): error TS2528: A module cannot have multiple default exports.
 a.js(3,15): error TS2528: A module cannot have multiple default exports.
 a.js(3,16): error TS1109: Expression expected.
 
 
-==== a.js (5 errors) ====
+==== a.js (3 errors) ====
     export default class a {
-                         ~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 a.js:3:15: Another export default is here.
                          ~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 a.js:3:15: Another export default is here.
     }
     export default var a = 10;
-                  
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 a.js:1:22: The first export default is here.
                   
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 a.js:1:22: The first export default is here.

@@ -1,41 +1,25 @@
 plainJSBinderErrors.js(1,1): error TS2528: A module cannot have multiple default exports.
-plainJSBinderErrors.js(1,1): error TS2528: A module cannot have multiple default exports.
-plainJSBinderErrors.js(2,1): error TS2528: A module cannot have multiple default exports.
 plainJSBinderErrors.js(2,1): error TS2528: A module cannot have multiple default exports.
 plainJSBinderErrors.js(3,7): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-plainJSBinderErrors.js(3,7): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-plainJSBinderErrors.js(6,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 plainJSBinderErrors.js(6,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 plainJSBinderErrors.js(9,11): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
-plainJSBinderErrors.js(9,11): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
 plainJSBinderErrors.js(12,5): error TS18012: '#constructor' is a reserved word.
-plainJSBinderErrors.js(12,5): error TS18012: '#constructor' is a reserved word.
-plainJSBinderErrors.js(15,20): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 plainJSBinderErrors.js(15,20): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 plainJSBinderErrors.js(15,20): error TS2703: The operand of a 'delete' operator must be a property reference.
 plainJSBinderErrors.js(18,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
-plainJSBinderErrors.js(18,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 plainJSBinderErrors.js(18,16): error TS2703: The operand of a 'delete' operator must be a property reference.
-plainJSBinderErrors.js(19,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 plainJSBinderErrors.js(19,16): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 plainJSBinderErrors.js(19,16): error TS2703: The operand of a 'delete' operator must be a property reference.
 plainJSBinderErrors.js(22,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-plainJSBinderErrors.js(22,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 plainJSBinderErrors.js(23,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-plainJSBinderErrors.js(23,15): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-plainJSBinderErrors.js(27,9): error TS1101: 'with' statements are not allowed in strict mode.
 plainJSBinderErrors.js(27,9): error TS1101: 'with' statements are not allowed in strict mode.
 plainJSBinderErrors.js(27,9): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
 plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
 plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function boundary.
 
 
-==== plainJSBinderErrors.js (31 errors) ====
+==== plainJSBinderErrors.js (18 errors) ====
     export default 12
-    ~~~~~~~~~~~~~~~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 plainJSBinderErrors.js:2:1: Another export default is here.
     ~~~~~~~~~~~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 plainJSBinderErrors.js:2:1: Another export default is here.
@@ -43,12 +27,7 @@ plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function b
     ~~~~~~~~~~~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 plainJSBinderErrors.js:1:1: The first export default is here.
-    ~~~~~~~~~~~~~~~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 plainJSBinderErrors.js:1:1: The first export default is here.
     const await = 1
-          ~~~~~
-!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
           ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     const yield = 2
@@ -56,13 +35,9 @@ plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function b
         const await = 3
               ~~~~~
 !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-              ~~~~~
-!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
     }
     function* g() {
         const yield = 4
-              ~~~~~
-!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
               ~~~~~
 !!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
     }
@@ -70,13 +45,9 @@ plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function b
         #constructor = 5
         ~~~~~~~~~~~~
 !!! error TS18012: '#constructor' is a reserved word.
-        ~~~~~~~~~~~~
-!!! error TS18012: '#constructor' is a reserved word.
         deleted() {
             function container(f) {
                 delete f
-                       ~
-!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                        ~
 !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                        ~
@@ -87,12 +58,8 @@ plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function b
                    ~
 !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                    ~
-!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
-                   ~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
             delete container
-                   ~~~~~~~~~
-!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                    ~~~~~~~~~
 !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                    ~~~~~~~~~
@@ -102,19 +69,13 @@ plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function b
             const eval = 7
                   ~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-                  ~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
             const arguments = 8
-                  ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                   ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
         withOctal() {
             const redundant = 0o10
             with (redundant) {
-            ~~~~
-!!! error TS1101: 'with' statements are not allowed in strict mode.
             ~~~~
 !!! error TS1101: 'with' statements are not allowed in strict mode.
             ~~~~~~~~~~~~~~~~
@@ -125,8 +86,6 @@ plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function b
         label() {
             for(;;) {
                 label: var x = 1
-                ~~~~~
-!!! error TS1344: 'A label is not allowed here.
                 ~~~~~
 !!! error TS1344: 'A label is not allowed here.
                 break label

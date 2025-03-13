@@ -1,20 +1,14 @@
 exportDefaultDuplicateCrash.ts(3,1): error TS2528: A module cannot have multiple default exports.
-exportDefaultDuplicateCrash.ts(3,1): error TS2528: A module cannot have multiple default exports.
-exportDefaultDuplicateCrash.ts(4,10): error TS2528: A module cannot have multiple default exports.
 exportDefaultDuplicateCrash.ts(4,10): error TS2528: A module cannot have multiple default exports.
 exportDefaultDuplicateCrash.ts(4,25): error TS2307: Cannot find module './hi' or its corresponding type declarations.
-exportDefaultDuplicateCrash.ts(5,16): error TS2528: A module cannot have multiple default exports.
 exportDefaultDuplicateCrash.ts(5,16): error TS2528: A module cannot have multiple default exports.
 exportDefaultDuplicateCrash.ts(5,31): error TS2307: Cannot find module './hi' or its corresponding type declarations.
 
 
-==== exportDefaultDuplicateCrash.ts (8 errors) ====
+==== exportDefaultDuplicateCrash.ts (5 errors) ====
     // #38214
     
     export default function () { }
-    ~~~~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 exportDefaultDuplicateCrash.ts:5:16: Another export default is here.
     ~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 exportDefaultDuplicateCrash.ts:5:16: Another export default is here.
@@ -22,16 +16,9 @@ exportDefaultDuplicateCrash.ts(5,31): error TS2307: Cannot find module './hi' or
              ~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS6204 exportDefaultDuplicateCrash.ts:5:16: and here.
-             ~~~~~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS6204 exportDefaultDuplicateCrash.ts:5:16: and here.
                             ~~~~~~
 !!! error TS2307: Cannot find module './hi' or its corresponding type declarations.
     export { aa as default } from './hi'
-                   ~~~~~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 exportDefaultDuplicateCrash.ts:3:1: The first export default is here.
-!!! related TS2752 exportDefaultDuplicateCrash.ts:4:10: The first export default is here.
                    ~~~~~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 exportDefaultDuplicateCrash.ts:3:1: The first export default is here.

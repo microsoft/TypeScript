@@ -1,12 +1,10 @@
 duplicateIdentifiersAcrossContainerBoundaries.ts(9,21): error TS2814: Function with bodies can only merge with classes that are ambient.
 duplicateIdentifiersAcrossContainerBoundaries.ts(12,18): error TS2813: Class declaration cannot implement overload list for 'f'.
 duplicateIdentifiersAcrossContainerBoundaries.ts(37,12): error TS2300: Duplicate identifier 'x'.
-duplicateIdentifiersAcrossContainerBoundaries.ts(37,12): error TS2300: Duplicate identifier 'x'.
-duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
 duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate identifier 'x'.
 
 
-==== duplicateIdentifiersAcrossContainerBoundaries.ts (6 errors) ====
+==== duplicateIdentifiersAcrossContainerBoundaries.ts (4 errors) ====
     module M {
         export interface I { }
     }
@@ -52,14 +50,10 @@ duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): error TS2300: Duplicate
         static x: number;
                ~
 !!! error TS2300: Duplicate identifier 'x'.
-               ~
-!!! error TS2300: Duplicate identifier 'x'.
     }
     
     module Foo {
         export var x: number; // error for redeclaring var in a different parent
-                   ~
-!!! error TS2300: Duplicate identifier 'x'.
                    ~
 !!! error TS2300: Duplicate identifier 'x'.
     }

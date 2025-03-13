@@ -3,17 +3,13 @@
 @@= skipped -0, +0 lines =@@
 -methodSignatureHandledDeclarationKindForSymbol.ts(6,5): error TS2717: Subsequent property declarations must have the same type.  Property 'bold' must be of type '() => string', but here has type 'string'.
 +methodSignatureHandledDeclarationKindForSymbol.ts(2,5): error TS2300: Duplicate identifier 'bold'.
-+methodSignatureHandledDeclarationKindForSymbol.ts(2,5): error TS2300: Duplicate identifier 'bold'.
-+methodSignatureHandledDeclarationKindForSymbol.ts(6,5): error TS2300: Duplicate identifier 'bold'.
 +methodSignatureHandledDeclarationKindForSymbol.ts(6,5): error TS2300: Duplicate identifier 'bold'.
  
  
 -==== methodSignatureHandledDeclarationKindForSymbol.ts (1 errors) ====
-+==== methodSignatureHandledDeclarationKindForSymbol.ts (4 errors) ====
++==== methodSignatureHandledDeclarationKindForSymbol.ts (2 errors) ====
      interface Foo {
          bold(): string;
-+        ~~~~
-+!!! error TS2300: Duplicate identifier 'bold'.
 +        ~~~~
 +!!! error TS2300: Duplicate identifier 'bold'.
      }
@@ -23,8 +19,6 @@
          ~~~~
 -!!! error TS2717: Subsequent property declarations must have the same type.  Property 'bold' must be of type '() => string', but here has type 'string'.
 -!!! related TS6203 methodSignatureHandledDeclarationKindForSymbol.ts:2:5: 'bold' was also declared here.
-+!!! error TS2300: Duplicate identifier 'bold'.
-+        ~~~~
 +!!! error TS2300: Duplicate identifier 'bold'.
      }
      

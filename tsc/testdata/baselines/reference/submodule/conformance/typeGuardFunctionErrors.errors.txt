@@ -1,5 +1,4 @@
 typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
-typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
 typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
 typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
@@ -33,7 +32,6 @@ typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any
 typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
 typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
-typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
 typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
 typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
@@ -75,10 +73,8 @@ typeGuardFunctionErrors.ts(166,45): error TS2677: A type predicate's type must b
 typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== typeGuardFunctionErrors.ts (58 errors) ====
+==== typeGuardFunctionErrors.ts (56 errors) ====
     class A {
-          ~
-!!! error TS2300: Duplicate identifier 'A'.
           ~
 !!! error TS2300: Duplicate identifier 'A'.
         propA: number;
@@ -237,8 +233,6 @@ typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy
 !!! error TS1005: ',' expected.
                  ~
 !!! error TS1005: ',' expected.
-                 ~
-!!! error TS2300: Duplicate identifier 'A'.
                  ~
 !!! error TS2300: Duplicate identifier 'A'.
     function b2(a: b is A) {};

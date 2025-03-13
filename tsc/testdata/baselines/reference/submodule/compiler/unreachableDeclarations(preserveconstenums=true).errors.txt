@@ -1,24 +1,19 @@
 unreachableDeclarations.ts(4,17): error TS2450: Enum 'EnumA' used before its declaration.
 unreachableDeclarations.ts(14,5): error TS7027: Unreachable code detected.
-unreachableDeclarations.ts(14,5): error TS7027: Unreachable code detected.
 unreachableDeclarations.ts(21,17): error TS2450: Enum 'EnumA' used before its declaration.
 unreachableDeclarations.ts(29,5): error TS7027: Unreachable code detected.
-unreachableDeclarations.ts(29,5): error TS7027: Unreachable code detected.
-unreachableDeclarations.ts(43,5): error TS7027: Unreachable code detected.
 unreachableDeclarations.ts(43,5): error TS7027: Unreachable code detected.
 unreachableDeclarations.ts(49,17): error TS2449: Class 'ClassA' used before its declaration.
-unreachableDeclarations.ts(57,5): error TS7027: Unreachable code detected.
 unreachableDeclarations.ts(57,5): error TS7027: Unreachable code detected.
 unreachableDeclarations.ts(63,14): error TS2450: Enum 'Bar' used before its declaration.
 unreachableDeclarations.ts(64,14): error TS2448: Block-scoped variable 'blah' used before its declaration.
 unreachableDeclarations.ts(64,14): error TS2454: Variable 'blah' is used before being assigned.
 unreachableDeclarations.ts(65,18): error TS2449: Class 'Foo' used before its declaration.
 unreachableDeclarations.ts(78,2): error TS7027: Unreachable code detected.
-unreachableDeclarations.ts(78,2): error TS7027: Unreachable code detected.
 unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 
 
-==== unreachableDeclarations.ts (18 errors) ====
+==== unreachableDeclarations.ts (13 errors) ====
     function func1() {
         aFunc();
     
@@ -37,10 +32,7 @@ unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only 
     
         enum EnumA { Value }
         ~~~~~~~~~~~~~~~~~~~~
-        ~~~~~~~~~~~~~~~~~~~~
         const enum EnumB { Value }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     }
@@ -62,8 +54,6 @@ unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only 
         enum EnumA { Value }
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     
     function func3() {
@@ -78,8 +68,6 @@ unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only 
         }
     
         const enum EnumB { Value }
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     }
@@ -99,8 +87,6 @@ unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only 
         }
     
         class ClassA { static Value = 1234; }
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     }
@@ -136,25 +122,17 @@ unreachableDeclarations.ts(84,2): error TS1235: A namespace declaration is only 
     
     	const blah = { prop: 1234 };
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    	~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
     
     
     	enum Bar { A }
     ~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~
-    
     
     
     	class Foo { x = 1234 }
     ~~~~~~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~~~~~~
-    
     
     
     	namespace Baz { export const value = 1234 }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     	~~~~~~~~~

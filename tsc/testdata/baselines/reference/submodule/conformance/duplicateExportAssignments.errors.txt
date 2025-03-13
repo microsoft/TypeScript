@@ -1,56 +1,37 @@
 foo1.ts(3,10): error TS2300: Duplicate identifier 'export='.
-foo1.ts(3,10): error TS2300: Duplicate identifier 'export='.
-foo1.ts(4,10): error TS2300: Duplicate identifier 'export='.
 foo1.ts(4,10): error TS2300: Duplicate identifier 'export='.
 foo2.ts(3,10): error TS2300: Duplicate identifier 'export='.
-foo2.ts(3,10): error TS2300: Duplicate identifier 'export='.
-foo2.ts(4,10): error TS2300: Duplicate identifier 'export='.
 foo2.ts(4,10): error TS2300: Duplicate identifier 'export='.
 foo3.ts(7,10): error TS2300: Duplicate identifier 'export='.
-foo3.ts(7,10): error TS2300: Duplicate identifier 'export='.
-foo3.ts(8,10): error TS2300: Duplicate identifier 'export='.
 foo3.ts(8,10): error TS2300: Duplicate identifier 'export='.
 foo4.ts(1,10): error TS2300: Duplicate identifier 'export='.
-foo4.ts(1,10): error TS2300: Duplicate identifier 'export='.
-foo4.ts(8,10): error TS2300: Duplicate identifier 'export='.
 foo4.ts(8,10): error TS2300: Duplicate identifier 'export='.
 foo5.ts(4,10): error TS2300: Duplicate identifier 'export='.
-foo5.ts(4,10): error TS2300: Duplicate identifier 'export='.
 foo5.ts(5,10): error TS2300: Duplicate identifier 'export='.
-foo5.ts(5,10): error TS2300: Duplicate identifier 'export='.
-foo5.ts(6,10): error TS2300: Duplicate identifier 'export='.
 foo5.ts(6,10): error TS2300: Duplicate identifier 'export='.
 
 
-==== foo1.ts (4 errors) ====
+==== foo1.ts (2 errors) ====
     var x = 10;
     var y = 20;
     export = x;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     export = y;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     
-==== foo2.ts (4 errors) ====
+==== foo2.ts (2 errors) ====
     var x = 10;
     class y {};
     export = x;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     export = y;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     
-==== foo3.ts (4 errors) ====
+==== foo3.ts (2 errors) ====
     module x {
     	export var x = 10;
     }
@@ -60,18 +41,12 @@ foo5.ts(6,10): error TS2300: Duplicate identifier 'export='.
     export = x;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     export = y;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     
-==== foo4.ts (4 errors) ====
+==== foo4.ts (2 errors) ====
     export = x;
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
              ~
 !!! error TS2300: Duplicate identifier 'export='.
     function x(){
@@ -83,26 +58,18 @@ foo5.ts(6,10): error TS2300: Duplicate identifier 'export='.
     export = y;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     
-==== foo5.ts (6 errors) ====
+==== foo5.ts (3 errors) ====
     var x = 5;
     var y = "test";
     var z = {};
     export = x;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     export = y;
              ~
 !!! error TS2300: Duplicate identifier 'export='.
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
     export = z;
-             ~
-!!! error TS2300: Duplicate identifier 'export='.
              ~
 !!! error TS2300: Duplicate identifier 'export='.
     

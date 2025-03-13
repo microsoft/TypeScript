@@ -2,12 +2,10 @@ redeclareParameterInCatchBlock.ts(4,11): error TS2492: Cannot redeclare identifi
 redeclareParameterInCatchBlock.ts(10,9): error TS2492: Cannot redeclare identifier 'e' in catch clause.
 redeclareParameterInCatchBlock.ts(16,15): error TS2492: Cannot redeclare identifier 'b' in catch clause.
 redeclareParameterInCatchBlock.ts(21,15): error TS2451: Cannot redeclare block-scoped variable 'x'.
-redeclareParameterInCatchBlock.ts(21,15): error TS2451: Cannot redeclare block-scoped variable 'x'.
-redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-scoped variable 'x'.
 redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-scoped variable 'x'.
 
 
-==== redeclareParameterInCatchBlock.ts (7 errors) ====
+==== redeclareParameterInCatchBlock.ts (5 errors) ====
     try {
     
     } catch(e) {
@@ -36,10 +34,6 @@ redeclareParameterInCatchBlock.ts(21,21): error TS2451: Cannot redeclare block-s
     
     } catch ({ a: x, b: x }) {
                   ~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x'.
-                  ~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x'.
-                        ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x'.
                         ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x'.

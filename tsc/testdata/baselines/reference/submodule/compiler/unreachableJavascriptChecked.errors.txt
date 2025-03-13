@@ -1,24 +1,17 @@
 unreachable.js(3,5): error TS7027: Unreachable code detected.
-unreachable.js(3,5): error TS7027: Unreachable code detected.
-unreachable.js(6,5): error TS7027: Unreachable code detected.
 unreachable.js(6,5): error TS7027: Unreachable code detected.
 
 
-==== unreachable.js (4 errors) ====
+==== unreachable.js (2 errors) ====
     function unreachable() {
         return f();
         return 2;
         ~~~~~~~~~
-        ~~~~~~~~~
         return 3;
-    ~~~~~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
     ~~~~~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
         function f() {}
         return 4;
-        ~~~~~~~~~
-!!! error TS7027: Unreachable code detected.
         ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
     }

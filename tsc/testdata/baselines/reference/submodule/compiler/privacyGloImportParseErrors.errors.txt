@@ -1,5 +1,4 @@
 privacyGloImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
-privacyGloImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 privacyGloImportParseErrors.ts(59,37): error TS1147: Import declarations in a namespace cannot reference a module.
@@ -17,7 +16,7 @@ privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in a n
 privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a namespace cannot reference a module.
 
 
-==== privacyGloImportParseErrors.ts (17 errors) ====
+==== privacyGloImportParseErrors.ts (16 errors) ====
     module m1 {
         export module m1_M1_public {
             export class c1 {
@@ -40,8 +39,6 @@ privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a n
         }
     
         export declare module "m1_M3_public" {
-        ~~~~~~
-!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
         ~~~~~~
 !!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
                               ~~~~~~~~~~~~~~

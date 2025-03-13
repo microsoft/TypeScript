@@ -1,24 +1,14 @@
 multipleDefaultExports05.ts(1,22): error TS2528: A module cannot have multiple default exports.
 multipleDefaultExports05.ts(1,22): error TS2528: A module cannot have multiple default exports.
-multipleDefaultExports05.ts(1,22): error TS2528: A module cannot have multiple default exports.
-multipleDefaultExports05.ts(1,22): error TS2528: A module cannot have multiple default exports.
 multipleDefaultExports05.ts(3,22): error TS2528: A module cannot have multiple default exports.
-multipleDefaultExports05.ts(3,22): error TS2528: A module cannot have multiple default exports.
-multipleDefaultExports05.ts(5,22): error TS2528: A module cannot have multiple default exports.
 multipleDefaultExports05.ts(5,22): error TS2528: A module cannot have multiple default exports.
 
 
-==== multipleDefaultExports05.ts (8 errors) ====
+==== multipleDefaultExports05.ts (4 errors) ====
     export default class AA1 {}
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 multipleDefaultExports05.ts:3:22: Another export default is here.
-                         ~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 multipleDefaultExports05.ts:3:22: Another export default is here.
-                         ~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 multipleDefaultExports05.ts:5:22: Another export default is here.
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 multipleDefaultExports05.ts:5:22: Another export default is here.
@@ -27,14 +17,8 @@ multipleDefaultExports05.ts(5,22): error TS2528: A module cannot have multiple d
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 multipleDefaultExports05.ts:1:22: The first export default is here.
-                         ~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 multipleDefaultExports05.ts:1:22: The first export default is here.
     
     export default class CC1 {}
-                         ~~~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 multipleDefaultExports05.ts:1:22: The first export default is here.
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 multipleDefaultExports05.ts:1:22: The first export default is here.

@@ -1,22 +1,14 @@
 classAndVariableWithSameName.ts(1,7): error TS2300: Duplicate identifier 'C'.
-classAndVariableWithSameName.ts(1,7): error TS2300: Duplicate identifier 'C'.
-classAndVariableWithSameName.ts(2,5): error TS2300: Duplicate identifier 'C'.
 classAndVariableWithSameName.ts(2,5): error TS2300: Duplicate identifier 'C'.
 classAndVariableWithSameName.ts(5,11): error TS2300: Duplicate identifier 'D'.
-classAndVariableWithSameName.ts(5,11): error TS2300: Duplicate identifier 'D'.
-classAndVariableWithSameName.ts(9,9): error TS2300: Duplicate identifier 'D'.
 classAndVariableWithSameName.ts(9,9): error TS2300: Duplicate identifier 'D'.
 
 
-==== classAndVariableWithSameName.ts (8 errors) ====
+==== classAndVariableWithSameName.ts (4 errors) ====
     class C { foo: string; } // error
           ~
 !!! error TS2300: Duplicate identifier 'C'.
-          ~
-!!! error TS2300: Duplicate identifier 'C'.
     var C = ''; // error
-        ~
-!!! error TS2300: Duplicate identifier 'C'.
         ~
 !!! error TS2300: Duplicate identifier 'C'.
     
@@ -24,14 +16,10 @@ classAndVariableWithSameName.ts(9,9): error TS2300: Duplicate identifier 'D'.
         class D { // error
               ~
 !!! error TS2300: Duplicate identifier 'D'.
-              ~
-!!! error TS2300: Duplicate identifier 'D'.
             bar: string;
         }
     
         var D = 1; // error
-            ~
-!!! error TS2300: Duplicate identifier 'D'.
             ~
 !!! error TS2300: Duplicate identifier 'D'.
     }

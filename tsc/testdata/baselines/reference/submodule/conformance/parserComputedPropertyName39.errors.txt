@@ -1,14 +1,11 @@
 parserComputedPropertyName39.ts(3,6): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-parserComputedPropertyName39.ts(3,6): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 parserComputedPropertyName39.ts(3,6): error TS2304: Cannot find name 'public'.
 
 
-==== parserComputedPropertyName39.ts (3 errors) ====
+==== parserComputedPropertyName39.ts (2 errors) ====
     "use strict";
     class C {
         [public]() { }
-         ~~~~~~
-!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
          ~~~~~~
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
          ~~~~~~

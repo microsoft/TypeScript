@@ -1,6 +1,5 @@
 bin.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 globalNs.js(2,1): error TS1315: Global module exports may only appear in declaration files.
-globalNs.js(2,1): error TS1315: Global module exports may only appear in declaration files.
 
 
 ==== cls.js (0 errors) ====
@@ -16,11 +15,9 @@ globalNs.js(2,1): error TS1315: Global module exports may only appear in declara
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     
-==== globalNs.js (2 errors) ====
+==== globalNs.js (1 errors) ====
     export * from "./cls";
     export as namespace GLO; // TS Only
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1315: Global module exports may only appear in declaration files.
     ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1315: Global module exports may only appear in declaration files.
     

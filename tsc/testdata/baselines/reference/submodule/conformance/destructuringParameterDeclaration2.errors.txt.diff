@@ -1,12 +1,8 @@
 --- old.destructuringParameterDeclaration2.errors.txt
 +++ new.destructuringParameterDeclaration2.errors.txt
-@@= skipped -5, +5 lines =@@
- destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
- destructuringParameterDeclaration2.ts(23,16): error TS2322: Type 'string' is not assignable to type 'number'.
+@@= skipped -7, +7 lines =@@
  destructuringParameterDeclaration2.ts(30,14): error TS2300: Duplicate identifier 'z'.
-+destructuringParameterDeclaration2.ts(30,14): error TS2300: Duplicate identifier 'z'.
  destructuringParameterDeclaration2.ts(30,18): error TS2300: Duplicate identifier 'z'.
-+destructuringParameterDeclaration2.ts(30,18): error TS2300: Duplicate identifier 'z'.
  destructuringParameterDeclaration2.ts(34,6): error TS2322: Type 'number' is not assignable to type '{ x: any; y: { j: any; }; }'.
 -destructuringParameterDeclaration2.ts(35,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
 -  Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
@@ -14,7 +10,7 @@
  destructuringParameterDeclaration2.ts(36,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
  destructuringParameterDeclaration2.ts(37,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
  destructuringParameterDeclaration2.ts(38,6): error TS2322: Type 'boolean' is not assignable to type 'string | number'.
-@@= skipped -13, +14 lines =@@
+@@= skipped -11, +10 lines =@@
  destructuringParameterDeclaration2.ts(47,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
  destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
  destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
@@ -24,32 +20,9 @@
 -      Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ x: any; y: any; c: any; }'.
 +      Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ c: any; x: any; y: any; }'.
  destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
-+destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
  destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
-+destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
  destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
-+destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
- 
- 
--==== destructuringParameterDeclaration2.ts (22 errors) ====
-+==== destructuringParameterDeclaration2.ts (27 errors) ====
-     // A parameter declaration may specify either an identifier or a binding pattern.
-     // The identifiers specified in parameter declarations and binding patterns
-     // in a parameter list must be unique within that parameter list.
-@@= skipped -55, +58 lines =@@
-     function c4([z], z: number) { }  // Error Duplicate identifier
-                  ~
- !!! error TS2300: Duplicate identifier 'z'.
-+                 ~
-+!!! error TS2300: Duplicate identifier 'z'.
-                      ~
- !!! error TS2300: Duplicate identifier 'z'.
-+                     ~
-+!!! error TS2300: Duplicate identifier 'z'.
-     function c5([a, b, [[c]]]) { }
-     function c6([a, b, [[c = 1]]]) { }
-     
-@@= skipped -10, +14 lines =@@
+@@= skipped -65, +65 lines =@@
  !!! error TS2322: Type 'number' is not assignable to type '{ x: any; y: { j: any; }; }'.
      c1({});            // Error, implied type is {z:number}?
         ~~
@@ -70,21 +43,4 @@
 +!!! error TS2416:       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ c: any; x: any; y: any; }'.
          e0([a, b, q]) { }
      }
-     
-@@= skipped -13, +13 lines =@@
-     function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
-                      ~~~~~~
- !!! error TS2300: Duplicate identifier 'number'.
-+                     ~~~~~~
-+!!! error TS2300: Duplicate identifier 'number'.
-                              ~~~~~~
- !!! error TS2300: Duplicate identifier 'number'.
-+                             ~~~~~~
-+!!! error TS2300: Duplicate identifier 'number'.
-                                      ~~~~~~
- !!! error TS2300: Duplicate identifier 'number'.
-+                                     ~~~~~~
-+!!! error TS2300: Duplicate identifier 'number'.
-     
-     
      

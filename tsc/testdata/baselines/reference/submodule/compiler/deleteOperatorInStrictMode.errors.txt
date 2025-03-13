@@ -1,14 +1,11 @@
 deleteOperatorInStrictMode.ts(3,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
-deleteOperatorInStrictMode.ts(3,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorInStrictMode.ts(3,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
-==== deleteOperatorInStrictMode.ts (3 errors) ====
+==== deleteOperatorInStrictMode.ts (2 errors) ====
     "use strict"
     var a;
     delete a;
-           ~
-!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
            ~
 !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
            ~

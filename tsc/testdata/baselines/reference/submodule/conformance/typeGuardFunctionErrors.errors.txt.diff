@@ -1,8 +1,6 @@
 --- old.typeGuardFunctionErrors.errors.txt
 +++ new.typeGuardFunctionErrors.errors.txt
-@@= skipped -0, +0 lines =@@
- typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
-+typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
+@@= skipped -1, +1 lines =@@
  typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
  typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
  typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
@@ -10,13 +8,7 @@
  typeGuardFunctionErrors.ts(17,60): error TS1434: Unexpected keyword or identifier.
  typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
  typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
-@@= skipped -31, +33 lines =@@
- typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
- typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
- typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
-+typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
- typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
- typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
+@@= skipped -35, +36 lines =@@
  typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
  typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
  typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
@@ -24,7 +16,7 @@
  typeGuardFunctionErrors.ts(97,25): error TS1434: Unexpected keyword or identifier.
  typeGuardFunctionErrors.ts(103,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
  typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'boolean' is not assignable to type 'D'.
-@@= skipped -15, +17 lines =@@
+@@= skipped -10, +11 lines =@@
  typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
  typeGuardFunctionErrors.ts(119,22): error TS2304: Cannot find name 'p1'.
  typeGuardFunctionErrors.ts(119,25): error TS1005: ';' expected.
@@ -57,16 +49,11 @@
  
  
 -==== typeGuardFunctionErrors.ts (53 errors) ====
-+==== typeGuardFunctionErrors.ts (58 errors) ====
++==== typeGuardFunctionErrors.ts (56 errors) ====
      class A {
            ~
  !!! error TS2300: Duplicate identifier 'A'.
-+          ~
-+!!! error TS2300: Duplicate identifier 'A'.
-         propA: number;
-     }
-     
-@@= skipped -26, +28 lines =@@
+@@= skipped -26, +26 lines =@@
  !!! error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
                                                              ~~
  !!! error TS1144: '{' or ';' expected.
@@ -75,16 +62,7 @@
                                                                 ~
  !!! error TS1434: Unexpected keyword or identifier.
          return true;
-@@= skipped -134, +136 lines =@@
- !!! error TS1005: ',' expected.
-                  ~
- !!! error TS2300: Duplicate identifier 'A'.
-+                 ~
-+!!! error TS2300: Duplicate identifier 'A'.
-     function b2(a: b is A) {};
-                    ~
- !!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
-@@= skipped -12, +14 lines =@@
+@@= skipped -146, +148 lines =@@
  !!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
                           ~~
  !!! error TS1144: '{' or ';' expected.

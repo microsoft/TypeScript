@@ -1,10 +1,8 @@
 ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(5,12): error TS2300: Duplicate identifier 'fn'.
-ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(5,12): error TS2300: Duplicate identifier 'fn'.
-ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(10,21): error TS2300: Duplicate identifier 'fn'.
 ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts(10,21): error TS2300: Duplicate identifier 'fn'.
 
 
-==== ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts (4 errors) ====
+==== ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts (2 errors) ====
     class clodule<T> {
         id: string;
         value: T;
@@ -12,15 +10,11 @@ ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFu
         static fn<U>(id: U) { }
                ~~
 !!! error TS2300: Duplicate identifier 'fn'.
-               ~~
-!!! error TS2300: Duplicate identifier 'fn'.
     }
     
     module clodule {
         // error: duplicate identifier expected
         export function fn<T>(x: T, y: T): T {
-                        ~~
-!!! error TS2300: Duplicate identifier 'fn'.
                         ~~
 !!! error TS2300: Duplicate identifier 'fn'.
             return x;

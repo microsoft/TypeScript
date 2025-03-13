@@ -1,10 +1,8 @@
 moduleDuplicateIdentifiers.ts(20,14): error TS2300: Duplicate identifier 'Kettle'.
-moduleDuplicateIdentifiers.ts(20,14): error TS2300: Duplicate identifier 'Kettle'.
-moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplicate identifier 'Kettle'.
 moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplicate identifier 'Kettle'.
 
 
-==== moduleDuplicateIdentifiers.ts (4 errors) ====
+==== moduleDuplicateIdentifiers.ts (2 errors) ====
     export var Foo = 2;
     export var Foo = 42; // Should error
     
@@ -27,14 +25,10 @@ moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplicate identifier 'Kettle
     export class Kettle {
                  ~~~~~~
 !!! error TS2300: Duplicate identifier 'Kettle'.
-                 ~~~~~~
-!!! error TS2300: Duplicate identifier 'Kettle'.
     	member1 = 2;
     }
     
     export class Kettle { // Should error
-                 ~~~~~~
-!!! error TS2300: Duplicate identifier 'Kettle'.
                  ~~~~~~
 !!! error TS2300: Duplicate identifier 'Kettle'.
     	member2 = 42;

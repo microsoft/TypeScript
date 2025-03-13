@@ -1,13 +1,9 @@
 file1.ts(1,5): error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
-file1.ts(1,5): error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
-file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
 file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
 
 
-==== file1.ts (2 errors) ====
+==== file1.ts (1 errors) ====
     var \u0061wait = 12; // ok
-        ~~~~~~~~~~
-!!! error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
         ~~~~~~~~~~
 !!! error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
     async function main() {
@@ -24,12 +20,10 @@ file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved w
     typ\u0065 notok = 0; // not ok
     
     export {};
-==== file2.ts (2 errors) ====
+==== file2.ts (1 errors) ====
     \u{0076}ar x = "hello"; // not ok
     
     var \u{0061}wait = 12; // ok
-        ~~~~~~~~~~~~
-!!! error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
         ~~~~~~~~~~~~
 !!! error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
     async function main() {

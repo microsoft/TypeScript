@@ -1,6 +1,4 @@
 constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-constEnumErrors.ts(5,8): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 constEnumErrors.ts(5,8): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 constEnumErrors.ts(12,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 constEnumErrors.ts(14,9): error TS2474: const enum member initializers must be constant expressions.
@@ -16,18 +14,14 @@ constEnumErrors.ts(42,9): error TS2477: 'const' enum member initializer was eval
 constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
 
 
-==== constEnumErrors.ts (16 errors) ====
+==== constEnumErrors.ts (14 errors) ====
     const enum E {
-               ~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
                ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
         A
     }
     
     module E {
-           ~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
            ~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
         var x = 1;

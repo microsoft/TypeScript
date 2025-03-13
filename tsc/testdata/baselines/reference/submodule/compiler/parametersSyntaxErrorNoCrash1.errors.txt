@@ -1,25 +1,21 @@
 parametersSyntaxErrorNoCrash1.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 parametersSyntaxErrorNoCrash1.ts(3,22): error TS2300: Duplicate identifier 'arg'.
-parametersSyntaxErrorNoCrash1.ts(3,22): error TS2300: Duplicate identifier 'arg'.
 parametersSyntaxErrorNoCrash1.ts(3,28): error TS1005: ',' expected.
 parametersSyntaxErrorNoCrash1.ts(3,30): error TS7006: Parameter 'T' implicitly has an 'any' type.
 parametersSyntaxErrorNoCrash1.ts(3,32): error TS1005: ',' expected.
 parametersSyntaxErrorNoCrash1.ts(4,12): error TS1005: ':' expected.
-parametersSyntaxErrorNoCrash1.ts(4,12): error TS2300: Duplicate identifier 'arg'.
 parametersSyntaxErrorNoCrash1.ts(4,12): error TS2300: Duplicate identifier 'arg'.
 parametersSyntaxErrorNoCrash1.ts(4,12): error TS2842: 'arg' is an unused renaming of 'return'. Did you intend to use it as a type annotation?
 parametersSyntaxErrorNoCrash1.ts(4,15): error TS1005: ',' expected.
 parametersSyntaxErrorNoCrash1.ts(5,2): error TS1005: ')' expected.
 
 
-==== parametersSyntaxErrorNoCrash1.ts (12 errors) ====
+==== parametersSyntaxErrorNoCrash1.ts (10 errors) ====
     // https://github.com/microsoft/TypeScript/issues/59422
     
     function identity<T>(arg: T: T {
              ~~~~~~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
-                         ~~~
-!!! error TS2300: Duplicate identifier 'arg'.
                          ~~~
 !!! error TS2300: Duplicate identifier 'arg'.
                                ~
@@ -31,8 +27,6 @@ parametersSyntaxErrorNoCrash1.ts(5,2): error TS1005: ')' expected.
         return arg;
                ~~~
 !!! error TS1005: ':' expected.
-               ~~~
-!!! error TS2300: Duplicate identifier 'arg'.
                ~~~
 !!! error TS2300: Duplicate identifier 'arg'.
                ~~~

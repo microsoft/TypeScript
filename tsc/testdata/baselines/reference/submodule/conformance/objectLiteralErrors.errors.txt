@@ -15,80 +15,50 @@ objectLiteralErrors.ts(16,5): error TS2403: Subsequent variable declarations mus
 objectLiteralErrors.ts(17,23): error TS1117: An object literal cannot have multiple properties with the same name.
 objectLiteralErrors.ts(19,25): error TS1117: An object literal cannot have multiple properties with the same name.
 objectLiteralErrors.ts(22,12): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(22,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(22,22): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(22,22): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(22,22): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(23,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(23,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(23,23): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(23,23): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(23,23): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(24,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(24,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(24,22): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(24,22): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(24,22): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(25,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(25,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(25,25): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(25,25): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(25,25): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(26,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(26,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(26,23): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(26,23): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(26,23): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(27,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(27,12): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(27,22): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(27,22): error TS2300: Duplicate identifier ''a''.
-objectLiteralErrors.ts(27,22): error TS2300: Duplicate identifier ''a''.
-objectLiteralErrors.ts(28,12): error TS2300: Duplicate identifier ''a''.
 objectLiteralErrors.ts(28,12): error TS2300: Duplicate identifier ''a''.
 objectLiteralErrors.ts(28,24): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(28,24): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(28,24): error TS2300: Duplicate identifier 'a'.
-objectLiteralErrors.ts(29,12): error TS2300: Duplicate identifier ''a''.
 objectLiteralErrors.ts(29,12): error TS2300: Duplicate identifier ''a''.
 objectLiteralErrors.ts(29,24): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(29,24): error TS2300: Duplicate identifier '"a"'.
-objectLiteralErrors.ts(29,24): error TS2300: Duplicate identifier '"a"'.
-objectLiteralErrors.ts(30,12): error TS2300: Duplicate identifier ''a''.
 objectLiteralErrors.ts(30,12): error TS2300: Duplicate identifier ''a''.
 objectLiteralErrors.ts(30,24): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(30,24): error TS2300: Duplicate identifier ''a''.
-objectLiteralErrors.ts(30,24): error TS2300: Duplicate identifier ''a''.
-objectLiteralErrors.ts(31,13): error TS2300: Duplicate identifier '"a"'.
 objectLiteralErrors.ts(31,13): error TS2300: Duplicate identifier '"a"'.
 objectLiteralErrors.ts(31,25): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(31,25): error TS2300: Duplicate identifier ''a''.
-objectLiteralErrors.ts(31,25): error TS2300: Duplicate identifier ''a''.
-objectLiteralErrors.ts(32,13): error TS2300: Duplicate identifier '1.0'.
 objectLiteralErrors.ts(32,13): error TS2300: Duplicate identifier '1.0'.
 objectLiteralErrors.ts(32,25): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(32,25): error TS2300: Duplicate identifier ''1''.
-objectLiteralErrors.ts(32,25): error TS2300: Duplicate identifier ''1''.
-objectLiteralErrors.ts(33,13): error TS2300: Duplicate identifier '0'.
 objectLiteralErrors.ts(33,13): error TS2300: Duplicate identifier '0'.
 objectLiteralErrors.ts(33,23): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(33,23): error TS2300: Duplicate identifier '0'.
-objectLiteralErrors.ts(33,23): error TS2300: Duplicate identifier '0'.
-objectLiteralErrors.ts(34,13): error TS2300: Duplicate identifier '0'.
 objectLiteralErrors.ts(34,13): error TS2300: Duplicate identifier '0'.
 objectLiteralErrors.ts(34,23): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(34,23): error TS2300: Duplicate identifier '0'.
-objectLiteralErrors.ts(34,23): error TS2300: Duplicate identifier '0'.
 objectLiteralErrors.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'f14' must be of type '{ 0: number; readonly 0x0: number; }', but here has type '{ 0: number; readonly 0o0: number; }'.
-objectLiteralErrors.ts(37,13): error TS2300: Duplicate identifier '"100"'.
 objectLiteralErrors.ts(37,13): error TS2300: Duplicate identifier '"100"'.
 objectLiteralErrors.ts(37,27): error TS1119: An object literal cannot have property and accessor with the same name.
 objectLiteralErrors.ts(37,27): error TS2300: Duplicate identifier '1e2'.
-objectLiteralErrors.ts(37,27): error TS2300: Duplicate identifier '1e2'.
-objectLiteralErrors.ts(39,13): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(39,13): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(39,46): error TS1119: An object literal cannot have property and accessor with the same name.
-objectLiteralErrors.ts(39,46): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(39,46): error TS2300: Duplicate identifier 'a'.
 objectLiteralErrors.ts(43,22): error TS2322: Type 'number' is not assignable to type 'string'.
 objectLiteralErrors.ts(48,7): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
@@ -96,7 +66,7 @@ objectLiteralErrors.ts(49,7): error TS1312: Did you mean to use a ':'? An '=' ca
 objectLiteralErrors.ts(50,5): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== objectLiteralErrors.ts (96 errors) ====
+==== objectLiteralErrors.ts (66 errors) ====
     // Multiple properties with the same name
     var e1 = { a: 0, a: 0 };
                      ~
@@ -154,144 +124,92 @@ objectLiteralErrors.ts(50,5): error TS18016: Private identifiers are not allowed
     var f1 = { a: 0, get a() { return 0; } };
                ~
 !!! error TS2300: Duplicate identifier 'a'.
-               ~
-!!! error TS2300: Duplicate identifier 'a'.
                          ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                         ~
-!!! error TS2300: Duplicate identifier 'a'.
                          ~
 !!! error TS2300: Duplicate identifier 'a'.
     var f2 = { a: '', get a() { return ''; } };
                ~
 !!! error TS2300: Duplicate identifier 'a'.
-               ~
-!!! error TS2300: Duplicate identifier 'a'.
                           ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                          ~
-!!! error TS2300: Duplicate identifier 'a'.
                           ~
 !!! error TS2300: Duplicate identifier 'a'.
     var f3 = { a: 0, get a() { return ''; } };
                ~
 !!! error TS2300: Duplicate identifier 'a'.
-               ~
-!!! error TS2300: Duplicate identifier 'a'.
                          ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                         ~
-!!! error TS2300: Duplicate identifier 'a'.
                          ~
 !!! error TS2300: Duplicate identifier 'a'.
     var f4 = { a: true, get a() { return false; } };
                ~
 !!! error TS2300: Duplicate identifier 'a'.
-               ~
-!!! error TS2300: Duplicate identifier 'a'.
                             ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                            ~
-!!! error TS2300: Duplicate identifier 'a'.
                             ~
 !!! error TS2300: Duplicate identifier 'a'.
     var f5 = { a: {}, get a() { return {}; } };
                ~
 !!! error TS2300: Duplicate identifier 'a'.
-               ~
-!!! error TS2300: Duplicate identifier 'a'.
                           ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                          ~
-!!! error TS2300: Duplicate identifier 'a'.
                           ~
 !!! error TS2300: Duplicate identifier 'a'.
     var f6 = { a: 0, get 'a'() { return 0; } };
                ~
 !!! error TS2300: Duplicate identifier 'a'.
-               ~
-!!! error TS2300: Duplicate identifier 'a'.
                          ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                         ~~~
-!!! error TS2300: Duplicate identifier ''a''.
                          ~~~
 !!! error TS2300: Duplicate identifier ''a''.
     var f7 = { 'a': 0, get a() { return 0; } };
                ~~~
 !!! error TS2300: Duplicate identifier ''a''.
-               ~~~
-!!! error TS2300: Duplicate identifier ''a''.
                            ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                           ~
-!!! error TS2300: Duplicate identifier 'a'.
                            ~
 !!! error TS2300: Duplicate identifier 'a'.
     var f8 = { 'a': 0, get "a"() { return 0; } };
                ~~~
 !!! error TS2300: Duplicate identifier ''a''.
-               ~~~
-!!! error TS2300: Duplicate identifier ''a''.
                            ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                           ~~~
-!!! error TS2300: Duplicate identifier '"a"'.
                            ~~~
 !!! error TS2300: Duplicate identifier '"a"'.
     var f9 = { 'a': 0, get 'a'() { return 0; } };
                ~~~
 !!! error TS2300: Duplicate identifier ''a''.
-               ~~~
-!!! error TS2300: Duplicate identifier ''a''.
                            ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                           ~~~
-!!! error TS2300: Duplicate identifier ''a''.
                            ~~~
 !!! error TS2300: Duplicate identifier ''a''.
     var f10 = { "a": 0, get 'a'() { return 0; } };
                 ~~~
 !!! error TS2300: Duplicate identifier '"a"'.
-                ~~~
-!!! error TS2300: Duplicate identifier '"a"'.
                             ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                            ~~~
-!!! error TS2300: Duplicate identifier ''a''.
                             ~~~
 !!! error TS2300: Duplicate identifier ''a''.
     var f11 = { 1.0: 0, get '1'() { return 0; } };
                 ~~~
 !!! error TS2300: Duplicate identifier '1.0'.
-                ~~~
-!!! error TS2300: Duplicate identifier '1.0'.
                             ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                            ~~~
-!!! error TS2300: Duplicate identifier ''1''.
                             ~~~
 !!! error TS2300: Duplicate identifier ''1''.
     var f12 = { 0: 0, get 0() { return 0; } };
                 ~
 !!! error TS2300: Duplicate identifier '0'.
-                ~
-!!! error TS2300: Duplicate identifier '0'.
                           ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                          ~
-!!! error TS2300: Duplicate identifier '0'.
                           ~
 !!! error TS2300: Duplicate identifier '0'.
     var f13 = { 0: 0, get 0() { return 0; } };
                 ~
 !!! error TS2300: Duplicate identifier '0'.
-                ~
-!!! error TS2300: Duplicate identifier '0'.
                           ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                          ~
-!!! error TS2300: Duplicate identifier '0'.
                           ~
 !!! error TS2300: Duplicate identifier '0'.
     var f14 = { 0: 0, get 0x0() { return 0; } };
@@ -302,24 +220,16 @@ objectLiteralErrors.ts(50,5): error TS18016: Private identifiers are not allowed
     var f15 = { "100": 0, get 1e2() { return 0; } };
                 ~~~~~
 !!! error TS2300: Duplicate identifier '"100"'.
-                ~~~~~
-!!! error TS2300: Duplicate identifier '"100"'.
                               ~~~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                              ~~~
-!!! error TS2300: Duplicate identifier '1e2'.
                               ~~~
 !!! error TS2300: Duplicate identifier '1e2'.
     var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
     var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
                 ~
 !!! error TS2300: Duplicate identifier 'a'.
-                ~
-!!! error TS2300: Duplicate identifier 'a'.
                                                  ~
 !!! error TS1119: An object literal cannot have property and accessor with the same name.
-                                                 ~
-!!! error TS2300: Duplicate identifier 'a'.
                                                  ~
 !!! error TS2300: Duplicate identifier 'a'.
     

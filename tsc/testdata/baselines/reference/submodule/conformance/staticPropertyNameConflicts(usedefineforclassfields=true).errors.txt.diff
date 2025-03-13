@@ -1,10 +1,8 @@
 --- old.staticPropertyNameConflicts(usedefineforclassfields=true).errors.txt
 +++ new.staticPropertyNameConflicts(usedefineforclassfields=true).errors.txt
-@@= skipped -0, +0 lines =@@
- staticPropertyNameConflicts.ts(53,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
+@@= skipped -1, +1 lines =@@
  staticPropertyNameConflicts.ts(58,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype2'.
  staticPropertyNameConflicts.ts(63,12): error TS2300: Duplicate identifier 'prototype'.
-+staticPropertyNameConflicts.ts(63,12): error TS2300: Duplicate identifier 'prototype'.
  staticPropertyNameConflicts.ts(63,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
 -staticPropertyNameConflicts.ts(68,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
 +staticPropertyNameConflicts.ts(68,12): error TS2300: Duplicate identifier 'prototype'.
@@ -12,7 +10,6 @@
  staticPropertyNameConflicts.ts(161,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
  staticPropertyNameConflicts.ts(166,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous2'.
  staticPropertyNameConflicts.ts(171,12): error TS2300: Duplicate identifier 'prototype'.
-+staticPropertyNameConflicts.ts(171,12): error TS2300: Duplicate identifier 'prototype'.
  staticPropertyNameConflicts.ts(171,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
 -staticPropertyNameConflicts.ts(176,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
 +staticPropertyNameConflicts.ts(176,12): error TS2300: Duplicate identifier 'prototype'.
@@ -27,31 +24,12 @@
  staticPropertyNameConflicts.ts(290,16): error TS2300: Duplicate identifier 'prototype'.
 -staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
 -staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
-+staticPropertyNameConflicts.ts(290,16): error TS2300: Duplicate identifier 'prototype'.
 +staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'default'.
 +staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier 'prototype'.
  staticPropertyNameConflicts.ts(296,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototypeFn'.
  staticPropertyNameConflicts.ts(302,12): error TS1319: A default export can only be used in an ECMAScript-style module.
  staticPropertyNameConflicts.ts(314,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-@@= skipped -25, +28 lines =@@
- staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only be used in an ECMAScript-style module.
- 
- 
--==== staticPropertyNameConflicts.ts (26 errors) ====
-+==== staticPropertyNameConflicts.ts (29 errors) ====
-     const FunctionPropertyNames = {
-         name: 'name',
-         length: 'length',
-@@= skipped -71, +71 lines =@@
-                ~~~~~~~~~
- !!! error TS2300: Duplicate identifier 'prototype'.
-                ~~~~~~~~~
-+!!! error TS2300: Duplicate identifier 'prototype'.
-+               ~~~~~~~~~
- !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-         prototype() {} // ok
-     }
-@@= skipped -7, +9 lines =@@
+@@= skipped -102, +102 lines =@@
      class StaticPrototypeFn2 {
          static [FunctionPropertyNames.prototype]() {} // always an error
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,16 +38,7 @@
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn2'.
          [FunctionPropertyNames.prototype]() {} // ok
-@@= skipped -113, +113 lines =@@
-                ~~~~~~~~~
- !!! error TS2300: Duplicate identifier 'prototype'.
-                ~~~~~~~~~
-+!!! error TS2300: Duplicate identifier 'prototype'.
-+               ~~~~~~~~~
- !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
-         prototype() {} // ok
-     }
-@@= skipped -7, +9 lines =@@
+@@= skipped -120, +120 lines =@@
      var StaticPrototypeFn_Anonymous2 = class {
          static [FunctionPropertyNames.prototype]() {} // always an error
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,13 +61,11 @@
  !!! error TS2300: Duplicate identifier 'prototype'.
                     ~~~~~~~~~
 -!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-+!!! error TS2300: Duplicate identifier 'prototype'.
-+                   ~~~~~~~~~
 +!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'default'.
              prototype() {} // ok
          }
      }
-@@= skipped -8, +10 lines =@@
+@@= skipped -8, +8 lines =@@
      export class ExportedStaticPrototypeFn {
          static [FunctionPropertyNames.prototype]() {} // always an error
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

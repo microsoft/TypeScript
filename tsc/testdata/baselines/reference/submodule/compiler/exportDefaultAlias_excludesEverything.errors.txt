@@ -1,22 +1,14 @@
 exportDefaultAlias_excludesEverything.ts(1,26): error TS2528: A module cannot have multiple default exports.
-exportDefaultAlias_excludesEverything.ts(1,26): error TS2528: A module cannot have multiple default exports.
-exportDefaultAlias_excludesEverything.ts(3,16): error TS2528: A module cannot have multiple default exports.
 exportDefaultAlias_excludesEverything.ts(3,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== exportDefaultAlias_excludesEverything.ts (4 errors) ====
+==== exportDefaultAlias_excludesEverything.ts (2 errors) ====
     export default interface A {}
-                             ~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 exportDefaultAlias_excludesEverything.ts:3:16: Another export default is here.
                              ~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 exportDefaultAlias_excludesEverything.ts:3:16: Another export default is here.
     interface B {}
     export default B;
-                   ~
-!!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 exportDefaultAlias_excludesEverything.ts:1:26: The first export default is here.
                    ~
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2752 exportDefaultAlias_excludesEverything.ts:1:26: The first export default is here.

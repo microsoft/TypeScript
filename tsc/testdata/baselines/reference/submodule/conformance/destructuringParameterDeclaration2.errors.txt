@@ -6,8 +6,6 @@ destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializ
 destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 destructuringParameterDeclaration2.ts(23,16): error TS2322: Type 'string' is not assignable to type 'number'.
 destructuringParameterDeclaration2.ts(30,14): error TS2300: Duplicate identifier 'z'.
-destructuringParameterDeclaration2.ts(30,14): error TS2300: Duplicate identifier 'z'.
-destructuringParameterDeclaration2.ts(30,18): error TS2300: Duplicate identifier 'z'.
 destructuringParameterDeclaration2.ts(30,18): error TS2300: Duplicate identifier 'z'.
 destructuringParameterDeclaration2.ts(34,6): error TS2322: Type 'number' is not assignable to type '{ x: any; y: { j: any; }; }'.
 destructuringParameterDeclaration2.ts(35,4): error TS2741: Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
@@ -24,14 +22,11 @@ destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type
     Types of parameters '__0' and '__0' are incompatible.
       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ c: any; x: any; y: any; }'.
 destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
-destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
 destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
-destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
-destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
 destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
 
 
-==== destructuringParameterDeclaration2.ts (27 errors) ====
+==== destructuringParameterDeclaration2.ts (22 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     // The identifiers specified in parameter declarations and binding patterns
     // in a parameter list must be unique within that parameter list.
@@ -77,10 +72,6 @@ destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier
     function c3({b}: { b: number|string } = { b: "hello" }) { }
     function c4([z], z: number) { }  // Error Duplicate identifier
                  ~
-!!! error TS2300: Duplicate identifier 'z'.
-                 ~
-!!! error TS2300: Duplicate identifier 'z'.
-                     ~
 !!! error TS2300: Duplicate identifier 'z'.
                      ~
 !!! error TS2300: Duplicate identifier 'z'.
@@ -149,13 +140,7 @@ destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier
     function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
                      ~~~~~~
 !!! error TS2300: Duplicate identifier 'number'.
-                     ~~~~~~
-!!! error TS2300: Duplicate identifier 'number'.
                              ~~~~~~
-!!! error TS2300: Duplicate identifier 'number'.
-                             ~~~~~~
-!!! error TS2300: Duplicate identifier 'number'.
-                                     ~~~~~~
 !!! error TS2300: Duplicate identifier 'number'.
                                      ~~~~~~
 !!! error TS2300: Duplicate identifier 'number'.

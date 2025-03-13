@@ -1,33 +1,23 @@
 augmentedTypesFunction.ts(2,10): error TS2300: Duplicate identifier 'y1'.
-augmentedTypesFunction.ts(2,10): error TS2300: Duplicate identifier 'y1'.
-augmentedTypesFunction.ts(3,5): error TS2300: Duplicate identifier 'y1'.
 augmentedTypesFunction.ts(3,5): error TS2300: Duplicate identifier 'y1'.
 augmentedTypesFunction.ts(6,10): error TS2393: Duplicate function implementation.
 augmentedTypesFunction.ts(7,10): error TS2393: Duplicate function implementation.
 augmentedTypesFunction.ts(9,10): error TS2300: Duplicate identifier 'y2a'.
-augmentedTypesFunction.ts(9,10): error TS2300: Duplicate identifier 'y2a'.
-augmentedTypesFunction.ts(10,5): error TS2300: Duplicate identifier 'y2a'.
 augmentedTypesFunction.ts(10,5): error TS2300: Duplicate identifier 'y2a'.
 augmentedTypesFunction.ts(13,10): error TS2814: Function with bodies can only merge with classes that are ambient.
 augmentedTypesFunction.ts(14,7): error TS2813: Class declaration cannot implement overload list for 'y3'.
 augmentedTypesFunction.ts(16,10): error TS2814: Function with bodies can only merge with classes that are ambient.
 augmentedTypesFunction.ts(17,7): error TS2813: Class declaration cannot implement overload list for 'y3a'.
 augmentedTypesFunction.ts(20,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-augmentedTypesFunction.ts(20,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
-==== augmentedTypesFunction.ts (18 errors) ====
+==== augmentedTypesFunction.ts (12 errors) ====
     // function then var
     function y1() { } // error
              ~~
 !!! error TS2300: Duplicate identifier 'y1'.
-             ~~
-!!! error TS2300: Duplicate identifier 'y1'.
     var y1 = 1; // error
-        ~~
-!!! error TS2300: Duplicate identifier 'y1'.
         ~~
 !!! error TS2300: Duplicate identifier 'y1'.
     
@@ -42,11 +32,7 @@ augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge 
     function y2a() { }  // error
              ~~~
 !!! error TS2300: Duplicate identifier 'y2a'.
-             ~~~
-!!! error TS2300: Duplicate identifier 'y2a'.
     var y2a = () => { } // error
-        ~~~
-!!! error TS2300: Duplicate identifier 'y2a'.
         ~~~
 !!! error TS2300: Duplicate identifier 'y2a'.
     
@@ -73,11 +59,7 @@ augmentedTypesFunction.ts(21,6): error TS2567: Enum declarations can only merge 
     function y4() { } // error
              ~~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-             ~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
     enum y4 { One } // error
-         ~~
-!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
          ~~
 !!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
     

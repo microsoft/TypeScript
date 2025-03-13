@@ -1,40 +1,16 @@
 --- old.errorElaboration.errors.txt
 +++ new.errorElaboration.errors.txt
-@@= skipped -0, +0 lines =@@
- errorElaboration.ts(10,18): error TS2300: Duplicate identifier 'foo'.
-+errorElaboration.ts(10,18): error TS2300: Duplicate identifier 'foo'.
- errorElaboration.ts(12,5): error TS2345: Argument of type '() => Container<Ref<string>>' is not assignable to parameter of type '() => Container<Ref<number>>'.
-   Type 'Container<Ref<string>>' is not assignable to type 'Container<Ref<number>>'.
-     Type 'Ref<string>' is not assignable to type 'Ref<number>'.
+@@= skipped -4, +4 lines =@@
        Type 'string' is not assignable to type 'number'.
  errorElaboration.ts(17,11): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
  errorElaboration.ts(22,7): error TS2300: Duplicate identifier 'foo'.
 -errorElaboration.ts(23,15): error TS2538: Type 'any' cannot be used as an index type.
-+errorElaboration.ts(22,7): error TS2300: Duplicate identifier 'foo'.
 +errorElaboration.ts(23,15): error TS2538: Type 'error' cannot be used as an index type.
  errorElaboration.ts(23,19): error TS2339: Property 'bar' does not exist on type '(x: () => Container<Ref<number>>) => void'.
  
  
--==== errorElaboration.ts (6 errors) ====
-+==== errorElaboration.ts (8 errors) ====
-     // Repro for #5712
-     
-     interface Ref<T> {
-@@= skipped -21, +23 lines =@@
-     declare function foo(x: () => Container<Ref<number>>): void;
-                      ~~~
+@@= skipped -41, +41 lines =@@
  !!! error TS2300: Duplicate identifier 'foo'.
-+                     ~~~
-+!!! error TS2300: Duplicate identifier 'foo'.
-     let a: () => Container<Ref<string>>;
-     foo(a);
-         ~
-@@= skipped -22, +24 lines =@@
-     const foo = { bar: 'a' };
-           ~~~
- !!! error TS2300: Duplicate identifier 'foo'.
-+          ~~~
-+!!! error TS2300: Duplicate identifier 'foo'.
      const x = ({ [foo.bar]: c }) => undefined;
                    ~~~~~~~
 -!!! error TS2538: Type 'any' cannot be used as an index type.

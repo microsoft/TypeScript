@@ -1,32 +1,20 @@
 collisionArgumentsClassConstructor.ts(4,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(4,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(9,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(9,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(14,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(14,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(20,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(20,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(25,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(25,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(31,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(31,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(36,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(36,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(54,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(54,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(62,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(62,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 
 
-==== collisionArgumentsClassConstructor.ts (20 errors) ====
+==== collisionArgumentsClassConstructor.ts (10 errors) ====
     // Constructors
     class c1 {
         constructor(i: number, ...arguments) { // error
             var arguments: any[]; // no error
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
@@ -36,15 +24,11 @@ collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a 
             var arguments = 10; // no error
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
     }
     class c1NoError {
         constructor(arguments: number) { // no error
             var arguments = 10; // no error
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
@@ -55,15 +39,11 @@ collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a 
             var arguments = 10; // no error
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
     }
     class c2NoError {
         constructor() {
             var arguments = 10; // no error
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
@@ -74,15 +54,11 @@ collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a 
             var arguments = 10; // no error
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
     }
     class c3NoError {
         constructor(public arguments: number) { // no error
             var arguments = 10; // no error
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
@@ -105,8 +81,6 @@ collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a 
             var arguments: any[]; // no error
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
     }
     
@@ -117,8 +91,6 @@ collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a 
             var arguments: any; // no error
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }
     }
     
@@ -127,8 +99,6 @@ collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a 
         constructor(arguments: string); // no error
         constructor(arguments: any) { // no error
             var arguments: any; // no error
-                ~~~~~~~~~
-!!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
                 ~~~~~~~~~
 !!! error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
         }

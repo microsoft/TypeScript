@@ -31,7 +31,6 @@ strictOptionalProperties1.ts(111,7): error TS2322: Type '{ foo: undefined; }' is
     Type 'undefined' is not assignable to type 'number'.
 strictOptionalProperties1.ts(119,5): error TS2411: Property 'bar' of type 'string | undefined' is not assignable to 'string' index type 'string'.
 strictOptionalProperties1.ts(190,15): error TS2451: Cannot redeclare block-scoped variable 'e'.
-strictOptionalProperties1.ts(190,15): error TS2451: Cannot redeclare block-scoped variable 'e'.
 strictOptionalProperties1.ts(193,1): error TS2322: Type 'string | boolean | undefined' is not assignable to type 'string | number | undefined'.
   Type 'false' is not assignable to type 'string | number | undefined'.
 strictOptionalProperties1.ts(194,1): error TS2412: Type 'string | boolean | undefined' is not assignable to type 'string | number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
@@ -39,7 +38,6 @@ strictOptionalProperties1.ts(194,1): error TS2412: Type 'string | boolean | unde
 strictOptionalProperties1.ts(195,1): error TS2322: Type '{ name: string; email: undefined; }' is not assignable to type 'U2'.
   Types of property 'email' are incompatible.
     Type 'undefined' is not assignable to type 'string | number'.
-strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
 strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
 strictOptionalProperties1.ts(210,1): error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
   Property 'b' is incompatible with index signature.
@@ -49,7 +47,7 @@ strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | unde
   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
 
 
-==== strictOptionalProperties1.ts (25 errors) ====
+==== strictOptionalProperties1.ts (23 errors) ====
     function f1(obj: { a?: string, b?: string | undefined }) {
         let a = obj.a;  // string | undefined
         let b = obj.b;  // string | undefined
@@ -290,8 +288,6 @@ strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | unde
     declare const e: string | boolean | undefined
                   ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'e'.
-                  ~
-!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
     declare const u1: U1
     declare let u2: U2
     u1.email = e // error, but only because boolean isn't in email's type
@@ -318,8 +314,6 @@ strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | unde
     declare var c: {a: number, b?: string}
     declare var d: {a: number, b: string | undefined }
     declare var e: {a: number, b?: string | undefined }
-                ~
-!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
                 ~
 !!! error TS2451: Cannot redeclare block-scoped variable 'e'.
     

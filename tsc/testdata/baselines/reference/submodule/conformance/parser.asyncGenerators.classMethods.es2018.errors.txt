@@ -4,22 +4,14 @@ asyncGeneratorSetAccessorIsError.ts(2,17): error TS1005: '(' expected.
 awaitInParameterInitializerIsError.ts(2,19): error TS2524: 'await' expressions cannot be used in a parameter initializer.
 awaitMissingValueIsError.ts(3,14): error TS1109: Expression expected.
 awaitParameterIsError.ts(2,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-awaitParameterIsError.ts(2,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-nestedFunctionDeclarationNamedAwaitIsError.ts(3,18): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 nestedFunctionDeclarationNamedAwaitIsError.ts(3,18): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 nestedFunctionDeclarationNamedYieldIsError.ts(3,18): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-nestedFunctionDeclarationNamedYieldIsError.ts(3,18): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-nestedFunctionExpressionNamedAwaitIsError.ts(3,28): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 nestedFunctionExpressionNamedAwaitIsError.ts(3,28): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 yieldAsTypeIsStrictError.ts(4,16): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-yieldAsTypeIsStrictError.ts(4,16): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-yieldInClassComputedPropertyIsError.ts(2,14): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 yieldInClassComputedPropertyIsError.ts(2,14): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 yieldInClassComputedPropertyIsError.ts(2,14): error TS2693: 'yield' only refers to a type, but is being used as a value here.
 yieldInParameterInitializerIsError.ts(2,19): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
-yieldParameterIsError.ts(2,15): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 yieldParameterIsError.ts(2,15): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
 
@@ -39,20 +31,16 @@ yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
         async * yield() {
         }
     }
-==== awaitParameterIsError.ts (2 errors) ====
+==== awaitParameterIsError.ts (1 errors) ====
     class C4 {
         async * f(await) {
                   ~~~~~
 !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-                  ~~~~~
-!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
         }
     }
-==== yieldParameterIsError.ts (2 errors) ====
+==== yieldParameterIsError.ts (1 errors) ====
     class C5 {
         async * f(yield) {
-                  ~~~~~
-!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                   ~~~~~
 !!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         }
@@ -78,45 +66,37 @@ yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
             }
         }
     }
-==== nestedFunctionDeclarationNamedYieldIsError.ts (2 errors) ====
+==== nestedFunctionDeclarationNamedYieldIsError.ts (1 errors) ====
     class C9 {
         async * f() {
             function yield() {
                      ~~~~~
 !!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-                     ~~~~~
-!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
             }
         }
     }
-==== nestedFunctionExpressionNamedYieldIsError.ts (2 errors) ====
+==== nestedFunctionExpressionNamedYieldIsError.ts (1 errors) ====
     class C10 {
         async * f() {
             const x = function yield() {
                                ~~~~~
 !!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-                               ~~~~~
-!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
             };
         }
     }
-==== nestedFunctionDeclarationNamedAwaitIsError.ts (2 errors) ====
+==== nestedFunctionDeclarationNamedAwaitIsError.ts (1 errors) ====
     class C11 {
         async * f() {
             function await() {
                      ~~~~~
 !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
-                     ~~~~~
-!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
             }
         }
     }
-==== nestedFunctionExpressionNamedAwaitIsError.ts (2 errors) ====
+==== nestedFunctionExpressionNamedAwaitIsError.ts (1 errors) ====
     class C12 {
         async * f() {
             const x = function await() {
-                               ~~~~~
-!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
                                ~~~~~
 !!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
             };
@@ -169,22 +149,18 @@ yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
             let x: await;
         }
     }
-==== yieldAsTypeIsStrictError.ts (2 errors) ====
+==== yieldAsTypeIsStrictError.ts (1 errors) ====
     interface yield {}
     class C20 {
         async * f() {
             let x: yield;
                    ~~~~~
 !!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-                   ~~~~~
-!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         }
     }
-==== yieldInClassComputedPropertyIsError.ts (3 errors) ====
+==== yieldInClassComputedPropertyIsError.ts (2 errors) ====
     class C21 {
         async * [yield]() {
-                 ~~~~~
-!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                  ~~~~~
 !!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                  ~~~~~

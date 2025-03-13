@@ -6,15 +6,10 @@ missingFunctionImplementation.ts(27,10): error TS2391: Function implementation i
 missingFunctionImplementation.ts(32,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 missingFunctionImplementation.ts(40,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 missingFunctionImplementation.ts(47,10): error TS2300: Duplicate identifier 'm'.
-missingFunctionImplementation.ts(47,10): error TS2300: Duplicate identifier 'm'.
-missingFunctionImplementation.ts(48,10): error TS2300: Duplicate identifier 'm'.
 missingFunctionImplementation.ts(48,10): error TS2300: Duplicate identifier 'm'.
 missingFunctionImplementation.ts(48,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 missingFunctionImplementation.ts(51,19): error TS2300: Duplicate identifier 'm'.
-missingFunctionImplementation.ts(51,19): error TS2300: Duplicate identifier 'm'.
 missingFunctionImplementation.ts(56,10): error TS2300: Duplicate identifier 'm'.
-missingFunctionImplementation.ts(56,10): error TS2300: Duplicate identifier 'm'.
-missingFunctionImplementation.ts(59,19): error TS2300: Duplicate identifier 'm'.
 missingFunctionImplementation.ts(59,19): error TS2300: Duplicate identifier 'm'.
 missingFunctionImplementation.ts(59,19): error TS2391: Function implementation is missing or not immediately following the declaration.
 missingFunctionImplementation.ts(64,19): error TS2391: Function implementation is missing or not immediately following the declaration.
@@ -24,7 +19,7 @@ missingFunctionImplementation.ts(74,19): error TS2393: Duplicate function implem
 missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implementation.
 
 
-==== missingFunctionImplementation.ts (24 errors) ====
+==== missingFunctionImplementation.ts (19 errors) ====
     export class C1 {
       m(): void;
       ~
@@ -88,11 +83,7 @@ missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implem
       static m(a): void;
              ~
 !!! error TS2300: Duplicate identifier 'm'.
-             ~
-!!! error TS2300: Duplicate identifier 'm'.
       static m(a, b): void;
-             ~
-!!! error TS2300: Duplicate identifier 'm'.
              ~
 !!! error TS2300: Duplicate identifier 'm'.
              ~
@@ -102,8 +93,6 @@ missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implem
       export function m(a?, b?): void { }
                       ~
 !!! error TS2300: Duplicate identifier 'm'.
-                      ~
-!!! error TS2300: Duplicate identifier 'm'.
     }
     
     // merged with namespace, static methods, duplicate declarations
@@ -111,13 +100,9 @@ missingFunctionImplementation.ts(77,19): error TS2393: Duplicate function implem
       static m(a): void { }
              ~
 !!! error TS2300: Duplicate identifier 'm'.
-             ~
-!!! error TS2300: Duplicate identifier 'm'.
     }
     namespace C9 {
       export function m(a): void;
-                      ~
-!!! error TS2300: Duplicate identifier 'm'.
                       ~
 !!! error TS2300: Duplicate identifier 'm'.
                       ~

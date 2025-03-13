@@ -1,14 +1,11 @@
 YieldExpression18_es6.ts(2,1): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
-YieldExpression18_es6.ts(2,1): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
 YieldExpression18_es6.ts(2,1): error TS2304: Cannot find name 'yield'.
 YieldExpression18_es6.ts(2,7): error TS2304: Cannot find name 'foo'.
 
 
-==== YieldExpression18_es6.ts (4 errors) ====
+==== YieldExpression18_es6.ts (3 errors) ====
     "use strict";
     yield(foo);
-    ~~~~~
-!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
     ~~~~~
 !!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
     ~~~~~

@@ -1,9 +1,8 @@
 superCallsInConstructor.ts(12,9): error TS1101: 'with' statements are not allowed in strict mode.
-superCallsInConstructor.ts(12,9): error TS1101: 'with' statements are not allowed in strict mode.
 superCallsInConstructor.ts(12,9): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== superCallsInConstructor.ts (3 errors) ====
+==== superCallsInConstructor.ts (2 errors) ====
     class C {
         foo() {}
         bar() {}
@@ -16,8 +15,6 @@ superCallsInConstructor.ts(12,9): error TS2410: The 'with' statement is not supp
     class Derived extends Base {
         constructor() {
             with(new C()) {
-            ~~~~
-!!! error TS1101: 'with' statements are not allowed in strict mode.
             ~~~~
 !!! error TS1101: 'with' statements are not allowed in strict mode.
             ~~~~~~~~~~~~~

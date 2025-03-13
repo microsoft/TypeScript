@@ -1,12 +1,9 @@
 index.ts(2,10): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-index.ts(2,10): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 
 
-==== index.ts (2 errors) ====
+==== index.ts (1 errors) ====
     // await disallowed in un-alised named import
     import { await } from "./other";
-             ~~~~~
-!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
              ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     
