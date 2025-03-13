@@ -6043,13 +6043,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     // @api
-    function createEnumMember(name: string | PropertyName, initializer?: Expression) {
+    function createEnumMember(name: string | PropertyName, initializer?: Expression, objectAssignmentInitializer?: Expression) {
         const node = createBaseDeclaration<EnumMember>(SyntaxKind.EnumMember);
         node.name = asName(name);
         node.initializer = initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer);
         node.transformFlags |= propagateChildFlags(node.name) |
             propagateChildFlags(node.initializer) |
             TransformFlags.ContainsTypeScript;
+        node.objectAssignmentInitializer = objectAssignmentInitializer;
 
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         return node;

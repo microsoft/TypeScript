@@ -1949,7 +1949,11 @@ export function transformTypeScript(context: TransformationContext): Transformer
 
     function visitEnumLiteralExpression(node: EnumLiteralExpression): ObjectLiteralExpression {
         const properties: readonly ObjectLiteralElementLike[] = node.members.map((member: EnumMember): ObjectLiteralElementLike => {
-            return member.original as ObjectLiteralElementLike;
+            if (member.initializer) {
+                return factory.createPropertyAssignment(member.name, member.initializer);
+            } else {
+                return factory.createShorthandPropertyAssignment(idText(member.name));
+            }
         });
 
         // return factory.updateEnumLiteralExpression(

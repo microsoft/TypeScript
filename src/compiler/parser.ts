@@ -8268,26 +8268,13 @@ namespace Parser {
         const hasJSDoc = hasPrecedingJSDocComment();
         const tokenIsIdentifier = isIdentifier();
         const name = parsePropertyName();
-
-        const isShorthandPropertyAssignment = tokenIsIdentifier && (token() !== SyntaxKind.ColonToken);
-        let originalNode: ObjectLiteralElementLike;
         let initializer: Expression | undefined;
-        if (isShorthandPropertyAssignment) {
-            const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
-            const objectAssignmentInitializer = equalsToken ? allowInAnd(() => parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true)) : undefined;
-            const node: Mutable<ShorthandPropertyAssignment> = originalNode = factory.createShorthandPropertyAssignment(name as Identifier, objectAssignmentInitializer);
-            // Save equals token for error reporting.
-            // TODO(rbuckton): Consider manufacturing this when we need to report an error as it is otherwise not useful.
-            node.equalsToken = equalsToken;
-        }
-        else {
+
+        if (token() === SyntaxKind.ColonToken) {
             parseExpected(SyntaxKind.ColonToken);
             initializer = allowInAnd(() => parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true));
-            originalNode = factory.createPropertyAssignment(name, initializer);
         }
-
         const node = withJSDoc(finishNode(factory.createEnumMember(name, initializer), pos), hasJSDoc);
-        setOriginalNode(node, originalNode);
         return node;
     }
 

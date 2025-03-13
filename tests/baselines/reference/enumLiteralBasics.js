@@ -46,20 +46,11 @@ const sval_bad2: E1 = functest("string"); // error
 // Enum literal syntax does not implement auto-incrementing behaviour.
 var ExistingShorthand = "exists";
 var E1 = {
-    NonexistingShorthand: NonexistingShorthand// Enum without initializers have first member = 0 and successive members = N + 1
-    // Enum literal syntax does not implement auto-incrementing behaviour.
-    , // Enum without initializers have first member = 0 and successive members = N + 1
-    ExistingShorthand: ExistingShorthand// Enum without initializers have first member = 0 and successive members = N + 1
-    // Enum literal syntax does not implement auto-incrementing behaviour.
-    , // Enum without initializers have first member = 0 and successive members = N + 1
-    Int: 1// Enum without initializers have first member = 0 and successive members = N + 1
-    // Enum literal syntax does not implement auto-incrementing behaviour.
-    , // Enum without initializers have first member = 0 and successive members = N + 1
-    String: "string"// Enum without initializers have first member = 0 and successive members = N + 1
-    // Enum literal syntax does not implement auto-incrementing behaviour.
-    , // Enum without initializers have first member = 0 and successive members = N + 1
-    Flag: 8// Enum without initializers have first member = 0 and successive members = N + 1
-    // Enum literal syntax does not implement auto-incrementing behaviour.
+    NonexistingShorthand: NonexistingShorthand,
+    ExistingShorthand: ExistingShorthand,
+    Int: 1,
+    String: "string",
+    Flag: 8
 };
 // Valid assignments
 var nonexist = E1.NonexistingShorthand; // ok
