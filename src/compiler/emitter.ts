@@ -2621,24 +2621,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitEnumLiteralExpression(node: EnumLiteralExpression) {
-        // pushNameGenerationScope(node);
-        // forEach(node.members, generateMemberNames);
-
-        // const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
-        // if (indentedFlag) {
-        //     increaseIndent();
-        // }
-
         writeSpace();
         writePunctuation("{");
         emitList(node, node.members, ListFormat.EnumMembers);
         writePunctuation("}");
-
-        // if (indentedFlag) {
-        //     decreaseIndent();
-        // }
-
-        // popNameGenerationScope(node);
     }
 
     function emitPropertyAccessExpression(node: PropertyAccessExpression) {

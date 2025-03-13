@@ -41120,7 +41120,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ObjectLiteralExpression:
                 return checkObjectLiteral(node as ObjectLiteralExpression, checkMode);
             case SyntaxKind.EnumLiteralExpression:
-                return checkEnumLiteralExpression(node as EnumLiteralExpression, checkMode);
+                return checkEnumLiteralExpression(node as EnumLiteralExpression);
             case SyntaxKind.PropertyAccessExpression:
                 return checkPropertyAccessExpression(node as PropertyAccessExpression, checkMode);
             case SyntaxKind.QualifiedName:
@@ -49515,7 +49515,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const symbol = getSymbolAtLocation(node);
             if (symbol) {
                 if (symbol.valueDeclaration && isEnumLiteralDeclaration(symbol.valueDeclaration)) {
-                    return getDeclaredTypeOfEnum(symbol.valueDeclaration.initializer!);
+                    return getDeclaredTypeOfEnum(symbol);
                 }
                 return getTypeOfSymbol(symbol);
             }

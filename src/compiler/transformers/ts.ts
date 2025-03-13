@@ -1952,7 +1952,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
             if (member.initializer) {
                 return factory.createPropertyAssignment(member.name, member.initializer);
             } else {
-                return factory.createShorthandPropertyAssignment(idText(member.name));
+                return factory.createShorthandPropertyAssignment(idText(member.name as Identifier));
             }
         });
 

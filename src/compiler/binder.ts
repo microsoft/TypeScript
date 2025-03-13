@@ -3674,15 +3674,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         varSymbol.flags &= ~(SymbolFlags.Assignment | SymbolFlags.Variable);
         varSymbol.exports ??= createSymbolTable();
         appendIfUnique(varSymbol.declarations, node);
-
-        // Temporarily treat `node` as the container
-        // const saveContainer = container;
-        // container = node; 
-        // bindChildren(node);
-        // container = saveContainer;
-        // return isEnumConst(node)
-        //     ? bindBlockScopedDeclaration(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
-        //     : bindBlockScopedDeclaration(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
     }
 
 
