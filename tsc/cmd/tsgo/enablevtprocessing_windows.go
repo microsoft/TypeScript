@@ -16,7 +16,7 @@ func enableVirtualTerminalProcessing() {
 			return
 		}
 		if mode&windows.ENABLE_VIRTUAL_TERMINAL_PROCESSING == 0 {
-			windows.SetConsoleMode(h, mode|windows.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
+			_ = windows.SetConsoleMode(h, mode|windows.ENABLE_VIRTUAL_TERMINAL_PROCESSING)
 		}
 	}
 }

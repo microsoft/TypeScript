@@ -314,9 +314,12 @@ export const lint = task({
     run: async () => {
         await buildCustomLinter();
 
-        const lintArgs = ["run", "--sort-results"];
+        const lintArgs = ["run", "--sort-results", "--show-stats"];
         if (isCI) {
             lintArgs.push("--timeout=5m");
+        }
+        if (defaultGoBuildTags.length) {
+            lintArgs.push("--build-tags", defaultGoBuildTags.join(","));
         }
         if (options.fix) {
             lintArgs.push("--fix");

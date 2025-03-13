@@ -101,18 +101,34 @@ jobs:
           path: testdata/baselines/local
 
   lint:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+          - os: windows-latest
+          - os: macos-latest
+          - os: ubuntu-latest
+            name: 'noembed'
+            noembed: true
+
+    name: lint (${{ matrix.name || matrix.os }})
+
+    runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
       - uses: ./.github/actions/setup-go
         with:
-          cache-name: lint
+          cache-name: lint${{ (matrix.noembed && '-noembed') || ''}}
 
       - run: npm ci
 
       - run: npx hereby install-tools
-      - run: npx hereby lint
+      - run: npx hereby lint ${NOEMBED_FLAG:+"$NOEMBED_FLAG"}
+        env:
+          NOEMBED_FLAG: ${{ (matrix.noembed && '--noembed') || '' }}
 
   format:
     runs-on: ubuntu-latest
