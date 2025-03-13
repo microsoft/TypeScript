@@ -32,36 +32,7 @@
  
  var e11 = { 1.0: 0, '1': 0 };
  >e11 : Symbol(e11, Decl(objectLiteralErrors.ts, 11, 3))
-@@= skipped -35, +35 lines =@@
- 
- var e14 = { 0: 0, 0x0: 0 };
- >e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
-->0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
-->0x0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
-+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11))
-+>0x0 : Symbol(0x0, Decl(objectLiteralErrors.ts, 14, 17))
- 
- var e14 = { 0: 0, 0o0: 0 };
- >e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
-->0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
-->0o0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
-+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11))
-+>0o0 : Symbol(0o0, Decl(objectLiteralErrors.ts, 15, 17))
- 
- var e15 = { "100": 0, 1e2: 0 };
- >e15 : Symbol(e15, Decl(objectLiteralErrors.ts, 16, 3))
-@@= skipped -15, +15 lines =@@
- 
- var e16 = { 0x20: 0, 3.2e1: 0 };
- >e16 : Symbol(e16, Decl(objectLiteralErrors.ts, 17, 3))
-->0x20 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11), Decl(objectLiteralErrors.ts, 17, 20))
-->3.2e1 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11), Decl(objectLiteralErrors.ts, 17, 20))
-+>0x20 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11))
-+>3.2e1 : Symbol(3.2e1, Decl(objectLiteralErrors.ts, 17, 20))
- 
- var e17 = { a: 0, b: 1, a: 0 };
- >e17 : Symbol(e17, Decl(objectLiteralErrors.ts, 18, 3))
-@@= skipped -38, +38 lines =@@
+@@= skipped -88, +88 lines =@@
  var f6 = { a: 0, get 'a'() { return 0; } };
  >f6 : Symbol(f6, Decl(objectLiteralErrors.ts, 26, 3))
  >a : Symbol(a, Decl(objectLiteralErrors.ts, 26, 10))

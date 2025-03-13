@@ -114,10 +114,11 @@
  >r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>0x1 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r11 = i[-0x1]
  >r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
-@@= skipped -19, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  var r12 = i[01]
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
@@ -239,10 +240,11 @@
  >r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>0x1 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r11 = i[-0x1]
  >r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
-@@= skipped -19, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  var r12 = i[01]
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
@@ -294,10 +296,11 @@
  >r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>0x1 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r11 = i[-0x1]
  >r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
-@@= skipped -19, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  var r12 = i[01]
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
@@ -349,10 +352,11 @@
  >r10 : Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->0x1 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>0x1 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r11 = i[-0x1]
  >r11 : Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
-@@= skipped -19, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  var r12 = i[01]
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))

@@ -1,21 +1,22 @@
 --- old.duplicateIdentifierDifferentSpelling.errors.txt
 +++ new.duplicateIdentifierDifferentSpelling.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -duplicateIdentifierDifferentSpelling.ts(3,3): error TS2300: Duplicate identifier '3'.
--duplicateIdentifierDifferentSpelling.ts(6,21): error TS1117: An object literal cannot have multiple properties with the same name.
--
--
++duplicateIdentifierDifferentSpelling.ts(2,3): error TS2300: Duplicate identifier '0b11'.
++duplicateIdentifierDifferentSpelling.ts(3,3): error TS2300: Duplicate identifier '0b11'.
+ duplicateIdentifierDifferentSpelling.ts(6,21): error TS1117: An object literal cannot have multiple properties with the same name.
+ 
+ 
 -==== duplicateIdentifierDifferentSpelling.ts (2 errors) ====
--    class A {
--      0b11 = '';
--      3 = '';
--      ~
++==== duplicateIdentifierDifferentSpelling.ts (3 errors) ====
+     class A {
+       0b11 = '';
++      ~~~~
++!!! error TS2300: Duplicate identifier '0b11'.
+       3 = '';
+       ~
 -!!! error TS2300: Duplicate identifier '3'.
--    }
--    
--    var X = { 0b11: '', 3: '' };
--                        ~
--!!! error TS1117: An object literal cannot have multiple properties with the same name.
--    
-@@= skipped --1, +1 lines =@@
-+<no content>
++!!! error TS2300: Duplicate identifier '0b11'.
+     }
+     
+     var X = { 0b11: '', 3: '' };

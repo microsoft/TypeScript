@@ -22,8 +22,8 @@ var sameName2a = { get 0.0() { return ''; }, set 0(n) { var p = n; var p: string
 
 var sameName3a = { get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p: string; } };
 >sameName3a : Symbol(sameName3a, Decl(objectLiteralGettersAndSetters.ts, 3, 3))
->0x20 : Symbol(0x20, Decl(objectLiteralGettersAndSetters.ts, 3, 18))
->3.2e1 : Symbol(3.2e1, Decl(objectLiteralGettersAndSetters.ts, 3, 45))
+>0x20 : Symbol(0x20, Decl(objectLiteralGettersAndSetters.ts, 3, 18), Decl(objectLiteralGettersAndSetters.ts, 3, 45))
+>3.2e1 : Symbol(0x20, Decl(objectLiteralGettersAndSetters.ts, 3, 18), Decl(objectLiteralGettersAndSetters.ts, 3, 45))
 >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 3, 56))
 >p : Symbol(p, Decl(objectLiteralGettersAndSetters.ts, 3, 64), Decl(objectLiteralGettersAndSetters.ts, 3, 75))
 >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 3, 56))

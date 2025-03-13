@@ -11,18 +11,7 @@
  >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 1, 51))
  >p : Symbol(p, Decl(objectLiteralGettersAndSetters.ts, 1, 59), Decl(objectLiteralGettersAndSetters.ts, 1, 70))
  >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 1, 51))
-@@= skipped -18, +18 lines =@@
- 
- var sameName3a = { get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p: string; } };
- >sameName3a : Symbol(sameName3a, Decl(objectLiteralGettersAndSetters.ts, 3, 3))
-->0x20 : Symbol(0x20, Decl(objectLiteralGettersAndSetters.ts, 3, 18), Decl(objectLiteralGettersAndSetters.ts, 3, 45))
-->3.2e1 : Symbol(0x20, Decl(objectLiteralGettersAndSetters.ts, 3, 18), Decl(objectLiteralGettersAndSetters.ts, 3, 45))
-+>0x20 : Symbol(0x20, Decl(objectLiteralGettersAndSetters.ts, 3, 18))
-+>3.2e1 : Symbol(3.2e1, Decl(objectLiteralGettersAndSetters.ts, 3, 45))
- >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 3, 56))
- >p : Symbol(p, Decl(objectLiteralGettersAndSetters.ts, 3, 64), Decl(objectLiteralGettersAndSetters.ts, 3, 75))
- >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 3, 56))
-@@= skipped -27, +27 lines =@@
+@@= skipped -45, +45 lines =@@
  
  var sameName6a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string; } };
  >sameName6a : Symbol(sameName6a, Decl(objectLiteralGettersAndSetters.ts, 6, 3))

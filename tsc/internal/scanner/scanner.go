@@ -1863,14 +1863,6 @@ func (s *Scanner) scanBigIntSuffix() ast.Kind {
 		// !!! Convert all bigint tokens to their normalized decimal representation
 		return ast.KindBigIntLiteral
 	}
-	// !!! Once core.StringToNumber supports parsing of non-decimal values we should also convert non-decimal
-	// tokens to their normalized decimal representation
-	if len(s.tokenValue) >= 2 {
-		firstTwo := s.tokenValue[:2]
-		if firstTwo == "0x" || firstTwo == "0o" || firstTwo == "0b" {
-			return ast.KindNumericLiteral
-		}
-	}
 	s.tokenValue = jsnum.FromString(s.tokenValue).String()
 	return ast.KindNumericLiteral
 }
