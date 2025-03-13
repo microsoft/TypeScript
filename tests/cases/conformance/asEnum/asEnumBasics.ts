@@ -3,10 +3,11 @@
 // `as enum` does not introduce auto-incrementing behaviour.
 let ExistingShorthand = "exists";
 const E1: enum = {
-    NonexistingShorthand, // error
-    ExistingShorthand, // ok
+    NonexistingShorthand, // error -- EnumLiteralExpressions require explicit property definitions.
+    ExistingShorthand, // error -- EnumLiteralExpressions require explicit property definitions.
     Int: 1, // ok
     String: "string", // ok
+    Flag: 8, // ok
 };
 
 // Valid assignments
@@ -18,9 +19,20 @@ const sval: E1 = E1.String; // ok
 // Assigning values which are not part of the enum despite being present in the enum
 const nonexist_bad: E1 = undefined; // error
 const exist_bad: E1 = "exists"; // error
-const ival_bad: E1 = 1; // error
+const ival_good: E1 = 1; // ok -- TypeScript is permissive of this in enums, to permit things like bitwise combinations of enum values.
 const sval_bad: E1 = "string"; // error
 
-// Assigning values which are not present in the enum
-const ival_bad2: E1 = 4; // error
-const sval_bad2: E1 = "not string"; // error
+const ival_notpresent: E1 = 4; // ok -- TypeScript is permissive of this in enums, to permit things like bitwise combinations of enum values.
+
+function functest(value: E1) {
+    console.log(value);
+    return value;
+}
+
+const nonexist_bad2: E1 = functest(undefined); // error
+const exist_bad2: E1 = functest("exists"); // error
+const ival_good2: E1 = functest(1); // ok
+const ival_good3: E1 = functest(4); // ok
+const ival_good4: E1 = functest(E1.Int | E1.Flag); // ok
+const sval_good2: E1 = functest(E1.String);
+const sval_bad2: E1 = functest("string"); // error

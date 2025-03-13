@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/asEnum/asEnumSimple.ts] ////
+
+=== asEnumSimple.ts ===
+const ENUM: enum = {
+>ENUM : ENUM
+>     : ^^^^
+>ENUM : ENUM
+>     : ^^^^
+
+  a: 1,
+>a : ENUM.a
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+  b: 2
+>b : ENUM.b
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+};
+
+const a: ENUM = 1
+>a : ENUM
+>  : ^^^^
+>1 : 1
+>  : ^
+

@@ -1426,6 +1426,11 @@ export function isConstTypeReference(node: Node): boolean {
         node.typeName.escapedText === "const" && !node.typeArguments;
 }
 
+export function isEnumTypeReference(node: Node): boolean {
+    return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+        node.typeName.escapedText === "enum" && !node.typeArguments;
+}
+
 export function skipPartiallyEmittedExpressions(node: Expression): Expression;
 export function skipPartiallyEmittedExpressions(node: Node): Node;
 export function skipPartiallyEmittedExpressions(node: Node) {
