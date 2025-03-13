@@ -20477,7 +20477,7 @@ func (c *Checker) isTypeParameterPossiblyReferenced(tp *Type, node *ast.Node) bo
 			return tp.AsTypeParameter().isThisType
 		case ast.KindTypeReference:
 			// use worker because we're looking for === equality
-			if !tp.AsTypeParameter().isThisType && len(node.TypeArguments()) == 0 && c.getTypeFromTypeNodeWorker(node) == tp {
+			if !tp.AsTypeParameter().isThisType && len(node.TypeArguments()) == 0 && c.getSymbolFromTypeReference(node) == tp.symbol {
 				return true
 			}
 		case ast.KindTypeQuery:
@@ -20512,7 +20512,7 @@ func (c *Checker) isTypeParameterPossiblyReferenced(tp *Type, node *ast.Node) bo
 	// between the node and the type parameter declaration, if the node contains actual references to the
 	// type parameter, or if the node contains type queries that we can't prove couldn't contain references to the type parameter,
 	// we consider the type parameter possibly referenced.
-	if tp.symbol != nil && tp.symbol.Declarations != nil && len(tp.symbol.Declarations) == 1 {
+	if tp.symbol != nil && len(tp.symbol.Declarations) == 1 {
 		container := tp.symbol.Declarations[0].Parent
 		for n := node; n != container; n = n.Parent {
 			if n == nil || ast.IsBlock(n) || ast.IsConditionalTypeNode(n) && containsReference(n.AsConditionalTypeNode().ExtendsType) {
@@ -21065,20 +21065,29 @@ func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
 func (c *Checker) getTypeFromTypeReference(node *ast.Node) *Type {
 	links := c.typeNodeLinks.Get(node)
 	if links.resolvedType == nil {
-		// handle LS queries on the `const` in `x as const` by resolving to the type of `x`
-		if isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent) {
-			links.resolvedSymbol = c.unknownSymbol
-			links.resolvedType = c.checkExpressionCached(node.Parent.Expression())
-			return links.resolvedType
-		}
-		symbol := c.resolveTypeReferenceName(node, ast.SymbolFlagsType, false /*ignoreErrors*/)
-		t := c.getTypeReferenceType(node, symbol)
 		// Cache both the resolved symbol and the resolved type. The resolved symbol is needed when we check the
 		// type reference in checkTypeReferenceNode.
-		links.resolvedSymbol = symbol
-		links.resolvedType = t
+		symbol := c.getSymbolFromTypeReference(node)
+		// handle LS queries on the `const` in `x as const` by resolving to the type of `x`
+		if isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent) {
+			links.resolvedType = c.checkExpressionCached(node.Parent.Expression())
+		} else {
+			links.resolvedType = c.getTypeReferenceType(node, symbol)
+		}
 	}
 	return links.resolvedType
+}
+
+func (c *Checker) getSymbolFromTypeReference(node *ast.Node) *ast.Symbol {
+	links := c.typeNodeLinks.Get(node)
+	if links.resolvedSymbol == nil {
+		if isConstTypeReference(node) && ast.IsAssertionExpression(node.Parent) {
+			links.resolvedSymbol = c.unknownSymbol
+		} else {
+			links.resolvedSymbol = c.resolveTypeReferenceName(node, ast.SymbolFlagsType, false /*ignoreErrors*/)
+		}
+	}
+	return links.resolvedSymbol
 }
 
 func (c *Checker) resolveTypeReferenceName(typeReference *ast.Node, meaning ast.SymbolFlags, ignoreErrors bool) *ast.Symbol {
