@@ -5590,20 +5590,8 @@ func (e *SemanticTokenTypes) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "class", "comment", "decorator",
-		"enum", "enumMember", "event",
-		"function", "interface", "keyword",
-		"label", "macro", "method",
-		"modifier", "namespace", "number",
-		"operator", "parameter", "property",
-		"regexp", "string", "struct",
-		"type", "typeParameter", "variable":
-		*e = SemanticTokenTypes(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown SemanticTokenTypes value: %v", v)
-	}
+	*e = SemanticTokenTypes(v)
+	return nil
 }
 
 // A set of predefined token modifiers. This set is not fixed
@@ -5631,16 +5619,8 @@ func (e *SemanticTokenModifiers) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "abstract", "async", "declaration",
-		"defaultLibrary", "definition", "deprecated",
-		"documentation", "modification", "readonly",
-		"static":
-		*e = SemanticTokenModifiers(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown SemanticTokenModifiers value: %v", v)
-	}
+	*e = SemanticTokenModifiers(v)
+	return nil
 }
 
 // The document diagnostic report kinds.
@@ -5662,13 +5642,8 @@ func (e *DocumentDiagnosticReportKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "full", "unchanged":
-		*e = DocumentDiagnosticReportKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown DocumentDiagnosticReportKind value: %v", v)
-	}
+	*e = DocumentDiagnosticReportKind(v)
+	return nil
 }
 
 // Predefined error codes.
@@ -5691,15 +5666,8 @@ func (e *ErrorCodes) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case -32700, -32603, -32602,
-		-32601, -32600, -32002,
-		-32001:
-		*e = ErrorCodes(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown ErrorCodes value: %v", v)
-	}
+	*e = ErrorCodes(v)
+	return nil
 }
 
 type LSPErrorCodes int32
@@ -5737,14 +5705,8 @@ func (e *LSPErrorCodes) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case -32803, -32802, -32801,
-		-32800:
-		*e = LSPErrorCodes(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown LSPErrorCodes value: %v", v)
-	}
+	*e = LSPErrorCodes(v)
+	return nil
 }
 
 // A set of predefined range kinds.
@@ -5764,13 +5726,8 @@ func (e *FoldingRangeKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "comment", "imports", "region":
-		*e = FoldingRangeKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown FoldingRangeKind value: %v", v)
-	}
+	*e = FoldingRangeKind(v)
+	return nil
 }
 
 // A symbol kind.
@@ -5810,21 +5767,8 @@ func (e *SymbolKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3,
-		4, 5, 6,
-		7, 8, 9,
-		10, 11, 12,
-		13, 14, 15,
-		16, 17, 18,
-		19, 20, 21,
-		22, 23, 24,
-		25, 26:
-		*e = SymbolKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown SymbolKind value: %v", v)
-	}
+	*e = SymbolKind(v)
+	return nil
 }
 
 // Symbol tags are extra annotations that tweak the rendering of a symbol.
@@ -5842,13 +5786,8 @@ func (e *SymbolTag) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1:
-		*e = SymbolTag(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown SymbolTag value: %v", v)
-	}
+	*e = SymbolTag(v)
+	return nil
 }
 
 // Moniker uniqueness level to define scope of the moniker.
@@ -5874,14 +5813,8 @@ func (e *UniquenessLevel) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "document", "global", "group",
-		"project", "scheme":
-		*e = UniquenessLevel(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown UniquenessLevel value: %v", v)
-	}
+	*e = UniquenessLevel(v)
+	return nil
 }
 
 // The moniker kind.
@@ -5904,13 +5837,8 @@ func (e *MonikerKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "export", "import", "local":
-		*e = MonikerKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown MonikerKind value: %v", v)
-	}
+	*e = MonikerKind(v)
+	return nil
 }
 
 // Inlay hint kinds.
@@ -5930,13 +5858,8 @@ func (e *InlayHintKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = InlayHintKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown InlayHintKind value: %v", v)
-	}
+	*e = InlayHintKind(v)
+	return nil
 }
 
 // The message type
@@ -5964,14 +5887,8 @@ func (e *MessageType) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3,
-		4, 5:
-		*e = MessageType(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown MessageType value: %v", v)
-	}
+	*e = MessageType(v)
+	return nil
 }
 
 // Defines how the host (editor) should sync
@@ -5995,13 +5912,8 @@ func (e *TextDocumentSyncKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 0, 1, 2:
-		*e = TextDocumentSyncKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown TextDocumentSyncKind value: %v", v)
-	}
+	*e = TextDocumentSyncKind(v)
+	return nil
 }
 
 // Represents reasons why a text document is saved.
@@ -6022,13 +5934,8 @@ func (e *TextDocumentSaveReason) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3:
-		*e = TextDocumentSaveReason(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown TextDocumentSaveReason value: %v", v)
-	}
+	*e = TextDocumentSaveReason(v)
+	return nil
 }
 
 // The kind of a completion entry.
@@ -6067,21 +5974,8 @@ func (e *CompletionItemKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3,
-		4, 5, 6,
-		7, 8, 9,
-		10, 11, 12,
-		13, 14, 15,
-		16, 17, 18,
-		19, 20, 21,
-		22, 23, 24,
-		25:
-		*e = CompletionItemKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown CompletionItemKind value: %v", v)
-	}
+	*e = CompletionItemKind(v)
+	return nil
 }
 
 // Completion item tags are extra annotations that tweak the rendering of a completion
@@ -6100,13 +5994,8 @@ func (e *CompletionItemTag) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1:
-		*e = CompletionItemTag(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown CompletionItemTag value: %v", v)
-	}
+	*e = CompletionItemTag(v)
+	return nil
 }
 
 // Defines whether the insert text in a completion item should be interpreted as
@@ -6132,13 +6021,8 @@ func (e *InsertTextFormat) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = InsertTextFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown InsertTextFormat value: %v", v)
-	}
+	*e = InsertTextFormat(v)
+	return nil
 }
 
 // How whitespace and indentation is handled during completion
@@ -6169,13 +6053,8 @@ func (e *InsertTextMode) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = InsertTextMode(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown InsertTextMode value: %v", v)
-	}
+	*e = InsertTextMode(v)
+	return nil
 }
 
 // A document highlight kind.
@@ -6195,13 +6074,8 @@ func (e *DocumentHighlightKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3:
-		*e = DocumentHighlightKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown DocumentHighlightKind value: %v", v)
-	}
+	*e = DocumentHighlightKind(v)
+	return nil
 }
 
 // A set of predefined code action kinds
@@ -6282,16 +6156,8 @@ func (e *CodeActionKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "", "notebook", "quickfix",
-		"refactor", "refactor.extract", "refactor.inline",
-		"refactor.move", "refactor.rewrite", "source",
-		"source.fixAll", "source.organizeImports":
-		*e = CodeActionKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown CodeActionKind value: %v", v)
-	}
+	*e = CodeActionKind(v)
+	return nil
 }
 
 // Code action tags are extra annotations that tweak the behavior of a code action.
@@ -6309,13 +6175,8 @@ func (e *CodeActionTag) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1:
-		*e = CodeActionTag(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown CodeActionTag value: %v", v)
-	}
+	*e = CodeActionTag(v)
+	return nil
 }
 
 type TraceValue string
@@ -6334,13 +6195,8 @@ func (e *TraceValue) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "messages", "off", "verbose":
-		*e = TraceValue(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown TraceValue value: %v", v)
-	}
+	*e = TraceValue(v)
+	return nil
 }
 
 // Describes the content type that a client supports in various
@@ -6362,13 +6218,8 @@ func (e *MarkupKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "markdown", "plaintext":
-		*e = MarkupKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown MarkupKind value: %v", v)
-	}
+	*e = MarkupKind(v)
+	return nil
 }
 
 // Predefined Language kinds
@@ -6453,32 +6304,8 @@ func (e *LanguageKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "abap", "bat", "bibtex",
-		"c", "clojure", "coffeescript",
-		"cpp", "csharp", "css",
-		"d", "dart", "diff",
-		"dockerfile", "elixir", "erlang",
-		"fsharp", "git-commit", "go",
-		"groovy", "handlebars", "haskell",
-		"html", "ini", "jade",
-		"java", "javascript", "javascriptreact",
-		"json", "latex", "less",
-		"lua", "makefile", "markdown",
-		"objective-c", "objective-cpp", "pascal",
-		"perl", "perl6", "php",
-		"powershell", "python", "r",
-		"razor", "rebase", "ruby",
-		"rust", "sass", "scala",
-		"scss", "shaderlab", "shellscript",
-		"sql", "swift", "tex",
-		"typescript", "typescriptreact", "vb",
-		"xml", "xsl", "yaml":
-		*e = LanguageKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown LanguageKind value: %v", v)
-	}
+	*e = LanguageKind(v)
+	return nil
 }
 
 // Describes how an provider was triggered.
@@ -6500,13 +6327,8 @@ func (e *InlineCompletionTriggerKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = InlineCompletionTriggerKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown InlineCompletionTriggerKind value: %v", v)
-	}
+	*e = InlineCompletionTriggerKind(v)
+	return nil
 }
 
 // A set of predefined position encoding kinds.
@@ -6535,13 +6357,8 @@ func (e *PositionEncodingKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "utf-16", "utf-32", "utf-8":
-		*e = PositionEncodingKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown PositionEncodingKind value: %v", v)
-	}
+	*e = PositionEncodingKind(v)
+	return nil
 }
 
 // The file event type
@@ -6561,13 +6378,8 @@ func (e *FileChangeType) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3:
-		*e = FileChangeType(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown FileChangeType value: %v", v)
-	}
+	*e = FileChangeType(v)
+	return nil
 }
 
 type WatchKind uint32
@@ -6586,13 +6398,8 @@ func (e *WatchKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 4:
-		*e = WatchKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown WatchKind value: %v", v)
-	}
+	*e = WatchKind(v)
+	return nil
 }
 
 // The diagnostic's severity.
@@ -6614,14 +6421,8 @@ func (e *DiagnosticSeverity) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3,
-		4:
-		*e = DiagnosticSeverity(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown DiagnosticSeverity value: %v", v)
-	}
+	*e = DiagnosticSeverity(v)
+	return nil
 }
 
 // The diagnostic tags.
@@ -6646,13 +6447,8 @@ func (e *DiagnosticTag) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = DiagnosticTag(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown DiagnosticTag value: %v", v)
-	}
+	*e = DiagnosticTag(v)
+	return nil
 }
 
 // How a completion was triggered
@@ -6674,13 +6470,8 @@ func (e *CompletionTriggerKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3:
-		*e = CompletionTriggerKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown CompletionTriggerKind value: %v", v)
-	}
+	*e = CompletionTriggerKind(v)
+	return nil
 }
 
 // Defines how values from a set of defaults and an individual item will be
@@ -6705,13 +6496,8 @@ func (e *ApplyKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = ApplyKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown ApplyKind value: %v", v)
-	}
+	*e = ApplyKind(v)
+	return nil
 }
 
 // How a signature help was triggered.
@@ -6733,13 +6519,8 @@ func (e *SignatureHelpTriggerKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2, 3:
-		*e = SignatureHelpTriggerKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown SignatureHelpTriggerKind value: %v", v)
-	}
+	*e = SignatureHelpTriggerKind(v)
+	return nil
 }
 
 // The reason why code actions were requested.
@@ -6762,13 +6543,8 @@ func (e *CodeActionTriggerKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = CodeActionTriggerKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown CodeActionTriggerKind value: %v", v)
-	}
+	*e = CodeActionTriggerKind(v)
+	return nil
 }
 
 // A pattern kind describing if a glob pattern matches a file a folder or
@@ -6789,13 +6565,8 @@ func (e *FileOperationPatternKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "file", "folder":
-		*e = FileOperationPatternKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown FileOperationPatternKind value: %v", v)
-	}
+	*e = FileOperationPatternKind(v)
+	return nil
 }
 
 // A notebook cell kind.
@@ -6815,13 +6586,8 @@ func (e *NotebookCellKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1, 2:
-		*e = NotebookCellKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown NotebookCellKind value: %v", v)
-	}
+	*e = NotebookCellKind(v)
+	return nil
 }
 
 type ResourceOperationKind string
@@ -6840,13 +6606,8 @@ func (e *ResourceOperationKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "create", "delete", "rename":
-		*e = ResourceOperationKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown ResourceOperationKind value: %v", v)
-	}
+	*e = ResourceOperationKind(v)
+	return nil
 }
 
 type FailureHandlingKind string
@@ -6872,14 +6633,8 @@ func (e *FailureHandlingKind) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "abort", "textOnlyTransactional", "transactional",
-		"undo":
-		*e = FailureHandlingKind(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown FailureHandlingKind value: %v", v)
-	}
+	*e = FailureHandlingKind(v)
+	return nil
 }
 
 type PrepareSupportDefaultBehavior uint32
@@ -6895,13 +6650,8 @@ func (e *PrepareSupportDefaultBehavior) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case 1:
-		*e = PrepareSupportDefaultBehavior(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown PrepareSupportDefaultBehavior value: %v", v)
-	}
+	*e = PrepareSupportDefaultBehavior(v)
+	return nil
 }
 
 type TokenFormat string
@@ -6915,13 +6665,8 @@ func (e *TokenFormat) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &v); err != nil {
 		return err
 	}
-	switch v {
-	case "relative":
-		*e = TokenFormat(v)
-		return nil
-	default:
-		return fmt.Errorf("unknown TokenFormat value: %v", v)
-	}
+	*e = TokenFormat(v)
+	return nil
 }
 
 // Type aliases

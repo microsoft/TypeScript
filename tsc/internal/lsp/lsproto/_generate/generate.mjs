@@ -399,31 +399,8 @@ for (const t of model.enumerations) {
     writeLine("if err := json.Unmarshal(data, &v); err != nil {");
     writeLine("return err");
     writeLine("}");
-    writeLine("switch v {");
-    const values = [...new Set(t.values.map(v => v.value))].sort(compareValues);
-    for (let i = 0; i < values.length; i++) {
-        const v = values[i];
-        if (i === 0) {
-            write("case ");
-        }
-        write(valueToLiteral(v));
-        if (i === values.length - 1) {
-            writeLine(":");
-        }
-        else {
-            if (i % 3 === 2) {
-                writeLine(",");
-            }
-            else {
-                write(", ");
-            }
-        }
-    }
     writeLine("*e = " + t.name + "(v)");
     writeLine("return nil");
-    writeLine("default:");
-    writeLine(`return fmt.Errorf("unknown ${t.name} value: %v", v)`);
-    writeLine("}");
     writeLine("}");
     writeLine("");
 }
