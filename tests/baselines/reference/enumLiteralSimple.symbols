@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/enums/enumLiteralSimple.ts] ////
+
+=== enumLiteralSimple.ts ===
+const ENUM: enum = {
+>ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 5))
+>ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 5))
+
+  a: 1,
+>a : Symbol(ENUM.a, Decl(enumLiteralSimple.ts, 0, 20))
+
+  b: 2
+>b : Symbol(ENUM.b, Decl(enumLiteralSimple.ts, 1, 7))
+
+};
+
+const a: ENUM = 1
+>a : Symbol(a, Decl(enumLiteralSimple.ts, 5, 5))
+>ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 5))
+

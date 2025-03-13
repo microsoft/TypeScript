@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/asEnum/asEnumBasics.ts] ////
+//// [tests/cases/conformance/enums/enumLiteralBasics.ts] ////
 
-//// [asEnumBasics.ts]
+//// [enumLiteralBasics.ts]
 // Enum without initializers have first member = 0 and successive members = N + 1
 
 // Enum literal syntax does not implement auto-incrementing behaviour.
@@ -41,7 +41,7 @@ const sval_good2: E1 = functest(E1.String);
 const sval_bad2: E1 = functest("string"); // error
 
 
-//// [asEnumBasics.js]
+//// [enumLiteralBasics.js]
 // Enum without initializers have first member = 0 and successive members = N + 1
 // Enum literal syntax does not implement auto-incrementing behaviour.
 var ExistingShorthand = "exists";
