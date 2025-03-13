@@ -1489,7 +1489,6 @@ const visitEachChildTable: VisitEachChildTable = {
         );
     },
 
-
     [SyntaxKind.ModuleDeclaration]: function visitEachChildOfModuleDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateModuleDeclaration(
             node,

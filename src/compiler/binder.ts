@@ -3676,7 +3676,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         appendIfUnique(varSymbol.declarations, node);
     }
 
-
     function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
         if (inStrictMode) {
             checkStrictModeEvalOrArguments(node, node.name);

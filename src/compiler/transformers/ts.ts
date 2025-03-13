@@ -1951,7 +1951,8 @@ export function transformTypeScript(context: TransformationContext): Transformer
         const properties: readonly ObjectLiteralElementLike[] = node.members.map((member: EnumMember): ObjectLiteralElementLike => {
             if (member.initializer) {
                 return factory.createPropertyAssignment(member.name, member.initializer);
-            } else {
+            }
+            else {
                 return factory.createShorthandPropertyAssignment(idText(member.name as Identifier));
             }
         });

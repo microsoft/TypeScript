@@ -169,6 +169,7 @@ import {
     EntityNameOrEntityNameExpression,
     entityNameToString,
     EnumDeclaration,
+    EnumLiteralExpression,
     EnumMember,
     EnumType,
     equateValues,
@@ -536,7 +537,11 @@ import {
     isEntityNameExpression,
     isEnumConst,
     isEnumDeclaration,
+    isEnumLiteralDeclaration,
+    isEnumLiteralExpression,
     isEnumMember,
+    isEnumTypeAnnotation,
+    isEnumTypeReference,
     isExclusivelyTypeOnlyImportOrExport,
     isExpandoPropertyDeclaration,
     isExportAssignment,
@@ -1133,11 +1138,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    EnumLiteralExpression,
-    isEnumLiteralExpression,
-    isEnumTypeReference,
-    isEnumTypeAnnotation,
-    isEnumLiteralDeclaration,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -47045,7 +47045,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function computeEnumMemberValues(node: EnumDeclaration|EnumLiteralExpression) {
+    function computeEnumMemberValues(node: EnumDeclaration | EnumLiteralExpression) {
         const nodeLinks = getNodeLinks(node);
         if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
             nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
