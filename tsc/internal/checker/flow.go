@@ -1148,7 +1148,7 @@ func (c *Checker) narrowTypeBySwitchOnTrue(f *FlowState, t *Type, data *ast.Flow
 		}
 	}
 	// If our current set has a default, then none the other cases were hit either.
-	// There's no point in narrowing by the the other cases in the set, since we can
+	// There's no point in narrowing by the other cases in the set, since we can
 	// get here through other paths.
 	if hasDefaultClause {
 		for i := clauseEnd; i < len(clauses); i++ {
