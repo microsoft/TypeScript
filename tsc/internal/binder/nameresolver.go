@@ -358,7 +358,7 @@ func (r *NameResolver) useOuterVariableScopeInParameter(result *ast.Symbol, loca
 						r.SetRequiresScopeChangeCache(functionLocation, declarationRequiresScopeChange)
 					}
 				}
-				return declarationRequiresScopeChange == core.TSTrue
+				return declarationRequiresScopeChange != core.TSTrue
 			}
 		}
 	}
