@@ -3070,10 +3070,10 @@ export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, e
 }
 
 /** @internal */
-export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None): SymbolDisplayPart[] {
+export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.None, verbosityLevel?: number, out?: WriterContextOut): SymbolDisplayPart[] {
     flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
     return mapToDisplayParts(writer => {
-        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer);
+        typechecker.writeSignature(signature, enclosingDeclaration, flags, /*kind*/ undefined, writer, verbosityLevel, out);
     });
 }
 

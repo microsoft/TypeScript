@@ -1717,8 +1717,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typePredicateToString: (predicate, enclosingDeclaration, flags) => {
             return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
         },
-        writeSignature: (signature, enclosingDeclaration, flags, kind, writer) => {
-            return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
+        writeSignature: (signature, enclosingDeclaration, flags, kind, writer, verbosityLevel, out) => {
+            return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer, verbosityLevel, out);
         },
         writeType: (type, enclosingDeclaration, flags, writer, verbosityLevel, out) => {
             return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
@@ -6028,7 +6028,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags = TypeFormatFlags.None, kind?: SignatureKind, writer?: EmitTextWriter): string {
+    function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags = TypeFormatFlags.None, kind?: SignatureKind, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string {
         return writer ? signatureToStringWorker(writer).getText() : usingSingleLineStringWriter(signatureToStringWorker);
 
         function signatureToStringWorker(writer: EmitTextWriter) {
@@ -6039,7 +6039,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 sigOutput = kind === SignatureKind.Construct ? SyntaxKind.ConstructSignature : SyntaxKind.CallSignature;
             }
-            const sig = nodeBuilder.signatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+            const sig = nodeBuilder.signatureToSignatureDeclaration(
+                signature,
+                sigOutput,
+                enclosingDeclaration,
+                toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName,
+                /*internalFlags*/ undefined,
+                /*tracker*/ undefined,
+                verbosityLevel,
+                out);
             const printer = createPrinterWithRemoveCommentsOmitTrailingSemicolon();
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, sig!, /*sourceFile*/ sourceFile, getTrailingSemicolonDeferringWriter(writer)); // TODO: GH#18217
@@ -6284,18 +6292,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         };
         return {
             syntacticBuilderResolver,
-            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: { couldUnfoldMore: boolean; }) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeToTypeNodeHelper(type, context), out),
+            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeToTypeNodeHelper(type, context), out),
             typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
             serializeTypeForDeclaration: (declaration: HasInferredType, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, symbol, context)),
             serializeReturnTypeForSignature: (signature: SignatureDeclaration, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeReturnTypeForSignature(signature, getSymbolOfDeclaration(signature), context)),
             serializeTypeForExpression: (expr: Expression, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfExpression(expr, context)),
             indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
-            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
+            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => signatureToSignatureDeclarationHelper(signature, kind, context), out),
             symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
             symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToExpression(symbol, context, meaning)),
             symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => typeParametersToTypeParameterDeclarations(symbol, context)),
             symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToParameterDeclaration(symbol, context)),
-            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeParameterToDeclaration(parameter, context)),
+            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeParameterToDeclaration(parameter, context), out),
             symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolTableToDeclarationStatements(symbolTable, context)),
             symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToNode(symbol, context, meaning)),
         };
@@ -6399,6 +6407,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 enclosingSymbolTypes: new Map(),
                 mapper: undefined,
                 depth: 0,
+                typeStack: [],
                 couldUnfoldMore: false,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
@@ -6446,16 +6455,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function couldUnfoldType(type: Type, context: NodeBuilderContext): boolean {
-            if (context.visitedTypes?.has(type.id)) {
-                return false;
+            for (let i = 0; i < context.typeStack.length - 1; i++) {
+                if (context.typeStack[i] === type.id) {
+                    return false;
+                }
             }
             return context.depth < context.unfoldDepth || context.depth === context.unfoldDepth && !context.couldUnfoldMore;
         }
 
         // Determines if a type can be unfolded, based on how many layers of type aliases we're allowed to unfold.
         function canUnfoldType(type: Type, context: NodeBuilderContext): boolean {
-            if (context.visitedTypes?.has(type.id)) {
-                return false;
+            for (let i = 0; i < context.typeStack.length - 1; i++) {
+                if (context.typeStack[i] === type.id) {
+                    return false;
+                }
             }
             const result = context.depth < context.unfoldDepth;
             if (!result) {
@@ -6464,9 +6477,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
+        // Don't unfold types like `Array` or `Promise`, instead treating them as transparent.
+        function isUnfoldableType(type: Type): boolean {
+            return (getObjectFlags(type) & ObjectFlags.Reference) !== 0 &&
+                !!((type as TypeReference).target.symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
+        }
+
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
             const restoreFlags = saveRestoreFlags(context);
+            type && context.typeStack.push(type.id);
             const typeNode = typeToTypeNodeWorker(type, context);
+            type && context.typeStack.pop();
             restoreFlags();
             return typeNode;
         }
@@ -6628,7 +6649,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (objectFlags & ObjectFlags.Reference) {
                 Debug.assert(!!(type.flags & TypeFlags.Object));
-                if (canUnfoldType(type, context)) {
+                if (!isUnfoldableType(type) && canUnfoldType(type, context)) {
                     context.depth += 1;
                     return createAnonymousTypeNode(type as TypeReference, /*forceClassExpansion*/ true);
                 }
@@ -6915,9 +6936,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         || symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)
                         || shouldWriteTypeOfFunctionSymbol()
                     ) {
-                        return symbolToTypeNode(symbol, context, isInstanceType);
+                        if (canUnfoldType(type, context)) {
+                            context.depth += 1;
+                        }
+                        else {
+                            return symbolToTypeNode(symbol, context, isInstanceType);
+                        }
                     }
-                    else if (context.visitedTypes?.has(typeId)) {
+                    if (context.visitedTypes?.has(typeId)) {
                         // If type is an anonymous type literal in a type alias declaration, use type alias name
                         const typeAlias = getTypeAliasForTypeLiteral(type);
                         if (typeAlias) {
@@ -8782,7 +8808,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             const returnType = getReturnTypeOfSignature(signature);
             if (!(suppressAny && isTypeAny(returnType))) {
-                if (signature.declaration && !nodeIsSynthesized(signature.declaration)) {
+                if (signature.declaration && !nodeIsSynthesized(signature.declaration) && !couldUnfoldType(returnType, context)) {
                     const declarationSymbol = getSymbolOfDeclaration(signature.declaration);
                     const restore = addSymbolTypeToContext(context, declarationSymbol, returnType);
                     returnTypeNode = syntacticNodeBuilder.serializeReturnTypeForSignature(signature.declaration, declarationSymbol, context);
@@ -53001,6 +53027,7 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     mapper: TypeMapper | undefined;
     depth: number; // How many levels of nested type aliases we have unfolded so far
     suppressReportInferenceFallback: boolean;
+    typeStack: number[];
 
     // Output
     couldUnfoldMore: boolean; // Whether we found a type alias that we could unfold but didn't

@@ -436,7 +436,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     );
                 }
                 if (signature) {
-                    addSignatureDisplayParts(signature, allSignatures);
+                    addSignatureDisplayParts(signature, allSignatures, /*flags*/ TypeFormatFlags.None);
                 }
                 hasAddedSymbolInfo = true;
                 hasMultipleSignatures = allSignatures.length > 1;
@@ -456,22 +456,19 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
         }
         displayParts.push(spacePart());
-        addFullSymbolName(symbol);
-        writeTypeParametersOfSymbol(symbol, sourceFile);
+        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
     }
     if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
         displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
         displayParts.push(spacePart());
-        addFullSymbolName(symbol);
-        writeTypeParametersOfSymbol(symbol, sourceFile);
+        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
     }
     if ((symbolFlags & SymbolFlags.TypeAlias) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
         displayParts.push(spacePart());
-        addFullSymbolName(symbol);
-        writeTypeParametersOfSymbol(symbol, sourceFile);
+        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
@@ -495,7 +492,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         }
         displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
         displayParts.push(spacePart());
-        addFullSymbolName(symbol);
+        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined);
     }
     if (symbolFlags & SymbolFlags.Module && !isThisExpression) {
         prefixNextMeaning();
@@ -515,7 +512,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         if (symbol.parent) {
             // Class/Interface type parameter
             addInPrefix();
-            addFullSymbolName(symbol.parent, enclosingDeclaration);
+            addFullSymbolName(symbol.parent, enclosingDeclaration); // >> TODO: review this case
             writeTypeParametersOfSymbol(symbol.parent, enclosingDeclaration);
         }
         else {
@@ -544,8 +541,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     addInPrefix();
                     displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                     displayParts.push(spacePart());
-                    addFullSymbolName(declaration.symbol);
-                    writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
+                    addFullSymbolName(declaration.symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
                 }
             }
         }
@@ -585,11 +581,15 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                         type,
                         semanticMeaning,
                         shouldUseAliasName ? symbol : resolvedSymbol,
+                        verbosityLevel,
                     );
                     displayParts.push(...resolvedInfo.displayParts);
                     displayParts.push(lineBreakPart());
                     documentationFromAlias = resolvedInfo.documentation;
                     tagsFromAlias = resolvedInfo.tags;
+                    if (typeWriterOut && resolvedInfo.canIncreaseVerbosityLevel) {
+                        typeWriterOut.couldUnfoldMore = true;
+                    }
                 }
                 else {
                     documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
@@ -680,6 +680,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                                 /*internalFlags*/ undefined,
                                 /*tracker*/ undefined,
                                 verbosityLevel,
+                                typeWriterOut,
                             )!;
                             getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                         });
@@ -814,9 +815,35 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(spacePart());
     }
 
-    function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
-        let indexInfos;
+    // >> TODO: can this ever be called with depth > 0, i.e. not at the top level?
+    function canUnfoldSymbol(symbol: Symbol, out: WriterContextOut | undefined): Type | undefined {
+        if (verbosityLevel === undefined || !(symbol.flags & SymbolFlags.Type)) {
+            return undefined;
+        }
+        const type = getTypeOfSymbol(symbol);
+        if (!type) {
+            return undefined;
+        }
+        if (0 < verbosityLevel) {
+            return type;
+        }
+        if (out) {
+            out.couldUnfoldMore = true;
+        }
+        return undefined;
+    }
 
+    function getTypeOfSymbol(symbol: Symbol) {
+        if (symbol.flags & (SymbolFlags.Interface)) {
+            return typeChecker.getDeclaredTypeOfSymbol(symbol);
+        }
+        return typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+    }
+
+    function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node, writeTypeParameters = false) {
+        let indexInfos;
+        const originalSymbol = symbolToDisplay;
+        let hasWrittenTypeParameters = false;
         if (alias && symbolToDisplay === symbol) {
             symbolToDisplay = alias;
         }
@@ -843,11 +870,32 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.CloseBracketToken));
         }
         else {
-            fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            let unfoldType;
+            if (unfoldType = canUnfoldSymbol(originalSymbol, typeWriterOut)) {
+                if (writeTypeParameters) {
+                    writeTypeParametersOfSymbol(originalSymbol, sourceFile);
+                    hasWrittenTypeParameters = true;
+                }
+                fullSymbolDisplayParts = typeToDisplayParts(
+                    typeChecker,
+                    unfoldType,
+                    enclosingDeclaration || sourceFile,
+                    /*flags*/ undefined,
+                    verbosityLevel,
+                    typeWriterOut,
+                )
+            }
+            else {
+                fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            }
         }
         addRange(displayParts, fullSymbolDisplayParts);
         if (symbol.flags & SymbolFlags.Optional) {
             displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
+        }
+
+        if (!hasWrittenTypeParameters && writeTypeParameters) {
+            writeTypeParametersOfSymbol(originalSymbol, sourceFile);
         }
     }
 
@@ -882,7 +930,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
 
     function addSignatureDisplayParts(signature: Signature, allSignatures: readonly Signature[], flags = TypeFormatFlags.None) {
-        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
+        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature, verbosityLevel, typeWriterOut));
         if (allSignatures.length > 1) {
             displayParts.push(spacePart());
             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
