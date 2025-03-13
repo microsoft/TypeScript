@@ -1,3 +1,4 @@
+asEnumBasics.ts(6,5): error TS1061: Enum member must have initializer.
 asEnumBasics.ts(7,5): error TS1061: Enum member must have initializer.
 asEnumBasics.ts(21,7): error TS2322: Type '"exists"' is not assignable to type 'E1'.
 asEnumBasics.ts(23,7): error TS2322: Type '"string"' is not assignable to type 'E1'.
@@ -5,13 +6,15 @@ asEnumBasics.ts(33,33): error TS2345: Argument of type '"exists"' is not assigna
 asEnumBasics.ts(38,32): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'E1'.
 
 
-==== asEnumBasics.ts (5 errors) ====
+==== asEnumBasics.ts (6 errors) ====
     // Enum without initializers have first member = 0 and successive members = N + 1
     
     // `as enum` does not introduce auto-incrementing behaviour.
     let ExistingShorthand = "exists";
     const E1: enum = {
         NonexistingShorthand, // error -- EnumLiteralExpressions require explicit property definitions.
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1061: Enum member must have initializer.
         ExistingShorthand, // error -- EnumLiteralExpressions require explicit property definitions.
         ~~~~~~~~~~~~~~~~~
 !!! error TS1061: Enum member must have initializer.

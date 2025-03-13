@@ -47051,7 +47051,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             // EnumLiteralExpressions are essentially plain ObjectLiteralExpressions and can not have computed values.
             const hasComputedValues = !isEnumLiteralExpression(node);
-            let autoValue: number | undefined = hasComputedValues ? undefined : 0;
+            let autoValue: number | undefined = hasComputedValues ? 0 : undefined;
             let previous: EnumMember | undefined;
             for (const member of node.members) {
                 const result = computeEnumMemberValue(member, autoValue, previous);
@@ -47237,7 +47237,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const enumIsConst = isEnumConst(node);
                 // check that const is placed\omitted on all enum declarations
                 forEach(enumSymbol.declarations, decl => {
-                    if (isEnumDeclaration(decl) && isEnumConst(decl) !== enumIsConst) {
+                    if ((isEnumDeclaration(decl) || isEnumLiteralExpression(decl)) && isEnumConst(decl) !== enumIsConst) {
                         error(getNameOfDeclaration(decl), Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                     }
                 });
