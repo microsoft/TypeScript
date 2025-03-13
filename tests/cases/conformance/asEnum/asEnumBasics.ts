@@ -1,6 +1,6 @@
 // Enum without initializers have first member = 0 and successive members = N + 1
 
-// `as enum` does not introduce auto-incrementing behaviour.
+// Enum literal syntax does not implement auto-incrementing behaviour.
 let ExistingShorthand = "exists";
 const E1: enum = {
     NonexistingShorthand, // error -- EnumLiteralExpressions require explicit property definitions.
