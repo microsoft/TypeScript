@@ -47,6 +47,7 @@ import {
     ElementAccessExpression,
     EmptyStatement,
     EnumDeclaration,
+    EnumLiteralExpression,
     EnumMember,
     EqualsGreaterThanToken,
     ExclamationToken,
@@ -815,6 +816,10 @@ export function isTypeAliasDeclaration(node: Node): node is TypeAliasDeclaration
 
 export function isEnumDeclaration(node: Node): node is EnumDeclaration {
     return node.kind === SyntaxKind.EnumDeclaration;
+}
+
+export function isEnumLiteralExpression(node: Node): node is EnumLiteralExpression {
+    return node.kind === SyntaxKind.EnumLiteralExpression;
 }
 
 export function isModuleDeclaration(node: Node): node is ModuleDeclaration {

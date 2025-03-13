@@ -33,6 +33,7 @@ import {
     EmitHint,
     EntityName,
     EnumDeclaration,
+    EnumLiteralExpression,
     EnumMember,
     ExportAssignment,
     ExportDeclaration,
@@ -85,6 +86,7 @@ import {
     isElementAccessExpression,
     isEntityName,
     isEnumConst,
+    isEnumMember,
     isExportAssignment,
     isExportDeclaration,
     isExportOrDefaultModifier,
@@ -168,6 +170,7 @@ import {
     setInternalEmitFlags,
     setOriginalNode,
     setParent,
+    setParentRecursive,
     setSourceMapRange,
     setSyntheticLeadingComments,
     setSyntheticTrailingComments,
@@ -807,6 +810,10 @@ export function transformTypeScript(context: TransformationContext): Transformer
             case SyntaxKind.EnumDeclaration:
                 // TypeScript enum declarations do not exist in ES6 and must be rewritten.
                 return visitEnumDeclaration(node as EnumDeclaration);
+
+            case SyntaxKind.EnumLiteralExpression:
+                // EnumLiteralExpression is rewritten as an ObjectLiteralExpression
+                return visitEnumLiteralExpression(node as EnumLiteralExpression);
 
             case SyntaxKind.VariableStatement:
                 // TypeScript namespace exports for variable statements must be transformed.
@@ -1783,7 +1790,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
      *
      * @param node The enum declaration node.
      */
-    function shouldEmitEnumDeclaration(node: EnumDeclaration) {
+    function shouldEmitEnumDeclaration(node: EnumDeclaration | EnumLiteralExpression) {
         return !isEnumConst(node)
             || shouldPreserveConstEnums(compilerOptions);
     }
@@ -1884,7 +1891,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
      *
      * @param node The enum declaration node.
      */
-    function transformEnumBody(node: EnumDeclaration, localName: Identifier): Block {
+    function transformEnumBody(node: EnumDeclaration | EnumLiteralExpression, localName: Identifier): Block {
         const savedCurrentNamespaceLocalName = currentNamespaceContainerName;
         currentNamespaceContainerName = localName;
 
@@ -1938,6 +1945,23 @@ export function transformTypeScript(context: TransformationContext): Transformer
             ),
             member,
         );
+    }
+
+    function visitEnumLiteralExpression(node: EnumLiteralExpression): ObjectLiteralExpression {
+        const properties: readonly ObjectLiteralElementLike[] = node.members.map((member: EnumMember): ObjectLiteralElementLike => {
+            return member.original as ObjectLiteralElementLike;
+        });
+
+        // return factory.updateEnumLiteralExpression(
+        //     node,
+        //     node.modifiers,
+        //     node.name,
+        //     visitNodes(node.members, getObjectLiteralElementVisitor(node), isObjectLiteralElementLike),
+        // );
+        const objectLiteral = factory.createObjectLiteralExpression(properties, /*multiLine*/ true);
+        setOriginalNode(objectLiteral, node);
+        setParent(objectLiteral, node.parent);
+        return objectLiteral;
     }
 
     /**

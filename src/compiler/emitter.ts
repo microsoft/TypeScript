@@ -79,6 +79,7 @@ import {
     ensureTrailingDirectorySeparator,
     EntityName,
     EnumDeclaration,
+    EnumLiteralExpression,
     EnumMember,
     escapeJsxAttributeString,
     escapeLeadingUnderscores,
@@ -1924,6 +1925,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitArrayLiteralExpression(node as ArrayLiteralExpression);
                 case SyntaxKind.ObjectLiteralExpression:
                     return emitObjectLiteralExpression(node as ObjectLiteralExpression);
+                case SyntaxKind.EnumLiteralExpression:
+                    return emitEnumLiteralExpression(node as EnumLiteralExpression);
                 case SyntaxKind.PropertyAccessExpression:
                     return emitPropertyAccessExpression(node as PropertyAccessExpression);
                 case SyntaxKind.ElementAccessExpression:
@@ -2615,6 +2618,27 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
 
         popNameGenerationScope(node);
+    }
+
+    function emitEnumLiteralExpression(node: EnumLiteralExpression) {
+        // pushNameGenerationScope(node);
+        // forEach(node.members, generateMemberNames);
+
+        // const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+        // if (indentedFlag) {
+        //     increaseIndent();
+        // }
+
+        writeSpace();
+        writePunctuation("{");
+        emitList(node, node.members, ListFormat.EnumMembers);
+        writePunctuation("}");
+
+        // if (indentedFlag) {
+        //     decreaseIndent();
+        // }
+
+        // popNameGenerationScope(node);
     }
 
     function emitPropertyAccessExpression(node: PropertyAccessExpression) {
