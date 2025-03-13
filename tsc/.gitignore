@@ -190,3 +190,5 @@ custom-gcl.hash
 
 # macOS Finder metadata
 .DS_Store
+
+.idea
