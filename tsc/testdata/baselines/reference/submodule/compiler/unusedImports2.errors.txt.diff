@@ -1,0 +1,17 @@
+--- old.unusedImports2.errors.txt
++++ new.unusedImports2.errors.txt
+@@= skipped -0, +0 lines =@@
+-file2.ts(2,1): error TS6133: 'test' is declared but its value is never read.
++file2.ts(2,9): error TS6133: 'test' is declared but its value is never read.
+ 
+ 
+ ==== file1.ts (0 errors) ====
+@@= skipped -12, +12 lines =@@
+ ==== file2.ts (1 errors) ====
+     import {Calculator} from "./file1"
+     import {test} from "./file1"
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++            ~~~~
+ !!! error TS6133: 'test' is declared but its value is never read.
+     
+     var x = new Calculator();

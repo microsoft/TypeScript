@@ -1,12 +1,12 @@
 unusedVariablesWithUnderscoreInBindingElement.ts(12,17): error TS6133: 'b1' is declared but its value is never read.
 unusedVariablesWithUnderscoreInBindingElement.ts(13,12): error TS6133: 'a2' is declared but its value is never read.
-unusedVariablesWithUnderscoreInBindingElement.ts(14,5): error TS6199: All variables are unused.
-unusedVariablesWithUnderscoreInBindingElement.ts(23,5): error TS6199: All variables are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(14,11): error TS6198: All destructured elements are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(23,11): error TS6198: All destructured elements are unused.
 unusedVariablesWithUnderscoreInBindingElement.ts(37,22): error TS6133: 'b1' is declared but its value is never read.
 unusedVariablesWithUnderscoreInBindingElement.ts(38,13): error TS6133: 'a2' is declared but its value is never read.
-unusedVariablesWithUnderscoreInBindingElement.ts(39,5): error TS6199: All variables are unused.
-unusedVariablesWithUnderscoreInBindingElement.ts(67,5): error TS6199: All variables are unused.
-unusedVariablesWithUnderscoreInBindingElement.ts(81,5): error TS6199: All variables are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(39,11): error TS6198: All destructured elements are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(67,11): error TS6198: All destructured elements are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(81,11): error TS6198: All destructured elements are unused.
 
 
 ==== unusedVariablesWithUnderscoreInBindingElement.ts (9 errors) ====
@@ -28,8 +28,8 @@ unusedVariablesWithUnderscoreInBindingElement.ts(81,5): error TS6199: All variab
                ~~
 !!! error TS6133: 'a2' is declared but its value is never read.
         const [a3, b3] = [1, 2];
-        ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6199: All variables are unused.
+              ~~~~~~~~
+!!! error TS6198: All destructured elements are unused.
     }
     
     function t3() {
@@ -39,8 +39,8 @@ unusedVariablesWithUnderscoreInBindingElement.ts(81,5): error TS6199: All variab
         const [_a2, [[_b2, _c2]], _d2, _e2] = [1, [[2, 3]], 4, 5];
     
         const [a3, [[b3, c3]], d3, e3] = [1, [[2, 3]], 4, 5];
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6199: All variables are unused.
+              ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6198: All destructured elements are unused.
     }
     
     function t4() {
@@ -61,8 +61,8 @@ unusedVariablesWithUnderscoreInBindingElement.ts(81,5): error TS6199: All variab
                 ~~
 !!! error TS6133: 'a2' is declared but its value is never read.
         const { a3, b3 } = { a3: 1, b3: 1 };
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6199: All variables are unused.
+              ~~~~~~~~~~
+!!! error TS6198: All destructured elements are unused.
     }
     
     function t6() {
@@ -91,7 +91,7 @@ unusedVariablesWithUnderscoreInBindingElement.ts(81,5): error TS6199: All variab
         } = { a2: 1, b2: { b21: { b211: 1, b212: 1 } }, c2: 1, d2: 1 };
     
         const {
-        ~~~~~~~
+              ~
             a3,
     ~~~~~~~~~~~
             b3: {
@@ -109,15 +109,15 @@ unusedVariablesWithUnderscoreInBindingElement.ts(81,5): error TS6199: All variab
             d3
     ~~~~~~~~~~
         } = { a3: 1, b3: { b31: { b311: 1, b312: 1 } }, c3: 1, d3: 1 };
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6199: All variables are unused.
+    ~~~~~
+!!! error TS6198: All destructured elements are unused.
     }
     
     function t7() {
         // error
         const { _a1, _b1 } = { _a1: 1, _b1: 1 };
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6199: All variables are unused.
+              ~~~~~~~~~~~~
+!!! error TS6198: All destructured elements are unused.
     
         // ok
         const { a2: _a2, b2: _b2 } = { a2: 1, b2: 1 };

@@ -2,24 +2,12 @@
 +++ new.unusedIdentifiersConsolidated1.errors.txt
 @@= skipped -0, +0 lines =@@
  unusedIdentifiersConsolidated1.ts(1,18): error TS6133: 'person' is declared but its value is never read.
--unusedIdentifiersConsolidated1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
+ unusedIdentifiersConsolidated1.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
 -unusedIdentifiersConsolidated1.ts(5,32): error TS6133: 'unusedtypeparameter' is declared but its value is never read.
-+unusedIdentifiersConsolidated1.ts(2,5): error TS6133: 'unused' is declared but its value is never read.
 +unusedIdentifiersConsolidated1.ts(5,32): error TS6196: 'unusedtypeparameter' is declared but never used.
  unusedIdentifiersConsolidated1.ts(6,13): error TS6133: 'unusedprivatevariable' is declared but its value is never read.
  unusedIdentifiersConsolidated1.ts(7,13): error TS6133: 'greeting' is declared but its value is never read.
  unusedIdentifiersConsolidated1.ts(11,17): error TS6133: 'message' is declared but its value is never read.
--unusedIdentifiersConsolidated1.ts(12,13): error TS6133: 'unused2' is declared but its value is never read.
-+unusedIdentifiersConsolidated1.ts(12,9): error TS6133: 'unused2' is declared but its value is never read.
- unusedIdentifiersConsolidated1.ts(16,20): error TS6133: 'person' is declared but its value is never read.
--unusedIdentifiersConsolidated1.ts(17,13): error TS6133: 'unused' is declared but its value is never read.
-+unusedIdentifiersConsolidated1.ts(17,9): error TS6133: 'unused' is declared but its value is never read.
- unusedIdentifiersConsolidated1.ts(24,13): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
--unusedIdentifiersConsolidated1.ts(37,11): error TS6133: 'numberRegexp' is declared but its value is never read.
-+unusedIdentifiersConsolidated1.ts(37,5): error TS6133: 'numberRegexp' is declared but its value is never read.
- unusedIdentifiersConsolidated1.ts(44,17): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
- unusedIdentifiersConsolidated1.ts(57,15): error TS6196: 'usedLocallyInterface2' is declared but never used.
- unusedIdentifiersConsolidated1.ts(64,11): error TS6196: 'dummy' is declared but never used.
 @@= skipped -18, +18 lines =@@
  
  ==== unusedIdentifiersConsolidated1.ts (17 errors) ====
@@ -28,10 +16,8 @@
 +                     ~~~~~~~~~~~~~~
  !!! error TS6133: 'person' is declared but its value is never read.
          var unused = 20;
--            ~~~~~~
-+        ~~~~~~~~~~~~~~~
- !!! error TS6133: 'unused' is declared but its value is never read.
-     }
+             ~~~~~~
+@@= skipped -9, +9 lines =@@
      
      class Dummy<usedtypeparameter, unusedtypeparameter> {
                                     ~~~~~~~~~~~~~~~~~~~
@@ -40,7 +26,7 @@
          private unusedprivatevariable: string;
                  ~~~~~~~~~~~~~~~~~~~~~
  !!! error TS6133: 'unusedprivatevariable' is declared but its value is never read.
-@@= skipped -20, +20 lines =@@
+@@= skipped -11, +11 lines =@@
          public typedvariable: usedtypeparameter;
      
          constructor(message: string) {
@@ -48,10 +34,8 @@
 +                    ~~~~~~~~~~~~~~~
  !!! error TS6133: 'message' is declared but its value is never read.
              var unused2 = 22;
--                ~~~~~~~
-+            ~~~~~~~~~~~~~~~~
- !!! error TS6133: 'unused2' is declared but its value is never read.
-             this.greeting = "Dummy Message";
+                 ~~~~~~~
+@@= skipped -9, +9 lines =@@
          }
      
          public greeter(person: string) {
@@ -59,17 +43,4 @@
 +                       ~~~~~~~~~~~~~~
  !!! error TS6133: 'person' is declared but its value is never read.
              var unused = 20;
--                ~~~~~~
-+            ~~~~~~~~~~~~~~~
- !!! error TS6133: 'unused' is declared but its value is never read.
-             this.usedPrivateFunction();
-         }
-@@= skipped -36, +36 lines =@@
-     
-         const lettersRegexp = /^[A-Za-z]+$/;
-         const numberRegexp = /^[0-9]+$/;
--              ~~~~~~~~~~~~
-+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS6133: 'numberRegexp' is declared but its value is never read.
-     
-         export class LettersOnlyValidator implements StringValidator {
+                 ~~~~~~

@@ -2,13 +2,14 @@
 +++ new.unusedTypeParameters1.errors.txt
 @@= skipped -0, +0 lines =@@
 -unusedTypeParameters1.ts(1,14): error TS6133: 'typeparameter1' is declared but its value is never read.
-+unusedTypeParameters1.ts(1,14): error TS6196: 'typeparameter1' is declared but never used.
++unusedTypeParameters1.ts(1,15): error TS6196: 'typeparameter1' is declared but never used.
  
  
  ==== unusedTypeParameters1.ts (1 errors) ====
      class greeter<typeparameter1> {
-                  ~~~~~~~~~~~~~~~~
+-                 ~~~~~~~~~~~~~~~~
 -!!! error TS6133: 'typeparameter1' is declared but its value is never read.
++                  ~~~~~~~~~~~~~~
 +!!! error TS6196: 'typeparameter1' is declared but never used.
      
      }

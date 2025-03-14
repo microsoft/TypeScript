@@ -1,5 +1,5 @@
 unusedSingleParameterInMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but its value is never read.
-unusedSingleParameterInMethodDeclaration.ts(3,9): error TS6133: 'unused' is declared but its value is never read.
+unusedSingleParameterInMethodDeclaration.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
 
 
 ==== unusedSingleParameterInMethodDeclaration.ts (2 errors) ====
@@ -8,7 +8,7 @@ unusedSingleParameterInMethodDeclaration.ts(3,9): error TS6133: 'unused' is decl
                        ~~~~~~~~~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
             var unused = 20;
-            ~~~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS6133: 'unused' is declared but its value is never read.
         }
     }

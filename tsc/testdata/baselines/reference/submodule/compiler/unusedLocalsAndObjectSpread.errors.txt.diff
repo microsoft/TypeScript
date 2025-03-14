@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
 -unusedLocalsAndObjectSpread.ts(20,18): error TS6133: 'bar' is declared but its value is never read.
 +unusedLocalsAndObjectSpread.ts(6,12): error TS6133: 'a' is declared but its value is never read.
-+unusedLocalsAndObjectSpread.ts(20,5): error TS6199: All variables are unused.
++unusedLocalsAndObjectSpread.ts(20,11): error TS6198: All destructured elements are unused.
  unusedLocalsAndObjectSpread.ts(27,21): error TS6133: 'bar' is declared but its value is never read.
  
  
@@ -26,8 +26,8 @@
          const {a, ...bar} = foo; // bar should be unused
 -                     ~~~
 -!!! error TS6133: 'bar' is declared but its value is never read.
-+        ~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS6199: All variables are unused.
++              ~~~~~~~~~~~
++!!! error TS6198: All destructured elements are unused.
          //console.log(bar);
      }
      

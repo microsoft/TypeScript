@@ -1,12 +1,6 @@
 --- old.unusedMultipleParameter2InFunctionExpression.errors.txt
 +++ new.unusedMultipleParameter2InFunctionExpression.errors.txt
-@@= skipped -0, +0 lines =@@
- unusedMultipleParameter2InFunctionExpression.ts(1,21): error TS6133: 'person' is declared but its value is never read.
- unusedMultipleParameter2InFunctionExpression.ts(1,37): error TS6133: 'person2' is declared but its value is never read.
- unusedMultipleParameter2InFunctionExpression.ts(1,54): error TS6133: 'person3' is declared but its value is never read.
--unusedMultipleParameter2InFunctionExpression.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
-+unusedMultipleParameter2InFunctionExpression.ts(2,5): error TS6133: 'unused' is declared but its value is never read.
- 
+@@= skipped -5, +5 lines =@@
  
  ==== unusedMultipleParameter2InFunctionExpression.ts (4 errors) ====
      var func = function(person: string, person2: string, person3: string) {
@@ -20,8 +14,4 @@
 +                                                         ~~~~~~~~~~~~~~~
  !!! error TS6133: 'person3' is declared but its value is never read.
          var unused = 20;
--            ~~~~~~
-+        ~~~~~~~~~~~~~~~
- !!! error TS6133: 'unused' is declared but its value is never read.
-         person2 = "Dummy value";
-     }
+             ~~~~~~

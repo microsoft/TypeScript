@@ -1,0 +1,17 @@
+--- old.unusedImports7.errors.txt
++++ new.unusedImports7.errors.txt
+@@= skipped -0, +0 lines =@@
+-file2.ts(1,1): error TS6133: 'n' is declared but its value is never read.
++file2.ts(1,13): error TS6133: 'n' is declared but its value is never read.
+ 
+ 
+ ==== file1.ts (0 errors) ====
+@@= skipped -15, +15 lines =@@
+     
+ ==== file2.ts (1 errors) ====
+     import * as n from "./file1"
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++                ~
+ !!! error TS6133: 'n' is declared but its value is never read.
+     
+     

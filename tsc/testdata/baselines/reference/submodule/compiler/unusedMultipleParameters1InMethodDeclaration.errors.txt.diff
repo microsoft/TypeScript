@@ -1,12 +1,6 @@
 --- old.unusedMultipleParameters1InMethodDeclaration.errors.txt
 +++ new.unusedMultipleParameters1InMethodDeclaration.errors.txt
-@@= skipped -0, +0 lines =@@
- unusedMultipleParameters1InMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but its value is never read.
- unusedMultipleParameters1InMethodDeclaration.ts(2,36): error TS6133: 'person2' is declared but its value is never read.
--unusedMultipleParameters1InMethodDeclaration.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
-+unusedMultipleParameters1InMethodDeclaration.ts(3,9): error TS6133: 'unused' is declared but its value is never read.
- 
- 
+@@= skipped -5, +5 lines =@@
  ==== unusedMultipleParameters1InMethodDeclaration.ts (3 errors) ====
      class Dummy {
          public greeter(person: string, person2: string) {
@@ -17,8 +11,4 @@
 +                                       ~~~~~~~~~~~~~~~
  !!! error TS6133: 'person2' is declared but its value is never read.
              var unused = 20;
--                ~~~~~~
-+            ~~~~~~~~~~~~~~~
- !!! error TS6133: 'unused' is declared but its value is never read.
-             person2 = "dummy value";
-         }
+                 ~~~~~~

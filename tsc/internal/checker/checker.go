@@ -5279,7 +5279,7 @@ func isNotOverload(node *ast.Node) bool {
 }
 
 func (c *Checker) collectLinkedAliases(node *ast.Node, setVisibility bool) {
-	// !!!
+	// !!! Implement if declaration emit needs it
 }
 
 func (c *Checker) checkMissingDeclaration(node *ast.Node) {
@@ -6504,12 +6504,8 @@ func (c *Checker) reportUnusedLocal(node *ast.Node, name string) {
 
 func (c *Checker) reportUnusedVariables(node *ast.Node) {
 	declarations := node.AsVariableDeclarationList().Declarations.Nodes
-	if core.Every(declarations, c.isUnreferencedVariableDeclaration) {
-		if len(declarations) == 1 && ast.IsIdentifier(declarations[0].Name()) {
-			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.X_0_is_declared_but_its_value_is_never_read, declarations[0].Name().Text()))
-		} else {
-			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.All_variables_are_unused))
-		}
+	if len(declarations) > 1 && core.Every(declarations, c.isUnreferencedVariableDeclaration) {
+		c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.All_variables_are_unused))
 	} else {
 		c.reportUnusedVariableDeclarations(declarations)
 	}
@@ -6521,12 +6517,8 @@ func (c *Checker) reportUnusedParameters(node *ast.Node) {
 
 func (c *Checker) reportUnusedBindingElements(node *ast.Node) {
 	declarations := node.AsBindingPattern().Elements.Nodes
-	if core.Every(declarations, c.isUnreferencedVariableDeclaration) {
-		if len(declarations) == 1 && ast.IsIdentifier(declarations[0].Name()) {
-			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.X_0_is_declared_but_its_value_is_never_read, declarations[0].Name().Text()))
-		} else {
-			c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.All_destructured_elements_are_unused))
-		}
+	if len(declarations) > 1 && core.Every(declarations, c.isUnreferencedVariableDeclaration) {
+		c.reportUnusedVariable(node, NewDiagnosticForNode(node, diagnostics.All_destructured_elements_are_unused))
 	} else {
 		c.reportUnusedVariableDeclarations(declarations)
 	}
@@ -6575,12 +6567,8 @@ func (c *Checker) reportUnusedImports(node *ast.Node, unuseds []*ast.Node) {
 			declarationCount += len(namedBindings.AsNamedImports().Elements.Nodes)
 		}
 	}
-	if declarationCount == len(unuseds) {
-		if declarationCount == 1 {
-			c.reportUnused(node, UnusedKindLocal, NewDiagnosticForNode(node.Parent, diagnostics.X_0_is_declared_but_its_value_is_never_read, unuseds[0].Name().Text()))
-		} else {
-			c.reportUnused(node, UnusedKindLocal, NewDiagnosticForNode(node.Parent, diagnostics.All_imports_in_import_declaration_are_unused))
-		}
+	if declarationCount > 1 && declarationCount == len(unuseds) {
+		c.reportUnused(node, UnusedKindLocal, NewDiagnosticForNode(node.Parent, diagnostics.All_imports_in_import_declaration_are_unused))
 	} else {
 		for _, unused := range unuseds {
 			c.reportUnusedLocal(unused, unused.Name().Text())
@@ -6618,14 +6606,10 @@ func (c *Checker) checkUnusedTypeParameters(node *ast.Node) {
 	if typeParameterList == nil {
 		return
 	}
-	if core.Every(typeParameterList.Nodes, c.isUnreferencedTypeParameter) {
+	if len(typeParameterList.Nodes) > 1 && core.Every(typeParameterList.Nodes, c.isUnreferencedTypeParameter) {
 		file := ast.GetSourceFileOfNode(node)
 		loc := rangeOfTypeParameters(file, typeParameterList)
-		if len(typeParameterList.Nodes) == 1 {
-			c.reportUnused(node, UnusedKindParameter, ast.NewDiagnostic(file, loc, diagnostics.X_0_is_declared_but_never_used, typeParameterList.Nodes[0].Name().Text()))
-		} else {
-			c.reportUnused(node, UnusedKindParameter, ast.NewDiagnostic(file, loc, diagnostics.All_type_parameters_are_unused))
-		}
+		c.reportUnused(node, UnusedKindParameter, ast.NewDiagnostic(file, loc, diagnostics.All_type_parameters_are_unused))
 	} else {
 		for _, typeParameter := range typeParameterList.Nodes {
 			if c.isUnreferencedTypeParameter(typeParameter) {
@@ -26189,7 +26173,7 @@ func (c *Checker) markExportSpecifierAliasReferenced(location *ast.ExportSpecifi
 }
 
 func (c *Checker) markDecoratorAliasReferenced(node *ast.Node /*HasDecorators*/) {
-	// !!!
+	// !!! Implement if/when we support emitDecoratorMetadata
 }
 
 func (c *Checker) markAliasReferenced(symbol *ast.Symbol, location *ast.Node) {
@@ -26307,10 +26291,6 @@ func (c *Checker) markTypeNodeAsReferenced(node *ast.TypeNode) {
 	if node != nil {
 		c.markEntityNameOrEntityExpressionAsReference(getEntityNameFromTypeNode(node), false /*forDecoratorMetadata*/)
 	}
-}
-
-func (c *Checker) markDecoratorMedataDataTypeNodeAsReferenced(node *ast.TypeNode) {
-	// !!!
 }
 
 func (c *Checker) getPromisedTypeOfPromise(t *Type) *Type {

@@ -1,0 +1,21 @@
+--- old.unusedDestructuringParameters.errors.txt
++++ new.unusedDestructuringParameters.errors.txt
+@@= skipped -0, +0 lines =@@
+-unusedDestructuringParameters.ts(1,12): error TS6133: 'a' is declared but its value is never read.
+-unusedDestructuringParameters.ts(3,13): error TS6133: 'a' is declared but its value is never read.
++unusedDestructuringParameters.ts(1,13): error TS6133: 'a' is declared but its value is never read.
++unusedDestructuringParameters.ts(3,14): error TS6133: 'a' is declared but its value is never read.
+ 
+ 
+ ==== unusedDestructuringParameters.ts (2 errors) ====
+     const f = ([a]) => { };
+-               ~~~
++                ~
+ !!! error TS6133: 'a' is declared but its value is never read.
+     f([1]);
+     const f2 = ({a}) => { };
+-                ~~~
++                 ~
+ !!! error TS6133: 'a' is declared but its value is never read.
+     f2({ a: 10 });
+     const f3 = ([_]) => { };

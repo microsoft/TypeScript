@@ -353,57 +353,6 @@ type SignatureLinks struct {
 	decoratorSignature *Signature // Signature for decorator as if invoked by the runtime
 }
 
-// jsxFlag: JsxOpeningElement | JsxClosingElement
-// resolvedJsxElementAttributesType: JsxOpeningElement | JsxClosingElement
-// resolvedJsxElementAllAttributesType: JsxOpeningElement | JsxClosingElement
-// jsxNamespace: Jsx*
-// jsxImplicitImportContainer: Jsx*
-
-// resolvedJSDocType: JSDoc TypeReference | ImportType
-
-// switchTypes: SwitchStatement
-
-// contectFreeType: Expression | FunctionExpression | ArrowFunction | MethodDeclaration
-
-// outerTypeParameters: AnonymousType | MappedType | DeferredTypeReference
-
-// Only on SourceFile
-// deferredNodes []Node          // Set of nodes whose checking has been deferred
-
-// resolvedSignature Signature;      // Cached signature of signature node or call expression
-// effectsSignature Signature;       // Signature with possible control flow effects
-// enumMemberValue EvaluatorResult;  // Constant value of enum member
-// isVisible boolean;                // Is this node visible
-// containsArgumentsReference boolean; // Whether a function-like declaration contains an 'arguments' reference
-// hasReportedStatementInAmbientContext boolean; // Cache boolean if we report statements in ambient context
-// jsxFlag JsxFlags;                 // flags for knowing what kind of element/attributes we're dealing with
-// resolvedJsxElementAttributesType Type; // resolved element attributes type of a JSX openinglike element
-// resolvedJsxElementAllAttributesType Type; // resolved all element attributes type of a JSX openinglike element
-// resolvedJSDocType Type;           // Resolved type of a JSDoc type reference
-// switchTypes []Type;               // Cached array of switch case expression types
-// jsxNamespace *Symbol;      // Resolved jsx namespace symbol for this node
-// jsxImplicitImportContainer *Symbol; // Resolved module symbol the implicit jsx import of this file should refer to
-// contextFreeType Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-// deferredNodes []Node          // Set of nodes whose checking has been deferred
-// capturedBlockScopeBindings []*Symbol; // Block-scoped bindings captured beneath this part of an IterationStatement
-// outerTypeParameters []*TypeParameter; // Outer type parameters of anonymous object type
-// isExhaustive boolean;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
-// skipDirectInference true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
-// declarationRequiresScopeChange boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
-// serializedTypes map[string]SerializedTypeEntry> // Collection of types serialized at this location
-// decoratorSignature Signature;     // Signature for decorator as if invoked by the runtime.
-// spreadIndices { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
-// parameterInitializerContainsUndefined boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
-// fakeScopeForSignatureDeclaration "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
-// assertionExpressionType Type;     // Cached type of the expression of a type assertion
-// potentialThisCollisions Node[];
-// potentialNewTargetCollisions Node[];
-// potentialWeakMapSetCollisions Node[];
-// potentialReflectCollisions Node[];
-// potentialUnusedRenamedBindingElementsInTypes BindingElement[];
-// externalHelpersModule Symbol;     // Resolved symbol for the external helpers module
-// instantiationExpressionTypes Map<number, Type>; // Cache of instantiation expression types for the node
-
 type TypeFlags uint32
 
 const (

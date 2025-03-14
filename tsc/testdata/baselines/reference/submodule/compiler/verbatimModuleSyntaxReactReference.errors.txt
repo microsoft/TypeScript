@@ -1,4 +1,4 @@
-index.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+index.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
 
 
 ==== react.d.ts (0 errors) ====
@@ -6,7 +6,7 @@ index.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
     
 ==== index.tsx (1 errors) ====
     import React from 'react';
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+           ~~~~~
 !!! error TS6133: 'React' is declared but its value is never read.
     
     export const build = <div>hello </div>;

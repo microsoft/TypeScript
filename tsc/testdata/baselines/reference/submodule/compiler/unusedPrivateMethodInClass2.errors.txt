@@ -1,7 +1,7 @@
 unusedPrivateMethodInClass2.ts(2,13): error TS6133: 'function1' is declared but its value is never read.
-unusedPrivateMethodInClass2.ts(3,9): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass2.ts(3,13): error TS6133: 'y' is declared but its value is never read.
 unusedPrivateMethodInClass2.ts(6,13): error TS6133: 'function2' is declared but its value is never read.
-unusedPrivateMethodInClass2.ts(7,9): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass2.ts(7,13): error TS6133: 'y' is declared but its value is never read.
 
 
 ==== unusedPrivateMethodInClass2.ts (4 errors) ====
@@ -10,7 +10,7 @@ unusedPrivateMethodInClass2.ts(7,9): error TS6133: 'y' is declared but its value
                 ~~~~~~~~~
 !!! error TS6133: 'function1' is declared but its value is never read.
             var y = 10;
-            ~~~~~~~~~~
+                ~
 !!! error TS6133: 'y' is declared but its value is never read.
         }
     
@@ -18,7 +18,7 @@ unusedPrivateMethodInClass2.ts(7,9): error TS6133: 'y' is declared but its value
                 ~~~~~~~~~
 !!! error TS6133: 'function2' is declared but its value is never read.
             var y = 10;
-            ~~~~~~~~~~
+                ~
 !!! error TS6133: 'y' is declared but its value is never read.
         }
     }

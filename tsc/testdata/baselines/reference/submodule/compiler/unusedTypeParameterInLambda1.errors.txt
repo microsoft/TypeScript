@@ -1,11 +1,11 @@
-unusedTypeParameterInLambda1.ts(3,16): error TS6196: 'T' is declared but never used.
+unusedTypeParameterInLambda1.ts(3,17): error TS6196: 'T' is declared but never used.
 
 
 ==== unusedTypeParameterInLambda1.ts (1 errors) ====
     class A {
         public f1() {
             return <T>() => {
-                   ~~~
+                    ~
 !!! error TS6196: 'T' is declared but never used.
     
             }

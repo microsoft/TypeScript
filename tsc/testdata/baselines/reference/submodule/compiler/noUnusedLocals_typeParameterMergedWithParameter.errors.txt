@@ -1,22 +1,19 @@
-noUnusedLocals_typeParameterMergedWithParameter.ts(1,17): error TS6196: 'T' is declared but never used.
 noUnusedLocals_typeParameterMergedWithParameter.ts(1,18): error TS6196: 'T' is declared but never used.
 noUnusedLocals_typeParameterMergedWithParameter.ts(1,21): error TS6133: 'T' is declared but its value is never read.
-noUnusedLocals_typeParameterMergedWithParameter.ts(3,18): error TS6196: 'T' is declared but never used.
+noUnusedLocals_typeParameterMergedWithParameter.ts(3,19): error TS6196: 'T' is declared but never used.
 noUnusedLocals_typeParameterMergedWithParameter.ts(7,23): error TS6196: 'T' is declared but never used.
 noUnusedLocals_typeParameterMergedWithParameter.ts(7,26): error TS6133: 'T' is declared but its value is never read.
 
 
-==== noUnusedLocals_typeParameterMergedWithParameter.ts (6 errors) ====
+==== noUnusedLocals_typeParameterMergedWithParameter.ts (5 errors) ====
     function useNone<T>(T: number) {}
-                    ~~~
-!!! error TS6196: 'T' is declared but never used.
                      ~
 !!! error TS6196: 'T' is declared but never used.
                         ~~~~~~~~~
 !!! error TS6133: 'T' is declared but its value is never read.
     
     function useParam<T>(T: number) {
-                     ~~~
+                      ~
 !!! error TS6196: 'T' is declared but never used.
         return T;
     }

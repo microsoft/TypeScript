@@ -1,4 +1,4 @@
-file2.ts(1,1): error TS6133: 'd' is declared but its value is never read.
+file2.ts(1,8): error TS6133: 'd' is declared but its value is never read.
 
 
 ==== file1.ts (0 errors) ====
@@ -16,7 +16,7 @@ file2.ts(1,1): error TS6133: 'd' is declared but its value is never read.
     
 ==== file2.ts (1 errors) ====
     import d from "./file1"
-    ~~~~~~~~~~~~~~~~~~~~~~~
+           ~
 !!! error TS6133: 'd' is declared but its value is never read.
     
     

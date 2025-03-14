@@ -5,7 +5,7 @@
 @@= skipped --1, +1 lines =@@
 +jsxFragmentFactoryNoUnusedLocals.tsx(2,1): error TS6192: All imports in import declaration are unused.
 +jsxFragmentFactoryNoUnusedLocals.tsx(2,41): error TS2307: Cannot find module 'react' or its corresponding type declarations.
-+jsxFragmentFactoryNoUnusedLocals.tsx(9,5): error TS6199: All variables are unused.
++jsxFragmentFactoryNoUnusedLocals.tsx(9,11): error TS6198: All destructured elements are unused.
 +
 +
 +==== jsxFragmentFactoryNoUnusedLocals.tsx (3 errors) ====
@@ -22,8 +22,8 @@
 +    
 +    export function Counter({ count = 0 }: CounterProps) {
 +        const [cnt, setCnt] = null as any;
-+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS6199: All variables are unused.
++              ~~~~~~~~~~~~~
++!!! error TS6198: All destructured elements are unused.
 +        return <>
 +            <p>{cnt}</p>
 +            <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>

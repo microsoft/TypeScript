@@ -1,8 +1,9 @@
 --- old.extendsUntypedModule.errors.txt
 +++ new.extendsUntypedModule.errors.txt
 @@= skipped -0, +0 lines =@@
+-/a.ts(2,1): error TS6133: 'Bar' is declared but its value is never read.
 +/a.ts(1,17): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
- /a.ts(2,1): error TS6133: 'Bar' is declared but its value is never read.
++/a.ts(2,8): error TS6133: 'Bar' is declared but its value is never read.
 +/a.ts(2,17): error TS2307: Cannot find module 'bar' or its corresponding type declarations.
  
  
@@ -12,7 +13,8 @@
 +                    ~~~~~
 +!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
      import Bar from "bar"; // error: unused
-     ~~~~~~~~~~~~~~~~~~~~~~
+-    ~~~~~~~~~~~~~~~~~~~~~~
++           ~~~
  !!! error TS6133: 'Bar' is declared but its value is never read.
 +                    ~~~~~
 +!!! error TS2307: Cannot find module 'bar' or its corresponding type declarations.

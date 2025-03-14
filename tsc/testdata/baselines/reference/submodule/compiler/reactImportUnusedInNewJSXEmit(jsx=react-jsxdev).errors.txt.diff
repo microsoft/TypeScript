@@ -1,7 +1,8 @@
 --- old.reactImportUnusedInNewJSXEmit(jsx=react-jsxdev).errors.txt
 +++ new.reactImportUnusedInNewJSXEmit(jsx=react-jsxdev).errors.txt
 @@= skipped -0, +0 lines =@@
- index.tsx(3,1): error TS6133: 'React' is declared but its value is never read.
+-index.tsx(3,1): error TS6133: 'React' is declared but its value is never read.
++index.tsx(3,8): error TS6133: 'React' is declared but its value is never read.
 +index.tsx(3,19): error TS2307: Cannot find module 'react' or its corresponding type declarations.
 +index.tsx(5,10): error TS6133: 'Bar' is declared but its value is never read.
  
@@ -11,7 +12,8 @@
      /// <reference path="/.lib/react16.d.ts" />
      
      import React from "react";
-     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
++           ~~~~~
  !!! error TS6133: 'React' is declared but its value is never read.
 +                      ~~~~~~~
 +!!! error TS2307: Cannot find module 'react' or its corresponding type declarations.

@@ -1,7 +1,7 @@
 unusedMultipleParameters2InMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but its value is never read.
 unusedMultipleParameters2InMethodDeclaration.ts(2,36): error TS6133: 'person2' is declared but its value is never read.
 unusedMultipleParameters2InMethodDeclaration.ts(2,53): error TS6133: 'person3' is declared but its value is never read.
-unusedMultipleParameters2InMethodDeclaration.ts(3,9): error TS6133: 'unused' is declared but its value is never read.
+unusedMultipleParameters2InMethodDeclaration.ts(3,13): error TS6133: 'unused' is declared but its value is never read.
 
 
 ==== unusedMultipleParameters2InMethodDeclaration.ts (4 errors) ====
@@ -14,7 +14,7 @@ unusedMultipleParameters2InMethodDeclaration.ts(3,9): error TS6133: 'unused' is 
                                                         ~~~~~~~~~~~~~~~
 !!! error TS6133: 'person3' is declared but its value is never read.
             var unused = 20;
-            ~~~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS6133: 'unused' is declared but its value is never read.
             person2 = "dummy value";
         }

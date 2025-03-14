@@ -1,17 +1,6 @@
 --- old.unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.errors.txt
 +++ new.unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.errors.txt
-@@= skipped -0, +0 lines =@@
- unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(1,25): error TS6133: 'person' is declared but its value is never read.
--unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(2,9): error TS6133: 'unused' is declared but its value is never read.
-+unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(2,5): error TS6133: 'unused' is declared but its value is never read.
- unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(3,14): error TS6133: 'maker' is declared but its value is never read.
- unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(3,20): error TS6133: 'child' is declared but its value is never read.
--unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(4,13): error TS6133: 'unused2' is declared but its value is never read.
-+unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(4,9): error TS6133: 'unused2' is declared but its value is never read.
- unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(6,21): error TS6133: 'child2' is declared but its value is never read.
--unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(7,13): error TS6133: 'unused3' is declared but its value is never read.
-+unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts(7,9): error TS6133: 'unused3' is declared but its value is never read.
- 
+@@= skipped -8, +8 lines =@@
  
  ==== unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.ts (7 errors) ====
      var greeter = function (person: string, person2: string) {
@@ -19,9 +8,8 @@
 +                            ~~~~~~~~~~~~~~
  !!! error TS6133: 'person' is declared but its value is never read.
          var unused = 20;
--            ~~~~~~
-+        ~~~~~~~~~~~~~~~
- !!! error TS6133: 'unused' is declared but its value is never read.
+             ~~~~~~
+@@= skipped -8, +8 lines =@@
          function maker(child: string): void {
                   ~~~~~
  !!! error TS6133: 'maker' is declared but its value is never read.
@@ -29,8 +17,7 @@
 +                       ~~~~~~~~~~~~~
  !!! error TS6133: 'child' is declared but its value is never read.
              var unused2 = 22;
--                ~~~~~~~
-+            ~~~~~~~~~~~~~~~~
+                 ~~~~~~~
  !!! error TS6133: 'unused2' is declared but its value is never read.
          }
          function maker2(child2: string): void {
@@ -38,8 +25,4 @@
 +                        ~~~~~~~~~~~~~~
  !!! error TS6133: 'child2' is declared but its value is never read.
              var unused3 = 23;
--                ~~~~~~~
-+            ~~~~~~~~~~~~~~~~
- !!! error TS6133: 'unused3' is declared but its value is never read.
-         }
-         maker2(person2);
+                 ~~~~~~~
