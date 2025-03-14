@@ -77,7 +77,7 @@ func TestEnumTransformer(t *testing.T) {
     E[E["A"] = 1] = "A";
     E[E["B"] = 2] = "B";
     E[E["C"] = 3] = "C";
-    E["D"] = 'x';
+    E["D"] = "x";
 })(E || (E = {}));`},
 
 		{title: "autonumber enum #8", input: "enum E {A,B=2,C}", output: `var E;
@@ -89,7 +89,7 @@ func TestEnumTransformer(t *testing.T) {
 
 		{title: "autonumber enum #9", input: "enum E {A='x',B=2,C}", output: `var E;
 (function (E) {
-    E["A"] = 'x';
+    E["A"] = "x";
     E[E["B"] = 2] = "B";
     E[E["C"] = 3] = "C";
 })(E || (E = {}));`},
@@ -97,7 +97,7 @@ func TestEnumTransformer(t *testing.T) {
 		{title: "autonumber enum #10", input: "enum E {A='x',B=y,C}", output: `var E;
 (function (E) {
     var auto;
-    E["A"] = 'x';
+    E["A"] = "x";
     E[E["B"] = auto = y] = "B";
     E[E["C"] = ++auto] = "C";
 })(E || (E = {}));`},
@@ -105,7 +105,7 @@ func TestEnumTransformer(t *testing.T) {
 		{title: "autonumber enum #11", input: "enum E {A='x',B=1,C,D=y,E,F=3,G}", output: `var E;
 (function (E) {
     var auto;
-    E["A"] = 'x';
+    E["A"] = "x";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
     E[E["D"] = auto = y] = "D";
@@ -122,7 +122,7 @@ func TestEnumTransformer(t *testing.T) {
 
 		{title: "autonumber enum #13", input: "enum E {A='x',B}", output: `var E;
 (function (E) {
-    E["A"] = 'x';
+    E["A"] = "x";
     E["B"] = void 0;
 })(E || (E = {}));`},
 
@@ -136,15 +136,15 @@ func TestEnumTransformer(t *testing.T) {
 
 		{title: "string enum #1", input: "enum E {A = 'x',B = 'y',C = 'z'}", output: `var E;
 (function (E) {
-    E["A"] = 'x';
-    E["B"] = 'y';
-    E["C"] = 'z';
+    E["A"] = "x";
+    E["B"] = "y";
+    E["C"] = "z";
 })(E || (E = {}));`},
 
 		{title: "string enum #2", input: "enum E {A = 'x',B = 'y',C = `a${A}b${B}c`}", output: `var E;
 (function (E) {
-    E["A"] = 'x';
-    E["B"] = 'y';
+    E["A"] = "x";
+    E["B"] = "y";
     E["C"] = "axbyc";
 })(E || (E = {}));`},
 

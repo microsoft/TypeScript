@@ -438,16 +438,12 @@ func (tx *RuntimeSyntaxTransformer) transformEnumMember(
 		case jsnum.Number:
 			hasNumericInitializer = true
 			*autoValue = value
-			if !ast.IsNumericLiteral(expression) && !ast.IsSignedNumericLiteral(expression) {
-				expression = constantExpression(value, tx.factory)
-			}
+			expression = constantExpression(value, tx.factory) // TODO: preserve original expression after Strada migration
 			tx.cacheEnumMemberValue(enum.AsNode(), memberName, result)
 		case string:
 			hasStringInitializer = true
 			*autoValue = jsnum.NaN()
-			if !ast.IsStringLiteralLike(expression) {
-				expression = constantExpression(value, tx.factory)
-			}
+			expression = constantExpression(value, tx.factory) // TODO: preserve original expression after Strada migration
 			tx.cacheEnumMemberValue(enum.AsNode(), memberName, result)
 		default:
 			*autoValue = jsnum.NaN()
