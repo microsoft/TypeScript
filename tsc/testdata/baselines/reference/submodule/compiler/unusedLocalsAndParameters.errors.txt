@@ -62,7 +62,7 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
         }
         // Accessor declaration paramter
         set x(v: number) {
-              ~~~~~~~~~
+              ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
     }
@@ -77,7 +77,7 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
         }
         // Accessor declaration paramter
         set x(v: number) {
-              ~~~~~~~~~
+              ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
     }
@@ -90,7 +90,7 @@ unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
         },
         // Accessor declaration paramter
         set x(v: number) {
-              ~~~~~~~~~
+              ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
     };

@@ -8,16 +8,7 @@
  unusedIdentifiersConsolidated1.ts(6,13): error TS6133: 'unusedprivatevariable' is declared but its value is never read.
  unusedIdentifiersConsolidated1.ts(7,13): error TS6133: 'greeting' is declared but its value is never read.
  unusedIdentifiersConsolidated1.ts(11,17): error TS6133: 'message' is declared but its value is never read.
-@@= skipped -18, +18 lines =@@
- 
- ==== unusedIdentifiersConsolidated1.ts (17 errors) ====
-     function greeter(person: string) {
--                     ~~~~~~
-+                     ~~~~~~~~~~~~~~
- !!! error TS6133: 'person' is declared but its value is never read.
-         var unused = 20;
-             ~~~~~~
-@@= skipped -9, +9 lines =@@
+@@= skipped -27, +27 lines =@@
      
      class Dummy<usedtypeparameter, unusedtypeparameter> {
                                     ~~~~~~~~~~~~~~~~~~~
@@ -26,21 +17,3 @@
          private unusedprivatevariable: string;
                  ~~~~~~~~~~~~~~~~~~~~~
  !!! error TS6133: 'unusedprivatevariable' is declared but its value is never read.
-@@= skipped -11, +11 lines =@@
-         public typedvariable: usedtypeparameter;
-     
-         constructor(message: string) {
--                    ~~~~~~~
-+                    ~~~~~~~~~~~~~~~
- !!! error TS6133: 'message' is declared but its value is never read.
-             var unused2 = 22;
-                 ~~~~~~~
-@@= skipped -9, +9 lines =@@
-         }
-     
-         public greeter(person: string) {
--                       ~~~~~~
-+                       ~~~~~~~~~~~~~~
- !!! error TS6133: 'person' is declared but its value is never read.
-             var unused = 20;
-                 ~~~~~~

@@ -5,7 +5,7 @@ errorElaboration.ts(12,5): error TS2345: Argument of type '() => Container<Ref<s
       Type 'string' is not assignable to type 'number'.
 errorElaboration.ts(17,11): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
 errorElaboration.ts(22,7): error TS2300: Duplicate identifier 'foo'.
-errorElaboration.ts(23,15): error TS2538: Type 'error' cannot be used as an index type.
+errorElaboration.ts(23,15): error TS2538: Type 'any' cannot be used as an index type.
 errorElaboration.ts(23,19): error TS2339: Property 'bar' does not exist on type '(x: () => Container<Ref<number>>) => void'.
 
 
@@ -46,7 +46,7 @@ errorElaboration.ts(23,19): error TS2339: Property 'bar' does not exist on type 
 !!! error TS2300: Duplicate identifier 'foo'.
     const x = ({ [foo.bar]: c }) => undefined;
                   ~~~~~~~
-!!! error TS2538: Type 'error' cannot be used as an index type.
+!!! error TS2538: Type 'any' cannot be used as an index type.
                       ~~~
 !!! error TS2339: Property 'bar' does not exist on type '(x: () => Container<Ref<number>>) => void'.
     

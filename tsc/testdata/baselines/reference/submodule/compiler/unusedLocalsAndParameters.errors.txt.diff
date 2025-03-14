@@ -14,34 +14,7 @@
      export { };
      
      // function declaration paramter
-@@= skipped -40, +41 lines =@@
-         }
-         // Accessor declaration paramter
-         set x(v: number) {
--              ~
-+              ~~~~~~~~~
- !!! error TS6133: 'v' is declared but its value is never read.
-         }
-     }
-@@= skipped -15, +15 lines =@@
-         }
-         // Accessor declaration paramter
-         set x(v: number) {
--              ~
-+              ~~~~~~~~~
- !!! error TS6133: 'v' is declared but its value is never read.
-         }
-     }
-@@= skipped -13, +13 lines =@@
-         },
-         // Accessor declaration paramter
-         set x(v: number) {
--              ~
-+              ~~~~~~~~~
- !!! error TS6133: 'v' is declared but its value is never read.
-         }
-     };
-@@= skipped -67, +67 lines =@@
+@@= skipped -135, +136 lines =@@
                   ~
  !!! error TS1005: ',' expected.
          z(x);

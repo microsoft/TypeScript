@@ -1,6 +1,6 @@
 asyncGeneratorParameterEvaluation.ts(2,27): error TS2304: Cannot find name 'z'.
 asyncGeneratorParameterEvaluation.ts(3,22): error TS2304: Cannot find name 'z'.
-asyncGeneratorParameterEvaluation.ts(3,22): error TS2538: Type 'error' cannot be used as an index type.
+asyncGeneratorParameterEvaluation.ts(3,22): error TS2538: Type 'any' cannot be used as an index type.
 asyncGeneratorParameterEvaluation.ts(7,22): error TS2304: Cannot find name 'z'.
 
 
@@ -13,7 +13,7 @@ asyncGeneratorParameterEvaluation.ts(7,22): error TS2304: Cannot find name 'z'.
                          ~
 !!! error TS2304: Cannot find name 'z'.
                          ~
-!!! error TS2538: Type 'error' cannot be used as an index type.
+!!! error TS2538: Type 'any' cannot be used as an index type.
     
     declare class Super { foo(): void; }
     class Sub extends Super {

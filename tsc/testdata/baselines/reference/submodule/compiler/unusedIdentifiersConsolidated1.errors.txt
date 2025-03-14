@@ -19,7 +19,7 @@ unusedIdentifiersConsolidated1.ts(99,15): error TS6196: 'interface5' is declared
 
 ==== unusedIdentifiersConsolidated1.ts (17 errors) ====
     function greeter(person: string) {
-                     ~~~~~~~~~~~~~~
+                     ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
         var unused = 20;
             ~~~~~~
@@ -39,7 +39,7 @@ unusedIdentifiersConsolidated1.ts(99,15): error TS6196: 'interface5' is declared
         public typedvariable: usedtypeparameter;
     
         constructor(message: string) {
-                    ~~~~~~~~~~~~~~~
+                    ~~~~~~~
 !!! error TS6133: 'message' is declared but its value is never read.
             var unused2 = 22;
                 ~~~~~~~
@@ -48,7 +48,7 @@ unusedIdentifiersConsolidated1.ts(99,15): error TS6196: 'interface5' is declared
         }
     
         public greeter(person: string) {
-                       ~~~~~~~~~~~~~~
+                       ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
             var unused = 20;
                 ~~~~~~

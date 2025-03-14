@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
  thisInObjectLiterals.ts(14,5): error TS7023: 'f' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 -thisInObjectLiterals.ts(15,21): error TS2339: Property 'spaaace' does not exist on type '{ f(): any; }'.
-+thisInObjectLiterals.ts(15,21): error TS2339: Property 'spaaace' does not exist on type '{ f: () => error; }'.
++thisInObjectLiterals.ts(15,21): error TS2339: Property 'spaaace' does not exist on type '{ f: () => any; }'.
  
  
  ==== thisInObjectLiterals.ts (2 errors) ====
@@ -12,7 +12,7 @@
              return this.spaaace;
                          ~~~~~~~
 -!!! error TS2339: Property 'spaaace' does not exist on type '{ f(): any; }'.
-+!!! error TS2339: Property 'spaaace' does not exist on type '{ f: () => error; }'.
++!!! error TS2339: Property 'spaaace' does not exist on type '{ f: () => any; }'.
          }
      };
      var obj: { f: () => any; };

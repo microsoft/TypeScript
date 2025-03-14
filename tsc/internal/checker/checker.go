@@ -878,7 +878,7 @@ func NewChecker(program Program) *Checker {
 	c.autoType = c.newIntrinsicTypeEx(TypeFlagsAny, "any", ObjectFlagsNonInferrableType)
 	c.wildcardType = c.newIntrinsicType(TypeFlagsAny, "any")
 	c.blockedStringType = c.newIntrinsicType(TypeFlagsAny, "any")
-	c.errorType = c.newIntrinsicType(TypeFlagsAny, "error")
+	c.errorType = c.newIntrinsicType(TypeFlagsAny, "any")
 	c.unresolvedType = c.newIntrinsicType(TypeFlagsAny, "unresolved")
 	c.nonInferrableAnyType = c.newIntrinsicTypeEx(TypeFlagsAny, "any", ObjectFlagsContainsWideningType)
 	c.intrinsicMarkerType = c.newIntrinsicType(TypeFlagsAny, "intrinsic")
@@ -6531,7 +6531,7 @@ func (c *Checker) reportUnusedVariableDeclarations(declarations []*ast.Node) {
 			if ast.IsBindingPattern(name) {
 				c.reportUnusedBindingElements(name)
 			} else if c.isUnreferencedVariableDeclaration(declaration) {
-				c.reportUnusedVariable(declaration, NewDiagnosticForNode(declaration, diagnostics.X_0_is_declared_but_its_value_is_never_read, name.Text()))
+				c.reportUnusedVariable(declaration, NewDiagnosticForNode(name, diagnostics.X_0_is_declared_but_its_value_is_never_read, name.Text()))
 			}
 		}
 	}
@@ -6594,7 +6594,7 @@ func importClauseFromImported(node *ast.Node) *ast.Node {
 func (c *Checker) checkUnusedInferTypeParameter(node *ast.Node) {
 	typeParameter := node.AsInferTypeNode().TypeParameter
 	if c.isUnreferencedTypeParameter(typeParameter) {
-		c.reportUnused(node, UnusedKindParameter, NewDiagnosticForNode(typeParameter, diagnostics.X_0_is_declared_but_never_used, typeParameter.Name().Text()))
+		c.reportUnused(node, UnusedKindParameter, NewDiagnosticForNode(typeParameter.Name(), diagnostics.X_0_is_declared_but_never_used, typeParameter.Name().Text()))
 	}
 }
 

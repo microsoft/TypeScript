@@ -6,11 +6,11 @@ unusedMultipleParameters2InFunctionDeclaration.ts(2,9): error TS6133: 'unused' i
 
 ==== unusedMultipleParameters2InFunctionDeclaration.ts (4 errors) ====
     function greeter(person: string, person2: string, person3: string) {
-                     ~~~~~~~~~~~~~~
+                     ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
-                                     ~~~~~~~~~~~~~~~
+                                     ~~~~~~~
 !!! error TS6133: 'person2' is declared but its value is never read.
-                                                      ~~~~~~~~~~~~~~~
+                                                      ~~~~~~~
 !!! error TS6133: 'person3' is declared but its value is never read.
         var unused = 20;
             ~~~~~~

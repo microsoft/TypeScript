@@ -9,7 +9,7 @@ noUnusedLocals_typeParameterMergedWithParameter.ts(7,26): error TS6133: 'T' is d
     function useNone<T>(T: number) {}
                      ~
 !!! error TS6196: 'T' is declared but never used.
-                        ~~~~~~~~~
+                        ~
 !!! error TS6133: 'T' is declared but its value is never read.
     
     function useParam<T>(T: number) {
@@ -21,7 +21,7 @@ noUnusedLocals_typeParameterMergedWithParameter.ts(7,26): error TS6133: 'T' is d
     function useTypeParam<T>(T: T) {}
                           ~
 !!! error TS6196: 'T' is declared but never used.
-                             ~~~~
+                             ~
 !!! error TS6133: 'T' is declared but its value is never read.
     
     function useBoth<T>(T: T) {

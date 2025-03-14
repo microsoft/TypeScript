@@ -5,9 +5,9 @@ unusedMultipleParameter1InFunctionExpression.ts(2,9): error TS6133: 'unused' is 
 
 ==== unusedMultipleParameter1InFunctionExpression.ts (3 errors) ====
     var func = function(person: string, person2: string) {
-                        ~~~~~~~~~~~~~~
+                        ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
-                                        ~~~~~~~~~~~~~~~
+                                        ~~~~~~~
 !!! error TS6133: 'person2' is declared but its value is never read.
         var unused = 20;
             ~~~~~~

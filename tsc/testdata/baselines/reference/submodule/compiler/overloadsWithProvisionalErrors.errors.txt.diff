@@ -13,12 +13,10 @@
 -  Overload 1 of 2, '(s: string): number', gave the following error.
 -    Argument of type '(s: string) => { a: any; }' is not assignable to parameter of type 'string'.
 -  Overload 2 of 2, '(lambda: (s: string) => { a: number; b: number; }): string', gave the following error.
--    Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
 +overloadsWithProvisionalErrors.ts(8,11): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
-+    Property 'b' is missing in type '{ a: error; }' but required in type '{ a: number; b: number; }'.
+     Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
  overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cannot find name 'blah'.
- 
  
 @@= skipped -18, +14 lines =@@
      };
@@ -44,9 +42,8 @@
 -!!! error TS2769:   Overload 1 of 2, '(s: string): number', gave the following error.
 -!!! error TS2769:     Argument of type '(s: string) => { a: any; }' is not assignable to parameter of type 'string'.
 -!!! error TS2769:   Overload 2 of 2, '(lambda: (s: string) => { a: number; b: number; }): string', gave the following error.
--!!! error TS2769:     Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
 +!!! error TS2769:   The last overload gave the following error.
-+!!! error TS2769:     Property 'b' is missing in type '{ a: error; }' but required in type '{ a: number; b: number; }'.
+ !!! error TS2769:     Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
  !!! related TS2728 overloadsWithProvisionalErrors.ts:3:42: 'b' is declared here.
  !!! related TS6502 overloadsWithProvisionalErrors.ts:3:14: The expected type comes from the return type of this signature.
 +!!! related TS2771 overloadsWithProvisionalErrors.ts:3:5: The last overload is declared here.

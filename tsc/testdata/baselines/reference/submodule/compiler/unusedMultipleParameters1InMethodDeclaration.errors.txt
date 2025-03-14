@@ -6,9 +6,9 @@ unusedMultipleParameters1InMethodDeclaration.ts(3,13): error TS6133: 'unused' is
 ==== unusedMultipleParameters1InMethodDeclaration.ts (3 errors) ====
     class Dummy {
         public greeter(person: string, person2: string) {
-                       ~~~~~~~~~~~~~~
+                       ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
-                                       ~~~~~~~~~~~~~~~
+                                       ~~~~~~~
 !!! error TS6133: 'person2' is declared but its value is never read.
             var unused = 20;
                 ~~~~~~

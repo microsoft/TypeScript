@@ -5,7 +5,7 @@ unusedSingleParameterInMethodDeclaration.ts(3,13): error TS6133: 'unused' is dec
 ==== unusedSingleParameterInMethodDeclaration.ts (2 errors) ====
     class Dummy {
         public greeter(person: string) {
-                       ~~~~~~~~~~~~~~
+                       ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
             var unused = 20;
                 ~~~~~~

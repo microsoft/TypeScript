@@ -4,51 +4,25 @@
  recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
  recursiveConditionalTypes.ts(22,5): error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
    'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
-+    Type '() | T' is not assignable to type 'T'.
-+      'T' could be instantiated with an arbitrary type which could be unrelated to '() | T'.
-+        Type '' is not assignable to type 'T'.
-+          'T' could be instantiated with an arbitrary type which could be unrelated to ''.
++    Type '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T' is not assignable to type 'T'.
++      'T' could be instantiated with an arbitrary type which could be unrelated to '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T'.
++        Type 'T extends PromiseLike<infer U> ? __Awaited<U> : T' is not assignable to type 'T'.
++          'T' could be instantiated with an arbitrary type which could be unrelated to 'T extends PromiseLike<infer U> ? __Awaited<U> : T'.
 +            Type 'unknown' is not assignable to type 'T'.
 +              'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
  recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
  recursiveConditionalTypes.ts(47,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
  recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
--  Type 'number extends M ? number[] : _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
-+  Type '' is not assignable to type 'TupleOf<number, N>'.
-     Type 'number[] | _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
-       Type 'number[]' is not assignable to type 'TupleOf<number, N>'.
- recursiveConditionalTypes.ts(51,5): error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
--  Type 'number extends N ? number[] : _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
-+  Type '' is not assignable to type 'TupleOf<number, M>'.
-     Type 'number[] | _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
-       Type 'number[]' is not assignable to type 'TupleOf<number, M>'.
- recursiveConditionalTypes.ts(117,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
 @@= skipped -56, +62 lines =@@
          ~~
  !!! error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
  !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
-+!!! error TS2322:     Type '() | T' is not assignable to type 'T'.
-+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to '() | T'.
-+!!! error TS2322:         Type '' is not assignable to type 'T'.
-+!!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to ''.
++!!! error TS2322:     Type '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T' is not assignable to type 'T'.
++!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T'.
++!!! error TS2322:         Type 'T extends PromiseLike<infer U> ? __Awaited<U> : T' is not assignable to type 'T'.
++!!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T extends PromiseLike<infer U> ? __Awaited<U> : T'.
 +!!! error TS2322:             Type 'unknown' is not assignable to type 'T'.
 +!!! error TS2322:               'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
      }
      
      // Flattening arrays
-@@= skipped -34, +40 lines =@@
-         tn = tm;
-         ~~
- !!! error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
--!!! error TS2322:   Type 'number extends M ? number[] : _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
-+!!! error TS2322:   Type '' is not assignable to type 'TupleOf<number, N>'.
- !!! error TS2322:     Type 'number[] | _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
- !!! error TS2322:       Type 'number[]' is not assignable to type 'TupleOf<number, N>'.
-         tm = tn;
-         ~~
- !!! error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
--!!! error TS2322:   Type 'number extends N ? number[] : _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
-+!!! error TS2322:   Type '' is not assignable to type 'TupleOf<number, M>'.
- !!! error TS2322:     Type 'number[] | _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
- !!! error TS2322:       Type 'number[]' is not assignable to type 'TupleOf<number, M>'.
-     }

@@ -3,7 +3,7 @@ privateNameAndAny.ts(13,9): error TS18046: 'thing' is of type 'unknown'.
 privateNameAndAny.ts(14,9): error TS18046: 'thing' is of type 'unknown'.
 privateNameAndAny.ts(15,9): error TS18046: 'thing' is of type 'unknown'.
 privateNameAndAny.ts(16,9): error TS18046: 'thing' is of type 'unknown'.
-privateNameAndAny.ts(16,15): error TS2339: Property '#bar' does not exist on type 'error'.
+privateNameAndAny.ts(16,15): error TS2339: Property '#bar' does not exist on type 'any'.
 privateNameAndAny.ts(17,9): error TS18046: 'thing' is of type 'unknown'.
 privateNameAndAny.ts(20,15): error TS2339: Property '#foo' does not exist on type 'never'.
 privateNameAndAny.ts(21,15): error TS2339: Property '#m' does not exist on type 'never'.
@@ -40,7 +40,7 @@ privateNameAndAny.ts(24,15): error TS2339: Property '#foo' does not exist on typ
             ~~~~~
 !!! error TS18046: 'thing' is of type 'unknown'.
                   ~~~~
-!!! error TS2339: Property '#bar' does not exist on type 'error'.
+!!! error TS2339: Property '#bar' does not exist on type 'any'.
             thing.#foo();
             ~~~~~
 !!! error TS18046: 'thing' is of type 'unknown'.

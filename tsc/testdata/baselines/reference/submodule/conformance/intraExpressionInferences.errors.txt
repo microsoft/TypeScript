@@ -1,5 +1,5 @@
-intraExpressionInferences.ts(131,5): error TS2322: Type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: error; str: number; }' is not assignable to type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
-  Type '{ bool: error; str: number; }' is not assignable to type 'Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
+intraExpressionInferences.ts(131,5): error TS2322: Type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }' is not assignable to type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
+  Type '{ bool: any; str: number; }' is not assignable to type 'Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
     Types of property 'str' are incompatible.
       Type 'number' is not assignable to type 'string'.
 intraExpressionInferences.ts(133,26): error TS2339: Property 'nonexistent' does not exist on type 'Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>'.
@@ -138,8 +138,8 @@ intraExpressionInferences.ts(133,26): error TS2339: Property 'nonexistent' does 
         },
         map(inputs) {
         ~~~
-!!! error TS2322: Type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: error; str: number; }' is not assignable to type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
-!!! error TS2322:   Type '{ bool: error; str: number; }' is not assignable to type 'Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
+!!! error TS2322: Type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }' is not assignable to type '(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
+!!! error TS2322:   Type '{ bool: any; str: number; }' is not assignable to type 'Unwrap<{ bool: Wrapper<boolean>; str: Wrapper<string>; }>'.
 !!! error TS2322:     Types of property 'str' are incompatible.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
 !!! related TS6500 intraExpressionInferences.ts:113:5: The expected type comes from property 'map' which is declared here on type 'MappingComponent<{ num: Wrapper<number>; str: Wrapper<string>; }, { bool: Wrapper<boolean>; str: Wrapper<string>; }>'

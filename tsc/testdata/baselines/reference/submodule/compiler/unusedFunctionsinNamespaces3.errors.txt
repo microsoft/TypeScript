@@ -7,7 +7,7 @@ unusedFunctionsinNamespaces3.ts(2,30): error TS6133: 'param1' is declared but it
         var function1 = function(param1:string) {
             ~~~~~~~~~
 !!! error TS6133: 'function1' is declared but its value is never read.
-                                 ~~~~~~~~~~~~~
+                                 ~~~~~~
 !!! error TS6133: 'param1' is declared but its value is never read.
         }
     }

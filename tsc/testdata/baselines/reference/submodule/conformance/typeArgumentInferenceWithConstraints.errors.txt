@@ -13,7 +13,7 @@ typeArgumentInferenceWithConstraints.ts(49,15): error TS2344: Type 'string' does
 typeArgumentInferenceWithConstraints.ts(55,41): error TS2345: Argument of type '(n: string) => string' is not assignable to parameter of type '(b: number) => number'.
   Types of parameters 'n' and 'b' are incompatible.
     Type 'number' is not assignable to type 'string'.
-typeArgumentInferenceWithConstraints.ts(66,31): error TS2345: Argument of type '<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
+typeArgumentInferenceWithConstraints.ts(66,31): error TS2345: Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
 typeArgumentInferenceWithConstraints.ts(67,1): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
 typeArgumentInferenceWithConstraints.ts(73,29): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
@@ -115,7 +115,7 @@ typeArgumentInferenceWithConstraints.ts(89,70): error TS2353: Object literal may
     function someGenerics8<T extends string>(n: T): T { return n; }
     var x = someGenerics8<string>(someGenerics7); // Error
                                   ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
     x<string, string, string>(null, null, null); // Error
     ~
 !!! error TS2349: This expression is not callable.

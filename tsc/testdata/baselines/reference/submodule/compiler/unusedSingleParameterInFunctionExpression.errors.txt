@@ -4,7 +4,7 @@ unusedSingleParameterInFunctionExpression.ts(2,9): error TS6133: 'unused' is dec
 
 ==== unusedSingleParameterInFunctionExpression.ts (2 errors) ====
     var func = function(person: string) {
-                        ~~~~~~~~~~~~~~
+                        ~~~~~~
 !!! error TS6133: 'person' is declared but its value is never read.
         var unused = 20;
             ~~~~~~

@@ -8,8 +8,8 @@ computedPropertiesInDestructuring1_ES6.ts(17,16): error TS2537: Type '{ bar: num
 computedPropertiesInDestructuring1_ES6.ts(18,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
 computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
-computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2538: Type 'error' cannot be used as an index type.
-computedPropertiesInDestructuring1_ES6.ts(22,8): error TS2538: Type 'error' cannot be used as an index type.
+computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1_ES6.ts(22,8): error TS2538: Type 'any' cannot be used as an index type.
 computedPropertiesInDestructuring1_ES6.ts(22,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
 computedPropertiesInDestructuring1_ES6.ts(25,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
 computedPropertiesInDestructuring1_ES6.ts(29,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
@@ -17,7 +17,7 @@ computedPropertiesInDestructuring1_ES6.ts(31,4): error TS2537: Type '{ bar: stri
 computedPropertiesInDestructuring1_ES6.ts(32,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
 computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
-computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2538: Type 'error' cannot be used as an index type.
+computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
 computedPropertiesInDestructuring1_ES6.ts(35,4): error TS2538: Type 'any' cannot be used as an index type.
 computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
 
@@ -64,10 +64,10 @@ computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cann
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
            ~~~~~
-!!! error TS2538: Type 'error' cannot be used as an index type.
+!!! error TS2538: Type 'any' cannot be used as an index type.
     let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
            ~~~~~~~~~~~~~~~~~~~
-!!! error TS2538: Type 'error' cannot be used as an index type.
+!!! error TS2538: Type 'any' cannot be used as an index type.
                ~~~~~~~~~~~~~
 !!! error TS2339: Property 'toExponential' does not exist on type 'string'.
     
@@ -94,7 +94,7 @@ computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cann
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
        ~~~~~
-!!! error TS2538: Type 'error' cannot be used as an index type.
+!!! error TS2538: Type 'any' cannot be used as an index type.
     [{[(1 + {})]: bar4}] = [{bar: "bar"}];
        ~~~~~~~~
 !!! error TS2538: Type 'any' cannot be used as an index type.
