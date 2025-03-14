@@ -2724,7 +2724,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function reportMergeSymbolError(target: Symbol, source: Symbol) {
             const isEitherEnum = !!(target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum);
             const isEitherBlockScoped = !!(target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable);
-            const message = isEitherEnum ? Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations
+            const message = isEitherEnum ? Diagnostics.Enum_declarations_can_only_merge_with_namespace_declarations
                 : isEitherBlockScoped ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                 : Diagnostics.Duplicate_identifier_0;
             const sourceSymbolFile = source.declarations && getSourceFileOfNode(source.declarations[0]);
