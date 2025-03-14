@@ -764,7 +764,7 @@ export function createSyntacticTypeNodeBuilder(
             return withNewScope(context, node, () => serializeTypeAnnotationOfDeclaration(accessorType, context, node, symbol) ?? inferTypeOfDeclaration(node, symbol, context));
         }
         if (accessorDeclarations.getAccessor) {
-            return withNewScope(context, accessorDeclarations.getAccessor, () => createReturnFromSignature(accessorDeclarations.getAccessor!, /*symbol*/ undefined, context));
+            return withNewScope(context, accessorDeclarations.getAccessor, () => createReturnFromSignature(accessorDeclarations.getAccessor!, symbol, context));
         }
         return undefined;
     }
@@ -855,14 +855,14 @@ export function createSyntacticTypeNodeBuilder(
         return resolver.serializeTypeOfExpression(context, node) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
-    function inferReturnTypeOfSignatureSignature(node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext, reportFallback: boolean) {
+    function inferReturnTypeOfSignatureSignature(node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext, symbol: Symbol | undefined, reportFallback: boolean) {
         if (reportFallback) {
             context.tracker.reportInferenceFallback(node);
         }
         if (context.noInferenceFallback === true) {
             return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
-        return resolver.serializeReturnTypeForSignature(context, node) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        return resolver.serializeReturnTypeForSignature(context, node, symbol) ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
     function inferAccessorType(node: GetAccessorDeclaration | SetAccessorDeclaration, allAccessors: AllAccessorDeclarations, context: SyntacticTypeNodeBuilderContext, symbol: Symbol | undefined, reportFallback: boolean = true): TypeNode | undefined {
@@ -1276,7 +1276,7 @@ export function createSyntacticTypeNodeBuilder(
         else if (isValueSignatureDeclaration(fn)) {
             returnType = typeFromSingleReturnExpression(fn, context);
         }
-        return returnType.type !== undefined ? returnType.type : inferReturnTypeOfSignatureSignature(fn, context, reportFallback && returnType.reportFallback && !returnTypeNode);
+        return returnType.type !== undefined ? returnType.type : inferReturnTypeOfSignatureSignature(fn, context, symbol, reportFallback && returnType.reportFallback && !returnTypeNode);
     }
 
     function typeFromSingleReturnExpression(declaration: FunctionLikeDeclaration | undefined, context: SyntacticTypeNodeBuilderContext): SyntacticResult {

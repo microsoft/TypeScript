@@ -6136,10 +6136,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             serializeExistingTypeNode(context, typeNode, addUndefined) {
                 return serializeExistingTypeNode(context as NodeBuilderContext, typeNode, !!addUndefined);
             },
-            serializeReturnTypeForSignature(syntacticContext, signatureDeclaration) {
+            serializeReturnTypeForSignature(syntacticContext, signatureDeclaration, symbol) {
                 const context = syntacticContext as NodeBuilderContext;
                 const signature = getSignatureFromDeclaration(signatureDeclaration);
-                const returnType = context.enclosingSymbolTypes.get(getSymbolId(getSymbolOfDeclaration(signatureDeclaration))) ?? instantiateType(getReturnTypeOfSignature(signature), context.mapper);
+                symbol ??= getSymbolOfDeclaration(signatureDeclaration);
+                const returnType = context.enclosingSymbolTypes.get(getSymbolId(symbol)) ?? instantiateType(getReturnTypeOfSignature(signature), context.mapper);
                 return serializeInferredReturnTypeForSignature(context, signature, returnType);
             },
             serializeTypeOfExpression(syntacticContext, expr) {
@@ -6153,7 +6154,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 symbol ??= getSymbolOfDeclaration(declaration);
                 let type = context.enclosingSymbolTypes?.get(getSymbolId(symbol));
                 if (type === undefined) {
-                    type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
+                    type = symbol.flags & SymbolFlags.Accessor && declaration.kind === SyntaxKind.SetAccessor ? instantiateType(getWriteTypeOfSymbol(symbol), context.mapper) :
+                        symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
                         ? instantiateType(getWidenedLiteralType(getTypeOfSymbol(symbol)), context.mapper)
                         : errorType;
                 }
@@ -7383,12 +7385,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (propertySymbol.flags & SymbolFlags.Accessor) {
                 const writeType = getWriteTypeOfSymbol(propertySymbol);
                 if (propertyType !== writeType && !isErrorType(propertyType) && !isErrorType(writeType)) {
+                    const symbolMapper = getSymbolLinks(propertySymbol).mapper;
                     const getterDeclaration = getDeclarationOfKind<GetAccessorDeclaration>(propertySymbol, SyntaxKind.GetAccessor)!;
                     const getterSignature = getSignatureFromDeclaration(getterDeclaration);
                     typeElements.push(
                         setCommentRange(
                             context,
-                            signatureToSignatureDeclarationHelper(getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
+                            signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(getterSignature, symbolMapper) : getterSignature, SyntaxKind.GetAccessor, context, { name: propertyName }) as GetAccessorDeclaration,
                             getterDeclaration,
                         ),
                     );
@@ -7397,7 +7400,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     typeElements.push(
                         setCommentRange(
                             context,
-                            signatureToSignatureDeclarationHelper(setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
+                            signatureToSignatureDeclarationHelper(symbolMapper ? instantiateSignature(setterSignature, symbolMapper) : setterSignature, SyntaxKind.SetAccessor, context, { name: propertyName }) as SetAccessorDeclaration,
                             setterDeclaration,
                         ),
                     );
@@ -8662,6 +8665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration, context.enclosingDeclaration);
             const decl = declaration ?? symbol.valueDeclaration ?? getDeclarationWithTypeAnnotation(symbol) ?? symbol.declarations?.[0];
             if (decl) {
+                const restore = addSymbolTypeToContext(context, symbol, type);
                 if (isAccessor(decl)) {
                     result = syntacticNodeBuilder.serializeTypeOfAccessor(decl, symbol, context);
                 }
@@ -8670,10 +8674,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     && !nodeIsSynthesized(decl)
                     && !(getObjectFlags(type) & ObjectFlags.RequiresWidening)
                 ) {
-                    const restore = addSymbolTypeToContext(context, symbol, type);
                     result = syntacticNodeBuilder.serializeTypeOfDeclaration(decl, symbol, context);
-                    restore();
                 }
+                restore();
             }
             if (!result) {
                 if (addUndefinedForParameter) {
