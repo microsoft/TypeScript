@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/confusingExclamationBeforeInAndInstanceOf.ts] ////
+
+=== confusingExclamationBeforeInAndInstanceOf.ts ===
+declare let a: any;
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+
+declare let b: any;
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a! instanceof b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a!instanceof b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a/**/!instanceof b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a!/**/instanceof b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a !instanceof b; // should error
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a	!instanceof b; // should error
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a! in b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a!in b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a/**/!in b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a!/**/in b; // should work
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a !in b; // should error
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
+a	!in b; // should error
+>a : Symbol(a, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 0, 11))
+>b : Symbol(b, Decl(confusingExclamationBeforeInAndInstanceOf.ts, 1, 11))
+
