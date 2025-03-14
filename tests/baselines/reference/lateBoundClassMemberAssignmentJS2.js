@@ -17,6 +17,6 @@ export class MyClass {
 
 //// [lateBoundClassMemberAssignmentJS2.d.ts]
 export class MyClass {
-    method(): void;
     "my-fake-sym": string;
+    method(): void;
 }
