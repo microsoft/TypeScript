@@ -34,10 +34,7 @@
  >undefined : Symbol(undefined)
  
  declare module "./a" {
-->"./a" : Symbol("a", Decl(a.ts, 0, 0), Decl(d.ts, 5, 52), Decl(e.ts, 3, 54))
-+>"./a" : Symbol(""a.ts"", Decl(a.ts, 0, 0), Decl(d.ts, 5, 52), Decl(e.ts, 3, 54))
- 
-     interface A {
+@@= skipped -14, +14 lines =@@
  >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.ts, 7, 22), Decl(e.ts, 5, 22))
  
          getB(): B;
@@ -46,7 +43,7 @@
  >B : Symbol(B, Decl(d.ts, 3, 8))
      }
  }
-@@= skipped -27, +27 lines =@@
+@@= skipped -13, +13 lines =@@
  >Cls : Symbol(Cls, Decl(e.ts, 1, 8))
  
  A.prototype.getCls = function () { return undefined; }
@@ -62,10 +59,7 @@
  >undefined : Symbol(undefined)
  
  declare module "./a" {
-->"./a" : Symbol("a", Decl(a.ts, 0, 0), Decl(d.ts, 5, 52), Decl(e.ts, 3, 54))
-+>"./a" : Symbol(""a.ts"", Decl(a.ts, 0, 0), Decl(d.ts, 5, 52), Decl(e.ts, 3, 54))
- 
-     interface A {
+@@= skipped -14, +14 lines =@@
  >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.ts, 7, 22), Decl(e.ts, 5, 22))
  
          getCls(): Cls;
@@ -74,7 +68,7 @@
  >Cls : Symbol(Cls, Decl(e.ts, 1, 8))
      }
  }
-@@= skipped -32, +32 lines =@@
+@@= skipped -18, +18 lines =@@
  
  let b = a.getB().x.toFixed();
  >b : Symbol(b, Decl(main.ts, 5, 3))

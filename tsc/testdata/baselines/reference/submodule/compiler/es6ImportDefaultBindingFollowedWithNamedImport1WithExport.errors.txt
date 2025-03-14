@@ -1,15 +1,15 @@
 client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
 client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
-client.ts(3,34): error TS2614: Module '""server.ts""' has no exported member 'a'. Did you mean to use 'import a from ""server.ts""' instead?
+client.ts(3,34): error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
 client.ts(5,1): error TS1191: An import declaration cannot have modifiers.
-client.ts(5,34): error TS2614: Module '""server.ts""' has no exported member 'a'. Did you mean to use 'import a from ""server.ts""' instead?
+client.ts(5,34): error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
 client.ts(7,1): error TS1191: An import declaration cannot have modifiers.
-client.ts(7,34): error TS2614: Module '""server.ts""' has no exported member 'x'. Did you mean to use 'import x from ""server.ts""' instead?
-client.ts(7,37): error TS2614: Module '""server.ts""' has no exported member 'a'. Did you mean to use 'import a from ""server.ts""' instead?
+client.ts(7,34): error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
+client.ts(7,37): error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
 client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
-client.ts(9,34): error TS2614: Module '""server.ts""' has no exported member 'x'. Did you mean to use 'import x from ""server.ts""' instead?
+client.ts(9,34): error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
 client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
-client.ts(11,34): error TS2614: Module '""server.ts""' has no exported member 'm'. Did you mean to use 'import m from ""server.ts""' instead?
+client.ts(11,34): error TS2614: Module '"server"' has no exported member 'm'. Did you mean to use 'import m from "server"' instead?
 
 
 ==== server.ts (0 errors) ====
@@ -25,32 +25,32 @@ client.ts(11,34): error TS2614: Module '""server.ts""' has no exported member 'm
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2614: Module '""server.ts""' has no exported member 'a'. Did you mean to use 'import a from ""server.ts""' instead?
+!!! error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
     export var x1: number = defaultBinding2;
     export import defaultBinding3, { a as b } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2614: Module '""server.ts""' has no exported member 'a'. Did you mean to use 'import a from ""server.ts""' instead?
+!!! error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
     export var x1: number = defaultBinding3;
     export import defaultBinding4, { x, a as y } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2614: Module '""server.ts""' has no exported member 'x'. Did you mean to use 'import x from ""server.ts""' instead?
+!!! error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
                                         ~
-!!! error TS2614: Module '""server.ts""' has no exported member 'a'. Did you mean to use 'import a from ""server.ts""' instead?
+!!! error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
     export var x1: number = defaultBinding4;
     export import defaultBinding5, { x as z,  } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2614: Module '""server.ts""' has no exported member 'x'. Did you mean to use 'import x from ""server.ts""' instead?
+!!! error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
     export var x1: number = defaultBinding5;
     export import defaultBinding6, { m,  } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2614: Module '""server.ts""' has no exported member 'm'. Did you mean to use 'import m from ""server.ts""' instead?
+!!! error TS2614: Module '"server"' has no exported member 'm'. Did you mean to use 'import m from "server"' instead?
     export var x1: number = defaultBinding6;
     

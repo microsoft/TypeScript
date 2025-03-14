@@ -2,7 +2,7 @@
 +++ new.exportSpellingSuggestion.errors.txt
 @@= skipped -0, +0 lines =@@
 -b.ts(1,10): error TS2724: '"./a"' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
-+b.ts(1,10): error TS2724: '""a.ts""' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
++b.ts(1,10): error TS2724: '"a"' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
  
  
  ==== a.ts (0 errors) ====
@@ -11,6 +11,6 @@
      import { assertNevar } from "./a";
               ~~~~~~~~~~~
 -!!! error TS2724: '"./a"' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
-+!!! error TS2724: '""a.ts""' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
++!!! error TS2724: '"a"' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
  !!! related TS2728 a.ts:1:17: 'assertNever' is declared here.
      

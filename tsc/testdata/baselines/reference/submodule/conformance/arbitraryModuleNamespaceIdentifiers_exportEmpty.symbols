@@ -8,7 +8,7 @@ const empty = "empty";
 
 export { empty as "" };
 >empty : Symbol(empty, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 2, 5))
->"" : Symbol("", Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 3, 8))
+>"" : Symbol(, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 3, 8))
 
 import { "" as foo } from "./arbitraryModuleNamespaceIdentifiers_exportEmpty";
 >foo : Symbol(foo, Decl(arbitraryModuleNamespaceIdentifiers_exportEmpty.ts, 4, 8))

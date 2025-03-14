@@ -19,7 +19,7 @@
 -genericRestParameters3.ts(37,21): error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 +genericRestParameters3.ts(37,21): error TS2345: Argument of type '<T>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
    Types of parameters 'cb' and 'args' are incompatible.
--    Property '0' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
+     Property '0' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
 -genericRestParameters3.ts(44,32): error TS2345: Argument of type '[10, 20]' is not assignable to parameter of type 'CoolArray<number>'.
 -  Property 'hello' is missing in type '[10, 20]' but required in type 'CoolArray<number>'.
 -genericRestParameters3.ts(49,1): error TS2345: Argument of type '[]' is not assignable to parameter of type 'CoolArray<never>'.
@@ -33,7 +33,6 @@
 -genericRestParameters3.ts(59,5): error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
 -  Type '["what"]' is not assignable to type '[number, string]'.
 -    Source has 1 element(s) but target requires 2.
-+    Property '"0"' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
 +genericRestParameters3.ts(44,32): error TS2741: Property 'hello' is missing in type '[10, 20]' but required in type 'CoolArray<number>'.
 +genericRestParameters3.ts(49,1): error TS2741: Property 'hello' is missing in type '[]' but required in type 'CoolArray<never>'.
 +genericRestParameters3.ts(50,5): error TS2741: Property 'hello' is missing in type '[number]' but required in type 'CoolArray<unknown>'.
@@ -76,11 +75,8 @@
 -!!! error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 +!!! error TS2345: Argument of type '<T>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
  !!! error TS2345:   Types of parameters 'cb' and 'args' are incompatible.
--!!! error TS2345:     Property '0' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
-+!!! error TS2345:     Property '"0"' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
+ !!! error TS2345:     Property '0' is missing in type 'CoolArray<any>' but required in type '[cb: (...args: any[]) => void]'.
      
-     function bar<T extends any[]>(...args: T): T {
-         return args;
 @@= skipped -11, +11 lines =@@
      let a = bar(10, 20);
      let b = bar<CoolArray<number>>(10, 20);  // Error

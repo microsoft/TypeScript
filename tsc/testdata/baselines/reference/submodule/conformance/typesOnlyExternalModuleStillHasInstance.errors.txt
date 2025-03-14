@@ -1,4 +1,4 @@
-foo_1.ts(5,5): error TS2741: Property 'M2' is missing in type '{}' but required in type '{ M2: Object; }'.
+foo_1.ts(5,5): error TS2741: Property 'M2' is missing in type 'typeof import("foo_0")' but required in type '{ M2: Object; }'.
 
 
 ==== foo_1.ts (1 errors) ====
@@ -8,7 +8,7 @@ foo_1.ts(5,5): error TS2741: Property 'M2' is missing in type '{}' but required 
     var x: typeof foo0 = {};
     var y: {M2: Object} = foo0;
         ~
-!!! error TS2741: Property 'M2' is missing in type '{}' but required in type '{ M2: Object; }'.
+!!! error TS2741: Property 'M2' is missing in type 'typeof import("foo_0")' but required in type '{ M2: Object; }'.
 !!! related TS2728 foo_1.ts:5:9: 'M2' is declared here.
     
 ==== foo_0.ts (0 errors) ====

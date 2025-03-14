@@ -173,35 +173,7 @@
  
          if ("a" in this) {
  >this : Symbol(UnreachableCodeDetection, Decl(inKeywordTypeguard.ts, 86, 1))
-@@= skipped -439, +439 lines =@@
- 
-         x[1];
- >x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- 
-         x["1"];
- >x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
-->"1" : Symbol(1)
-+>"1" : Symbol("1")
- 
-         x[sym];
- >x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
-@@= skipped -33, +33 lines =@@
- 
-         x[1];
- >x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- 
-         x["1"];
- >x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
-->"1" : Symbol(1)
-+>"1" : Symbol("1")
- 
-         x[sym];
- >x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
-@@= skipped -192, +192 lines =@@
+@@= skipped -664, +664 lines =@@
  >T : Symbol(T, Decl(inKeywordTypeguard.ts, 357, 15))
  
      if (Array.isArray(obj) || 'length' in obj) {

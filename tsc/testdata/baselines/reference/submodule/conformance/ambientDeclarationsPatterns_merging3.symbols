@@ -11,7 +11,7 @@ declare module "*.foo" {
 
 === test.ts ===
 declare module "a.foo" {
->"a.foo" : Symbol(""a.foo"", Decl(test.ts, 0, 0))
+>"a.foo" : Symbol("a.foo", Decl(test.ts, 0, 0))
 
   export interface OhNo { a: string }
 >OhNo : Symbol(OhNo, Decl(test.ts, 0, 24))

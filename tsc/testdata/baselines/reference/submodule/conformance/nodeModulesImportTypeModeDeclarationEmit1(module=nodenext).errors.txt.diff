@@ -3,8 +3,8 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+/index.ts(3,64): error TS2694: Namespace '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
-+/index.ts(6,91): error TS2694: Namespace '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++/index.ts(3,64): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
++/index.ts(6,91): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 +
 +
 +==== /index.ts (2 errors) ====
@@ -12,12 +12,12 @@
 +        & import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface
 +        & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
 +                                                                   ~~~~~~~~~~~~~~~
-+!!! error TS2694: Namespace '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 +    
 +    export const a = (null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface);
 +    export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
 +                                                                                              ~~~~~~~~~~~~~~~
-+!!! error TS2694: Namespace '""/node_modules/pkg/require.d.ts""' has no exported member 'ImportInterface'.
++!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 +    
 +==== /node_modules/pkg/package.json (0 errors) ====
 +    {

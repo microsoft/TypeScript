@@ -2,7 +2,7 @@
 +++ new.moduleAugmentationWithNonExistentNamedImport.errors.txt
 @@= skipped -0, +0 lines =@@
 -bar.d.ts(1,10): error TS2305: Module '"./foo"' has no exported member 'Bar'.
-+bar.d.ts(1,10): error TS2305: Module '""foo.d.ts""' has no exported member 'Bar'.
++bar.d.ts(1,10): error TS2305: Module '"foo"' has no exported member 'Bar'.
  
  
  ==== foo.d.ts (0 errors) ====
@@ -11,6 +11,6 @@
      import { Bar } from './foo';
               ~~~
 -!!! error TS2305: Module '"./foo"' has no exported member 'Bar'.
-+!!! error TS2305: Module '""foo.d.ts""' has no exported member 'Bar'.
++!!! error TS2305: Module '"foo"' has no exported member 'Bar'.
      export = Bar;
      export as namespace Bar;

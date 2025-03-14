@@ -24,12 +24,3 @@
  >child : Symbol(child, Decl(arrayDestructuringInSwitch1.ts, 8, 31))
  >evaluate : Symbol(evaluate, Decl(arrayDestructuringInSwitch1.ts, 1, 84))
  >child : Symbol(child, Decl(arrayDestructuringInSwitch1.ts, 8, 31))
-@@= skipped -11, +11 lines =@@
-         return !evaluate(operands[0]);
- >evaluate : Symbol(evaluate, Decl(arrayDestructuringInSwitch1.ts, 1, 84))
- >operands : Symbol(operands, Decl(arrayDestructuringInSwitch1.ts, 5, 20))
-->0 : Symbol(0)
-+>0 : Symbol("0")
-       }
-       default: {
-         throw new Error(`${operator} is not a supported operator`);

@@ -3,7 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+enumMerging.ts(64,17): error TS2339: Property 'Red' does not exist on type '{ readonly [x: number]: string; readonly Yellow: Color.Yellow; }'.
++enumMerging.ts(64,17): error TS2339: Property 'Red' does not exist on type 'typeof Color'.
 +
 +
 +==== enumMerging.ts (1 errors) ====
@@ -72,6 +72,6 @@
 +        var t = A.Color.Yellow;
 +        t = A.Color.Red;
 +                    ~~~
-+!!! error TS2339: Property 'Red' does not exist on type '{ readonly [x: number]: string; readonly Yellow: Color.Yellow; }'.
++!!! error TS2339: Property 'Red' does not exist on type 'typeof Color'.
 +    }
 +    

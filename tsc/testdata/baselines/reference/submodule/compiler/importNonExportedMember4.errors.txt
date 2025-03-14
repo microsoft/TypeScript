@@ -1,4 +1,4 @@
-b.ts(1,10): error TS2617: 'Foo' can only be imported by using 'import Foo = require(""a.ts"")' or by turning on the 'esModuleInterop' flag and using a default import.
+b.ts(1,10): error TS2617: 'Foo' can only be imported by using 'import Foo = require("a")' or by turning on the 'esModuleInterop' flag and using a default import.
 b.ts(1,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 
 
@@ -9,6 +9,6 @@ b.ts(1,21): error TS2497: This module can only be referenced with ECMAScript imp
 ==== b.ts (2 errors) ====
     import { Foo } from './a';
              ~~~
-!!! error TS2617: 'Foo' can only be imported by using 'import Foo = require(""a.ts"")' or by turning on the 'esModuleInterop' flag and using a default import.
+!!! error TS2617: 'Foo' can only be imported by using 'import Foo = require("a")' or by turning on the 'esModuleInterop' flag and using a default import.
                         ~~~~~
 !!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.

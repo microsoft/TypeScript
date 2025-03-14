@@ -1,4 +1,4 @@
-ModuleWithExportedAndNonExportedEnums.ts(10,11): error TS2339: Property 'Day' does not exist on type '{ Color: { readonly [x: number]: string; readonly Red: Color.Red; readonly Blue: Color.Blue; }; }'.
+ModuleWithExportedAndNonExportedEnums.ts(10,11): error TS2339: Property 'Day' does not exist on type 'typeof A'.
 
 
 ==== ModuleWithExportedAndNonExportedEnums.ts (1 errors) ====
@@ -13,5 +13,5 @@ ModuleWithExportedAndNonExportedEnums.ts(10,11): error TS2339: Property 'Day' do
     // error not exported
     var b = A.Day.Monday;
               ~~~
-!!! error TS2339: Property 'Day' does not exist on type '{ Color: { readonly [x: number]: string; readonly Red: Color.Red; readonly Blue: Color.Blue; }; }'.
+!!! error TS2339: Property 'Day' does not exist on type 'typeof A'.
     

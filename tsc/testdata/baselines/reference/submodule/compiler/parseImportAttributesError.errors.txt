@@ -10,7 +10,7 @@ error TS2468: Cannot find global value 'Promise'.
 /index.ts(2,69): error TS2304: Cannot find name 'RequireInterface'.
 /index.ts(3,7): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 /index.ts(3,34): error TS1005: ':' expected.
-/index.ts(3,68): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: {}; }>'.
+/index.ts(3,68): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/require"); }>'.
 /index.ts(5,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /index.ts(5,57): error TS1478: Identifier or string literal expected.
 /index.ts(5,57): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -63,7 +63,7 @@ error TS2468: Cannot find global value 'Promise'.
                                      ~
 !!! error TS1005: ':' expected.
                                                                        ~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: {}; }>'.
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/require"); }>'.
     
     export const a = (null as any as import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface);
                                      ~~~~~~~~~~~~~~~~~~~~~~~

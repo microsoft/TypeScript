@@ -7,7 +7,7 @@
 /d.ts(1,24): error TS2300: Duplicate identifier 'as'.
 /e.ts(4,1): error TS1361: 'as' cannot be used as a value because it was imported using 'import type'.
 /f.ts(1,15): error TS1003: Identifier expected.
-/f.ts(1,15): error TS2305: Module '""/mod.ts""' has no exported member 'import'.
+/f.ts(1,15): error TS2305: Module '"/mod"' has no exported member 'import'.
 /f.ts(2,18): error TS1003: Identifier expected.
 /f.ts(2,18): error TS2300: Duplicate identifier 'export'.
 /f.ts(3,21): error TS1003: Identifier expected.
@@ -73,7 +73,7 @@
                   ~~~~~~
 !!! error TS1003: Identifier expected.
                   ~~~~~~
-!!! error TS2305: Module '""/mod.ts""' has no exported member 'import'.
+!!! error TS2305: Module '"/mod"' has no exported member 'import'.
     import { type as export } from "./mod.js"; // Error
                      ~~~~~~
 !!! error TS1003: Identifier expected.

@@ -1,4 +1,4 @@
-dottedModuleName2.ts(19,18): error TS2339: Property 'B' does not exist on type '{}'.
+dottedModuleName2.ts(19,18): error TS2339: Property 'B' does not exist on type 'typeof A'.
 dottedModuleName2.ts(38,19): error TS2694: Namespace 'A' has no exported member 'B'.
 dottedModuleName2.ts(40,19): error TS2694: Namespace 'A' has no exported member 'B'.
 
@@ -24,7 +24,7 @@ dottedModuleName2.ts(40,19): error TS2694: Namespace 'A' has no exported member 
      
     var tmpError = A.B.x;
                      ~
-!!! error TS2339: Property 'B' does not exist on type '{}'.
+!!! error TS2339: Property 'B' does not exist on type 'typeof A'.
     
     
     module A.B.C

@@ -1,4 +1,4 @@
-internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(17,26): error TS2339: Property 'c' does not exist on type '{ cProp: c; }'.
+internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(17,26): error TS2339: Property 'c' does not exist on type 'typeof m3'.
 
 
 ==== internalAliasClassInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
@@ -20,4 +20,4 @@ internalAliasClassInsideLocalModuleWithoutExportAccessError.ts(17,26): error TS2
     
     export var d = new m2.m3.c();
                              ~
-!!! error TS2339: Property 'c' does not exist on type '{ cProp: c; }'.
+!!! error TS2339: Property 'c' does not exist on type 'typeof m3'.

@@ -1,5 +1,5 @@
 moduleProperty2.ts(7,15): error TS2304: Cannot find name 'x'.
-moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type '{ z: any; }'.
+moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type 'typeof M'.
 
 
 ==== moduleProperty2.ts (2 errors) ====
@@ -18,6 +18,6 @@ moduleProperty2.ts(12,17): error TS2339: Property 'y' does not exist on type '{ 
     module N {
         var test3=M.y; // nope y private property of M
                     ~
-!!! error TS2339: Property 'y' does not exist on type '{ z: any; }'.
+!!! error TS2339: Property 'y' does not exist on type 'typeof M'.
         var test4=M.z; // ok public property of M
     }

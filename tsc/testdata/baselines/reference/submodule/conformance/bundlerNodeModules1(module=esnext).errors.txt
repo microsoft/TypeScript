@@ -1,6 +1,6 @@
-/main.cts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
-/main.mts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
-/main.ts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+/main.cts(1,10): error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
+/main.mts(1,10): error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
+/main.ts(1,10): error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
 
 
 ==== /node_modules/dual/package.json (0 errors) ====
@@ -33,15 +33,15 @@
 ==== /main.ts (1 errors) ====
     import { esm, cjs } from "dual";
              ~~~
-!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+!!! error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
     
 ==== /main.mts (1 errors) ====
     import { esm, cjs } from "dual";
              ~~~
-!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+!!! error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
     
 ==== /main.cts (1 errors) ====
     import { esm, cjs } from "dual";
              ~~~
-!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
+!!! error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
     

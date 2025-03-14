@@ -2,8 +2,8 @@ errorsWithInvokablesInUnions01.ts(14,12): error TS2322: Type '(x: string) => voi
   Type '(x: string) => void' is not assignable to type 'IDirectiveLinkFn<number>'.
     Types of parameters 'x' and 'scope' are incompatible.
       Type 'number' is not assignable to type 'string'.
-errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Type '{ new (): ctor; prototype: ctor; }' is not assignable to type 'ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>'.
-  Type '{ new (): ctor; prototype: ctor; }' is not assignable to type 'ConstructableA'.
+errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Type 'typeof ctor' is not assignable to type 'ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>'.
+  Type 'typeof ctor' is not assignable to type 'ConstructableA'.
     Property 'somePropA' is missing in type 'ctor' but required in type '{ somePropA: any; }'.
 
 
@@ -30,8 +30,8 @@ errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Type '{ new (): ctor; pr
     
     export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = class {
                ~~~~
-!!! error TS2322: Type '{ new (): ctor; prototype: ctor; }' is not assignable to type 'ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>'.
-!!! error TS2322:   Type '{ new (): ctor; prototype: ctor; }' is not assignable to type 'ConstructableA'.
+!!! error TS2322: Type 'typeof ctor' is not assignable to type 'ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>'.
+!!! error TS2322:   Type 'typeof ctor' is not assignable to type 'ConstructableA'.
 !!! error TS2322:     Property 'somePropA' is missing in type 'ctor' but required in type '{ somePropA: any; }'.
 !!! related TS2728 errorsWithInvokablesInUnions01.ts:2:12: 'somePropA' is declared here.
         someUnaccountedProp: any;

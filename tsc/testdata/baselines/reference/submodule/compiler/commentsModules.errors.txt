@@ -1,9 +1,9 @@
-commentsModules.ts(46,8): error TS2339: Property 'm3' does not exist on type '{}'.
-commentsModules.ts(53,8): error TS2339: Property 'm4' does not exist on type '{}'.
-commentsModules.ts(62,8): error TS2339: Property 'm5' does not exist on type '{}'.
-commentsModules.ts(72,8): error TS2339: Property 'm6' does not exist on type '{}'.
-commentsModules.ts(80,8): error TS2339: Property 'm7' does not exist on type '{}'.
-commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type '{}'.
+commentsModules.ts(46,8): error TS2339: Property 'm3' does not exist on type 'typeof m2'.
+commentsModules.ts(53,8): error TS2339: Property 'm4' does not exist on type 'typeof m3'.
+commentsModules.ts(62,8): error TS2339: Property 'm5' does not exist on type 'typeof m4'.
+commentsModules.ts(72,8): error TS2339: Property 'm6' does not exist on type 'typeof m5'.
+commentsModules.ts(80,8): error TS2339: Property 'm7' does not exist on type 'typeof m6'.
+commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type 'typeof m7'.
 
 
 ==== commentsModules.ts (6 errors) ====
@@ -54,7 +54,7 @@ commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type '{}
     } /* trailing dotted module comment*/
     new m2.m3.c();
            ~~
-!!! error TS2339: Property 'm3' does not exist on type '{}'.
+!!! error TS2339: Property 'm3' does not exist on type 'typeof m2'.
     /** module comment of m3.m4.m5*/
     module m3.m4.m5 {
         /** Exported class comment*/
@@ -63,7 +63,7 @@ commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type '{}
     } // trailing dotted module 2
     new m3.m4.m5.c();
            ~~
-!!! error TS2339: Property 'm4' does not exist on type '{}'.
+!!! error TS2339: Property 'm4' does not exist on type 'typeof m3'.
     /** module comment of m4.m5.m6*/
     module m4.m5.m6 {
         export module m7 {
@@ -74,7 +74,7 @@ commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type '{}
     }
     new m4.m5.m6.m7.c();
            ~~
-!!! error TS2339: Property 'm5' does not exist on type '{}'.
+!!! error TS2339: Property 'm5' does not exist on type 'typeof m4'.
     /** module comment of m5.m6.m7*/
     module m5.m6.m7 {
         /** module m8 comment*/
@@ -86,7 +86,7 @@ commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type '{}
     }
     new m5.m6.m7.m8.c();
            ~~
-!!! error TS2339: Property 'm6' does not exist on type '{}'.
+!!! error TS2339: Property 'm6' does not exist on type 'typeof m5'.
     module m6.m7 {
         export module m8 {
             /** Exported class comment*/
@@ -96,7 +96,7 @@ commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type '{}
     }
     new m6.m7.m8.c();
            ~~
-!!! error TS2339: Property 'm7' does not exist on type '{}'.
+!!! error TS2339: Property 'm7' does not exist on type 'typeof m6'.
     module m7.m8 {
         /** module m9 comment*/
         export module m9 {
@@ -115,4 +115,4 @@ commentsModules.ts(97,8): error TS2339: Property 'm8' does not exist on type '{}
     }
     new m7.m8.m9.c();
            ~~
-!!! error TS2339: Property 'm8' does not exist on type '{}'.
+!!! error TS2339: Property 'm8' does not exist on type 'typeof m7'.

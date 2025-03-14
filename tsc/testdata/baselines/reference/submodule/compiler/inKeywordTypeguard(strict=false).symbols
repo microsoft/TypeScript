@@ -666,11 +666,11 @@ function f8(x: object) {
 
         x[1];
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
->1 : Symbol("1")
+>1 : Symbol(1)
 
         x["1"];
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
->"1" : Symbol("1")
+>"1" : Symbol(1)
 
         x[sym];
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 252, 12))
@@ -699,11 +699,11 @@ function f9(x: object) {
 
         x[1];
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
->1 : Symbol("1")
+>1 : Symbol(1)
 
         x["1"];
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))
->"1" : Symbol("1")
+>"1" : Symbol(1)
 
         x[sym];
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 262, 12))

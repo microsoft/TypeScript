@@ -6,14 +6,14 @@ functionConstraintSatisfaction2.ts(23,14): error TS2345: Argument of type 'Funct
 functionConstraintSatisfaction2.ts(24,15): error TS2345: Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'string[]'.
-functionConstraintSatisfaction2.ts(25,15): error TS2345: Argument of type '{ new (): C; prototype: C; }' is not assignable to parameter of type '(x: string) => string'.
-  Type '{ new (): C; prototype: C; }' provides no match for the signature '(x: string): string'.
+functionConstraintSatisfaction2.ts(25,15): error TS2345: Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
+  Type 'typeof C' provides no match for the signature '(x: string): string'.
 functionConstraintSatisfaction2.ts(26,15): error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
   Type 'new (x: string) => string' provides no match for the signature '(x: string): string'.
 functionConstraintSatisfaction2.ts(28,16): error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
-functionConstraintSatisfaction2.ts(29,16): error TS2345: Argument of type '{ new <T>(): C2<T>; prototype: C2<any>; }' is not assignable to parameter of type '(x: string) => string'.
-  Type '{ new <T>(): C2<T>; prototype: C2<any>; }' provides no match for the signature '(x: string): string'.
+functionConstraintSatisfaction2.ts(29,16): error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
+  Type 'typeof C2' provides no match for the signature '(x: string): string'.
 functionConstraintSatisfaction2.ts(30,16): error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
   Type 'new <T>(x: T) => T' provides no match for the signature '(x: string): string'.
 functionConstraintSatisfaction2.ts(34,16): error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
@@ -67,8 +67,8 @@ functionConstraintSatisfaction2.ts(38,10): error TS2345: Argument of type 'U' is
 !!! error TS2345:     Type 'string' is not assignable to type 'string[]'.
     var r6 = foo2(C);
                   ~
-!!! error TS2345: Argument of type '{ new (): C; prototype: C; }' is not assignable to parameter of type '(x: string) => string'.
-!!! error TS2345:   Type '{ new (): C; prototype: C; }' provides no match for the signature '(x: string): string'.
+!!! error TS2345: Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345:   Type 'typeof C' provides no match for the signature '(x: string): string'.
     var r7 = foo2(b);
                   ~
 !!! error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
@@ -80,8 +80,8 @@ functionConstraintSatisfaction2.ts(38,10): error TS2345: Argument of type 'U' is
 !!! error TS2345:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     var r13 = foo2(C2);
                    ~~
-!!! error TS2345: Argument of type '{ new <T>(): C2<T>; prototype: C2<any>; }' is not assignable to parameter of type '(x: string) => string'.
-!!! error TS2345:   Type '{ new <T>(): C2<T>; prototype: C2<any>; }' provides no match for the signature '(x: string): string'.
+!!! error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345:   Type 'typeof C2' provides no match for the signature '(x: string): string'.
     var r14 = foo2(b2);
                    ~~
 !!! error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.

@@ -2,7 +2,7 @@ duplicateErrorClassExpression.ts(17,5): error TS2416: Property 'foo' in type 'De
   Type 'ComplicatedTypeDerived' is not assignable to type 'ComplicatedTypeBase'.
     'string' index signatures are incompatible.
       Property 'a' is missing in type 'ADerived' but required in type 'ABase'.
-duplicateErrorClassExpression.ts(20,5): error TS2538: Type '{ new (): Derived; prototype: Derived; }' cannot be used as an index type.
+duplicateErrorClassExpression.ts(20,5): error TS2538: Type 'typeof Derived' cannot be used as an index type.
 
 
 ==== duplicateErrorClassExpression.ts (2 errors) ====
@@ -33,4 +33,4 @@ duplicateErrorClassExpression.ts(20,5): error TS2538: Type '{ new (): Derived; p
     let obj: { 3: string } = { 3: "three" };
     obj[x];
         ~
-!!! error TS2538: Type '{ new (): Derived; prototype: Derived; }' cannot be used as an index type.
+!!! error TS2538: Type 'typeof Derived' cannot be used as an index type.

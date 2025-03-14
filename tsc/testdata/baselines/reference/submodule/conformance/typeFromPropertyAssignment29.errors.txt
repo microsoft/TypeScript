@@ -2,14 +2,14 @@ typeFromPropertyAssignment29.ts(60,14): error TS2339: Property 'prop' does not e
 typeFromPropertyAssignment29.ts(61,14): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
 typeFromPropertyAssignment29.ts(64,22): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
 typeFromPropertyAssignment29.ts(64,42): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
-typeFromPropertyAssignment29.ts(70,14): error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
-typeFromPropertyAssignment29.ts(71,14): error TS2339: Property 'm' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
-typeFromPropertyAssignment29.ts(74,22): error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
-typeFromPropertyAssignment29.ts(74,42): error TS2339: Property 'm' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
-typeFromPropertyAssignment29.ts(80,14): error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
-typeFromPropertyAssignment29.ts(81,14): error TS2339: Property 'm' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
-typeFromPropertyAssignment29.ts(84,22): error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
-typeFromPropertyAssignment29.ts(84,42): error TS2339: Property 'm' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
+typeFromPropertyAssignment29.ts(70,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+typeFromPropertyAssignment29.ts(71,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+typeFromPropertyAssignment29.ts(74,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+typeFromPropertyAssignment29.ts(74,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+typeFromPropertyAssignment29.ts(80,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+typeFromPropertyAssignment29.ts(81,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+typeFromPropertyAssignment29.ts(84,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+typeFromPropertyAssignment29.ts(84,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
 
 
 ==== typeFromPropertyAssignment29.ts (12 errors) ====
@@ -92,17 +92,17 @@ typeFromPropertyAssignment29.ts(84,42): error TS2339: Property 'm' does not exis
     }
     ExpandoClass.prop = 2
                  ~~~~
-!!! error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
     ExpandoClass.m = function(n: number) {
                  ~
-!!! error TS2339: Property 'm' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
         return n + 1;
     }
     var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n
                          ~~~~
-!!! error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
                                              ~
-!!! error TS2339: Property 'm' does not exist on type '{ new (): ExpandoClass; prototype: ExpandoClass; }'.
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
     
     // Class expressions shouldn't work in typescript either
     var ExpandoExpr3 = class {
@@ -110,16 +110,16 @@ typeFromPropertyAssignment29.ts(84,42): error TS2339: Property 'm' does not exis
     }
     ExpandoExpr3.prop = 3
                  ~~~~
-!!! error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
     ExpandoExpr3.m = function(n: number) {
                  ~
-!!! error TS2339: Property 'm' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
         return n + 1;
     }
     var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n
                          ~~~~
-!!! error TS2339: Property 'prop' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
                                              ~
-!!! error TS2339: Property 'm' does not exist on type '{ new (): ExpandoExpr3; prototype: ExpandoExpr3; }'.
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
     
     

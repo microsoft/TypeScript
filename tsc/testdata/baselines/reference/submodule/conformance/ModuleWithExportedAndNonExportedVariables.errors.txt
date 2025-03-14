@@ -1,4 +1,4 @@
-ModuleWithExportedAndNonExportedVariables.ts(11,11): error TS2339: Property 'y' does not exist on type '{ x: string; }'.
+ModuleWithExportedAndNonExportedVariables.ts(11,11): error TS2339: Property 'y' does not exist on type 'typeof A'.
 
 
 ==== ModuleWithExportedAndNonExportedVariables.ts (1 errors) ====
@@ -14,5 +14,5 @@ ModuleWithExportedAndNonExportedVariables.ts(11,11): error TS2339: Property 'y' 
     // Error, since y is not exported
     var y = A.y;
               ~
-!!! error TS2339: Property 'y' does not exist on type '{ x: string; }'.
+!!! error TS2339: Property 'y' does not exist on type 'typeof A'.
     

@@ -1,4 +1,4 @@
-nonExportedElementsOfMergedModules.ts(13,7): error TS2339: Property 'x' does not exist on type '{ y: any; }'.
+nonExportedElementsOfMergedModules.ts(13,7): error TS2339: Property 'x' does not exist on type 'typeof B'.
 
 
 ==== nonExportedElementsOfMergedModules.ts (1 errors) ====
@@ -16,7 +16,7 @@ nonExportedElementsOfMergedModules.ts(13,7): error TS2339: Property 'x' does not
         }
         B.x;
           ~
-!!! error TS2339: Property 'x' does not exist on type '{ y: any; }'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof B'.
         B.y;
     }
     

@@ -18,10 +18,8 @@
 +>prototype : Symbol(prototype)
  
  declare module "./m1" {
-->"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
-+>"./m1" : Symbol(""m1.ts"", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
- 
-     interface Cls {
+ >"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+@@= skipped -16, +16 lines =@@
  >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
  
          foo(): number;
@@ -30,11 +28,7 @@
      }
  }
  
- declare module "./m1" {
-->"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
-+>"./m1" : Symbol(""m1.ts"", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
- 
-     interface Cls {
+@@= skipped -11, +11 lines =@@
  >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
  
          bar(): string;
@@ -56,7 +50,7 @@
  
  === m4.ts ===
  import {Cls} from "./m1";
-@@= skipped -49, +49 lines =@@
+@@= skipped -22, +22 lines =@@
  >C2 : Symbol(C2, Decl(m4.ts, 1, 11))
  
  (<any>Cls.prototype).baz1 = function() { return undefined };
@@ -76,10 +70,7 @@
  >undefined : Symbol(undefined)
  
  declare module "./m1" {
-->"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
-+>"./m1" : Symbol(""m1.ts"", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
- 
-     interface Cls {
+@@= skipped -18, +18 lines =@@
  >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
  
          baz1(): C1;
@@ -88,12 +79,7 @@
  >C1 : Symbol(C1, Decl(m4.ts, 1, 8))
      }
  }
- 
- declare module "./m1" {
-->"./m1" : Symbol("m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
-+>"./m1" : Symbol(""m1.ts"", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
- 
-     interface Cls {
+@@= skipped -12, +12 lines =@@
  >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
  
          baz2(): C2;
@@ -102,7 +88,7 @@
  >C2 : Symbol(C2, Decl(m4.ts, 1, 11))
      }
  }
-@@= skipped -46, +46 lines =@@
+@@= skipped -16, +16 lines =@@
  >Cls : Symbol(Cls, Decl(test.ts, 0, 8))
  
  c.foo().toExponential();

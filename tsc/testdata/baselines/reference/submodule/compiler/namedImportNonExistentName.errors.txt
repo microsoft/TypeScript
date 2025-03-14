@@ -1,9 +1,9 @@
-bar.ts(1,10): error TS2305: Module '""foo.d.ts""' has no exported member 'Bar'.
-bar.ts(1,15): error TS2305: Module '""foo.d.ts""' has no exported member 'toString'.
-bar.ts(3,10): error TS2305: Module '""foo2.ts""' has no exported member 'a'.
-bar.ts(3,13): error TS2305: Module '""foo2.ts""' has no exported member 'b'.
-bar.ts(3,19): error TS2305: Module '""foo2.ts""' has no exported member 'd'.
-bar.ts(3,22): error TS2305: Module '""foo2.ts""' has no exported member 'toString'.
+bar.ts(1,10): error TS2305: Module '"foo"' has no exported member 'Bar'.
+bar.ts(1,15): error TS2305: Module '"foo"' has no exported member 'toString'.
+bar.ts(3,10): error TS2305: Module '"foo2"' has no exported member 'a'.
+bar.ts(3,13): error TS2305: Module '"foo2"' has no exported member 'b'.
+bar.ts(3,19): error TS2305: Module '"foo2"' has no exported member 'd'.
+bar.ts(3,22): error TS2305: Module '"foo2"' has no exported member 'toString'.
 
 
 ==== foo.d.ts (0 errors) ====
@@ -21,17 +21,17 @@ bar.ts(3,22): error TS2305: Module '""foo2.ts""' has no exported member 'toStrin
 ==== bar.ts (6 errors) ====
     import { Bar, toString, foo } from './foo';
              ~~~
-!!! error TS2305: Module '""foo.d.ts""' has no exported member 'Bar'.
+!!! error TS2305: Module '"foo"' has no exported member 'Bar'.
                   ~~~~~~~~
-!!! error TS2305: Module '""foo.d.ts""' has no exported member 'toString'.
+!!! error TS2305: Module '"foo"' has no exported member 'toString'.
     foo();
     import { a, b, c, d, toString as foo2String } from './foo2';
              ~
-!!! error TS2305: Module '""foo2.ts""' has no exported member 'a'.
+!!! error TS2305: Module '"foo2"' has no exported member 'a'.
                 ~
-!!! error TS2305: Module '""foo2.ts""' has no exported member 'b'.
+!!! error TS2305: Module '"foo2"' has no exported member 'b'.
                       ~
-!!! error TS2305: Module '""foo2.ts""' has no exported member 'd'.
+!!! error TS2305: Module '"foo2"' has no exported member 'd'.
                          ~~~~~~~~
-!!! error TS2305: Module '""foo2.ts""' has no exported member 'toString'.
+!!! error TS2305: Module '"foo2"' has no exported member 'toString'.
     c;

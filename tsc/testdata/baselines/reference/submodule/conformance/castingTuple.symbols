@@ -79,7 +79,7 @@ var classCDATuple = <[C, D, A]>classCDTuple;
 var eleFromCDA1 = classCDATuple[2]; // A
 >eleFromCDA1 : Symbol(eleFromCDA1, Decl(castingTuple.ts, 18, 3))
 >classCDATuple : Symbol(classCDATuple, Decl(castingTuple.ts, 17, 3))
->2 : Symbol("2")
+>2 : Symbol(2)
 
 var eleFromCDA2 = classCDATuple[5]; // C | D | A
 >eleFromCDA2 : Symbol(eleFromCDA2, Decl(castingTuple.ts, 19, 3))

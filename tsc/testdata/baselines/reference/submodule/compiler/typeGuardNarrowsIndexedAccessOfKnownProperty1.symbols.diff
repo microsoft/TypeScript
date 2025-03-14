@@ -61,7 +61,7 @@
      switch(s['dash-ok']) {
  >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 23, 14))
 ->'dash-ok' : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19))
-+>'dash-ok' : Symbol("dash-ok", Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
++>'dash-ok' : Symbol(dash-ok, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
  
          case "square": return s['square-size'] * s['square-size'];
  >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 23, 14))
@@ -108,7 +108,7 @@
  >under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 16, 14))
  >"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 17, 20))
 ->"dash-ok" : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19))
-+>"dash-ok" : Symbol("dash-ok", Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
++>"dash-ok" : Symbol(dash-ok, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
  
          case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];
  >s[0].sub.under.shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 17, 20))
@@ -210,19 +210,7 @@
  }
  
  type A = ["aa", number];
-@@= skipped -41, +41 lines =@@
- 
-     z[0] // fine, typescript sees "xx" | "yy"
- >z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 55, 15))
-->0 : Symbol(0, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 38, 13), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 43, 13))
-+>0 : Symbol("0", Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 38, 13), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 43, 13))
- 
-     switch (z[0]) {
- >z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 55, 15))
-->0 : Symbol(0, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 38, 13), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 43, 13))
-+>0 : Symbol("0", Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 38, 13), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 43, 13))
- 
-         case "xx":
+@@= skipped -51, +51 lines =@@
              var xx: number = z[1] // should be number
  >xx : Symbol(xx, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 59, 15))
  >z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 55, 15))
@@ -239,41 +227,3 @@
  
              break;
      }
-     c[0] // fine, typescript sees "xx" | "yy"
- >c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 55, 20))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
-     switch (c[0]) {
- >c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 55, 20))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
-         case "aa":
-             var aa: number = c[1] // should be number
- >aa : Symbol(aa, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 68, 15))
- >c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 55, 20))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- 
-             break;
-         case "bb":
-             var bb: string = c[1] // should be string
- >bb : Symbol(bb, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 71, 15))
- >c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 55, 20))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- 
-             break;
-     }
-@@= skipped -52, +52 lines =@@
- 
-     return pair[1] ? pair[1] : 'nope';
- >pair : Symbol(pair, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 76, 18))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- >pair : Symbol(pair, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 76, 18))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- }
- 

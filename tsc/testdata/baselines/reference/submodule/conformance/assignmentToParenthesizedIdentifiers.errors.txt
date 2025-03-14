@@ -74,15 +74,15 @@ assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C
     M2.M3 = { x: '' }; // Error
               ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
+!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     (M2).M3 = { x: '' }; // Error
                 ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
+!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     (M2.M3) = { x: '' }; // Error
                 ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
+!!! related TS6500 assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     
     
     function fn() { }

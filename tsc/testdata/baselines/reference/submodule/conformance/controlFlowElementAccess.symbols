@@ -20,10 +20,10 @@ const y: [number, number] = [0, 0];
 
 if (y[0] === 0) {
 >y : Symbol(y, Decl(controlFlowElementAccess.ts, 5, 5))
->0 : Symbol("0")
+>0 : Symbol(0)
 
     y[0] = -1;
 >y : Symbol(y, Decl(controlFlowElementAccess.ts, 5, 5))
->0 : Symbol("0")
+>0 : Symbol(0)
 }
 

@@ -35,7 +35,7 @@ declare module "D" {
 >B : Symbol(B, Decl(d.d.ts, 2, 12))
 
     module "a" {
->"a" : Symbol(""a"", Decl(d.d.ts, 2, 24))
+>"a" : Symbol("a", Decl(d.d.ts, 2, 24))
 
         interface A {
 >A : Symbol(A, Decl(d.d.ts, 3, 16))

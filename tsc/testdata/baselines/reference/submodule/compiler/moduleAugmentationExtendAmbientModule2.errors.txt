@@ -1,5 +1,5 @@
 main.ts(6,11): error TS2339: Property 'map' does not exist on type 'Observable<number>'.
-main.ts(8,21): error TS2339: Property 'someAnotherValue' does not exist on type '{ new <T>(): Observable<T>; someValue: number; prototype: Observable<any>; }'.
+main.ts(8,21): error TS2339: Property 'someAnotherValue' does not exist on type 'typeof Observable'.
 map.ts(6,15): error TS2428: All declarations of 'Observable' must have identical type parameters.
 map.ts(7,35): error TS2314: Generic type 'Observable<T, T>' requires 2 type argument(s).
 observable.d.ts(2,11): error TS2428: All declarations of 'Observable' must have identical type parameters.
@@ -17,7 +17,7 @@ observable.d.ts(2,11): error TS2428: All declarations of 'Observable' must have 
     let z1 = Observable.someValue.toFixed();
     let z2 = Observable.someAnotherValue.toLowerCase();
                         ~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'someAnotherValue' does not exist on type '{ new <T>(): Observable<T>; someValue: number; prototype: Observable<any>; }'.
+!!! error TS2339: Property 'someAnotherValue' does not exist on type 'typeof Observable'.
 ==== map.ts (2 errors) ====
     import { Observable } from "observable"
     

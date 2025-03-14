@@ -1,6 +1,6 @@
-index.cts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
-index.mts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
-index.ts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
+index.cts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
+index.mts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
+index.ts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
 
 
 ==== index.ts (1 errors) ====
@@ -8,21 +8,21 @@ index.ts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on 
     import * as mod from "inner";
     mod.correctVersionApplied;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
+!!! error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
     
 ==== index.mts (1 errors) ====
     // esm format file
     import * as mod from "inner";
     mod.correctVersionApplied;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
+!!! error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
     
 ==== index.cts (1 errors) ====
     // cjs format file
     import * as mod from "inner";
     mod.correctVersionApplied;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'correctVersionApplied' does not exist on type '{ readonly noConditionsApplied: true; }'.
+!!! error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
     
 ==== node_modules/inner/index.d.ts (0 errors) ====
     // cjs format file

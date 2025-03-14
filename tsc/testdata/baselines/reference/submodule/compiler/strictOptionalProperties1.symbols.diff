@@ -24,26 +24,7 @@
  
          obj.b;
  >obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
-@@= skipped -82, +82 lines =@@
-     let x = t[0];  // string | undefined
- >x : Symbol(x, Decl(strictOptionalProperties1.ts, 57, 7))
- >t : Symbol(t, Decl(strictOptionalProperties1.ts, 56, 12))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
-     t[0] = 'hello';
- >t : Symbol(t, Decl(strictOptionalProperties1.ts, 56, 12))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
-     t[0] = undefined;  // Error
- >t : Symbol(t, Decl(strictOptionalProperties1.ts, 56, 12))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- >undefined : Symbol(undefined)
- }
- 
-@@= skipped -158, +158 lines =@@
+@@= skipped -240, +240 lines =@@
  >key : Symbol(key, Decl(strictOptionalProperties1.ts, 116, 5))
  
      foo?: string;  // Should be ok

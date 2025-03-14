@@ -1,4 +1,4 @@
-privateNamesConstructorChain-2.ts(6,15): error TS2339: Property '#bar' does not exist on type '{ new <T>(): Child<T>; prototype: Child<any>; }'.
+privateNamesConstructorChain-2.ts(6,15): error TS2339: Property '#bar' does not exist on type 'typeof Child'.
 
 
 ==== privateNamesConstructorChain-2.ts (1 errors) ====
@@ -9,7 +9,7 @@ privateNamesConstructorChain-2.ts(6,15): error TS2339: Property '#bar' does not 
             new Child<string>().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
             Child.#bar;       // Error: not found
                   ~~~~
-!!! error TS2339: Property '#bar' does not exist on type '{ new <T>(): Child<T>; prototype: Child<any>; }'.
+!!! error TS2339: Property '#bar' does not exist on type 'typeof Child'.
         }
     }
     

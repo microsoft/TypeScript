@@ -26,30 +26,20 @@
  
          return y.a;
  >y.a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
-@@= skipped -13, +13 lines =@@
-     }
-     if (z[0]) {
- >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
-->0 : Symbol(0)
-+>0 : Symbol("0")
+@@= skipped -16, +16 lines =@@
+ >0 : Symbol(0)
  
          z[0].length;
 ->z[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>z[0].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
-->0 : Symbol(0)
+ >0 : Symbol(0)
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
-+>0 : Symbol("0")
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  
          return z[0];
  >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
-->0 : Symbol(0)
-+>0 : Symbol("0")
-     }
-     return "hello";
- }
-@@= skipped -29, +29 lines =@@
+@@= skipped -26, +26 lines =@@
  >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
  
          x.length;

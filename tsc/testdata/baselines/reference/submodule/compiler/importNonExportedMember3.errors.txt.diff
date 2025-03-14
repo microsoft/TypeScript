@@ -2,7 +2,7 @@
 +++ new.importNonExportedMember3.errors.txt
 @@= skipped -0, +0 lines =@@
 -b.ts(1,10): error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
-+b.ts(1,10): error TS2459: Module '""a.ts""' declares 'Foo' locally, but it is not exported.
++b.ts(1,10): error TS2459: Module '"a"' declares 'Foo' locally, but it is not exported.
  
  
  ==== a.ts (0 errors) ====
@@ -11,7 +11,7 @@
      import { Foo } from './a';
               ~~~
 -!!! error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
-+!!! error TS2459: Module '""a.ts""' declares 'Foo' locally, but it is not exported.
++!!! error TS2459: Module '"a"' declares 'Foo' locally, but it is not exported.
  !!! related TS2728 a.ts:2:11: 'Foo' is declared here.
  !!! related TS6204 a.ts:3:11: and here.
  !!! related TS6204 a.ts:4:11: and here.

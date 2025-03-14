@@ -588,19 +588,3 @@
          }
      }
  }
- 
- declare module "anotherParseError" {
-->"anotherParseError" : Symbol("anotherParseError", Decl(privacyImportParseErrors.ts, 309, 1))
-+>"anotherParseError" : Symbol(""anotherParseError"", Decl(privacyImportParseErrors.ts, 309, 1))
- 
-     module m2 {
- >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 311, 36), Decl(privacyImportParseErrors.ts, 315, 5))
-@@= skipped -29, +29 lines =@@
- }
- 
- declare export module "anotherParseError2" {
-->"anotherParseError2" : Symbol("anotherParseError2", Decl(privacyImportParseErrors.ts, 323, 1))
-+>"anotherParseError2" : Symbol(""anotherParseError2"", Decl(privacyImportParseErrors.ts, 323, 1))
- 
-     module m2 {
- >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 325, 44), Decl(privacyImportParseErrors.ts, 329, 5))

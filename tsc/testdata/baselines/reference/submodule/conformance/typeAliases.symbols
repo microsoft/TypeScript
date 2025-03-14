@@ -231,6 +231,6 @@ var y: StringAndBoolean = ["1", false];
 y[0].toLowerCase();
 >y[0].toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(typeAliases.ts, 78, 3))
->0 : Symbol("0")
+>0 : Symbol(0)
 >toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
 

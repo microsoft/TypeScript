@@ -54,7 +54,7 @@ if (nameMB == nameMA) {
 >console : Symbol(console, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 0, 11))
 >log : Symbol(log, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 0, 22))
 >skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 7, 6))
->0 : Symbol("0")
+>0 : Symbol(0)
 >skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts, 7, 6))
->1 : Symbol("1")
+>1 : Symbol(1)
 }

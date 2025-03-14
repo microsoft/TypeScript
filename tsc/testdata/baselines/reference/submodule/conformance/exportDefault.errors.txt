@@ -1,6 +1,6 @@
 /d.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-/e.ts(2,11): error TS2339: Property 'A' does not exist on type '{}'.
-/f.ts(2,11): error TS2339: Property 'default' does not exist on type '{}'.
+/e.ts(2,11): error TS2339: Property 'A' does not exist on type 'typeof import("/b")'.
+/f.ts(2,11): error TS2339: Property 'default' does not exist on type 'typeof import("/b")'.
 /g.ts(2,5): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 
 
@@ -26,13 +26,13 @@
     import types = require('./b');
     new types.A(); // Error
               ~
-!!! error TS2339: Property 'A' does not exist on type '{}'.
+!!! error TS2339: Property 'A' does not exist on type 'typeof import("/b")'.
     
 ==== /f.ts (1 errors) ====
     import * as types from './b';
     new types.default.A(); // Error
               ~~~~~~~
-!!! error TS2339: Property 'default' does not exist on type '{}'.
+!!! error TS2339: Property 'default' does not exist on type 'typeof import("/b")'.
     
 ==== /g.ts (1 errors) ====
     import type types from './c'

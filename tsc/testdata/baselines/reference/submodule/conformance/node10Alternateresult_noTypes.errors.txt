@@ -1,4 +1,4 @@
-/index.ts(1,10): error TS2305: Module '""/node_modules/pkg/definitely-not-index.d.ts""' has no exported member 'pkg'.
+/index.ts(1,10): error TS2305: Module '"/node_modules/pkg/definitely-not-index"' has no exported member 'pkg'.
 
 
 ==== /node_modules/pkg/package.json (0 errors) ====
@@ -20,5 +20,5 @@
 ==== /index.ts (1 errors) ====
     import { pkg } from "pkg";
              ~~~
-!!! error TS2305: Module '""/node_modules/pkg/definitely-not-index.d.ts""' has no exported member 'pkg'.
+!!! error TS2305: Module '"/node_modules/pkg/definitely-not-index"' has no exported member 'pkg'.
     

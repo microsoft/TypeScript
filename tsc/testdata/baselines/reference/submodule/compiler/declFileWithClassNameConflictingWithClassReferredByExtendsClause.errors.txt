@@ -1,4 +1,4 @@
-declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(15,38): error TS2339: Property 'Y' does not exist on type '{}'.
+declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(15,38): error TS2339: Property 'Y' does not exist on type 'typeof X'.
 
 
 ==== declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts (1 errors) ====
@@ -18,7 +18,7 @@ declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts(15,38): erro
     
         export class W<TValue> extends X.Y.base.W {
                                          ~
-!!! error TS2339: Property 'Y' does not exist on type '{}'.
+!!! error TS2339: Property 'Y' does not exist on type 'typeof X'.
             value: boolean;
         }
     }

@@ -1,4 +1,4 @@
-a.ts(2,10): error TS2305: Module '""b.ts""' has no exported member 'default'.
+a.ts(2,10): error TS2305: Module '"b"' has no exported member 'default'.
 
 
 ==== b.ts (0 errors) ====
@@ -8,4 +8,4 @@ a.ts(2,10): error TS2305: Module '""b.ts""' has no exported member 'default'.
     export { b } from "./b";
     export { default } from "./b";
              ~~~~~~~
-!!! error TS2305: Module '""b.ts""' has no exported member 'default'.
+!!! error TS2305: Module '"b"' has no exported member 'default'.

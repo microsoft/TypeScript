@@ -2,7 +2,7 @@
 +++ new.assignmentCompatWithEnumIndexer.errors.txt
 @@= skipped -0, +0 lines =@@
 -assignmentCompatWithEnumIndexer.ts(5,5): error TS2741: Property '[E.A]' is missing in type '{}' but required in type 'Record<E, any>'.
-+assignmentCompatWithEnumIndexer.ts(5,5): error TS2741: Property '"0"' is missing in type '{}' but required in type 'Record<E.A, any>'.
++assignmentCompatWithEnumIndexer.ts(5,5): error TS2741: Property '0' is missing in type '{}' but required in type 'Record<E.A, any>'.
  
  
  ==== assignmentCompatWithEnumIndexer.ts (1 errors) ====
@@ -11,5 +11,5 @@
      let foo: Record<E, any> = {}
          ~~~
 -!!! error TS2741: Property '[E.A]' is missing in type '{}' but required in type 'Record<E, any>'.
-+!!! error TS2741: Property '"0"' is missing in type '{}' but required in type 'Record<E.A, any>'.
++!!! error TS2741: Property '0' is missing in type '{}' but required in type 'Record<E.A, any>'.
      

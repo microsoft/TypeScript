@@ -10,9 +10,9 @@
 -/main.cts(1,10): error TS2305: Module '"dual"' has no exported member 'esm'.
 -/main.mts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
 -/main.ts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
-+/main.cts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
-+/main.mts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
-+/main.ts(1,10): error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
++/main.cts(1,10): error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
++/main.mts(1,10): error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
++/main.ts(1,10): error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
  
  
 -!!! error TS6504: File '/node_modules/dual/index.cjs' is a JavaScript file. Did you mean to enable the 'allowJs' option?
@@ -31,18 +31,18 @@
 -                  ~~~
 -!!! error TS2305: Module '"dual"' has no exported member 'cjs'.
 +             ~~~
-+!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
++!!! error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
      
  ==== /main.mts (1 errors) ====
      import { esm, cjs } from "dual";
 -                  ~~~
 -!!! error TS2305: Module '"dual"' has no exported member 'cjs'.
 +             ~~~
-+!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
++!!! error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
      
  ==== /main.cts (1 errors) ====
      import { esm, cjs } from "dual";
               ~~~
 -!!! error TS2305: Module '"dual"' has no exported member 'esm'.
-+!!! error TS2305: Module '""/node_modules/dual/index.d.cts""' has no exported member 'esm'.
++!!! error TS2305: Module '"/node_modules/dual/index"' has no exported member 'esm'.
      

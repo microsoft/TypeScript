@@ -13,11 +13,7 @@
 -doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,75): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
  doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,111): error TS2550: Property 'groups' does not exist on type 'RegExpExecArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
  doYouNeedToChangeYourTargetLibraryES2016Plus.ts(18,33): error TS2550: Property 'dotAll' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
--doYouNeedToChangeYourTargetLibraryES2016Plus.ts(19,38): error TS2550: Property 'PluralRules' does not exist on type 'typeof Intl'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-+doYouNeedToChangeYourTargetLibraryES2016Plus.ts(19,38): error TS2550: Property 'PluralRules' does not exist on type '{ Collator: CollatorConstructor; NumberFormat: NumberFormatConstructor; DateTimeFormat: DateTimeFormatConstructor; }'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
- doYouNeedToChangeYourTargetLibraryES2016Plus.ts(20,27): error TS2583: Cannot find name 'AsyncGenerator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
- doYouNeedToChangeYourTargetLibraryES2016Plus.ts(21,35): error TS2583: Cannot find name 'AsyncGeneratorFunction'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
- doYouNeedToChangeYourTargetLibraryES2016Plus.ts(22,26): error TS2583: Cannot find name 'AsyncIterable'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
+ doYouNeedToChangeYourTargetLibraryES2016Plus.ts(19,38): error TS2550: Property 'PluralRules' does not exist on type 'typeof Intl'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
 @@= skipped -31, +25 lines =@@
  doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,33): error TS2550: Property 'replaceAll' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
  
@@ -49,12 +45,3 @@
                                                                                                                    ~~~~~~
  !!! error TS2550: Property 'groups' does not exist on type 'RegExpExecArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
      const testRegExpDotAll = /foo/g.dotAll;
-@@= skipped -22, +10 lines =@@
- !!! error TS2550: Property 'dotAll' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-     const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
-                                          ~~~~~~~~~~~
--!!! error TS2550: Property 'PluralRules' does not exist on type 'typeof Intl'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-+!!! error TS2550: Property 'PluralRules' does not exist on type '{ Collator: CollatorConstructor; NumberFormat: NumberFormatConstructor; DateTimeFormat: DateTimeFormatConstructor; }'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-     const testAsyncGenerator: AsyncGenerator<any> = null as any;
-                               ~~~~~~~~~~~~~~
- !!! error TS2583: Cannot find name 'AsyncGenerator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.

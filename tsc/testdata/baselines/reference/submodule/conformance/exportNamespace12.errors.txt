@@ -1,5 +1,5 @@
 main.ts(3,13): error TS1362: 'c' cannot be used as a value because it was exported using 'export type'.
-main.ts(4,19): error TS2339: Property 'c' does not exist on type '{ readonly c: 10; }'.
+main.ts(4,19): error TS2339: Property 'c' does not exist on type 'typeof import("types")'.
 
 
 ==== main.ts (2 errors) ====
@@ -11,7 +11,7 @@ main.ts(4,19): error TS2339: Property 'c' does not exist on type '{ readonly c: 
 !!! related TS1377 types.ts:1:1: 'c' was exported here.
     console.log(types.c) // Expected an error here.
                       ~
-!!! error TS2339: Property 'c' does not exist on type '{ readonly c: 10; }'.
+!!! error TS2339: Property 'c' does not exist on type 'typeof import("types")'.
     
 ==== types.ts (0 errors) ====
     export type * from './values'

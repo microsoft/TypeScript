@@ -1,4 +1,4 @@
-internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(12,11): error TS2339: Property 'b' does not exist on type '{ bVal2: (x: number) => number; }'.
+internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(12,11): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
 ==== internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
@@ -15,4 +15,4 @@ internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(12,11): error 
     }
     var d = c.b(11);
               ~
-!!! error TS2339: Property 'b' does not exist on type '{ bVal2: (x: number) => number; }'.
+!!! error TS2339: Property 'b' does not exist on type 'typeof c'.

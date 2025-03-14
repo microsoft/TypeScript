@@ -3,7 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+declarationEmit_nameConflicts_0.ts(23,26): error TS2694: Namespace '""declarationEmit_nameConflicts_0.ts"".M' has no exported member 'P'.
++declarationEmit_nameConflicts_0.ts(23,26): error TS2694: Namespace '"declarationEmit_nameConflicts_0".M' has no exported member 'P'.
 +
 +
 +==== declarationEmit_nameConflicts_0.ts (1 errors) ====
@@ -31,7 +31,7 @@
 +        }
 +        export import im = M.P.f;
 +                             ~
-+!!! error TS2694: Namespace '""declarationEmit_nameConflicts_0.ts"".M' has no exported member 'P'.
++!!! error TS2694: Namespace '"declarationEmit_nameConflicts_0".M' has no exported member 'P'.
 +        export var a = M.a; // emitted incorrectly as typeof f
 +        export var b = M.b; // ok
 +        export var c = M.c; // ok

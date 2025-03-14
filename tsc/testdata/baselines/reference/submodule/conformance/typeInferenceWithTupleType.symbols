@@ -24,12 +24,12 @@ var combineResult = combine("string", 10);
 var combineEle1 = combineResult[0]; // string
 >combineEle1 : Symbol(combineEle1, Decl(typeInferenceWithTupleType.ts, 5, 3))
 >combineResult : Symbol(combineResult, Decl(typeInferenceWithTupleType.ts, 4, 3))
->0 : Symbol("0")
+>0 : Symbol(0)
 
 var combineEle2 = combineResult[1]; // number
 >combineEle2 : Symbol(combineEle2, Decl(typeInferenceWithTupleType.ts, 6, 3))
 >combineResult : Symbol(combineResult, Decl(typeInferenceWithTupleType.ts, 4, 3))
->1 : Symbol("1")
+>1 : Symbol(1)
 
 function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 >zip : Symbol(zip, Decl(typeInferenceWithTupleType.ts, 6, 35))
@@ -91,13 +91,13 @@ var zipResult = zip(["foo", "bar"], [5, 6]);
 var zipResultEle = zipResult[0]; // [string, number]
 >zipResultEle : Symbol(zipResultEle, Decl(typeInferenceWithTupleType.ts, 21, 3))
 >zipResult : Symbol(zipResult, Decl(typeInferenceWithTupleType.ts, 20, 3))
->0 : Symbol("0")
+>0 : Symbol(0)
 
 var zipResultEleEle = zipResult[0][0]; // string
 >zipResultEleEle : Symbol(zipResultEleEle, Decl(typeInferenceWithTupleType.ts, 22, 3))
 >zipResult : Symbol(zipResult, Decl(typeInferenceWithTupleType.ts, 20, 3))
->0 : Symbol("0")
->0 : Symbol("0")
+>0 : Symbol(0)
+>0 : Symbol(0)
 
 // #33559 and #33752
 

@@ -43,11 +43,6 @@
  
  b1[1] = "a";
  >b1 : Symbol(b1, Decl(numericEnumMappedType.ts, 8, 5))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- 
- b1[e1] = "b";
- >b1 : Symbol(b1, Decl(numericEnumMappedType.ts, 8, 5))
 @@= skipped -33, +33 lines =@@
  
  enum N1 { A = val(), B = val() }

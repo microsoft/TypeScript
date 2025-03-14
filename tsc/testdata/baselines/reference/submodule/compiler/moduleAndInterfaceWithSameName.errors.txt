@@ -1,4 +1,4 @@
-moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not exist on type '{}'.
+moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
 
 
 ==== moduleAndInterfaceWithSameName.ts (1 errors) ====
@@ -24,7 +24,7 @@ moduleAndInterfaceWithSameName.ts(21,15): error TS2339: Property 'Bar' does not 
     
     var z2 = Foo2.Bar.y; // Error for using interface name as a value.
                   ~~~
-!!! error TS2339: Property 'Bar' does not exist on type '{}'.
+!!! error TS2339: Property 'Bar' does not exist on type 'typeof Foo2'.
     
     module Foo3 {
         export module Bar {

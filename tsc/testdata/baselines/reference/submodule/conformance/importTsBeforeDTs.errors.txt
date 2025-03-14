@@ -1,11 +1,11 @@
-foo_1.ts(2,14): error TS2339: Property 'x' does not exist on type '{ y: number; }'.
+foo_1.ts(2,14): error TS2339: Property 'x' does not exist on type 'typeof import("foo_0")'.
 
 
 ==== foo_1.ts (1 errors) ====
     import foo = require("./foo_0");
     var z1 = foo.x + 10;   // Should error, as .ts preferred over .d.ts
                  ~
-!!! error TS2339: Property 'x' does not exist on type '{ y: number; }'.
+!!! error TS2339: Property 'x' does not exist on type 'typeof import("foo_0")'.
     var z2 = foo.y + 10; // Should resolve
     
 ==== foo_0.d.ts (0 errors) ====

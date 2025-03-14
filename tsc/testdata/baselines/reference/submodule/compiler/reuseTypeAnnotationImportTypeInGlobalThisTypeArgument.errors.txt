@@ -1,5 +1,5 @@
-/contractHelper.d.ts(3,67): error TS2694: Namespace '""/types.js""' has no exported member 'ParamStateRecord'.
-/exported.d.ts(2,10): error TS2305: Module '""/types.js""' has no exported member 'ParamStateRecord'.
+/contractHelper.d.ts(3,67): error TS2694: Namespace '"/types"' has no exported member 'ParamStateRecord'.
+/exported.d.ts(2,10): error TS2305: Module '"/types"' has no exported member 'ParamStateRecord'.
 
 
 ==== /contractHelper.d.ts (1 errors) ====
@@ -7,7 +7,7 @@
       publicMixin: {
         getGovernedParams: () => globalThis.ERef<import("./types.js").ParamStateRecord>;
                                                                       ~~~~~~~~~~~~~~~~
-!!! error TS2694: Namespace '""/types.js""' has no exported member 'ParamStateRecord'.
+!!! error TS2694: Namespace '"/types"' has no exported member 'ParamStateRecord'.
       };
     };
     
@@ -15,7 +15,7 @@
     type _ERef<T> = T | Promise<T>;
     import { ParamStateRecord as _ParamStateRecord } from './types.js';
              ~~~~~~~~~~~~~~~~
-!!! error TS2305: Module '""/types.js""' has no exported member 'ParamStateRecord'.
+!!! error TS2305: Module '"/types"' has no exported member 'ParamStateRecord'.
     declare global {
       // @ts-ignore TS2666
       export {

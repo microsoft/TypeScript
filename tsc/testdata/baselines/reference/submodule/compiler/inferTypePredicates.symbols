@@ -731,7 +731,7 @@ const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
 >noInferenceFromRest : Symbol(noInferenceFromRest, Decl(inferTypePredicates.ts, 262, 5))
 >f : Symbol(f, Decl(inferTypePredicates.ts, 262, 29))
 >f : Symbol(f, Decl(inferTypePredicates.ts, 262, 29))
->0 : Symbol("0")
+>0 : Symbol(0)
 
 const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
 >noInferenceFromImpossibleRest : Symbol(noInferenceFromImpossibleRest, Decl(inferTypePredicates.ts, 263, 5))

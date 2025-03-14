@@ -43,11 +43,11 @@ f1(42, "hello", true);
 f1(t3[0], t3[1], t3[2]);
 >f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
 >t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
 >t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
->1 : Symbol("1")
+>1 : Symbol(1)
 >t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
->2 : Symbol("2")
+>2 : Symbol(2)
 
 f1(...t3);
 >f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
@@ -68,9 +68,9 @@ f1(42, "hello", true, ...t0);
 f1(ns[0], ns[1], true);
 >f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
->1 : Symbol("1")
+>1 : Symbol(1)
 
 f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f1 : Symbol(f1, Decl(genericRestParameters1.ts, 0, 11))
@@ -82,11 +82,11 @@ f2(42, "hello", true);
 f2(t3[0], t3[1], t3[2]);
 >f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
 >t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
 >t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
->1 : Symbol("1")
+>1 : Symbol(1)
 >t3 : Symbol(t3, Decl(genericRestParameters1.ts, 6, 13))
->2 : Symbol("2")
+>2 : Symbol(2)
 
 f2(...t3);
 >f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
@@ -107,9 +107,9 @@ f2(42, "hello", true, ...t0);
 f2(ns[0], ns[1], true);
 >f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
 >ns : Symbol(ns, Decl(genericRestParameters1.ts, 11, 13))
->1 : Symbol("1")
+>1 : Symbol(1)
 
 f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f2 : Symbol(f2, Decl(genericRestParameters1.ts, 1, 11))

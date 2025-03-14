@@ -169,7 +169,7 @@ function f17(obj: readonly [string | number]) {
     const isString = typeof obj[0] === 'string';
 >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 63, 9))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 62, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
 
     if (isString) {
 >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 63, 9))
@@ -177,7 +177,7 @@ function f17(obj: readonly [string | number]) {
         let s: string = obj[0];
 >s : Symbol(s, Decl(controlFlowAliasing.ts, 65, 11))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 62, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
     }
 }
 
@@ -188,7 +188,7 @@ function f18(obj: readonly [string | number]) {
     const isString = typeof obj[0] === 'string';
 >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 70, 9))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
 
     obj = [42];
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
@@ -199,7 +199,7 @@ function f18(obj: readonly [string | number]) {
         let s: string = obj[0];  // Not narrowed because of is assigned in function body
 >s : Symbol(s, Decl(controlFlowAliasing.ts, 73, 11))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
->0 : Symbol("0")
+>0 : Symbol(0)
     }
 }
 

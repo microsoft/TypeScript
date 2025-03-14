@@ -620,7 +620,7 @@ async function mainFindMany() {
     const first = results[0]
 >first : Symbol(first, Decl(awaitedType.ts, 234, 9))
 >results : Symbol(results, Decl(awaitedType.ts, 233, 30))
->0 : Symbol("0")
+>0 : Symbol(0)
 
     const second = results[1] // error
 >second : Symbol(second, Decl(awaitedType.ts, 235, 9))

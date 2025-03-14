@@ -59,7 +59,7 @@ function f2(options?: [string?, number?]) {
     let x1 = (options || {})[0];
 >x1 : Symbol(x1, Decl(destructuringAssignmentWithDefault.ts, 16, 7))
 >options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 13, 12))
->0 : Symbol("0")
+>0 : Symbol(0)
 }
 
 function f3(options?: { color: string, width: number }) {
@@ -107,6 +107,6 @@ function f4(options?: [string, number]) {
     let x1 = (options || {})[0];
 >x1 : Symbol(x1, Decl(destructuringAssignmentWithDefault.ts, 29, 7))
 >options : Symbol(options, Decl(destructuringAssignmentWithDefault.ts, 26, 12))
->0 : Symbol("0")
+>0 : Symbol(0)
 }
 

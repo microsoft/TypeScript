@@ -3,8 +3,8 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+/src/a.js(3,14): error TS2339: Property 'doSomething' does not exist on type '{ new (): Thing; prototype: Thing; }'.
-+/src/a.js(7,7): error TS2339: Property 'doSomething' does not exist on type '{ new (): Thing; prototype: Thing; }'.
++/src/a.js(3,14): error TS2339: Property 'doSomething' does not exist on type 'typeof Thing'.
++/src/a.js(7,7): error TS2339: Property 'doSomething' does not exist on type 'typeof Thing'.
 +
 +
 +==== /src/a.js (2 errors) ====
@@ -12,13 +12,13 @@
 +        static {
 +            this.doSomething = () => {};
 +                 ~~~~~~~~~~~
-+!!! error TS2339: Property 'doSomething' does not exist on type '{ new (): Thing; prototype: Thing; }'.
++!!! error TS2339: Property 'doSomething' does not exist on type 'typeof Thing'.
 +        }
 +    }
 +    
 +    Thing.doSomething();
 +          ~~~~~~~~~~~
-+!!! error TS2339: Property 'doSomething' does not exist on type '{ new (): Thing; prototype: Thing; }'.
++!!! error TS2339: Property 'doSomething' does not exist on type 'typeof Thing'.
 +    
 +    // GH#46468
 +    class ElementsArray extends Array {

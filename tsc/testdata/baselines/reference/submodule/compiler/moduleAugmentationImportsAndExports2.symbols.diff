@@ -35,11 +35,6 @@
  }
  
  declare module "./f1" {
-->"./f1" : Symbol("f1", Decl(f1.ts, 0, 0), Decl(f3.ts, 7, 1))
-+>"./f1" : Symbol(""f1.ts"", Decl(f1.ts, 0, 0), Decl(f3.ts, 7, 1))
- 
-     import {B} from "./f2";
- >B : Symbol(B, Decl(f3.ts, 10, 12))
 @@= skipped -19, +19 lines =@@
      import I = N.Ifc;
  >I : Symbol(I, Decl(f3.ts, 11, 27))

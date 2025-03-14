@@ -419,7 +419,7 @@ declare module "anotherParseError" {
         }
     }
     module "abc3" {
->"abc3" : Symbol(""abc3"", Decl(privacyGloImportParseErrors.ts, 139, 5))
+>"abc3" : Symbol("abc3", Decl(privacyGloImportParseErrors.ts, 139, 5))
     }
 }
 

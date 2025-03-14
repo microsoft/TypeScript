@@ -145,12 +145,3 @@
  
  // Generics
  function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
-@@= skipped -115, +115 lines =@@
- const variadicOk1: string = nonEmptyStringArray[0];  // Should OK
- >variadicOk1 : Symbol(variadicOk1, Decl(noUncheckedIndexedAccess.ts, 88, 5))
- >nonEmptyStringArray : Symbol(nonEmptyStringArray, Decl(noUncheckedIndexedAccess.ts, 87, 13))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
- const variadicError1: string = nonEmptyStringArray[1]; // Should error
- >variadicError1 : Symbol(variadicError1, Decl(noUncheckedIndexedAccess.ts, 89, 5))

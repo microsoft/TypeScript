@@ -9,18 +9,18 @@ export function bar();
 
 === a.ts ===
 import { default as Foo } from "./b";
->default : { foo: () => any; bar: () => any; }
->Foo : { foo: () => any; bar: () => any; }
+>default : typeof import("b")
+>Foo : typeof import("b")
 
 Foo.bar();
 >Foo.bar() : any
 >Foo.bar : () => any
->Foo : { foo: () => any; bar: () => any; }
+>Foo : typeof import("b")
 >bar : () => any
 
 Foo.foo();
 >Foo.foo() : any
 >Foo.foo : () => any
->Foo : { foo: () => any; bar: () => any; }
+>Foo : typeof import("b")
 >foo : () => any
 

@@ -1,4 +1,4 @@
-usage.ts(3,32): error TS2694: Namespace '""prelude.ts"".Something' has no exported member 'SubType'.
+usage.ts(3,32): error TS2694: Namespace '"prelude".Something' has no exported member 'SubType'.
 
 
 ==== usage.ts (1 errors) ====
@@ -6,7 +6,7 @@ usage.ts(3,32): error TS2694: Namespace '""prelude.ts"".Something' has no export
     export const myValue: Something<string> = Something.of("abc")
     export type MyType = Something.SubType<string>
                                    ~~~~~~~
-!!! error TS2694: Namespace '""prelude.ts"".Something' has no exported member 'SubType'.
+!!! error TS2694: Namespace '"prelude".Something' has no exported member 'SubType'.
     
 ==== Something.ts (0 errors) ====
     export type Something<A> = { value: A }

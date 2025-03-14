@@ -1,4 +1,4 @@
-externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts(4,7): error TS2339: Property 'bar' does not exist on type '{ foo: () => void; }'.
+externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts(4,7): error TS2339: Property 'bar' does not exist on type 'typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")'.
 
 
 ==== externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts (1 errors) ====
@@ -7,7 +7,7 @@ externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts(4,7): error TS
     file1.foo();
     file1.bar();
           ~~~
-!!! error TS2339: Property 'bar' does not exist on type '{ foo: () => void; }'.
+!!! error TS2339: Property 'bar' does not exist on type 'typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")'.
     
     
 ==== externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts (0 errors) ====

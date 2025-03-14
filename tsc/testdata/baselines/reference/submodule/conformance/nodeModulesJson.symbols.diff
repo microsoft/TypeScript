@@ -14,7 +14,7 @@
  
  import { default as config1 } from "./config.json" with { type: "json" }; // Ok
 ->default : Symbol(config, Decl(config.json, 0, 0))
-+>default : Symbol("export=", Decl(config.json, 0, 0))
++>default : Symbol(export=, Decl(config.json, 0, 0))
  >config1 : Symbol(config1, Decl(main.mts, 5, 8))
  
  import config2 from "./config.json"; // Error, no attribute

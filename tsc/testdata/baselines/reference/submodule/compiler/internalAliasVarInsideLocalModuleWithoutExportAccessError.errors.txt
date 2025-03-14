@@ -1,4 +1,4 @@
-internalAliasVarInsideLocalModuleWithoutExportAccessError.ts(10,18): error TS2339: Property 'b' does not exist on type '{ bVal: number; }'.
+internalAliasVarInsideLocalModuleWithoutExportAccessError.ts(10,18): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
 ==== internalAliasVarInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
@@ -13,4 +13,4 @@ internalAliasVarInsideLocalModuleWithoutExportAccessError.ts(10,18): error TS233
     
     export var z = c.b;
                      ~
-!!! error TS2339: Property 'b' does not exist on type '{ bVal: number; }'.
+!!! error TS2339: Property 'b' does not exist on type 'typeof c'.

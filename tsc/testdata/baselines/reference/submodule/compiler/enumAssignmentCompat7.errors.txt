@@ -3,7 +3,7 @@ enumAssignmentCompat7.ts(16,14): error TS2416: Property 'method' in type 'Derive
     Types of parameters 'param' and 'param' are incompatible.
       Type 'E.A' is not assignable to type 'E.A'. Two different types with this name exist, but they are unrelated.
 enumAssignmentCompat7.ts(20,10): error TS2394: This overload signature is not compatible with its implementation signature.
-enumAssignmentCompat7.ts(22,21): error TS2339: Property 'B' does not exist on type '{ readonly [x: number]: string; readonly A: E.A; }'.
+enumAssignmentCompat7.ts(22,21): error TS2339: Property 'B' does not exist on type 'typeof E'.
 
 
 ==== enumAssignmentCompat7.ts (3 errors) ====
@@ -38,5 +38,5 @@ enumAssignmentCompat7.ts(22,21): error TS2339: Property 'B' does not exist on ty
     function overloadingFunction(): second.E {
         return second.E.B
                         ~
-!!! error TS2339: Property 'B' does not exist on type '{ readonly [x: number]: string; readonly A: E.A; }'.
+!!! error TS2339: Property 'B' does not exist on type 'typeof E'.
     }

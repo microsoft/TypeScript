@@ -45,17 +45,17 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
     }
     if (z[0]) {
 >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
->0 : Symbol("0")
+>0 : Symbol(0)
 
         z[0].length;
 >z[0].length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
->0 : Symbol("0")
+>0 : Symbol(0)
 >length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
         return z[0];
 >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
->0 : Symbol("0")
+>0 : Symbol(0)
     }
     return "hello";
 }

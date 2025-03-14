@@ -1,4 +1,4 @@
-internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts(16,17): error TS2694: Namespace '""internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts"".c' has no exported member 'b'.
+internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts(16,17): error TS2694: Namespace '"internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.
 
 
 ==== internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
@@ -19,4 +19,4 @@ internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts(16,
     
     export var z: c.b.I;
                     ~
-!!! error TS2694: Namespace '""internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts"".c' has no exported member 'b'.
+!!! error TS2694: Namespace '"internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError".c' has no exported member 'b'.

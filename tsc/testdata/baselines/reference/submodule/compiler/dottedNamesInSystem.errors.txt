@@ -1,4 +1,4 @@
-dottedNamesInSystem.ts(6,14): error TS2339: Property 'B' does not exist on type '{}'.
+dottedNamesInSystem.ts(6,14): error TS2339: Property 'B' does not exist on type 'typeof A'.
 
 
 ==== dottedNamesInSystem.ts (1 errors) ====
@@ -9,5 +9,5 @@ dottedNamesInSystem.ts(6,14): error TS2339: Property 'B' does not exist on type 
     export function bar() {
         return A.B.C.foo();
                  ~
-!!! error TS2339: Property 'B' does not exist on type '{}'.
+!!! error TS2339: Property 'B' does not exist on type 'typeof A'.
     }

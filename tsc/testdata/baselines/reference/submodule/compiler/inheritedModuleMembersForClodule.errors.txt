@@ -1,4 +1,4 @@
-inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side '{ new (): D; foo: () => number; prototype: D; }' incorrectly extends base class static side '{ foo: () => string; prototype: C; }'.
+inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side 'typeof D' incorrectly extends base class static side '{ foo: () => string; prototype: C; }'.
   The types returned by 'foo()' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.
 
@@ -12,7 +12,7 @@ inheritedModuleMembersForClodule.ts(7,7): error TS2417: Class static side '{ new
     
     class D extends C {
           ~
-!!! error TS2417: Class static side '{ new (): D; foo: () => number; prototype: D; }' incorrectly extends base class static side '{ foo: () => string; prototype: C; }'.
+!!! error TS2417: Class static side 'typeof D' incorrectly extends base class static side '{ foo: () => string; prototype: C; }'.
 !!! error TS2417:   The types returned by 'foo()' are incompatible between these types.
 !!! error TS2417:     Type 'number' is not assignable to type 'string'.
     }

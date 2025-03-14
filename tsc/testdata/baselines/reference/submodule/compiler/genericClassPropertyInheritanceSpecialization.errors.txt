@@ -1,4 +1,4 @@
-genericClassPropertyInheritanceSpecialization.ts(55,51): error TS2339: Property 'Controls' does not exist on type '{}'.
+genericClassPropertyInheritanceSpecialization.ts(55,51): error TS2339: Property 'Controls' does not exist on type 'typeof Portal'.
 genericClassPropertyInheritanceSpecialization.ts(66,50): error TS2694: Namespace 'PortalFx' has no exported member 'ViewModels'.
 genericClassPropertyInheritanceSpecialization.ts(72,57): error TS2694: Namespace 'PortalFx' has no exported member 'ViewModels'.
 genericClassPropertyInheritanceSpecialization.ts(72,137): error TS2694: Namespace 'PortalFx' has no exported member 'ViewModels'.
@@ -61,7 +61,7 @@ genericClassPropertyInheritanceSpecialization.ts(72,137): error TS2694: Namespac
     
         export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
                                                       ~~~~~~~~
-!!! error TS2339: Property 'Controls' does not exist on type '{}'.
+!!! error TS2339: Property 'Controls' does not exist on type 'typeof Portal'.
     
             constructor(message?: string) {
                 super(message);

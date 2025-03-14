@@ -4,9 +4,9 @@
 -arbitraryModuleNamespaceIdentifiers_importEmpty.ts(4,3): error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"missing"'.
 -arbitraryModuleNamespaceIdentifiers_importEmpty.ts(5,3): error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"(missing)"'.
 -arbitraryModuleNamespaceIdentifiers_importEmpty.ts(6,3): error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '""'.
-+arbitraryModuleNamespaceIdentifiers_importEmpty.ts(4,3): error TS2305: Module '""arbitraryModuleNamespaceIdentifiers_importEmpty.ts""' has no exported member '"missing"'.
-+arbitraryModuleNamespaceIdentifiers_importEmpty.ts(5,3): error TS2305: Module '""arbitraryModuleNamespaceIdentifiers_importEmpty.ts""' has no exported member '"(missing)"'.
-+arbitraryModuleNamespaceIdentifiers_importEmpty.ts(6,3): error TS2305: Module '""arbitraryModuleNamespaceIdentifiers_importEmpty.ts""' has no exported member '""'.
++arbitraryModuleNamespaceIdentifiers_importEmpty.ts(4,3): error TS2305: Module '"arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"missing"'.
++arbitraryModuleNamespaceIdentifiers_importEmpty.ts(5,3): error TS2305: Module '"arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"(missing)"'.
++arbitraryModuleNamespaceIdentifiers_importEmpty.ts(6,3): error TS2305: Module '"arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '""'.
  
  
  ==== arbitraryModuleNamespaceIdentifiers_importEmpty.ts (3 errors) ====
@@ -15,15 +15,15 @@
        "missing" as x,
        ~~~~~~~~~
 -!!! error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"missing"'.
-+!!! error TS2305: Module '""arbitraryModuleNamespaceIdentifiers_importEmpty.ts""' has no exported member '"missing"'.
++!!! error TS2305: Module '"arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"missing"'.
        "(missing)" as y,
        ~~~~~~~~~~~
 -!!! error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"(missing)"'.
-+!!! error TS2305: Module '""arbitraryModuleNamespaceIdentifiers_importEmpty.ts""' has no exported member '"(missing)"'.
++!!! error TS2305: Module '"arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"(missing)"'.
        "" as z,
        ~~
 -!!! error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '""'.
-+!!! error TS2305: Module '""arbitraryModuleNamespaceIdentifiers_importEmpty.ts""' has no exported member '""'.
++!!! error TS2305: Module '"arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '""'.
      } from "./arbitraryModuleNamespaceIdentifiers_importEmpty";
      const xyz = [x, y, z];
      

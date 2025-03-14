@@ -1,1 +1,22 @@
-failed to diff the actual and expected content: bufio.Scanner: token too long
+--- old.moduleExportAliasUnknown.errors.txt
++++ new.moduleExportAliasUnknown.errors.txt
+@@= skipped -0, +0 lines =@@
++bug27025.js(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+ bug27025.js(1,25): error TS2339: Property 'nonprop' does not exist on type 'Window & typeof globalThis'.
++bug27025.js(2,1): error TS2304: Cannot find name 'exports'.
+ bug27025.js(2,15): error TS2304: Cannot find name 'bar'.
+ 
+ 
+-==== bug27025.js (2 errors) ====
++==== bug27025.js (4 errors) ====
+     module.exports = window.nonprop;
++    ~~~~~~
++!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                             ~~~~~~~
+ !!! error TS2339: Property 'nonprop' does not exist on type 'Window & typeof globalThis'.
+     exports.foo = bar;
++    ~~~~~~~
++!!! error TS2304: Cannot find name 'exports'.
+                   ~~~
+ !!! error TS2304: Cannot find name 'bar'.
+     

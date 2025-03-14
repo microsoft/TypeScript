@@ -42,7 +42,7 @@ func (c *Checker) symbolToString(s *ast.Symbol) string {
 		}
 	}
 	if len(s.Name) == 0 || s.Name[0] != '\xFE' {
-		return "\"" + s.Name + "\"" // !!! Implement escaping
+		return s.Name // !!! Implement escaping
 	}
 	switch s.Name {
 	case ast.InternalSymbolNameClass:
@@ -349,6 +349,22 @@ func (p *Printer) printTupleType(t *Type) {
 }
 
 func (p *Printer) printAnonymousType(t *Type) {
+	if t.symbol != nil && len(t.symbol.Name) != 0 {
+		if t.symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule) != 0 {
+			if t == p.c.getTypeOfSymbol(t.symbol) {
+				p.print("typeof ")
+				if t.symbol.Flags&ast.SymbolFlagsValueModule != 0 && t.symbol.Name[0] == '"' {
+					p.print("import(")
+					p.print(t.symbol.Name)
+					p.print(")")
+				} else {
+					p.printName(t.symbol)
+				}
+				return
+			}
+		}
+	}
+
 	props := p.c.getPropertiesOfObjectType(t)
 	callSignatures := p.c.getSignaturesOfType(t, SignatureKindCall)
 	constructSignatures := p.c.getSignaturesOfType(t, SignatureKindConstruct)

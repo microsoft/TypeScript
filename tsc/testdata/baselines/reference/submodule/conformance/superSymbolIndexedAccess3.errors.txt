@@ -1,4 +1,4 @@
-superSymbolIndexedAccess3.ts(11,22): error TS2538: Type '{ new (): Bar; prototype: Bar; }' cannot be used as an index type.
+superSymbolIndexedAccess3.ts(11,22): error TS2538: Type 'typeof Bar' cannot be used as an index type.
 
 
 ==== superSymbolIndexedAccess3.ts (1 errors) ====
@@ -14,6 +14,6 @@ superSymbolIndexedAccess3.ts(11,22): error TS2538: Type '{ new (): Bar; prototyp
         [symbol]() {
             return super[Bar]();
                          ~~~
-!!! error TS2538: Type '{ new (): Bar; prototype: Bar; }' cannot be used as an index type.
+!!! error TS2538: Type 'typeof Bar' cannot be used as an index type.
         }
     }

@@ -1,6 +1,6 @@
 usage.ts(1,24): error TS2307: Cannot find module './fo' or its corresponding type declarations.
 usage.ts(2,22): error TS2307: Cannot find module './fo2' or its corresponding type declarations.
-usage.ts(3,36): error TS2694: Namespace '""foo2.ts"".Bar' has no exported member 'Q'.
+usage.ts(3,36): error TS2694: Namespace '"foo2".Bar' has no exported member 'Q'.
 usage.ts(10,32): error TS2307: Cannot find module './fo2' or its corresponding type declarations.
 
 
@@ -41,7 +41,7 @@ usage.ts(10,32): error TS2307: Cannot find module './fo2' or its corresponding t
 !!! error TS2307: Cannot find module './fo2' or its corresponding type declarations.
     export let z: import("./foo2").Bar.Q = { a: "", b: 0 };
                                        ~
-!!! error TS2694: Namespace '""foo2.ts"".Bar' has no exported member 'Q'.
+!!! error TS2694: Namespace '"foo2".Bar' has no exported member 'Q'.
     
     export class Bar2 {
         item: {a: string, b: number, c: object};

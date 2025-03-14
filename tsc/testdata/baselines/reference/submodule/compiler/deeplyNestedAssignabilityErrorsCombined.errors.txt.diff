@@ -5,9 +5,8 @@
 +deeplyNestedAssignabilityErrorsCombined.ts(3,1): error TS2322: Type '{ a: { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: () => { g: string; }; }; }; }; }; }; }'.
    The types of 'a.b.c.d.e.f().g' are incompatible between these types.
      Type 'number' is not assignable to type 'string'.
--deeplyNestedAssignabilityErrorsCombined.ts(15,1): error TS2322: Type '{ a: { b: { c: { d: { e: { f: typeof Ctor2; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: typeof Ctor1; }; }; }; }; }; }'.
+ deeplyNestedAssignabilityErrorsCombined.ts(15,1): error TS2322: Type '{ a: { b: { c: { d: { e: { f: typeof Ctor2; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: typeof Ctor1; }; }; }; }; }; }'.
 -  The types of '(new a.b.c.d.e.f()).g' are incompatible between these types.
-+deeplyNestedAssignabilityErrorsCombined.ts(15,1): error TS2322: Type '{ a: { b: { c: { d: { e: { f: { new (): Ctor2; prototype: Ctor2; }; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: { new (): Ctor1; prototype: Ctor1; }; }; }; }; }; }; }'.
 +  The types of 'a.b.c.d.e.new f().g' are incompatible between these types.
      Type 'number' is not assignable to type 'string'.
  
@@ -21,12 +20,10 @@
  !!! error TS2322:   The types of 'a.b.c.d.e.f().g' are incompatible between these types.
  !!! error TS2322:     Type 'number' is not assignable to type 'string'.
      
-@@= skipped -16, +16 lines =@@
-     let y2 = { a: { b: { c: { d: { e: { f: Ctor2 } } } } } };
+@@= skipped -17, +17 lines =@@
      x2 = y2;
      ~~
--!!! error TS2322: Type '{ a: { b: { c: { d: { e: { f: typeof Ctor2; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: typeof Ctor1; }; }; }; }; }; }'.
+ !!! error TS2322: Type '{ a: { b: { c: { d: { e: { f: typeof Ctor2; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: typeof Ctor1; }; }; }; }; }; }'.
 -!!! error TS2322:   The types of '(new a.b.c.d.e.f()).g' are incompatible between these types.
-+!!! error TS2322: Type '{ a: { b: { c: { d: { e: { f: { new (): Ctor2; prototype: Ctor2; }; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: { new (): Ctor1; prototype: Ctor1; }; }; }; }; }; }; }'.
 +!!! error TS2322:   The types of 'a.b.c.d.e.new f().g' are incompatible between these types.
  !!! error TS2322:     Type 'number' is not assignable to type 'string'.

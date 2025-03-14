@@ -8,22 +8,7 @@
  
  type T10 = [string, ...[...string[]]];
  >T10 : Symbol(T10, Decl(restTupleElements1.ts, 9, 24))
-@@= skipped -107, +108 lines =@@
- let e0 = t[0];  // number
- >e0 : Symbol(e0, Decl(restTupleElements1.ts, 50, 3))
- >t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
- let e1 = t[1];  // string
- >e1 : Symbol(e1, Decl(restTupleElements1.ts, 51, 3))
- >t : Symbol(t, Decl(restTupleElements1.ts, 47, 13))
-->1 : Symbol(1)
-+>1 : Symbol("1")
- 
- let e2 = t[2];  // boolean
- >e2 : Symbol(e2, Decl(restTupleElements1.ts, 52, 3))
-@@= skipped -59, +59 lines =@@
+@@= skipped -166, +167 lines =@@
  >x : Symbol(x, Decl(restTupleElements1.ts, 66, 4))
  >x : Symbol(x, Decl(restTupleElements1.ts, 66, 4))
  >x : Symbol(x, Decl(restTupleElements1.ts, 66, 15))

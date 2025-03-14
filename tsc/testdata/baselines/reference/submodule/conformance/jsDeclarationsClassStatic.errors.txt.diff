@@ -3,7 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+source.js(9,9): error TS2339: Property 'statische' does not exist on type '{ new (): Handler; readonly OPTIONS: number; prototype: Handler; }'.
++source.js(9,9): error TS2339: Property 'statische' does not exist on type 'typeof Handler'.
 +source.js(15,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +source.js(16,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +
@@ -19,7 +19,7 @@
 +    }
 +    Handler.statische = function() { }
 +            ~~~~~~~~~
-+!!! error TS2339: Property 'statische' does not exist on type '{ new (): Handler; readonly OPTIONS: number; prototype: Handler; }'.
++!!! error TS2339: Property 'statische' does not exist on type 'typeof Handler'.
 +    const Strings = {
 +        a: "A",
 +        b: "B"

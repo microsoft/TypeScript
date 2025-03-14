@@ -1,6 +1,6 @@
 innerModExport2.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 innerModExport2.ts(5,12): error TS1437: Namespace must be given a name.
-innerModExport2.ts(20,7): error TS2551: Property 'NonExportFunc' does not exist on type '{ export_var: number; ExportFunc: () => number; outer_var_export: number; outerFuncExport: () => number; }'. Did you mean 'ExportFunc'?
+innerModExport2.ts(20,7): error TS2551: Property 'NonExportFunc' does not exist on type 'typeof Outer'. Did you mean 'ExportFunc'?
 
 
 ==== innerModExport2.ts (3 errors) ====
@@ -29,5 +29,5 @@ innerModExport2.ts(20,7): error TS2551: Property 'NonExportFunc' does not exist 
     
     Outer.NonExportFunc();
           ~~~~~~~~~~~~~
-!!! error TS2551: Property 'NonExportFunc' does not exist on type '{ export_var: number; ExportFunc: () => number; outer_var_export: number; outerFuncExport: () => number; }'. Did you mean 'ExportFunc'?
+!!! error TS2551: Property 'NonExportFunc' does not exist on type 'typeof Outer'. Did you mean 'ExportFunc'?
 !!! related TS2728 innerModExport2.ts:11:25: 'ExportFunc' is declared here.

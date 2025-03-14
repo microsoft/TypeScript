@@ -12,11 +12,11 @@
 +index.mts(8,23): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
 +index.mts(9,23): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
 +index.mts(11,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
-+index.mts(14,7): error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
++index.mts(14,7): error TS2339: Property 'mjsSource' does not exist on type 'typeof import("node_modules/inner/index")'.
 +index.ts(8,23): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
 +index.ts(9,23): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
 +index.ts(11,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
-+index.ts(14,7): error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
++index.ts(14,7): error TS2339: Property 'mjsSource' does not exist on type 'typeof import("node_modules/inner/index")'.
 +node_modules/inner/index.d.cts(2,22): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
 +node_modules/inner/index.d.cts(3,22): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
 +node_modules/inner/index.d.cts(5,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
@@ -51,7 +51,7 @@
      mjsi.mjsSource;
      typei.mjsSource;
 +          ~~~~~~~~~
-+!!! error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
++!!! error TS2339: Property 'mjsSource' does not exist on type 'typeof import("node_modules/inner/index")'.
      ts.mjsSource;
 -==== index.mts (0 errors) ====
 +==== index.mts (4 errors) ====
@@ -75,7 +75,7 @@
      mjsi.mjsSource;
      typei.mjsSource;
 +          ~~~~~~~~~
-+!!! error TS2339: Property 'mjsSource' does not exist on type '{ cjs: error; mjs: error; type: ???; ts: error; readonly implicitCjsSource: true; }'.
++!!! error TS2339: Property 'mjsSource' does not exist on type 'typeof import("node_modules/inner/index")'.
      ts.mjsSource;
 -==== index.cts (2 errors) ====
 +==== index.cts (3 errors) ====

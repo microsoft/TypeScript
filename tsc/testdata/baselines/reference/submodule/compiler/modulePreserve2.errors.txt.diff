@@ -3,14 +3,14 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+/main.js(1,10): error TS2305: Module '""/node_modules/dep/require.d.ts""' has no exported member 'esm'.
++/main.js(1,10): error TS2305: Module '"/node_modules/dep/require"' has no exported member 'esm'.
 +/main.js(2,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +
 +
 +==== /main.js (2 errors) ====
 +    import { esm } from "dep";
 +             ~~~
-+!!! error TS2305: Module '""/node_modules/dep/require.d.ts""' has no exported member 'esm'.
++!!! error TS2305: Module '"/node_modules/dep/require"' has no exported member 'esm'.
 +    const cjs = require("dep");
 +                ~~~~~~~
 +!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.

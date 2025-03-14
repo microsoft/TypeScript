@@ -1,5 +1,5 @@
-ModuleWithExportedAndNonExportedFunctions.ts(28,13): error TS2339: Property 'fn2' does not exist on type '{ fn: (s: string) => boolean; fng: <T, U>(s: T) => U; }'.
-ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng2' does not exist on type '{ fn: (s: string) => boolean; fng: <T, U>(s: T) => U; }'. Did you mean 'fng'?
+ModuleWithExportedAndNonExportedFunctions.ts(28,13): error TS2339: Property 'fn2' does not exist on type 'typeof A'.
+ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
 
 
 ==== ModuleWithExportedAndNonExportedFunctions.ts (2 errors) ====
@@ -32,8 +32,8 @@ ModuleWithExportedAndNonExportedFunctions.ts(29,14): error TS2551: Property 'fng
     // these should be errors since the functions are not exported
     var fn2 = A.fn2;
                 ~~~
-!!! error TS2339: Property 'fn2' does not exist on type '{ fn: (s: string) => boolean; fng: <T, U>(s: T) => U; }'.
+!!! error TS2339: Property 'fn2' does not exist on type 'typeof A'.
     var fng2 = A.fng2;
                  ~~~~
-!!! error TS2551: Property 'fng2' does not exist on type '{ fn: (s: string) => boolean; fng: <T, U>(s: T) => U; }'. Did you mean 'fng'?
+!!! error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
 !!! related TS2728 ModuleWithExportedAndNonExportedFunctions.ts:7:21: 'fng' is declared here.

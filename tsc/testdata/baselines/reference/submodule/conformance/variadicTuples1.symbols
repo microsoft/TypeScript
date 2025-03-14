@@ -257,7 +257,7 @@ function f0<T extends unknown[]>(t: [string, ...T], n: number) {
     const a = t[0];  // string
 >a : Symbol(a, Decl(variadicTuples1.ts, 79, 9))
 >t : Symbol(t, Decl(variadicTuples1.ts, 78, 33))
->0 : Symbol("0")
+>0 : Symbol(0)
 
     const b = t[1];  // [string, ...T][1]
 >b : Symbol(b, Decl(variadicTuples1.ts, 80, 9))
@@ -283,7 +283,7 @@ function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
     const a = t[0];  // string
 >a : Symbol(a, Decl(variadicTuples1.ts, 86, 9))
 >t : Symbol(t, Decl(variadicTuples1.ts, 85, 33))
->0 : Symbol("0")
+>0 : Symbol(0)
 
     const b = t[1];  // number | T[number]
 >b : Symbol(b, Decl(variadicTuples1.ts, 87, 9))

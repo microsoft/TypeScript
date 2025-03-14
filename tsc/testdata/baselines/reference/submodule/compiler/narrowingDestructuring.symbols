@@ -140,7 +140,7 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 
     if (typeof x[0] === 'number') {
 >x : Symbol(x, Decl(narrowingDestructuring.ts, 33, 77))
->0 : Symbol("0")
+>0 : Symbol(0)
 
         const [head, ...tail] = x;
 >head : Symbol(head, Decl(narrowingDestructuring.ts, 36, 15))

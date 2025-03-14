@@ -1,42 +1,6 @@
 --- old.controlFlowAliasing.symbols
 +++ new.controlFlowAliasing.symbols
-@@= skipped -168, +168 lines =@@
-     const isString = typeof obj[0] === 'string';
- >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 63, 9))
- >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 62, 13))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
-     if (isString) {
- >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 63, 9))
-@@= skipped -8, +8 lines =@@
-         let s: string = obj[0];
- >s : Symbol(s, Decl(controlFlowAliasing.ts, 65, 11))
- >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 62, 13))
-->0 : Symbol(0)
-+>0 : Symbol("0")
-     }
- }
- 
-@@= skipped -11, +11 lines =@@
-     const isString = typeof obj[0] === 'string';
- >isString : Symbol(isString, Decl(controlFlowAliasing.ts, 70, 9))
- >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
-->0 : Symbol(0)
-+>0 : Symbol("0")
- 
-     obj = [42];
- >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
-@@= skipped -11, +11 lines =@@
-         let s: string = obj[0];  // Not narrowed because of is assigned in function body
- >s : Symbol(s, Decl(controlFlowAliasing.ts, 73, 11))
- >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 69, 13))
-->0 : Symbol(0)
-+>0 : Symbol("0")
-     }
- }
- 
-@@= skipped -415, +415 lines =@@
+@@= skipped -613, +613 lines =@@
  >C10 : Symbol(C10, Decl(controlFlowAliasing.ts, 209, 1))
  
      constructor(readonly x: string | number) {

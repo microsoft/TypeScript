@@ -1,4 +1,4 @@
-folder/bar.ts(1,9): error TS2305: Module '""folder/foo.ts""' has no exported member 'nosuch'.
+folder/bar.ts(1,9): error TS2305: Module '"folder/foo"' has no exported member 'nosuch'.
 
 
 ==== folder/foo.ts (0 errors) ====
@@ -6,4 +6,4 @@ folder/bar.ts(1,9): error TS2305: Module '""folder/foo.ts""' has no exported mem
 ==== folder/bar.ts (1 errors) ====
     import {nosuch} from './foo';
             ~~~~~~
-!!! error TS2305: Module '""folder/foo.ts""' has no exported member 'nosuch'.
+!!! error TS2305: Module '"folder/foo"' has no exported member 'nosuch'.

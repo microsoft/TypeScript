@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 declare module "react" {
->"react" : Symbol(""react"", Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 0, 0))
+>"react" : Symbol("react", Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 0, 0))
 
     interface Attributes {
 >Attributes : Symbol(Attributes, Decl(jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx, 2, 24))

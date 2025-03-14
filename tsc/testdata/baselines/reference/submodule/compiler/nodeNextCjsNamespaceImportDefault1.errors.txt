@@ -1,4 +1,4 @@
-src/foo.mts(6,4): error TS2339: Property 'default' does not exist on type '{ readonly a: number; }'.
+src/foo.mts(6,4): error TS2339: Property 'default' does not exist on type 'typeof import("src/a")'.
 
 
 ==== src/a.cts (0 errors) ====
@@ -11,4 +11,4 @@ src/foo.mts(6,4): error TS2339: Property 'default' does not exist on type '{ rea
     d.a;
     ns.default.a;
        ~~~~~~~
-!!! error TS2339: Property 'default' does not exist on type '{ readonly a: number; }'.
+!!! error TS2339: Property 'default' does not exist on type 'typeof import("src/a")'.

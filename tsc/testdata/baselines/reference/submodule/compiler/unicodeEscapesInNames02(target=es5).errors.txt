@@ -1,9 +1,9 @@
 astralAsSurrogatePair.ts(1,11): error TS1127: Invalid character.
-astralAsSurrogatePair.ts(1,13): error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'as'.
+astralAsSurrogatePair.ts(1,13): error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'as'.
 astralAsSurrogatePair.ts(1,16): error TS1127: Invalid character.
-astralAsSurrogatePair.ts(1,17): error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'uD800'.
+astralAsSurrogatePair.ts(1,17): error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'uD800'.
 astralAsSurrogatePair.ts(1,22): error TS1127: Invalid character.
-astralAsSurrogatePair.ts(1,23): error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'uDEA7'.
+astralAsSurrogatePair.ts(1,23): error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'uDEA7'.
 extendedEscapesForAstralsInVarsAndClasses.ts(2,5): error TS1127: Invalid character.
 extendedEscapesForAstralsInVarsAndClasses.ts(2,6): error TS1134: Variable declaration expected.
 extendedEscapesForAstralsInVarsAndClasses.ts(3,5): error TS1127: Invalid character.
@@ -151,13 +151,13 @@ extendedEscapesForAstralsInVarsAndClasses.ts(24,12): error TS1128: Declaration o
               ~~~~
 !!! error TS1127: Invalid character.
                 ~~
-!!! error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'as'.
+!!! error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'as'.
                    ~
 !!! error TS1127: Invalid character.
                     ~~~~~
-!!! error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'uD800'.
+!!! error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'uD800'.
                          ~
 !!! error TS1127: Invalid character.
                           ~~~~~
-!!! error TS2305: Module '""extendedEscapesForAstralsInVarsAndClasses.ts""' has no exported member 'uDEA7'.
+!!! error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'uDEA7'.
     

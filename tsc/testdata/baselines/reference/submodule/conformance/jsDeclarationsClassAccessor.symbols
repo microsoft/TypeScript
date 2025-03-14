@@ -3,7 +3,7 @@
 === supplement.d.ts ===
 export { };
 declare module "./argument.js" {
->"./argument.js" : Symbol(""argument.js"", Decl(argument.js, 0, 0), Decl(supplement.d.ts, 0, 11))
+>"./argument.js" : Symbol("argument", Decl(argument.js, 0, 0), Decl(supplement.d.ts, 0, 11))
 
     interface Argument {
 >Argument : Symbol(Argument, Decl(argument.js, 0, 33), Decl(supplement.d.ts, 1, 32))

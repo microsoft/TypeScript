@@ -12,8 +12,8 @@ readonlyArraysAndTuples.ts(24,5): error TS2322: Type 'string[]' is not assignabl
   Target requires 2 element(s) but source may have fewer.
 readonlyArraysAndTuples.ts(25,5): error TS2322: Type 'readonly string[]' is not assignable to type '[string, string]'.
   Target requires 2 element(s) but source may have fewer.
-readonlyArraysAndTuples.ts(30,3): error TS2540: Cannot assign to '"0"' because it is a read-only property.
-readonlyArraysAndTuples.ts(31,3): error TS2540: Cannot assign to '"1"' because it is a read-only property.
+readonlyArraysAndTuples.ts(30,3): error TS2540: Cannot assign to '0' because it is a read-only property.
+readonlyArraysAndTuples.ts(31,3): error TS2540: Cannot assign to '1' because it is a read-only property.
 readonlyArraysAndTuples.ts(32,1): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
 readonlyArraysAndTuples.ts(33,8): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
 readonlyArraysAndTuples.ts(34,1): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
@@ -78,10 +78,10 @@ readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type '[number
     declare var v: readonly[number, number, ...number[]];
     v[0] = 1;        // Error
       ~
-!!! error TS2540: Cannot assign to '"0"' because it is a read-only property.
+!!! error TS2540: Cannot assign to '0' because it is a read-only property.
     v[1] = 1;        // Error
       ~
-!!! error TS2540: Cannot assign to '"1"' because it is a read-only property.
+!!! error TS2540: Cannot assign to '1' because it is a read-only property.
     v[2] = 1;        // Error
     ~~~~
 !!! error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.

@@ -1,4 +1,4 @@
-b.ts(1,10): error TS2459: Module '""a.ts""' declares 'bar' locally, but it is not exported.
+b.ts(1,10): error TS2459: Module '"a"' declares 'bar' locally, but it is not exported.
 
 
 ==== a.ts (0 errors) ====
@@ -9,6 +9,6 @@ b.ts(1,10): error TS2459: Module '""a.ts""' declares 'bar' locally, but it is no
 ==== b.ts (1 errors) ====
     import { bar } from "./a";
              ~~~
-!!! error TS2459: Module '""a.ts""' declares 'bar' locally, but it is not exported.
+!!! error TS2459: Module '"a"' declares 'bar' locally, but it is not exported.
 !!! related TS2728 a.ts:2:18: 'bar' is declared here.
     

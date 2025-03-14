@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -derivedClassWithPrivateStaticShadowingPublicStatic.ts(13,7): error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
 -  Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
-+derivedClassWithPrivateStaticShadowingPublicStatic.ts(13,7): error TS2417: Class static side '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
-+  Property 'x' is private in type '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
++derivedClassWithPrivateStaticShadowingPublicStatic.ts(13,7): error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
++  Property 'x' is private in type 'typeof Derived' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
  derivedClassWithPrivateStaticShadowingPublicStatic.ts(24,18): error TS2341: Property 'x' is private and only accessible within class 'Derived'.
  derivedClassWithPrivateStaticShadowingPublicStatic.ts(27,18): error TS2341: Property 'fn' is private and only accessible within class 'Derived'.
  derivedClassWithPrivateStaticShadowingPublicStatic.ts(32,18): error TS2341: Property 'a' is private and only accessible within class 'Derived'.
@@ -14,8 +14,8 @@
            ~~~~~~~
 -!!! error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
 -!!! error TS2417:   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
-+!!! error TS2417: Class static side '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
-+!!! error TS2417:   Property 'x' is private in type '{ new (): Derived; x: string; fn: () => string; a: number; prototype: Derived; }' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
++!!! error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side '{ x: string; fn: () => string; a: number; prototype: Base; }'.
++!!! error TS2417:   Property 'x' is private in type 'typeof Derived' but not in type '{ x: string; fn: () => string; a: number; prototype: Base; }'.
          private static x: string; 
          private static fn(): string {
              return '';

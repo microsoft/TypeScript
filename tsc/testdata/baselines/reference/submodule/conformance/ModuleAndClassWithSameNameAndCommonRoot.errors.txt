@@ -1,5 +1,5 @@
 module.ts(3,33): error TS2351: This expression is not constructable.
-  Type '{ Origin: any; }' has no construct signatures.
+  Type 'typeof Point' has no construct signatures.
 simple.ts(1,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 simple.ts(2,31): error TS2449: Class 'A' used before its declaration.
 
@@ -10,7 +10,7 @@ simple.ts(2,31): error TS2449: Class 'A' used before its declaration.
             export var Origin = new Point(0, 0);
                                     ~~~~~
 !!! error TS2351: This expression is not constructable.
-!!! error TS2351:   Type '{ Origin: any; }' has no construct signatures.
+!!! error TS2351:   Type 'typeof Point' has no construct signatures.
         }
     }
     

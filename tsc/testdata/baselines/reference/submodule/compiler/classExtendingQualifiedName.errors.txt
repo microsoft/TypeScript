@@ -1,4 +1,4 @@
-classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist on type '{}'.
+classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist on type 'typeof M'.
 
 
 ==== classExtendingQualifiedName.ts (1 errors) ====
@@ -8,6 +8,6 @@ classExtendingQualifiedName.ts(5,23): error TS2339: Property 'C' does not exist 
     
         class D extends M.C {
                           ~
-!!! error TS2339: Property 'C' does not exist on type '{}'.
+!!! error TS2339: Property 'C' does not exist on type 'typeof M'.
         }
     }

@@ -29,8 +29,8 @@
 +enumIsNotASubtypeOfAnythingButNumber.ts(72,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '(x: any) => number'.
 +enumIsNotASubtypeOfAnythingButNumber.ts(78,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '<T>(x: T) => T'.
 +enumIsNotASubtypeOfAnythingButNumber.ts(85,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'E2.A'.
-+enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ (): void; bar: number; }'.
-+enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ new (): c; bar: number; prototype: c; }'.
++enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'typeof f'.
++enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'typeof c'.
 +enumIsNotASubtypeOfAnythingButNumber.ts(111,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'T'.
 +enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'U'.
  
@@ -149,7 +149,7 @@
          foo: E;
          ~~~
 -!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof f'.
-+!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ (): void; bar: number; }'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'typeof f'.
      }
      
      
@@ -158,7 +158,7 @@
          foo: E;
          ~~~
 -!!! error TS2411: Property 'foo' of type 'E' is not assignable to 'string' index type 'typeof c'.
-+!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type '{ new (): c; bar: number; prototype: c; }'.
++!!! error TS2411: Property 'foo' of type 'E.A' is not assignable to 'string' index type 'typeof c'.
      }
      
      

@@ -1,4 +1,4 @@
-internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS2339: Property 'b' does not exist on type '{ bVal: weekend; }'.
+internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
 ==== internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
@@ -17,4 +17,4 @@ internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS23
     
     var happyFriday = c.b.Friday;
                         ~
-!!! error TS2339: Property 'b' does not exist on type '{ bVal: weekend; }'.
+!!! error TS2339: Property 'b' does not exist on type 'typeof c'.

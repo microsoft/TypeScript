@@ -1,23 +1,20 @@
 --- old.assignmentCompatability45.errors.txt
 +++ new.assignmentCompatability45.errors.txt
 @@= skipped -0, +0 lines =@@
--assignmentCompatability45.ts(7,7): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+ assignmentCompatability45.ts(7,7): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
 -  Types of construct signatures are incompatible.
 -    Type 'new (x: number) => B' is not assignable to type 'abstract new () => A'.
 -      Target signature provides too few arguments. Expected 1 or more, but got 0.
-+assignmentCompatability45.ts(7,7): error TS2322: Type '{ new (x: number): B; prototype: B; }' is not assignable to type '{ new (): A; prototype: A; }'.
 +  Target signature provides too few arguments. Expected 1 or more, but got 0.
  
  
  ==== assignmentCompatability45.ts (1 errors) ====
-@@= skipped -12, +10 lines =@@
-     }
+@@= skipped -13, +11 lines =@@
      const b: typeof A = B;
            ~
--!!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+ !!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
 -!!! error TS2322:   Types of construct signatures are incompatible.
 -!!! error TS2322:     Type 'new (x: number) => B' is not assignable to type 'abstract new () => A'.
 -!!! error TS2322:       Target signature provides too few arguments. Expected 1 or more, but got 0.
-+!!! error TS2322: Type '{ new (x: number): B; prototype: B; }' is not assignable to type '{ new (): A; prototype: A; }'.
 +!!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
      

@@ -11,11 +11,8 @@
 +>prototype : Symbol(prototype)
  
  declare module "./observable" {
-->"./observable" : Symbol("observable", Decl(observable.ts, 0, 0), Decl(map.ts, 2, 48))
-+>"./observable" : Symbol(""observable.ts"", Decl(observable.ts, 0, 0), Decl(map.ts, 2, 48))
- 
-     interface Observable<T> {
- >Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(map.ts, 4, 31))
+ >"./observable" : Symbol("observable", Decl(observable.ts, 0, 0), Decl(map.ts, 2, 48))
+@@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
  
          map<U>(proj: (e:T) => U): Observable<U>
@@ -24,7 +21,7 @@
  >U : Symbol(U, Decl(map.ts, 6, 12))
  >proj : Symbol(proj, Decl(map.ts, 6, 15))
  >e : Symbol(e, Decl(map.ts, 6, 22))
-@@= skipped -46, +46 lines =@@
+@@= skipped -34, +34 lines =@@
  >T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
  
      filter(pred: (e:T) => boolean): Observable<T>;

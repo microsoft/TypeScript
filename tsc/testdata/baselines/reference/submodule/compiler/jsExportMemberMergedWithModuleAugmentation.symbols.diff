@@ -26,7 +26,7 @@
  
  declare module "./test" {
 ->"./test" : Symbol("/test", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
-+>"./test" : Symbol(""./test"", Decl(index.ts, 0, 31))
++>"./test" : Symbol("./test", Decl(index.ts, 0, 31))
  
    interface Abcde { b: string }
 ->Abcde : Symbol(Abcde, Decl(test.js, 0, 0), Decl(index.ts, 2, 25))

@@ -3,7 +3,7 @@
 @@= skipped -0, +-1 lines =@@
 -<no content>
 @@= skipped --1, +1 lines =@@
-+a.js(4,7): error TS2339: Property 'Inner' does not exist on type '{ new (): O; prototype: O; }'.
++a.js(4,7): error TS2339: Property 'Inner' does not exist on type 'typeof O'.
 +
 +
 +==== a.js (1 errors) ====
@@ -12,7 +12,7 @@
 +    }
 +    Outer.Inner = class I {
 +          ~~~~~
-+!!! error TS2339: Property 'Inner' does not exist on type '{ new (): O; prototype: O; }'.
++!!! error TS2339: Property 'Inner' does not exist on type 'typeof O'.
 +        n(a, b) { }
 +    
 +    }
