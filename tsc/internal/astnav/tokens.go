@@ -82,7 +82,7 @@ func getTokenAtPosition(
 	}
 
 	visitNodes := func(nodes []*ast.Node) {
-		index, match := core.BinarySearchUniqueFunc(nodes, position, func(middle int, node *ast.Node) int {
+		index, match := core.BinarySearchUniqueFunc(nodes, func(middle int, node *ast.Node) int {
 			cmp := testNode(node)
 			if cmp < 0 {
 				left = node.End()
