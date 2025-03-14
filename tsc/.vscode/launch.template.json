@@ -17,6 +17,17 @@
             ],
             "autoAttachChildProcesses": true,
             "preLaunchTask": "Watch for extension run"
+        },
+        {
+            "name": "Launch submodule test",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/internal/testrunner",
+            "args": [
+                "-test.run",
+                "TestSubmodule/${fileBasename}"
+            ]
         }
     ]
 }
