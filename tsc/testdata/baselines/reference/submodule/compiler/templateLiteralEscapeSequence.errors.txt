@@ -30,16 +30,16 @@ templateLiteralEscapeSequence.ts(38,9): error TS1125: Hexadecimal digit expected
 templateLiteralEscapeSequence.ts(39,9): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
 templateLiteralEscapeSequence.ts(40,8): error TS1125: Hexadecimal digit expected.
 templateLiteralEscapeSequence.ts(41,9): error TS1125: Hexadecimal digit expected.
-templateLiteralEscapeSequence.ts(85,8): error TS1121: Octal literals are not allowed. Use the syntax '0'.
-templateLiteralEscapeSequence.ts(86,8): error TS1121: Octal literals are not allowed. Use the syntax '5'.
-templateLiteralEscapeSequence.ts(87,8): error TS1121: Octal literals are not allowed. Use the syntax '00'.
-templateLiteralEscapeSequence.ts(88,8): error TS1121: Octal literals are not allowed. Use the syntax '05'.
-templateLiteralEscapeSequence.ts(89,8): error TS1121: Octal literals are not allowed. Use the syntax '55'.
-templateLiteralEscapeSequence.ts(90,7): error TS1121: Octal literals are not allowed. Use the syntax '0'.
-templateLiteralEscapeSequence.ts(91,7): error TS1121: Octal literals are not allowed. Use the syntax '5'.
-templateLiteralEscapeSequence.ts(92,7): error TS1121: Octal literals are not allowed. Use the syntax '00'.
-templateLiteralEscapeSequence.ts(93,7): error TS1121: Octal literals are not allowed. Use the syntax '05'.
-templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal literals are not allowed. Use the syntax '55'.
+templateLiteralEscapeSequence.ts(85,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(86,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(87,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(88,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(89,8): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+templateLiteralEscapeSequence.ts(90,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(91,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(92,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+templateLiteralEscapeSequence.ts(93,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
 
 
 ==== templateLiteralEscapeSequence.ts (42 errors) ====
@@ -193,34 +193,34 @@ templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal literals are not all
     
     tag`0${00}`;
            ~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '0'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
     tag`0${05}`;
            ~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '5'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`0${000}`;
            ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '00'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
     tag`0${005}`;
            ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '05'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`0${055}`;
            ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '55'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
     tag`${00}0`;
           ~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '0'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
     tag`${05}0`;
           ~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '5'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`${000}0`;
           ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '00'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
     tag`${005}0`;
           ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '05'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`${055}0`;
           ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '55'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
     tag`\0`;
     tag`\5`;
     tag`\00`;

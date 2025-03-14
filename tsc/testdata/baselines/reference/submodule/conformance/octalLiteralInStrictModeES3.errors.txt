@@ -1,8 +1,8 @@
-octalLiteralInStrictModeES3.ts(2,1): error TS1121: Octal literals are not allowed. Use the syntax '3'.
+octalLiteralInStrictModeES3.ts(2,1): error TS1121: Octal literals are not allowed. Use the syntax '0o3'.
 
 
 ==== octalLiteralInStrictModeES3.ts (1 errors) ====
     "use strict";
     03;
     ~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '3'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o3'.

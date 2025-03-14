@@ -7,11 +7,7 @@
 +parseBigInt.ts(48,7): error TS2322: Type '0x000000ffn' is not assignable to type '0xffn'.
  parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
  parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
--parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
-+parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '123'.
- parseBigInt.ts(56,25): error TS1005: ',' expected.
- parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
- parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
+ parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
 @@= skipped -10, +14 lines =@@
  parseBigInt.ts(63,26): error TS2304: Cannot find name '_123n'.
  parseBigInt.ts(64,30): error TS6188: Numeric separators are not allowed here.
@@ -53,16 +49,7 @@
      
      // Plus not allowed on literals
      const unaryPlus = +123n;
-@@= skipped -18, +26 lines =@@
-     // In separate blocks because they each declare an "n" variable
-     { const legacyOct = 0123n; }
-                         ~~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '123'.
-                             ~
- !!! error TS1005: ',' expected.
-     { const scientific = 1e2n; }
-@@= skipped -35, +35 lines =@@
+@@= skipped -53, +61 lines =@@
      const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
      oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
                    ~~

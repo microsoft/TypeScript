@@ -4,7 +4,7 @@ parseBigInt.ts(47,7): error TS2322: Type '0xffn' is not assignable to type '255n
 parseBigInt.ts(48,7): error TS2322: Type '0x000000ffn' is not assignable to type '0xffn'.
 parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
-parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '123'.
+parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
 parseBigInt.ts(56,25): error TS1005: ',' expected.
 parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
 parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
@@ -92,7 +92,7 @@ parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to p
     // In separate blocks because they each declare an "n" variable
     { const legacyOct = 0123n; }
                         ~~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '123'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
                             ~
 !!! error TS1005: ',' expected.
     { const scientific = 1e2n; }

@@ -1,21 +1,9 @@
 --- old.octalLiteralAndEscapeSequence.errors.txt
 +++ new.octalLiteralAndEscapeSequence.errors.txt
-@@= skipped -0, +0 lines =@@
--octalLiteralAndEscapeSequence.ts(1,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
--octalLiteralAndEscapeSequence.ts(2,1): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
--octalLiteralAndEscapeSequence.ts(3,1): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
--octalLiteralAndEscapeSequence.ts(4,1): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
--octalLiteralAndEscapeSequence.ts(5,1): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
--octalLiteralAndEscapeSequence.ts(6,5): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
--octalLiteralAndEscapeSequence.ts(7,5): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
--octalLiteralAndEscapeSequence.ts(8,5): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
--octalLiteralAndEscapeSequence.ts(9,5): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
--octalLiteralAndEscapeSequence.ts(10,5): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
--octalLiteralAndEscapeSequence.ts(11,4): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
--octalLiteralAndEscapeSequence.ts(12,4): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
--octalLiteralAndEscapeSequence.ts(13,4): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
--octalLiteralAndEscapeSequence.ts(14,4): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
--octalLiteralAndEscapeSequence.ts(15,4): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
+@@= skipped -12, +12 lines =@@
+ octalLiteralAndEscapeSequence.ts(13,4): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+ octalLiteralAndEscapeSequence.ts(14,4): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
+ octalLiteralAndEscapeSequence.ts(15,4): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
 -octalLiteralAndEscapeSequence.ts(18,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
 -octalLiteralAndEscapeSequence.ts(19,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
 -octalLiteralAndEscapeSequence.ts(20,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
@@ -48,21 +36,6 @@
 -octalLiteralAndEscapeSequence.ts(49,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
 -octalLiteralAndEscapeSequence.ts(50,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
 -octalLiteralAndEscapeSequence.ts(51,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x04'.
-+octalLiteralAndEscapeSequence.ts(1,1): error TS1121: Octal literals are not allowed. Use the syntax '0'.
-+octalLiteralAndEscapeSequence.ts(2,1): error TS1121: Octal literals are not allowed. Use the syntax '5'.
-+octalLiteralAndEscapeSequence.ts(3,1): error TS1121: Octal literals are not allowed. Use the syntax '00'.
-+octalLiteralAndEscapeSequence.ts(4,1): error TS1121: Octal literals are not allowed. Use the syntax '05'.
-+octalLiteralAndEscapeSequence.ts(5,1): error TS1121: Octal literals are not allowed. Use the syntax '55'.
-+octalLiteralAndEscapeSequence.ts(6,5): error TS1121: Octal literals are not allowed. Use the syntax '0'.
-+octalLiteralAndEscapeSequence.ts(7,5): error TS1121: Octal literals are not allowed. Use the syntax '5'.
-+octalLiteralAndEscapeSequence.ts(8,5): error TS1121: Octal literals are not allowed. Use the syntax '00'.
-+octalLiteralAndEscapeSequence.ts(9,5): error TS1121: Octal literals are not allowed. Use the syntax '05'.
-+octalLiteralAndEscapeSequence.ts(10,5): error TS1121: Octal literals are not allowed. Use the syntax '55'.
-+octalLiteralAndEscapeSequence.ts(11,4): error TS1121: Octal literals are not allowed. Use the syntax '0'.
-+octalLiteralAndEscapeSequence.ts(12,4): error TS1121: Octal literals are not allowed. Use the syntax '5'.
-+octalLiteralAndEscapeSequence.ts(13,4): error TS1121: Octal literals are not allowed. Use the syntax '00'.
-+octalLiteralAndEscapeSequence.ts(14,4): error TS1121: Octal literals are not allowed. Use the syntax '05'.
-+octalLiteralAndEscapeSequence.ts(15,4): error TS1121: Octal literals are not allowed. Use the syntax '55'.
 +octalLiteralAndEscapeSequence.ts(18,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '5'.
 +octalLiteralAndEscapeSequence.ts(19,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '0'.
 +octalLiteralAndEscapeSequence.ts(20,2): error TS1487: Octal escape sequences are not allowed. Use the syntax '5'.
@@ -214,67 +187,7 @@
  
  
  ==== octalLiteralAndEscapeSequence.ts (109 errors) ====
-     00;
-     ~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '0'.
-     05;
-     ~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '5'.
-     000;
-     ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '00'.
-     005;
-     ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '05'.
-     055;
-     ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '55'.
-     `0${00}`;
-         ~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '0'.
-     `0${05}`;
-         ~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '5'.
-     `0${000}`;
-         ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '00'.
-     `0${005}`;
-         ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '05'.
-     `0${055}`;
-         ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '55'.
-     `${00}0`;
-        ~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '0'.
-     `${05}0`;
-        ~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '5'.
-     `${000}0`;
-        ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '00'.
-     `${005}0`;
-        ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '05'.
-     `${055}0`;
-        ~~~
--!!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
-+!!! error TS1121: Octal literals are not allowed. Use the syntax '55'.
-     
+@@= skipped -146, +146 lines =@@
      "\0";
      "\5";
       ~~
@@ -409,7 +322,7 @@
      "\8";
       ~~
  !!! error TS1488: Escape sequence '\8' is not allowed.
-@@= skipped -262, +262 lines =@@
+@@= skipped -104, +104 lines =@@
  !!! error TS1488: Escape sequence '\8' is not allowed.
      "\087";
       ~~

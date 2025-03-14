@@ -123,10 +123,11 @@
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>01 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r13 = i[-01]
  >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
-@@= skipped -10, +9 lines =@@
+@@= skipped -10, +10 lines =@@
  >I : Symbol(I, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 16))
  
      "0.1": void;
@@ -249,10 +250,11 @@
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>01 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r13 = i[-01]
  >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
-@@= skipped -56, +55 lines =@@
+@@= skipped -56, +56 lines =@@
  var r3 = c[1];
  >r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
  >c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
@@ -305,10 +307,11 @@
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>01 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r13 = i[-01]
  >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
-@@= skipped -56, +55 lines =@@
+@@= skipped -56, +56 lines =@@
  var r3 = c[1];
  >r3 : Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3) ... and 11 more)
  >c : Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 15, 3))
@@ -361,6 +364,7 @@
  >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
  >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
 ->01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
++>01 : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
  
  var r13 = i[-01]
  >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
