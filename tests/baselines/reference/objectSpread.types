@@ -56,7 +56,7 @@ let addAfter: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { ...o, c: false }
->{ ...o, c: false } : { c: false; a: number; b: string; }
+>{ ...o, c: false } : { a: number; b: string; c: false; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -94,7 +94,7 @@ let override: { a: number, b: string } =
 >  : ^^^^^^
 
     { ...o, b: 'override' }
->{ ...o, b: 'override' } : { b: string; a: number; }
+>{ ...o, b: 'override' } : { a: number; b: string; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -114,9 +114,9 @@ let nested: { a: number, b: boolean, c: string } =
 >  : ^^^^^^
 
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { a: number; b: false; c: string; }
 >                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>{ a: 3, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
@@ -148,7 +148,7 @@ let combined: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { ...o, ...o2 }
->{ ...o, ...o2 } : { b: string; c: boolean; a: number; }
+>{ ...o, ...o2 } : { a: number; b: string; c: boolean; }
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -166,7 +166,7 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { ...o, ...o2, b: 'ok' }
->{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
+>{ ...o, ...o2, b: 'ok' } : { a: number; c: boolean; b: string; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -188,9 +188,9 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >  : ^^^^^^
 
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { a: number; b: false; c: number; }
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
@@ -254,7 +254,7 @@ let getter: { a: number, c: number } =
 >  : ^^^^^^
 
     { ...op, c: 7 }
->{ ...op, c: 7 } : { c: number; a: number; }
+>{ ...op, c: 7 } : { a: number; c: number; }
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >op : { readonly a: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
@@ -309,8 +309,8 @@ function from16326(this: { header: Header }, header: Header, authToken: string):
 >          : ^^^^^^
 
     return {
->{        ...this.header,        ...header,        ...authToken && { authToken }    } : { authToken: string; head: string; body: string; }
->                                                                                     : ^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^      ^^^
+>{        ...this.header,        ...header,        ...authToken && { authToken }    } : { head: string; body: string; authToken: string; }
+>                                                                                     : ^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^      ^^^
 
         ...this.header,
 >this.header : Header
@@ -587,7 +587,7 @@ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } }
 >  : ^^^^^^
 >plus : () => void
 >     : ^^^^^^    
->{ ...c, plus() { return this.p + 1; } } : { plus(): any; p: number; }
+>{ ...c, plus() { return this.p + 1; } } : { p: number; plus(): any; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
 >  : ^
@@ -622,7 +622,7 @@ let changeTypeAfter: { a: string, b: string } =
 >  : ^^^^^^
 
     { ...o, a: 'wrong type?' }
->{ ...o, a: 'wrong type?' } : { a: string; b: string; }
+>{ ...o, a: 'wrong type?' } : { b: string; a: string; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -730,7 +730,7 @@ function container(
 >                    : ^^^^^^
 
         { ['before everything']: 12, ...o, b: 'yes' }
->{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; "before everything": number; }
+>{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; "before everything": number; b: string; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['before everything'] : number
 >                      : ^^^^^^
@@ -756,7 +756,7 @@ function container(
 >             : ^^^^^^
 
         { ...o, b: 'yeah', ['at the end']: 14 }
->{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; "at the end": number; a: number; }
+>{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; "at the end": number; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -785,7 +785,7 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >  : ^^^^^^
 >b : string
 >  : ^^^^^^
->{ ...o, a } : { a: number; b: string; }
+>{ ...o, a } : { b: string; a: number; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1141,9 +1141,9 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 >  : ^^^^^^^^^      ^^^
 
     let x14 = { ...w, ...obj };
->x14 : (T & { x: number; }) | { x: number; s: string; }
+>x14 : (T & { x: number; }) | { s: string; x: number; }
 >    : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
->{ ...w, ...obj } : (T & { x: number; }) | { x: number; s: string; }
+>{ ...w, ...obj } : (T & { x: number; }) | { s: string; x: number; }
 >                 : ^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^      ^^^
 >w : T | { s: string; }
 >  : ^^^^^^^^^      ^^^
@@ -1171,9 +1171,9 @@ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { 
 >  : ^^^^^^^^^      ^^^
 
     let x17 = { ...t, ...w, ...obj };
->x17 : (T & { x: number; }) | (T & { x: number; s: string; })
+>x17 : (T & { x: number; }) | (T & { s: string; x: number; })
 >    : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
->{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { x: number; s: string; })
+>{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { s: string; x: number; })
 >                       : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^
 >t : T
 >  : ^

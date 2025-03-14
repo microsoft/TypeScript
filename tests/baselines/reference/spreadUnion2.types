@@ -56,7 +56,7 @@ var o3: {} | { a: number } | { b: number } | { a: number, b: number };
 var o3 = { ...undefinedUnion, ...nullUnion };
 >o3 : {} | { a: number; } | { b: number; } | { a: number; b: number; }
 >   : ^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
->{ ...undefinedUnion, ...nullUnion } : { b?: number | undefined; a?: number | undefined; }
+>{ ...undefinedUnion, ...nullUnion } : { a?: number | undefined; b?: number | undefined; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefinedUnion : { a: number; } | undefined
 >               : ^^^^^      ^^^^^^^^^^^^^^^
