@@ -15,6 +15,7 @@ import {
     canIncludeBindAndCheckDiagnostics,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
+    CheckFlags,
     CheckJsDirective,
     Classifications,
     ClassifiedSpan,
@@ -721,7 +722,10 @@ class SymbolObject implements Symbol {
         if (!this.documentationComment) {
             this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+            if (!this.declarations && isTransientSymbol(this) && this.links.checkFlags & CheckFlags.Mapped && this.parent?.declarations && some(this.parent?.declarations, decl => hasJSDocInheritDocTag(decl))) {
+                this.documentationComment = getDocumentationComment(this.parent?.declarations.concat(this.links.syntheticOrigin?.declarations || emptyArray), checker);
+            }
+            else if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
                 const labelDecl = this.links.target.links.tupleLabelDeclaration;
                 this.documentationComment = getDocumentationComment([labelDecl], checker);
             }
