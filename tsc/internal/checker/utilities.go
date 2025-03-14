@@ -1210,21 +1210,6 @@ func isThisProperty(node *ast.Node) bool {
 	return (ast.IsPropertyAccessExpression(node) || ast.IsElementAccessExpression(node)) && node.Expression().Kind == ast.KindThisKeyword
 }
 
-func anyToString(v any) string {
-	// !!! This function should behave identically to the expression `"" + v` in JS
-	switch v := v.(type) {
-	case string:
-		return v
-	case jsnum.Number:
-		return v.String()
-	case bool:
-		return core.IfElse(v, "true", "false")
-	case PseudoBigInt:
-		return "(BigInt)" // !!!
-	}
-	panic("Unhandled case in anyToString")
-}
-
 func isValidNumberString(s string, roundTripOnly bool) bool {
 	if s == "" {
 		return false
@@ -1421,136 +1406,6 @@ func isJsxOpeningLikeElement(node *ast.Node) bool {
 // Deprecated in favor of `ast.IsObjectLiteralElement`
 func isObjectLiteralElementLike(node *ast.Node) bool {
 	return ast.IsObjectLiteralElement(node)
-}
-
-type EvaluatorResult struct {
-	value                 any
-	isSyntacticallyString bool
-	resolvedOtherFiles    bool
-	hasExternalReferences bool
-}
-
-func evaluatorResult(value any, isSyntacticallyString bool, resolvedOtherFiles bool, hasExternalReferences bool) EvaluatorResult {
-	return EvaluatorResult{value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences}
-}
-
-type Evaluator func(expr *ast.Node, location *ast.Node) EvaluatorResult
-
-func createEvaluator(evaluateEntity Evaluator) Evaluator {
-	var evaluate Evaluator
-	evaluateTemplateExpression := func(expr *ast.Node, location *ast.Node) EvaluatorResult {
-		var sb strings.Builder
-		sb.WriteString(expr.AsTemplateExpression().Head.Text())
-		resolvedOtherFiles := false
-		hasExternalReferences := false
-		for _, span := range expr.AsTemplateExpression().TemplateSpans.Nodes {
-			spanResult := evaluate(span.Expression(), location)
-			if spanResult.value == nil {
-				return evaluatorResult(nil, true /*isSyntacticallyString*/, false, false)
-			}
-			sb.WriteString(anyToString(spanResult.value))
-			sb.WriteString(span.AsTemplateSpan().Literal.Text())
-			resolvedOtherFiles = resolvedOtherFiles || spanResult.resolvedOtherFiles
-			hasExternalReferences = hasExternalReferences || spanResult.hasExternalReferences
-		}
-		return evaluatorResult(sb.String(), true, resolvedOtherFiles, hasExternalReferences)
-	}
-	evaluate = func(expr *ast.Node, location *ast.Node) EvaluatorResult {
-		isSyntacticallyString := false
-		resolvedOtherFiles := false
-		hasExternalReferences := false
-		// It's unclear when/whether we should consider skipping other kinds of outer expressions.
-		// Type assertions intentionally break evaluation when evaluating literal types, such as:
-		//     type T = `one ${"two" as any} three`; // string
-		// But it's less clear whether such an assertion should break enum member evaluation:
-		//     enum E {
-		//       A = "one" as any
-		//     }
-		// SatisfiesExpressions and non-null assertions seem to have even less reason to break
-		// emitting enum members as literals. However, these expressions also break Babel's
-		// evaluation (but not esbuild's), and the isolatedModules errors we give depend on
-		// our evaluation results, so we're currently being conservative so as to issue errors
-		// on code that might break Babel.
-		expr = ast.SkipParentheses(expr)
-		switch expr.Kind {
-		case ast.KindPrefixUnaryExpression:
-			result := evaluate(expr.AsPrefixUnaryExpression().Operand, location)
-			resolvedOtherFiles = result.resolvedOtherFiles
-			hasExternalReferences = result.hasExternalReferences
-			if value, ok := result.value.(jsnum.Number); ok {
-				switch expr.AsPrefixUnaryExpression().Operator {
-				case ast.KindPlusToken:
-					return evaluatorResult(value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindMinusToken:
-					return evaluatorResult(-value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindTildeToken:
-					return evaluatorResult(value.BitwiseNOT(), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				}
-			}
-		case ast.KindBinaryExpression:
-			left := evaluate(expr.AsBinaryExpression().Left, location)
-			right := evaluate(expr.AsBinaryExpression().Right, location)
-			operator := expr.AsBinaryExpression().OperatorToken.Kind
-			isSyntacticallyString = (left.isSyntacticallyString || right.isSyntacticallyString) && expr.AsBinaryExpression().OperatorToken.Kind == ast.KindPlusToken
-			resolvedOtherFiles = left.resolvedOtherFiles || right.resolvedOtherFiles
-			hasExternalReferences = left.hasExternalReferences || right.hasExternalReferences
-			leftNum, leftIsNum := left.value.(jsnum.Number)
-			rightNum, rightIsNum := right.value.(jsnum.Number)
-			if leftIsNum && rightIsNum {
-				switch operator {
-				case ast.KindBarToken:
-					return evaluatorResult(leftNum.BitwiseOR(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindAmpersandToken:
-					return evaluatorResult(leftNum.BitwiseAND(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindGreaterThanGreaterThanToken:
-					return evaluatorResult(leftNum.SignedRightShift(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindGreaterThanGreaterThanGreaterThanToken:
-					return evaluatorResult(leftNum.UnsignedRightShift(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindLessThanLessThanToken:
-					return evaluatorResult(leftNum.LeftShift(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindCaretToken:
-					return evaluatorResult(leftNum.BitwiseXOR(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindAsteriskToken:
-					return evaluatorResult(leftNum*rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindSlashToken:
-					return evaluatorResult(leftNum/rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindPlusToken:
-					return evaluatorResult(leftNum+rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindMinusToken:
-					return evaluatorResult(leftNum-rightNum, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindPercentToken:
-					return evaluatorResult(leftNum.Remainder(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				case ast.KindAsteriskAsteriskToken:
-					return evaluatorResult(leftNum.Exponentiate(rightNum), isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-				}
-			}
-			leftStr, leftIsStr := left.value.(string)
-			rightStr, rightIsStr := right.value.(string)
-			if (leftIsStr || leftIsNum) && (rightIsStr || rightIsNum) && operator == ast.KindPlusToken {
-				if leftIsNum {
-					leftStr = leftNum.String()
-				}
-				if rightIsNum {
-					rightStr = rightNum.String()
-				}
-				return evaluatorResult(leftStr+rightStr, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-			}
-		case ast.KindStringLiteral, ast.KindNoSubstitutionTemplateLiteral:
-			return evaluatorResult(expr.Text(), true /*isSyntacticallyString*/, false, false)
-		case ast.KindTemplateExpression:
-			return evaluateTemplateExpression(expr, location)
-		case ast.KindNumericLiteral:
-			return evaluatorResult(jsnum.FromString(expr.Text()), false, false, false)
-		case ast.KindIdentifier, ast.KindElementAccessExpression:
-			return evaluateEntity(expr, location)
-		case ast.KindPropertyAccessExpression:
-			if ast.IsEntityNameExpression(expr) {
-				return evaluateEntity(expr, location)
-			}
-		}
-		return evaluatorResult(nil, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences)
-	}
-	return evaluate
 }
 
 func isInfinityOrNaNString(name string) bool {
@@ -1844,11 +1699,8 @@ func expressionResultIsUnused(node *ast.Node) bool {
 	}
 }
 
-func pseudoBigIntToString(value PseudoBigInt) string {
-	if value.negative && value.base10Value != "0" {
-		return "-" + value.base10Value
-	}
-	return value.base10Value
+func pseudoBigIntToString(value jsnum.PseudoBigInt) string {
+	return value.String()
 }
 
 func getSuperContainer(node *ast.Node, stopOnFunctions bool) *ast.Node {

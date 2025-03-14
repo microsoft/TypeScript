@@ -205,64 +205,6 @@ func isIdentifierReference(name *ast.IdentifierNode, parent *ast.Node) bool {
 	}
 }
 
-func constantValue(node *ast.Expression) any {
-	node = ast.SkipOuterExpressions(node, ast.OEKAll)
-	switch {
-	case ast.IsStringLiteralLike(node):
-		return node.Text()
-
-	case ast.IsNumericLiteral(node):
-		return jsnum.FromString(node.Text())
-
-	case ast.IsPrefixUnaryExpression(node):
-		prefixUnary := node.AsPrefixUnaryExpression()
-		if value, ok := constantValue(prefixUnary.Operand).(jsnum.Number); ok {
-			switch prefixUnary.Operator {
-			case ast.KindPlusToken:
-				return value
-			case ast.KindMinusToken:
-				return -value
-			case ast.KindTildeToken:
-				return value.BitwiseNOT()
-			}
-		}
-
-	case ast.IsBinaryExpression(node):
-		binary := node.AsBinaryExpression()
-		leftNum, leftIsNum := constantValue(binary.Left).(jsnum.Number)
-		rightNum, rightIsNum := constantValue(binary.Right).(jsnum.Number)
-		if leftIsNum && rightIsNum {
-			switch binary.OperatorToken.Kind {
-			case ast.KindBarToken:
-				return leftNum.BitwiseOR(rightNum)
-			case ast.KindAmpersandToken:
-				return leftNum.BitwiseAND(rightNum)
-			case ast.KindGreaterThanGreaterThanToken:
-				return leftNum.SignedRightShift(rightNum)
-			case ast.KindGreaterThanGreaterThanGreaterThanToken:
-				return leftNum.UnsignedRightShift(rightNum)
-			case ast.KindLessThanLessThanToken:
-				return leftNum.LeftShift(rightNum)
-			case ast.KindCaretToken:
-				return leftNum.BitwiseXOR(rightNum)
-			case ast.KindAsteriskToken:
-				return leftNum * rightNum
-			case ast.KindSlashToken:
-				return leftNum / rightNum
-			case ast.KindPlusToken:
-				return leftNum + rightNum
-			case ast.KindMinusToken:
-				return leftNum - rightNum
-			case ast.KindPercentToken:
-				return leftNum.Remainder(rightNum)
-			case ast.KindAsteriskAsteriskToken:
-				return leftNum.Exponentiate(rightNum)
-			}
-		}
-	}
-	return nil
-}
-
 func constantExpression(value any, factory *ast.NodeFactory) *ast.Expression {
 	switch value := value.(type) {
 	case string:

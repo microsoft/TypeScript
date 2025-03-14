@@ -200,7 +200,7 @@ func (p *Printer) printValue(value any) {
 		p.printNumberLiteral(value)
 	case bool:
 		p.printBooleanLiteral(value)
-	case PseudoBigInt:
+	case jsnum.PseudoBigInt:
 		p.printBigIntLiteral(value)
 	}
 }
@@ -219,11 +219,8 @@ func (p *Printer) printBooleanLiteral(b bool) {
 	p.print(core.IfElse(b, "true", "false"))
 }
 
-func (p *Printer) printBigIntLiteral(b PseudoBigInt) {
-	if b.negative {
-		p.print("-")
-	}
-	p.print(b.base10Value)
+func (p *Printer) printBigIntLiteral(b jsnum.PseudoBigInt) {
+	p.print(b.String())
 }
 
 func (p *Printer) printUniqueESSymbolType(t *Type) {
