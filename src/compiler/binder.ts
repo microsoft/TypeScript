@@ -176,7 +176,6 @@ import {
     isInTopLevelContext,
     isJSDocConstructSignature,
     isJSDocEnumTag,
-    isJSDocImportTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
     isJSDocTypeAssertion,
@@ -1109,13 +1108,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (canHaveFlowNode(node) && node.flowNode) {
                 node.flowNode = undefined;
             }
-            if (isJSDocImportTag(node)) {
-                bindJSDocImportTag(node);
-            }
-            else {
-                bindEachChild(node);
-                bindJSDoc(node);
-            }
+            bindEachChild(node);
+            bindJSDoc(node);
             inAssignmentPattern = saveInAssignmentPattern;
             return;
         }
@@ -3953,6 +3947,9 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ConstructorType:
         case SyntaxKind.ClassStaticBlockDeclaration:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
+        case SyntaxKind.JSDocImportTag:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
