@@ -2,8 +2,7 @@
 
 === enumLiteralSimple.ts ===
 const ENUM: enum = {
->ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 5))
->ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 5))
+>ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 16))
 
   a: 1,
 >a : Symbol(ENUM.a, Decl(enumLiteralSimple.ts, 0, 20))
@@ -15,5 +14,5 @@ const ENUM: enum = {
 
 const a: ENUM = 1
 >a : Symbol(a, Decl(enumLiteralSimple.ts, 5, 5))
->ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 5))
+>ENUM : Symbol(ENUM, Decl(enumLiteralSimple.ts, 0, 5), Decl(enumLiteralSimple.ts, 0, 16))
 

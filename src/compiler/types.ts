@@ -3616,7 +3616,7 @@ export interface EnumLiteralExpression extends PrimaryExpression, Declaration, J
     readonly kind: SyntaxKind.EnumLiteralExpression;
     readonly parent: VariableDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
-    readonly name: Identifier; // For compatibility with EnumDeclaration -- however this must be equal to the BindingName in the VariableDeclaration.
+    readonly name: __String; // For compatibility with EnumDeclaration -- however this must be equal to the BindingName in the VariableDeclaration.
     readonly members: NodeArray<EnumMember>;
 }
 
@@ -9025,8 +9025,8 @@ export interface NodeFactory {
     updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
     createEnumDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
     updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
-    createEnumLiteralExpression(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumLiteralExpression;
-    updateEnumLiteralExpression(node: EnumLiteralExpression, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumLiteralExpression;
+    createEnumLiteralExpression(modifiers: readonly ModifierLike[] | undefined, name: __String, members: readonly EnumMember[]): EnumLiteralExpression;
+    updateEnumLiteralExpression(node: EnumLiteralExpression, modifiers: readonly ModifierLike[] | undefined, name: __String, members: readonly EnumMember[]): EnumLiteralExpression;
     createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
     updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
     createModuleBlock(statements: readonly Statement[]): ModuleBlock;

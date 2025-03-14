@@ -4546,15 +4546,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createEnumLiteralExpression(
         modifiers: readonly ModifierLike[] | undefined,
-        name: string | Identifier,
+        name: __String,
         members: readonly EnumMember[],
     ) {
         const node = createBaseDeclaration<EnumLiteralExpression>(SyntaxKind.EnumLiteralExpression);
         node.modifiers = asNodeArray(modifiers);
-        node.name = asName(name);
+        node.name = name;
         node.members = createNodeArray(members);
         node.transformFlags |= propagateChildrenFlags(node.modifiers) |
-            propagateChildFlags(node.name) |
             propagateChildrenFlags(node.members) |
             TransformFlags.ContainsTypeScript;
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
@@ -4567,7 +4566,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function updateEnumLiteralExpression(
         node: EnumLiteralExpression,
         modifiers: readonly ModifierLike[] | undefined,
-        name: Identifier,
+        name: __String,
         members: readonly EnumMember[],
     ) {
         return node.modifiers !== modifiers

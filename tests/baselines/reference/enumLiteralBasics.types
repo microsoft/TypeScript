@@ -13,8 +13,6 @@ let ExistingShorthand = "exists";
 const E1: enum = {
 >E1 : E1
 >   : ^^
->E1 : E1
->   : ^^
 
     NonexistingShorthand, // error -- EnumLiteralExpressions require explicit property definitions.
 >NonexistingShorthand : E1.NonexistingShorthand
@@ -84,6 +82,86 @@ const sval: E1 = E1.String; // ok
 >   : ^^^^^^^^^
 >String : E1.String
 >       : ^^^^^^^^^
+
+let p_int: E1.Int = E1.Int; // ok
+>p_int : E1.Int
+>      : ^^^^^^
+>E1 : any
+>   : ^^^
+>E1.Int : E1.Int
+>       : ^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>Int : E1.Int
+>    : ^^^^^^
+
+const p_nonexist: E1.NonexistingShorthand = E1.NonexistingShorthand; // ok
+>p_nonexist : E1.NonexistingShorthand
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>E1 : any
+>   : ^^^
+>E1.NonexistingShorthand : E1.NonexistingShorthand
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>NonexistingShorthand : E1.NonexistingShorthand
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const p_exist: E1.ExistingShorthand = E1.ExistingShorthand; // ok
+>p_exist : E1.ExistingShorthand
+>        : ^^^^^^^^^^^^^^^^^^^^
+>E1 : any
+>   : ^^^
+>E1.ExistingShorthand : E1.ExistingShorthand
+>                     : ^^^^^^^^^^^^^^^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>ExistingShorthand : E1.ExistingShorthand
+>                  : ^^^^^^^^^^^^^^^^^^^^
+
+const p_string: E1.String = E1.String; // ok
+>p_string : E1.String
+>         : ^^^^^^^^^
+>E1 : any
+>   : ^^^
+>E1.String : E1.String
+>          : ^^^^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>String : E1.String
+>       : ^^^^^^^^^
+
+p_int = E1.Flag; // Type 'E1.Flag' is not assignable to type 'E1.Int'.
+>p_int = E1.Flag : E1.Flag
+>                : ^^^^^^^
+>p_int : E1.Int
+>      : ^^^^^^
+>E1.Flag : E1.Flag
+>        : ^^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>Flag : E1.Flag
+>     : ^^^^^^^
+
+p_int = E1.Int | E1.Flag;
+>p_int = E1.Int | E1.Flag : number
+>                         : ^^^^^^
+>p_int : E1.Int
+>      : ^^^^^^
+>E1.Int | E1.Flag : number
+>                 : ^^^^^^
+>E1.Int : E1.Int
+>       : ^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>Int : E1.Int
+>    : ^^^^^^
+>E1.Flag : E1.Flag
+>        : ^^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>Flag : E1.Flag
+>     : ^^^^^^^
 
 // Assigning values which are not part of the enum despite being present in the enum
 const nonexist_bad: E1 = undefined; // error
@@ -222,6 +300,131 @@ const sval_bad2: E1 = functest("string"); // error
 >                   : ^^
 >functest : (value: E1) => E1
 >         : ^     ^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+function functest2(value: E1.Int) {
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
+>value : E1.Int
+>      : ^^^^^^
+>E1 : any
+>   : ^^^
+
+    console.log(value);
+>console.log(value) : void
+>                   : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>value : E1.Int
+>      : ^^^^^^
+
+    return value;
+>value : E1.Int
+>      : ^^^^^^
+}
+
+const nonexist_bad3: E1.Int = functest2(undefined);
+>nonexist_bad3 : E1.Int
+>              : ^^^^^^
+>E1 : any
+>   : ^^^
+>functest2(undefined) : E1.Int
+>                     : ^^^^^^
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+const exist_bad3: E1.Int = functest2("exists"); // error
+>exist_bad3 : E1.Int
+>           : ^^^^^^
+>E1 : any
+>   : ^^^
+>functest2("exists") : E1.Int
+>                    : ^^^^^^
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
+>"exists" : "exists"
+>         : ^^^^^^^^
+
+const ival_good5: E1.Int = functest2(1); // ok
+>ival_good5 : E1.Int
+>           : ^^^^^^
+>E1 : any
+>   : ^^^
+>functest2(1) : E1.Int
+>             : ^^^^^^
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+const ival_good6: E1.Int = functest2(4); // ok
+>ival_good6 : E1.Int
+>           : ^^^^^^
+>E1 : any
+>   : ^^^
+>functest2(4) : E1.Int
+>             : ^^^^^^
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+
+const ival_good7: E1.Int = functest2(E1.Int | E1.Flag); // ok
+>ival_good7 : E1.Int
+>           : ^^^^^^
+>E1 : any
+>   : ^^^
+>functest2(E1.Int | E1.Flag) : E1.Int
+>                            : ^^^^^^
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
+>E1.Int | E1.Flag : number
+>                 : ^^^^^^
+>E1.Int : E1.Int
+>       : ^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>Int : E1.Int
+>    : ^^^^^^
+>E1.Flag : E1.Flag
+>        : ^^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>Flag : E1.Flag
+>     : ^^^^^^^
+
+const sval_good3: E1.Int = functest2(E1.String);
+>sval_good3 : E1.Int
+>           : ^^^^^^
+>E1 : any
+>   : ^^^
+>functest2(E1.String) : E1.Int
+>                     : ^^^^^^
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
+>E1.String : E1.String
+>          : ^^^^^^^^^
+>E1 : typeof E1
+>   : ^^^^^^^^^
+>String : E1.String
+>       : ^^^^^^^^^
+
+const sval_bad3: E1.Flag = functest2("string"); // error
+>sval_bad3 : E1.Flag
+>          : ^^^^^^^
+>E1 : any
+>   : ^^^
+>functest2("string") : E1.Int
+>                    : ^^^^^^
+>functest2 : (value: E1.Int) => E1.Int
+>          : ^     ^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 

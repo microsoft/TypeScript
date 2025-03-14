@@ -110,6 +110,7 @@ import {
     getLeadingCommentRanges,
     getSpellingSuggestion,
     getTextOfNodeFromSourceText,
+    getTokenPosOfNode,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -923,8 +924,9 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.initializer);
     },
     [SyntaxKind.EnumLiteralExpression]: function forEachChildInEnumLiteralExpression<T>(node: EnumLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        // For EnumLiteralExpression, the name is not visited or emitted. It is a reference to the binding name of a Declaration for which
+        // the EnumLiteralExpression is an initializer, and is used to permit diagnostic code for EnumDeclarations to be used.
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
-            visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.members);
     },
     [SyntaxKind.ModuleDeclaration]: function forEachChildInModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -7645,7 +7647,7 @@ namespace Parser {
         }
         const type = parseTypeAnnotation();
         if (allowEnumType && type && isEnumTypeReference(type) && name.kind === SyntaxKind.Identifier) {
-            const initializer = parseInitializerAsEnumLiteralExpression(name, pos);
+            const initializer = parseInitializerAsEnumLiteralExpression(name);
             const node = factoryCreateVariableDeclaration(name, exclamationToken, type, initializer);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -8293,16 +8295,17 @@ namespace Parser {
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
-    function parseInitializerAsEnumLiteralExpression(name: Identifier, pos: number) {
+    function parseInitializerAsEnumLiteralExpression(name: Identifier) {
         // A VariableDeclaration with a declared type `enum` expects the initializer to be in a format like an ObjectLiteralExpression,
         // with only constant keys and property assignments, which are treated as EnumMembers.
+        const pos = getNodePos();
         parseExpected(SyntaxKind.EqualsToken);
         parseExpected(SyntaxKind.OpenBraceToken);
         const members = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralEnumMember);
         parseExpected(SyntaxKind.CloseBraceToken);
 
         // Should the variable have the jsdoc, or the enum literal, or both?
-        return finishNode(factory.createEnumLiteralExpression(/*modifiers*/ undefined, name, members), pos);
+        return finishNode(factory.createEnumLiteralExpression(/*modifiers*/ undefined, name.escapedText, members), pos);
     }
 
     function parseModuleBlock(): ModuleBlock {

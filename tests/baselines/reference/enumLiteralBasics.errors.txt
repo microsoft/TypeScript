@@ -1,12 +1,18 @@
 enumLiteralBasics.ts(6,5): error TS1061: Enum member must have initializer.
 enumLiteralBasics.ts(7,5): error TS1061: Enum member must have initializer.
-enumLiteralBasics.ts(21,7): error TS2322: Type '"exists"' is not assignable to type 'E1'.
-enumLiteralBasics.ts(23,7): error TS2322: Type '"string"' is not assignable to type 'E1'.
-enumLiteralBasics.ts(33,33): error TS2345: Argument of type '"exists"' is not assignable to parameter of type 'E1'.
-enumLiteralBasics.ts(38,32): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'E1'.
+enumLiteralBasics.ts(22,1): error TS2322: Type 'E1.Flag' is not assignable to type 'E1.Int'.
+enumLiteralBasics.ts(27,7): error TS2322: Type '"exists"' is not assignable to type 'E1'.
+enumLiteralBasics.ts(29,7): error TS2322: Type '"string"' is not assignable to type 'E1'.
+enumLiteralBasics.ts(39,33): error TS2345: Argument of type '"exists"' is not assignable to parameter of type 'E1'.
+enumLiteralBasics.ts(44,32): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'E1'.
+enumLiteralBasics.ts(52,38): error TS2345: Argument of type '"exists"' is not assignable to parameter of type 'E1.Int'.
+enumLiteralBasics.ts(54,38): error TS2345: Argument of type '4' is not assignable to parameter of type 'E1.Int'.
+enumLiteralBasics.ts(56,38): error TS2345: Argument of type 'E1.String' is not assignable to parameter of type 'E1.Int'.
+enumLiteralBasics.ts(57,7): error TS2322: Type 'E1.Int' is not assignable to type 'E1.Flag'.
+enumLiteralBasics.ts(57,38): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'E1.Int'.
 
 
-==== enumLiteralBasics.ts (6 errors) ====
+==== enumLiteralBasics.ts (12 errors) ====
     // Enum without initializers have first member = 0 and successive members = N + 1
     
     // Enum literal syntax does not implement auto-incrementing behaviour.
@@ -28,6 +34,14 @@ enumLiteralBasics.ts(38,32): error TS2345: Argument of type '"string"' is not as
     const exist: E1 = E1.ExistingShorthand; // ok
     const ival: E1 = E1.Int; // ok
     const sval: E1 = E1.String; // ok
+    let p_int: E1.Int = E1.Int; // ok
+    const p_nonexist: E1.NonexistingShorthand = E1.NonexistingShorthand; // ok
+    const p_exist: E1.ExistingShorthand = E1.ExistingShorthand; // ok
+    const p_string: E1.String = E1.String; // ok
+    p_int = E1.Flag; // Type 'E1.Flag' is not assignable to type 'E1.Int'.
+    ~~~~~
+!!! error TS2322: Type 'E1.Flag' is not assignable to type 'E1.Int'.
+    p_int = E1.Int | E1.Flag;
     
     // Assigning values which are not part of the enum despite being present in the enum
     const nonexist_bad: E1 = undefined; // error
@@ -58,3 +72,25 @@ enumLiteralBasics.ts(38,32): error TS2345: Argument of type '"string"' is not as
                                    ~~~~~~~~
 !!! error TS2345: Argument of type '"string"' is not assignable to parameter of type 'E1'.
     
+    function functest2(value: E1.Int) {
+        console.log(value);
+        return value;
+    }
+    
+    const nonexist_bad3: E1.Int = functest2(undefined);
+    const exist_bad3: E1.Int = functest2("exists"); // error
+                                         ~~~~~~~~
+!!! error TS2345: Argument of type '"exists"' is not assignable to parameter of type 'E1.Int'.
+    const ival_good5: E1.Int = functest2(1); // ok
+    const ival_good6: E1.Int = functest2(4); // ok
+                                         ~
+!!! error TS2345: Argument of type '4' is not assignable to parameter of type 'E1.Int'.
+    const ival_good7: E1.Int = functest2(E1.Int | E1.Flag); // ok
+    const sval_good3: E1.Int = functest2(E1.String);
+                                         ~~~~~~~~~
+!!! error TS2345: Argument of type 'E1.String' is not assignable to parameter of type 'E1.Int'.
+    const sval_bad3: E1.Flag = functest2("string"); // error
+          ~~~~~~~~~
+!!! error TS2322: Type 'E1.Int' is not assignable to type 'E1.Flag'.
+                                         ~~~~~~~~
+!!! error TS2345: Argument of type '"string"' is not assignable to parameter of type 'E1.Int'.

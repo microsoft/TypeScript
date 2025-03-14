@@ -4,8 +4,6 @@
 const ENUM: enum = {
 >ENUM : ENUM
 >     : ^^^^
->ENUM : ENUM
->     : ^^^^
 
   a: 1,
 >a : ENUM.a

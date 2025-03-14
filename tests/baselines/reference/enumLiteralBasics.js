@@ -18,6 +18,12 @@ const nonexist: E1 = E1.NonexistingShorthand; // ok
 const exist: E1 = E1.ExistingShorthand; // ok
 const ival: E1 = E1.Int; // ok
 const sval: E1 = E1.String; // ok
+let p_int: E1.Int = E1.Int; // ok
+const p_nonexist: E1.NonexistingShorthand = E1.NonexistingShorthand; // ok
+const p_exist: E1.ExistingShorthand = E1.ExistingShorthand; // ok
+const p_string: E1.String = E1.String; // ok
+p_int = E1.Flag; // Type 'E1.Flag' is not assignable to type 'E1.Int'.
+p_int = E1.Int | E1.Flag;
 
 // Assigning values which are not part of the enum despite being present in the enum
 const nonexist_bad: E1 = undefined; // error
@@ -40,6 +46,18 @@ const ival_good4: E1 = functest(E1.Int | E1.Flag); // ok
 const sval_good2: E1 = functest(E1.String);
 const sval_bad2: E1 = functest("string"); // error
 
+function functest2(value: E1.Int) {
+    console.log(value);
+    return value;
+}
+
+const nonexist_bad3: E1.Int = functest2(undefined);
+const exist_bad3: E1.Int = functest2("exists"); // error
+const ival_good5: E1.Int = functest2(1); // ok
+const ival_good6: E1.Int = functest2(4); // ok
+const ival_good7: E1.Int = functest2(E1.Int | E1.Flag); // ok
+const sval_good3: E1.Int = functest2(E1.String);
+const sval_bad3: E1.Flag = functest2("string"); // error
 
 //// [enumLiteralBasics.js]
 // Enum without initializers have first member = 0 and successive members = N + 1
@@ -57,6 +75,12 @@ var nonexist = E1.NonexistingShorthand; // ok
 var exist = E1.ExistingShorthand; // ok
 var ival = E1.Int; // ok
 var sval = E1.String; // ok
+var p_int = E1.Int; // ok
+var p_nonexist = E1.NonexistingShorthand; // ok
+var p_exist = E1.ExistingShorthand; // ok
+var p_string = E1.String; // ok
+p_int = E1.Flag; // Type 'E1.Flag' is not assignable to type 'E1.Int'.
+p_int = E1.Int | E1.Flag;
 // Assigning values which are not part of the enum despite being present in the enum
 var nonexist_bad = undefined; // error
 var exist_bad = "exists"; // error
@@ -74,3 +98,14 @@ var ival_good3 = functest(4); // ok
 var ival_good4 = functest(E1.Int | E1.Flag); // ok
 var sval_good2 = functest(E1.String);
 var sval_bad2 = functest("string"); // error
+function functest2(value) {
+    console.log(value);
+    return value;
+}
+var nonexist_bad3 = functest2(undefined);
+var exist_bad3 = functest2("exists"); // error
+var ival_good5 = functest2(1); // ok
+var ival_good6 = functest2(4); // ok
+var ival_good7 = functest2(E1.Int | E1.Flag); // ok
+var sval_good3 = functest2(E1.String);
+var sval_bad3 = functest2("string"); // error
