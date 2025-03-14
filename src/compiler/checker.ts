@@ -34544,7 +34544,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
-        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule).sort(compareSymbols), SymbolFlags.ModuleMember);
+        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule).sort(compareSymbols), SymbolFlags.ModuleMember); // eslint-disable-line local/no-array-mutating-method-expressions
     }
 
     function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression, keyedType: Type): string | undefined {
