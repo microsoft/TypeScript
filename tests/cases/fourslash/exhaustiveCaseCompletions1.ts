@@ -40,8 +40,8 @@ verify.completions(
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
 `case 1:
-case E.B:
-case E.A:`,
+case E.A:
+case E.B:`,
             },
         ],
         preferences: {
@@ -53,13 +53,13 @@ case E.A:`,
         isNewIdentifierLocation: false,
         includes: [
             {
-                name: "case E.B: ...",
+                name: "case E.A: ...",
                 source: completion.CompletionSource.SwitchCases,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
-`case E.B:
-case E.C:
-case E.A:`,
+`case E.A:
+case E.B:
+case E.C:`,
             },
         ],
         preferences: {

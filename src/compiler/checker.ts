@@ -52955,7 +52955,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return c;
             }
         }
-        else if (t1.flags & (TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol)) {
+        else if (t1.flags & (TypeFlags.Enum | TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol)) {
             // Enum members are ordered by their symbol (and thus their declaration order).
             const c = compareSymbols(t1.symbol, t2.symbol);
             if (c !== 0) {
@@ -53070,9 +53070,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSortOrderFlags(t: Type): number {
-        // We want enum literal and computed values to be ordered by their declarations, so we merge TypeFlagsEnum into
-        // TypeFlagsEnumLiteral and clear TypeFlagsEnum.
-        return (t.flags & TypeFlags.Enum) >> 1 | t.flags & ~TypeFlags.Enum;
+        // Return TypeFlagsEnum for all enum-like unit types (they'll be sorted by their symbols)
+        if (t.flags & (TypeFlags.EnumLiteral | TypeFlags.Enum) && !(t.flags & TypeFlags.Union)) {
+            return TypeFlags.Enum;
+        }
+        return t.flags;
     }
 
     function compareTypeNames(t1: Type, t2: Type): number {

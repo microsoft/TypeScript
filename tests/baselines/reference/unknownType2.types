@@ -1048,7 +1048,7 @@ function notNotEquals(u: unknown)  {
 
     else {
         const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
->aOrB : StringEnum.A | NumberEnum.A | NumberEnum.B
+>aOrB : NumberEnum.A | NumberEnum.B | StringEnum.A
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumberEnum : any
 >           : ^^^
@@ -1056,7 +1056,7 @@ function notNotEquals(u: unknown)  {
 >           : ^^^
 >StringEnum : any
 >           : ^^^
->u : StringEnum.A | NumberEnum.A | NumberEnum.B
+>u : NumberEnum.A | NumberEnum.B | StringEnum.A
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 
@@ -1103,7 +1103,7 @@ function notNotEquals(u: unknown)  {
 
     else {
         const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
->aOrB : StringEnum.A | NumberEnum.A | NumberEnum.B
+>aOrB : NumberEnum.A | NumberEnum.B | StringEnum.A
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >NumberEnum : any
 >           : ^^^
@@ -1111,7 +1111,7 @@ function notNotEquals(u: unknown)  {
 >           : ^^^
 >StringEnum : any
 >           : ^^^
->u : StringEnum.A | NumberEnum.A | NumberEnum.B
+>u : NumberEnum.A | NumberEnum.B | StringEnum.A
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
