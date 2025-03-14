@@ -29,7 +29,7 @@ func BenchmarkBind(b *testing.B) {
 
 			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, ModuleKind: core.ModuleKindNodeNext}
 
-			// The above parses do a lot of work; ensure GC is finished before we start collecting pefrormance data.
+			// The above parses do a lot of work; ensure GC is finished before we start collecting performance data.
 			// GC must be called twice to allow things to settle.
 			runtime.GC()
 			runtime.GC()

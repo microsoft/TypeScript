@@ -2081,7 +2081,7 @@ func IsBreakOrContinueStatement(node *Node) bool {
 // virtual `Parent` pointers that can be used to walk up the tree. Since `getModuleInstanceStateForAliasTarget` may
 // potentially walk up out of the provided `Node`, merely setting the parent pointers for a given `ModuleDeclaration`
 // prior to invoking `GetModuleInstanceState` is not sufficient. It is, however, necessary that the `Parent` pointers
-// for all ancestors of the `Node` provided to `GetModuleInstanceState` have ben set.
+// for all ancestors of the `Node` provided to `GetModuleInstanceState` have been set.
 
 // Push a virtual parent pointer onto `ancestors` and return it.
 func pushAncestor(ancestors []*Node, parent *Node) []*Node {
