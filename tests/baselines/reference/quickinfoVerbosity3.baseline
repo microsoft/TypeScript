@@ -15,20 +15,14 @@
 //           ^^^
 // | ----------------------------------------------------------------------
 // | class Opt {
-// |     new (): {
-// |         render(): any;
-// |     };
-// |     prototype: {
-// |         render(): any;
-// |     };
+// |     render(): any;
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //           ^^^
 // | ----------------------------------------------------------------------
 // | class Opt {
-// |     new (): Opt;
-// |     prototype: Opt;
+// |     render(): any;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -58,20 +52,14 @@
 //       ^^^
 // | ----------------------------------------------------------------------
 // | class Bar<T extends Date> {
-// |     new <T extends Date>(): {
-// |         prop: T;
-// |     };
-// |     prototype: {
-// |         prop: any;
-// |     };
+// |     prop: T;
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //       ^^^
 // | ----------------------------------------------------------------------
 // | class Bar<T extends Date> {
-// |     new <T extends Date>(): Bar<T>;
-// |     prototype: Bar<any>;
+// |     prop: T;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -89,36 +77,20 @@
 //           ^^^
 // | ----------------------------------------------------------------------
 // | class c5b {
-// |     new (): {
-// |         foo(): void;
-// |     };
-// |     prototype: {
-// |         foo(): void;
-// |     };
-// |     y: number;
+// |     foo(): void;
 // | }
 // | namespace c5b {
-// |     new (): {
-// |         foo(): void;
-// |     };
-// |     prototype: {
-// |         foo(): void;
-// |     };
-// |     y: number;
+// |     foo(): void;
 // | }
 // | (verbosity level: 2)
 // | ----------------------------------------------------------------------
 //           ^^^
 // | ----------------------------------------------------------------------
 // | class c5b {
-// |     new (): c5b;
-// |     prototype: c5b;
-// |     y: number;
+// |     foo(): void;
 // | }
 // | namespace c5b {
-// |     new (): c5b;
-// |     prototype: c5b;
-// |     y: number;
+// |     foo(): void;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -443,12 +415,8 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
+          "text": "render",
+          "kind": "text"
         },
         {
           "text": "(",
@@ -467,36 +435,8 @@
           "kind": "space"
         },
         {
-          "text": "Opt",
-          "kind": "className"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Opt",
-          "kind": "className"
+          "text": "any",
+          "kind": "keyword"
         },
         {
           "text": ";",
@@ -512,7 +452,7 @@
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 1
     }
   },
@@ -559,42 +499,6 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
           "text": "render",
           "kind": "text"
         },
@@ -617,98 +521,6 @@
         {
           "text": "any",
           "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "render",
-          "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -1023,87 +835,7 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "extends",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Date",
-          "kind": "text"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Bar",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
+          "text": "prop",
           "kind": "propertyName"
         },
         {
@@ -1115,20 +847,8 @@
           "kind": "space"
         },
         {
-          "text": "Bar",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
+          "text": "T",
+          "kind": "typeParameterName"
         },
         {
           "text": ";",
@@ -1144,7 +864,7 @@
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 1
     }
   },
@@ -1219,70 +939,6 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "T",
-          "kind": "typeParameterName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "extends",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Date",
-          "kind": "text"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
           "text": "prop",
           "kind": "propertyName"
         },
@@ -1297,90 +953,6 @@
         {
           "text": "T",
           "kind": "typeParameterName"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "prop",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
         },
         {
           "text": ";",
@@ -1491,12 +1063,8 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
+          "text": "foo",
+          "kind": "text"
         },
         {
           "text": "(",
@@ -1515,63 +1083,7 @@
           "kind": "space"
         },
         {
-          "text": "c5b",
-          "kind": "className"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "c5b",
-          "kind": "className"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "y",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
+          "text": "void",
           "kind": "keyword"
         },
         {
@@ -1619,12 +1131,8 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
+          "text": "foo",
+          "kind": "text"
         },
         {
           "text": "(",
@@ -1643,63 +1151,7 @@
           "kind": "space"
         },
         {
-          "text": "c5b",
-          "kind": "className"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "c5b",
-          "kind": "className"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "y",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
+          "text": "void",
           "kind": "keyword"
         },
         {
@@ -1716,7 +1168,7 @@
         }
       ],
       "documentation": [],
-      "canIncreaseVerbosityLevel": true,
+      "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 1
     }
   },
@@ -1763,42 +1215,6 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
           "text": "foo",
           "kind": "text"
         },
@@ -1820,126 +1236,6 @@
         },
         {
           "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "y",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
           "kind": "keyword"
         },
         {
@@ -1987,42 +1283,6 @@
           "kind": "space"
         },
         {
-          "text": "new",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
           "text": "foo",
           "kind": "text"
         },
@@ -2044,126 +1304,6 @@
         },
         {
           "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "prototype",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "        ",
-          "kind": "space"
-        },
-        {
-          "text": "foo",
-          "kind": "text"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "y",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
           "kind": "keyword"
         },
         {

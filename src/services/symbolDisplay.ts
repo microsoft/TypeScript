@@ -842,7 +842,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     }
 
     function getTypeOfSymbol(symbol: Symbol) {
-        if (symbol.flags & (SymbolFlags.Interface)) {
+        if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
             return typeChecker.getDeclaredTypeOfSymbol(symbol);
         }
         return typeChecker.getTypeOfSymbolAtLocation(symbol, location);
