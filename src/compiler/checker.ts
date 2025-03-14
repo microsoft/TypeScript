@@ -6465,6 +6465,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Determines if a type can be unfolded, based on how many layers of type aliases we're allowed to unfold.
         function canUnfoldType(type: Type, context: NodeBuilderContext): boolean {
+            if (isUnfoldableType(type)) {
+                return false;
+            }
             for (let i = 0; i < context.typeStack.length - 1; i++) {
                 if (context.typeStack[i] === type.id) {
                     return false;
@@ -6479,8 +6482,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Don't unfold types like `Array` or `Promise`, instead treating them as transparent.
         function isUnfoldableType(type: Type): boolean {
-            return (getObjectFlags(type) & ObjectFlags.Reference) !== 0 &&
-                !!((type as TypeReference).target.symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
+            const symbol = (getObjectFlags(type) & ObjectFlags.Reference) !== 0 ? (type as TypeReference).target.symbol : type.symbol;
+            return !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))))
         }
 
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
@@ -6649,9 +6652,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (objectFlags & ObjectFlags.Reference) {
                 Debug.assert(!!(type.flags & TypeFlags.Object));
-                if (!isUnfoldableType(type) && canUnfoldType(type, context)) {
+                if (canUnfoldType(type, context)) {
                     context.depth += 1;
-                    return createAnonymousTypeNode(type as TypeReference, /*forceClassExpansion*/ true);
+                    return createAnonymousTypeNode(type as TypeReference, /*forceClassExpansion*/ true, /*forceExpansion*/ true);
                 }
                 return (type as TypeReference).node ? visitAndTransformType(type as TypeReference, typeReferenceToTypeNode) : typeReferenceToTypeNode(type as TypeReference);
             }
@@ -6683,7 +6686,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (objectFlags & ObjectFlags.ClassOrInterface && canUnfoldType(type, context)) {
                     context.depth += 1;
-                    return createAnonymousTypeNode(type as InterfaceType, /*forceClassExpansion*/ true);
+                    return createAnonymousTypeNode(type as InterfaceType, /*forceClassExpansion*/ true, /*forceExpansion*/ true);
                 }
                 // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                 if (type.symbol) {
@@ -6892,7 +6895,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return result;
             }
 
-            function createAnonymousTypeNode(type: ObjectType, forceClassExpansion = false): TypeNode {
+            function createAnonymousTypeNode(type: ObjectType, forceClassExpansion = false, forceExpansion = false): TypeNode {
                 const typeId = type.id;
                 const symbol = type.symbol;
                 if (symbol) {
@@ -6925,7 +6928,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     // Always use 'typeof T' for type of class, enum, and module objects
                     else if (
-                        symbol.flags & SymbolFlags.Class
+                        !forceExpansion && 
+                        (symbol.flags & SymbolFlags.Class
                             && !forceClassExpansion
                             && !getBaseTypeVariableOfClass(symbol)
                             && !(symbol.valueDeclaration
@@ -6934,7 +6938,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 && (!isClassDeclaration(symbol.valueDeclaration)
                                     || isSymbolAccessible(symbol, context.enclosingDeclaration, isInstanceType, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible))
                         || symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)
-                        || shouldWriteTypeOfFunctionSymbol()
+                        || shouldWriteTypeOfFunctionSymbol())
                     ) {
                         if (canUnfoldType(type, context)) {
                             context.depth += 1;
@@ -8025,7 +8029,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
             const constraintNode = constraint && typeToTypeNodeHelperWithPossibleReusableTypeNode(constraint, getConstraintDeclaration(type), context);
-            return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
+            const typeParam = typeParameterToDeclarationWithConstraint(type, context, constraintNode);
+            return typeParam;
         }
 
         function typePredicateToTypePredicateNodeHelper(typePredicate: TypePredicate, context: NodeBuilderContext): TypePredicateNode {

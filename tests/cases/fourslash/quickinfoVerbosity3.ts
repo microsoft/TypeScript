@@ -33,10 +33,14 @@
 ////     prop!: T
 //// }
 
+// @Filename: c.ts
+//// class c5b { public foo() { } }
+//// namespace c5b/*5*/ { export var y = 2; }
 
 verify.baselineQuickInfo({
     "1": [0, 1],
     "2": [0, 1, 2],
     "3": [0, 1],
-    "4": [0, 1],
+    "4": [0, 1, 2],
+    "5": [0, 1, 2],
 });

@@ -3,7 +3,7 @@
 // enum Color {
 //      ^^^^^
 // | ----------------------------------------------------------------------
-// | enum {
+// | enum Color {
 // |     readonly [x: number]: string;
 // |     readonly Red: Color.Red;
 // |     readonly Green: Color.Green;
@@ -71,6 +71,14 @@
         {
           "text": "enum",
           "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Color",
+          "kind": "enumName"
         },
         {
           "text": " ",

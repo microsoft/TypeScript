@@ -19,7 +19,7 @@
 // import { Color } from "./0";
 //          ^^^^^
 // | ----------------------------------------------------------------------
-// | (alias) enum {
+// | (alias) enum Color {
 // |     readonly [x: number]: string;
 // |     readonly Red: Color.Red;
 // |     readonly Green: Color.Green;
@@ -988,6 +988,14 @@
           "kind": "space"
         },
         {
+          "text": "Color",
+          "kind": "aliasName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
           "text": "{",
           "kind": "punctuation"
         },
@@ -1077,7 +1085,7 @@
         },
         {
           "text": "Color",
-          "kind": "enumName"
+          "kind": "aliasName"
         },
         {
           "text": ".",
@@ -1121,7 +1129,7 @@
         },
         {
           "text": "Color",
-          "kind": "enumName"
+          "kind": "aliasName"
         },
         {
           "text": ".",
@@ -1165,7 +1173,7 @@
         },
         {
           "text": "Color",
-          "kind": "enumName"
+          "kind": "aliasName"
         },
         {
           "text": ".",

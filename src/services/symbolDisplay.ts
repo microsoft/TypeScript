@@ -456,19 +456,24 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             displayParts.push(keywordPart(SyntaxKind.ClassKeyword));
         }
         displayParts.push(spacePart());
-        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
+        addFullSymbolName(symbol);
+        writeTypeParametersOfSymbol(symbol, sourceFile);
+        tryUnfoldSymbol(symbol);
     }
     if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
         displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
         displayParts.push(spacePart());
-        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
+        addFullSymbolName(symbol);
+        writeTypeParametersOfSymbol(symbol, sourceFile);
+        tryUnfoldSymbol(symbol);
     }
     if ((symbolFlags & SymbolFlags.TypeAlias) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
         displayParts.push(spacePart());
-        addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
+        addFullSymbolName(symbol);
+        writeTypeParametersOfSymbol(symbol, sourceFile);
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
@@ -493,6 +498,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(keywordPart(SyntaxKind.EnumKeyword));
         displayParts.push(spacePart());
         addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined);
+        tryUnfoldSymbol(symbol);
     }
     if (symbolFlags & SymbolFlags.Module && !isThisExpression) {
         prefixNextMeaning();
@@ -501,6 +507,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
         displayParts.push(spacePart());
         addFullSymbolName(symbol);
+        tryUnfoldSymbol(symbol);
     }
     if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
         prefixNextMeaning();
@@ -512,7 +519,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         if (symbol.parent) {
             // Class/Interface type parameter
             addInPrefix();
-            addFullSymbolName(symbol.parent, enclosingDeclaration); // >> TODO: review this case
+            addFullSymbolName(symbol.parent, enclosingDeclaration);
             writeTypeParametersOfSymbol(symbol.parent, enclosingDeclaration);
         }
         else {
@@ -541,7 +548,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     addInPrefix();
                     displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                     displayParts.push(spacePart());
-                    addFullSymbolName(declaration.symbol, /*enclosingDeclaration*/ undefined, /*writeTypeParameters*/ true);
+                    addFullSymbolName(declaration.symbol);
+                    writeTypeParametersOfSymbol(symbol, sourceFile);
                 }
             }
         }
@@ -840,10 +848,24 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         return typeChecker.getTypeOfSymbolAtLocation(symbol, location);
     }
 
-    function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node, writeTypeParameters = false) {
+    function tryUnfoldSymbol(symbol: Symbol) {
+        let unfoldType;
+        if (unfoldType = canUnfoldSymbol(symbol, typeWriterOut)) {
+            const expandedDisplayParts = typeToDisplayParts(
+                typeChecker,
+                unfoldType,
+                enclosingDeclaration || sourceFile,
+                /*flags*/ undefined,
+                verbosityLevel,
+                typeWriterOut,
+            );
+            displayParts.push(spacePart());
+            addRange(displayParts, expandedDisplayParts);
+        }
+    }
+
+    function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
         let indexInfos;
-        const originalSymbol = symbolToDisplay;
-        let hasWrittenTypeParameters = false;
         if (alias && symbolToDisplay === symbol) {
             symbolToDisplay = alias;
         }
@@ -870,32 +892,11 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
             fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.CloseBracketToken));
         }
         else {
-            let unfoldType;
-            if (unfoldType = canUnfoldSymbol(originalSymbol, typeWriterOut)) {
-                if (writeTypeParameters) {
-                    writeTypeParametersOfSymbol(originalSymbol, sourceFile);
-                    hasWrittenTypeParameters = true;
-                }
-                fullSymbolDisplayParts = typeToDisplayParts(
-                    typeChecker,
-                    unfoldType,
-                    enclosingDeclaration || sourceFile,
-                    /*flags*/ undefined,
-                    verbosityLevel,
-                    typeWriterOut,
-                )
-            }
-            else {
-                fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
-            }
+            fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
         }
         addRange(displayParts, fullSymbolDisplayParts);
         if (symbol.flags & SymbolFlags.Optional) {
             displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
-        }
-
-        if (!hasWrittenTypeParameters && writeTypeParameters) {
-            writeTypeParametersOfSymbol(originalSymbol, sourceFile);
         }
     }
 
