@@ -150,7 +150,8 @@ func parseOwnConfigOfJsonSourceFile(
 				}
 			} else if keyText != "" {
 				if parentOption.ElementOptions != nil {
-					propertySetErrors = append(propertySetErrors, ast.NewCompilerDiagnostic(diagnostics.Option_build_must_be_the_first_command_line_argument, keyText))
+					// !!! TODO: support suggestion
+					propertySetErrors = append(propertySetErrors, createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, propertyAssignment.Name(), diagnostics.Unknown_compiler_option_0, keyText))
 				} else {
 					// errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Unknown_compiler_option_0_Did_you_mean_1, keyText, core.FindKey(parentOption.ElementOptions, keyText)))
 				}
@@ -516,21 +517,24 @@ func convertOptionsFromJson[O optionParser](optionsNameMap map[string]*CommandLi
 	var errors []*ast.Diagnostic
 	for key, value := range jsonMap.Entries() {
 		opt, ok := optionsNameMap[key]
+		if !ok {
+			// !!! TODO?: support suggestion
+			errors = append(errors, ast.NewCompilerDiagnostic(diagnostics.Unknown_compiler_option_0, key))
+			continue
+		}
+
 		commandLineOptionEnumMapVal := opt.EnumMap()
 		if commandLineOptionEnumMapVal != nil {
 			val, ok := commandLineOptionEnumMapVal.Get(strings.ToLower(value.(string)))
 			if ok {
 				errors = result.ParseOption(key, val)
 			}
-		} else if ok {
+		} else {
 			convertJson, err := convertJsonOption(opt, value, basePath, nil, nil, nil)
 			errors = append(errors, err...)
 			compilerOptionsErr := result.ParseOption(key, convertJson)
 			errors = append(errors, compilerOptionsErr...)
 		}
-		// else {
-		//     errors.push(createUnknownOptionError(id, diagnostics));
-		// }
 	}
 	return result, errors
 }

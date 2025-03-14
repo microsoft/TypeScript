@@ -471,6 +471,19 @@ var parseJsonConfigFileTests = []struct {
 			allFileList:    map[string]string{"/tsconfig.base.json": tsconfigWithExtendsAndConfigDir, "/src/index.ts": "", "/src/app.ts": "", "/node_modules/module.ts": "", "/dist/output.js": ""},
 		}},
 	},
+	{
+		title: "reports error for an unknown option",
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"unknown": true
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
 }
 
 var tsconfigWithExtends = `{
