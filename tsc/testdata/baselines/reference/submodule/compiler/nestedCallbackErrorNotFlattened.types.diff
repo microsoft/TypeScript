@@ -1,0 +1,10 @@
+--- old.nestedCallbackErrorNotFlattened.types
++++ new.nestedCallbackErrorNotFlattened.types
+@@= skipped -2, +2 lines =@@
+ === nestedCallbackErrorNotFlattened.ts ===
+ type Cb<T> = {noAlias: () => T}["noAlias"]; // `"noAlias"` here prevents an alias symbol from being made
+ >Cb : () => T
++>T : T
+ >noAlias : () => T
+ 
+ // which means the comparison will definitely be structural, rather than by variance

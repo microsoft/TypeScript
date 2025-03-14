@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/types/localTypes/localTypes5.ts] ////
+
+=== localTypes5.ts ===
+function foo<A>() {
+>foo : <A>() => Y<A, number, boolean, Date, string>
+>A : A
+
+    class X {
+>X : X<A>
+
+        m<B, C>() {
+>m : <B, C>() => Y<A, B, C, Date, string>
+>B : B
+>C : C
+
+            return (function <D>() {
+>(function <D>() {                class Y<E> {                }                return new Y<string>();            })<Date>() : Y<A, B, C, Date, string>
+>(function <D>() {                class Y<E> {                }                return new Y<string>();            }) : <D>() => Y<A, B, C, D, string>
+>function <D>() {                class Y<E> {                }                return new Y<string>();            } : <D>() => Y<A, B, C, D, string>
+>D : D
+
+                class Y<E> {
+>Y : Y<A, B, C, D, E>
+>E : E
+                }
+                return new Y<string>();
+>new Y<string>() : Y<A, B, C, D, string>
+>Y : typeof Y
+
+            })<Date>();
+        }
+    }
+    var x = new X();
+>x : X<A>
+>new X() : X<A>
+>X : typeof X
+
+    return x.m<number, boolean>();
+>x.m<number, boolean>() : Y<A, number, boolean, Date, string>
+>x.m : <B, C>() => Y<A, B, C, Date, string>
+>x : X<A>
+>m : <B, C>() => Y<A, B, C, Date, string>
+}
+var x = foo<void>();
+>x : Y<void, number, boolean, Date, string>
+>foo<void>() : Y<void, number, boolean, Date, string>
+>foo : <A>() => Y<A, number, boolean, Date, string>
+

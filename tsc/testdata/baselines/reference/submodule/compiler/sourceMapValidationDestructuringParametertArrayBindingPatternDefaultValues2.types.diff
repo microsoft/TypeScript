@@ -1,0 +1,106 @@
+--- old.sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.types
++++ new.sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.ts ===
+ declare var console: {
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ 
+     log(msg: any): void;
+ >log : (msg: any) => void
+@@= skipped -18, +18 lines =@@
+ >"edging" : "edging"
+ 
+ function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
+->foo1 : ([, skillA]?: Robot) => void
+-> : undefined
++>foo1 : (__0?: Robot) => void
+ >skillA : string[]
+ >["noSkill", "noSkill"] : string[]
+ >"noSkill" : "noSkill"
+@@= skipped -15, +14 lines =@@
+     console.log(skillA);
+ >console.log(skillA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >skillA : string[]
+ }
+ 
+ function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
+->foo2 : ([nameMB]?: Robot) => void
++>foo2 : (__0?: Robot) => void
+ >nameMB : string
+ >"noName" : "noName"
+ >["name", ["skill1", "skill2"]] : [string, string[]]
+@@= skipped -18, +18 lines =@@
+     console.log(nameMB);
+ >console.log(nameMB) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameMB : string
+ }
+ 
+ function foo3([nameMA = "noName", [
+->foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
++>foo3 : (__0: Robot) => void
+ >nameMA : string
+ >"noName" : "noName"
+ 
+@@= skipped -26, +26 lines =@@
+     console.log(nameMA);
+ >console.log(nameMA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameMA : string
+ }
+ 
+ foo1(robotA);
+ >foo1(robotA) : void
+->foo1 : ([, skillA]?: Robot) => void
++>foo1 : (__0?: Robot) => void
+ >robotA : Robot
+ 
+ foo1(["roomba", ["vacuum", "mopping"]]);
+ >foo1(["roomba", ["vacuum", "mopping"]]) : void
+->foo1 : ([, skillA]?: Robot) => void
++>foo1 : (__0?: Robot) => void
+ >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+ >"roomba" : "roomba"
+ >["vacuum", "mopping"] : string[]
+@@= skipped -21, +21 lines =@@
+ 
+ foo2(robotA);
+ >foo2(robotA) : void
+->foo2 : ([nameMB]?: Robot) => void
++>foo2 : (__0?: Robot) => void
+ >robotA : Robot
+ 
+ foo2(["roomba", ["vacuum", "mopping"]]);
+ >foo2(["roomba", ["vacuum", "mopping"]]) : void
+->foo2 : ([nameMB]?: Robot) => void
++>foo2 : (__0?: Robot) => void
+ >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+ >"roomba" : "roomba"
+ >["vacuum", "mopping"] : string[]
+@@= skipped -14, +14 lines =@@
+ 
+ foo3(robotA);
+ >foo3(robotA) : void
+->foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
++>foo3 : (__0: Robot) => void
+ >robotA : Robot
+ 
+ foo3(["roomba", ["vacuum", "mopping"]]);
+ >foo3(["roomba", ["vacuum", "mopping"]]) : void
+->foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
++>foo3 : (__0: Robot) => void
+ >["roomba", ["vacuum", "mopping"]] : [string, string[]]
+ >"roomba" : "roomba"
+ >["vacuum", "mopping"] : string[]

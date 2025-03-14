@@ -1,0 +1,187 @@
+--- old.narrowingUnionToUnion.types
++++ new.narrowingUnionToUnion.types
+@@= skipped -24, +24 lines =@@
+ 
+ function fx2<T>(x: T | undefined) {
+ >fx2 : <T>(x: T | undefined) => void
++>T : T
+ >x : T | undefined
+ 
+     if (isFalsy(x)) {
+@@= skipped -8, +9 lines =@@
+ >x : T | undefined
+ 
+         x;  // T & Falsy | undefined
+->x : (T & null) | (T & false) | (T & "") | (T & 0) | (T & 0n) | undefined
++>x : T & null | T & "" | T & 0 | T & 0n | T & false | undefined
+     }
+ }
+ 
+ function fx3<T extends string | number>(x: T) {
+ >fx3 : <T extends string | number>(x: T) => void
++>T : T
+ >x : T
+ 
+     if (isFalsy(x)) {
+@@= skipped -14, +15 lines =@@
+ >x : string | number
+ 
+         x;  // T & "" | T & 0
+->x : (T & "") | (T & 0)
++>x : T & "" | T & 0
+     }
+ }
+ 
+@@= skipped -50, +50 lines =@@
+ 
+ function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
+ >fx5 : <T extends X>(obj: X | YS, c: typeof XS | typeof Y) => void
++>T : T
+ >obj : X | YS
+ >c : typeof XS | typeof Y
+->XS : typeof XS
+->Y : typeof Y
+ 
+     if (obj instanceof c) {
+ >obj instanceof c : boolean
+@@= skipped -108, +107 lines =@@
+ 
+ declare function isEmptyArray<T>(value: T[]): value is [];
+ >isEmptyArray : <T>(value: T[]) => value is []
++>T : T
+ >value : T[]
+ 
+ declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
+ >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
++>T : T
+ >value : T[] | null | undefined
+ 
+ const TEST_CASES = [
+->TEST_CASES : (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[]
+->[    (value: string) => {        if (isEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }        if (isMaybeEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }    },    (value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    },    (value: number) => {        if (isZero(value)) {            value;  // 0        }        else {            value;  // number        }        if (isMaybeZero(value)) {            value; // 0        }        else {            value;  // number        }    },    (value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    },    (value: string[]) => {        if (isEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }        if (isMaybeEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }    },    (value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    },] : (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[]
++>TEST_CASES : ((value: string) => void | (value: number) => void | (value: string[]) => void)[]
++>[    (value: string) => {        if (isEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }        if (isMaybeEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }    },    (value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    },    (value: number) => {        if (isZero(value)) {            value;  // 0        }        else {            value;  // number        }        if (isMaybeZero(value)) {            value; // 0        }        else {            value;  // number        }    },    (value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    },    (value: string[]) => {        if (isEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }        if (isMaybeEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }    },    (value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    },] : ((value: string) => void | (value: number) => void | (value: string[]) => void)[]
+ 
+     (value: string) => {
+ >(value: string) => {        if (isEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }        if (isMaybeEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }    } : (value: string) => void
+@@= skipped -40, +42 lines =@@
+         }
+     },
+     (value?: string) => {
+->(value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    } : (value?: string) => void
++>(value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    } : (value?: string | undefined) => void
+ >value : string | undefined
+ 
+         if (isMaybeEmptyString(value)) {
+@@= skipped -46, +46 lines =@@
+         }
+     },
+     (value?: number) => {
+->(value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    } : (value?: number) => void
++>(value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    } : (value?: number | undefined) => void
+ >value : number | undefined
+ 
+         if (isMaybeZero(value)) {
+@@= skipped -46, +46 lines =@@
+         }
+     },
+     (value?: string[]) => {
+->(value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    } : (value?: string[]) => void
++>(value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    } : (value?: string[] | undefined) => void
+ >value : string[] | undefined
+ 
+         if (isMaybeEmptyArray(value)) {
+@@= skipped -24, +24 lines =@@
+ >EmptyString : EmptyString
+ 
+ function isEmpty(value: string | EmptyString): value is EmptyString {
+->isEmpty : (value: string | EmptyString) => value is EmptyString
++>isEmpty : (value: string | null | undefined) => value is EmptyString
+ >value : string | null | undefined
+ 
+     return value === '' || value === null || value === undefined;
+@@= skipped -21, +21 lines =@@
+ 
+ if (isEmpty(test)) {
+ >isEmpty(test) : boolean
+->isEmpty : (value: string | EmptyString) => value is EmptyString
++>isEmpty : (value: string | null | undefined) => value is EmptyString
+ >test : string | null | undefined
+ 
+     test;  // EmptyString
+@@= skipped -11, +11 lines =@@
+ 
+ declare function assert<T>(value: any): asserts value is T
+ >assert : <T>(value: any) => asserts value is T
++>T : T
+ >value : any
+ 
+ function test1(foo: number | string | boolean) {
+->test1 : (foo: number | string | boolean) => void
++>test1 : (foo: string | number | boolean) => void
+ >foo : string | number | boolean
+ 
+     assert<1 | string>(foo);
+@@= skipped -18, +19 lines =@@
+ // Repro from #46909
+ 
+ function check1(x: unknown): x is (string | 0) {
+->check1 : (x: unknown) => x is (string | 0)
++>check1 : (x: unknown) => x is string | 0
+ >x : unknown
+ 
+ 	return typeof x === "string" || x === 0;
+ >typeof x === "string" || x === 0 : boolean
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"string" : "string"
+ >x === 0 : boolean
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ function check2(x: unknown): x is ("hello" | 0) {
+->check2 : (x: unknown) => x is ("hello" | 0)
++>check2 : (x: unknown) => x is "hello" | 0
+ >x : unknown
+ 
+ 	return x === "hello" || x === 0;
+@@= skipped -20, +20 lines =@@
+ 	if (typeof x === "string" || x === 0) {
+ >typeof x === "string" || x === 0 : boolean
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"string" : "string"
+ >x === 0 : boolean
+@@= skipped -20, +20 lines =@@
+ >0 : 0
+ 
+ 			x;  // 0 | "hello"
+->x : 0 | "hello"
++>x : "hello" | 0
+ 		}
+ 	}
+ 	if (check1(x)) {
+ >check1(x) : boolean
+->check1 : (x: unknown) => x is (string | 0)
++>check1 : (x: unknown) => x is string | 0
+ >x : unknown
+ 
+ 		x;  // string | 0
+@@= skipped -13, +13 lines =@@
+ 
+ 		if (check2(x)) {
+ >check2(x) : boolean
+->check2 : (x: unknown) => x is ("hello" | 0)
++>check2 : (x: unknown) => x is "hello" | 0
+ >x : string | 0
+ 
+ 			x;  // 0 | "hello"
+->x : 0 | "hello"
++>x : "hello" | 0
+ 		}
+ 	}
+ }

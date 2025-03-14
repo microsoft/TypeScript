@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassLikeHeuristic.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/35801
+let A;
+>A : any
+
+A = {};
+>A = {} : {}
+>A : any
+>{} : {}
+
+A.prototype.b = {};
+>A.prototype.b = {} : {}
+>A.prototype.b : any
+>A.prototype : any
+>A : any
+>prototype : any
+>b : any
+>{} : {}
+

@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.ts] ////
+
+=== main.ts ===
+import { fa } from "ext";
+>fa : () => A
+
+import { fa as fa2 } from "ext/other";
+>fa : () => A2
+>fa2 : () => A2
+
+export const va = fa();
+>va : A
+>fa() : A
+>fa : () => A
+
+export const va2 = fa2();
+>va2 : A2
+>fa2() : A2
+>fa2 : () => A2
+
+=== node_modules/ext/index.d.ts ===
+export interface A {}
+>A : A
+
+export function fa(): A;
+>fa : () => A
+
+=== node_modules/ext/other.d.ts ===
+export interface A2 {}
+>A2 : A2
+
+export function fa(): A2;
+>fa : () => A2
+

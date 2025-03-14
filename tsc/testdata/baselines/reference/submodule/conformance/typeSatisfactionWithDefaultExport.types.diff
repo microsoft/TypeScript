@@ -1,0 +1,25 @@
+--- old.typeSatisfactionWithDefaultExport.types
++++ new.typeSatisfactionWithDefaultExport.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfactionWithDefaultExport.ts] ////
+ 
+-=== ./a.ts ===
++=== a.ts ===
+ interface Foo {
++>Foo : Foo
++
+     a: number;
+ >a : number
+ }
+@@= skipped -8, +10 lines =@@
+ >{} satisfies Foo : {}
+ >{} : {}
+ 
+-=== ./b.ts ===
++=== b.ts ===
+ interface Foo {
++>Foo : Foo
++
+     a: number;
+ >a : number
+ }

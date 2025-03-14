@@ -1,0 +1,31 @@
+--- old.moduleWithNoValuesAsType.types
++++ new.moduleWithNoValuesAsType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === moduleWithNoValuesAsType.ts ===
+ module A { }
++>A : any
++
+ var a: A; // error
+ >a : A
+ 
+ module B {
++>B : any
++
+     interface I {}
++>I : I
+ }
+ var b: B; // error
+ >b : B
+ 
+ module C {
++>C : any
++
+     module M {
++>M : any
++
+         interface I {}
++>I : I
+     }
+ }
+ 

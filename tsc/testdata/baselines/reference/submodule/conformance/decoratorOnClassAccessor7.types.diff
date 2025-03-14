@@ -1,0 +1,17 @@
+--- old.decoratorOnClassAccessor7.types
++++ new.decoratorOnClassAccessor7.types
+@@= skipped -2, +2 lines =@@
+ === decoratorOnClassAccessor7.ts ===
+ declare function dec1<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+ >dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
++>T : T
+ >target : any
+ >propertyKey : string
+ >descriptor : TypedPropertyDescriptor<T>
+ 
+ declare function dec2<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+ >dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
++>T : T
+ >target : any
+ >propertyKey : string
+ >descriptor : TypedPropertyDescriptor<T>

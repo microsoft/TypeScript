@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge02.ts] ////
+
+=== m1.ts ===
+export default class Decl {
+>Decl : default
+}
+
+export interface Decl {
+>Decl : Decl
+
+    p1: number;
+>p1 : number
+
+    p2: number;
+>p2 : number
+}
+
+export namespace Decl {
+>Decl : any
+
+    interface I {
+>I : I
+    }
+}
+
+=== m2.ts ===
+import Entity from "m1"
+>Entity : any
+
+Entity();
+>Entity() : any
+>Entity : any
+
+var x: Entity;
+>x : Entity
+
+var y: Entity.I;
+>y : I
+>Entity : any
+
+var z = new Entity();
+>z : any
+>new Entity() : any
+>Entity : any
+
+var sum = z.p1 + z.p2
+>sum : any
+>z.p1 + z.p2 : any
+>z.p1 : any
+>z : any
+>p1 : any
+>z.p2 : any
+>z : any
+>p2 : any
+

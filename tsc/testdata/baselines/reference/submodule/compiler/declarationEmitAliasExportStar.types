@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
+
+=== thingB.ts ===
+export interface ThingB { }
+>ThingB : ThingB
+
+=== things.ts ===
+
+export * from "./thingB";
+=== index.ts ===
+import * as things from "./things";
+>things : typeof import("things")
+
+export const thing2 = (param: things.ThingB) => null;
+>thing2 : (param: ThingB) => any
+>(param: things.ThingB) => null : (param: ThingB) => any
+>param : ThingB
+>things : any
+

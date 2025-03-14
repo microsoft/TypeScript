@@ -1,0 +1,19 @@
+--- old.nestedInfinitelyExpandedRecursiveTypes.types
++++ new.nestedInfinitelyExpandedRecursiveTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === nestedInfinitelyExpandedRecursiveTypes.ts ===
+ interface F<T> {
++>F : F<T>
++>T : T
++
+       t: G<F<() => T>>;
+ >t : G<F<() => T>>
+ }
+ interface G<U> {
++>G : G<U>
++>U : U
++
+       t: G<G<() => U>>;
+ >t : G<G<() => U>>
+ }

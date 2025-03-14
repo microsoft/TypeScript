@@ -1,0 +1,60 @@
+--- old.typeParameterAssignability2.types
++++ new.typeParameterAssignability2.types
+@@= skipped -4, +4 lines =@@
+ 
+ function foo<T, U extends T>(t: T, u: U) {
+ >foo : <T, U extends T>(t: T, u: U) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -16, +18 lines =@@
+ 
+ function foo2<T extends U, U>(t: T, u: U) {
+ >foo2 : <T extends U, U>(t: T, u: U) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -16, +18 lines =@@
+ 
+ function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
+ >foo3 : <T extends U, U extends V, V>(t: T, u: U, v: V) => void
++>T : T
++>U : U
++>V : V
+ >t : T
+ >u : U
+ >v : V
+@@= skipped -37, +40 lines =@@
+ 
+ function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
+ >foo4 : <T extends U, U extends V, V extends Date>(t: T, u: U, v: V) => void
++>T : T
++>U : U
++>V : V
+ >t : T
+ >u : U
+ >v : V
+@@= skipped -74, +77 lines =@@
+ // same as foo4 with different type parameter ordering
+ function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
+ >foo5 : <V extends Date, U extends V, T extends U>(t: T, u: U, v: V) => void
++>V : V
++>U : U
++>T : T
+ >t : T
+ >u : U
+ >v : V
+@@= skipped -73, +76 lines =@@
+ 
+ function foo6<T extends U, U, V>(t: T, u: U, v: V) {
+ >foo6 : <T extends U, U, V>(t: T, u: U, v: V) => void
++>T : T
++>U : U
++>V : V
+ >t : T
+ >u : U
+ >v : V

@@ -1,0 +1,22 @@
+--- old.contextuallyTypeArgumentsKeyword.types
++++ new.contextuallyTypeArgumentsKeyword.types
+@@= skipped -2, +2 lines =@@
+ === foo.js ===
+ // Repro for #16585
+ const x = {
+->x : { bar(): void; }
+->{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar(): void; }
++>x : { bar: () => void; }
++>{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar: () => void; }
+ 
+     bar() {
+ >bar : () => void
+@@= skipped -9, +9 lines =@@
+         setTimeout(function() { arguments }, 0);
+ >setTimeout(function() { arguments }, 0) : number
+ >setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+->function() { arguments } : (...args: any[]) => void
++>function() { arguments } : () => void
+ >arguments : IArguments
+ >0 : 0
+     }

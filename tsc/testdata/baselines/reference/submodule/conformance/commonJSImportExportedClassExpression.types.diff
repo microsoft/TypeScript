@@ -1,0 +1,43 @@
+--- old.commonJSImportExportedClassExpression.types
++++ new.commonJSImportExportedClassExpression.types
+@@= skipped -1, +1 lines =@@
+ 
+ === main.js ===
+ const { K } = require("./mod1");
+->K : typeof K
+->require("./mod1") : typeof import("mod1")
++>K : any
++>require("./mod1") : any
+ >require : any
+ >"./mod1" : "./mod1"
+ 
+ /** @param {K} k */
+ function f(k) {
+->f : (k: K) => void
+->k : K
++>f : (k: any) => void
++>k : any
+ 
+     k.values()
+->k.values() : void
+->k.values : () => void
+->k : K
+->values : () => void
++>k.values() : any
++>k.values : any
++>k : any
++>values : any
+ }
+ 
+ === mod1.js ===
+ exports.K = class K {
+ >exports.K = class K {    values() {    }} : typeof K
+->exports.K : typeof K
+->exports : typeof import("mod1")
+->K : typeof K
++>exports.K : any
++>exports : any
++>K : any
+ >class K {    values() {    }} : typeof K
+ >K : typeof K
+ 

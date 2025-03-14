@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/declarationEmit/leaveOptionalParameterAsWritten.ts] ////
+
+=== a.ts ===
+export interface Foo {}
+>Foo : Foo
+
+=== b.ts ===
+import * as a from "./a";
+>a : typeof import("a")
+
+declare global {
+>global : typeof global
+
+  namespace teams {
+>teams : typeof teams
+
+    export namespace calling {
+>calling : typeof calling
+
+      export import Foo = a.Foo;
+>Foo : any
+>a : typeof import("a")
+>Foo : Foo
+    }
+  }
+}
+
+=== c.ts ===
+type Foo = teams.calling.Foo;
+>Foo : Foo
+>teams : any
+>calling : any
+
+export const bar = (p?: Foo) => {}
+>bar : (p?: Foo | undefined) => void
+>(p?: Foo) => {} : (p?: Foo | undefined) => void
+>p : Foo | undefined
+

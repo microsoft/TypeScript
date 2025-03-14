@@ -1,0 +1,31 @@
+--- old.mappedTypeNotMistakenlyHomomorphic.types
++++ new.mappedTypeNotMistakenlyHomomorphic.types
+@@= skipped -7, +7 lines =@@
+ 
+ type Gen<T extends ABC> = { v: T; } & (
+ >Gen : Gen<T>
++>T : T
+ >v : T
+   {
+     v: ABC.A,
+@@= skipped -27, +28 lines =@@
+ //
+ type Gen2<T extends ABC> = {
+ >Gen2 : Gen2<T>
++>T : T
+ 
+   [Property in keyof Gen<T>]: string;
++>Property : Property
++
+ };
+ 
+ // 'a' and 'b' properties required !?!?
+@@= skipped -25, +28 lines =@@
+ 
+ // 'v' ???
+ type K = keyof Gen2<ABC.A>;
+->K : "v" | "a"
++>K : "a" | "v"
+ >ABC : any
+ 
+ // :(

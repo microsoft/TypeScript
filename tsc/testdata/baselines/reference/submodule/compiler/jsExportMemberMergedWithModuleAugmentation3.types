@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/jsExportMemberMergedWithModuleAugmentation3.ts] ////
+
+=== /x.js ===
+module.exports.x = 1;
+>module.exports.x = 1 : 1
+>module.exports.x : any
+>module.exports : any
+>module : any
+>exports : any
+>x : any
+>1 : 1
+
+module.exports = require("./y.js");
+>module.exports = require("./y.js") : any
+>module.exports : any
+>module : any
+>exports : any
+>require("./y.js") : any
+>require : any
+>"./y.js" : "./y.js"
+
+=== /y.d.ts ===
+export declare type x = 1;
+>x : 1
+

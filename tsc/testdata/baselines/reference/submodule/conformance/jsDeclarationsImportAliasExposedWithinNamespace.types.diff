@@ -1,0 +1,68 @@
+--- old.jsDeclarationsImportAliasExposedWithinNamespace.types
++++ new.jsDeclarationsImportAliasExposedWithinNamespace.types
+@@= skipped -6, +6 lines =@@
+  * @type {Object<string,*>}
+  */
+ const myTypes = {
+->myTypes : { [x: string]: any; }
++>myTypes : {}
+ >{    // SOME PROPS HERE} : {}
+ 
+     // SOME PROPS HERE
+@@= skipped -17, +17 lines =@@
+ /** @typedef {myTypes.typeB|Function} myTypes.typeC */
+ 
+ export {myTypes};
+->myTypes : { [x: string]: any; }
++>myTypes : {}
+ 
+ === file2.js ===
+ import {myTypes} from './file.js';
+->myTypes : { [x: string]: any; }
++>myTypes : {}
+ 
+ /**
+  * @namespace testFnTypes
+@@= skipped -12, +12 lines =@@
+  * @type {Object<string,*>}
+  */
+ const testFnTypes = {
+->testFnTypes : { [x: string]: any; }
++>testFnTypes : {}
+ >{    // SOME PROPS HERE} : {}
+ 
+     // SOME PROPS HERE
+@@= skipped -15, +15 lines =@@
+  * @returns {number|null} Result.
+  */
+ function testFn(input) {
+->testFn : (input: testFnTypes.input) => number | null
+->input : import("file2").testFnTypes.input
++>testFn : (input: any) => number
++>input : any
+ 
+     if (typeof input === 'number') {
+ >typeof input === 'number' : boolean
+->typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->input : import("file2").testFnTypes.input
++>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>input : any
+ >'number' : "number"
+ 
+         return 2 * input;
+ >2 * input : number
+ >2 : 2
+->input : never
++>input : number
+ 
+     } else {
+         return null;
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ export {testFn, testFnTypes};
+->testFn : (input: testFnTypes.input) => number | null
+->testFnTypes : { [x: string]: any; }
++>testFn : (input: any) => number
++>testFnTypes : {}
+ 

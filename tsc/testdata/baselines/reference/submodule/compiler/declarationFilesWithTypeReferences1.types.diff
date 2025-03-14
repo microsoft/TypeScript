@@ -1,0 +1,11 @@
+--- old.declarationFilesWithTypeReferences1.types
++++ new.declarationFilesWithTypeReferences1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /node_modules/@types/node/index.d.ts ===
+ interface Error {
++>Error : Error
++
+     stack2: string;
+ >stack2 : string
+ }

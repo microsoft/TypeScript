@@ -1,0 +1,13 @@
+--- old.jsdocResolveNameFailureInTypedef.types
++++ new.jsdocResolveNameFailureInTypedef.types
+@@= skipped -4, +4 lines =@@
+  * @param {Ty} x
+  */
+ function f(x) {}
+->f : (x: Ty) => void
+->x : CantResolveThis
++>f : (x: any) => void
++>x : any
+ 
+ /**
+  * @typedef {CantResolveThis} Ty

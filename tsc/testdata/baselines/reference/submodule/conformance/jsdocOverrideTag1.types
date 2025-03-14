@@ -1,0 +1,71 @@
+//// [tests/cases/conformance/jsdoc/jsdocOverrideTag1.ts] ////
+
+=== 0.js ===
+class A {
+>A : A
+
+    /**
+     * @method
+     * @param {string | number} a
+     * @returns {boolean}
+     */
+    foo (a) {
+>foo : (a: any) => a is string
+>a : any
+
+        return typeof a === 'string'
+>typeof a === 'string' : boolean
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>a : any
+>'string' : "string"
+    }
+    bar () {
+>bar : () => void
+
+    }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    /**
+     * @override
+     * @method
+     * @param {string | number} a
+     * @returns {boolean}
+     */
+    foo (a) {
+>foo : (a: any) => a is string
+>a : any
+
+        return super.foo(a)
+>super.foo(a) : boolean
+>super.foo : (a: any) => a is string
+>super : A
+>foo : (a: any) => a is string
+>a : any
+    }
+
+    bar () {
+>bar : () => void
+
+    }
+
+    /** @override */
+    baz () {
+>baz : () => void
+
+    }
+}
+
+
+class C {
+>C : C
+
+    /** @override */
+    foo () {
+>foo : () => void
+
+    }
+}

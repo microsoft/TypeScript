@@ -1,0 +1,10 @@
+--- old.typeParametersInStaticAccessors.types
++++ new.typeParametersInStaticAccessors.types
+@@= skipped -2, +2 lines =@@
+ === typeParametersInStaticAccessors.ts ===
+ class foo<T> {
+ >foo : foo<T>
++>T : T
+ 
+     static get Foo(): () => T { return null; }
+ >Foo : () => T

@@ -1,0 +1,17 @@
+--- old.reverseMappedTypeAssignableToIndex.types
++++ new.reverseMappedTypeAssignableToIndex.types
+@@= skipped -3, +3 lines =@@
+ // Simple mapped type and inferrence
+ type Mapped<T> = { [K in keyof T]: { name: T[K] } };
+ >Mapped : Mapped<T>
++>T : T
++>K : K
+ >name : T[K]
+ 
+ type InferFromMapped<T> = T extends Mapped<infer R> ? R : never;
+ >InferFromMapped : InferFromMapped<T>
++>T : T
++>R : R
+ 
+ // Object literal type and associated mapped type
+ // Note that in the real code we don't have a direct reference to LiteralType

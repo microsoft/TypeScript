@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/typeInferenceWithExcessPropertiesJsx.tsx] ////
+
+=== typeInferenceWithExcessPropertiesJsx.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React = require('react');
+>React : any
+
+type TranslationEntry = {
+>TranslationEntry : TranslationEntry
+
+    args: [] | [unknown];
+>args : [] | [unknown]
+}
+type Translations = {
+>Translations : Translations
+
+    a: { args: [string] },
+>a : { args: [string]; }
+>args : [string]
+
+    b: { args: [] }
+>b : { args: []; }
+>args : []
+}
+type TProps<Entry extends TranslationEntry> = {
+>TProps : TProps<Entry>
+>Entry : Entry
+
+    getTranslationEntry: (allTranslations: Translations) => Entry,
+>getTranslationEntry : (allTranslations: Translations) => Entry
+>allTranslations : Translations
+
+} & (Entry["args"] extends [unknown] ? {
+    args: Entry["args"][0]
+>args : Entry["args"][0]
+
+} : {});
+
+declare function T<Entry extends TranslationEntry>(
+>T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
+>Entry : Entry
+
+    props: TProps<Entry>
+>props : TProps<Entry>
+
+): JSX.Element;
+>JSX : any
+
+<T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />
+><T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" /> : any
+>T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
+>getTranslationEntry : any
+>(allTranslations) => allTranslations.a : (allTranslations: any) => any
+>allTranslations : any
+>allTranslations.a : any
+>allTranslations : any
+>a : any
+>args : any
+

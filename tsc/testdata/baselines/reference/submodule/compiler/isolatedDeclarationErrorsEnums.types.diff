@@ -1,0 +1,62 @@
+--- old.isolatedDeclarationErrorsEnums.types
++++ new.isolatedDeclarationErrorsEnums.types
+@@= skipped -49, +49 lines =@@
+ 
+ 
+ enum Flag {
+->Flag : Flag
++>Flag : Flag.A
+ 
+     A = 1 >> 1,
+ >A : Flag.A
+@@= skipped -23, +23 lines =@@
+     AB = A | B,
+ >AB : Flag.A
+ >A | B : number
+->A : Flag
+->B : Flag
++>A : Flag.A
++>B : Flag.A
+ 
+     ABC = Flag.AB | C,
+ >ABC : Flag.A
+ >Flag.AB | C : number
+->Flag.AB : Flag
++>Flag.AB : Flag.A
+ >Flag : typeof Flag
+->AB : Flag
+->C : Flag
++>AB : Flag.A
++>C : Flag.A
+ 
+     AC = Flag["A"] | C,
+ >AC : Flag.A
+ >Flag["A"] | C : number
+->Flag["A"] : Flag
++>Flag["A"] : Flag.A
+ >Flag : typeof Flag
+ >"A" : "A"
+->C : Flag
++>C : Flag.A
+ }
+ 
+ const EV = 1;
+@@= skipped -40, +40 lines =@@
+     ABCD = Flag.ABC | D,
+ >ABCD : ExtFlags.D
+ >Flag.ABC | D : number
+->Flag.ABC : Flag
++>Flag.ABC : Flag.A
+ >Flag : typeof Flag
+->ABC : Flag
++>ABC : Flag.A
+ >D : ExtFlags.D
+ 
+     AC = Flag["A"] | D,
+ >AC : ExtFlags.D
+ >Flag["A"] | D : number
+->Flag["A"] : Flag
++>Flag["A"] : Flag.A
+ >Flag : typeof Flag
+ >"A" : "A"
+ >D : ExtFlags.D

@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault4.ts] ////
+
+=== multipleExportDefault4.ts ===
+export default class C { }
+>C : default
+
+export default {
+>{    uhoh: "another default",} : { uhoh: string; }
+
+    uhoh: "another default",
+>uhoh : string
+>"another default" : "another default"
+
+};

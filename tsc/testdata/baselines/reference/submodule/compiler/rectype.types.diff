@@ -1,0 +1,55 @@
+--- old.rectype.types
++++ new.rectype.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     interface I { (i:I):I; }
++>I : I
+ >i : I
+ 
+     export function f(p: I) { return f };
+->f : (p: I) => typeof f
++>f : (p: I) => ???
+ >p : I
+->f : (p: I) => typeof f
++>f : (p: I) => ???
+ 
+     var i:I;
+ >i : I
+ 
+     f(i);
+->f(i) : (p: I) => typeof f
+->f : (p: I) => typeof f
++>f(i) : (p: I) => ???
++>f : (p: I) => ???
+ >i : I
+ 
+     f(f(i));
+->f(f(i)) : (p: I) => typeof f
+->f : (p: I) => typeof f
+->f(i) : (p: I) => typeof f
+->f : (p: I) => typeof f
++>f(f(i)) : (p: I) => ???
++>f : (p: I) => ???
++>f(i) : (p: I) => ???
++>f : (p: I) => ???
+ >i : I
+ 
+     f((f(f(i))));
+->f((f(f(i)))) : (p: I) => typeof f
+->f : (p: I) => typeof f
+->(f(f(i))) : (p: I) => typeof f
+->f(f(i)) : (p: I) => typeof f
+->f : (p: I) => typeof f
+->f(i) : (p: I) => typeof f
+->f : (p: I) => typeof f
++>f((f(f(i)))) : (p: I) => ???
++>f : (p: I) => ???
++>(f(f(i))) : (p: I) => ???
++>f(f(i)) : (p: I) => ???
++>f : (p: I) => ???
++>f(i) : (p: I) => ???
++>f : (p: I) => ???
+ >i : I
+ }
+ 

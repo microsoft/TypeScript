@@ -1,0 +1,11 @@
+--- old.decrementOperatorWithEnumType.types
++++ new.decrementOperatorWithEnumType.types
+@@= skipped -6, +6 lines =@@
+ >ENUM1 : ENUM1
+ >A : ENUM1.A
+ >B : ENUM1.B
+->"" : (typeof ENUM1)[""]
++>"" : ENUM1.""
+ 
+ // expression
+ var ResultIsNumber1 = --ENUM1["A"];

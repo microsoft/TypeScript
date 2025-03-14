@@ -1,0 +1,30 @@
+--- old.discriminantNarrowingCouldBeCircular.types
++++ new.discriminantNarrowingCouldBeCircular.types
+@@= skipped -3, +3 lines =@@
+ // #57705, 57690
+ declare function is<T>(v: T): v is T;
+ >is : <T>(v: T) => v is T
++>T : T
+ >v : T
+ 
+ const o: Record<string, string> | undefined = {};
+@@= skipped -73, +74 lines =@@
+ >parent : SomeRecord | undefined
+ >!parents.includes(parent.a) : boolean
+ >parents.includes(parent.a) : boolean
+->parents.includes : (searchElement: string, fromIndex?: number) => boolean
++>parents.includes : (searchElement: string, fromIndex?: number | undefined) => boolean
+ >parents : string[]
+->includes : (searchElement: string, fromIndex?: number) => boolean
++>includes : (searchElement: string, fromIndex?: number | undefined) => boolean
+ >parent.a : string
+ >parent : SomeRecord
+ >a : string
+@@= skipped -17, +17 lines =@@
+ 
+ declare function isPlainObject2<T>(
+ >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
++>T : T
+ 
+     data: unknown,
+ >data : unknown

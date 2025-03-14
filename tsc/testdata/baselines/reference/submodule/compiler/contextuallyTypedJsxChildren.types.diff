@@ -1,0 +1,148 @@
+--- old.contextuallyTypedJsxChildren.types
++++ new.contextuallyTypedJsxChildren.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/contextuallyTypedJsxChildren.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === contextuallyTypedJsxChildren.tsx ===
+ /// <reference path="react16.d.ts" />
+ 
+ import React from 'react';
+->React : typeof React
++>React : any
+ 
+ // repro from https://github.com/microsoft/TypeScript/issues/53941
+ declare namespace DropdownMenu {
++>DropdownMenu : ComponentType<Props>
++
+   interface BaseProps {
++>BaseProps : BaseProps
++
+     icon: string;
+ >icon : string
+ 
+@@= skipped -21, +19 lines =@@
+ >label : string
+   }
+   interface PropsWithChildren extends BaseProps {
++>PropsWithChildren : PropsWithChildren
++
+     children(props: { onClose: () => void }): JSX.Element;
+->children : (props: { onClose: () => void; }) => JSX.Element
++>children : (props: { onClose: () => void; }) => Element
+ >props : { onClose: () => void; }
+ >onClose : () => void
+ >JSX : any
+@@= skipped -10, +12 lines =@@
+ >controls : undefined
+   }
+   interface PropsWithControls extends BaseProps {
++>PropsWithControls : PropsWithControls
++
+     controls: Control[];
+ >controls : Control[]
+ 
+@@= skipped -7, +9 lines =@@
+ >children : undefined
+   }
+   interface Control {
++>Control : Control
++
+     title: string;
+ >title : string
+   }
+@@= skipped -7, +9 lines =@@
+ >Props : Props
+ }
+ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
+->DropdownMenu : React.ComponentType<DropdownMenu.Props>
++>DropdownMenu : ComponentType<Props>
+ >React : any
+ >DropdownMenu : any
+ 
+ <DropdownMenu icon="move" label="Select a direction">
+-><DropdownMenu icon="move" label="Select a direction">  {({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}</DropdownMenu> : JSX.Element
+->DropdownMenu : React.ComponentType<DropdownMenu.Props>
+->icon : string
+->label : string
++><DropdownMenu icon="move" label="Select a direction">  {({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}</DropdownMenu> : any
++>DropdownMenu : ComponentType<Props>
++>icon : any
++>label : any
+ 
+   {({ onClose }) => (
+->({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
+->onClose : () => void
+->(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
++>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: any; }) => any
++>onClose : any
++>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : any
+ 
+     <div>
+-><div>      <button onClick={onClose}>Click me</button>    </div> : JSX.Element
++><div>      <button onClick={onClose}>Click me</button>    </div> : any
+ >div : any
+ 
+       <button onClick={onClose}>Click me</button>
+-><button onClick={onClose}>Click me</button> : JSX.Element
++><button onClick={onClose}>Click me</button> : any
+ >button : any
+->onClick : () => void
+->onClose : () => void
++>onClick : any
++>onClose : any
+ >button : any
+ 
+     </div>
+@@= skipped -31, +31 lines =@@
+ 
+   )}
+ </DropdownMenu>;
+->DropdownMenu : React.ComponentType<DropdownMenu.Props>
++>DropdownMenu : ComponentType<Props>
+ 
+ <DropdownMenu
+-><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : JSX.Element
+->DropdownMenu : React.ComponentType<DropdownMenu.Props>
++><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : any
++>DropdownMenu : ComponentType<Props>
+ 
+   icon="move"
+->icon : string
++>icon : any
+ 
+   label="Select a direction"
+->label : string
++>label : any
+ 
+   children={({ onClose }) => (
+->children : ({ onClose }: { onClose: () => void; }) => JSX.Element
+->({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
+->onClose : () => void
+->(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
++>children : any
++>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: any; }) => any
++>onClose : any
++>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : any
+ 
+     <div>
+-><div>      <button onClick={onClose}>Click me</button>    </div> : JSX.Element
++><div>      <button onClick={onClose}>Click me</button>    </div> : any
+ >div : any
+ 
+       <button onClick={onClose}>Click me</button>
+-><button onClick={onClose}>Click me</button> : JSX.Element
++><button onClick={onClose}>Click me</button> : any
+ >button : any
+->onClick : () => void
+->onClose : () => void
++>onClick : any
++>onClose : any
+ >button : any
+ 
+     </div>

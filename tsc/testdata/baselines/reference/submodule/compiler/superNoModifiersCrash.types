@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/superNoModifiersCrash.ts] ////
+
+=== File.js ===
+class Parent {
+>Parent : Parent
+
+    initialize() {
+>initialize : () => string
+
+        super.initialize(...arguments)
+>super.initialize(...arguments) : any
+>super.initialize : any
+>super : any
+>initialize : any
+>...arguments : any
+>arguments : IArguments
+
+        return this.asdf = ''
+>this.asdf = '' : ""
+>this.asdf : any
+>this : this
+>asdf : any
+>'' : ""
+    }
+  }
+
+class Child extends Parent {
+>Child : Child
+>Parent : Parent
+
+    initialize() {
+>initialize : () => void
+    }
+}

@@ -1,0 +1,48 @@
+--- old.declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.types
++++ new.declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.types
+@@= skipped -73, +73 lines =@@
+     }
+ 
+     function foo111(): m2.public2 {
+->foo111 : () => m2.public2
++>foo111 : () => public2
+ >m2 : any
+ 
+         return;
+     }
+     function foo112() {
+->foo112 : () => m2.public2
++>foo112 : () => public2
+ 
+         return new m2.public2();
+->new m2.public2() : m2.public2
+->m2.public2 : typeof m2.public2
++>new m2.public2() : public2
++>m2.public2 : typeof public2
+ >m2 : typeof m2
+->public2 : typeof m2.public2
++>public2 : typeof public2
+     }
+ 
+     export function foo113(): m2.public2 {
+->foo113 : () => m2.public2
++>foo113 : () => public2
+ >m2 : any
+ 
+         return;
+     }
+     export function foo114() {
+->foo114 : () => m2.public2
++>foo114 : () => public2
+ 
+         return new m2.public2();
+->new m2.public2() : m2.public2
+->m2.public2 : typeof m2.public2
++>new m2.public2() : public2
++>m2.public2 : typeof public2
+ >m2 : typeof m2
+->public2 : typeof m2.public2
++>public2 : typeof public2
+     }
+ }
+ 

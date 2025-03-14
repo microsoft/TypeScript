@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/jsdoc/jsdocBindingInUnreachableCode.ts] ////
+
+=== bug27341.js ===
+if (false) {
+>false : false
+
+    /**
+     * @param {string} s
+     */
+    const x = function (s) {
+>x : (s: any) => void
+>function (s) {    } : (s: any) => void
+>s : any
+
+    };
+}
+

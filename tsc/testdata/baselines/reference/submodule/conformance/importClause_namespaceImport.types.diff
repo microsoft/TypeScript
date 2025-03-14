@@ -1,0 +1,55 @@
+--- old.importClause_namespaceImport.types
++++ new.importClause_namespaceImport.types
+@@= skipped -10, +10 lines =@@
+ 
+ export type C<T> = T;
+ >C : T
++>T : T
+ 
+ export const Value = {};
+ >Value : {}
+@@= skipped -7, +8 lines =@@
+ 
+ === /b.ts ===
+ import type * as types from './a';
+->types : typeof types
++>types : typeof import("/a")
+ 
+ types;
+->types : typeof types
++>types : typeof import("/a")
+ 
+ types.Value;
+ >types.Value : {}
+->types : typeof types
++>types : typeof import("/a")
+ >Value : {}
+ 
+ let v: types.Value;
+->v : types.Value
++>v : Value
+ >types : any
+ 
+ const a: types.A = {};
+->a : types.A
++>a : A
+ >types : any
+ >{} : {}
+ 
+ const b: types.B = {};
+->b : types.B
++>b : B
+ >types : any
+ >{} : {}
+ 
+@@= skipped -30, +30 lines =@@
+ >"" : ""
+ 
+ const d = { types };
+->d : { types: typeof types; }
+->{ types } : { types: typeof types; }
+->types : typeof types
++>d : { types: typeof import("/a"); }
++>{ types } : { types: typeof import("/a"); }
++>types : any
+ 

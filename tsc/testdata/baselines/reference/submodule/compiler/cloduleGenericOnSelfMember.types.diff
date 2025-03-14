@@ -1,0 +1,20 @@
+--- old.cloduleGenericOnSelfMember.types
++++ new.cloduleGenericOnSelfMember.types
+@@= skipped -2, +2 lines =@@
+ === cloduleGenericOnSelfMember.ts ===
+ class ServiceBase<T> {
+ >ServiceBase : ServiceBase<T>
++>T : T
+ 
+     field: T;
+ >field : T
+@@= skipped -7, +8 lines =@@
+ class Service extends ServiceBase<typeof Service.Base> {
+ >Service : Service
+ >ServiceBase : ServiceBase<{ name: string; value: number; }>
+->Service.Base : { name: string; value: number; }
+ >Service : typeof Service
+->Base : { name: string; value: number; }
+ }
+ namespace Service {
+ >Service : typeof Service

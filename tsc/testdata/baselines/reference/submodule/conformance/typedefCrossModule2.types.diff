@@ -1,0 +1,91 @@
+--- old.typedefCrossModule2.types
++++ new.typedefCrossModule2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === use.js ===
+ var mod = require('./mod1.js');
+->mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; Baz?: undefined; }
+->require('./mod1.js') : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; Baz?: undefined; }
++>mod : any
++>require('./mod1.js') : any
+ >require : any
+ >'./mod1.js' : "./mod1.js"
+ 
+ /** @type {import("./mod1.js").Baz} */
+ var b;
+->b : number
++>b : any
+ 
+ /** @type {mod.Baz} */
+ var bb;
+->bb : number
++>bb : any
+ 
+ var bbb = new mod.Baz();
+->bbb : Baz
+->new mod.Baz() : Baz
+->mod.Baz : typeof Baz
+->mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; Baz?: undefined; }
+->Baz : typeof Baz
++>bbb : any
++>new mod.Baz() : any
++>mod.Baz : any
++>mod : any
++>Baz : any
+ 
+-=== mod1.js ===
+-// error
+-
+-/** @typedef {number} Foo */
+-class Foo { } // should error
+->Foo : Foo
+-
+-/** @typedef {number} Bar */
+-exports.Bar = class { }
+->exports.Bar = class { } : typeof Bar
+->exports.Bar : typeof Bar
+->exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->Bar : typeof Bar
+->class { } : typeof Bar
+-
+-/** @typedef {number} Baz */
+-module.exports = {
+->module.exports = {    Baz: class { }} : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->module.exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->module : { exports: { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }; }
+->exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->{    Baz: class { }} : { Baz: typeof Baz; }
+-
+-    Baz: class { }
+->Baz : typeof Baz
+->class { } : typeof Baz
+-}
+-
+-// ok
+-
+-/** @typedef {number} Qux */
+-var Qux = 2;
+->Qux : number
+->2 : 2
+-
+-/** @typedef {number} Quid */
+-exports.Quid = 2;
+->exports.Quid = 2 : 2
+->exports.Quid : 2
+->exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->Quid : 2
+->2 : 2
+-
+-/** @typedef {number} Quack */
+-module.exports = {
+->module.exports = {    Quack: 2} : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->module.exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->module : { exports: { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }; }
+->exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; Quack?: undefined; } | { Quack: number; Bar: typeof Bar; Quid: 2; Baz?: undefined; }
+->{    Quack: 2} : { Quack: number; }
+-
+-    Quack: 2
+->Quack : number
+->2 : 2
+-}
+-

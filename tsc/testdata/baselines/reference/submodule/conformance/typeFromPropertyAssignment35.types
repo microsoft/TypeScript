@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment35.ts] ////
+
+=== bug26877.js ===
+/** @param {Emu.D} x */
+function ollKorrect(x) {
+>ollKorrect : (x: any) => void
+>x : any
+
+    x._model
+>x._model : any
+>x : any
+>_model : any
+
+    const y = new Emu.D()
+>y : any
+>new Emu.D() : any
+>Emu.D : any
+>Emu : {}
+>D : any
+
+    const z = Emu.D._wrapperInstance;
+>z : any
+>Emu.D._wrapperInstance : any
+>Emu.D : any
+>Emu : {}
+>D : any
+>_wrapperInstance : any
+}
+Emu.D = class {
+>Emu.D = class {    constructor() {        this._model = 1    }} : typeof D
+>Emu.D : any
+>Emu : {}
+>D : any
+>class {    constructor() {        this._model = 1    }} : typeof D
+
+    constructor() {
+        this._model = 1
+>this._model = 1 : 1
+>this._model : any
+>this : this
+>_model : any
+>1 : 1
+    }
+}
+
+=== second.js ===
+var Emu = {}
+>Emu : {}
+>{} : {}
+
+/** @type {string} */
+Emu.D._wrapperInstance;
+>Emu.D._wrapperInstance : any
+>Emu.D : any
+>Emu : {}
+>D : any
+>_wrapperInstance : any
+
+

@@ -1,0 +1,22 @@
+--- old.differentTypesWithSameName.types
++++ new.differentTypesWithSameName.types
+@@= skipped -10, +10 lines =@@
+ >s : string
+   }
+   export function doSomething(v: m.variable) {
+->doSomething : (v: m.variable) => void
++>doSomething : (v: variable) => void
+ >v : variable
+ >m : any
+     
+@@= skipped -22, +22 lines =@@
+ 
+ m.doSomething(v);
+ >m.doSomething(v) : void
+->m.doSomething : (v: m.variable) => void
++>m.doSomething : (v: variable) => void
+ >m : typeof m
+->doSomething : (v: m.variable) => void
++>doSomething : (v: variable) => void
+ >v : variable
+ 

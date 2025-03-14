@@ -1,0 +1,106 @@
+--- old.spreadObjectOrFalsy.types
++++ new.spreadObjectOrFalsy.types
+@@= skipped -2, +2 lines =@@
+ === spreadObjectOrFalsy.ts ===
+ function f1<T>(a: T & undefined) {
+ >f1 : <T>(a: T & undefined) => any
++>T : T
+ >a : T & undefined
+ 
+     return { ...a };  // Error
+@@= skipped -8, +9 lines =@@
+ }
+ 
+ function f2<T>(a: T | T & undefined) {
+->f2 : <T>(a: T | (T & undefined)) => T | (T & undefined)
+->a : T | (T & undefined)
++>f2 : <T>(a: T | T & undefined) => T | T & undefined
++>T : T
++>a : T | T & undefined
+ 
+     return { ...a };
+->{ ...a } : T | (T & undefined)
+->a : T | (T & undefined)
++>{ ...a } : T | T & undefined
++>a : T | T & undefined
+ }
+ 
+ function f3<T extends undefined>(a: T) {
+ >f3 : <T extends undefined>(a: T) => any
++>T : T
+ >a : T
+ 
+     return { ...a };  // Error
+@@= skipped -18, +20 lines =@@
+ }
+ 
+ function f4<T extends undefined>(a: object | T) {
+->f4 : <T extends undefined>(a: object | T) => {}
+->a : object | T
++>f4 : <T extends undefined>(a: T | object) => {}
++>T : T
++>a : T | object
+ 
+     return { ...a };
+ >{ ...a } : {}
+->a : object | T
++>a : T | object
+ }
+ 
+ function f5<S, T extends undefined>(a: S | T) {
+ >f5 : <S, T extends undefined>(a: S | T) => S | T
++>S : S
++>T : T
+ >a : S | T
+ 
+     return { ...a };
+@@= skipped -19, +22 lines =@@
+ 
+ function f6<T extends object | undefined>(a: T) {
+ >f6 : <T extends object | undefined>(a: T) => T
++>T : T
+ >a : T
+ 
+     return { ...a };
+@@= skipped -10, +11 lines =@@
+ // Repro from #46976
+ 
+ function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
+->g1 : <T extends {}, A extends { z: (T | undefined) & T; }>(a: A) => T
++>g1 : <T extends {}, A extends { z: T; }>(a: A) => T
++>T : T
++>A : A
+ >z : T
+ >a : A
+ 
+@@= skipped -20, +22 lines =@@
+ // Repro from #47028
+ 
+ interface DatafulFoo<T> {
++>DatafulFoo : DatafulFoo<T>
++>T : T
++
+     data: T;
+ >data : T
+ }
+ 
+ class Foo<T extends string> {
+ >Foo : Foo<T>
++>T : T
+ 
+     data: T | undefined;
+ >data : T | undefined
+@@= skipped -21, +25 lines =@@
+ 
+             this.data.toLocaleLowerCase();
+ >this.data.toLocaleLowerCase() : string
+->this.data.toLocaleLowerCase : (locales?: string | string[]) => string
++>this.data.toLocaleLowerCase : (locales?: string | string[] | undefined) => string
+ >this.data : T
+ >this : this & DatafulFoo<T>
+ >data : T
+->toLocaleLowerCase : (locales?: string | string[]) => string
++>toLocaleLowerCase : (locales?: string | string[] | undefined) => string
+         }
+     }
+     hasData(): this is DatafulFoo<T> {

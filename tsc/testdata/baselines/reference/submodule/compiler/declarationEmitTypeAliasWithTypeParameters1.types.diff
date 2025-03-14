@@ -1,0 +1,15 @@
+--- old.declarationEmitTypeAliasWithTypeParameters1.types
++++ new.declarationEmitTypeAliasWithTypeParameters1.types
+@@= skipped -2, +2 lines =@@
+ === declarationEmitTypeAliasWithTypeParameters1.ts ===
+ export type Bar<X, Y> = () => [X, Y];
+ >Bar : Bar<X, Y>
++>X : X
++>Y : Y
+ 
+ export type Foo<Y> = Bar<any, Y>;
+ >Foo : Foo<Y>
++>Y : Y
+ 
+ export const y = (x: Foo<string>) => 1
+ >y : (x: Foo<string>) => number

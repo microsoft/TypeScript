@@ -1,0 +1,16 @@
+--- old.asyncImportedPromise_es6.types
++++ new.asyncImportedPromise_es6.types
+@@= skipped -2, +2 lines =@@
+ === task.ts ===
+ export class Task<T> extends Promise<T> { }
+ >Task : Task<T>
++>T : T
+ >Promise : Promise<T>
+ 
+ === test.ts ===
+@@= skipped -11, +12 lines =@@
+ 
+     async example<T>(): Task<T> { return; }
+ >example : <T>() => Task<T>
++>T : T
+ }

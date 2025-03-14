@@ -1,0 +1,13 @@
+--- old.constEnumNoPreserveDeclarationReexport.types
++++ new.constEnumNoPreserveDeclarationReexport.types
+@@= skipped -18, +18 lines =@@
+ 
+ === ReExport.d.ts ===
+ export { MyConstEnum as default } from './ConstEnum';
+->MyConstEnum : typeof import("ConstEnum").MyConstEnum
+->default : typeof import("ConstEnum").MyConstEnum
++>MyConstEnum : typeof MyConstEnum
++>default : typeof MyConstEnum
+ 
+ === usages.ts ===
+ import {MyConstEnum} from "./ConstEnum";

@@ -1,0 +1,23 @@
+--- old.literalTypeNameAssertionNotTriggered.types
++++ new.literalTypeNameAssertionNotTriggered.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /b.ts ===
+ import a = require('./a');
+->a : typeof a
++>a : typeof import("/a")
+ 
+ declare function f<T>(obj: T, key: keyof T): void;
+ >f : <T>(obj: T, key: keyof T) => void
++>T : T
+ >obj : T
+ >key : keyof T
+ 
+ f(a, "");
+ >f(a, "") : void
+ >f : <T>(obj: T, key: keyof T) => void
+->a : typeof a
++>a : typeof import("/a")
+ >"" : ""
+ 
+ === /a.ts ===

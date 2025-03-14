@@ -1,0 +1,20 @@
+--- old.primitiveConstraints1.types
++++ new.primitiveConstraints1.types
+@@= skipped -2, +2 lines =@@
+ === primitiveConstraints1.ts ===
+ function foo1<T extends U, U>(t: T, u: U) { }
+ >foo1 : <T extends U, U>(t: T, u: U) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -11, +13 lines =@@
+  
+ function foo2<T, U extends T>(t: T, u: U) { }
+ >foo2 : <T, U extends T>(t: T, u: U) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 

@@ -1,0 +1,43 @@
+--- old.umd8.types
++++ new.umd8.types
+@@= skipped -2, +2 lines =@@
+ === a.ts ===
+ /// <reference path="foo.d.ts" />
+ import * as ff from './foo';
+->ff : typeof ff
++>ff : typeof Thing
+ 
+ let y: Foo; // OK in type position
+->y : ff
++>y : Thing
+ 
+ y.foo();
+ >y.foo() : number
+ >y.foo : () => number
+->y : ff
++>y : Thing
+ >foo : () => number
+ 
+ let z: Foo.SubThing; // OK in ns position
+->z : ff.SubThing
++>z : SubThing
+ >Foo : any
+ 
+ let x: any = Foo; // Not OK in value position
+ >x : any
+->Foo : typeof ff
++>Foo : typeof Thing
+ 
+ === foo.d.ts ===
+ declare class Thing {
+@@= skipped -27, +27 lines =@@
+ >foo : () => number
+ }
+ declare namespace Thing {
++>Thing : typeof Thing
++
+ 	interface SubThing { }
++>SubThing : SubThing
+ }
+ export = Thing;
+ >Thing : Thing

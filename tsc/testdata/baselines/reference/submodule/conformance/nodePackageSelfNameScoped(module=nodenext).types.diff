@@ -1,0 +1,33 @@
+--- old.nodePackageSelfNameScoped(module=nodenext).types
++++ new.nodePackageSelfNameScoped(module=nodenext).types
+@@= skipped -2, +2 lines =@@
+ === index.ts ===
+ // esm format file
+ import * as self from "@scope/package";
+->self : typeof self
++>self : typeof import("index")
+ 
+ self;
+->self : typeof self
++>self : typeof import("index")
+ 
+ === index.mts ===
+ // esm format file
+ import * as self from "@scope/package";
+->self : typeof self
++>self : typeof import("index")
+ 
+ self;
+->self : typeof self
++>self : typeof import("index")
+ 
+ === index.cts ===
+ // cjs format file
+ import * as self from "@scope/package";
+->self : typeof self
++>self : typeof import("index")
+ 
+ self;
+->self : typeof self
++>self : typeof import("index")
+ 

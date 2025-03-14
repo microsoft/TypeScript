@@ -1,0 +1,11 @@
+--- old.es5-commonjs4.types
++++ new.es5-commonjs4.types
+@@= skipped -1, +1 lines =@@
+ 
+ === es5-commonjs4.ts ===
+ export default class A
+->A : A
++>A : default
+ {
+     constructor ()
+     {

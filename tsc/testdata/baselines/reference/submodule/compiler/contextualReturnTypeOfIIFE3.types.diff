@@ -1,0 +1,26 @@
+--- old.contextualReturnTypeOfIIFE3.types
++++ new.contextualReturnTypeOfIIFE3.types
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ app.foo.bar = (function () {
+->app.foo.bar = (function () {  return { someFun(arg) {} };})() : { someFun(arg: number): void; }
++>app.foo.bar = (function () {  return { someFun(arg) {} };})() : { someFun: (arg: number) => void; }
+ >app.foo.bar : { someFun: (arg: number) => void; }
+ >app.foo : { bar: { someFun: (arg: number) => void; }; }
+ >app : typeof app
+ >foo : { bar: { someFun: (arg: number) => void; }; }
+ >bar : { someFun: (arg: number) => void; }
+->(function () {  return { someFun(arg) {} };})() : { someFun(arg: number): void; }
+->(function () {  return { someFun(arg) {} };}) : () => { someFun(arg: number): void; }
+->function () {  return { someFun(arg) {} };} : () => { someFun(arg: number): void; }
++>(function () {  return { someFun(arg) {} };})() : { someFun: (arg: number) => void; }
++>(function () {  return { someFun(arg) {} };}) : () => { someFun: (arg: number) => void; }
++>function () {  return { someFun(arg) {} };} : () => { someFun: (arg: number) => void; }
+ 
+   return { someFun(arg) {} };
+->{ someFun(arg) {} } : { someFun(arg: number): void; }
++>{ someFun(arg) {} } : { someFun: (arg: number) => void; }
+ >someFun : (arg: number) => void
+ >arg : number
+ 

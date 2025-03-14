@@ -1,0 +1,10 @@
+--- old.validUndefinedValues.types
++++ new.validUndefinedValues.types
+@@= skipped -2, +2 lines =@@
+ === validUndefinedValues.ts ===
+ var x: typeof undefined;
+ >x : any
+->undefined : undefined
+ 
+ x = undefined;
+ >x = undefined : undefined

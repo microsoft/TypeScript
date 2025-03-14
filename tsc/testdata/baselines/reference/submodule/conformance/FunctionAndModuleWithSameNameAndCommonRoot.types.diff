@@ -1,0 +1,67 @@
+--- old.FunctionAndModuleWithSameNameAndCommonRoot.types
++++ new.FunctionAndModuleWithSameNameAndCommonRoot.types
+@@= skipped -40, +40 lines =@@
+ 
+ var fn = A.Point;
+ >fn : () => { x: number; y: number; }
+->A.Point : typeof A.Point
++>A.Point : typeof Point
+ >A : typeof A
+->Point : typeof A.Point
++>Point : typeof Point
+ 
+ var cl: { x: number; y: number; }
+ >cl : { x: number; y: number; }
+@@= skipped -12, +12 lines =@@
+ var cl = A.Point();
+ >cl : { x: number; y: number; }
+ >A.Point() : { x: number; y: number; }
+->A.Point : typeof A.Point
++>A.Point : typeof Point
+ >A : typeof A
+->Point : typeof A.Point
++>Point : typeof Point
+ 
+ var cl = A.Point.Origin; // not expected to be an error.
+ >cl : { x: number; y: number; }
+ >A.Point.Origin : { x: number; y: number; }
+->A.Point : typeof A.Point
++>A.Point : typeof Point
+ >A : typeof A
+->Point : typeof A.Point
++>Point : typeof Point
+ >Origin : { x: number; y: number; }
+ 
+ 
+@@= skipped -48, +48 lines =@@
+ 
+ var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+ >fn : () => { x: number; y: number; }
+->B.Point : typeof B.Point
++>B.Point : typeof Point
+ >B : typeof B
+->Point : typeof B.Point
++>Point : typeof Point
+ 
+ var cl: { x: number; y: number; }
+ >cl : { x: number; y: number; }
+@@= skipped -12, +12 lines =@@
+ var cl = B.Point();
+ >cl : { x: number; y: number; }
+ >B.Point() : { x: number; y: number; }
+->B.Point : typeof B.Point
++>B.Point : typeof Point
+ >B : typeof B
+->Point : typeof B.Point
++>Point : typeof Point
+ 
+ var cl = B.Point.Origin;
+ >cl : { x: number; y: number; }
+ >B.Point.Origin : { x: number; y: number; }
+->B.Point : typeof B.Point
++>B.Point : typeof Point
+ >B : typeof B
+->Point : typeof B.Point
++>Point : typeof Point
+ >Origin : { x: number; y: number; }
+ 

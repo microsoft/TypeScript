@@ -1,0 +1,14 @@
+--- old.thisTag2.types
++++ new.thisTag2.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ /** @this {string} */
+ export function f1() {}
+->f1 : (this: string) => void
++>f1 : () => void
+ 
+ /** @this */
+ export function f2() {}
+->f2 : (this: any) => void
++>f2 : () => void
+ 

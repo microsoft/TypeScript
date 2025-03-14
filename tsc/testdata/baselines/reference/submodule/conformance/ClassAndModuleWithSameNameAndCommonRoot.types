@@ -1,0 +1,110 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleWithSameNameAndCommonRoot.ts] ////
+
+=== class.ts ===
+module X.Y {
+>X : typeof X
+>Y : typeof Y
+
+    export class Point {
+>Point : Point
+
+        constructor(x: number, y: number) {
+>x : number
+>y : number
+
+            this.x = x;
+>this.x = x : number
+>this.x : number
+>this : this
+>x : number
+>x : number
+
+            this.y = y;
+>this.y = y : number
+>this.y : number
+>this : this
+>y : number
+>y : number
+        }
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+}
+
+=== module.ts ===
+module X.Y {
+>X : typeof X
+>Y : typeof Y
+
+    export module Point {
+>Point : typeof Point
+
+        export var Origin = new Point(0, 0);
+>Origin : any
+>new Point(0, 0) : any
+>Point : typeof Point
+>0 : 0
+>0 : 0
+    }
+}
+
+=== test.ts ===
+//var cl: { x: number; y: number; }
+var cl = new X.Y.Point(1,1);
+>cl : any
+>new X.Y.Point(1,1) : any
+>X.Y.Point : any
+>X.Y : any
+>X : typeof X
+>Y : any
+>Point : any
+>1 : 1
+>1 : 1
+
+var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
+>cl : any
+>X.Y.Point.Origin : any
+>X.Y.Point : any
+>X.Y : any
+>X : typeof X
+>Y : any
+>Point : any
+>Origin : any
+
+
+=== simple.ts ===
+class A {
+>A : A
+
+    id: string;
+>id : string
+}
+
+module A {
+>A : typeof A
+
+    export var Instance = new A();
+>Instance : A
+>new A() : A
+>A : typeof A
+}
+
+// ensure merging works as expected
+var a = A.Instance;
+>a : A
+>A.Instance : A
+>A : typeof A
+>Instance : A
+
+var a = new A();
+>a : A
+>new A() : A
+>A : typeof A
+
+var a: { id: string };
+>a : A
+>id : string
+

@@ -1,0 +1,19 @@
+--- old.augmentExportEquals1.types
++++ new.augmentExportEquals1.types
+@@= skipped -5, +5 lines =@@
+ 
+ import "./file2";
+ let a: x.A; // should not work
+->a : x.A
++>a : A
+ >x : any
+ 
+ === file1.ts ===
+@@= skipped -21, +21 lines =@@
+ >"./file1" : any
+ 
+     interface A { a }
++>A : A
+ >a : any
+ }
+ 

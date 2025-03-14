@@ -1,0 +1,37 @@
+--- old.namespaceDisambiguationInUnion.types
++++ new.namespaceDisambiguationInUnion.types
+@@= skipped -1, +1 lines =@@
+ 
+ === namespaceDisambiguationInUnion.ts ===
+ namespace Foo {
++>Foo : any
++
+   export type Yep = { type: "foo.yep" };
+ >Yep : Yep
+ >type : "foo.yep"
+ }
+ 
+ namespace Bar {
++>Bar : any
++
+   export type Yep = { type: "bar.yep" };
+ >Yep : Yep
+ >type : "bar.yep"
+@@= skipped -18, +22 lines =@@
+ >"wat.nup" : "wat.nup"
+ 
+ const val1: Foo.Yep | Bar.Yep = x;
+->val1 : Foo.Yep | Bar.Yep
++>val1 : Yep | Yep
+ >Foo : any
+ >Bar : any
+ >x : { type: string; }
+@@= skipped -16, +16 lines =@@
+ >"b" : "b"
+ 
+ const val2: [Foo.Yep, Bar.Yep] = y;
+->val2 : [Foo.Yep, Bar.Yep]
++>val2 : [Yep, Yep]
+ >Foo : any
+ >Bar : any
+ >y : { type: string; }[]

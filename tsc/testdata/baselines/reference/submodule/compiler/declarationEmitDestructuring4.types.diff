@@ -1,0 +1,36 @@
+--- old.declarationEmitDestructuring4.types
++++ new.declarationEmitDestructuring4.types
+@@= skipped -4, +4 lines =@@
+ // we will not make any modification and will emit
+ // the similar binding pattern users' have written
+ function baz([]) { }
+->baz : ([]: any[]) => void
++>baz : (__0: any[]) => void
+ 
+ function baz1([] = [1,2,3]) { }
+->baz1 : ([]?: number[]) => void
++>baz1 : (__0?: number[]) => void
+ >[1,2,3] : number[]
+ >1 : 1
+ >2 : 2
+ >3 : 3
+ 
+ function baz2([[]] = [[1,2,3]]) { }
+->baz2 : ([[]]?: [number[]]) => void
++>baz2 : (__0?: [number[]]) => void
+ >[[1,2,3]] : [number[]]
+ >[1,2,3] : number[]
+ >1 : 1
+@@= skipped -18, +18 lines =@@
+ >3 : 3
+ 
+ function baz3({}) { }
+->baz3 : ({}: {}) => void
++>baz3 : (__0: {}) => void
+ 
+ function baz4({} = { x: 10 }) { }
+->baz4 : ({}?: { x: number; }) => void
++>baz4 : (__0?: { x: number; }) => void
+ >{ x: 10 } : { x: number; }
+ >x : number
+ >10 : 10

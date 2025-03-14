@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName5.ts] ////
+
+=== parserES5ComputedPropertyName5.ts ===
+interface I {
+>I : I
+
+    [e]: number 
+>[e] : number
+>e : any
+}

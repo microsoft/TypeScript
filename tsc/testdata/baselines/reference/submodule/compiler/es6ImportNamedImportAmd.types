@@ -1,0 +1,130 @@
+//// [tests/cases/compiler/es6ImportNamedImportAmd.ts] ////
+
+=== es6ImportNamedImportAmd_0.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+export var x = a;
+>x : number
+>a : number
+
+export var m = a;
+>m : number
+>a : number
+
+export var a1 = 10;
+>a1 : number
+>10 : 10
+
+export var x1 = 10;
+>x1 : number
+>10 : 10
+
+export var z1 = 10;
+>z1 : number
+>10 : 10
+
+export var z2 = 10;
+>z2 : number
+>10 : 10
+
+export var aaaa = 10;
+>aaaa : number
+>10 : 10
+
+=== es6ImportNamedImportAmd_1.ts ===
+import { } from "es6ImportNamedImportAmd_0";
+import { a } from "es6ImportNamedImportAmd_0";
+>a : any
+
+var xxxx = a;
+>xxxx : any
+>a : any
+
+import { a as b } from "es6ImportNamedImportAmd_0";
+>a : any
+>b : any
+
+var xxxx = b;
+>xxxx : any
+>b : any
+
+import { x, a as y } from "es6ImportNamedImportAmd_0";
+>x : any
+>a : any
+>y : any
+
+var xxxx = x;
+>xxxx : any
+>x : any
+
+var xxxx = y;
+>xxxx : any
+>y : any
+
+import { x as z,  } from "es6ImportNamedImportAmd_0";
+>x : any
+>z : any
+
+var xxxx = z;
+>xxxx : any
+>z : any
+
+import { m,  } from "es6ImportNamedImportAmd_0";
+>m : any
+
+var xxxx = m;
+>xxxx : any
+>m : any
+
+import { a1, x1 } from "es6ImportNamedImportAmd_0";
+>a1 : any
+>x1 : any
+
+var xxxx = a1;
+>xxxx : any
+>a1 : any
+
+var xxxx = x1;
+>xxxx : any
+>x1 : any
+
+import { a1 as a11, x1 as x11 } from "es6ImportNamedImportAmd_0";
+>a1 : any
+>a11 : any
+>x1 : any
+>x11 : any
+
+var xxxx = a11;
+>xxxx : any
+>a11 : any
+
+var xxxx = x11;
+>xxxx : any
+>x11 : any
+
+import { z1 } from "es6ImportNamedImportAmd_0";
+>z1 : any
+
+var z111 = z1;
+>z111 : any
+>z1 : any
+
+import { z2 as z3 } from "es6ImportNamedImportAmd_0";
+>z2 : any
+>z3 : any
+
+var z2 = z3; // z2 shouldn't give redeclare error
+>z2 : any
+>z3 : any
+
+// These are elided
+import { aaaa } from "es6ImportNamedImportAmd_0";
+>aaaa : any
+
+// These are elided
+import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
+>aaaa : any
+>bbbb : any
+

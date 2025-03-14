@@ -1,0 +1,12 @@
+--- old.privateInstanceMemberAccessibility.types
++++ new.privateInstanceMemberAccessibility.types
+@@= skipped -27, +27 lines =@@
+     }
+     z: typeof super.foo; // error
+ >z : any
+->super.foo : any
+ >super : any
+->foo : any
+ 
+     a: this.foo; // error
+ >a : this

@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/typeReferenceDirectives3.ts] ////
+
+=== /app.ts ===
+/// <reference types="lib" preserve="true" />
+/// <reference path="ref.d.ts" />
+interface A {
+>A : A
+
+    x: () => $
+>x : () => $
+}
+=== /ref.d.ts ===
+interface $ { x }
+>$ : $
+>x : any
+

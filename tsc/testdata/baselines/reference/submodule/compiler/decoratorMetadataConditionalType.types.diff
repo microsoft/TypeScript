@@ -1,0 +1,18 @@
+--- old.decoratorMetadataConditionalType.types
++++ new.decoratorMetadataConditionalType.types
+@@= skipped -5, +5 lines =@@
+ 
+ abstract class BaseEntity<T> {
+ >BaseEntity : BaseEntity<T>
++>T : T
+ 
+     @d()
+ >d() : PropertyDecorator
+@@= skipped -8, +9 lines =@@
+     public attributes: T extends { attributes: infer A } ? A : undefined;
+ >attributes : T extends { attributes: infer A; } ? A : undefined
+ >attributes : A
++>A : A
+ }
+ class C {
+ >C : C

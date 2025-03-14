@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/invariantGenericErrorElaboration.ts] ////
+
+=== invariantGenericErrorElaboration.ts ===
+// Repro from #19746
+
+const wat: Runtype<any> = Num;
+>wat : Runtype<any>
+>Num : Num
+
+const Foo = Obj({ foo: Num })
+>Foo : Obj<{ [_: string]: Runtype<any>; }>
+>Obj({ foo: Num }) : Obj<{ [_: string]: Runtype<any>; }>
+>Obj : <O extends { [_: string]: Runtype<any>; }>(fields: O) => Obj<O>
+>{ foo: Num } : { foo: Num; }
+>foo : Num
+>Num : Num
+
+interface Runtype<A> {
+>Runtype : Runtype<A>
+>A : A
+
+  constraint: Constraint<this>
+>constraint : Constraint<this>
+
+  witness: A
+>witness : A
+}
+
+interface Num extends Runtype<number> {
+>Num : Num
+
+  tag: 'number'
+>tag : "number"
+}
+declare const Num: Num
+>Num : Num
+
+interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in keyof O]: O[K]['witness'] }> {}
+>Obj : Obj<O>
+>O : O
+>_ : _
+>K : K
+
+declare function Obj<O extends { [_: string]: Runtype<any> }>(fields: O): Obj<O>;
+>Obj : <O extends { [_: string]: Runtype<any>; }>(fields: O) => Obj<O>
+>O : O
+>_ : string
+>fields : O
+
+interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {
+>Constraint : Constraint<A>
+>A : A
+
+  underlying: A,
+>underlying : A
+
+  check: (x: A['witness']) => void,
+>check : (x: A["witness"]) => void
+>x : A["witness"]
+}
+

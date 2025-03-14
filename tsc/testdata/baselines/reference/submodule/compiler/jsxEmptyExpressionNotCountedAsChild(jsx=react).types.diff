@@ -1,0 +1,67 @@
+--- old.jsxEmptyExpressionNotCountedAsChild(jsx=react).types
++++ new.jsxEmptyExpressionNotCountedAsChild(jsx=react).types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === jsxEmptyExpressionNotCountedAsChild.tsx ===
+ /// <reference path="react16.d.ts" />
+ import * as React from 'react'
+->React : typeof React
++>React : any
+ 
+ interface Props {
++>Props : Props
++
+     children: React.ReactElement<any>
+->children : React.ReactElement<any>
++>children : ReactElement<any>
+ >React : any
+ }
+ 
+ function Wrapper(props: Props) {
+->Wrapper : (props: Props) => JSX.Element
++>Wrapper : (props: Props) => any
+ >props : Props
+ 
+     return <div>{props.children}</div>
+-><div>{props.children}</div> : JSX.Element
++><div>{props.children}</div> : any
+ >div : any
+->props.children : React.ReactElement<any>
++>props.children : ReactElement<any>
+ >props : Props
+->children : React.ReactElement<any>
++>children : ReactElement<any>
+ >div : any
+ }
+ 
+ const element = (
+->element : JSX.Element
+->(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : JSX.Element
++>element : any
++>(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : any
+ 
+     <Wrapper>
+-><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : JSX.Element
+->Wrapper : (props: Props) => JSX.Element
++><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : any
++>Wrapper : (props: Props) => any
+ 
+     {/* comment */}
+      <div>Hello</div>
+-><div>Hello</div> : JSX.Element
++><div>Hello</div> : any
+ >div : any
+ >div : any
+ 
+     </Wrapper>
+->Wrapper : (props: Props) => JSX.Element
++>Wrapper : (props: Props) => any
+ 
+ )

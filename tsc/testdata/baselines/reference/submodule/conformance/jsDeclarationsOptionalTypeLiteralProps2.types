@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsOptionalTypeLiteralProps2.ts] ////
+
+=== foo.js ===
+/**
+ * foo
+ *
+ * @public
+ * @param {object} opts
+ * @param {number} opts.a
+ * @param {number} [opts.b]
+ * @param {number} [opts.c]
+ * @returns {number}
+ */
+function foo({ a, b, c }) {
+>foo : (__0: { a: any; b: any; c: any; }) => any
+>a : any
+>b : any
+>c : any
+
+    return a + (b ?? 0) + (c ?? 0);
+>a + (b ?? 0) + (c ?? 0) : any
+>a + (b ?? 0) : any
+>a : any
+>(b ?? 0) : any
+>b ?? 0 : any
+>b : any
+>0 : 0
+>(c ?? 0) : any
+>c ?? 0 : any
+>c : any
+>0 : 0
+}
+

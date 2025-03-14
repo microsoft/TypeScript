@@ -1,0 +1,14 @@
+--- old.assertInWrapSomeTypeParameter.types
++++ new.assertInWrapSomeTypeParameter.types
+@@= skipped -2, +2 lines =@@
+ === assertInWrapSomeTypeParameter.ts ===
+ class C<T extends C<T>> {
+ >C : C<T>
++>T : T
+ 
+     foo<U extends C<C<T>>(x: U) {
+ >foo : <U extends C<C<T>>>(x: U) => any
++>U : U
+ >x : U
+ 
+         return null;

@@ -1,0 +1,11 @@
+--- old.noImplicitAnyForwardReferencedInterface.types
++++ new.noImplicitAnyForwardReferencedInterface.types
+@@= skipped -4, +4 lines =@@
+ >x : Entry
+ 
+ interface Entry {
++>Entry : Entry
++
+     // Should return error for implicit any.
+     new ();
+ }

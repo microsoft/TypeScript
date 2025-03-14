@@ -1,0 +1,40 @@
+--- old.errorElaboration.types
++++ new.errorElaboration.types
+@@= skipped -3, +3 lines =@@
+ // Repro for #5712
+ 
+ interface Ref<T> {
++>Ref : Ref<T>
++>T : T
++
+     prop: T;
+ >prop : T
+ }
+ interface Container<T> {
++>Container : Container<T>
++>T : T
++
+     m1: Container<Ref<T>>;
+ >m1 : Container<Ref<T>>
+ 
+@@= skipped -25, +31 lines =@@
+ // Repro for #25498
+ 
+ function test(): {[A in "foo"]: A} {
+->test : () => { [A in "foo"]: A; }
++>test : () => { foo: "foo"; }
++>A : A
+ 
+   return {foo: "bar"};
+ >{foo: "bar"} : { foo: "bar"; }
+@@= skipped -17, +18 lines =@@
+ >'a' : "a"
+ 
+ const x = ({ [foo.bar]: c }) => undefined;
+->x : ({ [foo.bar]: c }: {}) => any
+->({ [foo.bar]: c }) => undefined : ({ [foo.bar]: c }: {}) => any
++>x : (__0: {}) => any
++>({ [foo.bar]: c }) => undefined : (__0: {}) => any
+ >foo.bar : any
+ >foo : (x: () => Container<Ref<number>>) => void
+ >bar : any

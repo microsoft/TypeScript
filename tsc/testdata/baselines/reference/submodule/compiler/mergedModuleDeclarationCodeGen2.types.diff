@@ -1,0 +1,24 @@
+--- old.mergedModuleDeclarationCodeGen2.types
++++ new.mergedModuleDeclarationCodeGen2.types
+@@= skipped -10, +10 lines =@@
+ }
+ module my.data {
+ >my : typeof my
+->data : typeof my.data
++>data : typeof data
+ 
+     function data(my) {
+ >data : (my: any) => void
+ >my : any
+ 
+         foo.buz();
+->foo.buz() : void
+->foo.buz : () => void
+->foo : typeof foo
+->buz : () => void
++>foo.buz() : any
++>foo.buz : any
++>foo : any
++>buz : any
+     }
+ }

@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/typeParameterListWithTrailingComma1.ts] ////
+
+=== typeParameterListWithTrailingComma1.ts ===
+class C<T,> {
+>C : C<T>
+>T : T
+}

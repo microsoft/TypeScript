@@ -1,0 +1,195 @@
+--- old.renamingDestructuredPropertyInFunctionType.types
++++ new.renamingDestructuredPropertyInFunctionType.types
+@@= skipped -40, +40 lines =@@
+ >F6 : F6
+ >a : any
+ >string : any
+->string : any
+ 
+ type F7 = ({ a: string, b: number }) => typeof number; // Error
+ >F7 : F7
+@@= skipped -8, +7 lines =@@
+ >string : any
+ >b : any
+ >number : any
+->number : any
+ 
+ type F8 = ({ a, b: number }) => typeof number; // OK
+ >F8 : F8
+ >a : any
+ >b : any
+ >number : any
+->number : any
+ 
+ type F9 = ([a, b, c]) => void; // OK
+ >F9 : F9
+@@= skipped -47, +45 lines =@@
+ >G6 : G6
+ >a : any
+ >string : any
+->string : any
+ 
+ type G7 = new ({ a: string, b: number }) => typeof number; // Error
+ >G7 : G7
+@@= skipped -8, +7 lines =@@
+ >string : any
+ >b : any
+ >number : any
+->number : any
+ 
+ type G8 = new ({ a, b: number }) => typeof number; // OK
+ >G8 : G8
+ >a : any
+ >b : any
+ >number : any
+->number : any
+ 
+ type G9 = new ([a, b, c]) => void; // OK
+ >G9 : G9
+@@= skipped -54, +52 lines =@@
+ >string : any
+ 
+ interface I {
++>I : I
++
+   method1(arg: number): any; // OK
+ >method1 : (arg: number) => any
+ >arg : number
+ 
+   method2({ a: string }): any; // Error
+->method2 : ({ a: string }: { a: any; }) => any
++>method2 : (__0: { a: any; }) => any
+ >a : any
+ >string : any
+ 
+@@= skipped -26, +28 lines =@@
+ 
+ // Below are OK but renaming should be removed from declaration emit
+ function f1({ a: string }: O) { }
+->f1 : ({ a: string }: O) => void
++>f1 : (__0: O) => void
+ >a : any
+ >string : string
+ 
+ const f2 = function({ a: string }: O) { };
+->f2 : ({ a: string }: O) => void
+->function({ a: string }: O) { } : ({ a: string }: O) => void
++>f2 : (__0: O) => void
++>function({ a: string }: O) { } : (__0: O) => void
+ >a : any
+ >string : string
+ 
+ const f3 = ({ a: string, b, c }: O) => { };
+->f3 : ({ a: string, b, c }: O) => void
+->({ a: string, b, c }: O) => { } : ({ a: string, b, c }: O) => void
++>f3 : (__0: O) => void
++>({ a: string, b, c }: O) => { } : (__0: O) => void
+ >a : any
+ >string : string
+ >b : number
+ >c : number
+ 
+ const f4 = function({ a: string }: O): typeof string { return string; };
+->f4 : ({ a: string }: O) => typeof string
+->function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => typeof string
++>f4 : (__0: O) => string
++>function({ a: string }: O): typeof string { return string; } : (__0: O) => string
+ >a : any
+ >string : string
+ >string : string
+->string : string
+ 
+ const f5 = ({ a: string, b, c }: O): typeof string => '';
+->f5 : ({ a: string, b, c }: O) => typeof string
+->({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => typeof string
++>f5 : (__0: O) => string
++>({ a: string, b, c }: O): typeof string => '' : (__0: O) => string
+ >a : any
+ >string : string
+ >b : number
+ >c : number
+->string : string
+ >'' : ""
+ 
+ const obj1 = {
+->obj1 : { method({ a: string }: O): void; }
+->{  method({ a: string }: O) { }} : { method({ a: string }: O): void; }
++>obj1 : { method: (__0: O) => void; }
++>{  method({ a: string }: O) { }} : { method: (__0: O) => void; }
+ 
+   method({ a: string }: O) { }
+->method : ({ a: string }: O) => void
++>method : (__0: O) => void
+ >a : any
+ >string : string
+ 
+ };
+ const obj2 = {
+->obj2 : { method({ a: string }: O): typeof string; }
+->{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): typeof string; }
++>obj2 : { method: (__0: O) => string; }
++>{  method({ a: string }: O): typeof string { return string; }} : { method: (__0: O) => string; }
+ 
+   method({ a: string }: O): typeof string { return string; }
+->method : ({ a: string }: O) => typeof string
++>method : (__0: O) => string
+ >a : any
+ >string : string
+ >string : string
+->string : string
+ 
+ };
+ function f6({ a: string = "" }: O) { }
+->f6 : ({ a: string }: O) => void
++>f6 : (__0: O) => void
+ >a : any
+ >string : string
+ >"" : ""
+ 
+ const f7 = ({ a: string = "", b, c }: O) => { };
+->f7 : ({ a: string, b, c }: O) => void
+->({ a: string = "", b, c }: O) => { } : ({ a: string, b, c }: O) => void
++>f7 : (__0: O) => void
++>({ a: string = "", b, c }: O) => { } : (__0: O) => void
+ >a : any
+ >string : string
+ >"" : ""
+@@= skipped -74, +71 lines =@@
+ >c : number
+ 
+ const f8 = ({ "a": string }: O) => { };
+->f8 : ({ "a": string }: O) => void
+->({ "a": string }: O) => { } : ({ "a": string }: O) => void
++>f8 : (__0: O) => void
++>({ "a": string }: O) => { } : (__0: O) => void
+ >string : string
+ 
+ function f9 ({ 2: string }) { };
+->f9 : ({ 2: string }: { 2: any; }) => void
++>f9 : (__0: { 2: any; }) => void
+ >string : any
+ 
+ function f10 ({ ["a"]: string }: O) { };
+->f10 : ({ ["a"]: string }: O) => void
++>f10 : (__0: O) => void
+ >"a" : "a"
+ >string : string
+ 
+ const f11 =  ({ [2]: string }) => { };
+->f11 : ({ [2]: string }: { 2: any; }) => void
+->({ [2]: string }) => { } : ({ [2]: string }: { 2: any; }) => void
++>f11 : (__0: { 2: any; }) => void
++>({ [2]: string }) => { } : (__0: { 2: any; }) => void
+ >2 : 2
+ >string : any
+ 
+ // In below case `string` should be kept because it is used
+ function f12({ a: string = "" }: O): typeof string { return "a"; }
+->f12 : ({ a: string }: O) => typeof string
++>f12 : (__0: O) => string
+ >a : any
+ >string : string
+ >"" : ""
+->string : string
+ >"a" : "a"
+ 

@@ -1,0 +1,16 @@
+--- old.EnumAndModuleWithSameNameAndCommonRoot.types
++++ new.EnumAndModuleWithSameNameAndCommonRoot.types
+@@= skipped -36, +36 lines =@@
+ 
+ var y = new enumdule.Point(0, 0);
+ >y : { x: number; y: number; }
+->new enumdule.Point(0, 0) : enumdule.Point
+->enumdule.Point : typeof enumdule.Point
++>new enumdule.Point(0, 0) : Point
++>enumdule.Point : typeof Point
+ >enumdule : typeof enumdule
+->Point : typeof enumdule.Point
++>Point : typeof Point
+ >0 : 0
+ >0 : 0
+ 

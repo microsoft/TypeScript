@@ -1,0 +1,19 @@
+--- old.functionDeclarationWithArgumentOfTypeFunctionTypeArray.types
++++ new.functionDeclarationWithArgumentOfTypeFunctionTypeArray.types
+@@= skipped -1, +1 lines =@@
+ 
+ === functionDeclarationWithArgumentOfTypeFunctionTypeArray.ts ===
+ function foo(args: { (x): number }[]) {
+->foo : (args: { (x: any): number; }[]) => number
+->args : ((x: any) => number)[]
++>foo : (args: (x: any) => number[]) => number
++>args : (x: any) => number[]
+ >x : any
+ 
+     return args.length;
+ >args.length : number
+->args : ((x: any) => number)[]
++>args : (x: any) => number[]
+ >length : number
+ }
+ 

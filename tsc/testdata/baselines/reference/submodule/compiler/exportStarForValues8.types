@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/exportStarForValues8.ts] ////
+
+=== file1.ts ===
+export interface Foo { x }
+>Foo : Foo
+>x : any
+
+=== file2.ts ===
+export interface A { x }
+>A : A
+>x : any
+
+export * from "file1"
+export var x = 1;
+>x : number
+>1 : 1
+
+=== file3.ts ===
+export interface B { x }
+>B : B
+>x : any
+
+export * from "file1"
+export var x = 1;
+>x : number
+>1 : 1
+
+=== file4.ts ===
+export interface C { x }
+>C : C
+>x : any
+
+export * from "file2"
+export * from "file3"
+export var x = 1;
+>x : number
+>1 : 1
+
+=== file5.ts ===
+export * from "file4"
+export var x = 1;
+>x : number
+>1 : 1
+

@@ -1,0 +1,57 @@
+//// [tests/cases/compiler/importAliasFromNamespace.ts] ////
+
+=== usage.ts ===
+/// <reference path="./internal.ts" preserve="true" />
+namespace SomeOther.Thing {
+>SomeOther : typeof SomeOther
+>Thing : typeof Thing
+
+    import Internal = My.Internal;
+>Internal : any
+>My : typeof My
+>Internal : any
+
+    export class Foo {
+>Foo : Foo
+
+        private _which: Internal.WhichThing;
+>_which : WhichThing
+>Internal : any
+
+        constructor() {
+            Internal.getThing();
+>Internal.getThing() : any
+>Internal.getThing : any
+>Internal : any
+>getThing : any
+
+            Internal.WhichThing.A ? "foo" : "bar";
+>Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
+>Internal.WhichThing.A : any
+>Internal.WhichThing : any
+>Internal : any
+>WhichThing : any
+>A : any
+>"foo" : "foo"
+>"bar" : "bar"
+        }
+    }
+}
+=== internal.ts ===
+namespace My.Internal {
+>My : typeof My
+>Internal : typeof Internal
+
+    export function getThing(): void {}
+>getThing : () => void
+
+    export const enum WhichThing {
+>WhichThing : WhichThing
+
+        A, B, C
+>A : WhichThing.A
+>B : WhichThing.B
+>C : WhichThing.C
+    }
+}
+

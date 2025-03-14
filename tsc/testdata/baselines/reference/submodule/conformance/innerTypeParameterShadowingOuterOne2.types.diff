@@ -1,0 +1,28 @@
+--- old.innerTypeParameterShadowingOuterOne2.types
++++ new.innerTypeParameterShadowingOuterOne2.types
+@@= skipped -5, +5 lines =@@
+ 
+ class C<T extends Date> {
+ >C : C<T>
++>T : T
+ 
+     g<T extends Number>() {
+ >g : <T extends Number>() => void
++>T : T
+ 
+         var x: T;
+ >x : T
+@@= skipped -30, +32 lines =@@
+ 
+ class C2<T extends Date, U extends Date> {
+ >C2 : C2<T, U>
++>T : T
++>U : U
+ 
+     g<T extends Number, U extends Number>() {
+ >g : <T extends Number, U extends Number>() => void
++>T : T
++>U : U
+ 
+         var x: U;
+ >x : U

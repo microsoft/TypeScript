@@ -1,0 +1,21 @@
+--- old.decoratorMetadata-jsdoc.types
++++ new.decoratorMetadata-jsdoc.types
+@@= skipped -19, +19 lines =@@
+ 
+     b?: string!;
+ >b : string
++>! : boolean
++> : any
+ 
+     @decorator()
+ >decorator() : any
+ >decorator : any
+ 
+     c?: *;
++>c?: * : any
+ >c : any
++> : any
++>* : number
++> : any
++> : any
+ }

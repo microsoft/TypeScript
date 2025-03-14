@@ -1,0 +1,71 @@
+--- old.mappedTypes5.types
++++ new.mappedTypes5.types
+@@= skipped -2, +2 lines =@@
+ === mappedTypes5.ts ===
+ function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
+ >f : <T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) => void
++>T : T
+ >p : Partial<T>
+ >r : Readonly<T>
+ >pr : Partial<Readonly<T>>
+@@= skipped -82, +83 lines =@@
+ 
+ type Args1<T extends State> = {
+ >Args1 : Args1<T>
++>T : T
+ 
+     readonly previous: Readonly<Partial<T>>;
+ >previous : Readonly<Partial<T>>
+@@= skipped -11, +12 lines =@@
+ 
+ type Args2<T extends State> = {
+ >Args2 : Args2<T>
++>T : T
+ 
+     readonly previous: Partial<Readonly<T>>;
+ >previous : Partial<Readonly<T>>
+@@= skipped -11, +12 lines =@@
+ 
+ function doit<T extends State>() {
+ >doit : <T extends State>() => void
++>T : T
+ 
+     let previous: Partial<T> = Object.create(null);
+ >previous : Partial<T>
+@@= skipped -18, +19 lines =@@
+     let args1: Args1<T> = { previous, current };
+ >args1 : Args1<T>
+ >{ previous, current } : { previous: Partial<T>; current: Partial<T>; }
+->previous : Partial<T>
+->current : Partial<T>
++>previous : any
++>current : any
+ 
+     let args2: Args2<T> = { previous, current };
+ >args2 : Args2<T>
+ >{ previous, current } : { previous: Partial<T>; current: Partial<T>; }
+->previous : Partial<T>
+->current : Partial<T>
++>previous : any
++>current : any
+ }
+ 
+ type State2 = { foo: number, bar: string };
+@@= skipped -57, +57 lines =@@
+     let args1: Args3 = { previous, current };
+ >args1 : Args3
+ >{ previous, current } : { previous: Partial<State2>; current: Partial<State2>; }
+->previous : Partial<State2>
+->current : Partial<State2>
++>previous : any
++>current : any
+ 
+     let args2: Args4 = { previous, current };
+ >args2 : Args4
+ >{ previous, current } : { previous: Partial<State2>; current: Partial<State2>; }
+->previous : Partial<State2>
+->current : Partial<State2>
++>previous : any
++>current : any
+ }
+ 

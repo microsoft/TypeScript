@@ -1,0 +1,19 @@
+--- old.definiteAssignmentAssertionsWithObjectShortHand.types
++++ new.definiteAssignmentAssertionsWithObjectShortHand.types
+@@= skipped -7, +7 lines =@@
+ const foo = { a! }
+ >foo : { a: string; }
+ >{ a! } : { a: string; }
+->a : string
++>a : any
+ 
+ const bar = {
+->bar : { a?(): void; }
+->{    a ? () { }} : { a?(): void; }
++>bar : { a?: () => void | undefined; }
++>{    a ? () { }} : { a?: () => void | undefined; }
+ 
+     a ? () { }
+->a : (() => void) | undefined
++>a : () => void | undefined
+ }

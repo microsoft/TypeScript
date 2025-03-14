@@ -1,0 +1,10 @@
+--- old.inferPropertyWithContextSensitiveReturnStatement.types
++++ new.inferPropertyWithContextSensitiveReturnStatement.types
+@@= skipped -4, +4 lines =@@
+ 
+ declare function repro<T>(config: {
+ >repro : <T>(config: { params: T; callback: () => (params: T) => number; }) => void
++>T : T
+ >config : { params: T; callback: () => (params: T) => number; }
+ 
+   params: T;

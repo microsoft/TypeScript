@@ -1,0 +1,36 @@
+--- old.unusedLocalsAndParametersDeferred.types
++++ new.unusedLocalsAndParametersDeferred.types
+@@= skipped -4, +4 lines =@@
+ 
+ function defered<T>(a: () => T): T {
+ >defered : <T>(a: () => T) => T
++>T : T
+ >a : () => T
+ 
+     return a();
+@@= skipped -178, +179 lines =@@
+ 
+ 
+ var o = {
+->o : { method(a: any): void; x: number; p: void; }
+->{    // Object literal method declaration paramter    method(a) {        defered(() => {            a;        });    },    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    },    // in a property initalizer    p: defered(() => {        prop1;    })} : { method(a: any): void; x: number; p: void; }
++>o : { method: (a: any) => void; x: number; p: void; }
++>{    // Object literal method declaration paramter    method(a) {        defered(() => {            a;        });    },    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    },    // in a property initalizer    p: defered(() => {        prop1;    })} : { method: (a: any) => void; x: number; p: void; }
+ 
+     // Object literal method declaration paramter
+     method(a) {
+@@= skipped -47, +47 lines =@@
+ };
+ 
+ o;
+->o : { method(a: any): void; x: number; p: void; }
++>o : { method: (a: any) => void; x: number; p: void; }
+ 
+ // in a for..in statment
+ for (let i in o) {
+ >i : string
+->o : { method(a: any): void; x: number; p: void; }
++>o : { method: (a: any) => void; x: number; p: void; }
+ 
+     defered(() => {
+ >defered(() => {        i;    }) : void

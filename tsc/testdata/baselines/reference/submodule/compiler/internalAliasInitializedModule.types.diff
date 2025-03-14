@@ -1,0 +1,17 @@
+--- old.internalAliasInitializedModule.types
++++ new.internalAliasInitializedModule.types
+@@= skipped -21, +21 lines =@@
+ >b : typeof b
+ 
+     export var x: b.c = new b.c();
+->x : b.c
++>x : c
+ >b : any
+->new b.c() : b.c
+->b.c : typeof b.c
++>new b.c() : c
++>b.c : typeof c
+ >b : typeof b
+->c : typeof b.c
++>c : typeof c
+ }

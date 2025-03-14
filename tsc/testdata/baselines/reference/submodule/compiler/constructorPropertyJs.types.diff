@@ -1,0 +1,14 @@
+--- old.constructorPropertyJs.types
++++ new.constructorPropertyJs.types
+@@= skipped -12, +12 lines =@@
+ 
+         this.constructor = a;
+ >this.constructor = a : any
+->this.constructor : any
++>this.constructor : Function
+ >this : this
+->constructor : any
++>constructor : Function
+ >a : any
+     }
+ }

@@ -1,0 +1,15 @@
+--- old.checkJsdocSatisfiesTag12.types
++++ new.checkJsdocSatisfiesTag12.types
+@@= skipped -75, +75 lines =@@
+  * @satisfies {T3}
+  */
+ const t7 = { a: "a" };
+->t7 : { a: "a"; }
+->{ a: "a" } : { a: "a"; }
+->a : "a"
++>t7 : { a: string; }
++>{ a: "a" } : { a: string; }
++>a : string
+ >"a" : "a"
+ 
+ /** @satisfies {string} */ const t8 = (1);

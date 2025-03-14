@@ -1,0 +1,20 @@
+--- old.unusedLocalProperty.types
++++ new.unusedLocalProperty.types
+@@= skipped -1, +1 lines =@@
+ 
+ === unusedLocalProperty.ts ===
+ declare var console: { log(msg: any): void; }
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >msg : any
+ 
+@@= skipped -21, +21 lines =@@
+         console.log(species);
+ >console.log(species) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >species : string
+     }

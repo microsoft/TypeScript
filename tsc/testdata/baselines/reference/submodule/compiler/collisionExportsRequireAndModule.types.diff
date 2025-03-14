@@ -1,0 +1,114 @@
+--- old.collisionExportsRequireAndModule.types
++++ new.collisionExportsRequireAndModule.types
+@@= skipped -4, +4 lines =@@
+ >require : typeof require
+ 
+     export interface I {
++>I : I
+     }
+     export class C {
+ >C : C
+     }
+ }
+ export function foo(): require.I {
+->foo : () => require.I
++>foo : () => I
+ >require : any
+ 
+     return null;
+@@= skipped -15, +16 lines =@@
+ >exports : typeof exports
+ 
+     export interface I {
++>I : I
+     }
+     export class C {
+ >C : C
+     }
+ }
+ export function foo2(): exports.I {
+->foo2 : () => exports.I
++>foo2 : () => I
+ >exports : any
+ 
+     return null;
+@@= skipped -18, +19 lines =@@
+ >require : typeof require
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C
+@@= skipped -9, +10 lines =@@
+ >exports : typeof exports
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C
+@@= skipped -13, +14 lines =@@
+ >require : typeof require
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C
+@@= skipped -9, +10 lines =@@
+ >exports : typeof exports
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C
+@@= skipped -12, +13 lines =@@
+ >require : typeof require
+ 
+     export interface I {
++>I : I
+     }
+     export class C {
+ >C : C
+@@= skipped -9, +10 lines =@@
+ >exports : typeof exports
+ 
+     export interface I {
++>I : I
+     }
+     export class C {
+ >C : C
+@@= skipped -12, +13 lines =@@
+ >require : typeof require
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C
+@@= skipped -9, +10 lines =@@
+ >exports : typeof exports
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C
+@@= skipped -13, +14 lines =@@
+ >require : typeof require
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C
+@@= skipped -9, +10 lines =@@
+ >exports : typeof exports
+ 
+         export interface I {
++>I : I
+         }
+         export class C {
+ >C : C

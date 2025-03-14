@@ -1,0 +1,84 @@
+--- old.parseInvalidNullableTypes.types
++++ new.parseInvalidNullableTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parseInvalidNullableTypes.ts ===
+ function f1(a: string): a is ?string {
+->f1 : (a: string) => a is string | null
++>f1 : (a: string) => a is any
+ >a : string
+ 
+     return true;
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ function f2(a: string?) {}
+->f2 : (a: string | null) => void
+->a : string | null
++>f2 : (a: string, ?: any) => void
++>a : string
++> : any
+ 
+ function f3(a: number?) {}
+->f3 : (a: number | null) => void
+->a : number | null
++>f3 : (a: number, ?: any) => void
++>a : number
++> : any
+ 
+ function f4(a: ?string) {}
+->f4 : (a: string | null) => void
+->a : string | null
++>f4 : (a: any) => void
++>a : any
+ 
+ function f5(a: ?number) {}
+->f5 : (a: number | null) => void
+->a : number | null
++>f5 : (a: any) => void
++>a : any
+ 
+ function f6(a: string): ?string {
+->f6 : (a: string) => string | null
++>f6 : (a: string) => any
+ >a : string
+ 
+     return true;
+@@= skipped -26, +28 lines =@@
+ const a = 1 as any?;
+ >a : any
+ >1 as any? : any
++>1 as any : any
+ >1 : 1
++> : any
++> : any
+ 
+ const b: number? = 1;
+->b : number | null
++>b : number
+ >1 : 1
+ 
+ const c = 1 as ?any;
+@@= skipped -12, +15 lines =@@
+ >1 : 1
+ 
+ const d: ?number = 1;
+->d : number | null
++>d : any
+ >1 : 1
+ 
+ let e: unknown?;
+ >e : unknown
+ 
+ let f: never?;
+->f : null
++>f : never
+ 
+ let g: void?;
+->g : void | null
++>g : void
+ 
+ let h: undefined?;
+->h : null | undefined
++>h : undefined
+ 

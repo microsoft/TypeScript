@@ -1,0 +1,28 @@
+--- old.propertyAssignmentUseParentType1.types
++++ new.propertyAssignmentUseParentType1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === propertyAssignmentUseParentType1.ts ===
+ interface N {
++>N : N
++
+     (): boolean
+     num: 123;
+ >num : 123
+ }
+ export const interfaced: N = () => true;
+ >interfaced : N
+->() => true : { (): true; num: 123; }
++>() => true : { (): true; num: number; }
+ >true : true
+ 
+ interfaced.num = 123;
+@@= skipped -19, +21 lines =@@
+ export const inlined: { (): boolean; nun: 456 } = () => true;
+ >inlined : { (): boolean; nun: 456; }
+ >nun : 456
+->() => true : { (): true; nun: 456; }
++>() => true : { (): true; nun: number; }
+ >true : true
+ 
+ inlined.nun = 456;

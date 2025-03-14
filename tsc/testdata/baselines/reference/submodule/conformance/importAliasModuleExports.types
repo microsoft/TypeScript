@@ -1,0 +1,82 @@
+//// [tests/cases/conformance/salsa/importAliasModuleExports.ts] ////
+
+=== mod1.js ===
+class Alias {
+>Alias : Alias
+
+    bar() { return 1 }
+>bar : () => number
+>1 : 1
+}
+module.exports = Alias;
+>module.exports = Alias : typeof Alias
+>module.exports : any
+>module : any
+>exports : any
+>Alias : typeof Alias
+
+=== main.js ===
+import A from './mod1'
+>A : any
+
+A.prototype.foo = 0
+>A.prototype.foo = 0 : 0
+>A.prototype.foo : any
+>A.prototype : any
+>A : any
+>prototype : any
+>foo : any
+>0 : 0
+
+A.prototype.func = function() { this._func = 0; }
+>A.prototype.func = function() { this._func = 0; } : () => void
+>A.prototype.func : any
+>A.prototype : any
+>A : any
+>prototype : any
+>func : any
+>function() { this._func = 0; } : () => void
+>this._func = 0 : 0
+>this._func : any
+>this : any
+>_func : any
+>0 : 0
+
+Object.defineProperty(A.prototype, "def", { value: 0 });
+>Object.defineProperty(A.prototype, "def", { value: 0 }) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>A.prototype : any
+>A : any
+>prototype : any
+>"def" : "def"
+>{ value: 0 } : { value: number; }
+>value : number
+>0 : 0
+
+new A().bar
+>new A().bar : any
+>new A() : any
+>A : any
+>bar : any
+
+new A().foo
+>new A().foo : any
+>new A() : any
+>A : any
+>foo : any
+
+new A().func()
+>new A().func() : any
+>new A().func : any
+>new A() : any
+>A : any
+>func : any
+
+new A().def
+>new A().def : any
+>new A() : any
+>A : any
+>def : any
+

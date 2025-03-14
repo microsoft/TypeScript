@@ -1,0 +1,10 @@
+--- old.nonGenericClassExtendingGenericClassWithAny.types
++++ new.nonGenericClassExtendingGenericClassWithAny.types
+@@= skipped -2, +2 lines =@@
+ === nonGenericClassExtendingGenericClassWithAny.ts ===
+ class Foo<T> {
+ >Foo : Foo<T>
++>T : T
+ 
+     t: T;
+ >t : T

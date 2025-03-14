@@ -1,0 +1,61 @@
+--- old.aliasUsageInArray.types
++++ new.aliasUsageInArray.types
+@@= skipped -1, +1 lines =@@
+ 
+ === aliasUsageInArray_main.ts ===
+ import Backbone = require("./aliasUsageInArray_backbone");
+->Backbone : typeof Backbone
++>Backbone : typeof import("aliasUsageInArray_backbone")
+ 
+ import moduleA = require("./aliasUsageInArray_moduleA");
+->moduleA : typeof moduleA
++>moduleA : typeof import("aliasUsageInArray_moduleA")
+ 
+ interface IHasVisualizationModel {
++>IHasVisualizationModel : IHasVisualizationModel
++
+     VisualizationModel: typeof Backbone.Model;
+->VisualizationModel : typeof Backbone.Model
+->Backbone.Model : typeof Backbone.Model
+->Backbone : typeof Backbone
+->Model : typeof Backbone.Model
++>VisualizationModel : typeof Model
++>Backbone : typeof import("aliasUsageInArray_backbone")
+ }
+ 
+ var xs: IHasVisualizationModel[] = [moduleA];
+ >xs : IHasVisualizationModel[]
+->[moduleA] : (typeof moduleA)[]
+->moduleA : typeof moduleA
++>[moduleA] : typeof import("aliasUsageInArray_moduleA")[]
++>moduleA : typeof import("aliasUsageInArray_moduleA")
+ 
+ var xs2: typeof moduleA[] = [moduleA];
+->xs2 : (typeof moduleA)[]
+->moduleA : typeof moduleA
+->[moduleA] : (typeof moduleA)[]
+->moduleA : typeof moduleA
++>xs2 : typeof import("aliasUsageInArray_moduleA")[]
++>[moduleA] : typeof import("aliasUsageInArray_moduleA")[]
++>moduleA : typeof import("aliasUsageInArray_moduleA")
+ 
+ === aliasUsageInArray_backbone.ts ===
+ export class Model {
+@@= skipped -34, +33 lines =@@
+ 
+ === aliasUsageInArray_moduleA.ts ===
+ import Backbone = require("./aliasUsageInArray_backbone");
+->Backbone : typeof Backbone
++>Backbone : typeof import("aliasUsageInArray_backbone")
+ 
+ export class VisualizationModel extends Backbone.Model {
+ >VisualizationModel : VisualizationModel
+->Backbone.Model : Backbone.Model
+->Backbone : typeof Backbone
+->Model : typeof Backbone.Model
++>Backbone.Model : Model
++>Backbone : typeof import("aliasUsageInArray_backbone")
++>Model : typeof Model
+ 
+     // interesting stuff here
+ }

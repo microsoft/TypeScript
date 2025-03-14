@@ -1,0 +1,11 @@
+--- old.typeVal.types
++++ new.typeVal.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeVal.ts ===
+ interface I {
++>I : I
++
+     I:number;
+ >I : number
+ }

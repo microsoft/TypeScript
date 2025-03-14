@@ -1,0 +1,11 @@
+--- old.computedPropertyNames51_ES6.types
++++ new.computedPropertyNames51_ES6.types
+@@= skipped -2, +2 lines =@@
+ === computedPropertyNames51_ES6.ts ===
+ function f<T, K extends keyof T>() {
+ >f : <T, K extends keyof T>() => void
++>T : T
++>K : K
+ 
+     var t: T;
+ >t : T

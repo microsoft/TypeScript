@@ -1,0 +1,16 @@
+--- old.es6ImportWithJsDocTags.types
++++ new.es6ImportWithJsDocTags.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/es6ImportWithJsDocTags.ts] ////
+ 
+-=== ./a.js ===
++=== a.js ===
+ export const foo = 1;
+ >foo : 1
+ >1 : 1
+ 
+-=== ./b.js ===
++=== b.js ===
+ 'use strict';
+ >'use strict' : "use strict"
+ 

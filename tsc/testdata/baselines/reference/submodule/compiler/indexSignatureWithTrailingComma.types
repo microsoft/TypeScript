@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/indexSignatureWithTrailingComma.ts] ////
+
+=== indexSignatureWithTrailingComma.ts ===
+type A = {
+>A : A
+
+    [key: string,]: string;
+>key : string
+
+};
+
+interface B {
+>B : B
+
+    [key: string,]: string;
+>key : string
+}
+
+class C {
+>C : C
+
+    [key: string,]: null;
+>key : string
+}
+

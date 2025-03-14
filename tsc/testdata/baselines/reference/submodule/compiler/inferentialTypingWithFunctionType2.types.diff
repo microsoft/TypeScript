@@ -1,0 +1,10 @@
+--- old.inferentialTypingWithFunctionType2.types
++++ new.inferentialTypingWithFunctionType2.types
+@@= skipped -2, +2 lines =@@
+ === inferentialTypingWithFunctionType2.ts ===
+ function identity<A>(a: A): A {
+ >identity : <A>(a: A) => A
++>A : A
+ >a : A
+ 
+     return a;

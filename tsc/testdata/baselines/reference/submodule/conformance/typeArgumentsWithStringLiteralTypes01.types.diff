@@ -1,0 +1,36 @@
+--- old.typeArgumentsWithStringLiteralTypes01.types
++++ new.typeArgumentsWithStringLiteralTypes01.types
+@@= skipped -17, +17 lines =@@
+ 
+ function fun1<T>(x: T, y: T) {
+ >fun1 : <T>(x: T, y: T) => T
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -13, +14 lines =@@
+ 
+ function fun2<T, U>(x: T, y: U) {
+ >fun2 : <T, U>(x: T, y: U) => T | U
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+@@= skipped -13, +15 lines =@@
+ 
+ function fun3<T>(...args: T[]): T {
+ >fun3 : <T>(...args: T[]) => T
++>T : T
+ >args : T[]
+ 
+     return args[+randBool()];
+@@= skipped -46, +47 lines =@@
+ 
+     export let e = fun3("Hello", "Hello", "World", "Foo");
+ >e : string
+->fun3("Hello", "Hello", "World", "Foo") : "Hello" | "World" | "Foo"
++>fun3("Hello", "Hello", "World", "Foo") : "Foo" | "Hello" | "World"
+ >fun3 : <T>(...args: T[]) => T
+ >"Hello" : "Hello"
+ >"Hello" : "Hello"

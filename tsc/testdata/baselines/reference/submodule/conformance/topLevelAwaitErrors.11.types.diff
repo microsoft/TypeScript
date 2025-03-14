@@ -1,0 +1,11 @@
+--- old.topLevelAwaitErrors.11.types
++++ new.topLevelAwaitErrors.11.types
+@@= skipped -5, +5 lines =@@
+ >require : any
+ 
+ import await = require("./other");
+->await : typeof await
++>await : typeof import("other")
+ 
+ === other.ts ===
+ declare const _await: any;

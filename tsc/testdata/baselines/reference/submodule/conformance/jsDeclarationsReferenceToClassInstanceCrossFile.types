@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReferenceToClassInstanceCrossFile.ts] ////
+
+=== test.js ===
+const {Render} = require("./index");
+>Render : any
+>require("./index") : any
+>require : any
+>"./index" : "./index"
+
+let render = new Render();
+>render : any
+>new Render() : any
+>Render : any
+
+render.addRectangle();
+>render.addRectangle() : any
+>render.addRectangle : any
+>render : any
+>addRectangle : any
+
+console.log("Objects", render.objects);
+>console.log("Objects", render.objects) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"Objects" : "Objects"
+>render.objects : any
+>render : any
+>objects : any
+

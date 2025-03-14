@@ -1,0 +1,29 @@
+--- old.declFileAmbientExternalModuleWithSingleExportedModule.types
++++ new.declFileAmbientExternalModuleWithSingleExportedModule.types
+@@= skipped -2, +2 lines =@@
+ === declFileAmbientExternalModuleWithSingleExportedModule_1.ts ===
+ ///<reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.ts' preserve="true" />
+ import SubModule = require('SubModule');
+->SubModule : typeof SubModule
++>SubModule : typeof import("SubModule")
+ 
+ export var x: SubModule.m.m3.c;
+->x : SubModule.m.m3.c
++>x : c
+ >SubModule : any
+ >m : any
+ >m3 : any
+@@= skipped -14, +14 lines =@@
+ >"SubModule" : typeof import("SubModule")
+ 
+     export module m {
++>m : any
++
+         export module m3 {
++>m3 : any
++
+             interface c {
++>c : c
+             }
+         }
+     }

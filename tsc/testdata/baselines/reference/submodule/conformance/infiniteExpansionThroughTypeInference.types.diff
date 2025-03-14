@@ -1,0 +1,20 @@
+--- old.infiniteExpansionThroughTypeInference.types
++++ new.infiniteExpansionThroughTypeInference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === infiniteExpansionThroughTypeInference.ts ===
+ interface G<T> {
++>G : G<T>
++>T : T
++
+     x: G<G<T>> // infinitely expanding type reference
+ >x : G<G<T>>
+ 
+@@= skipped -9, +12 lines =@@
+ 
+ function ff<T>(g: G<T>): void {
+ >ff : <T>(g: G<T>) => void
++>T : T
+ >g : G<T>
+ 
+     ff(g) // when infering T here we need to make sure to not descend into the structure of G<T> infinitely

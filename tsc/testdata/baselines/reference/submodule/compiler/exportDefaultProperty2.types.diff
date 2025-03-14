@@ -1,0 +1,13 @@
+--- old.exportDefaultProperty2.types
++++ new.exportDefaultProperty2.types
+@@= skipped -7, +7 lines =@@
+ >B : number
+ }
+ namespace C {
++>C : typeof C
++
+     export interface B { c: number }
++>B : B
+ >c : number
+ }
+ 

@@ -1,0 +1,38 @@
+--- old.controlFlowElementAccessNoCrash1.types
++++ new.controlFlowElementAccessNoCrash1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === controlFlowElementAccessNoCrash1.ts ===
+ interface TestTscEdit {
++>TestTscEdit : TestTscEdit
++
+   caption: string;
+ >caption : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface TestTscCompile {
++>TestTscCompile : TestTscCompile
++
+   subScenario: string;
+ >subScenario : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface VerifyTscEditDiscrepanciesInput {
++>VerifyTscEditDiscrepanciesInput : VerifyTscEditDiscrepanciesInput
++
+   index: number;
+ >index : number
+ 
+@@= skipped -15, +17 lines =@@
+ >input : TestTscCompile
+ 
+ function verifyTscEditDiscrepancies({
+->verifyTscEditDiscrepancies : ({ index, edits, commandLineArgs, }: VerifyTscEditDiscrepanciesInput) => void
++>verifyTscEditDiscrepancies : (__0: VerifyTscEditDiscrepanciesInput) => void
+ 
+   index,
+ >index : number

@@ -1,0 +1,14 @@
+--- old.iteratorsAndStrictNullChecks.types
++++ new.iteratorsAndStrictNullChecks.types
+@@= skipped -8, +8 lines =@@
+ >"b" : "b"
+ 
+     x.substring;
+->x.substring : (start: number, end?: number) => string
++>x.substring : (start: number, end?: number | undefined) => string
+ >x : string
+->substring : (start: number, end?: number) => string
++>substring : (start: number, end?: number | undefined) => string
+ }
+ 
+ // Spread

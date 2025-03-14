@@ -1,0 +1,43 @@
+--- old.expandoFunctionContextualTypes.types
++++ new.expandoFunctionContextualTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === expandoFunctionContextualTypes.ts ===
+ interface MyComponentProps {
++>MyComponentProps : MyComponentProps
++
+     color: "red" | "blue"
+->color : "red" | "blue"
++>color : "blue" | "red"
+ }
+ 
+ interface StatelessComponent<P> {
++>StatelessComponent : StatelessComponent<P>
++>P : P
++
+     (): any;
+     defaultProps?: Partial<P>;
+ >defaultProps : Partial<P>
+@@= skipped -12, +17 lines =@@
+ 
+ const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
+ >MyComponent : StatelessComponent<MyComponentProps>
+->() => null as any : { (): any; defaultProps: Partial<MyComponentProps>; }
++>() => null as any : { (): any; defaultProps: { color: string; }; }
+ >null as any : any
+ 
+ MyComponent.defaultProps = {
+->MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
++>MyComponent.defaultProps = {    color: "red"} : { color: string; }
+ >MyComponent.defaultProps : Partial<MyComponentProps>
+ >MyComponent : StatelessComponent<MyComponentProps>
+ >defaultProps : Partial<MyComponentProps>
+->{    color: "red"} : { color: "red"; }
++>{    color: "red"} : { color: string; }
+ 
+     color: "red"
+->color : "red"
++>color : string
+ >"red" : "red"
+ 
+ };

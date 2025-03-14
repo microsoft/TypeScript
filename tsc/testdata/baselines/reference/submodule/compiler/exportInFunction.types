@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/exportInFunction.ts] ////
+
+=== exportInFunction.ts ===
+function f() {
+>f : { (): void; export=: 0; }
+
+    export = 0;
+

@@ -1,0 +1,10 @@
+--- old.typeInferenceTypePredicate.types
++++ new.typeInferenceTypePredicate.types
+@@= skipped -2, +2 lines =@@
+ === typeInferenceTypePredicate.ts ===
+ declare function f<T>(predicate: (x: {}) => x is T): T;
+ >f : <T>(predicate: (x: {}) => x is T) => T
++>T : T
+ >predicate : (x: {}) => x is T
+ >x : {}
+ 

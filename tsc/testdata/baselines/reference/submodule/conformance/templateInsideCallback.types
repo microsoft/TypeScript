@@ -1,0 +1,93 @@
+//// [tests/cases/conformance/jsdoc/templateInsideCallback.ts] ////
+
+=== templateInsideCallback.js ===
+/**
+ * @typedef Oops
+ * @template T
+ * @property {T} a
+ * @property {T} b
+ */
+/**
+ * @callback Call
+ * @template T
+ * @param {T} x
+ * @returns {T}
+ */
+/**
+ * @template T
+ * @type {Call<T>}
+ */
+const identity = x => x;
+>identity : (x: any) => any
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+/**
+ * @typedef Nested
+ * @property {Object} oh
+ * @property {number} oh.no
+ * @template T
+ * @property {string} oh.noooooo
+ */
+
+
+/**
+ * @overload
+ * @template T
+ * @template U
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ */
+/**
+ * @overload
+ * @template T
+ * @param {T[][]} array
+ * @returns {T[]}
+ */
+/**
+ * @param {unknown[]} array
+ * @param {(x: unknown) => unknown} iterable
+ * @returns {unknown[]}
+ */
+function flatMap(array, iterable = identity) {
+>flatMap : (array: any, iterable?: (x: any) => any) => any[]
+>array : any
+>iterable : (x: any) => any
+>identity : (x: any) => any
+
+  /** @type {unknown[]} */
+  const result = [];
+>result : any[]
+>[] : never[]
+
+  for (let i = 0; i < array.length; i += 1) {
+>i : number
+>0 : 0
+>i < array.length : boolean
+>i : number
+>array.length : any
+>array : any
+>length : any
+>i += 1 : number
+>i : number
+>1 : 1
+
+    result.push(.../** @type {unknown[]} */(iterable(array[i])));
+>result.push(.../** @type {unknown[]} */(iterable(array[i]))) : number
+>result.push : (...items: any[]) => number
+>result : any[]
+>push : (...items: any[]) => number
+>.../** @type {unknown[]} */(iterable(array[i])) : any
+>(iterable(array[i])) : any
+>iterable(array[i]) : any
+>iterable : (x: any) => any
+>array[i] : any
+>array : any
+>i : number
+  }
+  return result;
+>result : any[]
+}
+

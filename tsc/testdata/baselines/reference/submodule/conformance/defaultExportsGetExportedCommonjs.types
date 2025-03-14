@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/es6/moduleExportsCommonjs/defaultExportsGetExportedCommonjs.ts] ////
+
+=== a.ts ===
+export default class Foo {}
+>Foo : default
+
+=== b.ts ===
+export default function foo() {}
+>foo : () => void
+

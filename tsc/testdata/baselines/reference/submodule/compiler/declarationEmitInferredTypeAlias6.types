@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/declarationEmitInferredTypeAlias6.ts] ////
+
+=== 0.ts ===
+{
+    type Data = string | boolean;
+>Data : Data
+
+    let obj: Data = true;
+>obj : Data
+>true : true
+}
+export { }
+
+=== 1.ts ===
+let v = "str" || true;
+>v : string | boolean
+>"str" || true : "str" | true
+>"str" : "str"
+>true : true
+
+export { v }
+>v : string | boolean
+

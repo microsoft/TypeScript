@@ -1,0 +1,20 @@
+--- old.untypedModuleImport_noImplicitAny_typesForPackageExist.types
++++ new.untypedModuleImport_noImplicitAny_typesForPackageExist.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ import * as foo from "foo";
+->foo : typeof foo
++>foo : typeof import("/node_modules/@types/foo/index")
+ 
+ import * as fooSub from "foo/sub";
+ >fooSub : any
+@@= skipped -9, +9 lines =@@
+ >barSub : any
+ 
+ import * as scopeFoo from "@scope/foo";
+->scopeFoo : typeof scopeFoo
++>scopeFoo : typeof import("/node_modules/@types/scope__foo/index")
+ 
+ import * as scopeFooSub from "@scope/foo/sub";
+ >scopeFooSub : any

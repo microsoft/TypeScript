@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportedCjsAlias.ts] ////
+
+=== main.js ===
+const { SomeClass, SomeClass: Another } = require('./lib');
+>SomeClass : any
+>SomeClass : any
+>Another : any
+>require('./lib') : any
+>require : any
+>'./lib' : "./lib"
+
+module.exports = {
+>module.exports = {    SomeClass,    Another} : { SomeClass: any; Another: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{    SomeClass,    Another} : { SomeClass: any; Another: any; }
+
+    SomeClass,
+>SomeClass : any
+
+    Another
+>Another : any
+}

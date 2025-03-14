@@ -1,0 +1,25 @@
+--- old.typeofThisInMethodSignature.types
++++ new.typeofThisInMethodSignature.types
+@@= skipped -10, +10 lines =@@
+ >1 : 1
+ 
+ 	a(x: typeof this.x): void {}
+->a : (x: typeof this.x) => void
++>a : (x: number) => void
+ >x : number
+->this.x : number
+ >this : this
+->x : number
+ }
+ 
+ const a = new A().a(1);
+ >a : void
+ >new A().a(1) : void
+->new A().a : (x: typeof this.x) => void
++>new A().a : (x: number) => void
+ >new A() : A
+ >A : typeof A
+->a : (x: typeof this.x) => void
++>a : (x: number) => void
+ >1 : 1
+ 

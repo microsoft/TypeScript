@@ -1,0 +1,52 @@
+--- old.inferringClassMembersFromAssignments7.types
++++ new.inferringClassMembersFromAssignments7.types
+@@= skipped -27, +27 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->self.x : number
++>self.x : any
+ >self : this
+->x : number
++>x : any
+         }
+     }
+     mreal() {
+@@= skipped -14, +14 lines =@@
+ 
+         self.y = 2
+ >self.y = 2 : 2
+->self.y : number | undefined
++>self.y : any
+ >self : this
+->y : number | undefined
++>y : any
+ >2 : 2
+     }
+ }
+@@= skipped -12, +12 lines =@@
+ >C : typeof C
+ 
+ c.x
+->c.x : number
++>c.x : any
+ >c : C
+->x : number
++>x : any
+ 
+ c.y
+->c.y : number | undefined
++>c.y : any
+ >c : C
+->y : number | undefined
++>y : any
+ 
+ c.m()
+->c.m() : void
+->c.m : () => void
++>c.m() : any
++>c.m : any
+ >c : C
+->m : () => void
++>m : any
+ 

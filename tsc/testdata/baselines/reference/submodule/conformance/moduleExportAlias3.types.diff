@@ -1,0 +1,22 @@
+--- old.moduleExportAlias3.types
++++ new.moduleExportAlias3.types
+@@= skipped -5, +5 lines =@@
+ >C : C
+ }
+ module.exports = {
+->module.exports = {    C} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {    C} : { C: typeof C; }
++>module.exports : any
++>module : any
++>exports : any
+ >{    C} : { C: typeof C; }
+ 
+     C
+->C : typeof C
++>C : any
+ 
+ };
+ 

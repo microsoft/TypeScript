@@ -1,0 +1,34 @@
+--- old.aliasAssignments.types
++++ new.aliasAssignments.types
+@@= skipped -1, +1 lines =@@
+ 
+ === aliasAssignments_1.ts ===
+ import moduleA = require("./aliasAssignments_moduleA");
+->moduleA : typeof moduleA
++>moduleA : typeof import("aliasAssignments_moduleA")
+ 
+ var x = moduleA;
+->x : typeof moduleA
+->moduleA : typeof moduleA
++>x : typeof import("aliasAssignments_moduleA")
++>moduleA : typeof import("aliasAssignments_moduleA")
+ 
+ x = 1; // Should be error
+ >x = 1 : 1
+->x : typeof moduleA
++>x : typeof import("aliasAssignments_moduleA")
+ >1 : 1
+ 
+ var y = 1;
+@@= skipped -16, +16 lines =@@
+ >1 : 1
+ 
+ y = moduleA; // should be error
+->y = moduleA : typeof moduleA
++>y = moduleA : typeof import("aliasAssignments_moduleA")
+ >y : number
+->moduleA : typeof moduleA
++>moduleA : typeof import("aliasAssignments_moduleA")
+ 
+ === aliasAssignments_moduleA.ts ===
+ export class someClass {

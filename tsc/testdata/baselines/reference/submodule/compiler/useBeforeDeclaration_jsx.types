@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/useBeforeDeclaration_jsx.tsx] ////
+
+=== useBeforeDeclaration_jsx.tsx ===
+namespace JSX {
+>JSX : any
+
+    export interface Element {}
+>Element : Element
+}
+
+class C {
+>C : C
+
+    static a = <C.z></C.z>;
+>a : any
+><C.z></C.z> : any
+>C.z : () => any
+>C : typeof C
+>z : () => any
+>C.z : () => any
+>C : typeof C
+>z : () => any
+
+    static b = <C.z/>;
+>b : any
+><C.z/> : any
+>C.z : () => any
+>C : typeof C
+>z : () => any
+
+    static c = <span {...C.x}></span>;
+>c : any
+><span {...C.x}></span> : any
+>span : any
+>C.x : {}
+>C : typeof C
+>x : {}
+>span : any
+
+    static d = <span id={C.y}></span>;
+>d : any
+><span id={C.y}></span> : any
+>span : any
+>id : any
+>C.y : string
+>C : typeof C
+>y : string
+>span : any
+
+    static e = <span>{C.y}</span>;
+>e : any
+><span>{C.y}</span> : any
+>span : any
+>C.y : string
+>C : typeof C
+>y : string
+>span : any
+
+    static x = {};
+>x : {}
+>{} : {}
+
+    static y = '';
+>y : string
+>'' : ""
+
+    static z = () => <b></b>;
+>z : () => any
+>() => <b></b> : () => any
+><b></b> : any
+>b : any
+>b : any
+}
+

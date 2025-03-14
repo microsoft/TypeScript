@@ -1,0 +1,67 @@
+--- old.importTypeLocal.types
++++ new.importTypeLocal.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo.ts ===
+ interface Point {
++>Point : Point
++
+     x: number;
+ >x : number
+ 
+@@= skipped -11, +13 lines =@@
+ 
+ === foo2.ts ===
+ namespace Bar {
++>Bar : typeof Bar
++
+     export interface I {
++>I : I
++
+         a: string;
+ >a : string
+ 
+@@= skipped -10, +14 lines =@@
+ }
+ 
+ export namespace Baz {
++>Baz : any
++
+     export interface J {
++>J : J
++
+         a: number;
+ >a : number
+ 
+@@= skipped -13, +17 lines =@@
+ >Bar : Bar
+ 
+     item: Bar.I;
+->item : Bar.I
++>item : I
+ >Bar : any
+ 
+     constructor(input: Baz.J) {}
+->input : Baz.J
++>input : J
+ >Baz : any
+ }
+ export { Bar }
+@@= skipped -12, +12 lines =@@
+ 
+ === usage.ts ===
+ export const x: import("./foo") = { x: 0, y: 0 };
+->x : import("foo")
++>x : Point
+ >{ x: 0, y: 0 } : { x: number; y: number; }
+ >x : number
+ >0 : 0
+@@= skipped -8, +8 lines =@@
+ >0 : 0
+ 
+ export let y: import("./foo2").Bar.I = { a: "", b: 0 };
+->y : import("foo2").Bar.I
++>y : I
+ >Bar : any
+ >{ a: "", b: 0 } : { a: string; b: number; }
+ >a : string

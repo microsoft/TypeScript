@@ -1,0 +1,16 @@
+--- old.nodeModulesImportAttributesModeDeclarationEmitErrors(module=node16).types
++++ new.nodeModulesImportAttributesModeDeclarationEmitErrors(module=node16).types
+@@= skipped -16, +16 lines =@@
+ >Req2 : any
+ 
+ export interface LocalInterface extends RequireInterface, ImportInterface {}
++>LocalInterface : LocalInterface
+ 
+ 
+ 
+ 
+ === /node_modules/pkg/require.d.ts ===
+-
+ export interface RequireInterface {}
++>RequireInterface : RequireInterface
++

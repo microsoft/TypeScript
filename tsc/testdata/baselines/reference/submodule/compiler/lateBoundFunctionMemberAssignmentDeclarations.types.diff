@@ -1,0 +1,33 @@
+--- old.lateBoundFunctionMemberAssignmentDeclarations.types
++++ new.lateBoundFunctionMemberAssignmentDeclarations.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.ts ===
+ export function foo() {}
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; }
+ 
+ foo.bar = 12;
+ >foo.bar = 12 : 12
+ >foo.bar : number
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; }
+ >bar : number
+ >12 : 12
+ 
+@@= skipped -17, +17 lines =@@
+ foo[_private] = "ok";
+ >foo[_private] = "ok" : "ok"
+ >foo[_private] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; }
+ >_private : unique symbol
+ >"ok" : "ok"
+ 
+ const x: string = foo[_private];
+ >x : string
+ >foo[_private] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; }
+ >_private : unique symbol
+ 

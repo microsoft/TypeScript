@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/references/library-reference-15.ts] ////
+
+=== /a/b/consumer.ts ===
+$.foo(); // should OK
+>$.foo() : any
+>$.foo : any
+>$ : any
+>foo : any
+
+$2.foo(); // should error
+>$2.foo() : any
+>$2.foo : any
+>$2 : any
+>foo : any
+

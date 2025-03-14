@@ -1,0 +1,12 @@
+--- old.jsDeclarationsRestArgsWithThisTypeInJSDocFunction.types
++++ new.jsDeclarationsRestArgsWithThisTypeInJSDocFunction.types
+@@= skipped -7, +7 lines =@@
+    * @param {function(this:Object, ...*):*} functionDeclaration
+    */
+   method(functionDeclaration) {}
+->method : (functionDeclaration: (this: any, ...args: any[]) => any) => void
+->functionDeclaration : (this: any, ...arg1: any[]) => any
++>method : (functionDeclaration: any) => void
++>functionDeclaration : any
+ }
+ 

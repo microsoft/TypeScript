@@ -1,0 +1,74 @@
+--- old.controlFlowOptionalChain2.types
++++ new.controlFlowOptionalChain2.types
+@@= skipped -85, +85 lines =@@
+ >x : "x"
+ 
+ function f1(x: X | U | undefined) {
+->f1 : (x: X | U | undefined) => void
++>f1 : (x: U | X | undefined) => void
+ >x : U | X | undefined
+ 
+     if (x?.kind === undefined) {
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ function f2(x: X | N | undefined) {
+->f2 : (x: X | N | undefined) => void
++>f2 : (x: N | X | undefined) => void
+ >x : N | X | undefined
+ 
+     if (x?.kind === undefined) {
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ function f3(x: X | U | null) {
+->f3 : (x: X | U | null) => void
++>f3 : (x: U | X | null) => void
+ >x : U | X | null
+ 
+     if (x?.kind === undefined) {
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ function f4(x: X | N | null) {
+->f4 : (x: X | N | null) => void
++>f4 : (x: N | X | null) => void
+ >x : N | X | null
+ 
+     if (x?.kind === undefined) {
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ function f5(x: X | U | undefined) {
+->f5 : (x: X | U | undefined) => void
++>f5 : (x: U | X | undefined) => void
+ >x : U | X | undefined
+ 
+     if (x?.kind === null) {
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function f6(x: X | N | undefined) {
+->f6 : (x: X | N | undefined) => void
++>f6 : (x: N | X | undefined) => void
+ >x : N | X | undefined
+ 
+     if (x?.kind === null) {
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function f7(x: X | U | null) {
+->f7 : (x: X | U | null) => void
++>f7 : (x: U | X | null) => void
+ >x : U | X | null
+ 
+     if (x?.kind === null) {
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function f8(x: X | N | null) {
+->f8 : (x: X | N | null) => void
++>f8 : (x: N | X | null) => void
+ >x : N | X | null
+ 
+     if (x?.kind === null) {

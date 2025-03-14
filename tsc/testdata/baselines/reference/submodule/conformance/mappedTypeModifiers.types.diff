@@ -1,0 +1,185 @@
+--- old.mappedTypeModifiers.types
++++ new.mappedTypeModifiers.types
+@@= skipped -40, +40 lines =@@
+ 
+ var v01: { [P in keyof T]: T[P] };
+ >v01 : T
++>P : P
+ 
+ var v01: Pick<T, keyof T>;
+ >v01 : T
+@@= skipped -12, +13 lines =@@
+ 
+ var v02: { [P in keyof T]?: T[P] };
+ >v02 : TP
++>P : P
+ 
+ var v02: Partial<T>;
+ >v02 : TP
+ 
+ var v02: { [P in keyof TP]: TP[P] }
+ >v02 : TP
++>P : P
+ 
+ var v02: Pick<TP, keyof TP>;
+ >v02 : TP
+@@= skipped -15, +17 lines =@@
+ 
+ var v03: { readonly [P in keyof T]: T[P] };
+ >v03 : TR
++>P : P
+ 
+ var v03: Readonly<T>;
+ >v03 : TR
+ 
+ var v03: { [P in keyof TR]: TR[P] }
+ >v03 : TR
++>P : P
+ 
+ var v03: Pick<TR, keyof TR>;
+ >v03 : TR
+@@= skipped -15, +17 lines =@@
+ 
+ var v04: { readonly [P in keyof T]?: T[P] };
+ >v04 : TPR
++>P : P
+ 
+ var v04: Partial<TR>;
+ >v04 : TPR
+@@= skipped -15, +16 lines =@@
+ 
+ var v04: { [P in keyof TPR]: TPR[P] }
+ >v04 : TPR
++>P : P
+ 
+ var v04: Pick<TPR, keyof T>;
+ >v04 : TPR
+ 
+ type Boxified<T> = { [P in keyof T]: { x: T[P] } };
+ >Boxified : Boxified<T>
++>T : T
++>P : P
+ >x : T[P]
+ 
+ type B = { a: { x: number }, b: { x: string } };
+@@= skipped -56, +59 lines =@@
+ 
+ var b01: { [P in keyof B]: B[P] };
+ >b01 : B
++>P : P
+ 
+ var b01: Pick<B, keyof B>;
+ >b01 : B
+@@= skipped -12, +13 lines =@@
+ 
+ var b02: { [P in keyof B]?: B[P] };
+ >b02 : BP
++>P : P
+ 
+ var b02: Partial<B>;
+ >b02 : BP
+ 
+ var b02: { [P in keyof BP]: BP[P] }
+ >b02 : BP
++>P : P
+ 
+ var b02: Pick<BP, keyof BP>;
+ >b02 : BP
+@@= skipped -15, +17 lines =@@
+ 
+ var b03: { readonly [P in keyof B]: B[P] };
+ >b03 : BR
++>P : P
+ 
+ var b03: Readonly<B>;
+ >b03 : BR
+ 
+ var b03: { [P in keyof BR]: BR[P] }
+ >b03 : BR
++>P : P
+ 
+ var b03: Pick<BR, keyof BR>;
+ >b03 : BR
+@@= skipped -15, +17 lines =@@
+ 
+ var b04: { readonly [P in keyof B]?: B[P] };
+ >b04 : BPR
++>P : P
+ 
+ var b04: Partial<BR>;
+ >b04 : BPR
+@@= skipped -15, +16 lines =@@
+ 
+ var b04: { [P in keyof BPR]: BPR[P] }
+ >b04 : BPR
++>P : P
+ 
+ var b04: Pick<BPR, keyof BPR>;
+ >b04 : BPR
+@@= skipped -20, +21 lines =@@
+ 
+     (x["other"] || 0).toFixed();
+ >(x["other"] || 0).toFixed() : string
+->(x["other"] || 0).toFixed : (fractionDigits?: number) => string
++>(x["other"] || 0).toFixed : (fractionDigits?: number | undefined) => string
+ >(x["other"] || 0) : number
+ >x["other"] || 0 : number
+ >x["other"] : number | undefined
+ >x : Partial<Foo>
+ >"other" : "other"
+ >0 : 0
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ }
+ 
+ function f2(x: Readonly<Foo>) {
+@@= skipped -21, +21 lines =@@
+ 
+     x["other"].toFixed();
+ >x["other"].toFixed() : string
+->x["other"].toFixed : (fractionDigits?: number) => string
++>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+ >x["other"] : number
+ >x : Readonly<Foo>
+ >"other" : "other"
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ }
+ 
+ function f3(x: Boxified<Foo>) {
+@@= skipped -18, +18 lines =@@
+ 
+     x["other"].x.toFixed();
+ >x["other"].x.toFixed() : string
+->x["other"].x.toFixed : (fractionDigits?: number) => string
++>x["other"].x.toFixed : (fractionDigits?: number | undefined) => string
+ >x["other"].x : number
+ >x["other"] : { x: number; }
+ >x : Boxified<Foo>
+ >"other" : "other"
+ >x : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ }
+ 
+ function f4(x: { [P in keyof Foo]: Foo[P] }) {
+->f4 : (x: { [P in keyof Foo]: Foo[P]; }) => void
++>f4 : (x: { [x: string]: number; prop: number; }) => void
+ >x : { [x: string]: number; prop: number; }
++>P : P
+ 
+     x.prop; // ok
+ >x.prop : number
+@@= skipped -20, +21 lines =@@
+ 
+     x["other"].toFixed();
+ >x["other"].toFixed() : string
+->x["other"].toFixed : (fractionDigits?: number) => string
++>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+ >x["other"] : number
+ >x : { [x: string]: number; prop: number; }
+ >"other" : "other"
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ }
+ 

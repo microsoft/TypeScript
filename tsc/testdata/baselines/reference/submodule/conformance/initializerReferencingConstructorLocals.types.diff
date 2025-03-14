@@ -1,0 +1,46 @@
+--- old.initializerReferencingConstructorLocals.types
++++ new.initializerReferencingConstructorLocals.types
+@@= skipped -11, +11 lines =@@
+ 
+     b: typeof z; // error
+ >b : any
+->z : any
+ 
+     c = this.z; // error
+ >c : any
+@@= skipped -10, +9 lines =@@
+ 
+     d: typeof this.z; // error
+ >d : any
+->this.z : any
+ >this : this
+->z : any
+ 
+     constructor(x) {
+ >x : any
+@@= skipped -16, +14 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     a = z; // error
+ >a : any
+@@= skipped -7, +8 lines =@@
+ 
+     b: typeof z; // error
+ >b : any
+->z : any
+ 
+     c = this.z; // error
+ >c : any
+@@= skipped -10, +9 lines =@@
+ 
+     d: typeof this.z; // error
+ >d : any
+->this.z : any
+ >this : this
+->z : any
+ 
+     constructor(x: T) {
+ >x : T

@@ -1,0 +1,12 @@
+--- old.generics0.types
++++ new.generics0.types
+@@= skipped -1, +1 lines =@@
+ 
+ === generics0.ts ===
+ interface G<T> {
++>G : G<T>
++>T : T
++
+     x: T;
+ >x : T
+ }

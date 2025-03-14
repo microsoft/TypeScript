@@ -1,0 +1,142 @@
+--- old.destructuringAssignmentWithDefault.types
++++ new.destructuringAssignmentWithDefault.types
+@@= skipped -1, +1 lines =@@
+ 
+ === destructuringAssignmentWithDefault.ts ===
+ const a: { x?: number } = { };
+->a : { x?: number; }
++>a : { x?: number | undefined; }
+ >x : number | undefined
+ >{ } : {}
+ 
+@@= skipped -9, +9 lines =@@
+ >0 : 0
+ 
+ ({x = 1} = a);
+->({x = 1} = a) : { x?: number; }
+->{x = 1} = a : { x?: number; }
++>({x = 1} = a) : { x?: number | undefined; }
++>{x = 1} = a : { x?: number | undefined; }
+ >{x = 1} : { x?: number; }
+->x : number
++>x : any
+ >1 : 1
+->a : { x?: number; }
++>a : { x?: number | undefined; }
+ 
+ // Repro from #26235
+ 
+ function f1(options?: { color?: string, width?: number }) {
+->f1 : (options?: { color?: string; width?: number; }) => void
+->options : { color?: string; width?: number; } | undefined
++>f1 : (options?: { color?: string | undefined; width?: number | undefined; } | undefined) => void
++>options : { color?: string | undefined; width?: number | undefined; } | undefined
+ >color : string | undefined
+ >width : number | undefined
+ 
+     let { color, width } = options || {};
+ >color : string | undefined
+ >width : number | undefined
+->options || {} : { color?: string; width?: number; }
+->options : { color?: string; width?: number; } | undefined
++>options || {} : { color?: string | undefined; width?: number | undefined; }
++>options : { color?: string | undefined; width?: number | undefined; } | undefined
+ >{} : {}
+ 
+     ({ color, width } = options || {});
+->({ color, width } = options || {}) : { color?: string; width?: number; }
+->{ color, width } = options || {} : { color?: string; width?: number; }
++>({ color, width } = options || {}) : { color?: string | undefined; width?: number | undefined; }
++>{ color, width } = options || {} : { color?: string | undefined; width?: number | undefined; }
+ >{ color, width } : { color: string | undefined; width: number | undefined; }
+->color : string | undefined
+->width : number | undefined
+->options || {} : { color?: string; width?: number; }
+->options : { color?: string; width?: number; } | undefined
++>color : any
++>width : any
++>options || {} : { color?: string | undefined; width?: number | undefined; }
++>options : { color?: string | undefined; width?: number | undefined; } | undefined
+ >{} : {}
+ 
+     let x1 = (options || {}).color;
+ >x1 : string | undefined
+ >(options || {}).color : string | undefined
+->(options || {}) : { color?: string; width?: number; }
+->options || {} : { color?: string; width?: number; }
+->options : { color?: string; width?: number; } | undefined
++>(options || {}) : { color?: string | undefined; width?: number | undefined; }
++>options || {} : { color?: string | undefined; width?: number | undefined; }
++>options : { color?: string | undefined; width?: number | undefined; } | undefined
+ >{} : {}
+ >color : string | undefined
+ 
+     let x2 = (options || {})["color"];
+ >x2 : string | undefined
+ >(options || {})["color"] : string | undefined
+->(options || {}) : { color?: string; width?: number; }
+->options || {} : { color?: string; width?: number; }
+->options : { color?: string; width?: number; } | undefined
++>(options || {}) : { color?: string | undefined; width?: number | undefined; }
++>options || {} : { color?: string | undefined; width?: number | undefined; }
++>options : { color?: string | undefined; width?: number | undefined; } | undefined
+ >{} : {}
+ >"color" : "color"
+ }
+ 
+ function f2(options?: [string?, number?]) {
+->f2 : (options?: [string?, number?]) => void
++>f2 : (options?: [(string | undefined)?, (number | undefined)?] | undefined) => void
+ >options : [(string | undefined)?, (number | undefined)?] | undefined
+ 
+     let [str, num] = options || [];
+@@= skipped -74, +74 lines =@@
+     let x1 = (options || {})[0];
+ >x1 : string | undefined
+ >(options || {})[0] : string | undefined
+->(options || {}) : [(string | undefined)?, (number | undefined)?] | {}
+->options || {} : [(string | undefined)?, (number | undefined)?] | {}
++>(options || {}) : {} | [(string | undefined)?, (number | undefined)?]
++>options || {} : {} | [(string | undefined)?, (number | undefined)?]
+ >options : [(string | undefined)?, (number | undefined)?] | undefined
+ >{} : {}
+ >0 : 0
+ }
+ 
+ function f3(options?: { color: string, width: number }) {
+->f3 : (options?: { color: string; width: number; }) => void
++>f3 : (options?: { color: string; width: number; } | undefined) => void
+ >options : { color: string; width: number; } | undefined
+ >color : string
+ >width : number
+@@= skipped -24, +24 lines =@@
+ >({ color, width } = options || {}) : { color: string; width: number; } | {}
+ >{ color, width } = options || {} : { color: string; width: number; } | {}
+ >{ color, width } : { color: string | undefined; width: number | undefined; }
+->color : string | undefined
+->width : number | undefined
++>color : any
++>width : any
+ >options || {} : { color: string; width: number; } | {}
+ >options : { color: string; width: number; } | undefined
+ >{} : {}
+@@= skipped -26, +26 lines =@@
+ }
+ 
+ function f4(options?: [string, number]) {
+->f4 : (options?: [string, number]) => void
++>f4 : (options?: [string, number] | undefined) => void
+ >options : [string, number] | undefined
+ 
+     let [str, num] = options || [];
+@@= skipped -22, +22 lines =@@
+     let x1 = (options || {})[0];
+ >x1 : string | undefined
+ >(options || {})[0] : string | undefined
+->(options || {}) : [string, number] | {}
+->options || {} : [string, number] | {}
++>(options || {}) : {} | [string, number]
++>options || {} : {} | [string, number]
+ >options : [string, number] | undefined
+ >{} : {}
+ >0 : 0

@@ -1,0 +1,14 @@
+--- old.transformNestedGeneratorsWithTry.types
++++ new.transformNestedGeneratorsWithTry.types
+@@= skipped -41, +41 lines =@@
+ 
+     type Bluebird<T> = Promise<T>;
+ >Bluebird : Bluebird<T>
++>T : T
+ 
+     const Bluebird: typeof Promise;
+ >Bluebird : PromiseConstructor
+->Promise : PromiseConstructor
+ 
+     export = Bluebird;
+ >Bluebird : Bluebird<T>

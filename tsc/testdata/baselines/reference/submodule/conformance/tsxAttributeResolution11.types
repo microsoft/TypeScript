@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution11.tsx] ////
+
+=== react.d.ts ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+	}
+	interface ElementAttributesProperty {
+>ElementAttributesProperty : ElementAttributesProperty
+
+		props;
+>props : any
+	}
+	interface IntrinsicAttributes {
+>IntrinsicAttributes : IntrinsicAttributes
+
+		ref?: string;
+>ref : string
+	}
+}
+
+=== file.tsx ===
+class MyComponent {  
+>MyComponent : MyComponent
+
+  render() {
+>render : () => void
+  }
+
+  props: {
+>props : { ref?: string; }
+
+	  ref?: string;
+>ref : string
+  }
+}
+
+// Should be an OK
+var x = <MyComponent bar='world' />;
+>x : any
+><MyComponent bar='world' /> : any
+>MyComponent : typeof MyComponent
+>bar : any
+
+

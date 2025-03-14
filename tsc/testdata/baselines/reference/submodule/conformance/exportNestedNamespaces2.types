@@ -1,0 +1,75 @@
+//// [tests/cases/conformance/salsa/exportNestedNamespaces2.ts] ////
+
+=== mod.js ===
+// Based on a pattern from adonis
+exports.formatters = {}
+>exports.formatters = {} : {}
+>exports.formatters : any
+>exports : any
+>formatters : any
+>{} : {}
+
+=== first.js ===
+exports = require('./mod')
+>exports = require('./mod') : any
+>exports : any
+>require('./mod') : any
+>require : any
+>'./mod' : "./mod"
+
+exports.formatters.j = function (v) {
+>exports.formatters.j = function (v) {    return v} : (v: any) => any
+>exports.formatters.j : any
+>exports.formatters : any
+>exports : any
+>formatters : any
+>j : any
+>function (v) {    return v} : (v: any) => any
+>v : any
+
+    return v
+>v : any
+}
+=== second.js ===
+exports = require('./mod')
+>exports = require('./mod') : any
+>exports : any
+>require('./mod') : any
+>require : any
+>'./mod' : "./mod"
+
+exports.formatters.o = function (v) {
+>exports.formatters.o = function (v) {    return v} : (v: any) => any
+>exports.formatters.o : any
+>exports.formatters : any
+>exports : any
+>formatters : any
+>o : any
+>function (v) {    return v} : (v: any) => any
+>v : any
+
+    return v
+>v : any
+}
+
+=== use.js ===
+import * as debug from './mod'
+>debug : any
+
+debug.formatters.j
+>debug.formatters.j : any
+>debug.formatters : any
+>debug : any
+>formatters : any
+>j : any
+
+var one = debug.formatters.o(1)
+>one : any
+>debug.formatters.o(1) : any
+>debug.formatters.o : any
+>debug.formatters : any
+>debug : any
+>formatters : any
+>o : any
+>1 : 1
+

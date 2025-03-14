@@ -1,0 +1,17 @@
+--- old.collisionCodeGenEnumWithEnumMemberConflict.types
++++ new.collisionCodeGenEnumWithEnumMemberConflict.types
+@@= skipped -1, +1 lines =@@
+ 
+ === collisionCodeGenEnumWithEnumMemberConflict.ts ===
+ enum Color {
+->Color : Color
++>Color : Color.Color
+ 
+     Color,
+ >Color : Color.Color
+ 
+     Thing = Color
+ >Thing : Color.Color
+->Color : Color
++>Color : Color.Color
+ }

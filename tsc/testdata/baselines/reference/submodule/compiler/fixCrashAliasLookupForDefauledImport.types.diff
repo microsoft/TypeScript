@@ -1,0 +1,18 @@
+--- old.fixCrashAliasLookupForDefauledImport.types
++++ new.fixCrashAliasLookupForDefauledImport.types
+@@= skipped -2, +2 lines =@@
+ === input.ts ===
+ export type Foo<T = string> = {};
+ >Foo : Foo<T>
++>T : T
+ 
+ === usage.ts ===
+ import {Foo} from "./input";
+@@= skipped -7, +8 lines =@@
+ 
+ function bar<T>(element: Foo) {
+ >bar : <T>(element: Foo) => number
++>T : T
+ >element : Foo
+ 
+     return 1;

@@ -1,0 +1,48 @@
+--- old.declarationEmitQualifiedAliasTypeArgument.types
++++ new.declarationEmitQualifiedAliasTypeArgument.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bbb.d.ts ===
+ export interface INode<T> {
++>INode : INode<T>
++>T : T
++
+     data: T;
+ >data : T
+ }
+ 
+ export function create<T>(): () => INode<T>;
+ >create : <T>() => () => INode<T>
++>T : T
+ 
+ === lib.d.ts ===
+ export type G<T extends string> = { [P in T]: string };
+ >G : G<T>
++>T : T
++>P : P
+ 
+ export enum E {
+ >E : E
+@@= skipped -36, +42 lines =@@
+ >Q : any
+ 
+ import { create } from "./bbb";
+->create : <T>() => () => import("bbb").INode<T>
++>create : <T>() => () => INode<T>
+ 
+ export const fun = create<T>();
+->fun : () => import("bbb").INode<T>
+->create<T>() : () => import("bbb").INode<T>
+->create : <T>() => () => import("bbb").INode<T>
++>fun : () => INode<T>
++>create<T>() : () => INode<T>
++>create : <T>() => () => INode<T>
+ 
+ export const fun2 = create<Q>();
+->fun2 : () => import("bbb").INode<Q>
+->create<Q>() : () => import("bbb").INode<Q>
+->create : <T>() => () => import("bbb").INode<T>
++>fun2 : () => INode<Q>
++>create<Q>() : () => INode<Q>
++>create : <T>() => () => INode<T>
+ 

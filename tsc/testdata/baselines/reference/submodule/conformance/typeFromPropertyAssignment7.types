@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment7.ts] ////
+
+=== a.js ===
+var obj = {};
+>obj : {}
+>{} : {}
+
+obj.method = function (hunch) {
+>obj.method = function (hunch) {    return true;} : (hunch: any) => boolean
+>obj.method : any
+>obj : {}
+>method : any
+>function (hunch) {    return true;} : (hunch: any) => boolean
+>hunch : any
+
+    return true;
+>true : true
+}
+var b = obj.method();
+>b : any
+>obj.method() : any
+>obj.method : any
+>obj : {}
+>method : any
+

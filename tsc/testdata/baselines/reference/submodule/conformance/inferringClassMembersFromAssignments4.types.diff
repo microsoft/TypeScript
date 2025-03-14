@@ -1,0 +1,26 @@
+--- old.inferringClassMembersFromAssignments4.types
++++ new.inferringClassMembersFromAssignments4.types
+@@= skipped -8, +8 lines =@@
+ 
+         this.p = 1
+ >this.p = 1 : 1
+->this.p : number | undefined
++>this.p : any
+ >this : this
+->p : number | undefined
++>p : any
+ >1 : 1
+     }
+ }
+@@= skipped -16, +16 lines =@@
+         // should be OK, and p should have type number | undefined from its base
+         this.p = 1
+ >this.p = 1 : 1
+->this.p : number | undefined
++>this.p : any
+ >this : this
+->p : number | undefined
++>p : any
+ >1 : 1
+     }
+ }

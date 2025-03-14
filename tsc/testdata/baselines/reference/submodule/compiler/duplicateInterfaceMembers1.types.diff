@@ -1,0 +1,11 @@
+--- old.duplicateInterfaceMembers1.types
++++ new.duplicateInterfaceMembers1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === duplicateInterfaceMembers1.ts ===
+ interface Bar {
++>Bar : Bar
++
+    x: number;
+ >x : number
+ 

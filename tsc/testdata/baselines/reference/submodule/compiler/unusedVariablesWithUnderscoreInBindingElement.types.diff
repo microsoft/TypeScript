@@ -1,0 +1,11 @@
+--- old.unusedVariablesWithUnderscoreInBindingElement.types
++++ new.unusedVariablesWithUnderscoreInBindingElement.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 250 -> 1,000
+-
+ === unusedVariablesWithUnderscoreInBindingElement.ts ===
+ function t1() {
+ >t1 : () => void

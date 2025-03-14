@@ -1,0 +1,87 @@
+--- old.importTypeInJSDoc.types
++++ new.importTypeInJSDoc.types
+@@= skipped -1, +1 lines =@@
+ 
+ === externs.d.ts ===
+ declare namespace MyClass {
++>MyClass : typeof MyClass
++
+     export interface Bar {
++>Bar : Bar
++
+         doer: (x: string) => void;
+ >doer : (x: string) => void
+ >x : string
+@@= skipped -18, +22 lines =@@
+ >y : number
+ 
+     constructor(x: MyClass.Bar);
+->x : MyClass.Bar
++>x : Bar
+ >MyClass : any
+ }
+ declare global {
+@@= skipped -8, +8 lines =@@
+ 
+     const Foo: typeof MyClass;
+ >Foo : typeof MyClass
+->MyClass : typeof MyClass
+ }
+ export = MyClass;
+ >MyClass : MyClass
+@@= skipped -11, +10 lines =@@
+  */
+ 
+ let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
+->a : import("externs")
+->(/** @type {*} */(undefined)) : import("externs")
+->(undefined) : any
++>a : any
++>(/** @type {*} */(undefined)) : undefined
++>(undefined) : undefined
+ >undefined : undefined
+ 
+ a = new Foo({doer: Foo.Bar});
+->a = new Foo({doer: Foo.Bar}) : import("externs")
+->a : import("externs")
+->new Foo({doer: Foo.Bar}) : import("externs")
+->Foo : typeof import("externs")
++>a = new Foo({doer: Foo.Bar}) : MyClass
++>a : any
++>new Foo({doer: Foo.Bar}) : MyClass
++>Foo : typeof MyClass
+ >{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
+ >doer : (x: string, y?: number) => void
+ >Foo.Bar : (x: string, y?: number) => void
+->Foo : typeof import("externs")
++>Foo : typeof MyClass
+ >Bar : (x: string, y?: number) => void
+ 
+ const q = /** @type {import("./externs").Bar} */({ doer: q => q });
+->q : import("externs").Bar
+->({ doer: q => q }) : import("externs").Bar
+->{ doer: q => q } : { doer: (q: string) => string; }
+->doer : (q: string) => string
+->q => q : (q: string) => string
+->q : string
+->q : string
++>q : { doer: (q: any) => any; }
++>({ doer: q => q }) : { doer: (q: any) => any; }
++>{ doer: q => q } : { doer: (q: any) => any; }
++>doer : (q: any) => any
++>q => q : (q: any) => any
++>q : any
++>q : any
+ 
+ const r = /** @type {typeof import("./externs").Bar} */(r => r);
+->r : (x: string, y?: number) => void
+->(r => r) : (x: string, y?: number) => void
+->r => r : (r: string) => string
+->r : string
+->r : string
++>r : (r: any) => any
++>(r => r) : (r: any) => any
++>r => r : (r: any) => any
++>r : any
++>r : any
+ 

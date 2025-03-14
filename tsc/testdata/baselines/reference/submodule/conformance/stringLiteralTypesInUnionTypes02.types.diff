@@ -1,0 +1,11 @@
+--- old.stringLiteralTypesInUnionTypes02.types
++++ new.stringLiteralTypesInUnionTypes02.types
+@@= skipped -42, +42 lines =@@
+ 
+     let e: (typeof x) | (typeof y) = c || d;
+ >e : string
+->x : "bar"
+->y : string
+ >c || d : string
+ >c : string
+ >d : string

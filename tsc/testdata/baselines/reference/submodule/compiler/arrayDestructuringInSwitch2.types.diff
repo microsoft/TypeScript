@@ -1,0 +1,11 @@
+--- old.arrayDestructuringInSwitch2.types
++++ new.arrayDestructuringInSwitch2.types
+@@= skipped -13, +13 lines =@@
+ 
+   const { kind, a } = x;
+ >kind : "a" | "b"
+->a : [1] | []
++>a : [] | [1]
+ >x : X
+ 
+   switch (kind) {

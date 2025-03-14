@@ -1,0 +1,19 @@
+--- old.inferentialTypingWithFunctionTypeNested.types
++++ new.inferentialTypingWithFunctionTypeNested.types
+@@= skipped -2, +2 lines =@@
+ === inferentialTypingWithFunctionTypeNested.ts ===
+ declare function map<T, U>(x: T, f: () => { x: (s: T) => U }): U;
+ >map : <T, U>(x: T, f: () => { x: (s: T) => U; }) => U
++>T : T
++>U : U
+ >x : T
+ >f : () => { x: (s: T) => U; }
+ >x : (s: T) => U
+@@= skipped -7, +9 lines =@@
+ 
+ declare function identity<V>(y: V): V;
+ >identity : <V>(y: V) => V
++>V : V
+ >y : V
+ 
+ var s = map("", () => { return { x: identity }; });

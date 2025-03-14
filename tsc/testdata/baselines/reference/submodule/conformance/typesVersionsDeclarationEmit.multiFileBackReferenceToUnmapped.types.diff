@@ -1,0 +1,49 @@
+--- old.typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.types
++++ new.typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.types
+@@= skipped -1, +1 lines =@@
+ 
+ === main.ts ===
+ import { fa } from "ext";
+->fa : () => import("node_modules/ext/other").A2
++>fa : () => A
+ 
+ import { fa as fa2 } from "ext/other";
+->fa : () => import("node_modules/ext/other").A2
+->fa2 : () => import("node_modules/ext/other").A2
++>fa : () => A2
++>fa2 : () => A2
+ 
+ export const va = fa();
+->va : import("node_modules/ext/other").A2
+->fa() : import("node_modules/ext/other").A2
+->fa : () => import("node_modules/ext/other").A2
++>va : A
++>fa() : A
++>fa : () => A
+ 
+ export const va2 = fa2();
+->va2 : import("node_modules/ext/other").A2
+->fa2() : import("node_modules/ext/other").A2
+->fa2 : () => import("node_modules/ext/other").A2
++>va2 : A2
++>fa2() : A2
++>fa2 : () => A2
+ 
++=== node_modules/ext/index.d.ts ===
++export interface A {}
++>A : A
++
++export function fa(): A;
++>fa : () => A
++
+ === node_modules/ext/other.d.ts ===
+ export interface A2 {}
++>A2 : A2
++
+ export function fa(): A2;
+ >fa : () => A2
+ 
+-=== node_modules/ext/ts3.1/index.d.ts ===
+-
+-export * from "../other";
+-

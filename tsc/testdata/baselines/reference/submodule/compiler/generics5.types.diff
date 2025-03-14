@@ -1,0 +1,24 @@
+--- old.generics5.types
++++ new.generics5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === generics5.ts ===
+ interface A { a: string; }
++>A : A
+ >a : string
+ 
+ interface B extends A { b: string; }
++>B : B
+ >b : string
+ 
+ interface C extends B { c: string; }
++>C : C
+ >c : string
+ 
+ interface G<T, U extends B> {
++>G : G<T, U>
++>T : T
++>U : U
+ 
+ 
+ }

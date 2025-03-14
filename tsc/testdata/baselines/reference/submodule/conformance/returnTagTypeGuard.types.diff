@@ -1,0 +1,119 @@
+--- old.returnTagTypeGuard.types
++++ new.returnTagTypeGuard.types
+@@= skipped -16, +16 lines =@@
+      * @return {this is Entry}
+      */
+     isInit(x) {
+->isInit : (x: any) => this is Entry
++>isInit : (x: any) => boolean
+ >x : any
+ 
+         return true
+@@= skipped -23, +23 lines =@@
+      * @return {false}
+      */
+     isInit(x) {
+->isInit : (x: any) => false
++>isInit : (x: any) => boolean
+ >x : any
+ 
+         return false
+@@= skipped -9, +9 lines =@@
+ }
+ /** @param {Entry | Group} chunk */
+ function f(chunk) {
+->f : (chunk: Entry | Group) => string | number
+->chunk : Entry | Group
++>f : (chunk: any) => any
++>chunk : any
+ 
+     let x = chunk.isInit(chunk) ? chunk.c : chunk.d
+->x : string | number
+->chunk.isInit(chunk) ? chunk.c : chunk.d : string | number
+->chunk.isInit(chunk) : boolean
+->chunk.isInit : ((x: any) => this is Entry) | ((x: any) => false)
+->chunk : Entry | Group
+->isInit : ((x: any) => this is Entry) | ((x: any) => false)
+->chunk : Entry | Group
+->chunk.c : number
+->chunk : Entry
+->c : number
+->chunk.d : string
+->chunk : Group
+->d : string
++>x : any
++>chunk.isInit(chunk) ? chunk.c : chunk.d : any
++>chunk.isInit(chunk) : any
++>chunk.isInit : any
++>chunk : any
++>isInit : any
++>chunk : any
++>chunk.c : any
++>chunk : any
++>c : any
++>chunk.d : any
++>chunk : any
++>d : any
+ 
+     return x
+->x : string | number
++>x : any
+ }
+ 
+ /**
+@@= skipped -32, +32 lines =@@
+ 
+     return typeof value === "boolean";
+ >typeof value === "boolean" : boolean
+->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >value : any
+ >"boolean" : "boolean"
+ }
+ 
+ /** @param {boolean | number} val */
+ function foo(val) {
+->foo : (val: boolean | number) => void
+->val : number | boolean
++>foo : (val: any) => void
++>val : any
+ 
+     if (isBoolean(val)) {
+ >isBoolean(val) : boolean
+ >isBoolean : (value: any) => value is boolean
+->val : number | boolean
++>val : any
+ 
+         val;
+ >val : boolean
+@@= skipped -28, +28 lines =@@
+ 
+ /** @type {Cb} */
+ function isNumber(x) { return typeof x === "number" }
+->isNumber : (x: unknown) => x is number
+->x : unknown
++>isNumber : (x: any) => x is number
++>x : any
+ >typeof x === "number" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->x : unknown
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>x : any
+ >"number" : "number"
+ 
+ /** @param {unknown} x */
+ function g(x) {
+->g : (x: unknown) => void
+->x : unknown
++>g : (x: any) => void
++>x : any
+ 
+     if (isNumber(x)) {
+ >isNumber(x) : boolean
+->isNumber : (x: unknown) => x is number
+->x : unknown
++>isNumber : (x: any) => x is number
++>x : any
+ 
+         x * 2;
+ >x * 2 : number

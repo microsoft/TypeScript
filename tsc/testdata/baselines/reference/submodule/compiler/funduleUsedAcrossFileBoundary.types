@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/funduleUsedAcrossFileBoundary.ts] ////
+
+=== funduleUsedAcrossFileBoundary_file1.ts ===
+declare function Q<T>(value: T): string;
+>Q : typeof Q
+>T : T
+>value : T
+
+declare module Q {
+>Q : typeof Q
+
+    interface Promise<T> {
+>Promise : Promise<T>
+>T : T
+
+        foo: string;
+>foo : string
+    }
+    export function defer<T>(): string;
+>defer : <T>() => string
+>T : T
+}
+
+=== funduleUsedAcrossFileBoundary_file2.ts ===
+function promiseWithCancellation<T>(promise: Q.Promise<T>) {
+>promiseWithCancellation : <T>(promise: Promise<T>) => void
+>T : T
+>promise : Promise<T>
+>Q : any
+
+    var deferred = Q.defer<T>(); // used to be an error
+>deferred : string
+>Q.defer<T>() : string
+>Q.defer : <T>() => string
+>Q : typeof Q
+>defer : <T>() => string
+}

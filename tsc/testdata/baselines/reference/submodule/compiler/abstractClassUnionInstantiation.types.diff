@@ -1,0 +1,40 @@
+--- old.abstractClassUnionInstantiation.types
++++ new.abstractClassUnionInstantiation.types
+@@= skipped -16, +16 lines =@@
+ 
+ type Abstracts = typeof AbstractA | typeof AbstractB;
+ >Abstracts : Abstracts
+->AbstractA : typeof AbstractA
+->AbstractB : typeof AbstractB
+ 
+ type Concretes = typeof ConcreteA | typeof ConcreteB;
+ >Concretes : Concretes
+->ConcreteA : typeof ConcreteA
+->ConcreteB : typeof ConcreteB
+ 
+ type ConcretesOrAbstracts = Concretes | Abstracts;
+ >ConcretesOrAbstracts : ConcretesOrAbstracts
+@@= skipped -29, +25 lines =@@
+ >cls2 : Abstracts
+ 
+ new cls3(); // should work
+->new cls3() : ConcreteA | ConcreteB
++>new cls3() : ConcreteA
+ >cls3 : Concretes
+ 
+ [ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
+@@= skipped -31, +31 lines =@@
+ 
+ [ConcreteA, ConcreteB].map(cls => new cls()); // should work
+ >[ConcreteA, ConcreteB].map(cls => new cls()) : ConcreteA[]
+->[ConcreteA, ConcreteB].map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: (typeof ConcreteA)[]) => U, thisArg?: any) => U[]
+->[ConcreteA, ConcreteB] : (typeof ConcreteA)[]
++>[ConcreteA, ConcreteB].map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: typeof ConcreteA[]) => U, thisArg?: any) => U[]
++>[ConcreteA, ConcreteB] : typeof ConcreteA[]
+ >ConcreteA : typeof ConcreteA
+ >ConcreteB : typeof ConcreteB
+->map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: (typeof ConcreteA)[]) => U, thisArg?: any) => U[]
++>map : <U>(callbackfn: (value: typeof ConcreteA, index: number, array: typeof ConcreteA[]) => U, thisArg?: any) => U[]
+ >cls => new cls() : (cls: typeof ConcreteA) => ConcreteA
+ >cls : typeof ConcreteA
+ >new cls() : ConcreteA

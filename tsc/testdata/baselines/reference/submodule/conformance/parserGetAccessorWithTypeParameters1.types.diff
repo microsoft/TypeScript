@@ -1,0 +1,8 @@
+--- old.parserGetAccessorWithTypeParameters1.types
++++ new.parserGetAccessorWithTypeParameters1.types
+@@= skipped -5, +5 lines =@@
+ 
+   get foo<T>() { }
+ >foo : void
++>T : T
+ }

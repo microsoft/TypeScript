@@ -1,0 +1,31 @@
+--- old.moduleImport.types
++++ new.moduleImport.types
+@@= skipped -33, +33 lines =@@
+ >X : typeof X
+ 
+ 	import ABC = A.B.C;
+->ABC : typeof ABC
++>ABC : any
+ >A : typeof A
+->B : typeof A.B
+->C : typeof ABC
++>B : any
++>C : any
+ 
+ 	export function pong(x: number) {
+ >pong : (x: number) => void
+@@= skipped -13, +13 lines =@@
+ >x > 0 : boolean
+ >x : number
+ >0 : 0
+->ABC.ping(x-1) : void
+->ABC.ping : (x: number) => void
+->ABC : typeof ABC
+->ping : (x: number) => void
++>ABC.ping(x-1) : any
++>ABC.ping : any
++>ABC : any
++>ping : any
+ >x-1 : number
+ >x : number
+ >1 : 1

@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/jsx/tsxExternalModuleEmit1.tsx] ////
+
+=== react.d.ts ===
+declare module 'react' {
+>'react' : typeof import("react")
+
+	class Component<T, U> { }
+>Component : Component<T, U>
+>T : T
+>U : U
+}
+
+=== app.tsx ===
+import * as React from 'react';
+>React : typeof import("react")
+
+// Should see var button_1 = require('./button') here
+import { Button } from './button';
+>Button : typeof Button
+
+export class App extends React.Component<any, any> {
+>App : App
+>React.Component : Component<any, any>
+>React : typeof import("react")
+>Component : typeof Component
+
+    render() {
+>render : () => any
+
+        return <Button />;
+><Button /> : any
+>Button : typeof Button
+    }
+
+}
+
+=== button.tsx ===
+import * as React from 'react';
+>React : typeof import("react")
+
+export class Button extends React.Component<any, any> {
+>Button : Button
+>React.Component : Component<any, any>
+>React : typeof import("react")
+>Component : typeof Component
+
+    render() {
+>render : () => any
+
+        return <button>Some button</button>;
+><button>Some button</button> : any
+>button : any
+>button : any
+    }
+
+}

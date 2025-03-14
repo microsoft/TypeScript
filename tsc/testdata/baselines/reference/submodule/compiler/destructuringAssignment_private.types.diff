@@ -1,0 +1,11 @@
+--- old.destructuringAssignment_private.types
++++ new.destructuringAssignment_private.types
+@@= skipped -24, +24 lines =@@
+ >{ a: { x } } : { a: { x: number; }; }
+ >a : { x: number; }
+ >{ x } : { x: number; }
+->x : number
++>x : any
+ >[{ a: new C() }] : [{ a: C; }]
+ >{ a: new C() } : { a: C; }
+ >a : C

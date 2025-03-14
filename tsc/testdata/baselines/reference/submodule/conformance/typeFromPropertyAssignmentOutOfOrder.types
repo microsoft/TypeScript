@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignmentOutOfOrder.ts] ////
+
+=== index.js ===
+First.Item = class I {}
+>First.Item = class I {} : typeof I
+>First.Item : any
+>First : {}
+>Item : any
+>class I {} : typeof I
+>I : typeof I
+
+Common.Object = class extends First.Item {}
+>Common.Object = class extends First.Item {} : typeof Object
+>Common.Object : any
+>Common : {}
+>Object : any
+>class extends First.Item {} : typeof Object
+>First.Item : any
+>First : {}
+>Item : any
+
+Workspace.Object = class extends Common.Object {}
+>Workspace.Object = class extends Common.Object {} : typeof Object
+>Workspace.Object : any
+>Workspace : {}
+>Object : any
+>class extends Common.Object {} : typeof Object
+>Common.Object : any
+>Common : {}
+>Object : any
+
+/** @type {Workspace.Object} */
+var am;
+>am : any
+
+=== roots.js ===
+var First = {};
+>First : {}
+>{} : {}
+
+var Common = {};
+>Common : {}
+>{} : {}
+
+var Workspace = {};
+>Workspace : {}
+>{} : {}
+

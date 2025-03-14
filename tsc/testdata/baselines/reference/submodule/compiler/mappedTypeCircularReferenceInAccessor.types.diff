@@ -1,0 +1,27 @@
+--- old.mappedTypeCircularReferenceInAccessor.types
++++ new.mappedTypeCircularReferenceInAccessor.types
+@@= skipped -1, +1 lines =@@
+ 
+ === mappedTypeCircularReferenceInAccessor.ts ===
+ interface User {
++>User : User
++
+   firstName: string,
+ >firstName : string
+ 
+@@= skipped -16, +18 lines =@@
+ 
+ type FilteredKeys<T> = { [K in keyof T]: T[K] extends number ? K : T[K] extends string ? K : T[K] extends boolean ? K : never }[keyof T];
+ >FilteredKeys : FilteredKeys<T>
++>T : T
++>K : K
+ 
+ type SerializablePartial<T> = {
+ >SerializablePartial : SerializablePartial<T>
++>T : T
+ 
+   [K in FilteredKeys<T>]: T[K]
++>K : K
++
+ };
+ 

@@ -1,0 +1,17 @@
+--- old.pathMappingBasedModuleResolution_rootImport_aliasWithRoot_realRootFile.types
++++ new.pathMappingBasedModuleResolution_rootImport_aliasWithRoot_realRootFile.types
+@@= skipped -4, +4 lines =@@
+ >foo : () => void
+ 
+ import { bar } from "/bar";
+->bar : () => void
++>bar : any
+ 
+ === /foo.ts ===
+ export function foo() {}
+ >foo : () => void
+ 
+-=== /bar.js ===
+-export function bar() {}
+->bar : () => void
+-

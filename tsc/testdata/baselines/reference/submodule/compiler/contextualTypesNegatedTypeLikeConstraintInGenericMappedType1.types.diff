@@ -1,0 +1,41 @@
+--- old.contextualTypesNegatedTypeLikeConstraintInGenericMappedType1.types
++++ new.contextualTypesNegatedTypeLikeConstraintInGenericMappedType1.types
+@@= skipped -31, +31 lines =@@
+ 
+ type Props<TTag extends ElementType, Overrides = {}> = Omit<
+ >Props : Props<TTag, Overrides>
++>TTag : TTag
++>Overrides : Overrides
+ 
+   IntrinsicElements[TTag],
+   keyof Overrides
+@@= skipped -8, +10 lines =@@
+ 
+ type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
+ >TabGroupProps : TabGroupProps<TTag>
+->DEFAULT_TABS_TAG : "div"
++>TTag : TTag
+ 
+   TTag,
+   {
+@@= skipped -8, +8 lines =@@
+ >defaultIndex : number | undefined
+ 
+     onChange?: (index: number) => void;
+->onChange : ((index: number) => void) | undefined
++>onChange : (index: number) => void | undefined
+ >index : number
+ 
+     selectedIndex?: number;
+@@= skipped -15, +15 lines =@@
+ >;
+ 
+ interface _internal_ComponentTabGroup {
++>_internal_ComponentTabGroup : _internal_ComponentTabGroup
++
+   <TTag extends ElementType = typeof DEFAULT_TABS_TAG>(
+->DEFAULT_TABS_TAG : "div"
++>TTag : TTag
+ 
+     props: TabGroupProps<TTag>,
+ >props : TabGroupProps<TTag>

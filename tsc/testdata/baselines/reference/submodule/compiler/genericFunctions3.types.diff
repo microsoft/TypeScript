@@ -1,0 +1,26 @@
+--- old.genericFunctions3.types
++++ new.genericFunctions3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericFunctions3.ts ===
+ interface Query<T> {
++>Query : Query<T>
++>T : T
++
+     foo(x: string): Query<T[]>;
+ >foo : (x: string) => Query<T[]>
+ >x : string
+@@= skipped -7, +10 lines =@@
+  
+ function from<T>(arg: boolean): Query<T>; // was Error: Overload signature is not compatible with function definition.
+ >from : <T>(arg: boolean) => Query<T>
++>T : T
+ >arg : boolean
+ 
+ function from<T>(arg: any): Query<T> {
+->from : <T_1>(arg: boolean) => Query<T_1>
++>from : <T>(arg: boolean) => Query<T>
++>T : T
+ >arg : any
+ 
+     return undefined;

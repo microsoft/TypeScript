@@ -1,0 +1,73 @@
+--- old.indexTypeCheck.types
++++ new.indexTypeCheck.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexTypeCheck.ts ===
+ interface Red {
++>Red : Red
++
+ 	[n:number]; // ok
+ >n : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Blue {
++>Blue : Blue
++
+ 	[n:number]: any; // ok
+ >n : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Yellow {
++>Yellow : Yellow
++
+ 	[n:number]: Red; // ok
+ >n : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Orange {
++>Orange : Orange
++
+ 	[n:number]: number; // ok
+ >n : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Green {
++>Green : Green
++
+ 	[n:number]: Orange; // error
+ >n : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Cyan {
++>Cyan : Cyan
++
+ 	[n:number]: number; // error
+ >n : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Purple {
++>Purple : Purple
++
+ 	[n:number, s:string]; // error
+ >n : number
+ >s : string
+ }
+ 
+ interface Magenta {
++>Magenta : Magenta
++
+ 	[p:Purple]; // error
+ >p : Purple
+ }

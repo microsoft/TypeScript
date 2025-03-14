@@ -1,0 +1,21 @@
+--- old.varianceCantBeStrictWhileStructureIsnt.types
++++ new.varianceCantBeStrictWhileStructureIsnt.types
+@@= skipped -2, +2 lines =@@
+ === varianceCantBeStrictWhileStructureIsnt.ts ===
+ // under non-strict-function-types, all the below should work
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+     member: (cb: T) => void;
+ >member : (cb: T) => void
+ >cb : T
+ }
+ 
+ interface Bar<T> {
++>Bar : Bar<T>
++>T : T
++
+     member: (cb: T) => void;
+ >member : (cb: T) => void
+ >cb : T

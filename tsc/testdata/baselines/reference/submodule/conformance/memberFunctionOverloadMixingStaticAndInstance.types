@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionOverloadMixingStaticAndInstance.ts] ////
+
+=== memberFunctionOverloadMixingStaticAndInstance.ts ===
+class C {
+>C : C
+
+    foo();
+>foo : () => any
+
+    static foo(); // error
+>foo : () => any
+}
+
+class D {
+>D : D
+
+    static foo();
+>foo : () => any
+
+    foo(); // error    
+>foo : () => any
+}
+
+class E<T> {
+>E : E<T>
+>T : T
+
+    foo(x: T);
+>foo : (x: T) => any
+>x : T
+
+    static foo(x: number); // error
+>foo : (x: number) => any
+>x : number
+}
+
+class F<T> {
+>F : F<T>
+>T : T
+
+    static foo(x: number);
+>foo : (x: number) => any
+>x : number
+
+    foo(x: T); // error    
+>foo : (x: T) => any
+>x : T
+}

@@ -1,0 +1,36 @@
+--- old.fatArrowSelf.types
++++ new.fatArrowSelf.types
+@@= skipped -4, +4 lines =@@
+ >Events : typeof Events
+ 
+     export interface ListenerCallback {
++>ListenerCallback : ListenerCallback
++
+         (value:any):void;
+ >value : any
+     }
+@@= skipped -21, +23 lines =@@
+ >EventEmitterConsummer : EventEmitterConsummer
+ 
+         constructor (private emitter: Events.EventEmitter) { }
+->emitter : Events.EventEmitter
++>emitter : EventEmitter
+ >Events : any
+ 
+         private register() {
+@@= skipped -8, +8 lines =@@
+ 
+             this.emitter.addListener('change', (e) => {
+ >this.emitter.addListener('change', (e) => {                this.changed();            }) : void
+->this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void
+->this.emitter : Events.EventEmitter
++>this.emitter.addListener : (type: string, listener: ListenerCallback) => void
++>this.emitter : EventEmitter
+ >this : this
+->emitter : Events.EventEmitter
+->addListener : (type: string, listener: Events.ListenerCallback) => void
++>emitter : EventEmitter
++>addListener : (type: string, listener: ListenerCallback) => void
+ >'change' : "change"
+ >(e) => {                this.changed();            } : (e: any) => void
+ >e : any

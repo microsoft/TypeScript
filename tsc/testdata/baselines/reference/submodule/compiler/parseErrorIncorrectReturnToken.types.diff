@@ -1,0 +1,13 @@
+--- old.parseErrorIncorrectReturnToken.types
++++ new.parseErrorIncorrectReturnToken.types
+@@= skipped -24, +24 lines =@@
+ >toString : (radix?: number) => string
+ 
+ let o = {
+->o : { m(n: number): any; }
+->{    m(n: number) : { m(n: number): any; }
++>o : { m: (n: number) => any; }
++>{    m(n: number) : { m: (n: number) => any; }
+ 
+     m(n: number) => string {
+ >m : (n: number) => any

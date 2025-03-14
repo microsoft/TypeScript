@@ -1,0 +1,13 @@
+--- old.parser630933.types
++++ new.parser630933.types
+@@= skipped -7, +7 lines =@@
+ var b = a.match(/\/ver=([^/]+)/);
+ >b : RegExpMatchArray
+ >a.match(/\/ver=([^/]+)/) : RegExpMatchArray
+->a.match : (regexp: string | RegExp) => RegExpMatchArray | null
++>a.match : (regexp: string | RegExp) => RegExpMatchArray
+ >a : string
+->match : (regexp: string | RegExp) => RegExpMatchArray | null
++>match : (regexp: string | RegExp) => RegExpMatchArray
+ >/\/ver=([^/]+)/ : RegExp
+ 

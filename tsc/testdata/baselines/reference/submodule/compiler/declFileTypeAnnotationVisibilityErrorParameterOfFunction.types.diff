@@ -1,0 +1,48 @@
+--- old.declFileTypeAnnotationVisibilityErrorParameterOfFunction.types
++++ new.declFileTypeAnnotationVisibilityErrorParameterOfFunction.types
+@@= skipped -65, +65 lines =@@
+     }
+ 
+     function foo111(param: m2.public2) {
+->foo111 : (param: m2.public2) => void
+->param : m2.public2
++>foo111 : (param: public2) => void
++>param : public2
+ >m2 : any
+     }
+     function foo112(param = new m2.public2()) {
+->foo112 : (param?: m2.public2) => void
+->param : m2.public2
+->new m2.public2() : m2.public2
+->m2.public2 : typeof m2.public2
++>foo112 : (param?: public2) => void
++>param : public2
++>new m2.public2() : public2
++>m2.public2 : typeof public2
+ >m2 : typeof m2
+->public2 : typeof m2.public2
++>public2 : typeof public2
+     }
+ 
+     export function foo113(param: m2.public2) {
+->foo113 : (param: m2.public2) => void
+->param : m2.public2
++>foo113 : (param: public2) => void
++>param : public2
+ >m2 : any
+     }
+     export function foo114(param = new m2.public2()) {
+->foo114 : (param?: m2.public2) => void
+->param : m2.public2
+->new m2.public2() : m2.public2
+->m2.public2 : typeof m2.public2
++>foo114 : (param?: public2) => void
++>param : public2
++>new m2.public2() : public2
++>m2.public2 : typeof public2
+ >m2 : typeof m2
+->public2 : typeof m2.public2
++>public2 : typeof public2
+     }
+ }
+ 

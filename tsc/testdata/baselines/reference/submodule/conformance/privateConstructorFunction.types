@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/salsa/privateConstructorFunction.ts] ////
+
+=== privateConstructorFunction.js ===
+{
+    // make sure not to crash when parent's a block rather than a source file or some other
+    // symbol-having node.
+
+    /** @private */
+    function C() {
+>C : () => void
+
+        this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+    }
+    new C()
+>new C() : any
+>C : () => void
+}
+

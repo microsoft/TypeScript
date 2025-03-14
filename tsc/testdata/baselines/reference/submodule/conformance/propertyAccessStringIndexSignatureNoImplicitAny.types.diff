@@ -1,0 +1,19 @@
+--- old.propertyAccessStringIndexSignatureNoImplicitAny.types
++++ new.propertyAccessStringIndexSignatureNoImplicitAny.types
+@@= skipped -1, +1 lines =@@
+ 
+ === propertyAccessStringIndexSignatureNoImplicitAny.ts ===
+ interface Flags { [name: string]: boolean }
++>Flags : Flags
+ >name : string
+ 
+ let flags: Flags;
+@@= skipped -26, +27 lines =@@
+ >'this is fine' : "this is fine"
+ 
+ interface Empty { }
++>Empty : Empty
++
+ let empty: Empty;
+ >empty : Empty
+ 

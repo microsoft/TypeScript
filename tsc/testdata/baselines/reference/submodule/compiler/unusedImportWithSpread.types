@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/unusedImportWithSpread.ts] ////
+
+=== a.ts ===
+export default { a: 1 };
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+=== b1.ts ===
+import a from "./a";
+>a : { a: number; }
+
+const b1 = {} as unknown;
+>b1 : unknown
+>{} as unknown : unknown
+>{} : {}
+
+({
+>({    // @ts-ignore    ...b1,    a}) : any
+>{    // @ts-ignore    ...b1,    a} : any
+
+    // @ts-ignore
+    ...b1,
+>b1 : unknown
+
+    a
+>a : any
+
+})
+
+=== b2.ts ===
+import a from "./a";
+>a : { a: number; }
+
+const b2 = {} as never;
+>b2 : never
+>{} as never : never
+>{} : {}
+
+({
+>({    // @ts-ignore    ...b2,    a}) : any
+>{    // @ts-ignore    ...b2,    a} : any
+
+    // @ts-ignore
+    ...b2,
+>b2 : never
+
+    a
+>a : any
+
+})
+

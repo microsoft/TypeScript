@@ -1,0 +1,45 @@
+--- old.callSignaturesWithParameterInitializers2.types
++++ new.callSignaturesWithParameterInitializers2.types
+@@= skipped -53, +53 lines =@@
+ >1 : 1
+ 
+ var b = {
+->b : { foo(x?: number): any; foo(x?: number): void; }
+->{    foo(x = 1), // error    foo(x = 1) { }, // error} : { foo(x?: number): any; foo(x?: number): void; }
++>b : { foo: (x?: number) => void; }
++>{    foo(x = 1), // error    foo(x = 1) { }, // error} : { foo: (x?: number) => void; }
+ 
+     foo(x = 1), // error
+->foo : { (x?: number): any; (x?: number): void; }
++>foo : (x?: number) => any
+ >x : number
+ >1 : 1
+ 
+     foo(x = 1) { }, // error
+->foo : { (x?: number): any; (x?: number): void; }
++>foo : (x?: number) => void
+ >x : number
+ >1 : 1
+ }
+ 
+ b.foo();
+->b.foo() : any
+->b.foo : { (x?: number): any; (x?: number): void; }
+->b : { foo(x?: number): any; foo(x?: number): void; }
+->foo : { (x?: number): any; (x?: number): void; }
++>b.foo() : void
++>b.foo : (x?: number) => void
++>b : { foo: (x?: number) => void; }
++>foo : (x?: number) => void
+ 
+ b.foo(1);
+->b.foo(1) : any
+->b.foo : { (x?: number): any; (x?: number): void; }
+->b : { foo(x?: number): any; foo(x?: number): void; }
+->foo : { (x?: number): any; (x?: number): void; }
++>b.foo(1) : void
++>b.foo : (x?: number) => void
++>b : { foo: (x?: number) => void; }
++>foo : (x?: number) => void
+ >1 : 1
+ 

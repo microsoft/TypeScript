@@ -1,0 +1,47 @@
+--- old.declarationFileForHtmlImport(allowarbitraryextensions=false).types
++++ new.declarationFileForHtmlImport(allowarbitraryextensions=false).types
+@@= skipped -23, +23 lines =@@
+ 
+ === file.ts ===
+ import * as mod from "./component.html";
+->mod : any
++>mod : typeof import("component.d.html")
+ 
+ window.customElements.define("my-html5-element", mod.HTML5Element);
+ >window.customElements.define("my-html5-element", mod.HTML5Element) : void
+@@= skipped -10, +10 lines =@@
+ >customElements : CustomElementRegistry
+ >define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
+ >"my-html5-element" : "my-html5-element"
+->mod.HTML5Element : any
+->mod : any
+->HTML5Element : any
++>mod.HTML5Element : typeof HTML5Element
++>mod : typeof import("component.d.html")
++>HTML5Element : typeof HTML5Element
+ 
+ if (document !== mod.default) {
+ >document !== mod.default : boolean
+ >document : Document
+->mod.default : any
+->mod : any
+->default : any
++>mod.default : Document
++>mod : typeof import("component.d.html")
++>default : Document
+ 
+     document.body.appendChild(mod.blogPost);
+->document.body.appendChild(mod.blogPost) : any
++>document.body.appendChild(mod.blogPost) : Element
+ >document.body.appendChild : <T extends Node>(node: T) => T
+ >document.body : HTMLElement
+ >document : Document
+ >body : HTMLElement
+ >appendChild : <T extends Node>(node: T) => T
+->mod.blogPost : any
+->mod : any
+->blogPost : any
++>mod.blogPost : Element
++>mod : typeof import("component.d.html")
++>blogPost : Element
+ }

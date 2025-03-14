@@ -1,0 +1,20 @@
+--- old.uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.types
++++ new.uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.types
+@@= skipped -10, +10 lines =@@
+ >global : any
+ 
+     interface Promise<T> {
++>Promise : Promise<T>
++>T : T
++
+         [FOO_SYMBOL]?: number;
+ >[FOO_SYMBOL] : number | undefined
+ >FOO_SYMBOL : unique symbol
+@@= skipped -8, +11 lines =@@
+ 
+ export function foo<T>(p: Promise<T>) {
+ >foo : <T>(p: Promise<T>) => void
++>T : T
+ >p : Promise<T>
+ 
+     p[FOO_SYMBOL] = 3;

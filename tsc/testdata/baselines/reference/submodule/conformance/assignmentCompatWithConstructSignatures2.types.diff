@@ -1,0 +1,62 @@
+--- old.assignmentCompatWithConstructSignatures2.types
++++ new.assignmentCompatWithConstructSignatures2.types
+@@= skipped -3, +3 lines =@@
+ // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+ 
+ interface T {
++>T : T
++
+     f: new (x: number) => void;
+ >f : new (x: number) => void
+ >x : number
+@@= skipped -23, +25 lines =@@
+ >t : T
+ 
+ interface S {
++>S : S
++
+     f: new (x: number) => string;
+ >f : new (x: number) => string
+ >x : number
+@@= skipped -60, +62 lines =@@
+ >'' : ""
+ 
+ interface S2 {
++>S2 : S2
++
+     f(x: string): void;
+ >f : (x: string) => void
+ >x : string
+@@= skipped -8, +10 lines =@@
+ >s2 : S2
+ 
+ var a3: { f(x: string): void };
+->a3 : { f(x: string): void; }
++>a3 : { f: (x: string) => void; }
+ >f : (x: string) => void
+ >x : string
+ 
+@@= skipped -11, +11 lines =@@
+ >s2 : S2
+ 
+ t = a3;
+->t = a3 : { f(x: string): void; }
++>t = a3 : { f: (x: string) => void; }
+ >t : T
+->a3 : { f(x: string): void; }
++>a3 : { f: (x: string) => void; }
+ 
+ t = (x: string) => 1;
+ >t = (x: string) => 1 : (x: string) => number
+@@= skipped -24, +24 lines =@@
+ >s2 : S2
+ 
+ a = a3;
+->a = a3 : { f(x: string): void; }
++>a = a3 : { f: (x: string) => void; }
+ >a : { f: new (x: number) => void; }
+->a3 : { f(x: string): void; }
++>a3 : { f: (x: string) => void; }
+ 
+ a = (x: string) => 1;
+ >a = (x: string) => 1 : (x: string) => number

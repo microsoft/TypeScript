@@ -1,0 +1,20 @@
+--- old.interfaceWithStringIndexerHidingBaseTypeIndexer3.types
++++ new.interfaceWithStringIndexerHidingBaseTypeIndexer3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceWithStringIndexerHidingBaseTypeIndexer3.ts ===
+ interface Base {
++>Base : Base
++
+     [x: number]: { a: number }
+ >x : number
+ >a : number
+@@= skipped -14, +16 lines =@@
+ }
+ 
+ interface Derived extends Base {
++>Derived : Derived
++
+     [x: number]: {
+ >x : number
+ 

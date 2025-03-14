@@ -1,0 +1,77 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution9.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface OptionProp {
+>OptionProp : OptionProp
+
+    x?: 2
+>x : 2
+
+    y?: boolean
+>y : boolean
+}
+
+class Opt extends React.Component<OptionProp, {}> {
+>Opt : Opt
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return <div>Hello</div>;
+><div>Hello</div> : any
+>div : any
+>div : any
+    }
+}
+
+const obj: OptionProp = {};
+>obj : OptionProp
+>{} : {}
+
+const obj1: OptionProp = {
+>obj1 : OptionProp
+>{    x: 2} : { x: 2; }
+
+    x: 2
+>x : 2
+>2 : 2
+}
+
+// OK
+let p = <Opt />;
+>p : any
+><Opt /> : any
+>Opt : typeof Opt
+
+let y = <Opt {...obj} />;
+>y : any
+><Opt {...obj} /> : any
+>Opt : typeof Opt
+>obj : OptionProp
+
+let y1 = <Opt {...obj1} />;
+>y1 : any
+><Opt {...obj1} /> : any
+>Opt : typeof Opt
+>obj1 : OptionProp
+
+let y2 = <Opt {...obj1} y/>;
+>y2 : any
+><Opt {...obj1} y/> : any
+>Opt : typeof Opt
+>obj1 : OptionProp
+>y : any
+
+let y3 = <Opt x={2} />;
+>y3 : any
+><Opt x={2} /> : any
+>Opt : typeof Opt
+>x : any
+>2 : 2
+

@@ -1,0 +1,10 @@
+--- old.declarationEmitExportDeclaration.types
++++ new.declarationEmitExportDeclaration.types
+@@= skipped -7, +7 lines =@@
+ >bar : () => void
+ 
+ export interface Buzz { }
++>Buzz : Buzz
+ 
+ === index.ts ===
+ import {foo, bar, Buzz} from "./utils";

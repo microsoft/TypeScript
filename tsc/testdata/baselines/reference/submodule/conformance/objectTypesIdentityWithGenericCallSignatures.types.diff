@@ -1,0 +1,201 @@
+--- old.objectTypesIdentityWithGenericCallSignatures.types
++++ new.objectTypesIdentityWithGenericCallSignatures.types
+@@= skipped -7, +7 lines =@@
+ 
+     foo<T>(x: T): T { return null; }
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ }
+ 
+ class B<T> {
+ >B : B<T>
++>T : T
+ 
+     foo(x: T): T { return null; }
+ >foo : (x: T) => T
+@@= skipped -13, +15 lines =@@
+ 
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     foo(x: T): T { return null; }
+ >foo : (x: T) => T
+@@= skipped -7, +8 lines =@@
+ }
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     foo(x: T): T;
+ >foo : (x: T) => T
+ >x : T
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     foo<T>(x: T): T;
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ }
+ 
+ var a: { foo<T>(x: T): T }
+->a : { foo<T>(x: T): T; }
++>a : { foo: <T>(x: T) => T; }
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ var b = { foo<T>(x: T) { return x; } };
+->b : { foo<T>(x: T): T; }
+->{ foo<T>(x: T) { return x; } } : { foo<T>(x: T): T; }
++>b : { foo: <T>(x: T) => T; }
++>{ foo<T>(x: T) { return x; } } : { foo: <T>(x: T) => T; }
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ >x : T
+ 
+@@= skipped -72, +80 lines =@@
+ >x : any
+ 
+ function foo3(x: typeof a);
+->foo3 : { (x: typeof a): any; (x: typeof a): any; }
+->x : { foo<T>(x: T): T; }
+->a : { foo<T>(x: T): T; }
++>foo3 : { (x: { foo: <T>(x: T) => T; }): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo3(x: typeof a); // error
+->foo3 : { (x: typeof a): any; (x: typeof a): any; }
+->x : { foo<T>(x: T): T; }
+->a : { foo<T>(x: T): T; }
++>foo3 : { (x: { foo: <T>(x: T) => T; }): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo3(x: any) { }
+->foo3 : { (x: typeof a): any; (x: typeof a): any; }
++>foo3 : { (x: { foo: <T>(x: T) => T; }): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : any
+ 
+ function foo4(x: typeof b);
+->foo4 : { (x: typeof b): any; (x: typeof b): any; }
+->x : { foo<T>(x: T): T; }
+->b : { foo<T>(x: T): T; }
++>foo4 : { (x: { foo: <T>(x: T) => T; }): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo4(x: typeof b); // error
+->foo4 : { (x: typeof b): any; (x: typeof b): any; }
+->x : { foo<T>(x: T): T; }
+->b : { foo<T>(x: T): T; }
++>foo4 : { (x: { foo: <T>(x: T) => T; }): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo4(x: any) { }
+->foo4 : { (x: typeof b): any; (x: typeof b): any; }
++>foo4 : { (x: { foo: <T>(x: T) => T; }): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : any
+ 
+ function foo5(x: A);
+@@= skipped -64, +60 lines =@@
+ >x : any
+ 
+ function foo7(x: A);
+->foo7 : { (x: A): any; (x: typeof a): any; }
++>foo7 : { (x: A): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : A
+ 
+ function foo7(x: typeof a); // error
+->foo7 : { (x: A): any; (x: typeof a): any; }
+->x : { foo<T>(x: T): T; }
+->a : { foo<T>(x: T): T; }
++>foo7 : { (x: A): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo7(x: any) { }
+->foo7 : { (x: A): any; (x: typeof a): any; }
++>foo7 : { (x: A): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : any
+ 
+ function foo8(x: B<string>);
+@@= skipped -37, +36 lines =@@
+ >x : any
+ 
+ function foo10(x: B<string>);
+->foo10 : { (x: B<string>): any; (x: typeof a): any; }
++>foo10 : { (x: B<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : B<string>
+ 
+ function foo10(x: typeof a); // ok
+->foo10 : { (x: B<string>): any; (x: typeof a): any; }
+->x : { foo<T>(x: T): T; }
+->a : { foo<T>(x: T): T; }
++>foo10 : { (x: B<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo10(x: any) { }
+->foo10 : { (x: B<string>): any; (x: typeof a): any; }
++>foo10 : { (x: B<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : any
+ 
+ function foo11(x: B<string>);
+->foo11 : { (x: B<string>): any; (x: typeof b): any; }
++>foo11 : { (x: B<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : B<string>
+ 
+ function foo11(x: typeof b); // ok
+->foo11 : { (x: B<string>): any; (x: typeof b): any; }
+->x : { foo<T>(x: T): T; }
+->b : { foo<T>(x: T): T; }
++>foo11 : { (x: B<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo11(x: any) { }
+->foo11 : { (x: B<string>): any; (x: typeof b): any; }
++>foo11 : { (x: B<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : any
+ 
+ function foo12(x: I<string>);
+@@= skipped -50, +48 lines =@@
+ >x : any
+ 
+ function foo13(x: I<string>);
+->foo13 : { (x: I<string>): any; (x: typeof a): any; }
++>foo13 : { (x: I<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : I<string>
+ 
+ function foo13(x: typeof a); // ok
+->foo13 : { (x: I<string>): any; (x: typeof a): any; }
+->x : { foo<T>(x: T): T; }
+->a : { foo<T>(x: T): T; }
++>foo13 : { (x: I<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo13(x: any) { }
+->foo13 : { (x: I<string>): any; (x: typeof a): any; }
++>foo13 : { (x: I<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : any
+ 
+ function foo14(x: I<string>);
+->foo14 : { (x: I<string>): any; (x: typeof b): any; }
++>foo14 : { (x: I<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : I<string>
+ 
+ function foo14(x: typeof b); // ok
+->foo14 : { (x: I<string>): any; (x: typeof b): any; }
+->x : { foo<T>(x: T): T; }
+->b : { foo<T>(x: T): T; }
++>foo14 : { (x: I<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
++>x : { foo: <T>(x: T) => T; }
+ 
+ function foo14(x: any) { }
+->foo14 : { (x: I<string>): any; (x: typeof b): any; }
++>foo14 : { (x: I<string>): any; (x: { foo: <T>(x: T) => T; }): any; }
+ >x : any
+ 
+ function foo15(x: I2);

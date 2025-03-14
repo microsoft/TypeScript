@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx] ////
+
+=== jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx ===
+/// <reference path="react16.d.ts" />
+
+// repro #51577
+
+declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T, K>;
+>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
+>T : T
+>K : K
+>names : readonly K[]
+>obj : T
+
+declare function omit<K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>;
+>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
+>K : K
+>names : readonly K[]
+>T : T
+>obj : T
+
+declare const otherProps: { bar: string, qwe: boolean }
+>otherProps : { bar: string; qwe: boolean; }
+>bar : string
+>qwe : boolean
+
+declare function GenericComponent<T>(props: T): null
+>GenericComponent : <T>(props: T) => null
+>T : T
+>props : T
+
+<GenericComponent {...omit(['bar'], otherProps)} />; // no error
+><GenericComponent {...omit(['bar'], otherProps)} /> : any
+>GenericComponent : <T>(props: T) => null
+>omit(['bar'], otherProps) : Omit<{ bar: string; qwe: boolean; }, "bar">
+>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
+>['bar'] : "bar"[]
+>'bar' : "bar"
+>otherProps : { bar: string; qwe: boolean; }
+
+
+

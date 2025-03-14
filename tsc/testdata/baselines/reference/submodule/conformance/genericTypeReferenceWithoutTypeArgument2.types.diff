@@ -1,0 +1,95 @@
+--- old.genericTypeReferenceWithoutTypeArgument2.types
++++ new.genericTypeReferenceWithoutTypeArgument2.types
+@@= skipped -4, +4 lines =@@
+ // all of these are errors 
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     foo: T;
+ >foo : T
+ }
+@@= skipped -8, +11 lines =@@
+ >c : any
+ 
+ var a: { x: I };
+->a : { x: I; }
++>a : { x: any; }
+ >x : any
+ 
+ var b: { (x: I): I };
+->b : (x: I) => I
++>b : (x: any) => any
+ >x : any
+ 
+ var d: { [x: I]: I };
+@@= skipped -12, +12 lines =@@
+ >x : any
+ 
+ var e = (x: I) => { var y: I; return y; }
+->e : (x: I) => any
+->(x: I) => { var y: I; return y; } : (x: I) => any
++>e : (x: any) => any
++>(x: I) => { var y: I; return y; } : (x: any) => any
+ >x : any
+ >y : any
+ >y : any
+ 
+ function f(x: I): I { var y: I; return y; }
+->f : (x: I) => I
++>f : (x: any) => any
+ >x : any
+ >y : any
+ >y : any
+ 
+ var g = function f(x: I): I { var y: I; return y; }
+->g : (x: I) => I
+->function f(x: I): I { var y: I; return y; } : (x: I) => I
+->f : (x: I) => I
++>g : (x: any) => any
++>function f(x: I): I { var y: I; return y; } : (x: any) => any
++>f : (x: any) => any
+ >x : any
+ >y : any
+ >y : any
+@@= skipped -26, +26 lines =@@
+ }
+ 
+ interface U extends I {}
++>U : U
+ 
+ module M {
++>M : any
++
+     export interface E<T> { foo: T }
++>E : E<T>
++>T : T
+ >foo : T
+ }
+ 
+@@= skipped -13, +18 lines =@@
+ >C : any
+ 
+ interface D3<T extends M.E> { }
++>D3 : D3<T>
++>T : T
+ >M : any
+ 
+ interface I2 extends M.C { }
++>I2 : I2
+ >M : any
+ 
+ function h<T extends I>(x: T) { }
+->h : <T extends I>(x: T) => void
++>h : <T extends any>(x: T) => void
++>T : T
+ >x : T
+ 
+ function i<T extends M.E>(x: T) { }
+->i : <T extends M.E>(x: T) => void
++>i : <T extends any>(x: T) => void
++>T : T
+ >M : any
+ >x : T
+ 

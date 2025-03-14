@@ -1,0 +1,51 @@
+--- old.mergedDeclarations3.types
++++ new.mergedDeclarations3.types
+@@= skipped -25, +25 lines =@@
+ var p = M.Color.Blue; // ok
+ >p : number
+ >M.Color.Blue : number
+->M.Color : typeof M.Color
++>M.Color : typeof Color
+ >M : typeof M
+->Color : typeof M.Color
++>Color : typeof Color
+ >Blue : number
+ 
+ module M {
+@@= skipped -51, +51 lines =@@
+ 
+ M.foo() // ok
+ >M.foo() : void
+->M.foo : typeof M.foo
++>M.foo : typeof foo
+ >M : typeof M
+->foo : typeof M.foo
++>foo : typeof foo
+ 
+ M.foo.x // error
+ >M.foo.x : any
+->M.foo : typeof M.foo
++>M.foo : typeof foo
+ >M : typeof M
+->foo : typeof M.foo
++>foo : typeof foo
+ >x : any
+ 
+ M.foo.y // ok
+ >M.foo.y : number
+->M.foo : typeof M.foo
++>M.foo : typeof foo
+ >M : typeof M
+->foo : typeof M.foo
++>foo : typeof foo
+ >y : number
+ 
+ M.foo.z // error
+ >M.foo.z : any
+->M.foo : typeof M.foo
++>M.foo : typeof foo
+ >M : typeof M
+->foo : typeof M.foo
++>foo : typeof foo
+ >z : any
+ 

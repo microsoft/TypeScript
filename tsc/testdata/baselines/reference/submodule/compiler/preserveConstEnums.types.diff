@@ -1,0 +1,16 @@
+--- old.preserveConstEnums.types
++++ new.preserveConstEnums.types
+@@= skipped -1, +1 lines =@@
+ 
+ === preserveConstEnums.ts ===
+ const enum E {
+->E : E
++>E : E.Value
+ 
+     Value = 1, Value2 = Value
+ >Value : E.Value
+ >1 : 1
+ >Value2 : E.Value
+->Value : E
++>Value : E.Value
+ }

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/fixCrashAliasLookupForDefauledImport.ts] ////
+
+=== input.ts ===
+export type Foo<T = string> = {};
+>Foo : Foo<T>
+>T : T
+
+=== usage.ts ===
+import {Foo} from "./input";
+>Foo : any
+
+function bar<T>(element: Foo) {
+>bar : <T>(element: Foo) => number
+>T : T
+>element : Foo
+
+    return 1;
+>1 : 1
+}
+
+bar(1 as Foo<number>);
+>bar(1 as Foo<number>) : number
+>bar : <T>(element: Foo) => number
+>1 as Foo<number> : Foo<number>
+>1 : 1
+

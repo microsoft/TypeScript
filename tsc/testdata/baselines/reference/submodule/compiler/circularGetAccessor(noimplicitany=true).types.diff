@@ -1,0 +1,11 @@
+--- old.circularGetAccessor(noimplicitany=true).types
++++ new.circularGetAccessor(noimplicitany=true).types
+@@= skipped -5, +5 lines =@@
+ 
+     get foo(): typeof this.foo;
+ >foo : any
+->this.foo : any
+ >this : this
+->foo : any
+ }
+ 

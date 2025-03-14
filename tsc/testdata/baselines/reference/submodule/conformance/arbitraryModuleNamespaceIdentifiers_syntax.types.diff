@@ -1,0 +1,72 @@
+--- old.arbitraryModuleNamespaceIdentifiers_syntax.types
++++ new.arbitraryModuleNamespaceIdentifiers_syntax.types
+@@= skipped -24, +24 lines =@@
+ === values-bad-import.ts ===
+ import { foo as "invalid 2" } from "./values-valid";
+ >foo : 123
+-> : 123
++>"invalid 2" : 123
+ 
+ === values-bad-export.ts ===
+ export { "invalid 3" as baz };
+@@= skipped -8, +8 lines =@@
+ 
+ === values-no-as.ts ===
+ import { "invalid 1" } from "./values-valid";
+-> : any
++>"invalid 1" : any
+ 
+ === values-type-as.ts ===
+ import { type as "invalid 4" } from "./values-valid";
+ >type : any
+-> : any
++>"invalid 4" : any
+ 
+ 
+ === type-decls-valid.ts ===
+@@= skipped -32, +32 lines =@@
+ === type-decls-bad-import.ts ===
+ import type { foo as "invalid 2" } from "./type-decls-valid";
+ >foo : any
+-> : 123
++>"invalid 2" : 123
+ 
+ === type-decls-bad-export.ts ===
+ export type { "invalid 3" as baz };
+@@= skipped -8, +8 lines =@@
+ 
+ === type-decls-no-as.ts ===
+ import type { "invalid 1" } from "./type-decls-valid";
+-> : any
++>"invalid 1" : any
+ 
+ === type-decls-type-as.ts ===
+ import type { type as "invalid 4" } from "./type-decls-valid";
+ >type : any
+-> : any
++>"invalid 4" : any
+ 
+ === type-clause-valid.ts ===
+ export type foo = 123;
+@@= skipped -28, +28 lines =@@
+ === type-clause-bad-import.ts ===
+ import { type foo as "invalid 2" } from "./type-clause-valid";
+ >foo : any
+-> : any
++>"invalid 2" : any
+ 
+ === type-clause-bad-export.ts ===
+ export { type "invalid 3" as baz };
+@@= skipped -8, +8 lines =@@
+ 
+ === type-clause-no-as.ts ===
+ import { type "invalid 1" } from "./type-clause-valid";
+-> : any
++>"invalid 1" : any
+ 
+ === type-clause-type-as-as.ts ===
+ import { type as as "invalid 4" } from "./type-clause-valid";
+ >as : any
+-> : any
++>"invalid 4" : any
+ 

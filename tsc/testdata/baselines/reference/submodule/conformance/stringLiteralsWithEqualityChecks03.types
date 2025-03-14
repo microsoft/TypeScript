@@ -1,0 +1,138 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts] ////
+
+=== stringLiteralsWithEqualityChecks03.ts ===
+interface Runnable {
+>Runnable : Runnable
+
+    isRunning: boolean;
+>isRunning : boolean
+}
+
+interface Refrigerator extends Runnable {
+>Refrigerator : Refrigerator
+
+    makesFoodGoBrrr: boolean;
+>makesFoodGoBrrr : boolean
+}
+
+let x: string;
+>x : string
+
+let y: "foo" | Refrigerator;
+>y : "foo" | Refrigerator
+
+let b: boolean;
+>b : boolean
+
+b = x === y;
+>b = x === y : boolean
+>b : boolean
+>x === y : boolean
+>x : string
+>y : "foo" | Refrigerator
+
+b = "foo" === y
+>b = "foo" === y : boolean
+>b : boolean
+>"foo" === y : boolean
+>"foo" : "foo"
+>y : "foo" | Refrigerator
+
+b = y === "foo";
+>b = y === "foo" : boolean
+>b : boolean
+>y === "foo" : boolean
+>y : "foo" | Refrigerator
+>"foo" : "foo"
+
+b = "foo" === "bar";
+>b = "foo" === "bar" : boolean
+>b : boolean
+>"foo" === "bar" : boolean
+>"foo" : "foo"
+>"bar" : "bar"
+
+b = "bar" === x;
+>b = "bar" === x : boolean
+>b : boolean
+>"bar" === x : boolean
+>"bar" : "bar"
+>x : string
+
+b = x === "bar";
+>b = x === "bar" : boolean
+>b : boolean
+>x === "bar" : boolean
+>x : string
+>"bar" : "bar"
+
+b = y === "bar";
+>b = y === "bar" : boolean
+>b : boolean
+>y === "bar" : boolean
+>y : "foo" | Refrigerator
+>"bar" : "bar"
+
+b = "bar" === y;
+>b = "bar" === y : boolean
+>b : boolean
+>"bar" === y : boolean
+>"bar" : "bar"
+>y : "foo" | Refrigerator
+
+b = x !== y;
+>b = x !== y : boolean
+>b : boolean
+>x !== y : boolean
+>x : string
+>y : "foo" | Refrigerator
+
+b = "foo" !== y
+>b = "foo" !== y : boolean
+>b : boolean
+>"foo" !== y : boolean
+>"foo" : "foo"
+>y : "foo" | Refrigerator
+
+b = y !== "foo";
+>b = y !== "foo" : boolean
+>b : boolean
+>y !== "foo" : boolean
+>y : "foo" | Refrigerator
+>"foo" : "foo"
+
+b = "foo" !== "bar";
+>b = "foo" !== "bar" : boolean
+>b : boolean
+>"foo" !== "bar" : boolean
+>"foo" : "foo"
+>"bar" : "bar"
+
+b = "bar" !== x;
+>b = "bar" !== x : boolean
+>b : boolean
+>"bar" !== x : boolean
+>"bar" : "bar"
+>x : string
+
+b = x !== "bar";
+>b = x !== "bar" : boolean
+>b : boolean
+>x !== "bar" : boolean
+>x : string
+>"bar" : "bar"
+
+b = y !== "bar";
+>b = y !== "bar" : boolean
+>b : boolean
+>y !== "bar" : boolean
+>y : "foo" | Refrigerator
+>"bar" : "bar"
+
+b = "bar" !== y;
+>b = "bar" !== y : boolean
+>b : boolean
+>"bar" !== y : boolean
+>"bar" : "bar"
+>y : "foo" | Refrigerator
+

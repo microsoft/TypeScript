@@ -1,0 +1,22 @@
+--- old.intraBindingPatternReferences.types
++++ new.intraBindingPatternReferences.types
+@@= skipped -51, +51 lines =@@
+ 
+ // Example that requires padding of object literal types at depth
+ const mockCallback = ({ event: { params = {} } = {} }) => {};
+->mockCallback : ({ event: { params } }: { event?: { params?: {} | undefined; } | undefined; }) => void
+->({ event: { params = {} } = {} }) => {} : ({ event: { params } }: { event?: { params?: {} | undefined; } | undefined; }) => void
++>mockCallback : (__0: { event?: { params?: {} | undefined; } | undefined; }) => void
++>({ event: { params = {} } = {} }) => {} : (__0: { event?: { params?: {} | undefined; } | undefined; }) => void
+ >event : any
+ >params : {}
+ >{} : {}
+@@= skipped -14, +14 lines =@@
+ >(x: number) => 0 : (x: number) => number
+ >x : number
+ >0 : 0
+->fn2 : ((x: number) => number) | ((x: any) => any)
++>fn2 : (x: number) => number | (x: any) => any
+ >fn1 : (x: number) => number
+ >{ fn1: x => x + 1, fn2: x => x + 2 } : { fn1?: (x: number) => number; fn2?: (x: any) => any; }
+ >fn1 : (x: number) => number

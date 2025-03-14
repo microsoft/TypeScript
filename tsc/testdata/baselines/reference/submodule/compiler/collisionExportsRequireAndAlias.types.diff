@@ -1,0 +1,48 @@
+--- old.collisionExportsRequireAndAlias.types
++++ new.collisionExportsRequireAndAlias.types
+@@= skipped -1, +1 lines =@@
+ 
+ === collisionExportsRequireAndAlias_file2.ts ===
+ import require = require('collisionExportsRequireAndAlias_file1'); // Error
+->require : typeof require
++>require : any
+ 
+ import exports = require('collisionExportsRequireAndAlias_file3333'); // Error
+->exports : typeof exports
++>exports : any
+ 
+ export function foo() {
+ >foo : () => void
+ 
+     require.bar();
+->require.bar() : void
+->require.bar : () => void
+->require : typeof require
+->bar : () => void
++>require.bar() : any
++>require.bar : any
++>require : any
++>bar : any
+ }
+ export function foo2() {
+ >foo2 : () => void
+ 
+     exports.bar2();
+->exports.bar2() : void
+->exports.bar2 : () => void
+->exports : typeof exports
+->bar2 : () => void
++>exports.bar2() : any
++>exports.bar2 : any
++>exports : any
++>bar2 : any
+ }
+-=== collisionExportsRequireAndAlias_file1.ts ===
+-export function bar() {
+->bar : () => void
+-}
+-
+-=== collisionExportsRequireAndAlias_file3333.ts ===
+-export function bar2() {
+->bar2 : () => void
+-}

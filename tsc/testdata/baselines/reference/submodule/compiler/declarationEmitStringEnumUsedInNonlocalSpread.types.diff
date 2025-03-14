@@ -1,0 +1,42 @@
+--- old.declarationEmitStringEnumUsedInNonlocalSpread.types
++++ new.declarationEmitStringEnumUsedInNonlocalSpread.types
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ export interface ITest {
++>ITest : ITest
++
+     [TestEnum.Test1]: string;
+ >[TestEnum.Test1] : string
+ >TestEnum.Test1 : TestEnum.Test1
+@@= skipped -20, +22 lines =@@
+ >getA : () => ITest
+ 
+         return {
+->{            [TestEnum.Test1]: '123',            [TestEnum.Test2]: '123',        } : { "123123": string; "12312312312": string; }
++>{            [TestEnum.Test1]: '123',            [TestEnum.Test2]: '123',        } : { [TestEnum.Test1]: string; [TestEnum.Test2]: string; }
+ 
+             [TestEnum.Test1]: '123',
+ >[TestEnum.Test1] : string
+@@= skipped -28, +28 lines =@@
+ >A : A
+ 
+     getA() { // TS4053 error
+->getA : () => { a: string; "123123": string; "12312312312": string; }
++>getA : () => { [TestEnum.Test1]: string; [TestEnum.Test2]: string; a: string; }
+ 
+         return {
+->{            ...super.getA(),            a: '123',        } : { a: string; "123123": string; "12312312312": string; }
++>{            ...super.getA(),            a: '123',        } : { [TestEnum.Test1]: string; [TestEnum.Test2]: string; a: string; }
+ 
+             ...super.getA(),
+->super.getA() : import("class").ITest
+->super.getA : () => import("class").ITest
++>super.getA() : ITest
++>super.getA : () => ITest
+ >super : A
+->getA : () => import("class").ITest
++>getA : () => ITest
+ 
+             a: '123',
+ >a : string

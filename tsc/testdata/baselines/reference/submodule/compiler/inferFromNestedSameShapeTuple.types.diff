@@ -1,0 +1,125 @@
+--- old.inferFromNestedSameShapeTuple.types
++++ new.inferFromNestedSameShapeTuple.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Magic<X> = X extends [[infer Y, ...infer _], ...infer __] ? Y : never;
+ >Magic : Magic<X>
++>X : X
++>Y : Y
++>_ : _
++>__ : __
+ 
+ type R = Magic<[[number]]>
+ >R : number
+@@= skipped -8, +12 lines =@@
+ 
+ type Recursive<Id> = {
+ >Recursive : Recursive<Id>
++>Id : Id
+ 
+     id: Id
+ >id : Id
+@@= skipped -10, +11 lines =@@
+ 
+ declare function getIds<Id>(items: readonly Recursive<Id>[]): Id[];
+ >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
++>Id : Id
+ >items : readonly Recursive<Id>[]
+ 
+ const items = [{
+->items : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const satisfies readonly Recursive<string>[] : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+->{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }
++>items : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
++>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const satisfies readonly Recursive<string>[] : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
++>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
++>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
++>{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }
+ 
+     id: 'a',
+ >id : "a"
+ >'a' : "a"
+ 
+     children: [{
+->children : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+->[{        id: 'b',        children: []    }] : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+->{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: readonly []; }
++>children : [{ readonly id: "b"; readonly children: []; }]
++>[{        id: 'b',        children: []    }] : [{ readonly id: "b"; readonly children: []; }]
++>{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: []; }
+ 
+         id: 'b',
+ >id : "b"
+ >'b' : "b"
+ 
+         children: []
+->children : readonly []
+->[] : readonly []
++>children : []
++>[] : []
+ 
+     }]
+ }] as const satisfies readonly Recursive<string>[]
+@@= skipped -33, +34 lines =@@
+ >foo : ("a" | "b")[]
+ >getIds(items) : ("a" | "b")[]
+ >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
+->items : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
++>items : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
+ 
+ // variant with a fresh argument
+ const foo2 = getIds([{
+ >foo2 : ("a" | "b")[]
+ >getIds([{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const) : ("a" | "b")[]
+ >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
+->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+->{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }
++>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
++>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
++>{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }
+ 
+     id: 'a',
+ >id : "a"
+ >'a' : "a"
+ 
+     children: [{
+->children : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+->[{        id: 'b',        children: []    }] : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+->{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: readonly []; }
++>children : [{ readonly id: "b"; readonly children: []; }]
++>[{        id: 'b',        children: []    }] : [{ readonly id: "b"; readonly children: []; }]
++>{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: []; }
+ 
+         id: 'b',
+ >id : "b"
+ >'b' : "b"
+ 
+         children: []
+->children : readonly []
+->[] : readonly []
++>children : []
++>[] : []
+ 
+     }]
+ }] as const)
+@@= skipped -35, +35 lines =@@
+ 
+ type T1<T> = [number, T1<{ x: T }>];
+ >T1 : T1<T>
++>T : T
+ >x : T
+ 
+ type T2<T> = [42, T2<{ x: T }>];
+ >T2 : T2<T>
++>T : T
+ >x : T
+ 
+ function qq<U>(x: T1<U>, y: T2<U>) {
+ >qq : <U>(x: T1<U>, y: T2<U>) => void
++>U : U
+ >x : T1<U>
+ >y : T2<U>
+ 

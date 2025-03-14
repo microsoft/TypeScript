@@ -1,0 +1,27 @@
+--- old.jsDeclarationsNestedParams.types
++++ new.jsDeclarationsNestedParams.types
+@@= skipped -11, +11 lines =@@
+       * @returns {Promise.<*>} resolves when the event has been sent.
+       */ 
+     async cancel({reason, code}) {}
+->cancel : ({ reason, code }: {    reason: string | null;    code: string | null;}) => Promise<any>
+->reason : string
+->code : string
++>cancel : (__0: { code: any; reason: any; }) => Promise<void>
++>reason : any
++>code : any
+ }
+ 
+ class Y {
+@@= skipped -18, +18 lines =@@
+       * @returns {Promise.<*>} resolves when the event has been sent.
+       */ 
+     async cancel({reason, suberr}) {}
+->cancel : ({ reason, suberr }: {    reason: string | null;    suberr: {        reason: string | null;        code: string | null;    };}) => Promise<any>
+->reason : string
+->suberr : { reason: string | null; code: string | null; }
++>cancel : (__0: { reason: any; suberr: any; }) => Promise<void>
++>reason : any
++>suberr : any
+ }
+ 

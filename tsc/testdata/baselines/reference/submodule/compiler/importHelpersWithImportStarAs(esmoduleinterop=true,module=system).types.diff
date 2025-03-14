@@ -1,0 +1,15 @@
+--- old.importHelpersWithImportStarAs(esmoduleinterop=true,module=system).types
++++ new.importHelpersWithImportStarAs(esmoduleinterop=true,module=system).types
+@@= skipped -5, +5 lines =@@
+ 
+ === b.ts ===
+ import * as a from "./a";
+->a : typeof a
++>a : typeof import("a")
+ 
+ export { a };
+->a : typeof a
++>a : typeof import("a")
+ 
+ === tslib.d.ts ===
+ declare module "tslib" {

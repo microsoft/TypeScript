@@ -1,0 +1,23 @@
+--- old.moduleResolutionWithSymlinks_notInNodeModules.types
++++ new.moduleResolutionWithSymlinks_notInNodeModules.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /src/app.ts ===
+ import { x } from "./shared/abc";
+->x : 0
++>x : any
+ 
+ import { x as x2 } from "./shared2/abc";
+->x : 0
+->x2 : 0
++>x : any
++>x2 : any
+ 
+ x + x2;
+->x + x2 : number
+->x : 0
+->x2 : 0
++>x + x2 : any
++>x : any
++>x2 : any
+ 

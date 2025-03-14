@@ -1,0 +1,26 @@
+--- old.controlFlowAnalysisOnBareThisKeyword.types
++++ new.controlFlowAnalysisOnBareThisKeyword.types
+@@= skipped -7, +7 lines =@@
+ >true : true
+ 
+ function bigger(this: {}) {
+->bigger : (this: {}) => void
++>bigger : () => void
+ >this : {}
+ 
+     if (isBig(this)) {
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ function bar(this: string | number) {
+->bar : (this: string | number) => void
++>bar : () => void
+ >this : string | number
+ 
+     if (typeof this === "string") {
+ >typeof this === "string" : boolean
+->typeof this : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof this : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >this : string | number
+ >"string" : "string"
+ 

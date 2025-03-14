@@ -1,0 +1,82 @@
+--- old.privateClassPropertyAccessibleWithinNestedClass.types
++++ new.privateClassPropertyAccessibleWithinNestedClass.types
+@@= skipped -26, +26 lines =@@
+ >x : string
+ 
+     private foo() { return this.foo; }
+->foo : () => any
+->this.foo : () => any
++>foo : () => ???
++>this.foo : () => ???
+ >this : this
+->foo : () => any
++>foo : () => ???
+ 
+     private static x: string;
+ >x : string
+@@= skipped -26, +26 lines =@@
+ >x : string
+ 
+     private static foo() { return this.foo; }
+->foo : () => typeof C.foo
+->this.foo : () => typeof C.foo
++>foo : () => ???
++>this.foo : () => ???
+ >this : typeof C
+->foo : () => typeof C.foo
++>foo : () => ???
+ 
+     private static bar() { this.foo(); }
+ >bar : () => void
+->this.foo() : () => typeof C.foo
+->this.foo : () => typeof C.foo
++>this.foo() : () => ???
++>this.foo : () => ???
+ >this : typeof C
+->foo : () => typeof C.foo
++>foo : () => ???
+ 
+     private bar() {
+ >bar : () => void
+@@= skipped -25, +25 lines =@@
+ >x : C
+ 
+                 var x1 = x.foo;
+->x1 : () => any
+->x.foo : () => any
++>x1 : () => ???
++>x.foo : () => ???
+ >x : C
+->foo : () => any
++>foo : () => ???
+ 
+                 var x2 = x.bar;
+ >x2 : () => void
+@@= skipped -42, +42 lines =@@
+ >bar : () => void
+ 
+                 var sx4 = C.foo;
+->sx4 : () => typeof C.foo
+->C.foo : () => typeof C.foo
++>sx4 : () => ???
++>C.foo : () => ???
+ >C : typeof C
+->foo : () => typeof C.foo
++>foo : () => ???
+ 
+                 let y = new C();
+ >y : C
+@@= skipped -11, +11 lines =@@
+ >C : typeof C
+ 
+                 var y1 = y.foo;
+->y1 : () => any
+->y.foo : () => any
++>y1 : () => ???
++>y.foo : () => ???
+ >y : C
+->foo : () => any
++>foo : () => ???
+ 
+                 var y2 = y.bar;
+ >y2 : () => void

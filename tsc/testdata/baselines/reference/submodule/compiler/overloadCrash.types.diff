@@ -1,0 +1,20 @@
+--- old.overloadCrash.types
++++ new.overloadCrash.types
+@@= skipped -1, +1 lines =@@
+ 
+ === overloadCrash.ts ===
+ interface I1 {a:number; b:number;};
++>I1 : I1
+ >a : number
+ >b : number
+ 
+ interface I2 {c:number; d:number;};
++>I2 : I2
+ >c : number
+ >d : number
+ 
+ interface I3 {a:number; b:number; c:number; d:number;};
++>I3 : I3
+ >a : number
+ >b : number
+ >c : number

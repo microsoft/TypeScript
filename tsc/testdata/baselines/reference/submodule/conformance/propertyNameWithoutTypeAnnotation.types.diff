@@ -1,0 +1,11 @@
+--- old.propertyNameWithoutTypeAnnotation.types
++++ new.propertyNameWithoutTypeAnnotation.types
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     foo;
+ >foo : any
+ }

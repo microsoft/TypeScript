@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/declarationEmitTypeofDefaultExport.ts] ////
+
+=== /a.ts ===
+export default class C {};
+>C : default
+
+=== /b.ts ===
+import * as a from "./a";
+>a : typeof import("/a")
+
+export default a.default;
+>a.default : typeof default
+>a : typeof import("/a")
+>default : typeof default
+

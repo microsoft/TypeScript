@@ -1,0 +1,31 @@
+--- old.typeFromPropertyAssignmentWithExport.types
++++ new.typeFromPropertyAssignmentWithExport.types
+@@= skipped -3, +3 lines =@@
+ // this is a javascript file...
+ 
+ export const Adapter = {};
+->Adapter : typeof Adapter
++>Adapter : {}
+ >{} : {}
+ 
+ Adapter.prop = {};
+ >Adapter.prop = {} : {}
+->Adapter.prop : {}
+->Adapter : typeof Adapter
+->prop : {}
++>Adapter.prop : any
++>Adapter : {}
++>prop : any
+ >{} : {}
+ 
+ // comment this out, and it works
+ Adapter.asyncMethod = function() {}
+ >Adapter.asyncMethod = function() {} : () => void
+->Adapter.asyncMethod : () => void
+->Adapter : typeof Adapter
+->asyncMethod : () => void
++>Adapter.asyncMethod : any
++>Adapter : {}
++>asyncMethod : any
+ >function() {} : () => void
+ 

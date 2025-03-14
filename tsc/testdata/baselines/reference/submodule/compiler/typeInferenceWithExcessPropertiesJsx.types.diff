@@ -1,0 +1,61 @@
+--- old.typeInferenceWithExcessPropertiesJsx.types
++++ new.typeInferenceWithExcessPropertiesJsx.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/typeInferenceWithExcessPropertiesJsx.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === typeInferenceWithExcessPropertiesJsx.tsx ===
+ /// <reference path="react16.d.ts" />
+ 
+ import React = require('react');
+->React : typeof React
++>React : any
+ 
+ type TranslationEntry = {
+ >TranslationEntry : TranslationEntry
+@@= skipped -30, +24 lines =@@
+ }
+ type TProps<Entry extends TranslationEntry> = {
+ >TProps : TProps<Entry>
++>Entry : Entry
+ 
+     getTranslationEntry: (allTranslations: Translations) => Entry,
+ >getTranslationEntry : (allTranslations: Translations) => Entry
+@@= skipped -12, +13 lines =@@
+ } : {});
+ 
+ declare function T<Entry extends TranslationEntry>(
+->T : <Entry extends TranslationEntry>(props: TProps<Entry>) => JSX.Element
++>T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
++>Entry : Entry
+ 
+     props: TProps<Entry>
+ >props : TProps<Entry>
+@@= skipped -9, +10 lines =@@
+ >JSX : any
+ 
+ <T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />
+-><T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" /> : JSX.Element
+->T : <Entry extends TranslationEntry>(props: TProps<Entry>) => JSX.Element
+->getTranslationEntry : (allTranslations: Translations) => { args: [string]; }
+->(allTranslations) => allTranslations.a : (allTranslations: Translations) => { args: [string]; }
+->allTranslations : Translations
+->allTranslations.a : { args: [string]; }
+->allTranslations : Translations
+->a : { args: [string]; }
+->args : string
++><T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" /> : any
++>T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
++>getTranslationEntry : any
++>(allTranslations) => allTranslations.a : (allTranslations: any) => any
++>allTranslations : any
++>allTranslations.a : any
++>allTranslations : any
++>a : any
++>args : any
+ 

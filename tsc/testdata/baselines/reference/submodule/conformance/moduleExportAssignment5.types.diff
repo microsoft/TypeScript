@@ -1,0 +1,30 @@
+--- old.moduleExportAssignment5.types
++++ new.moduleExportAssignment5.types
+@@= skipped -21, +21 lines =@@
+ >m : () => void
+ 
+ module.exports = axios;
+->module.exports = axios : { m(): void; default: Axios; }
+->module.exports : { m(): void; default: Axios; }
+->module : { exports: { m(): void; default: Axios; }; }
+->exports : { m(): void; default: Axios; }
++>module.exports = axios : Axios
++>module.exports : any
++>module : any
++>exports : any
+ >axios : Axios
+ 
+ module.exports.default = axios;
+ >module.exports.default = axios : Axios
+->module.exports.default : Axios
+->module.exports : { m(): void; default: Axios; }
+->module : { exports: { m(): void; default: Axios; }; }
+->exports : { m(): void; default: Axios; }
+->default : Axios
++>module.exports.default : any
++>module.exports : any
++>module : any
++>exports : any
++>default : any
+ >axios : Axios
+ 

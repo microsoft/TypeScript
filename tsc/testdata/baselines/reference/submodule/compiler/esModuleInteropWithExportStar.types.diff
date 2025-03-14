@@ -1,0 +1,15 @@
+--- old.esModuleInteropWithExportStar.types
++++ new.esModuleInteropWithExportStar.types
+@@= skipped -5, +5 lines =@@
+ 
+ === mjts.ts ===
+ import * as fs from "./fs";
+->fs : typeof fs
++>fs : typeof import("fs")
+ 
+ fs;
+->fs : typeof fs
++>fs : typeof import("fs")
+ 
+ export * from "./fs";
+ export {x} from "./fs";

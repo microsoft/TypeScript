@@ -1,0 +1,34 @@
+--- old.constEnumNamespaceReferenceCausesNoImport(isolatedmodules=true).types
++++ new.constEnumNamespaceReferenceCausesNoImport(isolatedmodules=true).types
+@@= skipped -18, +18 lines =@@
+ 
+ === index.ts ===
+ import * as Foo from "./foo";
+->Foo : typeof Foo
++>Foo : typeof import("foo")
+ 
+ function check(x: Foo.ConstFooEnum): void {
+->check : (x: Foo.ConstFooEnum) => void
+->x : Foo.ConstFooEnum
++>check : (x: ConstFooEnum) => void
++>x : ConstFooEnum
+ >Foo : any
+ 
+   switch (x) {
+->x : Foo.ConstFooEnum
++>x : ConstFooEnum
+ 
+     case Foo.ConstFooEnum.Some:
+->Foo.ConstFooEnum.Some : Foo.ConstFooEnum.Some
+->Foo.ConstFooEnum : typeof Foo.ConstFooEnum
+->Foo : typeof Foo
+->ConstFooEnum : typeof Foo.ConstFooEnum
+->Some : Foo.ConstFooEnum.Some
++>Foo.ConstFooEnum.Some : ConstFooEnum.Some
++>Foo.ConstFooEnum : typeof ConstFooEnum
++>Foo : typeof import("foo")
++>ConstFooEnum : typeof ConstFooEnum
++>Some : ConstFooEnum.Some
+ 
+       break;
+   }

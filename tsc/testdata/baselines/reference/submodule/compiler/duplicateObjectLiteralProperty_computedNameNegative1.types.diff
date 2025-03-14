@@ -1,0 +1,31 @@
+--- old.duplicateObjectLiteralProperty_computedNameNegative1.types
++++ new.duplicateObjectLiteralProperty_computedNameNegative1.types
+@@= skipped -3, +3 lines =@@
+ // repro from https://github.com/microsoft/TypeScript/issues/56341
+ 
+ function bar(props: { x?: string; y?: string }) {
+->bar : (props: { x?: string; y?: string; }) => { [x: string]: number; }
+->props : { x?: string; y?: string; }
++>bar : (props: { x?: string | undefined; y?: string | undefined; }) => { [x: string]: number; }
++>props : { x?: string | undefined; y?: string | undefined; }
+ >x : string | undefined
+ >y : string | undefined
+ 
+@@= skipped -10, +10 lines =@@
+ >"" : ""
+ >y : string
+ >"" : ""
+->props : { x?: string; y?: string; }
++>props : { x?: string | undefined; y?: string | undefined; }
+ 
+   return {
+ >{    [x]: 1,    [y]: 2,  } : { [x: string]: number; }
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function foo({ x = "", y = "" }: { x?: string; y?: string }) {
+->foo : ({ x, y }: { x?: string; y?: string; }) => { [x: string]: number; }
++>foo : (__0: { x?: string | undefined; y?: string | undefined; }) => { [x: string]: number; }
+ >x : string
+ >"" : ""
+ >y : string

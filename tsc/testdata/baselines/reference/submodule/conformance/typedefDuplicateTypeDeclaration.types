@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/jsdoc/typedefDuplicateTypeDeclaration.ts] ////
+
+=== typedefDuplicateTypeDeclaration.js ===
+
+/**
+ * @typedef Name
+ * @type {string}
+ * @type {Oops}
+ */

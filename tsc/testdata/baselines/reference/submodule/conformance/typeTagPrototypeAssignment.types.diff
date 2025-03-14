@@ -1,0 +1,20 @@
+--- old.typeTagPrototypeAssignment.types
++++ new.typeTagPrototypeAssignment.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bug27327.js ===
+ function C() {
+->C : typeof C
++>C : { (): void; prototype: number; }
+ }
+ /** @type {string} */
+ C.prototype = 12
+ >C.prototype = 12 : 12
+->C.prototype : string
+->C : typeof C
+->prototype : string
++>C.prototype : number
++>C : { (): void; prototype: number; }
++>prototype : number
+ >12 : 12
+ 

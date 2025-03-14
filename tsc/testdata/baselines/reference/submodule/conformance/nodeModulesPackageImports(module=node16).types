@@ -1,0 +1,62 @@
+//// [tests/cases/conformance/node/nodeModulesPackageImports.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as cjs from "#cjs";
+>cjs : typeof import("index")
+
+import * as mjs from "#mjs";
+>mjs : typeof import("index")
+
+import * as type from "#type";
+>type : typeof import("index")
+
+cjs;
+>cjs : typeof import("index")
+
+mjs;
+>mjs : typeof import("index")
+
+type;
+>type : typeof import("index")
+
+=== index.mts ===
+// esm format file
+import * as cjs from "#cjs";
+>cjs : typeof import("index")
+
+import * as mjs from "#mjs";
+>mjs : typeof import("index")
+
+import * as type from "#type";
+>type : typeof import("index")
+
+cjs;
+>cjs : typeof import("index")
+
+mjs;
+>mjs : typeof import("index")
+
+type;
+>type : typeof import("index")
+
+=== index.cts ===
+// esm format file
+import * as cjs from "#cjs";
+>cjs : typeof import("index")
+
+import * as mjs from "#mjs";
+>mjs : typeof import("index")
+
+import * as type from "#type";
+>type : typeof import("index")
+
+cjs;
+>cjs : typeof import("index")
+
+mjs;
+>mjs : typeof import("index")
+
+type;
+>type : typeof import("index")
+

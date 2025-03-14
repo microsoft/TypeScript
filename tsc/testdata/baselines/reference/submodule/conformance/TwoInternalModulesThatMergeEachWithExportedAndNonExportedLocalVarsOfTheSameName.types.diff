@@ -1,0 +1,76 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.types
++++ new.TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.types
+@@= skipped -4, +4 lines =@@
+ >A : typeof A
+ 
+     export interface Point {
++>Point : Point
++
+         x: number;
+ >x : number
+ 
+@@= skipped -12, +14 lines =@@
+ 
+         export function mirror<T extends Point>(p: T) {
+ >mirror : <T extends Point>(p: T) => { x: number; y: number; }
++>T : T
+ >p : T
+ 
+             return { x: p.y, y: p.x };
+@@= skipped -59, +60 lines =@@
+ 
+ var o = A.Origin;
+ >o : { x: number; y: number; }
+->A.Origin : A.Point
++>A.Origin : Point
+ >A : typeof A
+->Origin : A.Point
++>Origin : Point
+ 
+ var o = A.Utils.mirror(o);
+ >o : { x: number; y: number; }
+ >A.Utils.mirror(o) : { x: number; y: number; }
+->A.Utils.mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
+->A.Utils : typeof A.Utils
++>A.Utils.mirror : <T extends Point>(p: T) => { x: number; y: number; }
++>A.Utils : typeof Utils
+ >A : typeof A
+->Utils : typeof A.Utils
+->mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
++>Utils : typeof Utils
++>mirror : <T extends Point>(p: T) => { x: number; y: number; }
+ >o : { x: number; y: number; }
+ 
+ var p: { tl: A.Point; br: A.Point };
+->p : { tl: A.Point; br: A.Point; }
+->tl : A.Point
++>p : { tl: Point; br: Point; }
++>tl : Point
+ >A : any
+->br : A.Point
++>br : Point
+ >A : any
+ 
+ var p: A.Utils.Plane;
+->p : { tl: A.Point; br: A.Point; }
++>p : { tl: Point; br: Point; }
+ >A : any
+ >Utils : any
+ 
+ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
+->p : { tl: A.Point; br: A.Point; }
+->new A.Utils.Plane(o, { x: 1, y: 1 }) : A.Utils.Plane
+->A.Utils.Plane : typeof A.Utils.Plane
+->A.Utils : typeof A.Utils
++>p : { tl: Point; br: Point; }
++>new A.Utils.Plane(o, { x: 1, y: 1 }) : Plane
++>A.Utils.Plane : typeof Plane
++>A.Utils : typeof Utils
+ >A : typeof A
+->Utils : typeof A.Utils
+->Plane : typeof A.Utils.Plane
++>Utils : typeof Utils
++>Plane : typeof Plane
+ >o : { x: number; y: number; }
+ >{ x: 1, y: 1 } : { x: number; y: number; }
+ >x : number

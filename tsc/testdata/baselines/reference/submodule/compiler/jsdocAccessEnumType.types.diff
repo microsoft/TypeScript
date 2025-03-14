@@ -1,0 +1,23 @@
+--- old.jsdocAccessEnumType.types
++++ new.jsdocAccessEnumType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ export enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ === /b.js ===
+@@= skipped -9, +9 lines =@@
+ 
+ /** @type {E} */
+ const e = E.A;
+->e : E
+->E.A : E
++>e : E.A
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 

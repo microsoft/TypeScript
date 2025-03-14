@@ -1,0 +1,11 @@
+--- old.objectTypeWithStringNamedNumericProperty.types
++++ new.objectTypeWithStringNamedNumericProperty.types
+@@= skipped -143, +143 lines =@@
+ >01 : 1
+ 
+ interface I {
++>I : I
++
+     "0.1": void;
+ >"0.1" : void
+ 

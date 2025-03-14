@@ -1,0 +1,29 @@
+--- old.reactImportUnusedInNewJSXEmit(jsx=react-jsx).types
++++ new.reactImportUnusedInNewJSXEmit(jsx=react-jsx).types
+@@= skipped -3, +3 lines =@@
+ /// <reference path="react16.d.ts" />
+ 
+ import React from "react";
+->React : typeof React
++>React : any
+ 
+ function Bar() {
+->Bar : () => JSX.Element
++>Bar : () => any
+ 
+   return <div />;
+-><div /> : JSX.Element
++><div /> : any
+ >div : any
+ }
+ 
+ export function Foo() {
+->Foo : () => JSX.Element
++>Foo : () => any
+ 
+   return <Bar />;
+-><Bar /> : JSX.Element
+->Bar : () => JSX.Element
++><Bar /> : any
++>Bar : () => any
+ }

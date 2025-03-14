@@ -1,0 +1,33 @@
+--- old.spreadExpressionContextualType.types
++++ new.spreadExpressionContextualType.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #43966
+ 
+ interface Orange {
++>Orange : Orange
++
+     name: string;
+ >name : string
+ }
+ 
+ interface Apple {
++>Apple : Apple
++
+     name: string;
+ >name : string
+ }
+ 
+ function test<T extends Apple | Orange>(item: T): T {
+ >test : <T extends Apple | Orange>(item: T) => T
++>T : T
+ >item : T
+ 
+     return { ...item };
+@@= skipped -20, +25 lines =@@
+ 
+ function test2<T extends Apple | Orange>(item: T): T {
+ >test2 : <T extends Apple | Orange>(item: T) => T
++>T : T
+ >item : T
+ 
+     const x = { ...item };

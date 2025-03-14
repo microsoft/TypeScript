@@ -1,0 +1,113 @@
+--- old.es6ImportNamedImportDts.types
++++ new.es6ImportNamedImportDts.types
+@@= skipped -53, +53 lines =@@
+ >a : typeof a
+ 
+ import { a11 as b } from "./server";
+->a11 : typeof b
+->b : typeof b
++>a11 : typeof a11
++>b : typeof a11
+ 
+ export var xxxx1 = new b();
+->xxxx1 : b
+->new b() : b
+->b : typeof b
++>xxxx1 : a11
++>new b() : a11
++>b : typeof a11
+ 
+ import { x, a12 as y } from "./server";
+ >x : typeof x
+->a12 : typeof y
+->y : typeof y
++>a12 : typeof a12
++>y : typeof a12
+ 
+ export var xxxx2 = new x();
+ >xxxx2 : x
+@@= skipped -19, +19 lines =@@
+ >x : typeof x
+ 
+ export var xxxx3 = new y();
+->xxxx3 : y
+->new y() : y
+->y : typeof y
++>xxxx3 : a12
++>new y() : a12
++>y : typeof a12
+ 
+ import { x11 as z,  } from "./server";
+->x11 : typeof z
+->z : typeof z
++>x11 : typeof x11
++>z : typeof x11
+ 
+ export var xxxx4 = new z();
+->xxxx4 : z
+->new z() : z
+->z : typeof z
++>xxxx4 : x11
++>new z() : x11
++>z : typeof x11
+ 
+ import { m,  } from "./server";
+ >m : typeof m
+@@= skipped -36, +36 lines =@@
+ >x1 : typeof x1
+ 
+ import { a111 as a11, x111 as x11 } from "./server";
+->a111 : typeof a11
+->a11 : typeof a11
+->x111 : typeof x11
+->x11 : typeof x11
++>a111 : typeof a111
++>a11 : typeof a111
++>x111 : typeof x111
++>x11 : typeof x111
+ 
+ export var xxxx8 = new a11();
+->xxxx8 : a11
+->new a11() : a11
+->a11 : typeof a11
++>xxxx8 : a111
++>new a11() : a111
++>a11 : typeof a111
+ 
+ export var xxxx9 = new x11();
+->xxxx9 : x11
+->new x11() : x11
+->x11 : typeof x11
++>xxxx9 : x111
++>new x11() : x111
++>x11 : typeof x111
+ 
+ import { z1 } from "./server";
+ >z1 : typeof z1
+@@= skipped -24, +24 lines =@@
+ >z1 : typeof z1
+ 
+ import { z2 as z3 } from "./server";
+->z2 : typeof z3
+->z3 : typeof z3
++>z2 : typeof z2
++>z3 : typeof z2
+ 
+ export var z2 = new z3(); // z2 shouldn't give redeclare error
+->z2 : z3
+->new z3() : z3
+->z3 : typeof z3
++>z2 : z2
++>new z3() : z2
++>z3 : typeof z2
+ 
+ // not referenced
+ import { aaaa } from "./server";
+ >aaaa : typeof aaaa
+ 
+ import { aaaa1 as bbbb } from "./server";
+->aaaa1 : typeof bbbb
+->bbbb : typeof bbbb
++>aaaa1 : typeof aaaa1
++>bbbb : typeof aaaa1
+ 

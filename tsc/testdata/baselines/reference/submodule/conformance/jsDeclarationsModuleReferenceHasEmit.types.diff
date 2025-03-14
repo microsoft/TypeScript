@@ -1,0 +1,11 @@
+--- old.jsDeclarationsModuleReferenceHasEmit.types
++++ new.jsDeclarationsModuleReferenceHasEmit.types
+@@= skipped -12, +12 lines =@@
+  * @type {module:A}
+  */
+ export let el = null;
+->el : error
++>el : any
+ 
+ export default A;
+ >A : A

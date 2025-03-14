@@ -1,0 +1,34 @@
+--- old.circularConstraintYieldsAppropriateError.types
++++ new.circularConstraintYieldsAppropriateError.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/Microsoft/TypeScript/issues/16861
+ class BaseType<T> {
+ >BaseType : BaseType<T>
++>T : T
+ 
+     bar: T
+ >bar : T
+@@= skipped -7, +8 lines =@@
+ 
+ class NextType<C extends { someProp: any }, T = C['someProp']> extends BaseType<T> {
+ >NextType : NextType<C, T>
++>C : C
+ >someProp : any
++>T : T
+ >BaseType : BaseType<T>
+ 
+     baz: string;
+@@= skipped -26, +28 lines =@@
+ >Foo : typeof Foo
+ 
+ foo.bar.test
+->foo.bar.test : true
+->foo.bar : { test: true; }
++>foo.bar.test : any
++>foo.bar : any
+ >foo : Foo
+->bar : { test: true; }
+->test : true
++>bar : any
++>test : any
+ 

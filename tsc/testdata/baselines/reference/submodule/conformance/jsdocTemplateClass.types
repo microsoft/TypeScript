@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateClass.ts] ////
+
+=== templateTagOnClasses.js ===
+/**
+ * @template T
+ * @typedef {(t: T) => T} Id
+ */
+/** @template T */
+class Foo {
+>Foo : Foo
+
+    /** @typedef {(t: T) => T} Id2 */
+    /** @param {T} x */
+    constructor (x) {
+>x : any
+
+        this.a = x
+>this.a = x : any
+>this.a : any
+>this : this
+>a : any
+>x : any
+    }
+    /**
+     * 
+     * @param {T} x 
+     * @param {Id<T>} y
+     * @param {Id2} alpha
+     * @return {T}
+     */
+    foo(x, y, alpha) {
+>foo : (x: any, y: any, alpha: any) => any
+>x : any
+>y : any
+>alpha : any
+
+        return alpha(y(x))
+>alpha(y(x)) : any
+>alpha : any
+>y(x) : any
+>y : any
+>x : any
+    }
+}
+var f = new Foo(1)
+>f : Foo
+>new Foo(1) : Foo
+>Foo : typeof Foo
+>1 : 1
+
+var g = new Foo(false)
+>g : Foo
+>new Foo(false) : Foo
+>Foo : typeof Foo
+>false : false
+
+f.a = g.a
+>f.a = g.a : any
+>f.a : any
+>f : Foo
+>a : any
+>g.a : any
+>g : Foo
+>a : any
+

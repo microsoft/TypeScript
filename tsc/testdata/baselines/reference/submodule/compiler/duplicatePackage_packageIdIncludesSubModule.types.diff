@@ -1,0 +1,19 @@
+--- old.duplicatePackage_packageIdIncludesSubModule.types
++++ new.duplicatePackage_packageIdIncludesSubModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /index.ts ===
+ import Foo from "foo/Foo";
+->Foo : typeof Foo
++>Foo : typeof default
+ 
+ import { x } from "foo/Bar";
+ >x : number
+ 
+ === /node_modules/foo/Foo.d.ts ===
+ export default class Foo {
+->Foo : Foo
++>Foo : default
+ 
+     protected source: boolean;
+ >source : boolean

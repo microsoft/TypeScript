@@ -1,0 +1,35 @@
+--- old.objectRestNegative.types
++++ new.objectRestNegative.types
+@@= skipped -24, +24 lines =@@
+ >({ b, ...notAssignable } = o) : { a: number; b: string; }
+ >{ b, ...notAssignable } = o : { a: number; b: string; }
+ >{ b, ...notAssignable } : { a: string; b: string; }
+->b : string
++>b : any
+ >notAssignable : { a: string; }
+ >o : { a: number; b: string; }
+ 
+ 
+ function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
+->stillMustBeLast : ({ ...mustBeLast, a }: { a: number; b: string; }) => void
++>stillMustBeLast : (__0: { a: number; b: string; }) => void
+ >mustBeLast : { b: string; }
+ >a : number
+ >a : number
+@@= skipped -14, +14 lines =@@
+ }
+ function generic<T extends { x, y }>(t: T) {
+ >generic : <T extends { x: any; y: any; }>(t: T) => Omit<T, "x">
++>T : T
+ >x : any
+ >y : any
+ >t : T
+@@= skipped -21, +22 lines =@@
+ >({a, ...rest.b + rest.b} = o) : { a: number; b: string; }
+ >{a, ...rest.b + rest.b} = o : { a: number; b: string; }
+ >{a, ...rest.b + rest.b} : any
+->a : number
++>a : any
+ >rest.b + rest.b : string
+ >rest.b : string
+ >rest : { b: string; }

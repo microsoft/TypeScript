@@ -1,0 +1,34 @@
+--- old.recursiveReverseMappedType.types
++++ new.recursiveReverseMappedType.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Recur<T> = (
+ >Recur : Recur<T>
++>T : T
+ 
+     T extends (unknown[]) ? {} : { [K in keyof T]?: Recur<T[K]> }
++>K : K
++
+ ) | ['marker', ...Recur<T>[]];
+ 
+ function join<T>(l: Recur<T>[]): Recur<T> {
+ >join : <T>(l: Recur<T>[]) => Recur<T>
++>T : T
+ >l : Recur<T>[]
+ 
+     return ['marker', ...l];
+@@= skipped -17, +21 lines =@@
+ 
+ function a<T>(l: Recur<T>[]): void {
+ >a : <T>(l: Recur<T>[]) => void
++>T : T
+ >l : Recur<T>[]
+ 
+     const x: Recur<T> | undefined = join(l);
+ >x : Recur<T> | undefined
+ >join(l) : Recur<T>
+->join : <T_1>(l: Recur<T_1>[]) => Recur<T_1>
++>join : <T>(l: Recur<T>[]) => Recur<T>
+ >l : Recur<T>[]
+ }
+ 

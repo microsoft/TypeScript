@@ -1,0 +1,18 @@
+--- old.decoratorMetadataTypeOnlyExport.types
++++ new.decoratorMetadataTypeOnlyExport.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/decoratorMetadataTypeOnlyExport.ts] ////
+ 
+-=== ./a.ts ===
++=== a.ts ===
+ class Foo {}
+ >Foo : Foo
+ 
+ export type { Foo };
+ >Foo : Foo
+ 
+-=== ./b.ts ===
++=== b.ts ===
+ import { Foo } from "./a";
+ >Foo : typeof Foo
+ 

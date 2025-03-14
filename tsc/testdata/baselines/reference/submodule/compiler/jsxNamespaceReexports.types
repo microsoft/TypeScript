@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsxNamespaceReexports.tsx] ////
+
+=== library.ts ===
+function createElement(element: string, props: any, ...children: any[]): any {}
+>createElement : (element: string, props: any, ...children: any[]) => any
+>element : string
+>props : any
+>children : any[]
+
+namespace JSX {
+>JSX : any
+
+  export interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+    [key: string]: Record<string, any>;
+>key : string
+  }
+}
+
+export { createElement, JSX };
+>createElement : (element: string, props: any, ...children: any[]) => any
+>JSX : any
+
+=== index.tsx ===
+import * as MyLib from "./library";
+>MyLib : typeof import("library")
+
+const content = <my-element/>;
+>content : any
+><my-element/> : any
+>my-element : any
+

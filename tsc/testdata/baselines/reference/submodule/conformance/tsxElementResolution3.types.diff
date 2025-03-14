@@ -1,0 +1,35 @@
+--- old.tsxElementResolution3.types
++++ new.tsxElementResolution3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { }
++>Element : Element
++
+ 	interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+ 	    [x: string]: { n: string; };
+ >x : string
+ >n : string
+@@= skipped -10, +16 lines =@@
+ 
+ // OK
+ <div n='x' />;
+-><div n='x' /> : JSX.Element
++><div n='x' /> : any
+ >div : any
+->n : string
++>n : any
+ 
+ // Error
+ <span w='err' />;
+-><span w='err' /> : JSX.Element
++><span w='err' /> : any
+ >span : any
+->w : string
++>w : any
+ 

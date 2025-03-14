@@ -1,0 +1,13 @@
+--- old.duplicateIdentifierDifferentSpelling.types
++++ new.duplicateIdentifierDifferentSpelling.types
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ var X = { 0b11: '', 3: '' };
+->X : { 3: string; }
+->{ 0b11: '', 3: '' } : { 3: string; }
++>X : { 0b11: string; }
++>{ 0b11: '', 3: '' } : { 0b11: string; }
+ >0b11 : string
+ >'' : ""
+ >3 : string

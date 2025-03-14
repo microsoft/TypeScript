@@ -1,0 +1,10 @@
+--- old.constEnumSyntheticNodesComments.types
++++ new.constEnumSyntheticNodesComments.types
+@@= skipped -9, +9 lines =@@
+ 
+ function assert<T>(x: T) {
+ >assert : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+     return x;

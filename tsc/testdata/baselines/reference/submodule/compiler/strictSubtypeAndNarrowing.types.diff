@@ -1,0 +1,315 @@
+--- old.strictSubtypeAndNarrowing.types
++++ new.strictSubtypeAndNarrowing.types
+@@= skipped -94, +94 lines =@@
+ 
+ declare function isFunction<T>(x: unknown): x is T;
+ >isFunction : <T>(x: unknown) => x is T
++>T : T
+ >x : unknown
+ 
+ type A = (...args: any) => unknown;
+@@= skipped -22, +23 lines =@@
+ >FnTypes : FnTypes
+ 
+ function fx1(f: (() => void) | undefined) {
+->fx1 : (f: (() => void) | undefined) => void
+->f : (() => void) | undefined
++>fx1 : (f: () => void | undefined) => void
++>f : () => void | undefined
+ 
+     if (isFunction<A>(f)) {
+ >isFunction<A>(f) : boolean
+ >isFunction : <T>(x: unknown) => x is T
+->f : (() => void) | undefined
++>f : () => void | undefined
+ 
+         f;  // () => void
+ >f : () => void
+@@= skipped -16, +16 lines =@@
+ >f : undefined
+     }
+     f;  // (() => void) | undefined
+->f : (() => void) | undefined
++>f : () => void | undefined
+ }
+ 
+ function fx2(f: (() => void) | undefined) {
+->fx2 : (f: (() => void) | undefined) => void
+->f : (() => void) | undefined
++>fx2 : (f: () => void | undefined) => void
++>f : () => void | undefined
+ 
+     if (isFunction<B>(f)) {
+ >isFunction<B>(f) : boolean
+ >isFunction : <T>(x: unknown) => x is T
+->f : (() => void) | undefined
++>f : () => void | undefined
+ 
+         f;  // () => void
+ >f : () => void
+@@= skipped -20, +20 lines =@@
+ >f : undefined
+     }
+     f;  // (() => void) | undefined
+->f : (() => void) | undefined
++>f : () => void | undefined
+ }
+ 
+ function fx3(f: (() => void) | undefined) {
+->fx3 : (f: (() => void) | undefined) => void
+->f : (() => void) | undefined
++>fx3 : (f: () => void | undefined) => void
++>f : () => void | undefined
+ 
+     if (isFunction<C>(f)) {
+ >isFunction<C>(f) : boolean
+ >isFunction : <T>(x: unknown) => x is T
+->f : (() => void) | undefined
++>f : () => void | undefined
+ 
+         f;  // () => void
+ >f : () => void
+@@= skipped -20, +20 lines =@@
+ >f : undefined
+     }
+     f;  // (() => void) | undefined
+->f : (() => void) | undefined
++>f : () => void | undefined
+ }
+ 
+ function fx4(f: (() => void) | undefined) {
+->fx4 : (f: (() => void) | undefined) => void
+->f : (() => void) | undefined
++>fx4 : (f: () => void | undefined) => void
++>f : () => void | undefined
+ 
+     if (isFunction<D>(f)) {
+ >isFunction<D>(f) : boolean
+ >isFunction : <T>(x: unknown) => x is T
+->f : (() => void) | undefined
++>f : () => void | undefined
+ 
+         f;  // () => void
+ >f : () => void
+@@= skipped -20, +20 lines =@@
+ >f : undefined
+     }
+     f;  // (() => void) | undefined
+->f : (() => void) | undefined
++>f : () => void | undefined
+ }
+ 
+ function checkA(f: FnTypes) {
+@@= skipped -86, +86 lines =@@
+ // Type of x = y is y with freshness preserved
+ 
+ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
+->fx10 : (obj1: { x?: number; }, obj2: { x?: number; y?: number; }) => void
+->obj1 : { x?: number; }
++>fx10 : (obj1: { x?: number | undefined; }, obj2: { x?: number | undefined; y?: number | undefined; }) => void
++>obj1 : { x?: number | undefined; }
+ >x : number | undefined
+->obj2 : { x?: number; y?: number; }
++>obj2 : { x?: number | undefined; y?: number | undefined; }
+ >x : number | undefined
+ >y : number | undefined
+ 
+     obj1 = obj2 = { x: 1, y: 2 };
+ >obj1 = obj2 = { x: 1, y: 2 } : { x: number; y: number; }
+->obj1 : { x?: number; }
++>obj1 : { x?: number | undefined; }
+ >obj2 = { x: 1, y: 2 } : { x: number; y: number; }
+->obj2 : { x?: number; y?: number; }
++>obj2 : { x?: number | undefined; y?: number | undefined; }
+ >{ x: 1, y: 2 } : { x: number; y: number; }
+ >x : number
+ >1 : 1
+@@= skipped -20, +20 lines =@@
+ 
+     obj2 = obj1 = { x: 1, y: 2 };
+ >obj2 = obj1 = { x: 1, y: 2 } : { x: number; y: number; }
+->obj2 : { x?: number; y?: number; }
++>obj2 : { x?: number | undefined; y?: number | undefined; }
+ >obj1 = { x: 1, y: 2 } : { x: number; y: number; }
+->obj1 : { x?: number; }
++>obj1 : { x?: number | undefined; }
+ >{ x: 1, y: 2 } : { x: number; y: number; }
+ >x : number
+ >1 : 1
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ function fx11(): { x?: number } {
+->fx11 : () => { x?: number; }
++>fx11 : () => { x?: number | undefined; }
+ >x : number | undefined
+ 
+     let obj: { x?: number, y?: number };
+->obj : { x?: number; y?: number; }
++>obj : { x?: number | undefined; y?: number | undefined; }
+ >x : number | undefined
+ >y : number | undefined
+ 
+     return obj = { x: 1, y: 2 };
+ >obj = { x: 1, y: 2 } : { x: number; y: number; }
+->obj : { x?: number; y?: number; }
++>obj : { x?: number | undefined; y?: number | undefined; }
+ >{ x: 1, y: 2 } : { x: number; y: number; }
+ >x : number
+ >1 : 1
+@@= skipped -48, +48 lines =@@
+ }
+ 
+ function ff2(value: { [index: number]: boolean, length: number } | string) {
+->ff2 : (value: { [index: number]: boolean; length: number; } | string) => void
++>ff2 : (value: string | { [index: number]: boolean; length: number; }) => void
+ >value : string | { [index: number]: boolean; length: number; }
+ >index : number
+ >length : number
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
+->ff3 : (value: string | string[] | { [index: number]: boolean; length: number; } | [number, boolean] | number | { length: string; } | { a: string; } | null | undefined) => void
+->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
++>ff3 : (value: string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined) => void
++>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+ >index : number
+ >length : number
+ >length : string
+@@= skipped -10, +10 lines =@@
+     if (isArrayLike(value)) {
+ >isArrayLike(value) : boolean
+ >isArrayLike : (value: any) => value is { length: number; }
+->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
++>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+ 
+         value;
+->value : string | { [index: number]: boolean; length: number; } | [number, boolean] | string[]
++>value : string | string[] | { [index: number]: boolean; length: number; } | [number, boolean]
+ 
+     } else {
+         value;
+ >value : number | { length: string; } | { a: string; } | null | undefined
+     }
+     value;
+->value : string | number | { [index: number]: boolean; length: number; } | [number, boolean] | { length: string; } | { a: string; } | string[] | null | undefined
++>value : string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined
+ }
+ 
+ // Repro from comment in #52984
+ 
+ type DistributedKeyOf<T> = T extends unknown ? keyof T : never;
+ >DistributedKeyOf : DistributedKeyOf<T>
++>T : T
+ 
+ type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unknown
+ >NarrowByKeyValue : NarrowByKeyValue<ObjT, KeyT, ValueT>
++>ObjT : ObjT
++>KeyT : KeyT
++>ValueT : ValueT
+ 
+     ? KeyT extends keyof ObjT
+         ? ValueT extends ObjT[KeyT]
+@@= skipped -30, +34 lines =@@
+ 
+ type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
+ >NarrowByDeepValue : NarrowByDeepValue<ObjT, DeepPathT, ValueT>
++>ObjT : ObjT
++>DeepPathT : DeepPathT
++>ValueT : ValueT
+ 
+     infer Head extends DistributedKeyOf<ObjT>,
++>Head : Head
++
+ ]
+     ? NarrowByKeyValue<ObjT, Head, ValueT>
+     : DeepPathT extends readonly [infer Head extends DistributedKeyOf<ObjT>, ...infer Rest]
++>Head : Head
++>Rest : Rest
++
+     ? NarrowByKeyValue<ObjT, Head, NarrowByDeepValue<NonNullable<ObjT[Head]>, Rest, ValueT>>
+     : never;
+ 
+ 
+ declare function doesValueAtDeepPathSatisfy<
+->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
++>doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+ 
+     ObjT extends object,
++>ObjT : ObjT
++
+     const DeepPathT extends ReadonlyArray<number | string>,
++>DeepPathT : DeepPathT
++
+     ValueT,
++>ValueT : ValueT
++
+ >(
+     obj: ObjT,
+ >obj : ObjT
+@@= skipped -51, +65 lines =@@
+ >condition : boolean
+ 
+ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
+->test1 : (foo: Foo) => { value: { type: "A"; }; a?: number; }
++>test1 : (foo: Foo) => { value: { type: "A"; }; a?: number | undefined; }
+ >foo : Foo
+ >value : { type: "A"; }
+ >type : "A"
+@@= skipped -10, +10 lines =@@
+ >assert(doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA)) : void
+ >assert : (condition: boolean) => asserts condition
+ >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA) : boolean
+->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
++>doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+ >foo : Foo
+ >['value', 'type'] : ["value", "type"]
+ >'value' : "value"
+@@= skipped -8, +8 lines =@@
+ >isA : (arg: unknown) => arg is "A"
+ 
+     return foo;
+->foo : { value: { type: "A"; }; a?: number; }
++>foo : { value: { type: "A"; }; a?: number | undefined; }
+ }
+ 
+ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
+->test2 : (foo: Foo) => { value: { type: "A"; }; a?: number; }
++>test2 : (foo: Foo) => { value: { type: "A"; }; a?: number | undefined; }
+ >foo : Foo
+ >value : { type: "A"; }
+ >type : "A"
+@@= skipped -15, +15 lines =@@
+ >assert : (condition: boolean) => asserts condition
+ >!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
+ >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
+->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
++>doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+ >foo : Foo
+ >['value', 'type'] : ["value", "type"]
+ >'value' : "value"
+@@= skipped -8, +8 lines =@@
+ >isB : (arg: unknown) => arg is "B"
+ 
+     return foo;
+->foo : { value: { type: "A"; }; a?: number; }
++>foo : { value: { type: "A"; }; a?: number | undefined; }
+ }
+ 
+ // Repro from #53063
+ 
+ interface Free {
++>Free : Free
++
+     premium: false;
+ >premium : false
+ >false : false
+ }
+ 
+ interface Premium {
++>Premium : Premium
++
+     premium: true;
+ >premium : true
+ >true : true

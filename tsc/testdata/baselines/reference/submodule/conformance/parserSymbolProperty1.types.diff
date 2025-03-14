@@ -1,0 +1,11 @@
+--- old.parserSymbolProperty1.types
++++ new.parserSymbolProperty1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserSymbolProperty1.ts ===
+ interface I {
++>I : I
++
+     [Symbol.iterator]: string;
+ >[Symbol.iterator] : string
+ >Symbol.iterator : unique symbol

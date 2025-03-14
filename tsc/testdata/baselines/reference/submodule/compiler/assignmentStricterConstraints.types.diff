@@ -1,0 +1,20 @@
+--- old.assignmentStricterConstraints.types
++++ new.assignmentStricterConstraints.types
+@@= skipped -3, +3 lines =@@
+ var f = function <T, S extends T>(x: T, y: S): void {
+ >f : <T, S extends T>(x: T, y: S) => void
+ >function <T, S extends T>(x: T, y: S): void {    x = y} : <T, S extends T>(x: T, y: S) => void
++>T : T
++>S : S
+ >x : T
+ >y : S
+ 
+@@= skipped -12, +14 lines =@@
+ var g = function <T, S>(x: T, y: S): void { }
+ >g : <T, S>(x: T, y: S) => void
+ >function <T, S>(x: T, y: S): void { } : <T, S>(x: T, y: S) => void
++>T : T
++>S : S
+ >x : T
+ >y : S
+ 

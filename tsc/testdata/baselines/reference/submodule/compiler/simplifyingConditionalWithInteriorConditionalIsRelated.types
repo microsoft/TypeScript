@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/simplifyingConditionalWithInteriorConditionalIsRelated.ts] ////
+
+=== simplifyingConditionalWithInteriorConditionalIsRelated.ts ===
+// from https://github.com/microsoft/TypeScript/issues/30706
+type ConditionalType<T> = T extends string ? string : number;
+>ConditionalType : ConditionalType<T>
+>T : T
+
+function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
+>ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
+>T : T
+
+    return 0 as any;
+>0 as any : any
+>0 : 0
+}
+
+function JustConditional<T>(): ConditionalType<T> {
+>JustConditional : <T>() => ConditionalType<T>
+>T : T
+
+    return ConditionalOrUndefined<T>()!; // shouldn't error
+>ConditionalOrUndefined<T>()! : ConditionalType<T>
+>ConditionalOrUndefined<T>() : ConditionalType<T> | undefined
+>ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
+}
+
+
+// For comparison...
+function genericOrUndefined<T>(): T | undefined {
+>genericOrUndefined : <T>() => T | undefined
+>T : T
+
+    return 0 as any;
+>0 as any : any
+>0 : 0
+}
+
+function JustGeneric<T>(): T {
+>JustGeneric : <T>() => T
+>T : T
+
+    return genericOrUndefined<T>()!; // no error
+>genericOrUndefined<T>()! : NonNullable<T>
+>genericOrUndefined<T>() : T | undefined
+>genericOrUndefined : <T>() => T | undefined
+}
+
+// Simplified example:
+
+function f<T>() {
+>f : <T>() => void
+>T : T
+
+    type One = T extends string ? string : string;
+>One : One
+
+    type A = T extends number ? One : never;
+>A : A
+
+    const x: One = null as any as A;
+>x : One
+>null as any as A : A
+>null as any : any
+}
+

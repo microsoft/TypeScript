@@ -1,0 +1,36 @@
+--- old.noImplicitAnyStringIndexerOnObject.types
++++ new.noImplicitAnyStringIndexerOnObject.types
+@@= skipped -391, +391 lines =@@
+ 
+ 
+ interface MyMap<K, T> {
++>MyMap : MyMap<K, T>
++>K : K
++>T : T
++
+   get(key: K): T;
+ >get : (key: K) => T
+ >key : K
+@@= skipped -11, +15 lines =@@
+ }
+ 
+ interface Dog { bark(): void; }
++>Dog : Dog
+ >bark : () => void
+ 
+ let rover: Dog = { bark() {} };
+ >rover : Dog
+->{ bark() {} } : { bark(): void; }
++>{ bark() {} } : { bark: () => void; }
+ >bark : () => void
+ 
+ declare let map: MyMap<Dog, string>;
+@@= skipped -18, +19 lines =@@
+ >"Rover" : "Rover"
+ 
+ interface I {
++>I : I
++
+   prop: MyMap<string, string>
+ >prop : MyMap<string, string>
+ }

@@ -1,0 +1,14 @@
+--- old.declInput-2.types
++++ new.declInput-2.types
+@@= skipped -10, +10 lines =@@
+ >E : E
+ 
+     export interface I1 {}
++>I1 : I1
++
+     interface I2 {}
++>I2 : I2
++
+     export class D {
+ >D : D
+ 

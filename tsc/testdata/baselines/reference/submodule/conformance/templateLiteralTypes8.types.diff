@@ -1,0 +1,10 @@
+--- old.templateLiteralTypes8.types
++++ new.templateLiteralTypes8.types
+@@= skipped -14, +14 lines =@@
+ 
+ type Stringify<T extends string> = `${T}`;
+ >Stringify : `${T}`
++>T : T
+ 
+ let z1: `${E}` = "a";
+ >z1 : "a" | "b"

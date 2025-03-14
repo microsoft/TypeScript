@@ -1,0 +1,56 @@
+--- old.thisIndexOnExistingReadonlyFieldIsNotNever.types
++++ new.thisIndexOnExistingReadonlyFieldIsNotNever.types
+@@= skipped -2, +2 lines =@@
+ === thisIndexOnExistingReadonlyFieldIsNotNever.ts ===
+ declare class Component<P, S = {}> {
+ >Component : Component<P, S>
++>P : P
++>S : S
+ 
+     readonly props: Readonly<{ children?: unknown }> & Readonly<P>;
+ >props : Readonly<{ children?: unknown; }> & Readonly<P>
+@@= skipped -9, +11 lines =@@
+ >state : Readonly<S>
+ }
+ interface CoachMarkAnchorProps<C> {
++>CoachMarkAnchorProps : CoachMarkAnchorProps<C>
++>C : C
++
+     anchorRef?: (anchor: C) => void;
+->anchorRef : ((anchor: C) => void) | undefined
++>anchorRef : (anchor: C) => void | undefined
+ >anchor : C
+ }
+ type AnchorType<P> = Component<P>;
+ >AnchorType : AnchorType<P>
++>P : P
+ 
+ class CoachMarkAnchorDecorator {
+ >CoachMarkAnchorDecorator : CoachMarkAnchorDecorator
+ 
+     decorateComponent<P>(anchor: P) {
+ >decorateComponent : <P>(anchor: P) => typeof CoachMarkAnchor
++>P : P
+ >anchor : P
+ 
+         return class CoachMarkAnchor extends Component<CoachMarkAnchorProps<AnchorType<P>> & P, {}> {
+@@= skipped -25, +30 lines =@@
+ >anchor : AnchorType<P>
+ 
+                 const anchorRef = this.props.anchorRef;
+->anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+->this.props.anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
++>anchorRef : CoachMarkAnchorProps<AnchorType<P>> & P["anchorRef"] | undefined
++>this.props.anchorRef : CoachMarkAnchorProps<AnchorType<P>> & P["anchorRef"] | undefined
+ >this.props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
+ >this : this
+ >props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
+->anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
++>anchorRef : CoachMarkAnchorProps<AnchorType<P>> & P["anchorRef"] | undefined
+ 
+                 if (anchorRef) {
+->anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
++>anchorRef : CoachMarkAnchorProps<AnchorType<P>> & P["anchorRef"] | undefined
+ 
+                     anchorRef(anchor);
+ >anchorRef(anchor) : void

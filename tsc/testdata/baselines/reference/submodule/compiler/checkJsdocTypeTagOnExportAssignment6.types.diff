@@ -1,0 +1,13 @@
+--- old.checkJsdocTypeTagOnExportAssignment6.types
++++ new.checkJsdocTypeTagOnExportAssignment6.types
+@@= skipped -20, +20 lines =@@
+ 
+ === b.js ===
+ import a from "./a";
+->a : import("a").Foo
++>a : { a: number; b: number; c: number; }
+ 
+ a;
+->a : import("a").Foo
++>a : { a: number; b: number; c: number; }
+ 

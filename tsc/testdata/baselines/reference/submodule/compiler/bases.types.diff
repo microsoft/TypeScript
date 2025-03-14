@@ -1,0 +1,11 @@
+--- old.bases.types
++++ new.bases.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bases.ts ===
+ interface I {
++>I : I
++
+     x;
+ >x : any
+ }

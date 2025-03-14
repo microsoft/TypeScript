@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/es6/moduleExportsSystem/anonymousDefaultExportsSystem.ts] ////
+
+=== a.ts ===
+
+export default class {}
+
+=== b.ts ===
+
+export default function() {}

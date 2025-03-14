@@ -1,0 +1,257 @@
+--- old.typeFromPropertyAssignment10.types
++++ new.typeFromPropertyAssignment10.types
+@@= skipped -1, +1 lines =@@
+ 
+ === module.js ===
+ var Outer = Outer || {};
+->Outer : typeof Outer
+->Outer || {} : typeof Outer | {}
+->Outer : typeof Outer
++>Outer : any
++>Outer || {} : any
++>Outer : any
+ >{} : {}
+ 
+ Outer.app = Outer.app || {};
+->Outer.app = Outer.app || {} : typeof Outer.app
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->Outer.app || {} : {}
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
++>Outer.app = Outer.app || {} : any
++>Outer.app : any
++>Outer : any
++>app : any
++>Outer.app || {} : any
++>Outer.app : any
++>Outer : any
++>app : any
+ >{} : {}
+ 
+ === someview.js ===
+ Outer.app.SomeView = (function () {
+ >Outer.app.SomeView = (function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
+->Outer.app.SomeView : () => void
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->SomeView : () => void
++>Outer.app.SomeView : any
++>Outer.app : any
++>Outer : any
++>app : any
++>SomeView : any
+ >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
+ >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;}) : () => () => void
+ >function () {    var SomeView = function() {        var me = this;    }    return SomeView;} : () => () => void
+@@= skipped -42, +42 lines =@@
+ })();
+ Outer.app.Inner = class {
+ >Outer.app.Inner = class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
+->Outer.app.Inner : typeof Inner
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->Inner : typeof Inner
++>Outer.app.Inner : any
++>Outer.app : any
++>Outer : any
++>app : any
++>Inner : any
+ >class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
+ 
+     constructor() {
+         /** @type {number} */
+         this.y = 12;
+ >this.y = 12 : 12
+->this.y : number
++>this.y : any
+ >this : this
+->y : number
++>y : any
+ >12 : 12
+     }
+ }
+ var example = new Outer.app.Inner();
+->example : Inner
+->new Outer.app.Inner() : Inner
+->Outer.app.Inner : typeof Inner
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->Inner : typeof Inner
++>example : any
++>new Outer.app.Inner() : any
++>Outer.app.Inner : any
++>Outer.app : any
++>Outer : any
++>app : any
++>Inner : any
+ 
+ example.y;
+->example.y : number
+->example : Inner
+->y : number
++>example.y : any
++>example : any
++>y : any
+ 
+ /** @param {number} k */
+ Outer.app.statische = function (k) {
+->Outer.app.statische = function (k) {    return k ** k;} : (k: number) => number
+->Outer.app.statische : (k: number) => number
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->statische : (k: number) => number
+->function (k) {    return k ** k;} : (k: number) => number
+->k : number
++>Outer.app.statische = function (k) {    return k ** k;} : (k: any) => number
++>Outer.app.statische : any
++>Outer.app : any
++>Outer : any
++>app : any
++>statische : any
++>function (k) {    return k ** k;} : (k: any) => number
++>k : any
+ 
+     return k ** k;
+ >k ** k : number
+->k : number
+->k : number
++>k : any
++>k : any
+ }
+ === application.js ===
+ Outer.app.Application = (function () {
+->Outer.app.Application = (function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : typeof Application
+->Outer.app.Application : typeof Application
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->Application : typeof Application
+->(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : typeof Application
+->(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;}) : () => typeof Application
+->function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;} : () => typeof Application
++>Outer.app.Application = (function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : () => void
++>Outer.app.Application : any
++>Outer.app : any
++>Outer : any
++>app : any
++>Application : any
++>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : () => void
++>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;}) : () => () => void
++>function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;} : () => () => void
+ 
+     /**
+      * Application main class.
+      * Will be instantiated & initialized by HTML page
+      */
+     var Application = function () {
+->Application : typeof Application
+->function () {        var me = this;        me.view = new Outer.app.SomeView();    } : typeof Application
++>Application : () => void
++>function () {        var me = this;        me.view = new Outer.app.SomeView();    } : () => void
+ 
+         var me = this;
+->me : this
+->this : this
++>me : any
++>this : any
+ 
+         me.view = new Outer.app.SomeView();
+ >me.view = new Outer.app.SomeView() : any
+ >me.view : any
+->me : this
++>me : any
+ >view : any
+ >new Outer.app.SomeView() : any
+->Outer.app.SomeView : () => void
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->SomeView : () => void
++>Outer.app.SomeView : any
++>Outer.app : any
++>Outer : any
++>app : any
++>SomeView : any
+ 
+     };
+     return Application;
+->Application : typeof Application
++>Application : () => void
+ 
+ })();
+ === main.js ===
+ var app = new Outer.app.Application();
+->app : Application
+->new Outer.app.Application() : Application
+->Outer.app.Application : typeof Application
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->Application : typeof Application
++>app : any
++>new Outer.app.Application() : any
++>Outer.app.Application : any
++>Outer.app : any
++>Outer : any
++>app : any
++>Application : any
+ 
+ var inner = new Outer.app.Inner();
+->inner : Inner
+->new Outer.app.Inner() : Inner
+->Outer.app.Inner : typeof Inner
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->Inner : typeof Inner
++>inner : any
++>new Outer.app.Inner() : any
++>Outer.app.Inner : any
++>Outer.app : any
++>Outer : any
++>app : any
++>Inner : any
+ 
+ inner.y;
+->inner.y : number
+->inner : Inner
+->y : number
++>inner.y : any
++>inner : any
++>y : any
+ 
+ /** @type {Outer.app.Inner} */
+ var x;
+->x : Inner
++>x : any
+ 
+ x.y;
+->x.y : number
+->x : Inner
+->y : number
++>x.y : any
++>x : any
++>y : any
+ 
+ Outer.app.statische(101); // Infinity, duh
+->Outer.app.statische(101) : number
+->Outer.app.statische : (k: number) => number
+->Outer.app : typeof Outer.app
+->Outer : typeof Outer
+->app : typeof Outer.app
+->statische : (k: number) => number
++>Outer.app.statische(101) : any
++>Outer.app.statische : any
++>Outer.app : any
++>Outer : any
++>app : any
++>statische : any
+ >101 : 101
+ 

@@ -1,0 +1,95 @@
+--- old.vararg.types
++++ new.vararg.types
+@@= skipped -88, +88 lines =@@
+ }
+ 
+ var x=new M.C();
+->x : M.C
+->new M.C() : M.C
+->M.C : typeof M.C
++>x : C
++>new M.C() : C
++>M.C : typeof C
+ >M : typeof M
+->C : typeof M.C
++>C : typeof C
+ 
+ var result="";
+ >result : string
+@@= skipped -15, +15 lines =@@
+ >result : string
+ >x.f(x,3,3) : string
+ >x.f : (x: string, ...rest: number[]) => string
+->x : M.C
++>x : C
+ >f : (x: string, ...rest: number[]) => string
+->x : M.C
++>x : C
+ >3 : 3
+ >3 : 3
+ 
+@@= skipped -11, +11 lines =@@
+ >result : string
+ >x.f(3,"hello",3) : string
+ >x.f : (x: string, ...rest: number[]) => string
+->x : M.C
++>x : C
+ >f : (x: string, ...rest: number[]) => string
+ >3 : 3
+ >"hello" : "hello"
+@@= skipped -11, +11 lines =@@
+ >result : string
+ >x.f("hello",3,3,3,3,3) : string
+ >x.f : (x: string, ...rest: number[]) => string
+->x : M.C
++>x : C
+ >f : (x: string, ...rest: number[]) => string
+ >"hello" : "hello"
+ >3 : 3
+@@= skipped -14, +14 lines =@@
+ >result : string
+ >x.f("hello") : string
+ >x.f : (x: string, ...rest: number[]) => string
+->x : M.C
++>x : C
+ >f : (x: string, ...rest: number[]) => string
+ >"hello" : "hello"
+ 
+@@= skipped -9, +9 lines =@@
+ >result : string
+ >x.fonly(3) : any
+ >x.fonly : (...rest: string[]) => any
+->x : M.C
++>x : C
+ >fonly : (...rest: string[]) => any
+ >3 : 3
+ 
+@@= skipped -9, +9 lines =@@
+ >result : string
+ >x.fonly(x) : any
+ >x.fonly : (...rest: string[]) => any
+->x : M.C
++>x : C
+ >fonly : (...rest: string[]) => any
+->x : M.C
++>x : C
+ 
+ result+=x.fonly("a"); // ok 
+ >result+=x.fonly("a") : string
+ >result : string
+ >x.fonly("a") : any
+ >x.fonly : (...rest: string[]) => any
+->x : M.C
++>x : C
+ >fonly : (...rest: string[]) => any
+ >"a" : "a"
+ 
+@@= skipped -18, +18 lines =@@
+ >result : string
+ >x.fonly("a","b","c","d") : any
+ >x.fonly : (...rest: string[]) => any
+->x : M.C
++>x : C
+ >fonly : (...rest: string[]) => any
+ >"a" : "a"
+ >"b" : "b"

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/declarationEmitOfFuncspace.ts] ////
+
+=== expando.ts ===
+// #27032
+function ExpandoMerge(n: number) {
+>ExpandoMerge : (n: number) => number
+>n : number
+
+    return n;
+>n : number
+}
+namespace ExpandoMerge {
+>ExpandoMerge : (n: number) => number
+
+    export interface I { }
+>I : I
+}
+

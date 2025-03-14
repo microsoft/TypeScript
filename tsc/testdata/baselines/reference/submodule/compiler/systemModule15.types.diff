@@ -1,0 +1,53 @@
+--- old.systemModule15.types
++++ new.systemModule15.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file1.ts ===
+ import * as moduleB from "./file2"
+->moduleB : typeof moduleB
++>moduleB : typeof import("file2")
+ 
+ declare function use(v: any): void;
+ >use : (v: any) => void
+@@= skipped -10, +10 lines =@@
+ >use(moduleB.value) : void
+ >use : (v: any) => void
+ >moduleB.value : string
+->moduleB : typeof moduleB
++>moduleB : typeof import("file2")
+ >value : string
+ 
+ use(moduleB.moduleC);
+ >use(moduleB.moduleC) : void
+ >use : (v: any) => void
+ >moduleB.moduleC : string
+->moduleB : typeof moduleB
++>moduleB : typeof import("file2")
+ >moduleC : string
+ 
+ use(moduleB.moduleCStar);
+ >use(moduleB.moduleCStar) : void
+ >use : (v: any) => void
+->moduleB.moduleCStar : typeof moduleB.moduleCStar
+->moduleB : typeof moduleB
+->moduleCStar : typeof moduleB.moduleCStar
++>moduleB.moduleCStar : typeof import("file3")
++>moduleB : typeof import("file2")
++>moduleCStar : typeof import("file3")
+ 
+ === file2.ts ===
+ import * as moduleCStar from "./file3"
+->moduleCStar : typeof moduleCStar
++>moduleCStar : typeof import("file3")
+ 
+ import {value2} from "./file4"
+ >value2 : string
+@@= skipped -32, +32 lines =@@
+ 
+ export {
+     moduleCStar,
+->moduleCStar : typeof moduleCStar
++>moduleCStar : typeof import("file3")
+ 
+     moduleC,
+ >moduleC : string

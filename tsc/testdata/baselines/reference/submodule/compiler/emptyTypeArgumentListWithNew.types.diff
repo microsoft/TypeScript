@@ -1,0 +1,10 @@
+--- old.emptyTypeArgumentListWithNew.types
++++ new.emptyTypeArgumentListWithNew.types
+@@= skipped -2, +2 lines =@@
+ === emptyTypeArgumentListWithNew.ts ===
+ class foo<T> { }
+ >foo : foo<T>
++>T : T
+ 
+ new foo<>();
+ >new foo<>() : foo<unknown>

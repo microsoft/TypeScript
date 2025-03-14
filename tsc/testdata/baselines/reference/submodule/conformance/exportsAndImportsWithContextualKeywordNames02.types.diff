@@ -1,0 +1,24 @@
+--- old.exportsAndImportsWithContextualKeywordNames02.types
++++ new.exportsAndImportsWithContextualKeywordNames02.types
+@@= skipped -11, +11 lines =@@
+ 
+ === t2.ts ===
+ import * as as from "./t1";
+->as : typeof as
++>as : typeof import("t1")
+ 
+ var x = as.as;
+ >x : number
+ >as.as : number
+->as : typeof as
++>as : typeof import("t1")
+ >as : number
+ 
+ var y = as.return;
+ >y : number
+ >as.return : number
+->as : typeof as
++>as : typeof import("t1")
+ >return : number
+ 
+ === t3.ts ===

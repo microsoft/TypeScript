@@ -1,0 +1,11 @@
+--- old.interfaceWithOverloadedCallAndConstructSignatures.types
++++ new.interfaceWithOverloadedCallAndConstructSignatures.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceWithOverloadedCallAndConstructSignatures.ts ===
+ interface Foo {
++>Foo : Foo
++
+     (): number;
+     (x: string): number;
+ >x : string

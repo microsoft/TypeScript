@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/mergeWithImportedType.ts] ////
+
+=== f1.ts ===
+export enum E {X}
+>E : E.X
+>X : E.X
+
+=== f2.ts ===
+import {E} from "./f1";
+>E : typeof E
+
+export type E = E;
+>E : E.X
+

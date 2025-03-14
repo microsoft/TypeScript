@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/extendPrivateConstructorClass.ts] ////
+
+=== extendPrivateConstructorClass.ts ===
+declare namespace abc {
+>abc : typeof abc
+
+    class XYZ {
+>XYZ : XYZ
+
+        private constructor();
+    }
+}
+
+class C extends abc.XYZ {
+>C : C
+>abc.XYZ : XYZ
+>abc : typeof abc
+>XYZ : typeof XYZ
+}
+

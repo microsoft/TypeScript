@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/reactNamespaceImportPresevation.tsx] ////
+
+=== modules.d.ts ===
+declare module "my-React-Lib" {
+>"my-React-Lib" : typeof import("my-React-Lib")
+
+    var a: any;
+>a : any
+
+    export = a;
+>a : any
+}
+
+=== test.tsx ===
+import * as myReactLib from "my-React-Lib"; // should not be elided
+>myReactLib : any
+
+declare var foo: any;
+>foo : any
+
+<foo data/>;
+><foo data/> : any
+>foo : any
+>data : any
+

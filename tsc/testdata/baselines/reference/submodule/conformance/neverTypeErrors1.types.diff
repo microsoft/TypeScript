@@ -1,0 +1,30 @@
+--- old.neverTypeErrors1.types
++++ new.neverTypeErrors1.types
+@@= skipped -78, +78 lines =@@
+ // Repro from #46032
+ 
+ interface A {
++>A : A
++
+     foo: "a";
+ >foo : "a"
+ }
+ 
+ interface B {
++>B : B
++
+     foo: "b";
+ >foo : "b"
+ }
+ 
+ type Union = A & B;
+->Union : never
++>Union : Union
+ 
+ function func(): { value: Union[] } {
+ >func : () => { value: Union[]; }
+->value : never[]
++>value : Union[]
+ 
+     return {
+ >{        value: [],    } : { value: undefined[]; }

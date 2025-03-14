@@ -1,0 +1,17 @@
+--- old.conflictingCommonJSES2015Exports.types
++++ new.conflictingCommonJSES2015Exports.types
+@@= skipped -8, +8 lines =@@
+ >5 : 5
+ 
+ module.exports = { abc };
+->module.exports = { abc } : any
++>module.exports = { abc } : { abc: (a: any, b: any, c: any) => number; }
+ >module.exports : any
+ >module : any
+ >exports : any
+ >{ abc } : { abc: (a: any, b: any, c: any) => number; }
+->abc : (a: any, b: any, c: any) => number
++>abc : any
+ 
+ === use.js ===
+ import { abc } from './bug24934';

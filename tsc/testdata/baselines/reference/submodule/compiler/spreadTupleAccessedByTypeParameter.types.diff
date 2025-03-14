@@ -1,0 +1,18 @@
+--- old.spreadTupleAccessedByTypeParameter.types
++++ new.spreadTupleAccessedByTypeParameter.types
+@@= skipped -2, +2 lines =@@
+ === spreadTupleAccessedByTypeParameter.ts ===
+ export function test<N extends number>(singletons: ["a"][], i: N) {
+ >test : <N extends number>(singletons: ["a"][], i: N) => []
++>N : N
+ >singletons : ["a"][]
+ >i : N
+ 
+@@= skipped -10, +11 lines =@@
+ >i : N
+ 
+   const [, ...rest] = singleton;
+-> : undefined
+ >rest : []
+ >singleton : ["a"][][N]
+ 

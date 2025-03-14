@@ -1,0 +1,35 @@
+--- old.callSignatureWithoutAnnotationsOrBody.types
++++ new.callSignatureWithoutAnnotationsOrBody.types
+@@= skipped -13, +13 lines =@@
+ >1 : 1
+ 
+ interface I {
++>I : I
++
+     ();
+     f();
+ >f : () => any
+@@= skipped -20, +22 lines =@@
+ >f : () => any
+ 
+ var a: {
+->a : { (): any; f(): any; }
++>a : { (): any; f: () => any; }
+ 
+     ();
+     f();
+@@= skipped -10, +10 lines =@@
+ var r4 = a();
+ >r4 : any
+ >a() : any
+->a : { (): any; f(): any; }
++>a : { (): any; f: () => any; }
+ 
+ var r5 = a.f();
+ >r5 : any
+ >a.f() : any
+ >a.f : () => any
+->a : { (): any; f(): any; }
++>a : { (): any; f: () => any; }
+ >f : () => any
+ 

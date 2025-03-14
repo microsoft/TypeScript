@@ -1,0 +1,123 @@
+--- old.assignmentCompatWithConstructSignatures6.types
++++ new.assignmentCompatWithConstructSignatures6.types
+@@= skipped -22, +22 lines =@@
+ >bing : string
+ 
+ interface A {
++>A : A
++
+     a: new <T>(x: T) => T[];
+ >a : new <T>(x: T) => T[]
++>T : T
+ >x : T
+ 
+     a2: new <T>(x: T) => string[];
+ >a2 : new <T>(x: T) => string[]
++>T : T
+ >x : T
+ 
+     a3: new <T>(x: T) => void;
+ >a3 : new <T>(x: T) => void
++>T : T
+ >x : T
+ 
+     a4: new <T, U>(x: T, y: U) => string;
+ >a4 : new <T, U>(x: T, y: U) => string
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+     a5: new <T, U>(x: (arg: T) => U) => T;
+ >a5 : new <T, U>(x: (arg: T) => U) => T
++>T : T
++>U : U
+ >x : (arg: T) => U
+ >arg : T
+ 
+     a6: new <T extends Base>(x: (arg: T) => Derived) => T;
+ >a6 : new <T extends Base>(x: (arg: T) => Derived) => T
++>T : T
+ >x : (arg: T) => Derived
+ >arg : T
+ 
+     a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+ >a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
++>T : T
+ >x : { foo: T; }
+ >foo : T
+ >y : { foo: T; bar: T; }
+@@= skipped -37, +48 lines =@@
+ 
+     a15: new <T>(x: { a: T; b: T }) => T[];
+ >a15 : new <T>(x: { a: T; b: T; }) => T[]
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T
+ 
+     a16: new <T extends Base>(x: { a: T; b: T }) => T[];
+ >a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T
+@@= skipped -16, +18 lines =@@
+ 
+ var b: new <T>(x: T) => T[]; 
+ >b : new <T>(x: T) => T[]
++>T : T
+ >x : T
+ 
+ x.a = b;
+@@= skipped -18, +19 lines =@@
+ 
+ var b2: new <T>(x: T) => string[]; 
+ >b2 : new <T>(x: T) => string[]
++>T : T
+ >x : T
+ 
+ x.a2 = b2;
+@@= skipped -18, +19 lines =@@
+ 
+ var b3: new <T>(x: T) => T;
+ >b3 : new <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ x.a3 = b3;
+@@= skipped -18, +19 lines =@@
+ 
+ var b4: new <T, U>(x: T, y: U) => string; 
+ >b4 : new <T, U>(x: T, y: U) => string
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+@@= skipped -19, +21 lines =@@
+ 
+ var b5: new <T, U>(x: (arg: T) => U) => T; 
+ >b5 : new <T, U>(x: (arg: T) => U) => T
++>T : T
++>U : U
+ >x : (arg: T) => U
+ >arg : T
+ 
+@@= skipped -19, +21 lines =@@
+ 
+ var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+ >b11 : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
++>T : T
++>U : U
+ >x : { foo: T; }
+ >foo : T
+ >y : { foo: U; bar: U; }
+@@= skipped -22, +24 lines =@@
+ 
+ var b16: new <T>(x: { a: T; b: T }) => T[]; 
+ >b16 : new <T>(x: { a: T; b: T; }) => T[]
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T

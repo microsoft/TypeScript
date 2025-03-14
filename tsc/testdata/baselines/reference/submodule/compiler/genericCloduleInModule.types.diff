@@ -1,0 +1,25 @@
+--- old.genericCloduleInModule.types
++++ new.genericCloduleInModule.types
+@@= skipped -5, +5 lines =@@
+ 
+     export class B<T> {
+ >B : B<T>
++>T : T
+ 
+         foo() { }
+ >foo : () => void
+@@= skipped -17, +18 lines =@@
+ }
+ 
+ var b: A.B<number>;
+->b : A.B<number>
++>b : B<number>
+ >A : any
+ 
+ b.foo();
+ >b.foo() : void
+ >b.foo : () => void
+->b : A.B<number>
++>b : B<number>
+ >foo : () => void
+ 

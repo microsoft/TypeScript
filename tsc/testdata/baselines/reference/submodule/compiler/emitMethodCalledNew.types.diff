@@ -1,0 +1,35 @@
+--- old.emitMethodCalledNew.types
++++ new.emitMethodCalledNew.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/55075
+ 
+ export const a = {
+->a : { "new"(x: number): number; }
+->{  new(x: number) { return x + 1 }} : { "new"(x: number): number; }
++>a : { new: (x: number) => number; }
++>{  new(x: number) { return x + 1 }} : { new: (x: number) => number; }
+ 
+   new(x: number) { return x + 1 }
+ >new : (x: number) => number
+@@= skipped -11, +11 lines =@@
+ >1 : 1
+ }
+ export const b = {
+->b : { "new"(x: number): number; }
+->{  "new"(x: number) { return x + 1 }} : { "new"(x: number): number; }
++>b : { new: (x: number) => number; }
++>{  "new"(x: number) { return x + 1 }} : { new: (x: number) => number; }
+ 
+   "new"(x: number) { return x + 1 }
+ >"new" : (x: number) => number
+@@= skipped -11, +11 lines =@@
+ >1 : 1
+ }
+ export const c = {
+->c : { "new"(x: number): number; }
+->{  ["new"](x: number) { return x + 1 }} : { "new"(x: number): number; }
++>c : { new: (x: number) => number; }
++>{  ["new"](x: number) { return x + 1 }} : { new: (x: number) => number; }
+ 
+   ["new"](x: number) { return x + 1 }
+ >["new"] : (x: number) => number

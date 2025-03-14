@@ -1,0 +1,40 @@
+--- old.comparisonOperatorWithIdenticalObjects.types
++++ new.comparisonOperatorWithIdenticalObjects.types
+@@= skipped -73, +73 lines =@@
+ >Base : Base
+ 
+ interface A3 { f(a: number): string; }
++>A3 : A3
+ >f : (a: number) => string
+ >a : number
+ 
+ interface B3 { f(a: number): string; }
++>B3 : B3
+ >f : (a: number) => string
+ >a : number
+ 
+ interface A4 { new (a: string): A1; }
++>A4 : A4
+ >a : string
+ 
+ interface B4 { new (a: string): B1; }
++>B4 : B4
+ >a : string
+ 
+ interface A5 { [x: number]: number; }
++>A5 : A5
+ >x : number
+ 
+ interface B5 { [x: number]: number; }
++>B5 : B5
+ >x : number
+ 
+ interface A6 { [x: string]: string; }
++>A6 : A6
+ >x : string
+ 
+ interface B6 { [x: string]: string; }
++>B6 : B6
+ >x : string
+ 
+ var a1: A1;

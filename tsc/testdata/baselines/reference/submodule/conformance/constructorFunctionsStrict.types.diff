@@ -1,0 +1,137 @@
+--- old.constructorFunctionsStrict.types
++++ new.constructorFunctionsStrict.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ /** @param {number} x */
+ function C(x) {
+->C : typeof C
+->x : number
++>C : (x: any) => void
++>x : any
+ 
+     this.x = x
+->this.x = x : number
++>this.x = x : any
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+->x : number
++>x : any
+ }
+ C.prototype.m = function() {
+ >C.prototype.m = function() {    this.y = 12} : () => void
+ >C.prototype.m : any
+ >C.prototype : any
+->C : typeof C
++>C : (x: any) => void
+ >prototype : any
+ >m : any
+ >function() {    this.y = 12} : () => void
+ 
+     this.y = 12
+ >this.y = 12 : 12
+->this.y : number | undefined
+->this : this
+->y : number | undefined
++>this.y : any
++>this : any
++>y : any
+ >12 : 12
+ }
+ var c = new C(1)
+->c : C
+->new C(1) : C
+->C : typeof C
++>c : any
++>new C(1) : any
++>C : (x: any) => void
+ >1 : 1
+ 
+ c.x = undefined // should error
+ >c.x = undefined : undefined
+->c.x : number
+->c : C
+->x : number
++>c.x : any
++>c : any
++>x : any
+ >undefined : undefined
+ 
+ c.y = undefined // ok
+ >c.y = undefined : undefined
+->c.y : number | undefined
+->c : C
+->y : number | undefined
++>c.y : any
++>c : any
++>y : any
+ >undefined : undefined
+ 
+ /** @param {number} x */
+ function A(x) {
+->A : typeof A
+->x : number
++>A : (x: any) => any
++>x : any
+ 
+     if (!(this instanceof A)) {
+ >!(this instanceof A) : boolean
+ >(this instanceof A) : boolean
+ >this instanceof A : boolean
+->this : this
+->A : typeof A
++>this : any
++>A : (x: any) => any
+ 
+         return new A(x)
+->new A(x) : A
+->A : typeof A
+->x : number
++>new A(x) : any
++>A : (x: any) => any
++>x : any
+     }
+     this.x = x
+->this.x = x : number
++>this.x = x : any
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+->x : number
++>x : any
+ }
+ var k = A(1)
+->k : A
+->A(1) : A
+->A : typeof A
++>k : any
++>A(1) : any
++>A : (x: any) => any
+ >1 : 1
+ 
+ var j = new A(2)
+->j : A
+->new A(2) : A
+->A : typeof A
++>j : any
++>new A(2) : any
++>A : (x: any) => any
+ >2 : 2
+ 
+ k.x === j.x
+ >k.x === j.x : boolean
+->k.x : number | undefined
+->k : A
+->x : number | undefined
+->j.x : number | undefined
+->j : A
+->x : number | undefined
++>k.x : any
++>k : any
++>x : any
++>j.x : any
++>j : any
++>x : any
+ 

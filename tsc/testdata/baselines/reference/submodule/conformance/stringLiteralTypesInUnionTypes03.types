@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts] ////
+
+=== stringLiteralTypesInUnionTypes03.ts ===
+type T = number | "foo" | "bar";
+>T : T
+
+var x: "foo" | "bar" | number;
+>x : number | "bar" | "foo"
+
+var y: T = undefined;
+>y : T
+>undefined : undefined
+
+if (x === "foo") {
+>x === "foo" : boolean
+>x : number | "bar" | "foo"
+>"foo" : "foo"
+
+    let a = x;
+>a : "foo"
+>x : "foo"
+}
+else if (x !== "bar") {
+>x !== "bar" : boolean
+>x : number | "bar"
+>"bar" : "bar"
+
+    let b = x || y;
+>b : T
+>x || y : T
+>x : number
+>y : T
+}
+else {
+    let c = x;
+>c : "bar"
+>x : "bar"
+
+    let d = y;
+>d : T
+>y : T
+
+    let e: (typeof x) | (typeof y) = c || d;
+>e : T
+>c || d : T
+>c : "bar"
+>d : T
+}
+
+x = y;
+>x = y : T
+>x : number | "bar" | "foo"
+>y : T
+
+y = x;
+>y = x : number | "bar" | "foo"
+>y : T
+>x : number | "bar" | "foo"
+

@@ -1,0 +1,10 @@
+--- old.publicIndexer.types
++++ new.publicIndexer.types
+@@= skipped -18, +18 lines =@@
+ 
+ class E<T> {
+ >E : E<T>
++>T : T
+ 
+     public [x: string]: T;
+ >x : string

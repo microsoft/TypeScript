@@ -1,0 +1,11 @@
+--- old.libdtsFix.types
++++ new.libdtsFix.types
+@@= skipped -1, +1 lines =@@
+ 
+ === libdtsFix.ts ===
+ interface HTMLElement {
++>HTMLElement : HTMLElement
++
+     type: string;
+ >type : string
+ }

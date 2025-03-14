@@ -1,0 +1,15 @@
+--- old.classImplementsMethodWIthTupleArgs.types
++++ new.classImplementsMethodWIthTupleArgs.types
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ interface Settable {
++>Settable : Settable
++
+     set(...args: [option: Record<string, unknown>] | [name: string, value: unknown] | [name: string]): void;
+->set : (...args: [option: Record<string, unknown>] | [name: string, value: unknown] | [name: string]) => void
+->args : [option: Record<string, unknown>] | [name: string, value: unknown] | [name: string]
++>set : (...args: [name: string] | [option: Record<string, unknown>] | [name: string, value: unknown]) => void
++>args : [name: string] | [option: Record<string, unknown>] | [name: string, value: unknown]
+ }
+ 

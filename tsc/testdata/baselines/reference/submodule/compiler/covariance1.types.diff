@@ -1,0 +1,18 @@
+--- old.covariance1.types
++++ new.covariance1.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     interface X { m1:number; }
++>X : X
+ >m1 : number
+ 
+     export class XX implements X { constructor(public m1:number) { } }
+@@= skipped -7, +8 lines =@@
+ >m1 : number
+ 
+     interface Y { x:X; }
++>Y : Y
+ >x : X
+ 
+     export function f(y:Y) { }

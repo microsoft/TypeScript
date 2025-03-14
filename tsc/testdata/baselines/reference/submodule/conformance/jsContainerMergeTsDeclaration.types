@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/salsa/jsContainerMergeTsDeclaration.ts] ////
+
+=== a.js ===
+var /*1*/x = function foo() {
+>x : () => void
+>function foo() {} : () => void
+>foo : () => void
+}
+x.a = function bar() {
+>x.a = function bar() {} : () => void
+>x.a : any
+>x : () => void
+>a : any
+>function bar() {} : () => void
+>bar : () => void
+}
+=== b.ts ===
+var x = function () {
+>x : () => void
+>function () {    return 1;}() : number
+>function () {    return 1;} : () => number
+
+    return 1;
+>1 : 1
+
+}();
+

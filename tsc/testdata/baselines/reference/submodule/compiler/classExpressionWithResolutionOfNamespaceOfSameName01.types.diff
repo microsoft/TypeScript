@@ -1,0 +1,21 @@
+--- old.classExpressionWithResolutionOfNamespaceOfSameName01.types
++++ new.classExpressionWithResolutionOfNamespaceOfSameName01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classExpressionWithResolutionOfNamespaceOfSameName01.ts ===
+ namespace C {
++>C : any
++
+     export interface type {
++>type : type
+     }
+ }
+ 
+@@= skipped -10, +13 lines =@@
+ >C : typeof C
+ 
+     prop: C.type;
+->prop : C.type
++>prop : type
+ >C : any
+ }

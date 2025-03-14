@@ -1,0 +1,9 @@
+--- old.duplicateTypeParameters1.types
++++ new.duplicateTypeParameters1.types
+@@= skipped -2, +2 lines =@@
+ === duplicateTypeParameters1.ts ===
+ function A<X, X>() { }
+ >A : <X>() => void
++>X : X
++>X : X
+ 

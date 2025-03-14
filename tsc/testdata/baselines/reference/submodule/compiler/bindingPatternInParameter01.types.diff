@@ -1,0 +1,11 @@
+--- old.bindingPatternInParameter01.types
++++ new.bindingPatternInParameter01.types
+@@= skipped -17, +17 lines =@@
+ >nestedArray.forEach : (callbackfn: (value: number[][], index: number, array: number[][][]) => void, thisArg?: any) => void
+ >nestedArray : number[][][]
+ >forEach : (callbackfn: (value: number[][], index: number, array: number[][][]) => void, thisArg?: any) => void
+->([[a, b]]) => {  console.log(a, b);} : ([[a, b]]: number[][]) => void
++>([[a, b]]) => {  console.log(a, b);} : (__0: number[][]) => void
+ >a : number
+ >b : number
+ 

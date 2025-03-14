@@ -1,0 +1,10 @@
+--- old.substitutionTypeForNonGenericIndexedAccessType.types
++++ new.substitutionTypeForNonGenericIndexedAccessType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === substitutionTypeForNonGenericIndexedAccessType.ts ===
+ interface A {}
++>A : A
+ 
+ type B = A extends Record<'foo', string> ? A['foo'] : string; // no error
+ >B : string

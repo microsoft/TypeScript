@@ -1,0 +1,34 @@
+--- old.importMeta(module=system,target=es5).types
++++ new.importMeta(module=system,target=es5).types
+@@= skipped -10, +10 lines =@@
+ >response : Response
+ >await fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Response
+ >fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Promise<Response>
+->fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
++>fetch : (input: URL | RequestInfo, init?: RequestInit) => Promise<Response>
+ >new URL("../hamsters.jpg", import.meta.url).toString() : string
+ >new URL("../hamsters.jpg", import.meta.url).toString : () => string
+ >new URL("../hamsters.jpg", import.meta.url) : URL
+->URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string | URL): boolean; createObjectURL(obj: Blob | MediaSource): string; parse(url: string | URL, base?: string | URL): URL | null; revokeObjectURL(url: string): void; }
++>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse: (url: string | URL, base?: string | URL) => boolean; createObjectURL: (obj: Blob | MediaSource) => string; parse: (url: string | URL, base?: string | URL) => URL; revokeObjectURL: (url: string) => void; }
+ >"../hamsters.jpg" : "../hamsters.jpg"
+ >import.meta.url : string
+ >import.meta : ImportMeta
+@@= skipped -45, +45 lines =@@
+ >src : string
+ >URL.createObjectURL(blob) : string
+ >URL.createObjectURL : (obj: Blob | MediaSource) => string
+->URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string | URL): boolean; createObjectURL(obj: Blob | MediaSource): string; parse(url: string | URL, base?: string | URL): URL | null; revokeObjectURL(url: string): void; }
++>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse: (url: string | URL, base?: string | URL) => boolean; createObjectURL: (obj: Blob | MediaSource) => string; parse: (url: string | URL, base?: string | URL) => URL; revokeObjectURL: (url: string) => void; }
+ >createObjectURL : (obj: Blob | MediaSource) => string
+ >blob : Blob
+ 
+@@= skipped -93, +93 lines =@@
+ >global : any
+ 
+   interface ImportMeta {
++>ImportMeta : ImportMeta
++
+     wellKnownProperty: { a: number, b: string, c: boolean };
+ >wellKnownProperty : { a: number; b: string; c: boolean; }
+ >a : number

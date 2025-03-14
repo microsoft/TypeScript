@@ -1,0 +1,11 @@
+--- old.asyncEnum_es6.types
++++ new.asyncEnum_es6.types
+@@= skipped -1, +1 lines =@@
+ 
+ === asyncEnum_es6.ts ===
+ async enum E {  
+->E : E
++>E : E.Value
+ 
+   Value
+ >Value : E.Value

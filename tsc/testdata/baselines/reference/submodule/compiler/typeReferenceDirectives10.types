@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/typeReferenceDirectives10.ts] ////
+
+=== /app.ts ===
+/// <reference types="lib"/>
+import {$} from "./ref";
+>$ : any
+
+export interface A {
+>A : A
+
+    x: $
+>x : $
+}
+
+=== /ref.d.ts ===
+export interface $ { x }
+>$ : $
+>x : any
+

@@ -1,0 +1,24 @@
+--- old.computedPropertyNames33_ES6.types
++++ new.computedPropertyNames33_ES6.types
+@@= skipped -2, +2 lines =@@
+ === computedPropertyNames33_ES6.ts ===
+ function foo<T>() { return '' }
+ >foo : <T>() => string
++>T : T
+ >'' : ""
+ 
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     bar() {
+ >bar : () => number
+@@= skipped -15, +17 lines =@@
+             [foo<T>()]() { }
+ >[foo<T>()] : () => void
+ >foo<T>() : string
+->foo : <T_1>() => string
++>foo : <T>() => string
+ 
+         };
+         return 0;

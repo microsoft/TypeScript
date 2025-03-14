@@ -1,0 +1,36 @@
+--- old.topLevelThisAssignment.types
++++ new.topLevelThisAssignment.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ this.a = 10;
+ >this.a = 10 : 10
+->this.a : number
++>this.a : any
+ >this : typeof globalThis
+->a : number
++>a : any
+ >10 : 10
+ 
+ this.a;
+->this.a : number
++>this.a : any
+ >this : typeof globalThis
+->a : number
++>a : any
+ 
+ a;
+->a : number
++>a : any
+ 
+ === b.js ===
+ this.a;
+->this.a : number
++>this.a : any
+ >this : typeof globalThis
+->a : number
++>a : any
+ 
+ a;
+->a : number
++>a : any
+ 

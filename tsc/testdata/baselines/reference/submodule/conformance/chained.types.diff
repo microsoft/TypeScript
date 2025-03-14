@@ -1,0 +1,38 @@
+--- old.chained.types
++++ new.chained.types
+@@= skipped -17, +17 lines =@@
+ >Y : any
+ 
+ export { B as C } from './a';
+->B : typeof import("/a").B
+->C : typeof import("/a").B
++>B : typeof A
++>C : typeof A
+ 
+ === /c.ts ===
+ import type { C } from './b';
+->C : C
++>C : A
+ 
+ export { C as D };
+->C : typeof C
+->D : typeof C
++>C : typeof A
++>D : typeof A
+ 
+ === /d.ts ===
+ import { D } from './c';
+->D : typeof D
++>D : typeof A
+ 
+ new D();
+->new D() : D
+->D : typeof D
++>new D() : A
++>D : typeof A
+ 
+ const d: D = {};
+->d : D
++>d : A
+ >{} : {}
+ 

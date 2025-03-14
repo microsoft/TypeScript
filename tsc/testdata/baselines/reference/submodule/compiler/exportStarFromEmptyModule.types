@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/exportStarFromEmptyModule.ts] ////
+
+=== exportStarFromEmptyModule_module1.ts ===
+export class A {
+>A : A
+
+    static r;
+>r : any
+}
+
+=== exportStarFromEmptyModule_module2.ts ===
+
+// empty
+
+=== exportStarFromEmptyModule_module3.ts ===
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
+
+export class A {
+>A : A
+
+    static q;
+>q : any
+}
+
+=== exportStarFromEmptyModule_module4.ts ===
+import * as X from "./exportStarFromEmptyModule_module3";
+>X : typeof import("exportStarFromEmptyModule_module3")
+
+var s: X.A;
+>s : A
+>X : any
+
+X.A.q;
+>X.A.q : any
+>X.A : typeof A
+>X : typeof import("exportStarFromEmptyModule_module3")
+>A : typeof A
+>q : any
+
+X.A.r; // Error
+>X.A.r : any
+>X.A : typeof A
+>X : typeof import("exportStarFromEmptyModule_module3")
+>A : typeof A
+>r : any
+

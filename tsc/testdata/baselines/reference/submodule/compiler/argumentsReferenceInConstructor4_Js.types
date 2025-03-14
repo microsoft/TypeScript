@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/argumentsReferenceInConstructor4_Js.ts] ////
+
+=== /a.js ===
+class A {
+>A : A
+
+	/**
+	 * Constructor
+	 *
+	 * @param {object} [foo={}]
+	 */
+	constructor(foo = {}) {
+>foo : {}
+>{} : {}
+
+		const key = "bar";
+>key : "bar"
+>"bar" : "bar"
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this.foo = foo : {}
+>this.foo : any
+>this : this
+>foo : any
+>foo : {}
+
+		/**
+		 * @type object
+		 */
+		const arguments = this.arguments;
+>arguments : { bar: {}; }
+>this.arguments : { bar: {}; }
+>this : this
+>arguments : { bar: {}; }
+
+		/**
+		 * @type object
+		 */
+		this.bar = arguments.bar;
+>this.bar = arguments.bar : {}
+>this.bar : any
+>this : this
+>bar : any
+>arguments.bar : {}
+>arguments : { bar: {}; }
+>bar : {}
+
+		/**
+		 * @type object
+		 */
+		this.baz = arguments[key];
+>this.baz = arguments[key] : {}
+>this.baz : any
+>this : this
+>baz : any
+>arguments[key] : {}
+>arguments : { bar: {}; }
+>key : "bar"
+
+		/**
+		 * @type object
+		 */
+		this.options = arguments;
+>this.options = arguments : { bar: {}; }
+>this.options : any
+>this : this
+>options : any
+>arguments : { bar: {}; }
+	}
+
+	get arguments() {
+>arguments : { bar: {}; }
+
+		return { bar: {} };
+>{ bar: {} } : { bar: {}; }
+>bar : {}
+>{} : {}
+	}
+}
+

@@ -1,0 +1,83 @@
+--- old.nestedExcessPropertyChecking.types
++++ new.nestedExcessPropertyChecking.types
+@@= skipped -2, +2 lines =@@
+ === nestedExcessPropertyChecking.ts ===
+ type A1 = { x: { a?: string } };
+ >A1 : A1
+->x : { a?: string; }
++>x : { a?: string | undefined; }
+ >a : string | undefined
+ 
+ type B1 = { x: { b?: string } };
+ >B1 : B1
+->x : { b?: string; }
++>x : { b?: string | undefined; }
+ >b : string | undefined
+ 
+ type C1 = { x: { c: string } };
+@@= skipped -36, +36 lines =@@
+ >{} : {}
+ 
+ enum E { A = "A" }
+->E : E
++>E : E.A
+ >A : E.A
+ >"A" : "A"
+ 
+ let x: { nope?: any } = E.A;  // Error
+ >x : { nope?: any; }
+ >nope : any
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+ let y: { nope?: any } = "A";  // Error
+ >y : { nope?: any; }
+@@= skipped -26, +26 lines =@@
+ }
+ 
+ const foo1: Partial<{ something: any }> & { variables: {
+->foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>; }
++>foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>; }
+ >something : any
+->variables : { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>
++>variables : { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>
+ 
+     overrides?: OverridesInput;
+ >overrides : OverridesInput | undefined
+@@= skipped -20, +20 lines =@@
+ 
+ 
+ interface Unrelated { _?: any }
++>Unrelated : Unrelated
+ >_ : any
+ 
+ interface VariablesA { overrides?: OverridesInput; }
++>VariablesA : VariablesA
+ >overrides : OverridesInput | undefined
+ 
+ interface VariablesB { overrides?: OverridesInput; }
++>VariablesB : VariablesB
+ >overrides : OverridesInput | undefined
+ 
+ const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
+@@= skipped -29, +32 lines =@@
+ >T1 : T1
+ 
+     primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
+->primary : { __typename?: "Feature"; } & { colors: { light: number; dark: number; }; }
++>primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; dark: number; }; }
+ >__typename : "Feature" | undefined
+ >colors : { light: number; dark: number; }
+ >light : number
+@@= skipped -12, +12 lines =@@
+ >T2 : T2
+ 
+     primary: { __typename?: 'Feature' } & { colors: { light: number } },
+->primary : { __typename?: "Feature"; } & { colors: { light: number; }; }
++>primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; }; }
+ >__typename : "Feature" | undefined
+ >colors : { light: number; }
+ >light : number

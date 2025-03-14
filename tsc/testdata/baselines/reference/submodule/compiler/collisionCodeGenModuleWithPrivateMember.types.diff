@@ -1,0 +1,25 @@
+--- old.collisionCodeGenModuleWithPrivateMember.types
++++ new.collisionCodeGenModuleWithPrivateMember.types
+@@= skipped -1, +1 lines =@@
+ 
+ === collisionCodeGenModuleWithPrivateMember.ts ===
+ module m1 {
+->m1 : typeof globalThis.m1
++>m1 : typeof m1
+ 
+     class m1 {
+ >m1 : m1
+@@= skipped -15, +15 lines =@@
+     }
+ }
+ var foo = new m1.c1();
+->foo : m1.c1
+->new m1.c1() : m1.c1
+->m1.c1 : typeof m1.c1
++>foo : c1
++>new m1.c1() : c1
++>m1.c1 : typeof c1
+ >m1 : typeof m1
+->c1 : typeof m1.c1
++>c1 : typeof c1
+ 

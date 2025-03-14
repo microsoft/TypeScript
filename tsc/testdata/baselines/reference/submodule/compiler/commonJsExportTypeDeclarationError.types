@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/commonJsExportTypeDeclarationError.ts] ////
+
+=== test.js ===
+module.exports = {
+>module.exports = {   message: ""} : { message: string; }
+>module.exports : any
+>module : any
+>exports : any
+>{   message: ""} : { message: string; }
+
+   message: ""
+>message : string
+>"" : ""
+}
+
+=== types1.ts ===
+import test from "./test";
+>test : any
+
+export type test
+>test : any
+
+=== types2.ts ===
+import test from "./test";
+>test : any
+
+export type test = 
+>test : any
+
+=== types3.ts ===
+import test from "./test";
+>test : any
+
+export type test = test;
+>test : test
+

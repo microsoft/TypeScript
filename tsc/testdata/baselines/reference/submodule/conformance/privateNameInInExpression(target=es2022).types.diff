@@ -1,0 +1,43 @@
+--- old.privateNameInInExpression(target=es2022).types
++++ new.privateNameInInExpression(target=es2022).types
+@@= skipped -117, +117 lines =@@
+ >v : any
+     }
+     flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
+->flow : (u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) => void
++>flow : (u: unknown, n: never, fb: Bar | Foo, fs: FooSub, b: Bar, fsb: Bar | FooSub, fsfb: Bar | Foo | FooSub) => void
+ >u : unknown
+ >n : never
+->fb : Foo | Bar
++>fb : Bar | Foo
+ >fs : FooSub
+ >b : Bar
+ >fsb : Bar | FooSub
+->fsfb : Foo | Bar | FooSub
++>fsfb : Bar | Foo | FooSub
+ 
+         if (typeof u === 'object') {
+ >typeof u === 'object' : boolean
+->typeof u : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof u : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >u : unknown
+ >'object' : "object"
+ 
+@@= skipped -86, +86 lines =@@
+         if (#field in fb) {
+ >#field in fb : boolean
+ >#field : any
+->fb : Foo | Bar
++>fb : Bar | Foo
+ 
+             fb; // good fb is Foo
+ >fb : Foo
+@@= skipped -52, +52 lines =@@
+         if (#field in fsfb) {
+ >#field in fsfb : boolean
+ >#field : any
+->fsfb : Foo | Bar | FooSub
++>fsfb : Bar | Foo | FooSub
+ 
+             fsfb; // good fsfb is 'Foo | FooSub'
+ >fsfb : Foo | FooSub

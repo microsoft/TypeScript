@@ -1,0 +1,10 @@
+--- old.typeReferenceRelatedFiles.types
++++ new.typeReferenceRelatedFiles.types
+@@= skipped -7, +7 lines =@@
+ >"fs" : typeof import("fs")
+ 
+     interface FSWatcher {}
++>FSWatcher : FSWatcher
+ }
+ === main.ts ===
+ /// <reference types="node" />

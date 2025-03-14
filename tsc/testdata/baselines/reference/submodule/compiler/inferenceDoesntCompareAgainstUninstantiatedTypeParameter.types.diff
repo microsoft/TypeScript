@@ -1,0 +1,30 @@
+--- old.inferenceDoesntCompareAgainstUninstantiatedTypeParameter.types
++++ new.inferenceDoesntCompareAgainstUninstantiatedTypeParameter.types
+@@= skipped -2, +2 lines =@@
+ === inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts ===
+ class ClassA<TEntityClass>  {
+ >ClassA : ClassA<TEntityClass>
++>TEntityClass : TEntityClass
+ 
+     constructor(private entity?: TEntityClass, public settings?: SettingsInterface<TEntityClass>) {
+ >entity : TEntityClass
+@@= skipped -8, +9 lines =@@
+     }
+ }
+ export interface ValueInterface<TValueClass> {
++>ValueInterface : ValueInterface<TValueClass>
++>TValueClass : TValueClass
++
+     func?: (row: TValueClass) => any;
+ >func : (row: TValueClass) => any
+ >row : TValueClass
+@@= skipped -8, +11 lines =@@
+ >value : string
+ }
+ export interface SettingsInterface<TClass> {
++>SettingsInterface : SettingsInterface<TClass>
++>TClass : TClass
++
+     values?: (row: TClass) => ValueInterface<TClass>[],
+ >values : (row: TClass) => ValueInterface<TClass>[]
+ >row : TClass

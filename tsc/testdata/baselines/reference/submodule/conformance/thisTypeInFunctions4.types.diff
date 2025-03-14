@@ -1,0 +1,29 @@
+--- old.thisTypeInFunctions4.types
++++ new.thisTypeInFunctions4.types
+@@= skipped -18, +18 lines =@@
+ >name : string
+ 
+ function problemFunction(this: CorrectObject | WrongObject): void {
+->problemFunction : (this: CorrectObject | WrongObject) => void
+->this : WrongObject | CorrectObject
++>problemFunction : () => void
++>this : CorrectObject | WrongObject
+ 
+     //check type
+     if (!isCorrect(this)) return;
+ >!isCorrect(this) : boolean
+ >isCorrect(this) : boolean
+ >isCorrect : (obj: any) => obj is CorrectObject
+->this : WrongObject | CorrectObject
++>this : CorrectObject | WrongObject
+ 
+     callsCallback((name)=>{
+ >callsCallback((name)=>{        this.name = name; //should not error        type T = typeof this;    }) : any
+@@= skipped -25, +25 lines =@@
+ 
+         type T = typeof this;
+ >T : CorrectObject
+->this : CorrectObject
+ 
+     });
+ }

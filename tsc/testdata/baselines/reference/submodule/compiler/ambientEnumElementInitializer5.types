@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/ambientEnumElementInitializer5.ts] ////
+
+=== ambientEnumElementInitializer5.ts ===
+declare enum E {
+>E : E.e
+
+ e = -0xA
+>e : E.e
+>-0xA : -10
+>0xA : 10
+}

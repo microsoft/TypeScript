@@ -1,0 +1,164 @@
+--- old.jsdocParamTag2.types
++++ new.jsdocParamTag2.types
+@@= skipped -6, +6 lines =@@
+  * @param {string} x
+  */
+ function good1({a, b}, x) {}
+->good1 : ({ a, b }: { a: string; b: string; }, x: string) => void
+->a : string
+->b : string
+->x : string
++>good1 : (__0: { a: any; b: any; }, x: any) => void
++>a : any
++>b : any
++>x : any
+ 
+ /**
+  * @param {{a: string, b: string}} obj
+  * @param {{c: number, d: number}} OBJECTION
+  */
+ function good2({a, b}, {c, d}) {}
+->good2 : ({ a, b }: { a: string; b: string; }, { c, d }: { c: number; d: number; }) => void
+->a : string
+->b : string
+->c : number
+->d : number
++>good2 : (__0: { a: any; b: any; }, __1: { c: any; d: any; }) => void
++>a : any
++>b : any
++>c : any
++>d : any
+ 
+ /**
+  * @param {number} x
+@@= skipped -22, +22 lines =@@
+  * @param {string} y
+  */
+ function good3(x, {a, b}, y) {}
+->good3 : (x: number, { a, b }: { a: string; b: string; }, y: string) => void
+->x : number
+->a : string
+->b : string
+->y : string
++>good3 : (x: any, __1: { a: any; b: any; }, y: any) => void
++>x : any
++>a : any
++>b : any
++>y : any
+ 
+ /**
+  * @param {{a: string, b: string}} obj
+  */
+ function good4({a, b}) {}
+->good4 : ({ a, b }: { a: string; b: string; }) => void
+->a : string
+->b : string
++>good4 : (__0: { a: any; b: any; }) => void
++>a : any
++>b : any
+ 
+ // nested object syntax
+ /**
+@@= skipped -22, +22 lines =@@
+  * @param {string} x
+  */
+ function good5({a, b}, x) {}
+->good5 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
+->a : string
+->b : string
+->x : string
++>good5 : (__0: { a: any; b: any; }, x: any) => void
++>a : any
++>b : any
++>x : any
+ 
+ /**
+  * @param {Object} obj
+@@= skipped -14, +14 lines =@@
+  * @param {string} OBJECTION.d - meh
+  */
+ function good6({a, b}, {c, d}) {}
+->good6 : ({ a, b }: {    a: string;    b: string;}, { c, d }: {    c: string;    d: string;}) => void
+->a : string
+->b : string
+->c : string
+->d : string
++>good6 : (__0: { a: any; b: any; }, __1: { c: any; d: any; }) => void
++>a : any
++>b : any
++>c : any
++>d : any
+ 
+ /**
+  * @param {number} x
+@@= skipped -14, +14 lines =@@
+  * @param {string} y
+  */
+ function good7(x, {a, b}, y) {}
+->good7 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
+->x : number
+->a : string
+->b : string
+->y : string
++>good7 : (x: any, __1: { a: any; b: any; }, y: any) => void
++>x : any
++>a : any
++>b : any
++>y : any
+ 
+ /**
+  * @param {Object} obj
+@@= skipped -12, +12 lines =@@
+  * @param {string} obj.b
+  */
+ function good8({a, b}) {}
+->good8 : ({ a, b }: {    a: string;    b: string;}) => void
+->a : string
+->b : string
++>good8 : (__0: { a: any; b: any; }) => void
++>a : any
++>b : any
+ 
+ /**
+  * @param {{ a: string }} argument
+  */
+ function good9({ a }) {
+->good9 : ({ a }: { a: string; }, ...args: any[]) => void
+->a : string
++>good9 : (__0: { a: any; }) => void
++>a : any
+ 
+     console.log(arguments, a);
+ >console.log(arguments, a) : void
+@@= skipped -17, +17 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >arguments : IArguments
+->a : string
++>a : any
+ }
+ 
+ /**
+@@= skipped -10, +10 lines =@@
+  * @param {string} x
+  */
+ function bad1(x, {a, b}) {}
+->bad1 : (x: string, { a, b }: string) => void
+->x : string
++>bad1 : (x: any, __1: { a: any; b: any; }) => void
++>x : any
+ >a : any
+ >b : any
+ 
+@@= skipped -10, +10 lines =@@
+  * @param {{a: string, b: string}} obj
+  */
+ function bad2(x, {a, b}) {}
+->bad2 : (x: any, { a, b }: { a: string; b: string; }) => void
++>bad2 : (x: any, __1: { a: any; b: any; }) => void
+ >x : any
+->a : string
+->b : string
++>a : any
++>b : any
+ 

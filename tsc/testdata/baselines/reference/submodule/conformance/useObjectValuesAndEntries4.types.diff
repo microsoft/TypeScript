@@ -1,0 +1,25 @@
+--- old.useObjectValuesAndEntries4.types
++++ new.useObjectValuesAndEntries4.types
+@@= skipped -11, +11 lines =@@
+ for (var x of Object.values(o)) {
+ >x : number
+ >Object.values(o) : number[]
+->Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
++>Object.values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
+ >Object : ObjectConstructor
+->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
++>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
+ >o : { a: number; b: number; }
+ 
+     let y = x;
+@@= skipped -13, +13 lines =@@
+ var entries = Object.entries(o);
+ >entries : [string, number][]
+ >Object.entries(o) : [string, number][]
+->Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
++>Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+ >Object : ObjectConstructor
+->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
++>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+ >o : { a: number; b: number; }
+ 

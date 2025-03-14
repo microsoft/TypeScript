@@ -1,0 +1,12 @@
+--- old.defaultExportsCannotMerge04.types
++++ new.defaultExportsCannotMerge04.types
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ interface Foo {
++>Foo : Foo
+ }
+ 
+ export interface Foo {
++>Foo : Foo
+ }

@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/salsa/requireOfESWithPropertyAccess.ts] ////
+
+=== main.js ===
+const x = require('./ch').x
+>x : any
+>require('./ch').x : any
+>require('./ch') : any
+>require : any
+>'./ch' : "./ch"
+>x : any
+
+x
+>x : any
+
+x.grey
+>x.grey : any
+>x : any
+>grey : any
+
+x.x.grey
+>x.x.grey : any
+>x.x : any
+>x : any
+>x : any
+>grey : any
+
+=== ch.js ===
+const x = {
+>x : { grey: {}; }
+>{  grey: {}} : { grey: {}; }
+
+  grey: {}
+>grey : {}
+>{} : {}
+}
+export { x }
+>x : { grey: {}; }
+

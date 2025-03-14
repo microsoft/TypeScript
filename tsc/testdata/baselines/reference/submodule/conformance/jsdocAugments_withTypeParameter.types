@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_withTypeParameter.ts] ////
+
+=== /a.d.ts ===
+declare class A<T> { x: T }
+>A : A<T>
+>T : T
+>x : T
+
+=== /b.js ===
+/** @augments A<number> */
+class B extends A {
+>B : B
+>A : typeof A
+
+    m() {
+>m : () => any
+
+        return this.x;
+>this.x : any
+>this : this
+>x : any
+    }
+}
+

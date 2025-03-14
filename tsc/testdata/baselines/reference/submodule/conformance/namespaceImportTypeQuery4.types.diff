@@ -1,0 +1,16 @@
+--- old.namespaceImportTypeQuery4.types
++++ new.namespaceImportTypeQuery4.types
+@@= skipped -14, +14 lines =@@
+ 
+ === /b.ts ===
+ import * as types from './a';
+->types : typeof types
++>types : typeof import("/a")
+ 
+ let t: typeof types = {
+->t : typeof types
+->types : typeof types
++>t : typeof import("/a")
+ >{  A: undefined as any, // error  B: undefined as any,} : { A: any; B: any; }
+ 
+   A: undefined as any, // error

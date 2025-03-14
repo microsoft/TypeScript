@@ -1,0 +1,10 @@
+--- old.privateNameStaticAccessorsAccess.types
++++ new.privateNameStaticAccessorsAccess.types
+@@= skipped -24, +24 lines =@@
+         let a: typeof A2 = A2;
+ >a : typeof A2
+ >A2 : typeof A2
+->A2 : typeof A2
+ 
+         a.#prop;
+ >a.#prop : string

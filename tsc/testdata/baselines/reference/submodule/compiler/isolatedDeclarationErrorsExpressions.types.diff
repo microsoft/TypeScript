@@ -1,0 +1,46 @@
+--- old.isolatedDeclarationErrorsExpressions.types
++++ new.isolatedDeclarationErrorsExpressions.types
+@@= skipped -219, +219 lines =@@
+ >3 : 3
+ 
+ export let arrConst = [1, 2, 3] as const;
+->arrConst : readonly [1, 2, 3]
+->[1, 2, 3] as const : readonly [1, 2, 3]
+->[1, 2, 3] : readonly [1, 2, 3]
++>arrConst : [1, 2, 3]
++>[1, 2, 3] as const : [1, 2, 3]
++>[1, 2, 3] : [1, 2, 3]
+ >1 : 1
+ >2 : 2
+ >3 : 3
+ 
+ export let arrWithSpread = [1, 2, 3, ...arr] as const;
+->arrWithSpread : readonly [1, 2, 3, ...number[]]
+->[1, 2, 3, ...arr] as const : readonly [1, 2, 3, ...number[]]
+->[1, 2, 3, ...arr] : readonly [1, 2, 3, ...number[]]
++>arrWithSpread : [1, 2, 3, ...number[]]
++>[1, 2, 3, ...arr] as const : [1, 2, 3, ...number[]]
++>[1, 2, 3, ...arr] : [1, 2, 3, ...number[]]
+ >1 : 1
+ >2 : 2
+ >3 : 3
+@@= skipped -322, +322 lines =@@
+ >1 : 1
+ 
+ export const [, , b = 1]: [number, number, number | undefined] = [0, 1, 2];
+-> : undefined
+-> : undefined
+ >b : number
+ >1 : 1
+ >[0, 1, 2] : [number, number, number]
+@@= skipped -10, +8 lines =@@
+ >2 : 2
+ 
+ export function foo([, , b]: [
+->foo : ([, , b]?: [number, number, number]) => void
+-> : undefined
+-> : undefined
++>foo : (__0?: [number, number, number]) => void
+ >b : number
+ 
+     number,

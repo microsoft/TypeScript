@@ -1,0 +1,47 @@
+--- old.umd5.types
++++ new.umd5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ import * as Bar from './foo';
+->Bar : typeof Bar
++>Bar : typeof import("foo")
+ 
+ Bar.fn();
+ >Bar.fn() : void
+ >Bar.fn : () => void
+->Bar : typeof Bar
++>Bar : typeof import("foo")
+ >fn : () => void
+ 
+ let x: Bar.Thing;
+->x : Bar.Thing
++>x : Thing
+ >Bar : any
+ 
+ let y: number = x.n;
+ >y : number
+ >x.n : number
+->x : Bar.Thing
++>x : Thing
+ >n : number
+ 
+ // should error
+ let z = Foo;
+->z : typeof Bar
+->Foo : typeof Bar
++>z : typeof import("foo")
++>Foo : typeof import("foo")
+ 
+ === foo.d.ts ===
+ export var x: number;
+@@= skipped -31, +31 lines =@@
+ >fn : () => void
+ 
+ export interface Thing { n: typeof x }
++>Thing : Thing
+ >n : number
+->x : number
+ 
+ export as namespace Foo;
+ >Foo : typeof import("foo")

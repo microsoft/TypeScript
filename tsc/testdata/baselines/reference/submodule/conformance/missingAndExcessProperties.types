@@ -1,0 +1,175 @@
+//// [tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts] ////
+
+=== missingAndExcessProperties.ts ===
+// Missing properties
+function f1() {
+>f1 : () => void
+
+    var { x, y } = {};
+>x : any
+>y : any
+>{} : {}
+
+    var { x = 1, y } = {};
+>x : any
+>1 : 1
+>y : any
+>{} : {}
+
+    var { x, y = 1 } = {};
+>x : any
+>y : any
+>1 : 1
+>{} : {}
+
+    var { x = 1, y = 1 } = {};
+>x : any
+>1 : 1
+>y : any
+>1 : 1
+>{} : {}
+}
+
+// Missing properties
+function f2() {
+>f2 : () => void
+
+    var x: number, y: number;
+>x : number
+>y : number
+
+    ({ x, y } = {});
+>({ x, y } = {}) : {}
+>{ x, y } = {} : {}
+>{ x, y } : { x: number; y: number; }
+>x : any
+>y : any
+>{} : {}
+
+    ({ x: x = 1, y } = {});
+>({ x: x = 1, y } = {}) : {}
+>{ x: x = 1, y } = {} : {}
+>{ x: x = 1, y } : { x?: number; y: number; }
+>x : number
+>x = 1 : 1
+>x : number
+>1 : 1
+>y : any
+>{} : {}
+
+    ({ x, y: y = 1 } = {});
+>({ x, y: y = 1 } = {}) : {}
+>{ x, y: y = 1 } = {} : {}
+>{ x, y: y = 1 } : { x: number; y?: number; }
+>x : any
+>y : number
+>y = 1 : 1
+>y : number
+>1 : 1
+>{} : {}
+
+    ({ x: x = 1, y: y = 1 } = {});
+>({ x: x = 1, y: y = 1 } = {}) : {}
+>{ x: x = 1, y: y = 1 } = {} : {}
+>{ x: x = 1, y: y = 1 } : { x?: number; y?: number; }
+>x : number
+>x = 1 : 1
+>x : number
+>1 : 1
+>y : number
+>y = 1 : 1
+>y : number
+>1 : 1
+>{} : {}
+}
+
+// Excess properties
+function f3() {
+>f3 : () => void
+
+    var { } = { x: 0, y: 0 };
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    var { x } = { x: 0, y: 0 };
+>x : number
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    var { y } = { x: 0, y: 0 };
+>y : number
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    var { x, y } = { x: 0, y: 0 };
+>x : number
+>y : number
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+
+// Excess properties
+function f4() {
+>f4 : () => void
+
+    var x: number, y: number;
+>x : number
+>y : number
+
+    ({ } = { x: 0, y: 0 });
+>({ } = { x: 0, y: 0 }) : { x: number; y: number; }
+>{ } = { x: 0, y: 0 } : { x: number; y: number; }
+>{ } : {}
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    ({ x } = { x: 0, y: 0 });
+>({ x } = { x: 0, y: 0 }) : { x: number; y: number; }
+>{ x } = { x: 0, y: 0 } : { x: number; y: number; }
+>{ x } : { x: number; }
+>x : any
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    ({ y } = { x: 0, y: 0 });
+>({ y } = { x: 0, y: 0 }) : { x: number; y: number; }
+>{ y } = { x: 0, y: 0 } : { x: number; y: number; }
+>{ y } : { y: number; }
+>y : any
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    ({ x, y } = { x: 0, y: 0 });
+>({ x, y } = { x: 0, y: 0 }) : { x: number; y: number; }
+>{ x, y } = { x: 0, y: 0 } : { x: number; y: number; }
+>{ x, y } : { x: number; y: number; }
+>x : any
+>y : any
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+}
+

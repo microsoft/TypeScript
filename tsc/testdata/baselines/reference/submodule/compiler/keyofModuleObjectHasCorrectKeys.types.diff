@@ -1,0 +1,22 @@
+--- old.keyofModuleObjectHasCorrectKeys.types
++++ new.keyofModuleObjectHasCorrectKeys.types
+@@= skipped -13, +13 lines =@@
+ 
+ === test.ts ===
+ import * as example from './example';
+->example : typeof example
++>example : typeof import("example")
+ 
+ declare function test<T>(object: T, method: keyof T): void;
+ >test : <T>(object: T, method: keyof T) => void
++>T : T
+ >object : T
+ >method : keyof T
+ 
+ test(example, "default");
+ >test(example, "default") : void
+ >test : <T>(object: T, method: keyof T) => void
+->example : typeof example
++>example : typeof import("example")
+ >"default" : "default"
+ 

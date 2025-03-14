@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportDoubleAssignmentInClosure.ts] ////
+
+=== index.js ===
+// @ts-nocheck
+function foo() {
+>foo : () => void
+
+    module.exports = exports = function (o) {
+>module.exports = exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
+>module.exports : any
+>module : any
+>exports : any
+>exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
+>exports : any
+>function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
+>o : any
+
+        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
+>(o == null) ? create(base) : defineProperties(Object(o), descriptors) : any
+>(o == null) : boolean
+>o == null : boolean
+>o : any
+>create(base) : any
+>create : any
+>base : any
+>defineProperties(Object(o), descriptors) : any
+>defineProperties : any
+>Object(o) : any
+>Object : ObjectConstructor
+>o : any
+>descriptors : any
+
+    };
+    const m = function () {
+>m : () => void
+>function () {        // I have no idea what to put here    } : () => void
+
+        // I have no idea what to put here
+    }
+    exports.methods = m;
+>exports.methods = m : () => void
+>exports.methods : any
+>exports : any
+>methods : any
+>m : () => void
+}
+

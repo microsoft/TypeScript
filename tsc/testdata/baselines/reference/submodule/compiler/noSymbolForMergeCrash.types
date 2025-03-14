@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/noSymbolForMergeCrash.ts] ////
+
+=== initial.ts ===
+interface A { }
+>A : A
+
+namespace A {}
+>A : any
+
+=== final.ts ===
+type A = {}
+>A : A
+

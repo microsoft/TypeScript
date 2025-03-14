@@ -1,0 +1,96 @@
+//// [tests/cases/compiler/aliasErrors.ts] ////
+
+=== aliasErrors.ts ===
+module foo {    
+>foo : typeof foo
+
+    export class Provide {
+>Provide : Provide
+    }
+    export module bar { export module baz {export class boo {}}}
+>bar : typeof bar
+>baz : typeof baz
+>boo : boo
+}
+
+import provide = foo;
+>provide : typeof foo
+>foo : typeof foo
+
+import booz = foo.bar.baz;
+>booz : typeof baz
+>foo : typeof foo
+>bar : typeof bar
+>baz : typeof baz
+
+import beez = foo.bar;
+>beez : typeof bar
+>foo : typeof foo
+>bar : typeof bar
+
+import m = no;
+>m : any
+>no : any
+
+import m2 = no.mod;
+>m2 : any
+>no : any
+>mod : any
+
+import n = 5;
+>n : any
+> : any
+>5 : 5
+
+import o = "s";
+>o : any
+> : any
+>"s" : "s"
+
+import q = null;
+>q : any
+> : any
+
+import r = undefined;
+>r : any
+>undefined : any
+
+
+var p = new provide.Provide();
+>p : Provide
+>new provide.Provide() : Provide
+>provide.Provide : typeof Provide
+>provide : typeof foo
+>Provide : typeof Provide
+
+function use() {
+>use : () => void
+    
+  beez.baz.boo;
+>beez.baz.boo : typeof boo
+>beez.baz : typeof baz
+>beez : typeof bar
+>baz : typeof baz
+>boo : typeof boo
+
+  var p1: provide.Provide; 
+>p1 : Provide
+>provide : any
+
+  var p2: foo.Provide;
+>p2 : Provide
+>foo : any
+
+  var p3:booz.bar;
+>p3 : bar
+>booz : any
+
+  var p22 = new provide.Provide();
+>p22 : Provide
+>new provide.Provide() : Provide
+>provide.Provide : typeof Provide
+>provide : typeof foo
+>Provide : typeof Provide
+}
+
+

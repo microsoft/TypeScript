@@ -1,0 +1,40 @@
+--- old.jsdocReadonly.types
++++ new.jsdocReadonly.types
+@@= skipped -15, +15 lines =@@
+ 
+     /** @readonly */
+     y = 2
+->y : 2
++>y : number
+ >2 : 2
+ 
+     /** @readonly Definitely not here */
+     static z = 3
+->z : 3
++>z : number
+ >3 : 3
+ 
+     /** @readonly This is OK too */
+@@= skipped -13, +13 lines =@@
+         /** ok */
+         this.y = 2
+ >this.y = 2 : 2
+->this.y : 2
++>this.y : number
+ >this : this
+->y : 2
++>y : number
+ >2 : 2
+ 
+         /** @readonly ok */
+@@= skipped -22, +22 lines =@@
+ 
+ l.y = 12
+ >l.y = 12 : 12
+->l.y : any
++>l.y : number
+ >l : LOL
+->y : any
++>y : number
+ >12 : 12
+ 

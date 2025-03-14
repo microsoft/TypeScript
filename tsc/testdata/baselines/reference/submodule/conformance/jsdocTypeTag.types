@@ -1,0 +1,161 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeTag.ts] ////
+
+=== a.js ===
+/** @type {String} */
+var S;
+>S : any
+
+/** @type {string} */
+var s;
+>s : any
+
+/** @type {Number} */
+var N;
+>N : any
+
+/** @type {number} */
+var n;
+>n : any
+
+/** @type {Boolean} */
+var B;
+>B : any
+
+/** @type {boolean} */
+var b;
+>b : any
+
+/** @type {Void} */
+var V;
+>V : any
+
+/** @type {void} */
+var v;
+>v : any
+
+/** @type {Undefined} */
+var U;
+>U : any
+
+/** @type {undefined} */
+var u;
+>u : any
+
+/** @type {Null} */
+var Nl;
+>Nl : any
+
+/** @type {null} */
+var nl;
+>nl : any
+
+/** @type {Array} */
+var A;
+>A : any
+
+/** @type {array} */
+var a;
+>a : any
+
+/** @type {Promise} */
+var P;
+>P : any
+
+/** @type {promise} */
+var p;
+>p : any
+
+/** @type {?number} */
+var nullable;
+>nullable : any
+
+/** @type {Object} */
+var Obj;
+>Obj : any
+
+/** @type {object} */
+var obj;
+>obj : any
+
+/** @type {Function} */
+var Func;
+>Func : any
+
+/** @type {(s: string) => number} */
+var f;
+>f : any
+
+/** @type {new (s: string) => { s: string }} */
+var ctor;
+>ctor : any
+
+=== b.ts ===
+var S: string;
+>S : any
+
+var s: string;
+>s : any
+
+var N: number;
+>N : any
+
+var n: number
+>n : any
+
+var B: boolean;
+>B : any
+
+var b: boolean;
+>b : any
+
+var V :void;
+>V : any
+
+var v: void;
+>v : any
+
+var U: undefined;
+>U : any
+
+var u: undefined;
+>u : any
+
+var Nl: null;
+>Nl : any
+
+var nl: null;
+>nl : any
+
+var A: any[];
+>A : any
+
+var a: any[];
+>a : any
+
+var P: Promise<any>;
+>P : any
+
+var p: Promise<any>;
+>p : any
+
+var nullable: number | null;
+>nullable : any
+
+var Obj: any;
+>Obj : any
+
+var obj: any;
+>obj : any
+
+var Func: Function;
+>Func : any
+
+var f: (s: string) => number;
+>f : any
+>s : string
+
+var ctor: new (s: string) => { s: string };
+>ctor : any
+>s : string
+>s : string
+

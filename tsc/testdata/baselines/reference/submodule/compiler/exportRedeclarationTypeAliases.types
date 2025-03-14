@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/exportRedeclarationTypeAliases.ts] ////
+
+=== exportRedeclarationTypeAliases.ts ===
+export type Foo = number;
+>Foo : number
+
+export function Foo(): number;
+>Foo : () => number
+
+export function Foo(): any {}
+>Foo : () => number
+

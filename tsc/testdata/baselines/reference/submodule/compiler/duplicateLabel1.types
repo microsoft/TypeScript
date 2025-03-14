@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/duplicateLabel1.ts] ////
+
+=== duplicateLabel1.ts ===
+target:
+>target : any
+
+target:
+>target : any
+
+while (true) {
+>true : true
+}

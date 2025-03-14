@@ -1,0 +1,18 @@
+--- old.inferredIndexerOnNamespaceImport.types
++++ new.inferredIndexerOnNamespaceImport.types
+@@= skipped -10, +10 lines =@@
+ 
+ === bar.ts ===
+ import * as foo from "./foo";
+->foo : typeof foo
++>foo : typeof import("foo")
+ 
+ function f(map: { [k: string]: number }) {
+ >f : (map: { [k: string]: number; }) => void
+@@= skipped -13, +13 lines =@@
+ f(foo);
+ >f(foo) : void
+ >f : (map: { [k: string]: number; }) => void
+->foo : typeof foo
++>foo : typeof import("foo")
+ 

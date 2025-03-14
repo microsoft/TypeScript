@@ -1,0 +1,23 @@
+--- old.jsDeclarationsExportAssignmentWithKeywordName.types
++++ new.jsDeclarationsExportAssignmentWithKeywordName.types
+@@= skipped -6, +6 lines =@@
+ 
+ module.exports = {
+ >module.exports = {    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
+->module.exports : { extends: string; more: { others: string[]; }; x: number; }
+->module : { exports: { extends: string; more: { others: string[]; }; x: number; }; }
+->exports : { extends: string; more: { others: string[]; }; x: number; }
++>module.exports : any
++>module : any
++>exports : any
+ >{    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
+ 
+     extends: 'base',
+@@= skipped -20, +20 lines =@@
+ 
+     },
+     x
+->x : number
++>x : any
+ 
+ };

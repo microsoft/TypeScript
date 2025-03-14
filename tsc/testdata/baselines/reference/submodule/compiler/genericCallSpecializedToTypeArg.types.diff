@@ -1,0 +1,18 @@
+--- old.genericCallSpecializedToTypeArg.types
++++ new.genericCallSpecializedToTypeArg.types
+@@= skipped -2, +2 lines =@@
+ === genericCallSpecializedToTypeArg.ts ===
+ function dupe<T>(x: T): T {
+ >dupe : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+   return x;
+@@= skipped -7, +8 lines =@@
+ }
+ function dupeAndGetDist<U>(x: U): U {
+ >dupeAndGetDist : <U>(x: U) => U
++>U : U
+ >x : U
+ 
+   var y = dupe(x); //<-- dupe has incorrect type here

@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/salsa/typeFromJSInitializer3.ts] ////
+
+=== a.js ===
+/** @type {() => undefined} */
+function f1() {
+>f1 : () => any
+
+    return undefined;
+>undefined : undefined
+}
+const a = f1()
+>a : any
+>f1() : any
+>f1 : () => any
+
+/** @type {() => null} */
+function f2() {
+>f2 : () => any
+
+    return null;
+}
+const b = f2()
+>b : any
+>f2() : any
+>f2 : () => any
+

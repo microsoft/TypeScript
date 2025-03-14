@@ -1,0 +1,80 @@
+--- old.enumAssignmentCompat4.types
++++ new.enumAssignmentCompat4.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     export enum MyEnum {
+->MyEnum : MyEnum
++>MyEnum : MyEnum.BAR
+ 
+         BAR
+ >BAR : MyEnum.BAR
+     }
+     export var object2 = {
+->object2 : { foo: MyEnum; }
+->{        foo: MyEnum.BAR    } : { foo: MyEnum; }
++>object2 : { foo: MyEnum.BAR; }
++>{        foo: MyEnum.BAR    } : { foo: MyEnum.BAR; }
+ 
+         foo: MyEnum.BAR
+->foo : MyEnum
+->MyEnum.BAR : MyEnum
++>foo : MyEnum.BAR
++>MyEnum.BAR : MyEnum.BAR
+ >MyEnum : typeof MyEnum
+->BAR : MyEnum
++>BAR : MyEnum.BAR
+ 
+     };
+ }
+@@= skipped -22, +22 lines =@@
+ >N : typeof N
+ 
+     export enum MyEnum {
+->MyEnum : MyEnum
++>MyEnum : MyEnum.FOO
+ 
+         FOO
+ >FOO : MyEnum.FOO
+ 
+     };
+     export var object1 = {
+->object1 : { foo: MyEnum; }
+->{        foo: MyEnum.FOO    } : { foo: MyEnum; }
++>object1 : { foo: MyEnum.FOO; }
++>{        foo: MyEnum.FOO    } : { foo: MyEnum.FOO; }
+ 
+         foo: MyEnum.FOO
+->foo : MyEnum
+->MyEnum.FOO : MyEnum
++>foo : MyEnum.FOO
++>MyEnum.FOO : MyEnum.FOO
+ >MyEnum : typeof MyEnum
+->FOO : MyEnum
++>FOO : MyEnum.FOO
+ 
+     };
+ }
+ 
+ let broken = [
+->broken : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
+->[    N.object1,    M.object2] : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
++>broken : ({ foo: MyEnum.BAR; } | { foo: MyEnum.FOO; })[]
++>[    N.object1,    M.object2] : ({ foo: MyEnum.BAR; } | { foo: MyEnum.FOO; })[]
+ 
+     N.object1,
+->N.object1 : { foo: N.MyEnum; }
++>N.object1 : { foo: MyEnum.FOO; }
+ >N : typeof N
+->object1 : { foo: N.MyEnum; }
++>object1 : { foo: MyEnum.FOO; }
+ 
+     M.object2
+->M.object2 : { foo: M.MyEnum; }
++>M.object2 : { foo: MyEnum.BAR; }
+ >M : typeof M
+->object2 : { foo: M.MyEnum; }
++>object2 : { foo: MyEnum.BAR; }
+ 
+ ];
+ 

@@ -1,0 +1,108 @@
+--- old.genericClassWithStaticFactory.types
++++ new.genericClassWithStaticFactory.types
+@@= skipped -5, +5 lines =@@
+ 
+     export class List<T> {
+ >List : List<T>
++>T : T
+ 
+         public next: List<T>;
+ >next : List<T>
+@@= skipped -31, +32 lines =@@
+             var entry = this.listFactory.MakeEntry(data);
+ >entry : List<T>
+ >this.listFactory.MakeEntry(data) : List<T>
+->this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
++>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+ >this.listFactory : ListFactory<T>
+ >this : this
+ >listFactory : ListFactory<T>
+->MakeEntry : <T_1>(data: T_1) => List<T_1>
++>MakeEntry : <T>(data: T) => List<T>
+ >data : T
+             
+             this.prev.next = entry;
+@@= skipped -168, +168 lines =@@
+             var entry = this.listFactory.MakeEntry(data);
+ >entry : List<T>
+ >this.listFactory.MakeEntry(data) : List<T>
+->this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
++>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+ >this.listFactory : ListFactory<T>
+ >this : this
+ >listFactory : ListFactory<T>
+->MakeEntry : <T_1>(data: T_1) => List<T_1>
++>MakeEntry : <T>(data: T) => List<T>
+ >data : T
+ 
+             entry.data = data;
+@@= skipped -70, +70 lines =@@
+             else {
+                 return this.listFactory.RemoveEntry(this.next);
+ >this.listFactory.RemoveEntry(this.next) : List<T>
+->this.listFactory.RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
++>this.listFactory.RemoveEntry : <T>(entry: List<T>) => List<T>
+ >this.listFactory : ListFactory<T>
+ >this : this
+ >listFactory : ListFactory<T>
+->RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
++>RemoveEntry : <T>(entry: List<T>) => List<T>
+ >this.next : List<T>
+ >this : this
+ >next : List<T>
+@@= skipped -65, +65 lines =@@
+             var entry: List<T> = this.listFactory.MakeEntry(data);
+ >entry : List<T>
+ >this.listFactory.MakeEntry(data) : List<T>
+->this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
++>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+ >this.listFactory : ListFactory<T>
+ >this : this
+ >listFactory : ListFactory<T>
+->MakeEntry : <T_1>(data: T_1) => List<T_1>
++>MakeEntry : <T>(data: T) => List<T>
+ >data : T
+ 
+             entry.next = this.next;
+@@= skipped -90, +90 lines =@@
+             var entry = this.listFactory.MakeEntry(data);
+ >entry : List<T>
+ >this.listFactory.MakeEntry(data) : List<T>
+->this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
++>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+ >this.listFactory : ListFactory<T>
+ >this : this
+ >listFactory : ListFactory<T>
+->MakeEntry : <T_1>(data: T_1) => List<T_1>
++>MakeEntry : <T>(data: T) => List<T>
+ >data : T
+ 
+             return this.insertEntryBefore(entry);
+@@= skipped -18, +18 lines =@@
+ 
+     export class ListFactory<T> {
+ >ListFactory : ListFactory<T>
++>T : T
+ 
+         public MakeHead<T>(): List<T> {
+ >MakeHead : <T>() => List<T>
++>T : T
+ 
+             var entry: List<T> = new List<T>(true, null);
+ >entry : List<T>
+@@= skipped -30, +32 lines =@@
+ 
+         public MakeEntry<T>(data: T): List<T> {
+ >MakeEntry : <T>(data: T) => List<T>
++>T : T
+ >data : T
+ 
+             var entry: List<T> = new List<T>(false, data);
+@@= skipped -29, +30 lines =@@
+ 
+         public RemoveEntry<T>(entry: List<T>): List<T> {
+ >RemoveEntry : <T>(entry: List<T>) => List<T>
++>T : T
+ >entry : List<T>
+ 
+             if (entry == null) {

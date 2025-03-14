@@ -1,0 +1,14 @@
+--- old.exportDefaultAlias_excludesEverything.types
++++ new.exportDefaultAlias_excludesEverything.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportDefaultAlias_excludesEverything.ts ===
+ export default interface A {}
++>A : default
++
+ interface B {}
++>B : B
++
+ export default B;
+ >B : B
+ 

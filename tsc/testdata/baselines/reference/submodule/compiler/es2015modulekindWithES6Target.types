@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es2015modulekindWithES6Target.ts] ////
+
+=== es2015modulekindWithES6Target.ts ===
+export default class A
+>A : default
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : () => number
+    {
+        return 42;
+>42 : 42
+    }
+}

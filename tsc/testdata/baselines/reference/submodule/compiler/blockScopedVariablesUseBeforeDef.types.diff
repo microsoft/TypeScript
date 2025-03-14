@@ -1,0 +1,23 @@
+--- old.blockScopedVariablesUseBeforeDef.types
++++ new.blockScopedVariablesUseBeforeDef.types
+@@= skipped -69, +69 lines =@@
+ >foo5 : () => void
+ 
+     let x = () => y;
+->x : () => () => any
+->() => y : () => () => any
+->y : () => () => any
++>x : () => () => ???
++>() => y : () => () => ???
++>y : () => () => ???
+ 
+     let y = () => x;
+->y : () => () => any
+->() => x : () => () => any
+->x : () => () => any
++>y : () => () => ???
++>() => x : () => () => ???
++>x : () => () => ???
+ }
+ 
+ function foo6() {

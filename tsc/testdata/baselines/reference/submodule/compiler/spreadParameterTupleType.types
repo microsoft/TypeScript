@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/spreadParameterTupleType.ts] ////
+
+=== spreadParameterTupleType.ts ===
+function f1() {
+>f1 : () => (...args: [s: string, s: string]) => void
+
+    type A = [s: string];
+>A : A
+
+    type C = [...A, ...A];
+>C : [s: string, s: string]
+
+    return function fn(...args: C) { }
+>function fn(...args: C) { } : (...args: [s: string, s: string]) => void
+>fn : (...args: [s: string, s: string]) => void
+>args : [s: string, s: string]
+}
+
+function f2() {
+>f2 : () => (...args: [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]) => void
+
+    type A = [a: string];
+>A : A
+
+    type B = [b: string];
+>B : B
+
+    type C = [c: string];
+>C : C
+
+    type D = [...A, ...A, ...B, ...A, ...B, ...B, ...A, ...C];
+>D : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]
+
+    return function fn(...args: D) { }
+>function fn(...args: D) { } : (...args: [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]) => void
+>fn : (...args: [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]) => void
+>args : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]
+}
+

@@ -1,0 +1,13 @@
+--- old.declarationEmitComputedPropertyNameEnum1.types
++++ new.declarationEmitComputedPropertyNameEnum1.types
+@@= skipped -25, +25 lines =@@
+ >Type : any
+ 
+ export const foo = { ...({} as Type) };
+->foo : { x?: { a: 0; }; }
+->{ ...({} as Type) } : { x?: { a: 0; }; }
++>foo : { x?: { a: 0; } | undefined; }
++>{ ...({} as Type) } : { x?: { a: 0; } | undefined; }
+ >({} as Type) : Type
+ >{} as Type : Type
+ >{} : {}

@@ -1,0 +1,15 @@
+--- old.unusedImports12.types
++++ new.unusedImports12.types
+@@= skipped -9, +9 lines =@@
+ >M : typeof Member
+ 
+ import * as ns from './b';
+->ns : typeof ns
++>ns : typeof import("b")
+ 
+ import r = require("./b");
+->r : typeof ns
++>r : typeof import("b")
+ 
+ === b.ts ===
+ export class Member {}

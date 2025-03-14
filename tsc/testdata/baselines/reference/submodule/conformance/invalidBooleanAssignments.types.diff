@@ -1,0 +1,45 @@
+--- old.invalidBooleanAssignments.types
++++ new.invalidBooleanAssignments.types
+@@= skipped -18, +18 lines =@@
+ 
+ var d: typeof undefined = x;
+ >d : any
+->undefined : undefined
+ >x : true
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ var e: E = x;
+->e : E
++>e : E.A
+ >x : true
+ 
+ class C { foo: string }
+@@= skipped -20, +19 lines =@@
+ >x : true
+ 
+ interface I { bar: string }
++>I : I
+ >bar : string
+ 
+ var g: I = x;
+@@= skipped -11, +12 lines =@@
+ >x : true
+ 
+ var h2: { toString(): string } = x; // no error
+->h2 : { toString(): string; }
++>h2 : { toString: () => string; }
+ >toString : () => string
+ >x : true
+ 
+@@= skipped -16, +16 lines =@@
+ 
+ function i<T>(a: T) {
+ >i : <T>(a: T) => void
++>T : T
+ >a : T
+ 
+     a = x;

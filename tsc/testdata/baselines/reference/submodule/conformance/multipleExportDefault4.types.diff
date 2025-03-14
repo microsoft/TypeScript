@@ -1,0 +1,11 @@
+--- old.multipleExportDefault4.types
++++ new.multipleExportDefault4.types
+@@= skipped -1, +1 lines =@@
+ 
+ === multipleExportDefault4.ts ===
+ export default class C { }
+->C : C
++>C : default
+ 
+ export default {
+ >{    uhoh: "another default",} : { uhoh: string; }

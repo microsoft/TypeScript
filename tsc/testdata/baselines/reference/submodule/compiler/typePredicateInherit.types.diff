@@ -1,0 +1,11 @@
+--- old.typePredicateInherit.types
++++ new.typePredicateInherit.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typePredicateInherit.ts ===
+ interface A {
++>A : A
++
+   method1(): this is {
+ >method1 : () => this is { a: 1; }
+ 

@@ -1,0 +1,329 @@
+--- old.narrowingByTypeofInSwitch.types
++++ new.narrowingByTypeofInSwitch.types
+@@= skipped -104, +104 lines =@@
+ >x : Basic
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : Basic
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -53, +53 lines =@@
+ 
+ function testExtendsUnion<T extends Basic>(x: T) {
+ >testExtendsUnion : <T extends Basic>(x: T) => void
++>T : T
+ >x : T
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : T
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -59, +60 lines =@@
+ >x : any
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : any
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -64, +64 lines =@@
+ >x : Basic
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : Basic
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -39, +39 lines =@@
+ >x : Basic
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : Basic
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -35, +35 lines =@@
+ 
+ function testExtendsExplicitDefault<T extends Basic>(x: T) {
+ >testExtendsExplicitDefault : <T extends Basic>(x: T) => void
++>T : T
+ >x : T
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : T
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -40, +41 lines =@@
+ 
+ function testExtendsImplicitDefault<T extends Basic>(x: T) {
+ >testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
++>T : T
+ >x : T
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : T
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -46, +47 lines =@@
+ >y : number
+ 
+ function exhaustiveChecks(x: number | string | L | R): string {
+->exhaustiveChecks : (x: number | string | L | R) => string
+->x : string | number | R | L
++>exhaustiveChecks : (x: string | number | L | R) => string
++>x : string | number | L | R
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->x : string | number | R | L
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>x : string | number | L | R
+ 
+         case 'number': return x.toString(2);
+ >'number' : "number"
+ >x.toString(2) : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ >2 : 2
+ 
+         case 'string': return x;
+@@= skipped -34, +34 lines =@@
+ }
+ 
+ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
+->exhaustiveChecksGenerics : <T extends L | R | number | string>(x: T) => string
++>exhaustiveChecksGenerics : <T extends string | number | L | R>(x: T) => string
++>T : T
+ >x : T
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : T
+ 
+         case 'number': return x.toString(2);
+ >'number' : "number"
+ >x.toString(2) : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ >2 : 2
+ 
+         case 'string': return x;
+@@= skipped -39, +40 lines =@@
+ 
+ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
+ >multipleGeneric : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
++>X : X
++>Y : Y
+ >xy : X | Y
+ 
+     switch (typeof xy) {
+->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >xy : X | Y
+ 
+         case 'function': return [xy, xy(42)];
+@@= skipped -30, +32 lines =@@
+ }
+ 
+ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
+->multipleGenericFuse : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
++>multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
++>X : X
++>Y : Y
+ >xy : X | Y
+ 
+     switch (typeof xy) {
+->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >xy : X | Y
+ 
+         case 'function': return [xy, 1];
+@@= skipped -21, +23 lines =@@
+ 
+         case 'number': return [xy]
+ >'number' : "number"
+->[xy] : [(X & number) | (Y & number)]
+->xy : (X & number) | (Y & number)
++>[xy] : [X & number | Y & number]
++>xy : X & number | Y & number
+     }
+ }
+ 
+ function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
+ >multipleGenericExhaustive : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
++>X : X
++>Y : Y
+ >xy : X | Y
+ 
+     switch (typeof xy) {
+->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >xy : X | Y
+ 
+         case 'object': return [xy, xy.y];
+@@= skipped -36, +38 lines =@@
+ >x : string | number | boolean
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+ 
+         case 'string': return assertString(x);
+@@= skipped -41, +41 lines =@@
+ >x : string | number | boolean
+     }
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+ 
+         case 'string':
+@@= skipped -33, +33 lines =@@
+ >x : string | number | boolean | object
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean | object
+ 
+         case 'number':
+@@= skipped -46, +46 lines =@@
+ >x : unknown
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -48, +48 lines =@@
+ }
+ 
+ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
+->keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
++>keyofNarrowing : <S extends { [K in keyof S]: string }>(k: keyof S) => void
++>S : S
++>K : K
+ >k : keyof S
+ 
+     function assertKeyofS(k1: keyof S) { }
+@@= skipped -8, +10 lines =@@
+ >k1 : keyof S
+ 
+     switch (typeof k) {
+->typeof k : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof k : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >k : keyof S
+ 
+         case 'number': assertNumber(k); assertKeyofS(k); return;
+@@= skipped -37, +37 lines =@@
+ >x : {} | undefined
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : {} | undefined
+ 
+         case 'number': assertNumber(x); return;
+@@= skipped -57, +57 lines =@@
+ }
+ 
+ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
+->narrowingNarrows2 : (x: true | 3 | "hello" | undefined) => void
+->x : true | 3 | "hello" | undefined
++>narrowingNarrows2 : (x: "hello" | 3 | true | undefined) => void
++>x : "hello" | 3 | true | undefined
+ >true : true
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->x : true | 3 | "hello" | undefined
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>x : "hello" | 3 | true | undefined
+ 
+         case 'number': assertNumber(x); return;
+ >'number' : "number"
+@@= skipped -72, +72 lines =@@
+ >x : Basic
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : Basic
+ 
+         case `number`: assertNumber(x); return;
+@@= skipped -56, +56 lines =@@
+ >x : string | number | boolean | object
+ 
+     switch (typeof x) {
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean | object
+ 
+         case `number`:
+@@= skipped -42, +42 lines =@@
+ }
+ 
+ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
+->keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
++>keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string }>(k: keyof S) => void
++>S : S
++>K : K
+ >k : keyof S
+ 
+     function assertKeyofS(k1: keyof S) { }
+@@= skipped -8, +10 lines =@@
+ >k1 : keyof S
+ 
+     switch (typeof k) {
+->typeof k : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof k : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >k : keyof S
+ 
+         case `number`: assertNumber(k); assertKeyofS(k); return;
+@@= skipped -35, +35 lines =@@
+ /* Both string literals and template literals */
+ 
+ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
+->multipleGenericFuseWithBoth : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
++>multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
++>X : X
++>Y : Y
+ >xy : X | Y
+ 
+     switch (typeof xy) {
+->typeof xy : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof xy : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >xy : X | Y
+ 
+         case `function`: return [xy, 1];
+@@= skipped -21, +23 lines =@@
+ 
+         case `number`: return [xy]
+ >`number` : "number"
+->[xy] : [(X & number) | (Y & number)]
+->xy : (X & number) | (Y & number)
++>[xy] : [X & number | Y & number]
++>xy : X & number | Y & number
+     }
+ }
+ 

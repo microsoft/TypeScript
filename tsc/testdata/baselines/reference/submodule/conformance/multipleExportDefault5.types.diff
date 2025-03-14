@@ -1,0 +1,13 @@
+--- old.multipleExportDefault5.types
++++ new.multipleExportDefault5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === multipleExportDefault5.ts ===
+ export default function bar() { }
+->bar : typeof bar
++>bar : typeof default
+ 
+ export default class C {}
+->C : bar
++>C : default
+ 

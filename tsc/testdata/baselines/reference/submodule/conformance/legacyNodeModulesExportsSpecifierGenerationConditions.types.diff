@@ -1,0 +1,39 @@
+--- old.legacyNodeModulesExportsSpecifierGenerationConditions.types
++++ new.legacyNodeModulesExportsSpecifierGenerationConditions.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.ts ===
+ export const a = async () => (await import("inner")).x();
+->a : () => Promise<import("node_modules/inner/private").Thing>
+->async () => (await import("inner")).x() : () => Promise<import("node_modules/inner/private").Thing>
+->(await import("inner")).x() : import("node_modules/inner/private").Thing
+->(await import("inner")).x : () => import("node_modules/inner/private").Thing
+->(await import("inner")) : typeof import("node_modules/inner/index")
+->await import("inner") : typeof import("node_modules/inner/index")
+->import("inner") : Promise<typeof import("node_modules/inner/index")>
++>a : () => Promise<Thing>
++>async () => (await import("inner")).x() : () => Promise<Thing>
++>(await import("inner")).x() : Thing
++>(await import("inner")).x : () => Thing
++>(await import("inner")) : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
++>await import("inner") : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
++>import("inner") : Promise<{ x: () => Thing; default: typeof import("node_modules/inner/index"); }>
+ >"inner" : "inner"
+->x : () => import("node_modules/inner/private").Thing
++>x : () => Thing
+ 
+ === node_modules/inner/index.d.ts ===
+ export { x } from "./other.js";
+->x : () => import("node_modules/inner/private").Thing
++>x : () => Thing
+ 
+ === node_modules/inner/other.d.ts ===
+ import { Thing } from "./private.js"
+@@= skipped -22, +22 lines =@@
+ >x : () => Thing
+ 
+ === node_modules/inner/private.d.ts ===
+-
+ export interface Thing {} // not exported in export map, inaccessible under new module modes
++>Thing : Thing
++

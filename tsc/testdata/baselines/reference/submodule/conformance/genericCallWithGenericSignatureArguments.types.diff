@@ -1,0 +1,109 @@
+--- old.genericCallWithGenericSignatureArguments.types
++++ new.genericCallWithGenericSignatureArguments.types
+@@= skipped -5, +5 lines =@@
+ 
+ function foo<T>(a: (x: T) => T, b: (x: T) => T) {
+ >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
++>T : T
+ >a : (x: T) => T
+ >x : T
+ >b : (x: T) => T
+@@= skipped -70, +71 lines =@@
+ >r4 : (x: { x: number; y?: number; }) => { x: number; y?: number; }
+ >foo((x: typeof a) => a, (x: typeof b) => b) : (x: { x: number; y?: number; }) => { x: number; y?: number; }
+ >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+->(x: typeof a) => a : (x: typeof a) => { x: number; y?: number; }
++>(x: typeof a) => a : (x: { x: number; y?: number; }) => { x: number; y?: number; }
+ >x : { x: number; y?: number; }
+ >a : { x: number; y?: number; }
+->a : { x: number; y?: number; }
+->(x: typeof b) => b : (x: typeof b) => { x: number; z?: number; }
++>(x: typeof b) => b : (x: { x: number; z?: number; }) => { x: number; z?: number; }
+ >x : { x: number; z?: number; }
+ >b : { x: number; z?: number; }
+->b : { x: number; z?: number; }
+ 
+ var r5 = foo((x: typeof b) => b, (x: typeof a) => a); // typeof b => typeof b
+ >r5 : (x: { x: number; z?: number; }) => { x: number; z?: number; }
+ >foo((x: typeof b) => b, (x: typeof a) => a) : (x: { x: number; z?: number; }) => { x: number; z?: number; }
+ >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+->(x: typeof b) => b : (x: typeof b) => { x: number; z?: number; }
++>(x: typeof b) => b : (x: { x: number; z?: number; }) => { x: number; z?: number; }
+ >x : { x: number; z?: number; }
+ >b : { x: number; z?: number; }
+->b : { x: number; z?: number; }
+->(x: typeof a) => a : (x: typeof a) => { x: number; y?: number; }
++>(x: typeof a) => a : (x: { x: number; y?: number; }) => { x: number; y?: number; }
+ >x : { x: number; y?: number; }
+ >a : { x: number; y?: number; }
+->a : { x: number; y?: number; }
+ 
+ function other<T>(x: T) {
+ >other : <T>(x: T) => void
++>T : T
+ >x : T
+ 
+     var r6 = foo((a: T) => a, (b: T) => b); // T => T
+ >r6 : (x: T) => T
+ >foo((a: T) => a, (b: T) => b) : (x: T) => T
+->foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a: T) => a : (a: T) => T
+ >a : T
+ >a : T
+@@= skipped -40, +37 lines =@@
+     var r6b = foo((a) => a, (b) => b); // {} => {}
+ >r6b : (x: unknown) => unknown
+ >foo((a) => a, (b) => b) : (x: unknown) => unknown
+->foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a) => a : (a: unknown) => unknown
+ >a : unknown
+ >a : unknown
+@@= skipped -11, +11 lines =@@
+ 
+ function other2<T extends Date>(x: T) {
+ >other2 : <T extends Date>(x: T) => void
++>T : T
+ >x : T
+ 
+     var r7 = foo((a: T) => a, (b: T) => b); // T => T
+ >r7 : (x: T) => T
+ >foo((a: T) => a, (b: T) => b) : (x: T) => T
+->foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a: T) => a : (a: T) => T
+ >a : T
+ >a : T
+@@= skipped -16, +17 lines =@@
+     var r7b = foo((a) => a, (b) => b); // {} => {}
+ >r7b : (x: unknown) => unknown
+ >foo((a) => a, (b) => b) : (x: unknown) => unknown
+->foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a) => a : (a: unknown) => unknown
+ >a : unknown
+ >a : unknown
+@@= skipped -20, +20 lines =@@
+ 
+ function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
+ >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
++>T : T
+ >a : (x: T) => T
+ >x : T
+ >b : (x: T) => T
+@@= skipped -15, +16 lines =@@
+ 
+ function other3<T extends RegExp>(x: T) {
+ >other3 : <T extends RegExp>(x: T) => void
++>T : T
+ >x : T
+ 
+     var r8 = foo2((a: Date) => a, (b: Date) => b); // Date => Date
+ >r8 : (x: Date) => Date
+ >foo2((a: Date) => a, (b: Date) => b) : (x: Date) => Date
+->foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a: Date) => a : (a: Date) => Date
+ >a : Date
+ >a : Date

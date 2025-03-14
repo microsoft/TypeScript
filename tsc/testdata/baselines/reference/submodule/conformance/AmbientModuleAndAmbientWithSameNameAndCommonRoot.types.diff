@@ -1,0 +1,25 @@
+--- old.AmbientModuleAndAmbientWithSameNameAndCommonRoot.types
++++ new.AmbientModuleAndAmbientWithSameNameAndCommonRoot.types
+@@= skipped -46, +46 lines =@@
+ var p = A.Point.Origin;
+ >p : { x: number; y: number; }
+ >A.Point.Origin : { x: number; y: number; }
+->A.Point : typeof A.Point
++>A.Point : typeof Point
+ >A : typeof A
+->Point : typeof A.Point
++>Point : typeof Point
+ >Origin : { x: number; y: number; }
+ 
+ var p = new A.Point(0, 0); // unexpected error here, bug 840000
+ >p : { x: number; y: number; }
+->new A.Point(0, 0) : A.Point
+->A.Point : typeof A.Point
++>new A.Point(0, 0) : Point
++>A.Point : typeof Point
+ >A : typeof A
+->Point : typeof A.Point
++>Point : typeof Point
+ >0 : 0
+ >0 : 0
+  

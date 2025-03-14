@@ -1,0 +1,13 @@
+--- old.FunctionAndModuleWithSameNameAndDifferentCommonRoot.types
++++ new.FunctionAndModuleWithSameNameAndDifferentCommonRoot.types
+@@= skipped -52, +52 lines =@@
+ var cl = B.Point.Origin;
+ >cl : { x: number; y: number; }
+ >B.Point.Origin : { x: number; y: number; }
+->B.Point : typeof B.Point
++>B.Point : typeof Point
+ >B : typeof B
+->Point : typeof B.Point
++>Point : typeof Point
+ >Origin : { x: number; y: number; }
+ 

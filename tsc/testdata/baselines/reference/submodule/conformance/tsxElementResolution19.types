@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution19.tsx] ////
+
+=== react.d.ts ===
+declare module "react" {
+>"react" : typeof import("react")
+
+}
+
+=== file1.tsx ===
+declare module JSX {
+>JSX : any
+
+    interface Element { }
+>Element : Element
+}
+export class MyClass { }
+>MyClass : MyClass
+
+=== file2.tsx ===
+// Should not elide React import
+import * as React from 'react';
+>React : typeof import("react")
+
+import {MyClass} from './file1';
+>MyClass : typeof MyClass
+
+<MyClass />;
+><MyClass /> : any
+>MyClass : typeof MyClass
+

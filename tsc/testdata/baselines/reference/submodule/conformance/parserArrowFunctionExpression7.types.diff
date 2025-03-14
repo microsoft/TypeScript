@@ -1,0 +1,13 @@
+--- old.parserArrowFunctionExpression7.types
++++ new.parserArrowFunctionExpression7.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserArrowFunctionExpression7.ts ===
+ ({
+->({	async m() {		for (;;) {		}	}}) : { m(): Promise<never>; }
+->{	async m() {		for (;;) {		}	}} : { m(): Promise<never>; }
++>({	async m() {		for (;;) {		}	}}) : { m: () => Promise<never>; }
++>{	async m() {		for (;;) {		}	}} : { m: () => Promise<never>; }
+ 
+ 	async m() {
+ >m : () => Promise<never>

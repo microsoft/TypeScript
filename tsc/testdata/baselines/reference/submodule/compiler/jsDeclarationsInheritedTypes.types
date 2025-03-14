@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/jsDeclarationsInheritedTypes.ts] ////
+
+=== a.js ===
+/**
+ * @typedef A
+ * @property {string} a
+ */
+
+/**
+ * @typedef B
+ * @property {number} b
+ */
+
+ class C1 {
+>C1 : C1
+
+    /**
+     * @type {A}
+     */
+    value;
+>value : any
+}
+
+class C2 extends C1 {
+>C2 : C2
+>C1 : C1
+
+    /**
+     * @type {A}
+     */
+    value;
+>value : any
+}
+
+class C3 extends C1 {
+>C3 : C3
+>C1 : C1
+
+    /**
+     * @type {A & B}
+     */
+    value;
+>value : any
+}
+

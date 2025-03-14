@@ -1,0 +1,16 @@
+--- old.recursiveClassInstantiationsWithDefaultConstructors.types
++++ new.recursiveClassInstantiationsWithDefaultConstructors.types
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ var a = new TypeScript2.MemberNameArray()
+->a : TypeScript2.MemberNameArray
+->new TypeScript2.MemberNameArray() : TypeScript2.MemberNameArray
+->TypeScript2.MemberNameArray : typeof TypeScript2.MemberNameArray
++>a : MemberNameArray
++>new TypeScript2.MemberNameArray() : MemberNameArray
++>TypeScript2.MemberNameArray : typeof MemberNameArray
+ >TypeScript2 : typeof TypeScript2
+->MemberNameArray : typeof TypeScript2.MemberNameArray
++>MemberNameArray : typeof MemberNameArray
+ 

@@ -1,0 +1,9 @@
+--- old.customConditions(resolvepackagejsonexports=true).types
++++ new.customConditions(resolvepackagejsonexports=true).types
+@@= skipped -22, +22 lines =@@
+ 
+ === /index.ts ===
+ import _ from "lodash";
+->_ : "webpack"
++>_ : "index"
+ 

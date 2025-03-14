@@ -1,0 +1,26 @@
+--- old.importImportOnlyModule.types
++++ new.importImportOnlyModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo_2.ts ===
+ import foo = require("./foo_1");
+->foo : typeof foo
++>foo : typeof import("foo_1")
+ 
+ var x = foo; // Cause a runtime dependency
+->x : typeof foo
+->foo : typeof foo
++>x : typeof import("foo_1")
++>foo : typeof import("foo_1")
+ 
+ === foo_0.ts ===
+ export class C1 {
+@@= skipped -21, +21 lines =@@
+ 
+ === foo_1.ts ===
+ import c1 = require('./foo_0'); // Makes this an external module
+->c1 : typeof c1
++>c1 : typeof import("foo_0")
+ 
+ var answer = 42; // No exports
+ >answer : number

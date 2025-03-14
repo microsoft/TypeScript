@@ -1,0 +1,148 @@
+--- old.genericCallWithConstraintsTypeArgumentInference.types
++++ new.genericCallWithConstraintsTypeArgumentInference.types
+@@= skipped -27, +27 lines =@@
+ 
+ function foo<T extends Base>(t: T) {
+ >foo : <T extends Base>(t: T) => T
++>T : T
+ >t : T
+ 
+     return t;
+@@= skipped -20, +21 lines =@@
+ 
+ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
+ >foo2 : <T extends Base, U extends Derived>(t: T, u: U) => U
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ function foo2b<T extends Base, U extends Derived>(u: U) {
+ >foo2b : <T extends Base, U extends Derived>(u: U) => T
++>T : T
++>U : U
+ >u : U
+ 
+     var x: T;
+@@= skipped -11, +13 lines =@@
+ 
+ function foo2c<T extends Base, U extends Derived>() {
+ >foo2c : <T extends Base, U extends Derived>() => T
++>T : T
++>U : U
+ 
+     var x: T;
+ >x : T
+@@= skipped -21, +23 lines =@@
+ 
+ class C<T extends Base, U extends Derived> {
+ >C : C<T, U>
++>T : T
++>U : U
+ 
+     constructor(public t: T, public u: U) {
+ >t : T
+@@= skipped -26, +28 lines =@@
+ 
+     foo3<T extends Derived>(t: T, u: U) {
+ >foo3 : <T extends Derived>(t: T, u: U) => T
++>T : T
+ >t : T
+ >u : U
+ 
+@@= skipped -9, +10 lines =@@
+ 
+     foo4<U extends Derived2>(t: T, u: U) {
+ >foo4 : <U extends Derived2>(t: T, u: U) => T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -9, +10 lines =@@
+ 
+     foo5<T extends Derived, U extends Derived2>(t: T, u: U) {
+ >foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -9, +11 lines =@@
+ 
+     foo6<T extends Derived, U extends Derived2>() {
+ >foo6 : <T extends Derived, U extends Derived2>() => T
++>T : T
++>U : U
+ 
+         var x: T;
+ >x : T
+@@= skipped -10, +12 lines =@@
+ 
+     foo7<T extends Base, U extends Derived>(u: U) {
+ >foo7 : <T extends Base, U extends Derived>(u: U) => T
++>T : T
++>U : U
+ >u : U
+ 
+         var x: T;
+@@= skipped -11, +13 lines =@@
+ 
+     foo8<T extends Base, U extends Derived>() {
+ >foo8 : <T extends Base, U extends Derived>() => T
++>T : T
++>U : U
+ 
+         var x: T;
+ >x : T
+@@= skipped -93, +95 lines =@@
+ >foo8 : <T extends Base, U extends Derived>() => T
+ 
+ interface I<T extends Base, U extends Derived> {
++>I : I<T, U>
++>T : T
++>U : U
++
+     new (t: T, u: U);
+ >t : T
+ >u : U
+@@= skipped -16, +20 lines =@@
+ 
+     foo3<T extends Derived>(t: T, u: U): T;
+ >foo3 : <T extends Derived>(t: T, u: U) => T
++>T : T
+ >t : T
+ >u : U
+ 
+     foo4<U extends Derived2>(t: T, u: U): T;
+ >foo4 : <U extends Derived2>(t: T, u: U) => T
++>U : U
+ >t : T
+ >u : U
+ 
+     foo5<T extends Derived, U extends Derived2>(t: T, u: U): T;
+ >foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+     foo6<T extends Derived, U extends Derived2>(): T;
+ >foo6 : <T extends Derived, U extends Derived2>() => T
++>T : T
++>U : U
+ 
+     foo7<T extends Base, U extends Derived>(u: U): T;
+ >foo7 : <T extends Base, U extends Derived>(u: U) => T
++>T : T
++>U : U
+ >u : U
+ 
+     foo8<T extends Base, U extends Derived>(): T;
+ >foo8 : <T extends Base, U extends Derived>() => T
++>T : T
++>U : U
+ }
+ 
+ var i: I<Base, Derived>;

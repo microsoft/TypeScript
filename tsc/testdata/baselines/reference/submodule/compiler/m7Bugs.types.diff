@@ -1,0 +1,23 @@
+--- old.m7Bugs.types
++++ new.m7Bugs.types
+@@= skipped -2, +2 lines =@@
+ === m7Bugs.ts ===
+ // scenario 1
+ interface ISomething {
++>ISomething : ISomething
++
+    something: number;
+ >something : number
+ }
+@@= skipped -13, +15 lines =@@
+ 
+ // scenario 2
+ interface A { x: string; }
++>A : A
+ >x : string
+ 
+ interface B extends A { }
++>B : B
+ 
+ var x: B = <B>{ };
+ >x : B

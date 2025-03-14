@@ -1,0 +1,46 @@
+--- old.jsxGenericComponentWithSpreadingResultOfGenericFunction.types
++++ new.jsxGenericComponentWithSpreadingResultOfGenericFunction.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx ===
+ /// <reference path="react16.d.ts" />
+ 
+ // repro #51577
+ 
+ declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T, K>;
+->omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K_1 extends string>(names: readonly K_1[]): <T_1>(obj: T_1) => Omit<T_1, K_1>; }
++>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
++>T : T
++>K : K
+ >names : readonly K[]
+ >obj : T
+ 
+ declare function omit<K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>;
+->omit : { <T, K_1 extends string>(names: readonly K_1[], obj: T): Omit<T, K_1>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
++>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
++>K : K
+ >names : readonly K[]
++>T : T
+ >obj : T
+ 
+ declare const otherProps: { bar: string, qwe: boolean }
+@@= skipped -27, +25 lines =@@
+ 
+ declare function GenericComponent<T>(props: T): null
+ >GenericComponent : <T>(props: T) => null
++>T : T
+ >props : T
+ 
+ <GenericComponent {...omit(['bar'], otherProps)} />; // no error
+-><GenericComponent {...omit(['bar'], otherProps)} /> : JSX.Element
++><GenericComponent {...omit(['bar'], otherProps)} /> : any
+ >GenericComponent : <T>(props: T) => null
+ >omit(['bar'], otherProps) : Omit<{ bar: string; qwe: boolean; }, "bar">
+ >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }

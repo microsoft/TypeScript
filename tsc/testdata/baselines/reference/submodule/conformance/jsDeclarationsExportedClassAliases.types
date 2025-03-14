@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportedClassAliases.ts] ////
+
+=== utils/index.js ===
+// issue arises here on compilation
+const errors = require("./errors");
+>errors : any
+>require("./errors") : any
+>require : any
+>"./errors" : "./errors"
+
+module.exports = {
+>module.exports = {    errors} : { errors: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{    errors} : { errors: any; }
+
+    errors
+>errors : any
+
+};

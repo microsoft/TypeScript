@@ -1,0 +1,13 @@
+--- old.node10IsNode_node10.types
++++ new.node10IsNode_node10.types
+@@= skipped -9, +9 lines =@@
+ 
+ === /main.ts ===
+ import { fancy } from "fancy-lib";
+->fancy : "feast"
++>fancy : "ketchup"
+ 
+ fancy;
+->fancy : "feast"
++>fancy : "ketchup"
+ 

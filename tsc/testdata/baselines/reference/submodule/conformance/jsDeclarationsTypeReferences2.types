@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences2.ts] ////
+
+=== index.js ===
+const{ a, m } = require("./something").o;
+>a : any
+>m : any
+>require("./something").o : any
+>require("./something") : any
+>require : any
+>"./something" : "./something"
+>o : any
+
+const thing = a + m
+>thing : any
+>a + m : any
+>a : any
+>m : any
+
+module.exports = {
+>module.exports = {    thing} : { thing: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{    thing} : { thing: any; }
+
+    thing
+>thing : any
+
+};
+
+=== something.ts ===
+export const o = {
+>o : { a: number; m: number; }
+>{    a: 1,    m: 1} : { a: number; m: number; }
+
+    a: 1,
+>a : number
+>1 : 1
+
+    m: 1
+>m : number
+>1 : 1
+}
+

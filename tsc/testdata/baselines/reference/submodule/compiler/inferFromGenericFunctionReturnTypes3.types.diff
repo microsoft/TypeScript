@@ -1,0 +1,202 @@
+--- old.inferFromGenericFunctionReturnTypes3.types
++++ new.inferFromGenericFunctionReturnTypes3.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 1,000
+-
+ === inferFromGenericFunctionReturnTypes3.ts ===
+ // Repros from #5487
+ 
+@@= skipped -18, +15 lines =@@
+ }
+ 
+ interface Wrap<T> {
++>Wrap : Wrap<T>
++>T : T
++
+     value: T;
+ >value : T
+ }
+ 
+ function wrap<T>(value: T): Wrap<T> {
+ >wrap : <T>(value: T) => Wrap<T>
++>T : T
+ >value : T
+ 
+     return { value };
+ >{ value } : { value: T; }
+->value : T
++>value : any
+ }
+ 
+ function wrappedFoo(): Wrap<'foo'> {
+@@= skipped -28, +32 lines =@@
+ 
+     return { value };
+ >{ value } : { value: "bar"; }
+->value : "bar"
++>value : any
+ }
+ 
+ function wrappedBar(): Wrap<'bar'> {
+@@= skipped -54, +54 lines =@@
+ // Repro from #11152
+ 
+ interface FolderContentItem {
++>FolderContentItem : FolderContentItem
++
+     type: 'folder' | 'file';
+->type : "folder" | "file"
++>type : "file" | "folder"
+ }
+ 
+ let a: FolderContentItem[] = [];
+@@= skipped -42, +44 lines =@@
+ >arr.map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
+ >arr : [number, number][]
+ >map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
+->([x, y]) => {    return [x, y];} : ([x, y]: [number, number]) => [number, number]
++>([x, y]) => {    return [x, y];} : (__0: [number, number]) => [number, number]
+ >x : number
+ >y : number
+ 
+@@= skipped -37, +37 lines =@@
+ >DiagnosticSeverity : DiagnosticSeverity
+ 
+ export interface Diagnostic {
++>Diagnostic : Diagnostic
++
+ 	severity?: DiagnosticSeverity;
+ >severity : DiagnosticSeverity | undefined
+ 
+@@= skipped -74, +76 lines =@@
+ // Repro from #24352
+ 
+ interface Person {
++>Person : Person
++
+   phoneNumbers: {
+ >phoneNumbers : { __typename: "PhoneNumber"; }[]
+ 
+@@= skipped -38, +40 lines =@@
+ 
+ type Box<T> = { value: T };
+ >Box : Box<T>
++>T : T
+ >value : T
+ 
+ declare function box<T>(value: T): Box<T>;
+ >box : <T>(value: T) => Box<T>
++>T : T
+ >value : T
+ 
+ type WinCondition =
+@@= skipped -36, +38 lines =@@
+ // Repro from #27074
+ 
+ interface OK<T> {
++>OK : OK<T>
++>T : T
++
+     kind: "OK";
+ >kind : "OK"
+ 
+@@= skipped -8, +11 lines =@@
+ }
+ export function ok<T>(value: T): OK<T> {
+ >ok : <T>(value: T) => OK<T>
++>T : T
+ >value : T
+ 
+     return {
+@@= skipped -27, +28 lines =@@
+ // Repro from #25889
+ 
+ interface I {
++>I : I
++
+     code: 'mapped',
+ >code : "mapped"
+ 
+@@= skipped -26, +28 lines =@@
+ >'mapped' : "mapped"
+ 
+         name,
+->name : string
++>name : any
+     }
+ });
+ 
+@@= skipped -16, +16 lines =@@
+ >age : number
+ 
+     position: "STRIKER" | "GOALKEEPER",
+->position : "STRIKER" | "GOALKEEPER"
++>position : "GOALKEEPER" | "STRIKER"
+ 
+ };
+  
+@@= skipped -13, +13 lines =@@
+ 
+     return Promise.all([
+ >Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
+->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >Promise : PromiseConstructor
+->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >[        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ] : ({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]
+         {
+ >{            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        } : { name: string; age: number; position: "GOALKEEPER"; }
+@@= skipped -41, +41 lines =@@
+ 
+ declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
+ >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
++>U : U
+ >z : U
+ >f : (acc: U, t: boolean) => U
+ >acc : U
+@@= skipped -28, +29 lines =@@
+ 
+ declare function bar<T>(f: () => T[]): T[];
+ >bar : <T>(f: () => T[]) => T[]
++>T : T
+ >f : () => T[]
+ 
+ let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
+@@= skipped -33, +34 lines =@@
+ 
+ class ClassWithConvert<T> {
+ >ClassWithConvert : ClassWithConvert<T>
++>T : T
+ 
+   constructor(val: T) { }
+ >val : T
+@@= skipped -13, +14 lines =@@
+ 
+ function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
+ >fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
++>T : T
+ >arg : ClassWithConvert<T>
+ >f : () => ClassWithConvert<T>
+ 
+@@= skipped -20, +21 lines =@@
+ 
+ type Func<T> = (x: T) => T;
+ >Func : Func<T>
++>T : T
+ >x : T
+ 
+ declare function makeFoo<T>(x: T): Func<T>;
+ >makeFoo : <T>(x: T) => Func<T>
++>T : T
+ >x : T
+ 
+ declare function baz<U>(x: Func<U>, y: Func<U>): void;
+ >baz : <U>(x: Func<U>, y: Func<U>) => void
++>U : U
+ >x : Func<U>
+ >y : Func<U>
+ 

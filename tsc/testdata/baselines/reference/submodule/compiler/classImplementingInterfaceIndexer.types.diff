@@ -1,0 +1,11 @@
+--- old.classImplementingInterfaceIndexer.types
++++ new.classImplementingInterfaceIndexer.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classImplementingInterfaceIndexer.ts ===
+ interface I {
++>I : I
++
+     [index: string]: { prop }
+ >index : string
+ >prop : any

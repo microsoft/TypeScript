@@ -1,0 +1,11 @@
+--- old.narrowedImports.types
++++ new.narrowedImports.types
+@@= skipped -60, +60 lines =@@
+ >b : number | undefined
+ 
+ declare namespace b {}
++>b : number | undefined
++
+ export = b;
+ >b : number | undefined
+ 

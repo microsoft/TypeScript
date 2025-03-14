@@ -1,0 +1,14 @@
+--- old.decoratedClassFromExternalModule.types
++++ new.decoratedClassFromExternalModule.types
+@@= skipped -8, +8 lines =@@
+ >decorate : (target: any) => void
+ 
+ export default class Decorated { }
+->Decorated : Decorated
++>Decorated : default
+ 
+ === undecorated.ts ===
+ import Decorated from 'decorated';
+->Decorated : typeof Decorated
++>Decorated : any
+ 

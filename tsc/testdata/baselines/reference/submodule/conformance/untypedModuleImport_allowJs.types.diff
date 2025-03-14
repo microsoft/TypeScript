@@ -1,0 +1,29 @@
+--- old.untypedModuleImport_allowJs.types
++++ new.untypedModuleImport_allowJs.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ import foo from "foo";
+->foo : { bar(): number; }
++>foo : any
+ 
+ foo.bar();
+->foo.bar() : number
+->foo.bar : () => number
+->foo : { bar(): number; }
+->bar : () => number
++>foo.bar() : any
++>foo.bar : any
++>foo : any
++>bar : any
+ 
+-=== /node_modules/foo/index.js ===
+-exports.default = { bar() { return 0; } }
+->exports.default = { bar() { return 0; } } : { bar(): number; }
+->exports.default : { bar(): number; }
+->exports : typeof import("/node_modules/foo/index")
+->default : { bar(): number; }
+->{ bar() { return 0; } } : { bar(): number; }
+->bar : () => number
+->0 : 0
+-

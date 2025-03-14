@@ -1,0 +1,35 @@
+--- old.typeGuardNarrowsToLiteralTypeUnion.types
++++ new.typeGuardNarrowsToLiteralTypeUnion.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardNarrowsToLiteralTypeUnion.ts ===
+ declare function isFoo(value: string) : value is ("foo" | "bar");
+->isFoo : (value: string) => value is ("foo" | "bar")
++>isFoo : (value: string) => value is "bar" | "foo"
+ >value : string
+ 
+ declare function doThis(value: "foo" | "bar"): void;
+->doThis : (value: "foo" | "bar") => void
+->value : "foo" | "bar"
++>doThis : (value: "bar" | "foo") => void
++>value : "bar" | "foo"
+ 
+ declare function doThat(value: string) : void;
+ >doThat : (value: string) => void
+@@= skipped -16, +16 lines =@@
+ 
+ if (isFoo(value)) {
+ >isFoo(value) : boolean
+->isFoo : (value: string) => value is ("foo" | "bar")
++>isFoo : (value: string) => value is "bar" | "foo"
+ >value : string
+ 
+     doThis(value);
+ >doThis(value) : void
+->doThis : (value: "foo" | "bar") => void
+->value : "foo" | "bar"
++>doThis : (value: "bar" | "foo") => void
++>value : "bar" | "foo"
+ 
+ } else {
+     doThat(value);

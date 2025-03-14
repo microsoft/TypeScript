@@ -1,0 +1,24 @@
+--- old.declarationEmitDuplicateParameterDestructuring.types
++++ new.declarationEmitDuplicateParameterDestructuring.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitDuplicateParameterDestructuring.ts ===
+ export const fn1 = ({ prop: a, prop: b }: { prop: number }) => a + b;
+->fn1 : ({ prop: a, prop: b }: { prop: number; }) => number
+->({ prop: a, prop: b }: { prop: number }) => a + b : ({ prop: a, prop: b }: { prop: number; }) => number
++>fn1 : (__0: { prop: number; }) => number
++>({ prop: a, prop: b }: { prop: number }) => a + b : (__0: { prop: number; }) => number
+ >prop : any
+ >a : number
+ >prop : any
+@@= skipped -12, +12 lines =@@
+ >b : number
+ 
+ export const fn2 = ({ prop: a }: { prop: number }, { prop: b }: { prop: number }) => a + b;
+->fn2 : ({ prop: a }: { prop: number; }, { prop: b }: { prop: number; }) => number
+->({ prop: a }: { prop: number }, { prop: b }: { prop: number }) => a + b : ({ prop: a }: { prop: number; }, { prop: b }: { prop: number; }) => number
++>fn2 : (__0: { prop: number; }, __1: { prop: number; }) => number
++>({ prop: a }: { prop: number }, { prop: b }: { prop: number }) => a + b : (__0: { prop: number; }, __1: { prop: number; }) => number
+ >prop : any
+ >a : number
+ >prop : number

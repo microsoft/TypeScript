@@ -1,0 +1,84 @@
+--- old.assignmentToParenthesizedIdentifiers.types
++++ new.assignmentToParenthesizedIdentifiers.types
+@@= skipped -111, +111 lines =@@
+ }
+ M2.M3 = { x: 3 }; // OK
+ >M2.M3 = { x: 3 } : { x: number; }
+->M2.M3 : typeof M2.M3
++>M2.M3 : typeof M3
+ >M2 : typeof M2
+->M3 : typeof M2.M3
++>M3 : typeof M3
+ >{ x: 3 } : { x: number; }
+ >x : number
+ >3 : 3
+ 
+ (M2).M3 = { x: 3 }; // OK
+ >(M2).M3 = { x: 3 } : { x: number; }
+->(M2).M3 : typeof M2.M3
++>(M2).M3 : typeof M3
+ >(M2) : typeof M2
+ >M2 : typeof M2
+->M3 : typeof M2.M3
++>M3 : typeof M3
+ >{ x: 3 } : { x: number; }
+ >x : number
+ >3 : 3
+ 
+ (M2.M3) = { x: 3 }; // OK
+ >(M2.M3) = { x: 3 } : { x: number; }
+->(M2.M3) : typeof M2.M3
+->M2.M3 : typeof M2.M3
++>(M2.M3) : typeof M3
++>M2.M3 : typeof M3
+ >M2 : typeof M2
+->M3 : typeof M2.M3
++>M3 : typeof M3
+ >{ x: 3 } : { x: number; }
+ >x : number
+ >3 : 3
+ 
+ M2.M3 = { x: '' }; // Error
+ >M2.M3 = { x: '' } : { x: string; }
+->M2.M3 : typeof M2.M3
++>M2.M3 : typeof M3
+ >M2 : typeof M2
+->M3 : typeof M2.M3
++>M3 : typeof M3
+ >{ x: '' } : { x: string; }
+ >x : string
+ >'' : ""
+ 
+ (M2).M3 = { x: '' }; // Error
+ >(M2).M3 = { x: '' } : { x: string; }
+->(M2).M3 : typeof M2.M3
++>(M2).M3 : typeof M3
+ >(M2) : typeof M2
+ >M2 : typeof M2
+->M3 : typeof M2.M3
++>M3 : typeof M3
+ >{ x: '' } : { x: string; }
+ >x : string
+ >'' : ""
+ 
+ (M2.M3) = { x: '' }; // Error
+ >(M2.M3) = { x: '' } : { x: string; }
+->(M2.M3) : typeof M2.M3
+->M2.M3 : typeof M2.M3
++>(M2.M3) : typeof M3
++>M2.M3 : typeof M3
+ >M2 : typeof M2
+->M3 : typeof M2.M3
++>M3 : typeof M3
+ >{ x: '' } : { x: string; }
+ >x : string
+ >'' : ""
+@@= skipped -181, +181 lines =@@
+ }
+ 
+ enum E {
+->E : E
++>E : E.A
+ 
+     A
+ >A : E.A

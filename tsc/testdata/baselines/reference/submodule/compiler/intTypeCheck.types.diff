@@ -1,0 +1,66 @@
+--- old.intTypeCheck.types
++++ new.intTypeCheck.types
+@@= skipped -1, +1 lines =@@
+ 
+ === intTypeCheck.ts ===
+ interface i1 {
++>i1 : i1
++
+     //Property Signatures
+     p;
+ >p : any
+@@= skipped -29, +31 lines =@@
+ >pa2 : any
+ }
+ interface i2 {
++>i2 : i2
++
+     //Call Signatures
+     ();
+     (): number;
+@@= skipped -24, +26 lines =@@
+ >p7 : any[]
+ }
+ interface i3 {
++>i3 : i3
++
+     //Construct Signatures
+     new ();
+     new (): number;
+@@= skipped -21, +23 lines =@@
+ >p7 : any[]
+ }
+ interface i4 {
++>i4 : i4
++
+     // Used to be indexer, now it is a computed property
+     [p];
+ >[p] : any
+@@= skipped -14, +16 lines =@@
+ >p3 : number
+ }
+ interface i5 extends i1 { }
++>i5 : i5
++
+ interface i6 extends i2 { }
++>i6 : i6
++
+ interface i7 extends i3 { }
++>i7 : i7
++
+ interface i8 extends i4 { }
++>i8 : i8
++
+ interface i9 { }
++>i9 : i9
+ 
+ class Base { foo() { } }
+ >Base : Base
+ >foo : () => void
+ 
+ interface i11 {
++>i11 : i11
++
+     //Call Signatures
+     ();
+     (): number;

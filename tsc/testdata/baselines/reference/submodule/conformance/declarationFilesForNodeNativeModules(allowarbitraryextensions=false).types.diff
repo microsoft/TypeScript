@@ -1,0 +1,25 @@
+--- old.declarationFilesForNodeNativeModules(allowarbitraryextensions=false).types
++++ new.declarationFilesForNodeNativeModules(allowarbitraryextensions=false).types
+@@= skipped -1, +1 lines =@@
+ 
+ === main.ts ===
+ import mod = require("./dir/native.node");
+->mod : any
++>mod : typeof import("dir/native.d.node")
+ 
+ mod.doNativeThing("good");
+->mod.doNativeThing("good") : any
+->mod.doNativeThing : any
+->mod : any
+->doNativeThing : any
++>mod.doNativeThing("good") : unknown
++>mod.doNativeThing : (flag: string) => unknown
++>mod : typeof import("dir/native.d.node")
++>doNativeThing : (flag: string) => unknown
+ >"good" : "good"
+ 
++=== dir/native.d.node.ts ===
++export function doNativeThing(flag: string): unknown;
++>doNativeThing : (flag: string) => unknown
++>flag : string
++

@@ -1,0 +1,23 @@
+--- old.es6ImportNameSpaceImportWithExport.types
++++ new.es6ImportNameSpaceImportWithExport.types
+@@= skipped -6, +6 lines =@@
+ 
+ === client.ts ===
+ export import * as nameSpaceBinding from "server";
+->nameSpaceBinding : typeof nameSpaceBinding
++>nameSpaceBinding : any
+ 
+ export var x = nameSpaceBinding.a;
+->x : number
+->nameSpaceBinding.a : number
+->nameSpaceBinding : typeof nameSpaceBinding
+->a : number
++>x : any
++>nameSpaceBinding.a : any
++>nameSpaceBinding : any
++>a : any
+ 
+ export import * as nameSpaceBinding2 from "server"; // Not referenced imports
+->nameSpaceBinding2 : typeof nameSpaceBinding
++>nameSpaceBinding2 : any
+ 

@@ -1,0 +1,18 @@
+--- old.augmentedTypesEnum3.types
++++ new.augmentedTypesEnum3.types
+@@= skipped -23, +23 lines =@@
+ >o : any
+ }
+ enum A {
+->A : A
++>A : A.b
+ 
+     b
+ >b : A.b
+ }
+ enum A {
+->A : A
++>A : A.b
+ 
+     c
+ >c : A.b

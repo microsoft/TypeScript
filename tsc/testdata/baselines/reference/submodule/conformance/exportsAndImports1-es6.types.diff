@@ -1,0 +1,37 @@
+--- old.exportsAndImports1-es6.types
++++ new.exportsAndImports1-es6.types
+@@= skipped -11, +11 lines =@@
+ >C : C
+ }
+ interface I {
++>I : I
+ }
+ enum E {
+ >E : E
+@@= skipped -24, +25 lines =@@
+ >x : any
+ }
+ module N {
++>N : any
++
+     export interface I {
++>I : I
+     }
+ }
+ type T = number;
+@@= skipped -27, +30 lines =@@
+ export { v, f, C, I, E, D, M, N, T, a } from "./t1";
+ >v : number
+ >f : () => void
+->C : typeof import("t1").C
++>C : typeof C
+ >I : any
+->E : typeof import("t1").E
+->D : typeof import("t1").D
+->M : typeof import("t1").M
++>E : typeof E
++>D : typeof D
++>M : typeof M
+ >N : any
+ >T : any
+ >a : any

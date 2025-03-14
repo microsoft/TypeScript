@@ -1,0 +1,11 @@
+--- old.callbackTagNamespace.types
++++ new.callbackTagNamespace.types
+@@= skipped -12, +12 lines =@@
+ 
+ /** @type {NS.Nested.Inner} */
+ function f(space, peace) {
+->f : (space: any, peace: any) => string | number
++>f : (space: any, peace: any) => string
+ >space : any
+ >peace : any
+ 

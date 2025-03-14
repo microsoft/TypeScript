@@ -1,0 +1,18 @@
+--- old.conditionalDoesntLeakUninstantiatedTypeParameter.types
++++ new.conditionalDoesntLeakUninstantiatedTypeParameter.types
+@@= skipped -1, +1 lines =@@
+ 
+ === conditionalDoesntLeakUninstantiatedTypeParameter.ts ===
+ interface Synthetic<A, B extends A> {}
++>Synthetic : Synthetic<A, B>
++>A : A
++>B : B
++
+ type SyntheticDestination<T, U> = U extends Synthetic<T, infer V> ? V : never;
+ >SyntheticDestination : SyntheticDestination<T, U>
++>T : T
++>U : U
++>V : V
+ 
+ type TestSynthetic = // Resolved to T, should be `number` or an inference failure (`unknown`)
+ >TestSynthetic : number

@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/moduleDeclarationExportStarShadowingGlobalIsNameable.ts] ////
+
+=== model/index.ts ===
+
+export * from "./account";
+
+=== model/account.ts ===
+export interface Account {
+>Account : Account
+
+    myAccNum: number;
+>myAccNum : number
+}
+interface Account2 {
+>Account2 : Account2
+
+    myAccNum: number;
+>myAccNum : number
+}
+export { Account2 as Acc };
+>Account2 : any
+>Acc : any
+
+=== index.ts ===
+declare global {
+>global : any
+
+    interface Account {
+>Account : Account
+
+        someProp: number;
+>someProp : number
+    }
+    interface Acc {
+>Acc : Acc
+
+        someProp: number;
+>someProp : number
+    }
+}
+import * as model from "./model";
+>model : typeof import("model/index")
+
+export const func = (account: model.Account, acc2: model.Acc) => {};
+>func : (account: Account, acc2: Account2) => void
+>(account: model.Account, acc2: model.Acc) => {} : (account: Account, acc2: Account2) => void
+>account : Account
+>model : any
+>acc2 : Account2
+>model : any
+

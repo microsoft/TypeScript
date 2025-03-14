@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts] ////
+
+=== noImplicitAnyDestructuringInPrivateMethod.ts ===
+type Arg = {
+>Arg : Arg
+
+    a: number;
+>a : number
+
+};
+export class Bar {
+>Bar : Bar
+
+    private bar({ a, }: Arg): number {
+>bar : (__0: Arg) => number
+>a : number
+
+        return a;
+>a : number
+    }
+}
+export declare class Bar2 {
+>Bar2 : Bar2
+
+    private bar({ a, });
+>bar : (__0: { a: any; }) => any
+>a : any
+}

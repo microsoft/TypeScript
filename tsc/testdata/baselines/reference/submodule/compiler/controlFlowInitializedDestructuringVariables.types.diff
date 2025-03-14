@@ -1,0 +1,18 @@
+--- old.controlFlowInitializedDestructuringVariables.types
++++ new.controlFlowInitializedDestructuringVariables.types
+@@= skipped -1, +1 lines =@@
+ 
+ === controlFlowInitializedDestructuringVariables.ts ===
+ declare const obj: { a?: string, b?: number };
+->obj : { a?: string; b?: number; }
++>obj : { a?: string | undefined; b?: number | undefined; }
+ >a : string | undefined
+ >b : number | undefined
+ 
+@@= skipped -15, +15 lines =@@
+ >a : string
+ 
+ } = obj;
+->obj : { a?: string; b?: number; }
++>obj : { a?: string | undefined; b?: number | undefined; }
+ 

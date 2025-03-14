@@ -1,0 +1,11 @@
+--- old.useBeforeDeclaration_superClass.types
++++ new.useBeforeDeclaration_superClass.types
+@@= skipped -52, +52 lines =@@
+ 
+ // Interface doesn't count
+ interface I {
++>I : I
++
+     x: number;
+ >x : number
+ }

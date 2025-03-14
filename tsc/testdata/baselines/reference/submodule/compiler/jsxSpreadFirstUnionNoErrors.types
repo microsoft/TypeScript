@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/jsxSpreadFirstUnionNoErrors.tsx] ////
+
+=== jsxSpreadFirstUnionNoErrors.tsx ===
+import React from "react";
+>React : any
+
+type InfoProps =
+>InfoProps : InfoProps
+
+| { status: "hidden" }
+>status : "hidden"
+
+| { status: "visible"; content: string };
+>status : "visible"
+>content : string
+
+const Info = (props: InfoProps) =>
+>Info : (props: InfoProps) => any
+>(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => any
+>props : InfoProps
+
+props.status === "hidden"
+>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : any
+>props.status === "hidden" : boolean
+>props.status : "hidden" | "visible"
+>props : InfoProps
+>status : "hidden" | "visible"
+>"hidden" : "hidden"
+
+  ? <noscript />
+><noscript /> : any
+>noscript : any
+
+  : <div>{props.content}</div>;
+><div>{props.content}</div> : any
+>div : any
+>props.content : string
+>props : { status: "visible"; content: string; }
+>content : string
+>div : any
+
+const a = <Info status="hidden" />;
+>a : any
+><Info status="hidden" /> : any
+>Info : (props: InfoProps) => any
+>status : any
+
+const b = <Info status="visible" content="hello world" />;
+>b : any
+><Info status="visible" content="hello world" /> : any
+>Info : (props: InfoProps) => any
+>status : any
+>content : any
+
+declare const infoProps: InfoProps;
+>infoProps : InfoProps
+
+const c = <Info {...infoProps} />;
+>c : any
+><Info {...infoProps} /> : any
+>Info : (props: InfoProps) => any
+>infoProps : InfoProps
+

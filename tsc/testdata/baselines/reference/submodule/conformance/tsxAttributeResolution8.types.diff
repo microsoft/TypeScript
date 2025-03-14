@@ -1,0 +1,26 @@
+--- old.tsxAttributeResolution8.types
++++ new.tsxAttributeResolution8.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { }
++>Element : Element
++
+ 	interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+ 		test1: {x: string};
+ >test1 : { x: string; }
+ >x : string
+@@= skipped -13, +19 lines =@@
+ 
+ // Should be OK
+ <test1 {...x} />
+-><test1 {...x} /> : JSX.Element
++><test1 {...x} /> : any
+ >test1 : any
+ >x : any
+ 

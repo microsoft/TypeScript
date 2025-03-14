@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsNoImplicitAnyNoCascadingReferenceErrors.ts] ////
+
+=== somelib.d.ts ===
+export declare class Foo<T> {
+>Foo : Foo<T>
+>T : T
+
+    prop: T;
+>prop : T
+}
+=== index.js ===
+import {Foo} from "./somelib";
+>Foo : typeof Foo
+
+class MyFoo extends Foo {
+>MyFoo : MyFoo
+>Foo : typeof Foo
+
+    constructor() {
+        super();
+>super() : void
+>super : any
+
+        this.prop.alpha = 12;
+>this.prop.alpha = 12 : 12
+>this.prop.alpha : any
+>this.prop : any
+>this : this
+>prop : any
+>alpha : any
+>12 : 12
+    }
+}
+

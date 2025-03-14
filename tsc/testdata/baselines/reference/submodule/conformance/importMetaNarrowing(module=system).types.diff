@@ -1,0 +1,31 @@
+--- old.importMetaNarrowing(module=system).types
++++ new.importMetaNarrowing(module=system).types
+@@= skipped -1, +1 lines =@@
+ 
+ === importMetaNarrowing.ts ===
+ declare global { interface ImportMeta {foo?: () => void} };
+->global : any
+->foo : (() => void) | undefined
++>global : typeof global
++>ImportMeta : ImportMeta
++>foo : () => void | undefined
+ 
+ if (import.meta.foo) {
+->import.meta.foo : (() => void) | undefined
++>import.meta.foo : any
+ >import.meta : ImportMeta
+ >meta : ImportMeta
+->foo : (() => void) | undefined
++>foo : any
+ 
+   import.meta.foo();
+->import.meta.foo() : void
+->import.meta.foo : () => void
++>import.meta.foo() : any
++>import.meta.foo : any
+ >import.meta : ImportMeta
+ >meta : ImportMeta
+->foo : () => void
++>foo : any
+ }
+ 

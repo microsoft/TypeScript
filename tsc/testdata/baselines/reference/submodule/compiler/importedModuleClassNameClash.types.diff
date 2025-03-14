@@ -1,0 +1,14 @@
+--- old.importedModuleClassNameClash.types
++++ new.importedModuleClassNameClash.types
+@@= skipped -2, +2 lines =@@
+ === importedModuleClassNameClash.ts ===
+ import foo = m1;
+ >foo : typeof foo
+->m1 : error
++>m1 : any
+  
+ export module m1 { }
++>m1 : any
+  
+ class foo { }
+ >foo : foo

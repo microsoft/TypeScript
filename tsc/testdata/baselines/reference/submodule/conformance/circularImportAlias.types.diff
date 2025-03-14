@@ -1,0 +1,61 @@
+--- old.circularImportAlias.types
++++ new.circularImportAlias.types
+@@= skipped -3, +3 lines =@@
+ // expected no error
+ 
+ module B {
+->B : typeof a.b
++>B : typeof B
+ 
+     export import a = A;
+->a : typeof a
+->A : typeof a
++>a : typeof A
++>A : typeof A
+ 
+     export class D extends a.C {
+ >D : D
+->a.C : a.C
+->a : typeof a
+->C : typeof a.C
++>a.C : C
++>a : typeof A
++>C : typeof C
+ 
+         id: number;
+ >id : number
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ module A {
+->A : typeof b.a
++>A : typeof A
+ 
+     export class C { name: string }
+ >C : C
+ >name : string
+ 
+     export import b = B;
+->b : typeof b
+->B : typeof b
++>b : typeof B
++>B : typeof B
+ }
+ 
+ var c: { name: string };
+@@= skipped -17, +17 lines =@@
+ 
+ var c = new B.a.C();
+ >c : { name: string; }
+->new B.a.C() : A.C
+->B.a.C : typeof A.C
++>new B.a.C() : C
++>B.a.C : typeof C
+ >B.a : typeof A
+ >B : typeof B
+ >a : typeof A
+->C : typeof A.C
++>C : typeof C
+ 
+ 
+ 

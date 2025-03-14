@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsCjsFromJs.ts] ////
+
+=== foo.cjs ===
+exports.foo = "foo"
+>exports.foo = "foo" : "foo"
+>exports.foo : any
+>exports : any
+>foo : any
+>"foo" : "foo"
+
+=== bar.ts ===
+import foo from "./foo.cjs"
+>foo : any
+
+foo.foo;
+>foo.foo : any
+>foo : any
+>foo : any
+

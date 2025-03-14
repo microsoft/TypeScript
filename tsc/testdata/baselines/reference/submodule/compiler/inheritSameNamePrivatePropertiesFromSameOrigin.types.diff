@@ -1,0 +1,11 @@
+--- old.inheritSameNamePrivatePropertiesFromSameOrigin.types
++++ new.inheritSameNamePrivatePropertiesFromSameOrigin.types
+@@= skipped -15, +15 lines =@@
+ >B : B
+ 
+ interface A extends C, C2 { // ok
++>A : A
++
+     y: string;
+ >y : string
+ }

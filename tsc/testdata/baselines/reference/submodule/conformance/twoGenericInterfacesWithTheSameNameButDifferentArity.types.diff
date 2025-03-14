@@ -1,0 +1,91 @@
+--- old.twoGenericInterfacesWithTheSameNameButDifferentArity.types
++++ new.twoGenericInterfacesWithTheSameNameButDifferentArity.types
+@@= skipped -1, +1 lines =@@
+ 
+ === twoGenericInterfacesWithTheSameNameButDifferentArity.ts ===
+ interface A<T> {
++>A : A<T, U>
++>T : T
++
+     x: T;
+ >x : T
+ }
+ 
+ interface A<T, U> { // error
++>A : A<T, U>
++>T : T
++>U : U
++
+     y: T;
+ >y : T
+ }
+ 
+ module M {
++>M : any
++
+     interface A<T> {
++>A : A<T, U>
++>T : T
++
+         x: T;
+ >x : T
+     }
+ 
+     interface A<T, U> { // error
++>A : A<T, U>
++>T : T
++>U : U
++
+         y: T;
+ >y : T
+     }
+ }
+ 
+ module M2 {
++>M2 : any
++
+     interface A<T> {
++>A : A<T>
++>T : T
++
+         x: T;
+ >x : T
+     }
+ }
+ 
+ module M2 {
++>M2 : any
++
+     interface A<T, U> { // ok, different declaration space than other M2
++>A : A<T, U>
++>T : T
++>U : U
++
+         y: T;
+ >y : T
+     }
+ }
+ 
+ module M3 {
++>M3 : any
++
+     export interface A<T> {
++>A : A<T, U>
++>T : T
++
+         x: T;
+ >x : T
+     }
+ }
+ 
+ module M3 {
++>M3 : any
++
+     export interface A<T, U> { // error
++>A : A<T, U>
++>T : T
++>U : U
++
+         y: T;
+ >y : T
+     }

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/importUsedAsTypeWithErrors.ts] ////
+
+=== test.ts ===
+export interface T {
+>T : T
+
+    value: string
+>value : string
+}
+
+=== main.ts ===
+export const a: import("./test") = null;
+>a : any
+

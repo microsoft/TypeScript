@@ -1,0 +1,54 @@
+--- old.discriminateWithOptionalProperty3(exactoptionalpropertytypes=true).types
++++ new.discriminateWithOptionalProperty3(exactoptionalpropertytypes=true).types
+@@= skipped -4, +4 lines =@@
+ 
+ type Maybe<T> = null | undefined | T;
+ >Maybe : Maybe<T>
++>T : T
+ 
+ declare class GraphQLError extends Error {
+ >GraphQLError : GraphQLError
+@@= skipped -10, +11 lines =@@
+ }
+ 
+ interface ExecutionArgs {
++>ExecutionArgs : ExecutionArgs
++
+   variableValues?: Maybe<{ readonly [variable: string]: unknown }>;
+ >variableValues : Maybe<{ readonly [variable: string]: unknown; }>
+ >variable : string
+ }
+ 
+ interface ExecutionContext {
++>ExecutionContext : ExecutionContext
++
+   variableValues: { [variable: string]: unknown };
+ >variableValues : { [variable: string]: unknown; }
+ >variable : string
+@@= skipped -33, +37 lines =@@
+ }): CoercedVariableValues;
+ 
+ export function buildExecutionContext(
+->buildExecutionContext : (args: ExecutionArgs) => ReadonlyArray<GraphQLError> | ExecutionContext
++>buildExecutionContext : (args: ExecutionArgs) => ExecutionContext | readonly GraphQLError[]
+ 
+   args: ExecutionArgs,
+ >args : ExecutionArgs
+@@= skipped -26, +26 lines =@@
+ 
+     return coercedVariableValues.errors;
+ >coercedVariableValues.errors : readonly GraphQLError[]
+->coercedVariableValues : { errors: ReadonlyArray<GraphQLError>; coerced?: never; }
++>coercedVariableValues : { errors: readonly GraphQLError[]; coerced?: undefined; }
+ >errors : readonly GraphQLError[]
+   }
+ 
+@@= skipped -10, +10 lines =@@
+     variableValues: coercedVariableValues.coerced,
+ >variableValues : { [variable: string]: unknown; }
+ >coercedVariableValues.coerced : { [variable: string]: unknown; }
+->coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: never; }
++>coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: undefined; }
+ >coerced : { [variable: string]: unknown; }
+ 
+   };

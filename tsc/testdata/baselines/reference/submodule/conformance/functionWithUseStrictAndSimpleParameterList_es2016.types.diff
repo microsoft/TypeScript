@@ -1,0 +1,20 @@
+--- old.functionWithUseStrictAndSimpleParameterList_es2016.types
++++ new.functionWithUseStrictAndSimpleParameterList_es2016.types
+@@= skipped -60, +60 lines =@@
+ }
+ 
+ function objectBindingPattern({foo}: any) {
+->objectBindingPattern : ({ foo }: any) => void
++>objectBindingPattern : (__0: any) => void
+ >foo : any
+ 
+     'use strict';
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ function arrayBindingPattern([foo]: any[]) {
+->arrayBindingPattern : ([foo]: any[]) => void
++>arrayBindingPattern : (__0: any[]) => void
+ >foo : any
+ 
+     'use strict';

@@ -1,0 +1,48 @@
+--- old.duplicatePackage_subModule.types
++++ new.duplicatePackage_subModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /index.ts ===
+ import Foo from "foo/Foo";
+->Foo : typeof Foo
++>Foo : typeof default
+ 
+ import * as a from "a";
+->a : typeof a
++>a : typeof import("/node_modules/a/index")
+ 
+ const o: Foo = a.o;
+->o : Foo
+->a.o : Foo
+->a : typeof a
+->o : Foo
++>o : default
++>a.o : default
++>a : typeof import("/node_modules/a/index")
++>o : default
+ 
+ === /node_modules/a/index.d.ts ===
+ import Foo from "foo/Foo";
+->Foo : typeof Foo
++>Foo : typeof default
+ 
+ export const o: Foo;
+->o : Foo
++>o : default
+ 
+ === /node_modules/a/node_modules/foo/Foo.d.ts ===
+ export default class Foo {
+->Foo : Foo
++>Foo : default
+ 
+     protected source: boolean;
+ >source : boolean
+@@= skipped -28, +28 lines =@@
+ 
+ === /node_modules/foo/Foo.d.ts ===
+ export default class Foo {
+->Foo : Foo
++>Foo : default
+ 
+     protected source: boolean;
+ >source : boolean

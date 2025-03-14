@@ -1,0 +1,10 @@
+--- old.awaitClassExpression_es6.types
++++ new.awaitClassExpression_es6.types
+@@= skipped -5, +5 lines =@@
+ 
+ declare var p: Promise<typeof C>;
+ >p : Promise<typeof C>
+->C : typeof C
+ 
+ async function func(): Promise<void> {
+ >func : () => Promise<void>

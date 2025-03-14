@@ -1,0 +1,10 @@
+--- old.extendsTagEmit.types
++++ new.extendsTagEmit.types
+@@= skipped -10, +10 lines =@@
+ /** @extends {Mismatch} */
+ class C extends B { }
+ >C : C
+->B : typeof B
++>B : B
+ 
+ 

@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/destructuringFromUnionSpread.ts] ////
+
+=== destructuringFromUnionSpread.ts ===
+interface A { a: string }
+>A : A
+>a : string
+
+interface B { b: number }
+>B : B
+>b : number
+
+declare const x: A | B;
+>x : A | B
+
+const { a } = { ...x } // error
+>a : any
+>{ ...x } : { a: string; } | { b: number; }
+>x : A | B
+

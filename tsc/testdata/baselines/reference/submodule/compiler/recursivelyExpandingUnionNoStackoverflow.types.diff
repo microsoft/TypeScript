@@ -1,0 +1,12 @@
+--- old.recursivelyExpandingUnionNoStackoverflow.types
++++ new.recursivelyExpandingUnionNoStackoverflow.types
+@@= skipped -2, +2 lines =@@
+ === recursivelyExpandingUnionNoStackoverflow.ts ===
+ type N<T, K extends string> = T | { [P in K]: N<T, K> }[K];
+ >N : N<T, K>
++>T : T
++>K : K
++>P : P
+ 
+ type M = N<number, "M">;
+ >M : any

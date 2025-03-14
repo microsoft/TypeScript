@@ -1,0 +1,11 @@
+--- old.divergentAccessorsTypes1.types
++++ new.divergentAccessorsTypes1.types
+@@= skipped -33, +33 lines =@@
+ }
+ 
+ interface Test2 {
++>Test2 : Test2
++
+     get foo(): string;
+ >foo : string
+ 

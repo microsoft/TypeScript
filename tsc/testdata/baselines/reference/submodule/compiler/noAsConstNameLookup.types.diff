@@ -1,0 +1,23 @@
+--- old.noAsConstNameLookup.types
++++ new.noAsConstNameLookup.types
+@@= skipped -8, +8 lines =@@
+ 
+ export type Cleaner = <W extends Store>(runner: FeatureRunner<W>) => Promise<any>
+ >Cleaner : Cleaner
++>W : W
+ >runner : FeatureRunner<W>
+ 
+ export class FeatureRunner<W extends Store> {
+ >FeatureRunner : FeatureRunner<W>
++>W : W
+ 
+     private readonly cleaners: Cleaner[] = []
+ >cleaners : Cleaner[]
+@@= skipped -57, +59 lines =@@
+ 
+ export class C<T> {
+ >C : C<T>
++>T : T
+ 
+     f(): void {
+ >f : () => void

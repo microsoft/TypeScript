@@ -1,0 +1,36 @@
+--- old.promiseChaining1.types
++++ new.promiseChaining1.types
+@@= skipped -3, +3 lines =@@
+ // same example but with constraints on each type parameter
+ class Chain2<T extends { length: number }> {
+ >Chain2 : Chain2<T>
++>T : T
+ >length : number
+ 
+     constructor(public value: T) { }
+@@= skipped -7, +8 lines =@@
+ 
+     then<S extends Function>(cb: (x: T) => S): Chain2<S> {
+ >then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
++>S : S
+ >cb : (x: T) => S
+ >x : T
+ 
+@@= skipped -17, +18 lines =@@
+ >this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length) : Chain2<Function>
+ >this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then : <S extends Function>(cb: (x: Function) => S) => Chain2<S>
+ >this.then(x => result)/*S*/.then(x => "abc") : Chain2<Function>
+->this.then(x => result)/*S*/.then : <S extends Function>(cb: (x: S_1) => S) => Chain2<S>
++>this.then(x => result)/*S*/.then : <S extends Function>(cb: (x: S) => S) => Chain2<S>
+ >this.then(x => result) : Chain2<S>
+ >this.then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
+ >this : this
+@@= skipped -8, +8 lines =@@
+ >x => result : (x: T) => S
+ >x : T
+ >result : S
+->then : <S extends Function>(cb: (x: S_1) => S) => Chain2<S>
++>then : <S extends Function>(cb: (x: S) => S) => Chain2<S>
+ >x => "abc" : (x: S) => string
+ >x : S
+ >"abc" : "abc"

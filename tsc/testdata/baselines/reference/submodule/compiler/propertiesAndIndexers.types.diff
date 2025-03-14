@@ -1,0 +1,63 @@
+--- old.propertiesAndIndexers.types
++++ new.propertiesAndIndexers.types
+@@= skipped -1, +1 lines =@@
+ 
+ === propertiesAndIndexers.ts ===
+ interface X { }
++>X : X
++
+ interface Y {
++>Y : Y
++
+     n: number;
+ >n : number
+ }
+ interface Z {
++>Z : Z
++
+     s: string;
+ >s : string
+ }
+ 
+ interface A {
++>A : A
++
+     a: Y;
+ >a : Y
+ 
+@@= skipped -21, +29 lines =@@
+ }
+ 
+ interface B extends A {
++>B : B
++
+     [n: number]: string;
+ >n : number
+ 
+@@= skipped -14, +16 lines =@@
+ }
+ 
+ interface B {
++>B : B
++
+     4: boolean;
+ >4 : boolean
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface C extends A {
++>C : C
++
+     [s: string]: number;
+ >s : string
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface D extends B, C {
++>D : D
++
+     2: Z;
+ >2 : Z
+ 

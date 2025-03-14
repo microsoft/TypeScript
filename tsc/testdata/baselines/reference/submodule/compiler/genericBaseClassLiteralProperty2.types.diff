@@ -1,0 +1,10 @@
+--- old.genericBaseClassLiteralProperty2.types
++++ new.genericBaseClassLiteralProperty2.types
+@@= skipped -5, +5 lines =@@
+ 
+ class BaseCollection2<TItem extends CollectionItem2> {
+ >BaseCollection2 : BaseCollection2<TItem>
++>TItem : TItem
+ 
+     _itemsByKey: { [key: string]: TItem; };
+ >_itemsByKey : { [key: string]: TItem; }

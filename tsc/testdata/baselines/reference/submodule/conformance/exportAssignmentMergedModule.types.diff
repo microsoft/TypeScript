@@ -1,0 +1,42 @@
+--- old.exportAssignmentMergedModule.types
++++ new.exportAssignmentMergedModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo_1.ts ===
+ import foo = require("./foo_0");
+->foo : typeof foo
++>foo : typeof Foo
+ 
+ var a: number = foo.a();
+ >a : number
+ >foo.a() : number
+ >foo.a : () => number
+->foo : typeof foo
++>foo : typeof Foo
+ >a : () => number
+ 
+ if(!!foo.b){
+ >!!foo.b : boolean
+ >!foo.b : boolean
+ >foo.b : boolean
+->foo : typeof foo
++>foo : typeof Foo
+ >b : boolean
+ 
+ 	foo.Test.answer = foo.c(42);
+ >foo.Test.answer = foo.c(42) : number
+ >foo.Test.answer : number
+->foo.Test : typeof foo.Test
+->foo : typeof foo
+->Test : typeof foo.Test
++>foo.Test : typeof Test
++>foo : typeof Foo
++>Test : typeof Test
+ >answer : number
+ >foo.c(42) : number
+ >foo.c : (a: number) => number
+->foo : typeof foo
++>foo : typeof Foo
+ >c : (a: number) => number
+ >42 : 42
+ }

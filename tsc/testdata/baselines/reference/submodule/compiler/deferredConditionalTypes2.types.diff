@@ -1,0 +1,50 @@
+--- old.deferredConditionalTypes2.types
++++ new.deferredConditionalTypes2.types
+@@= skipped -12, +12 lines =@@
+ 
+ export type IsEqual<A, B> = (<G>() => G extends A ? 1 : 2) extends <
+ >IsEqual : IsEqual<A, B>
++>A : A
++>B : B
++>G : G
+ 
+   G,
++>G : G
++
+ >() => G extends B ? 1 : 2
+   ? true
+ >true : true
+@@= skipped -11, +16 lines =@@
+ 
+ export type Add<A extends number, B extends number> = [
+ >Add : [true, false] extends [IsEqual<A, Infinity>, IsEqual<B, -Infinity>] ? Infinity : "failed"
++>A : A
++>B : B
+ 
+   IsEqual<A, PositiveInfinity>,
+   IsEqual<A, NegativeInfinity>,
+   IsEqual<B, PositiveInfinity>,
+   IsEqual<B, NegativeInfinity>,
+ ] extends infer R extends [boolean, boolean, boolean, boolean]
++>R : R
++
+   ? [true, false] extends ([R[0], R[3]])
+ >true : true
+ >false : false
+@@= skipped -16, +20 lines =@@
+ 
+ export type AddWithoutParentheses<A extends number, B extends number> = [
+ >AddWithoutParentheses : [true, false] extends [IsEqual<A, Infinity>, IsEqual<B, -Infinity>] ? Infinity : "failed"
++>A : A
++>B : B
+ 
+   IsEqual<A, PositiveInfinity>,
+   IsEqual<A, NegativeInfinity>,
+   IsEqual<B, PositiveInfinity>,
+   IsEqual<B, NegativeInfinity>,
+ ] extends infer R extends [boolean, boolean, boolean, boolean]
++>R : R
++
+   ? [true, false] extends [R[0], R[3]]
+ >true : true
+ >false : false

@@ -1,0 +1,31 @@
+--- old.unknownSymbolOffContextualType1.types
++++ new.unknownSymbolOffContextualType1.types
+@@= skipped -4, +4 lines =@@
+ >document : Document
+ 
+ interface Document {
++>Document : Document
++
+     getElementById(elementId: string): HTMLElement;
+->getElementById : { (elementId: string): HTMLElement | null; (elementId: string): HTMLElement; }
++>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+ >elementId : string
+ }
+ interface HTMLElement {
++>HTMLElement : HTMLElement
++
+     isDisabled: boolean;
+ >isDisabled : boolean
+ }
+@@= skipped -23, +27 lines =@@
+ 
+         return document.getElementById(name);
+ >document.getElementById(name) : HTMLElement
+->document.getElementById : { (elementId: string): HTMLElement | null; (elementId: string): HTMLElement; }
++>document.getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+ >document : Document
+->getElementById : { (elementId: string): HTMLElement | null; (elementId: string): HTMLElement; }
++>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+ >name : string
+ 
+     });

@@ -1,0 +1,9 @@
+--- old.unusedTypeParameterInFunction1.types
++++ new.unusedTypeParameterInFunction1.types
+@@= skipped -2, +2 lines =@@
+ === unusedTypeParameterInFunction1.ts ===
+ function f1<T>() {
+ >f1 : <T>() => void
++>T : T
+ 
+ }

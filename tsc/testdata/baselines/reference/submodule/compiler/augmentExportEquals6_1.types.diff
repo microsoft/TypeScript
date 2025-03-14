@@ -1,0 +1,56 @@
+--- old.augmentExportEquals6_1.types
++++ new.augmentExportEquals6_1.types
+@@= skipped -4, +4 lines =@@
+ >"file1" : typeof import("file1")
+ 
+     class foo {}
+->foo : import("file1.d.ts")
++>foo : foo
+ 
+     namespace foo {
+->foo : typeof import("file1.d.ts")
++>foo : typeof foo
+ 
+         class A {}
+ >A : A
+     }
+     export = foo;
+->foo : import("file1.d.ts")
++>foo : foo
+ }
+ 
+ 
+ === file2.ts ===
+ /// <reference path="file1.d.ts"/>
+ import x = require("file1"); 
+->x : typeof x
++>x : typeof foo
+ 
+ // OK - './file1' is a namespace
+ declare module "file1" {
+->"file1" : typeof x
++>"file1" : typeof foo
+ 
+     interface A { a: number }
++>A : A
+ >a : number
+ }
+ 
+ === file3.ts ===
+ import * as x from "file1";
+->x : typeof x
++>x : typeof foo
+ 
+ import "file2";
+ let a: x.A;
+->a : x.A
++>a : A
+ >x : any
+ 
+ let b = a.a;
+ >b : number
+ >a.a : number
+->a : x.A
++>a : A
+ >a : number
+ 

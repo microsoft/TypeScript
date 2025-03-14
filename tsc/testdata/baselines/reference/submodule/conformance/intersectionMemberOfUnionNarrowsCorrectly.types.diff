@@ -1,0 +1,11 @@
+--- old.intersectionMemberOfUnionNarrowsCorrectly.types
++++ new.intersectionMemberOfUnionNarrowsCorrectly.types
+@@= skipped -9, +9 lines =@@
+ 
+ type Ex<T, U> = T extends U ? T : never;
+ >Ex : Ex<T, U>
++>T : T
++>U : U
+ 
+ declare let x: Ex<U, { kind?: 'A' }>
+ >x : { kind?: "A"; a: string; }

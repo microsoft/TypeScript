@@ -1,0 +1,35 @@
+--- old.impliedNodeFormatInterop1.types
++++ new.impliedNodeFormatInterop1.types
+@@= skipped -4, +4 lines =@@
+ >"highlight.js" : typeof import("highlight.js")
+ 
+   export interface HighlightAPI {
++>HighlightAPI : HighlightAPI
++
+     highlight(code: string): string;
+ >highlight : (code: string) => string
+ >code : string
+@@= skipped -13, +15 lines =@@
+ 
+ === /node_modules/highlight.js/lib/core.d.ts ===
+ import hljs from "highlight.js";
+->hljs : import("highlight.js").HighlightAPI
++>hljs : HighlightAPI
+ 
+ export default hljs;
+->hljs : import("highlight.js").HighlightAPI
++>hljs : HighlightAPI
+ 
+ === /index.ts ===
+ import hljs from "highlight.js/lib/core";
+->hljs : import("highlight.js").HighlightAPI
++>hljs : HighlightAPI
+ 
+ hljs.highlight("code");
+ >hljs.highlight("code") : string
+ >hljs.highlight : (code: string) => string
+->hljs : import("highlight.js").HighlightAPI
++>hljs : HighlightAPI
+ >highlight : (code: string) => string
+ >"code" : "code"
+ 

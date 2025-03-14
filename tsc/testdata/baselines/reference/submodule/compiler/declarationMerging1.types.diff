@@ -1,0 +1,11 @@
+--- old.declarationMerging1.types
++++ new.declarationMerging1.types
+@@= skipped -15, +15 lines =@@
+ 
+ === file2.ts ===
+ interface A {
++>A : A
++
+     run();
+ >run : () => any
+ }

@@ -1,0 +1,30 @@
+--- old.typeSatisfaction_contextualTyping2.types
++++ new.typeSatisfaction_contextualTyping2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeSatisfaction_contextualTyping2.ts ===
+ let obj: { f(s: string): void } & Record<string, unknown> = {
+->obj : { f(s: string): void; } & Record<string, unknown>
++>obj : { f: (s: string) => void; } & Record<string, unknown>
+ >f : (s: string) => void
+ >s : string
+->{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f(s: any): void; g(s: string): void; }
+->{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
++>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f: (s: any) => void; g: (s: string) => void; }
++>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f: (s: any) => void; g: (s: string) => void; }
+ 
+     f(s) { }, // "incorrect" implicit any on 's'
+ >f : (s: any) => void
+@@= skipped -20, +20 lines =@@
+ 
+ // This needs to not crash (outer node is not expression)
+ ({ f(x) { } }) satisfies { f(s: string): void };
+->({ f(x) { } }) satisfies { f(s: string): void } : { f(x: string): void; }
+->({ f(x) { } }) : { f(x: string): void; }
+->{ f(x) { } } : { f(x: string): void; }
++>({ f(x) { } }) satisfies { f(s: string): void } : { f: (x: string) => void; }
++>({ f(x) { } }) : { f: (x: string) => void; }
++>{ f(x) { } } : { f: (x: string) => void; }
+ >f : (x: string) => void
+ >x : string
+ >f : (s: string) => void

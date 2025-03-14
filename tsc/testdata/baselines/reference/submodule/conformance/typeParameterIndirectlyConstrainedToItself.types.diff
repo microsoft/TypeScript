@@ -1,0 +1,79 @@
+--- old.typeParameterIndirectlyConstrainedToItself.types
++++ new.typeParameterIndirectlyConstrainedToItself.types
+@@= skipped -2, +2 lines =@@
+ === typeParameterIndirectlyConstrainedToItself.ts ===
+ class C<U extends T, T extends U> { }
+ >C : C<U, T>
++>U : U
++>T : T
+ 
+ class C2<T extends U, U extends V, V extends T> { }
+ >C2 : C2<T, U, V>
++>T : T
++>U : U
++>V : V
+ 
+ interface I<U extends T, T extends U> { }
++>I : I<U, T>
++>U : U
++>T : T
++
+ interface I2<T extends U, U extends V, V extends T> { }
++>I2 : I2<T, U, V>
++>T : T
++>U : U
++>V : V
+ 
+ function f<U extends T, T extends U>() { }
+ >f : <U, T>() => void
++>U : U
++>T : T
+ 
+ function f2<T extends U, U extends V, V extends T>() { }
+ >f2 : <T, U, V>() => void
++>T : T
++>U : U
++>V : V
+ 
+ var a: {
+ >a : { <U, T>(): void; <T, U, V>(): void; }
+ 
+     <U extends T, T extends U>(): void;
++>U : U
++>T : T
++
+     <T extends U, U extends V, V extends T>(): void;
++>T : T
++>U : U
++>V : V
+ }
+ 
+ var b = <U extends T, T extends U>() => { }
+ >b : <U, T>() => void
+ ><U extends T, T extends U>() => { } : <U, T>() => void
++>U : U
++>T : T
+ 
+ var b2 = <T extends U, U extends V, V extends T>() => { }
+ >b2 : <T, U, V>() => void
+ ><T extends U, U extends V, V extends T>() => { } : <T, U, V>() => void
++>T : T
++>U : U
++>V : V
+ 
+ class D<U extends T, T extends V, V extends T> { }
+ >D : D<U, T, V>
++>U : U
++>T : T
++>V : V
+ 
+ // Repro from #25740
+ 
+ type Foo<T> = [T] extends [number] ? {} : {};
+ >Foo : Foo<T>
++>T : T
+ 
+ function foo<S extends Foo<S>>() {}
+ >foo : <S extends Foo<S>>() => void
++>S : S
+ 

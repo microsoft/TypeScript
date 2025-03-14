@@ -1,0 +1,188 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents1.tsx] ////
+
+=== file.tsx ===
+function EmptyPropSFC() {
+>EmptyPropSFC : () => any
+
+    return <div> Default Greeting </div>;
+><div> Default Greeting </div> : any
+>div : any
+>div : any
+}
+
+function Greet(x: {name: string}) {
+>Greet : (x: { name: string; }) => any
+>x : { name: string; }
+>name : string
+
+	return <div>Hello, {x}</div>;
+><div>Hello, {x}</div> : any
+>div : any
+>x : { name: string; }
+>div : any
+}
+function Meet({name = 'world'}) {
+>Meet : (__0: { name?: string; }) => any
+>name : string
+>'world' : "world"
+
+	return <div>Hello, {name}</div>;
+><div>Hello, {name}</div> : any
+>div : any
+>name : string
+>div : any
+}
+function MeetAndGreet(k: {"prop-name": string}) {
+>MeetAndGreet : (k: { "prop-name": string; }) => any
+>k : { "prop-name": string; }
+>"prop-name" : string
+
+	return <div>Hi Hi</div>;
+><div>Hi Hi</div> : any
+>div : any
+>div : any
+}
+
+// OK
+let a = <Greet name='world' />;
+>a : any
+><Greet name='world' /> : any
+>Greet : (x: { name: string; }) => any
+>name : any
+
+let a1 = <Greet name='world' extra-prop />;
+>a1 : any
+><Greet name='world' extra-prop /> : any
+>Greet : (x: { name: string; }) => any
+>name : any
+>extra-prop : any
+
+// Error
+let b = <Greet naaame='world' />;
+>b : any
+><Greet naaame='world' /> : any
+>Greet : (x: { name: string; }) => any
+>naaame : any
+
+// OK
+let c = <Meet />;
+>c : any
+><Meet /> : any
+>Meet : (__0: { name?: string; }) => any
+
+let c1 = <Meet extra-prop/>;
+>c1 : any
+><Meet extra-prop/> : any
+>Meet : (__0: { name?: string; }) => any
+>extra-prop : any
+
+// OK
+let d = <Meet name='me' />;
+>d : any
+><Meet name='me' /> : any
+>Meet : (__0: { name?: string; }) => any
+>name : any
+
+// Error
+let e = <Meet name={42} />;
+>e : any
+><Meet name={42} /> : any
+>Meet : (__0: { name?: string; }) => any
+>name : any
+>42 : 42
+
+// Error
+let f = <Meet naaaaaaame='no' />;
+>f : any
+><Meet naaaaaaame='no' /> : any
+>Meet : (__0: { name?: string; }) => any
+>naaaaaaame : any
+
+// OK
+let g = <MeetAndGreet prop-name="Bob" />;
+>g : any
+><MeetAndGreet prop-name="Bob" /> : any
+>MeetAndGreet : (k: { "prop-name": string; }) => any
+>prop-name : any
+
+// Error
+let h = <MeetAndGreet extra-prop-name="World" />;
+>h : any
+><MeetAndGreet extra-prop-name="World" /> : any
+>MeetAndGreet : (k: { "prop-name": string; }) => any
+>extra-prop-name : any
+
+// Error
+let i = <EmptyPropSFC prop1 />
+>i : any
+><EmptyPropSFC prop1 /> : any
+>EmptyPropSFC : () => any
+>prop1 : any
+
+let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
+>i1 : any
+><EmptyPropSFC ref={x => x.greeting.substr(10)} /> : any
+>EmptyPropSFC : () => any
+>ref : any
+>x => x.greeting.substr(10) : (x: any) => any
+>x : any
+>x.greeting.substr(10) : any
+>x.greeting.substr : any
+>x.greeting : any
+>x : any
+>greeting : any
+>substr : any
+>10 : 10
+
+let o = {
+>o : { prop1: boolean; }
+>{    prop1: true;} : { prop1: boolean; }
+
+    prop1: true;
+>prop1 : boolean
+>true : true
+}
+
+// OK as access properties are allow when spread
+let i2 = <EmptyPropSFC {...o} />
+>i2 : any
+><EmptyPropSFC {...o} /> : any
+>EmptyPropSFC : () => any
+>o : { prop1: boolean; }
+
+let o1: any;
+>o1 : any
+
+// OK
+let j = <EmptyPropSFC {...o1} />
+>j : any
+><EmptyPropSFC {...o1} /> : any
+>EmptyPropSFC : () => any
+>o1 : any
+
+let j1 = <EmptyPropSFC />
+>j1 : any
+><EmptyPropSFC /> : any
+>EmptyPropSFC : () => any
+
+let j2 = <EmptyPropSFC data-prop />
+>j2 : any
+><EmptyPropSFC data-prop /> : any
+>EmptyPropSFC : () => any
+>data-prop : any
+
+let j3 = <EmptyPropSFC {...{}} />
+>j3 : any
+><EmptyPropSFC {...{}} /> : any
+>EmptyPropSFC : () => any
+>{} : {}
+
+let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
+>j4 : any
+><EmptyPropSFC {...{ "data-info": "hi"}} /> : any
+>EmptyPropSFC : () => any
+>{ "data-info": "hi"} : { "data-info": string; }
+>"data-info" : string
+>"hi" : "hi"
+
+

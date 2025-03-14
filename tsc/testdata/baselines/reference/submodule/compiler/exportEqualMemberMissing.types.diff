@@ -1,0 +1,60 @@
+--- old.exportEqualMemberMissing.types
++++ new.exportEqualMemberMissing.types
+@@= skipped -2, +2 lines =@@
+ === exportEqualMemberMissing_1.ts ===
+ ///<reference path='exportEqualMemberMissing_0.ts'/>
+ import connect = require('./exportEqualMemberMissing_0');
+->connect : { (): connect.connectExport; foo: Date; }
++>connect : { (): connectExport; foo: Date; }
+ 
+ connect().use(connect.static('foo')); // Error	1	The property 'static' does not exist on value of type ''.
+->connect().use(connect.static('foo')) : connect.connectExport
+->connect().use : (mod: connect.connectModule) => connect.connectExport
+->connect() : connect.connectExport
+->connect : { (): connect.connectExport; foo: Date; }
+->use : (mod: connect.connectModule) => connect.connectExport
++>connect().use(connect.static('foo')) : connectExport
++>connect().use : (mod: connectModule) => connectExport
++>connect() : connectExport
++>connect : { (): connectExport; foo: Date; }
++>use : (mod: connectModule) => connectExport
+ >connect.static('foo') : any
+ >connect.static : any
+->connect : { (): connect.connectExport; foo: Date; }
++>connect : { (): connectExport; foo: Date; }
+ >static : any
+ >'foo' : "foo"
+ 
+ === exportEqualMemberMissing_0.ts ===
+ module server {
++>server : { (): connectExport; foo: Date; }
++
+     export interface connectModule {
++>connectModule : connectModule
++
+         (res, req, next): void;
+ >res : any
+ >req : any
+ >next : any
+     }
+     export interface connectExport {
++>connectExport : connectExport
++
+         use: (mod: connectModule) => connectExport;
+ >use : (mod: connectModule) => connectExport
+ >mod : connectModule
+     }
+ }
+ var server: {
+->server : { (): server.connectExport; foo: Date; }
++>server : { (): connectExport; foo: Date; }
+ 
+     (): server.connectExport;
+ >server : any
+@@= skipped -39, +45 lines =@@
+ 
+ };
+ export = server;
+->server : { (): server.connectExport; foo: Date; }
++>server : { (): connectExport; foo: Date; }
+ 

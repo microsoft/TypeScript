@@ -1,0 +1,11 @@
+--- old.destructuringArrayBindingPatternAndAssignment5SiblingInitializer.types
++++ new.destructuringArrayBindingPatternAndAssignment5SiblingInitializer.types
+@@= skipped -77, +77 lines =@@
+ >a : number
+ >b : number
+ >a : number
+->yadda ?? [] : [number, number] | []
++>yadda ?? [] : [] | [number, number]
+ >yadda : [number, number]
+ >[] : []
+ }

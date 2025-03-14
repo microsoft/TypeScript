@@ -1,0 +1,12 @@
+--- old.nestedGenerics.types
++++ new.nestedGenerics.types
+@@= skipped -1, +1 lines =@@
+ 
+ === nestedGenerics.ts ===
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+ 	t: T;
+ >t : T
+ }

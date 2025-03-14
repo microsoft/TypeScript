@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts] ////
+
+=== classAbstractImportInstantiation.ts ===
+module M {
+>M : typeof M
+
+    export abstract class A {}
+>A : A
+    
+    new A;
+>new A : any
+>A : typeof A
+}
+
+import myA = M.A;
+>myA : typeof A
+>M : typeof M
+>A : A
+
+new myA;
+>new myA : any
+>myA : typeof A
+

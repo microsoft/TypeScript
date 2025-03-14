@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToValue.ts] ////
+
+=== foo.js ===
+/** @param {Image} image */
+function process(image) {
+>process : (image: any) => any
+>image : any
+
+    return new image(1, 1)
+>new image(1, 1) : any
+>image : any
+>1 : 1
+>1 : 1
+}
+

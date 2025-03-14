@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/salsa/checkSpecialPropertyAssignments.ts] ////
+
+=== bug24252.js ===
+var A = {};
+>A : {}
+>{} : {}
+
+A.B = class {
+>A.B = class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
+>A.B : any
+>A : {}
+>B : any
+>class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
+
+    m() {
+>m : () => void
+
+        /** @type {string[]} */
+        var x = [];
+>x : any[]
+>[] : undefined[]
+
+        /** @type {number[]} */
+        var y;
+>y : any
+
+        y = x;
+>y = x : any[]
+>y : any
+>x : any[]
+    }
+};
+

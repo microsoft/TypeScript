@@ -1,0 +1,9 @@
+--- old.importsInAmbientModules1.types
++++ new.importsInAmbientModules1.types
+@@= skipped -8, +8 lines =@@
+ >"M" : typeof import("M")
+ 
+     import {x} from "external"
+->x : number
++>x : any
+ }

@@ -1,0 +1,173 @@
+--- old.keyofAndIndexedAccessErrors.types
++++ new.keyofAndIndexedAccessErrors.types
+@@= skipped -18, +18 lines =@@
+ 
+ type Dictionary<T> = { [x: string]: T };
+ >Dictionary : Dictionary<T>
++>T : T
+ >x : string
+ 
+ type T00 = keyof K0;  // Error
+@@= skipped -9, +10 lines =@@
+ >T01 : keyof Object
+ 
+ type T02 = keyof keyof Object;
+->T02 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
++>T02 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
+ 
+ type T03 = keyof keyof keyof Object;
+ >T03 : "toString" | "valueOf"
+ 
+ type T04 = keyof keyof keyof keyof Object;
+->T04 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
++>T04 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
+ 
+ type T05 = keyof keyof keyof keyof keyof Object;
+ >T05 : "toString" | "valueOf"
+ 
+ type T06 = keyof keyof keyof keyof keyof keyof Object;
+->T06 : number | "length" | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
++>T06 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "length" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substr" | "substring" | "toLocaleLowerCase" | "toLocaleUpperCase" | "toLowerCase" | "toString" | "toUpperCase" | "trim" | "valueOf"
+ 
+ type T10 = Shape["name"];
+ >T10 : string
+@@= skipped -101, +101 lines =@@
+ 
+ function getProperty<T, K extends keyof T>(obj: T, key: K) {
+ >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
++>T : T
++>K : K
+ >obj : T
+ >key : K
+ 
+@@= skipped -11, +13 lines =@@
+ 
+ function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+ >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
++>T : T
++>K : K
+ >obj : T
+ >key : K
+ >value : T[K]
+@@= skipped -66, +68 lines =@@
+ }
+ 
+ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
+->f20 : <T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) => void
++>f20 : <T, U>(x: T | U, y: T & U, k1: keyof T & keyof U, k2: keyof T & keyof U, k3: keyof T | keyof U, k4: keyof T | keyof U) => void
++>T : T
++>U : U
+ >x : T | U
+ >y : T & U
+ >k1 : keyof T & keyof U
+@@= skipped -9, +11 lines =@@
+ >k4 : keyof T | keyof U
+ 
+     x[k1];
+->x[k1] : (T | U)[keyof T & keyof U]
++>x[k1] : T | U[keyof T & keyof U]
+ >x : T | U
+ >k1 : keyof T & keyof U
+ 
+     x[k2];
+->x[k2] : (T | U)[keyof T & keyof U]
++>x[k2] : T | U[keyof T & keyof U]
+ >x : T | U
+ >k2 : keyof T & keyof U
+ 
+@@= skipped -20, +20 lines =@@
+ >k4 : keyof T | keyof U
+ 
+     y[k1];
+->y[k1] : (T & U)[keyof T & keyof U]
++>y[k1] : T & U[keyof T & keyof U]
+ >y : T & U
+ >k1 : keyof T & keyof U
+ 
+     y[k2];
+->y[k2] : (T & U)[keyof T & keyof U]
++>y[k2] : T & U[keyof T & keyof U]
+ >y : T & U
+ >k2 : keyof T & keyof U
+ 
+     y[k3];
+->y[k3] : (T & U)[keyof T | keyof U]
++>y[k3] : T & U[keyof T | keyof U]
+ >y : T & U
+ >k3 : keyof T | keyof U
+ 
+     y[k4];
+->y[k4] : (T & U)[keyof T | keyof U]
++>y[k4] : T & U[keyof T | keyof U]
+ >y : T & U
+ >k4 : keyof T | keyof U
+ 
+@@= skipped -83, +83 lines =@@
+ // Repro from #17166
+ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
+ >f3 : <T, K extends Extract<keyof T, string>, U extends T, J extends K>(t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]) => void
++>T : T
++>K : K
++>U : U
++>J : J
+ 
+     t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
+ >t : T
+@@= skipped -82, +86 lines =@@
+ 
+ // The constraint of 'keyof T' is 'keyof T'
+ function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
+->f4 : <T extends { [K in keyof T]: string; }>(k: keyof T) => void
++>f4 : <T extends { [K in keyof T]: string }>(k: keyof T) => void
++>T : T
++>K : K
+ >k : keyof T
+ 
+     k = 42; // error
+@@= skipped -18, +20 lines =@@
+ 
+ type UndefinedKeys<T extends Record<string, any>> = {
+ >UndefinedKeys : UndefinedKeys<T>
++>T : T
+ 
+   [K in keyof T]: undefined extends T[K] ? K : never
++>K : K
++
+ };
+ 
+ type MyType = {a: string, b: string | undefined}
+@@= skipped -22, +25 lines =@@
+ 
+ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
+ >test1 : <T extends Record<string, any>, K extends keyof T>(t: T, k: K) => void
++>T : T
++>K : K
+ >t : T
+ >k : K
+ 
+@@= skipped -31, +33 lines =@@
+ 
+ function f30<T, K extends keyof T>() {
+ >f30 : <T, K extends keyof T>() => void
++>T : T
++>K : K
+ 
+     let x: Partial<Record<keyof T, string>>[K] = "hello";
+ >x : Partial<Record<keyof T, string>>[K]
+@@= skipped -8, +10 lines =@@
+ 
+ function f31<T, K extends keyof T>() {
+ >f31 : <T, K extends keyof T>() => void
++>T : T
++>K : K
+ 
+     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+ >x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]
+@@= skipped -10, +12 lines =@@
+ 
+ class Test<T extends Record<string, number>> {
+ >Test : Test<T>
++>T : T
+ 
+   testy: T;
+ >testy : T

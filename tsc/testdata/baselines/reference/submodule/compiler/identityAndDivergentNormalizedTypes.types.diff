@@ -1,0 +1,56 @@
+--- old.identityAndDivergentNormalizedTypes.types
++++ new.identityAndDivergentNormalizedTypes.types
+@@= skipped -26, +26 lines =@@
+ 
+ type PostBody<PATH extends PostPath> = Extract<ApiPost, { path: PATH }>["body"];
+ >PostBody : PostBody<PATH>
++>PATH : PATH
+ >path : PATH
+ 
+ const post = <PATH extends PostPath>(
+->post : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
+-><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
++>post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
++><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
++>PATH : PATH
+ 
+     path: PATH,
+ >path : PATH
+ 
+     {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}
+ >body : PostBody<PATH>
+->options : { cache?: RequestCache | undefined; credentials?: RequestCredentials | undefined; headers?: HeadersInit | undefined; integrity?: string | undefined; keepalive?: boolean | undefined; method?: string | undefined; mode?: RequestMode | undefined; priority?: RequestPriority | undefined; redirect?: RequestRedirect | undefined; referrer?: string | undefined; referrerPolicy?: ReferrerPolicy | undefined; signal?: (AbortSignal | null) | undefined; window?: null | undefined; }
++>options : { cache?: RequestCache | undefined; credentials?: RequestCredentials | undefined; headers?: HeadersInit | undefined; integrity?: string | undefined; keepalive?: boolean | undefined; method?: string | undefined; mode?: RequestMode | undefined; priority?: RequestPriority | undefined; redirect?: RequestRedirect | undefined; referrer?: string | undefined; referrerPolicy?: ReferrerPolicy | undefined; signal?: AbortSignal | null | undefined; window?: null | undefined; }
+ >body : PostBody<PATH>
+ 
+ ) => {
+ }
+ 
+ const tmp = <PATH extends PostPath>(
+->tmp : <PATH extends PostPath>(path: PATH, body: PostBody<PATH>) => void
+-><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends PostPath>(path: PATH, body: PostBody<PATH>) => void
++>tmp : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
++><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
++>PATH : PATH
+ 
+   path: PATH,
+ >path : PATH
+@@= skipped -30, +33 lines =@@
+ ) => {
+   post<PATH>(path, { body })
+ >post<PATH>(path, { body }) : void
+->post : <PATH_1 extends PostPath>(path: PATH_1, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH_1>; }) => void
++>post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
+ >path : PATH
+ >{ body } : { body: PostBody<PATH>; }
+->body : PostBody<PATH>
++>body : any
+ }
+ 
+ function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {
+->fx1 : <P extends PostPath>(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
++>fx1 : <P extends "/login" | "/user">(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
++>P : P
+ >x : { body: PostBody<P>; }
+ >body : PostBody<P>
+ >y : { body: PostBody<P>; }

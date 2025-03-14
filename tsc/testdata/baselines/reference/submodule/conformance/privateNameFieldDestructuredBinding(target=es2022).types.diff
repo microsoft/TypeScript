@@ -1,0 +1,11 @@
+--- old.privateNameFieldDestructuredBinding(target=es2022).types
++++ new.privateNameFieldDestructuredBinding(target=es2022).types
+@@= skipped -41, +41 lines =@@
+ >x : number
+ >this.#field : number
+ >this : this
+->y : number
++>y : any
+ >this.testObject() : { x: number; y: number; }
+ >this.testObject : () => { x: number; y: number; }
+ >this : this

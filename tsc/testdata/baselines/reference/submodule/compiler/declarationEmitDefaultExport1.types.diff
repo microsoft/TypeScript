@@ -1,0 +1,9 @@
+--- old.declarationEmitDefaultExport1.types
++++ new.declarationEmitDefaultExport1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitDefaultExport1.ts ===
+ export default class C {
+->C : C
++>C : default
+ }

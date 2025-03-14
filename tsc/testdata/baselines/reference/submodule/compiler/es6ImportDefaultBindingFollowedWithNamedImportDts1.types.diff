@@ -1,0 +1,86 @@
+--- old.es6ImportDefaultBindingFollowedWithNamedImportDts1.types
++++ new.es6ImportDefaultBindingFollowedWithNamedImportDts1.types
+@@= skipped -8, +8 lines =@@
+ 
+ === client.ts ===
+ import defaultBinding1, { } from "./server";
+->defaultBinding1 : typeof defaultBinding1
++>defaultBinding1 : typeof a
+ 
+ export var x1 = new defaultBinding1();
+->x1 : defaultBinding1
+->new defaultBinding1() : defaultBinding1
+->defaultBinding1 : typeof defaultBinding1
++>x1 : a
++>new defaultBinding1() : a
++>defaultBinding1 : typeof a
+ 
+ import defaultBinding2, { a } from "./server";
+->defaultBinding2 : typeof defaultBinding1
++>defaultBinding2 : typeof a
+ >a : any
+ 
+ export var x2 = new defaultBinding2();
+->x2 : defaultBinding1
+->new defaultBinding2() : defaultBinding1
+->defaultBinding2 : typeof defaultBinding1
++>x2 : a
++>new defaultBinding2() : a
++>defaultBinding2 : typeof a
+ 
+ import defaultBinding3, { a as b } from "./server";
+->defaultBinding3 : typeof defaultBinding1
++>defaultBinding3 : typeof a
+ >a : any
+ >b : any
+ 
+ export var x3 = new defaultBinding3();
+->x3 : defaultBinding1
+->new defaultBinding3() : defaultBinding1
+->defaultBinding3 : typeof defaultBinding1
++>x3 : a
++>new defaultBinding3() : a
++>defaultBinding3 : typeof a
+ 
+ import defaultBinding4, { x, a as y } from "./server";
+->defaultBinding4 : typeof defaultBinding1
++>defaultBinding4 : typeof a
+ >x : any
+ >a : any
+ >y : any
+ 
+ export var x4 = new defaultBinding4();
+->x4 : defaultBinding1
+->new defaultBinding4() : defaultBinding1
+->defaultBinding4 : typeof defaultBinding1
++>x4 : a
++>new defaultBinding4() : a
++>defaultBinding4 : typeof a
+ 
+ import defaultBinding5, { x as z,  } from "./server";
+->defaultBinding5 : typeof defaultBinding1
++>defaultBinding5 : typeof a
+ >x : any
+ >z : any
+ 
+ export var x5 = new defaultBinding5();
+->x5 : defaultBinding1
+->new defaultBinding5() : defaultBinding1
+->defaultBinding5 : typeof defaultBinding1
++>x5 : a
++>new defaultBinding5() : a
++>defaultBinding5 : typeof a
+ 
+ import defaultBinding6, { m,  } from "./server";
+->defaultBinding6 : typeof defaultBinding1
++>defaultBinding6 : typeof a
+ >m : any
+ 
+ export var x6 = new defaultBinding6();
+->x6 : defaultBinding1
+->new defaultBinding6() : defaultBinding1
+->defaultBinding6 : typeof defaultBinding1
++>x6 : a
++>new defaultBinding6() : a
++>defaultBinding6 : typeof a
+ 

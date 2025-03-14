@@ -1,0 +1,11 @@
+--- old.protoAsIndexInIndexExpression.types
++++ new.protoAsIndexInIndexExpression.types
+@@= skipped -16, +16 lines =@@
+ };
+ WorkspacePrototype['__proto__'] = EntityPrototype;
+ >WorkspacePrototype['__proto__'] = EntityPrototype : any
+->WorkspacePrototype['__proto__'] : error
++>WorkspacePrototype['__proto__'] : any
+ >WorkspacePrototype : { serialize: () => any; }
+ >'__proto__' : "__proto__"
+ >EntityPrototype : any

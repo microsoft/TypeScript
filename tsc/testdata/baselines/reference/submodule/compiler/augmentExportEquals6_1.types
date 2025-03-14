@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/augmentExportEquals6_1.ts] ////
+
+=== file1.d.ts ===
+declare module "file1" {
+>"file1" : typeof import("file1")
+
+    class foo {}
+>foo : foo
+
+    namespace foo {
+>foo : typeof foo
+
+        class A {}
+>A : A
+    }
+    export = foo;
+>foo : foo
+}
+
+
+=== file2.ts ===
+/// <reference path="file1.d.ts"/>
+import x = require("file1"); 
+>x : typeof foo
+
+// OK - './file1' is a namespace
+declare module "file1" {
+>"file1" : typeof foo
+
+    interface A { a: number }
+>A : A
+>a : number
+}
+
+=== file3.ts ===
+import * as x from "file1";
+>x : typeof foo
+
+import "file2";
+let a: x.A;
+>a : A
+>x : any
+
+let b = a.a;
+>b : number
+>a.a : number
+>a : A
+>a : number
+

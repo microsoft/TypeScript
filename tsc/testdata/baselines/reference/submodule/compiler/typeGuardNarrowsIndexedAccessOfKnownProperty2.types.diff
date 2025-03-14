@@ -1,0 +1,32 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty2.types
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardNarrowsIndexedAccessOfKnownProperty2.ts ===
+ const foo: { key?: number } = {};
+->foo : { key?: number; }
++>foo : { key?: number | undefined; }
+ >key : number | undefined
+ >{} : {}
+ 
+@@= skipped -11, +11 lines =@@
+ 
+ if (foo[key]) {
+ >foo[key] : number | undefined
+->foo : { key?: number; }
++>foo : { key?: number | undefined; }
+ >key : "key"
+ 
+     foo[key]; // number
+ >foo[key] : number
+->foo : { key?: number; }
++>foo : { key?: number | undefined; }
+ >key : "key"
+ 
+     foo.key;  // number
+ >foo.key : number
+->foo : { key?: number; }
++>foo : { key?: number | undefined; }
+ >key : number
+ }
+ 

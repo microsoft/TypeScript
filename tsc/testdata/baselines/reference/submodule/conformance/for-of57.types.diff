@@ -1,0 +1,14 @@
+--- old.for-of57.types
++++ new.for-of57.types
+@@= skipped -1, +1 lines =@@
+ 
+ === for-of57.ts ===
+ var iter: Iterable<number>;
+->iter : Iterable<number>
++>iter : Iterable<number, any, any>
+ 
+ for (let num of iter) { }
+ >num : number
+->iter : Iterable<number>
++>iter : Iterable<number, any, any>
+ 

@@ -1,0 +1,203 @@
+--- old.anyAssignableToEveryType2.types
++++ new.anyAssignableToEveryType2.types
+@@= skipped -3, +3 lines =@@
+ // any is not a subtype of any other types, but is assignable, all the below should work
+ 
+ interface I {
++>I : I
++
+     [x: string]: any;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I2 {
++>I2 : I2
++
+     [x: string]: number;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I3 {
++>I3 : I3
++
+     [x: string]: string;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I4 {
++>I4 : I4
++
+     [x: string]: boolean;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I5 {
++>I5 : I5
++
+     [x: string]: Date;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I6 {
++>I6 : I6
++
+     [x: string]: RegExp;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I7 {
++>I7 : I7
++
+     [x: string]: { bar: number };
+ >x : string
+ >bar : number
+@@= skipped -10, +12 lines =@@
+ 
+ 
+ interface I8 {
++>I8 : I8
++
+     [x: string]: number[];
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I9 {
++>I9 : I9
++
+     [x: string]: I8;
+ >x : string
+ 
+@@= skipped -12, +14 lines =@@
+ >foo : number
+ 
+ interface I10 {
++>I10 : I10
++
+     [x: string]: A;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ class A2<T> { foo: T; }
+ >A2 : A2<T>
++>T : T
+ >foo : T
+ 
+ interface I11 {
++>I11 : I11
++
+     [x: string]: A2<number>;
+ >x : string
+ 
+@@= skipped -12, +15 lines =@@
+ 
+ 
+ interface I12 {
++>I12 : I12
++
+     [x: string]: (x) => number;
+ >x : string
+ >x : any
+@@= skipped -10, +12 lines =@@
+ 
+ 
+ interface I13 {
++>I13 : I13
++
+     [x: string]: <T>(x: T) => T;
+ >x : string
++>T : T
+ >x : T
+ 
+     foo: any;
+@@= skipped -10, +13 lines =@@
+ 
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ interface I14 {
++>I14 : I14
++
+     [x: string]: E;
+ >x : string
+ 
+@@= skipped -23, +25 lines =@@
+ >1 : 1
+ }
+ interface I15 {
++>I15 : I15
++
+     [x: string]: typeof f;
+ >x : string
+->f : typeof f
+ 
+     foo: any;
+ >foo : any
+@@= skipped -21, +22 lines =@@
+ >1 : 1
+ }
+ interface I16 {
++>I16 : I16
++
+     [x: string]: typeof c;
+ >x : string
+->c : typeof c
+ 
+     foo: any;
+ >foo : any
+@@= skipped -10, +11 lines =@@
+ 
+ 
+ interface I17<T> {
++>I17 : I17<T>
++>T : T
++
+     [x: string]: T;
+ >x : string
+ 
+@@= skipped -9, +12 lines =@@
+ 
+ 
+ interface I18<T, U extends T> {
++>I18 : I18<T, U>
++>T : T
++>U : U
++
+     [x: string]: U;
+ >x : string
+ 
+@@= skipped -9, +13 lines =@@
+ 
+ 
+ interface I19 {
++>I19 : I19
++
+     [x: string]: Object;
+ >x : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ 
+ interface I20 {
++>I20 : I20
++
+     [x: string]: {};
+ >x : string
+ 

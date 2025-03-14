@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/externalModules/commonJsImportBindingElementNarrowType.ts] ////
+
+=== /bar.js ===
+const { a } = require("./foo");
+>a : any
+>require("./foo") : any
+>require : any
+>"./foo" : "./foo"
+
+if (a) {
+>a : any
+
+  var x = a + 1;
+>x : any
+>a + 1 : any
+>a : any
+>1 : 1
+}
+=== /foo.d.ts ===
+export const a: number | null;
+>a : number | null
+

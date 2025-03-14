@@ -1,0 +1,114 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty3.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface IUser {
+>IUser : IUser
+
+    Name: string;
+>Name : string
+}
+
+interface IFetchUserProps {
+>IFetchUserProps : IFetchUserProps
+
+    children: (user: IUser) => JSX.Element;
+>children : (user: IUser) => Element
+>user : IUser
+>JSX : any
+}
+
+class FetchUser extends React.Component<IFetchUserProps, any> {
+>FetchUser : FetchUser
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return this.state
+>this.state            ? this.props.children(this.state.result)            : null : any
+>this.state : any
+>this : this
+>state : any
+
+            ? this.props.children(this.state.result)
+>this.props.children(this.state.result) : any
+>this.props.children : any
+>this.props : any
+>this : this
+>props : any
+>children : any
+>this.state.result : any
+>this.state : any
+>this : this
+>state : any
+>result : any
+
+            : null;
+    }
+}
+
+// Ok
+function UserName0() {
+>UserName0 : () => any
+
+    return (
+>(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : any
+
+        <FetchUser>
+><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : any
+>FetchUser : typeof FetchUser
+
+            { user => (
+>user => (                <h1>{ user.Name }</h1>            ) : (user: any) => any
+>user : any
+>(                <h1>{ user.Name }</h1>            ) : any
+
+                <h1>{ user.Name }</h1>
+><h1>{ user.Name }</h1> : any
+>h1 : any
+>user.Name : any
+>user : any
+>Name : any
+>h1 : any
+
+            ) }
+        </FetchUser>
+>FetchUser : typeof FetchUser
+
+    );
+}
+
+function UserName1() {
+>UserName1 : () => any
+
+    return (
+>(        <FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser>    ) : any
+
+        <FetchUser>
+><FetchUser>            { user => (                <h1>{ user.Name }</h1>            ) }        </FetchUser> : any
+>FetchUser : typeof FetchUser
+
+            { user => (
+>user => (                <h1>{ user.Name }</h1>            ) : (user: any) => any
+>user : any
+>(                <h1>{ user.Name }</h1>            ) : any
+
+                <h1>{ user.Name }</h1>
+><h1>{ user.Name }</h1> : any
+>h1 : any
+>user.Name : any
+>user : any
+>Name : any
+>h1 : any
+
+            ) }
+        </FetchUser>
+>FetchUser : typeof FetchUser
+
+    );
+}

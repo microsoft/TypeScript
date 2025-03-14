@@ -1,0 +1,371 @@
+--- old.inferTypePredicates.types
++++ new.inferTypePredicates.types
+@@= skipped -169, +169 lines =@@
+ 
+ function isNonNullGeneric<T>(x: T) {
+ >isNonNullGeneric : <T>(x: T) => x is T & ({} | undefined)
++>T : T
+ >x : T
+ 
+   return x !== null;
+@@= skipped -46, +47 lines =@@
+ >myArray  .map((arr) => arr.list)  .filter((arr) => arr && arr.length) : (MyObj[] | undefined)[]
+ >myArray  .map((arr) => arr.list)  .filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
+ >myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
+->myArray  .map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
++>myArray  .map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
+ >myArray : MyArray
+ 
+   .map((arr) => arr.list)
+->map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+->(arr) => arr.list : (arr: { list?: MyObj[]; }) => MyObj[] | undefined
+->arr : { list?: MyObj[]; }
++>map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
++>(arr) => arr.list : (arr: { list?: MyObj[] | undefined; }) => MyObj[] | undefined
++>arr : { list?: MyObj[] | undefined; }
+ >arr.list : MyObj[] | undefined
+->arr : { list?: MyObj[]; }
++>arr : { list?: MyObj[] | undefined; }
+ >list : MyObj[] | undefined
+ 
+   .filter((arr) => arr && arr.length)
+@@= skipped -46, +46 lines =@@
+ >obj => JSON.parse(obj.data) : (obj: MyObj) => any
+ >obj : MyObj
+ >JSON.parse(obj.data) : any
+->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
++>JSON.parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+ >JSON : JSON
+->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
++>parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+ >obj.data : string | undefined
+ >obj : MyObj
+ >data : string | undefined
+@@= skipped -18, +18 lines =@@
+ >myArray  .map((arr) => arr.list)  .filter((arr) => !!arr) : MyObj[][]
+ >myArray  .map((arr) => arr.list)  .filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
+ >myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
+->myArray  .map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
++>myArray  .map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
+ >myArray : MyArray
+ 
+   .map((arr) => arr.list)
+->map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+->(arr) => arr.list : (arr: { list?: MyObj[]; }) => MyObj[] | undefined
+->arr : { list?: MyObj[]; }
++>map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
++>(arr) => arr.list : (arr: { list?: MyObj[] | undefined; }) => MyObj[] | undefined
++>arr : { list?: MyObj[] | undefined; }
+ >arr.list : MyObj[] | undefined
+->arr : { list?: MyObj[]; }
++>arr : { list?: MyObj[] | undefined; }
+ >list : MyObj[] | undefined
+ 
+   .filter((arr) => !!arr)
+@@= skipped -61, +61 lines =@@
+ >obj => JSON.parse(obj.data) : (obj: MyObj) => any
+ >obj : MyObj
+ >JSON.parse(obj.data) : any
+->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
++>JSON.parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+ >JSON : JSON
+->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
++>parse : (text: string, reviver?: (key: string, value: any) => any | undefined) => any
+ >obj.data : string | undefined
+ >obj : MyObj
+ >data : string | undefined
+@@= skipped -81, +81 lines =@@
+ >x => typeof x === "string" : (x: string | number) => x is string
+ >x : string | number
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -13, +13 lines =@@
+ 
+ // Defer to explicit type guards, even when they're incorrect.
+ function backwardsGuard(x: number|string): x is number {
+->backwardsGuard : (x: number | string) => x is number
++>backwardsGuard : (x: string | number) => x is number
+ >x : string | number
+ 
+   return typeof x === 'string';
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'string' : "string"
+ }
+@@= skipped -17, +17 lines =@@
+ 
+   return typeof x === 'string';
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'string' : "string"
+ }
+@@= skipped -30, +30 lines =@@
+   return typeof x === 'string' && Math.random() > 0.5;
+ >typeof x === 'string' && Math.random() > 0.5 : boolean
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'string' : "string"
+ >Math.random() > 0.5 : boolean
+@@= skipped -105, +105 lines =@@
+ 
+   return typeof x === 'string';
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'string' : "string"
+ }
+@@= skipped -25, +25 lines =@@
+ 
+   return typeof x === 'string';
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'string' : "string"
+ }
+@@= skipped -14, +14 lines =@@
+   return typeof x === 'number' && typeof y === 'number';
+ >typeof x === 'number' && typeof y === 'number' : boolean
+ >typeof x === 'number' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'number' : "number"
+ >typeof y === 'number' : boolean
+->typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof y : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >y : string | number
+ >'number' : "number"
+ }
+@@= skipped -16, +16 lines =@@
+ 
+   if (typeof x === 'string') {
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'string' : "string"
+ 
+@@= skipped -19, +19 lines =@@
+ 
+   return typeof b === 'string';
+ >typeof b === 'string' : boolean
+->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >b : string | number
+ >'string' : "string"
+ }
+ 
+ // Checks that there are no string escaping issues
+ function dunderguard(__x: number | string) {
+->dunderguard : (__x: number | string) => __x is string
++>dunderguard : (__x: string | number) => __x is string
+ >__x : string | number
+ 
+   return typeof __x  === 'string';
+ >typeof __x  === 'string' : boolean
+->typeof __x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof __x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >__x : string | number
+ >'string' : "string"
+ }
+@@= skipped -31, +31 lines =@@
+ >x : number | boolean
+ >typeof x === 'number' || x : boolean
+ >typeof x === 'number' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : number | boolean
+ >'number' : "number"
+ >x : boolean
+ 
+ // inferred guards in methods
+ interface NumberInferrer {
++>NumberInferrer : NumberInferrer
++
+   isNumber(x: number | string): x is number;
+->isNumber : (x: number | string) => x is number
++>isNumber : (x: string | number) => x is number
+ >x : string | number
+ }
+ class Inferrer implements NumberInferrer {
+ >Inferrer : Inferrer
+ 
+   isNumber(x: number | string) {  // should ok
+->isNumber : (x: number | string) => x is number
++>isNumber : (x: string | number) => x is number
+ >x : string | number
+ 
+     return typeof x === 'number';
+ >typeof x === 'number' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'number' : "number"
+   }
+@@= skipped -35, +37 lines =@@
+ 
+ if (inf.isNumber(numOrStr)) {
+ >inf.isNumber(numOrStr) : boolean
+->inf.isNumber : (x: number | string) => x is number
++>inf.isNumber : (x: string | number) => x is number
+ >inf : Inferrer
+->isNumber : (x: number | string) => x is number
++>isNumber : (x: string | number) => x is number
+ >numOrStr : string | number
+ 
+   let t: number = numOrStr;  // should ok
+@@= skipped -51, +51 lines =@@
+ }
+ 
+ function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
+->doNotRefineDestructuredParam : ({ x, y }: { x: number | null; y: number; }) => boolean
++>doNotRefineDestructuredParam : (__0: { x: number | null; y: number; }) => boolean
+ >x : number | null
+ >y : number
+ >x : number | null
+@@= skipped -8, +8 lines =@@
+ 
+   return typeof x === 'number';
+ >typeof x === 'number' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : number | null
+ >'number' : "number"
+ }
+@@= skipped -13, +13 lines =@@
+   return typeof x === "string" && x.length < 10;
+ >typeof x === "string" && x.length < 10 : boolean
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"string" : "string"
+ >x.length < 10 : boolean
+@@= skipped -40, +40 lines =@@
+ 
+   return typeof x === "string";
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"string" : "string"
+ }
+@@= skipped -31, +31 lines =@@
+ >(typeof x === "number" || typeof x === "string") : boolean
+ >typeof x === "number" || typeof x === "string" : boolean
+ >typeof x === "number" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"number" : "number"
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"string" : "string"
+ }
+@@= skipped -37, +37 lines =@@
+   }
+   return typeof x === 'string';
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'string' : "string"
+ }
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function isNumberWithThis(this: Date, x: number | string) {
+->isNumberWithThis : (this: Date, x: number | string) => x is number
++>isNumberWithThis : (x: string | number) => x is number
+ >this : Date
+ >x : string | number
+ 
+   return typeof x === 'number';
+ >typeof x === 'number' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'number' : "number"
+ }
+@@= skipped -17, +17 lines =@@
+ 
+   return typeof x === 'number';
+ >typeof x === 'number' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : any
+ >'number' : "number"
+ }
+ 
+ const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
+->noInferenceFromRest : (f_0: "a" | "b") => boolean
+->(...f: ["a" | "b"]) => f[0] === "a" : (f_0: "a" | "b") => boolean
++>noInferenceFromRest : (...f: ["a" | "b"]) => boolean
++>(...f: ["a" | "b"]) => f[0] === "a" : (...f: ["a" | "b"]) => boolean
+ >f : ["a" | "b"]
+ >f[0] === "a" : boolean
+ >f[0] : "a" | "b"
+@@= skipped -16, +16 lines =@@
+ >"a" : "a"
+ 
+ const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
+->noInferenceFromImpossibleRest : () => boolean
+->(...f: []) => typeof f === "undefined" : () => boolean
++>noInferenceFromImpossibleRest : (...f: []) => boolean
++>(...f: []) => typeof f === "undefined" : (...f: []) => boolean
+ >f : []
+ >typeof f === "undefined" : boolean
+->typeof f : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof f : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >f : []
+ >"undefined" : "undefined"
+ 
+ function inferWithRest(x: string | null, ...f: ["a", "b"]) {
+->inferWithRest : (x: string | null, f_0: "a", f_1: "b") => x is string
++>inferWithRest : (x: string | null, ...f: ["a", "b"]) => x is string
+ >x : string | null
+ >f : ["a", "b"]
+ 
+   return typeof x === 'string';
+ >typeof x === 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | null
+ >'string' : "string"
+ }
+@@= skipped -33, +33 lines =@@
+ >bar : string
+ 
+ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+->foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+->(fb: typeof foobar) => fb.type === "foo" : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
++>foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
++>(fb: typeof foobar) => fb.type === "foo" : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
+ >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+->foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+ >fb.type === "foo" : boolean
+ >fb.type : "bar" | "foo"
+ >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+@@= skipped -12, +11 lines =@@
+ 
+ if (foobarPred(foobar)) {
+ >foobarPred(foobar) : boolean
+->foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
++>foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
+ >foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+ 
+   foobar.foo;

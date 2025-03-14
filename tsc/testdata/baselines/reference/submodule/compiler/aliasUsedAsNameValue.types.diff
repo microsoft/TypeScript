@@ -1,0 +1,27 @@
+--- old.aliasUsedAsNameValue.types
++++ new.aliasUsedAsNameValue.types
+@@= skipped -3, +3 lines =@@
+ ///<reference path='aliasUsedAsNameValue_0.ts' />
+ ///<reference path='aliasUsedAsNameValue_1.ts' />
+ import mod = require("./aliasUsedAsNameValue_0");
+->mod : typeof mod
++>mod : typeof import("aliasUsedAsNameValue_0")
+ 
+ import b = require("./aliasUsedAsNameValue_1");
+->b : typeof b
++>b : typeof import("aliasUsedAsNameValue_1")
+  
+ export var a = function () {
+ >a : () => void
+@@= skipped -13, +13 lines =@@
+     b.b(mod);
+ >b.b(mod) : any
+ >b.b : (a: any) => any
+->b : typeof b
++>b : typeof import("aliasUsedAsNameValue_1")
+ >b : (a: any) => any
+->mod : typeof mod
++>mod : typeof import("aliasUsedAsNameValue_0")
+ }
+ 
+ === aliasUsedAsNameValue_0.ts ===

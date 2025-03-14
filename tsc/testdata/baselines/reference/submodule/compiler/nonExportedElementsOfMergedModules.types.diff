@@ -1,0 +1,20 @@
+--- old.nonExportedElementsOfMergedModules.types
++++ new.nonExportedElementsOfMergedModules.types
+@@= skipped -4, +4 lines =@@
+ >One : typeof One
+ 
+     enum A { X }
+->A : A
++>A : A.X
+ >X : A.X
+ 
+     module B {
+@@= skipped -15, +15 lines =@@
+ >One : typeof One
+ 
+     enum A { Y }
+->A : A
++>A : A.Y
+ >Y : A.Y
+ 
+     module B {

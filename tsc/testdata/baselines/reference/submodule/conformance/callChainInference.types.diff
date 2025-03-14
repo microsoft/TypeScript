@@ -1,0 +1,36 @@
+--- old.callChainInference.types
++++ new.callChainInference.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #42404
+ 
+ interface Y {
++>Y : Y
++
+     foo<T>(this: T, arg: keyof T): void;
+->foo : <T>(this: T, arg: keyof T) => void
++>foo : <T>(arg: keyof T) => void
++>T : T
+ >this : T
+ >arg : keyof T
+ 
+@@= skipped -20, +23 lines =@@
+ 
+     value?.foo("a");
+ >value?.foo("a") : void
+->value?.foo : <T>(this: T, arg: keyof T) => void
++>value?.foo : <T>(arg: keyof T) => void
+ >value : Y
+->foo : <T>(this: T, arg: keyof T) => void
++>foo : <T>(arg: keyof T) => void
+ >"a" : "a"
+ }
+ 
+ value?.foo("a");
+ >value?.foo("a") : void | undefined
+->value?.foo : (<T>(this: T, arg: keyof T) => void) | undefined
++>value?.foo : <T>(arg: keyof T) => void | undefined
+ >value : Y | undefined
+->foo : (<T>(this: T, arg: keyof T) => void) | undefined
++>foo : <T>(arg: keyof T) => void | undefined
+ >"a" : "a"
+ 

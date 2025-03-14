@@ -1,0 +1,11 @@
+--- old.narrowByEquality.types
++++ new.narrowByEquality.types
+@@= skipped -114, +114 lines =@@
+ // Repro from #24991
+ 
+ function test(level: number | string):number {
+->test : (level: number | string) => number
++>test : (level: string | number) => number
+ >level : string | number
+ 
+     if (level == +level) {

@@ -1,0 +1,19 @@
+--- old.objectLiteralContextualTyping.types
++++ new.objectLiteralContextualTyping.types
+@@= skipped -6, +6 lines =@@
+ //      the string index type of the contextual type, if any.
+ 
+ interface Item {
++>Item : Item
++
+     name: string;
+ >name : string
+ 
+@@= skipped -65, +67 lines =@@
+ 
+ declare function bar<T>(param: { x?: T }): T;
+ >bar : <T>(param: { x?: T; }) => T
++>T : T
+ >param : { x?: T; }
+ >x : T
+ 

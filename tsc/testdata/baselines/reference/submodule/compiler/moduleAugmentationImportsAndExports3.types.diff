@@ -1,0 +1,46 @@
+--- old.moduleAugmentationImportsAndExports3.types
++++ new.moduleAugmentationImportsAndExports3.types
+@@= skipped -26, +26 lines =@@
+ >undefined : undefined
+ 
+ namespace N {
++>N : any
++
+     export interface Ifc { a }
++>Ifc : Ifc
+ >a : any
+ 
+     export interface Cls { a }
++>Cls : Cls
+ >a : any
+ }
+ 
+@@= skipped -16, +20 lines =@@
+     import I = N.Ifc;
+ >I : any
+ >N : any
+->Ifc : I
++>Ifc : Ifc
+ 
+     import C = N.Cls;
+ >C : any
+ >N : any
+->Cls : C
++>Cls : Cls
+ 
+     interface A {
++>A : A
++
+         foo(): B;
+ >foo : () => B
+ 
+         bar(): I;
+->bar : () => I
++>bar : () => Ifc
+ 
+         baz(): C;
+->baz : () => C
++>baz : () => Cls
+     }
+ }
+ 

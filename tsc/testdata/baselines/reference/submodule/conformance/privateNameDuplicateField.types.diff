@@ -1,0 +1,20 @@
+--- old.privateNameDuplicateField.types
++++ new.privateNameDuplicateField.types
+@@= skipped -117, +117 lines =@@
+ >#foo : () => void
+ 
+         #foo = "foo";
+->#foo : () => void
++>#foo : string
+ >"foo" : "foo"
+     }
+ 
+@@= skipped -463, +463 lines =@@
+ >#foo : () => void
+ 
+         static #foo = "foo";
+->#foo : () => void
++>#foo : string
+ >"foo" : "foo"
+     }
+ 

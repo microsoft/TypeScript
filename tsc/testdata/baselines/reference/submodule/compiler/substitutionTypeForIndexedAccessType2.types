@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/substitutionTypeForIndexedAccessType2.ts] ////
+
+=== substitutionTypeForIndexedAccessType2.ts ===
+interface Foo {
+>Foo : Foo
+
+  foo: string|undefined
+>foo : string
+}
+
+type Str<T extends string> = T
+>Str : T
+>T : T
+
+type Bar<T> = 
+>Bar : Bar<T>
+>T : T
+
+  T extends Foo
+    ? T['foo'] extends string
+      // Type 'T["foo"]' does not satisfy the constraint 'string'.
+      //  Type 'string | undefined' is not assignable to type 'string'.
+      //   Type 'undefined' is not assignable to type 'string'.(2344)
+      ? Str<T['foo']>
+      : never
+    : never

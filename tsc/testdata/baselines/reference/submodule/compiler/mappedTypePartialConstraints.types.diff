@@ -1,0 +1,26 @@
+--- old.mappedTypePartialConstraints.types
++++ new.mappedTypePartialConstraints.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #16985
+ 
+ interface MyInterface {
++>MyInterface : MyInterface
++
+   something: number;
+ >something : number
+ }
+ 
+ class MyClass<T extends MyInterface> {
+ >MyClass : MyClass<T>
++>T : T
+ 
+   doIt(data : Partial<T>) {}
+ >doIt : (data: Partial<T>) => void
+@@= skipped -19, +22 lines =@@
+ function fn(arg: typeof MyClass) {};
+ >fn : (arg: typeof MyClass) => void
+ >arg : typeof MyClass
+->MyClass : typeof MyClass
+ 
+ fn(MySubClass);
+ >fn(MySubClass) : void

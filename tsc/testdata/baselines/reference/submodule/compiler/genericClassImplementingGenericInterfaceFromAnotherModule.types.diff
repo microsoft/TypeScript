@@ -1,0 +1,21 @@
+--- old.genericClassImplementingGenericInterfaceFromAnotherModule.types
++++ new.genericClassImplementingGenericInterfaceFromAnotherModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericClassImplementingGenericInterfaceFromAnotherModule.ts ===
+ module foo {
++>foo : any
++
+     export interface IFoo<T> { }
++>IFoo : IFoo<T>
++>T : T
+ }
+ module bar {
+ >bar : typeof bar
+ 
+     export class Foo<T> implements foo.IFoo<T> { }
+ >Foo : Foo<T>
++>T : T
+ >foo : any
+ }
+ 

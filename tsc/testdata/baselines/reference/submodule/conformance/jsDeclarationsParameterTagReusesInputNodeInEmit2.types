@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsParameterTagReusesInputNodeInEmit2.ts] ////
+
+=== base.js ===
+class Base {
+>Base : Base
+
+    constructor() {}
+}
+
+const BaseFactory = () => {
+>BaseFactory : { (): Base; Base: typeof Base; }
+>() => {    return new Base();} : { (): Base; Base: typeof Base; }
+
+    return new Base();
+>new Base() : Base
+>Base : typeof Base
+
+};
+
+BaseFactory.Base = Base;
+>BaseFactory.Base = Base : typeof Base
+>BaseFactory.Base : typeof Base
+>BaseFactory : { (): Base; Base: typeof Base; }
+>Base : typeof Base
+>Base : typeof Base
+
+module.exports = BaseFactory;
+>module.exports = BaseFactory : { (): Base; Base: typeof Base; }
+>module.exports : any
+>module : any
+>exports : any
+>BaseFactory : { (): Base; Base: typeof Base; }
+
+=== file.js ===
+/** @typedef {typeof import('./base')} BaseFactory */
+
+/**
+ *
+ * @param {InstanceType<BaseFactory["Base"]>} base
+ * @returns {InstanceType<BaseFactory["Base"]>}
+ */
+const test = (base) => {
+>test : (base: any) => any
+>(base) => {    return base;} : (base: any) => any
+>base : any
+
+    return base;
+>base : any
+
+};
+

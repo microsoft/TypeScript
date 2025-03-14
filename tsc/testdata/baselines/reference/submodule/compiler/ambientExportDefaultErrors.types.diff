@@ -1,0 +1,23 @@
+--- old.ambientExportDefaultErrors.types
++++ new.ambientExportDefaultErrors.types
+@@= skipped -31, +31 lines =@@
+ >"indirect" : typeof import("indirect")
+ 
+     export default typeof Foo.default;
+->typeof Foo.default : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof Foo.default : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >Foo.default : number
+->Foo : typeof Foo
++>Foo : typeof import("foo")
+ >default : number
+ }
+ 
+@@= skipped -12, +12 lines =@@
+ >"indirect2" : typeof import("indirect2")
+ 
+     export = typeof Foo2;
+->typeof Foo2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof Foo2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >Foo2 : number
+ }
+ 

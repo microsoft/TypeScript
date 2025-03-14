@@ -1,0 +1,340 @@
+--- old.destructuringParameterDeclaration1ES5.types
++++ new.destructuringParameterDeclaration1ES5.types
+@@= skipped -6, +6 lines =@@
+ 
+ // If the declaration includes a type annotation, the parameter is of that type
+ function a1([a, b, [[c]]]: [number, number, string[][]]) { }
+->a1 : ([a, b, [[c]]]: [number, number, string[][]]) => void
++>a1 : (__0: [number, number, string[][]]) => void
+ >a : number
+ >b : number
+ >c : string
+@@= skipped -12, +12 lines =@@
+ >a : number
+ 
+ function a3({j, k, l: {m, n}, q: [a, b, c]}: { j: number, k: string, l: { m: boolean, n: number }, q: (number|string)[] }) { };
+->a3 : ({ j, k, l: { m, n }, q: [a, b, c] }: { j: number; k: string; l: { m: boolean; n: number; }; q: (number | string)[]; }) => void
++>a3 : (__0: { j: number; k: string; l: { m: boolean; n: number; }; q: (string | number)[]; }) => void
+ >j : number
+ >k : string
+ >l : any
+@@= skipped -18, +18 lines =@@
+ >q : (string | number)[]
+ 
+ function a4({x, a}: { x: number, a: number }) { }
+->a4 : ({ x, a }: { x: number; a: number; }) => void
++>a4 : (__0: { x: number; a: number; }) => void
+ >x : number
+ >a : number
+ >x : number
+@@= skipped -8, +8 lines =@@
+ 
+ a1([1, 2, [["world"]]]);
+ >a1([1, 2, [["world"]]]) : void
+->a1 : ([a, b, [[c]]]: [number, number, string[][]]) => void
++>a1 : (__0: [number, number, string[][]]) => void
+ >[1, 2, [["world"]]] : [number, number, string[][]]
+ >1 : 1
+ >2 : 2
+@@= skipped -10, +10 lines =@@
+ 
+ a1([1, 2, [["world"]], 3]);
+ >a1([1, 2, [["world"]], 3]) : void
+->a1 : ([a, b, [[c]]]: [number, number, string[][]]) => void
++>a1 : (__0: [number, number, string[][]]) => void
+ >[1, 2, [["world"]], 3] : [number, number, string[][], number]
+ >1 : 1
+ >2 : 2
+@@= skipped -30, +30 lines =@@
+ >undefined : undefined
+ 
+ function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
+->b3 : ({ z: { x, y: { j } } }?: { z: { x: string; y: { j: number; }; }; }) => void
++>b3 : (__0?: { z: { x: string; y: { j: number; }; }; }) => void
+ >z : any
+ >x : string
+ >y : any
+@@= skipped -16, +16 lines =@@
+ >1 : 1
+ 
+ interface F1 {
++>F1 : F1
++
+     b5(z, y, [, a, b], {p, m: { q, r}});
+->b5 : (z: any, y: any, [, a, b]: [any, any, any], { p, m: { q, r } }: { p: any; m: { q: any; r: any; }; }) => any
++>b5 : (z: any, y: any, __2: [any, any, any], __3: { m: { q: any; r: any; }; p: any; }) => any
+ >z : any
+ >y : any
+-> : undefined
+ >a : any
+ >b : any
+ >p : any
+@@= skipped -14, +15 lines =@@
+ }
+ 
+ function b6([a, z, y] = [undefined, null, undefined]) { }
+->b6 : ([a, z, y]?: [any, any, any]) => void
++>b6 : (__0?: [any, any, any]) => void
+ >a : any
+ >z : any
+ >y : any
+@@= skipped -9, +9 lines =@@
+ >undefined : undefined
+ 
+ function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
+->b7 : ([[a], b, [[c, d]]]?: [[any], any, [[any, any]]]) => void
++>b7 : (__0?: [[any], any, [[any, any]]]) => void
+ >a : any
+ >b : any
+ >c : any
+@@= skipped -44, +44 lines =@@
+ 
+ b6(["string", 1, 2]);                    // Shouldn't be an error
+ >b6(["string", 1, 2]) : void
+->b6 : ([a, z, y]?: [any, any, any]) => void
++>b6 : (__0?: [any, any, any]) => void
+ >["string", 1, 2] : [string, number, number]
+ >"string" : "string"
+ >1 : 1
+@@= skipped -8, +8 lines =@@
+ 
+ b7([["string"], 1, [[true, false]]]);    // Shouldn't be an error
+ >b7([["string"], 1, [[true, false]]]) : void
+->b7 : ([[a], b, [[c, d]]]?: [[any], any, [[any, any]]]) => void
++>b7 : (__0?: [[any], any, [[any, any]]]) => void
+ >[["string"], 1, [[true, false]]] : [[string], number, [[boolean, boolean]]]
+ >["string"] : [string]
+ >"string" : "string"
+@@= skipped -13, +13 lines =@@
+ 
+ // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
+ enum Foo { a }
+->Foo : Foo
++>Foo : Foo.a
+ >a : Foo.a
+ 
+ function c0({z: {x, y: {j}}}) { }
+->c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
++>c0 : (__0: { z: { x: any; y: { j: any; }; }; }) => void
+ >z : any
+ >x : any
+ >y : any
+ >j : any
+ 
+ function c1({z} = { z: 10 }) { }
+->c1 : ({ z }?: { z: number; }) => void
++>c1 : (__0?: { z: number; }) => void
+ >z : number
+ >{ z: 10 } : { z: number; }
+ >z : number
+ >10 : 10
+ 
+ function c2({z = 10}) { }
+->c2 : ({ z }: { z?: number; }) => void
++>c2 : (__0: { z?: number; }) => void
+ >z : number
+ >10 : 10
+ 
+ function c3({b}: { b: number|string} = { b: "hello" }) { }
+->c3 : ({ b }?: { b: number | string; }) => void
++>c3 : (__0?: { b: string | number; }) => void
+ >b : string | number
+ >b : string | number
+ >{ b: "hello" } : { b: string; }
+@@= skipped -31, +31 lines =@@
+ >"hello" : "hello"
+ 
+ function c5([a, b, [[c]]]) { }
+->c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
++>c5 : (__0: [any, any, [[any]]]) => void
+ >a : any
+ >b : any
+ >c : any
+ 
+ function c6([a, b, [[c=1]]]) { }
+->c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
++>c6 : (__0: [any, any, [[number?]]]) => void
+ >a : any
+ >b : any
+ >c : number
+@@= skipped -14, +14 lines =@@
+ 
+ c0({z : { x: 1, y: { j: "world" } }});      // Implied type is { z: {x: any, y: {j: any}} }
+ >c0({z : { x: 1, y: { j: "world" } }}) : void
+->c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
++>c0 : (__0: { z: { x: any; y: { j: any; }; }; }) => void
+ >{z : { x: 1, y: { j: "world" } }} : { z: { x: number; y: { j: string; }; }; }
+ >z : { x: number; y: { j: string; }; }
+ >{ x: 1, y: { j: "world" } } : { x: number; y: { j: string; }; }
+@@= skipped -13, +13 lines =@@
+ 
+ c0({z : { x: "string", y: { j: true } }});  // Implied type is { z: {x: any, y: {j: any}} }
+ >c0({z : { x: "string", y: { j: true } }}) : void
+->c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
++>c0 : (__0: { z: { x: any; y: { j: any; }; }; }) => void
+ >{z : { x: "string", y: { j: true } }} : { z: { x: string; y: { j: boolean; }; }; }
+ >z : { x: string; y: { j: boolean; }; }
+ >{ x: "string", y: { j: true } } : { x: string; y: { j: boolean; }; }
+@@= skipped -13, +13 lines =@@
+ 
+ c1();             // Implied type is {z:number}?
+ >c1() : void
+->c1 : ({ z }?: { z: number; }) => void
++>c1 : (__0?: { z: number; }) => void
+ 
+ c1({ z: 1 })      // Implied type is {z:number}? 
+ >c1({ z: 1 }) : void
+->c1 : ({ z }?: { z: number; }) => void
++>c1 : (__0?: { z: number; }) => void
+ >{ z: 1 } : { z: number; }
+ >z : number
+ >1 : 1
+ 
+ c2({});         // Implied type is {z?: number}
+ >c2({}) : void
+->c2 : ({ z }: { z?: number; }) => void
++>c2 : (__0: { z?: number; }) => void
+ >{} : {}
+ 
+ c2({z:1});      // Implied type is {z?: number}
+ >c2({z:1}) : void
+->c2 : ({ z }: { z?: number; }) => void
++>c2 : (__0: { z?: number; }) => void
+ >{z:1} : { z: number; }
+ >z : number
+ >1 : 1
+ 
+ c3({ b: 1 });     // Implied type is { b: number|string }.
+ >c3({ b: 1 }) : void
+->c3 : ({ b }?: { b: number | string; }) => void
++>c3 : (__0?: { b: string | number; }) => void
+ >{ b: 1 } : { b: number; }
+ >b : number
+ >1 : 1
+ 
+ c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]]
+ >c5([1, 2, [["string"]]]) : void
+->c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
++>c5 : (__0: [any, any, [[any]]]) => void
+ >[1, 2, [["string"]]] : [number, number, [[string]]]
+ >1 : 1
+ >2 : 2
+@@= skipped -40, +40 lines =@@
+ 
+ c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]]
+ >c5([1, 2, [["string"]], false, true]) : void
+->c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
++>c5 : (__0: [any, any, [[any]]]) => void
+ >[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
+ >1 : 1
+ >2 : 2
+@@= skipped -23, +23 lines =@@
+ >10 : 10
+ 
+ interface F2 {
++>F2 : F2
++
+     d3([a, b, c]?);
+->d3 : ([a, b, c]?: [any, any, any]) => any
++>d3 : (__0?: [any, any, any]) => any
+ >a : any
+ >b : any
+ >c : any
+ 
+     d4({x, y, z}?);
+->d4 : ({ x, y, z }?: { x: any; y: any; z: any; }) => any
++>d4 : (__0?: { x: any; y: any; z: any; }) => any
+ >x : any
+ >y : any
+ >z : any
+ 
+     e0([a, b, c]);
+->e0 : ([a, b, c]: [any, any, any]) => any
++>e0 : (__0: [any, any, any]) => any
+ >a : any
+ >b : any
+ >c : any
+@@= skipped -30, +32 lines =@@
+ >d4 : () => void
+ 
+     e0([a, b, c]) { }
+->e0 : ([a, b, c]: [any, any, any]) => void
++>e0 : (__0: [any, any, any]) => void
+ >a : any
+ >b : any
+ >c : any
+@@= skipped -10, +10 lines =@@
+ >C3 : C3
+ 
+     d3([a, b, c]) { }
+->d3 : ([a, b, c]: [any, any, any]) => void
++>d3 : (__0: [any, any, any]) => void
+ >a : any
+ >b : any
+ >c : any
+ 
+     d4({x, y, z}) { }
+->d4 : ({ x, y, z }: { x: any; y: any; z: any; }) => void
++>d4 : (__0: { x: any; y: any; z: any; }) => void
+ >x : any
+ >y : any
+ >z : any
+ 
+     e0([a, b, c]) { }
+->e0 : ([a, b, c]: [any, any, any]) => void
++>e0 : (__0: [any, any, any]) => void
+ >a : any
+ >b : any
+ >c : any
+@@= skipped -20, +20 lines =@@
+ 
+ 
+ function d5({x, y} = { x: 1, y: 2 }) { }
+->d5 : ({ x, y }?: { x: number; y: number; }) => void
++>d5 : (__0?: { x: number; y: number; }) => void
+ >x : number
+ >y : number
+ >{ x: 1, y: 2 } : { x: number; y: number; }
+@@= skipped -11, +11 lines =@@
+ 
+ d5();  // Parameter is optional as its declaration included an initializer
+ >d5() : void
+->d5 : ({ x, y }?: { x: number; y: number; }) => void
++>d5 : (__0?: { x: number; y: number; }) => void
+ 
+ // Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
+ // as such annotations would conflict with the already established meaning of colons in object literals.
+ // Type annotations must instead be written on the top- level parameter declaration
+ 
+ function e1({x: number}) { }  // x has type any NOT number
+->e1 : ({ x: number }: { x: any; }) => void
++>e1 : (__0: { x: any; }) => void
+ >x : any
+ >number : any
+ 
+ function e2({x}: { x: number }) { }  // x is type number
+->e2 : ({ x }: { x: number; }) => void
++>e2 : (__0: { x: number; }) => void
+ >x : number
+ >x : number
+ 
+ function e3({x}: { x?: number }) { }  // x is an optional with type number
+->e3 : ({ x }: { x?: number; }) => void
++>e3 : (__0: { x?: number; }) => void
+ >x : number
+ >x : number
+ 
+ function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
+->e4 : ({ x: [number, string, any] }: { x: [any, any, any]; }) => void
++>e4 : (__0: { x: [any, any, any]; }) => void
+ >x : any
+ >number : any
+ >string : any
+ >any : any
+ 
+ function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type [any, any, any]
+->e5 : ({ x: [a, b, c] }: { x: [number, number, number]; }) => void
++>e5 : (__0: { x: [number, number, number]; }) => void
+ >x : any
+ >a : number
+ >b : number

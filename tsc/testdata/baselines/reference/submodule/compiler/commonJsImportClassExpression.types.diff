@@ -1,0 +1,20 @@
+--- old.commonJsImportClassExpression.types
++++ new.commonJsImportClassExpression.types
+@@= skipped -1, +1 lines =@@
+ 
+ === use.ts ===
+ import Chunk = require('./mod1')
+->Chunk : typeof Chunk
++>Chunk : typeof (Anonymous class)
+ 
+ declare var c: Chunk;
+->c : Chunk
++>c : (Anonymous class)
+ 
+ c.chunk;
+ >c.chunk : number
+->c : Chunk
++>c : (Anonymous class)
+ >chunk : number
+ 
+ === mod1.ts ===

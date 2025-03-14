@@ -1,0 +1,76 @@
+--- old.emptyObjectNotSubtypeOfIndexSignatureContainingObject1.types
++++ new.emptyObjectNotSubtypeOfIndexSignatureContainingObject1.types
+@@= skipped -3, +3 lines =@@
+ // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
+ // Begin types from Lodash.
+ interface Dictionary<T> {
++>Dictionary : Dictionary<T>
++>T : T
++
+   [index: string]: T;
+ >index : string
+ }
+ 
+ interface NumericDictionary<T> {
++>NumericDictionary : NumericDictionary<T>
++>T : T
++
+   [index: number]: T;
+ >index : number
+ }
+ 
+ type ObjectIterator<TObject, TResult> = (
+ >ObjectIterator : ObjectIterator<TObject, TResult>
++>TObject : TObject
++>TResult : TResult
+ 
+   value: TObject[keyof TObject],
+ >value : TObject[keyof TObject]
+@@= skipped -25, +33 lines =@@
+ 
+ type DictionaryIterator<T, TResult> = ObjectIterator<Dictionary<T>, TResult>;
+ >DictionaryIterator : DictionaryIterator<T, TResult>
++>T : T
++>TResult : TResult
+ 
+ // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
+ function mapValues<T, TResult>(
+->mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
++>mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
++>T : T
++>TResult : TResult
+ 
+   obj: Dictionary<T> | NumericDictionary<T> | null | undefined,
+ >obj : Dictionary<T> | NumericDictionary<T>
+@@= skipped -18, +22 lines =@@
+ // End types from Lodash.
+ 
+ interface Foo {
++>Foo : Foo
++
+   foo: string;
+ >foo : string
+ }
+ 
+ interface Bar {
++>Bar : Bar
++
+   bar: string;
+ >bar : string
+ }
+ 
+ export function fooToBar(
+->fooToBar : (foos: Record<string, Foo>) => Record<string, Bar | null>
++>fooToBar : (foos: Record<string, Foo>) => Record<string, Bar>
+ 
+   foos: Record<string, Foo>
+ >foos : Record<string, Foo>
+@@= skipped -23, +27 lines =@@
+ >foos : Record<string, Foo>
+ >{} : {}
+ >mapValues(foos, f => f.foo) : Dictionary<string>
+->mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
++>mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
+ >foos : Record<string, Foo>
+ >f => f.foo : (f: Foo) => string
+ >f : Foo

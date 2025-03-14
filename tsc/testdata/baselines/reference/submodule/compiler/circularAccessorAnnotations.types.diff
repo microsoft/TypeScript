@@ -1,0 +1,32 @@
+--- old.circularAccessorAnnotations.types
++++ new.circularAccessorAnnotations.types
+@@= skipped -5, +5 lines =@@
+ 
+     get foo(): typeof c1.foo;
+ >foo : any
+->c1.foo : any
+ >c1 : { readonly foo: any; }
+->foo : any
+ }
+ 
+ declare const c2: {
+@@= skipped -11, +9 lines =@@
+     set foo(value: typeof c2.foo);
+ >foo : any
+ >value : any
+->c2.foo : any
+ >c2 : { foo: any; }
+->foo : any
+ }
+ 
+ declare const c3: {
+@@= skipped -14, +12 lines =@@
+     set foo(value: typeof c3.foo);
+ >foo : string
+ >value : string
+->c3.foo : string
+ >c3 : { foo: string; }
+->foo : string
+ }
+ 
+ type T1 = {

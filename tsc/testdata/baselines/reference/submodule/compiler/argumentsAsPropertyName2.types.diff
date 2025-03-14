@@ -1,0 +1,11 @@
+--- old.argumentsAsPropertyName2.types
++++ new.argumentsAsPropertyName2.types
+@@= skipped -34, +34 lines =@@
+         ({ arguments });
+ >({ arguments }) : { arguments: IArguments; }
+ >{ arguments } : { arguments: IArguments; }
+->arguments : IArguments
++>arguments : any
+ 
+         ({ arguments: arguments });
+ >({ arguments: arguments }) : { arguments: IArguments; }

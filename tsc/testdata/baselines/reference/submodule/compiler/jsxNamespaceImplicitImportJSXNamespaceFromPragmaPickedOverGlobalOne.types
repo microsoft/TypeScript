@@ -1,0 +1,157 @@
+//// [tests/cases/compiler/jsxNamespaceImplicitImportJSXNamespaceFromPragmaPickedOverGlobalOne.tsx] ////
+
+=== /node_modules/react/index.d.ts ===
+export = React;
+>React : any
+
+export as namespace React;
+>React : any
+
+declare namespace React { }
+>React : any
+
+declare global {
+>global : any
+
+    namespace JSX {
+>JSX : any
+
+        interface Element { }
+>Element : Element
+
+        interface ElementClass { }
+>ElementClass : ElementClass
+
+        interface ElementAttributesProperty { }
+>ElementAttributesProperty : ElementAttributesProperty
+
+        interface ElementChildrenAttribute { }
+>ElementChildrenAttribute : ElementChildrenAttribute
+
+        type LibraryManagedAttributes<C, P> = {}
+>LibraryManagedAttributes : LibraryManagedAttributes<C, P>
+>C : C
+>P : P
+
+        interface IntrinsicAttributes { }
+>IntrinsicAttributes : IntrinsicAttributes
+
+        interface IntrinsicClassAttributes<T> { }
+>IntrinsicClassAttributes : IntrinsicClassAttributes<T>
+>T : T
+
+        interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+            div: {}
+>div : {}
+        }
+    }
+}
+=== /node_modules/@emotion/react/jsx-runtime/index.d.ts ===
+export { EmotionJSX as JSX } from './jsx-namespace'
+>EmotionJSX : any
+>JSX : any
+
+=== /node_modules/@emotion/react/jsx-runtime/jsx-namespace.d.ts ===
+import 'react'
+
+type WithConditionalCSSProp<P> = 'className' extends keyof P
+>WithConditionalCSSProp : WithConditionalCSSProp<P>
+>P : P
+
+    ? (P extends { className?: string } ? P & { css?: string } : P)
+>className : string | undefined
+>css : string | undefined
+
+    : P
+
+type ReactJSXElement = JSX.Element
+>ReactJSXElement : Element
+>JSX : any
+
+type ReactJSXElementClass = JSX.ElementClass
+>ReactJSXElementClass : ElementClass
+>JSX : any
+
+type ReactJSXElementAttributesProperty = JSX.ElementAttributesProperty
+>ReactJSXElementAttributesProperty : ElementAttributesProperty
+>JSX : any
+
+type ReactJSXElementChildrenAttribute = JSX.ElementChildrenAttribute
+>ReactJSXElementChildrenAttribute : ElementChildrenAttribute
+>JSX : any
+
+type ReactJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>
+>ReactJSXLibraryManagedAttributes : ReactJSXLibraryManagedAttributes<C, P>
+>C : C
+>P : P
+>JSX : any
+
+type ReactJSXIntrinsicAttributes = JSX.IntrinsicAttributes
+>ReactJSXIntrinsicAttributes : IntrinsicAttributes
+>JSX : any
+
+type ReactJSXIntrinsicClassAttributes<T> = JSX.IntrinsicClassAttributes<T>
+>ReactJSXIntrinsicClassAttributes : ReactJSXIntrinsicClassAttributes<T>
+>T : T
+>JSX : any
+
+type ReactJSXIntrinsicElements = JSX.IntrinsicElements
+>ReactJSXIntrinsicElements : IntrinsicElements
+>JSX : any
+
+export namespace EmotionJSX {
+>EmotionJSX : any
+
+    interface Element extends ReactJSXElement { }
+>Element : Element
+
+    interface ElementClass extends ReactJSXElementClass { }
+>ElementClass : ElementClass
+
+    interface ElementAttributesProperty
+>ElementAttributesProperty : ElementAttributesProperty
+
+        extends ReactJSXElementAttributesProperty { }
+    interface ElementChildrenAttribute extends ReactJSXElementChildrenAttribute { }
+>ElementChildrenAttribute : ElementChildrenAttribute
+
+    type LibraryManagedAttributes<C, P> = WithConditionalCSSProp<P> &
+>LibraryManagedAttributes : LibraryManagedAttributes<C, P>
+>C : C
+>P : P
+
+        ReactJSXLibraryManagedAttributes<C, P>
+
+    interface IntrinsicAttributes extends ReactJSXIntrinsicAttributes { }
+>IntrinsicAttributes : IntrinsicAttributes
+
+    interface IntrinsicClassAttributes<T>
+>IntrinsicClassAttributes : IntrinsicClassAttributes<T>
+>T : T
+
+        extends ReactJSXIntrinsicClassAttributes<T> { }
+
+    type IntrinsicElements = {
+>IntrinsicElements : IntrinsicElements
+
+        [K in keyof ReactJSXIntrinsicElements]: ReactJSXIntrinsicElements[K] & {
+>K : K
+
+            css?: string
+>css : string | undefined
+        }
+    }
+}
+
+=== /index.tsx ===
+/* @jsxImportSource @emotion/react */
+export const Comp = () => <div css="color: hotpink;"></div>;
+>Comp : () => any
+>() => <div css="color: hotpink;"></div> : () => any
+><div css="color: hotpink;"></div> : any
+>div : any
+>css : any
+>div : any
+

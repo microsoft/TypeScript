@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/exportEqualErrorType.ts] ////
+
+=== exportEqualErrorType_1.ts ===
+///<reference path='exportEqualErrorType_0.ts'/>
+import connect = require('exportEqualErrorType_0');
+>connect : any
+
+connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
+>connect().use(connect.static('foo')) : any
+>connect().use : any
+>connect() : any
+>connect : any
+>use : any
+>connect.static('foo') : any
+>connect.static : any
+>connect : any
+>static : any
+>'foo' : "foo"
+
+=== exportEqualErrorType_0.ts ===
+module server {
+>server : { (): connectExport; foo: Date; }
+
+    export interface connectModule {
+>connectModule : connectModule
+
+        (res, req, next): void;
+>res : any
+>req : any
+>next : any
+    }
+    export interface connectExport {
+>connectExport : connectExport
+
+        use: (mod: connectModule) => connectExport;
+>use : (mod: connectModule) => connectExport
+>mod : connectModule
+    }
+}
+var server: {
+>server : { (): connectExport; foo: Date; }
+
+    (): server.connectExport;
+>server : any
+
+    foo: Date;
+>foo : Date
+
+};
+export = server;
+>server : { (): connectExport; foo: Date; }
+ 

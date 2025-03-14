@@ -1,0 +1,26 @@
+--- old.useRegexpGroups.types
++++ new.useRegexpGroups.types
+@@= skipped -7, +7 lines =@@
+ let result = re.exec("2015-01-02");
+ >result : RegExpExecArray
+ >re.exec("2015-01-02") : RegExpExecArray
+->re.exec : (string: string) => RegExpExecArray | null
++>re.exec : (string: string) => RegExpExecArray
+ >re : RegExp
+->exec : (string: string) => RegExpExecArray | null
++>exec : (string: string) => RegExpExecArray
+ >"2015-01-02" : "2015-01-02"
+ 
+ let date = result[0];
+@@= skipped -59, +59 lines =@@
+ >"foo".match(/(?<bar>foo)/)!.groups : { [key: string]: string; }
+ >"foo".match(/(?<bar>foo)/)! : RegExpMatchArray
+ >"foo".match(/(?<bar>foo)/) : RegExpMatchArray
+->"foo".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
++>"foo".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
+ >"foo" : "foo"
+->match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
++>match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
+ >/(?<bar>foo)/ : RegExp
+ >groups : { [key: string]: string; }
+ >foo : string

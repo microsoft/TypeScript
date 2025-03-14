@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsx/tsxErrorRecovery1.tsx] ////
+
+=== file.tsx ===
+declare namespace JSX { interface Element { } }
+>JSX : any
+>Element : Element
+
+function foo() {
+>foo : () => void
+
+	var x = <div>  { </div>
+>x : any
+><div>  { </div> : any
+>div : any
+> : any
+>div : any
+}
+// Shouldn't see any errors down here
+var y = { a: 1 };
+>y : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+

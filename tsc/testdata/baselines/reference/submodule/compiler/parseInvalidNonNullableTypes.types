@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/parseInvalidNonNullableTypes.ts] ////
+
+=== parseInvalidNonNullableTypes.ts ===
+function f1(a: string): a is string! {
+>f1 : (a: string) => a is string
+>a : string
+>! {    return true;} : false
+>{    return true;} : { return: boolean; }
+
+    return true;
+>return : boolean
+>true : true
+}
+
+function f2(a: string): a is !string {
+>f2 : (a: string) => a is any
+>a : string
+
+    return true;
+>true : true
+}
+
+function f3(a: string!) {}
+>f3 : (a: string, : any) => void
+>a : string
+> : any
+
+function f4(a: number!) {}
+>f4 : (a: number, : any) => void
+>a : number
+> : any
+
+function f5(a: !string) {}
+>f5 : (a: any) => void
+>a : any
+
+function f6(a: !number) {}
+>f6 : (a: any) => void
+>a : any
+
+function f7(): string! {}
+>f7 : () => string
+>! {} : boolean
+>{} : {}
+
+function f8(): !string {}
+>f8 : () => any
+
+const a = 1 as any!;
+>a : any
+>1 as any : any
+>1 : 1
+>! : boolean
+> : any
+
+const b: number! = 1;
+>b : number
+>! : boolean
+> : any
+>1 : 1
+
+const c = 1 as !any;
+>c : any
+>1 as !any : any
+>1 : 1
+
+const d: !number = 1;
+>d : any
+>1 : 1
+

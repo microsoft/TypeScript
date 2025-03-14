@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInBasePropertyAndDerivedContainerOfBase01.ts] ////
+
+=== thisTypeInBasePropertyAndDerivedContainerOfBase01.ts ===
+interface BoxOfFoo<T extends Foo> {
+>BoxOfFoo : BoxOfFoo<T>
+>T : T
+
+    item: T
+>item : T
+}
+
+interface Foo {
+>Foo : Foo
+
+    self: this;
+>self : this
+}
+
+interface Bar extends Foo {
+>Bar : Bar
+
+    other: BoxOfFoo<this>;
+>other : BoxOfFoo<this>
+}

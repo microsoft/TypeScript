@@ -1,0 +1,170 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty2.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface Prop {
+>Prop : Prop
+
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: string | JSX.Element
+>children : any
+>JSX : any
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => any
+>p : Prop
+
+    return <div>{p.b}</div>;
+><div>{p.b}</div> : any
+>div : any
+>p.b : string
+>p : Prop
+>b : string
+>div : any
+}
+
+// Error: missing children
+let k = <Comp a={10} b="hi" />;
+>k : any
+><Comp a={10} b="hi" /> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+let k0 =
+>k0 : any
+
+    <Comp a={10} b="hi" children="Random" >
+><Comp a={10} b="hi" children="Random" >        hi hi hi!    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+>children : any
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => any
+
+let o = {
+>o : { children: string; }
+>{     children:"Random"} : { children: string; }
+
+     children:"Random"
+>children : string
+>"Random" : "Random"
+}
+let k1 =
+>k1 : any
+
+    <Comp a={10} b="hi" {...o} >
+><Comp a={10} b="hi" {...o} >        hi hi hi!    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+>o : { children: string; }
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => any
+
+// Error: incorrect type
+let k2 =
+>k2 : any
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        <div> My Div </div>        {(name: string) => <div> My name {name} </div>}    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        <div> My Div </div>
+><div> My Div </div> : any
+>div : any
+>div : any
+
+        {(name: string) => <div> My name {name} </div>}
+>(name: string) => <div> My name {name} </div> : (name: string) => any
+>name : string
+><div> My name {name} </div> : any
+>div : any
+>name : string
+>div : any
+
+    </Comp>;
+>Comp : (p: Prop) => any
+
+let k3 =
+>k3 : any
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        <div> My Div </div>        {1000000}    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        <div> My Div </div>
+><div> My Div </div> : any
+>div : any
+>div : any
+
+        {1000000}
+>1000000 : 1000000
+
+    </Comp>;
+>Comp : (p: Prop) => any
+
+let k4 =
+>k4 : any
+
+    <Comp a={10} b="hi" >
+><Comp a={10} b="hi" >        <div> My Div </div>        hi hi hi!    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        <div> My Div </div>
+><div> My Div </div> : any
+>div : any
+>div : any
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => any
+
+let k5 =
+>k5 : any
+
+    <Comp a={10} b="hi" >
+><Comp a={10} b="hi" >        <div> My Div </div>        <div> My Div </div>    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        <div> My Div </div>
+><div> My Div </div> : any
+>div : any
+>div : any
+
+        <div> My Div </div>
+><div> My Div </div> : any
+>div : any
+>div : any
+
+    </Comp>;
+>Comp : (p: Prop) => any
+

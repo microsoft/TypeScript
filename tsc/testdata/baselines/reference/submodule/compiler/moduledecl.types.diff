@@ -1,0 +1,231 @@
+--- old.moduledecl.types
++++ new.moduledecl.types
+@@= skipped -1, +1 lines =@@
+ 
+ === moduledecl.ts ===
+ module a {
++>a : any
+ }
+ 
+ module b.a {
++>b : any
++>a : any
+ }
+ 
+ module c.a.b {
++>c : any
++>a : any
++>b : any
++
+     import ma = a;
+ >ma : any
+->a : error
++>a : any
+ }
+ 
+ module mImport {
++>mImport : any
++
+     import d = a;
+ >d : any
+->a : error
++>a : any
+ 
+     import e = b.a;
+ >e : any
+@@= skipped -23, +32 lines =@@
+ 
+     import d1 = a;
+ >d1 : any
+->a : error
++>a : any
+ 
+     import e1 = b.a;
+ >e1 : any
+@@= skipped -45, +45 lines =@@
+     }
+ 
+     interface i1 {
++>i1 : i1
++
+         () : Object;
+         [n: number]: c1;
+ >n : number
+@@= skipped -7, +9 lines =@@
+ 
+     import m2 = a;
+ >m2 : any
+->a : error
++>a : any
+ 
+     import m3 = b;
+ >m3 : any
+->b : error
++>b : any
+ 
+     import m4 = b.a;
+ >m4 : any
+@@= skipped -13, +13 lines =@@
+ 
+     import m5 = c;
+ >m5 : any
+->c : error
++>c : any
+ 
+     import m6 = c.a;
+ >m6 : any
+@@= skipped -70, +70 lines =@@
+     }
+ 
+     export interface i1 {
++>i1 : i1
++
+         () : Object;
+         [n: number]: c1;
+ >n : number
+@@= skipped -7, +9 lines =@@
+ 
+     import m2 = a;
+ >m2 : any
+->a : error
++>a : any
+ 
+     import m3 = b;
+ >m3 : any
+->b : error
++>b : any
+ 
+     import m4 = b.a;
+ >m4 : any
+@@= skipped -13, +13 lines =@@
+ 
+     import m5 = c;
+ >m5 : any
+->c : error
++>c : any
+ 
+     import m6 = c.a;
+ >m6 : any
+@@= skipped -209, +209 lines =@@
+ >aVar : C
+ 
+     interface B {
++>B : B
++
+         x: number;
+ >x : number
+ 
+@@= skipped -36, +38 lines =@@
+ >aVar : C
+ 
+         interface B {
++>B : B
++
+             x: number;
+ >x : number
+ 
+@@= skipped -22, +24 lines =@@
+ }
+ 
+ function foo() {
+->foo : () => mAmbient.C
++>foo : () => C
+ 
+     return mAmbient.foo();
+->mAmbient.foo() : mAmbient.C
+->mAmbient.foo : () => mAmbient.C
++>mAmbient.foo() : C
++>mAmbient.foo : () => C
+ >mAmbient : typeof mAmbient
+->foo : () => mAmbient.C
++>foo : () => C
+ }
+ 
+ var cVar = new mAmbient.C();
+->cVar : mAmbient.C
+->new mAmbient.C() : mAmbient.C
+->mAmbient.C : typeof mAmbient.C
++>cVar : C
++>new mAmbient.C() : C
++>mAmbient.C : typeof C
+ >mAmbient : typeof mAmbient
+->C : typeof mAmbient.C
++>C : typeof C
+ 
+ var aVar = mAmbient.aVar;
+->aVar : mAmbient.C
+->mAmbient.aVar : mAmbient.C
++>aVar : C
++>mAmbient.aVar : C
+ >mAmbient : typeof mAmbient
+->aVar : mAmbient.C
++>aVar : C
+ 
+ var bB: mAmbient.B;
+->bB : mAmbient.B
++>bB : B
+ >mAmbient : any
+ 
+ var eVar: mAmbient.e;
+->eVar : mAmbient.e
++>eVar : e
+ >mAmbient : any
+ 
+ function m3foo() {
+->m3foo : () => mAmbient.m3.C
++>m3foo : () => C
+ 
+     return mAmbient.m3.foo();
+->mAmbient.m3.foo() : mAmbient.m3.C
+->mAmbient.m3.foo : () => mAmbient.m3.C
+->mAmbient.m3 : typeof mAmbient.m3
++>mAmbient.m3.foo() : C
++>mAmbient.m3.foo : () => C
++>mAmbient.m3 : typeof m3
+ >mAmbient : typeof mAmbient
+->m3 : typeof mAmbient.m3
+->foo : () => mAmbient.m3.C
++>m3 : typeof m3
++>foo : () => C
+ }
+ 
+ var m3cVar = new mAmbient.m3.C();
+->m3cVar : mAmbient.m3.C
+->new mAmbient.m3.C() : mAmbient.m3.C
+->mAmbient.m3.C : typeof mAmbient.m3.C
+->mAmbient.m3 : typeof mAmbient.m3
++>m3cVar : C
++>new mAmbient.m3.C() : C
++>mAmbient.m3.C : typeof C
++>mAmbient.m3 : typeof m3
+ >mAmbient : typeof mAmbient
+->m3 : typeof mAmbient.m3
+->C : typeof mAmbient.m3.C
++>m3 : typeof m3
++>C : typeof C
+ 
+ var m3aVar = mAmbient.m3.aVar;
+->m3aVar : mAmbient.m3.C
+->mAmbient.m3.aVar : mAmbient.m3.C
+->mAmbient.m3 : typeof mAmbient.m3
++>m3aVar : C
++>mAmbient.m3.aVar : C
++>mAmbient.m3 : typeof m3
+ >mAmbient : typeof mAmbient
+->m3 : typeof mAmbient.m3
+->aVar : mAmbient.m3.C
++>m3 : typeof m3
++>aVar : C
+ 
+ var m3bB: mAmbient.m3.B;
+->m3bB : mAmbient.m3.B
++>m3bB : B
+ >mAmbient : any
+ >m3 : any
+ 
+ var m3eVar: mAmbient.m3.e;
+->m3eVar : mAmbient.m3.e
++>m3eVar : e
+ >mAmbient : any
+ >m3 : any
+ 

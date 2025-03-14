@@ -1,0 +1,97 @@
+--- old.uniqueSymbolsPropertyNames.types
++++ new.uniqueSymbolsPropertyNames.types
+@@= skipped -1, +1 lines =@@
+ 
+ === uniqueSymbolsPropertyNames.ts ===
+ interface OpTypes {
++>OpTypes : OpTypes
++
+   readonly equal: unique symbol;
+ >equal : unique symbol
+ }
+@@= skipped -29, +31 lines =@@
+ 
+ 
+ function getUniqueSymbol0(): typeof uniqueSymbol0 {
+->getUniqueSymbol0 : () => typeof uniqueSymbol0
+->uniqueSymbol0 : unique symbol
++>getUniqueSymbol0 : () => unique symbol
+ 
+   return uniqueSymbol0;
+ >uniqueSymbol0 : unique symbol
+ }
+ 
+ function getUniqueSymbol1(): typeof uniqueSymbol1 {
+->getUniqueSymbol1 : () => typeof uniqueSymbol1
+->uniqueSymbol1 : unique symbol
++>getUniqueSymbol1 : () => unique symbol
+ 
+     return uniqueSymbol1;
+ >uniqueSymbol1 : unique symbol
+@@= skipped -90, +88 lines =@@
+ };
+ 
+ const t3 = {
+->t3 : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
+->{  [getUniqueSymbol0()]: "first",  [getUniqueSymbol0()]: "last",  [getUniqueSymbol1()]: "first",  [getUniqueSymbol1()]: "last",} : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
++>t3 : { [getUniqueSymbol0()]: string; [getUniqueSymbol1()]: string; }
++>{  [getUniqueSymbol0()]: "first",  [getUniqueSymbol0()]: "last",  [getUniqueSymbol1()]: "first",  [getUniqueSymbol1()]: "last",} : { [getUniqueSymbol0()]: string; [getUniqueSymbol1()]: string; }
+ 
+   [getUniqueSymbol0()]: "first",
+ >[getUniqueSymbol0()] : string
+ >getUniqueSymbol0() : unique symbol
+->getUniqueSymbol0 : () => typeof uniqueSymbol0
++>getUniqueSymbol0 : () => unique symbol
+ >"first" : "first"
+ 
+   [getUniqueSymbol0()]: "last",
+ >[getUniqueSymbol0()] : string
+ >getUniqueSymbol0() : unique symbol
+->getUniqueSymbol0 : () => typeof uniqueSymbol0
++>getUniqueSymbol0 : () => unique symbol
+ >"last" : "last"
+ 
+   [getUniqueSymbol1()]: "first",
+ >[getUniqueSymbol1()] : string
+ >getUniqueSymbol1() : unique symbol
+->getUniqueSymbol1 : () => typeof uniqueSymbol1
++>getUniqueSymbol1 : () => unique symbol
+ >"first" : "first"
+ 
+   [getUniqueSymbol1()]: "last",
+ >[getUniqueSymbol1()] : string
+ >getUniqueSymbol1() : unique symbol
+->getUniqueSymbol1 : () => typeof uniqueSymbol1
++>getUniqueSymbol1 : () => unique symbol
+ >"last" : "last"
+ 
+ };
+@@= skipped -77, +77 lines =@@
+   [getUniqueSymbol0()] = "first";
+ >[getUniqueSymbol0()] : string
+ >getUniqueSymbol0() : unique symbol
+->getUniqueSymbol0 : () => typeof uniqueSymbol0
++>getUniqueSymbol0 : () => unique symbol
+ >"first" : "first"
+ 
+   [getUniqueSymbol0()] = "last";
+ >[getUniqueSymbol0()] : string
+ >getUniqueSymbol0() : unique symbol
+->getUniqueSymbol0 : () => typeof uniqueSymbol0
++>getUniqueSymbol0 : () => unique symbol
+ >"last" : "last"
+ 
+   [getUniqueSymbol1()] = "first";
+ >[getUniqueSymbol1()] : string
+ >getUniqueSymbol1() : unique symbol
+->getUniqueSymbol1 : () => typeof uniqueSymbol1
++>getUniqueSymbol1 : () => unique symbol
+ >"first" : "first"
+ 
+   [getUniqueSymbol1()] = "last";
+ >[getUniqueSymbol1()] : string
+ >getUniqueSymbol1() : unique symbol
+->getUniqueSymbol1 : () => typeof uniqueSymbol1
++>getUniqueSymbol1 : () => unique symbol
+ >"last" : "last"
+ }

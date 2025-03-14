@@ -1,0 +1,12 @@
+--- old.declarationEmitHasTypesRefOnNamespaceUse.types
++++ new.declarationEmitHasTypesRefOnNamespaceUse.types
+@@= skipped -4, +4 lines =@@
+ >Src : Src
+ >NS : any
+ 
+-=== /deps/dep/dep.d.ts ===
+-
+-declare namespace NS {
+-    interface Dep {
+-    }
+-}

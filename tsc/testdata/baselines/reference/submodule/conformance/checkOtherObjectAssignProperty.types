@@ -1,0 +1,82 @@
+//// [tests/cases/conformance/jsdoc/checkOtherObjectAssignProperty.ts] ////
+
+=== importer.js ===
+const mod = require("./mod1");
+>mod : any
+>require("./mod1") : any
+>require : any
+>"./mod1" : "./mod1"
+
+mod.thing;
+>mod.thing : any
+>mod : any
+>thing : any
+
+mod.other;
+>mod.other : any
+>mod : any
+>other : any
+
+mod.prop;
+>mod.prop : any
+>mod : any
+>prop : any
+
+mod.bad1;
+>mod.bad1 : any
+>mod : any
+>bad1 : any
+
+mod.bad2;
+>mod.bad2 : any
+>mod : any
+>bad2 : any
+
+mod.bad3;
+>mod.bad3 : any
+>mod : any
+>bad3 : any
+
+
+mod.thing = 0;
+>mod.thing = 0 : 0
+>mod.thing : any
+>mod : any
+>thing : any
+>0 : 0
+
+mod.other = 0;
+>mod.other = 0 : 0
+>mod.other : any
+>mod : any
+>other : any
+>0 : 0
+
+mod.prop = 0;
+>mod.prop = 0 : 0
+>mod.prop : any
+>mod : any
+>prop : any
+>0 : 0
+
+mod.bad1 = 0;
+>mod.bad1 = 0 : 0
+>mod.bad1 : any
+>mod : any
+>bad1 : any
+>0 : 0
+
+mod.bad2 = 0;
+>mod.bad2 = 0 : 0
+>mod.bad2 : any
+>mod : any
+>bad2 : any
+>0 : 0
+
+mod.bad3 = 0;
+>mod.bad3 = 0 : 0
+>mod.bad3 : any
+>mod : any
+>bad3 : any
+>0 : 0
+

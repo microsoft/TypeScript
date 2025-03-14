@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/nestedHomomorphicMappedTypesWithArrayConstraint1.ts] ////
+
+=== nestedHomomorphicMappedTypesWithArrayConstraint1.ts ===
+// Based on @types/sinon v10
+
+type MatchArguments<T> = {
+>MatchArguments : MatchArguments<T>
+>T : T
+
+    [K in keyof T]: T[K];
+>K : K
+
+};
+
+interface SinonSpyCallApi<TArgs extends any[] = any[]> {
+>SinonSpyCallApi : SinonSpyCallApi<TArgs>
+>TArgs : TArgs
+
+    calledWith(...args: Partial<MatchArguments<TArgs>>): boolean;
+>calledWith : (...args: Partial<MatchArguments<TArgs>>) => boolean
+>args : Partial<MatchArguments<TArgs>>
+}

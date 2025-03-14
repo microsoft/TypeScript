@@ -1,0 +1,49 @@
+--- old.functionCallOnConstrainedTypeVariable.types
++++ new.functionCallOnConstrainedTypeVariable.types
+@@= skipped -25, +25 lines =@@
+ 
+   p.a("s"); // Error
+ >p.a("s") : string
+->p.a : ((x: number) => string) | ((x: boolean) => string)
++>p.a : (x: number) => string | (x: boolean) => string
+ >p : A | B
+->a : ((x: number) => string) | ((x: boolean) => string)
++>a : (x: number) => string | (x: boolean) => string
+ >"s" : "s"
+ }
+ 
+ function callN<T extends A | B>(p: T) {
+ >callN : <T extends A | B>(p: T) => void
++>T : T
+ >p : T
+ 
+   p.a("s"); // Error
+ >p.a("s") : string
+->p.a : ((x: number) => string) | ((x: boolean) => string)
++>p.a : (x: number) => string | (x: boolean) => string
+ >p : A | B
+->a : ((x: number) => string) | ((x: boolean) => string)
++>a : (x: number) => string | (x: boolean) => string
+ >"s" : "s"
+   
+   var a: T["a"] = p.a;
+ >a : T["a"]
+->p.a : ((x: number) => string) | ((x: boolean) => string)
++>p.a : (x: number) => string | (x: boolean) => string
+ >p : A | B
+->a : ((x: number) => string) | ((x: boolean) => string)
++>a : (x: number) => string | (x: boolean) => string
+ 
+   a(""); // Error
+ >a("") : string
+->a : ((x: number) => string) | ((x: boolean) => string)
++>a : (x: number) => string | (x: boolean) => string
+ >"" : ""
+ 
+   a("", "", "", ""); // Error
+ >a("", "", "", "") : string
+->a : ((x: number) => string) | ((x: boolean) => string)
++>a : (x: number) => string | (x: boolean) => string
+ >"" : ""
+ >"" : ""
+ >"" : ""

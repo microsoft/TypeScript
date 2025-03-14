@@ -1,0 +1,70 @@
+--- old.narrowingDestructuring.types
++++ new.narrowingDestructuring.types
+@@= skipped -9, +9 lines =@@
+ 
+ function func<T extends X>(value: T) {
+ >func : <T extends X>(value: T) => void
++>T : T
+ >value : T
+ 
+     if (value.kind === "a") {
+@@= skipped -47, +48 lines =@@
+ 
+ function func2<T extends Z>(value: T) {
+ >func2 : <T extends Z>(value: T) => void
++>T : T
+ >value : T
+ 
+     if (value.kind === "f") {
+@@= skipped -41, +42 lines =@@
+ 
+ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t: T) {
+ >func3 : <T extends { kind: "a"; a: string; } | { kind: "b"; b: number; }>(t: T) => void
++>T : T
+ >kind : "a"
+ >a : string
+ >kind : "b"
+@@= skipped -21, +22 lines =@@
+         const r2 = (({ kind, ...rest }) => rest)(t);
+ >r2 : { a: string; }
+ >(({ kind, ...rest }) => rest)(t) : { a: string; }
+->(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
+->({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
++>(({ kind, ...rest }) => rest) : (__0: { kind: "a"; a: string; }) => { a: string; }
++>({ kind, ...rest }) => rest : (__0: { kind: "a"; a: string; }) => { a: string; }
+ >kind : "a"
+ >rest : { a: string; }
+ >rest : { a: string; }
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
+->farr : <T extends [number, string, string] | [string, number, number]>(x: T) => void
++>farr : <T extends [string, number, number] | [number, string, string]>(x: T) => void
++>T : T
+ >x : T
+ 
+     const [head, ...tail] = x;
+ >head : string | number
+ >tail : [string, string] | [number, number]
+->x : [number, string, string] | [string, number, number]
++>x : [string, number, number] | [number, string, string]
+ 
+     if (typeof x[0] === 'number') {
+ >typeof x[0] === 'number' : boolean
+->typeof x[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x[0] : string | number
+->x : [number, string, string] | [string, number, number]
++>x : [string, number, number] | [number, string, string]
+ >0 : 0
+ >'number' : "number"
+ 
+         const [head, ...tail] = x;
+ >head : number
+ >tail : [string, string] | [number, number]
+->x : [number, string, string] | [string, number, number]
++>x : [string, number, number] | [number, string, string]
+     }
+ }
+ 

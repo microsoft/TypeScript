@@ -1,0 +1,74 @@
+--- old.instanceOfAssignability.types
++++ new.instanceOfAssignability.types
+@@= skipped -1, +1 lines =@@
+ 
+ === instanceOfAssignability.ts ===
+ interface Base {
++>Base : Base
++
+ 	foo: string|number;
+ >foo : string | number
+ 
+@@= skipped -42, +44 lines =@@
+ >neck : any
+ 
+ function fn1(x: Array<number>|Array<string>|boolean) {
+->fn1 : (x: Array<number> | Array<string> | boolean) => void
+->x : boolean | number[] | string[]
++>fn1 : (x: boolean | string[] | number[]) => void
++>x : boolean | string[] | number[]
+ 
+ 	if(x instanceof Array) {
+ >x instanceof Array : boolean
+->x : boolean | number[] | string[]
++>x : boolean | string[] | number[]
+ >Array : ArrayConstructor
+ 
+ 		// 1.5: y: Array<number>|Array<string>
+ 		// Want: y: Array<number>|Array<string>
+ 		let y = x;
+->y : number[] | string[]
+->x : number[] | string[]
++>y : string[] | number[]
++>x : string[] | number[]
+ 	}
+ }
+ 
+@@= skipped -102, +102 lines =@@
+ }
+ 
+ function fn7(x: Array<number>|Array<string>) {
+->fn7 : (x: Array<number> | Array<string>) => void
+->x : number[] | string[]
++>fn7 : (x: string[] | number[]) => void
++>x : string[] | number[]
+ 
+ 	if(x instanceof Array) {
+ >x instanceof Array : boolean
+->x : number[] | string[]
++>x : string[] | number[]
+ >Array : ArrayConstructor
+ 
+ 		// 1.5: y: Array<number>|Array<string>
+ 		// Want: y: Array<number>|Array<string>
+ 		let y = x;
+->y : number[] | string[]
+->x : number[] | string[]
++>y : string[] | number[]
++>x : string[] | number[]
+ 	}
+ }
+ 
+ interface Alpha { a }
++>Alpha : Alpha
+ >a : any
+ 
+ interface Beta { b }
++>Beta : Beta
+ >b : any
+ 
+ interface Gamma { c }
++>Gamma : Gamma
+ >c : any
+ 
+ class ABC { a; b; c; }

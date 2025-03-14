@@ -1,0 +1,11 @@
+--- old.invalidImportAliasIdentifiers.types
++++ new.invalidImportAliasIdentifiers.types
+@@= skipped -34, +34 lines =@@
+ >E : E
+ 
+ interface I {
++>I : I
++
+     id: number;
+ >id : number
+ }

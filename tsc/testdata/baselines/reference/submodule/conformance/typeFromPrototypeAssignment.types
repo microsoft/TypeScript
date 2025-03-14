@@ -1,0 +1,151 @@
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment.ts] ////
+
+=== a.js ===
+// all references to _map, set, get, addon should be ok
+
+/** @constructor */
+var Multimap = function() {
+>Multimap : () => void
+>function() {    this._map = {};    this._map    this.set    this.get    this.addon} : () => void
+
+    this._map = {};
+>this._map = {} : {}
+>this._map : any
+>this : any
+>_map : any
+>{} : {}
+
+    this._map
+>this._map : any
+>this : any
+>_map : any
+
+    this.set
+>this.set : any
+>this : any
+>set : any
+
+    this.get
+>this.get : any
+>this : any
+>get : any
+
+    this.addon
+>this.addon : any
+>this : any
+>addon : any
+
+};
+
+Multimap.prototype = {
+>Multimap.prototype = {    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get: () => void; }
+>Multimap.prototype : any
+>Multimap : () => void
+>prototype : any
+>{    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get: () => void; }
+
+    set: function() {
+>set : () => void
+>function() {        this._map        this.set        this.get        this.addon    } : () => void
+
+        this._map
+>this._map : any
+>this : any
+>_map : any
+
+        this.set
+>this.set : any
+>this : any
+>set : any
+
+        this.get
+>this.get : any
+>this : any
+>get : any
+
+        this.addon
+>this.addon : any
+>this : any
+>addon : any
+
+    },
+    get() {
+>get : () => void
+
+        this._map
+>this._map : any
+>this : any
+>_map : any
+
+        this.set
+>this.set : any
+>this : any
+>set : any
+
+        this.get
+>this.get : any
+>this : any
+>get : any
+
+        this.addon
+>this.addon : any
+>this : any
+>addon : any
+    }
+}
+
+Multimap.prototype.addon = function () {
+>Multimap.prototype.addon = function () {    this._map    this.set    this.get    this.addon} : () => void
+>Multimap.prototype.addon : any
+>Multimap.prototype : any
+>Multimap : () => void
+>prototype : any
+>addon : any
+>function () {    this._map    this.set    this.get    this.addon} : () => void
+
+    this._map
+>this._map : any
+>this : any
+>_map : any
+
+    this.set
+>this.set : any
+>this : any
+>set : any
+
+    this.get
+>this.get : any
+>this : any
+>get : any
+
+    this.addon
+>this.addon : any
+>this : any
+>addon : any
+}
+
+var mm = new Multimap();
+>mm : any
+>new Multimap() : any
+>Multimap : () => void
+
+mm._map
+>mm._map : any
+>mm : any
+>_map : any
+
+mm.set
+>mm.set : any
+>mm : any
+>set : any
+
+mm.get
+>mm.get : any
+>mm : any
+>get : any
+
+mm.addon
+>mm.addon : any
+>mm : any
+>addon : any
+

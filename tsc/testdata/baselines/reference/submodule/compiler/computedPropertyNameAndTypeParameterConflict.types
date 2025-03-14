@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/computedPropertyNameAndTypeParameterConflict.ts] ////
+
+=== computedPropertyNameAndTypeParameterConflict.ts ===
+declare const O: unique symbol;
+>O : unique symbol
+
+declare class Bar<O> {
+>Bar : Bar<O>
+>O : O
+
+    [O]: number;
+>[O] : number
+>O : unique symbol
+}
+
+

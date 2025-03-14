@@ -1,0 +1,2305 @@
+--- old.complexRecursiveCollections.types
++++ new.complexRecursiveCollections.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/complexRecursiveCollections.ts] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 10,000
+-Type Count: 50,000
+-Instantiation count: 100,000
+-Symbol count: 100,000
+-
+ === complex.ts ===
+ interface Ara<T> { t: T }
++>Ara : Ara<T>
++>T : T
+ >t : T
+ 
+ interface Collection<K, V> {
++>Collection : Collection<K, V>
++>K : K
++>V : V
++
+     map<M>(mapper: (value: V, key: K, iter: this) => M): Collection<K, M>;
+ >map : <M>(mapper: (value: V, key: K, iter: this) => M) => Collection<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => M
+ >value : V
+ >key : K
+@@= skipped -19, +20 lines =@@
+ 
+     flatMap<M>(mapper: (value: V, key: K, iter: this) => Ara<M>, context?: any): Collection<K, M>;
+ >flatMap : <M>(mapper: (value: V, key: K, iter: this) => Ara<M>, context?: any) => Collection<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => Ara<M>
+ >value : V
+ >key : K
+@@= skipped -8, +9 lines =@@
+ 
+     // these seem necessary to push it over the top for memory usage
+     reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
+->reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
++>reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
++>R : R
+ >reducer : (reduction: R, value: V, key: K, iter: this) => R
+ >reduction : R
+ >value : V
+@@= skipped -10, +11 lines =@@
+ >context : any
+ 
+     reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
+->reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
+->reducer : (reduction: V | R, value: V, key: K, iter: this) => R
+->reduction : V | R
++>reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
++>R : R
++>reducer : (reduction: R | V, value: V, key: K, iter: this) => R
++>reduction : R | V
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -11, +12 lines =@@
+ >toSeq : () => Seq<K, V>
+ }
+ interface Seq<K, V> extends Collection<K, V> {
++>Seq : Seq<K, V>
++>K : K
++>V : V
+ }
+ interface N1<T> extends Collection<void, T> {
++>N1 : N1<T>
++>T : T
++
+     map<M>(mapper: (value: T, key: void, iter: this) => M): N1<M>;
+ >map : <M>(mapper: (value: T, key: void, iter: this) => M) => N1<M>
++>M : M
+ >mapper : (value: T, key: void, iter: this) => M
+ >value : T
+ >key : void
+@@= skipped -11, +18 lines =@@
+ 
+     flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N1<M>;
+ >flatMap : <M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any) => N1<M>
++>M : M
+ >mapper : (value: T, key: void, iter: this) => Ara<M>
+ >value : T
+ >key : void
+@@= skipped -7, +8 lines =@@
+ >context : any
+ }
+ interface N2<T> extends N1<T> {
++>N2 : N2<T>
++>T : T
++
+     map<M>(mapper: (value: T, key: void, iter: this) => M): N2<M>;
+ >map : <M>(mapper: (value: T, key: void, iter: this) => M) => N2<M>
++>M : M
+ >mapper : (value: T, key: void, iter: this) => M
+ >value : T
+ >key : void
+@@= skipped -9, +13 lines =@@
+ 
+     flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
+ >flatMap : <M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any) => N2<M>
++>M : M
+ >mapper : (value: T, key: void, iter: this) => Ara<M>
+ >value : T
+ >key : void
+@@= skipped -17, +18 lines =@@
+ >Immutable : typeof Immutable
+ 
+   export function fromJS(jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any): any;
+->fromJS : (jsValue: any, reviver?: (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any) => any
++>fromJS : (jsValue: any, reviver?: (key: string | number, sequence: Indexed<any> | Keyed<string, any>, path?: (string | number)[]) => any) => any
+ >jsValue : any
+->reviver : (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any
++>reviver : (key: string | number, sequence: Indexed<any> | Keyed<string, any>, path?: (string | number)[]) => any
+ >key : string | number
+->sequence : Collection.Keyed<string, any> | Collection.Indexed<any>
++>sequence : Indexed<any> | Keyed<string, any>
+ >Collection : any
+ >Collection : any
+ >path : (string | number)[]
+@@= skipped -27, +27 lines =@@
+ >maybeCollection : any
+ 
+   export function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
+->isKeyed : (maybeKeyed: any) => maybeKeyed is Collection.Keyed<any, any>
++>isKeyed : (maybeKeyed: any) => maybeKeyed is Keyed<any, any>
+ >maybeKeyed : any
+ >Collection : any
+ 
+   export function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
+->isIndexed : (maybeIndexed: any) => maybeIndexed is Collection.Indexed<any>
++>isIndexed : (maybeIndexed: any) => maybeIndexed is Indexed<any>
+ >maybeIndexed : any
+ >Collection : any
+ 
+   export function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
+->isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
++>isAssociative : (maybeAssociative: any) => maybeAssociative is Indexed<any> | Keyed<any, any>
+ >maybeAssociative : any
+ >Collection : any
+ >Collection : any
+@@= skipped -24, +24 lines =@@
+ >maybeValue : any
+ 
+   export interface ValueObject {
++>ValueObject : ValueObject
++
+     equals(other: any): boolean;
+ >equals : (other: any) => boolean
+ >other : any
+@@= skipped -15, +17 lines =@@
+ >maybeList : any
+ 
+     function of<T>(...values: Array<T>): List<T>;
+->of : <T>(...values: Array<T>) => List<T>
++>of : <T>(...values: T[]) => List<T>
++>T : T
+ >values : T[]
+   }
+   export function List(): List<any>;
+@@= skipped -8, +9 lines =@@
+ 
+   export function List<T>(): List<T>;
+ >List : typeof List
++>T : T
+ 
+   export function List<T>(collection: Iterable<T>): List<T>;
+ >List : typeof List
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ 
+   export interface List<T> extends Collection.Indexed<T> {
++>List : List<T>
++>T : T
+ >Collection : typeof Collection
+ 
+     // Persistent changes
+@@= skipped -31, +35 lines =@@
+ >clear : () => List<T>
+ 
+     push(...values: Array<T>): List<T>;
+->push : (...values: Array<T>) => List<T>
++>push : (...values: T[]) => List<T>
+ >values : T[]
+ 
+     pop(): List<T>;
+ >pop : () => List<T>
+ 
+     unshift(...values: Array<T>): List<T>;
+->unshift : (...values: Array<T>) => List<T>
++>unshift : (...values: T[]) => List<T>
+ >values : T[]
+ 
+     shift(): List<T>;
+@@= skipped -28, +28 lines =@@
+ 
+     update<R>(updater: (value: this) => R): R;
+ >update : { (index: number, notSetValue: T, updater: (value: T) => T): this; (index: number, updater: (value: T) => T): this; <R>(updater: (value: this) => R): R; }
++>R : R
+ >updater : (value: this) => R
+ >value : this
+ 
+     merge(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
+->merge : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
+->collections : (Collection.Indexed<T> | T[])[]
++>merge : (...collections: (T[] | Indexed<T>)[]) => this
++>collections : (T[] | Indexed<T>)[]
+ >Collection : any
+ 
+     mergeWith(merger: (oldVal: T, newVal: T, key: number) => T, ...collections: Array<Collection.Indexed<T> | Array<T>>): this;
+->mergeWith : (merger: (oldVal: T, newVal: T, key: number) => T, ...collections: Array<Collection.Indexed<T> | Array<T>>) => this
++>mergeWith : (merger: (oldVal: T, newVal: T, key: number) => T, ...collections: (T[] | Indexed<T>)[]) => this
+ >merger : (oldVal: T, newVal: T, key: number) => T
+ >oldVal : T
+ >newVal : T
+ >key : number
+->collections : (Collection.Indexed<T> | T[])[]
++>collections : (T[] | Indexed<T>)[]
+ >Collection : any
+ 
+     mergeDeep(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
+->mergeDeep : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
+->collections : (Collection.Indexed<T> | T[])[]
++>mergeDeep : (...collections: (T[] | Indexed<T>)[]) => this
++>collections : (T[] | Indexed<T>)[]
+ >Collection : any
+ 
+     mergeDeepWith(merger: (oldVal: T, newVal: T, key: number) => T, ...collections: Array<Collection.Indexed<T> | Array<T>>): this;
+->mergeDeepWith : (merger: (oldVal: T, newVal: T, key: number) => T, ...collections: Array<Collection.Indexed<T> | Array<T>>) => this
++>mergeDeepWith : (merger: (oldVal: T, newVal: T, key: number) => T, ...collections: (T[] | Indexed<T>)[]) => this
+ >merger : (oldVal: T, newVal: T, key: number) => T
+ >oldVal : T
+ >newVal : T
+ >key : number
+->collections : (Collection.Indexed<T> | T[])[]
++>collections : (T[] | Indexed<T>)[]
+ >Collection : any
+ 
+     setSize(size: number): List<T>;
+@@= skipped -37, +38 lines =@@
+ 
+     // Deep persistent changes
+     setIn(keyPath: Iterable<any>, value: any): this;
+->setIn : (keyPath: Iterable<any>, value: any) => this
+->keyPath : Iterable<any>
++>setIn : (keyPath: Iterable<any, any, any>, value: any) => this
++>keyPath : Iterable<any, any, any>
+ >value : any
+ 
+     deleteIn(keyPath: Iterable<any>): this;
+->deleteIn : (keyPath: Iterable<any>) => this
+->keyPath : Iterable<any>
++>deleteIn : (keyPath: Iterable<any, any, any>) => this
++>keyPath : Iterable<any, any, any>
+ 
+     removeIn(keyPath: Iterable<any>): this;
+->removeIn : (keyPath: Iterable<any>) => this
+->keyPath : Iterable<any>
++>removeIn : (keyPath: Iterable<any, any, any>) => this
++>keyPath : Iterable<any, any, any>
+ 
+     updateIn(keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this;
+->updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
+->keyPath : Iterable<any>
++>updateIn : { (keyPath: Iterable<any, any, any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any, any, any>, updater: (value: any) => any): this; }
++>keyPath : Iterable<any, any, any>
+ >notSetValue : any
+ >updater : (value: any) => any
+ >value : any
+ 
+     updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
+->updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
+->keyPath : Iterable<any>
++>updateIn : { (keyPath: Iterable<any, any, any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any, any, any>, updater: (value: any) => any): this; }
++>keyPath : Iterable<any, any, any>
+ >updater : (value: any) => any
+ >value : any
+ 
+     mergeIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
+->mergeIn : (keyPath: Iterable<any>, ...collections: Array<any>) => this
+->keyPath : Iterable<any>
++>mergeIn : (keyPath: Iterable<any, any, any>, ...collections: any[]) => this
++>keyPath : Iterable<any, any, any>
+ >collections : any[]
+ 
+     mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
+->mergeDeepIn : (keyPath: Iterable<any>, ...collections: Array<any>) => this
+->keyPath : Iterable<any>
++>mergeDeepIn : (keyPath: Iterable<any, any, any>, ...collections: any[]) => this
++>keyPath : Iterable<any, any, any>
+ >collections : any[]
+ 
+     // Transient changes
+@@= skipped -49, +49 lines =@@
+ 
+     // Sequence algorithms
+     concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): List<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => List<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => List<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ 
+     map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): List<M>;
+ >map : <M>(mapper: (value: T, key: number, iter: this) => M, context?: any) => List<M>
++>M : M
+ >mapper : (value: T, key: number, iter: this) => M
+ >value : T
+ >key : number
+@@= skipped -12, +14 lines =@@
+ >context : any
+ 
+     flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): List<M>;
+->flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any) => List<M>
+->mapper : (value: T, key: number, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M, any, any>, context?: any) => List<M>
++>M : M
++>mapper : (value: T, key: number, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : number
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>;
+ >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, index: number, iter: this) => value is F
+ >value : T
+ >index : number
+@@= skipped -22, +23 lines =@@
+ >maybeMap : any
+ 
+     function of(...keyValues: Array<any>): Map<any, any>;
+->of : (...keyValues: Array<any>) => Map<any, any>
++>of : (...keyValues: any[]) => Map<any, any>
+ >keyValues : any[]
+   }
+   export function Map<K, V>(collection: Iterable<[K, V]>): Map<K, V>;
+ >Map : typeof Map
+->collection : Iterable<[K, V]>
++>K : K
++>V : V
++>collection : Iterable<[K, V], any, any>
+ 
+   export function Map<T>(collection: Iterable<Iterable<T>>): Map<T, T>;
+ >Map : typeof Map
+->collection : Iterable<Iterable<T>>
++>T : T
++>collection : Iterable<Iterable<T, any, any>, any, any>
+ 
+   export function Map<V>(obj: {[key: string]: V}): Map<string, V>;
+ >Map : typeof Map
++>V : V
+ >obj : { [key: string]: V; }
+ >key : string
+ 
+   export function Map<K, V>(): Map<K, V>;
+ >Map : typeof Map
++>K : K
++>V : V
+ 
+   export function Map(): Map<any, any>;
+ >Map : typeof Map
+ 
+   export interface Map<K, V> extends Collection.Keyed<K, V> {
++>Map : Map<K, V>
++>K : K
++>V : V
+ >Collection : typeof Collection
+ 
+     // Persistent changes
+@@= skipped -40, +49 lines =@@
+ >key : K
+ 
+     deleteAll(keys: Iterable<K>): this;
+->deleteAll : (keys: Iterable<K>) => this
+->keys : Iterable<K>
++>deleteAll : (keys: Iterable<K, any, any>) => this
++>keys : Iterable<K, any, any>
+ 
+     removeAll(keys: Iterable<K>): this;
+->removeAll : (keys: Iterable<K>) => this
+->keys : Iterable<K>
++>removeAll : (keys: Iterable<K, any, any>) => this
++>keys : Iterable<K, any, any>
+ 
+     clear(): this;
+ >clear : () => this
+@@= skipped -25, +25 lines =@@
+ 
+     update<R>(updater: (value: this) => R): R;
+ >update : { (key: K, notSetValue: V, updater: (value: V) => V): this; (key: K, updater: (value: V) => V): this; <R>(updater: (value: this) => R): R; }
++>R : R
+ >updater : (value: this) => R
+ >value : this
+ 
+     merge(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
+->merge : (...collections: Array<Collection<K, V> | { [key: string]: V; }>) => this
++>merge : (...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+ >collections : (Collection<K, V> | { [key: string]: V; })[]
+ >key : string
+ 
+     mergeWith(merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
+->mergeWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | { [key: string]: V; }>) => this
++>mergeWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+ >merger : (oldVal: V, newVal: V, key: K) => V
+ >oldVal : V
+ >newVal : V
+@@= skipped -18, +19 lines =@@
+ >key : string
+ 
+     mergeDeep(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
+->mergeDeep : (...collections: Array<Collection<K, V> | { [key: string]: V; }>) => this
++>mergeDeep : (...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+ >collections : (Collection<K, V> | { [key: string]: V; })[]
+ >key : string
+ 
+     mergeDeepWith(merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
+->mergeDeepWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: Array<Collection<K, V> | { [key: string]: V; }>) => this
++>mergeDeepWith : (merger: (oldVal: V, newVal: V, key: K) => V, ...collections: (Collection<K, V> | { [key: string]: V; })[]) => this
+ >merger : (oldVal: V, newVal: V, key: K) => V
+ >oldVal : V
+ >newVal : V
+@@= skipped -15, +15 lines =@@
+ 
+     // Deep persistent changes
+     setIn(keyPath: Iterable<any>, value: any): this;
+->setIn : (keyPath: Iterable<any>, value: any) => this
+->keyPath : Iterable<any>
++>setIn : (keyPath: Iterable<any, any, any>, value: any) => this
++>keyPath : Iterable<any, any, any>
+ >value : any
+ 
+     deleteIn(keyPath: Iterable<any>): this;
+->deleteIn : (keyPath: Iterable<any>) => this
+->keyPath : Iterable<any>
++>deleteIn : (keyPath: Iterable<any, any, any>) => this
++>keyPath : Iterable<any, any, any>
+ 
+     removeIn(keyPath: Iterable<any>): this;
+->removeIn : (keyPath: Iterable<any>) => this
+->keyPath : Iterable<any>
++>removeIn : (keyPath: Iterable<any, any, any>) => this
++>keyPath : Iterable<any, any, any>
+ 
+     updateIn(keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this;
+->updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
+->keyPath : Iterable<any>
++>updateIn : { (keyPath: Iterable<any, any, any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any, any, any>, updater: (value: any) => any): this; }
++>keyPath : Iterable<any, any, any>
+ >notSetValue : any
+ >updater : (value: any) => any
+ >value : any
+ 
+     updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
+->updateIn : { (keyPath: Iterable<any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any>, updater: (value: any) => any): this; }
+->keyPath : Iterable<any>
++>updateIn : { (keyPath: Iterable<any, any, any>, notSetValue: any, updater: (value: any) => any): this; (keyPath: Iterable<any, any, any>, updater: (value: any) => any): this; }
++>keyPath : Iterable<any, any, any>
+ >updater : (value: any) => any
+ >value : any
+ 
+     mergeIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
+->mergeIn : (keyPath: Iterable<any>, ...collections: Array<any>) => this
+->keyPath : Iterable<any>
++>mergeIn : (keyPath: Iterable<any, any, any>, ...collections: any[]) => this
++>keyPath : Iterable<any, any, any>
+ >collections : any[]
+ 
+     mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
+->mergeDeepIn : (keyPath: Iterable<any>, ...collections: Array<any>) => this
+->keyPath : Iterable<any>
++>mergeDeepIn : (keyPath: Iterable<any, any, any>, ...collections: any[]) => this
++>keyPath : Iterable<any, any, any>
+ >collections : any[]
+ 
+     // Transient changes
+@@= skipped -49, +49 lines =@@
+ 
+     // Sequence algorithms
+     concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Map<K | string, V | C>; }
+->collections : Iterable<[KC, VC]>[]
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): Map<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Map<string | K, C | V>; }
++>KC : KC
++>VC : VC
++>collections : Iterable<[KC, VC], any, any>[]
+ 
+     concat<C>(...collections: Array<{[key: string]: C}>): Map<K | string, V | C>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Map<K | string, V | C>; }
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): Map<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Map<string | K, C | V>; }
++>C : C
+ >collections : { [key: string]: C; }[]
+ >key : string
+ 
+     map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Map<K, M>;
+ >map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => Map<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => M
+ >value : V
+ >key : K
+@@= skipped -18, +22 lines =@@
+ 
+     mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): Map<M, V>;
+ >mapKeys : <M>(mapper: (key: K, value: V, iter: this) => M, context?: any) => Map<M, V>
++>M : M
+ >mapper : (key: K, value: V, iter: this) => M
+ >key : K
+ >value : V
+@@= skipped -8, +9 lines =@@
+ 
+     mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): Map<KM, VM>;
+ >mapEntries : <KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any) => Map<KM, VM>
++>KM : KM
++>VM : VM
+ >mapper : (entry: [K, V], index: number, iter: this) => [KM, VM]
+ >entry : [K, V]
+ >index : number
+@@= skipped -7, +9 lines =@@
+ >context : any
+ 
+     flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Map<any, any>;
+->flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => Map<any, any>
+->mapper : (value: V, key: K, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M, any, any>, context?: any) => Map<any, any>
++>M : M
++>mapper : (value: V, key: K, iter: this) => Iterable<M, any, any>
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>;
+ >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: V, key: K, iter: this) => value is F
+ >value : V
+ >key : K
+@@= skipped -23, +24 lines =@@
+   }
+   export function OrderedMap<K, V>(collection: Iterable<[K, V]>): OrderedMap<K, V>;
+ >OrderedMap : typeof OrderedMap
+->collection : Iterable<[K, V]>
++>K : K
++>V : V
++>collection : Iterable<[K, V], any, any>
+ 
+   export function OrderedMap<T>(collection: Iterable<Iterable<T>>): OrderedMap<T, T>;
+ >OrderedMap : typeof OrderedMap
+->collection : Iterable<Iterable<T>>
++>T : T
++>collection : Iterable<Iterable<T, any, any>, any, any>
+ 
+   export function OrderedMap<V>(obj: {[key: string]: V}): OrderedMap<string, V>;
+ >OrderedMap : typeof OrderedMap
++>V : V
+ >obj : { [key: string]: V; }
+ >key : string
+ 
+   export function OrderedMap<K, V>(): OrderedMap<K, V>;
+ >OrderedMap : typeof OrderedMap
++>K : K
++>V : V
+ 
+   export function OrderedMap(): OrderedMap<any, any>;
+ >OrderedMap : typeof OrderedMap
+ 
+   export interface OrderedMap<K, V> extends Map<K, V> {
++>OrderedMap : OrderedMap<K, V>
++>K : K
++>V : V
++
+     // Sequence algorithms
+     concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): OrderedMap<K | string, V | C>; }
+->collections : Iterable<[KC, VC]>[]
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): OrderedMap<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): OrderedMap<string | K, C | V>; }
++>KC : KC
++>VC : VC
++>collections : Iterable<[KC, VC], any, any>[]
+ 
+     concat<C>(...collections: Array<{[key: string]: C}>): OrderedMap<K | string, V | C>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): OrderedMap<K | string, V | C>; }
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): OrderedMap<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): OrderedMap<string | K, C | V>; }
++>C : C
+ >collections : { [key: string]: C; }[]
+ >key : string
+ 
+     map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): OrderedMap<K, M>;
+ >map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => OrderedMap<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => M
+ >value : V
+ >key : K
+@@= skipped -38, +52 lines =@@
+ 
+     mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): OrderedMap<M, V>;
+ >mapKeys : <M>(mapper: (key: K, value: V, iter: this) => M, context?: any) => OrderedMap<M, V>
++>M : M
+ >mapper : (key: K, value: V, iter: this) => M
+ >key : K
+ >value : V
+@@= skipped -8, +9 lines =@@
+ 
+     mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): OrderedMap<KM, VM>;
+ >mapEntries : <KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any) => OrderedMap<KM, VM>
++>KM : KM
++>VM : VM
+ >mapper : (entry: [K, V], index: number, iter: this) => [KM, VM]
+ >entry : [K, V]
+ >index : number
+@@= skipped -7, +9 lines =@@
+ >context : any
+ 
+     flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): OrderedMap<any, any>;
+->flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => OrderedMap<any, any>
+->mapper : (value: V, key: K, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M, any, any>, context?: any) => OrderedMap<any, any>
++>M : M
++>mapper : (value: V, key: K, iter: this) => Iterable<M, any, any>
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>;
+ >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: V, key: K, iter: this) => value is F
+ >value : V
+ >key : K
+@@= skipped -22, +23 lines =@@
+ >maybeSet : any
+ 
+     function of<T>(...values: Array<T>): Set<T>;
+->of : <T>(...values: Array<T>) => Set<T>
++>of : <T>(...values: T[]) => Set<T>
++>T : T
+ >values : T[]
+ 
+     function fromKeys<T>(iter: Collection<T, any>): Set<T>;
+ >fromKeys : { <T>(iter: Collection<T, any>): Set<T>; (obj: { [key: string]: any; }): Set<string>; }
++>T : T
+ >iter : Collection<T, any>
+ 
+     function fromKeys(obj: {[key: string]: any}): Set<string>;
+@@= skipped -13, +15 lines =@@
+ >key : string
+ 
+     function intersect<T>(sets: Iterable<Iterable<T>>): Set<T>;
+->intersect : <T>(sets: Iterable<Iterable<T>>) => Set<T>
+->sets : Iterable<Iterable<T>>
++>intersect : <T>(sets: Iterable<Iterable<T, any, any>, any, any>) => Set<T>
++>T : T
++>sets : Iterable<Iterable<T, any, any>, any, any>
+ 
+     function union<T>(sets: Iterable<Iterable<T>>): Set<T>;
+->union : <T>(sets: Iterable<Iterable<T>>) => Set<T>
+->sets : Iterable<Iterable<T>>
++>union : <T>(sets: Iterable<Iterable<T, any, any>, any, any>) => Set<T>
++>T : T
++>sets : Iterable<Iterable<T, any, any>, any, any>
+   }
+   export function Set(): Set<any>;
+ >Set : typeof Set
+ 
+   export function Set<T>(): Set<T>;
+ >Set : typeof Set
++>T : T
+ 
+   export function Set<T>(collection: Iterable<T>): Set<T>;
+ >Set : typeof Set
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ 
+   export interface Set<T> extends Collection.Set<T> {
++>Set : Set<T>
++>T : T
+ >Collection : typeof Collection
+ 
+     // Persistent changes
+@@= skipped -37, +43 lines =@@
+ >clear : () => this
+ 
+     union(...collections: Array<Collection<any, T> | Array<T>>): this;
+->union : (...collections: Array<Collection<any, T> | Array<T>>) => this
+->collections : (Collection<any, T> | T[])[]
++>union : (...collections: (T[] | Collection<any, T>)[]) => this
++>collections : (T[] | Collection<any, T>)[]
+ 
+     merge(...collections: Array<Collection<any, T> | Array<T>>): this;
+->merge : (...collections: Array<Collection<any, T> | Array<T>>) => this
+->collections : (Collection<any, T> | T[])[]
++>merge : (...collections: (T[] | Collection<any, T>)[]) => this
++>collections : (T[] | Collection<any, T>)[]
+ 
+     intersect(...collections: Array<Collection<any, T> | Array<T>>): this;
+->intersect : (...collections: Array<Collection<any, T> | Array<T>>) => this
+->collections : (Collection<any, T> | T[])[]
++>intersect : (...collections: (T[] | Collection<any, T>)[]) => this
++>collections : (T[] | Collection<any, T>)[]
+ 
+     subtract(...collections: Array<Collection<any, T> | Array<T>>): this;
+->subtract : (...collections: Array<Collection<any, T> | Array<T>>) => this
+->collections : (Collection<any, T> | T[])[]
++>subtract : (...collections: (T[] | Collection<any, T>)[]) => this
++>collections : (T[] | Collection<any, T>)[]
+ 
+     // Transient changes
+     withMutations(mutator: (mutable: this) => any): this;
+@@= skipped -29, +29 lines =@@
+ 
+     // Sequence algorithms
+     concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Set<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => Set<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => Set<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ 
+     map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): Set<M>;
+ >map : <M>(mapper: (value: T, key: never, iter: this) => M, context?: any) => Set<M>
++>M : M
+ >mapper : (value: T, key: never, iter: this) => M
+ >value : T
+ >key : never
+@@= skipped -12, +14 lines =@@
+ >context : any
+ 
+     flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any): Set<M>;
+->flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any) => Set<M>
+->mapper : (value: T, key: never, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M, any, any>, context?: any) => Set<M>
++>M : M
++>mapper : (value: T, key: never, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : never
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>;
+ >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, key: never, iter: this) => value is F
+ >value : T
+ >key : never
+@@= skipped -22, +23 lines =@@
+ >maybeOrderedSet : any
+ 
+     function of<T>(...values: Array<T>): OrderedSet<T>;
+->of : <T>(...values: Array<T>) => OrderedSet<T>
++>of : <T>(...values: T[]) => OrderedSet<T>
++>T : T
+ >values : T[]
+ 
+     function fromKeys<T>(iter: Collection<T, any>): OrderedSet<T>;
+ >fromKeys : { <T>(iter: Collection<T, any>): OrderedSet<T>; (obj: { [key: string]: any; }): OrderedSet<string>; }
++>T : T
+ >iter : Collection<T, any>
+ 
+     function fromKeys(obj: {[key: string]: any}): OrderedSet<string>;
+@@= skipped -17, +19 lines =@@
+ 
+   export function OrderedSet<T>(): OrderedSet<T>;
+ >OrderedSet : typeof OrderedSet
++>T : T
+ 
+   export function OrderedSet<T>(collection: Iterable<T>): OrderedSet<T>;
+ >OrderedSet : typeof OrderedSet
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ 
+   export interface OrderedSet<T> extends Set<T> {
++>OrderedSet : OrderedSet<T>
++>T : T
++
+     // Sequence algorithms
+     concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): OrderedSet<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => OrderedSet<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => OrderedSet<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ 
+     map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): OrderedSet<M>;
+ >map : <M>(mapper: (value: T, key: never, iter: this) => M, context?: any) => OrderedSet<M>
++>M : M
+ >mapper : (value: T, key: never, iter: this) => M
+ >value : T
+ >key : never
+@@= skipped -20, +27 lines =@@
+ >context : any
+ 
+     flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any): OrderedSet<M>;
+->flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any) => OrderedSet<M>
+->mapper : (value: T, key: never, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M, any, any>, context?: any) => OrderedSet<M>
++>M : M
++>mapper : (value: T, key: never, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : never
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>;
+ >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, key: never, iter: this) => value is F
+ >value : T
+ >key : never
+@@= skipped -15, +16 lines =@@
+ >context : any
+ 
+     zip(...collections: Array<Collection<any, any>>): OrderedSet<any>;
+->zip : (...collections: Array<Collection<any, any>>) => OrderedSet<any>
++>zip : (...collections: Collection<any, any>[]) => OrderedSet<any>
+ >collections : Collection<any, any>[]
+ 
+     zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>;
+->zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>; <U_1, V, Z_1>(zipper: (value: T, otherValue: U_1, thirdValue: V) => Z_1, otherCollection: Collection<any, U_1>, thirdCollection: Collection<any, V>): OrderedSet<Z_1>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): OrderedSet<Z_1>; }
++>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): OrderedSet<Z>; }
++>U : U
++>Z : Z
+ >zipper : (value: T, otherValue: U) => Z
+ >value : T
+ >otherValue : U
+ >otherCollection : Collection<any, U>
+ 
+     zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>;
+->zipWith : { <U_1, Z_1>(zipper: (value: T, otherValue: U_1) => Z_1, otherCollection: Collection<any, U_1>): OrderedSet<Z_1>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): OrderedSet<Z_1>; }
++>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): OrderedSet<Z>; }
++>U : U
++>V : V
++>Z : Z
+ >zipper : (value: T, otherValue: U, thirdValue: V) => Z
+ >value : T
+ >otherValue : U
+@@= skipped -20, +25 lines =@@
+ >thirdCollection : Collection<any, V>
+ 
+     zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>;
+->zipWith : { <U, Z_1>(zipper: (value: T, otherValue: U) => Z_1, otherCollection: Collection<any, U>): OrderedSet<Z_1>; <U, V, Z_1>(zipper: (value: T, otherValue: U, thirdValue: V) => Z_1, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z_1>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): OrderedSet<Z>; }
+->zipper : (...any: Array<any>) => Z
++>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): OrderedSet<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): OrderedSet<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): OrderedSet<Z>; }
++>Z : Z
++>zipper : (...any: any[]) => Z
+ >any : any[]
+ >collections : Collection<any, any>[]
+   }
+@@= skipped -13, +14 lines =@@
+ >maybeStack : any
+ 
+     function of<T>(...values: Array<T>): Stack<T>;
+->of : <T>(...values: Array<T>) => Stack<T>
++>of : <T>(...values: T[]) => Stack<T>
++>T : T
+ >values : T[]
+   }
+   export function Stack(): Stack<any>;
+@@= skipped -8, +9 lines =@@
+ 
+   export function Stack<T>(): Stack<T>;
+ >Stack : typeof Stack
++>T : T
+ 
+   export function Stack<T>(collection: Iterable<T>): Stack<T>;
+ >Stack : typeof Stack
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ 
+   export interface Stack<T> extends Collection.Indexed<T> {
++>Stack : Stack<T>
++>T : T
+ >Collection : typeof Collection
+ 
+     // Reading values
+     peek(): T | undefined;
+->peek : () => T | undefined
++>peek : () => T
+ 
+     // Persistent changes
+     clear(): Stack<T>;
+ >clear : () => Stack<T>
+ 
+     unshift(...values: Array<T>): Stack<T>;
+->unshift : (...values: Array<T>) => Stack<T>
++>unshift : (...values: T[]) => Stack<T>
+ >values : T[]
+ 
+     unshiftAll(iter: Iterable<T>): Stack<T>;
+->unshiftAll : (iter: Iterable<T>) => Stack<T>
+->iter : Iterable<T>
++>unshiftAll : (iter: Iterable<T, any, any>) => Stack<T>
++>iter : Iterable<T, any, any>
+ 
+     shift(): Stack<T>;
+ >shift : () => Stack<T>
+ 
+     push(...values: Array<T>): Stack<T>;
+->push : (...values: Array<T>) => Stack<T>
++>push : (...values: T[]) => Stack<T>
+ >values : T[]
+ 
+     pushAll(iter: Iterable<T>): Stack<T>;
+->pushAll : (iter: Iterable<T>) => Stack<T>
+->iter : Iterable<T>
++>pushAll : (iter: Iterable<T, any, any>) => Stack<T>
++>iter : Iterable<T, any, any>
+ 
+     pop(): Stack<T>;
+ >pop : () => Stack<T>
+@@= skipped -52, +56 lines =@@
+ 
+     // Sequence algorithms
+     concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Stack<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => Stack<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => Stack<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ 
+     map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): Stack<M>;
+ >map : <M>(mapper: (value: T, key: number, iter: this) => M, context?: any) => Stack<M>
++>M : M
+ >mapper : (value: T, key: number, iter: this) => M
+ >value : T
+ >key : number
+@@= skipped -12, +14 lines =@@
+ >context : any
+ 
+     flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Stack<M>;
+->flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any) => Stack<M>
+->mapper : (value: T, key: number, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M, any, any>, context?: any) => Stack<M>
++>M : M
++>mapper : (value: T, key: number, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : number
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>;
+ >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, index: number, iter: this) => value is F
+ >value : T
+ >index : number
+@@= skipped -15, +16 lines =@@
+ >context : any
+   }
+   export function Range(start?: number, end?: number, step?: number): Seq.Indexed<number>;
+->Range : (start?: number, end?: number, step?: number) => Seq.Indexed<number>
++>Range : (start?: number, end?: number, step?: number) => Indexed<number>
+ >start : number
+ >end : number
+ >step : number
+ >Seq : any
+ 
+   export function Repeat<T>(value: T, times?: number): Seq.Indexed<T>;
+->Repeat : <T>(value: T, times?: number) => Seq.Indexed<T>
++>Repeat : <T>(value: T, times?: number) => Indexed<T>
++>T : T
+ >value : T
+ >times : number
+ >Seq : any
+@@= skipped -16, +17 lines =@@
+ >Record : typeof Record
+ 
+     export function isRecord(maybeRecord: any): maybeRecord is Record.Instance<any>;
+->isRecord : (maybeRecord: any) => maybeRecord is Record.Instance<any>
++>isRecord : (maybeRecord: any) => maybeRecord is Instance<any>
+ >maybeRecord : any
+ >Record : any
+ 
+@@= skipped -9, +9 lines =@@
+ >record : Instance<any>
+ 
+     export interface Class<T extends Object> {
++>Class : Class<T>
++>T : T
++
+       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
+->values : Partial<T> | Iterable<[string, any]>
++>values : Iterable<[string, any], any, any> | Partial<T>
+ 
+       new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
+->values : Partial<T> | Iterable<[string, any]>
++>values : Iterable<[string, any], any, any> | Partial<T>
+     }
+     export interface Instance<T extends Object> {
++>Instance : Instance<T>
++>T : T
++
+       readonly size: number;
+ >size : number
+ 
+@@= skipped -17, +23 lines =@@
+ 
+       get<K extends keyof T>(key: K): T[K];
+ >get : <K extends keyof T>(key: K) => T[K]
++>K : K
+ >key : K
+ 
+       // Reading deep values
+       hasIn(keyPath: Iterable<any>): boolean;
+->hasIn : (keyPath: Iterable<any>) => boolean
+->keyPath : Iterable<any>
++>hasIn : (keyPath: Iterable<any, any, any>) => boolean
++>keyPath : Iterable<any, any, any>
+ 
+       getIn(keyPath: Iterable<any>): any;
+->getIn : (keyPath: Iterable<any>) => any
+->keyPath : Iterable<any>
++>getIn : (keyPath: Iterable<any, any, any>) => any
++>keyPath : Iterable<any, any, any>
+ 
+       // Value equality
+       equals(other: any): boolean;
+@@= skipped -22, +23 lines =@@
+       // Persistent changes
+       set<K extends keyof T>(key: K, value: T[K]): this;
+ >set : <K extends keyof T>(key: K, value: T[K]) => this
++>K : K
+ >key : K
+ >value : T[K]
+ 
+       update<K extends keyof T>(key: K, updater: (value: T[K]) => T[K]): this;
+ >update : <K extends keyof T>(key: K, updater: (value: T[K]) => T[K]) => this
++>K : K
+ >key : K
+ >updater : (value: T[K]) => T[K]
+ >value : T[K]
+ 
+       merge(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
+->merge : (...collections: Array<Partial<T> | Iterable<[string, any]>>) => this
+->collections : (Iterable<[string, any]> | Partial<T>)[]
++>merge : (...collections: (Iterable<[string, any], any, any> | Partial<T>)[]) => this
++>collections : (Iterable<[string, any], any, any> | Partial<T>)[]
+ 
+       mergeDeep(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
+->mergeDeep : (...collections: Array<Partial<T> | Iterable<[string, any]>>) => this
+->collections : (Iterable<[string, any]> | Partial<T>)[]
++>mergeDeep : (...collections: (Iterable<[string, any], any, any> | Partial<T>)[]) => this
++>collections : (Iterable<[string, any], any, any> | Partial<T>)[]
+ 
+       mergeWith(merger: (oldVal: any, newVal: any, key: keyof T) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
+->mergeWith : (merger: (oldVal: any, newVal: any, key: keyof T) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>) => this
++>mergeWith : (merger: (oldVal: any, newVal: any, key: keyof T) => any, ...collections: (Iterable<[string, any], any, any> | Partial<T>)[]) => this
+ >merger : (oldVal: any, newVal: any, key: keyof T) => any
+ >oldVal : any
+ >newVal : any
+ >key : keyof T
+->collections : (Iterable<[string, any]> | Partial<T>)[]
++>collections : (Iterable<[string, any], any, any> | Partial<T>)[]
+ 
+       mergeDeepWith(merger: (oldVal: any, newVal: any, key: any) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
+->mergeDeepWith : (merger: (oldVal: any, newVal: any, key: any) => any, ...collections: Array<Partial<T> | Iterable<[string, any]>>) => this
++>mergeDeepWith : (merger: (oldVal: any, newVal: any, key: any) => any, ...collections: (Iterable<[string, any], any, any> | Partial<T>)[]) => this
+ >merger : (oldVal: any, newVal: any, key: any) => any
+ >oldVal : any
+ >newVal : any
+ >key : any
+->collections : (Iterable<[string, any]> | Partial<T>)[]
++>collections : (Iterable<[string, any], any, any> | Partial<T>)[]
+ 
+       delete<K extends keyof T>(key: K): this;
+ >delete : <K extends keyof T>(key: K) => this
++>K : K
+ >key : K
+ 
+       remove<K extends keyof T>(key: K): this;
+ >remove : <K extends keyof T>(key: K) => this
++>K : K
+ >key : K
+ 
+       clear(): this;
+@@= skipped -46, +50 lines =@@
+ 
+       // Deep persistent changes
+       setIn(keyPath: Iterable<any>, value: any): this;
+->setIn : (keyPath: Iterable<any>, value: any) => this
+->keyPath : Iterable<any>
++>setIn : (keyPath: Iterable<any, any, any>, value: any) => this
++>keyPath : Iterable<any, any, any>
+ >value : any
+ 
+       updateIn(keyPath: Iterable<any>, updater: (value: any) => any): this;
+->updateIn : (keyPath: Iterable<any>, updater: (value: any) => any) => this
+->keyPath : Iterable<any>
++>updateIn : (keyPath: Iterable<any, any, any>, updater: (value: any) => any) => this
++>keyPath : Iterable<any, any, any>
+ >updater : (value: any) => any
+ >value : any
+ 
+       mergeIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
+->mergeIn : (keyPath: Iterable<any>, ...collections: Array<any>) => this
+->keyPath : Iterable<any>
++>mergeIn : (keyPath: Iterable<any, any, any>, ...collections: any[]) => this
++>keyPath : Iterable<any, any, any>
+ >collections : any[]
+ 
+       mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
+->mergeDeepIn : (keyPath: Iterable<any>, ...collections: Array<any>) => this
+->keyPath : Iterable<any>
++>mergeDeepIn : (keyPath: Iterable<any, any, any>, ...collections: any[]) => this
++>keyPath : Iterable<any, any, any>
+ >collections : any[]
+ 
+       deleteIn(keyPath: Iterable<any>): this;
+->deleteIn : (keyPath: Iterable<any>) => this
+->keyPath : Iterable<any>
++>deleteIn : (keyPath: Iterable<any, any, any>) => this
++>keyPath : Iterable<any, any, any>
+ 
+       removeIn(keyPath: Iterable<any>): this;
+->removeIn : (keyPath: Iterable<any>) => this
+->keyPath : Iterable<any>
++>removeIn : (keyPath: Iterable<any, any, any>) => this
++>keyPath : Iterable<any, any, any>
+ 
+       // Conversion to JavaScript types
+       toJS(): { [K in keyof T]: any };
+->toJS : () => { [K in keyof T]: any; }
++>toJS : () => { [K in keyof T]: any }
++>K : K
+ 
+       toJSON(): T;
+ >toJSON : () => T
+@@= skipped -52, +53 lines =@@
+ 
+       // Sequence algorithms
+       toSeq(): Seq.Keyed<keyof T, T[keyof T]>;
+->toSeq : () => Seq.Keyed<keyof T, T[keyof T]>
++>toSeq : () => Keyed<keyof T, T[keyof T]>
+ >Seq : any
+ 
+       [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
+->[Symbol.iterator] : () => IterableIterator<[keyof T, T[keyof T]]>
++>[Symbol.iterator] : () => IterableIterator<[keyof T, T[keyof T]], any, any>
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+@@= skipped -12, +12 lines =@@
+   }
+   export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
+ >Record : typeof Record
++>T : T
+ >defaultValues : T
+ >name : string
+ >Record : any
+@@= skipped -8, +9 lines =@@
+ >Seq : typeof Seq
+ 
+     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
+->isSeq : (maybeSeq: any) => maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>
++>isSeq : (maybeSeq: any) => maybeSeq is Indexed<any> | Keyed<any, any>
+ >maybeSeq : any
+ >Seq : any
+ >Seq : any
+ 
+     function of<T>(...values: Array<T>): Seq.Indexed<T>;
+->of : <T>(...values: Array<T>) => Seq.Indexed<T>
++>of : <T>(...values: T[]) => Indexed<T>
++>T : T
+ >values : T[]
+ >Seq : any
+ 
+     export module Keyed {}
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Keyed<any, any>; }
++
+     export function Keyed<K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>;
+->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K_1, V_1>(): Seq.Keyed<K_1, V_1>; (): Seq.Keyed<any, any>; }
+->collection : Iterable<[K, V]>
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Keyed<any, any>; }
++>K : K
++>V : V
++>collection : Iterable<[K, V], any, any>
+ >Seq : any
+ 
+     export function Keyed<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
+->Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Seq.Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V_1>(): Seq.Keyed<K, V_1>; (): Seq.Keyed<any, any>; }
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Keyed<any, any>; }
++>V : V
+ >obj : { [key: string]: V; }
+ >key : string
+ >Seq : any
+ 
+     export function Keyed<K, V>(): Seq.Keyed<K, V>;
+->Keyed : { <K_1, V_1>(collection: Iterable<[K_1, V_1]>): Seq.Keyed<K_1, V_1>; <V_1>(obj: { [key: string]: V_1; }): Seq.Keyed<string, V_1>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Keyed<any, any>; }
++>K : K
++>V : V
+ >Seq : any
+ 
+     export function Keyed(): Seq.Keyed<any, any>;
+->Keyed : { <K, V>(collection: Iterable<[K, V]>): Seq.Keyed<K, V>; <V>(obj: { [key: string]: V; }): Seq.Keyed<string, V>; <K, V>(): Seq.Keyed<K, V>; (): Seq.Keyed<any, any>; }
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; <K, V>(): Keyed<K, V>; (): Keyed<any, any>; }
+ >Seq : any
+ 
+     export interface Keyed<K, V> extends Seq<K, V>, Collection.Keyed<K, V> {
++>Keyed : Keyed<K, V>
++>K : K
++>V : V
+ >Collection : typeof Collection
+ 
+       toJS(): Object;
+@@= skipped -44, +55 lines =@@
+ >toSeq : () => this
+ 
+       concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Seq.Keyed<K | string, V | C>; }
+->collections : Iterable<[KC, VC]>[]
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Keyed<string | K, C | V>; }
++>KC : KC
++>VC : VC
++>collections : Iterable<[KC, VC], any, any>[]
+ >Seq : any
+ 
+       concat<C>(...collections: Array<{[key: string]: C}>): Seq.Keyed<K | string, V | C>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Seq.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Seq.Keyed<K | string, V | C>; }
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Keyed<string | K, C | V>; }
++>C : C
+ >collections : { [key: string]: C; }[]
+ >key : string
+ >Seq : any
+ 
+       map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Seq.Keyed<K, M>;
+->map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => Seq.Keyed<K, M>
++>map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => Keyed<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => M
+ >value : V
+ >key : K
+@@= skipped -20, +24 lines =@@
+ >Seq : any
+ 
+       mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): Seq.Keyed<M, V>;
+->mapKeys : <M>(mapper: (key: K, value: V, iter: this) => M, context?: any) => Seq.Keyed<M, V>
++>mapKeys : <M>(mapper: (key: K, value: V, iter: this) => M, context?: any) => Keyed<M, V>
++>M : M
+ >mapper : (key: K, value: V, iter: this) => M
+ >key : K
+ >value : V
+@@= skipped -9, +10 lines =@@
+ >Seq : any
+ 
+       mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): Seq.Keyed<KM, VM>;
+->mapEntries : <KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any) => Seq.Keyed<KM, VM>
++>mapEntries : <KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any) => Keyed<KM, VM>
++>KM : KM
++>VM : VM
+ >mapper : (entry: [K, V], index: number, iter: this) => [KM, VM]
+ >entry : [K, V]
+ >index : number
+@@= skipped -9, +11 lines =@@
+ >Seq : any
+ 
+       flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Seq.Keyed<any, any>;
+->flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => Seq.Keyed<any, any>
+->mapper : (value: V, key: K, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M, any, any>, context?: any) => Keyed<any, any>
++>M : M
++>mapper : (value: V, key: K, iter: this) => Iterable<M, any, any>
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ >Seq : any
+ 
+       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>;
+->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: V, key: K, iter: this) => value is F
+ >value : V
+ >key : K
+@@= skipped -9, +10 lines =@@
+ >Seq : any
+ 
+       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
+->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
+ >predicate : (value: V, key: K, iter: this) => any
+ >value : V
+ >key : K
+@@= skipped -11, +11 lines =@@
+ >Indexed : typeof Indexed
+ 
+       function of<T>(...values: Array<T>): Seq.Indexed<T>;
+->of : <T>(...values: Array<T>) => Seq.Indexed<T>
++>of : <T>(...values: T[]) => Indexed<T>
++>T : T
+ >values : T[]
+ >Seq : any
+     }
+@@= skipped -10, +11 lines =@@
+ 
+     export function Indexed<T>(): Seq.Indexed<T>;
+ >Indexed : typeof Indexed
++>T : T
+ >Seq : any
+ 
+     export function Indexed<T>(collection: Iterable<T>): Seq.Indexed<T>;
+ >Indexed : typeof Indexed
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ >Seq : any
+ 
+     export interface Indexed<T> extends Seq<number, T>, Collection.Indexed<T> {
++>Indexed : Indexed<T>
++>T : T
+ >Collection : typeof Collection
+ 
+       toJS(): Array<any>;
+->toJS : () => Array<any>
++>toJS : () => any[]
+ 
+       toJSON(): Array<T>;
+->toJSON : () => Array<T>
++>toJSON : () => T[]
+ 
+       toSeq(): this;
+ >toSeq : () => this
+ 
+       concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Seq.Indexed<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => Seq.Indexed<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => Indexed<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ >Seq : any
+ 
+       map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): Seq.Indexed<M>;
+->map : <M>(mapper: (value: T, key: number, iter: this) => M, context?: any) => Seq.Indexed<M>
++>map : <M>(mapper: (value: T, key: number, iter: this) => M, context?: any) => Indexed<M>
++>M : M
+ >mapper : (value: T, key: number, iter: this) => M
+ >value : T
+ >key : number
+@@= skipped -34, +40 lines =@@
+ >Seq : any
+ 
+       flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Seq.Indexed<M>;
+->flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any) => Seq.Indexed<M>
+->mapper : (value: T, key: number, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M, any, any>, context?: any) => Indexed<M>
++>M : M
++>mapper : (value: T, key: number, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : number
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ >Seq : any
+ 
+       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>;
+->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, index: number, iter: this) => value is F
+ >value : T
+ >index : number
+@@= skipped -9, +10 lines =@@
+ >Seq : any
+ 
+       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
+->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
+ >predicate : (value: T, index: number, iter: this) => any
+ >value : T
+ >index : number
+@@= skipped -11, +11 lines =@@
+ >Set : typeof Set
+ 
+       function of<T>(...values: Array<T>): Seq.Set<T>;
+->of : <T>(...values: Array<T>) => Seq.Set<T>
++>of : <T>(...values: T[]) => Set<T>
++>T : T
+ >values : T[]
+ >Seq : any
+     }
+@@= skipped -10, +11 lines =@@
+ 
+     export function Set<T>(): Seq.Set<T>;
+ >Set : typeof Set
++>T : T
+ >Seq : any
+ 
+     export function Set<T>(collection: Iterable<T>): Seq.Set<T>;
+ >Set : typeof Set
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ >Seq : any
+ 
+     export interface Set<T> extends Seq<never, T>, Collection.Set<T> {
++>Set : Set<T>
++>T : T
+ >Collection : typeof Collection
+ 
+       toJS(): Array<any>;
+->toJS : () => Array<any>
++>toJS : () => any[]
+ 
+       toJSON(): Array<T>;
+->toJSON : () => Array<T>
++>toJSON : () => T[]
+ 
+       toSeq(): this;
+ >toSeq : () => this
+ 
+       concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Seq.Set<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => Seq.Set<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => Set<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ >Seq : any
+ 
+       map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): Seq.Set<M>;
+->map : <M>(mapper: (value: T, key: never, iter: this) => M, context?: any) => Seq.Set<M>
++>map : <M>(mapper: (value: T, key: never, iter: this) => M, context?: any) => Set<M>
++>M : M
+ >mapper : (value: T, key: never, iter: this) => M
+ >value : T
+ >key : never
+@@= skipped -34, +40 lines =@@
+ >Seq : any
+ 
+       flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any): Seq.Set<M>;
+->flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any) => Seq.Set<M>
+->mapper : (value: T, key: never, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M, any, any>, context?: any) => Set<M>
++>M : M
++>mapper : (value: T, key: never, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : never
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ >Seq : any
+ 
+       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>;
+->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, key: never, iter: this) => value is F
+ >value : T
+ >key : never
+@@= skipped -9, +10 lines =@@
+ >Seq : any
+ 
+       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
+->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
+ >predicate : (value: T, key: never, iter: this) => any
+ >value : T
+ >key : never
+@@= skipped -10, +10 lines =@@
+   }
+   export function Seq<S extends Seq<any, any>>(seq: S): S;
+ >Seq : typeof Seq
++>S : S
+ >seq : S
+ 
+   export function Seq<K, V>(collection: Collection.Keyed<K, V>): Seq.Keyed<K, V>;
+ >Seq : typeof Seq
+->collection : Collection.Keyed<K, V>
++>K : K
++>V : V
++>collection : Keyed<K, V>
+ >Collection : any
+ >Seq : any
+ 
+   export function Seq<T>(collection: Collection.Indexed<T>): Seq.Indexed<T>;
+ >Seq : typeof Seq
+->collection : Collection.Indexed<T>
++>T : T
++>collection : Indexed<T>
+ >Collection : any
+ >Seq : any
+ 
+   export function Seq<T>(collection: Collection.Set<T>): Seq.Set<T>;
+ >Seq : typeof Seq
+->collection : Collection.Set<T>
++>T : T
++>collection : Set<T>
+ >Collection : any
+ >Seq : any
+ 
+   export function Seq<T>(collection: Iterable<T>): Seq.Indexed<T>;
+ >Seq : typeof Seq
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ >Seq : any
+ 
+   export function Seq<V>(obj: {[key: string]: V}): Seq.Keyed<string, V>;
+ >Seq : typeof Seq
++>V : V
+ >obj : { [key: string]: V; }
+ >key : string
+ >Seq : any
+@@= skipped -35, +42 lines =@@
+ >Seq : typeof Seq
+ 
+   export interface Seq<K, V> extends Collection<K, V> {
++>Seq : Seq<K, V>
++>K : K
++>V : V
++
+     readonly size: number | undefined;
+ >size : number
+ 
+@@= skipped -10, +14 lines =@@
+     // Sequence algorithms
+     map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Seq<K, M>;
+ >map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => Seq<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => M
+ >value : V
+ >key : K
+@@= skipped -7, +8 lines =@@
+ >context : any
+ 
+     flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Seq<K, M>;
+->flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => Seq<K, M>
+->mapper : (value: V, key: K, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M, any, any>, context?: any) => Seq<K, M>
++>M : M
++>mapper : (value: V, key: K, iter: this) => Iterable<M, any, any>
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>;
+ >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: V, key: K, iter: this) => value is F
+ >value : V
+ >key : K
+@@= skipped -18, +19 lines =@@
+ >Collection : typeof Collection
+ 
+     function isKeyed(maybeKeyed: any): maybeKeyed is Collection.Keyed<any, any>;
+->isKeyed : (maybeKeyed: any) => maybeKeyed is Collection.Keyed<any, any>
++>isKeyed : (maybeKeyed: any) => maybeKeyed is Keyed<any, any>
+ >maybeKeyed : any
+ >Collection : any
+ 
+     function isIndexed(maybeIndexed: any): maybeIndexed is Collection.Indexed<any>;
+->isIndexed : (maybeIndexed: any) => maybeIndexed is Collection.Indexed<any>
++>isIndexed : (maybeIndexed: any) => maybeIndexed is Indexed<any>
+ >maybeIndexed : any
+ >Collection : any
+ 
+     function isAssociative(maybeAssociative: any): maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>;
+->isAssociative : (maybeAssociative: any) => maybeAssociative is Collection.Keyed<any, any> | Collection.Indexed<any>
++>isAssociative : (maybeAssociative: any) => maybeAssociative is Indexed<any> | Keyed<any, any>
+ >maybeAssociative : any
+ >Collection : any
+ >Collection : any
+@@= skipped -20, +20 lines =@@
+ >maybeOrdered : any
+ 
+     export module Keyed {}
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; }
++
+     export function Keyed<K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>;
+->Keyed : { <K, V>(collection: Iterable<[K, V]>): Collection.Keyed<K, V>; <V_1>(obj: { [key: string]: V_1; }): Collection.Keyed<string, V_1>; }
+->collection : Iterable<[K, V]>
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; }
++>K : K
++>V : V
++>collection : Iterable<[K, V], any, any>
+ >Collection : any
+ 
+     export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
+->Keyed : { <K, V_1>(collection: Iterable<[K, V_1]>): Collection.Keyed<K, V_1>; <V>(obj: { [key: string]: V; }): Collection.Keyed<string, V>; }
++>Keyed : { <K, V>(collection: Iterable<[K, V], any, any>): Keyed<K, V>; <V>(obj: { [key: string]: V; }): Keyed<string, V>; }
++>V : V
+ >obj : { [key: string]: V; }
+ >key : string
+ >Collection : any
+ 
+     export interface Keyed<K, V> extends Collection<K, V> {
++>Keyed : Keyed<K, V>
++>K : K
++>V : V
++
+       toJS(): Object;
+ >toJS : () => Object
+ 
+@@= skipped -20, +29 lines =@@
+ >key : string
+ 
+       toSeq(): Seq.Keyed<K, V>;
+->toSeq : () => Seq.Keyed<K, V>
++>toSeq : () => Keyed<K, V>
+ >Seq : any
+ 
+       // Sequence functions
+@@= skipped -8, +8 lines =@@
+ >flip : () => this
+ 
+       concat<KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Collection.Keyed<K | string, V | C>; }
+->collections : Iterable<[KC, VC]>[]
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Keyed<string | K, C | V>; }
++>KC : KC
++>VC : VC
++>collections : Iterable<[KC, VC], any, any>[]
+ >Collection : any
+ 
+       concat<C>(...collections: Array<{[key: string]: C}>): Collection.Keyed<K | string, V | C>;
+->concat : { <KC, VC>(...collections: Array<Iterable<[KC, VC]>>): Collection.Keyed<K | KC, V | VC>; <C>(...collections: Array<{ [key: string]: C; }>): Collection.Keyed<K | string, V | C>; }
++>concat : { <KC, VC>(...collections: Iterable<[KC, VC], any, any>[]): Keyed<K | KC, V | VC>; <C>(...collections: { [key: string]: C; }[]): Keyed<string | K, C | V>; }
++>C : C
+ >collections : { [key: string]: C; }[]
+ >key : string
+ >Collection : any
+ 
+       map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Collection.Keyed<K, M>;
+->map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => Collection.Keyed<K, M>
++>map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => Keyed<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => M
+ >value : V
+ >key : K
+@@= skipped -20, +24 lines =@@
+ >Collection : any
+ 
+       mapKeys<M>(mapper: (key: K, value: V, iter: this) => M, context?: any): Collection.Keyed<M, V>;
+->mapKeys : <M>(mapper: (key: K, value: V, iter: this) => M, context?: any) => Collection.Keyed<M, V>
++>mapKeys : <M>(mapper: (key: K, value: V, iter: this) => M, context?: any) => Keyed<M, V>
++>M : M
+ >mapper : (key: K, value: V, iter: this) => M
+ >key : K
+ >value : V
+@@= skipped -9, +10 lines =@@
+ >Collection : any
+ 
+       mapEntries<KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any): Collection.Keyed<KM, VM>;
+->mapEntries : <KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any) => Collection.Keyed<KM, VM>
++>mapEntries : <KM, VM>(mapper: (entry: [K, V], index: number, iter: this) => [KM, VM], context?: any) => Keyed<KM, VM>
++>KM : KM
++>VM : VM
+ >mapper : (entry: [K, V], index: number, iter: this) => [KM, VM]
+ >entry : [K, V]
+ >index : number
+@@= skipped -9, +11 lines =@@
+ >Collection : any
+ 
+       flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection.Keyed<any, any>;
+->flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => Collection.Keyed<any, any>
+->mapper : (value: V, key: K, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M, any, any>, context?: any) => Keyed<any, any>
++>M : M
++>mapper : (value: V, key: K, iter: this) => Iterable<M, any, any>
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ >Collection : any
+ 
+       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>;
+->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: V, key: K, iter: this) => value is F
+ >value : V
+ >key : K
+@@= skipped -9, +10 lines =@@
+ >Collection : any
+ 
+       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
+->filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
+ >predicate : (value: V, key: K, iter: this) => any
+ >value : V
+ >key : K
+@@= skipped -8, +8 lines =@@
+ >context : any
+ 
+       [Symbol.iterator](): IterableIterator<[K, V]>;
+->[Symbol.iterator] : () => IterableIterator<[K, V]>
++>[Symbol.iterator] : () => IterableIterator<[K, V], any, any>
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+     }
+     export module Indexed {}
++>Indexed : <T>(collection: Iterable<T, any, any>) => Indexed<T>
++
+     export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
+->Indexed : <T>(collection: Iterable<T>) => Collection.Indexed<T>
+->collection : Iterable<T>
++>Indexed : <T>(collection: Iterable<T, any, any>) => Indexed<T>
++>T : T
++>collection : Iterable<T, any, any>
+ >Collection : any
+ 
+     export interface Indexed<T> extends Collection<number, T> {
++>Indexed : Indexed<T>
++>T : T
++
+       toJS(): Array<any>;
+->toJS : () => Array<any>
++>toJS : () => any[]
+ 
+       toJSON(): Array<T>;
+->toJSON : () => Array<T>
++>toJSON : () => T[]
+ 
+       // Reading values
+       get<NSV>(index: number, notSetValue: NSV): T | NSV;
+->get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T | undefined; }
++>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T; }
++>NSV : NSV
+ >index : number
+ >notSetValue : NSV
+ 
+       get(index: number): T | undefined;
+->get : { <NSV>(index: number, notSetValue: NSV): T | NSV; (index: number): T | undefined; }
++>get : { <NSV>(index: number, notSetValue: NSV): NSV | T; (index: number): T; }
+ >index : number
+ 
+       // Conversion to Seq
+       toSeq(): Seq.Indexed<T>;
+->toSeq : () => Seq.Indexed<T>
++>toSeq : () => Indexed<T>
+ >Seq : any
+ 
+       fromEntrySeq(): Seq.Keyed<any, any>;
+->fromEntrySeq : () => Seq.Keyed<any, any>
++>fromEntrySeq : () => Keyed<any, any>
+ >Seq : any
+ 
+       // Combination
+@@= skipped -43, +50 lines =@@
+ >separator : T
+ 
+       interleave(...collections: Array<Collection<any, T>>): this;
+->interleave : (...collections: Array<Collection<any, T>>) => this
++>interleave : (...collections: Collection<any, T>[]) => this
+ >collections : Collection<any, T>[]
+ 
+       splice(index: number, removeNum: number, ...values: Array<T>): this;
+->splice : (index: number, removeNum: number, ...values: Array<T>) => this
++>splice : (index: number, removeNum: number, ...values: T[]) => this
+ >index : number
+ >removeNum : number
+ >values : T[]
+ 
+       zip(...collections: Array<Collection<any, any>>): Collection.Indexed<any>;
+->zip : (...collections: Array<Collection<any, any>>) => Collection.Indexed<any>
++>zip : (...collections: Collection<any, any>[]) => Indexed<any>
+ >collections : Collection<any, any>[]
+ >Collection : any
+ 
+       zipWith<U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>;
+->zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Collection.Indexed<Z>; <U_1, V, Z_1>(zipper: (value: T, otherValue: U_1, thirdValue: V) => Z_1, otherCollection: Collection<any, U_1>, thirdCollection: Collection<any, V>): Collection.Indexed<Z_1>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z_1>; }
++>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Indexed<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): Indexed<Z>; }
++>U : U
++>Z : Z
+ >zipper : (value: T, otherValue: U) => Z
+ >value : T
+ >otherValue : U
+@@= skipped -23, +25 lines =@@
+ >Collection : any
+ 
+       zipWith<U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>;
+->zipWith : { <U_1, Z_1>(zipper: (value: T, otherValue: U_1) => Z_1, otherCollection: Collection<any, U_1>): Collection.Indexed<Z_1>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z>; <Z_1>(zipper: (...any: Array<any>) => Z_1, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z_1>; }
++>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Indexed<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): Indexed<Z>; }
++>U : U
++>V : V
++>Z : Z
+ >zipper : (value: T, otherValue: U, thirdValue: V) => Z
+ >value : T
+ >otherValue : U
+@@= skipped -10, +13 lines =@@
+ >Collection : any
+ 
+       zipWith<Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>;
+->zipWith : { <U, Z_1>(zipper: (value: T, otherValue: U) => Z_1, otherCollection: Collection<any, U>): Collection.Indexed<Z_1>; <U, V, Z_1>(zipper: (value: T, otherValue: U, thirdValue: V) => Z_1, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Collection.Indexed<Z_1>; <Z>(zipper: (...any: Array<any>) => Z, ...collections: Array<Collection<any, any>>): Collection.Indexed<Z>; }
+->zipper : (...any: Array<any>) => Z
++>zipWith : { <U, Z>(zipper: (value: T, otherValue: U) => Z, otherCollection: Collection<any, U>): Indexed<Z>; <U, V, Z>(zipper: (value: T, otherValue: U, thirdValue: V) => Z, otherCollection: Collection<any, U>, thirdCollection: Collection<any, V>): Indexed<Z>; <Z>(zipper: (...any: any[]) => Z, ...collections: Collection<any, any>[]): Indexed<Z>; }
++>Z : Z
++>zipper : (...any: any[]) => Z
+ >any : any[]
+ >collections : Collection<any, any>[]
+ >Collection : any
+@@= skipped -33, +34 lines =@@
+ 
+       // Sequence algorithms
+       concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Collection.Indexed<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => Collection.Indexed<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => Indexed<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ >Collection : any
+ 
+       map<M>(mapper: (value: T, key: number, iter: this) => M, context?: any): Collection.Indexed<M>;
+->map : <M>(mapper: (value: T, key: number, iter: this) => M, context?: any) => Collection.Indexed<M>
++>map : <M>(mapper: (value: T, key: number, iter: this) => M, context?: any) => Indexed<M>
++>M : M
+ >mapper : (value: T, key: number, iter: this) => M
+ >value : T
+ >key : number
+@@= skipped -14, +16 lines =@@
+ >Collection : any
+ 
+       flatMap<M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any): Collection.Indexed<M>;
+->flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M>, context?: any) => Collection.Indexed<M>
+->mapper : (value: T, key: number, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: number, iter: this) => Iterable<M, any, any>, context?: any) => Indexed<M>
++>M : M
++>mapper : (value: T, key: number, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : number
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ >Collection : any
+ 
+       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>;
+->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, index: number, iter: this) => value is F
+ >value : T
+ >index : number
+@@= skipped -9, +10 lines =@@
+ >Collection : any
+ 
+       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
+->filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
+ >predicate : (value: T, index: number, iter: this) => any
+ >value : T
+ >index : number
+@@= skipped -8, +8 lines =@@
+ >context : any
+ 
+       [Symbol.iterator](): IterableIterator<T>;
+->[Symbol.iterator] : () => IterableIterator<T>
++>[Symbol.iterator] : () => IterableIterator<T, any, any>
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+     }
+     export module Set {}
++>Set : <T>(collection: Iterable<T, any, any>) => Set<T>
++
+     export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
+->Set : <T>(collection: Iterable<T>) => Collection.Set<T>
+->collection : Iterable<T>
++>Set : <T>(collection: Iterable<T, any, any>) => Set<T>
++>T : T
++>collection : Iterable<T, any, any>
+ >Collection : any
+ 
+     export interface Set<T> extends Collection<never, T> {
++>Set : Set<T>
++>T : T
++
+       toJS(): Array<any>;
+->toJS : () => Array<any>
++>toJS : () => any[]
+ 
+       toJSON(): Array<T>;
+->toJSON : () => Array<T>
++>toJSON : () => T[]
+ 
+       toSeq(): Seq.Set<T>;
+->toSeq : () => Seq.Set<T>
++>toSeq : () => Set<T>
+ >Seq : any
+ 
+       // Sequence algorithms
+       concat<C>(...valuesOrCollections: Array<Iterable<C> | C>): Collection.Set<T | C>;
+->concat : <C>(...valuesOrCollections: Array<Iterable<C> | C>) => Collection.Set<T | C>
+->valuesOrCollections : (C | Iterable<C>)[]
++>concat : <C>(...valuesOrCollections: (C | Iterable<C, any, any>)[]) => Set<C | T>
++>C : C
++>valuesOrCollections : (C | Iterable<C, any, any>)[]
+ >Collection : any
+ 
+       map<M>(mapper: (value: T, key: never, iter: this) => M, context?: any): Collection.Set<M>;
+->map : <M>(mapper: (value: T, key: never, iter: this) => M, context?: any) => Collection.Set<M>
++>map : <M>(mapper: (value: T, key: never, iter: this) => M, context?: any) => Set<M>
++>M : M
+ >mapper : (value: T, key: never, iter: this) => M
+ >value : T
+ >key : never
+@@= skipped -38, +46 lines =@@
+ >Collection : any
+ 
+       flatMap<M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any):  Collection.Set<M>;
+->flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M>, context?: any) => Collection.Set<M>
+->mapper : (value: T, key: never, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: T, key: never, iter: this) => Iterable<M, any, any>, context?: any) => Set<M>
++>M : M
++>mapper : (value: T, key: never, iter: this) => Iterable<M, any, any>
+ >value : T
+ >key : never
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ >Collection : any
+ 
+       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>;
+->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: T, key: never, iter: this) => value is F
+ >value : T
+ >key : never
+@@= skipped -9, +10 lines =@@
+ >Collection : any
+ 
+       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
+->filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
++>filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
+ >predicate : (value: T, key: never, iter: this) => any
+ >value : T
+ >key : never
+@@= skipped -8, +8 lines =@@
+ >context : any
+ 
+       [Symbol.iterator](): IterableIterator<T>;
+->[Symbol.iterator] : () => IterableIterator<T>
++>[Symbol.iterator] : () => IterableIterator<T, any, any>
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+@@= skipped -8, +8 lines =@@
+   }
+   export function Collection<I extends Collection<any, any>>(collection: I): I;
+ >Collection : typeof Collection
++>I : I
+ >collection : I
+ 
+   export function Collection<T>(collection: Iterable<T>): Collection.Indexed<T>;
+ >Collection : typeof Collection
+->collection : Iterable<T>
++>T : T
++>collection : Iterable<T, any, any>
+ >Collection : any
+ 
+   export function Collection<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
+ >Collection : typeof Collection
++>V : V
+ >obj : { [key: string]: V; }
+ >key : string
+ >Collection : any
+ 
+   export interface Collection<K, V> extends ValueObject {
++>Collection : Collection<K, V>
++>K : K
++>V : V
++
+     // Value equality
+     equals(other: any): boolean;
+ >equals : (other: any) => boolean
+@@= skipped -24, +31 lines =@@
+ 
+     // Reading values
+     get<NSV>(key: K, notSetValue: NSV): V | NSV;
+->get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V | undefined; }
++>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V; }
++>NSV : NSV
+ >key : K
+ >notSetValue : NSV
+ 
+     get(key: K): V | undefined;
+->get : { <NSV>(key: K, notSetValue: NSV): V | NSV; (key: K): V | undefined; }
++>get : { <NSV>(key: K, notSetValue: NSV): NSV | V; (key: K): V; }
+ >key : K
+ 
+     has(key: K): boolean;
+@@= skipped -21, +22 lines =@@
+ >value : V
+ 
+     first(): V | undefined;
+->first : () => V | undefined
++>first : () => V
+ 
+     last(): V | undefined;
+->last : () => V | undefined
++>last : () => V
+ 
+     // Reading deep values
+     getIn(searchKeyPath: Iterable<any>, notSetValue?: any): any;
+->getIn : (searchKeyPath: Iterable<any>, notSetValue?: any) => any
+->searchKeyPath : Iterable<any>
++>getIn : (searchKeyPath: Iterable<any, any, any>, notSetValue?: any) => any
++>searchKeyPath : Iterable<any, any, any>
+ >notSetValue : any
+ 
+     hasIn(searchKeyPath: Iterable<any>): boolean;
+->hasIn : (searchKeyPath: Iterable<any>) => boolean
+->searchKeyPath : Iterable<any>
++>hasIn : (searchKeyPath: Iterable<any, any, any>) => boolean
++>searchKeyPath : Iterable<any, any, any>
+ 
+     // Persistent changes
+     update<R>(updater: (value: this) => R): R;
+ >update : <R>(updater: (value: this) => R) => R
++>R : R
+ >updater : (value: this) => R
+ >value : this
+ 
+     // Conversion to JavaScript types
+     toJS(): Array<any> | { [key: string]: any };
+->toJS : () => Array<any> | { [key: string]: any; }
++>toJS : () => any[] | { [key: string]: any; }
+ >key : string
+ 
+     toJSON(): Array<V> | { [key: string]: V };
+->toJSON : () => Array<V> | { [key: string]: V; }
++>toJSON : () => V[] | { [key: string]: V; }
+ >key : string
+ 
+     toArray(): Array<V>;
+->toArray : () => Array<V>
++>toArray : () => V[]
+ 
+     toObject(): { [key: string]: V };
+ >toObject : () => { [key: string]: V; }
+@@= skipped -61, +62 lines =@@
+ >toSeq : () => this
+ 
+     toKeyedSeq(): Seq.Keyed<K, V>;
+->toKeyedSeq : () => Seq.Keyed<K, V>
++>toKeyedSeq : () => Keyed<K, V>
+ >Seq : any
+ 
+     toIndexedSeq(): Seq.Indexed<V>;
+->toIndexedSeq : () => Seq.Indexed<V>
++>toIndexedSeq : () => Indexed<V>
+ >Seq : any
+ 
+     toSetSeq(): Seq.Set<V>;
+->toSetSeq : () => Seq.Set<V>
++>toSetSeq : () => Set<V>
+ >Seq : any
+ 
+     // Iterators
+     keys(): IterableIterator<K>;
+->keys : () => IterableIterator<K>
++>keys : () => IterableIterator<K, any, any>
+ 
+     values(): IterableIterator<V>;
+->values : () => IterableIterator<V>
++>values : () => IterableIterator<V, any, any>
+ 
+     entries(): IterableIterator<[K, V]>;
+->entries : () => IterableIterator<[K, V]>
++>entries : () => IterableIterator<[K, V], any, any>
+ 
+     // Collections (Seq)
+     keySeq(): Seq.Indexed<K>;
+->keySeq : () => Seq.Indexed<K>
++>keySeq : () => Indexed<K>
+ >Seq : any
+ 
+     valueSeq(): Seq.Indexed<V>;
+->valueSeq : () => Seq.Indexed<V>
++>valueSeq : () => Indexed<V>
+ >Seq : any
+ 
+     entrySeq(): Seq.Indexed<[K, V]>;
+->entrySeq : () => Seq.Indexed<[K, V]>
++>entrySeq : () => Indexed<[K, V]>
+ >Seq : any
+ 
+     // Sequence algorithms
+     map<M>(mapper: (value: V, key: K, iter: this) => M, context?: any): Collection<K, M>;
+ >map : <M>(mapper: (value: V, key: K, iter: this) => M, context?: any) => Collection<K, M>
++>M : M
+ >mapper : (value: V, key: K, iter: this) => M
+ >value : V
+ >key : K
+@@= skipped -45, +46 lines =@@
+ 
+     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>;
+ >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
++>F : F
+ >predicate : (value: V, key: K, iter: this) => value is F
+ >value : V
+ >key : K
+@@= skipped -33, +34 lines =@@
+ 
+     sortBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): this;
+ >sortBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => this
++>C : C
+ >comparatorValueMapper : (value: V, key: K, iter: this) => C
+ >value : V
+ >key : K
+@@= skipped -9, +10 lines =@@
+ >valueB : C
+ 
+     groupBy<G>(grouper: (value: V, key: K, iter: this) => G, context?: any): /*Map*/Seq.Keyed<G, /*this*/Collection<K, V>>;
+->groupBy : <G>(grouper: (value: V, key: K, iter: this) => G, context?: any) => Seq.Keyed<G, Collection<K, V>>
++>groupBy : <G>(grouper: (value: V, key: K, iter: this) => G, context?: any) => Keyed<G, Collection<K, V>>
++>G : G
+ >grouper : (value: V, key: K, iter: this) => G
+ >value : V
+ >key : K
+@@= skipped -79, +80 lines =@@
+ 
+     // Combination
+     concat(...valuesOrCollections: Array<any>): Collection<any, any>;
+->concat : (...valuesOrCollections: Array<any>) => Collection<any, any>
++>concat : (...valuesOrCollections: any[]) => Collection<any, any>
+ >valuesOrCollections : any[]
+ 
+     flatten(depth?: number): Collection<any, any>;
+@@= skipped -12, +12 lines =@@
+ >shallow : boolean
+ 
+     flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection<K, M>;
+->flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => Collection<K, M>
+->mapper : (value: V, key: K, iter: this) => Iterable<M>
++>flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M, any, any>, context?: any) => Collection<K, M>
++>M : M
++>mapper : (value: V, key: K, iter: this) => Iterable<M, any, any>
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -9, +10 lines =@@
+ 
+     // Reducing a value
+     reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
+->reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
++>reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
++>R : R
+ >reducer : (reduction: R, value: V, key: K, iter: this) => R
+ >reduction : R
+ >value : V
+@@= skipped -10, +11 lines =@@
+ >context : any
+ 
+     reduce<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
+->reduce : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
+->reducer : (reduction: V | R, value: V, key: K, iter: this) => R
+->reduction : V | R
++>reduce : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
++>R : R
++>reducer : (reduction: R | V, value: V, key: K, iter: this) => R
++>reduction : R | V
+ >value : V
+ >key : K
+ >iter : this
+ 
+     reduceRight<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;
+->reduceRight : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R_1>(reducer: (reduction: V | R_1, value: V, key: K, iter: this) => R_1): R_1; }
++>reduceRight : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
++>R : R
+ >reducer : (reduction: R, value: V, key: K, iter: this) => R
+ >reduction : R
+ >value : V
+@@= skipped -18, +20 lines =@@
+ >context : any
+ 
+     reduceRight<R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R;
+->reduceRight : { <R_1>(reducer: (reduction: R_1, value: V, key: K, iter: this) => R_1, initialReduction: R_1, context?: any): R_1; <R>(reducer: (reduction: V | R, value: V, key: K, iter: this) => R): R; }
+->reducer : (reduction: V | R, value: V, key: K, iter: this) => R
+->reduction : V | R
++>reduceRight : { <R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R; <R>(reducer: (reduction: R | V, value: V, key: K, iter: this) => R): R; }
++>R : R
++>reducer : (reduction: R | V, value: V, key: K, iter: this) => R
++>reduction : R | V
+ >value : V
+ >key : K
+ >iter : this
+@@= skipped -43, +44 lines =@@
+ 
+     countBy<G>(grouper: (value: V, key: K, iter: this) => G, context?: any): Map<G, number>;
+ >countBy : <G>(grouper: (value: V, key: K, iter: this) => G, context?: any) => Map<G, number>
++>G : G
+ >grouper : (value: V, key: K, iter: this) => G
+ >value : V
+ >key : K
+@@= skipped -8, +9 lines =@@
+ 
+     // Search for value
+     find(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): V | undefined;
+->find : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V | undefined
++>find : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V
+ >predicate : (value: V, key: K, iter: this) => boolean
+ >value : V
+ >key : K
+@@= skipped -9, +9 lines =@@
+ >notSetValue : V
+ 
+     findLast(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): V | undefined;
+->findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V | undefined
++>findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V
+ >predicate : (value: V, key: K, iter: this) => boolean
+ >value : V
+ >key : K
+@@= skipped -9, +9 lines =@@
+ >notSetValue : V
+ 
+     findEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
+->findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V] | undefined
++>findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V]
+ >predicate : (value: V, key: K, iter: this) => boolean
+ >value : V
+ >key : K
+@@= skipped -9, +9 lines =@@
+ >notSetValue : V
+ 
+     findLastEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
+->findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V] | undefined
++>findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V]
+ >predicate : (value: V, key: K, iter: this) => boolean
+ >value : V
+ >key : K
+@@= skipped -9, +9 lines =@@
+ >notSetValue : V
+ 
+     findKey(predicate: (value: V, key: K, iter: this) => boolean, context?: any): K | undefined;
+->findKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K | undefined
++>findKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K
+ >predicate : (value: V, key: K, iter: this) => boolean
+ >value : V
+ >key : K
+@@= skipped -8, +8 lines =@@
+ >context : any
+ 
+     findLastKey(predicate: (value: V, key: K, iter: this) => boolean, context?: any): K | undefined;
+->findLastKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K | undefined
++>findLastKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K
+ >predicate : (value: V, key: K, iter: this) => boolean
+ >value : V
+ >key : K
+@@= skipped -8, +8 lines =@@
+ >context : any
+ 
+     keyOf(searchValue: V): K | undefined;
+->keyOf : (searchValue: V) => K | undefined
++>keyOf : (searchValue: V) => K
+ >searchValue : V
+ 
+     lastKeyOf(searchValue: V): K | undefined;
+->lastKeyOf : (searchValue: V) => K | undefined
++>lastKeyOf : (searchValue: V) => K
+ >searchValue : V
+ 
+     max(comparator?: (valueA: V, valueB: V) => number): V | undefined;
+->max : (comparator?: (valueA: V, valueB: V) => number) => V | undefined
++>max : (comparator?: (valueA: V, valueB: V) => number) => V
+ >comparator : (valueA: V, valueB: V) => number
+ >valueA : V
+ >valueB : V
+ 
+     maxBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): V | undefined;
+->maxBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V | undefined
++>maxBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V
++>C : C
+ >comparatorValueMapper : (value: V, key: K, iter: this) => C
+ >value : V
+ >key : K
+@@= skipped -24, +25 lines =@@
+ >valueB : C
+ 
+     min(comparator?: (valueA: V, valueB: V) => number): V | undefined;
+->min : (comparator?: (valueA: V, valueB: V) => number) => V | undefined
++>min : (comparator?: (valueA: V, valueB: V) => number) => V
+ >comparator : (valueA: V, valueB: V) => number
+ >valueA : V
+ >valueB : V
+ 
+     minBy<C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number): V | undefined;
+->minBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V | undefined
++>minBy : <C>(comparatorValueMapper: (value: V, key: K, iter: this) => C, comparator?: (valueA: C, valueB: C) => number) => V
++>C : C
+ >comparatorValueMapper : (value: V, key: K, iter: this) => C
+ >value : V
+ >key : K
+@@= skipped -17, +18 lines =@@
+ 
+     // Comparison
+     isSubset(iter: Iterable<V>): boolean;
+->isSubset : (iter: Iterable<V>) => boolean
+->iter : Iterable<V>
++>isSubset : (iter: Iterable<V, any, any>) => boolean
++>iter : Iterable<V, any, any>
+ 
+     isSuperset(iter: Iterable<V>): boolean;
+->isSuperset : (iter: Iterable<V>) => boolean
+->iter : Iterable<V>
++>isSuperset : (iter: Iterable<V, any, any>) => boolean
++>iter : Iterable<V, any, any>
+ 
+     readonly size: number;
+ >size : number

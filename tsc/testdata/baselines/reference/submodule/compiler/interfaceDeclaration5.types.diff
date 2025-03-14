@@ -1,0 +1,10 @@
+--- old.interfaceDeclaration5.types
++++ new.interfaceDeclaration5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceDeclaration5.ts ===
+ export interface I1 { item:string; }
++>I1 : I1
+ >item : string
+ 
+ export class C1 { }

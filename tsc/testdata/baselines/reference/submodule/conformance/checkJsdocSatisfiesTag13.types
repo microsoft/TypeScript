@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag13.ts] ////
+
+=== /a.js ===
+/** @satisfies {{ f: (x: string) => string }} */
+const t1 = { f: s => s.toLowerCase() }; // should work
+>t1 : { f: (s: any) => any; }
+>{ f: s => s.toLowerCase() } : { f: (s: any) => any; }
+>f : (s: any) => any
+>s => s.toLowerCase() : (s: any) => any
+>s : any
+>s.toLowerCase() : any
+>s.toLowerCase : any
+>s : any
+>toLowerCase : any
+
+/** @satisfies {{ f: (x: string) => string }} */
+const t2 = { g: "oops" }; // should error
+>t2 : { g: string; }
+>{ g: "oops" } : { g: string; }
+>g : string
+>"oops" : "oops"
+

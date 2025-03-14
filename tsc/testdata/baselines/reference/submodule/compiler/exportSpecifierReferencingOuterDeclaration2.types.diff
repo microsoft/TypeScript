@@ -1,0 +1,20 @@
+--- old.exportSpecifierReferencingOuterDeclaration2.types
++++ new.exportSpecifierReferencingOuterDeclaration2.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2.ts] ////
+ 
+ === exportSpecifierReferencingOuterDeclaration2_A.ts ===
+-
+ declare module X { export interface bar { } }
++>X : any
++>bar : bar
+ 
+ === exportSpecifierReferencingOuterDeclaration2_B.ts ===
+ export { X };
+ >X : any
+ 
+ export declare function foo(): X.bar;
+->foo : () => X.bar
++>foo : () => bar
+ >X : any
+ 

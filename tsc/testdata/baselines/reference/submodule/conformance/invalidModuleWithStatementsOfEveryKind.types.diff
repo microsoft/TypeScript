@@ -1,0 +1,62 @@
+--- old.invalidModuleWithStatementsOfEveryKind.types
++++ new.invalidModuleWithStatementsOfEveryKind.types
+@@= skipped -11, +11 lines =@@
+ 
+     public class BB<T> extends A {
+ >BB : BB<T>
++>T : T
+ >A : A
+ 
+         id: number;
+@@= skipped -12, +13 lines =@@
+ 
+     public class AA<T> { s: T }
+ >AA : AA<T>
++>T : T
+ >s : T
+ 
+     public interface I { id: number }
++>I : I
+ >id : number
+ 
+     public class B extends AA<string> implements I { id: number }
+@@= skipped -41, +43 lines =@@
+ 
+     private class BB<T> extends A {
+ >BB : BB<T>
++>T : T
+ >A : A
+ 
+         id: number;
+@@= skipped -12, +13 lines =@@
+ 
+     private class AA<T> { s: T }
+ >AA : AA<T>
++>T : T
+ >s : T
+ 
+     private interface I { id: number }
++>I : I
+ >id : number
+ 
+     private class B extends AA<string> implements I { id: number }
+@@= skipped -42, +44 lines =@@
+ 
+     static class BB<T> extends A {
+ >BB : BB<T>
++>T : T
+ >A : A
+ 
+         id: number;
+@@= skipped -12, +13 lines =@@
+ 
+     static class AA<T> { s: T }
+ >AA : AA<T>
++>T : T
+ >s : T
+ 
+     static interface I { id: number }
++>I : I
+ >id : number
+ 
+     static class B extends AA<string> implements I { id: number }

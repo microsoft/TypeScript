@@ -1,0 +1,21 @@
+--- old.moduleExportsAliasLoop2.types
++++ new.moduleExportsAliasLoop2.types
+@@= skipped -9, +9 lines =@@
+ exports.fn1();
+ >exports.fn1() : any
+ >exports.fn1 : any
+->exports : typeof import("x")
++>exports : any
+ >fn1 : any
+ 
+ exports.fn2 = Foo.min;
+ >exports.fn2 = Foo.min : number
+->exports.fn2 : number
+->exports : typeof import("x")
+->fn2 : number
++>exports.fn2 : any
++>exports : any
++>fn2 : any
+ >Foo.min : number
+ >Foo : { min: number; }
+ >min : number

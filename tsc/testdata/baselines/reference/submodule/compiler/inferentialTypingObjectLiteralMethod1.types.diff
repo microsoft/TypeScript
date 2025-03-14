@@ -1,0 +1,37 @@
+--- old.inferentialTypingObjectLiteralMethod1.types
++++ new.inferentialTypingObjectLiteralMethod1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === inferentialTypingObjectLiteralMethod1.ts ===
+ interface Int<T, U> {
++>Int : Int<T, U>
++>T : T
++>U : U
++
+     method(x: T): U;
+ >method : (x: T) => U
+ >x : T
+ }
+ declare function foo<T, U>(x: T, y: Int<T, U>, z: Int<U, T>): T;
+ >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
++>T : T
++>U : U
+ >x : T
+ >y : Int<T, U>
+ >z : Int<U, T>
+@@= skipped -14, +20 lines =@@
+ >foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }) : string
+ >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
+ >"" : ""
+->{ method(p1) { return p1.length } } : { method(p1: string): number; }
++>{ method(p1) { return p1.length } } : { method: (p1: string) => number; }
+ >method : (p1: string) => number
+ >p1 : string
+ >p1.length : number
+ >p1 : string
+ >length : number
+->{ method(p2) { return undefined } } : { method(p2: number): any; }
++>{ method(p2) { return undefined } } : { method: (p2: number) => any; }
+ >method : (p2: number) => any
+ >p2 : number
+ >undefined : undefined

@@ -1,0 +1,19 @@
+--- old.defaultBestCommonTypesHaveDecls.types
++++ new.defaultBestCommonTypesHaveDecls.types
+@@= skipped -18, +18 lines =@@
+ 
+ function concat<T>(x: T, y: T): T { return null; }
+ >concat : <T>(x: T, y: T) => T
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -18, +19 lines =@@
+ 
+ function concat2<T, U>(x: T, y: U) { return null; }
+ >concat2 : <T, U>(x: T, y: U) => any
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 

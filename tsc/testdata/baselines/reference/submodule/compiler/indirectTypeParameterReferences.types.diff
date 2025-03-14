@@ -1,0 +1,96 @@
+--- old.indirectTypeParameterReferences.types
++++ new.indirectTypeParameterReferences.types
+@@= skipped -7, +7 lines =@@
+ >b : string
+ 
+ const flowtypes = <A>(b: B) => {
+->flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+-><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
++>flowtypes : <A>(b: B) => { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
++><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
++>A : A
+ >b : B
+ 
+   type Combined = A & B
+->Combined : A & B
++>Combined : Combined
+ 
+   const combined = (fn: (combined: Combined) => void) => null
+->combined : (fn: (combined: A & B) => void) => any
+->(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
+->fn : (combined: A & B) => void
+->combined : A & B
++>combined : (fn: (combined: Combined) => void) => any
++>(fn: (combined: Combined) => void) => null : (fn: (combined: Combined) => void) => any
++>fn : (combined: Combined) => void
++>combined : Combined
+ 
+   const literal = (fn: (aPlusB: A & B) => void) => null
+ >literal : (fn: (aPlusB: A & B) => void) => any
+@@= skipped -20, +21 lines =@@
+ >aPlusB : A & B
+ 
+   return {combined, literal}
+->{combined, literal} : { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+->combined : (fn: (combined: A & B) => void) => any
+->literal : (fn: (aPlusB: A & B) => void) => any
++>{combined, literal} : { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
++>combined : any
++>literal : any
+ }
+ 
+ const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})
+->combined : (fn: (combined: { a: string; } & B) => void) => any
++>combined : (fn: (combined: Combined) => void) => any
+ >literal : (fn: (aPlusB: { a: string; } & B) => void) => any
+->flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: { a: string; } & B) => void) => any; literal: (fn: (aPlusB: { a: string; } & B) => void) => any; }
+->flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
++>flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: { a: string; } & B) => void) => any; }
++>flowtypes : <A>(b: B) => { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
+ >a : string
+ >{b: 'b-value'} : { b: string; }
+ >b : string
+@@= skipped -35, +35 lines =@@
+ 
+ combined(comb => {
+ >combined(comb => {  comb.b  comb.a}) : any
+->combined : (fn: (combined: { a: string; } & B) => void) => any
+->comb => {  comb.b  comb.a} : (comb: { a: string; } & B) => void
+->comb : { a: string; } & B
++>combined : (fn: (combined: Combined) => void) => any
++>comb => {  comb.b  comb.a} : (comb: Combined) => void
++>comb : Combined
+ 
+   comb.b
+ >comb.b : string
+->comb : { a: string; } & B
++>comb : Combined
+ >b : string
+ 
+   comb.a
+ >comb.a : string
+->comb : { a: string; } & B
++>comb : Combined
+ >a : string
+ 
+ })
+@@= skipped -19, +19 lines =@@
+ // Repro from #19091
+ 
+ declare function f<T>(a: T): { a: typeof a };
+->f : <T>(a: T) => { a: typeof a; }
++>f : <T>(a: T) => { a: T; }
++>T : T
+ >a : T
+ >a : T
+->a : T
+ 
+ let n: number = f(2).a;
+ >n : number
+ >f(2).a : number
+ >f(2) : { a: number; }
+->f : <T>(a: T) => { a: typeof a; }
++>f : <T>(a: T) => { a: T; }
+ >2 : 2
+ >a : number
+ 

@@ -1,0 +1,81 @@
+--- old.typePredicatesInUnion3.types
++++ new.typePredicatesInUnion3.types
+@@= skipped -40, +40 lines =@@
+ }
+ 
+ function f2(x: unknown, p: P1 | P2 | F1) {
+->f2 : (x: unknown, p: P1 | P2 | F1) => void
++>f2 : (x: unknown, p: F1 | P1 | P2) => void
+ >x : unknown
+->p : P1 | P2 | F1
++>p : F1 | P1 | P2
+ 
+     if (p(x)) {
+ >p(x) : boolean
+->p : P1 | P2 | F1
++>p : F1 | P1 | P2
+ >x : unknown
+ 
+         x;  // string | number
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ function f3(x: unknown, p: P1 | P2 | F2) {
+->f3 : (x: unknown, p: P1 | P2 | F2) => void
++>f3 : (x: unknown, p: F2 | P1 | P2) => void
+ >x : unknown
+->p : P1 | P2 | F2
++>p : F2 | P1 | P2
+ 
+     if (p(x)) {
+ >p(x) : boolean
+->p : P1 | P2 | F2
++>p : F2 | P1 | P2
+ >x : unknown
+ 
+         x;  // unknown
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ function f4(x: unknown, p: P1 | P2 | F3) {
+->f4 : (x: unknown, p: P1 | P2 | F3) => void
++>f4 : (x: unknown, p: F3 | P1 | P2) => void
+ >x : unknown
+->p : P1 | P2 | F3
++>p : F3 | P1 | P2
+ 
+     if (p(x)) {
+ >p(x) : string | boolean
+->p : P1 | P2 | F3
++>p : F3 | P1 | P2
+ >x : unknown
+ 
+         x;  // unknown
+@@= skipped -18, +18 lines =@@
+ 
+ type HasAttribute<T> = T & { attribute: number };
+ >HasAttribute : HasAttribute<T>
++>T : T
+ >attribute : number
+ 
+ class Type1 {
+@@= skipped -32, +33 lines =@@
+ 
+ function assertType<T>(_val: T) {
+ >assertType : <T>(_val: T) => void
++>T : T
+ >_val : T
+ }
+ 
+@@= skipped -8, +9 lines =@@
+ 
+ if (val.predicate()) {
+ >val.predicate() : boolean
+->val.predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
++>val.predicate : () => this is HasAttribute<Type1> | () => boolean
+ >val : Type1 | Type2
+->predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
++>predicate : () => this is HasAttribute<Type1> | () => boolean
+ 
+     assertType<number>(val.attribute);  // Error
+ >assertType<number>(val.attribute) : void

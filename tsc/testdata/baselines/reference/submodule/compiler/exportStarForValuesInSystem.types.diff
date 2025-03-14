@@ -1,0 +1,10 @@
+--- old.exportStarForValuesInSystem.types
++++ new.exportStarForValuesInSystem.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file1.ts ===
+ export interface Foo { x }
++>Foo : Foo
+ >x : any
+ 
+ === file2.ts ===

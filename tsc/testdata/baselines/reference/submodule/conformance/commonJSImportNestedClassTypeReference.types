@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/salsa/commonJSImportNestedClassTypeReference.ts] ////
+
+=== main.js ===
+const { K } = require("./mod1");
+>K : any
+>require("./mod1") : any
+>require : any
+>"./mod1" : "./mod1"
+
+/** @param {K} k */
+function f(k) {
+>f : (k: any) => void
+>k : any
+
+    k.values()
+>k.values() : any
+>k.values : any
+>k : any
+>values : any
+}
+
+=== mod1.js ===
+var NS = {}
+>NS : {}
+>{} : {}
+
+NS.K =class {
+>NS.K =class {    values() {        return new NS.K()    }} : typeof K
+>NS.K : any
+>NS : {}
+>K : any
+>class {    values() {        return new NS.K()    }} : typeof K
+
+    values() {
+>values : () => any
+
+        return new NS.K()
+>new NS.K() : any
+>NS.K : any
+>NS : {}
+>K : any
+    }
+}
+exports.K = NS.K;
+>exports.K = NS.K : any
+>exports.K : any
+>exports : any
+>K : any
+>NS.K : any
+>NS : {}
+>K : any
+

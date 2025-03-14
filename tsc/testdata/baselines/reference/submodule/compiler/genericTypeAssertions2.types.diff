@@ -1,0 +1,16 @@
+--- old.genericTypeAssertions2.types
++++ new.genericTypeAssertions2.types
+@@= skipped -2, +2 lines =@@
+ === genericTypeAssertions2.ts ===
+ class A<T> { foo(x: T) { } }
+ >A : A<T>
++>T : T
+ >foo : (x: T) => void
+ >x : T
+ 
+ class B<T> extends A<T> {
+ >B : B<T>
++>T : T
+ >A : A<T>
+ 
+     bar(): T {

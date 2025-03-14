@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/restParameterWithBindingPattern2.ts] ////
+
+=== restParameterWithBindingPattern2.ts ===
+function a(...[a, b]) { }
+>a : (...__0: [any, any]) => void
+>a : any
+>b : any
+

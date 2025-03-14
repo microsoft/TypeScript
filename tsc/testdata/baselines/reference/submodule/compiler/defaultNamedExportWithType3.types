@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/defaultNamedExportWithType3.ts] ////
+
+=== defaultNamedExportWithType3.ts ===
+interface Foo {}
+>Foo : Foo
+
+export const Foo = {};
+>Foo : {}
+>{} : {}
+
+export default Foo;
+>Foo : Foo
+

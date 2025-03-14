@@ -1,0 +1,20 @@
+--- old.propertiesAndIndexers2.types
++++ new.propertiesAndIndexers2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === propertiesAndIndexers2.ts ===
+ interface A {
++>A : A
++
+     [n: number]: string;
+ >n : number
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ // All of these should fail.
+ interface B extends A {
++>B : B
++
+     c: string;
+ >c : string
+ 

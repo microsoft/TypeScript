@@ -1,0 +1,54 @@
+--- old.generatorReturnTypeInference.types
++++ new.generatorReturnTypeInference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === generatorReturnTypeInference.ts ===
+ declare const iterableIterator: IterableIterator<number>;
+->iterableIterator : IterableIterator<number>
++>iterableIterator : IterableIterator<number, any, any>
+ 
+ declare const generator: Generator<number, string, boolean>;
+ >generator : Generator<number, string, boolean>
+@@= skipped -41, +41 lines =@@
+ 
+     yield* iterableIterator;
+ >yield* iterableIterator : any
+->iterableIterator : IterableIterator<number>
++>iterableIterator : IterableIterator<number, any, any>
+ }
+ 
+ function* g005() { // Generator<number, void, boolean>
+@@= skipped -106, +106 lines =@@
+ 
+ declare function f2<T>(x: T): T;
+ >f2 : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ function* g204() { // Generator<number, void, any>
+@@= skipped -95, +96 lines =@@
+ 
+ function* g307<T>() { // Generator<number, T, T>
+ >g307 : <T>() => Generator<number, T, T>
++>T : T
+ 
+     const a: T = yield 0;
+ >a : T
+@@= skipped -12, +13 lines =@@
+ 
+ function* g308<T>(x: T) { // Generator<T, T, T>
+ >g308 : <T>(x: T) => Generator<T, T, T>
++>T : T
+ >x : T
+ 
+     const a: T = yield x;
+@@= skipped -13, +14 lines =@@
+ 
+ function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
+ >g309 : <T, U, V>(x: T, y: U) => Generator<T, U, V>
++>T : T
++>U : U
++>V : V
+ >x : T
+ >y : U
+ 

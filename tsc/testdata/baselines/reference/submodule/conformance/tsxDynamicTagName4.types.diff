@@ -1,0 +1,26 @@
+--- old.tsxDynamicTagName4.types
++++ new.tsxDynamicTagName4.types
+@@= skipped -1, +1 lines =@@
+ 
+ === tsxDynamicTagName4.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { }
++>Element : Element
++
+ 	interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+ 		div: any
+ >div : any
+ 
+@@= skipped -15, +21 lines =@@
+ >"h1" : "h1"
+ 
+ <CustomTag> Hello World </CustomTag>
+-><CustomTag> Hello World </CustomTag> : JSX.Element
++><CustomTag> Hello World </CustomTag> : any
+ >CustomTag : "h1"
+ >CustomTag : "h1"
+ 

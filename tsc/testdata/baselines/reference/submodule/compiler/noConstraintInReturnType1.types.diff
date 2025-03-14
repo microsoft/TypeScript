@@ -1,0 +1,13 @@
+--- old.noConstraintInReturnType1.types
++++ new.noConstraintInReturnType1.types
+@@= skipped -2, +2 lines =@@
+ === noConstraintInReturnType1.ts ===
+ class List<T extends {}> {
+ >List : List<T>
++>T : T
+ 
+     static empty<T extends {}>(): List<T> { return null; }
+ >empty : <T extends {}>() => List<T>
++>T : T
+ }
+ 

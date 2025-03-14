@@ -1,0 +1,29 @@
+--- old.classWithBaseClassButNoConstructor.types
++++ new.classWithBaseClassButNoConstructor.types
+@@= skipped -32, +32 lines =@@
+ 
+ class Base2<T,U> {
+ >Base2 : Base2<T, U>
++>T : T
++>U : U
+ 
+     constructor(x: T) { }
+ >x : T
+@@= skipped -7, +9 lines =@@
+ 
+ class D<T,U> extends Base2<T,U> {
+ >D : D<T, U>
++>T : T
++>U : U
+ >Base2 : Base2<T, U>
+ 
+     foo: U;
+@@= skipped -24, +26 lines =@@
+ // specialized base class
+ class D2<T, U> extends Base2<string, number> {
+ >D2 : D2<T, U>
++>T : T
++>U : U
+ >Base2 : Base2<string, number>
+ 
+     foo: U;

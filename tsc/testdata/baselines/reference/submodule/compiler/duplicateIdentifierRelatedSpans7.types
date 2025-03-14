@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans7.ts] ////
+
+=== file2.ts ===
+/// <reference path="./file1" />
+
+declare module "someMod" {
+>"someMod" : any
+
+    export interface TopLevel {
+>TopLevel : TopLevel
+
+        duplicate1(): number;
+>duplicate1 : () => number
+
+        duplicate2(): number;
+>duplicate2 : () => number
+
+        duplicate3(): number;
+>duplicate3 : () => number
+
+        duplicate4(): number;
+>duplicate4 : () => number
+
+        duplicate5(): number;
+>duplicate5 : () => number
+
+        duplicate6(): number;
+>duplicate6 : () => number
+
+        duplicate7(): number;
+>duplicate7 : () => number
+
+        duplicate8(): number;
+>duplicate8 : () => number
+
+        duplicate9(): number;
+>duplicate9 : () => number
+    }
+}
+export {};
+

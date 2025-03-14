@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/mappedTypePartialConstraints.ts] ////
+
+=== mappedTypePartialConstraints.ts ===
+// Repro from #16985
+
+interface MyInterface {
+>MyInterface : MyInterface
+
+  something: number;
+>something : number
+}
+
+class MyClass<T extends MyInterface> {
+>MyClass : MyClass<T>
+>T : T
+
+  doIt(data : Partial<T>) {}
+>doIt : (data: Partial<T>) => void
+>data : Partial<T>
+}
+
+class MySubClass extends MyClass<MyInterface> {}
+>MySubClass : MySubClass
+>MyClass : MyClass<MyInterface>
+
+function fn(arg: typeof MyClass) {};
+>fn : (arg: typeof MyClass) => void
+>arg : typeof MyClass
+
+fn(MySubClass);
+>fn(MySubClass) : void
+>fn : (arg: typeof MyClass) => void
+>MySubClass : typeof MySubClass
+

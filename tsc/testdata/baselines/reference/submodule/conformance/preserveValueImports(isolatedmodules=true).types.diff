@@ -1,0 +1,19 @@
+--- old.preserveValueImports(isolatedmodules=true).types
++++ new.preserveValueImports(isolatedmodules=true).types
+@@= skipped -12, +12 lines =@@
+ >1 : 1
+ 
+ export interface D {}
++>D : D
+ 
+ === b.ts ===
+ import a, { b, c, D } from "./a";
+@@= skipped -10, +11 lines =@@
+ 
+ === c.ts ===
+ import * as a from "./a";
+->a : typeof a
++>a : typeof import("a")
+ 
+ === d.ts ===
+ export = {};

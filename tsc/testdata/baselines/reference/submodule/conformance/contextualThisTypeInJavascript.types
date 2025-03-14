@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/types/thisType/contextualThisTypeInJavascript.ts] ////
+
+=== context.js ===
+const obj = {
+>obj : { prop: number; method: () => void; }
+>{    prop: 2,    method() {        this;        this.prop;        this.method;        this.unknown; // ok, obj has a string indexer    }} : { prop: number; method: () => void; }
+
+    prop: 2,
+>prop : number
+>2 : 2
+
+    method() {
+>method : () => void
+
+        this;
+>this : any
+
+        this.prop;
+>this.prop : any
+>this : any
+>prop : any
+
+        this.method;
+>this.method : any
+>this : any
+>method : any
+
+        this.unknown; // ok, obj has a string indexer
+>this.unknown : any
+>this : any
+>unknown : any
+    }
+}
+

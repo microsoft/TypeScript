@@ -1,0 +1,13 @@
+--- old.computedPropertyNames46_ES5.types
++++ new.computedPropertyNames46_ES5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === computedPropertyNames46_ES5.ts ===
+ var o = {
+->o : { 0: number; }
+->{    ["" || 0]: 0} : { 0: number; }
++>o : { ["" || 0]: number; }
++>{    ["" || 0]: 0} : { ["" || 0]: number; }
+ 
+     ["" || 0]: 0
+ >["" || 0] : number

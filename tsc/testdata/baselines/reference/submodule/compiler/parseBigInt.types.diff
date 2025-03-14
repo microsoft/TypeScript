@@ -1,0 +1,270 @@
+--- old.parseBigInt.types
++++ new.parseBigInt.types
+@@= skipped -4, +4 lines =@@
+ const bin = 0b101, binBig = 0b101n; // 5, 5n
+ >bin : 5
+ >0b101 : 5
+->binBig : 5n
+->0b101n : 5n
++>binBig : 0b101n
++>0b101n : 0b101n
+ 
+ const oct = 0o567, octBig = 0o567n; // 375, 375n
+ >oct : 375
+ >0o567 : 375
+->octBig : 375n
+->0o567n : 375n
++>octBig : 0o567n
++>0o567n : 0o567n
+ 
+ const hex = 0xC0B, hexBig = 0xC0Bn; // 3083, 3083n
+ >hex : 3083
+ >0xC0B : 3083
+->hexBig : 3083n
+->0xC0Bn : 3083n
++>hexBig : 0xc0bn
++>0xC0Bn : 0xc0bn
+ 
+ const dec = 123,   decBig = 123n;
+ >dec : 123
+@@= skipped -24, +24 lines =@@
+ // Test literals whose values overflow a 53-bit integer
+ // These should be represented exactly in the emitted JS
+ const largeBin = 0b10101010101010101010101010101010101010101010101010101010101n; // 384307168202282325n
+->largeBin : 384307168202282325n
+->0b10101010101010101010101010101010101010101010101010101010101n : 384307168202282325n
++>largeBin : 0b10101010101010101010101010101010101010101010101010101010101n
++>0b10101010101010101010101010101010101010101010101010101010101n : 0b10101010101010101010101010101010101010101010101010101010101n
+ 
+ const largeOct = 0o123456712345671234567n; // 1505852261029722487n
+->largeOct : 1505852261029722487n
+->0o123456712345671234567n : 1505852261029722487n
++>largeOct : 0o123456712345671234567n
++>0o123456712345671234567n : 0o123456712345671234567n
+ 
+ const largeDec = 12345678091234567890n;
+ >largeDec : 12345678091234567890n
+ >12345678091234567890n : 12345678091234567890n
+ 
+ const largeHex = 0x1234567890abcdefn; // 1311768467294899695n
+->largeHex : 1311768467294899695n
+->0x1234567890abcdefn : 1311768467294899695n
++>largeHex : 0x1234567890abcdefn
++>0x1234567890abcdefn : 0x1234567890abcdefn
+ 
+ // Test literals with separators
+ const separatedBin = 0b010_10_1n; // 21n
+->separatedBin : 21n
+->0b010_10_1n : 21n
++>separatedBin : 0b010101n
++>0b010_10_1n : 0b010101n
+ 
+ const separatedOct = 0o1234_567n; // 342391n
+->separatedOct : 342391n
+->0o1234_567n : 342391n
++>separatedOct : 0o1234567n
++>0o1234_567n : 0o1234567n
+ 
+ const separatedDec = 123_456_789n;
+ >separatedDec : 123456789n
+ >123_456_789n : 123456789n
+ 
+ const separatedHex = 0x0_abcdefn; // 11259375n
+->separatedHex : 11259375n
+->0x0_abcdefn : 11259375n
++>separatedHex : 0x0abcdefn
++>0x0_abcdefn : 0x0abcdefn
+ 
+ // Test parsing literals of different bit sizes
+ // to ensure that parsePseudoBigInt() allocates enough space
+ const zero         = 0b0n;
+->zero : 0n
+->0b0n : 0n
++>zero : 0b0n
++>0b0n : 0b0n
+ 
+ const oneBit       = 0b1n;
+->oneBit : 1n
+->0b1n : 1n
++>oneBit : 0b1n
++>0b1n : 0b1n
+ 
+ const twoBit       = 0b11n; // 3n
+->twoBit : 3n
+->0b11n : 3n
++>twoBit : 0b11n
++>0b11n : 0b11n
+ 
+ const threeBit     = 0b111n; // 7n
+->threeBit : 7n
+->0b111n : 7n
++>threeBit : 0b111n
++>0b111n : 0b111n
+ 
+ const fourBit      = 0b1111n; // 15n
+->fourBit : 15n
+->0b1111n : 15n
++>fourBit : 0b1111n
++>0b1111n : 0b1111n
+ 
+ const fiveBit      = 0b11111n; // 31n
+->fiveBit : 31n
+->0b11111n : 31n
++>fiveBit : 0b11111n
++>0b11111n : 0b11111n
+ 
+ const sixBit       = 0b111111n; // 63n
+->sixBit : 63n
+->0b111111n : 63n
++>sixBit : 0b111111n
++>0b111111n : 0b111111n
+ 
+ const sevenBit     = 0b1111111n; // 127n
+->sevenBit : 127n
+->0b1111111n : 127n
++>sevenBit : 0b1111111n
++>0b1111111n : 0b1111111n
+ 
+ const eightBit     = 0b11111111n; // 255n
+->eightBit : 255n
+->0b11111111n : 255n
++>eightBit : 0b11111111n
++>0b11111111n : 0b11111111n
+ 
+ const nineBit      = 0b111111111n; // 511n
+->nineBit : 511n
+->0b111111111n : 511n
++>nineBit : 0b111111111n
++>0b111111111n : 0b111111111n
+ 
+ const tenBit       = 0b1111111111n; // 1023n
+->tenBit : 1023n
+->0b1111111111n : 1023n
++>tenBit : 0b1111111111n
++>0b1111111111n : 0b1111111111n
+ 
+ const elevenBit    = 0b11111111111n; // 2047n
+->elevenBit : 2047n
+->0b11111111111n : 2047n
++>elevenBit : 0b11111111111n
++>0b11111111111n : 0b11111111111n
+ 
+ const twelveBit    = 0b111111111111n; // 4095n
+->twelveBit : 4095n
+->0b111111111111n : 4095n
++>twelveBit : 0b111111111111n
++>0b111111111111n : 0b111111111111n
+ 
+ const thirteenBit  = 0b1111111111111n; // 8191n
+->thirteenBit : 8191n
+->0b1111111111111n : 8191n
++>thirteenBit : 0b1111111111111n
++>0b1111111111111n : 0b1111111111111n
+ 
+ const fourteenBit  = 0b11111111111111n; // 16383n
+->fourteenBit : 16383n
+->0b11111111111111n : 16383n
++>fourteenBit : 0b11111111111111n
++>0b11111111111111n : 0b11111111111111n
+ 
+ const fifteenBit   = 0b111111111111111n; // 32767n
+->fifteenBit : 32767n
+->0b111111111111111n : 32767n
++>fifteenBit : 0b111111111111111n
++>0b111111111111111n : 0b111111111111111n
+ 
+ const sixteenBit   = 0b1111111111111111n; // 65535n
+->sixteenBit : 65535n
+->0b1111111111111111n : 65535n
++>sixteenBit : 0b1111111111111111n
++>0b1111111111111111n : 0b1111111111111111n
+ 
+ const seventeenBit = 0b11111111111111111n; // 131071n
+->seventeenBit : 131071n
+->0b11111111111111111n : 131071n
++>seventeenBit : 0b11111111111111111n
++>0b11111111111111111n : 0b11111111111111111n
+ 
+ // Test negative literals
+ const neg = -123n;
+@@= skipped -116, +116 lines =@@
+ >negHex : -16n
+ >-16n : -16n
+ >16n : 16n
+->-0x10n : -16n
+->0x10n : 16n
++>-0x10n : -0x10n
++>0x10n : 0x10n
+ 
+ // Test normalization of bigints -- all of these should succeed
+ const negZero: 0n = -0n;
+ >negZero : 0n
+->-0n : 0n
++>-0n : -0n
+ >0n : 0n
+ 
+ const baseChange: 255n = 0xFFn;
+ >baseChange : 255n
+->0xFFn : 255n
++>0xFFn : 0xffn
+ 
+ const leadingZeros: 0xFFn = 0x000000FFn;
+->leadingZeros : 255n
+->0x000000FFn : 255n
++>leadingZeros : 0xffn
++>0x000000FFn : 0x000000ffn
+ 
+ // Plus not allowed on literals
+ const unaryPlus = +123n;
+@@= skipped -26, +26 lines =@@
+ const unaryPlusHex = +0x123n;
+ >unaryPlusHex : number
+ >+0x123n : number
+->0x123n : 291n
++>0x123n : 0x123n
+ 
+ // Parsing errors
+ // In separate blocks because they each declare an "n" variable
+ { const legacyOct = 0123n; }
+->legacyOct : 83
+->0123 : 83
++>legacyOct : 123
++>0123 : 123
+ >n : any
+ 
+ { const scientific = 1e2n; }
+@@= skipped -22, +22 lines =@@
+ >.1n : 0.1
+ 
+ const emptyBinary = 0bn; // should error but infer 0n
+->emptyBinary : 0n
+->0bn : 0n
++>emptyBinary : 0b0n
++>0bn : 0b0n
+ 
+ const emptyOct = 0on; // should error but infer 0n
+->emptyOct : 0n
+->0on : 0n
++>emptyOct : 0o0n
++>0on : 0o0n
+ 
+ const emptyHex = 0xn; // should error but infer 0n
+->emptyHex : 0n
+->0xn : 0n
++>emptyHex : 0x0n
++>0xn : 0x0n
+ 
+ const leadingSeparator = _123n;
+ >leadingSeparator : any
+@@= skipped -27, +27 lines =@@
+ const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
+ >oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+ >(x: 1n | 2n | 3n): bigint => x ** 2n : (x: 1n | 2n | 3n) => bigint
+->x : 1n | 3n | 2n
++>x : 1n | 2n | 3n
+ >x ** 2n : bigint
+->x : 1n | 3n | 2n
++>x : 1n | 2n | 3n
+ >2n : 2n
+ 
+ oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);

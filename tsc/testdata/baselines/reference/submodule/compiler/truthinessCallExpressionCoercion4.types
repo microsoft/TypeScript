@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/truthinessCallExpressionCoercion4.ts] ////
+
+=== a.js ===
+function fn() {}
+>fn : () => void
+
+if (typeof module === 'object' && module.exports) {
+>typeof module === 'object' && module.exports : any
+>typeof module === 'object' : boolean
+>typeof module : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>module : any
+>'object' : "object"
+>module.exports : any
+>module : any
+>exports : any
+
+    module.exports = fn;
+>module.exports = fn : () => void
+>module.exports : any
+>module : any
+>exports : any
+>fn : () => void
+}
+

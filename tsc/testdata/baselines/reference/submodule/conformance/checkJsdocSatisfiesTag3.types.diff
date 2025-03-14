@@ -1,0 +1,36 @@
+--- old.checkJsdocSatisfiesTag3.types
++++ new.checkJsdocSatisfiesTag3.types
+@@= skipped -2, +2 lines =@@
+ === /a.js ===
+ /** @type {{ f(s: string): void } & Record<string, unknown> }} */
+ let obj = /** @satisfies {{ g(s: string): void } & Record<string, unknown>} */ ({
+->obj : { f(s: string): void; } & Record<string, unknown>
+->({    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }}) : { f(s: string): void; } & Record<string, unknown>
+->{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
++>obj : { f: (s: any) => void; g: (s: any) => void; }
++>({    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }}) : { f: (s: any) => void; g: (s: any) => void; }
++>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f: (s: any) => void; g: (s: any) => void; }
+ 
+     f(s) { }, // "incorrect" implicit any on 's'
+ >f : (s: any) => void
+ >s : any
+ 
+     g(s) { }
+->g : (s: string) => void
+->s : string
++>g : (s: any) => void
++>s : any
+ 
+ });
+ 
+ // This needs to not crash (outer node is not expression)
+ /** @satisfies {{ f(s: string): void }} */ ({ f(x) { } })
+->({ f(x) { } }) : { f(x: string): void; }
+->{ f(x) { } } : { f(x: string): void; }
+->f : (x: string) => void
+->x : string
++>({ f(x) { } }) : { f: (x: any) => void; }
++>{ f(x) { } } : { f: (x: any) => void; }
++>f : (x: any) => void
++>x : any
+ 

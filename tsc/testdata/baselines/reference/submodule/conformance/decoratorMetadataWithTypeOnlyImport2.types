@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/decorators/decoratorMetadataWithTypeOnlyImport2.ts] ////
+
+=== services.ts ===
+export namespace Services {
+>Services : typeof Services
+
+  export class Service {}
+>Service : Service
+}
+
+=== index.ts ===
+import type { Services } from './services';
+>Services : any
+
+declare const decorator: any;
+>decorator : any
+
+export class Main {
+>Main : Main
+
+  @decorator()
+>decorator() : any
+>decorator : any
+
+  field: Services.Service;
+>field : Service
+>Services : any
+}
+

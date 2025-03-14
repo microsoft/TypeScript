@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts] ////
+
+=== classMergedWithInterfaceMultipleBasesNoError.ts ===
+interface Bar { }
+>Bar : Bar
+
+interface Baz { }
+>Baz : Baz
+
+interface Q { }
+>Q : Q
+
+interface Foo extends Bar, Baz { }
+>Foo : Foo
+
+class Foo { }
+>Foo : Foo
+
+export default class extends Foo {
+>Foo : Foo
+
+    readonly observer = this.handleIntersection;
+>observer : () => void
+>this.handleIntersection : () => void
+>this : this
+>handleIntersection : () => void
+
+    readonly handleIntersection = () => { }
+>handleIntersection : () => void
+>() => { } : () => void
+}

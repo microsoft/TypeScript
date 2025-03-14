@@ -1,0 +1,13 @@
+--- old.nodeModulesImportAttributes(module=nodenext).types
++++ new.nodeModulesImportAttributes(module=nodenext).types
+@@= skipped -10, +10 lines =@@
+ >type : any
+ 
+ const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
+->json2 : Promise<{ default: { name: string; private: boolean; type: string; }; }>
+->import("./package.json", { with: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>
++>json2 : Promise<{ name: string; private: boolean; type: string; default: { name: string; private: boolean; type: string; }; }>
++>import("./package.json", { with: { type: "json" } }) : Promise<{ name: string; private: boolean; type: string; default: { name: string; private: boolean; type: string; }; }>
+ >"./package.json" : "./package.json"
+ >{ with: { type: "json" } } : { with: { type: string; }; }
+ >with : { type: string; }

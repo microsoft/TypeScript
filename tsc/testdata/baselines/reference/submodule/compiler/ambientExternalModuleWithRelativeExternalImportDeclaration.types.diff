@@ -1,0 +1,11 @@
+--- old.ambientExternalModuleWithRelativeExternalImportDeclaration.types
++++ new.ambientExternalModuleWithRelativeExternalImportDeclaration.types
+@@= skipped -16, +16 lines =@@
+ >InstanceVar : number
+ 
+         public x: m2.c;
+->x : m2.c
++>x : c
+ >m2 : any
+ 
+         constructor();

@@ -1,0 +1,67 @@
+--- old.doYouNeedToChangeYourTargetLibraryES2023(target=esnext).types
++++ new.doYouNeedToChangeYourTargetLibraryES2023(target=esnext).types
+@@= skipped -57, +57 lines =@@
+ export let sorted = array.toSorted();
+ >sorted : number[]
+ >array.toSorted() : number[]
+->array.toSorted : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
++>array.toSorted : (compareFn?: (a: number, b: number) => number | undefined) => number[]
+ >array : number[]
+->toSorted : (compareFn?: ((a: number, b: number) => number) | undefined) => number[]
++>toSorted : (compareFn?: (a: number, b: number) => number | undefined) => number[]
+ 
+ export let spliced1 = array.toSpliced(2);
+ >spliced1 : number[]
+ >array.toSpliced(2) : number[]
+->array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >array : number[]
+->toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >2 : 2
+ 
+ export let spliced2 = array.toSpliced(2, 1);
+ >spliced2 : number[]
+ >array.toSpliced(2, 1) : number[]
+->array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >array : number[]
+->toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >2 : 2
+ >1 : 1
+ 
+ export let spliced3 = array.toSpliced(2, 1, 4, 5, 6, 7);
+ >spliced3 : number[]
+ >array.toSpliced(2, 1, 4, 5, 6, 7) : number[]
+->array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >array : number[]
+->toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >2 : 2
+ >1 : 1
+ >4 : 4
+@@= skipped -37, +37 lines =@@
+ export let spliced4 = array.toSpliced(2, undefined);
+ >spliced4 : number[]
+ >array.toSpliced(2, undefined) : number[]
+->array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >array : number[]
+->toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >2 : 2
+ >undefined : undefined
+ 
+ export let spliced5 = array.toSpliced(2, undefined, 4, 5, 6, 7);
+ >spliced5 : number[]
+ >array.toSpliced(2, undefined, 4, 5, 6, 7) : number[]
+->array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>array.toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >array : number[]
+->toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
++>toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; }
+ >2 : 2
+ >undefined : undefined
+ >4 : 4

@@ -1,0 +1,11 @@
+--- old.strictModeOctalLiterals.types
++++ new.strictModeOctalLiterals.types
+@@= skipped -1, +1 lines =@@
+ 
+ === strictModeOctalLiterals.ts ===
+ export enum E {
+->E : E
++>E : E.A
+ 
+     A = 12 + 01
+ >A : E.A

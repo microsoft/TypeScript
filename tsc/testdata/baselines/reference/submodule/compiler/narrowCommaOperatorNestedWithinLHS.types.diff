@@ -1,0 +1,84 @@
+--- old.narrowCommaOperatorNestedWithinLHS.types
++++ new.narrowCommaOperatorNestedWithinLHS.types
+@@= skipped -6, +6 lines =@@
+ >true : true
+ 
+ const value: { inner: number | string } = null as any;
+->value : { inner: number | string; }
++>value : { inner: string | number; }
+ >inner : string | number
+ >null as any : any
+ 
+@@= skipped -14, +14 lines =@@
+ 
+ if (typeof (otherValue(), value).inner === 'number') {
+ >typeof (otherValue(), value).inner === 'number' : boolean
+->typeof (otherValue(), value).inner : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof (otherValue(), value).inner : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >(otherValue(), value).inner : string | number
+->(otherValue(), value) : { inner: number | string; }
+->otherValue(), value : { inner: number | string; }
++>(otherValue(), value) : { inner: string | number; }
++>otherValue(), value : { inner: string | number; }
+ >otherValue() : boolean
+ >otherValue : () => boolean
+->value : { inner: number | string; }
++>value : { inner: string | number; }
+ >inner : string | number
+ >'number' : "number"
+ 
+     const a = value.inner; // number
+ >a : number
+ >value.inner : number
+->value : { inner: number | string; }
++>value : { inner: string | number; }
+ >inner : number
+ 
+     const b: number = (otherValue(), value).inner; // string | number , but should be number
+ >b : number
+ >(otherValue(), value).inner : number
+->(otherValue(), value) : { inner: number | string; }
+->otherValue(), value : { inner: number | string; }
++>(otherValue(), value) : { inner: string | number; }
++>otherValue(), value : { inner: string | number; }
+ >otherValue() : boolean
+ >otherValue : () => boolean
+->value : { inner: number | string; }
++>value : { inner: string | number; }
+ >inner : number
+ }
+ 
+@@= skipped -31, +31 lines =@@
+ >isNumber((otherValue(), value).inner) : boolean
+ >isNumber : (obj: any) => obj is number
+ >(otherValue(), value).inner : string | number
+->(otherValue(), value) : { inner: number | string; }
+->otherValue(), value : { inner: number | string; }
++>(otherValue(), value) : { inner: string | number; }
++>otherValue(), value : { inner: string | number; }
+ >otherValue() : boolean
+ >otherValue : () => boolean
+->value : { inner: number | string; }
++>value : { inner: string | number; }
+ >inner : string | number
+ 
+     const a = value.inner; // number
+ >a : number
+ >value.inner : number
+->value : { inner: number | string; }
++>value : { inner: string | number; }
+ >inner : number
+ 
+     const b: number = (otherValue(), value).inner; // string | number , but should be number
+ >b : number
+ >(otherValue(), value).inner : number
+->(otherValue(), value) : { inner: number | string; }
+->otherValue(), value : { inner: number | string; }
++>(otherValue(), value) : { inner: string | number; }
++>otherValue(), value : { inner: string | number; }
+ >otherValue() : boolean
+ >otherValue : () => boolean
+->value : { inner: number | string; }
++>value : { inner: string | number; }
+ >inner : number
+ }

@@ -1,0 +1,22 @@
+--- old.typeReferenceDirectives12.types
++++ new.typeReferenceDirectives12.types
+@@= skipped -24, +24 lines =@@
+ >Cls : typeof Cls
+ >bar : () => Lib
+ 
+-=== /types/lib/index.d.ts ===
+-interface Lib { x }
+->x : any
+-
+ === /main.ts ===
+ export class Cls {
+ >Cls : Cls
+@@= skipped -32, +28 lines =@@
+ >"./main" : typeof import("/main")
+ 
+     interface Cls {
++>Cls : Cls
++
+         foo(): Lib;
+ >foo : () => Lib
+     }

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures.ts] ////
+
+=== contextualTypingOfLambdaWithMultipleSignatures.ts ===
+interface Foo {
+>Foo : Foo
+
+    getFoo(n: number): void;
+>getFoo : { (n: number): void; (s: string): void; }
+>n : number
+
+    getFoo(s: string): void;
+>getFoo : { (n: number): void; (s: string): void; }
+>s : string
+}
+
+var foo: Foo;
+>foo : Foo
+
+foo.getFoo = bar => { };
+>foo.getFoo = bar => { } : (bar: any) => void
+>foo.getFoo : { (n: number): void; (s: string): void; }
+>foo : Foo
+>getFoo : { (n: number): void; (s: string): void; }
+>bar => { } : (bar: any) => void
+>bar : any
+

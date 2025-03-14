@@ -1,0 +1,18 @@
+--- old.generics3.types
++++ new.generics3.types
+@@= skipped -2, +2 lines =@@
+ === generics3.ts ===
+ class C<T> { private x: T; }
+ >C : C<T>
++>T : T
+ >x : T
+ 
+ interface X { f(): string; }
++>X : X
+ >f : () => string
+ 
+ interface Y { f(): string; }
++>Y : Y
+ >f : () => string
+ 
+ var a: C<X>;

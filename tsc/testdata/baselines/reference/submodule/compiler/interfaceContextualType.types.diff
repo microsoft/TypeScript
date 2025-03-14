@@ -1,0 +1,20 @@
+--- old.interfaceContextualType.types
++++ new.interfaceContextualType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceContextualType.ts ===
+ export interface IOptions {
++>IOptions : IOptions
++
+     italic?: boolean;
+ >italic : boolean
+ 
+@@= skipped -7, +9 lines =@@
+ >bold : boolean
+ }
+ export interface IMap {
++>IMap : IMap
++
+     [s: string]: IOptions;
+ >s : string
+ }

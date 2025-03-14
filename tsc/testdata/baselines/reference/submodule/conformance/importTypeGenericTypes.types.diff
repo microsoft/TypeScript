@@ -1,0 +1,81 @@
+--- old.importTypeGenericTypes.types
++++ new.importTypeGenericTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo.ts ===
+ interface Point<T> {
++>Point : Point<T>
++>T : T
++
+     x: number;
+ >x : number
+ 
+@@= skipped -14, +17 lines =@@
+ 
+ === foo2.ts ===
+ namespace Bar {
++>Bar : typeof Bar
++
+     export interface I<T> {
++>I : I<T>
++>T : T
++
+         a: string;
+ >a : string
+ 
+@@= skipped -13, +18 lines =@@
+ }
+ 
+ export namespace Baz {
++>Baz : any
++
+     export interface J<T> {
++>J : J<T>
++>T : T
++
+         a: number;
+ >a : number
+ 
+@@= skipped -14, +19 lines =@@
+ 
+ class Bar<T> {
+ >Bar : Bar<T>
++>T : T
+ 
+     item: Bar.I<T>;
+->item : Bar.I<T>
++>item : I<T>
+ >Bar : any
+ 
+     constructor(input: Baz.J<T>) {}
+->input : Baz.J<T>
++>input : J<T>
+ >Baz : any
+ }
+ export { Bar }
+@@= skipped -14, +15 lines =@@
+ 
+ === usage.ts ===
+ export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
+->x : import("foo")<{ x: number; }>
++>x : Point<{ x: number; }>
+ >x : number
+ >{ x: 0, y: 0, data: {x: 12} } : { x: number; y: number; data: { x: number; }; }
+ >x : number
+@@= skipped -13, +13 lines =@@
+ >12 : 12
+ 
+ export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
+->y : import("foo2").Bar.I<{ x: number; }>
++>y : I<{ x: number; }>
+ >Bar : any
+ >x : number
+ >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
+@@= skipped -15, +15 lines =@@
+ 
+ export class Bar2<T> {
+ >Bar2 : Bar2<T>
++>T : T
+ 
+     item: {a: string, b: number, c: object, data: T};
+ >item : { a: string; b: number; c: object; data: T; }

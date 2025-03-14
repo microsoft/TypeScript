@@ -1,0 +1,20 @@
+--- old.internalAliasClass.types
++++ new.internalAliasClass.types
+@@= skipped -12, +12 lines =@@
+ >c : typeof c
+ 
+     import b = a.c;
+->b : typeof b
++>b : typeof c
+ >a : typeof a
+->c : b
++>c : c
+ 
+     export var x: b = new b();
+->x : b
+->new b() : b
+->b : typeof b
++>x : c
++>new b() : c
++>b : typeof c
+ }

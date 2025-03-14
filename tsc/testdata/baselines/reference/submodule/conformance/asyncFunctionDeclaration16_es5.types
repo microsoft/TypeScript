@@ -1,0 +1,82 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration16_es5.ts] ////
+
+=== /types.d.ts ===
+declare class Thenable { then(): void; }
+>Thenable : Thenable
+>then : () => void
+
+=== /a.js ===
+/**
+ * @callback T1
+ * @param {string} str
+ * @returns {string}
+ */
+
+/**
+ * @callback T2
+ * @param {string} str
+ * @returns {Promise<string>}
+ */
+
+/**
+ * @callback T3
+ * @param {string} str
+ * @returns {Thenable}
+ */
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+const f1 = async str => {
+>f1 : (str: any) => Promise<any>
+>async str => {    return str;} : (str: any) => Promise<any>
+>str : any
+
+    return str;
+>str : any
+}
+
+/** @type {T1} */
+const f2 = async str => {
+>f2 : (str: any) => Promise<any>
+>async str => {    return str;} : (str: any) => Promise<any>
+>str : any
+
+    return str;
+>str : any
+}
+
+/**
+ * @param {string} str
+ * @returns {Promise<string>}
+ */
+const f3 = async str => {
+>f3 : (str: any) => Promise<any>
+>async str => {    return str;} : (str: any) => Promise<any>
+>str : any
+
+    return str;
+>str : any
+}
+
+/** @type {T2} */
+const f4 = async str => {
+>f4 : (str: any) => Promise<any>
+>async str => {    return str;} : (str: any) => Promise<any>
+>str : any
+
+    return str;
+>str : any
+}
+
+/** @type {T3} */
+const f5 = async str => {
+>f5 : (str: any) => Promise<any>
+>async str => {    return str;} : (str: any) => Promise<any>
+>str : any
+
+    return str;
+>str : any
+}
+

@@ -1,0 +1,35 @@
+--- old.undeclaredModuleError.types
++++ new.undeclaredModuleError.types
+@@= skipped -4, +4 lines =@@
+ >fs : any
+ 
+ function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
+->readdir : (path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void) => void
++>readdir : (path: string, accept: (stat: Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: Stats; }[]) => void) => void
+ >path : string
+->accept : (stat: fs.Stats, name: string) => boolean
+->stat : fs.Stats
++>accept : (stat: Stats, name: string) => boolean
++>stat : Stats
+ >fs : any
+ >name : string
+->callback : (error: Error, results: { name: string; stat: fs.Stats; }[]) => void
++>callback : (error: Error, results: { name: string; stat: Stats; }[]) => void
+ >error : Error
+->results : { name: string; stat: fs.Stats; }[]
++>results : { name: string; stat: Stats; }[]
+ >name : string
+->stat : fs.Stats
++>stat : Stats
+ >fs : any
+ 
+ function join(...paths: string[]) {}
+@@= skipped -33, +33 lines =@@
+ 
+         readdir(covFileDir, () => {
+ >readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } ) : void
+->readdir : (path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void) => void
++>readdir : (path: string, accept: (stat: Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: Stats; }[]) => void) => void
+ >covFileDir : string
+ >() => {        } : () => void
+ 

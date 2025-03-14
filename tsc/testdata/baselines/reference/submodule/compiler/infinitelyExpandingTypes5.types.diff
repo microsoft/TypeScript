@@ -1,0 +1,37 @@
+--- old.infinitelyExpandingTypes5.types
++++ new.infinitelyExpandingTypes5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === infinitelyExpandingTypes5.ts ===
+ interface Query<T> {
++>Query : Query<T>
++>T : T
++
+     foo(x: T): Query<T[]>;
+ >foo : (x: T) => Query<T[]>
+ >x : T
+ }
+ 
+ interface Enumerator<T> {
++>Enumerator : Enumerator<T>
++>T : T
++
+     (action: (item: T, index: number) => boolean): boolean;
+ >action : (item: T, index: number) => boolean
+ >item : T
+@@= skipped -13, +19 lines =@@
+ }
+ 
+ function from<T>(array: T[]): Query<T>;
+->from : { <T>(array: T[]): Query<T>; <T_1>(enumerator: Enumerator<T_1>): Query<T_1>; }
++>from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
++>T : T
+ >array : T[]
+ 
+ function from<T>(enumerator: Enumerator<T>): Query<T>;
+->from : { <T_1>(array: T_1[]): Query<T_1>; <T>(enumerator: Enumerator<T>): Query<T>; }
++>from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
++>T : T
+ >enumerator : Enumerator<T>
+ 
+ function from(arg: any): any {

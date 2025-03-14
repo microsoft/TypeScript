@@ -1,0 +1,34 @@
+--- old.tsxReactEmit3.types
++++ new.tsxReactEmit3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === test.tsx ===
+ declare module JSX { interface Element { } }
++>JSX : any
++>Element : Element
++
+ declare var React: any;
+ >React : any
+ 
+@@= skipped -9, +12 lines =@@
+ >baz : any
+ 
+ <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
+-><Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo> : JSX.Element
++><Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo> : any
+ >Foo : any
+-><Bar> q </Bar> : JSX.Element
++><Bar> q </Bar> : any
+ >Bar : any
+ >Bar : any
+-><Bar/> : JSX.Element
++><Bar/> : any
+ >Bar : any
+-><Bar/> : JSX.Element
++><Bar/> : any
+ >Bar : any
+-><Bar/> : JSX.Element
++><Bar/> : any
+ >Bar : any
+ >Foo : any
+ 

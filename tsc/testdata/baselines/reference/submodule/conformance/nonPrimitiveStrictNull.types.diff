@@ -1,0 +1,56 @@
+--- old.nonPrimitiveStrictNull.types
++++ new.nonPrimitiveStrictNull.types
+@@= skipped -56, +56 lines =@@
+ 
+ if (typeof b !== 'object') {
+ >typeof b !== 'object' : boolean
+->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >b : object | null
+ >'object' : "object"
+ 
+@@= skipped -13, +13 lines =@@
+ 
+ if (typeof b === 'object') {
+ >typeof b === 'object' : boolean
+->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >b : object | null
+ >'object' : "object"
+ 
+@@= skipped -12, +12 lines =@@
+ 
+ if (typeof d === 'object') {
+ >typeof d === 'object' : boolean
+->typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof d : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >d : object | null | undefined
+ >'object' : "object"
+ 
+@@= skipped -61, +61 lines =@@
+ 
+ if (typeof d === 'undefined') {
+ >typeof d === 'undefined' : boolean
+->typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof d : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >d : object | null | undefined
+ >'undefined' : "undefined"
+ 
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ interface Proxy<T extends object> {}
++>Proxy : Proxy<T>
++>T : T
+ 
+ var x: Proxy<number>; // error
+ >x : Proxy<number>
+@@= skipped -11, +13 lines =@@
+ >z : Proxy<undefined>
+ 
+ interface Blah {
++>Blah : Blah
++
+   foo: number;
+ >foo : number
+ }

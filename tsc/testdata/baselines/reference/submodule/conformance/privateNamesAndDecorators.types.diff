@@ -1,0 +1,10 @@
+--- old.privateNamesAndDecorators.types
++++ new.privateNamesAndDecorators.types
+@@= skipped -2, +2 lines =@@
+ === privateNamesAndDecorators.ts ===
+ declare function dec<T>(target: T): T;
+ >dec : <T>(target: T) => T
++>T : T
+ >target : T
+ 
+ class A {

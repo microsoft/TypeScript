@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/augmentedTypesInterface.ts] ////
+
+=== augmentedTypesInterface.ts ===
+// interface then interface
+
+interface i {
+>i : i
+
+    foo(): void;
+>foo : () => void
+}
+
+interface i {
+>i : i
+
+    bar(): number;
+>bar : () => number
+}
+
+// interface then class
+interface i2 {
+>i2 : i2
+
+    foo(): void;
+>foo : () => void
+}
+
+class i2 {
+>i2 : i2
+
+    bar() {
+>bar : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+
+// interface then enum
+interface i3 { // error
+>i3 : i3
+
+    foo(): void;
+>foo : () => void
+}
+enum i3 { One }; // error
+>i3 : i3.One
+>One : i3.One
+
+// interface then import
+interface i4 {
+>i4 : i4
+
+    foo(): void;
+>foo : () => void
+}
+
+//import i4 = require('');  // error

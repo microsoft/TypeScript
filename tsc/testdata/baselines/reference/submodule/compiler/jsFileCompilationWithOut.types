@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/jsFileCompilationWithOut.ts] ////
+
+=== a.ts ===
+class c {
+>c : c
+}
+
+=== b.js ===
+function foo() {
+>foo : () => void
+}
+

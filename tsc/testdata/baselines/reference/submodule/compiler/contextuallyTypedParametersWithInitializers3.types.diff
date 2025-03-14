@@ -1,0 +1,19 @@
+--- old.contextuallyTypedParametersWithInitializers3.types
++++ new.contextuallyTypedParametersWithInitializers3.types
+@@= skipped -4, +4 lines =@@
+ >CanvasDirection : CanvasDirection
+ 
+ interface GraphActions {
++>GraphActions : GraphActions
++
+   setDirection: (direction: CanvasDirection) => void;
+ >setDirection : (direction: CanvasDirection) => void
+ >direction : CanvasDirection
+@@= skipped -7, +9 lines =@@
+ 
+ export declare function create<T>(config: T): void;
+ >create : <T>(config: T) => void
++>T : T
+ >config : T
+ 
+ declare function takesDirection(direction: CanvasDirection): void;

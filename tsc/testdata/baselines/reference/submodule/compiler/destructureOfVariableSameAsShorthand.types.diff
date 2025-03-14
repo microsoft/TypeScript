@@ -1,0 +1,76 @@
+--- old.destructureOfVariableSameAsShorthand.types
++++ new.destructureOfVariableSameAsShorthand.types
+@@= skipped -2, +2 lines =@@
+ === destructureOfVariableSameAsShorthand.ts ===
+ // https://github.com/microsoft/TypeScript/issues/38969
+ interface AxiosResponse<T = never> {
++>AxiosResponse : AxiosResponse<T>
++>T : T
++
+     data: T;
+ >data : T
+ }
+ 
+ declare function get<T = never, R = AxiosResponse<T>>(): Promise<R>;
+->get : <T = never, R = AxiosResponse<T>>() => Promise<R>
++>get : <T, R>() => Promise<R>
++>T : T
++>R : R
+ 
+ async function main() {
+ >main : () => Promise<void>
+@@= skipped -13, +18 lines =@@
+     // These work examples as expected
+     get().then((response) => {
+ >get().then((response) => {        // body is never        const body = response.data;    }) : Promise<void>
+->get().then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>get().then : <TResult1, TResult2>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >get() : Promise<AxiosResponse<never>>
+->get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+->then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>get : <T, R>() => Promise<R>
++>then : <TResult1, TResult2>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >(response) => {        // body is never        const body = response.data;    } : (response: AxiosResponse<never>) => void
+ >response : AxiosResponse<never>
+ 
+@@= skipped -17, +17 lines =@@
+     })
+     get().then(({ data }) => {
+ >get().then(({ data }) => {        // data is never    }) : Promise<void>
+->get().then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>get().then : <TResult1, TResult2>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >get() : Promise<AxiosResponse<never>>
+->get : <T = never, R = AxiosResponse<T>>() => Promise<R>
+->then : <TResult1 = AxiosResponse<never>, TResult2 = never>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+->({ data }) => {        // data is never    } : ({ data }: AxiosResponse<never>) => void
++>get : <T, R>() => Promise<R>
++>then : <TResult1, TResult2>(onfulfilled?: (value: AxiosResponse<never>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>({ data }) => {        // data is never    } : (__0: AxiosResponse<never>) => void
+ >data : never
+ 
+         // data is never
+@@= skipped -13, +13 lines =@@
+ >response : AxiosResponse<never>
+ >await get() : AxiosResponse<never>
+ >get() : Promise<AxiosResponse<never>>
+->get : <T = never, R = AxiosResponse<T>>() => Promise<R>
++>get : <T, R>() => Promise<R>
+ 
+     // body is never
+     const body = response.data;
+@@= skipped -14, +14 lines =@@
+ >data : never
+ >await get<never>() : AxiosResponse<never>
+ >get<never>() : Promise<AxiosResponse<never>>
+->get : <T = never, R = AxiosResponse<T>>() => Promise<R>
++>get : <T, R>() => Promise<R>
+ 
+     // The following did not work as expected.
+     // shouldBeNever should be never, but was any
+@@= skipped -9, +9 lines =@@
+ >shouldBeNever : never
+ >await get() : AxiosResponse<never>
+ >get() : Promise<AxiosResponse<never>>
+->get : <T = never, R = AxiosResponse<T>>() => Promise<R>
++>get : <T, R>() => Promise<R>
+ }

@@ -1,0 +1,16 @@
+--- old.enumTagOnExports2.types
++++ new.enumTagOnExports2.types
+@@= skipped -2, +2 lines =@@
+ === enumTagOnExports.js ===
+ /** @enum {string} */
+ module.exports = {};
+->module.exports = {} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {} : {}
++>module.exports : any
++>module : any
++>exports : any
+ >{} : {}
+ 

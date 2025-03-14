@@ -1,0 +1,14 @@
+--- old.stringRawType.types
++++ new.stringRawType.types
+@@= skipped -2, +2 lines =@@
+ === stringRawType.ts ===
+ String.raw({ raw: ["foo", "bar", "baz"] }, 1, 2);
+ >String.raw({ raw: ["foo", "bar", "baz"] }, 1, 2) : string
+->String.raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
++>String.raw : (template: { raw: ArrayLike<string> | readonly string[]; }, ...substitutions: any[]) => string
+ >String : StringConstructor
+->raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
++>raw : (template: { raw: ArrayLike<string> | readonly string[]; }, ...substitutions: any[]) => string
+ >{ raw: ["foo", "bar", "baz"] } : { raw: string[]; }
+ >raw : string[]
+ >["foo", "bar", "baz"] : string[]

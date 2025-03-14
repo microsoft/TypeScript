@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/modulePreserve2.ts] ////
+
+=== /main.js ===
+import { esm } from "dep";
+>esm : any
+
+const cjs = require("dep");
+>cjs : any
+>require("dep") : any
+>require : any
+>"dep" : "dep"
+
+=== /node_modules/dep/require.d.ts ===
+declare const cjs: "cjs";
+>cjs : "cjs"
+
+export = cjs;
+>cjs : "cjs"
+

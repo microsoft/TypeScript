@@ -1,0 +1,28 @@
+--- old.declFileTypeAnnotationTypeLiteral.types
++++ new.declFileTypeAnnotationTypeLiteral.types
+@@= skipped -5, +5 lines =@@
+ }
+ class g<T> {
+ >g : g<T>
++>T : T
+ }
+ module m {
+ >m : typeof m
+@@= skipped -11, +12 lines =@@
+ 
+ // Object literal with everything
+ var x: {
+->x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: number]: c; [n: string]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }
++>x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): c; [n: number]: c; [n: string]: c; a: c; b: g<string>; m1: () => g<number>; m2: (a: string, b?: number, ...c: c[]) => string; }
+ 
+     // Call signatures
+     (a: number): c;
+@@= skipped -51, +51 lines =@@
+ 
+ // constructor type
+ var z: new (a: string) => m.c;
+->z : new (a: string) => m.c
++>z : new (a: string) => c
+ >a : string
+ >m : any
+ 

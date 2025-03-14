@@ -1,0 +1,13 @@
+--- old.importsInAmbientModules3.types
++++ new.importsInAmbientModules3.types
+@@= skipped -4, +4 lines =@@
+ >"M" : typeof import("M")
+ 
+     import C = require("external");
+->C : typeof C
++>C : any
+ }
+-=== external.d.ts ===
+-export default class C {}
+->C : C
+-

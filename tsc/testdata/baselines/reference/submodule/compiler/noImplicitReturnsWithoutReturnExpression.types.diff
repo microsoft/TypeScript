@@ -1,0 +1,11 @@
+--- old.noImplicitReturnsWithoutReturnExpression.types
++++ new.noImplicitReturnsWithoutReturnExpression.types
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ function isMissingReturnExpression3(): number|void {
+->isMissingReturnExpression3 : () => number | void
++>isMissingReturnExpression3 : () => void | number
+ 
+     return;
+ }

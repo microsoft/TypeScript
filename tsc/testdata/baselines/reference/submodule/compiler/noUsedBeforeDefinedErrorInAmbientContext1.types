@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/noUsedBeforeDefinedErrorInAmbientContext1.ts] ////
+
+=== test.d.ts ===
+declare var S: typeof A; // no error
+>S : number
+
+declare const A: number;  
+>A : number
+

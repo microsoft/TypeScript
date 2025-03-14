@@ -1,0 +1,11 @@
+--- old.objectLiteralFunctionArgContextualTyping.types
++++ new.objectLiteralFunctionArgContextualTyping.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectLiteralFunctionArgContextualTyping.ts ===
+ interface I {
++>I : I
++
+     value: string;
+ >value : string
+ 

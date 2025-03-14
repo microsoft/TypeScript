@@ -1,0 +1,12 @@
+--- old.unusedTypeParameterInInterface1.types
++++ new.unusedTypeParameterInInterface1.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/unusedTypeParameterInInterface1.ts] ////
+ 
+ === unusedTypeParameterInInterface1.ts ===
+-
+ interface int<T> {
++>int : int<T>
++>T : T
+ 
+ }

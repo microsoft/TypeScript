@@ -1,0 +1,10 @@
+--- old.functionExpressionWithResolutionOfTypeOfSameName02.types
++++ new.functionExpressionWithResolutionOfTypeOfSameName02.types
+@@= skipped -1, +1 lines =@@
+ 
+ === functionExpressionWithResolutionOfTypeOfSameName02.ts ===
+ interface Foo {
++>Foo : Foo
+ }
+ 
+ var x = function Foo() {

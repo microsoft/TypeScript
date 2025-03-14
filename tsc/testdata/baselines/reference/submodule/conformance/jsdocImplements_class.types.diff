@@ -1,0 +1,50 @@
+--- old.jsdocImplements_class.types
++++ new.jsdocImplements_class.types
+@@= skipped -5, +5 lines =@@
+ 
+     /** @return {number} */
+     method() { throw new Error(); }
+->method : () => number
++>method : () => void
+ >new Error() : Error
+ >Error : ErrorConstructor
+ }
+@@= skipped -30, +30 lines =@@
+ 
+ 
+ var Ns = {};
+->Ns : typeof Ns
++>Ns : {}
+ >{} : {}
+ 
+ /** @implements {A} */
+ Ns.C1 = class {
+ >Ns.C1 = class {    method() { return 11; }} : typeof C1
+->Ns.C1 : typeof C1
+->Ns : typeof Ns
+->C1 : typeof C1
++>Ns.C1 : any
++>Ns : {}
++>C1 : any
+ >class {    method() { return 11; }} : typeof C1
+ 
+     method() { return 11; }
+@@= skipped -60, +60 lines =@@
+ 
+ /** @implements {A} */
+ Ns.C5 = C5 || class {
+->Ns.C5 = C5 || class {    method() {        return 15;    }} : typeof C5
+->Ns.C5 : typeof C5
+->Ns : typeof Ns
+->C5 : typeof C5
+->C5 || class {    method() {        return 15;    }} : typeof C5
+->C5 : undefined
++>Ns.C5 = C5 || class {    method() {        return 15;    }} : any
++>Ns.C5 : any
++>Ns : {}
++>C5 : any
++>C5 || class {    method() {        return 15;    }} : any
++>C5 : any
+ >class {    method() {        return 15;    }} : typeof C5
+ 
+     method() {

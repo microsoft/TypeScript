@@ -1,0 +1,29 @@
+--- old.builtinIteratorReturn(strictbuiltiniteratorreturn=false).types
++++ new.builtinIteratorReturn(strictbuiltiniteratorreturn=false).types
+@@= skipped -112, +112 lines =@@
+ >set : Set<number>
+ 
+ declare const i12: IterableIterator<number, undefined>;
+->i12 : IterableIterator<number, undefined>
++>i12 : IterableIterator<number, undefined, any>
+ 
+ declare const i13: IterableIterator<number, any>;
+->i13 : IterableIterator<number>
++>i13 : IterableIterator<number, any, any>
+ 
+ declare const i14: IterableIterator<number, boolean>;
+->i14 : IterableIterator<number, boolean>
++>i14 : IterableIterator<number, boolean, any>
+ 
+ declare const i15: Iterable<number, undefined>;
+->i15 : Iterable<number, undefined>
++>i15 : Iterable<number, undefined, any>
+ 
+ declare const i16: Iterable<number, any>;
+->i16 : Iterable<number>
++>i16 : Iterable<number, any, any>
+ 
+ declare const i17: Iterable<number, boolean>;
+->i17 : Iterable<number, boolean>
++>i17 : Iterable<number, boolean, any>
+ 

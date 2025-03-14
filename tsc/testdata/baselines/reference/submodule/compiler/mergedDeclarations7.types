@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/mergedDeclarations7.ts] ////
+
+=== passport.d.ts ===
+declare module 'passport' {
+>'passport' : typeof import("passport")
+
+    namespace passport {
+>passport : PassportStatic
+
+        interface Passport {
+>Passport : Passport
+
+            use(): this;
+>use : () => this
+        }
+
+        interface PassportStatic extends Passport {
+>PassportStatic : PassportStatic
+
+            Passport: {new(): Passport};
+>Passport : new () => Passport
+        }
+    }
+
+    const passport: passport.PassportStatic;
+>passport : PassportStatic
+>passport : any
+
+    export = passport;
+>passport : PassportStatic
+}
+
+=== test.ts ===
+import * as passport from "passport";
+>passport : PassportStatic
+
+import { Passport } from "passport";
+>Passport : new () => Passport
+
+let p: Passport = passport.use();
+>p : Passport
+>passport.use() : PassportStatic
+>passport.use : () => PassportStatic
+>passport : PassportStatic
+>use : () => PassportStatic
+

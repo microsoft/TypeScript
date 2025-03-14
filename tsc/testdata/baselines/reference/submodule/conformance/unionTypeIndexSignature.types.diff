@@ -1,0 +1,56 @@
+--- old.unionTypeIndexSignature.types
++++ new.unionTypeIndexSignature.types
+@@= skipped -33, +33 lines =@@
+ >a : string
+ 
+ anyVar = unionOfTypesWithAndWithoutStringSignature["hello"]; // any
+->anyVar = unionOfTypesWithAndWithoutStringSignature["hello"] : error
++>anyVar = unionOfTypesWithAndWithoutStringSignature["hello"] : any
+ >anyVar : number
+->unionOfTypesWithAndWithoutStringSignature["hello"] : error
++>unionOfTypesWithAndWithoutStringSignature["hello"] : any
+ >unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
+ >"hello" : "hello"
+ 
+ anyVar = unionOfTypesWithAndWithoutStringSignature[10]; // any
+->anyVar = unionOfTypesWithAndWithoutStringSignature[10] : error
++>anyVar = unionOfTypesWithAndWithoutStringSignature[10] : any
+ >anyVar : number
+->unionOfTypesWithAndWithoutStringSignature[10] : error
++>unionOfTypesWithAndWithoutStringSignature[10] : any
+ >unionOfTypesWithAndWithoutStringSignature : boolean | { [a: string]: number; }
+ >10 : 10
+ 
+@@= skipped -21, +21 lines =@@
+ >a : number
+ 
+ numOrDate = unionOfDifferentReturnType1["hello"]; // any
+->numOrDate = unionOfDifferentReturnType1["hello"] : error
++>numOrDate = unionOfDifferentReturnType1["hello"] : any
+ >numOrDate : number | Date
+->unionOfDifferentReturnType1["hello"] : error
++>unionOfDifferentReturnType1["hello"] : any
+ >unionOfDifferentReturnType1 : { [a: number]: number; } | { [a: number]: Date; }
+ >"hello" : "hello"
+ 
+@@= skipped -18, +18 lines =@@
+ >a : number
+ 
+ anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"]; // any
+->anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"] : error
++>anyVar = unionOfTypesWithAndWithoutStringSignature1["hello"] : any
+ >anyVar : number
+->unionOfTypesWithAndWithoutStringSignature1["hello"] : error
++>unionOfTypesWithAndWithoutStringSignature1["hello"] : any
+ >unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
+ >"hello" : "hello"
+ 
+ anyVar = unionOfTypesWithAndWithoutStringSignature1[10]; // any
+->anyVar = unionOfTypesWithAndWithoutStringSignature1[10] : error
++>anyVar = unionOfTypesWithAndWithoutStringSignature1[10] : any
+ >anyVar : number
+->unionOfTypesWithAndWithoutStringSignature1[10] : error
++>unionOfTypesWithAndWithoutStringSignature1[10] : any
+ >unionOfTypesWithAndWithoutStringSignature1 : boolean | { [a: number]: number; }
+ >10 : 10
+ 

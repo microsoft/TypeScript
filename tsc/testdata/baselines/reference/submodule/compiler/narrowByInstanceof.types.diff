@@ -1,0 +1,65 @@
+--- old.narrowByInstanceof.types
++++ new.narrowByInstanceof.types
+@@= skipped -1, +1 lines =@@
+ 
+ === narrowByInstanceof.ts ===
+ interface A { a: string }
++>A : A
+ >a : string
+ 
+ interface B { b: string }
++>B : B
+ >b : string
+ 
+ interface C { c: string }
++>C : C
+ >c : string
+ 
+ type AA = {
+@@= skipped -99, +102 lines =@@
+ >typeof o === "object" && o !== null && o instanceof Person : boolean
+ >typeof o === "object" && o !== null : boolean
+ >typeof o === "object" : boolean
+->typeof o : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof o : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >o : any
+ >"object" : "object"
+ >o !== null : boolean
+@@= skipped -49, +49 lines =@@
+ }
+ 
+ function test(o: Person | Car) {
+->test : (o: Person | Car) => void
+->o : Person | Car
++>test : (o: Car | Person) => void
++>o : Car | Person
+ 
+     if (o instanceof cls) {
+ >o instanceof cls : boolean
+->o : Person | Car
++>o : Car | Person
+ >cls : PersonMixin
+ 
+         console.log("Is Person");
+@@= skipped -20, +20 lines =@@
+ >(o as Person).work : () => void
+ >(o as Person) : Person
+ >o as Person : Person
+->o : Person | Car
++>o : Car | Person
+ >work : () => void
+     }
+     else {
+@@= skipped -13, +13 lines =@@
+ 
+         o.sayHi();
+ >o.sayHi() : void
+->o.sayHi : (() => void) | (() => void)
+->o : Person | Car
+->sayHi : (() => void) | (() => void)
++>o.sayHi : () => void | () => void
++>o : Car | Person
++>sayHi : () => void | () => void
+     }
+ }
+ 

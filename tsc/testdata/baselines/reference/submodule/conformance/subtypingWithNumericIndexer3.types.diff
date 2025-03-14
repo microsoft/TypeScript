@@ -1,0 +1,50 @@
+--- old.subtypingWithNumericIndexer3.types
++++ new.subtypingWithNumericIndexer3.types
+@@= skipped -3, +3 lines =@@
+ // Derived type indexer must be subtype of base type indexer
+ 
+ interface Base { foo: string; }
++>Base : Base
+ >foo : string
+ 
+ interface Derived extends Base { bar: string; }
++>Derived : Derived
+ >bar : string
+ 
+ interface Derived2 extends Derived { baz: string; }
++>Derived2 : Derived2
+ >baz : string
+ 
+ class A {
+@@= skipped -36, +39 lines =@@
+ 
+     class A<T extends Derived> {
+ >A : A<T>
++>T : T
+ 
+         [x: number]: T;
+ >x : number
+@@= skipped -23, +24 lines =@@
+ 
+     class B3<T extends Derived> extends A<T> {
+ >B3 : B3<T>
++>T : T
+ >A : A<T>
+ 
+         [x: number]: Base; // error
+@@= skipped -8, +9 lines =@@
+ 
+     class B4<T extends Derived> extends A<T> {
+ >B4 : B4<T>
++>T : T
+ >A : A<T>
+ 
+         [x: number]: Derived; // error
+@@= skipped -8, +9 lines =@@
+ 
+     class B5<T extends Derived2> extends A<T> {
+ >B5 : B5<T>
++>T : T
+ >A : A<T>
+ 
+         [x: number]: Derived2; // error

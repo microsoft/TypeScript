@@ -1,0 +1,73 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment6.ts] ////
+
+=== webpackLibNormalModule.js ===
+class C {
+>C : C
+
+    /** @param {number} x */
+    constructor(x) {
+>x : any
+
+        this.x = x
+>this.x = x : any
+>this.x : any
+>this : this
+>x : any
+>x : any
+
+        this.exports = [x]
+>this.exports = [x] : any[]
+>this.exports : any
+>this : this
+>exports : any
+>[x] : any[]
+>x : any
+    }
+    /** @param {number} y */
+    m(y) {
+>m : (y: any) => any
+>y : any
+
+        return this.x + y
+>this.x + y : any
+>this.x : any
+>this : this
+>x : any
+>y : any
+    }
+}
+function exec() {
+>exec : () => any
+
+    const module = new C(12);
+>module : C
+>new C(12) : C
+>C : typeof C
+>12 : 12
+
+    return module.exports; // should be fine because `module` is defined locally
+>module.exports : any
+>module : C
+>exports : any
+}
+
+function tricky() {
+>tricky : () => () => any
+
+    // (a trickier variant of what webpack does)
+    const module = new C(12);
+>module : C
+>new C(12) : C
+>C : typeof C
+>12 : 12
+
+    return () => {
+>() => {        return module.exports;    } : () => any
+
+        return module.exports;
+>module.exports : any
+>module : C
+>exports : any
+    }
+}
+

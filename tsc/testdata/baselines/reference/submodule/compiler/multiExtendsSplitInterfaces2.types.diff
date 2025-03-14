@@ -1,0 +1,32 @@
+--- old.multiExtendsSplitInterfaces2.types
++++ new.multiExtendsSplitInterfaces2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === multiExtendsSplitInterfaces2.ts ===
+ interface A {
++>A : A
++
+ 	a: number;
+ >a : number
+ }
+ 
+ interface I extends A {
++>I : I
++
+ 	i1: number;
+ >i1 : number
+ }
+ 
+ interface B {
++>B : B
++
+ 	b: number;
+ >b : number
+ }
+ 
+ interface I extends B {
++>I : I
++
+ 	i2: number;
+ >i2 : number
+ }

@@ -1,0 +1,40 @@
+--- old.moduleResolutionWithSymlinks_preserveSymlinks.types
++++ new.moduleResolutionWithSymlinks_preserveSymlinks.types
+@@= skipped -4, +4 lines =@@
+ /// <reference types="linked" />
+ 
+ import { C as C1 } from "linked";
+->C : typeof C1
+->C1 : typeof C1
++>C : any
++>C1 : any
+ 
+ import { C as C2 } from "linked2";
+->C : typeof C2
+->C2 : typeof C2
++>C : any
++>C2 : any
+ 
+ let x = new C1();
+->x : C1
+->new C1() : C1
+->C1 : typeof C1
++>x : any
++>new C1() : any
++>C1 : any
+ 
+ // Should fail. We no longer resolve any symlinks.
+ x = new C2();
+->x = new C2() : C2
+->x : C1
+->new C2() : C2
+->C2 : typeof C2
++>x = new C2() : any
++>x : any
++>new C2() : any
++>C2 : any
+ 
+-=== /app/node_modules/real/index.d.ts ===
+-export const real: string;
+->real : string
+-

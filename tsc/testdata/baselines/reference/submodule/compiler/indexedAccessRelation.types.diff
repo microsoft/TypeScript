@@ -1,0 +1,42 @@
+--- old.indexedAccessRelation.types
++++ new.indexedAccessRelation.types
+@@= skipped -4, +4 lines =@@
+ 
+ class Component<S> {
+ >Component : Component<S>
++>S : S
+ 
+     setState<K extends keyof S>(state: Pick<S, K>) {}
+ >setState : <K extends keyof S>(state: Pick<S, K>) => void
++>K : K
+ >state : Pick<S, K>
+ }
+ 
+ export interface State<T> {
++>State : State<T>
++>T : T
++
+     a?: T;
+ >a : T
+ }
+@@= skipped -16, +21 lines =@@
+ 
+ class Comp<T extends Foo, S> extends Component<S & State<T>>
+ >Comp : Comp<T, S>
++>T : T
++>S : S
+ >Component : Component<S & State<T>>
+ {
+     foo(a: T) {
+@@= skipped -8, +10 lines =@@
+ 
+         this.setState({ a: a });
+ >this.setState({ a: a }) : void
+->this.setState : <K extends keyof S | "a">(state: Pick<S & State<T>, K>) => void
++>this.setState : <K extends "a" | keyof S>(state: Pick<S & State<T>, K>) => void
+ >this : this
+->setState : <K extends keyof S | "a">(state: Pick<S & State<T>, K>) => void
++>setState : <K extends "a" | keyof S>(state: Pick<S & State<T>, K>) => void
+ >{ a: a } : { a: T; }
+ >a : T
+ >a : T

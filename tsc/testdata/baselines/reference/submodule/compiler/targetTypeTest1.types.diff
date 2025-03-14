@@ -1,0 +1,93 @@
+--- old.targetTypeTest1.types
++++ new.targetTypeTest1.types
+@@= skipped -115, +115 lines =@@
+ // this in function add inferred to be type of object literal (i.e. Point)
+ // dx, dy, and return type of add inferred using target typing
+ Point.prototype = {
+->Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
++>Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => Point; }
+ >Point.prototype : Point
+ >Point : typeof Point
+ >prototype : Point
+->{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
++>{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => Point; }
+ 
+     x: 0,
+ >x : number
+@@= skipped -15, +15 lines =@@
+ >0 : 0
+ 
+     add: function(dx, dy) {
+->add : (dx: number, dy: number) => Point
+->function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
+->dx : number
+->dy : number
++>add : (dx: any, dy: any) => Point
++>function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: any, dy: any) => Point
++>dx : any
++>dy : any
+ 
+         return new Point(this.x + dx, this.y + dy);
+ >new Point(this.x + dx, this.y + dy) : Point
+@@= skipped -12, +12 lines =@@
+ >this.x : any
+ >this : any
+ >x : any
+->dx : number
++>dx : any
+ >this.y + dy : any
+ >this.y : any
+ >this : any
+ >y : any
+->dy : number
++>dy : any
+     }
+ };
+ 
+@@= skipped -62, +62 lines =@@
+ }
+ 
+ C.prototype = 
+->C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
++>C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: any, d: any) => any; }
+ >C.prototype : C
+ >C : typeof C
+ >prototype : C
+ 
+ 	{	a:0,
+->{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
++>{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: any, d: any) => any; }
+ >a : number
+ >0 : 0
+ 
+@@= skipped -15, +15 lines =@@
+ >0 : 0
+ 
+ 		C1M1: function(c,d) {     
+->C1M1 : (c: number, d: number) => any
+->function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: number, d: number) => any
+->c : number
+->d : number
++>C1M1 : (c: any, d: any) => any
++>function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: any, d: any) => any
++>c : any
++>d : any
+ 
+ 				return (this.a + c) + (this.b + d);
+ >(this.a + c) + (this.b + d) : any
+@@= skipped -12, +12 lines =@@
+ >this.a : any
+ >this : any
+ >a : any
+->c : number
++>c : any
+ >(this.b + d) : any
+ >this.b + d : any
+ >this.b : any
+ >this : any
+ >b : any
+->d : number
++>d : any
+ 			}
+ 	};
+ 

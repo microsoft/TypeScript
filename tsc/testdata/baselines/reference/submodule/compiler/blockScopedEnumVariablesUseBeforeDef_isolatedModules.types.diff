@@ -1,0 +1,62 @@
+--- old.blockScopedEnumVariablesUseBeforeDef_isolatedModules.types
++++ new.blockScopedEnumVariablesUseBeforeDef_isolatedModules.types
+@@= skipped -1, +1 lines =@@
+ 
+ === blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts ===
+ function foo1() {
+->foo1 : () => E
++>foo1 : () => E.A
+ 
+     return E.A
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+     enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ }
+ 
+ function foo2() {
+->foo2 : () => E
++>foo2 : () => E.A
+ 
+     return E.A
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+     const enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ }
+ 
+ const config = {
+->config : { a: AfterObject; }
+->{    a: AfterObject.A,} : { a: AfterObject; }
++>config : { a: AfterObject.A; }
++>{    a: AfterObject.A,} : { a: AfterObject.A; }
+ 
+     a: AfterObject.A,
+->a : AfterObject
+->AfterObject.A : AfterObject
++>a : AfterObject.A
++>AfterObject.A : AfterObject.A
+ >AfterObject : typeof AfterObject
+->A : AfterObject
++>A : AfterObject.A
+ 
+ };
+ 
+ const enum AfterObject {
+->AfterObject : AfterObject
++>AfterObject : AfterObject.A
+ 
+     A = 2,
+ >A : AfterObject.A

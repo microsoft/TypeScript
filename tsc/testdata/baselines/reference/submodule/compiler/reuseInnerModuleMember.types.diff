@@ -1,0 +1,26 @@
+--- old.reuseInnerModuleMember.types
++++ new.reuseInnerModuleMember.types
+@@= skipped -2, +2 lines =@@
+ === reuseInnerModuleMember_1.ts ===
+ ///<reference path='reuseInnerModuleMember_0.ts'/>
+ declare module bar {
++>bar : typeof bar
++
+     interface alpha { }
++>alpha : alpha
+ }
+ 
+ import f = require('./reuseInnerModuleMember_0');
+->f : typeof f
++>f : typeof import("reuseInnerModuleMember_0")
+ 
+ module bar {
+ >bar : typeof bar
+@@= skipped -14, +17 lines =@@
+ }
+ 
+ === reuseInnerModuleMember_0.ts ===
+-
+ export module M { }
++>M : any
+ 

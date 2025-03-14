@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/newLineInTypeofInstantiation.ts] ////
+
+=== newLineInTypeofInstantiation.ts ===
+interface Example {
+>Example : Example
+
+    (a: number): typeof a
+>a : number
+  
+    <T>(): void
+>T : T
+}
+

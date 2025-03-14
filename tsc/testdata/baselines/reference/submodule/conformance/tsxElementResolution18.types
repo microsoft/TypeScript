@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution18.tsx] ////
+
+=== file1.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+}
+
+// Error under implicit any
+<div n='x' />;
+><div n='x' /> : any
+>div : any
+>n : any
+

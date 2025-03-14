@@ -1,0 +1,24 @@
+--- old.importHelpersInTsx.types
++++ new.importHelpersInTsx.types
+@@= skipped -7, +7 lines =@@
+ >o : any
+ 
+ export const x = <span {...o} />
+->x : error
+-><span {...o} /> : error
++>x : any
++><span {...o} /> : any
+ >span : any
+ >o : any
+ 
+@@= skipped -13, +13 lines =@@
+ >o : any
+ 
+ const x = <span {...o} />
+->x : error
+-><span {...o} /> : error
++>x : any
++><span {...o} /> : any
+ >span : any
+ >o : any
+ 

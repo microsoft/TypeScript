@@ -1,0 +1,30 @@
+--- old.unusedImports_entireImportDeclaration.types
++++ new.unusedImports_entireImportDeclaration.types
+@@= skipped -20, +20 lines =@@
+ 
+ import d2, * as ns from "./a";
+ >d2 : 0
+->ns : typeof ns
++>ns : typeof import("/a")
+ 
+ import d3, { a as a2, b as b2 } from "./a";
+ >d3 : 0
+@@= skipped -14, +14 lines =@@
+ 
+ import d4, * as ns2 from "./a";
+ >d4 : 0
+->ns2 : typeof ns
++>ns2 : typeof import("/a")
+ 
+ d4;
+ >d4 : 0
+ 
+ import d5, * as ns3 from "./a";
+ >d5 : 0
+->ns3 : typeof ns
++>ns3 : typeof import("/a")
+ 
+ ns3;
+->ns3 : typeof ns
++>ns3 : typeof import("/a")
+ 

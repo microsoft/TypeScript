@@ -1,0 +1,18 @@
+--- old.typeOfThisInMemberFunctions.types
++++ new.typeOfThisInMemberFunctions.types
+@@= skipped -22, +22 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     x: T;
+ >x : T
+@@= skipped -23, +24 lines =@@
+ 
+ class E<T extends Date> {
+ >E : E<T>
++>T : T
+ 
+     x: T;
+ >x : T

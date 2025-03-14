@@ -1,0 +1,15 @@
+--- old.enumGenericTypeClash.types
++++ new.enumGenericTypeClash.types
+@@= skipped -2, +2 lines =@@
+ === enumGenericTypeClash.ts ===
+ class X<A,B,C> { }
+ >X : X<A, B, C>
++>A : A
++>B : B
++>C : C
+ 
+ enum X { MyVal }
+->X : X
++>X : X.MyVal
+ >MyVal : X.MyVal
+ 

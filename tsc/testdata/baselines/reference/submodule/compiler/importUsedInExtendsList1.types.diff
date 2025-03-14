@@ -1,0 +1,20 @@
+--- old.importUsedInExtendsList1.types
++++ new.importUsedInExtendsList1.types
+@@= skipped -2, +2 lines =@@
+ === importUsedInExtendsList1_1.ts ===
+ ///<reference path='importUsedInExtendsList1_require.ts'/>
+ import foo = require('./importUsedInExtendsList1_require');
+->foo : typeof foo
++>foo : typeof import("importUsedInExtendsList1_require")
+ 
+ class Sub extends foo.Super { }
+ >Sub : Sub
+->foo.Super : foo.Super
+->foo : typeof foo
+->Super : typeof foo.Super
++>foo.Super : Super
++>foo : typeof import("importUsedInExtendsList1_require")
++>Super : typeof Super
+ 
+ var s: Sub;
+ >s : Sub

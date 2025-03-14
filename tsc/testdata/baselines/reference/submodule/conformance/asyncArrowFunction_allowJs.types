@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction_allowJs.ts] ////
+
+=== file.js ===
+// Error (good)
+/** @type {function(): string} */
+const a = () => 0
+>a : () => number
+>() => 0 : () => number
+>0 : 0
+
+// Error (good)
+/** @type {function(): string} */
+const b = async () => 0
+>b : () => Promise<number>
+>async () => 0 : () => Promise<number>
+>0 : 0
+
+// No error (bad)
+/** @type {function(): string} */
+const c = async () => {
+>c : () => Promise<number>
+>async () => {	return 0} : () => Promise<number>
+
+	return 0
+>0 : 0
+}
+
+// Error (good)
+/** @type {function(): string} */
+const d = async () => {
+>d : () => Promise<string>
+>async () => {	return ""} : () => Promise<string>
+
+	return ""
+>"" : ""
+}
+
+/** @type {function(function(): string): void} */
+const f = (p) => {}
+>f : (p: any) => void
+>(p) => {} : (p: any) => void
+>p : any
+
+// Error (good)
+f(async () => {
+>f(async () => {	return 0}) : void
+>f : (p: any) => void
+>async () => {	return 0} : () => Promise<number>
+
+	return 0
+>0 : 0
+
+})

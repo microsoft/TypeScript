@@ -1,0 +1,109 @@
+//// [tests/cases/conformance/jsx/tsxUnionElementType3.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+class RC1 extends React.Component<{x : number}, {}> {
+>RC1 : RC1
+>React.Component : any
+>React : any
+>Component : any
+>x : number
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+}
+
+class RC2 extends React.Component<{ x: string }, {}> {
+>RC2 : RC2
+>React.Component : any
+>React : any
+>Component : any
+>x : string
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+    private method() { }
+>method : () => void
+}
+
+class RC3 extends React.Component<{}, {}> {
+>RC3 : RC3
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+}
+
+class RC4 extends React.Component<{}, {}> {
+>RC4 : RC4
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+}
+
+var EmptyRCComp = RC3 || RC4;
+>EmptyRCComp : typeof RC3
+>RC3 || RC4 : typeof RC3
+>RC3 : typeof RC3
+>RC4 : typeof RC4
+
+var PartRCComp = RC1 || RC4;
+>PartRCComp : typeof RC1
+>RC1 || RC4 : typeof RC1
+>RC1 : typeof RC1
+>RC4 : typeof RC4
+
+var RCComp = RC1 || RC2;
+>RCComp : typeof RC1
+>RC1 || RC2 : typeof RC1
+>RC1 : typeof RC1
+>RC2 : typeof RC2
+
+// OK
+let a = <RCComp x="Hi" />;
+>a : any
+><RCComp x="Hi" /> : any
+>RCComp : typeof RC1
+>x : any
+
+let a1 = <EmptyRCComp />;
+>a1 : any
+><EmptyRCComp /> : any
+>EmptyRCComp : typeof RC3
+
+let a2 = <EmptyRCComp data-prop="hello" />;
+>a2 : any
+><EmptyRCComp data-prop="hello" /> : any
+>EmptyRCComp : typeof RC3
+>data-prop : any
+
+let b = <PartRCComp />
+>b : any
+><PartRCComp /> : any
+>PartRCComp : typeof RC1
+
+let c = <PartRCComp data-extra="hello" />
+>c : any
+><PartRCComp data-extra="hello" /> : any
+>PartRCComp : typeof RC1
+>data-extra : any
+

@@ -1,0 +1,18 @@
+--- old.signatureLengthMismatchWithOptionalParameters.types
++++ new.signatureLengthMismatchWithOptionalParameters.types
+@@= skipped -1, +1 lines =@@
+ 
+ === signatureLengthMismatchWithOptionalParameters.ts ===
+ function callee(n: number | undefined, m: string) { }
+->callee : (n: number | undefined, m: string) => void
++>callee : (n: number, m: string) => void
+ >n : number
+ >m : string
+ 
+@@= skipped -12, +12 lines =@@
+ caller(callee);
+ >caller(callee) : void
+ >caller : (arg: (n?: number) => void) => void
+->callee : (n: number | undefined, m: string) => void
++>callee : (n: number, m: string) => void
+ 

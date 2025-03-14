@@ -1,0 +1,24 @@
+--- old.commonSourceDir6.types
++++ new.commonSourceDir6.types
+@@= skipped -30, +30 lines =@@
+ 
+ === baz.ts ===
+ import {x} from "a/bar";
+->x : number
++>x : any
+ 
+ import {i} from "a/foo";
+->i : number
++>i : any
+ 
+ export var pi = Math.PI;
+ >pi : number
+@@= skipped -14, +14 lines =@@
+ export var y = x * i;
+ >y : number
+ >x * i : number
+->x : number
+->i : number
++>x : any
++>i : any
+ 

@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/strictOptionalProperties3.ts] ////
+
+=== a.js ===
+/**
+ * @typedef {object} A
+ * @property {number} [value]
+ */
+
+/** @type {A} */
+const a = { value: undefined }; // error
+>a : { value: undefined; }
+>{ value: undefined } : { value: undefined; }
+>value : undefined
+>undefined : undefined
+
+/**
+ * @typedef {{ value?: number }} B
+ */
+
+/** @type {B} */
+const b = { value: undefined }; // error
+>b : { value: undefined; }
+>{ value: undefined } : { value: undefined; }
+>value : undefined
+>undefined : undefined
+

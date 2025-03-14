@@ -1,0 +1,26 @@
+--- old.importTag16.types
++++ new.importTag16.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/jsdoc/importTag16.ts] ////
+ 
+ === a.ts ===
+-
+ export default interface Foo {}
++>Foo : default
++
+ export interface I {}
++>I : I
+ 
+ === b.js ===
+ /** @import Foo, { I } from "./a" */
+@@= skipped -12, +14 lines =@@
+  * @param {I} b
+  */
+ export function foo(a, b) {}
+->foo : (a: Foo, b: I) => void
+->a : Foo
+->b : I
++>foo : (a: any, b: any) => void
++>a : any
++>b : any
+ 

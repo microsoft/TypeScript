@@ -1,0 +1,30 @@
+--- old.jsFileMethodOverloads4.types
++++ new.jsFileMethodOverloads4.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.js ===
+ export function Foo() { }
+->Foo : typeof Foo
++>Foo : () => void
+ 
+ /**
+  * @overload
+@@= skipped -21, +21 lines =@@
+  * @return {void}
+  */
+ Foo.prototype.bar = function (a, b) { }
+->Foo.prototype.bar = function (a, b) { } : { (a: string): void; (a: number, b: string): void; }
++>Foo.prototype.bar = function (a, b) { } : (a: any, b: any) => void
+ >Foo.prototype.bar : any
+ >Foo.prototype : any
+->Foo : typeof Foo
++>Foo : () => void
+ >prototype : any
+ >bar : any
+->function (a, b) { } : { (a: string): void; (a: number, b: string): void; }
+->a : string | number
+->b : string
++>function (a, b) { } : (a: any, b: any) => void
++>a : any
++>b : any
+ 

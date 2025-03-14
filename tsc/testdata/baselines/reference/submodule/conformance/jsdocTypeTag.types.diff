@@ -1,0 +1,197 @@
+--- old.jsdocTypeTag.types
++++ new.jsdocTypeTag.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ /** @type {String} */
+ var S;
+->S : string
++>S : any
+ 
+ /** @type {string} */
+ var s;
+->s : string
++>s : any
+ 
+ /** @type {Number} */
+ var N;
+->N : number
++>N : any
+ 
+ /** @type {number} */
+ var n;
+->n : number
++>n : any
+ 
+ /** @type {Boolean} */
+ var B;
+->B : boolean
++>B : any
+ 
+ /** @type {boolean} */
+ var b;
+->b : boolean
++>b : any
+ 
+ /** @type {Void} */
+ var V;
+->V : void
++>V : any
+ 
+ /** @type {void} */
+ var v;
+->v : void
++>v : any
+ 
+ /** @type {Undefined} */
+ var U;
+->U : undefined
++>U : any
+ 
+ /** @type {undefined} */
+ var u;
+->u : undefined
++>u : any
+ 
+ /** @type {Null} */
+ var Nl;
+->Nl : null
++>Nl : any
+ 
+ /** @type {null} */
+ var nl;
+->nl : null
++>nl : any
+ 
+ /** @type {Array} */
+ var A;
+->A : any[]
++>A : any
+ 
+ /** @type {array} */
+ var a;
+->a : any[]
++>a : any
+ 
+ /** @type {Promise} */
+ var P;
+->P : Promise<any>
++>P : any
+ 
+ /** @type {promise} */
+ var p;
+->p : Promise<any>
++>p : any
+ 
+ /** @type {?number} */
+ var nullable;
+->nullable : number | null
++>nullable : any
+ 
+ /** @type {Object} */
+ var Obj;
+@@= skipped -76, +76 lines =@@
+ 
+ /** @type {Function} */
+ var Func;
+->Func : Function
++>Func : any
+ 
+ /** @type {(s: string) => number} */
+ var f;
+->f : (s: string) => number
++>f : any
+ 
+ /** @type {new (s: string) => { s: string }} */
+ var ctor;
+->ctor : new (s: string) => { s: string; }
++>ctor : any
+ 
+ === b.ts ===
+ var S: string;
+->S : string
++>S : any
+ 
+ var s: string;
+->s : string
++>s : any
+ 
+ var N: number;
+->N : number
++>N : any
+ 
+ var n: number
+->n : number
++>n : any
+ 
+ var B: boolean;
+->B : boolean
++>B : any
+ 
+ var b: boolean;
+->b : boolean
++>b : any
+ 
+ var V :void;
+->V : void
++>V : any
+ 
+ var v: void;
+->v : void
++>v : any
+ 
+ var U: undefined;
+->U : undefined
++>U : any
+ 
+ var u: undefined;
+->u : undefined
++>u : any
+ 
+ var Nl: null;
+->Nl : null
++>Nl : any
+ 
+ var nl: null;
+->nl : null
++>nl : any
+ 
+ var A: any[];
+->A : any[]
++>A : any
+ 
+ var a: any[];
+->a : any[]
++>a : any
+ 
+ var P: Promise<any>;
+->P : Promise<any>
++>P : any
+ 
+ var p: Promise<any>;
+->p : Promise<any>
++>p : any
+ 
+ var nullable: number | null;
+->nullable : number | null
++>nullable : any
+ 
+ var Obj: any;
+ >Obj : any
+@@= skipped -69, +69 lines =@@
+ >obj : any
+ 
+ var Func: Function;
+->Func : Function
++>Func : any
+ 
+ var f: (s: string) => number;
+->f : (s: string) => number
++>f : any
+ >s : string
+ 
+ var ctor: new (s: string) => { s: string };
+->ctor : new (s: string) => { s: string; }
++>ctor : any
+ >s : string
+ >s : string
+ 

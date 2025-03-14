@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/module_augmentUninstantiatedModule.ts] ////
+
+=== module_augmentUninstantiatedModule.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+   namespace M {}
+>M : any
+
+   var M;
+>M : any
+
+   export = M;
+>M : any
+}
+
+declare module "bar" {
+>"bar" : typeof import("bar")
+
+    module "foo" {}
+>"foo" : any
+}

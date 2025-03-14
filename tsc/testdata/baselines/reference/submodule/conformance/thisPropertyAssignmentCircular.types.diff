@@ -1,0 +1,71 @@
+--- old.thisPropertyAssignmentCircular.types
++++ new.thisPropertyAssignmentCircular.types
+@@= skipped -15, +15 lines =@@
+ >slicey : () => void
+ 
+         this.foo = this.foo.slice();
+->this.foo = this.foo.slice() : string
+->this.foo : string
++>this.foo = this.foo.slice() : any
++>this.foo : any
+ >this : this
+->foo : string
+->this.foo.slice() : string
+->this.foo.slice : (start?: number, end?: number) => string
+->this.foo : string
++>foo : any
++>this.foo.slice() : any
++>this.foo.slice : any
++>this.foo : any
+ >this : this
+->foo : string
+->slice : (start?: number, end?: number) => string
++>foo : any
++>slice : any
+     }
+     m() {
+ >m : () => void
+ 
+         this.foo
+->this.foo : string
++>this.foo : any
+ >this : this
+->foo : string
++>foo : any
+     }
+ }
+ 
+ /** @class */
+ function C() {
+->C : typeof C
++>C : () => void
+ 
+     this.x = 0;
+ >this.x = 0 : 0
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >0 : 0
+ 
+     this.x = function() { this.x.toString(); }
+ >this.x = function() { this.x.toString(); } : () => void
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >function() { this.x.toString(); } : () => void
+->this.x.toString() : string
+->this.x.toString : () => string
+->this.x : () => void
+->this : this
+->x : () => void
+->toString : () => string
++>this.x.toString() : any
++>this.x.toString : any
++>this.x : any
++>this : any
++>x : any
++>toString : any
+ }
+ 

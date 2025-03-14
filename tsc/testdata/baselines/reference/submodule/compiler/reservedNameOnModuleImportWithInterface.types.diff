@@ -1,0 +1,16 @@
+--- old.reservedNameOnModuleImportWithInterface.types
++++ new.reservedNameOnModuleImportWithInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === reservedNameOnModuleImportWithInterface.ts ===
+ declare module test {
++>test : any
++
+     interface mi_string { }
++>mi_string : mi_string
++
+     module mi_string { }
++>mi_string : any
+ 
+     // Should error; imports both a type and a module, which means it conflicts with the 'string' type.
+     import string = mi_string;

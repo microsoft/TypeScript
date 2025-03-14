@@ -1,0 +1,13 @@
+--- old.quotedConstructors.types
++++ new.quotedConstructors.types
+@@= skipped -57, +57 lines =@@
+ };
+ 
+ var o = { "constructor"() {} };
+->o : { constructor(): void; }
+->{ "constructor"() {} } : { constructor(): void; }
++>o : { constructor: () => void; }
++>{ "constructor"() {} } : { constructor: () => void; }
+ >"constructor" : () => void
+ 
+ class F {

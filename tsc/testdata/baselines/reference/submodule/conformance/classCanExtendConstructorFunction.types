@@ -1,0 +1,298 @@
+//// [tests/cases/conformance/salsa/classCanExtendConstructorFunction.ts] ////
+
+=== first.js ===
+/**
+ * @constructor
+ * @param {number} numberOxen
+ */
+function Wagon(numberOxen) {
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>numberOxen : any
+
+    this.numberOxen = numberOxen
+>this.numberOxen = numberOxen : any
+>this.numberOxen : any
+>this : any
+>numberOxen : any
+>numberOxen : any
+}
+/** @param {Wagon[]=} wagons */
+Wagon.circle = function (wagons) {
+>Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons: any) => any
+>Wagon.circle : (wagons: any) => any
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>circle : (wagons: any) => any
+>function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons: any) => any
+>wagons : any
+
+    return wagons ? wagons.length : 3.14;
+>wagons ? wagons.length : 3.14 : any
+>wagons : any
+>wagons.length : any
+>wagons : any
+>length : any
+>3.14 : 3.14
+}
+/** @param {*[]=} supplies - *[]= is my favourite type */
+Wagon.prototype.load = function (supplies) {
+>Wagon.prototype.load = function (supplies) {} : (supplies: any) => void
+>Wagon.prototype.load : any
+>Wagon.prototype : any
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>prototype : any
+>load : any
+>function (supplies) {} : (supplies: any) => void
+>supplies : any
+}
+/** @param {*[]=} supplies - Yep, still a great type */
+Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
+>Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies: any) => any
+>Wagon.prototype.weight : any
+>Wagon.prototype : any
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>prototype : any
+>weight : any
+>supplies => supplies ? supplies.length : -1 : (supplies: any) => any
+>supplies : any
+>supplies ? supplies.length : -1 : any
+>supplies : any
+>supplies.length : any
+>supplies : any
+>length : any
+>-1 : -1
+>1 : 1
+
+Wagon.prototype.speed = function () {
+>Wagon.prototype.speed = function () {    return this.numberOxen / this.weight()} : () => number
+>Wagon.prototype.speed : any
+>Wagon.prototype : any
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+>prototype : any
+>speed : any
+>function () {    return this.numberOxen / this.weight()} : () => number
+
+    return this.numberOxen / this.weight()
+>this.numberOxen / this.weight() : number
+>this.numberOxen : any
+>this : any
+>numberOxen : any
+>this.weight() : any
+>this.weight : any
+>this : any
+>weight : any
+}
+// ok
+class Sql extends Wagon {
+>Sql : Sql
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+
+    constructor() {
+        super(); // error: not enough arguments
+>super() : void
+>super : any
+
+        this.foonly = 12
+>this.foonly = 12 : 12
+>this.foonly : any
+>this : this
+>foonly : any
+>12 : 12
+    }
+    /**
+     * @param {Array.<string>} files
+     * @param {"csv" | "json" | "xmlolololol"} format
+     * This is not assignable, so should have a type error
+     */
+    load(files, format) {
+>load : (files: any, format: any) => void
+>files : any
+>format : any
+
+        if (format === "xmlolololol") {
+>format === "xmlolololol" : boolean
+>format : any
+>"xmlolololol" : "xmlolololol"
+
+            throw new Error("please do not use XML. It was a joke.");
+>new Error("please do not use XML. It was a joke.") : Error
+>Error : ErrorConstructor
+>"please do not use XML. It was a joke." : "please do not use XML. It was a joke."
+        }
+        else {
+            super.speed() // run faster
+>super.speed() : any
+>super.speed : any
+>super : any
+>speed : any
+
+            if (super.weight() < 0) {
+>super.weight() < 0 : boolean
+>super.weight() : any
+>super.weight : any
+>super : any
+>weight : any
+>0 : 0
+
+                // ????????????????????????
+            }
+        }
+    }
+}
+var db = new Sql();
+>db : Sql
+>new Sql() : Sql
+>Sql : typeof Sql
+
+db.numberOxen = db.foonly
+>db.numberOxen = db.foonly : any
+>db.numberOxen : any
+>db : Sql
+>numberOxen : any
+>db.foonly : any
+>db : Sql
+>foonly : any
+
+// error, can't extend a TS constructor function
+class Drakkhen extends Dragon {
+>Drakkhen : Drakkhen
+>Dragon : (numberEaten: number) => void
+
+}
+
+=== second.ts ===
+/**
+ * @constructor
+ */
+function Dragon(numberEaten: number) {
+>Dragon : (numberEaten: number) => void
+>numberEaten : number
+
+    this.numberEaten = numberEaten
+>this.numberEaten = numberEaten : number
+>this.numberEaten : any
+>this : any
+>numberEaten : any
+>numberEaten : number
+}
+// error!
+class Firedrake extends Dragon {
+>Firedrake : Firedrake
+>Dragon : (numberEaten: number) => void
+
+    constructor() {
+        super();
+>super() : void
+>super : any
+    }
+}
+// ok
+class Conestoga extends Wagon {
+>Conestoga : Conestoga
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+
+    constructor(public drunkOO: true) {
+>drunkOO : true
+>true : true
+
+        // error: wrong type
+        super('nope');
+>super('nope') : void
+>super : any
+>'nope' : "nope"
+    }
+    // should error since others is not optional
+    static circle(others: (typeof Wagon)[]) {
+>circle : (others: { (numberOxen: any): void; circle: (wagons: any) => any; }[]) => number
+>others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
+
+        return others.length
+>others.length : number
+>others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
+>length : number
+    }
+}
+var c = new Conestoga(true);
+>c : Conestoga
+>new Conestoga(true) : Conestoga
+>Conestoga : typeof Conestoga
+>true : true
+
+c.drunkOO
+>c.drunkOO : true
+>c : Conestoga
+>drunkOO : true
+
+c.numberOxen
+>c.numberOxen : any
+>c : Conestoga
+>numberOxen : any
+
+=== generic.js ===
+/**
+ * @template T
+ * @param {T} flavour
+ */
+function Soup(flavour) {
+>Soup : (flavour: any) => void
+>flavour : any
+
+    this.flavour = flavour
+>this.flavour = flavour : any
+>this.flavour : any
+>this : any
+>flavour : any
+>flavour : any
+}
+/** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
+class Chowder extends Soup {
+>Chowder : Chowder
+>Soup : (flavour: any) => void
+
+    log() {
+>log : () => any
+
+        return this.flavour
+>this.flavour : any
+>this : this
+>flavour : any
+    }
+}
+
+var soup = new Soup(1);
+>soup : any
+>new Soup(1) : any
+>Soup : (flavour: any) => void
+>1 : 1
+
+soup.flavour
+>soup.flavour : any
+>soup : any
+>flavour : any
+
+var chowder = new Chowder({ claim: "ignorant" });
+>chowder : Chowder
+>new Chowder({ claim: "ignorant" }) : Chowder
+>Chowder : typeof Chowder
+>{ claim: "ignorant" } : { claim: string; }
+>claim : string
+>"ignorant" : "ignorant"
+
+chowder.flavour.claim
+>chowder.flavour.claim : any
+>chowder.flavour : any
+>chowder : Chowder
+>flavour : any
+>claim : any
+
+var errorNoArgs = new Chowder();
+>errorNoArgs : Chowder
+>new Chowder() : Chowder
+>Chowder : typeof Chowder
+
+var errorArgType = new Chowder(0);
+>errorArgType : Chowder
+>new Chowder(0) : Chowder
+>Chowder : typeof Chowder
+>0 : 0
+
+

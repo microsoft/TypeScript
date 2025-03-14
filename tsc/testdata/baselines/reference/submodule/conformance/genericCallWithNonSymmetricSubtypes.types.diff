@@ -1,0 +1,10 @@
+--- old.genericCallWithNonSymmetricSubtypes.types
++++ new.genericCallWithNonSymmetricSubtypes.types
+@@= skipped -5, +5 lines =@@
+ 
+ function foo<T>(x: T, y: T) {
+ >foo : <T>(x: T, y: T) => T
++>T : T
+ >x : T
+ >y : T
+ 

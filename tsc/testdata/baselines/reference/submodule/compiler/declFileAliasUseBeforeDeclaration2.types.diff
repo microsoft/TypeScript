@@ -1,0 +1,16 @@
+--- old.declFileAliasUseBeforeDeclaration2.types
++++ new.declFileAliasUseBeforeDeclaration2.types
+@@= skipped -12, +12 lines =@@
+     }
+     class B extends E {
+ >B : B
+->E : E
++>E : C
+     }
+     import E = A.C;
+->E : typeof E
++>E : typeof C
+ >A : typeof A
+->C : E
++>C : C
+ }

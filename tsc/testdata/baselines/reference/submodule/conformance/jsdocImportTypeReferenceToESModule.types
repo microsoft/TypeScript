@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToESModule.ts] ////
+
+=== ex.d.ts ===
+export var config: {}
+>config : {}
+
+=== test.js ===
+/** @param {import('./ex')} a */
+function demo(a) {
+>demo : (a: any) => void
+>a : any
+
+    a.config
+>a.config : any
+>a : any
+>config : any
+}
+

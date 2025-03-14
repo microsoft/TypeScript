@@ -1,0 +1,40 @@
+--- old.readonlyFloat32ArrayAssignableWithFloat32Array.types
++++ new.readonlyFloat32ArrayAssignableWithFloat32Array.types
+@@= skipped -1, +1 lines =@@
+ 
+ === readonlyFloat32ArrayAssignableWithFloat32Array.ts ===
+ function update(b: Readonly<Float32Array>) {
+->update : (b: Readonly<Float32Array>) => void
++>update : (b: Readonly<Float32Array<ArrayBuffer>>) => void
+ >b : Readonly<Float32Array<ArrayBuffer>>
+ 
+     const c = copy(b);
+ >c : Float32Array<ArrayBuffer>
+ >copy(b) : Float32Array<ArrayBuffer>
+->copy : (a: Float32Array) => Float32Array<ArrayBuffer>
++>copy : (a: Float32Array<ArrayBuffer>) => Float32Array<ArrayBuffer>
+ >b : Readonly<Float32Array<ArrayBuffer>>
+ 
+     add(c, c);
+ >add(c, c) : void
+->add : (a: Float32Array, b: Float32Array, c?: Float32Array) => void
++>add : (a: Float32Array<ArrayBuffer>, b: Float32Array<ArrayBuffer>, c?: Float32Array<ArrayBuffer>) => void
+ >c : Float32Array<ArrayBuffer>
+ >c : Float32Array<ArrayBuffer>
+ }
+ 
+ function add(a: Float32Array, b: Float32Array, c: Float32Array = a) {
+->add : (a: Float32Array, b: Float32Array, c?: Float32Array) => void
++>add : (a: Float32Array<ArrayBuffer>, b: Float32Array<ArrayBuffer>, c?: Float32Array<ArrayBuffer>) => void
+ >a : Float32Array<ArrayBuffer>
+ >b : Float32Array<ArrayBuffer>
+ >c : Float32Array<ArrayBuffer>
+@@= skipped -38, +38 lines =@@
+ }
+ 
+ function copy(a: Float32Array) {
+->copy : (a: Float32Array) => Float32Array<ArrayBuffer>
++>copy : (a: Float32Array<ArrayBuffer>) => Float32Array<ArrayBuffer>
+ >a : Float32Array<ArrayBuffer>
+ 
+     return new Float32Array(a);

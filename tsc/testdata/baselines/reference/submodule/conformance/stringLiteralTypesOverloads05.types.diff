@@ -1,0 +1,22 @@
+--- old.stringLiteralTypesOverloads05.types
++++ new.stringLiteralTypesOverloads05.types
+@@= skipped -1, +1 lines =@@
+ 
+ === stringLiteralTypesOverloads05.ts ===
+ interface Animal { animal: {} };
++>Animal : Animal
+ >animal : {}
+ 
+ interface Dog extends Animal { dog: {} }
++>Dog : Dog
+ >dog : {}
+ 
+ interface Cat extends Animal { cat: {} }
++>Cat : Cat
+ >cat : {}
+ 
+ interface Moose extends Animal { moose: {} }
++>Moose : Moose
+ >moose : {}
+ 
+ function doThing(x: "dog"): Dog;

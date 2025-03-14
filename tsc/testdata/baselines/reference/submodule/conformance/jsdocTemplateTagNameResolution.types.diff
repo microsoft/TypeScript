@@ -1,0 +1,10 @@
+--- old.jsdocTemplateTagNameResolution.types
++++ new.jsdocTemplateTagNameResolution.types
+@@= skipped -14, +14 lines =@@
+ 
+ /** @type {Foo<typeof x, "a">} */
+ const y = "a";
+->y : number
++>y : "a"
+ >"a" : "a"
+ 

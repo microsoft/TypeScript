@@ -1,0 +1,25 @@
+--- old.classExtendingAny.types
++++ new.classExtendingAny.types
+@@= skipped -44, +44 lines =@@
+ }
+ 
+ var o = {
+->o : { m(): void; }
+->{    m() {        super.unknown    }} : { m(): void; }
++>o : { m: () => void; }
++>{    m() {        super.unknown    }} : { m: () => void; }
+ 
+     m() {
+ >m : () => void
+@@= skipped -33, +33 lines =@@
+ >f : () => void
+ 
+         this.wat
+->this.wat : number
++>this.wat : any
+ >this : this
+->wat : number
++>wat : any
+ 
+         this.wit
+ >this.wit : any

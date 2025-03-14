@@ -1,0 +1,260 @@
+--- old.genericDefaultsJs.types
++++ new.genericDefaultsJs.types
+@@= skipped -2, +2 lines =@@
+ === decls.d.ts ===
+ declare function f0<T>(x?: T): T;
+ >f0 : <T>(x?: T) => T
++>T : T
+ >x : T
+ 
+ declare function f1<T, U = number>(x?: T): [T, U];
+->f1 : <T, U = number>(x?: T) => [T, U]
++>f1 : <T, U>(x?: T) => [T, U]
++>T : T
++>U : U
+ >x : T
+ 
+ declare class C0<T> {
+ >C0 : C0<T>
++>T : T
+ 
+     y: T;
+ >y : T
+@@= skipped -17, +21 lines =@@
+ }
+ declare class C1<T, U = number> {
+ >C1 : C1<T, U>
++>T : T
++>U : U
+ 
+     y: [T, U];
+ >y : [T, U]
+@@= skipped -9, +11 lines =@@
+ }
+ === main.js ===
+ const f0_v0 = f0();
+->f0_v0 : any
+->f0() : any
++>f0_v0 : unknown
++>f0() : unknown
+ >f0 : <T>(x?: T) => T
+ 
+ const f0_v1 = f0(1);
+@@= skipped -11, +11 lines =@@
+ >1 : 1
+ 
+ const f1_c0 = f1();
+->f1_c0 : [any, number]
+->f1() : [any, number]
+->f1 : <T, U = number>(x?: T) => [T, U]
++>f1_c0 : [unknown, number]
++>f1() : [unknown, number]
++>f1 : <T, U>(x?: T) => [T, U]
+ 
+ const f1_c1 = f1(1);
+ >f1_c1 : [number, number]
+ >f1(1) : [number, number]
+->f1 : <T, U = number>(x?: T) => [T, U]
++>f1 : <T, U>(x?: T) => [T, U]
+ >1 : 1
+ 
+ const C0_v0 = new C0();
+->C0_v0 : C0<any>
+->new C0() : C0<any>
++>C0_v0 : C0<unknown>
++>new C0() : C0<unknown>
+ >C0 : typeof C0
+ 
+ const C0_v0_y = C0_v0.y;
+->C0_v0_y : any
+->C0_v0.y : any
+->C0_v0 : C0<any>
+->y : any
++>C0_v0_y : unknown
++>C0_v0.y : unknown
++>C0_v0 : C0<unknown>
++>y : unknown
+ 
+ const C0_v1 = new C0(1);
+ >C0_v1 : C0<number>
+@@= skipped -34, +34 lines =@@
+ >y : number
+ 
+ const C1_v0 = new C1();
+->C1_v0 : C1<any, number>
+->new C1() : C1<any, number>
++>C1_v0 : C1<unknown, number>
++>new C1() : C1<unknown, number>
+ >C1 : typeof C1
+ 
+ const C1_v0_y = C1_v0.y;
+->C1_v0_y : [any, number]
+->C1_v0.y : [any, number]
+->C1_v0 : C1<any, number>
+->y : [any, number]
++>C1_v0_y : [unknown, number]
++>C1_v0.y : [unknown, number]
++>C1_v0 : C1<unknown, number>
++>y : [unknown, number]
+ 
+ const C1_v1 = new C1(1);
+ >C1_v1 : C1<number, number>
+@@= skipped -24, +24 lines =@@
+ 
+ class C0_B0 extends C0 {}
+ >C0_B0 : C0_B0
+->C0 : C0<any>
++>C0 : typeof C0
+ 
+ class C0_B1 extends C0 {
+ >C0_B1 : C0_B1
+->C0 : C0<any>
++>C0 : typeof C0
+ 
+     constructor() {
+         super();
+ >super() : void
+->super : typeof C0
++>super : any
+     }
+ }
+ class C0_B2 extends C0 {
+ >C0_B2 : C0_B2
+->C0 : C0<any>
++>C0 : typeof C0
+ 
+     constructor() {
+         super(1);
+ >super(1) : void
+->super : typeof C0
++>super : any
+ >1 : 1
+     }
+ }
+ 
+ const C0_B0_v0 = new C0_B0();
+->C0_B0_v0 : C0_B0
+->new C0_B0() : C0_B0
++>C0_B0_v0 : any
++>new C0_B0() : any
+ >C0_B0 : typeof C0_B0
+ 
+ const C0_B0_v0_y = C0_B0_v0.y;
+ >C0_B0_v0_y : any
+ >C0_B0_v0.y : any
+->C0_B0_v0 : C0_B0
++>C0_B0_v0 : any
+ >y : any
+ 
+ const C0_B0_v1 = new C0_B0(1);
+->C0_B0_v1 : C0_B0
+->new C0_B0(1) : C0_B0
++>C0_B0_v1 : any
++>new C0_B0(1) : any
+ >C0_B0 : typeof C0_B0
+ >1 : 1
+ 
+ const C0_B0_v1_y = C0_B0_v1.y;
+ >C0_B0_v1_y : any
+ >C0_B0_v1.y : any
+->C0_B0_v1 : C0_B0
++>C0_B0_v1 : any
+ >y : any
+ 
+ const C0_B1_v0 = new C0_B1();
+@@= skipped -71, +71 lines =@@
+ 
+ class C1_B0 extends C1 {}
+ >C1_B0 : C1_B0
+->C1 : C1<any, number>
++>C1 : typeof C1
+ 
+ class C1_B1 extends C1 {
+ >C1_B1 : C1_B1
+->C1 : C1<any, number>
++>C1 : typeof C1
+ 
+     constructor() {
+         super();
+ >super() : void
+->super : typeof C1
++>super : any
+     }
+ }
+ class C1_B2 extends C1 {
+ >C1_B2 : C1_B2
+->C1 : C1<any, number>
++>C1 : typeof C1
+ 
+     constructor() {
+         super(1);
+ >super(1) : void
+->super : typeof C1
++>super : any
+ >1 : 1
+     }
+ }
+ 
+ const C1_B0_v0 = new C1_B0();
+->C1_B0_v0 : C1_B0
+->new C1_B0() : C1_B0
++>C1_B0_v0 : any
++>new C1_B0() : any
+ >C1_B0 : typeof C1_B0
+ 
+ const C1_B0_v0_y = C1_B0_v0.y;
+->C1_B0_v0_y : [any, number]
+->C1_B0_v0.y : [any, number]
+->C1_B0_v0 : C1_B0
+->y : [any, number]
++>C1_B0_v0_y : any
++>C1_B0_v0.y : any
++>C1_B0_v0 : any
++>y : any
+ 
+ const C1_B0_v1 = new C1_B0(1);
+->C1_B0_v1 : C1_B0
+->new C1_B0(1) : C1_B0
++>C1_B0_v1 : any
++>new C1_B0(1) : any
+ >C1_B0 : typeof C1_B0
+ >1 : 1
+ 
+ const C1_B0_v1_y = C1_B0_v1.y;
+->C1_B0_v1_y : [any, number]
+->C1_B0_v1.y : [any, number]
+->C1_B0_v1 : C1_B0
+->y : [any, number]
++>C1_B0_v1_y : any
++>C1_B0_v1.y : any
++>C1_B0_v1 : any
++>y : any
+ 
+ const C1_B1_v0 = new C1_B1();
+ >C1_B1_v0 : C1_B1
+@@= skipped -53, +53 lines =@@
+ >C1_B1 : typeof C1_B1
+ 
+ const C1_B1_v0_y = C1_B1_v0.y;
+->C1_B1_v0_y : [any, number]
+->C1_B1_v0.y : [any, number]
++>C1_B1_v0_y : any
++>C1_B1_v0.y : any
+ >C1_B1_v0 : C1_B1
+->y : [any, number]
++>y : any
+ 
+ const C1_B2_v0 = new C1_B2();
+ >C1_B2_v0 : C1_B2
+@@= skipped -11, +11 lines =@@
+ >C1_B2 : typeof C1_B2
+ 
+ const C1_B2_v0_y = C1_B2_v0.y;
+->C1_B2_v0_y : [any, number]
+->C1_B2_v0.y : [any, number]
++>C1_B2_v0_y : any
++>C1_B2_v0.y : any
+ >C1_B2_v0 : C1_B2
+->y : [any, number]
++>y : any
+ 

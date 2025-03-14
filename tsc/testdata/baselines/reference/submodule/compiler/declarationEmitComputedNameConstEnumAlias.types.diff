@@ -1,0 +1,32 @@
+--- old.declarationEmitComputedNameConstEnumAlias.types
++++ new.declarationEmitComputedNameConstEnumAlias.types
+@@= skipped -1, +1 lines =@@
+ 
+ === EnumExample.ts ===
+ enum EnumExample {
+->EnumExample : EnumExample
++>EnumExample : EnumExample.TEST
+ 
+     TEST = 'TEST',
+ >TEST : EnumExample.TEST
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ export default EnumExample;
+->EnumExample : EnumExample
++>EnumExample : EnumExample.TEST
+ 
+ === index.ts ===
+ import EnumExample from './EnumExample';
+@@= skipped -11, +11 lines =@@
+ 
+     [EnumExample.TEST]: {},
+ >[EnumExample.TEST] : {}
+->EnumExample.TEST : EnumExample
++>EnumExample.TEST : EnumExample.TEST
+ >EnumExample : typeof EnumExample
+->TEST : EnumExample
++>TEST : EnumExample.TEST
+ >{} : {}
+ 
+ };

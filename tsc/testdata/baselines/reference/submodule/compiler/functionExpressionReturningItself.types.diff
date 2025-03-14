@@ -1,0 +1,15 @@
+--- old.functionExpressionReturningItself.types
++++ new.functionExpressionReturningItself.types
+@@= skipped -1, +1 lines =@@
+ 
+ === functionExpressionReturningItself.ts ===
+ var x = function somefn() { return somefn; };
+->x : () => any
+->function somefn() { return somefn; } : () => any
+->somefn : () => any
+->somefn : () => any
++>x : () => ???
++>function somefn() { return somefn; } : () => ???
++>somefn : () => ???
++>somefn : () => ???
+ 

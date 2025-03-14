@@ -1,0 +1,43 @@
+--- old.augmentedTypeBracketAccessIndexSignature.types
++++ new.augmentedTypeBracketAccessIndexSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === augmentedTypeBracketAccessIndexSignature.ts ===
+ interface Foo { a }
++>Foo : Foo
+ >a : any
+ 
+ interface Bar { b }
++>Bar : Bar
+ >b : any
+ 
+ interface Object {
++>Object : Object
++
+     [n: number]: Foo;
+ >n : number
+ }
+ 
+ interface Function {
++>Function : Function
++
+     [n: number]: Bar;
+ >n : number
+ }
+ 
+ var a = {}[0]; // Should be Foo
+->a : error
+->{}[0] : error
++>a : any
++>{}[0] : any
+ >{} : {}
+ >0 : 0
+ 
+ var b = (() => { })[0]; // Should be Bar
+->b : error
+->(() => { })[0] : error
++>b : any
++>(() => { })[0] : any
+ >(() => { }) : () => void
+ >() => { } : () => void
+ >0 : 0

@@ -1,0 +1,17 @@
+--- old.isolatedDeclarationErrors.types
++++ new.isolatedDeclarationErrors.types
+@@= skipped -1, +1 lines =@@
+ 
+ === isolatedDeclarationErrors.ts ===
+ function errorOnAssignmentBelowDecl(): void {}
+->errorOnAssignmentBelowDecl : typeof errorOnAssignmentBelowDecl
++>errorOnAssignmentBelowDecl : { (): void; a: string; }
+ 
+ errorOnAssignmentBelowDecl.a = "";
+ >errorOnAssignmentBelowDecl.a = "" : ""
+ >errorOnAssignmentBelowDecl.a : string
+->errorOnAssignmentBelowDecl : typeof errorOnAssignmentBelowDecl
++>errorOnAssignmentBelowDecl : { (): void; a: string; }
+ >a : string
+ >"" : ""
+ 

@@ -1,0 +1,67 @@
+--- old.jsDeclarationsDefault.types
++++ new.jsDeclarationsDefault.types
+@@= skipped -5, +5 lines =@@
+ 
+ === index2.js ===
+ export default function foo() {
+->foo : () => typeof foo
++>foo : () => ???
+ 
+     return foo;
+->foo : () => typeof foo
++>foo : () => ???
+ }
+ export const x = foo;
+->x : () => typeof foo
+->foo : () => typeof foo
++>x : () => ???
++>foo : () => ???
+ 
+ export { foo as bar };
+->foo : () => typeof foo
+->bar : () => typeof foo
++>foo : () => ???
++>bar : () => ???
+ 
+ === index3.js ===
+ export default class Foo {
+->Foo : Foo
++>Foo : default
+ 
+     a = /** @type {Foo} */(null);
+->a : Foo
+->(null) : Foo
++>a : any
++>(null) : null
+ 
+ };
+ export const X = Foo;
+->X : typeof Foo
+->Foo : typeof Foo
++>X : typeof default
++>Foo : typeof default
+ 
+ export { Foo as Bar };
+->Foo : typeof Foo
+->Bar : typeof Foo
++>Foo : typeof default
++>Bar : typeof default
+ 
+ === index4.js ===
+ import Fab from "./index3";
+->Fab : typeof Fab
++>Fab : typeof default
+ 
+ class Bar extends Fab {
+ >Bar : Bar
+->Fab : Fab
++>Fab : default
+ 
+     x = /** @type {Bar} */(null);
+->x : Bar
+->(null) : Bar
++>x : any
++>(null) : null
+ }
+ export default Bar;
+ >Bar : Bar

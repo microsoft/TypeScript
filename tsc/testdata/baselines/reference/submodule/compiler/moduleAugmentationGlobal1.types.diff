@@ -1,0 +1,12 @@
+--- old.moduleAugmentationGlobal1.types
++++ new.moduleAugmentationGlobal1.types
+@@= skipped -13, +13 lines =@@
+ >global : any
+ 
+     interface Array<T> {
++>Array : T[]
++>T : T
++
+         getA(): A;
+ >getA : () => A
+     }

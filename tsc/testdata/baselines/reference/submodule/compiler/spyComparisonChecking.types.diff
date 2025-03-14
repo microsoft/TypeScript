@@ -1,0 +1,45 @@
+--- old.spyComparisonChecking.types
++++ new.spyComparisonChecking.types
+@@= skipped -1, +1 lines =@@
+ 
+ === spyComparisonChecking.ts ===
+ interface Spy {
++>Spy : Spy
++
+     (...params: any[]): any;
+ >params : any[]
+ 
+@@= skipped -19, +21 lines =@@
+ 
+ type SpyObj<T> = T & {
+ >SpyObj : SpyObj<T>
++>T : T
+ 
+     [k in keyof T]: Spy;
++>k : k
+ }
+ 
+ declare function createSpyObj<T>(
+->createSpyObj : <T>(name: string, names: Array<keyof T>) => SpyObj<T>
++>createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
++>T : T
+ 
+     name: string, names: Array<keyof T>): SpyObj<T>;
+ >name : string
+ >names : (keyof T)[]
+ 
+ function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
+->mock : <T>(spyName: string, methodNames: Array<keyof T>) => SpyObj<T>
++>mock : <T>(spyName: string, methodNames: (keyof T)[]) => SpyObj<T>
++>T : T
+ >spyName : string
+ >methodNames : (keyof T)[]
+ 
+     const spyObj = createSpyObj<T>(spyName, methodNames);
+ >spyObj : SpyObj<T>
+ >createSpyObj<T>(spyName, methodNames) : SpyObj<T>
+->createSpyObj : <T_1>(name: string, names: Array<keyof T_1>) => SpyObj<T_1>
++>createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
+ >spyName : string
+ >methodNames : (keyof T)[]
+ 

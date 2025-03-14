@@ -1,0 +1,29 @@
+--- old.parserRealSource12.types
++++ new.parserRealSource12.types
+@@= skipped -9, +9 lines =@@
+ >TypeScript : typeof TypeScript
+ 
+     export interface IAstWalker {
++>IAstWalker : IAstWalker
++
+         walk(ast: AST, parent: AST): AST;
+ >walk : (ast: AST, parent: AST) => AST
+ >ast : AST
+@@= skipped -51, +53 lines =@@
+     }
+ 
+     export interface IAstWalkCallback {
++>IAstWalkCallback : IAstWalkCallback
++
+         (ast: AST, parent: AST, walker: IAstWalker): AST;
+ >ast : AST
+ >parent : AST
+@@= skipped -7, +9 lines =@@
+     }
+ 
+     export interface IAstWalkChildren {
++>IAstWalkChildren : IAstWalkChildren
++
+         (preAst: AST, parent: AST, walker: IAstWalker): void;
+ >preAst : AST
+ >parent : AST

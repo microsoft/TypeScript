@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter01.ts] ////
+
+=== emptyArrayBindingPatternParameter01.ts ===
+function f([]) {
+>f : (__0: any[]) => void
+
+    var x, y, z;
+>x : any
+>y : any
+>z : any
+}

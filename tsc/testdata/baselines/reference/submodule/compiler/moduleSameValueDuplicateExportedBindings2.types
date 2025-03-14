@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/moduleSameValueDuplicateExportedBindings2.ts] ////
+
+=== a.ts ===
+
+export * from "./b";
+export * from "./c";
+
+=== b.ts ===
+export {Animals} from "./c";
+>Animals : typeof Animals
+
+=== c.ts ===
+export enum Animals {
+>Animals : Animals
+
+	Cat,
+>Cat : Animals.Cat
+
+	Dog
+>Dog : Animals.Dog
+
+};

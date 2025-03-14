@@ -1,0 +1,10 @@
+--- old.forInStatement3.types
++++ new.forInStatement3.types
+@@= skipped -2, +2 lines =@@
+ === forInStatement3.ts ===
+ function F<T>() {
+ >F : <T>() => void
++>T : T
+ 
+   var expr: T;
+ >expr : T

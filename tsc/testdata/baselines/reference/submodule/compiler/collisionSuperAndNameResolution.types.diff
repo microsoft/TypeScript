@@ -1,0 +1,20 @@
+--- old.collisionSuperAndNameResolution.types
++++ new.collisionSuperAndNameResolution.types
+@@= skipped -1, +1 lines =@@
+ 
+ === collisionSuperAndNameResolution.ts ===
+ var console: {
+->console : { log(message: any): any; }
++>console : { log: (message: any) => any; }
+ 
+     log(message: any);
+ >log : (message: any) => any
+@@= skipped -23, +23 lines =@@
+         console.log(_super); // Error as this doesnt not resolve to user defined _super
+ >console.log(_super) : any
+ >console.log : (message: any) => any
+->console : { log(message: any): any; }
++>console : { log: (message: any) => any; }
+ >log : (message: any) => any
+ >_super : number
+     }

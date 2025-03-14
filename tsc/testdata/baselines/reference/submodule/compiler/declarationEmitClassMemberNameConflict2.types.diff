@@ -1,0 +1,19 @@
+--- old.declarationEmitClassMemberNameConflict2.types
++++ new.declarationEmitClassMemberNameConflict2.types
+@@= skipped -5, +5 lines =@@
+ >'bar' : "bar"
+ 
+ enum Hello {
+->Hello : Hello
++>Hello : Hello.World
+ 
+     World
+ >World : Hello.World
+ }
+ 
+ enum Hello1 {
+->Hello1 : Hello1
++>Hello1 : Hello1.World1
+ 
+     World1
+ >World1 : Hello1.World1

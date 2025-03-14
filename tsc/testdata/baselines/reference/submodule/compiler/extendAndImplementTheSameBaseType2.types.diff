@@ -1,0 +1,10 @@
+--- old.extendAndImplementTheSameBaseType2.types
++++ new.extendAndImplementTheSameBaseType2.types
+@@= skipped -2, +2 lines =@@
+ === extendAndImplementTheSameBaseType2.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     foo: number
+ >foo : number

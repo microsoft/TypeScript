@@ -1,0 +1,10 @@
+--- old.mergedDeclarations6.types
++++ new.mergedDeclarations6.types
+@@= skipped -27, +27 lines =@@
+ >"./a" : typeof import("a")
+ 
+     interface A { }
++>A : A
+ }
+ 
+ export class B extends A {

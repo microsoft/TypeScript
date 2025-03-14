@@ -1,0 +1,64 @@
+--- old.jsDeclarationsTypedefAndImportTypes.types
++++ new.jsDeclarationsTypedefAndImportTypes.types
+@@= skipped -18, +18 lines =@@
+ 
+ module.exports = Conn;
+ >module.exports = Conn : typeof Conn
+->module.exports : typeof Conn
+->module : { exports: typeof Conn; }
+->exports : typeof Conn
++>module.exports : any
++>module : any
++>exports : any
+ >Conn : typeof Conn
+ 
+ === usage.js ===
+@@= skipped -17, +17 lines =@@
+      * @param {Conn} c
+      */
+     constructor(c) {
+->c : import("conn")
++>c : any
+ 
+         this.connItem = c.item;
+->this.connItem = c.item : number
++>this.connItem = c.item : any
+ >this.connItem : any
+ >this : this
+ >connItem : any
+->c.item : number
+->c : import("conn")
+->item : number
++>c.item : any
++>c : any
++>item : any
+ 
+         /** @type {import("./conn").Whatever} */
+         this.another = "";
+ >this.another = "" : ""
+->this.another : import("conn").Whatever
++>this.another : any
+ >this : this
+->another : import("conn").Whatever
++>another : any
+ >"" : ""
+     }
+ }
+ 
+ module.exports = {
+->module.exports = {    Wrap} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {    Wrap} : { Wrap: typeof Wrap; }
++>module.exports : any
++>module : any
++>exports : any
+ >{    Wrap} : { Wrap: typeof Wrap; }
+ 
+     Wrap
+->Wrap : typeof Wrap
++>Wrap : any
+ 
+ };
+ 

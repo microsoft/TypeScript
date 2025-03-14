@@ -1,0 +1,45 @@
+--- old.pickOfLargeObjectUnionWorks.types
++++ new.pickOfLargeObjectUnionWorks.types
+@@= skipped -1, +1 lines =@@
+ 
+ === pickOfLargeObjectUnionWorks.ts ===
+ interface HTMLDataAttributes {
++>HTMLDataAttributes : HTMLDataAttributes
++
+     [data: `data-${string}`]: unknown
+ >data : `data-${string}`
+ }
+ 
+ interface Base {
++>Base : Base
++
+     id: string;
+ >id : string
+ 
+@@= skipped -121, +125 lines =@@
+   }
+   
+   interface A extends Base, HTMLDataAttributes {
++>A : A
++
+     a1: string;
+ >a1 : string
+ 
+@@= skipped -26, +28 lines =@@
+   }
+   
+   interface B extends Base, HTMLDataAttributes {
++>B : B
++
+     b1: string;
+ >b1 : string
+ 
+@@= skipped -26, +28 lines =@@
+   }
+   
+   interface C extends Base, HTMLDataAttributes {
++>C : C
++
+     c1: string;
+ >c1 : string
+ 

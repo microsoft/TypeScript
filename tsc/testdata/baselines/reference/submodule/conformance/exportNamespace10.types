@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace10.ts] ////
+
+=== /a.ts ===
+export class A {}
+>A : A
+
+=== /b.ts ===
+export type * as ns from "./a";
+>ns : typeof import("/a")
+
+=== /c.ts ===
+import { ns } from "./b";
+>ns : typeof import("/a")
+
+let _: ns.A = new ns.A(); // Error
+>_ : A
+>ns : any
+>new ns.A() : A
+>ns.A : typeof A
+>ns : typeof import("/a")
+>A : typeof A
+

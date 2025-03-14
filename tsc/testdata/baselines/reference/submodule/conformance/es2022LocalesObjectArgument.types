@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/es2022/es2022LocalesObjectArgument.ts] ////
+
+=== es2022LocalesObjectArgument.ts ===
+const enUS = new Intl.Locale("en-US");
+>enUS : Locale
+>new Intl.Locale("en-US") : Locale
+>Intl.Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
+>"en-US" : "en-US"
+
+const deDE = new Intl.Locale("de-DE");
+>deDE : Locale
+>new Intl.Locale("de-DE") : Locale
+>Intl.Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
+>"de-DE" : "de-DE"
+
+const jaJP = new Intl.Locale("ja-JP");
+>jaJP : Locale
+>new Intl.Locale("ja-JP") : Locale
+>Intl.Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
+>"ja-JP" : "ja-JP"
+
+new Intl.Segmenter(enUS);
+>new Intl.Segmenter(enUS) : Segmenter
+>Intl.Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>enUS : Locale
+
+new Intl.Segmenter([deDE, jaJP]);
+>new Intl.Segmenter([deDE, jaJP]) : Segmenter
+>Intl.Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>[deDE, jaJP] : Locale[]
+>deDE : Locale
+>jaJP : Locale
+
+Intl.Segmenter.supportedLocalesOf(enUS);
+>Intl.Segmenter.supportedLocalesOf(enUS) : string[]
+>Intl.Segmenter.supportedLocalesOf : (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]
+>Intl.Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>supportedLocalesOf : (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]
+>enUS : Locale
+
+Intl.Segmenter.supportedLocalesOf([deDE, jaJP]);
+>Intl.Segmenter.supportedLocalesOf([deDE, jaJP]) : string[]
+>Intl.Segmenter.supportedLocalesOf : (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]
+>Intl.Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
+>supportedLocalesOf : (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]
+>[deDE, jaJP] : Locale[]
+>deDE : Locale
+>jaJP : Locale
+

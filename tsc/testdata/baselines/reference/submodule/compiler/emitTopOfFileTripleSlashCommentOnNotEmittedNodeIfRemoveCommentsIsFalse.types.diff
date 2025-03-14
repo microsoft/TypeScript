@@ -1,0 +1,10 @@
+--- old.emitTopOfFileTripleSlashCommentOnNotEmittedNodeIfRemoveCommentsIsFalse.types
++++ new.emitTopOfFileTripleSlashCommentOnNotEmittedNodeIfRemoveCommentsIsFalse.types
+@@= skipped -6, +6 lines =@@
+ 
+ /// <reference path="file0.ts" />
+ interface F { }
++>F : F
+ 
+ 
+ 

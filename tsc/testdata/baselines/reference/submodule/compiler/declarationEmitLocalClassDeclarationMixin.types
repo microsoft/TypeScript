@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/declarationEmitLocalClassDeclarationMixin.ts] ////
+
+=== declarationEmitLocalClassDeclarationMixin.ts ===
+interface Constructor<C> { new (...args: any[]): C; }
+>Constructor : Constructor<C>
+>C : C
+>args : any[]
+
+function mixin<B extends Constructor<{}>>(Base: B) {
+>mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed<B>; prototype: PrivateMixed<any>; } & B
+>B : B
+>Base : B
+
+    class PrivateMixed extends Base {
+>PrivateMixed : PrivateMixed<B>
+>Base : {}
+
+        bar = 2;
+>bar : number
+>2 : 2
+    }
+    return PrivateMixed;
+>PrivateMixed : { new (...args: any[]): PrivateMixed<B>; prototype: PrivateMixed<any>; } & B
+}
+
+export class Unmixed {
+>Unmixed : Unmixed
+
+    foo = 1;
+>foo : number
+>1 : 1
+}
+
+export const Mixed = mixin(Unmixed);
+>Mixed : { new (...args: any[]): PrivateMixed<typeof Unmixed>; prototype: PrivateMixed<any>; } & typeof Unmixed
+>mixin(Unmixed) : { new (...args: any[]): PrivateMixed<typeof Unmixed>; prototype: PrivateMixed<any>; } & typeof Unmixed
+>mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed<B>; prototype: PrivateMixed<any>; } & B
+>Unmixed : typeof Unmixed
+
+function Filter<C extends Constructor<{}>>(ctor: C) {
+>Filter : <C extends Constructor<{}>>(ctor: C) => { new (...args: any[]): FilterMixin<C>; prototype: FilterMixin<any>; } & C
+>C : C
+>ctor : C
+
+    abstract class FilterMixin extends ctor {
+>FilterMixin : FilterMixin<C>
+>ctor : {}
+
+        abstract match(path: string): boolean;
+>match : (path: string) => boolean
+>path : string
+
+        // other concrete methods, fields, constructor
+        thing = 12;
+>thing : number
+>12 : 12
+    }
+    return FilterMixin;
+>FilterMixin : { new (...args: any[]): FilterMixin<C>; prototype: FilterMixin<any>; } & C
+}
+
+export class FilteredThing extends Filter(Unmixed) {
+>FilteredThing : FilteredThing
+>Filter(Unmixed) : FilterMixin<typeof Unmixed> & Unmixed
+>Filter : <C extends Constructor<{}>>(ctor: C) => { new (...args: any[]): FilterMixin<C>; prototype: FilterMixin<any>; } & C
+>Unmixed : typeof Unmixed
+
+    match(path: string) {
+>match : (path: string) => boolean
+>path : string
+
+        return false;
+>false : false
+    }
+}
+

@@ -1,0 +1,56 @@
+--- old.jsxViaImport.2.types
++++ new.jsxViaImport.2.types
+@@= skipped -2, +2 lines =@@
+ === consumer.tsx ===
+ /// <reference path="component.d.ts" />
+ import BaseComponent from 'BaseComponent';
+->BaseComponent : typeof BaseComponent
++>BaseComponent : typeof default
+ 
+ class TestComponent extends React.Component<any, {}> {
+ >TestComponent : TestComponent
+->React.Component : React.Component<any, {}>
++>React.Component : Component<any, {}>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ 
+     render() {
+ >render : () => any
+ 
+         return <BaseComponent />;
+-><BaseComponent /> : error
+->BaseComponent : typeof BaseComponent
++><BaseComponent /> : any
++>BaseComponent : typeof default
+     }
+ }
+ 
+ === component.d.ts ===
+ declare module JSX {
++>JSX : any
++
+   interface ElementAttributesProperty { props; }
++>ElementAttributesProperty : ElementAttributesProperty
+ >props : any
+ }
+ declare module React {
+@@= skipped -27, +30 lines =@@
+ 
+   class Component<T, U> { }
+ >Component : Component<T, U>
++>T : T
++>U : U
+ }
+ declare module "BaseComponent" {
+ >"BaseComponent" : typeof import("BaseComponent")
+ 
+     export default class extends React.Component<any, {}> {
+->React.Component : React.Component<any, {}>
++>React.Component : Component<any, {}>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+     }
+ }
+ 

@@ -1,0 +1,38 @@
+--- old.typeInferenceCacheInvalidation.types
++++ new.typeInferenceCacheInvalidation.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Callback<TFoo, TBar> = (foo: TFoo, bar: TBar) => any
+ >Callback : Callback<TFoo, TBar>
++>TFoo : TFoo
++>TBar : TBar
+ >foo : TFoo
+ >bar : TBar
+ 
+ declare function example<TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(
+ >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
++>TFoo : TFoo
++>TBar : TBar
++>TCallback : TCallback
+ 
+     foo: TFoo,
+ >foo : TFoo
+@@= skipped -39, +44 lines =@@
+ >'42' : "42"
+ 
+ example(42, (foo, bar) => ({
+->example(42, (foo, bar) => ({    t() {        let s: string = bar;    }}), '42') : (foo: number, bar: string) => { t(): void; }
++>example(42, (foo, bar) => ({    t() {        let s: string = bar;    }}), '42') : (foo: number, bar: string) => { t: () => void; }
+ >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
+ >42 : 42
+->(foo, bar) => ({    t() {        let s: string = bar;    }}) : (foo: number, bar: string) => { t(): void; }
++>(foo, bar) => ({    t() {        let s: string = bar;    }}) : (foo: number, bar: string) => { t: () => void; }
+ >foo : number
+ >bar : string
+->({    t() {        let s: string = bar;    }}) : { t(): void; }
+->{    t() {        let s: string = bar;    }} : { t(): void; }
++>({    t() {        let s: string = bar;    }}) : { t: () => void; }
++>{    t() {        let s: string = bar;    }} : { t: () => void; }
+ 
+     t() {
+ >t : () => void

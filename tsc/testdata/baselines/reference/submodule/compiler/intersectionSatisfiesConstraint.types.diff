@@ -1,0 +1,53 @@
+--- old.intersectionSatisfiesConstraint.types
++++ new.intersectionSatisfiesConstraint.types
+@@= skipped -1, +1 lines =@@
+ 
+ === intersectionSatisfiesConstraint.ts ===
+ interface FirstInterface {
++>FirstInterface : FirstInterface
++
+     commonProperty: number
+ >commonProperty : number
+ }
+ 
+ interface SecondInterface {
++>SecondInterface : SecondInterface
++
+     commonProperty: number
+ >commonProperty : number
+ }
+@@= skipped -12, +16 lines =@@
+ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) => {
+ >myFirstFunction : <T extends FirstInterface | SecondInterface>(param1: T) => void
+ ><T extends FirstInterface | SecondInterface>(param1: T) => {    const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })    mySecondFunction(newParam)} : <T extends FirstInterface | SecondInterface>(param1: T) => void
++>T : T
+ >param1 : T
+ 
+     const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })
+ >newParam : T & { otherProperty: number; }
+ >otherProperty : number
+ >Object.assign(param1, { otherProperty: 3 }) : T & { otherProperty: number; }
+->Object.assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
++>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+ >Object : ObjectConstructor
+->assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
++>assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+ >param1 : T
+ >{ otherProperty: 3 } : { otherProperty: number; }
+ >otherProperty : number
+@@= skipped -16, +17 lines =@@
+ 
+     mySecondFunction(newParam)
+ >mySecondFunction(newParam) : { commonProperty: number; otherProperty: number; }
+->mySecondFunction : <T_1 extends { commonProperty: number; otherProperty: number; }>(newParam: T_1) => T_1
++>mySecondFunction : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
+ >newParam : (FirstInterface | SecondInterface) & { otherProperty: number; }
+ }
+ 
+ const mySecondFunction = <T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {
+ >mySecondFunction : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
+ ><T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {    return newParam} : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
++>T : T
+ >commonProperty : number
+ >otherProperty : number
+ >newParam : T

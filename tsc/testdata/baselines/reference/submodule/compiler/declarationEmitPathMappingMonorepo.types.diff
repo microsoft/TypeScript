@@ -1,0 +1,22 @@
+--- old.declarationEmitPathMappingMonorepo.types
++++ new.declarationEmitPathMappingMonorepo.types
+@@= skipped -1, +1 lines =@@
+ 
+ === packages/b/src/index.ts ===
+ import { a } from "@ts-bug/a";
+->a : (text: string) => import("@ts-bug/a").AText
++>a : (text: string) => AText
+ 
+ export function b(text: string) {
+->b : (text: string) => import("@ts-bug/a").AText
++>b : (text: string) => AText
+ >text : string
+ 
+   return a(text);
+->a(text) : import("@ts-bug/a").AText
+->a : (text: string) => import("@ts-bug/a").AText
++>a(text) : AText
++>a : (text: string) => AText
+ >text : string
+ }
+ === packages/a/index.d.ts ===

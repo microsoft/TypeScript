@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/elidingImportNames.ts] ////
+
+=== elidingImportNames_test.ts ===
+import a = require('./elidingImportNames_main'); // alias used in typeof
+>a : typeof import("elidingImportNames_main")
+
+var b = a;
+>b : typeof import("elidingImportNames_main")
+>a : typeof import("elidingImportNames_main")
+
+var x: typeof a;
+>x : typeof import("elidingImportNames_main")
+
+import a2 = require('./elidingImportNames_main1'); // alias not used in typeof
+>a2 : typeof import("elidingImportNames_main1")
+
+var b2 = a2;
+>b2 : typeof import("elidingImportNames_main1")
+>a2 : typeof import("elidingImportNames_main1")
+
+
+=== elidingImportNames_main.ts ===
+export var main = 10;
+>main : number
+>10 : 10
+
+=== elidingImportNames_main1.ts ===
+export var main = 10;
+>main : number
+>10 : 10
+

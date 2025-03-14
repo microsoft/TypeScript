@@ -1,0 +1,100 @@
+//// [tests/cases/conformance/jsx/tsxUnionElementType4.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+class RC1 extends React.Component<{x : number}, {}> {
+>RC1 : RC1
+>React.Component : any
+>React : any
+>Component : any
+>x : number
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+}
+
+class RC2 extends React.Component<{ x: string }, {}> {
+>RC2 : RC2
+>React.Component : any
+>React : any
+>Component : any
+>x : string
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+    private method() { }
+>method : () => void
+}
+
+class RC3 extends React.Component<{}, {}> {
+>RC3 : RC3
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+}
+
+class RC4 extends React.Component<{}, {}> {
+>RC4 : RC4
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return null;
+    }
+}
+
+var RCComp = RC1 || RC2;
+>RCComp : typeof RC1
+>RC1 || RC2 : typeof RC1
+>RC1 : typeof RC1
+>RC2 : typeof RC2
+
+var EmptyRCComp = RC3 || RC4;
+>EmptyRCComp : typeof RC3
+>RC3 || RC4 : typeof RC3
+>RC3 : typeof RC3
+>RC4 : typeof RC4
+
+var PartRCComp = RC1 || RC4;
+>PartRCComp : typeof RC1
+>RC1 || RC4 : typeof RC1
+>RC1 : typeof RC1
+>RC4 : typeof RC4
+
+// Error
+let a = <RCComp x />;
+>a : any
+><RCComp x /> : any
+>RCComp : typeof RC1
+>x : any
+
+let b = <PartRCComp x={10} />
+>b : any
+><PartRCComp x={10} /> : any
+>PartRCComp : typeof RC1
+>x : any
+>10 : 10
+
+let c = <EmptyRCComp prop />;
+>c : any
+><EmptyRCComp prop /> : any
+>EmptyRCComp : typeof RC3
+>prop : any
+

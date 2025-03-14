@@ -1,0 +1,34 @@
+--- old.callWithSpread2.types
++++ new.callWithSpread2.types
+@@= skipped -6, +6 lines =@@
+ >b : number
+ 
+ declare function weird(a?: number | string, b?: number | string): void;
+->weird : (a?: number | string, b?: number | string) => void
++>weird : (a?: string | number, b?: string | number) => void
+ >a : string | number
+ >b : string | number
+ 
+@@= skipped -49, +49 lines =@@
+ 
+ weird(...ns)
+ >weird(...ns) : void
+->weird : (a?: number | string, b?: number | string) => void
++>weird : (a?: string | number, b?: string | number) => void
+ >...ns : number
+ >ns : number[]
+ 
+ weird(...mixed)
+ >weird(...mixed) : void
+->weird : (a?: number | string, b?: number | string) => void
++>weird : (a?: string | number, b?: string | number) => void
+ >...mixed : string | number
+ >mixed : (string | number)[]
+ 
+ weird(...tuple)
+ >weird(...tuple) : void
+->weird : (a?: number | string, b?: number | string) => void
++>weird : (a?: string | number, b?: string | number) => void
+ >...tuple : string | number
+ >tuple : [number, string]
+ 

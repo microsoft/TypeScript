@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassExpression.ts] ////
+
+=== index.js ===
+module.exports = class Thing {
+>module.exports = class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof Thing
+>module.exports : any
+>module : any
+>exports : any
+>class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof Thing
+>Thing : typeof Thing
+
+    /**
+     * @param {number} p
+     */
+    constructor(p) {
+>p : any
+
+        this.t = 12 + p;
+>this.t = 12 + p : any
+>this.t : any
+>this : this
+>t : any
+>12 + p : any
+>12 : 12
+>p : any
+    }
+}

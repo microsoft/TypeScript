@@ -1,0 +1,14 @@
+--- old.es6ModuleClassDeclaration.types
++++ new.es6ModuleClassDeclaration.types
+@@= skipped -251, +251 lines =@@
+ >c4 : typeof c4
+ 
+     new m1.c3();
+->new m1.c3() : m1.c3
+->m1.c3 : typeof m1.c3
++>new m1.c3() : c3
++>m1.c3 : typeof c3
+ >m1 : typeof m1
+->c3 : typeof m1.c3
++>c3 : typeof c3
+ }

@@ -1,0 +1,13 @@
+--- old.circularlyReferentialInterfaceAccessNoCrash.types
++++ new.circularlyReferentialInterfaceAccessNoCrash.types
+@@= skipped -4, +4 lines =@@
+ >Mxs : Mxs
+ 
+ interface Mx<T, K> {
++>Mx : Mx<T, K>
++>T : T
++>K : K
++
+   p1: T;
+ >p1 : T
+ 

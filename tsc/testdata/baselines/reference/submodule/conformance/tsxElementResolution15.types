@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution15.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface ElementAttributesProperty { pr1: any; pr2: any; }
+>ElementAttributesProperty : ElementAttributesProperty
+>pr1 : any
+>pr2 : any
+
+	interface IntrinsicElements { }
+>IntrinsicElements : IntrinsicElements
+}
+
+interface Obj1type {
+>Obj1type : Obj1type
+
+	new(n: string): {};
+>n : string
+}
+var Obj1: Obj1type;
+>Obj1 : Obj1type
+
+<Obj1 x={10} />; // Error
+><Obj1 x={10} /> : any
+>Obj1 : Obj1type
+>x : any
+>10 : 10
+

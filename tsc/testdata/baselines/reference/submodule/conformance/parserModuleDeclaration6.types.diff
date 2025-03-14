@@ -1,0 +1,10 @@
+--- old.parserModuleDeclaration6.types
++++ new.parserModuleDeclaration6.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration6.ts] ////
+ 
+ === parserModuleDeclaration6.ts ===
+-
+ module number {
++>number : any
+ }

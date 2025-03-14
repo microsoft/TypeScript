@@ -1,0 +1,50 @@
+--- old.arrayTypeInSignatureOfInterfaceAndClass.types
++++ new.arrayTypeInSignatureOfInterfaceAndClass.types
+@@= skipped -5, +5 lines =@@
+ 
+     class Promise<T> {
+ >Promise : Promise<T>
++>T : T
+ 
+         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
+ >then : <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void) => Promise<U>
++>U : U
+ >success : (value: T) => Promise<U>
+ >value : T
+ >error : (error: any) => Promise<U>
+@@= skipped -15, +17 lines =@@
+ >Data : typeof Data
+ 
+     export interface IListItem<T> {
++>IListItem : IListItem<T>
++>T : T
++
+         itemIndex: number;
+ >itemIndex : number
+ 
+@@= skipped -25, +28 lines =@@
+ >preventAugmentation : boolean
+     }
+     export interface IVirtualList<T> {
++>IVirtualList : IVirtualList<T>
++>T : T
++
+         //removeIndices: WinJS.Promise<IListItem<T>[]>;
+         removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
+->removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
++>removeIndices : (indices: number[], options?: any) => Promise<IListItem<T>[]>
+ >indices : number[]
+ >options : any
+ >WinJS : any
+     }
+     export class VirtualList<T> implements IVirtualList<T> {
+ >VirtualList : VirtualList<T>
++>T : T
+ 
+         //removeIndices: WinJS.Promise<IListItem<T>[]>;
+         public removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
+->removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
++>removeIndices : (indices: number[], options?: any) => Promise<IListItem<T>[]>
+ >indices : number[]
+ >options : any
+ >WinJS : any

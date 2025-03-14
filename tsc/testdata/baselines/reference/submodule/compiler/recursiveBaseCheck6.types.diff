@@ -1,0 +1,10 @@
+--- old.recursiveBaseCheck6.types
++++ new.recursiveBaseCheck6.types
+@@= skipped -2, +2 lines =@@
+ === recursiveBaseCheck6.ts ===
+ class S18<A> extends S18<{ S19: A; }>{ }
+ >S18 : S18<A>
++>A : A
+ >S18 : typeof S18
+ >S19 : A
+ 

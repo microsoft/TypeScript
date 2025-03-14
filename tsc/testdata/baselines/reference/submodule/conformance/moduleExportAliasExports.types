@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/salsa/moduleExportAliasExports.ts] ////
+
+=== Eloquent.js ===
+// bug #27365, crashes from github.com/marijnh/Eloquent-JavaScript
+(function() {
+>(function() {exports.bigOak = 1exports.everywhere = 2module.exports = exports})() : void
+>(function() {exports.bigOak = 1exports.everywhere = 2module.exports = exports}) : () => void
+>function() {exports.bigOak = 1exports.everywhere = 2module.exports = exports} : () => void
+
+exports.bigOak = 1
+>exports.bigOak = 1 : 1
+>exports.bigOak : any
+>exports : any
+>bigOak : any
+>1 : 1
+
+exports.everywhere = 2
+>exports.everywhere = 2 : 2
+>exports.everywhere : any
+>exports : any
+>everywhere : any
+>2 : 2
+
+module.exports = exports
+>module.exports = exports : any
+>module.exports : any
+>module : any
+>exports : any
+>exports : any
+
+})()
+

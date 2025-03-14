@@ -1,0 +1,11 @@
+--- old.umd6.types
++++ new.umd6.types
+@@= skipped -5, +5 lines =@@
+ >y : number
+ >Foo.fn() : number
+ >Foo.fn : () => number
+->Foo : typeof Foo
++>Foo : typeof Thing
+ >fn : () => number
+ 
+ === foo.d.ts ===

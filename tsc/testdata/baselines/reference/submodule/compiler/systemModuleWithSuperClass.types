@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/systemModuleWithSuperClass.ts] ////
+
+=== foo.ts ===
+export class Foo {
+>Foo : Foo
+
+    a: string;
+>a : string
+}
+
+=== bar.ts ===
+import {Foo} from './foo';
+>Foo : typeof Foo
+
+export class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    b: string;
+>b : string
+}

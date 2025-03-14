@@ -1,0 +1,177 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts] ////
+
+=== subtypingWithCallSignaturesWithOptionalParameters.ts ===
+// call signatures in derived types must have the same or fewer optional parameters as the base type
+
+interface Base { 
+>Base : Base
+
+    a: () => number;
+>a : () => number
+
+    a2: (x?: number) => number;
+>a2 : (x?: number) => number
+>x : number
+
+    a3: (x: number) => number;
+>a3 : (x: number) => number
+>x : number
+
+    a4: (x: number, y?: number) => number;
+>a4 : (x: number, y?: number) => number
+>x : number
+>y : number
+
+    a5: (x?: number, y?: number) => number;
+>a5 : (x?: number, y?: number) => number
+>x : number
+>y : number
+}
+
+interface I1 extends Base {
+>I1 : I1
+
+    a: () => number; // ok, same number of required params
+>a : () => number
+}
+
+interface I2 extends Base {
+>I2 : I2
+
+    a: (x?: number) => number; // ok, same number of required params
+>a : (x?: number) => number
+>x : number
+}
+
+interface I3 extends Base {
+>I3 : I3
+
+    a: (x: number) => number; // error, too many required params
+>a : (x: number) => number
+>x : number
+}
+
+
+interface I4 extends Base {
+>I4 : I4
+
+    a2: () => number; // ok, same number of required params
+>a2 : () => number
+}
+
+interface I5 extends Base {
+>I5 : I5
+
+    a2: (x?: number) => number; // ok, same number of required params
+>a2 : (x?: number) => number
+>x : number
+}
+
+interface I6 extends Base {
+>I6 : I6
+
+    a2: (x: number) => number; // ok, same number of params
+>a2 : (x: number) => number
+>x : number
+}
+
+
+interface I7 extends Base {
+>I7 : I7
+
+    a3: () => number; // ok, fewer required params
+>a3 : () => number
+}
+
+interface I8 extends Base {
+>I8 : I8
+
+    a3: (x?: number) => number; // ok, fewer required params
+>a3 : (x?: number) => number
+>x : number
+}
+
+interface I9 extends Base {
+>I9 : I9
+
+    a3: (x: number) => number; // ok, same number of required params
+>a3 : (x: number) => number
+>x : number
+}
+
+interface I10 extends Base {
+>I10 : I10
+
+    a3: (x: number, y: number) => number;  // error, too many required params
+>a3 : (x: number, y: number) => number
+>x : number
+>y : number
+}
+
+
+interface I11 extends Base {
+>I11 : I11
+
+    a4: () => number; // ok, fewer required params
+>a4 : () => number
+}
+
+interface I12 extends Base {
+>I12 : I12
+
+    a4: (x?: number, y?: number) => number; // ok, fewer required params
+>a4 : (x?: number, y?: number) => number
+>x : number
+>y : number
+}
+
+interface I13 extends Base {
+>I13 : I13
+
+    a4: (x: number) => number; // ok, same number of required params
+>a4 : (x: number) => number
+>x : number
+}
+
+interface I14 extends Base {
+>I14 : I14
+
+    a4: (x: number, y: number) => number;  // ok, same number of params
+>a4 : (x: number, y: number) => number
+>x : number
+>y : number
+}
+
+
+interface I15 extends Base {
+>I15 : I15
+
+    a5: () => number; // ok, fewer required params
+>a5 : () => number
+}
+
+interface I16 extends Base {
+>I16 : I16
+
+    a5: (x?: number, y?: number) => number; // ok, fewer required params
+>a5 : (x?: number, y?: number) => number
+>x : number
+>y : number
+}
+
+interface I17 extends Base {
+>I17 : I17
+
+    a5: (x: number) => number; // ok, all present params match
+>a5 : (x: number) => number
+>x : number
+}
+
+interface I18 extends Base {
+>I18 : I18
+
+    a5: (x: number, y: number) => number;  // ok, same number of params
+>a5 : (x: number, y: number) => number
+>x : number
+>y : number
+}

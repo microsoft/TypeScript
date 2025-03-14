@@ -1,0 +1,101 @@
+--- old.optionalChainingInference.types
++++ new.optionalChainingInference.types
+@@= skipped -2, +2 lines =@@
+ === optionalChainingInference.ts ===
+ // https://github.com/microsoft/TypeScript/issues/34579
+ declare function unbox<T>(box: { value: T | undefined }): T;
+->unbox : <T>(box: { value: T | undefined; }) => T
+->box : { value: T | undefined; }
++>unbox : <T>(box: { value: T; }) => T
++>T : T
++>box : { value: T; }
+ >value : T
+ 
+ declare const su: string | undefined;
+@@= skipped -29, +30 lines =@@
+ const v1: number = unbox(b1);
+ >v1 : number
+ >unbox(b1) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
++>unbox : <T>(box: { value: T; }) => T
+ >b1 : { value: number; }
+ 
+ const b2 = { value: su?.length as number | undefined };
+->b2 : { value: number | undefined; }
+->{ value: su?.length as number | undefined } : { value: number | undefined; }
++>b2 : { value: number; }
++>{ value: su?.length as number | undefined } : { value: number; }
+ >value : number
+ >su?.length as number | undefined : number
+ >su?.length : number
+@@= skipped -15, +15 lines =@@
+ const v2: number = unbox(b2);
+ >v2 : number
+ >unbox(b2) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
+->b2 : { value: number | undefined; }
++>unbox : <T>(box: { value: T; }) => T
++>b2 : { value: number; }
+ 
+ const b3: { value: number | undefined } = { value: su?.length };
+->b3 : { value: number | undefined; }
++>b3 : { value: number; }
+ >value : number
+ >{ value: su?.length } : { value: number; }
+ >value : number
+@@= skipped -15, +15 lines =@@
+ const v3: number = unbox(b3);
+ >v3 : number
+ >unbox(b3) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
+->b3 : { value: number | undefined; }
++>unbox : <T>(box: { value: T; }) => T
++>b3 : { value: number; }
+ 
+ const b4 = { value: fnu?.() };
+ >b4 : { value: number; }
+@@= skipped -13, +13 lines =@@
+ const v4: number = unbox(b4);
+ >v4 : number
+ >unbox(b4) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
++>unbox : <T>(box: { value: T; }) => T
+ >b4 : { value: number; }
+ 
+ const b5 = { value: su?.["length"] };
+@@= skipped -14, +14 lines =@@
+ const v5: number = unbox(b5);
+ >v5 : number
+ >unbox(b5) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
++>unbox : <T>(box: { value: T; }) => T
+ >b5 : { value: number; }
+ 
+ const b6 = { value: osu?.prop.length };
+@@= skipped -16, +16 lines =@@
+ const v6: number = unbox(b6);
+ >v6 : number
+ >unbox(b6) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
++>unbox : <T>(box: { value: T; }) => T
+ >b6 : { value: number; }
+ 
+ const b7 = { value: osu?.prop["length"] };
+@@= skipped -16, +16 lines =@@
+ const v7: number = unbox(b7);
+ >v7 : number
+ >unbox(b7) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
++>unbox : <T>(box: { value: T; }) => T
+ >b7 : { value: number; }
+ 
+ const b8 = { value: ofnu?.prop() };
+@@= skipped -15, +15 lines =@@
+ const v8: number = unbox(b8);
+ >v8 : number
+ >unbox(b8) : number
+->unbox : <T>(box: { value: T | undefined; }) => T
++>unbox : <T>(box: { value: T; }) => T
+ >b8 : { value: number; }
+ 
+ 

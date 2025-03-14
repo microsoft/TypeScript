@@ -1,0 +1,218 @@
+--- old.enumAssignmentCompat3.types
++++ new.enumAssignmentCompat3.types
+@@= skipped -68, +68 lines =@@
+     }
+ }
+ namespace Const {
++>Const : typeof Const
++
+     export const enum E {
+ >E : E
+ 
+@@= skipped -63, +65 lines =@@
+ }
+ 
+ var abc: First.E;
+->abc : First.E
++>abc : E
+ >First : any
+ 
+ var secondAbc: Abc.E;
+->secondAbc : Abc.E
++>secondAbc : E
+ >Abc : any
+ 
+ var secondAbcd: Abcd.E;
+->secondAbcd : Abcd.E
++>secondAbcd : E
+ >Abcd : any
+ 
+ var secondAb: Ab.E;
+->secondAb : Ab.E
++>secondAb : E
+ >Ab : any
+ 
+ var secondCd: Cd.E;
+->secondCd : Cd.E
++>secondCd : E
+ >Cd : any
+ 
+ var nope: Abc.Nope;
+->nope : Abc.Nope
++>nope : Nope
+ >Abc : any
+ 
+ var k: Const.E;
+->k : Const.E
++>k : E
+ >Const : any
+ 
+ var decl: Decl.E;
+->decl : Decl.E
++>decl : E
+ >Decl : any
+ 
+ var merged: Merged.E;
+->merged : Merged.E
++>merged : E
+ >Merged : any
+ 
+ var merged2: Merged2.E;
+->merged2 : Merged2.E
++>merged2 : E
+ >Merged2 : any
+ 
+ abc = secondAbc; // ok
+->abc = secondAbc : Abc.E
+->abc : First.E
+->secondAbc : Abc.E
++>abc = secondAbc : E
++>abc : E
++>secondAbc : E
+ 
+ abc = secondAbcd; // missing 'd'
+->abc = secondAbcd : Abcd.E
+->abc : First.E
+->secondAbcd : Abcd.E
++>abc = secondAbcd : E
++>abc : E
++>secondAbcd : E
+ 
+ abc = secondAb; // ok
+->abc = secondAb : Ab.E
+->abc : First.E
+->secondAb : Ab.E
++>abc = secondAb : E
++>abc : E
++>secondAb : E
+ 
+ abc = secondCd; // missing 'd'
+->abc = secondCd : Cd.E
+->abc : First.E
+->secondCd : Cd.E
++>abc = secondCd : E
++>abc : E
++>secondCd : E
+ 
+ abc = nope; // nope!
+->abc = nope : Abc.Nope
+->abc : First.E
+->nope : Abc.Nope
++>abc = nope : Nope
++>abc : E
++>nope : Nope
+ 
+ abc = decl; // bad - value of 'c' differs between these enums
+->abc = decl : Decl.E
+->abc : First.E
+->decl : Decl.E
++>abc = decl : E
++>abc : E
++>decl : E
+ 
+ secondAbc = abc; // ok
+->secondAbc = abc : First.E
+->secondAbc : Abc.E
+->abc : First.E
++>secondAbc = abc : E
++>secondAbc : E
++>abc : E
+ 
+ secondAbcd = abc; // ok
+->secondAbcd = abc : First.E
+->secondAbcd : Abcd.E
+->abc : First.E
++>secondAbcd = abc : E
++>secondAbcd : E
++>abc : E
+ 
+ secondAb = abc; // missing 'c'
+->secondAb = abc : First.E
+->secondAb : Ab.E
+->abc : First.E
++>secondAb = abc : E
++>secondAb : E
++>abc : E
+ 
+ secondCd = abc; // missing 'a' and 'b'
+->secondCd = abc : First.E
+->secondCd : Cd.E
+->abc : First.E
++>secondCd = abc : E
++>secondCd : E
++>abc : E
+ 
+ nope = abc; // nope!
+->nope = abc : First.E
+->nope : Abc.Nope
+->abc : First.E
++>nope = abc : E
++>nope : Nope
++>abc : E
+ 
+ decl = abc; // bad - value of 'c' differs between these enums
+->decl = abc : First.E
+->decl : Decl.E
+->abc : First.E
++>decl = abc : E
++>decl : E
++>abc : E
+ 
+ // const is only assignable to itself
+ k = k;
+->k = k : Const.E
+->k : Const.E
+->k : Const.E
++>k = k : E
++>k : E
++>k : E
+ 
+ abc = k; // error
+->abc = k : Const.E
+->abc : First.E
+->k : Const.E
++>abc = k : E
++>abc : E
++>k : E
+ 
+ k = abc;
+->k = abc : First.E
+->k : Const.E
+->abc : First.E
++>k = abc : E
++>k : E
++>abc : E
+ 
+ // merged enums compare all their members
+ abc = merged; // missing 'd'
+->abc = merged : Merged.E
+->abc : First.E
+->merged : Merged.E
++>abc = merged : E
++>abc : E
++>merged : E
+ 
+ merged = abc; // bad - value of 'c' differs between these enums
+->merged = abc : First.E
+->merged : Merged.E
+->abc : First.E
++>merged = abc : E
++>merged : E
++>abc : E
+ 
+ abc = merged2; // ok
+->abc = merged2 : Merged2.E
+->abc : First.E
+->merged2 : Merged2.E
++>abc = merged2 : E
++>abc : E
++>merged2 : E
+ 
+ merged2 = abc; // ok
+->merged2 = abc : First.E
+->merged2 : Merged2.E
+->abc : First.E
++>merged2 = abc : E
++>merged2 : E
++>abc : E
+ 

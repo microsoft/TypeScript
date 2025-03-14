@@ -1,0 +1,28 @@
+--- old.declarationEmitPartialReuseComputedProperty.types
++++ new.declarationEmitPartialReuseComputedProperty.types
+@@= skipped -14, +14 lines =@@
+ >1 : 1
+ 
+ export const o = () => null! as { [n]: string, foo: string, [poz]: number, [neg]: number }
+->o : () => { [n]: string; foo: string; [poz]: number; [neg]: number; }
+->() => null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : () => { [n]: string; foo: string; [poz]: number; [neg]: number; }
+->null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : { foo: string; A: string; 1: number; [-1]: number; }
++>o : () => { A: string; foo: string; [poz]: number; [neg]: number; }
++>() => null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : () => { A: string; foo: string; [poz]: number; [neg]: number; }
++>null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : { A: string; foo: string; [poz]: number; [neg]: number; }
+ >null! : never
+ >[n] : string
+ >n : "A"
+@@= skipped -14, +14 lines =@@
+ 
+ === b.ts ===
+ import { o } from "./a";
+->o : () => { A: string; foo: string; 1: number; [-1]: number; }
++>o : () => { A: string; foo: string; [poz]: number; [neg]: number; }
+ 
+ export const g = o
+->g : () => { A: string; foo: string; 1: number; [-1]: number; }
+->o : () => { A: string; foo: string; 1: number; [-1]: number; }
++>g : () => { A: string; foo: string; [poz]: number; [neg]: number; }
++>o : () => { A: string; foo: string; [poz]: number; [neg]: number; }
+ 

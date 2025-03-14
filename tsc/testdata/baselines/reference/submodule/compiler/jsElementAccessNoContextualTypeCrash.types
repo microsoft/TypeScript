@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsElementAccessNoContextualTypeCrash.ts] ////
+
+=== jsElementAccessNoContextualTypeCrash.js ===
+var Common = {};
+>Common : {}
+>{} : {}
+
+self['Common'] = self['Common'] || {};
+>self['Common'] = self['Common'] || {} : {}
+>self['Common'] : {}
+>self : Window & typeof globalThis
+>'Common' : "Common"
+>self['Common'] || {} : {}
+>self['Common'] : {}
+>self : Window & typeof globalThis
+>'Common' : "Common"
+>{} : {}
+
+/**
+ * @param {string} string
+ * @return {string}
+ */
+Common.localize = function (string) {
+>Common.localize = function (string) {    return string;} : (string: any) => any
+>Common.localize : any
+>Common : {}
+>localize : any
+>function (string) {    return string;} : (string: any) => any
+>string : any
+
+    return string;
+>string : any
+
+};

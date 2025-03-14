@@ -1,0 +1,41 @@
+--- old.inheritedStringIndexersFromDifferentBaseTypes2.types
++++ new.inheritedStringIndexersFromDifferentBaseTypes2.types
+@@= skipped -2, +2 lines =@@
+ === inheritedStringIndexersFromDifferentBaseTypes2.ts ===
+ // indexer in B is a subtype of indexer in A
+ interface A {
++>A : A
++
+     [s: string]: {
+ >s : string
+ 
+@@= skipped -9, +11 lines =@@
+     };
+ }
+ interface B {
++>B : B
++
+     [s: number]: {
+ >s : number
+ 
+@@= skipped -12, +14 lines =@@
+     };
+ }
+ interface C extends A, B { } // ok
++>C : C
+ 
+ interface D {
++>D : D
++
+     [s: number]: {};
+ >s : number
+ }
+ interface E extends A, D { } // error
++>E : E
+ 
+ interface F extends A, D {
++>F : F
++
+     [s: number]: {
+ >s : number
+ 

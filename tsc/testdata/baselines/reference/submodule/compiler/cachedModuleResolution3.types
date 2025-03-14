@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/cachedModuleResolution3.ts] ////
+
+=== /a/b/foo.d.ts ===
+export declare let x: number
+>x : number
+
+=== /a/b/c/d/e/app.ts ===
+import {x} from "foo";
+>x : any
+
+=== /a/b/c/lib.ts ===
+import {x} from "foo";
+>x : any
+

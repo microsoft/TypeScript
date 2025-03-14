@@ -1,0 +1,14 @@
+--- old.genericConstraintDeclaration.types
++++ new.genericConstraintDeclaration.types
+@@= skipped -2, +2 lines =@@
+ === genericConstraintDeclaration.ts ===
+ class List<T extends {}>{
+ >List : List<T>
++>T : T
+ 
+     static empty<T extends {}>(): List<T>{return null;}
+ >empty : <T extends {}>() => List<T>
++>T : T
+ }
+ 
+ 

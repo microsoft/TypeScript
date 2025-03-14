@@ -1,0 +1,23 @@
+--- old.moduleAndInterfaceSharingName2.types
++++ new.moduleAndInterfaceSharingName2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === moduleAndInterfaceSharingName2.ts ===
+ module X {
++>X : any
++
+     export module Y {
++>Y : any
++
+         export interface Z { }
++>Z : Z
+     }
+     export interface Y { }
++>Y : Y
+ }
+ var z: X.Y.Z = null;
+->z : X.Y.Z
++>z : Z
+ >X : any
+ >Y : any
+ 

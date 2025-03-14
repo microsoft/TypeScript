@@ -1,0 +1,20 @@
+--- old.duplicateIdentifierRelatedSpans5.types
++++ new.duplicateIdentifierRelatedSpans5.types
+@@= skipped -4, +4 lines =@@
+ >global : any
+ 
+     interface TopLevel {
++>TopLevel : TopLevel
++
+         duplicate1: () => string;
+ >duplicate1 : () => string
+ 
+@@= skipped -17, +19 lines =@@
+ >global : any
+ 
+     interface TopLevel {
++>TopLevel : TopLevel
++
+         duplicate1(): number;
+ >duplicate1 : () => number
+ 

@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment2.ts] ////
+
+=== a.js ===
+/// <reference path='./requires.d.ts' />
+var mod1 = require('./mod1')
+>mod1 : any
+>require('./mod1') : any
+>require : (name: string) => any
+>'./mod1' : "./mod1"
+
+mod1.toFixed(12)
+>mod1.toFixed(12) : any
+>mod1.toFixed : any
+>mod1 : any
+>toFixed : any
+>12 : 12
+
+mod1.f() // error, 'f' is not a property on 'number'
+>mod1.f() : any
+>mod1.f : any
+>mod1 : any
+>f : any
+
+=== requires.d.ts ===
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
+
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+

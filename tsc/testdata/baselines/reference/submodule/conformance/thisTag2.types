@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/jsdoc/thisTag2.ts] ////
+
+=== a.js ===
+/** @this {string} */
+export function f1() {}
+>f1 : () => void
+
+/** @this */
+export function f2() {}
+>f2 : () => void
+

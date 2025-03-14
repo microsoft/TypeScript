@@ -1,0 +1,20 @@
+--- old.classMemberInitializerWithLamdaScoping2.types
++++ new.classMemberInitializerWithLamdaScoping2.types
+@@= skipped -5, +5 lines =@@
+ 
+ === classMemberInitializerWithLamdaScoping2_1.ts ===
+ declare var console: {
+->console : { log(msg?: any): void; }
++>console : { log: (msg?: any) => void; }
+ 
+     log(msg?: any): void;
+ >log : (msg?: any) => void
+@@= skipped -20, +20 lines =@@
+         console.log(field1); // But this should be error as the field1 will resolve to var field1 
+ >console.log(field1) : void
+ >console.log : (msg?: any) => void
+->console : { log(msg?: any): void; }
++>console : { log: (msg?: any) => void; }
+ >log : (msg?: any) => void
+ >field1 : any
+ 

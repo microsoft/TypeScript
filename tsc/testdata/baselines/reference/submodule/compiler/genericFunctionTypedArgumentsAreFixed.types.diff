@@ -1,0 +1,11 @@
+--- old.genericFunctionTypedArgumentsAreFixed.types
++++ new.genericFunctionTypedArgumentsAreFixed.types
+@@= skipped -2, +2 lines =@@
+ === genericFunctionTypedArgumentsAreFixed.ts ===
+ declare function map<T, U>(f: (x: T) => U, xs: T[]): U[];
+ >map : <T, U>(f: (x: T) => U, xs: T[]) => U[]
++>T : T
++>U : U
+ >f : (x: T) => U
+ >x : T
+ >xs : T[]

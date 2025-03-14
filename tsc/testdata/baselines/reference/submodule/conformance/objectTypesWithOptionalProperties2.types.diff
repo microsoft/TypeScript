@@ -1,0 +1,49 @@
+--- old.objectTypesWithOptionalProperties2.types
++++ new.objectTypesWithOptionalProperties2.types
+@@= skipped -3, +3 lines =@@
+ // Illegal attempts to define optional methods
+ 
+ var a: {
+->a : { x(): any; number: any; }
++>a : { x: () => any; number: any; }
+ 
+     x()?: number; // error
+ >x : () => any
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     x()?: number; // error
+ >x : () => any
+ >number : any
+@@= skipped -14, +16 lines =@@
+ }
+ 
+ interface I2<T> {
++>I2 : I2<T>
++>T : T
++
+     x()?: T; // error
+ >x : () => any
+ >T : any
+@@= skipped -7, +10 lines =@@
+ 
+ class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+     x()?: T; // error
+ >x : () => any
+@@= skipped -8, +9 lines =@@
+ 
+ 
+ var b = {
+->b : { x(): any; 1: any; }
+->{    x()?: 1 // error} : { x(): any; 1: any; }
++>b : { x: () => any; 1: any; }
++>{    x()?: 1 // error} : { x: () => any; 1: any; }
+ 
+     x()?: 1 // error
+ >x : () => any

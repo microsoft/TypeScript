@@ -1,0 +1,11 @@
+--- old.paramterDestrcuturingDeclaration.types
++++ new.paramterDestrcuturingDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === paramterDestrcuturingDeclaration.ts ===
+ interface C {
++>C : C
++
+     ({p: name}): any;
+ >p : any
+ >name : any

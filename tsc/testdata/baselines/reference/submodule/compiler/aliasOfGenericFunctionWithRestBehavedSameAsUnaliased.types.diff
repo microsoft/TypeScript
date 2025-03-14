@@ -1,0 +1,32 @@
+--- old.aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.types
++++ new.aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.types
+@@= skipped -4, +4 lines =@@
+ 
+ type ExtendedMapper<HandledInputT, OutputT, ArgsT extends any[]> = (name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT;
+ >ExtendedMapper : ExtendedMapper<HandledInputT, OutputT, ArgsT>
++>HandledInputT : HandledInputT
++>OutputT : OutputT
++>ArgsT : ArgsT
+ >name : string
+ >mixed : HandledInputT
+ >args : ArgsT
+@@= skipped -20, +23 lines =@@
+ 
+ type ExtendedMapper1<HandledInputT, OutputT, ArgsT extends any[]> = (
+ >ExtendedMapper1 : ExtendedMapper1<HandledInputT, OutputT, ArgsT>
++>HandledInputT : HandledInputT
++>OutputT : OutputT
++>ArgsT : ArgsT
+ 
+     (name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT
+ >name : string
+@@= skipped -23, +26 lines =@@
+ 
+ type ExtendedMapper2<HandledInputT, OutputT, ArgsT extends any[]> = (
+ >ExtendedMapper2 : (name: string, mixed: HandledInputT, ...args: ArgsT) => OutputT
++>HandledInputT : HandledInputT
++>OutputT : OutputT
++>ArgsT : ArgsT
+ 
+     {x:(name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT}["x"]
+ >x : (name: string, mixed: HandledInputT, ...args: ArgsT) => OutputT

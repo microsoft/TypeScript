@@ -1,0 +1,14 @@
+--- old.recursiveFunctionTypes1.types
++++ new.recursiveFunctionTypes1.types
+@@= skipped -4, +4 lines =@@
+ >C : C
+ 
+      static g(t: typeof C.g){ }
+->g : (t: typeof C.g) => void
+->t : (t: typeof C.g) => void
+->C.g : (t: typeof C.g) => void
++>g : (t: ???) => void
++>t : (t: ???) => void
+ >C : typeof C
+->g : (t: typeof C.g) => void
+ }

@@ -1,0 +1,24 @@
+--- old.classExtendingClass.types
++++ new.classExtendingClass.types
+@@= skipped -52, +52 lines =@@
+ 
+ class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+     foo: T;
+ >foo : T
+@@= skipped -10, +11 lines =@@
+ 
+     static other<T>(x: T) { }
+ >other : <T>(x: T) => void
++>T : T
+ >x : T
+ }
+ 
+ class D2<T> extends C2<T> {
+ >D2 : D2<T>
++>T : T
+ >C2 : C2<T>
+ 
+     bar: string;

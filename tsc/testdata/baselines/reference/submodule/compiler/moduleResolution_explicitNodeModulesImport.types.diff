@@ -1,0 +1,17 @@
+--- old.moduleResolution_explicitNodeModulesImport.types
++++ new.moduleResolution_explicitNodeModulesImport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /src/index.ts ===
+ import { x } from "../node_modules/foo";
+->x : 0
++>x : any
+ 
+-=== /node_modules/foo/index.js ===
+-exports.x = 0;
+->exports.x = 0 : 0
+->exports.x : 0
+->exports : typeof import("/node_modules/foo/index")
+->x : 0
+->0 : 0
+-

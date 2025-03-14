@@ -1,0 +1,10 @@
+--- old.genericGetter.types
++++ new.genericGetter.types
+@@= skipped -2, +2 lines =@@
+ === genericGetter.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     data: T;
+ >data : T

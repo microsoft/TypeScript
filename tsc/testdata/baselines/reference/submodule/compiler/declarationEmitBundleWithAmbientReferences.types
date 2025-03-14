@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/declarationEmitBundleWithAmbientReferences.ts] ////
+
+=== lib/lib.d.ts ===
+declare module "lib/result" {
+>"lib/result" : typeof import("lib/result")
+
+    export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);
+>Result : Result<E, T>
+>E : E
+>T : T
+
+    export interface Failure<E extends Error> { }
+>Failure : Failure<E>
+>E : E
+
+    export interface Success<T> { }
+>Success : Success<T>
+>T : T
+}
+
+=== src/datastore_result.ts ===
+import { Result } from "lib/result";
+>Result : any
+
+export type T<T> = Result<Error, T>;
+>T : T<T>
+>T : T
+
+=== src/conditional_directive_field.ts ===
+import * as DatastoreResult from "src/datastore_result";
+>DatastoreResult : any
+
+export const build = (): DatastoreResult.T<string> => {
+>build : () => T<string>
+>(): DatastoreResult.T<string> => {	return null;} : () => T<string>
+>DatastoreResult : any
+
+	return null;
+};
+

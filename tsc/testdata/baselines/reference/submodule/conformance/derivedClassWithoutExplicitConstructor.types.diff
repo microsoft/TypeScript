@@ -1,0 +1,18 @@
+--- old.derivedClassWithoutExplicitConstructor.types
++++ new.derivedClassWithoutExplicitConstructor.types
+@@= skipped -42, +42 lines =@@
+ 
+ class Base2<T> {
+ >Base2 : Base2<T>
++>T : T
+ 
+     a: T;
+ >a : T
+@@= skipped -15, +16 lines =@@
+ 
+ class D<T extends Date> extends Base2<T> {
+ >D : D<T>
++>T : T
+ >Base2 : Base2<T>
+ 
+     x = 2

@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeWithInterfaceMethod.ts] ////
+
+=== lovefield-ts.d.ts ===
+// bug #27352, crashes from github.com/google/lovefield
+declare namespace lf {
+>lf : any
+
+  export interface Transaction {
+>Transaction : Transaction
+
+    attach(query: query.Builder): Promise<Array<Object>>
+>attach : (query: Builder) => Promise<Object[]>
+>query : Builder
+>query : any
+
+    begin(scope: Array<schema.Table>): Promise<void>
+>begin : (scope: Table[]) => Promise<void>
+>scope : Table[]
+>schema : any
+
+    commit(): Promise<void>
+>commit : () => Promise<void>
+
+    exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
+>exec : (queries: Builder[]) => Promise<Object[][]>
+>queries : Builder[]
+>query : any
+
+    rollback(): Promise<void>
+>rollback : () => Promise<void>
+
+    stats(): TransactionStats
+>stats : () => TransactionStats
+  }
+}
+=== lovefield.js ===
+lf.Transaction = function() {};
+>lf.Transaction = function() {} : () => void
+>lf.Transaction : any
+>lf : any
+>Transaction : any
+>function() {} : () => void
+
+/**
+ * @param {!Array<!lf.schema.Table>} scope
+ * @return {!IThenable}
+ */
+lf.Transaction.prototype.begin = function(scope) {};
+>lf.Transaction.prototype.begin = function(scope) {} : (scope: any) => void
+>lf.Transaction.prototype.begin : any
+>lf.Transaction.prototype : any
+>lf.Transaction : any
+>lf : any
+>Transaction : any
+>prototype : any
+>begin : any
+>function(scope) {} : (scope: any) => void
+>scope : any
+

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/instanceSubtypeCheck1.ts] ////
+
+=== instanceSubtypeCheck1.ts ===
+interface A<T>
+>A : A<T>
+>T : T
+{
+   x: A<B<T>>
+>x : A<B<T>>
+}
+ 
+interface B<T> extends A<T>
+>B : B<T>
+>T : T
+{
+   x: B<A<T>>
+>x : B<A<T>>
+}

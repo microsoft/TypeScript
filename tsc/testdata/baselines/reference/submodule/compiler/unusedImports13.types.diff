@@ -1,0 +1,29 @@
+--- old.unusedImports13.types
++++ new.unusedImports13.types
+@@= skipped -4, +4 lines =@@
+ >React : typeof React
+ 
+ export const FooComponent = <div></div>
+->FooComponent : error
+-><div></div> : error
++>FooComponent : any
++><div></div> : any
+ >div : any
+ >div : any
+ 
+@@= skipped -17, +17 lines =@@
+ 
+     function createClass<P, S>(spec);
+ >createClass : <P, S>(spec: any) => any
++>P : P
++>S : S
+ >spec : any
+ }
+ declare global {
+ >global : any
+ 
+     namespace JSX {
++>JSX : any
+     }
+ }
+ 

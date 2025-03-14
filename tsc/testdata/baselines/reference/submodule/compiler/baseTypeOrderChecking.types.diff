@@ -1,0 +1,18 @@
+--- old.baseTypeOrderChecking.types
++++ new.baseTypeOrderChecking.types
+@@= skipped -26, +26 lines =@@
+ 
+ class Class3<T>
+ >Class3 : Class3<T>
++>T : T
+ 
+ {
+ 
+@@= skipped -12, +13 lines =@@
+ 
+ class Class4<T> extends Class3<T>
+ >Class4 : Class4<T>
++>T : T
+ >Class3 : Class3<T>
+ 
+ {

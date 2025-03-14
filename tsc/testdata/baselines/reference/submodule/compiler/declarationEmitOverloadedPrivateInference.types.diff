@@ -1,0 +1,33 @@
+--- old.declarationEmitOverloadedPrivateInference.types
++++ new.declarationEmitOverloadedPrivateInference.types
+@@= skipped -19, +19 lines =@@
+ >Wrapper : Wrapper
+ 
+     private proxy<T, U>(fn: (options: T) => U): (options: T) => U;
+->proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>T : T
++>U : U
+ >fn : (options: T) => U
+ >options : T
+ >options : T
+ 
+     private proxy<T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U;
+->proxy : { <T_1, U_1>(fn: (options: T_1) => U_1): (options: T_1) => U_1; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>T : T
++>U : U
+ >fn : (options?: T) => U
+ >options : T
+ >noArgs : true
+@@= skipped -14, +18 lines =@@
+ >options : T
+ 
+     private proxy<T, U>(fn: (options: T) => U) {
+->proxy : { <T_1, U_1>(fn: (options: T_1) => U_1): (options: T_1) => U_1; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
++>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
++>T : T
++>U : U
+ >fn : (options: T) => U
+ >options : T
+ 

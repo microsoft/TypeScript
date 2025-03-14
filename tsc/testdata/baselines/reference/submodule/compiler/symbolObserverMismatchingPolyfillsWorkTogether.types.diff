@@ -1,0 +1,36 @@
+--- old.symbolObserverMismatchingPolyfillsWorkTogether.types
++++ new.symbolObserverMismatchingPolyfillsWorkTogether.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolObserverMismatchingPolyfillsWorkTogether.ts ===
+ interface SymbolConstructor {
++>SymbolConstructor : SymbolConstructor
++
+     readonly observer: symbol;
+->observer : unique symbol
++>observer : symbol
+ }
+ interface SymbolConstructor {
++>SymbolConstructor : SymbolConstructor
++
+     readonly observer: unique symbol;
+->observer : unique symbol
++>observer : symbol
+ }
+ 
+ const obj = {
+->obj : { [Symbol.observer]: number; }
+->{    [Symbol.observer]: 0} : { [Symbol.observer]: number; }
++>obj : { [x: symbol]: number; }
++>{    [Symbol.observer]: 0} : { [x: symbol]: number; }
+ 
+     [Symbol.observer]: 0
+ >[Symbol.observer] : number
+->Symbol.observer : unique symbol
++>Symbol.observer : symbol
+ >Symbol : SymbolConstructor
+->observer : unique symbol
++>observer : symbol
+ >0 : 0
+ 
+ };

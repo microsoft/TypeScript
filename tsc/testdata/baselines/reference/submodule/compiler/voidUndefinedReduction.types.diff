@@ -1,0 +1,30 @@
+--- old.voidUndefinedReduction.types
++++ new.voidUndefinedReduction.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #42786
+ 
+ function isDefined<T>(value: T | undefined | null | void): value is T {
+->isDefined : <T>(value: T | undefined | null | void) => value is T
++>isDefined : <T>(value: void | T | null | undefined) => value is T
++>T : T
+ >value : void | T | null | undefined
+ 
+   return value !== undefined && value !== null;
+@@= skipped -9, +10 lines =@@
+ >value : void | T | null | undefined
+ >undefined : undefined
+ >value !== null : boolean
+->value : (T & {}) | null
++>value : T & {} | null
+ }
+ 
+ declare const foo: string | undefined;
+@@= skipped -8, +8 lines =@@
+ 
+ if (isDefined(foo)) {
+ >isDefined(foo) : boolean
+->isDefined : <T>(value: T | undefined | null | void) => value is T
++>isDefined : <T>(value: void | T | null | undefined) => value is T
+ >foo : string | undefined
+ 
+   console.log(foo.toUpperCase()); 

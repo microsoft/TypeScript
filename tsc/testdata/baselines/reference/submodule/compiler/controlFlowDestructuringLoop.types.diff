@@ -1,0 +1,35 @@
+--- old.controlFlowDestructuringLoop.types
++++ new.controlFlowDestructuringLoop.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #28758
+ 
+ interface NumVal { val: number; }
++>NumVal : NumVal
+ >val : number
+ 
+ interface StrVal { val: string; }
++>StrVal : StrVal
+ >val : string
+ 
+ type Val = NumVal | StrVal;
+@@= skipped -14, +16 lines =@@
+ 
+     return typeof x.val === 'number';
+ >typeof x.val === 'number' : boolean
+->typeof x.val : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x.val : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x.val : string | number
+ >x : Val
+ >val : string | number
+@@= skipped -26, +26 lines =@@
+ 
+             val.toFixed(2);
+ >val.toFixed(2) : string
+->val.toFixed : (fractionDigits?: number) => string
++>val.toFixed : (fractionDigits?: number | undefined) => string
+ >val : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ >2 : 2
+         }
+         else {

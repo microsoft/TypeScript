@@ -1,0 +1,10 @@
+--- old.iteratorSpreadInCall12.types
++++ new.iteratorSpreadInCall12.types
+@@= skipped -2, +2 lines =@@
+ === iteratorSpreadInCall12.ts ===
+ class Foo<T> {
+ >Foo : Foo<T>
++>T : T
+ 
+     constructor(...s: T[]) { }
+ >s : T[]

@@ -1,0 +1,46 @@
+--- old.mergedModuleDeclarationCodeGen5.types
++++ new.mergedModuleDeclarationCodeGen5.types
+@@= skipped -3, +3 lines =@@
+ module M.buz.plop {
+ >M : typeof M
+ >buz : typeof buz
+->plop : typeof buz.plop
++>plop : typeof plop
+ 
+     export function doom() { }
+ >doom : () => void
+@@= skipped -11, +11 lines =@@
+ module M.buz.plop {
+ >M : typeof M
+ >buz : typeof buz
+->plop : typeof globalThis.M.buz.plop
++>plop : typeof plop
+ 
+     function gunk() { }
+ >gunk : () => void
+@@= skipped -12, +12 lines =@@
+ >fudge : fudge
+ 
+     export enum plop { }
+->plop : plop
++>plop : plop.plop
+ 
+     // Emit these references as follows
+     var v1 = gunk; // gunk
+@@= skipped -12, +12 lines =@@
+ >buz : () => void
+ 
+     export var v3 = doom; // _plop.doom
+->v3 : () => void
+->doom : () => void
++>v3 : any
++>doom : any
+ 
+     export var v4 = M; // _plop.M
+->v4 : () => void
+->M : () => void
++>v4 : typeof M
++>M : typeof M
+ 
+     export var v5 = fudge; // fudge
+ >v5 : typeof fudge

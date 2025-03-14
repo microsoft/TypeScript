@@ -1,0 +1,35 @@
+--- old.jsdocParseDotDotDotInJSDocFunction.types
++++ new.jsdocParseDotDotDotInJSDocFunction.types
+@@= skipped -3, +3 lines =@@
+ // from bcryptjs
+ /** @param {function(...[*])} callback */
+ function g(callback) {
+->g : (callback: (...args: [any][]) => any) => void
+->callback : (...arg0: [any][]) => any
++>g : (callback: any) => void
++>callback : any
+ 
+     callback([1], [2], [3])
+ >callback([1], [2], [3]) : any
+->callback : (...arg0: [any][]) => any
+->[1] : [number]
++>callback : any
++>[1] : number[]
+ >1 : 1
+->[2] : [number]
++>[2] : number[]
+ >2 : 2
+->[3] : [number]
++>[3] : number[]
+ >3 : 3
+ }
+ 
+@@= skipped -19, +19 lines =@@
+  * @inner
+  */
+ var stringFromCharCode = String.fromCharCode;
+->stringFromCharCode : (...arg0: number[]) => string
++>stringFromCharCode : (...codes: number[]) => string
+ >String.fromCharCode : (...codes: number[]) => string
+ >String : StringConstructor
+ >fromCharCode : (...codes: number[]) => string

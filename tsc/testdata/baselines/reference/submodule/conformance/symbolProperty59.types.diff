@@ -1,0 +1,16 @@
+--- old.symbolProperty59.types
++++ new.symbolProperty59.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty59.ts ===
+ interface I {
++>I : I
++
+     [Symbol.keyFor]: string;
+ >[Symbol.keyFor] : string
+->Symbol.keyFor : (sym: symbol) => string | undefined
++>Symbol.keyFor : (sym: symbol) => string
+ >Symbol : SymbolConstructor
+->keyFor : (sym: symbol) => string | undefined
++>keyFor : (sym: symbol) => string
+ }

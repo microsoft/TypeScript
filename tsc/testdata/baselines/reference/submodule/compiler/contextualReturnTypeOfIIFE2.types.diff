@@ -1,0 +1,51 @@
+--- old.contextualReturnTypeOfIIFE2.types
++++ new.contextualReturnTypeOfIIFE2.types
+@@= skipped -4, +4 lines =@@
+ >app : typeof app
+ 
+   function foo(): void;
+->foo : typeof foo
++>foo : () => void
+ }
+ 
+ app.foo.bar = (function () {
+ >app.foo.bar = (function () {  const someFun = (arg: number) => {};  return { someFun };})() : { someFun: (arg: number) => void; }
+->app.foo.bar : { someFun: (arg: number) => void; }
+->app.foo : typeof app.foo
++>app.foo.bar : any
++>app.foo : () => void
+ >app : typeof app
+->foo : typeof app.foo
+->bar : { someFun: (arg: number) => void; }
++>foo : () => void
++>bar : any
+ >(function () {  const someFun = (arg: number) => {};  return { someFun };})() : { someFun: (arg: number) => void; }
+ >(function () {  const someFun = (arg: number) => {};  return { someFun };}) : () => { someFun: (arg: number) => void; }
+ >function () {  const someFun = (arg: number) => {};  return { someFun };} : () => { someFun: (arg: number) => void; }
+@@= skipped -21, +21 lines =@@
+ 
+   return { someFun };
+ >{ someFun } : { someFun: (arg: number) => void; }
+->someFun : (arg: number) => void
++>someFun : any
+ 
+ })();
+ 
+ app.foo.bar.someFun(1);
+->app.foo.bar.someFun(1) : void
+->app.foo.bar.someFun : (arg: number) => void
+->app.foo.bar : { someFun: (arg: number) => void; }
+->app.foo : typeof app.foo
++>app.foo.bar.someFun(1) : any
++>app.foo.bar.someFun : any
++>app.foo.bar : any
++>app.foo : () => void
+ >app : typeof app
+->foo : typeof app.foo
+->bar : { someFun: (arg: number) => void; }
+->someFun : (arg: number) => void
++>foo : () => void
++>bar : any
++>someFun : any
+ >1 : 1
+ 

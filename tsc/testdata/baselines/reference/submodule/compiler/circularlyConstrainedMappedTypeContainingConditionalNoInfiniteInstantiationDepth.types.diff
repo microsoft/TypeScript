@@ -1,0 +1,130 @@
+--- old.circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.types
++++ new.circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.types
+@@= skipped -2, +2 lines =@@
+ === circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts ===
+ declare class Component<P> {
+ >Component : Component<P>
++>P : P
+ 
+     constructor(props: Readonly<P>);
+ >props : Readonly<P>
+@@= skipped -9, +10 lines =@@
+ >context : any
+ 
+     readonly props: Readonly<P> & Readonly<{ children?: {} }>;
+->props : Readonly<P> & Readonly<{ children?: {}; }>
++>props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
+ >children : {} | undefined
+ }
+ interface ComponentClass<P = {}> {
++>ComponentClass : ComponentClass<P>
++>P : P
++
+     new (props: P, context?: any): Component<P>;
+ >props : P
+ >context : any
+@@= skipped -18, +21 lines =@@
+ >displayName : string | undefined
+ }
+ interface FunctionComponent<P = {}> {
++>FunctionComponent : FunctionComponent<P>
++>P : P
++
+     (props: P & { children?: {} }, context?: any): {} | null;
+->props : P & { children?: {}; }
++>props : P & { children?: {} | undefined; }
+ >children : {} | undefined
+ >context : any
+ 
+@@= skipped -19, +22 lines =@@
+ >nominalTypeHack : unique symbol
+ 
+ export interface Validator<T> {
++>Validator : Validator<T>
++>T : T
++
+     (props: object, propName: string, componentName: string, location: string, propFullName: string): Error | null;
+ >props : object
+ >propName : string
+@@= skipped -13, +16 lines =@@
+ }
+ type WeakValidationMap<T> = {
+ >WeakValidationMap : WeakValidationMap<T>
++>T : T
+ 
+     [K in keyof T]?: null extends T[K]
++>K : K
++
+         ? Validator<T[K] | null | undefined>
+         : undefined extends T[K]
+         ? Validator<T[K] | null | undefined>
+@@= skipped -9, +12 lines =@@
+ };
+ type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
+ >ComponentType : ComponentType<P>
++>P : P
+ 
+ export type Shared<
+ >Shared : Shared<InjectedProps, DecorationTargetProps>
+ 
+     InjectedProps,
++>InjectedProps : InjectedProps
++
+     DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
++>DecorationTargetProps : DecorationTargetProps
++
+     > = {
+         [P in Extract<keyof InjectedProps, keyof DecorationTargetProps>]?: InjectedProps[P] extends DecorationTargetProps[P] ? DecorationTargetProps[P] : never;
++>P : P
++
+     };
+ 
+ // Infers prop type from component C
+ export type GetProps<C> = C extends ComponentType<infer P> ? P : never;
+ >GetProps : GetProps<C>
++>C : C
++>P : P
+ 
+ export type ConnectedComponentClass<
+ >ConnectedComponentClass : ConnectedComponentClass<C, P>
+ 
+     C extends ComponentType<any>,
++>C : C
++
+     P
++>P : P
++
+ > = ComponentClass<P> & {
+     WrappedComponent: C;
+ >WrappedComponent : C
+@@= skipped -27, +40 lines =@@
+ 
+ export type Matching<InjectedProps, DecorationTargetProps> = {
+ >Matching : Matching<InjectedProps, DecorationTargetProps>
++>InjectedProps : InjectedProps
++>DecorationTargetProps : DecorationTargetProps
+ 
+     [P in keyof DecorationTargetProps]: P extends keyof InjectedProps
++>P : P
++
+         ? InjectedProps[P] extends DecorationTargetProps[P]
+             ? DecorationTargetProps[P]
+             : InjectedProps[P]
+@@= skipped -10, +14 lines =@@
+ 
+ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+ >Omit : Omit<T, K>
++>T : T
++>K : K
+ 
+ export type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> =
+ >InferableComponentEnhancerWithProps : InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps>
++>TInjectedProps : TInjectedProps
++>TNeedsProps : TNeedsProps
+ 
+     <C extends ComponentType<Matching<TInjectedProps, GetProps<C>>>>(
++>C : C
++
+         component: C
+ >component : C
+ 

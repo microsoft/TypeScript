@@ -1,0 +1,20 @@
+--- old.declFileMethods.types
++++ new.declFileMethods.types
+@@= skipped -197, +197 lines =@@
+ }
+ 
+ export interface I1 {
++>I1 : I1
++
+     /** This comment should appear for foo*/
+     foo(): string;
+ >foo : () => string
+@@= skipped -225, +227 lines =@@
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     /** This comment should appear for foo*/
+     foo(): string;
+ >foo : () => string

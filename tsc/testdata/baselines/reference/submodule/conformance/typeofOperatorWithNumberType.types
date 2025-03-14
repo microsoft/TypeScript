@@ -1,0 +1,235 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithNumberType.ts] ////
+
+=== typeofOperatorWithNumberType.ts ===
+// typeof  operator on number type
+var NUMBER: number;
+>NUMBER : number
+
+var NUMBER1: number[] = [1, 2];
+>NUMBER1 : number[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+function foo(): number { return 1; }
+>foo : () => number
+>1 : 1
+
+class A {
+>A : A
+
+    public a: number;
+>a : number
+
+    static foo() { return 1; }
+>foo : () => number
+>1 : 1
+}
+module M {
+>M : typeof M
+
+    export var n: number;
+>n : number
+}
+
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// number type var
+var ResultIsString1 = typeof NUMBER;
+>ResultIsString1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof NUMBER : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER : number
+
+var ResultIsString2 = typeof NUMBER1;
+>ResultIsString2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof NUMBER1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER1 : number[]
+
+// number type literal
+var ResultIsString3 = typeof 1;
+>ResultIsString3 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof 1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>1 : 1
+
+var ResultIsString4 = typeof { x: 1, y: 2};
+>ResultIsString4 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof { x: 1, y: 2} : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>{ x: 1, y: 2} : { x: number; y: number; }
+>x : number
+>1 : 1
+>y : number
+>2 : 2
+
+var ResultIsString5 = typeof { x: 1, y: (n: number) => { return n; } };
+>ResultIsString5 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof { x: 1, y: (n: number) => { return n; } } : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
+>x : number
+>1 : 1
+>y : (n: number) => number
+>(n: number) => { return n; } : (n: number) => number
+>n : number
+>n : number
+
+// number type expressions
+var ResultIsString6 = typeof objA.a;
+>ResultIsString6 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof objA.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>objA.a : number
+>objA : A
+>a : number
+
+var ResultIsString7 = typeof M.n;
+>ResultIsString7 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof M.n : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>M.n : number
+>M : typeof M
+>n : number
+
+var ResultIsString8 = typeof NUMBER1[0];
+>ResultIsString8 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof NUMBER1[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER1[0] : number
+>NUMBER1 : number[]
+>0 : 0
+
+var ResultIsString9 = typeof foo();
+>ResultIsString9 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof foo() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo() : number
+>foo : () => number
+
+var ResultIsString10 = typeof A.foo();
+>ResultIsString10 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof A.foo() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>A.foo() : number
+>A.foo : () => number
+>A : typeof A
+>foo : () => number
+
+var ResultIsString11 = typeof (NUMBER + NUMBER);
+>ResultIsString11 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof (NUMBER + NUMBER) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>(NUMBER + NUMBER) : number
+>NUMBER + NUMBER : number
+>NUMBER : number
+>NUMBER : number
+
+// multiple typeof  operators
+var ResultIsString12 = typeof typeof NUMBER;
+>ResultIsString12 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof typeof NUMBER : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof NUMBER : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER : number
+
+var ResultIsString13 = typeof typeof typeof (NUMBER + NUMBER);
+>ResultIsString13 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof typeof typeof (NUMBER + NUMBER) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof typeof (NUMBER + NUMBER) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof (NUMBER + NUMBER) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>(NUMBER + NUMBER) : number
+>NUMBER + NUMBER : number
+>NUMBER : number
+>NUMBER : number
+
+// miss assignment operators
+typeof 1;
+>typeof 1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>1 : 1
+
+typeof NUMBER;
+>typeof NUMBER : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER : number
+
+typeof NUMBER1;
+>typeof NUMBER1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER1 : number[]
+
+typeof foo();
+>typeof foo() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo() : number
+>foo : () => number
+
+typeof objA.a;
+>typeof objA.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>objA.a : number
+>objA : A
+>a : number
+
+typeof M.n;
+>typeof M.n : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>M.n : number
+>M : typeof M
+>n : number
+
+typeof objA.a, M.n;
+>typeof objA.a, M.n : number
+>typeof objA.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>objA.a : number
+>objA : A
+>a : number
+>M.n : number
+>M : typeof M
+>n : number
+
+// use typeof in type query
+var z: number;
+>z : number
+
+var x: number[];
+>x : number[]
+
+z: typeof NUMBER;
+>z : any
+>typeof NUMBER : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER : number
+
+x: typeof NUMBER1;
+>x : any
+>typeof NUMBER1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>NUMBER1 : number[]
+
+r: typeof foo;
+>r : any
+>typeof foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo : () => number
+
+var y = { a: 1, b: 2 };
+>y : { a: number; b: number; }
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+
+z: typeof y.a;
+>z : any
+>typeof y.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>y.a : number
+>y : { a: number; b: number; }
+>a : number
+
+z: typeof objA.a;
+>z : any
+>typeof objA.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>objA.a : number
+>objA : A
+>a : number
+
+z: typeof A.foo;
+>z : any
+>typeof A.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>A.foo : () => number
+>A : typeof A
+>foo : () => number
+
+z: typeof M.n;
+>z : any
+>typeof M.n : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>M.n : number
+>M : typeof M
+>n : number
+

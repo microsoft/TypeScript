@@ -1,0 +1,97 @@
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports_errors.ts] ////
+
+=== a.ts ===
+export type A = {};
+>A : A
+
+export type { A as default };
+>A : any
+>default : A
+
+=== b.ts ===
+class B {};
+>B : B
+
+export type { B, B as default };
+>B : B
+>B : typeof B
+>default : B
+
+=== c.ts ===
+import DefaultA from "./a";
+>DefaultA : any
+
+import { A } from "./a";
+>A : any
+
+import DefaultB from "./b";
+>DefaultB : typeof B
+
+import { B } from "./b";
+>B : typeof B
+
+=== c.fixed.ts ===
+import type DefaultA from "./a";
+>DefaultA : A
+
+import type { A } from "./a";
+>A : A
+
+import type DefaultB from "./b";
+>DefaultB : B
+
+import type { B } from "./b";
+>B : B
+
+=== d.ts ===
+export { A as AA } from "./a";
+>A : any
+>AA : any
+
+export { B as BB } from "./b";
+>B : typeof B
+>BB : typeof B
+
+=== d.fixed.ts ===
+export type { A as AA } from "./a";
+>A : any
+>AA : A
+
+export type { B as BB } from "./b";
+>B : typeof B
+>BB : B
+
+=== e.ts ===
+import { AA, BB } from "./d";
+>AA : any
+>BB : typeof B
+
+=== e.fixed.ts ===
+import type { AA, BB } from "./d";
+>AA : A
+>BB : B
+
+=== f.ts ===
+import type { A } from "./a";
+>A : A
+
+import type { B } from "./b";
+>B : B
+
+export { A, B as BB };
+>A : any
+>B : typeof B
+>BB : typeof B
+
+=== f.fixed.ts ===
+import type { A } from "./a";
+>A : A
+
+import type { B } from "./b";
+>B : B
+
+export type { A, B as BB };
+>A : A
+>B : typeof B
+>BB : B
+

@@ -1,0 +1,28 @@
+--- old.import_unneeded-require-when-referenecing-aliased-type-throug-array.types
++++ new.import_unneeded-require-when-referenecing-aliased-type-throug-array.types
+@@= skipped -5, +5 lines =@@
+ >ITest : any
+ 
+ var testData: ITest[];
+->testData : ITest[]
++>testData : Name[]
+ 
+ var p = testData[0].name;
+ >p : string
+ >testData[0].name : string
+->testData[0] : ITest
+->testData : ITest[]
++>testData[0] : Name
++>testData : Name[]
+ >0 : 0
+ >name : string
+  
+@@= skipped -15, +15 lines =@@
+ >"ITest" : typeof import("ITest")
+ 
+     interface Name {
++>Name : Name
++
+         name: string;
+ >name : string
+     }

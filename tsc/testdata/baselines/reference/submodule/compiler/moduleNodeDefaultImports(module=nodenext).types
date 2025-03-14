@@ -1,0 +1,133 @@
+//// [tests/cases/compiler/moduleNodeDefaultImports.ts] ////
+
+=== mod.cts ===
+declare function fun(): void;
+>fun : () => void
+
+export default fun;
+>fun : () => void
+
+=== b.mts ===
+import a from "./mod.cjs";
+>a : () => void
+
+import { default as b } from "./mod.cjs";
+>default : () => void
+>b : () => void
+
+import c, { default as d } from "./mod.cjs";
+>c : () => void
+>default : () => void
+>d : () => void
+
+import * as self from "./b.mjs";
+>self : typeof import("b")
+
+export { default } from "./mod.cjs";
+>default : () => void
+
+export { default as def } from "./mod.cjs";
+>default : () => void
+>def : () => void
+
+a === b;
+>a === b : boolean
+>a : () => void
+>b : () => void
+
+b === c;
+>b === c : boolean
+>b : () => void
+>c : () => void
+
+c === d;
+>c === d : boolean
+>c : () => void
+>d : () => void
+
+d === self.default;
+>d === self.default : boolean
+>d : () => void
+>self.default : () => void
+>self : typeof import("b")
+>default : () => void
+
+self.default === self.def;
+>self.default === self.def : boolean
+>self.default : () => void
+>self : typeof import("b")
+>default : () => void
+>self.def : () => void
+>self : typeof import("b")
+>def : () => void
+
+// should all fail
+a();
+>a() : void
+>a : () => void
+
+b();
+>b() : void
+>b : () => void
+
+c();
+>c() : void
+>c : () => void
+
+d();
+>d() : void
+>d : () => void
+
+self.default();
+>self.default() : void
+>self.default : () => void
+>self : typeof import("b")
+>default : () => void
+
+self.def();
+>self.def() : void
+>self.def : () => void
+>self : typeof import("b")
+>def : () => void
+
+// should all work
+a.default();
+>a.default() : any
+>a.default : any
+>a : () => void
+>default : any
+
+b.default();
+>b.default() : any
+>b.default : any
+>b : () => void
+>default : any
+
+c.default();
+>c.default() : any
+>c.default : any
+>c : () => void
+>default : any
+
+d.default();
+>d.default() : any
+>d.default : any
+>d : () => void
+>default : any
+
+self.default.default();
+>self.default.default() : any
+>self.default.default : any
+>self.default : () => void
+>self : typeof import("b")
+>default : () => void
+>default : any
+
+self.def.default();
+>self.def.default() : any
+>self.def.default : any
+>self.def : () => void
+>self : typeof import("b")
+>def : () => void
+>default : any
+

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/nodeResolution5.ts] ////
+
+=== b.ts ===
+import y = require("a"); 
+>y : typeof import("a")
+
+=== node_modules/a.d.ts ===
+declare module "a" {
+>"a" : typeof import("a")
+
+    var x: number;
+>x : number
+}
+

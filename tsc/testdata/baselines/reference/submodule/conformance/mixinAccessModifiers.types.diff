@@ -1,0 +1,118 @@
+--- old.mixinAccessModifiers.types
++++ new.mixinAccessModifiers.types
+@@= skipped -78, +78 lines =@@
+ 
+ function f1(x: Private & Private2) {
+ >f1 : (x: Private & Private2) => void
+->x : never
++>x : Private & Private2
+ 
+ 	x.p;  // Error, private constituent makes property inaccessible
+ >x.p : any
+->x : never
++>x : Private & Private2
+ >p : any
+ }
+ 
+ function f2(x: Private & Protected) {
+ >f2 : (x: Private & Protected) => void
+->x : never
++>x : Private & Protected
+ 
+ 	x.p;  // Error, private constituent makes property inaccessible
+ >x.p : any
+->x : never
++>x : Private & Protected
+ >p : any
+ }
+ 
+ function f3(x: Private & Public) {
+ >f3 : (x: Private & Public) => void
+->x : never
++>x : Private & Public
+ 
+ 	x.p;  // Error, private constituent makes property inaccessible
+ >x.p : any
+->x : never
++>x : Private & Public
+ >p : any
+ }
+ 
+@@= skipped -60, +60 lines =@@
+ 
+ declare function Mix<T, U>(c1: T, c2: U): T & U;
+ >Mix : <T, U>(c1: T, c2: U) => T & U
++>T : T
++>U : U
+ >c1 : T
+ >c2 : U
+ 
+@@= skipped -172, +174 lines =@@
+ 
+ class ProtectedGeneric<T> {
+ >ProtectedGeneric : ProtectedGeneric<T>
++>T : T
+ 
+ 	private privateMethod() {}
+ >privateMethod : () => void
+@@= skipped -10, +11 lines =@@
+ 
+ class ProtectedGeneric2<T> {
+ >ProtectedGeneric2 : ProtectedGeneric2<T>
++>T : T
+ 
+ 	private privateMethod() {}
+ >privateMethod : () => void
+@@= skipped -9, +10 lines =@@
+ }
+ 
+ function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
+->f7 : (x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) => void
++>f7 : (x: ProtectedGeneric<{}>) => void
+ >x : ProtectedGeneric<{}>
+ 
+ 	x.privateMethod(); // Error, private constituent makes method inaccessible
+@@= skipped -18, +18 lines =@@
+ 
+ function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
+ >f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
+->x : never
++>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
+ >a : void
+ >a : void
+ >b : void
+@@= skipped -8, +8 lines =@@
+ 	x.privateMethod(); // Error, private constituent makes method inaccessible
+ >x.privateMethod() : any
+ >x.privateMethod : any
+->x : never
++>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
+ >privateMethod : any
+ 
+ 	x.protectedMethod(); // Error, protected when all constituents are protected
+ >x.protectedMethod() : any
+ >x.protectedMethod : any
+->x : never
++>x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>
+ >protectedMethod : any
+ }
+ 
+@@= skipped -19, +19 lines =@@
+ 
+ 	x.privateMethod(); // Error, private constituent makes method inaccessible
+ >x.privateMethod() : void
+->x.privateMethod : (() => void) & (() => void)
++>x.privateMethod : () => void & () => void
+ >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+->privateMethod : (() => void) & (() => void)
++>privateMethod : () => void & () => void
+ 
+ 	x.protectedMethod(); // Error, protected when all constituents are protected
+ >x.protectedMethod() : void
+->x.protectedMethod : (() => void) & (() => void)
++>x.protectedMethod : () => void & () => void
+ >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
+->protectedMethod : (() => void) & (() => void)
++>protectedMethod : () => void & () => void
+ }
+ 

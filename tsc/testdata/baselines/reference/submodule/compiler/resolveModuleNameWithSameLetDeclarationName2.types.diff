@@ -1,0 +1,11 @@
+--- old.resolveModuleNameWithSameLetDeclarationName2.types
++++ new.resolveModuleNameWithSameLetDeclarationName2.types
+@@= skipped -4, +4 lines =@@
+ >"punycode" : typeof import("punycode")
+ 
+     interface ucs2 {
++>ucs2 : ucs2
++
+         decode(string: string): string;
+ >decode : (string: string) => string
+ >string : string

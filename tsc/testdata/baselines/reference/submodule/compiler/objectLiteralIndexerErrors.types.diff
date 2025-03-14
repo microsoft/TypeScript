@@ -1,0 +1,18 @@
+--- old.objectLiteralIndexerErrors.types
++++ new.objectLiteralIndexerErrors.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectLiteralIndexerErrors.ts ===
+ interface A {
++>A : A
++
+     x: number;
+ >x : number
+ }
+ 
+ interface B extends A {
++>B : B
++
+     y: string;
+ >y : string
+ }

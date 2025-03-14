@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/references/library-reference-8.ts] ////
+
+=== /test/foo.ts ===
+/// <reference types="alpha" />
+/// <reference types="beta" />
+var x: string = alpha.a + beta.b;
+>x : string
+>alpha.a + beta.b : any
+>alpha.a : any
+>alpha : any
+>a : any
+>beta.b : any
+>beta : any
+>b : any
+
+

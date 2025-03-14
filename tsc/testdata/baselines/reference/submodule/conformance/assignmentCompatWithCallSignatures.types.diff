@@ -1,0 +1,45 @@
+--- old.assignmentCompatWithCallSignatures.types
++++ new.assignmentCompatWithCallSignatures.types
+@@= skipped -3, +3 lines =@@
+ // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
+ 
+ interface T {
++>T : T
++
+     (x: number): void;
+ >x : number
+ }
+@@= skipped -21, +23 lines =@@
+ >t : T
+ 
+ interface S {
++>S : S
++
+     (x: number): string;
+ >x : number
+ }
+@@= skipped -34, +36 lines =@@
+ >t = <T>(x: T) => 1 : <T>(x: T) => number
+ >t : T
+ ><T>(x: T) => 1 : <T>(x: T) => number
++>T : T
+ >x : T
+ >1 : 1
+ 
+@@= skipped -20, +21 lines =@@
+ >a = <T>(x: T) => 1 : <T>(x: T) => number
+ >a : (x: number) => void
+ ><T>(x: T) => 1 : <T>(x: T) => number
++>T : T
+ >x : T
+ >1 : 1
+ 
+@@= skipped -17, +18 lines =@@
+ >'' : ""
+ 
+ interface S2 {
++>S2 : S2
++
+     (x: string): void;
+ >x : string
+ }

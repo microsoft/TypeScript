@@ -1,0 +1,22 @@
+--- old.maxNodeModuleJsDepthDefaultsToZero.types
++++ new.maxNodeModuleJsDepthDefaultsToZero.types
+@@= skipped -10, +10 lines =@@
+ === /index.ts ===
+ /// <reference path="/typings/index.d.ts" />
+ import * as foo from "shortid";
+->foo : typeof foo
++>foo : typeof import("shortid")
+ 
+ foo.x // found in index.d.ts
+ >foo.x : number
+->foo : typeof foo
++>foo : typeof import("shortid")
+ >x : number
+ 
+ foo.y // ignored from shortid/index.js
+ >foo.y : any
+->foo : typeof foo
++>foo : typeof import("shortid")
+ >y : any
+ 
+ 

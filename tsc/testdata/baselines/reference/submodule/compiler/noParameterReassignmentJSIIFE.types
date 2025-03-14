@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/noParameterReassignmentJSIIFE.ts] ////
+
+=== index.js ===
+self.importScripts = (function (importScripts) {
+>self.importScripts = (function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => any
+>self.importScripts : (...urls: string[]) => void
+>self : Window & typeof globalThis
+>importScripts : (...urls: string[]) => void
+>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : () => any
+>(function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => () => any
+>function (importScripts) {    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => () => any
+>importScripts : (...urls: string[]) => void
+
+    return function () {
+>function () {        return importScripts.apply(this, arguments);    } : () => any
+
+        return importScripts.apply(this, arguments);
+>importScripts.apply(this, arguments) : any
+>importScripts.apply : (thisArg: any, argArray?: any) => any
+>importScripts : (...urls: string[]) => void
+>apply : (thisArg: any, argArray?: any) => any
+>this : any
+>arguments : IArguments
+
+    };
+})(importScripts);
+>importScripts : (...urls: string[]) => void
+

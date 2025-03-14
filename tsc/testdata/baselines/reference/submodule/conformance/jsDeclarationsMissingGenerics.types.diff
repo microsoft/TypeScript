@@ -1,0 +1,20 @@
+--- old.jsDeclarationsMissingGenerics.types
++++ new.jsDeclarationsMissingGenerics.types
+@@= skipped -4, +4 lines =@@
+  * @param {Array} x
+  */
+ function x(x) {}
+->x : (x: any[]) => void
+->x : any[]
++>x : (x: any) => void
++>x : any
+ 
+ /**
+  * @param {Promise} x
+  */
+ function y(x) {}
+->y : (x: Promise<any>) => void
+->x : Promise<any>
++>y : (x: any) => void
++>x : any
+ 

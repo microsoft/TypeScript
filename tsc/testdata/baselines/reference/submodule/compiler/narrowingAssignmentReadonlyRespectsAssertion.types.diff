@@ -1,0 +1,39 @@
+--- old.narrowingAssignmentReadonlyRespectsAssertion.types
++++ new.narrowingAssignmentReadonlyRespectsAssertion.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/41984
+ 
+ interface TestCase<T extends string | number> {
++>TestCase : TestCase<T>
++>T : T
++
+   readonly val1: T | ReadonlyArray<T>;
+ >val1 : T | readonly T[]
+ 
+@@= skipped -8, +11 lines =@@
+ }
+ 
+ interface MultiCaseFixture<T> {
++>MultiCaseFixture : MultiCaseFixture<T>
++>T : T
++
+   cases: T[];
+ >cases : T[]
+ }
+@@= skipped -59, +62 lines =@@
+ 
+ function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
+ >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
++>T : T
+ >subFunc : () => T[]
+ 
+   return { cases: subFunc() };
+@@= skipped -25, +26 lines =@@
+ >fixture : MultiCaseFixture<TestCase<string | number>>
+ >cases : TestCase<string | number>[]
+ >forEach : (callbackfn: (value: TestCase<string | number>, index: number, array: TestCase<string | number>[]) => void, thisArg?: any) => void
+->({ val1, val2 }) => {      if (Array.isArray(val1)) {          // This should retain val1 as being an array          const reversedVal1 = val1.slice().reverse();          console.log(reversedVal1);      } else {          console.log(val1);      }      console.log(val2);  } : ({ val1, val2 }: TestCase<string | number>) => void
++>({ val1, val2 }) => {      if (Array.isArray(val1)) {          // This should retain val1 as being an array          const reversedVal1 = val1.slice().reverse();          console.log(reversedVal1);      } else {          console.log(val1);      }      console.log(val2);  } : (__0: TestCase<string | number>) => void
+ >val1 : string | number | readonly (string | number)[]
+ >val2 : readonly (string | number)[]
+ 

@@ -1,0 +1,34 @@
+--- old.objectLiteralShorthandPropertiesAssignmentError.types
++++ new.objectLiteralShorthandPropertiesAssignmentError.types
+@@= skipped -13, +13 lines =@@
+ >b : string
+ >id : number
+ >{ name, id } : { name: string; id: number; }
+->name : string
+->id : number
++>name : any
++>id : any
+ 
+ var person1: { name, id };  // ok
+ >person1 : { name: any; id: any; }
+@@= skipped -15, +15 lines =@@
+ >id : string
+ >name : number
+ >{ name, id } : { name: string; id: number; }
+->name : string
+->id : number
++>name : any
++>id : any
+ 
+ function bar(obj: { name: string; id: boolean }) { }
+ >bar : (obj: { name: string; id: boolean; }) => void
+@@= skipped -13, +13 lines =@@
+ >bar({ name, id }) : void
+ >bar : (obj: { name: string; id: boolean; }) => void
+ >{ name, id } : { name: string; id: number; }
+->name : string
+->id : number
++>name : any
++>id : any
+ 
+ 

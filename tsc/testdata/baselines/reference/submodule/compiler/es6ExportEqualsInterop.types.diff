@@ -1,0 +1,214 @@
+--- old.es6ExportEqualsInterop.types
++++ new.es6ExportEqualsInterop.types
+@@= skipped -13, +13 lines =@@
+ >z3 : { a: number; b: number; }
+ 
+ import z4 = require("module");
+->z4 : typeof z4
++>z4 : typeof Foo
+ 
+ import z5 = require("interface-module");
+->z5 : typeof z5
++>z5 : typeof Foo
+ 
+ import z6 = require("variable-module");
+ >z6 : { a: number; b: number; }
+@@= skipped -12, +12 lines =@@
+ >z7 : () => any
+ 
+ import z8 = require("function-module");
+->z8 : typeof z8
++>z8 : typeof foo
+ 
+ import z9 = require("class");
+->z9 : typeof z9
++>z9 : typeof Foo
+ 
+ import z0 = require("class-module");
+->z0 : typeof z0
++>z0 : typeof Foo
+ 
+ z1.a;
+ >z1.a : any
+@@= skipped -25, +25 lines =@@
+ 
+ z4.a;
+ >z4.a : number
+->z4 : typeof z4
++>z4 : typeof Foo
+ >a : number
+ 
+ z5.a;
+ >z5.a : number
+->z5 : typeof z5
++>z5 : typeof Foo
+ >a : number
+ 
+ z6.a;
+@@= skipped -20, +20 lines =@@
+ 
+ z8.a;
+ >z8.a : number
+->z8 : typeof z8
++>z8 : typeof foo
+ >a : number
+ 
+ z9.a;
+ >z9.a : any
+->z9 : typeof z9
++>z9 : typeof Foo
+ >a : any
+ 
+ z0.a;
+ >z0.a : number
+->z0 : typeof z0
++>z0 : typeof Foo
+ >a : number
+ 
+ // default import
+@@= skipped -18, +18 lines =@@
+ >x1 : any
+ 
+ import x2 from "variable";
+->x2 : any
++>x2 : { a: number; b: number; }
+ 
+ import x3 from "interface-variable";
+->x3 : any
++>x3 : { a: number; b: number; }
+ 
+ import x4 from "module";
+->x4 : any
++>x4 : typeof Foo
+ 
+ import x5 from "interface-module";
+->x5 : any
++>x5 : typeof Foo
+ 
+ import x6 from "variable-module";
+->x6 : any
++>x6 : { a: number; b: number; }
+ 
+ import x7 from "function";
+->x7 : any
++>x7 : () => any
+ 
+ import x8 from "function-module";
+->x8 : any
++>x8 : typeof foo
+ 
+ import x9 from "class";
+->x9 : any
++>x9 : typeof Foo
+ 
+ import x0 from "class-module";
+->x0 : any
++>x0 : typeof Foo
+ 
+ // namespace import
+ import * as y1 from "interface";
+@@= skipped -37, +37 lines =@@
+ >y3 : { a: number; b: number; }
+ 
+ import * as y4 from "module";
+->y4 : typeof z4
++>y4 : typeof Foo
+ 
+ import * as y5 from "interface-module";
+->y5 : typeof z5
++>y5 : typeof Foo
+ 
+ import * as y6 from "variable-module";
+ >y6 : { a: number; b: number; }
+@@= skipped -12, +12 lines =@@
+ >y7 : () => any
+ 
+ import * as y8 from "function-module";
+->y8 : typeof z8
++>y8 : typeof foo
+ 
+ import * as y9 from "class";
+->y9 : typeof z9
++>y9 : typeof Foo
+ 
+ import * as y0 from "class-module";
+->y0 : typeof z0
++>y0 : typeof Foo
+ 
+ y1.a;
+ >y1.a : any
+@@= skipped -25, +25 lines =@@
+ 
+ y4.a;
+ >y4.a : number
+->y4 : typeof z4
++>y4 : typeof Foo
+ >a : number
+ 
+ y5.a;
+ >y5.a : number
+->y5 : typeof z5
++>y5 : typeof Foo
+ >a : number
+ 
+ y6.a;
+@@= skipped -20, +20 lines =@@
+ 
+ y8.a;
+ >y8.a : number
+->y8 : typeof z8
++>y8 : typeof foo
+ >a : number
+ 
+ y9.a;
+ >y9.a : any
+->y9 : typeof z9
++>y9 : typeof Foo
+ >a : any
+ 
+ y0.a;
+ >y0.a : number
+->y0 : typeof z0
++>y0 : typeof Foo
+ >a : number
+ 
+ // named import
+@@= skipped -142, +142 lines =@@
+ >"interface" : typeof import("interface")
+ 
+     interface Foo {
++>Foo : Foo
++
+         x: number;
+ >x : number
+ 
+@@= skipped -30, +32 lines =@@
+ >"interface-variable" : typeof import("interface-variable")
+ 
+     interface Foo {
++>Foo : Foo
++
+         x: number;
+ >x : number
+ 
+@@= skipped -39, +41 lines =@@
+ >"interface-module" : typeof import("interface-module")
+ 
+     interface Foo {
++>Foo : Foo
++
+         x: number;
+ >x : number
+ 
+@@= skipped -23, +25 lines =@@
+ >"variable-module" : typeof import("variable-module")
+ 
+     module Foo {
++>Foo : { a: number; b: number; }
++
+         interface Bar {
++>Bar : Bar
++
+             x: number;
+ >x : number
+ 

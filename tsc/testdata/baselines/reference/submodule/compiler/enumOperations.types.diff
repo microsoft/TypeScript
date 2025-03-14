@@ -1,0 +1,72 @@
+--- old.enumOperations.types
++++ new.enumOperations.types
+@@= skipped -1, +1 lines =@@
+ 
+ === enumOperations.ts ===
+ enum Enum { None = 0 }
+->Enum : Enum
++>Enum : Enum.None
+ >None : Enum.None
+ >0 : 0
+ 
+ var enumType: Enum = Enum.None;
+->enumType : Enum
+->Enum.None : Enum
++>enumType : Enum.None
++>Enum.None : Enum.None
+ >Enum : typeof Enum
+->None : Enum
++>None : Enum.None
+ 
+ var numberType: number = 0;
+ >numberType : number
+@@= skipped -20, +20 lines =@@
+  
+ enumType ^ numberType;
+ >enumType ^ numberType : number
+->enumType : Enum
++>enumType : Enum.None
+ >numberType : number
+ 
+ numberType ^ anyType;
+@@= skipped -10, +10 lines =@@
+  
+ enumType & anyType;
+ >enumType & anyType : number
+->enumType : Enum
++>enumType : Enum.None
+ >anyType : any
+ 
+ enumType | anyType;
+ >enumType | anyType : number
+->enumType : Enum
++>enumType : Enum.None
+ >anyType : any
+ 
+ enumType ^ anyType;
+ >enumType ^ anyType : number
+->enumType : Enum
++>enumType : Enum.None
+ >anyType : any
+ 
+ ~anyType;
+@@= skipped -19, +19 lines =@@
+ 
+ enumType <<anyType;
+ >enumType <<anyType : number
+->enumType : Enum
++>enumType : Enum.None
+ >anyType : any
+ 
+ enumType >>anyType;
+ >enumType >>anyType : number
+->enumType : Enum
++>enumType : Enum.None
+ >anyType : any
+ 
+ enumType >>>anyType;
+ >enumType >>>anyType : number
+->enumType : Enum
++>enumType : Enum.None
+ >anyType : any
+ 

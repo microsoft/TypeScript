@@ -1,0 +1,29 @@
+--- old.constructorTagWithThisTag.types
++++ new.constructorTagWithThisTag.types
+@@= skipped -6, +6 lines =@@
+  * this-tag should win, both 'e' and 'm' should be defined.
+  */
+ function C() {
+->C : typeof C
++>C : () => void
+ 
+     this.e = this.m + 1
+->this.e = this.m + 1 : number
+->this.e : number
+->this : { e: number; m: number; }
+->e : number
+->this.m + 1 : number
+->this.m : number
+->this : { e: number; m: number; }
+->m : number
++>this.e = this.m + 1 : any
++>this.e : any
++>this : any
++>e : any
++>this.m + 1 : any
++>this.m : any
++>this : any
++>m : any
+ >1 : 1
+ }
+ 

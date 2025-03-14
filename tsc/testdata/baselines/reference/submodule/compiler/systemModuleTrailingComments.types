@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/systemModuleTrailingComments.ts] ////
+
+=== systemModuleTrailingComments.ts ===
+export const test = "TEST";
+>test : "TEST"
+>"TEST" : "TEST"
+
+//some comment

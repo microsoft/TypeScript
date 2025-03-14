@@ -1,0 +1,31 @@
+--- old.missingDomElements.types
++++ new.missingDomElements.types
+@@= skipped -1, +1 lines =@@
+ 
+ === missingDomElements.ts ===
+ interface Element {}
++>Element : Element
++
+ interface EventTarget {}
++>EventTarget : EventTarget
++
+ interface HTMLElement {}
++>HTMLElement : HTMLElement
++
+ interface HTMLInputElement {}
++>HTMLInputElement : HTMLInputElement
+ 
+ ({} as any as Element).textContent;
+ >({} as any as Element).textContent : any
+@@= skipped -37, +44 lines =@@
+ >textContent : any
+ 
+ interface HTMLElementFake {}
++>HTMLElementFake : HTMLElementFake
++
+ interface Node {
++>Node : Node
++
+     actuallyNotTheSame: number;    
+ >actuallyNotTheSame : number
+ 

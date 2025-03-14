@@ -1,0 +1,18 @@
+--- old.assignmentNonObjectTypeConstraints.types
++++ new.assignmentNonObjectTypeConstraints.types
+@@= skipped -8, +8 lines =@@
+ 
+ function foo<T extends number>(x: T) {
+ >foo : <T extends number>(x: T) => void
++>T : T
+ >x : T
+ 
+     var y: number = x;  // Ok
+@@= skipped -29, +30 lines =@@
+ 
+ function bar<T extends A | B>(x: T) {
+ >bar : <T extends A | B>(x: T) => void
++>T : T
+ >x : T
+ 
+     var y: A | B = x;  // Ok

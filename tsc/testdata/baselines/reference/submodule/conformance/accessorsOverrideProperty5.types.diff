@@ -1,0 +1,17 @@
+--- old.accessorsOverrideProperty5.types
++++ new.accessorsOverrideProperty5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === accessorsOverrideProperty5.ts ===
+ interface I {
++>I : I
++
+     p: number
+ >p : number
+ }
+ interface B extends I { }
++>B : B
++
+ class B { }
+ >B : B
+ 

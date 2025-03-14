@@ -1,0 +1,25 @@
+--- old.memberAccessMustUseModuleInstances.types
++++ new.memberAccessMustUseModuleInstances.types
+@@= skipped -2, +2 lines =@@
+ === memberAccessMustUseModuleInstances_1.ts ===
+ ///<reference path='memberAccessMustUseModuleInstances_0.ts'/>
+ import WinJS = require('memberAccessMustUseModuleInstances_0');
+->WinJS : typeof WinJS
++>WinJS : any
+ 
+ WinJS.Promise.timeout(10);
+->WinJS.Promise.timeout(10) : WinJS.Promise
+->WinJS.Promise.timeout : (delay: number) => WinJS.Promise
+->WinJS.Promise : typeof WinJS.Promise
+->WinJS : typeof WinJS
+->Promise : typeof WinJS.Promise
+->timeout : (delay: number) => WinJS.Promise
++>WinJS.Promise.timeout(10) : any
++>WinJS.Promise.timeout : any
++>WinJS.Promise : any
++>WinJS : any
++>Promise : any
++>timeout : any
+ >10 : 10
+ 
+ === memberAccessMustUseModuleInstances_0.ts ===

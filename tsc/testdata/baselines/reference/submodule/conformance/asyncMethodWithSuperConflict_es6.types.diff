@@ -1,0 +1,20 @@
+--- old.asyncMethodWithSuperConflict_es6.types
++++ new.asyncMethodWithSuperConflict_es6.types
+@@= skipped -129, +129 lines =@@
+ >super : A
+ >x : () => void
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // destructuring assign with element access
+         ({ f: super["x"] } = { f });
+@@= skipped -12, +12 lines =@@
+ >super : A
+ >"x" : "x"
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+     }
+ }
+ 

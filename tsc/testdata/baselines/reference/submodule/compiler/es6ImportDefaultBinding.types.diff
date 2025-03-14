@@ -1,0 +1,19 @@
+--- old.es6ImportDefaultBinding.types
++++ new.es6ImportDefaultBinding.types
+@@= skipped -9, +9 lines =@@
+ 
+ === es6ImportDefaultBinding_1.ts ===
+ import defaultBinding from "es6ImportDefaultBinding_0";
+->defaultBinding : number
++>defaultBinding : any
+ 
+ var x = defaultBinding;
+->x : number
+->defaultBinding : number
++>x : any
++>defaultBinding : any
+ 
+ import defaultBinding2 from "es6ImportDefaultBinding_0"; // elide this import since defaultBinding2 is not used
+->defaultBinding2 : number
++>defaultBinding2 : any
+ 

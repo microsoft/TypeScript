@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocOptionalParamOrder.ts] ////
+
+=== 0.js ===
+// @ts-check
+/**
+ * @param {number} a
+ * @param {number} [b]
+ * @param {number} c
+ */
+function foo(a, b, c) {}
+>foo : (a: any, b: any, c: any) => void
+>a : any
+>b : any
+>c : any
+

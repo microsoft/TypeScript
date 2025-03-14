@@ -1,0 +1,27 @@
+--- old.jsxImportForSideEffectsNonExtantNoError.types
++++ new.jsxImportForSideEffectsNonExtantNoError.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsxImportForSideEffectsNonExtantNoError.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 5,000
+-Instantiation count: 50,000
+-Symbol count: 50,000
+-
+ === jsxImportForSideEffectsNonExtantNoError.tsx ===
+ /// <reference path="react16.d.ts" />
+ import * as React from "react";
+->React : typeof React
++>React : any
+ 
+ import "./App.css"; // doesn't actually exist
+ 
+ const tag = <div></div>;
+->tag : JSX.Element
+-><div></div> : JSX.Element
++>tag : any
++><div></div> : any
+ >div : any
+ >div : any
+ 

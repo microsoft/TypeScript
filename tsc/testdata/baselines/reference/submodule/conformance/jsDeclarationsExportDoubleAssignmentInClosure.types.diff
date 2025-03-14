@@ -1,0 +1,43 @@
+--- old.jsDeclarationsExportDoubleAssignmentInClosure.types
++++ new.jsDeclarationsExportDoubleAssignmentInClosure.types
+@@= skipped -5, +5 lines =@@
+ >foo : () => void
+ 
+     module.exports = exports = function (o) {
+->module.exports = exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : { (o: any): any; methods: () => void; }
+->module.exports : { (o: any): any; methods: () => void; }
+->module : { exports: { (o: any): any; methods: () => void; }; }
+->exports : { (o: any): any; methods: () => void; }
++>module.exports = exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
++>module.exports : any
++>module : any
++>exports : any
+ >exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
+ >exports : any
+ >function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
+ >o : any
+ 
+         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
+->(o == null) ? create(base) : defineProperties(Object(o), descriptors) : error
++>(o == null) ? create(base) : defineProperties(Object(o), descriptors) : any
+ >(o == null) : boolean
+ >o == null : boolean
+ >o : any
+->create(base) : error
+->create : error
+->base : error
+->defineProperties(Object(o), descriptors) : error
+->defineProperties : error
++>create(base) : any
++>create : any
++>base : any
++>defineProperties(Object(o), descriptors) : any
++>defineProperties : any
+ >Object(o) : any
+ >Object : ObjectConstructor
+ >o : any
+->descriptors : error
++>descriptors : any
+ 
+     };
+     const m = function () {

@@ -1,0 +1,13 @@
+--- old.bestCommonTypeOfTuple2.types
++++ new.bestCommonTypeOfTuple2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bestCommonTypeOfTuple2.ts ===
+ interface base { }
++>base : base
++
+ interface base1 { i }
++>base1 : base1
+ >i : any
+ 
+ class C implements base { c }

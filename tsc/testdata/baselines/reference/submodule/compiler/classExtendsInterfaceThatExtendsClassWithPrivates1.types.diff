@@ -1,0 +1,11 @@
+--- old.classExtendsInterfaceThatExtendsClassWithPrivates1.types
++++ new.classExtendsInterfaceThatExtendsClassWithPrivates1.types
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ interface I extends C {
++>I : I
++
+     other(x: any): any;
+ >other : (x: any) => any
+ >x : any

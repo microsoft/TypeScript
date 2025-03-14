@@ -1,0 +1,26 @@
+--- old.declarationEmitExpandoPropertyPrivateName.types
++++ new.declarationEmitExpandoPropertyPrivateName.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ interface I {}
++>I : I
++
+ export function f(): I { return null as I; }
+ >f : () => I
+ >null as I : I
+@@= skipped -9, +11 lines =@@
+ >f : () => I
+ 
+ export function q() {}
+->q : typeof q
++>q : { (): void; val: I; }
+ 
+ q.val = f();
+ >q.val = f() : I
+ >q.val : I
+->q : typeof q
++>q : { (): void; val: I; }
+ >val : I
+ >f() : I
+ >f : () => I

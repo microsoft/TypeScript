@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/constDeclarations-access.ts] ////
+
+=== file1.ts ===
+const x = 0
+>x : 0
+>0 : 0
+
+=== file2.ts ===
+x++;
+>x++ : number
+>x : any
+

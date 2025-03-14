@@ -1,0 +1,18 @@
+--- old.TypeGuardWithArrayUnion.types
++++ new.TypeGuardWithArrayUnion.types
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ function saySize(message: Message | Message[]) {
+->saySize : (message: Message | Message[]) => number
+->message : Message | Message[]
++>saySize : (message: Message[] | Message) => number
++>message : Message[] | Message
+ 
+     if (message instanceof Array) {
+ >message instanceof Array : boolean
+->message : Message | Message[]
++>message : Message[] | Message
+ >Array : ArrayConstructor
+ 
+         return message.length;  // Should have type Message[] here

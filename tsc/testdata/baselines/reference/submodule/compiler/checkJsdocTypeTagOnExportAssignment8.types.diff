@@ -1,0 +1,19 @@
+--- old.checkJsdocTypeTagOnExportAssignment8.types
++++ new.checkJsdocTypeTagOnExportAssignment8.types
+@@= skipped -10, +10 lines =@@
+ 
+ /** @type {Foo} */
+ export default {
+->{    a: 'a',    b: 'b'} : { a: string; b: "b"; }
++>{    a: 'a',    b: 'b'} : { a: string; b: string; }
+ 
+     a: 'a',
+ >a : string
+ >'a' : "a"
+ 
+     b: 'b'
+->b : "b"
++>b : string
+ >'b' : "b"
+ }
+ 

@@ -1,0 +1,11 @@
+--- old.equalityStrictNulls.types
++++ new.equalityStrictNulls.types
+@@= skipped -100, +100 lines =@@
+ }
+ 
+ function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
+->f3 : (a: number, b: boolean, c: { x: number; }, d: number | string) => void
++>f3 : (a: number, b: boolean, c: { x: number; }, d: string | number) => void
+ >a : number
+ >b : boolean
+ >c : { x: number; }

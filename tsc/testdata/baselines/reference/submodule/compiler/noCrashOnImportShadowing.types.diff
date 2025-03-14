@@ -1,0 +1,53 @@
+--- old.noCrashOnImportShadowing.types
++++ new.noCrashOnImportShadowing.types
+@@= skipped -6, +6 lines =@@
+ 
+ === a.ts ===
+ import * as B from "./b";
+->B : typeof B
++>B : typeof import("b")
+ 
+ interface B {
++>B : B
++
+     x: string;
+ >x : string
+ }
+@@= skipped -15, +17 lines =@@
+ 
+ B.zzz;
+ >B.zzz : 123
+->B : typeof B
++>B : typeof import("b")
+ >zzz : 123
+ 
+ export { B };
+->B : typeof B
++>B : typeof import("b")
+ 
+ === index.ts ===
+ import { B } from "./a";
+->B : typeof OriginalB
++>B : typeof import("b")
+ 
+ const x: B = { x: "" };
+ >x : B
+@@= skipped -18, +18 lines =@@
+ 
+ B.zzz;
+ >B.zzz : 123
+->B : typeof OriginalB
++>B : typeof import("b")
+ >zzz : 123
+ 
+ import * as OriginalB from "./b";
+->OriginalB : typeof OriginalB
++>OriginalB : typeof import("b")
+ 
+ OriginalB.zzz;
+ >OriginalB.zzz : 123
+->OriginalB : typeof OriginalB
++>OriginalB : typeof import("b")
+ >zzz : 123
+ 
+ const y: OriginalB = x;

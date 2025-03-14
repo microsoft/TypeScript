@@ -1,0 +1,10 @@
+--- old.typeofClass.types
++++ new.typeofClass.types
+@@= skipped -25, +25 lines =@@
+ 
+ var k2: typeof K;
+ >k2 : typeof K
+->K : typeof K
+ 
+ k2.foo;
+ >k2.foo : any

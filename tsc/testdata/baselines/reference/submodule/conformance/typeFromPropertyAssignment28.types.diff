@@ -1,0 +1,14 @@
+--- old.typeFromPropertyAssignment28.types
++++ new.typeFromPropertyAssignment28.types
+@@= skipped -28, +28 lines =@@
+ >C : typeof C
+ 
+ c.p
+->c.p : number
++>c.p : any
+ >c : C
+->p : number
++>p : any
+ 
+ c.q
+ >c.q : any

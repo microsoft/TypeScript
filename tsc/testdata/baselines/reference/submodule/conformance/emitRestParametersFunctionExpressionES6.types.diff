@@ -1,0 +1,13 @@
+--- old.emitRestParametersFunctionExpressionES6.types
++++ new.emitRestParametersFunctionExpressionES6.types
+@@= skipped -19, +19 lines =@@
+ var funcExp3 = (function (...rest) { })()
+ >funcExp3 : void
+ >(function (...rest) { })() : void
+->(function (...rest) { }) : () => void
+->function (...rest) { } : () => void
+->rest : []
++>(function (...rest) { }) : (...rest: any[]) => void
++>function (...rest) { } : (...rest: any[]) => void
++>rest : any[]
+ 

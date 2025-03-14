@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility5.ts] ////
+
+=== classConstructorAccessibility5.ts ===
+class Base {
+>Base : Base
+
+    protected constructor() { }
+}
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    static make() { new Base() } // ok
+>make : () => void
+>new Base() : Base
+>Base : typeof Base
+}
+
+class Unrelated {
+>Unrelated : Unrelated
+
+    static fake() { new Base() } // error
+>fake : () => void
+>new Base() : Base
+>Base : typeof Base
+}
+

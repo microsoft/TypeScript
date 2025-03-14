@@ -1,0 +1,10 @@
+--- old.expr.types
++++ new.expr.types
+@@= skipped -1, +1 lines =@@
+ 
+ === expr.ts ===
+ interface I {
++>I : I
+ }
+ 
+ enum E {

@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports01.ts] ////
+
+=== m1.ts ===
+export default class foo {
+>foo : default
+
+}
+
+export default function bar() {
+>bar : typeof default
+
+}
+
+var x = 10;
+>x : number
+>10 : 10
+
+export default x;
+>x : number
+
+=== m2.ts ===
+import Entity from "./m1"
+>Entity : typeof default
+
+Entity();
+>Entity() : void
+>Entity : typeof default
+

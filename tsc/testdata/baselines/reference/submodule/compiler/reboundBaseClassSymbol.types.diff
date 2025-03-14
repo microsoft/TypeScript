@@ -1,0 +1,17 @@
+--- old.reboundBaseClassSymbol.types
++++ new.reboundBaseClassSymbol.types
+@@= skipped -1, +1 lines =@@
+ 
+ === reboundBaseClassSymbol.ts ===
+ interface A { a: number; }
++>A : A
+ >a : number
+ 
+ module Foo {
+@@= skipped -10, +11 lines =@@
+ >1 : 1
+ 
+     interface B extends A { b: string; } 
++>B : B
+ >b : string
+ }

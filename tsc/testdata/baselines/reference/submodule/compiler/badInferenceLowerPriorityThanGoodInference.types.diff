@@ -1,0 +1,41 @@
+--- old.badInferenceLowerPriorityThanGoodInference.types
++++ new.badInferenceLowerPriorityThanGoodInference.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #13118
+ 
+ interface Foo<A> {
++>Foo : Foo<A>
++>A : A
++
+     a: A;
+ >a : A
+ 
+@@= skipped -10, +13 lines =@@
+ 
+ declare function canYouInferThis<A>(fn: () => Foo<A>): A;
+ >canYouInferThis : <A>(fn: () => Foo<A>) => A
++>A : A
+ >fn : () => Foo<A>
+ 
+ const result = canYouInferThis(() => ({
+@@= skipped -32, +33 lines =@@
+ 
+ function goofus <ARGS extends any[]> (f: (...args: ARGS) => any ) {}
+ >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
++>ARGS : ARGS
+ >f : (...args: ARGS) => any
+ >args : ARGS
+ 
+ goofus((a: string) => ({ dog() { return a; } }));
+ >goofus((a: string) => ({ dog() { return a; } })) : void
+ >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
+->(a: string) => ({ dog() { return a; } }) : (a: string) => { dog(): string; }
++>(a: string) => ({ dog() { return a; } }) : (a: string) => { dog: () => string; }
+ >a : string
+->({ dog() { return a; } }) : { dog(): string; }
+->{ dog() { return a; } } : { dog(): string; }
++>({ dog() { return a; } }) : { dog: () => string; }
++>{ dog() { return a; } } : { dog: () => string; }
+ >dog : () => string
+ >a : string
+ 

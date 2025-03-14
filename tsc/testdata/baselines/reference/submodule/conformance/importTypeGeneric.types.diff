@@ -1,0 +1,36 @@
+--- old.importTypeGeneric.types
++++ new.importTypeGeneric.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.d.ts ===
+ export interface Foo {
++>Foo : Foo
++
+     a: string;
+ >a : string
+ }
+ === b.d.ts ===
+ export interface Foo {
++>Foo : Foo
++
+     a: number;
+ >a : number
+ }
+ === usage.ts ===
+ export function getFooFrom<T extends "./a" | "./b">(v: T): import(T).Foo {
+->getFooFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo
++>getFooFrom : <T extends "./a" | "./b">(v: T) => any
++>T : T
+ >v : T
+ 
+     return undefined as any;
+@@= skipped -19, +24 lines =@@
+ }
+ 
+ export function getFooValueFrom<T extends "./a" | "./b">(v: T): import(T).Foo["a"] {
+->getFooValueFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo["a"]
++>getFooValueFrom : <T extends "./a" | "./b">(v: T) => any
++>T : T
+ >v : T
+ 
+     return undefined as any;

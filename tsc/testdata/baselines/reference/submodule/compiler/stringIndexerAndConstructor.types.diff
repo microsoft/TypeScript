@@ -1,0 +1,11 @@
+--- old.stringIndexerAndConstructor.types
++++ new.stringIndexerAndConstructor.types
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     [s: string]: number;
+ >s : string
+ 

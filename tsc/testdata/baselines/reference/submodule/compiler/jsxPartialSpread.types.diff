@@ -1,0 +1,51 @@
+--- old.jsxPartialSpread.types
++++ new.jsxPartialSpread.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsxPartialSpread.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === jsxPartialSpread.tsx ===
+ /// <reference path="react16.d.ts" />
+ const Select = (p: {value?: unknown}) => <p></p>;
+->Select : (p: { value?: unknown; }) => JSX.Element
+->(p: {value?: unknown}) => <p></p> : (p: { value?: unknown; }) => JSX.Element
++>Select : (p: { value?: unknown; }) => any
++>(p: {value?: unknown}) => <p></p> : (p: { value?: unknown; }) => any
+ >p : { value?: unknown; }
+ >value : unknown
+-><p></p> : JSX.Element
++><p></p> : any
+ >p : { value?: unknown; }
+ >p : { value?: unknown; }
+ 
+ import React from 'react';
+->React : typeof React
++>React : any
+ 
+ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
+->Repro : ({ SelectProps }: { SelectProps?: Partial<Parameters<typeof Select>[0]>; }) => JSX.Element
++>Repro : (__0: { SelectProps?: Partial<{ value?: unknown; }> | undefined; }) => any
+ >SelectProps : Partial<{ value?: unknown; }>
+ >{} : {}
+ >SelectProps : Partial<{ value?: unknown; }> | undefined
+->Select : (p: { value?: unknown; }) => JSX.Element
+ 
+     return (
+->(        <Select value={'test'} {...SelectProps} />    ) : JSX.Element
++>(        <Select value={'test'} {...SelectProps} />    ) : any
+ 
+         <Select value={'test'} {...SelectProps} />
+-><Select value={'test'} {...SelectProps} /> : JSX.Element
+->Select : (p: { value?: unknown; }) => JSX.Element
+->value : string
++><Select value={'test'} {...SelectProps} /> : any
++>Select : (p: { value?: unknown; }) => any
++>value : any
+ >'test' : "test"
+ >SelectProps : Partial<{ value?: unknown; }>
+ 

@@ -1,0 +1,14 @@
+--- old.parserModuleDeclaration4.d.types
++++ new.parserModuleDeclaration4.d.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.d.ts] ////
+ 
+ === parserModuleDeclaration4.d.ts ===
+-
+ module M {
++>M : any
++
+   declare module M1 {
++>M1 : any
+   }
+ }

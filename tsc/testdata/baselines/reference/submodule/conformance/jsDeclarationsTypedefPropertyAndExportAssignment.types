@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefPropertyAndExportAssignment.ts] ////
+
+=== index.js ===
+const {taskGroups, taskNameToGroup} = require('./module.js');
+>taskGroups : any
+>taskNameToGroup : any
+>require('./module.js') : any
+>require : any
+>'./module.js' : "./module.js"
+
+/** @typedef {import('./module.js').TaskGroup} TaskGroup */
+
+/**
+ * @typedef TaskNode
+ * @prop {TaskNode[]} children
+ * @prop {TaskNode|undefined} parent
+ * @prop {TaskGroup} group
+ */
+
+/** @typedef {{timers: Map<string, TaskNode>}} PriorTaskData */
+class MainThreadTasks {
+>MainThreadTasks : MainThreadTasks
+
+    /**
+     * @param {TaskGroup} x
+     * @param {TaskNode} y
+     */
+    constructor(x, y){}
+>x : any
+>y : any
+}
+
+module.exports = MainThreadTasks;
+>module.exports = MainThreadTasks : typeof MainThreadTasks
+>module.exports : any
+>module : any
+>exports : any
+>MainThreadTasks : typeof MainThreadTasks
+

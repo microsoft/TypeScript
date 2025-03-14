@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/ambientExportDefaultErrors.ts] ////
+
+=== consumer.ts ===
+
+/// <reference path="./indirection.d.ts" />
+/// <reference path="./indirection2.d.ts" />
+import "indirect";
+import "foo";
+import "indirect2";
+import "foo2";
+=== foo.d.ts ===
+export default 2 + 2;
+>2 + 2 : number
+>2 : 2
+>2 : 2
+
+export as namespace Foo;
+>Foo : typeof import("foo")
+
+=== foo2.d.ts ===
+export = 2 + 2;
+>2 + 2 : number
+>2 : 2
+>2 : 2
+
+export as namespace Foo2;
+>Foo2 : number
+
+=== indirection.d.ts ===
+/// <reference path="./foo.d.ts" />
+declare module "indirect" {
+>"indirect" : typeof import("indirect")
+
+    export default typeof Foo.default;
+>typeof Foo.default : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>Foo.default : number
+>Foo : typeof import("foo")
+>default : number
+}
+
+=== indirection2.d.ts ===
+/// <reference path="./foo2.d.ts" />
+declare module "indirect2" {
+>"indirect2" : typeof import("indirect2")
+
+    export = typeof Foo2;
+>typeof Foo2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>Foo2 : number
+}
+

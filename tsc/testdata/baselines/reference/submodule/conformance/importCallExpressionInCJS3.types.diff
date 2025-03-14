@@ -1,0 +1,14 @@
+--- old.importCallExpressionInCJS3.types
++++ new.importCallExpressionInCJS3.types
+@@= skipped -16, +16 lines =@@
+ 
+     x.then(value => {
+ >x.then(value => {        let b = new value.B();        b.print();    }) : Promise<void>
+->x.then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>x.then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >x : Promise<any>
+->then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >value => {        let b = new value.B();        b.print();    } : (value: any) => void
+ >value : any
+ 

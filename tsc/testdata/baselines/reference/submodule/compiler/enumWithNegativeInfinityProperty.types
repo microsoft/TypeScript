@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/enumWithNegativeInfinityProperty.ts] ////
+
+=== enumWithNegativeInfinityProperty.ts ===
+enum A {
+>A : A."-Infinity"
+
+    "-Infinity" = 1
+>"-Infinity" : A."-Infinity"
+>1 : 1
+}
+

@@ -1,0 +1,24 @@
+--- old.baseExpressionTypeParameters.types
++++ new.baseExpressionTypeParameters.types
+@@= skipped -4, +4 lines =@@
+ 
+ function base<T>() {
+ >base : <T>() => typeof Base
++>T : T
+ 
+     class Base {
+->Base : Base
++>Base : Base<T>
+ 
+         static prop: T;
+ >prop : T
+@@= skipped -13, +14 lines =@@
+ 
+ class Gen<T> extends base<T>() {}  // Error, T not in scope
+ >Gen : Gen<T>
+->base<T>() : base<T>.Base
++>T : T
++>base<T>() : Base<T>
+ >base : <T>() => typeof Base
+ 
+ class Spec extends Gen<string> {}

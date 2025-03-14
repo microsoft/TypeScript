@@ -1,0 +1,11 @@
+--- old.unusedDestructuring.types
++++ new.unusedDestructuring.types
+@@= skipped -33, +33 lines =@@
+ >o : any
+ 
+ function f({ a, b }, { c, d }, { e }) {
+->f : ({ a, b }: { a: any; b: any; }, { c, d }: { c: any; d: any; }, { e }: { e: any; }) => void
++>f : (__0: { a: any; b: any; }, __1: { c: any; d: any; }, __2: { e: any; }) => void
+ >a : any
+ >b : any
+ >c : any

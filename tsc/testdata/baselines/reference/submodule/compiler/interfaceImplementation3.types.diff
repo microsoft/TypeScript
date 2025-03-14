@@ -1,0 +1,11 @@
+--- old.interfaceImplementation3.types
++++ new.interfaceImplementation3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceImplementation3.ts ===
+ interface I1 {
++>I1 : I1
++
+     iObj:{ };
+ >iObj : {}
+ 

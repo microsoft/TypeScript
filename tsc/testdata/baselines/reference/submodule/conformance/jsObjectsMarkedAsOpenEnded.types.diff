@@ -1,0 +1,69 @@
+--- old.jsObjectsMarkedAsOpenEnded.types
++++ new.jsObjectsMarkedAsOpenEnded.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ var variable = {};
+->variable : typeof variable
++>variable : {}
+ >{} : {}
+ 
+ variable.a = 0;
+ >variable.a = 0 : 0
+->variable.a : number
+->variable : typeof variable
+->a : number
++>variable.a : any
++>variable : {}
++>a : any
+ >0 : 0
+ 
+ class C {
+@@= skipped -27, +27 lines =@@
+ 
+         this.member.a = 0;
+ >this.member.a = 0 : 0
+->this.member.a : error
+->this.member : {}
++>this.member.a : any
++>this.member : any
+ >this : this
+->member : {}
++>member : any
+ >a : any
+ >0 : 0
+     }
+@@= skipped -21, +21 lines =@@
+ 
+ obj.property.a = 0;
+ >obj.property.a = 0 : 0
+->obj.property.a : error
++>obj.property.a : any
+ >obj.property : {}
+ >obj : { property: {}; }
+ >property : {}
+@@= skipped -23, +23 lines =@@
+ === b.ts ===
+ variable.a = 1;
+ >variable.a = 1 : 1
+->variable.a : number
+->variable : typeof variable
+->a : number
++>variable.a : any
++>variable : {}
++>a : any
+ >1 : 1
+ 
+ (new C()).member.a = 1;
+ >(new C()).member.a = 1 : 1
+ >(new C()).member.a : any
+->(new C()).member : {}
++>(new C()).member : any
+ >(new C()) : C
+ >new C() : C
+ >C : typeof C
+->member : {}
++>member : any
+ >a : any
+ >1 : 1
+ 

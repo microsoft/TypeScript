@@ -1,0 +1,64 @@
+--- old.genericInferenceDefaultTypeParameterJsxReact.types
++++ new.genericInferenceDefaultTypeParameterJsxReact.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 5,000
+-Type Count: 10,000
+-Instantiation count: 250,000
+-Symbol count: 100,000
+-
+ === genericInferenceDefaultTypeParameterJsxReact.tsx ===
+ /// <reference path="react16.d.ts" />
+ 
+ // Repro from #50858
+ 
+ import React, { ComponentPropsWithRef, ElementType, ReactNode } from 'react';
+->React : typeof React
++>React : any
+ >ComponentPropsWithRef : any
+ >ElementType : any
+ >ReactNode : any
+ 
+ type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { children?: ReactNode };
+->ButtonBaseProps : ButtonBaseProps<T>
+->children : React.ReactNode
++>ButtonBaseProps : any
++>T : T
++>children : any
+ 
+ function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
+->Component : <T extends ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
+->props : ButtonBaseProps<T>
++>Component : <T extends ElementType>(props: any) => any
++>T : T
++>props : any
+ 
+     return <></>;
+-><></> : JSX.Element
++><></> : any
+ }
+ 
+ const v1 = <Component onClick={e => e.preventDefault()} />;
+->v1 : JSX.Element
+-><Component onClick={e => e.preventDefault()} /> : JSX.Element
+->Component : <T extends ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
+->onClick : (e: React.MouseEvent<HTMLSpanElement>) => void
+->e => e.preventDefault() : (e: React.MouseEvent<HTMLSpanElement>) => void
+->e : React.MouseEvent<HTMLSpanElement>
+->e.preventDefault() : void
+->e.preventDefault : () => void
+->e : React.MouseEvent<HTMLSpanElement>
+->preventDefault : () => void
++>v1 : any
++><Component onClick={e => e.preventDefault()} /> : any
++>Component : <T extends ElementType>(props: any) => any
++>onClick : any
++>e => e.preventDefault() : (e: any) => any
++>e : any
++>e.preventDefault() : any
++>e.preventDefault : any
++>e : any
++>preventDefault : any
+ 

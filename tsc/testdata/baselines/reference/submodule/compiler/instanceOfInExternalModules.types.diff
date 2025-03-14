@@ -1,0 +1,24 @@
+--- old.instanceOfInExternalModules.types
++++ new.instanceOfInExternalModules.types
+@@= skipped -2, +2 lines =@@
+ === instanceOfInExternalModules_1.ts ===
+ ///<reference path='instanceOfInExternalModules_require.ts'/>
+ import Bar = require("instanceOfInExternalModules_require");
+->Bar : typeof Bar
++>Bar : any
+ 
+ function IsFoo(value: any): boolean {
+ >IsFoo : (value: any) => boolean
+@@= skipped -9, +9 lines =@@
+     return value instanceof Bar.Foo;
+ >value instanceof Bar.Foo : boolean
+ >value : any
+->Bar.Foo : typeof Bar.Foo
+->Bar : typeof Bar
+->Foo : typeof Bar.Foo
++>Bar.Foo : any
++>Bar : any
++>Foo : any
+ }
+ 
+ === instanceOfInExternalModules_require.ts ===

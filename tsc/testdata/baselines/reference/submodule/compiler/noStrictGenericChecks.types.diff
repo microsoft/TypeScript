@@ -1,0 +1,17 @@
+--- old.noStrictGenericChecks.types
++++ new.noStrictGenericChecks.types
+@@= skipped -2, +2 lines =@@
+ === noStrictGenericChecks.ts ===
+ type A = <T, U>(x: T, y: U) => [T, U];
+ >A : A
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+ type B = <S>(x: S, y: S) => [S, S];
+ >B : B
++>S : S
+ >x : S
+ >y : S
+ 

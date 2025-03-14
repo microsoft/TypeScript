@@ -1,0 +1,27 @@
+--- old.chainedImportAlias.types
++++ new.chainedImportAlias.types
+@@= skipped -1, +1 lines =@@
+ 
+ === chainedImportAlias_file1.ts ===
+ import x = require('./chainedImportAlias_file0');
+->x : typeof x
++>x : typeof import("chainedImportAlias_file0")
+ 
+ import y = x;
+->y : typeof x
+->x : typeof x
++>y : typeof import("chainedImportAlias_file0")
++>x : typeof import("chainedImportAlias_file0")
+ 
+ y.m.foo();
+ >y.m.foo() : void
+ >y.m.foo : () => void
+->y.m : typeof x.m
+->y : typeof x
+->m : typeof x.m
++>y.m : typeof m
++>y : typeof import("chainedImportAlias_file0")
++>m : typeof m
+ >foo : () => void
+ 
+ === chainedImportAlias_file0.ts ===

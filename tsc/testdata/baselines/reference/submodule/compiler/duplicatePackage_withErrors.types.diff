@@ -1,0 +1,30 @@
+--- old.duplicatePackage_withErrors.types
++++ new.duplicatePackage_withErrors.types
+@@= skipped -5, +5 lines =@@
+ >xa : number
+ 
+ import { x as xb } from "b";
+->x : number
+->xb : number
++>x : any
++>xb : any
+ 
+ === /node_modules/a/index.d.ts ===
+ export { x } from "x";
+@@= skipped -16, +16 lines =@@
+ 
+ === /node_modules/b/index.d.ts ===
+ export { x } from "x";
+->x : number
++>x : any
+ 
+ === /node_modules/b/node_modules/x/index.d.ts ===
+ content not parsed
+->x : number
+->1 + 1 : number
+->1 : 1
+->1 : 1
++>content : any
++>not : any
++>parsed : any
+ 

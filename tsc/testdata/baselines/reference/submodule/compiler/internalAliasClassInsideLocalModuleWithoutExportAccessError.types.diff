@@ -1,0 +1,13 @@
+--- old.internalAliasClassInsideLocalModuleWithoutExportAccessError.types
++++ new.internalAliasClassInsideLocalModuleWithoutExportAccessError.types
+@@= skipped -46, +46 lines =@@
+ >d : any
+ >new m2.m3.c() : any
+ >m2.m3.c : any
+->m2.m3 : typeof m2.m3
++>m2.m3 : typeof m3
+ >m2 : typeof m2
+->m3 : typeof m2.m3
++>m3 : typeof m3
+ >c : any
+ 

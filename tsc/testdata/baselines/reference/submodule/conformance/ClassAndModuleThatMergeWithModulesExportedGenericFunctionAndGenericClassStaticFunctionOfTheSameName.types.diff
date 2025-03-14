@@ -1,0 +1,26 @@
+--- old.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.types
++++ new.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.types
+@@= skipped -2, +2 lines =@@
+ === ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.ts ===
+ class clodule<T> {
+ >clodule : clodule<T>
++>T : T
+ 
+     id: string;
+ >id : string
+@@= skipped -9, +10 lines =@@
+ 
+     static fn<U>(id: U) { }
+ >fn : <U>(id: U) => void
++>U : U
+ >id : U
+ }
+ 
+@@= skipped -9, +10 lines =@@
+     // error: duplicate identifier expected
+     export function fn<T>(x: T, y: T): T {
+ >fn : <T>(x: T, y: T) => T
++>T : T
+ >x : T
+ >y : T
+ 

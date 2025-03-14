@@ -1,0 +1,86 @@
+--- old.checkJsdocTypeTag6.types
++++ new.checkJsdocTypeTag6.types
+@@= skipped -10, +10 lines =@@
+ 
+ /** @type {{ prop: string }} */
+ var g = function (prop) {
+->g : { prop: string; }
++>g : (prop: any) => void
+ >function (prop) {} : (prop: any) => void
+ >prop : any
+ }
+ 
+ /** @type {(a: number) => number} */
+ function add1(a, b) { return a + b; }
+->add1 : (a: number) => number
+->a : number
++>add1 : (a: any, b: any) => any
++>a : any
+ >b : any
+ >a + b : any
+->a : number
++>a : any
+ >b : any
+ 
+ /** @type {(a: number, b: number) => number} */
+ function add2(a, b) { return a + b; }
+->add2 : (a: number, b: number) => number
+->a : number
+->b : number
+->a + b : number
+->a : number
+->b : number
++>add2 : (a: any, b: any) => any
++>a : any
++>b : any
++>a + b : any
++>a : any
++>b : any
+ 
+ // TODO: Should be an error since signature doesn't match.
+ /** @type {(a: number, b: number, c: number) => number} */
+ function add3(a, b) { return a + b; }
+->add3 : (a: number, b: number, c: number) => number
+->a : number
+->b : number
+->a + b : number
+->a : number
+->b : number
++>add3 : (a: any, b: any) => any
++>a : any
++>b : any
++>a + b : any
++>a : any
++>b : any
+ 
+ // Confirm initializers are compatible.
+ // They can't have more parameters than the type/context.
+ 
+ /** @type {() => void} */
+ function funcWithMoreParameters(more) {} // error
+->funcWithMoreParameters : () => void
++>funcWithMoreParameters : (more: any) => void
+ >more : any
+ 
+ /** @type {() => void} */
+ const variableWithMoreParameters = function (more) {}; // error
+->variableWithMoreParameters : () => void
++>variableWithMoreParameters : (more: any) => void
+ >function (more) {} : (more: any) => void
+ >more : any
+ 
+ /** @type {() => void} */
+ const arrowWithMoreParameters = (more) => {}; // error
+->arrowWithMoreParameters : () => void
++>arrowWithMoreParameters : (more: any) => void
+ >(more) => {} : (more: any) => void
+ >more : any
+ 
+ ({
+->({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters(): void; }
+->{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters(): void; }
++>({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters: (more: any) => void; }
++>{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters: (more: any) => void; }
+ 
+   /** @type {() => void} */
+   methodWithMoreParameters(more) {}, // error

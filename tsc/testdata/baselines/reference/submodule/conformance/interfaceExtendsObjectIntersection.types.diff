@@ -1,0 +1,102 @@
+--- old.interfaceExtendsObjectIntersection.types
++++ new.interfaceExtendsObjectIntersection.types
+@@= skipped -23, +23 lines =@@
+ 
+ type T7 = { [P in 'a' | 'b' | 'c']: string };
+ >T7 : T7
++>P : P
+ 
+ interface I1 extends T1 { x: string }
++>I1 : I1
+ >x : string
+ 
+ interface I2 extends T2 { x: string }
++>I2 : I2
+ >x : string
+ 
+ interface I3 extends T3 { x: string }
++>I3 : I3
+ >x : string
+ 
+ interface I4 extends T4 { x: string }
++>I4 : I4
+ >x : string
+ 
+ interface I5 extends T5 { x: string }
++>I5 : I5
+ >x : string
+ 
+ interface I6 extends T6 { x: string }
++>I6 : I6
+ >x : string
+ 
+ interface I7 extends T7 { x: string }
++>I7 : I7
+ >x : string
+ 
+ type Constructor<T> = new () => T;
+ >Constructor : Constructor<T>
++>T : T
+ 
+ declare function Constructor<T>(): Constructor<T>;
+ >Constructor : <T>() => Constructor<T>
++>T : T
+ 
+ class C1 extends Constructor<I1>() { x: string }
+ >C1 : C1
+@@= skipped -91, +101 lines =@@
+ 
+ type T10 = typeof fx;
+ >T10 : (x: string) => string
+->fx : (x: string) => string
+ 
+ type T11 = typeof CX;
+ >T11 : typeof CX
+->CX : typeof CX
+ 
+ type T12 = typeof EX;
+ >T12 : typeof EX
+->EX : typeof EX
+ 
+ type T13 = typeof NX;
+ >T13 : typeof NX
+->NX : typeof NX
+ 
+ interface I10 extends T10 { x: string }
++>I10 : I10
+ >x : string
+ 
+ interface I11 extends T11 { x: string }
++>I11 : I11
+ >x : string
+ 
+ interface I12 extends T12 { x: string }
++>I12 : I12
+ >x : string
+ 
+ interface I13 extends T13 { x: string }
++>I13 : I13
+ >x : string
+ 
+ type Identifiable<T> = { _id: string } & T;
+ >Identifiable : Identifiable<T>
++>T : T
+ >_id : string
+ 
+ interface I20 extends Partial<T1> { x: string }
++>I20 : I20
+ >x : string
+ 
+ interface I21 extends Readonly<T1> { x: string }
++>I21 : I21
+ >x : string
+ 
+ interface I22 extends Identifiable<T1> { x: string }
++>I22 : I22
+ >x : string
+ 
+ interface I23 extends Identifiable<T1 & { b: number}> { x: string }
++>I23 : I23
+ >b : number
+ >x : string
+ 

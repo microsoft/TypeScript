@@ -1,0 +1,29 @@
+--- old.expandoFunctionNullishProperty.types
++++ new.expandoFunctionNullishProperty.types
+@@= skipped -3, +3 lines =@@
+ // mentioned in https://github.com/microsoft/TypeScript/issues/54220
+ 
+ interface TestNull {
++>TestNull : TestNull
++
+   (): void;
+   readonly prop: null;
+ >prop : null
+@@= skipped -22, +24 lines =@@
+ }
+ 
+ interface TestNull2 {
++>TestNull2 : TestNull2
++
+   (): void;
+   prop: string | null;
+ >prop : string | null
+@@= skipped -22, +24 lines =@@
+ }
+ 
+ interface TestUndefined {
++>TestUndefined : TestUndefined
++
+   (): void;
+   readonly prop: undefined;
+ >prop : undefined

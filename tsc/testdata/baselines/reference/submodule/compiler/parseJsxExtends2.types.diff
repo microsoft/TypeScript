@@ -1,0 +1,10 @@
+--- old.parseJsxExtends2.types
++++ new.parseJsxExtends2.types
+@@= skipped -10, +10 lines =@@
+     return <T extends/>
+ ><T extends/> : any
+ >T : any
+->extends : true
++>extends : any
+ }
+ 

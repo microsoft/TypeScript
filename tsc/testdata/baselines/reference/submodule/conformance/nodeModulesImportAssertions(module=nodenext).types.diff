@@ -1,0 +1,13 @@
+--- old.nodeModulesImportAssertions(module=nodenext).types
++++ new.nodeModulesImportAssertions(module=nodenext).types
+@@= skipped -10, +10 lines =@@
+ >type : any
+ 
+ const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
+->json2 : Promise<{ default: { name: string; private: boolean; type: string; }; }>
+->import("./package.json", { assert: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>
++>json2 : Promise<{ name: string; private: boolean; type: string; default: { name: string; private: boolean; type: string; }; }>
++>import("./package.json", { assert: { type: "json" } }) : Promise<{ name: string; private: boolean; type: string; default: { name: string; private: boolean; type: string; }; }>
+ >"./package.json" : "./package.json"
+ >{ assert: { type: "json" } } : { assert: { type: string; }; }
+ >assert : { type: string; }

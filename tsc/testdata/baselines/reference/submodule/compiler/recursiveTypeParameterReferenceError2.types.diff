@@ -1,0 +1,22 @@
+--- old.recursiveTypeParameterReferenceError2.types
++++ new.recursiveTypeParameterReferenceError2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === recursiveTypeParameterReferenceError2.ts ===
+ interface List<T> {
++>List : List<T>
++>T : T
++
+     data: T;
+ >data : T
+ 
+@@= skipped -11, +14 lines =@@
+ }
+ 
+ interface List2<T> {
++>List2 : List2<T>
++>T : T
++
+     data: T;
+ >data : T
+ 

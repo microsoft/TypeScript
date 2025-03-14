@@ -1,0 +1,13 @@
+--- old.typeCheckObjectLiteralMethodBody.types
++++ new.typeCheckObjectLiteralMethodBody.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeCheckObjectLiteralMethodBody.ts ===
+ var foo = { bar() { return undefined } };
+->foo : { bar(): any; }
+->{ bar() { return undefined } } : { bar(): any; }
++>foo : { bar: () => any; }
++>{ bar() { return undefined } } : { bar: () => any; }
+ >bar : () => any
+ >undefined : undefined
+ 

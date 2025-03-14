@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution4_classic.ts] ////
+
+=== c:/root/folder1/file1.ts ===
+import {x} from "folder2/file2"
+>x : any
+
+declare function use(a: any): void;
+>use : (a: any) => void
+>a : any
+
+use(x.toExponential());
+>use(x.toExponential()) : void
+>use : (a: any) => void
+>x.toExponential() : any
+>x.toExponential : any
+>x : any
+>toExponential : any
+
+=== c:/root/folder2/file2.ts ===
+import {x as a} from "./file3"  // found with baseurl
+>x : number
+>a : number
+
+import {y as b} from "file4"    // found with fallback
+>y : any
+>b : any
+
+export var x = a + b;
+>x : any
+>a + b : any
+>a : number
+>b : any
+
+=== c:/root/folder2/file3.ts ===
+export var x = 1;
+>x : number
+>1 : 1
+

@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/exportImportMultipleFiles.ts] ////
+
+=== exportImportMultipleFiles_userCode.ts ===
+import lib = require('./exportImportMultipleFiles_library');
+>lib : typeof import("exportImportMultipleFiles_library")
+
+lib.math.add(3, 4); // Shouldnt be error
+>lib.math.add(3, 4) : any
+>lib.math.add : any
+>lib.math : any
+>lib : typeof import("exportImportMultipleFiles_library")
+>math : any
+>add : any
+>3 : 3
+>4 : 4
+
+=== exportImportMultipleFiles_library.ts ===
+export import math = require("exportImportMultipleFiles_math");
+>math : any
+
+math.add(3, 4); // OK
+>math.add(3, 4) : any
+>math.add : any
+>math : any
+>add : any
+>3 : 3
+>4 : 4
+

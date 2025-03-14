@@ -1,0 +1,13 @@
+--- old.moduleResolutionAsTypeReferenceDirective.types
++++ new.moduleResolutionAsTypeReferenceDirective.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ import { a2 } from "phaser";
+->a2 : number
++>a2 : any
+ 
+-=== /typings/phaser/types/phaser.d.ts ===
+-export const a2: number;
+->a2 : number
+-

@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/contextuallyTypedJsxAttribute2.tsx] ////
+
+=== contextuallyTypedJsxAttribute2.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : any
+
+import { ComponentPropsWithRef, ElementType } from "react";
+>ComponentPropsWithRef : any
+>ElementType : any
+
+function UnwrappedLink<T extends ElementType = ElementType>(
+>UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => any
+>T : T
+
+  props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">,
+>props : Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">
+
+) {
+  return <a></a>;
+><a></a> : any
+>a : any
+>a : any
+}
+
+<UnwrappedLink onClick={(e) => {}} />;
+><UnwrappedLink onClick={(e) => {}} /> : any
+>UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => any
+>onClick : any
+>(e) => {} : (e: any) => void
+>e : any
+
+function UnwrappedLink2<T extends ElementType = ElementType>(
+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
+>T : T
+
+  props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & {
+>props : Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }
+
+    as?: T;
+>as : T | undefined
+
+  },
+) {
+  return <a></a>;
+><a></a> : any
+>a : any
+>a : any
+}
+
+<UnwrappedLink2 onClick={(e) => {}} />;
+><UnwrappedLink2 onClick={(e) => {}} /> : any
+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
+>onClick : any
+>(e) => {} : (e: any) => void
+>e : any
+
+<UnwrappedLink2 as="button" onClick={(e) => {}} />;
+><UnwrappedLink2 as="button" onClick={(e) => {}} /> : any
+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
+>as : any
+>onClick : any
+>(e) => {} : (e: any) => void
+>e : any
+

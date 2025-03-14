@@ -1,0 +1,10 @@
+--- old.declarationEmitClassPrivateConstructor2.types
++++ new.declarationEmitClassPrivateConstructor2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitClassPrivateConstructor2.ts ===
+ interface PrivateInterface {
++>PrivateInterface : PrivateInterface
+ }
+ 
+ export class ExportedClass1 {

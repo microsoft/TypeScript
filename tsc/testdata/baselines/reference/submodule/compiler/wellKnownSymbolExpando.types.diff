@@ -1,0 +1,18 @@
+--- old.wellKnownSymbolExpando.types
++++ new.wellKnownSymbolExpando.types
+@@= skipped -1, +1 lines =@@
+ 
+ === wellKnownSymbolExpando.ts ===
+ function f() {}
+->f : typeof f
++>f : { (): void; f[Symbol.iterator]: () => void; }
+ 
+ f[Symbol.iterator] = function() {}
+ >f[Symbol.iterator] = function() {} : () => void
+->f[Symbol.iterator] : any
+->f : typeof f
++>f[Symbol.iterator] : () => void
++>f : { (): void; f[Symbol.iterator]: () => void; }
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol

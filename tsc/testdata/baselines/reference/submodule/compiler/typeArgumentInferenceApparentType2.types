@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/typeArgumentInferenceApparentType2.ts] ////
+
+=== typeArgumentInferenceApparentType2.ts ===
+function method<T>(iterable: Iterable<T>): T {
+>method : <T>(iterable: Iterable<T, any, any>) => T
+>T : T
+>iterable : Iterable<T, any, any>
+
+    function inner<U extends Iterable<T>>() {
+>inner : <U extends Iterable<T, any, any>>() => void
+>U : U
+
+        var u: U;
+>u : U
+
+        var res: T = method(u);
+>res : T
+>method(u) : T
+>method : <T>(iterable: Iterable<T, any, any>) => T
+>u : U
+    }
+    return;
+}

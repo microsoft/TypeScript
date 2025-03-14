@@ -1,0 +1,69 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements02.ts] ////
+
+=== stringLiteralsWithSwitchStatements02.ts ===
+let x: "foo";
+>x : "foo"
+
+let y: "foo" | "bar";
+>y : "bar" | "foo"
+
+let b: boolean;
+>b : boolean
+
+b = x == y;
+>b = x == y : boolean
+>b : boolean
+>x == y : boolean
+>x : "foo"
+>y : "bar" | "foo"
+
+b = "foo" == y
+>b = "foo" == y : boolean
+>b : boolean
+>"foo" == y : boolean
+>"foo" : "foo"
+>y : "bar" | "foo"
+
+b = y == "foo";
+>b = y == "foo" : boolean
+>b : boolean
+>y == "foo" : boolean
+>y : "bar" | "foo"
+>"foo" : "foo"
+
+b = "foo" == "bar";
+>b = "foo" == "bar" : boolean
+>b : boolean
+>"foo" == "bar" : boolean
+>"foo" : "foo"
+>"bar" : "bar"
+
+b = x != y;
+>b = x != y : boolean
+>b : boolean
+>x != y : boolean
+>x : "foo"
+>y : "bar" | "foo"
+
+b = "foo" != y
+>b = "foo" != y : boolean
+>b : boolean
+>"foo" != y : boolean
+>"foo" : "foo"
+>y : "bar" | "foo"
+
+b = y != "foo";
+>b = y != "foo" : boolean
+>b : boolean
+>y != "foo" : boolean
+>y : "bar" | "foo"
+>"foo" : "foo"
+
+b = "foo" != "bar";
+>b = "foo" != "bar" : boolean
+>b : boolean
+>"foo" != "bar" : boolean
+>"foo" : "foo"
+>"bar" : "bar"
+
+

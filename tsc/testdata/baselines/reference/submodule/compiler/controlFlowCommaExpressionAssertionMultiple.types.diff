@@ -1,0 +1,39 @@
+--- old.controlFlowCommaExpressionAssertionMultiple.types
++++ new.controlFlowCommaExpressionAssertionMultiple.types
+@@= skipped -2, +2 lines =@@
+ === controlFlowCommaExpressionAssertionMultiple.ts ===
+ function Narrow<T>(value: any): asserts value is T {}
+ >Narrow : <T>(value: any) => asserts value is T
++>T : T
+ >value : any
+ 
+ function func(foo: any, bar: any) {
+@@= skipped -17, +18 lines =@@
+ >bar : any
+ 
+     foo;
+->foo : number
++>foo : any
+ 
+     bar;
+->bar : string
++>bar : any
+ }
+ 
+ function func2(foo: any, bar: any, baz: any) {
+@@= skipped -26, +26 lines =@@
+ >baz : any
+ 
+     foo;
+->foo : number
++>foo : any
+ 
+     bar;
+->bar : string
++>bar : any
+ 
+     baz;
+->baz : boolean
++>baz : any
+ }
+ 

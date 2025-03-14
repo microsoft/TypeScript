@@ -1,0 +1,12 @@
+--- old.recursiveInheritanceGeneric.types
++++ new.recursiveInheritanceGeneric.types
+@@= skipped -1, +1 lines =@@
+ 
+ === recursiveInheritanceGeneric.ts ===
+ interface I5<T> extends I5<T> { 
++>I5 : I5<T>
++>T : T
++
+     foo():void;
+ >foo : () => void
+ }  

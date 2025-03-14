@@ -1,0 +1,22 @@
+--- old.reactJsxReactResolvedNodeNextEsm.types
++++ new.reactJsxReactResolvedNodeNextEsm.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ export const a = <div></div>;
+->a : error
+-><div></div> : error
++>a : any
++><div></div> : any
+ >div : any
+ >div : any
+ 
+ === node_modules/@types/react/index.d.ts ===
+ declare namespace JSX {
++>JSX : any
++
+     interface IntrinsicElements { [x: string]: any; }
++>IntrinsicElements : IntrinsicElements
+ >x : string
+ }
+ === node_modules/@types/react/jsx-runtime.d.ts ===

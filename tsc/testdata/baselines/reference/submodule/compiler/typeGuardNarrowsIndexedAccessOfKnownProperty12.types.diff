@@ -1,0 +1,10 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty12.types
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty12.types
+@@= skipped -14, +14 lines =@@
+ 
+ declare const m: { [K in E]: string | null };
+ >m : { A: string | null; B: string | null; }
++>K : K
+ 
+ if (m[E.A] !== null) {
+ >m[E.A] !== null : boolean

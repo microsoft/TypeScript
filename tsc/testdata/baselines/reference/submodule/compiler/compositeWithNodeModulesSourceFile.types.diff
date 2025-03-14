@@ -1,0 +1,21 @@
+--- old.compositeWithNodeModulesSourceFile.types
++++ new.compositeWithNodeModulesSourceFile.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /foo/test.ts ===
+ import myModule = require("myModule");
+->myModule : typeof myModule
++>myModule : typeof import("/foo/node_modules/myModule/index")
+ 
+ new myModule.c();
+->new myModule.c() : myModule.c
+->myModule.c : typeof myModule.c
+->myModule : typeof myModule
+->c : typeof myModule.c
++>new myModule.c() : c
++>myModule.c : typeof c
++>myModule : typeof import("/foo/node_modules/myModule/index")
++>c : typeof c
+ 
+ 
+ === /foo/node_modules/myModule/index.ts ===

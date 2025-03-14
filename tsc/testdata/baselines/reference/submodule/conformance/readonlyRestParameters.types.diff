@@ -1,0 +1,69 @@
+--- old.readonlyRestParameters.types
++++ new.readonlyRestParameters.types
+@@= skipped -19, +19 lines =@@
+ 
+     f2(a, b);
+ >f2(a, b) : void
+->f2 : (args_0: string, args_1: string) => void
++>f2 : (...args: [string, string]) => void
+ >a : string
+ >b : string
+ }
+@@= skipped -36, +36 lines =@@
+ }
+ 
+ function f2(...args: readonly [string, string]) {
+->f2 : (args_0: string, args_1: string) => void
+->args : readonly [string, string]
++>f2 : (...args: [string, string]) => void
++>args : [string, string]
+ 
+     f0(...args);
+ >f0(...args) : void
+ >f0 : (a: string, b: string) => void
+ >...args : string
+->args : readonly [string, string]
++>args : [string, string]
+ 
+     f1('abc', 'def');
+ >f1('abc', 'def') : void
+@@= skipped -20, +20 lines =@@
+ >f1 : (...args: readonly string[]) => void
+ >'abc' : "abc"
+ >...args : string
+->args : readonly [string, string]
++>args : [string, string]
+ 
+     f1(...args);
+ >f1(...args) : void
+ >f1 : (...args: readonly string[]) => void
+ >...args : string
+->args : readonly [string, string]
++>args : [string, string]
+ 
+     f2('abc', 'def');
+ >f2('abc', 'def') : void
+->f2 : (args_0: string, args_1: string) => void
++>f2 : (...args: [string, string]) => void
+ >'abc' : "abc"
+ >'def' : "def"
+ 
+     f2('abc', ...args);  // Error
+ >f2('abc', ...args) : void
+->f2 : (args_0: string, args_1: string) => void
++>f2 : (...args: [string, string]) => void
+ >'abc' : "abc"
+ >...args : string
+->args : readonly [string, string]
++>args : [string, string]
+ 
+     f2(...args);
+ >f2(...args) : void
+->f2 : (args_0: string, args_1: string) => void
++>f2 : (...args: [string, string]) => void
+ >...args : string
+->args : readonly [string, string]
++>args : [string, string]
+ }
+ 
+ function f4(...args: readonly string[]) {

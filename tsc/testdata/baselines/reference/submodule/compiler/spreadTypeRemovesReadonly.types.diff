@@ -1,0 +1,11 @@
+--- old.spreadTypeRemovesReadonly.types
++++ new.spreadTypeRemovesReadonly.types
+@@= skipped -1, +1 lines =@@
+ 
+ === spreadTypeRemovesReadonly.ts ===
+ interface ReadonlyData {
++>ReadonlyData : ReadonlyData
++
+     readonly value: string;
+ >value : string
+ }

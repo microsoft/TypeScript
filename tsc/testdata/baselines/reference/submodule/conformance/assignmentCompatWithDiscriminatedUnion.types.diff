@@ -1,0 +1,177 @@
+--- old.assignmentCompatWithDiscriminatedUnion.types
++++ new.assignmentCompatWithDiscriminatedUnion.types
+@@= skipped -50, +50 lines =@@
+     type T = { a: 0,     b: 1 | 4 }     // T0
+ >T : T
+ >a : 0
+->b : 4 | 1
++>b : 1 | 4
+ 
+            | { a: 1,     b: 2 }         // T1
+ >a : 1
+@@= skipped -8, +8 lines =@@
+ 
+            | { a: 2,     b: 3 | 4 };    // T2
+ >a : 2
+->b : 4 | 3
++>b : 3 | 4
+ 
+     declare let s: S;
+ >s : S
+@@= skipped -28, +28 lines =@@
+     type T = { a: 0,     b: 1 | 4 }     // T0
+ >T : T
+ >a : 0
+->b : 4 | 1
++>b : 1 | 4
+ 
+            | { a: 1,     b: 2 | 4 }     // T1
+ >a : 1
+@@= skipped -37, +37 lines =@@
+     type T = { a: 0,     b: 1 | 4 }             // T0
+ >T : T
+ >a : 0
+->b : 4 | 1
++>b : 1 | 4
+ 
+            | { a: 1,     b: 2 }                 // T1
+ >a : 1
+@@= skipped -8, +8 lines =@@
+ 
+            | { a: 2,     b: 3 | 4, c: string }; // T2
+ >a : 2
+->b : 4 | 3
++>b : 3 | 4
+ >c : string
+ 
+     declare let s: S;
+@@= skipped -157, +157 lines =@@
+ >GH30170 : typeof GH30170
+ 
+     interface Blue {
++>Blue : Blue
++
+         color: 'blue'
+ >color : "blue"
+     }
+     interface Yellow {
++>Yellow : Yellow
++
+         color?: 'yellow',
+ >color : "yellow"
+     }
+@@= skipped -12, +16 lines =@@
+ >val : Blue | Yellow
+ 
+     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
+->drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
++>drawWithColor : (currentColor: "blue" | "yellow") => void
+ >currentColor : "blue" | "yellow"
+ 
+         return draw({ color: currentColor });
+@@= skipped -17, +17 lines =@@
+ >GH12052 : typeof GH12052
+ 
+     interface ILinearAxis { type: "linear"; }
++>ILinearAxis : ILinearAxis
+ >type : "linear"
+ 
+     interface ICategoricalAxis { type: "categorical"; }
++>ICategoricalAxis : ICategoricalAxis
+ >type : "categorical"
+ 
+     type IAxis = ILinearAxis | ICategoricalAxis;
+@@= skipped -43, +45 lines =@@
+ 
+     good.type = getAxisType();
+ >good.type = getAxisType() : IAxisType
+->good.type : "linear" | "categorical"
++>good.type : "categorical" | "linear"
+ >good : IAxis
+->type : "linear" | "categorical"
++>type : "categorical" | "linear"
+ >getAxisType() : IAxisType
+ >getAxisType : () => IAxisType
+ }
+@@= skipped -12, +12 lines =@@
+ >GH18421 : typeof GH18421
+ 
+     interface ThingTypeOne {
++>ThingTypeOne : ThingTypeOne
++
+         type: 'one';
+ >type : "one"
+     }
+ 
+     interface ThingTypeTwo {
++>ThingTypeTwo : ThingTypeTwo
++
+         type: 'two';
+ >type : "two"
+     }
+@@= skipped -66, +70 lines =@@
+ >GH20889 : typeof GH20889
+ 
+     interface A1 {
++>A1 : A1
++
+         type: "A1";
+ >type : "A1"
+     }
+     interface A2 {
++>A2 : A2
++
+         type: "A2";
+ >type : "A2"
+     }
+@@= skipped -43, +47 lines =@@
+ 
+     const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+ >a : A
+->b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["a" | "b", number] | ["c", string]
++>b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["c", string] | ["a" | "b", number]
+ >b === "a" || b === "b" : boolean
+ >b === "a" : boolean
+ >b : B
+@@= skipped -56, +56 lines =@@
+ >something({ kind, id }) : void
+ >something : (a: MyType) => void
+ >{ kind, id } : { kind: MyEnum; id: number; }
+->kind : MyEnum
+->id : number
++>kind : any
++>id : any
+     }
+     
+     type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
+@@= skipped -14, +14 lines =@@
+ >value : undefined
+     
+     function test(obj: { kind: "a" | "b", value: number | undefined }) {
+->test : (obj: { kind: "a" | "b"; value: number | undefined; }) => void
+->obj : { kind: "a" | "b"; value: number | undefined; }
++>test : (obj: { kind: "a" | "b"; value: number; }) => void
++>obj : { kind: "a" | "b"; value: number; }
+ >kind : "a" | "b"
+ >value : number
+ 
+         let x1: Foo = obj;
+ >x1 : Foo
+->obj : { kind: "a" | "b"; value: number | undefined; }
++>obj : { kind: "a" | "b"; value: number; }
+ 
+         let x2: Foo = { kind: obj.kind, value: obj.value };
+ >x2 : Foo
+ >{ kind: obj.kind, value: obj.value } : { kind: "a" | "b"; value: number; }
+ >kind : "a" | "b"
+ >obj.kind : "a" | "b"
+->obj : { kind: "a" | "b"; value: number | undefined; }
++>obj : { kind: "a" | "b"; value: number; }
+ >kind : "a" | "b"
+ >value : number
+ >obj.value : number
+->obj : { kind: "a" | "b"; value: number | undefined; }
++>obj : { kind: "a" | "b"; value: number; }
+ >value : number
+     }
+ }

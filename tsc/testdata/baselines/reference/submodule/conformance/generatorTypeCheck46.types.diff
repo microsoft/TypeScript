@@ -1,0 +1,31 @@
+--- old.generatorTypeCheck46.types
++++ new.generatorTypeCheck46.types
+@@= skipped -1, +1 lines =@@
+ 
+ === generatorTypeCheck46.ts ===
+ declare function foo<T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T): T;
+->foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
++>foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U, any, any>, fun2: (y: U) => T) => T
++>T : T
++>U : U
+ >x : T
+->fun : () => Iterable<(x: T) => U>
++>fun : () => Iterable<(x: T) => U, any, any>
+ >x : T
+ >fun2 : (y: U) => T
+ >y : U
+ 
+ foo("", function* () {
+ >foo("", function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }}, p => undefined) : string
+->foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
++>foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U, any, any>, fun2: (y: U) => T) => T
+ >"" : ""
+ >function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => Generator<(x: string) => number, void, any>
+ 
+     yield* {
+ >yield* {        *[Symbol.iterator]() {            yield x => x.length        }    } : void
+->{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, any>; }
++>{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator]: () => Generator<(x: string) => number, void, any>; }
+ 
+         *[Symbol.iterator]() {
+ >[Symbol.iterator] : () => Generator<(x: string) => number, void, any>

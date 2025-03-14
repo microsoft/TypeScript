@@ -1,0 +1,86 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution2.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface PoisonedProp {
+>PoisonedProp : PoisonedProp
+
+    x: string;
+>x : string
+
+    y: "2";
+>y : "2"
+}
+
+class Poisoned extends React.Component<PoisonedProp, {}> {
+>Poisoned : Poisoned
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return <div>Hello</div>;
+><div>Hello</div> : any
+>div : any
+>div : any
+    }
+}
+
+const obj = {};
+>obj : {}
+>{} : {}
+
+// OK
+<Poisoned {...{x: "ok", y: "2"}} />;
+><Poisoned {...{x: "ok", y: "2"}} /> : any
+>Poisoned : typeof Poisoned
+>{x: "ok", y: "2"} : { x: string; y: string; }
+>x : string
+>"ok" : "ok"
+>y : string
+>"2" : "2"
+
+// Error
+let p = <Poisoned {...obj} />;
+>p : any
+><Poisoned {...obj} /> : any
+>Poisoned : typeof Poisoned
+>obj : {}
+
+let y = <Poisoned />;
+>y : any
+><Poisoned /> : any
+>Poisoned : typeof Poisoned
+
+let z = <Poisoned x y/>;
+>z : any
+><Poisoned x y/> : any
+>Poisoned : typeof Poisoned
+>x : any
+>y : any
+
+let w = <Poisoned {...{x: 5, y: "2"}}/>;
+>w : any
+><Poisoned {...{x: 5, y: "2"}}/> : any
+>Poisoned : typeof Poisoned
+>{x: 5, y: "2"} : { x: number; y: string; }
+>x : number
+>5 : 5
+>y : string
+>"2" : "2"
+
+let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
+>w1 : any
+><Poisoned {...{x: 5, y: "2"}} X="hi" /> : any
+>Poisoned : typeof Poisoned
+>{x: 5, y: "2"} : { x: number; y: string; }
+>x : number
+>5 : 5
+>y : string
+>"2" : "2"
+>X : any
+

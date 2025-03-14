@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/doubleUnderscoreExportStarConflict.ts] ////
+
+=== index.tsx ===
+
+export * from "./b";
+export * from "./c";
+
+=== b.ts ===
+export function __foo(): number | void {}
+>__foo : () => void | number
+
+=== c.ts ===
+export function __foo(): string | void {}
+>__foo : () => void | string
+

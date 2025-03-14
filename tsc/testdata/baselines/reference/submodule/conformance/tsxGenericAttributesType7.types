@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType7.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+declare function Component<T>(props: T) : JSX.Element;
+>Component : <T>(props: T) => Element
+>T : T
+>props : T
+>JSX : any
+
+const decorator = function <U>(props: U) {
+>decorator : <U>(props: U) => any
+>function <U>(props: U) {    return <Component {...props} />;} : <U>(props: U) => any
+>U : U
+>props : U
+
+    return <Component {...props} />;
+><Component {...props} /> : any
+>Component : <T>(props: T) => Element
+>props : U
+}
+
+const decorator1 = function <U extends {x: string}>(props: U) {
+>decorator1 : <U extends { x: string; }>(props: U) => any
+>function <U extends {x: string}>(props: U) {    return <Component {...props} x="hi"/>;} : <U extends { x: string; }>(props: U) => any
+>U : U
+>x : string
+>props : U
+
+    return <Component {...props} x="hi"/>;
+><Component {...props} x="hi"/> : any
+>Component : <T>(props: T) => Element
+>props : U
+>x : any
+}

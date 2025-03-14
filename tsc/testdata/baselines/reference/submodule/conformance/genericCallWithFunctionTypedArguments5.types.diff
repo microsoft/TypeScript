@@ -1,0 +1,44 @@
+--- old.genericCallWithFunctionTypedArguments5.types
++++ new.genericCallWithFunctionTypedArguments5.types
+@@= skipped -4, +4 lines =@@
+ 
+ function foo<T, U>(arg: { cb: (t: T) => U }) {
+ >foo : <T, U>(arg: { cb: (t: T) => U; }) => U
++>T : T
++>U : U
+ >arg : { cb: (t: T) => U; }
+ >cb : (t: T) => U
+ >t : T
+@@= skipped -16, +18 lines =@@
+ >{ cb: <T>(x: T) => '' } : { cb: <T>(x: T) => string; }
+ >cb : <T>(x: T) => string
+ ><T>(x: T) => '' : <T>(x: T) => string
++>T : T
+ >x : T
+ >'' : ""
+ 
+@@= skipped -17, +18 lines =@@
+ >{ cb: <T>(x: T, y: T) => '' } : { cb: <T>(x: T, y: T) => string; }
+ >cb : <T>(x: T, y: T) => string
+ ><T>(x: T, y: T) => '' : <T>(x: T, y: T) => string
++>T : T
+ >x : T
+ >y : T
+ >'' : ""
+@@= skipped -17, +18 lines =@@
+ 
+ function foo2<T, U>(arg: { cb: (t: T, t2: T) => U }) {
+ >foo2 : <T, U>(arg: { cb: (t: T, t2: T) => U; }) => U
++>T : T
++>U : U
+ >arg : { cb: (t: T, t2: T) => U; }
+ >cb : (t: T, t2: T) => U
+ >t : T
+@@= skipped -26, +28 lines =@@
+ >{ cb: <T>(x: T) => '' } : { cb: <T>(x: T) => string; }
+ >cb : <T>(x: T) => string
+ ><T>(x: T) => '' : <T>(x: T) => string
++>T : T
+ >x : T
+ >'' : ""
+ 

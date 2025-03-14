@@ -1,0 +1,15 @@
+--- old.acceptableAlias1.types
++++ new.acceptableAlias1.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     export module N {
++>N : any
+     }
+     export import X = N;
+ >X : any
+->N : error
++>N : any
+ }
+ 
+ import r = M.X;

@@ -1,0 +1,86 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag5.ts] ////
+
+=== test.js ===
+// all 6 should error on return statement/expression
+/** @type {(x: number) => string} */
+function h(x) { return x }
+>h : (x: any) => any
+>x : any
+>x : any
+
+/** @type {(x: number) => string} */
+var f = x => x
+>f : (x: any) => any
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+/** @type {(x: number) => string} */
+var g = function (x) { return x }
+>g : (x: any) => any
+>function (x) { return x } : (x: any) => any
+>x : any
+>x : any
+
+/** @type {{ (x: number): string }} */
+function i(x) { return x }
+>i : (x: any) => any
+>x : any
+>x : any
+
+/** @type {{ (x: number): string }} */
+var j = x => x
+>j : (x: any) => any
+>x => x : (x: any) => any
+>x : any
+>x : any
+
+/** @type {{ (x: number): string }} */
+var k = function (x) { return x }
+>k : (x: any) => any
+>function (x) { return x } : (x: any) => any
+>x : any
+>x : any
+
+
+/** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
+/** @type {Argle} */
+function blargle(s) {
+>blargle : (s: any) => number
+>s : any
+
+    return 0;
+>0 : 0
+}
+
+/** @type {0 | 1 | 2} - assignment should not error */
+var zeroonetwo = blargle('hi')
+>zeroonetwo : number
+>blargle('hi') : number
+>blargle : (s: any) => number
+>'hi' : "hi"
+
+/** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
+
+/** @type {Gioconda} */
+function monaLisa(sb) {
+>monaLisa : (sb: any) => 1 | 2
+>sb : any
+
+    return typeof sb === 'string' ? 1 : 2;
+>typeof sb === 'string' ? 1 : 2 : 1 | 2
+>typeof sb === 'string' : boolean
+>typeof sb : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>sb : any
+>'string' : "string"
+>1 : 1
+>2 : 2
+}
+
+/** @type {2 | 3} - overloads are not supported, so there will be an error */
+var twothree = monaLisa(false);
+>twothree : number
+>monaLisa(false) : 1 | 2
+>monaLisa : (sb: any) => 1 | 2
+>false : false
+

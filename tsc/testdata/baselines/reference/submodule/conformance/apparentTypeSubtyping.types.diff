@@ -1,0 +1,26 @@
+--- old.apparentTypeSubtyping.types
++++ new.apparentTypeSubtyping.types
+@@= skipped -5, +5 lines =@@
+ 
+ class Base<U extends String> {
+ >Base : Base<U>
++>U : U
+ 
+     x: U;
+ >x : U
+@@= skipped -8, +9 lines =@@
+ // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
+ class Derived<U> extends Base<string> { // error
+ >Derived : Derived<U>
++>U : U
+ >Base : Base<string>
+ 
+     x: String;
+@@= skipped -19, +20 lines =@@
+ // is U extends String (S) a subtype of String (T)? Apparent type of U is String so it succeeds
+ class Derived2<U extends String> extends Base2 { // error because of the prototype's not matching, not because of the instance side
+ >Derived2 : Derived2<U>
++>U : U
+ >Base2 : Base2
+ 
+     x: U;

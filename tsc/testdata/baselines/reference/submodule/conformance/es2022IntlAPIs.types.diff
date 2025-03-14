@@ -1,0 +1,70 @@
+--- old.es2022IntlAPIs.types
++++ new.es2022IntlAPIs.types
+@@= skipped -2, +2 lines =@@
+ === es2022IntlAPIs.ts ===
+ // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat#using_timezonename
+ const timezoneNames = ['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const;
+->timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+->['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+->['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
++>timezoneNames : ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
++>['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] as const : ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
++>['short', 'long', 'shortOffset', 'longOffset', 'shortGeneric', 'longGeneric'] : ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+ >'short' : "short"
+ >'long' : "long"
+ >'shortOffset' : "shortOffset"
+@@= skipped -11, +11 lines =@@
+ >'longGeneric' : "longGeneric"
+ 
+ for (const zoneName of timezoneNames) {
+->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+->timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
++>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
++>timezoneNames : ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
+ 
+   var formatter = new Intl.DateTimeFormat('en-US', {
+->formatter : Intl.DateTimeFormat
+->new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : Intl.DateTimeFormat
+->Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
++>formatter : DateTimeFormat
++>new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : DateTimeFormat
++>Intl.DateTimeFormat : DateTimeFormatConstructor
+ >Intl : typeof Intl
+->DateTimeFormat : Intl.DateTimeFormatConstructor
++>DateTimeFormat : DateTimeFormatConstructor
+ >'en-US' : "en-US"
+->{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
++>{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"; }
+ 
+     timeZone: 'America/Los_Angeles',
+ >timeZone : string
+ >'America/Los_Angeles' : "America/Los_Angeles"
+ 
+     timeZoneName: zoneName,
+->timeZoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
+->zoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"
++>timeZoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
++>zoneName : "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"
+ 
+   });
+ }
+ 
+ const enumerationKeys = ['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const;
+->enumerationKeys : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+->['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+->['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
++>enumerationKeys : ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
++>['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] as const : ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
++>['calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit'] : ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+ >'calendar' : "calendar"
+ >'collation' : "collation"
+ >'currency' : "currency"
+@@= skipped -36, +36 lines =@@
+ 
+ for (const key of enumerationKeys) {
+ >key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+->enumerationKeys : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
++>enumerationKeys : ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
+ 
+   var supported = Intl.supportedValuesOf(key);
+ >supported : string[]

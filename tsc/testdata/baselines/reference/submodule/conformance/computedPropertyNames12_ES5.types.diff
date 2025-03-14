@@ -1,0 +1,10 @@
+--- old.computedPropertyNames12_ES5.types
++++ new.computedPropertyNames12_ES5.types
+@@= skipped -38, +38 lines =@@
+ >[+s] : string
+ >+s : number
+ >s : string
+->s : string
+ 
+     static [""]: number;
+ >[""] : number

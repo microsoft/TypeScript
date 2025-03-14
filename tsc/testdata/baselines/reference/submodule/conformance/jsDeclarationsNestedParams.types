@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNestedParams.ts] ////
+
+=== file.js ===
+class X {
+>X : X
+
+    /**
+      * Cancels the request, sending a cancellation to the other party
+      * @param {Object} error __auto_generated__
+      * @param {string?} error.reason the error reason to send the cancellation with
+      * @param {string?} error.code the error code to send the cancellation with
+      * @returns {Promise.<*>} resolves when the event has been sent.
+      */ 
+    async cancel({reason, code}) {}
+>cancel : (__0: { code: any; reason: any; }) => Promise<void>
+>reason : any
+>code : any
+}
+
+class Y {
+>Y : Y
+
+    /**
+      * Cancels the request, sending a cancellation to the other party
+      * @param {Object} error __auto_generated__
+      * @param {string?} error.reason the error reason to send the cancellation with
+      * @param {Object} error.suberr
+      * @param {string?} error.suberr.reason the error reason to send the cancellation with
+      * @param {string?} error.suberr.code the error code to send the cancellation with
+      * @returns {Promise.<*>} resolves when the event has been sent.
+      */ 
+    async cancel({reason, suberr}) {}
+>cancel : (__0: { reason: any; suberr: any; }) => Promise<void>
+>reason : any
+>suberr : any
+}
+

@@ -1,0 +1,31 @@
+--- old.recursiveTypeParameterReferenceError1.types
++++ new.recursiveTypeParameterReferenceError1.types
+@@= skipped -2, +2 lines =@@
+ === recursiveTypeParameterReferenceError1.ts ===
+ class X<T> { }
+ >X : X<T>
++>T : T
+ 
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+     z: Foo<X<T>>; // error
+ >z : Foo<X<T>>
+ }
+@@= skipped -17, +21 lines =@@
+ 
+ class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+     x: T;
+ >x : T
+ }
+ interface Foo2<T> {
++>Foo2 : Foo2<T>
++>T : T
++
+     ofC4: C2<{ x: T }> // ok
+ >ofC4 : C2<{ x: T; }>
+ >x : T

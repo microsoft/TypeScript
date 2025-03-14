@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefFunction.ts] ////
+
+=== foo.js ===
+/**
+ * @typedef {{
+ *   [id: string]: [Function, Function];
+ * }} ResolveRejectMap
+ */
+
+let id = 0
+>id : number
+>0 : 0
+
+/**
+ * @param {ResolveRejectMap} handlers
+ * @returns {Promise<any>}
+ */
+const send = handlers => new Promise((resolve, reject) => {
+>send : (handlers: any) => Promise<unknown>
+>handlers => new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : (handlers: any) => Promise<unknown>
+>handlers : any
+>new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : Promise<unknown>
+>Promise : PromiseConstructor
+>(resolve, reject) => {  handlers[++id] = [resolve, reject]} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value: unknown) => void
+>reject : (reason?: any) => void
+
+  handlers[++id] = [resolve, reject]
+>handlers[++id] = [resolve, reject] : (value: unknown) => void[]
+>handlers[++id] : any
+>handlers : any
+>++id : number
+>id : number
+>[resolve, reject] : (value: unknown) => void[]
+>resolve : (value: unknown) => void
+>reject : (reason?: any) => void
+
+})

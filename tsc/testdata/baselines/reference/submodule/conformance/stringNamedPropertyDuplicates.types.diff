@@ -1,0 +1,11 @@
+--- old.stringNamedPropertyDuplicates.types
++++ new.stringNamedPropertyDuplicates.types
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     "a b": number;
+ >"a b" : number
+ 

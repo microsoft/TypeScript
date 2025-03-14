@@ -1,0 +1,49 @@
+--- old.callbackCrossModule.types
++++ new.callbackCrossModule.types
+@@= skipped -5, +5 lines =@@
+  * @return {any} I don't even know what this should return
+  */
+ module.exports = C
+->module.exports = C : typeof C
+->module.exports : typeof C
+->module : { exports: typeof C; }
+->exports : typeof C
+->C : typeof C
++>module.exports = C : () => void
++>module.exports : any
++>module : any
++>exports : any
++>C : () => void
+ 
+ function C() {
+->C : typeof C
++>C : () => void
+ 
+     this.p = 1
+ >this.p = 1 : 1
+ >this.p : any
+->this : this
++>this : any
+ >p : any
+ >1 : 1
+ }
+@@= skipped -20, +20 lines =@@
+ === use.js ===
+ /** @param {import('./mod1').Con} k */
+ function f(k) {
+->f : (k: import("./mod1").Con) => any
+->k : import("mod1").Con
++>f : (k: any) => any
++>k : any
+ 
+     if (1 === 2 - 1) {
+ >1 === 2 - 1 : boolean
+@@= skipped -14, +14 lines =@@
+     }
+     return k({ ok: true})
+ >k({ ok: true}) : any
+->k : import("mod1").Con
++>k : any
+ >{ ok: true} : { ok: boolean; }
+ >ok : boolean
+ >true : true

@@ -1,0 +1,198 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment9.ts] ////
+
+=== a.js ===
+var my = my || {};
+>my : any
+>my || {} : any
+>my : any
+>{} : {}
+
+/** @param {number} n */
+my.method = function(n) {
+>my.method = function(n) {    return n + 1;} : (n: any) => any
+>my.method : any
+>my : any
+>method : any
+>function(n) {    return n + 1;} : (n: any) => any
+>n : any
+
+    return n + 1;
+>n + 1 : any
+>n : any
+>1 : 1
+}
+my.number = 1;
+>my.number = 1 : 1
+>my.number : any
+>my : any
+>number : any
+>1 : 1
+
+my.object = {};
+>my.object = {} : {}
+>my.object : any
+>my : any
+>object : any
+>{} : {}
+
+my.predicate = my.predicate || {};
+>my.predicate = my.predicate || {} : any
+>my.predicate : any
+>my : any
+>predicate : any
+>my.predicate || {} : any
+>my.predicate : any
+>my : any
+>predicate : any
+>{} : {}
+
+my.predicate.query = function () {
+>my.predicate.query = function () {    var me = this;    me.property = false;} : () => void
+>my.predicate.query : any
+>my.predicate : any
+>my : any
+>predicate : any
+>query : any
+>function () {    var me = this;    me.property = false;} : () => void
+
+    var me = this;
+>me : any
+>this : any
+
+    me.property = false;
+>me.property = false : false
+>me.property : any
+>me : any
+>property : any
+>false : false
+
+};
+var q = new my.predicate.query();
+>q : any
+>new my.predicate.query() : any
+>my.predicate.query : any
+>my.predicate : any
+>my : any
+>predicate : any
+>query : any
+
+my.predicate.query.another = function () {
+>my.predicate.query.another = function () {    return 1;} : () => number
+>my.predicate.query.another : any
+>my.predicate.query : any
+>my.predicate : any
+>my : any
+>predicate : any
+>query : any
+>another : any
+>function () {    return 1;} : () => number
+
+    return 1;
+>1 : 1
+}
+my.predicate.query.result = 'none'
+>my.predicate.query.result = 'none' : "none"
+>my.predicate.query.result : any
+>my.predicate.query : any
+>my.predicate : any
+>my : any
+>predicate : any
+>query : any
+>result : any
+>'none' : "none"
+
+/** @param {number} first
+ *  @param {number} second
+ */
+my.predicate.sort = my.predicate.sort || function (first, second) {
+>my.predicate.sort = my.predicate.sort || function (first, second) {    return first > second ? first : second;} : any
+>my.predicate.sort : any
+>my.predicate : any
+>my : any
+>predicate : any
+>sort : any
+>my.predicate.sort || function (first, second) {    return first > second ? first : second;} : any
+>my.predicate.sort : any
+>my.predicate : any
+>my : any
+>predicate : any
+>sort : any
+>function (first, second) {    return first > second ? first : second;} : (first: any, second: any) => any
+>first : any
+>second : any
+
+    return first > second ? first : second;
+>first > second ? first : second : any
+>first > second : boolean
+>first : any
+>second : any
+>first : any
+>second : any
+}
+my.predicate.type = class {
+>my.predicate.type = class {    m() { return 101; }} : typeof type
+>my.predicate.type : any
+>my.predicate : any
+>my : any
+>predicate : any
+>type : any
+>class {    m() { return 101; }} : typeof type
+
+    m() { return 101; }
+>m : () => number
+>101 : 101
+}
+
+
+// global-ish prefixes
+var min = window.min || {};
+>min : any
+>window.min || {} : any
+>window.min : any
+>window : Window & typeof globalThis
+>min : any
+>{} : {}
+
+min.nest = this.min.nest || function () { };
+>min.nest = this.min.nest || function () { } : any
+>min.nest : any
+>min : any
+>nest : any
+>this.min.nest || function () { } : any
+>this.min.nest : any
+>this.min : any
+>this : typeof globalThis
+>min : any
+>nest : any
+>function () { } : () => void
+
+min.nest.other = self.min.nest.other || class { };
+>min.nest.other = self.min.nest.other || class { } : any
+>min.nest.other : any
+>min.nest : any
+>min : any
+>nest : any
+>other : any
+>self.min.nest.other || class { } : any
+>self.min.nest.other : any
+>self.min.nest : any
+>self.min : any
+>self : Window & typeof globalThis
+>min : any
+>nest : any
+>other : any
+>class { } : typeof other
+
+min.property = global.min.property || {};
+>min.property = global.min.property || {} : any
+>min.property : any
+>min : any
+>property : any
+>global.min.property || {} : any
+>global.min.property : any
+>global.min : any
+>global : any
+>min : any
+>property : any
+>{} : {}
+

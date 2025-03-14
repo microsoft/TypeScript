@@ -1,0 +1,18 @@
+--- old.nameDelimitedBySlashes.types
++++ new.nameDelimitedBySlashes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo_1.ts ===
+ import foo = require('./test/foo_0');
+->foo : typeof foo
++>foo : typeof import("test/foo_0")
+ 
+ var x = foo.foo + 42;
+ >x : number
+ >foo.foo + 42 : number
+ >foo.foo : number
+->foo : typeof foo
++>foo : typeof import("test/foo_0")
+ >foo : number
+ >42 : 42
+ 

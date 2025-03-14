@@ -1,0 +1,26 @@
+--- old.moduleAugmentationInAmbientModule5.types
++++ new.moduleAugmentationInAmbientModule5.types
+@@= skipped -11, +11 lines =@@
+ let y = x.getA().x;
+ >y : number
+ >x.getA().x : number
+->x.getA() : import("A").A
+->x.getA : () => import("A").A
++>x.getA() : A
++>x.getA : () => A
+ >x : number[]
+->getA : () => import("A").A
++>getA : () => A
+ >x : number
+ 
+ === array.d.ts ===
+@@= skipped -25, +25 lines =@@
+ >global : any
+ 
+         interface Array<T> {
++>Array : T[]
++>T : T
++
+             getA(): A;
+ >getA : () => A
+         }

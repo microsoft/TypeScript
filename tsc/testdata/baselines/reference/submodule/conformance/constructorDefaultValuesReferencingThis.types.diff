@@ -1,0 +1,18 @@
+--- old.constructorDefaultValuesReferencingThis.types
++++ new.constructorDefaultValuesReferencingThis.types
+@@= skipped -14, +14 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     constructor(x = this) { }
+ >x : this
+@@= skipped -8, +9 lines =@@
+ 
+ class E<T> {
+ >E : E<T>
++>T : T
+ 
+     constructor(public x = this) { }
+ >x : this

@@ -1,0 +1,16 @@
+--- old.multipleBaseInterfaesWithIncompatibleProperties.types
++++ new.multipleBaseInterfaesWithIncompatibleProperties.types
+@@= skipped -1, +1 lines =@@
+ 
+ === multipleBaseInterfaesWithIncompatibleProperties.ts ===
+ interface A<T>
++>A : A<T>
++>T : T
+ {
+     x: T
+ >x : T
+ }
+ 
+ interface C extends A<string>, A<number> { }
++>C : C
+ 

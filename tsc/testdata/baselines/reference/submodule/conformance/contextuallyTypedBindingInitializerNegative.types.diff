@@ -1,0 +1,90 @@
+--- old.contextuallyTypedBindingInitializerNegative.types
++++ new.contextuallyTypedBindingInitializerNegative.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextuallyTypedBindingInitializerNegative.ts ===
+ interface Show {
++>Show : Show
++
+     show: (x: number) => string;
+ >show : (x: number) => string
+ >x : number
+ }
+ function f({ show: showRename = v => v }: Show) {}
+->f : ({ show: showRename }: Show) => void
++>f : (__0: Show) => void
+ >show : any
+ >showRename : (x: number) => string
+ >v => v : (v: number) => number
+@@= skipped -13, +15 lines =@@
+ >v : number
+ 
+ function f2({ "show": showRename = v => v }: Show) {}
+->f2 : ({ "show": showRename }: Show) => void
++>f2 : (__0: Show) => void
+ >showRename : (x: number) => string
+ >v => v : (v: number) => number
+ >v : number
+ >v : number
+ 
+ function f3({ ["show"]: showRename = v => v }: Show) {}
+->f3 : ({ ["show"]: showRename }: Show) => void
++>f3 : (__0: Show) => void
+ >"show" : "show"
+ >showRename : (x: number) => string
+ >v => v : (v: number) => number
+@@= skipped -15, +15 lines =@@
+ >v : number
+ 
+ interface Nested {
++>Nested : Nested
++
+     nested: Show
+ >nested : Show
+ }
+ function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
+->ff : ({ nested: nestedRename }: Nested) => void
++>ff : (__0: Nested) => void
+ >nested : any
+ >nestedRename : Show
+ >{ show: v => v } : { show: (v: number) => number; }
+@@= skipped -14, +16 lines =@@
+ >v : number
+ 
+ interface StringIdentity {
++>StringIdentity : StringIdentity
++
+     stringIdentity(s: string): string;
+ >stringIdentity : (s: string) => string
+ >s : string
+@@= skipped -19, +21 lines =@@
+ >x : string
+ 
+ interface Tuples {
++>Tuples : Tuples
++
+     prop: [string, number];
+ >prop : [string, number]
+ }
+ function g({ prop = [101, 1234] }: Tuples) {}
+->g : ({ prop }: Tuples) => void
++>g : (__0: Tuples) => void
+ >prop : [string, number]
+ >[101, 1234] : [number, number]
+ >101 : 101
+ >1234 : 1234
+ 
+ interface StringUnion {
++>StringUnion : StringUnion
++
+     prop: "foo" | "bar";
+->prop : "foo" | "bar"
++>prop : "bar" | "foo"
+ }
+ function h({ prop = "baz" }: StringUnion) {}
+->h : ({ prop }: StringUnion) => void
+->prop : "foo" | "bar"
++>h : (__0: StringUnion) => void
++>prop : "bar" | "foo"
+ >"baz" : "baz"
+ 

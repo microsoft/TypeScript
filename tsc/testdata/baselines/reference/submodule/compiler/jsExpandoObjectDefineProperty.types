@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/jsExpandoObjectDefineProperty.ts] ////
+
+=== index.js ===
+var chrome = {}
+>chrome : {}
+>{} : {}
+
+Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
+>Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true }) : {}
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>chrome : {}
+>'devtools' : "devtools"
+>{ value: {}, enumerable: true } : { value: {}; enumerable: true; }
+>value : {}
+>{} : {}
+>enumerable : true
+>true : true
+
+chrome.devtools.inspectedWindow = {}
+>chrome.devtools.inspectedWindow = {} : {}
+>chrome.devtools.inspectedWindow : any
+>chrome.devtools : any
+>chrome : {}
+>devtools : any
+>inspectedWindow : any
+>{} : {}
+

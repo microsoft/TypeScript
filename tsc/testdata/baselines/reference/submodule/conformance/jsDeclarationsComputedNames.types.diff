@@ -1,0 +1,28 @@
+--- old.jsDeclarationsComputedNames.types
++++ new.jsDeclarationsComputedNames.types
+@@= skipped -11, +11 lines =@@
+ >Symbol : SymbolConstructor
+ 
+ module.exports = {
+->module.exports = {    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+->module.exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+->module : { exports: { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }; }
+->exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+->{    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
++>module.exports = {    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym]: (x?: number) => number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
++>module.exports : any
++>module : any
++>exports : any
++>{    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym]: (x?: number) => number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
+ 
+     [TopLevelSym](x = 12) {
+ >[TopLevelSym] : (x?: number) => number
+@@= skipped -62, +62 lines =@@
+      * @param {typeof TopLevelSym | typeof InnerSym} _p
+      */
+     constructor(_p = InnerSym) {
+->_p : unique symbol | unique symbol
++>_p : symbol
+ >InnerSym : unique symbol
+ 
+         // switch on _p

@@ -1,0 +1,11 @@
+--- old.stringIndexerConstrainsPropertyDeclarations2.types
++++ new.stringIndexerConstrainsPropertyDeclarations2.types
+@@= skipped -39, +39 lines =@@
+ }
+ 
+ interface Foo2 {
++>Foo2 : Foo2
++
+     [x: string]: A;
+ >x : string
+ 

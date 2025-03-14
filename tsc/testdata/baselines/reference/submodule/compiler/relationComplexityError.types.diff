@@ -1,0 +1,12 @@
+--- old.relationComplexityError.types
++++ new.relationComplexityError.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/relationComplexityError.ts] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500,000
+-Type Count: 25,000
+-
+ === relationComplexityError.ts ===
+ // Repro from #55630
+ 

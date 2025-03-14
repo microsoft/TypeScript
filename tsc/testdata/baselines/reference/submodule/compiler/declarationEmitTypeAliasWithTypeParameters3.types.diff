@@ -1,0 +1,14 @@
+--- old.declarationEmitTypeAliasWithTypeParameters3.types
++++ new.declarationEmitTypeAliasWithTypeParameters3.types
+@@= skipped -2, +2 lines =@@
+ === declarationEmitTypeAliasWithTypeParameters3.ts ===
+ type Foo<T> = {
+ >Foo : Foo<T>
++>T : T
+ 
+     foo<U>(): Foo<U>
+ >foo : <U>() => Foo<U>
++>U : U
+ 
+ };
+ function bar() {

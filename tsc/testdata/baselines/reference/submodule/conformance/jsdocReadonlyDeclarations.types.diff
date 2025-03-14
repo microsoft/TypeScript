@@ -1,0 +1,56 @@
+--- old.jsdocReadonlyDeclarations.types
++++ new.jsdocReadonlyDeclarations.types
+@@= skipped -5, +5 lines =@@
+ 
+     /** @readonly */
+     x = 6
+->x : 6
++>x : number
+ >6 : 6
+ 
+     /** @readonly */
+@@= skipped -9, +9 lines =@@
+ 
+         this.x = n
+ >this.x = n : any
+->this.x : 6
++>this.x : number
+ >this : this
+->x : 6
++>x : number
+ >n : any
+ 
+         /**
+@@= skipped -11, +11 lines =@@
+          */
+         this.y = n
+ >this.y = n : any
+->this.y : number
++>this.y : any
+ >this : this
+->y : number
++>y : any
+ >n : any
+     }
+ }
+ new C().x
+->new C().x : 6
++>new C().x : number
+ >new C() : C
+ >C : typeof C
+->x : 6
++>x : number
+ 
+ function F() {
+->F : typeof F
++>F : () => void
+ 
+     /** @readonly */
+     this.z = 1
+ >this.z = 1 : 1
+ >this.z : any
+->this : this
++>this : any
+ >z : any
+ >1 : 1
+ }

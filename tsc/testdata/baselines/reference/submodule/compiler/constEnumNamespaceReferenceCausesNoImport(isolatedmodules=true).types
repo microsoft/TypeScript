@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/constEnumNamespaceReferenceCausesNoImport.ts] ////
+
+=== foo.ts ===
+export const enum ConstFooEnum {
+>ConstFooEnum : ConstFooEnum
+
+    Some,
+>Some : ConstFooEnum.Some
+
+    Values,
+>Values : ConstFooEnum.Values
+
+    Here
+>Here : ConstFooEnum.Here
+
+};
+export function fooFunc(): void { /* removed */ }
+>fooFunc : () => void
+
+=== index.ts ===
+import * as Foo from "./foo";
+>Foo : typeof import("foo")
+
+function check(x: Foo.ConstFooEnum): void {
+>check : (x: ConstFooEnum) => void
+>x : ConstFooEnum
+>Foo : any
+
+  switch (x) {
+>x : ConstFooEnum
+
+    case Foo.ConstFooEnum.Some:
+>Foo.ConstFooEnum.Some : ConstFooEnum.Some
+>Foo.ConstFooEnum : typeof ConstFooEnum
+>Foo : typeof import("foo")
+>ConstFooEnum : typeof ConstFooEnum
+>Some : ConstFooEnum.Some
+
+      break;
+  }
+}

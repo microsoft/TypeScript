@@ -1,0 +1,51 @@
+--- old.declarationEmitMappedTypeTemplateTypeofSymbol.types
++++ new.declarationEmitMappedTypeTemplateTypeofSymbol.types
+@@= skipped -4, +4 lines =@@
+ >timestampSymbol : unique symbol
+ 
+ export declare const Timestamp: {
+->Timestamp : { [timestampSymbol]: true; }
++>Timestamp : { (Unique symbol): true; }
+ 
+     [TKey in typeof timestampSymbol]: true;
+->timestampSymbol : unique symbol
++>TKey : TKey
+ >true : true
+ 
+ };
+ 
+ export declare function now(): typeof Timestamp;
+->now : () => typeof Timestamp
+->Timestamp : { [timestampSymbol]: true; }
++>now : () => { (Unique symbol): true; }
+ 
+ === b.ts ===
+ import * as x from "./a";
+->x : typeof x
++>x : typeof import("a")
+ 
+ export const timestamp = x.now();
+->timestamp : { [x.timestampSymbol]: true; }
+->x.now() : { [x.timestampSymbol]: true; }
+->x.now : () => typeof x.Timestamp
+->x : typeof x
+->now : () => typeof x.Timestamp
++>timestamp : { (Unique symbol): true; }
++>x.now() : { (Unique symbol): true; }
++>x.now : () => { (Unique symbol): true; }
++>x : typeof import("a")
++>now : () => { (Unique symbol): true; }
+ 
+ === c.ts ===
+ import { now } from "./a";
+->now : () => typeof import("a").Timestamp
++>now : () => { (Unique symbol): true; }
+ 
+ export const timestamp = now();
+->timestamp : { [timestampSymbol]: true; }
+->now() : { [timestampSymbol]: true; }
+->now : () => typeof import("a").Timestamp
++>timestamp : { (Unique symbol): true; }
++>now() : { (Unique symbol): true; }
++>now : () => { (Unique symbol): true; }
+ 

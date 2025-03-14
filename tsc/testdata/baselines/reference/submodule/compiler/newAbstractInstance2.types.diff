@@ -1,0 +1,14 @@
+--- old.newAbstractInstance2.types
++++ new.newAbstractInstance2.types
+@@= skipped -5, +5 lines =@@
+ 
+ === /b.ts ===
+ import A from "./a";
+->A : typeof A
++>A : typeof default
+ 
+ new A();
+ >new A() : any
+->A : typeof A
++>A : typeof default
+ 

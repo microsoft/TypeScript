@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/moduleResolutionNoResolve.ts] ////
+
+=== a.ts ===
+import a = require('./b');
+>a : typeof import("b")
+
+=== b.ts ===
+export var c = '';
+>c : string
+>'' : ""
+

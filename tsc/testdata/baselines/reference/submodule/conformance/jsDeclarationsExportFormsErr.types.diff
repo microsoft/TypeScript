@@ -1,0 +1,29 @@
+--- old.jsDeclarationsExportFormsErr.types
++++ new.jsDeclarationsExportFormsErr.types
+@@= skipped -5, +5 lines =@@
+ 
+ === bar.js ===
+ import ns = require("./cls");
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ export = ns; // TS Only
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ === bin.js ===
+ import * as ns from "./cls";
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
+->module.exports = ns : any
++>module.exports = ns : typeof import("cls")
+ >module.exports : any
+ >module : any
+ >exports : any
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ === globalNs.js ===
+ export * from "./cls";

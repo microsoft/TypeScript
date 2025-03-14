@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/visibilityOfCrossModuleTypeUsage.ts] ////
+
+=== visibilityOfCrossModuleTypeUsage_fs.ts ===
+import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
+>commands : typeof import("visibilityOfCrossModuleTypeUsage_commands")
+
+function run(configuration: commands.IConfiguration) {
+>run : (configuration: IConfiguration) => void
+>configuration : IConfiguration
+>commands : any
+
+    var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
+>absoluteWorkspacePath : string
+>configuration.workspace.toAbsolutePath(configuration.server) : string
+>configuration.workspace.toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
+>configuration.workspace : IWorkspace
+>configuration : IConfiguration
+>workspace : IWorkspace
+>toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
+>configuration.server : IServer
+>configuration : IConfiguration
+>server : IServer
+}
+=== visibilityOfCrossModuleTypeUsage_commands.ts ===
+import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
+>fs : typeof import("visibilityOfCrossModuleTypeUsage_fs")
+
+import server = require('./visibilityOfCrossModuleTypeUsage_server');
+>server : typeof import("visibilityOfCrossModuleTypeUsage_server")
+
+export interface IConfiguration {
+>IConfiguration : IConfiguration
+
+    workspace: server.IWorkspace;
+>workspace : IWorkspace
+>server : any
+
+    server?: server.IServer;
+>server : IServer
+>server : any
+}
+
+=== visibilityOfCrossModuleTypeUsage_server.ts ===
+export interface IServer {
+>IServer : IServer
+}
+
+export interface IWorkspace {
+>IWorkspace : IWorkspace
+
+    toAbsolutePath(server: IServer, workspaceRelativePath?: string): string;
+>toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
+>server : IServer
+>workspaceRelativePath : string
+}
+

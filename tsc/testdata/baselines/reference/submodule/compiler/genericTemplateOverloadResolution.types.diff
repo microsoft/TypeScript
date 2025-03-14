@@ -1,0 +1,16 @@
+--- old.genericTemplateOverloadResolution.types
++++ new.genericTemplateOverloadResolution.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericTemplateOverloadResolution.ts ===
+ interface IFooFn {
++>IFooFn : IFooFn
++
+     (strings: TemplateStringsArray): Promise<{}>;
+ >strings : TemplateStringsArray
+ 
+     <T>(strings: TemplateStringsArray): Promise<T>;
++>T : T
+ >strings : TemplateStringsArray
+ }
+ 

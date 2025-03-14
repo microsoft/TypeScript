@@ -1,0 +1,26 @@
+--- old.recursiveTypeInGenericConstraint.types
++++ new.recursiveTypeInGenericConstraint.types
+@@= skipped -2, +2 lines =@@
+ === recursiveTypeInGenericConstraint.ts ===
+ class G<T> {
+ >G : G<T>
++>T : T
+ 
+     x: G<G<T>>; // infinitely expanding type reference
+ >x : G<G<T>>
+@@= skipped -7, +8 lines =@@
+ 
+ class Foo<T extends G<T>> { // error, constraint referencing itself
+ >Foo : Foo<T>
++>T : T
+ 
+     bar: T;
+ >bar : T
+@@= skipped -7, +8 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     x: G<G<T>>; 
+ >x : G<G<T>>

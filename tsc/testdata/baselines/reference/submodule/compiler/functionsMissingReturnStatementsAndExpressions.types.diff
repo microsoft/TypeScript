@@ -1,0 +1,44 @@
+--- old.functionsMissingReturnStatementsAndExpressions.types
++++ new.functionsMissingReturnStatementsAndExpressions.types
+@@= skipped -144, +144 lines =@@
+ }
+ 
+ function f20(): any | number {
+->f20 : () => any | number
++>f20 : () => any
+ 
+     // Okay; function return type is union containing any
+ }
+ 
+ function f21(): number | string {
+->f21 : () => number | string
++>f21 : () => string | number
+ 
+     // Not okay; union does not contain void or any
+ }
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ function f23(): undefined | number {
+->f23 : () => undefined | number
++>f23 : () => number
+ 
+     // Error; because `undefined | number` becomes `number` without strictNullChecks.
+ }
+@@= skipped -21, +21 lines =@@
+ }
+ 
+ const f32: () => undefined | number = () => {
+->f32 : () => undefined | number
++>f32 : () => number
+ >() => {    // Error, contextual type for implicit return isn't just `undefined`} : () => void
+ 
+     // Error, contextual type for implicit return isn't just `undefined`
+ }
+ 
+ const f33: () => undefined | number = () => {
+->f33 : () => undefined | number
++>f33 : () => number
+ >() => {    // Error, contextual type for expression-less return isn't just `undefined`    return;} : () => void
+ 
+     // Error, contextual type for expression-less return isn't just `undefined`

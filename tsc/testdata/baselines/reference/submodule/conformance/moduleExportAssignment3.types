@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment3.ts] ////
+
+=== npm.js ===
+var mod = require('./mod')
+>mod : any
+>require('./mod') : any
+>require : any
+>'./mod' : "./mod"
+
+mod() // should be callable from here too
+>mod() : any
+>mod : any
+

@@ -1,0 +1,21 @@
+--- old.nodeModulesTripleSlashReferenceModeDeclarationEmit4(module=nodenext).types
++++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit4(module=nodenext).types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit4.ts] ////
+ 
+ === /index.ts ===
+-
+ /// <reference types="pkg" resolution-mode="import" preserve="true" />
+ export interface LocalInterface extends ImportInterface {}
+-=== /node_modules/pkg/import.d.ts ===
++>LocalInterface : LocalInterface
++
++=== /node_modules/pkg/require.d.ts ===
+ export {};
+ declare global {
+ >global : any
+ 
+-    interface ImportInterface {}
++    interface RequireInterface {}
++>RequireInterface : RequireInterface
+ }

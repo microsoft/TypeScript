@@ -1,0 +1,25 @@
+--- old.unionTypeCallSignatures5.types
++++ new.unionTypeCallSignatures5.types
+@@= skipped -2, +2 lines =@@
+ === unionTypeCallSignatures5.ts ===
+ // #31485
+ interface A {
++>A : A
++
+   (this: void, b?: number): void;
+ >this : void
+ >b : number
+ }
+ interface B {
++>B : B
++
+   (this: number, b?: number): void;
+ >this : number
+ >b : number
+ }
+ interface C {
++>C : C
++
+   (i: number): void;
+ >i : number
+ }

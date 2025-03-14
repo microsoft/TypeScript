@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/checkJsdocTypeTagOnExportAssignment6.ts] ////
+
+=== checkJsdocTypeTagOnExportAssignment6.js ===
+
+=== a.js ===
+/**
+ * @typedef {Object} Foo
+ * @property {number} a
+ * @property {number} b
+ */
+
+/** @type {Foo} */
+export default { a: 1, b: 1, c: 1 };
+>{ a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+>c : number
+>1 : 1
+
+=== b.js ===
+import a from "./a";
+>a : { a: number; b: number; c: number; }
+
+a;
+>a : { a: number; b: number; c: number; }
+

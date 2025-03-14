@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/genericTypeUsedWithoutTypeArguments3.ts] ////
+
+=== genericTypeUsedWithoutTypeArguments3.ts ===
+interface Foo<T> { }
+>Foo : Foo<T>
+>T : T
+
+interface Bar<T> extends Foo { }
+>Bar : Bar<T>
+>T : T
+

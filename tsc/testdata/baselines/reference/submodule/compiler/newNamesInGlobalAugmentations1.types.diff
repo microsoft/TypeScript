@@ -1,0 +1,20 @@
+--- old.newNamesInGlobalAugmentations1.types
++++ new.newNamesInGlobalAugmentations1.types
+@@= skipped -13, +13 lines =@@
+ >global : typeof global
+ 
+     interface SymbolConstructor {
++>SymbolConstructor : SymbolConstructor
++
+         observable: symbol;
+ >observable : symbol
+     }
+@@= skipped -14, +16 lines =@@
+     export import X = M.M1.x;
+ >X : number
+ >M : typeof M
+->M1 : typeof M.M1
++>M1 : typeof M1
+ >x : number
+ }
+ 

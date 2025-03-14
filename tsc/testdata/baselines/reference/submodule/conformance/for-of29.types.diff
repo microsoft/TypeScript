@@ -1,0 +1,22 @@
+--- old.for-of29.types
++++ new.for-of29.types
+@@= skipped -1, +1 lines =@@
+ 
+ === for-of29.ts ===
+ var iterableWithOptionalIterator: {
+->iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
++>iterableWithOptionalIterator : { [Symbol.iterator]?: () => Iterator<string, any, any>; }
+ 
+     [Symbol.iterator]?(): Iterator<string>
+->[Symbol.iterator] : () => Iterator<string>
++>[Symbol.iterator] : () => Iterator<string, any, any>
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+@@= skipped -12, +12 lines =@@
+ 
+ for (var v of iterableWithOptionalIterator) { }
+ >v : any
+->iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
++>iterableWithOptionalIterator : { [Symbol.iterator]?: () => Iterator<string, any, any>; }
+ 

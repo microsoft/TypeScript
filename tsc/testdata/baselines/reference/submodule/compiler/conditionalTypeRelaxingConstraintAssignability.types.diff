@@ -1,0 +1,48 @@
+--- old.conditionalTypeRelaxingConstraintAssignability.types
++++ new.conditionalTypeRelaxingConstraintAssignability.types
+@@= skipped -10, +10 lines =@@
+ >ElChildren : any
+ 
+ export namespace ElChildren {
++>ElChildren : any
++
+   export type Void = undefined;
+ >Void : undefined
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ type Relax<C extends ElChildren> = C extends ElChildren.Text ? ElChildren.Text : C;
+ >Relax : Relax<C>
++>C : C
+ >ElChildren : any
+ >ElChildren : any
+ 
+@@= skipped -7, +8 lines =@@
+ >Elem : Elem<C>
+ 
+   C extends ElChildren,
++>C : C
++
+   > {
+   constructor(
+     private children_: Relax<C>,
+@@= skipped -40, +42 lines =@@
+ // Repro from #31766
+ 
+ interface I { a: string }
++>I : I
+ >a : string
+ 
+ type DeepPartial<T> =
+ >DeepPartial : DeepPartial<T>
++>T : T
+ 
+     T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} : T;
++>K : K
+ 
+ declare function f<T>(t: T, partial: DeepPartial<T>): T;
+ >f : <T>(t: T, partial: DeepPartial<T>) => T
++>T : T
+ >t : T
+ >partial : DeepPartial<T>
+ 

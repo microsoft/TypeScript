@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/declarationEmitLateBoundJSAssignments.ts] ////
+
+=== file.js ===
+export function foo() {}
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+
+foo.bar = 12;
+>foo.bar = 12 : 12
+>foo.bar : number
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>bar : number
+>12 : 12
+
+const _private = Symbol();
+>_private : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+foo[_private] = "ok";
+>foo[_private] = "ok" : "ok"
+>foo[_private] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>_private : unique symbol
+>"ok" : "ok"
+
+const strMem = "strMemName";
+>strMem : "strMemName"
+>"strMemName" : "strMemName"
+
+foo[strMem] = "ok";
+>foo[strMem] = "ok" : "ok"
+>foo[strMem] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>strMem : "strMemName"
+>"ok" : "ok"
+
+const dashStrMem = "dashed-str-mem";
+>dashStrMem : "dashed-str-mem"
+>"dashed-str-mem" : "dashed-str-mem"
+
+foo[dashStrMem] = "ok";
+>foo[dashStrMem] = "ok" : "ok"
+>foo[dashStrMem] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>dashStrMem : "dashed-str-mem"
+>"ok" : "ok"
+
+const numMem = 42;
+>numMem : 42
+>42 : 42
+
+foo[numMem] = "ok";
+>foo[numMem] = "ok" : "ok"
+>foo[numMem] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>numMem : 42
+>"ok" : "ok"
+
+/** @type {string} */
+const x = foo[_private];
+>x : string
+>foo[_private] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>_private : unique symbol
+
+/** @type {string} */
+const y = foo[strMem];
+>y : string
+>foo[strMem] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>strMem : "strMemName"
+
+/** @type {string} */
+const z = foo[numMem];
+>z : string
+>foo[numMem] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>numMem : 42
+
+/** @type {string} */
+const a = foo[dashStrMem];
+>a : string
+>foo[dashStrMem] : string
+>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>dashStrMem : "dashed-str-mem"
+

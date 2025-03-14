@@ -1,0 +1,38 @@
+--- old.genericSpecializations2.types
++++ new.genericSpecializations2.types
+@@= skipped -2, +2 lines =@@
+ === genericSpecializations2.ts ===
+ class IFoo<T> {
+ >IFoo : IFoo<T>
++>T : T
+ 
+     foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+         return null;
+@@= skipped -14, +16 lines =@@
+ 
+     foo<string>(x: string): string { return null; }
+ >foo : <string>(x: string) => string
++>string : string
+ >x : string
+ }
+ 
+@@= skipped -8, +9 lines =@@
+ 
+     foo<string>(x: string): string { return null; }
+ >foo : <string>(x: string) => string
++>string : string
+ >x : string
+ }
+ 
+@@= skipped -8, +9 lines =@@
+ 
+     foo<T>(x: T): T { return null; }
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ }
+ 

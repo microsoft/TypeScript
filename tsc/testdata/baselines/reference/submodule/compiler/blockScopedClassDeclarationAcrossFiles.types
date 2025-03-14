@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/blockScopedClassDeclarationAcrossFiles.ts] ////
+
+=== c.ts ===
+let foo: typeof C;
+>foo : typeof C
+
+=== b.ts ===
+class C { }
+>C : C
+

@@ -1,0 +1,12 @@
+--- old.incrementOnNullAssertion.types
++++ new.incrementOnNullAssertion.types
+@@= skipped -1, +1 lines =@@
+ 
+ === incrementOnNullAssertion.ts ===
+ interface Dictionary<T> {
++>Dictionary : Dictionary<T>
++>T : T
++
+     [myFavouriteType: string]: T | undefined
+ >myFavouriteType : string
+ }

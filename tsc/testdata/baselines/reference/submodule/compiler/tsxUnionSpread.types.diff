@@ -1,0 +1,47 @@
+--- old.tsxUnionSpread.types
++++ new.tsxUnionSpread.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.tsx ===
+ namespace JSX {
++>JSX : any
++
+     export interface Element {}
++>Element : Element
+ }
+ 
+ export type CatInfo = { type: 'Cat'; subType: string; };
+@@= skipped -16, +19 lines =@@
+ >AnimalInfo : AnimalInfo
+ 
+ function AnimalComponent(info: AnimalInfo): JSX.Element {
+->AnimalComponent : (info: AnimalInfo) => JSX.Element
++>AnimalComponent : (info: AnimalInfo) => Element
+ >info : AnimalInfo
+ >JSX : any
+ 
+@@= skipped -27, +27 lines =@@
+ >getProps : () => AnimalInfo
+ 
+ var component = <AnimalComponent {...props} />
+->component : error
+-><AnimalComponent {...props} /> : error
+->AnimalComponent : (info: AnimalInfo) => JSX.Element
++>component : any
++><AnimalComponent {...props} /> : any
++>AnimalComponent : (info: AnimalInfo) => Element
+ >props : AnimalInfo
+ 
+ var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
+@@= skipped -14, +14 lines =@@
+ >'Large' : "Large"
+ 
+ var component2 = <AnimalComponent {...props2} />
+->component2 : error
+-><AnimalComponent {...props2} /> : error
+->AnimalComponent : (info: AnimalInfo) => JSX.Element
++>component2 : any
++><AnimalComponent {...props2} /> : any
++>AnimalComponent : (info: AnimalInfo) => Element
+ >props2 : CatInfo
+ 

@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/noCrashOnImportShadowing.ts] ////
+
+=== b.ts ===
+export const zzz = 123;
+>zzz : 123
+>123 : 123
+
+=== a.ts ===
+import * as B from "./b";
+>B : typeof import("b")
+
+interface B {
+>B : B
+
+    x: string;
+>x : string
+}
+
+const x: B = { x: "" };
+>x : B
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+
+B.zzz;
+>B.zzz : 123
+>B : typeof import("b")
+>zzz : 123
+
+export { B };
+>B : typeof import("b")
+
+=== index.ts ===
+import { B } from "./a";
+>B : typeof import("b")
+
+const x: B = { x: "" };
+>x : B
+>{ x: "" } : { x: string; }
+>x : string
+>"" : ""
+
+B.zzz;
+>B.zzz : 123
+>B : typeof import("b")
+>zzz : 123
+
+import * as OriginalB from "./b";
+>OriginalB : typeof import("b")
+
+OriginalB.zzz;
+>OriginalB.zzz : 123
+>OriginalB : typeof import("b")
+>zzz : 123
+
+const y: OriginalB = x;
+>y : OriginalB
+>x : B
+

@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/derivedTypeIncompatibleSignatures.ts] ////
+
+=== derivedTypeIncompatibleSignatures.ts ===
+interface A {
+>A : A
+
+    (a: string): string;
+>a : string
+}
+
+interface B extends A {
+>B : B
+
+    (a: string): number; // Number is not a subtype of string.  Should error.
+>a : string
+}
+
+interface C {
+>C : C
+
+    new (a: string): string;
+>a : string
+}
+
+interface D extends C {
+>D : D
+
+    new (a: string): number; // Number is not a subtype of string.  Should error.
+>a : string
+}
+
+interface E {
+>E : E
+
+    [a: string]: string;
+>a : string
+}
+
+interface F extends E {
+>F : F
+
+    [a: string]: number; // Number is not a subtype of string.  Should error.
+>a : string
+}
+
+interface G {
+>G : G
+
+    [a: number]: string;
+>a : number
+}
+
+interface H extends G {
+>H : H
+
+    [a: number]: number; // Should error for the same reason
+>a : number
+}

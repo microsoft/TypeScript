@@ -1,0 +1,25 @@
+--- old.declarationEmitForTypesWhichNeedImportTypes.types
++++ new.declarationEmitForTypesWhichNeedImportTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === b.ts ===
+ export interface Named {}
++>Named : Named
+ 
+ export function createNamed(): Named {
+ >createNamed : () => Named
+@@= skipped -9, +10 lines =@@
+ }
+ === a.ts ===
+ import { createNamed } from "./b";
+->createNamed : () => import("b").Named
++>createNamed : () => Named
+ 
+ export const Value = createNamed();
+->Value : import("b").Named
+->createNamed() : import("b").Named
+->createNamed : () => import("b").Named
++>Value : Named
++>createNamed() : Named
++>createNamed : () => Named
+ 

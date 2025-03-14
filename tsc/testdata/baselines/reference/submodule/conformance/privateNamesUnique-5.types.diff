@@ -1,0 +1,10 @@
+--- old.privateNamesUnique-5.types
++++ new.privateNamesUnique-5.types
+@@= skipped -9, +9 lines =@@
+ >#foo : number
+ }
+ interface A2 extends A { }
++>A2 : A2
+ 
+ class B {
+ >B : B

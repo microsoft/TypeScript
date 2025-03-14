@@ -1,0 +1,24 @@
+--- old.controlFlowPropertyDeclarations.types
++++ new.controlFlowPropertyDeclarations.types
+@@= skipped -317, +317 lines =@@
+ >'{' + JSON.stringify(whitespace) : string
+ >'{' : "{"
+ >JSON.stringify(whitespace) : string
+->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
++>JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+ >JSON : JSON
+->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
++>stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
+ >whitespace : string
+ >'}' : "}"
+ 
+@@= skipped -15, +15 lines =@@
+ >text.indexOf : (searchString: string, position?: number) => number
+ >text : string
+ >indexOf : (searchString: string, position?: number) => number
+->'\n' : "\n"
++>'\n' : "
++"
+ >-1 : -1
+ >1 : 1
+       }

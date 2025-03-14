@@ -1,0 +1,85 @@
+--- old.declarationEmitLateBoundJSAssignments.types
++++ new.declarationEmitLateBoundJSAssignments.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.js ===
+ export function foo() {}
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ 
+ foo.bar = 12;
+ >foo.bar = 12 : 12
+ >foo.bar : number
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >bar : number
+ >12 : 12
+ 
+@@= skipped -17, +17 lines =@@
+ foo[_private] = "ok";
+ >foo[_private] = "ok" : "ok"
+ >foo[_private] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >_private : unique symbol
+ >"ok" : "ok"
+ 
+@@= skipped -11, +11 lines =@@
+ foo[strMem] = "ok";
+ >foo[strMem] = "ok" : "ok"
+ >foo[strMem] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >strMem : "strMemName"
+ >"ok" : "ok"
+ 
+@@= skipped -11, +11 lines =@@
+ foo[dashStrMem] = "ok";
+ >foo[dashStrMem] = "ok" : "ok"
+ >foo[dashStrMem] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >dashStrMem : "dashed-str-mem"
+ >"ok" : "ok"
+ 
+@@= skipped -11, +11 lines =@@
+ foo[numMem] = "ok";
+ >foo[numMem] = "ok" : "ok"
+ >foo[numMem] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >numMem : 42
+ >"ok" : "ok"
+ 
+@@= skipped -8, +8 lines =@@
+ const x = foo[_private];
+ >x : string
+ >foo[_private] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >_private : unique symbol
+ 
+ /** @type {string} */
+ const y = foo[strMem];
+ >y : string
+ >foo[strMem] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >strMem : "strMemName"
+ 
+ /** @type {string} */
+ const z = foo[numMem];
+ >z : string
+ >foo[numMem] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >numMem : 42
+ 
+ /** @type {string} */
+ const a = foo[dashStrMem];
+ >a : string
+ >foo[dashStrMem] : string
+->foo : typeof foo
++>foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+ >dashStrMem : "dashed-str-mem"
+ 

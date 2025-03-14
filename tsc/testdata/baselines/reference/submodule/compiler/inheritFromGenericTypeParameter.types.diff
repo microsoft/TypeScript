@@ -1,0 +1,13 @@
+--- old.inheritFromGenericTypeParameter.types
++++ new.inheritFromGenericTypeParameter.types
+@@= skipped -2, +2 lines =@@
+ === inheritFromGenericTypeParameter.ts ===
+ class C<T> extends T { }
+ >C : C<T>
++>T : T
+ >T : any
+ 
+ interface I<T> extends T { }
++>I : I<T>
++>T : T
++

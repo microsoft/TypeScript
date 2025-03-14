@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/typeAliasExport.ts] ////
+
+=== typeAliasExport.ts ===
+declare module "a" {
+>"a" : typeof import("a")
+
+  export default undefined
+>undefined : undefined
+
+  export var a;
+>a : any
+
+  export type a = typeof a;
+>a : any
+}

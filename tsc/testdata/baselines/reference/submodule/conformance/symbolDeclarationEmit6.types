@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/es6/Symbols/symbolDeclarationEmit6.ts] ////
+
+=== symbolDeclarationEmit6.ts ===
+interface I {
+>I : I
+
+    [Symbol.isConcatSpreadable]: string;
+>[Symbol.isConcatSpreadable] : string
+>Symbol.isConcatSpreadable : unique symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : unique symbol
+}

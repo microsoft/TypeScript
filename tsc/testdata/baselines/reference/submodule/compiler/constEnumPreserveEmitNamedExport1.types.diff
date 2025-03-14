@@ -1,0 +1,11 @@
+--- old.constEnumPreserveEmitNamedExport1.types
++++ new.constEnumPreserveEmitNamedExport1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ const enum A {
+->A : A
++>A : A.Foo
+ 
+     Foo
+ >Foo : A.Foo

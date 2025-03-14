@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/aliasUsageInIndexerOfClass.ts] ////
+
+=== aliasUsageInIndexerOfClass_main.ts ===
+import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
+>Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
+
+import moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
+>moduleA : typeof import("aliasUsageInIndexerOfClass_moduleA")
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : IHasVisualizationModel
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : typeof Model
+>Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
+}
+class N {
+>N : N
+
+    [idx: string]: IHasVisualizationModel
+>idx : string
+
+    x = moduleA;
+>x : typeof import("aliasUsageInIndexerOfClass_moduleA")
+>moduleA : typeof import("aliasUsageInIndexerOfClass_moduleA")
+}
+class N2 {
+>N2 : N2
+
+    [idx: string]: typeof moduleA
+>idx : string
+
+    x: IHasVisualizationModel;
+>x : IHasVisualizationModel
+}
+=== aliasUsageInIndexerOfClass_backbone.ts ===
+export class Model {
+>Model : Model
+
+    public someData: string;
+>someData : string
+}
+
+=== aliasUsageInIndexerOfClass_moduleA.ts ===
+import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
+>Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone.Model : Model
+>Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
+>Model : typeof Model
+
+    // interesting stuff here
+}
+

@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/typeofInternalModules.ts] ////
+
+=== typeofInternalModules.ts ===
+module Outer {
+>Outer : typeof Outer
+
+    export module instantiated {
+>instantiated : typeof instantiated
+
+        export class C { }
+>C : C
+    }
+    export module uninstantiated {
+>uninstantiated : any
+
+        export interface P { }
+>P : P
+    }
+}
+
+import importInst = Outer.instantiated;
+>importInst : typeof instantiated
+>Outer : typeof Outer
+>instantiated : typeof instantiated
+
+import importUninst = Outer.uninstantiated;
+>importUninst : any
+>Outer : typeof Outer
+>uninstantiated : any
+
+var x1: typeof importInst.C = importInst.C;
+>x1 : typeof C
+>importInst : typeof instantiated
+>importInst.C : typeof C
+>importInst : typeof instantiated
+>C : typeof C
+
+var x2: importInst.C = new x1();
+>x2 : C
+>importInst : any
+>new x1() : C
+>x1 : typeof C
+
+var x3: typeof importUninst.P; // Error again
+>x3 : any
+>importUninst : any
+
+var x4: Outer = Outer;
+>x4 : Outer
+>Outer : typeof Outer
+
+var x5: typeof importInst;
+>x5 : typeof instantiated
+
+x5 = Outer;
+>x5 = Outer : typeof Outer
+>x5 : typeof instantiated
+>Outer : typeof Outer
+
+x5 = Outer.instantiated;
+>x5 = Outer.instantiated : typeof instantiated
+>x5 : typeof instantiated
+>Outer.instantiated : typeof instantiated
+>Outer : typeof Outer
+>instantiated : typeof instantiated
+
+var x6: typeof importUninst;
+>x6 : any
+
+var x7: typeof Outer = Outer;
+>x7 : typeof Outer
+>Outer : typeof Outer
+
+x7 = importInst;
+>x7 = importInst : typeof instantiated
+>x7 : typeof Outer
+>importInst : typeof instantiated
+

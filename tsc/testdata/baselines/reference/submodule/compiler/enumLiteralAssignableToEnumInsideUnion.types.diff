@@ -1,0 +1,94 @@
+--- old.enumLiteralAssignableToEnumInsideUnion.types
++++ new.enumLiteralAssignableToEnumInsideUnion.types
+@@= skipped -61, +61 lines =@@
+     }
+ }
+ const e0: X.Foo | boolean = Y.Foo.A; // ok
+->e0 : boolean | X.Foo
++>e0 : boolean | Foo
+ >X : any
+->Y.Foo.A : Y.Foo.A
+->Y.Foo : typeof Y.Foo
++>Y.Foo.A : Foo.A
++>Y.Foo : typeof Foo
+ >Y : typeof Y
+->Foo : typeof Y.Foo
+->A : Y.Foo.A
++>Foo : typeof Foo
++>A : Foo.A
+ 
+ const e1: X.Foo | boolean = Z.Foo.A; // not legal, Z is computed
+->e1 : boolean | X.Foo
++>e1 : boolean | Foo
+ >X : any
+->Z.Foo.A : Z.Foo.A
+->Z.Foo : typeof Z.Foo
++>Z.Foo.A : Foo.A
++>Z.Foo : typeof Foo
+ >Z : typeof Z
+->Foo : typeof Z.Foo
+->A : Z.Foo.A
++>Foo : typeof Foo
++>A : Foo.A
+ 
+ const e2: X.Foo.A | X.Foo.B | boolean = Z.Foo.A; // still not legal
+->e2 : boolean | X.Foo
++>e2 : boolean | Foo
+ >X : any
+ >Foo : any
+ >X : any
+ >Foo : any
+->Z.Foo.A : Z.Foo.A
+->Z.Foo : typeof Z.Foo
++>Z.Foo.A : Foo.A
++>Z.Foo : typeof Foo
+ >Z : typeof Z
+->Foo : typeof Z.Foo
+->A : Z.Foo.A
++>Foo : typeof Foo
++>A : Foo.A
+ 
+ const e3: X.Foo.B | boolean = Z.Foo.A; // not legal
+->e3 : boolean | X.Foo.B
++>e3 : boolean | Foo.B
+ >X : any
+ >Foo : any
+->Z.Foo.A : Z.Foo.A
+->Z.Foo : typeof Z.Foo
++>Z.Foo.A : Foo.A
++>Z.Foo : typeof Foo
+ >Z : typeof Z
+->Foo : typeof Z.Foo
+->A : Z.Foo.A
++>Foo : typeof Foo
++>A : Foo.A
+ 
+ const e4: X.Foo.A | boolean = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
+->e4 : boolean | X.Foo.A
++>e4 : boolean | Foo.A
+ >X : any
+ >Foo : any
+->Z.Foo.A : Z.Foo.A
+->Z.Foo : typeof Z.Foo
++>Z.Foo.A : Foo.A
++>Z.Foo : typeof Foo
+ >Z : typeof Z
+->Foo : typeof Z.Foo
+->A : Z.Foo.A
++>Foo : typeof Foo
++>A : Foo.A
+ 
+ const e5: Ka.Foo | boolean = Z.Foo.A; // ok
+->e5 : boolean | Ka.Foo
++>e5 : boolean | Foo
+ >Ka : any
+->Z.Foo.A : Z.Foo.A
+->Z.Foo : typeof Z.Foo
++>Z.Foo.A : Foo.A
++>Z.Foo : typeof Foo
+ >Z : typeof Z
+->Foo : typeof Z.Foo
+->A : Z.Foo.A
++>Foo : typeof Foo
++>A : Foo.A
+ 

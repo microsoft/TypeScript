@@ -1,0 +1,27 @@
+--- old.jsxFactoryAndJsxFragmentFactory.types
++++ new.jsxFactoryAndJsxFragmentFactory.types
+@@= skipped -7, +7 lines =@@
+ >Frag : any
+ 
+ <></>;
+-><></> : error
++><></> : any
+ 
+ <><span>1</span><><span>2.1</span><span>2.2</span></></>;
+-><><span>1</span><><span>2.1</span><span>2.2</span></></> : error
+-><span>1</span> : error
++><><span>1</span><><span>2.1</span><span>2.2</span></></> : any
++><span>1</span> : any
+ >span : any
+ >span : any
+-><><span>2.1</span><span>2.2</span></> : error
+-><span>2.1</span> : error
++><><span>2.1</span><span>2.2</span></> : any
++><span>2.1</span> : any
+ >span : any
+ >span : any
+-><span>2.2</span> : error
++><span>2.2</span> : any
+ >span : any
+ >span : any
+ 

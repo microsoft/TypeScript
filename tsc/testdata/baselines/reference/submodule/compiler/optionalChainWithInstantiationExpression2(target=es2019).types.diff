@@ -1,0 +1,16 @@
+--- old.optionalChainWithInstantiationExpression2(target=es2019).types
++++ new.optionalChainWithInstantiationExpression2(target=es2019).types
+@@= skipped -1, +1 lines =@@
+ 
+ === optionalChainWithInstantiationExpression2.ts ===
+ declare interface A {
++>A : A
++
+     c: number;
+ >c : number
+ 
+     <T>(): T;
++>T : T
+ }
+ 
+ type b = 'b type';

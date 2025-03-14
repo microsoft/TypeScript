@@ -1,0 +1,9 @@
+--- old.parserEnum3.types
++++ new.parserEnum3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserEnum3.ts ===
+     export enum SignatureFlags {
+->SignatureFlags : SignatureFlags
++>SignatureFlags : "parserEnum3".SignatureFlags
+     }

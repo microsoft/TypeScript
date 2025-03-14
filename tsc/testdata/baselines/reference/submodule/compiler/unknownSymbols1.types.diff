@@ -1,0 +1,18 @@
+--- old.unknownSymbols1.types
++++ new.unknownSymbols1.types
+@@= skipped -26, +26 lines =@@
+ 
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     foo: asdf;
+ >foo : asdf
+@@= skipped -12, +13 lines =@@
+ >C2 : C2
+ 
+ interface I extends adsf { }
++>I : I
+ 
+ class C3 { constructor(x: any) { } }
+ >C3 : C3

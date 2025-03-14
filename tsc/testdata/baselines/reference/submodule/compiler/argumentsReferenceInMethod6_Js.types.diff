@@ -1,0 +1,11 @@
+--- old.argumentsReferenceInMethod6_Js.types
++++ new.argumentsReferenceInMethod6_Js.types
+@@= skipped -4, +4 lines =@@
+ >A : A
+ 
+ 	m() {
+->m : (...args: any[]) => void
++>m : () => void
+ 
+ 		/**
+ 		 * @type object

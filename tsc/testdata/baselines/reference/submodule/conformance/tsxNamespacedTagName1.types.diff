@@ -1,0 +1,61 @@
+--- old.tsxNamespacedTagName1.types
++++ new.tsxNamespacedTagName1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.tsx ===
+ const a = <svg:path></svg:path>;
+->a : error
+-><svg:path></svg:path> : error
+->svg : error
+->path : error
+->svg : error
+->path : error
++>a : any
++><svg:path></svg:path> : any
++>svg : any
++>path : any
++>svg : any
++>path : any
+ 
+ const b = <svg : path></svg : path>;
+->b : error
+-><svg : path></svg : path> : error
+->svg : error
+->path : error
+->svg : error
+->path : error
++>b : any
++><svg : path></svg : path> : any
++>svg : any
++>path : any
++>svg : any
++>path : any
+ 
+ const c = <A:foo></A:foo>;
+->c : error
+-><A:foo></A:foo> : error
+->A : error
+->foo : error
+->A : error
+->foo : error
++>c : any
++><A:foo></A:foo> : any
++>A : any
++>foo : any
++>A : any
++>foo : any
+ 
+ const d = <a:foo></a:foo>;
+->d : error
+-><a:foo></a:foo> : error
+->a : error
+->foo : error
+->a : error
+->foo : error
++>d : any
++><a:foo></a:foo> : any
++>a : any
++>foo : any
++>a : any
++>foo : any
+ 

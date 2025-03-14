@@ -1,0 +1,20 @@
+--- old.expressionsForbiddenInParameterInitializers.types
++++ new.expressionsForbiddenInParameterInitializers.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bar.ts ===
+ export async function foo({ foo = await import("./bar") }) {
+->foo : ({ foo }: { foo?: typeof import("bar"); }) => Promise<void>
++>foo : (__0: { foo?: typeof import("bar"); }) => Promise<void>
+ >foo : typeof import("bar")
+ >await import("./bar") : typeof import("bar")
+ >import("./bar") : Promise<typeof import("bar")>
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ export function* foo2({ foo = yield "a" }) {
+->foo2 : ({ foo }: { foo?: any; }) => Generator<never, void, unknown>
++>foo2 : (__0: { foo?: any; }) => Generator<never, void, unknown>
+ >foo : any
+ >yield "a" : any
+ >"a" : "a"

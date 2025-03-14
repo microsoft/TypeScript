@@ -1,0 +1,10 @@
+--- old.decoratorOnClass8.es6.types
++++ new.decoratorOnClass8.es6.types
+@@= skipped -2, +2 lines =@@
+ === decoratorOnClass8.es6.ts ===
+ declare function dec<T>(target: T): T;
+ >dec : <T>(target: T) => T
++>T : T
+ >target : T
+ 
+ @dec

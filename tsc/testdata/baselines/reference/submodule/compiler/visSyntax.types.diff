@@ -1,0 +1,10 @@
+--- old.visSyntax.types
++++ new.visSyntax.types
+@@= skipped -8, +8 lines =@@
+     }
+ 
+     export interface I {
++>I : I
+ 	
+     }
+ 

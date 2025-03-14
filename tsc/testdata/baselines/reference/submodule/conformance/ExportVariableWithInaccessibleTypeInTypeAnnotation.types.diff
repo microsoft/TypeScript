@@ -1,0 +1,20 @@
+--- old.ExportVariableWithInaccessibleTypeInTypeAnnotation.types
++++ new.ExportVariableWithInaccessibleTypeInTypeAnnotation.types
+@@= skipped -4, +4 lines =@@
+ >A : typeof A
+ 
+     export interface Point {
++>Point : Point
++
+         x: number;
+ >x : number
+ 
+@@= skipped -17, +19 lines =@@
+ >0 : 0
+ 
+     interface Point3d extends Point {
++>Point3d : Point3d
++
+         z: number;
+ >z : number
+     }

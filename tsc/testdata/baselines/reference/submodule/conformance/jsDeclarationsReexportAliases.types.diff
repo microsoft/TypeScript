@@ -1,0 +1,30 @@
+--- old.jsDeclarationsReexportAliases.types
++++ new.jsDeclarationsReexportAliases.types
+@@= skipped -1, +1 lines =@@
+ 
+ === cls.js ===
+ export default class Foo {}
+->Foo : Foo
++>Foo : default
+ 
+ === usage.js ===
+ import {default as Fooa} from "./cls";
+->default : typeof Fooa
+->Fooa : typeof Fooa
++>default : typeof default
++>Fooa : typeof default
+ 
+ export const x = new Fooa();
+->x : Fooa
+->new Fooa() : Fooa
+->Fooa : typeof Fooa
++>x : default
++>new Fooa() : default
++>Fooa : typeof default
+ 
+ export {default as Foob} from "./cls";
+->default : typeof Fooa
+->Foob : typeof Fooa
++>default : typeof default
++>Foob : typeof default
+ 

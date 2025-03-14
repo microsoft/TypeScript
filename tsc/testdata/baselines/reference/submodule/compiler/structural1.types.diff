@@ -1,0 +1,11 @@
+--- old.structural1.types
++++ new.structural1.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     export interface I {
++>I : I
++
+         salt:number;
+ >salt : number
+ 

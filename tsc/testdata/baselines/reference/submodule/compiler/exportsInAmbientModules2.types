@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/exportsInAmbientModules2.ts] ////
+
+=== external.d.ts ===
+export default class C {}
+>C : default
+
+=== main.ts ===
+declare module "M" {
+>"M" : typeof import("M")
+
+    export * from "external"
+}

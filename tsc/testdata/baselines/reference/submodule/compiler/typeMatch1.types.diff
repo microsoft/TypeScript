@@ -1,0 +1,28 @@
+--- old.typeMatch1.types
++++ new.typeMatch1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeMatch1.ts ===
+ interface I { z; }
++>I : I
+ >z : any
+ 
+ interface I2 { z; }
++>I2 : I2
+ >z : any
+ 
+ var x1: { z: number; f(n: number): string; f(s: string): number; }
+->x1 : { z: number; f(n: number): string; f(s: string): number; }
++>x1 : { z: number; f: { (n: number): string; (s: string): number; }; }
+ >z : number
+ >f : { (n: number): string; (s: string): number; }
+ >n : number
+@@= skipped -19, +21 lines =@@
+ >f : { (n: number): string; (s: string): number; }
+ >n : number
+ >s : string
+->x1 : { z: number; f(n: number): string; f(s: string): number; }
++>x1 : { z: number; f: { (n: number): string; (s: string): number; }; }
+ 
+ var i:I;
+ >i : I

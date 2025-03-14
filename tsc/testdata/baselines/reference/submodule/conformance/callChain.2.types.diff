@@ -1,0 +1,20 @@
+--- old.callChain.2.types
++++ new.callChain.2.types
+@@= skipped -18, +18 lines =@@
+ >b : () => number
+ 
+ declare const o3: { b: (() => { c: string }) | undefined };
+->o3 : { b: (() => { c: string; }) | undefined; }
++>o3 : { b: () => { c: string; }; }
+ >b : () => { c: string; }
+ >c : string
+ 
+@@= skipped -8, +8 lines =@@
+ >o3.b?.().c : string
+ >o3.b?.() : { c: string; }
+ >o3.b : () => { c: string; }
+->o3 : { b: (() => { c: string; }) | undefined; }
++>o3 : { b: () => { c: string; }; }
+ >b : () => { c: string; }
+ >c : string
+ 

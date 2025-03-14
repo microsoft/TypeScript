@@ -1,0 +1,30 @@
+--- old.moduleAliasAsFunctionArgument.types
++++ new.moduleAliasAsFunctionArgument.types
+@@= skipped -2, +2 lines =@@
+ === moduleAliasAsFunctionArgument_1.ts ===
+ ///<reference path='moduleAliasAsFunctionArgument_0.ts'/>
+ import a = require('moduleAliasAsFunctionArgument_0');
+->a : typeof a
++>a : any
+ 
+ function fn(arg: { x: number }) {
+ >fn : (arg: { x: number; }) => void
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ a.x; // OK
+->a.x : number
+->a : typeof a
+->x : number
++>a.x : any
++>a : any
++>x : any
+ 
+ fn(a); // Error: property 'x' is missing from 'a'
+ >fn(a) : void
+ >fn : (arg: { x: number; }) => void
+->a : typeof a
++>a : any
+ 
+ === moduleAliasAsFunctionArgument_0.ts ===
+ export var x: number;

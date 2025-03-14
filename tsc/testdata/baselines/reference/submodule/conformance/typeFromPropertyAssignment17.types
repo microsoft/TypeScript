@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment17.ts] ////
+
+=== use.js ===
+/// <reference path='./types.d.ts'/>
+var mini = require('./minimatch')
+>mini : any
+>require('./minimatch') : any
+>require : any
+>'./minimatch' : "./minimatch"
+
+mini.M.defaults()
+>mini.M.defaults() : any
+>mini.M.defaults : any
+>mini.M : any
+>mini : any
+>M : any
+>defaults : any
+
+var m = new mini.M()
+>m : any
+>new mini.M() : any
+>mini.M : any
+>mini : any
+>M : any
+
+m.m()
+>m.m() : any
+>m.m : any
+>m : any
+>m : any
+
+mini.filter()
+>mini.filter() : any
+>mini.filter : any
+>mini : any
+>filter : any
+
+=== types.d.ts ===
+declare var require: any;
+>require : any
+
+declare var module: any;
+>module : any
+

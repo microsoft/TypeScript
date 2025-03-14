@@ -1,0 +1,29 @@
+--- old.overloadTag2.types
++++ new.overloadTag2.types
+@@= skipped -5, +5 lines =@@
+ 
+     #a = true ? 1 : "1"
+ >#a : string | number
+->true ? 1 : "1" : 1 | "1"
++>true ? 1 : "1" : "1" | 1
+ >true : true
+ >1 : 1
+ >"1" : "1"
+@@= skipped -29, +29 lines =@@
+      * @param {number | string} a
+      */
+     constructor(a, b) {
+->a : string | number
++>a : any
+ >b : any
+ 
+         this.#a = a
+->this.#a = a : string | number
++>this.#a = a : any
+ >this.#a : string | number
+ >this : this
+->a : string | number
++>a : any
+ 
+         this.#b = b
+ >this.#b = b : any

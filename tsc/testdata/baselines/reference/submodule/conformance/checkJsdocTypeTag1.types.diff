@@ -1,0 +1,115 @@
+--- old.checkJsdocTypeTag1.types
++++ new.checkJsdocTypeTag1.types
+@@= skipped -13, +13 lines =@@
+ 
+ /** @type {*} */
+ var anyT = 2;
+->anyT : any
++>anyT : number
+ >2 : 2
+ 
+ anyT = "hello";
+ >anyT = "hello" : "hello"
+->anyT : any
++>anyT : number
+ >"hello" : "hello"
+ 
+ /** @type {?} */
+ var anyT1 = 2;
+->anyT1 : any
++>anyT1 : number
+ >2 : 2
+ 
+ anyT1 = "hi";
+ >anyT1 = "hi" : "hi"
+->anyT1 : any
++>anyT1 : number
+ >"hi" : "hi"
+ 
+ /** @type {Function} */
+ const x = (a) => a + 1;
+->x : Function
++>x : (a: any) => any
+ >(a) => a + 1 : (a: any) => any
+ >a : any
+ >a + 1 : any
+@@= skipped -29, +29 lines =@@
+ 
+ x(1);
+ >x(1) : any
+->x : Function
++>x : (a: any) => any
+ >1 : 1
+ 
+ /** @type {function} */
+ const y = (a) => a + 1;
+->y : Function
++>y : (a: any) => any
+ >(a) => a + 1 : (a: any) => any
+ >a : any
+ >a + 1 : any
+@@= skipped -14, +14 lines =@@
+ 
+ y(1);
+ >y(1) : any
+->y : Function
++>y : (a: any) => any
+ >1 : 1
+ 
+ /** @type {function (number)} */
+ const x1 = (a) => a + 1;
+->x1 : (arg0: number) => any
+->(a) => a + 1 : (a: number) => any
+->a : number
+->a + 1 : number
+->a : number
++>x1 : (a: any) => any
++>(a) => a + 1 : (a: any) => any
++>a : any
++>a + 1 : any
++>a : any
+ >1 : 1
+ 
+ x1(0);
+ >x1(0) : any
+->x1 : (arg0: number) => any
++>x1 : (a: any) => any
+ >0 : 0
+ 
+ /** @type {function (number): number} */
+ const x2 = (a) => a + 1;
+->x2 : (arg0: number) => number
+->(a) => a + 1 : (a: number) => number
+->a : number
+->a + 1 : number
+->a : number
++>x2 : (a: any) => any
++>(a) => a + 1 : (a: any) => any
++>a : any
++>a + 1 : any
++>a : any
+ >1 : 1
+ 
+ x2(0);
+->x2(0) : number
+->x2 : (arg0: number) => number
++>x2(0) : any
++>x2 : (a: any) => any
+ >0 : 0
+ 
+ /**
+  * @type {object}
+  */
+ var props = {};
+->props : any
++>props : {}
+ >{} : {}
+ 
+ /**
+  * @type {Object}
+  */
+ var props = {};
+->props : any
++>props : {}
+ >{} : {}
+ 

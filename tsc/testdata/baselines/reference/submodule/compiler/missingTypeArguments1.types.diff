@@ -1,0 +1,97 @@
+--- old.missingTypeArguments1.types
++++ new.missingTypeArguments1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === missingTypeArguments1.ts ===
+ interface I<T> { }
++>I : I<T>
++>T : T
++
+ class Y<T> {}
+ >Y : Y<T>
++>T : T
+ 
+ class X<T> {
+ >X : X<T>
++>T : T
+ 
+     p1: () => X;
+->p1 : () => X
++>p1 : () => any
+ }
+ var a: X<number>;
+ >a : X<number>
+ 
+ class X2<T> {
+ >X2 : X2<T>
++>T : T
+ 
+     p2: { [idx: number]: X2 } 
+ >p2 : { [idx: number]: any; }
+@@= skipped -24, +30 lines =@@
+ 
+ class X3<T> {
+ >X3 : X3<T>
++>T : T
+ 
+     p3: X3[]
+ >p3 : any[]
+@@= skipped -9, +10 lines =@@
+ 
+ class X4<T> {
+ >X4 : X4<T>
++>T : T
+ 
+     p4: I<X4>
+ >p4 : I<any>
+@@= skipped -9, +10 lines =@@
+ 
+ class X5<T> {
+ >X5 : X5<T>
++>T : T
+ 
+     p5: X5
+ >p5 : any
+@@= skipped -9, +10 lines =@@
+ 
+ class X6<T> {
+ >X6 : X6<T>
++>T : T
+ 
+     p6: () => Y;
+->p6 : () => Y
++>p6 : () => any
+ }
+ var a6: X6<number>;
+ >a6 : X6<number>
+ 
+ class X7<T> {
+ >X7 : X7<T>
++>T : T
+ 
+     p7: { [idx: number]: Y } 
+ >p7 : { [idx: number]: any; }
+@@= skipped -19, +21 lines =@@
+ 
+ class X8<T> {
+ >X8 : X8<T>
++>T : T
+ 
+     p8: Y[]
+ >p8 : any[]
+@@= skipped -9, +10 lines =@@
+ 
+ class X9<T> {
+ >X9 : X9<T>
++>T : T
+ 
+     p9: I<Y>
+ >p9 : I<any>
+@@= skipped -9, +10 lines =@@
+ 
+ class X10<T> {
+ >X10 : X10<T>
++>T : T
+ 
+     pa: Y
+ >pa : any

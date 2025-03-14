@@ -1,0 +1,11 @@
+--- old.slightlyIndirectedDeepObjectLiteralElaborations.types
++++ new.slightlyIndirectedDeepObjectLiteralElaborations.types
+@@= skipped -1, +1 lines =@@
+ 
+ === slightlyIndirectedDeepObjectLiteralElaborations.ts ===
+ interface Foo {
++>Foo : Foo
++
+     a: {
+ >a : { b: { c: { d: string; }; }; }
+ 

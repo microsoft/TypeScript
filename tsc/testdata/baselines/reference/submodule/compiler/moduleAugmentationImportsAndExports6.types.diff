@@ -1,0 +1,84 @@
+--- old.moduleAugmentationImportsAndExports6.types
++++ new.moduleAugmentationImportsAndExports6.types
+@@= skipped -29, +29 lines =@@
+ >undefined : undefined
+ 
+ export namespace N {
++>N : any
++
+     export interface Ifc { a: number; }
++>Ifc : Ifc
+ >a : number
+ 
+     export interface Cls { b: number; }
++>Cls : Cls
+ >b : number
+ }
+ import I = N.Ifc;
+ >I : any
+ >N : any
+->Ifc : I
++>Ifc : Ifc
+ 
+ import C = N.Cls;
+ >C : any
+ >N : any
+->Cls : C
++>Cls : Cls
+ 
+ declare module "./f1" {
+ >"./f1" : typeof import("f1")
+ 
+     interface A {
++>A : A
++
+         foo(): B;
+ >foo : () => B
+ 
+         bar(): I;
+->bar : () => I
++>bar : () => Ifc
+ 
+         baz(): C;
+->baz : () => C
++>baz : () => Cls
+     }
+ }
+ 
+@@= skipped -43, +49 lines =@@
+ let b = a.foo().n;
+ >b : number
+ >a.foo().n : number
+->a.foo() : import("f2").B
+->a.foo : () => import("f2").B
++>a.foo() : B
++>a.foo : () => B
+ >a : A
+->foo : () => import("f2").B
++>foo : () => B
+ >n : number
+ 
+ let c = a.bar().a;
+ >c : number
+ >a.bar().a : number
+->a.bar() : import("f3").N.Ifc
+->a.bar : () => import("f3").N.Ifc
++>a.bar() : Ifc
++>a.bar : () => Ifc
+ >a : A
+->bar : () => import("f3").N.Ifc
++>bar : () => Ifc
+ >a : number
+ 
+ let d = a.baz().b;
+ >d : number
+ >a.baz().b : number
+->a.baz() : import("f3").N.Cls
+->a.baz : () => import("f3").N.Cls
++>a.baz() : Cls
++>a.baz : () => Cls
+ >a : A
+->baz : () => import("f3").N.Cls
++>baz : () => Cls
+ >b : number
+ 

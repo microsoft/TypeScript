@@ -1,0 +1,13 @@
+--- old.binaryIntegerLiteralError.types
++++ new.binaryIntegerLiteralError.types
+@@= skipped -12, +12 lines =@@
+ >23410 : 23410
+ 
+ var obj1 = {
+->obj1 : { 26: string; }
+->{    0b11010: "hi",    26: "Hello",    "26": "world",} : { 26: string; }
++>obj1 : { 0b11010: string; }
++>{    0b11010: "hi",    26: "Hello",    "26": "world",} : { 0b11010: string; }
+ 
+     0b11010: "hi",
+ >0b11010 : string

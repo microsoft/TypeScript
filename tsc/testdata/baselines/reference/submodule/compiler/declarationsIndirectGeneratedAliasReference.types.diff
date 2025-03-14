@@ -1,0 +1,65 @@
+--- old.declarationsIndirectGeneratedAliasReference.types
++++ new.declarationsIndirectGeneratedAliasReference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === node_modules/mod/ctor.d.ts ===
+ export interface Ctor {
++>Ctor : Ctor
++
+     x: number;
+ >x : number
+ }
+ export type ExtendedCtor<T> = {x: number, ext: T};
+ >ExtendedCtor : ExtendedCtor<T>
++>T : T
+ >x : number
+ >ext : T
+ 
+ export interface CtorConstructor {
++>CtorConstructor : CtorConstructor
++
+     extends<T>(x: T): ExtendedCtor<T extends unknown ? Ctor : undefined>;
+ >extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
++>T : T
+ >x : T
+ }
+ export const Ctor: CtorConstructor;
+@@= skipped -18, +24 lines =@@
+ 
+ === node_modules/mod/index.d.ts ===
+ import { Ctor } from "./ctor";
+->Ctor : import("node_modules/mod/ctor").CtorConstructor
++>Ctor : CtorConstructor
+ 
+ export default Ctor;
+ >Ctor : Ctor
+ 
+ === index.ts ===
+ import * as ns from "mod";
+->ns : typeof ns
++>ns : typeof import("node_modules/mod/index")
+ 
+ const Ctor = ns.default;
+->Ctor : import("node_modules/mod/ctor").CtorConstructor
+->ns.default : import("node_modules/mod/ctor").CtorConstructor
+->ns : typeof ns
+->default : import("node_modules/mod/ctor").CtorConstructor
++>Ctor : CtorConstructor
++>ns.default : CtorConstructor
++>ns : typeof import("node_modules/mod/index")
++>default : CtorConstructor
+ 
+ export const MyComp = Ctor.extends({foo: "bar"});
+->MyComp : import("node_modules/mod/ctor").ExtendedCtor<import("node_modules/mod/ctor").Ctor>
+->Ctor.extends({foo: "bar"}) : import("node_modules/mod/ctor").ExtendedCtor<import("node_modules/mod/ctor").Ctor>
+->Ctor.extends : <T>(x: T) => import("node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("node_modules/mod/ctor").Ctor : undefined>
+->Ctor : import("node_modules/mod/ctor").CtorConstructor
+->extends : <T>(x: T) => import("node_modules/mod/ctor").ExtendedCtor<T extends unknown ? import("node_modules/mod/ctor").Ctor : undefined>
++>MyComp : ExtendedCtor<Ctor>
++>Ctor.extends({foo: "bar"}) : ExtendedCtor<Ctor>
++>Ctor.extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
++>Ctor : CtorConstructor
++>extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
+ >{foo: "bar"} : { foo: string; }
+ >foo : string
+ >"bar" : "bar"

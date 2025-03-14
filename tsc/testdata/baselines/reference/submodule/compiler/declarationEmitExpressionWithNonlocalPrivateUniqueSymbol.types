@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/declarationEmitExpressionWithNonlocalPrivateUniqueSymbol.ts] ////
+
+=== a.ts ===
+type AX = { readonly A: unique symbol };
+>AX : AX
+>A : unique symbol
+
+export const A: AX = 0 as any;
+>A : AX
+>0 as any : any
+>0 : 0
+
+=== b.ts ===
+import { A } from './a';
+>A : AX
+
+export const A1 = A;
+>A1 : AX
+>A : AX
+

@@ -1,0 +1,33 @@
+--- old.callOverload.types
++++ new.callOverload.types
+@@= skipped -10, +10 lines =@@
+ >y : any
+ 
+ declare function withRest(a: any, ...args: Array<any>): void;
+->withRest : (a: any, ...args: Array<any>) => void
++>withRest : (a: any, ...args: any[]) => void
+ >a : any
+ >args : any[]
+ 
+@@= skipped -30, +30 lines =@@
+ 
+ withRest('a', ...n); // no error
+ >withRest('a', ...n) : void
+->withRest : (a: any, ...args: Array<any>) => void
++>withRest : (a: any, ...args: any[]) => void
+ >'a' : "a"
+ >...n : number
+ >n : number[]
+ 
+ withRest();
+ >withRest() : void
+->withRest : (a: any, ...args: Array<any>) => void
++>withRest : (a: any, ...args: any[]) => void
+ 
+ withRest(...n); 
+ >withRest(...n) : void
+->withRest : (a: any, ...args: Array<any>) => void
++>withRest : (a: any, ...args: any[]) => void
+ >...n : number
+ >n : number[]
+ 

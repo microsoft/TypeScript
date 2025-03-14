@@ -1,0 +1,32 @@
+--- old.pathMappingBasedModuleResolution6_classic.types
++++ new.pathMappingBasedModuleResolution6_classic.types
+@@= skipped -1, +1 lines =@@
+ 
+ === c:/root/src/file1.ts ===
+ import {x} from "./project/file3";
+->x : number
++>x : any
+ 
+ declare function use(x: string);
+ >use : (x: string) => any
+@@= skipped -9, +9 lines =@@
+ use(x.toExponential());
+ >use(x.toExponential()) : any
+ >use : (x: string) => any
+->x.toExponential() : string
+->x.toExponential : (fractionDigits?: number) => string
+->x : number
+->toExponential : (fractionDigits?: number) => string
++>x.toExponential() : any
++>x.toExponential : any
++>x : any
++>toExponential : any
+ 
+ === c:/root/src/file2.d.ts ===
+ export let x: number;
+ >x : number
+ 
+-=== c:/root/generated/src/project/file3.ts ===
+-export {x} from "../file2";
+->x : number
+-

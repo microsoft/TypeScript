@@ -1,0 +1,11 @@
+--- old.indexSignatureWithAccessibilityModifier.types
++++ new.indexSignatureWithAccessibilityModifier.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexSignatureWithAccessibilityModifier.ts ===
+ interface I {
++>I : I
++
+     [public x: string]: string;
+ >x : string
+ }

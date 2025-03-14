@@ -1,0 +1,19 @@
+--- old.ambientDeclarations.types
++++ new.ambientDeclarations.types
+@@= skipped -54, +54 lines =@@
+ 
+ declare function fn10<T>(...q: T[]);
+ >fn10 : <T>(...q: T[]) => any
++>T : T
+ >q : T[]
+ 
+ // Ambient class
+@@= skipped -62, +63 lines =@@
+ 
+ // Ambient enum members are always exported with or without export keyword
+ declare enum E3 {
+->E3 : E3
++>E3 : E3.A
+ 
+     A
+ >A : E3.A

@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/jsdocCallbackAndType.ts] ////
+
+=== /a.js ===
+/**
+ * @template T
+ * @callback B
+ */
+/** @type {B<string>} */
+let b;
+>b : any
+
+b();
+>b() : any
+>b : any
+
+b(1);
+>b(1) : any
+>b : any
+>1 : 1
+

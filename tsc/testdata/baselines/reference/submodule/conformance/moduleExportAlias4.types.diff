@@ -1,0 +1,45 @@
+--- old.moduleExportAlias4.types
++++ new.moduleExportAlias4.types
+@@= skipped -2, +2 lines =@@
+ === bug24024.js ===
+ // #24024
+ var wat = require('./bug24024')
+->wat : typeof wat
+->require('./bug24024') : typeof wat
++>wat : any
++>require('./bug24024') : any
+ >require : any
+ >'./bug24024' : "./bug24024"
+ 
+ module.exports = class C {}
+->module.exports = class C {} : typeof wat
+->module.exports : typeof wat
+->module : { exports: typeof wat; }
+->exports : typeof wat
+->class C {} : typeof wat
+->C : typeof wat
++>module.exports = class C {} : typeof C
++>module.exports : any
++>module : any
++>exports : any
++>class C {} : typeof C
++>C : typeof C
+ 
+ module.exports.D = class D { }
+->module.exports.D = class D { } : typeof wat.D
+->module.exports.D : typeof wat.D
+->module.exports : typeof wat
+->module : { exports: typeof wat; }
+->exports : typeof wat
+->D : typeof wat.D
+->class D { } : typeof wat.D
+->D : typeof wat.D
++>module.exports.D = class D { } : typeof D
++>module.exports.D : any
++>module.exports : any
++>module : any
++>exports : any
++>D : any
++>class D { } : typeof D
++>D : typeof D
+ 

@@ -1,0 +1,73 @@
+--- old.prototypePropertyAssignmentMergeWithInterfaceMethod.types
++++ new.prototypePropertyAssignmentMergeWithInterfaceMethod.types
+@@= skipped -2, +2 lines =@@
+ === lovefield-ts.d.ts ===
+ // bug #27352, crashes from github.com/google/lovefield
+ declare namespace lf {
++>lf : any
++
+   export interface Transaction {
++>Transaction : Transaction
++
+     attach(query: query.Builder): Promise<Array<Object>>
+->attach : (query: query.Builder) => Promise<Array<Object>>
+->query : query.Builder
++>attach : (query: Builder) => Promise<Object[]>
++>query : Builder
+ >query : any
+ 
+     begin(scope: Array<schema.Table>): Promise<void>
+->begin : (scope: Array<schema.Table>) => Promise<void>
+->scope : schema.Table[]
++>begin : (scope: Table[]) => Promise<void>
++>scope : Table[]
+ >schema : any
+ 
+     commit(): Promise<void>
+ >commit : () => Promise<void>
+ 
+     exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
+->exec : (queries: Array<query.Builder>) => Promise<Array<Array<Object>>>
+->queries : query.Builder[]
++>exec : (queries: Builder[]) => Promise<Object[][]>
++>queries : Builder[]
+ >query : any
+ 
+     rollback(): Promise<void>
+@@= skipped -28, +32 lines =@@
+ }
+ === lovefield.js ===
+ lf.Transaction = function() {};
+->lf.Transaction = function() {} : typeof Transaction
+->lf.Transaction : typeof Transaction
+->lf : typeof lf
+->Transaction : typeof Transaction
+->function() {} : typeof Transaction
++>lf.Transaction = function() {} : () => void
++>lf.Transaction : any
++>lf : any
++>Transaction : any
++>function() {} : () => void
+ 
+ /**
+  * @param {!Array<!lf.schema.Table>} scope
+  * @return {!IThenable}
+  */
+ lf.Transaction.prototype.begin = function(scope) {};
+->lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
++>lf.Transaction.prototype.begin = function(scope) {} : (scope: any) => void
+ >lf.Transaction.prototype.begin : any
+ >lf.Transaction.prototype : any
+->lf.Transaction : typeof Transaction
+->lf : typeof lf
+->Transaction : typeof Transaction
++>lf.Transaction : any
++>lf : any
++>Transaction : any
+ >prototype : any
+ >begin : any
+->function(scope) {} : (scope: Array<lf.schema.Table>) => IThenable
+->scope : lf.schema.Table[]
++>function(scope) {} : (scope: any) => void
++>scope : any
+ 

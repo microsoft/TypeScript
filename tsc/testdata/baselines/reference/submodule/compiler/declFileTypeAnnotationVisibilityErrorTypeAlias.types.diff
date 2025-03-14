@@ -1,0 +1,25 @@
+--- old.declFileTypeAnnotationVisibilityErrorTypeAlias.types
++++ new.declFileTypeAnnotationVisibilityErrorTypeAlias.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declFileTypeAnnotationVisibilityErrorTypeAlias.ts ===
+ interface Window {
++>Window : Window
++
+     someMethod();
+ >someMethod : () => any
+ }
+@@= skipped -68, +70 lines =@@
+ >t12 : public1
+ 
+     type t111 = m3.public1;
+->t111 : m3.public1
++>t111 : public1
+ >m3 : any
+ 
+     export type t112 = m3.public1; // error
+->t112 : m3.public1
++>t112 : public1
+ >m3 : any
+ }
+ 

@@ -1,0 +1,15 @@
+--- old.functionLikeInParameterInitializer.types
++++ new.functionLikeInParameterInitializer.types
+@@= skipped -13, +13 lines =@@
+ }
+ // error
+ export function baz1(func = { f() { return foo } }) {
+->baz1 : (func?: { f(): string; }) => void
+->func : { f(): string; }
+->{ f() { return foo } } : { f(): string; }
++>baz1 : (func?: { f: () => string; }) => void
++>func : { f: () => string; }
++>{ f() { return foo } } : { f: () => string; }
+ >f : () => string
+ >foo : string
+ 

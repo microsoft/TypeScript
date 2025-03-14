@@ -1,0 +1,20 @@
+--- old.typeofClassWithPrivates.types
++++ new.typeofClassWithPrivates.types
+@@= skipped -2, +2 lines =@@
+ === typeofClassWithPrivates.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     private a: number;
+ >a : number
+@@= skipped -19, +20 lines =@@
+ 
+ var r: typeof C;
+ >r : typeof C
+->C : typeof C
+ 
+ var r2: typeof c;
+ >r2 : C<string>
+->c : C<string>
+ 

@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/baseExpressionTypeParameters.ts] ////
+
+=== baseExpressionTypeParameters.ts ===
+// Repro from #17829
+
+function base<T>() {
+>base : <T>() => typeof Base
+>T : T
+
+    class Base {
+>Base : Base<T>
+
+        static prop: T;
+>prop : T
+    }
+    return Base;
+>Base : typeof Base
+}
+
+class Gen<T> extends base<T>() {}  // Error, T not in scope
+>Gen : Gen<T>
+>T : T
+>base<T>() : Base<T>
+>base : <T>() => typeof Base
+
+class Spec extends Gen<string> {}
+>Spec : Spec
+>Gen : Gen<string>
+
+<string>Spec.prop;
+><string>Spec.prop : string
+>Spec.prop : T
+>Spec : typeof Spec
+>prop : T
+

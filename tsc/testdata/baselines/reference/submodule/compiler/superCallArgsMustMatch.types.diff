@@ -1,0 +1,10 @@
+--- old.superCallArgsMustMatch.types
++++ new.superCallArgsMustMatch.types
+@@= skipped -2, +2 lines =@@
+ === superCallArgsMustMatch.ts ===
+ class T5<T>{
+ >T5 : T5<T>
++>T : T
+ 
+     public foo: T;
+ >foo : T

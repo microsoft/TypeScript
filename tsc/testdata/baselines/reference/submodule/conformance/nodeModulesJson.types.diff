@@ -1,0 +1,37 @@
+--- old.nodeModulesJson.types
++++ new.nodeModulesJson.types
+@@= skipped -32, +32 lines =@@
+ >moreOops : {}
+ 
+ import typed from "actually-json/typed"; // Error
+->typed : typeof typed
++>typed : {}
+ 
+ import config from "./config.json" with { type: "json" }; // Ok
+ >config : { version: number; }
+@@= skipped -19, +19 lines =@@
+ >type : any
+ 
+ import * as config3 from "./config.json" with { type: "json" };
+->config3 : { default: { version: number; }; }
++>config3 : { version: number; }
+ >type : any
+ 
+ config3.version; // Error
+->config3.version : any
+->config3 : { default: { version: number; }; }
+->version : any
++>config3.version : number
++>config3 : { version: number; }
++>version : number
+ 
+ config3.default; // Ok
+->config3.default : { version: number; }
+->config3 : { default: { version: number; }; }
+->default : { version: number; }
++>config3.default : any
++>config3 : { version: number; }
++>default : any
+ 
+ === /loosey.cts ===
+ import config from "./config.json" with { type: "json" }; // Error

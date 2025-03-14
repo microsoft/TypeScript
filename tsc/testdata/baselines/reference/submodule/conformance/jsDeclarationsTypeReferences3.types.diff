@@ -1,0 +1,62 @@
+--- old.jsDeclarationsTypeReferences3.types
++++ new.jsDeclarationsTypeReferences3.types
+@@= skipped -3, +3 lines =@@
+ /// <reference types="node" />
+ 
+ const Something = require("fs").Something;
+->Something : typeof Something
+->require("fs").Something : typeof Something
+->require("fs") : typeof import("fs")
++>Something : any
++>require("fs").Something : any
++>require("fs") : any
+ >require : any
+ >"fs" : "fs"
+->Something : typeof Something
++>Something : any
+ 
+ module.exports.A = {}
+->module.exports.A = {} : typeof A
+->module.exports.A : typeof A
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->A : typeof A
++>module.exports.A = {} : {}
++>module.exports.A : any
++>module.exports : any
++>module : any
++>exports : any
++>A : any
+ >{} : {}
+ 
+ module.exports.A.B = {
+->module.exports.A.B = {    thing: new Something()} : { thing: Something; }
+->module.exports.A.B : { thing: Something; }
+->module.exports.A : typeof A
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->A : typeof A
+->B : { thing: Something; }
+->{    thing: new Something()} : { thing: Something; }
++>module.exports.A.B = {    thing: new Something()} : { thing: any; }
++>module.exports.A.B : any
++>module.exports.A : any
++>module.exports : any
++>module : any
++>exports : any
++>A : any
++>B : any
++>{    thing: new Something()} : { thing: any; }
+ 
+     thing: new Something()
+->thing : Something
+->new Something() : Something
+->Something : typeof Something
++>thing : any
++>new Something() : any
++>Something : any
+ }
+ 
+ === node_modules/@types/node/index.d.ts ===

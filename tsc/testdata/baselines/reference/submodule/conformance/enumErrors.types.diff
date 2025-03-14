@@ -1,0 +1,74 @@
+--- old.enumErrors.types
++++ new.enumErrors.types
+@@= skipped -15, +15 lines =@@
+ 
+ // Enum with computed member initializer of type Number
+ enum E5 {
+->E5 : E5
++>E5 : E5.C
+ 
+     C = new Number(30)
+ >C : E5.C
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ enum E9 {
+->E9 : E9
++>E9 : E9.A
+ 
+     A,
+ >A : E9.A
+ 
+     B = A
+ >B : E9.A
+->A : E9
++>A : E9.A
+ }
+ 
+ //Enum with computed member intializer of different enum type
+ // Bug 707850: This should be allowed
+ enum E10 {
+->E10 : E10
++>E10 : E10.A
+ 
+     A = E9.A,
+ >A : E10.A
+->E9.A : E9
++>E9.A : E9.A
+ >E9 : typeof E9
+->A : E9
++>A : E9.A
+ 
+     B = E9.B
+ >B : E10.A
+->E9.B : E9
++>E9.B : E9.A
+ >E9 : typeof E9
+->B : E9
++>B : E9.A
+ }
+ 
+ // Enum with computed member intializer of other types
+@@= skipped -108, +108 lines =@@
+ 
+     postColonValueComma: 2,
+ >postColonValueComma : E13.postColonValueComma
+->2 : (typeof E13)["2"]
++>2 : E13.2
+ 
+     postColonValueSemicolon: 3;
+ >postColonValueSemicolon : E13.postColonValueSemicolon
+->3 : (typeof E13)["3"]
++>3 : E13.3
+ 
+ };
+ 
+@@= skipped -14, +14 lines =@@
+ >b : E14.b
+ >any : E14.any
+ >"hello" : E14.hello
+->1 : (typeof E14)["1"]
++>1 : E14.1
+ >c : E14.c
+ >d : E14.d
+ 

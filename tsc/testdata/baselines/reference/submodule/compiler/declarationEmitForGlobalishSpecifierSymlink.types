@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/declarationEmitForGlobalishSpecifierSymlink.ts] ////
+
+=== /p1/node_modules/typescript-fsa/src/impl.d.ts ===
+export function getA(): A;
+>getA : () => A.Val
+
+export enum A {
+>A : A.Val
+
+    Val
+>Val : A.Val
+}
+=== /p1/node_modules/typescript-fsa/index.d.ts ===
+
+export * from "./src/impl";
+=== /p2/node_modules/typescript-fsa/src/impl.d.ts ===
+export function getA(): A;
+>getA : () => A.Val
+
+export enum A {
+>A : A.Val
+
+    Val
+>Val : A.Val
+}
+=== /p2/node_modules/typescript-fsa/index.d.ts ===
+
+export * from "./src/impl";
+=== /p1/index.ts ===
+import * as _whatever from "p2";
+>_whatever : typeof import("/p2/index")
+
+import { getA } from "typescript-fsa";
+>getA : () => A.Val
+
+export const a = getA();
+>a : A.Val
+>getA() : A.Val
+>getA : () => A.Val
+
+=== /p2/index.d.ts ===
+export const a: import("typescript-fsa").A;
+>a : A.Val
+
+

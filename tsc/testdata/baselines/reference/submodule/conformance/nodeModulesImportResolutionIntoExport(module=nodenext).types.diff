@@ -1,0 +1,33 @@
+--- old.nodeModulesImportResolutionIntoExport(module=nodenext).types
++++ new.nodeModulesImportResolutionIntoExport(module=nodenext).types
+@@= skipped -2, +2 lines =@@
+ === index.ts ===
+ // esm format file
+ import * as type from "#type";
+->type : typeof type
++>type : typeof import("index")
+ 
+ type;
+->type : typeof type
++>type : typeof import("index")
+ 
+ === index.mts ===
+ // esm format file
+ import * as type from "#type";
+->type : typeof type
++>type : typeof import("index")
+ 
+ type;
+->type : typeof type
++>type : typeof import("index")
+ 
+ === index.cts ===
+ // esm format file
+ import * as type from "#type";
+->type : typeof type
++>type : typeof import("index")
+ 
+ type;
+->type : typeof type
++>type : typeof import("index")
+ 

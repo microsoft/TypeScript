@@ -1,0 +1,11 @@
+--- old.symbolProperty17.types
++++ new.symbolProperty17.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty17.ts ===
+ interface I {
++>I : I
++
+     [Symbol.iterator]: number;
+ >[Symbol.iterator] : number
+ >Symbol.iterator : unique symbol

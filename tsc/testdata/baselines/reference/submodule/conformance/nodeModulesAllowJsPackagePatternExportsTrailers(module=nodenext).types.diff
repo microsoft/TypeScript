@@ -1,0 +1,159 @@
+--- old.nodeModulesAllowJsPackagePatternExportsTrailers(module=nodenext).types
++++ new.nodeModulesAllowJsPackagePatternExportsTrailers(module=nodenext).types
+@@= skipped -2, +2 lines =@@
+ === index.js ===
+ // esm format file
+ import * as cjsi from "inner/cjs/index.cjs";
+->cjsi : typeof cjsi
++>cjsi : typeof import("node_modules/inner/index")
+ 
+ import * as mjsi from "inner/mjs/index.mjs";
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof import("node_modules/inner/index")
+ 
+ import * as typei from "inner/js/index.js";
+->typei : typeof typei
++>typei : typeof import("node_modules/inner/index")
+ 
+ cjsi;
+->cjsi : typeof cjsi
++>cjsi : typeof import("node_modules/inner/index")
+ 
+ mjsi;
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof import("node_modules/inner/index")
+ 
+ typei;
+->typei : typeof typei
++>typei : typeof import("node_modules/inner/index")
+ 
+ === index.mjs ===
+ // esm format file
+ import * as cjsi from "inner/cjs/index.cjs";
+->cjsi : typeof cjsi
++>cjsi : typeof import("node_modules/inner/index")
+ 
+ import * as mjsi from "inner/mjs/index.mjs";
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof import("node_modules/inner/index")
+ 
+ import * as typei from "inner/js/index.js";
+->typei : typeof typei
++>typei : typeof import("node_modules/inner/index")
+ 
+ cjsi;
+->cjsi : typeof cjsi
++>cjsi : typeof import("node_modules/inner/index")
+ 
+ mjsi;
+->mjsi : typeof cjsi.cjs.mjs
++>mjsi : typeof import("node_modules/inner/index")
+ 
+ typei;
+->typei : typeof typei
++>typei : typeof import("node_modules/inner/index")
+ 
+ === index.cjs ===
+ // cjs format file
+ import * as cjsi from "inner/cjs/index.cjs";
+->cjsi : typeof cjsi
++>cjsi : typeof import("node_modules/inner/index")
+ 
+ import * as mjsi from "inner/mjs/index.mjs";
+->mjsi : typeof cjsi.mjs
++>mjsi : typeof import("node_modules/inner/index")
+ 
+ import * as typei from "inner/js/index.js";
+->typei : typeof cjsi.mjs.cjs.type
++>typei : typeof import("node_modules/inner/index")
+ 
+ cjsi;
+->cjsi : typeof cjsi
++>cjsi : typeof import("node_modules/inner/index")
+ 
+ mjsi;
+->mjsi : typeof cjsi.mjs
++>mjsi : typeof import("node_modules/inner/index")
+ 
+ typei;
+->typei : typeof cjsi.mjs.cjs.type
++>typei : typeof import("node_modules/inner/index")
+ 
+ === node_modules/inner/index.d.ts ===
+ // cjs format file
+ import * as cjs from "inner/cjs/index.cjs";
+->cjs : any
++>cjs : typeof import("node_modules/inner/index")
+ 
+ import * as mjs from "inner/mjs/index.mjs";
+->mjs : typeof mjs
++>mjs : typeof import("node_modules/inner/index")
+ 
+ import * as type from "inner/js/index.js";
+->type : typeof mjs.cjs.cjs.type
++>type : typeof import("node_modules/inner/index")
+ 
+ export { cjs };
+->cjs : any
++>cjs : typeof import("node_modules/inner/index")
+ 
+ export { mjs };
+->mjs : typeof mjs
++>mjs : typeof import("node_modules/inner/index")
+ 
+ export { type };
+->type : typeof mjs.cjs.cjs.type
++>type : typeof import("node_modules/inner/index")
+ 
+ === node_modules/inner/index.d.mts ===
+ // esm format file
+ import * as cjs from "inner/cjs/index.cjs";
+->cjs : typeof cjs
++>cjs : typeof import("node_modules/inner/index")
+ 
+ import * as mjs from "inner/mjs/index.mjs";
+->mjs : typeof cjs.cjs.mjs
++>mjs : typeof import("node_modules/inner/index")
+ 
+ import * as type from "inner/js/index.js";
+->type : typeof cjs.cjs.mjs.type
++>type : typeof import("node_modules/inner/index")
+ 
+ export { cjs };
+->cjs : typeof cjs
++>cjs : typeof import("node_modules/inner/index")
+ 
+ export { mjs };
+->mjs : typeof cjs.cjs.mjs
++>mjs : typeof import("node_modules/inner/index")
+ 
+ export { type };
+->type : typeof cjs.cjs.mjs.type
++>type : typeof import("node_modules/inner/index")
+ 
+ === node_modules/inner/index.d.cts ===
+ // cjs format file
+ import * as cjs from "inner/cjs/index.cjs";
+->cjs : typeof cjs
++>cjs : typeof import("node_modules/inner/index")
+ 
+ import * as mjs from "inner/mjs/index.mjs";
+->mjs : typeof cjs.mjs
++>mjs : typeof import("node_modules/inner/index")
+ 
+ import * as type from "inner/js/index.js";
+->type : typeof cjs.mjs.cjs.type
++>type : typeof import("node_modules/inner/index")
+ 
+ export { cjs };
+->cjs : typeof cjs
++>cjs : typeof import("node_modules/inner/index")
+ 
+ export { mjs };
+->mjs : typeof cjs.mjs
++>mjs : typeof import("node_modules/inner/index")
+ 
+ export { type };
+->type : typeof cjs.mjs.cjs.type
++>type : typeof import("node_modules/inner/index")
+ 

@@ -1,0 +1,29 @@
+--- old.mergedInheritedClassInterface.types
++++ new.mergedInheritedClassInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === mergedInheritedClassInterface.ts ===
+ interface BaseInterface {
++>BaseInterface : BaseInterface
++
+     required: number;
+ >required : number
+ 
+@@= skipped -18, +20 lines =@@
+ }
+ 
+ interface Child extends BaseInterface {
++>Child : Child
++
+     additional: number;
+ >additional : number
+ }
+@@= skipped -16, +18 lines =@@
+ }
+ 
+ interface ChildNoBaseClass extends BaseInterface {
++>ChildNoBaseClass : ChildNoBaseClass
++
+     additional2: string;
+ >additional2 : string
+ }

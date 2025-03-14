@@ -1,0 +1,64 @@
+--- old.contextuallyTypedJsxAttribute.types
++++ new.contextuallyTypedJsxAttribute.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.tsx ===
+ interface Elements {
++>Elements : Elements
++
+   foo: { callback?: (value: number) => void };
+ >foo : { callback?: (value: number) => void; }
+ >callback : (value: number) => void
+@@= skipped -13, +15 lines =@@
+ 
+ type Props<C extends keyof Elements> = { as?: C } & Elements[C];
+ >Props : Props<C>
++>C : C
+ >as : C
+ 
+ declare function Test<C extends keyof Elements>(props: Props<C>): null;
+ >Test : <C extends keyof Elements>(props: Props<C>) => null
++>C : C
+ >props : Props<C>
+ 
+ <Test
+-><Test  as="bar"  callback={(value) => {}}/> : error
++><Test  as="bar"  callback={(value) => {}}/> : any
+ >Test : <C extends keyof Elements>(props: Props<C>) => null
+ 
+   as="bar"
+->as : "bar"
++>as : any
+ 
+   callback={(value) => {}}
+->callback : (value: string) => void
+->(value) => {} : (value: string) => void
+->value : string
++>callback : any
++>(value) => {} : (value: any) => void
++>value : any
+ 
+ />;
+ 
+@@= skipped -37, +39 lines =@@
+ });
+ 
+ <Test<'bar'>
+-><Test<'bar'>  as="bar"  callback={(value) => {}}/> : error
++><Test<'bar'>  as="bar"  callback={(value) => {}}/> : any
+ >Test : <C extends keyof Elements>(props: Props<C>) => null
+ 
+   as="bar"
+->as : "bar"
++>as : any
+ 
+   callback={(value) => {}}
+->callback : (value: string) => void
+->(value) => {} : (value: string) => void
+->value : string
++>callback : any
++>(value) => {} : (value: any) => void
++>value : any
+ 
+ />;
+ 

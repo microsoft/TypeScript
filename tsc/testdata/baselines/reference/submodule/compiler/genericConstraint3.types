@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/genericConstraint3.ts] ////
+
+=== genericConstraint3.ts ===
+interface C<P> { x: P; }
+>C : C<P>
+>P : P
+>x : P
+
+interface A<T, U extends C<T>> { x: U; }
+>A : A<T, U>
+>T : T
+>U : U
+>x : U
+
+interface B extends A<{}, { x: {} }> { } // Should not produce an error
+>B : B
+>x : {}
+

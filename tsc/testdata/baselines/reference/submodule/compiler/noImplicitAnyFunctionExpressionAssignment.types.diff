@@ -1,0 +1,18 @@
+--- old.noImplicitAnyFunctionExpressionAssignment.types
++++ new.noImplicitAnyFunctionExpressionAssignment.types
+@@= skipped -4, +4 lines =@@
+ >x : (a: any) => void
+ >a : any
+ >function <T>(x: T) {    return null;} : <T>(x: T) => any
++>T : T
+ >x : T
+ 
+     return null;
+@@= skipped -10, +11 lines =@@
+ >a : any
+ >function f<T>(x: T) {    return null;} : <T>(x: T) => any
+ >f : <T>(x: T) => any
++>T : T
+ >x : T
+ 
+     return null;

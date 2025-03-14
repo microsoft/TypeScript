@@ -1,0 +1,149 @@
+--- old.unreachableDeclarations(preserveconstenums=false).types
++++ new.unreachableDeclarations(preserveconstenums=false).types
+@@= skipped -12, +12 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumA.Value : EnumA
++>EnumA.Value : EnumA.Value
+ >EnumA : typeof EnumA
+->Value : EnumA
++>Value : EnumA.Value
+ 
+     console.log(EnumB.Value);
+ >console.log(EnumB.Value) : void
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumB.Value : EnumB
++>EnumB.Value : EnumB.Value
+ >EnumB : typeof EnumB
+->Value : EnumB
++>Value : EnumB.Value
+ 
+     return;
+ 
+@@= skipped -23, +23 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumA.Value : EnumA
++>EnumA.Value : EnumA.Value
+ >EnumA : typeof EnumA
+->Value : EnumA
++>Value : EnumA.Value
+ 
+         console.log(EnumB.Value);
+ >console.log(EnumB.Value) : void
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumB.Value : EnumB
++>EnumB.Value : EnumB.Value
+ >EnumB : typeof EnumB
+->Value : EnumB
++>Value : EnumB.Value
+     }
+ 
+     enum EnumA { Value }
+->EnumA : EnumA
++>EnumA : EnumA.Value
+ >Value : EnumA.Value
+ 
+     const enum EnumB { Value }
+->EnumB : EnumB
++>EnumB : EnumB.Value
+ >Value : EnumB.Value
+ }
+ 
+@@= skipped -35, +35 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumA.Value : EnumA
++>EnumA.Value : EnumA.Value
+ >EnumA : typeof EnumA
+->Value : EnumA
++>Value : EnumA.Value
+ 
+     return;
+ 
+@@= skipped -14, +14 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumA.Value : EnumA
++>EnumA.Value : EnumA.Value
+ >EnumA : typeof EnumA
+->Value : EnumA
++>Value : EnumA.Value
+     }
+ 
+     enum EnumA { Value }
+->EnumA : EnumA
++>EnumA : EnumA.Value
+ >Value : EnumA.Value
+ }
+ 
+@@= skipped -22, +22 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumB.Value : EnumB
++>EnumB.Value : EnumB.Value
+ >EnumB : typeof EnumB
+->Value : EnumB
++>Value : EnumB.Value
+ 
+     return;
+ 
+@@= skipped -14, +14 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->EnumB.Value : EnumB
++>EnumB.Value : EnumB.Value
+ >EnumB : typeof EnumB
+->Value : EnumB
++>Value : EnumB.Value
+     }
+ 
+     const enum EnumB { Value }
+->EnumB : EnumB
++>EnumB : EnumB.Value
+ >Value : EnumB.Value
+ }
+ 
+@@= skipped -59, +59 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->Bar.A : Bar
++>Bar.A : Bar.A
+ >Bar : typeof Bar
+->A : Bar
++>A : Bar.A
+ 
+ 	console.log(blah.prop);
+ >console.log(blah.prop) : void
+@@= skipped -41, +41 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->Bar.A : Bar
++>Bar.A : Bar.A
+ >Bar : typeof Bar
+->A : Bar
++>A : Bar.A
+ 
+ 		console.log(blah.prop);
+ >console.log(blah.prop) : void
+@@= skipped -38, +38 lines =@@
+ >1234 : 1234
+ 
+ 	enum Bar { A }
+->Bar : Bar
++>Bar : Bar.A
+ >A : Bar.A
+ 
+ 	class Foo { x = 1234 }

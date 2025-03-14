@@ -1,0 +1,47 @@
+--- old.jsDeclarationsTypeReferences2.types
++++ new.jsDeclarationsTypeReferences2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.js ===
+ const{ a, m } = require("./something").o;
+->a : number
+->m : number
+->require("./something").o : { a: number; m: number; }
+->require("./something") : typeof import("something")
++>a : any
++>m : any
++>require("./something").o : any
++>require("./something") : any
+ >require : any
+ >"./something" : "./something"
+->o : { a: number; m: number; }
++>o : any
+ 
+ const thing = a + m
+->thing : number
+->a + m : number
+->a : number
+->m : number
++>thing : any
++>a + m : any
++>a : any
++>m : any
+ 
+ module.exports = {
+->module.exports = {    thing} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->{    thing} : { thing: number; }
++>module.exports = {    thing} : { thing: any; }
++>module.exports : any
++>module : any
++>exports : any
++>{    thing} : { thing: any; }
+ 
+     thing
+->thing : number
++>thing : any
+ 
+ };
+ 

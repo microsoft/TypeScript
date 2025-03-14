@@ -1,0 +1,42 @@
+--- old.destructuringSameNames.types
++++ new.destructuringSameNames.types
+@@= skipped -14, +14 lines =@@
+ >({ foo, foo } = { foo: 2 }) : { foo: number; }
+ >{ foo, foo } = { foo: 2 } : { foo: number; }
+ >{ foo, foo } : { foo: number; }
+->foo : number
+->foo : number
++>foo : any
++>foo : any
+ >{ foo: 2 } : { foo: number; }
+ >foo : number
+ >2 : 2
+@@= skipped -10, +10 lines =@@
+ >({ foo, foo: bar } = { foo: 3 }) : { foo: number; }
+ >{ foo, foo: bar } = { foo: 3 } : { foo: number; }
+ >{ foo, foo: bar } : { foo: number; }
+->foo : number
+->foo : number
++>foo : any
++>foo : any
+ >bar : number
+ >{ foo: 3 } : { foo: number; }
+ >foo : number
+@@= skipped -22, +22 lines =@@
+ >({ foo, bar: foo } = { foo: 3, bar: 33 }) : { foo: number; bar: number; }
+ >{ foo, bar: foo } = { foo: 3, bar: 33 } : { foo: number; bar: number; }
+ >{ foo, bar: foo } : { foo: number; bar: number; }
+->foo : number
++>foo : any
+ >bar : number
+ >foo : number
+ >{ foo: 3, bar: 33 } : { foo: number; bar: number; }
+@@= skipped -15, +15 lines =@@
+ >{ bar: foo, foo } : { bar: number; foo: number; }
+ >bar : number
+ >foo : number
+->foo : number
++>foo : any
+ >{ foo: 4, bar: 44 } : { foo: number; bar: number; }
+ >foo : number
+ >4 : 4

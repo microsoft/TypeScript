@@ -1,0 +1,10 @@
+--- old.classWithoutExplicitConstructor.types
++++ new.classWithoutExplicitConstructor.types
+@@= skipped -24, +24 lines =@@
+ 
+ class D<T extends Date> {
+ >D : D<T>
++>T : T
+ 
+     x = 2
+ >x : number

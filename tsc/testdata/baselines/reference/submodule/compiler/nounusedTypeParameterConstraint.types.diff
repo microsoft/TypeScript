@@ -1,0 +1,18 @@
+--- old.nounusedTypeParameterConstraint.types
++++ new.nounusedTypeParameterConstraint.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/nounusedTypeParameterConstraint.ts] ////
+ 
+ === bar.ts ===
+-
+ export interface IEventSourcedEntity { }
++>IEventSourcedEntity : IEventSourcedEntity
+ 
+ === test.ts ===
+ import { IEventSourcedEntity } from "./bar";
+@@= skipped -9, +9 lines =@@
+ 
+ export type DomainEntityConstructor<TEntity extends IEventSourcedEntity> = { new(): TEntity; };
+ >DomainEntityConstructor : DomainEntityConstructor<TEntity>
++>TEntity : TEntity
+ 

@@ -1,0 +1,27 @@
+--- old.recursiveTypeIdentity.types
++++ new.recursiveTypeIdentity.types
+@@= skipped -1, +1 lines =@@
+ 
+ === recursiveTypeIdentity.ts ===
+ interface A {
++>A : A
++
+     <T extends A>(x: T): void;
++>T : T
+ >x : T
+ }
+ 
+ interface B {
++>B : B
++
+     <T extends B>(x: T): void;
++>T : T
+ >x : T
+ }
+ 
+ interface C {
++>C : C
++
+     (x: A): void;
+ >x : A
+ 

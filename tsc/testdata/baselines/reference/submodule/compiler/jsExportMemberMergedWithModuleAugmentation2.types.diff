@@ -1,0 +1,38 @@
+--- old.jsExportMemberMergedWithModuleAugmentation2.types
++++ new.jsExportMemberMergedWithModuleAugmentation2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /test.js ===
+ module.exports = {
+->module.exports = {  a: "ok"} : { a: string | number; }
+->module.exports : { a: string | number; }
+->module : { exports: { a: string | number; }; }
+->exports : { a: string | number; }
++>module.exports = {  a: "ok"} : { a: string; }
++>module.exports : any
++>module : any
++>exports : any
+ >{  a: "ok"} : { a: string; }
+ 
+   a: "ok"
+@@= skipped -14, +14 lines =@@
+ 
+ === /index.ts ===
+ import { a } from "./test";
+->a : string
++>a : any
+ 
+ declare module "./test" {
+->"./test" : { a: string | number; }
++>"./test" : typeof import("./test")
+ 
+   export const a: number;
+ >a : number
+@@= skipped -12, +12 lines =@@
+ a.toFixed();
+ >a.toFixed() : any
+ >a.toFixed : any
+->a : string
++>a : any
+ >toFixed : any
+ 

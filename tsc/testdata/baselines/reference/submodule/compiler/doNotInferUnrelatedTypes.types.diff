@@ -1,0 +1,20 @@
+--- old.doNotInferUnrelatedTypes.types
++++ new.doNotInferUnrelatedTypes.types
+@@= skipped -2, +2 lines =@@
+ === doNotInferUnrelatedTypes.ts ===
+ // #16709
+ declare function dearray<T>(ara: ReadonlyArray<T>): T;
+->dearray : <T>(ara: ReadonlyArray<T>) => T
++>dearray : <T>(ara: readonly T[]) => T
++>T : T
+ >ara : readonly T[]
+ 
+ type LiteralType = "foo" | "bar";
+@@= skipped -12, +13 lines =@@
+ let foo: LiteralType = dearray(alt);
+ >foo : LiteralType
+ >dearray(alt) : LiteralType
+->dearray : <T>(ara: ReadonlyArray<T>) => T
++>dearray : <T>(ara: readonly T[]) => T
+ >alt : LiteralType[]
+ 

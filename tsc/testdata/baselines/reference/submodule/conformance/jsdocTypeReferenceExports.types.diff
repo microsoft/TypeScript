@@ -1,0 +1,24 @@
+--- old.jsdocTypeReferenceExports.types
++++ new.jsdocTypeReferenceExports.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bug27342.js ===
+ module.exports = {}
+->module.exports = {} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {} : {}
++>module.exports : any
++>module : any
++>exports : any
+ >{} : {}
+ 
+ /**
+  * @type {exports}
+  */
+ var x
+->x : typeof import("bug27342")
++>x : any
+ 
+ 

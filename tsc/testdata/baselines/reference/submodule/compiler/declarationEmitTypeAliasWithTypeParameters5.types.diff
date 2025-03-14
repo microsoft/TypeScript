@@ -1,0 +1,21 @@
+--- old.declarationEmitTypeAliasWithTypeParameters5.types
++++ new.declarationEmitTypeAliasWithTypeParameters5.types
+@@= skipped -2, +2 lines =@@
+ === declarationEmitTypeAliasWithTypeParameters5.ts ===
+ type Foo<T, Y> = {
+ >Foo : Foo<T, Y>
++>T : T
++>Y : Y
+ 
+     foo<U, J>(): Foo<U, J>
+ >foo : <U, J>() => Foo<U, J>
++>U : U
++>J : J
+ 
+ };
+ export type SubFoo<R> = Foo<string, R>;
+ >SubFoo : SubFoo<R>
++>R : R
+ 
+ function foo() {
+ >foo : () => SubFoo<number>

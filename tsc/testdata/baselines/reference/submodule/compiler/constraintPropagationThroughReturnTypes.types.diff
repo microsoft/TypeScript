@@ -1,0 +1,18 @@
+--- old.constraintPropagationThroughReturnTypes.types
++++ new.constraintPropagationThroughReturnTypes.types
+@@= skipped -2, +2 lines =@@
+ === constraintPropagationThroughReturnTypes.ts ===
+ function g<T>(x: T): T {
+ >g : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+   return x;
+@@= skipped -8, +9 lines =@@
+  
+ function f<S extends { foo: string }>(x: S) {
+ >f : <S extends { foo: string; }>(x: S) => void
++>S : S
+ >foo : string
+ >x : S
+ 

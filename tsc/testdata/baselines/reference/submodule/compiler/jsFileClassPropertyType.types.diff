@@ -1,0 +1,15 @@
+--- old.jsFileClassPropertyType.types
++++ new.jsFileClassPropertyType.types
+@@= skipped -16, +16 lines =@@
+ === bar.ts ===
+ (new C()).p = "string";
+ >(new C()).p = "string" : "string"
+->(new C()).p : number
++>(new C()).p : any
+ >(new C()) : C
+ >new C() : C
+ >C : typeof C
+->p : number
++>p : any
+ >"string" : "string"
+ 

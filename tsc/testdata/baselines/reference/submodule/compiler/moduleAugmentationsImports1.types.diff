@@ -1,0 +1,48 @@
+--- old.moduleAugmentationsImports1.types
++++ new.moduleAugmentationsImports1.types
+@@= skipped -53, +53 lines =@@
+ >"./a" : typeof import("a")
+ 
+     interface A {
++>A : A
++
+         getB(): B;
+ >getB : () => B
+     }
+@@= skipped -9, +11 lines =@@
+ >"./a" : typeof import("a")
+ 
+     interface A {
++>A : A
++
+         getCls(): Cls;
+ >getCls : () => Cls
+     }
+@@= skipped -19, +21 lines =@@
+ >a.getB().x.toFixed() : string
+ >a.getB().x.toFixed : (fractionDigits?: number) => string
+ >a.getB().x : number
+->a.getB() : import("b").B
+->a.getB : () => import("b").B
++>a.getB() : B
++>a.getB : () => B
+ >a : A
+->getB : () => import("b").B
++>getB : () => B
+ >x : number
+ >toFixed : (fractionDigits?: number) => string
+ 
+@@= skipped -12, +12 lines =@@
+ >a.getCls().y.toLowerCase() : string
+ >a.getCls().y.toLowerCase : () => string
+ >a.getCls().y : string
+->a.getCls() : import("C").Cls
+->a.getCls : () => import("C").Cls
++>a.getCls() : Cls
++>a.getCls : () => Cls
+ >a : A
+->getCls : () => import("C").Cls
++>getCls : () => Cls
+ >y : string
+ >toLowerCase : () => string
+ 

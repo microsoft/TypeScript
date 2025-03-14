@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/es6/destructuring/emptyObjectBindingPatternParameter02.ts] ////
+
+=== emptyObjectBindingPatternParameter02.ts ===
+function f(a, {}) {
+>f : (a: any, __1: {}) => void
+>a : any
+
+    var x, y, z;
+>x : any
+>y : any
+>z : any
+}

@@ -1,0 +1,280 @@
+--- old.moduleExportAssignment7.types
++++ new.moduleExportAssignment7.types
+@@= skipped -20, +20 lines =@@
+ 
+ /** @typedef {() => number} buz */
+ module.exports = {
+->module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+->module.exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+->module : { exports: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }; }
+->exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+->{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
++>module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
++>module.exports : any
++>module : any
++>exports : any
++>{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
+ 
+     Thing,
+->Thing : typeof Thing
++>Thing : any
+ 
+     AnotherThing,
+->AnotherThing : typeof AnotherThing
++>AnotherThing : any
+ 
+     foo,
+->foo : () => number
++>foo : any
+ 
+     qux: bar,
+ >qux : () => number
+@@= skipped -38, +38 lines =@@
+  * @param {import("./mod").literal} g
+  */
+ function jstypes(a, b, c, d, e, f, g) {
+->jstypes : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz, g: string) => number
+->a : Thing
+->b : AnotherThing
+->c : () => number
+->d : () => number
+->e : () => number
+->f : import("mod").buz
+->g : string
++>jstypes : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
++>a : any
++>b : any
++>c : any
++>d : any
++>e : any
++>f : any
++>g : any
+ 
+     return a.x + b.y + c() + d() + e() + f() + g.length
+->a.x + b.y + c() + d() + e() + f() + g.length : number
+->a.x + b.y + c() + d() + e() + f() : number
+->a.x + b.y + c() + d() + e() : number
+->a.x + b.y + c() + d() : number
+->a.x + b.y + c() : number
+->a.x + b.y : number
+->a.x : number
+->a : Thing
+->x : number
+->b.y : number
+->b : AnotherThing
+->y : number
+->c() : number
+->c : () => number
+->d() : number
+->d : () => number
+->e() : number
+->e : () => number
+->f() : number
+->f : import("mod").buz
+->g.length : number
+->g : string
+->length : number
++>a.x + b.y + c() + d() + e() + f() + g.length : any
++>a.x + b.y + c() + d() + e() + f() : any
++>a.x + b.y + c() + d() + e() : any
++>a.x + b.y + c() + d() : any
++>a.x + b.y + c() : any
++>a.x + b.y : any
++>a.x : any
++>a : any
++>x : any
++>b.y : any
++>b : any
++>y : any
++>c() : any
++>c : any
++>d() : any
++>d : any
++>e() : any
++>e : any
++>f() : any
++>f : any
++>g.length : any
++>g : any
++>length : any
+ }
+ 
+ /**
+@@= skipped -45, +45 lines =@@
+  * @param {typeof import("./mod").literal} g
+  */
+ function jsvalues(a, b, c, d, e, f, g) {
+->jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
+->a : typeof Thing
+->b : typeof AnotherThing
+->c : () => number
+->d : () => number
+->e : () => number
++>jsvalues : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
++>a : any
++>b : any
++>c : any
++>d : any
++>e : any
+ >f : any
+->g : string
++>g : any
+ 
+     return a.length + b.length + c() + d() + e() + f() + g.length
+ >a.length + b.length + c() + d() + e() + f() + g.length : any
+ >a.length + b.length + c() + d() + e() + f() : any
+->a.length + b.length + c() + d() + e() : number
+->a.length + b.length + c() + d() : number
+->a.length + b.length + c() : number
+->a.length + b.length : number
+->a.length : number
+->a : typeof Thing
+->length : number
+->b.length : number
+->b : typeof AnotherThing
+->length : number
+->c() : number
+->c : () => number
+->d() : number
+->d : () => number
+->e() : number
+->e : () => number
++>a.length + b.length + c() + d() + e() : any
++>a.length + b.length + c() + d() : any
++>a.length + b.length + c() : any
++>a.length + b.length : any
++>a.length : any
++>a : any
++>length : any
++>b.length : any
++>b : any
++>length : any
++>c() : any
++>c : any
++>d() : any
++>d : any
++>e() : any
++>e : any
+ >f() : any
+ >f : any
+->g.length : number
+->g : string
+->length : number
++>g.length : any
++>g : any
++>length : any
+ }
+ 
+ === index.ts ===
+ function types(
+->types : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: import("./mod").foo, d: import("./mod").qux, e: import("./mod").baz, f: import("./mod").buz, g: import("./mod").literal) => any
++>types : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+ 
+     a: import('./mod').Thing,
+ >a : any
+@@= skipped -55, +55 lines =@@
+ >e : any
+ 
+     f: import('./mod').buz,
+->f : import("mod").buz
++>f : any
+ 
+     g: import('./mod').literal,
+ >g : any
+@@= skipped -25, +25 lines =@@
+ >d : any
+ >e() : any
+ >e : any
+->f() : number
+->f : import("mod").buz
++>f() : any
++>f : any
+ >g.length : any
+ >g : any
+ >length : any
+ }
+ 
+ function values(
+->values : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
++>values : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+ 
+     a: typeof import('./mod').Thing,
+->a : typeof Thing
+->Thing : any
++>a : any
+ 
+     b: typeof import('./mod').AnotherThing,
+->b : typeof AnotherThing
+->AnotherThing : any
++>b : any
+ 
+     c: typeof import('./mod').foo,
+->c : () => number
+->foo : any
++>c : any
+ 
+     d: typeof import('./mod').qux,
+->d : () => number
+->qux : any
++>d : any
+ 
+     e: typeof import('./mod').baz,
+->e : () => number
+->baz : any
++>e : any
+ 
+     f: typeof import('./mod').buz,
+ >f : any
+->buz : any
+ 
+     g: typeof import('./mod').literal,
+->g : string
+->literal : any
++>g : any
+ 
+ ) {
+     return a.length + b.length + c() + d() + e() + f() + g.length
+ >a.length + b.length + c() + d() + e() + f() + g.length : any
+ >a.length + b.length + c() + d() + e() + f() : any
+->a.length + b.length + c() + d() + e() : number
+->a.length + b.length + c() + d() : number
+->a.length + b.length + c() : number
+->a.length + b.length : number
+->a.length : number
+->a : typeof Thing
+->length : number
+->b.length : number
+->b : typeof AnotherThing
+->length : number
+->c() : number
+->c : () => number
+->d() : number
+->d : () => number
+->e() : number
+->e : () => number
++>a.length + b.length + c() + d() + e() : any
++>a.length + b.length + c() + d() : any
++>a.length + b.length + c() : any
++>a.length + b.length : any
++>a.length : any
++>a : any
++>length : any
++>b.length : any
++>b : any
++>length : any
++>c() : any
++>c : any
++>d() : any
++>d : any
++>e() : any
++>e : any
+ >f() : any
+ >f : any
+->g.length : number
+->g : string
+->length : number
++>g.length : any
++>g : any
++>length : any
+ }
+ 

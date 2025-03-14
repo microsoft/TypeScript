@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/jsxImportInAttribute.tsx] ////
+
+=== consumer.tsx ===
+/// <reference path="component.d.ts" />
+import Test from 'Test';
+>Test : typeof default
+
+let x = Test; // emit test_1.default
+>x : typeof default
+>Test : typeof default
+
+<anything attr={Test} />; // ?
+><anything attr={Test} /> : any
+>anything : any
+>attr : any
+>Test : typeof default
+
+=== component.d.ts ===
+declare module "Test" {
+>"Test" : typeof import("Test")
+
+	export default class Text { }
+>Text : default
+}
+

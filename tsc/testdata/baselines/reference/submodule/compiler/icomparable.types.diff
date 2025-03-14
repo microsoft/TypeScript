@@ -1,0 +1,24 @@
+--- old.icomparable.types
++++ new.icomparable.types
+@@= skipped -1, +1 lines =@@
+ 
+ === icomparable.ts ===
+     interface IComparable<T> {
++>IComparable : IComparable<T>
++>T : T
++
+        compareTo(other: T);
+ >compareTo : (other: T) => any
+ >other : T
+@@= skipped -7, +10 lines =@@
+ 
+     declare function sort<U extends IComparable<any>>(items: U[]): U[];
+ >sort : <U extends IComparable<any>>(items: U[]) => U[]
++>U : U
+ >items : U[]
+ 
+     interface StringComparable extends IComparable<string> {
++>StringComparable : StringComparable
+     }
+ 
+     var sc: StringComparable[];

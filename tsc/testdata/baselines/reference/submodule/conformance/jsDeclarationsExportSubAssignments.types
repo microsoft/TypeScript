@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportSubAssignments.ts] ////
+
+=== cls.js ===
+const Strings = {
+>Strings : { a: string; b: string; }
+>{    a: "A",    b: "B"} : { a: string; b: string; }
+
+    a: "A",
+>a : string
+>"A" : "A"
+
+    b: "B"
+>b : string
+>"B" : "B"
+
+};
+class Foo {}
+>Foo : Foo
+
+module.exports = Foo;
+>module.exports = Foo : typeof Foo
+>module.exports : any
+>module : any
+>exports : any
+>Foo : typeof Foo
+
+module.exports.Strings = Strings;
+>module.exports.Strings = Strings : { a: string; b: string; }
+>module.exports.Strings : any
+>module.exports : any
+>module : any
+>exports : any
+>Strings : any
+>Strings : { a: string; b: string; }
+

@@ -1,0 +1,24 @@
+--- old.externalModuleRefernceResolutionOrderInImportDeclaration.types
++++ new.externalModuleRefernceResolutionOrderInImportDeclaration.types
+@@= skipped -2, +2 lines =@@
+ === externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts ===
+ ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
+ import file1 = require('./externalModuleRefernceResolutionOrderInImportDeclaration_file1');
+->file1 : typeof file1
++>file1 : typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")
+ 
+ file1.foo();
+ >file1.foo() : void
+ >file1.foo : () => void
+->file1 : typeof file1
++>file1 : typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")
+ >foo : () => void
+ 
+ file1.bar();
+ >file1.bar() : any
+ >file1.bar : any
+->file1 : typeof file1
++>file1 : typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")
+ >bar : any
+ 
+ 

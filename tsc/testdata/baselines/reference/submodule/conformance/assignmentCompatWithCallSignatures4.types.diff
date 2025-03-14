@@ -1,0 +1,161 @@
+--- old.assignmentCompatWithCallSignatures4.types
++++ new.assignmentCompatWithCallSignatures4.types
+@@= skipped -59, +59 lines =@@
+ >bar : string
+ 
+         var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
+->a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
++>a12 : (x: Base[], y: Derived2[]) => Derived[]
+ >x : Base[]
+ >y : Derived2[]
+ 
+@@= skipped -51, +51 lines =@@
+ >x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+ 
+                     <T extends Derived>(a: T): T;
++>T : T
+ >a : T
+ 
+                     <T extends Base>(a: T): T;
++>T : T
+ >a : T
+ 
+                 }): any[];
+@@= skipped -10, +12 lines =@@
+ >x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+ 
+                     <T extends Derived2>(a: T): T;
++>T : T
+ >a : T
+ 
+                     <T extends Base>(a: T): T;
++>T : T
+ >a : T
+ 
+                 }): any[];
+@@= skipped -10, +12 lines =@@
+ 
+         var b2: <T, U>(x: T) => U[]; 
+ >b2 : <T, U>(x: T) => U[]
++>T : T
++>U : U
+ >x : T
+ 
+         a2 = b2;
+@@= skipped -14, +16 lines =@@
+ 
+         var b7: <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
+ >b7 : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
++>T : T
++>U : U
++>V : V
+ >x : (arg: T) => U
+ >arg : T
+ >r : T
+@@= skipped -16, +19 lines =@@
+ 
+         var b8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
+ >b8 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
++>T : T
++>U : U
+ >x : (arg: T) => U
+ >arg : T
+ >y : (arg2: { foo: number; }) => U
+@@= skipped -20, +22 lines =@@
+         
+         var b10: <T extends Derived>(...x: T[]) => T; 
+ >b10 : <T extends Derived>(...x: T[]) => T
++>T : T
+ >x : T[]
+ 
+         a10 = b10;
+@@= skipped -14, +15 lines =@@
+ 
+         var b11: <T extends Derived>(x: T, y: T) => T; 
+ >b11 : <T extends Derived>(x: T, y: T) => T
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -14, +15 lines =@@
+ >a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+ 
+         var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
+->b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
++>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
++>T : T
+ >x : Base[]
+ >y : Base[]
+ 
+         a12 = b12;
+->a12 = b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
+->a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+->b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
++>a12 = b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
++>a12 : (x: Base[], y: Derived2[]) => Derived[]
++>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
+ 
+         b12 = a12;
+->b12 = a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
+->b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
+->a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
++>b12 = a12 : (x: Base[], y: Derived2[]) => Derived[]
++>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
++>a12 : (x: Base[], y: Derived2[]) => Derived[]
+ 
+         var b15: <T>(x: { a: T; b: T }) => T; 
+ >b15 : <T>(x: { a: T; b: T; }) => T
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T
+@@= skipped -32, +34 lines =@@
+ 
+         var b15a: <T extends Base>(x: { a: T; b: T }) => number; 
+ >b15a : <T extends Base>(x: { a: T; b: T; }) => number
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T
+@@= skipped -16, +17 lines =@@
+ 
+         var b16: <T>(x: (a: T) => T) => T[];
+ >b16 : <T>(x: (a: T) => T) => T[]
++>T : T
+ >x : (a: T) => T
+ >a : T
+ 
+@@= skipped -15, +16 lines =@@
+ 
+         var b17: <T>(x: (a: T) => T) => any[];
+ >b17 : <T>(x: (a: T) => T) => any[]
++>T : T
+ >x : (a: T) => T
+ >a : T
+ 
+@@= skipped -20, +21 lines =@@
+         // target type has generic call signature
+         var a2: <T>(x: T) => T[];
+ >a2 : <T>(x: T) => T[]
++>T : T
+ >x : T
+ 
+         var b2: <T>(x: T) => string[];
+ >b2 : <T>(x: T) => string[]
++>T : T
+ >x : T
+ 
+         a2 = b2;
+@@= skipped -19, +21 lines =@@
+         // target type has generic call signature
+         var a3: <T>(x: T) => string[];
+ >a3 : <T>(x: T) => string[]
++>T : T
+ >x : T
+ 
+         var b3: <T>(x: T) => T[]; 
+ >b3 : <T>(x: T) => T[]
++>T : T
+ >x : T
+ 
+         a3 = b3;

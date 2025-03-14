@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/jsx/tsxReactComponentWithDefaultTypeParameter2.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface Prop {
+>Prop : Prop
+
+    a: number,
+>a : number
+
+    b: string
+>b : string
+}
+
+declare class MyComp<P = Prop> extends React.Component<P, {}> {
+>MyComp : MyComp<P>
+>P : P
+>React.Component : any
+>React : any
+>Component : any
+
+    internalProp: P;
+>internalProp : P
+}
+
+let x = <MyComp />
+>x : any
+><MyComp /> : any
+>MyComp : typeof MyComp
+
+let x1 = <MyComp a="hi"/>
+>x1 : any
+><MyComp a="hi"/> : any
+>MyComp : typeof MyComp
+>a : any
+

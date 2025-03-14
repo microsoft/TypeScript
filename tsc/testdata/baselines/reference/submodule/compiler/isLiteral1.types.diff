@@ -1,0 +1,9 @@
+--- old.isLiteral1.types
++++ new.isLiteral1.types
+@@= skipped -2, +2 lines =@@
+ === isLiteral1.ts ===
+ var x: number = 02343;
+ >x : number
+->02343 : 1251
++>02343 : 2343
+ 

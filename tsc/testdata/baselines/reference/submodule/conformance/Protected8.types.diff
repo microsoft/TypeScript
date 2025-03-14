@@ -1,0 +1,11 @@
+--- old.Protected8.types
++++ new.Protected8.types
+@@= skipped -1, +1 lines =@@
+ 
+ === Protected8.ts ===
+ interface I {
++>I : I
++
+    protected
+ >protected : any
+ 

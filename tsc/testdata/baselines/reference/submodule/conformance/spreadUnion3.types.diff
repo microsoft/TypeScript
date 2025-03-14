@@ -1,0 +1,31 @@
+--- old.spreadUnion3.types
++++ new.spreadUnion3.types
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ function g(t?: { a: number } | null): void {
+->g : (t?: { a: number; } | null) => void
++>g : (t?: { a: number; } | null | undefined) => void
+ >t : { a: number; } | null | undefined
+ >a : number
+ 
+@@= skipped -17, +17 lines =@@
+ }
+ g()
+ >g() : void
+->g : (t?: { a: number; } | null) => void
++>g : (t?: { a: number; } | null | undefined) => void
+ 
+ g(undefined)
+ >g(undefined) : void
+->g : (t?: { a: number; } | null) => void
++>g : (t?: { a: number; } | null | undefined) => void
+ >undefined : undefined
+ 
+ g(null)
+ >g(null) : void
+->g : (t?: { a: number; } | null) => void
++>g : (t?: { a: number; } | null | undefined) => void
+ 
+ // spreading nothing but null and undefined is not allowed
+ declare const nullAndUndefinedUnion: null | undefined;

@@ -1,0 +1,53 @@
+--- old.nullishCoalescingOperator8.types
++++ new.nullishCoalescingOperator8.types
+@@= skipped -1, +1 lines =@@
+ 
+ === nullishCoalescingOperator8.ts ===
+ declare const a: { p: string | undefined, m(): string | undefined };
+->a : { p: string | undefined; m(): string | undefined; }
++>a : { p: string | undefined; m: () => string | undefined; }
+ >p : string | undefined
+ >m : () => string | undefined
+ 
+ declare const b: { p: string | undefined, m(): string | undefined };
+->b : { p: string | undefined; m(): string | undefined; }
++>b : { p: string | undefined; m: () => string | undefined; }
+ >p : string | undefined
+ >m : () => string | undefined
+ 
+@@= skipped -13, +13 lines =@@
+ >n1 : string
+ >a.p ?? "default" : string
+ >a.p : string | undefined
+->a : { p: string | undefined; m(): string | undefined; }
++>a : { p: string | undefined; m: () => string | undefined; }
+ >p : string | undefined
+ >"default" : "default"
+ 
+@@= skipped -9, +9 lines =@@
+ >a.m() ?? "default" : string
+ >a.m() : string | undefined
+ >a.m : () => string | undefined
+->a : { p: string | undefined; m(): string | undefined; }
++>a : { p: string | undefined; m: () => string | undefined; }
+ >m : () => string | undefined
+ >"default" : "default"
+ 
+@@= skipped -11, +11 lines =@@
+ >a.m() ?? b.p : string | undefined
+ >a.m() : string | undefined
+ >a.m : () => string | undefined
+->a : { p: string | undefined; m(): string | undefined; }
++>a : { p: string | undefined; m: () => string | undefined; }
+ >m : () => string | undefined
+ >b.p : string | undefined
+->b : { p: string | undefined; m(): string | undefined; }
++>b : { p: string | undefined; m: () => string | undefined; }
+ >p : string | undefined
+ >b.m() : string | undefined
+ >b.m : () => string | undefined
+->b : { p: string | undefined; m(): string | undefined; }
++>b : { p: string | undefined; m: () => string | undefined; }
+ >m : () => string | undefined
+ >"default" : "default"
+ 

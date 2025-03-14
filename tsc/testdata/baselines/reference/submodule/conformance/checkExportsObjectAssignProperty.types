@@ -1,0 +1,177 @@
+//// [tests/cases/conformance/jsdoc/checkExportsObjectAssignProperty.ts] ////
+
+=== validator.ts ===
+import "./";
+
+import m1 = require("./mod1");
+>m1 : any
+
+m1.thing;
+>m1.thing : any
+>m1 : any
+>thing : any
+
+m1.readonlyProp;
+>m1.readonlyProp : any
+>m1 : any
+>readonlyProp : any
+
+m1.rwAccessors;
+>m1.rwAccessors : any
+>m1 : any
+>rwAccessors : any
+
+m1.readonlyAccessor;
+>m1.readonlyAccessor : any
+>m1 : any
+>readonlyAccessor : any
+
+m1.setonlyAccessor;
+>m1.setonlyAccessor : any
+>m1 : any
+>setonlyAccessor : any
+
+// allowed assignments
+m1.thing = 10;
+>m1.thing = 10 : 10
+>m1.thing : any
+>m1 : any
+>thing : any
+>10 : 10
+
+m1.rwAccessors = 11;
+>m1.rwAccessors = 11 : 11
+>m1.rwAccessors : any
+>m1 : any
+>rwAccessors : any
+>11 : 11
+
+m1.setonlyAccessor = "yes";
+>m1.setonlyAccessor = "yes" : "yes"
+>m1.setonlyAccessor : any
+>m1 : any
+>setonlyAccessor : any
+>"yes" : "yes"
+
+// disallowed assignments
+m1.readonlyProp = "name";
+>m1.readonlyProp = "name" : "name"
+>m1.readonlyProp : any
+>m1 : any
+>readonlyProp : any
+>"name" : "name"
+
+m1.readonlyAccessor = 12;
+>m1.readonlyAccessor = 12 : 12
+>m1.readonlyAccessor : any
+>m1 : any
+>readonlyAccessor : any
+>12 : 12
+
+m1.thing = "no";
+>m1.thing = "no" : "no"
+>m1.thing : any
+>m1 : any
+>thing : any
+>"no" : "no"
+
+m1.rwAccessors = "no";
+>m1.rwAccessors = "no" : "no"
+>m1.rwAccessors : any
+>m1 : any
+>rwAccessors : any
+>"no" : "no"
+
+m1.setonlyAccessor = 0;
+>m1.setonlyAccessor = 0 : 0
+>m1.setonlyAccessor : any
+>m1 : any
+>setonlyAccessor : any
+>0 : 0
+
+import m2 = require("./mod2");
+>m2 : any
+
+m2.thing;
+>m2.thing : any
+>m2 : any
+>thing : any
+
+m2.readonlyProp;
+>m2.readonlyProp : any
+>m2 : any
+>readonlyProp : any
+
+m2.rwAccessors;
+>m2.rwAccessors : any
+>m2 : any
+>rwAccessors : any
+
+m2.readonlyAccessor;
+>m2.readonlyAccessor : any
+>m2 : any
+>readonlyAccessor : any
+
+m2.setonlyAccessor;
+>m2.setonlyAccessor : any
+>m2 : any
+>setonlyAccessor : any
+
+// allowed assignments
+m2.thing = "ok";
+>m2.thing = "ok" : "ok"
+>m2.thing : any
+>m2 : any
+>thing : any
+>"ok" : "ok"
+
+m2.rwAccessors = 11;
+>m2.rwAccessors = 11 : 11
+>m2.rwAccessors : any
+>m2 : any
+>rwAccessors : any
+>11 : 11
+
+m2.setonlyAccessor = "yes";
+>m2.setonlyAccessor = "yes" : "yes"
+>m2.setonlyAccessor : any
+>m2 : any
+>setonlyAccessor : any
+>"yes" : "yes"
+
+// disallowed assignments
+m2.readonlyProp = "name";
+>m2.readonlyProp = "name" : "name"
+>m2.readonlyProp : any
+>m2 : any
+>readonlyProp : any
+>"name" : "name"
+
+m2.readonlyAccessor = 12;
+>m2.readonlyAccessor = 12 : 12
+>m2.readonlyAccessor : any
+>m2 : any
+>readonlyAccessor : any
+>12 : 12
+
+m2.thing = 0;
+>m2.thing = 0 : 0
+>m2.thing : any
+>m2 : any
+>thing : any
+>0 : 0
+
+m2.rwAccessors = "no";
+>m2.rwAccessors = "no" : "no"
+>m2.rwAccessors : any
+>m2 : any
+>rwAccessors : any
+>"no" : "no"
+
+m2.setonlyAccessor = 0;
+>m2.setonlyAccessor = 0 : 0
+>m2.setonlyAccessor : any
+>m2 : any
+>setonlyAccessor : any
+>0 : 0
+

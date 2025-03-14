@@ -1,0 +1,8 @@
+--- old.typeofModuleWithoutExports.types
++++ new.typeofModuleWithoutExports.types
+@@= skipped -17, +17 lines =@@
+ 
+ var r: typeof M;
+ >r : typeof M
+->M : typeof M
+ 

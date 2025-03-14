@@ -1,0 +1,22 @@
+--- old.extendClassExpressionFromModule.types
++++ new.extendClassExpressionFromModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo2.ts ===
+ import foo1 = require('./foo1');
+->foo1 : typeof foo1
++>foo1 : typeof x
+ 
+ var x = foo1;
+->x : typeof foo1
+->foo1 : typeof foo1
++>x : typeof x
++>foo1 : typeof x
+ 
+ class y extends x {}
+ >y : y
+->x : foo1
++>x : x
+ 
+ === foo1.ts ===
+ class x{}

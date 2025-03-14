@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution7_classic.ts] ////
+
+=== c:/root/src/file1.ts ===
+import {x} from "./project/file2";
+>x : any
+
+import {y} from "module3";
+>y : any
+
+declare function use(x: string);
+>use : (x: string) => any
+>x : string
+
+use(x.toFixed());
+>use(x.toFixed()) : any
+>use : (x: string) => any
+>x.toFixed() : any
+>x.toFixed : any
+>x : any
+>toFixed : any
+
+use(y.toFixed());
+>use(y.toFixed()) : any
+>use : (x: string) => any
+>y.toFixed() : any
+>y.toFixed : any
+>y : any
+>toFixed : any
+
+=== c:/root/src/file3.d.ts ===
+export let x: number;
+>x : number
+

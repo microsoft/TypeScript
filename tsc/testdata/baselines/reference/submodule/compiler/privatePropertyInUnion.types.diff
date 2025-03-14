@@ -1,0 +1,17 @@
+--- old.privatePropertyInUnion.types
++++ new.privatePropertyInUnion.types
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ interface SyncableRef<T extends ISyncableObject> {}
++>SyncableRef : SyncableRef<T>
++>T : T
+ 
+ interface ISyncableObject<T = object> extends SyncableObject {}
++>ISyncableObject : ISyncableObject<T>
++>T : T
+ 
+ type __ValueDescriptorType<T extends string | object> = T extends ISyncableObject ? SyncableRef<T> : T;
+ >__ValueDescriptorType : __ValueDescriptorType<T>
++>T : T
+ 

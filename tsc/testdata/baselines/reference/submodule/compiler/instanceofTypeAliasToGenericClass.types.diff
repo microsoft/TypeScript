@@ -1,0 +1,28 @@
+--- old.instanceofTypeAliasToGenericClass.types
++++ new.instanceofTypeAliasToGenericClass.types
+@@= skipped -2, +2 lines =@@
+ === instanceofTypeAliasToGenericClass.ts ===
+ declare class TableClass<S = any> {
+ >TableClass : TableClass<S>
++>S : S
+ 
+     _field: S;
+ >_field : S
+@@= skipped -10, +11 lines =@@
+ 
+ function fn<T extends Table>(o: T) {
+ >fn : <T extends Table>(o: T) => boolean
++>T : T
+ >o : T
+ 
+     return o instanceof TableClass;
+@@= skipped -9, +10 lines =@@
+ }
+ 
+ function fn2<T extends TableClass>(o: T) {
+->fn2 : <T extends TableClass>(o: T) => boolean
++>fn2 : <T extends TableClass<any>>(o: T) => boolean
++>T : T
+ >o : T
+ 
+     return o instanceof TableClass;

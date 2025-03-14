@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/accessorBodyInTypeContext.ts] ////
+
+=== accessorBodyInTypeContext.ts ===
+type A = {
+>A : A
+
+    get foo() { return 0 }
+>foo : number
+>0 : 0
+
+};
+
+type B = {
+>B : B
+
+    set foo(v: any) { }
+>foo : any
+>v : any
+
+};
+
+interface X {
+>X : X
+
+    get foo() { return 0 }
+>foo : number
+>0 : 0
+}
+
+interface Y {
+>Y : Y
+
+    set foo(v: any) { }
+>foo : any
+>v : any
+}
+
+

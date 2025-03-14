@@ -1,0 +1,62 @@
+--- old.jsxElementClassTooManyParams.types
++++ new.jsxElementClassTooManyParams.types
+@@= skipped -1, +1 lines =@@
+ 
+ === jsxElementClassTooManyParams.tsx ===
+ namespace JSX {
++>JSX : any
++
+     export interface Element {}
++>Element : Element
++
+     export interface IntrinsicClassAttributes<TClass, TOther=never> {
++>IntrinsicClassAttributes : IntrinsicClassAttributes<TClass, TOther>
++>TClass : TClass
++>TOther : TOther
++
+         ref?: TClass;
+ >ref : TClass | undefined
+ 
+@@= skipped -9, +17 lines =@@
+ >item : TOther | undefined
+     }
+     export interface ElementClass extends Element {}
++>ElementClass : ElementClass
++
+     export interface ElementAttributesProperty { props: {}; }
++>ElementAttributesProperty : ElementAttributesProperty
+ >props : {}
+ 
+     export interface ElementChildrenAttribute { children: {}; }
++>ElementChildrenAttribute : ElementChildrenAttribute
+ >children : {}
+ 
+     export interface IntrinsicAttributes {}
++>IntrinsicAttributes : IntrinsicAttributes
++
+     export interface IntrinsicElements { [key: string]: Element }
++>IntrinsicElements : IntrinsicElements
+ >key : string
+ }
+ class ElemClass<T extends {x: number}> implements JSX.ElementClass {
+ >ElemClass : ElemClass<T>
++>T : T
+ >x : number
+ >JSX : any
+ 
+@@= skipped -19, +27 lines =@@
+ >props : T
+ }
+ const elem = <ElemClass x={12} y={24} />
+->elem : JSX.Element
+-><ElemClass x={12} y={24} /> : JSX.Element
++>elem : any
++><ElemClass x={12} y={24} /> : any
+ >ElemClass : typeof ElemClass
+->x : number
++>x : any
+ >12 : 12
+->y : number
++>y : any
+ >24 : 24
+ 

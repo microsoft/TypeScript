@@ -1,0 +1,22 @@
+--- old.genericTypeWithCallableMembers2.types
++++ new.genericTypeWithCallableMembers2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericTypeWithCallableMembers2.ts ===
+ function foo1<T extends { (): string; }>(f: T) {
+->foo1 : <T extends { (): string; }>(f: T) => string
++>foo1 : <T extends () => string>(f: T) => string
++>T : T
+ >f : T
+ 
+     return f(); // should return 'string', once returned 'any'
+@@= skipped -9, +10 lines =@@
+ }
+  
+ function foo2<T extends { new (): string; }>(f: T) {
+->foo2 : <T extends { new (): string; }>(f: T) => string
++>foo2 : <T extends new () => string>(f: T) => string
++>T : T
+ >f : T
+ 
+     return new f(); // should be legal, once was an error

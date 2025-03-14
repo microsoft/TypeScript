@@ -1,0 +1,10 @@
+--- old.decoratorOnEnum2.types
++++ new.decoratorOnEnum2.types
+@@= skipped -2, +2 lines =@@
+ === decoratorOnEnum2.ts ===
+ declare function dec<T>(target: T): T;
+ >dec : <T>(target: T) => T
++>T : T
+ >target : T
+ 
+ enum E {

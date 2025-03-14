@@ -1,0 +1,166 @@
+--- old.jsdocTypeFromChainedAssignment.types
++++ new.jsdocTypeFromChainedAssignment.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ function A () {
+->A : typeof A
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
+ 
+     this.x = 1
+ >this.x = 1 : 1
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >1 : 1
+ 
+     /** @type {1} */
+     this.first = this.second = 1
+ >this.first = this.second = 1 : 1
+->this.first : 1
+->this : this
+->first : 1
++>this.first : any
++>this : any
++>first : any
+ >this.second = 1 : 1
+->this.second : 1
+->this : this
+->second : 1
++>this.second : any
++>this : any
++>second : any
+ >1 : 1
+ }
+ /** @param {number} n */
+ A.prototype.y = A.prototype.z = function f(n) {
+->A.prototype.y = A.prototype.z = function f(n) {    return n + this.x} : (n: number) => number
++>A.prototype.y = A.prototype.z = function f(n) {    return n + this.x} : (n: any) => any
+ >A.prototype.y : any
+ >A.prototype : any
+->A : typeof A
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
+ >prototype : any
+ >y : any
+->A.prototype.z = function f(n) {    return n + this.x} : (n: number) => number
++>A.prototype.z = function f(n) {    return n + this.x} : (n: any) => any
+ >A.prototype.z : any
+ >A.prototype : any
+->A : typeof A
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
+ >prototype : any
+ >z : any
+->function f(n) {    return n + this.x} : (n: number) => number
+->f : (n: number) => number
+->n : number
++>function f(n) {    return n + this.x} : (n: any) => any
++>f : (n: any) => any
++>n : any
+ 
+     return n + this.x
+->n + this.x : number
+->n : number
+->this.x : number
+->this : this
+->x : number
++>n + this.x : any
++>n : any
++>this.x : any
++>this : any
++>x : any
+ }
+ /** @param {number} m */
+ A.s = A.t = function g(m) {
+->A.s = A.t = function g(m) {    return m + this.x} : (m: number) => any
+->A.s : (m: number) => any
+->A : typeof A
+->s : (m: number) => any
+->A.t = function g(m) {    return m + this.x} : (m: number) => any
+->A.t : (m: number) => any
+->A : typeof A
+->t : (m: number) => any
+->function g(m) {    return m + this.x} : (m: number) => any
+->g : (m: number) => any
+->m : number
++>A.s = A.t = function g(m) {    return m + this.x} : (m: any) => any
++>A.s : (m: any) => any
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
++>s : (m: any) => any
++>A.t = function g(m) {    return m + this.x} : (m: any) => any
++>A.t : (m: any) => any
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
++>t : (m: any) => any
++>function g(m) {    return m + this.x} : (m: any) => any
++>g : (m: any) => any
++>m : any
+ 
+     return m + this.x
+ >m + this.x : any
+->m : number
++>m : any
+ >this.x : any
+->this : typeof A
++>this : any
+ >x : any
+ }
+ var a = new A()
+->a : A
+->new A() : A
+->A : typeof A
++>a : any
++>new A() : any
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
+ 
+ a.y('no') // error
+->a.y('no') : number
+->a.y : (n: number) => number
+->a : A
+->y : (n: number) => number
++>a.y('no') : any
++>a.y : any
++>a : any
++>y : any
+ >'no' : "no"
+ 
+ a.z('not really') // error
+->a.z('not really') : number
+->a.z : (n: number) => number
+->a : A
+->z : (n: number) => number
++>a.z('not really') : any
++>a.z : any
++>a : any
++>z : any
+ >'not really' : "not really"
+ 
+ A.s('still no') // error
+ >A.s('still no') : any
+->A.s : (m: number) => any
+->A : typeof A
+->s : (m: number) => any
++>A.s : (m: any) => any
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
++>s : (m: any) => any
+ >'still no' : "still no"
+ 
+ A.t('not here either') // error
+ >A.t('not here either') : any
+->A.t : (m: number) => any
+->A : typeof A
+->t : (m: number) => any
++>A.t : (m: any) => any
++>A : { (): void; s: (m: any) => any; t: (m: any) => any; }
++>t : (m: any) => any
+ >'not here either' : "not here either"
+ 
+ a.first = 10 // error: '10' isn't assignable to '1'
+ >a.first = 10 : 10
+->a.first : 1
+->a : A
+->first : 1
++>a.first : any
++>a : any
++>first : any
+ >10 : 10
+ 

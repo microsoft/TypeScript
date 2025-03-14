@@ -1,0 +1,15 @@
+--- old.propagationOfPromiseInitialization.types
++++ new.propagationOfPromiseInitialization.types
+@@= skipped -1, +1 lines =@@
+ 
+ === propagationOfPromiseInitialization.ts ===
+ interface IPromise<T> {
++>IPromise : IPromise<T>
++>T : T
++
+     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
+ >then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
++>TResult : TResult
+ >successCallback : (promiseValue: T) => TResult
+ >promiseValue : T
+ >errorCallback : (reason: any) => TResult

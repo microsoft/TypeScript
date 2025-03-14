@@ -1,0 +1,51 @@
+--- old.inferThis.types
++++ new.inferThis.types
+@@= skipped -9, +9 lines =@@
+      * @return {T}
+      */
+     static a() {
+->a : <T>(this: T) => T
++>a : () => typeof C
+ 
+         return this;
+->this : T
++>this : typeof C
+     }
+ 
+     /**
+@@= skipped -12, +12 lines =@@
+      * @return {T}
+      */
+     b() {
+->b : <T>(this: T) => T
++>b : () => this
+ 
+         return this;
+->this : T
++>this : this
+     }
+ }
+ 
+ const a = C.a();
+ >a : typeof C
+ >C.a() : typeof C
+->C.a : <T>(this: T) => T
++>C.a : () => typeof C
+ >C : typeof C
+->a : <T>(this: T) => T
++>a : () => typeof C
+ 
+ a; // typeof C
+ >a : typeof C
+@@= skipped -25, +25 lines =@@
+ const b = c.b();
+ >b : C
+ >c.b() : C
+->c.b : <T>(this: T) => T
++>c.b : () => C
+ >c : C
+->b : <T>(this: T) => T
++>b : () => C
+ 
+ b; // C
+ >b : C

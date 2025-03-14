@@ -1,0 +1,11 @@
+--- old.abstractInterfaceIdentifierName.types
++++ new.abstractInterfaceIdentifierName.types
+@@= skipped -1, +1 lines =@@
+ 
+ === abstractInterfaceIdentifierName.ts ===
+ interface abstract {
++>abstract : abstract
++
+     abstract(): void;
+ >abstract : () => void
+ }

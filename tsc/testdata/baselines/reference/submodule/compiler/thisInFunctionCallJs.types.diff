@@ -1,0 +1,156 @@
+--- old.thisInFunctionCallJs.types
++++ new.thisInFunctionCallJs.types
+@@= skipped -7, +7 lines =@@
+         /** @type {number[]} */
+         this.data = [1, 2, 3];
+ >this.data = [1, 2, 3] : number[]
+->this.data : number[]
++>this.data : any
+ >this : this
+->data : number[]
++>data : any
+ >[1, 2, 3] : number[]
+ >1 : 1
+ >2 : 2
+@@= skipped -13, +13 lines =@@
+ >finderRaw : () => void
+ 
+         this.data.find(function (d) {
+->this.data.find(function (d) {            return d === this.data.length        }) : number
+->this.data.find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
+->this.data : number[]
++>this.data.find(function (d) {            return d === this.data.length        }) : any
++>this.data.find : any
++>this.data : any
+ >this : this
+->data : number[]
+->find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
+->function (d) {            return d === this.data.length        } : (d: number) => boolean
+->d : number
++>data : any
++>find : any
++>function (d) {            return d === this.data.length        } : (d: any) => boolean
++>d : any
+ 
+             return d === this.data.length
+ >d === this.data.length : boolean
+->d : number
++>d : any
+ >this.data.length : any
+ >this.data : any
+ >this : any
+@@= skipped -25, +25 lines =@@
+ >forEacherRaw : () => void
+ 
+         this.data.forEach(function (d) {
+->this.data.forEach(function (d) {            console.log(d === this.data.length)        }) : void
+->this.data.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+->this.data : number[]
++>this.data.forEach(function (d) {            console.log(d === this.data.length)        }) : any
++>this.data.forEach : any
++>this.data : any
+ >this : this
+->data : number[]
+->forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+->function (d) {            console.log(d === this.data.length)        } : (d: number) => void
+->d : number
++>data : any
++>forEach : any
++>function (d) {            console.log(d === this.data.length)        } : (d: any) => void
++>d : any
+ 
+             console.log(d === this.data.length)
+ >console.log(d === this.data.length) : void
+@@= skipped -15, +15 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >d === this.data.length : boolean
+->d : number
++>d : any
+ >this.data.length : any
+ >this.data : any
+ >this : any
+@@= skipped -14, +14 lines =@@
+ >forEacher : () => void
+ 
+         this.data.forEach(
+->this.data.forEach(        /** @this {Test} */        function (d) {            console.log(d === this.data.length)        }, this) : void
+->this.data.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+->this.data : number[]
++>this.data.forEach(        /** @this {Test} */        function (d) {            console.log(d === this.data.length)        }, this) : any
++>this.data.forEach : any
++>this.data : any
+ >this : this
+->data : number[]
+->forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
++>data : any
++>forEach : any
+ 
+         /** @this {Test} */
+         function (d) {
+->function (d) {            console.log(d === this.data.length)        } : (this: Test, d: number) => void
+->d : number
++>function (d) {            console.log(d === this.data.length)        } : (d: any) => void
++>d : any
+ 
+             console.log(d === this.data.length)
+ >console.log(d === this.data.length) : void
+@@= skipped -18, +18 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >d === this.data.length : boolean
+->d : number
+->this.data.length : number
+->this.data : number[]
+->this : Test
+->data : number[]
+->length : number
++>d : any
++>this.data.length : any
++>this.data : any
++>this : any
++>data : any
++>length : any
+ 
+         }, this)
+ >this : this
+@@= skipped -15, +15 lines =@@
+ >finder : () => void
+ 
+         this.data.find(
+->this.data.find(        /** @this {Test} */        function (d) {            return d === this.data.length        }, this) : number
+->this.data.find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
+->this.data : number[]
++>this.data.find(        /** @this {Test} */        function (d) {            return d === this.data.length        }, this) : any
++>this.data.find : any
++>this.data : any
+ >this : this
+->data : number[]
+->find : { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number; }
++>data : any
++>find : any
+ 
+         /** @this {Test} */
+         function (d) {
+->function (d) {            return d === this.data.length        } : (this: Test, d: number) => boolean
+->d : number
++>function (d) {            return d === this.data.length        } : (d: any) => boolean
++>d : any
+ 
+             return d === this.data.length
+ >d === this.data.length : boolean
+->d : number
+->this.data.length : number
+->this.data : number[]
+->this : Test
+->data : number[]
+->length : number
++>d : any
++>this.data.length : any
++>this.data : any
++>this : any
++>data : any
++>length : any
+ 
+         }, this)
+ >this : this

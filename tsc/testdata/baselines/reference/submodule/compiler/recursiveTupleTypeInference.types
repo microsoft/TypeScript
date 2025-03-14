@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/recursiveTupleTypeInference.ts] ////
+
+=== recursiveTupleTypeInference.ts ===
+// Repro from #37475
+
+export type A = "number" | "null" | A[];
+>A : A
+
+export type F<T> = null extends T
+>F : F<T>
+>T : T
+
+    ? [F<NonNullable<T>>, "null"]
+    : T extends number
+    ? "number"
+    : never;
+
+export type G<T> = { [k in keyof T]: F<T[k]> };
+>G : G<T>
+>T : T
+>k : k
+
+interface K {
+>K : K
+
+    b: number | null;
+>b : number | null
+}
+
+const gK: { [key in keyof K]: A } = { b: ["number", "null"] };
+>gK : { b: A; }
+>key : key
+>{ b: ["number", "null"] } : { b: ("null" | "number")[]; }
+>b : ("null" | "number")[]
+>["number", "null"] : ("null" | "number")[]
+>"number" : "number"
+>"null" : "null"
+
+function foo<T>(g: G<T>): T {
+>foo : <T>(g: G<T>) => T
+>T : T
+>g : G<T>
+
+    return {} as any;
+>{} as any : any
+>{} : {}
+}
+
+foo(gK);
+>foo(gK) : { b: unknown; }
+>foo : <T>(g: G<T>) => T
+>gK : { b: A; }
+

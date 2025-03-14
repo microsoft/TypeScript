@@ -1,0 +1,17 @@
+--- old.optionalBindingParameters4.types
++++ new.optionalBindingParameters4.types
+@@= skipped -4, +4 lines =@@
+ * @param {{ cause?: string }} [options] 
+ */ 
+ function foo({ cause } = {}) {
+->foo : ({ cause }?: { cause?: string; }) => string
+->cause : string
++>foo : (__0?: {}) => any
++>cause : any
+ >{} : {}
+ 
+     return cause;
+->cause : string
++>cause : any
+ }
+ 

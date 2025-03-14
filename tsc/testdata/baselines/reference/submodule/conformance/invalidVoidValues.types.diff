@@ -1,0 +1,54 @@
+--- old.invalidVoidValues.types
++++ new.invalidVoidValues.types
+@@= skipped -19, +19 lines =@@
+ >true : true
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ x = E;
+@@= skipped -9, +9 lines =@@
+ >E : typeof E
+ 
+ x = E.A;
+->x = E.A : E
++>x = E.A : E.A
+ >x : void
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+ class C { foo: string }
+ >C : C
+@@= skipped -19, +19 lines =@@
+ >a : C
+ 
+ interface I { foo: string }
++>I : I
+ >foo : string
+ 
+ var b: I;
+@@= skipped -11, +12 lines =@@
+ >b : I
+ 
+ x = { f() {} }
+->x = { f() {} } : { f(): void; }
++>x = { f() {} } : { f: () => void; }
+ >x : void
+->{ f() {} } : { f(): void; }
++>{ f() {} } : { f: () => void; }
+ >f : () => void
+ 
+ module M { export var x = 1; }
+@@= skipped -17, +17 lines =@@
+ 
+ function f<T>(a: T) {
+ >f : <T>(a: T) => void
++>T : T
+ >a : T
+ 
+     x = a;

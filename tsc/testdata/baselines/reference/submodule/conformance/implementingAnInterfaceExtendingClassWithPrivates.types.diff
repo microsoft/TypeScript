@@ -1,0 +1,11 @@
+--- old.implementingAnInterfaceExtendingClassWithPrivates.types
++++ new.implementingAnInterfaceExtendingClassWithPrivates.types
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ interface I extends Foo {
++>I : I
++
+     y: number;
+ >y : number
+ }

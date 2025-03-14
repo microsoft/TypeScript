@@ -1,0 +1,10 @@
+--- old.strictNullChecksNoWidening.types
++++ new.strictNullChecksNoWidening.types
+@@= skipped -41, +41 lines =@@
+ 
+ declare function f<T>(x: T): T;
+ >f : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ var c1 = f(null);

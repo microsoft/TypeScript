@@ -1,0 +1,33 @@
+--- old.forStatementsMultipleInvalidDecl.types
++++ new.forStatementsMultipleInvalidDecl.types
+@@= skipped -1, +1 lines =@@
+ 
+ === forStatementsMultipleInvalidDecl.ts ===
+ interface I {
++>I : I
++
+     id: number;
+ >id : number
+ }
+@@= skipped -24, +26 lines =@@
+ 
+ class D<T>{
+ >D : D<T>
++>T : T
+ 
+     source: T;
+ >source : T
+@@= skipped -118, +119 lines =@@
+ 
+ for(var m: typeof M;;){}
+ >m : typeof M
+->M : typeof M
+ 
+ for( var m = M.A;;){}
+ >m : typeof M
+->M.A : typeof M.A
++>M.A : typeof A
+ >M : typeof M
+->A : typeof M.A
++>A : typeof A
+ 

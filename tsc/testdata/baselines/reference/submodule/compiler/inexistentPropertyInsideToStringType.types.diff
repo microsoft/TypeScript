@@ -1,0 +1,23 @@
+--- old.inexistentPropertyInsideToStringType.types
++++ new.inexistentPropertyInsideToStringType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.js ===
+ function toString() {
+->toString : typeof toString
++>toString : { (): string; (): void; }
+ 
+     this.yadda
+ >this.yadda : any
+->this : this
++>this : any
+ >yadda : any
+ 
+     this.someValue = "";
+ >this.someValue = "" : ""
+ >this.someValue : any
+->this : this
++>this : any
+ >someValue : any
+ >"" : ""
+ }

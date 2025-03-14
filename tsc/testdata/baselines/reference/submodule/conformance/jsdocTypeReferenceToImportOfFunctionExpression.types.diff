@@ -1,0 +1,74 @@
+--- old.jsdocTypeReferenceToImportOfFunctionExpression.types
++++ new.jsdocTypeReferenceToImportOfFunctionExpression.types
+@@= skipped -1, +1 lines =@@
+ 
+ === MC.js ===
+ const MW = require("./MW");
+->MW : typeof MW
+->require("./MW") : typeof MW
++>MW : any
++>require("./MW") : any
+ >require : any
+ >"./MW" : "./MW"
+ 
+@@= skipped -9, +9 lines =@@
+ 
+ /** @class */
+ module.exports = function MC() {
+->module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : { (): MW; new (): MC; }
+->module.exports : { (): MW; new (): MC; }
+->module : { exports: { (): MW; new (): MC; }; }
+->exports : { (): MW; new (): MC; }
+->function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : typeof MC
+->MC : typeof MC
++>module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : () => any
++>module.exports : any
++>module : any
++>exports : any
++>function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : () => any
++>MC : () => any
+ 
+     /** @type {any} */
+     var x = {}
+->x : any
++>x : {}
+ >{} : {}
+ 
+     return new MW(x);
+->new MW(x) : MW
+->MW : typeof MW
+->x : any
++>new MW(x) : any
++>MW : any
++>x : {}
+ 
+ };
+ 
+-=== MW.js ===
+-/** @typedef {import("./MC")} MC */
+-
+-class MW {
+->MW : MW
+-
+-  /**
+-   * @param {MC} compiler the compiler
+-   */
+-  constructor(compiler) {
+->compiler : { (): MW; new (): MC; }
+-
+-    this.compiler = compiler;
+->this.compiler = compiler : { (): MW; new (): MC; }
+->this.compiler : any
+->this : this
+->compiler : any
+->compiler : { (): MW; new (): MC; }
+-  }
+-}
+-
+-module.exports = MW;
+->module.exports = MW : typeof MW
+->module.exports : typeof MW
+->module : { exports: typeof MW; }
+->exports : typeof MW
+->MW : typeof MW
+-

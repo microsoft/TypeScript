@@ -1,0 +1,10 @@
+--- old.jsFileCompilationDecoratorSyntax.types
++++ new.jsFileCompilationDecoratorSyntax.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ @internal class C { }
+->internal : error
++>internal : any
+ >C : C
+ 

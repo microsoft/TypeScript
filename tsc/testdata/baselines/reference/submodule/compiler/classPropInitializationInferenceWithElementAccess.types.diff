@@ -1,0 +1,11 @@
+--- old.classPropInitializationInferenceWithElementAccess.types
++++ new.classPropInitializationInferenceWithElementAccess.types
+@@= skipped -33, +33 lines =@@
+ >this : this
+ >'y' : "y"
+ >{ seed } : { seed: number; }
+->seed : number
++>seed : any
+ 
+         this['z'] = `${seed}`;
+ >this['z'] = `${seed}` : string

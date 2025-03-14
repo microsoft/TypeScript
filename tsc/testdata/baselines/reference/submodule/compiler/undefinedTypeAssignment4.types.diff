@@ -1,0 +1,17 @@
+--- old.undefinedTypeAssignment4.types
++++ new.undefinedTypeAssignment4.types
+@@= skipped -7, +7 lines =@@
+ >foo : string
+ }
+ interface undefined {
++>undefined : undefined
++
+ 	member: number;
+ >member : number
+ }
+@@= skipped -15, +17 lines =@@
+ 
+ var y: typeof undefined;
+ >y : typeof undefined
+->undefined : typeof undefined
+ 

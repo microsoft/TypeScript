@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/jsFileClassPropertyType2.ts] ////
+
+=== foo.js ===
+class C {
+>C : C
+
+    constructor() {
+      /** @type {number[]}*/
+      this.p = [];
+>this.p = [] : undefined[]
+>this.p : any
+>this : this
+>p : any
+>[] : undefined[]
+  }
+}
+
+=== bar.ts ===
+(new C()).p.push("string");
+>(new C()).p.push("string") : any
+>(new C()).p.push : any
+>(new C()).p : any
+>(new C()) : C
+>new C() : C
+>C : typeof C
+>p : any
+>push : any
+>"string" : "string"
+

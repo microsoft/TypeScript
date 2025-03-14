@@ -1,0 +1,47 @@
+--- old.circularReferenceInReturnType.types
++++ new.circularReferenceInReturnType.types
+@@= skipped -3, +3 lines =@@
+ // inference fails for res1 and res2, but ideally should not
+ declare function fn1<T>(cb: () => T): string;
+ >fn1 : <T>(cb: () => T) => string
++>T : T
+ >cb : () => T
+ 
+ const res1 = fn1(() => res1);
+@@= skipped -11, +12 lines =@@
+ 
+ declare function fn2<T>(): (cb: () => any) => (a: T) => void;
+ >fn2 : <T>() => (cb: () => any) => (a: T) => void
++>T : T
+ >cb : () => any
+ >a : T
+ 
+@@= skipped -13, +14 lines =@@
+ 
+ declare function fn3<T>(): <T2>(cb: (arg: T2) => any) => (a: T) => void;
+ >fn3 : <T>() => <T2>(cb: (arg: T2) => any) => (a: T) => void
++>T : T
++>T2 : T2
+ >cb : (arg: T2) => any
+ >arg : T2
+ >a : T
+@@= skipped -15, +17 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/58616
+ 
+ function foo(arg: Parameters<typeof bar>[0]) {
+->foo : (arg: Parameters<typeof bar>[0]) => string
++>foo : (arg: string) => string
+ >arg : string
+->bar : (arg: string) => string
+ 
+     return arg;
+ >arg : string
+@@= skipped -14, +13 lines =@@
+ 
+     return foo(arg);
+ >foo(arg) : string
+->foo : (arg: Parameters<typeof bar>[0]) => string
++>foo : (arg: string) => string
+ >arg : string
+ }
+ 

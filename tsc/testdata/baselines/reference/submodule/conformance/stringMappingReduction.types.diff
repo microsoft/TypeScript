@@ -1,0 +1,34 @@
+--- old.stringMappingReduction.types
++++ new.stringMappingReduction.types
+@@= skipped -47, +47 lines =@@
+ 
+ type EPlusFallback<C> = C extends Keys ? EMap[C] : "unrecognised event";
+ >EPlusFallback : EPlusFallback<C>
++>C : C
+ 
+ type VirtualEvent<T extends string> = { bivarianceHack(event: EPlusFallback<Lowercase<T>>): any; }['bivarianceHack'];
+ >VirtualEvent : (event: EPlusFallback<Lowercase<T>>) => any
++>T : T
+ >bivarianceHack : (event: EPlusFallback<Lowercase<T>>) => any
+ >event : EPlusFallback<Lowercase<T>>
+ 
+ declare const _virtualOn: (eventQrl: VirtualEvent<Keys>) => void;
+->_virtualOn : (eventQrl: VirtualEvent<Keys>) => void
++>_virtualOn : (eventQrl: (event: {}) => any) => void
+ >eventQrl : (event: {}) => any
+ 
+ export const virtualOn = <T extends string>(eventQrl: VirtualEvent<T>) => {
+->virtualOn : <T extends string>(eventQrl: VirtualEvent<T>) => void
+-><T extends string>(eventQrl: VirtualEvent<T>) => {    _virtualOn(eventQrl);} : <T extends string>(eventQrl: VirtualEvent<T>) => void
++>virtualOn : <T extends string>(eventQrl: (event: EPlusFallback<Lowercase<T>>) => any) => void
++><T extends string>(eventQrl: VirtualEvent<T>) => {    _virtualOn(eventQrl);} : <T extends string>(eventQrl: (event: EPlusFallback<Lowercase<T>>) => any) => void
++>T : T
+ >eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
+ 
+     _virtualOn(eventQrl);
+ >_virtualOn(eventQrl) : void
+->_virtualOn : (eventQrl: VirtualEvent<Keys>) => void
++>_virtualOn : (eventQrl: (event: {}) => any) => void
+ >eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
+ 
+ };

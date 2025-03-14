@@ -1,0 +1,9 @@
+--- old.templateStringControlCharacterEscapes03.types
++++ new.templateStringControlCharacterEscapes03.types
+@@= skipped -2, +2 lines =@@
+ === templateStringControlCharacterEscapes03.ts ===
+ var x = `\x1F\u001f 1F 1f`;
+ >x : string
+->`\x1F\u001f 1F 1f` : "\u001F\u001F 1F 1f"
++>`\x1F\u001f 1F 1f` : " 1F 1f"
+ 

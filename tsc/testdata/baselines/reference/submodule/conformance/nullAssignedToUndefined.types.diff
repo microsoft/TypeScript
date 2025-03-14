@@ -1,0 +1,8 @@
+--- old.nullAssignedToUndefined.types
++++ new.nullAssignedToUndefined.types
+@@= skipped -7, +7 lines =@@
+ 
+ var y: typeof undefined = null; // ok, widened
+ >y : any
+->undefined : undefined
+ 

@@ -1,0 +1,10 @@
+--- old.declarationEmitMergedAliasWithConst.types
++++ new.declarationEmitMergedAliasWithConst.types
+@@= skipped -21, +21 lines =@@
+ 
+ export type Color = typeof Color
+ >Color : { readonly Red: "Red"; readonly Green: "Green"; readonly Blue: "Blue"; }
+->Color : { readonly Red: "Red"; readonly Green: "Green"; readonly Blue: "Blue"; }
+ 
+ export type Colors = Color[keyof Color]
+ >Colors : Colors

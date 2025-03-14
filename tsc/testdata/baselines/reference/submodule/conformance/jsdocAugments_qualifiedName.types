@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_qualifiedName.ts] ////
+
+=== /a.js ===
+export class A {}
+>A : A
+
+=== /b.js ===
+import * as a from "./a";
+>a : typeof import("/a")
+
+/** @augments a.A */
+class B {}
+>B : B
+

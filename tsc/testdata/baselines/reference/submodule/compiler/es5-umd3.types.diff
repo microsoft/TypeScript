@@ -1,0 +1,11 @@
+--- old.es5-umd3.types
++++ new.es5-umd3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === es5-umd3.ts ===
+ export default class A
+->A : A
++>A : default
+ {
+     constructor ()
+     {

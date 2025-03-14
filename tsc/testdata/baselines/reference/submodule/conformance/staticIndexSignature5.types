@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature5.ts] ////
+
+=== staticIndexSignature5.ts ===
+class B {
+>B : B
+
+    static readonly [s: string]: number;
+>s : string
+
+    static readonly [s: number]: 42 | 233
+>s : number
+}
+
+interface I {
+>I : I
+
+    static readonly [s: string]: number;
+>s : string
+
+    static readonly [s: number]: 42 | 233
+>s : number
+}
+
+type TA = (typeof B)["foo"]
+>TA : number
+
+type TB = (typeof B)[42]
+>TB : 42 | 233
+
+type TC = (typeof B)[string]
+>TC : number
+
+type TD = (typeof B)[number]
+>TD : 42 | 233
+
+type TE = keyof typeof B;
+>TE : string | number
+
+type TF = Pick<typeof B, number>
+>TF : TF
+
+type TFI = Pick<I, number>
+>TFI : TFI
+
+type TG = Omit<typeof B, number>
+>TG : TG
+
+type TGI = Omit<I, number>
+>TGI : TGI
+

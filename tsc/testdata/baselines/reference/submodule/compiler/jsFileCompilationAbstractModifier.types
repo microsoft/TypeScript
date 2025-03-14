@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/jsFileCompilationAbstractModifier.ts] ////
+
+=== a.js ===
+abstract class c {
+>c : c
+
+    abstract x;
+>x : any
+}

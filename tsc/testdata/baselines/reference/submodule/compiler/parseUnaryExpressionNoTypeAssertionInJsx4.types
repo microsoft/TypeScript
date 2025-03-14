@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx4.ts] ////
+
+=== index.tsx ===
+const x = "oops";
+>x : "oops"
+>"oops" : "oops"
+
+const a = + <number> x;
+>a : number
+>+ <number> x : number
+><number> x : number
+>x : "oops"
+
+const b = + <> x;
+>b : number
+>+ <> x : number
+><> x : any
+>x : "oops"
+
+const c = + <1234> x;
+>c : number
+>+ <1234> x : number
+><1234> x : 1234
+>x : "oops"
+

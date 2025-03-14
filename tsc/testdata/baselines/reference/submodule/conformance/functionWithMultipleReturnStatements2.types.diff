@@ -1,0 +1,37 @@
+--- old.functionWithMultipleReturnStatements2.types
++++ new.functionWithMultipleReturnStatements2.types
+@@= skipped -56, +56 lines =@@
+ }
+ 
+ function f5() {
+->f5 : () => Object | 1
++>f5 : () => 1 | Object
+ 
+     return 1;
+ >1 : 1
+@@= skipped -12, +12 lines =@@
+ 
+ function f6<T>(x: T) {
+ >f6 : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+     if (true) {
+@@= skipped -65, +66 lines =@@
+ 
+ // returns number => void
+ function f11() {
+->f11 : () => ((x: number) => void) | ((x: Object) => void)
++>f11 : () => (x: number) => void | (x: Object) => void
+ 
+     if (true) {
+ >true : true
+@@= skipped -18, +18 lines =@@
+ 
+ // returns Object => void
+ function f12() {
+->f12 : () => ((x: Object) => void) | ((x: number) => void)
++>f12 : () => (x: Object) => void | (x: number) => void
+ 
+     if (true) {
+ >true : true

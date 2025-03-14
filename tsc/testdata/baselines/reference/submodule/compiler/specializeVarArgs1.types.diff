@@ -1,0 +1,25 @@
+--- old.specializeVarArgs1.types
++++ new.specializeVarArgs1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === specializeVarArgs1.ts ===
+ interface Observable<T>{ }
++>Observable : Observable<T>
++>T : T
+ 
+  
+ 
+ interface ObservableArray<T> extends Observable<T[]>
++>ObservableArray : ObservableArray<T>
++>T : T
+ 
+ {
+ 
+@@= skipped -17, +21 lines =@@
+ 
+ function observableArray<T>(): ObservableArray<T> { return null;}
+ >observableArray : <T>() => ObservableArray<T>
++>T : T
+ 
+  
+ 

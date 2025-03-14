@@ -1,0 +1,110 @@
+//// [tests/cases/conformance/jsx/jsxSpreadOverwritesAttributeStrict.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface Props {
+>Props : Props
+
+    a: number;
+>a : number
+
+    b: number;
+>b : number
+
+    c?: number;
+>c : number | undefined
+
+    d?: number;
+>d : number | undefined
+}
+
+
+const props: Props = { a: 1, b: 1 };
+>props : Props
+>{ a: 1, b: 1 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+
+const Foo = (props: Props) => <div>{ props.a }</div>;
+>Foo : (props: Props) => any
+>(props: Props) => <div>{ props.a }</div> : (props: Props) => any
+>props : Props
+><div>{ props.a }</div> : any
+>div : any
+>props.a : number
+>props : Props
+>a : number
+>div : any
+
+// ok
+const a1 = <Foo {...props}></Foo>;
+>a1 : any
+><Foo {...props}></Foo> : any
+>Foo : (props: Props) => any
+>props : Props
+>Foo : (props: Props) => any
+
+const a2 = <Foo d={1} {...props}></Foo>;
+>a2 : any
+><Foo d={1} {...props}></Foo> : any
+>Foo : (props: Props) => any
+>d : any
+>1 : 1
+>props : Props
+>Foo : (props: Props) => any
+
+// error
+const b1 = <Foo a={1} {...props}></Foo>;
+>b1 : any
+><Foo a={1} {...props}></Foo> : any
+>Foo : (props: Props) => any
+>a : any
+>1 : 1
+>props : Props
+>Foo : (props: Props) => any
+
+const b2 = <Foo a={1} b={2} {...props}></Foo>;
+>b2 : any
+><Foo a={1} b={2} {...props}></Foo> : any
+>Foo : (props: Props) => any
+>a : any
+>1 : 1
+>b : any
+>2 : 2
+>props : Props
+>Foo : (props: Props) => any
+
+const b3 = <Foo a={1} d={1} {...props} {...{ d: 1 }}></Foo>;
+>b3 : any
+><Foo a={1} d={1} {...props} {...{ d: 1 }}></Foo> : any
+>Foo : (props: Props) => any
+>a : any
+>1 : 1
+>d : any
+>1 : 1
+>props : Props
+>{ d: 1 } : { d: number; }
+>d : number
+>1 : 1
+>Foo : (props: Props) => any
+
+const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
+>b4 : any
+><Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo> : any
+>Foo : (props: Props) => any
+>a : any
+>1 : 1
+>d : any
+>1 : 1
+>props : Props
+>{ a: 1, d: 1 } : { a: number; d: number; }
+>a : number
+>1 : 1
+>d : number
+>1 : 1
+>Foo : (props: Props) => any
+

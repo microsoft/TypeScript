@@ -1,0 +1,65 @@
+--- old.callSignaturesWithOptionalParameters2.types
++++ new.callSignaturesWithOptionalParameters2.types
+@@= skipped -102, +102 lines =@@
+ >2 : 2
+ 
+ interface I {
++>I : I
++
+     (x?: number);
+ >x : number
+ 
+@@= skipped -62, +64 lines =@@
+ >3 : 3
+ 
+ var a: {
+->a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
++>a : { (x?: number): any; (x?: number, y?: number): any; foo: { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }; }
+ 
+     (x?: number);
+ >x : number
+@@= skipped -23, +23 lines =@@
+ 
+ a();
+ >a() : any
+->a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
++>a : { (x?: number): any; (x?: number, y?: number): any; foo: { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }; }
+ 
+ a(1);
+ >a(1) : any
+->a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
++>a : { (x?: number): any; (x?: number, y?: number): any; foo: { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }; }
+ >1 : 1
+ 
+ a(1, 2);
+ >a(1, 2) : any
+->a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
++>a : { (x?: number): any; (x?: number, y?: number): any; foo: { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }; }
+ >1 : 1
+ >2 : 2
+ 
+ a.foo(1);
+ >a.foo(1) : any
+ >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+->a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
++>a : { (x?: number): any; (x?: number, y?: number): any; foo: { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }; }
+ >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+ >1 : 1
+ 
+ a.foo(1, 2);
+ >a.foo(1, 2) : any
+ >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+->a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
++>a : { (x?: number): any; (x?: number, y?: number): any; foo: { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }; }
+ >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+ >1 : 1
+ >2 : 2
+@@= skipped -31, +31 lines =@@
+ a.foo(1, 2, 3);
+ >a.foo(1, 2, 3) : any
+ >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+->a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
++>a : { (x?: number): any; (x?: number, y?: number): any; foo: { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }; }
+ >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
+ >1 : 1
+ >2 : 2

@@ -1,0 +1,74 @@
+--- old.excessPropertyCheckWithUnions.types
++++ new.excessPropertyCheckWithUnions.types
+@@= skipped -314, +314 lines =@@
+ // Repro from #34611
+ 
+ interface IValue {
++>IValue : IValue
++
+   value: string
+ >value : string
+ }
+ 
+ interface StringKeys {
++>StringKeys : StringKeys
++
+     [propertyName: string]: IValue;
+ >propertyName : string
+ 
+ };
+ 
+ interface NumberKeys {
++>NumberKeys : NumberKeys
++
+     [propertyName: number]: IValue;
+ >propertyName : number
+ }
+@@= skipped -52, +58 lines =@@
+ // Repro from #33732
+ 
+ interface I1 {
++>I1 : I1
++
+     prop1: string;
+ >prop1 : string
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     prop2: string;
+ >prop2 : string
+ }
+ 
+ interface I3 extends Record<string, string> {
++>I3 : I3
+ 
+ }
+ 
+@@= skipped -46, +51 lines =@@
+ >{        prop1,        prop2,    } : { prop1: string; prop2: string | undefined; }
+ 
+         prop1,
+->prop1 : string
++>prop1 : any
+ 
+         prop2,
+->prop2 : string | undefined
++>prop2 : any
+ 
+     },
+ });
+@@= skipped -18, +18 lines =@@
+ >{    prop1,    prop2,} : { prop1: string; prop2: string | undefined; }
+ 
+     prop1,
+->prop1 : string
++>prop1 : any
+ 
+     prop2,
+->prop2 : string | undefined
++>prop2 : any
+ 
+ });
+ 

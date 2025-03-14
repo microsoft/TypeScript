@@ -1,0 +1,89 @@
+--- old.objectSpreadStrictNull.types
++++ new.objectSpreadStrictNull.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectSpreadStrictNull.ts ===
+ function f(
+->f : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string; }, optionalNumber: { sn?: number; }, undefinedString: { sn: string | undefined; }, undefinedNumber: { sn: number | undefined; }) => void
++>f : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }, undefinedString: { sn: string | undefined; }, undefinedNumber: { sn: number | undefined; }) => void
+ 
+     definiteBoolean: { sn: boolean },
+ >definiteBoolean : { sn: boolean; }
+@@= skipped -11, +11 lines =@@
+ >sn : string
+ 
+     optionalString: { sn?: string },
+->optionalString : { sn?: string; }
++>optionalString : { sn?: string | undefined; }
+ >sn : string | undefined
+ 
+     optionalNumber: { sn?: number },
+->optionalNumber : { sn?: number; }
++>optionalNumber : { sn?: number | undefined; }
+ >sn : number | undefined
+ 
+     undefinedString: { sn: string | undefined },
+@@= skipped -22, +22 lines =@@
+ >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
+ >definiteBoolean : { sn: boolean; }
+ >definiteString : { sn: string; }
+->optionalNumber : { sn?: number; }
++>optionalNumber : { sn?: number | undefined; }
+ 
+     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+ >optionalUnionDuplicates : { sn: string | number; }
+@@= skipped -8, +8 lines =@@
+ >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
+ >definiteBoolean : { sn: boolean; }
+ >definiteString : { sn: string; }
+->optionalString : { sn?: string; }
+->optionalNumber : { sn?: number; }
++>optionalString : { sn?: string | undefined; }
++>optionalNumber : { sn?: number | undefined; }
+ 
+     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+->allOptional : { sn?: string | number; }
++>allOptional : { sn?: string | number | undefined; }
+ >sn : string | number | undefined
+ >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
+->optionalString : { sn?: string; }
+->optionalNumber : { sn?: number; }
++>optionalString : { sn?: string | undefined; }
++>optionalNumber : { sn?: number | undefined; }
+ 
+     // undefined
+     let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
+@@= skipped -41, +41 lines =@@
+ >{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | undefined; }
+ >definiteBoolean : { sn: boolean; }
+ >undefinedString : { sn: string | undefined; }
+->optionalNumber : { sn?: number; }
++>optionalNumber : { sn?: number | undefined; }
+ }
+ 
+ type Movie = {
+@@= skipped -24, +24 lines =@@
+ // should error here because title: undefined is not assignable to string
+ const x: Movie = { ...m, title: undefined };
+ >x : Movie
+->{ ...m, title: undefined } : { title: undefined; yearReleased: number; }
++>{ ...m, title: undefined } : { yearReleased: number; title: undefined; }
+ >m : { title: string; yearReleased: number; }
+ >title : undefined
+ >undefined : undefined
+ 
+ interface Fields {
++>Fields : Fields
++
+     foo: number;
+ >foo : number
+ 
+@@= skipped -13, +15 lines =@@
+ >bar : string
+ }
+ interface NearlyPartialFields {
++>NearlyPartialFields : NearlyPartialFields
++
+     foo: number | undefined;
+ >foo : number | undefined
+ 

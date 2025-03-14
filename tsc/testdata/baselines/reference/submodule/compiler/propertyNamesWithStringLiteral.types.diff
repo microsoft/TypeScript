@@ -1,0 +1,11 @@
+--- old.propertyNamesWithStringLiteral.types
++++ new.propertyNamesWithStringLiteral.types
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ interface NamedColors {
++>NamedColors : NamedColors
++
+     azure: _Color;
+ >azure : _Color
+ 

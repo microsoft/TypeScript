@@ -1,0 +1,11 @@
+--- old.qualifiedName_ImportDeclarations-entity-names-referencing-a-var.types
++++ new.qualifiedName_ImportDeclarations-entity-names-referencing-a-var.types
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ module Beta {
++>Beta : any
++
+     import p = Alpha.x;
+ >p : number
+ >Alpha : typeof Alpha

@@ -1,0 +1,78 @@
+--- old.typeFromPropertyAssignment35.types
++++ new.typeFromPropertyAssignment35.types
+@@= skipped -2, +2 lines =@@
+ === bug26877.js ===
+ /** @param {Emu.D} x */
+ function ollKorrect(x) {
+->ollKorrect : (x: D) => void
+->x : D
++>ollKorrect : (x: any) => void
++>x : any
+ 
+     x._model
+->x._model : number
+->x : D
+->_model : number
++>x._model : any
++>x : any
++>_model : any
+ 
+     const y = new Emu.D()
+->y : D
+->new Emu.D() : D
+->Emu.D : typeof D
+->Emu : typeof Emu
+->D : typeof D
++>y : any
++>new Emu.D() : any
++>Emu.D : any
++>Emu : {}
++>D : any
+ 
+     const z = Emu.D._wrapperInstance;
+->z : string
+->Emu.D._wrapperInstance : string
+->Emu.D : typeof D
+->Emu : typeof Emu
+->D : typeof D
+->_wrapperInstance : string
++>z : any
++>Emu.D._wrapperInstance : any
++>Emu.D : any
++>Emu : {}
++>D : any
++>_wrapperInstance : any
+ }
+ Emu.D = class {
+ >Emu.D = class {    constructor() {        this._model = 1    }} : typeof D
+->Emu.D : typeof D
+->Emu : typeof Emu
+->D : typeof D
++>Emu.D : any
++>Emu : {}
++>D : any
+ >class {    constructor() {        this._model = 1    }} : typeof D
+ 
+     constructor() {
+@@= skipped -42, +42 lines =@@
+ 
+ === second.js ===
+ var Emu = {}
+->Emu : typeof Emu
++>Emu : {}
+ >{} : {}
+ 
+ /** @type {string} */
+ Emu.D._wrapperInstance;
+->Emu.D._wrapperInstance : string
+->Emu.D : typeof D
+->Emu : typeof Emu
+->D : typeof D
+->_wrapperInstance : string
++>Emu.D._wrapperInstance : any
++>Emu.D : any
++>Emu : {}
++>D : any
++>_wrapperInstance : any
+ 
+ 

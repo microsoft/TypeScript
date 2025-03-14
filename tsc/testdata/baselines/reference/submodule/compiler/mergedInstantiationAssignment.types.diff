@@ -1,0 +1,75 @@
+--- old.mergedInstantiationAssignment.types
++++ new.mergedInstantiationAssignment.types
+@@= skipped -4, +4 lines =@@
+ 
+ class GenericObject<T = number> {
+ >GenericObject : GenericObject<T>
++>T : T
+ 
+   set x(x: T) {}
+ >x : T
+@@= skipped -7, +8 lines =@@
+ }
+ 
+ const v1 = new GenericObject() as GenericObject &
+->v1 : GenericObject<number> & ({ a?: string; } | { b?: number; })
+->new GenericObject() as GenericObject &  ({ a?: string } | { b?: number }) : GenericObject<number> & ({ a?: string; } | { b?: number; })
++>v1 : GenericObject<number> & ({ a?: string | undefined; } | { b?: number | undefined; })
++>new GenericObject() as GenericObject &  ({ a?: string } | { b?: number }) : GenericObject<number> & ({ a?: string | undefined; } | { b?: number | undefined; })
+ >new GenericObject() : GenericObject<number>
+ >GenericObject : typeof GenericObject
+ 
+@@= skipped -12, +12 lines =@@
+ v1.x = 432;
+ >v1.x = 432 : 432
+ >v1.x : number
+->v1 : GenericObject<number> & ({ a?: string; } | { b?: number; })
++>v1 : GenericObject<number> & ({ a?: string | undefined; } | { b?: number | undefined; })
+ >x : number
+ >432 : 432
+ 
+ class GenericObjectWithoutSetter<T = number> {
+ >GenericObjectWithoutSetter : GenericObjectWithoutSetter<T>
++>T : T
+ 
+   declare x: T;
+ >x : T
+ }
+ 
+ const v2 = new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &
+->v2 : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
+->new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &  ({ a?: string } | { b?: number }) : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
++>v2 : GenericObjectWithoutSetter<number> & ({ a?: string | undefined; } | { b?: number | undefined; })
++>new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &  ({ a?: string } | { b?: number }) : GenericObjectWithoutSetter<number> & ({ a?: string | undefined; } | { b?: number | undefined; })
+ >new GenericObjectWithoutSetter() : GenericObjectWithoutSetter<number>
+ >GenericObjectWithoutSetter : typeof GenericObjectWithoutSetter
+ 
+@@= skipped -24, +25 lines =@@
+ v2.x = 42;
+ >v2.x = 42 : 42
+ >v2.x : number
+->v2 : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
++>v2 : GenericObjectWithoutSetter<number> & ({ a?: string | undefined; } | { b?: number | undefined; })
+ >x : number
+ >42 : 42
+ 
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ const v3 = new NormalObject() as NormalObject &
+->v3 : NormalObject & ({ a?: string; } | { b?: number; })
+->new NormalObject() as NormalObject &  ({ a?: string } | { b?: number }) : NormalObject & ({ a?: string; } | { b?: number; })
++>v3 : NormalObject & ({ a?: string | undefined; } | { b?: number | undefined; })
++>new NormalObject() as NormalObject &  ({ a?: string } | { b?: number }) : NormalObject & ({ a?: string | undefined; } | { b?: number | undefined; })
+ >new NormalObject() : NormalObject
+ >NormalObject : typeof NormalObject
+ 
+@@= skipped -12, +12 lines =@@
+ v3.x = 42;
+ >v3.x = 42 : 42
+ >v3.x : number
+->v3 : NormalObject & ({ a?: string; } | { b?: number; })
++>v3 : NormalObject & ({ a?: string | undefined; } | { b?: number | undefined; })
+ >x : number
+ >42 : 42
+ 

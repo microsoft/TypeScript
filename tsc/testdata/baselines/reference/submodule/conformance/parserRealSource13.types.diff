@@ -1,0 +1,11 @@
+--- old.parserRealSource13.types
++++ new.parserRealSource13.types
+@@= skipped -10, +10 lines =@@
+ >AstWalkerWithDetailCallback : typeof AstWalkerWithDetailCallback
+ 
+     export interface AstWalkerDetailCallback {
++>AstWalkerDetailCallback : AstWalkerDetailCallback
++
+         EmptyCallback? (pre, ast: AST): boolean;
+ >EmptyCallback : (pre: any, ast: AST) => boolean
+ >pre : any

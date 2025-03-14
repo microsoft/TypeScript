@@ -1,0 +1,25 @@
+--- old.classExtendsNull.types
++++ new.classExtendsNull.types
+@@= skipped -10, +10 lines =@@
+ 
+         return Object.create(null);
+ >Object.create(null) : any
+->Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
++>Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+ >Object : ObjectConstructor
+->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
++>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+     }
+ }
+ 
+@@= skipped -12, +12 lines =@@
+     constructor() {
+         return Object.create(null);
+ >Object.create(null) : any
+->Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
++>Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+ >Object : ObjectConstructor
+->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
++>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+     }
+ }

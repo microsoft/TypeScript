@@ -1,0 +1,33 @@
+--- old.declareDottedExtend.types
++++ new.declareDottedExtend.types
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ import ab = A.B;
+->ab : typeof ab
++>ab : typeof B
+ >A : typeof A
+->B : typeof ab
++>B : typeof B
+ 
+ class D extends ab.C{ }
+ >D : D
+->ab.C : ab.C
+->ab : typeof ab
+->C : typeof ab.C
++>ab.C : C
++>ab : typeof B
++>C : typeof C
+ 
+ class E extends A.B.C{ }
+ >E : E
+->A.B.C : ab.C
+->A.B : typeof ab
++>A.B.C : C
++>A.B : typeof B
+ >A : typeof A
+->B : typeof ab
+->C : typeof ab.C
++>B : typeof B
++>C : typeof C
+ 

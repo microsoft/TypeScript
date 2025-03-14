@@ -1,0 +1,35 @@
+--- old.discriminatedUnionJsxElement.types
++++ new.discriminatedUnionJsxElement.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #46021
+ 
+ interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
++>IData : IData<MenuItemVariant>
++>MenuItemVariant : MenuItemVariant
+ >ListItemVariant : any
+ 
+     menuItemsVariant?: MenuItemVariant;
+@@= skipped -7, +9 lines =@@
+ }
+ 
+ function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
+->Menu : <MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) => any
++>Menu : <MenuItemVariant extends ListItemVariant>(data: IData<MenuItemVariant>) => any
++>MenuItemVariant : MenuItemVariant
+ >ListItemVariant : any
+ >data : IData<MenuItemVariant>
+ 
+@@= skipped -15, +16 lines =@@
+ >OneLine : ListItemVariant.OneLine
+ 
+     return <ListItem variant={listItemVariant} />;
+-><ListItem variant={listItemVariant} /> : error
++><ListItem variant={listItemVariant} /> : any
+ >ListItem : (_data: IListItemData) => null
+->variant : ListItemVariant
+->listItemVariant : ListItemVariant
++>variant : any
++>listItemVariant : ListItemVariant.OneLine | MenuItemVariant
+ }
+ 
+ type IListItemData = { variant: ListItemVariant.Avatar; } | { variant: ListItemVariant.OneLine; };

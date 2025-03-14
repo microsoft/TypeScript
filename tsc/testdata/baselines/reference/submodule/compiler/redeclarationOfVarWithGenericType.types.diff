@@ -1,0 +1,19 @@
+--- old.redeclarationOfVarWithGenericType.types
++++ new.redeclarationOfVarWithGenericType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === redeclarationOfVarWithGenericType.ts ===
+ var a1: { fn<T>(x: T): T };
+->a1 : { fn<T>(x: T): T; }
++>a1 : { fn: <T>(x: T) => T; }
+ >fn : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ var a1: { fn<T>(x: T): T };
+->a1 : { fn<T>(x: T): T; }
++>a1 : { fn: <T>(x: T) => T; }
+ >fn : <T>(x: T) => T
++>T : T
+ >x : T
+ 

@@ -1,0 +1,18 @@
+--- old.indexer.types
++++ new.indexer.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexer.ts ===
+ interface JQueryElement {
++>JQueryElement : JQueryElement
++
+     id:string;
+ >id : string
+ }
+ 
+ interface JQuery {
++>JQuery : JQuery
++
+     [n:number]:JQueryElement;
+ >n : number
+ }

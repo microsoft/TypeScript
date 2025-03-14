@@ -1,0 +1,25 @@
+--- old.overrideInterfaceProperty.types
++++ new.overrideInterfaceProperty.types
+@@= skipped -1, +1 lines =@@
+ 
+ === overrideInterfaceProperty.ts ===
+ interface Mup<K, V> {
++>Mup : Mup<K, V>
++>K : K
++>V : V
++
+     readonly size: number;
+ >size : number
+ }
+ interface MupConstructor {
++>MupConstructor : MupConstructor
++
+     new(): Mup<any, any>;
+     new<K, V>(entries?: readonly (readonly [K, V])[] | null): Mup<K, V>;
+->entries : readonly (readonly [K, V])[]
++>K : K
++>V : V
++>entries : readonly [K, V][]
+ 
+     readonly prototype: Mup<any, any>;
+ >prototype : Mup<any, any>

@@ -1,0 +1,34 @@
+--- old.expandoFunctionBlockShadowing.types
++++ new.expandoFunctionBlockShadowing.types
+@@= skipped -25, +25 lines =@@
+ }
+ 
+ export function Y() {}
+->Y : typeof Y
++>Y : { (): void; test: string; }
+ 
+ Y.test = "foo";
+ >Y.test = "foo" : "foo"
+ >Y.test : string
+->Y : typeof Y
++>Y : { (): void; test: string; }
+ >test : string
+ >"foo" : "foo"
+ 
+ const aliasTopY = Y;
+->aliasTopY : typeof Y
+->Y : typeof Y
++>aliasTopY : { (): void; test: string; }
++>Y : { (): void; test: string; }
+ 
+ if (Math.random()) {
+ >Math.random() : number
+@@= skipped -34, +34 lines =@@
+   const topYcheck: { (): void; test: string } = aliasTopY;
+ >topYcheck : { (): void; test: string; }
+ >test : string
+->aliasTopY : typeof import("expandoFunctionBlockShadowing").Y
++>aliasTopY : { (): void; test: string; }
+ 
+   const blockYcheck: { (): void; test: number } = Y;
+ >blockYcheck : { (): void; test: number; }

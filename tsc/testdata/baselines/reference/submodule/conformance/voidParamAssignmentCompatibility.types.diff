@@ -1,0 +1,12 @@
+--- old.voidParamAssignmentCompatibility.types
++++ new.voidParamAssignmentCompatibility.types
+@@= skipped -9, +9 lines =@@
+ >g : (a: void) => void
+ 
+ interface Obj<T> {
++>Obj : Obj<T>
++>T : T
++
+     method(value: T): void;
+ >method : (value: T) => void
+ >value : T

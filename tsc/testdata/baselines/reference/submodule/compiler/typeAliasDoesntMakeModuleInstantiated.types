@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/typeAliasDoesntMakeModuleInstantiated.ts] ////
+
+=== typeAliasDoesntMakeModuleInstantiated.ts ===
+declare module m {
+>m : IStatic
+
+    // type alias declaration here shouldnt make the module declaration instantiated
+    type Selector = string| string[] |Function;
+>Selector : Selector
+
+    export interface IStatic {
+>IStatic : IStatic
+
+        (selector: any /* Selector */): IInstance;
+>selector : any
+    }
+    export interface IInstance { }
+>IInstance : IInstance
+}
+declare var m: m.IStatic; // Should be ok to have var 'm' as module is non instantiated
+>m : IStatic
+>m : any
+

@@ -1,0 +1,10 @@
+--- old.constructorParameterProperties.types
++++ new.constructorParameterProperties.types
+@@= skipped -34, +34 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     y: T;
+ >y : T

@@ -1,0 +1,16 @@
+--- old.privacyCheckExportAssignmentOnExportedGenericInterface2.types
++++ new.privacyCheckExportAssignmentOnExportedGenericInterface2.types
+@@= skipped -4, +4 lines =@@
+ >Foo : Foo<T>
+ 
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
+ }
+ 
+ function Foo<T>(array: T[]): Foo<T> {
+ >Foo : typeof Foo
++>T : T
+ >array : T[]
+ 
+     return undefined;

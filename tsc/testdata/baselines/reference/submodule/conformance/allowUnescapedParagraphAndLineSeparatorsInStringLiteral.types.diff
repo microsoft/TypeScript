@@ -1,0 +1,90 @@
+--- old.allowUnescapedParagraphAndLineSeparatorsInStringLiteral.types
++++ new.allowUnescapedParagraphAndLineSeparatorsInStringLiteral.types
+@@= skipped -5, +5 lines =@@
+ 
+ var stringContainingUnescapedLineSeparator1 = "
+ >stringContainingUnescapedLineSeparator1 : string
+->" STRING_CONTENT " : "\u2028STRING_CONTENT\u2028"
++>" STRING_CONTENT " : " STRING_CONTENT "
+ 
+ STRING_CONTENT
+ ";
+ var stringContainingUnescapedParagraphSeparator1 = "
+ >stringContainingUnescapedParagraphSeparator1 : string
+->" STRING_CONTENT " : "\u2029STRING_CONTENT\u2029"
++>" STRING_CONTENT " : " STRING_CONTENT "
+ 
+ STRING_CONTENT
+ ";
+@@= skipped -14, +14 lines =@@
+ 
+ var stringContainingUnescapedLineSeparator2 = '
+ >stringContainingUnescapedLineSeparator2 : string
+->' STRING_CONTENT ' : "\u2028STRING_CONTENT\u2028"
++>' STRING_CONTENT ' : " STRING_CONTENT "
+ 
+ STRING_CONTENT
+ ';
+ var stringContainingUnescapedParagraphSeparator2 = '
+ >stringContainingUnescapedParagraphSeparator2 : string
+->' STRING_CONTENT ' : "\u2029STRING_CONTENT\u2029"
++>' STRING_CONTENT ' : " STRING_CONTENT "
+ 
+ STRING_CONTENT
+ ';
+@@= skipped -14, +14 lines =@@
+ 
+ var stringContainingUnescapedLineSeparator3 = `
+ >stringContainingUnescapedLineSeparator3 : string
+->` STRING_CONTENT ` : "\u2028STRING_CONTENT\u2028"
++>` STRING_CONTENT ` : " STRING_CONTENT "
+ 
+ STRING_CONTENT
+ `;
+ var stringContainingUnescapedParagraphSeparator3 = `
+ >stringContainingUnescapedParagraphSeparator3 : string
+->` STRING_CONTENT ` : "\u2029STRING_CONTENT\u2029"
++>` STRING_CONTENT ` : " STRING_CONTENT "
+ 
+ STRING_CONTENT
+ `;
+@@= skipped -18, +18 lines =@@
+ >[    "  STRING_CONTENT  ",    "   STRING_CONTENT   ",    "STRING_CONTENT ",    " STRING_CONTENT",    `\ `,    ' '] : string[]
+ 
+     "
+->"  STRING_CONTENT  " : "\u2029\u2028STRING_CONTENT\u2028\u2029"
++>"  STRING_CONTENT  " : "  STRING_CONTENT  "
+ 
+ STRING_CONTENT
+ 
+ ",
+     "
+->"   STRING_CONTENT   " : "\u2028\u2029\u2029STRING_CONTENT\u2029\u2029\u2028"
++>"   STRING_CONTENT   " : "   STRING_CONTENT   "
+ 
+ 
+ STRING_CONTENT
+@@= skipped -14, +14 lines =@@
+ 
+ ",
+     "STRING_CONTENT
+->"STRING_CONTENT " : "STRING_CONTENT\u2029"
++>"STRING_CONTENT " : "STRING_CONTENT "
+ 
+ ",
+     "
+->" STRING_CONTENT" : "\u2028STRING_CONTENT"
++>" STRING_CONTENT" : " STRING_CONTENT"
+ 
+ STRING_CONTENT",
+     `\
+->`\ ` : ""
++>`\ ` : "â��"
+ 
+ `,
+     '
+->' ' : "\u2028"
++>' ' : " "
+ 
+ '
+ ];

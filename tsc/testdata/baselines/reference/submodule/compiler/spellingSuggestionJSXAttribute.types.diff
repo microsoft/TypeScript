@@ -1,0 +1,90 @@
+--- old.spellingSuggestionJSXAttribute.types
++++ new.spellingSuggestionJSXAttribute.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 5,000
+-Instantiation count: 50,000
+-Symbol count: 50,000
+-
+ === spellingSuggestionJSXAttribute.tsx ===
+ /// <reference path="react16.d.ts" />
+ import * as React from "react";
+->React : typeof React
++>React : any
+ 
+ function MyComp2(props: { className?: string, htmlFor?: string }) {
+ >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+@@= skipped -21, +15 lines =@@
+ }
+ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
+ >MyComp : MyComp
+->React.Component : React.Component<{ className?: string; htmlFor?: string; }, {}, any>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : any
++>React : any
++>Component : any
+ >className : string
+ >htmlFor : string
+ 
+ <a class="" />;
+-><a class="" /> : JSX.Element
++><a class="" /> : any
+ >a : any
+->class : string
++>class : any
+ 
+ <a for="" />; // should have no fix
+-><a for="" /> : JSX.Element
++><a for="" /> : any
+ >a : any
+->for : string
++>for : any
+ 
+ <label for="" />;
+-><label for="" /> : JSX.Element
++><label for="" /> : any
+ >label : any
+->for : string
++>for : any
+ 
+ <label for="" class="" />;
+-><label for="" class="" /> : JSX.Element
++><label for="" class="" /> : any
+ >label : any
+->for : string
+->class : string
++>for : any
++>class : any
+ 
+ <MyComp class="" />;
+-><MyComp class="" /> : JSX.Element
++><MyComp class="" /> : any
+ >MyComp : typeof MyComp
+->class : string
++>class : any
+ 
+ <MyComp2 class="" />;
+-><MyComp2 class="" /> : JSX.Element
++><MyComp2 class="" /> : any
+ >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+->class : string
++>class : any
+ 
+ <MyComp for="" />;
+-><MyComp for="" /> : JSX.Element
++><MyComp for="" /> : any
+ >MyComp : typeof MyComp
+->for : string
++>for : any
+ 
+ <MyComp2 for="" />;
+-><MyComp2 for="" /> : JSX.Element
++><MyComp2 for="" /> : any
+ >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
+->for : string
++>for : any
+ 

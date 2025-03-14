@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/typeTagPrototypeAssignment.ts] ////
+
+=== bug27327.js ===
+function C() {
+>C : { (): void; prototype: number; }
+}
+/** @type {string} */
+C.prototype = 12
+>C.prototype = 12 : 12
+>C.prototype : number
+>C : { (): void; prototype: number; }
+>prototype : number
+>12 : 12
+

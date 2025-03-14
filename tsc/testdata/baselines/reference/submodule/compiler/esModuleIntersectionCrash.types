@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/esModuleIntersectionCrash.ts] ////
+
+=== mod.d.ts ===
+export = modObj;
+>modObj : A & B
+
+declare const modObj: modObj.A & modObj.B;
+>modObj : A & B
+>modObj : any
+>modObj : any
+
+declare namespace modObj {
+>modObj : A & B
+
+    interface A { (): void; a: string; }
+>A : A
+>a : string
+
+    interface B { (x: string): void; b: string; }
+>B : B
+>x : string
+>b : string
+}
+=== idx.ts ===
+import * as mod from "./mod";
+>mod : A & B
+
+mod.a;
+>mod.a : string
+>mod : A & B
+>a : string
+
+mod.b;
+>mod.b : string
+>mod : A & B
+>b : string
+

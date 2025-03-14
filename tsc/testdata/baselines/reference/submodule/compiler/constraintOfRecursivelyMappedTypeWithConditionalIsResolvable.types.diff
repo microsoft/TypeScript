@@ -1,0 +1,51 @@
+--- old.constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.types
++++ new.constraintOfRecursivelyMappedTypeWithConditionalIsResolvable.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/Microsoft/TypeScript/issues/25379
+ 
+ interface Map<K, V> {
++>Map : Map<K, V>
++>K : K
++>V : V
++
+     // ...
+ }
+ 
+@@= skipped -8, +12 lines =@@
+ 
+ export type ImmutableModel<T> = { [K in keyof T]: T[K] extends ImmutableTypes ? T[K] : never };
+ >ImmutableModel : ImmutableModel<T>
++>T : T
++>K : K
+ 
+ export interface IImmutableMap<T extends ImmutableModel<T>> extends Map<string, any> {
++>IImmutableMap : IImmutableMap<T>
++>T : T
++
+     set<K extends keyof T>(key: K, value: T[K]): IImmutableMap<T>;
+ >set : <K extends keyof T>(key: K, value: T[K]) => IImmutableMap<T>
++>K : K
+ >key : K
+ >value : T[K]
+ }
+@@= skipped -13, +19 lines =@@
+ 
+ type isImmutableType<T> = [T] extends [ImmutableTypes2] ? T : never;
+ >isImmutableType : isImmutableType<T>
++>T : T
+ 
+ export type ImmutableModel2<T> = { [K in keyof T]: isImmutableType<T[K]> };
+ >ImmutableModel2 : ImmutableModel2<T>
++>T : T
++>K : K
+ 
+ export interface IImmutableMap2<T extends ImmutableModel2<T>> extends Map<string, any> {
++>IImmutableMap2 : IImmutableMap2<T>
++>T : T
++
+     set<K extends keyof T>(key: K, value: T[K]): IImmutableMap2<T>;
+ >set : <K extends keyof T>(key: K, value: T[K]) => IImmutableMap2<T>
++>K : K
+ >key : K
+ >value : T[K]
+ }

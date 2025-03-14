@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment26.ts] ////
+
+=== bug24730.js ===
+var UI = {}
+>UI : {}
+>{} : {}
+
+UI.TreeElement = class {
+>UI.TreeElement = class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement
+>UI.TreeElement : any
+>UI : {}
+>TreeElement : any
+>class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement
+
+    constructor() {
+        this.treeOutline = 12
+>this.treeOutline = 12 : 12
+>this.treeOutline : any
+>this : this
+>treeOutline : any
+>12 : 12
+    }
+};
+UI.context = new UI.TreeElement()
+>UI.context = new UI.TreeElement() : any
+>UI.context : any
+>UI : {}
+>context : any
+>new UI.TreeElement() : any
+>UI.TreeElement : any
+>UI : {}
+>TreeElement : any
+
+class C extends UI.TreeElement {
+>C : C
+>UI.TreeElement : any
+>UI : {}
+>TreeElement : any
+
+    onpopulate() {
+>onpopulate : () => void
+
+        this.doesNotExist
+>this.doesNotExist : any
+>this : this
+>doesNotExist : any
+
+        this.treeOutline.doesntExistEither()
+>this.treeOutline.doesntExistEither() : any
+>this.treeOutline.doesntExistEither : any
+>this.treeOutline : any
+>this : this
+>treeOutline : any
+>doesntExistEither : any
+    }
+};
+

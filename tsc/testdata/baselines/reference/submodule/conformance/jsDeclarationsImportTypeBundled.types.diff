@@ -1,0 +1,45 @@
+--- old.jsDeclarationsImportTypeBundled.types
++++ new.jsDeclarationsImportTypeBundled.types
+@@= skipped -7, +7 lines =@@
+  * @type {Item};
+  */
+ const x = {x: 12};
+->x : Item
++>x : { x: number; }
+ >{x: 12} : { x: number; }
+ >x : number
+ >12 : 12
+ 
+ module.exports = x;
+ >module.exports = x : { x: number; }
+->module.exports : { x: number; }
+->module : { exports: { x: number; }; }
+->exports : { x: number; }
+->x : Item
++>module.exports : any
++>module : any
++>exports : any
++>x : { x: number; }
+ 
+ === index.js ===
+ /** @type {(typeof import("./folder/mod1"))[]} */
+ const items = [{x: 12}];
+->items : import("folder/mod1").Item[]
++>items : { x: number; }[]
+ >[{x: 12}] : { x: number; }[]
+ >{x: 12} : { x: number; }
+ >x : number
+ >12 : 12
+ 
+ module.exports = items;
+->module.exports = items : import("folder/mod1").Item[]
+->module.exports : import("folder/mod1").Item[]
+->module : { exports: import("folder/mod1").Item[]; }
+->exports : import("folder/mod1").Item[]
+->items : import("folder/mod1").Item[]
++>module.exports = items : { x: number; }[]
++>module.exports : any
++>module : any
++>exports : any
++>items : { x: number; }[]
+ 

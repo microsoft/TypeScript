@@ -1,0 +1,23 @@
+--- old.tslibMultipleMissingHelper.types
++++ new.tslibMultipleMissingHelper.types
+@@= skipped -13, +13 lines =@@
+ >noop : () => Promise<void>
+ 
+ export function spread({ a, ...rest }: { a: number, b: number}) {
+->spread : ({ a, ...rest }: { a: number; b: number; }) => { b: number; c: string; }
++>spread : (__0: { a: number; b: number; }) => { b: number; c: string; }
+ >a : number
+ >rest : { b: number; }
+ >a : number
+@@= skipped -18, +18 lines =@@
+ async function foo(): Promise<void> {}
+ >foo : () => Promise<void>
+ 
+-=== /package1/node_modules/tslib/tslib.d.ts ===
+-export const notAHelper: any;
+->notAHelper : any
+-
+-=== /package2/node_modules/tslib/tslib.d.ts ===
+-export const notAHelper: any;
+->notAHelper : any
+-

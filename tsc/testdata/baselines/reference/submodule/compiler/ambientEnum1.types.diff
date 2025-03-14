@@ -1,0 +1,20 @@
+--- old.ambientEnum1.types
++++ new.ambientEnum1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === ambientEnum1.ts ===
+     declare enum E1 {
+->E1 : E1
++>E1 : E1.y
+ 
+         y = 4.23
+ >y : E1.y
+@@= skipped -9, +9 lines =@@
+     
+     // Ambient enum with computer member
+     declare enum E2 {
+->E2 : E2
++>E2 : E2.x
+ 
+         x = 'foo'.length
+ >x : E2.x

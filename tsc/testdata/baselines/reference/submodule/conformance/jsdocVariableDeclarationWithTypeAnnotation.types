@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/jsdoc/jsdocVariableDeclarationWithTypeAnnotation.ts] ////
+
+=== foo.js ===
+/** @type {boolean} */
+var /** @type {string} */ x,
+>x : any
+
+    /** @type {number} */ y;
+>y : any
+

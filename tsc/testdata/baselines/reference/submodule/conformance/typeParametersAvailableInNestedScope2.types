@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope2.ts] ////
+
+=== typeParametersAvailableInNestedScope2.ts ===
+function foo<T, U>(x: T, y: U) {
+>foo : <T, U>(x: T, y: U) => void
+>T : T
+>U : U
+>x : T
+>y : U
+
+    function bar<V>(z: V) {
+>bar : <V>(z: V) => void
+>V : V
+>z : V
+
+        function baz<W>(a: W) {
+>baz : <W>(a: W) => void
+>W : W
+>a : W
+
+            var c: T;
+>c : T
+
+            var d: U;
+>d : U
+
+            var e: V;
+>e : V
+        }
+    }
+}

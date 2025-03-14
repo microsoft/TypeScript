@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/declarationEmitMappedTypeTemplateTypeofSymbol.ts] ////
+
+=== a.d.ts ===
+export declare const timestampSymbol: unique symbol;
+>timestampSymbol : unique symbol
+
+export declare const Timestamp: {
+>Timestamp : { (Unique symbol): true; }
+
+    [TKey in typeof timestampSymbol]: true;
+>TKey : TKey
+>true : true
+
+};
+
+export declare function now(): typeof Timestamp;
+>now : () => { (Unique symbol): true; }
+
+=== b.ts ===
+import * as x from "./a";
+>x : typeof import("a")
+
+export const timestamp = x.now();
+>timestamp : { (Unique symbol): true; }
+>x.now() : { (Unique symbol): true; }
+>x.now : () => { (Unique symbol): true; }
+>x : typeof import("a")
+>now : () => { (Unique symbol): true; }
+
+=== c.ts ===
+import { now } from "./a";
+>now : () => { (Unique symbol): true; }
+
+export const timestamp = now();
+>timestamp : { (Unique symbol): true; }
+>now() : { (Unique symbol): true; }
+>now : () => { (Unique symbol): true; }
+

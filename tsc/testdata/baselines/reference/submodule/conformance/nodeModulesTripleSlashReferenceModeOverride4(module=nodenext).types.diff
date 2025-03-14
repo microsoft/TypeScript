@@ -1,0 +1,25 @@
+--- old.nodeModulesTripleSlashReferenceModeOverride4(module=nodenext).types
++++ new.nodeModulesTripleSlashReferenceModeOverride4(module=nodenext).types
+@@= skipped -2, +2 lines =@@
+ === /index.ts ===
+ /// <reference types="pkg" resolution-mode="import" />
+ foo; // foo should resolve while bar should not, since even though index.js is cjs, the refernce is esm
+->foo : number
++>foo : any
+ 
+ bar;
+->bar : any
++>bar : number
+ 
+ export {};
+-=== /node_modules/pkg/import.d.ts ===
++=== /node_modules/pkg/require.d.ts ===
+ export {};
+ declare global {
+ >global : typeof global
+ 
+-    var foo: number;
+->foo : number
++    var bar: number;
++>bar : number
+ }

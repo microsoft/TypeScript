@@ -1,0 +1,35 @@
+--- old.objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.types
++++ new.objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.types
+@@= skipped -13, +13 lines =@@
+ >b : string
+ >id : number
+ >{ name, id } : { name: string; id: number; }
+->name : string
+->id : number
++>name : any
++>id : any
+ 
+ function bar(name: string, id: number): { name: number, id: string } { return { name, id }; }  // error
+ >bar : (name: string, id: number) => { name: number; id: string; }
+@@= skipped -10, +10 lines =@@
+ >name : number
+ >id : string
+ >{ name, id } : { name: string; id: number; }
+->name : string
+->id : number
++>name : any
++>id : any
+ 
+ function foo(name: string, id: number): { name: string, id: number } { return { name, id }; }  // error
+ >foo : (name: string, id: number) => { name: string; id: number; }
+@@= skipped -10, +10 lines =@@
+ >name : string
+ >id : number
+ >{ name, id } : { name: string; id: number; }
+->name : string
+->id : number
++>name : any
++>id : any
+ 
+ var person1: { name, id }; // ok
+ >person1 : { name: any; id: any; }

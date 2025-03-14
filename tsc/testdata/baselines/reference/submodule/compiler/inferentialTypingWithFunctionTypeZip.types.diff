@@ -1,0 +1,21 @@
+--- old.inferentialTypingWithFunctionTypeZip.types
++++ new.inferentialTypingWithFunctionTypeZip.types
+@@= skipped -2, +2 lines =@@
+ === inferentialTypingWithFunctionTypeZip.ts ===
+ var pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
+ >pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
++>T : T
++>S : S
+ >x : T
+ >y : S
+ >x : T
+@@= skipped -7, +9 lines =@@
+ 
+ var zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
+ >zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
++>T : T
++>S : S
++>U : U
+ >a : T[]
+ >b : S[]
+ >f : (x: T) => (y: S) => U

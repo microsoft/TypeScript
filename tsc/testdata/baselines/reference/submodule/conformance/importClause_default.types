@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importClause_default.ts] ////
+
+=== /a.ts ===
+export default class A { a!: string }
+>A : default
+>a : string
+
+=== /b.ts ===
+import type A from './a';
+>A : default
+
+new A();
+>new A() : default
+>A : typeof default
+
+let a: A = { a: '' };
+>a : default
+>{ a: '' } : { a: string; }
+>a : string
+>'' : ""
+
+let b = { A };
+>b : { A: typeof default; }
+>{ A } : { A: typeof default; }
+>A : any
+

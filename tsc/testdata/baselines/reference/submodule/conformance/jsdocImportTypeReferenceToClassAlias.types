@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToClassAlias.ts] ////
+
+=== mod1.js ===
+class C {
+>C : C
+
+    s() { }
+>s : () => void
+}
+module.exports.C = C
+>module.exports.C = C : typeof C
+>module.exports.C : any
+>module.exports : any
+>module : any
+>exports : any
+>C : any
+>C : typeof C
+
+=== test.js ===
+/** @typedef {import('./mod1').C} X */
+/** @param {X} c */
+function demo(c) {
+>demo : (c: any) => void
+>c : any
+
+    c.s
+>c.s : any
+>c : any
+>s : any
+}
+

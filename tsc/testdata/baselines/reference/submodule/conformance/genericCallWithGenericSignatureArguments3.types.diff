@@ -1,0 +1,58 @@
+--- old.genericCallWithGenericSignatureArguments3.types
++++ new.genericCallWithGenericSignatureArguments3.types
+@@= skipped -5, +5 lines =@@
+ 
+ function foo<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
+ >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
++>T : T
+ >x : T
+ >a : (x: T) => T
+ >x : T
+@@= skipped -84, +85 lines =@@
+ >'' : ""
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ enum F { A }
+->F : F
++>F : F.A
+ >A : F.A
+ 
+ var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number 
+ >r6 : (x: number) => number
+ >foo(E.A, (x: number) => E.A, (x: F) => F.A) : (x: number) => number
+ >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
+->(x: number) => E.A : (x: number) => E
++>A : E.A
++>(x: number) => E.A : (x: number) => E.A
+ >x : number
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
+->(x: F) => F.A : (x: F) => F
+->x : F
+->F.A : F
++>A : E.A
++>(x: F) => F.A : (x: F.A) => F.A
++>x : F.A
++>F.A : F.A
+ >F : typeof F
+->A : F
++>A : F.A
+ 
+ 
+ function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {
+ >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
++>T : T
++>U : U
+ >x : T
+ >a : (x: T) => U
+ >x : T

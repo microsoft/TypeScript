@@ -1,0 +1,10 @@
+--- old.objectTypeWithRecursiveWrappedProperty.types
++++ new.objectTypeWithRecursiveWrappedProperty.types
+@@= skipped -4, +4 lines =@@
+ 
+ class List<T> {
+ >List : List<T>
++>T : T
+ 
+     data: T;
+ >data : T

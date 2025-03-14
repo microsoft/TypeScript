@@ -1,0 +1,110 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.types
++++ new.TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.types
+@@= skipped -1, +1 lines =@@
+ 
+ === TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts ===
+ module A {
++>A : any
++
+     export interface Point {
++>Point : Point
++
+         x: number;
+ >x : number
+ 
+@@= skipped -13, +17 lines =@@
+ }
+ 
+ module A {
++>A : any
++
+     export interface Point {
++>Point : Point
++
+         fromCarth(): Point;
+ >fromCarth : () => Point
+     }
+@@= skipped -8, +12 lines =@@
+ 
+ // ensure merges as expected
+ var p: { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; };
+->p : { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; }
++>p : { x: number; y: number; toCarth: () => Point; fromCarth: () => Point; }
+ >x : number
+ >y : number
+->toCarth : () => A.Point
++>toCarth : () => Point
+ >A : any
+->fromCarth : () => A.Point
++>fromCarth : () => Point
+ >A : any
+ 
+ var p: A.Point;
+->p : { x: number; y: number; toCarth(): A.Point; fromCarth(): A.Point; }
++>p : { x: number; y: number; toCarth: () => Point; fromCarth: () => Point; }
+ >A : any
+ 
+ module X.Y.Z {
++>X : any
++>Y : any
++>Z : any
++
+     export interface Line {
++>Line : Line
++
+         new (start: A.Point, end: A.Point);
+->start : A.Point
++>start : Point
+ >A : any
+->end : A.Point
++>end : Point
+ >A : any
+     }
+ }
+ 
+ module X {
++>X : any
++
+     export module Y.Z {
++>Y : any
++>Z : any
++
+         export interface Line {
++>Line : Line
++
+             start: A.Point;
+->start : A.Point
++>start : Point
+ >A : any
+ 
+             end: A.Point;
+->end : A.Point
++>end : Point
+ >A : any
+         }
+     }
+@@= skipped -38, +51 lines =@@
+ 
+ // ensure merges as expected
+ var l: { start: A.Point; end: A.Point; new (s: A.Point, e: A.Point); }
+->l : { new (s: A.Point, e: A.Point): any; start: A.Point; end: A.Point; }
+->start : A.Point
++>l : { new (s: Point, e: Point): any; start: Point; end: Point; }
++>start : Point
+ >A : any
+->end : A.Point
++>end : Point
+ >A : any
+->s : A.Point
++>s : Point
+ >A : any
+->e : A.Point
++>e : Point
+ >A : any
+ 
+ var l: X.Y.Z.Line;
+->l : { new (s: A.Point, e: A.Point): any; start: A.Point; end: A.Point; }
++>l : { new (s: Point, e: Point): any; start: Point; end: Point; }
+ >X : any
+ >Y : any
+ >Z : any

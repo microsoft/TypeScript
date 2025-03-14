@@ -1,0 +1,34 @@
+--- old.nestedPrototypeAssignment.types
++++ new.nestedPrototypeAssignment.types
+@@= skipped -2, +2 lines =@@
+ === mod.js ===
+ // #24111 -- shouldn't assert
+ C.prototype = {}
+->C.prototype = {} : typeof C.prototype
+->C.prototype : typeof C.prototype
+->C : typeof C
+->prototype : typeof C.prototype
++>C.prototype = {} : {}
++>C.prototype : any
++>C : any
++>prototype : any
+ >{} : {}
+ 
+ C.prototype.bar.foo = {};
+ >C.prototype.bar.foo = {} : {}
+->C.prototype.bar.foo : {}
+->C.prototype.bar : typeof C.prototype.bar
+->C.prototype : typeof C.prototype
+->C : typeof C
+->prototype : typeof C.prototype
+->bar : typeof C.prototype.bar
+->foo : {}
++>C.prototype.bar.foo : any
++>C.prototype.bar : any
++>C.prototype : any
++>C : any
++>prototype : any
++>bar : any
++>foo : any
+ >{} : {}
+ 

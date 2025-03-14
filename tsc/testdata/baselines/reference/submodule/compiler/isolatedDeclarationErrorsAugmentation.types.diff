@@ -1,0 +1,11 @@
+--- old.isolatedDeclarationErrorsAugmentation.types
++++ new.isolatedDeclarationErrorsAugmentation.types
+@@= skipped -7, +7 lines =@@
+ >'./parent' : typeof import("parent")
+ 
+     interface ParentThing {
++>ParentThing : ParentThing
++
+         add: (a: number, b: number) => number;
+ >add : (a: number, b: number) => number
+ >a : number

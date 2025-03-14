@@ -1,0 +1,27 @@
+--- old.exportAssignmentInternalModule.types
++++ new.exportAssignmentInternalModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportAssignmentInternalModule_B.ts ===
+ import modM = require("exportAssignmentInternalModule_A");
+->modM : typeof modM
++>modM : any
+ 
+ var n: number = modM.x;
+ >n : number
+ >modM.x : any
+->modM : typeof modM
++>modM : any
+ >x : any
+ 
+-=== exportAssignmentInternalModule_A.ts ===
+-module M {
+->M : typeof M
+-
+-	export var x;
+->x : any
+-}
+-
+-export = M;
+->M : typeof M
+-

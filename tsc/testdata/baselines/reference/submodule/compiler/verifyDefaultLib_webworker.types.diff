@@ -1,0 +1,11 @@
+--- old.verifyDefaultLib_webworker.types
++++ new.verifyDefaultLib_webworker.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/verifyDefaultLib_webworker.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 5,000
+-
+ === verifyDefaultLib_webworker.ts ===
+ var x: Worker;
+ >x : Worker

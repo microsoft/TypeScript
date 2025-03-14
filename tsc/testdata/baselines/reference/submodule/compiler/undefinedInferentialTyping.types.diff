@@ -1,0 +1,10 @@
+--- old.undefinedInferentialTyping.types
++++ new.undefinedInferentialTyping.types
+@@= skipped -2, +2 lines =@@
+ === undefinedInferentialTyping.ts ===
+ function f<T>(arr: T[], elemnt: T): T {
+ >f : <T>(arr: T[], elemnt: T) => T
++>T : T
+ >arr : T[]
+ >elemnt : T
+ 

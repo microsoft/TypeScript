@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/exportTwoInterfacesWithSameName.ts] ////
+
+=== exportTwoInterfacesWithSameName.ts ===
+export interface I {}
+>I : I
+
+export interface I {}
+>I : I
+

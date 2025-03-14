@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment19.ts] ////
+
+=== index.js ===
+/// <reference path='./types.d.ts'/>
+const C = require("./semver")
+>C : any
+>require("./semver") : any
+>require : any
+>"./semver" : "./semver"
+
+var two = C.f(1)
+>two : any
+>C.f(1) : any
+>C.f : any
+>C : any
+>f : any
+>1 : 1
+
+=== types.d.ts ===
+declare var require: any;
+>require : any
+
+declare var module: any;
+>module : any
+

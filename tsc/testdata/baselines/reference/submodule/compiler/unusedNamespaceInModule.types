@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/unusedNamespaceInModule.ts] ////
+
+=== unusedNamespaceInModule.ts ===
+module A {
+>A : any
+
+    namespace B { }
+>B : any
+
+    export namespace C {}
+>C : any
+}

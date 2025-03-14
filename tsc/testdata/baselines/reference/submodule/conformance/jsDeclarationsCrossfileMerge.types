@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCrossfileMerge.ts] ////
+
+=== index.js ===
+const m = require("./exporter");
+>m : any
+>require("./exporter") : any
+>require : any
+>"./exporter" : "./exporter"
+
+module.exports = m.default;
+>module.exports = m.default : any
+>module.exports : any
+>module : any
+>exports : any
+>m.default : any
+>m : any
+>default : any
+
+module.exports.memberName = "thing";
+>module.exports.memberName = "thing" : "thing"
+>module.exports.memberName : any
+>module.exports : any
+>module : any
+>exports : any
+>memberName : any
+>"thing" : "thing"
+
+=== exporter.js ===
+function validate() {}
+>validate : () => void
+
+export default validate;
+>validate : () => void
+

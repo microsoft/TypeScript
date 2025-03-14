@@ -1,0 +1,61 @@
+--- old.tsxPreserveEmit1.types
++++ new.tsxPreserveEmit1.types
+@@= skipped -5, +5 lines =@@
+ >React : any
+ 
+ import ReactRouter = require('react-router');
+->ReactRouter : typeof ReactRouter
++>ReactRouter : any
+ 
+ import Route = ReactRouter.Route;
+ >Route : any
+->ReactRouter : typeof ReactRouter
++>ReactRouter : any
+ >Route : any
+ 
+ var routes1 = <Route />;
+->routes1 : error
+-><Route /> : error
++>routes1 : any
++><Route /> : any
+ >Route : any
+ 
+ module M {
+@@= skipped -23, +23 lines =@@
+ 
+ 	// Should emit 'M.X' in both opening and closing tags
+ 	var y = <X></X>;
+->y : error
+-><X></X> : error
++>y : any
++><X></X> : any
+ >X : any
+ >X : any
+ }
+ 
+-=== react.d.ts ===
+-declare module 'react' {
+->'react' : typeof import("react")
+-
+-	var x: any;
+->x : any
+-
+-	export = x;
+->x : any
+-}
+-
+-declare module ReactRouter {
+->ReactRouter : typeof ReactRouter
+-
+-	var Route: any;
+->Route : any
+-
+-	interface Thing { }
+-}
+-declare module 'react-router' {
+->'react-router' : typeof import("react-router")
+-
+-	export = ReactRouter;
+->ReactRouter : typeof ReactRouter
+-}
+-

@@ -1,0 +1,50 @@
+--- old.returnTypePredicateIsInstantiateInContextOfTarget.types
++++ new.returnTypePredicateIsInstantiateInContextOfTarget.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/returnTypePredicateIsInstantiateInContextOfTarget.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === returnTypePredicateIsInstantiateInContextOfTarget.tsx ===
+ /// <reference path="react16.d.ts" />
+ import * as React from "react";
+->React : typeof React
++>React : any
+ 
+ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }> {
+ >TestComponent : TestComponent
+->React.Component : React.Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : any
++>React : any
++>Component : any
+ >isAny : <T>(obj: any) => obj is T
++>T : T
+ >obj : any
+ 
+     static defaultProps = {
+@@= skipped -32, +27 lines =@@
+     // Type guard is defined as a static class property
+     static isAny<T>(obj: any): obj is T {
+ >isAny : <T>(obj: any) => obj is T
++>T : T
+ >obj : any
+ 
+         return true;
+@@= skipped -8, +9 lines =@@
+ }
+ 
+ const TestRender = () => <TestComponent />;
+->TestRender : () => JSX.Element
+->() => <TestComponent /> : () => JSX.Element
+-><TestComponent /> : JSX.Element
++>TestRender : () => any
++>() => <TestComponent /> : () => any
++><TestComponent /> : any
+ >TestComponent : typeof TestComponent
+ 

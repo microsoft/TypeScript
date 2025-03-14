@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/typeParameterHasSelfAsConstraint.ts] ////
+
+=== typeParameterHasSelfAsConstraint.ts ===
+function foo<T extends T>(x: T): number {
+>foo : <T>(x: T) => number
+>T : T
+>x : T
+
+    return x;
+>x : T
+}
+ 
+

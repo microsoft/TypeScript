@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/jsx/tsxPreserveEmit2.tsx] ////
+
+=== test.tsx ===
+var Route: any;
+>Route : any
+
+var routes1 = <Route />;
+>routes1 : any
+><Route /> : any
+>Route : any
+

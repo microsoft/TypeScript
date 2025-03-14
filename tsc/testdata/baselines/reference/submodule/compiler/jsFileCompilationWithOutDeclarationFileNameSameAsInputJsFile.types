@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsFileCompilationWithOutDeclarationFileNameSameAsInputJsFile.ts] ////
+
+=== /a.ts ===
+class c {
+>c : c
+}
+
+=== /b.d.ts ===
+declare function foo(): boolean;
+>foo : () => boolean
+

@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyPropCustomImportPragma.tsx] ////
+
+=== react.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
+import "./preact";
+const props2 = { answer: 42 }
+>props2 : { answer: number; }
+>{ answer: 42 } : { answer: number; }
+>answer : number
+>42 : 42
+
+const a2 = <div key="foo" {...props2}>text</div>;
+>a2 : any
+><div key="foo" {...props2}>text</div> : any
+>div : any
+>key : any
+>props2 : { answer: number; }
+>div : any
+
+const b2 = <div {...props2} key="bar">text</div>;
+>b2 : any
+><div {...props2} key="bar">text</div> : any
+>div : any
+>props2 : { answer: number; }
+>key : any
+>div : any
+
+export {};
+
+=== preact.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
+const props = { answer: 42 }
+>props : { answer: number; }
+>{ answer: 42 } : { answer: number; }
+>answer : number
+>42 : 42
+
+const a = <div key="foo" {...props}>text</div>;
+>a : any
+><div key="foo" {...props}>text</div> : any
+>div : any
+>key : any
+>props : { answer: number; }
+>div : any
+
+const b = <div {...props} key="bar">text</div>;
+>b : any
+><div {...props} key="bar">text</div> : any
+>div : any
+>props : { answer: number; }
+>key : any
+>div : any
+
+export {};
+

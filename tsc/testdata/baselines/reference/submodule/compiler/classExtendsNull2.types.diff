@@ -1,0 +1,16 @@
+--- old.classExtendsNull2.types
++++ new.classExtendsNull2.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/55499
+ 
+ interface Base {}
++>Base : Base
+ 
+ class C extends null {
+ >C : C
+@@= skipped -11, +12 lines =@@
+   }
+ }
+ interface C extends Base {}
++>C : C
+ 

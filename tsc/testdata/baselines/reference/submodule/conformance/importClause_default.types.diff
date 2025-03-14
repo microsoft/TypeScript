@@ -1,0 +1,36 @@
+--- old.importClause_default.types
++++ new.importClause_default.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ export default class A { a!: string }
+->A : A
++>A : default
+ >a : string
+ 
+ === /b.ts ===
+ import type A from './a';
+->A : A
++>A : default
+ 
+ new A();
+->new A() : A
+->A : typeof A
++>new A() : default
++>A : typeof default
+ 
+ let a: A = { a: '' };
+->a : A
++>a : default
+ >{ a: '' } : { a: string; }
+ >a : string
+ >'' : ""
+ 
+ let b = { A };
+->b : { A: typeof A; }
+->{ A } : { A: typeof A; }
+->A : typeof A
++>b : { A: typeof default; }
++>{ A } : { A: typeof default; }
++>A : any
+ 

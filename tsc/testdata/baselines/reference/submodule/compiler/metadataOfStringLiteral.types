@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/metadataOfStringLiteral.ts] ////
+
+=== metadataOfStringLiteral.ts ===
+function PropDeco(target: Object, propKey: string | symbol) { }
+>PropDeco : (target: Object, propKey: string | symbol) => void
+>target : Object
+>propKey : string | symbol
+
+class Foo {
+>Foo : Foo
+
+    @PropDeco
+>PropDeco : (target: Object, propKey: string | symbol) => void
+
+    public foo: "foo" | "bar";
+>foo : "bar" | "foo"
+}

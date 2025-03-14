@@ -1,0 +1,38 @@
+--- old.typeParameterAsTypeParameterConstraintTransitively2.types
++++ new.typeParameterAsTypeParameterConstraintTransitively2.types
+@@= skipped -4, +4 lines =@@
+ // these should be errors at the type parameter constraint declarations, and have no downstream errors
+ 
+ interface A { foo: number }
++>A : A
+ >foo : number
+ 
+ interface B extends A { bar: string; }
++>B : B
+ >bar : string
+ 
+ interface C extends B { baz: boolean; }
++>C : C
+ >baz : boolean
+ 
+ var a: A;
+@@= skipped -19, +22 lines =@@
+ 
+ function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
+ >foo : <T, U, V>(x: T, y: U, z: V) => V
++>T : T
++>U : U
++>V : V
+ >x : T
+ >y : U
+ >z : V
+@@= skipped -66, +69 lines =@@
+ 
+ function foo2<T extends A, U extends A, V extends A>(x: T, y: U, z: V): V { return z; }
+ >foo2 : <T extends A, U extends A, V extends A>(x: T, y: U, z: V) => V
++>T : T
++>U : U
++>V : V
+ >x : T
+ >y : U
+ >z : V

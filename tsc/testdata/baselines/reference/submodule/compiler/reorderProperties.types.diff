@@ -1,0 +1,36 @@
+--- old.reorderProperties.types
++++ new.reorderProperties.types
+@@= skipped -1, +1 lines =@@
+ 
+ === reorderProperties.ts ===
+ interface A<T> {
++>A : A<T>
++>T : T
++
+     x: T
+ >x : T
+ }
+ 
+ interface B<T> {
++>B : B<T>
++>T : T
++
+     x: T
+ >x : T
+ }
+ 
+ interface C<S> extends A<D<S>> {
++>C : C<S>
++>S : S
++
+     y: S
+ >y : S
+ }
+ 
+ interface D<S> extends B<C<S>> {
++>D : D<S>
++>S : S
++
+     y: S
+ >y : S
+ }

@@ -1,0 +1,10 @@
+--- old.thisTypeInFunctions3.types
++++ new.thisTypeInFunctions3.types
+@@= skipped -5, +5 lines =@@
+ 
+     check<TProp extends this>(prop: TProp): boolean;
+ >check : <TProp extends this>(prop: TProp) => boolean
++>TProp : TProp
+ >prop : TProp
+ }
+ 

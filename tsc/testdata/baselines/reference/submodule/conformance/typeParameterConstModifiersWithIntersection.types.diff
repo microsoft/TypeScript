@@ -1,0 +1,37 @@
+--- old.typeParameterConstModifiersWithIntersection.types
++++ new.typeParameterConstModifiersWithIntersection.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/55778
+ 
+ interface Config<T1 extends { type: string }> {
++>Config : Config<T1>
++>T1 : T1
+ >type : string
+ 
+   useIt: T1;
+@@= skipped -7, +9 lines =@@
+ }
+ 
+ declare function test<
+->test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
++>test : <T1 extends { type: string; }, TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
+ 
+   T1 extends { type: string },
++>T1 : T1
+ >type : string
+ 
+   const TConfig extends Config<T1>,
++>TConfig : TConfig
++
+ >(config: { produceThing: T1 } & TConfig): TConfig;
+ >config : { produceThing: T1; } & TConfig
+ >produceThing : T1
+@@= skipped -13, +16 lines =@@
+ const result = test({
+ >result : { readonly produceThing: { type: "foo"; }; readonly useIt: { readonly type: "foo"; }; readonly extra: 10; }
+ >test({  produceThing: {} as {    type: "foo";  },  useIt: {    type: "foo",  },  extra: 10,}) : { readonly produceThing: { type: "foo"; }; readonly useIt: { readonly type: "foo"; }; readonly extra: 10; }
+->test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
++>test : <T1 extends { type: string; }, TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
+ >{  produceThing: {} as {    type: "foo";  },  useIt: {    type: "foo",  },  extra: 10,} : { produceThing: { type: "foo"; }; useIt: { type: "foo"; }; extra: 10; }
+ 
+   produceThing: {} as {

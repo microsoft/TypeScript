@@ -1,0 +1,19 @@
+--- old.exportAsNamespace5.types
++++ new.exportAsNamespace5.types
+@@= skipped -12, +12 lines =@@
+ 
+ === one.ts ===
+ import ns from "./two";
+->ns : typeof ns
++>ns : typeof import("three")
+ 
+ type Alias = ns.Named;
+ >Alias : 0
+@@= skipped -8, +8 lines =@@
+ 
+ ns.Named;
+ >ns.Named : 0
+->ns : typeof ns
++>ns : typeof import("three")
+ >Named : 0
+ 

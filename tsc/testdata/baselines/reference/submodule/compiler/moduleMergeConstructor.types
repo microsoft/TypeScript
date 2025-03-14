@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/moduleMergeConstructor.ts] ////
+
+=== foo.d.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+    export class Foo {
+>Foo : Foo
+
+        constructor();
+        method1(): any;
+>method1 : () => any
+    }
+}
+
+=== foo-ext.d.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+    export interface Foo {
+>Foo : Foo
+
+        method2(): any;
+>method2 : () => any
+    }
+}
+
+=== index.ts ===
+import * as foo from "foo";
+>foo : typeof import("foo")
+
+class Test {
+>Test : Test
+
+    bar: foo.Foo;
+>bar : Foo
+>foo : any
+
+    constructor() {
+        this.bar = new foo.Foo();
+>this.bar = new foo.Foo() : Foo
+>this.bar : Foo
+>this : this
+>bar : Foo
+>new foo.Foo() : Foo
+>foo.Foo : typeof Foo
+>foo : typeof import("foo")
+>Foo : typeof Foo
+    }
+}
+

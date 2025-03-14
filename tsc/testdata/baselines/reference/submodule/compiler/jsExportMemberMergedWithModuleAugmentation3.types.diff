@@ -1,0 +1,32 @@
+--- old.jsExportMemberMergedWithModuleAugmentation3.types
++++ new.jsExportMemberMergedWithModuleAugmentation3.types
+@@= skipped -2, +2 lines =@@
+ === /x.js ===
+ module.exports.x = 1;
+ >module.exports.x = 1 : 1
+->module.exports.x : 1
+->module.exports : typeof import("/y")
+->module : { exports: typeof import("/y"); }
+->exports : typeof import("/y")
+->x : 1
++>module.exports.x : any
++>module.exports : any
++>module : any
++>exports : any
++>x : any
+ >1 : 1
+ 
+ module.exports = require("./y.js");
+->module.exports = require("./y.js") : typeof import("/y")
+->module.exports : typeof import("/y")
+->module : { exports: typeof import("/y"); }
+->exports : typeof import("/y")
+->require("./y.js") : typeof import("/y")
++>module.exports = require("./y.js") : any
++>module.exports : any
++>module : any
++>exports : any
++>require("./y.js") : any
+ >require : any
+ >"./y.js" : "./y.js"
+ 

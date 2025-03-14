@@ -1,0 +1,10 @@
+--- old.inferringAnyFunctionType5.types
++++ new.inferringAnyFunctionType5.types
+@@= skipped -2, +2 lines =@@
+ === inferringAnyFunctionType5.ts ===
+ function f<T extends { q: (p1: number) => number }>(p: T): T {
+ >f : <T extends { q: (p1: number) => number; }>(p: T) => T
++>T : T
+ >q : (p1: number) => number
+ >p1 : number
+ >p : T

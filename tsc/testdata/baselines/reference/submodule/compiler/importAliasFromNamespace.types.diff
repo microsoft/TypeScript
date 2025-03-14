@@ -1,0 +1,47 @@
+--- old.importAliasFromNamespace.types
++++ new.importAliasFromNamespace.types
+@@= skipped -6, +6 lines =@@
+ >Thing : typeof Thing
+ 
+     import Internal = My.Internal;
+->Internal : typeof Internal
++>Internal : any
+ >My : typeof My
+->Internal : typeof Internal
++>Internal : any
+ 
+     export class Foo {
+ >Foo : Foo
+ 
+         private _which: Internal.WhichThing;
+->_which : Internal.WhichThing
++>_which : WhichThing
+ >Internal : any
+ 
+         constructor() {
+             Internal.getThing();
+->Internal.getThing() : void
+->Internal.getThing : () => void
+->Internal : typeof Internal
+->getThing : () => void
++>Internal.getThing() : any
++>Internal.getThing : any
++>Internal : any
++>getThing : any
+ 
+             Internal.WhichThing.A ? "foo" : "bar";
+->Internal.WhichThing.A ? "foo" : "bar" : "foo" | "bar"
+->Internal.WhichThing.A : Internal.WhichThing.A
+->Internal.WhichThing : typeof Internal.WhichThing
+->Internal : typeof Internal
+->WhichThing : typeof Internal.WhichThing
+->A : Internal.WhichThing.A
++>Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
++>Internal.WhichThing.A : any
++>Internal.WhichThing : any
++>Internal : any
++>WhichThing : any
++>A : any
+ >"foo" : "foo"
+ >"bar" : "bar"
+         }

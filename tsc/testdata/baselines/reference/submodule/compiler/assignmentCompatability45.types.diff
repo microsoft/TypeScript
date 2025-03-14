@@ -1,0 +1,9 @@
+--- old.assignmentCompatability45.types
++++ new.assignmentCompatability45.types
+@@= skipped -17, +17 lines =@@
+ }
+ const b: typeof A = B;
+ >b : typeof A
+->A : typeof A
+ >B : typeof B
+ 

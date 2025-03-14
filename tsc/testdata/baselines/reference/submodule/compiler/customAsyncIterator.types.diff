@@ -1,0 +1,17 @@
+--- old.customAsyncIterator.types
++++ new.customAsyncIterator.types
+@@= skipped -3, +3 lines =@@
+ // GH: https://github.com/microsoft/TypeScript/issues/33239
+ class ConstantIterator<T> implements AsyncIterator<T, void, T | undefined> {
+ >ConstantIterator : ConstantIterator<T>
++>T : T
+ 
+     constructor(private constant: T) {
+ >constant : T
+     }
+     async next(value?: T): Promise<IteratorResult<T>> {
+->next : (value?: T) => Promise<IteratorResult<T>>
++>next : (value?: T) => Promise<IteratorResult<T, any>>
+ >value : T
+ 
+         if (value != null) {

@@ -1,0 +1,93 @@
+--- old.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.types
++++ new.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.types
+@@= skipped -1, +1 lines =@@
+ 
+ === complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts ===
+ interface TextChannel {
++>TextChannel : TextChannel
++
+     id: string;
+ >id : string
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface EmailChannel {
++>EmailChannel : EmailChannel
++
+     id: string;
+ >id : string
+ 
+@@= skipped -14, +16 lines =@@
+ >Channel : Channel
+ 
+ export type ChannelType = Channel extends { type: infer R } ? R : never;
+->ChannelType : "text" | "email"
++>ChannelType : "email" | "text"
+ >type : R
++>R : R
+ 
+ type Omit<T, K extends keyof T> = Pick<
+ >Omit : Omit<T, K>
++>T : T
++>K : K
+ 
+     T,
+     ({ [P in keyof T]: P } & { [P in K]: never } & { [x: string]: never })[keyof T]
++>P : P
++>P : P
+ >x : string
+ 
+ >;
+ 
+ type ChannelOfType<T extends ChannelType, A = Channel> = A extends { type: T }
+ >ChannelOfType : ChannelOfType<T, A>
++>T : T
++>A : A
+ >type : T
+ 
+     ? A
+@@= skipped -22, +29 lines =@@
+ 
+ export type NewChannel<T extends Channel> = Pick<T, 'type'> &
+ >NewChannel : NewChannel<T>
++>T : T
+ 
+     Partial<Omit<T, 'type' | 'id'>> & { localChannelId: string };
+ >localChannelId : string
+ 
+ 
+ export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<ChannelOfType<T>> {
+->makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
++>makeNewChannel : <T extends "email" | "text">(type: T) => NewChannel<ChannelOfType<T, EmailChannel> | ChannelOfType<T, TextChannel>>
++>T : T
+ >type : T
+ 
+     const localChannelId = `blahblahblah`;
+@@= skipped -15, +17 lines =@@
+ 
+     return { type, localChannelId };
+ >{ type, localChannelId } : { type: T; localChannelId: string; }
+->type : T
+->localChannelId : string
++>type : any
++>localChannelId : any
+ }
+ 
+ const newTextChannel = makeNewChannel('text');
+ >newTextChannel : NewChannel<TextChannel>
+ >makeNewChannel('text') : NewChannel<TextChannel>
+->makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
++>makeNewChannel : <T extends "email" | "text">(type: T) => NewChannel<ChannelOfType<T, EmailChannel> | ChannelOfType<T, TextChannel>>
+ >'text' : "text"
+ 
+ // This should work
+@@= skipped -21, +21 lines =@@
+ const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
+ >newTextChannel2 : NewChannel<TextChannel>
+ >makeNewChannel('text') : NewChannel<TextChannel>
+->makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
++>makeNewChannel : <T extends "email" | "text">(type: T) => NewChannel<ChannelOfType<T, EmailChannel> | ChannelOfType<T, TextChannel>>
+ >'text' : "text"
+ 
+ // Compare with this, which ofc works.

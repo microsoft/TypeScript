@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/jsdoc/typeTagModuleExports.ts] ////
+
+=== bug27327.js ===
+/** @type {string} */
+module.exports = 0;
+>module.exports = 0 : 0
+>module.exports : any
+>module : any
+>exports : any
+>0 : 0
+

@@ -1,0 +1,16 @@
+--- old.declarationEmitNoNonRequiredParens.types
++++ new.declarationEmitNoNonRequiredParens.types
+@@= skipped -11, +11 lines =@@
+ 
+ export type TestType = typeof Test;
+ >TestType : typeof Test
+->Test : typeof Test
+ 
+ export const bar = (null as TestType[Extract<keyof TestType, string>][]);
+->bar : Test[]
+->(null as TestType[Extract<keyof TestType, string>][]) : Test[]
+->null as TestType[Extract<keyof TestType, string>][] : Test[]
++>bar : (Test)[]
++>(null as TestType[Extract<keyof TestType, string>][]) : (Test)[]
++>null as TestType[Extract<keyof TestType, string>][] : (Test)[]
+ 

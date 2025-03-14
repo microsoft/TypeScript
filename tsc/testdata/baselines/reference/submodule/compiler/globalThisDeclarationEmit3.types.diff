@@ -1,0 +1,28 @@
+--- old.globalThisDeclarationEmit3.types
++++ new.globalThisDeclarationEmit3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.ts ===
+ import { variable } from "./variable";
+->variable : typeof variable
++>variable : typeof globalThis
+ 
+ export { variable as globalThis };
+->variable : typeof variable
+->globalThis : typeof variable
++>variable : typeof globalThis
++>globalThis : typeof globalThis
+ 
+ === variable.ts ===
+ import mod = globalThis;
+->mod : typeof mod
+->globalThis : typeof mod
++>mod : typeof globalThis
++>globalThis : typeof globalThis
+ 
+ export { mod as variable };
+->mod : typeof mod
+->variable : typeof mod
++>mod : typeof globalThis
++>variable : typeof globalThis
+ 

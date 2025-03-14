@@ -1,0 +1,23 @@
+--- old.funduleExportedClassIsUsedBeforeDeclaration.types
++++ new.funduleExportedClassIsUsedBeforeDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === funduleExportedClassIsUsedBeforeDeclaration.ts ===
+ interface A {   // interface before module declaration
++>A : A
++
+     (): B.C;    // uses defined below class in module
+ >B : any
+ }
+@@= skipped -15, +17 lines =@@
+     }
+ }
+ new B.C(); 
+->new B.C() : B.C
+->B.C : typeof B.C
++>new B.C() : C
++>B.C : typeof C
+ >B : typeof B
+->C : typeof B.C
++>C : typeof C
+ 

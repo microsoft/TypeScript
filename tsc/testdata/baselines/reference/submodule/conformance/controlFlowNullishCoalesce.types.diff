@@ -1,0 +1,23 @@
+--- old.controlFlowNullishCoalesce.types
++++ new.controlFlowNullishCoalesce.types
+@@= skipped -5, +5 lines =@@
+ >a : number
+ 
+ o ?? (a = 1);
+->o ?? (a = 1) : { x: number; } | 1
++>o ?? (a = 1) : 1 | { x: number; }
+ >o : { x: number; } | undefined
+ >(a = 1) : 1
+ >a = 1 : 1
+@@= skipped -9, +9 lines =@@
+ 
+ a.toString();
+ >a.toString() : string
+->a.toString : (radix?: number) => string
++>a.toString : (radix?: number | undefined) => string
+ >a : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+ // assignment flow
+ declare const o: { x: number } | undefined;

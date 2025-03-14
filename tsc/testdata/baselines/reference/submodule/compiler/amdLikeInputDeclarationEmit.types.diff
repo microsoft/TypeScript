@@ -1,0 +1,69 @@
+--- old.amdLikeInputDeclarationEmit.types
++++ new.amdLikeInputDeclarationEmit.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typing.d.ts ===
+ declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
+->define : <T = unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
++>define : <T>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
++>T : T
+ >name : string
+ >modules : string[]
+ >ready : (...modules: unknown[]) => T
+@@= skipped -15, +16 lines =@@
+ 
+         static extends<A>(a: A): new () => A & BaseClass;
+ >extends : <A>(a: A) => new () => A & BaseClass
++>A : A
+ >a : A
+     }
+     export = BaseClass;
+@@= skipped -8, +9 lines =@@
+ === ExtendedClass.js ===
+ define("lib/ExtendedClass", ["deps/BaseClass"], 
+ >define("lib/ExtendedClass", ["deps/BaseClass"], /** * {typeof import("deps/BaseClass")} * @param  {typeof import("deps/BaseClass")} BaseClass  * @returns  */(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;}) : any
+->define : <T = unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
++>define : <T>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
+ >"lib/ExtendedClass" : "lib/ExtendedClass"
+ >["deps/BaseClass"] : string[]
+ >"deps/BaseClass" : "deps/BaseClass"
+@@= skipped -11, +11 lines =@@
+  * @returns 
+  */
+ (BaseClass) => {    
+->(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;} : (BaseClass: typeof import("deps/BaseClass")) => any
+->BaseClass : typeof import("deps/BaseClass")
++>(BaseClass) => {            const ExtendedClass = BaseClass.extends({        f: function() {            return "something";        }    });    // Exports the module in a way tsc recognize class export     const module = {};    module.exports = ExtendedClass    return module.exports;} : (BaseClass: unknown) => any
++>BaseClass : unknown
+     
+     const ExtendedClass = BaseClass.extends({
+->ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
+->BaseClass.extends({        f: function() {            return "something";        }    }) : new () => { f: () => "something"; } & import("deps/BaseClass")
+->BaseClass.extends : <A>(a: A) => new () => A & import("deps/BaseClass")
+->BaseClass : typeof import("deps/BaseClass")
+->extends : <A>(a: A) => new () => A & import("deps/BaseClass")
+->{        f: function() {            return "something";        }    } : { f: () => "something"; }
++>ExtendedClass : any
++>BaseClass.extends({        f: function() {            return "something";        }    }) : any
++>BaseClass.extends : any
++>BaseClass : unknown
++>extends : any
++>{        f: function() {            return "something";        }    } : { f: () => string; }
+ 
+         f: function() {
+->f : () => "something"
+->function() {            return "something";        } : () => "something"
++>f : () => string
++>function() {            return "something";        } : () => string
+ 
+             return "something";
+ >"something" : "something"
+@@= skipped -30, +30 lines =@@
+ >module.exports : any
+ >module : {}
+ >exports : any
+->ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
++>ExtendedClass : any
+ 
+     return module.exports;
+ >module.exports : any

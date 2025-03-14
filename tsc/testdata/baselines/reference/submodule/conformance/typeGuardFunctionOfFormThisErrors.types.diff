@@ -1,0 +1,20 @@
+--- old.typeGuardFunctionOfFormThisErrors.types
++++ new.typeGuardFunctionOfFormThisErrors.types
+@@= skipped -38, +38 lines =@@
+ }
+ 
+ interface GuardInterface extends RoyalGuard {}
++>GuardInterface : GuardInterface
++
+ let a: RoyalGuard = new FollowerGuard();
+ >a : RoyalGuard
+ >new FollowerGuard() : FollowerGuard
+@@= skipped -74, +76 lines =@@
+ let holder = {invalidGuard};
+ >holder : { invalidGuard: (c: any) => this is number; }
+ >{invalidGuard} : { invalidGuard: (c: any) => this is number; }
+->invalidGuard : (c: any) => this is number
++>invalidGuard : any
+ 
+ if (holder.invalidGuard(c)) {
+ >holder.invalidGuard(c) : boolean

@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/moduleVisibilityTest3.ts] ////
+
+=== moduleVisibilityTest3.ts ===
+module _modes {
+>_modes : typeof _modes
+
+ export interface IMode {
+>IMode : IMode
+  
+ }
+ 
+ class Mode {
+>Mode : Mode
+  
+ }
+}
+
+//_modes. // produces an internal error - please implement in derived class
+
+module editor {
+>editor : typeof editor
+
+ import modes = _modes;
+>modes : typeof _modes
+>_modes : typeof _modes
+ 
+ var i : modes.IMode;
+>i : IMode
+>modes : any
+  
+ // If you just use p1:modes, the compiler accepts it - should be an error
+ class Bug {
+>Bug : Bug
+
+     constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
+>p1 : modes
+>p2 : Mode
+>modes : any
+
+         var x:modes.Mode;
+>x : Mode
+>modes : any
+     }
+    
+ }
+}
+

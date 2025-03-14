@@ -1,0 +1,97 @@
+--- old.isDeclarationVisibleNodeKinds.types
++++ new.isDeclarationVisibleNodeKinds.types
+@@= skipped -7, +7 lines =@@
+     export function createValidator1(schema: any): <T>(data: T) => T {
+ >createValidator1 : (schema: any) => <T>(data: T) => T
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -14, +15 lines =@@
+     export function createValidator2(schema: any): new <T>(data: T) => T {
+ >createValidator2 : (schema: any) => new <T>(data: T) => T
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -12, +13 lines =@@
+ >schema : typeof schema
+ 
+      export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
+->createValidator3 : (schema: any) => number | { new <T>(data: T): T; }
++>createValidator3 : (schema: any) => number | new <T>(data: T) => T
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -14, +15 lines =@@
+ >schema : typeof schema
+ 
+      export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
+->createValidator4 : (schema: any) => { new <T>(data: T): T; }[]
++>createValidator4 : (schema: any) => new <T>(data: T) => T[]
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -15, +16 lines =@@
+ >schema : typeof schema
+ 
+     export function createValidator5(schema: any): { new <T>(data: T): T } {
+->createValidator5 : (schema: any) => { new <T>(data: T): T; }
++>createValidator5 : (schema: any) => new <T>(data: T) => T
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -16, +17 lines =@@
+     export function createValidator6(schema: any): [ new <T>(data: T) => T, number] {
+ >createValidator6 : (schema: any) => [new <T>(data: T) => T, number]
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -12, +13 lines =@@
+ >schema : typeof schema
+ 
+     export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
+->createValidator7 : (schema: any) => (new <T>(data: T) => T)[]
++>createValidator7 : (schema: any) => new <T>(data: T) => T[]
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -14, +15 lines =@@
+ >schema : typeof schema
+ 
+     export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
+->createValidator8 : (schema: any) => Array<{ <T>(data: T): T; }>
++>createValidator8 : (schema: any) => <T>(data: T) => T[]
+ >schema : any
++>T : T
+ >data : T
+ 
+         return undefined;
+@@= skipped -18, +19 lines =@@
+ 
+         get createValidator9(): <T>(data: T) => T {
+ >createValidator9 : <T>(data: T) => T
++>T : T
+ >data : T
+ 
+             return undefined;
+@@= skipped -9, +10 lines =@@
+         set createValidator10(v: <T>(data: T) => T) {
+ >createValidator10 : <T>(data: T) => T
+ >v : <T>(data: T) => T
++>T : T
+ >data : T
+         }
+     }

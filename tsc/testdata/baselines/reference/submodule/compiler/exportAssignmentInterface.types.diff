@@ -1,0 +1,21 @@
+--- old.exportAssignmentInterface.types
++++ new.exportAssignmentInterface.types
+@@= skipped -8, +8 lines =@@
+ 
+ var n: number = i.p1;
+ >n : number
+->i.p1 : number
++>i.p1 : any
+ >i : I1
+->p1 : number
++>p1 : any
+ 
+-=== exportAssignmentInterface_A.ts ===
+-interface A {
+-	p1: number;
+->p1 : number
+-}
+-
+-export = A;
+->A : A
+-

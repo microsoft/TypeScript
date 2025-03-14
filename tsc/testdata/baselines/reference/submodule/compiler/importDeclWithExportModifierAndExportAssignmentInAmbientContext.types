@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts] ////
+
+=== importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts ===
+declare module "m" {
+>"m" : typeof import("m")
+
+    module x {
+>x : typeof x
+
+        interface c {
+>c : c
+        }
+    }
+    export import a = x.c;
+>a : any
+>x : typeof x
+>c : c
+
+    export = x;
+>x : typeof x
+}

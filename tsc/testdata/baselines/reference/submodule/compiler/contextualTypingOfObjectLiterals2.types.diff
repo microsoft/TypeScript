@@ -1,0 +1,11 @@
+--- old.contextualTypingOfObjectLiterals2.types
++++ new.contextualTypingOfObjectLiterals2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextualTypingOfObjectLiterals2.ts ===
+ interface Foo {
++>Foo : Foo
++
+     foo: (t: string) => string;
+ >foo : (t: string) => string
+ >t : string

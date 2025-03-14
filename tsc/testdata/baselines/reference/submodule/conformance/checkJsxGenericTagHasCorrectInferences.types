@@ -1,0 +1,86 @@
+//// [tests/cases/conformance/jsx/checkJsxGenericTagHasCorrectInferences.tsx] ////
+
+=== file.tsx ===
+import * as React from "react";
+>React : any
+
+interface BaseProps<T> {
+>BaseProps : BaseProps<T>
+>T : T
+
+  initialValues: T;
+>initialValues : T
+
+  nextValues: (cur: T) => T;
+>nextValues : (cur: T) => T
+>cur : T
+}
+declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
+>GenericComponent : GenericComponent<Props, Values>
+>Props : Props
+>Values : Values
+>React.Component : any
+>React : any
+>Component : any
+
+  iv: Values;
+>iv : Values
+}
+
+let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // No error
+>a : any
+><GenericComponent initialValues={{ x: "y" }} nextValues={a => a} /> : any
+>GenericComponent : typeof GenericComponent
+>initialValues : any
+>{ x: "y" } : { x: string; }
+>x : string
+>"y" : "y"
+>nextValues : any
+>a => a : (a: any) => any
+>a : any
+>a : any
+
+let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
+>b : any
+><GenericComponent initialValues={12} nextValues={a => a} /> : any
+>GenericComponent : typeof GenericComponent
+>initialValues : any
+>12 : 12
+>nextValues : any
+>a => a : (a: any) => any
+>a : any
+>a : any
+
+let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} />; // No Error
+>c : any
+><GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} /> : any
+>GenericComponent : typeof GenericComponent
+>initialValues : any
+>{ x: "y" } : { x: string; }
+>x : string
+>"y" : "y"
+>nextValues : any
+>a => ({ x: a.x }) : (a: any) => { x: any; }
+>a : any
+>({ x: a.x }) : { x: any; }
+>{ x: a.x } : { x: any; }
+>x : any
+>a.x : any
+>a : any
+>x : any
+
+let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
+>d : any
+><GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} /> : any
+>GenericComponent : typeof GenericComponent
+>initialValues : any
+>{ x: "y" } : { x: string; }
+>x : string
+>"y" : "y"
+>nextValues : any
+>a => a.x : (a: any) => any
+>a : any
+>a.x : any
+>a : any
+>x : any
+

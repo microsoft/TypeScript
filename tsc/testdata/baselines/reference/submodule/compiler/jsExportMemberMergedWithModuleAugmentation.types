@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/jsExportMemberMergedWithModuleAugmentation.ts] ////
+
+=== /test.js ===
+class Abcde {
+>Abcde : Abcde
+
+  /** @type {string} */
+  x;
+>x : any
+}
+
+module.exports = {
+>module.exports = {  Abcde} : { Abcde: typeof Abcde; }
+>module.exports : any
+>module : any
+>exports : any
+>{  Abcde} : { Abcde: typeof Abcde; }
+
+  Abcde
+>Abcde : any
+
+};
+
+=== /index.ts ===
+import { Abcde } from "./test";
+>Abcde : any
+
+declare module "./test" {
+>"./test" : any
+
+  interface Abcde { b: string }
+>Abcde : Abcde
+>b : string
+}
+
+new Abcde().x;
+>new Abcde().x : any
+>new Abcde() : any
+>Abcde : any
+>x : any
+
+// Bug: the type meaning from /test.js does not
+// propagate through the object literal export.
+const x: Abcde = { b: "" };
+>x : Abcde
+>{ b: "" } : { b: string; }
+>b : string
+>"" : ""
+

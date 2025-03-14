@@ -1,0 +1,19 @@
+--- old.subtypeRelationForNever.types
++++ new.subtypeRelationForNever.types
+@@= skipped -9, +9 lines =@@
+ 
+ function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r {
+ >withFew : <a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r) => r
++>a : a
++>r : r
+ >values : a[]
+ >haveFew : (values: a[]) => r
+ >values : a[]
+@@= skipped -22, +24 lines =@@
+ }
+ function id<a>(value: a) : a { return value; }
+ >id : <a>(value: a) => a
++>a : a
+ >value : a
+ >value : a
+ 

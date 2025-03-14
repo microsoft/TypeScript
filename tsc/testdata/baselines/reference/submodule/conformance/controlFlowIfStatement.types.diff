@@ -1,0 +1,62 @@
+--- old.controlFlowIfStatement.types
++++ new.controlFlowIfStatement.types
+@@= skipped -92, +92 lines =@@
+ }
+ function c<T>(data: string | T): T {
+ >c : <T>(data: string | T) => T
++>T : T
+ >data : string | T
+ 
+     if (typeof data === 'string') {
+ >typeof data === 'string' : boolean
+->typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >data : string | T
+ >'string' : "string"
+ 
+         return JSON.parse(data);
+ >JSON.parse(data) : any
+->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
++>JSON.parse : (text: string, reviver?: (key: string, value: any) => any) => any
+ >JSON : JSON
+->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+->data : string | (T & string)
++>parse : (text: string, reviver?: (key: string, value: any) => any) => any
++>data : string | T & string
+     }
+     else {
+         return data;
+@@= skipped -22, +23 lines =@@
+ }
+ function d<T extends string>(data: string | T): never {
+ >d : <T extends string>(data: string | T) => never
++>T : T
+ >data : string | T
+ 
+     if (typeof data === 'string') {
+ >typeof data === 'string' : boolean
+->typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof data : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >data : string | T
+ >'string' : "string"
+ 
+@@= skipped -20, +21 lines =@@
+ }
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+   p: T;
+ >p : T
+ }
+@@= skipped -19, +22 lines =@@
+ >(null as unknown as typeof x.p) : "A"
+ >null as unknown as typeof x.p : "A"
+ >null as unknown : unknown
+->x.p : "A"
+ >x : I<"A" | "B">
+->p : "A"
+     }
+ }
+ 

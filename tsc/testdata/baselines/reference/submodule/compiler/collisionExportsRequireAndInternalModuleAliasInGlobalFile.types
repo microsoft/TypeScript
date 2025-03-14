@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts] ////
+
+=== collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts ===
+module mOfGloalFile {
+>mOfGloalFile : typeof mOfGloalFile
+
+    export class c {
+>c : c
+    }
+}
+import exports = mOfGloalFile.c;
+>exports : typeof c
+>mOfGloalFile : typeof mOfGloalFile
+>c : c
+
+import require = mOfGloalFile.c;
+>require : typeof c
+>mOfGloalFile : typeof mOfGloalFile
+>c : c
+
+new exports();
+>new exports() : c
+>exports : typeof c
+
+new require();
+>new require() : c
+>require : typeof c
+
+module m1 {
+>m1 : typeof m1
+
+    import exports = mOfGloalFile.c;
+>exports : typeof c
+>mOfGloalFile : typeof mOfGloalFile
+>c : c
+
+    import require = mOfGloalFile.c;
+>require : typeof c
+>mOfGloalFile : typeof mOfGloalFile
+>c : c
+
+    new exports();
+>new exports() : c
+>exports : typeof c
+
+    new require();
+>new require() : c
+>require : typeof c
+}
+
+module m2 {
+>m2 : typeof m2
+
+    export import exports = mOfGloalFile.c;
+>exports : typeof c
+>mOfGloalFile : typeof mOfGloalFile
+>c : c
+
+    export import require = mOfGloalFile.c;
+>require : typeof c
+>mOfGloalFile : typeof mOfGloalFile
+>c : c
+
+    new exports();
+>new exports() : c
+>exports : typeof c
+
+    new require();
+>new require() : c
+>require : typeof c
+}

@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/filesEmittingIntoSameOutputWithOutOption.ts] ////
+
+=== a.ts ===
+export class c {
+>c : c
+}
+
+=== b.ts ===
+function foo() {
+>foo : () => void
+}
+

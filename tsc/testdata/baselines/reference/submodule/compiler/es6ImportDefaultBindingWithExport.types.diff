@@ -1,0 +1,19 @@
+--- old.es6ImportDefaultBindingWithExport.types
++++ new.es6ImportDefaultBindingWithExport.types
+@@= skipped -9, +9 lines =@@
+ 
+ === client.ts ===
+ export import defaultBinding from "server";
+->defaultBinding : number
++>defaultBinding : any
+ 
+ export var x = defaultBinding;
+->x : number
+->defaultBinding : number
++>x : any
++>defaultBinding : any
+ 
+ export import defaultBinding2 from "server"; // non referenced
+->defaultBinding2 : number
++>defaultBinding2 : any
+ 

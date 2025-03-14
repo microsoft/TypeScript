@@ -1,0 +1,11 @@
+--- old.exportInFunction.types
++++ new.exportInFunction.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportInFunction.ts ===
+ function f() {
+->f : () => void
++>f : { (): void; export=: 0; }
+ 
+     export = 0;
+ 

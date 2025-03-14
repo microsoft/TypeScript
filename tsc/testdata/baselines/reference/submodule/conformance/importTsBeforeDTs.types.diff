@@ -1,0 +1,27 @@
+--- old.importTsBeforeDTs.types
++++ new.importTsBeforeDTs.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo_1.ts ===
+ import foo = require("./foo_0");
+->foo : typeof foo
++>foo : typeof import("foo_0")
+ 
+ var z1 = foo.x + 10;   // Should error, as .ts preferred over .d.ts
+ >z1 : any
+ >foo.x + 10 : any
+ >foo.x : any
+->foo : typeof foo
++>foo : typeof import("foo_0")
+ >x : any
+ >10 : 10
+ 
+@@= skipped -14, +14 lines =@@
+ >z2 : number
+ >foo.y + 10 : number
+ >foo.y : number
+->foo : typeof foo
++>foo : typeof import("foo_0")
+ >y : number
+ >10 : 10
+ 

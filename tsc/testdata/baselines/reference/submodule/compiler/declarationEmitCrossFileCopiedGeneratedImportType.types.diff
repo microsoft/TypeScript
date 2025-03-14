@@ -1,0 +1,29 @@
+--- old.declarationEmitCrossFileCopiedGeneratedImportType.types
++++ new.declarationEmitCrossFileCopiedGeneratedImportType.types
+@@= skipped -17, +17 lines =@@
+ 
+ === projC/index.d.ts ===
+ export declare const e: {
+->e : { f: (foo: import("../projA").Foo) => boolean; }
++>e : { f: (foo: Foo) => boolean; }
+ 
+     f: (foo: import("../projA").Foo) => boolean;
+->f : (foo: import("../projA").Foo) => boolean
+->foo : import("projA/index").Foo
++>f : (foo: Foo) => boolean
++>foo : Foo
+ 
+ };
+ === projD/index.ts ===
+ import {e} from "../projC";
+->e : { f: (foo: import("projA/index").Foo) => boolean; }
++>e : { f: (foo: Foo) => boolean; }
+ 
+ export const d = {e};
+->d : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
+->{e} : { e: { f: (foo: import("projA/index").Foo) => boolean; }; }
+->e : { f: (foo: import("projA/index").Foo) => boolean; }
++>d : { e: { f: (foo: Foo) => boolean; }; }
++>{e} : { e: { f: (foo: Foo) => boolean; }; }
++>e : any
+ 

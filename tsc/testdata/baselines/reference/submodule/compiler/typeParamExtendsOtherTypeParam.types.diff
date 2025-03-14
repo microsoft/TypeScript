@@ -1,0 +1,32 @@
+--- old.typeParamExtendsOtherTypeParam.types
++++ new.typeParamExtendsOtherTypeParam.types
+@@= skipped -2, +2 lines =@@
+ === typeParamExtendsOtherTypeParam.ts ===
+ class A<T, U extends T> { }
+ >A : A<T, U>
++>T : T
++>U : U
+ 
+ class B<T extends Object, U extends T> {
+ >B : B<T, U>
++>T : T
++>U : U
+ 
+     data: A<Object, Object>;
+ >data : A<Object, Object>
+@@= skipped -56, +60 lines =@@
+ >a : string
+ 
+ interface I1 {
++>I1 : I1
++
+     a: string;
+ >a : string
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     a: string;
+ >a : string
+ 

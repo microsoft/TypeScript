@@ -1,0 +1,11 @@
+--- old.exportDefaultTypeAndClass.types
++++ new.exportDefaultTypeAndClass.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportDefaultTypeAndClass.ts ===
+ export default class Foo {}
+->Foo : Foo
++>Foo : default
+ 
+ type Bar = {}
+ >Bar : Bar

@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/extendsClauseAlreadySeen2.ts] ////
+
+=== extendsClauseAlreadySeen2.ts ===
+class C<T> {
+>C : C<T>
+>T : T
+
+}
+class D<T> extends C<number> extends C<string> {
+>D : D<T>
+>T : T
+>C : C<number>
+>C : C<number>
+
+    baz() { }
+>baz : () => void
+}

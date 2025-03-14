@@ -1,0 +1,31 @@
+--- old.moduleExportAlias5.types
++++ new.moduleExportAlias5.types
+@@= skipped -6, +6 lines =@@
+ >function (){} : { (): void; WebpackOptionsDefaulter: number; }
+ }
+ exports = module.exports = webpack;
+->exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+->exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+->module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+->module.exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+->module : { exports: { (): void; WebpackOptionsDefaulter: number; version: 1001; }; }
+->exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
++>exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
++>exports : any
++>module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
++>module.exports : any
++>module : any
++>exports : any
+ >webpack : { (): void; WebpackOptionsDefaulter: number; }
+ 
+ exports.version = 1001;
+ >exports.version = 1001 : 1001
+->exports.version : 1001
+->exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+->version : 1001
++>exports.version : any
++>exports : any
++>version : any
+ >1001 : 1001
+ 
+ webpack.WebpackOptionsDefaulter = 1111;

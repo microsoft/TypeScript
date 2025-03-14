@@ -1,0 +1,20 @@
+--- old.isolatedModulesImportConstEnumTypeOnly.types
++++ new.isolatedModulesImportConstEnumTypeOnly.types
+@@= skipped -1, +1 lines =@@
+ 
+ === enum.ts ===
+ export const enum Foo { Bar }
+->Foo : Foo
++>Foo : Foo.Bar
+ >Bar : Foo.Bar
+ 
+ === index.ts ===
+@@= skipped -8, +8 lines =@@
+ >Foo : typeof Foo
+ 
+ function f(foo: Foo) { return; }
+->f : (foo: Foo) => void
+->foo : Foo
++>f : (foo: Foo.Bar) => void
++>foo : Foo.Bar
+ 

@@ -1,0 +1,15 @@
+--- old.unusedTypeParameters7.types
++++ new.unusedTypeParameters7.types
+@@= skipped -2, +2 lines =@@
+ === a.ts ===
+ class C<T> { a: T; }
+ >C : C<T>
++>T : T
+ >a : T
+ 
+ === b.ts ===
+-
+ interface C<T> { }
++>C : C<T>
++>T : T
++

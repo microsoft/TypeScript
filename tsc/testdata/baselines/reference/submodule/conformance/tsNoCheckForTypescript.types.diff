@@ -1,0 +1,11 @@
+--- old.tsNoCheckForTypescript.types
++++ new.tsNoCheckForTypescript.types
+@@= skipped -9, +9 lines =@@
+ >{} : {}
+ 
+ export interface Aleph {
++>Aleph : Aleph
++
+     q: number;
+ >q : number
+ }

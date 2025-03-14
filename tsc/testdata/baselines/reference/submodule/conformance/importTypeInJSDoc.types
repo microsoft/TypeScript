@@ -1,0 +1,76 @@
+//// [tests/cases/conformance/types/import/importTypeInJSDoc.ts] ////
+
+=== externs.d.ts ===
+declare namespace MyClass {
+>MyClass : typeof MyClass
+
+    export interface Bar {
+>Bar : Bar
+
+        doer: (x: string) => void;
+>doer : (x: string) => void
+>x : string
+    }
+}
+declare class MyClass {
+>MyClass : MyClass
+
+    field: string;
+>field : string
+
+    static Bar: (x: string, y?: number) => void;
+>Bar : (x: string, y?: number) => void
+>x : string
+>y : number
+
+    constructor(x: MyClass.Bar);
+>x : Bar
+>MyClass : any
+}
+declare global {
+>global : typeof global
+
+    const Foo: typeof MyClass;
+>Foo : typeof MyClass
+}
+export = MyClass;
+>MyClass : MyClass
+
+=== index.js ===
+/**
+ * @typedef {import("./externs")} Foo
+ */
+
+let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
+>a : any
+>(/** @type {*} */(undefined)) : undefined
+>(undefined) : undefined
+>undefined : undefined
+
+a = new Foo({doer: Foo.Bar});
+>a = new Foo({doer: Foo.Bar}) : MyClass
+>a : any
+>new Foo({doer: Foo.Bar}) : MyClass
+>Foo : typeof MyClass
+>{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
+>doer : (x: string, y?: number) => void
+>Foo.Bar : (x: string, y?: number) => void
+>Foo : typeof MyClass
+>Bar : (x: string, y?: number) => void
+
+const q = /** @type {import("./externs").Bar} */({ doer: q => q });
+>q : { doer: (q: any) => any; }
+>({ doer: q => q }) : { doer: (q: any) => any; }
+>{ doer: q => q } : { doer: (q: any) => any; }
+>doer : (q: any) => any
+>q => q : (q: any) => any
+>q : any
+>q : any
+
+const r = /** @type {typeof import("./externs").Bar} */(r => r);
+>r : (r: any) => any
+>(r => r) : (r: any) => any
+>r => r : (r: any) => any
+>r : any
+>r : any
+

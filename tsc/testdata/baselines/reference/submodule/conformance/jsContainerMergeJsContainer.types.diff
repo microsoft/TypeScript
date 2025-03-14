@@ -1,0 +1,37 @@
+--- old.jsContainerMergeJsContainer.types
++++ new.jsContainerMergeJsContainer.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ const a = {};
+->a : typeof a
++>a : {}
+ >{} : {}
+ 
+ a.d = function() {};
+->a.d = function() {} : typeof d
+->a.d : typeof d
+->a : typeof a
+->d : typeof d
+->function() {} : typeof d
++>a.d = function() {} : () => void
++>a.d : any
++>a : {}
++>d : any
++>function() {} : () => void
+ 
+ === b.js ===
+ a.d.prototype = {};
+ >a.d.prototype = {} : {}
+->a.d.prototype : {}
+->a.d : typeof d
+->a : typeof a
+->d : typeof d
+->prototype : {}
++>a.d.prototype : any
++>a.d : any
++>a : {}
++>d : any
++>prototype : any
+ >{} : {}
+ 

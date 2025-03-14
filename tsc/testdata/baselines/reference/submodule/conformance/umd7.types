@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/externalModules/umd7.ts] ////
+
+=== a.ts ===
+/// <reference path="foo.d.ts" />
+let y: number = Foo();
+>y : number
+>Foo() : number
+>Foo : () => number
+
+=== foo.d.ts ===
+declare function Thing(): number;
+>Thing : () => number
+
+export = Thing;
+>Thing : () => number
+
+export as namespace Foo;
+>Foo : () => number
+

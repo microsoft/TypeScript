@@ -1,0 +1,20 @@
+--- old.decoratorWithUnderscoreMethod.types
++++ new.decoratorWithUnderscoreMethod.types
+@@= skipped -1, +1 lines =@@
+ 
+ === decoratorWithUnderscoreMethod.ts ===
+ declare var console : { log(arg: string): void };
+->console : { log(arg: string): void; }
++>console : { log: (arg: string) => void; }
+ >log : (arg: string) => void
+ >arg : string
+ 
+@@= skipped -16, +16 lines =@@
+         console.log(target[propKey]);
+ >console.log(target[propKey]) : void
+ >console.log : (arg: string) => void
+->console : { log(arg: string): void; }
++>console : { log: (arg: string) => void; }
+ >log : (arg: string) => void
+ >target[propKey] : any
+ >target : any

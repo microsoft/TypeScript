@@ -1,0 +1,49 @@
+--- old.typeFromPropertyAssignment27.types
++++ new.typeFromPropertyAssignment27.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ // mixed prototype-assignment+function declaration
+ function C() { this.p = 1; }
+->C : typeof C
++>C : { (): void; prototype: { q: number; }; }
+ >this.p = 1 : 1
+ >this.p : any
+->this : this
++>this : any
+ >p : any
+ >1 : 1
+ 
+ C.prototype = { q: 2 };
+ >C.prototype = { q: 2 } : { q: number; }
+ >C.prototype : { q: number; }
+->C : typeof C
++>C : { (): void; prototype: { q: number; }; }
+ >prototype : { q: number; }
+ >{ q: 2 } : { q: number; }
+ >q : number
+ >2 : 2
+ 
+ const c = new C()
+->c : C
+->new C() : C
+->C : typeof C
++>c : any
++>new C() : any
++>C : { (): void; prototype: { q: number; }; }
+ 
+ c.p
+->c.p : number
+->c : C
+->p : number
++>c.p : any
++>c : any
++>p : any
+ 
+ c.q
+->c.q : number
+->c : C
+->q : number
++>c.q : any
++>c : any
++>q : any
+ 

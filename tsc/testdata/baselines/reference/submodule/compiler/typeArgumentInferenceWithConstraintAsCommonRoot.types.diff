@@ -1,0 +1,23 @@
+--- old.typeArgumentInferenceWithConstraintAsCommonRoot.types
++++ new.typeArgumentInferenceWithConstraintAsCommonRoot.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeArgumentInferenceWithConstraintAsCommonRoot.ts ===
+ interface Animal { x }
++>Animal : Animal
+ >x : any
+ 
+ interface Giraffe extends Animal { y }
++>Giraffe : Giraffe
+ >y : any
+ 
+ interface Elephant extends Animal { z }
++>Elephant : Elephant
+ >z : any
+ 
+ function f<T extends Animal>(x: T, y: T): T { return undefined; }
+ >f : <T extends Animal>(x: T, y: T) => T
++>T : T
+ >x : T
+ >y : T
+ >undefined : undefined

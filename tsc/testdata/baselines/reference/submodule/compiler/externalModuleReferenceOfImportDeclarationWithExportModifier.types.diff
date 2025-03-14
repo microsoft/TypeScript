@@ -1,0 +1,23 @@
+--- old.externalModuleReferenceOfImportDeclarationWithExportModifier.types
++++ new.externalModuleReferenceOfImportDeclarationWithExportModifier.types
+@@= skipped -1, +1 lines =@@
+ 
+ === externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts ===
+ export import file1 = require('externalModuleReferenceOfImportDeclarationWithExportModifier_0');
+->file1 : typeof file1
++>file1 : any
+ 
+ file1.foo();
+->file1.foo() : void
+->file1.foo : () => void
+->file1 : typeof file1
+->foo : () => void
++>file1.foo() : any
++>file1.foo : any
++>file1 : any
++>foo : any
+ 
+-=== externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts ===
+-export function foo() { };
+->foo : () => void
+-

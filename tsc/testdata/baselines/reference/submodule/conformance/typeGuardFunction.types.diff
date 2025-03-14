@@ -1,0 +1,20 @@
+--- old.typeGuardFunction.types
++++ new.typeGuardFunction.types
+@@= skipped -87, +87 lines =@@
+ 
+ // Call signature
+ interface I1 {
++>I1 : I1
++
+     (p1: A): p1 is C;
+ >p1 : A
+ }
+@@= skipped -25, +27 lines =@@
+ 
+ // Methods
+ var obj: {
+->obj : { func1(p1: A): p1 is C; }
++>obj : { func1: (p1: A) => p1 is C; }
+ 
+     func1(p1: A): p1 is C;
+ >func1 : (p1: A) => p1 is C

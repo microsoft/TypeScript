@@ -1,0 +1,34 @@
+--- old.exportAssignmentOfGenericType1.types
++++ new.exportAssignmentOfGenericType1.types
+@@= skipped -2, +2 lines =@@
+ === exportAssignmentOfGenericType1_1.ts ===
+ ///<reference path='exportAssignmentOfGenericType1_0.ts'/>
+ import q = require("exportAssignmentOfGenericType1_0");
+->q : typeof q
++>q : any
+ 
+ class M extends q<string> { }
+ >M : M
+->q : q<string>
++>q : any
+ 
+ var m: M;
+ >m : M
+ 
+ var r: string = m.foo;
+ >r : string
+->m.foo : string
++>m.foo : any
+ >m : M
+->foo : string
++>foo : any
+ 
+ === exportAssignmentOfGenericType1_0.ts ===
+ export = T;
+@@= skipped -21, +21 lines =@@
+ 
+ class T<X> { foo: X; }
+ >T : T<X>
++>X : X
+ >foo : X
+ 

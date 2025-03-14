@@ -1,0 +1,9 @@
+--- old.typeParameterInConstraint1.types
++++ new.typeParameterInConstraint1.types
+@@= skipped -2, +2 lines =@@
+ === typeParameterInConstraint1.ts ===
+ class C<T, U extends T> {
+ >C : C<T, U>
++>T : T
++>U : U
+ }

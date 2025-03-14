@@ -1,0 +1,17 @@
+--- old.declarationEmitTransitiveImportOfHtmlDeclarationItem.types
++++ new.declarationEmitTransitiveImportOfHtmlDeclarationItem.types
+@@= skipped -17, +17 lines =@@
+ 
+ === index.ts ===
+ import { func } from "./reexporter";
+->func : () => import("foo.d.html").CustomHtmlRepresentationThing
++>func : () => CustomHtmlRepresentationThing
+ 
+ export const c = func();
+->c : import("foo.d.html").CustomHtmlRepresentationThing
+->func() : import("foo.d.html").CustomHtmlRepresentationThing
+->func : () => import("foo.d.html").CustomHtmlRepresentationThing
++>c : CustomHtmlRepresentationThing
++>func() : CustomHtmlRepresentationThing
++>func : () => CustomHtmlRepresentationThing
+ 

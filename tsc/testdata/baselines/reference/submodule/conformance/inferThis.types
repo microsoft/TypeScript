@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/jsdoc/inferThis.ts] ////
+
+=== /a.js ===
+export class C {
+>C : C
+
+    /**
+     * @template T
+     * @this {T}
+     * @return {T}
+     */
+    static a() {
+>a : () => typeof C
+
+        return this;
+>this : typeof C
+    }
+
+    /**
+     * @template T
+     * @this {T}
+     * @return {T}
+     */
+    b() {
+>b : () => this
+
+        return this;
+>this : this
+    }
+}
+
+const a = C.a();
+>a : typeof C
+>C.a() : typeof C
+>C.a : () => typeof C
+>C : typeof C
+>a : () => typeof C
+
+a; // typeof C
+>a : typeof C
+
+const c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+const b = c.b();
+>b : C
+>c.b() : C
+>c.b : () => C
+>c : C
+>b : () => C
+
+b; // C
+>b : C
+

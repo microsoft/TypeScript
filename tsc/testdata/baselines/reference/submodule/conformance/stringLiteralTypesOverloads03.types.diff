@@ -1,0 +1,34 @@
+--- old.stringLiteralTypesOverloads03.types
++++ new.stringLiteralTypesOverloads03.types
+@@= skipped -1, +1 lines =@@
+ 
+ === stringLiteralTypesOverloads03.ts ===
+ interface Base {
++>Base : Base
++
+     x: string;
+ >x : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface HelloOrWorld extends Base {
++>HelloOrWorld : HelloOrWorld
++
+     p1: boolean;
+ >p1 : boolean
+ }
+ 
+ interface JustHello extends Base {
++>JustHello : JustHello
++
+     p2: boolean;
+ >p2 : boolean
+ }
+ 
+ interface JustWorld extends Base {
++>JustWorld : JustWorld
++
+     p3: boolean;
+ >p3 : boolean
+ }

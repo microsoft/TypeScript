@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/signatureCombiningRestParameters1.ts] ////
+
+=== signatureCombiningRestParameters1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58371
+
+type T1 = "A" | "B";
+>T1 : T1
+
+type T2 = {
+>T2 : T2
+
+  C: [string];
+>C : [string]
+
+  D: [number];
+>D : [number]
+
+};
+
+declare const map: {
+>map : { A: (...args: []) => unknown; B: (...args: []) => unknown; C: (...args: [string]) => unknown; D: (...args: [number]) => unknown; }
+
+  [K in T1 | keyof T2]: (...args: K extends keyof T2 ? T2[K] : []) => unknown;
+>K : K
+>args : K extends keyof T2 ? T2[K] : []
+
+};
+
+declare const args: any;
+>args : any
+
+for (const [key, fn] of Object.entries(map)) {
+>key : string
+>fn : (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown
+>Object.entries(map) : [string, (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown][]
+>Object.entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
+>map : { A: (...args: []) => unknown; B: (...args: []) => unknown; C: (...args: [string]) => unknown; D: (...args: [number]) => unknown; }
+
+  fn(...args);
+>fn(...args) : unknown
+>fn : (...args: []) => unknown | (...args: []) => unknown | (...args: [string]) => unknown | (...args: [number]) => unknown
+>...args : any
+>args : any
+}
+
+const test2: ((a: number, ...args: []) => void) &
+>test2 : (a: number, ...args: []) => void & (b: string) => void & (c: boolean) => void
+>a : number
+>args : []
+
+  ((b: string) => void) &
+>b : string
+
+  ((c: boolean) => void) = (arg) => {};
+>c : boolean
+>(arg) => {} : (arg: string | number | boolean) => void
+>arg : string | number | boolean
+

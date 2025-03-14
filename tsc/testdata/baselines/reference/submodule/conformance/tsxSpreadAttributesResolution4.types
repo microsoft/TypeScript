@@ -1,0 +1,113 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution4.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface PoisonedProp {
+>PoisonedProp : PoisonedProp
+
+    x: string;
+>x : string
+
+    y: 2;
+>y : 2
+}
+
+class Poisoned extends React.Component<PoisonedProp, {}> {
+>Poisoned : Poisoned
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return <div>Hello</div>;
+><div>Hello</div> : any
+>div : any
+>div : any
+    }
+}
+
+const obj: PoisonedProp = {
+>obj : PoisonedProp
+>{    x: "hello world",    y: 2} : { x: string; y: 2; }
+
+    x: "hello world",
+>x : string
+>"hello world" : "hello world"
+
+    y: 2
+>y : 2
+>2 : 2
+
+};
+
+// OK
+let p = <Poisoned {...obj} />;
+>p : any
+><Poisoned {...obj} /> : any
+>Poisoned : typeof Poisoned
+>obj : PoisonedProp
+
+class EmptyProp extends React.Component<{}, {}> {
+>EmptyProp : EmptyProp
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return <div>Default hi</div>;
+><div>Default hi</div> : any
+>div : any
+>div : any
+    }
+}
+
+// OK
+let j: any;
+>j : any
+
+let e1 = <EmptyProp {...{}} />;
+>e1 : any
+><EmptyProp {...{}} /> : any
+>EmptyProp : typeof EmptyProp
+>{} : {}
+
+let e2 = <EmptyProp {...j} />
+>e2 : any
+><EmptyProp {...j} /> : any
+>EmptyProp : typeof EmptyProp
+>j : any
+
+let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
+>e3 : any
+><EmptyProp {...{ ref: (input) => { this.textInput = input; } }} /> : any
+>EmptyProp : typeof EmptyProp
+>{ ref: (input) => { this.textInput = input; } } : { ref: (input: any) => void; }
+>ref : (input: any) => void
+>(input) => { this.textInput = input; } : (input: any) => void
+>input : any
+>this.textInput = input : any
+>this.textInput : any
+>this : undefined
+>textInput : any
+>input : any
+
+let e4 = <EmptyProp data-prop />
+>e4 : any
+><EmptyProp data-prop /> : any
+>EmptyProp : typeof EmptyProp
+>data-prop : any
+
+let e5 = <EmptyProp {...{ "data-prop": true}} />
+>e5 : any
+><EmptyProp {...{ "data-prop": true}} /> : any
+>EmptyProp : typeof EmptyProp
+>{ "data-prop": true} : { "data-prop": boolean; }
+>"data-prop" : boolean
+>true : true
+

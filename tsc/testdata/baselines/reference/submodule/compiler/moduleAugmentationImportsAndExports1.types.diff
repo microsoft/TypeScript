@@ -1,0 +1,24 @@
+--- old.moduleAugmentationImportsAndExports1.types
++++ new.moduleAugmentationImportsAndExports1.types
+@@= skipped -32, +32 lines =@@
+ >"./f1" : typeof import("f1")
+ 
+     interface A {
++>A : A
++
+         foo(): B;
+ >foo : () => B
+     }
+@@= skipped -17, +19 lines =@@
+ let b = a.foo().n;
+ >b : number
+ >a.foo().n : number
+->a.foo() : import("f2").B
+->a.foo : () => import("f2").B
++>a.foo() : B
++>a.foo : () => B
+ >a : A
+->foo : () => import("f2").B
++>foo : () => B
+ >n : number
+ 

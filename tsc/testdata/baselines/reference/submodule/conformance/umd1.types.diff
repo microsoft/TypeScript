@@ -1,0 +1,33 @@
+--- old.umd1.types
++++ new.umd1.types
+@@= skipped -4, +4 lines =@@
+ Foo.fn();
+ >Foo.fn() : void
+ >Foo.fn : () => void
+->Foo : typeof Foo
++>Foo : typeof import("foo")
+ >fn : () => void
+ 
+ let x: Foo.Thing;
+->x : Foo.Thing
++>x : Thing
+ >Foo : any
+ 
+ let y: number = x.n;
+ >y : number
+ >x.n : number
+->x : Foo.Thing
++>x : Thing
+ >n : number
+ 
+ === foo.d.ts ===
+@@= skipped -21, +21 lines =@@
+ >fn : () => void
+ 
+ export interface Thing { n: typeof x }
++>Thing : Thing
+ >n : number
+->x : number
+ 
+ export as namespace Foo;
+ >Foo : typeof import("foo")

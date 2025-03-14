@@ -1,0 +1,55 @@
+--- old.genericRestTypes.types
++++ new.genericRestTypes.types
+@@= skipped -6, +6 lines =@@
+ // Removes the first element from a tuple
+ type Tail<T extends any[]> = ((...args: T) => any) extends ((head: any, ...tail: infer U) => any) ? U : never;
+ >Tail : Tail<T>
++>T : T
+ >args : T
+ >head : any
+ >tail : U
++>U : U
+ 
+ type MyFunctionType = (foo: number, bar: string) => boolean;
+ >MyFunctionType : MyFunctionType
+@@= skipped -15, +17 lines =@@
+ 
+ type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
+ >Bind1 : Bind1<T>
++>T : T
+ >head : any
+ >tail : any[]
+ >args : Tail<Parameters<T>>
+@@= skipped -9, +10 lines =@@
+ 
+ function assignmentWithComplexRest<T extends any[]>() {
+ >assignmentWithComplexRest : <T extends any[]>() => void
++>T : T
+ 
+     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+ >fn1 : (x: string, ...rest: T) => void
+@@= skipped -18, +19 lines =@@
+ 
+ function assignmentWithComplexRest2<T extends any[]>() {
+ >assignmentWithComplexRest2 : <T extends any[]>() => void
++>T : T
+ 
+     const fn1: (cb: (x: string, ...rest: T) => void) => void = (cb) => {};
+ >fn1 : (cb: (x: string, ...rest: T) => void) => void
+@@= skipped -18, +19 lines =@@
+ 
+ function assignmentWithComplexRest3<T extends any[]>() {
+ >assignmentWithComplexRest3 : <T extends any[]>() => void
++>T : T
+ 
+     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+ >fn1 : (x: string, ...rest: T) => void
+@@= skipped -12, +13 lines =@@
+ 
+     const fn2: (...args: {x: "a"} & {x: "b"}) => void = fn1;
+ >fn2 : (...args: { x: "a"; } & { x: "b"; }) => void
+->args : never
++>args : { x: "a"; } & { x: "b"; }
+ >x : "a"
+ >x : "b"
+ >fn1 : (x: string, ...rest: T) => void

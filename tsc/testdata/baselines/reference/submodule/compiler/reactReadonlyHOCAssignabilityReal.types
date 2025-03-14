@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx] ////
+
+=== reactReadonlyHOCAssignabilityReal.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : any
+
+function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
+>myHigherOrderComponent : <P>(Inner: ComponentClass<P & { name: string; }>) => ComponentClass<P>
+>P : P
+>Inner : ComponentClass<P & { name: string; }>
+>React : any
+>name : string
+>React : any
+
+    return class OuterComponent extends React.Component<P> {
+>class OuterComponent extends React.Component<P> {        render() {            return <Inner {...this.props} name="Matt"/>;        }    } : typeof OuterComponent
+>OuterComponent : typeof OuterComponent
+>React.Component : any
+>React : any
+>Component : any
+
+        render() {
+>render : () => any
+
+            return <Inner {...this.props} name="Matt"/>;
+><Inner {...this.props} name="Matt"/> : any
+>Inner : ComponentClass<P & { name: string; }>
+>this.props : any
+>this : this
+>props : any
+>name : any
+        }
+    };
+}

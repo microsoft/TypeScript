@@ -1,0 +1,174 @@
+--- old.jsDeclarationsClassMethod.types
++++ new.jsDeclarationsClassMethod.types
+@@= skipped -1, +1 lines =@@
+ 
+ === jsDeclarationsClassMethod.js ===
+ function C1() {
+->C1 : typeof C1
++>C1 : { (): void; staticProp: (x: any, y: any) => any; }
+ 
+     /**
+      * A comment prop
+@@= skipped -9, +9 lines =@@
+      * @returns {number}
+      */
+     this.prop = function (x, y) {
+->this.prop = function (x, y) {        return x + y;    } : (x: number, y: number) => number
++>this.prop = function (x, y) {        return x + y;    } : (x: any, y: any) => any
+ >this.prop : any
+->this : this
++>this : any
+ >prop : any
+->function (x, y) {        return x + y;    } : (x: number, y: number) => number
+->x : number
+->y : number
++>function (x, y) {        return x + y;    } : (x: any, y: any) => any
++>x : any
++>y : any
+ 
+         return x + y;
+->x + y : number
+->x : number
+->y : number
++>x + y : any
++>x : any
++>y : any
+     }
+ }
+ 
+@@= skipped -22, +22 lines =@@
+  * @returns {number}
+  */
+ C1.prototype.method = function (x, y) {
+->C1.prototype.method = function (x, y) {    return x + y;} : (x: number, y: number) => number
++>C1.prototype.method = function (x, y) {    return x + y;} : (x: any, y: any) => any
+ >C1.prototype.method : any
+ >C1.prototype : any
+->C1 : typeof C1
++>C1 : { (): void; staticProp: (x: any, y: any) => any; }
+ >prototype : any
+ >method : any
+->function (x, y) {    return x + y;} : (x: number, y: number) => number
+->x : number
+->y : number
++>function (x, y) {    return x + y;} : (x: any, y: any) => any
++>x : any
++>y : any
+ 
+     return x + y;
+->x + y : number
+->x : number
+->y : number
++>x + y : any
++>x : any
++>y : any
+ }
+ 
+ /**
+@@= skipped -23, +23 lines =@@
+  * @returns {number}
+  */
+ C1.staticProp = function (x, y) {
+->C1.staticProp = function (x, y) {    return x + y;} : (x: number, y: number) => number
+->C1.staticProp : (x: number, y: number) => number
+->C1 : typeof C1
+->staticProp : (x: number, y: number) => number
+->function (x, y) {    return x + y;} : (x: number, y: number) => number
+->x : number
+->y : number
++>C1.staticProp = function (x, y) {    return x + y;} : (x: any, y: any) => any
++>C1.staticProp : (x: any, y: any) => any
++>C1 : { (): void; staticProp: (x: any, y: any) => any; }
++>staticProp : (x: any, y: any) => any
++>function (x, y) {    return x + y;} : (x: any, y: any) => any
++>x : any
++>y : any
+ 
+     return x + y;
+->x + y : number
+->x : number
+->y : number
++>x + y : any
++>x : any
++>y : any
+ }
+ 
+ class C2 {
+@@= skipped -24, +24 lines =@@
+      * @returns {number}
+      */
+     method1(x, y) {
+->method1 : (x: number, y: number) => number
+->x : number
+->y : number
++>method1 : (x: any, y: any) => any
++>x : any
++>y : any
+ 
+         return x + y;
+->x + y : number
+->x : number
+->y : number
++>x + y : any
++>x : any
++>y : any
+     }
+ }
+ 
+@@= skipped -18, +18 lines =@@
+  * @returns {number}
+  */
+ C2.prototype.method2 = function (x, y) {
+->C2.prototype.method2 = function (x, y) {    return x + y;} : (x: number, y: number) => number
+->C2.prototype.method2 : (x: number, y: number) => number
++>C2.prototype.method2 = function (x, y) {    return x + y;} : (x: any, y: any) => any
++>C2.prototype.method2 : any
+ >C2.prototype : C2
+ >C2 : typeof C2
+ >prototype : C2
+->method2 : (x: number, y: number) => number
+->function (x, y) {    return x + y;} : (x: number, y: number) => number
+->x : number
+->y : number
++>method2 : any
++>function (x, y) {    return x + y;} : (x: any, y: any) => any
++>x : any
++>y : any
+ 
+     return x + y;
+->x + y : number
+->x : number
+->y : number
++>x + y : any
++>x : any
++>y : any
+ }
+ 
+ /**
+@@= skipped -23, +23 lines =@@
+  * @returns {number}
+  */
+ C2.staticProp = function (x, y) {
+->C2.staticProp = function (x, y) {    return x + y;} : (x: number, y: number) => number
+->C2.staticProp : (x: number, y: number) => number
++>C2.staticProp = function (x, y) {    return x + y;} : (x: any, y: any) => any
++>C2.staticProp : any
+ >C2 : typeof C2
+->staticProp : (x: number, y: number) => number
+->function (x, y) {    return x + y;} : (x: number, y: number) => number
+->x : number
+->y : number
++>staticProp : any
++>function (x, y) {    return x + y;} : (x: any, y: any) => any
++>x : any
++>y : any
+ 
+     return x + y;
+->x + y : number
+->x : number
+->y : number
++>x + y : any
++>x : any
++>y : any
+ }
+ 

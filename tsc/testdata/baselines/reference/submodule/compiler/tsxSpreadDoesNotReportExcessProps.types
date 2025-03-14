@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx] ////
+
+=== tsxSpreadDoesNotReportExcessProps.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : any
+
+class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
+>MyComponent : MyComponent
+>React.Component : any
+>React : any
+>Component : any
+>dataSource : number[]
+>onClick : any
+
+    render() {
+>render : () => any
+
+        return (<div {...this.props} className="ok"></div>);
+>(<div {...this.props} className="ok"></div>) : any
+><div {...this.props} className="ok"></div> : any
+>div : any
+>this.props : any
+>this : this
+>props : any
+>className : any
+>div : any
+    }
+}
+

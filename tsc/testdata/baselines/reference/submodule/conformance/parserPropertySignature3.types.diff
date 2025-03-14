@@ -1,0 +1,11 @@
+--- old.parserPropertySignature3.types
++++ new.parserPropertySignature3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserPropertySignature3.ts ===
+ interface I {
++>I : I
++
+   C:any;
+ >C : any
+ }

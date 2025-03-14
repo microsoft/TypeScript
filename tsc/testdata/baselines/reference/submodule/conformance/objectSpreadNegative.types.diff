@@ -1,0 +1,107 @@
+--- old.objectSpreadNegative.types
++++ new.objectSpreadNegative.types
+@@= skipped -40, +40 lines =@@
+ >x : any
+ 
+ declare let optionalString: { sn?: string };
+->optionalString : { sn?: string; }
++>optionalString : { sn?: string | undefined; }
+ >sn : string | undefined
+ 
+ declare let optionalNumber: { sn?: number };
+->optionalNumber : { sn?: number; }
++>optionalNumber : { sn?: number | undefined; }
+ >sn : number | undefined
+ 
+ let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
+ >allOptional : { sn: string | number; }
+ >sn : string | number
+ >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
+->optionalString : { sn?: string; }
+->optionalNumber : { sn?: number; }
++>optionalString : { sn?: string | undefined; }
++>optionalNumber : { sn?: number | undefined; }
+ 
+ // error, 'sn' is optional in source, required in target
+ 
+ // assignability as target
+ interface Bool { b: boolean };
++>Bool : Bool
+ >b : boolean
+ 
+ interface Str { s: string };
++>Str : Str
+ >s : string
+ 
+ let spread = { ...{ b: true }, ...{s: "foo" } };
+->spread : { s: string; b: boolean; }
+->{ ...{ b: true }, ...{s: "foo" } } : { s: string; b: boolean; }
++>spread : { b: boolean; s: string; }
++>{ ...{ b: true }, ...{s: "foo" } } : { b: boolean; s: string; }
+ >{ b: true } : { b: boolean; }
+ >b : boolean
+ >true : true
+@@= skipped -35, +37 lines =@@
+ 
+ spread = { s: "foo" };  // error, missing 'b'
+ >spread = { s: "foo" } : { s: string; }
+->spread : { s: string; b: boolean; }
++>spread : { b: boolean; s: string; }
+ >{ s: "foo" } : { s: string; }
+ >s : string
+ >"foo" : "foo"
+@@= skipped -13, +13 lines =@@
+ 
+ spread = b; // error, missing 's'
+ >spread = b : { b: boolean; }
+->spread : { s: string; b: boolean; }
++>spread : { b: boolean; s: string; }
+ >b : { b: boolean; }
+ 
+ // literal repeats are not allowed, but spread repeats are fine
+ let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
+->duplicated : { b: string; a: number; }
+->{ b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' } : { b: string; a: number; }
++>duplicated : { a: number; b: string; }
++>{ b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' } : { a: number; b: string; }
+ >b : string
+ >'bad' : "bad"
+ >o : { a: number; b: string; }
+@@= skipped -57, +57 lines =@@
+ >c : boolean
+ 
+     { b: 'ok', ...o3, ...o4 }
+->{ b: 'ok', ...o3, ...o4 } : { b: string; c: boolean; a: number; }
++>{ b: 'ok', ...o3, ...o4 } : { a: number; b: string; c: boolean; }
+ >b : string
+ >'ok' : "ok"
+ >o3 : { a: number; b: string; }
+@@= skipped -13, +13 lines =@@
+ >c : boolean
+ 
+     { ...o3, b: 'ok', ...o4 }
+->{ ...o3, b: 'ok', ...o4 } : { b: string; c: boolean; a: number; }
++>{ ...o3, b: 'ok', ...o4 } : { a: number; b: string; c: boolean; }
+ >o3 : { a: number; b: string; }
+ >b : string
+ >'ok' : "ok"
+@@= skipped -14, +14 lines =@@
+ >d : string
+ 
+     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
+->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
+->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
++>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { b: false; c: string; a: number; d: string; }
++>{ a: 4, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
+ >a : number
+ >4 : 4
+ >{ b: false, c: 'overriden' } : { b: false; c: string; }
+@@= skipped -36, +36 lines =@@
+ >"in the middle" : number
+ 
+     { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
+->{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { b: string; c: boolean; "in the middle": number; a: number; }
++>{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { a: number; b: string; c: boolean; ['in the middle']: number; }
+ >o3 : { a: number; b: string; }
+ >['in the middle'] : number
+ >'in the middle' : "in the middle"

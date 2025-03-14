@@ -1,0 +1,38 @@
+--- old.constAssertionOnEnum.types
++++ new.constAssertionOnEnum.types
+@@= skipped -42, +42 lines =@@
+ >ns : typeof ns
+ 
+     export enum Foo { X }
+->Foo : Foo
++>Foo : Foo.X
+ >X : Foo.X
+ 
+     ns.Foo.X as const;
+->ns.Foo.X as const : Foo
+->ns.Foo.X : Foo
++>ns.Foo.X as const : Foo.X
++>ns.Foo.X : Foo.X
+ >ns.Foo : typeof Foo
+ >ns : typeof ns
+ >Foo : typeof Foo
+->X : Foo
++>X : Foo.X
+ }
+ 
+ === more.ts ===
+ export enum Foo { X }
+->Foo : Foo
++>Foo : Foo.X
+ >X : Foo.X
+ 
+ (Foo).X as const;
+->(Foo).X as const : Foo
+->(Foo).X : Foo
++>(Foo).X as const : Foo.X
++>(Foo).X : Foo.X
+ >(Foo) : typeof Foo
+ >Foo : typeof Foo
+->X : Foo
++>X : Foo.X
+ 

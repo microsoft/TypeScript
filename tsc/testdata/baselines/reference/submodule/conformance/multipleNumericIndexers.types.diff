@@ -1,0 +1,29 @@
+--- old.multipleNumericIndexers.types
++++ new.multipleNumericIndexers.types
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ interface I {
++>I : I<T>
++
+     [x: number]: string;
+ >x : number
+ 
+@@= skipped -35, +37 lines =@@
+ 
+ class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+     [x: number]: string;
+ >x : number
+@@= skipped -9, +10 lines =@@
+ }
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     [x: number]: string;
+ >x : number
+ 

@@ -1,0 +1,70 @@
+--- old.assignmentCompatWithObjectMembersOptionality2.types
++++ new.assignmentCompatWithObjectMembersOptionality2.types
+@@= skipped -22, +22 lines =@@
+ 
+     // targets
+     interface C {
++>C : C
++
+         opt?: Base
+ >opt : Base
+     }
+@@= skipped -12, +14 lines =@@
+ 
+     var b: typeof a = { opt: new Base() }
+ >b : { opt?: Base; }
+->a : { opt?: Base; }
+ >{ opt: new Base() } : { opt: Base; }
+ >opt : Base
+ >new Base() : Base
+@@= skipped -8, +7 lines =@@
+ 
+     // sources
+     interface D {
++>D : D
++
+         other: Base;
+ >other : Base
+     }
+     interface E {
++>E : E
++
+         other: Derived;
+ >other : Derived
+     }
+     interface F {
++>F : F
++
+         other?: Derived;
+ >other : Derived
+     }
+@@= skipped -93, +99 lines =@@
+ 
+     // targets
+     interface C {
++>C : C
++
+         opt: Base
+ >opt : Base
+     }
+@@= skipped -19, +21 lines =@@
+ 
+     // sources
+     interface D {
++>D : D
++
+         other?: Base;
+ >other : Base
+     }
+     interface E {
++>E : E
++
+         other?: Derived;
+ >other : Derived
+     }
+     interface F {
++>F : F
++
+         other: Derived;
+ >other : Derived
+     }

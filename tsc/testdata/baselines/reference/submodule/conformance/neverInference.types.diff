@@ -1,0 +1,73 @@
+--- old.neverInference.types
++++ new.neverInference.types
+@@= skipped -2, +2 lines =@@
+ === neverInference.ts ===
+ declare function f1<T>(x: T[]): T;
+ >f1 : <T>(x: T[]) => T
++>T : T
+ >x : T[]
+ 
+ let neverArray: never[] = [];
+@@= skipped -22, +23 lines =@@
+ 
+ type Comparator<T> = (x: T, y: T) => number;
+ >Comparator : Comparator<T>
++>T : T
+ >x : T
+ >y : T
+ 
+ interface LinkedList<T> {
++>LinkedList : LinkedList<T>
++>T : T
++
+     comparator: Comparator<T>,
+ >comparator : Comparator<T>
+ 
+@@= skipped -13, +17 lines =@@
+ 
+ type Node<T> = { value: T, next: Node<T> } | null
+ >Node : Node<T>
++>T : T
+ >value : T
+ >next : Node<T>
+ 
+@@= skipped -10, +11 lines =@@
+ 
+ declare function mkList<T>(items: T[], comparator: Comparator<T>): LinkedList<T>;
+ >mkList : <T>(items: T[], comparator: Comparator<T>) => LinkedList<T>
++>T : T
+ >items : T[]
+ >comparator : Comparator<T>
+ 
+@@= skipped -14, +15 lines =@@
+ 
+ declare function f2<a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number): void;
+ >f2 : <a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number) => void
++>a : a
+ >as1 : a[]
+ >as2 : a[]
+ >cmp : (a1: a, a2: a) => number
+@@= skipped -10, +11 lines =@@
+ >f2(Array.from([0]), [], (a1, a2) => a1 - a2) : void
+ >f2 : <a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number) => void
+ >Array.from([0]) : number[]
+->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >Array : ArrayConstructor
+->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >[0] : number[]
+ >0 : 0
+ >[] : never[]
+@@= skipped -17, +17 lines =@@
+ >f2(Array.from([]), [0], (a1, a2) => a1 - a2) : void
+ >f2 : <a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number) => void
+ >Array.from([]) : never[]
+->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >Array : ArrayConstructor
+->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >[] : never[]
+ >[0] : number[]
+ >0 : 0

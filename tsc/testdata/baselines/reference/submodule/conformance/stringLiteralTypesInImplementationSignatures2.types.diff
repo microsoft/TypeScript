@@ -1,0 +1,40 @@
+--- old.stringLiteralTypesInImplementationSignatures2.types
++++ new.stringLiteralTypesInImplementationSignatures2.types
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     (x: 'a');
+ >x : "a"
+ 
+@@= skipped -18, +20 lines =@@
+ }
+ 
+ var a: {
+->a : { (x: "hi"): any; (x: "a"): any; foo(x: "hi"): any; foo(x: "a"): any; }
++>a : { (x: "hi"): any; (x: "a"): any; foo: { (x: "hi"): any; (x: "a"): any; }; }
+ 
+     (x: 'hi');
+ >x : "hi"
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ var b = {
+->b : { foo(x: "hi"): void; foo(x: "a"): void; }
+->{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo(x: "hi"): void; foo(x: "a"): void; }
++>b : { foo: (x: "a") => void; }
++>{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo: (x: "a") => void; }
+ 
+     foo(x: 'hi') { },
+->foo : { (x: "hi"): void; (x: "a"): void; }
++>foo : (x: "hi") => void
+ >x : "hi"
+ 
+     foo(x: 'a') { },
+->foo : { (x: "hi"): void; (x: "a"): void; }
++>foo : (x: "a") => void
+ >x : "a"
+ }
+ 

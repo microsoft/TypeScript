@@ -1,0 +1,26 @@
+--- old.tsxDynamicTagName2.types
++++ new.tsxDynamicTagName2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === tsxDynamicTagName2.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { }
++>Element : Element
++
+ 	interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+         div: any
+ >div : any
+ 	}
+@@= skipped -12, +18 lines =@@
+ >"h1" : "h1"
+ 
+ <customTag> Hello World </customTag>  // This should be an error. The lower-case is look up as an intrinsic element name
+-><customTag> Hello World </customTag> : JSX.Element
++><customTag> Hello World </customTag> : any
+ >customTag : string
+ >customTag : string
+ 

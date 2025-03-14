@@ -1,0 +1,27 @@
+--- old.pushTypeGetTypeOfAlias.types
++++ new.pushTypeGetTypeOfAlias.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bar.js ===
+ module.exports = function () {};
+->module.exports = function () {} : { (): void; blah: any; }
+->module.exports : { (): void; blah: any; }
+->module : { exports: { (): void; blah: any; }; }
+->exports : { (): void; blah: any; }
++>module.exports = function () {} : () => void
++>module.exports : any
++>module : any
++>exports : any
+ >function () {} : () => void
+ 
+ exports.blah = exports.someProp;
+ >exports.blah = exports.someProp : any
+ >exports.blah : any
+->exports : { (): void; blah: any; }
++>exports : any
+ >blah : any
+ >exports.someProp : any
+->exports : { (): void; blah: any; }
++>exports : any
+ >someProp : any
+ 

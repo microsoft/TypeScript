@@ -1,0 +1,110 @@
+--- old.intersectionTypeNormalization.types
++++ new.intersectionTypeNormalization.types
+@@= skipped -1, +1 lines =@@
+ 
+ === intersectionTypeNormalization.ts ===
+ interface A { a: string }
++>A : A
+ >a : string
+ 
+ interface B { b: string }
++>B : B
+ >b : string
+ 
+ interface C { c: string }
++>C : C
+ >c : string
+ 
+ interface D { d: string }
++>D : D
+ >d : string
+ 
+ // Identical ways of writing the same type
+@@= skipped -31, +35 lines =@@
+ >x : X1
+ 
+ interface X { x: string }
++>X : X
+ >x : string
+ 
+ interface Y { y: string }
++>Y : Y
+ >y : string
+ 
+ // Identical ways of writing the same type
+@@= skipped -25, +27 lines =@@
+ >y : Y1
+ 
+ interface M { m: string }
++>M : M
+ >m : string
+ 
+ interface N { n: string }
++>N : N
+ >n : string
+ 
+ // Identical ways of writing the same type
+@@= skipped -66, +68 lines =@@
+ 
+     if (value.kind === 'int') {
+ >value.kind === 'int' : boolean
+->value.kind : "string" | "int"
++>value.kind : "int" | "string"
+ >value : IntersectionFail
+->kind : "string" | "int"
++>kind : "int" | "string"
+ >'int' : "int"
+ 
+         return '' + value.num;
+@@= skipped -21, +21 lines =@@
+ // Repro from #12535
+ 
+ namespace enums {
++>enums : typeof enums
++
+     export const enum A {
+ >A : A
+ 
+@@= skipped -62, +64 lines =@@
+ >Foo : Foo
+ 
+     genreId: enums.Genre;
+->genreId : enums.Genre
++>genreId : Genre
+ >enums : any
+ 
+ };
+@@= skipped -9, +9 lines =@@
+ >Bar : Bar
+ 
+     genreId: enums.Genre;
+->genreId : enums.Genre
++>genreId : Genre
+ >enums : any
+ 
+ };
+@@= skipped -9, +9 lines =@@
+ >FooBar : FooBar
+ 
+ function foo(so: any) {
+->foo : (so: any) => enums.Genre
++>foo : (so: any) => Genre
+ >so : any
+ 
+     const val = so as FooBar;
+@@= skipped -9, +9 lines =@@
+ >so : any
+ 
+     const isGenre = val.genreId;
+->isGenre : enums.Genre
+->val.genreId : enums.Genre
++>isGenre : Genre
++>val.genreId : Genre
+ >val : FooBar
+->genreId : enums.Genre
++>genreId : Genre
+ 
+     return isGenre;
+->isGenre : enums.Genre
++>isGenre : Genre
+ }

@@ -1,0 +1,11 @@
+--- old.es6ClassTest2.types
++++ new.es6ClassTest2.types
+@@= skipped -333, +333 lines =@@
+ >Statics : typeof Statics
+ 
+ interface IFoo {
++>IFoo : IFoo
++
+     x: number;
+ >x : number
+ 

@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution2.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		test1: Attribs1;
+>test1 : Attribs1
+	}
+}
+interface Attribs1 {
+>Attribs1 : Attribs1
+
+	c1?: (x: string) => void;
+>c1 : (x: string) => void
+>x : string
+}
+
+// OK
+<test1 c1={(x) => x.length} />; // OK
+><test1 c1={(x) => x.length} /> : any
+>test1 : any
+>c1 : any
+>(x) => x.length : (x: any) => any
+>x : any
+>x.length : any
+>x : any
+>length : any
+
+<test1 data-c1={(x) => x.leng} />; // OK
+><test1 data-c1={(x) => x.leng} /> : any
+>test1 : any
+>data-c1 : any
+>(x) => x.leng : (x: any) => any
+>x : any
+>x.leng : any
+>x : any
+>leng : any
+
+
+// Errors
+<test1 c1={(x) => x.leng} />; // Error, no leng on 'string'
+><test1 c1={(x) => x.leng} /> : any
+>test1 : any
+>c1 : any
+>(x) => x.leng : (x: any) => any
+>x : any
+>x.leng : any
+>x : any
+>leng : any
+

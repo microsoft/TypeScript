@@ -1,0 +1,70 @@
+--- old.intersectionTypeMembers.types
++++ new.intersectionTypeMembers.types
+@@= skipped -4, +4 lines =@@
+ // with types that are intersections of the respective members in the constituent types
+ 
+ interface A { a: string }
++>A : A
+ >a : string
+ 
+ interface B { b: string }
++>B : B
+ >b : string
+ 
+ interface C { c: string }
++>C : C
+ >c : string
+ 
+ var abc: A & B & C;
+@@= skipped -33, +36 lines =@@
+ >"hello" : "hello"
+ 
+ interface X { x: A }
++>X : X
+ >x : A
+ 
+ interface Y { x: B }
++>Y : Y
+ >x : B
+ 
+ interface Z { x: C }
++>Z : Z
+ >x : C
+ 
+ var xyz: X & Y & Z;
+@@= skipped -62, +65 lines =@@
+ >42 : 42
+ 
+ interface D {
++>D : D
++
+     nested: { doublyNested: { d: string; }, different: { e: number } };
+ >nested : { doublyNested: { d: string; }; different: { e: number; }; }
+ >doublyNested : { d: string; }
+@@= skipped -8, +10 lines =@@
+ >e : number
+ }
+ interface E {
++>E : E
++
+     nested: { doublyNested: { f: string; }, other: {g: number } };
+ >nested : { doublyNested: { f: string; }; other: { g: number; }; }
+ >doublyNested : { f: string; }
+@@= skipped -44, +46 lines =@@
+ 
+ // Additional test case with >2 doubly nested members so fix for #31441 is tested w/ excess props
+ interface F {
++>F : F
++
+     nested: { doublyNested: { g: string; } }
+ >nested : { doublyNested: { g: string; }; }
+ >doublyNested : { g: string; }
+@@= skipped -7, +9 lines =@@
+ }
+ 
+ interface G {
++>G : G
++
+     nested: { doublyNested: { h: string; } }
+ >nested : { doublyNested: { h: string; }; }
+ >doublyNested : { h: string; }

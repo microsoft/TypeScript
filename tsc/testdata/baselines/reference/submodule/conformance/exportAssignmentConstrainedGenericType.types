@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/externalModules/exportAssignmentConstrainedGenericType.ts] ////
+
+=== foo_1.ts ===
+import foo = require("./foo_0");
+>foo : typeof Foo
+
+var x = new foo(true); // Should error
+>x : Foo<{ a: string; b: number; }>
+>new foo(true) : Foo<{ a: string; b: number; }>
+>foo : typeof Foo
+>true : true
+
+var y = new foo({a: "test", b: 42}); // Should be OK
+>y : Foo<{ a: string; b: number; }>
+>new foo({a: "test", b: 42}) : Foo<{ a: string; b: number; }>
+>foo : typeof Foo
+>{a: "test", b: 42} : { a: string; b: number; }
+>a : string
+>"test" : "test"
+>b : number
+>42 : 42
+
+var z: number = y.test.b;
+>z : number
+>y.test.b : number
+>y.test : { a: string; b: number; }
+>y : Foo<{ a: string; b: number; }>
+>test : { a: string; b: number; }
+>b : number
+
+=== foo_0.ts ===
+class Foo<T extends {a: string; b:number;}>{
+>Foo : Foo<T>
+>T : T
+>a : string
+>b : number
+
+	test: T;
+>test : T
+
+	constructor(x: T){}
+>x : T
+}
+
+export = Foo;
+>Foo : Foo<T>
+

@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/duplicateObjectLiteralProperty_computedName3.ts] ////
+
+=== a.ts ===
+export const n = 1;
+>n : 1
+>1 : 1
+
+export const s = "s";
+>s : "s"
+>"s" : "s"
+
+export enum E1 { A = "ENUM_KEY" }
+>E1 : E1.A
+>A : E1.A
+>"ENUM_KEY" : "ENUM_KEY"
+
+export enum E2 { B }
+>E2 : E2.B
+>B : E2.B
+
+=== b.ts ===
+import * as keys from "./a";
+>keys : typeof import("a")
+
+const t1 = {
+>t1 : { [keys.n]: number; }
+>{    [keys.n]: 1,    [keys.n]: 1, // duplicate} : { [keys.n]: number; }
+
+    [keys.n]: 1,
+>[keys.n] : number
+>keys.n : 1
+>keys : typeof import("a")
+>n : 1
+>1 : 1
+
+    [keys.n]: 1, // duplicate
+>[keys.n] : number
+>keys.n : 1
+>keys : typeof import("a")
+>n : 1
+>1 : 1
+}
+
+const t2 = {
+>t2 : { s: number; }
+>{    [keys.s]: 1,    [keys.s]: 1, // duplicate} : { s: number; }
+
+    [keys.s]: 1,
+>[keys.s] : number
+>keys.s : "s"
+>keys : typeof import("a")
+>s : "s"
+>1 : 1
+
+    [keys.s]: 1, // duplicate
+>[keys.s] : number
+>keys.s : "s"
+>keys : typeof import("a")
+>s : "s"
+>1 : 1
+}
+
+const t3 = {
+>t3 : { ENUM_KEY: number; }
+>{    [keys.E1.A]: 1,    [keys.E1.A]: 1, // duplicate} : { ENUM_KEY: number; }
+
+    [keys.E1.A]: 1,
+>[keys.E1.A] : number
+>keys.E1.A : E1.A
+>keys.E1 : typeof E1
+>keys : typeof import("a")
+>E1 : typeof E1
+>A : E1.A
+>1 : 1
+
+    [keys.E1.A]: 1, // duplicate
+>[keys.E1.A] : number
+>keys.E1.A : E1.A
+>keys.E1 : typeof E1
+>keys : typeof import("a")
+>E1 : typeof E1
+>A : E1.A
+>1 : 1
+}
+
+const t4 = {
+>t4 : { [keys.E2.B]: number; }
+>{    [keys.E2.B]: 1,    [keys.E2.B]: 1, // duplicate} : { [keys.E2.B]: number; }
+
+    [keys.E2.B]: 1,
+>[keys.E2.B] : number
+>keys.E2.B : E2.B
+>keys.E2 : typeof E2
+>keys : typeof import("a")
+>E2 : typeof E2
+>B : E2.B
+>1 : 1
+
+    [keys.E2.B]: 1, // duplicate
+>[keys.E2.B] : number
+>keys.E2.B : E2.B
+>keys.E2 : typeof E2
+>keys : typeof import("a")
+>E2 : typeof E2
+>B : E2.B
+>1 : 1
+}
+

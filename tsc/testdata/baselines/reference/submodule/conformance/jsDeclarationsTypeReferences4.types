@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences4.ts] ////
+
+=== index.js ===
+/// <reference types="node" />
+export const Something = 2; // to show conflict that can occur
+>Something : 2
+>2 : 2
+
+// @ts-ignore
+export namespace A {
+>A : typeof A
+
+    // @ts-ignore
+    export namespace B {
+>B : typeof B
+
+        const Something = require("fs").Something;
+>Something : any
+>require("fs").Something : any
+>require("fs") : any
+>require : any
+>"fs" : "fs"
+>Something : any
+
+        const thing = new Something();
+>thing : any
+>new Something() : any
+>Something : any
+
+        // @ts-ignore
+        export { thing };
+>thing : any
+    }
+}
+
+=== node_modules/@types/node/index.d.ts ===
+declare module "fs" {
+>"fs" : typeof import("fs")
+
+    export class Something {}
+>Something : Something
+}

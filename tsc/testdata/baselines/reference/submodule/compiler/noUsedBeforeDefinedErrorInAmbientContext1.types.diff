@@ -1,0 +1,10 @@
+--- old.noUsedBeforeDefinedErrorInAmbientContext1.types
++++ new.noUsedBeforeDefinedErrorInAmbientContext1.types
+@@= skipped -2, +2 lines =@@
+ === test.d.ts ===
+ declare var S: typeof A; // no error
+ >S : number
+->A : number
+ 
+ declare const A: number;  
+ >A : number

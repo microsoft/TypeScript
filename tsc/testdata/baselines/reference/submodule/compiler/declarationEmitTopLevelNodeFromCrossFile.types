@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/declarationEmitTopLevelNodeFromCrossFile.ts] ////
+
+=== a.ts ===
+export type X = string;
+>X : string
+
+export const fn = { o: (a?: (X | undefined)[]) => {} };
+>fn : { o: (a?: string[]) => void; }
+>{ o: (a?: (X | undefined)[]) => {} } : { o: (a?: string[]) => void; }
+>o : (a?: string[]) => void
+>(a?: (X | undefined)[]) => {} : (a?: string[]) => void
+>a : string[]
+
+=== b.ts ===
+import {fn} from "./a";
+>fn : { o: (a?: string[]) => void; }
+
+export const m = {                        
+>m : { prop: number; }
+>{                            /**    * leading doc for prop    */     prop: 1} : { prop: number; }
+
+    /**
+    * leading doc for prop
+    */ 
+    prop: 1
+>prop : number
+>1 : 1
+}
+
+
+export const x = { p: fn }; 
+>x : { p: { o: (a?: string[]) => void; }; }
+>{ p: fn } : { p: { o: (a?: string[]) => void; }; }
+>p : { o: (a?: string[]) => void; }
+>fn : { o: (a?: string[]) => void; }
+

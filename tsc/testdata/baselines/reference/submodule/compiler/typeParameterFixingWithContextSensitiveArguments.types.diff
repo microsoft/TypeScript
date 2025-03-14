@@ -1,0 +1,23 @@
+--- old.typeParameterFixingWithContextSensitiveArguments.types
++++ new.typeParameterFixingWithContextSensitiveArguments.types
+@@= skipped -2, +2 lines =@@
+ === typeParameterFixingWithContextSensitiveArguments.ts ===
+ function f<T, U>(y: T, f: (x: T) => U, x: T): [T, U] { return [y, f(x)]; }
+ >f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
++>T : T
++>U : U
+ >y : T
+ >f : (x: T) => U
+ >x : T
+@@= skipped -11, +13 lines =@@
+ >x : T
+ 
+ interface A { a: A; }
++>A : A
+ >a : A
+ 
+ interface B extends A { b; }
++>B : B
+ >b : any
+ 
+ var a: A, b: B;

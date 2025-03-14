@@ -1,0 +1,34 @@
+--- old.indexedAccessRetainsIndexSignature.types
++++ new.indexedAccessRetainsIndexSignature.types
+@@= skipped -2, +2 lines =@@
+ === indexedAccessRetainsIndexSignature.ts ===
+ type Diff<T extends keyof any, U extends keyof any> =
+ >Diff : Diff<T, U>
++>T : T
++>U : U
+ 
+     ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T]
++>P : P
++>P : P
+ >x : string
+ 
+ type Omit<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>
+ >Omit : Omit<U, K>
++>U : U
++>K : K
+ 
+ type Omit1<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>;
+ >Omit1 : Omit1<U, K>
++>U : U
++>K : K
+ 
+ // is in fact an equivalent of
+ 
+ type Omit2<T, K extends keyof T> = {[P in Diff<keyof T, K>]: T[P]};
+ >Omit2 : Omit2<T, K>
++>T : T
++>K : K
++>P : P
+ 
+ type O = Omit<{ a: number, b: string }, 'a'>
+ >O : O

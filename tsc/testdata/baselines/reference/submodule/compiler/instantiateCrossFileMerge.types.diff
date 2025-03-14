@@ -1,0 +1,20 @@
+--- old.instantiateCrossFileMerge.types
++++ new.instantiateCrossFileMerge.types
+@@= skipped -2, +2 lines =@@
+ === first.ts ===
+ declare class P<R> {
+ >P : P<R>
++>R : R
+ 
+     constructor(callback: (resolve: (value: R) => void) => void);
+ >callback : (resolve: (value: R) => void) => void
+@@= skipped -9, +10 lines =@@
+ 
+ === second.ts ===
+ interface P<R> { }
++>P : P<R>
++>R : R
++
+ new P<string>(r => { r('foo') });
+ >new P<string>(r => { r('foo') }) : P<string>
+ >P : typeof P

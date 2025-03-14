@@ -1,0 +1,16 @@
+--- old.ambientShorthand_reExport.types
++++ new.ambientShorthand_reExport.types
+@@= skipped -16, +16 lines =@@
+ >x : any
+ 
+ import * as $ from "./reExportAll";
+->$ : typeof $
++>$ : typeof import("reExportAll")
+ 
+ // '$' is not callable, it is an object.
+ x($);
+ >x($) : any
+ >x : any
+->$ : typeof $
++>$ : typeof import("reExportAll")
+ 

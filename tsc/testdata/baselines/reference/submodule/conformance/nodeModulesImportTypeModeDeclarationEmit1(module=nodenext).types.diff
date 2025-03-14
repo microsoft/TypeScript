@@ -1,0 +1,38 @@
+--- old.nodeModulesImportTypeModeDeclarationEmit1(module=nodenext).types
++++ new.nodeModulesImportTypeModeDeclarationEmit1(module=nodenext).types
+@@= skipped -1, +1 lines =@@
+ 
+ === /index.ts ===
+ export type LocalInterface =
+->LocalInterface : LocalInterface
++>LocalInterface : any
+ 
+     & import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface
+     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+ 
+ export const a = (null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface);
+->a : import("/node_modules/pkg/require").RequireInterface
+->(null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+->null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
++>a : RequireInterface
++>(null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface) : RequireInterface
++>null as any as import("pkg", { assert: {"resolution-mode": "require"} }).RequireInterface : RequireInterface
+ >null as any : any
+ 
+ export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+->b : import("/node_modules/pkg/import").ImportInterface
+->(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+->null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
++>b : any
++>(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : any
++>null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : any
+ >null as any : any
+ 
+-=== /node_modules/pkg/import.d.ts ===
+-
+-export interface ImportInterface {}
+ === /node_modules/pkg/require.d.ts ===
+-
+ export interface RequireInterface {}
++>RequireInterface : RequireInterface
++

@@ -1,0 +1,35 @@
+--- old.destructuringAssignabilityCheck.types
++++ new.destructuringAssignabilityCheck.types
+@@= skipped -8, +8 lines =@@
+ 
+ (([]) => 0)({}); // should be error
+ >(([]) => 0)({}) : number
+->(([]) => 0) : ([]: {}) => number
+->([]) => 0 : ([]: {}) => number
++>(([]) => 0) : (__0: {}) => number
++>([]) => 0 : (__0: {}) => number
+ >0 : 0
+ >{} : {}
+ 
+ (({}) => 0)(undefined); // should be error
+ >(({}) => 0)(undefined) : number
+->(({}) => 0) : ({}: undefined) => number
+->({}) => 0 : ({}: undefined) => number
++>(({}) => 0) : (__0: undefined) => number
++>({}) => 0 : (__0: undefined) => number
+ >0 : 0
+ >undefined : undefined
+ 
+ function foo({}: undefined) {
+->foo : ({}: undefined) => number
++>foo : (__0: undefined) => number
+ 
+     return 0
+ >0 : 0
+ }
+ function bar([]: {}) {
+->bar : ([]: {}) => number
++>bar : (__0: {}) => number
+ 
+     return 0
+ >0 : 0

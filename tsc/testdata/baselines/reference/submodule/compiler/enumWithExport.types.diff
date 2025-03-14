@@ -1,0 +1,11 @@
+--- old.enumWithExport.types
++++ new.enumWithExport.types
+@@= skipped -8, +8 lines =@@
+ >123 : 123
+ }
+ enum x {
+->x : x
++>x : x.z
+ 
+   z = y
+ >z : x.z

@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts] ////
+
+=== collisionExportsRequireAndInternalModuleAlias.ts ===
+export module m {
+>m : typeof m
+
+    export class c {
+>c : c
+    }
+}
+import exports = m.c;
+>exports : typeof c
+>m : typeof m
+>c : c
+
+import require = m.c;
+>require : typeof c
+>m : typeof m
+>c : c
+
+new exports();
+>new exports() : c
+>exports : typeof c
+
+new require();
+>new require() : c
+>require : typeof c
+
+module m1 {
+>m1 : typeof m1
+
+    import exports = m.c;
+>exports : typeof c
+>m : typeof m
+>c : c
+
+    import require = m.c;
+>require : typeof c
+>m : typeof m
+>c : c
+
+    new exports();
+>new exports() : c
+>exports : typeof c
+
+    new require();
+>new require() : c
+>require : typeof c
+}
+
+module m2 {
+>m2 : typeof m2
+
+    export import exports = m.c;
+>exports : typeof c
+>m : typeof m
+>c : c
+
+    export import require = m.c;
+>require : typeof c
+>m : typeof m
+>c : c
+
+    new exports();
+>new exports() : c
+>exports : typeof c
+
+    new require();
+>new require() : c
+>require : typeof c
+}

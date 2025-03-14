@@ -1,0 +1,13 @@
+--- old.tsxSpreadInvalidType.types
++++ new.tsxSpreadInvalidType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.tsx ===
+ namespace JSX {
++>JSX : any
++
+     export interface IntrinsicElements { [key: string]: any }
++>IntrinsicElements : IntrinsicElements
+ >key : string
+ }
+ 

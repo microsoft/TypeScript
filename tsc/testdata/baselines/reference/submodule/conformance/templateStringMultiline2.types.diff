@@ -1,0 +1,12 @@
+--- old.templateStringMultiline2.types
++++ new.templateStringMultiline2.types
+@@= skipped -2, +2 lines =@@
+ === templateStringMultiline2.ts ===
+ // newlines are <LF>
+ `
+->`\` : "\n"
++>`\` : "
++"
+ 
+ \
+ `

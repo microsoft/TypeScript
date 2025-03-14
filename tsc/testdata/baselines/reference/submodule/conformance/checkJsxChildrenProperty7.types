@@ -1,0 +1,105 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty7.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface Prop {
+>Prop : Prop
+
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: JSX.Element | JSX.Element[];
+>children : any
+>JSX : any
+>JSX : any
+}
+
+class Button extends React.Component<any, any> {
+>Button : Button
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return (<div>My Button</div>)
+>(<div>My Button</div>) : any
+><div>My Button</div> : any
+>div : any
+>div : any
+    }
+}
+
+function AnotherButton(p: any) {
+>AnotherButton : (p: any) => any
+>p : any
+
+    return <h1>Just Another Button</h1>;
+><h1>Just Another Button</h1> : any
+>h1 : any
+>h1 : any
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => any
+>p : Prop
+
+    return <div>{p.b}</div>;
+><div>{p.b}</div> : any
+>div : any
+>p.b : string
+>p : Prop
+>b : string
+>div : any
+}
+
+// Error: whitespaces matters
+let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
+>k1 : any
+><Comp a={10} b="hi"><Button />  <AnotherButton /></Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+><Button /> : any
+>Button : typeof Button
+><AnotherButton /> : any
+>AnotherButton : (p: any) => any
+>Comp : (p: Prop) => any
+
+let k2 = <Comp a={10} b="hi"><Button />
+>k2 : any
+><Comp a={10} b="hi"><Button />    <AnotherButton />  </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+><Button /> : any
+>Button : typeof Button
+
+    <AnotherButton />  </Comp>;
+><AnotherButton /> : any
+>AnotherButton : (p: any) => any
+>Comp : (p: Prop) => any
+
+let k3 = <Comp a={10} b="hi">    <Button />
+>k3 : any
+><Comp a={10} b="hi">    <Button />    <AnotherButton /></Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+><Button /> : any
+>Button : typeof Button
+
+    <AnotherButton /></Comp>;
+><AnotherButton /> : any
+>AnotherButton : (p: any) => any
+>Comp : (p: Prop) => any
+

@@ -1,0 +1,75 @@
+--- old.commonJSImportNotAsPrimaryExpression.types
++++ new.commonJSImportNotAsPrimaryExpression.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo_1.ts ===
+ import foo = require("./foo_0");
+->foo : typeof foo
++>foo : typeof import("foo_0")
+ 
+ // None of the below should cause a runtime dependency on foo_0
+ import f = foo.M1;
+ >f : any
+->foo : typeof foo
++>foo : typeof import("foo_0")
+ >M1 : any
+ 
+ var i: f.I2;
+->i : f.I2
++>i : I2
+ >f : any
+ 
+ var x: foo.C1 = <{m1: number}>{};
+->x : foo.C1
++>x : C1
+ >foo : any
+ ><{m1: number}>{} : { m1: number; }
+ >m1 : number
+@@= skipped -21, +21 lines =@@
+ 
+ var y: typeof foo.C1.s1 = false;
+ >y : boolean
+->foo.C1.s1 : boolean
+->foo.C1 : typeof foo.C1
+->foo : typeof foo
+->C1 : typeof foo.C1
+->s1 : boolean
++>foo.C1 : typeof C1
++>foo : typeof import("foo_0")
++>C1 : typeof C1
+ >false : false
+ 
+ var z: foo.M1.I2;
+->z : f.I2
++>z : I2
+ >foo : any
+ >M1 : any
+ 
+ var e: number = <foo.E1>0;
+ >e : number
+-><foo.E1>0 : foo.E1
++><foo.E1>0 : E1
+ >foo : any
+ >0 : 0
+ 
+@@= skipped -32, +30 lines =@@
+ }
+ 
+ export interface I1 {
++>I1 : I1
++
+ 	name: string;
+ >name : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ export module M1 {
++>M1 : any
++
+ 	export interface I2 {
++>I2 : I2
++
+ 		foo: string;
+ >foo : string
+ 	}

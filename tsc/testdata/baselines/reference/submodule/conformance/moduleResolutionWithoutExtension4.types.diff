@@ -1,0 +1,9 @@
+--- old.moduleResolutionWithoutExtension4.types
++++ new.moduleResolutionWithoutExtension4.types
+@@= skipped -10, +10 lines =@@
+ === /src/bar.mts ===
+ // Extensionless relative path ES import in an ES module
+ import { foo } from "./foo"; // should error, suggest adding ".js"
+->foo : any
++>foo : () => string
+ 

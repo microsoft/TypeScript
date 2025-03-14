@@ -1,0 +1,118 @@
+//// [tests/cases/compiler/contextuallyTypedJsxChildren.tsx] ////
+
+=== contextuallyTypedJsxChildren.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : any
+
+// repro from https://github.com/microsoft/TypeScript/issues/53941
+declare namespace DropdownMenu {
+>DropdownMenu : ComponentType<Props>
+
+  interface BaseProps {
+>BaseProps : BaseProps
+
+    icon: string;
+>icon : string
+
+    label: string;
+>label : string
+  }
+  interface PropsWithChildren extends BaseProps {
+>PropsWithChildren : PropsWithChildren
+
+    children(props: { onClose: () => void }): JSX.Element;
+>children : (props: { onClose: () => void; }) => Element
+>props : { onClose: () => void; }
+>onClose : () => void
+>JSX : any
+
+    controls?: never | undefined;
+>controls : undefined
+  }
+  interface PropsWithControls extends BaseProps {
+>PropsWithControls : PropsWithControls
+
+    controls: Control[];
+>controls : Control[]
+
+    children?: never | undefined;
+>children : undefined
+  }
+  interface Control {
+>Control : Control
+
+    title: string;
+>title : string
+  }
+  type Props = PropsWithChildren | PropsWithControls;
+>Props : Props
+}
+declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
+>DropdownMenu : ComponentType<Props>
+>React : any
+>DropdownMenu : any
+
+<DropdownMenu icon="move" label="Select a direction">
+><DropdownMenu icon="move" label="Select a direction">  {({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}</DropdownMenu> : any
+>DropdownMenu : ComponentType<Props>
+>icon : any
+>label : any
+
+  {({ onClose }) => (
+>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: any; }) => any
+>onClose : any
+>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : any
+
+    <div>
+><div>      <button onClick={onClose}>Click me</button>    </div> : any
+>div : any
+
+      <button onClick={onClose}>Click me</button>
+><button onClick={onClose}>Click me</button> : any
+>button : any
+>onClick : any
+>onClose : any
+>button : any
+
+    </div>
+>div : any
+
+  )}
+</DropdownMenu>;
+>DropdownMenu : ComponentType<Props>
+
+<DropdownMenu
+><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : any
+>DropdownMenu : ComponentType<Props>
+
+  icon="move"
+>icon : any
+
+  label="Select a direction"
+>label : any
+
+  children={({ onClose }) => (
+>children : any
+>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: any; }) => any
+>onClose : any
+>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : any
+
+    <div>
+><div>      <button onClick={onClose}>Click me</button>    </div> : any
+>div : any
+
+      <button onClick={onClose}>Click me</button>
+><button onClick={onClose}>Click me</button> : any
+>button : any
+>onClick : any
+>onClose : any
+>button : any
+
+    </div>
+>div : any
+
+  )}
+/>;
+

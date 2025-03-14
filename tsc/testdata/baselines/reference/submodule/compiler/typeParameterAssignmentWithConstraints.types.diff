@@ -1,0 +1,11 @@
+--- old.typeParameterAssignmentWithConstraints.types
++++ new.typeParameterAssignmentWithConstraints.types
+@@= skipped -2, +2 lines =@@
+ === typeParameterAssignmentWithConstraints.ts ===
+ function f<A, B extends A>() {
+ >f : <A, B extends A>() => void
++>A : A
++>B : B
+ 
+     var a: A;
+ >a : A

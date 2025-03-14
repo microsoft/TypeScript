@@ -1,0 +1,14 @@
+--- old.argumentsReferenceInConstructor7_Js.types
++++ new.argumentsReferenceInConstructor7_Js.types
+@@= skipped -9, +9 lines =@@
+ 		 */
+ 		this.callee = arguments.callee;
+ >this.callee = arguments.callee : Function
+->this.callee : Function
++>this.callee : any
+ >this : this
+->callee : Function
++>callee : any
+ >arguments.callee : Function
+ >arguments : IArguments
+ >callee : Function

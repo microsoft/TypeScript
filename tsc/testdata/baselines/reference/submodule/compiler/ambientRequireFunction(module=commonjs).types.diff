@@ -1,0 +1,27 @@
+--- old.ambientRequireFunction(module=commonjs).types
++++ new.ambientRequireFunction(module=commonjs).types
+@@= skipped -3, +3 lines =@@
+ /// <reference path="node.d.ts"/>
+ 
+ const fs = require("fs");
+->fs : typeof fs
+->require("fs") : typeof fs
++>fs : any
++>require("fs") : any
+ >require : (moduleName: string) => any
+ >"fs" : "fs"
+ 
+ const text = fs.readFileSync("/a/b/c");
+->text : string
+->fs.readFileSync("/a/b/c") : string
+->fs.readFileSync : (s: string) => string
+->fs : typeof fs
+->readFileSync : (s: string) => string
++>text : any
++>fs.readFileSync("/a/b/c") : any
++>fs.readFileSync : any
++>fs : any
++>readFileSync : any
+ >"/a/b/c" : "/a/b/c"
+ 
+ === node.d.ts ===

@@ -1,0 +1,84 @@
+//// [tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx] ////
+
+=== jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : any
+
+interface MyProps {
+>MyProps : MyProps
+
+    x: number;
+>x : number
+}
+
+function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {
+>MyComp4 : (props: MyProps, context: any, bad: any, verybad: any) => any
+>props : MyProps
+>context : any
+>bad : any
+>verybad : any
+
+    return <div></div>;
+><div></div> : any
+>div : any
+>div : any
+}
+function MyComp3(props: MyProps, context: any, bad: any) {
+>MyComp3 : (props: MyProps, context: any, bad: any) => any
+>props : MyProps
+>context : any
+>bad : any
+
+    return <div></div>;
+><div></div> : any
+>div : any
+>div : any
+}
+function MyComp2(props: MyProps, context: any) {
+>MyComp2 : (props: MyProps, context: any) => any
+>props : MyProps
+>context : any
+
+    return <div></div>
+><div></div> : any
+>div : any
+>div : any
+}
+
+const a = <MyComp4 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+>a : any
+><MyComp4 x={2}/> : any
+>MyComp4 : (props: MyProps, context: any, bad: any, verybad: any) => any
+>x : any
+>2 : 2
+
+const b = <MyComp3 x={2}/>; // using `MyComp` as a component should error - it expects more arguments than react provides
+>b : any
+><MyComp3 x={2}/> : any
+>MyComp3 : (props: MyProps, context: any, bad: any) => any
+>x : any
+>2 : 2
+
+const c  = <MyComp2 x={2}/>; // Should be OK, `context` is allowed, per react rules
+>c : any
+><MyComp2 x={2}/> : any
+>MyComp2 : (props: MyProps, context: any) => any
+>x : any
+>2 : 2
+
+declare function MyTagWithOptionalNonJSXBits(props: MyProps, context: any, nonReactArg?: string): JSX.Element;
+>MyTagWithOptionalNonJSXBits : (props: MyProps, context: any, nonReactArg?: string) => Element
+>props : MyProps
+>context : any
+>nonReactArg : string
+>JSX : any
+
+const d = <MyTagWithOptionalNonJSXBits x={2} />; // Technically OK, but probably questionable
+>d : any
+><MyTagWithOptionalNonJSXBits x={2} /> : any
+>MyTagWithOptionalNonJSXBits : (props: MyProps, context: any, nonReactArg?: string) => Element
+>x : any
+>2 : 2
+

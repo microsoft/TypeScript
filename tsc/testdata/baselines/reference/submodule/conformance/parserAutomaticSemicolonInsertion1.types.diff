@@ -1,0 +1,11 @@
+--- old.parserAutomaticSemicolonInsertion1.types
++++ new.parserAutomaticSemicolonInsertion1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserAutomaticSemicolonInsertion1.ts ===
+ interface I {
++>I : I
++
+     (): void;
+ }
+  

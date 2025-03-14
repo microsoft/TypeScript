@@ -1,0 +1,19 @@
+--- old.privateNameStaticFieldDestructuredBinding(target=esnext).types
++++ new.privateNameStaticFieldDestructuredBinding(target=esnext).types
+@@= skipped -40, +40 lines =@@
+ >x : number
+ >A.#field : number
+ >A : typeof A
+->y : number
++>y : any
+ >this.testObject() : { x: number; y: number; }
+ >this.testObject : () => { x: number; y: number; }
+ >this : this
+@@= skipped -91, +91 lines =@@
+     static test(_a: typeof A) {
+ >test : (_a: typeof A) => void
+ >_a : typeof A
+->A : typeof A
+ 
+         [_a.#field] = [2];
+ >[_a.#field] = [2] : [number]

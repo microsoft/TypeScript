@@ -1,0 +1,10 @@
+--- old.constructorOverloadsWithDefaultValues.types
++++ new.constructorOverloadsWithDefaultValues.types
+@@= skipped -16, +16 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     foo: string;
+ >foo : string

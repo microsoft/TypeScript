@@ -1,0 +1,41 @@
+--- old.TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.types
++++ new.TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.types
+@@= skipped -7, +7 lines =@@
+ >A : typeof A
+ 
+         export interface Point {
++>Point : Point
++
+             x: number;
+ >x : number
+ 
+@@= skipped -12, +14 lines =@@
+ 
+             export function mirror<T extends Point>(p: T) {
+ >mirror : <T extends Point>(p: T) => { x: number; y: number; }
++>T : T
+ >p : T
+ 
+                 return { x: p.y, y: p.x };
+@@= skipped -26, +27 lines =@@
+ 
+         // have to be fully qualified since in different root
+         export var Origin: Root.A.Point = { x: 0, y: 0 };
+->Origin : Root.A.Point
++>Origin : Point
+ >Root : any
+ >A : any
+ >{ x: 0, y: 0 } : { x: number; y: number; }
+@@= skipped -16, +16 lines =@@
+ >Plane : Plane
+ 
+                 constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
+->tl : Root.A.Point
++>tl : Point
+ >Root : any
+ >A : any
+->br : Root.A.Point
++>br : Point
+ >Root : any
+ >A : any
+             }

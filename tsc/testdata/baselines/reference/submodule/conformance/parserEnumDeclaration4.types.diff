@@ -1,0 +1,11 @@
+--- old.parserEnumDeclaration4.types
++++ new.parserEnumDeclaration4.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserEnumDeclaration4.ts ===
+ enum void {
+-> : (Missing)
++> : 
+ >void {} : undefined
+ >{} : {}
+ }

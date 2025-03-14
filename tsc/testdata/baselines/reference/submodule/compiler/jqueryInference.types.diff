@@ -1,0 +1,28 @@
+--- old.jqueryInference.types
++++ new.jqueryInference.types
+@@= skipped -2, +2 lines =@@
+ === jqueryInference.ts ===
+ // #22362
+ interface MyPromise<T, U> {
++>MyPromise : MyPromise<T, U>
++>T : T
++>U : U
++
+     then(cb: (t: T) => void): void;
+ >then : (cb: (t: T) => void) => void
+ >cb : (t: T) => void
+@@= skipped -12, +16 lines =@@
+ }
+ 
+ interface DoNothingAlias<T, U> extends MyPromise<T, U> { }
++>DoNothingAlias : DoNothingAlias<T, U>
++>T : T
++>U : U
+ 
+ declare function shouldBeIdentity<T, U>(p: DoNothingAlias<T, U>): MyPromise<T, U>;
+ >shouldBeIdentity : <T, U>(p: DoNothingAlias<T, U>) => MyPromise<T, U>
++>T : T
++>U : U
+ >p : DoNothingAlias<T, U>
+ 
+ declare const p1: MyPromise<boolean, any>;

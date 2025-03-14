@@ -1,0 +1,67 @@
+//// [tests/cases/conformance/types/members/duplicateNumericIndexers.ts] ////
+
+=== duplicateNumericIndexers.ts ===
+// it is an error to have duplicate index signatures of the same kind in a type
+
+interface Number {
+>Number : Number
+
+    [x: number]: string;
+>x : number
+
+    [x: number]: string;
+>x : number
+}
+
+interface String {
+>String : String
+
+    [x: number]: string;
+>x : number
+
+    [x: number]: string;
+>x : number
+}
+
+interface Array<T> {
+>Array : T[]
+>T : T
+
+    [x: number]: T;
+>x : number
+
+    [x: number]: T;
+>x : number
+}
+
+class C {
+>C : C
+
+    [x: number]: string;
+>x : number
+
+    [x: number]: string;
+>x : number
+}
+
+interface I {
+>I : I
+
+    [x: number]: string;
+>x : number
+
+    [x: number]: string;
+>x : number
+}
+
+var a: {
+>a : { [x: number]: string; }
+
+    [x: number]: string;
+>x : number
+
+    [x: number]: string;
+>x : number
+}
+
+

@@ -1,0 +1,179 @@
+--- old.localTypes1.types
++++ new.localTypes1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === localTypes1.ts ===
+ function f1() {
+->f1 : () => I[]
++>f1 : () => A
+ 
+     enum E {
+ >E : E
+@@= skipped -17, +17 lines =@@
+ >x : E
+     }
+     interface I {
++>I : I
++
+         x: E;
+ >x : E
+     }
+     type A = I[];
+->A : I[]
++>A : A
+ 
+     let a: A = [new C()];
+->a : I[]
++>a : A
+ >[new C()] : C[]
+ >new C() : C
+ >C : typeof C
+@@= skipped -16, +18 lines =@@
+ >a[0].x = E.B : E.B
+ >a[0].x : E
+ >a[0] : I
+->a : I[]
++>a : A
+ >0 : 0
+ >x : E
+ >E.B : E.B
+@@= skipped -8, +8 lines =@@
+ >B : E.B
+ 
+     return a;
+->a : I[]
++>a : A
+ }
+ 
+ function f2() {
+->f2 : () => I[]
++>f2 : () => A
+ 
+     function g() {
+->g : () => I[]
++>g : () => A
+ 
+         enum E {
+ >E : E
+@@= skipped -24, +24 lines =@@
+ >x : E
+         }
+         interface I {
++>I : I
++
+             x: E;
+ >x : E
+         }
+         type A = I[];
+->A : I[]
++>A : A
+ 
+         let a: A = [new C()];
+->a : I[]
++>a : A
+ >[new C()] : C[]
+ >new C() : C
+ >C : typeof C
+@@= skipped -16, +18 lines =@@
+ >a[0].x = E.B : E.B
+ >a[0].x : E
+ >a[0] : I
+->a : I[]
++>a : A
+ >0 : 0
+ >x : E
+ >E.B : E.B
+@@= skipped -8, +8 lines =@@
+ >B : E.B
+ 
+         return a;
+->a : I[]
++>a : A
+     }
+     return g();
+->g() : I[]
+->g : () => I[]
++>g() : A
++>g : () => A
+ }
+ 
+ function f3(b: boolean) {
+->f3 : (b: boolean) => I[]
++>f3 : (b: boolean) => A
+ >b : boolean
+ 
+     if (true) {
+@@= skipped -32, +32 lines =@@
+ >x : E
+             }
+             interface I {
++>I : I
++
+                 x: E;
+ >x : E
+             }
+             type A = I[];
+->A : I[]
++>A : A
+ 
+             let a: A = [new C()];
+->a : I[]
++>a : A
+ >[new C()] : C[]
+ >new C() : C
+ >C : typeof C
+@@= skipped -16, +18 lines =@@
+ >a[0].x = E.B : E.B
+ >a[0].x : E
+ >a[0] : I
+->a : I[]
++>a : A
+ >0 : 0
+ >x : E
+ >E.B : E.B
+@@= skipped -8, +8 lines =@@
+ >B : E.B
+ 
+             return a;
+->a : I[]
++>a : A
+         }
+         else {
+             class A {
+@@= skipped -10, +10 lines =@@
+ >x : E
+             }
+             interface J {
++>J : J
++
+                 x: E;
+ >x : E
+             }
+             type C = J[];
+->C : J[]
++>C : C
+ 
+             let c: C = [new A()];
+->c : J[]
++>c : C
+ >[new A()] : A[]
+ >new A() : A
+ >A : typeof A
+@@= skipped -16, +18 lines =@@
+ >c[0].x = E.B : E.B
+ >c[0].x : E
+ >c[0] : J
+->c : J[]
++>c : C
+ >0 : 0
+ >x : E
+ >E.B : E.B
+@@= skipped -8, +8 lines =@@
+ >B : E.B
+ 
+             return c;
+->c : J[]
++>c : C
+         }
+     }
+ }

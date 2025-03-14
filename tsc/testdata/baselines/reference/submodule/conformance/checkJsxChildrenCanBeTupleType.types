@@ -1,0 +1,61 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx] ////
+
+=== checkJsxChildrenCanBeTupleType.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react'
+>React : any
+
+interface ResizablePanelProps {
+>ResizablePanelProps : ResizablePanelProps
+
+  children: [React.ReactNode, React.ReactNode]
+>children : [ReactNode, ReactNode]
+>React : any
+>React : any
+}
+
+class ResizablePanel extends React.Component<
+>ResizablePanel : ResizablePanel
+>React.Component : any
+>React : any
+>Component : any
+
+  ResizablePanelProps, any> {}
+
+const test = <ResizablePanel>
+>test : any
+><ResizablePanel>  <div />  <div /></ResizablePanel> : any
+>ResizablePanel : typeof ResizablePanel
+
+  <div />
+><div /> : any
+>div : any
+
+  <div />
+><div /> : any
+>div : any
+
+</ResizablePanel>
+>ResizablePanel : typeof ResizablePanel
+
+const testErr = <ResizablePanel>
+>testErr : any
+><ResizablePanel>  <div />  <div />  <div /></ResizablePanel> : any
+>ResizablePanel : typeof ResizablePanel
+
+  <div />
+><div /> : any
+>div : any
+
+  <div />
+><div /> : any
+>div : any
+
+  <div />
+><div /> : any
+>div : any
+
+</ResizablePanel>
+>ResizablePanel : typeof ResizablePanel
+

@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/spreadExpressionContextualTypeWithNamespace.ts] ////
+
+=== spreadExpressionContextualTypeWithNamespace_0.ts ===
+// Repro from #44179 with some modification
+
+function func() {}
+>func : () => void
+
+class klass {}
+>klass : klass
+
+const obj = { x: true };
+>obj : { x: boolean; }
+>{ x: true } : { x: boolean; }
+>x : boolean
+>true : true
+
+export { func, klass, obj };
+>func : () => void
+>klass : typeof klass
+>obj : { x: boolean; }
+
+export function exportedDirectly() {}
+>exportedDirectly : () => void
+
+=== spreadExpressionContextualTypeWithNamespace_1.ts ===
+import * as stuff from "./spreadExpressionContextualTypeWithNamespace_0";
+>stuff : typeof import("spreadExpressionContextualTypeWithNamespace_0")
+
+stuff.func;
+>stuff.func : () => void
+>stuff : typeof import("spreadExpressionContextualTypeWithNamespace_0")
+>func : () => void
+
+stuff.klass;
+>stuff.klass : typeof klass
+>stuff : typeof import("spreadExpressionContextualTypeWithNamespace_0")
+>klass : typeof klass
+
+stuff.obj;
+>stuff.obj : { x: boolean; }
+>stuff : typeof import("spreadExpressionContextualTypeWithNamespace_0")
+>obj : { x: boolean; }
+
+stuff.exportedDirectly;
+>stuff.exportedDirectly : () => void
+>stuff : typeof import("spreadExpressionContextualTypeWithNamespace_0")
+>exportedDirectly : () => void
+
+function getStuff<T>() {
+>getStuff : <T>() => { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>T : T
+
+  const thing = { ...stuff };
+>thing : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>{ ...stuff } : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>stuff : typeof import("spreadExpressionContextualTypeWithNamespace_0")
+
+  thing.func;
+>thing.func : () => void
+>thing : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>func : () => void
+
+  thing.klass;
+>thing.klass : typeof klass
+>thing : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>klass : typeof klass
+
+  thing.obj;
+>thing.obj : { x: boolean; }
+>thing : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>obj : { x: boolean; }
+
+  thing.exportedDirectly;
+>thing.exportedDirectly : () => void
+>thing : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>exportedDirectly : () => void
+
+  return thing;
+>thing : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+}
+
+getStuff().func;
+>getStuff().func : () => void
+>getStuff() : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>getStuff : <T>() => { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>func : () => void
+
+getStuff().klass;
+>getStuff().klass : typeof klass
+>getStuff() : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>getStuff : <T>() => { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>klass : typeof klass
+
+getStuff().obj;
+>getStuff().obj : { x: boolean; }
+>getStuff() : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>getStuff : <T>() => { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>obj : { x: boolean; }
+
+getStuff().exportedDirectly;
+>getStuff().exportedDirectly : () => void
+>getStuff() : { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>getStuff : <T>() => { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
+>exportedDirectly : () => void
+

@@ -1,0 +1,204 @@
+--- old.contextuallyTypedParametersWithInitializers1.types
++++ new.contextuallyTypedParametersWithInitializers1.types
+@@= skipped -2, +2 lines =@@
+ === contextuallyTypedParametersWithInitializers1.ts ===
+ declare function id1<T>(input: T): T;
+ >id1 : <T>(input: T) => T
++>T : T
+ >input : T
+ 
+ declare function id2<T extends (x: any) => any>(input: T): T;
+ >id2 : <T extends (x: any) => any>(input: T) => T
++>T : T
+ >x : any
+ >input : T
+ 
+ declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
+ >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
++>T : T
+ >x : { foo: any; }
+ >foo : any
+ >input : T
+ 
+ declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
+->id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
+->x : { foo?: number; }
++>id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
++>T : T
++>x : { foo?: number | undefined; }
+ >foo : number | undefined
+ >input : T
+ 
+ declare function id5<T extends (x?: number) => any>(input: T): T;
+->id5 : <T extends (x?: number) => any>(input: T) => T
++>id5 : <T extends (x?: number | undefined) => any>(input: T) => T
++>T : T
+ >x : number | undefined
+ >input : T
+ 
+ const f10 = function ({ foo = 42 }) { return foo };
+->f10 : ({ foo }: { foo?: number | undefined; }) => number
+->function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
++>f10 : (__0: { foo?: number | undefined; }) => number
++>function ({ foo = 42 }) { return foo } : (__0: { foo?: number | undefined; }) => number
+ >foo : number
+ >42 : 42
+ >foo : number
+ 
+ const f11 = id1(function ({ foo = 42 }) { return foo });
+->f11 : ({ foo }: { foo?: number | undefined; }) => number
+->id1(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
++>f11 : (__0: { foo?: number | undefined; }) => number
++>id1(function ({ foo = 42 }) { return foo }) : (__0: { foo?: number | undefined; }) => number
+ >id1 : <T>(input: T) => T
+->function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
++>function ({ foo = 42 }) { return foo } : (__0: { foo?: number | undefined; }) => number
+ >foo : number
+ >42 : 42
+ >foo : number
+ 
+ const f12 = id2(function ({ foo = 42 }) { return foo });
+->f12 : ({ foo }: any) => any
+->id2(function ({ foo = 42 }) { return foo }) : ({ foo }: any) => any
++>f12 : (__0: any) => any
++>id2(function ({ foo = 42 }) { return foo }) : (__0: any) => any
+ >id2 : <T extends (x: any) => any>(input: T) => T
+->function ({ foo = 42 }) { return foo } : ({ foo }: any) => any
++>function ({ foo = 42 }) { return foo } : (__0: any) => any
+ >foo : any
+ >42 : 42
+ >foo : any
+ 
+ const f13 = id3(function ({ foo = 42 }) { return foo });
+->f13 : ({ foo }: { foo: any; }) => any
+->id3(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo: any; }) => any
++>f13 : (__0: { foo: any; }) => any
++>id3(function ({ foo = 42 }) { return foo }) : (__0: { foo: any; }) => any
+ >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
+->function ({ foo = 42 }) { return foo } : ({ foo }: { foo: any; }) => any
++>function ({ foo = 42 }) { return foo } : (__0: { foo: any; }) => any
+ >foo : any
+ >42 : 42
+ >foo : any
+ 
+ const f14 = id4(function ({ foo = 42 }) { return foo });
+->f14 : ({ foo }: { foo?: number; }) => number
+->id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number; }) => number
+->id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
+->function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number; }) => number
++>f14 : (__0: { foo?: number | undefined; }) => number
++>id4(function ({ foo = 42 }) { return foo }) : (__0: { foo?: number | undefined; }) => number
++>id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
++>function ({ foo = 42 }) { return foo } : (__0: { foo?: number | undefined; }) => number
+ >foo : number
+ >42 : 42
+ >foo : number
+@@= skipped -95, +100 lines =@@
+ const f25 = id5(function (foo = 42) { return foo });
+ >f25 : (foo?: number | undefined) => number
+ >id5(function (foo = 42) { return foo }) : (foo?: number | undefined) => number
+->id5 : <T extends (x?: number) => any>(input: T) => T
++>id5 : <T extends (x?: number | undefined) => any>(input: T) => T
+ >function (foo = 42) { return foo } : (foo?: number | undefined) => number
+ >foo : number | undefined
+ >42 : 42
+@@= skipped -57, +57 lines =@@
+ 
+ const f8: () => any = (...x) => 0;  // []
+ >f8 : () => any
+->(...x) => 0 : () => number
++>(...x) => 0 : (...x: []) => number
+ >x : []
+ >0 : 0
+ 
+ declare function g1<T>(x: T): T;
+ >g1 : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ declare function g2<T extends any>(x: T): T;
+ >g2 : <T extends unknown>(x: T) => T
++>T : T
+ >x : T
+ 
+ declare function g3<T extends unknown>(x: T): T;
+ >g3 : <T extends unknown>(x: T) => T
++>T : T
+ >x : T
+ 
+ declare function g4<T extends Function>(x: T): T;
+ >g4 : <T extends Function>(x: T) => T
++>T : T
+ >x : T
+ 
+ declare function g5<T extends (...args: any[]) => any>(x: T): T;
+ >g5 : <T extends (...args: any[]) => any>(x: T) => T
++>T : T
+ >args : any[]
+ >x : T
+ 
+ declare function g6<T extends () => any>(x: T): T;
+ >g6 : <T extends () => any>(x: T) => T
++>T : T
+ >x : T
+ 
+ g1((x = 1) => 0);  // number
+@@= skipped -85, +91 lines =@@
+ >0 : 0
+ 
+ g6((...x) => 0);   // []
+->g6((...x) => 0) : () => number
++>g6((...x) => 0) : (...x: []) => number
+ >g6 : <T extends () => any>(x: T) => T
+->(...x) => 0 : () => number
++>(...x) => 0 : (...x: []) => number
+ >x : []
+ >0 : 0
+ 
+@@= skipped -10, +10 lines =@@
+ 
+ function id<T>(input: T): T { return input }
+ >id : <T>(input: T) => T
++>T : T
+ >input : T
+ >input : T
+ 
+ function getFoo ({ foo = 42 }) {
+->getFoo : ({ foo }: { foo?: number | undefined; }) => number
++>getFoo : (__0: { foo?: number | undefined; }) => number
+ >foo : number
+ >42 : 42
+ 
+@@= skipped -13, +14 lines =@@
+ }
+ 
+ const newGetFoo = id(getFoo);
+->newGetFoo : ({ foo }: { foo?: number | undefined; }) => number
+->id(getFoo) : ({ foo }: { foo?: number | undefined; }) => number
++>newGetFoo : (__0: { foo?: number | undefined; }) => number
++>id(getFoo) : (__0: { foo?: number | undefined; }) => number
+ >id : <T>(input: T) => T
+->getFoo : ({ foo }: { foo?: number | undefined; }) => number
++>getFoo : (__0: { foo?: number | undefined; }) => number
+ 
+ const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
+->newGetFoo2 : ({ foo }: { foo?: number | undefined; }) => number
+->id(function getFoo ({ foo = 42 }) {  return foo;}) : ({ foo }: { foo?: number | undefined; }) => number
++>newGetFoo2 : (__0: { foo?: number | undefined; }) => number
++>id(function getFoo ({ foo = 42 }) {  return foo;}) : (__0: { foo?: number | undefined; }) => number
+ >id : <T>(input: T) => T
+->function getFoo ({ foo = 42 }) {  return foo;} : ({ foo }: { foo?: number | undefined; }) => number
+->getFoo : ({ foo }: { foo?: number | undefined; }) => number
++>function getFoo ({ foo = 42 }) {  return foo;} : (__0: { foo?: number | undefined; }) => number
++>getFoo : (__0: { foo?: number | undefined; }) => number
+ >foo : number
+ >42 : 42
+ 
+@@= skipped -23, +23 lines =@@
+ 
+ declare function memoize<F extends Function>(func: F): F;
+ >memoize : <F extends Function>(func: F) => F
++>F : F
+ >func : F
+ 
+ function add(x: number, y = 0): number {

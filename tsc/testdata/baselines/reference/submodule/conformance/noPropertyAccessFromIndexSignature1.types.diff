@@ -1,0 +1,25 @@
+--- old.noPropertyAccessFromIndexSignature1.types
++++ new.noPropertyAccessFromIndexSignature1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === noPropertyAccessFromIndexSignature1.ts ===
+ interface A {
++>A : A
++
+     foo: string
+ >foo : string
+ }
+ 
+ interface B {
++>B : B
++
+     [k: string]: string
+ >k : string
+ }
+ 
+ interface C {
++>C : C
++
+     foo: string
+ >foo : string
+ 

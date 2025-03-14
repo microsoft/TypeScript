@@ -1,0 +1,32 @@
+--- old.filterNamespace_import.types
++++ new.filterNamespace_import.types
+@@= skipped -33, +33 lines =@@
+ >ns : any
+ 
+ ns.Class; // Error
+->ns.Class : typeof ns.Class
++>ns.Class : typeof Class
+ >ns : typeof ns
+->Class : typeof ns.Class
++>Class : typeof Class
+ 
+ ns.Value; // Error
+ >ns.Value : ""
+@@= skipped -10, +10 lines =@@
+ >Value : ""
+ 
+ let c: ns.Class;
+->c : ns.Class
++>c : Class
+ >ns : any
+ 
+ let t: ns.Type = "";
+@@= skipped -9, +9 lines =@@
+ >"" : ""
+ 
+ let n: ns.nested.NestedClass = { a: '' };
+->n : ns.nested.NestedClass
++>n : NestedClass
+ >ns : any
+ >nested : any
+ >{ a: '' } : { a: string; }

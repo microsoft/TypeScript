@@ -1,0 +1,32 @@
+--- old.namespaceImportTypeQuery.types
++++ new.namespaceImportTypeQuery.types
+@@= skipped -11, +11 lines =@@
+ 
+ === /b.ts ===
+ import * as types from './a';
+->types : typeof types
++>types : typeof import("/a")
+ 
+ let A: typeof types.A;
+->A : typeof types.A
+->types.A : typeof types.A
+->types : typeof types
+->A : typeof types.A
++>A : typeof A
++>types : typeof import("/a")
+ 
+ let B: typeof types.B;
+->B : typeof types.B
+->types.B : typeof types.B
+->types : typeof types
+->B : typeof types.B
++>B : typeof B
++>types : typeof import("/a")
+ 
+ let t: typeof types = {
+->t : typeof types
+->types : typeof types
++>t : typeof import("/a")
+ >{  // error: while you can ask for `typeof types.A`,  // `typeof types` does not include `A`  A: undefined as any,  B: undefined as any,} : { A: any; B: any; }
+ 
+   // error: while you can ask for `typeof types.A`,

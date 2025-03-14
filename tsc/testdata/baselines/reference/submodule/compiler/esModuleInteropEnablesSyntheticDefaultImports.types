@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/esModuleInteropEnablesSyntheticDefaultImports.ts] ////
+
+=== a.ts ===
+import Namespace from "./b";
+>Namespace : typeof import("b")
+
+export var x = new Namespace.Foo();
+>x : Foo
+>new Namespace.Foo() : Foo
+>Namespace.Foo : typeof Foo
+>Namespace : typeof import("b")
+>Foo : typeof Foo
+
+=== b.d.ts ===
+export class Foo {
+>Foo : Foo
+
+	member: string;
+>member : string
+}
+

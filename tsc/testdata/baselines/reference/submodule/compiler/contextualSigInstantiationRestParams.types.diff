@@ -1,0 +1,18 @@
+--- old.contextualSigInstantiationRestParams.types
++++ new.contextualSigInstantiationRestParams.types
+@@= skipped -2, +2 lines =@@
+ === contextualSigInstantiationRestParams.ts ===
+ declare function toInstantiate<A, B>(a?: A, b?: B): B;
+ >toInstantiate : <A, B>(a?: A, b?: B) => B
++>A : A
++>B : B
+ >a : A
+ >b : B
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ var sig: typeof contextual = toInstantiate;
+ >sig : (...s: string[]) => string
+->contextual : (...s: string[]) => string
+ >toInstantiate : <A, B>(a?: A, b?: B) => B
+ 

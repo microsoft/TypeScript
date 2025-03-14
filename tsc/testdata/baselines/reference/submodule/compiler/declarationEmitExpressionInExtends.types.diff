@@ -1,0 +1,10 @@
+--- old.declarationEmitExpressionInExtends.types
++++ new.declarationEmitExpressionInExtends.types
+@@= skipped -4, +4 lines =@@
+ >x : new <T>(s: any) => Q
+ 
+     new<T>(s: any): Q;
++>T : T
+ >s : any
+ }
+ 

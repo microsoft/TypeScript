@@ -1,0 +1,37 @@
+--- old.decoratorMetadataWithImportDeclarationNameCollision4.types
++++ new.decoratorMetadataWithImportDeclarationNameCollision4.types
+@@= skipped -26, +26 lines =@@
+ >MyClass : MyClass
+ 
+     db: db.db;
+->db : db.db
++>db : error
+ >db : any
+ 
+     constructor(db: db.db) {
+->db : db.db
++>db : error
+ >db : any
+ 
+         this.db = db;
+->this.db = db : db.db
+->this.db : db.db
++>this.db = db : error
++>this.db : error
+ >this : this
+->db : db.db
+->db : db.db
++>db : db
++>db : error
+ 
+         this.db.doSomething();
+ >this.db.doSomething() : any
+ >this.db.doSomething : any
+->this.db : db.db
++>this.db : db
+ >this : this
+->db : db.db
++>db : db
+ >doSomething : any
+     }
+ }

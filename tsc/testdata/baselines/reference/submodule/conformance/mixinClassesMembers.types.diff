@@ -1,0 +1,33 @@
+--- old.mixinClassesMembers.types
++++ new.mixinClassesMembers.types
+@@= skipped -47, +47 lines =@@
+ 
+ declare const Mixed1: typeof M1 & typeof C1;
+ >Mixed1 : typeof M1 & typeof C1
+->M1 : typeof M1
+->C1 : typeof C1
+ 
+ declare const Mixed2: typeof C1 & typeof M1;
+ >Mixed2 : typeof C1 & typeof M1
+->C1 : typeof C1
+->M1 : typeof M1
+ 
+ declare const Mixed3: typeof M2 & typeof M1 & typeof C1;
+ >Mixed3 : typeof M2 & typeof M1 & typeof C1
+->M2 : typeof M2
+->M1 : typeof M1
+->C1 : typeof C1
+ 
+ declare const Mixed4: typeof C1 & typeof M1 & typeof M2;
+ >Mixed4 : typeof C1 & typeof M1 & typeof M2
+->C1 : typeof C1
+->M1 : typeof M1
+->M2 : typeof M2
+ 
+ declare const Mixed5: typeof M1 & typeof M2;
+ >Mixed5 : typeof M1 & typeof M2
+->M1 : typeof M1
+->M2 : typeof M2
+ 
+ function f1() {
+ >f1 : () => void

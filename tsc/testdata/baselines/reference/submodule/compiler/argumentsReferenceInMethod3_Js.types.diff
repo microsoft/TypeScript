@@ -1,0 +1,26 @@
+--- old.argumentsReferenceInMethod3_Js.types
++++ new.argumentsReferenceInMethod3_Js.types
+@@= skipped -21, +21 lines =@@
+ 	 * @param {object} [foo={}]
+ 	 */
+ 	m(foo = {}) {
+->m : (foo?: object) => void
+->foo : any
++>m : (foo?: {}) => void
++>foo : {}
+ >{} : {}
+ 
+ 		/**
+ 		 * @type object
+ 		 */
+ 		this.x = foo;
+->this.x = foo : any
++>this.x = foo : {}
+ >this.x : any
+ >this : this
+ >x : any
+->foo : any
++>foo : {}
+ 
+ 		/**
+ 		 * @type object

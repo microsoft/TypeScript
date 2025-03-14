@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsFileCompilationBindMultipleDefaultExports.ts] ////
+
+=== a.js ===
+export default class a {
+>a : default
+}
+export default var a = 10;
+> : any
+>a : number
+>10 : 10
+

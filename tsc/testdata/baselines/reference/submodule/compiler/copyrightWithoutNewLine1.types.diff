@@ -1,0 +1,14 @@
+--- old.copyrightWithoutNewLine1.types
++++ new.copyrightWithoutNewLine1.types
+@@= skipped -9, +9 lines =@@
+ var el = document.getElementById('content');
+ >el : HTMLElement
+ >document.getElementById('content') : HTMLElement
+->document.getElementById : (elementId: string) => HTMLElement | null
++>document.getElementById : (elementId: string) => HTMLElement
+ >document : Document
+->getElementById : (elementId: string) => HTMLElement | null
++>getElementById : (elementId: string) => HTMLElement
+ >'content' : "content"
+ 
+ var greeter = new model.Greeter(el);

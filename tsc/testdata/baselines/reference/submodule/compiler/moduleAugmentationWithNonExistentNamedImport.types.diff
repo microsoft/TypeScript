@@ -1,0 +1,10 @@
+--- old.moduleAugmentationWithNonExistentNamedImport.types
++++ new.moduleAugmentationWithNonExistentNamedImport.types
+@@= skipped -17, +17 lines =@@
+ >global : any
+ 
+     namespace Bar { }
++>Bar : any
+ }
+ 
+ === bar.d.ts ===

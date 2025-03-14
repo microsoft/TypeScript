@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/references/library-reference-14.ts] ////
+
+=== /a/b/consumer.ts ===
+$.foo();
+>$.foo() : any
+>$.foo : any
+>$ : any
+>foo : any
+

@@ -1,0 +1,41 @@
+--- old.inOperatorWithInvalidOperands.types
++++ new.inOperatorWithInvalidOperands.types
+@@= skipped -4, +4 lines =@@
+ >Foo : Foo
+ 
+ enum E { a }
+->E : E
++>E : E.a
+ >a : E.a
+ 
+ var x: any;
+@@= skipped -18, +18 lines =@@
+ >a3 : {}
+ 
+ var a4: E;
+->a4 : E
++>a4 : E.a
+ 
+ var a5: Foo | string;
+ >a5 : string | Foo
+@@= skipped -29, +29 lines =@@
+ var ra4 = a4 in x;
+ >ra4 : boolean
+ >a4 in x : boolean
+->a4 : E
++>a4 : E.a
+ >x : any
+ 
+ var ra5 = null in x;
+@@= skipped -17, +17 lines =@@
+ var ra7 = E.a in x;
+ >ra7 : boolean
+ >E.a in x : boolean
+->E.a : E
++>E.a : E.a
+ >E : typeof E
+->a : E
++>a : E.a
+ >x : any
+ 
+ var ra8 = false in x;

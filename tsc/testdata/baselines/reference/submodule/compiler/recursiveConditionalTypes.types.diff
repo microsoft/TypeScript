@@ -1,0 +1,335 @@
+--- old.recursiveConditionalTypes.types
++++ new.recursiveConditionalTypes.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 500,000
+-Instantiation count: 500,000
+-Symbol count: 1,000,000
+-
+ === recursiveConditionalTypes.ts ===
+ // Awaiting promises
+ 
+ type __Awaited<T> =
+ >__Awaited : __Awaited<T>
++>T : T
+ 
+     T extends null | undefined ? T :
+     T extends PromiseLike<infer U> ? __Awaited<U> :
++>U : U
++
+     T;
+ 
+ type MyPromise<T> = {
+ >MyPromise : MyPromise<T>
++>T : T
+ 
+     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
+->then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
+->f : ((value: T) => U | PromiseLike<U>) | null | undefined
++>then : <U>(f: (value: T) => U | PromiseLike<U> | null | undefined) => MyPromise<U>
++>U : U
++>f : (value: T) => U | PromiseLike<U> | null | undefined
+ >value : T
+ }
+ 
+ type InfinitePromise<T> = Promise<InfinitePromise<T>>;
+ >InfinitePromise : InfinitePromise<T>
++>T : T
+ 
+ type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+ >P0 : string | number | null | undefined
+@@= skipped -37, +38 lines =@@
+ 
+ function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
+ >f11 : <T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) => void
++>T : T
++>U : U
+ >tx : T
+ >ta : __Awaited<T>
+ >ux : U
+@@= skipped -30, +32 lines =@@
+ 
+ type Flatten<T extends readonly unknown[]> = T extends unknown[] ? _Flatten<T>[] : readonly _Flatten<T>[];
+ >Flatten : Flatten<T>
++>T : T
+ 
+ type _Flatten<T> = T extends readonly (infer U)[] ? _Flatten<U> : T;
+ >_Flatten : _Flatten<T>
++>T : T
++>U : U
+ 
+ type InfiniteArray<T> = InfiniteArray<T>[];
+ >InfiniteArray : InfiniteArray<T>
++>T : T
+ 
+ type B0 = Flatten<string[][][]>;
+ >B0 : string[]
+@@= skipped -23, +27 lines =@@
+ 
+ type TupleOf<T, N extends number> = N extends N ? number extends N ? T[] : _TupleOf<T, N, []> : never;
+ >TupleOf : TupleOf<T, N>
++>T : T
++>N : N
+ 
+ type _TupleOf<T, N extends number, R extends unknown[]> = R['length'] extends N ? R : _TupleOf<T, N, [T, ...R]>;
+ >_TupleOf : _TupleOf<T, N, R>
++>T : T
++>N : N
++>R : R
+ 
+ type TT0 = TupleOf<string, 4>;
+ >TT0 : [string, string, string, string]
+@@= skipped -24, +29 lines =@@
+ 
+ function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
+ >f22 : <N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) => void
++>N : N
++>M : M
+ >tn : TupleOf<number, N>
+ >tm : TupleOf<number, M>
+ 
+@@= skipped -15, +17 lines =@@
+ }
+ 
+ declare function f23<T>(t: TupleOf<T, 3>): T;
+->f23 : <T>(t: TupleOf<T, 3>) => T
++>f23 : <T>(t: [T, T, T]) => T
++>T : T
+ >t : [T, T, T]
+ 
+ f23(['a', 'b', 'c']);  // string
+ >f23(['a', 'b', 'c']) : string
+->f23 : <T>(t: TupleOf<T, 3>) => T
++>f23 : <T>(t: [T, T, T]) => T
+ >['a', 'b', 'c'] : [string, string, string]
+ >'a' : "a"
+ >'b' : "b"
+@@= skipped -14, +15 lines =@@
+ // Inference to recursive type
+ 
+ interface Box<T> { value: T };
++>Box : Box<T>
++>T : T
+ >value : T
+ 
+ type RecBox<T> = T | Box<RecBox<T>>;
+ >RecBox : RecBox<T>
++>T : T
+ 
+ type InfBox<T> = Box<InfBox<T>>;
+ >InfBox : InfBox<T>
++>T : T
+ 
+ declare function unbox<T>(box: RecBox<T>): T
+ >unbox : <T>(box: RecBox<T>) => T
++>T : T
+ >box : RecBox<T>
+ 
+ type T1 = Box<string>;
+@@= skipped -40, +45 lines =@@
+ >b3 : InfBox<string>
+ 
+ declare let b4: { value: { value: { value: typeof b4 }}};
+->b4 : { value: { value: { value: typeof b4; }; }; }
+->value : { value: { value: typeof b4; }; }
+->value : { value: typeof b4; }
+->value : { value: { value: { value: typeof b4; }; }; }
+->b4 : { value: { value: { value: typeof b4; }; }; }
++>b4 : { value: { value: { value: ???; }; }; }
++>value : { value: { value: { value: ???; }; }; }
++>value : { value: { value: { value: ???; }; }; }
++>value : { value: { value: { value: ???; }; }; }
+ 
+ unbox(b1);  // string
+ >unbox(b1) : string
+@@= skipped -39, +38 lines =@@
+ >5 : 5
+ 
+ unbox(b4);  // { value: { value: typeof b4 }}
+->unbox(b4) : { value: { value: typeof b4; }; }
++>unbox(b4) : { value: { value: { value: ???; }; }; }
+ >unbox : <T>(box: RecBox<T>) => T
+->b4 : { value: { value: { value: typeof b4; }; }; }
++>b4 : { value: { value: { value: ???; }; }; }
+ 
+ unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
+->unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
++>unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: ???; }; }
+ >unbox : <T>(box: RecBox<T>) => T
+->{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: any; }; }; }; }
+->value : { value: { readonly value: { readonly value: any; }; }; }
+->{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: any; }; }; }
+->value : { readonly value: { readonly value: any; }; }
+->{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
+->value : { readonly value: any; }
+->this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>
++>{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: ???; }; }; }; }
++>value : { value: { readonly value: { readonly value: ???; }; }; }
++>{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: ???; }; }; }
++>value : { readonly value: { readonly value: ???; }; }
++>{ get value() { return this; } } : { readonly value: { readonly value: ???; }; }
++>value : { readonly value: ???; }
++>this : never
+ 
+ // Inference from nested instantiations of same generic types
+ 
+ type Box1<T> = { value: T };
+ >Box1 : Box1<T>
++>T : T
+ >value : T
+ 
+ type Box2<T> = { value: T };
+ >Box2 : Box2<T>
++>T : T
+ >value : T
+ 
+ declare function foo<T>(x: Box1<Box1<T>>): T;
+ >foo : <T>(x: Box1<Box1<T>>) => T
++>T : T
+ >x : Box1<Box1<T>>
+ 
+ declare let z: Box2<Box2<string>>;
+@@= skipped -41, +44 lines =@@
+ 
+ type Intersect<U extends any[], R = unknown> = U extends [infer H, ...infer T] ? Intersect<T, R & H> : R;
+ >Intersect : Intersect<U, R>
++>U : U
++>R : R
++>H : H
++>T : T
+ 
+ type QQ = Intersect<[string[], number[], 7]>;
+ >QQ : string[] & number[] & 7
+@@= skipped -8, +12 lines =@@
+ 
+ type Unpack1<T> = T extends (infer U)[] ? Unpack1<U> : T;
+ >Unpack1 : Unpack1<T>
++>T : T
++>U : U
+ 
+ type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
+ >Unpack2 : Unpack2<T>
++>T : T
++>U : U
+ 
+ function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
+ >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
++>T : T
++>U : U
+ >x : Unpack1<T>
+ >y : Unpack2<T>
+ 
+@@= skipped -28, +34 lines =@@
+ 
+ type Grow1<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow1<[number, ...T], N>;
+ >Grow1 : Grow1<T, N>
++>T : T
++>N : N
+ 
+ type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow2<[string, ...T], N>;
+ >Grow2 : Grow2<T, N>
++>T : T
++>N : N
+ 
+ function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
+ >f21 : <T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) => void
++>T : T
+ >x : Grow1<[], T>
+ >y : Grow2<[], T>
+ 
+@@= skipped -20, +25 lines =@@
+ 
+ type ParseSuccess<R extends string> = { rest: R };
+ >ParseSuccess : ParseSuccess<R>
++>R : R
+ >rest : R
+ 
+ type ParseManyWhitespace<S extends string> =
+ >ParseManyWhitespace : ParseManyWhitespace<S>
++>S : S
+ 
+     S extends ` ${infer R0}` ?
++>R0 : R0
++
+         ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
++>R1 : R1
++
+         ParseSuccess<S>;
+ 
+ type TP1 = ParseManyWhitespace<" foo">;
+@@= skipped -14, +20 lines =@@
+ 
+ type ParseManyWhitespace2<S extends string> =
+ >ParseManyWhitespace2 : ParseManyWhitespace2<S>
++>S : S
+ 
+     S extends ` ${infer R0}` ?
++>R0 : R0
++
+         Helper<ParseManyWhitespace2<R0>> :
+         ParseSuccess<S>;
+ 
+ type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
+ >Helper : Helper<T>
++>T : T
++>R : R
+ 
+ type TP2 = ParseManyWhitespace2<" foo">;
+ >TP2 : ParseSuccess<"foo">
+@@= skipped -15, +20 lines =@@
+ 
+ type NTuple<N extends number, Tup extends unknown[] = []> =
+ >NTuple : NTuple<N, Tup>
++>N : N
++>Tup : Tup
+ 
+     Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
+ 
+ type Add<A extends number, B extends number> =
+ >Add : Add<A, B>
++>A : A
++>B : B
+ 
+     [...NTuple<A>, ...NTuple<B>]['length'];
+ 
+@@= skipped -15, +19 lines =@@
+ 
+ type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
+ >_PrependNextNum : _PrependNextNum<A>
++>A : A
++>T : T
+ 
+     ? [T, ...A] extends [...infer X] 
++>X : X
++
+         ? X
+         : never
+     : never;
+ 
+ type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
+ >_Enumerate : _Enumerate<A, N>
++>A : A
++>N : N
+ 
+     ? A
+     : _Enumerate<_PrependNextNum<A>, N> & number;
+ 
+ type Enumerate<N extends number> = number extends N
+ >Enumerate : Enumerate<N>
++>N : N
+ 
+     ? number
+     : _Enumerate<[], N> extends (infer E)[]
++>E : E
++
+     ? E
+     : never;
+ 
+ function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
+ >foo2 : <T extends unknown[]>(value: T) => Enumerate<T["length"]>
++>T : T
+ >value : T
+ 
+     return value.length;  // Error

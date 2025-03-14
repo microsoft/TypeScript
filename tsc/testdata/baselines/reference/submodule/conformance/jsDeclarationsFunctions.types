@@ -1,0 +1,128 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctions.ts] ////
+
+=== index.js ===
+export function a() {}
+>a : () => void
+
+export function b() {}
+>b : { (): void; cat: string; }
+
+b.cat = "cat";
+>b.cat = "cat" : "cat"
+>b.cat : string
+>b : { (): void; cat: string; }
+>cat : string
+>"cat" : "cat"
+
+export function c() {}
+>c : { (): void; Cls: typeof Cls; }
+
+c.Cls = class {}
+>c.Cls = class {} : typeof Cls
+>c.Cls : typeof Cls
+>c : { (): void; Cls: typeof Cls; }
+>Cls : typeof Cls
+>class {} : typeof Cls
+
+/**
+ * @param {number} a
+ * @param {number} b
+ * @return {string} 
+ */
+export function d(a, b) { return /** @type {*} */(null); }
+>d : (a: any, b: any) => any
+>a : any
+>b : any
+>(null) : null
+
+/**
+ * @template T,U
+ * @param {T} a
+ * @param {U} b
+ * @return {T & U} 
+ */
+export function e(a, b) { return /** @type {*} */(null); }
+>e : (a: any, b: any) => any
+>a : any
+>b : any
+>(null) : null
+
+/**
+ * @template T
+ * @param {T} a
+ */
+export function f(a) {
+>f : { (a: any): any; self: ???; }
+>a : any
+
+    return a;
+>a : any
+}
+f.self = f;
+>f.self = f : { (a: any): any; self: ???; }
+>f.self : { (a: any): any; self: ???; }
+>f : { (a: any): any; self: ???; }
+>self : { (a: any): any; self: ???; }
+>f : { (a: any): any; self: ???; }
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
+function g(a, b) {
+>g : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return a.x && b.y();
+>a.x && b.y() : any
+>a.x : any
+>a : any
+>x : any
+>b.y() : any
+>b.y : any
+>b : any
+>y : any
+}
+
+export { g };
+>g : (a: any, b: any) => any
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
+function hh(a, b) {
+>hh : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return a.x && b.y();
+>a.x && b.y() : any
+>a.x : any
+>a : any
+>x : any
+>b.y() : any
+>b.y : any
+>b : any
+>y : any
+}
+
+export { hh as h };
+>hh : (a: any, b: any) => any
+>h : (a: any, b: any) => any
+
+export function i() {}
+>i : () => void
+
+export { i as ii };
+>i : () => void
+>ii : () => void
+
+export { j as jj };
+>j : () => void
+>jj : () => void
+
+export function j() {}
+>j : () => void
+

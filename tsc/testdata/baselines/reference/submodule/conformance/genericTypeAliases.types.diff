@@ -1,0 +1,133 @@
+--- old.genericTypeAliases.types
++++ new.genericTypeAliases.types
+@@= skipped -2, +2 lines =@@
+ === genericTypeAliases.ts ===
+ type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
+ >Tree : Tree<T>
++>T : T
+ >left : Tree<T>
+ >right : Tree<T>
+ 
+@@= skipped -37, +38 lines =@@
+ 
+ type Lazy<T> = T | (() => T);
+ >Lazy : Lazy<T>
++>T : T
+ 
+ var ls: Lazy<string>;
+ >ls : Lazy<string>
+@@= skipped -17, +18 lines =@@
+ 
+ type Foo<T> = T | { x: Foo<T> };
+ >Foo : Foo<T>
++>T : T
+ >x : Foo<T>
+ 
+ type Bar<U> = U | { x: Bar<U> };
+ >Bar : Bar<U>
++>U : U
+ >x : Bar<U>
+ 
+ // Deeply instantiated generics
+@@= skipped -70, +72 lines =@@
+ 
+ type Strange<T> = string;  // Type parameter not used
+ >Strange : string
++>T : T
+ 
+ var s: Strange<number>;
+ >s : string
+@@= skipped -10, +11 lines =@@
+ >"hello" : "hello"
+ 
+ interface AB<A, B> {
++>AB : AB<A, B>
++>A : A
++>B : B
++
+     a: A;
+ >a : A
+ 
+@@= skipped -9, +13 lines =@@
+ 
+ type Pair<T> = AB<T, T>;
+ >Pair : Pair<T>
++>T : T
+ 
+ interface TaggedPair<T> extends Pair<T> {
++>TaggedPair : TaggedPair<T>
++>T : T
++
+     tag: string;
+ >tag : string
+ }
+@@= skipped -31, +35 lines =@@
+ >"test" : "test"
+ 
+ function f<A>() {
+->f : <A>() => A[] | { x: A[] | any; }
++>f : <A>() => Foo<A[]>
++>A : A
+ 
+     type Foo<T> = T | { x: Foo<T> };
+->Foo : T | { x: T | any; }
+->x : T | { x: T | any; }
++>Foo : Foo<T>
++>T : T
++>x : Foo<T>
+ 
+     var x: Foo<A[]>;
+->x : A[] | { x: A[] | any; }
++>x : Foo<A[]>
+ 
+     return x;
+->x : A[] | { x: A[] | any; }
++>x : Foo<A[]>
+ }
+ 
+ function g<B>() {
+->g : <B>() => B[] | { x: B[] | any; }
++>g : <B>() => Bar<B[]>
++>B : B
+ 
+     type Bar<U> = U | { x: Bar<U> };
+->Bar : U | { x: U | any; }
+->x : U | { x: U | any; }
++>Bar : Bar<U>
++>U : U
++>x : Bar<U>
+ 
+     var x: Bar<B[]>;
+->x : B[] | { x: B[] | any; }
++>x : Bar<B[]>
+ 
+     return x;
+->x : B[] | { x: B[] | any; }
++>x : Bar<B[]>
+ }
+ 
+ // Deeply instantiated generics
+ var a = f<string>();
+->a : string[] | { x: string[] | any; }
+->f<string>() : string[] | { x: string[] | any; }
+->f : <A>() => A[] | { x: A[] | any; }
++>a : Foo<string[]>
++>f<string>() : Foo<string[]>
++>f : <A>() => Foo<A[]>
+ 
+ var b = g<string>();
+->b : string[] | { x: string[] | any; }
+->g<string>() : string[] | { x: string[] | any; }
+->g : <B>() => B[] | { x: B[] | any; }
++>b : Bar<string[]>
++>g<string>() : Bar<string[]>
++>g : <B>() => Bar<B[]>
+ 
+ a = b;
+->a = b : string[] | { x: string[] | any; }
+->a : string[] | { x: string[] | any; }
+->b : string[] | { x: string[] | any; }
++>a = b : Bar<string[]>
++>a : Foo<string[]>
++>b : Bar<string[]>
+ 

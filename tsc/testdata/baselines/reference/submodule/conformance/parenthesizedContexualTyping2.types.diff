@@ -1,0 +1,32 @@
+--- old.parenthesizedContexualTyping2.types
++++ new.parenthesizedContexualTyping2.types
+@@= skipped -9, +9 lines =@@
+ type FuncType = (x: <T>(p: T) => T) => typeof x;
+ >FuncType : FuncType
+ >x : <T>(p: T) => T
++>T : T
+ >p : T
+->x : <T>(p: T) => T
+ 
+ function fun<T>(f: FuncType, x: T): T;
+->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
++>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
++>T : T
+ >f : FuncType
+ >x : T
+ 
+ function fun<T>(f: FuncType, g: FuncType, x: T): T;
+->fun : { <T_1>(f: FuncType, x: T_1): T_1; <T>(f: FuncType, g: FuncType, x: T): T; }
++>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
++>T : T
+ >f : FuncType
+ >g : FuncType
+ >x : T
+ 
+ function fun<T>(...rest: any[]): T {
+->fun : { <T_1>(f: FuncType, x: T_1): T_1; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
++>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
++>T : T
+ >rest : any[]
+ 
+     return undefined;

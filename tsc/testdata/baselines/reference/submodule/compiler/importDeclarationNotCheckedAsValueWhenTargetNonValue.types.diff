@@ -1,0 +1,35 @@
+--- old.importDeclarationNotCheckedAsValueWhenTargetNonValue.types
++++ new.importDeclarationNotCheckedAsValueWhenTargetNonValue.types
+@@= skipped -13, +13 lines =@@
+ >Val : Val
+ 
+             interface common {
++>common : common
++
+                 createText: object;
+ >createText : object
+             }
+             namespace common {
++>common : any
++
+                 interface createText {
++>createText : createText
++
+                     gfx(): string
+ >gfx : () => string
+                 }
+@@= skipped -18, +24 lines =@@
+     import exp = dojox.charting.axis2d.common
+ >exp : any
+ >dojox : typeof dojox
+->charting : typeof dojox.charting
+->axis2d : typeof dojox.charting.axis2d
+->common : exp
++>charting : typeof charting
++>axis2d : typeof axis2d
++>common : common
+ 
+     export = exp;
+->exp : exp
++>exp : common
+ }

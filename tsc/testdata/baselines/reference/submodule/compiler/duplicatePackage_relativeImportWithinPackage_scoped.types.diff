@@ -1,0 +1,22 @@
+--- old.duplicatePackage_relativeImportWithinPackage_scoped.types
++++ new.duplicatePackage_relativeImportWithinPackage_scoped.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /index.ts ===
+ import { use } from "@foo/bar/use";
+->use : (o: import("/node_modules/@foo/bar/index").C) => void
++>use : (o: C) => void
+ 
+ import { o } from "a";
+->o : import("/node_modules/@foo/bar/index").C
++>o : C
+ 
+ use(o);
+ >use(o) : void
+->use : (o: import("/node_modules/@foo/bar/index").C) => void
+->o : import("/node_modules/@foo/bar/index").C
++>use : (o: C) => void
++>o : C
+ 
+ === /node_modules/a/node_modules/@foo/bar/index.d.ts ===
+ export class C {

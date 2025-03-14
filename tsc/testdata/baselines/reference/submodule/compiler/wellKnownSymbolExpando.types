@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/wellKnownSymbolExpando.ts] ////
+
+=== wellKnownSymbolExpando.ts ===
+function f() {}
+>f : { (): void; f[Symbol.iterator]: () => void; }
+
+f[Symbol.iterator] = function() {}
+>f[Symbol.iterator] = function() {} : () => void
+>f[Symbol.iterator] : () => void
+>f : { (): void; f[Symbol.iterator]: () => void; }
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>function() {} : () => void
+

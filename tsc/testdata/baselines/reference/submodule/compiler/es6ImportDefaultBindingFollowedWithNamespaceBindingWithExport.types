@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingWithExport.ts] ////
+
+=== server.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+=== client.ts ===
+export import defaultBinding, * as nameSpaceBinding  from "./server";
+>defaultBinding : any
+>nameSpaceBinding : typeof import("server")
+
+export var x: number = nameSpaceBinding.a;
+>x : number
+>nameSpaceBinding.a : number
+>nameSpaceBinding : typeof import("server")
+>a : number
+

@@ -1,0 +1,28 @@
+--- old.objectTypeHidingMembersOfObject.types
++++ new.objectTypeHidingMembersOfObject.types
+@@= skipped -20, +20 lines =@@
+ >valueOf : () => void
+ 
+ interface I {
++>I : I
++
+     valueOf(): void;
+ >valueOf : () => void
+ }
+@@= skipped -31, +33 lines =@@
+ >valueOf : () => void
+ 
+ var b: {
+->b : { valueOf(): void; }
++>b : { valueOf: () => void; }
+ 
+     valueOf(): void;
+ >valueOf : () => void
+@@= skipped -10, +10 lines =@@
+ >r4 : void
+ >b.valueOf() : void
+ >b.valueOf : () => void
+->b : { valueOf(): void; }
++>b : { valueOf: () => void; }
+ >valueOf : () => void
+ 

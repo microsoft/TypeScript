@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/variableDeclarationInnerCommentEmit.ts] ////
+
+=== variableDeclarationInnerCommentEmit.ts ===
+var a = /*some comment*/ null;
+>a : any
+
+var b /*some comment*/ = null;
+>b : any
+
+var /*some comment*/ c = null;
+>c : any
+
+// no space
+var a=/*some comment*/null;
+>a : any
+

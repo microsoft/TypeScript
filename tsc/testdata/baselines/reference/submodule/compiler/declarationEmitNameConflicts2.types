@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/declarationEmitNameConflicts2.ts] ////
+
+=== declarationEmitNameConflicts2.ts ===
+module X.Y.base {
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
+
+    export function f() { }
+>f : () => void
+
+    export class C { }
+>C : C
+
+    export module M {
+>M : typeof M
+
+        export var v;
+>v : any
+    }
+    export enum E { }
+>E : base.E
+}
+
+module X.Y.base.Z {
+>X : typeof X
+>Y : typeof Y
+>base : typeof base
+>Z : typeof Z
+
+    export var f = X.Y.base.f; // Should be base.f
+>f : any
+>X.Y.base.f : any
+>X.Y.base : any
+>X.Y : any
+>X : typeof X
+>Y : any
+>base : any
+>f : any
+
+    export var C = X.Y.base.C; // Should be base.C
+>C : any
+>X.Y.base.C : any
+>X.Y.base : any
+>X.Y : any
+>X : typeof X
+>Y : any
+>base : any
+>C : any
+
+    export var M = X.Y.base.M; // Should be base.M
+>M : any
+>X.Y.base.M : any
+>X.Y.base : any
+>X.Y : any
+>X : typeof X
+>Y : any
+>base : any
+>M : any
+
+    export var E = X.Y.base.E; // Should be base.E
+>E : any
+>X.Y.base.E : any
+>X.Y.base : any
+>X.Y : any
+>X : typeof X
+>Y : any
+>base : any
+>E : any
+}

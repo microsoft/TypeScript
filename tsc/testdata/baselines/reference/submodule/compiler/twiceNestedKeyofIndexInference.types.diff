@@ -1,0 +1,55 @@
+--- old.twiceNestedKeyofIndexInference.types
++++ new.twiceNestedKeyofIndexInference.types
+@@= skipped -2, +2 lines =@@
+ === twiceNestedKeyofIndexInference.ts ===
+ type Set1<T, K1 extends keyof T> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
+ >Set1 : Set1<T, K1>
++>T : T
++>K1 : K1
+ 
+     [SK1 in K1]-?: Required<Pick<T, SK1>>;
++>SK1 : SK1
++
+ }[K1];
+ 
+ type Set2<T, K1 extends keyof T, K2 extends keyof T[K1]> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
+ >Set2 : Set2<T, K1, K2>
++>T : T
++>K1 : K1
++>K2 : K2
+ 
+     [SK1 in K1]-?: Required<{
++>SK1 : SK1
++
+         [key in K1]: Set1<T[K1], K2>;
++>key : key
++
+     }>;
+ }[K1];
+ 
+ declare function set<T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>;
+->set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(source: T_1, path: [K1_1, K2], value: T_1[K1_1][K2]): Set2<T_1, K1_1, K2>; }
++>set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
++>T : T
++>K1 : K1
+ >source : T
+ >path : [K1]
+ >value : T[K1]
+ 
+ declare function set<T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>;
+->set : { <T_1, K1_1 extends keyof T_1>(source: T_1, path: [K1_1], value: T_1[K1_1]): Set1<T_1, K1_1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
++>set : { <T, K1 extends keyof T>(source: T, path: [K1], value: T[K1]): Set1<T, K1>; <T, K1 extends keyof T, K2 extends keyof T[K1]>(source: T, path: [K1, K2], value: T[K1][K2]): Set2<T, K1, K2>; }
++>T : T
++>K1 : K1
++>K2 : K2
+ >source : T
+ >path : [K1, K2]
+ >value : T[K1][K2]
+ 
+ 
+ interface State {
++>State : State
++
+     a: {
+ >a : { b: string; c: number; }
+ 

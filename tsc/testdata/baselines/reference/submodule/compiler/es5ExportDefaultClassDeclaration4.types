@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/es5ExportDefaultClassDeclaration4.ts] ////
+
+=== es5ExportDefaultClassDeclaration4.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+    export var before: C;
+>before : default
+
+    export default class C {
+>C : default
+
+        method(): C;
+>method : () => default
+    }
+
+    export var after: C;
+>after : default
+
+    export var t: typeof C;
+>t : typeof default
+}
+
+

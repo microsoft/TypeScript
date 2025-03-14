@@ -1,0 +1,10 @@
+--- old.genericMergedDeclarationUsingTypeParameter2.types
++++ new.genericMergedDeclarationUsingTypeParameter2.types
+@@= skipped -2, +2 lines =@@
+ === genericMergedDeclarationUsingTypeParameter2.ts ===
+ class foo<T> { constructor(x: T) { } }
+ >foo : foo<T>
++>T : T
+ >x : T
+ 
+ module foo {

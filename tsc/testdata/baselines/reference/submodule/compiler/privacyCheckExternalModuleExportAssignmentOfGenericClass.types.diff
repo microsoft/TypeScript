@@ -1,0 +1,19 @@
+--- old.privacyCheckExternalModuleExportAssignmentOfGenericClass.types
++++ new.privacyCheckExternalModuleExportAssignmentOfGenericClass.types
+@@= skipped -7, +7 lines =@@
+ >Bar : Bar
+ 
+ interface Bar {
++>Bar : Bar
++
+     foo: Foo<number>;
+ >foo : Foo<number>
+ }
+@@= skipped -9, +11 lines =@@
+ 
+ class Foo<A> {
+ >Foo : Foo<A>
++>A : A
+ 
+     constructor(public a: A) { }
+ >a : A

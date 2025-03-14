@@ -1,0 +1,19 @@
+--- old.declarationEmitExpressionInExtends6.types
++++ new.declarationEmitExpressionInExtends6.types
+@@= skipped -9, +9 lines =@@
+ 
+ === /b.ts ===
+ import * as A from "./a";
+->A : typeof A
++>A : typeof import("/a")
+ 
+ const { Foo } = A;
+->Foo : typeof A.Foo
+->A : typeof A
++>Foo : typeof Foo
++>A : typeof import("/a")
+ 
+ export default class extends Foo {}
+->Foo : A.Foo
++>Foo : Foo
+ 

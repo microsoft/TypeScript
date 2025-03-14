@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_jsModule.ts] ////
+
+=== /index.ts ===
+import { ios } from "./foo.js";
+>ios : any
+
+=== /foo.ios.js ===
+"use strict";
+>"use strict" : "use strict"
+
+exports.__esModule = true;
+>exports.__esModule = true : true
+>exports.__esModule : any
+>exports : any
+>__esModule : any
+>true : true
+
+function ios() {}
+>ios : () => void
+
+exports.ios = ios;
+>exports.ios = ios : () => void
+>exports.ios : any
+>exports : any
+>ios : any
+>ios : () => void
+
+=== /foo.js ===
+"use strict";
+>"use strict" : "use strict"
+
+exports.__esModule = true;
+>exports.__esModule = true : true
+>exports.__esModule : any
+>exports : any
+>__esModule : any
+>true : true
+
+function base() {}
+>base : () => void
+
+exports.base = base;
+>exports.base = base : () => void
+>exports.base : any
+>exports : any
+>base : any
+>base : () => void
+

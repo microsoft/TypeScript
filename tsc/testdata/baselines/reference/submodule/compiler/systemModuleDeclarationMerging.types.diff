@@ -1,0 +1,11 @@
+--- old.systemModuleDeclarationMerging.types
++++ new.systemModuleDeclarationMerging.types
+@@= skipped -15, +15 lines =@@
+ >x : any
+ 
+ export enum E {}
+->E : E
++>E : "systemModuleDeclarationMerging".E
+ 
+ export module E { var x; }
+ >E : typeof E

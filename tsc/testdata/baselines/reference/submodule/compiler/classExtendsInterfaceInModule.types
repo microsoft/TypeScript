@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/classExtendsInterfaceInModule.ts] ////
+
+=== classExtendsInterfaceInModule.ts ===
+module M {
+>M : any
+
+  export interface I1 {}
+>I1 : I1
+
+  export interface I2<T> {}
+>I2 : I2<T>
+>T : T
+}
+class C1 extends M.I1 {}
+>C1 : C1
+>M.I1 : any
+>M : any
+>I1 : any
+
+class C2<T> extends M.I2<T> {}
+>C2 : C2<T>
+>T : T
+>M.I2 : any
+>M : any
+>I2 : any
+
+module Mod {
+>Mod : any
+
+	export namespace Nested {
+>Nested : any
+
+		export interface I {}
+>I : I
+	}
+}
+
+class D extends Mod.Nested.I {}
+>D : D
+>Mod.Nested.I : any
+>Mod.Nested : any
+>Mod : any
+>Nested : any
+>I : any
+

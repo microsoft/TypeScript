@@ -1,0 +1,20 @@
+--- old.symbolProperty20.types
++++ new.symbolProperty20.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty20.ts ===
+ interface I {
++>I : I
++
+     [Symbol.iterator]: (s: string) => string;
+ >[Symbol.iterator] : (s: string) => string
+ >Symbol.iterator : unique symbol
+@@= skipped -17, +19 lines =@@
+ 
+ var i: I = {
+ >i : I
+->{    [Symbol.iterator]: s => s,    [Symbol.toStringTag](n) { return n; }} : { [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }
++>{    [Symbol.iterator]: s => s,    [Symbol.toStringTag](n) { return n; }} : { [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag]: (n: number) => number; }
+ 
+     [Symbol.iterator]: s => s,
+ >[Symbol.iterator] : (s: string) => string

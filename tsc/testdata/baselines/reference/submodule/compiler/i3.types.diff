@@ -1,0 +1,10 @@
+--- old.i3.types
++++ new.i3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === i3.ts ===
+ interface I3 { one?: number; }; 
++>I3 : I3
+ >one : number
+ 
+ var x: {one: number};

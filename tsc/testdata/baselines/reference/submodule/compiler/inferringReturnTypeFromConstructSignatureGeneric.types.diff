@@ -1,0 +1,42 @@
+--- old.inferringReturnTypeFromConstructSignatureGeneric.types
++++ new.inferringReturnTypeFromConstructSignatureGeneric.types
+@@= skipped -2, +2 lines =@@
+ === inferringReturnTypeFromConstructSignatureGeneric.ts ===
+ class GenericObject<T extends {} = {}> {
+ >GenericObject : GenericObject<T>
++>T : T
+ 
+   give(value: T) {
+ >give : (value: T) => T
+@@= skipped -11, +12 lines =@@
+ }
+ class GenericNumber<T extends number> {
+ >GenericNumber : GenericNumber<T>
++>T : T
+ 
+   give(value: T) {
+ >give : (value: T) => T
+@@= skipped -11, +12 lines =@@
+ }
+ class GenericNumberOrString<T extends number | string> {
+ >GenericNumberOrString : GenericNumberOrString<T>
++>T : T
+ 
+   give(value: T) {
+ >give : (value: T) => T
+@@= skipped -12, +13 lines =@@
+ 
+ function g<T>(type: new () => T): T {
+ >g : <T>(type: new () => T) => T
++>T : T
+ >type : new () => T
+ 
+     return new type();
+@@= skipped -56, +57 lines =@@
+ // repro from #35636
+ class C<T> {}
+ >C : C<T>
++>T : T
+ 
+ const g4 = g(C);
+ >g4 : C<unknown>

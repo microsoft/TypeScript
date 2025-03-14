@@ -1,0 +1,20 @@
+--- old.noCollisionThisExpressionInFunctionAndVarInGlobal.types
++++ new.noCollisionThisExpressionInFunctionAndVarInGlobal.types
+@@= skipped -1, +1 lines =@@
+ 
+ === noCollisionThisExpressionInFunctionAndVarInGlobal.ts ===
+ var console: {
+->console : { log(val: any): any; }
++>console : { log: (val: any) => any; }
+ 
+     log(val: any);
+ >log : (val: any) => any
+@@= skipped -18, +18 lines =@@
+ >x : any
+ >console.log(this) : any
+ >console.log : (val: any) => any
+->console : { log(val: any): any; }
++>console : { log: (val: any) => any; }
+ >log : (val: any) => any
+ >this : any
+ }

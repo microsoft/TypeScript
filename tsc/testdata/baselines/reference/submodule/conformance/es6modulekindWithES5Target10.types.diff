@@ -1,0 +1,10 @@
+--- old.es6modulekindWithES5Target10.types
++++ new.es6modulekindWithES5Target10.types
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ namespace N {
++>N : any
+ }
+ export = N; // Error
+ >N : any

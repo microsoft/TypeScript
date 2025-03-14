@@ -1,0 +1,60 @@
+--- old.destructuringParameterDeclaration6.types
++++ new.destructuringParameterDeclaration6.types
+@@= skipped -8, +8 lines =@@
+ 
+ // Error
+ function a({while}) { }
+->a : ({ while:  }: { while: any; }) => void
++>a : (__0: { while: any; }) => void
+ >while : any
+ > : any
+ 
+ function a1({public}) { }
+->a1 : ({ public }: { public: any; }) => void
++>a1 : (__0: { public: any; }) => void
+ >public : any
+ 
+ function a4([while, for, public]){ }
+->a4 : ([]: any[]) => any
++>a4 : (__0: any[]) => any
+ >, : any
+ > : any
+ > : any
+@@= skipped -35, +35 lines =@@
+ 
+ a({ while: 1 });
+ >a({ while: 1 }) : void
+->a : ({ while:  }: { while: any; }) => void
++>a : (__0: { while: any; }) => void
+ >{ while: 1 } : { while: number; }
+ >while : number
+ >1 : 1
+ 
+ // No Error
+ function b1({public: x}) { }
+->b1 : ({ public: x }: { public: any; }) => void
++>b1 : (__0: { public: any; }) => void
+ >public : any
+ >x : any
+ 
+ function b2({while: y}) { }
+->b2 : ({ while: y }: { while: any; }) => void
++>b2 : (__0: { while: any; }) => void
+ >while : any
+ >y : any
+ 
+ b1({ public: 1 });
+ >b1({ public: 1 }) : void
+->b1 : ({ public: x }: { public: any; }) => void
++>b1 : (__0: { public: any; }) => void
+ >{ public: 1 } : { public: number; }
+ >public : number
+ >1 : 1
+ 
+ b2({ while: 1 });
+ >b2({ while: 1 }) : void
+->b2 : ({ while: y }: { while: any; }) => void
++>b2 : (__0: { while: any; }) => void
+ >{ while: 1 } : { while: number; }
+ >while : number
+ >1 : 1

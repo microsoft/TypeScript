@@ -1,0 +1,37 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty8.types
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty8.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty8.ts] ////
+ 
+-=== ./a.ts ===
++=== a.ts ===
+ export const key = "a";
+ >key : "a"
+ >"a" : "a"
+ 
+-=== ./b.ts ===
++=== b.ts ===
+ import * as a from "./a";
+->a : typeof a
++>a : typeof import("a")
+ 
+ export class C {
+ >C : C
+@@= skipped -14, +14 lines =@@
+     [a.key]: string;
+ >[a.key] : string
+ >a.key : "a"
+->a : typeof a
++>a : typeof import("a")
+ >key : "a"
+ 
+     constructor() {
+@@= skipped -9, +9 lines =@@
+ >this[a.key] : string
+ >this : this
+ >a.key : "a"
+->a : typeof a
++>a : typeof import("a")
+ >key : "a"
+ >"foo" : "foo"
+     }

@@ -1,0 +1,14 @@
+--- old.nonNullableAndObjectIntersections(strict=false).types
++++ new.nonNullableAndObjectIntersections(strict=false).types
+@@= skipped -25, +25 lines =@@
+ 
+ type NonNullableNew<T> = T & {};
+ >NonNullableNew : NonNullableNew<T>
++>T : T
+ 
+ type NonNullableOld<T> = T extends null | undefined ? never : T;
+ >NonNullableOld : NonNullableOld<T>
++>T : T
+ 
+ type TestNew = NonNullableNew<null>;
+ >TestNew : never

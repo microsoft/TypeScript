@@ -1,0 +1,16 @@
+--- old.computedPropertyNames35_ES5.types
++++ new.computedPropertyNames35_ES5.types
+@@= skipped -2, +2 lines =@@
+ === computedPropertyNames35_ES5.ts ===
+ function foo<T>() { return '' }
+ >foo : <T>() => string
++>T : T
+ >'' : ""
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     bar(): string;
+ >bar : () => string
+ 

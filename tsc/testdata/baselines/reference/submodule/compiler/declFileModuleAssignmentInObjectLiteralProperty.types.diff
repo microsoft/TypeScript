@@ -1,0 +1,30 @@
+--- old.declFileModuleAssignmentInObjectLiteralProperty.types
++++ new.declFileModuleAssignmentInObjectLiteralProperty.types
+@@= skipped -8, +8 lines =@@
+     }
+ }
+ var d = {
+->d : { m1: { m: typeof m1; }; m2: { c: typeof m1.c; }; }
+->{    m1: { m: m1 },    m2: { c: m1.c },} : { m1: { m: typeof m1; }; m2: { c: typeof m1.c; }; }
++>d : { m1: { m: typeof m1; }; m2: { c: typeof c; }; }
++>{    m1: { m: m1 },    m2: { c: m1.c },} : { m1: { m: typeof m1; }; m2: { c: typeof c; }; }
+ 
+     m1: { m: m1 },
+ >m1 : { m: typeof m1; }
+@@= skipped -10, +10 lines =@@
+ >m1 : typeof m1
+ 
+     m2: { c: m1.c },
+->m2 : { c: typeof m1.c; }
+->{ c: m1.c } : { c: typeof m1.c; }
+->c : typeof m1.c
+->m1.c : typeof m1.c
++>m2 : { c: typeof c; }
++>{ c: m1.c } : { c: typeof c; }
++>c : typeof c
++>m1.c : typeof c
+ >m1 : typeof m1
+->c : typeof m1.c
++>c : typeof c
+ 
+ };

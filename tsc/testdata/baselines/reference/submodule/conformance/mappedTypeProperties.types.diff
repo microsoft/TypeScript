@@ -1,0 +1,71 @@
+--- old.mappedTypeProperties.types
++++ new.mappedTypeProperties.types
+@@= skipped -7, +7 lines =@@
+ >Before : Before
+ 
+     model: 'hour' | 'day';
+->model : "hour" | "day"
++>model : "day" | "hour"
+ 
+     [placeType in PlaceType]: void;
+ >[placeType in PlaceType] : void
+@@= skipped -13, +13 lines =@@
+ >After : After
+ 
+     [placeType in PlaceType]: void;
++>placeType : placeType
++
+     model: 'hour' | 'day'
+->model : "hour" | "day"
++>model : "day" | "hour"
+ }
+ 
+ type AfterQuestion = {
+ >AfterQuestion : AfterQuestion
+ 
+     [placeType in PlaceType]?: void;
++>placeType : placeType
++
+     model: 'hour' | 'day';
+->model : "hour" | "day"
++>model : "day" | "hour"
+ }
+ type AfterMethod = {
+ >AfterMethod : AfterMethod
+ 
+     [placeType in PlaceType]?: void;
++>placeType : placeType
++
+     model(duration: number): 'hour' | 'day';
+->model : (duration: number) => "hour" | "day"
++>model : (duration: number) => "day" | "hour"
+ >duration : number
+ }
+ 
+@@= skipped -24, +30 lines =@@
+ >AfterImplicit : AfterImplicit
+ 
+     [placeType in PlaceType]
++>placeType : placeType
++
+     model: 'hour' | 'day';
+->model : "hour" | "day"
++>model : "day" | "hour"
+ }
+ type AfterImplicitQ = {
+ >AfterImplicitQ : AfterImplicitQ
+ 
+     [placeType in PlaceType]?
++>placeType : placeType
++
+     model: 'hour' | 'day'
+->model : "hour" | "day"
++>model : "day" | "hour"
+ }
+ 
+ interface I {
++>I : I
++
+     [P in PlaceType]: any
+ >[P in PlaceType] : any
+ >P in PlaceType : boolean

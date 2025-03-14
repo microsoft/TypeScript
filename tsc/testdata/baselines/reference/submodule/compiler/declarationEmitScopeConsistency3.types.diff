@@ -1,0 +1,25 @@
+--- old.declarationEmitScopeConsistency3.types
++++ new.declarationEmitScopeConsistency3.types
+@@= skipped -6, +6 lines =@@
+ >v : "outer"
+ 
+     const f = (v: "inner") => () => null! as typeof v;
+->f : (v: "inner") => () => typeof v
+->(v: "inner") => () => null! as typeof v : (v: "inner") => () => typeof v
++>f : (v: "inner") => () => "inner"
++>(v: "inner") => () => null! as typeof v : (v: "inner") => () => "inner"
+ >v : "inner"
+->() => null! as typeof v : () => typeof v
++>() => null! as typeof v : () => "inner"
+ >null! as typeof v : "inner"
+ >null! : never
+->v : "inner"
+ 
+     const r = f(null!)
+ >r : () => "inner"
+ >f(null!) : () => "inner"
+->f : (v: "inner") => () => typeof v
++>f : (v: "inner") => () => "inner"
+ >null! : never
+ 
+     return r;

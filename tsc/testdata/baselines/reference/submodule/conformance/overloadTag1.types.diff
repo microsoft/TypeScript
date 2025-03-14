@@ -1,0 +1,107 @@
+--- old.overloadTag1.types
++++ new.overloadTag1.types
+@@= skipped -16, +16 lines =@@
+  * @returns {string | number}
+  */
+ export function overloaded(a,b) {
+->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
+->a : string | number
+->b : string | number
++>overloaded : (a: any, b: any) => string | number
++>a : any
++>b : any
+ 
+   if (typeof a === "string" && typeof b === "string") {
+ >typeof a === "string" && typeof b === "string" : boolean
+ >typeof a === "string" : boolean
+->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->a : string | number
++>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>a : any
+ >"string" : "string"
+ >typeof b === "string" : boolean
+->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->b : string | number
++>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>b : any
+ >"string" : "string"
+ 
+     return a + b;
+@@= skipped -23, +23 lines =@@
+   } else if (typeof a === "number" && typeof b === "number") {
+ >typeof a === "number" && typeof b === "number" : boolean
+ >typeof a === "number" : boolean
+->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->a : string | number
++>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>a : any
+ >"number" : "number"
+ >typeof b === "number" : boolean
+->typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->b : string | number
++>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>b : any
+ >"number" : "number"
+ 
+     return a + b;
+@@= skipped -19, +19 lines =@@
+ >"Invalid arguments" : "Invalid arguments"
+ }
+ var o1 = overloaded(1,2)
+->o1 : number
+->overloaded(1,2) : number
+->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
++>o1 : string | number
++>overloaded(1,2) : string | number
++>overloaded : (a: any, b: any) => string | number
+ >1 : 1
+ >2 : 2
+ 
+ var o2 = overloaded("zero", "one")
+->o2 : never
+->overloaded("zero", "one") : never
+->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
++>o2 : string | number
++>overloaded("zero", "one") : string | number
++>overloaded : (a: any, b: any) => string | number
+ >"zero" : "zero"
+ >"one" : "one"
+ 
+ var o3 = overloaded("a",false)
+->o3 : string
+->overloaded("a",false) : string
+->overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
++>o3 : string | number
++>overloaded("a",false) : string | number
++>overloaded : (a: any, b: any) => string | number
+ >"a" : "a"
+ >false : false
+ 
+@@= skipped -32, +32 lines =@@
+  * @returns {string}
+  */
+ export function uncheckedInternally(a, b) {
+->uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
++>uncheckedInternally : (a: any, b: any) => any
+ >a : any
+ >b : any
+ 
+@@= skipped -10, +10 lines =@@
+ >b : any
+ }
+ uncheckedInternally(1,2)
+->uncheckedInternally(1,2) : number
+->uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
++>uncheckedInternally(1,2) : any
++>uncheckedInternally : (a: any, b: any) => any
+ >1 : 1
+ >2 : 2
+ 
+ uncheckedInternally("zero", "one")
+->uncheckedInternally("zero", "one") : never
+->uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
++>uncheckedInternally("zero", "one") : any
++>uncheckedInternally : (a: any, b: any) => any
+ >"zero" : "zero"
+ >"one" : "one"
+ 

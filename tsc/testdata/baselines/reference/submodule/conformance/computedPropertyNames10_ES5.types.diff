@@ -1,0 +1,13 @@
+--- old.computedPropertyNames10_ES5.types
++++ new.computedPropertyNames10_ES5.types
+@@= skipped -10, +10 lines =@@
+ >a : any
+ 
+ var v = {
+->v : { [x: string]: () => void; [x: number]: () => void; ""(): void; 0(): void; "hello bye"(): void; }
+->{    [s]() { },    [n]() { },    [s + s]() { },    [s + n]() { },    [+s]() { },    [""]() { },    [0]() { },    [a]() { },    [<any>true]() { },    [`hello bye`]() { },    [`hello ${a} bye`]() { }} : { [x: string]: () => void; [x: number]: () => void; ""(): void; 0(): void; "hello bye"(): void; }
++>v : { [x: string]: () => void; [x: number]: () => void; [""]: () => void; [0]: () => void; [`hello bye`]: () => void; }
++>{    [s]() { },    [n]() { },    [s + s]() { },    [s + n]() { },    [+s]() { },    [""]() { },    [0]() { },    [a]() { },    [<any>true]() { },    [`hello bye`]() { },    [`hello ${a} bye`]() { }} : { [x: string]: () => void; [x: number]: () => void; [""]: () => void; [0]: () => void; [`hello bye`]: () => void; }
+ 
+     [s]() { },
+ >[s] : () => void

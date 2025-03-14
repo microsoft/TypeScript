@@ -1,0 +1,11 @@
+--- old.trivialSubtypeReductionNoStructuralCheck.types
++++ new.trivialSubtypeReductionNoStructuralCheck.types
+@@= skipped -25, +25 lines =@@
+ }
+ 
+ export interface WizardStepProps {
++>WizardStepProps : WizardStepProps
++
+   wizard?: Wizard;
+ >wizard : Wizard | undefined
+ }

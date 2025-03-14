@@ -1,0 +1,10 @@
+--- old.instanceofOperatorWithRHSIsSubtypeOfFunction.types
++++ new.instanceofOperatorWithRHSIsSubtypeOfFunction.types
+@@= skipped -1, +1 lines =@@
+ 
+ === instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
+ interface I extends Function { }
++>I : I
+ 
+ var x: any;
+ >x : any

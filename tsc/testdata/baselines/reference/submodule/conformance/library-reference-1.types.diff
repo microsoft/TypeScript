@@ -1,0 +1,21 @@
+--- old.library-reference-1.types
++++ new.library-reference-1.types
+@@= skipped -2, +2 lines =@@
+ === /src/consumer.ts ===
+ /// <reference types="jquery" />
+ $.foo();
+->$.foo() : void
+->$.foo : () => void
+->$ : { foo(): void; }
+->foo : () => void
++>$.foo() : any
++>$.foo : any
++>$ : any
++>foo : any
+ 
+-=== /src/types/jquery/index.d.ts ===
+-declare var $: { foo(): void };
+->$ : { foo(): void; }
+->foo : () => void
+-
+-

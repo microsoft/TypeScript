@@ -1,0 +1,31 @@
+--- old.mappedTypeIndexedAccess.types
++++ new.mappedTypeIndexedAccess.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Pairs<T> = {
+ >Pairs : Pairs<T>
++>T : T
+ 
+     [TKey in keyof T]: {
++>TKey : TKey
++
+         key: TKey;
+ >key : TKey
+ 
+@@= skipped -13, +16 lines =@@
+ 
+ type Pair<T> = Pairs<T>[keyof T];
+ >Pair : Pair<T>
++>T : T
+ 
+ type FooBar = {
+ >FooBar : FooBar
+@@= skipped -29, +30 lines =@@
+ 
+ // Error expected here
+ let pair2: Pairs<FooBar>[keyof FooBar] = {
+->pair2 : { key: "foo"; value: string; } | { key: "bar"; value: number; }
++>pair2 : { key: "bar"; value: number; } | { key: "foo"; value: string; }
+ >{    key: "foo",    value: 3} : { key: "foo"; value: number; }
+ 
+     key: "foo",

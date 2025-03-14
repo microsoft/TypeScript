@@ -1,0 +1,17 @@
+--- old.declarationEmitOfTypeofAliasedExport.types
++++ new.declarationEmitOfTypeofAliasedExport.types
+@@= skipped -9, +9 lines =@@
+ 
+ === /b.ts ===
+ import * as a from "./a";
+->a : typeof a
++>a : typeof import("/a")
+ 
+ export default a.D;
+->a.D : typeof a.D
+->a : typeof a
+->D : typeof a.D
++>a.D : typeof C
++>a : typeof import("/a")
++>D : typeof C
+ 

@@ -1,0 +1,11 @@
+--- old.computedPropertyNamesContextualType4_ES5.types
++++ new.computedPropertyNamesContextualType4_ES5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === computedPropertyNamesContextualType4_ES5.ts ===
+ interface I {
++>I : I
++
+     [s: string]: any;
+ >s : string
+ 

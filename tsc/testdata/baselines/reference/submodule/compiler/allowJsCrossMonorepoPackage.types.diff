@@ -1,0 +1,26 @@
+--- old.allowJsCrossMonorepoPackage.types
++++ new.allowJsCrossMonorepoPackage.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /packages/main/index.ts ===
+ import { x } from "shared";
+->x : "pkg"
++>x : any
+ 
+-=== /node_modules/pkg/index.d.ts ===
+-export declare function pkg(): "pkg";
+->pkg : () => "pkg"
+-
+-=== /packages/shared/utils.js ===
+-export { pkg } from "pkg";
+->pkg : () => "pkg"
+-
+-=== /packages/shared/index.js ===
+-import { pkg } from "./utils.js";
+->pkg : () => "pkg"
+-
+-export const x = pkg();
+->x : "pkg"
+->pkg() : "pkg"
+->pkg : () => "pkg"
+-

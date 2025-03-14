@@ -1,0 +1,29 @@
+--- old.typeParameterAsTypeParameterConstraint2.types
++++ new.typeParameterAsTypeParameterConstraint2.types
+@@= skipped -5, +5 lines =@@
+ 
+ function foo<T, U extends T>(x: T, y: U): U { return y; } // this is now an error
+ >foo : <T, U extends T>(x: T, y: U) => U
++>T : T
++>U : U
+ >x : T
+ >y : U
+ >y : U
+@@= skipped -17, +19 lines =@@
+ >{} : {}
+ 
+ interface NumberVariant extends Number {
++>NumberVariant : NumberVariant
++
+     x: number;
+ >x : number
+ }
+@@= skipped -15, +17 lines =@@
+ 
+ function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
+ >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
++>T : T
++>U : U
+ >length : T
+ >x : T
+ >y : U

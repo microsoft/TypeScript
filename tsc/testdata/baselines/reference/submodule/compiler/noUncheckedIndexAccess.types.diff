@@ -1,0 +1,13 @@
+--- old.noUncheckedIndexAccess.types
++++ new.noUncheckedIndexAccess.types
+@@= skipped -59, +59 lines =@@
+ >"testing" : "testing"
+ 
+   const value2 = Meat[valueUndefined]
+->value2 : error
+->Meat[valueUndefined] : error
++>value2 : any
++>Meat[valueUndefined] : any
+ >Meat : typeof Meat
+ >valueUndefined : "testing"
+ 

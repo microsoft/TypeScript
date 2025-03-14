@@ -1,0 +1,11 @@
+--- old.parser645484.types
++++ new.parser645484.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parser645484.ts ===
+ var c : {
+->c : { "new"?(): any; }
++>c : { new?: () => any; }
+ 
+     new?(): any;
+ >new : () => any

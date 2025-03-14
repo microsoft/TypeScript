@@ -1,0 +1,22 @@
+--- old.declarationEmitTypeofDefaultExport.types
++++ new.declarationEmitTypeofDefaultExport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ export default class C {};
+->C : C
++>C : default
+ 
+ === /b.ts ===
+ import * as a from "./a";
+->a : typeof a
++>a : typeof import("/a")
+ 
+ export default a.default;
+->a.default : typeof a.default
+->a : typeof a
+->default : typeof a.default
++>a.default : typeof default
++>a : typeof import("/a")
++>default : typeof default
+ 

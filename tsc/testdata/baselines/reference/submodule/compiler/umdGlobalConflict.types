@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/umdGlobalConflict.ts] ////
+
+=== v1/index.d.ts ===
+export as namespace Alpha;
+>Alpha : typeof import("v1/index")
+
+export var x: string;
+>x : string
+
+=== v2/index.d.ts ===
+export as namespace Alpha;
+>Alpha : typeof import("v2/index")
+
+export var y: number;
+>y : number
+
+=== consumer.ts ===
+import * as v1 from './v1';
+>v1 : typeof import("v1/index")
+
+import * as v2 from './v2';
+>v2 : typeof import("v2/index")
+
+=== global.ts ===
+// Should be OK, first in wins
+const p: string = Alpha.x;
+>p : string
+>Alpha.x : string
+>Alpha : typeof import("v1/index")
+>x : string
+

@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionWithDefaultAssignedMember.ts] ////
+
+=== index.js ===
+function foo() {}
+>foo : { (): void; foo: ???; default: ???; }
+
+foo.foo = foo;
+>foo.foo = foo : { (): void; foo: ???; default: ???; }
+>foo.foo : { (): void; foo: ???; default: ???; }
+>foo : { (): void; foo: ???; default: ???; }
+>foo : { (): void; foo: ???; default: ???; }
+>foo : { (): void; foo: ???; default: ???; }
+
+foo.default = foo;
+>foo.default = foo : { (): void; foo: ???; default: ???; }
+>foo.default : { (): void; foo: ???; default: ???; }
+>foo : { (): void; foo: ???; default: ???; }
+>default : { (): void; foo: ???; default: ???; }
+>foo : { (): void; foo: ???; default: ???; }
+
+module.exports = foo;
+>module.exports = foo : { (): void; foo: ???; default: ???; }
+>module.exports : any
+>module : any
+>exports : any
+>foo : { (): void; foo: ???; default: ???; }
+

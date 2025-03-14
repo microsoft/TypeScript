@@ -1,0 +1,522 @@
+--- old.intraExpressionInferences.types
++++ new.intraExpressionInferences.types
+@@= skipped -4, +4 lines =@@
+ 
+ declare function callIt<T>(obj: {
+ >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
++>T : T
+ >obj : { produce: (n: number) => T; consume: (x: T) => void; }
+ 
+     produce: (n: number) => T,
+@@= skipped -27, +28 lines =@@
+ >n => n.toFixed() : (n: number) => string
+ >n : number
+ >n.toFixed() : string
+->n.toFixed : (fractionDigits?: number) => string
++>n.toFixed : (fractionDigits?: number | undefined) => string
+ >n : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+ });
+ 
+@@= skipped -22, +22 lines =@@
+ >n => n.toFixed() : (n: number) => string
+ >n : number
+ >n.toFixed() : string
+->n.toFixed : (fractionDigits?: number) => string
++>n.toFixed : (fractionDigits?: number | undefined) => string
+ >n : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+ });
+ 
+ callIt({
+ >callIt({    produce() {        return 0;    },    consume: n => n.toFixed()}) : void
+ >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
+->{    produce() {        return 0;    },    consume: n => n.toFixed()} : { produce(): number; consume: (n: number) => string; }
++>{    produce() {        return 0;    },    consume: n => n.toFixed()} : { produce: () => number; consume: (n: number) => string; }
+ 
+     produce() {
+ >produce : () => number
+@@= skipped -23, +23 lines =@@
+ >n => n.toFixed() : (n: number) => string
+ >n : number
+ >n.toFixed() : string
+->n.toFixed : (fractionDigits?: number) => string
++>n.toFixed : (fractionDigits?: number | undefined) => string
+ >n : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+ });
+ 
+ declare function callItT<T>(obj: [(n: number) => T, (x: T) => void]): void;
+ >callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
++>T : T
+ >obj : [(n: number) => T, (x: T) => void]
+ >n : number
+ >x : T
+@@= skipped -21, +22 lines =@@
+ >n => n.toFixed() : (n: number) => string
+ >n : number
+ >n.toFixed() : string
+->n.toFixed : (fractionDigits?: number) => string
++>n.toFixed : (fractionDigits?: number | undefined) => string
+ >n : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+ callItT([_a => 0, n => n.toFixed()]);
+ >callItT([_a => 0, n => n.toFixed()]) : void
+@@= skipped -14, +14 lines =@@
+ >n => n.toFixed() : (n: number) => string
+ >n : number
+ >n.toFixed() : string
+->n.toFixed : (fractionDigits?: number) => string
++>n.toFixed : (fractionDigits?: number | undefined) => string
+ >n : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+ // Repro from #25092
+ 
+ interface MyInterface<T> {
++>MyInterface : MyInterface<T>
++>T : T
++
+     retrieveGeneric: (parameter: string) => T,
+ >retrieveGeneric : (parameter: string) => T
+ >parameter : string
+@@= skipped -19, +22 lines =@@
+ const inferTypeFn = <T>(generic: MyInterface<T>) => generic;
+ >inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
+ ><T>(generic: MyInterface<T>) => generic : <T>(generic: MyInterface<T>) => MyInterface<T>
++>T : T
+ >generic : MyInterface<T>
+ >generic : MyInterface<T>
+ 
+@@= skipped -20, +21 lines =@@
+ >generic => generic.toFixed() : (generic: number) => string
+ >generic : number
+ >generic.toFixed() : string
+->generic.toFixed : (fractionDigits?: number) => string
++>generic.toFixed : (fractionDigits?: number | undefined) => string
+ >generic : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+ });
+ 
+@@= skipped -10, +10 lines =@@
+ 
+ function make<M>(o: { mutations: M,  action: (m: M) => void }) { }
+ >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
++>M : M
+ >o : { mutations: M; action: (m: M) => void; }
+ >mutations : M
+ >action : (m: M) => void
+@@= skipped -8, +9 lines =@@
+ make({
+ >make({   mutations: {       foo() { }   },   action: (a) => { a.foo() }}) : void
+ >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
+->{   mutations: {       foo() { }   },   action: (a) => { a.foo() }} : { mutations: { foo(): void; }; action: (a: { foo(): void; }) => void; }
++>{   mutations: {       foo() { }   },   action: (a) => { a.foo() }} : { mutations: { foo: () => void; }; action: (a: { foo: () => void; }) => void; }
+ 
+    mutations: {
+->mutations : { foo(): void; }
+->{       foo() { }   } : { foo(): void; }
++>mutations : { foo: () => void; }
++>{       foo() { }   } : { foo: () => void; }
+ 
+        foo() { }
+ >foo : () => void
+ 
+    },
+    action: (a) => { a.foo() }
+->action : (a: { foo(): void; }) => void
+->(a) => { a.foo() } : (a: { foo(): void; }) => void
+->a : { foo(): void; }
++>action : (a: { foo: () => void; }) => void
++>(a) => { a.foo() } : (a: { foo: () => void; }) => void
++>a : { foo: () => void; }
+ >a.foo() : void
+ >a.foo : () => void
+->a : { foo(): void; }
++>a : { foo: () => void; }
+ >foo : () => void
+ 
+ });
+@@= skipped -25, +25 lines =@@
+ 
+ declare function foo<A>(options: { a: A, b: (a: A) => void }): void;
+ >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
++>A : A
+ >options : { a: A; b: (a: A) => void; }
+ >a : A
+ >b : (a: A) => void
+@@= skipped -8, +9 lines =@@
+ foo({
+ >foo({    a: () => { return 42 },    b(a) {},}) : void
+ >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+->{    a: () => { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
++>{    a: () => { return 42 },    b(a) {},} : { a: () => 42; b: (a: () => 42) => void; }
+ 
+     a: () => { return 42 },
+ >a : () => 42
+@@= skipped -16, +16 lines =@@
+ foo({
+ >foo({    a: function () { return 42 },    b(a) {},}) : void
+ >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+->{    a: function () { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
++>{    a: function () { return 42 },    b(a) {},} : { a: () => 42; b: (a: () => 42) => void; }
+ 
+     a: function () { return 42 },
+ >a : () => 42
+@@= skipped -16, +16 lines =@@
+ foo({
+ >foo({    a() { return 42 },    b(a) {},}) : void
+ >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
+->{    a() { return 42 },    b(a) {},} : { a(): 42; b(a: () => 42): void; }
++>{    a() { return 42 },    b(a) {},} : { a: () => 42; b: (a: () => 42) => void; }
+ 
+     a() { return 42 },
+ >a : () => 42
+@@= skipped -16, +16 lines =@@
+ 
+ type Chain<R1, R2> = {
+ >Chain : Chain<R1, R2>
++>R1 : R1
++>R2 : R2
+ 
+     a(): R1,
+ >a : () => R1
+@@= skipped -16, +18 lines =@@
+ 
+ function test<R1, R2>(foo: Chain<R1, R2>) {}
+ >test : <R1, R2>(foo: Chain<R1, R2>) => void
++>R1 : R1
++>R2 : R2
+ >foo : Chain<R1, R2>
+ 
+ test({
+@@= skipped -60, +62 lines =@@
+ 
+ class Wrapper<T = any> {
+ >Wrapper : Wrapper<T>
++>T : T
+ 
+     public value?: T;
+ >value : T | undefined
+@@= skipped -10, +11 lines =@@
+ 
+ type Unwrap<D extends WrappedMap> = {
+ >Unwrap : Unwrap<D>
++>D : D
+ 
+     [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
++>K : K
++>T : T
++
+ };
+ 
+ type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
+ >MappingComponent : MappingComponent<I, O>
++>I : I
++>O : O
+ 
+     setup(): { inputs: I; outputs: O };
+ >setup : () => { inputs: I; outputs: O; }
+@@= skipped -13, +19 lines =@@
+ >outputs : O
+ 
+     map?: (inputs: Unwrap<I>) => Unwrap<O>;
+->map : ((inputs: Unwrap<I>) => Unwrap<O>) | undefined
++>map : (inputs: Unwrap<I>) => Unwrap<O> | undefined
+ >inputs : Unwrap<I>
+ 
+ };
+ 
+ declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
+ >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
++>I : I
++>O : O
+ >def : MappingComponent<I, O>
+ 
+ createMappingComponent({
+ >createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
+ >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
+->{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup(): { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>): { bool: any; str: number; }; }
++>{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup: () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map: (inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }; }
+ 
+     setup() {
+ >setup : () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
+@@= skipped -77, +79 lines =@@
+ 
+ function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {}
+ >simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
++>T : T
+ >props : { generator: () => T; receiver: (t: T) => any; }
+ >generator : () => T
+ >receiver : (t: T) => any
+@@= skipped -7, +8 lines =@@
+ 
+ function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => any }) {}
+ >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
++>T : T
+ >props : { generator: (bob: any) => T; receiver: (t: T) => any; }
+ >generator : (bob: any) => T
+ >bob : any
+@@= skipped -8, +9 lines =@@
+ 
+ function nonObject<T>(generator: (bob: any) => T, receiver: (t: T) => any) {}
+ >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
++>T : T
+ >generator : (bob: any) => T
+ >bob : any
+ >receiver : (t: T) => any
+@@= skipped -26, +27 lines =@@
+ whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) })
+ >whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) }) : void
+ >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
+->{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 2 | 1; receiver: (t: 2 | 1) => void; }
+->generator : (bob: any) => 2 | 1
+->(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
++>{ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) } : { generator: (bob: any) => 1 | 2; receiver: (t: 1 | 2) => void; }
++>generator : (bob: any) => 1 | 2
++>(bob) => bob ? 1 : 2 : (bob: any) => 1 | 2
+ >bob : any
+->bob ? 1 : 2 : 2 | 1
++>bob ? 1 : 2 : 1 | 2
+ >bob : any
+ >1 : 1
+ >2 : 2
+->receiver : (t: 2 | 1) => void
+->(t) => console.log(t + 2) : (t: 2 | 1) => void
+->t : 2 | 1
++>receiver : (t: 1 | 2) => void
++>(t) => console.log(t + 2) : (t: 1 | 2) => void
++>t : 1 | 2
+ >console.log(t + 2) : void
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+ >t + 2 : number
+->t : 2 | 1
++>t : 1 | 2
+ >2 : 2
+ 
+ nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
+ >nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2)) : void
+ >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
+->(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
++>(bob) => bob ? 1 : 2 : (bob: any) => 1 | 2
+ >bob : any
+->bob ? 1 : 2 : 2 | 1
++>bob ? 1 : 2 : 1 | 2
+ >bob : any
+ >1 : 1
+ >2 : 2
+->(t) => console.log(t + 2) : (t: 2 | 1) => void
+->t : 2 | 1
++>(t) => console.log(t + 2) : (t: 1 | 2) => void
++>t : 1 | 2
+ >console.log(t + 2) : void
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+ >t + 2 : number
+->t : 2 | 1
++>t : 1 | 2
+ >2 : 2
+ 
+ // Repro from #48466
+ 
+ interface Opts<TParams, TDone, TMapped> {
++>Opts : Opts<TParams, TDone, TMapped>
++>TParams : TParams
++>TDone : TDone
++>TMapped : TMapped
++
+     fetch: (params: TParams, foo: number) => TDone,
+ >fetch : (params: TParams, foo: number) => TDone
+ >params : TParams
+@@= skipped -53, +58 lines =@@
+ 
+ function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) {
+ >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
++>TParams : TParams
++>TDone : TDone
++>TMapped : TMapped
+ >options : Opts<TParams, TDone, TMapped>
+ 
+     return (params: TParams) => {
+@@= skipped -25, +28 lines =@@
+ }
+ 
+ interface Params {
++>Params : Params
++
+     one: number
+ >one : number
+ 
+@@= skipped -78, +80 lines =@@
+ >branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
+ 
+   <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
++>T : T
++>U : U
+ >_ : { test: T; if: (t: T) => t is U; then: (u: U) => void; }
+ >test : T
+ >if : (t: T) => t is U
+@@= skipped -39, +41 lines =@@
+ })
+ 
+ interface Props<T> {
++>Props : Props<T>
++>T : T
++
+   a: (x: string) => T;
+ >a : (x: string) => T
+ >x : string
+@@= skipped -11, +14 lines =@@
+ 
+ declare function Foo<T>(props: Props<T>): null;
+ >Foo : <T>(props: Props<T>) => null
++>T : T
+ >props : Props<T>
+ 
+ Foo({
+@@= skipped -23, +24 lines =@@
+ 
+       arg.toString();
+ >arg.toString() : string
+->arg.toString : (radix?: number) => string
++>arg.toString : (radix?: number | undefined) => string
+ >arg : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+     },
+   },
+@@= skipped -10, +10 lines =@@
+ 
+ declare function nested<T>(arg: {
+ >nested : <T>(arg: { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }) => T
++>T : T
+ >arg : { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }
+ 
+   prop: {
+@@= skipped -38, +39 lines =@@
+ >(arg) => arg.join(",") : (arg: number[]) => string
+ >arg : number[]
+ >arg.join(",") : string
+->arg.join : (separator?: string) => string
++>arg.join : (separator?: string | undefined) => string
+ >arg : number[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"," : ","
+ 
+   },
+@@= skipped -10, +10 lines =@@
+ 
+ declare function twoConsumers<T>(arg: {
+ >twoConsumers : <T>(arg: { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }) => T
++>T : T
+ >arg : { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }
+ 
+   a: (arg: string) => T;
+@@= skipped -43, +44 lines =@@
+ 
+ declare function multipleProducersBeforeConsumers<T, T2>(arg: {
+ >multipleProducersBeforeConsumers : <T, T2>(arg: { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }) => [T, T2]
++>T : T
++>T2 : T2
+ >arg : { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }
+ 
+   a: (arg: string) => T;
+@@= skipped -55, +57 lines =@@
+ 
+ declare function withConditionalExpression<T, T2, T3>(arg: {
+ >withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
++>T : T
++>T2 : T2
++>T3 : T3
+ >arg : { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }
+ 
+   a: (arg1: string) => T;
+@@= skipped -20, +23 lines =@@
+ >resWithConditionalExpression : [string[], "first" | "two", boolean]
+ >withConditionalExpression({  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),}) : [string[], "first" | "two", boolean]
+ >withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
+->{  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),} : { a: (arg: string) => string[]; b: ((arg: string[]) => "first") | ((arg: string[]) => "two"); c: (arg: "first" | "two") => boolean; }
++>{  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),} : { a: (arg: string) => string[]; b: (arg: string[]) => "first" | (arg: string[]) => "two"; c: (arg: "first" | "two") => boolean; }
+ 
+   a: (arg) => [arg],
+ >a : (arg: string) => string[]
+@@= skipped -10, +10 lines =@@
+ >arg : string
+ 
+   b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,
+->b : ((arg: string[]) => "first") | ((arg: string[]) => "two")
+->Math.random() ? (arg) => "first" as const : (arg) => "two" as const : ((arg: string[]) => "first") | ((arg: string[]) => "two")
++>b : (arg: string[]) => "first" | (arg: string[]) => "two"
++>Math.random() ? (arg) => "first" as const : (arg) => "two" as const : (arg: string[]) => "first" | (arg: string[]) => "two"
+ >Math.random() : number
+ >Math.random : () => number
+ >Math : Math
+@@= skipped -27, +27 lines =@@
+ 
+ declare function onion<T, T2, T3>(arg: {
+ >onion : <T, T2, T3>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }) => [T, T2, T3]
++>T : T
++>T2 : T2
++>T3 : T3
+ >arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }
+ 
+   a: (arg1: string) => T;
+@@= skipped -46, +49 lines =@@
+ >(arg) => arg.join(",") : (arg: string[]) => string
+ >arg : string[]
+ >arg.join(",") : string
+->arg.join : (separator?: string) => string
++>arg.join : (separator?: string | undefined) => string
+ >arg : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"," : ","
+ 
+     nested2: {
+@@= skipped -23, +23 lines =@@
+ 
+ declare function onion2<T, T2, T3, T4>(arg: {
+ >onion2 : <T, T2, T3, T4>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }) => [T, T2, T3, T4]
++>T : T
++>T2 : T2
++>T3 : T3
++>T4 : T4
+ >arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }
+ 
+   a: (arg1: string) => T;
+@@= skipped -50, +54 lines =@@
+ >(arg) => arg.join(",") : (arg: string[]) => string
+ >arg : string[]
+ >arg.join(",") : string
+->arg.join : (separator?: string) => string
++>arg.join : (separator?: string | undefined) => string
+ >arg : string[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"," : ","
+ 
+     c: (arg) => Number(arg),
+@@= skipped -31, +31 lines =@@
+ 
+ declare function distant<T>(args: {
+ >distant : <T>(args: { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }) => T
++>T : T
+ >args : { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }
+ 
+   foo: {

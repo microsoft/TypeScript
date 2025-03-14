@@ -1,0 +1,11 @@
+--- old.contextualTypingWithGenericSignature.types
++++ new.contextualTypingWithGenericSignature.types
+@@= skipped -6, +6 lines =@@
+ >f2 : <T, U>(x: T, y: U) => T
+ 
+     <T, U>(x: T, y: U): T
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 

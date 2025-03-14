@@ -1,0 +1,27 @@
+--- old.templateLiteralIntersection4.types
++++ new.templateLiteralIntersection4.types
+@@= skipped -2, +2 lines =@@
+ === templateLiteralIntersection4.ts ===
+ type StateHook<S> = () => [S, unknown];
+ >StateHook : StateHook<S>
++>S : S
+ 
+ type StoreUtils<Store extends { [K: string]: any }> = Omit<{
+ >StoreUtils : StoreUtils<Store>
++>Store : Store
+ >K : string
+ 
+     [K in keyof Store as `use${Capitalize<string & K>}`]: StateHook<Store[K]>
++>K : K
++
+ }, 'useStore'> & {
+   Provider: unknown,
+ >Provider : unknown
+@@= skipped -17, +21 lines =@@
+ 
+ declare function createStore<Store extends { [K: string]: any }>(store: Store): StoreUtils<Store>;
+ >createStore : <Store extends { [K: string]: any; }>(store: Store) => StoreUtils<Store>
++>Store : Store
+ >K : string
+ >store : Store
+ 

@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType18.ts] ////
+
+=== symbolType18.ts ===
+interface Foo { prop }
+>Foo : Foo
+>prop : any
+
+var x: symbol | Foo;
+>x : symbol | Foo
+
+x;
+>x : symbol | Foo
+
+if (typeof x === "object") {
+>typeof x === "object" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : symbol | Foo
+>"object" : "object"
+
+    x;
+>x : Foo
+}
+else {
+    x;
+>x : symbol
+}

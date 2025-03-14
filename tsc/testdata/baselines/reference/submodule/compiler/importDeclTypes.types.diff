@@ -1,0 +1,11 @@
+--- old.importDeclTypes.types
++++ new.importDeclTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /node_modules/@types/foo-bar/index.d.ts ===
+ export interface Foo {
++>Foo : Foo
++
+     bar: string;
+ >bar : string
+ }

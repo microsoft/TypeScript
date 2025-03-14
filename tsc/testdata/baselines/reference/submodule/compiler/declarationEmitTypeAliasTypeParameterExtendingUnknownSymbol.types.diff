@@ -1,0 +1,8 @@
+--- old.declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.types
++++ new.declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.types
+@@= skipped -2, +2 lines =@@
+ === declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts ===
+ type A<T extends Unknown> = {}
+ >A : A<T>
++>T : T
+ 

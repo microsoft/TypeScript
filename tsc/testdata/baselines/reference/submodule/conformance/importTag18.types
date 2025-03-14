@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/jsdoc/importTag18.ts] ////
+
+=== a.ts ===
+export interface Foo {}
+>Foo : Foo
+
+=== b.js ===
+/**
+ * @import {
+ *    Foo
+ * } from "./a"
+ */
+
+/**
+ * @param {Foo} a
+ */
+export function foo(a) {}
+>foo : (a: any) => void
+>a : any
+

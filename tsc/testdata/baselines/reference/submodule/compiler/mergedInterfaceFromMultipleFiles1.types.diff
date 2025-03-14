@@ -1,0 +1,28 @@
+--- old.mergedInterfaceFromMultipleFiles1.types
++++ new.mergedInterfaceFromMultipleFiles1.types
+@@= skipped -3, +3 lines =@@
+ /// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
+ 
+ interface D { bar(): number; }
++>D : D
+ >bar : () => number
+ 
+ interface C extends D {
++>C : C
++
+ 	b(): Date;
+ >b : () => Date
+ }
+@@= skipped -40, +43 lines =@@
+ 
+ === mergedInterfaceFromMultipleFiles1_0.ts ===
+ interface I { foo(): string; }
++>I : I
+ >foo : () => string
+ 
+ interface C extends I {
++>C : C
++
+ 	a(): number;
+ >a : () => number
+ }

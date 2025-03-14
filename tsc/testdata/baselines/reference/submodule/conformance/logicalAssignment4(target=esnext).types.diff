@@ -1,0 +1,11 @@
+--- old.logicalAssignment4(target=esnext).types
++++ new.logicalAssignment4(target=esnext).types
+@@= skipped -65, +65 lines =@@
+ }
+ 
+ interface ThingWithOriginal {
++>ThingWithOriginal : ThingWithOriginal
++
+     name: string;
+ >name : string
+ 

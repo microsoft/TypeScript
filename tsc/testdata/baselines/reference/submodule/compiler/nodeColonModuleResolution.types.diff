@@ -1,0 +1,23 @@
+--- old.nodeColonModuleResolution.types
++++ new.nodeColonModuleResolution.types
+@@= skipped -47, +47 lines =@@
+ }
+ === /a/b/main.ts ===
+ import * as ph from 'node:ph'
+->ph : typeof ph
++>ph : typeof import("node:ph")
+ 
+ console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
+ >console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE) : void
+@@= skipped -8, +8 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
+->ph.constants : typeof ph.constants
+->ph : typeof ph
+->constants : typeof ph.constants
++>ph.constants : typeof constants
++>ph : typeof import("node:ph")
++>constants : typeof constants
+ >NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
+ 

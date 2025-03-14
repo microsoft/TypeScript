@@ -1,0 +1,19 @@
+--- old.externalModuleReferenceDoubleUnderscore1.types
++++ new.externalModuleReferenceDoubleUnderscore1.types
+@@= skipped -4, +4 lines =@@
+ >'timezonecomplete' : typeof import("timezonecomplete")
+ 
+     import basics = require("__timezonecomplete/basics");
+->basics : typeof basics
++>basics : typeof import("__timezonecomplete/basics")
+ 
+     export import TimeUnit = basics.TimeUnit;
+->TimeUnit : typeof basics.TimeUnit
+->basics : typeof basics
+->TimeUnit : basics.TimeUnit
++>TimeUnit : typeof TimeUnit
++>basics : typeof import("__timezonecomplete/basics")
++>TimeUnit : TimeUnit
+ }
+ 
+ declare module '__timezonecomplete/basics' {

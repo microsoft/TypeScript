@@ -1,0 +1,25 @@
+--- old.readonlyArraysAndTuples2.types
++++ new.readonlyArraysAndTuples2.types
+@@= skipped -19, +19 lines =@@
+ >T21 : T21
+ 
+ declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): readonly [string, string];
+->f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => readonly [string, string]
++>f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: [string, string]) => [string, string]
+ >ma : string[]
+ >ra : readonly string[]
+ >mt : [string, string]
+->rt : readonly [string, string]
++>rt : [string, string]
+ 
+ declare const someDec: any;
+ >someDec : any
+@@= skipped -23, +23 lines =@@
+ >someDec : any
+ 
+   k: readonly [string, number] = ['foo', 42];
+->k : readonly [string, number]
++>k : [string, number]
+ >['foo', 42] : [string, number]
+ >'foo' : "foo"
+ >42 : 42

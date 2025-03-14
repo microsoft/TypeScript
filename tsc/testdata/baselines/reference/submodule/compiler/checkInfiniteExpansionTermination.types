@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/checkInfiniteExpansionTermination.ts] ////
+
+=== checkInfiniteExpansionTermination.ts ===
+// Regression test for #1002
+// Before fix this code would cause infinite loop
+
+interface IObservable<T> {
+>IObservable : IObservable<T>
+>T : T
+
+    n: IObservable<T[]>; // Needed, must be T[]
+>n : IObservable<T[]>
+}
+
+// Needed
+interface ISubject<T> extends IObservable<T> { }
+>ISubject : ISubject<T>
+>T : T
+
+interface Foo { x }
+>Foo : Foo
+>x : any
+
+interface Bar { y }
+>Bar : Bar
+>y : any
+
+var values: IObservable<Foo>;
+>values : IObservable<Foo>
+
+var values2: ISubject<Bar>;
+>values2 : ISubject<Bar>
+
+values = values2;
+>values = values2 : ISubject<Bar>
+>values : IObservable<Foo>
+>values2 : ISubject<Bar>
+

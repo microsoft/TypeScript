@@ -1,0 +1,34 @@
+--- old.exportStarFromEmptyModule.types
++++ new.exportStarFromEmptyModule.types
+@@= skipped -24, +24 lines =@@
+ 
+ === exportStarFromEmptyModule_module4.ts ===
+ import * as X from "./exportStarFromEmptyModule_module3";
+->X : typeof X
++>X : typeof import("exportStarFromEmptyModule_module3")
+ 
+ var s: X.A;
+->s : X.A
++>s : A
+ >X : any
+ 
+ X.A.q;
+ >X.A.q : any
+->X.A : typeof X.A
+->X : typeof X
+->A : typeof X.A
++>X.A : typeof A
++>X : typeof import("exportStarFromEmptyModule_module3")
++>A : typeof A
+ >q : any
+ 
+ X.A.r; // Error
+ >X.A.r : any
+->X.A : typeof X.A
+->X : typeof X
+->A : typeof X.A
++>X.A : typeof A
++>X : typeof import("exportStarFromEmptyModule_module3")
++>A : typeof A
+ >r : any
+ 

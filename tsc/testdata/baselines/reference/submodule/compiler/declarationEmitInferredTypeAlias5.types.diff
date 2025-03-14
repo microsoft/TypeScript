@@ -1,0 +1,17 @@
+--- old.declarationEmitInferredTypeAlias5.types
++++ new.declarationEmitInferredTypeAlias5.types
+@@= skipped -9, +9 lines =@@
+ 
+ === 1.ts ===
+ import * as Z from "./0"
+->Z : typeof Z
++>Z : typeof import("0")
+ 
+ //let v2: Z.Data;
+ let v = "str" || true;
+ >v : string | boolean
+->"str" || true : true | "str"
++>"str" || true : "str" | true
+ >"str" : "str"
+ >true : true
+ 

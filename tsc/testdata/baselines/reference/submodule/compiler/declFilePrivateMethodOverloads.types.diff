@@ -1,0 +1,55 @@
+--- old.declFilePrivateMethodOverloads.types
++++ new.declFilePrivateMethodOverloads.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declFilePrivateMethodOverloads.ts ===
+ interface IContext {
++>IContext : IContext
++
+     someMethod();
+ >someMethod : () => any
+ }
+@@= skipped -7, +9 lines =@@
+ >c1 : c1
+ 
+     private _forEachBindingContext(bindingContext: IContext, fn: (bindingContext: IContext) => void);
+->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
++>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+ >bindingContext : IContext
+ >fn : (bindingContext: IContext) => void
+ >bindingContext : IContext
+ 
+     private _forEachBindingContext(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
+->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
++>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+ >bindingContextArray : IContext[]
+ >fn : (bindingContext: IContext) => void
+ >bindingContext : IContext
+ 
+     private _forEachBindingContext(context, fn: (bindingContext: IContext) => void): void {
+->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
++>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+ >context : any
+ >fn : (bindingContext: IContext) => void
+ >bindingContext : IContext
+@@= skipped -21, +21 lines =@@
+     }
+ 
+     private overloadWithArityDifference(bindingContext: IContext);
+->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
++>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+ >bindingContext : IContext
+ 
+     private overloadWithArityDifference(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
+->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
++>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+ >bindingContextArray : IContext[]
+ >fn : (bindingContext: IContext) => void
+ >bindingContext : IContext
+ 
+     private overloadWithArityDifference(context): void {
+->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void): any; }
++>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+ >context : any
+ 
+         // Function here

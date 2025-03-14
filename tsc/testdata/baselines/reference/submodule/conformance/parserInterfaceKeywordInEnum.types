@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserInterfaceKeywordInEnum.ts] ////
+
+=== parserInterfaceKeywordInEnum.ts ===
+enum Bar {
+>Bar : Bar.interface
+
+    interface,
+>interface : Bar.interface
+}
+

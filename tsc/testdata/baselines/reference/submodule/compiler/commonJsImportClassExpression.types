@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/commonJsImportClassExpression.ts] ////
+
+=== use.ts ===
+import Chunk = require('./mod1')
+>Chunk : typeof (Anonymous class)
+
+declare var c: Chunk;
+>c : (Anonymous class)
+
+c.chunk;
+>c.chunk : number
+>c : (Anonymous class)
+>chunk : number
+
+=== mod1.ts ===
+export = class {
+>class {    chunk = 1} : typeof (Anonymous class)
+
+    chunk = 1
+>chunk : number
+>1 : 1
+}
+

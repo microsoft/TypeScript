@@ -1,0 +1,17 @@
+--- old.declFileForFunctionTypeAsTypeParameter.types
++++ new.declFileForFunctionTypeAsTypeParameter.types
+@@= skipped -2, +2 lines =@@
+ === declFileForFunctionTypeAsTypeParameter.ts ===
+ class X<T> {
+ >X : X<T>
++>T : T
+ }
+ class C extends X<() => number> {
+ >C : C
+ >X : X<() => number>
+ }
+ interface I extends X<() => number> {
++>I : I
+ }
+ 
+ 

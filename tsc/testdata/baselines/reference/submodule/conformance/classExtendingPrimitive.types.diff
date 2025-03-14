@@ -1,0 +1,11 @@
+--- old.classExtendingPrimitive.types
++++ new.classExtendingPrimitive.types
+@@= skipped -39, +39 lines =@@
+ >Undefined : any
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ class C8 extends E { }

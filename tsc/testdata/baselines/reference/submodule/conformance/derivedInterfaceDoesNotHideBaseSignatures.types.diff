@@ -1,0 +1,19 @@
+--- old.derivedInterfaceDoesNotHideBaseSignatures.types
++++ new.derivedInterfaceDoesNotHideBaseSignatures.types
+@@= skipped -2, +2 lines =@@
+ === derivedInterfaceDoesNotHideBaseSignatures.ts ===
+ // Derived interfaces no longer hide signatures from base types, so these signatures are always compatible.
+ interface Base {
++>Base : Base
++
+     (): string;
+     new (x: string): number;
+ >x : string
+ }
+ 
+ interface Derived extends Base {
++>Derived : Derived
++
+     (): number;
+     new (x: string): string;
+ >x : string

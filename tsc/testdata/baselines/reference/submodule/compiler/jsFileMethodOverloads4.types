@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/jsFileMethodOverloads4.ts] ////
+
+=== /a.js ===
+export function Foo() { }
+>Foo : () => void
+
+/**
+ * @overload
+ * @param {string} a
+ * @return {void}
+ */
+
+/**
+ * @overload
+ * @param {number} a
+ * @param {string} b
+ * @return {void}
+ */
+
+/**
+ * @param {string | number} a
+ * @param {string} [b]
+ * @return {void}
+ */
+Foo.prototype.bar = function (a, b) { }
+>Foo.prototype.bar = function (a, b) { } : (a: any, b: any) => void
+>Foo.prototype.bar : any
+>Foo.prototype : any
+>Foo : () => void
+>prototype : any
+>bar : any
+>function (a, b) { } : (a: any, b: any) => void
+>a : any
+>b : any
+

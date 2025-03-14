@@ -1,0 +1,20 @@
+--- old.typeSatisfaction.types
++++ new.typeSatisfaction.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeSatisfaction.ts ===
+ interface I1 {
++>I1 : I1
++
+     a: number;
+ >a : number
+ }
+@@= skipped -63, +65 lines =@@
+ >2 : 2
+ 
+ interface A {
++>A : A
++
+     a: string
+ >a : string
+ }

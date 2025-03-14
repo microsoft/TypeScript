@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/es6/destructuring/optionalBindingParameters3.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef Foo
+ * @property {string} a
+ */
+
+/**
+ * @param {Foo} [options]
+ */
+function f({ a = "a" }) {}
+>f : (__0: { a?: string; }) => void
+>a : string
+>"a" : "a"
+

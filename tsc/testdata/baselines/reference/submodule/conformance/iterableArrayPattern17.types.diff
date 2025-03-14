@@ -1,0 +1,18 @@
+--- old.iterableArrayPattern17.types
++++ new.iterableArrayPattern17.types
+@@= skipped -42, +42 lines =@@
+ }
+ 
+ function fun(...[a, b]: Bar[]) { }
+->fun : (...[a, b]: Bar[]) => void
++>fun : (...__0: Bar[]) => void
+ >a : Bar
+ >b : Bar
+ 
+ fun(new FooIterator);
+ >fun(new FooIterator) : void
+->fun : (...[a, b]: Bar[]) => void
++>fun : (...__0: Bar[]) => void
+ >new FooIterator : FooIterator
+ >FooIterator : typeof FooIterator
+ 

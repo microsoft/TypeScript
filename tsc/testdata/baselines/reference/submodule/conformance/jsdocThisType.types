@@ -1,0 +1,84 @@
+//// [tests/cases/conformance/jsdoc/jsdocThisType.ts] ////
+
+=== /types.d.ts ===
+export interface Foo {
+>Foo : Foo
+
+    foo: () => void;
+>foo : () => void
+}
+
+export type M = (this: Foo) => void;
+>M : M
+>this : Foo
+
+=== /a.js ===
+/** @type {import('./types').M} */
+export const f1 = function() {
+>f1 : () => void
+>function() {    this.test();} : () => void
+
+    this.test();
+>this.test() : any
+>this.test : any
+>this : any
+>test : any
+}
+
+/** @type {import('./types').M} */
+export function f2() {
+>f2 : () => void
+
+    this.test();
+>this.test() : any
+>this.test : any
+>this : any
+>test : any
+}
+
+/** @type {(this: import('./types').Foo) => void} */
+export const f3 = function() {
+>f3 : () => void
+>function() {    this.test();} : () => void
+
+    this.test();
+>this.test() : any
+>this.test : any
+>this : any
+>test : any
+}
+
+/** @type {(this: import('./types').Foo) => void} */
+export function f4() {
+>f4 : () => void
+
+    this.test();
+>this.test() : any
+>this.test : any
+>this : any
+>test : any
+}
+
+/** @type {function(this: import('./types').Foo): void} */
+export const f5 = function() {
+>f5 : () => void
+>function() {    this.test();} : () => void
+
+    this.test();
+>this.test() : any
+>this.test : any
+>this : any
+>test : any
+}
+
+/** @type {function(this: import('./types').Foo): void} */
+export function f6() {
+>f6 : () => void
+
+    this.test();
+>this.test() : any
+>this.test : any
+>this : any
+>test : any
+}
+

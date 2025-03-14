@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/unusedVariablesinModules1.ts] ////
+
+=== unusedVariablesinModules1.ts ===
+export {};
+
+var x: string;
+>x : string
+
+export var y: string;
+>y : string
+

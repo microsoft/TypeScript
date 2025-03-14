@@ -1,0 +1,29 @@
+--- old.superNoModifiersCrash.types
++++ new.superNoModifiersCrash.types
+@@= skipped -4, +4 lines =@@
+ >Parent : Parent
+ 
+     initialize() {
+->initialize : (...args: any[]) => string
++>initialize : () => string
+ 
+         super.initialize(...arguments)
+->super.initialize(...arguments) : error
+->super.initialize : error
++>super.initialize(...arguments) : any
++>super.initialize : any
+ >super : any
+ >initialize : any
+ >...arguments : any
+@@= skipped -12, +12 lines =@@
+ 
+         return this.asdf = ''
+ >this.asdf = '' : ""
+->this.asdf : string
++>this.asdf : any
+ >this : this
+->asdf : string
++>asdf : any
+ >'' : ""
+     }
+   }

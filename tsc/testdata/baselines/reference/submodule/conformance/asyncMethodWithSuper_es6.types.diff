@@ -1,0 +1,56 @@
+--- old.asyncMethodWithSuper_es6.types
++++ new.asyncMethodWithSuper_es6.types
+@@= skipped -117, +117 lines =@@
+ >super : A
+ >x : () => void
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // destructuring assign with element access
+         ({ f: super["x"] } = { f });
+@@= skipped -12, +12 lines =@@
+ >super : A
+ >"x" : "x"
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // property access in arrow
+         (() => super.x());
+@@= skipped -100, +100 lines =@@
+ >super : A
+ >x : () => void
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // property access (assign) in arrow
+         (() => super.x = f);
+@@= skipped -84, +84 lines =@@
+ >super : A
+ >"x" : "x"
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // element access (assign) in arrow
+         (() => super["x"] = f);
+@@= skipped -84, +84 lines =@@
+ >super : A
+ >x : () => void
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // property access (assign) in arrow
+         (() => super.x = f);
+@@= skipped -84, +84 lines =@@
+ >super : A
+ >"x" : "x"
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // element access (assign) in arrow
+         (() => super["x"] = f);

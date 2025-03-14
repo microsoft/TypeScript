@@ -1,0 +1,235 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts] ////
+
+=== typeofOperatorWithStringType.ts ===
+// typeof  operator on string type
+var STRING: string;
+>STRING : string
+
+var STRING1: string[] = ["", "abc"];
+>STRING1 : string[]
+>["", "abc"] : string[]
+>"" : ""
+>"abc" : "abc"
+
+function foo(): string { return "abc"; }
+>foo : () => string
+>"abc" : "abc"
+
+class A {
+>A : A
+
+    public a: string;
+>a : string
+
+    static foo() { return ""; }
+>foo : () => string
+>"" : ""
+}
+module M {
+>M : typeof M
+
+    export var n: string;
+>n : string
+}
+
+var objA = new A();
+>objA : A
+>new A() : A
+>A : typeof A
+
+// string type var
+var ResultIsString1 = typeof STRING;
+>ResultIsString1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof STRING : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING : string
+
+var ResultIsString2 = typeof STRING1;
+>ResultIsString2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof STRING1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING1 : string[]
+
+// string type literal
+var ResultIsString3 = typeof "";
+>ResultIsString3 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof "" : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>"" : ""
+
+var ResultIsString4 = typeof { x: "", y: "" };
+>ResultIsString4 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof { x: "", y: "" } : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>{ x: "", y: "" } : { x: string; y: string; }
+>x : string
+>"" : ""
+>y : string
+>"" : ""
+
+var ResultIsString5 = typeof { x: "", y: (s: string) => { return s; } };
+>ResultIsString5 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof { x: "", y: (s: string) => { return s; } } : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
+>x : string
+>"" : ""
+>y : (s: string) => string
+>(s: string) => { return s; } : (s: string) => string
+>s : string
+>s : string
+
+// string type expressions
+var ResultIsString6 = typeof objA.a;
+>ResultIsString6 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof objA.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>objA.a : string
+>objA : A
+>a : string
+
+var ResultIsString7 = typeof M.n;
+>ResultIsString7 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof M.n : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>M.n : string
+>M : typeof M
+>n : string
+
+var ResultIsString8 = typeof STRING1[0];
+>ResultIsString8 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof STRING1[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING1[0] : string
+>STRING1 : string[]
+>0 : 0
+
+var ResultIsString9 = typeof foo();
+>ResultIsString9 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof foo() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo() : string
+>foo : () => string
+
+var ResultIsString10 = typeof A.foo();
+>ResultIsString10 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof A.foo() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>A.foo() : string
+>A.foo : () => string
+>A : typeof A
+>foo : () => string
+
+var ResultIsString11 = typeof (STRING + STRING);
+>ResultIsString11 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof (STRING + STRING) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>(STRING + STRING) : string
+>STRING + STRING : string
+>STRING : string
+>STRING : string
+
+var ResultIsString12 = typeof STRING.charAt(0);
+>ResultIsString12 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof STRING.charAt(0) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING.charAt(0) : string
+>STRING.charAt : (pos: number) => string
+>STRING : string
+>charAt : (pos: number) => string
+>0 : 0
+
+// multiple typeof  operators
+var ResultIsString13 = typeof typeof STRING;
+>ResultIsString13 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof typeof STRING : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof STRING : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING : string
+
+var ResultIsString14 = typeof typeof typeof (STRING + STRING);
+>ResultIsString14 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof typeof typeof (STRING + STRING) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof typeof (STRING + STRING) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>typeof (STRING + STRING) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>(STRING + STRING) : string
+>STRING + STRING : string
+>STRING : string
+>STRING : string
+
+// miss assignment operators
+typeof "";
+>typeof "" : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>"" : ""
+
+typeof STRING;
+>typeof STRING : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING : string
+
+typeof STRING1;
+>typeof STRING1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING1 : string[]
+
+typeof foo();
+>typeof foo() : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo() : string
+>foo : () => string
+
+typeof objA.a, M.n;
+>typeof objA.a, M.n : string
+>typeof objA.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>objA.a : string
+>objA : A
+>a : string
+>M.n : string
+>M : typeof M
+>n : string
+
+// use typeof in type query
+var z: string;
+>z : string
+
+var x: string[];
+>x : string[]
+
+var r: () => string;
+>r : () => string
+
+z: typeof STRING;
+>z : any
+>typeof STRING : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING : string
+
+x: typeof STRING1;
+>x : any
+>typeof STRING1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>STRING1 : string[]
+
+r: typeof foo;
+>r : any
+>typeof foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>foo : () => string
+
+var y = { a: "", b: "" };
+>y : { a: string; b: string; }
+>{ a: "", b: "" } : { a: string; b: string; }
+>a : string
+>"" : ""
+>b : string
+>"" : ""
+
+z: typeof y.a;
+>z : any
+>typeof y.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>y.a : string
+>y : { a: string; b: string; }
+>a : string
+
+z: typeof objA.a;
+>z : any
+>typeof objA.a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>objA.a : string
+>objA : A
+>a : string
+
+z: typeof A.foo;
+>z : any
+>typeof A.foo : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>A.foo : () => string
+>A : typeof A
+>foo : () => string
+
+z: typeof M.n;
+>z : any
+>typeof M.n : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>M.n : string
+>M : typeof M
+>n : string
+

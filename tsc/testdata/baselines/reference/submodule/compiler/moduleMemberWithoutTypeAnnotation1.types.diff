@@ -1,0 +1,31 @@
+--- old.moduleMemberWithoutTypeAnnotation1.types
++++ new.moduleMemberWithoutTypeAnnotation1.types
+@@= skipped -19, +19 lines =@@
+ >TypeScript : typeof TypeScript
+ 
+     export interface ISyntaxElement { };
++>ISyntaxElement : ISyntaxElement
++
+     export interface ISyntaxToken { };
++>ISyntaxToken : ISyntaxToken
+ 
+     export class PositionedElement {
+ >PositionedElement : PositionedElement
+ 
+         public childIndex(child: ISyntaxElement) {
+->childIndex : (child: ISyntaxElement) => void
++>childIndex : (child: ISyntaxElement) => any
+ >child : ISyntaxElement
+ 
+             return Syntax.childIndex();
+->Syntax.childIndex() : void
+->Syntax.childIndex : () => void
+->Syntax : typeof Syntax
+->childIndex : () => void
++>Syntax.childIndex() : any
++>Syntax.childIndex : any
++>Syntax : any
++>childIndex : any
+         }
+     }
+ 

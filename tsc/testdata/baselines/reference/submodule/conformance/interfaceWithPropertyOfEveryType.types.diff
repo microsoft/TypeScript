@@ -1,0 +1,69 @@
+--- old.interfaceWithPropertyOfEveryType.types
++++ new.interfaceWithPropertyOfEveryType.types
+@@= skipped -15, +15 lines =@@
+ >1 : 1
+ }
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ interface Foo {
++>Foo : Foo
++
+     a: number;
+ >a : number
+ 
+@@= skipped -31, +33 lines =@@
+ 
+     i: <T>(x: T) => T;
+ >i : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+     j: Foo;
+@@= skipped -10, +11 lines =@@
+ 
+     l: typeof f1;
+ >l : () => void
+->f1 : () => void
+ 
+     m: typeof M;
+ >m : typeof M
+->M : typeof M
+ 
+     n: {};
+ >n : {}
+ 
+     o: E;
+->o : E
++>o : E.A
+ }
+ 
+ var a: Foo = {
+ >a : Foo
+->{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : { a: number; b: string; c: true; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: () => void; m: typeof M; n: {}; o: E; }
++>{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : { a: number; b: string; c: true; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: () => void; m: typeof M; n: {}; o: E.A; }
+ 
+     a: 1,
+ >a : number
+@@= skipped -54, +52 lines =@@
+     i: <T>(x: T) => x,
+ >i : <T>(x: T) => T
+ ><T>(x: T) => x : <T>(x: T) => T
++>T : T
+ >x : T
+ >x : T
+ 
+@@= skipped -25, +26 lines =@@
+ >{} : {}
+ 
+     o: E.A
+->o : E
+->E.A : E
++>o : E.A
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ }

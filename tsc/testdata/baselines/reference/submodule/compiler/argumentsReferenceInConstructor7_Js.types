@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/argumentsReferenceInConstructor7_Js.ts] ////
+
+=== /a.js ===
+class A {
+>A : A
+
+	constructor() {
+		/**
+		 * @type Function
+		 */
+		this.callee = arguments.callee;
+>this.callee = arguments.callee : Function
+>this.callee : any
+>this : this
+>callee : any
+>arguments.callee : Function
+>arguments : IArguments
+>callee : Function
+	}
+}
+

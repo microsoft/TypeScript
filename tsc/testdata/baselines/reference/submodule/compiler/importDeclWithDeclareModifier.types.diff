@@ -1,0 +1,13 @@
+--- old.importDeclWithDeclareModifier.types
++++ new.importDeclWithDeclareModifier.types
+@@= skipped -1, +1 lines =@@
+ 
+ === importDeclWithDeclareModifier.ts ===
+ module x {
++>x : any
++
+     interface c {
++>c : c
+     }
+ }
+ declare export import a = x.c;

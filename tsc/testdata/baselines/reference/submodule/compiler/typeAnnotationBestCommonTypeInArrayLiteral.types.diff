@@ -1,0 +1,11 @@
+--- old.typeAnnotationBestCommonTypeInArrayLiteral.types
++++ new.typeAnnotationBestCommonTypeInArrayLiteral.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeAnnotationBestCommonTypeInArrayLiteral.ts ===
+ interface IMenuItem {
++>IMenuItem : IMenuItem
++
+     id: string;
+ >id : string
+ 

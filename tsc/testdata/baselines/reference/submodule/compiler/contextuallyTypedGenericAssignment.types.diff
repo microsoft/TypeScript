@@ -1,0 +1,14 @@
+--- old.contextuallyTypedGenericAssignment.types
++++ new.contextuallyTypedGenericAssignment.types
+@@= skipped -2, +2 lines =@@
+ === contextuallyTypedGenericAssignment.ts ===
+ function foo<A extends any[]>(
+ >foo : <A extends any[]>(arg: <T extends { a: number; }>(t: T, ...rest: A) => number) => void
++>A : A
+ 
+     arg: <T extends { a: number }>(t: T, ...rest: A) => number
+ >arg : <T extends { a: number; }>(t: T, ...rest: A) => number
++>T : T
+ >a : number
+ >t : T
+ >rest : A

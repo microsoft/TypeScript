@@ -1,0 +1,20 @@
+--- old.declFileExportAssignmentOfGenericInterface.types
++++ new.declFileExportAssignmentOfGenericInterface.types
+@@= skipped -7, +7 lines =@@
+ >x : a<a<string>>
+ 
+ x.a;
+->x.a : string
++>x.a : any
+ >x : a<a<string>>
+->a : string
++>a : any
+ 
+-=== declFileExportAssignmentOfGenericInterface_0.ts ===
+-interface Foo<T> {
+-    a: string;
+->a : string
+-}
+-export = Foo;
+->Foo : Foo<T>
+-

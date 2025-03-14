@@ -1,0 +1,19 @@
+--- old.nodeModulesTripleSlashReferenceModeDeclarationEmit6(module=nodenext).types
++++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit6(module=nodenext).types
+@@= skipped -7, +7 lines =@@
+ >(obj as typeof obj) : RequireInterface
+ >obj as typeof obj : RequireInterface
+ >obj : RequireInterface
+->obj : RequireInterface
+ 
+ === /node_modules/pkg/require.d.ts ===
+ export {};
+@@= skipped -8, +7 lines =@@
+ >global : typeof global
+ 
+     interface RequireInterface {}
++>RequireInterface : RequireInterface
++
+     function getInterR(): RequireInterface;
+ >getInterR : () => RequireInterface
+ }

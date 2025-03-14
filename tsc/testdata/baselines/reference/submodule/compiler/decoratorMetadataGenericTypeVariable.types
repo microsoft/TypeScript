@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/decoratorMetadataGenericTypeVariable.ts] ////
+
+=== decoratorMetadataGenericTypeVariable.ts ===
+export class C<TypeVariable> {
+>C : C<TypeVariable>
+>TypeVariable : TypeVariable
+
+  @Decorate
+>Decorate : any
+
+  member: TypeVariable;
+>member : TypeVariable
+}
+

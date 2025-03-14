@@ -1,0 +1,43 @@
+--- old.jsDeclarationsTypeReferences.types
++++ new.jsDeclarationsTypeReferences.types
+@@= skipped -3, +3 lines =@@
+ /// <reference types="node" />
+ 
+ const Something = require("fs").Something;
+->Something : typeof Something
+->require("fs").Something : typeof Something
+->require("fs") : typeof import("fs")
++>Something : any
++>require("fs").Something : any
++>require("fs") : any
+ >require : any
+ >"fs" : "fs"
+->Something : typeof Something
++>Something : any
+ 
+ const thing = new Something();
+->thing : Something
+->new Something() : Something
+->Something : typeof Something
++>thing : any
++>new Something() : any
++>Something : any
+ 
+ module.exports = {
+->module.exports = {    thing} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->{    thing} : { thing: Something; }
++>module.exports = {    thing} : { thing: any; }
++>module.exports : any
++>module : any
++>exports : any
++>{    thing} : { thing: any; }
+ 
+     thing
+->thing : Something
++>thing : any
+ 
+ };
+ 

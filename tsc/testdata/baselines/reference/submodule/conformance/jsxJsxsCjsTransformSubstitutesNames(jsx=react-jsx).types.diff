@@ -1,0 +1,21 @@
+--- old.jsxJsxsCjsTransformSubstitutesNames(jsx=react-jsx).types
++++ new.jsxJsxsCjsTransformSubstitutesNames(jsx=react-jsx).types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNames.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === jsxJsxsCjsTransformSubstitutesNames.tsx ===
+ /// <reference path="react16.d.ts" />
+ const a = <div></div>
+->a : JSX.Element
+-><div></div> : JSX.Element
++>a : any
++><div></div> : any
+ >div : any
+ >div : any
+ 

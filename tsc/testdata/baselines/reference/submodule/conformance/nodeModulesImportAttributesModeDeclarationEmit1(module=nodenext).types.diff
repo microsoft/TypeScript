@@ -1,0 +1,35 @@
+--- old.nodeModulesImportAttributesModeDeclarationEmit1(module=nodenext).types
++++ new.nodeModulesImportAttributesModeDeclarationEmit1(module=nodenext).types
+@@= skipped -4, +4 lines =@@
+ >RequireInterface : RequireInterface
+ 
+ import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+->ImportInterface : ImportInterface
++>ImportInterface : any
+ 
+ export interface LocalInterface extends RequireInterface, ImportInterface {}
++>LocalInterface : LocalInterface
+ 
+ import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
+ >RequireInterface : any
+@@= skipped -13, +14 lines =@@
+ >Imp : any
+ 
+ export interface Loc extends Req, Imp {}
++>Loc : Loc
+ 
+ export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+ >RequireInterface : RequireInterface
+ 
+ export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+->ImportInterface : ImportInterface
++>ImportInterface : any
+ 
+-=== /node_modules/pkg/import.d.ts ===
+-
+-export interface ImportInterface {}
+ === /node_modules/pkg/require.d.ts ===
+-
+ export interface RequireInterface {}
++>RequireInterface : RequireInterface
++

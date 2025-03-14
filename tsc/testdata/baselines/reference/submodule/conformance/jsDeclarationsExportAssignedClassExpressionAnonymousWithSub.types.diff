@@ -1,0 +1,69 @@
+--- old.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.types
++++ new.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.js ===
+ module.exports = class {
+->module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
+->module.exports : typeof import("index")
+->module : { exports: typeof import("index"); }
+->exports : typeof import("index")
+->class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
++>module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
++>module.exports : any
++>module : any
++>exports : any
++>class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
+ 
+     /**
+      * @param {number} p
+      */
+     constructor(p) {
+->p : number
++>p : any
+ 
+         this.t = 12 + p;
+->this.t = 12 + p : number
++>this.t = 12 + p : any
+ >this.t : any
+ >this : this
+ >t : any
+->12 + p : number
++>12 + p : any
+ >12 : 12
+->p : number
++>p : any
+     }
+ }
+ module.exports.Sub = class {
+ >module.exports.Sub = class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub
+->module.exports.Sub : typeof Sub
+->module.exports : typeof import("index")
+->module : { exports: typeof import("index"); }
+->exports : typeof import("index")
+->Sub : typeof Sub
++>module.exports.Sub : any
++>module.exports : any
++>module : any
++>exports : any
++>Sub : any
+ >class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub
+ 
+     constructor() {
+         this.instance = new module.exports(10);
+->this.instance = new module.exports(10) : import("index")
++>this.instance = new module.exports(10) : any
+ >this.instance : any
+ >this : this
+ >instance : any
+->new module.exports(10) : import("index")
+->module.exports : typeof import("index")
+->module : { exports: typeof import("index"); }
+->exports : typeof import("index")
++>new module.exports(10) : any
++>module.exports : any
++>module : any
++>exports : any
+ >10 : 10
+     }
+ }

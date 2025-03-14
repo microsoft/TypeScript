@@ -1,0 +1,60 @@
+--- old.optionalPropertyAssignableToStringIndexSignature.types
++++ new.optionalPropertyAssignableToStringIndexSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === optionalPropertyAssignableToStringIndexSignature.ts ===
+ declare let optionalProperties: { k1?: string };
+->optionalProperties : { k1?: string; }
++>optionalProperties : { k1?: string | undefined; }
+ >k1 : string | undefined
+ 
+ declare let undefinedProperties: { k1: string | undefined };
+@@= skipped -12, +12 lines =@@
+ >key : string
+ 
+ stringDictionary = optionalProperties;  // ok
+->stringDictionary = optionalProperties : { k1?: string; }
++>stringDictionary = optionalProperties : { k1?: string | undefined; }
+ >stringDictionary : { [key: string]: string; }
+->optionalProperties : { k1?: string; }
++>optionalProperties : { k1?: string | undefined; }
+ 
+ stringDictionary = undefinedProperties; // error
+ >stringDictionary = undefinedProperties : { k1: string | undefined; }
+@@= skipped -14, +14 lines =@@
+ >key : number
+ 
+ declare let numberLiteralKeys: { 1?: string };
+->numberLiteralKeys : { 1?: string; }
++>numberLiteralKeys : { 1?: string | undefined; }
+ >1 : string | undefined
+ 
+ probablyArray = numberLiteralKeys;  // error
+->probablyArray = numberLiteralKeys : { 1?: string; }
++>probablyArray = numberLiteralKeys : { 1?: string | undefined; }
+ >probablyArray : { [key: number]: string; }
+->numberLiteralKeys : { 1?: string; }
++>numberLiteralKeys : { 1?: string | undefined; }
+ 
+ declare let optionalUndefined: { k1?: undefined };
+ >optionalUndefined : { k1?: undefined; }
+@@= skipped -19, +19 lines =@@
+ 
+ function f<T>() {
+ >f : <T>() => void
++>T : T
+ 
+ 	let optional: { k1?: T } = undefined!;
+->optional : { k1?: T; }
++>optional : { k1?: T | undefined; }
+ >k1 : T | undefined
+ >undefined! : never
+ >undefined : undefined
+@@= skipped -10, +11 lines =@@
+ 	let dict: { [key: string]: T | number } = optional; // ok
+ >dict : { [key: string]: number | T; }
+ >key : string
+->optional : { k1?: T; }
++>optional : { k1?: T | undefined; }
+ }
+ 

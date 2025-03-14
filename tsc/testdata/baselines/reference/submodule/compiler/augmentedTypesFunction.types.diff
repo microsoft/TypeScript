@@ -1,0 +1,28 @@
+--- old.augmentedTypesFunction.types
++++ new.augmentedTypesFunction.types
+@@= skipped -41, +41 lines =@@
+ >y4 : () => void
+ 
+ enum y4 { One } // error
+->y4 : y4
++>y4 : y4.One
+ >One : y4.One
+ 
+ // function then internal module
+@@= skipped -8, +8 lines =@@
+ >y5 : () => void
+ 
+ module y5 { } // ok since module is not instantiated
++>y5 : () => void
+ 
+ function y5a() { }
+ >y5a : typeof y5a
+@@= skipped -21, +22 lines =@@
+ >y5c : () => void
+ 
+ module y5c { export interface I { foo(): void } } // should be an error
++>y5c : () => void
++>I : I
+ >foo : () => void
+ 
+ // function then import, messes with other errors

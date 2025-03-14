@@ -1,0 +1,55 @@
+--- old.jsdocTypeCast.types
++++ new.jsdocTypeCast.types
+@@= skipped -4, +4 lines =@@
+  * @param {string} x
+  */
+  function f(x) {
+->f : (x: string) => void
+->x : string
++>f : (x: any) => void
++>x : any
+ 
+     /** @type {'a' | 'b'} */
+     let a = (x); // Error
+->a : "a" | "b"
+->(x) : "a" | "b"
+->x : string
++>a : any
++>(x) : any
++>x : any
+ 
+     a;
+->a : "a" | "b"
++>a : any
+ 
+     /** @type {'a' | 'b'} */
+     let b = (((x))); // Error
+->b : "a" | "b"
+->(((x))) : "a" | "b"
+->((x)) : string
+->(x) : string
+->x : string
++>b : any
++>(((x))) : any
++>((x)) : any
++>(x) : any
++>x : any
+ 
+     b;
+->b : "a" | "b"
++>b : any
+ 
+     /** @type {'a' | 'b'} */
+     let c = /** @type {'a' | 'b'} */ (x); // Ok
+->c : "a" | "b"
+->(x) : "a" | "b"
+->x : string
++>c : any
++>(x) : any
++>x : any
+ 
+     c;
+->c : "a" | "b"
++>c : any
+ }
+ 

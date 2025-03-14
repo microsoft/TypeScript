@@ -1,0 +1,90 @@
+--- old.missingTypeArguments3.types
++++ new.missingTypeArguments3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === missingTypeArguments3.ts ===
+ declare module linq {
++>linq : any
+ 
+     interface Enumerable<T> {
++>Enumerable : Enumerable<T>
++>T : T
++
+         OrderByDescending(keySelector?: string): OrderedEnumerable<T>;
+ >OrderByDescending : (keySelector?: string) => OrderedEnumerable<T>
+ >keySelector : string
+ 
+         GroupBy<TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>;
+->GroupBy : { <TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>; <TKey_1, TElement>(keySelector: (element: T) => TKey_1, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey_1, TElement>>; }
++>GroupBy : { <TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>; <TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
++>TKey : TKey
+ >keySelector : (element: T) => TKey
+ >element : T
+ 
+         GroupBy<TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>;
+->GroupBy : { <TKey_1>(keySelector: (element: T) => TKey_1): Enumerable<Grouping<TKey_1, T>>; <TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
++>GroupBy : { <TKey>(keySelector: (element: T) => TKey): Enumerable<Grouping<TKey, T>>; <TKey, TElement>(keySelector: (element: T) => TKey, elementSelector: (element: T) => TElement): Enumerable<Grouping<TKey, TElement>>; }
++>TKey : TKey
++>TElement : TElement
+ >keySelector : (element: T) => TKey
+ >element : T
+ >elementSelector : (element: T) => TElement
+@@= skipped -20, +27 lines =@@
+ 
+         ToDictionary<TKey>(keySelector: (element: T) => TKey): Dictionary<TKey, T>;
+ >ToDictionary : <TKey>(keySelector: (element: T) => TKey) => Dictionary<TKey, T>
++>TKey : TKey
+ >keySelector : (element: T) => TKey
+ >element : T
+     }
+ 
+     interface OrderedEnumerable<T> extends Enumerable<T> {
++>OrderedEnumerable : OrderedEnumerable<T>
++>T : T
++
+         ThenBy<TCompare>(keySelector: (element: T) => TCompare): OrderedEnumerable<T>; // used to incorrectly think this was missing a type argument
+ >ThenBy : <TCompare>(keySelector: (element: T) => TCompare) => OrderedEnumerable<T>
++>TCompare : TCompare
+ >keySelector : (element: T) => TCompare
+ >element : T
+     }
+ 
+     interface Grouping<TKey, TElement> extends Enumerable<TElement> {
++>Grouping : Grouping<TKey, TElement>
++>TKey : TKey
++>TElement : TElement
++
+         Key(): TKey;
+ >Key : () => TKey
+     }
+ 
+     interface Lookup<TKey, TElement> {
++>Lookup : Lookup<TKey, TElement>
++>TKey : TKey
++>TElement : TElement
++
+         Count(): number;
+ >Count : () => number
+ 
+@@= skipped -33, +46 lines =@@
+     }
+ 
+     interface Dictionary<TKey, TValue> {
++>Dictionary : Dictionary<TKey, TValue>
++>TKey : TKey
++>TValue : TValue
++
+         Add(key: TKey, value: TValue): void;
+ >Add : (key: TKey, value: TValue) => void
+ >key : TKey
+@@= skipped -33, +37 lines =@@
+     }
+ 
+     interface KeyValuePair<TKey, TValue> {
++>KeyValuePair : KeyValuePair<TKey, TValue>
++>TKey : TKey
++>TValue : TValue
++
+         Key: TKey;
+ >Key : TKey
+ 

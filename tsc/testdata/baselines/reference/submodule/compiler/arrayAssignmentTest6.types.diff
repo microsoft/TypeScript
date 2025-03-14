@@ -1,0 +1,29 @@
+--- old.arrayAssignmentTest6.types
++++ new.arrayAssignmentTest6.types
+@@= skipped -4, +4 lines =@@
+ >Test : typeof Test
+ 
+     interface IState {
++>IState : IState
+     }
+     interface IToken {
++>IToken : IToken
++
+         startIndex: number;
+ >startIndex : number
+     }
+     interface ILineTokens {
++>ILineTokens : ILineTokens
++
+         tokens: IToken[];
+ >tokens : IToken[]
+ 
+@@= skipped -13, +18 lines =@@
+ >endState : IState
+     }
+     interface IMode {
++>IMode : IMode
++
+         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
+ >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
+ >line : string

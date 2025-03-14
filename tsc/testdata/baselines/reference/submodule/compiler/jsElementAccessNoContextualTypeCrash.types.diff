@@ -1,0 +1,44 @@
+--- old.jsElementAccessNoContextualTypeCrash.types
++++ new.jsElementAccessNoContextualTypeCrash.types
+@@= skipped -1, +1 lines =@@
+ 
+ === jsElementAccessNoContextualTypeCrash.js ===
+ var Common = {};
+->Common : typeof Common
++>Common : {}
+ >{} : {}
+ 
+ self['Common'] = self['Common'] || {};
+ >self['Common'] = self['Common'] || {} : {}
+->self['Common'] : typeof Common
++>self['Common'] : {}
+ >self : Window & typeof globalThis
+ >'Common' : "Common"
+ >self['Common'] || {} : {}
+->self['Common'] : typeof Common
++>self['Common'] : {}
+ >self : Window & typeof globalThis
+ >'Common' : "Common"
+ >{} : {}
+@@= skipped -19, +19 lines =@@
+  * @return {string}
+  */
+ Common.localize = function (string) {
+->Common.localize = function (string) {    return string;} : (string: string) => string
+->Common.localize : (string: string) => string
+->Common : typeof Common
+->localize : (string: string) => string
+->function (string) {    return string;} : (string: string) => string
+->string : string
++>Common.localize = function (string) {    return string;} : (string: any) => any
++>Common.localize : any
++>Common : {}
++>localize : any
++>function (string) {    return string;} : (string: any) => any
++>string : any
+ 
+     return string;
+->string : string
++>string : any
+ 
+ };

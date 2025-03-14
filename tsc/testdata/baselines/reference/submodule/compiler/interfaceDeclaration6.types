@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/interfaceDeclaration6.ts] ////
+
+=== interfaceDeclaration6.ts ===
+interface i1 { foo: number; };
+>i1 : i1
+>foo : number
+
+interface i2 extends i1 { foo: number; };
+>i2 : i2
+>foo : number
+
+interface i3 extends i1 { foo: string; };
+>i3 : i3
+>foo : string
+
+interface i4 {
+>i4 : i4
+
+ bar():any;
+>bar : { (): any; (): any; }
+
+ bar():any;
+>bar : { (): any; (): any; }
+}

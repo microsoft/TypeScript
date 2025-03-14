@@ -1,0 +1,52 @@
+--- old.intersectionsAndEmptyObjects.types
++++ new.intersectionsAndEmptyObjects.types
+@@= skipped -42, +42 lines =@@
+ >x09 : A & B
+ 
+ interface D {}
++>D : D
++
+ interface E {}
++>E : E
+ 
+ let x10: A & D;
+ >x10 : A & D
+@@= skipped -26, +29 lines =@@
+ const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
+ >intersectDictionaries : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
+ ><F1 extends Dictionary, F2 extends Dictionary>(  d1: F1,  d2: F2,): F1 & F2 => Object.assign({}, d1, d2) : <F1 extends Dictionary, F2 extends Dictionary>(d1: F1, d2: F2) => F1 & F2
++>F1 : F1
++>F2 : F2
+ 
+   d1: F1,
+ >d1 : F1
+@@= skipped -19, +21 lines =@@
+ const testDictionary = <T extends Dictionary>(_value: T) => { };
+ >testDictionary : <T extends Dictionary>(_value: T) => void
+ ><T extends Dictionary>(_value: T) => { } : <T extends Dictionary>(_value: T) => void
++>T : T
+ >_value : T
+ 
+ const d1 = {};
+@@= skipped -77, +78 lines =@@
+ 
+ type choices<IChoiceList extends {
+ >choices : choices<IChoiceList>
++>IChoiceList : IChoiceList
+ 
+     [key: string]: boolean;
+ >key : string
+@@= skipped -53, +54 lines =@@
+ type Foo2 = { x: string } & { [K in number]: Foo2 };
+ >Foo2 : Foo2
+ >x : string
++>K : K
+ 
+ // Repro from #40239
+ 
+ declare function mock<M>(_: Promise<M>): {} & M;
+ >mock : <M>(_: Promise<M>) => {} & M
++>M : M
+ >_ : Promise<M>
+ 
+ mock(import('./ex'))

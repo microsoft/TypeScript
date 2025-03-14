@@ -1,0 +1,34 @@
+--- old.tsxElementResolution13.types
++++ new.tsxElementResolution13.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { }
++>Element : Element
++
+ 	interface ElementAttributesProperty { pr1: any; pr2: any; }
++>ElementAttributesProperty : ElementAttributesProperty
+ >pr1 : any
+ >pr2 : any
+ }
+ 
+ interface Obj1 {
++>Obj1 : Obj1
++
+ 	new(n: string): any;
+ >n : string
+ }
+@@= skipped -14, +21 lines =@@
+ >obj1 : Obj1
+ 
+ <obj1 x={10} />; // Error
+-><obj1 x={10} /> : JSX.Element
++><obj1 x={10} /> : any
+ >obj1 : Obj1
+->x : number
++>x : any
+ >10 : 10
+ 

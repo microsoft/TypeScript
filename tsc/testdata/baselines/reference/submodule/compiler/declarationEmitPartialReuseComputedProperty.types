@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/declarationEmitPartialReuseComputedProperty.ts] ////
+
+=== a.ts ===
+export const n = "A"
+>n : "A"
+>"A" : "A"
+
+export const poz = 1;
+>poz : 1
+>1 : 1
+
+export const neg = -1;
+>neg : -1
+>-1 : -1
+>1 : 1
+
+export const o = () => null! as { [n]: string, foo: string, [poz]: number, [neg]: number }
+>o : () => { A: string; foo: string; [poz]: number; [neg]: number; }
+>() => null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : () => { A: string; foo: string; [poz]: number; [neg]: number; }
+>null! as { [n]: string, foo: string, [poz]: number, [neg]: number } : { A: string; foo: string; [poz]: number; [neg]: number; }
+>null! : never
+>[n] : string
+>n : "A"
+>foo : string
+>[poz] : number
+>poz : 1
+>[neg] : number
+>neg : -1
+
+=== b.ts ===
+import { o } from "./a";
+>o : () => { A: string; foo: string; [poz]: number; [neg]: number; }
+
+export const g = o
+>g : () => { A: string; foo: string; [poz]: number; [neg]: number; }
+>o : () => { A: string; foo: string; [poz]: number; [neg]: number; }
+

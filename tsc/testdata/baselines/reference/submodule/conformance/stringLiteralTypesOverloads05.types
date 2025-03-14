@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads05.ts] ////
+
+=== stringLiteralTypesOverloads05.ts ===
+interface Animal { animal: {} };
+>Animal : Animal
+>animal : {}
+
+interface Dog extends Animal { dog: {} }
+>Dog : Dog
+>dog : {}
+
+interface Cat extends Animal { cat: {} }
+>Cat : Cat
+>cat : {}
+
+interface Moose extends Animal { moose: {} }
+>Moose : Moose
+>moose : {}
+
+function doThing(x: "dog"): Dog;
+>doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
+>x : "dog"
+
+function doThing(x: "cat"): Cat;
+>doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
+>x : "cat"
+
+function doThing(x: string): Animal;
+>doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
+>x : string
+
+function doThing(x: string, y?: string): Moose {
+>doThing : { (x: "dog"): Dog; (x: "cat"): Cat; (x: string): Animal; }
+>x : string
+>y : string
+
+    return undefined;
+>undefined : undefined
+}

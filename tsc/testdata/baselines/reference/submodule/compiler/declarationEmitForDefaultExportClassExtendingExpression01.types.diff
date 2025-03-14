@@ -1,0 +1,18 @@
+--- old.declarationEmitForDefaultExportClassExtendingExpression01.types
++++ new.declarationEmitForDefaultExportClassExtendingExpression01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitForDefaultExportClassExtendingExpression01.ts ===
+ interface Greeter {
++>Greeter : Greeter
++
+     getGreeting(): string;
+ >getGreeting : () => string
+ }
+ 
+ interface GreeterConstructor {
++>GreeterConstructor : GreeterConstructor
++
+     new (): Greeter;
+ }
+ 

@@ -1,0 +1,20 @@
+--- old.recursiveBaseCheck2.types
++++ new.recursiveBaseCheck2.types
+@@= skipped -26, +26 lines =@@
+ 
+     export class b2ContactListener extends Box2D.Collision.Shapes.b2Shape {
+ >b2ContactListener : b2ContactListener
+->Box2D.Collision.Shapes.b2Shape : Collision.Shapes.b2Shape
+->Box2D.Collision.Shapes : typeof Collision.Shapes
++>Box2D.Collision.Shapes.b2Shape : b2Shape
++>Box2D.Collision.Shapes : typeof Shapes
+ >Box2D.Collision : typeof Collision
+ >Box2D : typeof Box2D
+ >Collision : typeof Collision
+->Shapes : typeof Collision.Shapes
+->b2Shape : typeof Collision.Shapes.b2Shape
++>Shapes : typeof Shapes
++>b2Shape : typeof b2Shape
+     }
+     export class b2FixtureDef extends Box2D.Dynamics.b2ContactListener {
+ >b2FixtureDef : b2FixtureDef

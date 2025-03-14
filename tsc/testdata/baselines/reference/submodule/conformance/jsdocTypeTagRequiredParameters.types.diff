@@ -1,0 +1,44 @@
+--- old.jsdocTypeTagRequiredParameters.types
++++ new.jsdocTypeTagRequiredParameters.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ /** @type {function(string): void} */
+ const f = (value) => {
+->f : (arg0: string) => void
+->(value) => {} : (value: string) => void
+->value : string
++>f : (value: any) => void
++>(value) => {} : (value: any) => void
++>value : any
+ 
+ };
+ /** @type {(s: string) => void} */
+ function g(s) {
+->g : (s: string) => void
+->s : string
++>g : (s: any) => void
++>s : any
+ }
+ /** @type {{(s: string): void}} */
+ function h(s) {
+->h : (s: string) => void
+->s : string
++>h : (s: any) => void
++>s : any
+ }
+ 
+ f() // should error
+ >f() : void
+->f : (arg0: string) => void
++>f : (value: any) => void
+ 
+ g() // should error
+ >g() : void
+->g : (s: string) => void
++>g : (s: any) => void
+ 
+ h()
+ >h() : void
+->h : (s: string) => void
++>h : (s: any) => void
+ 

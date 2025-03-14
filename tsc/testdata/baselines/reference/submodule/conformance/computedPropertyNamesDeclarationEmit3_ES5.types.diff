@@ -1,0 +1,11 @@
+--- old.computedPropertyNamesDeclarationEmit3_ES5.types
++++ new.computedPropertyNamesDeclarationEmit3_ES5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === computedPropertyNamesDeclarationEmit3_ES5.ts ===
+ interface I {
++>I : I
++
+     ["" + ""](): void;
+ >["" + ""] : () => void
+ >"" + "" : string

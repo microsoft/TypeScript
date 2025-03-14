@@ -1,0 +1,22 @@
+--- old.jsPropertyAssignedAfterMethodDeclaration.types
++++ new.jsPropertyAssignedAfterMethodDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.js ===
+ const o = {
+->o : { a(): void; }
+->{    a() {        // Should not be treated as a declaration. Should be an error.        this.a = 0;    }} : { a(): void; }
++>o : { a: () => void; }
++>{    a() {        // Should not be treated as a declaration. Should be an error.        this.a = 0;    }} : { a: () => void; }
+ 
+     a() {
+ >a : () => void
+@@= skipped -10, +10 lines =@@
+         this.a = 0;
+ >this.a = 0 : 0
+ >this.a : () => void
+->this : { a(): void; }
++>this : { a: () => void; }
+ >a : () => void
+ >0 : 0
+     }

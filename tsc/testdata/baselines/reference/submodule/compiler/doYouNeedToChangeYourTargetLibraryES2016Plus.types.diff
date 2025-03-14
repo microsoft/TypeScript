@@ -1,0 +1,54 @@
+--- old.doYouNeedToChangeYourTargetLibraryES2016Plus.types
++++ new.doYouNeedToChangeYourTargetLibraryES2016Plus.types
+@@= skipped -55, +55 lines =@@
+ >testIntlFormatToParts : any
+ >new Intl.DateTimeFormat("en-US").formatToParts() : any
+ >new Intl.DateTimeFormat("en-US").formatToParts : any
+->new Intl.DateTimeFormat("en-US") : Intl.DateTimeFormat
+->Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
++>new Intl.DateTimeFormat("en-US") : DateTimeFormat
++>Intl.DateTimeFormat : DateTimeFormatConstructor
+ >Intl : typeof Intl
+->DateTimeFormat : Intl.DateTimeFormatConstructor
++>DateTimeFormat : DateTimeFormatConstructor
+ >"en-US" : "en-US"
+ >formatToParts : any
+ 
+@@= skipped -39, +39 lines =@@
+ >testRegExpMatchArrayGroups : any
+ >"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups : any
+ >"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g) : RegExpMatchArray
+->"2019-04-30".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
++>"2019-04-30".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
+ >"2019-04-30" : "2019-04-30"
+->match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
++>match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
+ >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g : RegExp
+ >groups : any
+ 
+@@= skipped -10, +10 lines =@@
+ >testRegExpExecArrayGroups : any
+ >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups : any
+ >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30") : RegExpExecArray
+->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : (string: string) => RegExpExecArray | null
++>/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : (string: string) => RegExpExecArray
+ >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g : RegExp
+->exec : (string: string) => RegExpExecArray | null
++>exec : (string: string) => RegExpExecArray
+ >"2019-04-30" : "2019-04-30"
+ >groups : any
+ 
+@@= skipped -44, +44 lines =@@
+ >testNumberFormatFormatToParts : any
+ >new Intl.NumberFormat("en-US").formatToParts() : any
+ >new Intl.NumberFormat("en-US").formatToParts : any
+->new Intl.NumberFormat("en-US") : Intl.NumberFormat
+->Intl.NumberFormat : Intl.NumberFormatConstructor
++>new Intl.NumberFormat("en-US") : NumberFormat
++>Intl.NumberFormat : NumberFormatConstructor
+ >Intl : typeof Intl
+->NumberFormat : Intl.NumberFormatConstructor
++>NumberFormat : NumberFormatConstructor
+ >"en-US" : "en-US"
+ >formatToParts : any
+ 

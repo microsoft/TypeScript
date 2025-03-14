@@ -1,0 +1,62 @@
+--- old.genericClassWithObjectTypeArgsAndConstraints.types
++++ new.genericClassWithObjectTypeArgsAndConstraints.types
+@@= skipped -22, +22 lines =@@
+ 
+ class X<T> {
+ >X : X<T>
++>T : T
+ 
+     x: T;
+ >x : T
+@@= skipped -10, +11 lines =@@
+ 
+     class G<T extends { x: string }> {
+ >G : G<T>
++>T : T
+ >x : string
+ 
+         foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
+ >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
++>T : T
+ >x : string
+ >t : X<T>
+ >t2 : X<T>
+@@= skipped -51, +53 lines =@@
+ 
+     class G2<T extends C> {
+ >G2 : G2<T>
++>T : T
+ 
+         foo2<T extends C>(t: X<T>, t2: X<T>) {
+ >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
++>T : T
+ >t : X<T>
+ >t2 : X<T>
+ 
+@@= skipped -39, +41 lines =@@
+ >Interface : typeof Interface
+ 
+     interface G<T extends { x: string }> {
++>G : G<T>
++>T : T
+ >x : string
+ 
+         foo<T extends { x: string }>(t: X<T>, t2: X<T>): T;
+ >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
++>T : T
+ >x : string
+ >t : X<T>
+ >t2 : X<T>
+@@= skipped -43, +46 lines =@@
+ >c1 : X<C>
+ 
+     interface G2<T extends C> {
++>G2 : G2<T>
++>T : T
++
+         foo2<T extends C>(t: X<T>, t2: X<T>): T;
+ >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
++>T : T
+ >t : X<T>
+ >t2 : X<T>
+     }

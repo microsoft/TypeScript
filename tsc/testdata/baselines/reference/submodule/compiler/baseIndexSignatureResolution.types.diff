@@ -1,0 +1,18 @@
+--- old.baseIndexSignatureResolution.types
++++ new.baseIndexSignatureResolution.types
+@@= skipped -11, +11 lines =@@
+ 
+ // Note - commmenting "extends Foo" prevents the error
+ interface Foo {
++>Foo : Foo
++
+     [i: number]: Base;
+ >i : number
+ }
+ interface FooOf<TBase extends Base> extends Foo {
++>FooOf : FooOf<TBase>
++>TBase : TBase
++
+     [i: number]: TBase;
+ >i : number
+ }

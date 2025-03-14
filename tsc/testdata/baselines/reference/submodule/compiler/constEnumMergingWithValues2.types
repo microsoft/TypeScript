@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/constEnumMergingWithValues2.ts] ////
+
+=== m1.ts ===
+class foo {}
+>foo : foo
+
+module foo {
+>foo : typeof foo
+
+    const enum E { X }
+>E : E.X
+>X : E.X
+}
+
+export = foo
+>foo : foo
+

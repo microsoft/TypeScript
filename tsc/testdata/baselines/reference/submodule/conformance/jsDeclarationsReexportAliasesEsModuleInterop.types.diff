@@ -1,0 +1,35 @@
+--- old.jsDeclarationsReexportAliasesEsModuleInterop.types
++++ new.jsDeclarationsReexportAliasesEsModuleInterop.types
+@@= skipped -5, +5 lines =@@
+ 
+ module.exports = Foo;
+ >module.exports = Foo : typeof Foo
+->module.exports : typeof Foo
+->module : { exports: typeof Foo; }
+->exports : typeof Foo
++>module.exports : any
++>module : any
++>exports : any
+ >Foo : typeof Foo
+ 
+ === usage.js ===
+ import {default as Fooa} from "./cls";
+->default : typeof Fooa
+->Fooa : typeof Fooa
++>default : any
++>Fooa : any
+ 
+ export const x = new Fooa();
+->x : Fooa
+->new Fooa() : Fooa
+->Fooa : typeof Fooa
++>x : any
++>new Fooa() : any
++>Fooa : any
+ 
+ export {default as Foob} from "./cls";
+->default : typeof Fooa
+->Foob : typeof Fooa
++>default : any
++>Foob : any
+ 

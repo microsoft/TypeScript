@@ -1,0 +1,94 @@
+--- old.typeAliases.types
++++ new.typeAliases.types
+@@= skipped -48, +48 lines =@@
+ >x5 : any
+ 
+ interface I6 { x : string }
++>I6 : I6
+ >x : string
+ 
+ type T6 = I6;
+@@= skipped -63, +64 lines =@@
+ >x11 : new () => boolean
+ 
+ interface I13 { x: string };
++>I13 : I13
+ >x : string
+ 
+ type T13 = I13;
+@@= skipped -12, +13 lines =@@
+ >x13_2 : I13
+ 
+ declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
+->foo13 : <T1 extends I13, T2 extends T13>(t1: T1, t2: T13) => void
++>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
++>T1 : T1
++>T2 : T2
+ >t1 : T1
+ >t2 : I13
+ 
+ foo13(x13_1, x13_2);
+ >foo13(x13_1, x13_2) : void
+->foo13 : <T1 extends I13, T2 extends T13>(t1: T1, t2: T13) => void
++>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
+ >x13_1 : I13
+ >x13_2 : I13
+ 
+ foo13(x13_2, x13_1);
+ >foo13(x13_2, x13_1) : void
+->foo13 : <T1 extends I13, T2 extends T13>(t1: T1, t2: T13) => void
++>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
+ >x13_2 : I13
+ >x13_1 : I13
+ 
+@@= skipped -23, +25 lines =@@
+ >x14 : string
+ 
+ declare function foo14_1(x: T14): void;
+->foo14_1 : (x: T14) => void
++>foo14_1 : (x: string) => void
+ >x : string
+ 
+ declare function foo14_2(x: "click"): void;
+->foo14_2 : { (x: "click"): void; (x: T14): void; }
++>foo14_2 : { (x: "click"): void; (x: string): void; }
+ >x : "click"
+ 
+ declare function foo14_2(x: T14): void;
+->foo14_2 : { (x: "click"): void; (x: T14): void; }
++>foo14_2 : { (x: "click"): void; (x: string): void; }
+ >x : string
+ 
+ type Meters = number
+ >Meters : number
+ 
+ enum E { x = 10 }
+->E : E
++>E : E.x
+ >x : E.x
+ >10 : 10
+ 
+ declare function f15(a: string): boolean;
+->f15 : { (a: string): boolean; (a: Meters): string; }
++>f15 : { (a: string): boolean; (a: number): string; }
+ >a : string
+ 
+ declare function f15(a: Meters): string;
+->f15 : { (a: string): boolean; (a: Meters): string; }
++>f15 : { (a: string): boolean; (a: number): string; }
+ >a : number
+ 
+ f15(E.x).toLowerCase();
+ >f15(E.x).toLowerCase() : string
+ >f15(E.x).toLowerCase : () => string
+ >f15(E.x) : string
+->f15 : { (a: string): boolean; (a: Meters): string; }
+->E.x : E
++>f15 : { (a: string): boolean; (a: number): string; }
++>E.x : E.x
+ >E : typeof E
+->x : E
++>x : E.x
+ >toLowerCase : () => string
+ 
+ type StringAndBoolean = [string, boolean]

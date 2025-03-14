@@ -1,0 +1,34 @@
+--- old.module_augmentUninstantiatedModule2.types
++++ new.module_augmentUninstantiatedModule2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === module_augmentUninstantiatedModule2.ts ===
+ declare var ng: ng.IAngularStatic;
+->ng : ng.IAngularStatic
++>ng : IAngularStatic
+ >ng : any
+ 
+ declare module ng {
++>ng : IAngularStatic
++
+    export interface IModule {
++>IModule : IModule
++
+       name: string;
+ >name : string
+    }
+ 
+    export interface IAngularStatic {
++>IAngularStatic : IAngularStatic
++
+        module: (s: string) => IModule;
+ >module : (s: string) => IModule
+ >s : string
+@@= skipped -17, +23 lines =@@
+ }
+ 
+ export = ng;
+->ng : ng.IAngularStatic
++>ng : IAngularStatic
+ 
+ 

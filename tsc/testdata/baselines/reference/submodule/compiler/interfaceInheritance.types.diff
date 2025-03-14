@@ -1,0 +1,41 @@
+--- old.interfaceInheritance.types
++++ new.interfaceInheritance.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceInheritance.ts ===
+ interface I1 {
++>I1 : I1
++
+     i1P1: number;
+ >i1P1 : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface I2 extends I1 {
++>I2 : I2
++
+     i2P1: string;
+ >i2P1 : string
+ }
+ 
+ interface I3 {
++>I3 : I3
++
+     i2P1: string; // has a member from i2P1, but not from I1
+ >i2P1 : string
+ }
+ 
+ interface I4 {
++>I4 : I4
++
+ 	one: number;
+ >one : number
+ }
+ 
+ interface I5 {
++>I5 : I5
++
+ 	one: string;
+ >one : string
+ }

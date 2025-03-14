@@ -1,0 +1,25 @@
+--- old.globalThisPropertyAssignment.types
++++ new.globalThisPropertyAssignment.types
+@@= skipped -2, +2 lines =@@
+ === globalThisPropertyAssignment.js ===
+ this.x = 1
+ >this.x = 1 : 1
+->this.x : number
++>this.x : any
+ >this : typeof globalThis
+->x : number
++>x : any
+ >1 : 1
+ 
+ var y = 2
+@@= skipped -20, +20 lines =@@
+ // should work in JS (even though it's a secondary declaration)
+ globalThis.alpha = 4
+ >globalThis.alpha = 4 : 4
+->globalThis.alpha : number
++>globalThis.alpha : any
+ >globalThis : typeof globalThis
+->alpha : number
++>alpha : any
+ >4 : 4
+ 

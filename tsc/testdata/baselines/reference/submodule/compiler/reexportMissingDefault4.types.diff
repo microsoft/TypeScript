@@ -1,0 +1,9 @@
+--- old.reexportMissingDefault4.types
++++ new.reexportMissingDefault4.types
+@@= skipped -11, +11 lines =@@
+ >b : number
+ 
+ export { default } from "./b";
+->default : any
++>default : typeof import("b")
+ 

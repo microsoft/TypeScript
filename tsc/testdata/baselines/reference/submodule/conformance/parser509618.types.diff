@@ -1,0 +1,9 @@
+--- old.parser509618.types
++++ new.parser509618.types
+@@= skipped -4, +4 lines =@@
+ >ambiModule : typeof ambiModule
+ 
+    interface i1 { };
++>i1 : i1
+ }
+ 

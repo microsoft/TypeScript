@@ -1,0 +1,28 @@
+--- old.importTag6.types
++++ new.importTag6.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /types.ts ===
+ export interface A {
++>A : A
++
+     a: number;
+ >a : number
+ }
+ export interface B {
++>B : B
++
+     a: number;
+ >a : number
+ }
+@@= skipped -21, +25 lines =@@
+  * @param { B } b
+  */
+ function f(a, b) {}
+->f : (a: A, b: B) => void
+->a : A
+->b : B
++>f : (a: any, b: any) => void
++>a : any
++>b : any
+ 

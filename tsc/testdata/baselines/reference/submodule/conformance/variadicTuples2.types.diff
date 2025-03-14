@@ -1,0 +1,159 @@
+--- old.variadicTuples2.types
++++ new.variadicTuples2.types
+@@= skipped -36, +36 lines =@@
+ 
+ type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
+ >Tup3 : [...T, ...U, ...V]
++>T : T
++>U : U
++>V : V
+ 
+ type V20 = Tup3<[number], string[], [number]>;  // [number, ...string[], number]
+ >V20 : [number, ...string[], number]
+@@= skipped -27, +30 lines =@@
+ 
+ type V30<A extends unknown[]> = Tup3<A, string[], number[]>;  // [...A, ...(string | number)[]]
+ >V30 : [...A, ...(string | number)[]]
++>A : A
+ 
+ type V31<A extends unknown[]> = Tup3<string[], A, number[]>;  // (string | number | A[number])[]
+ >V31 : (string | number | A[number])[]
++>A : A
+ 
+ type V32<A extends unknown[]> = Tup3<string[], number[], A>;  // [...(string | number)[], ...A]
+ >V32 : [...(string | number)[], ...A]
++>A : A
+ 
+ type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;  // [...A, string?, ...number[]]
+ >V40 : [...A, (string | undefined)?, ...number[]]
++>A : A
+ 
+ type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;  // [string?, ...A, ...number[]]
+ >V41 : [(string | undefined)?, ...A, ...number[]]
++>A : A
+ 
+ type V42<A extends unknown[]> = Tup3<[string?], number[], A>;  // [string?, ...number[], ...A]
+ >V42 : [(string | undefined)?, ...number[], ...A]
++>A : A
+ 
+ type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;  // [...A, ...(string | number | undefined)[]]
+ >V50 : [...A, ...(string | number | undefined)[]]
++>A : A
+ 
+ type V51<A extends unknown[]> = Tup3<string[], A, [number?]>;  // (string | number | A[number] | undefined)[]
+ >V51 : (string | number | A[number] | undefined)[]
++>A : A
+ 
+ type V52<A extends unknown[]> = Tup3<string[], [number?], A>;  // [...(string | number | undefined)[], ...A]
+ >V52 : [...(string | number | undefined)[], ...A]
++>A : A
+ 
+ // Assignability
+ 
+@@= skipped -222, +231 lines =@@
+ 
+ function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) {
+ >ft3 : <T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) => void
++>T : T
+ >x : [number, ...T]
+ >y : [number, number]
+ >z : [number, ...number[]]
+@@= skipped -37, +38 lines =@@
+ 
+ function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
+ >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
++>T : T
+ >args : [...T, (...values: T) => void]
+ >values : T
+ 
+@@= skipped -19, +20 lines =@@
+ >values : T
+ >args.slice(0, -1) as unknown as T : T
+ >args.slice(0, -1) as unknown : unknown
+->args.slice(0, -1) : (((...values: T) => void) | T[number])[]
+->args.slice : (start?: number, end?: number) => (((...values: T) => void) | T[number])[]
++>args.slice(0, -1) : ((...values: T) => void | T[number])[]
++>args.slice : (start?: number | undefined, end?: number | undefined) => ((...values: T) => void | T[number])[]
+ >args : [...T, (...values: T) => void]
+->slice : (start?: number, end?: number) => (((...values: T) => void) | T[number])[]
++>slice : (start?: number | undefined, end?: number | undefined) => ((...values: T) => void | T[number])[]
+ >0 : 0
+ >-1 : -1
+ >1 : 1
+@@= skipped -43, +43 lines =@@
+ >"foo" : "foo"
+ >123 : 123
+ >true : true
+->(...x) => {    x;  // [string, number, boolean]} : (x_0: string, x_1: number, x_2: boolean) => void
++>(...x) => {    x;  // [string, number, boolean]} : (...x: [string, number, boolean]) => void
+ >x : [string, number, boolean]
+ 
+     x;  // [string, number, boolean]
+@@= skipped -71, +71 lines =@@
+ 
+ declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];
+ >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
++>T : T
++>U : U
+ >t : [...unknown[], T, U]
+ 
+ fn1([]);  // Error
+@@= skipped -30, +32 lines =@@
+ 
+ declare function fn2<T, U>(t: [T, ...unknown[], U]): [T, U];
+ >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
++>T : T
++>U : U
+ >t : [T, ...unknown[], U]
+ 
+ fn2([]);  // Error
+@@= skipped -31, +33 lines =@@
+ // Repro from #39595
+ 
+ declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
+->foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+->stringsAndNumber : readonly [...S, number]
++>foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
++>S : S
++>stringsAndNumber : [...S, number]
+ 
+ const a1 = foo('blah1', 1);
+ >a1 : ["blah1", number]
+ >foo('blah1', 1) : ["blah1", number]
+->foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
++>foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+ >'blah1' : "blah1"
+ >1 : 1
+ 
+ const b1 = foo('blah1', 'blah2', 1);
+ >b1 : ["blah1", "blah2", number]
+ >foo('blah1', 'blah2', 1) : ["blah1", "blah2", number]
+->foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
++>foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+ >'blah1' : "blah1"
+ >'blah2' : "blah2"
+ >1 : 1
+@@= skipped -21, +22 lines =@@
+ const c1 = foo(1);  // Error
+ >c1 : [string, ...string[], number]
+ >foo(1) : [string, ...string[], number]
+->foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
++>foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+ >1 : 1
+ 
+ const d1 = foo(1, 2);  // Error
+ >d1 : [string, ...string[], number]
+ >foo(1, 2) : [string, ...string[], number]
+->foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
++>foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+ >1 : 1
+ >2 : 2
+ 
+ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
+ >e1 : [string, ...string[], number]
+ >foo('blah1', 'blah2', 1, 2, 3) : [string, ...string[], number]
+->foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
++>foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+ >'blah1' : "blah1"
+ >'blah2' : "blah2"
+ >1 : 1

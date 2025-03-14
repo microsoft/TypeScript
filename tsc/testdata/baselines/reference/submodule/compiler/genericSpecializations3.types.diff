@@ -1,0 +1,20 @@
+--- old.genericSpecializations3.types
++++ new.genericSpecializations3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericSpecializations3.ts ===
+ interface IFoo<T> {
++>IFoo : IFoo<T>
++>T : T
++
+     foo(x: T): T;
+ >foo : (x: T) => T
+ >x : T
+@@= skipped -72, +75 lines =@@
+ 
+     foo<T>(x: T): T { return null; }
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ }
+ var stringFoo3: StringFoo3;

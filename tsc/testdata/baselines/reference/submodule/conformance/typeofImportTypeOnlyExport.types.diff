@@ -1,0 +1,27 @@
+--- old.typeofImportTypeOnlyExport.types
++++ new.typeofImportTypeOnlyExport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === button.ts ===
+ import {classMap} from './lit.js';
+->classMap : () => { directive: typeof import("lit").ClassMapDirective; }
++>classMap : () => { directive: typeof ClassMapDirective; }
+ 
+ export const c = classMap();
+->c : { directive: typeof import("lit").ClassMapDirective; }
+->classMap() : { directive: typeof import("lit").ClassMapDirective; }
+->classMap : () => { directive: typeof import("lit").ClassMapDirective; }
++>c : { directive: typeof ClassMapDirective; }
++>classMap() : { directive: typeof ClassMapDirective; }
++>classMap : () => { directive: typeof ClassMapDirective; }
+ 
+ === lit.ts ===
+ class ClassMapDirective {}
+@@= skipped -19, +19 lines =@@
+ 
+   <C>(class_: C) =>
+ ><C>(class_: C) =>  () => ({    directive: class_,  }) : <C>(class_: C) => () => { directive: C; }
++>C : C
+ >class_ : C
+ 
+   () => ({

@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/alwaysStrictAlreadyUseStrict.ts] ////
+
+=== alwaysStrictAlreadyUseStrict.ts ===
+"use strict"
+>"use strict" : "use strict"
+
+function f() {
+>f : () => void
+
+    var a = [];
+>a : any[]
+>[] : undefined[]
+}

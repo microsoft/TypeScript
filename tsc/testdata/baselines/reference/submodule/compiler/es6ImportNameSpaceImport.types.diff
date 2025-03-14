@@ -1,0 +1,20 @@
+--- old.es6ImportNameSpaceImport.types
++++ new.es6ImportNameSpaceImport.types
+@@= skipped -6, +6 lines =@@
+ 
+ === es6ImportNameSpaceImport_1.ts ===
+ import * as nameSpaceBinding from "./es6ImportNameSpaceImport_0";
+->nameSpaceBinding : typeof nameSpaceBinding
++>nameSpaceBinding : typeof import("es6ImportNameSpaceImport_0")
+ 
+ var x = nameSpaceBinding.a;
+ >x : number
+ >nameSpaceBinding.a : number
+->nameSpaceBinding : typeof nameSpaceBinding
++>nameSpaceBinding : typeof import("es6ImportNameSpaceImport_0")
+ >a : number
+ 
+ import * as nameSpaceBinding2 from "./es6ImportNameSpaceImport_0"; // elide this
+->nameSpaceBinding2 : typeof nameSpaceBinding
++>nameSpaceBinding2 : typeof import("es6ImportNameSpaceImport_0")
+ 

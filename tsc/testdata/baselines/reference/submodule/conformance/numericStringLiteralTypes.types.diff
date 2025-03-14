@@ -1,0 +1,49 @@
+--- old.numericStringLiteralTypes.types
++++ new.numericStringLiteralTypes.types
+@@= skipped -11, +11 lines =@@
+ 
+ type T3<T extends string> = string & `${T}`;  // `${T}
+ >T3 : `${T}`
++>T : T
+ 
+ type T4<T extends string> = string & `${Capitalize<`${T}`>}`;  // `${Capitalize<T>}`
+ >T4 : `${Capitalize<T>}`
++>T : T
+ 
+ function f1(a: boolean[], x: `${number}`) {
+ >f1 : (a: boolean[], x: `${number}`) => void
+@@= skipped -36, +38 lines =@@
+ 
+ type T20<T extends number | `${number}`> = T;
+ >T20 : T
++>T : T
+ 
+ type T21<T extends unknown[]> = { [K in keyof T]: T20<K> };
+ >T21 : T21<T>
++>T : T
++>K : K
+ 
+ type Container<T> = {
+ >Container : Container<T>
++>T : T
+ 
+     value: T
+ >value : T
+@@= skipped -13, +17 lines =@@
+ 
+ type UnwrapContainers<T extends Container<unknown>[]> = { [K in keyof T]: T[K]['value'] };
+ >UnwrapContainers : UnwrapContainers<T>
++>T : T
++>K : K
+ 
+ declare function createContainer<T extends unknown>(value: T): Container<T>;
+ >createContainer : <T extends unknown>(value: T) => Container<T>
++>T : T
+ >value : T
+ 
+ declare function f<T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void): void;
+ >f : <T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void) => void
++>T : T
+ >containers : [...T]
+ >callback : (...values: UnwrapContainers<T>) => void
+ >values : UnwrapContainers<T>

@@ -1,0 +1,29 @@
+--- old.functionsMissingReturnStatementsAndExpressionsStrictNullChecks.types
++++ new.functionsMissingReturnStatementsAndExpressionsStrictNullChecks.types
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ function f11(): undefined | number {
+->f11 : () => undefined | number
++>f11 : () => number | undefined
+ 
+     // Error, return type isn't just undefined
+ }
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ const f21: () => undefined | number = () => {
+->f21 : () => undefined | number
++>f21 : () => number | undefined
+ >() => {    // Error, regular void function because contextual type for implicit return isn't just undefined} : () => void
+ 
+     // Error, regular void function because contextual type for implicit return isn't just undefined
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ async function f31(): Promise<undefined | number> {
+->f31 : () => Promise<undefined | number>
++>f31 : () => Promise<number | undefined>
+ 
+     // Error, return type isn't just undefined
+ }

@@ -1,0 +1,10 @@
+--- old.inOperatorWithGeneric.types
++++ new.inOperatorWithGeneric.types
+@@= skipped -2, +2 lines =@@
+ === inOperatorWithGeneric.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     foo(x:T) {
+ >foo : (x: T) => void

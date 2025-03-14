@@ -1,0 +1,11 @@
+--- old.parserParameterList13.types
++++ new.parserParameterList13.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserParameterList13.ts ===
+ interface I {
++>I : I
++
+     new (public x);
+ >x : any
+ }

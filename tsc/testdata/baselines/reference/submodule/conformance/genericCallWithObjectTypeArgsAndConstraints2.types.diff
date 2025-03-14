@@ -1,0 +1,34 @@
+--- old.genericCallWithObjectTypeArgsAndConstraints2.types
++++ new.genericCallWithObjectTypeArgsAndConstraints2.types
+@@= skipped -19, +19 lines =@@
+ 
+ function f<T extends Base>(x: { foo: T; bar: T }) {
+ >f : <T extends Base>(x: { foo: T; bar: T; }) => T
++>T : T
+ >x : { foo: T; bar: T; }
+ >foo : T
+ >bar : T
+@@= skipped -36, +37 lines =@@
+ 
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     a: T;
+ >a : T
+ }
+ function f2<T extends Base>(x: I<T>) {
+ >f2 : <T extends Base>(x: I<T>) => T
++>T : T
+ >x : I<T>
+ 
+     var r: T;
+@@= skipped -25, +29 lines =@@
+ 
+ function f3<T extends Base>(x: T, y: (a: T) => T) {
+ >f3 : <T extends Base>(x: T, y: (a: T) => T) => T
++>T : T
+ >x : T
+ >y : (a: T) => T
+ >a : T

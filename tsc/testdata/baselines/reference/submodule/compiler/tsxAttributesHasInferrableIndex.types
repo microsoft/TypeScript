@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx] ////
+
+=== tsxAttributesHasInferrableIndex.tsx ===
+type AttributeValue = number | string | Date | boolean;
+>AttributeValue : AttributeValue
+
+interface Attributes {
+>Attributes : Attributes
+
+    [key: string]: AttributeValue;
+>key : string
+}
+function createElement(name: string, attributes: Attributes | undefined, ...contents: string[]) {
+>createElement : (name: string, attributes: Attributes | undefined, ...contents: string[]) => string
+>name : string
+>attributes : Attributes | undefined
+>contents : string[]
+
+    return name;
+>name : string
+}
+namespace createElement.JSX {
+>createElement : (name: string, attributes: Attributes | undefined, ...contents: string[]) => string
+>JSX : any
+
+    type Element = string;
+>Element : string
+}
+
+function Button(attributes: Attributes | undefined, contents: string[]) {
+>Button : (attributes: Attributes | undefined, contents: string[]) => string
+>attributes : Attributes | undefined
+>contents : string[]
+
+    return '';
+>'' : ""
+}
+const b = <Button></Button>
+>b : any
+><Button></Button> : any
+>Button : (attributes: Attributes | undefined, contents: string[]) => string
+>Button : (attributes: Attributes | undefined, contents: string[]) => string
+

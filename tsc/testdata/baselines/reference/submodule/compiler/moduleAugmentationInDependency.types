@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/moduleAugmentationInDependency.ts] ////
+
+=== /node_modules/A/index.d.ts ===
+declare module "ext" {
+>"ext" : any
+}
+export {};
+
+=== /src/app.ts ===
+
+import "A"

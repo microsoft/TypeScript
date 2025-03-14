@@ -1,0 +1,67 @@
+--- old.constructorWithIncompleteTypeAnnotation.types
++++ new.constructorWithIncompleteTypeAnnotation.types
+@@= skipped -13, +13 lines =@@
+ >ReadAllText : () => string
+     }
+     export interface IFile {
++>IFile : IFile
++
+         [index: number]: string;
+ >index : number
+     }
+@@= skipped -188, +190 lines =@@
+ >local : number
+ 
+             var local5 = <fs.File>null;
+->local5 : fs.File
+-><fs.File>null : fs.File
++>local5 : File
++><fs.File>null : File
+ >fs : any
+ 
+             var local6 = local5 instanceof fs.File;
+ >local6 : boolean
+ >local5 instanceof fs.File : boolean
+->local5 : fs.File
++>local5 : File
+ >fs.File : any
+ >fs : any
+ >File : any
+@@= skipped -36, +36 lines =@@
+             var quoted = '"', quoted2 = "'";
+ > : any
+ >quoted : string
+->'"' : "\""
++>'"' : """
+ >quoted2 : string
+ >"'" : "'"
+ 
+@@= skipped -558, +558 lines =@@
+     }
+ 
+     interface IF {
++>IF : IF
++
+         Foo(): bool;
+ >Foo : () => bool
+     }
+@@= skipped -164, +166 lines =@@
+ }
+ 
+ interface IDisposable {
++>IDisposable : IDisposable
++
+     Dispose(): void;
+ >Dispose : () => void
+ }
+@@= skipped -7, +9 lines =@@
+ TypeScriptAllInOne.Program.Main();
+ >TypeScriptAllInOne.Program.Main() : void
+ >TypeScriptAllInOne.Program.Main : (...args: string[]) => void
+->TypeScriptAllInOne.Program : typeof TypeScriptAllInOne.Program
++>TypeScriptAllInOne.Program : typeof Program
+ >TypeScriptAllInOne : typeof TypeScriptAllInOne
+->Program : typeof TypeScriptAllInOne.Program
++>Program : typeof Program
+ >Main : (...args: string[]) => void
+ 

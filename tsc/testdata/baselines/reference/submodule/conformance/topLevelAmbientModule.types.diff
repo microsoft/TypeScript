@@ -1,0 +1,18 @@
+--- old.topLevelAmbientModule.types
++++ new.topLevelAmbientModule.types
+@@= skipped -2, +2 lines =@@
+ === foo_1.ts ===
+ /// <reference path="foo_0.ts"/>
+ import foo = require("foo");
+->foo : typeof foo
++>foo : typeof import("foo")
+ 
+ var z = foo.x + 10;
+ >z : number
+ >foo.x + 10 : number
+ >foo.x : number
+->foo : typeof foo
++>foo : typeof import("foo")
+ >x : number
+ >10 : 10
+ 

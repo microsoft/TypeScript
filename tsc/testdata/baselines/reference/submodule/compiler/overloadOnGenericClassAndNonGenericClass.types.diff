@@ -1,0 +1,18 @@
+--- old.overloadOnGenericClassAndNonGenericClass.types
++++ new.overloadOnGenericClassAndNonGenericClass.types
+@@= skipped -14, +14 lines =@@
+ 
+ class X<T> { x: T; }
+ >X : X<T>
++>T : T
+ >x : T
+ 
+ class X1 { x: string; }
+@@= skipped -16, +17 lines =@@
+ 
+ function f<T>(a: X<T>): B;
+ >f : { (a: X1): A; <T>(a: X<T>): B; }
++>T : T
+ >a : X<T>
+ 
+ function f(a): any {

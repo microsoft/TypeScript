@@ -1,0 +1,20 @@
+--- old.constructorsWithSpecializedSignatures.types
++++ new.constructorsWithSpecializedSignatures.types
+@@= skipped -64, +64 lines =@@
+ 
+ // errors
+ interface I {
++>I : I
++
+     new (x: "hi");
+ >x : "hi"
+ 
+@@= skipped -12, +14 lines =@@
+ 
+ // ok
+ interface I2 {
++>I2 : I2
++
+     new (x: "hi");
+ >x : "hi"
+ 

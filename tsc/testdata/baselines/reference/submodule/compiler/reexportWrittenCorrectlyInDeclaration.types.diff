@@ -1,0 +1,30 @@
+--- old.reexportWrittenCorrectlyInDeclaration.types
++++ new.reexportWrittenCorrectlyInDeclaration.types
+@@= skipped -9, +9 lines =@@
+ 
+ === Things.ts ===
+ export {ThingA} from "./ThingA";
+->ThingA : typeof import("ThingA").ThingA
++>ThingA : typeof ThingA
+ 
+ export {ThingB} from "./ThingB";
+->ThingB : typeof import("ThingB").ThingB
++>ThingB : typeof ThingB
+ 
+ === Test.ts ===
+ import * as things from "./Things";
+->things : typeof things
++>things : typeof import("Things")
+ 
+ export class Test {
+ >Test : Test
+ 
+     public method = (input: things.ThingA)  => { };
+->method : (input: things.ThingA) => void
+->(input: things.ThingA)  => { } : (input: things.ThingA) => void
+->input : things.ThingA
++>method : (input: ThingA) => void
++>(input: things.ThingA)  => { } : (input: ThingA) => void
++>input : ThingA
+ >things : any
+ }

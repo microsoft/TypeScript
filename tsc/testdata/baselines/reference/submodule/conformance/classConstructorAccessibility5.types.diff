@@ -1,0 +1,11 @@
+--- old.classConstructorAccessibility5.types
++++ new.classConstructorAccessibility5.types
+@@= skipped -20, +20 lines =@@
+ 
+     static fake() { new Base() } // error
+ >fake : () => void
+->new Base() : any
++>new Base() : Base
+ >Base : typeof Base
+ }
+ 

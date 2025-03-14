@@ -1,0 +1,38 @@
+--- old.moduleExportAliasExports.types
++++ new.moduleExportAliasExports.types
+@@= skipped -8, +8 lines =@@
+ 
+ exports.bigOak = 1
+ >exports.bigOak = 1 : 1
+->exports.bigOak : 1
+->exports : typeof import("Eloquent")
+->bigOak : 1
++>exports.bigOak : any
++>exports : any
++>bigOak : any
+ >1 : 1
+ 
+ exports.everywhere = 2
+ >exports.everywhere = 2 : 2
+->exports.everywhere : 2
+->exports : typeof import("Eloquent")
+->everywhere : 2
++>exports.everywhere : any
++>exports : any
++>everywhere : any
+ >2 : 2
+ 
+ module.exports = exports
+->module.exports = exports : typeof import("Eloquent")
+->module.exports : typeof import("Eloquent")
+->module : { exports: typeof import("Eloquent"); }
+->exports : typeof import("Eloquent")
+->exports : typeof import("Eloquent")
++>module.exports = exports : any
++>module.exports : any
++>module : any
++>exports : any
++>exports : any
+ 
+ })()
+ 

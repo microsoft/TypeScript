@@ -1,0 +1,25 @@
+--- old.declarationEmitModuleWithScopeMarker.types
++++ new.declarationEmitModuleWithScopeMarker.types
+@@= skipped -4, +4 lines =@@
+ >"bar" : typeof import("bar")
+ 
+     var before: typeof func;
+->before : () => typeof func
+->func : () => typeof func
++>before : () => ???
+ 
+     export function normal(): void;
+ >normal : () => void
+ 
+     export default function func(): typeof func;
+->func : () => typeof func
+->func : () => typeof func
++>func : () => ???
+ 
+     var after: typeof func;
+->after : () => typeof func
+->func : () => typeof func
++>after : () => ???
+ 
+     export {}
+ }

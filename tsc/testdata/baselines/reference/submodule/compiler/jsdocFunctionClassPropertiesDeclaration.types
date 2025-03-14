@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/jsdocFunctionClassPropertiesDeclaration.ts] ////
+
+=== /a.js ===
+/**
+ * @param {number | undefined} x
+ * @param {number | undefined} y
+ */
+export function Foo(x, y) {
+>Foo : (x: any, y: any) => any
+>x : any
+>y : any
+
+    if (!(this instanceof Foo)) {
+>!(this instanceof Foo) : boolean
+>(this instanceof Foo) : boolean
+>this instanceof Foo : boolean
+>this : any
+>Foo : (x: any, y: any) => any
+
+        return new Foo(x, y);
+>new Foo(x, y) : any
+>Foo : (x: any, y: any) => any
+>x : any
+>y : any
+    }
+    this.x = x;
+>this.x = x : any
+>this.x : any
+>this : any
+>x : any
+>x : any
+
+    this.y = y;
+>this.y = y : any
+>this.y : any
+>this : any
+>y : any
+>y : any
+}
+

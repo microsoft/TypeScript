@@ -1,0 +1,23 @@
+--- old.parseAssertEntriesError.types
++++ new.parseAssertEntriesError.types
+@@= skipped -13, +13 lines =@@
+ 
+     & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface;
+ >import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface : any
+->import("pkg", { assert: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
++>import("pkg", { assert: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
+ >"pkg" : "pkg"
+ >{ assert: {1234, "resolution-mode": "import"} } : { assert: { 1234: any; "resolution-mode": string; }; }
+ >assert : { 1234: any; "resolution-mode": string; }
+@@= skipped -33, +33 lines =@@
+ >"import" : "import"
+ >ImportInterface : any
+ 
+-=== /node_modules/pkg/import.d.ts ===
+-
+-export interface ImportInterface {}
+ === /node_modules/pkg/require.d.ts ===
+-
+ export interface RequireInterface {}
++>RequireInterface : RequireInterface
++

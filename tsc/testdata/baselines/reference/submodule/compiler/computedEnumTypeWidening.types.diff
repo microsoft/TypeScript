@@ -1,0 +1,113 @@
+--- old.computedEnumTypeWidening.types
++++ new.computedEnumTypeWidening.types
+@@= skipped -42, +42 lines =@@
+ >B : E.B
+ 
+     let v1 = c1;  // E
+->v1 : E
++>v1 : E.B
+ >c1 : E.B
+ 
+     const c2 = c1;  // Fresh E.B
+@@= skipped -8, +8 lines =@@
+ >c1 : E.B
+ 
+     let v2 = c2;  // E
+->v2 : E
++>v2 : E.B
+ >c2 : E.B
+ 
+     const c3: E.B = E.B;  // E.B
+@@= skipped -46, +46 lines =@@
+ >c1 : E.A | E.B
+ 
+     const c3 = cond ? c1 : c2;  // E.A | E.B
+->c3 : E.A | E.B
++>c3 : E.A | E.A | E.B | E.B
+ >cond ? c1 : c2 : E.A | E.B
+ >cond : boolean
+ >c1 : E.A | E.B
+ >c2 : E.A | E.B
+ 
+     const c4 = cond ? c3 : E.C;  // E.A | E.B | fresh E.C
+->c4 : E.A | E.B | E.C
++>c4 : E.A | E.A | E.B | E.B | E.C
+ >cond ? c3 : E.C : E.A | E.B | E.C
+ >cond : boolean
+ >c3 : E.A | E.B
+@@= skipped -23, +23 lines =@@
+ >c4 : E.A | E.B | E.C
+ 
+     let v1 = c1;  // E
+->v1 : E
++>v1 : E.A | E.B
+ >c1 : E.A | E.B
+ 
+     let v2 = c2;  // E.A | E.B
+@@= skipped -8, +8 lines =@@
+ >c2 : E.A | E.B
+ 
+     let v3 = c3;  // E.A | E.B
+->v3 : E.A | E.B
++>v3 : E.A | E.A | E.B | E.B
+ >c3 : E.A | E.B
+ 
+     let v4 = c4;  // E
+->v4 : E
++>v4 : E.A | E.A | E.B | E.B | E.C
+ >c4 : E.A | E.B | E.C
+ 
+     let v5 = c5;  // E.A | E.B | E.C
+@@= skipped -22, +22 lines =@@
+ >B : E.B
+ 
+     let v1 = c1;  // E
+->v1 : E
++>v1 : E.B
+ >c1 : E.B
+ 
+     const c2: E.B = E.B;
+@@= skipped -67, +67 lines =@@
+ >B : E2.B
+ 
+     let v1 = E.B;  // E2
+->v1 : E
++>v1 : E.B
+ >E.B : E.B
+ >E : typeof E
+ >B : E.B
+@@= skipped -20, +20 lines =@@
+ >B : E.B
+ 
+ let v1 = E.B;
+->v1 : E
++>v1 : E.B
+ >E.B : E.B
+ >E : typeof E
+ >B : E.B
+@@= skipped -16, +16 lines =@@
+ >C : C
+ 
+   p1 = E.B;
+->p1 : E
++>p1 : E.B
+ >E.B : E.B
+ >E : typeof E
+ >B : E.B
+@@= skipped -54, +54 lines =@@
+ >C : MyDeclaredEnum.C
+ 
+ let val2 = MyDeclaredEnum.A;
+->val2 : MyDeclaredEnum
++>val2 : MyDeclaredEnum.A
+ >MyDeclaredEnum.A : MyDeclaredEnum.A
+ >MyDeclaredEnum : typeof MyDeclaredEnum
+ >A : MyDeclaredEnum.A
+ 
+ val2 = MyDeclaredEnum.B;
+ >val2 = MyDeclaredEnum.B : MyDeclaredEnum.B
+->val2 : MyDeclaredEnum
++>val2 : MyDeclaredEnum.A
+ >MyDeclaredEnum.B : MyDeclaredEnum.B
+ >MyDeclaredEnum : typeof MyDeclaredEnum
+ >B : MyDeclaredEnum.B

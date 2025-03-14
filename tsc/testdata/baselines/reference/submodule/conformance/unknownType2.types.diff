@@ -1,0 +1,196 @@
+--- old.unknownType2.types
++++ new.unknownType2.types
+@@= skipped -2, +2 lines =@@
+ === unknownType2.ts ===
+ type isUnknown<T> = unknown extends T ? true : false;
+ >isUnknown : isUnknown<T>
++>T : T
+ >true : true
+ >false : false
+ 
+ type isTrue<T extends true> = T;
+ >isTrue : T
++>T : T
+ >true : true
+ 
+ type SomeResponse = 'yes' | 'no' | 'idk';
+@@= skipped -13, +15 lines =@@
+ let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
+ >validate : (x: unknown) => SomeResponse
+ >x : unknown
+->x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "yes" | "no" | "idk"
++>x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "idk" | "no" | "yes"
+ >x : unknown
+->(x === 'yes' || x === 'no') ? x : 'idk' : "yes" | "no" | "idk"
++>(x === 'yes' || x === 'no') ? x : 'idk' : "idk" | "no" | "yes"
+ >(x === 'yes' || x === 'no') : boolean
+ >x === 'yes' || x === 'no' : boolean
+ >x === 'yes' : boolean
+@@= skipped -11, +11 lines =@@
+ >x === 'no' : boolean
+ >x : unknown
+ >'no' : "no"
+->x : "yes" | "no"
++>x : "no" | "yes"
+ >'idk' : "idk"
+ 
+ const u: unknown = undefined;
+@@= skipped -21, +21 lines =@@
+     const y = u.toString(10);
+ >y : string
+ >u.toString(10) : string
+->u.toString : (radix?: number) => string
++>u.toString : (radix?: number | undefined) => string
+ >u : 5
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ >10 : 10
+ }
+ 
+@@= skipped -46, +46 lines =@@
+ 
+     const symbolAlias: typeof symb = u;
+ >symbolAlias : unique symbol
+->symb : unique symbol
+ >u : unique symbol
+ }
+ 
+@@= skipped -13, +12 lines =@@
+ 
+     type A = isTrue<isUnknown<typeof u>>
+ >A : true
+->u : unknown
+ }
+ 
+ if (u !== 42) {
+@@= skipped -10, +9 lines =@@
+ 
+     type B = isTrue<isUnknown<typeof u>>
+ >B : true
+->u : unknown
+ }
+ 
+ if (u == 42) {
+@@= skipped -10, +9 lines =@@
+ 
+     type C = isTrue<isUnknown<typeof u>>
+ >C : true
+->u : unknown
+ }
+ 
+ if (u == true) {
+@@= skipped -10, +9 lines =@@
+ 
+     type D = isTrue<isUnknown<typeof u>>
+ >D : true
+->u : unknown
+ }
+ 
+ if (u == Object) {
+@@= skipped -10, +9 lines =@@
+ 
+     type E = isTrue<isUnknown<typeof u>>
+ >E : true
+->u : unknown
+ }
+ 
+ declare const aString: string;
+@@= skipped -89, +88 lines =@@
+ 
+     type unionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+ >unionDoesNotNarrow : true
+->u : unknown
+ }
+ 
+ if (u === anIntersection) {
+@@= skipped -10, +9 lines =@@
+ 
+     type intersectionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+ >intersectionDoesNotNarrow : true
+->u : unknown
+ }
+ 
+ if (u === aFunction) {
+@@= skipped -125, +124 lines =@@
+     }
+     type End = isTrue<isUnknown<typeof x>>
+ >End : true
+->x : unknown
+ }
+ 
+ function switchTestCollectEnum(x: unknown) {
+@@= skipped -51, +50 lines =@@
+     }
+     type End = isTrue<isUnknown<typeof x>>
+ >End : true
+->x : unknown
+ }
+ 
+ function switchTestLiterals(x: unknown) {
+@@= skipped -79, +78 lines =@@
+ 
+             const anotherSymbol: typeof symb = x;
+ >anotherSymbol : unique symbol
+->symb : unique symbol
+ >x : unique symbol
+ 
+             break;
+@@= skipped -15, +14 lines =@@
+     }
+     type End = isTrue<isUnknown<typeof x>>
+ >End : true
+->x : unknown
+ }
+ 
+ function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
+@@= skipped -43, +42 lines =@@
+     }
+     type End = isTrue<isUnknown<typeof x>>
+ >End : true
+->x : unknown
+ }
+ 
+ function switchResponse(x: unknown): SomeResponse {
+@@= skipped -20, +19 lines =@@
+ >'idk' : "idk"
+ 
+             return x;
+->x : "yes" | "no" | "idk"
++>x : "idk" | "no" | "yes"
+ 
+         default:
+             throw new Error('unknown response');
+@@= skipped -11, +11 lines =@@
+     // Arguably this should be never.
+     type End = isTrue<isUnknown<typeof x>>
+ >End : true
+->x : unknown
+ }
+ 
+ function switchResponseWrong(x: unknown): SomeResponse {
+@@= skipped -20, +19 lines =@@
+ >'maybe' : "maybe"
+ 
+             return x; // error
+->x : "yes" | "no" | "maybe"
++>x : "maybe" | "no" | "yes"
+ 
+         default:
+             throw new Error('Can you repeat the question?');
+@@= skipped -11, +11 lines =@@
+     // Arguably this should be never.
+     type End = isTrue<isUnknown<typeof x>>
+ >End : true
+->x : unknown
+ }
+ 
+ // Repro from #33483
+@@= skipped -15, +14 lines =@@
+ >x : unknown
+ >undefined : undefined
+ >typeof x !== 'string' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : {} | null
+ >'string' : "string"
+ 

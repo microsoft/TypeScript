@@ -1,0 +1,27 @@
+--- old.staticMembersUsingClassTypeParameter.types
++++ new.staticMembersUsingClassTypeParameter.types
+@@= skipped -3, +3 lines =@@
+ // BUG 745747
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     static x: T;
+ >x : T
+@@= skipped -11, +12 lines =@@
+ 
+ class C2<T, U> {
+ >C2 : C2<T, U>
++>T : T
++>U : U
+ 
+     static x: U;
+ >x : U
+@@= skipped -11, +13 lines =@@
+ 
+ class C3<T extends Date> {
+ >C3 : C3<T>
++>T : T
+ 
+     static x: T;
+ >x : T

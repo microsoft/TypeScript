@@ -1,0 +1,23 @@
+--- old.nestedFreshLiteral.types
++++ new.nestedFreshLiteral.types
+@@= skipped -1, +1 lines =@@
+ 
+ === nestedFreshLiteral.ts ===
+ interface CSSProps  {
++>CSSProps : CSSProps
++
+   color?: string
+ >color : string | undefined
+ }
+ interface NestedCSSProps {
++>NestedCSSProps : NestedCSSProps
++
+   nested?: NestedSelector
+ >nested : NestedSelector | undefined
+ }
+ interface NestedSelector  {
++>NestedSelector : NestedSelector
++
+   prop: CSSProps;
+ >prop : CSSProps
+ }

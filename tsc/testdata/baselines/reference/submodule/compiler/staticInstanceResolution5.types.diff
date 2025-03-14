@@ -1,0 +1,27 @@
+--- old.staticInstanceResolution5.types
++++ new.staticInstanceResolution5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === staticInstanceResolution5_1.ts ===
+ import WinJS = require('staticInstanceResolution5_0');
+->WinJS : typeof WinJS
++>WinJS : any
+ 
+ // these 3 should be errors
+ var x = (w1: WinJS) => { };
+@@= skipped -17, +17 lines =@@
+ >z : (w3: WinJS) => void
+ >w3 : WinJS
+ 
+-=== staticInstanceResolution5_0.ts ===
+-export class Promise {
+->Promise : Promise
+-
+-    static timeout(delay: number): Promise {
+->timeout : (delay: number) => Promise
+->delay : number
+-
+-        return null;
+-    }
+-}
+-

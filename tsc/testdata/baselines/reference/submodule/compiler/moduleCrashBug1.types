@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/moduleCrashBug1.ts] ////
+
+=== moduleCrashBug1.ts ===
+module _modes {
+>_modes : typeof _modes
+
+ export interface IMode {
+>IMode : IMode
+  
+ }
+ 
+ class Mode {
+>Mode : Mode
+  
+ }
+}
+
+//_modes. // produces an internal error - please implement in derived class
+
+module editor {
+>editor : any
+
+ import modes = _modes;
+>modes : typeof _modes
+>_modes : typeof _modes
+
+}
+
+var m : _modes;
+>m : _modes
+
+
+

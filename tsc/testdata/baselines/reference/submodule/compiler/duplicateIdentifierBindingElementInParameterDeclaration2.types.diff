@@ -1,0 +1,54 @@
+--- old.duplicateIdentifierBindingElementInParameterDeclaration2.types
++++ new.duplicateIdentifierBindingElementInParameterDeclaration2.types
+@@= skipped -4, +4 lines =@@
+ >"use strict" : "use strict"
+ 
+ function f0(a, [a, [b]], {b}) { }
+->f0 : (a: any, [a, [b]]: [any, [any]], { b }: { b: any; }) => void
++>f0 : (a: any, __1: [any, [any]], __2: { b: any; }) => void
+ >a : any
+ >a : any
+ >b : any
+ >b : any
+ 
+ function f1([a, a]) { }
+->f1 : ([a, a]: [any, any]) => void
++>f1 : (__0: [any, any]) => void
+ >a : any
+ >a : any
+ 
+ function f2({b}, {b}) { }
+->f2 : ({ b }: { b: any; }, { b }: { b: any; }) => void
++>f2 : (__0: { b: any; }, __1: { b: any; }) => void
+ >b : any
+ >b : any
+ 
+ function f3([c, [c], [[c]]]) { }
+->f3 : ([c, [c], [[c]]]: [any, [any], [[any]]]) => void
++>f3 : (__0: [any, [any], [[any]]]) => void
+ >c : any
+ >c : any
+ >c : any
+ 
+ function f4({d, d: {d}}) { }
+->f4 : ({ d, d: { d } }: { d: { d: any; }; }) => void
++>f4 : (__0: { d: { d: any; }; }) => void
+ >d : { d: any; }
+ >d : any
+ >d : any
+ 
+ function f5({e, e: {e}}, {e}, [d, e, [[e]]], ...e) { }
+->f5 : ({ e, e: { e } }: { e: { e: any; }; }, { e }: { e: any; }, [d, e, [[e]]]: [any, any, [[any]]], ...e: any[]) => void
++>f5 : (__0: { e: { e: any; }; }, __1: { e: any; }, __2: [any, any, [[any]]], ...e: any[]) => void
+ >e : { e: any; }
+ >e : any
+ >e : any
+@@= skipped -40, +40 lines =@@
+ >e : any[]
+ 
+ function f6([f, ...f]) { }
+->f6 : ([f, ...f]: [any, ...any[]]) => void
++>f6 : (__0: [any, ...any[]]) => void
+ >f : any
+ >f : any[]
+ 

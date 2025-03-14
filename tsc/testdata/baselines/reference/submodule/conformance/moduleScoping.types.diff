@@ -1,0 +1,20 @@
+--- old.moduleScoping.types
++++ new.moduleScoping.types
+@@= skipped -28, +28 lines =@@
+ 
+ === file4.ts ===
+ import file3 = require('./file3');
+->file3 : typeof file3
++>file3 : typeof import("file3")
+ 
+ var t1 = v1;
+ >t1 : string
+@@= skipped -13, +13 lines =@@
+ var t3 = file3.v3;
+ >t3 : boolean
+ >file3.v3 : boolean
+->file3 : typeof file3
++>file3 : typeof import("file3")
+ >v3 : boolean
+ 
+ var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module

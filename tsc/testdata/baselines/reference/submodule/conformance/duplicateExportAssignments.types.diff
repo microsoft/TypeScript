@@ -1,0 +1,11 @@
+--- old.duplicateExportAssignments.types
++++ new.duplicateExportAssignments.types
+@@= skipped -30, +30 lines =@@
+ 
+ === foo3.ts ===
+ module x {
+->x : typeof import("foo3")
++>x : typeof x
+ 
+ 	export var x = 10;
+ >x : number

@@ -1,0 +1,10 @@
+--- old.typeArgumentInferenceWithClassExpression1.types
++++ new.typeArgumentInferenceWithClassExpression1.types
+@@= skipped -2, +2 lines =@@
+ === typeArgumentInferenceWithClassExpression1.ts ===
+ function foo<T>(x = class { static prop: T }): T {
+ >foo : <T>(x?: typeof (Anonymous class)) => T
++>T : T
+ >x : typeof (Anonymous class)
+ >class { static prop: T } : typeof (Anonymous class)
+ >prop : T

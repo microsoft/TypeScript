@@ -1,0 +1,84 @@
+//// [tests/cases/conformance/es2019/allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts] ////
+
+=== allowUnescapedParagraphAndLineSeparatorsInStringLiteral.ts ===
+// Strings containing unescaped line / paragraph separators
+// Using both single quotes, double quotes and template literals
+
+var stringContainingUnescapedLineSeparator1 = "
+>stringContainingUnescapedLineSeparator1 : string
+>" STRING_CONTENT " : " STRING_CONTENT "
+
+STRING_CONTENT
+";
+var stringContainingUnescapedParagraphSeparator1 = "
+>stringContainingUnescapedParagraphSeparator1 : string
+>" STRING_CONTENT " : " STRING_CONTENT "
+
+STRING_CONTENT
+";
+
+
+var stringContainingUnescapedLineSeparator2 = '
+>stringContainingUnescapedLineSeparator2 : string
+>' STRING_CONTENT ' : " STRING_CONTENT "
+
+STRING_CONTENT
+';
+var stringContainingUnescapedParagraphSeparator2 = '
+>stringContainingUnescapedParagraphSeparator2 : string
+>' STRING_CONTENT ' : " STRING_CONTENT "
+
+STRING_CONTENT
+';
+
+
+var stringContainingUnescapedLineSeparator3 = `
+>stringContainingUnescapedLineSeparator3 : string
+>` STRING_CONTENT ` : " STRING_CONTENT "
+
+STRING_CONTENT
+`;
+var stringContainingUnescapedParagraphSeparator3 = `
+>stringContainingUnescapedParagraphSeparator3 : string
+>` STRING_CONTENT ` : " STRING_CONTENT "
+
+STRING_CONTENT
+`;
+
+// Array of unescaped line / paragraph separators
+
+var arr = [
+>arr : string[]
+>[    "  STRING_CONTENT  ",    "   STRING_CONTENT   ",    "STRING_CONTENT ",    " STRING_CONTENT",    `\ `,    ' '] : string[]
+
+    "
+>"  STRING_CONTENT  " : "  STRING_CONTENT  "
+
+STRING_CONTENT
+
+",
+    "
+>"   STRING_CONTENT   " : "   STRING_CONTENT   "
+
+
+STRING_CONTENT
+
+
+",
+    "STRING_CONTENT
+>"STRING_CONTENT " : "STRING_CONTENT "
+
+",
+    "
+>" STRING_CONTENT" : " STRING_CONTENT"
+
+STRING_CONTENT",
+    `\
+>`\ ` : "â��"
+
+`,
+    '
+>' ' : " "
+
+'
+];

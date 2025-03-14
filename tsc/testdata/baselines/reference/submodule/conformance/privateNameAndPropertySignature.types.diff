@@ -1,0 +1,29 @@
+--- old.privateNameAndPropertySignature.types
++++ new.privateNameAndPropertySignature.types
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ interface B {
++>B : B
++
+     #foo: string;
+ >#foo : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ declare const x: {
+->x : { bar: { #baz: string; #taz(): string; }; }
++>x : { bar: {}; }
+ 
+     #foo: number;
+ >#foo : number
+@@= skipped -20, +20 lines =@@
+ };
+ 
+ declare const y: [{ qux: { #quux: 3 } }];
+->y : [{ qux: { #quux: 3; }; }]
++>y : [{ qux: {}; }]
+ >qux : {}
+ >#quux : 3
+ 

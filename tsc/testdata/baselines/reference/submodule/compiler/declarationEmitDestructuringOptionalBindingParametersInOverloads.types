@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/declarationEmitDestructuringOptionalBindingParametersInOverloads.ts] ////
+
+=== declarationEmitDestructuringOptionalBindingParametersInOverloads.ts ===
+function foo([x, y, z] ?: [string, number, boolean]);
+>foo : (__0?: [string, number, boolean]) => any
+>x : string
+>y : number
+>z : boolean
+
+function foo(...rest: any[]) {
+>foo : (__0?: [string, number, boolean]) => any
+>rest : any[]
+}
+
+function foo2( { x, y, z }?: { x: string; y: number; z: boolean });
+>foo2 : (__0?: { x: string; y: number; z: boolean; }) => any
+>x : string
+>y : number
+>z : boolean
+>x : string
+>y : number
+>z : boolean
+
+function foo2(...rest: any[]) {
+>foo2 : (__0?: { x: string; y: number; z: boolean; }) => any
+>rest : any[]
+
+}

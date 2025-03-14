@@ -1,0 +1,54 @@
+--- old.tsxStatelessComponentDefaultProps.types
++++ new.tsxStatelessComponentDefaultProps.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/tsxStatelessComponentDefaultProps.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 50,000
+-
+ === tsxStatelessComponentDefaultProps.tsx ===
+ /// <reference path="react16.d.ts" />
+ 
+ import React from 'react';
+->React : typeof React
++>React : any
+ 
+ interface Props {
++>Props : Props
++
+     text: string;
+ >text : string
+ }
+ 
+ function BackButton(_props: Props) {
+->BackButton : typeof BackButton
++>BackButton : { (_props: Props): any; defaultProps: { text: string; }; }
+ >_props : Props
+ 
+     return <div />
+-><div /> : JSX.Element
++><div /> : any
+ >div : any
+ }
+ BackButton.defaultProps = {
+ >BackButton.defaultProps = {    text: 'Go Back',} : { text: string; }
+ >BackButton.defaultProps : { text: string; }
+->BackButton : typeof BackButton
++>BackButton : { (_props: Props): any; defaultProps: { text: string; }; }
+ >defaultProps : { text: string; }
+ >{    text: 'Go Back',} : { text: string; }
+ 
+@@= skipped -37, +33 lines =@@
+ 
+ };
+ let a = <BackButton />
+->a : JSX.Element
+-><BackButton /> : JSX.Element
+->BackButton : typeof BackButton
++>a : any
++><BackButton /> : any
++>BackButton : { (_props: Props): any; defaultProps: { text: string; }; }
+ 

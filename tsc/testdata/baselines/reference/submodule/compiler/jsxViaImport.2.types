@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/jsxViaImport.2.tsx] ////
+
+=== consumer.tsx ===
+/// <reference path="component.d.ts" />
+import BaseComponent from 'BaseComponent';
+>BaseComponent : typeof default
+
+class TestComponent extends React.Component<any, {}> {
+>TestComponent : TestComponent
+>React.Component : Component<any, {}>
+>React : typeof React
+>Component : typeof Component
+
+    render() {
+>render : () => any
+
+        return <BaseComponent />;
+><BaseComponent /> : any
+>BaseComponent : typeof default
+    }
+}
+
+=== component.d.ts ===
+declare module JSX {
+>JSX : any
+
+  interface ElementAttributesProperty { props; }
+>ElementAttributesProperty : ElementAttributesProperty
+>props : any
+}
+declare module React {
+>React : typeof React
+
+  class Component<T, U> { }
+>Component : Component<T, U>
+>T : T
+>U : U
+}
+declare module "BaseComponent" {
+>"BaseComponent" : typeof import("BaseComponent")
+
+    export default class extends React.Component<any, {}> {
+>React.Component : Component<any, {}>
+>React : typeof React
+>Component : typeof Component
+    }
+}
+

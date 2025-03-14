@@ -1,0 +1,30 @@
+--- old.validNumberAssignments.types
++++ new.validNumberAssignments.types
+@@= skipped -17, +17 lines =@@
+ >x : number
+ 
+ enum E { A };
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ var d: E = x;
+->d : E
++>d : E.A
+ >x : number
+ 
+ var e = E.A;
+->e : E
+->E.A : E
++>e : E.A
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+ e = x;
+ >e = x : number
+->e : E
++>e : E.A
+ >x : number
+ 

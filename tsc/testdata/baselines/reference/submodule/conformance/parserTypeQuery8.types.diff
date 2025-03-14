@@ -1,0 +1,8 @@
+--- old.parserTypeQuery8.types
++++ new.parserTypeQuery8.types
+@@= skipped -2, +2 lines =@@
+ === parserTypeQuery8.ts ===
+ var v: typeof A<B>
+ >v : any
+->A : any
+ 

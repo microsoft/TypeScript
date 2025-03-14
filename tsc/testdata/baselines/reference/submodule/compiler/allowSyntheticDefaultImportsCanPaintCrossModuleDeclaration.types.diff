@@ -1,0 +1,26 @@
+--- old.allowSyntheticDefaultImportsCanPaintCrossModuleDeclaration.types
++++ new.allowSyntheticDefaultImportsCanPaintCrossModuleDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === color.ts ===
+ interface Color {
++>Color : Color
++
+     c: string;
+ >c : string
+ }
+@@= skipped -15, +17 lines =@@
+ 
+ === file2.ts ===
+ import { styled }  from "./file1";
+->styled : () => import("color").default
++>styled : () => Color
+ 
+ export const A = styled();
+->A : import("color").default
+->styled() : import("color").default
+->styled : () => import("color").default
++>A : Color
++>styled() : Color
++>styled : () => Color
+ 

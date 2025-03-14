@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
+
+=== ThingA.ts ===
+export class ThingA { } 
+>ThingA : ThingA
+
+=== ThingB.ts ===
+export class ThingB { }
+>ThingB : ThingB
+
+=== Things.ts ===
+export {ThingA} from "./ThingA";
+>ThingA : typeof ThingA
+
+export {ThingB} from "./ThingB";
+>ThingB : typeof ThingB
+
+=== Test.ts ===
+import * as things from "./Things";
+>things : typeof import("Things")
+
+export class Test {
+>Test : Test
+
+    public method = (input: things.ThingA)  => { };
+>method : (input: ThingA) => void
+>(input: things.ThingA)  => { } : (input: ThingA) => void
+>input : ThingA
+>things : any
+}

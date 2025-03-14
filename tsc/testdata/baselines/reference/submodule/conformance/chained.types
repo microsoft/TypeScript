@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/externalModules/typeOnly/chained.ts] ////
+
+=== /a.ts ===
+class A { a!: string }
+>A : A
+>a : string
+
+export type { A as B };
+>A : typeof A
+>B : A
+
+export type Z = A;
+>Z : A
+
+=== /b.ts ===
+import { Z as Y } from './a';
+>Z : any
+>Y : any
+
+export { B as C } from './a';
+>B : typeof A
+>C : typeof A
+
+=== /c.ts ===
+import type { C } from './b';
+>C : A
+
+export { C as D };
+>C : typeof A
+>D : typeof A
+
+=== /d.ts ===
+import { D } from './c';
+>D : typeof A
+
+new D();
+>new D() : A
+>D : typeof A
+
+const d: D = {};
+>d : A
+>{} : {}
+

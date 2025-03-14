@@ -1,0 +1,18 @@
+--- old.fixingTypeParametersRepeatedly1.types
++++ new.fixingTypeParametersRepeatedly1.types
+@@= skipped -2, +2 lines =@@
+ === fixingTypeParametersRepeatedly1.ts ===
+ declare function f<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
+ >f : <T>(x: T, y: (p: T) => T, z: (p: T) => T) => T
++>T : T
+ >x : T
+ >y : (p: T) => T
+ >p : T
+@@= skipped -22, +23 lines =@@
+ // First overload of g should type check just like f
+ declare function g<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
+ >g : { <T>(x: T, y: (p: T) => T, z: (p: T) => T): T; (): any; }
++>T : T
+ >x : T
+ >y : (p: T) => T
+ >p : T

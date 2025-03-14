@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/salsa/varRequireFromTypescript.ts] ////
+
+=== use.js ===
+var ex = require('./ex')
+>ex : any
+>require('./ex') : any
+>require : any
+>'./ex' : "./ex"
+
+// values work
+var crunch = new ex.Crunch(1);
+>crunch : any
+>new ex.Crunch(1) : any
+>ex.Crunch : any
+>ex : any
+>Crunch : any
+>1 : 1
+
+crunch.n
+>crunch.n : any
+>crunch : any
+>n : any
+
+
+// types work
+/**
+ * @param {ex.Greatest} greatest
+ * @param {ex.Crunch} wrap
+ */
+function f(greatest, wrap) {
+>f : (greatest: any, wrap: any) => void
+>greatest : any
+>wrap : any
+
+    greatest.day
+>greatest.day : any
+>greatest : any
+>day : any
+
+    wrap.n
+>wrap.n : any
+>wrap : any
+>n : any
+}
+
+=== ex.d.ts ===
+export type Greatest = { day: 1 }
+>Greatest : Greatest
+>day : 1
+
+export class Crunch {
+>Crunch : Crunch
+
+    n: number
+>n : number
+
+    m(): number
+>m : () => number
+
+    constructor(n: number)
+>n : number
+}
+

@@ -1,0 +1,27 @@
+--- old.duplicateIdentifierShouldNotShortCircuitBaseTypeBinding.types
++++ new.duplicateIdentifierShouldNotShortCircuitBaseTypeBinding.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/duplicateIdentifierShouldNotShortCircuitBaseTypeBinding.ts] ////
+ 
+ === duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts ===
++export interface IPoint {}
++>IPoint : IPoint
+ 
++export module Shapes {
++>Shapes : typeof Shapes
++
++    export class Point implements IPoint {}
++>Point : Point
++
++}
++
++=== duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_1.ts ===
++
++//var x = new Shapes.Point();
++//interface IPoint {}
++
++//module Shapes {
++
++//    export class Point implements IPoint {}
++
++//}

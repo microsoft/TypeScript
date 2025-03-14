@@ -1,0 +1,18 @@
+--- old.derivedGenericClassWithAny.types
++++ new.derivedGenericClassWithAny.types
+@@= skipped -2, +2 lines =@@
+ === derivedGenericClassWithAny.ts ===
+ class C<T extends number> {
+ >C : C<T>
++>T : T
+ 
+     x: T;
+ >x : T
+@@= skipped -51, +52 lines =@@
+ // if D is a valid class definition than E is now not safe tranisitively through C
+ class E<T extends string> extends D {
+ >E : E<T>
++>T : T
+ >D : D
+ 
+     x: T;

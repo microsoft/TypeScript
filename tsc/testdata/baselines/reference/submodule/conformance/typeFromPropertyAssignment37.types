@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment37.ts] ////
+
+=== use.js ===
+const util = require('./mod')
+>util : any
+>require('./mod') : any
+>require : any
+>'./mod' : "./mod"
+
+function n() {
+>n : () => void
+
+    util.existy // no error
+>util.existy : any
+>util : any
+>existy : any
+}
+util.existy // no error
+>util.existy : any
+>util : any
+>existy : any
+

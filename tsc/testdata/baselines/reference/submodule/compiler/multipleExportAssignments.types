@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/multipleExportAssignments.ts] ////
+
+=== multipleExportAssignments.ts ===
+interface connectModule {
+>connectModule : connectModule
+
+    (res, req, next): void;
+>res : any
+>req : any
+>next : any
+}
+interface connectExport {
+>connectExport : connectExport
+
+    use: (mod: connectModule) => connectExport;
+>use : (mod: connectModule) => connectExport
+>mod : connectModule
+
+    listen: (port: number) => void;
+>listen : (port: number) => void
+>port : number
+}
+var server: {
+>server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+
+    (): connectExport;
+    test1: connectModule;
+>test1 : connectModule
+
+    test2(): connectModule;
+>test2 : () => connectModule
+
+};
+export = server;
+>server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+
+export = connectExport;
+>connectExport : connectExport
+ 
+

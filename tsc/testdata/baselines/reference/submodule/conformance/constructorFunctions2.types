@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/salsa/constructorFunctions2.ts] ////
+
+=== node.d.ts ===
+declare function require(id: string): any;
+>require : (id: string) => any
+>id : string
+
+declare var module: any, exports: any;
+>module : any
+>exports : any
+
+=== index.js ===
+const A = require("./other");
+>A : any
+>require("./other") : any
+>require : (id: string) => any
+>"./other" : "./other"
+
+const a = new A().id;
+>a : any
+>new A().id : any
+>new A() : any
+>A : any
+>id : any
+
+const B = function() { this.id = 1; }
+>B : () => void
+>function() { this.id = 1; } : () => void
+>this.id = 1 : 1
+>this.id : any
+>this : any
+>id : any
+>1 : 1
+
+B.prototype.m = function() { this.x = 2; }
+>B.prototype.m = function() { this.x = 2; } : () => void
+>B.prototype.m : any
+>B.prototype : any
+>B : () => void
+>prototype : any
+>m : any
+>function() { this.x = 2; } : () => void
+>this.x = 2 : 2
+>this.x : any
+>this : any
+>x : any
+>2 : 2
+
+const b = new B();
+>b : any
+>new B() : any
+>B : () => void
+
+b.id;
+>b.id : any
+>b : any
+>id : any
+
+b.x;
+>b.x : any
+>b : any
+>x : any
+
+=== other.js ===
+function A() { this.id = 1; }
+>A : () => void
+>this.id = 1 : 1
+>this.id : any
+>this : any
+>id : any
+>1 : 1
+
+module.exports = A;
+>module.exports = A : any
+>module.exports : any
+>module : any
+>exports : any
+>A : any
+

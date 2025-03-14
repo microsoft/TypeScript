@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/jsdoc/paramTagTypeResolution.ts] ////
+
+=== main.js ===
+var f = require('./first');
+>f : any
+>require('./first') : any
+>require : any
+>'./first' : "./first"
+
+f(1, n => { })
+>f(1, n => { }) : any
+>f : any
+>1 : 1
+>n => { } : (n: any) => void
+>n : any
+

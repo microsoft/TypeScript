@@ -1,0 +1,28 @@
+--- old.unannotatedParametersAreOptional.types
++++ new.unannotatedParametersAreOptional.types
+@@= skipped -46, +46 lines =@@
+ >p : (x: any) => void
+ 
+ const obj = {
+->obj : { m(x: any): void; p: (x: any) => void; }
+->{  m(x) {},  p: x => {}} : { m(x: any): void; p: (x: any) => void; }
++>obj : { m: (x: any) => void; p: (x: any) => void; }
++>{  m(x) {},  p: x => {}} : { m: (x: any) => void; p: (x: any) => void; }
+ 
+   m(x) {},
+ >m : (x: any) => void
+@@= skipped -17, +17 lines =@@
+ obj.m(); // Always been ok
+ >obj.m() : void
+ >obj.m : (x: any) => void
+->obj : { m(x: any): void; p: (x: any) => void; }
++>obj : { m: (x: any) => void; p: (x: any) => void; }
+ >m : (x: any) => void
+ 
+ obj.p(); // Always been ok
+ >obj.p() : void
+ >obj.p : (x: any) => void
+->obj : { m(x: any): void; p: (x: any) => void; }
++>obj : { m: (x: any) => void; p: (x: any) => void; }
+ >p : (x: any) => void
+ 

@@ -1,0 +1,68 @@
+--- old.inferTypeParameterConstraints.types
++++ new.inferTypeParameterConstraints.types
+@@= skipped -4, +4 lines =@@
+ 
+ type SubGuard<A, X extends [A]> = X;
+ >SubGuard : X
++>A : A
++>X : X
+ 
+ type IsSub<M extends any[], S extends any[]> = M extends [...SubGuard<M[number], infer B>, ...S, ...any[]] ? B : never;
+ >IsSub : IsSub<M, S>
++>M : M
++>S : S
++>B : B
+ 
+ type E0 = IsSub<[1, 2, 3, 4], [2, 3, 4]>;  // [1 | 2 | 3 | 4]
+->E0 : [1 | 4 | 2 | 3]
++>E0 : [1 | 2 | 3 | 4]
+ 
+ type E1 = [1, 2, 3, 4] extends [...infer B, 2, 3, 4, ...any[]] ? B : never;  // unknown[]
+ >E1 : unknown[]
++>B : B
+ 
+ // Repro from #42636
+ 
+ type Constrain<T extends C, C> = unknown;
+ >Constrain : unknown
++>T : T
++>C : C
+ 
+ type Foo<A> = A extends Constrain<infer X, A> ? X : never;
+ >Foo : Foo<A>
++>A : A
++>X : X
+ 
+ type T0 = Foo<string>;  // string
+ >T0 : string
+@@= skipped -25, +35 lines =@@
+ 
+ class BaseClass<V> {
+ >BaseClass : BaseClass<V>
++>V : V
+ 
+   protected fake(): V {
+ >fake : () => V
+@@= skipped -13, +14 lines =@@
+ 
+ class Klass<V> extends BaseClass<V> {
+ >Klass : Klass<V>
++>V : V
+ >BaseClass : BaseClass<V>
+ 
+   child = true;
+@@= skipped -9, +10 lines =@@
+ 
+ type Constructor<V, P extends BaseClass<V>> = new () => P;
+ >Constructor : Constructor<V, P>
++>V : V
++>P : P
+ 
+ type inferTest<V, T> = T extends Constructor<V, infer P> ? P : never;
+ >inferTest : inferTest<V, T>
++>V : V
++>T : T
++>P : P
+ 
+ type U = inferTest<number, Constructor<number, Klass<number>>>;
+ >U : Klass<number>

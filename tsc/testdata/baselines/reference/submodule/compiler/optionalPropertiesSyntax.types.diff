@@ -1,0 +1,47 @@
+--- old.optionalPropertiesSyntax.types
++++ new.optionalPropertiesSyntax.types
+@@= skipped -1, +1 lines =@@
+ 
+ === optionalPropertiesSyntax.ts ===
+ interface fnSigs {
++>fnSigs : fnSigs
++
+     //functions signatures can be optional
+     fn(): void;
+ >fn : { (): void; (): void; }
+@@= skipped -12, +14 lines =@@
+ }
+ 
+ interface callSig {
++>callSig : callSig
++
+     //Call signatures can't be optional
+     (): any;
+     ()?: any; //err
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ interface constructSig {
++>constructSig : constructSig
++
+     //Construct signatures can't be optional
+     new (): any;
+     new ()?: any; //err
+@@= skipped -10, +12 lines =@@
+ }
+ 
+ interface propertySig {
++>propertySig : propertySig
++
+     //Property signatures can be optional
+     prop: any;
+ >prop : any
+@@= skipped -12, +14 lines =@@
+ }
+ 
+ interface indexSig {
++>indexSig : indexSig
++
+     //Index signatures can't be optional
+     [idx: number]: any;
+ >idx : number

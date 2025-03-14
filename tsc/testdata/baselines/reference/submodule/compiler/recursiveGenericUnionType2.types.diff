@@ -1,0 +1,60 @@
+--- old.recursiveGenericUnionType2.types
++++ new.recursiveGenericUnionType2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === recursiveGenericUnionType2.ts ===
+ declare module Test1 {
++>Test1 : any
++
+     export type Container<T> = T | {
+ >Container : Container<T>
++>T : T
+ 
+         [i: string]: Container<T>[];
+ >i : string
+@@= skipped -12, +15 lines =@@
+ }
+ 
+ declare module Test2 {
++>Test2 : any
++
+     export type Container<T> = T | {
+ >Container : Container<T>
++>T : T
+ 
+         [i: string]: Container<T>[];
+ >i : string
+@@= skipped -12, +15 lines =@@
+ }
+ 
+ var x: Test1.Container<number>;
+->x : Test1.Container<number>
++>x : Container<number>
+ >Test1 : any
+ 
+ var s1: Test1.IStringContainer;
+->s1 : Test1.IStringContainer
++>s1 : IStringContainer
+ >Test1 : any
+ 
+ var s2: Test2.IStringContainer;
+->s2 : Test2.IStringContainer
++>s2 : IStringContainer
+ >Test2 : any
+ 
+ s1 = s2;
+->s1 = s2 : Test2.IStringContainer
+->s1 : Test1.IStringContainer
+->s2 : Test2.IStringContainer
++>s1 = s2 : IStringContainer
++>s1 : IStringContainer
++>s2 : IStringContainer
+ 
+ s2 = s1;
+->s2 = s1 : Test1.IStringContainer
+->s2 : Test2.IStringContainer
+->s1 : Test1.IStringContainer
++>s2 = s1 : IStringContainer
++>s2 : IStringContainer
++>s1 : IStringContainer
+ 

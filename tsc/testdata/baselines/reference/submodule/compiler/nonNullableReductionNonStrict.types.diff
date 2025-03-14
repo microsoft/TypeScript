@@ -1,0 +1,48 @@
+--- old.nonNullableReductionNonStrict.types
++++ new.nonNullableReductionNonStrict.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Transform1<T> = ((value: string) => T) | (string extends T ? undefined : never);
+ >Transform1 : Transform1<T>
++>T : T
+ >value : string
+ 
+ type Transform2<T> = string extends T ? ((value: string) => T) | undefined : (value: string) => T;
+ >Transform2 : Transform2<T>
++>T : T
+ >value : string
+ >value : string
+ 
+ function test<T>(f1: Transform1<T>, f2: Transform2<T>) {
+ >test : <T>(f1: Transform1<T>, f2: Transform2<T>) => void
++>T : T
+ >f1 : Transform1<T>
+ >f2 : Transform2<T>
+ 
+@@= skipped -19, +22 lines =@@
+ 
+     f2?.("hello");
+ >f2?.("hello") : T
+->f2 : ((value: string) => T) | ((value: string) => T)
++>f2 : (value: string) => T | (value: string) => T
+ >"hello" : "hello"
+ }
+ 
+ function f1<T>(x: T | (string extends T ? null | undefined : never)) {
+->f1 : <T>(x: T | (string extends T ? null | undefined : never)) => void
++>f1 : <T>(x: T | (string extends T ? null : never)) => void
++>T : T
+ >x : T | (string extends T ? null : never)
+ 
+     let z = x!;  // NonNullable<T>
+@@= skipped -15, +16 lines =@@
+ }
+ 
+ function f2<T, U extends null | undefined>(x: T | U) {
+->f2 : <T, U extends null | undefined>(x: T | U) => void
++>f2 : <T, U extends null>(x: T | U) => void
++>T : T
++>U : U
+ >x : T | U
+ 
+     let z = x!;  // NonNullable<T>

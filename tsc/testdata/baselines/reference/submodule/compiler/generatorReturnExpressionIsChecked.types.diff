@@ -1,0 +1,11 @@
+--- old.generatorReturnExpressionIsChecked.types
++++ new.generatorReturnExpressionIsChecked.types
+@@= skipped -1, +1 lines =@@
+ 
+ === generatorReturnExpressionIsChecked.ts ===
+ function* f(): Iterator<number> {
+->f : () => Iterator<number>
++>f : () => Iterator<number, any, any>
+ 
+     return invalid;
+ >invalid : any

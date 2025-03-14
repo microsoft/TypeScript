@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/importNonExportedMember.ts] ////
+
+=== a.ts ===
+declare function foo(): any
+>foo : () => any
+
+declare function bar(): any;
+>bar : () => any
+
+export { foo, bar as baz };
+>foo : () => any
+>bar : () => any
+>baz : () => any
+
+=== b.ts ===
+import { foo, bar } from "./a";
+>foo : () => any
+>bar : any
+

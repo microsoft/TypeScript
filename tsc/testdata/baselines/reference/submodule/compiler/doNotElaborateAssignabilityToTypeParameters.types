@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/doNotElaborateAssignabilityToTypeParameters.ts] ////
+
+=== doNotElaborateAssignabilityToTypeParameters.ts ===
+async function foo<T>(x: T): Promise<T> {
+>foo : <T>(x: T) => Promise<T>
+>T : T
+>x : T
+
+  let yaddable = await getXOrYadda(x);
+>yaddable : Yadda | Awaited<T>
+>await getXOrYadda(x) : Yadda | Awaited<T>
+>getXOrYadda(x) : T | Yadda
+>getXOrYadda : <T>(x: T) => T | Yadda
+>x : T
+
+  return yaddable;
+>yaddable : Yadda | Awaited<T>
+}
+
+interface Yadda {
+>Yadda : Yadda
+
+  stuff: string,
+>stuff : string
+
+  things: string,
+>things : string
+}
+
+declare function getXOrYadda<T>(x: T): T | Yadda;
+>getXOrYadda : <T>(x: T) => T | Yadda
+>T : T
+>x : T
+

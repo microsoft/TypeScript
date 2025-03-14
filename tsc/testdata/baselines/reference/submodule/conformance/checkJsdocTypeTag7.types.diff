@@ -1,0 +1,19 @@
+--- old.checkJsdocTypeTag7.types
++++ new.checkJsdocTypeTag7.types
+@@= skipped -9, +9 lines =@@
+ 
+     /** @type {Foo} */
+     foo(a, b) {}
+->foo : (a: string, b: number) => void
+->a : string
+->b : number
++>foo : (a: any, b: any) => void
++>a : any
++>b : any
+ 
+     /** @type {(optional?) => void} */
+     methodWithOptionalParameters() {}
+->methodWithOptionalParameters : (optional?: any) => void
++>methodWithOptionalParameters : () => void
+ }
+ 

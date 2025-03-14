@@ -1,0 +1,153 @@
+--- old.typedefOnStatements.types
++++ new.typedefOnStatements.types
+@@= skipped -92, +92 lines =@@
+  * @param {Q} q
+  */
+ function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
+->proof : (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K, l: L, m: M, n: N, o: O, p: P, q: Q) => void
+->a : A
+->b : B
+->c : C
+->d : D
+->e : E
+->f : F
+->g : G
+->h : H
+->i : I
+->j : J
+->k : K
+->l : L
+->m : M
+->n : N
+->o : O
+->p : P
+->q : Q
++>proof : (a: any, b: any, c: any, d: any, e: any, f: any, g: any, h: any, i: any, j: any, k: any, l: any, m: any, n: any, o: any, p: any, q: any) => void
++>a : any
++>b : any
++>c : any
++>d : any
++>e : any
++>f : any
++>g : any
++>h : any
++>i : any
++>j : any
++>k : any
++>l : any
++>m : any
++>n : any
++>o : any
++>p : any
++>q : any
+ 
+     console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q)
+ >console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q) : void
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->a.a : string
+->a : A
+->a : string
+->b.b : string
+->b : B
+->b : string
+->c.c : string
+->c : C
+->c : string
+->d.d : string
+->d : D
+->d : string
+->e.e : string
+->e : E
+->e : string
+->f.f : string
+->f : F
+->f : string
+->g.g : string
+->g : G
+->g : string
+->h.h : string
+->h : H
+->h : string
+->i.i : string
+->i : I
+->i : string
+->j.j : string
+->j : J
+->j : string
+->k.k : string
+->k : K
+->k : string
+->l.l : string
+->l : L
+->l : string
+->m.m : string
+->m : M
+->m : string
+->n.n : string
+->n : N
+->n : string
+->o.o : string
+->o : O
+->o : string
+->p.p : string
+->p : P
+->p : string
+->q.q : string
+->q : Q
+->q : string
++>a.a : any
++>a : any
++>a : any
++>b.b : any
++>b : any
++>b : any
++>c.c : any
++>c : any
++>c : any
++>d.d : any
++>d : any
++>d : any
++>e.e : any
++>e : any
++>e : any
++>f.f : any
++>f : any
++>f : any
++>g.g : any
++>g : any
++>g : any
++>h.h : any
++>h : any
++>h : any
++>i.i : any
++>i : any
++>i : any
++>j.j : any
++>j : any
++>j : any
++>k.k : any
++>k : any
++>k : any
++>l.l : any
++>l : any
++>l : any
++>m.m : any
++>m : any
++>m : any
++>n.n : any
++>n : any
++>n : any
++>o.o : any
++>o : any
++>o : any
++>p.p : any
++>p : any
++>p : any
++>q.q : any
++>q : any
++>q : any
+ 
+     /** @type {Alpha} */
+     var alpha = { alpha: "aleph" }

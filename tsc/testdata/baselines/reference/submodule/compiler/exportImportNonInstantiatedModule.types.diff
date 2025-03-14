@@ -1,0 +1,28 @@
+--- old.exportImportNonInstantiatedModule.types
++++ new.exportImportNonInstantiatedModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportImportNonInstantiatedModule.ts ===
+ module A {
++>A : any
++
+     export interface I { x: number }
++>I : I
+ >x : number
+ }
+ 
+@@= skipped -9, +12 lines =@@
+ 
+     export import A1 = A
+ >A1 : any
+->A : error
++>A : any
+     
+ }
+ 
+ var x: B.A1.I = { x: 1 };
+->x : A.I
++>x : I
+ >B : any
+ >A1 : any
+ >{ x: 1 } : { x: number; }

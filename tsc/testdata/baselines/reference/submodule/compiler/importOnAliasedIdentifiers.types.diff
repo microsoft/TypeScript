@@ -1,0 +1,37 @@
+--- old.importOnAliasedIdentifiers.types
++++ new.importOnAliasedIdentifiers.types
+@@= skipped -4, +4 lines =@@
+ >A : typeof A
+ 
+     export interface X { s: string }
++>X : X
+ >s : string
+ 
+     export var X: X;
+@@= skipped -9, +10 lines =@@
+ >B : typeof B
+ 
+     interface A { n: number }
++>A : A
+ >n : number
+ 
+     import Y = A; // Alias only for module A
+->Y : typeof Y
+->A : typeof Y
++>Y : typeof A
++>A : typeof A
+ 
+     import Z = A.X; // Alias for both type and member A.X
+->Z : Y.X
+->A : typeof Y
+->X : Y.X
++>Z : X
++>A : typeof A
++>X : X
+ 
+     var v: Z = Z;
+->v : Y.X
+->Z : Y.X
++>v : X
++>Z : X
+ }

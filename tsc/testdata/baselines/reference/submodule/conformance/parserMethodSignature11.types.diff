@@ -1,0 +1,12 @@
+--- old.parserMethodSignature11.types
++++ new.parserMethodSignature11.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserMethodSignature11.ts ===
+ interface I {
++>I : I
++
+   2<T>();
+ >2 : <T>() => any
++>T : T
+ }

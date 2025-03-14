@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/importNonExportedMember12.ts] ////
+
+=== /node_modules/foo/src/index.js ===
+module.exports = 1;
+>module.exports = 1 : 1
+>module.exports : any
+>module : any
+>exports : any
+>1 : 1
+
+=== /a.js ===
+export const A = require("foo");
+>A : any
+>require("foo") : any
+>require : any
+>"foo" : "foo"
+
+=== /b.ts ===
+import { A } from "./a";
+>A : any
+

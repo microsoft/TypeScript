@@ -1,0 +1,11 @@
+--- old.jsDeclarationsClassLikeHeuristic.types
++++ new.jsDeclarationsClassLikeHeuristic.types
+@@= skipped -13, +13 lines =@@
+ >A.prototype.b = {} : {}
+ >A.prototype.b : any
+ >A.prototype : any
+->A : {}
++>A : any
+ >prototype : any
+ >b : any
+ >{} : {}

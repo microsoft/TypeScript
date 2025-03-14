@@ -1,0 +1,11 @@
+--- old.inheritance1.types
++++ new.inheritance1.types
+@@= skipped -7, +7 lines =@@
+ >state : any
+ }
+ interface SelectableControl extends Control {
++>SelectableControl : SelectableControl
++
+     select(): void;
+ >select : () => void
+ }

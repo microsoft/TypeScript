@@ -1,0 +1,36 @@
+--- old.genericCallWithConstructorTypedArguments5.types
++++ new.genericCallWithConstructorTypedArguments5.types
+@@= skipped -4, +4 lines =@@
+ 
+ function foo<T, U>(arg: { cb: new(t: T) => U }) {
+ >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
++>T : T
++>U : U
+ >arg : { cb: new (t: T) => U; }
+ >cb : new (t: T) => U
+ >t : T
+@@= skipped -14, +16 lines =@@
+ var arg: { cb: new<T>(x: T) => string };
+ >arg : { cb: new <T>(x: T) => string; }
+ >cb : new <T>(x: T) => string
++>T : T
+ >x : T
+ 
+ var r = foo(arg); // {}
+@@= skipped -12, +13 lines =@@
+ var arg2: { cb: new <T>(x: T, y: T) => string };
+ >arg2 : { cb: new <T>(x: T, y: T) => string; }
+ >cb : new <T>(x: T, y: T) => string
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -23, +24 lines =@@
+ 
+ function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
+ >foo2 : <T, U>(arg: { cb: new (t: T, t2: T) => U; }) => U
++>T : T
++>U : U
+ >arg : { cb: new (t: T, t2: T) => U; }
+ >cb : new (t: T, t2: T) => U
+ >t : T

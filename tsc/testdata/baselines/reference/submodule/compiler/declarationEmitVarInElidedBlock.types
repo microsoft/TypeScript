@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/declarationEmitVarInElidedBlock.ts] ////
+
+=== declarationEmitVarInElidedBlock.ts ===
+{
+    var a = "";
+>a : string
+>"" : ""
+}
+export let b: typeof a;
+>b : string
+

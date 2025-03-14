@@ -1,0 +1,10 @@
+--- old.switchWithConstrainedTypeVariable.types
++++ new.switchWithConstrainedTypeVariable.types
+@@= skipped -4, +4 lines =@@
+ 
+ function function1<T extends 'a' | 'b'>(key: T) {
+ >function1 : <T extends "a" | "b">(key: T) => void
++>T : T
+ >key : T
+ 
+   switch (key) {

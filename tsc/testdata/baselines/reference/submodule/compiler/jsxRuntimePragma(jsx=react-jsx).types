@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/jsxRuntimePragma.ts] ////
+
+=== one.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime classic */
+import * as React from "react";
+>React : any
+
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => any
+>() => <h1>Hello world</h1> : () => any
+><h1>Hello world</h1> : any
+>h1 : any
+>h1 : any
+
+export const frag = <><div></div></>;
+>frag : any
+><><div></div></> : any
+><div></div> : any
+>div : any
+>div : any
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : any
+><img src="./image.png" /> : any
+>img : any
+>src : any
+
+=== two.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime automatic */
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => any
+>() => <h1>Hello world</h1> : () => any
+><h1>Hello world</h1> : any
+>h1 : any
+>h1 : any
+
+export const frag = <><div></div></>;
+>frag : any
+><><div></div></> : any
+><div></div> : any
+>div : any
+>div : any
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : any
+><img src="./image.png" /> : any
+>img : any
+>src : any
+
+=== three.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime classic */
+/* @jsxRuntime automatic */
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => any
+>() => <h1>Hello world</h1> : () => any
+><h1>Hello world</h1> : any
+>h1 : any
+>h1 : any
+
+export const frag = <><div></div></>;
+>frag : any
+><><div></div></> : any
+><div></div> : any
+>div : any
+>div : any
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : any
+><img src="./image.png" /> : any
+>img : any
+>src : any
+
+=== four.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime automatic */
+/* @jsxRuntime classic */
+import * as React from "react";
+>React : any
+
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : () => any
+>() => <h1>Hello world</h1> : () => any
+><h1>Hello world</h1> : any
+>h1 : any
+>h1 : any
+
+export const frag = <><div></div></>;
+>frag : any
+><><div></div></> : any
+><div></div> : any
+>div : any
+>div : any
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : any
+><img src="./image.png" /> : any
+>img : any
+>src : any
+
+=== index.ts ===
+export * as one from "./one.js";
+>one : typeof import("one")
+
+export * as two from "./two.js";
+>two : typeof import("two")
+
+export * as three from "./three.js";
+>three : typeof import("three")
+
+export * as four from "./four.js";
+>four : typeof import("four")
+

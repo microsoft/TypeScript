@@ -1,0 +1,152 @@
+//// [tests/cases/conformance/salsa/inferringClassStaticMembersFromAssignments.ts] ////
+
+=== a.js ===
+export class C1 { }
+>C1 : C1
+
+C1.staticProp = 0;
+>C1.staticProp = 0 : 0
+>C1.staticProp : any
+>C1 : typeof C1
+>staticProp : any
+>0 : 0
+
+export function F1() { }
+>F1 : { (): void; staticProp: number; }
+
+F1.staticProp = 0;
+>F1.staticProp = 0 : 0
+>F1.staticProp : number
+>F1 : { (): void; staticProp: number; }
+>staticProp : number
+>0 : 0
+
+export var C2 = class { };
+>C2 : typeof C2
+>class { } : typeof C2
+
+C2.staticProp = 0;
+>C2.staticProp = 0 : 0
+>C2.staticProp : any
+>C2 : typeof C2
+>staticProp : any
+>0 : 0
+
+export let F2 = function () { };
+>F2 : () => void
+>function () { } : () => void
+
+F2.staticProp = 0;
+>F2.staticProp = 0 : 0
+>F2.staticProp : any
+>F2 : () => void
+>staticProp : any
+>0 : 0
+
+=== global.js ===
+class C3 { }
+>C3 : C3
+
+C3.staticProp = 0;
+>C3.staticProp = 0 : 0
+>C3.staticProp : any
+>C3 : typeof C3
+>staticProp : any
+>0 : 0
+
+function F3() { }
+>F3 : { (): void; staticProp: number; }
+
+F3.staticProp = 0;
+>F3.staticProp = 0 : 0
+>F3.staticProp : number
+>F3 : { (): void; staticProp: number; }
+>staticProp : number
+>0 : 0
+
+var C4 = class { };
+>C4 : typeof C4
+>class { } : typeof C4
+
+C4.staticProp = 0;
+>C4.staticProp = 0 : 0
+>C4.staticProp : any
+>C4 : typeof C4
+>staticProp : any
+>0 : 0
+
+let F4 = function () { };
+>F4 : () => void
+>function () { } : () => void
+
+F4.staticProp = 0;
+>F4.staticProp = 0 : 0
+>F4.staticProp : any
+>F4 : () => void
+>staticProp : any
+>0 : 0
+
+=== b.ts ===
+import * as a from "./a";
+>a : typeof import("a")
+
+var n: number;
+>n : number
+
+var n = a.C1.staticProp;
+>n : number
+>a.C1.staticProp : any
+>a.C1 : typeof C1
+>a : typeof import("a")
+>C1 : typeof C1
+>staticProp : any
+
+var n = a.C2.staticProp;
+>n : number
+>a.C2.staticProp : any
+>a.C2 : typeof C2
+>a : typeof import("a")
+>C2 : typeof C2
+>staticProp : any
+
+var n = a.F1.staticProp;
+>n : number
+>a.F1.staticProp : number
+>a.F1 : { (): void; staticProp: number; }
+>a : typeof import("a")
+>F1 : { (): void; staticProp: number; }
+>staticProp : number
+
+var n = a.F2.staticProp;
+>n : number
+>a.F2.staticProp : any
+>a.F2 : () => void
+>a : typeof import("a")
+>F2 : () => void
+>staticProp : any
+
+
+var n = C3.staticProp;
+>n : number
+>C3.staticProp : any
+>C3 : typeof C3
+>staticProp : any
+
+var n = C4.staticProp;
+>n : number
+>C4.staticProp : any
+>C4 : typeof C4
+>staticProp : any
+
+var n = F3.staticProp;
+>n : number
+>F3.staticProp : number
+>F3 : { (): void; staticProp: number; }
+>staticProp : number
+
+var n = F4.staticProp;
+>n : number
+>F4.staticProp : any
+>F4 : () => void
+>staticProp : any
+

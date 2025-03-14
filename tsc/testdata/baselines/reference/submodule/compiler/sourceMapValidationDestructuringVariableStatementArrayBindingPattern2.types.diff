@@ -1,0 +1,28 @@
+--- old.sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.types
++++ new.sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.ts ===
+ declare var console: {
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ 
+     log(msg: string): void;
+ >log : (msg: string) => void
+@@= skipped -26, +26 lines =@@
+ >"edging" : "edging"
+ 
+ let [, skillA] = multiRobotA;
+-> : undefined
+ >skillA : [string, string]
+ >multiRobotA : MultiSkilledRobot
+ 
+@@= skipped -44, +43 lines =@@
+     console.log(skillA[0] + skillA[1]);
+ >console.log(skillA[0] + skillA[1]) : void
+ >console.log : (msg: string) => void
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ >log : (msg: string) => void
+ >skillA[0] + skillA[1] : string
+ >skillA[0] : string

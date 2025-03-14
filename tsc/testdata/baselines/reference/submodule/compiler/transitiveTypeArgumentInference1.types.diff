@@ -1,0 +1,21 @@
+--- old.transitiveTypeArgumentInference1.types
++++ new.transitiveTypeArgumentInference1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === transitiveTypeArgumentInference1.ts ===
+ interface I1<T, U> {
++>I1 : I1<T, U>
++>T : T
++>U : U
++
+ 	m(value: T): U;
+ >m : (value: T) => U
+ >value : T
+@@= skipped -10, +14 lines =@@
+ 
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+ 	constructor(p: I1<boolean, T>) {
+ >p : I1<boolean, T>

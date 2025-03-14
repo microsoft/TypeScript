@@ -1,0 +1,40 @@
+--- old.validNullAssignments.types
++++ new.validNullAssignments.types
+@@= skipped -14, +14 lines =@@
+ 
+ var e: typeof undefined = null;
+ >e : any
+->undefined : undefined
+ 
+ e = null; // ok
+ >e = null : null
+ >e : any
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ E.A = null; // error
+@@= skipped -32, +31 lines =@@
+ >C : any
+ 
+ interface I { foo: string }
++>I : I
+ >foo : string
+ 
+ var g: I;
+@@= skipped -23, +24 lines =@@
+ >M : any
+ 
+ var h: { f(): void } = null;
+->h : { f(): void; }
++>h : { f: () => void; }
+ >f : () => void
+ 
+ function i<T>(a: T) {
+ >i : <T>(a: T) => void
++>T : T
+ >a : T
+ 
+     a = null;

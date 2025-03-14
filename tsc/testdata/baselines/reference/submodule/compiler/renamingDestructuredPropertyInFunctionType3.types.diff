@@ -1,0 +1,19 @@
+--- old.renamingDestructuredPropertyInFunctionType3.types
++++ new.renamingDestructuredPropertyInFunctionType3.types
+@@= skipped -19, +19 lines =@@
+ >string : unknown
+ 
+ const f13 =  ({ [sym]: string }: O) => { };
+->f13 : ({ [sym]: string }: O) => void
+->({ [sym]: string }: O) => { } : ({ [sym]: string }: O) => void
++>f13 : (__0: O) => void
++>({ [sym]: string }: O) => { } : (__0: O) => void
+ >sym : unique symbol
+ >string : unknown
+ 
+ function f14 ({ [sym]: string }: O) { };
+->f14 : ({ [sym]: string }: O) => void
++>f14 : (__0: O) => void
+ >sym : unique symbol
+ >string : unknown
+ 

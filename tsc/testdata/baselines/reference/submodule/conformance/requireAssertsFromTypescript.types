@@ -1,0 +1,49 @@
+//// [tests/cases/conformance/salsa/requireAssertsFromTypescript.ts] ////
+
+=== 38379.js ===
+const { art } = require('./ex')
+>art : any
+>require('./ex') : any
+>require : any
+>'./ex' : "./ex"
+
+const artoo = require('./ex2')
+>artoo : any
+>require('./ex2') : any
+>require : any
+>'./ex2' : "./ex2"
+
+let x = 1
+>x : number
+>1 : 1
+
+art(x)
+>art(x) : any
+>art : any
+>x : number
+
+let y = 1
+>y : number
+>1 : 1
+
+artoo(y)
+>artoo(y) : any
+>artoo : any
+>y : number
+
+=== ex.d.ts ===
+// based on assert in @types/node
+export function art(value: any, message?: string | Error): asserts value;
+>art : (value: any, message?: string | Error) => asserts value
+>value : any
+>message : string | Error
+
+=== ex2.d.ts ===
+declare function art(value: any, message?: string | Error): asserts value;
+>art : (value: any, message?: string | Error) => asserts value
+>value : any
+>message : string | Error
+
+export = art;
+>art : (value: any, message?: string | Error) => asserts value
+

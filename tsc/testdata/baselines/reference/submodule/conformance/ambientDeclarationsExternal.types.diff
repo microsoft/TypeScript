@@ -1,0 +1,17 @@
+--- old.ambientDeclarationsExternal.types
++++ new.ambientDeclarationsExternal.types
+@@= skipped -7, +7 lines =@@
+ 
+ // Ambient external module members are always exported with or without export keyword when module lacks export assignment
+ import imp3 = require('equ2');
+->imp3 : typeof imp3
++>imp3 : typeof import("equ2")
+ 
+ var n = imp3.x;
+ >n : number
+ >imp3.x : number
+->imp3 : typeof imp3
++>imp3 : typeof import("equ2")
+ >x : number
+ 
+ var n: number;

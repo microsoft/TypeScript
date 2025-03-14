@@ -1,0 +1,25 @@
+--- old.inheritedGenericCallSignature.types
++++ new.inheritedGenericCallSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === inheritedGenericCallSignature.ts ===
+ interface I1<T> {
++>I1 : I1<T>
++>T : T
+ 
+     (a: T): T;
+ >a : T
+@@= skipped -8, +10 lines =@@
+ 
+ 
+ interface Object {}
++>Object : Object
+ 
+  
+ 
+ interface I2<T> extends I1<T[]> {
++>I2 : I2<T>
++>T : T
+ 
+     b: T;
+ >b : T

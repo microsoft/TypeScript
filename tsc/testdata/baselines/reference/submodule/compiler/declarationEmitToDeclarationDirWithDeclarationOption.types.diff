@@ -1,0 +1,11 @@
+--- old.declarationEmitToDeclarationDirWithDeclarationOption.types
++++ new.declarationEmitToDeclarationDirWithDeclarationOption.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /foo/test.ts ===
+ interface Foo {
++>Foo : Foo
++
+     x: number;
+ >x : number
+ }

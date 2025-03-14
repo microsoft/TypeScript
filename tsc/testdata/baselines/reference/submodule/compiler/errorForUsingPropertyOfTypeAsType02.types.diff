@@ -1,0 +1,16 @@
+--- old.errorForUsingPropertyOfTypeAsType02.types
++++ new.errorForUsingPropertyOfTypeAsType02.types
+@@= skipped -5, +5 lines =@@
+ 
+     function foo<T extends { abc: number }>(x: T) {
+ >foo : <T extends { abc: number; }>(x: T) => void
++>T : T
+ >abc : number
+ >x : T
+ 
+         let a: T.abc = x.abc;
+->a : T.abc
++>a : abc
+ >T : any
+ >x.abc : number
+ >x : T

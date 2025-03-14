@@ -1,0 +1,43 @@
+--- old.constEnumNoEmitReexport.types
++++ new.constEnumNoEmitReexport.types
+@@= skipped -26, +26 lines =@@
+ 
+ === ReExportDefault.ts ===
+ export { MyConstEnum as default } from './ConstEnum';
+->MyConstEnum : typeof import("ConstEnum").MyConstEnum
+->default : typeof import("ConstEnum").MyConstEnum
++>MyConstEnum : typeof MyConstEnum
++>default : typeof MyConstEnum
+ 
+ === ReExport.ts ===
+ export { MyConstEnum } from './ConstEnum';
+->MyConstEnum : typeof import("ConstEnum").MyConstEnum
++>MyConstEnum : typeof MyConstEnum
+ 
+ === Usage1.ts ===
+ import MyConstEnum1 from './ImportExportDefault';
+->MyConstEnum1 : typeof MyConstEnum1
++>MyConstEnum1 : typeof MyConstEnum
+ 
+ import MyConstEnum2 from './ReExportDefault';
+->MyConstEnum2 : typeof MyConstEnum1
++>MyConstEnum2 : typeof MyConstEnum
+ 
+ MyConstEnum1.Foo;
+->MyConstEnum1.Foo : MyConstEnum1.Foo
+->MyConstEnum1 : typeof MyConstEnum1
+->Foo : MyConstEnum1.Foo
++>MyConstEnum1.Foo : MyConstEnum.Foo
++>MyConstEnum1 : typeof MyConstEnum
++>Foo : MyConstEnum.Foo
+ 
+ MyConstEnum2.Foo;
+->MyConstEnum2.Foo : MyConstEnum1.Foo
+->MyConstEnum2 : typeof MyConstEnum1
+->Foo : MyConstEnum1.Foo
++>MyConstEnum2.Foo : MyConstEnum.Foo
++>MyConstEnum2 : typeof MyConstEnum
++>Foo : MyConstEnum.Foo
+ 
+ === Usage2.ts ===
+ import { MyConstEnum } from './ImportExport';

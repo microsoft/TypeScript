@@ -1,0 +1,33 @@
+--- old.experimentalDecoratorMetadataUnresolvedTypeObjectInEmit.types
++++ new.experimentalDecoratorMetadataUnresolvedTypeObjectInEmit.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/experimentalDecoratorMetadataUnresolvedTypeObjectInEmit.ts] ////
+ 
+ === types.d.ts ===
+-
+ declare namespace A {
++>A : any
++
+     export namespace B {
++>B : any
++
+         export namespace C {
++>C : any
++
+             export namespace D {
++>D : any
+             }
+         }
+     }
+@@= skipped -14, +20 lines =@@
+ >Foo : Foo
+ 
+     f(@decorate user: A.B.C.D.E): void {}
+->f : (user: A.B.C.D.E) => void
++>f : (user: E) => void
+ >decorate : any
+->user : A.B.C.D.E
++>user : E
+ >A : any
+ >B : any
+ >C : any

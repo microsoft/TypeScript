@@ -1,0 +1,116 @@
+--- old.mappedTypeWithAny.types
++++ new.mappedTypeWithAny.types
+@@= skipped -6, +6 lines =@@
+ 
+ type ItemMap<T> = { [P in keyof T]: Item };
+ >ItemMap : ItemMap<T>
++>T : T
++>P : P
+ 
+ declare let x0: keyof any;
+ >x0 : string | number | symbol
+ 
+ declare let x1: { [P in any]: Item };
+ >x1 : { [x: string]: Item; [x: number]: Item; [x: symbol]: Item; }
++>P : P
+ 
+ declare let x2: { [P in string]: Item };
+ >x2 : { [x: string]: Item; }
++>P : P
+ 
+ declare let x3: { [P in keyof any]: Item };
+ >x3 : { [x: string]: Item; }
++>P : P
+ 
+ declare let x4: ItemMap<any>;
+ >x4 : ItemMap<any>
+@@= skipped -27, +32 lines =@@
+ 
+ type StrictDataMap<T> = {
+ >StrictDataMap : StrictDataMap<T>
++>T : T
+ 
+   [P in keyof T]: Data
++>P : P
+ }
+ 
+ declare let z: StrictDataMap<any>;
+@@= skipped -30, +32 lines =@@
+ // is constrained to array and tuple types.
+ type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
+ >Arrayish : Arrayish<T>
++>T : T
++>K : K
+ 
+ type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
+ >Objectish : Objectish<T>
++>T : T
++>K : K
+ 
+ // When a mapped type whose constraint is `keyof T` is instantiated,
+ // `T` may be instantiated with a `U` which is constrained to
+@@= skipped -13, +17 lines =@@
+ // depending on the usage-site. As a result, `IndirectArrayish` does not act like `Arrayish`.
+ type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+ >IndirectArrayish : Objectish<U>
++>U : U
+ 
+ function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
+->bar : (arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) => void
++>bar : (arrayish: any[], objectish: Objectish<any>, indirectArrayish: Objectish<any>) => void
+ >arrayish : any[]
+ >objectish : Objectish<any>
+ >indirectArrayish : Objectish<any>
+@@= skipped -27, +28 lines =@@
+ }
+ 
+ declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
+->stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
++>stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string }
++>T : T
+ >arr : T
++>K : K
+ 
+ let abc: any[] = stringifyArray(void 0 as any);
+ >abc : any[]
+ >stringifyArray(void 0 as any) : string[]
+->stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
++>stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string }
+ >void 0 as any : any
+ >void 0 : undefined
+ >0 : 0
+ 
+ declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readonly [K in keyof T]: string };
+->stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
++>stringifyPair : <T extends [any, any]>(arr: T) => { -readonly [K in keyof T]: string }
++>T : T
+ >arr : T
++>K : K
+ 
+ let def: [any, any] = stringifyPair(void 0 as any);
+ >def : [any, any]
+ >stringifyPair(void 0 as any) : string[]
+->stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
++>stringifyPair : <T extends [any, any]>(arr: T) => { -readonly [K in keyof T]: string }
+ >void 0 as any : any
+ >void 0 : undefined
+ >0 : 0
+@@= skipped -27, +31 lines =@@
+ 
+ type Evolvable<E extends Evolver> = {
+ >Evolvable : Evolvable<E>
++>E : E
+ 
+   [P in keyof E]: never;
++>P : P
++
+ };
+ type Evolver<T extends Evolvable<any> = any> = {
+ >Evolver : Evolver<T>
++>T : T
+ 
+   [key in keyof Partial<T>]: never;
++>key : key
++
+ };
+ 

@@ -1,0 +1,19 @@
+--- old.symbolType17.types
++++ new.symbolType17.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolType17.ts ===
+ interface Foo { prop }
++>Foo : Foo
+ >prop : any
+ 
+ var x: symbol | Foo;
+@@= skipped -10, +11 lines =@@
+ 
+ if (typeof x === "symbol") {
+ >typeof x === "symbol" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : symbol | Foo
+ >"symbol" : "symbol"
+ 

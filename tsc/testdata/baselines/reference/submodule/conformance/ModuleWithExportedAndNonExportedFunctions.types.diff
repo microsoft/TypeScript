@@ -1,0 +1,29 @@
+--- old.ModuleWithExportedAndNonExportedFunctions.types
++++ new.ModuleWithExportedAndNonExportedFunctions.types
+@@= skipped -13, +13 lines =@@
+ 
+     export function fng<T, U>(s: T): U {
+ >fng : <T, U>(s: T) => U
++>T : T
++>U : U
+ >s : T
+ 
+         return null;
+@@= skipped -15, +17 lines =@@
+ 
+     function fng2<T, U>(s: T): U {
+ >fng2 : <T, U>(s: T) => U
++>T : T
++>U : U
+ >s : T
+ 
+         return null;
+@@= skipped -19, +21 lines =@@
+ 
+ var fng: <T, U>(s: T) => U;
+ >fng : <T, U>(s: T) => U
++>T : T
++>U : U
+ >s : T
+ 
+ var fng = A.fng; // bug 838015

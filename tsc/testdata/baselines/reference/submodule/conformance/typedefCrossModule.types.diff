@@ -1,0 +1,98 @@
+--- old.typedefCrossModule.types
++++ new.typedefCrossModule.types
+@@= skipped -10, +10 lines =@@
+ /** @typedef {{ type: "b", y: 1 }} B */
+ /** @typedef {A | B} Both */
+ module.exports = C
+->module.exports = C : typeof C
+->module.exports : typeof C
+->module : { exports: typeof C; }
+->exports : typeof C
+->C : typeof C
++>module.exports = C : () => void
++>module.exports : any
++>module : { exports: any; }
++>exports : any
++>C : () => void
+ 
+ function C() {
+->C : typeof C
++>C : () => void
+ 
+     this.p = 1
+ >this.p = 1 : 1
+ >this.p : any
+->this : this
++>this : any
+ >p : any
+ >1 : 1
+ }
+@@= skipped -24, +24 lines =@@
+ /** @typedef {A | B} Both */
+ 
+ export function C() {
+->C : typeof C
++>C : () => void
+ 
+     this.p = 1
+ >this.p = 1 : 1
+ >this.p : any
+->this : this
++>this : any
+ >p : any
+ >1 : 1
+ }
+@@= skipped -17, +17 lines =@@
+ /** @typedef {A | B} Both */
+ 
+ exports.C = function() {
+->exports.C = function() {    this.p = 1} : typeof C
+->exports.C : typeof C
+->exports : typeof import("mod3")
+->C : typeof C
+->function() {    this.p = 1} : typeof C
++>exports.C = function() {    this.p = 1} : () => void
++>exports.C : any
++>exports : any
++>C : any
++>function() {    this.p = 1} : () => void
+ 
+     this.p = 1
+ >this.p = 1 : 1
+ >this.p : any
+->this : this
++>this : any
+ >p : any
+ >1 : 1
+ }
+@@= skipped -17, +17 lines =@@
+ === use.js ===
+ /** @type {import('./mod1').Both} */
+ var both1 = { type: 'a', x: 1 };
+->both1 : import("mod1").Both
+->{ type: 'a', x: 1 } : { type: "a"; x: 1; }
+->type : "a"
++>both1 : { type: string; x: number; }
++>{ type: 'a', x: 1 } : { type: string; x: number; }
++>type : string
+ >'a' : "a"
+->x : 1
++>x : number
+ >1 : 1
+ 
+ /** @type {import('./mod2').Both} */
+ var both2 = both1;
+->both2 : import("mod2").Both
+->both1 : import("mod1").A
++>both2 : { type: string; x: number; }
++>both1 : { type: string; x: number; }
+ 
+ /** @type {import('./mod3').Both} */
+ var both3 = both2;
+->both3 : import("mod3").Both
+->both2 : import("mod2").A
++>both3 : { type: string; x: number; }
++>both2 : { type: string; x: number; }
+ 
+ 
+ 

@@ -1,0 +1,11 @@
+--- old.functionsWithImplicitReturnTypeAssignableToUndefined(strictnullchecks=false).types
++++ new.functionsWithImplicitReturnTypeAssignableToUndefined(strictnullchecks=false).types
+@@= skipped -93, +93 lines =@@
+ }
+ 
+ function f8(): string | null {
+->f8 : () => string | null
++>f8 : () => string
+ 
+     if (Math.random() < 0.5) return "foo";
+ >Math.random() < 0.5 : boolean

@@ -1,0 +1,11 @@
+--- old.protoInIndexer.types
++++ new.protoInIndexer.types
+@@= skipped -6, +6 lines =@@
+     constructor() {
+         this['__proto__'] = null; // used to cause ICE
+ >this['__proto__'] = null : null
+->this['__proto__'] : error
++>this['__proto__'] : any
+ >this : this
+ >'__proto__' : "__proto__"
+     }

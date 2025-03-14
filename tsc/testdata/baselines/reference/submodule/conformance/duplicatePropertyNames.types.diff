@@ -1,0 +1,39 @@
+--- old.duplicatePropertyNames.types
++++ new.duplicatePropertyNames.types
+@@= skipped -3, +3 lines =@@
+ // duplicate property names are an error in all types
+ 
+ interface Number {
++>Number : Number
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface String {
++>String : String
++
+     foo(): string;
+ >foo : { (): string; (): string; }
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Array<T> {
++>Array : T[]
++>T : T
++
+     foo: T;
+ >foo : T
+ 
+@@= skipped -34, +37 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     foo: string;
+ >foo : string
+ 

@@ -1,0 +1,33 @@
+--- old.declarationEmitDestructuringOptionalBindingParametersInOverloads.types
++++ new.declarationEmitDestructuringOptionalBindingParametersInOverloads.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitDestructuringOptionalBindingParametersInOverloads.ts ===
+ function foo([x, y, z] ?: [string, number, boolean]);
+->foo : ([x, y, z]?: [string, number, boolean]) => any
++>foo : (__0?: [string, number, boolean]) => any
+ >x : string
+ >y : number
+ >z : boolean
+ 
+ function foo(...rest: any[]) {
+->foo : ([x, y, z]?: [string, number, boolean]) => any
++>foo : (__0?: [string, number, boolean]) => any
+ >rest : any[]
+ }
+ 
+ function foo2( { x, y, z }?: { x: string; y: number; z: boolean });
+->foo2 : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
++>foo2 : (__0?: { x: string; y: number; z: boolean; }) => any
+ >x : string
+ >y : number
+ >z : boolean
+@@= skipped -20, +20 lines =@@
+ >z : boolean
+ 
+ function foo2(...rest: any[]) {
+->foo2 : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
++>foo2 : (__0?: { x: string; y: number; z: boolean; }) => any
+ >rest : any[]
+ 
+ }

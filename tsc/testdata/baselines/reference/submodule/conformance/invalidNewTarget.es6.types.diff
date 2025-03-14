@@ -1,0 +1,13 @@
+--- old.invalidNewTarget.es6.types
++++ new.invalidNewTarget.es6.types
+@@= skipped -74, +74 lines =@@
+ }
+ 
+ const O = {
+->O : { [x: number]: any; k(): any; readonly l: any; m: any; n: any; }
+->{    [new.target]: undefined,    k() { return new.target; },    get l() { return new.target; },    set m(_) { _ = new.target; },    n: new.target,} : { [x: number]: undefined; k(): any; readonly l: any; m: any; n: any; }
++>O : { [x: number]: any; k: () => any; readonly l: any; m: any; n: any; }
++>{    [new.target]: undefined,    k() { return new.target; },    get l() { return new.target; },    set m(_) { _ = new.target; },    n: new.target,} : { [x: number]: undefined; k: () => any; readonly l: any; m: any; n: any; }
+ 
+     [new.target]: undefined,
+ >[new.target] : undefined

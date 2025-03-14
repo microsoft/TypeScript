@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/interfaceMergedUnconstrainedNoErrorIrrespectiveOfOrder.ts] ////
+
+=== working.ts ===
+// minmal samples from #33395
+export namespace ns {
+>ns : any
+
+    interface Function<T extends (...args: any) => any> {
+>Function : Function<T>
+>T : T
+>args : any
+
+        throttle(): Function<T>;
+>throttle : () => Function<T>
+    }
+    interface Function<T> {
+>Function : Function<T>
+>T : T
+
+        unary(): Function<() => ReturnType<T>>;
+>unary : () => Function<() => ReturnType<T>>
+    }
+}
+=== regression.ts ===
+export namespace ns {
+>ns : any
+
+    interface Function<T> {
+>Function : Function<T>
+>T : T
+
+        unary(): Function<() => ReturnType<T>>;
+>unary : () => Function<() => ReturnType<T>>
+    }
+    interface Function<T extends (...args: any) => any> {
+>Function : Function<T>
+>T : T
+>args : any
+
+        throttle(): Function<T>;
+>throttle : () => Function<T>
+    }
+}

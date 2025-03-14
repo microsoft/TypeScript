@@ -1,0 +1,266 @@
+--- old.unionAndIntersectionInference3.types
++++ new.unionAndIntersectionInference3.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 1,000
+-Instantiation count: 2,500
+-
+ === unionAndIntersectionInference3.ts ===
+ // Repro from #30720
+ 
+ type Maybe<T> = T | undefined;
+ >Maybe : Maybe<T>
++>T : T
+ 
+ declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
+->concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
+->args : (Maybe<T> | Maybe<T>[])[]
++>concatMaybe : <T>(...args: (Maybe<T>[] | Maybe<T>)[]) => T[]
++>T : T
++>args : (Maybe<T>[] | Maybe<T>)[]
+ 
+ concatMaybe([1, 2, 3], 4);
+ >concatMaybe([1, 2, 3], 4) : number[]
+->concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
++>concatMaybe : <T>(...args: (Maybe<T>[] | Maybe<T>)[]) => T[]
+ >[1, 2, 3] : number[]
+ >1 : 1
+ >2 : 2
+@@= skipped -25, +23 lines =@@
+ // Repros from #32247
+ 
+ const g: <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Promise<U> = async <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>): Promise<U> => {
+->g : <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Promise<U>
+->com : () => Iterator<S, U, R> | AsyncIterator<S, U, R>
+->async <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>): Promise<U> => {  throw com;} : <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Promise<U>
+->com : () => Iterator<S, U, R> | AsyncIterator<S, U, R>
++>g : <U, R, S>(com: () => AsyncIterator<S, U, R> | Iterator<S, U, R>) => Promise<U>
++>U : U
++>R : R
++>S : S
++>com : () => AsyncIterator<S, U, R> | Iterator<S, U, R>
++>async <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>): Promise<U> => {  throw com;} : <U, R, S>(com: () => AsyncIterator<S, U, R> | Iterator<S, U, R>) => Promise<U>
++>U : U
++>R : R
++>S : S
++>com : () => AsyncIterator<S, U, R> | Iterator<S, U, R>
+ 
+   throw com;
+->com : () => Iterator<S, U, R> | AsyncIterator<S, U, R>
++>com : () => AsyncIterator<S, U, R> | Iterator<S, U, R>
+ 
+ };
+ 
+ interface Foo1<T> {
++>Foo1 : Foo1<T>
++>T : T
++
+     test(value: T): void;
+ >test : (value: T) => void
+ >value : T
+ }
+ 
+ interface Bar1<T> {
++>Bar1 : Bar1<T>
++>T : T
++
+     test(value: T | PromiseLike<T>): void;
+ >test : (value: T | PromiseLike<T>) => void
+ >value : T | PromiseLike<T>
+ }
+ 
+ declare let f1: <T>(x: Foo1<T> | Bar1<T>) => Promise<T>;
+->f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
+->x : Foo1<T> | Bar1<T>
++>f1 : <T>(x: Bar1<T> | Foo1<T>) => Promise<T>
++>T : T
++>x : Bar1<T> | Foo1<T>
+ 
+ declare let f2: <U>(x: Foo1<U> | Bar1<U>) => Promise<U>;
+->f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
+->x : Foo1<U> | Bar1<U>
++>f2 : <U>(x: Bar1<U> | Foo1<U>) => Promise<U>
++>U : U
++>x : Bar1<U> | Foo1<U>
+ 
+ f1 = f2;
+->f1 = f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
+->f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
+->f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
++>f1 = f2 : <U>(x: Bar1<U> | Foo1<U>) => Promise<U>
++>f1 : <T>(x: Bar1<T> | Foo1<T>) => Promise<T>
++>f2 : <U>(x: Bar1<U> | Foo1<U>) => Promise<U>
+ 
+ f2 = f1;
+->f2 = f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
+->f2 : <U>(x: Foo1<U> | Bar1<U>) => Promise<U>
+->f1 : <T>(x: Foo1<T> | Bar1<T>) => Promise<T>
++>f2 = f1 : <T>(x: Bar1<T> | Foo1<T>) => Promise<T>
++>f2 : <U>(x: Bar1<U> | Foo1<U>) => Promise<U>
++>f1 : <T>(x: Bar1<T> | Foo1<T>) => Promise<T>
+ 
+ type Foo2<T> = {
+ >Foo2 : Foo2<T>
++>T : T
+ 
+     test(value: T): void;
+ >test : (value: T) => void
+@@= skipped -50, +65 lines =@@
+ 
+ type Bar2<T> = {
+ >Bar2 : Bar2<T>
++>T : T
+ 
+     test(value: T | PromiseLike<T>): void;
+ >test : (value: T | PromiseLike<T>) => void
+@@= skipped -7, +8 lines =@@
+ }
+ 
+ declare let g1: <T>(x: Foo2<T> | Bar2<T>) => Promise<T>;
+->g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
+->x : Foo2<T> | Bar2<T>
++>g1 : <T>(x: Bar2<T> | Foo2<T>) => Promise<T>
++>T : T
++>x : Bar2<T> | Foo2<T>
+ 
+ declare let g2: <U>(x: Foo2<U> | Bar2<U>) => Promise<U>;
+->g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
+->x : Foo2<U> | Bar2<U>
++>g2 : <U>(x: Bar2<U> | Foo2<U>) => Promise<U>
++>U : U
++>x : Bar2<U> | Foo2<U>
+ 
+ g1 = g2;
+->g1 = g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
+->g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
+->g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
++>g1 = g2 : <U>(x: Bar2<U> | Foo2<U>) => Promise<U>
++>g1 : <T>(x: Bar2<T> | Foo2<T>) => Promise<T>
++>g2 : <U>(x: Bar2<U> | Foo2<U>) => Promise<U>
+ 
+ g2 = g1;
+->g2 = g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
+->g2 : <U>(x: Foo2<U> | Bar2<U>) => Promise<U>
+->g1 : <T>(x: Foo2<T> | Bar2<T>) => Promise<T>
++>g2 = g1 : <T>(x: Bar2<T> | Foo2<T>) => Promise<T>
++>g2 : <U>(x: Bar2<U> | Foo2<U>) => Promise<U>
++>g1 : <T>(x: Bar2<T> | Foo2<T>) => Promise<T>
+ 
+ // Repro from #32572
+ 
+ declare function foo1<T>(obj: string[] & Iterable<T>): T;
+->foo1 : <T>(obj: string[] & Iterable<T>) => T
+->obj : string[] & Iterable<T>
++>foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
++>T : T
++>obj : string[] & Iterable<T, any, any>
+ 
+ declare function foo2<T>(obj: string[] & T): T;
+ >foo2 : <T>(obj: string[] & T) => T
++>T : T
+ >obj : string[] & T
+ 
+ declare let sa: string[];
+@@= skipped -37, +41 lines =@@
+ let x1 = foo1(sa);  // string
+ >x1 : string
+ >foo1(sa) : string
+->foo1 : <T>(obj: string[] & Iterable<T>) => T
++>foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
+ >sa : string[]
+ 
+ let y1 = foo1(sx);  // string
+ >y1 : string
+ >foo1(sx) : string
+->foo1 : <T>(obj: string[] & Iterable<T>) => T
++>foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
+ >sx : string[] & { extra: number; }
+ 
+ let x2 = foo2(sa);  // unknown
+@@= skipped -25, +25 lines =@@
+ 
+ declare class Component<P> { props: P }
+ >Component : Component<P>
++>P : P
+ >props : P
+ 
+ export type ComponentClass<P> = new (props: P) => Component<P>;
+ >ComponentClass : ComponentClass<P>
++>P : P
+ >props : P
+ 
+ export type FunctionComponent<P> = (props: P) => null;
+ >FunctionComponent : FunctionComponent<P>
++>P : P
+ >props : P
+ 
+ export type ComponentType<P> = FunctionComponent<P> | ComponentClass<P>;
+ >ComponentType : ComponentType<P>
++>P : P
+ 
+ export interface RouteComponentProps { route: string }
++>RouteComponentProps : RouteComponentProps
+ >route : string
+ 
+ declare function withRouter<
+->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, keyof RouteComponentProps>>
++>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, "route">>
+ 
+   P extends RouteComponentProps,
++>P : P
++
+   C extends ComponentType<P>
++>C : C
++
+ >(
+   component: C & ComponentType<P>
+ >component : C & ComponentType<P>
+@@= skipped -28, +37 lines =@@
+ ): ComponentClass<Omit<P, keyof RouteComponentProps>>;
+ 
+ interface Props extends RouteComponentProps { username: string }
++>Props : Props
+ >username : string
+ 
+ declare const MyComponent: ComponentType<Props>;
+@@= skipped -7, +8 lines =@@
+ 
+ withRouter(MyComponent);
+ >withRouter(MyComponent) : ComponentClass<Omit<Props, "route">>
+->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, keyof RouteComponentProps>>
++>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, "route">>
+ >MyComponent : ComponentType<Props>
+ 
+ // Repro from #33490
+ 
+ type AB<T> = { a: T } | { b: T };
+ >AB : AB<T>
++>T : T
+ >a : T
+ >b : T
+ 
+ // T & AB<U> normalizes to T & { a: U } | T & { b: U } below
+ declare function foo<T, U>(obj: T & AB<U>): [T, U];
+ >foo : <T, U>(obj: T & AB<U>) => [T, U]
++>T : T
++>U : U
+ >obj : T & AB<U>
+ 
+ declare let ab: AB<string>;
+@@= skipped -28, +31 lines =@@
+ 
+ declare let a: <T>() => (T extends true ? true : false) & boolean;
+ >a : <T>() => (T extends true ? true : false) & boolean
++>T : T
+ >true : true
+ >true : true
+ >false : false
+ 
+ declare let b: <T>() => (T extends true ? true : false) & boolean;
+ >b : <T>() => (T extends true ? true : false) & boolean
++>T : T
+ >true : true
+ >true : true
+ >false : false

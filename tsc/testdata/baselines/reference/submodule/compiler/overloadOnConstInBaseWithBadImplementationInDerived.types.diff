@@ -1,0 +1,11 @@
+--- old.overloadOnConstInBaseWithBadImplementationInDerived.types
++++ new.overloadOnConstInBaseWithBadImplementationInDerived.types
+@@= skipped -1, +1 lines =@@
+ 
+ === overloadOnConstInBaseWithBadImplementationInDerived.ts ===
+ interface I {
++>I : I
++
+     x1(a: number, callback: (x: 'hi') => number);
+ >x1 : (a: number, callback: (x: "hi") => number) => any
+ >a : number

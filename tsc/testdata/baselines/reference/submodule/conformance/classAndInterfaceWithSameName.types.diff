@@ -1,0 +1,19 @@
+--- old.classAndInterfaceWithSameName.types
++++ new.classAndInterfaceWithSameName.types
+@@= skipped -5, +5 lines =@@
+ >foo : string
+ 
+ interface C { foo: string; }
++>C : C
+ >foo : string
+ 
+ module M {
+@@= skipped -13, +14 lines =@@
+     }
+ 
+     interface D {
++>D : D
++
+         bar: string;
+ >bar : string
+     }

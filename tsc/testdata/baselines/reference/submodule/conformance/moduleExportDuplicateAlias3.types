@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias3.ts] ////
+
+=== test.js ===
+const { apply } = require('./moduleExportAliasDuplicateAlias')
+>apply : any
+>require('./moduleExportAliasDuplicateAlias') : any
+>require : any
+>'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
+
+const result = apply.toFixed()
+>result : any
+>apply.toFixed() : any
+>apply.toFixed : any
+>apply : any
+>toFixed : any
+

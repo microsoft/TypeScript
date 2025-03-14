@@ -1,0 +1,12 @@
+--- old.FunctionPropertyAssignments3_es6.types
++++ new.FunctionPropertyAssignments3_es6.types
+@@= skipped -1, +1 lines =@@
+ 
+ === FunctionPropertyAssignments3_es6.ts ===
+ var v = { *{ } }
+->v : { ""(): Generator<never, void, unknown>; }
+->{ *{ } } : { ""(): Generator<never, void, unknown>; }
++>v : { : () => Generator<never, void, unknown>; }
++>{ *{ } } : { : () => Generator<never, void, unknown>; }
+ > : () => Generator<never, void, unknown>
+ 

@@ -1,0 +1,92 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty5.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface Prop {
+>Prop : Prop
+
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: Button;
+>children : Button
+}
+
+class Button extends React.Component<any, any> {
+>Button : Button
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return (<div>My Button</div>)
+>(<div>My Button</div>) : any
+><div>My Button</div> : any
+>div : any
+>div : any
+    }
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => any
+>p : Prop
+
+    return <div>{p.b}</div>;
+><div>{p.b}</div> : any
+>div : any
+>p.b : string
+>p : Prop
+>b : string
+>div : any
+}
+
+// Error: no children specified
+let k = <Comp a={10} b="hi" />;
+>k : any
+><Comp a={10} b="hi" /> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+// Error: JSX.element is not the same as JSX.ElementClass
+let k1 =
+>k1 : any
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        <Button />    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        <Button />
+><Button /> : any
+>Button : typeof Button
+
+    </Comp>;
+>Comp : (p: Prop) => any
+
+let k2 =
+>k2 : any
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        {Button}    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        {Button}
+>Button : typeof Button
+
+    </Comp>;
+>Comp : (p: Prop) => any
+

@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassInstance3.ts] ////
+
+=== index.js ===
+class Foo {
+>Foo : Foo
+
+    static stat = 10;
+>stat : number
+>10 : 10
+
+    member = 10;
+>member : number
+>10 : 10
+}
+
+module.exports = new Foo();
+>module.exports = new Foo() : Foo
+>module.exports : any
+>module : any
+>exports : any
+>new Foo() : Foo
+>Foo : typeof Foo
+
+module.exports.additional = 20;
+>module.exports.additional = 20 : 20
+>module.exports.additional : any
+>module.exports : any
+>module : any
+>exports : any
+>additional : any
+>20 : 20
+

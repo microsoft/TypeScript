@@ -1,0 +1,14 @@
+--- old.iterableContextualTyping1.types
++++ new.iterableContextualTyping1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === iterableContextualTyping1.ts ===
+ var iter: Iterable<(x: string) => number> = [s => s.length];
+->iter : Iterable<(x: string) => number>
++>iter : Iterable<(x: string) => number, any, any>
+ >x : string
+->[s => s.length] : ((s: string) => number)[]
++>[s => s.length] : (s: string) => number[]
+ >s => s.length : (s: string) => number
+ >s : string
+ >s.length : number

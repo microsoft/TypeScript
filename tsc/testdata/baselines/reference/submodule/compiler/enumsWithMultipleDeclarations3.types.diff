@@ -1,0 +1,15 @@
+--- old.enumsWithMultipleDeclarations3.types
++++ new.enumsWithMultipleDeclarations3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === enumsWithMultipleDeclarations3.ts ===
+ module E {
++>E : typeof E
+ }
+ 
+ enum E {
+->E : E
++>E : E.A
+ 
+   A
+ >A : E.A

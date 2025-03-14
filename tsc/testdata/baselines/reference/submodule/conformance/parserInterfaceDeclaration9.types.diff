@@ -1,0 +1,29 @@
+--- old.parserInterfaceDeclaration9.types
++++ new.parserInterfaceDeclaration9.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserInterfaceDeclaration9.ts ===
+ interface I1 {
++>I1 : I1
++
+     get foo(): number,
+ >foo : number
+ 
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     get foo(): number;
+ >foo : number
+ 
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ interface I3 {
++>I3 : I3
++
+     get foo(): number
+ >foo : number
+ 

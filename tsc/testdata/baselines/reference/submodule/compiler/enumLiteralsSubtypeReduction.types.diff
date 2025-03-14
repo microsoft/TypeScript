@@ -1,0 +1,11 @@
+--- old.enumLiteralsSubtypeReduction.types
++++ new.enumLiteralsSubtypeReduction.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/enumLiteralsSubtypeReduction.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 2,500
+-
+ === enumLiteralsSubtypeReduction.ts ===
+ enum E {
+ >E : E

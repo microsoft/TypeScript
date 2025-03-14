@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/declarationEmit/typeReferenceRelatedFiles.ts] ////
+
+=== node_modules/@types/node/index.d.ts ===
+
+/// <reference path="fs.d.ts" />
+=== node_modules/@types/node/fs.d.ts ===
+declare module "fs" {
+>"fs" : typeof import("fs")
+
+    interface FSWatcher {}
+>FSWatcher : FSWatcher
+}
+=== main.ts ===
+/// <reference types="node" />
+import { FSWatcher } from "fs";
+>FSWatcher : any
+
+export function f() {
+>f : () => FSWatcher
+
+    return {} as FSWatcher;
+>{} as FSWatcher : FSWatcher
+>{} : {}
+}
+

@@ -1,0 +1,30 @@
+--- old.inferringClassMembersFromAssignments5.types
++++ new.inferringClassMembersFromAssignments5.types
+@@= skipped -8, +8 lines =@@
+ 
+         this.p = 1
+ >this.p = 1 : 1
+->this.p : number | undefined
++>this.p : any
+ >this : this
+->p : number | undefined
++>p : any
+ >1 : 1
+     }
+ }
+@@= skipped -24, +24 lines =@@
+ >1 : 1
+     }
+     test() {
+->test : () => number
++>test : () => any
+ 
+         return this.p
+->this.p : number
++>this.p : any
+ >this : this
+->p : number
++>p : any
+     }
+ }
+ 

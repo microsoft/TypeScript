@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/externalModules/relativePathToDeclarationFile.ts] ////
+
+=== test/file1.ts ===
+import foo = require('foo');
+>foo : any
+
+import other = require('./other');
+>other : typeof import("test/other")
+
+import relMod = require('./sub/relMod');
+>relMod : typeof Test
+
+if(foo.M2.x){
+>foo.M2.x : any
+>foo.M2 : any
+>foo : any
+>M2 : any
+>x : any
+
+	var x = new relMod(other.M2.x.charCodeAt(0));
+>x : Test
+>new relMod(other.M2.x.charCodeAt(0)) : Test
+>relMod : typeof Test
+>other.M2.x.charCodeAt(0) : number
+>other.M2.x.charCodeAt : (index: number) => number
+>other.M2.x : string
+>other.M2 : typeof M2
+>other : typeof import("test/other")
+>M2 : typeof M2
+>x : string
+>charCodeAt : (index: number) => number
+>0 : 0
+}
+
+=== test/other.d.ts ===
+export declare module M2 {
+>M2 : typeof M2
+
+	export var x: string;
+>x : string
+}
+
+=== test/sub/relMod.d.ts ===
+declare class Test {
+>Test : Test
+
+	constructor(x: number);
+>x : number
+}
+export = Test;
+>Test : Test
+

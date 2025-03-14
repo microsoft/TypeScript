@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment39.ts] ////
+
+=== a.js ===
+const foo = {};
+>foo : {}
+>{} : {}
+
+foo["baz"] = {};
+>foo["baz"] = {} : {}
+>foo["baz"] : any
+>foo : {}
+>"baz" : "baz"
+>{} : {}
+
+foo["baz"]["blah"] = 3;
+>foo["baz"]["blah"] = 3 : 3
+>foo["baz"]["blah"] : any
+>foo["baz"] : any
+>foo : {}
+>"baz" : "baz"
+>"blah" : "blah"
+>3 : 3
+

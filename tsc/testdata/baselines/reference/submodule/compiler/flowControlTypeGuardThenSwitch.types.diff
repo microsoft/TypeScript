@@ -1,0 +1,27 @@
+--- old.flowControlTypeGuardThenSwitch.types
++++ new.flowControlTypeGuardThenSwitch.types
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ interface Base {
++>Base : Base
++
+     kind: Kind;
+ >kind : Kind
+ }
+ 
+ interface A extends Base {
++>A : A
++
+     kind: Kind.A;
+ >kind : Kind.A
+ >Kind : any
+@@= skipped -14, +18 lines =@@
+ }
+ 
+ interface B extends Base {
++>B : B
++
+     kind: Kind.B;
+ >kind : Kind.B
+ >Kind : any

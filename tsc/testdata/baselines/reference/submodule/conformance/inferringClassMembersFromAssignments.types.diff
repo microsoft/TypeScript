@@ -1,0 +1,383 @@
+--- old.inferringClassMembersFromAssignments.types
++++ new.inferringClassMembersFromAssignments.types
+@@= skipped -43, +43 lines =@@
+ 
+             this.inMethod = 0;
+ >this.inMethod = 0 : 0
+->this.inMethod : string | number | undefined
++>this.inMethod : any
+ >this : this
+->inMethod : string | number | undefined
++>inMethod : any
+ >0 : 0
+ 
+             this.inMethodNullable = null;
+@@= skipped -14, +14 lines =@@
+         else {
+             this.inMethod = "string"
+ >this.inMethod = "string" : "string"
+->this.inMethod : string | number | undefined
++>this.inMethod : any
+ >this : this
+->inMethod : string | number | undefined
++>inMethod : any
+ >"string" : "string"
+ 
+             this.inMethodNullable = undefined;
+@@= skipped -14, +14 lines =@@
+         }
+         this.inMultiple = "string";
+ >this.inMultiple = "string" : "string"
+->this.inMultiple : number
++>this.inMultiple : any
+ >this : this
+->inMultiple : number
++>inMultiple : any
+ >"string" : "string"
+ 
+         this.inMultipleMethods = "string";
+ >this.inMultipleMethods = "string" : "string"
+->this.inMultipleMethods : string | boolean | undefined
++>this.inMultipleMethods : any
+ >this : this
+->inMultipleMethods : string | boolean | undefined
++>inMultipleMethods : any
+ >"string" : "string"
+ 
+         var action = () => {
+@@= skipped -24, +24 lines =@@
+ 
+                 this.inNestedArrowFunction = 0;
+ >this.inNestedArrowFunction = 0 : 0
+->this.inNestedArrowFunction : string | number | undefined
++>this.inNestedArrowFunction : any
+ >this : this
+->inNestedArrowFunction : string | number | undefined
++>inNestedArrowFunction : any
+ >0 : 0
+             }
+             else {
+                 this.inNestedArrowFunction = "string"
+ >this.inNestedArrowFunction = "string" : "string"
+->this.inNestedArrowFunction : string | number | undefined
++>this.inNestedArrowFunction : any
+ >this : this
+->inNestedArrowFunction : string | number | undefined
++>inNestedArrowFunction : any
+ >"string" : "string"
+             }
+         };
+@@= skipped -26, +26 lines =@@
+ 
+             this.inGetter = 0;
+ >this.inGetter = 0 : 0
+->this.inGetter : string | number | undefined
++>this.inGetter : any
+ >this : this
+->inGetter : string | number | undefined
++>inGetter : any
+ >0 : 0
+         }
+         else {
+             this.inGetter = "string"
+ >this.inGetter = "string" : "string"
+->this.inGetter : string | number | undefined
++>this.inGetter : any
+ >this : this
+->inGetter : string | number | undefined
++>inGetter : any
+ >"string" : "string"
+         }
+         this.inMultiple = false;
+ >this.inMultiple = false : false
+->this.inMultiple : number
++>this.inMultiple : any
+ >this : this
+->inMultiple : number
++>inMultiple : any
+ >false : false
+ 
+         this.inMultipleMethods = false;
+ >this.inMultipleMethods = false : false
+->this.inMultipleMethods : string | boolean | undefined
++>this.inMultipleMethods : any
+ >this : this
+->inMultipleMethods : string | boolean | undefined
++>inMultipleMethods : any
+ >false : false
+     }
+     set() {
+@@= skipped -38, +38 lines =@@
+ 
+             this.inSetter = 0;
+ >this.inSetter = 0 : 0
+->this.inSetter : string | number | undefined
++>this.inSetter : any
+ >this : this
+->inSetter : string | number | undefined
++>inSetter : any
+ >0 : 0
+         }
+         else {
+             this.inSetter = "string"
+ >this.inSetter = "string" : "string"
+->this.inSetter : string | number | undefined
++>this.inSetter : any
+ >this : this
+->inSetter : string | number | undefined
++>inSetter : any
+ >"string" : "string"
+         }
+     }
+@@= skipped -26, +26 lines =@@
+ 
+             this.inPropertyDeclaration = 0;
+ >this.inPropertyDeclaration = 0 : 0
+->this.inPropertyDeclaration : string | number | undefined
++>this.inPropertyDeclaration : any
+ >this : this
+->inPropertyDeclaration : string | number | undefined
++>inPropertyDeclaration : any
+ >0 : 0
+         }
+         else {
+             this.inPropertyDeclaration = "string"
+ >this.inPropertyDeclaration = "string" : "string"
+->this.inPropertyDeclaration : string | number | undefined
++>this.inPropertyDeclaration : any
+ >this : this
+->inPropertyDeclaration : string | number | undefined
++>inPropertyDeclaration : any
+ >"string" : "string"
+         }
+     }
+@@= skipped -25, +25 lines =@@
+ 
+             this.inStaticMethod = 0;
+ >this.inStaticMethod = 0 : 0
+->this.inStaticMethod : string | number | undefined
++>this.inStaticMethod : any
+ >this : typeof C
+->inStaticMethod : string | number | undefined
++>inStaticMethod : any
+ >0 : 0
+         }
+         else {
+             this.inStaticMethod = "string"
+ >this.inStaticMethod = "string" : "string"
+->this.inStaticMethod : string | number | undefined
++>this.inStaticMethod : any
+ >this : typeof C
+->inStaticMethod : string | number | undefined
++>inStaticMethod : any
+ >"string" : "string"
+         }
+ 
+@@= skipped -26, +26 lines =@@
+ 
+                 this.inStaticNestedArrowFunction = 0;
+ >this.inStaticNestedArrowFunction = 0 : 0
+->this.inStaticNestedArrowFunction : string | number | undefined
++>this.inStaticNestedArrowFunction : any
+ >this : typeof C
+->inStaticNestedArrowFunction : string | number | undefined
++>inStaticNestedArrowFunction : any
+ >0 : 0
+             }
+             else {
+                 this.inStaticNestedArrowFunction = "string"
+ >this.inStaticNestedArrowFunction = "string" : "string"
+->this.inStaticNestedArrowFunction : string | number | undefined
++>this.inStaticNestedArrowFunction : any
+ >this : typeof C
+->inStaticNestedArrowFunction : string | number | undefined
++>inStaticNestedArrowFunction : any
+ >"string" : "string"
+             }
+         };
+@@= skipped -26, +26 lines =@@
+ 
+             this.inStaticGetter = 0;
+ >this.inStaticGetter = 0 : 0
+->this.inStaticGetter : string | number | undefined
++>this.inStaticGetter : any
+ >this : typeof C
+->inStaticGetter : string | number | undefined
++>inStaticGetter : any
+ >0 : 0
+         }
+         else {
+             this.inStaticGetter = "string"
+ >this.inStaticGetter = "string" : "string"
+->this.inStaticGetter : string | number | undefined
++>this.inStaticGetter : any
+ >this : typeof C
+->inStaticGetter : string | number | undefined
++>inStaticGetter : any
+ >"string" : "string"
+         }
+     }
+@@= skipped -25, +25 lines =@@
+ 
+             this.inStaticSetter = 0;
+ >this.inStaticSetter = 0 : 0
+->this.inStaticSetter : string | number | undefined
++>this.inStaticSetter : any
+ >this : typeof C
+->inStaticSetter : string | number | undefined
++>inStaticSetter : any
+ >0 : 0
+         }
+         else {
+             this.inStaticSetter = "string"
+ >this.inStaticSetter = "string" : "string"
+->this.inStaticSetter : string | number | undefined
++>this.inStaticSetter : any
+ >this : typeof C
+->inStaticSetter : string | number | undefined
++>inStaticSetter : any
+ >"string" : "string"
+         }
+     }
+@@= skipped -26, +26 lines =@@
+ 
+             this.inStaticPropertyDeclaration = 0;
+ >this.inStaticPropertyDeclaration = 0 : 0
+->this.inStaticPropertyDeclaration : string | number | undefined
++>this.inStaticPropertyDeclaration : any
+ >this : typeof C
+->inStaticPropertyDeclaration : string | number | undefined
++>inStaticPropertyDeclaration : any
+ >0 : 0
+         }
+         else {
+             this.inStaticPropertyDeclaration = "string"
+ >this.inStaticPropertyDeclaration = "string" : "string"
+->this.inStaticPropertyDeclaration : string | number | undefined
++>this.inStaticPropertyDeclaration : any
+ >this : typeof C
+->inStaticPropertyDeclaration : string | number | undefined
++>inStaticPropertyDeclaration : any
+ >"string" : "string"
+         }
+     }
+@@= skipped -27, +27 lines =@@
+ 
+ var stringOrNumber = c.inConstructor;
+ >stringOrNumber : string | number
+->c.inConstructor : string | number
++>c.inConstructor : any
+ >c : C
+->inConstructor : string | number
++>inConstructor : any
+ 
+ var stringOrNumberOrUndefined: string | number | undefined;
+ >stringOrNumberOrUndefined : string | number | undefined
+ 
+ var stringOrNumberOrUndefined = c.inMethod;
+ >stringOrNumberOrUndefined : string | number | undefined
+->c.inMethod : string | number | undefined
++>c.inMethod : any
+ >c : C
+->inMethod : string | number | undefined
++>inMethod : any
+ 
+ var stringOrNumberOrUndefined = c.inGetter;
+ >stringOrNumberOrUndefined : string | number | undefined
+->c.inGetter : string | number | undefined
++>c.inGetter : any
+ >c : C
+->inGetter : string | number | undefined
++>inGetter : any
+ 
+ var stringOrNumberOrUndefined = c.inSetter;
+ >stringOrNumberOrUndefined : string | number | undefined
+->c.inSetter : string | number | undefined
++>c.inSetter : any
+ >c : C
+->inSetter : string | number | undefined
++>inSetter : any
+ 
+ var stringOrNumberOrUndefined = c.inPropertyDeclaration;
+ >stringOrNumberOrUndefined : string | number | undefined
+->c.inPropertyDeclaration : string | number | undefined
++>c.inPropertyDeclaration : any
+ >c : C
+->inPropertyDeclaration : string | number | undefined
++>inPropertyDeclaration : any
+ 
+ var stringOrNumberOrUndefined = c.inNestedArrowFunction
+ >stringOrNumberOrUndefined : string | number | undefined
+->c.inNestedArrowFunction : string | number | undefined
++>c.inNestedArrowFunction : any
+ >c : C
+->inNestedArrowFunction : string | number | undefined
++>inNestedArrowFunction : any
+ 
+ var stringOrNumberOrBoolean: string | number | boolean;
+ >stringOrNumberOrBoolean : string | number | boolean
+@@= skipped -45, +45 lines =@@
+ 
+ var number = c.inMultiple;
+ >number : number
+->c.inMultiple : number
++>c.inMultiple : any
+ >c : C
+->inMultiple : number
++>inMultiple : any
+ 
+ var stringOrBooleanOrUndefined : string | boolean | undefined;
+ >stringOrBooleanOrUndefined : string | boolean | undefined
+ 
+ var stringOrBooleanOrUndefined = c.inMultipleMethods;
+ >stringOrBooleanOrUndefined : string | boolean | undefined
+->c.inMultipleMethods : string | boolean | undefined
++>c.inMultipleMethods : any
+ >c : C
+->inMultipleMethods : string | boolean | undefined
++>inMultipleMethods : any
+ 
+ var any: any;
+ >any : any
+@@= skipped -25, +25 lines =@@
+ 
+ var stringOrNumberOrUndefined = C.inStaticMethod;
+ >stringOrNumberOrUndefined : string | number | undefined
+->C.inStaticMethod : string | number | undefined
++>C.inStaticMethod : any
+ >C : typeof C
+->inStaticMethod : string | number | undefined
++>inStaticMethod : any
+ 
+ var stringOrNumberOrUndefined = C.inStaticGetter;
+ >stringOrNumberOrUndefined : string | number | undefined
+->C.inStaticGetter : string | number | undefined
++>C.inStaticGetter : any
+ >C : typeof C
+->inStaticGetter : string | number | undefined
++>inStaticGetter : any
+ 
+ var stringOrNumberOrUndefined = C.inStaticSetter;
+ >stringOrNumberOrUndefined : string | number | undefined
+->C.inStaticSetter : string | number | undefined
++>C.inStaticSetter : any
+ >C : typeof C
+->inStaticSetter : string | number | undefined
++>inStaticSetter : any
+ 
+ var stringOrNumberOrUndefined = C.inStaticPropertyDeclaration;
+ >stringOrNumberOrUndefined : string | number | undefined
+->C.inStaticPropertyDeclaration : string | number | undefined
++>C.inStaticPropertyDeclaration : any
+ >C : typeof C
+->inStaticPropertyDeclaration : string | number | undefined
++>inStaticPropertyDeclaration : any
+ 
+ var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
+ >stringOrNumberOrUndefined : string | number | undefined
+->C.inStaticNestedArrowFunction : string | number | undefined
++>C.inStaticNestedArrowFunction : any
+ >C : typeof C
+->inStaticNestedArrowFunction : string | number | undefined
++>inStaticNestedArrowFunction : any
+ 

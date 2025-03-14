@@ -1,0 +1,51 @@
+--- old.constraintWithIndexedAccess.types
++++ new.constraintWithIndexedAccess.types
+@@= skipped -54, +54 lines =@@
+ }
+ export type NoTypeParamBoatRequired<F extends keyof DataFetchFns['Boat']> = ReturnType<DataFetchFns['Boat'][F]>;
+ >NoTypeParamBoatRequired : NoTypeParamBoatRequired<F>
++>F : F
+ 
+ type TypeHardcodedAsParameterWithoutReturnType<T extends 'Boat', F extends keyof DataFetchFns[T]> = DataFetchFns[T][F];
+ >TypeHardcodedAsParameterWithoutReturnType : TypeHardcodedAsParameterWithoutReturnType<T, F>
++>T : T
++>F : F
+ 
+ export type allAreFunctionsAsExpected = TypeHardcodedAsParameterWithoutReturnType<'Boat', keyof DataFetchFns['Boat']>;
+ >allAreFunctionsAsExpected : allAreFunctionsAsExpected
+@@= skipped -15, +18 lines =@@
+ 
+ export type FailingCombo<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<TypeHardcodedAsParameterWithoutReturnType<T,F>>;
+ >FailingCombo : FailingCombo<T, F>
++>T : T
++>F : F
+ 
+ export type TypeHardcodedAsParameter<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
+ >TypeHardcodedAsParameter : TypeHardcodedAsParameter<T, F>
++>T : T
++>F : F
+ 
+ type VehicleSelector<T extends keyof DataFetchFns> = DataFetchFns[T];
+ >VehicleSelector : VehicleSelector<T>
++>T : T
+ 
+ export type TypeHardcodedAsParameter2<T extends 'Boat', F extends keyof DataFetchFns[T]> = ReturnType<VehicleSelector<T>[F]>;
+ >TypeHardcodedAsParameter2 : TypeHardcodedAsParameter2<T, F>
++>T : T
++>F : F
+ 
+ export type TypeGeneric1<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][F]>;
+ >TypeGeneric1 : TypeGeneric1<T, F>
++>T : T
++>F : F
+ 
+ export type TypeGeneric2<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[T][T]>; // error
+ >TypeGeneric2 : TypeGeneric2<T, F>
++>T : T
++>F : F
+ 
+ export type TypeGeneric3<T extends keyof DataFetchFns, F extends keyof DataFetchFns[T]> = ReturnType<DataFetchFns[F][F]>; // error
+ >TypeGeneric3 : TypeGeneric3<T, F>
++>T : T
++>F : F
+ 

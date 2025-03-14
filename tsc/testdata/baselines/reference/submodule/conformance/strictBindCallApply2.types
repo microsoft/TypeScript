@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/functions/strictBindCallApply2.ts] ////
+
+=== strictBindCallApply2.ts ===
+// Repro from #32964
+
+interface Foo { blub: string };
+>Foo : Foo
+>blub : string
+
+function fn(this: Foo) {}
+>fn : () => void
+>this : Foo
+
+type Test = ThisParameterType<typeof fn>; 
+>Test : Foo
+
+const fb = fn.bind({ blub: "blub" });
+>fb : (...args: []) => void
+>fn.bind({ blub: "blub" }) : (...args: []) => void
+>fn.bind : { <T>(thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(thisArg: T, ...args: A): (...args: B) => R; }
+>fn : () => void
+>bind : { <T>(thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(thisArg: T, ...args: A): (...args: B) => R; }
+>{ blub: "blub" } : { blub: string; }
+>blub : string
+>"blub" : "blub"
+

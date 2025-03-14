@@ -1,0 +1,13 @@
+--- old.umd9.types
++++ new.umd9.types
+@@= skipped -2, +2 lines =@@
+ === a.ts ===
+ /// <reference path="foo.d.ts" />
+ export const x = Foo; // OK in value position because allowUmdGlobalAccess: true
+->x : typeof import("foo")
+->Foo : typeof import("foo")
++>x : typeof Thing
++>Foo : typeof Thing
+ 
+ === foo.d.ts ===
+ declare class Thing {

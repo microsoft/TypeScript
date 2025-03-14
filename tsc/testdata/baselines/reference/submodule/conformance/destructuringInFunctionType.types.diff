@@ -1,0 +1,37 @@
+--- old.destructuringInFunctionType.types
++++ new.destructuringInFunctionType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === destructuringInFunctionType.ts ===
+ interface a { a }
++>a : a
+ >a : any
+ 
+ interface b { b }
++>b : b
+ >b : any
+ 
+ interface c { c }
++>c : c
+ >c : any
+ 
+ type T1 = ([a, b, c]);
+@@= skipped -54, +57 lines =@@
+ >c : any
+ 
+ var v1 = ([a, b, c]) => "hello";
+->v1 : ([a, b, c]: [any, any, any]) => string
+->([a, b, c]) => "hello" : ([a, b, c]: [any, any, any]) => string
++>v1 : (__0: [any, any, any]) => string
++>([a, b, c]) => "hello" : (__0: [any, any, any]) => string
+ >a : any
+ >b : any
+ >c : any
+ >"hello" : "hello"
+ 
+ var v2: ([a, b, c]) => string;
+->v2 : ([a, b, c]: [any, any, any]) => string
++>v2 : (__0: [any, any, any]) => string
+ >a : any
+ >b : any
+ >c : any

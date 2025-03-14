@@ -1,0 +1,20 @@
+--- old.iteratorSpreadInCall6.types
++++ new.iteratorSpreadInCall6.types
+@@= skipped -1, +1 lines =@@
+ 
+ === iteratorSpreadInCall6.ts ===
+ function foo(...s: (symbol | number)[]) { }
+->foo : (...s: (symbol | number)[]) => void
++>foo : (...s: (number | symbol)[]) => void
+ >s : (number | symbol)[]
+ 
+ class SymbolIterator {
+@@= skipped -68, +68 lines =@@
+ 
+ foo(...new SymbolIterator, ...new _StringIterator);
+ >foo(...new SymbolIterator, ...new _StringIterator) : void
+->foo : (...s: (symbol | number)[]) => void
++>foo : (...s: (number | symbol)[]) => void
+ >...new SymbolIterator : symbol
+ >new SymbolIterator : SymbolIterator
+ >SymbolIterator : typeof SymbolIterator

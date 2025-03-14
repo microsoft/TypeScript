@@ -1,0 +1,53 @@
+--- old.inferrenceInfiniteLoopWithSubtyping.types
++++ new.inferrenceInfiniteLoopWithSubtyping.types
+@@= skipped -2, +2 lines =@@
+ === graphql-compose.d.ts ===
+ export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;
+ >ObjMapReadOnly : Readonly<{ [key: string]: Readonly<T>; }>
++>T : T
+ >key : string
+ 
+ export type Thunk<T> = (() => T) | T;
+ >Thunk : Thunk<T>
++>T : T
+ 
+ export type ComposeOutputTypeDefinition = Readonly<ObjectTypeComposer<any, any> | EnumTypeComposer>;
+ >ComposeOutputTypeDefinition : ComposeOutputTypeDefinition
+@@= skipped -20, +22 lines =@@
+ 
+ export class ObjectTypeComposer<TSource, TContext> {
+ >ObjectTypeComposer : ObjectTypeComposer<TSource, TContext>
++>TSource : TSource
++>TContext : TContext
+ 
+   public setFields(fields: ObjMapReadOnly<Resolver>): this;
+->setFields : (fields: ObjMapReadOnly<Resolver>) => this
++>setFields : (fields: Readonly<{ [key: string]: Readonly<Resolver>; }>) => this
+ >fields : Readonly<{ [key: string]: Readonly<Resolver>; }>
+ 
+   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
+ >addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => this
++>TResolverSource : TResolverSource
+ >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
+ >type : Thunk<ComposeOutputTypeDefinition>
+ }
+@@= skipped -16, +19 lines =@@
+ 
+   public wrapArgs<NewContext>(
+ >wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
++>NewContext : NewContext
+ 
+     cb: () => {
+ >cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }
+@@= skipped -24, +25 lines =@@
+ 
+ User.addResolver({
+ >User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
+->User.addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
++>User.addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+ >User : ObjectTypeComposer<any, any>
+->addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
++>addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+ >{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
+ 
+   type: User, // `User as any` fix the problem

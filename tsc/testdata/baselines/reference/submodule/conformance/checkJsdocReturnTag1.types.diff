@@ -1,0 +1,20 @@
+--- old.checkJsdocReturnTag1.types
++++ new.checkJsdocReturnTag1.types
+@@= skipped -15, +15 lines =@@
+  * @returns {string=} This comment is not currently exposed
+  */
+ function f1() {
+->f1 : () => string | undefined
++>f1 : () => string
+ 
+     return "hello world";
+ >"hello world" : "hello world"
+@@= skipped -10, +10 lines =@@
+  * @returns {string|number} This comment is not currently exposed
+  */
+ function f2() {
+->f2 : () => string | number
++>f2 : () => "hello" | 5
+ 
+     return 5 || "hello";
+ >5 || "hello" : "hello" | 5

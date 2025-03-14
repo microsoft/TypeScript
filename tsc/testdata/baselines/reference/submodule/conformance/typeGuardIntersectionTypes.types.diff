@@ -1,0 +1,76 @@
+--- old.typeGuardIntersectionTypes.types
++++ new.typeGuardIntersectionTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardIntersectionTypes.ts ===
+ interface X {
++>X : X
++
+     x: string;
+ >x : string
+ }
+ 
+ interface Y {
++>Y : Y
++
+     y: string;
+ >y : string
+ }
+ 
+ interface Z {
++>Z : Z
++
+     z: string;
+ >z : string
+ }
+@@= skipped -68, +74 lines =@@
+ 
+ // two interfaces
+ interface A {
++>A : A
++
+   a: string;
+ >a : string
+ }
+ 
+ interface B {
++>B : B
++
+   b: string;
+ >b : string
+ }
+@@= skipped -24, +28 lines =@@
+ 
+ // a function that turns an A into an A & B
+ function union(a: A): A & B | null {
+->union : (a: A) => (A & B) | null
++>union : (a: A) => A & B | null
+ >a : A
+ 
+   if (isB(a)) {
+@@= skipped -24, +24 lines =@@
+ 
+ // Supported beast features
+ interface Beast     { wings?: boolean; legs?: number }
++>Beast : Beast
+ >wings : boolean | undefined
+ >legs : number | undefined
+ 
+ interface Legged    { legs: number; }
++>Legged : Legged
+ >legs : number
+ 
+ interface Winged    { wings: boolean; }
++>Winged : Winged
+ >wings : boolean
+ 
+ // Beast feature detection via user-defined type guards
+@@= skipped -16, +19 lines =@@
+ >x && typeof x.legs === 'number' : boolean
+ >x : Beast
+ >typeof x.legs === 'number' : boolean
+->typeof x.legs : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x.legs : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x.legs : number | undefined
+ >x : Beast
+ >legs : number | undefined

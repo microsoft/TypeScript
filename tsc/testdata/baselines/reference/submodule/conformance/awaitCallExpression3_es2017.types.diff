@@ -1,0 +1,20 @@
+--- old.awaitCallExpression3_es2017.types
++++ new.awaitCallExpression3_es2017.types
+@@= skipped -13, +13 lines =@@
+ >arg2 : boolean
+ 
+ declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
+->o : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
++>o : { fn: (arg0: boolean, arg1: boolean, arg2: boolean) => void; }
+ >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+ >arg0 : boolean
+ >arg1 : boolean
+@@= skipped -13, +13 lines =@@
+ >arg2 : boolean
+ 
+ declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
+->po : Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>
++>po : Promise<{ fn: (arg0: boolean, arg1: boolean, arg2: boolean) => void; }>
+ >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+ >arg0 : boolean
+ >arg1 : boolean

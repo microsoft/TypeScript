@@ -1,0 +1,38 @@
+--- old.collisionThisExpressionAndParameter.types
++++ new.collisionThisExpressionAndParameter.types
+@@= skipped -105, +105 lines =@@
+     }
+ }
+ declare var console: {
+->console : { log(msg: any): any; }
++>console : { log: (msg: any) => any; }
+ 
+     log(msg: any);
+ >log : (msg: any) => any
+@@= skipped -16, +16 lines =@@
+ >x : any
+ >console.log(this.x) : any
+ >console.log : (msg: any) => any
+->console : { log(msg: any): any; }
++>console : { log: (msg: any) => any; }
+ >log : (msg: any) => any
+ >this.x : any
+ >this : any
+@@= skipped -75, +75 lines =@@
+     }
+ }
+ declare var console: {
+->console : { log(msg: any): any; }
++>console : { log: (msg: any) => any; }
+ 
+     log(msg: any);
+ >log : (msg: any) => any
+@@= skipped -24, +24 lines =@@
+ >x : any
+ >console.log(this.x) : any
+ >console.log : (msg: any) => any
+->console : { log(msg: any): any; }
++>console : { log: (msg: any) => any; }
+ >log : (msg: any) => any
+ >this.x : any
+ >this : any

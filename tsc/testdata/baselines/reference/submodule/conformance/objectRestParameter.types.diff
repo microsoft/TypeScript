@@ -1,0 +1,69 @@
+--- old.objectRestParameter.types
++++ new.objectRestParameter.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectRestParameter.ts ===
+ function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
+->cloneAgain : ({ a, ...clone }: { a: number; b: string; }) => void
++>cloneAgain : (__0: { a: number; b: string; }) => void
+ >a : number
+ >clone : { b: string; }
+ >a : number
+@@= skipped -19, +19 lines =@@
+ suddenly(({ x: a, ...rest }) => rest.y);
+ >suddenly(({ x: a, ...rest }) => rest.y) : any
+ >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
+->({ x: a, ...rest }) => rest.y : ({ x: a, ...rest }: { x: { z: any; ka: any; }; y: string; }) => string
++>({ x: a, ...rest }) => rest.y : (__0: { x: { z: any; ka: any; }; y: string; }) => string
+ >x : any
+ >a : { z: any; ka: any; }
+ >rest : { y: string; }
+@@= skipped -11, +11 lines =@@
+ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
+ >suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka) : any
+ >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
+->({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka : ({ x: { z, ...nested }, ...rest }?: { x: { z: any; ka: any; }; y: string; }) => string
++>({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka : (__0?: { x: { z: any; ka: any; }; y: string; }) => string
+ >x : any
+ >z : any
+ >12 : 12
+@@= skipped -27, +27 lines =@@
+ >C : C
+ 
+     m({ a, ...clone }: { a: number, b: string}): void {
+->m : ({ a, ...clone }: { a: number; b: string; }) => void
++>m : (__0: { a: number; b: string; }) => void
+ >a : number
+ >clone : { b: string; }
+ >a : number
+@@= skipped -19, +19 lines =@@
+     }
+ }
+ function foobar({ bar={}, ...opts }: any = {}) {
+->foobar : ({ bar, ...opts }?: any) => void
++>foobar : (__0?: any) => void
+ >bar : any
+ >{} : {}
+ >opts : any
+@@= skipped -8, +8 lines =@@
+ }
+ foobar();
+ >foobar() : void
+->foobar : ({ bar, ...opts }?: any) => void
++>foobar : (__0?: any) => void
+ 
+ foobar({ baz: 'hello' });
+ >foobar({ baz: 'hello' }) : void
+->foobar : ({ bar, ...opts }?: any) => void
++>foobar : (__0?: any) => void
+ >{ baz: 'hello' } : { baz: string; }
+ >baz : string
+ >'hello' : "hello"
+ 
+ foobar({ bar: { greeting: 'hello' } });
+ >foobar({ bar: { greeting: 'hello' } }) : void
+->foobar : ({ bar, ...opts }?: any) => void
++>foobar : (__0?: any) => void
+ >{ bar: { greeting: 'hello' } } : { bar: { greeting: string; }; }
+ >bar : { greeting: string; }
+ >{ greeting: 'hello' } : { greeting: string; }

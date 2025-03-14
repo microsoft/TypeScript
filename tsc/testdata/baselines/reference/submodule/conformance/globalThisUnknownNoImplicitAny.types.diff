@@ -1,0 +1,10 @@
+--- old.globalThisUnknownNoImplicitAny.types
++++ new.globalThisUnknownNoImplicitAny.types
+@@= skipped -2, +2 lines =@@
+ === globalThisUnknownNoImplicitAny.ts ===
+ declare let win: Window & typeof globalThis;
+ >win : Window & typeof globalThis
+->globalThis : typeof globalThis
+ 
+ // all accesses should be errors
+ win.hi

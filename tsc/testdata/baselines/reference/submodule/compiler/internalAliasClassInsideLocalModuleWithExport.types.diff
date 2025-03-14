@@ -1,0 +1,20 @@
+--- old.internalAliasClassInsideLocalModuleWithExport.types
++++ new.internalAliasClassInsideLocalModuleWithExport.types
+@@= skipped -43, +43 lines =@@
+ }
+ 
+ export var d = new m2.m3.c();
+->d : x.c
+->new m2.m3.c() : x.c
+->m2.m3.c : typeof x.c
+->m2.m3 : typeof m2.m3
++>d : c
++>new m2.m3.c() : c
++>m2.m3.c : typeof c
++>m2.m3 : typeof m3
+ >m2 : typeof m2
+->m3 : typeof m2.m3
+->c : typeof x.c
++>m3 : typeof m3
++>c : typeof c
+ 

@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefAndLatebound.ts] ////
+
+=== index.js ===
+const LazySet = require("./LazySet");
+>LazySet : any
+>require("./LazySet") : any
+>require : any
+>"./LazySet" : "./LazySet"
+
+/** @type {LazySet} */
+const stringSet = undefined;
+>stringSet : any
+>undefined : undefined
+
+stringSet.addAll(stringSet);
+>stringSet.addAll(stringSet) : any
+>stringSet.addAll : any
+>stringSet : any
+>addAll : any
+>stringSet : any
+
+
+=== LazySet.js ===
+// Comment out this JSDoc, and note that the errors index.js go away.
+/**
+ * @typedef {Object} SomeObject
+ */
+class LazySet {
+>LazySet : LazySet
+
+    /**
+     * @param {LazySet} iterable
+     */
+    addAll(iterable) {}
+>addAll : (iterable: any) => void
+>iterable : any
+
+    [Symbol.iterator]() {}
+>[Symbol.iterator] : () => void
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+}
+
+module.exports = LazySet;
+>module.exports = LazySet : any
+>module.exports : any
+>module : any
+>exports : any
+>LazySet : any
+

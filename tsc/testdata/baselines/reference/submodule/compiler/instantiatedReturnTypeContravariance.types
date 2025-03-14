@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/instantiatedReturnTypeContravariance.ts] ////
+
+=== instantiatedReturnTypeContravariance.ts ===
+interface B<T> {
+>B : B<T>
+>T : T
+
+name: string;
+>name : string
+
+x(): T;
+>x : () => T
+
+}
+ 
+class c {
+>c : c
+
+foo(): B<void> {
+>foo : () => B<void>
+
+return null;
+
+}
+
+}
+ 
+class d extends c {
+>d : d
+>c : c
+
+foo(): B<number> {
+>foo : () => B<number>
+
+return null;
+
+}
+
+}
+
+ 
+

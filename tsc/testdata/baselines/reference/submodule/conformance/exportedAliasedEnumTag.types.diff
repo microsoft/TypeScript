@@ -1,0 +1,30 @@
+--- old.exportedAliasedEnumTag.types
++++ new.exportedAliasedEnumTag.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportedAliasedEnumTag.js ===
+ var middlewarify = module.exports = {};
+->middlewarify : typeof module.exports
+->module.exports = {} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>middlewarify : {}
++>module.exports = {} : {}
++>module.exports : any
++>module : any
++>exports : any
+ >{} : {}
+ 
+ /** @enum */
+ middlewarify.Type = {
+ >middlewarify.Type = {  BEFORE: 'before'} : { BEFORE: string; }
+->middlewarify.Type : { BEFORE: string; }
+->middlewarify : typeof module.exports
+->Type : { BEFORE: string; }
++>middlewarify.Type : any
++>middlewarify : {}
++>Type : any
+ >{  BEFORE: 'before'} : { BEFORE: string; }
+ 
+   BEFORE: 'before'

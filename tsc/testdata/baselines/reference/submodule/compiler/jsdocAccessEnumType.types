@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/jsdocAccessEnumType.ts] ////
+
+=== /a.ts ===
+export enum E { A }
+>E : E.A
+>A : E.A
+
+=== /b.js ===
+import { E } from "./a";
+>E : typeof E
+
+/** @type {E} */
+const e = E.A;
+>e : E.A
+>E.A : E.A
+>E : typeof E
+>A : E.A
+

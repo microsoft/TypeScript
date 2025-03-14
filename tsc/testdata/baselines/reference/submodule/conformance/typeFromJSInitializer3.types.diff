@@ -1,0 +1,35 @@
+--- old.typeFromJSInitializer3.types
++++ new.typeFromJSInitializer3.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ /** @type {() => undefined} */
+ function f1() {
+->f1 : () => undefined
++>f1 : () => any
+ 
+     return undefined;
+ >undefined : undefined
+ }
+ const a = f1()
+->a : undefined
+->f1() : undefined
+->f1 : () => undefined
++>a : any
++>f1() : any
++>f1 : () => any
+ 
+ /** @type {() => null} */
+ function f2() {
+->f2 : () => null
++>f2 : () => any
+ 
+     return null;
+ }
+ const b = f2()
+->b : null
+->f2() : null
+->f2 : () => null
++>b : any
++>f2() : any
++>f2 : () => any
+ 

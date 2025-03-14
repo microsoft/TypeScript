@@ -1,0 +1,27 @@
+--- old.infinitelyExpandingBaseTypes1.types
++++ new.infinitelyExpandingBaseTypes1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === infinitelyExpandingBaseTypes1.ts ===
+ interface A<T>
++>A : A<T>
++>T : T
+ {
+     x : A<A<T>>
+ >x : A<A<T>>
+ }
+  
+ interface B<T>
++>B : B<T>
++>T : T
+ {
+     x : B<T>
+ >x : B<T>
+ }
+  
+ interface C<T> extends A<T>, B<T> { }
++>C : C<T>
++>T : T
+ 
+  
+ 

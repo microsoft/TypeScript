@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/importedAliasesInTypePositions.ts] ////
+
+=== file2.ts ===
+import RT_ALIAS = require("file1");
+>RT_ALIAS : any
+
+import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
+>ReferredTo : any
+>RT_ALIAS : any
+>elaborate : any
+>nested : any
+>mod : any
+>name : any
+>ReferredTo : any
+
+export module ImportingModule {
+>ImportingModule : typeof ImportingModule
+
+    class UsesReferredType {
+>UsesReferredType : UsesReferredType
+
+        constructor(private referred: ReferredTo) { }
+>referred : ReferredTo
+    }
+}

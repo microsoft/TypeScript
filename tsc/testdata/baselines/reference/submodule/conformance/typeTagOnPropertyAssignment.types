@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/typeTagOnPropertyAssignment.ts] ////
+
+=== typeTagOnPropertyAssignment.js ===
+const o = {
+>o : { a: string; n: () => string; }
+>{    /**     * @type {"a"}     */    a: "a",    /** @type {() => 'b'} */    n: () => 'b'} : { a: string; n: () => string; }
+
+    /**
+     * @type {"a"}
+     */
+    a: "a",
+>a : string
+>"a" : "a"
+
+    /** @type {() => 'b'} */
+    n: () => 'b'
+>n : () => string
+>() => 'b' : () => string
+>'b' : "b"
+
+};
+o.a
+>o.a : string
+>o : { a: string; n: () => string; }
+>a : string
+
+o.n
+>o.n : () => string
+>o : { a: string; n: () => string; }
+>n : () => string
+

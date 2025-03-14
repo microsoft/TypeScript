@@ -1,0 +1,14 @@
+--- old.jsContainerMergeTsDeclaration2.types
++++ new.jsContainerMergeTsDeclaration2.types
+@@= skipped -9, +9 lines =@@
+ === b.js ===
+ C.prototype = {};
+ >C.prototype = {} : {}
+->C.prototype : {}
++>C.prototype : any
+ >C : typeof C
+->prototype : {}
++>prototype : any
+ >{} : {}
+ 
+ C.bar = 2;

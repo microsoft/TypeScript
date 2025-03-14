@@ -1,0 +1,36 @@
+--- old.contextualSignatureInstantiation3.types
++++ new.contextualSignatureInstantiation3.types
+@@= skipped -2, +2 lines =@@
+ === contextualSignatureInstantiation3.ts ===
+ function map<T, U>(items: T[], f: (x: T) => U): U[]{
+ >map : <T, U>(items: T[], f: (x: T) => U) => U[]
++>T : T
++>U : U
+ >items : T[]
+ >f : (x: T) => U
+ >x : T
+ 
+     return items.map(f);
+ >items.map(f) : U[]
+->items.map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
++>items.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+ >items : T[]
+->map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
++>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+ >f : (x: T) => U
+ }
+ 
+ function identity<T>(x: T) {
+ >identity : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+     return x;
+@@= skipped -22, +25 lines =@@
+ 
+ function singleton<T>(x: T) {
+ >singleton : <T>(x: T) => T[]
++>T : T
+ >x : T
+ 
+     return [x];

@@ -1,0 +1,11 @@
+--- old.jsdocImplements_signatures.types
++++ new.jsdocImplements_signatures.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /defs.d.ts ===
+ interface Sig {
++>Sig : Sig
++
+     [index: string]: string
+ >index : string
+ }

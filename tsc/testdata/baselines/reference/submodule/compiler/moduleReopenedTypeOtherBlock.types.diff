@@ -1,0 +1,10 @@
+--- old.moduleReopenedTypeOtherBlock.types
++++ new.moduleReopenedTypeOtherBlock.types
+@@= skipped -7, +7 lines =@@
+ >C1 : C1
+ 
+     export interface I { n: number; }
++>I : I
+ >n : number
+ }
+ module M {

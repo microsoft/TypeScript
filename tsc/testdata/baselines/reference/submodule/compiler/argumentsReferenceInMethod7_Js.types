@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod7_Js.ts] ////
+
+=== /a.js ===
+class A {
+>A : A
+
+	m() {
+>m : () => void
+
+		/**
+		 * @type Function
+		 */
+		this.callee = arguments.callee;
+>this.callee = arguments.callee : Function
+>this.callee : any
+>this : this
+>callee : any
+>arguments.callee : Function
+>arguments : IArguments
+>callee : Function
+	}
+}
+

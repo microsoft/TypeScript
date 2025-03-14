@@ -1,0 +1,59 @@
+--- old.noCrashOnThisTypeUsage.types
++++ new.noCrashOnThisTypeUsage.types
+@@= skipped -1, +1 lines =@@
+ 
+ === noCrashOnThisTypeUsage.ts ===
+ interface IListenable {
++>IListenable : IListenable
++
+     changeListeners: Function[] | null
+ >changeListeners : Function[] | null
+ 
+     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
+->observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
++>observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean | undefined) => void
+ >handler : (change: any, oldValue?: any) => void
+ >change : any
+ >oldValue : any
+@@= skipped -13, +15 lines =@@
+ 
+ function notifyListeners<T>(listenable: IListenable, change: T) {
+ >notifyListeners : <T>(listenable: IListenable, change: T) => void
++>T : T
+ >listenable : IListenable
+ >change : T
+ }
+ 
+ export class ObservableValue<T> {
+ >ObservableValue : ObservableValue<T>
++>T : T
+ 
+     constructor(
+         public value: T
+@@= skipped -21, +23 lines =@@
+ 
+         notifyListeners(this, {
+ >notifyListeners(this, {            type: "update",            object: this,            newValue,            oldValue        }) : void
+->notifyListeners : <T_1>(listenable: IListenable, change: T_1) => void
++>notifyListeners : <T>(listenable: IListenable, change: T) => void
+ >this : this
+ >{            type: "update",            object: this,            newValue,            oldValue        } : { type: string; object: this; newValue: T; oldValue: any; }
+ 
+@@= skipped -13, +13 lines =@@
+ >this : this
+ 
+             newValue,
+->newValue : T
++>newValue : any
+ 
+             oldValue
+ >oldValue : any
+@@= skipped -12, +12 lines =@@
+ >[] : never[]
+ 
+     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
+->observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
++>observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean | undefined) => void
+ >handler : (change: any, oldValue?: any) => void
+ >change : any
+ >oldValue : any

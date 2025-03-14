@@ -1,0 +1,10 @@
+--- old.typeInferenceConflictingCandidates.types
++++ new.typeInferenceConflictingCandidates.types
+@@= skipped -2, +2 lines =@@
+ === typeInferenceConflictingCandidates.ts ===
+ declare function g<T>(a: T, b: T, c: (t: T) => T): T;
+ >g : <T>(a: T, b: T, c: (t: T) => T) => T
++>T : T
+ >a : T
+ >b : T
+ >c : (t: T) => T

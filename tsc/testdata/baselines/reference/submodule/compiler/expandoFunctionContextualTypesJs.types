@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/expandoFunctionContextualTypesJs.ts] ////
+
+=== input.js ===
+/** @typedef {{ color: "red" | "blue" }} MyComponentProps */
+
+/**
+ * @template P 
+ * @typedef {{ (): any; defaultProps?: Partial<P> }} StatelessComponent */
+
+ /**
+  * @type {StatelessComponent<MyComponentProps>}
+  */
+const MyComponent = () => /* @type {any} */(null);
+>MyComponent : { (): any; defaultProps: { color: string; }; }
+>() => /* @type {any} */(null) : { (): any; defaultProps: { color: string; }; }
+>(null) : null
+
+MyComponent.defaultProps = {
+>MyComponent.defaultProps = {    color: "red"} : { color: string; }
+>MyComponent.defaultProps : { color: string; }
+>MyComponent : { (): any; defaultProps: { color: string; }; }
+>defaultProps : { color: string; }
+>{    color: "red"} : { color: string; }
+
+    color: "red"
+>color : string
+>"red" : "red"
+
+};
+
+const MyComponent2 = () => null;
+>MyComponent2 : { (): any; defaultProps: { color: string; }; }
+>() => null : { (): any; defaultProps: { color: string; }; }
+
+/**
+ * @type {MyComponentProps}
+ */
+MyComponent2.defaultProps = {
+>MyComponent2.defaultProps = {    color: "red"} : { color: string; }
+>MyComponent2.defaultProps : { color: string; }
+>MyComponent2 : { (): any; defaultProps: { color: string; }; }
+>defaultProps : { color: string; }
+>{    color: "red"} : { color: string; }
+
+    color: "red"
+>color : string
+>"red" : "red"
+}
+
+/**
+  * @type {StatelessComponent<MyComponentProps>}
+ */
+const check = MyComponent2;
+>check : { (): any; defaultProps: { color: string; }; }
+>MyComponent2 : { (): any; defaultProps: { color: string; }; }
+
+/**
+ * 
+ * @param {{ props: MyComponentProps }} p 
+ */
+function expectLiteral(p) {}
+>expectLiteral : (p: any) => void
+>p : any
+
+function foo() {
+>foo : () => void
+
+    /**
+     * @type {MyComponentProps}
+     */
+    this.props = { color: "red" };
+>this.props = { color: "red" } : { color: string; }
+>this.props : any
+>this : any
+>props : any
+>{ color: "red" } : { color: string; }
+>color : string
+>"red" : "red"
+
+    expectLiteral(this);
+>expectLiteral(this) : void
+>expectLiteral : (p: any) => void
+>this : any
+}
+
+/**
+ * @type {MyComponentProps}
+ */
+module.exports = {
+>module.exports = {    color: "red"} : { color: string; }
+>module.exports : any
+>module : any
+>exports : any
+>{    color: "red"} : { color: string; }
+
+    color: "red"
+>color : string
+>"red" : "red"
+}
+
+expectLiteral({ props: module.exports });
+>expectLiteral({ props: module.exports }) : void
+>expectLiteral : (p: any) => void
+>{ props: module.exports } : { props: any; }
+>props : any
+>module.exports : any
+>module : any
+>exports : any
+

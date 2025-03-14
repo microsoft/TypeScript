@@ -1,0 +1,111 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments1.tsx] ////
+
+=== file.tsx ===
+import React = require('react')
+>React : any
+
+declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
+>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
+>K : K
+>V : V
+>l : { key1: K; value: V; }
+>key1 : K
+>value : V
+>JSX : any
+
+// OK
+function Baz<T,U>(key1: T, value: U) {
+>Baz : <T, U>(key1: T, value: U) => void
+>T : T
+>U : U
+>key1 : T
+>value : U
+
+    let a0 = <ComponentWithTwoAttributes key1={key1} value={value} />
+>a0 : any
+><ComponentWithTwoAttributes key1={key1} value={value} /> : any
+>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
+>key1 : any
+>key1 : T
+>value : any
+>value : U
+
+    let a1 = <ComponentWithTwoAttributes {...{key1, value: value}} key="Component" />
+>a1 : any
+><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : any
+>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
+>{key1, value: value} : { key1: T; value: U; }
+>key1 : any
+>value : U
+>value : U
+>key : any
+}
+
+declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
+>Link : <U>(l: { func: (arg: U) => void; }) => Element
+>U : U
+>l : { func: (arg: U) => void; }
+>func : (arg: U) => void
+>arg : U
+>JSX : any
+
+// OK
+function createLink(func: (a: number)=>void) {
+>createLink : (func: (a: number) => void) => void
+>func : (a: number) => void
+>a : number
+
+    let o = <Link func={func} />
+>o : any
+><Link func={func} /> : any
+>Link : <U>(l: { func: (arg: U) => void; }) => Element
+>func : any
+>func : (a: number) => void
+}
+
+function createLink1(func: (a: number)=>boolean) {
+>createLink1 : (func: (a: number) => boolean) => void
+>func : (a: number) => boolean
+>a : number
+
+    let o = <Link func={func} />
+>o : any
+><Link func={func} /> : any
+>Link : <U>(l: { func: (arg: U) => void; }) => Element
+>func : any
+>func : (a: number) => boolean
+}
+
+interface InferParamProp<T> {
+>InferParamProp : InferParamProp<T>
+>T : T
+
+    values: Array<T>;
+>values : Array<T>
+
+    selectHandler: (selectedVal: T) => void;
+>selectHandler : (selectedVal: T) => void
+>selectedVal : T
+}
+
+declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
+>InferParamComponent : <T>(attr: InferParamProp<T>) => Element
+>T : T
+>attr : InferParamProp<T>
+>JSX : any
+
+// OK
+let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;
+>i : any
+><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} /> : any
+>InferParamComponent : <T>(attr: InferParamProp<T>) => Element
+>values : any
+>[1, 2, 3, 4] : {}
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>selectHandler : any
+>(val) => { } : (val: any) => void
+>val : any
+

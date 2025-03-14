@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/collisionExportsRequireAndAlias.ts] ////
+
+=== collisionExportsRequireAndAlias_file2.ts ===
+import require = require('collisionExportsRequireAndAlias_file1'); // Error
+>require : any
+
+import exports = require('collisionExportsRequireAndAlias_file3333'); // Error
+>exports : any
+
+export function foo() {
+>foo : () => void
+
+    require.bar();
+>require.bar() : any
+>require.bar : any
+>require : any
+>bar : any
+}
+export function foo2() {
+>foo2 : () => void
+
+    exports.bar2();
+>exports.bar2() : any
+>exports.bar2 : any
+>exports : any
+>bar2 : any
+}

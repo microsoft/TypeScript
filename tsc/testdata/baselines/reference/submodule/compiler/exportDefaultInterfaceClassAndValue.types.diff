@@ -1,0 +1,12 @@
+--- old.exportDefaultInterfaceClassAndValue.types
++++ new.exportDefaultInterfaceClassAndValue.types
+@@= skipped -8, +8 lines =@@
+ >foo : 1
+ 
+ export default class Foo {}
+->Foo : foo
++>Foo : default
+ 
+ export default interface Foo {}
++>Foo : default
+ 

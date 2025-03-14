@@ -1,0 +1,40 @@
+--- old.objectRest.types
++++ new.objectRest.types
+@@= skipped -121, +121 lines =@@
+ >({ x, ...fresh } = { x: 1, y: 2 }) : { x: number; y: number; }
+ >{ x, ...fresh } = { x: 1, y: 2 } : { x: number; y: number; }
+ >{ x, ...fresh } : { y: number; x: number; }
+->x : number
++>x : any
+ >fresh : { y: number; }
+ >{ x: 1, y: 2 } : { x: number; y: number; }
+ >x : number
+@@= skipped -39, +39 lines =@@
+ >remainder : string
+ }
+ interface I {
++>I : I
++
+     m(): void;
+ >m : () => void
+ 
+@@= skipped -25, +27 lines =@@
+ 
+ var { removed, ...removableRest2 } = i;
+ >removed : string
+->removableRest2 : { m(): void; remainder: string; }
++>removableRest2 : { m: () => void; remainder: string; }
+ >i : I
+ 
+ let computed = 'b';
+@@= skipped -33, +33 lines =@@
+ >o : { a: number; b: string; }
+ 
+ var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
+->noContextualType : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
+->({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
++>noContextualType : (__0: { [x: string]: any; aNumber?: number; }) => any
++>({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : (__0: { [x: string]: any; aNumber?: number; }) => any
+ >aNumber : number
+ >12 : 12
+ >notEmptyObject : { [x: string]: any; }

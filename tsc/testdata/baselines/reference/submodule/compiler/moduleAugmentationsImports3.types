@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/moduleAugmentationsImports3.ts] ////
+
+=== main.ts ===
+/// <reference path="d.d.ts"/>
+import {A} from "./a";
+>A : typeof A
+
+import "D";
+import "e";
+
+let a: A;
+>a : A
+
+let b = a.getB().x.toFixed();
+>b : any
+>a.getB().x.toFixed() : any
+>a.getB().x.toFixed : any
+>a.getB().x : any
+>a.getB() : any
+>a.getB : any
+>a : A
+>getB : any
+>x : any
+>toFixed : any
+
+let c = a.getCls().y.toLowerCase();
+>c : any
+>a.getCls().y.toLowerCase() : any
+>a.getCls().y.toLowerCase : any
+>a.getCls().y : any
+>a.getCls() : any
+>a.getCls : any
+>a : A
+>getCls : any
+>y : any
+>toLowerCase : any
+
+=== a.ts ===
+export class A {}
+>A : A
+
+=== d.d.ts ===
+declare module "D" {
+>"D" : typeof import("D")
+
+    import {A} from "a";
+>A : any
+
+    import {B} from "b";
+>B : any
+
+    module "a" {
+>"a" : any
+
+        interface A {
+>A : A
+
+            getB(): B;
+>getB : () => B
+        }
+    }
+}
+

@@ -1,0 +1,51 @@
+--- old.narrowingTypeofFunction.types
++++ new.narrowingTypeofFunction.types
+@@= skipped -5, +5 lines =@@
+ >foo : string
+ 
+ interface F { (): string }
++>F : F
+ 
+ function f1(a: (F & Meta) | string) {
+->f1 : (a: (F & Meta) | string) => void
+->a : string | (F & Meta)
++>f1 : (a: string | F & Meta) => void
++>a : string | F & Meta
+ 
+     if (typeof a === "function") {
+ >typeof a === "function" : boolean
+->typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->a : string | (F & Meta)
++>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>a : string | F & Meta
+ >"function" : "function"
+ 
+         a;
+@@= skipped -21, +22 lines =@@
+ }
+ 
+ function f2<T>(x: (T & F) | T & string) {
+->f2 : <T>(x: (T & F) | (T & string)) => void
+->x : (T & F) | (T & string)
++>f2 : <T>(x: T & string | T & F) => void
++>T : T
++>x : T & string | T & F
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->x : (T & F) | (T & string)
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>x : T & string | T & F
+ >"function" : "function"
+ 
+         x;
+@@= skipped -25, +26 lines =@@
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : { _foo: number; } & number
+ >"function" : "function"
+ 

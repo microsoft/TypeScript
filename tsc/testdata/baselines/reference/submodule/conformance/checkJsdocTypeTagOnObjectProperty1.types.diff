@@ -1,0 +1,121 @@
+--- old.checkJsdocTypeTagOnObjectProperty1.types
++++ new.checkJsdocTypeTagOnObjectProperty1.types
+@@= skipped -6, +6 lines =@@
+ >"hello Lol" : "hello Lol"
+ 
+ const obj = {
+->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
+->{  /** @type {string|undefined} */  foo: undefined,  /** @type {string|undefined} */  bar: "42",  /** @type {function(number): number} */  method1(n1) {      return n1 + 42;  },  /** @type {string} */  lol,  /** @type {number} */  ['b' + 'ar1']: 42,  /** @type {function(number): number} */  arrowFunc: (num) => num + 42} : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
++>obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
++>{  /** @type {string|undefined} */  foo: undefined,  /** @type {string|undefined} */  bar: "42",  /** @type {function(number): number} */  method1(n1) {      return n1 + 42;  },  /** @type {string} */  lol,  /** @type {number} */  ['b' + 'ar1']: 42,  /** @type {function(number): number} */  arrowFunc: (num) => num + 42} : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+ 
+   /** @type {string|undefined} */
+   foo: undefined,
+->foo : string | undefined
++>foo : undefined
+ >undefined : undefined
+ 
+   /** @type {string|undefined} */
+   bar: "42",
+->bar : string | undefined
++>bar : string
+ >"42" : "42"
+ 
+   /** @type {function(number): number} */
+   method1(n1) {
+->method1 : (n1: number) => number
+->n1 : number
++>method1 : (n1: any) => any
++>n1 : any
+ 
+       return n1 + 42;
+->n1 + 42 : number
+->n1 : number
++>n1 + 42 : any
++>n1 : any
+ >42 : 42
+ 
+   },
+   /** @type {string} */
+   lol,
+->lol : string
++>lol : any
+ 
+   /** @type {number} */
+   ['b' + 'ar1']: 42,
+@@= skipped -38, +38 lines =@@
+ 
+   /** @type {function(number): number} */
+   arrowFunc: (num) => num + 42
+->arrowFunc : (arg0: number) => number
+->(num) => num + 42 : (num: number) => number
+->num : number
+->num + 42 : number
+->num : number
++>arrowFunc : (num: any) => any
++>(num) => num + 42 : (num: any) => any
++>num : any
++>num + 42 : any
++>num : any
+ >42 : 42
+ }
+ obj.foo = 'string'
+ >obj.foo = 'string' : "string"
+->obj.foo : string | undefined
+->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
+->foo : string | undefined
++>obj.foo : undefined
++>obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
++>foo : undefined
+ >'string' : "string"
+ 
+ obj.lol
+ >obj.lol : string
+->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
++>obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
+ >lol : string
+ 
+ obj.bar = undefined;
+ >obj.bar = undefined : undefined
+->obj.bar : string | undefined
+->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
+->bar : string | undefined
++>obj.bar : string
++>obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
++>bar : string
+ >undefined : undefined
+ 
+ var k = obj.method1(0);
+->k : number
+->obj.method1(0) : number
+->obj.method1 : (arg0: number) => number
+->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
+->method1 : (arg0: number) => number
++>k : any
++>obj.method1(0) : any
++>obj.method1 : (n1: any) => any
++>obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
++>method1 : (n1: any) => any
+ >0 : 0
+ 
+ obj.bar1 = "42";
+ >obj.bar1 = "42" : "42"
+->obj.bar1 : string | number | ((arg0: number) => number) | undefined
+->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
+->bar1 : string | number | ((arg0: number) => number) | undefined
++>obj.bar1 : string | number | (n1: any) => any | undefined
++>obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
++>bar1 : string | number | (n1: any) => any | undefined
+ >"42" : "42"
+ 
+ obj.arrowFunc(0);
+->obj.arrowFunc(0) : number
+->obj.arrowFunc : (arg0: number) => number
+->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
+->arrowFunc : (arg0: number) => number
++>obj.arrowFunc(0) : any
++>obj.arrowFunc : (num: any) => any
++>obj : { [x: string]: string | number | (n1: any) => any | undefined; foo: undefined; bar: string; method1: (n1: any) => any; lol: string; arrowFunc: (num: any) => any; }
++>arrowFunc : (num: any) => any
+ >0 : 0
+ 

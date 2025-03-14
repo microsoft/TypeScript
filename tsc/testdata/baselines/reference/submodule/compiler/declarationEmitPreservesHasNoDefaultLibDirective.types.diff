@@ -1,0 +1,30 @@
+--- old.declarationEmitPreservesHasNoDefaultLibDirective.types
++++ new.declarationEmitPreservesHasNoDefaultLibDirective.types
+@@= skipped -8, +8 lines =@@
+ >public : string
+ }
+ interface Array<T> {}
++>Array : T[]
++>T : T
++
+ interface Boolean {}
++>Boolean : Boolean
++
+ interface Function {}
++>Function : Function
++
+ interface IArguments {}
++>IArguments : IArguments
++
+ interface Number {}
++>Number : Number
++
+ interface Object {}
++>Object : Object
++
+ interface RegExp {}
++>RegExp : RegExp
++
+ interface String {}
++>String : String
+ 

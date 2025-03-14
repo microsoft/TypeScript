@@ -1,0 +1,45 @@
+--- old.jsDeclarationsGlobalFileConstFunction.types
++++ new.jsDeclarationsGlobalFileConstFunction.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.js ===
+ const SomeConstructor = function () {
+->SomeConstructor : typeof SomeConstructor
+->function () {	this.x = 1;} : typeof SomeConstructor
++>SomeConstructor : () => void
++>function () {	this.x = 1;} : () => void
+ 
+ 	this.x = 1;
+ >this.x = 1 : 1
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >1 : 1
+ 
+@@= skipped -25, +25 lines =@@
+ >"str" : "str"
+ 
+ const SomeConstructor3 = function () {
+->SomeConstructor3 : typeof SomeConstructor3
+->function () {	this.x = 1;} : typeof SomeConstructor3
++>SomeConstructor3 : { (): void; staticMember: string; }
++>function () {	this.x = 1;} : { (): void; staticMember: string; }
+ 
+ 	this.x = 1;
+ >this.x = 1 : 1
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >1 : 1
+ 
+@@= skipped -14, +14 lines =@@
+ SomeConstructor3.staticMember = "str";
+ >SomeConstructor3.staticMember = "str" : "str"
+ >SomeConstructor3.staticMember : string
+->SomeConstructor3 : typeof SomeConstructor3
++>SomeConstructor3 : { (): void; staticMember: string; }
+ >staticMember : string
+ >"str" : "str"
+ 

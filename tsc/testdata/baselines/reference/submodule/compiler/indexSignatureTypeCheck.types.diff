@@ -1,0 +1,19 @@
+--- old.indexSignatureTypeCheck.types
++++ new.indexSignatureTypeCheck.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexSignatureTypeCheck.ts ===
+ interface IPropertySet {
++>IPropertySet : IPropertySet
+ 
+     [index: string]: any;
+ >index : string
+@@= skipped -23, +24 lines =@@
+ 
+ 
+ interface indexErrors {
++>indexErrors : indexErrors
++
+     [p2?: string];
+ >p2 : string
+ 

@@ -1,0 +1,17 @@
+--- old.extendNumberInterface.types
++++ new.extendNumberInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === extendNumberInterface.ts ===
+ interface Number {
++>Number : Number
++
+     doStuff(): string;
+ >doStuff : () => string
+ 
+     doOtherStuff<T>(x:T): T;
+ >doOtherStuff : <T>(x: T) => T
++>T : T
+ >x : T
+ }
+ 

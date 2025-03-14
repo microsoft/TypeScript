@@ -1,0 +1,23 @@
+--- old.genericCallWithFunctionTypedArguments3.types
++++ new.genericCallWithFunctionTypedArguments3.types
+@@= skipped -14, +14 lines =@@
+ 
+ function foo4<T, U>(cb: (x: T) => U) {
+ >foo4 : <T, U>(cb: (x: T) => U) => U
++>T : T
++>U : U
+ >cb : (x: T) => U
+ >x : T
+ 
+@@= skipped -20, +22 lines =@@
+ >b : { <T>(x: boolean): T; <T>(x: T): any; }
+ 
+     <T>(x: boolean): T;
++>T : T
+ >x : boolean
+ 
+     <T>(x: T): any;
++>T : T
+ >x : T
+ }
+ 

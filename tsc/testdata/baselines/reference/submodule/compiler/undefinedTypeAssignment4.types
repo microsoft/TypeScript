@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/undefinedTypeAssignment4.ts] ////
+
+=== undefinedTypeAssignment4.ts ===
+class undefined {
+>undefined : undefined
+
+	foo: string;
+>foo : string
+}
+interface undefined {
+>undefined : undefined
+
+	member: number;
+>member : number
+}
+namespace undefined {
+>undefined : typeof undefined
+
+	export var x = 42;
+>x : number
+>42 : 42
+}
+var x: undefined;
+>x : undefined
+
+var y: typeof undefined;
+>y : typeof undefined
+

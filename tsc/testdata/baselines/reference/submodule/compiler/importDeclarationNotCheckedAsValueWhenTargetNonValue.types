@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/importDeclarationNotCheckedAsValueWhenTargetNonValue.ts] ////
+
+=== file.d.ts ===
+declare namespace dojox {
+>dojox : typeof dojox
+
+    namespace charting {
+>charting : typeof charting
+
+        namespace axis2d {
+>axis2d : typeof axis2d
+
+            export class Val { }
+>Val : Val
+
+            interface common {
+>common : common
+
+                createText: object;
+>createText : object
+            }
+            namespace common {
+>common : any
+
+                interface createText {
+>createText : createText
+
+                    gfx(): string
+>gfx : () => string
+                }
+            }
+        }
+    }
+}
+declare module "dojox/charting/axis2d/common.createText" {
+>"dojox/charting/axis2d/common.createText" : typeof import("dojox/charting/axis2d/common.createText")
+
+    import exp = dojox.charting.axis2d.common
+>exp : any
+>dojox : typeof dojox
+>charting : typeof charting
+>axis2d : typeof axis2d
+>common : common
+
+    export = exp;
+>exp : common
+}

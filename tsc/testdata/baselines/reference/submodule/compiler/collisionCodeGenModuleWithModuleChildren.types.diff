@@ -1,0 +1,10 @@
+--- old.collisionCodeGenModuleWithModuleChildren.types
++++ new.collisionCodeGenModuleWithModuleChildren.types
+@@= skipped -67, +67 lines =@@
+ >m3 : typeof m3
+ 
+         interface M {
++>M : M
+         }
+         var p = x;
+ >p : number

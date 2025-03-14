@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/references/library-reference-2.ts] ////
+
+=== /consumer.ts ===
+/// <reference types="jquery" />
+$.foo();
+>$.foo() : any
+>$.foo : any
+>$ : any
+>foo : any
+

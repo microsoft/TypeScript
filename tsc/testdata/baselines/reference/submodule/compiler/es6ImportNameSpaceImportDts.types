@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/es6ImportNameSpaceImportDts.ts] ////
+
+=== server.ts ===
+export class c { };  
+>c : c
+
+=== client.ts ===
+import * as nameSpaceBinding from "./server";
+>nameSpaceBinding : typeof import("server")
+
+export var x = new nameSpaceBinding.c();
+>x : c
+>new nameSpaceBinding.c() : c
+>nameSpaceBinding.c : typeof c
+>nameSpaceBinding : typeof import("server")
+>c : typeof c
+
+import * as nameSpaceBinding2 from "./server"; // unreferenced
+>nameSpaceBinding2 : typeof import("server")
+

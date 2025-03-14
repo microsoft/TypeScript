@@ -1,0 +1,28 @@
+--- old.augmentedTypeBracketNamedPropertyAccess.types
++++ new.augmentedTypeBracketNamedPropertyAccess.types
+@@= skipped -1, +1 lines =@@
+ 
+ === augmentedTypeBracketNamedPropertyAccess.ts ===
+ interface Object {
++>Object : Object
++
+     data: number;
+ >data : number
+ }
+ interface Function {
++>Function : Function
++
+     functionData: string;
+ >functionData : string
+ }
+@@= skipped -22, +26 lines =@@
+ >'data' : "data"
+ 
+ var r2 = o['functionData']; // Should be any (no property found)
+->r2 : error
+->o['functionData'] : error
++>r2 : any
++>o['functionData'] : any
+ >o : {}
+ >'functionData' : "functionData"
+ 

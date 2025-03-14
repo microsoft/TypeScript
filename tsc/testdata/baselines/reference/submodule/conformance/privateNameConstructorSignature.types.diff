@@ -1,0 +1,20 @@
+--- old.privateNameConstructorSignature.types
++++ new.privateNameConstructorSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === privateNameConstructorSignature.ts ===
+ interface D {
++>D : D
++
+     x: number;
+ >x : number
+ }
+@@= skipped -38, +40 lines =@@
+     }
+ }
+ interface C {
++>C : C
++
+     new (): D;
+ }
+ 

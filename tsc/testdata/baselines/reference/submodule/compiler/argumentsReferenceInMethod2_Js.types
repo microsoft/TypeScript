@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod2_Js.ts] ////
+
+=== /a.js ===
+class A {
+>A : A
+
+	/**
+	 * @param {object} [foo={}]
+	 */
+	m(foo = {}) {
+>m : (foo?: {}) => void
+>foo : {}
+>{} : {}
+
+		/**
+		 * @type object
+		 */
+		this["arguments"] = foo;
+>this["arguments"] = foo : {}
+>this["arguments"] : any
+>this : this
+>"arguments" : "arguments"
+>foo : {}
+	}
+}
+

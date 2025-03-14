@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImportOfClassExpression.ts] ////
+
+=== MC.js ===
+const MW = require("./MW");
+>MW : any
+>require("./MW") : any
+>require : any
+>"./MW" : "./MW"
+
+/** @typedef {number} Cictema */
+
+module.exports = class MC {
+>module.exports = class MC {  watch() {    return new MW(this);  }} : typeof MC
+>module.exports : any
+>module : any
+>exports : any
+>class MC {  watch() {    return new MW(this);  }} : typeof MC
+>MC : typeof MC
+
+  watch() {
+>watch : () => any
+
+    return new MW(this);
+>new MW(this) : any
+>MW : any
+>this : this
+  }
+};
+

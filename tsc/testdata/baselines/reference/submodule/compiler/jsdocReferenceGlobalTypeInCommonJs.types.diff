@@ -1,0 +1,34 @@
+--- old.jsdocReferenceGlobalTypeInCommonJs.types
++++ new.jsdocReferenceGlobalTypeInCommonJs.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ const other = require('./other');
+->other : () => string
+->require('./other') : () => string
++>other : any
++>require('./other') : any
+ >require : any
+ >'./other' : "./other"
+ 
+ /** @type {Puppeteer.Keyboard} */
+ var ppk;
+->ppk : Puppeteer.Keyboard
++>ppk : any
+ 
+ Puppeteer.connect;
+ >Puppeteer.connect : (name: string) => void
+->Puppeteer : typeof Puppeteer
++>Puppeteer : typeof import("puppet")
+ >connect : (name: string) => void
+ 
+ === puppet.d.ts ===
+@@= skipped -19, +19 lines =@@
+ >Puppeteer : typeof import("puppet")
+ 
+ export interface Keyboard {
++>Keyboard : Keyboard
++
+     key: string
+ >key : string
+ }

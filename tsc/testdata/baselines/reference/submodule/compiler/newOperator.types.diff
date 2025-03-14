@@ -1,0 +1,61 @@
+--- old.newOperator.types
++++ new.newOperator.types
+@@= skipped -1, +1 lines =@@
+ 
+ === newOperator.ts ===
+ interface ifc { }
++>ifc : ifc
++
+ // Attempting to 'new' an interface yields poor error
+ var i = new ifc();
+ >i : any
+@@= skipped -96, +98 lines =@@
+ 
+ // Error on union with one constructor
+ declare const ctorUnion: { a: string } | (new (a: string) => void)
+->ctorUnion : { a: string; } | (new (a: string) => void)
++>ctorUnion : { a: string; } | new (a: string) => void
+ >a : string
+ >a : string
+ 
+ new ctorUnion("");
+ >new ctorUnion("") : any
+->ctorUnion : { a: string; } | (new (a: string) => void)
++>ctorUnion : { a: string; } | new (a: string) => void
+ >"" : ""
+ 
+ // Error on union with incompatible constructors
+ declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
+->ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
++>ctorUnion2 : new <T extends number>(a: T) => void | new <T>(a: string) => void
++>T : T
+ >a : T
++>T : T
+ >a : string
+ 
+ new ctorUnion2("");
+ >new ctorUnion2("") : any
+->ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
++>ctorUnion2 : new <T extends number>(a: T) => void | new <T>(a: string) => void
+ >"" : ""
+ 
+ module M {
+@@= skipped -35, +37 lines =@@
+ >S : S
+ 
+     public get xs(): M.T[] {
+->xs : M.T[]
++>xs : T[]
+ >M : any
+ 
+         return new M.T[];
+ >new M.T[] : any
+ >M.T[] : any
+->M.T : typeof M.T
++>M.T : typeof T
+ >M : typeof M
+->T : typeof M.T
++>T : typeof T
+ > : any
+     }
+ }

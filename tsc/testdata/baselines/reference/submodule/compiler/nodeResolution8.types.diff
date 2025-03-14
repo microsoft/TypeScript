@@ -1,0 +1,11 @@
+--- old.nodeResolution8.types
++++ new.nodeResolution8.types
+@@= skipped -1, +1 lines =@@
+ 
+ === b.ts ===
+ import y = require("a");
+->y : typeof y
++>y : typeof import("node_modules/a/index")
+ 
+ === node_modules/a/ref.ts ===
+ var x = 1;

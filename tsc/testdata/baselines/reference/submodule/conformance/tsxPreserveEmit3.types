@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsx/tsxPreserveEmit3.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+
+=== test.d.ts ===
+export var React;
+>React : any
+
+=== react-consumer.tsx ===
+// This import should be elided
+import {React} from "./test";
+>React : any
+

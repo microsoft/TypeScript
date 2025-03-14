@@ -1,0 +1,11 @@
+--- old.defaultIndexProps2.types
++++ new.defaultIndexProps2.types
+@@= skipped -24, +24 lines =@@
+ // WScript.Echo(o[0]);
+ 
+ 1[0];
+->1[0] : error
++>1[0] : any
+ >1 : 1
+ >0 : 0
+ 

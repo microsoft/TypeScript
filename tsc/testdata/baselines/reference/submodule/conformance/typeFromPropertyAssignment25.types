@@ -1,0 +1,76 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment25.ts] ////
+
+=== bug24703.js ===
+var Common = {};
+>Common : {}
+>{} : {}
+
+Common.I = class {
+>Common.I = class {    constructor() {        this.i = 1    }} : typeof I
+>Common.I : any
+>Common : {}
+>I : any
+>class {    constructor() {        this.i = 1    }} : typeof I
+
+    constructor() {
+        this.i = 1
+>this.i = 1 : 1
+>this.i : any
+>this : this
+>i : any
+>1 : 1
+    }
+}
+Common.O = class extends Common.I {
+>Common.O = class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
+>Common.O : any
+>Common : {}
+>O : any
+>class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
+>Common.I : any
+>Common : {}
+>I : any
+
+    constructor() {
+        super()
+>super() : void
+>super : any
+
+        this.o = 2
+>this.o = 2 : 2
+>this.o : any
+>this : this
+>o : any
+>2 : 2
+    }
+}
+var o = new Common.O()
+>o : any
+>new Common.O() : any
+>Common.O : any
+>Common : {}
+>O : any
+
+var i = new Common.I()
+>i : any
+>new Common.I() : any
+>Common.I : any
+>Common : {}
+>I : any
+
+o.i
+>o.i : any
+>o : any
+>i : any
+
+o.o
+>o.o : any
+>o : any
+>o : any
+
+i.i
+>i.i : any
+>i : any
+>i : any
+
+

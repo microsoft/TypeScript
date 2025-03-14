@@ -1,0 +1,14 @@
+--- old.commentOnAmbientfunction.types
++++ new.commentOnAmbientfunction.types
+@@= skipped -2, +2 lines =@@
+ === b.ts ===
+ ///<reference path="a.ts"/>
+ declare function foobar(a: typeof foo): typeof bar;
+->foobar : (a: typeof foo) => typeof bar
++>foobar : (a: () => any) => () => any
+ >a : () => any
+->foo : () => any
+->bar : () => any
+ 
+ === a.ts ===
+ /*!=========

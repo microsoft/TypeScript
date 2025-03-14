@@ -1,0 +1,19 @@
+--- old.tripleSlashReferenceAbsoluteWindowsPath.types
++++ new.tripleSlashReferenceAbsoluteWindowsPath.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/tripleSlashReferenceAbsoluteWindowsPath.ts] ////
+ 
+-=== C:\a\b\d.ts ===
++=== C:/a/b/d.ts ===
+ /// <reference path="C:\a\b\c.ts" />
+ const y = x + 3;
+ >y : number
+@@= skipped -7, +7 lines =@@
+ >x : 5
+ >3 : 3
+ 
+-=== C:\a\b\c.ts ===
++=== C:/a/b/c.ts ===
+ const x = 5;
+ >x : 5
+ >5 : 5

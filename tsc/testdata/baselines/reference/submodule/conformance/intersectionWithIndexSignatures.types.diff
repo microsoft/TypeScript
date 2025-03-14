@@ -1,0 +1,28 @@
+--- old.intersectionWithIndexSignatures.types
++++ new.intersectionWithIndexSignatures.types
+@@= skipped -64, +64 lines =@@
+ 
+ type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<keyof Tgt, keyof Source>>;
+ >constr : constr<Source, Tgt>
++>Source : Source
++>Tgt : Tgt
++>K : K
+ 
+ type s = constr<{}, { [key: string]: { a: string } }>;
+ >s : s
+@@= skipped -11, +14 lines =@@
+ 
+ q["asd"].a.substr(1);
+ >q["asd"].a.substr(1) : string
+->q["asd"].a.substr : (from: number, length?: number) => string
++>q["asd"].a.substr : (from: number, length?: number | undefined) => string
+ >q["asd"].a : string
+ >q["asd"] : { a: string; }
+ >q : s
+ >"asd" : "asd"
+ >a : string
+->substr : (from: number, length?: number) => string
++>substr : (from: number, length?: number | undefined) => string
+ >1 : 1
+ 
+ q["asd"].b;  // Error

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/commonJsIsolatedModules.ts] ////
+
+=== index.js ===
+module.exports = {}
+>module.exports = {} : {}
+>module.exports : any
+>module : any
+>exports : any
+>{} : {}
+
+var x = 1
+>x : number
+>1 : 1
+

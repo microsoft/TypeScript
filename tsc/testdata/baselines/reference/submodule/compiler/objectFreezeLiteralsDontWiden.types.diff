@@ -1,0 +1,14 @@
+--- old.objectFreezeLiteralsDontWiden.types
++++ new.objectFreezeLiteralsDontWiden.types
+@@= skipped -3, +3 lines =@@
+ const PUPPETEER_REVISIONS = Object.freeze({
+ >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+ >Object.freeze({  chromium: '1011831',  firefox: 'latest',}) : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
+->Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
++>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | object; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+ >Object : ObjectConstructor
+->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
++>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | object; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+ >{  chromium: '1011831',  firefox: 'latest',} : { chromium: "1011831"; firefox: "latest"; }
+ 
+   chromium: '1011831',

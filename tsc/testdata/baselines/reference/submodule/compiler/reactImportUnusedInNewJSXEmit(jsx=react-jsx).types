@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/reactImportUnusedInNewJSXEmit.tsx] ////
+
+=== index.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : any
+
+function Bar() {
+>Bar : () => any
+
+  return <div />;
+><div /> : any
+>div : any
+}
+
+export function Foo() {
+>Foo : () => any
+
+  return <Bar />;
+><Bar /> : any
+>Bar : () => any
+}

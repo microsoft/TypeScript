@@ -1,0 +1,9 @@
+--- old.declarationEmitDoesNotUseReexportedNamespaceAsLocal.types
++++ new.declarationEmitDoesNotUseReexportedNamespaceAsLocal.types
+@@= skipped -16, +16 lines =@@
+ 
+ declare function add<T>(x: Promise<T>): T;
+ >add : <T>(x: Promise<T>) => T
++>T : T
+ >x : Promise<T>
+ 

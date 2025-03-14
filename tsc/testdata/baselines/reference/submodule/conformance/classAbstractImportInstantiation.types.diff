@@ -1,0 +1,17 @@
+--- old.classAbstractImportInstantiation.types
++++ new.classAbstractImportInstantiation.types
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ import myA = M.A;
+->myA : typeof myA
++>myA : typeof A
+ >M : typeof M
+->A : myA
++>A : A
+ 
+ new myA;
+ >new myA : any
+->myA : typeof myA
++>myA : typeof A
+ 

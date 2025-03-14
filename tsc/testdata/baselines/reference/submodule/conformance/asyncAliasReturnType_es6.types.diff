@@ -1,0 +1,10 @@
+--- old.asyncAliasReturnType_es6.types
++++ new.asyncAliasReturnType_es6.types
+@@= skipped -2, +2 lines =@@
+ === asyncAliasReturnType_es6.ts ===
+ type PromiseAlias<T> = Promise<T>;
+ >PromiseAlias : PromiseAlias<T>
++>T : T
+ 
+ async function f(): PromiseAlias<void> {
+ >f : () => PromiseAlias<void>

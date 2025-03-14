@@ -1,0 +1,36 @@
+--- old.moduleCodeGenTest5.types
++++ new.moduleCodeGenTest5.types
+@@= skipped -36, +36 lines =@@
+ }
+ 
+ export enum E1 {A=0}
+->E1 : E1
++>E1 : E1.A
+ >A : E1.A
+ >0 : 0
+ 
+ var u = E1.A;
+->u : E1
+->E1.A : E1
++>u : E1.A
++>E1.A : E1.A
+ >E1 : typeof E1
+->A : E1
++>A : E1.A
+ 
+ enum E2 {B=0}
+->E2 : E2
++>E2 : E2.B
+ >B : E2.B
+ >0 : 0
+ 
+ var v = E2.B;
+->v : E2
+->E2.B : E2
++>v : E2.B
++>E2.B : E2.B
+ >E2 : typeof E2
+->B : E2
++>B : E2.B
+ 
+ 

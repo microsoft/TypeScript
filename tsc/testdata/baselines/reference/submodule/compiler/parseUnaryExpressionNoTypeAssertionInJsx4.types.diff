@@ -1,0 +1,30 @@
+--- old.parseUnaryExpressionNoTypeAssertionInJsx4.types
++++ new.parseUnaryExpressionNoTypeAssertionInJsx4.types
+@@= skipped -6, +6 lines =@@
+ 
+ const a = + <number> x;
+ >a : number
+->+ <number> x;const b = + <> x;const c = + <1234> x; : number
+-><number> x;const b = + <> x;const c = + <1234> x; : any
+->number : any
++>+ <number> x : number
++><number> x : number
++>x : "oops"
+ 
+ const b = + <> x;
+-><> x;const c = + <1234> x; : any
++>b : number
++>+ <> x : number
++><> x : any
++>x : "oops"
+ 
+ const c = + <1234> x;
+->< : any
+-> : any
++>c : number
++>+ <1234> x : number
++><1234> x : 1234
++>x : "oops"
+ 
+-> : any
+-

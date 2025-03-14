@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors3.ts] ////
+
+=== plainJSGrammarErrors3.js ===
+
+=== /a.js ===
+function foo() {
+>foo : () => void
+
+    await new Promise(undefined);
+>await new Promise(undefined) : unknown
+>new Promise(undefined) : Promise<unknown>
+>Promise : PromiseConstructor
+>undefined : undefined
+}
+

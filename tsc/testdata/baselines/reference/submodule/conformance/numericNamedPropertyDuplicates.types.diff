@@ -1,0 +1,11 @@
+--- old.numericNamedPropertyDuplicates.types
++++ new.numericNamedPropertyDuplicates.types
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     2: number;
+ >2 : number
+ 

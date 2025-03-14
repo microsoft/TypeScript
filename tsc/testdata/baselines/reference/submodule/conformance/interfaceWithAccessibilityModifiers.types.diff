@@ -1,0 +1,11 @@
+--- old.interfaceWithAccessibilityModifiers.types
++++ new.interfaceWithAccessibilityModifiers.types
+@@= skipped -2, +2 lines =@@
+ === interfaceWithAccessibilityModifiers.ts ===
+ // Errors
+ interface Foo {
++>Foo : Foo
++
+     public a: any;
+ >a : any
+ 

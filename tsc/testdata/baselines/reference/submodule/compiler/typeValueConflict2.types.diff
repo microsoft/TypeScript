@@ -1,0 +1,22 @@
+--- old.typeValueConflict2.types
++++ new.typeValueConflict2.types
+@@= skipped -5, +5 lines =@@
+ 
+     export class A<T> {
+ >A : A<T>
++>T : T
+ 
+         constructor(a: T) {
+ >a : T
+@@= skipped -27, +28 lines =@@
+     // Shouldn't error
+     class B extends M1.A<string> {
+ >B : B
+->M1.A : M1.A<string>
++>M1.A : A<string>
+ >M1 : typeof M1
+->A : typeof M1.A
++>A : typeof A
+     }
+ }
+ 

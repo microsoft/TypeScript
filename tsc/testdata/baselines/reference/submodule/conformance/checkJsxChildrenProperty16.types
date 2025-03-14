@@ -1,0 +1,78 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty16.tsx] ////
+
+=== checkJsxChildrenProperty16.tsx ===
+/// <reference path="react16.d.ts" />
+
+// repro from #53493
+
+import React = require('react');
+>React : any
+
+export type Props =
+>Props : Props
+
+  | { renderNumber?: false; children: (arg: string) => void }
+>renderNumber : false | undefined
+>false : false
+>children : (arg: string) => void
+>arg : string
+
+  | {
+      renderNumber: true;
+>renderNumber : true
+>true : true
+
+      children: (arg: number) => void;
+>children : (arg: number) => void
+>arg : number
+
+    };
+
+export declare function Foo(props: Props): JSX.Element;
+>Foo : (props: Props) => Element
+>props : Props
+>JSX : any
+
+export const Test = () => {
+>Test : () => any
+>() => {  return (    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  );} : () => any
+
+  return (
+>(    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  ) : any
+
+    <>
+><>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </> : any
+
+      <Foo>{(value) => {}}</Foo>
+><Foo>{(value) => {}}</Foo> : any
+>Foo : (props: Props) => Element
+>(value) => {} : (value: any) => void
+>value : any
+>Foo : (props: Props) => Element
+
+      <Foo renderNumber>{(value) => {}}</Foo>
+><Foo renderNumber>{(value) => {}}</Foo> : any
+>Foo : (props: Props) => Element
+>renderNumber : any
+>(value) => {} : (value: any) => void
+>value : any
+>Foo : (props: Props) => Element
+
+      <Foo children={(value) => {}} />
+><Foo children={(value) => {}} /> : any
+>Foo : (props: Props) => Element
+>children : any
+>(value) => {} : (value: any) => void
+>value : any
+
+      <Foo renderNumber children={(value) => {}} />
+><Foo renderNumber children={(value) => {}} /> : any
+>Foo : (props: Props) => Element
+>renderNumber : any
+>children : any
+>(value) => {} : (value: any) => void
+>value : any
+
+    </>
+  );
+};

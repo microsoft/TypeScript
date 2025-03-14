@@ -1,0 +1,15 @@
+--- old.typedefCrossModule4.types
++++ new.typedefCrossModule4.types
+@@= skipped -6, +6 lines =@@
+ 
+ module.exports = { Foo: Bar };
+ >module.exports = { Foo: Bar } : { Foo: typeof Bar; }
+->module.exports : { Foo: typeof Bar; }
+->module : { exports: { Foo: typeof Bar; }; }
+->exports : { Foo: typeof Bar; }
++>module.exports : any
++>module : any
++>exports : any
+ >{ Foo: Bar } : { Foo: typeof Bar; }
+ >Foo : typeof Bar
+ >Bar : typeof Bar

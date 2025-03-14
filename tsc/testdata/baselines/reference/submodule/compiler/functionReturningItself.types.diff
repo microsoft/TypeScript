@@ -1,0 +1,13 @@
+--- old.functionReturningItself.types
++++ new.functionReturningItself.types
+@@= skipped -1, +1 lines =@@
+ 
+ === functionReturningItself.ts ===
+ function somefn() {
+->somefn : () => typeof somefn
++>somefn : () => ???
+ 
+     return somefn;
+->somefn : () => typeof somefn
++>somefn : () => ???
+ }

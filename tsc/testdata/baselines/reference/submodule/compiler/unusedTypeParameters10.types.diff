@@ -1,0 +1,13 @@
+--- old.unusedTypeParameters10.types
++++ new.unusedTypeParameters10.types
+@@= skipped -2, +2 lines =@@
+ === unusedTypeParameters10.ts ===
+ type Alias<T> = { };
+ >Alias : Alias<T>
++>T : T
+ 
+ type Alias2<T> = { x: T };
+ >Alias2 : Alias2<T>
++>T : T
+ >x : T
+ 

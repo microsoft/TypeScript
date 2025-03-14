@@ -1,0 +1,10 @@
+--- old.declarationEmitTypeParamMergedWithPrivate.types
++++ new.declarationEmitTypeParamMergedWithPrivate.types
+@@= skipped -2, +2 lines =@@
+ === declarationEmitTypeParamMergedWithPrivate.ts ===
+ export class Test<T> {
+ >Test : Test<T>
++>T : T
+ 
+     private get T(): T {
+ >T : T

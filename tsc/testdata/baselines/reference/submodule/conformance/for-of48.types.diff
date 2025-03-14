@@ -1,0 +1,24 @@
+--- old.for-of48.types
++++ new.for-of48.types
+@@= skipped -14, +14 lines =@@
+ >true : true
+ 
+ enum E { x }
+->E : E
++>E : E.x
+ >x : E.x
+ 
+ for ({x, y = E.x} of array) {
+ >{x, y = E.x} : { x: string; y?: number; }
+->x : string
+->y : number
+->E.x : E
++>x : any
++>y : any
++>E.x : E.x
+ >E : typeof E
+->x : E
++>x : E.x
+ >array : { x: string; y: boolean; }[]
+ 
+     x;

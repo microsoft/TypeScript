@@ -1,0 +1,11 @@
+--- old.jsdocAugmentsMissingType.types
++++ new.jsdocAugmentsMissingType.types
+@@= skipped -11, +11 lines =@@
+ /** @augments */
+ class B extends A {
+ >B : B
+->A : typeof A
++>A : A
+ 
+     m() {
+ >m : () => void

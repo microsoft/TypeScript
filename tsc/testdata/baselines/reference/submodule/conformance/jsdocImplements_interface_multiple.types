@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_interface_multiple.ts] ////
+
+=== /defs.d.ts ===
+interface Drawable {
+>Drawable : Drawable
+
+    draw(): number;
+>draw : () => number
+}
+interface Sizable {
+>Sizable : Sizable
+
+    size(): number;
+>size : () => number
+}
+=== /a.js ===
+/** 
+ * @implements {Drawable} 
+ * @implements Sizable 
+ **/
+class Square {
+>Square : Square
+
+    draw() {
+>draw : () => number
+
+        return 0;
+>0 : 0
+    }
+    size() {
+>size : () => number
+
+        return 0;
+>0 : 0
+    }
+}
+/**
+ * @implements Drawable
+ * @implements {Sizable}
+ **/
+class BadSquare {
+>BadSquare : BadSquare
+
+    size() {
+>size : () => number
+
+        return 0;
+>0 : 0
+    }
+}

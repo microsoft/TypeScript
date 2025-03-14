@@ -1,0 +1,28 @@
+--- old.importHelpersWithImportOrExportDefault(esmoduleinterop=true,module=system).types
++++ new.importHelpersWithImportOrExportDefault(esmoduleinterop=true,module=system).types
+@@= skipped -5, +5 lines =@@
+ 
+ === b.ts ===
+ export { default } from "./a";
+->default : typeof b
++>default : typeof default
+ 
+ export { default as a } from "./a";
+->default : typeof b
+->a : typeof b
++>default : typeof default
++>a : typeof default
+ 
+ import { default as b } from "./a";
+->default : typeof b
+->b : typeof b
++>default : typeof default
++>b : typeof default
+ 
+ void b;
+ >void b : undefined
+->b : typeof b
++>b : typeof default
+ 
+ === tslib.d.ts ===
+ declare module "tslib" {

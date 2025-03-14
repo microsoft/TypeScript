@@ -1,0 +1,17 @@
+--- old.indexSignaturesInferentialTyping.types
++++ new.indexSignaturesInferentialTyping.types
+@@= skipped -2, +2 lines =@@
+ === indexSignaturesInferentialTyping.ts ===
+ function foo<T>(items: { [index: number]: T }): T { return undefined; }
+ >foo : <T>(items: { [index: number]: T; }) => T
++>T : T
+ >items : { [index: number]: T; }
+ >index : number
+ >undefined : undefined
+ 
+ function bar<T>(items: { [index: string]: T }): T { return undefined; }
+ >bar : <T>(items: { [index: string]: T; }) => T
++>T : T
+ >items : { [index: string]: T; }
+ >index : string
+ >undefined : undefined

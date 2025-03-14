@@ -1,0 +1,28 @@
+--- old.intersectionType_useDefineForClassFields.types
++++ new.intersectionType_useDefineForClassFields.types
+@@= skipped -2, +2 lines =@@
+ === intersectionType_useDefineForClassFields.ts ===
+ type Foo<T> = {
+ >Foo : Foo<T>
++>T : T
+ 
+     [k in keyof T & string]: any
++>k : k
+ }
+ 
+ function bar<T>(_p: T): { new(): Foo<T> } {
+->bar : <T>(_p: T) => { new (): Foo<T>; }
++>bar : <T>(_p: T) => new () => Foo<T>
++>T : T
+ >_p : T
+ 
+     return null as any;
+@@= skipped -15, +18 lines =@@
+ class Baz extends bar({ x: 1 }) {
+ >Baz : Baz
+ >bar({ x: 1 }) : Foo<{ x: number; }>
+->bar : <T>(_p: T) => { new (): Foo<T>; }
++>bar : <T>(_p: T) => new () => Foo<T>
+ >{ x: 1 } : { x: number; }
+ >x : number
+ >1 : 1

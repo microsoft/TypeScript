@@ -1,0 +1,20 @@
+--- old.decoratorMetadataOnInferredType.types
++++ new.decoratorMetadataOnInferredType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === decoratorMetadataOnInferredType.ts ===
+ declare var console: {
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ 
+     log(msg: string): void;
+ >log : (msg: string) => void
+@@= skipped -14, +14 lines =@@
+     constructor() { console.log('new A'); }
+ >console.log('new A') : void
+ >console.log : (msg: string) => void
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ >log : (msg: string) => void
+ >'new A' : "new A"
+ }

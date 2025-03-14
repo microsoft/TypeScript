@@ -1,0 +1,11 @@
+--- old.ambientExternalModuleInsideNonAmbient.types
++++ new.ambientExternalModuleInsideNonAmbient.types
+@@= skipped -1, +1 lines =@@
+ 
+ === ambientExternalModuleInsideNonAmbient.ts ===
+ module M {
++>M : any
++
+     export declare module "M" { }
+ >"M" : typeof import("M")
+ }

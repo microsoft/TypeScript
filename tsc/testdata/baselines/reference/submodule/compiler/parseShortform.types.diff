@@ -1,0 +1,11 @@
+--- old.parseShortform.types
++++ new.parseShortform.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parseShortform.ts ===
+ interface I {
++>I : I
++
+     w: {
+ >w : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
+ 

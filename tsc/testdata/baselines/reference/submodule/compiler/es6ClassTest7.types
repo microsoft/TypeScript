@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es6ClassTest7.ts] ////
+
+=== es6ClassTest7.ts ===
+declare module M {
+>M : typeof M
+
+    export class Foo {
+>Foo : Foo
+    }
+}
+
+class Bar extends M.Foo {
+>Bar : Bar
+>M.Foo : Foo
+>M : typeof M
+>Foo : typeof Foo
+}
+

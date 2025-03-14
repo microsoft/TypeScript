@@ -1,0 +1,175 @@
+--- old.jsdocTemplateTag4.types
++++ new.jsdocTemplateTag4.types
+@@= skipped -7, +7 lines =@@
+  * @template V
+  */
+ function Multimap() {
+->Multimap : typeof Multimap
++>Multimap : () => void
+ 
+     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+     this._map = {};
+ >this._map = {} : {}
+->this._map : { [x: string]: V; }
+->this : this
+->_map : { [x: string]: V; }
++>this._map : any
++>this : any
++>_map : any
+ >{} : {}
+ 
+ };
+@@= skipped -17, +17 lines =@@
+  * @returns {V} the value ok
+  */
+ Multimap.prototype.get = function (key) {
+->Multimap.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
++>Multimap.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+ >Multimap.prototype.get : any
+ >Multimap.prototype : any
+->Multimap : typeof Multimap
++>Multimap : () => void
+ >prototype : any
+ >get : any
+->function (key) {    return this._map[key + ''];} : (key: K) => V
+->key : K
++>function (key) {    return this._map[key + ''];} : (key: any) => any
++>key : any
+ 
+     return this._map[key + ''];
+->this._map[key + ''] : V
+->this._map : { [x: string]: V; }
+->this : this
+->_map : { [x: string]: V; }
++>this._map[key + ''] : any
++>this._map : any
++>this : any
++>_map : any
+ >key + '' : string
+->key : K
++>key : any
+ >'' : ""
+ }
+ 
+@@= skipped -26, +26 lines =@@
+  * @template V
+  */
+ var Multimap2 = function() {
+->Multimap2 : typeof Multimap2
+->function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : typeof Multimap2
++>Multimap2 : () => void
++>function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
+ 
+     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+     this._map = {};
+ >this._map = {} : {}
+->this._map : { [x: string]: V; }
+->this : this
+->_map : { [x: string]: V; }
++>this._map : any
++>this : any
++>_map : any
+ >{} : {}
+ 
+ };
+@@= skipped -18, +18 lines =@@
+  * @returns {V} the value ok
+  */
+ Multimap2.prototype.get = function (key) {
+->Multimap2.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
++>Multimap2.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+ >Multimap2.prototype.get : any
+ >Multimap2.prototype : any
+->Multimap2 : typeof Multimap2
++>Multimap2 : () => void
+ >prototype : any
+ >get : any
+->function (key) {    return this._map[key + ''];} : (key: K) => V
+->key : K
++>function (key) {    return this._map[key + ''];} : (key: any) => any
++>key : any
+ 
+     return this._map[key + ''];
+->this._map[key + ''] : V
+->this._map : { [x: string]: V; }
+->this : this
+->_map : { [x: string]: V; }
++>this._map[key + ''] : any
++>this._map : any
++>this : any
++>_map : any
+ >key + '' : string
+->key : K
++>key : any
+ >'' : ""
+ }
+ 
+ var Ns = {};
+->Ns : typeof Ns
++>Ns : {}
+ >{} : {}
+ 
+ /**
+@@= skipped -30, +30 lines =@@
+  * @template V
+  */
+ Ns.Multimap3 = function() {
+->Ns.Multimap3 = function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : typeof Multimap3
+->Ns.Multimap3 : typeof Multimap3
+->Ns : typeof Ns
+->Multimap3 : typeof Multimap3
+->function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : typeof Multimap3
++>Ns.Multimap3 = function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
++>Ns.Multimap3 : any
++>Ns : {}
++>Multimap3 : any
++>function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
+ 
+     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+     this._map = {};
+ >this._map = {} : {}
+->this._map : { [x: string]: V; }
+->this : this
+->_map : { [x: string]: V; }
++>this._map : any
++>this : {}
++>_map : any
+ >{} : {}
+ 
+ };
+@@= skipped -21, +21 lines =@@
+  * @returns {V} the value ok
+  */
+ Ns.Multimap3.prototype.get = function (key) {
+->Ns.Multimap3.prototype.get = function (key) {    return this._map[key + ''];} : (key: K) => V
++>Ns.Multimap3.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+ >Ns.Multimap3.prototype.get : any
+ >Ns.Multimap3.prototype : any
+->Ns.Multimap3 : typeof Multimap3
+->Ns : typeof Ns
+->Multimap3 : typeof Multimap3
++>Ns.Multimap3 : any
++>Ns : {}
++>Multimap3 : any
+ >prototype : any
+ >get : any
+->function (key) {    return this._map[key + ''];} : (key: K) => V
+->key : K
++>function (key) {    return this._map[key + ''];} : (key: any) => any
++>key : any
+ 
+     return this._map[key + ''];
+->this._map[key + ''] : V
+->this._map : { [x: string]: V; }
+->this : this
+->_map : { [x: string]: V; }
++>this._map[key + ''] : any
++>this._map : any
++>this : any
++>_map : any
+ >key + '' : string
+->key : K
++>key : any
+ >'' : ""
+ }
+ 

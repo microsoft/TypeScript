@@ -1,0 +1,26 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.types
++++ new.TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.types
+@@= skipped -21, +21 lines =@@
+ >Point : Point
+ 
+         fromCarthesian(p: A.Point) {
+->fromCarthesian : (p: A.Point) => { x: number; y: number; }
+->p : A.Point
++>fromCarthesian : (p: Point) => { x: number; y: number; }
++>p : Point
+ >A : any
+ 
+             return { x: p.x, y: p.y };
+ >{ x: p.x, y: p.y } : { x: number; y: number; }
+ >x : number
+ >p.x : number
+->p : A.Point
++>p : Point
+ >x : number
+ >y : number
+ >p.y : number
+->p : A.Point
++>p : Point
+ >y : number
+         }
+     }

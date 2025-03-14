@@ -1,0 +1,36 @@
+--- old.jsdocImportTypeReferenceToClassAlias.types
++++ new.jsdocImportTypeReferenceToClassAlias.types
+@@= skipped -8, +8 lines =@@
+ }
+ module.exports.C = C
+ >module.exports.C = C : typeof C
+->module.exports.C : typeof C
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports.C : any
++>module.exports : any
++>module : any
++>exports : any
++>C : any
+ >C : typeof C
+->C : typeof C
+ 
+ === test.js ===
+ /** @typedef {import('./mod1').C} X */
+ /** @param {X} c */
+ function demo(c) {
+->demo : (c: X) => void
+->c : import("mod1").C
++>demo : (c: any) => void
++>c : any
+ 
+     c.s
+->c.s : () => void
+->c : import("mod1").C
+->s : () => void
++>c.s : any
++>c : any
++>s : any
+ }
+ 

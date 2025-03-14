@@ -1,0 +1,36 @@
+--- old.destructureOptionalParameter.types
++++ new.destructureOptionalParameter.types
+@@= skipped -1, +1 lines =@@
+ 
+ === destructureOptionalParameter.ts ===
+ declare function f1({ a, b }?: { a: number, b: string }): void;
+->f1 : ({ a, b }?: { a: number; b: string; }) => void
++>f1 : (__0?: { a: number; b: string; } | undefined) => void
+ >a : number
+ >b : string
+ >a : number
+ >b : string
+ 
+ function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {
+->f2 : ({ a, b }?: { a: number; b: number; }) => void
++>f2 : (__0?: { a: number; b: number; }) => void
+ >a : number
+ >b : number
+ >a : number
+@@= skipped -28, +28 lines =@@
+ // Repro from #8681
+ 
+ interface Type { t: void }
++>Type : Type
+ >t : void
+ 
+ interface QueryMetadata { q: void }
++>QueryMetadata : QueryMetadata
+ >q : void
+ 
+ interface QueryMetadataFactory {
++>QueryMetadataFactory : QueryMetadataFactory
++
+     (selector: Type | string, {descendants, read}?: {
+ >selector : string | Type
+ >descendants : boolean | undefined

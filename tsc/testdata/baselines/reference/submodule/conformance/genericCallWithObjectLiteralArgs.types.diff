@@ -1,0 +1,10 @@
+--- old.genericCallWithObjectLiteralArgs.types
++++ new.genericCallWithObjectLiteralArgs.types
+@@= skipped -2, +2 lines =@@
+ === genericCallWithObjectLiteralArgs.ts ===
+ function foo<T>(x: { bar: T; baz: T }) {
+ >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
++>T : T
+ >x : { bar: T; baz: T; }
+ >bar : T
+ >baz : T

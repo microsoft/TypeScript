@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/typeReferenceDirectiveScopedPackageCustomTypeRoot.ts] ////
+
+=== /a.ts ===
+typesCache;
+>typesCache : any
+
+mangledAtTypesCache;
+>mangledAtTypesCache : number
+
+nodeModulesCache;
+>nodeModulesCache : any
+
+mangledNodeModules;
+>mangledNodeModules : any
+
+atTypesCache;
+>atTypesCache : any
+
+mangledAtTypesCache;
+>mangledAtTypesCache : number
+
+=== /node_modules/@types/mangled__attypescache/index.d.ts ===
+declare const mangledAtTypesCache: number;
+>mangledAtTypesCache : number
+

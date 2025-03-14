@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingDts1.ts] ////
+
+=== server.ts ===
+class a { }
+>a : a
+
+export default a;
+>a : a
+
+=== client.ts ===
+import defaultBinding, * as nameSpaceBinding from "server";
+>defaultBinding : any
+>nameSpaceBinding : any
+
+export var x = new defaultBinding();
+>x : any
+>new defaultBinding() : any
+>defaultBinding : any
+

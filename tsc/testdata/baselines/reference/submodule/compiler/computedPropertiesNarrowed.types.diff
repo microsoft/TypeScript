@@ -1,0 +1,68 @@
+--- old.computedPropertiesNarrowed.types
++++ new.computedPropertiesNarrowed.types
+@@= skipped -20, +20 lines =@@
+ >x : 0 | 1
+ 
+ export let o = {
+->o : { 1: number; }
+->{    [x]: 1 // error narrow type !== declared type} : { 1: number; }
++>o : { [x]: number; }
++>{    [x]: 1 // error narrow type !== declared type} : { [x]: number; }
+ 
+     [x]: 1 // error narrow type !== declared type
+ >[x] : number
+@@= skipped -15, +15 lines =@@
+ >0 : 0
+ 
+ export let o2 = {
+->o2 : { 0: number; }
+->{    [y]: 1 // ok literal computed type } : { 0: number; }
++>o2 : { [y]: number; }
++>{    [y]: 1 // ok literal computed type } : { [y]: number; }
+ 
+     [y]: 1 // ok literal computed type 
+ >[y] : number
+@@= skipped -11, +11 lines =@@
+ 
+ // literals are ok
+ export let o3 = { [1]: 1 }
+->o3 : { 1: number; }
+->{ [1]: 1 } : { 1: number; }
++>o3 : { [1]: number; }
++>{ [1]: 1 } : { [1]: number; }
+ >[1] : number
+ >1 : 1
+ >1 : 1
+@@= skipped -70, +70 lines =@@
+ >1 : 1
+ 
+ export let o7 = {
+->o7 : { 1: number; }
+->{    [foo()]: 1 // Should error} : { 1: number; }
++>o7 : { [foo()]: number; }
++>{    [foo()]: 1 // Should error} : { [foo()]: number; }
+ 
+     [foo()]: 1 // Should error
+ >[foo()] : number
+@@= skipped -19, +19 lines =@@
+ >1 : 1
+ 
+ export const o8 = {
+->o8 : { 1: number; }
+->{    [E.A]: 1 // Fresh } : { 1: number; }
++>o8 : { [E.A]: number; }
++>{    [E.A]: 1 // Fresh } : { [E.A]: number; }
+ 
+     [E.A]: 1 // Fresh 
+ >[E.A] : number
+@@= skipped -19, +19 lines =@@
+ >0 : 0
+ 
+ export const o9 = {
+->o9 : { 0: number; }
+->{    [ns().v]: 1} : { 0: number; }
++>o9 : { [ns().v]: number; }
++>{    [ns().v]: 1} : { [ns().v]: number; }
+ 
+     [ns().v]: 1
+ >[ns().v] : number

@@ -1,0 +1,49 @@
+--- old.varianceCallbacksAndIndexedAccesses.types
++++ new.varianceCallbacksAndIndexedAccesses.types
+@@= skipped -4, +4 lines =@@
+ >Source : Source
+ 
+     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
++>K : K
+ >type : K
+->listener : (this: Window, ev: WindowEventMap[K]) => any
++>listener : (ev: WindowEventMap[K]) => any
+ >this : Window
+ >ev : WindowEventMap[K]
+ >options : boolean | AddEventListenerOptions
+@@= skipped -13, +14 lines =@@
+ }
+ 
+ interface Action1<T> {
++>Action1 : Action1<T>
++>T : T
++
+     (arg: T): void;
+ >arg : T
+ }
+ interface MessageEventLike<T> {
++>MessageEventLike : MessageEventLike<T>
++>T : T
++
+     source: WindowLike<T>;
+ >source : WindowLike<T>
+ 
+@@= skipped -14, +20 lines =@@
+ >data : T
+ }
+ interface PostMessageObject<T> {
++>PostMessageObject : PostMessageObject<T>
++>T : T
++
+     postMessage(message: T, host: string): void;
+ >postMessage : (message: T, host: string) => void
+ >message : T
+ >host : string
+ }
+ interface WindowLike<T> extends PostMessageObject<T> {
++>WindowLike : WindowLike<T>
++>T : T
++
+     addEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
+ >addEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
+ >type : "message"

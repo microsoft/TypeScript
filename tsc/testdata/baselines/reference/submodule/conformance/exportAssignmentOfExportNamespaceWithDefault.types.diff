@@ -1,0 +1,24 @@
+--- old.exportAssignmentOfExportNamespaceWithDefault.types
++++ new.exportAssignmentOfExportNamespaceWithDefault.types
+@@= skipped -2, +2 lines =@@
+ === main.ts ===
+ // https://github.com/microsoft/TypeScript/issues/39149
+ import a from "a";
+->a : typeof import("b").a
++>a : typeof a
+ 
+ a();
+ >a() : void
+->a : typeof import("b").a
++>a : typeof a
+ 
+ === external.d.ts ===
+ declare module "b" {
+@@= skipped -18, +18 lines =@@
+ 
+         var _a: typeof a;
+ >_a : typeof a
+->a : typeof a
+ 
+         export { _a as default };
+ >_a : typeof a

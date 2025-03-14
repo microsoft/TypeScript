@@ -1,0 +1,19 @@
+--- old.decoratorOnImportEquals1.types
++++ new.decoratorOnImportEquals1.types
+@@= skipped -2, +2 lines =@@
+ === decoratorOnImportEquals1.ts ===
+ declare function dec<T>(target: T): T;
+ >dec : <T>(target: T) => T
++>T : T
+ >target : T
+ 
+ module M1 {
+@@= skipped -10, +11 lines =@@
+ }
+ 
+ module M2 {
++>M2 : any
++
+     @dec
+ >dec : <T>(target: T) => T
+ 

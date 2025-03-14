@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx] ////
+
+=== jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react'
+>React : any
+
+type Tab = [string, React.ReactNode]  // [tabName, tabContent]
+>Tab : Tab
+>React : any
+
+interface Props {
+>Props : Props
+
+    children: Tab[]
+>children : Tab[]
+}
+
+function TabLayout(props: Props) {
+>TabLayout : (props: Props) => any
+>props : Props
+
+    return <div/>
+><div/> : any
+>div : any
+}
+
+export class App extends React.Component<{}> {
+>App : App
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return <TabLayout>
+><TabLayout>            {[                ['Users', <div/>],                ['Products', <div/>]            ]}        </TabLayout> : any
+>TabLayout : (props: Props) => any
+
+            {[
+>[                ['Users', <div/>],                ['Products', <div/>]            ] : any[][]
+
+                ['Users', <div/>],
+>['Users', <div/>] : any[]
+>'Users' : "Users"
+><div/> : any
+>div : any
+
+                ['Products', <div/>]
+>['Products', <div/>] : any[]
+>'Products' : "Products"
+><div/> : any
+>div : any
+
+            ]}
+        </TabLayout>
+>TabLayout : (props: Props) => any
+    }
+}

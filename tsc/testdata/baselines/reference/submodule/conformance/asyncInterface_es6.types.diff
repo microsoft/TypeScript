@@ -1,0 +1,10 @@
+--- old.asyncInterface_es6.types
++++ new.asyncInterface_es6.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/async/es6/asyncInterface_es6.ts] ////
+ 
+ === asyncInterface_es6.ts ===
+-
+ async interface I {  
++>I : I
+ }

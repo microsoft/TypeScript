@@ -1,0 +1,18 @@
+--- old.recursiveTupleTypes1.types
++++ new.recursiveTupleTypes1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === recursiveTupleTypes1.ts ===
+ interface Tree1 {
++>Tree1 : Tree1
++
+     children: [Tree1, Tree2];
+ >children : [Tree1, Tree2]
+ }
+ 
+ interface Tree2 {
++>Tree2 : Tree2
++
+     children: [Tree2, Tree1];
+ >children : [Tree2, Tree1]
+ }

@@ -1,0 +1,29 @@
+--- old.unusedLocalsAndObjectSpread.types
++++ new.unusedLocalsAndObjectSpread.types
+@@= skipped -1, +1 lines =@@
+ 
+ === unusedLocalsAndObjectSpread.ts ===
+ declare var console: { log(a: any): void };
+->console : { log(a: any): void; }
++>console : { log: (a: any) => void; }
+ >log : (a: any) => void
+ >a : any
+ 
+@@= skipped -24, +24 lines =@@
+     console.log(bar);
+ >console.log(bar) : void
+ >console.log : (a: any) => void
+->console : { log(a: any): void; }
++>console : { log: (a: any) => void; }
+ >log : (a: any) => void
+ >bar : { b: number; }
+ }
+@@= skipped -26, +26 lines =@@
+     console.log(bar);
+ >console.log(bar) : void
+ >console.log : (a: any) => void
+->console : { log(a: any): void; }
++>console : { log: (a: any) => void; }
+ >log : (a: any) => void
+ >bar : { b: number; }
+ }

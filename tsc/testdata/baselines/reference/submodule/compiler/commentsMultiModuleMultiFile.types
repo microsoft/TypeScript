@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/commentsMultiModuleMultiFile.ts] ////
+
+=== commentsMultiModuleMultiFile_1.ts ===
+import m = require('commentsMultiModuleMultiFile_0');
+>m : any
+
+/** this is multi module 3 comment*/
+export module multiM {
+>multiM : typeof multiM
+
+    /** class d comment*/
+    export class d {
+>d : d
+    }
+
+    /// class f comment
+    export class f {
+>f : f
+    }
+}
+new multiM.d();
+>new multiM.d() : d
+>multiM.d : typeof d
+>multiM : typeof multiM
+>d : typeof d
+

@@ -1,0 +1,11 @@
+--- old.typeFromPropertyAssignment30.types
++++ new.typeFromPropertyAssignment30.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeFromPropertyAssignment30.ts ===
+ interface Combo {
++>Combo : Combo
++
+     (): number;
+     p?: { [s: string]: number };
+ >p : { [s: string]: number; }

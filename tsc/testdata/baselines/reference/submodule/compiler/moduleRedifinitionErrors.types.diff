@@ -1,0 +1,9 @@
+--- old.moduleRedifinitionErrors.types
++++ new.moduleRedifinitionErrors.types
+@@= skipped -4, +4 lines =@@
+ >A : A
+ }
+ module A {
++>A : typeof A
+ }
+ 

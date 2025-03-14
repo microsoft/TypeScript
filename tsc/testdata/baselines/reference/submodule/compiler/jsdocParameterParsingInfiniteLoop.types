@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/jsdocParameterParsingInfiniteLoop.ts] ////
+
+=== example.js ===
+// @ts-check
+/**
+ * @type {function(@foo)}
+ */
+let x;
+>x : any
+

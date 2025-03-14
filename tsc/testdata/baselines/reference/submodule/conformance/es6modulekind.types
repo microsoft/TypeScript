@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/externalModules/es6/es6modulekind.ts] ////
+
+=== es6modulekind.ts ===
+export default class A
+>A : default
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : () => number
+    {
+        return 42;
+>42 : 42
+    }
+}

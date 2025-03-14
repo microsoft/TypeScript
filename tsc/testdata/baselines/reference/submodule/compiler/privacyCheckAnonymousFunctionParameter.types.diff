@@ -1,0 +1,19 @@
+--- old.privacyCheckAnonymousFunctionParameter.types
++++ new.privacyCheckAnonymousFunctionParameter.types
+@@= skipped -5, +5 lines =@@
+ >1 : 1
+ 
+ interface Iterator<T> {
++>Iterator : Iterator<T>
++>T : T
+ }
+ 
+ module Query {
+@@= skipped -7, +9 lines =@@
+ 
+     export function fromDoWhile<T>(doWhile: (test: Iterator<T>) => boolean): Iterator<T> {
+ >fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
++>T : T
+ >doWhile : (test: Iterator<T>) => boolean
+ >test : Iterator<T>
+ 

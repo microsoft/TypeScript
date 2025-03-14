@@ -1,0 +1,36 @@
+--- old.controlFlowUnionContainingTypeParameter1.types
++++ new.controlFlowUnionContainingTypeParameter1.types
+@@= skipped -4, +4 lines =@@
+ 
+ class TestClass<T> {
+ >TestClass : TestClass<T>
++>T : T
+ 
+   typeguard(val: unknown): val is T {
+ >typeguard : (val: unknown) => val is T
+@@= skipped -17, +18 lines =@@
+ >v : T
+ 
+   func(val: T | number): void {
+->func : (val: T | number) => void
++>func : (val: number | T) => void
+ >val : number | T
+ 
+     if (this.typeguard(val)) {
+@@= skipped -30, +30 lines =@@
+ 
+ class TestClass2<T extends Date> {
+ >TestClass2 : TestClass2<T>
++>T : T
+ 
+   typeguard(val: unknown): val is T {
+ >typeguard : (val: unknown) => val is T
+@@= skipped -17, +18 lines =@@
+ >v : T
+ 
+   func(val: T | number): void {
+->func : (val: T | number) => void
++>func : (val: number | T) => void
+ >val : number | T
+ 
+     if (this.typeguard(val)) {

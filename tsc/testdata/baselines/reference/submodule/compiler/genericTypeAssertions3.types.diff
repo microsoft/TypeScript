@@ -1,0 +1,18 @@
+--- old.genericTypeAssertions3.types
++++ new.genericTypeAssertions3.types
+@@= skipped -3, +3 lines =@@
+ var r = < <T>(x: T) => T > ((x) => { return null; }); // bug was 'could not find dotted symbol T' on x's annotation in the type assertion instead of no error
+ >r : <T>(x: T) => T
+ >< <T>(x: T) => T > ((x) => { return null; }) : <T>(x: T) => T
++>T : T
+ >x : T
+ >((x) => { return null; }) : <T>(x: T) => any
+ >(x) => { return null; } : <T>(x: T) => any
+@@= skipped -8, +9 lines =@@
+ var s = < <T>(x: T) => T > ((x: any) => { return null; }); // no error
+ >s : <T>(x: T) => T
+ >< <T>(x: T) => T > ((x: any) => { return null; }) : <T>(x: T) => T
++>T : T
+ >x : T
+ >((x: any) => { return null; }) : (x: any) => any
+ >(x: any) => { return null; } : (x: any) => any

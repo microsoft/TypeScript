@@ -1,0 +1,26 @@
+--- old.ambientModuleWithTemplateLiterals.types
++++ new.ambientModuleWithTemplateLiterals.types
+@@= skipped -57, +57 lines =@@
+ >b : "template"
+ 
+ Foo.c;
+->Foo.c : Foo.Bar.a
++>Foo.c : Bar.a
+ >Foo : typeof Foo
+->c : Foo.Bar.a
++>c : Bar.a
+ 
+ Foo.d;
+->Foo.d : Foo.Bar.b
++>Foo.d : Bar.b
+ >Foo : typeof Foo
+->d : Foo.Bar.b
++>d : Bar.b
+ 
+ Foo.e;
+->Foo.e : Foo.Bar.c
++>Foo.e : Bar.c
+ >Foo : typeof Foo
+->e : Foo.Bar.c
++>e : Bar.c
+ 

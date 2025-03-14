@@ -1,0 +1,13 @@
+--- old.doubleUnderscoreReactNamespace.types
++++ new.doubleUnderscoreReactNamespace.types
+@@= skipped -12, +12 lines =@@
+ >__foot : any
+ 
+ const thing = <__foot />;
+->thing : error
+-><__foot /> : error
++>thing : any
++><__foot /> : any
+ >__foot : any
+ 
+ export {}

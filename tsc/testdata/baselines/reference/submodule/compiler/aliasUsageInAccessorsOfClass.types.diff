@@ -1,0 +1,56 @@
+--- old.aliasUsageInAccessorsOfClass.types
++++ new.aliasUsageInAccessorsOfClass.types
+@@= skipped -1, +1 lines =@@
+ 
+ === aliasUsage1_main.ts ===
+ import Backbone = require("./aliasUsage1_backbone");
+->Backbone : typeof Backbone
++>Backbone : typeof import("aliasUsage1_backbone")
+ 
+ import moduleA = require("./aliasUsage1_moduleA");
+->moduleA : typeof moduleA
++>moduleA : typeof import("aliasUsage1_moduleA")
+ 
+ interface IHasVisualizationModel {
++>IHasVisualizationModel : IHasVisualizationModel
++
+     VisualizationModel: typeof Backbone.Model;
+->VisualizationModel : typeof Backbone.Model
+->Backbone.Model : typeof Backbone.Model
+->Backbone : typeof Backbone
+->Model : typeof Backbone.Model
++>VisualizationModel : typeof Model
++>Backbone : typeof import("aliasUsage1_backbone")
+ }
+ class C2 {
+ >C2 : C2
+@@= skipped -31, +31 lines =@@
+ >x : IHasVisualizationModel
+ 
+         x = moduleA;
+->x = moduleA : typeof moduleA
++>x = moduleA : typeof import("aliasUsage1_moduleA")
+ >x : IHasVisualizationModel
+->moduleA : typeof moduleA
++>moduleA : typeof import("aliasUsage1_moduleA")
+     }
+ }
+ === aliasUsage1_backbone.ts ===
+@@= skipped -15, +15 lines =@@
+ 
+ === aliasUsage1_moduleA.ts ===
+ import Backbone = require("./aliasUsage1_backbone");
+->Backbone : typeof Backbone
++>Backbone : typeof import("aliasUsage1_backbone")
+ 
+ export class VisualizationModel extends Backbone.Model {
+ >VisualizationModel : VisualizationModel
+->Backbone.Model : Backbone.Model
+->Backbone : typeof Backbone
+->Model : typeof Backbone.Model
++>Backbone.Model : Model
++>Backbone : typeof import("aliasUsage1_backbone")
++>Model : typeof Model
+ 
+     // interesting stuff here
+ }

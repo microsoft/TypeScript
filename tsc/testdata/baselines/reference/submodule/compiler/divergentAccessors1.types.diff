@@ -1,0 +1,44 @@
+--- old.divergentAccessors1.types
++++ new.divergentAccessors1.types
+@@= skipped -4, +4 lines =@@
+ 
+ {
+     interface IHasGetSet {
++>IHasGetSet : IHasGetSet
++
+         get foo(): number;
+ >foo : number
+ 
+@@= skipped -28, +30 lines =@@
+ 
+ {
+     type T_HasGetSet = {
+->T_HasGetSet : { get foo(): number; set foo(v: number | string); }
++>T_HasGetSet : T_HasGetSet
+ 
+         get foo(): number;
+ >foo : number
+@@= skipped -11, +11 lines =@@
+     }
+     
+     const t_hgs: T_HasGetSet = null as any;
+->t_hgs : { get foo(): number; set foo(v: number | string); }
++>t_hgs : T_HasGetSet
+ >null as any : any
+ 
+     t_hgs.foo = "32";
+ >t_hgs.foo = "32" : "32"
+ >t_hgs.foo : string | number
+->t_hgs : { get foo(): number; set foo(v: number | string); }
++>t_hgs : T_HasGetSet
+ >foo : string | number
+ >"32" : "32"
+ 
+     let r_t_hgs_foo: number = t_hgs.foo;
+ >r_t_hgs_foo : number
+ >t_hgs.foo : number
+->t_hgs : { get foo(): number; set foo(v: number | string); }
++>t_hgs : T_HasGetSet
+ >foo : number
+ }
+ 

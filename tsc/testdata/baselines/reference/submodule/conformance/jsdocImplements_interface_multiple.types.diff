@@ -1,0 +1,17 @@
+--- old.jsdocImplements_interface_multiple.types
++++ new.jsdocImplements_interface_multiple.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /defs.d.ts ===
+ interface Drawable {
++>Drawable : Drawable
++
+     draw(): number;
+ >draw : () => number
+ }
+ interface Sizable {
++>Sizable : Sizable
++
+     size(): number;
+ >size : () => number
+ }

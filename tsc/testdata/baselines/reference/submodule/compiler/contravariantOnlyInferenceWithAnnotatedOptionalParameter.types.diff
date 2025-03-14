@@ -1,0 +1,28 @@
+--- old.contravariantOnlyInferenceWithAnnotatedOptionalParameter.types
++++ new.contravariantOnlyInferenceWithAnnotatedOptionalParameter.types
+@@= skipped -4, +4 lines =@@
+ 
+ declare function filter<T>(predicate: (value: T, index: number) => boolean): T;
+ >filter : <T>(predicate: (value: T, index: number) => boolean) => T
++>T : T
+ >predicate : (value: T, index: number) => boolean
+ >value : T
+ >index : number
+@@= skipped -8, +9 lines =@@
+ >a : number | undefined
+ >filter((pose?: number) => true) : number | undefined
+ >filter : <T>(predicate: (value: T, index: number) => boolean) => T
+->(pose?: number) => true : (pose?: number) => true
++>(pose?: number) => true : (pose?: number | undefined) => true
+ >pose : number | undefined
+ >true : true
+ 
+@@= skipped -8, +8 lines =@@
+ >b : number | undefined
+ >filter((pose?: number, _?: number) => true) : number | undefined
+ >filter : <T>(predicate: (value: T, index: number) => boolean) => T
+->(pose?: number, _?: number) => true : (pose?: number, _?: number) => true
++>(pose?: number, _?: number) => true : (pose?: number | undefined, _?: number | undefined) => true
+ >pose : number | undefined
+ >_ : number | undefined
+ >true : true

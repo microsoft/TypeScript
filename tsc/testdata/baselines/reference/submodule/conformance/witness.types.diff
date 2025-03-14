@@ -1,0 +1,50 @@
+--- old.witness.types
++++ new.witness.types
+@@= skipped -56, +56 lines =@@
+ >fnReturn1 : () => never
+ 
+ function fnReturn2() {
+->fnReturn2 : () => typeof fnReturn2
++>fnReturn2 : () => ???
+ 
+     return fnReturn2;
+->fnReturn2 : () => typeof fnReturn2
++>fnReturn2 : () => ???
+ }
+ var fnr2: () => any = fnReturn2();
+ >fnr2 : () => any
+->fnReturn2() : () => typeof fnReturn2
+->fnReturn2 : () => typeof fnReturn2
++>fnReturn2() : () => ???
++>fnReturn2 : () => ???
+ 
+ // Comma
+ var co1 = (co1, 3);
+@@= skipped -168, +168 lines =@@
+ 
+ // Call argument
+ function fnArg1(x: typeof fnArg1, y: number) {
+->fnArg1 : (x: typeof fnArg1, y: number) => void
+->x : (x: typeof fnArg1, y: number) => void
+->fnArg1 : (x: typeof fnArg1, y: number) => void
++>fnArg1 : (x: ???, y: number) => void
++>x : (x: ???, y: number) => void
+ >y : number
+ 
+     var x: (n: typeof fnArg1, m: number) => void;
+->x : (x: typeof fnArg1, y: number) => void
+->n : (x: typeof fnArg1, y: number) => void
+->fnArg1 : (x: typeof fnArg1, y: number) => void
++>x : (x: ???, y: number) => void
++>n : (x: ???, y: number) => void
+ >m : number
+ 
+     fnArg1(fnArg1, 0);
+ >fnArg1(fnArg1, 0) : void
+->fnArg1 : (x: typeof fnArg1, y: number) => void
+->fnArg1 : (x: typeof fnArg1, y: number) => void
++>fnArg1 : (x: ???, y: number) => void
++>fnArg1 : (x: ???, y: number) => void
+ >0 : 0
+ }
+ 

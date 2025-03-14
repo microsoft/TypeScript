@@ -1,0 +1,16 @@
+--- old.restParamAsOptional.types
++++ new.restParamAsOptional.types
+@@= skipped -1, +1 lines =@@
+ 
+ === restParamAsOptional.ts ===
+ function f(...x?) { }
+->f : (...x?: any[]) => void
++>f : (...x: any[]) => void
+ >x : any[]
+ 
+ function f2(...x = []) { }
+->f2 : (...x?: any[]) => void
++>f2 : (...x: any[]) => void
+ >x : any[]
+ >[] : undefined[]
+ 

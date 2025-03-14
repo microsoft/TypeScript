@@ -1,0 +1,20 @@
+--- old.nonObjectUnionNestedExcessPropertyCheck.types
++++ new.nonObjectUnionNestedExcessPropertyCheck.types
+@@= skipped -1, +1 lines =@@
+ 
+ === nonObjectUnionNestedExcessPropertyCheck.ts ===
+ interface IProps {
++>IProps : IProps
++
+     iconProp?: string;
+ >iconProp : string
+ 
+@@= skipped -12, +14 lines =@@
+ }
+ 
+ interface INestedProps {
++>INestedProps : INestedProps
++
+     nestedProps?: IProps;
+ >nestedProps : IProps
+ }

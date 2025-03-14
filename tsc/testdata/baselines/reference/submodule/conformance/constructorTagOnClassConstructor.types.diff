@@ -1,0 +1,13 @@
+--- old.constructorTagOnClassConstructor.types
++++ new.constructorTagOnClassConstructor.types
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ const arr = [Alpha, Beta];
+->arr : (typeof Alpha)[]
+->[Alpha, Beta] : (typeof Alpha)[]
++>arr : typeof Alpha[]
++>[Alpha, Beta] : typeof Alpha[]
+ >Alpha : typeof Alpha
+ >Beta : typeof Beta
+ 

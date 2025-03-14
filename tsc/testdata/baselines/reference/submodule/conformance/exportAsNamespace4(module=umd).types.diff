@@ -1,0 +1,46 @@
+--- old.exportAsNamespace4(module=umd).types
++++ new.exportAsNamespace4(module=umd).types
+@@= skipped -14, +14 lines =@@
+ 
+ === 11.ts ===
+ import * as ns from './0';
+->ns : typeof ns
++>ns : typeof import("0")
+ 
+ export default ns;
+->ns : typeof ns
++>ns : typeof import("0")
+ 
+ === 2.ts ===
+ import foo from './1'
+->foo : typeof foo
++>foo : typeof import("0")
+ 
+ import foo1 from './11'
+->foo1 : typeof foo
++>foo1 : typeof import("0")
+ 
+ foo.a;
+ >foo.a : 1
+->foo : typeof foo
++>foo : typeof import("0")
+ >a : 1
+ 
+ foo1.a;
+ >foo1.a : 1
+->foo1 : typeof foo
++>foo1 : typeof import("0")
+ >a : 1
+ 
+ foo.b;
+ >foo.b : 2
+->foo : typeof foo
++>foo : typeof import("0")
+ >b : 2
+ 
+ foo1.b;
+ >foo1.b : 2
+->foo1 : typeof foo
++>foo1 : typeof import("0")
+ >b : 2
+ 

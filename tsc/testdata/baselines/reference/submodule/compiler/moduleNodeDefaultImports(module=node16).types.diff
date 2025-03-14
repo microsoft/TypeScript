@@ -1,0 +1,197 @@
+--- old.moduleNodeDefaultImports(module=node16).types
++++ new.moduleNodeDefaultImports(module=node16).types
+@@= skipped -8, +8 lines =@@
+ 
+ === b.mts ===
+ import a from "./mod.cjs";
+->a : typeof a
++>a : () => void
+ 
+ import { default as b } from "./mod.cjs";
+->default : typeof a
+->b : typeof a
++>default : () => void
++>b : () => void
+ 
+ import c, { default as d } from "./mod.cjs";
+->c : typeof a
+->default : typeof a
+->d : typeof a
++>c : () => void
++>default : () => void
++>d : () => void
+ 
+ import * as self from "./b.mjs";
+->self : typeof self
++>self : typeof import("b")
+ 
+ export { default } from "./mod.cjs";
+->default : typeof a
++>default : () => void
+ 
+ export { default as def } from "./mod.cjs";
+->default : typeof a
+->def : typeof a
++>default : () => void
++>def : () => void
+ 
+ a === b;
+ >a === b : boolean
+->a : typeof a
+->b : typeof a
++>a : () => void
++>b : () => void
+ 
+ b === c;
+ >b === c : boolean
+->b : typeof a
+->c : typeof a
++>b : () => void
++>c : () => void
+ 
+ c === d;
+ >c === d : boolean
+->c : typeof a
+->d : typeof a
++>c : () => void
++>d : () => void
+ 
+ d === self.default;
+ >d === self.default : boolean
+->d : typeof a
+->self.default : typeof a
+->self : typeof self
+->default : typeof a
++>d : () => void
++>self.default : () => void
++>self : typeof import("b")
++>default : () => void
+ 
+ self.default === self.def;
+ >self.default === self.def : boolean
+->self.default : typeof a
+->self : typeof self
+->default : typeof a
+->self.def : typeof a
+->self : typeof self
+->def : typeof a
++>self.default : () => void
++>self : typeof import("b")
++>default : () => void
++>self.def : () => void
++>self : typeof import("b")
++>def : () => void
+ 
+ // should all fail
+ a();
+->a() : any
+->a : typeof a
++>a() : void
++>a : () => void
+ 
+ b();
+->b() : any
+->b : typeof a
++>b() : void
++>b : () => void
+ 
+ c();
+->c() : any
+->c : typeof a
++>c() : void
++>c : () => void
+ 
+ d();
+->d() : any
+->d : typeof a
++>d() : void
++>d : () => void
+ 
+ self.default();
+->self.default() : any
+->self.default : typeof a
+->self : typeof self
+->default : typeof a
++>self.default() : void
++>self.default : () => void
++>self : typeof import("b")
++>default : () => void
+ 
+ self.def();
+->self.def() : any
+->self.def : typeof a
+->self : typeof self
+->def : typeof a
++>self.def() : void
++>self.def : () => void
++>self : typeof import("b")
++>def : () => void
+ 
+ // should all work
+ a.default();
+->a.default() : void
+->a.default : () => void
+->a : typeof a
+->default : () => void
++>a.default() : any
++>a.default : any
++>a : () => void
++>default : any
+ 
+ b.default();
+->b.default() : void
+->b.default : () => void
+->b : typeof a
+->default : () => void
++>b.default() : any
++>b.default : any
++>b : () => void
++>default : any
+ 
+ c.default();
+->c.default() : void
+->c.default : () => void
+->c : typeof a
+->default : () => void
++>c.default() : any
++>c.default : any
++>c : () => void
++>default : any
+ 
+ d.default();
+->d.default() : void
+->d.default : () => void
+->d : typeof a
+->default : () => void
++>d.default() : any
++>d.default : any
++>d : () => void
++>default : any
+ 
+ self.default.default();
+->self.default.default() : void
+->self.default.default : () => void
+->self.default : typeof a
+->self : typeof self
+->default : typeof a
++>self.default.default() : any
++>self.default.default : any
++>self.default : () => void
++>self : typeof import("b")
+ >default : () => void
++>default : any
+ 
+ self.def.default();
+->self.def.default() : void
+->self.def.default : () => void
+->self.def : typeof a
+->self : typeof self
+->def : typeof a
+->default : () => void
++>self.def.default() : any
++>self.def.default : any
++>self.def : () => void
++>self : typeof import("b")
++>def : () => void
++>default : any
+ 

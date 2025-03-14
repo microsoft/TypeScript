@@ -1,0 +1,11 @@
+--- old.declFileEnums.types
++++ new.declFileEnums.types
+@@= skipped -84, +84 lines =@@
+ >"Sunday" : e5.Sunday
+ 
+     "Weekend days"
+->"Weekend days" : (typeof e5)["Weekend days"]
++>"Weekend days" : e5."Weekend days"
+ }
+ 
+ 

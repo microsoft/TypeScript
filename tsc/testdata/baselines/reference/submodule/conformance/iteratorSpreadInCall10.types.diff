@@ -1,0 +1,10 @@
+--- old.iteratorSpreadInCall10.types
++++ new.iteratorSpreadInCall10.types
+@@= skipped -2, +2 lines =@@
+ === iteratorSpreadInCall10.ts ===
+ function foo<T>(s: T[]) { return s[0] }
+ >foo : <T>(s: T[]) => T
++>T : T
+ >s : T[]
+ >s[0] : T
+ >s : T[]

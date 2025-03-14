@@ -1,0 +1,109 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution12.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+const obj = {};
+>obj : {}
+>{} : {}
+
+const obj1: {x: 2} = {
+>obj1 : { x: 2; }
+>x : 2
+>{    x: 2} : { x: 2; }
+
+    x: 2
+>x : 2
+>2 : 2
+}
+const obj3: {y: false, overwrite: string} = {
+>obj3 : { y: false; overwrite: string; }
+>y : false
+>false : false
+>overwrite : string
+>{    y: false,    overwrite: "hi"} : { y: false; overwrite: string; }
+
+    y: false,
+>y : false
+>false : false
+
+    overwrite: "hi"
+>overwrite : string
+>"hi" : "hi"
+}
+
+interface Prop {
+>Prop : Prop
+
+    x: 2
+>x : 2
+
+    y: false
+>y : false
+>false : false
+
+    overwrite: string
+>overwrite : string
+}
+
+class OverWriteAttr extends React.Component<Prop, {}> {
+>OverWriteAttr : OverWriteAttr
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return <div>Hello</div>;
+><div>Hello</div> : any
+>div : any
+>div : any
+    }
+}
+
+let anyobj: any;
+>anyobj : any
+
+// Error
+let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
+>x : any
+><OverWriteAttr {...obj} y overwrite="hi" {...obj1} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>obj : {}
+>y : any
+>overwrite : any
+>obj1 : { x: 2; }
+
+let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
+>x1 : any
+><OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>overwrite : any
+>obj1 : { x: 2; }
+>x : any
+>3 : 3
+>{y: true} : { y: boolean; }
+>y : boolean
+>true : true
+
+let x2 = <OverWriteAttr {...anyobj} x={3} />
+>x2 : any
+><OverWriteAttr {...anyobj} x={3} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>anyobj : any
+>x : any
+>3 : 3
+
+let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
+>x3 : any
+><OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>overwrite : any
+>obj1 : { x: 2; }
+>{y: true} : { y: boolean; }
+>y : boolean
+>true : true
+
+

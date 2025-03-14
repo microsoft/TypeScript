@@ -1,0 +1,64 @@
+--- old.multipleDeclarations.types
++++ new.multipleDeclarations.types
+@@= skipped -1, +1 lines =@@
+ 
+ === input.js ===
+ function C() {
+->C : typeof C
++>C : () => void
+ 
+     this.m = null;
+ >this.m = null : null
+ >this.m : any
+->this : this
++>this : any
+ >m : any
+ }
+ C.prototype.m = function() {
+ >C.prototype.m = function() {    this.nothing();} : () => void
+ >C.prototype.m : any
+ >C.prototype : any
+->C : typeof C
++>C : () => void
+ >prototype : any
+ >m : any
+ >function() {    this.nothing();} : () => void
+ 
+     this.nothing();
+->this.nothing() : error
+->this.nothing : error
+->this : this
++>this.nothing() : any
++>this.nothing : any
++>this : any
+ >nothing : any
+ }
+ class X {
+@@= skipped -33, +33 lines =@@
+ >this : this
+ >m : () => void
+ >this.m.bind(this) : any
+->this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
++>this.m.bind : (thisArg: any, ...argArray: any[]) => any
+ >this.m : () => void
+ >this : this
+ >m : () => void
+->bind : (this: Function, thisArg: any, ...argArray: any[]) => any
++>bind : (thisArg: any, ...argArray: any[]) => any
+ >this : this
+ 
+         this.mistake = 'frankly, complete nonsense';
+@@= skipped -62, +62 lines =@@
+ >this : this
+ >m : () => void
+ >this.m.bind(this) : any
+->this.m.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
++>this.m.bind : (thisArg: any, ...argArray: any[]) => any
+ >this.m : () => void
+ >this : this
+ >m : () => void
+->bind : (this: Function, thisArg: any, ...argArray: any[]) => any
++>bind : (thisArg: any, ...argArray: any[]) => any
+ >this : this
+ 
+         this.mistake = 'even more nonsense';

@@ -1,0 +1,32 @@
+--- old.multiImportExport.types
++++ new.multiImportExport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === consumer.ts ===
+ import Drawing = require('./Drawing');
+->Drawing : typeof Drawing
++>Drawing : typeof import("Drawing")
+ 
+ var addr = new Drawing.Math.Adder();
+->addr : import("Math/Adder")
+->new Drawing.Math.Adder() : import("Math/Adder")
+->Drawing.Math.Adder : typeof import("Math/Adder")
+->Drawing.Math : { Adder: typeof import("Math/Adder"); }
+->Drawing : typeof Drawing
+->Math : { Adder: typeof import("Math/Adder"); }
+->Adder : typeof import("Math/Adder")
++>addr : Adder
++>new Drawing.Math.Adder() : Adder
++>Drawing.Math.Adder : typeof Adder
++>Drawing.Math : { Adder: typeof Adder; }
++>Drawing : typeof import("Drawing")
++>Math : { Adder: typeof Adder; }
++>Adder : typeof Adder
+ 
+ === Drawing.ts ===
+ export import Math = require('./Math/Math')
+->Math : { Adder: typeof import("Math/Adder"); }
++>Math : { Adder: typeof Adder; }
+ 
+ === Math/Math.ts ===
+ import Adder = require('./Adder');

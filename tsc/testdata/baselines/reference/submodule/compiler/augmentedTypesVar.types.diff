@@ -1,0 +1,19 @@
+--- old.augmentedTypesVar.types
++++ new.augmentedTypesVar.types
+@@= skipped -47, +47 lines =@@
+ >1 : 1
+ 
+ enum x5 { One } // error
+->x5 : x5
++>x5 : x5.One
+ >One : x5.One
+ 
+ // var then module
+@@= skipped -9, +9 lines =@@
+ >1 : 1
+ 
+ module x6 { } // ok since non-instantiated
++>x6 : number
+ 
+ var x6a = 1; // error
+ >x6a : number

@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/reactJsxReactResolvedNodeNextEsm.tsx] ////
+
+=== file.tsx ===
+export const a = <div></div>;
+>a : any
+><div></div> : any
+>div : any
+>div : any
+
+=== node_modules/@types/react/index.d.ts ===
+declare namespace JSX {
+>JSX : any
+
+    interface IntrinsicElements { [x: string]: any; }
+>IntrinsicElements : IntrinsicElements
+>x : string
+}
+=== node_modules/@types/react/jsx-runtime.d.ts ===
+
+import './';
+=== node_modules/@types/react/jsx-dev-runtime.d.ts ===
+
+import './';
+

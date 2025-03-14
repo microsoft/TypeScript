@@ -1,0 +1,11 @@
+--- old.parameterInitializersForwardReferencing1.types
++++ new.parameterInitializersForwardReferencing1.types
+@@= skipped -74, +74 lines =@@
+ }
+ 
+ function f7({[foo]: bar}: any[]) {
+->f7 : ({ [foo]: bar }: any[]) => void
++>f7 : (__0: any[]) => void
+ >foo : number
+ >bar : any
+ 

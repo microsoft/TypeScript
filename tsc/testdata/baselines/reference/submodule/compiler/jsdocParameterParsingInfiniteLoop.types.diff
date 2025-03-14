@@ -1,0 +1,9 @@
+--- old.jsdocParameterParsingInfiniteLoop.types
++++ new.jsdocParameterParsingInfiniteLoop.types
+@@= skipped -5, +5 lines =@@
+  * @type {function(@foo)}
+  */
+ let x;
+->x : (arg0: any, arg1: foo) => any
++>x : any
+ 

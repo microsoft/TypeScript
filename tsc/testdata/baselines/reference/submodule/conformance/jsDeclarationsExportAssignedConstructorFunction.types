@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunction.ts] ////
+
+=== jsDeclarationsExportAssignedConstructorFunction.js ===
+/** @constructor */
+module.exports.MyClass = function() {
+>module.exports.MyClass = function() {    this.x = 1} : () => void
+>module.exports.MyClass : any
+>module.exports : any
+>module : any
+>exports : any
+>MyClass : any
+>function() {    this.x = 1} : () => void
+
+    this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : any
+>x : any
+>1 : 1
+}
+module.exports.MyClass.prototype = {
+>module.exports.MyClass.prototype = {    a: function() {    }} : { a: () => void; }
+>module.exports.MyClass.prototype : any
+>module.exports.MyClass : any
+>module.exports : any
+>module : any
+>exports : any
+>MyClass : any
+>prototype : any
+>{    a: function() {    }} : { a: () => void; }
+
+    a: function() {
+>a : () => void
+>function() {    } : () => void
+    }
+}
+

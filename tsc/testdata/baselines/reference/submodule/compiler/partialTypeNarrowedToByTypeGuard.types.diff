@@ -1,0 +1,20 @@
+--- old.partialTypeNarrowedToByTypeGuard.types
++++ new.partialTypeNarrowedToByTypeGuard.types
+@@= skipped -23, +23 lines =@@
+ // };
+ 
+ function isUser(obj: Obj): obj is PartialUser {
+->isUser : (obj: Obj) => obj is PartialUser
++>isUser : (obj: Obj) => obj is Partial<User>
+ >obj : Obj
+ 
+     return true;
+@@= skipped -13, +13 lines =@@
+ 
+     if (isUser(obj)) {
+ >isUser(obj) : boolean
+->isUser : (obj: Obj) => obj is PartialUser
++>isUser : (obj: Obj) => obj is Partial<User>
+ >obj : Obj
+ 
+         return obj.name;

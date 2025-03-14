@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingAmd.ts] ////
+
+=== es6ImportDefaultBindingAmd_0.ts ===
+var a = 10;
+>a : number
+>10 : 10
+
+export default a;
+>a : number
+
+=== es6ImportDefaultBindingAmd_1.ts ===
+import defaultBinding from "es6ImportDefaultBindingAmd_0";
+>defaultBinding : any
+
+var x = defaultBinding;
+>x : any
+>defaultBinding : any
+
+import defaultBinding2 from "es6ImportDefaultBindingAmd_0"; // elide this import since defaultBinding2 is not used
+>defaultBinding2 : any
+

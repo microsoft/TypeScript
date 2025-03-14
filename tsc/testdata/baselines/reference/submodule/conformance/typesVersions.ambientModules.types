@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/moduleResolution/typesVersions.ambientModules.ts] ////
+
+=== main.ts ===
+import { a } from "ext";
+>a : "default a"
+
+import { b } from "ext/other";
+>b : "default b"
+
+const aa: "ts3.1 a" = a;
+>aa : "ts3.1 a"
+>a : "default a"
+
+const bb: "ts3.1 b" = b;
+>bb : "ts3.1 b"
+>b : "default b"
+
+=== node_modules/ext/index.d.ts ===
+declare module "ext" {
+>"ext" : typeof import("ext")
+
+    export const a = "default a";
+>a : "default a"
+>"default a" : "default a"
+}
+declare module "ext/other" {
+>"ext/other" : typeof import("ext/other")
+
+    export const b = "default b";
+>b : "default b"
+>"default b" : "default b"
+}
+

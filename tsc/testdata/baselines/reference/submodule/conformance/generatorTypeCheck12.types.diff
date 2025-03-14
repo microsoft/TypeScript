@@ -1,0 +1,11 @@
+--- old.generatorTypeCheck12.types
++++ new.generatorTypeCheck12.types
+@@= skipped -1, +1 lines =@@
+ 
+ === generatorTypeCheck12.ts ===
+ function* g(): IterableIterator<number, string> {
+->g : () => IterableIterator<number, string>
++>g : () => IterableIterator<number, string, any>
+ 
+     return "";
+ >"" : ""

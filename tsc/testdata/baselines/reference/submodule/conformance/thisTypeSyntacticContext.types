@@ -1,0 +1,71 @@
+//// [tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts] ////
+
+=== thisTypeSyntacticContext.ts ===
+function f(this: { n: number }) {
+>f : () => void
+>this : { n: number; }
+>n : number
+}
+
+const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
+>o : { n: number; test?: () => void; }
+>n : number
+>test : () => void
+>this : { n: number; }
+>n : number
+>{ n: 1 } : { n: number; }
+>n : number
+>1 : 1
+
+o.test = f
+>o.test = f : () => void
+>o.test : () => void
+>o : { n: number; test?: () => void; }
+>test : () => void
+>f : () => void
+
+o.test();
+>o.test() : void
+>o.test : () => void
+>o : { n: number; test?: () => void; }
+>test : () => void
+
+o!.test();
+>o!.test() : void
+>o!.test : () => void
+>o! : { n: number; test?: () => void; }
+>o : { n: number; test?: () => void; }
+>test : () => void
+
+o.test!();
+>o.test!() : void
+>o.test! : () => void
+>o.test : () => void
+>o : { n: number; test?: () => void; }
+>test : () => void
+
+o.test!!!();
+>o.test!!!() : void
+>o.test!!! : () => void
+>o.test!! : () => void
+>o.test! : () => void
+>o.test : () => void
+>o : { n: number; test?: () => void; }
+>test : () => void
+
+(o.test!)();
+>(o.test!)() : void
+>(o.test!) : () => void
+>o.test! : () => void
+>o.test : () => void
+>o : { n: number; test?: () => void; }
+>test : () => void
+
+(o.test)();
+>(o.test)() : void
+>(o.test) : () => void
+>o.test : () => void
+>o : { n: number; test?: () => void; }
+>test : () => void
+
+

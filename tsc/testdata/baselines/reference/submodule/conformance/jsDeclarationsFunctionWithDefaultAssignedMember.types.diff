@@ -1,0 +1,45 @@
+--- old.jsDeclarationsFunctionWithDefaultAssignedMember.types
++++ new.jsDeclarationsFunctionWithDefaultAssignedMember.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.js ===
+ function foo() {}
+->foo : typeof foo
++>foo : { (): void; foo: ???; default: ???; }
+ 
+ foo.foo = foo;
+->foo.foo = foo : typeof foo
+->foo.foo : typeof foo
+->foo : typeof foo
+->foo : typeof foo
+->foo : typeof foo
++>foo.foo = foo : { (): void; foo: ???; default: ???; }
++>foo.foo : { (): void; foo: ???; default: ???; }
++>foo : { (): void; foo: ???; default: ???; }
++>foo : { (): void; foo: ???; default: ???; }
++>foo : { (): void; foo: ???; default: ???; }
+ 
+ foo.default = foo;
+->foo.default = foo : typeof foo
+->foo.default : typeof foo
+->foo : typeof foo
+->default : typeof foo
+->foo : typeof foo
++>foo.default = foo : { (): void; foo: ???; default: ???; }
++>foo.default : { (): void; foo: ???; default: ???; }
++>foo : { (): void; foo: ???; default: ???; }
++>default : { (): void; foo: ???; default: ???; }
++>foo : { (): void; foo: ???; default: ???; }
+ 
+ module.exports = foo;
+->module.exports = foo : typeof foo
+->module.exports : typeof foo
+->module : { exports: typeof foo; }
+->exports : typeof foo
+->foo : typeof foo
++>module.exports = foo : { (): void; foo: ???; default: ???; }
++>module.exports : any
++>module : any
++>exports : any
++>foo : { (): void; foo: ???; default: ???; }
+ 

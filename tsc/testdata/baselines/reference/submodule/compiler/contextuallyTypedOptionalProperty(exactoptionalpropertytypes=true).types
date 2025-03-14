@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/contextuallyTypedOptionalProperty.ts] ////
+
+=== contextuallyTypedOptionalProperty.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/55164
+
+declare function match<T>(cb: (value: T) => boolean): T;
+>match : <T>(cb: (value: T) => boolean) => T
+>T : T
+>cb : (value: T) => boolean
+>value : T
+
+declare function foo(pos: { x?: number; y?: number }): boolean;
+>foo : (pos: { x?: number | undefined; y?: number | undefined; }) => boolean
+>pos : { x?: number | undefined; y?: number | undefined; }
+>x : number | undefined
+>y : number | undefined
+
+foo({ y: match(y => y > 0) })
+>foo({ y: match(y => y > 0) }) : boolean
+>foo : (pos: { x?: number | undefined; y?: number | undefined; }) => boolean
+>{ y: match(y => y > 0) } : { y: number; }
+>y : number
+>match(y => y > 0) : number
+>match : <T>(cb: (value: T) => boolean) => T
+>y => y > 0 : (y: number) => boolean
+>y : number
+>y > 0 : boolean
+>y : number
+>0 : 0
+
+declare function foo2(point: [number?]): boolean;
+>foo2 : (point: [(number | undefined)?]) => boolean
+>point : [(number | undefined)?]
+
+foo2([match(y => y > 0)])
+>foo2([match(y => y > 0)]) : boolean
+>foo2 : (point: [(number | undefined)?]) => boolean
+>[match(y => y > 0)] : [number]
+>match(y => y > 0) : number
+>match : <T>(cb: (value: T) => boolean) => T
+>y => y > 0 : (y: number) => boolean
+>y : number
+>y > 0 : boolean
+>y : number
+>0 : 0
+

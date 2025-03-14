@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/externalModules/umd6.ts] ////
+
+=== a.ts ===
+/// <reference path="foo.d.ts" />
+let y: number = Foo.fn();
+>y : number
+>Foo.fn() : number
+>Foo.fn : () => number
+>Foo : typeof Thing
+>fn : () => number
+
+=== foo.d.ts ===
+declare namespace Thing {
+>Thing : typeof Thing
+
+	export function fn(): number;
+>fn : () => number
+}
+export = Thing;
+>Thing : typeof Thing
+
+export as namespace Foo;
+>Foo : typeof Thing
+

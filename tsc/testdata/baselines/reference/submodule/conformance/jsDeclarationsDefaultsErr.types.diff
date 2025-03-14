@@ -1,0 +1,11 @@
+--- old.jsDeclarationsDefaultsErr.types
++++ new.jsDeclarationsDefaultsErr.types
+@@= skipped -22, +22 lines =@@
+ === index2.js ===
+ // merge type alias and class (error message improvement needed, see #32368)
+ export default class C {};
+->C : C
++>C : default
+ 
+ /**
+  * @typedef {string | number} default

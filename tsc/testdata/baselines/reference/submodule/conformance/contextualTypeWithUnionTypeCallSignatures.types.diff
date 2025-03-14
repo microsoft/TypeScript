@@ -1,0 +1,44 @@
+--- old.contextualTypeWithUnionTypeCallSignatures.types
++++ new.contextualTypeWithUnionTypeCallSignatures.types
+@@= skipped -8, +8 lines =@@
+ // U has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in S.
+ 
+ interface IWithNoCallSignatures {
++>IWithNoCallSignatures : IWithNoCallSignatures
++
+     foo: string;
+ >foo : string
+ }
+ interface IWithCallSignatures {
++>IWithCallSignatures : IWithCallSignatures
++
+     (a: number): string;
+ >a : number
+ }
+ interface IWithCallSignatures2 {
++>IWithCallSignatures2 : IWithCallSignatures2
++
+     (a: number): number;
+ >a : number
+ }
+ interface IWithCallSignatures3 {
++>IWithCallSignatures3 : IWithCallSignatures3
++
+     (b: string): number;
+ >b : string
+ }
+ interface IWithCallSignatures4 {
++>IWithCallSignatures4 : IWithCallSignatures4
++
+     (a: number): string;
+ >a : number
+ 
+@@= skipped -26, +36 lines =@@
+ 
+ // With no call signature | callSignatures
+ var x: IWithNoCallSignatures | IWithCallSignatures = a => a.toString();
+->x : IWithNoCallSignatures | IWithCallSignatures
++>x : IWithCallSignatures | IWithNoCallSignatures
+ >a => a.toString() : (a: number) => string
+ >a : number
+ >a.toString() : string

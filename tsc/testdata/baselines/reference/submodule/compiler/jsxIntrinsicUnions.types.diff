@@ -1,0 +1,36 @@
+--- old.jsxIntrinsicUnions.types
++++ new.jsxIntrinsicUnions.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsxIntrinsicUnions.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 5,000
+-Instantiation count: 50,000
+-Symbol count: 50,000
+-
+ === jsxIntrinsicUnions.tsx ===
+ /// <reference path="react16.d.ts" />
+ 
+ import * as React from "react";
+->React : typeof React
++>React : any
+ 
+ const El = Math.random() ? 'h1' : 'h2';
+ >El : "h1" | "h2"
+@@= skipped -22, +16 lines =@@
+ >'h2' : "h2"
+ 
+ const tag = <El className="ok" key="key">{"Title"}</El>;
+->tag : JSX.Element
+-><El className="ok" key="key">{"Title"}</El> : JSX.Element
++>tag : any
++><El className="ok" key="key">{"Title"}</El> : any
+ >El : "h1" | "h2"
+->className : string
+->key : string
++>className : any
++>key : any
+ >"Title" : "Title"
+ >El : "h1" | "h2"
+ 

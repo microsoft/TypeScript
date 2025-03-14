@@ -1,0 +1,32 @@
+--- old.forwardDeclaredCommonTypes01.types
++++ new.forwardDeclaredCommonTypes01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === forwardDeclaredCommonTypes01.ts ===
+ interface Promise<T> {}
++>Promise : Promise<T>
++>T : T
++
+ interface Symbol {}
++>Symbol : Symbol
++
+ interface Map<K, V> {}
++>Map : Map<K, V>
++>K : K
++>V : V
++
+ interface WeakMap<K extends object, V> {}
++>WeakMap : WeakMap<K, V>
++>K : K
++>V : V
++
+ interface Set<T> {}
++>Set : Set<T>
++>T : T
++
+ interface WeakSet<T extends object> {}
++>WeakSet : WeakSet<T>
++>T : T
+ 
+ (function() {
+ >(function() {    new Promise;    new Symbol; Symbol();    new Map;    new WeakMap;    new Set;    new WeakSet;}) : () => void

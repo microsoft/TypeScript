@@ -1,0 +1,20 @@
+--- old.importTag17.types
++++ new.importTag17.types
+@@= skipped -15, +15 lines =@@
+  * @returns { Import }
+  */
+ export function f1() {
+->f1 : () => "module"
++>f1 : () => number
+ 
+     return 1;
+ >1 : 1
+@@= skipped -10, +10 lines =@@
+  * @returns { Require }
+  */
+ export function f2() {
+->f2 : () => "script"
++>f2 : () => number
+ 
+     return 1;
+ >1 : 1

@@ -1,0 +1,10 @@
+--- old.unusedTypeParameterInMethod4.types
++++ new.unusedTypeParameterInMethod4.types
+@@= skipped -5, +5 lines =@@
+ 
+     public f1<X>() {
+ >f1 : <X>() => void
++>X : X
+ 
+     }
+ }

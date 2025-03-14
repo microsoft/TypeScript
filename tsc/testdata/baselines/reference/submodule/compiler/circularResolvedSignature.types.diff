@@ -1,0 +1,21 @@
+--- old.circularResolvedSignature.types
++++ new.circularResolvedSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === circularResolvedSignature.ts ===
+ declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
+->useState : <S>(initialState: (() => S)) => [S, (s: S) => void]
++>useState : <S>(initialState: () => S) => [S, (s: S) => void]
++>S : S
+ >initialState : () => S
+ >s : S
+ 
+@@= skipped -27, +28 lines =@@
+ >state : Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>
+ >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void
+ >useState<Data>(() => ({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    })) : [Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>, (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void]
+->useState : <S>(initialState: (() => S)) => [S, (s: S) => void]
++>useState : <S>(initialState: () => S) => [S, (s: S) => void]
+ >() => ({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    }) : () => { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+ >({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    }) : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+ >{        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    } : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }

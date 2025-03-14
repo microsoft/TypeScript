@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts] ////
+
+=== interfacesWithPredefinedTypesAsNames.ts ===
+interface any { }
+>any : any
+
+interface number { }
+>number : number
+
+interface string { }
+>string : string
+
+interface boolean { }
+>boolean : boolean
+
+interface void {}
+>interface : any
+>void {} : undefined
+>{} : {}
+
+interface unknown {}
+>unknown : unknown
+
+interface never {}
+>never : never
+

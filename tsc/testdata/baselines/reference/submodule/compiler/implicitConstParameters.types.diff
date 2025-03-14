@@ -1,0 +1,29 @@
+--- old.implicitConstParameters.types
++++ new.implicitConstParameters.types
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ function fn(x: number | string) {
+->fn : (x: number | string) => void
++>fn : (x: string | number) => void
+ >x : string | number
+ 
+   if (typeof x === 'number') {
+ >typeof x === 'number' : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >'number' : "number"
+ 
+@@= skipped -14, +14 lines =@@
+ >doSomething : (cb: () => void) => void
+ >() => x.toFixed() : () => string
+ >x.toFixed() : string
+->x.toFixed : (fractionDigits?: number) => string
++>x.toFixed : (fractionDigits?: number | undefined) => string
+ >x : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+   }
+ }
+ 

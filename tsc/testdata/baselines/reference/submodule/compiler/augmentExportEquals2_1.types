@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/augmentExportEquals2_1.ts] ////
+
+=== file3.ts ===
+import x = require("file1");
+>x : any
+
+import "file2";
+let a: x.A; // should not work
+>a : A
+>x : any
+

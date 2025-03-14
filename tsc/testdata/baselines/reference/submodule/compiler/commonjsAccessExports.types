@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/commonjsAccessExports.ts] ////
+
+=== /a.js ===
+exports.x = 0;
+>exports.x = 0 : 0
+>exports.x : any
+>exports : any
+>x : any
+>0 : 0
+
+exports.x;
+>exports.x : any
+>exports : any
+>x : any
+
+// Works nested
+{
+    // 'exports' does not provide a contextual type to a function-class
+    exports.Cls = function() {
+>exports.Cls = function() {        this.x = 0;    } : () => void
+>exports.Cls : any
+>exports : any
+>Cls : any
+>function() {        this.x = 0;    } : () => void
+
+        this.x = 0;
+>this.x = 0 : 0
+>this.x : any
+>this : any
+>x : any
+>0 : 0
+    }
+}
+
+const instance = new exports.Cls();
+>instance : any
+>new exports.Cls() : any
+>exports.Cls : any
+>exports : any
+>Cls : any
+

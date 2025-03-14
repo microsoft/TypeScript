@@ -1,0 +1,48 @@
+--- old.typeFromPropertyAssignment6.types
++++ new.typeFromPropertyAssignment6.types
+@@= skipped -6, +6 lines =@@
+ === a.js ===
+ Outer.Inner = class I {
+ >Outer.Inner = class I {    messages() { return [] }} : typeof I
+->Outer.Inner : typeof I
++>Outer.Inner : any
+ >Outer : typeof Outer
+->Inner : typeof I
++>Inner : any
+ >class I {    messages() { return [] }} : typeof I
+ >I : typeof I
+ 
+@@= skipped -12, +12 lines =@@
+ }
+ /** @type {!Outer.Inner} */
+ Outer.i
+->Outer.i : I
++>Outer.i : any
+ >Outer : typeof Outer
+->i : I
++>i : any
+ 
+ === b.js ===
+ var msgs = Outer.i.messages()
+->msgs : any[]
+->Outer.i.messages() : any[]
+->Outer.i.messages : () => any[]
+->Outer.i : I
++>msgs : any
++>Outer.i.messages() : any
++>Outer.i.messages : any
++>Outer.i : any
+ >Outer : typeof Outer
+->i : I
+->messages : () => any[]
++>i : any
++>messages : any
+ 
+ /** @param {Outer.Inner} inner */
+ function x(inner) {
+->x : (inner: I) => void
+->inner : I
++>x : (inner: any) => void
++>inner : any
+ }
+ 

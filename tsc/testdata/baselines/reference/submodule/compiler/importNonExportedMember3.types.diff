@@ -1,0 +1,19 @@
+--- old.importNonExportedMember3.types
++++ new.importNonExportedMember3.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/importNonExportedMember3.ts] ////
+ 
+ === a.ts ===
+-
+ export {}
+ interface Foo {}
++>Foo : Foo
++
+ interface Foo {}
++>Foo : Foo
++
+ namespace Foo {}
++>Foo : any
+ 
+ === b.ts ===
+ import { Foo } from './a';

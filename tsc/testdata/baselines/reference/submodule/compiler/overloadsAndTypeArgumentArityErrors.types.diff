@@ -1,0 +1,31 @@
+--- old.overloadsAndTypeArgumentArityErrors.types
++++ new.overloadsAndTypeArgumentArityErrors.types
+@@= skipped -6, +6 lines =@@
+ 
+ declare function Callbacks<T>(flags?: string): void;
+ >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
++>T : T
+ >flags : string
+ 
+ declare function Callbacks<T1, T2>(flags?: string): void;
+ >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
++>T1 : T1
++>T2 : T2
+ >flags : string
+ 
+ Callbacks<number, string, boolean>('s'); // wrong number of type arguments
+@@= skipped -17, +20 lines =@@
+ >'s' : "s"
+ 
+ declare function f<A, B = {}>(arg: number): void;
+->f : <A, B = {}>(arg: number) => void
++>f : <A, B>(arg: number) => void
++>A : A
++>B : B
+ >arg : number
+ 
+ f<number>(); // wrong number of arguments (#25683)
+ >f<number>() : void
+->f : <A, B = {}>(arg: number) => void
++>f : <A, B>(arg: number) => void
+ 

@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/noCrashOnNoLib.ts] ////
+
+=== noCrashOnNoLib.ts ===
+export function f() {
+>f : () => void
+
+    let e: {}[];
+>e : {}
+
+    while (true) {
+>true : true
+
+      e = [...(e || [])];
+>e = [...(e || [])] : {}
+>e : {}
+>[...(e || [])] : {}
+>...(e || []) : any
+>(e || []) : {}
+>e || [] : {}
+>e : {}
+>[] : {}
+    }
+}

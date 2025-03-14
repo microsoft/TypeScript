@@ -1,0 +1,24 @@
+--- old.parseImportAttributesError.types
++++ new.parseImportAttributesError.types
+@@= skipped -13, +13 lines =@@
+ 
+     & import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface;
+ >import("pkg", { with: {1234, "resolution-mode": "import"} }).ImportInterface : any
+->import("pkg", { with: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
++>import("pkg", { with: {1234, "resolution-mode": "import"} }) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
+ >"pkg" : "pkg"
+ >{ with: {1234, "resolution-mode": "import"} } : { with: { 1234: any; "resolution-mode": string; }; }
+ >with : { 1234: any; "resolution-mode": string; }
+@@= skipped -33, +33 lines =@@
+ >"import" : "import"
+ >ImportInterface : any
+ 
+-=== /node_modules/pkg/import.d.ts ===
+-
+-export interface ImportInterface {}
+-
+ === /node_modules/pkg/require.d.ts ===
+-
+ export interface RequireInterface {}
++>RequireInterface : RequireInterface
+ 

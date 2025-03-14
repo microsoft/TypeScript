@@ -1,0 +1,47 @@
+--- old.classMemberInitializerWithLamdaScoping.types
++++ new.classMemberInitializerWithLamdaScoping.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classMemberInitializerWithLamdaScoping.ts ===
+ declare var console: {
+->console : { log(msg?: any): void; }
++>console : { log: (msg?: any) => void; }
+ 
+     log(msg?: any): void;
+ >log : (msg?: any) => void
+@@= skipped -26, +26 lines =@@
+         console.log(field); // Using field here shouldnt be error
+ >console.log(field) : void
+ >console.log : (msg?: any) => void
+->console : { log(msg?: any): void; }
++>console : { log: (msg?: any) => void; }
+ >log : (msg?: any) => void
+ >field : string
+ 
+@@= skipped -21, +21 lines =@@
+         console.log(field); // Using field here shouldnt be error
+ >console.log(field) : void
+ >console.log : (msg?: any) => void
+->console : { log(msg?: any): void; }
++>console : { log: (msg?: any) => void; }
+ >log : (msg?: any) => void
+ >field : number
+ 
+@@= skipped -23, +23 lines =@@
+         console.log(field1); // But this should be error as the field1 will resolve to var field1 
+ >console.log(field1) : void
+ >console.log : (msg?: any) => void
+->console : { log(msg?: any): void; }
++>console : { log: (msg?: any) => void; }
+ >log : (msg?: any) => void
+ >field1 : any
+ 
+@@= skipped -14, +14 lines =@@
+         console.log(field1); // This shouldnt be error as its a static property
+ >console.log(field1) : void
+ >console.log : (msg?: any) => void
+->console : { log(msg?: any): void; }
++>console : { log: (msg?: any) => void; }
+ >log : (msg?: any) => void
+ >field1 : string
+ 

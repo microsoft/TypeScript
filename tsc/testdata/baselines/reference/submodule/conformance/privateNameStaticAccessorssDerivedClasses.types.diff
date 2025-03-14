@@ -1,0 +1,18 @@
+--- old.privateNameStaticAccessorssDerivedClasses.types
++++ new.privateNameStaticAccessorssDerivedClasses.types
+@@= skipped -10, +10 lines =@@
+     static method(x: typeof Derived) {
+ >method : (x: typeof Derived) => void
+ >x : typeof Derived
+->Derived : typeof Derived
+ 
+         console.log(x.#prop);
+ >console.log(x.#prop) : void
+@@= skipped -18, +17 lines =@@
+     static method(x: typeof Derived) {
+ >method : (x: typeof Derived) => void
+ >x : typeof Derived
+->Derived : typeof Derived
+ 
+         console.log(x.#prop);
+ >console.log(x.#prop) : void

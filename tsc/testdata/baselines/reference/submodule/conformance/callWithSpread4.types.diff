@@ -1,0 +1,50 @@
+--- old.callWithSpread4.types
++++ new.callWithSpread4.types
+@@= skipped -14, +14 lines =@@
+ >b : number
+ 
+ declare const pli: {
+->pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
++>pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: readonly (R | RW | W)[]): Promise<void>; (s1: R, s2: RW | W, ...streams: (RW | W)[]): Promise<void>; }
+ 
+     (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>;
+ >s1 : R
+@@= skipped -10, +10 lines =@@
+ >s5 : W
+ 
+     (streams: ReadonlyArray<R | W | RW>): Promise<void>;
+->streams : readonly (R | W | RW)[]
++>streams : readonly (R | RW | W)[]
+ 
+     (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>;
+ >s1 : R
+->s2 : W | RW
+->streams : (W | RW)[]
++>s2 : RW | W
++>streams : (RW | W)[]
+ }
+ 
+ declare var writes: W
+@@= skipped -29, +29 lines =@@
+ 
+ pli(
+ >pli(    reads,    ...gun,    tr,    fun,    ...gz,    writes) : Promise<void>
+->pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
++>pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: readonly (R | RW | W)[]): Promise<void>; (s1: R, s2: RW | W, ...streams: (RW | W)[]): Promise<void>; }
+ 
+     reads,
+ >reads : R
+@@= skipped -40, +40 lines =@@
+ 
+ pli(...[reads, writes, writes] as const)
+ >pli(...[reads, writes, writes] as const) : Promise<void>
+->pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: ReadonlyArray<R | W | RW>): Promise<void>; (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>; }
++>pli : { (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>; (streams: readonly (R | RW | W)[]): Promise<void>; (s1: R, s2: RW | W, ...streams: (RW | W)[]): Promise<void>; }
+ >...[reads, writes, writes] as const : R | W
+->[reads, writes, writes] as const : readonly [R, W, W]
+->[reads, writes, writes] : readonly [R, W, W]
++>[reads, writes, writes] as const : [R, W, W]
++>[reads, writes, writes] : [R, W, W]
+ >reads : R
+ >writes : W
+ >writes : W

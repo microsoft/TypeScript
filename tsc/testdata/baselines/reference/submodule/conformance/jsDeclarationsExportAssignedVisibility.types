@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedVisibility.ts] ////
+
+=== index.js ===
+const Obj = require("./obj");
+>Obj : any
+>require("./obj") : any
+>require : any
+>"./obj" : "./obj"
+
+class Container {
+>Container : Container
+
+    constructor() {
+        this.usage = new Obj();
+>this.usage = new Obj() : any
+>this.usage : any
+>this : this
+>usage : any
+>new Obj() : any
+>Obj : any
+    }
+}
+
+module.exports = Container;
+>module.exports = Container : typeof Container
+>module.exports : any
+>module : any
+>exports : any
+>Container : typeof Container
+

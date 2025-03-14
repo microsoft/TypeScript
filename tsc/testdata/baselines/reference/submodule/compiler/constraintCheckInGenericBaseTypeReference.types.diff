@@ -1,0 +1,10 @@
+--- old.constraintCheckInGenericBaseTypeReference.types
++++ new.constraintCheckInGenericBaseTypeReference.types
+@@= skipped -9, +9 lines =@@
+ }
+ class GenericBase<T extends Constraint> {
+ >GenericBase : GenericBase<T>
++>T : T
+ 
+     public items: any;
+ >items : any

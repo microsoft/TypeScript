@@ -1,0 +1,11 @@
+--- old.propertyNamesOfReservedWords.types
++++ new.propertyNamesOfReservedWords.types
+@@= skipped -208, +208 lines =@@
+ >as : any
+ 
+ interface I {
++>I : I
++
+     abstract;
+ >abstract : any
+ 

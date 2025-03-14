@@ -1,0 +1,11 @@
+--- old.primitiveTypeAsInterfaceNameGeneric.types
++++ new.primitiveTypeAsInterfaceNameGeneric.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/primitiveTypeAsInterfaceNameGeneric.ts] ////
+ 
+ === primitiveTypeAsInterfaceNameGeneric.ts ===
+-
+ interface number<T> {}
++>number : number<T>
++>T : T
++

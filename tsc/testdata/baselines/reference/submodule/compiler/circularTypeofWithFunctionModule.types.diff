@@ -1,0 +1,19 @@
+--- old.circularTypeofWithFunctionModule.types
++++ new.circularTypeofWithFunctionModule.types
+@@= skipped -8, +8 lines =@@
+ function maker (value: string): typeof maker.Bar {
+ >maker : typeof maker
+ >value : string
+->maker.Bar : typeof maker.Bar
+ >maker : typeof maker
+->Bar : typeof maker.Bar
+ 
+     return maker.Bar;
+->maker.Bar : typeof maker.Bar
++>maker.Bar : typeof Bar
+ >maker : typeof maker
+->Bar : typeof maker.Bar
++>Bar : typeof Bar
+ }
+ 
+ namespace maker {

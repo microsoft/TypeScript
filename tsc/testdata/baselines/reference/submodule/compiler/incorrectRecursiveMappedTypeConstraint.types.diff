@@ -1,0 +1,12 @@
+--- old.incorrectRecursiveMappedTypeConstraint.types
++++ new.incorrectRecursiveMappedTypeConstraint.types
+@@= skipped -3, +3 lines =@@
+ // #17847
+ function sum<T extends { [P in T]: number }, K extends keyof T>(n: number, v: T, k: K) {
+ >sum : <T, K extends keyof T>(n: number, v: T, k: K) => void
++>T : T
++>P : P
++>K : K
+ >n : number
+ >v : T
+ >k : K

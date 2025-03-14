@@ -1,0 +1,23 @@
+--- old.exportImportNonInstantiatedModule2.types
++++ new.exportImportNonInstantiatedModule2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === consumer.ts ===
+ import e = require('./exporter');
+->e : typeof e
++>e : typeof import("exporter")
+ 
+ export function w(): e.w { // Should be OK
+->w : () => e.w
++>w : () => Widget1
+ >e : any
+ 
+     return {name: 'value' };
+@@= skipped -16, +16 lines =@@
+ >Widget1 : Widget1
+ 
+ interface Widget1 { name: string; }
++>Widget1 : Widget1
+ >name : string
+ 
+ === exporter.ts ===

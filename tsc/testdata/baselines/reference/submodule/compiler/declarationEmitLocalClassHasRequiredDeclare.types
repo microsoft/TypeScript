@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/declarationEmitLocalClassHasRequiredDeclare.ts] ////
+
+=== declarationEmitLocalClassHasRequiredDeclare.ts ===
+export declare namespace A {
+>A : typeof A
+
+    namespace X { }
+>X : typeof X
+}
+
+class X { }
+>X : X
+
+export class A {
+>A : A
+
+    static X = X;
+>X : typeof X
+>X : typeof X
+}
+
+export declare namespace Y {
+>Y : typeof Y
+
+}
+
+export class Y { }
+>Y : Y
+

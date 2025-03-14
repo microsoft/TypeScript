@@ -1,0 +1,18 @@
+--- old.transformsElideNullUndefinedType.types
++++ new.transformsElideNullUndefinedType.types
+@@= skipped -133, +133 lines =@@
+ 
+ declare function fn<T>();
+ >fn : <T>() => any
++>T : T
+ 
+ fn<null>();
+ >fn<null>() : any
+@@= skipped -11, +12 lines =@@
+ 
+ declare class D<T> {}
+ >D : D<T>
++>T : T
+ 
+ new D<null>();
+ >new D<null>() : D<null>

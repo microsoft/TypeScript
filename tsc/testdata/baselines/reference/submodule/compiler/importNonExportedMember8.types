@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/importNonExportedMember8.ts] ////
+
+=== a.ts ===
+class Foo {}
+>Foo : Foo
+
+export = Foo;
+>Foo : Foo
+
+=== b.js ===
+import { Foo } from './a';
+>Foo : any
+

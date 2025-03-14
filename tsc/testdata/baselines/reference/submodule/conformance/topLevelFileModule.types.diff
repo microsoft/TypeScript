@@ -1,0 +1,26 @@
+--- old.topLevelFileModule.types
++++ new.topLevelFileModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo_1.ts ===
+ import foo = require("./vs/foo_0");
+->foo : typeof foo
++>foo : typeof import("vs/foo_0")
+ 
+ import fum = require("./vs/fum");
+->fum : typeof fum
++>fum : typeof import("vs/fum")
+ 
+ var z = foo.x + fum.y;
+ >z : number
+ >foo.x + fum.y : number
+ >foo.x : number
+->foo : typeof foo
++>foo : typeof import("vs/foo_0")
+ >x : number
+ >fum.y : number
+->fum : typeof fum
++>fum : typeof import("vs/fum")
+ >y : number
+ 
+ === vs/foo_0.ts ===

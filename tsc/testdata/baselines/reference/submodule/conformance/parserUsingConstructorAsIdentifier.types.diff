@@ -1,0 +1,14 @@
+--- old.parserUsingConstructorAsIdentifier.types
++++ new.parserUsingConstructorAsIdentifier.types
+@@= skipped -75, +75 lines =@@
+ >constructor : any
+ >prototype : any
+ >Object.create(basePrototype) : any
+->Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
++>Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+ >Object : ObjectConstructor
+->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
++>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+ >basePrototype : any
+ 
+                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);

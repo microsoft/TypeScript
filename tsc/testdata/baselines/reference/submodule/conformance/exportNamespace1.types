@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace1.ts] ////
+
+=== a.ts ===
+export class A {}
+>A : A
+
+=== b.ts ===
+export type { A } from './a';
+>A : A
+
+=== c.ts ===
+
+export * from './b';
+
+=== d.ts ===
+import { A } from './c';
+>A : typeof A
+
+new A(); // Error
+>new A() : A
+>A : typeof A
+

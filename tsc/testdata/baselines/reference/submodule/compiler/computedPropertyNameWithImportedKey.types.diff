@@ -1,0 +1,11 @@
+--- old.computedPropertyNameWithImportedKey.types
++++ new.computedPropertyNameWithImportedKey.types
+@@= skipped -10, +10 lines =@@
+ >a : unique symbol
+ 
+ export function fn({ [a]: value }: any): string {
+->fn : ({ [a]: value }: any) => string
++>fn : (__0: any) => string
+ >a : unique symbol
+ >value : any
+ 

@@ -1,0 +1,17 @@
+--- old.typeFromPropertyAssignment38.types
++++ new.typeFromPropertyAssignment38.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeFromPropertyAssignment38.ts ===
+ function F() {}
+->F : typeof F
++>F : { (): void; prop: number; }
+ 
+ F["prop"] = 3;
+ >F["prop"] = 3 : 3
+ >F["prop"] : number
+->F : typeof F
++>F : { (): void; prop: number; }
+ >"prop" : "prop"
+ >3 : 3
+ 

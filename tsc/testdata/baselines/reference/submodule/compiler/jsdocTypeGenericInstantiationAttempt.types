@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsdocTypeGenericInstantiationAttempt.ts] ////
+
+=== index.js ===
+/**
+ * @param {Array<*>} list
+ */
+function thing(list) {
+>thing : (list: any) => any
+>list : any
+
+    return list;
+>list : any
+}
+

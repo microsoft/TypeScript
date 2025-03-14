@@ -1,0 +1,12 @@
+--- old.typeofThisWithImplicitThis.types
++++ new.typeofThisWithImplicitThis.types
+@@= skipped -5, +5 lines =@@
+ 
+     let x: typeof this.no = 1
+ >x : any
+->this.no : any
+ >this : any
+->no : any
+ >1 : 1
+ }
+ 

@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsExportMemberMergedWithModuleAugmentation2.ts] ////
+
+=== /test.js ===
+module.exports = {
+>module.exports = {  a: "ok"} : { a: string; }
+>module.exports : any
+>module : any
+>exports : any
+>{  a: "ok"} : { a: string; }
+
+  a: "ok"
+>a : string
+>"ok" : "ok"
+
+};
+
+=== /index.ts ===
+import { a } from "./test";
+>a : any
+
+declare module "./test" {
+>"./test" : typeof import("./test")
+
+  export const a: number;
+>a : number
+}
+
+a.toFixed();
+>a.toFixed() : any
+>a.toFixed : any
+>a : any
+>toFixed : any
+

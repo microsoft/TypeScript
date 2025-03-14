@@ -1,0 +1,129 @@
+--- old.twoGenericInterfacesWithDifferentConstraints.types
++++ new.twoGenericInterfacesWithDifferentConstraints.types
+@@= skipped -1, +1 lines =@@
+ 
+ === twoGenericInterfacesWithDifferentConstraints.ts ===
+ interface A<T extends Date> {
++>A : A<T>
++>T : T
++
+     x: T;
+ >x : T
+ }
+ 
+ interface A<T extends Number> { // error
++>A : A<T>
++>T : T
++
+     y: T;
+ >y : T
+ }
+ 
+ module M {
++>M : any
++
+     interface B<T extends A<Date>> {
++>B : B<T>
++>T : T
++
+         x: T;
+ >x : T
+     }
+ 
+     interface B<T extends A<any>> { // error
++>B : B<T>
++>T : T
++
+         y: T;
+ >y : T
+     }
+ }
+ 
+ module M2 {
++>M2 : any
++
+     interface A<T extends Date> {
++>A : A<T>
++>T : T
++
+         x: T;
+ >x : T
+     }
+ }
+ 
+ module M2 {
++>M2 : any
++
+     interface A<T extends Number> { // ok, different declaration space from other M2.A
++>A : A<T>
++>T : T
++
+         y: T;
+ >y : T
+     }
+ }
+ 
+ module M3 {
++>M3 : any
++
+     export interface A<T extends Date> {
++>A : A<T>
++>T : T
++
+         x: T;
+ >x : T
+     }
+ }
+ 
+ module M3 {
++>M3 : any
++
+     export interface A<T extends Number> { // error
++>A : A<T>
++>T : T
++
+         y: T;
+ >y : T
+     }
+ }
+ 
+ interface B<T extends number> {
++>B : B<T>
++>T : T
++
+   u: T;
+ >u : T
+ 
+@@= skipped -58, +95 lines =@@
+ }
+ 
+ interface B<T> { // ok
++>B : B<T>
++>T : T
++
+   x: T;
+ >x : T
+ 
+@@= skipped -8, +11 lines =@@
+ }
+ 
+ interface C<T> {
++>C : C<T>
++>T : T
++
+   x: T;
+ >x : T
+ }
+ 
+ interface C<T extends number> { // ok
++>C : C<T>
++>T : T
++
+   y: T;
+ >y : T
+ }
+ 
+ interface Constraint<T extends number> {}
++>Constraint : Constraint<T>
++>T : T
+ 

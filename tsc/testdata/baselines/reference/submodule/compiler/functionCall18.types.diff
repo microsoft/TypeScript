@@ -1,0 +1,10 @@
+--- old.functionCall18.types
++++ new.functionCall18.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #26835
+ declare function foo<T>(a: T, b: T);
+ >foo : { <T>(a: T, b: T): any; (a: {}): any; }
++>T : T
+ >a : T
+ >b : T
+ 

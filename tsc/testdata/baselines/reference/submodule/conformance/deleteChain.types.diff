@@ -1,0 +1,178 @@
+--- old.deleteChain.types
++++ new.deleteChain.types
+@@= skipped -40, +40 lines =@@
+ >c : string | undefined
+ 
+ declare const o3: { b: undefined | { c: string } };
+->o3 : { b: undefined | { c: string; }; }
++>o3 : { b: { c: string; } | undefined; }
+ >b : { c: string; } | undefined
+ >c : string
+ 
+@@= skipped -8, +8 lines =@@
+ >delete o3.b?.c : boolean
+ >o3.b?.c : string | undefined
+ >o3.b : { c: string; } | undefined
+->o3 : { b: undefined | { c: string; }; }
++>o3 : { b: { c: string; } | undefined; }
+ >b : { c: string; } | undefined
+ >c : string | undefined
+ 
+@@= skipped -9, +9 lines =@@
+ >(o3.b?.c) : string | undefined
+ >o3.b?.c : string | undefined
+ >o3.b : { c: string; } | undefined
+->o3 : { b: undefined | { c: string; }; }
++>o3 : { b: { c: string; } | undefined; }
+ >b : { c: string; } | undefined
+ >c : string | undefined
+ 
+ declare const o4: { b?: { c: { d?: { e: string } } } };
+->o4 : { b?: { c: { d?: { e: string; }; }; }; }
+->b : { c: { d?: { e: string; }; }; } | undefined
+->c : { d?: { e: string; }; }
++>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; }
+ >d : { e: string; } | undefined
+ >e : string
+ 
+@@= skipped -15, +15 lines =@@
+ >delete o4.b?.c.d?.e : boolean
+ >o4.b?.c.d?.e : string | undefined
+ >o4.b?.c.d : { e: string; } | undefined
+->o4.b?.c : { d?: { e: string; }; } | undefined
+->o4.b : { c: { d?: { e: string; }; }; } | undefined
+->o4 : { b?: { c: { d?: { e: string; }; }; }; }
+->b : { c: { d?: { e: string; }; }; } | undefined
+->c : { d?: { e: string; }; } | undefined
++>o4.b?.c : { d?: { e: string; } | undefined; } | undefined
++>o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; } | undefined
+ >d : { e: string; } | undefined
+ >e : string | undefined
+ 
+@@= skipped -13, +13 lines =@@
+ >(o4.b?.c.d)?.e : string | undefined
+ >(o4.b?.c.d) : { e: string; } | undefined
+ >o4.b?.c.d : { e: string; } | undefined
+->o4.b?.c : { d?: { e: string; }; } | undefined
+->o4.b : { c: { d?: { e: string; }; }; } | undefined
+->o4 : { b?: { c: { d?: { e: string; }; }; }; }
+->b : { c: { d?: { e: string; }; }; } | undefined
+->c : { d?: { e: string; }; } | undefined
++>o4.b?.c : { d?: { e: string; } | undefined; } | undefined
++>o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; } | undefined
+ >d : { e: string; } | undefined
+ >e : string | undefined
+ 
+@@= skipped -13, +13 lines =@@
+ >(o4.b?.c.d?.e) : string | undefined
+ >o4.b?.c.d?.e : string | undefined
+ >o4.b?.c.d : { e: string; } | undefined
+->o4.b?.c : { d?: { e: string; }; } | undefined
+->o4.b : { c: { d?: { e: string; }; }; } | undefined
+->o4 : { b?: { c: { d?: { e: string; }; }; }; }
+->b : { c: { d?: { e: string; }; }; } | undefined
+->c : { d?: { e: string; }; } | undefined
++>o4.b?.c : { d?: { e: string; } | undefined; } | undefined
++>o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; } | undefined
+ >d : { e: string; } | undefined
+ >e : string | undefined
+ 
+ declare const o5: { b?(): { c: { d?: { e: string } } } };
+->o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+->b : (() => { c: { d?: { e: string; }; }; }) | undefined
+->c : { d?: { e: string; }; }
++>o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; }
+ >d : { e: string; } | undefined
+ >e : string
+ 
+@@= skipped -19, +19 lines =@@
+ >delete o5.b?.().c.d?.e : boolean
+ >o5.b?.().c.d?.e : string | undefined
+ >o5.b?.().c.d : { e: string; } | undefined
+->o5.b?.().c : { d?: { e: string; }; } | undefined
+->o5.b?.() : { c: { d?: { e: string; }; }; } | undefined
+->o5.b : (() => { c: { d?: { e: string; }; }; }) | undefined
+->o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+->b : (() => { c: { d?: { e: string; }; }; }) | undefined
+->c : { d?: { e: string; }; } | undefined
++>o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
++>o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
++>o5.b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
++>o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; } | undefined
+ >d : { e: string; } | undefined
+ >e : string | undefined
+ 
+@@= skipped -14, +14 lines =@@
+ >(o5.b?.().c.d?.e) : string | undefined
+ >o5.b?.().c.d?.e : string | undefined
+ >o5.b?.().c.d : { e: string; } | undefined
+->o5.b?.().c : { d?: { e: string; }; } | undefined
+->o5.b?.() : { c: { d?: { e: string; }; }; } | undefined
+->o5.b : (() => { c: { d?: { e: string; }; }; }) | undefined
+->o5 : { b?(): { c: { d?: { e: string; }; }; }; }
+->b : (() => { c: { d?: { e: string; }; }; }) | undefined
+->c : { d?: { e: string; }; } | undefined
++>o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
++>o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
++>o5.b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
++>o5 : { b?: () => { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : () => { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; } | undefined
+ >d : { e: string; } | undefined
+ >e : string | undefined
+ 
+ declare const o6: { b?: { c: { d?: { e: string } } } };
+->o6 : { b?: { c: { d?: { e: string; }; }; }; }
+->b : { c: { d?: { e: string; }; }; } | undefined
+->c : { d?: { e: string; }; }
++>o6 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>c : { d?: { e: string; } | undefined; }
+ >d : { e: string; } | undefined
+ >e : string
+ 
+@@= skipped -20, +20 lines =@@
+ >delete o6.b?.['c'].d?.['e'] : boolean
+ >o6.b?.['c'].d?.['e'] : string | undefined
+ >o6.b?.['c'].d : { e: string; } | undefined
+->o6.b?.['c'] : { d?: { e: string; }; } | undefined
+->o6.b : { c: { d?: { e: string; }; }; } | undefined
+->o6 : { b?: { c: { d?: { e: string; }; }; }; }
+->b : { c: { d?: { e: string; }; }; } | undefined
++>o6.b?.['c'] : { d?: { e: string; } | undefined; } | undefined
++>o6.b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>o6 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : { c: { d?: { e: string; } | undefined; }; } | undefined
+ >'c' : "c"
+ >d : { e: string; } | undefined
+ >'e' : "e"
+@@= skipped -13, +13 lines =@@
+ >(o6.b?.['c'].d?.['e']) : string | undefined
+ >o6.b?.['c'].d?.['e'] : string | undefined
+ >o6.b?.['c'].d : { e: string; } | undefined
+->o6.b?.['c'] : { d?: { e: string; }; } | undefined
+->o6.b : { c: { d?: { e: string; }; }; } | undefined
+->o6 : { b?: { c: { d?: { e: string; }; }; }; }
+->b : { c: { d?: { e: string; }; }; } | undefined
++>o6.b?.['c'] : { d?: { e: string; } | undefined; } | undefined
++>o6.b : { c: { d?: { e: string; } | undefined; }; } | undefined
++>o6 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
++>b : { c: { d?: { e: string; } | undefined; }; } | undefined
+ >'c' : "c"
+ >d : { e: string; } | undefined
+ >'e' : "e"

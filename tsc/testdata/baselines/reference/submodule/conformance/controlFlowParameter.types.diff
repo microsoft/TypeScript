@@ -1,0 +1,29 @@
+--- old.controlFlowParameter.types
++++ new.controlFlowParameter.types
+@@= skipped -25, +25 lines =@@
+ }
+ 
+ function f2(
+->f2 : (a: number | string | undefined, required?: unknown) => void
++>f2 : (a: string | number | undefined, required?: unknown) => void
+ 
+   a: number | string | undefined,
+ >a : string | number | undefined
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ function f3(
+->f3 : (a?: number | string | undefined, required?: unknown) => void
++>f3 : (a?: string | number | undefined, required?: unknown) => void
+ 
+   a: number | string | undefined = 1,
+ >a : string | number | undefined
+@@= skipped -24, +24 lines =@@
+ }
+ 
+ function f4(
+->f4 : (a?: number | string | undefined, { [(a = "")]: b }?: any) => void
++>f4 : (a?: string | number | undefined, __1?: any) => void
+ 
+   a: number | string | undefined = 1,
+ >a : string | number | undefined

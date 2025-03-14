@@ -1,0 +1,10 @@
+--- old.restElementWithAssignmentPattern4.types
++++ new.restElementWithAssignmentPattern4.types
+@@= skipped -19, +19 lines =@@
+ >a = "" : ""
+ >a : string
+ >"" : ""
+->b : number
++>b : any
+ >tuple : [string, number]
+ 

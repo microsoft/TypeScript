@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/noCrashOnMixin.ts] ////
+
+=== noCrashOnMixin.ts ===
+class Abstract {
+>Abstract : Abstract
+
+    protected constructor() {
+    }
+}
+
+class Concrete extends Abstract {
+>Concrete : Concrete
+>Abstract : Abstract
+}
+
+type Constructor<T = {}> = new (...args: any[]) => T;
+>Constructor : Constructor<T>
+>T : T
+>args : any[]
+
+function Mixin<TBase extends Constructor>(Base: TBase) {
+>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>TBase : TBase
+>Base : TBase
+
+    return class extends Base {
+>class extends Base {    } : { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>Base : {}
+
+    };
+}
+
+class Empty {
+>Empty : Empty
+}
+
+class CrashTrigger extends Mixin(Empty) {
+>CrashTrigger : CrashTrigger
+>Mixin(Empty) : (Anonymous class)<typeof Empty> & Empty
+>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>Empty : typeof Empty
+
+    public trigger() {
+>trigger : () => void
+
+        new Concrete();
+>new Concrete() : Concrete
+>Concrete : typeof Concrete
+    }
+}

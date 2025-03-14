@@ -1,0 +1,17 @@
+--- old.classSideInheritance3.types
++++ new.classSideInheritance3.types
+@@= skipped -37, +37 lines =@@
+ 
+ var r1: typeof A = B; // error
+ >r1 : typeof A
+->A : typeof A
+ >B : typeof B
+ 
+ var r2: new (x: string) => A = B; // error
+@@= skipped -10, +9 lines =@@
+ 
+ var r3: typeof A = C; // ok
+ >r3 : typeof A
+->A : typeof A
+ >C : typeof C
+ 

@@ -1,0 +1,29 @@
+--- old.getterErrorMessageNotDuplicated.types
++++ new.getterErrorMessageNotDuplicated.types
+@@= skipped -1, +1 lines =@@
+ 
+ === getterErrorMessageNotDuplicated.ts ===
+ interface Thing {
++>Thing : Thing
++
+     get style(): Foo;
+ >style : Foo
+ 
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ interface Foo {
++>Foo : Foo
++
+     hello: string;
+ >hello : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Bar extends Foo {
++>Bar : Bar
++
+     extra: any;
+ >extra : any
+ }

@@ -1,0 +1,9 @@
+--- old.es6ImportDefaultBindingInEs5.types
++++ new.es6ImportDefaultBindingInEs5.types
+@@= skipped -9, +9 lines =@@
+ 
+ === es6ImportDefaultBindingInEs5_1.ts ===
+ import defaultBinding from "./es6ImportDefaultBindingInEs5_0";
+->defaultBinding : any
++>defaultBinding : number
+ 

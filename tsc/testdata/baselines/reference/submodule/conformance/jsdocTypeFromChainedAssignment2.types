@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeFromChainedAssignment2.ts] ////
+
+=== use.js ===
+var mod = require('./mod');
+>mod : any
+>require('./mod') : any
+>require : any
+>'./mod' : "./mod"
+
+mod.f('no')
+>mod.f('no') : any
+>mod.f : any
+>mod : any
+>f : any
+>'no' : "no"
+
+mod.g('also no')
+>mod.g('also no') : any
+>mod.g : any
+>mod : any
+>g : any
+>'also no' : "also no"
+
+mod.h(0)
+>mod.h(0) : any
+>mod.h : any
+>mod : any
+>h : any
+>0 : 0
+
+mod.i(1)
+>mod.i(1) : any
+>mod.i : any
+>mod : any
+>i : any
+>1 : 1
+

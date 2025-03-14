@@ -1,0 +1,17 @@
+--- old.jsxIntrinsicElementsExtendsRecord.types
++++ new.jsxIntrinsicElementsExtendsRecord.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.tsx ===
+ declare namespace JSX {
++>JSX : any
++
+   interface IntrinsicElements extends Record<string, any> {}
++>IntrinsicElements : IntrinsicElements
+ }
+ 
+ <a />;
+-><a /> : error
++><a /> : any
+ >a : any
+ 

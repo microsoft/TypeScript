@@ -1,0 +1,19 @@
+--- old.InvalidNonInstantiatedModule.types
++++ new.InvalidNonInstantiatedModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === InvalidNonInstantiatedModule.ts ===
+ module M {
++>M : any
++
+     export interface Point { x: number; y: number }
++>Point : Point
+ >x : number
+ >y : number
+ }
+@@= skipped -11, +14 lines =@@
+ 
+ var x: typeof M; // Error only a namespace
+ >x : any
+->M : any
+ 

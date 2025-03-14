@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/interfaceMemberValidation.ts] ////
+
+=== interfaceMemberValidation.ts ===
+interface i1 { name: string; }
+>i1 : i1
+>name : string
+
+interface i2 extends i1 { name: number; yo: string; }
+>i2 : i2
+>name : number
+>yo : string
+
+interface foo {
+>foo : foo
+
+ bar():any;
+>bar : { (): any; (): any; }
+
+ bar():any;
+>bar : { (): any; (): any; }
+
+ new():void;
+ new():void;
+ [s:string]:number;
+>s : string
+
+ [s:string]:number;
+>s : string
+}

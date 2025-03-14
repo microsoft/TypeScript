@@ -1,0 +1,20 @@
+--- old.parameterInitializerBeforeDestructuringEmit.types
++++ new.parameterInitializerBeforeDestructuringEmit.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parameterInitializerBeforeDestructuringEmit.ts ===
+ interface Foo {
++>Foo : Foo
++
+     bar?: any;
+ >bar : any
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ function foobar({ bar = {}, ...opts }: Foo = {}) {
+->foobar : ({ bar, ...opts }?: Foo) => void
++>foobar : (__0?: Foo) => void
+ >bar : any
+ >{} : {}
+ >opts : { baz?: any; }

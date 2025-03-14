@@ -1,0 +1,31 @@
+--- old.symbolProperty19.types
++++ new.symbolProperty19.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty19.ts ===
+ var i = {
+->i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
+->{    [Symbol.iterator]: { p: null },    [Symbol.toStringTag]() { return { p: undefined }; }} : { [Symbol.iterator]: { p: null; }; [Symbol.toStringTag](): { p: any; }; }
++>i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag]: () => { p: any; }; }
++>{    [Symbol.iterator]: { p: null },    [Symbol.toStringTag]() { return { p: undefined }; }} : { [Symbol.iterator]: { p: null; }; [Symbol.toStringTag]: () => { p: any; }; }
+ 
+     [Symbol.iterator]: { p: null },
+ >[Symbol.iterator] : { p: null; }
+@@= skipped -24, +24 lines =@@
+ var it = i[Symbol.iterator];
+ >it : { p: any; }
+ >i[Symbol.iterator] : { p: any; }
+->i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
++>i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag]: () => { p: any; }; }
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+@@= skipped -9, +9 lines =@@
+ >str : { p: any; }
+ >i[Symbol.toStringTag]() : { p: any; }
+ >i[Symbol.toStringTag] : () => { p: any; }
+->i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
++>i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag]: () => { p: any; }; }
+ >Symbol.toStringTag : unique symbol
+ >Symbol : SymbolConstructor
+ >toStringTag : unique symbol

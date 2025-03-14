@@ -1,0 +1,11 @@
+--- old.generatorTypeCheck8.types
++++ new.generatorTypeCheck8.types
+@@= skipped -1, +1 lines =@@
+ 
+ === generatorTypeCheck8.ts ===
+ interface BadGenerator extends Iterator<number>, Iterable<string> { }
++>BadGenerator : BadGenerator
++
+ function* g3(): BadGenerator { }
+ >g3 : () => BadGenerator
+ 

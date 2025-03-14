@@ -1,0 +1,56 @@
+--- old.errorWithSameNameType.types
++++ new.errorWithSameNameType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ export interface F {
++>F : F
++
+     foo1: number
+ >foo1 : number
+ }
+ 
+ === b.ts ===
+ export interface F {
++>F : F
++
+     foo2: number
+ >foo2 : number
+ }
+ 
+ === c.ts ===
+ import * as A from './a'
+->A : typeof A
++>A : typeof import("a")
+ 
+ import * as B from './b'
+->B : typeof B
++>B : typeof import("b")
+ 
+ let a: A.F
+->a : A.F
++>a : F
+ >A : any
+ 
+ let b: B.F
+->b : B.F
++>b : F
+ >B : any
+ 
+ if (a === b) {
+ >a === b : boolean
+->a : A.F
+->b : B.F
++>a : F
++>b : F
+ 
+ }
+ 
+ a = b
+->a = b : B.F
+->a : A.F
+->b : B.F
++>a = b : F
++>a : F
++>b : F
+ 

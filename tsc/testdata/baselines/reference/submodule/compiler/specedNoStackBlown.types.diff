@@ -1,0 +1,76 @@
+--- old.specedNoStackBlown.types
++++ new.specedNoStackBlown.types
+@@= skipped -7, +7 lines =@@
+ // TypeScript Version: 2.8
+ 
+ declare function spected<ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT): Result<ROOTINPUT, SPEC>;
+->spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
++>spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
++>ROOTINPUT : ROOTINPUT
++>SPEC : SPEC
+ >spec : SPEC
+ >input : ROOTINPUT
+ 
+ type Predicate<INPUT, ROOTINPUT> = (value: INPUT, inputs: ROOTINPUT) => boolean;
+ >Predicate : Predicate<INPUT, ROOTINPUT>
++>INPUT : INPUT
++>ROOTINPUT : ROOTINPUT
+ >value : INPUT
+ >inputs : ROOTINPUT
+ 
+ type ErrorMsg<INPUT> =
+ >ErrorMsg : ErrorMsg<INPUT>
++>INPUT : INPUT
+ 
+     | (string | number | boolean | symbol | null | undefined | object)
+     | ((value: INPUT, field: string) => any);
+@@= skipped -19, +24 lines =@@
+ 
+ export type Spec<INPUT, ROOTINPUT = any> = [Predicate<INPUT, ROOTINPUT>, ErrorMsg<INPUT>];
+ >Spec : Spec<INPUT, ROOTINPUT>
++>INPUT : INPUT
++>ROOTINPUT : ROOTINPUT
+ 
+ export type SpecArray<INPUT, ROOTINPUT = any> = Array<Spec<INPUT, ROOTINPUT>>;
+ >SpecArray : SpecArray<INPUT, ROOTINPUT>
++>INPUT : INPUT
++>ROOTINPUT : ROOTINPUT
+ 
+ export type SpecFunction<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<infer U>]
+ >SpecFunction : SpecFunction<INPUT, ROOTINPUT>
++>INPUT : INPUT
++>ROOTINPUT : ROOTINPUT
++>U : U
+ 
+     ? (value: INPUT) => ReadonlyArray<SpecArray<U, ROOTINPUT>>
+ >value : INPUT
+@@= skipped -18, +25 lines =@@
+ >value : INPUT
+ 
+ export type SpecObject<INPUT, ROOTINPUT = any> = Partial<{[key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>}>;
+->SpecObject : Partial<{ [key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT>; }>
++>SpecObject : Partial<{ [key in keyof INPUT]: SpecValue<INPUT[key], ROOTINPUT> }>
++>INPUT : INPUT
++>ROOTINPUT : ROOTINPUT
++>key : key
+ 
+ export type SpecValue<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<any>]
+ >SpecValue : SpecValue<INPUT, ROOTINPUT>
++>INPUT : INPUT
++>ROOTINPUT : ROOTINPUT
+ 
+     ? SpecArray<INPUT, ROOTINPUT> | SpecFunction<INPUT, ROOTINPUT>
+         : [INPUT] extends [object]
+@@= skipped -12, +17 lines =@@
+ 
+ export type Result<INPUT, SPEC> = {[key in keyof INPUT]: true | any[] | Result<INPUT[key], any>};
+ >Result : Result<INPUT, SPEC>
++>INPUT : INPUT
++>SPEC : SPEC
++>key : key
+ >true : true
+ 
+ export default spected;
+->spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
++>spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
+ 

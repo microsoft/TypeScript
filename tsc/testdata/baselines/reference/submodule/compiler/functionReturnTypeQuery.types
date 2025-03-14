@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/functionReturnTypeQuery.ts] ////
+
+=== functionReturnTypeQuery.ts ===
+declare let foo: number;
+>foo : number
+
+declare function test1(foo: string, bar: typeof foo): typeof foo;
+>test1 : (foo: string, bar: string) => string
+>foo : string
+>bar : string
+
+declare function test2({foo}: {foo: string}, bar: typeof foo): typeof foo;
+>test2 : (__0: { foo: string; }, bar: string) => string
+>foo : string
+>foo : string
+>bar : string
+

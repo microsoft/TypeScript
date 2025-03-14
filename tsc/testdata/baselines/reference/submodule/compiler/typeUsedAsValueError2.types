@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/typeUsedAsValueError2.ts] ////
+
+=== world.ts ===
+import HelloInterface = require("helloInterface");
+>HelloInterface : any
+
+import HelloNamespace = require("helloNamespace");
+>HelloNamespace : any
+
+HelloInterface.world;
+>HelloInterface.world : any
+>HelloInterface : any
+>world : any
+
+HelloNamespace.world;
+>HelloNamespace.world : any
+>HelloNamespace : any
+>world : any
+

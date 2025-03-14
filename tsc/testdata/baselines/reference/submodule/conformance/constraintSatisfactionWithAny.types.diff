@@ -1,0 +1,67 @@
+--- old.constraintSatisfactionWithAny.types
++++ new.constraintSatisfactionWithAny.types
+@@= skipped -4, +4 lines =@@
+ 
+ function foo<T extends String>(x: T): T { return null; }
+ >foo : <T extends String>(x: T) => T
++>T : T
+ >x : T
+ 
+ function foo2<T extends { x: number }>(x: T): T { return null; }
+ >foo2 : <T extends { x: number; }>(x: T) => T
++>T : T
+ >x : number
+ >x : T
+ 
+ //function foo3<T extends T[]>(x: T): T { return null; }
+ function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
+->foo4 : <T extends <T_1>(x: T_1) => void>(x: T) => T
++>foo4 : <T extends <T>(x: T) => void>(x: T) => T
++>T : T
++>T : T
+ >x : T
+ >x : T
+ 
+@@= skipped -29, +33 lines =@@
+ //foo3(a);
+ foo4(a);
+ >foo4(a) : any
+->foo4 : <T extends <T_1>(x: T_1) => void>(x: T) => T
++>foo4 : <T extends <T>(x: T) => void>(x: T) => T
+ >a : any
+ 
+ var b: number;
+@@= skipped -19, +19 lines =@@
+ //foo3<any>(b);
+ foo4<any>(b);
+ >foo4<any>(b) : any
+->foo4 : <T extends <T_1>(x: T_1) => void>(x: T) => T
++>foo4 : <T extends <T>(x: T) => void>(x: T) => T
+ >b : number
+ 
+ //function foo5<T extends String, U extends T>(x: T, y: U): T { return null; }
+@@= skipped -9, +9 lines =@@
+ 
+ class C<T extends String> {
+ >C : C<T>
++>T : T
+ 
+     constructor(public x: T) { }
+ >x : T
+@@= skipped -19, +20 lines =@@
+ 
+ class C2<T extends { x: number }> {
+ >C2 : C2<T>
++>T : T
+ >x : number
+ 
+     constructor(public x: T) { }
+@@= skipped -27, +28 lines =@@
+ 
+ class C4<T extends <T>(x:T) => T> {
+ >C4 : C4<T>
++>T : T
++>T : T
+ >x : T
+ 
+     constructor(public x: T) { }

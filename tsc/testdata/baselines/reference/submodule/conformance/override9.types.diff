@@ -1,0 +1,20 @@
+--- old.override9.types
++++ new.override9.types
+@@= skipped -1, +1 lines =@@
+ 
+ === override9.ts ===
+ interface B {
++>B : B
++
+     foo (): void
+ >foo : () => void
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface D extends B {
++>D : D
++
+     foo (): void;
+ >foo : () => void
+ 

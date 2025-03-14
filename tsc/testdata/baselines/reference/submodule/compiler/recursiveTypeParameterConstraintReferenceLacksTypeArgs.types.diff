@@ -1,0 +1,8 @@
+--- old.recursiveTypeParameterConstraintReferenceLacksTypeArgs.types
++++ new.recursiveTypeParameterConstraintReferenceLacksTypeArgs.types
+@@= skipped -2, +2 lines =@@
+ === recursiveTypeParameterConstraintReferenceLacksTypeArgs.ts ===
+ class A<T extends A> { }
+ >A : A<T>
++>T : T
+ 

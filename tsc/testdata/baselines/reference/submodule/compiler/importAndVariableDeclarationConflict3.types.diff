@@ -1,0 +1,11 @@
+--- old.importAndVariableDeclarationConflict3.types
++++ new.importAndVariableDeclarationConflict3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === importAndVariableDeclarationConflict3.ts ===
+ module m {
+->m : typeof globalThis.m
++>m : typeof m
+ 
+   export var m = '';
+ >m : string

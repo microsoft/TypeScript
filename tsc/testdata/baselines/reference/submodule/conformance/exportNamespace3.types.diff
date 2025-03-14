@@ -1,0 +1,25 @@
+--- old.exportNamespace3.types
++++ new.exportNamespace3.types
+@@= skipped -5, +5 lines =@@
+ 
+ === b.ts ===
+ export type { A } from './a';
+->A : import("a").A
++>A : A
+ 
+ === c.ts ===
+ export * as a from './b';
+@@= skipped -8, +8 lines =@@
+ 
+ === d.ts ===
+ import { a } from './c';
+->a : typeof a
++>a : typeof import("b")
+ 
+ new a.A(); // Error
+ >new a.A() : any
+ >a.A : any
+->a : typeof a
++>a : typeof import("b")
+ >A : any
+ 

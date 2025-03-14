@@ -1,0 +1,132 @@
+--- old.sourceMapValidationDestructuringParametertArrayBindingPattern.types
++++ new.sourceMapValidationDestructuringParametertArrayBindingPattern.types
+@@= skipped -1, +1 lines =@@
+ 
+ === sourceMapValidationDestructuringParametertArrayBindingPattern.ts ===
+ declare var console: {
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ 
+     log(msg: any): void;
+ >log : (msg: any) => void
+@@= skipped -17, +17 lines =@@
+ >"mowing" : "mowing"
+ 
+ function foo1([, nameA]: Robot) {
+->foo1 : ([, nameA]: Robot) => void
+-> : undefined
++>foo1 : (__0: Robot) => void
+ >nameA : string
+ 
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ 
+ function foo2([numberB]: Robot) {
+->foo2 : ([numberB]: Robot) => void
++>foo2 : (__0: Robot) => void
+ >numberB : number
+ 
+     console.log(numberB);
+ >console.log(numberB) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >numberB : number
+ }
+ 
+ function foo3([numberA2, nameA2, skillA2]: Robot) {
+->foo3 : ([numberA2, nameA2, skillA2]: Robot) => void
++>foo3 : (__0: Robot) => void
+ >numberA2 : number
+ >nameA2 : string
+ >skillA2 : string
+@@= skipped -33, +32 lines =@@
+     console.log(nameA2);
+ >console.log(nameA2) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA2 : string
+ }
+ 
+ function foo4([numberA3, ...robotAInfo]: Robot) {
+->foo4 : ([numberA3, ...robotAInfo]: Robot) => void
++>foo4 : (__0: Robot) => void
+ >numberA3 : number
+ >robotAInfo : [string, string]
+ 
+     console.log(robotAInfo);
+ >console.log(robotAInfo) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >robotAInfo : [string, string]
+ }
+ 
+ foo1(robotA);
+ >foo1(robotA) : void
+->foo1 : ([, nameA]: Robot) => void
++>foo1 : (__0: Robot) => void
+ >robotA : Robot
+ 
+ foo1([2, "trimmer", "trimming"]);
+ >foo1([2, "trimmer", "trimming"]) : void
+->foo1 : ([, nameA]: Robot) => void
++>foo1 : (__0: Robot) => void
+ >[2, "trimmer", "trimming"] : [number, string, string]
+ >2 : 2
+ >"trimmer" : "trimmer"
+@@= skipped -33, +33 lines =@@
+ 
+ foo2(robotA);
+ >foo2(robotA) : void
+->foo2 : ([numberB]: Robot) => void
++>foo2 : (__0: Robot) => void
+ >robotA : Robot
+ 
+ foo2([2, "trimmer", "trimming"]);
+ >foo2([2, "trimmer", "trimming"]) : void
+->foo2 : ([numberB]: Robot) => void
++>foo2 : (__0: Robot) => void
+ >[2, "trimmer", "trimming"] : [number, string, string]
+ >2 : 2
+ >"trimmer" : "trimmer"
+@@= skipped -13, +13 lines =@@
+ 
+ foo3(robotA);
+ >foo3(robotA) : void
+->foo3 : ([numberA2, nameA2, skillA2]: Robot) => void
++>foo3 : (__0: Robot) => void
+ >robotA : Robot
+ 
+ foo3([2, "trimmer", "trimming"]);
+ >foo3([2, "trimmer", "trimming"]) : void
+->foo3 : ([numberA2, nameA2, skillA2]: Robot) => void
++>foo3 : (__0: Robot) => void
+ >[2, "trimmer", "trimming"] : [number, string, string]
+ >2 : 2
+ >"trimmer" : "trimmer"
+@@= skipped -13, +13 lines =@@
+ 
+ foo4(robotA);
+ >foo4(robotA) : void
+->foo4 : ([numberA3, ...robotAInfo]: Robot) => void
++>foo4 : (__0: Robot) => void
+ >robotA : Robot
+ 
+ foo4([2, "trimmer", "trimming"]);
+ >foo4([2, "trimmer", "trimming"]) : void
+->foo4 : ([numberA3, ...robotAInfo]: Robot) => void
++>foo4 : (__0: Robot) => void
+ >[2, "trimmer", "trimming"] : [number, string, string]
+ >2 : 2
+ >"trimmer" : "trimmer"

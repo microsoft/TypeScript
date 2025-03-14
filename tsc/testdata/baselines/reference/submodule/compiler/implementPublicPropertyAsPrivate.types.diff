@@ -1,0 +1,11 @@
+--- old.implementPublicPropertyAsPrivate.types
++++ new.implementPublicPropertyAsPrivate.types
+@@= skipped -1, +1 lines =@@
+ 
+ === implementPublicPropertyAsPrivate.ts ===
+ interface I {
++>I : I
++
+     x: number;
+ >x : number
+ }

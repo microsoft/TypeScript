@@ -1,0 +1,20 @@
+--- old.deepElaborationsIntoArrowExpressions.types
++++ new.deepElaborationsIntoArrowExpressions.types
+@@= skipped -1, +1 lines =@@
+ 
+ === deepElaborationsIntoArrowExpressions.ts ===
+ const a: {
+->a : { y(): "a"; }
++>a : { y: () => "a"; }
+ 
+     y(): "a"
+ >y : () => "a"
+@@= skipped -16, +16 lines =@@
+ };
+ 
+ interface Foo {
++>Foo : Foo
++
+     a: number;
+ >a : number
+ }

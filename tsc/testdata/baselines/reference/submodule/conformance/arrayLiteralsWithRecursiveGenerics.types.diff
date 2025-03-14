@@ -1,0 +1,37 @@
+--- old.arrayLiteralsWithRecursiveGenerics.types
++++ new.arrayLiteralsWithRecursiveGenerics.types
+@@= skipped -2, +2 lines =@@
+ === arrayLiteralsWithRecursiveGenerics.ts ===
+ class List<T> {
+ >List : List<T>
++>T : T
+ 
+     data: T;
+ >data : T
+@@= skipped -10, +11 lines =@@
+ 
+ class DerivedList<U> extends List<U> {
+ >DerivedList : DerivedList<U>
++>U : U
+ >List : List<U>
+ 
+     foo: U;
+@@= skipped -10, +11 lines =@@
+ 
+ class MyList<T> {
+ >MyList : MyList<T>
++>T : T
+ 
+     data: T;
+ >data : T
+@@= skipped -24, +25 lines =@@
+ >myList : MyList<number>
+ 
+ var ys = [list, list2]; // {}[]
+->ys : (List<number> | List<string>)[]
+->[list, list2] : (List<number> | List<string>)[]
++>ys : (List<string> | List<number>)[]
++>[list, list2] : (List<string> | List<number>)[]
+ >list : List<number>
+ >list2 : List<string>
+ 

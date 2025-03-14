@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/salsa/commonJSImportExportedClassExpression.ts] ////
+
+=== main.js ===
+const { K } = require("./mod1");
+>K : any
+>require("./mod1") : any
+>require : any
+>"./mod1" : "./mod1"
+
+/** @param {K} k */
+function f(k) {
+>f : (k: any) => void
+>k : any
+
+    k.values()
+>k.values() : any
+>k.values : any
+>k : any
+>values : any
+}
+
+=== mod1.js ===
+exports.K = class K {
+>exports.K = class K {    values() {    }} : typeof K
+>exports.K : any
+>exports : any
+>K : any
+>class K {    values() {    }} : typeof K
+>K : typeof K
+
+    values() {
+>values : () => void
+    }
+};
+

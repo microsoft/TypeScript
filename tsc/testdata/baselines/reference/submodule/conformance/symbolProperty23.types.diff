@@ -1,0 +1,11 @@
+--- old.symbolProperty23.types
++++ new.symbolProperty23.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty23.ts ===
+ interface I {
++>I : I
++
+     [Symbol.toPrimitive]: () => boolean;
+ >[Symbol.toPrimitive] : () => boolean
+ >Symbol.toPrimitive : unique symbol

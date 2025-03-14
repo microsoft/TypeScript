@@ -1,0 +1,33 @@
+--- old.listFailure.types
++++ new.listFailure.types
+@@= skipped -37, +37 lines =@@
+     
+     export function ListRemoveEntry<U>(entry: List<U>): List<U> { 
+ >ListRemoveEntry : <U>(entry: List<U>) => List<U>
++>U : U
+ >entry : List<U>
+ 
+     	return entry;
+@@= skipped -8, +9 lines =@@
+ 
+     export function ListMakeHead<U>(): List<U> {
+ >ListMakeHead : <U>() => List<U>
++>U : U
+ 
+ 		return null;
+     }
+ 
+     export function ListMakeEntry<U>(data: U): List<U> {
+ >ListMakeEntry : <U>(data: U) => List<U>
++>U : U
+ >data : U
+ 
+ 		return null;
+@@= skipped -13, +15 lines =@@
+ 
+     class List<T> { 
+ >List : List<T>
++>T : T
+ 
+         public next: List<T>; 
+ >next : List<T>

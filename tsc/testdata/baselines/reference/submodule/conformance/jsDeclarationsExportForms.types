@@ -1,0 +1,122 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportForms.ts] ////
+
+=== cls.js ===
+export class Foo {}
+>Foo : Foo
+
+=== func.js ===
+export function func() {}
+>func : () => void
+
+=== bar.js ===
+
+export * from "./cls";
+
+=== bar2.js ===
+
+export * from "./func";
+export * from "./cls";
+
+=== baz.js ===
+import {Foo} from "./cls";
+>Foo : typeof Foo
+
+export {Foo};
+>Foo : typeof Foo
+
+=== bat.js ===
+import * as ns from "./cls";
+>ns : typeof import("cls")
+
+export default ns;
+>ns : typeof import("cls")
+
+=== ban.js ===
+import * as ns from "./cls";
+>ns : typeof import("cls")
+
+export {ns};
+>ns : typeof import("cls")
+
+=== bol.js ===
+import * as ns from "./cls";
+>ns : typeof import("cls")
+
+export { ns as classContainer };
+>ns : typeof import("cls")
+>classContainer : typeof import("cls")
+
+=== cjs.js ===
+const ns = require("./cls");
+>ns : any
+>require("./cls") : any
+>require : any
+>"./cls" : "./cls"
+
+module.exports = { ns };
+>module.exports = { ns } : { ns: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{ ns } : { ns: any; }
+>ns : any
+
+=== cjs2.js ===
+const ns = require("./cls");
+>ns : any
+>require("./cls") : any
+>require : any
+>"./cls" : "./cls"
+
+module.exports = ns;
+>module.exports = ns : any
+>module.exports : any
+>module : any
+>exports : any
+>ns : any
+
+=== cjs3.js ===
+const ns = require("./cls");
+>ns : any
+>require("./cls") : any
+>require : any
+>"./cls" : "./cls"
+
+module.exports.ns = ns;
+>module.exports.ns = ns : any
+>module.exports.ns : any
+>module.exports : any
+>module : any
+>exports : any
+>ns : any
+>ns : any
+
+=== cjs4.js ===
+const ns = require("./cls");
+>ns : any
+>require("./cls") : any
+>require : any
+>"./cls" : "./cls"
+
+module.exports.names = ns;
+>module.exports.names = ns : any
+>module.exports.names : any
+>module.exports : any
+>module : any
+>exports : any
+>names : any
+>ns : any
+
+=== includeAll.js ===
+
+import "./cjs4";
+import "./cjs3";
+import "./cjs2";
+import "./cjs";
+import "./bol";
+import "./ban";
+import "./bat";
+import "./baz";
+import "./bar";
+import "./bar2";
+

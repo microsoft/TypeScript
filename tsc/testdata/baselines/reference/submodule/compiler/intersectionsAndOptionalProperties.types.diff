@@ -1,0 +1,33 @@
+--- old.intersectionsAndOptionalProperties.types
++++ new.intersectionsAndOptionalProperties.types
+@@= skipped -1, +1 lines =@@
+ 
+ === intersectionsAndOptionalProperties.ts ===
+ declare let x: { a?: number, b: string };
+->x : { a?: number; b: string; }
++>x : { a?: number | undefined; b: string; }
+ >a : number | undefined
+ >b : string
+ 
+@@= skipped -16, +16 lines =@@
+ 
+ x = y;  // Error
+ >x = y : { a: null; b: string; }
+->x : { a?: number; b: string; }
++>x : { a?: number | undefined; b: string; }
+ >y : { a: null; b: string; }
+ 
+ x = z;  // Error
+ >x = z : { a: null; } & { b: string; }
+->x : { a?: number; b: string; }
++>x : { a?: number | undefined; b: string; }
+ >z : { a: null; } & { b: string; }
+ 
+ // Repro from #36604
+ 
+ interface To {
++>To : To
++
+     field?: number;
+ >field : number | undefined
+ 

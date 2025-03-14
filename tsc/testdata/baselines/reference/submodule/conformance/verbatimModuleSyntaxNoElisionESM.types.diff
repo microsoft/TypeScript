@@ -1,0 +1,33 @@
+--- old.verbatimModuleSyntaxNoElisionESM.types
++++ new.verbatimModuleSyntaxNoElisionESM.types
+@@= skipped -6, +6 lines =@@
+ 
+ export type A = typeof a;
+ >A : 0
+->a : 0
+ 
+ export class AClass {}
+ >AClass : AClass
+@@= skipped -49, +48 lines =@@
+ 
+ === /main5.ts ===
+ export default class C {} // ok
+->C : C
++>C : default
+ 
+ === /main6.ts ===
+ interface I {}
++>I : I
++
+ export default I; // error
+ >I : I
+ 
+ === /main7.ts ===
+ import type C from "./main5";
+->C : C
++>C : default
+ 
+ export default C; // error
+->C : C
++>C : default
+ 

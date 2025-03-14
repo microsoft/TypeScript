@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/jsFileMethodOverloads.ts] ////
+
+=== jsFileMethodOverloads.js ===
+/**
+ * @template T
+ */
+ class Example {
+>Example : Example
+
+  /**
+   * @param {T} value 
+   */
+  constructor(value) {
+>value : any
+
+    this.value = value;
+>this.value = value : any
+>this.value : any
+>this : this
+>value : any
+>value : any
+  }
+
+  /**
+   * @overload
+   * @param {Example<number>} this
+   * @returns {'number'}
+   */
+  /**
+   * @overload
+   * @param {Example<string>} this
+   * @returns {'string'}
+   */
+  /**
+   * @returns {string}
+   */
+  getTypeName() {
+>getTypeName : () => "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+
+    return typeof this.value;
+>typeof this.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>this.value : any
+>this : this
+>value : any
+  }
+
+  /**
+   * @template U
+   * @overload
+   * @param {(y: T) => U} fn
+   * @returns {U}
+   */
+  /**
+   * @overload
+   * @returns {T}
+   */
+  /**
+   * @param {(y: T) => unknown} [fn]
+   * @returns {unknown}
+   */
+  transform(fn) {
+>transform : (fn: any) => any
+>fn : any
+
+    return fn ? fn(this.value) : this.value;
+>fn ? fn(this.value) : this.value : any
+>fn : any
+>fn(this.value) : any
+>fn : any
+>this.value : any
+>this : this
+>value : any
+>this.value : any
+>this : this
+>value : any
+  }
+}
+

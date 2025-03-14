@@ -1,0 +1,21 @@
+--- old.seeTag1.types
++++ new.seeTag1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === seeTag1.ts ===
+ interface Foo {
++>Foo : Foo
++
+     foo: string
+ >foo : string
+ }
+ 
+ namespace NS {
++>NS : any
++
+     export interface Bar {
++>Bar : Bar
++
+         baz: Foo
+ >baz : Foo
+     }

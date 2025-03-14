@@ -1,0 +1,33 @@
+--- old.typeReferenceDirectiveScopedPackageCustomTypeRoot.types
++++ new.typeReferenceDirectiveScopedPackageCustomTypeRoot.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ typesCache;
+->typesCache : number
++>typesCache : any
+ 
+ mangledAtTypesCache;
+ >mangledAtTypesCache : number
+ 
+ nodeModulesCache;
+->nodeModulesCache : number
++>nodeModulesCache : any
+ 
+ mangledNodeModules;
+ >mangledNodeModules : any
+@@= skipped -17, +17 lines =@@
+ mangledAtTypesCache;
+ >mangledAtTypesCache : number
+ 
+-=== /types/@scoped/typescache/index.d.ts ===
+-declare const typesCache: number;
+->typesCache : number
+-
+-=== /node_modules/@scoped/nodemodulescache/index.d.ts ===
+-declare const nodeModulesCache: number;
+->nodeModulesCache : number
+-
+ === /node_modules/@types/mangled__attypescache/index.d.ts ===
+ declare const mangledAtTypesCache: number;
+ >mangledAtTypesCache : number

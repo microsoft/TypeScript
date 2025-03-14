@@ -1,0 +1,12 @@
+--- old.destructuringParameterProperties3.types
++++ new.destructuringParameterProperties3.types
+@@= skipped -2, +2 lines =@@
+ === destructuringParameterProperties3.ts ===
+ class C1<T, U, V> {
+ >C1 : C1<T, U, V>
++>T : T
++>U : U
++>V : V
+ 
+     constructor(private k: T, private [a, b, c]: [T,U,V]) {
+ >k : T

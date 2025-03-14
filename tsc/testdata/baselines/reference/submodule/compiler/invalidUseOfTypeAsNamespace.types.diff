@@ -1,0 +1,14 @@
+--- old.invalidUseOfTypeAsNamespace.types
++++ new.invalidUseOfTypeAsNamespace.types
+@@= skipped -1, +1 lines =@@
+ 
+ === invalidUseOfTypeAsNamespace.ts ===
+ interface OhNo {
++>OhNo : OhNo
+ }
+ 
+ declare let y: OhNo.hello;
+->y : OhNo.hello
++>y : hello
+ >OhNo : any
+ 

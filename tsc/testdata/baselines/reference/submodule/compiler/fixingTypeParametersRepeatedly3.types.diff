@@ -1,0 +1,43 @@
+--- old.fixingTypeParametersRepeatedly3.types
++++ new.fixingTypeParametersRepeatedly3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === fixingTypeParametersRepeatedly3.ts ===
+ interface Base {
++>Base : Base
++
+     baseProp;
+ >baseProp : any
+ }
+ interface Derived extends Base {
++>Derived : Derived
++
+     toBase?(): Base;
+ >toBase : () => Base
+ }
+@@= skipped -13, +17 lines =@@
+ 
+ declare function foo<T>(x: T, func: (p: T) => T): T;
+ >foo : <T>(x: T, func: (p: T) => T) => T
++>T : T
+ >x : T
+ >func : (p: T) => T
+ >p : T
+@@= skipped -19, +20 lines =@@
+ // bar should type check just like foo.
+ // result2 should have the same type as result
+ declare function bar<T>(x: T, func: (p: T) => T): T;
+->bar : { <T>(x: T, func: (p: T) => T): T; <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; }
++>bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
++>T : T
+ >x : T
+ >func : (p: T) => T
+ >p : T
+ 
+ declare function bar<T>(x: T, func: (p: T) => T): T;
+->bar : { <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; <T>(x: T, func: (p: T) => T): T; }
++>bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
++>T : T
+ >x : T
+ >func : (p: T) => T
+ >p : T

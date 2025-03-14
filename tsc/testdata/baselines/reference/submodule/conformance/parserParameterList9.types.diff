@@ -1,0 +1,10 @@
+--- old.parserParameterList9.types
++++ new.parserParameterList9.types
+@@= skipped -4, +4 lines =@@
+ >C : C
+ 
+    foo(...bar?) { }
+->foo : (...bar?: any[]) => void
++>foo : (...bar: any[]) => void
+ >bar : any[]
+ }

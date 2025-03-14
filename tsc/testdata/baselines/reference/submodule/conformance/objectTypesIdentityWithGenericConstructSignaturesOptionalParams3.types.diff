@@ -1,0 +1,174 @@
+--- old.objectTypesIdentityWithGenericConstructSignaturesOptionalParams3.types
++++ new.objectTypesIdentityWithGenericConstructSignaturesOptionalParams3.types
+@@= skipped -6, +6 lines =@@
+ 
+ class B<T, U> {
+ >B : B<T, U>
++>T : T
++>U : U
+ 
+     constructor(x: T, y: U) { return null; }
+ >x : T
+@@= skipped -8, +10 lines =@@
+ 
+ class C<T, U> {
+ >C : C<T, U>
++>T : T
++>U : U
+ 
+     constructor(x: T, y?: U) { return null; }
+ >x : T
+@@= skipped -7, +9 lines =@@
+ }
+ 
+ interface I<T, U> {
++>I : I<T, U>
++>T : T
++>U : U
++
+     new(x: T, y?: U): B<T, U>;
+ >x : T
+ >y : U
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     new<T, U>(x: T, y: U): C<T, U>;
++>T : T
++>U : U
+ >x : T
+ >y : U
+ }
+ 
+ var a: { new <T, U>(x: T, y?: U): B<T, U> };
+ >a : new <T, U>(x: T, y?: U) => B<T, U>
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+ var b = { new<T, U>(x: T, y: U) { return new C<T, U>(x, y); } }; // not a construct signature, function called new
+->b : { "new"<T, U>(x: T, y: U): C<T, U>; }
+->{ new<T, U>(x: T, y: U) { return new C<T, U>(x, y); } } : { "new"<T, U>(x: T, y: U): C<T, U>; }
++>b : { new: <T, U>(x: T, y: U) => C<T, U>; }
++>{ new<T, U>(x: T, y: U) { return new C<T, U>(x, y); } } : { new: <T, U>(x: T, y: U) => C<T, U>; }
+ >new : <T, U>(x: T, y: U) => C<T, U>
++>T : T
++>U : U
+ >x : T
+ >y : U
+ >new C<T, U>(x, y) : C<T, U>
+@@= skipped -64, +76 lines =@@
+ >x : any
+ 
+ function foo3(x: typeof a);
+->foo3 : { (x: typeof a): any; (x: typeof a): any; }
++>foo3 : { (x: new <T, U>(x: T, y?: U) => B<T, U>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : new <T, U>(x: T, y?: U) => B<T, U>
+->a : new <T, U>(x: T, y?: U) => B<T, U>
+ 
+ function foo3(x: typeof a); // error
+->foo3 : { (x: typeof a): any; (x: typeof a): any; }
++>foo3 : { (x: new <T, U>(x: T, y?: U) => B<T, U>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : new <T, U>(x: T, y?: U) => B<T, U>
+->a : new <T, U>(x: T, y?: U) => B<T, U>
+ 
+ function foo3(x: any) { }
+->foo3 : { (x: typeof a): any; (x: typeof a): any; }
++>foo3 : { (x: new <T, U>(x: T, y?: U) => B<T, U>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : any
+ 
+ function foo4(x: typeof b);
+->foo4 : { (x: typeof b): any; (x: typeof b): any; }
+->x : { "new"<T, U>(x: T, y: U): C<T, U>; }
+->b : { "new"<T, U>(x: T, y: U): C<T, U>; }
++>foo4 : { (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
++>x : { new: <T, U>(x: T, y: U) => C<T, U>; }
+ 
+ function foo4(x: typeof b); // error
+->foo4 : { (x: typeof b): any; (x: typeof b): any; }
+->x : { "new"<T, U>(x: T, y: U): C<T, U>; }
+->b : { "new"<T, U>(x: T, y: U): C<T, U>; }
++>foo4 : { (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
++>x : { new: <T, U>(x: T, y: U) => C<T, U>; }
+ 
+ function foo4(x: any) { }
+->foo4 : { (x: typeof b): any; (x: typeof b): any; }
++>foo4 : { (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
+ >x : any
+ 
+ function foo8(x: B<string, number>);
+@@= skipped -52, +48 lines =@@
+ >x : any
+ 
+ function foo10(x: B<string, number>);
+->foo10 : { (x: B<string, number>): any; (x: typeof a): any; }
++>foo10 : { (x: B<string, number>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : B<string, number>
+ 
+ function foo10(x: typeof a); // BUG 832086
+->foo10 : { (x: B<string, number>): any; (x: typeof a): any; }
++>foo10 : { (x: B<string, number>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : new <T, U>(x: T, y?: U) => B<T, U>
+->a : new <T, U>(x: T, y?: U) => B<T, U>
+ 
+ function foo10(x: any) { }
+->foo10 : { (x: B<string, number>): any; (x: typeof a): any; }
++>foo10 : { (x: B<string, number>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : any
+ 
+ function foo11(x: B<string, number>);
+->foo11 : { (x: B<string, number>): any; (x: typeof b): any; }
++>foo11 : { (x: B<string, number>): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
+ >x : B<string, number>
+ 
+ function foo11(x: typeof b); // ok
+->foo11 : { (x: B<string, number>): any; (x: typeof b): any; }
+->x : { "new"<T, U>(x: T, y: U): C<T, U>; }
+->b : { "new"<T, U>(x: T, y: U): C<T, U>; }
++>foo11 : { (x: B<string, number>): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
++>x : { new: <T, U>(x: T, y: U) => C<T, U>; }
+ 
+ function foo11(x: any) { }
+->foo11 : { (x: B<string, number>): any; (x: typeof b): any; }
++>foo11 : { (x: B<string, number>): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
+ >x : any
+ 
+ function foo12(x: I<string, number>);
+@@= skipped -50, +48 lines =@@
+ >x : any
+ 
+ function foo13(x: I<string, number>);
+->foo13 : { (x: I<string, number>): any; (x: typeof a): any; }
++>foo13 : { (x: I<string, number>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : I<string, number>
+ 
+ function foo13(x: typeof a); // BUG 832086
+->foo13 : { (x: I<string, number>): any; (x: typeof a): any; }
++>foo13 : { (x: I<string, number>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : new <T, U>(x: T, y?: U) => B<T, U>
+->a : new <T, U>(x: T, y?: U) => B<T, U>
+ 
+ function foo13(x: any) { }
+->foo13 : { (x: I<string, number>): any; (x: typeof a): any; }
++>foo13 : { (x: I<string, number>): any; (x: new <T, U>(x: T, y?: U) => B<T, U>): any; }
+ >x : any
+ 
+ function foo14(x: I<string, number>);
+->foo14 : { (x: I<string, number>): any; (x: typeof b): any; }
++>foo14 : { (x: I<string, number>): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
+ >x : I<string, number>
+ 
+ function foo14(x: typeof b); // ok
+->foo14 : { (x: I<string, number>): any; (x: typeof b): any; }
+->x : { "new"<T, U>(x: T, y: U): C<T, U>; }
+->b : { "new"<T, U>(x: T, y: U): C<T, U>; }
++>foo14 : { (x: I<string, number>): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
++>x : { new: <T, U>(x: T, y: U) => C<T, U>; }
+ 
+ function foo14(x: any) { }
+->foo14 : { (x: I<string, number>): any; (x: typeof b): any; }
++>foo14 : { (x: I<string, number>): any; (x: { new: <T, U>(x: T, y: U) => C<T, U>; }): any; }
+ >x : any
+ 

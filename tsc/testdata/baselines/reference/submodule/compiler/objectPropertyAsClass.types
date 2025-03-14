@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/objectPropertyAsClass.ts] ////
+
+=== index.js ===
+const a1 = {
+>a1 : { foo: () => void; }
+>{    foo() {        this.x = 0;    }} : { foo: () => void; }
+
+    foo() {
+>foo : () => void
+
+        this.x = 0;
+>this.x = 0 : 0
+>this.x : any
+>this : any
+>x : any
+>0 : 0
+    }
+}
+
+const a2 = {
+>a2 : { foo: () => void; }
+>{    foo: function() {        this.x = 0;    }} : { foo: () => void; }
+
+    foo: function() {
+>foo : () => void
+>function() {        this.x = 0;    } : () => void
+
+        this.x = 0;
+>this.x = 0 : 0
+>this.x : any
+>this : any
+>x : any
+>0 : 0
+    }
+}
+
+const b1 = {
+>b1 : { foo: () => void; }
+>{    /** @class */    foo() {        this.x = 0;    }} : { foo: () => void; }
+
+    /** @class */
+    foo() {
+>foo : () => void
+
+        this.x = 0;
+>this.x = 0 : 0
+>this.x : any
+>this : any
+>x : any
+>0 : 0
+    }
+}
+
+const b2 = {
+>b2 : { foo: () => void; }
+>{    /** @class */    foo: function() {        this.x = 0;    }} : { foo: () => void; }
+
+    /** @class */
+    foo: function() {
+>foo : () => void
+>function() {        this.x = 0;    } : () => void
+
+        this.x = 0;
+>this.x = 0 : 0
+>this.x : any
+>this : any
+>x : any
+>0 : 0
+    }
+}
+

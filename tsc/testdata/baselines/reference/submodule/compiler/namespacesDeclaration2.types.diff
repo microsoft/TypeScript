@@ -1,0 +1,20 @@
+--- old.namespacesDeclaration2.types
++++ new.namespacesDeclaration2.types
+@@= skipped -21, +21 lines =@@
+ }
+ 
+ var foge: N.S;
+->foge : N.S
++>foge : S
+ >N : any
+ 
+ var foo: M.F;
+->foo : M.F
++>foo : F
+ >M : any
+ 
+ let x: ns.A;
+->x : ns.A
++>x : A
+ >ns : any
+ 

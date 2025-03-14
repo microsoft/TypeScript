@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/unusedDestructuringParameters.ts] ////
+
+=== unusedDestructuringParameters.ts ===
+const f = ([a]) => { };
+>f : (__0: [any]) => void
+>([a]) => { } : (__0: [any]) => void
+>a : any
+
+f([1]);
+>f([1]) : void
+>f : (__0: [any]) => void
+>[1] : [number]
+>1 : 1
+
+const f2 = ({a}) => { };
+>f2 : (__0: { a: any; }) => void
+>({a}) => { } : (__0: { a: any; }) => void
+>a : any
+
+f2({ a: 10 });
+>f2({ a: 10 }) : void
+>f2 : (__0: { a: any; }) => void
+>{ a: 10 } : { a: number; }
+>a : number
+>10 : 10
+
+const f3 = ([_]) => { };
+>f3 : (__0: [any]) => void
+>([_]) => { } : (__0: [any]) => void
+>_ : any
+
+f3([10]);
+>f3([10]) : void
+>f3 : (__0: [any]) => void
+>[10] : [number]
+>10 : 10
+

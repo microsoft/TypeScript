@@ -1,0 +1,31 @@
+--- old.numericStringNamedPropertyEquivalence.types
++++ new.numericStringNamedPropertyEquivalence.types
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     "1": number;
+ >"1" : number
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ var a: {
+->a : { 1: number; }
++>a : { "1": number; }
+ 
+     "1": number;
+ >"1" : number
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ var b = {
+->b : { 0: string; }
+->{    "0": '',    0: ''} : { 0: string; }
++>b : { "0": string; }
++>{    "0": '',    0: ''} : { "0": string; }
+ 
+     "0": '',
+ >"0" : string

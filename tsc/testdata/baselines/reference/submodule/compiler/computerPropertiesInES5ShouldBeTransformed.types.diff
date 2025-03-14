@@ -1,0 +1,13 @@
+--- old.computerPropertiesInES5ShouldBeTransformed.types
++++ new.computerPropertiesInES5ShouldBeTransformed.types
+@@= skipped -1, +1 lines =@@
+ 
+ === computerPropertiesInES5ShouldBeTransformed.ts ===
+ const b = ({ [`key`]: renamed }) => renamed;
+->b : ({ [`key`]: renamed }: { key: any; }) => any
+->({ [`key`]: renamed }) => renamed : ({ [`key`]: renamed }: { key: any; }) => any
++>b : (__0: { key: any; }) => any
++>({ [`key`]: renamed }) => renamed : (__0: { key: any; }) => any
+ >`key` : "key"
+ >renamed : any
+ >renamed : any

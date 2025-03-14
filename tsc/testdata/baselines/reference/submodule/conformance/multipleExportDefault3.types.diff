@@ -1,0 +1,10 @@
+--- old.multipleExportDefault3.types
++++ new.multipleExportDefault3.types
+@@= skipped -10, +10 lines =@@
+ };
+ 
+ export default class C { }
+->C : import("multipleExportDefault3").default
++>C : default
+ 
+ 

@@ -1,0 +1,28 @@
+--- old.defaultExportsCannotMerge01.types
++++ new.defaultExportsCannotMerge01.types
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ export interface Decl {
++>Decl : Decl
++
+     p1: number;
+ >p1 : number
+ 
+@@= skipped -19, +21 lines =@@
+ >20 : 20
+ 
+     interface I {
++>I : I
+     }
+ }
+ 
+@@= skipped -15, +16 lines =@@
+ >x : Entity
+ 
+ var y: Entity.I;
+->y : Entity.I
++>y : I
+ >Entity : any
+ 
+ Entity.x;

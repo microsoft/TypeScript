@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/circularInstantiationExpression.ts] ////
+
+=== circularInstantiationExpression.ts ===
+declare function foo<T>(t: T): typeof foo<T>;
+>foo : <T>(t: T) => (t: T) => ???
+>T : T
+>t : T
+
+foo("");
+>foo("") : (t: string) => ???
+>foo : <T>(t: T) => (t: T) => ???
+>"" : ""
+

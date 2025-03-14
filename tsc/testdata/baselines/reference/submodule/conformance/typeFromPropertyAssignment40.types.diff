@@ -1,0 +1,36 @@
+--- old.typeFromPropertyAssignment40.types
++++ new.typeFromPropertyAssignment40.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeFromPropertyAssignment40.js ===
+ function Outer() {
+->Outer : typeof Outer
++>Outer : () => void
+ 
+     var self = this
+->self : this
+->this : this
++>self : any
++>this : any
+ 
+     self.y = 2
+ >self.y = 2 : 2
+ >self.y : any
+->self : this
++>self : any
+ >y : any
+ >2 : 2
+ }
+ /** @type {Outer} */
+ var ok
+->ok : Outer
++>ok : any
+ 
+ ok.y
+->ok.y : number
+->ok : Outer
+->y : number
++>ok.y : any
++>ok : any
++>y : any
+ 

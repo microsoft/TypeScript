@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/typeReferenceDirectives4.ts] ////
+
+=== /app.ts ===
+/// <reference path="./ref.d.ts"/>
+/// <reference types="lib" preserve="true" />
+
+let x: $;
+>x : $
+
+let y = () => x
+>y : () => $
+>() => x : () => $
+>x : $
+
+=== /ref.d.ts ===
+interface $ { x }
+>$ : $
+>x : any
+

@@ -1,0 +1,23 @@
+--- old.commentsMultiModuleSingleFile.types
++++ new.commentsMultiModuleSingleFile.types
+@@= skipped -30, +30 lines =@@
+     }
+ }
+ new multiM.b();
+->new multiM.b() : multiM.b
+->multiM.b : typeof multiM.b
++>new multiM.b() : b
++>multiM.b : typeof b
+ >multiM : typeof multiM
+->b : typeof multiM.b
++>b : typeof b
+ 
+ new multiM.c();
+->new multiM.c() : multiM.c
+->multiM.c : typeof multiM.c
++>new multiM.c() : c
++>multiM.c : typeof c
+ >multiM : typeof multiM
+->c : typeof multiM.c
++>c : typeof c
+ 

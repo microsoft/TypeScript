@@ -1,0 +1,21 @@
+--- old.mutuallyRecursiveCallbacks.types
++++ new.mutuallyRecursiveCallbacks.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #18277
+ 
+ interface Foo<T> { (bar: Bar<T>): void };
++>Foo : Foo<T>
++>T : T
+ >bar : Bar<T>
+ 
+ type Bar<T> = (foo: Foo<T>) => Foo<T>;
+ >Bar : Bar<T>
++>T : T
+ >foo : Foo<T>
+ 
+ declare function foo<T>(bar: Bar<T>): void;
+ >foo : <T>(bar: Bar<T>) => void
++>T : T
+ >bar : Bar<T>
+ 
+ declare var bar: Bar<{}>;

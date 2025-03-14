@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/importDeclWithDeclareModifier.ts] ////
+
+=== importDeclWithDeclareModifier.ts ===
+module x {
+>x : any
+
+    interface c {
+>c : c
+    }
+}
+declare export import a = x.c;
+>a : any
+>x : any
+>c : any
+
+var b: a;
+>b : a
+

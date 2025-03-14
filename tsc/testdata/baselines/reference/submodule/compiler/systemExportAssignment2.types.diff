@@ -1,0 +1,9 @@
+--- old.systemExportAssignment2.types
++++ new.systemExportAssignment2.types
+@@= skipped -9, +9 lines =@@
+ 
+ === b.ts ===
+ import * as a from "a";
+->a : number
++>a : any
+ 

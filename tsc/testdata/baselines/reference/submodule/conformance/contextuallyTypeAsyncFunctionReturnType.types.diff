@@ -1,0 +1,67 @@
+--- old.contextuallyTypeAsyncFunctionReturnType.types
++++ new.contextuallyTypeAsyncFunctionReturnType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextuallyTypeAsyncFunctionReturnType.ts ===
+ interface Obj { key: "value"; }
++>Obj : Obj
+ >key : "value"
+ 
+ async function fn1(): Promise<Obj> {
+@@= skipped -80, +81 lines =@@
+ >this : Context
+ 
+ interface TestFunction {
++>TestFunction : TestFunction
++
+   (fn: Func): void;
+ >fn : Func
+ 
+@@= skipped -19, +21 lines =@@
+ >test : TestFunction
+ 
+ interface ProcessTreeNode {
++>ProcessTreeNode : ProcessTreeNode
++
+   pid: number;
+ >pid : number
+ 
+@@= skipped -68, +70 lines =@@
+ });
+ 
+ interface ILocalExtension {
++>ILocalExtension : ILocalExtension
++
+   isApplicationScoped: boolean;
+ >isApplicationScoped : boolean
+ 
+@@= skipped -14, +16 lines =@@
+ 
+ };
+ declare function scanMetadata(
+->scanMetadata : (local: ILocalExtension) => Promise<Metadata | undefined>
++>scanMetadata : (local: ILocalExtension) => Promise<Metadata>
+ 
+   local: ILocalExtension
+ >local : ILocalExtension
+@@= skipped -20, +20 lines =@@
+     await Promise.all(
+ >await Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : [ILocalExtension, Metadata][]
+ >Promise.all(      fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)])    ) : Promise<[ILocalExtension, Metadata][]>
+->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >Promise : PromiseConstructor
+->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ 
+       fromExtensions
+ >fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)]) : Promise<[ILocalExtension, Metadata]>[]
+@@= skipped -28, +28 lines =@@
+ >e : ILocalExtension
+ >await scanMetadata(e) : Metadata
+ >scanMetadata(e) : Promise<Metadata>
+->scanMetadata : (local: ILocalExtension) => Promise<Metadata | undefined>
++>scanMetadata : (local: ILocalExtension) => Promise<Metadata>
+ >e : ILocalExtension
+ 
+     );

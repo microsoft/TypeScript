@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/alwaysStrict.ts] ////
+
+=== alwaysStrict.ts ===
+function f() {
+>f : () => void
+
+    var arguments = [];
+>arguments : any[]
+>[] : undefined[]
+}

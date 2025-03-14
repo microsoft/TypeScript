@@ -1,0 +1,61 @@
+--- old.extendsClause.types
++++ new.extendsClause.types
+@@= skipped -1, +1 lines =@@
+ 
+ === types.ts ===
+ export interface I {}
++>I : I
++
+ export class C {}
+ >C : C
+ 
+ === ns.ts ===
+ import type * as types from './types';
+->types : typeof types
++>types : typeof import("types")
+ 
+ export { types };
+->types : typeof types
++>types : typeof import("types")
+ 
+ === index.ts ===
+ import { types } from './ns';
+->types : typeof types
++>types : typeof import("types")
+ 
+ import type { C, I } from './types';
+->C : types.C
+->I : types.I
++>C : C
++>I : I
+ 
+ interface Q extends C {}
++>Q : Q
++
+ interface R extends I {}
++>R : R
++
+ interface S extends types.C {}
+->types : typeof types
++>S : S
++>types : typeof import("types")
+ 
+ interface T extends types.I {}
+->types : typeof types
++>T : T
++>types : typeof import("types")
+ 
+ class U extends C {} // Error
+ >U : U
+->C : types.C
++>C : C
+ 
+ class V extends types.C {} // Error
+ >V : V
+->types.C : types.C
+->types : typeof types
+->C : typeof types.C
++>types.C : C
++>types : typeof import("types")
++>C : typeof C
+ 

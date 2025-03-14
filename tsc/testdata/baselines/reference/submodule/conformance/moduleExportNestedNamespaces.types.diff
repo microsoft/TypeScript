@@ -1,0 +1,136 @@
+--- old.moduleExportNestedNamespaces.types
++++ new.moduleExportNestedNamespaces.types
+@@= skipped -1, +1 lines =@@
+ 
+ === mod.js ===
+ module.exports.n = {};
+->module.exports.n = {} : typeof n
+->module.exports.n : typeof n
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->n : typeof n
++>module.exports.n = {} : {}
++>module.exports.n : any
++>module.exports : any
++>module : any
++>exports : any
++>n : any
+ >{} : {}
+ 
+ module.exports.n.K = function C() {
+->module.exports.n.K = function C() {    this.x = 10;} : typeof C
+->module.exports.n.K : typeof C
+->module.exports.n : typeof n
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->n : typeof n
+->K : typeof C
+->function C() {    this.x = 10;} : typeof C
+->C : typeof C
++>module.exports.n.K = function C() {    this.x = 10;} : () => void
++>module.exports.n.K : any
++>module.exports.n : any
++>module.exports : any
++>module : any
++>exports : any
++>n : any
++>K : any
++>function C() {    this.x = 10;} : () => void
++>C : () => void
+ 
+     this.x = 10;
+ >this.x = 10 : 10
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >10 : 10
+ }
+ module.exports.Classic = class {
+ >module.exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
+->module.exports.Classic : typeof Classic
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->Classic : typeof Classic
++>module.exports.Classic : any
++>module.exports : any
++>module : any
++>exports : any
++>Classic : any
+ >class {    constructor() {        this.p = 1    }} : typeof Classic
+ 
+     constructor() {
+@@= skipped -48, +48 lines =@@
+ 
+ === use.js ===
+ import * as s from './mod'
+->s : typeof s
++>s : any
+ 
+ var k = new s.n.K()
+->k : C
+->new s.n.K() : C
+->s.n.K : typeof C
+->s.n : typeof s.n
+->s : typeof s
+->n : typeof s.n
+->K : typeof C
++>k : any
++>new s.n.K() : any
++>s.n.K : any
++>s.n : any
++>s : any
++>n : any
++>K : any
+ 
+ k.x
+->k.x : number
+->k : C
+->x : number
++>k.x : any
++>k : any
++>x : any
+ 
+ var classic = new s.Classic()
+->classic : s.Classic
+->new s.Classic() : s.Classic
+->s.Classic : typeof s.Classic
+->s : typeof s
+->Classic : typeof s.Classic
++>classic : any
++>new s.Classic() : any
++>s.Classic : any
++>s : any
++>Classic : any
+ 
+ 
+ /** @param {s.n.K} c
+     @param {s.Classic} classic */
+ function f(c, classic) {
+->f : (c: C, classic: s.Classic) => void
+->c : C
+->classic : s.Classic
++>f : (c: any, classic: any) => void
++>c : any
++>classic : any
+ 
+     c.x
+->c.x : number
+->c : C
+->x : number
++>c.x : any
++>c : any
++>x : any
+ 
+     classic.p
+->classic.p : number
+->classic : s.Classic
+->p : number
++>classic.p : any
++>classic : any
++>p : any
+ }
+ 

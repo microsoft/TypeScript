@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingDts.ts] ////
+
+=== server.ts ===
+class c { }
+>c : c
+
+export default c;
+>c : c
+
+=== client.ts ===
+import defaultBinding from "./server";
+>defaultBinding : typeof c
+
+export var x = new defaultBinding();
+>x : c
+>new defaultBinding() : c
+>defaultBinding : typeof c
+
+import defaultBinding2 from "./server"; // elide this import since defaultBinding2 is not used
+>defaultBinding2 : typeof c
+

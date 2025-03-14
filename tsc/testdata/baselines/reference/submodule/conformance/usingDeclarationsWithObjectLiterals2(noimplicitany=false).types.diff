@@ -1,0 +1,24 @@
+--- old.usingDeclarationsWithObjectLiterals2(noimplicitany=false).types
++++ new.usingDeclarationsWithObjectLiterals2(noimplicitany=false).types
+@@= skipped -2, +2 lines =@@
+ === usingDeclarationsWithObjectLiterals2.ts ===
+ {
+   using _ = { [Symbol.dispose]() {}, value: null };
+->_ : { [Symbol.dispose](): void; value: any; }
+->{ [Symbol.dispose]() {}, value: null } : { [Symbol.dispose](): void; value: null; }
++>_ : { [Symbol.dispose]: () => void; value: any; }
++>{ [Symbol.dispose]() {}, value: null } : { [Symbol.dispose]: () => void; value: null; }
+ >[Symbol.dispose] : () => void
+ >Symbol.dispose : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -13, +13 lines =@@
+ >f : () => Promise<void>
+   {
+     await using _ = { async [Symbol.asyncDispose]() {}, value: null };
+->_ : { [Symbol.asyncDispose](): Promise<void>; value: any; }
+->{ async [Symbol.asyncDispose]() {}, value: null } : { [Symbol.asyncDispose](): Promise<void>; value: null; }
++>_ : { [Symbol.asyncDispose]: () => Promise<void>; value: any; }
++>{ async [Symbol.asyncDispose]() {}, value: null } : { [Symbol.asyncDispose]: () => Promise<void>; value: null; }
+ >[Symbol.asyncDispose] : () => Promise<void>
+ >Symbol.asyncDispose : unique symbol
+ >Symbol : SymbolConstructor

@@ -1,0 +1,17 @@
+--- old.circularReferenceInImport.types
++++ new.circularReferenceInImport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === db.d.ts ===
+ declare namespace Db {
+->Db : typeof Types
++>Db : typeof Db
+ 
+     export import Types = Db;
+->Types : typeof Types
+->Db : typeof Types
++>Types : typeof Db
++>Db : typeof Db
+ }
+ 
+ export = Db;

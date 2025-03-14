@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInAModule.ts] ////
+
+=== classAbstractInAModule.ts ===
+module M {
+>M : typeof M
+
+    export abstract class A {}
+>A : A
+
+    export class B extends A {}
+>B : B
+>A : A
+}
+
+new M.A;
+>new M.A : any
+>M.A : typeof A
+>M : typeof M
+>A : typeof A
+
+new M.B;
+>new M.B : B
+>M.B : typeof B
+>M : typeof M
+>B : typeof B
+

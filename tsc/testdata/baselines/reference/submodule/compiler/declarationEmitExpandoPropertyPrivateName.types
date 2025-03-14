@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationEmitExpandoPropertyPrivateName.ts] ////
+
+=== a.ts ===
+interface I {}
+>I : I
+
+export function f(): I { return null as I; }
+>f : () => I
+>null as I : I
+
+=== b.ts ===
+import {f} from "./a";
+>f : () => I
+
+export function q() {}
+>q : { (): void; val: I; }
+
+q.val = f();
+>q.val = f() : I
+>q.val : I
+>q : { (): void; val: I; }
+>val : I
+>f() : I
+>f : () => I
+

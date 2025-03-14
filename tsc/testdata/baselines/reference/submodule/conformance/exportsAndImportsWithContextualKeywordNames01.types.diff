@@ -1,0 +1,11 @@
+--- old.exportsAndImportsWithContextualKeywordNames01.types
++++ new.exportsAndImportsWithContextualKeywordNames01.types
+@@= skipped -19, +19 lines =@@
+ 
+ === t2.ts ===
+ import * as set from "./t1";
+->set : typeof set
++>set : typeof import("t1")
+ 
+ === t3.ts ===
+ import { set as yield } from "./t1";

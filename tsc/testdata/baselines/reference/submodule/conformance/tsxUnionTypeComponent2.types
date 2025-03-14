@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/jsx/tsxUnionTypeComponent2.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+type Invalid1 = React.ComponentClass<any> | number;
+>Invalid1 : any
+>React : any
+
+const X: Invalid1 = 1;
+>X : any
+>1 : 1
+
+<X />;
+><X /> : any
+>X : any
+
+
+

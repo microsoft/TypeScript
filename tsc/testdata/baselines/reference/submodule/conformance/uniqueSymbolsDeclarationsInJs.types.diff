@@ -1,0 +1,32 @@
+--- old.uniqueSymbolsDeclarationsInJs.types
++++ new.uniqueSymbolsDeclarationsInJs.types
+@@= skipped -8, +8 lines =@@
+      * @readonly
+      */
+     static readonlyStaticCall = Symbol();
+->readonlyStaticCall : unique symbol
+->Symbol() : unique symbol
++>readonlyStaticCall : symbol
++>Symbol() : symbol
+ >Symbol : SymbolConstructor
+ 
+     /**
+@@= skipped -9, +9 lines =@@
+      * @readonly
+      */
+     static readonlyStaticType;
+->readonlyStaticType : unique symbol
++>readonlyStaticType : any
+ 
+     /**
+      * @type {unique symbol}
+      * @readonly
+      */
+     static readonlyStaticTypeAndCall = Symbol();
+->readonlyStaticTypeAndCall : unique symbol
+->Symbol() : unique symbol
++>readonlyStaticTypeAndCall : symbol
++>Symbol() : symbol
+ >Symbol : SymbolConstructor
+ 
+     static readwriteStaticCall = Symbol();

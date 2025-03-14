@@ -1,0 +1,10 @@
+--- old.declFileForTypeParameters.types
++++ new.declFileForTypeParameters.types
+@@= skipped -2, +2 lines =@@
+ === declFileForTypeParameters.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     x: T;
+ >x : T

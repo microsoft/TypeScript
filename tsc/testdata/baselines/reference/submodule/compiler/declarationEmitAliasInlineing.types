@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/declarationEmitAliasInlineing.ts] ////
+
+=== a.ts ===
+type O = {
+>O : O
+
+    prop: string
+>prop : string
+
+    prop2: string
+>prop2 : string
+}
+
+type I = {
+>I : I
+
+    prop: string
+>prop : string
+}
+
+export const fn = (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {};
+>fn : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+>(v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {} : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+>v : string
+>p : Omit<O, "prop">
+>key : keyof O
+>p2 : Omit<O, "prop">
+
+=== aExp.ts ===
+export type O = {
+>O : O
+
+    prop: string
+>prop : string
+
+    prop2: string
+>prop2 : string
+}
+
+export type I = {
+>I : I
+
+    prop: string
+>prop : string
+}
+
+export const fnExp = (v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {};
+>fnExp : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+>(v: O['prop'], p: Omit<O, 'prop'>, key: keyof O, p2: Omit<O, keyof I>) => {} : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+>v : string
+>p : Omit<O, "prop">
+>key : keyof O
+>p2 : Omit<O, "prop">
+
+=== b.ts ===
+import {fn} from './a'
+>fn : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+
+import {fnExp} from './aExp'
+>fnExp : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+
+export const f = fn;
+>f : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+>fn : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+
+export const fExp = fnExp;
+>fExp : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+>fnExp : (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void
+

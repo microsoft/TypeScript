@@ -1,0 +1,11 @@
+--- old.unknownSymbolInGenericReturnType.types
++++ new.unknownSymbolInGenericReturnType.types
+@@= skipped -5, +5 lines =@@
+ 
+     public static select<T, S>(values: T[], func: (v: T) => A): any[] {
+ >select : <T, S>(values: T[], func: (v: T) => A) => any[]
++>T : T
++>S : S
+ >values : T[]
+ >func : (v: T) => A
+ >v : T

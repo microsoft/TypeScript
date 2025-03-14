@@ -1,0 +1,20 @@
+--- old.instancePropertiesInheritedIntoClassType.types
++++ new.instancePropertiesInheritedIntoClassType.types
+@@= skipped -80, +80 lines =@@
+ 
+     class C<T, U> {
+ >C : C<T, U>
++>T : T
++>U : U
+ 
+         x: T;
+ >x : T
+@@= skipped -24, +26 lines =@@
+ 
+     class D<T, U> extends C<T, U> { e: T; }
+ >D : D<T, U>
++>T : T
++>U : U
+ >C : C<T, U>
+ >e : T
+ 

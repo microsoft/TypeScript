@@ -1,0 +1,11 @@
+--- old.omitTypeTestErrors01.types
++++ new.omitTypeTestErrors01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === omitTypeTestErrors01.ts ===
+ interface Foo {
++>Foo : Foo
++
+     a: string;
+ >a : string
+ 

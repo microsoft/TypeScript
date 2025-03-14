@@ -1,0 +1,223 @@
+--- old.uniqueSymbolsErrors.types
++++ new.uniqueSymbolsErrors.types
+@@= skipped -13, +13 lines =@@
+ 
+ // function arguments and return types
+ declare function invalidArgType(arg: unique symbol): void;
+->invalidArgType : (arg: unique symbol) => void
++>invalidArgType : (arg: symbol) => void
+ >arg : symbol
+ 
+ declare function invalidRestArgType(...arg: (unique symbol)[]): void;
+->invalidRestArgType : (...arg: (unique symbol)[]) => void
++>invalidRestArgType : (...arg: symbol[]) => void
+ >arg : symbol[]
+ 
+ declare function invalidReturnType(): unique symbol;
+->invalidReturnType : () => unique symbol
++>invalidReturnType : () => symbol
+ 
+ declare function invalidThisType(this: unique symbol): void;
+->invalidThisType : (this: unique symbol) => void
++>invalidThisType : () => void
+ >this : symbol
+ 
+ declare function invalidTypePredicate(n: any): n is unique symbol;
+->invalidTypePredicate : (n: any) => n is unique symbol
++>invalidTypePredicate : (n: any) => n is symbol
+ >n : any
+ 
+ declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
+->invalidTypeParameterConstraint : <T extends unique symbol>() => void
++>invalidTypeParameterConstraint : <T extends symbol>() => void
++>T : T
+ 
+ declare function invalidTypeParameterDefault<T = unique symbol>(): void;
+->invalidTypeParameterDefault : <T = symbol>() => void
++>invalidTypeParameterDefault : <T>() => void
++>T : T
+ 
+ // classes
+ class InvalidClass {
+@@= skipped -38, +40 lines =@@
+ >invalidPropertyType : symbol
+ 
+     invalidArgType(arg: unique symbol): void { return; }
+->invalidArgType : (arg: unique symbol) => void
++>invalidArgType : (arg: symbol) => void
+ >arg : symbol
+ 
+     invalidRestArgType(...args: (unique symbol)[]): void { return; }
+->invalidRestArgType : (...args: (unique symbol)[]) => void
++>invalidRestArgType : (...args: symbol[]) => void
+ >args : symbol[]
+ 
+     invalidReturnType(): unique symbol { return; }
+->invalidReturnType : () => unique symbol
++>invalidReturnType : () => symbol
+ 
+     invalidThisType(this: unique symbol): void { return; }
+->invalidThisType : (this: unique symbol) => void
++>invalidThisType : () => void
+ >this : symbol
+ 
+     invalidTypePredicate(n: any): n is unique symbol { return; }
+->invalidTypePredicate : (n: any) => n is unique symbol
++>invalidTypePredicate : (n: any) => n is symbol
+ >n : any
+ 
+     invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
+->invalidTypeParameterConstraint : <T extends unique symbol>() => void
++>invalidTypeParameterConstraint : <T extends symbol>() => void
++>T : T
+ 
+     invalidTypeParameterDefault<T = unique symbol>(): void { return; }
+->invalidTypeParameterDefault : <T = symbol>() => void
++>invalidTypeParameterDefault : <T>() => void
++>T : T
+ 
+     get invalidGetter(): unique symbol { return; }
+ >invalidGetter : symbol
+@@= skipped -35, +37 lines =@@
+ >invalidStaticPropertyType : symbol
+ 
+     static invalidStaticArgType(arg: unique symbol): void { return; }
+->invalidStaticArgType : (arg: unique symbol) => void
++>invalidStaticArgType : (arg: symbol) => void
+ >arg : symbol
+ 
+     static invalidStaticRestArgType(...args: (unique symbol)[]): void { return; }
+->invalidStaticRestArgType : (...args: (unique symbol)[]) => void
++>invalidStaticRestArgType : (...args: symbol[]) => void
+ >args : symbol[]
+ 
+     static invalidStaticReturnType(): unique symbol { return; }
+->invalidStaticReturnType : () => unique symbol
++>invalidStaticReturnType : () => symbol
+ 
+     static invalidStaticThisType(this: unique symbol): void { return; }
+->invalidStaticThisType : (this: unique symbol) => void
++>invalidStaticThisType : () => void
+ >this : symbol
+ 
+     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
+->invalidStaticTypePredicate : (n: any) => n is unique symbol
++>invalidStaticTypePredicate : (n: any) => n is symbol
+ >n : any
+ 
+     static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
+->invalidStaticTypeParameterConstraint : <T extends unique symbol>() => void
++>invalidStaticTypeParameterConstraint : <T extends symbol>() => void
++>T : T
+ 
+     static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
+->invalidStaticTypeParameterDefault : <T = symbol>() => void
++>invalidStaticTypeParameterDefault : <T>() => void
++>T : T
+ 
+     static get invalidStaticGetter(): unique symbol { return; }
+ >invalidStaticGetter : symbol
+@@= skipped -34, +36 lines =@@
+ 
+ // interfaces
+ interface InvalidInterface {
++>InvalidInterface : InvalidInterface
++
+     invalidPropertyType: unique symbol;
+ >invalidPropertyType : symbol
+ 
+     invalidArgType(arg: unique symbol): void;
+->invalidArgType : (arg: unique symbol) => void
++>invalidArgType : (arg: symbol) => void
+ >arg : symbol
+ 
+     invalidRestArgType(...args: (unique symbol)[]): void;
+->invalidRestArgType : (...args: (unique symbol)[]) => void
++>invalidRestArgType : (...args: symbol[]) => void
+ >args : symbol[]
+ 
+     invalidReturnType(): unique symbol;
+->invalidReturnType : () => unique symbol
++>invalidReturnType : () => symbol
+ 
+     invalidThisType(this: unique symbol);
+->invalidThisType : (this: unique symbol) => any
++>invalidThisType : () => any
+ >this : symbol
+ 
+     invalidTypePredicate(n: any): n is unique symbol
+->invalidTypePredicate : (n: any) => n is unique symbol
++>invalidTypePredicate : (n: any) => n is symbol
+ >n : any
+ 
+     invalidTypeParameterConstraint<T extends unique symbol>(): void;
+->invalidTypeParameterConstraint : <T extends unique symbol>() => void
++>invalidTypeParameterConstraint : <T extends symbol>() => void
++>T : T
+ 
+     invalidTypeParameterDefault<T = unique symbol>(): void;
+->invalidTypeParameterDefault : <T = symbol>() => void
++>invalidTypeParameterDefault : <T>() => void
++>T : T
+ }
+ 
+ // type literals
+@@= skipped -37, +41 lines =@@
+ >invalidPropertyType : symbol
+ 
+     invalidArgType(arg: unique symbol): void;
+->invalidArgType : (arg: unique symbol) => void
++>invalidArgType : (arg: symbol) => void
+ >arg : symbol
+ 
+     invalidRestArgType(...args: (unique symbol)[]): void;
+->invalidRestArgType : (...args: (unique symbol)[]) => void
++>invalidRestArgType : (...args: symbol[]) => void
+ >args : symbol[]
+ 
+     invalidReturnType(): unique symbol;
+->invalidReturnType : () => unique symbol
++>invalidReturnType : () => symbol
+ 
+     invalidThisType(this: unique symbol);
+->invalidThisType : (this: unique symbol) => any
++>invalidThisType : () => any
+ >this : symbol
+ 
+     invalidTypePredicate(n: any): n is unique symbol
+->invalidTypePredicate : (n: any) => n is unique symbol
++>invalidTypePredicate : (n: any) => n is symbol
+ >n : any
+ 
+     invalidTypeParameterConstraint<T extends unique symbol>(): void;
+->invalidTypeParameterConstraint : <T extends unique symbol>() => void
++>invalidTypeParameterConstraint : <T extends symbol>() => void
++>T : T
+ 
+     invalidTypeParameterDefault<T = unique symbol>(): void;
+->invalidTypeParameterDefault : <T = symbol>() => void
++>invalidTypeParameterDefault : <T>() => void
++>T : T
+ 
+ };
+ 
+@@= skipped -32, +34 lines =@@
+ 
+ type InvalidAliasTypeParameterConstraint<T extends unique symbol> = never;
+ >InvalidAliasTypeParameterConstraint : never
++>T : T
+ 
+ type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
+ >InvalidAliasTypeParameterDefault : never
++>T : T
+ 
+ // type references
+ declare const invalidTypeArgument: Promise<unique symbol>;
+@@= skipped -17, +19 lines =@@
+ // mapped types
+ declare const invalidMappedType: { [P in string]: unique symbol };
+ >invalidMappedType : { [x: string]: symbol; }
++>P : P
+ 
+ // unions/intersection
+ declare const invalidUnion: unique symbol | unique symbol;

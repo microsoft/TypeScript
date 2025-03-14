@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/externalModules/topLevelAwaitErrors.11.ts] ////
+
+=== index.ts ===
+// await disallowed in import=
+declare var require: any;
+>require : any
+
+import await = require("./other");
+>await : typeof import("other")
+
+=== other.ts ===
+declare const _await: any;
+>_await : any
+
+export { _await as await };
+>_await : any
+>await : any
+

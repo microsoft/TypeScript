@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/isolatedModulesNoExternalModuleMultiple.ts] ////
+
+=== file1.ts ===
+var x;
+>x : any
+
+=== file2.ts ===
+var y;
+>y : any
+
+=== file3.ts ===
+var z;
+>z : any
+

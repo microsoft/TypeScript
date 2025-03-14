@@ -1,0 +1,10 @@
+--- old.classIsSubtypeOfBaseType.types
++++ new.classIsSubtypeOfBaseType.types
+@@= skipped -2, +2 lines =@@
+ === classIsSubtypeOfBaseType.ts ===
+ class Base<T> {
+ >Base : Base<T>
++>T : T
+ 
+     foo: T;
+ >foo : T

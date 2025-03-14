@@ -1,0 +1,12 @@
+--- old.moduleAugmentationGlobal2.types
++++ new.moduleAugmentationGlobal2.types
+@@= skipped -12, +12 lines =@@
+ >global : any
+ 
+     interface Array<T> {
++>Array : T[]
++>T : T
++
+         getCountAsString(): string;
+ >getCountAsString : () => string
+     }

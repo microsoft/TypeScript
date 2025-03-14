@@ -1,0 +1,157 @@
+--- old.contextualTypeTupleEnd.types
++++ new.contextualTypeTupleEnd.types
+@@= skipped -24, +24 lines =@@
+ f1(x => str(x));
+ >f1(x => str(x)) : void
+ >f1 : (...args: Funcs) => void
+->x => str(x) : (x: string) => void
+->x : string
++>x => str(x) : (x: any) => void
++>x : any
+ >str(x) : void
+ >str : (x: string) => void
+->x : string
++>x : any
+ 
+ f1(x => num(x), x => str(x));
+ >f1(x => num(x), x => str(x)) : void
+ >f1 : (...args: Funcs) => void
+->x => num(x) : (x: number) => void
+->x : number
++>x => num(x) : (x: any) => void
++>x : any
+ >num(x) : void
+ >num : (x: number) => void
+->x : number
+->x => str(x) : (x: string) => void
+->x : string
++>x : any
++>x => str(x) : (x: any) => void
++>x : any
+ >str(x) : void
+ >str : (x: string) => void
+->x : string
++>x : any
+ 
+ f1(x => num(x), x => num(x), x => str(x));
+ >f1(x => num(x), x => num(x), x => str(x)) : void
+ >f1 : (...args: Funcs) => void
+->x => num(x) : (x: number) => void
+->x : number
++>x => num(x) : (x: any) => void
++>x : any
+ >num(x) : void
+ >num : (x: number) => void
+->x : number
+->x => num(x) : (x: number) => void
+->x : number
++>x : any
++>x => num(x) : (x: any) => void
++>x : any
+ >num(x) : void
+ >num : (x: number) => void
+->x : number
+->x => str(x) : (x: string) => void
+->x : string
++>x : any
++>x => str(x) : (x: any) => void
++>x : any
+ >str(x) : void
+ >str : (x: string) => void
+->x : string
++>x : any
+ 
+ const a0: Funcs = [];  // Error
+ >a0 : Funcs
+@@= skipped -89, +89 lines =@@
+ 
+ export type Selector<State> = (state: State) => unknown;
+ >Selector : Selector<State>
++>State : State
+ >state : State
+ 
+ export type SelectorTuple<State> = Selector<State>[];
+ >SelectorTuple : SelectorTuple<State>
++>State : State
+ 
+ export type ExampleState = {
+ >ExampleState : ExampleState
+@@= skipped -18, +20 lines =@@
+ 
+ export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
+ >createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
++>S : S
+ >selectors : [...selectors: S, f: (x: any) => any]
+ >x : any
+ 
+@@= skipped -38, +39 lines =@@
+ // Repro from #43122
+ 
+ declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void
+->example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
+->args : [...((n: number) => void)[], (x: any) => void]
++>example : (...args: [...(n: number) => void[], (x: any) => void]) => void
++>args : [...(n: number) => void[], (x: any) => void]
+ >n : number
+ >x : any
+ 
+ example(
+ >example(    x => x.foo,  // Error    x => x.bar,  // Error    x => x.baz,) : void
+->example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
++>example : (...args: [...(n: number) => void[], (x: any) => void]) => void
+ 
+     x => x.foo,  // Error
+->x => x.foo : (x: number) => any
+->x : number
++>x => x.foo : (x: any) => any
++>x : any
+ >x.foo : any
+->x : number
++>x : any
+ >foo : any
+ 
+     x => x.bar,  // Error
+->x => x.bar : (x: number) => any
+->x : number
++>x => x.bar : (x: any) => any
++>x : any
+ >x.bar : any
+->x : number
++>x : any
+ >bar : any
+ 
+     x => x.baz,
+@@= skipped -35, +35 lines =@@
+ // Repro from #52846
+ 
+ declare function test(...args: [...((arg: number) => void)[], (arg: string) => void]): void;
+->test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
+->args : [...((arg: number) => void)[], (arg: string) => void]
++>test : (...args: [...(arg: number) => void[], (arg: string) => void]) => void
++>args : [...(arg: number) => void[], (arg: string) => void]
+ >arg : number
+ >arg : string
+   
+ test(a => a, b => b, c => c);
+ >test(a => a, b => b, c => c) : void
+->test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
+->a => a : (a: number) => number
+->a : number
+->a : number
+->b => b : (b: number) => number
+->b : number
+->b : number
+->c => c : (c: string) => string
+->c : string
+->c : string
++>test : (...args: [...(arg: number) => void[], (arg: string) => void]) => void
++>a => a : (a: any) => any
++>a : any
++>a : any
++>b => b : (b: any) => any
++>b : any
++>b : any
++>c => c : (c: any) => any
++>c : any
++>c : any
+ 

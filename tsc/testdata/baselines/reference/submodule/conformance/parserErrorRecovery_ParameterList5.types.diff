@@ -1,0 +1,11 @@
+--- old.parserErrorRecovery_ParameterList5.types
++++ new.parserErrorRecovery_ParameterList5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserErrorRecovery_ParameterList5.ts ===
+ (a:number => { }
+->(a:number => { } : (a: number, {}: {}) => any
++>(a:number => { } : (a: number, __1: {}) => any
+ >a : number
+ > : any
+ 

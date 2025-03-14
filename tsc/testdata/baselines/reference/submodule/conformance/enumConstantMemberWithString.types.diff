@@ -1,0 +1,20 @@
+--- old.enumConstantMemberWithString.types
++++ new.enumConstantMemberWithString.types
+@@= skipped -73, +73 lines =@@
+ }
+ 
+ enum T4 {
+->T4 : T4
++>T4 : T4.a
+ 
+     a = "1"
+ >a : T4.a
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ enum T5 {
+->T5 : T5
++>T5 : T5.a
+ 
+     a = "1" + "2"
+ >a : T5.a

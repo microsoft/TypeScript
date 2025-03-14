@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.ts] ////
+
+=== eslint.config.js ===
+const eslintReact = require('./eslint-plugin-react.js');
+>eslintReact : any
+>require('./eslint-plugin-react.js') : any
+>require : any
+>'./eslint-plugin-react.js' : "./eslint-plugin-react.js"
+
+const tseslint = require('./typescript-eslint.js');
+>tseslint : any
+>require('./typescript-eslint.js') : any
+>require : any
+>'./typescript-eslint.js' : "./typescript-eslint.js"
+
+tseslint.config(eslintReact)
+>tseslint.config(eslintReact) : any
+>tseslint.config : any
+>tseslint : any
+>config : any
+>eslintReact : any
+

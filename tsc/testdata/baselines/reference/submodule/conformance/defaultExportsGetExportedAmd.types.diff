@@ -1,0 +1,11 @@
+--- old.defaultExportsGetExportedAmd.types
++++ new.defaultExportsGetExportedAmd.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ export default class Foo {}
+->Foo : Foo
++>Foo : default
+ 
+ === b.ts ===
+ export default function foo() {}

@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/literalTypeNameAssertionNotTriggered.ts] ////
+
+=== /b.ts ===
+import a = require('./a');
+>a : typeof import("/a")
+
+declare function f<T>(obj: T, key: keyof T): void;
+>f : <T>(obj: T, key: keyof T) => void
+>T : T
+>obj : T
+>key : keyof T
+
+f(a, "");
+>f(a, "") : void
+>f : <T>(obj: T, key: keyof T) => void
+>a : typeof import("/a")
+>"" : ""
+
+=== /a.ts ===
+import x = require("something");
+>x : any
+
+export { x };
+>x : any
+

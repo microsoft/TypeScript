@@ -1,0 +1,58 @@
+--- old.jsDeclarationsWithDefaultAsNamespaceLikeMerge.types
++++ new.jsDeclarationsWithDefaultAsNamespaceLikeMerge.types
+@@= skipped -4, +4 lines =@@
+ >Computed : Computed
+ 
+ interface Mapper<R> {
++>Mapper : Mapper<R>
++>R : R
++
+     <Key extends string>(map: Key[]): { [K in Key]: R };
++>Key : Key
+ >map : Key[]
++>K : K
+ 
+     <Map extends Record<string, string>>(map: Map): { [K in keyof Map]: R };
++>Map : Map
+ >map : Map
++>K : K
+ }
+ interface NamespacedMappers {
++>NamespacedMappers : NamespacedMappers
++
+     mapState: Mapper<Computed>;
+ >mapState : Mapper<Computed>
+ }
+@@= skipped -15, +24 lines =@@
+ 
+ === /index.js ===
+ import { createNamespacedHelpers } from './helper'
+->createNamespacedHelpers : () => import("/helper").NamespacedMappers
++>createNamespacedHelpers : () => NamespacedMappers
+ 
+ const { mapState } = createNamespacedHelpers()
+->mapState : import("/helper").Mapper<import("/helper").Computed>
+->createNamespacedHelpers() : import("/helper").NamespacedMappers
+->createNamespacedHelpers : () => import("/helper").NamespacedMappers
++>mapState : Mapper<Computed>
++>createNamespacedHelpers() : NamespacedMappers
++>createNamespacedHelpers : () => NamespacedMappers
+ 
+ export default {
+->{    computed: {        ...mapState(['panels'])    }} : { computed: { panels: import("/helper").Computed; }; }
++>{    computed: {        ...mapState(['panels'])    }} : { computed: { panels: Computed; }; }
+ 
+     computed: {
+->computed : { panels: import("/helper").Computed; }
+->{        ...mapState(['panels'])    } : { panels: import("/helper").Computed; }
++>computed : { panels: Computed; }
++>{        ...mapState(['panels'])    } : { panels: Computed; }
+ 
+         ...mapState(['panels'])
+->mapState(['panels']) : { panels: import("/helper").Computed; }
+->mapState : import("/helper").Mapper<import("/helper").Computed>
++>mapState(['panels']) : { panels: Computed; }
++>mapState : Mapper<Computed>
+ >['panels'] : "panels"[]
+ >'panels' : "panels"
+     }

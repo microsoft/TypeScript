@@ -1,0 +1,34 @@
+--- old.mergedInterfacesWithInheritedPrivates3.types
++++ new.mergedInterfacesWithInheritedPrivates3.types
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ interface A extends C { // error
++>A : A
++
+     y: string;
+ >y : string
+ }
+ 
+ interface A extends C2 { 
++>A : A
++
+     z: string;
+ >z : string
+ }
+@@= skipped -38, +42 lines =@@
+     }
+ 
+     interface A extends C { // error, privates conflict
++>A : A
++
+         y: string;
+ >y : string
+     }
+ 
+     interface A extends C2 {
++>A : A
++
+         z: string;
+ >z : string
+     }

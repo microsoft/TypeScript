@@ -1,0 +1,36 @@
+--- old.importAliasInModuleAugmentation.types
++++ new.importAliasInModuleAugmentation.types
+@@= skipped -10, +10 lines =@@
+ >34 : 34
+ 
+     export interface y { s: string }
++>y : y
+ >s : string
+ }
+ 
+@@= skipped -9, +10 lines =@@
+     export import x = A.y;
+ >x : 34
+ >A : typeof A
+->y : x
++>y : y
+ 
+     // Should still error
+     import f = require("fs");
+@@= skipped -12, +12 lines =@@
+ >x : 34
+ 
+ let s: x = { s: "" };
+->s : x
++>s : y
+ >{ s: "" } : { s: string; }
+ >s : string
+ >"" : ""
+@@= skipped -8, +8 lines =@@
+ void s.s;
+ >void s.s : undefined
+ >s.s : string
+->s : x
++>s : y
+ >s : string
+ 

@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/jsx/tsxErrorRecovery3.tsx] ////
+
+=== file1.tsx ===
+declare namespace JSX { interface Element { } }
+>JSX : any
+>Element : Element
+
+<div></div>
+><div></div><div></div> : any
+><div></div> : any
+>div : any
+>div : any
+
+<div></div>
+><div></div> : any
+>div : any
+>div : any
+
+=== file2.tsx ===
+var x = <div></div><div></div>
+>x : any
+><div></div><div></div> : any
+><div></div> : any
+>div : any
+>div : any
+><div></div> : any
+>div : any
+>div : any
+

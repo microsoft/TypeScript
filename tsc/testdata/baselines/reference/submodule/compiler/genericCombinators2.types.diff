@@ -1,0 +1,38 @@
+--- old.genericCombinators2.types
++++ new.genericCombinators2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericCombinators2.ts ===
+ interface Collection<T, U> {
++>Collection : Collection<T, U>
++>T : T
++>U : U
++
+     length: number;
+ >length : number
+ 
+@@= skipped -15, +19 lines =@@
+ }
+ 
+ interface Combinators {
++>Combinators : Combinators
++
+     map<T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>;
+->map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; }
++>map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
++>T : T
++>U : U
+ >c : Collection<T, U>
+ >f : (x: T, y: U) => any
+ >x : T
+ >y : U
+ 
+     map<T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>;
+->map : { <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
++>map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
++>T : T
++>U : U
++>V : V
+ >c : Collection<T, U>
+ >f : (x: T, y: U) => V
+ >x : T

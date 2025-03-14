@@ -1,0 +1,11 @@
+--- old.privateProtectedMembersAreNotAccessibleDestructuring.types
++++ new.privateProtectedMembersAreNotAccessibleDestructuring.types
+@@= skipped -74, +74 lines =@@
+ >k : K
+ 
+ function f({ priv, prot, privateMethod }: K) {
+->f : ({ priv, prot, privateMethod }: K) => void
++>f : (__0: K) => void
+ >priv : any
+ >prot : any
+ >privateMethod : () => void

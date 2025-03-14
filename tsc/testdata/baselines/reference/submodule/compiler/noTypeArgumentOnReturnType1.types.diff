@@ -1,0 +1,14 @@
+--- old.noTypeArgumentOnReturnType1.types
++++ new.noTypeArgumentOnReturnType1.types
+@@= skipped -2, +2 lines =@@
+ === noTypeArgumentOnReturnType1.ts ===
+ class A<T>{
+ >A : A<T>
++>T : T
+  
+  foo(): A{
+->foo : () => A
++>foo : () => any
+ 
+   return null;
+  }

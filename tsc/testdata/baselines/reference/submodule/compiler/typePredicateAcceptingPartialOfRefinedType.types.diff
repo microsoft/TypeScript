@@ -1,0 +1,18 @@
+--- old.typePredicateAcceptingPartialOfRefinedType.types
++++ new.typePredicateAcceptingPartialOfRefinedType.types
+@@= skipped -3, +3 lines =@@
+ // repro #51953
+ 
+ interface Test {
++>Test : Test
++
+   testy?: string;
+ >testy : string | undefined
+ }
+ 
+ interface Options {
++>Options : Options
++
+   test: Test['testy'];
+ >test : string | undefined
+ }

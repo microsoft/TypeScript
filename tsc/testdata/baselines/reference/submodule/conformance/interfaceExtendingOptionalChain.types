@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendingOptionalChain.ts] ////
+
+=== interfaceExtendingOptionalChain.ts ===
+namespace Foo {
+>Foo : typeof Foo
+
+    export class Bar {}
+>Bar : Bar
+}
+
+interface C1 extends Foo?.Bar {}
+>C1 : C1
+>Foo : typeof Foo
+

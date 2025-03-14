@@ -1,0 +1,11 @@
+--- old.narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.types
++++ new.narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.types
+@@= skipped -1, +1 lines =@@
+ 
+ === narrowRefinedConstLikeParameterBIndingElementNameInInnerScope.ts ===
+ function ff({ a, b }: { a: string | undefined, b: () => void }) {
+->ff : ({ a, b }: { a: string | undefined; b: () => void; }) => void
++>ff : (__0: { a: string | undefined; b: () => void; }) => void
+ >a : string | undefined
+ >b : () => void
+ >a : string | undefined

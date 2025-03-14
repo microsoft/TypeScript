@@ -1,0 +1,68 @@
+--- old.strictTypeofUnionNarrowing.types
++++ new.strictTypeofUnionNarrowing.types
+@@= skipped -1, +1 lines =@@
+ 
+ === strictTypeofUnionNarrowing.ts ===
+ function stringify1(anything: { toString(): string } | undefined): string {
+->stringify1 : (anything: { toString(): string; } | undefined) => string
+->anything : { toString(): string; } | undefined
++>stringify1 : (anything: { toString: () => string; } | undefined) => string
++>anything : { toString: () => string; } | undefined
+ >toString : () => string
+ 
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >typeof anything === "string" ? anything.toUpperCase() : "" : string
+ >typeof anything === "string" : boolean
+->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->anything : { toString(): string; } | undefined
++>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>anything : { toString: () => string; } | undefined
+ >"string" : "string"
+ >anything.toUpperCase() : string
+ >anything.toUpperCase : () => string
+@@= skipped -24, +24 lines =@@
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >typeof anything === "string" ? anything.toUpperCase() : "" : string
+ >typeof anything === "string" : boolean
+->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >anything : {} | undefined
+ >"string" : "string"
+ >anything.toUpperCase() : string
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ function stringify3(anything: unknown | undefined): string { // should simplify to just `unknown` which should narrow fine
+->stringify3 : (anything: unknown | undefined) => string
++>stringify3 : (anything: unknown) => string
+ >anything : unknown
+ 
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >typeof anything === "string" ? anything.toUpperCase() : "" : string
+ >typeof anything === "string" : boolean
+->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >anything : unknown
+ >"string" : "string"
+ >anything.toUpperCase() : string
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ function stringify4(anything: { toString?(): string } | undefined): string {
+->stringify4 : (anything: { toString?(): string; } | undefined) => string
+->anything : { toString?(): string; } | undefined
+->toString : (() => string) | undefined
++>stringify4 : (anything: { toString?: () => string | undefined; } | undefined) => string
++>anything : { toString?: () => string | undefined; } | undefined
++>toString : () => string | undefined
+ 
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ >typeof anything === "string" ? anything.toUpperCase() : "" : string
+ >typeof anything === "string" : boolean
+->typeof anything : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->anything : { toString?(): string; } | undefined
++>typeof anything : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>anything : { toString?: () => string | undefined; } | undefined
+ >"string" : "string"
+ >anything.toUpperCase() : string
+ >anything.toUpperCase : () => string

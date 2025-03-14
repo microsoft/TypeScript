@@ -1,0 +1,68 @@
+--- old.systemModule17.types
++++ new.systemModule17.types
+@@= skipped -4, +4 lines =@@
+ >A : A
+ 
+ export interface I {}
++>I : I
+ 
+ === f2.ts ===
+ var x = 1;
+@@= skipped -7, +8 lines =@@
+ >1 : 1
+ 
+ interface I { }
++>I : I
+ 
+ namespace N {
+ >N : typeof N
+@@= skipped -9, +10 lines =@@
+ >1 : 1
+ 
+ 	export interface I { }	
++>I : I
+ }
+ 
+ import IX = N.x;
+@@= skipped -10, +11 lines =@@
+ import II = N.I;
+ >II : any
+ >N : typeof N
+->I : II
++>I : I
+ 
+ import { A, A as EA, I as EI } from "f1";
+->A : typeof A
+->A : typeof A
+->EA : typeof A
++>A : any
++>A : any
++>EA : any
+ >I : any
+ >EI : any
+ 
+@@= skipped -24, +24 lines =@@
+ >I1 : any
+ 
+ export {A};
+->A : typeof A
++>A : any
+ 
+ export {A as A1};
+->A : typeof A
+->A1 : typeof A
++>A : any
++>A1 : any
+ 
+ export {EA};
+->EA : typeof A
++>EA : any
+ 
+ export {EA as EA1};
+->EA : typeof A
+->EA1 : typeof A
++>EA : any
++>EA1 : any
+ 
+ export {EI };
+ >EI : any

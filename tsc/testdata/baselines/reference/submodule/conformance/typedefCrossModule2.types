@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule2.ts] ////
+
+=== use.js ===
+var mod = require('./mod1.js');
+>mod : any
+>require('./mod1.js') : any
+>require : any
+>'./mod1.js' : "./mod1.js"
+
+/** @type {import("./mod1.js").Baz} */
+var b;
+>b : any
+
+/** @type {mod.Baz} */
+var bb;
+>bb : any
+
+var bbb = new mod.Baz();
+>bbb : any
+>new mod.Baz() : any
+>mod.Baz : any
+>mod : any
+>Baz : any
+

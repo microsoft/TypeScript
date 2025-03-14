@@ -1,0 +1,11 @@
+--- old.null.types
++++ new.null.types
+@@= skipped -33, +33 lines =@@
+ >3 : 3
+ }
+ interface I {
++>I : I
++
+     x:any;
+ >x : any
+ 

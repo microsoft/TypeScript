@@ -1,0 +1,26 @@
+--- old.typeTagWithGenericSignature.types
++++ new.typeTagWithGenericSignature.types
+@@= skipped -2, +2 lines =@@
+ === bug25618.js ===
+ /** @type {<T>(param?: T) => T | undefined} */
+ function typed(param) {
+->typed : <T>(param?: T) => T | undefined
+->param : T | undefined
++>typed : (param: any) => any
++>param : any
+ 
+     return param;
+->param : T | undefined
++>param : any
+ }
+ 
+ var n = typed(1);
+->n : number | undefined
+->typed(1) : 1 | undefined
+->typed : <T>(param?: T) => T | undefined
++>n : any
++>typed(1) : any
++>typed : (param: any) => any
+ >1 : 1
+ 
+ 

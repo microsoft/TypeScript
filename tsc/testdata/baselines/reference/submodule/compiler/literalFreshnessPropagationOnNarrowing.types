@@ -1,0 +1,174 @@
+//// [tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts] ////
+
+=== literalFreshnessPropagationOnNarrowing.ts ===
+function f1() {
+>f1 : () => void
+
+    let b = true;
+>b : boolean
+>true : true
+
+    let obj = { b };
+>obj : { b: boolean; }
+>{ b } : { b: boolean; }
+>b : any
+
+    // Desired: OK
+    // 3.0: OK
+    // 3.1 as-is: OK
+    // 3.1 minus widening propagation: error
+    obj.b = false;
+>obj.b = false : false
+>obj.b : boolean
+>obj : { b: boolean; }
+>b : boolean
+>false : false
+}
+
+function f2() {
+>f2 : () => void
+
+    type Element = (string | false);
+>Element : Element
+>false : false
+
+    type ElementOrArray = Element | Element[]; 
+>ElementOrArray : ElementOrArray
+
+    let el: Element = null as any;
+>el : Element
+>null as any : any
+
+    let arr: Element[] = null as any;
+>arr : Element[]
+>null as any : any
+
+    let elOrA: ElementOrArray = null as any;
+>elOrA : ElementOrArray
+>null as any : any
+
+    // Desired/actual: All OK
+    let a1: ElementOrArray = el;
+>a1 : ElementOrArray
+>el : Element
+
+    let a2: ElementOrArray = arr;
+>a2 : ElementOrArray
+>arr : Element[]
+
+    let a3: ElementOrArray = [el];
+>a3 : ElementOrArray
+>[el] : Element[]
+>el : Element
+
+    let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
+>a4 : ElementOrArray
+>Array.isArray(elOrA) ? elOrA : [elOrA] : Element[]
+>Array.isArray(elOrA) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>elOrA : ElementOrArray
+>elOrA : Element[]
+>[elOrA] : Element[]
+>elOrA : Element
+
+    // Desired: OK
+    // 3.0: Error
+    // 3.1: OK
+    let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
+>a5 : ElementOrArray
+>[...Array.isArray(elOrA) ? elOrA : [elOrA]] : Element[]
+>...Array.isArray(elOrA) ? elOrA : [elOrA] : Element
+>Array.isArray(elOrA) ? elOrA : [elOrA] : Element[]
+>Array.isArray(elOrA) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>elOrA : ElementOrArray
+>elOrA : Element[]
+>[elOrA] : Element[]
+>elOrA : Element
+}
+
+function f3() {
+>f3 : () => void
+
+    type XY = 'x' | 'y';
+>XY : XY
+
+    const x: XY = 'x';
+>x : XY
+>'x' : "x"
+
+    let x2 = x;
+>x2 : "x"
+>x : "x"
+
+    // Desired: OK (up for debate?)
+    // 3.0: Error
+    // 3.1 as-is: OK
+    x2 = 'y';
+>x2 = 'y' : "y"
+>x2 : "x"
+>'y' : "y"
+
+    // Desired/actual: All OK
+    let x3: XY = x;
+>x3 : XY
+>x : "x"
+
+    x3 = 'y';
+>x3 = 'y' : "y"
+>x3 : XY
+>'y' : "y"
+}
+
+function f4() {
+>f4 : () => void
+
+    const x: boolean = true;
+>x : boolean
+>true : true
+
+    let x1 = x;
+>x1 : boolean
+>x : true
+
+    // Desired: OK
+    // 3.0: OK
+    // 3.1: OK
+    // 3.1 minus widening propagation: error
+    x1 = false;
+>x1 = false : false
+>x1 : boolean
+>false : false
+}
+
+function f5() {
+>f5 : () => void
+
+    type XY = 'x' | 'y';
+>XY : XY
+
+    let arr: XY[] = ['x'];
+>arr : XY[]
+>['x'] : "x"[]
+>'x' : "x"
+
+    arr = ['y'];
+>arr = ['y'] : "y"[]
+>arr : XY[]
+>['y'] : "y"[]
+>'y' : "y"
+
+    // Desired: OK
+    // Error in all extant branches
+    arr = [...['y']];
+>arr = [...['y']] : string[]
+>arr : XY[]
+>[...['y']] : string[]
+>...['y'] : string
+>['y'] : string[]
+>'y' : "y"
+}

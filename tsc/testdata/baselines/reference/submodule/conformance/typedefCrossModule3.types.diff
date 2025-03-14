@@ -1,0 +1,33 @@
+--- old.typedefCrossModule3.types
++++ new.typedefCrossModule3.types
+@@= skipped -2, +2 lines =@@
+ === mod2.js ===
+ /** @typedef {number} Foo */
+ const ns = {};
+->ns : typeof ns
++>ns : {}
+ >{} : {}
+ 
+ ns.Foo = class {}
+ >ns.Foo = class {} : typeof Foo
+->ns.Foo : typeof Foo
+->ns : typeof ns
+->Foo : typeof Foo
++>ns.Foo : any
++>ns : {}
++>Foo : any
+ >class {} : typeof Foo
+ 
+ module.exports = ns;
+->module.exports = ns : typeof ns
+->module.exports : typeof ns
+->module : { exports: typeof ns; }
+->exports : typeof ns
+->ns : typeof ns
++>module.exports = ns : {}
++>module.exports : any
++>module : any
++>exports : any
++>ns : {}
+ 
+ 

@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/jsdoc/callbackTag1.ts] ////
+
+=== cb.js ===
+/** @callback Sid
+ * @param {string} s
+ * @returns {string} What were you expecting
+ */
+var x = 1
+>x : number
+>1 : 1
+
+/** @type {Sid} smallId */
+var sid = s => s + "!";
+>sid : (s: any) => string
+>s => s + "!" : (s: any) => string
+>s : any
+>s + "!" : string
+>s : any
+>"!" : "!"
+
+
+/** @type {NoReturn} */
+var noreturn = obj => void obj.title
+>noreturn : (obj: any) => any
+>obj => void obj.title : (obj: any) => any
+>obj : any
+>void obj.title : undefined
+>obj.title : any
+>obj : any
+>title : any
+
+/**
+ * @callback NoReturn
+ * @param {{ e: number, m: number, title: string }} s - Knee deep, shores, etc
+ */
+

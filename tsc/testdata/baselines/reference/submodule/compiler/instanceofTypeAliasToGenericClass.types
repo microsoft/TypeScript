@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/instanceofTypeAliasToGenericClass.ts] ////
+
+=== instanceofTypeAliasToGenericClass.ts ===
+declare class TableClass<S = any> {
+>TableClass : TableClass<S>
+>S : S
+
+    _field: S;
+>_field : S
+}
+
+export type Table = TableClass;
+>Table : Table
+
+function fn<T extends Table>(o: T) {
+>fn : <T extends Table>(o: T) => boolean
+>T : T
+>o : T
+
+    return o instanceof TableClass;
+>o instanceof TableClass : boolean
+>o : T
+>TableClass : typeof TableClass
+}
+
+function fn2<T extends TableClass>(o: T) {
+>fn2 : <T extends TableClass<any>>(o: T) => boolean
+>T : T
+>o : T
+
+    return o instanceof TableClass;
+>o instanceof TableClass : boolean
+>o : T
+>TableClass : typeof TableClass
+}
+
+declare const o: Table;
+>o : Table
+
+o instanceof TableClass;
+>o instanceof TableClass : boolean
+>o : Table
+>TableClass : typeof TableClass
+

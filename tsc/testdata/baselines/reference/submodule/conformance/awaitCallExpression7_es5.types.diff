@@ -1,0 +1,29 @@
+--- old.awaitCallExpression7_es5.types
++++ new.awaitCallExpression7_es5.types
+@@= skipped -13, +13 lines =@@
+ >arg2 : boolean
+ 
+ declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
+->o : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
++>o : { fn: (arg0: boolean, arg1: boolean, arg2: boolean) => void; }
+ >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+ >arg0 : boolean
+ >arg1 : boolean
+@@= skipped -13, +13 lines =@@
+ >arg2 : boolean
+ 
+ declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
+->po : Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>
++>po : Promise<{ fn: (arg0: boolean, arg1: boolean, arg2: boolean) => void; }>
+ >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+ >arg0 : boolean
+ >arg1 : boolean
+@@= skipped -23, +23 lines =@@
+ >b : void
+ >o.fn(a, await p, a) : void
+ >o.fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+->o : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
++>o : { fn: (arg0: boolean, arg1: boolean, arg2: boolean) => void; }
+ >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
+ >a : boolean
+ >await p : boolean

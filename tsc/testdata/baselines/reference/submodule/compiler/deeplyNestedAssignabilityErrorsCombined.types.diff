@@ -1,0 +1,75 @@
+--- old.deeplyNestedAssignabilityErrorsCombined.types
++++ new.deeplyNestedAssignabilityErrorsCombined.types
+@@= skipped -1, +1 lines =@@
+ 
+ === deeplyNestedAssignabilityErrorsCombined.ts ===
+ let x = { a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } };
+->x : { a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }
+->{ a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } } : { a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }
+->a : { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }
+->{ b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } : { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }
+->b : { c: { d: { e: { f(): { g: string; }; }; }; }; }
+->{ c: { d: { e: { f() { return { g: "hello" }; } } } } } : { c: { d: { e: { f(): { g: string; }; }; }; }; }
+->c : { d: { e: { f(): { g: string; }; }; }; }
+->{ d: { e: { f() { return { g: "hello" }; } } } } : { d: { e: { f(): { g: string; }; }; }; }
+->d : { e: { f(): { g: string; }; }; }
+->{ e: { f() { return { g: "hello" }; } } } : { e: { f(): { g: string; }; }; }
+->e : { f(): { g: string; }; }
+->{ f() { return { g: "hello" }; } } : { f(): { g: string; }; }
++>x : { a: { b: { c: { d: { e: { f: () => { g: string; }; }; }; }; }; }; }
++>{ a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } } : { a: { b: { c: { d: { e: { f: () => { g: string; }; }; }; }; }; }; }
++>a : { b: { c: { d: { e: { f: () => { g: string; }; }; }; }; }; }
++>{ b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } : { b: { c: { d: { e: { f: () => { g: string; }; }; }; }; }; }
++>b : { c: { d: { e: { f: () => { g: string; }; }; }; }; }
++>{ c: { d: { e: { f() { return { g: "hello" }; } } } } } : { c: { d: { e: { f: () => { g: string; }; }; }; }; }
++>c : { d: { e: { f: () => { g: string; }; }; }; }
++>{ d: { e: { f() { return { g: "hello" }; } } } } : { d: { e: { f: () => { g: string; }; }; }; }
++>d : { e: { f: () => { g: string; }; }; }
++>{ e: { f() { return { g: "hello" }; } } } : { e: { f: () => { g: string; }; }; }
++>e : { f: () => { g: string; }; }
++>{ f() { return { g: "hello" }; } } : { f: () => { g: string; }; }
+ >f : () => { g: string; }
+ >{ g: "hello" } : { g: string; }
+ >g : string
+ >"hello" : "hello"
+ 
+ let y = { a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } };
+->y : { a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }
+->{ a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } } : { a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }
+->a : { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }
+->{ b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } : { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }
+->b : { c: { d: { e: { f(): { g: number; }; }; }; }; }
+->{ c: { d: { e: { f() { return { g: 12345 }; } } } } } : { c: { d: { e: { f(): { g: number; }; }; }; }; }
+->c : { d: { e: { f(): { g: number; }; }; }; }
+->{ d: { e: { f() { return { g: 12345 }; } } } } : { d: { e: { f(): { g: number; }; }; }; }
+->d : { e: { f(): { g: number; }; }; }
+->{ e: { f() { return { g: 12345 }; } } } : { e: { f(): { g: number; }; }; }
+->e : { f(): { g: number; }; }
+->{ f() { return { g: 12345 }; } } : { f(): { g: number; }; }
++>y : { a: { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }; }
++>{ a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } } : { a: { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }; }
++>a : { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }
++>{ b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } : { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }
++>b : { c: { d: { e: { f: () => { g: number; }; }; }; }; }
++>{ c: { d: { e: { f() { return { g: 12345 }; } } } } } : { c: { d: { e: { f: () => { g: number; }; }; }; }; }
++>c : { d: { e: { f: () => { g: number; }; }; }; }
++>{ d: { e: { f() { return { g: 12345 }; } } } } : { d: { e: { f: () => { g: number; }; }; }; }
++>d : { e: { f: () => { g: number; }; }; }
++>{ e: { f() { return { g: 12345 }; } } } : { e: { f: () => { g: number; }; }; }
++>e : { f: () => { g: number; }; }
++>{ f() { return { g: 12345 }; } } : { f: () => { g: number; }; }
+ >f : () => { g: number; }
+ >{ g: 12345 } : { g: number; }
+ >g : number
+ >12345 : 12345
+ 
+ x = y;
+->x = y : { a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }
+->x : { a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }
+->y : { a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }
++>x = y : { a: { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }; }
++>x : { a: { b: { c: { d: { e: { f: () => { g: string; }; }; }; }; }; }; }
++>y : { a: { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }; }
+ 
+ class Ctor1 {
+ >Ctor1 : Ctor1

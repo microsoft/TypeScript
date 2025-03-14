@@ -1,0 +1,11 @@
+--- old.restParameterWithBindingPattern1.types
++++ new.restParameterWithBindingPattern1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === restParameterWithBindingPattern1.ts ===
+ function a(...{a, b}) { }
+->a : (...{ a, b }: { a: any; b: any; }) => void
++>a : (...__0: { a: any; b: any; }) => void
+ >a : any
+ >b : any
+ 

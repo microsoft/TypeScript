@@ -1,0 +1,22 @@
+--- old.exportNamespace10.types
++++ new.exportNamespace10.types
+@@= skipped -9, +9 lines =@@
+ 
+ === /c.ts ===
+ import { ns } from "./b";
+->ns : typeof ns
++>ns : typeof import("/a")
+ 
+ let _: ns.A = new ns.A(); // Error
+->_ : ns.A
++>_ : A
+ >ns : any
+->new ns.A() : ns.A
+->ns.A : typeof ns.A
+->ns : typeof ns
+->A : typeof ns.A
++>new ns.A() : A
++>ns.A : typeof A
++>ns : typeof import("/a")
++>A : typeof A
+ 

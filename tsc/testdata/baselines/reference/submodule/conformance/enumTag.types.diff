@@ -1,0 +1,66 @@
+--- old.enumTag.types
++++ new.enumTag.types
+@@= skipped -77, +77 lines =@@
+  * @param {Fs} f
+  */
+ function consume(t,s,f) {
+->consume : (t: Target, s: Second, f: Fs) => void
+->t : string
+->s : number
+->f : Fs
++>consume : (t: any, s: any, f: any) => void
++>t : any
++>s : any
++>f : any
+ 
+     /** @type {string} */
+     var str = t
+->str : string
+->t : string
++>str : any
++>t : any
+ 
+     /** @type {number} */
+     var num = s
+->num : number
+->s : number
++>num : any
++>s : any
+ 
+     /** @type {(n: number) => number} */
+     var fun = f
+->fun : (n: number) => number
+->f : Fs
++>fun : any
++>f : any
+ 
+     /** @type {Target} */
+     var v = Target.START
+@@= skipped -48, +48 lines =@@
+ }
+ /** @param {string} s */
+ function ff(s) {
+->ff : (s: string) => any
+->s : string
++>ff : (s: any) => any
++>s : any
+ 
+     // element access with arbitrary string is an error only with noImplicitAny
+     if (!Target[s]) {
+ >!Target[s] : boolean
+ >Target[s] : any
+ >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
+->s : string
++>s : any
+ 
+         return null
+     }
+@@= skipped -16, +16 lines =@@
+         return Target[s]
+ >Target[s] : any
+ >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
+->s : string
++>s : any
+     }
+ }
+ 

@@ -1,0 +1,89 @@
+--- old.unspecializedConstraints.types
++++ new.unspecializedConstraints.types
+@@= skipped -4, +4 lines =@@
+ >ts : typeof ts
+ 
+     interface Map<T> {
++>Map : Map<T>
++>T : T
++
+         [index: string]: T;
+ >index : string
+     }
+ 
+     interface Equals<T> {
++>Equals : Equals<T>
++>T : T
++
+         equals(other: T): boolean;
+ >equals : (other: T) => boolean
+ >other : T
+@@= skipped -444, +450 lines =@@
+ 
+     function getProperty<T>(map: Map<T>, key: string): T {
+ >getProperty : <T>(map: Map<T>, key: string) => T
++>T : T
+ >map : Map<T>
+ >key : string
+ 
+         if (!hasOwnProperty.call(map, key)) return undefined;
+ >!hasOwnProperty.call(map, key) : boolean
+ >hasOwnProperty.call(map, key) : any
+->hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
++>hasOwnProperty.call : (thisArg: any, ...argArray: any[]) => any
+ >hasOwnProperty : (v: PropertyKey) => boolean
+->call : (this: Function, thisArg: any, ...argArray: any[]) => any
++>call : (thisArg: any, ...argArray: any[]) => any
+ >map : Map<T>
+ >key : string
+ >undefined : undefined
+@@= skipped -21, +22 lines =@@
+ 
+     function hasProperty<T>(map: Map<T>, key: string): boolean {
+ >hasProperty : <T>(map: Map<T>, key: string) => boolean
++>T : T
+ >map : Map<T>
+ >key : string
+ 
+         return hasOwnProperty.call(map, key);
+ >hasOwnProperty.call(map, key) : any
+->hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
++>hasOwnProperty.call : (thisArg: any, ...argArray: any[]) => any
+ >hasOwnProperty : (v: PropertyKey) => boolean
+->call : (this: Function, thisArg: any, ...argArray: any[]) => any
++>call : (thisArg: any, ...argArray: any[]) => any
+ >map : Map<T>
+ >key : string
+     }
+ 
+     function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
+ >arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
++>T : T
+ >a : T[]
+ >item : T
+ 
+@@= skipped -48, +50 lines =@@
+ 
+     function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
+ >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
++>T : T
+ >a : T[]
+ >b : T[]
+ 
+@@= skipped -45, +46 lines =@@
+ 
+     function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
+ >setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
++>T : T
+ >a : T[]
+ >b : T[]
+ 
+@@= skipped -29, +30 lines =@@
+             if (!arrayContains(b, a[i])) return false;
+ >!arrayContains(b, a[i]) : boolean
+ >arrayContains(b, a[i]) : boolean
+->arrayContains : <T_1 extends Equals<T_1>>(a: T_1[], item: T_1) => boolean
++>arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
+ >b : T[]
+ >a[i] : T
+ >a : T[]

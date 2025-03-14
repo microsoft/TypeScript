@@ -1,0 +1,50 @@
+--- old.inferRestArgumentsMappedTuple.types
++++ new.inferRestArgumentsMappedTuple.types
+@@= skipped -2, +2 lines =@@
+ === inferRestArgumentsMappedTuple.ts ===
+ type MyMappedType<Primitive extends any> = {
+ >MyMappedType : MyMappedType<Primitive>
++>Primitive : Primitive
+ 
+ 	primitive: Primitive;
+ >primitive : Primitive
+@@= skipped -8, +9 lines =@@
+ 
+ type TupleMapperOld<Tuple extends any[]> = {
+ >TupleMapperOld : TupleMapperOld<Tuple>
++>Tuple : Tuple
+ 
+ 	[Key in keyof Tuple]: Tuple[Key] extends Tuple[number] ? MyMappedType<Tuple[Key]> : never;
++>Key : Key
++
+ };
+ 
+ type MyMappedTupleOld = TupleMapperOld<[string, number]>; // [MyMappedType<string>, MyMappedType<number>]
+@@= skipped -9, +12 lines =@@
+ 
+ declare function extractPrimitivesOld<Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>): Tuple;
+ >extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
++>Tuple : Tuple
+ >mappedTypes : TupleMapperOld<Tuple>
+ 
+ const myPrimitiveTupleOld: [string, number] = extractPrimitivesOld({ primitive: "" }, { primitive: 0 });
+@@= skipped -15, +16 lines =@@
+ 
+ type TupleMapperNew<Tuple extends any[]> = {
+ >TupleMapperNew : TupleMapperNew<Tuple>
++>Tuple : Tuple
+ 
+ 	[Key in keyof Tuple]: MyMappedType<Tuple[Key]>;
++>Key : Key
++
+ };
+ 
+ type MyMappedTupleNew = TupleMapperNew<[string, number]>;
+@@= skipped -9, +12 lines =@@
+ 
+ declare function extractPrimitivesNew<Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>): Tuple;
+ >extractPrimitivesNew : <Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>) => Tuple
++>Tuple : Tuple
+ >mappedTypes : TupleMapperNew<Tuple>
+ 
+ const myPrimitiveTupleNew: [string, number] = extractPrimitivesNew({ primitive: "" }, { primitive: 0 });

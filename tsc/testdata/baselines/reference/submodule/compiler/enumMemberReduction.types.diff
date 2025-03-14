@@ -1,0 +1,20 @@
+--- old.enumMemberReduction.types
++++ new.enumMemberReduction.types
+@@= skipped -46, +46 lines =@@
+ }
+ 
+ export function fn(optionalEnum: MyEnum | undefined) {
+->fn : (optionalEnum: MyEnum | undefined) => MyEnum
++>fn : (optionalEnum: MyEnum) => MyEnum
+ >optionalEnum : MyEnum
+ 
+   return optionalEnum ?? MyEnum.A;
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ export function fn2(optionalEnum: MyEnum | undefined) {
+->fn2 : (optionalEnum: MyEnum | undefined) => MyEnum.B | MyEnum.C
++>fn2 : (optionalEnum: MyEnum) => MyEnum.B | MyEnum.C
+ >optionalEnum : MyEnum
+ 
+   return optionalEnum || MyEnum.B;

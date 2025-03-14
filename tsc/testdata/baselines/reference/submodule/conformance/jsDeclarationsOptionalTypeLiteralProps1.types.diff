@@ -1,0 +1,28 @@
+--- old.jsDeclarationsOptionalTypeLiteralProps1.types
++++ new.jsDeclarationsOptionalTypeLiteralProps1.types
+@@= skipped -11, +11 lines =@@
+  * @returns {number}
+  */
+ function foo({ a, b, c }) {
+->foo : ({ a, b, c }: {    a: number;    b?: number;    c?: number;}) => number
+->a : number
+->b : number
+->c : number
++>foo : (__0: { a: any; b: any; c: any; }) => any
++>a : any
++>b : any
++>c : any
+ 
+     return a + b + c;
+->a + b + c : number
+->a + b : number
+->a : number
+->b : number
+->c : number
++>a + b + c : any
++>a + b : any
++>a : any
++>b : any
++>c : any
+ }
+ 

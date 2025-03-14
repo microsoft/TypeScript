@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es2015modulekind.ts] ////
+
+=== es2015modulekind.ts ===
+export default class A
+>A : default
+{
+    constructor ()
+    {
+
+    }
+
+    public B()
+>B : () => number
+    {
+        return 42;
+>42 : 42
+    }
+}

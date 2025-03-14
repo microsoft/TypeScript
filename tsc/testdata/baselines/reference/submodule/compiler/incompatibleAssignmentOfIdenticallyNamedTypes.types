@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts] ////
+
+=== incompatibleAssignmentOfIdenticallyNamedTypes.ts ===
+interface T { }
+>T : T
+
+declare const a: T;
+>a : T
+
+class Foo<T> {
+>Foo : Foo<T>
+>T : T
+
+    x: T;
+>x : T
+
+    fn() {
+>fn : () => void
+
+        this.x = a;
+>this.x = a : T
+>this.x : T
+>this : this
+>x : T
+>a : T
+    }
+}
+

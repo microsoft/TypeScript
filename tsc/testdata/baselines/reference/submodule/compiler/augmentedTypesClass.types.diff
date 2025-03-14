@@ -1,0 +1,10 @@
+--- old.augmentedTypesClass.types
++++ new.augmentedTypesClass.types
+@@= skipped -15, +15 lines =@@
+ >foo : () => void
+ 
+ enum c4 { One } // error
+->c4 : c4
++>c4 : c4.One
+ >One : c4.One
+ 

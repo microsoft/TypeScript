@@ -1,0 +1,58 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsImportAliasExposedWithinNamespaceCjs.ts] ////
+
+=== file2.js ===
+const {myTypes} = require('./file.js');
+>myTypes : any
+>require('./file.js') : any
+>require : any
+>'./file.js' : "./file.js"
+
+/**
+ * @namespace testFnTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+const testFnTypes = {
+>testFnTypes : {}
+>{    // SOME PROPS HERE} : {}
+
+    // SOME PROPS HERE
+};
+
+/** @typedef {boolean|myTypes.typeC} testFnTypes.input */
+
+/**
+ * @function testFn
+ * @description A test function.
+ * @param {testFnTypes.input} input - Input.
+ * @returns {number|null} Result.
+ */
+function testFn(input) {
+>testFn : (input: any) => number
+>input : any
+
+    if (typeof input === 'number') {
+>typeof input === 'number' : boolean
+>typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>input : any
+>'number' : "number"
+
+        return 2 * input;
+>2 * input : number
+>2 : 2
+>input : number
+
+    } else {
+        return null;
+    }
+}
+
+module.exports = {testFn, testFnTypes};
+>module.exports = {testFn, testFnTypes} : { testFn: (input: any) => number; testFnTypes: {}; }
+>module.exports : any
+>module : any
+>exports : any
+>{testFn, testFnTypes} : { testFn: (input: any) => number; testFnTypes: {}; }
+>testFn : any
+>testFnTypes : any
+

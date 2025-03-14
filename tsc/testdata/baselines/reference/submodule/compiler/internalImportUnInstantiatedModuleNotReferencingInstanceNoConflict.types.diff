@@ -1,0 +1,21 @@
+--- old.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.types
++++ new.internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.types
+@@= skipped -1, +1 lines =@@
+ 
+ === internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts ===
+ module A {
++>A : any
++
+     export interface X { s: string }
++>X : X
+ >s : string
+ }
+ 
+@@= skipped -13, +16 lines =@@
+ 
+     import Y = A;
+ >Y : any
+->A : error
++>A : any
+ }
+ 

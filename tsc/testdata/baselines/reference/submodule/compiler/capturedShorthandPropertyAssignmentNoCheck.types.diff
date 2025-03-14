@@ -1,0 +1,11 @@
+--- old.capturedShorthandPropertyAssignmentNoCheck.types
++++ new.capturedShorthandPropertyAssignmentNoCheck.types
+@@= skipped -19, +19 lines =@@
+ >() => ({ value }) : () => { value: number; }
+ >({ value }) : { value: number; }
+ >{ value } : { value: number; }
+->value : number
++>value : any
+ }
+ const result = fns.map(fn => fn());
+ >result : any[]

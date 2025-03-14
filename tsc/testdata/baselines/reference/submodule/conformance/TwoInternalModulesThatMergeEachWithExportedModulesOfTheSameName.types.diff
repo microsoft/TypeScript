@@ -1,0 +1,18 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.types
++++ new.TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.types
+@@= skipped -25, +25 lines =@@
+ 
+ var x = A.B.x;
+ >x : number
+->A.B.x : number
+->A.B : typeof A.B
++>A.B.x : any
++>A.B : any
+ >A : typeof A
+->B : typeof A.B
+->x : number
++>B : any
++>x : any
+ 
+ module X.Y.Z {
+ >X : typeof X

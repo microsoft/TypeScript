@@ -1,0 +1,56 @@
+--- old.invalidVoidAssignments.types
++++ new.invalidVoidAssignments.types
+@@= skipped -17, +17 lines =@@
+ 
+ var d: typeof undefined = x;
+ >d : any
+->undefined : undefined
+ >x : void
+ 
+ class C { foo: string; }
+@@= skipped -12, +11 lines =@@
+ >x : void
+ 
+ interface I { bar: string; }
++>I : I
+ >bar : string
+ 
+ var f: I = x;
+@@= skipped -28, +29 lines =@@
+ 
+ function i<T>(a: T) {
+ >i : <T>(a: T) => void
++>T : T
+ >a : T
+ 
+     a = x;
+@@= skipped -13, +14 lines =@@
+ >x : void
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ x = E;
+@@= skipped -9, +9 lines =@@
+ >E : typeof E
+ 
+ x = E.A;
+->x = E.A : E
++>x = E.A : E.A
+ >x : void
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+ x = { f() { } }
+->x = { f() { } } : { f(): void; }
++>x = { f() { } } : { f: () => void; }
+ >x : void
+->{ f() { } } : { f(): void; }
++>{ f() { } } : { f: () => void; }
+ >f : () => void
+ 

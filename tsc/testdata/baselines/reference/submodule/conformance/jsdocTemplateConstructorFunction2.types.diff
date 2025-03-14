@@ -1,0 +1,132 @@
+--- old.jsdocTemplateConstructorFunction2.types
++++ new.jsdocTemplateConstructorFunction2.types
+@@= skipped -5, +5 lines =@@
+  * @template T
+  */
+ function Zet(t) {
+->Zet : typeof Zet
+->t : T
++>Zet : (t: any) => void
++>t : any
+ 
+     /** @type {T} */
+     this.u
+->this.u : T
+->this : this
+->u : T
++>this.u : any
++>this : any
++>u : any
+ 
+     this.t = t
+->this.t = t : T
++>this.t = t : any
+ >this.t : any
+->this : this
++>this : any
+ >t : any
+->t : T
++>t : any
+ }
+ /**
+  * @param {T} v
+@@= skipped -22, +22 lines =@@
+  * @param {T} o.nested
+  */
+ Zet.prototype.add = function(v, o) {
+->Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: {    nested: T;}) => T
++>Zet.prototype.add = function(v, o) {    this.u = v || o.nested    return this.u} : (v: any, o: any) => any
+ >Zet.prototype.add : any
+ >Zet.prototype : any
+->Zet : typeof Zet
++>Zet : (t: any) => void
+ >prototype : any
+ >add : any
+->function(v, o) {    this.u = v || o.nested    return this.u} : (v: T, o: {    nested: T;}) => T
+->v : T
+->o : { nested: T; }
++>function(v, o) {    this.u = v || o.nested    return this.u} : (v: any, o: any) => any
++>v : any
++>o : any
+ 
+     this.u = v || o.nested
+->this.u = v || o.nested : T
+->this.u : T
+->this : this
+->u : T
+->v || o.nested : T
+->v : T
+->o.nested : T
+->o : { nested: T; }
+->nested : T
++>this.u = v || o.nested : any
++>this.u : any
++>this : any
++>u : any
++>v || o.nested : any
++>v : any
++>o.nested : any
++>o : any
++>nested : any
+ 
+     return this.u
+->this.u : T
+->this : this
+->u : T
++>this.u : any
++>this : any
++>u : any
+ }
+ var z = new Zet(1)
+->z : Zet<number>
+->new Zet(1) : Zet<number>
+->Zet : typeof Zet
++>z : any
++>new Zet(1) : any
++>Zet : (t: any) => void
+ >1 : 1
+ 
+ z.t = 2
+ >z.t = 2 : 2
+->z.t : number
+->z : Zet<number>
+->t : number
++>z.t : any
++>z : any
++>t : any
+ >2 : 2
+ 
+ z.u = false
+ >z.u = false : false
+->z.u : number
+->z : Zet<number>
+->u : number
++>z.u : any
++>z : any
++>u : any
+ >false : false
+ 
+ /** @type {number} */
+ let answer = z.add(3, { nested: 4 })
+->answer : number
+->z.add(3, { nested: 4 }) : number
+->z.add : (v: number, o: { nested: number; }) => number
+->z : Zet<number>
+->add : (v: number, o: { nested: number; }) => number
++>answer : any
++>z.add(3, { nested: 4 }) : any
++>z.add : any
++>z : any
++>add : any
+ >3 : 3
+ >{ nested: 4 } : { nested: number; }
+ >nested : number
+@@= skipped -65, +65 lines =@@
+  */
+ /** @type {A} */
+ const options = { value: null };
+->options : A
++>options : { value: any; }
+ >{ value: null } : { value: null; }
+ >value : null
+ 

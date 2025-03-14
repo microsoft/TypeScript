@@ -1,0 +1,20 @@
+--- old.lambdaParamTypes.types
++++ new.lambdaParamTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === lambdaParamTypes.ts ===
+ interface MyArrayWrapper<T> {
++>MyArrayWrapper : MyArrayWrapper<T>
++>T : T
++
+     constructor(initialItems?: T[]);
+ >constructor : (initialItems?: T[]) => any
+ >initialItems : T[]
+@@= skipped -13, +16 lines =@@
+ 
+ declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
+ >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
++>T : T
+ >initialValues : T[]
+ 
+ var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);

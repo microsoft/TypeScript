@@ -1,0 +1,578 @@
+--- old.dependentDestructuredVariables.types
++++ new.dependentDestructuredVariables.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 2,500
+-Instantiation count: 5,000
+-
+ === dependentDestructuredVariables.ts ===
+ type Action =
+ >Action : Action
+@@= skipped -16, +12 lines =@@
+ >payload : string
+ 
+ function f10({ kind, payload }: Action) {
+->f10 : ({ kind, payload }: Action) => void
++>f10 : (__0: Action) => void
+ >kind : "A" | "B"
+ >payload : string | number
+ 
+@@= skipped -11, +11 lines =@@
+ 
+         payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -33, +33 lines =@@
+ 
+         payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ function f12({ kind, payload }: Action) {
+->f12 : ({ kind, payload }: Action) => void
++>f12 : (__0: Action) => void
+ >kind : "A" | "B"
+ >payload : string | number
+ 
+@@= skipped -12, +12 lines =@@
+ 
+             payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+             break;
+         case 'B':
+@@= skipped -23, +23 lines =@@
+ 
+ // repro #50206
+ function f13<T extends Action>({ kind, payload }: T) {
+->f13 : <T extends Action>({ kind, payload }: T) => void
++>f13 : <T extends Action>(__0: T) => void
++>T : T
+ >kind : "A" | "B"
+ >payload : string | number
+ 
+@@= skipped -11, +12 lines =@@
+ 
+         payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -19, +19 lines =@@
+ 
+ function f14<T extends Action>(t: T) {
+ >f14 : <T extends Action>(t: T) => void
++>T : T
+ >t : T
+ 
+     const { kind, payload } = t;
+@@= skipped -14, +15 lines =@@
+ 
+         payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -29, +29 lines =@@
+ >payload : string | undefined
+ 
+ function f20({ kind, payload }: Action2) {
+->f20 : ({ kind, payload }: Action2) => void
++>f20 : (__0: Action2) => void
+ >kind : "A" | "B"
+ >payload : string | number | undefined
+ 
+@@= skipped -14, +14 lines =@@
+ 
+             payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+         }
+         if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -37, +37 lines =@@
+ 
+             payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+         }
+         if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -39, +39 lines =@@
+ 
+             payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+         }
+         if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function f23({ kind, payload }: Action2) {
+->f23 : ({ kind, payload }: Action2) => void
++>f23 : (__0: Action2) => void
+ >kind : "A" | "B"
+ >payload : string | number | undefined
+ 
+@@= skipped -15, +15 lines =@@
+ 
+                 payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+                 break;
+             case 'B':
+@@= skipped -41, +41 lines =@@
+ >false : false
+ 
+ function f30({ kind, isA }: Foo) {
+->f30 : ({ kind, isA }: Foo) => void
++>f30 : (__0: Foo) => void
+ >kind : "A" | "B" | "C"
+ >isA : boolean
+ 
+@@= skipped -44, +44 lines =@@
+ >Args : Args
+ 
+ function f40(...[kind, data]: Args) {
+->f40 : (...[kind, data]: Args) => void
++>f40 : (...__0: Args) => void
+ >kind : "A" | "B"
+ >data : string | number
+ 
+@@= skipped -11, +11 lines =@@
+ 
+         data.toFixed();
+ >data.toFixed() : string
+->data.toFixed : (fractionDigits?: number) => string
++>data.toFixed : (fractionDigits?: number | undefined) => string
+ >data : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -20, +20 lines =@@
+ // Repro from #35283
+ 
+ interface A<T> { variant: 'a', value: T }
++>A : A<T>
++>T : T
+ >variant : "a"
+ >value : T
+ 
+ interface B<T> { variant: 'b', value: Array<T> }
++>B : B<T>
++>T : T
+ >variant : "b"
+ >value : T[]
+ 
+ type AB<T> = A<T> | B<T>;
+ >AB : AB<T>
++>T : T
+ 
+ declare function printValue<T>(t: T): void;
+ >printValue : <T>(t: T) => void
++>T : T
+ >t : T
+ 
+ declare function printValueList<T>(t: Array<T>): void;
+->printValueList : <T>(t: Array<T>) => void
++>printValueList : <T>(t: T[]) => void
++>T : T
+ >t : T[]
+ 
+ function unrefined1<T>(ab: AB<T>): void {
+ >unrefined1 : <T>(ab: AB<T>) => void
++>T : T
+ >ab : AB<T>
+ 
+     const { variant, value } = ab;
+@@= skipped -34, +42 lines =@@
+ 
+         printValue<T>(value);
+ >printValue<T>(value) : void
+->printValue : <T_1>(t: T_1) => void
++>printValue : <T>(t: T) => void
+ >value : T
+     }
+     else {
+         printValueList<T>(value);
+ >printValueList<T>(value) : void
+->printValueList : <T_1>(t: Array<T_1>) => void
++>printValueList : <T>(t: T[]) => void
+ >value : T[]
+     }
+ }
+@@= skipped -27, +27 lines =@@
+ >toRemove : number
+ 
+ const reducerBroken = (state: number, { type, payload }: Action3) => {
+->reducerBroken : (state: number, { type, payload }: Action3) => number
+->(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, { type, payload }: Action3) => number
++>reducerBroken : (state: number, __1: Action3) => number
++>(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, __1: Action3) => number
+ >state : number
+ >type : "add" | "remove"
+ >payload : { toAdd: number; } | { toRemove: number; }
+@@= skipped -40, +40 lines =@@
+ >value : any
+ >done : boolean | undefined
+ >it.next() : IteratorResult<number, any>
+->it.next : (...[value]: [] | [any]) => IteratorResult<number, any>
++>it.next : (...__0: [] | [any]) => IteratorResult<number, any>
+ >it : Iterator<number, any, any>
+->next : (...[value]: [] | [any]) => IteratorResult<number, any>
++>next : (...__0: [] | [any]) => IteratorResult<number, any>
+ 
+ if (!done) {
+ >!done : boolean
+@@= skipped -33, +33 lines =@@
+ 
+         data.toFixed();
+ >data.toFixed() : string
+->data.toFixed : (fractionDigits?: number) => string
++>data.toFixed : (fractionDigits?: number | undefined) => string
+ >data : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -31, +31 lines =@@
+ 
+         payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === 'B') {
+ >kind === 'B' : boolean
+@@= skipped -18, +18 lines =@@
+ };
+ 
+ const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
+->f52 : (...args: ["A", number] | ["B"]) => void
+->args : ["A", number] | ["B"]
++>f52 : (...args: ["B"] | ["A", number]) => void
++>args : ["B"] | ["A", number]
+ >(kind, payload?) => {    if (kind === 'A') {        payload.toFixed();    }    else {        payload;  // undefined    }} : (kind: "A" | "B", payload?: number | undefined) => void
+ >kind : "A" | "B"
+ >payload : number | undefined
+@@= skipped -13, +13 lines =@@
+ 
+         payload.toFixed();
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     else {
+         payload;  // undefined
+@@= skipped -127, +127 lines =@@
+ >FooMethod : FooMethod
+ 
+   method(...args:
+->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => void
+->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
++>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => void
++>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ 
+     [type: "str", cb: (e: string) => void] |
+ >e : string
+@@= skipped -14, +14 lines =@@
+ 
+ let fooM: FooMethod = {
+ >fooM : FooMethod
+->{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): void; }
++>{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => void; }
+ 
+   method(type, cb) {
+->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => void
+->type : "str" | "num"
+->cb : ((e: string) => void) | ((e: number) => void)
++>method : (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => void
++>type : "num" | "str"
++>cb : (e: string) => void | (e: number) => void
+ 
+     if (type == 'num') {
+ >type == 'num' : boolean
+->type : "str" | "num"
++>type : "num" | "str"
+ >'num' : "num"
+ 
+       cb(123)
+@@= skipped -30, +30 lines =@@
+ >FooAsyncMethod : FooAsyncMethod
+ 
+   method(...args:
+->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Promise<any>
+->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
++>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => Promise<any>
++>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ 
+     [type: "str", cb: (e: string) => void] |
+ >e : string
+@@= skipped -14, +14 lines =@@
+ 
+ let fooAsyncM: FooAsyncMethod = {
+ >fooAsyncM : FooAsyncMethod
+->{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
++>{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => Promise<void>; }
+ 
+   async method(type, cb) {
+->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
+->type : "str" | "num"
+->cb : ((e: string) => void) | ((e: number) => void)
++>method : (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => Promise<void>
++>type : "num" | "str"
++>cb : (e: string) => void | (e: number) => void
+ 
+     if (type == 'num') {
+ >type == 'num' : boolean
+->type : "str" | "num"
++>type : "num" | "str"
+ >'num' : "num"
+ 
+       cb(123)
+@@= skipped -30, +30 lines =@@
+ >FooGenMethod : FooGenMethod
+ 
+   method(...args:
+->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => Generator<any, any, any>
+->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
++>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => Generator<any, any, any>
++>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ 
+     [type: "str", cb: (e: string) => void] |
+ >e : string
+@@= skipped -14, +14 lines =@@
+ 
+ let fooGenM: FooGenMethod = {
+ >fooGenM : FooGenMethod
+->{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
++>{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => Generator<never, void, any>; }
+ 
+   *method(type, cb) {
+->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
+->type : "str" | "num"
+->cb : ((e: string) => void) | ((e: number) => void)
++>method : (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => Generator<never, void, any>
++>type : "num" | "str"
++>cb : (e: string) => void | (e: number) => void
+ 
+     if (type == 'num') {
+ >type == 'num' : boolean
+->type : "str" | "num"
++>type : "num" | "str"
+ >'num' : "num"
+ 
+       cb(123)
+@@= skipped -30, +30 lines =@@
+ >FooAsyncGenMethod : FooAsyncGenMethod
+ 
+   method(...args:
+->method : (...args: [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]) => AsyncGenerator<any, any, any>
+->args : [type: "str", cb: (e: string) => void] | [type: "num", cb: (e: number) => void]
++>method : (...args: [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]) => AsyncGenerator<any, any, any>
++>args : [type: "num", cb: (e: number) => void] | [type: "str", cb: (e: string) => void]
+ 
+     [type: "str", cb: (e: string) => void] |
+ >e : string
+@@= skipped -14, +14 lines =@@
+ 
+ let fooAsyncGenM: FooAsyncGenMethod = {
+ >fooAsyncGenM : FooAsyncGenMethod
+->{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
++>{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => AsyncGenerator<never, void, any>; }
+ 
+   async *method(type, cb) {
+->method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
+->type : "str" | "num"
+->cb : ((e: string) => void) | ((e: number) => void)
++>method : (type: "num" | "str", cb: (e: string) => void | (e: number) => void) => AsyncGenerator<never, void, any>
++>type : "num" | "str"
++>cb : (e: string) => void | (e: number) => void
+ 
+     if (type == 'num') {
+ >type == 'num' : boolean
+->type : "str" | "num"
++>type : "num" | "str"
+ >'num' : "num"
+ 
+       cb(123)
+@@= skipped -30, +30 lines =@@
+ 
+ type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+ >Func : Func
++>T : T
+ >args : T
+ 
+ const f60: Func = (kind, payload) => {
+@@= skipped -15, +16 lines =@@
+ 
+         payload.toFixed();  // error
+ >payload.toFixed() : string
+->payload.toFixed : (fractionDigits?: number) => string
++>payload.toFixed : (fractionDigits?: number | undefined) => string
+ >payload : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+     }
+     if (kind === "b") {
+ >kind === "b" : boolean
+@@= skipped -20, +20 lines =@@
+ // Repro from #48902
+ 
+ function foo({
+->foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { value1: any; test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; }) => void
++>foo : (__0: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
+ 
+     value1,
+ >value1 : any
+@@= skipped -64, +64 lines =@@
+ // Repro from #49772
+ 
+ function fa1(x: [true, number] | [false, string]) {
+->fa1 : (x: [true, number] | [false, string]) => void
+->x : [true, number] | [false, string]
++>fa1 : (x: [false, string] | [true, number]) => void
++>x : [false, string] | [true, number]
+ >true : true
+ >false : false
+ 
+     const [guard, value] = x;
+ >guard : boolean
+ >value : string | number
+->x : [true, number] | [false, string]
++>x : [false, string] | [true, number]
+ 
+     if (guard) {
+ >guard : boolean
+@@= skipped -66, +66 lines =@@
+ }
+ 
+ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
+->fa3 : (...args: [true, number] | [false, string]) => void
+->args : [true, number] | [false, string]
++>fa3 : (...args: [false, string] | [true, number]) => void
++>args : [false, string] | [true, number]
+ >true : true
+ >false : false
+ >(guard, value) => {    if (guard) {        for (;;) {            value;  // number        }    }    else {        while (!!true) {            value;  // string        }    }} : (guard: boolean, value: string | number) => void
+@@= skipped -31, +31 lines =@@
+ // Repro from #52152
+ 
+ interface ClientEvents {
++>ClientEvents : ClientEvents
++
+     warn: [message: string];
+ >warn : [message: string]
+ 
+@@= skipped -12, +14 lines =@@
+ 
+     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
+ >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
++>K : K
+ >event : K
+ >listener : (...args: ClientEvents[K]) => void
+ >args : ClientEvents[K]
+@@= skipped -61, +62 lines =@@
+ // Destructuring tuple types with different arities
+ 
+ function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
+->fz1 : ([x, y]: [1, 2] | [3, 4] | [5]) => void
++>fz1 : (__0: [5] | [1, 2] | [3, 4]) => void
+ >x : 1 | 3 | 5
+ >y : 2 | 4 | undefined
+ 
+@@= skipped -57, +57 lines =@@
+ // Repro from #55661
+ 
+ function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
+->tooNarrow : ([x, y]: [1, 1] | [1, 2] | [1]) => void
++>tooNarrow : (__0: [1] | [1, 1] | [1, 2]) => void
+ >x : 1
+->y : 2 | 1 | undefined
++>y : 1 | 2 | undefined
+ 
+     if (y === undefined) {
+ >y === undefined : boolean
+->y : 2 | 1 | undefined
++>y : 1 | 2 | undefined
+ >undefined : undefined
+ 
+         const shouldNotBeOk: never = x;  // Error
+@@= skipped -18, +18 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/56312
+ 
+ function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
+->parameterReassigned1 : ([x, y]: [1, 2] | [3, 4]) => void
++>parameterReassigned1 : (__0: [1, 2] | [3, 4]) => void
+ >x : 1 | 3
+ >y : 2 | 4
+ 
+@@= skipped -26, +26 lines =@@
+ }
+ 
+ function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
+->parameterReassigned2 : ([x, y]: [1, 2] | [3, 4]) => void
++>parameterReassigned2 : (__0: [1, 2] | [3, 4]) => void
+ >x : 1 | 3
+ >y : 2 | 4
+ 

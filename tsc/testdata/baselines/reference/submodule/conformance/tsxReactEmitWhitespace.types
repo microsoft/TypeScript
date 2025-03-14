@@ -1,0 +1,124 @@
+//// [tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+declare var React: any;
+>React : any
+
+// THIS FILE HAS TEST-SIGNIFICANT LEADING/TRAILING
+// WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT
+
+var p = 0;
+>p : number
+>0 : 0
+
+// Emit "   "
+<div>   </div>;
+><div>   </div> : any
+>div : any
+>div : any
+
+// Emit "  ", p, "   "
+<div>  {p}    </div>;
+><div>  {p}    </div> : any
+>div : any
+>p : number
+>div : any
+
+// Emit only p
+<div>  
+><div>        {p}          </div> : any
+>div : any
+
+      {p}    
+>p : number
+
+      </div>;
+>div : any
+
+// Emit only p
+<div>
+><div>  {p}    </div> : any
+>div : any
+
+  {p}
+>p : number
+
+    </div>;
+>div : any
+
+// Emit "  3"
+<div>  3  
+><div>  3    </div> : any
+>div : any
+
+  </div>;
+>div : any
+
+// Emit "  3  "
+<div>  3  </div>;
+><div>  3  </div> : any
+>div : any
+>div : any
+
+// Emit "3"
+<div>   
+><div>      3       </div> : any
+>div : any
+
+   3    
+   </div>;
+>div : any
+
+// Emit no args
+<div>   
+><div>      </div> : any
+>div : any
+
+   </div>;
+>div : any
+
+// Emit "foo bar"
+<div>  
+><div>     foo bar     </div> : any
+>div : any
+
+   foo
+
+ bar   
+
+  </div>;
+>div : any
+
+// Emit "hello\\ world"
+<div>
+><div>    hello\world</div> : any
+>div : any
+
+    hello\
+
+world
+</div>;
+>div : any
+
+// Emit "  a b  c d  "
+<div>  a
+><div>  a    b  c    d  </div> : any
+>div : any
+
+    b  c
+    d  </div>;
+>div : any
+

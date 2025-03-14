@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocReturnTag2.ts] ////
+
+=== returns.js ===
+// @ts-check
+/**
+ * @returns {string} This comment is not currently exposed
+ */
+function f() {
+>f : () => number
+
+    return 5;
+>5 : 5
+}
+
+/**
+ * @returns {string | number} This comment is not currently exposed
+ */
+function f1() {
+>f1 : () => 5 | true
+
+    return 5 || true;
+>5 || true : 5 | true
+>5 : 5
+>true : true
+}
+

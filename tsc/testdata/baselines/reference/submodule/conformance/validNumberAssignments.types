@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/types/primitives/number/validNumberAssignments.ts] ////
+
+=== validNumberAssignments.ts ===
+var x = 1;
+>x : number
+>1 : 1
+
+var a: any = x;
+>a : any
+>x : number
+
+var b: Object = x;
+>b : Object
+>x : number
+
+var c: number = x;
+>c : number
+>x : number
+
+enum E { A };
+>E : E.A
+>A : E.A
+
+var d: E = x;
+>d : E.A
+>x : number
+
+var e = E.A;
+>e : E.A
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+e = x;
+>e = x : number
+>e : E.A
+>x : number
+

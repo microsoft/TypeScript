@@ -1,0 +1,11 @@
+--- old.duplicateStringNamedProperty1.types
++++ new.duplicateStringNamedProperty1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === duplicateStringNamedProperty1.ts ===
+ export interface Album {
++>Album : Album
++
+     "artist": string;
+ >"artist" : string
+ 

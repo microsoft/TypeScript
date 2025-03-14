@@ -1,0 +1,34 @@
+--- old.doNotElaborateAssignabilityToTypeParameters.types
++++ new.doNotElaborateAssignabilityToTypeParameters.types
+@@= skipped -2, +2 lines =@@
+ === doNotElaborateAssignabilityToTypeParameters.ts ===
+ async function foo<T>(x: T): Promise<T> {
+ >foo : <T>(x: T) => Promise<T>
++>T : T
+ >x : T
+ 
+   let yaddable = await getXOrYadda(x);
+ >yaddable : Yadda | Awaited<T>
+ >await getXOrYadda(x) : Yadda | Awaited<T>
+ >getXOrYadda(x) : T | Yadda
+->getXOrYadda : <T_1>(x: T_1) => T_1 | Yadda
++>getXOrYadda : <T>(x: T) => T | Yadda
+ >x : T
+ 
+   return yaddable;
+@@= skipped -14, +15 lines =@@
+ }
+ 
+ interface Yadda {
++>Yadda : Yadda
++
+   stuff: string,
+ >stuff : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ declare function getXOrYadda<T>(x: T): T | Yadda;
+ >getXOrYadda : <T>(x: T) => T | Yadda
++>T : T
+ >x : T
+ 

@@ -1,0 +1,10 @@
+--- old.parserEnumDeclaration2.types
++++ new.parserEnumDeclaration2.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+   declare enum E {
+->E : E
++>E : M.E
+   }
+ }

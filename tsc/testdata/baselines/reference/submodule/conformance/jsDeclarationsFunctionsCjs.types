@@ -1,0 +1,230 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionsCjs.ts] ////
+
+=== index.js ===
+module.exports.a = function a() {}
+>module.exports.a = function a() {} : () => void
+>module.exports.a : any
+>module.exports : any
+>module : any
+>exports : any
+>a : any
+>function a() {} : () => void
+>a : () => void
+
+module.exports.b = function b() {}
+>module.exports.b = function b() {} : () => void
+>module.exports.b : any
+>module.exports : any
+>module : any
+>exports : any
+>b : any
+>function b() {} : () => void
+>b : () => void
+
+module.exports.b.cat = "cat";
+>module.exports.b.cat = "cat" : "cat"
+>module.exports.b.cat : any
+>module.exports.b : any
+>module.exports : any
+>module : any
+>exports : any
+>b : any
+>cat : any
+>"cat" : "cat"
+
+module.exports.c = function c() {}
+>module.exports.c = function c() {} : () => void
+>module.exports.c : any
+>module.exports : any
+>module : any
+>exports : any
+>c : any
+>function c() {} : () => void
+>c : () => void
+
+module.exports.c.Cls = class {}
+>module.exports.c.Cls = class {} : typeof Cls
+>module.exports.c.Cls : any
+>module.exports.c : any
+>module.exports : any
+>module : any
+>exports : any
+>c : any
+>Cls : any
+>class {} : typeof Cls
+
+/**
+ * @param {number} a
+ * @param {number} b
+ * @return {string} 
+ */
+module.exports.d = function d(a, b) { return /** @type {*} */(null); }
+>module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
+>module.exports.d : any
+>module.exports : any
+>module : any
+>exports : any
+>d : any
+>function d(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
+>d : (a: any, b: any) => any
+>a : any
+>b : any
+>(null) : null
+
+/**
+ * @template T,U
+ * @param {T} a
+ * @param {U} b
+ * @return {T & U} 
+ */
+module.exports.e = function e(a, b) { return /** @type {*} */(null); }
+>module.exports.e = function e(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
+>module.exports.e : any
+>module.exports : any
+>module : any
+>exports : any
+>e : any
+>function e(a, b) { return /** @type {*} */(null); } : (a: any, b: any) => any
+>e : (a: any, b: any) => any
+>a : any
+>b : any
+>(null) : null
+
+/**
+ * @template T
+ * @param {T} a
+ */
+module.exports.f = function f(a) {
+>module.exports.f = function f(a) {    return a;} : (a: any) => any
+>module.exports.f : any
+>module.exports : any
+>module : any
+>exports : any
+>f : any
+>function f(a) {    return a;} : (a: any) => any
+>f : (a: any) => any
+>a : any
+
+    return a;
+>a : any
+}
+module.exports.f.self = module.exports.f;
+>module.exports.f.self = module.exports.f : any
+>module.exports.f.self : any
+>module.exports.f : any
+>module.exports : any
+>module : any
+>exports : any
+>f : any
+>self : any
+>module.exports.f : any
+>module.exports : any
+>module : any
+>exports : any
+>f : any
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
+function g(a, b) {
+>g : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return a.x && b.y();
+>a.x && b.y() : any
+>a.x : any
+>a : any
+>x : any
+>b.y() : any
+>b.y : any
+>b : any
+>y : any
+}
+
+module.exports.g = g;
+>module.exports.g = g : (a: any, b: any) => any
+>module.exports.g : any
+>module.exports : any
+>module : any
+>exports : any
+>g : any
+>g : (a: any, b: any) => any
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof module.exports.b}} b
+ */
+function hh(a, b) {
+>hh : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return a.x && b.y();
+>a.x && b.y() : any
+>a.x : any
+>a : any
+>x : any
+>b.y() : any
+>b.y : any
+>b : any
+>y : any
+}
+
+module.exports.h = hh;
+>module.exports.h = hh : (a: any, b: any) => any
+>module.exports.h : any
+>module.exports : any
+>module : any
+>exports : any
+>h : any
+>hh : (a: any, b: any) => any
+
+module.exports.i = function i() {}
+>module.exports.i = function i() {} : () => void
+>module.exports.i : any
+>module.exports : any
+>module : any
+>exports : any
+>i : any
+>function i() {} : () => void
+>i : () => void
+
+module.exports.ii = module.exports.i;
+>module.exports.ii = module.exports.i : any
+>module.exports.ii : any
+>module.exports : any
+>module : any
+>exports : any
+>ii : any
+>module.exports.i : any
+>module.exports : any
+>module : any
+>exports : any
+>i : any
+
+// note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
+module.exports.jj = module.exports.j;
+>module.exports.jj = module.exports.j : any
+>module.exports.jj : any
+>module.exports : any
+>module : any
+>exports : any
+>jj : any
+>module.exports.j : any
+>module.exports : any
+>module : any
+>exports : any
+>j : any
+
+module.exports.j = function j() {}
+>module.exports.j = function j() {} : () => void
+>module.exports.j : any
+>module.exports : any
+>module : any
+>exports : any
+>j : any
+>function j() {} : () => void
+>j : () => void
+

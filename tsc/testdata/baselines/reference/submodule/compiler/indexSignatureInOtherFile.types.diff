@@ -1,0 +1,44 @@
+--- old.indexSignatureInOtherFile.types
++++ new.indexSignatureInOtherFile.types
+@@= skipped -10, +10 lines =@@
+ 
+ === other.ts ===
+ interface Array1<T> {
++>Array1 : Array1<T>
++>T : T
++
+   length: number;
+ >length : number
+ 
+@@= skipped -8, +11 lines =@@
+ }
+ 
+ interface ArrayConstructor1 {
++>ArrayConstructor1 : ArrayConstructor1
++
+   new(arrayLength?: number): Array1<any>;
+ >arrayLength : number
+ }
+@@= skipped -9, +11 lines =@@
+ 
+ // iterable.d.ts
+ interface Array1<T> {
++>Array1 : Array1<T>
++>T : T
++
+   [Symbol.iterator](): IterableIterator<T>;
+->[Symbol.iterator] : () => IterableIterator<T>
++>[Symbol.iterator] : () => IterableIterator<T, any, any>
+ >Symbol.iterator : unique symbol
+ >Symbol : SymbolConstructor
+ >iterator : unique symbol
+@@= skipped -9, +12 lines =@@
+ 
+ // symbol.wellknown.d.ts
+ interface Array1<T> {
++>Array1 : Array1<T>
++>T : T
++
+   /**
+    * Returns an object whose properties have the value 'true'
+    * when they will be absent when used in a 'with' statement.

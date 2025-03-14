@@ -1,0 +1,9 @@
+--- old.typeLookupInIIFE.types
++++ new.typeLookupInIIFE.types
+@@= skipped -9, +9 lines =@@
+ 
+ /** @type {ns.NotFound} */
+ var crash;
+->crash : ns.NotFound
++>crash : any
+ 

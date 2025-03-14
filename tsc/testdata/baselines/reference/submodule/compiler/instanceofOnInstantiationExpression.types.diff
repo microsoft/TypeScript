@@ -1,0 +1,10 @@
+--- old.instanceofOnInstantiationExpression.types
++++ new.instanceofOnInstantiationExpression.types
+@@= skipped -2, +2 lines =@@
+ === instanceofOnInstantiationExpression.ts ===
+ declare class Box<T> {
+ >Box : Box<T>
++>T : T
+ 
+     value: T;
+ >value : T

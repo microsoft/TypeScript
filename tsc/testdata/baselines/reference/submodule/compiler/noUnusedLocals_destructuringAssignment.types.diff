@@ -1,0 +1,20 @@
+--- old.noUnusedLocals_destructuringAssignment.types
++++ new.noUnusedLocals_destructuringAssignment.types
+@@= skipped -17, +17 lines =@@
+ >({ x } = this) : this
+ >{ x } = this : this
+ >{ x } : { x: number; }
+->x : number
++>x : any
+ >this : this
+ 
+         return x;
+@@= skipped -17, +17 lines =@@
+ >({ f } = this) : this
+ >{ f } = this : this
+ >{ f } : { f: Function; }
+->f : Function
++>f : any
+ >this : this
+ 
+         return f;

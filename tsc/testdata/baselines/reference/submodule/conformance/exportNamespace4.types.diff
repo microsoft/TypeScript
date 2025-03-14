@@ -1,0 +1,17 @@
+--- old.exportNamespace4.types
++++ new.exportNamespace4.types
+@@= skipped -20, +20 lines =@@
+ 
+ === e.ts ===
+ import { ns } from './c';
+->ns : typeof ns
++>ns : typeof import("a")
+ 
+ ns.A;
+->ns.A : typeof ns.A
+->ns : typeof ns
+->A : typeof ns.A
++>ns.A : typeof A
++>ns : typeof import("a")
++>A : typeof A
+ 

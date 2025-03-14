@@ -1,0 +1,47 @@
+--- old.anonClassDeclarationEmitIsAnon.types
++++ new.anonClassDeclarationEmitIsAnon.types
+@@= skipped -19, +19 lines =@@
+ 
+ export type Constructor<T = {}> = new (...args: any[]) => T;
+ >Constructor : Constructor<T>
++>T : T
+ >args : any[]
+ 
+ export function Timestamped<TBase extends Constructor>(Base: TBase) {
+->Timestamped : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
++>Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
++>TBase : TBase
+ >Base : TBase
+ 
+     return class extends Base {
+->class extends Base {        timestamp = Date.now();    } : { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
++>class extends Base {        timestamp = Date.now();    } : { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+ >Base : {}
+ 
+         timestamp = Date.now();
+@@= skipped -23, +25 lines =@@
+ === index.ts ===
+ import { wrapClass, Timestamped } from "./wrapClass";
+ >wrapClass : (param: any) => typeof Wrapped
+->Timestamped : <TBase extends import("wrapClass").Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
++>Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+ 
+ export default wrapClass(0);
+ >wrapClass(0) : typeof Wrapped
+@@= skipped -19, +19 lines =@@
+ // User that is Timestamped
+ export class TimestampedUser extends Timestamped(User) {
+ >TimestampedUser : TimestampedUser
+->Timestamped(User) : Timestamped<typeof User>.(Anonymous class) & User
+->Timestamped : <TBase extends import("wrapClass").Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
++>Timestamped(User) : (Anonymous class)<typeof User> & User
++>Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+ >User : typeof User
+ 
+     constructor() {
+         super();
+ >super() : void
+->super : { new (...args: any[]): Timestamped<typeof User>.(Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & typeof User
++>super : { new (...args: any[]): (Anonymous class)<typeof User>; prototype: (Anonymous class)<any>; } & typeof User
+     }
+ }

@@ -1,0 +1,10 @@
+--- old.emitClassDeclarationWithTypeArgumentInES6.types
++++ new.emitClassDeclarationWithTypeArgumentInES6.types
+@@= skipped -2, +2 lines =@@
+ === emitClassDeclarationWithTypeArgumentInES6.ts ===
+ class B<T> {
+ >B : B<T>
++>T : T
+ 
+     x: T;
+ >x : T

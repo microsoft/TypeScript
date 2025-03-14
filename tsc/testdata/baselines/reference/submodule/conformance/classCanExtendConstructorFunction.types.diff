@@ -1,0 +1,317 @@
+--- old.classCanExtendConstructorFunction.types
++++ new.classCanExtendConstructorFunction.types
+@@= skipped -5, +5 lines =@@
+  * @param {number} numberOxen
+  */
+ function Wagon(numberOxen) {
+->Wagon : typeof Wagon
+->numberOxen : number
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
++>numberOxen : any
+ 
+     this.numberOxen = numberOxen
+->this.numberOxen = numberOxen : number
++>this.numberOxen = numberOxen : any
+ >this.numberOxen : any
+->this : this
++>this : any
+ >numberOxen : any
+->numberOxen : number
++>numberOxen : any
+ }
+ /** @param {Wagon[]=} wagons */
+ Wagon.circle = function (wagons) {
+->Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
+->Wagon.circle : (wagons?: Wagon[] | undefined) => number
+->Wagon : typeof Wagon
+->circle : (wagons?: Wagon[] | undefined) => number
+->function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
+->wagons : Wagon[]
++>Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons: any) => any
++>Wagon.circle : (wagons: any) => any
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
++>circle : (wagons: any) => any
++>function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons: any) => any
++>wagons : any
+ 
+     return wagons ? wagons.length : 3.14;
+->wagons ? wagons.length : 3.14 : number
+->wagons : Wagon[]
+->wagons.length : number
+->wagons : Wagon[]
+->length : number
++>wagons ? wagons.length : 3.14 : any
++>wagons : any
++>wagons.length : any
++>wagons : any
++>length : any
+ >3.14 : 3.14
+ }
+ /** @param {*[]=} supplies - *[]= is my favourite type */
+ Wagon.prototype.load = function (supplies) {
+->Wagon.prototype.load = function (supplies) {} : (supplies?: any[] | undefined) => void
++>Wagon.prototype.load = function (supplies) {} : (supplies: any) => void
+ >Wagon.prototype.load : any
+ >Wagon.prototype : any
+->Wagon : typeof Wagon
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+ >prototype : any
+ >load : any
+->function (supplies) {} : (supplies?: any[] | undefined) => void
+->supplies : any[]
++>function (supplies) {} : (supplies: any) => void
++>supplies : any
+ }
+ /** @param {*[]=} supplies - Yep, still a great type */
+ Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
+->Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
++>Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies: any) => any
+ >Wagon.prototype.weight : any
+ >Wagon.prototype : any
+->Wagon : typeof Wagon
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+ >prototype : any
+ >weight : any
+->supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
+->supplies : any[]
+->supplies ? supplies.length : -1 : number
+->supplies : any[]
+->supplies.length : number
+->supplies : any[]
+->length : number
++>supplies => supplies ? supplies.length : -1 : (supplies: any) => any
++>supplies : any
++>supplies ? supplies.length : -1 : any
++>supplies : any
++>supplies.length : any
++>supplies : any
++>length : any
+ >-1 : -1
+ >1 : 1
+ 
+@@= skipped -60, +60 lines =@@
+ >Wagon.prototype.speed = function () {    return this.numberOxen / this.weight()} : () => number
+ >Wagon.prototype.speed : any
+ >Wagon.prototype : any
+->Wagon : typeof Wagon
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+ >prototype : any
+ >speed : any
+ >function () {    return this.numberOxen / this.weight()} : () => number
+ 
+     return this.numberOxen / this.weight()
+ >this.numberOxen / this.weight() : number
+->this.numberOxen : number
+->this : this
+->numberOxen : number
+->this.weight() : number
+->this.weight : (supplies?: any[] | undefined) => number
+->this : this
+->weight : (supplies?: any[] | undefined) => number
++>this.numberOxen : any
++>this : any
++>numberOxen : any
++>this.weight() : any
++>this.weight : any
++>this : any
++>weight : any
+ }
+ // ok
+ class Sql extends Wagon {
+ >Sql : Sql
+->Wagon : Wagon
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+ 
+     constructor() {
+         super(); // error: not enough arguments
+ >super() : void
+->super : typeof Wagon
++>super : any
+ 
+         this.foonly = 12
+ >this.foonly = 12 : 12
+@@= skipped -38, +38 lines =@@
+      * This is not assignable, so should have a type error
+      */
+     load(files, format) {
+->load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => void
+->files : string[]
+->format : "csv" | "json" | "xmlolololol"
++>load : (files: any, format: any) => void
++>files : any
++>format : any
+ 
+         if (format === "xmlolololol") {
+ >format === "xmlolololol" : boolean
+->format : "csv" | "json" | "xmlolololol"
++>format : any
+ >"xmlolololol" : "xmlolololol"
+ 
+             throw new Error("please do not use XML. It was a joke.");
+@@= skipped -16, +16 lines =@@
+         }
+         else {
+             super.speed() // run faster
+->super.speed() : number
+->super.speed : () => number
+->super : Wagon
+->speed : () => number
++>super.speed() : any
++>super.speed : any
++>super : any
++>speed : any
+ 
+             if (super.weight() < 0) {
+ >super.weight() < 0 : boolean
+->super.weight() : number
+->super.weight : (supplies?: any[] | undefined) => number
+->super : Wagon
+->weight : (supplies?: any[] | undefined) => number
++>super.weight() : any
++>super.weight : any
++>super : any
++>weight : any
+ >0 : 0
+ 
+                 // ????????????????????????
+@@= skipped -24, +24 lines =@@
+ >Sql : typeof Sql
+ 
+ db.numberOxen = db.foonly
+->db.numberOxen = db.foonly : number
+->db.numberOxen : number
++>db.numberOxen = db.foonly : any
++>db.numberOxen : any
+ >db : Sql
+->numberOxen : number
+->db.foonly : number
++>numberOxen : any
++>db.foonly : any
+ >db : Sql
+->foonly : number
++>foonly : any
+ 
+ // error, can't extend a TS constructor function
+ class Drakkhen extends Dragon {
+@@= skipped -44, +44 lines =@@
+ // ok
+ class Conestoga extends Wagon {
+ >Conestoga : Conestoga
+->Wagon : Wagon
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
+ 
+     constructor(public drunkOO: true) {
+ >drunkOO : true
+@@= skipped -9, +9 lines =@@
+         // error: wrong type
+         super('nope');
+ >super('nope') : void
+->super : typeof Wagon
++>super : any
+ >'nope' : "nope"
+     }
+     // should error since others is not optional
+     static circle(others: (typeof Wagon)[]) {
+->circle : (others: (typeof Wagon)[]) => number
+->others : (typeof Wagon)[]
+->Wagon : typeof Wagon
++>circle : (others: { (numberOxen: any): void; circle: (wagons: any) => any; }[]) => number
++>others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
+ 
+         return others.length
+ >others.length : number
+->others : (typeof Wagon)[]
++>others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
+ >length : number
+     }
+ }
+@@= skipped -27, +26 lines =@@
+ >drunkOO : true
+ 
+ c.numberOxen
+->c.numberOxen : number
++>c.numberOxen : any
+ >c : Conestoga
+->numberOxen : number
++>numberOxen : any
+ 
+ === generic.js ===
+ /**
+@@= skipped -10, +10 lines =@@
+  * @param {T} flavour
+  */
+ function Soup(flavour) {
+->Soup : typeof Soup
+->flavour : T
++>Soup : (flavour: any) => void
++>flavour : any
+ 
+     this.flavour = flavour
+->this.flavour = flavour : T
++>this.flavour = flavour : any
+ >this.flavour : any
+->this : this
++>this : any
+ >flavour : any
+->flavour : T
++>flavour : any
+ }
+ /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
+ class Chowder extends Soup {
+ >Chowder : Chowder
+->Soup : Soup<{ claim: "ignorant" | "malicious"; }>
++>Soup : (flavour: any) => void
+ 
+     log() {
+->log : () => { claim: "ignorant" | "malicious"; }
++>log : () => any
+ 
+         return this.flavour
+->this.flavour : { claim: "ignorant" | "malicious"; }
++>this.flavour : any
+ >this : this
+->flavour : { claim: "ignorant" | "malicious"; }
++>flavour : any
+     }
+ }
+ 
+ var soup = new Soup(1);
+->soup : Soup<number>
+->new Soup(1) : Soup<number>
+->Soup : typeof Soup
++>soup : any
++>new Soup(1) : any
++>Soup : (flavour: any) => void
+ >1 : 1
+ 
+ soup.flavour
+->soup.flavour : number
+->soup : Soup<number>
+->flavour : number
++>soup.flavour : any
++>soup : any
++>flavour : any
+ 
+ var chowder = new Chowder({ claim: "ignorant" });
+ >chowder : Chowder
+ >new Chowder({ claim: "ignorant" }) : Chowder
+ >Chowder : typeof Chowder
+->{ claim: "ignorant" } : { claim: "ignorant"; }
+->claim : "ignorant"
++>{ claim: "ignorant" } : { claim: string; }
++>claim : string
+ >"ignorant" : "ignorant"
+ 
+ chowder.flavour.claim
+->chowder.flavour.claim : "ignorant" | "malicious"
+->chowder.flavour : { claim: "ignorant" | "malicious"; }
++>chowder.flavour.claim : any
++>chowder.flavour : any
+ >chowder : Chowder
+->flavour : { claim: "ignorant" | "malicious"; }
+->claim : "ignorant" | "malicious"
++>flavour : any
++>claim : any
+ 
+ var errorNoArgs = new Chowder();
+ >errorNoArgs : Chowder

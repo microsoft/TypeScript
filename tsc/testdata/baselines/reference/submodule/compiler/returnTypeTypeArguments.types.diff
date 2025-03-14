@@ -1,0 +1,165 @@
+--- old.returnTypeTypeArguments.types
++++ new.returnTypeTypeArguments.types
+@@= skipped -2, +2 lines =@@
+ === returnTypeTypeArguments.ts ===
+ class One<T>{
+ >One : One<T>
++>T : T
+ 
+     value: T;
+ >value : T
+ }
+ class Two<T, U>{
+ >Two : Two<T, U>
++>T : T
++>U : U
+ 
+     value: T;
+ >value : T
+@@= skipped -15, +18 lines =@@
+ }
+ class Three<T, U, V>{
+ >Three : Three<T, U, V>
++>T : T
++>U : U
++>V : V
+ 
+     value: T;
+ >value : T
+@@= skipped -12, +15 lines =@@
+ }
+ 
+ function A1(): One { return null; }
+->A1 : () => One
++>A1 : () => any
+ 
+ function A2(): Two { return null; }
+->A2 : () => Two
++>A2 : () => any
+ 
+ function A3(): Three { return null; }
+->A3 : () => Three
++>A3 : () => any
+ 
+ function B1(): Two<number> { return null; }
+->B1 : () => Two<number>
++>B1 : () => any
+ 
+ function B2(): Three<string> { return null; }
+->B2 : () => Three<string>
++>B2 : () => any
+ 
+ function B3(): Three<string, number> { return null; }
+->B3 : () => Three<string, number>
++>B3 : () => any
+ 
+ class C {
+ >C : C
+ 
+     A1(): One { return null; }
+->A1 : () => One
++>A1 : () => any
+ 
+     A2(): Two { return null; }
+->A2 : () => Two
++>A2 : () => any
+ 
+     A3(): Three { return null; }
+->A3 : () => Three
++>A3 : () => any
+ 
+     B1(): Two<number> { return null; }
+->B1 : () => Two<number>
++>B1 : () => any
+ 
+     B2(): Three<string> { return null; }
+->B2 : () => Three<string>
++>B2 : () => any
+ 
+     B3(): Three<string, number> { return null; }
+->B3 : () => Three<string, number>
++>B3 : () => any
+ }
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     A2(): Two<T> { return null; }
+->A2 : () => Two<T>
++>A2 : () => any
+ 
+     A3(): Three<T> { return null; }
+->A3 : () => Three<T>
++>A3 : () => any
+ 
+     B1(): Two<T> { return null; }
+->B1 : () => Two<T>
++>B1 : () => any
+ 
+     B2(): Three<T> { return null; }
+->B2 : () => Three<T>
++>B2 : () => any
+ 
+     B3(): Three<string, T> { return null; }
+->B3 : () => Three<string, T>
++>B3 : () => any
+ }
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     value: T;
+ >value : T
+ }
+ 
+ class Y<T>
+ >Y : Y<T>
++>T : T
+ {
+     value: T;
+ >value : T
+@@= skipped -72, +77 lines =@@
+ 
+ class X<T>
+ >X : X<T>
++>T : T
+ {
+     p1: () => X;
+->p1 : () => X
++>p1 : () => any
+ 
+     p2: { [idx: number]: X }
+ >p2 : { [idx: number]: any; }
+@@= skipped -18, +19 lines =@@
+ >p5 : any
+ 
+     p6: () => Y;
+->p6 : () => Y
++>p6 : () => any
+ 
+     p7: { [idx: number]: Y }
+ >p7 : { [idx: number]: any; }
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ declare var a: {
+->a : { p1: () => X; p2: { [idx: number]: X; }; p3: X[]; p4: I<X>; p5: X; p6: () => Y; p7: { [idx: number]: Y; }; p8: Y[]; p9: I<Y>; pa: Y; }
++>a : { p1: () => any; p2: { [idx: number]: any; }; p3: any[]; p4: I<any>; p5: any; p6: () => any; p7: { [idx: number]: any; }; p8: any[]; p9: I<any>; pa: any; }
+ 
+     p1: () => X;
+->p1 : () => X
++>p1 : () => any
+ 
+     p2: { [idx: number]: X }
+ >p2 : { [idx: number]: any; }
+@@= skipped -19, +19 lines =@@
+ >p5 : any
+ 
+     p6: () => Y;
+->p6 : () => Y
++>p6 : () => any
+ 
+     p7: { [idx: number]: Y }
+ >p7 : { [idx: number]: any; }

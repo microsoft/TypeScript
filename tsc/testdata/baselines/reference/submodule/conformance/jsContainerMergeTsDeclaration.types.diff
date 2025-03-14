@@ -1,0 +1,31 @@
+--- old.jsContainerMergeTsDeclaration.types
++++ new.jsContainerMergeTsDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ var /*1*/x = function foo() {
+->x : { (): void; a(): void; }
+->function foo() {} : { (): void; a(): void; }
+->foo : { (): void; a(): void; }
++>x : () => void
++>function foo() {} : () => void
++>foo : () => void
+ }
+ x.a = function bar() {
+ >x.a = function bar() {} : () => void
+->x.a : () => void
+->x : { (): void; a(): void; }
+->a : () => void
++>x.a : any
++>x : () => void
++>a : any
+ >function bar() {} : () => void
+ >bar : () => void
+ }
+ === b.ts ===
+ var x = function () {
+->x : { (): void; a(): void; }
++>x : () => void
+ >function () {    return 1;}() : number
+ >function () {    return 1;} : () => number
+ 

@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES5.ts] ////
+
+=== computedPropertyNames7_ES5.ts ===
+enum E {
+>E : E.member
+
+    member
+>member : E.member
+}
+var v = {
+>v : { [E.member]: number; }
+>{    [E.member]: 0} : { [E.member]: number; }
+
+    [E.member]: 0
+>[E.member] : number
+>E.member : E.member
+>E : typeof E
+>member : E.member
+>0 : 0
+}

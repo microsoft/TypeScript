@@ -1,0 +1,55 @@
+--- old.importCallExpressionReturnPromiseOfAny.types
++++ new.importCallExpressionReturnPromiseOfAny.types
+@@= skipped -5, +5 lines =@@
+ 
+ === 1.ts ===
+ import * as defaultModule from "./defaultPath";
+->defaultModule : typeof defaultModule
++>defaultModule : typeof import("defaultPath")
+ 
+ declare function getSpecifier(): string;
+ >getSpecifier : () => string
+@@= skipped -44, +44 lines =@@
+ >getSpecifier : () => string
+ 
+ var p11: Promise<typeof defaultModule> = import(getSpecifier());
+->p11 : Promise<typeof defaultModule>
+->defaultModule : typeof defaultModule
++>p11 : Promise<typeof import("defaultPath")>
+ >import(getSpecifier()) : Promise<any>
+ >getSpecifier() : string
+ >getSpecifier : () => string
+ 
+ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule>;
+->p2 : Promise<typeof defaultModule>
+->import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule> : Promise<typeof defaultModule>
++>p2 : Promise<typeof import("defaultPath")>
++>import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule> : Promise<typeof import("defaultPath")>
+ >import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
+ >whatToLoad ? getSpecifier() : "defaulPath" : string
+ >whatToLoad : boolean
+ >getSpecifier() : string
+ >getSpecifier : () => string
+ >"defaulPath" : "defaulPath"
+->defaultModule : typeof defaultModule
+ 
+ p1.then(zero => {
+ >p1.then(zero => {    return zero.foo();  // ok, zero is any}) : Promise<any>
+->p1.then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>p1.then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >p1 : Promise<any>
+->then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >zero => {    return zero.foo();  // ok, zero is any} : (zero: any) => any
+ >zero : any
+ 
+@@= skipped -37, +35 lines =@@
+ >j : string
+ 
+ var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
+->p3 : Promise<typeof defaultModule>
+->defaultModule : typeof defaultModule
++>p3 : Promise<typeof import("defaultPath")>
+ >import(j=getSpecifier()) : Promise<any>
+ >j=getSpecifier() : string
+ >j : string

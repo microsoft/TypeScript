@@ -1,0 +1,10 @@
+--- old.crashInresolveReturnStatement.types
++++ new.crashInresolveReturnStatement.types
+@@= skipped -24, +24 lines =@@
+ }
+ function createWorkItemDialog<P0>(dialogType: P0) {
+ >createWorkItemDialog : <P0>(dialogType: P0) => void
++>P0 : P0
+ >dialogType : P0
+ }
+ class WITDialogs {

@@ -1,0 +1,10 @@
+--- old.inferSecondaryParameter.types
++++ new.inferSecondaryParameter.types
+@@= skipped -3, +3 lines =@@
+ // type inference on 'bug' should give 'any'
+ 
+ interface Ib { m(test: string, fn: Function); }
++>Ib : Ib
+ >m : (test: string, fn: Function) => any
+ >test : string
+ >fn : Function

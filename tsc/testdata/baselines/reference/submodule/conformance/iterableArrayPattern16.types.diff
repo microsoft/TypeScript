@@ -1,0 +1,18 @@
+--- old.iterableArrayPattern16.types
++++ new.iterableArrayPattern16.types
+@@= skipped -1, +1 lines =@@
+ 
+ === iterableArrayPattern16.ts ===
+ function fun(...[a, b]: [Bar, Bar][]) { }
+->fun : (...[a, b]: [Bar, Bar][]) => void
++>fun : (...__0: [Bar, Bar][]) => void
+ >a : [Bar, Bar]
+ >b : [Bar, Bar]
+ 
+ fun(...new FooIteratorIterator);
+ >fun(...new FooIteratorIterator) : void
+->fun : (...[a, b]: [Bar, Bar][]) => void
++>fun : (...__0: [Bar, Bar][]) => void
+ >...new FooIteratorIterator : FooIterator
+ >new FooIteratorIterator : FooIteratorIterator
+ >FooIteratorIterator : typeof FooIteratorIterator

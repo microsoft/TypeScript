@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/jsFileCompilationDecoratorSyntax.ts] ////
+
+=== a.js ===
+@internal class C { }
+>internal : any
+>C : C
+

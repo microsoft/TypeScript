@@ -1,0 +1,20 @@
+--- old.selfInLambdas.types
++++ new.selfInLambdas.types
+@@= skipped -1, +1 lines =@@
+ 
+ === selfInLambdas.ts ===
+ interface MouseEvent {
++>MouseEvent : MouseEvent
++
+     x: number;
+ >x : number
+ 
+@@= skipped -11, +13 lines =@@
+ >window : Window
+ 
+ interface Window {
++>Window : Window
++
+     onmousemove: (ev: MouseEvent) => any;
+ >onmousemove : (ev: MouseEvent) => any
+ >ev : MouseEvent

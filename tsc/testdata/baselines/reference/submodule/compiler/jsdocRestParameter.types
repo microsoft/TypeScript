@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/jsdocRestParameter.ts] ////
+
+=== /a.js ===
+/** @param {...number} a */
+function f(a) {
+>f : (a: any) => void
+>a : any
+
+    a; // number | undefined
+>a : any
+
+    // Ideally this would be a number. But currently checker.ts has only one `argumentsSymbol`, so it's `any`.
+    arguments[0];
+>arguments[0] : any
+>arguments : IArguments
+>0 : 0
+}
+f([1, 2]); // Error
+>f([1, 2]) : void
+>f : (a: any) => void
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+f(1, "2"); // Error
+>f(1, "2") : void
+>f : (a: any) => void
+>1 : 1
+>"2" : "2"
+
+f(1, 2);
+>f(1, 2) : void
+>f : (a: any) => void
+>1 : 1
+>2 : 2
+

@@ -1,0 +1,36 @@
+--- old.tsxTypeArgumentPartialDefinitionStillErrors.types
++++ new.tsxTypeArgumentPartialDefinitionStillErrors.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare namespace JSX {
++>JSX : any
++
+     interface Element {
++>Element : Element
++
+         render(): Element | string | false;
+->render : () => Element | string | false
++>render : () => string | false | Element
+ >false : false
+     }
+ }
+ 
+ function SFC<T>(props: Record<string, T>) {
+ >SFC : <T>(props: Record<string, T>) => string
++>T : T
+ >props : Record<string, T>
+ 
+     return '';
+@@= skipped -16, +21 lines =@@
+ }
+ 
+ <SFC<string> prop={1}></SFC>; // should error
+-><SFC<string> prop={1}></SFC> : JSX.Element
++><SFC<string> prop={1}></SFC> : any
+ >SFC : <T>(props: Record<string, T>) => string
+->prop : number
++>prop : any
+ >1 : 1
+ >SFC : <T>(props: Record<string, T>) => string
+ 

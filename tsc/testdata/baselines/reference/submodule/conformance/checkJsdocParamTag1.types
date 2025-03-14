@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocParamTag1.ts] ////
+
+=== 0.js ===
+// @ts-check
+/**
+ * @param {number=} n
+ * @param {string} [s]
+ */
+function foo(n, s) {}
+>foo : (n: any, s: any) => void
+>n : any
+>s : any
+
+foo();
+>foo() : void
+>foo : (n: any, s: any) => void
+
+foo(1);
+>foo(1) : void
+>foo : (n: any, s: any) => void
+>1 : 1
+
+foo(1, "hi");
+>foo(1, "hi") : void
+>foo : (n: any, s: any) => void
+>1 : 1
+>"hi" : "hi"
+

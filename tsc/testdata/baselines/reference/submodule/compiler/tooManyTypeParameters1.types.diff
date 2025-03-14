@@ -1,0 +1,36 @@
+--- old.tooManyTypeParameters1.types
++++ new.tooManyTypeParameters1.types
+@@= skipped -2, +2 lines =@@
+ === tooManyTypeParameters1.ts ===
+ function f<T>() { }
+ >f : <T>() => void
++>T : T
+ 
+ f<string, string>();
+ >f<string, string>() : void
+@@= skipped -8, +9 lines =@@
+ var x = <T>() => {};
+ >x : <T>() => void
+ ><T>() => {} : <T>() => void
++>T : T
+ 
+ x<number,number>();
+ >x<number,number>() : void
+@@= skipped -7, +8 lines =@@
+ 
+ class C<T> {}
+ >C : C<T>
++>T : T
+ 
+ var c = new C<Date,Date>();
+ >c : C<Date>
+@@= skipped -7, +8 lines =@@
+ >C : typeof C
+ 
+ interface I<T> {}
++>I : I<T>
++>T : T
++
+ var i: I<number,number>;
+ >i : any
+ 

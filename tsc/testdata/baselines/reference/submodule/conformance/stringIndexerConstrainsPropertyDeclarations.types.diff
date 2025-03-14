@@ -1,0 +1,38 @@
+--- old.stringIndexerConstrainsPropertyDeclarations.types
++++ new.stringIndexerConstrainsPropertyDeclarations.types
+@@= skipped -3, +3 lines =@@
+ // String indexer types constrain the types of named properties in their containing type
+ 
+ interface MyString extends String {
++>MyString : MyString
++
+     foo: number;
+ >foo : number
+ }
+@@= skipped -77, +79 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     [x: string]: string;
+ >x : string
+ 
+@@= skipped -42, +44 lines =@@
+ }
+ 
+ var a: {
+->a : { (): string; (x: any): number; [x: string]: string; a: string; b: number; c: () => {}; d: string; e: number; 1: string; 2: number; foo(): string; "3.0": string; "4.0": number; f: MyString; }
++>a : { (): string; (x: any): number; [x: string]: string; a: string; b: number; c: () => {}; d: string; e: number; 1.0: string; 2.0: number; foo: () => string; "3.0": string; "4.0": number; f: MyString; }
+ 
+     [x: string]: string;
+ >x : string
+@@= skipped -47, +47 lines =@@
+ var b: { [x: string]: string; } = {
+ >b : { [x: string]: string; }
+ >x : string
+->{    a: '',    b: 1,     c: () => { },     "d": '',     "e": 1,     1.0: '',    2.0: 1,     "3.0": '',     "4.0": 1,     f: <MyString>null,     get X() {         return '';    },    set X(v) { },     foo() {         return '';    }} : { a: string; b: number; c: () => void; d: string; e: number; 1: string; 2: number; "3.0": string; "4.0": number; f: MyString; X: string; foo(): string; }
++>{    a: '',    b: 1,     c: () => { },     "d": '',     "e": 1,     1.0: '',    2.0: 1,     "3.0": '',     "4.0": 1,     f: <MyString>null,     get X() {         return '';    },    set X(v) { },     foo() {         return '';    }} : { a: string; b: number; c: () => void; d: string; e: number; 1.0: string; 2.0: number; "3.0": string; "4.0": number; f: MyString; X: string; foo: () => string; }
+ 
+     a: '',
+ >a : string

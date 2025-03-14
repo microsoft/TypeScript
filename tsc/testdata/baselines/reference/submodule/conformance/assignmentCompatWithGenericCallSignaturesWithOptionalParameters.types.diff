@@ -1,0 +1,501 @@
+--- old.assignmentCompatWithGenericCallSignaturesWithOptionalParameters.types
++++ new.assignmentCompatWithGenericCallSignaturesWithOptionalParameters.types
+@@= skipped -7, +7 lines =@@
+ 
+     class Base<T> {
+ >Base : Base<T>
++>T : T
+ 
+         a: () => T;
+ >a : () => T
+@@= skipped -182, +183 lines =@@
+ 
+         a: <T>() => T;
+ >a : <T>() => T
++>T : T
+ 
+         a2: <T>(x?: T) => T;
+ >a2 : <T>(x?: T) => T
++>T : T
+ >x : T
+ 
+         a3: <T>(x: T) => T;
+ >a3 : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+         a4: <T>(x: T, y?: T) => T;
+ >a4 : <T>(x: T, y?: T) => T
++>T : T
+ >x : T
+ >y : T
+ 
+         a5: <T>(x?: T, y?: T) => T;
+ >a5 : <T>(x?: T, y?: T) => T
++>T : T
+ >x : T
+ >y : T
+     }
+ 
+     class Target<T> {
+ >Target : Target<T>
++>T : T
+ 
+         a: () => T;
+ >a : () => T
+@@= skipped -48, +54 lines =@@
+ 
+     function foo<T>() {
+ >foo : <T>() => void
++>T : T
+ 
+         var b: Base2;
+ >b : Base2
+@@= skipped -10, +11 lines =@@
+         // all errors
+         b.a = t.a;
+ >b.a = t.a : () => T
+->b.a : <T_1>() => T_1
++>b.a : <T>() => T
+ >b : Base2
+->a : <T_1>() => T_1
++>a : <T>() => T
+ >t.a : () => T
+ >t : Target<T>
+ >a : () => T
+ 
+         b.a = t.a2;
+ >b.a = t.a2 : (x?: T) => T
+->b.a : <T_1>() => T_1
++>b.a : <T>() => T
+ >b : Base2
+->a : <T_1>() => T_1
++>a : <T>() => T
+ >t.a2 : (x?: T) => T
+ >t : Target<T>
+ >a2 : (x?: T) => T
+ 
+         b.a = t.a3;
+ >b.a = t.a3 : (x: T) => T
+->b.a : <T_1>() => T_1
++>b.a : <T>() => T
+ >b : Base2
+->a : <T_1>() => T_1
++>a : <T>() => T
+ >t.a3 : (x: T) => T
+ >t : Target<T>
+ >a3 : (x: T) => T
+ 
+         b.a = t.a4;
+ >b.a = t.a4 : (x: T, y?: T) => T
+->b.a : <T_1>() => T_1
++>b.a : <T>() => T
+ >b : Base2
+->a : <T_1>() => T_1
++>a : <T>() => T
+ >t.a4 : (x: T, y?: T) => T
+ >t : Target<T>
+ >a4 : (x: T, y?: T) => T
+ 
+         b.a = t.a5;
+ >b.a = t.a5 : (x?: T, y?: T) => T
+->b.a : <T_1>() => T_1
++>b.a : <T>() => T
+ >b : Base2
+->a : <T_1>() => T_1
++>a : <T>() => T
+ >t.a5 : (x?: T, y?: T) => T
+ >t : Target<T>
+ >a5 : (x?: T, y?: T) => T
+ 
+         b.a2 = t.a;
+ >b.a2 = t.a : () => T
+->b.a2 : <T_1>(x?: T_1) => T_1
++>b.a2 : <T>(x?: T) => T
+ >b : Base2
+->a2 : <T_1>(x?: T_1) => T_1
++>a2 : <T>(x?: T) => T
+ >t.a : () => T
+ >t : Target<T>
+ >a : () => T
+ 
+         b.a2 = t.a2;
+ >b.a2 = t.a2 : (x?: T) => T
+->b.a2 : <T_1>(x?: T_1) => T_1
++>b.a2 : <T>(x?: T) => T
+ >b : Base2
+->a2 : <T_1>(x?: T_1) => T_1
++>a2 : <T>(x?: T) => T
+ >t.a2 : (x?: T) => T
+ >t : Target<T>
+ >a2 : (x?: T) => T
+ 
+         b.a2 = t.a3;
+ >b.a2 = t.a3 : (x: T) => T
+->b.a2 : <T_1>(x?: T_1) => T_1
++>b.a2 : <T>(x?: T) => T
+ >b : Base2
+->a2 : <T_1>(x?: T_1) => T_1
++>a2 : <T>(x?: T) => T
+ >t.a3 : (x: T) => T
+ >t : Target<T>
+ >a3 : (x: T) => T
+ 
+         b.a2 = t.a4;
+ >b.a2 = t.a4 : (x: T, y?: T) => T
+->b.a2 : <T_1>(x?: T_1) => T_1
++>b.a2 : <T>(x?: T) => T
+ >b : Base2
+->a2 : <T_1>(x?: T_1) => T_1
++>a2 : <T>(x?: T) => T
+ >t.a4 : (x: T, y?: T) => T
+ >t : Target<T>
+ >a4 : (x: T, y?: T) => T
+ 
+         b.a2 = t.a5;
+ >b.a2 = t.a5 : (x?: T, y?: T) => T
+->b.a2 : <T_1>(x?: T_1) => T_1
++>b.a2 : <T>(x?: T) => T
+ >b : Base2
+->a2 : <T_1>(x?: T_1) => T_1
++>a2 : <T>(x?: T) => T
+ >t.a5 : (x?: T, y?: T) => T
+ >t : Target<T>
+ >a5 : (x?: T, y?: T) => T
+ 
+         b.a3 = t.a;
+ >b.a3 = t.a : () => T
+->b.a3 : <T_1>(x: T_1) => T_1
++>b.a3 : <T>(x: T) => T
+ >b : Base2
+->a3 : <T_1>(x: T_1) => T_1
++>a3 : <T>(x: T) => T
+ >t.a : () => T
+ >t : Target<T>
+ >a : () => T
+ 
+         b.a3 = t.a2;
+ >b.a3 = t.a2 : (x?: T) => T
+->b.a3 : <T_1>(x: T_1) => T_1
++>b.a3 : <T>(x: T) => T
+ >b : Base2
+->a3 : <T_1>(x: T_1) => T_1
++>a3 : <T>(x: T) => T
+ >t.a2 : (x?: T) => T
+ >t : Target<T>
+ >a2 : (x?: T) => T
+ 
+         b.a3 = t.a3;
+ >b.a3 = t.a3 : (x: T) => T
+->b.a3 : <T_1>(x: T_1) => T_1
++>b.a3 : <T>(x: T) => T
+ >b : Base2
+->a3 : <T_1>(x: T_1) => T_1
++>a3 : <T>(x: T) => T
+ >t.a3 : (x: T) => T
+ >t : Target<T>
+ >a3 : (x: T) => T
+ 
+         b.a3 = t.a4;
+ >b.a3 = t.a4 : (x: T, y?: T) => T
+->b.a3 : <T_1>(x: T_1) => T_1
++>b.a3 : <T>(x: T) => T
+ >b : Base2
+->a3 : <T_1>(x: T_1) => T_1
++>a3 : <T>(x: T) => T
+ >t.a4 : (x: T, y?: T) => T
+ >t : Target<T>
+ >a4 : (x: T, y?: T) => T
+ 
+         b.a3 = t.a5;
+ >b.a3 = t.a5 : (x?: T, y?: T) => T
+->b.a3 : <T_1>(x: T_1) => T_1
++>b.a3 : <T>(x: T) => T
+ >b : Base2
+->a3 : <T_1>(x: T_1) => T_1
++>a3 : <T>(x: T) => T
+ >t.a5 : (x?: T, y?: T) => T
+ >t : Target<T>
+ >a5 : (x?: T, y?: T) => T
+ 
+         b.a4 = t.a;
+ >b.a4 = t.a : () => T
+->b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>b.a4 : <T>(x: T, y?: T) => T
+ >b : Base2
+->a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>a4 : <T>(x: T, y?: T) => T
+ >t.a : () => T
+ >t : Target<T>
+ >a : () => T
+ 
+         b.a4 = t.a2;
+ >b.a4 = t.a2 : (x?: T) => T
+->b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>b.a4 : <T>(x: T, y?: T) => T
+ >b : Base2
+->a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>a4 : <T>(x: T, y?: T) => T
+ >t.a2 : (x?: T) => T
+ >t : Target<T>
+ >a2 : (x?: T) => T
+ 
+         b.a4 = t.a3;
+ >b.a4 = t.a3 : (x: T) => T
+->b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>b.a4 : <T>(x: T, y?: T) => T
+ >b : Base2
+->a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>a4 : <T>(x: T, y?: T) => T
+ >t.a3 : (x: T) => T
+ >t : Target<T>
+ >a3 : (x: T) => T
+ 
+         b.a4 = t.a4;
+ >b.a4 = t.a4 : (x: T, y?: T) => T
+->b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>b.a4 : <T>(x: T, y?: T) => T
+ >b : Base2
+->a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>a4 : <T>(x: T, y?: T) => T
+ >t.a4 : (x: T, y?: T) => T
+ >t : Target<T>
+ >a4 : (x: T, y?: T) => T
+ 
+         b.a4 = t.a5;
+ >b.a4 = t.a5 : (x?: T, y?: T) => T
+->b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>b.a4 : <T>(x: T, y?: T) => T
+ >b : Base2
+->a4 : <T_1>(x: T_1, y?: T_1) => T_1
++>a4 : <T>(x: T, y?: T) => T
+ >t.a5 : (x?: T, y?: T) => T
+ >t : Target<T>
+ >a5 : (x?: T, y?: T) => T
+ 
+         b.a5 = t.a;
+ >b.a5 = t.a : () => T
+->b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>b.a5 : <T>(x?: T, y?: T) => T
+ >b : Base2
+->a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>a5 : <T>(x?: T, y?: T) => T
+ >t.a : () => T
+ >t : Target<T>
+ >a : () => T
+ 
+         b.a5 = t.a2;
+ >b.a5 = t.a2 : (x?: T) => T
+->b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>b.a5 : <T>(x?: T, y?: T) => T
+ >b : Base2
+->a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>a5 : <T>(x?: T, y?: T) => T
+ >t.a2 : (x?: T) => T
+ >t : Target<T>
+ >a2 : (x?: T) => T
+ 
+         b.a5 = t.a3;
+ >b.a5 = t.a3 : (x: T) => T
+->b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>b.a5 : <T>(x?: T, y?: T) => T
+ >b : Base2
+->a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>a5 : <T>(x?: T, y?: T) => T
+ >t.a3 : (x: T) => T
+ >t : Target<T>
+ >a3 : (x: T) => T
+ 
+         b.a5 = t.a4;
+ >b.a5 = t.a4 : (x: T, y?: T) => T
+->b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>b.a5 : <T>(x?: T, y?: T) => T
+ >b : Base2
+->a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>a5 : <T>(x?: T, y?: T) => T
+ >t.a4 : (x: T, y?: T) => T
+ >t : Target<T>
+ >a4 : (x: T, y?: T) => T
+ 
+         b.a5 = t.a5;
+ >b.a5 = t.a5 : (x?: T, y?: T) => T
+->b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>b.a5 : <T>(x?: T, y?: T) => T
+ >b : Base2
+->a5 : <T_1>(x?: T_1, y?: T_1) => T_1
++>a5 : <T>(x?: T, y?: T) => T
+ >t.a5 : (x?: T, y?: T) => T
+ >t : Target<T>
+ >a5 : (x?: T, y?: T) => T
+@@= skipped -233, +233 lines =@@
+ 
+         a: <T>() => T;
+ >a : <T>() => T
++>T : T
+ 
+         a2: <T>(x?: T) => T;
+ >a2 : <T>(x?: T) => T
++>T : T
+ >x : T
+ 
+         a3: <T>(x: T) => T;
+ >a3 : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+         a4: <T>(x: T, y?: T) => T;
+ >a4 : <T>(x: T, y?: T) => T
++>T : T
+ >x : T
+ >y : T
+ 
+         a5: <T>(x?: T, y?: T) => T;
+ >a5 : <T>(x?: T, y?: T) => T
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -29, +34 lines =@@
+ >this : this
+ >a : <T>() => T
+ ><T>() => null : <T>() => any
++>T : T
+ 
+             this.a = <T>(x?: T) => null; // ok, same T of required params
+ >this.a = <T>(x?: T) => null : <T>(x?: T) => any
+@@= skipped -7, +8 lines =@@
+ >this : this
+ >a : <T>() => T
+ ><T>(x?: T) => null : <T>(x?: T) => any
++>T : T
+ >x : T
+ 
+             this.a = <T>(x: T) => null; // error, too many required params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a : <T>() => T
+ ><T>(x: T) => null : <T>(x: T) => any
++>T : T
+ >x : T
+ 
+             this.a2 = <T>() => null; // ok, same T of required params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a2 : <T>(x?: T) => T
+ ><T>() => null : <T>() => any
++>T : T
+ 
+             this.a2 = <T>(x?: T) => null; // ok, same T of required params
+ >this.a2 = <T>(x?: T) => null : <T>(x?: T) => any
+@@= skipped -7, +8 lines =@@
+ >this : this
+ >a2 : <T>(x?: T) => T
+ ><T>(x?: T) => null : <T>(x?: T) => any
++>T : T
+ >x : T
+ 
+             this.a2 = <T>(x: T) => null; // ok, same number of params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a2 : <T>(x?: T) => T
+ ><T>(x: T) => null : <T>(x: T) => any
++>T : T
+ >x : T
+ 
+             this.a3 = <T>() => null; // ok, fewer required params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a3 : <T>(x: T) => T
+ ><T>() => null : <T>() => any
++>T : T
+ 
+             this.a3 = <T>(x?: T) => null; // ok, fewer required params
+ >this.a3 = <T>(x?: T) => null : <T>(x?: T) => any
+@@= skipped -7, +8 lines =@@
+ >this : this
+ >a3 : <T>(x: T) => T
+ ><T>(x?: T) => null : <T>(x?: T) => any
++>T : T
+ >x : T
+ 
+             this.a3 = <T>(x: T) => null; // ok, same T of required params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a3 : <T>(x: T) => T
+ ><T>(x: T) => null : <T>(x: T) => any
++>T : T
+ >x : T
+ 
+             this.a3 = <T>(x: T, y: T) => null;  // error, too many required params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a3 : <T>(x: T) => T
+ ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -9, +10 lines =@@
+ >this : this
+ >a4 : <T>(x: T, y?: T) => T
+ ><T>() => null : <T>() => any
++>T : T
+ 
+             this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params
+ >this.a4 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+@@= skipped -7, +8 lines =@@
+ >this : this
+ >a4 : <T>(x: T, y?: T) => T
+ ><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -9, +10 lines =@@
+ >this : this
+ >a4 : <T>(x: T, y?: T) => T
+ ><T>(x: T) => null : <T>(x: T) => any
++>T : T
+ >x : T
+ 
+             this.a4 = <T>(x: T, y: T) => null;  // ok, same number of params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a4 : <T>(x: T, y?: T) => T
+ ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -10, +11 lines =@@
+ >this : this
+ >a5 : <T>(x?: T, y?: T) => T
+ ><T>() => null : <T>() => any
++>T : T
+ 
+             this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params
+ >this.a5 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+@@= skipped -7, +8 lines =@@
+ >this : this
+ >a5 : <T>(x?: T, y?: T) => T
+ ><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
++>T : T
+ >x : T
+ >y : T
+ 
+@@= skipped -9, +10 lines =@@
+ >this : this
+ >a5 : <T>(x?: T, y?: T) => T
+ ><T>(x: T) => null : <T>(x: T) => any
++>T : T
+ >x : T
+ 
+             this.a5 = <T>(x: T, y: T) => null;  // ok, same number of params
+@@= skipped -8, +9 lines =@@
+ >this : this
+ >a5 : <T>(x?: T, y?: T) => T
+ ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
++>T : T
+ >x : T
+ >y : T
+         }

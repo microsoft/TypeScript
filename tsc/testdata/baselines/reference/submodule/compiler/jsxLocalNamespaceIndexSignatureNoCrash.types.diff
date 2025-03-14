@@ -1,0 +1,25 @@
+--- old.jsxLocalNamespaceIndexSignatureNoCrash.types
++++ new.jsxLocalNamespaceIndexSignatureNoCrash.types
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ export namespace X {
++>X : typeof X
++
+     export namespace JSX {
++>JSX : any
++
+         export type IntrinsicElements = {
+ >IntrinsicElements : IntrinsicElements
+ 
+@@= skipped -15, +19 lines =@@
+ >A : () => any
+ 
+     return (<p>Hello</p>);
+->(<p>Hello</p>) : error
+-><p>Hello</p> : error
++>(<p>Hello</p>) : any
++><p>Hello</p> : any
+ >p : any
+ >p : any
+ }

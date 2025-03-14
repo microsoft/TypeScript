@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/node/nodeModulesExportsBlocksSpecifierResolution.ts] ////
+
+=== index.ts ===
+// esm format file
+import { Thing } from "inner/other";
+>Thing : any
+
+export const a = (await import("inner")).x();
+>a : Thing
+>(await import("inner")).x() : Thing
+>(await import("inner")).x : () => Thing
+>(await import("inner")) : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
+>await import("inner") : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
+>import("inner") : Promise<{ x: () => Thing; default: typeof import("node_modules/inner/index"); }>
+>"inner" : "inner"
+>x : () => Thing
+
+=== node_modules/inner/index.d.ts ===
+// esm format file
+export { x } from "./other.js";
+>x : () => Thing
+
+=== node_modules/inner/other.d.ts ===
+// esm format file
+export interface Thing {}
+>Thing : Thing
+
+export const x: () => Thing;
+>x : () => Thing
+

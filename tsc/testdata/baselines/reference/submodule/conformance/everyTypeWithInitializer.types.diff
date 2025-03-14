@@ -1,0 +1,35 @@
+--- old.everyTypeWithInitializer.types
++++ new.everyTypeWithInitializer.types
+@@= skipped -1, +1 lines =@@
+ 
+ === everyTypeWithInitializer.ts ===
+ interface I {
++>I : I
++
+     id: number;
+ >id : number
+ }
+@@= skipped -13, +15 lines =@@
+ 
+ class D<T>{
+ >D : D<T>
++>T : T
+ 
+     source: T;
+ >source : T
+@@= skipped -99, +100 lines =@@
+ >M : typeof M
+ 
+ var aClassInModule = new M.A();
+->aClassInModule : M.A
+->new M.A() : M.A
+->M.A : typeof M.A
++>aClassInModule : A
++>new M.A() : A
++>M.A : typeof A
+ >M : typeof M
+->A : typeof M.A
++>A : typeof A
+ 
+ var aFunctionInModule = M.F2;
+ >aFunctionInModule : (x: number) => string

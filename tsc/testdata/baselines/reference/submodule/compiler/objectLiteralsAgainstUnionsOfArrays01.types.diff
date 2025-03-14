@@ -1,0 +1,19 @@
+--- old.objectLiteralsAgainstUnionsOfArrays01.types
++++ new.objectLiteralsAgainstUnionsOfArrays01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectLiteralsAgainstUnionsOfArrays01.ts ===
+ interface Foo {
++>Foo : Foo
++
+   bar: Bar | Bar[];
+->bar : Bar | Bar[]
++>bar : Bar[] | Bar
+ }
+ 
+ interface Bar {
++>Bar : Bar
++
+   prop: string;
+ >prop : string
+ }

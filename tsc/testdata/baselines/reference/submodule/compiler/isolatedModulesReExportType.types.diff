@@ -1,0 +1,42 @@
+--- old.isolatedModulesReExportType.types
++++ new.isolatedModulesReExportType.types
+@@= skipped -9, +9 lines =@@
+ 
+ // OK, has a value side
+ export { C } from "./exportValue";
+->C : typeof CC
++>C : typeof C
+ 
+ // OK, even though the namespace it exports is only types.
+ import * as NS from "./exportT";
+->NS : typeof NS
++>NS : typeof import("/exportT")
+ 
+ export { NS };
+->NS : typeof NS
++>NS : typeof import("/exportT")
+ 
+ // OK, syntactically clear that a type is being re-exported.
+ export type T3 = T;
+@@= skipped -31, +31 lines =@@
+ 
+ // Error, type-only declaration is in a different file.
+ import { C as CC } from "./reExportValueAsTypeOnly";
+->C : typeof CC
+->CC : typeof CC
++>C : typeof C
++>CC : typeof C
+ 
+ export { CC };
+->CC : typeof CC
++>CC : typeof C
+ 
+ === /exportT.ts ===
+ export type T = number;
+@@= skipped -23, +23 lines =@@
+ 
+ === /reExportValueAsTypeOnly.ts ===
+ export type { C } from "./exportValue";
+->C : import("/exportValue").C
++>C : C
+ 

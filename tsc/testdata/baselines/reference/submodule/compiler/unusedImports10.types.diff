@@ -1,0 +1,14 @@
+--- old.unusedImports10.types
++++ new.unusedImports10.types
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ module B {
++>B : any
++
+     import a = A;
+->a : typeof a
+->A : typeof a
++>a : typeof A
++>A : typeof A
+ }

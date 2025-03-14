@@ -1,0 +1,11 @@
+--- old.exportNamespace1.types
++++ new.exportNamespace1.types
+@@= skipped -5, +5 lines =@@
+ 
+ === b.ts ===
+ export type { A } from './a';
+->A : import("a").A
++>A : A
+ 
+ === c.ts ===
+ 

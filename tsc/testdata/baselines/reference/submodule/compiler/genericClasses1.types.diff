@@ -1,0 +1,10 @@
+--- old.genericClasses1.types
++++ new.genericClasses1.types
+@@= skipped -2, +2 lines =@@
+ === genericClasses1.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+ 	public x: T;
+ >x : T

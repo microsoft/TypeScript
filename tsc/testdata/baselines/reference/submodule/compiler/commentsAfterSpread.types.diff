@@ -1,0 +1,11 @@
+--- old.commentsAfterSpread.types
++++ new.commentsAfterSpread.types
+@@= skipped -172, +172 lines =@@
+ >length : number
+ 
+ function k ({
+->k : ({ first, ...rest }: { [x: string]: any; first: any; }) => { [x: string]: any; }
++>k : (__0: { [x: string]: any; first: any; }) => { [x: string]: any; }
+ 
+   first,
+ >first : any

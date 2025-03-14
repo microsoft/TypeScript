@@ -1,0 +1,39 @@
+--- old.moduleVisibilityTest3.types
++++ new.moduleVisibilityTest3.types
+@@= skipped -4, +4 lines =@@
+ >_modes : typeof _modes
+ 
+  export interface IMode {
++>IMode : IMode
+   
+  }
+  
+@@= skipped -15, +16 lines =@@
+ >editor : typeof editor
+ 
+  import modes = _modes;
+->modes : typeof modes
+->_modes : typeof modes
++>modes : typeof _modes
++>_modes : typeof _modes
+  
+  var i : modes.IMode;
+->i : modes.IMode
++>i : IMode
+ >modes : any
+   
+  // If you just use p1:modes, the compiler accepts it - should be an error
+@@= skipped -13, +13 lines =@@
+ 
+      constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
+ >p1 : modes
+->p2 : modes.Mode
++>p2 : Mode
+ >modes : any
+ 
+          var x:modes.Mode;
+->x : modes.Mode
++>x : Mode
+ >modes : any
+      }
+     

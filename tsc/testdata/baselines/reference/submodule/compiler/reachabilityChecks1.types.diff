@@ -1,0 +1,51 @@
+--- old.reachabilityChecks1.types
++++ new.reachabilityChecks1.types
+@@= skipped -24, +24 lines =@@
+ >true : true
+ 
+     module A {
++>A : any
++
+         interface F {}
++>F : F
+     }
+ }
+ 
+@@= skipped -36, +39 lines =@@
+ >true : true
+ 
+     module A {
++>A : typeof A
++
+         const enum E { X }
+->E : E
++>E : E.X
+ >X : E.X
+     }
+ }
+@@= skipped -39, +41 lines =@@
+ 
+     for (; ;);
+     module C {
++>C : any
+     }
+ }
+ 
+@@= skipped -11, +12 lines =@@
+ >true : true
+ 
+     enum E {
+->E : E
++>E : E.X
+ 
+         X = 1
+ >X : E.X
+@@= skipped -19, +19 lines =@@
+ >Error : ErrorConstructor
+     }
+     const enum E {
+->E : E
++>E : E.X
+ 
+         X = 1
+ >X : E.X

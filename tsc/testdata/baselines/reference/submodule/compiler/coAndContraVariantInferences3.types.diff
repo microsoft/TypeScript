@@ -1,0 +1,344 @@
+--- old.coAndContraVariantInferences3.types
++++ new.coAndContraVariantInferences3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === coAndContraVariantInferences3.ts ===
+ interface DeprecationOptions {
++>DeprecationOptions : DeprecationOptions
++
+     message?: string;
+ >message : string | undefined
+ 
+@@= skipped -12, +14 lines =@@
+ 
+ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+ >UnionToIntersection : UnionToIntersection<U>
++>U : U
+ >k : U
+ >k : I
++>I : I
+ 
+ type OverloadDefinitions = { readonly [P in number]: (...args: any[]) => any; };
+ >OverloadDefinitions : OverloadDefinitions
++>P : P
+ >args : any[]
+ 
+ type OverloadBinder<T extends OverloadDefinitions> = (args: OverloadParameters<T>) => OverloadKeys<T> | undefined;
+ >OverloadBinder : OverloadBinder<T>
+->args : Parameters<{ [P in Extract<keyof T, number>]: T[P]; }[Extract<keyof T, number>]>
++>T : T
++>args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
+ 
+ type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
+ >OverloadKeys : OverloadKeys<T>
++>T : T
+ 
+ type OverloadParameters<T extends OverloadDefinitions> = Parameters<{ [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]>;
+ >OverloadParameters : OverloadParameters<T>
++>T : T
++>P : P
+ 
+ type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersection<T[keyof T]>;
+ >OverloadFunction : OverloadFunction<T>
++>T : T
+ 
+ type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
+ >OverloadBinders : OverloadBinders<T>
+->args : Parameters<{ [P_1 in Extract<keyof T, number>]: T[P_1]; }[Extract<keyof T, number>]>
++>T : T
++>P : P
++>args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
+ 
+ type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
+ >OverloadDeprecations : OverloadDeprecations<T>
++>T : T
++>P : P
+ 
+ declare function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>): UnionToIntersection<T[keyof T]>;
+->createOverload : <T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) => UnionToIntersection<T[keyof T]>
++>createOverload : <T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T> | undefined) => UnionToIntersection<T[keyof T]>
++>T : T
+ >name : string
+ >overloads : T
+ >binder : OverloadBinders<T>
+@@= skipped -36, +49 lines =@@
+ 
+ declare function createBinder<T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>): OverloadBinder<T>;
+ >createBinder : <T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>) => OverloadBinder<T>
++>T : T
+ >overloads : T
+ >binder : OverloadBinders<T>
+ 
+ interface OverloadBuilder {
++>OverloadBuilder : OverloadBuilder
++
+     overload<T extends OverloadDefinitions>(overloads: T): BindableOverloadBuilder<T>;
+ >overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>
++>T : T
+ >overloads : T
+ }
+ 
+ interface BindableOverloadBuilder<T extends OverloadDefinitions> {
++>BindableOverloadBuilder : BindableOverloadBuilder<T>
++>T : T
++
+     bind(binder: OverloadBinders<T>): BoundOverloadBuilder<T>;
+ >bind : (binder: OverloadBinders<T>) => BoundOverloadBuilder<T>
+ >binder : OverloadBinders<T>
+ }
+ 
+ interface FinishableOverloadBuilder<T extends OverloadDefinitions> {
++>FinishableOverloadBuilder : FinishableOverloadBuilder<T>
++>T : T
++
+     finish(): OverloadFunction<T>;
+->finish : () => OverloadFunction<T>
++>finish : () => UnionToIntersection<T[keyof T]>
+ }
+ 
+ interface BoundOverloadBuilder<T extends OverloadDefinitions> extends FinishableOverloadBuilder<T> {
++>BoundOverloadBuilder : BoundOverloadBuilder<T>
++>T : T
++
+     deprecate(deprecations: OverloadDeprecations<T>): FinishableOverloadBuilder<T>;
+ >deprecate : (deprecations: OverloadDeprecations<T>) => FinishableOverloadBuilder<T>
+ >deprecations : OverloadDeprecations<T>
+@@= skipped -50, +63 lines =@@
+ }
+ 
+ interface Node {
++>Node : Node
++
+     kind: SyntaxKind;
+ >kind : SyntaxKind
+ }
+ 
+ interface Declaration extends Node { _declarationBrand: any }
++>Declaration : Declaration
+ >_declarationBrand : any
+ 
+ interface Statement extends Node { _statementBrand: any };
++>Statement : Statement
+ >_statementBrand : any
+ 
+ interface Expression extends Node { _expressionBrand: any; }
++>Expression : Expression
+ >_expressionBrand : any
+ 
+ interface ImportDeclaration extends Statement { kind: SyntaxKind.ImportDeclaration; }
++>ImportDeclaration : ImportDeclaration
+ >kind : SyntaxKind.ImportDeclaration
+ >SyntaxKind : any
+ 
+ interface Modifier extends Node { kind: SyntaxKind.Modifier; }
++>Modifier : Modifier
+ >kind : SyntaxKind.Modifier
+ >SyntaxKind : any
+ 
+ interface Decorator extends Node { kind: SyntaxKind.Decorator; }
++>Decorator : Decorator
+ >kind : SyntaxKind.Decorator
+ >SyntaxKind : any
+ 
+ interface ImportClause extends Declaration { kind: SyntaxKind.ImportClause; }
++>ImportClause : ImportClause
+ >kind : SyntaxKind.ImportClause
+ >SyntaxKind : any
+ 
+ interface AssertClause extends Node { kind: SyntaxKind.AssertClause; }
++>AssertClause : AssertClause
+ >kind : SyntaxKind.AssertClause
+ >SyntaxKind : any
+ 
+@@= skipped -73, +83 lines =@@
+ }
+ 
+ declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
+->every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T_1, U_1 extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
++>every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
++>T : T
++>U : U
+ >array : readonly T[]
+ >callback : (element: T, index: number) => element is U
+ >element : T
+ >index : number
+ 
+ declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
+->every : { <T_1, U_1 extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
++>every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
++>T : T
++>U : U
+ >array : readonly T[] | undefined
+ >callback : (element: T, index: number) => element is U
+ >element : T
+ >index : number
+ 
+ declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
+->every : { <T_1, U extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U): array is readonly U[]; <T_1, U extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
++>every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
++>T : T
+ >array : readonly T[] | undefined
+ >callback : (element: T, index: number) => boolean
+ >element : T
+@@= skipped -28, +33 lines =@@
+ >DISALLOW_DECORATORS : DeprecationOptions
+ 
+ buildOverload("updateImportDeclaration")
+->buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate({        1: DISALLOW_DECORATORS    })    .finish() : ((node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration) & ((node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration)
+->buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate({        1: DISALLOW_DECORATORS    })    .finish : () => ((node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration) & ((node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration)
+->buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate({        1: DISALLOW_DECORATORS    }) : FinishableOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
+->buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate : (deprecations: OverloadDeprecations<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>) => FinishableOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
+->buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    }) : BoundOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
+->buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind : (binder: OverloadBinders<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>) => BoundOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
+->buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    }) : BindableOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
++>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate({        1: DISALLOW_DECORATORS    })    .finish() : (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration & (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration
++>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate({        1: DISALLOW_DECORATORS    })    .finish : () => (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration & (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration
++>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate({        1: DISALLOW_DECORATORS    }) : FinishableOverloadBuilder<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>
++>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    })    .deprecate : (deprecations: OverloadDeprecations<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>) => FinishableOverloadBuilder<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>
++>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind({        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    }) : BoundOverloadBuilder<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>
++>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    })    .bind : (binder: OverloadBinders<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>) => BoundOverloadBuilder<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>
++>buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    }) : BindableOverloadBuilder<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>
+ >buildOverload("updateImportDeclaration")    .overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>
+ >buildOverload("updateImportDeclaration") : OverloadBuilder
+ >buildOverload : (name: string) => OverloadBuilder
+@@= skipped -14, +14 lines =@@
+ 
+     .overload({
+ >overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>
+->{        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    } : { 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }
++>{        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    } : { 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }
+ 
+         0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {
+ >0 : (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration
+@@= skipped -42, +42 lines =@@
+         },
+     })
+     .bind({
+->bind : (binder: OverloadBinders<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>) => BoundOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
+->{        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    } : { 0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean; 1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean; }
++>bind : (binder: OverloadBinders<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>) => BoundOverloadBuilder<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>
++>{        0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),        1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)),    } : { 0: (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean; 1: (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean; }
+ 
+         0: ([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>
+->0 : ([, modifiers, importClause, moduleSpecifier, assertClause, other]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
+->([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : ([, modifiers, importClause, moduleSpecifier, assertClause, other]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
+-> : undefined
+->modifiers : readonly Modifier[] | readonly Decorator[] | undefined
++>0 : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
++>([, modifiers, importClause, moduleSpecifier, assertClause, other]) =>            (other === undefined) &&            (modifiers === undefined || every(modifiers, isModifier)) &&            (importClause === undefined || !isArray(importClause)) &&            (moduleSpecifier === undefined || isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
++>modifiers : readonly Decorator[] | readonly Modifier[] | undefined
+ >importClause : ImportClause | readonly Modifier[] | undefined
+ >moduleSpecifier : Expression | ImportClause | undefined
+->assertClause : Expression | AssertClause | undefined
++>assertClause : AssertClause | Expression | undefined
+ >other : AssertClause | undefined
+ 
+             (other === undefined) &&
+@@= skipped -27, +26 lines =@@
+ >(modifiers === undefined || every(modifiers, isModifier)) : boolean
+ >modifiers === undefined || every(modifiers, isModifier) : boolean
+ >modifiers === undefined : boolean
+->modifiers : readonly Modifier[] | readonly Decorator[] | undefined
++>modifiers : readonly Decorator[] | readonly Modifier[] | undefined
+ >undefined : undefined
+ >every(modifiers, isModifier) : boolean
+ >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+->modifiers : readonly Modifier[] | readonly Decorator[]
++>modifiers : readonly Decorator[] | readonly Modifier[]
+ >isModifier : (node: Node) => node is Modifier
+ 
+             (importClause === undefined || !isArray(importClause)) &&
+@@= skipped -32, +32 lines =@@
+ >(assertClause === undefined || isAssertClause(assertClause)) : boolean
+ >assertClause === undefined || isAssertClause(assertClause) : boolean
+ >assertClause === undefined : boolean
+->assertClause : Expression | AssertClause | undefined
++>assertClause : AssertClause | Expression | undefined
+ >undefined : undefined
+ >isAssertClause(assertClause) : boolean
+ >isAssertClause : (node: Node) => node is AssertClause
+->assertClause : Expression | AssertClause
++>assertClause : AssertClause | Expression
+ 
+         1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>
+->1 : ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
+->([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
+-> : undefined
+->decorators : readonly Modifier[] | readonly Decorator[] | undefined
++>1 : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
++>([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>            (decorators === undefined || every(decorators, isDecorator)) &&            (modifiers === undefined || isArray(modifiers)) &&            (importClause === undefined || isImportClause(importClause)) &&            (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&            (assertClause === undefined || isAssertClause(assertClause)) : (__0: [node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined] | [node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined]) => boolean
++>decorators : readonly Decorator[] | readonly Modifier[] | undefined
+ >modifiers : ImportClause | readonly Modifier[] | undefined
+ >importClause : Expression | ImportClause | undefined
+->moduleSpecifier : Expression | AssertClause | undefined
++>moduleSpecifier : AssertClause | Expression | undefined
+ >assertClause : AssertClause | undefined
+ 
+             (decorators === undefined || every(decorators, isDecorator)) &&
+@@= skipped -24, +23 lines =@@
+ >(decorators === undefined || every(decorators, isDecorator)) : boolean
+ >decorators === undefined || every(decorators, isDecorator) : boolean
+ >decorators === undefined : boolean
+->decorators : readonly Modifier[] | readonly Decorator[] | undefined
++>decorators : readonly Decorator[] | readonly Modifier[] | undefined
+ >undefined : undefined
+ >every(decorators, isDecorator) : boolean
+ >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+->decorators : readonly Modifier[] | readonly Decorator[]
++>decorators : readonly Decorator[] | readonly Modifier[]
+ >isDecorator : (node: Node) => node is Decorator
+ 
+             (modifiers === undefined || isArray(modifiers)) &&
+@@= skipped -31, +31 lines =@@
+ >(moduleSpecifier !== undefined && isExpression(moduleSpecifier)) : boolean
+ >moduleSpecifier !== undefined && isExpression(moduleSpecifier) : boolean
+ >moduleSpecifier !== undefined : boolean
+->moduleSpecifier : Expression | AssertClause | undefined
++>moduleSpecifier : AssertClause | Expression | undefined
+ >undefined : undefined
+ >isExpression(moduleSpecifier) : boolean
+ >isExpression : (node: Node) => node is Expression
+->moduleSpecifier : Expression | AssertClause
++>moduleSpecifier : AssertClause | Expression
+ 
+             (assertClause === undefined || isAssertClause(assertClause)),
+ >(assertClause === undefined || isAssertClause(assertClause)) : boolean
+@@= skipped -18, +18 lines =@@
+ 
+     })
+     .deprecate({
+->deprecate : (deprecations: OverloadDeprecations<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>) => FinishableOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
++>deprecate : (deprecations: OverloadDeprecations<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>) => FinishableOverloadBuilder<{ 0: (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; 1: (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration; }>
+ >{        1: DISALLOW_DECORATORS    } : { 1: DeprecationOptions; }
+ 
+         1: DISALLOW_DECORATORS
+@@= skipped -9, +9 lines =@@
+ 
+     })
+     .finish();
+->finish : () => ((node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration) & ((node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration)
++>finish : () => (node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration & (node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined) => ImportDeclaration
+ 
+ 
+ declare const modifiers: readonly Modifier[] | readonly Decorator[];
+->modifiers : readonly Modifier[] | readonly Decorator[]
++>modifiers : readonly Decorator[] | readonly Modifier[]
+ 
+ function foo() {
+ >foo : () => void
+@@= skipped -12, +12 lines =@@
+     every(modifiers, isModifier);
+ >every(modifiers, isModifier) : boolean
+ >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+->modifiers : readonly Modifier[] | readonly Decorator[]
++>modifiers : readonly Decorator[] | readonly Modifier[]
+ >isModifier : (node: Node) => node is Modifier
+ 
+     every(modifiers, isDecorator);
+ >every(modifiers, isDecorator) : boolean
+ >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
+->modifiers : readonly Modifier[] | readonly Decorator[]
++>modifiers : readonly Decorator[] | readonly Modifier[]
+ >isDecorator : (node: Node) => node is Decorator
+ }
+ 

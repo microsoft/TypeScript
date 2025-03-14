@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.tsx] ////
+
+=== jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
+/// <reference path="react16.d.ts" preserve="true" />
+import PropTypes from 'prop-types';
+>PropTypes : any
+
+import React from 'react';
+>React : any
+
+const propTypes = {
+>propTypes : { bar: any; }
+>{  bar: PropTypes.bool,} : { bar: any; }
+
+  bar: PropTypes.bool,
+>bar : any
+>PropTypes.bool : any
+>PropTypes : any
+>bool : any
+
+};
+
+const defaultProps = {
+>defaultProps : { bar: boolean; }
+>{  bar: false,} : { bar: boolean; }
+
+  bar: false,
+>bar : boolean
+>false : false
+
+};
+
+function Foo({ bar }) {
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
+>bar : any
+
+  return <div>{bar}</div>;
+><div>{bar}</div> : any
+>div : any
+>bar : any
+>div : any
+}
+
+Foo.propTypes = propTypes;
+>Foo.propTypes = propTypes : { bar: any; }
+>Foo.propTypes : { bar: any; }
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
+>propTypes : { bar: any; }
+>propTypes : { bar: any; }
+
+Foo.defaultProps = defaultProps;
+>Foo.defaultProps = defaultProps : { bar: boolean; }
+>Foo.defaultProps : { bar: boolean; }
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
+>defaultProps : { bar: boolean; }
+>defaultProps : { bar: boolean; }
+
+export default Foo;
+>Foo : { (__0: { bar: any; }): any; propTypes: { bar: any; }; defaultProps: { bar: boolean; }; }
+

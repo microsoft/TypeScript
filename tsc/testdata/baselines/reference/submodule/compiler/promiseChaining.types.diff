@@ -1,0 +1,35 @@
+--- old.promiseChaining.types
++++ new.promiseChaining.types
+@@= skipped -2, +2 lines =@@
+ === promiseChaining.ts ===
+ class Chain<T> {
+ >Chain : Chain<T>
++>T : T
+ 
+     constructor(public value: T) { }
+ >value : T
+ 
+     then<S>(cb: (x: T) => S): Chain<S> {
+ >then : <S>(cb: (x: T) => S) => Chain<S>
++>S : S
+ >cb : (x: T) => S
+ >x : T
+ 
+@@= skipped -23, +25 lines =@@
+ >this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length) : Chain<number>
+ >this.then(x => result)/*S*/.then(x => "abc")/*string*/.then : <S>(cb: (x: string) => S) => Chain<S>
+ >this.then(x => result)/*S*/.then(x => "abc") : Chain<string>
+->this.then(x => result)/*S*/.then : <S>(cb: (x: S_1) => S) => Chain<S>
++>this.then(x => result)/*S*/.then : <S>(cb: (x: S) => S) => Chain<S>
+ >this.then(x => result) : Chain<S>
+ >this.then : <S>(cb: (x: T) => S) => Chain<S>
+ >this : this
+@@= skipped -8, +8 lines =@@
+ >x => result : (x: T) => S
+ >x : T
+ >result : S
+->then : <S>(cb: (x: S_1) => S) => Chain<S>
++>then : <S>(cb: (x: S) => S) => Chain<S>
+ >x => "abc" : (x: S) => string
+ >x : S
+ >"abc" : "abc"

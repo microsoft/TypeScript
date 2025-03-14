@@ -1,0 +1,29 @@
+--- old.lateBoundClassMemberAssignmentJS3.types
++++ new.lateBoundClassMemberAssignmentJS3.types
+@@= skipped -16, +16 lines =@@
+ 
+         self[_sym] = "ok";
+ >self[_sym] = "ok" : "ok"
+->self[_sym] : string
++>self[_sym] : any
+ >self : this
+ >_sym : unique symbol
+ >"ok" : "ok"
+@@= skipped -15, +15 lines =@@
+ 
+         self[_sym] = "yep";
+ >self[_sym] = "yep" : "yep"
+->self[_sym] : string
++>self[_sym] : any
+ >self : this
+ >_sym : unique symbol
+ >"yep" : "yep"
+ 
+         const x = self[_sym];
+->x : string
+->self[_sym] : string
++>x : any
++>self[_sym] : any
+ >self : this
+ >_sym : unique symbol
+     }

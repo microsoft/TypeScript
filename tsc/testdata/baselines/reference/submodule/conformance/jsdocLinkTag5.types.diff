@@ -1,0 +1,11 @@
+--- old.jsdocLinkTag5.types
++++ new.jsdocLinkTag5.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/jsdoc/jsdocLinkTag5.ts] ////
+ 
+ === /a.ts ===
+-
+ /** {@link UNRESOLVED_LINK} */
+ export interface A {}
++>A : A
+ 

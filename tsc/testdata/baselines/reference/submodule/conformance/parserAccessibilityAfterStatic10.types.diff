@@ -1,0 +1,9 @@
+--- old.parserAccessibilityAfterStatic10.types
++++ new.parserAccessibilityAfterStatic10.types
+@@= skipped -5, +5 lines =@@
+ {
+ static public intI<T>() {}
+ >intI : <T>() => void
++>T : T
+ }
+ 

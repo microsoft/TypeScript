@@ -1,0 +1,31 @@
+--- old.restElementWithNullInitializer.types
++++ new.restElementWithNullInitializer.types
+@@= skipped -1, +1 lines =@@
+ 
+ === restElementWithNullInitializer.ts ===
+ function foo1([...r] = null) {
+->foo1 : ([...r]?: any) => void
++>foo1 : (__0?: any) => void
+ >r : any[]
+ }
+ 
+ function foo2([...r] = undefined) {
+->foo2 : ([...r]?: any) => void
++>foo2 : (__0?: any) => void
+ >r : any[]
+ >undefined : undefined
+ }
+ 
+ function foo3([...r] = {}) {
+->foo3 : ([...r]?: {}) => void
++>foo3 : (__0?: {}) => void
+ >r : any[]
+ >{} : {}
+ }
+ 
+ function foo4([...r] = []) {
+->foo4 : ([...r]?: any[]) => void
++>foo4 : (__0?: any[]) => void
+ >r : any[]
+ >[] : undefined[]
+ }

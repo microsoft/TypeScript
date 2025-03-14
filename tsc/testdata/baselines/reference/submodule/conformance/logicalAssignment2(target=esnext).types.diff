@@ -1,0 +1,158 @@
+--- old.logicalAssignment2(target=esnext).types
++++ new.logicalAssignment2(target=esnext).types
+@@= skipped -1, +1 lines =@@
+ 
+ === logicalAssignment2.ts ===
+ interface A {
++>A : A
++
+     foo: {
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ 
+         bar(): {
+->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
++>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
+ 
+             baz: 0 | 1 | 42 | undefined | ''
+ >baz : "" | 0 | 1 | 42 | undefined
+@@= skipped -58, +60 lines =@@
+ a.foo["baz"] &&= result.foo.baz
+ >a.foo["baz"] &&= result.foo.baz : "" | 0 | 1 | 42 | undefined
+ >a.foo["baz"] : "" | 0 | 1 | 42 | undefined
+->a.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>a.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >a : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >"baz" : "baz"
+ >result.foo.baz : "" | 0 | 1 | 42 | undefined
+->result.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>result.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >result : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ 
+ b.foo["baz"] ||= result.foo.baz
+ >b.foo["baz"] ||= result.foo.baz : "" | 0 | 1 | 42 | undefined
+ >b.foo["baz"] : "" | 0 | 1 | 42 | undefined
+->b.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>b.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >b : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >"baz" : "baz"
+ >result.foo.baz : "" | 0 | 1 | 42 | undefined
+->result.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>result.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >result : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ 
+ c.foo["baz"] ??= result.foo.baz
+ >c.foo["baz"] ??= result.foo.baz : "" | 0 | 1 | 42 | undefined
+ >c.foo["baz"] : "" | 0 | 1 | 42 | undefined
+->c.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>c.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >c : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >"baz" : "baz"
+ >result.foo.baz : "" | 0 | 1 | 42 | undefined
+->result.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>result.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >result : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ 
+ a.foo.bar().baz &&= result.foo.bar().baz
+ >a.foo.bar().baz &&= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+ >a.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+->a.foo.bar() : { baz: 0 | 1 | 42 | undefined | ""; }
+->a.foo.bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
+->a.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>a.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
++>a.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
++>a.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >a : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
+->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
++>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ >result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+->result.foo.bar() : { baz: 0 | 1 | 42 | undefined | ""; }
+->result.foo.bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
+->result.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>result.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
++>result.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
++>result.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >result : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
+->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
++>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ 
+ b.foo.bar().baz ||= result.foo.bar().baz
+ >b.foo.bar().baz ||= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+ >b.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+->b.foo.bar() : { baz: 0 | 1 | 42 | undefined | ""; }
+->b.foo.bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
+->b.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>b.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
++>b.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
++>b.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >b : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
+->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
++>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ >result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+->result.foo.bar() : { baz: 0 | 1 | 42 | undefined | ""; }
+->result.foo.bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
+->result.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>result.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
++>result.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
++>result.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >result : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
+->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
++>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ 
+ c.foo.bar().baz ??= result.foo.bar().baz
+ >c.foo.bar().baz ??= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+ >c.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+->c.foo.bar() : { baz: 0 | 1 | 42 | undefined | ""; }
+->c.foo.bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
+->c.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>c.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
++>c.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
++>c.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >c : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
+->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
++>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ >result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
+->result.foo.bar() : { baz: 0 | 1 | 42 | undefined | ""; }
+->result.foo.bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
+->result.foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
++>result.foo.bar() : { baz: "" | 0 | 1 | 42 | undefined; }
++>result.foo.bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
++>result.foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
+ >result : A
+->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
+->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
++>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
++>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
+ >baz : "" | 0 | 1 | 42 | undefined
+ 
+ 

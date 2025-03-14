@@ -1,0 +1,79 @@
+--- old.excessPropertyCheckWithMultipleDiscriminants.types
++++ new.excessPropertyCheckWithMultipleDiscriminants.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #32657
+ 
+ interface Base<T> {
++>Base : Base<T>
++>T : T
++
+     value: T;
+ >value : T
+ }
+ 
+ interface Int extends Base<number> {
++>Int : Int
++
+     type: "integer";
+ >type : "integer"
+ 
+@@= skipped -13, +18 lines =@@
+ }
+ 
+ interface Float extends Base<number> {
++>Float : Float
++
+     type: "number";
+ >type : "number"
+ }
+ 
+ interface Str extends Base<string> {
++>Str : Str
++
+     type: "string";
+ >type : "string"
+ 
+@@= skipped -13, +17 lines =@@
+ }
+ 
+ interface Bool extends Base<boolean> {
++>Bool : Bool
++
+     type: "boolean";
+ >type : "boolean"
+ }
+@@= skipped -114, +116 lines =@@
+ // Repro from #51873
+ 
+ interface Common {
++>Common : Common
++
+     type: "A" | "B" | "C" | "D";
+ >type : "A" | "B" | "C" | "D"
+ 
+@@= skipped -7, +9 lines =@@
+ >n : number
+ }
+ interface A {
++>A : A
++
+     type: "A";
+ >type : "A"
+ 
+@@= skipped -7, +9 lines =@@
+ >a : number
+ }
+ interface B {
++>B : B
++
+     type: "B";
+ >type : "B"
+ 
+@@= skipped -61, +63 lines =@@
+ 
+ export type BaseAttribute<T> = {
+ >BaseAttribute : BaseAttribute<T>
++>T : T
+ 
+     type?: string | undefined;
+ >type : string

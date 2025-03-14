@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/jsx/tsxUnionElementType1.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+function SFC1(prop: { x: number }) {
+>SFC1 : (prop: { x: number; }) => any
+>prop : { x: number; }
+>x : number
+
+    return <div>hello</div>;
+><div>hello</div> : any
+>div : any
+>div : any
+
+};
+
+function SFC2(prop: { x: boolean }) {
+>SFC2 : (prop: { x: boolean; }) => any
+>prop : { x: boolean; }
+>x : boolean
+
+    return <h1>World </h1>;
+><h1>World </h1> : any
+>h1 : any
+>h1 : any
+}
+
+var SFCComp = SFC1 || SFC2;
+>SFCComp : (prop: { x: number; }) => any | (prop: { x: boolean; }) => any
+>SFC1 || SFC2 : (prop: { x: number; }) => any | (prop: { x: boolean; }) => any
+>SFC1 : (prop: { x: number; }) => any
+>SFC2 : (prop: { x: boolean; }) => any
+
+<SFCComp x />
+><SFCComp x /> : any
+>SFCComp : (prop: { x: number; }) => any | (prop: { x: boolean; }) => any
+>x : any
+

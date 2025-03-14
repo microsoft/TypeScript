@@ -1,0 +1,49 @@
+--- old.excessPropertyCheckWithSpread.types
++++ new.excessPropertyCheckWithSpread.types
+@@= skipped -1, +1 lines =@@
+ 
+ === excessPropertyCheckWithSpread.ts ===
+ declare function f({ a: number }): void
+->f : ({ a: number }: { a: any; }) => void
++>f : (__0: { a: any; }) => void
+ >a : any
+ >number : any
+ 
+ interface I {
++>I : I
++
+     readonly n: number;
+ >n : number
+ }
+@@= skipped -13, +15 lines =@@
+ 
+ f({ a: 1, ...i });
+ >f({ a: 1, ...i }) : void
+->f : ({ a: number }: { a: any; }) => void
++>f : (__0: { a: any; }) => void
+ >{ a: 1, ...i } : { n: number; a: number; }
+ >a : number
+ >1 : 1
+ >i : I
+ 
+ interface R {
++>R : R
++
+     opt?: number
+ >opt : number
+ }
+ interface L {
++>L : L
++
+     opt: string
+ >opt : string
+ }
+@@= skipped -22, +26 lines =@@
+ 
+ f({ a: 1, ...l, ...r });
+ >f({ a: 1, ...l, ...r }) : void
+->f : ({ a: number }: { a: any; }) => void
++>f : (__0: { a: any; }) => void
+ >{ a: 1, ...l, ...r } : { opt: string | number; a: number; }
+ >a : number
+ >1 : 1

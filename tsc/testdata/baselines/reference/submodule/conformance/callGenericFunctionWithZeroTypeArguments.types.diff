@@ -1,0 +1,64 @@
+--- old.callGenericFunctionWithZeroTypeArguments.types
++++ new.callGenericFunctionWithZeroTypeArguments.types
+@@= skipped -4, +4 lines =@@
+ 
+ function f<T>(x: T): T { return null; }
+ >f : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ var r = f(1);
+@@= skipped -11, +12 lines =@@
+ var f2 = <T>(x: T): T => { return null; }
+ >f2 : <T>(x: T) => T
+ ><T>(x: T): T => { return null; } : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ var r2 = f2(1);
+@@= skipped -10, +11 lines =@@
+ 
+ var f3: { <T>(x: T): T; }
+ >f3 : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ var r3 = f3(1);
+@@= skipped -13, +14 lines =@@
+ 
+     f<T>(x: T): T {
+ >f : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+         return null;
+@@= skipped -16, +17 lines =@@
+ >1 : 1
+ 
+ interface I {
++>I : I
++
+     f<T>(x: T): T;
+ >f : <T>(x: T) => T
++>T : T
+ >x : T
+ }
+ var i: I;
+@@= skipped -17, +20 lines =@@
+ 
+ class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+     f(x: T): T {
+ >f : (x: T) => T
+@@= skipped -19, +20 lines =@@
+ >1 : 1
+ 
+ interface I2<T> {
++>I2 : I2<T>
++>T : T
++
+     f(x: T): T;
+ >f : (x: T) => T
+ >x : T

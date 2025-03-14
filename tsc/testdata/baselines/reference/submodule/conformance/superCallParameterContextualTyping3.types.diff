@@ -1,0 +1,38 @@
+--- old.superCallParameterContextualTyping3.types
++++ new.superCallParameterContextualTyping3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === superCallParameterContextualTyping3.ts ===
+ interface ContextualType<T> {
++>ContextualType : ContextualType<T>
++>T : T
++
+     method(parameter: T): void;
+ >method : (parameter: T) => void
+ >parameter : T
+@@= skipped -7, +10 lines =@@
+ 
+ class CBase<T>  {
+ >CBase : CBase<T>
++>T : T
+ 
+     constructor(param: ContextualType<T>) {
+ >param : ContextualType<T>
+@@= skipped -21, +22 lines =@@
+         super({
+ >super({            method(p) {                p.length;            }        }) : void
+ >super : typeof CBase
+->{            method(p) {                p.length;            }        } : { method(p: string): void; }
++>{            method(p) {                p.length;            }        } : { method: (p: string) => void; }
+ 
+             method(p) {
+ >method : (p: string) => void
+@@= skipped -20, +20 lines =@@
+ >super.foo : (param: ContextualType<string>) => void
+ >super : CBase<string>
+ >foo : (param: ContextualType<string>) => void
+->{            method(p) {                p.length;            }        } : { method(p: string): void; }
++>{            method(p) {                p.length;            }        } : { method: (p: string) => void; }
+ 
+             method(p) {
+ >method : (p: string) => void

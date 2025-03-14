@@ -1,0 +1,20 @@
+--- old.asyncMethodWithSuper_es5.types
++++ new.asyncMethodWithSuper_es5.types
+@@= skipped -117, +117 lines =@@
+ >super : A
+ >x : () => void
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+ 
+         // destructuring assign with element access
+         ({ f: super["x"] } = { f });
+@@= skipped -12, +12 lines =@@
+ >super : A
+ >"x" : "x"
+ >{ f } : { f: () => void; }
+->f : () => void
++>f : any
+     }
+ }
+ 

@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/genericArrayExtenstions.ts] ////
+
+=== genericArrayExtenstions.ts ===
+export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
+>ObservableArray : ObservableArray<T>
+>T : T
+
+concat<U extends T[]>(...items: U[]): T[];
+>concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
+>U : U
+>items : U[]
+
+concat(...items: T[]): T[];
+>concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
+>items : T[]
+}
+

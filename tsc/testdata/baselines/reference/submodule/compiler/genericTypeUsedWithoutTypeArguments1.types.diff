@@ -1,0 +1,13 @@
+--- old.genericTypeUsedWithoutTypeArguments1.types
++++ new.genericTypeUsedWithoutTypeArguments1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericTypeUsedWithoutTypeArguments1.ts ===
+ interface Foo<T> { }
++>Foo : Foo<T>
++>T : T
++
+ class Bar<T> implements Foo { }
+ >Bar : Bar<T>
++>T : T
+ 

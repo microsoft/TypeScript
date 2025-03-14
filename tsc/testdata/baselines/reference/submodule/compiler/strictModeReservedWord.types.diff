@@ -1,0 +1,48 @@
+--- old.strictModeReservedWord.types
++++ new.strictModeReservedWord.types
+@@= skipped -37, +37 lines =@@
+ 
+     function baz<implements, protected>() { }
+ >baz : <implements, protected>() => void
++>implements : implements
++>protected : protected
+ 
+     function barn(cb: (private, public, package) => void) { }
+ >barn : (cb: (private: any, public: any, package: any) => void) => void
+@@= skipped -23, +25 lines =@@
+ >public : number
+ 
+     var b: public.bar;
+->b : public.bar
++>b : bar
+ >public : any
+ 
+     function foo(x: private.x) { }
+->foo : (x: private.x) => void
+->x : private.x
++>foo : (x: x) => void
++>x : x
+ >private : any
+ 
+     function foo1(x: private.package.x) { }
+->foo1 : (x: private.package.x) => void
+->x : private.package.x
++>foo1 : (x: x) => void
++>x : x
+ >private : any
+ >package : any
+ 
+     function foo2(x: private.package.protected) { }
+->foo2 : (x: private.package.protected) => void
+->x : private.package.protected
++>foo2 : (x: protected) => void
++>x : protected
+ >private : any
+ >package : any
+ 
+     let b: interface.package.implements.B;
+->b : interface.package.implements.B
++>b : B
+ >interface : any
+ >package : any
+ >implements : any

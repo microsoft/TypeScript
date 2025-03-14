@@ -1,0 +1,11 @@
+--- old.topLevelAwaitErrors.7(module=esnext).types
++++ new.topLevelAwaitErrors.7(module=esnext).types
+@@= skipped -2, +2 lines =@@
+ === index.ts ===
+ // await disallowed in namespace import
+ import * as await from "./other";
+->await : typeof await
++>await : typeof import("other")
+ 
+ === other.ts ===
+ declare const _await: any;

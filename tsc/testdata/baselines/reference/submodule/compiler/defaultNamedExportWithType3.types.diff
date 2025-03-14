@@ -1,0 +1,11 @@
+--- old.defaultNamedExportWithType3.types
++++ new.defaultNamedExportWithType3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === defaultNamedExportWithType3.ts ===
+ interface Foo {}
++>Foo : Foo
++
+ export const Foo = {};
+ >Foo : {}
+ >{} : {}

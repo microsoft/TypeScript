@@ -1,0 +1,22 @@
+--- old.declarationEmitComputedNameCausesImportToBePainted.types
++++ new.declarationEmitComputedNameCausesImportToBePainted.types
+@@= skipped -6, +6 lines =@@
+ >Symbol : SymbolConstructor
+ 
+ export interface Context {
++>Context : Context
++
+   [Key]: string;
+ >[Key] : string
+ >Key : unique symbol
+@@= skipped -20, +22 lines =@@
+ }
+ 
+ export const withContext = ({ [Key]: value }: Context) => value;
+->withContext : ({ [Key]: value }: Context) => string
+->({ [Key]: value }: Context) => value : ({ [Key]: value }: Context) => string
++>withContext : (__0: Context) => string
++>({ [Key]: value }: Context) => value : (__0: Context) => string
+ >Key : unique symbol
+ >value : string
+ >value : string

@@ -1,0 +1,42 @@
+--- old.importAttributes6.types
++++ new.importAttributes6.types
+@@= skipped -1, +1 lines =@@
+ 
+ === mod.mts ===
+ import * as thing1 from "./mod.mjs" with { field: 0 };
+->thing1 : typeof thing1
++>thing1 : typeof import("mod")
+ >field : any
+ 
+ import * as thing2 from "./mod.mjs" with { field: `a` };
+->thing2 : typeof thing1
++>thing2 : typeof import("mod")
+ >field : any
+ 
+ import * as thing3 from "./mod.mjs" with { field: /a/g };
+->thing3 : typeof thing1
++>thing3 : typeof import("mod")
+ >field : any
+ >/a/g : RegExp
+ 
+ import * as thing4 from "./mod.mjs" with { field: ["a"] };
+->thing4 : typeof thing1
++>thing4 : typeof import("mod")
+ >field : any
+ >["a"] : string[]
+ >"a" : "a"
+ 
+ import * as thing5 from "./mod.mjs" with { field: { a: 0 } };
+->thing5 : typeof thing1
++>thing5 : typeof import("mod")
+ >field : any
+ >{ a: 0 } : { a: number; }
+ >a : number
+ >0 : 0
+ 
+ import * as thing6 from "./mod.mjs" with { type: "json", field: 0..toString() };
+->thing6 : typeof thing1
++>thing6 : typeof import("mod")
+ >type : any
+ >field : any
+ >0..toString() : string

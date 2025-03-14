@@ -1,0 +1,36 @@
+--- old.defaultExportsCannotMerge02.types
++++ new.defaultExportsCannotMerge02.types
+@@= skipped -1, +1 lines =@@
+ 
+ === m1.ts ===
+ export default class Decl {
+->Decl : Decl
++>Decl : default
+ }
+ 
+ export interface Decl {
++>Decl : Decl
++
+     p1: number;
+ >p1 : number
+ 
+@@= skipped -12, +14 lines =@@
+ }
+ 
+ export namespace Decl {
++>Decl : any
++
+     interface I {
++>I : I
+     }
+ }
+ 
+@@= skipped -16, +19 lines =@@
+ >x : Entity
+ 
+ var y: Entity.I;
+->y : Entity.I
++>y : I
+ >Entity : any
+ 
+ var z = new Entity();

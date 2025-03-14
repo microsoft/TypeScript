@@ -1,0 +1,11 @@
+--- old.moduleSameValueDuplicateExportedBindings2.types
++++ new.moduleSameValueDuplicateExportedBindings2.types
+@@= skipped -6, +6 lines =@@
+ 
+ === b.ts ===
+ export {Animals} from "./c";
+->Animals : typeof import("c").Animals
++>Animals : typeof Animals
+ 
+ === c.ts ===
+ export enum Animals {

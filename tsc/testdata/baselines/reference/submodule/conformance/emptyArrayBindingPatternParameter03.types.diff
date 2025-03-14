@@ -1,0 +1,11 @@
+--- old.emptyArrayBindingPatternParameter03.types
++++ new.emptyArrayBindingPatternParameter03.types
+@@= skipped -1, +1 lines =@@
+ 
+ === emptyArrayBindingPatternParameter03.ts ===
+ function f(a, []) {
+->f : (a: any, []: any[]) => void
++>f : (a: any, __1: any[]) => void
+ >a : any
+ 
+     var x, y, z;

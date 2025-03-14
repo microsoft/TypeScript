@@ -1,0 +1,48 @@
+--- old.objectTypeHidingMembersOfExtendedObject.types
++++ new.objectTypeHidingMembersOfExtendedObject.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 2,500
+-
+ === objectTypeHidingMembersOfExtendedObject.ts ===
+ class A {
+ >A : A
+@@= skipped -21, +16 lines =@@
+ }
+ 
+ interface Object {
++>Object : Object
++
+     data: A;
+ >data : A
+ 
+@@= skipped -49, +51 lines =@@
+ >'hm' : "hm"
+ 
+ interface I {
++>I : I
++
+     valueOf(): void;
+ >valueOf : () => void
+ 
+@@= skipped -78, +80 lines =@@
+ >'hm' : "hm"
+ 
+ var b: {
+->b : { [x: string]: any; valueOf(): void; data: B; }
++>b : { [x: string]: any; valueOf: () => void; data: B; }
+ 
+     valueOf(): void;
+ >valueOf : () => void
+@@= skipped -16, +16 lines =@@
+ >r4 : void
+ >b.valueOf() : void
+ >b.valueOf : () => void
+->b : { [x: string]: any; valueOf(): void; data: B; }
++>b : { [x: string]: any; valueOf: () => void; data: B; }
+ >valueOf : () => void
+ 

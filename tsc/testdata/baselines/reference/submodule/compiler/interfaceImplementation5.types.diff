@@ -1,0 +1,11 @@
+--- old.interfaceImplementation5.types
++++ new.interfaceImplementation5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceImplementation5.ts ===
+ interface I1 {
++>I1 : I1
++
+     getset1:number;
+ >getset1 : number
+ }

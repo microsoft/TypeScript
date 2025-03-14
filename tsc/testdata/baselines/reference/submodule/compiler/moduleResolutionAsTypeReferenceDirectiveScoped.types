@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/moduleResolutionAsTypeReferenceDirectiveScoped.ts] ////
+
+=== /a.ts ===
+import { typesCache } from "@scoped/typescache";
+>typesCache : any
+
+import { mangledTypes } from "@mangled/typescache";
+>mangledTypes : any
+
+import { nodeModulesCache } from "@scoped/nodemodulescache";
+>nodeModulesCache : any
+
+import { mangledNodeModules } from "@mangled/nodemodulescache";
+>mangledNodeModules : any
+
+import { atTypesCache } from "@scoped/attypescache";
+>atTypesCache : any
+
+import { mangledAtTypesCache } from "@mangled/attypescache";
+>mangledAtTypesCache : any
+

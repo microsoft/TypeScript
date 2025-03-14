@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/contextualSignatureInObjectFreeze.ts] ////
+
+=== contextualSignatureInObjectFreeze.ts ===
+// #49101
+
+Object.freeze({
+>Object.freeze({    f: function () { }}) : Readonly<{ f: () => void; }>
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | object; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | object; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>{    f: function () { }} : { f: () => void; }
+
+    f: function () { }
+>f : () => void
+>function () { } : () => void
+
+})
+

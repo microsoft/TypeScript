@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/reactSFCAndFunctionResolvable.tsx] ////
+
+=== reactSFCAndFunctionResolvable.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react';
+>React : any
+
+declare const Radio: (props: {}) => React.ReactElement<{}>;
+>Radio : (props: {}) => ReactElement<{}>
+>props : {}
+>React : any
+
+declare const OtherRadio: () => React.ReactElement<{}>;
+>OtherRadio : () => ReactElement<{}>
+>React : any
+
+declare const Checkbox: React.SFC;
+>Checkbox : SFC
+>React : any
+
+declare const condition1: boolean;
+>condition1 : boolean
+
+declare const condition2: boolean;
+>condition2 : boolean
+
+declare const condition3: boolean;
+>condition3 : boolean
+
+const RandomComponent: React.SFC = () => {
+>RandomComponent : SFC
+>React : any
+>() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => any
+
+  const Component =
+>Component : any
+
+    condition1
+>condition1      ? Radio      : Checkbox : any
+>condition1 : boolean
+
+      ? Radio
+>Radio : (props: {}) => ReactElement<{}>
+
+      : Checkbox;
+>Checkbox : SFC
+
+  const OtherComponent =
+>OtherComponent : any
+
+    condition2
+>condition2      ? OtherRadio      : Checkbox : any
+>condition2 : boolean
+
+      ? OtherRadio
+>OtherRadio : () => ReactElement<{}>
+
+      : Checkbox;
+>Checkbox : SFC
+
+  return condition1 ? <Component /> : <OtherComponent />;
+>condition1 ? <Component /> : <OtherComponent /> : any
+>condition1 : boolean
+><Component /> : any
+>Component : any
+><OtherComponent /> : any
+>OtherComponent : any
+
+};
+

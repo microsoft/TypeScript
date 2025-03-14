@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/jsFileCompilationWithJsEmitPathSameAsInput.ts] ////
+
+=== a.ts ===
+class c {
+>c : c
+}
+
+=== a.js ===
+function foo() {
+>foo : () => void
+}
+

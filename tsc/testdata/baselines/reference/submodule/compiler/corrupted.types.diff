@@ -1,0 +1,8 @@
+--- old.corrupted.types
++++ new.corrupted.types
+@@= skipped -1, +1 lines =@@
+ 
+ === corrupted.ts ===
+ 
+-ï¿½ï¿½ï¿½
++Æ¼Á

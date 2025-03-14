@@ -1,0 +1,10 @@
+--- old.typeUsedAsValueError.types
++++ new.typeUsedAsValueError.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeUsedAsValueError.ts ===
+ interface Interface {
++>Interface : Interface
+ 
+ }
+ 

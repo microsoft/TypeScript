@@ -1,0 +1,17 @@
+--- old.umd2.types
++++ new.umd2.types
+@@= skipped -7, +7 lines =@@
+ >fn : any
+ 
+ let x: Foo.Thing;
+->x : Foo.Thing
++>x : Thing
+ >Foo : any
+ 
+ let y: number = x.n;
+ >y : number
+ >x.n : any
+->x : Foo.Thing
++>x : Thing
+ >n : any
+ 

@@ -1,0 +1,10 @@
+--- old.generatorImplicitAny.types
++++ new.generatorImplicitAny.types
+@@= skipped -9, +9 lines =@@
+ 
+ declare function f<T>(value: T): void;
+ >f : <T>(value: T) => void
++>T : T
+ >value : T
+ 
+ function* g2() {

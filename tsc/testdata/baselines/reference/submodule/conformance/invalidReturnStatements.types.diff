@@ -1,0 +1,10 @@
+--- old.invalidReturnStatements.types
++++ new.invalidReturnStatements.types
+@@= skipped -17, +17 lines =@@
+ >fn7 : () => any
+ 
+ interface I { id: number }
++>I : I
+ >id : number
+ 
+ class C implements I {

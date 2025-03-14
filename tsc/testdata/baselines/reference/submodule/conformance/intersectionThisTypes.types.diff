@@ -1,0 +1,47 @@
+--- old.intersectionThisTypes.types
++++ new.intersectionThisTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === intersectionThisTypes.ts ===
+ interface Thing1 {
++>Thing1 : Thing1
++
+     a: number;
+ >a : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Thing2 {
++>Thing2 : Thing2
++
+     b: number;
+ >b : number
+ 
+@@= skipped -41, +43 lines =@@
+ }
+ 
+ interface Thing5 extends Thing4 {
++>Thing5 : Thing5
++
+     c: string;
+ >c : string
+ }
+@@= skipped -32, +34 lines =@@
+ }
+ 
+ interface Component {
++>Component : Component
++
+     extend<T>(props: T): this & T;
+ >extend : <T>(props: T) => this & T
++>T : T
+ >props : T
+ }
+ 
+ interface Label extends Component {
++>Label : Label
++
+     title: string;
+ >title : string
+ }

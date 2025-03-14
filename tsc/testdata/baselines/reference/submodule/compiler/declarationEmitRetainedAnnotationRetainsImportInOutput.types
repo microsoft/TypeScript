@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/declarationEmitRetainedAnnotationRetainsImportInOutput.ts] ////
+
+=== node_modules/whatever/index.d.ts ===
+export type Whatever<T> = {x: T};
+>Whatever : Whatever<T>
+>T : T
+>x : T
+
+export declare function something<T>(cb: () => Whatever<T>): Whatever<T>;
+>something : <T>(cb: () => Whatever<T>) => Whatever<T>
+>T : T
+>cb : () => Whatever<T>
+
+=== index.ts ===
+import * as E from 'whatever';
+>E : typeof import("node_modules/whatever/index")
+
+export const run = <E>(i: () => E.Whatever<E>): E.Whatever<E> => E.something(i);
+>run : <E>(i: () => Whatever<E>) => Whatever<E>
+><E>(i: () => E.Whatever<E>): E.Whatever<E> => E.something(i) : <E>(i: () => Whatever<E>) => Whatever<E>
+>E : E
+>i : () => Whatever<E>
+>E : any
+>E : any
+>E.something(i) : Whatever<E>
+>E.something : <T>(cb: () => Whatever<T>) => Whatever<T>
+>E : typeof import("node_modules/whatever/index")
+>something : <T>(cb: () => Whatever<T>) => Whatever<T>
+>i : () => Whatever<E>
+

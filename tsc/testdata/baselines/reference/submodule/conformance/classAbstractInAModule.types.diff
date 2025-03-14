@@ -1,0 +1,21 @@
+--- old.classAbstractInAModule.types
++++ new.classAbstractInAModule.types
+@@= skipped -13, +13 lines =@@
+ 
+ new M.A;
+ >new M.A : any
+->M.A : typeof M.A
++>M.A : typeof A
+ >M : typeof M
+->A : typeof M.A
++>A : typeof A
+ 
+ new M.B;
+->new M.B : M.B
+->M.B : typeof M.B
++>new M.B : B
++>M.B : typeof B
+ >M : typeof M
+->B : typeof M.B
++>B : typeof B
+ 

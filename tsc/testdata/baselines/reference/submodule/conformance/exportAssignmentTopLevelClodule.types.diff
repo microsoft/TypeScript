@@ -1,0 +1,27 @@
+--- old.exportAssignmentTopLevelClodule.types
++++ new.exportAssignmentTopLevelClodule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo_1.ts ===
+ import foo = require("./foo_0");
+->foo : typeof foo
++>foo : typeof Foo
+ 
+ if(foo.answer === 42){
+ >foo.answer === 42 : boolean
+ >foo.answer : number
+->foo : typeof foo
++>foo : typeof Foo
+ >answer : number
+ >42 : 42
+ 
+ 	var x = new foo();
+->x : foo
+->new foo() : foo
+->foo : typeof foo
++>x : Foo
++>new foo() : Foo
++>foo : typeof Foo
+ }
+ 
+ === foo_0.ts ===

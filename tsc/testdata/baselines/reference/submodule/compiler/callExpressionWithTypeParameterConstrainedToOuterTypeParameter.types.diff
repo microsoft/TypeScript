@@ -1,0 +1,14 @@
+--- old.callExpressionWithTypeParameterConstrainedToOuterTypeParameter.types
++++ new.callExpressionWithTypeParameterConstrainedToOuterTypeParameter.types
+@@= skipped -1, +1 lines =@@
+ 
+ === callExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts ===
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     <U extends T>(u: U): U;
++>U : U
+ >u : U
+ }
+ var i: I<string>;

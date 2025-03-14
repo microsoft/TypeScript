@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.ts] ////
+
+=== node_modules/@types/react/index.d.ts ===
+export = React;
+>React : any
+
+declare namespace React {
+>React : any
+
+    export type Component<T = any, U = {}, V = {}> = { x: T, y: U, z: V };
+>Component : Component<T, U, V>
+>T : T
+>U : U
+>V : V
+>x : T
+>y : U
+>z : V
+
+    export interface DOMAttributes<T> { }
+>DOMAttributes : DOMAttributes<T>
+>T : T
+}
+=== node_modules/@emotion/core/index.d.ts ===
+import {
+    Component
+>Component : any
+
+} from 'react'
+export {};
+
+declare module 'react' {
+>'react' : any
+
+    interface DOMAttributes<T> {
+>DOMAttributes : DOMAttributes<T>
+>T : T
+
+        css?: any
+>css : any
+    }
+}
+
+=== src/get-comp.ts ===
+import {Component} from 'react';
+>Component : any
+
+export function getComp(): Component {
+>getComp : () => Component
+
+    return {} as any as Component
+>{} as any as Component : Component
+>{} as any : any
+>{} : {}
+}
+=== src/inferred-comp-export.ts ===
+import { getComp } from "./get-comp";
+>getComp : () => Component
+
+// this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
+// This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
+export const obj = {
+>obj : { comp: Component; }
+>{    comp: getComp()} : { comp: Component; }
+
+    comp: getComp()
+>comp : Component
+>getComp() : Component
+>getComp : () => Component
+}
+=== src/some-other-file.ts ===
+
+export * from '@emotion/core';
+

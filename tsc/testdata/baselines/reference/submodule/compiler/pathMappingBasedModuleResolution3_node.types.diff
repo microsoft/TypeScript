@@ -1,0 +1,26 @@
+--- old.pathMappingBasedModuleResolution3_node.types
++++ new.pathMappingBasedModuleResolution3_node.types
+@@= skipped -1, +1 lines =@@
+ 
+ === c:/root/folder1/file1.ts ===
+ import {x} from "folder2/file2"
+->x : number
++>x : any
+ 
+ declare function use(a: any): void;
+ >use : (a: any) => void
+@@= skipped -9, +9 lines =@@
+ use(x.toExponential());
+ >use(x.toExponential()) : void
+ >use : (a: any) => void
+->x.toExponential() : string
+->x.toExponential : (fractionDigits?: number) => string
+->x : number
+->toExponential : (fractionDigits?: number) => string
++>x.toExponential() : any
++>x.toExponential : any
++>x : any
++>toExponential : any
+ 
+ === c:/root/folder2/file2.ts ===
+ import {x as a} from "./file3"  // found with baseurl

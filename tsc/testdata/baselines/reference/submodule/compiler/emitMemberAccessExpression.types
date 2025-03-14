@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/emitMemberAccessExpression.ts] ////
+
+=== emitMemberAccessExpression_file3.ts ===
+/// <reference path="emitMemberAccessExpression_file2.ts" />
+/// <reference path="emitMemberAccessExpression_file1.ts" />
+declare var OData: any;
+>OData : any
+
+module Microsoft.PeopleAtWork.Model {
+>Microsoft : typeof Microsoft
+>PeopleAtWork : typeof PeopleAtWork
+>Model : typeof Model
+
+    export class KnockoutExtentions {
+>KnockoutExtentions : KnockoutExtentions
+    }
+}
+=== emitMemberAccessExpression_file1.ts ===
+/// <reference path="emitMemberAccessExpression_file3.ts" />
+"use strict";
+>"use strict" : "use strict"
+
+=== emitMemberAccessExpression_file2.ts ===
+/// <reference path="emitMemberAccessExpression_file3.ts" />
+"use strict";
+>"use strict" : "use strict"
+
+module Microsoft.PeopleAtWork.Model {
+>Microsoft : typeof Microsoft
+>PeopleAtWork : typeof PeopleAtWork
+>Model : typeof Model
+
+    export class _Person {
+>_Person : _Person
+
+        public populate(raw: any) {
+>populate : (raw: any) => void
+>raw : any
+
+            var res = Model.KnockoutExtentions;
+>res : any
+>Model.KnockoutExtentions : any
+>Model : typeof Model
+>KnockoutExtentions : any
+        }
+    }
+}
+

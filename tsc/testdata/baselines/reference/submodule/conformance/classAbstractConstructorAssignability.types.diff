@@ -1,0 +1,20 @@
+--- old.classAbstractConstructorAssignability.types
++++ new.classAbstractConstructorAssignability.types
+@@= skipped -13, +13 lines =@@
+ 
+ var AA : typeof A = B;
+ >AA : typeof A
+->A : typeof A
+ >B : typeof B
+ 
+ var BB : typeof B = A;
+ >BB : typeof B
+->B : typeof B
+ >A : typeof A
+ 
+ var CC : typeof C = B;
+ >CC : typeof C
+->C : typeof C
+ >B : typeof B
+ 
+ new AA;

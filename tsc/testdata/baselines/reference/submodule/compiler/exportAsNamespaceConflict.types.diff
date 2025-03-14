@@ -1,0 +1,10 @@
+--- old.exportAsNamespaceConflict.types
++++ new.exportAsNamespaceConflict.types
+@@= skipped -2, +2 lines =@@
+ === /a.d.ts ===
+ declare global { namespace N {} }
+ >global : any
++>N : any
+ 
+ export = N;
+ >N : any

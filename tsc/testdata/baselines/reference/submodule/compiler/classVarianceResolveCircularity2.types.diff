@@ -1,0 +1,18 @@
+--- old.classVarianceResolveCircularity2.types
++++ new.classVarianceResolveCircularity2.types
+@@= skipped -6, +6 lines =@@
+ 
+ class Bar<T> {
+ >Bar : Bar<T>
++>T : T
+ 
+     num!: number;
+ >num : number
+@@= skipped -38, +39 lines =@@
+ 
+ class Foo<T> {
+ >Foo : Foo<T>
++>T : T
+ 
+     bar!: Bar<T>;
+ >bar : Bar<T>

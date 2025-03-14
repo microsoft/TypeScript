@@ -1,0 +1,93 @@
+--- old.bigintWithLib.types
++++ new.bigintWithLib.types
+@@= skipped -27, +27 lines =@@
+ >BigInt : BigIntConstructor
+ >asIntN : (bits: number, int: bigint) => bigint
+ >8 : 8
+->0xFFFFn : 65535n
++>0xFFFFn : 0xffffn
+ 
+ bigintVal = BigInt.asUintN(8, 0xFFFFn);
+ >bigintVal = BigInt.asUintN(8, 0xFFFFn) : bigint
+@@= skipped -10, +10 lines =@@
+ >BigInt : BigIntConstructor
+ >asUintN : (bits: number, int: bigint) => bigint
+ >8 : 8
+->0xFFFFn : 65535n
++>0xFFFFn : 0xffffn
+ 
+ bigintVal = bigintVal.valueOf();
+ >bigintVal = bigintVal.valueOf() : bigint
+@@= skipped -30, +30 lines =@@
+ >stringVal = bigintVal.toLocaleString() : string
+ >stringVal : string
+ >bigintVal.toLocaleString() : string
+->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ >bigintVal : bigint
+->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ 
+ stringVal = bigintVal.toLocaleString('de-DE');
+ >stringVal = bigintVal.toLocaleString('de-DE') : string
+ >stringVal : string
+ >bigintVal.toLocaleString('de-DE') : string
+->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ >bigintVal : bigint
+->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ >'de-DE' : "de-DE"
+ 
+ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
+ >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
+ >stringVal : string
+ >bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
+->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ >bigintVal : bigint
+->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ >'de-DE' : "de-DE"
+ >{ style: 'currency' } : { style: string; }
+ >style : string
+@@= skipped -29, +29 lines =@@
+ >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
+ >stringVal : string
+ >bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
+->bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ >bigintVal : bigint
+->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
++>toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+ >'de-DE' : "de-DE"
+ >{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
+ >style : string
+@@= skipped -294, +294 lines =@@
+ new Intl.NumberFormat("fr").format(3000n);
+ >new Intl.NumberFormat("fr").format(3000n) : string
+ >new Intl.NumberFormat("fr").format : { (value: number): string; (value: number | bigint): string; }
+->new Intl.NumberFormat("fr") : Intl.NumberFormat
+->Intl.NumberFormat : Intl.NumberFormatConstructor
++>new Intl.NumberFormat("fr") : NumberFormat
++>Intl.NumberFormat : NumberFormatConstructor
+ >Intl : typeof Intl
+->NumberFormat : Intl.NumberFormatConstructor
++>NumberFormat : NumberFormatConstructor
+ >"fr" : "fr"
+ >format : { (value: number): string; (value: number | bigint): string; }
+ >3000n : 3000n
+@@= skipped -11, +11 lines =@@
+ new Intl.NumberFormat("fr").format(bigintVal);
+ >new Intl.NumberFormat("fr").format(bigintVal) : string
+ >new Intl.NumberFormat("fr").format : { (value: number): string; (value: number | bigint): string; }
+->new Intl.NumberFormat("fr") : Intl.NumberFormat
+->Intl.NumberFormat : Intl.NumberFormatConstructor
++>new Intl.NumberFormat("fr") : NumberFormat
++>Intl.NumberFormat : NumberFormatConstructor
+ >Intl : typeof Intl
+->NumberFormat : Intl.NumberFormatConstructor
++>NumberFormat : NumberFormatConstructor
+ >"fr" : "fr"
+ >format : { (value: number): string; (value: number | bigint): string; }
+ >bigintVal : bigint

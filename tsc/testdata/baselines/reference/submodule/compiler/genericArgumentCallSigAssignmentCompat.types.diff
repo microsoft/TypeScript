@@ -1,0 +1,76 @@
+--- old.genericArgumentCallSigAssignmentCompat.types
++++ new.genericArgumentCallSigAssignmentCompat.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericArgumentCallSigAssignmentCompat.ts ===
+ module Underscore {
++>Underscore : any
++
+     export interface Iterator<T, U> {
++>Iterator : Iterator<T, U>
++>T : T
++>U : U
++
+         (value: T, index: any, list: any): U;
+ >value : T
+ >index : any
+@@= skipped -8, +14 lines =@@
+     }
+  
+     export interface Static {
++>Static : Static
++
+         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
+ >all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
++>T : T
+ >list : T[]
+ >iterator : Iterator<T, boolean>
+ >context : any
+ 
+         identity<T>(value: T): T;
+ >identity : <T>(value: T) => T
++>T : T
+ >value : T
+     }
+ }
+  
+ declare var _: Underscore.Static;
+->_ : Underscore.Static
++>_ : Static
+ >Underscore : any
+  
+ // No error, Call signatures of types '<T>(value: T) => T' and 'Underscore.Iterator<{}, boolean>' are compatible when instantiated with any.
+ // Ideally, we would not have a generic signature here, because it should be instantiated with {} during inferential typing
+ _.all([true, 1, null, 'yes'], _.identity);
+ >_.all([true, 1, null, 'yes'], _.identity) : boolean
+->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
+->_ : Underscore.Static
+->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
++>_.all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
++>_ : Static
++>all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
+ >[true, 1, null, 'yes'] : (string | number | true)[]
+ >true : true
+ >1 : 1
+ >'yes' : "yes"
+ >_.identity : <T>(value: T) => T
+->_ : Underscore.Static
++>_ : Static
+ >identity : <T>(value: T) => T
+  
+ // Ok, because fixing makes us infer boolean for T
+ _.all([true], _.identity);
+ >_.all([true], _.identity) : boolean
+->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
+->_ : Underscore.Static
+->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
++>_.all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
++>_ : Static
++>all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
+ >[true] : true[]
+ >true : true
+ >_.identity : <T>(value: T) => T
+->_ : Underscore.Static
++>_ : Static
+ >identity : <T>(value: T) => T
+ 

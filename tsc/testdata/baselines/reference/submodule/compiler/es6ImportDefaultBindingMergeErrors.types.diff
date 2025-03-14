@@ -1,0 +1,10 @@
+--- old.es6ImportDefaultBindingMergeErrors.types
++++ new.es6ImportDefaultBindingMergeErrors.types
+@@= skipped -12, +12 lines =@@
+ >defaultBinding : number
+ 
+ interface defaultBinding { // This is ok
++>defaultBinding : defaultBinding
+ }
+ var x = defaultBinding;
+ >x : number

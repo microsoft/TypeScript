@@ -1,0 +1,53 @@
+--- old.typesWithOptionalProperty.types
++++ new.typesWithOptionalProperty.types
+@@= skipped -3, +3 lines =@@
+ // basic uses of optional properties without errors
+ 
+ interface I {
++>I : I
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ var a: {
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number; baz?: () => string; }
+ 
+     foo: string;
+ >foo : string
+@@= skipped -58, +58 lines =@@
+ 
+ a = b;
+ >a = b : { foo: string; }
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number; baz?: () => string; }
+ >b : { foo: string; }
+ 
+ a = c;
+ >a = c : { foo: string; bar: number; }
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number; baz?: () => string; }
+ >c : { foo: string; bar: number; }
+ 
+ a = d;
+ >a = d : { foo: string; bar: number; baz: () => string; }
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number; baz?: () => string; }
+ >d : { foo: string; bar: number; baz: () => string; }
+ 
+ i = a;
+->i = a : { foo: string; bar?: number; baz?(): string; }
++>i = a : { foo: string; bar?: number; baz?: () => string; }
+ >i : I
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number; baz?: () => string; }
+ 
+ a = i;
+ >a = i : I
+->a : { foo: string; bar?: number; baz?(): string; }
++>a : { foo: string; bar?: number; baz?: () => string; }
+ >i : I
+ 

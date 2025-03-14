@@ -1,0 +1,11 @@
+--- old.staticPropertyNotInClassType.types
++++ new.staticPropertyNotInClassType.types
+@@= skipped -72, +72 lines =@@
+ 
+     class C<T, U> {
+ >C : C<T, U>
++>T : T
++>U : U
+ 
+         fn() { return this; }
+ >fn : () => this

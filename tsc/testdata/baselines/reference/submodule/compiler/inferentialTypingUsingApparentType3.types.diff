@@ -1,0 +1,21 @@
+--- old.inferentialTypingUsingApparentType3.types
++++ new.inferentialTypingUsingApparentType3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === inferentialTypingUsingApparentType3.ts ===
+ interface Field<T> {
++>Field : Field<T>
++>T : T
++
+     clean(input: T): T
+ >clean : (input: T) => T
+ >input : T
+@@= skipped -31, +34 lines =@@
+ 
+ class ObjectField<A, T extends { [name: string]: Field<any> }> {
+ >ObjectField : ObjectField<A, T>
++>A : A
++>T : T
+ >name : string
+ 
+     constructor(public fields: T) { }

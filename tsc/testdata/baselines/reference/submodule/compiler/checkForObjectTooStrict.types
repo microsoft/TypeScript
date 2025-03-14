@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/checkForObjectTooStrict.ts] ////
+
+=== checkForObjectTooStrict.ts ===
+module Foo {
+>Foo : typeof Foo
+
+    export class Object {
+>Object : Object
+
+    }
+
+}
+
+ 
+
+class Bar extends Foo.Object { // should work
+>Bar : Bar
+>Foo.Object : Object
+>Foo : typeof Foo
+>Object : typeof Object
+
+    constructor () {
+
+        super();
+>super() : void
+>super : typeof Object
+
+    }
+
+}
+
+
+class Baz extends Object {
+>Baz : Baz
+>Object : Object
+
+    constructor () { // ERROR, as expected
+
+        super();
+>super() : void
+>super : ObjectConstructor
+
+    }
+
+}
+

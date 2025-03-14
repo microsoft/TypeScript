@@ -1,0 +1,44 @@
+--- old.destructuringParameterDeclaration8.types
++++ new.destructuringParameterDeclaration8.types
+@@= skipped -3, +3 lines =@@
+ // explicit type annotation should cause `method` to have type 'x' | 'y'
+ // both inside and outside `test`.
+ function test({
+->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+ 
+     method = 'z',
+ >method : "x" | "y"
+@@= skipped -30, +30 lines =@@
+ 
+ test({});
+ >test({}) : void
+->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+ >{} : {}
+ 
+ test({ method: 'x', nested: { p: 'a' } })
+ >test({ method: 'x', nested: { p: 'a' } }) : void
+->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+ >{ method: 'x', nested: { p: 'a' } } : { method: "x"; nested: { p: "a"; }; }
+ >method : "x"
+ >'x' : "x"
+@@= skipped -16, +16 lines =@@
+ 
+ test({ method: 'z', nested: { p: 'b' } })
+ >test({ method: 'z', nested: { p: 'b' } }) : void
+->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+ >{ method: 'z', nested: { p: 'b' } } : { method: "z"; nested: { p: "b"; }; }
+ >method : "z"
+ >'z' : "z"
+@@= skipped -11, +11 lines =@@
+ 
+ test({ method: 'one', nested: { p: 'a' } })
+ >test({ method: 'one', nested: { p: 'a' } }) : void
+->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
+ >{ method: 'one', nested: { p: 'a' } } : { method: "one"; nested: { p: "a"; }; }
+ >method : "one"
+ >'one' : "one"

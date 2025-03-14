@@ -1,0 +1,22 @@
+--- old.thisTag3.types
++++ new.thisTag3.types
+@@= skipped -12, +12 lines =@@
+      * @param {string} a
+      */
+     p = (a) => this.fn("" + a);
+->p : (this: T, a: string) => any
+->(a) => this.fn("" + a) : (this: T, a: string) => any
+->a : string
++>p : (a: any) => any
++>(a) => this.fn("" + a) : (a: any) => any
++>a : any
+ >this.fn("" + a) : any
+ >this.fn : any
+ >this : this
+ >fn : any
+ >"" + a : string
+ >"" : ""
+->a : string
++>a : any
+ }
+ 

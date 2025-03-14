@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/typeReferenceDirectives6.ts] ////
+
+=== /app.ts ===
+/// <reference path="./ref.d.ts"/>
+/// <reference types="lib"/>
+
+let x: $;
+>x : $
+
+let y = () => x
+>y : () => $
+>() => x : () => $
+>x : $
+
+
+=== /ref.d.ts ===
+declare let $: { x: number }
+>$ : { x: number; }
+>x : number
+    

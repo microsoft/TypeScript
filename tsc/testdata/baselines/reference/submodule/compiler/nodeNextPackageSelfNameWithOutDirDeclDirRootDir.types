@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/nodeNextPackageSelfNameWithOutDirDeclDirRootDir.ts] ////
+
+=== /pkg/src/index.ts ===
+import * as me from "@this/package";
+>me : any
+
+me.thing();
+>me.thing() : any
+>me.thing : any
+>me : any
+>thing : any
+
+export function thing(): void {}
+>thing : () => void
+

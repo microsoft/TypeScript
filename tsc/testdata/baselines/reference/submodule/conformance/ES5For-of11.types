@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of11.ts] ////
+
+=== ES5For-of11.ts ===
+var v;
+>v : any
+
+for (v of []) { }
+>v : any
+>[] : undefined[]
+

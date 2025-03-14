@@ -1,0 +1,12 @@
+--- old.es6ImportWithoutFromClauseNonInstantiatedModule.types
++++ new.es6ImportWithoutFromClauseNonInstantiatedModule.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule.ts] ////
+ 
+ === es6ImportWithoutFromClauseNonInstantiatedModule_0.ts ===
+-
+ export interface i {
++>i : i
+ }
+ 
+ === es6ImportWithoutFromClauseNonInstantiatedModule_1.ts ===

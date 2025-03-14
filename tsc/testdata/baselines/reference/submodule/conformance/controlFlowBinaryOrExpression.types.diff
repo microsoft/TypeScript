@@ -1,0 +1,54 @@
+--- old.controlFlowBinaryOrExpression.types
++++ new.controlFlowBinaryOrExpression.types
+@@= skipped -26, +26 lines =@@
+ >"" : ""
+ 
+ cond || (x = 0);
+->cond || (x = 0) : true | 0
++>cond || (x = 0) : 0 | true
+ >cond : boolean
+ >(x = 0) : 0
+ >x = 0 : 0
+@@= skipped -11, +11 lines =@@
+ >x : string | number
+ 
+ export interface NodeList {
++>NodeList : NodeList
++
+     length: number;
+ >length : number
+ }
+ 
+ export interface HTMLCollection {
++>HTMLCollection : HTMLCollection
++
+     length: number;
+ >length : number
+ }
+@@= skipped -33, +37 lines =@@
+ 
+     sourceObj.length;
+ >sourceObj.length : number
+->sourceObj : NodeList | HTMLCollection
++>sourceObj : HTMLCollection | NodeList
+ >length : number
+ }
+ 
+@@= skipped -11, +11 lines =@@
+ 
+     sourceObj.length;
+ >sourceObj.length : number
+->sourceObj : NodeList | HTMLCollection
++>sourceObj : HTMLCollection | NodeList
+ >length : number
+ }
+ 
+@@= skipped -15, +15 lines =@@
+ 
+     sourceObj.length;
+ >sourceObj.length : number
+->sourceObj : NodeList
++>sourceObj : HTMLCollection
+ >length : number
+ }
+ 

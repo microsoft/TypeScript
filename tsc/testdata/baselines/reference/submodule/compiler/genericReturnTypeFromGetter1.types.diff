@@ -1,0 +1,18 @@
+--- old.genericReturnTypeFromGetter1.types
++++ new.genericReturnTypeFromGetter1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericReturnTypeFromGetter1.ts ===
+ export interface A<T> {
++>A : A<T>
++>T : T
++
+    new (dbSet: DbSet<T>): T;
+ >dbSet : DbSet<T>
+ }
+ export class DbSet<T> {
+ >DbSet : DbSet<T>
++>T : T
+ 
+     _entityType: A;
+ >_entityType : any

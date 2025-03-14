@@ -1,0 +1,19 @@
+--- old.resolveInterfaceNameWithSameLetDeclarationName2.types
++++ new.resolveInterfaceNameWithSameLetDeclarationName2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === resolveInterfaceNameWithSameLetDeclarationName2.ts ===
+ interface foo { }
++>foo : foo
++
+ interface bar { }
++>bar : bar
++
+ let bar: bar | foo;
+->bar : foo | bar
++>bar : bar | foo
+ 
+ let foo: bar | foo;
+->foo : foo | bar
++>foo : bar | foo
+ 

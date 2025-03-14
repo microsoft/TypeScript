@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReferences3.ts] ////
+
+=== index.js ===
+/// <reference types="node" />
+
+const Something = require("fs").Something;
+>Something : any
+>require("fs").Something : any
+>require("fs") : any
+>require : any
+>"fs" : "fs"
+>Something : any
+
+module.exports.A = {}
+>module.exports.A = {} : {}
+>module.exports.A : any
+>module.exports : any
+>module : any
+>exports : any
+>A : any
+>{} : {}
+
+module.exports.A.B = {
+>module.exports.A.B = {    thing: new Something()} : { thing: any; }
+>module.exports.A.B : any
+>module.exports.A : any
+>module.exports : any
+>module : any
+>exports : any
+>A : any
+>B : any
+>{    thing: new Something()} : { thing: any; }
+
+    thing: new Something()
+>thing : any
+>new Something() : any
+>Something : any
+}
+
+=== node_modules/@types/node/index.d.ts ===
+declare module "fs" {
+>"fs" : typeof import("fs")
+
+    export class Something {}
+>Something : Something
+}

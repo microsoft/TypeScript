@@ -1,0 +1,21 @@
+--- old.narrowingPlainJsNoCrash1.types
++++ new.narrowingPlainJsNoCrash1.types
+@@= skipped -17, +17 lines =@@
+ 
+ while (d !== a$b);
+ >d !== a$b : boolean
+->d : {}
++>d : any
+ >a$b : {}
+ 
+ while ((c = a$b != a$b)) c.e;
+@@= skipped -10, +10 lines =@@
+ >a$b != a$b : boolean
+ >a$b : {}
+ >a$b : {}
+->c.e : error
+->c : true
++>c.e : any
++>c : any
+ >e : any
+ 

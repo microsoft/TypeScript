@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/declarationEmitSymlinkPaths.ts] ////
+
+=== /packages/search/lib/index.d.ts ===
+export declare function test<T> (a: () => T): () => T;
+>test : <T>(a: () => T) => () => T
+>T : T
+>a : () => T
+
+=== /packages/search-prefix/src/API/NotificationAPIUtils.ts ===
+export type NotificationRequest = {};
+>NotificationRequest : NotificationRequest
+
+export type NotificationResponse = {};
+>NotificationResponse : NotificationResponse
+
+export function getNotification(): NotificationResponse {
+>getNotification : () => NotificationResponse
+
+  return {};
+>{} : {}
+}
+=== /packages/search-prefix/src/Store/NotificationStore.ts ===
+import { test } from "search/lib/index";
+>test : <T>(a: () => T) => () => T
+
+import { getNotification } from "../API/NotificationAPIUtils";
+>getNotification : () => NotificationResponse
+
+export const NotificationScenario = test(
+>NotificationScenario : () => NotificationResponse
+>test(  getNotification) : () => NotificationResponse
+>test : <T>(a: () => T) => () => T
+
+  getNotification
+>getNotification : () => NotificationResponse
+
+);

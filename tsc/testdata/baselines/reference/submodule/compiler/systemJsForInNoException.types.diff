@@ -1,0 +1,11 @@
+--- old.systemJsForInNoException.types
++++ new.systemJsForInNoException.types
+@@= skipped -15, +15 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->obj[key] : error
++>obj[key] : any
+ >obj : { a: number; }
+ >key : string
+ 

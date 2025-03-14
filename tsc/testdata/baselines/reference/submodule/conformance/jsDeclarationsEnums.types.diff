@@ -1,0 +1,33 @@
+--- old.jsDeclarationsEnums.types
++++ new.jsDeclarationsEnums.types
+@@= skipped -4, +4 lines =@@
+ // but we should be able to synthesize declarations from the symbols regardless
+ 
+ export enum A {}
+->A : A
++>A : "index".A
+ 
+ export enum B {
+->B : B
++>B : B.Member
+ 
+     Member
+ >Member : B.Member
+@@= skipped -23, +23 lines =@@
+ >D : typeof DD
+ 
+ export enum E {}
+->E : E
++>E : "index".E
+ 
+ export { E as EE };
+ >E : typeof E
+@@= skipped -11, +11 lines =@@
+ >FF : typeof F
+ 
+ export enum F {}
+->F : F
++>F : "index".F
+ 
+ export enum G {
+ >G : G

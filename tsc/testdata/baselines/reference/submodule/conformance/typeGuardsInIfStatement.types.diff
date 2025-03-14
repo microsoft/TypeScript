@@ -1,0 +1,235 @@
+--- old.typeGuardsInIfStatement.types
++++ new.typeGuardsInIfStatement.types
+@@= skipped -5, +5 lines =@@
+ // In the false branch statement of an 'if' statement, 
+ // the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false.
+ function foo(x: number | string) {
+->foo : (x: number | string) => number
++>foo : (x: string | number) => number
+ >x : string | number
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -21, +21 lines =@@
+     }
+ }
+ function foo2(x: number | string) {
+->foo2 : (x: number | string) => number
++>foo2 : (x: string | number) => number
+ >x : string | number
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -23, +23 lines =@@
+     }
+ }
+ function foo3(x: number | string) {
+->foo3 : (x: number | string) => string | number
++>foo3 : (x: string | number) => string | number
+ >x : string | number
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -23, +23 lines =@@
+     }
+ }
+ function foo4(x: number | string) {
+->foo4 : (x: number | string) => string | number
++>foo4 : (x: string | number) => string | number
+ >x : string | number
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -23, +23 lines =@@
+     }
+ }
+ function foo5(x: number | string) {
+->foo5 : (x: number | string) => string
++>foo5 : (x: string | number) => string
+ >x : string | number
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -23, +23 lines =@@
+     }
+ }
+ function foo6(x: number | string) {
+->foo6 : (x: number | string) => string | number
++>foo6 : (x: string | number) => string | number
+ >x : string | number
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -28, +28 lines =@@
+     }
+ }
+ function foo7(x: number | string | boolean) {
+->foo7 : (x: number | string | boolean) => boolean
++>foo7 : (x: string | number | boolean) => boolean
+ >x : string | number | boolean
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+ >"string" : "string"
+ 
+@@= skipped -16, +16 lines =@@
+     }
+     else if (typeof x === "boolean") {
+ >typeof x === "boolean" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : number | boolean
+ >"boolean" : "boolean"
+ 
+@@= skipped -15, +15 lines =@@
+     }
+ }
+ function foo8(x: number | string | boolean) {
+->foo8 : (x: number | string | boolean) => boolean
++>foo8 : (x: string | number | boolean) => boolean
+ >x : string | number | boolean
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+ >"string" : "string"
+ 
+@@= skipped -21, +21 lines =@@
+ 
+         if (typeof x === "boolean") {
+ >typeof x === "boolean" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : number | boolean
+ >"boolean" : "boolean"
+ 
+@@= skipped -16, +16 lines =@@
+     }
+ }
+ function foo9(x: number | string) {
+->foo9 : (x: number | string) => boolean
++>foo9 : (x: string | number) => boolean
+ >x : string | number
+ 
+     var y = 10;
+@@= skipped -9, +9 lines =@@
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -25, +25 lines =@@
+     }
+ }
+ function foo10(x: number | string | boolean) {
+->foo10 : (x: number | string | boolean) => boolean
++>foo10 : (x: string | number | boolean) => boolean
+ >x : string | number | boolean
+ 
+     // Mixing typeguard narrowing in if statement with conditional expression typeguard
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+ >"string" : "string"
+ 
+@@= skipped -26, +26 lines =@@
+         return typeof x === "number"
+ >typeof x === "number"            ? x === 10 // number            : x : boolean
+ >typeof x === "number" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : number | boolean
+ >"number" : "number"
+ 
+@@= skipped -14, +14 lines =@@
+     }
+ }
+ function foo11(x: number | string | boolean) {
+->foo11 : (x: number | string | boolean) => string
++>foo11 : (x: string | number | boolean) => string
+ >x : string | number | boolean
+ 
+     // Mixing typeguard narrowing in if statement with conditional expression typeguard
+     // Assigning value to x deep inside another guard stops narrowing of type too
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+ >"string" : "string"
+ 
+@@= skipped -25, +25 lines =@@
+         return typeof x === "number"
+ >typeof x === "number"            ? (            // change value of x            x = 10 && x.toString() // number | boolean | string            )            : (            // do not change value            y = x && x.toString() // number | boolean | string            ) : string
+ >typeof x === "number" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : number | boolean
+ >"number" : "number"
+ 
+@@= skipped -37, +37 lines =@@
+     }
+ }
+ function foo12(x: number | string | boolean) {
+->foo12 : (x: number | string | boolean) => any
++>foo12 : (x: string | number | boolean) => any
+ >x : string | number | boolean
+ 
+     // Mixing typeguard narrowing in if statement with conditional expression typeguard
+     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+ >"string" : "string"
+ 
+@@= skipped -30, +30 lines =@@
+         return typeof x === "number"
+ >typeof x === "number"            ? x.toString() // number            : x.toString() : any
+ >typeof x === "number" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : number
+ >"number" : "number"
+ 

@@ -1,0 +1,24 @@
+--- old.systemObjectShorthandRename.types
++++ new.systemObjectShorthandRename.types
+@@= skipped -11, +11 lines =@@
+ const x2 = {x}
+ >x2 : { x: string; }
+ >{x} : { x: string; }
+->x : string
++>x : any
+ 
+ const a = {x2}
+ >a : { x2: { x: string; }; }
+ >{x2} : { x2: { x: string; }; }
+->x2 : { x: string; }
++>x2 : any
+ 
+ const x3 = x
+ >x3 : "X"
+@@= skipped -14, +14 lines =@@
+ const b = {x3}
+ >b : { x3: string; }
+ >{x3} : { x3: string; }
+->x3 : string
++>x3 : any
+ 

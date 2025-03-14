@@ -1,0 +1,32 @@
+--- old.assignmentGenericLookupTypeNarrowing.types
++++ new.assignmentGenericLookupTypeNarrowing.types
+@@= skipped -4, +4 lines =@@
+ 
+ let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};
+ >mappedObject : { foo: { x: string; }; }
++>K : K
+ >x : string
+ >{foo: {x: "hello"}} : { foo: { x: string; }; }
+ >foo : { x: string; }
+@@= skipped -8, +9 lines =@@
+ >"hello" : "hello"
+ 
+ declare function foo<T>(x: T): null | T;
+->foo : <T>(x: T) => null | T
++>foo : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ function bar<K extends "foo">(key: K) {
+ >bar : <K extends "foo">(key: K) => void
++>K : K
+ >key : K
+ 
+   const element = foo(mappedObject[key]);
+ >element : { foo: { x: string; }; }[K]
+ >foo(mappedObject[key]) : { foo: { x: string; }; }[K]
+->foo : <T>(x: T) => null | T
++>foo : <T>(x: T) => T
+ >mappedObject[key] : { foo: { x: string; }; }[K]
+ >mappedObject : { foo: { x: string; }; }
+ >key : K

@@ -1,0 +1,145 @@
+--- old.typeGuardsWithInstanceOfByConstructorSignature.types
++++ new.typeGuardsWithInstanceOfByConstructorSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardsWithInstanceOfByConstructorSignature.ts ===
+ interface AConstructor {
++>AConstructor : AConstructor
++
+     new (): A;
+ }
+ interface A {
++>A : A
++
+     foo: string;
+ >foo : string
+ }
+@@= skipped -49, +53 lines =@@
+ 
+ // a construct signature with generics
+ interface BConstructor {
++>BConstructor : BConstructor
++
+     new <T>(): B<T>;
++>T : T
+ }
+ interface B<T> {
++>B : B<T>
++>T : T
++
+     foo: T;
+ >foo : T
+ }
+@@= skipped -71, +77 lines =@@
+ 
+ // has multiple construct signature
+ interface CConstructor {
++>CConstructor : CConstructor
++
+     new (value: string): C1;
+ >value : string
+ 
+@@= skipped -7, +9 lines =@@
+ >value : number
+ }
+ interface C1 {
++>C1 : C1
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -10, +12 lines =@@
+ >bar1 : number
+ }
+ interface C2 {
++>C2 : C2
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -67, +69 lines =@@
+ 
+ // with object type literal
+ interface D {
++>D : D
++
+     foo: string;
+ >foo : string
+ }
+@@= skipped -46, +48 lines =@@
+ 
+ // a construct signature that returns a union type
+ interface EConstructor {
++>EConstructor : EConstructor
++
+     new (): E1 | E2;
+ }
+ interface E1 {
++>E1 : E1
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -10, +14 lines =@@
+ >bar1 : number
+ }
+ interface E2 {
++>E2 : E2
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -59, +61 lines =@@
+ 
+ // a construct signature that returns any
+ interface FConstructor {
++>FConstructor : FConstructor
++
+     new (): any;
+ }
+ interface F {
++>F : F
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -52, +56 lines =@@
+ 
+ // a type with a prototype, it overrides the construct signature
+ interface GConstructor {
++>GConstructor : GConstructor
++
+     prototype: G1; // high priority
+ >prototype : G1
+ 
+     new (): G2;    // low priority
+ }
+ interface G1 {
++>G1 : G1
++
+     foo1: number;
+ >foo1 : number
+ }
+ interface G2 {
++>G2 : G2
++
+     foo2: boolean;
+ >foo2 : boolean
+ }
+@@= skipped -56, +62 lines =@@
+ 
+ // a type with a prototype that has any type
+ interface HConstructor {
++>HConstructor : HConstructor
++
+     prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
+ >prototype : any
+ 
+     new (): H;      // low priority
+ }
+ interface H {
++>H : H
++
+     foo: number;
+ >foo : number
+ }

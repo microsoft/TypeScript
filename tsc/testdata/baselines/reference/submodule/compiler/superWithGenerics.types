@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/superWithGenerics.ts] ////
+
+=== superWithGenerics.ts ===
+declare class B<T> {    
+>B : B<T>
+>T : T
+
+    m<U>(): B<U>;
+>m : <U>() => B<U>
+>U : U
+
+    static g(): B<any>;
+>g : () => B<any>
+}
+
+class D extends B<any> {
+>D : D
+>B : B<any>
+
+    constructor() {
+        super(); 
+>super() : void
+>super : typeof B
+    }
+}
+

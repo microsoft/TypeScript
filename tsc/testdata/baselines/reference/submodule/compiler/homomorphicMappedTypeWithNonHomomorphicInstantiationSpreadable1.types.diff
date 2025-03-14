@@ -1,0 +1,43 @@
+--- old.homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.types
++++ new.homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.types
+@@= skipped -2, +2 lines =@@
+ === homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts ===
+ type HandleOptions<O> = {
+ >HandleOptions : HandleOptions<O>
++>O : O
+ 
+     [I in keyof O]: {
++>I : I
++
+         value: O[I];
+ >value : O[I]
+ 
+@@= skipped -9, +12 lines =@@
+ };
+ 
+ declare function func1<
+->func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }) => T
++>func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }) => T
+ 
+     T extends Record<PropertyKey, readonly any[]>,
++>T : T
++
+ >(fields: {
+->fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }
++>fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }
+ 
+     [K in keyof T]: {
++>K : K
++
+         label: string;
+ >label : string
+ 
+@@= skipped -19, +23 lines =@@
+ const result = func1({
+ >result : { prop: [number, string]; other: [string, boolean]; }
+ >func1({    prop: {        label: "first",        options: [            {                value: 123,            },            {                value: "foo",            },        ],    },    other: {        label: "second",        options: [            {                value: "bar",            },            {                value: true,            },        ],    },}) : { prop: [number, string]; other: [string, boolean]; }
+->func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }) => T
++>func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }) => T
+ >{    prop: {        label: "first",        options: [            {                value: 123,            },            {                value: "foo",            },        ],    },    other: {        label: "second",        options: [            {                value: "bar",            },            {                value: true,            },        ],    },} : { prop: { label: string; options: [{ value: number; }, { value: string; }]; }; other: { label: string; options: [{ value: string; }, { value: true; }]; }; }
+ 
+     prop: {

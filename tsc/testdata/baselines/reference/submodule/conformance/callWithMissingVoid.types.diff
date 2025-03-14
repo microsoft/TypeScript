@@ -1,0 +1,152 @@
+--- old.callWithMissingVoid.types
++++ new.callWithMissingVoid.types
+@@= skipped -3, +3 lines =@@
+ // From #4260
+ class X<T> {
+ >X : X<T>
++>T : T
+ 
+     f(t: T) {
+ >f : (t: T) => { a: T; }
+@@= skipped -22, +23 lines =@@
+ >f : (t: void) => { a: void; }
+ 
+ declare const xUnion: X<void | number>;
+->xUnion : X<number | void>
++>xUnion : X<void | number>
+ 
+ xUnion.f(42) // no error because f accepts number
+->xUnion.f(42) : { a: number | void; }
+->xUnion.f : (t: number | void) => { a: number | void; }
+->xUnion : X<number | void>
+->f : (t: number | void) => { a: number | void; }
++>xUnion.f(42) : { a: void | number; }
++>xUnion.f : (t: void | number) => { a: void | number; }
++>xUnion : X<void | number>
++>f : (t: void | number) => { a: void | number; }
+ >42 : 42
+ 
+ xUnion.f() // no error because f accepts void
+->xUnion.f() : { a: number | void; }
+->xUnion.f : (t: number | void) => { a: number | void; }
+->xUnion : X<number | void>
+->f : (t: number | void) => { a: number | void; }
++>xUnion.f() : { a: void | number; }
++>xUnion.f : (t: void | number) => { a: void | number; }
++>xUnion : X<void | number>
++>f : (t: void | number) => { a: void | number; }
+ 
+ declare const xAny: X<any>;
+ >xAny : X<any>
+@@= skipped -47, +47 lines =@@
+ 
+ class MyPromise<X> {
+ >MyPromise : MyPromise<X>
++>X : X
+ 
+     constructor(executor: (resolve: (value: X) => void) => void) {
+ >executor : (resolve: (value: X) => void) => void
+@@= skipped -18, +19 lines =@@
+ >resolve : (value: void) => void
+ 
+ new MyPromise<void | number>(resolve => resolve()); // no error
+->new MyPromise<void | number>(resolve => resolve()) : MyPromise<number | void>
++>new MyPromise<void | number>(resolve => resolve()) : MyPromise<void | number>
+ >MyPromise : typeof MyPromise
+->resolve => resolve() : (resolve: (value: number | void) => void) => void
+->resolve : (value: number | void) => void
++>resolve => resolve() : (resolve: (value: void | number) => void) => void
++>resolve : (value: void | number) => void
+ >resolve() : void
+->resolve : (value: number | void) => void
++>resolve : (value: void | number) => void
+ 
+ new MyPromise<any>(resolve => resolve()); // error, `any` arguments cannot be omitted
+ >new MyPromise<any>(resolve => resolve()) : MyPromise<any>
+@@= skipped -99, +99 lines =@@
+ >4 : 4
+ 
+ function c(x: number | void, y: void, z: void | string | number): void  {
+->c : (x: number | void, y: void, z: void | string | number) => void
+->x : number | void
++>c : (x: void | number, y: void, z: void | string | number) => void
++>x : void | number
+ >y : void
+->z : string | number | void
++>z : void | string | number
+     
+ }
+ 
+ c(3, void 0, void 0); // ok
+ >c(3, void 0, void 0) : void
+->c : (x: number | void, y: void, z: void | string | number) => void
++>c : (x: void | number, y: void, z: void | string | number) => void
+ >3 : 3
+ >void 0 : undefined
+ >0 : 0
+@@= skipped -18, +18 lines =@@
+ 
+ c(3, void 0); // ok
+ >c(3, void 0) : void
+->c : (x: number | void, y: void, z: void | string | number) => void
++>c : (x: void | number, y: void, z: void | string | number) => void
+ >3 : 3
+ >void 0 : undefined
+ >0 : 0
+ 
+ c(3); // ok
+ >c(3) : void
+->c : (x: number | void, y: void, z: void | string | number) => void
++>c : (x: void | number, y: void, z: void | string | number) => void
+ >3 : 3
+ 
+ c(); // ok
+ >c() : void
+->c : (x: number | void, y: void, z: void | string | number) => void
++>c : (x: void | number, y: void, z: void | string | number) => void
+ 
+ 
+ // Spread Parameters
+ 
+ declare function call<TS extends unknown[]>(
+ >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
++>TS : TS
+ 
+     handler: (...args: TS) => unknown,
+ >handler : (...args: TS) => unknown
+@@= skipped -80, +81 lines =@@
+ call((x: number | void, y: number | void) => 42) // ok
+ >call((x: number | void, y: number | void) => 42) : void
+ >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
+->(x: number | void, y: number | void) => 42 : (x: number | void, y: number | void) => number
+->x : number | void
+->y : number | void
++>(x: number | void, y: number | void) => 42 : (x: void | number, y: void | number) => number
++>x : void | number
++>y : void | number
+ >42 : 42
+ 
+ call((x: number | void, y: number | void) => 42, 4) // ok
+ >call((x: number | void, y: number | void) => 42, 4) : void
+ >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
+->(x: number | void, y: number | void) => 42 : (x: number | void, y: number | void) => number
+->x : number | void
+->y : number | void
++>(x: number | void, y: number | void) => 42 : (x: void | number, y: void | number) => number
++>x : void | number
++>y : void | number
+ >42 : 42
+ >4 : 4
+ 
+ call((x: number | void, y: number | void) => 42, 4, 2) // ok
+ >call((x: number | void, y: number | void) => 42, 4, 2) : void
+ >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
+->(x: number | void, y: number | void) => 42 : (x: number | void, y: number | void) => number
+->x : number | void
+->y : number | void
++>(x: number | void, y: number | void) => 42 : (x: void | number, y: void | number) => number
++>x : void | number
++>y : void | number
+ >42 : 42
+ >4 : 4
+ >2 : 2

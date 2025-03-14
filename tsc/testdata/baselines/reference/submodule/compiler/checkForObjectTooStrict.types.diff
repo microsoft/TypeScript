@@ -1,0 +1,21 @@
+--- old.checkForObjectTooStrict.types
++++ new.checkForObjectTooStrict.types
+@@= skipped -14, +14 lines =@@
+ 
+ class Bar extends Foo.Object { // should work
+ >Bar : Bar
+->Foo.Object : Foo.Object
++>Foo.Object : Object
+ >Foo : typeof Foo
+->Object : typeof Foo.Object
++>Object : typeof Object
+ 
+     constructor () {
+ 
+         super();
+ >super() : void
+->super : typeof Foo.Object
++>super : typeof Object
+ 
+     }
+ 

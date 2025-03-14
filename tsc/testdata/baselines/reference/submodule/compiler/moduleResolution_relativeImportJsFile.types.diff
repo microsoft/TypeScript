@@ -1,0 +1,9 @@
+--- old.moduleResolution_relativeImportJsFile.types
++++ new.moduleResolution_relativeImportJsFile.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /src/a.ts ===
+ import * as b from "./b";
+->b : error
++>b : any
+ 

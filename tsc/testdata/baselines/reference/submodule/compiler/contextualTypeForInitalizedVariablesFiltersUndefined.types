@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts] ////
+
+=== contextualTypeForInitalizedVariablesFiltersUndefined.ts ===
+const fInferred = ({ a = 0 } = {}) => a;
+>fInferred : (__0?: { a?: number | undefined; }) => number
+>({ a = 0 } = {}) => a : (__0?: { a?: number | undefined; }) => number
+>a : number
+>0 : 0
+>{} : {}
+>a : number
+
+// const fInferred: ({ a }?: { a?: number; }) => number
+
+const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
+>fAnnotated : (__0?: { a?: number | undefined; }) => number
+>({ a = 0 } = {}) => a : (__0?: { a?: number | undefined; } | undefined) => number
+>a : number
+>0 : 0
+>{} : {}
+>a : number
+
+declare var t: { s: string } | undefined;
+>t : { s: string; } | undefined
+>s : string
+
+const { s } = t;
+>s : any
+>t : { s: string; } | undefined
+
+function fst({ s } = t) { }
+>fst : (__0?: { s: string; } | undefined) => void
+>s : any
+>t : { s: string; } | undefined
+

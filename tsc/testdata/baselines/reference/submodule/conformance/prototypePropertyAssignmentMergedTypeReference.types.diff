@@ -1,0 +1,31 @@
+--- old.prototypePropertyAssignmentMergedTypeReference.types
++++ new.prototypePropertyAssignmentMergedTypeReference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === prototypePropertyAssignmentMergedTypeReference.js ===
+ var f = function() {
+->f : typeof f
+->function() {    return 12;} : typeof f
++>f : () => number
++>function() {    return 12;} : () => number
+ 
+     return 12;
+ >12 : 12
+@@= skipped -12, +12 lines =@@
+ >f.prototype.a = "a" : "a"
+ >f.prototype.a : any
+ >f.prototype : any
+->f : typeof f
++>f : () => number
+ >prototype : any
+ >a : any
+ >"a" : "a"
+ 
+ /** @type {new () => f} */
+ var x = f;
+->x : new () => f
+->f : typeof f
++>x : () => number
++>f : () => number
+ 
+ 

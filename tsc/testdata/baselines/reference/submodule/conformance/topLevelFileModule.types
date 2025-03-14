@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/externalModules/topLevelFileModule.ts] ////
+
+=== foo_1.ts ===
+import foo = require("./vs/foo_0");
+>foo : typeof import("vs/foo_0")
+
+import fum = require("./vs/fum");
+>fum : typeof import("vs/fum")
+
+var z = foo.x + fum.y;
+>z : number
+>foo.x + fum.y : number
+>foo.x : number
+>foo : typeof import("vs/foo_0")
+>x : number
+>fum.y : number
+>fum : typeof import("vs/fum")
+>y : number
+
+=== vs/foo_0.ts ===
+export var x: number;
+>x : number
+
+=== vs/fum.d.ts ===
+export declare var y: number;
+>y : number
+

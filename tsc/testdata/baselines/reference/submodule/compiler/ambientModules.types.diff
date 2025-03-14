@@ -1,0 +1,14 @@
+--- old.ambientModules.types
++++ new.ambientModules.types
+@@= skipped -8, +8 lines =@@
+ Foo.Bar.foo = 5; 
+ >Foo.Bar.foo = 5 : 5
+ >Foo.Bar.foo : any
+->Foo.Bar : typeof Foo.Bar
++>Foo.Bar : typeof Bar
+ >Foo : typeof Foo
+->Bar : typeof Foo.Bar
++>Bar : typeof Bar
+ >foo : any
+ >5 : 5
+ 

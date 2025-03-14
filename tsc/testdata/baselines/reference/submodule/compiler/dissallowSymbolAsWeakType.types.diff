@@ -1,0 +1,22 @@
+--- old.dissallowSymbolAsWeakType.types
++++ new.dissallowSymbolAsWeakType.types
+@@= skipped -92, +92 lines =@@
+ 
+ f.register(s, null);
+ >f.register(s, null) : void
+->f.register : (target: WeakKey, heldValue: unknown, unregisterToken?: WeakKey) => void
++>f.register : (target: object, heldValue: unknown, unregisterToken?: object) => void
+ >f : FinalizationRegistry<unknown>
+->register : (target: WeakKey, heldValue: unknown, unregisterToken?: WeakKey) => void
++>register : (target: object, heldValue: unknown, unregisterToken?: object) => void
+ >s : symbol
+ 
+ f.unregister(s);
+ >f.unregister(s) : boolean
+->f.unregister : (unregisterToken: WeakKey) => boolean
++>f.unregister : (unregisterToken: object) => boolean
+ >f : FinalizationRegistry<unknown>
+->unregister : (unregisterToken: WeakKey) => boolean
++>unregister : (unregisterToken: object) => boolean
+ >s : symbol
+ 

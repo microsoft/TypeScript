@@ -1,0 +1,15 @@
+--- old.esmModeDeclarationFileWithExportAssignment.types
++++ new.esmModeDeclarationFileWithExportAssignment.types
+@@= skipped -8, +8 lines =@@
+ 
+ === main.mts ===
+ import example from "./other.mjs";
+->example : any
++>example : () => 5
+ 
+ example();
+->example() : any
+->example : any
++>example() : 5
++>example : () => 5
+ 

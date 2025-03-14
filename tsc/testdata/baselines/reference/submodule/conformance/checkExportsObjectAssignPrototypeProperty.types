@@ -1,0 +1,98 @@
+//// [tests/cases/conformance/jsdoc/checkExportsObjectAssignPrototypeProperty.ts] ////
+
+=== validator.ts ===
+import "./";
+
+import Person = require("./mod1");
+>Person : any
+
+const m1 = new Person("Name")
+>m1 : any
+>new Person("Name") : any
+>Person : any
+>"Name" : "Name"
+
+m1.thing;
+>m1.thing : any
+>m1 : any
+>thing : any
+
+m1.readonlyProp;
+>m1.readonlyProp : any
+>m1 : any
+>readonlyProp : any
+
+m1.rwAccessors;
+>m1.rwAccessors : any
+>m1 : any
+>rwAccessors : any
+
+m1.readonlyAccessor;
+>m1.readonlyAccessor : any
+>m1 : any
+>readonlyAccessor : any
+
+m1.setonlyAccessor;
+>m1.setonlyAccessor : any
+>m1 : any
+>setonlyAccessor : any
+
+// allowed assignments
+m1.thing = 10;
+>m1.thing = 10 : 10
+>m1.thing : any
+>m1 : any
+>thing : any
+>10 : 10
+
+m1.rwAccessors = 11;
+>m1.rwAccessors = 11 : 11
+>m1.rwAccessors : any
+>m1 : any
+>rwAccessors : any
+>11 : 11
+
+m1.setonlyAccessor = "yes";
+>m1.setonlyAccessor = "yes" : "yes"
+>m1.setonlyAccessor : any
+>m1 : any
+>setonlyAccessor : any
+>"yes" : "yes"
+
+// disallowed assignments
+m1.readonlyProp = "name";
+>m1.readonlyProp = "name" : "name"
+>m1.readonlyProp : any
+>m1 : any
+>readonlyProp : any
+>"name" : "name"
+
+m1.readonlyAccessor = 12;
+>m1.readonlyAccessor = 12 : 12
+>m1.readonlyAccessor : any
+>m1 : any
+>readonlyAccessor : any
+>12 : 12
+
+m1.thing = "no";
+>m1.thing = "no" : "no"
+>m1.thing : any
+>m1 : any
+>thing : any
+>"no" : "no"
+
+m1.rwAccessors = "no";
+>m1.rwAccessors = "no" : "no"
+>m1.rwAccessors : any
+>m1 : any
+>rwAccessors : any
+>"no" : "no"
+
+m1.setonlyAccessor = 0;
+>m1.setonlyAccessor = 0 : 0
+>m1.setonlyAccessor : any
+>m1 : any
+>setonlyAccessor : any
+>0 : 0
+
+

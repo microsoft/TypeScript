@@ -1,0 +1,135 @@
+//// [tests/cases/conformance/jsdoc/returnTagTypeGuard.ts] ////
+
+=== bug25127.js ===
+class Entry {
+>Entry : Entry
+
+    constructor() {
+        this.c = 1
+>this.c = 1 : 1
+>this.c : any
+>this : this
+>c : any
+>1 : 1
+    }
+    /**
+     * @param {any} x
+     * @return {this is Entry}
+     */
+    isInit(x) {
+>isInit : (x: any) => boolean
+>x : any
+
+        return true
+>true : true
+    }
+}
+class Group {
+>Group : Group
+
+    constructor() {
+        this.d = 'no'
+>this.d = 'no' : "no"
+>this.d : any
+>this : this
+>d : any
+>'no' : "no"
+    }
+    /**
+     * @param {any} x
+     * @return {false}
+     */
+    isInit(x) {
+>isInit : (x: any) => boolean
+>x : any
+
+        return false
+>false : false
+    }
+}
+/** @param {Entry | Group} chunk */
+function f(chunk) {
+>f : (chunk: any) => any
+>chunk : any
+
+    let x = chunk.isInit(chunk) ? chunk.c : chunk.d
+>x : any
+>chunk.isInit(chunk) ? chunk.c : chunk.d : any
+>chunk.isInit(chunk) : any
+>chunk.isInit : any
+>chunk : any
+>isInit : any
+>chunk : any
+>chunk.c : any
+>chunk : any
+>c : any
+>chunk.d : any
+>chunk : any
+>d : any
+
+    return x
+>x : any
+}
+
+/**
+ * @param {any} value
+ * @return {value is boolean}
+ */
+function isBoolean(value) {
+>isBoolean : (value: any) => value is boolean
+>value : any
+
+    return typeof value === "boolean";
+>typeof value === "boolean" : boolean
+>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>value : any
+>"boolean" : "boolean"
+}
+
+/** @param {boolean | number} val */
+function foo(val) {
+>foo : (val: any) => void
+>val : any
+
+    if (isBoolean(val)) {
+>isBoolean(val) : boolean
+>isBoolean : (value: any) => value is boolean
+>val : any
+
+        val;
+>val : boolean
+    }
+}
+
+/**
+ * @callback Cb
+ * @param {unknown} x
+ * @return {x is number}
+ */
+
+/** @type {Cb} */
+function isNumber(x) { return typeof x === "number" }
+>isNumber : (x: any) => x is number
+>x : any
+>typeof x === "number" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : any
+>"number" : "number"
+
+/** @param {unknown} x */
+function g(x) {
+>g : (x: any) => void
+>x : any
+
+    if (isNumber(x)) {
+>isNumber(x) : boolean
+>isNumber : (x: any) => x is number
+>x : any
+
+        x * 2;
+>x * 2 : number
+>x : number
+>2 : 2
+    }
+}
+

@@ -1,0 +1,37 @@
+--- old.errorsForCallAndAssignmentAreSimilar.types
++++ new.errorsForCallAndAssignmentAreSimilar.types
+@@= skipped -4, +4 lines =@@
+ >minimalExample1 : () => void
+ 
+     type Disc =
+->Disc : { kind: "hddvd"; } | { kind: "bluray"; }
++>Disc : Disc
+ 
+         | { kind: "hddvd" }
+ >kind : "hddvd"
+@@= skipped -9, +9 lines =@@
+ >kind : "bluray"
+ 
+     function foo(x: Disc[]) {
+->foo : (x: ({ kind: "hddvd"; } | { kind: "bluray"; })[]) => void
+->x : ({ kind: "hddvd"; } | { kind: "bluray"; })[]
++>foo : (x: Disc[]) => void
++>x : Disc[]
+     }
+ 
+     foo([
+ >foo([        { kind: "bluray", },        { kind: "hdpvd", }    ]) : void
+->foo : (x: ({ kind: "hddvd"; } | { kind: "bluray"; })[]) => void
++>foo : (x: Disc[]) => void
+ >[        { kind: "bluray", },        { kind: "hdpvd", }    ] : ({ kind: "bluray"; } | { kind: "hdpvd"; })[]
+ 
+         { kind: "bluray", },
+@@= skipped -22, +22 lines =@@
+     ]);
+ 
+     const ds: Disc[] = [
+->ds : ({ kind: "hddvd"; } | { kind: "bluray"; })[]
++>ds : Disc[]
+ >[        { kind: "bluray", },        { kind: "hdpvd", }    ] : ({ kind: "bluray"; } | { kind: "hdpvd"; })[]
+ 
+         { kind: "bluray", },

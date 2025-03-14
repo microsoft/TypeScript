@@ -1,0 +1,11 @@
+--- old.parserIndexSignature2.types
++++ new.parserIndexSignature2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserIndexSignature2.ts ===
+ interface I {
++>I : I
++
+   [public a]
+ >a : any
+ }

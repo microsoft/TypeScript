@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/jsFileImportPreservedWhenUsed.ts] ////
+
+=== dash.d.ts ===
+type ObjectIterator<TObject, TResult> = (value: TObject[keyof TObject], key: string, collection: TObject) => TResult;
+>ObjectIterator : ObjectIterator<TObject, TResult>
+>TObject : TObject
+>TResult : TResult
+>value : TObject[keyof TObject]
+>key : string
+>collection : TObject
+
+interface LoDashStatic {
+>LoDashStatic : LoDashStatic
+
+    mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
+>mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
+>T : T
+>TResult : TResult
+>obj : T | null | undefined
+>callback : ObjectIterator<T, TResult>
+>P : P
+}
+declare const _: LoDashStatic;
+>_ : LoDashStatic
+
+export = _;
+>_ : LoDashStatic
+
+=== Consts.ts ===
+export const INDEX_FIELD = '__INDEX';
+>INDEX_FIELD : "__INDEX"
+>'__INDEX' : "__INDEX"
+
+=== index.js ===
+import * as _ from './dash';
+>_ : LoDashStatic
+
+import { INDEX_FIELD } from './Consts';
+>INDEX_FIELD : "__INDEX"
+
+export class Test {
+>Test : Test
+
+    /**
+     * @param {object} obj
+     * @param {object} vm
+     */
+    test(obj, vm) {
+>test : (obj: any, vm: any) => void
+>obj : any
+>vm : any
+
+        let index = 0;
+>index : number
+>0 : 0
+
+        vm.objects = _.mapValues(
+>vm.objects = _.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : { [x: string]: any; }
+>vm.objects : any
+>vm : any
+>objects : any
+>_.mapValues(            obj,            object => ({ ...object, [INDEX_FIELD]: index++ }),        ) : { [x: string]: any; }
+>_.mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
+>_ : LoDashStatic
+>mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
+
+            obj,
+>obj : any
+
+            object => ({ ...object, [INDEX_FIELD]: index++ }),
+>object => ({ ...object, [INDEX_FIELD]: index++ }) : (object: any) => any
+>object : any
+>({ ...object, [INDEX_FIELD]: index++ }) : any
+>{ ...object, [INDEX_FIELD]: index++ } : any
+>object : any
+>[INDEX_FIELD] : number
+>INDEX_FIELD : "__INDEX"
+>index++ : number
+>index : number
+
+        );
+    }
+}

@@ -1,0 +1,29 @@
+--- old.assignments.types
++++ new.assignments.types
+@@= skipped -10, +10 lines =@@
+ //  Assign to an interface
+ 
+ module M { }
++>M : any
++
+ M = null; // Error
+ >M = null : null
+ >M : any
+@@= skipped -12, +14 lines =@@
+ >C : any
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ E = null; // Error
+@@= skipped -37, +37 lines =@@
+ }
+ 
+ interface I { }
++>I : I
++
+ I = null; // Error
+ >I = null : null
+ >I : any

@@ -1,0 +1,8 @@
+--- old.MemberFunctionDeclaration7_es6.types
++++ new.MemberFunctionDeclaration7_es6.types
+@@= skipped -5, +5 lines =@@
+ 
+    *foo<T>() { }
+ >foo : <T>() => Generator<never, void, unknown>
++>T : T
+ }

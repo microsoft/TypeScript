@@ -1,0 +1,11 @@
+--- old.genericCallWithConstraintsTypeArgumentInference2.types
++++ new.genericCallWithConstraintsTypeArgumentInference2.types
+@@= skipped -4, +4 lines =@@
+ 
+ function foo<T, U extends T>(t: T) {
+ >foo : <T, U extends T>(t: T) => U
++>T : T
++>U : U
+ >t : T
+ 
+     var u: U;

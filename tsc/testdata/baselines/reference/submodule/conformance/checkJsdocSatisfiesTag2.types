@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag2.ts] ////
+
+=== /a.js ===
+/** @typedef {Object.<string, (n: number) => boolean>} Predicates */
+
+const p = /** @satisfies {Predicates} */ ({
+>p : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
+>({    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1}) : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
+>{    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1} : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
+
+    isEven: n => n % 2 === 0,
+>isEven : (n: any) => boolean
+>n => n % 2 === 0 : (n: any) => boolean
+>n : any
+>n % 2 === 0 : boolean
+>n % 2 : number
+>n : any
+>2 : 2
+>0 : 0
+
+    isOdd: n => n % 2 === 1
+>isOdd : (n: any) => boolean
+>n => n % 2 === 1 : (n: any) => boolean
+>n : any
+>n % 2 === 1 : boolean
+>n % 2 : number
+>n : any
+>2 : 2
+>1 : 1
+
+});
+

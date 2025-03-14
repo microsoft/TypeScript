@@ -1,0 +1,11 @@
+--- old.callWithSpread.types
++++ new.callWithSpread.types
+@@= skipped -1, +1 lines =@@
+ 
+ === callWithSpread.ts ===
+ interface X {
++>X : X
++
+     foo(x: number, y: number, ...z: string[]): X;
+ >foo : (x: number, y: number, ...z: string[]) => X
+ >x : number

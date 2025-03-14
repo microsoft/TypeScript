@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/chainedImportAlias.ts] ////
+
+=== chainedImportAlias_file1.ts ===
+import x = require('./chainedImportAlias_file0');
+>x : typeof import("chainedImportAlias_file0")
+
+import y = x;
+>y : typeof import("chainedImportAlias_file0")
+>x : typeof import("chainedImportAlias_file0")
+
+y.m.foo();
+>y.m.foo() : void
+>y.m.foo : () => void
+>y.m : typeof m
+>y : typeof import("chainedImportAlias_file0")
+>m : typeof m
+>foo : () => void
+
+=== chainedImportAlias_file0.ts ===
+export module m {
+>m : typeof m
+
+    export function foo() { }
+>foo : () => void
+}
+

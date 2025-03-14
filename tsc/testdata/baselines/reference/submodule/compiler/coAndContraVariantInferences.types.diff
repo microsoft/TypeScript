@@ -1,0 +1,58 @@
+--- old.coAndContraVariantInferences.types
++++ new.coAndContraVariantInferences.types
+@@= skipped -20, +20 lines =@@
+ 
+ declare function foo<T>(x: { kind: T }, f: (arg: { kind: T }) => void): void;
+ >foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
++>T : T
+ >x : { kind: T; }
+ >kind : T
+ >f : (arg: { kind: T; }) => void
+@@= skipped -21, +22 lines =@@
+ // Repro from #45603
+ 
+ interface Action<TName extends string,TPayload> {
++>Action : Action<TName, TPayload>
++>TName : TName
++>TPayload : TPayload
++
+     name: TName,
+ >name : TName
+ 
+@@= skipped -23, +27 lines =@@
+ 
+ function call<TName extends string,TPayload>(
+ >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
++>TName : TName
++>TPayload : TPayload
+ 
+   action: Action<TName,TPayload>,
+ >action : Action<TName, TPayload>
+@@= skipped -16, +18 lines =@@
+ }
+ 
+ const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
+->printFn : (action: typeof actionA | typeof actionB) => void
+->(action: typeof actionA | typeof actionB)=> console.log(action) : (action: typeof actionA | typeof actionB) => void
++>printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
++>(action: typeof actionA | typeof actionB)=> console.log(action) : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+ >action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
+->actionA : Action<"ACTION_A", string>
+->actionB : Action<"ACTION_B", boolean>
+ >console.log(action) : void
+ >console.log : (...data: any[]) => void
+ >console : Console
+@@= skipped -15, +13 lines =@@
+ >call(actionA, printFn) : void
+ >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
+ >actionA : Action<"ACTION_A", string>
+->printFn : (action: typeof actionA | typeof actionB) => void
++>printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+ 
+ call(actionB, printFn);
+ >call(actionB, printFn) : void
+ >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
+ >actionB : Action<"ACTION_B", boolean>
+->printFn : (action: typeof actionA | typeof actionB) => void
++>printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
+ 

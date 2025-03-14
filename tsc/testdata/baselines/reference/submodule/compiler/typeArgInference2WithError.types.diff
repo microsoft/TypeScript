@@ -1,0 +1,18 @@
+--- old.typeArgInference2WithError.types
++++ new.typeArgInference2WithError.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeArgInference2WithError.ts ===
+ interface Item {
++>Item : Item
++
+     name: string;
+ >name : string
+ }
+ 
+ declare function foo<T extends Item>(x?: T, y?: T): T;
+ >foo : <T extends Item>(x?: T, y?: T) => T
++>T : T
+ >x : T
+ >y : T
+ 

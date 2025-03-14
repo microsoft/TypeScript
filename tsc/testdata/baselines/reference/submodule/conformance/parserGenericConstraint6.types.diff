@@ -1,0 +1,8 @@
+--- old.parserGenericConstraint6.types
++++ new.parserGenericConstraint6.types
+@@= skipped -2, +2 lines =@@
+ === parserGenericConstraint6.ts ===
+ class C<T extends List<List<T> >> {
+ >C : C<T>
++>T : T
+ }

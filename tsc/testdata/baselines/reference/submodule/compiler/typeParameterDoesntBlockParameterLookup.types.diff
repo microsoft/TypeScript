@@ -1,0 +1,10 @@
+--- old.typeParameterDoesntBlockParameterLookup.types
++++ new.typeParameterDoesntBlockParameterLookup.types
+@@= skipped -2, +2 lines =@@
+ === typeParameterDoesntBlockParameterLookup.ts ===
+ declare function f<Foo extends Bar, Bar>(Bar: any): void
+ >f : <Foo extends Bar, Bar>(Bar: any) => void
++>Foo : Foo
++>Bar : Bar
+ >Bar : any
+ 

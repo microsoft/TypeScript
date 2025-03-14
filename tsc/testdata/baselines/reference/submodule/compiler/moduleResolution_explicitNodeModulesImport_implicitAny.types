@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/moduleResolution_explicitNodeModulesImport_implicitAny.ts] ////
+
+=== /src/index.ts ===
+import { y } from "../node_modules/foo";
+>y : any
+

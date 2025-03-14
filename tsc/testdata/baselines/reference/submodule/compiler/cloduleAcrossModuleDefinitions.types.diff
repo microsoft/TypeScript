@@ -1,0 +1,10 @@
+--- old.cloduleAcrossModuleDefinitions.types
++++ new.cloduleAcrossModuleDefinitions.types
+@@= skipped -27, +27 lines =@@
+ }
+ 
+ var b: A.B; // ok
+->b : A.B
++>b : B
+ >A : any
+ 

@@ -1,0 +1,42 @@
+--- old.mappedToToIndexSignatureInference.types
++++ new.mappedToToIndexSignatureInference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === mappedToToIndexSignatureInference.ts ===
+ declare const fn: <K extends string, V>(object: { [Key in K]: V }) => object;
+->fn : <K extends string, V>(object: { [Key in K]: V; }) => object
+->object : { [Key in K]: V; }
++>fn : <K extends string, V>(object: { [Key in K]: V }) => object
++>K : K
++>V : V
++>object : { [Key in K]: V }
++>Key : Key
+ 
+ declare const a: { [index: string]: number };
+ >a : { [index: string]: number; }
+@@= skipped -9, +12 lines =@@
+ 
+ fn(a);
+ >fn(a) : object
+->fn : <K extends string, V>(object: { [Key in K]: V; }) => object
++>fn : <K extends string, V>(object: { [Key in K]: V }) => object
+ >a : { [index: string]: number; }
+ 
+ // Repro from #30218
+ 
+ declare function enumValues<K extends string, V extends string>(e: Record<K, V>): V[];
+ >enumValues : <K extends string, V extends string>(e: Record<K, V>) => V[]
++>K : K
++>V : V
+ >e : Record<K, V>
+ 
+ enum E { A = 'foo', B = 'bar' }
+@@= skipped -18, +20 lines =@@
+ 
+ let x: E[] = enumValues(E);
+ >x : E[]
+->enumValues(E) : E[]
++>enumValues(E) : (E)[]
+ >enumValues : <K extends string, V extends string>(e: Record<K, V>) => V[]
+ >E : typeof E
+ 

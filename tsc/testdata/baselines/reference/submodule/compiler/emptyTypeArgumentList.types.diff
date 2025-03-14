@@ -1,0 +1,10 @@
+--- old.emptyTypeArgumentList.types
++++ new.emptyTypeArgumentList.types
+@@= skipped -2, +2 lines =@@
+ === emptyTypeArgumentList.ts ===
+ function foo<T>() { }
+ >foo : <T>() => void
++>T : T
+ 
+ foo<>();
+ >foo<>() : void

@@ -1,0 +1,244 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment7.ts] ////
+
+=== mod.js ===
+class Thing  { x = 1 }
+>Thing : Thing
+>x : number
+>1 : 1
+
+class AnotherThing { y = 2  }
+>AnotherThing : AnotherThing
+>y : number
+>2 : 2
+
+function foo() { return 3 }
+>foo : () => number
+>3 : 3
+
+function bar() { return 4 }
+>bar : () => number
+>4 : 4
+
+/** @typedef {() => number} buz */
+module.exports = {
+>module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
+>module.exports : any
+>module : any
+>exports : any
+>{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
+
+    Thing,
+>Thing : any
+
+    AnotherThing,
+>AnotherThing : any
+
+    foo,
+>foo : any
+
+    qux: bar,
+>qux : () => number
+>bar : () => number
+
+    baz() { return 5 },
+>baz : () => number
+>5 : 5
+
+    literal: "",
+>literal : string
+>"" : ""
+}
+=== main.js ===
+/**
+ * @param {import("./mod").Thing} a
+ * @param {import("./mod").AnotherThing} b
+ * @param {import("./mod").foo} c
+ * @param {import("./mod").qux} d
+ * @param {import("./mod").baz} e
+ * @param {import("./mod").buz} f
+ * @param {import("./mod").literal} g
+ */
+function jstypes(a, b, c, d, e, f, g) {
+>jstypes : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+>e : any
+>f : any
+>g : any
+
+    return a.x + b.y + c() + d() + e() + f() + g.length
+>a.x + b.y + c() + d() + e() + f() + g.length : any
+>a.x + b.y + c() + d() + e() + f() : any
+>a.x + b.y + c() + d() + e() : any
+>a.x + b.y + c() + d() : any
+>a.x + b.y + c() : any
+>a.x + b.y : any
+>a.x : any
+>a : any
+>x : any
+>b.y : any
+>b : any
+>y : any
+>c() : any
+>c : any
+>d() : any
+>d : any
+>e() : any
+>e : any
+>f() : any
+>f : any
+>g.length : any
+>g : any
+>length : any
+}
+
+/**
+ * @param {typeof import("./mod").Thing} a
+ * @param {typeof import("./mod").AnotherThing} b
+ * @param {typeof import("./mod").foo} c
+ * @param {typeof import("./mod").qux} d
+ * @param {typeof import("./mod").baz} e
+ * @param {typeof import("./mod").buz} f
+ * @param {typeof import("./mod").literal} g
+ */
+function jsvalues(a, b, c, d, e, f, g) {
+>jsvalues : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+>e : any
+>f : any
+>g : any
+
+    return a.length + b.length + c() + d() + e() + f() + g.length
+>a.length + b.length + c() + d() + e() + f() + g.length : any
+>a.length + b.length + c() + d() + e() + f() : any
+>a.length + b.length + c() + d() + e() : any
+>a.length + b.length + c() + d() : any
+>a.length + b.length + c() : any
+>a.length + b.length : any
+>a.length : any
+>a : any
+>length : any
+>b.length : any
+>b : any
+>length : any
+>c() : any
+>c : any
+>d() : any
+>d : any
+>e() : any
+>e : any
+>f() : any
+>f : any
+>g.length : any
+>g : any
+>length : any
+}
+
+=== index.ts ===
+function types(
+>types : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+
+    a: import('./mod').Thing,
+>a : any
+
+    b: import('./mod').AnotherThing,
+>b : any
+
+    c: import('./mod').foo,
+>c : any
+
+    d: import('./mod').qux,
+>d : any
+
+    e: import('./mod').baz,
+>e : any
+
+    f: import('./mod').buz,
+>f : any
+
+    g: import('./mod').literal,
+>g : any
+
+) {
+    return a.x + b.y + c() + d() + e() + f() + g.length
+>a.x + b.y + c() + d() + e() + f() + g.length : any
+>a.x + b.y + c() + d() + e() + f() : any
+>a.x + b.y + c() + d() + e() : any
+>a.x + b.y + c() + d() : any
+>a.x + b.y + c() : any
+>a.x + b.y : any
+>a.x : any
+>a : any
+>x : any
+>b.y : any
+>b : any
+>y : any
+>c() : any
+>c : any
+>d() : any
+>d : any
+>e() : any
+>e : any
+>f() : any
+>f : any
+>g.length : any
+>g : any
+>length : any
+}
+
+function values(
+>values : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
+
+    a: typeof import('./mod').Thing,
+>a : any
+
+    b: typeof import('./mod').AnotherThing,
+>b : any
+
+    c: typeof import('./mod').foo,
+>c : any
+
+    d: typeof import('./mod').qux,
+>d : any
+
+    e: typeof import('./mod').baz,
+>e : any
+
+    f: typeof import('./mod').buz,
+>f : any
+
+    g: typeof import('./mod').literal,
+>g : any
+
+) {
+    return a.length + b.length + c() + d() + e() + f() + g.length
+>a.length + b.length + c() + d() + e() + f() + g.length : any
+>a.length + b.length + c() + d() + e() + f() : any
+>a.length + b.length + c() + d() + e() : any
+>a.length + b.length + c() + d() : any
+>a.length + b.length + c() : any
+>a.length + b.length : any
+>a.length : any
+>a : any
+>length : any
+>b.length : any
+>b : any
+>length : any
+>c() : any
+>c : any
+>d() : any
+>d : any
+>e() : any
+>e : any
+>f() : any
+>f : any
+>g.length : any
+>g : any
+>length : any
+}
+

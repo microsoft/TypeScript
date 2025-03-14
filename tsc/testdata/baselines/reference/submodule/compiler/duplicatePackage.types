@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/duplicatePackage.ts] ////
+
+=== /src/a.ts ===
+import { a } from "a";
+>a : (x: default) => void
+
+import { b } from "b";
+>b : X
+
+import { c } from "c";
+>c : default
+
+a(b); // Works
+>a(b) : void
+>a : (x: default) => void
+>b : X
+
+a(c); // Error, these are from different versions of the library.
+>a(c) : void
+>a : (x: default) => void
+>c : default
+
+=== /node_modules/a/index.d.ts ===
+import X from "x";
+>X : typeof default
+
+export function a(x: X): void;
+>a : (x: default) => void
+>x : default
+
+=== /node_modules/a/node_modules/x/index.d.ts ===
+export default class X {
+>X : default
+
+    private x: number;
+>x : number
+}
+
+=== /node_modules/b/index.d.ts ===
+import X from "x";
+>X : any
+
+export const b: X;
+>b : X
+
+=== /node_modules/b/node_modules/x/index.d.ts ===
+content not parsed
+>content : any
+>not : any
+>parsed : any
+
+=== /node_modules/c/index.d.ts ===
+import X from "x";
+>X : typeof default
+
+export const c: X;
+>c : default
+
+=== /node_modules/c/node_modules/x/index.d.ts ===
+export default class X {
+>X : default
+
+    private x: number;
+>x : number
+}
+

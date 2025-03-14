@@ -1,0 +1,274 @@
+--- old.subtypesOfTypeParameterWithRecursiveConstraints.types
++++ new.subtypesOfTypeParameterWithRecursiveConstraints.types
+@@= skipped -4, +4 lines =@@
+ 
+ class Foo<T> { foo: T; }
+ >Foo : Foo<T>
++>T : T
+ >foo : T
+ 
+ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
+ >f : <T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) => void
++>T : T
++>U : U
++>V : V
+ >t : T
+ >u : U
+ >v : V
+ 
+     // ok
+     var r1 = true ? t : u;
+->r1 : U | T
+->true ? t : u : U | T
++>r1 : T | U
++>true ? t : u : T | U
+ >true : true
+ >t : T
+ >u : U
+ 
+     var r1 = true ? u : t;
+->r1 : U | T
+->true ? u : t : U | T
++>r1 : T | U
++>true ? u : t : T | U
+ >true : true
+ >u : U
+ >t : T
+@@= skipped -89, +93 lines =@@
+ 
+     // ok
+     var r6 = true ? v : new Foo<T>();
+->r6 : Foo<T> | V
+->true ? v : new Foo<T>() : Foo<T> | V
++>r6 : V | Foo<T>
++>true ? v : new Foo<T>() : V | Foo<T>
+ >true : true
+ >v : V
+ >new Foo<T>() : Foo<T>
+ >Foo : typeof Foo
+ 
+     var r6 = true ? new Foo<T>() : v;
+->r6 : Foo<T> | V
+->true ? new Foo<T>() : v : Foo<T> | V
++>r6 : V | Foo<T>
++>true ? new Foo<T>() : v : V | Foo<T>
+ >true : true
+ >new Foo<T>() : Foo<T>
+ >Foo : typeof Foo
+@@= skipped -52, +52 lines =@@
+ 
+     // ok
+     var r9 = true ? v : new Foo<U>();
+->r9 : Foo<U> | V
+->true ? v : new Foo<U>() : Foo<U> | V
++>r9 : V | Foo<U>
++>true ? v : new Foo<U>() : V | Foo<U>
+ >true : true
+ >v : V
+ >new Foo<U>() : Foo<U>
+ >Foo : typeof Foo
+ 
+     var r9 = true ? new Foo<U>() : v;
+->r9 : Foo<U> | V
+->true ? new Foo<U>() : v : Foo<U> | V
++>r9 : V | Foo<U>
++>true ? new Foo<U>() : v : V | Foo<U>
+ >true : true
+ >new Foo<U>() : Foo<U>
+ >Foo : typeof Foo
+@@= skipped -73, +73 lines =@@
+ 
+     class Base<T> {
+ >Base : Base<T>
++>T : T
+ 
+         foo: T;
+ >foo : T
+@@= skipped -7, +8 lines =@@
+ 
+     class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+ >D1 : D1<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<T>
+ 
+         [x: string]: T;
+@@= skipped -11, +14 lines =@@
+ 
+     class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+ >D2 : D2<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<T>
+ 
+         [x: string]: T;
+@@= skipped -11, +14 lines =@@
+ 
+     class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+ >D3 : D3<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<T>
+ 
+         [x: string]: T;
+@@= skipped -11, +14 lines =@@
+ 
+     class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+ >D4 : D4<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<U>
+ 
+         [x: string]: U;
+@@= skipped -11, +14 lines =@@
+ 
+     class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+ >D5 : D5<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<U>
+ 
+         [x: string]: U;
+@@= skipped -11, +14 lines =@@
+ 
+     class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+ >D6 : D6<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<U>
+ 
+         [x: string]: U;
+@@= skipped -11, +14 lines =@@
+ 
+     class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+ >D7 : D7<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<V>
+ 
+         [x: string]: V;
+@@= skipped -11, +14 lines =@@
+ 
+     class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+ >D8 : D8<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<V>
+ 
+         [x: string]: V;
+@@= skipped -11, +14 lines =@@
+ 
+     class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+ >D9 : D9<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base : Base<V>
+ 
+         [x: string]: V;
+@@= skipped -16, +19 lines =@@
+ 
+     class Base2<T> {
+ >Base2 : Base2<T>
++>T : T
+ 
+         foo: Foo<T>;
+ >foo : Foo<T>
+@@= skipped -7, +8 lines =@@
+ 
+     class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+ >D1 : D1<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<T>
+ 
+         [x: string]: T;
+@@= skipped -11, +14 lines =@@
+ 
+     class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+ >D2 : D2<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<T>
+ 
+         [x: string]: T;
+@@= skipped -11, +14 lines =@@
+ 
+     class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+ >D3 : D3<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<T>
+ 
+         [x: string]: T;
+@@= skipped -11, +14 lines =@@
+ 
+     class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+ >D4 : D4<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<U>
+ 
+         [x: string]: U;
+@@= skipped -11, +14 lines =@@
+ 
+     class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+ >D5 : D5<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<U>
+ 
+         [x: string]: U;
+@@= skipped -11, +14 lines =@@
+ 
+     class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+ >D6 : D6<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<U>
+ 
+         [x: string]: U;
+@@= skipped -11, +14 lines =@@
+ 
+     class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+ >D7 : D7<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<V>
+ 
+         [x: string]: V;
+@@= skipped -11, +14 lines =@@
+ 
+     class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+ >D8 : D8<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<V>
+ 
+         [x: string]: V;
+@@= skipped -11, +14 lines =@@
+ 
+     class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+ >D9 : D9<T, U, V>
++>T : T
++>U : U
++>V : V
+ >Base2 : Base2<V>
+ 
+         [x: string]: V;

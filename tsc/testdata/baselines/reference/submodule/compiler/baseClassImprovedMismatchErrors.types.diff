@@ -1,0 +1,20 @@
+--- old.baseClassImprovedMismatchErrors.types
++++ new.baseClassImprovedMismatchErrors.types
+@@= skipped -21, +21 lines =@@
+ >n : string | Derived
+ 
+     fn() {
+->fn : () => number | string
++>fn : () => string | number
+ 
+         return 10 as number | string;
+ >10 as number | string : string | number
+@@= skipped -14, +14 lines =@@
+ >n : string | DerivedInterface
+ 
+     fn() {
+->fn : () => number | string
++>fn : () => string | number
+ 
+         return 10 as number | string;
+ >10 as number | string : string | number

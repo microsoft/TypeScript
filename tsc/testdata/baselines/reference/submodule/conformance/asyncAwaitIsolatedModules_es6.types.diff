@@ -1,0 +1,13 @@
+--- old.asyncAwaitIsolatedModules_es6.types
++++ new.asyncAwaitIsolatedModules_es6.types
+@@= skipped -63, +63 lines =@@
+ >p : Promise<number>
+ 
+ let o = {
+->o : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
+->{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
++>o : { m1: () => Promise<void>; m2: () => Promise<void>; m3: () => MyPromise<void>; }
++>{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1: () => Promise<void>; m2: () => Promise<void>; m3: () => MyPromise<void>; }
+ 
+ 	async m1() { },
+ >m1 : () => Promise<void>

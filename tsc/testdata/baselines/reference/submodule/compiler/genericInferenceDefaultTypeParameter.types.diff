@@ -1,0 +1,32 @@
+--- old.genericInferenceDefaultTypeParameter.types
++++ new.genericInferenceDefaultTypeParameter.types
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ declare function f1<T extends keyof Type = "a">(props: Type[T]): void;
+->f1 : <T extends keyof Type = "a">(props: Type[T]) => void
++>f1 : <T extends keyof Type>(props: Type[T]) => void
++>T : T
+ >props : Type[T]
+ 
+ f1(event => { });
+ >f1(event => { }) : void
+->f1 : <T extends keyof Type = "a">(props: Type[T]) => void
++>f1 : <T extends keyof Type>(props: Type[T]) => void
+ >event => { } : (event: string) => void
+ >event : string
+ 
+ f1<"a">(event => { });
+ >f1<"a">(event => { }) : void
+->f1 : <T extends keyof Type = "a">(props: Type[T]) => void
++>f1 : <T extends keyof Type>(props: Type[T]) => void
+ >event => { } : (event: string) => void
+ >event : string
+ 
+ f1<"b">(event => { });
+ >f1<"b">(event => { }) : void
+->f1 : <T extends keyof Type = "a">(props: Type[T]) => void
++>f1 : <T extends keyof Type>(props: Type[T]) => void
+ >event => { } : (event: number) => void
+ >event : number
+ 

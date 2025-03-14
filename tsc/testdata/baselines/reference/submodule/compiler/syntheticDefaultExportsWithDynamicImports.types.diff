@@ -1,0 +1,17 @@
+--- old.syntheticDefaultExportsWithDynamicImports.types
++++ new.syntheticDefaultExportsWithDynamicImports.types
+@@= skipped -10, +10 lines =@@
+ === index.ts ===
+ import("package").then(({default: foo}) => foo(42));
+ >import("package").then(({default: foo}) => foo(42)) : Promise<string>
+->import("package").then : <TResult1 = { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: { default: (x: number) => string; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>import("package").then : <TResult1, TResult2>(onfulfilled?: (value: { default: (x: number) => string; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >import("package") : Promise<{ default: (x: number) => string; }>
+ >"package" : "package"
+->then : <TResult1 = { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: { default: (x: number) => string; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+->({default: foo}) => foo(42) : ({ default: foo }: { default: (x: number) => string; }) => string
++>then : <TResult1, TResult2>(onfulfilled?: (value: { default: (x: number) => string; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>({default: foo}) => foo(42) : (__0: { default: (x: number) => string; }) => string
+ >default : any
+ >foo : (x: number) => string
+ >foo(42) : string

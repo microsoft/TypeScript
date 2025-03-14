@@ -1,0 +1,22 @@
+--- old.checkJsdocTypeTag4.types
++++ new.checkJsdocTypeTag4.types
+@@= skipped -2, +2 lines =@@
+ === t.d.ts ===
+ type A<T extends string> = { a: T }
+ >A : A<T>
++>T : T
+ >a : T
+ 
+ === test.js ===
+@@= skipped -9, +10 lines =@@
+  */
+ /** @type {A<number>} */
+ var a;
+->a : A<number>
++>a : any
+ 
+ /** @type {B<number>} */
+ var b;
+->b : B<number>
++>b : any
+ 

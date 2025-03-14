@@ -1,0 +1,18 @@
+--- old.declarationEmitPrivateNameCausesError.types
++++ new.declarationEmitPrivateNameCausesError.types
+@@= skipped -7, +7 lines =@@
+ 
+ //This is exported
+ export function ignoreExtraVariables<CtorT extends {new(...args:any[]):{}}> (ctor : CtorT) {
+->ignoreExtraVariables : <CtorT extends { new (...args: any[]): {}; }>(ctor: CtorT) => { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables<any>.(Anonymous class); } & CtorT
++>ignoreExtraVariables : <CtorT extends new (...args: any[]) => {}>(ctor: CtorT) => { new (...args: any[]): (Anonymous class)<CtorT>; prototype: (Anonymous class)<any>; } & CtorT
++>CtorT : CtorT
+ >args : any[]
+ >ctor : CtorT
+ 
+     return class extends ctor {
+->class extends ctor {        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used    } : { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables<any>.(Anonymous class); } & CtorT
++>class extends ctor {        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used    } : { new (...args: any[]): (Anonymous class)<CtorT>; prototype: (Anonymous class)<any>; } & CtorT
+ >ctor : {}
+ 
+         [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used

@@ -1,0 +1,352 @@
+--- old.sourceMapValidationDestructuringForOfObjectBindingPattern2.types
++++ new.sourceMapValidationDestructuringForOfObjectBindingPattern2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === sourceMapValidationDestructuringForOfObjectBindingPattern2.ts ===
+ declare var console: {
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ 
+     log(msg: any): void;
+ >log : (msg: any) => void
+ >msg : any
+ }
+ interface Robot {
++>Robot : Robot
++
+     name: string;
+ >name : string
+ 
+@@= skipped -15, +17 lines =@@
+ }
+ 
+ interface MultiRobot {
++>MultiRobot : MultiRobot
++
+     name: string;
+ >name : string
+ 
+@@= skipped -89, +91 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -14, +14 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -23, +23 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -17, +17 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -18, +18 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -37, +37 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+ for ({name } of robots) {
+ >{name } : { name: string; }
+->name : string
++>name : any
+ >robots : Robot[]
+ 
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name } of getRobots()) {
+ >{name } : { name: string; }
+->name : string
++>name : any
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+ 
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+ >{name } : { name: string; }
+->name : string
++>name : any
+ >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
+ >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+ >name : string
+@@= skipped -47, +47 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -8, +8 lines =@@
+ >{ skills: { primary, secondary } } : { skills: { primary: string; secondary: string; }; }
+ >skills : { primary: string; secondary: string; }
+ >{ primary, secondary } : { primary: string; secondary: string; }
+->primary : string
+->secondary : string
++>primary : any
++>secondary : any
+ >multiRobots : MultiRobot[]
+ 
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -15, +15 lines =@@
+ >{ skills: { primary, secondary } } : { skills: { primary: string; secondary: string; }; }
+ >skills : { primary: string; secondary: string; }
+ >{ primary, secondary } : { primary: string; secondary: string; }
+->primary : string
+->secondary : string
++>primary : any
++>secondary : any
+ >getMultiRobots() : MultiRobot[]
+ >getMultiRobots : () => MultiRobot[]
+ 
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -16, +16 lines =@@
+ >{ skills: { primary, secondary } } : { skills: { primary: string; secondary: string; }; }
+ >skills : { primary: string; secondary: string; }
+ >{ primary, secondary } : { primary: string; secondary: string; }
+->primary : string
+->secondary : string
++>primary : any
++>secondary : any
+ >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
+ >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
+ >name : string
+@@= skipped -27, +27 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -17, +17 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -16, +16 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -25, +25 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -19, +19 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -20, +20 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -39, +39 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name, skill } of robots) {
+ >{name, skill } : { name: string; skill: string; }
+->name : string
+->skill : string
++>name : any
++>skill : any
+ >robots : Robot[]
+ 
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name, skill } of getRobots()) {
+ >{name, skill } : { name: string; skill: string; }
+->name : string
+->skill : string
++>name : any
++>skill : any
+ >getRobots() : Robot[]
+ >getRobots : () => Robot[]
+ 
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name, skill } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+ >{name, skill } : { name: string; skill: string; }
+->name : string
+->skill : string
++>name : any
++>skill : any
+ >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
+ >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
+ >name : string
+@@= skipped -50, +50 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name, skills: { primary, secondary } } of multiRobots) {
+ >{name, skills: { primary, secondary } } : { name: string; skills: { primary: string; secondary: string; }; }
+->name : string
++>name : any
+ >skills : { primary: string; secondary: string; }
+ >{ primary, secondary } : { primary: string; secondary: string; }
+->primary : string
+->secondary : string
++>primary : any
++>secondary : any
+ >multiRobots : MultiRobot[]
+ 
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+ >{name, skills: { primary, secondary } } : { name: string; skills: { primary: string; secondary: string; }; }
+->name : string
++>name : any
+ >skills : { primary: string; secondary: string; }
+ >{ primary, secondary } : { primary: string; secondary: string; }
+->primary : string
+->secondary : string
++>primary : any
++>secondary : any
+ >getMultiRobots() : MultiRobot[]
+ >getMultiRobots : () => MultiRobot[]
+ 
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+ for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+ >{name, skills: { primary, secondary } } : { name: string; skills: { primary: string; secondary: string; }; }
+->name : string
++>name : any
+ >skills : { primary: string; secondary: string; }
+ >{ primary, secondary } : { primary: string; secondary: string; }
+->primary : string
+->secondary : string
++>primary : any
++>secondary : any
+ >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
+ >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
+ >name : string
+@@= skipped -69, +69 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }

@@ -1,0 +1,35 @@
+--- old.destructuringArrayBindingPatternAndAssignment3.types
++++ new.destructuringArrayBindingPatternAndAssignment3.types
+@@= skipped -29, +29 lines =@@
+ 
+ (function ([a, b = a]) { // ok
+ >(function ([a, b = a]) { // ok})([1]) : void
+->(function ([a, b = a]) { // ok}) : ([a, b]: number[]) => void
+->function ([a, b = a]) { // ok} : ([a, b]: number[]) => void
++>(function ([a, b = a]) { // ok}) : (__0: number[]) => void
++>function ([a, b = a]) { // ok} : (__0: number[]) => void
+ >a : number
+ >b : number
+ >a : number
+@@= skipped -12, +12 lines =@@
+ 
+ (function ([c, d = c, e = e]) { // error for e = e
+ >(function ([c, d = c, e = e]) { // error for e = e})([1]) : void
+->(function ([c, d = c, e = e]) { // error for e = e}) : ([c, d, e]: number[]) => void
+->function ([c, d = c, e = e]) { // error for e = e} : ([c, d, e]: number[]) => void
++>(function ([c, d = c, e = e]) { // error for e = e}) : (__0: number[]) => void
++>function ([c, d = c, e = e]) { // error for e = e} : (__0: number[]) => void
+ >c : number
+ >d : number
+ >c : number
+@@= skipped -14, +14 lines =@@
+ 
+ (function ([f, g = f, h = i, i = f]) { // error for h = i
+ >(function ([f, g = f, h = i, i = f]) { // error for h = i})([1]) : void
+->(function ([f, g = f, h = i, i = f]) { // error for h = i}) : ([f, g, h, i]: number[]) => void
+->function ([f, g = f, h = i, i = f]) { // error for h = i} : ([f, g, h, i]: number[]) => void
++>(function ([f, g = f, h = i, i = f]) { // error for h = i}) : (__0: number[]) => void
++>function ([f, g = f, h = i, i = f]) { // error for h = i} : (__0: number[]) => void
+ >f : number
+ >g : number
+ >f : number

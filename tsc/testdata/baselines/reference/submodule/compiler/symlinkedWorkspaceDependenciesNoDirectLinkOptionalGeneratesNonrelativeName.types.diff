@@ -1,0 +1,21 @@
+--- old.symlinkedWorkspaceDependenciesNoDirectLinkOptionalGeneratesNonrelativeName.types
++++ new.symlinkedWorkspaceDependenciesNoDirectLinkOptionalGeneratesNonrelativeName.types
+@@= skipped -15, +15 lines =@@
+ 
+ === workspace/packageC/index.ts ===
+ import * as pkg from "package-b";
+->pkg : typeof pkg
++>pkg : typeof import("workspace/packageB/index")
+ 
+ export const a = pkg.invoke();
+->a : import("workspace/packageA/index").Foo
+->pkg.invoke() : import("workspace/packageA/index").Foo
+->pkg.invoke : () => import("workspace/packageA/index").Foo
+->pkg : typeof pkg
+->invoke : () => import("workspace/packageA/index").Foo
++>a : Foo
++>pkg.invoke() : Foo
++>pkg.invoke : () => Foo
++>pkg : typeof import("workspace/packageB/index")
++>invoke : () => Foo
+ 

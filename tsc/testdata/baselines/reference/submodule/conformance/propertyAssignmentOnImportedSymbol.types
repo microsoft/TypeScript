@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentOnImportedSymbol.ts] ////
+
+=== mod1.js ===
+export var hurk = {}
+>hurk : {}
+>{} : {}
+
+=== bug24658.js ===
+import { hurk } from './mod1'
+>hurk : {}
+
+hurk.expando = 4
+>hurk.expando = 4 : 4
+>hurk.expando : any
+>hurk : {}
+>expando : any
+>4 : 4
+

@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.ts] ////
+
+=== jsDeclarationsExportAssignedConstructorFunctionWithSub.js ===
+/**
+ * @param {number} p
+ */
+module.exports = function (p) {
+>module.exports = function (p) {    this.t = 12 + p;} : (p: any) => void
+>module.exports : any
+>module : any
+>exports : any
+>function (p) {    this.t = 12 + p;} : (p: any) => void
+>p : any
+
+    this.t = 12 + p;
+>this.t = 12 + p : any
+>this.t : any
+>this : any
+>t : any
+>12 + p : any
+>12 : 12
+>p : any
+}
+module.exports.Sub = function() {
+>module.exports.Sub = function() {    this.instance = new module.exports(10);} : () => void
+>module.exports.Sub : any
+>module.exports : any
+>module : any
+>exports : any
+>Sub : any
+>function() {    this.instance = new module.exports(10);} : () => void
+
+    this.instance = new module.exports(10);
+>this.instance = new module.exports(10) : any
+>this.instance : any
+>this : any
+>instance : any
+>new module.exports(10) : any
+>module.exports : any
+>module : any
+>exports : any
+>10 : 10
+}
+module.exports.Sub.prototype = { }
+>module.exports.Sub.prototype = { } : {}
+>module.exports.Sub.prototype : any
+>module.exports.Sub : any
+>module.exports : any
+>module : any
+>exports : any
+>Sub : any
+>prototype : any
+>{ } : {}
+

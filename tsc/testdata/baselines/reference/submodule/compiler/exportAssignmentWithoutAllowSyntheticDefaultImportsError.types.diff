@@ -1,0 +1,9 @@
+--- old.exportAssignmentWithoutAllowSyntheticDefaultImportsError.types
++++ new.exportAssignmentWithoutAllowSyntheticDefaultImportsError.types
+@@= skipped -8, +8 lines =@@
+ 
+ === /foo.ts ===
+ import bar from './bar';
+->bar : any
++>bar : () => void
+ 

@@ -1,0 +1,11 @@
+--- old.additionOperatorWithTypeParameter.types
++++ new.additionOperatorWithTypeParameter.types
+@@= skipped -8, +8 lines =@@
+ 
+ function foo<T, U>(t: T, u: U) {
+ >foo : <T, U>(t: T, u: U) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 

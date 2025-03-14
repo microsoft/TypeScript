@@ -1,0 +1,13 @@
+--- old.spreadIntersectionJsx.types
++++ new.spreadIntersectionJsx.types
+@@= skipped -15, +15 lines =@@
+ >intersected : A & C
+ 
+ let element = <div { ...intersected } />;
+->element : error
+-><div { ...intersected } /> : error
++>element : any
++><div { ...intersected } /> : any
+ >div : any
+ >intersected : A & C
+ 

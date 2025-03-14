@@ -1,0 +1,56 @@
+--- old.declarationEmitNameConflicts3.types
++++ new.declarationEmitNameConflicts3.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     export interface D { }
++>D : D
++
+     export module D {
+ >D : typeof D
+ 
+@@= skipped -35, +37 lines =@@
+ >C : C
+ 
+     export enum D {
+->D : D
++>D : D.f
+ 
+         f
+ >f : D.f
+     }
+     export var v: M.D; // ok
+->v : M.D
++>v : D
+ >M : any
+ 
+     export var w = M.D.f; // error, should be typeof M.D.f
+ >w : () => void
+ >M.D.f : () => void
+->M.D : typeof M.D
++>M.D : typeof D
+ >M : typeof M
+->D : typeof M.D
++>D : typeof D
+ >f : () => void
+ 
+     export var x = M.C.f; // error, should be typeof M.C.f
+ >x : () => void
+ >M.C.f : () => void
+->M.C : typeof M.C
++>M.C : typeof C
+ >M : typeof M
+->C : typeof M.C
++>C : typeof C
+ >f : () => void
+ 
+     export var x = M.E.f; // error, should be typeof M.E.f
+ >x : () => void
+ >M.E.f : () => void
+->M.E : typeof M.E
++>M.E : typeof E
+ >M : typeof M
+->E : typeof M.E
++>E : typeof E
+ >f : () => void
+ }

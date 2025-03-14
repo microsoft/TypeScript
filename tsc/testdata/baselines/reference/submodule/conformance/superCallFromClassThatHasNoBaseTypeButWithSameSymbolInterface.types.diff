@@ -1,0 +1,10 @@
+--- old.superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.types
++++ new.superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.ts ===
+ interface Foo extends Array<number> {}
++>Foo : Foo
+ 
+ class Foo {
+ >Foo : Foo

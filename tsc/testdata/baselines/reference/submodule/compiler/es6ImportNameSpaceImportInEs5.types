@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/es6ImportNameSpaceImportInEs5.ts] ////
+
+=== es6ImportNameSpaceImportInEs5_0.ts ===
+export var a = 10;  
+>a : number
+>10 : 10
+
+=== es6ImportNameSpaceImportInEs5_1.ts ===
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportInEs5_0";
+>nameSpaceBinding : typeof import("es6ImportNameSpaceImportInEs5_0")
+
+var x = nameSpaceBinding.a;
+>x : number
+>nameSpaceBinding.a : number
+>nameSpaceBinding : typeof import("es6ImportNameSpaceImportInEs5_0")
+>a : number
+
+import * as nameSpaceBinding2 from "./es6ImportNameSpaceImportInEs5_0"; // elide this
+>nameSpaceBinding2 : typeof import("es6ImportNameSpaceImportInEs5_0")
+

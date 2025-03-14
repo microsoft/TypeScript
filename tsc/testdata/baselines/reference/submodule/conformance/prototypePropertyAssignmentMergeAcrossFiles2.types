@@ -1,0 +1,67 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.ts] ////
+
+=== prototypePropertyAssignmentMergeAcrossFiles2.js ===
+var Ns = {}
+>Ns : {}
+>{} : {}
+
+Ns.One = function() {};
+>Ns.One = function() {} : () => void
+>Ns.One : any
+>Ns : {}
+>One : any
+>function() {} : () => void
+
+Ns.Two = function() {};
+>Ns.Two = function() {} : () => void
+>Ns.Two : any
+>Ns : {}
+>Two : any
+>function() {} : () => void
+
+Ns.One.prototype = {
+>Ns.One.prototype = {  ok() {},} : { ok: () => void; }
+>Ns.One.prototype : any
+>Ns.One : any
+>Ns : {}
+>One : any
+>prototype : any
+>{  ok() {},} : { ok: () => void; }
+
+  ok() {},
+>ok : () => void
+
+};
+Ns.Two.prototype = {
+>Ns.Two.prototype = {} : {}
+>Ns.Two.prototype : any
+>Ns.Two : any
+>Ns : {}
+>Two : any
+>prototype : any
+>{} : {}
+}
+
+=== other.js ===
+/**
+ * @type {Ns.One}
+ */
+var one;
+>one : any
+
+one.wat;
+>one.wat : any
+>one : any
+>wat : any
+
+/**
+ * @type {Ns.Two}
+ */
+var two;
+>two : any
+
+two.wat;
+>two.wat : any
+>two : any
+>wat : any
+

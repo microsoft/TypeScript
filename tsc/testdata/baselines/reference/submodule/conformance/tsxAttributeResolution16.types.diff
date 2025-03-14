@@ -1,0 +1,60 @@
+--- old.tsxAttributeResolution16.types
++++ new.tsxAttributeResolution16.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : any
+ 
+ interface Address {
++>Address : Address
++
+   street: string;
+ >street : string
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface CanadianAddress extends Address {
++>CanadianAddress : CanadianAddress
++
+     postalCode: string;
+ >postalCode : string
+ }
+ 
+ interface AmericanAddress extends Address {
++>AmericanAddress : AmericanAddress
++
+     zipCode: string;
+ >zipCode : string
+ }
+@@= skipped -14, +18 lines =@@
+ 
+ export class AddressComp extends React.Component<Properties, void> {
+ >AddressComp : AddressComp
+->React.Component : React.Component<Properties, void>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : any
++>React : any
++>Component : any
+ 
+   public render() {
+ >render : () => any
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
+->a : JSX.Element
+-><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : JSX.Element
++>a : any
++><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : any
+ >AddressComp : typeof AddressComp
+->postalCode : string
+->street : string
+->country : string
++>postalCode : any
++>street : any
++>country : any
+ 

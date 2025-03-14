@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7.ts] ////
+
+=== usage.js ===
+const x = require("./lateBoundAssignmentDeclarationSupport7.js");
+>x : any
+>require("./lateBoundAssignmentDeclarationSupport7.js") : any
+>require : any
+>"./lateBoundAssignmentDeclarationSupport7.js" : "./lateBoundAssignmentDeclarationSupport7.js"
+
+const y = x.F["my-fake-sym"];
+>y : any
+>x.F["my-fake-sym"] : any
+>x.F : any
+>x : any
+>F : any
+>"my-fake-sym" : "my-fake-sym"
+
+const z = x.F[x.S];
+>z : any
+>x.F[x.S] : any
+>x.F : any
+>x : any
+>F : any
+>x.S : any
+>x : any
+>S : any
+

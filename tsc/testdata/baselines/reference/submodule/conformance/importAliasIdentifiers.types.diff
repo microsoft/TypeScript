@@ -1,0 +1,77 @@
+--- old.importAliasIdentifiers.types
++++ new.importAliasIdentifiers.types
+@@= skipped -17, +17 lines =@@
+ >moduleA : typeof moduleA
+ 
+ var p: alias.Point;
+->p : alias.Point
++>p : Point
+ >alias : any
+ 
+ var p: moduleA.Point;
+->p : alias.Point
++>p : Point
+ >moduleA : any
+ 
+ var p: { x: number; y: number; };
+->p : alias.Point
++>p : Point
+ >x : number
+ >y : number
+ 
+@@= skipped -23, +23 lines =@@
+ >clodule : typeof clodule
+ 
+     export interface Point {
++>Point : Point
++
+         x: number; y: number;
+ >x : number
+ >y : number
+@@= skipped -18, +20 lines =@@
+ >clodule : clodule
+ 
+ var p: clolias.Point;
+->p : alias.Point
++>p : Point
+ >clolias : any
+ 
+ var p: clodule.Point;
+->p : alias.Point
++>p : Point
+ >clodule : any
+ 
+ var p: { x: number; y: number; };
+->p : alias.Point
++>p : Point
+ >x : number
+ >y : number
+ 
+@@= skipped -28, +28 lines =@@
+ >fundule : typeof fundule
+ 
+     export interface Point {
++>Point : Point
++
+         x: number; y: number;
+ >x : number
+ >y : number
+@@= skipped -18, +20 lines =@@
+ >fundule : typeof fundule
+ 
+ var p: funlias.Point;
+->p : alias.Point
++>p : Point
+ >funlias : any
+ 
+ var p: fundule.Point;
+->p : alias.Point
++>p : Point
+ >fundule : any
+ 
+ var p: { x: number; y: number; };
+->p : alias.Point
++>p : Point
+ >x : number
+ >y : number
+ 

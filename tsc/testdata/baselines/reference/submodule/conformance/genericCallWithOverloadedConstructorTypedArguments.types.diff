@@ -1,0 +1,85 @@
+--- old.genericCallWithOverloadedConstructorTypedArguments.types
++++ new.genericCallWithOverloadedConstructorTypedArguments.types
+@@= skipped -17, +17 lines =@@
+     }
+ 
+     function foo4(cb: typeof a) {
+->foo4 : (cb: typeof a) => boolean
++>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => boolean
+ >cb : { new (x: boolean): boolean; new (x: string): string; }
+->a : { new (x: boolean): boolean; new (x: string): string; }
+ 
+         return new cb(null);
+ >new cb(null) : boolean
+@@= skipped -12, +11 lines =@@
+     var r = foo4(a);
+ >r : boolean
+ >foo4(a) : boolean
+->foo4 : (cb: typeof a) => boolean
++>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => boolean
+ >a : { new (x: boolean): boolean; new (x: string): string; }
+ 
+     var b: { new <T>(x: T): T };
+ >b : new <T>(x: T) => T
++>T : T
+ >x : T
+ 
+     var r2 = foo4(b);
+ >r2 : boolean
+ >foo4(b) : boolean
+->foo4 : (cb: typeof a) => boolean
++>foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => boolean
+ >b : new <T>(x: T) => T
+ }
+ 
+@@= skipped -19, +20 lines =@@
+ 
+     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
+ >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
++>T : T
+ >cb : { new (x: T): string; new (x: number): T; }
+ >x : T
+ >x : number
+@@= skipped -25, +26 lines =@@
+ 
+     var b: { new<T>(x: T): string; new<T>(x: number): T; }
+ >b : { new <T>(x: T): string; new <T>(x: number): T; }
++>T : T
+ >x : T
++>T : T
+ >x : number
+ 
+     var r7 = foo5(b); // new any => string; new(x:number) => any
+@@= skipped -11, +13 lines =@@
+ 
+     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
+ >foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>T : T
+ >cb : { new (x: T): string; new (x: T, y?: T): string; }
+ >x : T
+ >x : T
+@@= skipped -23, +24 lines =@@
+ 
+     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
+ >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
++>T : T
+ >x : T
+ >cb : { new (x: T): string; new (x: T, y?: T): string; }
+ >x : T
+@@= skipped -19, +20 lines =@@
+ 
+     var c: { new <T>(x: T): string; <T>(x: number): T; }
+ >c : { <T>(x: number): T; new <T>(x: T): string; }
++>T : T
+ >x : T
++>T : T
+ >x : number
+ 
+     var c2: { new <T>(x: T): string; new<T>(x: number): T; }
+ >c2 : { new <T>(x: T): string; new <T>(x: number): T; }
++>T : T
+ >x : T
++>T : T
+ >x : number
+ 
+     var r14 = foo7(1, c); // new any => string; new(x:any, y?:any) => string

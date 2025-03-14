@@ -1,0 +1,10 @@
+--- old.typeArgumentsShouldDisallowNonGenericOverloads.types
++++ new.typeArgumentsShouldDisallowNonGenericOverloads.types
+@@= skipped -6, +6 lines =@@
+ 
+ function foo<T>(a: T): number;
+ >foo : { (a: string): string; <T>(a: T): number; }
++>T : T
+ >a : T
+ 
+ function foo(a: any): any {

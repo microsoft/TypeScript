@@ -1,0 +1,53 @@
+--- old.tsxAttributeResolution7.types
++++ new.tsxAttributeResolution7.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { }
++>Element : Element
++
+ 	interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+ 		test1: { "data-foo"?: string };
+ >test1 : { "data-foo"?: string; }
+ >"data-foo" : string
+@@= skipped -10, +16 lines =@@
+ 
+ // Error
+ <test1 data-foo={32} />;
+-><test1 data-foo={32} /> : JSX.Element
++><test1 data-foo={32} /> : any
+ >test1 : any
+->data-foo : number
++>data-foo : any
+ >32 : 32
+ 
+ // OK
+ <test1 data-foo={'32'} />;
+-><test1 data-foo={'32'} /> : JSX.Element
++><test1 data-foo={'32'} /> : any
+ >test1 : any
+->data-foo : string
++>data-foo : any
+ >'32' : "32"
+ 
+ <test1 data-bar={'32'} />;
+-><test1 data-bar={'32'} /> : JSX.Element
++><test1 data-bar={'32'} /> : any
+ >test1 : any
+->data-bar : string
++>data-bar : any
+ >'32' : "32"
+ 
+ <test1 data-bar={32} />;
+-><test1 data-bar={32} /> : JSX.Element
++><test1 data-bar={32} /> : any
+ >test1 : any
+->data-bar : number
++>data-bar : any
+ >32 : 32
+ 

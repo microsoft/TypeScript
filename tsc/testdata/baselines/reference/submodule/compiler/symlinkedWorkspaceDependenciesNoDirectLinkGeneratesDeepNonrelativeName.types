@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/symlinkedWorkspaceDependenciesNoDirectLinkGeneratesDeepNonrelativeName.ts] ////
+
+=== workspace/packageA/foo.d.ts ===
+export declare class Foo {
+>Foo : Foo
+
+    private f: any;
+>f : any
+}
+=== workspace/packageA/index.d.ts ===
+import { Foo } from "./foo.js";
+>Foo : typeof Foo
+
+export function create(): Foo;
+>create : () => Foo
+
+=== workspace/packageB/index.d.ts ===
+import { create } from "package-a";
+>create : () => Foo
+
+export declare function invoke(): ReturnType<typeof create>;
+>invoke : () => Foo
+
+=== workspace/packageC/index.ts ===
+import * as pkg from "package-b";
+>pkg : typeof import("workspace/packageB/index")
+
+export const a = pkg.invoke();
+>a : Foo
+>pkg.invoke() : Foo
+>pkg.invoke : () => Foo
+>pkg : typeof import("workspace/packageB/index")
+>invoke : () => Foo
+

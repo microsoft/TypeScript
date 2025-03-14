@@ -1,0 +1,41 @@
+--- old.identicalCallSignatures.types
++++ new.identicalCallSignatures.types
+@@= skipped -3, +3 lines =@@
+ // Each pair of call signatures in these types have a duplicate signature error.
+ // Identical call signatures should generate an error.
+ interface I {
++>I : I
++
+     (x): number;
+ >x : any
+ 
+@@= skipped -7, +9 lines =@@
+ >x : any
+ 
+     <T>(x: T): T;
++>T : T
+ >x : T
+ 
+     <U>(x: U): U; // error
++>U : U
+ >x : U
+ }
+ 
+ interface I2<T> {
++>I2 : I2<T>
++>T : T
++
+     (x: T): T;
+ >x : T
+ 
+@@= skipped -24, +29 lines =@@
+ >x : any
+ 
+     <T>(x: T): T;
++>T : T
+ >x : T
+ 
+     <T>(x: T): T; // error
++>T : T
+ >x : T
+ }

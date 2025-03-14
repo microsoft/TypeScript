@@ -1,0 +1,10 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty10.types
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty10.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardNarrowsIndexedAccessOfKnownProperty10.ts ===
+ interface Foo { bar: any; }
++>Foo : Foo
+ >bar : any
+ 
+ const bar: { [id: string]: number } = {};

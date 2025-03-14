@@ -1,0 +1,11 @@
+--- old.assignmentCompatWithCallSignaturesWithOptionalParameters.types
++++ new.assignmentCompatWithCallSignaturesWithOptionalParameters.types
+@@= skipped -3, +3 lines =@@
+ // call signatures in derived types must have the same or fewer optional parameters as the base type
+ 
+ interface Base { 
++>Base : Base
++
+     a: () => number;
+ >a : () => number
+ 

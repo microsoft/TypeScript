@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeParameters1.ts] ////
+
+=== parserSetAccessorWithTypeParameters1.ts ===
+class C {
+>C : C
+
+   set foo<T>(v) { }
+>foo : any
+>T : T
+>v : any
+}

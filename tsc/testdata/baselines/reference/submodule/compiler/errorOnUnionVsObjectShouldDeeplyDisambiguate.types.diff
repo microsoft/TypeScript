@@ -1,0 +1,24 @@
+--- old.errorOnUnionVsObjectShouldDeeplyDisambiguate.types
++++ new.errorOnUnionVsObjectShouldDeeplyDisambiguate.types
+@@= skipped -1, +1 lines =@@
+ 
+ === errorOnUnionVsObjectShouldDeeplyDisambiguate.ts ===
+ interface Stuff {
++>Stuff : Stuff
++
+     a?: () => Promise<number[]>;
+ >a : () => Promise<number[]>
+ 
+@@= skipped -35, +37 lines =@@
+   }
+   
+   function foo(): Stuff | string {
+->foo : () => Stuff | string
++>foo : () => string | Stuff
+ 
+     return {
+->{      a() { return [123] },      b: () => "hello",      c: () => "hello",      d: () => "hello",      e: () => "hello",      f: () => "hello",      g: () => "hello",      h: () => "hello",      i: () => "hello",      j: () => "hello",      k: () => 123    } : { a(): number[]; b: () => string; c: () => string; d: () => string; e: () => string; f: () => string; g: () => string; h: () => string; i: () => string; j: () => string; k: () => number; }
++>{      a() { return [123] },      b: () => "hello",      c: () => "hello",      d: () => "hello",      e: () => "hello",      f: () => "hello",      g: () => "hello",      h: () => "hello",      i: () => "hello",      j: () => "hello",      k: () => 123    } : { a: () => number[]; b: () => string; c: () => string; d: () => string; e: () => string; f: () => string; g: () => string; h: () => string; i: () => string; j: () => string; k: () => number; }
+ 
+       a() { return [123] },
+ >a : () => number[]

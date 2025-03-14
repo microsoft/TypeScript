@@ -1,0 +1,34 @@
+--- old.callbacksDontShareTypes.types
++++ new.callbacksDontShareTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === callbacksDontShareTypes.ts ===
+ interface Collection<T> {
++>Collection : Collection<T>
++>T : T
++
+     length: number;
+ >length : number
+ 
+@@= skipped -12, +15 lines =@@
+ >x : T
+ }
+ interface Combinators {
++>Combinators : Combinators
++
+     map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
+->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
++>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
++>T : T
++>U : U
+ >c : Collection<T>
+ >f : (x: T) => U
+ >x : T
+ 
+     map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
+->map : { <T_1, U>(c: Collection<T_1>, f: (x: T_1) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
++>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
++>T : T
+ >c : Collection<T>
+ >f : (x: T) => any
+ >x : T

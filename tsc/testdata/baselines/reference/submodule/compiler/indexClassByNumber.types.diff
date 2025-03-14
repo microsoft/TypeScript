@@ -1,0 +1,11 @@
+--- old.indexClassByNumber.types
++++ new.indexClassByNumber.types
+@@= skipped -12, +12 lines =@@
+ 
+ f[0] = 4; // Shouldn't be allowed
+ >f[0] = 4 : 4
+->f[0] : error
++>f[0] : any
+ >f : foo
+ >0 : 0
+ >4 : 4

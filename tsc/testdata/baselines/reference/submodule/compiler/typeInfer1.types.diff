@@ -1,0 +1,11 @@
+--- old.typeInfer1.types
++++ new.typeInfer1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeInfer1.ts ===
+ interface ITextWriter2 {
++>ITextWriter2 : ITextWriter2
++
+     Write(s:string):void;
+ >Write : (s: string) => void
+ >s : string

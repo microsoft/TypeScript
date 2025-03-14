@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToMergedClass.ts] ////
+
+=== jsdocTypeReferenceToMergedClass.js ===
+var Workspace = {}
+>Workspace : {}
+>{} : {}
+
+/** @type {Workspace.Project} */
+var p;
+>p : any
+
+p.isServiceProject()
+>p.isServiceProject() : any
+>p.isServiceProject : any
+>p : any
+>isServiceProject : any
+
+Workspace.Project = function wp() { }
+>Workspace.Project = function wp() { } : () => void
+>Workspace.Project : any
+>Workspace : {}
+>Project : any
+>function wp() { } : () => void
+>wp : () => void
+
+Workspace.Project.prototype = {
+>Workspace.Project.prototype = {  isServiceProject() {}} : { isServiceProject: () => void; }
+>Workspace.Project.prototype : any
+>Workspace.Project : any
+>Workspace : {}
+>Project : any
+>prototype : any
+>{  isServiceProject() {}} : { isServiceProject: () => void; }
+
+  isServiceProject() {}
+>isServiceProject : () => void
+}
+

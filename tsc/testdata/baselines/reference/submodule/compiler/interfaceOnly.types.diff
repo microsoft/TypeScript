@@ -1,0 +1,11 @@
+--- old.interfaceOnly.types
++++ new.interfaceOnly.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceOnly.ts ===
+ interface foo {
++>foo : foo
++
+     foo();
+ >foo : () => any
+ 

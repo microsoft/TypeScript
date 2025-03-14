@@ -1,0 +1,484 @@
+//// [tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx] ////
+
+=== tsxLibraryManagedAttributes.tsx ===
+type Defaultize<TProps, TDefaults> =
+>Defaultize : Defaultize<TProps, TDefaults>
+>TProps : TProps
+>TDefaults : TDefaults
+
+    & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}
+>K : K
+
+    & {[K in Exclude<keyof TProps, keyof TDefaults>]: TProps[K]}
+>K : K
+
+    & Partial<TDefaults>;
+
+type InferredPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
+>InferredPropTypes : InferredPropTypes<P>
+>P : P
+>K : K
+>T : T
+>U : U
+
+declare const checkedType: unique symbol;
+>checkedType : unique symbol
+
+interface PropTypeChecker<U, TRequired = false> {
+>PropTypeChecker : PropTypeChecker<U, TRequired>
+>U : U
+>TRequired : TRequired
+>false : false
+
+    (props: any, propName: string, componentName: string, location: any, propFullName: string): boolean;
+>props : any
+>propName : string
+>componentName : string
+>location : any
+>propFullName : string
+
+    isRequired: PropTypeChecker<U, true>;
+>isRequired : PropTypeChecker<U, true>
+>true : true
+
+    [checkedType]: TRequired extends true ? U : U | null | undefined;
+>[checkedType] : TRequired extends true ? U : U | null | undefined
+>checkedType : unique symbol
+>true : true
+}
+
+declare namespace PropTypes {
+>PropTypes : typeof PropTypes
+
+    export const number: PropTypeChecker<number>;
+>number : PropTypeChecker<number, false>
+
+    export const string: PropTypeChecker<string>;
+>string : PropTypeChecker<string, false>
+
+    export const node: PropTypeChecker<ReactNode>;
+>node : PropTypeChecker<ReactNode, false>
+}
+
+type ReactNode = string | number | ReactComponent<{}, {}>;
+>ReactNode : ReactNode
+
+declare class ReactComponent<P={}, S={}> {
+>ReactComponent : ReactComponent<P, S>
+>P : P
+>S : S
+
+    constructor(props: P);
+>props : P
+
+    props: P & Readonly<{children: ReactNode[]}>;
+>props : P & Readonly<{ children: ReactNode[]; }>
+>children : ReactNode[]
+
+    setState(s: Partial<S>): S;
+>setState : (s: Partial<S>) => S
+>s : Partial<S>
+
+    render(): ReactNode;
+>render : () => ReactNode
+}
+
+declare namespace JSX {
+>JSX : any
+
+    interface Element extends ReactComponent {}
+>Element : Element
+
+    interface IntrinsicElements {}
+>IntrinsicElements : IntrinsicElements
+
+    type LibraryManagedAttributes<TComponent, TProps> =
+>LibraryManagedAttributes : LibraryManagedAttributes<TComponent, TProps>
+>TComponent : TComponent
+>TProps : TProps
+
+        TComponent extends { defaultProps: infer D; propTypes: infer P; }
+>defaultProps : D
+>D : D
+>propTypes : P
+>P : P
+
+            ? Defaultize<TProps & InferredPropTypes<P>, D>
+            : TComponent extends { defaultProps: infer D }
+>defaultProps : D
+>D : D
+
+                ? Defaultize<TProps, D>
+                : TComponent extends { propTypes: infer P }
+>propTypes : P
+>P : P
+
+                    ? TProps & InferredPropTypes<P>
+                    : TProps;
+}
+
+class Component extends ReactComponent {
+>Component : Component
+>ReactComponent : ReactComponent<{}, {}>
+
+    static propTypes = {
+>propTypes : { foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }
+>{        foo: PropTypes.number,        bar: PropTypes.node,        baz: PropTypes.string.isRequired,    } : { foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }
+
+        foo: PropTypes.number,
+>foo : PropTypeChecker<number, false>
+>PropTypes.number : PropTypeChecker<number, false>
+>PropTypes : typeof PropTypes
+>number : PropTypeChecker<number, false>
+
+        bar: PropTypes.node,
+>bar : PropTypeChecker<ReactNode, false>
+>PropTypes.node : PropTypeChecker<ReactNode, false>
+>PropTypes : typeof PropTypes
+>node : PropTypeChecker<ReactNode, false>
+
+        baz: PropTypes.string.isRequired,
+>baz : PropTypeChecker<string, true>
+>PropTypes.string.isRequired : PropTypeChecker<string, true>
+>PropTypes.string : PropTypeChecker<string, false>
+>PropTypes : typeof PropTypes
+>string : PropTypeChecker<string, false>
+>isRequired : PropTypeChecker<string, true>
+
+    };
+    static defaultProps = {
+>defaultProps : { foo: number; }
+>{        foo: 42,    } : { foo: number; }
+
+        foo: 42,
+>foo : number
+>42 : 42
+    }
+}
+
+const a = <Component foo={12} bar="yes" baz="yeah" />;
+>a : any
+><Component foo={12} bar="yes" baz="yeah" /> : any
+>Component : typeof Component
+>foo : any
+>12 : 12
+>bar : any
+>baz : any
+
+const b = <Component foo={12} />; // Error, missing required prop bar
+>b : any
+><Component foo={12} /> : any
+>Component : typeof Component
+>foo : any
+>12 : 12
+
+const c = <Component bar="yes" baz="yeah" />;
+>c : any
+><Component bar="yes" baz="yeah" /> : any
+>Component : typeof Component
+>bar : any
+>baz : any
+
+const d = <Component bar="yes" baz="yo" bat="ohno" />; // Error, baz not a valid prop
+>d : any
+><Component bar="yes" baz="yo" bat="ohno" /> : any
+>Component : typeof Component
+>bar : any
+>baz : any
+>bat : any
+
+const e = <Component foo={12} bar={null} baz="cool" />; // bar is nullable/undefinable since it's not marked `isRequired`
+>e : any
+><Component foo={12} bar={null} baz="cool" /> : any
+>Component : typeof Component
+>foo : any
+>12 : 12
+>bar : any
+>baz : any
+
+const f = <Component foo={12} bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
+>f : any
+><Component foo={12} bar="yeah" baz={null} /> : any
+>Component : typeof Component
+>foo : any
+>12 : 12
+>bar : any
+>baz : any
+
+class JustPropTypes extends ReactComponent {
+>JustPropTypes : JustPropTypes
+>ReactComponent : ReactComponent<{}, {}>
+
+    static propTypes = {
+>propTypes : { foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }
+>{        foo: PropTypes.number,        bar: PropTypes.node.isRequired,    } : { foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }
+
+        foo: PropTypes.number,
+>foo : PropTypeChecker<number, false>
+>PropTypes.number : PropTypeChecker<number, false>
+>PropTypes : typeof PropTypes
+>number : PropTypeChecker<number, false>
+
+        bar: PropTypes.node.isRequired,
+>bar : PropTypeChecker<ReactNode, true>
+>PropTypes.node.isRequired : PropTypeChecker<ReactNode, true>
+>PropTypes.node : PropTypeChecker<ReactNode, false>
+>PropTypes : typeof PropTypes
+>node : PropTypeChecker<ReactNode, false>
+>isRequired : PropTypeChecker<ReactNode, true>
+
+    };
+}
+
+const g = <JustPropTypes foo={12} bar="ok" />;
+>g : any
+><JustPropTypes foo={12} bar="ok" /> : any
+>JustPropTypes : typeof JustPropTypes
+>foo : any
+>12 : 12
+>bar : any
+
+const h = <JustPropTypes foo="no" />; // error, wrong type
+>h : any
+><JustPropTypes foo="no" /> : any
+>JustPropTypes : typeof JustPropTypes
+>foo : any
+
+const i = <JustPropTypes foo={null} bar="ok" />;
+>i : any
+><JustPropTypes foo={null} bar="ok" /> : any
+>JustPropTypes : typeof JustPropTypes
+>foo : any
+>bar : any
+
+const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required
+>j : any
+><JustPropTypes foo={12} bar={null} /> : any
+>JustPropTypes : typeof JustPropTypes
+>foo : any
+>12 : 12
+>bar : any
+
+class JustDefaultProps extends ReactComponent {
+>JustDefaultProps : JustDefaultProps
+>ReactComponent : ReactComponent<{}, {}>
+
+    static defaultProps = {
+>defaultProps : { foo: number; }
+>{        foo: 42,    } : { foo: number; }
+
+        foo: 42,
+>foo : number
+>42 : 42
+
+    };
+}
+
+const k = <JustDefaultProps foo={12} />;
+>k : any
+><JustDefaultProps foo={12} /> : any
+>JustDefaultProps : typeof JustDefaultProps
+>foo : any
+>12 : 12
+
+const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
+>l : any
+><JustDefaultProps foo={12} bar="ok" /> : any
+>JustDefaultProps : typeof JustDefaultProps
+>foo : any
+>12 : 12
+>bar : any
+
+const m = <JustDefaultProps foo="no" />; // error, wrong type
+>m : any
+><JustDefaultProps foo="no" /> : any
+>JustDefaultProps : typeof JustDefaultProps
+>foo : any
+
+interface FooProps {
+>FooProps : FooProps
+
+    foo: string;
+>foo : string
+}
+
+class BothWithSpecifiedGeneric extends ReactComponent<FooProps> {
+>BothWithSpecifiedGeneric : BothWithSpecifiedGeneric
+>ReactComponent : ReactComponent<FooProps, {}>
+
+    static propTypes = {
+>propTypes : { foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }
+>{        foo: PropTypes.string,        bar: PropTypes.node,        baz: PropTypes.number.isRequired,    } : { foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }
+
+        foo: PropTypes.string,
+>foo : PropTypeChecker<string, false>
+>PropTypes.string : PropTypeChecker<string, false>
+>PropTypes : typeof PropTypes
+>string : PropTypeChecker<string, false>
+
+        bar: PropTypes.node,
+>bar : PropTypeChecker<ReactNode, false>
+>PropTypes.node : PropTypeChecker<ReactNode, false>
+>PropTypes : typeof PropTypes
+>node : PropTypeChecker<ReactNode, false>
+
+        baz: PropTypes.number.isRequired,
+>baz : PropTypeChecker<number, true>
+>PropTypes.number.isRequired : PropTypeChecker<number, true>
+>PropTypes.number : PropTypeChecker<number, false>
+>PropTypes : typeof PropTypes
+>number : PropTypeChecker<number, false>
+>isRequired : PropTypeChecker<number, true>
+
+    };
+    static defaultProps = {
+>defaultProps : { foo: string; }
+>{        foo: "yo",    } : { foo: string; }
+
+        foo: "yo",
+>foo : string
+>"yo" : "yo"
+
+    };
+}
+const n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} />;
+>n : any
+><BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} /> : any
+>BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+>foo : any
+>bar : any
+>baz : any
+>12 : 12
+
+const o = <BothWithSpecifiedGeneric foo="no" />; // Error, missing required prop bar
+>o : any
+><BothWithSpecifiedGeneric foo="no" /> : any
+>BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+>foo : any
+
+const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
+>p : any
+><BothWithSpecifiedGeneric bar="yes" baz={12} /> : any
+>BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+>bar : any
+>baz : any
+>12 : 12
+
+const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
+>q : any
+><BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" /> : any
+>BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+>bar : any
+>baz : any
+>12 : 12
+>bat : any
+
+const r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0} />; // bar is nullable/undefinable since it's not marked `isRequired`
+>r : any
+><BothWithSpecifiedGeneric foo="no" bar={null} baz={0} /> : any
+>BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+>foo : any
+>bar : any
+>baz : any
+>0 : 0
+
+const s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
+>s : any
+><BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} /> : any
+>BothWithSpecifiedGeneric : typeof BothWithSpecifiedGeneric
+>foo : any
+>bar : any
+>baz : any
+
+class JustPropTypesWithSpecifiedGeneric extends ReactComponent<FooProps> {
+>JustPropTypesWithSpecifiedGeneric : JustPropTypesWithSpecifiedGeneric
+>ReactComponent : ReactComponent<FooProps, {}>
+
+    static propTypes = {
+>propTypes : { foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }
+>{        foo: PropTypes.string,        bar: PropTypes.node.isRequired,    } : { foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }
+
+        foo: PropTypes.string,
+>foo : PropTypeChecker<string, false>
+>PropTypes.string : PropTypeChecker<string, false>
+>PropTypes : typeof PropTypes
+>string : PropTypeChecker<string, false>
+
+        bar: PropTypes.node.isRequired,
+>bar : PropTypeChecker<ReactNode, true>
+>PropTypes.node.isRequired : PropTypeChecker<ReactNode, true>
+>PropTypes.node : PropTypeChecker<ReactNode, false>
+>PropTypes : typeof PropTypes
+>node : PropTypeChecker<ReactNode, false>
+>isRequired : PropTypeChecker<ReactNode, true>
+
+    };
+}
+const t = <JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" />;
+>t : any
+><JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok" /> : any
+>JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+>foo : any
+>bar : any
+
+const u = <JustPropTypesWithSpecifiedGeneric foo={12} />; // error, wrong type
+>u : any
+><JustPropTypesWithSpecifiedGeneric foo={12} /> : any
+>JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+>foo : any
+>12 : 12
+
+const v = <JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" />; // generic overrides propTypes required-ness, null isn't valid
+>v : any
+><JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" /> : any
+>JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+>foo : any
+>bar : any
+
+const w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} />; // error, bar is required
+>w : any
+><JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} /> : any
+>JustPropTypesWithSpecifiedGeneric : typeof JustPropTypesWithSpecifiedGeneric
+>foo : any
+>bar : any
+
+class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
+>JustDefaultPropsWithSpecifiedGeneric : JustDefaultPropsWithSpecifiedGeneric
+>ReactComponent : ReactComponent<FooProps, {}>
+
+    static defaultProps = {
+>defaultProps : { foo: string; }
+>{        foo: "no",    } : { foo: string; }
+
+        foo: "no",
+>foo : string
+>"no" : "no"
+
+    };
+}
+
+const x = <JustDefaultPropsWithSpecifiedGeneric foo="eh" />;
+>x : any
+><JustDefaultPropsWithSpecifiedGeneric foo="eh" /> : any
+>JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+>foo : any
+
+const y = <JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" />; // error, no prop named bar
+>y : any
+><JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" /> : any
+>JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+>foo : any
+>bar : any
+
+const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
+>z : any
+><JustDefaultPropsWithSpecifiedGeneric foo={12} /> : any
+>JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+>foo : any
+>12 : 12
+
+const aa = <JustDefaultPropsWithSpecifiedGeneric />;
+>aa : any
+><JustDefaultPropsWithSpecifiedGeneric /> : any
+>JustDefaultPropsWithSpecifiedGeneric : typeof JustDefaultPropsWithSpecifiedGeneric
+

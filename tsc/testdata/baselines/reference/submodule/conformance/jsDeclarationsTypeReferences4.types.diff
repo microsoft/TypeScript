@@ -1,0 +1,32 @@
+--- old.jsDeclarationsTypeReferences4.types
++++ new.jsDeclarationsTypeReferences4.types
+@@= skipped -14, +14 lines =@@
+ >B : typeof B
+ 
+         const Something = require("fs").Something;
+->Something : typeof Something
+->require("fs").Something : typeof Something
+->require("fs") : typeof import("fs")
++>Something : any
++>require("fs").Something : any
++>require("fs") : any
+ >require : any
+ >"fs" : "fs"
+->Something : typeof Something
++>Something : any
+ 
+         const thing = new Something();
+->thing : Something
+->new Something() : Something
+->Something : typeof Something
++>thing : any
++>new Something() : any
++>Something : any
+ 
+         // @ts-ignore
+         export { thing };
+->thing : Something
++>thing : any
+     }
+ }
+ 

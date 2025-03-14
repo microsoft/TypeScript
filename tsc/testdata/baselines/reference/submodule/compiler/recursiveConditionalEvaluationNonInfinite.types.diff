@@ -1,0 +1,10 @@
+--- old.recursiveConditionalEvaluationNonInfinite.types
++++ new.recursiveConditionalEvaluationNonInfinite.types
+@@= skipped -2, +2 lines =@@
+ === recursiveConditionalEvaluationNonInfinite.ts ===
+ type Test<T> = [T] extends [any[]] ? { array: Test<T[0]> } : { notArray: T };
+ >Test : Test<T>
++>T : T
+ >array : Test<T[0]>
+ >notArray : T
+ 

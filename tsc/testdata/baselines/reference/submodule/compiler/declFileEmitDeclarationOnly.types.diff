@@ -1,0 +1,22 @@
+--- old.declFileEmitDeclarationOnly.types
++++ new.declFileEmitDeclarationOnly.types
+@@= skipped -1, +1 lines =@@
+ 
+ === helloworld.ts ===
+ const Log = {
+->Log : { info(msg: string): void; }
+->{  info(msg: string) {}} : { info(msg: string): void; }
++>Log : { info: (msg: string) => void; }
++>{  info(msg: string) {}} : { info: (msg: string) => void; }
+ 
+   info(msg: string) {}
+ >info : (msg: string) => void
+@@= skipped -21, +21 lines =@@
+     Log.info(`Hello ${this.name}`);
+ >Log.info(`Hello ${this.name}`) : void
+ >Log.info : (msg: string) => void
+->Log : { info(msg: string): void; }
++>Log : { info: (msg: string) => void; }
+ >info : (msg: string) => void
+ >`Hello ${this.name}` : string
+ >this.name : string

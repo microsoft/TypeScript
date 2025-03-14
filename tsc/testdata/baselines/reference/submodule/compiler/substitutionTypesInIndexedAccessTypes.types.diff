@@ -1,0 +1,39 @@
+--- old.substitutionTypesInIndexedAccessTypes.types
++++ new.substitutionTypesInIndexedAccessTypes.types
+@@= skipped -12, +12 lines =@@
+ 
+ type Subset<T, U> = { [key in keyof T]: key extends keyof U ? T[key] : never };
+ >Subset : Subset<T, U>
++>T : T
++>U : U
++>key : key
+ 
+ declare function withBoundary<T extends UserArgs>(args?: Subset<T, UserArgs>): T;
+->withBoundary : <T extends UserArgs>(args?: Subset<T, UserArgs>) => T
++>withBoundary : <T extends UserArgs>(args?: Subset<T, UserArgs> | undefined) => T
++>T : T
+ >args : Subset<T, UserArgs> | undefined
+ 
+ declare function withoutBoundary<T extends UserArgs>(args?: T): T;
+->withoutBoundary : <T extends UserArgs>(args?: T) => T
++>withoutBoundary : <T extends UserArgs>(args?: T | undefined) => T
++>T : T
+ >args : T | undefined
+ 
+ const boundaryResult = withBoundary({
+ >boundaryResult : { select: true; }
+ >withBoundary({  select: true,}) : { select: true; }
+->withBoundary : <T extends UserArgs>(args?: Subset<T, UserArgs>) => T
++>withBoundary : <T extends UserArgs>(args?: Subset<T, UserArgs> | undefined) => T
+ >{  select: true,} : { select: true; }
+ 
+   select: true,
+@@= skipped -24, +29 lines =@@
+ const withoutBoundaryResult = withoutBoundary({
+ >withoutBoundaryResult : { select: true; }
+ >withoutBoundary({  select: true,}) : { select: true; }
+->withoutBoundary : <T extends UserArgs>(args?: T) => T
++>withoutBoundary : <T extends UserArgs>(args?: T | undefined) => T
+ >{  select: true,} : { select: true; }
+ 
+   select: true,

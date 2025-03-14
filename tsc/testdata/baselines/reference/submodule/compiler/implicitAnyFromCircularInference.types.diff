@@ -1,0 +1,39 @@
+--- old.implicitAnyFromCircularInference.types
++++ new.implicitAnyFromCircularInference.types
+@@= skipped -3, +3 lines =@@
+ // Error expected
+ var a: typeof a;
+ >a : any
+->a : any
+ 
+ // Error expected on b or c
+ var b: typeof c;
+ >b : any
+->c : any
+ 
+ var c: typeof b;
+ >c : any
+->b : any
+ 
+ // Error expected
+ var d: Array<typeof d>;
+ >d : any
+->d : any
+ 
+ function f() { return f; }
+->f : () => typeof f
+->f : () => typeof f
++>f : () => ???
++>f : () => ???
+ 
+ // Error expected
+ function g() { return g(); }
+@@= skipped -64, +60 lines =@@
+ }
+ 
+ interface A {
++>A : A
++
+     s: string;
+ >s : string
+ }

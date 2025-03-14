@@ -1,0 +1,46 @@
+--- old.decoratorMetadataWithImportDeclarationNameCollision2.types
++++ new.decoratorMetadataWithImportDeclarationNameCollision2.types
+@@= skipped -10, +10 lines =@@
+ 
+ === service.ts ===
+ import {db as Database} from './db';
+->db : typeof Database
+->Database : typeof Database
++>db : typeof db
++>Database : typeof db
+ 
+ function someDecorator(target) {
+ >someDecorator : (target: any) => any
+@@= skipped -17, +17 lines =@@
+ >MyClass : MyClass
+ 
+     db: Database;
+->db : Database
++>db : db
+ 
+     constructor(db: Database) { // no collision
+->db : Database
++>db : db
+ 
+         this.db = db;
+->this.db = db : Database
+->this.db : Database
++>this.db = db : db
++>this.db : db
+ >this : this
+->db : Database
+->db : Database
++>db : db
++>db : db
+ 
+         this.db.doSomething();
+ >this.db.doSomething() : void
+ >this.db.doSomething : () => void
+->this.db : Database
++>this.db : db
+ >this : this
+->db : Database
++>db : db
+ >doSomething : () => void
+     }
+ }

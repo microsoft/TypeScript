@@ -1,0 +1,46 @@
+//// [tests/cases/conformance/salsa/chainedPrototypeAssignment.ts] ////
+
+=== use.js ===
+/// <reference path='./types.d.ts'/>
+var mod = require('./mod');
+>mod : any
+>require('./mod') : any
+>require : (name: string) => any
+>'./mod' : "./mod"
+
+var a = new mod.A()
+>a : any
+>new mod.A() : any
+>mod.A : any
+>mod : any
+>A : any
+
+var b = new mod.B()
+>b : any
+>new mod.B() : any
+>mod.B : any
+>mod : any
+>B : any
+
+a.m('nope')
+>a.m('nope') : any
+>a.m : any
+>a : any
+>m : any
+>'nope' : "nope"
+
+b.m('not really')
+>b.m('not really') : any
+>b.m : any
+>b : any
+>m : any
+>'not really' : "not really"
+
+=== types.d.ts ===
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+declare var exports: any;
+>exports : any
+

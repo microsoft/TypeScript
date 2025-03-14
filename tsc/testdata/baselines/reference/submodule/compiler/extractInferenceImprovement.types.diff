@@ -1,0 +1,29 @@
+--- old.extractInferenceImprovement.types
++++ new.extractInferenceImprovement.types
+@@= skipped -3, +3 lines =@@
+ // repro mostly from https://github.com/Microsoft/TypeScript/issues/25065
+ function getProperty2<T, K extends keyof T>(obj: T, key: Extract<K, string>): T[K] {
+ >getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
++>T : T
++>K : K
+ >obj : T
+ >key : Extract<K, string>
+ 
+@@= skipped -11, +13 lines =@@
+ 
+ function getProperty3<T, K extends Extract<keyof T, string>>(obj: T, key: K): T[K] {
+ >getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
++>T : T
++>K : K
+ >obj : T
+ >key : K
+ 
+@@= skipped -15, +17 lines =@@
+ >Symbol : SymbolConstructor
+ 
+ interface StrNum {
++>StrNum : StrNum
++
+     first: string;
+ >first : string
+ 

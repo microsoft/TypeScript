@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportAliases.ts] ////
+
+=== cls.js ===
+export default class Foo {}
+>Foo : default
+
+=== usage.js ===
+import {default as Fooa} from "./cls";
+>default : typeof default
+>Fooa : typeof default
+
+export const x = new Fooa();
+>x : default
+>new Fooa() : default
+>Fooa : typeof default
+
+export {default as Foob} from "./cls";
+>default : typeof default
+>Foob : typeof default
+

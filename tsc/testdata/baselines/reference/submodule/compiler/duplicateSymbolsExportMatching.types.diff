@@ -1,0 +1,98 @@
+--- old.duplicateSymbolsExportMatching.types
++++ new.duplicateSymbolsExportMatching.types
+@@= skipped -1, +1 lines =@@
+ 
+ === duplicateSymbolsExportMatching.ts ===
+ module M {
++>M : typeof M
++
+     export interface E { }
++>E : E
++
+     interface I { }
++>I : I
+ }
+ module M {
++>M : typeof M
++
+     export interface E { } // ok
++>E : E
++
+     interface I { } // ok
++>I : I
+ }
+ 
+ // Doesn't match export visibility, but it's in a different parent, so it's ok
+ module M {
++>M : typeof M
++
+     interface E { } // ok
++>E : E
++
+     export interface I { } // ok
++>I : I
+ }
+ 
+ module N {
++>N : any
++
+     interface I { }
++>I : I
++
+     interface I { } // ok
++>I : I
++
+     export interface E { }
++>E : E
++
+     export interface E { } // ok
++>E : E
+ }
+ 
+ module N2 {
++>N2 : any
++
+     interface I { }
++>I : I
++
+     export interface I { } // error
++>I : I
++
+     export interface E { }
++>E : E
++
+     interface E { } // error
++>E : E
+ }
+ 
+ // Should report error only once for instantiated module
+@@= skipped -39, +72 lines =@@
+ >t : any
+     }
+     export module inst { // one error
+->inst : typeof M.inst
++>inst : typeof inst
+ 
+         var t;
+ >t : any
+@@= skipped -44, +44 lines =@@
+ >C : C
+ 
+     module C { }
++>C : typeof C
++
+     export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+->C : typeof M.C
++>C : typeof C
+ 
+         var t;
+ >t : any
+@@= skipped -10, +12 lines =@@
+ 
+ // Top level
+ interface D { }
++>D : D
++
+ export interface D { }
++>D : D
++

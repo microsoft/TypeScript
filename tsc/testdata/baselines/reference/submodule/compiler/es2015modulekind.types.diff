@@ -1,0 +1,11 @@
+--- old.es2015modulekind.types
++++ new.es2015modulekind.types
+@@= skipped -1, +1 lines =@@
+ 
+ === es2015modulekind.ts ===
+ export default class A
+->A : A
++>A : default
+ {
+     constructor ()
+     {

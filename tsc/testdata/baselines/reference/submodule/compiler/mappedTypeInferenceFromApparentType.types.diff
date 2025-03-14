@@ -1,0 +1,20 @@
+--- old.mappedTypeInferenceFromApparentType.types
++++ new.mappedTypeInferenceFromApparentType.types
+@@= skipped -10, +10 lines =@@
+ 
+ type foo = <T>(target: { [K in keyof T]: T[K] }) => void;
+ >foo : foo
+->target : { [K in keyof T]: T[K]; }
++>T : T
++>target : { [K in keyof T]: T[K] }
++>K : K
+ 
+ type bar = <U extends string[]>(source: { [K in keyof U]: Obj[K] }) => void;
+ >bar : bar
+->source : { [K in keyof U]: Obj[K]; }
++>U : U
++>source : { [K in keyof U]: Obj[K] }
++>K : K
+ 
+ declare let f: foo;
+ >f : foo

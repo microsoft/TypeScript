@@ -1,0 +1,9 @@
+--- old.typesVersions.justIndex.types
++++ new.typesVersions.justIndex.types
+@@= skipped -6, +6 lines =@@
+ 
+ === /b/user.ts ===
+ import { a } from "a";
+->a : 0
++>a : any
+ 

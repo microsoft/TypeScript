@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/jsdocTypeNongenericInstantiationAttempt.ts] ////
+
+=== index.js ===
+/**
+ * @param {<T>(m: Boolean<T>) => string} somebody
+ */
+function sayHello(somebody) {
+>sayHello : (somebody: any) => string
+>somebody : any
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : any
+}
+
+=== index2.js ===
+/**
+ * @param {<T>(m: Void<T>) => string} somebody
+ */
+function sayHello2(somebody) {
+>sayHello2 : (somebody: any) => string
+>somebody : any
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : any
+}
+
+
+=== index3.js ===
+/**
+ * @param {<T>(m: Undefined<T>) => string} somebody
+ */
+function sayHello3(somebody) {
+>sayHello3 : (somebody: any) => string
+>somebody : any
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : any
+}
+
+
+=== index4.js ===
+/**
+ * @param {<T>(m: Function<T>) => string} somebody
+ */
+function sayHello4(somebody) {
+>sayHello4 : (somebody: any) => string
+>somebody : any
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : any
+}
+
+
+=== index5.js ===
+/**
+ * @param {<T>(m: String<T>) => string} somebody
+ */
+function sayHello5(somebody) {
+>sayHello5 : (somebody: any) => string
+>somebody : any
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : any
+}
+
+
+=== index6.js ===
+/**
+ * @param {<T>(m: Number<T>) => string} somebody
+ */
+function sayHello6(somebody) {
+>sayHello6 : (somebody: any) => string
+>somebody : any
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : any
+}
+
+
+=== index7.js ===
+/**
+ * @param {<T>(m: Object<T>) => string} somebody
+ */
+function sayHello7(somebody) {
+>sayHello7 : (somebody: any) => string
+>somebody : any
+
+    return 'Hello ' + somebody;
+>'Hello ' + somebody : string
+>'Hello ' : "Hello "
+>somebody : any
+}
+
+=== index8.js ===
+function fn() {}
+>fn : () => void
+
+/**
+ * @param {fn<T>} somebody
+ */
+function sayHello8(somebody) { }
+>sayHello8 : (somebody: any) => void
+>somebody : any
+

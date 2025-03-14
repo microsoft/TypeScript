@@ -1,0 +1,22 @@
+--- old.errorSpanForUnclosedJsxTag.types
++++ new.errorSpanForUnclosedJsxTag.types
+@@= skipped -4, +4 lines =@@
+ >React : any
+ 
+ let Foo = {
+->Foo : { Bar(): void; }
+->{  Bar() {}} : { Bar(): void; }
++>Foo : { Bar: () => void; }
++>{  Bar() {}} : { Bar: () => void; }
+ 
+   Bar() {}
+ >Bar : () => void
+@@= skipped -15, +15 lines =@@
+ >x : any
+ ><    Foo.Bar >Hellolet y = <   Baz >Hello : any
+ >Foo.Bar : () => void
+->Foo : { Bar(): void; }
++>Foo : { Bar: () => void; }
+ >Bar : () => void
+ 
+ let y = <   Baz >Hello

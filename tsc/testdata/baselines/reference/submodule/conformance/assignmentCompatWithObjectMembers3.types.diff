@@ -1,0 +1,15 @@
+--- old.assignmentCompatWithObjectMembers3.types
++++ new.assignmentCompatWithObjectMembers3.types
+@@= skipped -18, +18 lines =@@
+ >t : T
+ 
+ interface S2 { foo: string; bar?: string }
++>S2 : S2
+ >foo : string
+ >bar : string
+ 
+ interface T2 { foo: string; baz?: string }
++>T2 : T2
+ >foo : string
+ >baz : string
+ 

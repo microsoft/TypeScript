@@ -1,0 +1,10 @@
+--- old.declareAlreadySeen.types
++++ new.declareAlreadySeen.types
+@@= skipped -10, +10 lines =@@
+ >f : () => any
+ 
+     declare declare module N { }  
++>N : any
+ 
+     declare declare class C { }
+ >C : C

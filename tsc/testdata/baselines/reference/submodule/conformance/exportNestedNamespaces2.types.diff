@@ -1,0 +1,86 @@
+--- old.exportNestedNamespaces2.types
++++ new.exportNestedNamespaces2.types
+@@= skipped -3, +3 lines =@@
+ // Based on a pattern from adonis
+ exports.formatters = {}
+ >exports.formatters = {} : {}
+->exports.formatters : {}
+->exports : typeof import("mod")
+->formatters : {}
++>exports.formatters : any
++>exports : any
++>formatters : any
+ >{} : {}
+ 
+ === first.js ===
+ exports = require('./mod')
+->exports = require('./mod') : typeof import("mod")
+->exports : typeof import("first")
+->require('./mod') : typeof import("mod")
++>exports = require('./mod') : any
++>exports : any
++>require('./mod') : any
+ >require : any
+ >'./mod' : "./mod"
+ 
+@@= skipped -17, +17 lines =@@
+ >exports.formatters.j = function (v) {    return v} : (v: any) => any
+ >exports.formatters.j : any
+ >exports.formatters : any
+->exports : typeof import("first")
++>exports : any
+ >formatters : any
+ >j : any
+ >function (v) {    return v} : (v: any) => any
+@@= skipped -11, +11 lines =@@
+ }
+ === second.js ===
+ exports = require('./mod')
+->exports = require('./mod') : typeof import("mod")
+->exports : typeof import("second")
+->require('./mod') : typeof import("mod")
++>exports = require('./mod') : any
++>exports : any
++>require('./mod') : any
+ >require : any
+ >'./mod' : "./mod"
+ 
+@@= skipped -10, +10 lines =@@
+ >exports.formatters.o = function (v) {    return v} : (v: any) => any
+ >exports.formatters.o : any
+ >exports.formatters : any
+->exports : typeof import("second")
++>exports : any
+ >formatters : any
+ >o : any
+ >function (v) {    return v} : (v: any) => any
+@@= skipped -12, +12 lines =@@
+ 
+ === use.js ===
+ import * as debug from './mod'
+->debug : typeof debug
++>debug : any
+ 
+ debug.formatters.j
+ >debug.formatters.j : any
+->debug.formatters : {}
+->debug : typeof debug
+->formatters : {}
++>debug.formatters : any
++>debug : any
++>formatters : any
+ >j : any
+ 
+ var one = debug.formatters.o(1)
+ >one : any
+ >debug.formatters.o(1) : any
+ >debug.formatters.o : any
+->debug.formatters : {}
+->debug : typeof debug
+->formatters : {}
++>debug.formatters : any
++>debug : any
++>formatters : any
+ >o : any
+ >1 : 1
+ 

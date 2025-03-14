@@ -1,0 +1,22 @@
+--- old.typeArgumentInferenceApparentType1.types
++++ new.typeArgumentInferenceApparentType1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeArgumentInferenceApparentType1.ts ===
+ function method<T>(iterable: Iterable<T>): T {
+->method : <T>(iterable: Iterable<T>) => T
+->iterable : Iterable<T>
++>method : <T>(iterable: Iterable<T, any, any>) => T
++>T : T
++>iterable : Iterable<T, any, any>
+ 
+     return;
+ }
+@@= skipped -9, +10 lines =@@
+ var res: string = method("test");
+ >res : string
+ >method("test") : string
+->method : <T>(iterable: Iterable<T>) => T
++>method : <T>(iterable: Iterable<T, any, any>) => T
+ >"test" : "test"
+ 

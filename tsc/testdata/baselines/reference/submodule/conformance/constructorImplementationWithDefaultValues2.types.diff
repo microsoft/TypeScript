@@ -1,0 +1,19 @@
+--- old.constructorImplementationWithDefaultValues2.types
++++ new.constructorImplementationWithDefaultValues2.types
+@@= skipped -18, +18 lines =@@
+ 
+ class D<T, U> {
+ >D : D<T, U>
++>T : T
++>U : U
+ 
+     constructor(x: T, y: U);
+ >x : T
+@@= skipped -19, +21 lines =@@
+ 
+ class E<T extends Date> {
+ >E : E<T>
++>T : T
+ 
+     constructor(x);
+ >x : any

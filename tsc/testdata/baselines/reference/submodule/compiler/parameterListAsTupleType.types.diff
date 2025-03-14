@@ -1,0 +1,45 @@
+--- old.parameterListAsTupleType.types
++++ new.parameterListAsTupleType.types
+@@= skipped -10, +10 lines =@@
+ }
+ type Foops = Parameters<typeof foo>;
+ >Foops : [a: number, b: string]
+->foo : (a: number, b: string) => boolean
+ 
+ const x = (a: number) => 5;
+ >x : (a: number) => number
+@@= skipped -10, +9 lines =@@
+ 
+ type Xps = Parameters<typeof x>;
+ >Xps : [a: number]
+->x : (a: number) => number
+ 
+ const a: Xps = ['should-not-work']; // works, but shouldn't
+ >a : [a: number]
+@@= skipped -8, +7 lines =@@
+ >'should-not-work' : "should-not-work"
+ 
+ function t(...args: Xps) {} // should work
+->t : (a: number) => void
++>t : (...args: [a: number]) => void
+ >args : [a: number]
+ 
+ class C {
+@@= skipped -14, +14 lines =@@
+ 
+ type Cps = Parameters<typeof C>; // should not work
+ >Cps : never
+->C : typeof C
+ 
+ type Ccps = ConstructorParameters<typeof C>; // should be [number, string]
+ >Ccps : [a: number, b: string]
+->C : typeof C
+ 
+ class D {
+ >D : D
+@@= skipped -16, +14 lines =@@
+ }
+ type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
+ >Dcps : [a: number, ...rest: string[]]
+->D : typeof D
+ 

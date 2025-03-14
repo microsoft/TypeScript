@@ -1,0 +1,11 @@
+--- old.typeParametersShouldNotBeEqual.types
++++ new.typeParametersShouldNotBeEqual.types
+@@= skipped -2, +2 lines =@@
+ === typeParametersShouldNotBeEqual.ts ===
+ function ff<T, U>(x: T, y: U) {
+ >ff : <T, U>(x: T, y: U) => void
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 

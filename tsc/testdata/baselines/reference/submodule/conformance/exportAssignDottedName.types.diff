@@ -1,0 +1,16 @@
+--- old.exportAssignDottedName.types
++++ new.exportAssignDottedName.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo2.ts ===
+ import foo1 = require('./foo1');
+->foo1 : typeof foo1
++>foo1 : typeof import("foo1")
+ 
+ export = foo1.x; // Ok
+ >foo1.x : () => boolean
+->foo1 : typeof foo1
++>foo1 : typeof import("foo1")
+ >x : () => boolean
+ 
+ === foo1.ts ===

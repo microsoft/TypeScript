@@ -1,0 +1,149 @@
+--- old.overload1.types
++++ new.overload1.types
+@@= skipped -20, +20 lines =@@
+     }
+ 
+     export interface I {
++>I : I
++
+         f(s:string):number;
+ >f : { (s: string): number; (n: number): string; }
+ >s : string
+@@= skipped -38, +40 lines =@@
+ }
+ 
+ declare var x:O.I;
+->x : O.I
++>x : I
+ >O : any
+ 
+ var e:string=x.g(new O.A()); // matches overload but bad assignment
+ >e : string
+->x.g(new O.A()) : O.C
+->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x : O.I
+->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->new O.A() : O.A
+->O.A : typeof O.A
++>x.g(new O.A()) : C
++>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x : I
++>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>new O.A() : A
++>O.A : typeof A
+ >O : typeof O
+->A : typeof O.A
++>A : typeof A
+ 
+ var y:string=x.f(3); // good
+ >y : string
+ >x.f(3) : string
+ >x.f : { (s: string): number; (n: number): string; }
+->x : O.I
++>x : I
+ >f : { (s: string): number; (n: number): string; }
+ >3 : 3
+ 
+@@= skipped -27, +27 lines =@@
+ >y : string
+ >x.f("nope") : number
+ >x.f : { (s: string): number; (n: number): string; }
+->x : O.I
++>x : I
+ >f : { (s: string): number; (n: number): string; }
+ >"nope" : "nope"
+ 
+ var z:string=x.g(x.g(3,3)); // good
+ >z : string
+ >x.g(x.g(3,3)) : string
+->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x : O.I
+->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
++>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x : I
++>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+ >x.g(3,3) : number
+->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x : O.I
+->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
++>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x : I
++>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+ >3 : 3
+ >3 : 3
+ 
+@@= skipped -21, +21 lines =@@
+ >z=x.g(2,2,2) : never
+ >z : string
+ >x.g(2,2,2) : never
+->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x : O.I
+->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
++>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x : I
++>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+ >2 : 2
+ >2 : 2
+ >2 : 2
+@@= skipped -11, +11 lines =@@
+ >z=x.g() : never
+ >z : string
+ >x.g() : never
+->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x : O.I
+->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
++>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x : I
++>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+ 
+ z=x.g(new O.B()); // ambiguous (up and down conversion)
+->z=x.g(new O.B()) : O.C
++>z=x.g(new O.B()) : C
+ >z : string
+->x.g(new O.B()) : O.C
+->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x : O.I
+->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->new O.B() : O.B
+->O.B : typeof O.B
++>x.g(new O.B()) : C
++>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x : I
++>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>new O.B() : B
++>O.B : typeof B
+ >O : typeof O
+->B : typeof O.B
++>B : typeof B
+ 
+ z=x.h(2,2); // no match
+ >z=x.h(2,2) : never
+ >z : string
+ >x.h(2,2) : never
+ >x.h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+->x : O.I
++>x : I
+ >h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+ >2 : 2
+ >2 : 2
+@@= skipped -31, +31 lines =@@
+ >z : string
+ >x.h("hello",0) : string
+ >x.h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+->x : O.I
++>x : I
+ >h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
+ >"hello" : "hello"
+ >0 : 0
+ 
+ var v=x.g;
+->v : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+->x : O.I
+->g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
++>v : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
++>x : I
++>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
+ 
+ 

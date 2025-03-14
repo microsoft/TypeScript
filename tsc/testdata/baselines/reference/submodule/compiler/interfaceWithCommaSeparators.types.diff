@@ -1,0 +1,16 @@
+--- old.interfaceWithCommaSeparators.types
++++ new.interfaceWithCommaSeparators.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceWithCommaSeparators.ts ===
+ var v: { bar(): void, baz }
+->v : { bar(): void; baz: any; }
++>v : { bar: () => void; baz: any; }
+ >bar : () => void
+ >baz : any
+ 
+ interface Foo { bar(): void, baz }
++>Foo : Foo
+ >bar : () => void
+ >baz : any
+ 

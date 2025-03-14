@@ -1,0 +1,59 @@
+--- old.taggedTemplateStringsWithOverloadResolution3.types
++++ new.taggedTemplateStringsWithOverloadResolution3.types
+@@= skipped -36, +36 lines =@@
+ 
+ function fn2<T>(strs: TemplateStringsArray, n: number, t: T): T;
+ >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
++>T : T
+ >strs : TemplateStringsArray
+ >n : number
+ >t : T
+@@= skipped -52, +53 lines =@@
+ 
+ // Generic overloads with differing arity
+ function fn3<T>(strs: TemplateStringsArray, n: T): string;
+->fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T_1, U>(strs: TemplateStringsArray, s: string, t: T_1, u: U): U; <T_1, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T_1): number; }
++>fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
++>T : T
+ >strs : TemplateStringsArray
+ >n : T
+ 
+ function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
+->fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T_1, U_1, V>(strs: TemplateStringsArray, v: V, u: U_1, t: T_1): number; }
++>fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
++>T : T
++>U : U
+ >strs : TemplateStringsArray
+ >s : string
+ >t : T
+ >u : U
+ 
+ function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
+->fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T_1, U_1>(strs: TemplateStringsArray, s: string, t: T_1, u: U_1): U_1; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
++>fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
++>T : T
++>U : U
++>V : V
+ >strs : TemplateStringsArray
+ >v : V
+ >u : U
+@@= skipped -83, +89 lines =@@
+ 
+ // Generic overloads with constraints
+ function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);
+->fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T_1 extends number, U_1 extends string>(strs: TemplateStringsArray, n: T_1, m: U_1): any; (strs: TemplateStringsArray): any; }
++>fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
++>T : T
++>U : U
+ >strs : TemplateStringsArray
+ >n : T
+ >m : U
+ 
+ function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U);
+->fn4 : { <T_1 extends string, U_1 extends number>(strs: TemplateStringsArray, n: T_1, m: U_1): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
++>fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
++>T : T
++>U : U
+ >strs : TemplateStringsArray
+ >n : T
+ >m : U

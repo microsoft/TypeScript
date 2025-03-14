@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/classes/mixinAbstractClasses.2.ts] ////
+
+=== mixinAbstractClasses.2.ts ===
+interface Mixin {
+>Mixin : Mixin
+
+    mixinMethod(): void;
+>mixinMethod : () => void
+}
+
+function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
+>TBaseClass : TBaseClass
+>args : any
+>baseClass : TBaseClass
+>args : any
+
+    // error expected: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+    class MixinClass extends baseClass implements Mixin {
+>MixinClass : MixinClass<TBaseClass>
+>baseClass : TBaseClass
+
+        mixinMethod() {
+>mixinMethod : () => void
+        }
+    }
+    return MixinClass;
+>MixinClass : { new (...args: any): MixinClass<TBaseClass>; prototype: MixinClass<any>; } & TBaseClass
+}
+
+abstract class AbstractBase {
+>AbstractBase : AbstractBase
+
+    abstract abstractBaseMethod(): void;
+>abstractBaseMethod : () => void
+}
+
+const MixedBase = Mixin(AbstractBase);
+>MixedBase : typeof AbstractBase & new (...args: any) => Mixin
+>Mixin(AbstractBase) : typeof AbstractBase & new (...args: any) => Mixin
+>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
+>AbstractBase : typeof AbstractBase
+
+// error expected: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
+class DerivedFromAbstract extends MixedBase {
+>DerivedFromAbstract : DerivedFromAbstract
+>MixedBase : AbstractBase & Mixin
+}
+
+// error expected: Cannot create an instance of an abstract class.
+new MixedBase();
+>new MixedBase() : any
+>MixedBase : typeof AbstractBase & new (...args: any) => Mixin
+

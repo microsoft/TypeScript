@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/declarationEmitObjectAssignedDefaultExport.ts] ////
+
+=== node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
+interface Statics {
+>Statics : Statics
+
+    "$$whatever": string;
+>"$$whatever" : string
+}
+declare namespace hoistNonReactStatics {
+>hoistNonReactStatics : any
+
+    type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
+>NonReactStatics : NonReactStatics<T>
+>T : T
+>X : X
+}
+export = hoistNonReactStatics;
+>hoistNonReactStatics : any
+
+=== node_modules/styled-components/index.d.ts ===
+import * as hoistNonReactStatics from "hoist-non-react-statics";
+>hoistNonReactStatics : any
+
+export interface DefaultTheme {}
+>DefaultTheme : DefaultTheme
+
+export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =
+>StyledComponent : StyledComponent<TTag, TTheme, TStyle, TWhatever>
+>TTag : TTag
+>TTheme : TTheme
+>TStyle : TStyle
+>TWhatever : TWhatever
+
+    string
+    & StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
+    & hoistNonReactStatics.NonReactStatics<TTag>;
+>hoistNonReactStatics : any
+
+export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> {
+>StyledComponentBase : StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
+>TTag : TTag
+>TTheme : TTheme
+>TStyle : TStyle
+>TWhatever : TWhatever
+
+    tag: TTag;
+>tag : TTag
+
+    theme: TTheme;
+>theme : TTheme
+
+    style: TStyle;
+>style : TStyle
+
+    whatever: TWhatever;
+>whatever : TWhatever
+}
+export interface StyledInterface {
+>StyledInterface : StyledInterface
+
+    div: (a: TemplateStringsArray) => StyledComponent<"div">;
+>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>a : TemplateStringsArray
+}
+
+declare const styled: StyledInterface;
+>styled : StyledInterface
+
+export default styled;
+>styled : StyledInterface
+
+=== index.ts ===
+import styled from "styled-components";
+>styled : StyledInterface
+
+const A = styled.div``;
+>A : StyledComponent<"div", DefaultTheme, {}, never>
+>styled.div`` : StyledComponent<"div", DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>styled : StyledInterface
+>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>`` : ""
+
+const B = styled.div``;
+>B : StyledComponent<"div", DefaultTheme, {}, never>
+>styled.div`` : StyledComponent<"div", DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>styled : StyledInterface
+>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>`` : ""
+
+export const C = styled.div``;
+>C : StyledComponent<"div", DefaultTheme, {}, never>
+>styled.div`` : StyledComponent<"div", DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>styled : StyledInterface
+>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
+>`` : ""
+
+export default Object.assign(A, {
+>Object.assign(A, {    B,    C}) : string & StyledComponentBase<"div", DefaultTheme, {}, never> & NonReactStatics<"div"> & { B: StyledComponent<"div", DefaultTheme, {}, never>; C: StyledComponent<"div", DefaultTheme, {}, never>; }
+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>A : StyledComponent<"div", DefaultTheme, {}, never>
+>{    B,    C} : { B: StyledComponent<"div", DefaultTheme, {}, never>; C: StyledComponent<"div", DefaultTheme, {}, never>; }
+
+    B,
+>B : any
+
+    C
+>C : any
+
+});
+

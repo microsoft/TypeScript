@@ -1,0 +1,27 @@
+--- old.genericFunduleInModule2.types
++++ new.genericFunduleInModule2.types
+@@= skipped -5, +5 lines =@@
+ 
+     export function B<T>(x: T) { return x; }
+ >B : typeof B
++>T : T
+ >x : T
+ >x : T
+ }
+@@= skipped -17, +18 lines =@@
+ }
+ 
+ var b: A.B;
+->b : A.B
++>b : B
+ >A : any
+ 
+ A.B(1);
+ >A.B(1) : 1
+->A.B : typeof A.B
++>A.B : typeof B
+ >A : typeof A
+->B : typeof A.B
++>B : typeof B
+ >1 : 1
+ 

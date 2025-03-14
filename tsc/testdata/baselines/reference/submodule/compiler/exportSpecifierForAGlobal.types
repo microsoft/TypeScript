@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/exportSpecifierForAGlobal.ts] ////
+
+=== a.d.ts ===
+declare class X { }
+>X : X
+
+=== b.ts ===
+export {X};
+>X : typeof X
+
+export function f() {
+>f : () => X
+
+    var x: X;
+>x : X
+
+    return x;
+>x : X
+} 
+

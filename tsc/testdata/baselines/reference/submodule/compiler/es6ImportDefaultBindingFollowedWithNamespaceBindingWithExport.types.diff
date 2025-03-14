@@ -1,0 +1,16 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBindingWithExport.types
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingWithExport.types
+@@= skipped -7, +7 lines =@@
+ === client.ts ===
+ export import defaultBinding, * as nameSpaceBinding  from "./server";
+ >defaultBinding : any
+->nameSpaceBinding : typeof nameSpaceBinding
++>nameSpaceBinding : typeof import("server")
+ 
+ export var x: number = nameSpaceBinding.a;
+ >x : number
+ >nameSpaceBinding.a : number
+->nameSpaceBinding : typeof nameSpaceBinding
++>nameSpaceBinding : typeof import("server")
+ >a : number
+ 

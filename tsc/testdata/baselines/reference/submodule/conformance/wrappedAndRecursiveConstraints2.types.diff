@@ -1,0 +1,10 @@
+--- old.wrappedAndRecursiveConstraints2.types
++++ new.wrappedAndRecursiveConstraints2.types
+@@= skipped -2, +2 lines =@@
+ === wrappedAndRecursiveConstraints2.ts ===
+ class C<T extends C<T>> { // error
+ >C : C<T>
++>T : T
+ 
+     constructor(x: T) { }
+ >x : T

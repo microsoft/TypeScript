@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importEquals2.ts] ////
+
+=== /c.ts ===
+import a = require('./b');
+>a : typeof import("/a")
+
+new a.A(); // Error
+>new a.A() : any
+>a.A : any
+>a : typeof import("/a")
+>A : any
+
+=== /a.ts ===
+class A {}
+>A : A
+
+export type { A }
+>A : A
+
+=== /b.ts ===
+import * as a from './a';
+>a : typeof import("/a")
+
+export = a;
+>a : typeof import("/a")
+

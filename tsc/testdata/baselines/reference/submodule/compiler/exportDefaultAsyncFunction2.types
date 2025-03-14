@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/exportDefaultAsyncFunction2.ts] ////
+
+=== asyncawait.ts ===
+export function async<T>(...args: any[]): any { }
+>async : <T>(...args: any[]) => any
+>T : T
+>args : any[]
+
+export function await(...args: any[]): any { }
+>await : (...args: any[]) => any
+>args : any[]
+
+=== a.ts ===
+import { async, await } from 'asyncawait';
+>async : any
+>await : any
+
+export default async(() => await(Promise.resolve(1)));
+>async(() => await(Promise.resolve(1))) : any
+>async : any
+>() => await(Promise.resolve(1)) : () => any
+>await(Promise.resolve(1)) : any
+>await : any
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>1 : 1
+
+=== b.ts ===
+export default async () => { return 0; };
+>async () => { return 0; } : () => Promise<number>
+>0 : 0
+
+=== c.ts ===
+import { async, await } from 'asyncawait';
+>async : any
+>await : any
+
+export default async<number>();
+>async<number>() : any
+>async : any
+
+=== d.ts ===
+import { async, await } from 'asyncawait';
+>async : any
+>await : any
+
+export default async;
+>async : any
+
+=== e.ts ===
+import { async, await } from 'asyncawait';
+>async : any
+>await : any
+
+export default async
+>async : any
+
+export function foo() { }
+>foo : () => void
+

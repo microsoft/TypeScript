@@ -1,0 +1,58 @@
+--- old.keyofIntersection.types
++++ new.keyofIntersection.types
+@@= skipped -9, +9 lines =@@
+ >b : string
+ 
+ type T01 = keyof (A & B);  // "a" | "b"
+->T01 : "b" | "a"
++>T01 : "a" | "b"
+ 
+ type T02<T> = keyof (T & B);  // "b" | keyof T
+->T02 : keyof T | "b"
++>T02 : "b" | keyof T
++>T : T
+ 
+ type T03<U> = keyof (A & U);  // "a" | keyof U
+ >T03 : "a" | keyof U
++>U : U
+ 
+ type T04<T, U> = keyof (T & U);  // keyof T | keyof U
+ >T04 : keyof T | keyof U
++>T : T
++>U : U
+ 
+ type T05 = T02<A>;  // "a" | "b"
+ >T05 : T05
+@@= skipped -24, +28 lines =@@
+ 
+ type Example1<T extends string, U extends string> = keyof (Record<T, any> & Record<U, any>);
+ >Example1 : T | U
++>T : T
++>U : U
+ 
+ type Result1 = Example1<'x', 'y'>;  // "x" | "y"
+ >Result1 : Result1
+@@= skipped -9, +11 lines =@@
+ 
+ type Example3<T extends string> = keyof (Record<T, any>);
+ >Example3 : T
++>T : T
+ 
+ type Result3 = Example3<'x' | 'y'>;  // "x" | "y"
+ >Result3 : "x" | "y"
+ 
+ type Example4<T extends string, U extends string> = (Record<T, any> & Record<U, any>);
+ >Example4 : Example4<T, U>
++>T : T
++>U : U
+ 
+ type Result4 = keyof Example4<'x', 'y'>;  // "x" | "y"
+ >Result4 : "x" | "y"
+ 
+ type Example5<T, U> = keyof (T & U);
+ >Example5 : keyof T | keyof U
++>T : T
++>U : U
+ 
+ type Result5 = Example5<Record<'x', any>, Record<'y', any>>;  // "x" | "y"
+ >Result5 : Result5

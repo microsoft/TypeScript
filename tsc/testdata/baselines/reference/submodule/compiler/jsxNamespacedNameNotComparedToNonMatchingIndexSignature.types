@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx] ////
+
+=== jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
+/// <reference path="react16.d.ts" />
+
+declare module "react" {
+>"react" : any
+
+    interface Attributes {
+>Attributes : Attributes
+
+        [key: `do-${string}`]: Function;
+>key : `do-${string}`
+
+        "ns:thing"?: string;
+>"ns:thing" : string
+    }
+}
+
+export const tag = <div ns:thing="a"/>
+>tag : any
+><div ns:thing="a"/> : any
+>div : any
+>ns:thing : any
+>ns : any
+>thing : any
+

@@ -1,0 +1,10 @@
+--- old.deleteReadonlyInStrictNullChecks.types
++++ new.deleteReadonlyInStrictNullChecks.types
+@@= skipped -1, +1 lines =@@
+ 
+ === deleteReadonlyInStrictNullChecks.ts ===
+ interface Function { readonly name: string; }
++>Function : Function
+ >name : string
+ 
+ class Foo {}

@@ -1,0 +1,15 @@
+--- old.moduleResolutionPackageIdWithRelativeAndAbsolutePath.types
++++ new.moduleResolutionPackageIdWithRelativeAndAbsolutePath.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /project/src/app.ts ===
+ import * as t from "anotherLib"; // Include the lib that recursively includes option as relative module resolution in this directory
+->t : typeof t
++>t : typeof import("/project/node_modules/anotherLib/index")
+ 
+ import { makeSharedOption } from "@shared/lib/app"; // Includes option as module in shared folder but as module in node_modules folder
+->makeSharedOption : () => import("/shared/lib/app").SharedOption
++>makeSharedOption : () => SharedOption
+ 
+ === /shared/node_modules/troublesome-lib/lib/Option.d.ts ===
+ export class Option {

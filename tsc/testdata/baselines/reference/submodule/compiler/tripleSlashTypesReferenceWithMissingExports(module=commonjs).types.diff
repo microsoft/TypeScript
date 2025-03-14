@@ -1,0 +1,10 @@
+--- old.tripleSlashTypesReferenceWithMissingExports(module=commonjs).types
++++ new.tripleSlashTypesReferenceWithMissingExports(module=commonjs).types
+@@= skipped -1, +1 lines =@@
+ 
+ === node_modules/pkg/index.d.ts ===
+ interface GlobalThing { a: number }
++>GlobalThing : GlobalThing
+ >a : number
+ 
+ === usage.ts ===

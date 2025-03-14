@@ -1,0 +1,16 @@
+--- old.defaultIsNotVisibleInLocalScope.types
++++ new.defaultIsNotVisibleInLocalScope.types
+@@= skipped -6, +6 lines =@@
+ }
+ export type X = typeof default;  // expect error
+ >X : any
+->default : any
+ 
+ === b.ts ===
+ export default { a: true }
+@@= skipped -10, +9 lines =@@
+ 
+ export type X = typeof default; // expect error
+ >X : any
+->default : any
+ 

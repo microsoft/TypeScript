@@ -1,0 +1,97 @@
+--- old.tsxGenericArrowFunctionParsing.types
++++ new.tsxGenericArrowFunctionParsing.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { isElement; }
++>Element : Element
+ >isElement : any
+ }
+ 
+@@= skipped -11, +14 lines =@@
+ 
+ // This is an element
+ var x1 = <T>() => {}</T>;
+->x1 : JSX.Element
+-><T>() => {}</T> : JSX.Element
++>x1 : any
++><T>() => {}</T> : any
+ >T : any
+ >T : any
+ 
+ x1.isElement;
+ >x1.isElement : any
+->x1 : JSX.Element
++>x1 : any
+ >isElement : any
+ 
+ // This is a generic function
+ var x2 = <T extends {}>() => {};
+ >x2 : <T extends {}>() => void
+ ><T extends {}>() => {} : <T extends {}>() => void
++>T : T
+ 
+ x2();
+ >x2() : void
+@@= skipped -23, +24 lines =@@
+ var x3 = <T, T1>() => {};
+ >x3 : <T, T1>() => void
+ ><T, T1>() => {} : <T, T1>() => void
++>T : T
++>T1 : T1
+ 
+ x3();
+ >x3() : void
+@@= skipped -7, +9 lines =@@
+ 
+ // This is an element
+ var x4 = <T extends={true}>() => {}</T>;
+->x4 : JSX.Element
+-><T extends={true}>() => {}</T> : JSX.Element
++>x4 : any
++><T extends={true}>() => {}</T> : any
+ >T : any
+->extends : boolean
++>extends : any
+ >true : true
+ >T : any
+ 
+ x4.isElement;
+ >x4.isElement : any
+->x4 : JSX.Element
++>x4 : any
+ >isElement : any
+ 
+ // This is an element
+ var x5 = <T extends>() => {}</T>;
+->x5 : JSX.Element
+-><T extends>() => {}</T> : JSX.Element
++>x5 : any
++><T extends>() => {}</T> : any
+ >T : any
+->extends : true
++>extends : any
+ >T : any
+ 
+ x5.isElement;
+ >x5.isElement : any
+->x5 : JSX.Element
++>x5 : any
+ >isElement : any
+ 
+ // This is a generic function
+ var x6 = <T = string,>() => {};
+->x6 : <T = string>() => void
+-><T = string,>() => {} : <T = string>() => void
++>x6 : <T>() => void
++><T = string,>() => {} : <T>() => void
++>T : T
+ 
+ x6();
+ >x6() : void
+->x6 : <T = string>() => void
++>x6 : <T>() => void
+ 

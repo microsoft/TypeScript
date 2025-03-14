@@ -1,0 +1,8 @@
+--- old.parserGenericClass1.types
++++ new.parserGenericClass1.types
+@@= skipped -2, +2 lines =@@
+ === parserGenericClass1.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ }

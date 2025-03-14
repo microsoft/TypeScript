@@ -1,0 +1,10 @@
+--- old.genericCallWithArrayLiteralArgs.types
++++ new.genericCallWithArrayLiteralArgs.types
+@@= skipped -2, +2 lines =@@
+ === genericCallWithArrayLiteralArgs.ts ===
+ function foo<T>(t: T) {
+ >foo : <T>(t: T) => T
++>T : T
+ >t : T
+ 
+     return t;

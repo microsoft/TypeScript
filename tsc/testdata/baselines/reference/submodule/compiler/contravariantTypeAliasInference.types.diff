@@ -1,0 +1,31 @@
+--- old.contravariantTypeAliasInference.types
++++ new.contravariantTypeAliasInference.types
+@@= skipped -2, +2 lines =@@
+ === contravariantTypeAliasInference.ts ===
+ type Func1<T> = (x: T) => void;
+ >Func1 : Func1<T>
++>T : T
+ >x : T
+ 
+ type Func2<T> = ((x: T) => void) | undefined;
+ >Func2 : Func2<T>
++>T : T
+ >x : T
+ 
+ declare let f1: Func1<string>;
+@@= skipped -14, +16 lines =@@
+ 
+ declare function foo<T>(f1: Func1<T>, f2: Func1<T>): void;
+ >foo : <T>(f1: Func1<T>, f2: Func1<T>) => void
++>T : T
+ >f1 : Func1<T>
+ >f2 : Func1<T>
+ 
+@@= skipped -17, +18 lines =@@
+ 
+ declare function bar<T>(g1: Func2<T>, g2: Func2<T>): void;
+ >bar : <T>(g1: Func2<T>, g2: Func2<T>) => void
++>T : T
+ >g1 : Func2<T>
+ >g2 : Func2<T>
+ 

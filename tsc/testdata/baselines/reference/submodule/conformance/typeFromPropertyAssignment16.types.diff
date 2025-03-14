@@ -1,0 +1,95 @@
+--- old.typeFromPropertyAssignment16.types
++++ new.typeFromPropertyAssignment16.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ var Outer = {};
+->Outer : typeof Outer
++>Outer : {}
+ >{} : {}
+ 
+ Outer.Inner = function () {}
+->Outer.Inner = function () {} : typeof Inner
+->Outer.Inner : typeof Inner
+->Outer : typeof Outer
+->Inner : typeof Inner
+->function () {} : typeof Inner
++>Outer.Inner = function () {} : () => void
++>Outer.Inner : any
++>Outer : {}
++>Inner : any
++>function () {} : () => void
+ 
+ Outer.Inner.prototype = {
+->Outer.Inner.prototype = {    x: 1,    m() { }} : { x: number; m(): void; }
+->Outer.Inner.prototype : { x: number; m(): void; }
+->Outer.Inner : typeof Inner
+->Outer : typeof Outer
+->Inner : typeof Inner
+->prototype : { x: number; m(): void; }
+->{    x: 1,    m() { }} : { x: number; m(): void; }
++>Outer.Inner.prototype = {    x: 1,    m() { }} : { x: number; m: () => void; }
++>Outer.Inner.prototype : any
++>Outer.Inner : any
++>Outer : {}
++>Inner : any
++>prototype : any
++>{    x: 1,    m() { }} : { x: number; m: () => void; }
+ 
+     x: 1,
+ >x : number
+@@= skipped -29, +29 lines =@@
+ 
+ /** @type {Outer.Inner} */
+ var inner
+->inner : Inner
++>inner : any
+ 
+ inner.x
+->inner.x : number
+->inner : Inner
+->x : number
++>inner.x : any
++>inner : any
++>x : any
+ 
+ inner.m()
+->inner.m() : void
+->inner.m : () => void
+->inner : Inner
+->m : () => void
++>inner.m() : any
++>inner.m : any
++>inner : any
++>m : any
+ 
+ var inno = new Outer.Inner()
+->inno : Inner
+->new Outer.Inner() : Inner
+->Outer.Inner : typeof Inner
+->Outer : typeof Outer
+->Inner : typeof Inner
++>inno : any
++>new Outer.Inner() : any
++>Outer.Inner : any
++>Outer : {}
++>Inner : any
+ 
+ inno.x
+->inno.x : number
+->inno : Inner
+->x : number
++>inno.x : any
++>inno : any
++>x : any
+ 
+ inno.m()
+->inno.m() : void
+->inno.m : () => void
+->inno : Inner
+->m : () => void
++>inno.m() : any
++>inno.m : any
++>inno : any
++>m : any
+ 

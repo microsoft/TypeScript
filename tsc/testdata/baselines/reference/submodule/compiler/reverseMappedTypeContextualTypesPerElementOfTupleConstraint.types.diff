@@ -1,0 +1,41 @@
+--- old.reverseMappedTypeContextualTypesPerElementOfTupleConstraint.types
++++ new.reverseMappedTypeContextualTypesPerElementOfTupleConstraint.types
+@@= skipped -2, +2 lines =@@
+ === reverseMappedTypeContextualTypesPerElementOfTupleConstraint.ts ===
+ type Tuple<T> = readonly [T, ...T[]];
+ >Tuple : Tuple<T>
++>T : T
+ 
+ declare function bindAll<
+->bindAll : <TTarget extends EventTarget, TTypes extends Tuple<keyof TTarget & `on${any}`>>(target: TTarget, bindings: { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }) => void
++>bindAll : <TTarget extends EventTarget, TTypes extends Tuple<keyof TTarget & `on${any}`>>(target: TTarget, bindings: { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; } }) => void
+ 
+   TTarget extends EventTarget,
++>TTarget : TTarget
++
+   TTypes extends Tuple<keyof TTarget & `on${any}`>
++>TTypes : TTypes
++
+ >(
+   target: TTarget,
+ >target : TTarget
+ 
+   bindings: {
+->bindings : { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }
++>bindings : { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; } }
+ 
+     [K in keyof TTypes]: {
++>K : K
++
+       type: TTypes[K];
+ >type : TTypes[K]
+ 
+@@= skipped -31, +38 lines =@@
+ 
+ bindAll({} as HTMLButtonElement, [
+ >bindAll({} as HTMLButtonElement, [  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },]) : void
+->bindAll : <TTarget extends EventTarget, TTypes extends Tuple<keyof TTarget & `on${any}`>>(target: TTarget, bindings: { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }) => void
++>bindAll : <TTarget extends EventTarget, TTypes extends Tuple<keyof TTarget & `on${any}`>>(target: TTarget, bindings: { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; } }) => void
+ >{} as HTMLButtonElement : HTMLButtonElement
+ >{} : {}
+ >[  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },] : [{ type: "onclick"; listener: (event: MouseEvent) => void; }, { type: "onkeydown"; listener: (event: KeyboardEvent) => void; }]

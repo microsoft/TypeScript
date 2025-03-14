@@ -1,0 +1,12 @@
+--- old.forgottenNew.types
++++ new.forgottenNew.types
+@@= skipped -10, +10 lines =@@
+ var logger = Tools.NullLogger();
+ >logger : any
+ >Tools.NullLogger() : any
+->Tools.NullLogger : typeof Tools.NullLogger
++>Tools.NullLogger : typeof NullLogger
+ >Tools : typeof Tools
+->NullLogger : typeof Tools.NullLogger
++>NullLogger : typeof NullLogger
+ 

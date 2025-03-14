@@ -1,0 +1,9 @@
+--- old.typeAliasDeclarationEmit2.types
++++ new.typeAliasDeclarationEmit2.types
+@@= skipped -2, +2 lines =@@
+ === typeAliasDeclarationEmit2.ts ===
+ export type A<a> = { value: a };
+ >A : A<a>
++>a : a
+ >value : a
+ 

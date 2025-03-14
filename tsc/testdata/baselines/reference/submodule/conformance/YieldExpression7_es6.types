@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/es6/yieldExpressions/YieldExpression7_es6.ts] ////
+
+=== YieldExpression7_es6.ts ===
+function* foo() {
+>foo : () => Generator<???, void, unknown>
+
+  yield foo
+>yield foo : any
+>foo : () => Generator<???, void, unknown>
+}

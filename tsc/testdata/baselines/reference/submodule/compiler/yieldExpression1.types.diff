@@ -1,0 +1,11 @@
+--- old.yieldExpression1.types
++++ new.yieldExpression1.types
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ function* b(): IterableIterator<number> {
+->b : () => IterableIterator<number>
++>b : () => IterableIterator<number, any, any>
+ 
+     yield;
+ >yield : any

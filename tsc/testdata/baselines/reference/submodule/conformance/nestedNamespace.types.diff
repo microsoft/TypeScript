@@ -1,0 +1,18 @@
+--- old.nestedNamespace.types
++++ new.nestedNamespace.types
+@@= skipped -9, +9 lines =@@
+ 
+ === b.ts ===
+ import type * as a from './a';
+->a : typeof a
++>a : typeof import("a")
+ 
+ interface B extends a.types.A {}
+->a.types : typeof a.types
+->a : typeof a
+->types : typeof a.types
++>B : B
++>a.types : typeof types
++>a : typeof import("a")
++>types : typeof types
+ 

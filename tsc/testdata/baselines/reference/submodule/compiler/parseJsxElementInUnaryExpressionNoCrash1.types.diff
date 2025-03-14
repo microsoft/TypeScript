@@ -1,0 +1,15 @@
+--- old.parseJsxElementInUnaryExpressionNoCrash1.types
++++ new.parseJsxElementInUnaryExpressionNoCrash1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ ~< <
+->~< < : boolean
+->~< : number
+->< : any
+-> : any
++>~< < : number
++>< < : () => any
+ 
+ > : any
+ 

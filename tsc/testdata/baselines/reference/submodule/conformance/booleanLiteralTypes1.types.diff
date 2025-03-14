@@ -1,0 +1,56 @@
+--- old.booleanLiteralTypes1.types
++++ new.booleanLiteralTypes1.types
+@@= skipped -31, +31 lines =@@
+ }
+ 
+ function f2(a: true | false, b: boolean) {
+->f2 : (a: true | false, b: boolean) => void
++>f2 : (a: boolean, b: boolean) => void
+ >a : boolean
+ >true : true
+ >false : false
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ function f3(a: true | false, b: true | false) {
+->f3 : (a: true | false, b: true | false) => void
++>f3 : (a: boolean, b: boolean) => void
+ >a : boolean
+ >true : true
+ >false : false
+@@= skipped -116, +116 lines =@@
+ }
+ 
+ function f10(x: true | false) {
+->f10 : (x: true | false) => "true" | "false"
++>f10 : (x: boolean) => "false" | "true"
+ >x : boolean
+ >true : true
+ >false : false
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function f11(x: true | false) {
+->f11 : (x: true | false) => "true" | "false"
++>f11 : (x: boolean) => "false" | "true"
+ >x : boolean
+ >true : true
+ >false : false
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ function f12(x: true | false) {
+->f12 : (x: true | false) => void
++>f12 : (x: boolean) => void
+ >x : boolean
+ >true : true
+ >false : false
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ function f13(x: true | false) {
+->f13 : (x: true | false) => void
++>f13 : (x: boolean) => void
+ >x : boolean
+ >true : true
+ >false : false

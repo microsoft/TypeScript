@@ -1,0 +1,11 @@
+--- old.DeclarationErrorsNoEmitOnError.types
++++ new.DeclarationErrorsNoEmitOnError.types
+@@= skipped -5, +5 lines =@@
+ >x : number
+ 
+ export interface I {
++>I : I
++
+     f: T;   
+ >f : T
+ }

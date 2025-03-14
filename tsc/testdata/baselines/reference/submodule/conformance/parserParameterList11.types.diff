@@ -1,0 +1,11 @@
+--- old.parserParameterList11.types
++++ new.parserParameterList11.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserParameterList11.ts ===
+ (...arg?) => 102;
+->(...arg?) => 102 : (...arg?: any[]) => number
++>(...arg?) => 102 : (...arg: any[]) => number
+ >arg : any[]
+ >102 : 102
+ 

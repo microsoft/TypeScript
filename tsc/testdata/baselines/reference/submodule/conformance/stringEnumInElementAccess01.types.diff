@@ -1,0 +1,11 @@
+--- old.stringEnumInElementAccess01.types
++++ new.stringEnumInElementAccess01.types
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ interface Item {
++>Item : Item
++
+     a: string;
+ >a : string
+ 

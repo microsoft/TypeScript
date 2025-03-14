@@ -1,0 +1,38 @@
+--- old.logicalAssignment8(target=es2015).types
++++ new.logicalAssignment8(target=es2015).types
+@@= skipped -1, +1 lines =@@
+ 
+ === logicalAssignment8.ts ===
+ declare const bar: { value?: number[] } | undefined
+->bar : { value?: number[]; } | undefined
++>bar : { value?: number[] | undefined; } | undefined
+ >value : number[] | undefined
+ 
+ function foo1(results: number[] | undefined) {
+@@= skipped -15, +15 lines =@@
+ >results : number[] | undefined
+ >bar?.value ?? [] : number[]
+ >bar?.value : number[] | undefined
+->bar : { value?: number[]; } | undefined
++>bar : { value?: number[] | undefined; } | undefined
+ >value : number[] | undefined
+ >[] : never[]
+ >push : (...items: number[]) => number
+@@= skipped -19, +19 lines =@@
+ >results : number[] | undefined
+ >bar?.value ?? [] : number[]
+ >bar?.value : number[] | undefined
+->bar : { value?: number[]; } | undefined
++>bar : { value?: number[] | undefined; } | undefined
+ >value : number[] | undefined
+ >[] : never[]
+ >push : (...items: number[]) => number
+@@= skipped -19, +19 lines =@@
+ >results : number[] | undefined
+ >bar?.value ?? [] : number[]
+ >bar?.value : number[] | undefined
+->bar : { value?: number[]; } | undefined
++>bar : { value?: number[] | undefined; } | undefined
+ >value : number[] | undefined
+ >[] : never[]
+ >push : (...items: number[]) => number

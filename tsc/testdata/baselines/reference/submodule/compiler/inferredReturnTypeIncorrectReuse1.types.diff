@@ -1,0 +1,86 @@
+--- old.inferredReturnTypeIncorrectReuse1.types
++++ new.inferredReturnTypeIncorrectReuse1.types
+@@= skipped -2, +2 lines =@@
+ === inferredReturnTypeIncorrectReuse1.ts ===
+ export type inferPipe<t, pipe> =
+ >inferPipe : inferPipe<t, pipe>
++>t : t
++>pipe : pipe
+ 
+     pipe extends (In: t) => unknown ? (In: t) => ReturnType<pipe> : never
+ >In : t
+ >In : t
+ 
+ interface Type<t> {
++>Type : Type<t>
++>t : t
++
+     pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe<t, fn>>
+ >pipe : <fn extends (In: t) => unknown>(fn: fn) => Type<inferPipe<t, fn>>
++>fn : fn
+ >In : t
+ >fn : fn
+ }
+@@= skipped -19, +25 lines =@@
+ export const out = t.pipe(s => parseInt(s))
+ >out : Type<(In: string) => number>
+ >t.pipe(s => parseInt(s)) : Type<(In: string) => number>
+->t.pipe : <fn_1 extends (In: string) => unknown>(fn: fn_1) => Type<inferPipe<string, fn_1>>
++>t.pipe : <fn extends (In: string) => unknown>(fn: fn) => Type<inferPipe<string, fn>>
+ >t : Type<string>
+->pipe : <fn_1 extends (In: string) => unknown>(fn: fn_1) => Type<inferPipe<string, fn_1>>
++>pipe : <fn extends (In: string) => unknown>(fn: fn) => Type<inferPipe<string, fn>>
+ >s => parseInt(s) : (s: string) => number
+ >s : string
+ >parseInt(s) : number
+->parseInt : (string: string, radix?: number) => number
++>parseInt : (string: string, radix?: number | undefined) => number
+ >s : string
+ 
+ export type inferPipe2<t, pipe> =
+ >inferPipe2 : inferPipe2<t, pipe>
++>t : t
++>pipe : pipe
+ 
+ 	pipe extends (In: t) => unknown ?
+ >In : t
+ 
+ 		(In: t) => ReturnType<pipe> extends infer n extends number ? n
+ >In : t
++>n : n
+ 
+ 		: ReturnType<pipe> extends infer s extends string ? s
++>s : s
++
+ 		: ReturnType<pipe> extends infer b extends boolean ? b
++>b : b
++
+ 		: never
+ 	:	never
+ 
+ interface Type2<t> {
++>Type2 : Type2<t>
++>t : t
++
+ 	pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe2<t, fn>>
+ >pipe : <fn extends (In: t) => unknown>(fn: fn) => Type<inferPipe2<t, fn>>
++>fn : fn
+ >In : t
+ >fn : fn
+ }
+@@= skipped -37, +48 lines =@@
+ export const out2 = t2.pipe(s => parseInt(s))
+ >out2 : Type<(In: string) => number>
+ >t2.pipe(s => parseInt(s)) : Type<(In: string) => number>
+->t2.pipe : <fn_1 extends (In: string) => unknown>(fn: fn_1) => Type<inferPipe2<string, fn_1>>
++>t2.pipe : <fn extends (In: string) => unknown>(fn: fn) => Type<inferPipe2<string, fn>>
+ >t2 : Type2<string>
+->pipe : <fn_1 extends (In: string) => unknown>(fn: fn_1) => Type<inferPipe2<string, fn_1>>
++>pipe : <fn extends (In: string) => unknown>(fn: fn) => Type<inferPipe2<string, fn>>
+ >s => parseInt(s) : (s: string) => number
+ >s : string
+ >parseInt(s) : number
+->parseInt : (string: string, radix?: number) => number
++>parseInt : (string: string, radix?: number | undefined) => number
+ >s : string
+ 

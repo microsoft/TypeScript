@@ -1,0 +1,21 @@
+--- old.newOperatorErrorCases.types
++++ new.newOperatorErrorCases.types
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ class T<T> {
+->T : globalThis.T<T>
++>T : T<T>
++>T : T
+ 
+     constructor(n?: T) { }
+ >n : T
+@@= skipped -21, +22 lines =@@
+ };
+ 
+ interface nestedCtor {
++>nestedCtor : nestedCtor
++
+     new (): nestedCtor;
+ }
+ var nestedCtor: nestedCtor;

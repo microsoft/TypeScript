@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagParameterType.ts] ////
+
+=== a.js ===
+/** @type {function(string): void} */
+const f = (value) => {
+>f : (value: any) => void
+>(value) => {    value = 1 // should error} : (value: any) => void
+>value : any
+
+    value = 1 // should error
+>value = 1 : 1
+>value : any
+>1 : 1
+
+};
+/** @type {(s: string) => void} */
+function g(s) {
+>g : (s: any) => void
+>s : any
+
+    s = 1 // Should error
+>s = 1 : 1
+>s : any
+>1 : 1
+}
+

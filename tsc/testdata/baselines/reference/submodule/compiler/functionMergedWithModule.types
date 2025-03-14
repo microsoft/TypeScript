@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/functionMergedWithModule.ts] ////
+
+=== functionMergedWithModule.ts ===
+function foo(title: string) {
+>foo : typeof foo
+>title : string
+
+    var x = 10;
+>x : number
+>10 : 10
+}
+
+module foo.Bar {
+>foo : typeof foo
+>Bar : typeof Bar
+
+    export function f() {
+>f : () => void
+    }
+}
+
+module foo.Baz {
+>foo : typeof foo
+>Baz : typeof Baz
+
+    export function g() {
+>g : () => void
+
+        Bar.f();
+>Bar.f() : any
+>Bar.f : any
+>Bar : any
+>f : any
+    }
+}

@@ -1,0 +1,11 @@
+--- old.useBeforeDeclaration_destructuring.types
++++ new.useBeforeDeclaration_destructuring.types
+@@= skipped -17, +17 lines =@@
+ >b : string | number
+ 
+ function test({c, d = c}: Record<string, number>) {}
+->test : ({ c, d }: Record<string, number>) => void
++>test : (__0: Record<string, number>) => void
+ >c : number
+ >d : number
+ >c : number

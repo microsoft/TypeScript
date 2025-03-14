@@ -1,0 +1,11 @@
+--- old.importAttributes7.types
++++ new.importAttributes7.types
+@@= skipped -19, +19 lines =@@
+ === /b.ts ===
+ import a from "./a" with { a: "a", "b": "b" };
+ >a : { a: string; b: string; 1: string; }
+->a : error
++>a : any
+ 
+ export async function f() {
+ >f : () => Promise<void>

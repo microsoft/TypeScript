@@ -1,0 +1,16 @@
+--- old.jsDeclarationsUniqueSymbolUsage.types
++++ new.jsDeclarationsUniqueSymbolUsage.types
+@@= skipped -15, +15 lines =@@
+  * @param {import('./a').WithSymbol} value 
+  */
+ export function b(value) {
+->b : (value: import("./a").WithSymbol) => import("./a").WithSymbol
+->value : import("a").WithSymbol
++>b : (value: any) => any
++>value : any
+ 
+     return value;
+->value : import("a").WithSymbol
++>value : any
+ }
+ 

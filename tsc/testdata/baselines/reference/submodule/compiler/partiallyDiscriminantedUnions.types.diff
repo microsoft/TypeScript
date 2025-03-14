@@ -1,0 +1,41 @@
+--- old.partiallyDiscriminantedUnions.types
++++ new.partiallyDiscriminantedUnions.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #10586
+ 
+ interface A1 {
++>A1 : A1
++
+     type: 'a';
+ >type : "a"
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface A2 {
++>A2 : A2
++
+     type: 'a';
+ >type : "a"
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface B {
++>B : B
++
+     type: 'b';
+ >type : "b"
+ }
+@@= skipped -73, +75 lines =@@
+ 
+         if (s.kind === "circle") {
+ >s.kind === "circle" : boolean
+->s.kind : "square" | "circle"
++>s.kind : "circle" | "square"
+ >s : Shape
+->kind : "square" | "circle"
++>kind : "circle" | "square"
+ >"circle" : "circle"
+ 
+             let c: Circle = s;

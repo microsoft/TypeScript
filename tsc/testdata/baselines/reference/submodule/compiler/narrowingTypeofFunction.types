@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/narrowingTypeofFunction.ts] ////
+
+=== narrowingTypeofFunction.ts ===
+type Meta = { foo: string }
+>Meta : Meta
+>foo : string
+
+interface F { (): string }
+>F : F
+
+function f1(a: (F & Meta) | string) {
+>f1 : (a: string | F & Meta) => void
+>a : string | F & Meta
+
+    if (typeof a === "function") {
+>typeof a === "function" : boolean
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>a : string | F & Meta
+>"function" : "function"
+
+        a;
+>a : F & Meta
+    }
+    else {
+        a;
+>a : string
+    }
+}
+
+function f2<T>(x: (T & F) | T & string) {
+>f2 : <T>(x: T & string | T & F) => void
+>T : T
+>x : T & string | T & F
+
+    if (typeof x === "function") {
+>typeof x === "function" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : T & string | T & F
+>"function" : "function"
+
+        x;
+>x : T & F
+    }
+    else {
+        x;
+>x : T & string
+    }
+}
+
+function f3(x: { _foo: number } & number) {
+>f3 : (x: { _foo: number; } & number) => void
+>x : { _foo: number; } & number
+>_foo : number
+
+    if (typeof x === "function") {
+>typeof x === "function" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : { _foo: number; } & number
+>"function" : "function"
+
+        x;
+>x : never
+    }
+}

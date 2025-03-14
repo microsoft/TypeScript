@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/checkJsTypeDefNoUnusedLocalMarked.ts] ////
+
+=== file.ts ===
+class Foo {
+>Foo : Foo
+
+    x: number;
+>x : number
+}
+
+declare global {
+>global : typeof global
+
+    var module: any; // Just here to remove unrelated error from test
+>module : any
+}
+
+export = Foo;
+>Foo : Foo
+
+=== something.js ===
+/** @typedef {typeof import("./file")} Foo */
+
+/** @typedef {(foo: Foo) => string} FooFun */
+
+module.exports = /** @type {FooFun} */(void 0);
+>module.exports = /** @type {FooFun} */(void 0) : undefined
+>module.exports : any
+>module : any
+>exports : any
+>(void 0) : undefined
+>void 0 : undefined
+>0 : 0
+

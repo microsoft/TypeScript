@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/exportImport.ts] ////
+
+=== consumer.ts ===
+import e = require('./exporter');
+>e : typeof import("exporter")
+
+export function w(): e.w { // Should be OK
+>w : () => Widget1
+>e : any
+
+    return new e.w();
+>new e.w() : Widget1
+>e.w : typeof Widget1
+>e : typeof import("exporter")
+>w : typeof Widget1
+}
+=== w1.ts ===
+export = Widget1
+>Widget1 : Widget1
+
+class Widget1 { name = 'one'; }
+>Widget1 : Widget1
+>name : string
+>'one' : "one"
+
+=== exporter.ts ===
+export import w = require('./w1');
+>w : typeof Widget1
+

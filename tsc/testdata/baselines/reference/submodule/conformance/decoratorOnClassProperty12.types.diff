@@ -1,0 +1,10 @@
+--- old.decoratorOnClassProperty12.types
++++ new.decoratorOnClassProperty12.types
+@@= skipped -2, +2 lines =@@
+ === decoratorOnClassProperty12.ts ===
+ declare function dec(): <T>(target: any, propertyKey: string) => void;
+ >dec : () => <T>(target: any, propertyKey: string) => void
++>T : T
+ >target : any
+ >propertyKey : string
+ 

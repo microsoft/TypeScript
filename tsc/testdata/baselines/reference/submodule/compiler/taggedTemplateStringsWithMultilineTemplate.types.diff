@@ -1,0 +1,14 @@
+--- old.taggedTemplateStringsWithMultilineTemplate.types
++++ new.taggedTemplateStringsWithMultilineTemplate.types
+@@= skipped -8, +8 lines =@@
+ f `
+ >f `\` : void
+ >f : (...args: any[]) => void
+->`\` : "\n\n"
++>`\` : "
+ 
++"
++
+ \
+ 
+ `;

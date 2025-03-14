@@ -1,0 +1,23 @@
+--- old.contextualSignatureInstatiationContravariance.types
++++ new.contextualSignatureInstatiationContravariance.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextualSignatureInstatiationContravariance.ts ===
+ interface Animal { x }
++>Animal : Animal
+ >x : any
+ 
+ interface Giraffe extends Animal { y }
++>Giraffe : Giraffe
+ >y : any
+ 
+ interface Elephant extends Animal { y2 }
++>Elephant : Elephant
+ >y2 : any
+ 
+ var f2: <T extends Animal>(x: T, y: T) => void;
+ >f2 : <T extends Animal>(x: T, y: T) => void
++>T : T
+ >x : T
+ >y : T
+ 

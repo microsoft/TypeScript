@@ -1,0 +1,108 @@
+--- old.jsEnumCrossFileExport.types
++++ new.jsEnumCrossFileExport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === enumDef.js ===
+ var Host = {};
+->Host : typeof Host
++>Host : {}
+ >{} : {}
+ 
+ Host.UserMetrics = {};
+->Host.UserMetrics = {} : typeof Host.UserMetrics
+->Host.UserMetrics : typeof Host.UserMetrics
+->Host : typeof Host
+->UserMetrics : typeof Host.UserMetrics
++>Host.UserMetrics = {} : {}
++>Host.UserMetrics : any
++>Host : {}
++>UserMetrics : any
+ >{} : {}
+ 
+ /** @enum {number} */
+ Host.UserMetrics.Action = {
+ >Host.UserMetrics.Action = {    WindowDocked: 1,    WindowUndocked: 2,    ScriptsBreakpointSet: 3,    TimelineStarted: 4,} : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+->Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+->Host.UserMetrics : typeof Host.UserMetrics
+->Host : typeof Host
+->UserMetrics : typeof Host.UserMetrics
+->Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
++>Host.UserMetrics.Action : any
++>Host.UserMetrics : any
++>Host : {}
++>UserMetrics : any
++>Action : any
+ >{    WindowDocked: 1,    WindowUndocked: 2,    ScriptsBreakpointSet: 3,    TimelineStarted: 4,} : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+ 
+     WindowDocked: 1,
+@@= skipped -45, +45 lines =@@
+  */
+ Host.UserMetrics.Blah = {
+ >Host.UserMetrics.Blah = {    x: 12} : { x: number; }
+->Host.UserMetrics.Blah : { x: number; }
+->Host.UserMetrics : typeof Host.UserMetrics
+->Host : typeof Host
+->UserMetrics : typeof Host.UserMetrics
+->Blah : { x: number; }
++>Host.UserMetrics.Blah : any
++>Host.UserMetrics : any
++>Host : {}
++>UserMetrics : any
++>Blah : any
+ >{    x: 12} : { x: number; }
+ 
+     x: 12
+@@= skipped -13, +13 lines =@@
+ }
+ === index.js ===
+ var Other = {};
+->Other : typeof Other
++>Other : {}
+ >{} : {}
+ 
+ Other.Cls = class {
+ >Other.Cls = class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : typeof Cls
+->Other.Cls : typeof Cls
+->Other : typeof Other
+->Cls : typeof Cls
++>Other.Cls : any
++>Other : {}
++>Cls : any
+ >class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : typeof Cls
+ 
+     /**
+      * @param {!Host.UserMetrics.Action} p
+      */
+     method(p) {}
+->method : (p: Host.UserMetrics.Action) => void
+->p : number
++>method : (p: any) => void
++>p : any
+ 
+     usage() {
+ >usage : () => void
+ 
+         this.method(Host.UserMetrics.Action.WindowDocked);
+ >this.method(Host.UserMetrics.Action.WindowDocked) : void
+->this.method : (p: Host.UserMetrics.Action) => void
++>this.method : (p: any) => void
+ >this : this
+->method : (p: Host.UserMetrics.Action) => void
+->Host.UserMetrics.Action.WindowDocked : number
+->Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+->Host.UserMetrics : typeof Host.UserMetrics
+->Host : typeof Host
+->UserMetrics : typeof Host.UserMetrics
+->Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
+->WindowDocked : number
++>method : (p: any) => void
++>Host.UserMetrics.Action.WindowDocked : any
++>Host.UserMetrics.Action : any
++>Host.UserMetrics : any
++>Host : {}
++>UserMetrics : any
++>Action : any
++>WindowDocked : any
+     }
+ }
+ 

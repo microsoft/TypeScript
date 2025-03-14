@@ -1,0 +1,12 @@
+--- old.parserMethodSignature7.types
++++ new.parserMethodSignature7.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserMethodSignature7.ts ===
+ interface I {
++>I : I
++
+   "G"<T>();
+ >"G" : <T>() => any
++>T : T
+ }

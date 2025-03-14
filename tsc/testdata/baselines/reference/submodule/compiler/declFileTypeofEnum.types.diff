@@ -1,0 +1,8 @@
+--- old.declFileTypeofEnum.types
++++ new.declFileTypeofEnum.types
+@@= skipped -37, +37 lines =@@
+ 
+ var daysOfYear: typeof days;
+ >daysOfYear : typeof days
+->days : typeof days
+ 

@@ -1,0 +1,28 @@
+--- old.interfaceAssignmentCompat.types
++++ new.interfaceAssignmentCompat.types
+@@= skipped -17, +17 lines =@@
+     }
+ 
+     export interface IEye {
++>IEye : IEye
++
+         color:number;
+ >color : number
+     }
+ 
+     export interface IFrenchEye {
++>IFrenchEye : IFrenchEye
++
+         coleur:number;
+ >coleur : number
+     }
+@@= skipped -129, +133 lines =@@
+ >z : IEye[]
+ >i : number
+ >color : number
+->"\r\n" : "\r\n"
++>"\r\n" : "
++"
+         }
+ 
+         var eeks:IFrenchEye[] = [];

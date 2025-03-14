@@ -1,0 +1,291 @@
+--- old.objectSpread.types
++++ new.objectSpread.types
+@@= skipped -32, +32 lines =@@
+ >c : boolean
+ 
+     { ...o, c: false }
+->{ ...o, c: false } : { c: false; a: number; b: string; }
++>{ ...o, c: false } : { a: number; b: string; c: false; }
+ >o : { a: number; b: string; }
+ >c : false
+ >false : false
+@@= skipped -23, +23 lines =@@
+ >b : string
+ 
+     { ...o, b: 'override' }
+->{ ...o, b: 'override' } : { b: string; a: number; }
++>{ ...o, b: 'override' } : { a: number; b: string; }
+ >o : { a: number; b: string; }
+ >b : string
+ >'override' : "override"
+@@= skipped -12, +12 lines =@@
+ >c : string
+ 
+     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
+->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
+->{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
++>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { a: number; b: false; c: string; }
++>{ a: 3, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
+ >a : number
+ >3 : 3
+ >{ b: false, c: 'overriden' } : { b: false; c: string; }
+@@= skipped -19, +19 lines =@@
+ >c : boolean
+ 
+     { ...o, ...o2 }
+->{ ...o, ...o2 } : { b: string; c: boolean; a: number; }
++>{ ...o, ...o2 } : { a: number; b: string; c: boolean; }
+ >o : { a: number; b: string; }
+ >o2 : { b: string; c: boolean; }
+ 
+@@= skipped -11, +11 lines =@@
+ >c : boolean
+ 
+     { ...o, ...o2, b: 'ok' }
+->{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
++>{ ...o, ...o2, b: 'ok' } : { a: number; c: boolean; b: string; }
+ >o : { a: number; b: string; }
+ >o2 : { b: string; c: boolean; }
+ >b : string
+@@= skipped -13, +13 lines =@@
+ >c : number
+ 
+     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
+->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
+->{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
++>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { a: number; b: false; c: number; }
++>{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; b: false; c: string; }
+ >a : number
+ >1 : 1
+ >{ b: false, c: 'overriden' } : { b: false; c: string; }
+@@= skipped -39, +39 lines =@@
+ >c : number
+ 
+     { ...op, c: 7 }
+->{ ...op, c: 7 } : { c: number; a: number; }
++>{ ...op, c: 7 } : { a: number; c: number; }
+ >op : { readonly a: number; }
+ >c : number
+ >7 : 7
+@@= skipped -26, +26 lines =@@
+ >authToken : string
+ 
+ function from16326(this: { header: Header }, header: Header, authToken: string): Header {
+->from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
++>from16326 : (header: Header, authToken: string) => Header
+ >this : { header: Header; }
+ >header : Header
+ >header : Header
+ >authToken : string
+ 
+     return {
+->{        ...this.header,        ...header,        ...authToken && { authToken }    } : { authToken: string; head: string; body: string; }
++>{        ...this.header,        ...header,        ...authToken && { authToken }    } : { head: string; body: string; authToken: string; }
+ 
+         ...this.header,
+ >this.header : Header
+@@= skipped -21, +21 lines =@@
+ >authToken && { authToken } : "" | { authToken: string; }
+ >authToken : string
+ >{ authToken } : { authToken: string; }
+->authToken : string
++>authToken : any
+     }
+ }
+ // boolean && T results in Partial<T>
+@@= skipped -157, +157 lines =@@
+ 
+ // own methods are enumerable
+ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
+->cplus : { p: number; plus(): void; }
++>cplus : { p: number; plus: () => void; }
+ >p : number
+ >plus : () => void
+->{ ...c, plus() { return this.p + 1; } } : { plus(): any; p: number; }
++>{ ...c, plus() { return this.p + 1; } } : { p: number; plus: () => any; }
+ >c : C
+ >plus : () => any
+ >this.p + 1 : any
+@@= skipped -15, +15 lines =@@
+ cplus.plus();
+ >cplus.plus() : void
+ >cplus.plus : () => void
+->cplus : { p: number; plus(): void; }
++>cplus : { p: number; plus: () => void; }
+ >plus : () => void
+ 
+ // new field's type conflicting with existing field is OK
+@@= skipped -10, +10 lines =@@
+ >b : string
+ 
+     { ...o, a: 'wrong type?' }
+->{ ...o, a: 'wrong type?' } : { a: string; b: string; }
++>{ ...o, a: 'wrong type?' } : { b: string; a: string; }
+ >o : { a: number; b: string; }
+ >a : string
+ >'wrong type?' : "wrong type?"
+@@= skipped -17, +17 lines =@@
+ 
+ // optional
+ function container(
+->container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string; }, optionalNumber: { sn?: number; }) => void
++>container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }) => void
+ 
+     definiteBoolean: { sn: boolean },
+ >definiteBoolean : { sn: boolean; }
+@@= skipped -11, +11 lines =@@
+ >sn : string
+ 
+     optionalString: { sn?: string },
+->optionalString : { sn?: string; }
++>optionalString : { sn?: string | undefined; }
+ >sn : string | undefined
+ 
+     optionalNumber: { sn?: number }) {
+->optionalNumber : { sn?: number; }
++>optionalNumber : { sn?: number | undefined; }
+ >sn : number | undefined
+ 
+     let optionalUnionStops: { sn: string | number | boolean } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
+@@= skipped -13, +13 lines =@@
+ >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
+ >definiteBoolean : { sn: boolean; }
+ >definiteString : { sn: string; }
+->optionalNumber : { sn?: number; }
++>optionalNumber : { sn?: number | undefined; }
+ 
+     let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+ >optionalUnionDuplicates : { sn: string | number; }
+@@= skipped -8, +8 lines =@@
+ >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
+ >definiteBoolean : { sn: boolean; }
+ >definiteString : { sn: string; }
+->optionalString : { sn?: string; }
+->optionalNumber : { sn?: number; }
++>optionalString : { sn?: string | undefined; }
++>optionalNumber : { sn?: number | undefined; }
+ 
+     let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+->allOptional : { sn?: string | number; }
++>allOptional : { sn?: string | number | undefined; }
+ >sn : string | number | undefined
+ >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
+->optionalString : { sn?: string; }
+->optionalNumber : { sn?: number; }
++>optionalString : { sn?: string | undefined; }
++>optionalNumber : { sn?: number | undefined; }
+ 
+     // computed property
+     let computedFirst: { a: number, b: string, "before everything": number } =
+@@= skipped -18, +18 lines =@@
+ >"before everything" : number
+ 
+         { ['before everything']: 12, ...o, b: 'yes' }
+->{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; "before everything": number; }
++>{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; ['before everything']: number; b: string; }
+ >['before everything'] : number
+ >'before everything' : "before everything"
+ >12 : 12
+@@= skipped -15, +15 lines =@@
+ >"at the end" : number
+ 
+         { ...o, b: 'yeah', ['at the end']: 14 }
+->{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; "at the end": number; a: number; }
++>{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; ['at the end']: number; }
+ >o : { a: number; b: string; }
+ >b : string
+ >'yeah' : "yeah"
+@@= skipped -17, +17 lines =@@
+ >shortCutted : { a: number; b: string; }
+ >a : number
+ >b : string
+->{ ...o, a } : { a: number; b: string; }
++>{ ...o, a } : { b: string; a: number; }
+ >o : { a: number; b: string; }
+->a : number
++>a : any
+ 
+ // non primitive
+ let spreadNonPrimitive = { ...<object>{}};
+@@= skipped -15, +15 lines =@@
+ 
+ function f<T, U>(t: T, u: U) {
+ >f : <T, U>(t: T, u: U) => T & U & { id: string; }
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -74, +76 lines =@@
+ >d : string
+ 
+     f({ a: 1, id: true }, { c: 1, d: 'no' })
+->f({ a: 1, id: true }, { c: 1, d: 'no' }) : never
++>f({ a: 1, id: true }, { c: 1, d: 'no' }) : { a: number; id: boolean; } & { c: number; d: string; } & { id: string; }
+ >f : <T, U>(t: T, u: U) => T & U & { id: string; }
+ >{ a: 1, id: true } : { a: number; id: true; }
+ >a : number
+@@= skipped -15, +15 lines =@@
+ 
+ function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
+ >genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ >v : T | U
+@@= skipped -90, +92 lines =@@
+ >v : T | U
+ 
+     let x12 = { ...v, ...obj };
+->x12 : (T & { x: number; }) | (U & { x: number; })
+->{ ...v, ...obj } : (T & { x: number; }) | (U & { x: number; })
++>x12 : T & { x: number; } | U & { x: number; }
++>{ ...v, ...obj } : T & { x: number; } | U & { x: number; }
+ >v : T | U
+ >obj : { x: number; }
+ 
+@@= skipped -11, +11 lines =@@
+ >w : T | { s: string; }
+ 
+     let x14 = { ...w, ...obj };
+->x14 : (T & { x: number; }) | { x: number; s: string; }
+->{ ...w, ...obj } : (T & { x: number; }) | { x: number; s: string; }
++>x14 : { s: string; x: number; } | T & { x: number; }
++>{ ...w, ...obj } : { s: string; x: number; } | T & { x: number; }
+ >w : T | { s: string; }
+ >obj : { x: number; }
+ 
+     let x15 = { ...t, ...v };
+->x15 : T | (T & U)
+->{ ...t, ...v } : T | (T & U)
++>x15 : T | T & U
++>{ ...t, ...v } : T | T & U
+ >t : T
+ >v : T | U
+ 
+     let x16 = { ...t, ...w };
+->x16 : T | (T & { s: string; })
+->{ ...t, ...w } : T | (T & { s: string; })
++>x16 : T | T & { s: string; }
++>{ ...t, ...w } : T | T & { s: string; }
+ >t : T
+ >w : T | { s: string; }
+ 
+     let x17 = { ...t, ...w, ...obj };
+->x17 : (T & { x: number; }) | (T & { x: number; s: string; })
+->{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { x: number; s: string; })
++>x17 : T & { x: number; } | T & { s: string; x: number; }
++>{ ...t, ...w, ...obj } : T & { x: number; } | T & { s: string; x: number; }
+ >t : T
+ >w : T | { s: string; }
+ >obj : { x: number; }
+ 
+     let x18 = { ...t, ...v, ...w };
+->x18 : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
+->{ ...t, ...v, ...w } : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
++>x18 : T | T & U | T & { s: string; } | T & U & { s: string; }
++>{ ...t, ...v, ...w } : T | T & U | T & { s: string; } | T & U & { s: string; }
+ >t : T
+ >v : T | U
+ >w : T | { s: string; }

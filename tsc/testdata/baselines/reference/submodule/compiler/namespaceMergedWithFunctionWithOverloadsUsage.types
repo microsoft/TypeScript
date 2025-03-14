@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/namespaceMergedWithFunctionWithOverloadsUsage.ts] ////
+
+=== index.ts ===
+import X = require("./file");
+>X : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+
+X(0); // shouldn't cause a crash
+>X(0) : void
+>X : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+>0 : 0
+
+=== file.d.ts ===
+declare namespace Foo {
+>Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+
+    interface Whatever {
+>Whatever : Whatever
+
+        prop: any;
+>prop : any
+    }
+}
+
+declare function Foo(opts?: Foo.Whatever): void;
+>Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+>opts : Whatever
+>Foo : any
+
+declare function Foo(cb: Function, opts?: Foo.Whatever): void;
+>Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+>cb : Function
+>opts : Whatever
+>Foo : any
+
+export = Foo;
+>Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+

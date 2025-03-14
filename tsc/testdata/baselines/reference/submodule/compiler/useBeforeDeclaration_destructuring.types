@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/useBeforeDeclaration_destructuring.ts] ////
+
+=== useBeforeDeclaration_destructuring.ts ===
+a;
+>a : string
+
+let {a, b = a} = {a: '', b: 1};
+>a : string
+>b : string | number
+>a : string
+>{a: '', b: 1} : { a: string; b?: number; }
+>a : string
+>'' : ""
+>b : number
+>1 : 1
+
+b;
+>b : string | number
+
+function test({c, d = c}: Record<string, number>) {}
+>test : (__0: Record<string, number>) => void
+>c : number
+>d : number
+>c : number
+

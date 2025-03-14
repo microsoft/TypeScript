@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag4.ts] ////
+
+=== t.d.ts ===
+type A<T extends string> = { a: T }
+>A : A<T>
+>T : T
+>a : T
+
+=== test.js ===
+/** Also should error for jsdoc typedefs
+ * @template {string} U
+ * @typedef {{ b: U }} B
+ */
+/** @type {A<number>} */
+var a;
+>a : any
+
+/** @type {B<number>} */
+var b;
+>b : any
+

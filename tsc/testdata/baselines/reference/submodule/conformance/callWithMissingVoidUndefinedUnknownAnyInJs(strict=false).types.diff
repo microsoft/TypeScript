@@ -1,0 +1,11 @@
+--- old.callWithMissingVoidUndefinedUnknownAnyInJs(strict=false).types
++++ new.callWithMissingVoidUndefinedUnknownAnyInJs(strict=false).types
+@@= skipped -17, +17 lines =@@
+ >p : any
+ 
+ interface I<T> { m(p: T): void; }
++>I : I<T>
++>T : T
+ >m : (p: T) => void
+ >p : T
+ 

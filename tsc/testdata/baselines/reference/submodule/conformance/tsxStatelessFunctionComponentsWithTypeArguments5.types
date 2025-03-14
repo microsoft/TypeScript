@@ -1,0 +1,83 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments5.tsx] ////
+
+=== file.tsx ===
+import React = require('react')
+>React : any
+
+declare function Component<U>(l: U): JSX.Element;
+>Component : <U>(l: U) => Element
+>U : U
+>l : U
+>JSX : any
+
+function createComponent<T extends { prop: number }>(arg: T) {
+>createComponent : <T extends { prop: number; }>(arg: T) => void
+>T : T
+>prop : number
+>arg : T
+
+    let a1 = <Component {...arg} />;
+>a1 : any
+><Component {...arg} /> : any
+>Component : <U>(l: U) => Element
+>arg : T
+
+    let a2 = <Component {...arg} prop1 />;
+>a2 : any
+><Component {...arg} prop1 /> : any
+>Component : <U>(l: U) => Element
+>arg : T
+>prop1 : any
+}
+
+declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
+>ComponentSpecific : <U>(l: { prop: U; }) => Element
+>U : U
+>l : { prop: U; }
+>prop : U
+>JSX : any
+
+declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => Element
+>U : U
+>l : { prop: U; "ignore-prop": number; }
+>prop : U
+>"ignore-prop" : number
+>JSX : any
+
+function Bar<T extends { prop: number }>(arg: T) {
+>Bar : <T extends { prop: number; }>(arg: T) => void
+>T : T
+>prop : number
+>arg : T
+
+    let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
+>a1 : any
+><ComponentSpecific {...arg} ignore-prop="hi" /> : any
+>ComponentSpecific : <U>(l: { prop: U; }) => Element
+>arg : T
+>ignore-prop : any
+
+    let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
+>a2 : any
+><ComponentSpecific1 {...arg} ignore-prop={10} /> : any
+>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => Element
+>arg : T
+>ignore-prop : any
+>10 : 10
+
+    let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
+>a3 : any
+><ComponentSpecific {...arg} prop="hello" /> : any
+>ComponentSpecific : <U>(l: { prop: U; }) => Element
+>arg : T
+>prop : any
+
+    let a4 = <ComponentSpecific {...arg} prop1="hello" />;   // U is "hello"
+>a4 : any
+><ComponentSpecific {...arg} prop1="hello" /> : any
+>ComponentSpecific : <U>(l: { prop: U; }) => Element
+>arg : T
+>prop1 : any
+}
+

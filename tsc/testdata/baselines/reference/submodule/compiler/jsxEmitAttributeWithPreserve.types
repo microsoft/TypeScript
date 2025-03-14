@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/jsxEmitAttributeWithPreserve.tsx] ////
+
+=== jsxEmitAttributeWithPreserve.tsx ===
+declare var React: any;
+>React : any
+
+<foo data/>
+><foo data/> : any
+>foo : any
+>data : any
+

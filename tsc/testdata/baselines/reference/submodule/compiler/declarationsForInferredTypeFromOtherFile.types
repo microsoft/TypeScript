@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/declarationsForInferredTypeFromOtherFile.ts] ////
+
+=== file1.ts ===
+export class Foo {}
+>Foo : Foo
+
+=== file2.ts ===
+export function foo(): import("./file1").Foo {
+>foo : () => Foo
+
+    return null as any;
+>null as any : any
+}
+=== file3.ts ===
+import {foo} from "./file2";
+>foo : () => Foo
+
+export function bar() {
+>bar : () => Foo
+
+    return foo();
+>foo() : Foo
+>foo : () => Foo
+}
+

@@ -1,0 +1,67 @@
+--- old.argumentsSpreadRestIterables(target=es5).types
++++ new.argumentsSpreadRestIterables(target=es5).types
+@@= skipped -23, +23 lines =@@
+ 
+ ;(function(a, ...rest) {})('', true, ...itNum)
+ >(function(a, ...rest) {})('', true, ...itNum) : void
+->(function(a, ...rest) {}) : (a: string, rest_0: boolean, ...rest: Iterable<number>[]) => void
+->function(a, ...rest) {} : (a: string, rest_0: boolean, ...rest: Iterable<number>[]) => void
++>(function(a, ...rest) {}) : (a: string, ...rest: [boolean, ...Iterable<number>[]]) => void
++>function(a, ...rest) {} : (a: string, ...rest: [boolean, ...Iterable<number>[]]) => void
+ >a : string
+ >rest : [boolean, ...Iterable<number>[]]
+ >'' : ""
+@@= skipped -10, +10 lines =@@
+ >itNum : Iterable<number>
+ 
+ declare function fn1<const T extends readonly unknown[]>(...args: T): T;
+->fn1 : <const T extends readonly unknown[]>(...args: T) => T
++>fn1 : <T extends readonly unknown[]>(...args: T) => T
++>T : T
+ >args : T
+ 
+ const res1 = fn1(..."hello");
+ >res1 : readonly any[]
+ >fn1(..."hello") : readonly any[]
+->fn1 : <const T extends readonly unknown[]>(...args: T) => T
++>fn1 : <T extends readonly unknown[]>(...args: T) => T
+ >..."hello" : any
+ >"hello" : "hello"
+ 
+ const res2 = fn1(...itNum);
+ >res2 : Iterable<number>
+ >fn1(...itNum) : Iterable<number>
+->fn1 : <const T extends readonly unknown[]>(...args: T) => T
++>fn1 : <T extends readonly unknown[]>(...args: T) => T
+ >...itNum : Iterable<number>
+ >itNum : Iterable<number>
+ 
+ const res3 = fn1(true, ..."hello");
+->res3 : readonly [true, ...any[]]
+->fn1(true, ..."hello") : readonly [true, ...any[]]
+->fn1 : <const T extends readonly unknown[]>(...args: T) => T
++>res3 : [true, ...any[]]
++>fn1(true, ..."hello") : [true, ...any[]]
++>fn1 : <T extends readonly unknown[]>(...args: T) => T
+ >true : true
+ >..."hello" : any
+ >"hello" : "hello"
+ 
+ const res4 = fn1(true, ...itNum);
+->res4 : readonly [true, ...Iterable<number>[]]
+->fn1(true, ...itNum) : readonly [true, ...Iterable<number>[]]
+->fn1 : <const T extends readonly unknown[]>(...args: T) => T
++>res4 : [true, ...Iterable<number>[]]
++>fn1(true, ...itNum) : [true, ...Iterable<number>[]]
++>fn1 : <T extends readonly unknown[]>(...args: T) => T
+ >true : true
+ >...itNum : Iterable<number>
+ >itNum : Iterable<number>
+@@= skipped -36, +37 lines =@@
+ // repro from #52781
+ declare function foo<T extends unknown[]>(...args: T): T;
+ >foo : <T extends unknown[]>(...args: T) => T
++>T : T
+ >args : T
+ 
+ const p1 = foo(..."hello");

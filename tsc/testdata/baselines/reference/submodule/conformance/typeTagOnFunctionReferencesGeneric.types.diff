@@ -1,0 +1,42 @@
+--- old.typeTagOnFunctionReferencesGeneric.types
++++ new.typeTagOnFunctionReferencesGeneric.types
+@@= skipped -6, +6 lines =@@
+ 
+ /**@type {IFn}*/
+ export function inJs(l) {
+->inJs : <T>(m: T) => T
+->l : T
++>inJs : (l: any) => any
++>l : any
+ 
+     return l;
+->l : T
++>l : any
+ }
+ inJs(1); // lints error. Why?
+->inJs(1) : 1
+->inJs : <T>(m: T) => T
++>inJs(1) : any
++>inJs : (l: any) => any
+ >1 : 1
+ 
+ /**@type {IFn}*/
+ const inJsArrow = (j) => {
+->inJsArrow : IFn
+->(j) => {    return j;} : <T>(j: T) => T
+->j : T
++>inJsArrow : (j: any) => any
++>(j) => {    return j;} : (j: any) => any
++>j : any
+ 
+     return j;
+->j : T
++>j : any
+ }
+ inJsArrow(2); // no error gets linted as expected
+->inJsArrow(2) : 2
+->inJsArrow : IFn
++>inJsArrow(2) : any
++>inJsArrow : (j: any) => any
+ >2 : 2
+ 

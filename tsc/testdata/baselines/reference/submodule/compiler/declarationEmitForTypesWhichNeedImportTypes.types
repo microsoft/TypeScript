@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/declarationEmitForTypesWhichNeedImportTypes.ts] ////
+
+=== b.ts ===
+export interface Named {}
+>Named : Named
+
+export function createNamed(): Named {
+>createNamed : () => Named
+
+  return {};
+>{} : {}
+}
+=== a.ts ===
+import { createNamed } from "./b";
+>createNamed : () => Named
+
+export const Value = createNamed();
+>Value : Named
+>createNamed() : Named
+>createNamed : () => Named
+

@@ -1,0 +1,32 @@
+--- old.instanceofOperatorWithInvalidOperands.es2015.types
++++ new.instanceofOperatorWithInvalidOperands.es2015.types
+@@= skipped -169, +169 lines =@@
+ 
+ // @@hasInstance restricts LHS
+ var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
+->o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
++>o4 : { [Symbol.hasInstance]: (value: { x: number; }) => boolean; }
+ >[Symbol.hasInstance] : (value: { x: number; }) => boolean
+ >Symbol.hasInstance : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -16, +16 lines =@@
+ >ra10 : boolean
+ >o5 instanceof o4 : boolean
+ >o5 : { y: string; }
+->o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
++>o4 : { [Symbol.hasInstance]: (value: { x: number; }) => boolean; }
+ 
+ // invalid @@hasInstance method return type on RHS
+ var o6: {[Symbol.hasInstance](value: unknown): number;};
+->o6 : { [Symbol.hasInstance](value: unknown): number; }
++>o6 : { [Symbol.hasInstance]: (value: unknown) => number; }
+ >[Symbol.hasInstance] : (value: unknown) => number
+ >Symbol.hasInstance : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -15, +15 lines =@@
+ >rb11 : boolean
+ >x instanceof o6 : boolean
+ >x : any
+->o6 : { [Symbol.hasInstance](value: unknown): number; }
++>o6 : { [Symbol.hasInstance]: (value: unknown) => number; }
+ 

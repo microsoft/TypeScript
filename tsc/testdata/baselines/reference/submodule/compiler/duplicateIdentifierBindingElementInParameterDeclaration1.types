@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/duplicateIdentifierBindingElementInParameterDeclaration1.ts] ////
+
+=== duplicateIdentifierBindingElementInParameterDeclaration1.ts ===
+function f0(a, [a, [b]], {b}) { }
+>f0 : (a: any, __1: [any, [any]], __2: { b: any; }) => void
+>a : any
+>a : any
+>b : any
+>b : any
+
+function f1([a, a]) { }
+>f1 : (__0: [any, any]) => void
+>a : any
+>a : any
+
+function f2({b}, {b}) { }
+>f2 : (__0: { b: any; }, __1: { b: any; }) => void
+>b : any
+>b : any
+
+function f3([c,[c],[[c]]]) { }
+>f3 : (__0: [any, [any], [[any]]]) => void
+>c : any
+>c : any
+>c : any
+
+function f4({d, d:{d}}) { }
+>f4 : (__0: { d: { d: any; }; }) => void
+>d : { d: any; }
+>d : any
+>d : any
+
+function f5({e, e: {e}}, {e}, [d,e, [[e]]], ...e) { }
+>f5 : (__0: { e: { e: any; }; }, __1: { e: any; }, __2: [any, any, [[any]]], ...e: any[]) => void
+>e : { e: any; }
+>e : any
+>e : any
+>e : any
+>d : any
+>e : any
+>e : any
+>e : any[]
+
+function f6([f, ...f]) { }
+>f6 : (__0: [any, ...any[]]) => void
+>f : any
+>f : any[]
+
+function f7(a, func = (a) => { return 1 }) { }  // not error
+>f7 : (a: any, func?: (a: any) => number) => void
+>a : any
+>func : (a: any) => number
+>(a) => { return 1 } : (a: any) => number
+>a : any
+>1 : 1
+

@@ -1,0 +1,37 @@
+--- old.optionalBindingParametersInOverloads2.types
++++ new.optionalBindingParametersInOverloads2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === optionalBindingParametersInOverloads2.ts ===
+ function foo({ x, y, z }?: { x: string; y: number; z: boolean });
+->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
++>foo : (__0?: { x: string; y: number; z: boolean; }) => any
+ >x : string
+ >y : number
+ >z : boolean
+@@= skipped -9, +9 lines =@@
+ >z : boolean
+ 
+ function foo(...rest: any[]) {
+->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
++>foo : (__0?: { x: string; y: number; z: boolean; }) => any
+ >rest : any[]
+ 
+ }
+ 
+ foo({ x: "", y: 0, z: false });
+ >foo({ x: "", y: 0, z: false }) : any
+->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
++>foo : (__0?: { x: string; y: number; z: boolean; }) => any
+ >{ x: "", y: 0, z: false } : { x: string; y: number; z: false; }
+ >x : string
+ >"" : ""
+@@= skipped -18, +18 lines =@@
+ 
+ foo({ x: false, y: 0, z: "" });
+ >foo({ x: false, y: 0, z: "" }) : any
+->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
++>foo : (__0?: { x: string; y: number; z: boolean; }) => any
+ >{ x: false, y: 0, z: "" } : { x: boolean; y: number; z: string; }
+ >x : boolean
+ >false : false

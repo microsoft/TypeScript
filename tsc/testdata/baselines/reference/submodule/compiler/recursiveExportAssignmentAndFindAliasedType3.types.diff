@@ -1,0 +1,22 @@
+--- old.recursiveExportAssignmentAndFindAliasedType3.types
++++ new.recursiveExportAssignmentAndFindAliasedType3.types
+@@= skipped -5, +5 lines =@@
+ >moduleC : any
+ 
+ import ClassB = require("recursiveExportAssignmentAndFindAliasedType3_moduleB");
+->ClassB : typeof ClassB
++>ClassB : any
+ 
+ export var b: ClassB; // This should result in type ClassB
+ >b : ClassB
+@@= skipped -34, +34 lines =@@
+ >self : any
+ }
+ 
+-=== recursiveExportAssignmentAndFindAliasedType3_moduleB.ts ===
+-class ClassB { }
+->ClassB : ClassB
+-
+-export = ClassB;
+->ClassB : ClassB
+-

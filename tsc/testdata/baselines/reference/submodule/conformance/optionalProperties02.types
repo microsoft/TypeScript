@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/optionalProperties02.ts] ////
+
+=== optionalProperties02.ts ===
+interface Foo {
+>Foo : Foo
+
+    a?: string;
+>a : string | undefined
+
+    b: string;
+>b : string
+}
+
+<Foo>{ a: undefined };
+><Foo>{ a: undefined } : Foo
+>{ a: undefined } : { a: undefined; }
+>a : undefined
+>undefined : undefined
+

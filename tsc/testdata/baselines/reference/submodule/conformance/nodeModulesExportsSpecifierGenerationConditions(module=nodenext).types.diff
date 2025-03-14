@@ -1,0 +1,36 @@
+--- old.nodeModulesExportsSpecifierGenerationConditions(module=nodenext).types
++++ new.nodeModulesExportsSpecifierGenerationConditions(module=nodenext).types
+@@= skipped -5, +5 lines =@@
+ >Thing : any
+ 
+ export const a = (await import("inner")).x();
+->a : import("node_modules/inner/other").Thing
+->(await import("inner")).x() : import("node_modules/inner/other").Thing
+->(await import("inner")).x : () => import("node_modules/inner/other").Thing
+->(await import("inner")) : typeof import("node_modules/inner/index")
+->await import("inner") : typeof import("node_modules/inner/index")
+->import("inner") : Promise<typeof import("node_modules/inner/index")>
++>a : Thing
++>(await import("inner")).x() : Thing
++>(await import("inner")).x : () => Thing
++>(await import("inner")) : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
++>await import("inner") : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
++>import("inner") : Promise<{ x: () => Thing; default: typeof import("node_modules/inner/index"); }>
+ >"inner" : "inner"
+->x : () => import("node_modules/inner/other").Thing
++>x : () => Thing
+ 
+ === node_modules/inner/index.d.ts ===
+ // esm format file
+ export { x } from "./other.js";
+->x : () => import("node_modules/inner/other").Thing
++>x : () => Thing
+ 
+ === node_modules/inner/other.d.ts ===
+ // esm format file
+ export interface Thing {}
++>Thing : Thing
++
+ export const x: () => Thing;
+ >x : () => Thing
+ 

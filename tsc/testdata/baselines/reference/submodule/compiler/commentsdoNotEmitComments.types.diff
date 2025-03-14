@@ -1,0 +1,19 @@
+--- old.commentsdoNotEmitComments.types
++++ new.commentsdoNotEmitComments.types
+@@= skipped -101, +101 lines =@@
+ 
+ /** interface comments*/
+ interface i1 {
++>i1 : i1
++
+     /** caller comments*/
+     (a: number): number;
+ >a : number
+@@= skipped -42, +44 lines =@@
+ 
+     /// module m2
+     export module m2 {
++>m2 : any
+     }
+ }
+ 

@@ -1,0 +1,43 @@
+--- old.typeFromPropertyAssignment.types
++++ new.typeFromPropertyAssignment.types
+@@= skipped -12, +12 lines =@@
+ }
+ Outer.Inner = class I {
+ >Outer.Inner = class I {    n(a, b) { }} : typeof I
+->Outer.Inner : typeof I
++>Outer.Inner : any
+ >Outer : typeof O
+->Inner : typeof I
++>Inner : any
+ >class I {    n(a, b) { }} : typeof I
+ >I : typeof I
+ 
+@@= skipped -14, +14 lines =@@
+ }
+ /** @type {Outer} */
+ var si
+->si : O
++>si : any
+ 
+ si.m
+->si.m : (x: any, y: any) => void
+->si : O
+->m : (x: any, y: any) => void
++>si.m : any
++>si : any
++>m : any
+ 
+ /** @type {Outer.Inner} */
+ var oi
+->oi : I
++>oi : any
+ 
+ oi.n
+->oi.n : (a: any, b: any) => void
+->oi : I
+->n : (a: any, b: any) => void
++>oi.n : any
++>oi : any
++>n : any
+ 
+ 

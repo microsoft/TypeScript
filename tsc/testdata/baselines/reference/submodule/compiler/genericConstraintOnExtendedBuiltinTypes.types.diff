@@ -1,0 +1,46 @@
+--- old.genericConstraintOnExtendedBuiltinTypes.types
++++ new.genericConstraintOnExtendedBuiltinTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericConstraintOnExtendedBuiltinTypes.ts ===
+ declare module EndGate {
++>EndGate : typeof EndGate
++
+     export interface ICloneable {
++>ICloneable : ICloneable
++
+         Clone(): any;
+ >Clone : () => any
+     }
+ }
+ 
+ interface Number extends EndGate.ICloneable { }
++>Number : Number
+ >EndGate : typeof EndGate
+ 
+ module EndGate.Tweening {
+@@= skipped -15, +20 lines =@@
+ 
+     export class Tween<T extends ICloneable>{
+ >Tween : Tween<T>
++>T : T
+ 
+         private _from: T;
+ >_from : T
+@@= skipped -27, +28 lines =@@
+ 
+     export class NumberTween extends Tween<number>{
+ >NumberTween : NumberTween
+->Tween : Tween<number>
++>Tween : any
+ 
+         constructor(from: number) {
+ >from : number
+ 
+             super(from);
+ >super(from) : void
+->super : typeof Tween
++>super : any
+ >from : number
+         }
+     }

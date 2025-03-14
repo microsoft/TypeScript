@@ -1,0 +1,19 @@
+--- old.cloduleAndTypeParameters.types
++++ new.cloduleAndTypeParameters.types
+@@= skipped -2, +2 lines =@@
+ === cloduleAndTypeParameters.ts ===
+ class Foo<T extends Foo.Bar> {
+ >Foo : Foo<T>
++>T : T
+ >Foo : any
+ 
+   constructor() {
+@@= skipped -10, +11 lines =@@
+ >Foo : typeof Foo
+ 
+   export interface Bar {
++>Bar : Bar
++
+     bar(): void;
+ >bar : () => void
+   }

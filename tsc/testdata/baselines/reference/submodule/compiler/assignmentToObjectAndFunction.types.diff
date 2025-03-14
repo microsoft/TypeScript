@@ -1,0 +1,11 @@
+--- old.assignmentToObjectAndFunction.types
++++ new.assignmentToObjectAndFunction.types
+@@= skipped -8, +8 lines =@@
+ 
+ var goodObj: Object = {
+ >goodObj : Object
+->{    toString(x?) {        return "";    }} : { toString(x?: any): string; }
++>{    toString(x?) {        return "";    }} : { toString: (x?: any) => string; }
+ 
+     toString(x?) {
+ >toString : (x?: any) => string

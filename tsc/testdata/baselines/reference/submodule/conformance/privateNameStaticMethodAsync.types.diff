@@ -1,0 +1,38 @@
+--- old.privateNameStaticMethodAsync.types
++++ new.privateNameStaticMethodAsync.types
+@@= skipped -29, +29 lines =@@
+ >b : number
+ >(this.#baz().next().value || 0) : number
+ >this.#baz().next().value || 0 : number
+->this.#baz().next().value : number | void
++>this.#baz().next().value : void | number
+ >this.#baz().next() : IteratorResult<number, void>
+->this.#baz().next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
++>this.#baz().next : (...__0: [] | [unknown]) => IteratorResult<number, void>
+ >this.#baz() : Generator<number, void, unknown>
+ >this.#baz : () => Generator<number, void, unknown>
+ >this : typeof C
+->next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
+->value : number | void
++>next : (...__0: [] | [unknown]) => IteratorResult<number, void>
++>value : void | number
+ >0 : 0
+ >((await this.#qux().next()).value || 0) : number
+ >(await this.#qux().next()).value || 0 : number
+->(await this.#qux().next()).value : number | void
++>(await this.#qux().next()).value : void | number
+ >(await this.#qux().next()) : IteratorResult<number, void>
+ >await this.#qux().next() : IteratorResult<number, void>
+ >this.#qux().next() : Promise<IteratorResult<number, void>>
+->this.#qux().next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
++>this.#qux().next : (...__0: [] | [unknown]) => Promise<IteratorResult<number, void>>
+ >this.#qux() : AsyncGenerator<number, void, unknown>
+ >this.#qux : () => AsyncGenerator<number, void, unknown>
+ >this : typeof C
+->next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
+->value : number | void
++>next : (...__0: [] | [unknown]) => Promise<IteratorResult<number, void>>
++>value : void | number
+ >0 : 0
+     }
+     static *#baz() { yield 42; }

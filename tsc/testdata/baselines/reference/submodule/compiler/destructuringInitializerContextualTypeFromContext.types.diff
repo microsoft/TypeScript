@@ -1,0 +1,64 @@
+--- old.destructuringInitializerContextualTypeFromContext.types
++++ new.destructuringInitializerContextualTypeFromContext.types
+@@= skipped -1, +1 lines =@@
+ 
+ === destructuringInitializerContextualTypeFromContext.ts ===
+ interface SFC<P = {}> {
++>SFC : SFC<P>
++>P : P
++
+     (props: P & { children?: any }): any | null;
+ >props : P & { children?: any; }
+ >children : any
+ }
+ 
+ interface Props {
++>Props : Props
++
+     name: "Apollo" | "Artemis" | "Dionysus" | "Persephone";
+ >name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
+ }
+ 
+ const Parent: SFC<Props> = ({
+ >Parent : SFC<Props>
+->({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : ({ children, name, ...props }: Props & { children?: any; }) => any
++>({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : (__0: Props & { children?: any; }) => any
+ 
+     children,
+ >children : any
+@@= skipped -28, +33 lines =@@
+ >Child({name, ...props}) : any
+ >Child : SFC<Props>
+ >{name, ...props} : { name: "Apollo" | "Artemis" | "Dionysus" | "Persephone"; }
+->name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
++>name : any
+ >props : {}
+ 
+ const Child: SFC<Props> = ({
+ >Child : SFC<Props>
+->({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : ({ children, name, ...props }: Props & { children?: any; }) => string
++>({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : (__0: Props & { children?: any; }) => string
+ 
+     children,
+ >children : any
+@@= skipped -21, +21 lines =@@
+ >`name: ${name} props: ${JSON.stringify(props)}` : string
+ >name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
+ >JSON.stringify(props) : string
+->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
++>JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+ >JSON : JSON
+->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
++>stringify : { (value: any, replacer?: (key: string, value: any) => any | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+ >props : {}
+ 
+ // Repro from #29189
+@@= skipped -15, +15 lines =@@
+ f(([_1, _2 = undefined]) => undefined)
+ >f(([_1, _2 = undefined]) => undefined) : void
+ >f : (g: (as: string[]) => void) => void
+->([_1, _2 = undefined]) => undefined : ([_1, _2]: string[]) => undefined
++>([_1, _2 = undefined]) => undefined : (__0: string[]) => undefined
+ >_1 : string
+ >_2 : string | undefined
+ >undefined : undefined

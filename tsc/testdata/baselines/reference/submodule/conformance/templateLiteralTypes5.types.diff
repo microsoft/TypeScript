@@ -1,0 +1,40 @@
+--- old.templateLiteralTypes5.types
++++ new.templateLiteralTypes5.types
+@@= skipped -2, +2 lines =@@
+ === templateLiteralTypes5.ts ===
+ // https://github.com/microsoft/TypeScript/issues/55364
+ interface TypeMap {
++>TypeMap : TypeMap
++
+   a: "A";
+ >a : "A"
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ declare const f: <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0];
+ >f : <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]
++>T0 : T0
+ >x : `${T0}`
+ 
+ type F1 = <T1 extends "a" | "b">(x: `${T1}`) => TypeMap[T1];
+ >F1 : F1
++>T1 : T1
+ >x : `${T1}`
+ 
+ const f1: F1 = f; 
+@@= skipped -12, +14 lines =@@
+ 
+ type F2 = <T2 extends 'a' | 'b'>(x: `${T2}`) => TypeMap[`${T2}`]
+ >F2 : F2
++>T2 : T2
+ >x : `${T2}`
+ 
+ const f2: F2 = f
+@@= skipped -8, +9 lines =@@
+ 
+ function f3<T3 extends "a" | "b">(x: T3) {
+ >f3 : <T3 extends "a" | "b">(x: T3) => void
++>T3 : T3
+ >x : T3
+ 
+     const test1: `${T3}` = x    

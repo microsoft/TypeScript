@@ -1,0 +1,11 @@
+--- old.instantiatedReturnTypeContravariance.types
++++ new.instantiatedReturnTypeContravariance.types
+@@= skipped -1, +1 lines =@@
+ 
+ === instantiatedReturnTypeContravariance.ts ===
+ interface B<T> {
++>B : B<T>
++>T : T
+ 
+ name: string;
+ >name : string

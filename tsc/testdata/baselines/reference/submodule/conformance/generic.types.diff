@@ -1,0 +1,10 @@
+--- old.generic.types
++++ new.generic.types
+@@= skipped -2, +2 lines =@@
+ === /a.ts ===
+ export class A<T> { a!: T }
+ >A : A<T>
++>T : T
+ >a : T
+ 
+ export type { A as B };

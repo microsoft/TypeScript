@@ -1,0 +1,103 @@
+//// [tests/cases/conformance/externalModules/umd-augmentation-1.ts] ////
+
+=== b.ts ===
+/// <reference path="math2d-augment.d.ts" />
+import * as m from 'math2d';
+>m : typeof import("node_modules/math2d/index")
+
+let v = new m.Vector(3, 2);
+>v : Vector
+>new m.Vector(3, 2) : Vector
+>m.Vector : typeof Vector
+>m : typeof import("node_modules/math2d/index")
+>Vector : typeof Vector
+>3 : 3
+>2 : 2
+
+let magnitude = m.getLength(v);
+>magnitude : number
+>m.getLength(v) : number
+>m.getLength : (p: Vector) => number
+>m : typeof import("node_modules/math2d/index")
+>getLength : (p: Vector) => number
+>v : Vector
+
+let p: m.Point = v.translate(5, 5);
+>p : Point
+>m : any
+>v.translate(5, 5) : Vector
+>v.translate : (dx: number, dy: number) => Vector
+>v : Vector
+>translate : (dx: number, dy: number) => Vector
+>5 : 5
+>5 : 5
+
+p = v.reverse();
+>p = v.reverse() : Point
+>p : Point
+>v.reverse() : Point
+>v.reverse : () => Point
+>v : Vector
+>reverse : () => Point
+
+var t = p.x;
+>t : number
+>p.x : number
+>p : Point
+>x : number
+
+=== node_modules/math2d/index.d.ts ===
+export as namespace Math2d;
+>Math2d : typeof import("node_modules/math2d/index")
+
+export interface Point {
+>Point : Point
+
+	x: number;
+>x : number
+
+	y: number;
+>y : number
+}
+
+export class Vector implements Point {
+>Vector : Vector
+
+	x: number;
+>x : number
+
+	y: number;
+>y : number
+
+	constructor(x: number, y: number);
+>x : number
+>y : number
+
+	translate(dx: number, dy: number): Vector;
+>translate : (dx: number, dy: number) => Vector
+>dx : number
+>dy : number
+}
+
+export function getLength(p: Vector): number;
+>getLength : (p: Vector) => number
+>p : Vector
+
+=== math2d-augment.d.ts ===
+import * as Math2d from 'math2d';
+>Math2d : typeof import("node_modules/math2d/index")
+
+// Augment the module
+declare module 'math2d' {
+>'math2d' : typeof import("node_modules/math2d/index")
+
+	// Add a method to the class
+	interface Vector {
+>Vector : Vector
+
+		reverse(): Math2d.Point;
+>reverse : () => Point
+>Math2d : any
+	}
+}
+

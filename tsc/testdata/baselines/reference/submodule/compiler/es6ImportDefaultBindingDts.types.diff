@@ -1,0 +1,21 @@
+--- old.es6ImportDefaultBindingDts.types
++++ new.es6ImportDefaultBindingDts.types
+@@= skipped -8, +8 lines =@@
+ 
+ === client.ts ===
+ import defaultBinding from "./server";
+->defaultBinding : typeof defaultBinding
++>defaultBinding : typeof c
+ 
+ export var x = new defaultBinding();
+->x : defaultBinding
+->new defaultBinding() : defaultBinding
+->defaultBinding : typeof defaultBinding
++>x : c
++>new defaultBinding() : c
++>defaultBinding : typeof c
+ 
+ import defaultBinding2 from "./server"; // elide this import since defaultBinding2 is not used
+->defaultBinding2 : typeof defaultBinding
++>defaultBinding2 : typeof c
+ 

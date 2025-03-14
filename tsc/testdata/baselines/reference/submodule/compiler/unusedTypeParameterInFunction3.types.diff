@@ -1,0 +1,12 @@
+--- old.unusedTypeParameterInFunction3.types
++++ new.unusedTypeParameterInFunction3.types
+@@= skipped -2, +2 lines =@@
+ === unusedTypeParameterInFunction3.ts ===
+ function f1<X, Y, Z>() {
+ >f1 : <X, Y, Z>() => void
++>X : X
++>Y : Y
++>Z : Z
+ 
+     var a: X;
+ >a : X

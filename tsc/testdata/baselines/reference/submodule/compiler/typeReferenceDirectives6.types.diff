@@ -1,0 +1,11 @@
+--- old.typeReferenceDirectives6.types
++++ new.typeReferenceDirectives6.types
+@@= skipped -17, +17 lines =@@
+ >$ : { x: number; }
+ >x : number
+     
+-=== /types/lib/index.d.ts ===
+-interface $ { x }
+->x : any
+-
+-

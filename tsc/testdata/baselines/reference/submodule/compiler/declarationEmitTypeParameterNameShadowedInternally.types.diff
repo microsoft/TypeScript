@@ -1,0 +1,33 @@
+--- old.declarationEmitTypeParameterNameShadowedInternally.types
++++ new.declarationEmitTypeParameterNameShadowedInternally.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitTypeParameterNameShadowedInternally.ts ===
+ export const foo = <T,>(x: T) => {
+->foo : <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1]
+-><T,>(x: T) => {	const inner = <T,>(y: T) => [x, y] as const;	return inner;} : <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1]
++>foo : <T>(x: T) => <T>(y: T) => [T, T]
++><T,>(x: T) => {	const inner = <T,>(y: T) => [x, y] as const;	return inner;} : <T>(x: T) => <T>(y: T) => [T, T]
++>T : T
+ >x : T
+ 
+ 	const inner = <T,>(y: T) => [x, y] as const;
+->inner : <T_1>(y: T_1) => readonly [T, T_1]
+-><T,>(y: T) => [x, y] as const : <T_1>(y: T_1) => readonly [T, T_1]
++>inner : <T>(y: T) => [T, T]
++><T,>(y: T) => [x, y] as const : <T>(y: T) => [T, T]
++>T : T
+ >y : T
+->[x, y] as const : readonly [T_1, T]
+->[x, y] : readonly [T_1, T]
+->x : T_1
++>[x, y] as const : [T, T]
++>[x, y] : [T, T]
++>x : T
+ >y : T
+ 
+ 	return inner;
+->inner : <T_1>(y: T_1) => readonly [T, T_1]
++>inner : <T>(y: T) => [T, T]
+ }
+ 

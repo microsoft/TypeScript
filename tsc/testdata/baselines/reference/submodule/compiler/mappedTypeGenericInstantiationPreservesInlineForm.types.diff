@@ -1,0 +1,31 @@
+--- old.mappedTypeGenericInstantiationPreservesInlineForm.types
++++ new.mappedTypeGenericInstantiationPreservesInlineForm.types
+@@= skipped -3, +3 lines =@@
+ // repro from #53109
+ 
+ export const test1 = <T = Record<string, never>>(schema: {
+->test1 : <T = Record<string, never>>(schema: { [K in keyof Required<T>]: T[K]; }) => void
+-><T = Record<string, never>>(schema: {    [K in keyof Required<T>]: T[K];}) => {} : <T = Record<string, never>>(schema: { [K in keyof Required<T>]: T[K]; }) => void
+->schema : { [K in keyof Required<T>]: T[K]; }
++>test1 : <T>(schema: { [K in keyof T]: T[K] }) => void
++><T = Record<string, never>>(schema: {    [K in keyof Required<T>]: T[K];}) => {} : <T>(schema: { [K in keyof T]: T[K] }) => void
++>T : T
++>schema : { [K in keyof T]: T[K] }
+ 
+     [K in keyof Required<T>]: T[K];
++>K : K
++
+ }) => {}
+ 
+ export function test2<T = Record<string, never>>(schema: {
+->test2 : <T = Record<string, never>>(schema: { [K in keyof Required<T>]: T[K]; }) => void
+->schema : { [K in keyof Required<T>]: T[K]; }
++>test2 : <T>(schema: { [K in keyof T]: T[K] }) => void
++>T : T
++>schema : { [K in keyof T]: T[K] }
+ 
+     [K in keyof Required<T>]: T[K];
++>K : K
++
+ }) {};
+ 

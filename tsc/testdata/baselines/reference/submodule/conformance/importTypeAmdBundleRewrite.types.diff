@@ -1,0 +1,35 @@
+--- old.importTypeAmdBundleRewrite.types
++++ new.importTypeAmdBundleRewrite.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a/b/c.ts ===
+ export interface Foo {
++>Foo : Foo
++
+     x: 12;
+ >x : 12
+ }
+ === a/inner.ts ===
+ const c: import("./b/c").Foo = {x: 12};
+->c : import("a/b/c").Foo
++>c : Foo
+ >{x: 12} : { x: 12; }
+ >x : 12
+ >12 : 12
+ 
+ export {c};
+->c : import("a/b/c").Foo
++>c : Foo
+ 
+ === index.ts ===
+ const d: typeof import("./a/inner")["c"] = {x: 12};
+->d : import("a/b/c").Foo
++>d : Foo
+ >{x: 12} : { x: 12; }
+ >x : 12
+ >12 : 12
+ 
+ export {d};
+->d : import("a/b/c").Foo
++>d : Foo
+ 

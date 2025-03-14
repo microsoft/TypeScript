@@ -1,0 +1,54 @@
+--- old.enumMergingErrors.types
++++ new.enumMergingErrors.types
+@@= skipped -64, +64 lines =@@
+ >M1 : typeof M1
+ 
+     export enum E1 { A = 0 }
+->E1 : E1
++>E1 : E1.A
+ >A : E1.A
+ >0 : 0
+ }
+@@= skipped -8, +8 lines =@@
+ >M1 : typeof M1
+ 
+     export enum E1 { B }
+->E1 : E1
++>E1 : E1.A
+ >B : E1.A
+ }
+ module M1 {
+ >M1 : typeof M1
+ 
+     export enum E1 { C }
+->E1 : E1
++>E1 : E1.A
+ >C : E1.A
+ }
+ 
+@@= skipped -17, +17 lines =@@
+ >M2 : typeof M2
+ 
+     export enum E1 { A }
+->E1 : E1
++>E1 : E1.A
+ >A : E1.A
+ }
+ module M2 {
+ >M2 : typeof M2
+ 
+     export enum E1 { B = 0 }
+->E1 : E1
++>E1 : E1.A
+ >B : E1.A
+ >0 : 0
+ }
+@@= skipped -15, +15 lines =@@
+ >M2 : typeof M2
+ 
+     export enum E1 { C }
+->E1 : E1
++>E1 : E1.A
+ >C : E1.A
+ }
+ 

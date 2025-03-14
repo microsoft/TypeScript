@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/errorMessagesIntersectionTypes02.ts] ////
+
+=== errorMessagesIntersectionTypes02.ts ===
+interface Foo {
+>Foo : Foo
+
+    fooProp: "hello" | "world";
+>fooProp : "hello" | "world"
+}
+
+interface Bar {
+>Bar : Bar
+
+    barProp: string;
+>barProp : string
+}
+
+interface FooBar extends Foo, Bar {
+>FooBar : FooBar
+}
+
+declare function mixBar<T>(obj: T): T & Bar;
+>mixBar : <T>(obj: T) => T & Bar
+>T : T
+>obj : T
+
+let fooBar: FooBar = mixBar({
+>fooBar : FooBar
+>mixBar({    fooProp: "frizzlebizzle"}) : { fooProp: "frizzlebizzle"; } & Bar
+>mixBar : <T>(obj: T) => T & Bar
+>{    fooProp: "frizzlebizzle"} : { fooProp: "frizzlebizzle"; }
+
+    fooProp: "frizzlebizzle"
+>fooProp : "frizzlebizzle"
+>"frizzlebizzle" : "frizzlebizzle"
+
+});

@@ -1,0 +1,86 @@
+//// [tests/cases/conformance/jsdoc/checkObjectDefineProperty.ts] ////
+
+=== validate.ts ===
+// Validate in TS as simple validations would usually be interpreted as more special assignments
+import x = require("./");
+>x : any
+
+x.name;
+>x.name : any
+>x : any
+>name : any
+
+x.middleInit;
+>x.middleInit : any
+>x : any
+>middleInit : any
+
+x.lastName;
+>x.lastName : any
+>x : any
+>lastName : any
+
+x.zip;
+>x.zip : any
+>x : any
+>zip : any
+
+x.houseNumber;
+>x.houseNumber : any
+>x : any
+>houseNumber : any
+
+x.zipStr;
+>x.zipStr : any
+>x : any
+>zipStr : any
+
+x.name = "Another";
+>x.name = "Another" : "Another"
+>x.name : any
+>x : any
+>name : any
+>"Another" : "Another"
+
+x.zip = 98123;
+>x.zip = 98123 : 98123
+>x.zip : any
+>x : any
+>zip : any
+>98123 : 98123
+
+x.zipStr = "OK";
+>x.zipStr = "OK" : "OK"
+>x.zipStr : any
+>x : any
+>zipStr : any
+>"OK" : "OK"
+
+x.lastName = "should fail";
+>x.lastName = "should fail" : "should fail"
+>x.lastName : any
+>x : any
+>lastName : any
+>"should fail" : "should fail"
+
+x.houseNumber = 12; // should also fail
+>x.houseNumber = 12 : 12
+>x.houseNumber : any
+>x : any
+>houseNumber : any
+>12 : 12
+
+x.zipStr = 12; // should fail
+>x.zipStr = 12 : 12
+>x.zipStr : any
+>x : any
+>zipStr : any
+>12 : 12
+
+x.middleInit = "R"; // should also fail
+>x.middleInit = "R" : "R"
+>x.middleInit : any
+>x : any
+>middleInit : any
+>"R" : "R"
+

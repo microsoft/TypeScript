@@ -1,0 +1,11 @@
+--- old.exportsInAmbientModules2.types
++++ new.exportsInAmbientModules2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === external.d.ts ===
+ export default class C {}
+->C : C
++>C : default
+ 
+ === main.ts ===
+ declare module "M" {

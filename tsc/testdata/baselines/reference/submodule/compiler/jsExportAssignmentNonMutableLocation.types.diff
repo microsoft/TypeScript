@@ -1,0 +1,36 @@
+--- old.jsExportAssignmentNonMutableLocation.types
++++ new.jsExportAssignmentNonMutableLocation.types
+@@= skipped -8, +8 lines =@@
+ 
+ // This is a common pattern in Node’s built-in modules:
+ module.exports = {
+->module.exports = {    customSymbol,} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
++>module.exports = {    customSymbol,} : { customSymbol: symbol; }
++>module.exports : any
++>module : any
++>exports : any
+ >{    customSymbol,} : { customSymbol: symbol; }
+ 
+     customSymbol,
+->customSymbol : symbol
++>customSymbol : any
+ 
+ };
+ 
+ exports.customSymbol2 = Symbol("custom");
+->exports.customSymbol2 = Symbol("custom") : unique symbol
+->exports.customSymbol2 : unique symbol
+->exports : typeof import("file")
+->customSymbol2 : unique symbol
+->Symbol("custom") : unique symbol
++>exports.customSymbol2 = Symbol("custom") : symbol
++>exports.customSymbol2 : any
++>exports : any
++>customSymbol2 : any
++>Symbol("custom") : symbol
+ >Symbol : SymbolConstructor
+ >"custom" : "custom"
+ 

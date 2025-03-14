@@ -1,0 +1,13 @@
+--- old.withStatementErrors.types
++++ new.withStatementErrors.types
+@@= skipped -41, +41 lines =@@
+ >C : any
+     
+     interface I {} // error
++>I : any
+     
+     module M {} // error
++>M : any
+         
+ }
+ 

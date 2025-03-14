@@ -1,0 +1,38 @@
+--- old.reexportClassDefinition.types
++++ new.reexportClassDefinition.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo3.ts ===
+ import foo2 = require('./foo2')
+->foo2 : { x: typeof import("foo1"); }
++>foo2 : { x: typeof x; }
+ 
+ class x extends foo2.x {}
+ >x : x
+->foo2.x : import("foo1")
+->foo2 : { x: typeof import("foo1"); }
+->x : typeof import("foo1")
++>foo2.x : x
++>foo2 : { x: typeof x; }
++>x : typeof x
+ 
+ 
+ === foo1.ts ===
+@@= skipped -18, +18 lines =@@
+ 
+ === foo2.ts ===
+ import foo1 = require('./foo1');
+->foo1 : typeof foo1
++>foo1 : typeof x
+ 
+ export = {
+->{    x: foo1} : { x: typeof foo1; }
++>{    x: foo1} : { x: typeof x; }
+ 
+     x: foo1
+->x : typeof foo1
+->foo1 : typeof foo1
++>x : typeof x
++>foo1 : typeof x
+ }
+ 

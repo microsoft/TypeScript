@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/recursiveGenericMethodCall.ts] ////
+
+=== recursiveGenericMethodCall.ts ===
+interface Generator<T> { (): T; }
+>Generator : Generator<T>
+>T : T
+
+function Generate<T>(func: Generator<T>): T {
+>Generate : <T>(func: Generator<T>) => T
+>T : T
+>func : Generator<T>
+
+    return Generate(func);
+>Generate(func) : T
+>Generate : <T>(func: Generator<T>) => T
+>func : Generator<T>
+}
+

@@ -1,0 +1,19 @@
+--- old.interfaceThatHidesBaseProperty.types
++++ new.interfaceThatHidesBaseProperty.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceThatHidesBaseProperty.ts ===
+ interface Base {
++>Base : Base
++
+     x: { a: number };
+ >x : { a: number; }
+ >a : number
+ }
+ 
+ interface Derived extends Base {
++>Derived : Derived
++
+     x: {
+ >x : { a: number; b: number; }
+ 

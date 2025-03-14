@@ -1,0 +1,26 @@
+--- old.javascriptThisAssignmentInStaticBlock.types
++++ new.javascriptThisAssignmentInStaticBlock.types
+@@= skipped -6, +6 lines =@@
+     static {
+         this.doSomething = () => {};
+ >this.doSomething = () => {} : () => void
+->this.doSomething : () => void
++>this.doSomething : any
+ >this : typeof Thing
+->doSomething : () => void
++>doSomething : any
+ >() => {} : () => void
+     }
+ }
+ 
+ Thing.doSomething();
+->Thing.doSomething() : void
+->Thing.doSomething : () => void
++>Thing.doSomething() : any
++>Thing.doSomething : any
+ >Thing : typeof Thing
+->doSomething : () => void
++>doSomething : any
+ 
+ // GH#46468
+ class ElementsArray extends Array {

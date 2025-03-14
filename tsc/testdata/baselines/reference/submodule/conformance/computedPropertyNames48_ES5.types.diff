@@ -1,0 +1,42 @@
+--- old.computedPropertyNames48_ES5.types
++++ new.computedPropertyNames48_ES5.types
+@@= skipped -2, +2 lines =@@
+ === computedPropertyNames48_ES5.ts ===
+ declare function extractIndexer<T>(p: { [n: number]: T }): T;
+ >extractIndexer : <T>(p: { [n: number]: T; }) => T
++>T : T
+ >p : { [n: number]: T; }
+ >n : number
+ 
+ enum E { x }
+->E : E
++>E : E.x
+ >x : E.x
+ 
+ var a: any;
+@@= skipped -25, +26 lines =@@
+ extractIndexer({
+ >extractIndexer({    [E.x]: ""}) : string
+ >extractIndexer : <T>(p: { [n: number]: T; }) => T
+->{    [E.x]: ""} : { 0: string; }
++>{    [E.x]: ""} : { [E.x]: string; }
+ 
+     [E.x]: ""
+ >[E.x] : string
+->E.x : E
++>E.x : E.x
+ >E : typeof E
+->x : E
++>x : E.x
+ >"" : ""
+ 
+ }); // Should return string
+@@= skipped -14, +14 lines =@@
+ extractIndexer({
+ >extractIndexer({    ["" || 0]: ""}) : string
+ >extractIndexer : <T>(p: { [n: number]: T; }) => T
+->{    ["" || 0]: ""} : { 0: string; }
++>{    ["" || 0]: ""} : { ["" || 0]: string; }
+ 
+     ["" || 0]: ""
+ >["" || 0] : string

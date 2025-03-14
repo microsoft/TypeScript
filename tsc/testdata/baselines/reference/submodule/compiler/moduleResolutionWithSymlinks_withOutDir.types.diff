@@ -1,0 +1,43 @@
+--- old.moduleResolutionWithSymlinks_withOutDir.types
++++ new.moduleResolutionWithSymlinks_withOutDir.types
+@@= skipped -4, +4 lines =@@
+ >MyClass : typeof MyClass
+ 
+ import { MyClass2 } from "./library-b";
+->MyClass2 : typeof MyClass
++>MyClass2 : any
+ 
+ let x: MyClass;
+ >x : MyClass
+ 
+ let y: MyClass2;
+->y : MyClass
++>y : MyClass2
+ 
+ x = y;
+->x = y : MyClass
++>x = y : MyClass2
+ >x : MyClass
+->y : MyClass
++>y : MyClass2
+ 
+ y = x;
+ >y = x : MyClass
+->y : MyClass
++>y : MyClass2
+ >x : MyClass
+ 
+ === /src/library-a/index.ts ===
+@@= skipped -25, +25 lines =@@
+ 
+ === /src/library-b/index.ts ===
+ import {MyClass} from "library-a";
+->MyClass : typeof MyClass
++>MyClass : any
+ 
+ export { MyClass as MyClass2 }
+->MyClass : typeof MyClass
+->MyClass2 : typeof MyClass
++>MyClass : any
++>MyClass2 : any
+ 

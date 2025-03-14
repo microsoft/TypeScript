@@ -1,0 +1,10 @@
+--- old.inferentialTypingWithObjectLiteralProperties.types
++++ new.inferentialTypingWithObjectLiteralProperties.types
+@@= skipped -2, +2 lines =@@
+ === inferentialTypingWithObjectLiteralProperties.ts ===
+ function f<T>(x: T, y: T): T {
+ >f : <T>(x: T, y: T) => T
++>T : T
+ >x : T
+ >y : T
+ 

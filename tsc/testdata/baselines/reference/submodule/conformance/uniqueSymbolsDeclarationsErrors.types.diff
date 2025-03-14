@@ -1,0 +1,85 @@
+--- old.uniqueSymbolsDeclarationsErrors.types
++++ new.uniqueSymbolsDeclarationsErrors.types
+@@= skipped -4, +4 lines =@@
+ >s : unique symbol
+ 
+ interface I { readonly readonlyType: unique symbol; }
++>I : I
+ >readonlyType : unique symbol
+ 
+ // not allowed when emitting declarations
+ 
+ export const obj = {
+->obj : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
+->{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
++>obj : { method1: (p: unique symbol) => unique symbol; method2: (p: unique symbol) => unique symbol; }
++>{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1: (p: unique symbol) => unique symbol; method2: (p: unique symbol) => unique symbol; }
+ 
+     method1(p: typeof s): typeof s {
+->method1 : (p: typeof s) => typeof s
++>method1 : (p: unique symbol) => unique symbol
+ >p : unique symbol
+->s : unique symbol
+->s : unique symbol
+ 
+         return p;
+ >p : unique symbol
+ 
+     },
+     method2(p: I["readonlyType"]): I["readonlyType"] {
+->method2 : (p: I["readonlyType"]) => I["readonlyType"]
++>method2 : (p: unique symbol) => unique symbol
+ >p : unique symbol
+ 
+         return p;
+@@= skipped -32, +31 lines =@@
+ >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof classExpression
+ 
+     method1(p: typeof s): typeof s {
+->method1 : (p: typeof s) => typeof s
++>method1 : (p: unique symbol) => unique symbol
+ >p : unique symbol
+->s : unique symbol
+->s : unique symbol
+ 
+         return p;
+ >p : unique symbol
+     }
+     method2(p: I["readonlyType"]): I["readonlyType"] {
+->method2 : (p: I["readonlyType"]) => I["readonlyType"]
++>method2 : (p: unique symbol) => unique symbol
+ >p : unique symbol
+ 
+         return p;
+@@= skipped -18, +16 lines =@@
+ };
+ 
+ export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
+->funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
+->obj : { method(p: typeof s): void; }
+->method : (p: typeof s) => void
++>funcInferredReturnType : (obj: { method: (p: unique symbol) => void; }) => { method: (p: unique symbol) => void; }
++>obj : { method: (p: unique symbol) => void; }
++>method : (p: unique symbol) => void
+ >p : unique symbol
+->s : unique symbol
+ 
+     return obj;
+->obj : { method(p: typeof s): void; }
++>obj : { method: (p: unique symbol) => void; }
+ }
+ 
+ export interface InterfaceWithPrivateNamedProperties {
++>InterfaceWithPrivateNamedProperties : InterfaceWithPrivateNamedProperties
++
+     [s]: any;
+ >[s] : any
+ >s : unique symbol
+ }
+ 
+ export interface InterfaceWithPrivateNamedMethods {
++>InterfaceWithPrivateNamedMethods : InterfaceWithPrivateNamedMethods
++
+     [s](): any;
+ >[s] : () => any
+ >s : unique symbol

@@ -1,0 +1,41 @@
+--- old.discriminatedUnionInference.types
++++ new.discriminatedUnionInference.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Foo<A> = { type: "foo", (): A[] };
+ >Foo : Foo<A>
++>A : A
+ >type : "foo"
+ 
+ type Bar<A> = { type: "bar", (): A };
+ >Bar : Bar<A>
++>A : A
+ >type : "bar"
+ 
+ type FooBar<A> = Foo<A> | Bar<A>;
+ >FooBar : FooBar<A>
++>A : A
+ 
+ type InferA<T> = T extends FooBar<infer A> ? A : never;
+ >InferA : InferA<T>
++>T : T
++>A : A
+ 
+ type FooA = InferA<Foo<number>>;  // number
+ >FooA : number
+@@= skipped -19, +24 lines =@@
+ 
+ type Item<T> = { kind: 'a', data: T } | { kind: 'b', data: T[] };
+ >Item : Item<T>
++>T : T
+ >kind : "a"
+ >data : T
+ >kind : "b"
+@@= skipped -7, +8 lines =@@
+ 
+ declare function foo<T>(item: Item<T>): T;
+ >foo : <T>(item: Item<T>) => T
++>T : T
+ >item : Item<T>
+ 
+ let x1 = foo({ kind: 'a', data: 42 });  // number

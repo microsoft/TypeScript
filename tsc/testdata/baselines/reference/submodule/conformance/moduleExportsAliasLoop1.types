@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/salsa/moduleExportsAliasLoop1.ts] ////
+
+=== x.js ===
+exports.fn1();
+>exports.fn1() : any
+>exports.fn1 : any
+>exports : any
+>fn1 : any
+
+exports.fn2 = Math.min;
+>exports.fn2 = Math.min : (...values: number[]) => number
+>exports.fn2 : any
+>exports : any
+>fn2 : any
+>Math.min : (...values: number[]) => number
+>Math : Math
+>min : (...values: number[]) => number
+

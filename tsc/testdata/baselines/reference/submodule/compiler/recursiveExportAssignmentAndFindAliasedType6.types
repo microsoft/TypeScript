@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType6.ts] ////
+
+=== recursiveExportAssignmentAndFindAliasedType6_moduleA.ts ===
+import moduleC = require("recursiveExportAssignmentAndFindAliasedType6_moduleC");
+>moduleC : any
+
+import ClassB = require("recursiveExportAssignmentAndFindAliasedType6_moduleB");
+>ClassB : any
+
+export var b: ClassB; // This should result in type ClassB
+>b : ClassB
+

@@ -1,0 +1,10 @@
+--- old.jsFileCompilationInterfaceSyntax.types
++++ new.jsFileCompilationInterfaceSyntax.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsFileCompilationInterfaceSyntax.ts] ////
+ 
+ === a.js ===
+-
+ interface I { }
++>I : I
++

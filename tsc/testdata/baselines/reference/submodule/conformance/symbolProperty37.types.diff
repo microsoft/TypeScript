@@ -1,0 +1,11 @@
+--- old.symbolProperty37.types
++++ new.symbolProperty37.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty37.ts ===
+ interface I {
++>I : I
++
+     [Symbol.isConcatSpreadable]: string;
+ >[Symbol.isConcatSpreadable] : string
+ >Symbol.isConcatSpreadable : unique symbol

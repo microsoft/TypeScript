@@ -1,0 +1,15 @@
+--- old.asOperatorAmbiguity.types
++++ new.asOperatorAmbiguity.types
+@@= skipped -1, +1 lines =@@
+ 
+ === asOperatorAmbiguity.ts ===
+ interface A<T> { x: T; }
++>A : A<T>
++>T : T
+ >x : T
+ 
+ interface B { m: string; }
++>B : B
+ >m : string
+ 
+ // Make sure this is a type assertion to an array type, and not nested comparison operators.

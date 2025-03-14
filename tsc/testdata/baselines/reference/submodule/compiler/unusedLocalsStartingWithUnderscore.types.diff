@@ -1,0 +1,11 @@
+--- old.unusedLocalsStartingWithUnderscore.types
++++ new.unusedLocalsStartingWithUnderscore.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ import * as _ from "./a";
+->_ : typeof _
++>_ : typeof import("/a")
+ 
+ for (const _ of []) { }
+ >_ : any

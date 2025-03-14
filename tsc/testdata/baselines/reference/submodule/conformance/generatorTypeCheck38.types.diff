@@ -1,0 +1,8 @@
+--- old.generatorTypeCheck38.types
++++ new.generatorTypeCheck38.types
+@@= skipped -12, +12 lines =@@
+ 
+     var v: typeof yield;
+ >v : any
+->yield : any
+ }

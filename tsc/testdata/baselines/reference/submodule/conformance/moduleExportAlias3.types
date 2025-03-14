@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias3.ts] ////
+
+=== bug24062.js ===
+// #24062
+class C {
+>C : C
+}
+module.exports = {
+>module.exports = {    C} : { C: typeof C; }
+>module.exports : any
+>module : any
+>exports : any
+>{    C} : { C: typeof C; }
+
+    C
+>C : any
+
+};
+

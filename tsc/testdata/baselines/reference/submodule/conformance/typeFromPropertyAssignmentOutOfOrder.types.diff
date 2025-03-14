@@ -1,0 +1,68 @@
+--- old.typeFromPropertyAssignmentOutOfOrder.types
++++ new.typeFromPropertyAssignmentOutOfOrder.types
+@@= skipped -2, +2 lines =@@
+ === index.js ===
+ First.Item = class I {}
+ >First.Item = class I {} : typeof I
+->First.Item : typeof I
+->First : typeof First
+->Item : typeof I
++>First.Item : any
++>First : {}
++>Item : any
+ >class I {} : typeof I
+ >I : typeof I
+ 
+ Common.Object = class extends First.Item {}
+ >Common.Object = class extends First.Item {} : typeof Object
+->Common.Object : typeof Object
+->Common : typeof Common
+->Object : typeof Object
++>Common.Object : any
++>Common : {}
++>Object : any
+ >class extends First.Item {} : typeof Object
+->First.Item : I
+->First : typeof First
+->Item : typeof I
++>First.Item : any
++>First : {}
++>Item : any
+ 
+ Workspace.Object = class extends Common.Object {}
+ >Workspace.Object = class extends Common.Object {} : typeof Object
+->Workspace.Object : typeof Object
+->Workspace : typeof Workspace
+->Object : typeof Object
++>Workspace.Object : any
++>Workspace : {}
++>Object : any
+ >class extends Common.Object {} : typeof Object
+->Common.Object : Object
+->Common : typeof Common
+->Object : typeof Object
++>Common.Object : any
++>Common : {}
++>Object : any
+ 
+ /** @type {Workspace.Object} */
+ var am;
+->am : Object
++>am : any
+ 
+ === roots.js ===
+ var First = {};
+->First : typeof First
++>First : {}
+ >{} : {}
+ 
+ var Common = {};
+->Common : typeof Common
++>Common : {}
+ >{} : {}
+ 
+ var Workspace = {};
+->Workspace : typeof Workspace
++>Workspace : {}
+ >{} : {}
+ 

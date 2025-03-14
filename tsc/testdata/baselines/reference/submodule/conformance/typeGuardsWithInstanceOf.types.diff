@@ -1,0 +1,62 @@
+--- old.typeGuardsWithInstanceOf.types
++++ new.typeGuardsWithInstanceOf.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardsWithInstanceOf.ts ===
+ interface I { global: string; }
++>I : I
+ >global : string
+ 
+ var result!: I;
+@@= skipped -23, +24 lines =@@
+ } else if (!result.global) {
+ >!result.global : boolean
+ >result.global : any
+->result : never
++>result : I & RegExp
+ >global : any
+ }
+ 
+ // Repro from #31155
+ 
+ interface OnChanges {
++>OnChanges : OnChanges
++
+     onChanges(changes: Record<string, unknown>): void
+ >onChanges : (changes: Record<string, unknown>) => void
+ >changes : Record<string, unknown>
+ }
+ interface Validator {
++>Validator : Validator
++
+     validate(): null | Record<string, unknown>;
+->validate : () => null | Record<string, unknown>
++>validate : () => Record<string, unknown> | null
+ }
+ 
+ class C {
+@@= skipped -43, +47 lines =@@
+ >v : C
+     }
+     v // Validator & Partial<OnChanges> via subtype reduction
+->v : C | (Validator & Partial<OnChanges>)
++>v : C | Validator & Partial<OnChanges>
+ 
+     // In 4.1, we introduced a change which _fixed_ a bug with CFA
+     // correctly setting this to be the right object. With 4.2,
+@@= skipped -8, +8 lines =@@
+     // before 4.1.
+     if (v.onChanges) {
+ >v.onChanges : any
+->v : C | (Validator & Partial<OnChanges>)
++>v : C | Validator & Partial<OnChanges>
+ >onChanges : any
+ 
+         v.onChanges({});
+ >v.onChanges({}) : any
+ >v.onChanges : any
+->v : C | (Validator & Partial<OnChanges>)
++>v : C | Validator & Partial<OnChanges>
+ >onChanges : any
+ >{} : {}
+     }

@@ -1,0 +1,37 @@
+--- old.multipleExportAssignments.types
++++ new.multipleExportAssignments.types
+@@= skipped -1, +1 lines =@@
+ 
+ === multipleExportAssignments.ts ===
+ interface connectModule {
++>connectModule : connectModule
++
+     (res, req, next): void;
+ >res : any
+ >req : any
+ >next : any
+ }
+ interface connectExport {
++>connectExport : connectExport
++
+     use: (mod: connectModule) => connectExport;
+ >use : (mod: connectModule) => connectExport
+ >mod : connectModule
+@@= skipped -15, +19 lines =@@
+ >port : number
+ }
+ var server: {
+->server : { (): connectExport; test1: connectModule; test2(): connectModule; }
++>server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+ 
+     (): connectExport;
+     test1: connectModule;
+@@= skipped -11, +11 lines =@@
+ 
+ };
+ export = server;
+->server : { (): connectExport; test1: connectModule; test2(): connectModule; }
++>server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+ 
+ export = connectExport;
+ >connectExport : connectExport

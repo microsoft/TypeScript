@@ -1,0 +1,14 @@
+--- old.narrowingWithNonNullExpression.types
++++ new.narrowingWithNonNullExpression.types
+@@= skipped -3, +3 lines =@@
+ const m = ''.match('');
+ >m : RegExpMatchArray
+ >''.match('') : RegExpMatchArray
+->''.match : (regexp: string | RegExp) => RegExpMatchArray | null
++>''.match : (regexp: string | RegExp) => RegExpMatchArray
+ >'' : ""
+->match : (regexp: string | RegExp) => RegExpMatchArray | null
++>match : (regexp: string | RegExp) => RegExpMatchArray
+ >'' : ""
+ 
+ m! && m[0];

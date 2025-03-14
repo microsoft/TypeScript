@@ -1,0 +1,11 @@
+--- old.tupleElementTypes2.types
++++ new.tupleElementTypes2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === tupleElementTypes2.ts ===
+ function f([a, b]: [number, any]) { }
+->f : ([a, b]: [number, any]) => void
++>f : (__0: [number, any]) => void
+ >a : number
+ >b : any
+ 

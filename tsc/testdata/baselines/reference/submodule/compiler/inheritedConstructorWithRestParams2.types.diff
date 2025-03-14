@@ -1,0 +1,29 @@
+--- old.inheritedConstructorWithRestParams2.types
++++ new.inheritedConstructorWithRestParams2.types
+@@= skipped -2, +2 lines =@@
+ === inheritedConstructorWithRestParams2.ts ===
+ class IBaseBase<T, U> {
+ >IBaseBase : IBaseBase<T, U>
++>T : T
++>U : U
+ 
+     constructor(x: U) { }
+ >x : U
+ }
+ 
+ interface IBase<T, U> extends IBaseBase<T, U> { }
++>IBase : IBase<T, U>
++>T : T
++>U : U
+ 
+ class BaseBase2 {
+ >BaseBase2 : BaseBase2
+@@= skipped -16, +21 lines =@@
+ 
+ declare class BaseBase<T, U> extends BaseBase2 implements IBase<T, U> {
+ >BaseBase : BaseBase<T, U>
++>T : T
++>U : U
+ >BaseBase2 : BaseBase2
+ 
+     constructor(x: T, ...y: U[]);

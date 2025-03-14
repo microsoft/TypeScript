@@ -1,0 +1,11 @@
+--- old.sourceMapSample.types
++++ new.sourceMapSample.types
+@@= skipped -30, +30 lines =@@
+ 
+ 
+     function foo(greeting: string): Foo.Bar.Greeter {
+->foo : (greeting: string) => Foo.Bar.Greeter
++>foo : (greeting: string) => Greeter
+ >greeting : string
+ >Foo : any
+ >Bar : any

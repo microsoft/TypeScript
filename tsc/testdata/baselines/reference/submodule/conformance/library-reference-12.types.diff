@@ -1,0 +1,17 @@
+--- old.library-reference-12.types
++++ new.library-reference-12.types
+@@= skipped -4, +4 lines =@@
+ $.foo();
+ >$.foo() : void
+ >$.foo : () => void
+->$ : { foo(): void; }
++>$ : { foo: () => void; }
+ >foo : () => void
+ 
+ === /a/node_modules/jquery/dist/jquery.d.ts ===
+ declare var $: { foo(): void };
+->$ : { foo(): void; }
++>$ : { foo: () => void; }
+ >foo : () => void
+ 
+ 

@@ -1,0 +1,37 @@
+--- old.jsDeclarationsExportAssignedClassExpressionShadowing.types
++++ new.jsDeclarationsExportAssignedClassExpressionShadowing.types
+@@= skipped -16, +16 lines =@@
+ >42 : 42
+ }
+ module.exports = class Q {
+->module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof import("index")
+->module.exports : typeof import("index")
+->module : { exports: typeof import("index"); }
+->exports : typeof import("index")
+->class Q {    constructor() {        this.x = new A();    }} : typeof import("index")
+->Q : typeof import("index")
++>module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof Q
++>module.exports : any
++>module : any
++>exports : any
++>class Q {    constructor() {        this.x = new A();    }} : typeof Q
++>Q : typeof Q
+ 
+     constructor() {
+         this.x = new A();
+@@= skipped -19, +19 lines =@@
+ }
+ module.exports.Another = Q;
+ >module.exports.Another = Q : typeof Q
+->module.exports.Another : typeof Q
+->module.exports : typeof import("index")
+->module : { exports: typeof import("index"); }
+->exports : typeof import("index")
+->Another : typeof Q
++>module.exports.Another : any
++>module.exports : any
++>module : any
++>exports : any
++>Another : any
+ >Q : typeof Q
+ 

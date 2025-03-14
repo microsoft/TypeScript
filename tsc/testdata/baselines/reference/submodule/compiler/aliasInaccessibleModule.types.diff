@@ -1,0 +1,13 @@
+--- old.aliasInaccessibleModule.types
++++ new.aliasInaccessibleModule.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     module N {
++>N : any
+     }
+     export import X = N;
+ >X : any
+->N : error
++>N : any
+ }

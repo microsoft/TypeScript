@@ -1,0 +1,52 @@
+--- old.esModuleInteropNamedDefaultImports.types
++++ new.esModuleInteropNamedDefaultImports.types
+@@= skipped -1, +1 lines =@@
+ 
+ === mod.ts ===
+ export default class Foo {}
+->Foo : Foo
++>Foo : default
+ 
+ export class Bar {}
+ >Bar : Bar
+ 
+ === idx.ts ===
+ import Foo from "./mod";
+->Foo : typeof Foo
++>Foo : typeof default
+ 
+ import { default as Foo2 } from "./mod";
+->default : typeof Foo
+->Foo2 : typeof Foo
++>default : typeof default
++>Foo2 : typeof default
+ 
+ import { Bar, default as Foo3 } from "./mod";
+ >Bar : typeof Bar
+->default : typeof Foo
+->Foo3 : typeof Foo
++>default : typeof default
++>Foo3 : typeof default
+ 
+ new Foo();
+->new Foo() : Foo
+->Foo : typeof Foo
++>new Foo() : default
++>Foo : typeof default
+ 
+ new Foo2();
+->new Foo2() : Foo
+->Foo2 : typeof Foo
++>new Foo2() : default
++>Foo2 : typeof default
+ 
+ new Bar();
+ >new Bar() : Bar
+ >Bar : typeof Bar
+ 
+ new Foo3();
+->new Foo3() : Foo
+->Foo3 : typeof Foo
++>new Foo3() : default
++>Foo3 : typeof default
+ 

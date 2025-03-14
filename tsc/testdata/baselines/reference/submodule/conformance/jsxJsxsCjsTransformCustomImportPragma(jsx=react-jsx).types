@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImportPragma.tsx] ////
+
+=== react.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
+import "./preact";
+const a = <>
+>a : any
+><>  <p></p>  text  <div className="foo"></div></> : any
+
+  <p></p>
+><p></p> : any
+>p : any
+>p : any
+
+  text
+  <div className="foo"></div>
+><div className="foo"></div> : any
+>div : any
+>className : any
+>div : any
+
+</>
+
+export {};
+=== preact.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
+const a = <>
+>a : any
+><>  <p></p>  text  <div className="foo"></div></> : any
+
+  <p></p>
+><p></p> : any
+>p : any
+>p : any
+
+  text
+  <div className="foo"></div>
+><div className="foo"></div> : any
+>div : any
+>className : any
+>div : any
+
+</>
+
+export {};

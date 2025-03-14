@@ -1,0 +1,29 @@
+--- old.exportNonVisibleType.types
++++ new.exportNonVisibleType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === foo1.ts ===
+ interface I1 {
++>I1 : I1
++
+ 	a: string;
+ >a : string
+ 
+@@= skipped -21, +23 lines =@@
+ 
+ === foo2.ts ===
+ interface I1 {
++>I1 : I1
++
+ 	a: string;
+ >a : string
+ 
+@@= skipped -19, +21 lines =@@
+ 
+ === foo3.ts ===
+ interface I1 {
++>I1 : I1
++
+ 	a: string;
+ >a : string
+ 

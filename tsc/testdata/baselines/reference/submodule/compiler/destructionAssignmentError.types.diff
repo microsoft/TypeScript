@@ -1,0 +1,24 @@
+--- old.destructionAssignmentError.types
++++ new.destructionAssignmentError.types
+@@= skipped -15, +15 lines =@@
+ >({ a, b } = fn()) : { a: 1; b: 2; }
+ >{ a, b } = fn() : { a: 1; b: 2; }
+ >{ a, b } : { a: number; b: number; }
+->a : number
+->b : number
++>a : any
++>b : any
+ >fn() : { a: 1; b: 2; }
+ >fn : () => { a: 1; b: 2; }
+ 
+@@= skipped -16, +16 lines =@@
+ >({ a, b } =fn()) : { a: 1; b: 2; }
+ >{ a, b } =fn() : { a: 1; b: 2; }
+ >{ a, b } : { a: number; b: number; }
+->a : number
+->b : number
++>a : any
++>b : any
+ 
+ fn());
+ >fn() : { a: 1; b: 2; }

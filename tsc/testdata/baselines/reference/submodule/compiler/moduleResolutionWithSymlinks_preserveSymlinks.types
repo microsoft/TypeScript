@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_preserveSymlinks.ts] ////
+
+=== /app/app.ts ===
+// We shouldn't resolve symlinks for references either. See the trace.
+/// <reference types="linked" />
+
+import { C as C1 } from "linked";
+>C : any
+>C1 : any
+
+import { C as C2 } from "linked2";
+>C : any
+>C2 : any
+
+let x = new C1();
+>x : any
+>new C1() : any
+>C1 : any
+
+// Should fail. We no longer resolve any symlinks.
+x = new C2();
+>x = new C2() : any
+>x : any
+>new C2() : any
+>C2 : any
+

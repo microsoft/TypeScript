@@ -1,0 +1,30 @@
+--- old.typeInferenceWithExcessProperties.types
++++ new.typeInferenceWithExcessProperties.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #17041
+ 
+ interface Named {
++>Named : Named
++
+     name: string;
+ >name : string
+ }
+ 
+ function parrot<T extends Named>(obj: T): T {
+ >parrot : <T extends Named>(obj: T) => T
++>T : T
+ >obj : T
+ 
+     return obj;
+@@= skipped -55, +58 lines =@@
+ });
+ 
+ parrot({
+->parrot({    name: "TypeScript",    sayHello() {    },}) : { name: string; sayHello(): void; }
++>parrot({    name: "TypeScript",    sayHello() {    },}) : { name: string; sayHello: () => void; }
+ >parrot : <T extends Named>(obj: T) => T
+->{    name: "TypeScript",    sayHello() {    },} : { name: string; sayHello(): void; }
++>{    name: "TypeScript",    sayHello() {    },} : { name: string; sayHello: () => void; }
+ 
+     name: "TypeScript",
+ >name : string

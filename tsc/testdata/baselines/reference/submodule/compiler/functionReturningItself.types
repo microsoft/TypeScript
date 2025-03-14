@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/functionReturningItself.ts] ////
+
+=== functionReturningItself.ts ===
+function somefn() {
+>somefn : () => ???
+
+    return somefn;
+>somefn : () => ???
+}

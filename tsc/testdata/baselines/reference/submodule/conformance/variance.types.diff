@@ -1,0 +1,28 @@
+--- old.variance.types
++++ new.variance.types
+@@= skipped -5, +5 lines =@@
+ // Repro from #30047
+ 
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+   prop: T extends unknown ? true : false;
+ >prop : T extends unknown ? true : false
+ >true : true
+@@= skipped -30, +33 lines =@@
+ 
+ class Bar<T extends string> {
+ >Bar : Bar<T>
++>T : T
+ 
+   private static instance: Bar<string>[] = [];
+ >instance : Bar<string>[]
+ >[] : never[]
+ 
+   cast(_name: ([T] extends [string] ? string : string)) { }
+->cast : (_name: ([T] extends [string] ? string : string)) => void
++>cast : (_name: [T] extends [string] ? string : string) => void
+ >_name : [T] extends [string] ? string : string
+   
+   pushThis() {

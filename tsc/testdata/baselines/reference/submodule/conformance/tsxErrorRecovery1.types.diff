@@ -1,0 +1,20 @@
+--- old.tsxErrorRecovery1.types
++++ new.tsxErrorRecovery1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare namespace JSX { interface Element { } }
++>JSX : any
++>Element : Element
+ 
+ function foo() {
+ >foo : () => void
+ 
+ 	var x = <div>  { </div>
+->x : JSX.Element
+-><div>  { </div> : JSX.Element
++>x : any
++><div>  { </div> : any
+ >div : any
+ > : any
+ >div : any

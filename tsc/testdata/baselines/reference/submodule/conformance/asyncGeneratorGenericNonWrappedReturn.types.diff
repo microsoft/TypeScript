@@ -1,0 +1,10 @@
+--- old.asyncGeneratorGenericNonWrappedReturn.types
++++ new.asyncGeneratorGenericNonWrappedReturn.types
+@@= skipped -4, +4 lines =@@
+ 
+ export async function* test<T>(a: T): AsyncGenerator<T, T, T> {
+ >test : <T>(a: T) => AsyncGenerator<T, T, T>
++>T : T
+ >a : T
+ 
+   return a // `T` should be allowed here even though the generator's `returnType` is `Awaited<T>`

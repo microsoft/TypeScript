@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/typeParametersAndParametersInComputedNames.ts] ////
+
+=== typeParametersAndParametersInComputedNames.ts ===
+function foo<T>(a: T) : string {
+>foo : <T>(a: T) => string
+>T : T
+>a : T
+
+    return "";
+>"" : ""
+}
+
+class A {
+>A : A
+
+    [foo<T>(a)]<T>(a: T) {  
+>[foo<T>(a)] : <T>(a: T) => void
+>foo<T>(a) : string
+>foo : <T>(a: T) => string
+>a : any
+>T : T
+>a : T
+    }
+}

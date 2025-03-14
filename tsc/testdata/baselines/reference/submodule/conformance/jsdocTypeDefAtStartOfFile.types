@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeDefAtStartOfFile.ts] ////
+
+=== dtsEquivalent.js ===
+
+/** @typedef {{[k: string]: any}} AnyEffect */
+/** @typedef {number} Third */
+=== index.js ===
+/** @type {AnyEffect} */
+let b;
+>b : any
+
+/** @type {Third} */
+let c;
+>c : any
+

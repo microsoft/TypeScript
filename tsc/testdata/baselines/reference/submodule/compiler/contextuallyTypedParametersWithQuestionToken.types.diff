@@ -1,0 +1,28 @@
+--- old.contextuallyTypedParametersWithQuestionToken.types
++++ new.contextuallyTypedParametersWithQuestionToken.types
+@@= skipped -37, +37 lines =@@
+ >f2 : (a: string, b: number) => void
+ >a : string
+ >b : number
+->function self(a, b?: number) {  acceptNum(b); // error  self("");  self("", undefined);} : (a: string, b?: number) => void
+->self : (a: string, b?: number) => void
++>function self(a, b?: number) {  acceptNum(b); // error  self("");  self("", undefined);} : (a: string, b?: number | undefined) => void
++>self : (a: string, b?: number | undefined) => void
+ >a : string
+ >b : number | undefined
+ 
+@@= skipped -12, +12 lines =@@
+ 
+   self("");
+ >self("") : void
+->self : (a: string, b?: number) => void
++>self : (a: string, b?: number | undefined) => void
+ >"" : ""
+ 
+   self("", undefined);
+ >self("", undefined) : void
+->self : (a: string, b?: number) => void
++>self : (a: string, b?: number | undefined) => void
+ >"" : ""
+ >undefined : undefined
+ 

@@ -1,0 +1,136 @@
+--- old.typeArgumentInferenceWithObjectLiteral.types
++++ new.typeArgumentInferenceWithObjectLiteral.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeArgumentInferenceWithObjectLiteral.ts ===
+ interface Computed<T> {
++>Computed : Computed<T>
++>T : T
++
+     read(): T;
+ >read : () => T
+ 
+@@= skipped -10, +13 lines =@@
+ 
+ function foo<T>(x: Computed<T>) { }
+ >foo : <T>(x: Computed<T>) => void
++>T : T
+ >x : Computed<T>
+ 
+ var s: string;
+@@= skipped -46, +47 lines =@@
+ });
+ 
+ enum E1 { X }
+->E1 : E1
++>E1 : E1.X
+ >X : E1.X
+ 
+ enum E2 { X }
+->E2 : E2
++>E2 : E2.X
+ >X : E2.X
+ 
+ // Check that we infer from both a.r and b before fixing T in a.w
+ 
+ declare function f1<T, U>(a: { w: (x: T) => U; r: () => T; }, b: T): U;
+ >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
++>T : T
++>U : U
+ >a : { w: (x: T) => U; r: () => T; }
+ >w : (x: T) => U
+ >x : T
+@@= skipped -46, +48 lines =@@
+ >r : () => number
+ >() => 0 : () => number
+ >0 : 0
+->E1.X : E1
++>E1.X : E1.X
+ >E1 : typeof E1
+->X : E1
++>X : E1.X
+ 
+ var v1 = f1({ w: x => x, r: () => E1.X }, 0);
+ >v1 : number
+ >f1({ w: x => x, r: () => E1.X }, 0) : number
+ >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+->{ w: x => x, r: () => E1.X } : { w: (x: 0) => number; r: () => E1; }
++>{ w: x => x, r: () => E1.X } : { w: (x: 0) => number; r: () => E1.X; }
+ >w : (x: 0) => number
+ >x => x : (x: 0) => number
+ >x : 0
+ >x : 0
+->r : () => E1
+->() => E1.X : () => E1
+->E1.X : E1
++>r : () => E1.X
++>() => E1.X : () => E1.X
++>E1.X : E1.X
+ >E1 : typeof E1
+->X : E1
++>X : E1.X
+ >0 : 0
+ 
+ var v2: E1;
+->v2 : E1
++>v2 : E1.X
+ 
+ var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);
+->v2 : E1
+->f1({ w: x => x, r: () => E1.X }, E1.X) : E1
++>v2 : E1.X
++>f1({ w: x => x, r: () => E1.X }, E1.X) : E1.X
+ >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+->{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1; r: () => E1; }
+->w : (x: E1.X) => E1
+->x => x : (x: E1.X) => E1
++>{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1.X; r: () => E1.X; }
++>w : (x: E1.X) => E1.X
++>x => x : (x: E1.X) => E1.X
+ >x : E1.X
+->x : E1
+->r : () => E1
+->() => E1.X : () => E1
+->E1.X : E1
++>x : E1.X
++>r : () => E1.X
++>() => E1.X : () => E1.X
++>E1.X : E1.X
+ >E1 : typeof E1
+->X : E1
+->E1.X : E1
++>X : E1.X
++>E1.X : E1.X
+ >E1 : typeof E1
+->X : E1
++>X : E1.X
+ 
+ var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);  // Error
+ >v3 : unknown
+ >f1({ w: x => x, r: () => E1.X }, E2.X) : unknown
+ >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
+->{ w: x => x, r: () => E1.X } : { w: (x: E1) => E1; r: () => E1; }
+->w : (x: E1) => E1
+->x => x : (x: E1) => E1
+->x : E1
+->x : E1
+->r : () => E1
+->() => E1.X : () => E1
+->E1.X : E1
++>{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1.X; r: () => E1.X; }
++>w : (x: E1.X) => E1.X
++>x => x : (x: E1.X) => E1.X
++>x : E1.X
++>x : E1.X
++>r : () => E1.X
++>() => E1.X : () => E1.X
++>E1.X : E1.X
+ >E1 : typeof E1
+->X : E1
+->E2.X : E2
++>X : E1.X
++>E2.X : E2.X
+ >E2 : typeof E2
+->X : E2
++>X : E2.X
+ 

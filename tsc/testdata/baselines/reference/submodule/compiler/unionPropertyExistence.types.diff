@@ -1,0 +1,66 @@
+--- old.unionPropertyExistence.types
++++ new.unionPropertyExistence.types
+@@= skipped -1, +1 lines =@@
+ 
+ === unionPropertyExistence.ts ===
+ interface A {
++>A : A
++
+     inAll: string;
+ >inAll : string
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface B {
++>B : B
++
+     inAll: boolean;
+ >inAll : boolean
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface C {
++>C : C
++
+     inAll: number;
+ >inAll : number
+ 
+@@= skipped -20, +22 lines =@@
+ >abc : ABC
+ 
+ declare const x: "foo" | "bar";
+->x : "foo" | "bar"
++>x : "bar" | "foo"
+ 
+ declare const bFoo: B | "foo";
+->bFoo : B | "foo"
++>bFoo : "foo" | B
+ 
+ x.nope();
+ >x.nope() : any
+ >x.nope : any
+->x : "foo" | "bar"
++>x : "bar" | "foo"
+ >nope : any
+ 
+ bFoo.onlyInB;
+ >bFoo.onlyInB : any
+->bFoo : B | "foo"
++>bFoo : "foo" | B
+ >onlyInB : any
+ 
+ x.length; // Ok
+ >x.length : number
+->x : "foo" | "bar"
++>x : "bar" | "foo"
+ >length : number
+ 
+ bFoo.length;
+ >bFoo.length : any
+->bFoo : B | "foo"
++>bFoo : "foo" | B
+ >length : any
+ 
+ ab.onlyInB;

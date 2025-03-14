@@ -1,0 +1,87 @@
+--- old.intersectionAndUnionTypes.types
++++ new.intersectionAndUnionTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === intersectionAndUnionTypes.ts ===
+ interface A { a: string }
++>A : A
+ >a : string
+ 
+ interface B { b: string }
++>B : B
+ >b : string
+ 
+ interface C { c: string }
++>C : C
+ >c : string
+ 
+ interface D { d: string }
++>D : D
+ >d : string
+ 
+ var a: A;
+@@= skipped -36, +40 lines =@@
+ >cod : C | D
+ 
+ var x: A & B | C & D;
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ 
+ var y: (A | B) & (C | D);
+ >y : (A | B) & (C | D)
+@@= skipped -27, +27 lines =@@
+ 
+ x = anb;  // Ok
+ >x = anb : A & B
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ >anb : A & B
+ 
+ x = aob;
+ >x = aob : A | B
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ >aob : A | B
+ 
+ x = cnd;  // Ok
+ >x = cnd : C & D
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ >cnd : C & D
+ 
+ x = cod;
+ >x = cod : C | D
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ >cod : C | D
+ 
+ anb = x;
+->anb = x : (A & B) | (C & D)
++>anb = x : A & B | C & D
+ >anb : A & B
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ 
+ aob = x;
+->aob = x : (A & B) | (C & D)
++>aob = x : A & B | C & D
+ >aob : A | B
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ 
+ cnd = x;
+->cnd = x : (A & B) | (C & D)
++>cnd = x : A & B | C & D
+ >cnd : C & D
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ 
+ cod = x;
+->cod = x : (A & B) | (C & D)
++>cod = x : A & B | C & D
+ >cod : C | D
+->x : (A & B) | (C & D)
++>x : A & B | C & D
+ 
+ y = anb;
+ >y = anb : A & B

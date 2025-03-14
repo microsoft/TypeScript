@@ -1,0 +1,41 @@
+--- old.isolatedDeclarationsAddUndefined.types
++++ new.isolatedDeclarationsAddUndefined.types
+@@= skipped -7, +7 lines =@@
+ >Bar : Bar
+ 
+     c? = [2 as N] as const;
+->c : readonly [1] | undefined
+->[2 as N] as const : readonly [1]
+->[2 as N] : readonly [1]
++>c : [1] | undefined
++>[2 as N] as const : [1]
++>[2 as N] : [1]
+ >2 as N : 1
+ >2 : 2
+ 
+@@= skipped -22, +22 lines =@@
+ 
+ === file2.ts ===
+ export function foo(p = (ip = 10, v: number): void => {}): void{
+->foo : (p?: (ip: number | undefined, v: number) => void) => void
+->p : (ip: number | undefined, v: number) => void
+->(ip = 10, v: number): void => {} : (ip: number | undefined, v: number) => void
++>foo : (p?: (ip: number, v: number) => void) => void
++>p : (ip: number, v: number) => void
++>(ip = 10, v: number): void => {} : (ip: number, v: number) => void
+ >ip : number
+ >10 : 10
+ >v : number
+@@= skipped -11, +11 lines =@@
+ >T : number
+ 
+ export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
+->foo2 : (p?: (ip: T | undefined, v: number) => void) => void
+->p : (ip: T | undefined, v: number) => void
+->(ip = 10 as T, v: number): void => {} : (ip: T | undefined, v: number) => void
++>foo2 : (p?: (ip: number, v: number) => void) => void
++>p : (ip: number, v: number) => void
++>(ip = 10 as T, v: number): void => {} : (ip: number, v: number) => void
+ >ip : number
+ >10 as T : number
+ >10 : 10

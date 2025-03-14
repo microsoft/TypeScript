@@ -1,0 +1,10 @@
+--- old.parservoidInQualifiedName2.types
++++ new.parservoidInQualifiedName2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parservoidInQualifiedName2.ts ===
+ var v : x.void;
+->v : x.void
++>v : void
+ >x : any
+ 

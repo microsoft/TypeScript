@@ -1,0 +1,133 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution11.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+const obj = {};
+>obj : {}
+>{} : {}
+
+const obj1: { x: 2 } = {
+>obj1 : { x: 2; }
+>x : 2
+>{    x: 2} : { x: 2; }
+
+    x: 2
+>x : 2
+>2 : 2
+}
+const obj3: {y: true, overwrite: string } = {
+>obj3 : { y: true; overwrite: string; }
+>y : true
+>true : true
+>overwrite : string
+>{    y: true,    overwrite: "hi"} : { y: true; overwrite: string; }
+
+    y: true,
+>y : true
+>true : true
+
+    overwrite: "hi"
+>overwrite : string
+>"hi" : "hi"
+}
+
+interface Prop {
+>Prop : Prop
+
+    x: 2
+>x : 2
+
+    y: true
+>y : true
+>true : true
+
+    overwrite: string
+>overwrite : string
+}
+
+class OverWriteAttr extends React.Component<Prop, {}> {
+>OverWriteAttr : OverWriteAttr
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => any
+
+        return <div>Hello</div>;
+><div>Hello</div> : any
+>div : any
+>div : any
+    }
+}
+
+let anyobj: any;
+>anyobj : any
+
+// OK
+let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
+>x : any
+><OverWriteAttr {...obj} y overwrite="hi" {...obj1} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>obj : {}
+>y : any
+>overwrite : any
+>obj1 : { x: 2; }
+
+let x1 = <OverWriteAttr {...obj1} {...obj3} />
+>x1 : any
+><OverWriteAttr {...obj1} {...obj3} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>obj1 : { x: 2; }
+>obj3 : { y: true; overwrite: string; }
+
+let x2 = <OverWriteAttr x={3} overwrite="hi" {...obj1} {...{y: true}} />
+>x2 : any
+><OverWriteAttr x={3} overwrite="hi" {...obj1} {...{y: true}} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>x : any
+>3 : 3
+>overwrite : any
+>obj1 : { x: 2; }
+>{y: true} : { y: boolean; }
+>y : boolean
+>true : true
+
+let x3 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overwrite:"world"}} />
+>x3 : any
+><OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overwrite:"world"}} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>overwrite : any
+>obj1 : { x: 2; }
+>x : any
+>3 : 3
+>{y: true, x: 2, overwrite:"world"} : { y: boolean; x: number; overwrite: string; }
+>y : boolean
+>true : true
+>x : number
+>2 : 2
+>overwrite : string
+>"world" : "world"
+
+let x4 = <OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} />
+>x4 : any
+><OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>{x: 2} : { x: number; }
+>x : number
+>2 : 2
+>{overwrite: "world"} : { overwrite: string; }
+>overwrite : string
+>"world" : "world"
+>{y: true} : { y: boolean; }
+>y : boolean
+>true : true
+
+let x5 = <OverWriteAttr {...anyobj} />
+>x5 : any
+><OverWriteAttr {...anyobj} /> : any
+>OverWriteAttr : typeof OverWriteAttr
+>anyobj : any
+

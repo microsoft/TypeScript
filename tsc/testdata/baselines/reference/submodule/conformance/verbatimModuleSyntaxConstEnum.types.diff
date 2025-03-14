@@ -1,0 +1,11 @@
+--- old.verbatimModuleSyntaxConstEnum.types
++++ new.verbatimModuleSyntaxConstEnum.types
+@@= skipped -1, +1 lines =@@
+ 
+ === verbatimModuleSyntaxConstEnum.ts ===
+ export const enum E {
+->E : E
++>E : E.A
+ 
+     A = 1,
+ >A : E.A

@@ -1,0 +1,54 @@
+--- old.bigintPropertyName.types
++++ new.bigintPropertyName.types
+@@= skipped -32, +32 lines =@@
+ >789 : 789
+ 
+ const arr = [1, 2, 3] as const;
+->arr : readonly [1, 2, 3]
+->[1, 2, 3] as const : readonly [1, 2, 3]
+->[1, 2, 3] : readonly [1, 2, 3]
++>arr : [1, 2, 3]
++>[1, 2, 3] as const : [1, 2, 3]
++>[1, 2, 3] : [1, 2, 3]
+ >1 : 1
+ >2 : 2
+ >3 : 3
+ 
+ const { 0: d } = arr;
+ >d : 1
+->arr : readonly [1, 2, 3]
++>arr : [1, 2, 3]
+ 
+ const { "0": e } = arr;
+ >e : 1
+->arr : readonly [1, 2, 3]
++>arr : [1, 2, 3]
+ 
+ const { 0n: f } = arr; // bigint should give an index error
+ >f : any
+->arr : readonly [1, 2, 3]
++>arr : [1, 2, 3]
+ 
+ // BigInt cannot be used as an property name
+ const x = { 0n: 123 };
+@@= skipped -28, +28 lines =@@
+ 
+ === g.ts ===
+ interface G {
++>G : G
++
+     2n: string;
+ >2n : string
+ }
+ interface H {
++>H : H
++
+     "3n": string;
+ >"3n" : string
+ }
+@@= skipped -121, +125 lines =@@
+ 
+ type T = { [t in  Q]: string };
+ >T : T
++>t : t
+ 

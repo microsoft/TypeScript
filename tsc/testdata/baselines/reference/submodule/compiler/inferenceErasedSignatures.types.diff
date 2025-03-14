@@ -1,0 +1,105 @@
+--- old.inferenceErasedSignatures.types
++++ new.inferenceErasedSignatures.types
+@@= skipped -7, +7 lines =@@
+ 
+     set<K extends keyof this>(key: K, value: this[K]): this[K];
+ >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
++>K : K
+ >key : K
+ >value : this[K]
+ }
+ 
+ abstract class SomeAbstractClass<C, M, R> extends SomeBaseClass {
+ >SomeAbstractClass : SomeAbstractClass<C, M, R>
++>C : C
++>M : M
++>R : R
+ >SomeBaseClass : SomeBaseClass
+ 
+     foo!: (r?: R) => void;
+->foo : (r?: R) => void
++>foo : (r?: R | undefined) => void
+ >r : R | undefined
+ 
+     bar!: (r?: any) => void;
+@@= skipped -37, +41 lines =@@
+ 
+ type CType<T> = T extends SomeAbstractClass<infer C, any, any> ? C : never;
+ >CType : CType<T>
++>T : T
++>C : C
+ 
+ type MType<T> = T extends SomeAbstractClass<any, infer M, any> ? M : never;
+ >MType : MType<T>
++>T : T
++>M : M
+ 
+ type RType<T> = T extends SomeAbstractClass<any, any, infer R> ? R : never;
+ >RType : RType<T>
++>T : T
++>R : R
+ 
+ type SomeClassC = CType<SomeClass>; // number
+ >SomeClassC : number
+@@= skipped -19, +25 lines =@@
+ // Repro from #37163
+ 
+ interface BaseType<T1, T2>  {
++>BaseType : BaseType<T1, T2>
++>T1 : T1
++>T2 : T2
++
+     set<K extends keyof this>(key: K, value: this[K]): this[K];
+ >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
++>K : K
+ >key : K
+ >value : this[K]
+ 
+@@= skipped -10, +15 lines =@@
+ >c : T1
+ 
+     useT2(r?: T2): void;
+->useT2 : (r?: T2) => void
++>useT2 : (r?: T2 | undefined) => void
+ >r : T2 | undefined
+ 
+     unrelatedButSomehowRelevant(r?: any): void;
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ interface InheritedType extends BaseType<number, boolean> {
++>InheritedType : InheritedType
++
+     // This declaration shouldn't do anything...
+     useT1(_: number): void
+ >useT1 : (_: number) => void
+@@= skipped -8, +10 lines =@@
+ 
+ // Structural expansion of InheritedType
+ interface StructuralVersion  {
++>StructuralVersion : StructuralVersion
++
+     set<K extends keyof this>(key: K, value: this[K]): this[K];
+ >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
++>K : K
+ >key : K
+ >value : this[K]
+ 
+@@= skipped -10, +13 lines =@@
+ >c : number
+ 
+     useT2(r?: boolean): void;
+->useT2 : (r?: boolean) => void
++>useT2 : (r?: boolean | undefined) => void
+ >r : boolean | undefined
+ 
+     unrelatedButSomehowRelevant(r?: any): void;
+@@= skipped -10, +10 lines =@@
+ 
+ type GetT1<T> = T extends BaseType<infer U, any> ? U : never;
+ >GetT1 : GetT1<T>
++>T : T
++>U : U
+ 
+ type T1 = GetT1<InheritedType>; // number
+ >T1 : number

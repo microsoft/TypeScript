@@ -1,0 +1,11 @@
+--- old.contextualTypingOfArrayLiterals1.types
++++ new.contextualTypingOfArrayLiterals1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextualTypingOfArrayLiterals1.ts ===
+ interface I {
++>I : I
++
+    [x: number]: Date;
+ >x : number
+ }

@@ -1,0 +1,10 @@
+--- old.genericCloneReturnTypes2.types
++++ new.genericCloneReturnTypes2.types
+@@= skipped -2, +2 lines =@@
+ === genericCloneReturnTypes2.ts ===
+ class MyList<T> {
+ >MyList : MyList<T>
++>T : T
+ 
+     public size: number;
+ >size : number

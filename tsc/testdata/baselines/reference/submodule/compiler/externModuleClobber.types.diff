@@ -1,0 +1,43 @@
+--- old.externModuleClobber.types
++++ new.externModuleClobber.types
+@@= skipped -10, +10 lines =@@
+ >EC : EC
+ 
+ 		public getPosition() : EM.Position;
+->getPosition : () => EM.Position
++>getPosition : () => Position
+ >EM : any
+ 	}
+ }
+ 
+ var x:EM.Position;
+->x : EM.Position
++>x : Position
+ >EM : any
+ 
+ var ec:EM.EC = new EM.EC();
+->ec : EM.EC
++>ec : EC
+ >EM : any
+->new EM.EC() : EM.EC
+->EM.EC : typeof EM.EC
++>new EM.EC() : EC
++>EM.EC : typeof EC
+ >EM : typeof EM
+->EC : typeof EM.EC
++>EC : typeof EC
+ 
+ x = ec.getPosition();
+->x = ec.getPosition() : EM.Position
+->x : EM.Position
+->ec.getPosition() : EM.Position
+->ec.getPosition : () => EM.Position
+->ec : EM.EC
+->getPosition : () => EM.Position
++>x = ec.getPosition() : Position
++>x : Position
++>ec.getPosition() : Position
++>ec.getPosition : () => Position
++>ec : EC
++>getPosition : () => Position
+ 

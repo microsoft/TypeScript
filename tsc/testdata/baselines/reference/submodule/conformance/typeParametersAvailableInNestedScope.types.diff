@@ -1,0 +1,26 @@
+--- old.typeParametersAvailableInNestedScope.types
++++ new.typeParametersAvailableInNestedScope.types
+@@= skipped -2, +2 lines =@@
+ === typeParametersAvailableInNestedScope.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     data: T;
+ >data : T
+@@= skipped -7, +8 lines =@@
+     x = <U>(a: U) => {
+ >x : <U>(a: U) => T
+ ><U>(a: U) => {        var y: T;        return y;    } : <U>(a: U) => T
++>U : U
+ >a : U
+ 
+         var y: T;
+@@= skipped -14, +15 lines =@@
+ 
+         function temp<U>(a: U) {
+ >temp : <U>(a: U) => T
++>U : U
+ >a : U
+ 
+             var y: T;

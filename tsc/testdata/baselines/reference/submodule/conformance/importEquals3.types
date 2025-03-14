@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importEquals3.ts] ////
+
+=== a.ts ===
+export class A {}
+>A : A
+
+=== b.ts ===
+import type * as a from './a';
+>a : typeof import("a")
+
+import A = a.A; // Error
+>A : typeof A
+>a : typeof import("a")
+>A : A
+
+import aa = a;  // Error
+>aa : typeof import("a")
+>a : typeof import("a")
+
+const x = 0;
+>x : 0
+>0 : 0
+
+export { a, A, x };
+>a : typeof import("a")
+>A : typeof A
+>x : 0
+
+=== c.ts ===
+import * as b from './b';
+>b : typeof import("b")
+
+import A = b.a.A; // Error
+>A : typeof A
+>b : typeof import("b")
+>a : typeof import("a")
+>A : A
+
+import AA = b.A; // Error
+>AA : typeof A
+>b : typeof import("b")
+>A : A
+
+import x = b.x;
+>x : 0
+>b : typeof import("b")
+>x : 0
+
+console.log(x);
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : 0
+

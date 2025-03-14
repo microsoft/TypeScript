@@ -1,0 +1,22 @@
+--- old.checkJsdocTypeTagOnExportAssignment2.types
++++ new.checkJsdocTypeTagOnExportAssignment2.types
+@@= skipped -3, +3 lines =@@
+ 
+ === a.ts ===
+ export interface Foo {
++>Foo : Foo
++
+     a: number;
+ >a : number
+ 
+@@= skipped -16, +18 lines =@@
+ 
+ === c.js ===
+ import b from "./b";
+->b : import("a").Foo
++>b : { c: boolean; }
+ 
+ b;
+->b : import("a").Foo
++>b : { c: boolean; }
+ 

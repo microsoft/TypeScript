@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionPrototypeStatic.ts] ////
+
+=== source.js ===
+module.exports = MyClass;
+>module.exports = MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+>module.exports : any
+>module : any
+>exports : any
+>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+
+function MyClass() {}
+>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+
+MyClass.staticMethod = function() {}
+>MyClass.staticMethod = function() {} : () => void
+>MyClass.staticMethod : () => void
+>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+>staticMethod : () => void
+>function() {} : () => void
+
+MyClass.prototype.method = function() {}
+>MyClass.prototype.method = function() {} : () => void
+>MyClass.prototype.method : any
+>MyClass.prototype : any
+>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+>prototype : any
+>method : any
+>function() {} : () => void
+
+MyClass.staticProperty = 123;
+>MyClass.staticProperty = 123 : 123
+>MyClass.staticProperty : number
+>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+>staticProperty : number
+>123 : 123
+
+/**
+ * Callback to be invoked when test execution is complete.
+ *
+ * @callback DoneCB
+ * @param {number} failures - Number of failures that occurred.
+ */

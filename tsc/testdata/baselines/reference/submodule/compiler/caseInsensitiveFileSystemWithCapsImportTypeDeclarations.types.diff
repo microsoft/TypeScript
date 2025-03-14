@@ -1,0 +1,9 @@
+--- old.caseInsensitiveFileSystemWithCapsImportTypeDeclarations.types
++++ new.caseInsensitiveFileSystemWithCapsImportTypeDeclarations.types
+@@= skipped -38, +38 lines =@@
+ === Uppercased_Dir/src/types.ts ===
+ export type Merge<T, U> = T & U;
+ >Merge : Merge<T, U>
++>T : T
++>U : U
+ 

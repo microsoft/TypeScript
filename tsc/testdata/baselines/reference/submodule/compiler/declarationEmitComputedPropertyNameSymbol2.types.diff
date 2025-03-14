@@ -1,0 +1,13 @@
+--- old.declarationEmitComputedPropertyNameSymbol2.types
++++ new.declarationEmitComputedPropertyNameSymbol2.types
+@@= skipped -21, +21 lines =@@
+ >Type : any
+ 
+ export const foo = { ...({} as Type) };
+->foo : { x?: { [Foo.sym]: 0; }; }
+->{ ...({} as Type) } : { x?: { [Foo.sym]: 0; }; }
++>foo : { x?: { [Foo.sym]: 0; } | undefined; }
++>{ ...({} as Type) } : { x?: { [Foo.sym]: 0; } | undefined; }
+ >({} as Type) : Type
+ >{} as Type : Type
+ >{} : {}

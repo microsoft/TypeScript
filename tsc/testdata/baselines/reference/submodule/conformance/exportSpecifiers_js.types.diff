@@ -1,0 +1,10 @@
+--- old.exportSpecifiers_js.types
++++ new.exportSpecifiers_js.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/externalModules/typeOnly/exportSpecifiers_js.ts] ////
+ 
+-=== ./a.js ===
++=== a.js ===
+ const foo = 0;
+ >foo : 0
+ >0 : 0

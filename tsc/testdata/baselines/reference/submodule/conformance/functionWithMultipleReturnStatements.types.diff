@@ -1,0 +1,66 @@
+--- old.functionWithMultipleReturnStatements.types
++++ new.functionWithMultipleReturnStatements.types
+@@= skipped -4, +4 lines =@@
+ // it is an error if there is no single BCT, these are error cases
+ 
+ function f1() {
+->f1 : () => 1 | ""
++>f1 : () => "" | 1
+ 
+     if (true) {
+ >true : true
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ function f2() {
+->f2 : () => 1 | "" | 2
++>f2 : () => "" | 1 | 2
+ 
+     if (true) {
+ >true : true
+@@= skipped -21, +21 lines =@@
+ }
+ 
+ function f3() {
+->f3 : () => 1 | ""
++>f3 : () => "" | 1
+ 
+     try {
+         return 1;
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ function f4() {
+->f4 : () => 1 | ""
++>f4 : () => "" | 1
+ 
+     try {
+         return 1;
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ function f5() {
+->f5 : () => 1 | ""
++>f5 : () => "" | 1
+ 
+     return 1;
+ >1 : 1
+@@= skipped -11, +11 lines =@@
+ 
+ function f6<T, U>(x: T, y:U) {
+ >f6 : <T, U>(x: T, y: U) => T | U
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+@@= skipped -17, +19 lines =@@
+ 
+ function f8<T extends U, U extends V, V>(x: T, y: U) {
+ >f8 : <T extends U, U extends V, V>(x: T, y: U) => U
++>T : T
++>U : U
++>V : V
+ >x : T
+ >y : U
+ 

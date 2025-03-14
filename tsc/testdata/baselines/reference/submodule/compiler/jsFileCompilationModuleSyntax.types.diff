@@ -1,0 +1,10 @@
+--- old.jsFileCompilationModuleSyntax.types
++++ new.jsFileCompilationModuleSyntax.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/jsFileCompilationModuleSyntax.ts] ////
+ 
+ === a.js ===
+-
+ module M { }
++>M : any
++

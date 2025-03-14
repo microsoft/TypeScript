@@ -1,0 +1,21 @@
+--- old.genericSignatureInheritance2.types
++++ new.genericSignatureInheritance2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericSignatureInheritance2.ts ===
+ interface I {
++>I : I
++
+     <T>(x: T): string;
++>T : T
+ >x : T
+ }
+ 
+ interface I2 extends I { 
++>I2 : I2
++
+     <T>(x: T): void;
++>T : T
+ >x : T
+ }
+ 

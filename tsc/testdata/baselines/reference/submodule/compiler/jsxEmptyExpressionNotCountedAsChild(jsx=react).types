@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild.tsx] ////
+
+=== jsxEmptyExpressionNotCountedAsChild.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from 'react'
+>React : any
+
+interface Props {
+>Props : Props
+
+    children: React.ReactElement<any>
+>children : ReactElement<any>
+>React : any
+}
+
+function Wrapper(props: Props) {
+>Wrapper : (props: Props) => any
+>props : Props
+
+    return <div>{props.children}</div>
+><div>{props.children}</div> : any
+>div : any
+>props.children : ReactElement<any>
+>props : Props
+>children : ReactElement<any>
+>div : any
+}
+
+const element = (
+>element : any
+>(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : any
+
+    <Wrapper>
+><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : any
+>Wrapper : (props: Props) => any
+
+    {/* comment */}
+     <div>Hello</div>
+><div>Hello</div> : any
+>div : any
+>div : any
+
+    </Wrapper>
+>Wrapper : (props: Props) => any
+
+)

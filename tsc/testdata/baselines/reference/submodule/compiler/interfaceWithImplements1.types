@@ -1,0 +1,9 @@
+//// [tests/cases/compiler/interfaceWithImplements1.ts] ////
+
+=== interfaceWithImplements1.ts ===
+interface IFoo { }
+>IFoo : IFoo
+
+interface IBar implements IFoo {
+>IBar : IBar
+}

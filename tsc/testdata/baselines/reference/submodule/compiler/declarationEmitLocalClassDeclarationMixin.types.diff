@@ -1,0 +1,72 @@
+--- old.declarationEmitLocalClassDeclarationMixin.types
++++ new.declarationEmitLocalClassDeclarationMixin.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitLocalClassDeclarationMixin.ts ===
+ interface Constructor<C> { new (...args: any[]): C; }
++>Constructor : Constructor<C>
++>C : C
+ >args : any[]
+ 
+ function mixin<B extends Constructor<{}>>(Base: B) {
+->mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
++>mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed<B>; prototype: PrivateMixed<any>; } & B
++>B : B
+ >Base : B
+ 
+     class PrivateMixed extends Base {
+->PrivateMixed : PrivateMixed
++>PrivateMixed : PrivateMixed<B>
+ >Base : {}
+ 
+         bar = 2;
+@@= skipped -15, +18 lines =@@
+ >2 : 2
+     }
+     return PrivateMixed;
+->PrivateMixed : { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
++>PrivateMixed : { new (...args: any[]): PrivateMixed<B>; prototype: PrivateMixed<any>; } & B
+ }
+ 
+ export class Unmixed {
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ export const Mixed = mixin(Unmixed);
+->Mixed : { new (...args: any[]): mixin<typeof Unmixed>.PrivateMixed; prototype: mixin<any>.PrivateMixed; } & typeof Unmixed
+->mixin(Unmixed) : { new (...args: any[]): mixin<typeof Unmixed>.PrivateMixed; prototype: mixin<any>.PrivateMixed; } & typeof Unmixed
+->mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
++>Mixed : { new (...args: any[]): PrivateMixed<typeof Unmixed>; prototype: PrivateMixed<any>; } & typeof Unmixed
++>mixin(Unmixed) : { new (...args: any[]): PrivateMixed<typeof Unmixed>; prototype: PrivateMixed<any>; } & typeof Unmixed
++>mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed<B>; prototype: PrivateMixed<any>; } & B
+ >Unmixed : typeof Unmixed
+ 
+ function Filter<C extends Constructor<{}>>(ctor: C) {
+->Filter : <C extends Constructor<{}>>(ctor: C) => ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
++>Filter : <C extends Constructor<{}>>(ctor: C) => { new (...args: any[]): FilterMixin<C>; prototype: FilterMixin<any>; } & C
++>C : C
+ >ctor : C
+ 
+     abstract class FilterMixin extends ctor {
+->FilterMixin : FilterMixin
++>FilterMixin : FilterMixin<C>
+ >ctor : {}
+ 
+         abstract match(path: string): boolean;
+@@= skipped -23, +24 lines =@@
+ >12 : 12
+     }
+     return FilterMixin;
+->FilterMixin : ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
++>FilterMixin : { new (...args: any[]): FilterMixin<C>; prototype: FilterMixin<any>; } & C
+ }
+ 
+ export class FilteredThing extends Filter(Unmixed) {
+ >FilteredThing : FilteredThing
+->Filter(Unmixed) : Filter<typeof Unmixed>.FilterMixin & Unmixed
+->Filter : <C extends Constructor<{}>>(ctor: C) => ((abstract new (...args: any[]) => FilterMixin) & { prototype: Filter<any>.FilterMixin; }) & C
++>Filter(Unmixed) : FilterMixin<typeof Unmixed> & Unmixed
++>Filter : <C extends Constructor<{}>>(ctor: C) => { new (...args: any[]): FilterMixin<C>; prototype: FilterMixin<any>; } & C
+ >Unmixed : typeof Unmixed
+ 
+     match(path: string) {

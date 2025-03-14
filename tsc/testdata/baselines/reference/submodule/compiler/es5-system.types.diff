@@ -1,0 +1,11 @@
+--- old.es5-system.types
++++ new.es5-system.types
+@@= skipped -1, +1 lines =@@
+ 
+ === es5-system.ts ===
+ export default class A
+->A : A
++>A : default
+ {
+     constructor ()
+     {

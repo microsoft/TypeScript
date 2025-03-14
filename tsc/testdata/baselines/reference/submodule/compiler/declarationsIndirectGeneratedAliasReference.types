@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/declarationsIndirectGeneratedAliasReference.ts] ////
+
+=== node_modules/mod/ctor.d.ts ===
+export interface Ctor {
+>Ctor : Ctor
+
+    x: number;
+>x : number
+}
+export type ExtendedCtor<T> = {x: number, ext: T};
+>ExtendedCtor : ExtendedCtor<T>
+>T : T
+>x : number
+>ext : T
+
+export interface CtorConstructor {
+>CtorConstructor : CtorConstructor
+
+    extends<T>(x: T): ExtendedCtor<T extends unknown ? Ctor : undefined>;
+>extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
+>T : T
+>x : T
+}
+export const Ctor: CtorConstructor;
+>Ctor : CtorConstructor
+
+=== node_modules/mod/index.d.ts ===
+import { Ctor } from "./ctor";
+>Ctor : CtorConstructor
+
+export default Ctor;
+>Ctor : Ctor
+
+=== index.ts ===
+import * as ns from "mod";
+>ns : typeof import("node_modules/mod/index")
+
+const Ctor = ns.default;
+>Ctor : CtorConstructor
+>ns.default : CtorConstructor
+>ns : typeof import("node_modules/mod/index")
+>default : CtorConstructor
+
+export const MyComp = Ctor.extends({foo: "bar"});
+>MyComp : ExtendedCtor<Ctor>
+>Ctor.extends({foo: "bar"}) : ExtendedCtor<Ctor>
+>Ctor.extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
+>Ctor : CtorConstructor
+>extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
+>{foo: "bar"} : { foo: string; }
+>foo : string
+>"bar" : "bar"
+

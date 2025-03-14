@@ -1,0 +1,485 @@
+--- old.privacyCannotNameVarTypeDeclFile.types
++++ new.privacyCannotNameVarTypeDeclFile.types
+@@= skipped -1, +1 lines =@@
+ 
+ === privacyCannotNameVarTypeDeclFile_consumer.ts ===
+ import exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
+->exporter : typeof exporter
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
+ 
+ export class publicClassWithWithPrivatePropertyTypes {
+ >publicClassWithWithPrivatePropertyTypes : publicClassWithWithPrivatePropertyTypes
+ 
+     static myPublicStaticProperty = exporter.createExportedWidget1(); // Error
+->myPublicStaticProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPublicStaticProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     private static myPrivateStaticProperty = exporter.createExportedWidget1();
+->myPrivateStaticProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPrivateStaticProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     myPublicProperty = exporter.createExportedWidget1(); // Error
+->myPublicProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPublicProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     private myPrivateProperty = exporter.createExportedWidget1();
+->myPrivateProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPrivateProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     static myPublicStaticProperty1 = exporter.createExportedWidget3(); // Error
+->myPublicStaticProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPublicStaticProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+     private static myPrivateStaticProperty1 = exporter.createExportedWidget3();
+->myPrivateStaticProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPrivateStaticProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+     myPublicProperty1 = exporter.createExportedWidget3(); // Error
+->myPublicProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPublicProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+     private myPrivateProperty1 = exporter.createExportedWidget3();
+->myPrivateProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPrivateProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ }
+ 
+ class privateClassWithWithPrivatePropertyTypes {
+ >privateClassWithWithPrivatePropertyTypes : privateClassWithWithPrivatePropertyTypes
+ 
+     static myPublicStaticProperty = exporter.createExportedWidget1(); 
+->myPublicStaticProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPublicStaticProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     private static myPrivateStaticProperty = exporter.createExportedWidget1();
+->myPrivateStaticProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPrivateStaticProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     myPublicProperty = exporter.createExportedWidget1(); 
+->myPublicProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPublicProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     private myPrivateProperty = exporter.createExportedWidget1();
+->myPrivateProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>myPrivateProperty : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+     static myPublicStaticProperty1 = exporter.createExportedWidget3(); 
+->myPublicStaticProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPublicStaticProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+     private static myPrivateStaticProperty1 = exporter.createExportedWidget3();
+->myPrivateStaticProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPrivateStaticProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+     myPublicProperty1 = exporter.createExportedWidget3(); 
+->myPublicProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPublicProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+     private myPrivateProperty1 = exporter.createExportedWidget3();
+->myPrivateProperty1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>myPrivateProperty1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ }
+ 
+ export var publicVarWithPrivatePropertyTypes= exporter.createExportedWidget1(); // Error
+->publicVarWithPrivatePropertyTypes : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>publicVarWithPrivatePropertyTypes : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+ var privateVarWithPrivatePropertyTypes= exporter.createExportedWidget1();
+->privateVarWithPrivatePropertyTypes : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1() : import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter.createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
+->exporter : typeof exporter
+->createExportedWidget1 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").Widget1
++>privateVarWithPrivatePropertyTypes : Widget1
++>exporter.createExportedWidget1() : Widget1
++>exporter.createExportedWidget1 : () => Widget1
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget1 : () => Widget1
+ 
+ export var publicVarWithPrivatePropertyTypes1 = exporter.createExportedWidget3(); // Error
+->publicVarWithPrivatePropertyTypes1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>publicVarWithPrivatePropertyTypes1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+ var privateVarWithPrivatePropertyTypes1 = exporter.createExportedWidget3();
+->privateVarWithPrivatePropertyTypes1 : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+->exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
+->exporter : typeof exporter
+->createExportedWidget3 : () => import("GlobalWidgets").Widget3
++>privateVarWithPrivatePropertyTypes1 : Widget3
++>exporter.createExportedWidget3() : Widget3
++>exporter.createExportedWidget3 : () => Widget3
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget3 : () => Widget3
+ 
+ export class publicClassWithPrivateModulePropertyTypes {
+ >publicClassWithPrivateModulePropertyTypes : publicClassWithPrivateModulePropertyTypes
+ 
+     static myPublicStaticProperty= exporter.createExportedWidget2(); // Error
+->myPublicStaticProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2() : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter : typeof exporter
+->createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
++>myPublicStaticProperty : Widget2
++>exporter.createExportedWidget2() : Widget2
++>exporter.createExportedWidget2 : () => Widget2
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget2 : () => Widget2
+ 
+     myPublicProperty = exporter.createExportedWidget2(); // Error
+->myPublicProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2() : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter : typeof exporter
+->createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
++>myPublicProperty : Widget2
++>exporter.createExportedWidget2() : Widget2
++>exporter.createExportedWidget2 : () => Widget2
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget2 : () => Widget2
+ 
+     static myPublicStaticProperty1 = exporter.createExportedWidget4(); // Error
+->myPublicStaticProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter : typeof exporter
+->createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
++>myPublicStaticProperty1 : Widget4
++>exporter.createExportedWidget4() : Widget4
++>exporter.createExportedWidget4 : () => Widget4
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget4 : () => Widget4
+ 
+     myPublicProperty1 = exporter.createExportedWidget4(); // Error
+->myPublicProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter : typeof exporter
+->createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
++>myPublicProperty1 : Widget4
++>exporter.createExportedWidget4() : Widget4
++>exporter.createExportedWidget4 : () => Widget4
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget4 : () => Widget4
+ }
+ export var publicVarWithPrivateModulePropertyTypes= exporter.createExportedWidget2(); // Error
+->publicVarWithPrivateModulePropertyTypes : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2() : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter : typeof exporter
+->createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
++>publicVarWithPrivateModulePropertyTypes : Widget2
++>exporter.createExportedWidget2() : Widget2
++>exporter.createExportedWidget2 : () => Widget2
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget2 : () => Widget2
+ 
+ export var publicVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4(); // Error
+->publicVarWithPrivateModulePropertyTypes1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter : typeof exporter
+->createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
++>publicVarWithPrivateModulePropertyTypes1 : Widget4
++>exporter.createExportedWidget4() : Widget4
++>exporter.createExportedWidget4 : () => Widget4
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget4 : () => Widget4
+ 
+ class privateClassWithPrivateModulePropertyTypes {
+ >privateClassWithPrivateModulePropertyTypes : privateClassWithPrivateModulePropertyTypes
+ 
+     static myPublicStaticProperty= exporter.createExportedWidget2();
+->myPublicStaticProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2() : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter : typeof exporter
+->createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
++>myPublicStaticProperty : Widget2
++>exporter.createExportedWidget2() : Widget2
++>exporter.createExportedWidget2 : () => Widget2
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget2 : () => Widget2
+ 
+     myPublicProperty= exporter.createExportedWidget2();
+->myPublicProperty : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2() : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter : typeof exporter
+->createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
++>myPublicProperty : Widget2
++>exporter.createExportedWidget2() : Widget2
++>exporter.createExportedWidget2 : () => Widget2
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget2 : () => Widget2
+ 
+     static myPublicStaticProperty1 = exporter.createExportedWidget4();
+->myPublicStaticProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter : typeof exporter
+->createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
++>myPublicStaticProperty1 : Widget4
++>exporter.createExportedWidget4() : Widget4
++>exporter.createExportedWidget4 : () => Widget4
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget4 : () => Widget4
+ 
+     myPublicProperty1 = exporter.createExportedWidget4();
+->myPublicProperty1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter : typeof exporter
+->createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
++>myPublicProperty1 : Widget4
++>exporter.createExportedWidget4() : Widget4
++>exporter.createExportedWidget4 : () => Widget4
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget4 : () => Widget4
+ }
+ var privateVarWithPrivateModulePropertyTypes= exporter.createExportedWidget2();
+->privateVarWithPrivateModulePropertyTypes : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2() : import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter.createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
+->exporter : typeof exporter
+->createExportedWidget2 : () => import("privacyCannotNameVarTypeDeclFile_Widgets").SpecializedWidget.Widget2
++>privateVarWithPrivateModulePropertyTypes : Widget2
++>exporter.createExportedWidget2() : Widget2
++>exporter.createExportedWidget2 : () => Widget2
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget2 : () => Widget2
+ 
+ var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4();
+->privateVarWithPrivateModulePropertyTypes1 : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+->exporter : typeof exporter
+->createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
++>privateVarWithPrivateModulePropertyTypes1 : Widget4
++>exporter.createExportedWidget4() : Widget4
++>exporter.createExportedWidget4 : () => Widget4
++>exporter : typeof import("privacyCannotNameVarTypeDeclFile_exporter")
++>createExportedWidget4 : () => Widget4
+ 
+ === privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts ===
+ declare module "GlobalWidgets" {
+@@= skipped -305, +305 lines =@@
+ === privacyCannotNameVarTypeDeclFile_exporter.ts ===
+ ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
+ import Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
+->Widgets : typeof Widgets
++>Widgets : typeof import("privacyCannotNameVarTypeDeclFile_Widgets")
+ 
+ import Widgets1 = require("GlobalWidgets");
+->Widgets1 : typeof Widgets1
++>Widgets1 : typeof import("GlobalWidgets")
+ 
+ export function createExportedWidget1() {
+->createExportedWidget1 : () => Widgets.Widget1
++>createExportedWidget1 : () => Widget1
+ 
+     return Widgets.createWidget1();
+->Widgets.createWidget1() : Widgets.Widget1
+->Widgets.createWidget1 : () => Widgets.Widget1
+->Widgets : typeof Widgets
+->createWidget1 : () => Widgets.Widget1
++>Widgets.createWidget1() : Widget1
++>Widgets.createWidget1 : () => Widget1
++>Widgets : typeof import("privacyCannotNameVarTypeDeclFile_Widgets")
++>createWidget1 : () => Widget1
+ }
+ export function createExportedWidget2() {
+->createExportedWidget2 : () => Widgets.SpecializedWidget.Widget2
++>createExportedWidget2 : () => Widget2
+ 
+     return Widgets.SpecializedWidget.createWidget2();
+->Widgets.SpecializedWidget.createWidget2() : Widgets.SpecializedWidget.Widget2
+->Widgets.SpecializedWidget.createWidget2 : () => Widgets.SpecializedWidget.Widget2
+->Widgets.SpecializedWidget : typeof Widgets.SpecializedWidget
+->Widgets : typeof Widgets
+->SpecializedWidget : typeof Widgets.SpecializedWidget
+->createWidget2 : () => Widgets.SpecializedWidget.Widget2
++>Widgets.SpecializedWidget.createWidget2() : Widget2
++>Widgets.SpecializedWidget.createWidget2 : () => Widget2
++>Widgets.SpecializedWidget : typeof SpecializedWidget
++>Widgets : typeof import("privacyCannotNameVarTypeDeclFile_Widgets")
++>SpecializedWidget : typeof SpecializedWidget
++>createWidget2 : () => Widget2
+ }
+ export function createExportedWidget3() {
+->createExportedWidget3 : () => Widgets1.Widget3
++>createExportedWidget3 : () => Widget3
+ 
+     return Widgets1.createWidget3();
+->Widgets1.createWidget3() : Widgets1.Widget3
+->Widgets1.createWidget3 : () => Widgets1.Widget3
+->Widgets1 : typeof Widgets1
+->createWidget3 : () => Widgets1.Widget3
++>Widgets1.createWidget3() : Widget3
++>Widgets1.createWidget3 : () => Widget3
++>Widgets1 : typeof import("GlobalWidgets")
++>createWidget3 : () => Widget3
+ }
+ export function createExportedWidget4() {
+->createExportedWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
++>createExportedWidget4 : () => Widget4
+ 
+     return Widgets1.SpecializedGlobalWidget.createWidget4();
+->Widgets1.SpecializedGlobalWidget.createWidget4() : Widgets1.SpecializedGlobalWidget.Widget4
+->Widgets1.SpecializedGlobalWidget.createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
+->Widgets1.SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
+->Widgets1 : typeof Widgets1
+->SpecializedGlobalWidget : typeof Widgets1.SpecializedGlobalWidget
+->createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
++>Widgets1.SpecializedGlobalWidget.createWidget4() : Widget4
++>Widgets1.SpecializedGlobalWidget.createWidget4 : () => Widget4
++>Widgets1.SpecializedGlobalWidget : typeof SpecializedGlobalWidget
++>Widgets1 : typeof import("GlobalWidgets")
++>SpecializedGlobalWidget : typeof SpecializedGlobalWidget
++>createWidget4 : () => Widget4
+ }
+ 

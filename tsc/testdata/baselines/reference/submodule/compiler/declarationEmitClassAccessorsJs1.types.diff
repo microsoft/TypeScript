@@ -1,0 +1,11 @@
+--- old.declarationEmitClassAccessorsJs1.types
++++ new.declarationEmitClassAccessorsJs1.types
+@@= skipped -20, +20 lines =@@
+    */
+   set path(path) {
+ >path : string
+->path : string | URL
++>path : string
+   }
+ }
+ 

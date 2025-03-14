@@ -1,0 +1,17 @@
+--- old.es6ImportEqualsDeclaration.types
++++ new.es6ImportEqualsDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === client.ts ===
+ import a = require("server");
+->a : number
++>a : any
+ 
+-=== server.ts ===
+-var a = 10;
+->a : number
+->10 : 10
+-
+-export = a;
+->a : number
+-

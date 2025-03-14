@@ -1,0 +1,14 @@
+--- old.commentOnAmbientModule.types
++++ new.commentOnAmbientModule.types
+@@= skipped -6, +6 lines =@@
+ 
+     class foobar extends D.bar {
+ >foobar : foobar
+->D.bar : D.bar
++>D.bar : bar
+ >D : typeof D
+->bar : typeof D.bar
++>bar : typeof bar
+ 
+         foo();
+ >foo : () => any

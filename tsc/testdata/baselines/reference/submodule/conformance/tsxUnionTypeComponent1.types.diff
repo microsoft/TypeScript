@@ -1,0 +1,85 @@
+--- old.tsxUnionTypeComponent1.types
++++ new.tsxUnionTypeComponent1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react');
+->React : typeof React
++>React : any
+ 
+ interface ComponentProps {
++>ComponentProps : ComponentProps
++
+     AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
+->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
++>AnyComponent : any
+ >React : any
+ >React : any
+ }
+ 
+ class MyComponent extends React.Component<ComponentProps, {}> {
+ >MyComponent : MyComponent
+->React.Component : React.Component<ComponentProps, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : any
++>React : any
++>Component : any
+ 
+     render() {
+->render : () => JSX.Element
++>render : () => any
+ 
+         const { AnyComponent } = this.props;
+->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
+->this.props : ComponentProps & { children?: React.ReactNode; }
++>AnyComponent : any
++>this.props : any
+ >this : this
+->props : ComponentProps & { children?: React.ReactNode; }
++>props : any
+ 
+         return (<AnyComponent />);
+->(<AnyComponent />) : JSX.Element
+-><AnyComponent /> : JSX.Element
+->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
++>(<AnyComponent />) : any
++><AnyComponent /> : any
++>AnyComponent : any
+     }
+ }
+ 
+ // Stateless Component As Props
+ <MyComponent AnyComponent={() => <button>test</button>}/>
+-><MyComponent AnyComponent={() => <button>test</button>}/> : JSX.Element
++><MyComponent AnyComponent={() => <button>test</button>}/> : any
+ >MyComponent : typeof MyComponent
+->AnyComponent : () => JSX.Element
+->() => <button>test</button> : () => JSX.Element
+-><button>test</button> : JSX.Element
++>AnyComponent : any
++>() => <button>test</button> : () => any
++><button>test</button> : any
+ >button : any
+ >button : any
+ 
+ // Component Class as Props
+ class MyButtonComponent extends React.Component<{},{}> {
+ >MyButtonComponent : MyButtonComponent
+->React.Component : React.Component<{}, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : any
++>React : any
++>Component : any
+ }
+ 
+ <MyComponent AnyComponent={MyButtonComponent} />
+-><MyComponent AnyComponent={MyButtonComponent} /> : JSX.Element
++><MyComponent AnyComponent={MyButtonComponent} /> : any
+ >MyComponent : typeof MyComponent
+->AnyComponent : typeof MyButtonComponent
++>AnyComponent : any
+ >MyButtonComponent : typeof MyButtonComponent
+ 
+ 

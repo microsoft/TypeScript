@@ -1,0 +1,11 @@
+--- old.parserES5SymbolIndexer1.types
++++ new.parserES5SymbolIndexer1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserES5SymbolIndexer1.ts ===
+ interface I {
++>I : I
++
+     [s: symbol]: string;
+ >s : symbol
+ }

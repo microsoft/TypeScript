@@ -1,0 +1,93 @@
+--- old.thisTypeInObjectLiterals.types
++++ new.thisTypeInObjectLiterals.types
+@@= skipped -1, +1 lines =@@
+ 
+ === thisTypeInObjectLiterals.ts ===
+ let o = {
+->o : { d: string; m(): number; f: () => number; }
+->{    d: "bar",    m() {        return this.d.length;    },    f: function() {        return this.d.length;    }} : { d: string; m(): number; f: () => number; }
++>o : { d: string; m: () => number; f: () => number; }
++>{    d: "bar",    m() {        return this.d.length;    },    f: function() {        return this.d.length;    }} : { d: string; m: () => number; f: () => number; }
+ 
+     d: "bar",
+ >d : string
+@@= skipped -13, +13 lines =@@
+         return this.d.length;
+ >this.d.length : number
+ >this.d : string
+->this : { d: string; m(): number; f: () => number; }
++>this : { d: string; m: () => number; f: () => number; }
+ >d : string
+ >length : number
+ 
+@@= skipped -12, +12 lines =@@
+         return this.d.length;
+ >this.d.length : number
+ >this.d : string
+->this : { d: string; m(): number; f: () => number; }
++>this : { d: string; m: () => number; f: () => number; }
+ >d : string
+ >length : number
+     }
+ }
+ 
+ let mutuallyRecursive = {
+->mutuallyRecursive : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
+->{    a: 100,    start() {        return this.passthrough(this.a);    },    passthrough(n: number) {        return this.sub1(n);    },    sub1(n: number): number {        if (n > 0) {            return this.passthrough(n - 1);        }        return n;    }} : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
++>mutuallyRecursive : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
++>{    a: 100,    start() {        return this.passthrough(this.a);    },    passthrough(n: number) {        return this.sub1(n);    },    sub1(n: number): number {        if (n > 0) {            return this.passthrough(n - 1);        }        return n;    }} : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
+ 
+     a: 100,
+ >a : number
+@@= skipped -20, +20 lines =@@
+         return this.passthrough(this.a);
+ >this.passthrough(this.a) : number
+ >this.passthrough : (n: number) => number
+->this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
++>this : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
+ >passthrough : (n: number) => number
+ >this.a : number
+->this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
++>this : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
+ >a : number
+ 
+     },
+@@= skipped -14, +14 lines =@@
+         return this.sub1(n);
+ >this.sub1(n) : number
+ >this.sub1 : (n: number) => number
+->this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
++>this : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
+ >sub1 : (n: number) => number
+ >n : number
+ 
+@@= skipped -17, +17 lines =@@
+             return this.passthrough(n - 1);
+ >this.passthrough(n - 1) : number
+ >this.passthrough : (n: number) => number
+->this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
++>this : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
+ >passthrough : (n: number) => number
+ >n - 1 : number
+ >n : number
+@@= skipped -14, +14 lines =@@
+ >i : number
+ >mutuallyRecursive.start() : number
+ >mutuallyRecursive.start : () => number
+->mutuallyRecursive : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
++>mutuallyRecursive : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
+ >start : () => number
+ 
+ interface I {
++>I : I
++
+     a: number;
+ >a : number
+ 
+@@= skipped -20, +22 lines =@@
+ }
+ var impl: I = mutuallyRecursive;
+ >impl : I
+->mutuallyRecursive : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
++>mutuallyRecursive : { a: number; start: () => number; passthrough: (n: number) => number; sub1: (n: number) => number; }
+ 

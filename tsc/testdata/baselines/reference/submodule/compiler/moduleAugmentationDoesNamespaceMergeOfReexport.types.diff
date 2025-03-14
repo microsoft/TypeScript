@@ -1,0 +1,79 @@
+--- old.moduleAugmentationDoesNamespaceMergeOfReexport.types
++++ new.moduleAugmentationDoesNamespaceMergeOfReexport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.ts ===
+ export namespace Root {
++>Root : any
++
+     export interface Foo {
++>Foo : Foo
++
+         x: number;
+ >x : number
+     }
+@@= skipped -10, +14 lines =@@
+ export * from "./file";
+ === augment.ts ===
+ import * as ns from "./reexport";
+->ns : typeof ns
++>ns : typeof import("reexport")
+ 
+ declare module "./reexport" {
+->"./reexport" : typeof ns
++>"./reexport" : typeof import("reexport")
+ 
+     export namespace Root {
++>Root : any
++
+         export interface Foo {
++>Foo : Foo
++
+             self: Foo;
+ >self : Foo
+         }
+@@= skipped -14, +18 lines =@@
+ }
+ 
+ declare const f: ns.Root.Foo;
+->f : ns.Root.Foo
++>f : Foo
+ >ns : any
+ >Root : any
+ 
+ f.x;
+ >f.x : number
+->f : ns.Root.Foo
++>f : Foo
+ >x : number
+ 
+ f.self;
+->f.self : ns.Root.Foo
+->f : ns.Root.Foo
+->self : ns.Root.Foo
++>f.self : Foo
++>f : Foo
++>self : Foo
+ 
+ f.self.x;
+ >f.self.x : number
+->f.self : ns.Root.Foo
+->f : ns.Root.Foo
+->self : ns.Root.Foo
++>f.self : Foo
++>f : Foo
++>self : Foo
+ >x : number
+ 
+ f.self.self;
+->f.self.self : ns.Root.Foo
+->f.self : ns.Root.Foo
+->f : ns.Root.Foo
+->self : ns.Root.Foo
+->self : ns.Root.Foo
++>f.self.self : Foo
++>f.self : Foo
++>f : Foo
++>self : Foo
++>self : Foo
+ 

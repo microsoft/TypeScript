@@ -1,0 +1,10 @@
+--- old.systemModuleExportDefault.types
++++ new.systemModuleExportDefault.types
+@@= skipped -13, +13 lines =@@
+ 
+ === file4.ts ===
+ export default class C {}
+->C : C
++>C : default
+ 
+ 

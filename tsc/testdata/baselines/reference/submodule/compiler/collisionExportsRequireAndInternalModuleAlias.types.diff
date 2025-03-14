@@ -1,0 +1,90 @@
+--- old.collisionExportsRequireAndInternalModuleAlias.types
++++ new.collisionExportsRequireAndInternalModuleAlias.types
+@@= skipped -8, +8 lines =@@
+     }
+ }
+ import exports = m.c;
+->exports : typeof exports
++>exports : typeof c
+ >m : typeof m
+->c : exports
++>c : c
+ 
+ import require = m.c;
+->require : typeof exports
++>require : typeof c
+ >m : typeof m
+->c : exports
++>c : c
+ 
+ new exports();
+->new exports() : exports
+->exports : typeof exports
++>new exports() : c
++>exports : typeof c
+ 
+ new require();
+->new require() : exports
+->require : typeof exports
++>new require() : c
++>require : typeof c
+ 
+ module m1 {
+ >m1 : typeof m1
+ 
+     import exports = m.c;
+->exports : typeof exports
++>exports : typeof c
+ >m : typeof m
+->c : exports
++>c : c
+ 
+     import require = m.c;
+->require : typeof exports
++>require : typeof c
+ >m : typeof m
+->c : exports
++>c : c
+ 
+     new exports();
+->new exports() : exports
+->exports : typeof exports
++>new exports() : c
++>exports : typeof c
+ 
+     new require();
+->new require() : exports
+->require : typeof exports
++>new require() : c
++>require : typeof c
+ }
+ 
+ module m2 {
+ >m2 : typeof m2
+ 
+     export import exports = m.c;
+->exports : typeof exports
++>exports : typeof c
+ >m : typeof m
+->c : exports
++>c : c
+ 
+     export import require = m.c;
+->require : typeof exports
++>require : typeof c
+ >m : typeof m
+->c : exports
++>c : c
+ 
+     new exports();
+->new exports() : exports
+->exports : typeof exports
++>new exports() : c
++>exports : typeof c
+ 
+     new require();
+->new require() : exports
+->require : typeof exports
++>new require() : c
++>require : typeof c
+ }

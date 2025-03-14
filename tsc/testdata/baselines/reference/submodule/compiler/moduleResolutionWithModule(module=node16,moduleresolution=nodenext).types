@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/moduleResolutionWithModule.ts] ////
+
+=== node_modules/pkg/entrypoint.d.ts ===
+export declare function thing(): void;
+>thing : () => void
+
+=== index.ts ===
+import * as p from "pkg";
+>p : typeof import("node_modules/pkg/entrypoint")
+
+p.thing();
+>p.thing() : void
+>p.thing : () => void
+>p : typeof import("node_modules/pkg/entrypoint")
+>thing : () => void
+

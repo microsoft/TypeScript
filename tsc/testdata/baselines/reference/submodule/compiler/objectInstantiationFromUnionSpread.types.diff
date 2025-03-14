@@ -1,0 +1,79 @@
+--- old.objectInstantiationFromUnionSpread.types
++++ new.objectInstantiationFromUnionSpread.types
+@@= skipped -3, +3 lines =@@
+ // #40995
+ 
+ interface Success {
++>Success : Success
++
+   isSuccess: true;
+ >isSuccess : true
+ >true : true
+ }
+ 
+ interface Fail {
++>Fail : Fail
++
+   isSuccess: false;
+ >isSuccess : false
+ >false : false
+@@= skipped -19, +23 lines =@@
+ >a : Item[]
+ 
+   a.map(item => ({ ...item })).filter(value => {});
+->a.map(item => ({ ...item })).filter(value => {}) : ({ isSuccess: true; } | { isSuccess: false; })[]
+->a.map(item => ({ ...item })).filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
+->a.map(item => ({ ...item })) : ({ isSuccess: true; } | { isSuccess: false; })[]
++>a.map(item => ({ ...item })).filter(value => {}) : ({ isSuccess: false; } | { isSuccess: true; })[]
++>a.map(item => ({ ...item })).filter : { <S extends { isSuccess: false; } | { isSuccess: true; }>(predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => unknown, thisArg?: any): ({ isSuccess: false; } | { isSuccess: true; })[]; }
++>a.map(item => ({ ...item })) : ({ isSuccess: false; } | { isSuccess: true; })[]
+ >a.map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
+ >a : Item[]
+ >map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
+->item => ({ ...item }) : (item: Item) => { isSuccess: true; } | { isSuccess: false; }
++>item => ({ ...item }) : (item: Item) => { isSuccess: false; } | { isSuccess: true; }
+ >item : Item
+->({ ...item }) : { isSuccess: true; } | { isSuccess: false; }
+->{ ...item } : { isSuccess: true; } | { isSuccess: false; }
++>({ ...item }) : { isSuccess: false; } | { isSuccess: true; }
++>{ ...item } : { isSuccess: false; } | { isSuccess: true; }
+ >item : Item
+->filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
+->value => {} : (value: { isSuccess: true; } | { isSuccess: false; }) => void
+->value : { isSuccess: true; } | { isSuccess: false; }
++>filter : { <S extends { isSuccess: false; } | { isSuccess: true; }>(predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => unknown, thisArg?: any): ({ isSuccess: false; } | { isSuccess: true; })[]; }
++>value => {} : (value: { isSuccess: false; } | { isSuccess: true; }) => void
++>value : { isSuccess: false; } | { isSuccess: true; }
+ }
+ 
+ function f2<T>(a: Item[]) {
+ >f2 : <T>(a: Item[]) => void
++>T : T
+ >a : Item[]
+ 
+   a.map(item => ({ ...item })).filter(value => {});
+->a.map(item => ({ ...item })).filter(value => {}) : ({ isSuccess: true; } | { isSuccess: false; })[]
+->a.map(item => ({ ...item })).filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
+->a.map(item => ({ ...item })) : ({ isSuccess: true; } | { isSuccess: false; })[]
++>a.map(item => ({ ...item })).filter(value => {}) : ({ isSuccess: false; } | { isSuccess: true; })[]
++>a.map(item => ({ ...item })).filter : { <S extends { isSuccess: false; } | { isSuccess: true; }>(predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => unknown, thisArg?: any): ({ isSuccess: false; } | { isSuccess: true; })[]; }
++>a.map(item => ({ ...item })) : ({ isSuccess: false; } | { isSuccess: true; })[]
+ >a.map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
+ >a : Item[]
+ >map : <U>(callbackfn: (value: Item, index: number, array: Item[]) => U, thisArg?: any) => U[]
+->item => ({ ...item }) : (item: Item) => { isSuccess: true; } | { isSuccess: false; }
++>item => ({ ...item }) : (item: Item) => { isSuccess: false; } | { isSuccess: true; }
+ >item : Item
+->({ ...item }) : { isSuccess: true; } | { isSuccess: false; }
+->{ ...item } : { isSuccess: true; } | { isSuccess: false; }
++>({ ...item }) : { isSuccess: false; } | { isSuccess: true; }
++>{ ...item } : { isSuccess: false; } | { isSuccess: true; }
+ >item : Item
+->filter : { <S extends { isSuccess: true; } | { isSuccess: false; }>(predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: true; } | { isSuccess: false; }, index: number, array: ({ isSuccess: true; } | { isSuccess: false; })[]) => unknown, thisArg?: any): ({ isSuccess: true; } | { isSuccess: false; })[]; }
+->value => {} : (value: { isSuccess: true; } | { isSuccess: false; }) => void
+->value : { isSuccess: true; } | { isSuccess: false; }
++>filter : { <S extends { isSuccess: false; } | { isSuccess: true; }>(predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => value is S, thisArg?: any): S[]; (predicate: (value: { isSuccess: false; } | { isSuccess: true; }, index: number, array: ({ isSuccess: false; } | { isSuccess: true; })[]) => unknown, thisArg?: any): ({ isSuccess: false; } | { isSuccess: true; })[]; }
++>value => {} : (value: { isSuccess: false; } | { isSuccess: true; }) => void
++>value : { isSuccess: false; } | { isSuccess: true; }
+ }
+ 

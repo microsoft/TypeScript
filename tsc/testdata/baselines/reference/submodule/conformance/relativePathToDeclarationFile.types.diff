@@ -1,0 +1,61 @@
+--- old.relativePathToDeclarationFile.types
++++ new.relativePathToDeclarationFile.types
+@@= skipped -1, +1 lines =@@
+ 
+ === test/file1.ts ===
+ import foo = require('foo');
+->foo : typeof foo
++>foo : any
+ 
+ import other = require('./other');
+->other : typeof other
++>other : typeof import("test/other")
+ 
+ import relMod = require('./sub/relMod');
+->relMod : typeof relMod
++>relMod : typeof Test
+ 
+ if(foo.M2.x){
+->foo.M2.x : boolean
+->foo.M2 : typeof foo.M2
+->foo : typeof foo
+->M2 : typeof foo.M2
+->x : boolean
++>foo.M2.x : any
++>foo.M2 : any
++>foo : any
++>M2 : any
++>x : any
+ 
+ 	var x = new relMod(other.M2.x.charCodeAt(0));
+->x : relMod
+->new relMod(other.M2.x.charCodeAt(0)) : relMod
+->relMod : typeof relMod
++>x : Test
++>new relMod(other.M2.x.charCodeAt(0)) : Test
++>relMod : typeof Test
+ >other.M2.x.charCodeAt(0) : number
+ >other.M2.x.charCodeAt : (index: number) => number
+ >other.M2.x : string
+->other.M2 : typeof other.M2
+->other : typeof other
+->M2 : typeof other.M2
++>other.M2 : typeof M2
++>other : typeof import("test/other")
++>M2 : typeof M2
+ >x : string
+ >charCodeAt : (index: number) => number
+ >0 : 0
+ }
+ 
+-=== test/foo.d.ts ===
+-export declare module M2 {
+->M2 : typeof M2
+-
+-	export var x: boolean;
+->x : boolean
+-}
+-
+ === test/other.d.ts ===
+ export declare module M2 {
+ >M2 : typeof M2

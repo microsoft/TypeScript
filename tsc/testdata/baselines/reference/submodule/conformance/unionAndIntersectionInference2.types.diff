@@ -1,0 +1,50 @@
+--- old.unionAndIntersectionInference2.types
++++ new.unionAndIntersectionInference2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === unionAndIntersectionInference2.ts ===
+ declare function f1<T>(x: T | string): T;
+->f1 : <T>(x: T | string) => T
++>f1 : <T>(x: string | T) => T
++>T : T
+ >x : string | T
+ 
+ var a1: string;
+@@= skipped -21, +22 lines =@@
+ 
+ f1(a1); // string
+ >f1(a1) : string
+->f1 : <T>(x: T | string) => T
++>f1 : <T>(x: string | T) => T
+ >a1 : string
+ 
+ f1(b1); // string[]
+ >f1(b1) : string[]
+->f1 : <T>(x: T | string) => T
++>f1 : <T>(x: string | T) => T
+ >b1 : string | string[]
+ 
+ f1(c1); // string[]
+ >f1(c1) : string[]
+->f1 : <T>(x: T | string) => T
++>f1 : <T>(x: string | T) => T
+ >c1 : string | string[]
+ 
+ f1(d1); // { name: string }
+ >f1(d1) : { name: string; }
+->f1 : <T>(x: T | string) => T
++>f1 : <T>(x: string | T) => T
+ >d1 : string | { name: string; }
+ 
+ f1(e1); // number | boolean
+ >f1(e1) : number | boolean
+->f1 : <T>(x: T | string) => T
++>f1 : <T>(x: string | T) => T
+ >e1 : string | number | boolean
+ 
+ declare function f2<T>(x: T & { name: string }): T;
+ >f2 : <T>(x: T & { name: string; }) => T
++>T : T
+ >x : T & { name: string; }
+ >name : string
+ 

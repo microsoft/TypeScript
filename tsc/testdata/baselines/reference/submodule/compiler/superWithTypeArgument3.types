@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/superWithTypeArgument3.ts] ////
+
+=== superWithTypeArgument3.ts ===
+class C<T> {
+>C : C<T>
+>T : T
+
+    foo: T;
+>foo : T
+
+    bar<U>(x: U) { }
+>bar : <U>(x: U) => void
+>U : U
+>x : U
+}
+
+class D<T> extends C<T> {
+>D : D<T>
+>T : T
+>C : C<T>
+
+    constructor() {
+        super<T>();
+>super<T>() : void
+>super : typeof C
+    }
+    bar() {
+>bar : () => void
+
+        super.bar<T>(null);
+>super.bar<T>(null) : void
+>super.bar : <U>(x: U) => void
+>super : C<T>
+>bar : <U>(x: U) => void
+    }
+}

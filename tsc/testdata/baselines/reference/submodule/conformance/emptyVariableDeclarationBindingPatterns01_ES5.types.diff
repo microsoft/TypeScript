@@ -1,0 +1,20 @@
+--- old.emptyVariableDeclarationBindingPatterns01_ES5.types
++++ new.emptyVariableDeclarationBindingPatterns01_ES5.types
+@@= skipped -62, +62 lines =@@
+     }
+ 
+     function f({} = a, [] = a, { p: {} = a} = a) {
+->f : ({}?: any, []?: any, { p: {} }?: any) => ({}?: any, []?: any, { p: {} }?: any) => any
++>f : (__0?: any, __1?: any, __2?: any) => (__0?: any, __1?: any, __2?: any) => any
+ >a : any
+ >a : any
+ >p : any
+@@= skipped -8, +8 lines =@@
+ >a : any
+ 
+         return ({} = a, [] = a, { p: {} = a } = a) => a;
+->({} = a, [] = a, { p: {} = a } = a) => a : ({}?: any, []?: any, { p: {} }?: any) => any
++>({} = a, [] = a, { p: {} = a } = a) => a : (__0?: any, __1?: any, __2?: any) => any
+ >a : any
+ >a : any
+ >p : any

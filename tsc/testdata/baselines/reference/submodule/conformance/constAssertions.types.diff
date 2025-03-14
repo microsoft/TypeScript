@@ -1,0 +1,274 @@
+--- old.constAssertions.types
++++ new.constAssertions.types
+@@= skipped -105, +105 lines =@@
+ >c1 : "abc"
+ 
+ let a1 = [] as const;
+->a1 : readonly []
+->[] as const : readonly []
+->[] : readonly []
++>a1 : []
++>[] as const : []
++>[] : []
+ 
+ let a2 = [1, 2, 3] as const;
+->a2 : readonly [1, 2, 3]
+->[1, 2, 3] as const : readonly [1, 2, 3]
+->[1, 2, 3] : readonly [1, 2, 3]
++>a2 : [1, 2, 3]
++>[1, 2, 3] as const : [1, 2, 3]
++>[1, 2, 3] : [1, 2, 3]
+ >1 : 1
+ >2 : 2
+ >3 : 3
+ 
+ let a3 = [10, 'hello', true] as const;
+->a3 : readonly [10, "hello", true]
+->[10, 'hello', true] as const : readonly [10, "hello", true]
+->[10, 'hello', true] : readonly [10, "hello", true]
++>a3 : [10, "hello", true]
++>[10, 'hello', true] as const : [10, "hello", true]
++>[10, 'hello', true] : [10, "hello", true]
+ >10 : 10
+ >'hello' : "hello"
+ >true : true
+ 
+ let a4 = [...[1, 2, 3]] as const;
+->a4 : readonly [1, 2, 3]
+->[...[1, 2, 3]] as const : readonly [1, 2, 3]
+->[...[1, 2, 3]] : readonly [1, 2, 3]
++>a4 : [1, 2, 3]
++>[...[1, 2, 3]] as const : [1, 2, 3]
++>[...[1, 2, 3]] : [1, 2, 3]
+ >...[1, 2, 3] : 1 | 2 | 3
+->[1, 2, 3] : readonly [1, 2, 3]
++>[1, 2, 3] : [1, 2, 3]
+ >1 : 1
+ >2 : 2
+ >3 : 3
+@@= skipped -51, +51 lines =@@
+ >a6 : readonly number[]
+ 
+ let a8 = ['abc', ...a7] as const;
+->a8 : readonly ["abc", ...number[]]
+->['abc', ...a7] as const : readonly ["abc", ...number[]]
+->['abc', ...a7] : readonly ["abc", ...number[]]
++>a8 : ["abc", ...number[]]
++>['abc', ...a7] as const : ["abc", ...number[]]
++>['abc', ...a7] : ["abc", ...number[]]
+ >'abc' : "abc"
+ >...a7 : number
+ >a7 : number[]
+@@= skipped -11, +11 lines =@@
+ >a9 : (number | "abc")[]
+ >[...a8] : (number | "abc")[]
+ >...a8 : number | "abc"
+->a8 : readonly ["abc", ...number[]]
++>a8 : ["abc", ...number[]]
+ 
+ declare let d: { [x: string]: string };
+ >d : { [x: string]: string; }
+@@= skipped -16, +16 lines =@@
+ >20 : 20
+ 
+ let o2 = { a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const;
+->o2 : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+->{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>{ a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+ >a : 1
+ >1 : 1
+ >'b' : 2
+@@= skipped -18, +18 lines =@@
+ >4 : 4
+ 
+ let o3 = { ...o1, ...o2 } as const;
+->o3 : { readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
+->{ ...o1, ...o2 } as const : { readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
+->{ ...o1, ...o2 } : { readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; readonly x: 10; readonly y: 20; }
++>o3 : { readonly x: 10; readonly y: 20; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>{ ...o1, ...o2 } as const : { readonly x: 10; readonly y: 20; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>{ ...o1, ...o2 } : { readonly x: 10; readonly y: 20; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+ >o1 : { readonly x: 10; readonly y: 20; }
+->o2 : { readonly [x: string]: 1 | 2 | 3 | (() => void) | 4; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
++>o2 : { readonly [x: string]: 1 | 2 | 3 | 4 | () => void; readonly a: 1; readonly b: 2; readonly c: 3; readonly d: () => void; }
+ 
+ let o4 = { a: 1, b: 2 };
+ >o4 : { a: number; b: number; }
+@@= skipped -64, +64 lines =@@
+ >10 : 10
+ 
+ let p3 = ([(10)]) as const;
+->p3 : readonly [10]
+->([(10)]) as const : readonly [10]
+->([(10)]) : readonly [10]
+->[(10)] : readonly [10]
++>p3 : [10]
++>([(10)]) as const : [10]
++>([(10)]) : [10]
++>[(10)] : [10]
+ >(10) : 10
+ >10 : 10
+ 
+ let p4 = [[[[10]]]] as const;
+->p4 : readonly [readonly [readonly [readonly [10]]]]
+->[[[[10]]]] as const : readonly [readonly [readonly [readonly [10]]]]
+->[[[[10]]]] : readonly [readonly [readonly [readonly [10]]]]
+->[[[10]]] : readonly [readonly [readonly [10]]]
+->[[10]] : readonly [readonly [10]]
+->[10] : readonly [10]
++>p4 : [[[[10]]]]
++>[[[[10]]]] as const : [[[[10]]]]
++>[[[[10]]]] : [[[[10]]]]
++>[[[10]]] : [[[10]]]
++>[[10]] : [[10]]
++>[10] : [10]
+ >10 : 10
+ 
+ let x1 = { x: 10, y: [20, 30], z: { a: { b: 42 } } } as const;
+->x1 : { readonly x: 10; readonly y: readonly [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
+->{ x: 10, y: [20, 30], z: { a: { b: 42 } } } as const : { readonly x: 10; readonly y: readonly [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
+->{ x: 10, y: [20, 30], z: { a: { b: 42 } } } : { readonly x: 10; readonly y: readonly [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
++>x1 : { readonly x: 10; readonly y: [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
++>{ x: 10, y: [20, 30], z: { a: { b: 42 } } } as const : { readonly x: 10; readonly y: [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
++>{ x: 10, y: [20, 30], z: { a: { b: 42 } } } : { readonly x: 10; readonly y: [20, 30]; readonly z: { readonly a: { readonly b: 42; }; }; }
+ >x : 10
+ >10 : 10
+->y : readonly [20, 30]
+->[20, 30] : readonly [20, 30]
++>y : [20, 30]
++>[20, 30] : [20, 30]
+ >20 : 20
+ >30 : 30
+ >z : { readonly a: { readonly b: 42; }; }
+@@= skipped -49, +49 lines =@@
+ >true : true
+ 
+ let q4 = <const> [1, 2, 3];
+->q4 : readonly [1, 2, 3]
+-><const> [1, 2, 3] : readonly [1, 2, 3]
+->[1, 2, 3] : readonly [1, 2, 3]
++>q4 : [1, 2, 3]
++><const> [1, 2, 3] : [1, 2, 3]
++>[1, 2, 3] : [1, 2, 3]
+ >1 : 1
+ >2 : 2
+ >3 : 3
+@@= skipped -18, +18 lines =@@
+ 
+ declare function id<T>(x: T): T;
+ >id : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ let e1 = v1 as const;  // Error
+@@= skipped -50, +51 lines =@@
+ >t2 : "bar"
+ 
+ function ff1(x: 'foo' | 'bar', y: 1 | 2) {
+->ff1 : (x: "foo" | "bar", y: 1 | 2) => "foo-1" | "foo-2" | "bar-1" | "bar-2"
+->x : "foo" | "bar"
++>ff1 : (x: "bar" | "foo", y: 1 | 2) => "bar-1" | "bar-2" | "foo-1" | "foo-2"
++>x : "bar" | "foo"
+ >y : 1 | 2
+ 
+     return `${x}-${y}` as const;
+->`${x}-${y}` as const : "foo-1" | "foo-2" | "bar-1" | "bar-2"
+->`${x}-${y}` : "foo-1" | "foo-2" | "bar-1" | "bar-2"
+->x : "foo" | "bar"
++>`${x}-${y}` as const : "bar-1" | "bar-2" | "foo-1" | "foo-2"
++>`${x}-${y}` : "bar-1" | "bar-2" | "foo-1" | "foo-2"
++>x : "bar" | "foo"
+ >y : 1 | 2
+ }
+ 
+ function ff2<T extends string, U extends string>(x: T, y: U) {
+ >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+@@= skipped -31, +33 lines =@@
+ >'bar' : "bar"
+ 
+ const ts2 = ff2('foo', !!true ? '0' : '1');
+->ts2 : "foo-1" | "foo-0"
+->ff2('foo', !!true ? '0' : '1') : "foo-1" | "foo-0"
++>ts2 : "foo-0" | "foo-1"
++>ff2('foo', !!true ? '0' : '1') : "foo-0" | "foo-1"
+ >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
+ >'foo' : "foo"
+ >!!true ? '0' : '1' : "0" | "1"
+@@= skipped -12, +12 lines =@@
+ >'1' : "1"
+ 
+ const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
+->ts3 : "top-left" | "top-right" | "bottom-left" | "bottom-right"
+->ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right') : "top-left" | "top-right" | "bottom-left" | "bottom-right"
++>ts3 : "bottom-left" | "bottom-right" | "top-left" | "top-right"
++>ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right') : "bottom-left" | "bottom-right" | "top-left" | "top-right"
+ >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
+->!!true ? 'top' : 'bottom' : "top" | "bottom"
++>!!true ? 'top' : 'bottom' : "bottom" | "top"
+ >!!true : true
+ >!true : false
+ >true : true
+@@= skipped -17, +17 lines =@@
+ >'right' : "right"
+ 
+ function ff3(x: 'foo' | 'bar', y: object) {
+->ff3 : (x: "foo" | "bar", y: object) => `foo${string}` | `bar${string}`
+->x : "foo" | "bar"
++>ff3 : (x: "bar" | "foo", y: object) => `bar${string}` | `foo${string}`
++>x : "bar" | "foo"
+ >y : object
+ 
+     return `${x}${y}` as const;
+->`${x}${y}` as const : `foo${string}` | `bar${string}`
+->`${x}${y}` : `foo${string}` | `bar${string}`
+->x : "foo" | "bar"
++>`${x}${y}` as const : `bar${string}` | `foo${string}`
++>`${x}${y}` : `bar${string}` | `foo${string}`
++>x : "bar" | "foo"
+ >y : object
+ }
+ 
+@@= skipped -81, +81 lines =@@
+ }
+ 
+ function accessorNames<S extends string>(propName: S) {
+->accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
++>accessorNames : <S extends string>(propName: S) => [`get-${S}`, `set-${S}`]
++>S : S
+ >propName : S
+ 
+     return [`get-${propName}`, `set-${propName}`] as const;
+->[`get-${propName}`, `set-${propName}`] as const : readonly [`get-${S}`, `set-${S}`]
+->[`get-${propName}`, `set-${propName}`] : readonly [`get-${S}`, `set-${S}`]
++>[`get-${propName}`, `set-${propName}`] as const : [`get-${S}`, `set-${S}`]
++>[`get-${propName}`, `set-${propName}`] : [`get-${S}`, `set-${S}`]
+ >`get-${propName}` : `get-${S}`
+ >propName : S
+ >`set-${propName}` : `set-${S}`
+@@= skipped -13, +14 lines =@@
+ }
+ 
+ const ns1 = accessorNames('foo');
+->ns1 : readonly ["get-foo", "set-foo"]
+->accessorNames('foo') : readonly ["get-foo", "set-foo"]
+->accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
++>ns1 : ["get-foo", "set-foo"]
++>accessorNames('foo') : ["get-foo", "set-foo"]
++>accessorNames : <S extends string>(propName: S) => [`get-${S}`, `set-${S}`]
+ >'foo' : "foo"
+ 
+ // repro from https://github.com/microsoft/TypeScript/issues/54374
+ interface Foo54374 {
++>Foo54374 : Foo54374
++
+   a: 1;
+ >a : 1
+ 

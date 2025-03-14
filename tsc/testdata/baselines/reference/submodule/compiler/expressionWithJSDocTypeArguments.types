@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/expressionWithJSDocTypeArguments.ts] ////
+
+=== expressionWithJSDocTypeArguments.ts ===
+// Repro from #51802
+
+function foo<T>(x: T): T { return x }
+>foo : <T>(x: T) => T
+>T : T
+>x : T
+>x : T
+
+class Bar<T> { constructor(public x: T) { } }
+>Bar : Bar<T>
+>T : T
+>x : T
+
+// Errors expected on all of the following
+
+const WhatFoo = foo<?>;
+>WhatFoo : (x: any) => any
+>foo<?> : (x: any) => any
+>foo : <T>(x: T) => T
+
+const HuhFoo = foo<string?>;
+>HuhFoo : any
+>foo<string?> : any
+>foo<string : boolean
+>foo : <T>(x: T) => T
+>string : any
+>> : boolean
+> : any
+> : any
+> : any
+
+const NopeFoo = foo<?string>;
+>NopeFoo : (x: any) => any
+>foo<?string> : (x: any) => any
+>foo : <T>(x: T) => T
+
+const ComeOnFoo = foo<?string?>;
+>ComeOnFoo : any
+>foo<?string?> : any
+>foo< : boolean
+>foo : <T>(x: T) => T
+> : any
+>string?> : any
+>string : any
+>> : boolean
+> : any
+> : any
+> : any
+> : any
+
+type TWhatFoo = typeof foo<?>;
+>TWhatFoo : (x: any) => any
+
+type THuhFoo = typeof foo<string?>;
+>THuhFoo : (x: string) => string
+>> : boolean
+> : any
+> : any
+
+type TNopeFoo = typeof foo<?string>;
+>TNopeFoo : (x: any) => any
+
+type TComeOnFoo = typeof foo<?string?>;
+>TComeOnFoo : (x: any) => any
+>> : boolean
+> : any
+> : any
+
+const WhatBar = Bar<?>;
+>WhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>Bar<?> : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>Bar : typeof Bar
+
+const HuhBar = Bar<string?>;
+>HuhBar : any
+>Bar<string?> : any
+>Bar<string : boolean
+>Bar : typeof Bar
+>string : any
+>> : boolean
+> : any
+> : any
+> : any
+
+const NopeBar = Bar<?string>;
+>NopeBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>Bar<?string> : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>Bar : typeof Bar
+
+const ComeOnBar = Bar<?string?>;
+>ComeOnBar : any
+>Bar<?string?> : any
+>Bar< : boolean
+>Bar : typeof Bar
+> : any
+>string?> : any
+>string : any
+>> : boolean
+> : any
+> : any
+> : any
+> : any
+
+type TWhatBar = typeof Bar<?>;
+>TWhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+
+type THuhBar = typeof Bar<string?>;
+>THuhBar : { new (x: string): Bar<string>; prototype: Bar<any>; }
+>> : boolean
+> : any
+> : any
+
+type TNopeBar = typeof Bar<?string>;
+>TNopeBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+
+type TComeOnBar = typeof Bar<?string?>;
+>TComeOnBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>> : boolean
+> : any
+> : any
+

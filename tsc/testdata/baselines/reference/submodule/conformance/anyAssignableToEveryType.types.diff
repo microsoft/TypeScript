@@ -1,0 +1,52 @@
+--- old.anyAssignableToEveryType.types
++++ new.anyAssignableToEveryType.types
+@@= skipped -13, +13 lines =@@
+ >ac : C
+ 
+ interface I {
++>I : I
++
+     foo: string;
+ >foo : string
+ }
+@@= skipped -7, +9 lines =@@
+ >ai : I
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ var ae: E;
+->ae : E
++>ae : E.A
+ 
+ var b: number = a;
+ >b : number
+@@= skipped -63, +63 lines =@@
+ 
+ ae = a;
+ >ae = a : any
+->ae : E
++>ae : E.A
+ >a : any
+ 
+ var m: number[] = a;
+@@= skipped -14, +14 lines =@@
+ 
+ var o: <T>(x: T) => T = a;
+ >o : <T>(x: T) => T
++>T : T
+ >x : T
+ >a : any
+ 
+@@= skipped -13, +14 lines =@@
+ 
+ function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
+ >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
++>T : T
++>U : U
++>V : V
+ >x : T
+ >y : U
+ >z : V

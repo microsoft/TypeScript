@@ -1,0 +1,46 @@
+--- old.clinterfaces.types
++++ new.clinterfaces.types
+@@= skipped -7, +7 lines =@@
+ >C : C
+ 
+     interface C { }
++>C : C
++
+     interface D { }
++>D : D
++
+     class D { }
+ >D : D
+ }
+ 
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+     a: string;
+ >a : string
+ }
+ 
+ class Foo<T>{
+ >Foo : Foo<T>
++>T : T
+ 
+     b: number;
+ >b : number
+@@= skipped -19, +27 lines =@@
+ 
+ class Bar<T>{
+ >Bar : Bar<T>
++>T : T
+ 
+     b: number;
+ >b : number
+ }
+ 
+ interface Bar<T> {
++>Bar : Bar<T>
++>T : T
++
+     a: string;
+ >a : string
+ }

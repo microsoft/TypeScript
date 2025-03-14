@@ -1,0 +1,25 @@
+--- old.asyncAwait_es6.types
++++ new.asyncAwait_es6.types
+@@= skipped -2, +2 lines =@@
+ === asyncAwait_es6.ts ===
+ type MyPromise<T> = Promise<T>;
+ >MyPromise : MyPromise<T>
++>T : T
+ 
+ declare var MyPromise: typeof Promise;
+ >MyPromise : PromiseConstructor
+->Promise : PromiseConstructor
+ 
+ declare var p: Promise<number>;
+ >p : Promise<number>
+@@= skipped -65, +65 lines =@@
+ >p : Promise<number>
+ 
+ let o = {
+->o : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
+->{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
++>o : { m1: () => Promise<void>; m2: () => Promise<void>; m3: () => MyPromise<void>; }
++>{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1: () => Promise<void>; m2: () => Promise<void>; m3: () => MyPromise<void>; }
+ 
+ 	async m1() { },
+ >m1 : () => Promise<void>

@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/jsx/tsxFragmentPreserveEmit.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+declare var React: any;
+>React : any
+
+<></>; // no whitespace
+><></> : any
+
+<    ></   >; // lots of whitespace
+><    ></   > : any
+
+< /*starting wrap*/ ></ /*ending wrap*/>; // comments in the tags
+>< /*starting wrap*/ ></ /*ending wrap*/> : any
+
+<>hi</>; // text inside
+><>hi</> : any
+
+<><span>hi</span><div>bye</div></>; // children
+><><span>hi</span><div>bye</div></> : any
+><span>hi</span> : any
+>span : any
+>span : any
+><div>bye</div> : any
+>div : any
+>div : any
+
+<><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
+><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : any
+><span>1</span> : any
+>span : any
+>span : any
+><><span>2.1</span><span>2.2</span></> : any
+><span>2.1</span> : any
+>span : any
+>span : any
+><span>2.2</span> : any
+>span : any
+>span : any
+><span>3</span> : any
+>span : any
+>span : any
+
+<>#</>; // # would cause scanning error if not in jsxtext
+><>#</> : any
+

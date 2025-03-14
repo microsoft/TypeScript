@@ -1,0 +1,19 @@
+--- old.cloduleTest1.types
++++ new.cloduleTest1.types
+@@= skipped -5, +5 lines =@@
+ >selector : string
+ 
+   interface $ {
++>$ : $
++
+       addClass(className: string): $;
+ >addClass : (className: string) => $
+ >className : string
+@@= skipped -8, +10 lines =@@
+ >$ : typeof $
+ 
+     export interface AjaxSettings {
++>AjaxSettings : AjaxSettings
+     }
+     export function ajax(options: AjaxSettings) { }
+ >ajax : (options: AjaxSettings) => void

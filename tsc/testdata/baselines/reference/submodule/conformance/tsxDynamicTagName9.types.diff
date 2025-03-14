@@ -1,0 +1,39 @@
+--- old.tsxDynamicTagName9.types
++++ new.tsxDynamicTagName9.types
+@@= skipped -5, +5 lines =@@
+ 
+ 	class Component<T, U> { }
+ >Component : Component<T, U>
++>T : T
++>U : U
+ }
+ 
+ === app.tsx ===
+ import * as React from 'react';
+->React : typeof React
++>React : typeof import("react")
+ 
+ export class Text extends React.Component<{}, {}> {
+ >Text : Text
+->React.Component : React.Component<{}, {}>
+->React : typeof React
+->Component : typeof React.Component
++>React.Component : Component<{}, {}>
++>React : typeof import("react")
++>Component : typeof Component
+ 
+   _tagName: "div" = 'div';
+ >_tagName : "div"
+@@= skipped -20, +22 lines =@@
+ >render : () => any
+ 
+     return (
+->(      <this._tagName> Hello world </this._tagName>    ) : error
++>(      <this._tagName> Hello world </this._tagName>    ) : any
+ 
+       <this._tagName> Hello world </this._tagName>
+-><this._tagName> Hello world </this._tagName> : error
++><this._tagName> Hello world </this._tagName> : any
+ >this._tagName : "div"
+ >this : this
+ >_tagName : "div"

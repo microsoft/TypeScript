@@ -1,0 +1,17 @@
+--- old.privateNameJsBadDeclaration.types
++++ new.privateNameJsBadDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === privateNameJsPrototype.js ===
+ function A() { }
+->A : typeof A
++>A : { (): void; prototype: {}; }
+ 
+ A.prototype = {
+ >A.prototype = {  #x: 1,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+ >A.prototype : {}
+->A : typeof A
++>A : { (): void; prototype: {}; }
+ >prototype : {}
+ >{  #x: 1,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+ 

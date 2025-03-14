@@ -1,0 +1,78 @@
+--- old.intersectionNarrowing.types
++++ new.intersectionNarrowing.types
+@@= skipped -3, +3 lines =@@
+ // Repros from #43130
+ 
+ function f1<T>(x: T & string | T & undefined) {
+->f1 : <T>(x: (T & string) | (T & undefined)) => void
+->x : (T & string) | (T & undefined)
++>f1 : <T>(x: T & undefined | T & string) => void
++>T : T
++>x : T & undefined | T & string
+ 
+     if (x) {
+->x : (T & string) | (T & undefined)
++>x : T & undefined | T & string
+ 
+         x;  // Should narrow to T & string
+ >x : T & string
+@@= skipped -12, +13 lines =@@
+ }
+ 
+ function f2<T>(x: T & string | T & undefined) {
+->f2 : <T>(x: (T & string) | (T & undefined)) => void
+->x : (T & string) | (T & undefined)
++>f2 : <T>(x: T & undefined | T & string) => void
++>T : T
++>x : T & undefined | T & string
+ 
+     if (x !== undefined) {
+ >x !== undefined : boolean
+->x : (T & string) | (T & undefined)
++>x : T & undefined | T & string
+ >undefined : undefined
+ 
+         x;  // Should narrow to T & string
+@@= skipped -18, +19 lines =@@
+ }
+ 
+ function f3<T>(x: T & string | T & number) {
+->f3 : <T>(x: (T & string) | (T & number)) => void
+->x : (T & string) | (T & number)
++>f3 : <T>(x: T & string | T & number) => void
++>T : T
++>x : T & string | T & number
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->x : (T & string) | (T & number)
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>x : T & string | T & number
+ >"string" : "string"
+ 
+         x;  // Should narrow to T & string
+@@= skipped -19, +20 lines =@@
+ }
+ 
+ function f4<T>(x: T & 1 | T & 2) {
+->f4 : <T>(x: (T & 1) | (T & 2)) => void
+->x : (T & 1) | (T & 2)
++>f4 : <T>(x: T & 1 | T & 2) => void
++>T : T
++>x : T & 1 | T & 2
+ 
+     switch (x) {
+->x : (T & 1) | (T & 2)
++>x : T & 1 | T & 2
+ 
+         case 1: x; break;  // T & 1
+ >1 : 1
+@@= skipped -21, +22 lines =@@
+ 
+ function f5<T extends string | number>(x: T & number) {
+ >f5 : <T extends string | number>(x: T & number) => void
++>T : T
+ >x : T & number
+ 
+     const t1 = x === "hello";  // Should be an error

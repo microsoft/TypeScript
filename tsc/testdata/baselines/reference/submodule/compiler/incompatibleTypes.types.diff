@@ -1,0 +1,56 @@
+--- old.incompatibleTypes.types
++++ new.incompatibleTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === incompatibleTypes.ts ===
+ interface IFoo1 {
++>IFoo1 : IFoo1
++
+     p1(): number;
+ >p1 : () => number
+ }
+@@= skipped -16, +18 lines =@@
+ }
+ 
+ interface IFoo2 {
++>IFoo2 : IFoo2
++
+     p1(s:string): number;
+ >p1 : (s: string) => number
+ >s : string
+@@= skipped -18, +20 lines =@@
+ }
+ 
+ interface IFoo3 {
++>IFoo3 : IFoo3
++
+     p1: string;
+ >p1 : string
+ }
+@@= skipped -12, +14 lines =@@
+ }
+ 
+ interface IFoo4 {
++>IFoo4 : IFoo4
++
+     p1: { a: { a: string; }; b: string; };
+ >p1 : { a: { a: string; }; b: string; }
+ >a : { a: string; }
+@@= skipped -69, +71 lines =@@
+ >0 : 0
+ 
+ interface IMap {
++>IMap : IMap
++
+  [key:string]:string;
+ >key : string
+ }
+@@= skipped -41, +43 lines =@@
+ >0 : 0
+ 
+ var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
+->a1 : ({ e: number; f: number; g?: undefined; } | { e: number; g: number; f?: undefined; })[]
++>a1 : ({ e: number; f: number; g?: undefined; } | { f?: undefined; e: number; g: number; })[]
+ >[{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }] : ({ e: number; f: number; } | { e: number; g: number; })[]
+ >{ e: 0, f: 0 } : { e: number; f: number; }
+ >e : number

@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/externalModules/umd2.ts] ////
+
+=== a.ts ===
+Foo.fn();
+>Foo.fn() : any
+>Foo.fn : any
+>Foo : any
+>fn : any
+
+let x: Foo.Thing;
+>x : Thing
+>Foo : any
+
+let y: number = x.n;
+>y : number
+>x.n : any
+>x : Thing
+>n : any
+

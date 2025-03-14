@@ -1,0 +1,9 @@
+--- old.es6ExportAssignment3.types
++++ new.es6ExportAssignment3.types
+@@= skipped -8, +8 lines =@@
+ 
+ === b.ts ===
+ import * as a from "a";
+->a : number
++>a : any
+ 

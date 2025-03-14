@@ -1,0 +1,13 @@
+--- old.topLevelAwait.1(module=system,target=es2017).types
++++ new.topLevelAwait.1(module=system,target=es2017).types
+@@= skipped -88, +88 lines =@@
+ >1 : 1
+ }
+ ({
+->({    await() {}}) : { await(): void; }
+->{    await() {}} : { await(): void; }
++>({    await() {}}) : { await: () => void; }
++>{    await() {}} : { await: () => void; }
+ 
+     await() {}
+ >await : () => void

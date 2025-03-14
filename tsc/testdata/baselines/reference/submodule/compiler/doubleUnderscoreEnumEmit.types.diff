@@ -1,0 +1,16 @@
+--- old.doubleUnderscoreEnumEmit.types
++++ new.doubleUnderscoreEnumEmit.types
+@@= skipped -8, +8 lines =@@
+ >1 : 1
+ 
+     "(Anonymous function)" = 2,
+->"(Anonymous function)" : (typeof Foo)["(Anonymous function)"]
++>"(Anonymous function)" : Foo."(Anonymous function)"
+ >2 : 2
+ 
+     "(Anonymous class)" = 4,
+->"(Anonymous class)" : (typeof Foo)["(Anonymous class)"]
++>"(Anonymous class)" : Foo."(Anonymous class)"
+ >4 : 4
+ 
+     "__call" = 10

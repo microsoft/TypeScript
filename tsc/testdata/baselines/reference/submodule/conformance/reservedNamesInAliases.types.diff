@@ -1,0 +1,11 @@
+--- old.reservedNamesInAliases.types
++++ new.reservedNamesInAliases.types
+@@= skipped -1, +1 lines =@@
+ 
+ === reservedNamesInAliases.ts ===
+ interface I {}
++>I : I
++
+ type any = I;
+ >any : I
+ 

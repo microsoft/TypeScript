@@ -1,0 +1,25 @@
+--- old.allowSyntheticDefaultImports7.types
++++ new.allowSyntheticDefaultImports7.types
+@@= skipped -8, +8 lines =@@
+ 
+ === a.ts ===
+ import { default as Foo } from "./b";
+->default : typeof Foo
+->Foo : typeof Foo
++>default : typeof import("b")
++>Foo : typeof import("b")
+ 
+ Foo.bar();
+ >Foo.bar() : any
+ >Foo.bar : () => any
+->Foo : typeof Foo
++>Foo : typeof import("b")
+ >bar : () => any
+ 
+ Foo.foo();
+ >Foo.foo() : any
+ >Foo.foo : () => any
+->Foo : typeof Foo
++>Foo : typeof import("b")
+ >foo : () => any
+ 

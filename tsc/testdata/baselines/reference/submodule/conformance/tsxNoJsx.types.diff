@@ -1,0 +1,10 @@
+--- old.tsxNoJsx.types
++++ new.tsxNoJsx.types
+@@= skipped -1, +1 lines =@@
+ 
+ === tsxNoJsx.tsx ===
+ <nope />;
+-><nope /> : error
++><nope /> : any
+ >nope : any
+ 

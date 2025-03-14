@@ -1,0 +1,8 @@
+--- old.baseTypePrivateMemberClash.types
++++ new.baseTypePrivateMemberClash.types
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ interface Z extends X, Y { }
++>Z : Z
++

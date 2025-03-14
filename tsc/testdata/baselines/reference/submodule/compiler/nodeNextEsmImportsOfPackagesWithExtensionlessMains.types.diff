@@ -1,0 +1,20 @@
+--- old.nodeNextEsmImportsOfPackagesWithExtensionlessMains.types
++++ new.nodeNextEsmImportsOfPackagesWithExtensionlessMains.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.ts ===
+ import * as ip from 'ip';
+->ip : typeof ip
++>ip : typeof import("node_modules/@types/ip/index")
+ 
+ import nullthrows from 'nullthrows'; // shouldn't be callable, `nullthrows` is a cjs package, so the `default` is the module itself
+ >nullthrows : typeof nullthrows
+@@= skipped -13, +13 lines =@@
+ >nullthrows : typeof nullthrows
+ >ip.address() : string
+ >ip.address : () => string
+->ip : typeof ip
++>ip : typeof import("node_modules/@types/ip/index")
+ >address : () => string
+ }
+ === node_modules/@types/ip/index.d.ts ===

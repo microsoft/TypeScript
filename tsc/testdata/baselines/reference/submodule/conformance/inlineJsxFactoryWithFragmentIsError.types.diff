@@ -1,0 +1,23 @@
+--- old.inlineJsxFactoryWithFragmentIsError.types
++++ new.inlineJsxFactoryWithFragmentIsError.types
+@@= skipped -4, +4 lines =@@
+ >global : any
+ 
+     namespace JSX {
++>JSX : any
++
+         interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+             [e: string]: any;
+ >e : string
+         }
+@@= skipped -15, +19 lines =@@
+ === reacty.tsx ===
+ /** @jsx React.createElement */
+ import * as React from "./renderer";
+->React : typeof React
++>React : typeof import("renderer")
+ 
+ <><h></h></>
+ ><><h></h></> : any

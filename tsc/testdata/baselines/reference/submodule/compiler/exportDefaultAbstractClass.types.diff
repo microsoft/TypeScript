@@ -1,0 +1,31 @@
+--- old.exportDefaultAbstractClass.types
++++ new.exportDefaultAbstractClass.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ export default abstract class A { a: number; }
+->A : A
++>A : default
+ >a : number
+ 
+ class B extends A {}
+ >B : B
+->A : A
++>A : default
+ 
+ new B().a.toExponential();
+ >new B().a.toExponential() : string
+@@= skipped -18, +18 lines =@@
+ 
+ === b.ts ===
+ import A from './a';
+->A : typeof A
++>A : typeof default
+ 
+ class C extends A {}
+ >C : C
+->A : A
++>A : default
+ 
+ new C().a.toExponential();
+ >new C().a.toExponential() : string

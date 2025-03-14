@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/jsdoc/paramTagTypeResolution2.ts] ////
+
+=== 38572.js ===
+/**
+ * @template T
+ * @param {T} a
+ * @param {{[K in keyof T]: (value: T[K]) => void }} b
+ */
+function f(a, b) {
+>f : (a: any, b: any) => void
+>a : any
+>b : any
+}
+
+f({ x: 42 }, { x(param) { param.toFixed() } });
+>f({ x: 42 }, { x(param) { param.toFixed() } }) : void
+>f : (a: any, b: any) => void
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : 42
+>{ x(param) { param.toFixed() } } : { x: (param: any) => void; }
+>x : (param: any) => void
+>param : any
+>param.toFixed() : any
+>param.toFixed : any
+>param : any
+>toFixed : any
+

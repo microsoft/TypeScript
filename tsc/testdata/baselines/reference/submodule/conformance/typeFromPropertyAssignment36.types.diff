@@ -1,0 +1,90 @@
+--- old.typeFromPropertyAssignment36.types
++++ new.typeFromPropertyAssignment36.types
+@@= skipped -104, +104 lines =@@
+ >s : string
+ 
+ function d() {
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ }
+ d.e = 12
+ >d.e = 12 : 12
+ >d.e : number
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >e : number
+ >12 : 12
+ 
+ d.e
+ >d.e : number
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >e : number
+ 
+ if (!!false) {
+@@= skipped -22, +22 lines =@@
+     d.q = false
+ >d.q = false : false
+ >d.q : boolean
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >q : boolean
+ >false : false
+ }
+ d.q
+ >d.q : boolean
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >q : boolean
+ 
+ if (!!false) {
+@@= skipped -17, +17 lines =@@
+     d.q = false
+ >d.q = false : false
+ >d.q : boolean
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >q : boolean
+ >false : false
+ }
+@@= skipped -8, +8 lines =@@
+     d.q = true
+ >d.q = true : true
+ >d.q : boolean
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >q : boolean
+ >true : true
+ }
+ d.q
+ >d.q : boolean
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >q : boolean
+ 
+ if (!!false) {
+@@= skipped -17, +17 lines =@@
+     d.r = 1
+ >d.r = 1 : 1
+ >d.r : number
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >r : number
+ >1 : 1
+ }
+@@= skipped -8, +8 lines =@@
+     d.r = 2
+ >d.r = 2 : 2
+ >d.r : number
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >r : number
+ >2 : 2
+ }
+ d.r
+ >d.r : number
+->d : typeof d
++>d : { (): void; e: number; q: boolean; r: number; }
+ >r : number
+ 
+ // test function expressions too

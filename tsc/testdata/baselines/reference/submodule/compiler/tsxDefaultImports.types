@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/tsxDefaultImports.ts] ////
+
+=== a.ts ===
+enum SomeEnum {
+>SomeEnum : SomeEnum.one
+
+  one,
+>one : SomeEnum.one
+}
+export default class SomeClass {
+>SomeClass : default
+
+  public static E = SomeEnum;
+>E : typeof SomeEnum
+>SomeEnum : typeof SomeEnum
+}
+
+=== b.ts ===
+import {default as Def} from "./a"
+>default : typeof default
+>Def : typeof default
+
+let a = Def.E.one;
+>a : SomeEnum.one
+>Def.E.one : SomeEnum.one
+>Def.E : typeof SomeEnum
+>Def : typeof default
+>E : typeof SomeEnum
+>one : SomeEnum.one
+

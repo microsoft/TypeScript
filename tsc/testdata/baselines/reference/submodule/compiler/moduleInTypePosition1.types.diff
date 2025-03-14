@@ -1,0 +1,11 @@
+--- old.moduleInTypePosition1.types
++++ new.moduleInTypePosition1.types
+@@= skipped -2, +2 lines =@@
+ === moduleInTypePosition1_1.ts ===
+ ///<reference path='moduleInTypePosition1_0.ts'/>
+ import WinJS = require('./moduleInTypePosition1_0');
+->WinJS : typeof WinJS
++>WinJS : typeof import("moduleInTypePosition1_0")
+ 
+ var x = (w1: WinJS) => { };
+ >x : (w1: WinJS) => void

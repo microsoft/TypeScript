@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeAliases.ts] ////
+
+=== index.js ===
+
+export {}; // flag file as module
+/**
+ * @typedef {string | number | symbol} PropName 
+ */
+
+/**
+ * Callback
+ *
+ * @callback NumberToStringCb
+ * @param {number} a
+ * @returns {string}
+ */
+
+/**
+ * @template T
+ * @typedef {T & {name: string}} MixinName 
+ */
+
+/**
+ * Identity function
+ *
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+
+=== mixed.js ===
+/**
+ * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
+ */
+/**
+ * @param {number} x
+ * @returns {SomeType}
+ */
+function doTheThing(x) {
+>doTheThing : (x: any) => { x: string; }
+>x : any
+
+    return {x: ""+x};
+>{x: ""+x} : { x: string; }
+>x : string
+>""+x : string
+>"" : ""
+>x : any
+}
+class ExportedThing {
+>ExportedThing : ExportedThing
+
+    z = "ok"
+>z : string
+>"ok" : "ok"
+}
+module.exports = {
+>module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: any) => { x: string; }; ExportedThing: typeof ExportedThing; }
+>module.exports : any
+>module : any
+>exports : any
+>{    doTheThing,    ExportedThing,} : { doTheThing: (x: any) => { x: string; }; ExportedThing: typeof ExportedThing; }
+
+    doTheThing,
+>doTheThing : any
+
+    ExportedThing,
+>ExportedThing : any
+
+};
+class LocalThing {
+>LocalThing : LocalThing
+
+    y = "ok"
+>y : string
+>"ok" : "ok"
+}
+

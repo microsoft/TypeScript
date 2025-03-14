@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/salsa/moduleExportAlias2.ts] ////
+
+=== index.js ===
+/// <reference path='node.d.ts' />
+const C = require("./semver")
+>C : any
+>require("./semver") : any
+>require : (name: string) => any
+>"./semver" : "./semver"
+
+var two = C.f(1)
+>two : any
+>C.f(1) : any
+>C.f : any
+>C : any
+>f : any
+>1 : 1
+
+var c = new C
+>c : any
+>new C : any
+>C : any
+
+=== node.d.ts ===
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+
+declare var exports: any;
+>exports : any
+
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
+

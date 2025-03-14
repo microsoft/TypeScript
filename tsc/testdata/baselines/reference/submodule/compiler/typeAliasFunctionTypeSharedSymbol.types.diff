@@ -1,0 +1,33 @@
+--- old.typeAliasFunctionTypeSharedSymbol.types
++++ new.typeAliasFunctionTypeSharedSymbol.types
+@@= skipped -3, +3 lines =@@
+ // Repro from comment in #21496
+ 
+ function Mixin<TBase extends {new (...args: any[]): {}}>(Base: TBase) {
+->Mixin : <TBase extends { new (...args: any[]): {}; }>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
++>Mixin : <TBase extends new (...args: any[]) => {}>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
++>TBase : TBase
+ >args : any[]
+ >Base : TBase
+ 
+     return class extends Base {
+->class extends Base {    } : { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
++>class extends Base {    } : { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+ >Base : {}
+ 
+     };
+ }
+ 
+ type Mixin = ReturnTypeOf<typeof Mixin>
+->Mixin : { new (...args: any[]): Mixin<new (...args: any[]) => {}>.(Anonymous class); prototype: Mixin<any>.(Anonymous class); } & (new (...args: any[]) => {})
+->Mixin : <TBase extends { new (...args: any[]): {}; }>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
++>Mixin : { new (...args: any[]): (Anonymous class)<new (...args: any[]) => {}>; prototype: (Anonymous class)<any>; } & new (...args: any[]) => {}
+ 
+ type ReturnTypeOf<V> = V extends (...args: any[])=>infer R ? R : never;
+ >ReturnTypeOf : ReturnTypeOf<V>
++>V : V
+ >args : any[]
++>R : R
+ 
+ type Crashes = number & Mixin;
+ >Crashes : Crashes

@@ -1,0 +1,23 @@
+--- old.classImplementsImportedInterface.types
++++ new.classImplementsImportedInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classImplementsImportedInterface.ts ===
+ module M1 {
++>M1 : any
++
+     export interface I {
++>I : I
++
+         foo();
+ >foo : () => any
+     }
+@@= skipped -12, +16 lines =@@
+     import T = M1.I;
+ >T : any
+ >M1 : any
+->I : T
++>I : I
+ 
+     class C implements T {
+ >C : C

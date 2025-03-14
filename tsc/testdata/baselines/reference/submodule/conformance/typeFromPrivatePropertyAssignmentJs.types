@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignmentJs.ts] ////
+
+=== typeFromPrivatePropertyAssignmentJs.js ===
+
+=== a.js ===
+class C {
+>C : C
+
+    /** @type {{ foo?: string } | undefined } */
+    #a;
+>#a : any
+
+    /** @type {{ foo?: string } | undefined } */
+    #b;
+>#b : any
+
+    m() {
+>m : () => void
+
+        const a = this.#a || {};
+>a : any
+>this.#a || {} : any
+>this.#a : any
+>this : this
+>{} : {}
+
+        this.#b = this.#b || {};
+>this.#b = this.#b || {} : any
+>this.#b : any
+>this : this
+>this.#b || {} : any
+>this.#b : any
+>this : this
+>{} : {}
+    }
+}
+

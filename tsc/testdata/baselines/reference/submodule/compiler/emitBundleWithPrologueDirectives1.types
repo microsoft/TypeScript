@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/emitBundleWithPrologueDirectives1.ts] ////
+
+=== test.ts ===
+/* Detached Comment */
+
+// Class Doo Comment
+export class Doo {}
+>Doo : Doo
+
+class Scooby extends Doo {}
+>Scooby : Scooby
+>Doo : Doo
+

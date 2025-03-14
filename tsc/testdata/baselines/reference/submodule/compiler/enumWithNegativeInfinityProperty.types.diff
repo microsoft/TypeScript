@@ -1,0 +1,15 @@
+--- old.enumWithNegativeInfinityProperty.types
++++ new.enumWithNegativeInfinityProperty.types
+@@= skipped -1, +1 lines =@@
+ 
+ === enumWithNegativeInfinityProperty.ts ===
+ enum A {
+->A : A
++>A : A."-Infinity"
+ 
+     "-Infinity" = 1
+->"-Infinity" : (typeof A)["-Infinity"]
++>"-Infinity" : A."-Infinity"
+ >1 : 1
+ }
+ 

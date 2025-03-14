@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
+
+=== jsxFragmentFactoryNoUnusedLocals.tsx ===
+/// <reference path="react16.d.ts" />
+import { Fragment, createElement } from "react"
+>Fragment : any
+>createElement : any
+
+type CounterProps = {
+>CounterProps : CounterProps
+
+    count?: number
+>count : number
+}
+
+export function Counter({ count = 0 }: CounterProps) {
+>Counter : (__0: CounterProps) => any
+>count : number
+>0 : 0
+
+    const [cnt, setCnt] = null as any;
+>cnt : any
+>setCnt : any
+>null as any : any
+
+    return <>
+><>        <p>{cnt}</p>        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>    </> : any
+
+        <p>{cnt}</p>
+><p>{cnt}</p> : any
+>p : any
+>cnt : any
+>p : any
+
+        <button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button>
+><button onClick={() => setCnt((prev) => prev + 1)} type="button">Update</button> : any
+>button : any
+>onClick : any
+>() => setCnt((prev) => prev + 1) : () => any
+>setCnt((prev) => prev + 1) : any
+>setCnt : any
+>(prev) => prev + 1 : (prev: any) => any
+>prev : any
+>prev + 1 : any
+>prev : any
+>1 : 1
+>type : any
+>button : any
+
+    </>
+}

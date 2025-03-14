@@ -1,0 +1,42 @@
+--- old.typeParameterDiamond4.types
++++ new.typeParameterDiamond4.types
+@@= skipped -2, +2 lines =@@
+ === typeParameterDiamond4.ts ===
+ function diamondTop<Top>() {
+ >diamondTop : <Top>() => void
++>Top : Top
+ 
+     function diamondMiddle<T, U>() {
+ >diamondMiddle : <T, U>() => void
++>T : T
++>U : U
+ 
+         function diamondBottom<Bottom extends Top | T | U>() {
+->diamondBottom : <Bottom extends Top | T | U>() => void
++>diamondBottom : <Bottom extends T | Top | U>() => void
++>Bottom : Bottom
+ 
+             var top: Top;
+ >top : Top
+ 
+             var middle: Top | T | U;
+->middle : Top | T | U
++>middle : T | Top | U
+ 
+             var bottom: Bottom;
+ >bottom : Bottom
+ 
+             top = middle;
+->top = middle : Top | T | U
++>top = middle : T | Top | U
+ >top : Top
+->middle : Top | T | U
++>middle : T | Top | U
+ 
+             middle = bottom;
+ >middle = bottom : Bottom
+->middle : Top | T | U
++>middle : T | Top | U
+ >bottom : Bottom
+ 
+             top = bottom;

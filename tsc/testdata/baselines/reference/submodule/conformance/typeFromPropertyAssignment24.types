@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment24.ts] ////
+
+=== usage.js ===
+// note that usage is first in the compilation
+Outer.Inner.Message = function() {
+>Outer.Inner.Message = function() {} : () => void
+>Outer.Inner.Message : any
+>Outer.Inner : any
+>Outer : {}
+>Inner : any
+>Message : any
+>function() {} : () => void
+
+};
+
+var y = new Outer.Inner()
+>y : any
+>new Outer.Inner() : any
+>Outer.Inner : any
+>Outer : {}
+>Inner : any
+
+y.name
+>y.name : any
+>y : any
+>name : any
+
+/** @type {Outer.Inner} should be instance type, not static type */
+var x;
+>x : any
+
+x.name
+>x.name : any
+>x : any
+>name : any
+
+=== def.js ===
+var Outer = {}
+>Outer : {}
+>{} : {}
+
+Outer.Inner = class {
+>Outer.Inner = class {  name() {    return 'hi'  }} : typeof Inner
+>Outer.Inner : any
+>Outer : {}
+>Inner : any
+>class {  name() {    return 'hi'  }} : typeof Inner
+
+  name() {
+>name : () => string
+
+    return 'hi'
+>'hi' : "hi"
+  }
+}
+

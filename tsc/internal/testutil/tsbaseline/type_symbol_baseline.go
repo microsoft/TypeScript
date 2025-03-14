@@ -52,16 +52,54 @@ func DoTypeAndSymbolBaseline(
 
 	fullWalker := newTypeWriterWalker(program, hasErrorBaseline)
 
-	if !opts.IsSubmodule {
-		t.Run("type", func(t *testing.T) {
-			defer testutil.RecoverAndFail(t, "Panic on creating type baseline for test "+header)
-			checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, false /*isSymbolBaseline*/)
-		})
-	}
+	t.Run("type", func(t *testing.T) {
+		defer testutil.RecoverAndFail(t, "Panic on creating type baseline for test "+header)
+
+		// !!! Remove once the type baselines print node reuse lines
+		typesOpts := opts
+		typesOpts.DiffFixupOld = func(s string) string {
+			var sb strings.Builder
+			sb.Grow(len(s))
+
+			for line := range strings.SplitSeq(s, "\n") {
+				if isTypeBaselineNodeReuseLine(line) {
+					continue
+				}
+				sb.WriteString(line)
+				sb.WriteString("\n")
+			}
+
+			return sb.String()[:sb.Len()-1]
+		}
+
+		checkBaselines(t, baselinePath, allFiles, fullWalker, header, typesOpts, false /*isSymbolBaseline*/)
+	})
 	t.Run("symbol", func(t *testing.T) {
 		defer testutil.RecoverAndFail(t, "Panic on creating symbol baseline for test "+header)
 		checkBaselines(t, baselinePath, allFiles, fullWalker, header, opts, true /*isSymbolBaseline*/)
 	})
+}
+
+func isTypeBaselineNodeReuseLine(line string) bool {
+	line, ok := strings.CutPrefix(line, ">")
+	if !ok {
+		return false
+	}
+	line = strings.TrimLeft(line[1:], " ")
+	line, ok = strings.CutPrefix(line, ":")
+	if !ok {
+		return false
+	}
+
+	for _, c := range line {
+		switch c {
+		case ' ', '^', '\r':
+			// Okay
+		default:
+			return false
+		}
+	}
+	return true
 }
 
 func checkBaselines(
@@ -308,7 +346,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 			!ast.IsMetaProperty(node.Parent) &&
 			!isImportStatementName(node) &&
 			!isExportStatementName(node) &&
-			!isIntrinsicJsxTag(node) {
+			!isIntrinsicJsxTag(node, walker.currentSourceFile) {
 			typeString = t.AsIntrinsicType().IntrinsicName()
 		} else {
 			// !!! TODO: full type printing and underline when we have node builder
@@ -400,12 +438,13 @@ func isExportStatementName(node *ast.Node) bool {
 	return false
 }
 
-func isIntrinsicJsxTag(node *ast.Node) bool {
+func isIntrinsicJsxTag(node *ast.Node, sourceFile *ast.SourceFile) bool {
 	if !(ast.IsJsxOpeningElement(node.Parent) || ast.IsJsxClosingElement(node.Parent) || ast.IsJsxSelfClosingElement(node.Parent)) {
 		return false
 	}
 	if node.Parent.TagName() != node {
 		return false
 	}
-	return checker.IsIntrinsicJsxName(node.Text())
+	text := scanner.GetSourceTextOfNodeFromSourceFile(sourceFile, node, false /*includeTrivia*/)
+	return checker.IsIntrinsicJsxName(text)
 }

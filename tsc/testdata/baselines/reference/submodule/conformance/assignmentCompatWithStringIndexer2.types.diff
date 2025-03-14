@@ -1,0 +1,57 @@
+--- old.assignmentCompatWithStringIndexer2.types
++++ new.assignmentCompatWithStringIndexer2.types
+@@= skipped -3, +3 lines =@@
+ // index signatures must be compatible in assignments
+ 
+ interface Base { foo: string; }
++>Base : Base
+ >foo : string
+ 
+ interface Derived extends Base { bar: string; }
++>Derived : Derived
+ >bar : string
+ 
+ interface Derived2 extends Derived { baz: string; }
++>Derived2 : Derived2
+ >baz : string
+ 
+ interface A {
++>A : A
++
+     [x: string]: Base;
+ >x : string
+ }
+@@= skipped -48, +53 lines =@@
+ >Generics : typeof Generics
+ 
+     interface A<T extends Base> {
++>A : A<T>
++>T : T
++
+         [x: string]: T;
+ >x : string
+     }
+ 
+     interface B extends A<Base> {
++>B : B
++
+         [x: string]: Derived; // ok
+ >x : string
+     }
+@@= skipped -27, +32 lines =@@
+ >a1 : A<Base>
+ 
+     interface B2 extends A<Base> {
++>B2 : B2
++
+         [x: string]: Derived2; // ok
+ >x : string
+     }
+@@= skipped -20, +22 lines =@@
+ 
+     function foo<T extends Base>() {
+ >foo : <T extends Base>() => void
++>T : T
+ 
+         var b3: { [x: string]: Derived; };
+ >b3 : { [x: string]: Derived; }

@@ -1,0 +1,18 @@
+--- old.constructorWithAssignableReturnExpression.types
++++ new.constructorWithAssignableReturnExpression.types
+@@= skipped -39, +39 lines =@@
+ 
+ class F<T> {
+ >F : F<T>
++>T : T
+ 
+     x: T;
+ >x : T
+@@= skipped -14, +15 lines =@@
+ 
+ class G<T> {
+ >G : G<T>
++>T : T
+ 
+     x: T;
+ >x : T

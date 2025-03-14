@@ -1,0 +1,12 @@
+--- old.requiredMappedTypeModifierTrumpsVariance.types
++++ new.requiredMappedTypeModifierTrumpsVariance.types
+@@= skipped -49, +49 lines =@@
+ >a : any
+ 
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+     a: Required<T>;
+ >a : Required<T>
+ }

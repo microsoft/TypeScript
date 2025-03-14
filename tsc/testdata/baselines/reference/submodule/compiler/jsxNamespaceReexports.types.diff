@@ -1,0 +1,28 @@
+--- old.jsxNamespaceReexports.types
++++ new.jsxNamespaceReexports.types
+@@= skipped -7, +7 lines =@@
+ >children : any[]
+ 
+ namespace JSX {
++>JSX : any
++
+   export interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+     [key: string]: Record<string, any>;
+ >key : string
+   }
+@@= skipped -12, +16 lines =@@
+ 
+ === index.tsx ===
+ import * as MyLib from "./library";
+->MyLib : typeof MyLib
++>MyLib : typeof import("library")
+ 
+ const content = <my-element/>;
+->content : error
+-><my-element/> : error
++>content : any
++><my-element/> : any
+ >my-element : any
+ 

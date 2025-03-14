@@ -1,0 +1,33 @@
+--- old.compositeContextualSignature.types
++++ new.compositeContextualSignature.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #55145
+ 
+ function f<T extends any[]>(v: ReadonlyArray<T>) { }
+->f : <T extends any[]>(v: ReadonlyArray<T>) => void
++>f : <T extends any[]>(v: readonly T[]) => void
++>T : T
+ >v : readonly T[]
+ 
+ f([
+ >f([    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],]) : void
+->f : <T extends any[]>(v: ReadonlyArray<T>) => void
+->[    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],] : (((() => void) | undefined)[] | (number | (() => void))[])[]
++>f : <T extends any[]>(v: readonly T[]) => void
++>[    [        undefined,        () => { },    ],    [        1,        () => {            console.log('Hello')        },    ],] : ((() => void | undefined)[] | (number | () => void)[])[]
+ 
+     [
+->[        undefined,        () => { },    ] : ((() => void) | undefined)[]
++>[        undefined,        () => { },    ] : (() => void | undefined)[]
+ 
+         undefined,
+ >undefined : undefined
+@@= skipped -19, +20 lines =@@
+ 
+     ],
+     [
+->[        1,        () => {            console.log('Hello')        },    ] : (number | (() => void))[]
++>[        1,        () => {            console.log('Hello')        },    ] : (number | () => void)[]
+ 
+         1,
+ >1 : 1

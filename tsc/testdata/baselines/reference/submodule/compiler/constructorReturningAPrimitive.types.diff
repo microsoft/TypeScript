@@ -1,0 +1,10 @@
+--- old.constructorReturningAPrimitive.types
++++ new.constructorReturningAPrimitive.types
+@@= skipped -19, +19 lines =@@
+ 
+ class B<T> {
+ >B : B<T>
++>T : T
+ 
+     constructor() {
+         var x: T;

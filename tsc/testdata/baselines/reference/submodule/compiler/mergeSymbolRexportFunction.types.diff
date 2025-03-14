@@ -1,0 +1,25 @@
+--- old.mergeSymbolRexportFunction.types
++++ new.mergeSymbolRexportFunction.types
+@@= skipped -7, +7 lines =@@
+ >Row() : void
+ >Row : () => void
+ 
+-=== ./a.d.ts ===
++=== a.d.ts ===
+ import '.'
+ declare module '.' {
+ >'.' : typeof import("index")
+@@= skipped -9, +9 lines =@@
+ >Row : () => void
+ }
+ 
+-=== ./index.d.ts ===
++=== index.d.ts ===
+ export type {Row} from './common';
+ >Row : any
+ 
+-=== ./common.d.ts ===
++=== common.d.ts ===
+ export declare function Row(): void; 
+ >Row : () => void
+ 

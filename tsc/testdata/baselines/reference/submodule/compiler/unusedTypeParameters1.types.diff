@@ -1,0 +1,9 @@
+--- old.unusedTypeParameters1.types
++++ new.unusedTypeParameters1.types
+@@= skipped -2, +2 lines =@@
+ === unusedTypeParameters1.ts ===
+ class greeter<typeparameter1> {
+ >greeter : greeter<typeparameter1>
++>typeparameter1 : typeparameter1
+ 
+ }

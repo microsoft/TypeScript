@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/enumIdentifierLiterals.ts] ////
+
+=== enumIdentifierLiterals.ts ===
+enum Nums {
+>Nums : Nums
+
+    1.0,
+>1.0 : Nums.1.0
+
+    11e-1,
+>11e-1 : Nums.11e-1
+
+    0.12e1,
+>0.12e1 : Nums.0.12e1
+
+    "13e-1",
+>"13e-1" : Nums."13e-1"
+
+    0xF00D
+>0xF00D : Nums.0xF00D
+}

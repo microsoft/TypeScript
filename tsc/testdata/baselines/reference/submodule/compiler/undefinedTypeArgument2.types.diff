@@ -1,0 +1,23 @@
+--- old.undefinedTypeArgument2.types
++++ new.undefinedTypeArgument2.types
+@@= skipped -2, +2 lines =@@
+ === undefinedTypeArgument2.ts ===
+ // once caused stack overflow
+ interface Query<T> {
++>Query : Query<T>
++>T : T
++
+     selectMany<U>(selector: (item: T) => U[]): Query<U>;
+->selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U_1>(arraySelector: (item: T) => U_1[], resultSelector: (outer: T, inner: U_1) => R): Query<R>; }
++>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
++>U : U
+ >selector : (item: T) => U[]
+ >item : T
+ 
+     selectMany<U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>;
+->selectMany : { <U_1>(selector: (item: T) => U_1[]): Query<U_1>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
++>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
++>U : U
+ >arraySelector : (item: T) => U[]
+ >item : T
+ >resultSelector : (outer: T, inner: U) => R

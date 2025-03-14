@@ -1,0 +1,11 @@
+--- old.jsdocImportTypeNodeNamespace.types
++++ new.jsdocImportTypeNodeNamespace.types
+@@= skipped -12, +12 lines =@@
+ === Main.js ===
+ export default function () {
+   return /** @type {import('./GeometryType.js').default} */ ('Point');
+->('Point') : typeof import("GeometryType").default
++>('Point') : "Point"
+ >'Point' : "Point"
+ }
+ 

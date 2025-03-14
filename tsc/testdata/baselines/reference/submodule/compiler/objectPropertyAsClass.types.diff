@@ -1,0 +1,86 @@
+--- old.objectPropertyAsClass.types
++++ new.objectPropertyAsClass.types
+@@= skipped -1, +1 lines =@@
+ 
+ === index.js ===
+ const a1 = {
+->a1 : { foo(): void; }
+->{    foo() {        this.x = 0;    }} : { foo(): void; }
++>a1 : { foo: () => void; }
++>{    foo() {        this.x = 0;    }} : { foo: () => void; }
+ 
+     foo() {
+ >foo : () => void
+@@= skipped -9, +9 lines =@@
+         this.x = 0;
+ >this.x = 0 : 0
+ >this.x : any
+->this : { foo(): void; }
++>this : any
+ >x : any
+ >0 : 0
+     }
+ }
+ 
+ const a2 = {
+->a2 : { foo: typeof foo; }
+->{    foo: function() {        this.x = 0;    }} : { foo: typeof foo; }
++>a2 : { foo: () => void; }
++>{    foo: function() {        this.x = 0;    }} : { foo: () => void; }
+ 
+     foo: function() {
+->foo : typeof foo
+->function() {        this.x = 0;    } : typeof foo
++>foo : () => void
++>function() {        this.x = 0;    } : () => void
+ 
+         this.x = 0;
+ >this.x = 0 : 0
+ >this.x : any
+->this : { foo: typeof foo; }
++>this : any
+ >x : any
+ >0 : 0
+     }
+ }
+ 
+ const b1 = {
+->b1 : { foo(): void; }
+->{    /** @class */    foo() {        this.x = 0;    }} : { foo(): void; }
++>b1 : { foo: () => void; }
++>{    /** @class */    foo() {        this.x = 0;    }} : { foo: () => void; }
+ 
+     /** @class */
+     foo() {
+@@= skipped -34, +34 lines =@@
+         this.x = 0;
+ >this.x = 0 : 0
+ >this.x : any
+->this : { foo(): void; }
++>this : any
+ >x : any
+ >0 : 0
+     }
+ }
+ 
+ const b2 = {
+->b2 : { foo: typeof foo; }
+->{    /** @class */    foo: function() {        this.x = 0;    }} : { foo: typeof foo; }
++>b2 : { foo: () => void; }
++>{    /** @class */    foo: function() {        this.x = 0;    }} : { foo: () => void; }
+ 
+     /** @class */
+     foo: function() {
+->foo : typeof foo
+->function() {        this.x = 0;    } : typeof foo
++>foo : () => void
++>function() {        this.x = 0;    } : () => void
+ 
+         this.x = 0;
+ >this.x = 0 : 0
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >0 : 0
+     }

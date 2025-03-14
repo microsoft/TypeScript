@@ -1,0 +1,27 @@
+--- old.declarationEmitScopeConsistency.types
++++ new.declarationEmitScopeConsistency.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ export interface A { a: number }
++>A : A
+ >a : number
+ 
+ export const f = (x: A) => x as A;
+@@= skipped -11, +12 lines =@@
+ 
+ === b.ts ===
+ import { f } from "./a";
+->f : (x: import("a").A) => import("a").A
++>f : (x: A) => A
+ 
+ export interface A { other: number }
++>A : A
+ >other : number
+ 
+ export const g = f;
+->g : (x: import("a").A) => import("a").A
+->f : (x: import("a").A) => import("a").A
++>g : (x: A) => A
++>f : (x: A) => A
+ 

@@ -1,0 +1,11 @@
+--- old.moduleAugmentationInDependency.types
++++ new.moduleAugmentationInDependency.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /node_modules/A/index.d.ts ===
+ declare module "ext" {
+->"ext" : error
++>"ext" : any
+ }
+ export {};
+ 

@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/nodeResolution8.ts] ////
+
+=== b.ts ===
+import y = require("a");
+>y : typeof import("node_modules/a/index")
+
+=== node_modules/a/ref.ts ===
+var x = 1;
+>x : number
+>1 : 1
+
+=== node_modules/a/index.d.ts ===
+/// <reference path="ref.ts"/>
+export declare var y;
+>y : any
+
+

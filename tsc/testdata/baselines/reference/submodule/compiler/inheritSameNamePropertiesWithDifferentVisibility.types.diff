@@ -1,0 +1,11 @@
+--- old.inheritSameNamePropertiesWithDifferentVisibility.types
++++ new.inheritSameNamePropertiesWithDifferentVisibility.types
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ interface A extends C, C2 { // error
++>A : A
++
+     y: string;
+ >y : string
+ }

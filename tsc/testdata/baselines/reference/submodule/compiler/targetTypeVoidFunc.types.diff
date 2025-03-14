@@ -1,0 +1,27 @@
+--- old.targetTypeVoidFunc.types
++++ new.targetTypeVoidFunc.types
+@@= skipped -1, +1 lines =@@
+ 
+ === targetTypeVoidFunc.ts ===
+ function f1(): { new (): number; } {
+->f1 : () => { new (): number; }
++>f1 : () => new () => number
+ 
+     return function () { return; }
+ >function () { return; } : () => void
+@@= skipped -10, +10 lines =@@
+ var x = f1();
+ >x : new () => number
+ >f1() : new () => number
+->f1 : () => { new (): number; }
++>f1 : () => new () => number
+ 
+ var y = new x();
+ >y : number
+@@= skipped -12, +12 lines =@@
+ >new (f1())() : number
+ >(f1()) : new () => number
+ >f1() : new () => number
+->f1 : () => { new (): number; }
++>f1 : () => new () => number
+ 

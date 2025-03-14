@@ -1,0 +1,87 @@
+--- old.genericOverloadSignatures.types
++++ new.genericOverloadSignatures.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericOverloadSignatures.ts ===
+ interface A {
++>A : A
++
+     <T>(x: T): void;
++>T : T
+ >x : T
+ 
+     <T>(x: T): void;
++>T : T
+ >x : T
+ }
+ 
+ function f<T>(a: T);
+->f : { <T>(a: T): any; <T_1>(a: T_1): any; }
++>f : { <T>(a: T): any; <T>(a: T): any; }
++>T : T
+ >a : T
+ 
+ function f<T>(a: T);
+->f : { <T_1>(a: T_1): any; <T>(a: T): any; }
++>f : { <T>(a: T): any; <T>(a: T): any; }
++>T : T
+ >a : T
+ 
+ function f(a) { }
+@@= skipped -20, +26 lines =@@
+ >a : any
+ 
+ interface I2 {
++>I2 : I2
++
+     f<T>(x: T): number;
+->f : { <T>(x: T): number; <T_1>(x: T_1): string; }
++>f : { <T>(x: T): number; <T>(x: T): string; }
++>T : T
+ >x : T
+ 
+     f<T>(x: T): string;
+->f : { <T_1>(x: T_1): number; <T>(x: T): string; }
++>f : { <T>(x: T): number; <T>(x: T): string; }
++>T : T
+ >x : T
+ }
+ 
+ interface I3<T> {
++>I3 : I3<T>
++>T : T
++
+     f(x: T): number;
+ >f : { (x: T): number; (x: T): string; }
+ >x : T
+@@= skipped -21, +28 lines =@@
+ 
+ class C2<T> {
+ >C2 : C2<T>
++>T : T
+ }
+ var b: {
+ >b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+ 
+     new <T>(x: T, y: string): C2<T>;
++>T : T
+ >x : T
+ >y : string
+ 
+     new <T>(x: T, y: string): C2<T>;
++>T : T
+ >x : T
+ >y : string
+ }
+ 
+ interface D {
++>D : D
++
+     <T>(x: T): T;
++>T : T
+ >x : T
+ 
+     <T>(x: T): T;
++>T : T
+ >x : T
+ }

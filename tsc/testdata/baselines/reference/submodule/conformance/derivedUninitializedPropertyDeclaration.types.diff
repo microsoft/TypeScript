@@ -1,0 +1,26 @@
+--- old.derivedUninitializedPropertyDeclaration.types
++++ new.derivedUninitializedPropertyDeclaration.types
+@@= skipped -129, +129 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     q: number
+ >q : number
+ }
+ interface J extends I { }
++>J : J
++
+ class J {
+ >J : J
+ 
+@@= skipped -19, +23 lines =@@
+ >q : 1 | 2 | 3
+ 
+     r!: 4 | 5 // error, from class
+->r : 5 | 4
++>r : 4 | 5
+ }
+ 
+ // #35327

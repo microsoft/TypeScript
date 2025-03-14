@@ -1,0 +1,27 @@
+--- old.classExtendsInterface.types
++++ new.classExtendsInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classExtendsInterface.ts ===
+ interface Comparable {}
++>Comparable : Comparable
++
+ class A extends Comparable {}
+ >A : A
+ >Comparable : any
+@@= skipped -8, +10 lines =@@
+ >B : B
+ 
+ interface Comparable2<T> {}
++>Comparable2 : Comparable2<T>
++>T : T
++
+ class A2<T> extends Comparable2<T> {}
+ >A2 : A2<T>
++>T : T
+ >Comparable2 : any
+ 
+ class B2<T> implements Comparable2<T> {}
+ >B2 : B2<T>
++>T : T
+ 

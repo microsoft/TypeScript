@@ -1,0 +1,13 @@
+--- old.symbolProperty5.types
++++ new.symbolProperty5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty5.ts ===
+ var x = {
+->x : { [Symbol.iterator]: number; [Symbol.toPrimitive](): void; readonly [Symbol.toStringTag]: number; }
+->{    [Symbol.iterator]: 0,    [Symbol.toPrimitive]() { },    get [Symbol.toStringTag]() {        return 0;    }} : { [Symbol.iterator]: number; [Symbol.toPrimitive](): void; readonly [Symbol.toStringTag]: number; }
++>x : { [Symbol.iterator]: number; [Symbol.toPrimitive]: () => void; readonly [Symbol.toStringTag]: number; }
++>{    [Symbol.iterator]: 0,    [Symbol.toPrimitive]() { },    get [Symbol.toStringTag]() {        return 0;    }} : { [Symbol.iterator]: number; [Symbol.toPrimitive]: () => void; readonly [Symbol.toStringTag]: number; }
+ 
+     [Symbol.iterator]: 0,
+ >[Symbol.iterator] : number

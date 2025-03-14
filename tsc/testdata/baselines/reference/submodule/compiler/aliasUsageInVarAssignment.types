@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/aliasUsageInVarAssignment.ts] ////
+
+=== aliasUsageInVarAssignment_main.ts ===
+import Backbone = require("./aliasUsageInVarAssignment_backbone");
+>Backbone : typeof import("aliasUsageInVarAssignment_backbone")
+
+import moduleA = require("./aliasUsageInVarAssignment_moduleA");
+>moduleA : typeof import("aliasUsageInVarAssignment_moduleA")
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : IHasVisualizationModel
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : typeof Model
+>Backbone : typeof import("aliasUsageInVarAssignment_backbone")
+}
+var i: IHasVisualizationModel;
+>i : IHasVisualizationModel
+
+var m: typeof moduleA = i;
+>m : typeof import("aliasUsageInVarAssignment_moduleA")
+>i : IHasVisualizationModel
+
+=== aliasUsageInVarAssignment_backbone.ts ===
+export class Model {
+>Model : Model
+
+    public someData: string;
+>someData : string
+}
+
+=== aliasUsageInVarAssignment_moduleA.ts ===
+import Backbone = require("./aliasUsageInVarAssignment_backbone");
+>Backbone : typeof import("aliasUsageInVarAssignment_backbone")
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone.Model : Model
+>Backbone : typeof import("aliasUsageInVarAssignment_backbone")
+>Model : typeof Model
+
+    // interesting stuff here
+}
+

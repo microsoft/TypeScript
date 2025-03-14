@@ -1,0 +1,10 @@
+--- old.circularModuleImports.types
++++ new.circularModuleImports.types
+@@= skipped -1, +1 lines =@@
+ 
+ === circularModuleImports.ts ===
+ module M
++>M : any
+  
+ {
+  

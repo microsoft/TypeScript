@@ -1,0 +1,136 @@
+//// [tests/cases/compiler/thisInFunctionCallJs.ts] ////
+
+=== /a.js ===
+class Test {
+>Test : Test
+
+    constructor() {
+        /** @type {number[]} */
+        this.data = [1, 2, 3];
+>this.data = [1, 2, 3] : number[]
+>this.data : any
+>this : this
+>data : any
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+    }
+
+    finderRaw() {
+>finderRaw : () => void
+
+        this.data.find(function (d) {
+>this.data.find(function (d) {            return d === this.data.length        }) : any
+>this.data.find : any
+>this.data : any
+>this : this
+>data : any
+>find : any
+>function (d) {            return d === this.data.length        } : (d: any) => boolean
+>d : any
+
+            return d === this.data.length
+>d === this.data.length : boolean
+>d : any
+>this.data.length : any
+>this.data : any
+>this : any
+>data : any
+>length : any
+
+        })
+    }
+
+    forEacherRaw() {
+>forEacherRaw : () => void
+
+        this.data.forEach(function (d) {
+>this.data.forEach(function (d) {            console.log(d === this.data.length)        }) : any
+>this.data.forEach : any
+>this.data : any
+>this : this
+>data : any
+>forEach : any
+>function (d) {            console.log(d === this.data.length)        } : (d: any) => void
+>d : any
+
+            console.log(d === this.data.length)
+>console.log(d === this.data.length) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>d === this.data.length : boolean
+>d : any
+>this.data.length : any
+>this.data : any
+>this : any
+>data : any
+>length : any
+
+        })
+    }
+
+    forEacher() {
+>forEacher : () => void
+
+        this.data.forEach(
+>this.data.forEach(        /** @this {Test} */        function (d) {            console.log(d === this.data.length)        }, this) : any
+>this.data.forEach : any
+>this.data : any
+>this : this
+>data : any
+>forEach : any
+
+        /** @this {Test} */
+        function (d) {
+>function (d) {            console.log(d === this.data.length)        } : (d: any) => void
+>d : any
+
+            console.log(d === this.data.length)
+>console.log(d === this.data.length) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>d === this.data.length : boolean
+>d : any
+>this.data.length : any
+>this.data : any
+>this : any
+>data : any
+>length : any
+
+        }, this)
+>this : this
+    }
+
+    finder() {
+>finder : () => void
+
+        this.data.find(
+>this.data.find(        /** @this {Test} */        function (d) {            return d === this.data.length        }, this) : any
+>this.data.find : any
+>this.data : any
+>this : this
+>data : any
+>find : any
+
+        /** @this {Test} */
+        function (d) {
+>function (d) {            return d === this.data.length        } : (d: any) => boolean
+>d : any
+
+            return d === this.data.length
+>d === this.data.length : boolean
+>d : any
+>this.data.length : any
+>this.data : any
+>this : any
+>data : any
+>length : any
+
+        }, this)
+>this : this
+    }
+}
+

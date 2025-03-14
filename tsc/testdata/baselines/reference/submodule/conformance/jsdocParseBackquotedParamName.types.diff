@@ -1,0 +1,15 @@
+--- old.jsdocParseBackquotedParamName.types
++++ new.jsdocParseBackquotedParamName.types
+@@= skipped -5, +5 lines =@@
+  * @param `bwarg` {?number?}
+  */
+ function f(args, bwarg) {
+->f : (args?: string | undefined, bwarg: (number | null) | null) => void
+->args : string | undefined
+->bwarg : number | null
++>f : (args: any, bwarg: any) => void
++>args : any
++>bwarg : any
+ }
+ 
+ === ts.ts ===

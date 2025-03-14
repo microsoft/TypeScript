@@ -1,0 +1,20 @@
+--- old.discriminantElementAccessCheck.types
++++ new.discriminantElementAccessCheck.types
+@@= skipped -4, +4 lines =@@
+ >U : U
+ 
+ interface TypeA {
++>TypeA : TypeA
++
+     kind: 'A';
+ >kind : "A"
+ 
+@@= skipped -7, +9 lines =@@
+ >a : number
+ }
+ interface TypeB {
++>TypeB : TypeB
++
+     kind: 'B';
+ >kind : "B"
+ 

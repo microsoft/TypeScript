@@ -1,0 +1,11 @@
+--- old.moduleExportAliasUnknown.types
++++ new.moduleExportAliasUnknown.types
+@@= skipped -3, +3 lines =@@
+ module.exports = window.nonprop;
+ >module.exports = window.nonprop : any
+ >module.exports : any
+->module : { exports: any; }
++>module : any
+ >exports : any
+ >window.nonprop : any
+ >window : Window & typeof globalThis

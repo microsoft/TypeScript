@@ -1,0 +1,18 @@
+--- old.declarationEmitDestructuringWithOptionalBindingParameters.types
++++ new.declarationEmitDestructuringWithOptionalBindingParameters.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitDestructuringWithOptionalBindingParameters.ts ===
+ function foo([x,y,z]?: [string, number, boolean]) {
+->foo : ([x, y, z]?: [string, number, boolean]) => void
++>foo : (__0?: [string, number, boolean]) => void
+ >x : string
+ >y : number
+ >z : boolean
+ }
+ function foo1( { x, y, z }?: { x: string; y: number; z: boolean }) {
+->foo1 : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => void
++>foo1 : (__0?: { x: string; y: number; z: boolean; }) => void
+ >x : string
+ >y : number
+ >z : boolean

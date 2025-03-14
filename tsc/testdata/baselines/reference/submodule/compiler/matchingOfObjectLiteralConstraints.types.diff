@@ -1,0 +1,11 @@
+--- old.matchingOfObjectLiteralConstraints.types
++++ new.matchingOfObjectLiteralConstraints.types
+@@= skipped -2, +2 lines =@@
+ === matchingOfObjectLiteralConstraints.ts ===
+ function foo2<T, U extends { y: T; }>(x: U, z: T) { }
+ >foo2 : <T, U extends { y: T; }>(x: U, z: T) => void
++>T : T
++>U : U
+ >y : T
+ >x : U
+ >z : T

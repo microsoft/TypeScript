@@ -1,0 +1,22 @@
+--- old.symbolProperty21.types
++++ new.symbolProperty21.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolProperty21.ts ===
+ interface I<T, U> {
++>I : I<T, U>
++>T : T
++>U : U
++
+     [Symbol.unscopables]: T;
+ >[Symbol.unscopables] : T
+ >Symbol.unscopables : unique symbol
+@@= skipped -15, +19 lines =@@
+ 
+ declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
+ >foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
++>T : T
++>U : U
+ >p : I<T, U>
+ >t : T
+ >u : U

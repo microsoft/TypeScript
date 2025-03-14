@@ -1,0 +1,74 @@
+--- old.enumLiteralTypes3.types
++++ new.enumLiteralTypes3.types
+@@= skipped -27, +27 lines =@@
+ >Choice : any
+ 
+ function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+->f1 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
++>f1 : (a: Choice.Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+ >a : Choice.Yes
+ >b : YesNo
+ >c : UnknownYesNo
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+->f2 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
++>f2 : (a: Choice.Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+ >a : Choice.Yes
+ >b : YesNo
+ >c : UnknownYesNo
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+->f3 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
++>f3 : (a: Choice.Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+ >a : Choice.Yes
+ >b : YesNo
+ >c : UnknownYesNo
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+->f4 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
++>f4 : (a: Choice.Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+ >a : Choice.Yes
+ >b : YesNo
+ >c : UnknownYesNo
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+->f5 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
++>f5 : (a: Choice.Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+ >a : Choice.Yes
+ >b : YesNo
+ >c : UnknownYesNo
+@@= skipped -92, +92 lines =@@
+ }
+ 
+ function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+->f6 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
++>f6 : (a: Choice.Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+ >a : Choice.Yes
+ >b : YesNo
+ >c : UnknownYesNo
+@@= skipped -92, +92 lines =@@
+ }
+ 
+ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
+->f7 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
++>f7 : (a: Choice.Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
+ >a : Choice.Yes
+ >b : YesNo
+ >c : UnknownYesNo
+@@= skipped -88, +88 lines =@@
+ }
+ 
+ function f10(x: Yes): Yes {
+->f10 : (x: Yes) => Yes
++>f10 : (x: Choice.Yes) => Choice.Yes
+ >x : Choice.Yes
+ 
+     switch (x) {

@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/exportDefaultWithJSDoc2.ts] ////
+
+=== a.js ===
+/**
+ * A number, or a string containing a number.
+ * @typedef {(number|string)} NumberLike
+ */
+
+export default /** @type {NumberLike[]} */([ ]);
+>([ ]) : undefined[]
+>[ ] : undefined[]
+
+=== b.ts ===
+import A from './a'
+>A : any[]
+
+A[0]
+>A[0] : any
+>A : any[]
+>0 : 0
+

@@ -1,0 +1,25 @@
+--- old.jsNoImplicitAnyNoCascadingReferenceErrors.types
++++ new.jsNoImplicitAnyNoCascadingReferenceErrors.types
+@@= skipped -2, +2 lines =@@
+ === somelib.d.ts ===
+ export declare class Foo<T> {
+ >Foo : Foo<T>
++>T : T
+ 
+     prop: T;
+ >prop : T
+@@= skipped -10, +11 lines =@@
+ 
+ class MyFoo extends Foo {
+ >MyFoo : MyFoo
+->Foo : Foo<any>
++>Foo : typeof Foo
+ 
+     constructor() {
+         super();
+ >super() : void
+->super : typeof Foo
++>super : any
+ 
+         this.prop.alpha = 12;
+ >this.prop.alpha = 12 : 12

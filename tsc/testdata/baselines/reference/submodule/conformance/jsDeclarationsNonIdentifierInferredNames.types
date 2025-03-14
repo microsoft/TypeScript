@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.ts] ////
+
+=== jsDeclarationsNonIdentifierInferredNames.jsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : any
+
+const dynPropName = "data-dyn";
+>dynPropName : "data-dyn"
+>"data-dyn" : "data-dyn"
+
+export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (
+>ExampleFunctionalComponent : (__0: { data-dyn: any; data-testid: any; }) => any
+>({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : (__0: { data-dyn: any; data-testid: any; }) => any
+>dataTestId : any
+>dynPropName : "data-dyn"
+>dynProp : any
+>(    <>Hello</>) : any
+
+    <>Hello</>
+><>Hello</> : any
+
+);

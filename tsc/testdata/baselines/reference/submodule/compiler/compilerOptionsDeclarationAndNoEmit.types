@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/compilerOptionsDeclarationAndNoEmit.ts] ////
+
+=== a.ts ===
+class c {
+>c : c
+}
+

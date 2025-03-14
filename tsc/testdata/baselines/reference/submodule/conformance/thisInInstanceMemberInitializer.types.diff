@@ -1,0 +1,10 @@
+--- old.thisInInstanceMemberInitializer.types
++++ new.thisInInstanceMemberInitializer.types
+@@= skipped -10, +10 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     x = this;
+ >x : this

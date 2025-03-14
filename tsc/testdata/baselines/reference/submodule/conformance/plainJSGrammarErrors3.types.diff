@@ -1,0 +1,13 @@
+--- old.plainJSGrammarErrors3.types
++++ new.plainJSGrammarErrors3.types
+@@= skipped -6, +6 lines =@@
+ >foo : () => void
+ 
+     await new Promise(undefined);
+->await new Promise(undefined) : any
+->new Promise(undefined) : Promise<any>
++>await new Promise(undefined) : unknown
++>new Promise(undefined) : Promise<unknown>
+ >Promise : PromiseConstructor
+ >undefined : undefined
+ }

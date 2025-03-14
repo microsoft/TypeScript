@@ -1,0 +1,67 @@
+--- old.localTypes5.types
++++ new.localTypes5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === localTypes5.ts ===
+ function foo<A>() {
+->foo : <A>() => X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
++>foo : <A>() => Y<A, number, boolean, Date, string>
++>A : A
+ 
+     class X {
+->X : X
++>X : X<A>
+ 
+         m<B, C>() {
+->m : <B, C>() => (Anonymous function)<Date>.Y<string>
++>m : <B, C>() => Y<A, B, C, Date, string>
++>B : B
++>C : C
+ 
+             return (function <D>() {
+->(function <D>() {                class Y<E> {                }                return new Y<string>();            })<Date>() : (Anonymous function)<Date>.Y<string>
+->(function <D>() {                class Y<E> {                }                return new Y<string>();            }) : <D>() => Y<string>
+->function <D>() {                class Y<E> {                }                return new Y<string>();            } : <D>() => Y<string>
++>(function <D>() {                class Y<E> {                }                return new Y<string>();            })<Date>() : Y<A, B, C, Date, string>
++>(function <D>() {                class Y<E> {                }                return new Y<string>();            }) : <D>() => Y<A, B, C, D, string>
++>function <D>() {                class Y<E> {                }                return new Y<string>();            } : <D>() => Y<A, B, C, D, string>
++>D : D
+ 
+                 class Y<E> {
+->Y : Y<E>
++>Y : Y<A, B, C, D, E>
++>E : E
+                 }
+                 return new Y<string>();
+->new Y<string>() : Y<string>
++>new Y<string>() : Y<A, B, C, D, string>
+ >Y : typeof Y
+ 
+             })<Date>();
+         }
+     }
+     var x = new X();
+->x : X
+->new X() : X
++>x : X<A>
++>new X() : X<A>
+ >X : typeof X
+ 
+     return x.m<number, boolean>();
+->x.m<number, boolean>() : X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+->x.m : <B, C>() => X.m<B, C>.(Anonymous function)<Date>.Y<string>
+->x : X
+->m : <B, C>() => X.m<B, C>.(Anonymous function)<Date>.Y<string>
++>x.m<number, boolean>() : Y<A, number, boolean, Date, string>
++>x.m : <B, C>() => Y<A, B, C, Date, string>
++>x : X<A>
++>m : <B, C>() => Y<A, B, C, Date, string>
+ }
+ var x = foo<void>();
+->x : foo<void>.X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+->foo<void>() : foo<void>.X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
+->foo : <A>() => X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
++>x : Y<void, number, boolean, Date, string>
++>foo<void>() : Y<void, number, boolean, Date, string>
++>foo : <A>() => Y<A, number, boolean, Date, string>
+ 

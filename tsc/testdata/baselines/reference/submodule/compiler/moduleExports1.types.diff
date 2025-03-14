@@ -1,0 +1,35 @@
+--- old.moduleExports1.types
++++ new.moduleExports1.types
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ var rue = new TypeScript.Strasse.Street.Rue();
+->rue : TypeScript.Strasse.Street.Rue
+->new TypeScript.Strasse.Street.Rue() : TypeScript.Strasse.Street.Rue
+->TypeScript.Strasse.Street.Rue : typeof TypeScript.Strasse.Street.Rue
+->TypeScript.Strasse.Street : typeof TypeScript.Strasse.Street
+->TypeScript.Strasse : typeof TypeScript.Strasse
++>rue : any
++>new TypeScript.Strasse.Street.Rue() : any
++>TypeScript.Strasse.Street.Rue : any
++>TypeScript.Strasse.Street : any
++>TypeScript.Strasse : any
+ >TypeScript : typeof TypeScript
+->Strasse : typeof TypeScript.Strasse
+->Street : typeof TypeScript.Strasse.Street
+->Rue : typeof TypeScript.Strasse.Street.Rue
++>Strasse : any
++>Street : any
++>Rue : any
+ 
+ rue.address = "1 Main Street";
+ >rue.address = "1 Main Street" : "1 Main Street"
+->rue.address : string
+->rue : TypeScript.Strasse.Street.Rue
+->address : string
++>rue.address : any
++>rue : any
++>address : any
+ >"1 Main Street" : "1 Main Street"
+ 
+ void 0;

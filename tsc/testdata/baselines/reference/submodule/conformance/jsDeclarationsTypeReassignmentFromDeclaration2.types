@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReassignmentFromDeclaration2.ts] ////
+
+=== index.js ===
+const items = require("./some-mod")();
+>items : any
+>require("./some-mod")() : any
+>require("./some-mod") : any
+>require : any
+>"./some-mod" : "./some-mod"
+
+module.exports = items;
+>module.exports = items : any
+>module.exports : any
+>module : any
+>exports : any
+>items : any
+
+=== some-mod.d.ts ===
+interface Item {
+>Item : Item
+
+    x: string;
+>x : string
+}
+declare function getItems(): Item[];
+>getItems : () => Item[]
+
+export = getItems;
+>getItems : () => Item[]
+

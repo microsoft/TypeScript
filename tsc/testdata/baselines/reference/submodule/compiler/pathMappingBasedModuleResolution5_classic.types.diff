@@ -1,0 +1,35 @@
+--- old.pathMappingBasedModuleResolution5_classic.types
++++ new.pathMappingBasedModuleResolution5_classic.types
+@@= skipped -10, +10 lines =@@
+ >z : number
+ 
+ import {z1} from "file4"
+->z1 : number
++>z1 : any
+ 
+ declare function use(a: any): void;
+ >use : (a: any) => void
+@@= skipped -33, +33 lines =@@
+ use(z1.toExponential());
+ >use(z1.toExponential()) : void
+ >use : (a: any) => void
+->z1.toExponential() : string
+->z1.toExponential : (fractionDigits?: number) => string
+->z1 : number
+->toExponential : (fractionDigits?: number) => string
++>z1.toExponential() : any
++>z1.toExponential : any
++>z1 : any
++>toExponential : any
+ 
+ === c:/root/folder2/file1.ts ===
+ export var x = 1;
+@@= skipped -20, +20 lines =@@
+ >z : number
+ >1 : 1
+ 
+-=== c:/file4.ts ===
+-export var z1 = 1;
+->z1 : number
+->1 : 1
+-

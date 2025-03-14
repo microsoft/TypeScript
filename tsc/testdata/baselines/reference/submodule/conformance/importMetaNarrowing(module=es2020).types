@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/es2019/importMeta/importMetaNarrowing.ts] ////
+
+=== importMetaNarrowing.ts ===
+declare global { interface ImportMeta {foo?: () => void} };
+>global : typeof global
+>ImportMeta : ImportMeta
+>foo : () => void | undefined
+
+if (import.meta.foo) {
+>import.meta.foo : any
+>import.meta : ImportMeta
+>meta : ImportMeta
+>foo : any
+
+  import.meta.foo();
+>import.meta.foo() : any
+>import.meta.foo : any
+>import.meta : ImportMeta
+>meta : ImportMeta
+>foo : any
+}
+

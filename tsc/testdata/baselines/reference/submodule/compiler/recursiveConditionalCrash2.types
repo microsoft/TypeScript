@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/recursiveConditionalCrash2.ts] ////
+
+=== recursiveConditionalCrash2.ts ===
+// Simplified #43529
+
+export type CanBeExpanded<T extends object> = {
+>CanBeExpanded : CanBeExpanded<T>
+>T : T
+
+  value: T
+>value : T
+}
+
+type Expand__<O, N, Depth> =
+>Expand__ : Expand__<O, N, Depth>
+>O : O
+>N : N
+>Depth : Depth
+
+  N extends Depth ?
+      unknown :
+      O extends CanBeExpanded<any> ?
+          Expand__<O['value'], N, Depth> :
+          O
+
+export type UseQueryOptions<T> = Expand__<T, 4, 2>
+>UseQueryOptions : T extends CanBeExpanded<any> ? T["value"] extends CanBeExpanded<any> ? T["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? ???["value"]["value"]["value"] extends CanBeExpanded<any> ? ???["value"]["value"] extends CanBeExpanded<any> ? ???["value"] extends CanBeExpanded<any> ? ??? extends CanBeExpanded<any> ? ??? : ??? : ???["value"] : ???["value"]["value"] : ???["value"]["value"]["value"] : T["value"]["value"]["value"]["value"] : T["value"]["value"]["value"] : T["value"]["value"] : T["value"] : T
+>T : T
+

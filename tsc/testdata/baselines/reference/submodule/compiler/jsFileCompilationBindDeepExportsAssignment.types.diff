@@ -1,0 +1,11 @@
+--- old.jsFileCompilationBindDeepExportsAssignment.types
++++ new.jsFileCompilationBindDeepExportsAssignment.types
+@@= skipped -5, +5 lines =@@
+ >exports.a.b.c : any
+ >exports.a.b : any
+ >exports.a : any
+->exports : typeof import("a")
++>exports : any
+ >a : any
+ >b : any
+ >c : any

@@ -1,0 +1,90 @@
+--- old.collisionExportsRequireAndInternalModuleAliasInGlobalFile.types
++++ new.collisionExportsRequireAndInternalModuleAliasInGlobalFile.types
+@@= skipped -8, +8 lines =@@
+     }
+ }
+ import exports = mOfGloalFile.c;
+->exports : typeof exports
++>exports : typeof c
+ >mOfGloalFile : typeof mOfGloalFile
+->c : exports
++>c : c
+ 
+ import require = mOfGloalFile.c;
+->require : typeof exports
++>require : typeof c
+ >mOfGloalFile : typeof mOfGloalFile
+->c : exports
++>c : c
+ 
+ new exports();
+->new exports() : exports
+->exports : typeof exports
++>new exports() : c
++>exports : typeof c
+ 
+ new require();
+->new require() : exports
+->require : typeof exports
++>new require() : c
++>require : typeof c
+ 
+ module m1 {
+ >m1 : typeof m1
+ 
+     import exports = mOfGloalFile.c;
+->exports : typeof exports
++>exports : typeof c
+ >mOfGloalFile : typeof mOfGloalFile
+->c : exports
++>c : c
+ 
+     import require = mOfGloalFile.c;
+->require : typeof exports
++>require : typeof c
+ >mOfGloalFile : typeof mOfGloalFile
+->c : exports
++>c : c
+ 
+     new exports();
+->new exports() : exports
+->exports : typeof exports
++>new exports() : c
++>exports : typeof c
+ 
+     new require();
+->new require() : exports
+->require : typeof exports
++>new require() : c
++>require : typeof c
+ }
+ 
+ module m2 {
+ >m2 : typeof m2
+ 
+     export import exports = mOfGloalFile.c;
+->exports : typeof exports
++>exports : typeof c
+ >mOfGloalFile : typeof mOfGloalFile
+->c : exports
++>c : c
+ 
+     export import require = mOfGloalFile.c;
+->require : typeof exports
++>require : typeof c
+ >mOfGloalFile : typeof mOfGloalFile
+->c : exports
++>c : c
+ 
+     new exports();
+->new exports() : exports
+->exports : typeof exports
++>new exports() : c
++>exports : typeof c
+ 
+     new require();
+->new require() : exports
+->require : typeof exports
++>new require() : c
++>require : typeof c
+ }

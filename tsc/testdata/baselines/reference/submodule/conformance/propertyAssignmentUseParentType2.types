@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/salsa/propertyAssignmentUseParentType2.ts] ////
+
+=== propertyAssignmentUseParentType2.js ===
+/** @type {{ (): boolean; nuo: 789 }} */
+export const inlined = () => true
+>inlined : { (): boolean; nuo: number; }
+>() => true : { (): boolean; nuo: number; }
+>true : true
+
+inlined.nuo = 789
+>inlined.nuo = 789 : 789
+>inlined.nuo : number
+>inlined : { (): boolean; nuo: number; }
+>nuo : number
+>789 : 789
+
+/** @type {{ (): boolean; nuo: 789 }} */
+export const duplicated = () => true
+>duplicated : { (): boolean; nuo: number; }
+>() => true : { (): boolean; nuo: number; }
+>true : true
+
+/** @type {789} */
+duplicated.nuo = 789
+>duplicated.nuo = 789 : 789
+>duplicated.nuo : number
+>duplicated : { (): boolean; nuo: number; }
+>nuo : number
+>789 : 789
+
+/** @type {{ (): boolean; nuo: 789 }} */
+export const conflictingDuplicated = () => true
+>conflictingDuplicated : { (): boolean; nuo: number; }
+>() => true : { (): boolean; nuo: number; }
+>true : true
+
+/** @type {1000} */
+conflictingDuplicated.nuo = 789
+>conflictingDuplicated.nuo = 789 : 789
+>conflictingDuplicated.nuo : number
+>conflictingDuplicated : { (): boolean; nuo: number; }
+>nuo : number
+>789 : 789
+

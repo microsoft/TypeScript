@@ -1,0 +1,13 @@
+--- old.genericConstructSignatureInInterface.types
++++ new.genericConstructSignatureInInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericConstructSignatureInInterface.ts ===
+ interface C {
++>C : C
++
+     new <T>(x: T);
++>T : T
+ >x : T
+ }
+ 

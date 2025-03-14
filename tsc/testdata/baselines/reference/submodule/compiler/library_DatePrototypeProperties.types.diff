@@ -1,0 +1,36 @@
+--- old.library_DatePrototypeProperties.types
++++ new.library_DatePrototypeProperties.types
+@@= skipped -35, +35 lines =@@
+ 
+ Date.prototype.toLocaleString();
+ >Date.prototype.toLocaleString() : string
+->Date.prototype.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>Date.prototype.toLocaleString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; }
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>toLocaleString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; }
+ 
+ Date.prototype.toLocaleDateString();
+ >Date.prototype.toLocaleDateString() : string
+->Date.prototype.toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>Date.prototype.toLocaleDateString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; }
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>toLocaleDateString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; }
+ 
+ Date.prototype.toLocaleTimeString();
+ >Date.prototype.toLocaleTimeString() : string
+->Date.prototype.toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>Date.prototype.toLocaleTimeString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; }
+ >Date.prototype : Date
+ >Date : DateConstructor
+ >prototype : Date
+->toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; }
++>toLocaleTimeString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; }
+ 
+ Date.prototype.valueOf();
+ >Date.prototype.valueOf() : number

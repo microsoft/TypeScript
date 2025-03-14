@@ -1,0 +1,118 @@
+//// [tests/cases/conformance/jsx/tsxTypeArgumentsJsxPreserveOutput.tsx] ////
+
+=== foo.tsx ===
+import React = require('react');
+>React : any
+
+type TypeProps = { foo?: boolean; };
+>TypeProps : TypeProps
+>foo : boolean
+
+interface InterfaceProps { foo?: boolean; }
+>InterfaceProps : InterfaceProps
+>foo : boolean
+
+function Foo<T>() {
+>Foo : <T>() => any
+>T : T
+
+    return null;
+}
+
+<>
+><>    {/* JsxSelfClosingElement */}    <Foo<unknown> />    <Foo<string> />    <Foo<boolean> />    <Foo<object> />    <Foo<null> />    <Foo<any> />    <Foo<never> />    <Foo<undefined> />    <Foo<TypeProps> />    <Foo<InterfaceProps> />    {/* JsxOpeningElement */}    <Foo<unknown>></Foo>    <Foo<string>></Foo>    <Foo<boolean>></Foo>    <Foo<object>></Foo>    <Foo<null>></Foo>    <Foo<any>></Foo>    <Foo<never>></Foo>    <Foo<undefined>></Foo>    <Foo<TypeProps>></Foo>    <Foo<InterfaceProps>></Foo></> : any
+
+    {/* JsxSelfClosingElement */}
+    <Foo<unknown> />
+><Foo<unknown> /> : any
+>Foo : <T>() => any
+
+    <Foo<string> />
+><Foo<string> /> : any
+>Foo : <T>() => any
+
+    <Foo<boolean> />
+><Foo<boolean> /> : any
+>Foo : <T>() => any
+
+    <Foo<object> />
+><Foo<object> /> : any
+>Foo : <T>() => any
+
+    <Foo<null> />
+><Foo<null> /> : any
+>Foo : <T>() => any
+
+    <Foo<any> />
+><Foo<any> /> : any
+>Foo : <T>() => any
+
+    <Foo<never> />
+><Foo<never> /> : any
+>Foo : <T>() => any
+
+    <Foo<undefined> />
+><Foo<undefined> /> : any
+>Foo : <T>() => any
+
+    <Foo<TypeProps> />
+><Foo<TypeProps> /> : any
+>Foo : <T>() => any
+
+    <Foo<InterfaceProps> />
+><Foo<InterfaceProps> /> : any
+>Foo : <T>() => any
+
+    {/* JsxOpeningElement */}
+    <Foo<unknown>></Foo>
+><Foo<unknown>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<string>></Foo>
+><Foo<string>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<boolean>></Foo>
+><Foo<boolean>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<object>></Foo>
+><Foo<object>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<null>></Foo>
+><Foo<null>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<any>></Foo>
+><Foo<any>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<never>></Foo>
+><Foo<never>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<undefined>></Foo>
+><Foo<undefined>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<TypeProps>></Foo>
+><Foo<TypeProps>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+    <Foo<InterfaceProps>></Foo>
+><Foo<InterfaceProps>></Foo> : any
+>Foo : <T>() => any
+>Foo : <T>() => any
+
+</>
+

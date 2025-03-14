@@ -1,0 +1,338 @@
+//// [tests/cases/compiler/jsxElementType.tsx] ////
+
+=== jsxElementType.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : any
+
+type React18ReactFragment = ReadonlyArray<React18ReactNode>;
+>React18ReactFragment : React18ReactFragment
+
+type React18ReactNode =
+>React18ReactNode : any
+
+  | React.ReactElement<any>
+>React : any
+
+  | string
+  | number
+  | React18ReactFragment
+  | React.ReactPortal
+>React : any
+
+  | boolean
+  | null
+  | undefined
+  | Promise<React18ReactNode>;
+
+// // React.JSXElementConstructor but it now can return React nodes from function components.
+type NewReactJSXElementConstructor<P> =
+>NewReactJSXElementConstructor : NewReactJSXElementConstructor<P>
+>P : P
+
+  | ((props: P) => React18ReactNode)
+>props : P
+
+  | (new (props: P) => React.Component<P, any>);
+>props : P
+>React : any
+
+declare global {
+>global : any
+
+  namespace JSX {
+>JSX : any
+
+    type ElementType = string | NewReactJSXElementConstructor<any>;
+>ElementType : ElementType
+
+    interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+      ['my-custom-element']: React.DOMAttributes<unknown>;
+>['my-custom-element'] : DOMAttributes<unknown>
+>'my-custom-element' : "my-custom-element"
+>React : any
+    }
+  }
+}
+
+let Component: NewReactJSXElementConstructor<{ title: string }>;
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>title : string
+
+const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
+>RenderElement : (__0: { title: string; }) => any
+>({ title }: { title: string }) => <div>{title}</div> : (__0: { title: string; }) => any
+>title : string
+>title : string
+><div>{title}</div> : any
+>div : any
+>title : string
+>div : any
+
+Component = RenderElement;
+>Component = RenderElement : (__0: { title: string; }) => any
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderElement : (__0: { title: string; }) => any
+
+<RenderElement />;
+><RenderElement /> : any
+>RenderElement : (__0: { title: string; }) => any
+
+<RenderElement title="react" />;
+><RenderElement title="react" /> : any
+>RenderElement : (__0: { title: string; }) => any
+>title : any
+
+<RenderElement excessProp />;
+><RenderElement excessProp /> : any
+>RenderElement : (__0: { title: string; }) => any
+>excessProp : any
+
+const RenderString = ({ title }: { title: string }) => title;
+>RenderString : (__0: { title: string; }) => string
+>({ title }: { title: string }) => title : (__0: { title: string; }) => string
+>title : string
+>title : string
+>title : string
+
+Component = RenderString;
+>Component = RenderString : (__0: { title: string; }) => string
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderString : (__0: { title: string; }) => string
+
+<RenderString />;
+><RenderString /> : any
+>RenderString : (__0: { title: string; }) => string
+
+<RenderString title="react" />;
+><RenderString title="react" /> : any
+>RenderString : (__0: { title: string; }) => string
+>title : any
+
+<RenderString excessProp />;
+><RenderString excessProp /> : any
+>RenderString : (__0: { title: string; }) => string
+>excessProp : any
+
+const RenderNumber = ({ title }: { title: string }) => title.length;
+>RenderNumber : (__0: { title: string; }) => number
+>({ title }: { title: string }) => title.length : (__0: { title: string; }) => number
+>title : string
+>title : string
+>title.length : number
+>title : string
+>length : number
+
+Component = RenderNumber;
+>Component = RenderNumber : (__0: { title: string; }) => number
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderNumber : (__0: { title: string; }) => number
+
+<RenderNumber />;
+><RenderNumber /> : any
+>RenderNumber : (__0: { title: string; }) => number
+
+<RenderNumber title="react" />;
+><RenderNumber title="react" /> : any
+>RenderNumber : (__0: { title: string; }) => number
+>title : any
+
+<RenderNumber excessProp />;
+><RenderNumber excessProp /> : any
+>RenderNumber : (__0: { title: string; }) => number
+>excessProp : any
+
+const RenderArray = ({ title }: { title: string }) => [title];
+>RenderArray : (__0: { title: string; }) => string[]
+>({ title }: { title: string }) => [title] : (__0: { title: string; }) => string[]
+>title : string
+>title : string
+>[title] : string[]
+>title : string
+
+Component = RenderArray;
+>Component = RenderArray : (__0: { title: string; }) => string[]
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderArray : (__0: { title: string; }) => string[]
+
+<RenderArray />;
+><RenderArray /> : any
+>RenderArray : (__0: { title: string; }) => string[]
+
+<RenderArray title="react" />;
+><RenderArray title="react" /> : any
+>RenderArray : (__0: { title: string; }) => string[]
+>title : any
+
+<RenderArray excessProp />;
+><RenderArray excessProp /> : any
+>RenderArray : (__0: { title: string; }) => string[]
+>excessProp : any
+
+// React Server Component
+const RenderPromise = async ({ title }: { title: string }) => "react";
+>RenderPromise : (__0: { title: string; }) => Promise<string>
+>async ({ title }: { title: string }) => "react" : (__0: { title: string; }) => Promise<string>
+>title : string
+>title : string
+>"react" : "react"
+
+Component = RenderPromise;
+>Component = RenderPromise : (__0: { title: string; }) => Promise<string>
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderPromise : (__0: { title: string; }) => Promise<string>
+
+<RenderPromise />;
+><RenderPromise /> : any
+>RenderPromise : (__0: { title: string; }) => Promise<string>
+
+<RenderPromise title="react" />;
+><RenderPromise title="react" /> : any
+>RenderPromise : (__0: { title: string; }) => Promise<string>
+>title : any
+
+<RenderPromise excessProp />;
+><RenderPromise excessProp /> : any
+>RenderPromise : (__0: { title: string; }) => Promise<string>
+>excessProp : any
+
+// Class components still work
+class RenderStringClass extends React.Component<{ title: string }> {
+>RenderStringClass : RenderStringClass
+>React.Component : any
+>React : any
+>Component : any
+>title : string
+
+  render() {
+>render : () => any
+
+    return this.props.title;
+>this.props.title : any
+>this.props : any
+>this : this
+>props : any
+>title : any
+  }
+}
+Component = RenderStringClass;
+>Component = RenderStringClass : typeof RenderStringClass
+>Component : NewReactJSXElementConstructor<{ title: string; }>
+>RenderStringClass : typeof RenderStringClass
+
+<RenderStringClass />;
+><RenderStringClass /> : any
+>RenderStringClass : typeof RenderStringClass
+
+<RenderStringClass title="react" />;
+><RenderStringClass title="react" /> : any
+>RenderStringClass : typeof RenderStringClass
+>title : any
+
+<RenderStringClass excessProp />;
+><RenderStringClass excessProp /> : any
+>RenderStringClass : typeof RenderStringClass
+>excessProp : any
+
+// Host element types still work
+<div />;
+><div /> : any
+>div : any
+
+<my-custom-element />;
+><my-custom-element /> : any
+>my-custom-element : any
+
+// Undeclared host element types are still rejected
+<boop />;
+><boop /> : any
+>boop : any
+
+<my-undeclared-custom-element />;
+><my-undeclared-custom-element /> : any
+>my-undeclared-custom-element : any
+
+// Highlighting various ecosystem compat issues
+// react-native-gesture-handler
+// https://github.com/software-mansion/react-native-gesture-handler/blob/79017e5e7cc2e82e6467851f870920ff836ee04f/src/components/GestureComponents.tsx#L139-L146
+interface ReactNativeFlatListProps<Item> {}
+>ReactNativeFlatListProps : ReactNativeFlatListProps<Item>
+>Item : Item
+
+function ReactNativeFlatList(
+>ReactNativeFlatList : (props: {}, ref: ForwardedRef<???>) => null
+
+  props: {},
+>props : {}
+
+  ref: React.ForwardedRef<typeof ReactNativeFlatList>
+>ref : ForwardedRef<(props: {}, ref: ForwardedRef<???>) => null>
+>React : any
+
+) {
+  return null;
+}
+<ReactNativeFlatList />;
+><ReactNativeFlatList /> : any
+>ReactNativeFlatList : (props: {}, ref: ForwardedRef<???>) => null
+
+// testing higher-order component compat
+function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
+>f1 : <T extends (props: {}) => ReactElement<any>>(Component: T) => any
+>T : T
+>props : {}
+>React : any
+>Component : T
+
+  return <Component />;
+><Component /> : any
+>Component : T
+}
+
+<Unresolved />;
+><Unresolved /> : any
+>Unresolved : any
+
+<Unresolved foo="abc" />;
+><Unresolved foo="abc" /> : any
+>Unresolved : any
+>foo : any
+
+declare global {
+>global : any
+
+    namespace JSX {
+>JSX : any
+
+      interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+          ['a:b']: { a: string };
+>['a:b'] : { a: string; }
+>'a:b' : "a:b"
+>a : string
+      }
+  }
+}
+
+<a:b a="accepted" />;
+><a:b a="accepted" /> : any
+>a : any
+>b : any
+>a : any
+
+<a:b b="rejected" />;
+><a:b b="rejected" /> : any
+>a : any
+>b : any
+>b : any
+
+<a:b a="accepted" b="rejected" />;
+><a:b a="accepted" b="rejected" /> : any
+>a : any
+>b : any
+>a : any
+>b : any
+

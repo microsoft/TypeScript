@@ -1,0 +1,76 @@
+--- old.jsFileMethodOverloads.types
++++ new.jsFileMethodOverloads.types
+@@= skipped -4, +4 lines =@@
+  * @template T
+  */
+  class Example {
+->Example : Example<T>
++>Example : Example
+ 
+   /**
+    * @param {T} value 
+    */
+   constructor(value) {
+->value : T
++>value : any
+ 
+     this.value = value;
+->this.value = value : T
++>this.value = value : any
+ >this.value : any
+ >this : this
+ >value : any
+->value : T
++>value : any
+   }
+ 
+   /**
+@@= skipped -30, +30 lines =@@
+    * @returns {string}
+    */
+   getTypeName() {
+->getTypeName : { (this: Example<number>): "number"; (this: Example<string>): "string"; }
++>getTypeName : () => "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ 
+     return typeof this.value;
+->typeof this.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->this.value : T
++>typeof this.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>this.value : any
+ >this : this
+->value : T
++>value : any
+   }
+ 
+   /**
+@@= skipped -24, +24 lines =@@
+    * @returns {unknown}
+    */
+   transform(fn) {
+->transform : { <U>(fn: (y: T) => U): U; (): T; }
+->fn : (y: T) => unknown
++>transform : (fn: any) => any
++>fn : any
+ 
+     return fn ? fn(this.value) : this.value;
+->fn ? fn(this.value) : this.value : unknown
+->fn : (y: T) => unknown
+->fn(this.value) : unknown
+->fn : (y: T) => unknown
+->this.value : T
++>fn ? fn(this.value) : this.value : any
++>fn : any
++>fn(this.value) : any
++>fn : any
++>this.value : any
+ >this : this
+->value : T
+->this.value : T
++>value : any
++>this.value : any
+ >this : this
+->value : T
++>value : any
+   }
+ }
+ 

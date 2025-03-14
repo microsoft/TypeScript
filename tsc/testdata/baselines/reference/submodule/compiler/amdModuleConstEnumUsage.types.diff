@@ -1,0 +1,24 @@
+--- old.amdModuleConstEnumUsage.types
++++ new.amdModuleConstEnumUsage.types
+@@= skipped -11, +11 lines =@@
+ }
+ === /proj/component/file.ts ===
+ import { CharCode } from 'defs/cc';
+->CharCode : typeof CharCode
++>CharCode : any
+ 
+ export class User {
+ >User : User
+@@= skipped -11, +11 lines =@@
+ 
+         if (CharCode.A === input) {}
+ >CharCode.A === input : boolean
+->CharCode.A : CharCode.A
+->CharCode : typeof CharCode
+->A : CharCode.A
++>CharCode.A : any
++>CharCode : any
++>A : any
+ >input : number
+     }
+ }

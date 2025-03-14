@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction.ts] ////
+
+=== templateTagOnConstructorFunctions.js ===
+/**
+ * @template U
+ * @typedef {(u: U) => U} Id
+ */
+/**
+ * @param {T} t
+ * @template T
+ */
+function Zet(t) {
+>Zet : (t: any) => void
+>t : any
+
+    /** @type {T} */
+    this.u
+>this.u : any
+>this : any
+>u : any
+
+    this.t = t
+>this.t = t : any
+>this.t : any
+>this : any
+>t : any
+>t : any
+}
+/**
+ * @param {T} v
+ * @param {Id<T>} id
+ */
+Zet.prototype.add = function(v, id) {
+>Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
+>Zet.prototype.add : any
+>Zet.prototype : any
+>Zet : (t: any) => void
+>prototype : any
+>add : any
+>function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
+>v : any
+>id : any
+
+    this.u = v || this.t
+>this.u = v || this.t : any
+>this.u : any
+>this : any
+>u : any
+>v || this.t : any
+>v : any
+>this.t : any
+>this : any
+>t : any
+
+    return id(this.u)
+>id(this.u) : any
+>id : any
+>this.u : any
+>this : any
+>u : any
+}
+var z = new Zet(1)
+>z : any
+>new Zet(1) : any
+>Zet : (t: any) => void
+>1 : 1
+
+z.t = 2
+>z.t = 2 : 2
+>z.t : any
+>z : any
+>t : any
+>2 : 2
+
+z.u = false
+>z.u = false : false
+>z.u : any
+>z : any
+>u : any
+>false : false
+

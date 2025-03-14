@@ -1,0 +1,48 @@
+--- old.thisTypeInInterfaces.types
++++ new.thisTypeInInterfaces.types
+@@= skipped -1, +1 lines =@@
+ 
+ === thisTypeInInterfaces.ts ===
+ interface I1 {
++>I1 : I1
++
+     x: this;
+ >x : this
+ 
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     (x: this): this;
+ >x : this
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+     x: T;
+ >x : T
+ 
+@@= skipped -8, +11 lines =@@
+ }
+ 
+ interface I3 {
++>I3 : I3
++
+     a: this[];
+ >a : this[]
+ 
+@@= skipped -27, +29 lines =@@
+ >h : Foo<this>
+ 
+     i: Foo<this | (() => this)>;
+->i : Foo<this | (() => this)>
++>i : Foo<this | () => this>
+ 
+     j: (x: any) => x is this;
+ >j : (x: any) => x is this

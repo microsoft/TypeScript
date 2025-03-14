@@ -1,0 +1,10 @@
+--- old.inheritedFunctionAssignmentCompatibility.types
++++ new.inheritedFunctionAssignmentCompatibility.types
+@@= skipped -1, +1 lines =@@
+ 
+ === inheritedFunctionAssignmentCompatibility.ts ===
+ interface IResultCallback extends Function { }
++>IResultCallback : IResultCallback
+ 
+ function fn(cb: IResultCallback) { }
+ >fn : (cb: IResultCallback) => void

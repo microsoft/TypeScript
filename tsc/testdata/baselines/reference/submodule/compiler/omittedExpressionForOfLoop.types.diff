@@ -1,0 +1,20 @@
+--- old.omittedExpressionForOfLoop.types
++++ new.omittedExpressionForOfLoop.types
+@@= skipped -1, +1 lines =@@
+ 
+ === omittedExpressionForOfLoop.ts ===
+ for (const [,] of doesNotExist) {
+-> : undefined
+ >doesNotExist : any
+ }
+ 
+ for (const [,] of undefined) {
+-> : undefined
+ >undefined : undefined
+ }
+ 
+ for (const [,] of []) {
+-> : undefined
+ >[] : never[]
+ }
+ 

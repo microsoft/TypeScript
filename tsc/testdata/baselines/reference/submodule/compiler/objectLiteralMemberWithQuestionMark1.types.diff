@@ -1,0 +1,12 @@
+--- old.objectLiteralMemberWithQuestionMark1.types
++++ new.objectLiteralMemberWithQuestionMark1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectLiteralMemberWithQuestionMark1.ts ===
+ var v = { foo?() { } }
+->v : { foo?(): void; }
+->{ foo?() { } } : { foo?(): void; }
++>v : { foo?: () => void; }
++>{ foo?() { } } : { foo?: () => void; }
+ >foo : () => void
+ 

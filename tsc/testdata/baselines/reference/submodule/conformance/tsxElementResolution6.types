@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution6.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements { }
+>IntrinsicElements : IntrinsicElements
+}
+
+var div: any;
+>div : any
+
+// Still an error
+<div n='x' />;
+><div n='x' /> : any
+>div : any
+>n : any
+

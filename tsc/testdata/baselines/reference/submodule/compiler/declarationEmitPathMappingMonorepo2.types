@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/declarationEmitPathMappingMonorepo2.ts] ////
+
+=== packages/lab/src/index.ts ===
+import { createSvgIcon } from "@ts-bug/core/utils";
+>createSvgIcon : any
+
+export default createSvgIcon("Hello", "ArrowLeft");
+>createSvgIcon("Hello", "ArrowLeft") : any
+>createSvgIcon : any
+>"Hello" : "Hello"
+>"ArrowLeft" : "ArrowLeft"
+

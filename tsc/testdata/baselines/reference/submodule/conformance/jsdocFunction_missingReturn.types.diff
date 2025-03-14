@@ -1,0 +1,9 @@
+--- old.jsdocFunction_missingReturn.types
++++ new.jsdocFunction_missingReturn.types
+@@= skipped -2, +2 lines =@@
+ === /a.js ===
+ /** @type {function(): number} */
+ function f() {}
+->f : () => number
++>f : () => void
+ 

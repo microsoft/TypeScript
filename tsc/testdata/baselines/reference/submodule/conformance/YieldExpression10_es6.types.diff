@@ -1,0 +1,13 @@
+--- old.YieldExpression10_es6.types
++++ new.YieldExpression10_es6.types
+@@= skipped -1, +1 lines =@@
+ 
+ === YieldExpression10_es6.ts ===
+ var v = { * foo() {
+->v : { foo(): Generator<any, void, unknown>; }
+->{ * foo() {    yield(foo);  }} : { foo(): Generator<any, void, unknown>; }
++>v : { foo: () => Generator<any, void, unknown>; }
++>{ * foo() {    yield(foo);  }} : { foo: () => Generator<any, void, unknown>; }
+ >foo : () => Generator<any, void, unknown>
+ 
+     yield(foo);

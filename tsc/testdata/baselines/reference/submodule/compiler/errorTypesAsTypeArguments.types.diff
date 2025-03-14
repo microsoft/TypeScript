@@ -1,0 +1,12 @@
+--- old.errorTypesAsTypeArguments.types
++++ new.errorTypesAsTypeArguments.types
+@@= skipped -1, +1 lines =@@
+ 
+ === errorTypesAsTypeArguments.ts ===
+ interface Foo<A> {
++>Foo : Foo<A>
++>A : A
++
+   bar(baz: Foo<B>): Foo<C>;
+ >bar : (baz: Foo<B>) => Foo<C>
+ >baz : Foo<B>

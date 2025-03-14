@@ -1,0 +1,88 @@
+--- old.typeGuardFunctionErrors.types
++++ new.typeGuardFunctionErrors.types
+@@= skipped -88, +88 lines =@@
+ 
+ function hasNonMathcingGenericType<T>(a: string): a is T[] {
+ >hasNonMathcingGenericType : <T>(a: string) => a is T[]
++>T : T
+ >a : string
+ 
+     return true;
+@@= skipped -145, +146 lines =@@
+ >A : any
+ 
+ function b3(): A | b is A {
+->b3 : () => A | b
++>b3 : () => any
+ >is : any
+ >A : typeof A
+ 
+@@= skipped -36, +36 lines =@@
+ }
+ 
+ interface I1 {
++>I1 : I1
++
+     new (p1: A): p1 is C;
+ >p1 : A
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     [index: number]: p1 is C;
+ >index : number
+ >is : any
+@@= skipped -22, +26 lines =@@
+ 
+ // Reference to binding pattern
+ function b5({a, b, p1}, p2, p3): p1 is A {
+->b5 : ({ a, b, p1 }: { a: any; b: any; p1: any; }, p2: any, p3: any) => p1 is A
++>b5 : (__0: { a: any; b: any; p1: any; }, p2: any, p3: any) => p1 is A
+ >a : any
+ >b : any
+ >p1 : any
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ function b6([a, b, p1], p2, p3): p1 is A {
+->b6 : ([a, b, p1]: [any, any, any], p2: any, p3: any) => p1 is A
++>b6 : (__0: [any, any, any], p2: any, p3: any) => p1 is A
+ >a : any
+ >b : any
+ >p1 : any
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
+->b7 : ({ a, b, c: { p1 } }: { a: any; b: any; c: { p1: any; }; }, p2: any, p3: any) => p1 is A
++>b7 : (__0: { a: any; b: any; c: { p1: any; }; }, p2: any, p3: any) => p1 is A
+ >a : any
+ >b : any
+ >c : any
+@@= skipped -33, +33 lines =@@
+ 
+ type KeySet<T extends Keys> = { [k in T]: true }
+ >KeySet : KeySet<T>
++>T : T
++>k : k
+ >true : true
+ 
+ // expected an error, since Keys doesn't have a 'd'
+ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
+->hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | "d">
++>hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<"d" | T>
++>T : T
+ >x : KeySet<T>
+ 
+ type Foo = { 'a': string; }
+@@= skipped -16, +19 lines =@@
+ >'a' : number
+ 
+ interface NeedsFoo<T extends Foo> {
++>NeedsFoo : NeedsFoo<T>
++>T : T
++
+     foo: T;
+ >foo : T
+ 

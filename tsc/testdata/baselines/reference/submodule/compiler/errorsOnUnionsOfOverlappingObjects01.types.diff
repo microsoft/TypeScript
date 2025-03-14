@@ -1,0 +1,68 @@
+--- old.errorsOnUnionsOfOverlappingObjects01.types
++++ new.errorsOnUnionsOfOverlappingObjects01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === errorsOnUnionsOfOverlappingObjects01.ts ===
+ interface Foo {
++>Foo : Foo
++
+     a: string;
+ >a : string
+ 
+@@= skipped -9, +11 lines =@@
+ };
+ 
+ interface Bar {
++>Bar : Bar
++
+     b: string;
+ >b : string
+ }
+ 
+ interface Other {
++>Other : Other
++
+     totallyUnrelatedProperty: number;
+ >totallyUnrelatedProperty : number
+ }
+@@= skipped -54, +58 lines =@@
+ >'' : ""
+ 
+ declare function h(x: Foo | Bar | Other): any;
+->h : (x: Foo | Bar | Other) => any
+->x : Foo | Bar | Other
++>h : (x: Bar | Foo | Other) => any
++>x : Bar | Foo | Other
+ 
+ h(x);
+ >h(x) : any
+->h : (x: Foo | Bar | Other) => any
++>h : (x: Bar | Foo | Other) => any
+ >x : { a: string; b: string; }
+ 
+ h({ a: '', b: '' })
+ >h({ a: '', b: '' }) : any
+->h : (x: Foo | Bar | Other) => any
++>h : (x: Bar | Foo | Other) => any
+ >{ a: '', b: '' } : { a: string; b: string; }
+ >a : string
+ >'' : ""
+@@= skipped -18, +18 lines =@@
+ >'' : ""
+ 
+ interface CatDog { cat: any, dog: any }
++>CatDog : CatDog
+ >cat : any
+ >dog : any
+ 
+ interface ManBearPig { man: any, bear: any, pig: any }
++>ManBearPig : ManBearPig
+ >man : any
+ >bear : any
+ >pig : any
+ 
+ interface Platypus { platypus: any }
++>Platypus : Platypus
+ >platypus : any
+ 
+ type ExoticAnimal =

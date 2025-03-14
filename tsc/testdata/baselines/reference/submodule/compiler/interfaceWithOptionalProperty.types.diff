@@ -1,0 +1,11 @@
+--- old.interfaceWithOptionalProperty.types
++++ new.interfaceWithOptionalProperty.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceWithOptionalProperty.ts ===
+ interface I {
++>I : I
++
+     x?: number;
+ >x : number
+ }

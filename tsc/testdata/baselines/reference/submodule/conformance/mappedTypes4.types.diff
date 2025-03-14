@@ -1,0 +1,89 @@
+--- old.mappedTypes4.types
++++ new.mappedTypes4.types
+@@= skipped -2, +2 lines =@@
+ === mappedTypes4.ts ===
+ type Box<T> = {
+ >Box : Box<T>
++>T : T
+ 
+ };
+ 
+ type Boxified<T> = {
+ >Boxified : Boxified<T>
++>T : T
+ 
+     [P in keyof T]: Box<T[P]>;
++>P : P
++
+ };
+ 
+ function boxify<T>(obj: T): Boxified<T> {
+ >boxify : <T>(obj: T) => Boxified<T>
++>T : T
+ >obj : T
+ 
+     if (typeof obj === "object") {
+ >typeof obj === "object" : boolean
+->typeof obj : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof obj : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >obj : T
+ >"object" : "object"
+ 
+@@= skipped -26, +31 lines =@@
+ 
+         for (let k in obj) {
+ >k : Extract<keyof T, string>
+->obj : (T & object) | (T & null)
++>obj : T & null | T & object
+ 
+             result[k] = { value: obj[k] };
+->result[k] = { value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }
++>result[k] = { value: obj[k] } : { value: T & object[Extract<keyof T, string>]; }
+ >result[k] : Boxified<T>[Extract<keyof T, string>]
+ >result : Boxified<T>
+ >k : Extract<keyof T, string>
+->{ value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }
+->value : (T & object)[Extract<keyof T, string>]
+->obj[k] : (T & object)[Extract<keyof T, string>]
++>{ value: obj[k] } : { value: T & object[Extract<keyof T, string>]; }
++>value : T & object[Extract<keyof T, string>]
++>obj[k] : T & object[Extract<keyof T, string>]
+ >obj : T & object
+ >k : Extract<keyof T, string>
+         }
+@@= skipped -63, +63 lines =@@
+ 
+ type BoxifiedWithSentinel<T, U> = {
+ >BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
++>T : T
++>U : U
+ 
+     [P in keyof T]: Box<T[P]> | U;
++>P : P
+ }
+ 
+ type T10 = BoxifiedWithSentinel<A | B | C, null>;
+@@= skipped -15, +18 lines =@@
+ 
+ type DeepReadonly<T> = {
+ >DeepReadonly : DeepReadonly<T>
++>T : T
+ 
+     readonly [P in keyof T]: DeepReadonly<T[P]>;
++>P : P
++
+ };
+ 
+ type Foo = {
+@@= skipped -50, +53 lines =@@
+ 
+ type Clone<T> = {
+ >Clone : Clone<T>
++>T : T
+ 
+   [P in keyof (T & {})]: (T & {})[P];
++>P : P
++
+ };
+ type M = Clone<Z>; // M should be { a: number }
+ >M : M

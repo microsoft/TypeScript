@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsxClassAttributeResolution.tsx] ////
+
+=== file.tsx ===
+class App {}
+>App : App
+
+export const a = <App></App>;
+>a : any
+><App></App> : any
+>App : typeof App
+>App : typeof App
+
+=== node_modules/@types/react/index.d.ts ===
+interface IntrinsicClassAttributesAlias<T> {
+>IntrinsicClassAttributesAlias : IntrinsicClassAttributesAlias<T>
+>T : T
+
+    ref: T
+>ref : T
+}
+declare namespace JSX {
+>JSX : any
+
+    type IntrinsicClassAttributes<T> = IntrinsicClassAttributesAlias<T>
+>IntrinsicClassAttributes : IntrinsicClassAttributes<T>
+>T : T
+}
+=== node_modules/@types/react/jsx-runtime.d.ts ===
+
+import './';
+=== node_modules/@types/react/jsx-dev-runtime.d.ts ===
+
+import './';
+

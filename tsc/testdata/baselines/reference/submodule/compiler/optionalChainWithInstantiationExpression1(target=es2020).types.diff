@@ -1,0 +1,36 @@
+--- old.optionalChainWithInstantiationExpression1(target=es2020).types
++++ new.optionalChainWithInstantiationExpression1(target=es2020).types
+@@= skipped -5, +5 lines =@@
+ 
+     export class b<T> {
+ >b : b<T>
++>T : T
+ 
+         static d: number;
+ >d : number
+@@= skipped -14, +15 lines =@@
+ 
+ declare const a: typeof A | undefined;
+ >a : typeof A
+->A : typeof A
+ 
+ a?.b<c>.d;
+ >a?.b<c>.d : number
+->a?.b<c> : { new (x: unknown): A.b<unknown>; prototype: A.b<any>; d: number; }
+->a?.b : typeof A.b
++>a?.b<c> : { new (x: unknown): b<unknown>; d: number; prototype: b<any>; }
++>a?.b : typeof b
+ >a : typeof A
+->b : typeof A.b
++>b : typeof b
+ >d : number
+ 
+ a?.b.d
+ >a?.b.d : number
+->a?.b : typeof A.b
++>a?.b : typeof b
+ >a : typeof A
+->b : typeof A.b
++>b : typeof b
+ >d : number
+ 

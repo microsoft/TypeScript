@@ -1,0 +1,52 @@
+--- old.nullAssignableToEveryType.types
++++ new.nullAssignableToEveryType.types
+@@= skipped -10, +10 lines =@@
+ >ac : C
+ 
+ interface I {
++>I : I
++
+     foo: string;
+ >foo : string
+ }
+@@= skipped -7, +9 lines =@@
+ >ai : I
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ var ae: E;
+->ae : E
++>ae : E.A
+ 
+ var b: number = null;
+ >b : number
+@@= skipped -50, +50 lines =@@
+ 
+ ae = null;
+ >ae = null : null
+->ae : E
++>ae : E.A
+ 
+ var m: number[] = null;
+ >m : number[]
+@@= skipped -11, +11 lines =@@
+ 
+ var o: <T>(x: T) => T = null;
+ >o : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ var p: Number = null;
+@@= skipped -10, +11 lines =@@
+ 
+ function foo<T, U, V extends Date>(x: T, y: U, z: V) {
+ >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
++>T : T
++>U : U
++>V : V
+ >x : T
+ >y : U
+ >z : V

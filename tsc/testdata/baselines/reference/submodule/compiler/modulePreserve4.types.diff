@@ -1,0 +1,272 @@
+--- old.modulePreserve4.types
++++ new.modulePreserve4.types
+@@= skipped -42, +42 lines =@@
+ === /g.js ===
+ exports.default = 0;
+ >exports.default = 0 : 0
+->exports.default : 0
+->exports : typeof import("/g")
+->default : 0
++>exports.default : any
++>exports : any
++>default : any
+ >0 : 0
+ 
+ === /main1.ts ===
+@@= skipped -11, +11 lines =@@
+ >y : any
+ 
+ import a1 = require("./a"); // { x: 0 }
+->a1 : typeof a1
++>a1 : typeof import("/a")
+ 
+ const a2 = require("./a"); // Error in TS
+ >a2 : any
+@@= skipped -9, +9 lines =@@
+ >"./a" : "./a"
+ 
+ const a3 = await import("./a"); // { x: 0 }
+->a3 : typeof a1
+->await import("./a") : typeof a1
+->import("./a") : Promise<typeof a1>
++>a3 : typeof import("/a")
++>await import("./a") : typeof import("/a")
++>import("./a") : Promise<typeof import("/a")>
+ >"./a" : "./a"
+ 
+ a3.x;
+ >a3.x : 0
+->a3 : typeof a1
++>a3 : typeof import("/a")
+ >x : 0
+ 
+ import b1 from "./b"; // 0
+ >b1 : 0
+ 
+ import b2 = require("./b"); // { default: 0 }
+->b2 : typeof b2
++>b2 : typeof import("/b")
+ 
+ b2.default;
+ >b2.default : 0
+->b2 : typeof b2
++>b2 : typeof import("/b")
+ >default : 0
+ 
+ const b3 = await import("./b"); // { default: 0 }
+->b3 : typeof b2
+->await import("./b") : typeof b2
+->import("./b") : Promise<typeof b2>
++>b3 : typeof import("/b")
++>await import("./b") : typeof import("/b")
++>import("./b") : Promise<typeof import("/b")>
+ >"./b" : "./b"
+ 
+ b3.default;
+ >b3.default : 0
+->b3 : typeof b2
++>b3 : typeof import("/b")
+ >default : 0
+ 
+ import c1 from "./c"; // { default: [Function: default] }
+@@= skipped -72, +72 lines =@@
+ >default : () => void
+ 
+ import e1 from "./e.mjs"; // 0
+->e1 : any
++>e1 : 0
+ 
+ import e2 = require("./e.mjs"); // 0
+ >e2 : 0
+@@= skipped -9, +9 lines =@@
+ >f1 : 0
+ 
+ import f2 = require("./f.cjs"); // { default: 0 }
+->f2 : typeof f2
++>f2 : typeof import("/f")
+ 
+ f2.default;
+ >f2.default : 0
+->f2 : typeof f2
++>f2 : typeof import("/f")
+ >default : 0
+ 
+ import g1 from "./g"; // { default: 0 }
+->g1 : typeof g1
++>g1 : any
+ 
+ g1.default;
+->g1.default : 0
+->g1 : typeof g1
+->default : 0
++>g1.default : any
++>g1 : any
++>default : any
+ 
+ import g2 = require("./g"); // { default: 0 }
+->g2 : typeof g1
++>g2 : any
+ 
+ g2.default;
+->g2.default : 0
+->g2 : typeof g1
+->default : 0
++>g2.default : any
++>g2 : any
++>default : any
+ 
+ === /main2.mts ===
+ import { x, y } from "./a"; // No y
+@@= skipped -29, +29 lines =@@
+ >y : any
+ 
+ import a1 = require("./a"); // { x: 0 }
+->a1 : typeof a1
++>a1 : typeof import("/a")
+ 
+ a1.x;
+ >a1.x : 0
+->a1 : typeof a1
++>a1 : typeof import("/a")
+ >x : 0
+ 
+ a1.default.x; // Arguably should exist but doesn't
+ >a1.default.x : any
+ >a1.default : any
+->a1 : typeof a1
++>a1 : typeof import("/a")
+ >default : any
+ >x : any
+ 
+@@= skipped -24, +24 lines =@@
+ >b1 : 0
+ 
+ import b2 = require("./b"); // { default: 0 }
+->b2 : typeof b2
++>b2 : typeof import("/b")
+ 
+ import c1 from "./c"; // { default: [Function: default] }
+ >c1 : { default: () => void; }
+@@= skipped -15, +15 lines =@@
+ >d2 : () => void
+ 
+ import e1 from "./e.mjs"; // 0
+->e1 : any
++>e1 : 0
+ 
+ import e2 = require("./e.mjs"); // 0
+ >e2 : 0
+@@= skipped -9, +9 lines =@@
+ >f1 : 0
+ 
+ import f2 = require("./f.cjs"); // { default: 0 }
+->f2 : typeof f2
++>f2 : typeof import("/f")
+ 
+ import g1 from "./g"; // { default: 0 }
+->g1 : typeof g1
++>g1 : any
+ 
+ import g2 = require("./g"); // { default: 0 }
+->g2 : typeof g1
++>g2 : any
+ 
+ === /main3.cjs ===
+ import { x, y } from "./a"; // No y
+@@= skipped -14, +14 lines =@@
+ >y : any
+ 
+ import a1 = require("./a"); // Error in JS
+->a1 : typeof a1
++>a1 : typeof import("/a")
+ 
+ const a2 = require("./a"); // { x: 0 }
+->a2 : typeof a1
+->require("./a") : typeof a1
++>a2 : any
++>require("./a") : any
+ >require : any
+ >"./a" : "./a"
+ 
+@@= skipped -12, +12 lines =@@
+ >b1 : 0
+ 
+ const b2 = require("./b"); // { default: 0 }
+->b2 : typeof b2
+->require("./b") : typeof b2
++>b2 : any
++>require("./b") : any
+ >require : any
+ >"./b" : "./b"
+ 
+@@= skipped -9, +9 lines =@@
+ >c1 : { default: () => void; }
+ 
+ const c2 = require("./c"); // { default: [Function: default] }
+->c2 : { default: () => void; }
+->require("./c") : { default: () => void; }
++>c2 : any
++>require("./c") : any
+ >require : any
+ >"./c" : "./c"
+ 
+@@= skipped -9, +9 lines =@@
+ >d1 : () => void
+ 
+ const d2 = require("./d"); // [Function: default]
+->d2 : () => void
+->require("./d") : () => void
++>d2 : any
++>require("./d") : any
+ >require : any
+ >"./d" : "./d"
+ 
+@@= skipped -9, +9 lines =@@
+ >e1 : 0
+ 
+ const e2 = require("./e.mjs"); // 0
+->e2 : 0
+->require("./e.mjs") : 0
++>e2 : any
++>require("./e.mjs") : any
+ >require : any
+ >"./e.mjs" : "./e.mjs"
+ 
+@@= skipped -9, +9 lines =@@
+ >f1 : 0
+ 
+ const f2 = require("./f.cjs"); // { default: 0 }
+->f2 : typeof f2
+->require("./f.cjs") : typeof f2
++>f2 : any
++>require("./f.cjs") : any
+ >require : any
+ >"./f.cjs" : "./f.cjs"
+ 
+ import g1 from "./g"; // { default: 0 }
+->g1 : typeof g1
++>g1 : any
+ 
+ const g2 = require("./g"); // { default: 0 }
+->g2 : typeof g1
+->require("./g") : typeof g1
++>g2 : any
++>require("./g") : any
+ >require : any
+ >"./g" : "./g"
+ 
+ === /main4.cjs ===
+ exports.x = require("./g");
+->exports.x = require("./g") : typeof import("/g")
+->exports.x : typeof import("/g")
+->exports : typeof import("/main4")
+->x : typeof import("/g")
+->require("./g") : typeof import("/g")
++>exports.x = require("./g") : any
++>exports.x : any
++>exports : any
++>x : any
++>require("./g") : any
+ >require : any
+ >"./g" : "./g"
+ 

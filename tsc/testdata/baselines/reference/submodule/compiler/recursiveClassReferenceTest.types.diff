@@ -1,0 +1,109 @@
+--- old.recursiveClassReferenceTest.types
++++ new.recursiveClassReferenceTest.types
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ declare module Sample.Thing {
++>Sample : typeof Sample
++>Thing : any
+ 
+ 	export interface IWidget {
++>IWidget : IWidget
++
+ 		getDomNode(): any;
+ >getDomNode : () => any
+ 
+@@= skipped -9, +13 lines =@@
+ >destroy : () => any
+ 
+ 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
+->gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
+->runner : (widget: Sample.Thing.IWidget) => any
++>gar : (runner: (widget: IWidget) => any) => any
++>runner : (widget: IWidget) => any
+ >widget : IWidget
+ >Sample : any
+ >Thing : any
+ 	}
+ 
+ 	export interface ICodeThing {
++>ICodeThing : ICodeThing
+   
+   		getDomNode(): Element;
+ >getDomNode : () => Element
+@@= skipped -25, +26 lines =@@
+ 	}
+ 
+ 	export interface IAction {
++>IAction : IAction
++
+ 		run(Thing:ICodeThing):boolean;
+ >run : (Thing: ICodeThing) => boolean
+ >Thing : ICodeThing
+@@= skipped -17, +19 lines =@@
+ 
+ 	export class StartFindAction implements Sample.Thing.IAction {
+ >StartFindAction : StartFindAction
+->Sample.Thing : typeof Sample.Thing
++>Sample.Thing : any
+ >Sample : typeof Sample
+->Thing : typeof Sample.Thing
++>Thing : any
+ 		
+ 		public getId() { return "yo"; }
+ >getId : () => string
+ >"yo" : "yo"
+ 		
+ 		public run(Thing:Sample.Thing.ICodeThing):boolean {
+->run : (Thing: Sample.Thing.ICodeThing) => boolean
+->Thing : Sample.Thing.ICodeThing
++>run : (Thing: ICodeThing) => boolean
++>Thing : ICodeThing
+ >Sample : any
+ >Thing : any
+ 
+@@= skipped -27, +27 lines =@@
+ 
+ 	export class FindWidget implements Sample.Thing.IWidget {
+ >FindWidget : FindWidget
+->Sample.Thing : typeof Thing
++>Sample.Thing : any
+ >Sample : typeof Sample
+->Thing : typeof Thing
++>Thing : any
+ 
+ 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+->gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
+->runner : (widget: Sample.Thing.IWidget) => any
++>gar : (runner: (widget: IWidget) => any) => any
++>runner : (widget: IWidget) => any
+ >widget : IWidget
+ >Sample : any
+ >Thing : any
+ >true : true
+ >runner(this) : any
+->runner : (widget: Sample.Thing.IWidget) => any
++>runner : (widget: IWidget) => any
+ >this : this
+ 			
+ 		private domNode:any = null;
+@@= skipped -49, +49 lines =@@
+ }
+ 
+ interface IMode { getInitialState(): IState;} 
++>IMode : IMode
+ >getInitialState : () => IState
+ 
+ class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
+@@= skipped -7, +8 lines =@@
+ >getInitialState : () => IState
+ 
+ interface IState {}
++>IState : IState
+ 
+ interface Window {
++>Window : Window
++
+     opener: Window;
+ >opener : Window
+ }

@@ -1,0 +1,20 @@
+--- old.emptyDeclarationEmitIsModule.types
++++ new.emptyDeclarationEmitIsModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === module.ts ===
+ import * as i from "./index";
+->i : typeof i
++>i : typeof import("index")
+ 
+ class Foo {}
+ >Foo : Foo
+@@= skipped -8, +8 lines =@@
+ === index.ts ===
+ import {} from "./module";
+ export interface Bar {
++>Bar : Bar
++
+     x: string
+ >x : string
+ }

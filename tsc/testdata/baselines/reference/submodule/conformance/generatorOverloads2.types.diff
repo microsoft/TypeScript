@@ -1,0 +1,20 @@
+--- old.generatorOverloads2.types
++++ new.generatorOverloads2.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     function* f(s: string): Iterable<any>;
+->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; (s: any): Iterable<any>; }
++>f : { (s: string): Iterable<any, any, any>; (s: number): Iterable<any, any, any>; (s: any): Iterable<any, any, any>; }
+ >s : string
+ 
+     function* f(s: number): Iterable<any>;
+->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; (s: any): Iterable<any>; }
++>f : { (s: string): Iterable<any, any, any>; (s: number): Iterable<any, any, any>; (s: any): Iterable<any, any, any>; }
+ >s : number
+ 
+     function* f(s: any): Iterable<any>;
+->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; (s: any): Iterable<any>; }
++>f : { (s: string): Iterable<any, any, any>; (s: number): Iterable<any, any, any>; (s: any): Iterable<any, any, any>; }
+ >s : any
+ }

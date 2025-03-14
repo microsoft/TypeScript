@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx] ////
+
+=== jsxIntrinsicElementsCompatability.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : any
+
+function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
+>SomeComponent : <T extends "a" | "button">(props: any) => Element
+>T : T
+>props : any
+>element : T | undefined
+>JSX : any
+>JSX : any
+
+    // Just so the return value is RectElement, the rendered element doesnt matter
+    return <div />
+><div /> : any
+>div : any
+}
+
+function Test<T extends 'button' | 'a'>(el: T) {
+>Test : <T extends "a" | "button">(el: T) => any
+>T : T
+>el : T
+
+    return <SomeComponent element={el} />
+><SomeComponent element={el} /> : any
+>SomeComponent : <T extends "a" | "button">(props: any) => Element
+>element : any
+>el : T
+}

@@ -1,0 +1,33 @@
+--- old.jsDeclarationsExportAssignmentExpressionPlusSecondary.types
++++ new.jsDeclarationsExportAssignmentExpressionPlusSecondary.types
+@@= skipped -14, +14 lines =@@
+ 
+ };
+ module.exports = {
+->module.exports = {    thing: "ok",    also: "ok",    desc: {        item: "ok"    }} : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+->module.exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+->module : { exports: { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }; }
+->exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
++>module.exports = {    thing: "ok",    also: "ok",    desc: {        item: "ok"    }} : { thing: string; also: string; desc: { item: string; }; }
++>module.exports : any
++>module : any
++>exports : any
+ >{    thing: "ok",    also: "ok",    desc: {        item: "ok"    }} : { thing: string; also: string; desc: { item: string; }; }
+ 
+     thing: "ok",
+@@= skipped -25, +25 lines =@@
+ };
+ module.exports.Strings = Strings;
+ >module.exports.Strings = Strings : { a: string; b: string; }
+->module.exports.Strings : { a: string; b: string; }
+->module.exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+->module : { exports: { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }; }
+->exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
++>module.exports.Strings : any
++>module.exports : any
++>module : any
++>exports : any
++>Strings : any
+ >Strings : { a: string; b: string; }
+->Strings : { a: string; b: string; }
+ 

@@ -1,0 +1,49 @@
+//// [tests/cases/compiler/moduleExports1.ts] ////
+
+=== moduleExports1.ts ===
+export module TypeScript.Strasse.Street {
+>TypeScript : typeof TypeScript
+>Strasse : typeof Strasse
+>Street : typeof Street
+
+	export class Rue {
+>Rue : Rue
+
+		public address:string;
+>address : string
+	}	
+}
+
+var rue = new TypeScript.Strasse.Street.Rue();
+>rue : any
+>new TypeScript.Strasse.Street.Rue() : any
+>TypeScript.Strasse.Street.Rue : any
+>TypeScript.Strasse.Street : any
+>TypeScript.Strasse : any
+>TypeScript : typeof TypeScript
+>Strasse : any
+>Street : any
+>Rue : any
+
+rue.address = "1 Main Street";
+>rue.address = "1 Main Street" : "1 Main Street"
+>rue.address : any
+>rue : any
+>address : any
+>"1 Main Street" : "1 Main Street"
+
+void 0;
+>void 0 : undefined
+>0 : 0
+
+if (!module.exports) module.exports = "";
+>!module.exports : boolean
+>module.exports : any
+>module : any
+>exports : any
+>module.exports = "" : ""
+>module.exports : any
+>module : any
+>exports : any
+>"" : ""
+

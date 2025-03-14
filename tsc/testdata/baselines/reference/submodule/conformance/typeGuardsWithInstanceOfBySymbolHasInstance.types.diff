@@ -1,0 +1,189 @@
+--- old.typeGuardsWithInstanceOfBySymbolHasInstance.types
++++ new.typeGuardsWithInstanceOfBySymbolHasInstance.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardsWithInstanceOfBySymbolHasInstance.ts ===
+ interface AConstructor {
++>AConstructor : AConstructor
++
+     new (): A;
+     [Symbol.hasInstance](value: unknown): value is A;
+ >[Symbol.hasInstance] : (value: unknown) => value is A
+@@= skipped -9, +11 lines =@@
+ >value : unknown
+ }
+ interface A {
++>A : A
++
+     foo: string;
+ >foo : string
+ }
+@@= skipped -46, +48 lines =@@
+ 
+ // a construct signature with generics
+ interface BConstructor {
++>BConstructor : BConstructor
++
+     new <T>(): B<T>;
++>T : T
++
+     [Symbol.hasInstance](value: unknown): value is B<any>;
+ >[Symbol.hasInstance] : (value: unknown) => value is B<any>
+ >Symbol.hasInstance : unique symbol
+@@= skipped -9, +13 lines =@@
+ >value : unknown
+ }
+ interface B<T> {
++>B : B<T>
++>T : T
++
+     foo: T;
+ >foo : T
+ }
+@@= skipped -68, +71 lines =@@
+ 
+ // has multiple construct signature
+ interface CConstructor {
++>CConstructor : CConstructor
++
+     new (value: string): C1;
+ >value : string
+ 
+@@= skipped -14, +16 lines =@@
+ >value : unknown
+ }
+ interface C1 {
++>C1 : C1
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -10, +12 lines =@@
+ >bar1 : number
+ }
+ interface C2 {
++>C2 : C2
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -67, +69 lines =@@
+ 
+ // with object type literal
+ interface D {
++>D : D
++
+     foo: string;
+ >foo : string
+ }
+ declare var D: {
+->D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
++>D : { new (): D; [Symbol.hasInstance]: (value: unknown) => value is D; }
+ 
+     new (): D;
+     [Symbol.hasInstance](value: unknown): value is D;
+@@= skipped -22, +24 lines =@@
+ if (obj7 instanceof D) { // narrowed to D.
+ >obj7 instanceof D : boolean
+ >obj7 : string | D
+->D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
++>D : { new (): D; [Symbol.hasInstance]: (value: unknown) => value is D; }
+ 
+     obj7.foo;
+ >obj7.foo : string
+@@= skipped -19, +19 lines =@@
+ if (obj8 instanceof D) {
+ >obj8 instanceof D : boolean
+ >obj8 : any
+->D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
++>D : { new (): D; [Symbol.hasInstance]: (value: unknown) => value is D; }
+ 
+     obj8.foo;
+ >obj8.foo : string
+@@= skipped -15, +15 lines =@@
+ 
+ // a construct signature that returns a union type
+ interface EConstructor {
++>EConstructor : EConstructor
++
+     new (): E1 | E2;
+     [Symbol.hasInstance](value: unknown): value is E1 | E2;
+ >[Symbol.hasInstance] : (value: unknown) => value is E1 | E2
+@@= skipped -9, +11 lines =@@
+ >value : unknown
+ }
+ interface E1 {
++>E1 : E1
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -7, +9 lines =@@
+ >bar1 : number
+ }
+ interface E2 {
++>E2 : E2
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -59, +61 lines =@@
+ 
+ // a construct signature that returns any
+ interface FConstructor {
++>FConstructor : FConstructor
++
+     new (): any;
+     [Symbol.hasInstance](value: unknown): value is any;
+ >[Symbol.hasInstance] : (value: unknown) => value is any
+@@= skipped -9, +11 lines =@@
+ >value : unknown
+ }
+ interface F {
++>F : F
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -49, +51 lines =@@
+ 
+ // a type with a prototype, it overrides the construct signature
+ interface GConstructor {
++>GConstructor : GConstructor
++
+     prototype: G1; // high priority
+ >prototype : G1
+ 
+@@= skipped -12, +14 lines =@@
+ >value : unknown
+ }
+ interface G1 {
++>G1 : G1
++
+     foo1: number;
+ >foo1 : number
+ }
+ interface G2 {
++>G2 : G2
++
+     foo2: boolean;
+ >foo2 : boolean
+ }
+@@= skipped -50, +54 lines =@@
+ 
+ // a type with a prototype that has any type
+ interface HConstructor {
++>HConstructor : HConstructor
++
+     prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
+ >prototype : any
+ 
+@@= skipped -12, +14 lines =@@
+ >value : unknown
+ }
+ interface H {
++>H : H
++
+     foo: number;
+ >foo : number
+ }

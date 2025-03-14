@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/structuralTypeInDeclareFileForModule.ts] ////
+
+=== structuralTypeInDeclareFileForModule.ts ===
+module M { export var x; }
+>M : typeof M
+>x : any
+
+var m = M;
+>m : typeof M
+>M : typeof M
+

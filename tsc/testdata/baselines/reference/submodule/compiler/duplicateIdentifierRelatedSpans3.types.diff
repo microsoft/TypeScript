@@ -1,0 +1,20 @@
+--- old.duplicateIdentifierRelatedSpans3.types
++++ new.duplicateIdentifierRelatedSpans3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file1.ts ===
+ interface TopLevel {
++>TopLevel : TopLevel
++
+     duplicate1: () => string;
+ >duplicate1 : () => string
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ === file2.ts ===
+ interface TopLevel {
++>TopLevel : TopLevel
++
+     duplicate1(): number;
+ >duplicate1 : () => number
+ 

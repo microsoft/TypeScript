@@ -1,0 +1,46 @@
+--- old.typesVersions.ambientModules.types
++++ new.typesVersions.ambientModules.types
+@@= skipped -1, +1 lines =@@
+ 
+ === main.ts ===
+ import { a } from "ext";
+->a : "ts3.1 a"
++>a : "default a"
+ 
+ import { b } from "ext/other";
+->b : "ts3.1 b"
++>b : "default b"
+ 
+ const aa: "ts3.1 a" = a;
+ >aa : "ts3.1 a"
+->a : "ts3.1 a"
++>a : "default a"
+ 
+ const bb: "ts3.1 b" = b;
+ >bb : "ts3.1 b"
+->b : "ts3.1 b"
++>b : "default b"
+ 
+-=== node_modules/ext/ts3.1/index.d.ts ===
++=== node_modules/ext/index.d.ts ===
+ declare module "ext" {
+ >"ext" : typeof import("ext")
+ 
+-    export const a = "ts3.1 a";
+->a : "ts3.1 a"
+->"ts3.1 a" : "ts3.1 a"
++    export const a = "default a";
++>a : "default a"
++>"default a" : "default a"
+ }
+ declare module "ext/other" {
+ >"ext/other" : typeof import("ext/other")
+ 
+-    export const b = "ts3.1 b";
+->b : "ts3.1 b"
+->"ts3.1 b" : "ts3.1 b"
++    export const b = "default b";
++>b : "default b"
++>"default b" : "default b"
+ }
+ 

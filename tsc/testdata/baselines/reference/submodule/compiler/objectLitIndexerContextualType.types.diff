@@ -1,0 +1,19 @@
+--- old.objectLitIndexerContextualType.types
++++ new.objectLitIndexerContextualType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectLitIndexerContextualType.ts ===
+ interface I {
++>I : I
++
+     [s: string]: (s: string) => number;
+ >s : string
+ >s : string
+ }
+ 
+ interface J {
++>J : J
++
+     [s: number]: (s: string) => number;
+ >s : number
+ >s : string

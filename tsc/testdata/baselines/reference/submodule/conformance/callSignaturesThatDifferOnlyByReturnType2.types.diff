@@ -1,0 +1,19 @@
+--- old.callSignaturesThatDifferOnlyByReturnType2.types
++++ new.callSignaturesThatDifferOnlyByReturnType2.types
+@@= skipped -4, +4 lines =@@
+ // Here the multiple overloads come from multiple bases.
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     foo(x: number): T;
+ >foo : (x: number) => T
+ >x : number
+ }
+ 
+ interface A extends I<number>, I<string> { }
++>A : A
+ 
+ var x: A;
+ >x : A

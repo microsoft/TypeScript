@@ -1,0 +1,26 @@
+--- old.errorElaborationDivesIntoApparentlyPresentPropsOnly.types
++++ new.errorElaborationDivesIntoApparentlyPresentPropsOnly.types
+@@= skipped -2, +2 lines =@@
+ === errorElaborationDivesIntoApparentlyPresentPropsOnly.ts ===
+ function foo<T extends { a: string }>(x: T) {
+ >foo : <T extends { a: string; }>(x: T) => void
++>T : T
+ >a : string
+ >x : T
+ 
+@@= skipped -17, +18 lines =@@
+ 
+ function bar<T extends { a: string }>(x: T) {
+ >bar : <T extends { a: string; }>(x: T) => void
++>T : T
+ >a : string
+ >x : T
+ 
+@@= skipped -13, +14 lines =@@
+ 
+ function baz<T extends { a: string }>(x: T) {
+ >baz : <T extends { a: string; }>(x: T) => void
++>T : T
+ >a : string
+ >x : T
+ 

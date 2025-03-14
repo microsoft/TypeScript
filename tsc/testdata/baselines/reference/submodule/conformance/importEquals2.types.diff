@@ -1,0 +1,28 @@
+--- old.importEquals2.types
++++ new.importEquals2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /c.ts ===
+ import a = require('./b');
+->a : typeof a
++>a : typeof import("/a")
+ 
+ new a.A(); // Error
+ >new a.A() : any
+ >a.A : any
+->a : typeof a
++>a : typeof import("/a")
+ >A : any
+ 
+ === /a.ts ===
+@@= skipped -17, +17 lines =@@
+ 
+ === /b.ts ===
+ import * as a from './a';
+->a : typeof a
++>a : typeof import("/a")
+ 
+ export = a;
+->a : typeof a
++>a : typeof import("/a")
+ 

@@ -1,0 +1,34 @@
+--- old.genericCallWithObjectTypeArgsAndConstraints4.types
++++ new.genericCallWithObjectTypeArgsAndConstraints4.types
+@@= skipped -21, +21 lines =@@
+ 
+ function foo<T, U extends T>(t: T, t2: U) {
+ >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
++>T : T
++>U : U
+ >t : T
+ >t2 : U
+ 
+@@= skipped -81, +83 lines =@@
+ 
+ function other<T, U extends T>() {
+ >other : <T, U extends T>() => void
++>T : T
++>U : U
+ 
+     var r4 = foo(c, d);
+ >r4 : (x: C) => D
+ >foo(c, d) : (x: C) => D
+->foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
++>foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+ >c : C
+ >d : D
+ 
+     var r5 = foo<T, U>(c, d); // error
+ >r5 : (x: T) => U
+ >foo<T, U>(c, d) : (x: T) => U
+->foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
++>foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+ >c : C
+ >d : D
+ }

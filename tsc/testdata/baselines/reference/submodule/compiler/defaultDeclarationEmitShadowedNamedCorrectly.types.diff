@@ -1,0 +1,65 @@
+--- old.defaultDeclarationEmitShadowedNamedCorrectly.types
++++ new.defaultDeclarationEmitShadowedNamedCorrectly.types
+@@= skipped -1, +1 lines =@@
+ 
+ === this.ts ===
+ import * as me from "./this";
+->me : typeof me
++>me : typeof import("this")
+ 
+ export interface Things<P, T> {
++>Things : Things<P, T>
++>P : P
++>T : T
++
+     p: P;
+ >p : P
+ 
+@@= skipped -10, +14 lines =@@
+ >t : T
+ }
+ export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
+->make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
++>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
++>P : P
++>CTor : CTor
+ >x : new () => CTor & { props: P; }
+ >props : P
+ 
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ export interface Props {
++>Props : Props
+ }
+ 
+ export default class MyComponent {
+->MyComponent : me.default
++>MyComponent : default
+ 
+     props: Props;
+->props : me.Props
++>props : Props
+ }
+ export namespace Something {
+->Something : typeof me.Something
++>Something : typeof Something
+ 
+     let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
+ >MyComponent : number
+ >2 : 2
+ 
+     export const create = make(me.default);
+->create : me.Things<me.Props, me.default>
+->make(me.default) : me.Things<me.Props, me.default>
+->make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
+->me.default : typeof me.default
+->me : typeof me
+->default : typeof me.default
++>create : Things<Props, default>
++>make(me.default) : Things<Props, default>
++>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
++>me.default : typeof default
++>me : typeof import("this")
++>default : typeof default
+ }

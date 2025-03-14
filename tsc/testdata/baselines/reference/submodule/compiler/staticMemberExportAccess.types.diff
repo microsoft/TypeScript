@@ -1,0 +1,11 @@
+--- old.staticMemberExportAccess.types
++++ new.staticMemberExportAccess.types
+@@= skipped -23, +23 lines =@@
+ >1 : 1
+ }
+ interface JQueryStatic {
++>JQueryStatic : JQueryStatic
++
+     sammy: Sammy; // class instance
+ >sammy : Sammy
+ }

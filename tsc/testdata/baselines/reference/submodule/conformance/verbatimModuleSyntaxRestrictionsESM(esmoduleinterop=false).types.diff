@@ -1,0 +1,32 @@
+--- old.verbatimModuleSyntaxRestrictionsESM(esmoduleinterop=false).types
++++ new.verbatimModuleSyntaxRestrictionsESM(esmoduleinterop=false).types
+@@= skipped -19, +19 lines =@@
+ 
+ === /types.ts ===
+ interface Typey {}
++>Typey : Typey
++
+ export type { Typey };
+ >Typey : Typey
+ 
+@@= skipped -11, +13 lines =@@
+ >CJSy2 : typeof CJSy
+ 
+ import CJSy3 from "./decl"; // ok in esModuleInterop
+->CJSy3 : any
++>CJSy3 : typeof CJSy
+ 
+ import * as types from "./types"; // ok
+->types : typeof types
++>types : typeof import("/types")
+ 
+ CJSy;
+ >CJSy : typeof CJSy
+@@= skipped -13, +13 lines =@@
+ >ns : typeof ns
+ 
+     export enum A {}
+->A : A
++>A : ns.A
+ }
+ 

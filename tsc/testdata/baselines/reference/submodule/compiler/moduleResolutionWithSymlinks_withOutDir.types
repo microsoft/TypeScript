@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_withOutDir.ts] ////
+
+=== /src/app.ts ===
+import { MyClass } from "./library-a";
+>MyClass : typeof MyClass
+
+import { MyClass2 } from "./library-b";
+>MyClass2 : any
+
+let x: MyClass;
+>x : MyClass
+
+let y: MyClass2;
+>y : MyClass2
+
+x = y;
+>x = y : MyClass2
+>x : MyClass
+>y : MyClass2
+
+y = x;
+>y = x : MyClass
+>y : MyClass2
+>x : MyClass
+
+=== /src/library-a/index.ts ===
+export class MyClass { private x: number; }
+>MyClass : MyClass
+>x : number
+
+=== /src/library-b/index.ts ===
+import {MyClass} from "library-a";
+>MyClass : any
+
+export { MyClass as MyClass2 }
+>MyClass : any
+>MyClass2 : any
+

@@ -1,0 +1,168 @@
+--- old.destructuringParameterDeclaration5.types
++++ new.destructuringParameterDeclaration5.types
+@@= skipped -3, +3 lines =@@
+ // Parameter Declaration with generic
+ 
+ interface F { }
++>F : F
++
+ class Class implements F {
+ >Class : Class
+ 
+@@= skipped -43, +45 lines =@@
+ 
+ 
+ function d0<T extends Class>({x} = { x: new Class() }) { }
+->d0 : <T extends Class>({ x }?: { x: Class; }) => void
++>d0 : <T extends Class>(__0?: { x: Class; }) => void
++>T : T
+ >x : Class
+ >{ x: new Class() } : { x: Class; }
+ >x : Class
+@@= skipped -8, +9 lines =@@
+ >Class : typeof Class
+ 
+ function d1<T extends F>({x}: { x: F }) { }
+->d1 : <T extends F>({ x }: { x: F; }) => void
++>d1 : <T extends F>(__0: { x: F; }) => void
++>T : T
+ >x : F
+ >x : F
+ 
+ function d2<T extends Class>({x}: { x: Class }) { }
+->d2 : <T extends Class>({ x }: { x: Class; }) => void
++>d2 : <T extends Class>(__0: { x: Class; }) => void
++>T : T
+ >x : Class
+ >x : Class
+ 
+ function d3<T extends D>({y}: { y: D }) { }
+->d3 : <T extends D>({ y }: { y: D; }) => void
++>d3 : <T extends D>(__0: { y: D; }) => void
++>T : T
+ >y : D
+ >y : D
+ 
+ function d4<T extends D>({y} = { y: new D() }) { }
+->d4 : <T extends D>({ y }?: { y: D; }) => void
++>d4 : <T extends D>(__0?: { y: D; }) => void
++>T : T
+ >y : D
+ >{ y: new D() } : { y: D; }
+ >y : D
+@@= skipped -29, +33 lines =@@
+ 
+ d0({ x: 1 });
+ >d0({ x: 1 }) : void
+->d0 : <T extends Class>({ x }?: { x: Class; }) => void
++>d0 : <T extends Class>(__0?: { x: Class; }) => void
+ >{ x: 1 } : { x: number; }
+ >x : number
+ >1 : 1
+ 
+ d0({ x: {} });
+ >d0({ x: {} }) : void
+->d0 : <T extends Class>({ x }?: { x: Class; }) => void
++>d0 : <T extends Class>(__0?: { x: Class; }) => void
+ >{ x: {} } : { x: {}; }
+ >x : {}
+ >{} : {}
+ 
+ d0({ x: "string" });
+ >d0({ x: "string" }) : void
+->d0 : <T extends Class>({ x }?: { x: Class; }) => void
++>d0 : <T extends Class>(__0?: { x: Class; }) => void
+ >{ x: "string" } : { x: string; }
+ >x : string
+ >"string" : "string"
+ 
+ d1({ x: new Class() });
+ >d1({ x: new Class() }) : void
+->d1 : <T extends F>({ x }: { x: F; }) => void
++>d1 : <T extends F>(__0: { x: F; }) => void
+ >{ x: new Class() } : { x: Class; }
+ >x : Class
+ >new Class() : Class
+@@= skipped -29, +29 lines =@@
+ 
+ d1({ x: {} });
+ >d1({ x: {} }) : void
+->d1 : <T extends F>({ x }: { x: F; }) => void
++>d1 : <T extends F>(__0: { x: F; }) => void
+ >{ x: {} } : { x: {}; }
+ >x : {}
+ >{} : {}
+ 
+ d1({ x: "string" });
+ >d1({ x: "string" }) : void
+->d1 : <T extends F>({ x }: { x: F; }) => void
++>d1 : <T extends F>(__0: { x: F; }) => void
+ >{ x: "string" } : { x: string; }
+ >x : string
+ >"string" : "string"
+ 
+ d2({ x: new SubClass() });
+ >d2({ x: new SubClass() }) : void
+->d2 : <T extends Class>({ x }: { x: Class; }) => void
++>d2 : <T extends Class>(__0: { x: Class; }) => void
+ >{ x: new SubClass() } : { x: SubClass; }
+ >x : SubClass
+ >new SubClass() : SubClass
+@@= skipped -22, +22 lines =@@
+ 
+ d2({ x: {} });
+ >d2({ x: {} }) : void
+->d2 : <T extends Class>({ x }: { x: Class; }) => void
++>d2 : <T extends Class>(__0: { x: Class; }) => void
+ >{ x: {} } : { x: {}; }
+ >x : {}
+ >{} : {}
+ 
+ d3({ y: new SubD() });
+ >d3({ y: new SubD() }) : void
+->d3 : <T extends D>({ y }: { y: D; }) => void
++>d3 : <T extends D>(__0: { y: D; }) => void
+ >{ y: new SubD() } : { y: SubD; }
+ >y : SubD
+ >new SubD() : SubD
+@@= skipped -15, +15 lines =@@
+ 
+ d3({ y: new SubClass() });
+ >d3({ y: new SubClass() }) : void
+->d3 : <T extends D>({ y }: { y: D; }) => void
++>d3 : <T extends D>(__0: { y: D; }) => void
+ >{ y: new SubClass() } : { y: SubClass; }
+ >y : SubClass
+ >new SubClass() : SubClass
+@@= skipped -9, +9 lines =@@
+ // Error
+ d3({ y: new Class() });
+ >d3({ y: new Class() }) : void
+->d3 : <T extends D>({ y }: { y: D; }) => void
++>d3 : <T extends D>(__0: { y: D; }) => void
+ >{ y: new Class() } : { y: Class; }
+ >y : Class
+ >new Class() : Class
+@@= skipped -8, +8 lines =@@
+ 
+ d3({});
+ >d3({}) : void
+->d3 : <T extends D>({ y }: { y: D; }) => void
++>d3 : <T extends D>(__0: { y: D; }) => void
+ >{} : {}
+ 
+ d3({ y: 1 });
+ >d3({ y: 1 }) : void
+->d3 : <T extends D>({ y }: { y: D; }) => void
++>d3 : <T extends D>(__0: { y: D; }) => void
+ >{ y: 1 } : { y: number; }
+ >y : number
+ >1 : 1
+ 
+ d3({ y: "world" });
+ >d3({ y: "world" }) : void
+->d3 : <T extends D>({ y }: { y: D; }) => void
++>d3 : <T extends D>(__0: { y: D; }) => void
+ >{ y: "world" } : { y: string; }
+ >y : string
+ >"world" : "world"

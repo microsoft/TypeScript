@@ -1,0 +1,39 @@
+--- old.typeFromPropertyAssignment20.types
++++ new.typeFromPropertyAssignment20.types
+@@= skipped -13, +13 lines =@@
+ >inner : () => void
+ 
+         function Async() {
+->Async : typeof Async
++>Async : () => void
+ 
+             this._trampolineEnabled = true;
+ >this._trampolineEnabled = true : true
+ >this._trampolineEnabled : any
+->this : this
++>this : any
+ >_trampolineEnabled : any
+ >true : true
+         }
+@@= skipped -14, +14 lines =@@
+ >Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        } : (b: any) => void
+ >Async.prototype.disableTrampolineIfNecessary : any
+ >Async.prototype : any
+->Async : typeof Async
++>Async : () => void
+ >prototype : any
+ >disableTrampolineIfNecessary : any
+ >function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        } : (b: any) => void
+@@= skipped -12, +12 lines =@@
+ 
+                 this._trampolineEnabled = false;
+ >this._trampolineEnabled = false : false
+->this._trampolineEnabled : boolean
+->this : this
+->_trampolineEnabled : boolean
++>this._trampolineEnabled : any
++>this : any
++>_trampolineEnabled : any
+ >false : false
+             }
+         };

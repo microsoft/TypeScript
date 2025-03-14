@@ -1,0 +1,28 @@
+--- old.unusedLocalsAndParameters.types
++++ new.unusedLocalsAndParameters.types
+@@= skipped -65, +65 lines =@@
+ }
+ 
+ var o = {
+->o : { method(a: any): void; x: number; }
+->{    // Object literal method declaration paramter    method(a) {    },    // Accessor declaration paramter    set x(v: number) {    }} : { method(a: any): void; x: number; }
++>o : { method: (a: any) => void; x: number; }
++>{    // Object literal method declaration paramter    method(a) {    },    // Accessor declaration paramter    set x(v: number) {    }} : { method: (a: any) => void; x: number; }
+ 
+     // Object literal method declaration paramter
+     method(a) {
+@@= skipped -17, +17 lines =@@
+ };
+ 
+ o;
+->o : { method(a: any): void; x: number; }
++>o : { method: (a: any) => void; x: number; }
+ 
+ // in a for..in statment
+ for (let i in o) {
+ >i : string
+->o : { method(a: any): void; x: number; }
++>o : { method: (a: any) => void; x: number; }
+ }
+ 
+ // in a for..of statment

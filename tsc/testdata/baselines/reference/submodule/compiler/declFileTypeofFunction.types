@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/declFileTypeofFunction.ts] ////
+
+=== declFileTypeofFunction.ts ===
+function f(n: typeof f): string;
+>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
+>n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
+
+function f(n: typeof g): string;
+>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
+>n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
+
+function f() { return undefined; }
+>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
+>undefined : undefined
+
+function g(n: typeof g): number;
+>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
+>n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
+
+function g(n: typeof f): number;
+>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
+>n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
+
+function g() { return undefined; }
+>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
+>undefined : undefined
+
+var b: () => typeof b;
+>b : () => ???
+
+function b1() {
+>b1 : () => ???
+
+    return b1;
+>b1 : () => ???
+}
+
+function foo(): typeof foo {
+>foo : () => ???
+
+    return null;
+}
+var foo1: typeof foo;
+>foo1 : () => ???
+
+var foo2 = foo;
+>foo2 : () => ???
+>foo : () => ???
+
+var foo3 = function () {
+>foo3 : () => ???
+>function () {    return foo3;} : () => ???
+
+    return foo3;
+>foo3 : () => ???
+}
+var x = () => {
+>x : () => ???
+>() => {    return x;} : () => ???
+
+    return x;
+>x : () => ???
+}
+
+function foo5(x: number) {
+>foo5 : (x: number) => (x: number) => number
+>x : number
+
+    function bar(x: number) {
+>bar : (x: number) => number
+>x : number
+
+        return x;
+>x : number
+    }
+    return bar;
+>bar : (x: number) => number
+}

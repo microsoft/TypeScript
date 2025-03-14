@@ -1,0 +1,33 @@
+--- old.typePredicatesOptionalChaining3.types
++++ new.typePredicatesOptionalChaining3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typePredicatesOptionalChaining3.ts ===
+ interface Animal {
++>Animal : Animal
++
+   breed?: Breed;
+ >breed : Breed | undefined
+ }
+ interface Breed {
++>Breed : Breed
++
+   size?: string;
+ >size : string | undefined
+ }
+ 
+ declare function isNil(value: unknown): value is undefined | null;
+->isNil : (value: unknown) => value is undefined | null
++>isNil : (value: unknown) => value is null | undefined
+ >value : unknown
+ 
+ function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
+@@= skipped -44, +48 lines =@@
+   if (!isNil(animal?.breed?.size)) {
+ >!isNil(animal?.breed?.size) : boolean
+ >isNil(animal?.breed?.size) : boolean
+->isNil : (value: unknown) => value is undefined | null
++>isNil : (value: unknown) => value is null | undefined
+ >animal?.breed?.size : string | undefined
+ >animal?.breed : Breed | undefined
+ >animal : Animal

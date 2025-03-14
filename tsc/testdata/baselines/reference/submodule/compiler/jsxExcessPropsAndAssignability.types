@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/jsxExcessPropsAndAssignability.tsx] ////
+
+=== jsxExcessPropsAndAssignability.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react';
+>React : any
+
+const myHoc = <ComposedComponentProps extends any>(
+>myHoc : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps>) => void
+><ComposedComponentProps extends any>(    ComposedComponent: React.ComponentClass<ComposedComponentProps>,) => {    type WrapperComponentProps = ComposedComponentProps & { myProp: string };    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;    const props: ComposedComponentProps = null as any;    <WrapperComponent {...props} myProp={'1000000'} />;    <WrapperComponent {...props} myProp={1000000} />;} : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps>) => void
+>ComposedComponentProps : ComposedComponentProps
+
+    ComposedComponent: React.ComponentClass<ComposedComponentProps>,
+>ComposedComponent : ComponentClass<ComposedComponentProps>
+>React : any
+
+) => {
+    type WrapperComponentProps = ComposedComponentProps & { myProp: string };
+>WrapperComponentProps : WrapperComponentProps
+>myProp : string
+
+    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;
+>WrapperComponent : ComponentClass<WrapperComponentProps>
+>React : any
+>null as any : any
+
+    const props: ComposedComponentProps = null as any;
+>props : ComposedComponentProps
+>null as any : any
+
+    <WrapperComponent {...props} myProp={'1000000'} />;
+><WrapperComponent {...props} myProp={'1000000'} /> : any
+>WrapperComponent : ComponentClass<WrapperComponentProps>
+>props : ComposedComponentProps
+>myProp : any
+>'1000000' : "1000000"
+
+    <WrapperComponent {...props} myProp={1000000} />;
+><WrapperComponent {...props} myProp={1000000} /> : any
+>WrapperComponent : ComponentClass<WrapperComponentProps>
+>props : ComposedComponentProps
+>myProp : any
+>1000000 : 1000000
+
+};
+

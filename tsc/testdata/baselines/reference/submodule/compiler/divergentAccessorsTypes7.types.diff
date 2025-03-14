@@ -1,0 +1,38 @@
+--- old.divergentAccessorsTypes7.types
++++ new.divergentAccessorsTypes7.types
+@@= skipped -2, +2 lines =@@
+ === divergentAccessorsTypes7.ts ===
+ class Test<S> {
+ >Test : Test<S>
++>S : S
+ 
+     constructor() {}
+ 
+     set value(value: string | ((item: S) => string)) {}
+ >value : string
+->value : string | ((item: S) => string)
++>value : string | (item: S) => string
+ >item : S
+ 
+     get value(): string {
+@@= skipped -36, +37 lines =@@
+ 
+ a.value = (item) => item.property
+ >a.value = (item) => item.property : (item: { property: string; }) => string
+->a.value : string | ((item: { property: string; }) => string)
++>a.value : string | (item: { property: string; }) => string
+ >a : Test<{ property: string; }>
+->value : string | ((item: { property: string; }) => string)
++>value : string | (item: { property: string; }) => string
+ >(item) => item.property : (item: { property: string; }) => string
+ >item : { property: string; }
+ >item.property : string
+@@= skipped -11, +11 lines =@@
+ 
+ a['value'] = (item) => item.property
+ >a['value'] = (item) => item.property : (item: { property: string; }) => string
+->a['value'] : string | ((item: { property: string; }) => string)
++>a['value'] : string | (item: { property: string; }) => string
+ >a : Test<{ property: string; }>
+ >'value' : "value"
+ >(item) => item.property : (item: { property: string; }) => string

@@ -1,0 +1,81 @@
+--- old.jsdocTypeReferenceToImport.types
++++ new.jsdocTypeReferenceToImport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === jsdocTypeReferenceToImport.js ===
+ const C = require('./ex').C;
+->C : typeof C
+->require('./ex').C : typeof C
+->require('./ex') : typeof import("ex")
++>C : any
++>require('./ex').C : any
++>require('./ex') : any
+ >require : any
+ >'./ex' : "./ex"
+->C : typeof C
++>C : any
+ 
+ const D = require('./ex')?.C;
+->D : typeof C
+->require('./ex')?.C : typeof C
+->require('./ex') : typeof import("ex")
++>D : any
++>require('./ex')?.C : any
++>require('./ex') : any
+ >require : any
+ >'./ex' : "./ex"
+->C : typeof C
++>C : any
+ 
+ /** @type {C} c */
+ var c = new C()
+->c : C
+->new C() : C
+->C : typeof C
++>c : any
++>new C() : any
++>C : any
+ 
+ c.start
+->c.start : number
+->c : C
+->start : number
++>c.start : any
++>c : any
++>start : any
+ 
+ c.end
+->c.end : number
+->c : C
+->end : number
++>c.end : any
++>c : any
++>end : any
+ 
+ /** @type {D} c */
+ var d = new D()
+->d : C
+->new D() : C
+->D : typeof C
++>d : any
++>new D() : any
++>D : any
+ 
+ d.start
+->d.start : number
+->d : C
+->start : number
++>d.start : any
++>d : any
++>start : any
+ 
+ d.end
+->d.end : number
+->d : C
+->end : number
++>d.end : any
++>d : any
++>end : any
+ 
+ === ex.d.ts ===
+ export class C {

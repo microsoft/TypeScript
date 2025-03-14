@@ -1,0 +1,24 @@
+--- old.moduleSharesNameWithImportDeclarationInsideIt3.types
++++ new.moduleSharesNameWithImportDeclarationInsideIt3.types
+@@= skipped -14, +14 lines =@@
+         }
+     }
+     export interface I { }
++>I : I
+ }
+ module A.M {
+ >A : typeof A
+->M : typeof A.M
++>M : typeof M
+ 
+     import M = Z.M;
+ >M : typeof M
+@@= skipped -13, +14 lines =@@
+     import M = Z.I;
+ >M : any
+ >Z : typeof Z
+->I : Z.I
++>I : I
+ 
+     export function bar() {
+ >bar : () => void

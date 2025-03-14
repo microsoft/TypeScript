@@ -1,0 +1,18 @@
+--- old.privateNameJsBadAssignment.types
++++ new.privateNameJsBadAssignment.types
+@@= skipped -7, +7 lines =@@
+ >1 : 1
+ 
+ function A() { }
+->A : typeof A
++>A : () => void
+ 
+ A.prototype.#no = 2;         // Error (outside class body)
+ >A.prototype.#no = 2 : 2
+ >A.prototype.#no : any
+ >A.prototype : any
+->A : typeof A
++>A : () => void
+ >prototype : any
+ >2 : 2
+ 

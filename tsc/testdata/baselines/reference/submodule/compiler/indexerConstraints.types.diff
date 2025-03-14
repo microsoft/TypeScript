@@ -1,0 +1,82 @@
+--- old.indexerConstraints.types
++++ new.indexerConstraints.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexerConstraints.ts ===
+ interface A { a: number; }
++>A : A
+ >a : number
+ 
+ interface B extends A { b: number; }
++>B : B
+ >b : number
+ 
+ // Good case
+ interface D {
++>D : D
++
+     [s: string]: A;
+ >s : string
+ }
+ interface D {
++>D : D
++
+     [n: number]: B;
+ >n : number
+ }
+ 
+ // Bad case
+ interface E {
++>E : E
++
+     [s: string]: B;
+ >s : string
+ }
+ interface E {
++>E : E
++
+     [n: number]: A;
+ >n : number
+ }
+ 
+ // Inheritance
+ interface F {
++>F : F
++
+     [s: string]: B;
+ >s : string
+ }
+ interface G extends F {
++>G : G
++
+     [n: number]: A;
+ >n : number
+ }
+ 
+ // Other way
+ interface H {
++>H : H
++
+     [n: number]: A;
+ >n : number
+ }
+ interface I extends H {
++>I : I
++
+     [s: string]: B;
+ >s : string
+ }
+ 
+ // With hidden indexer
+ interface J {
++>J : J
++
+     [n: number]: {};
+ >n : number
+ }
+ interface K extends J {
++>K : K
++
+     [n: number]: A;
+ >n : number
+ 

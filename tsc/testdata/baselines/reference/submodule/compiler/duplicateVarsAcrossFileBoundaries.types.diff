@@ -1,0 +1,20 @@
+--- old.duplicateVarsAcrossFileBoundaries.types
++++ new.duplicateVarsAcrossFileBoundaries.types
+@@= skipped -45, +45 lines =@@
+ 
+ === duplicateVarsAcrossFileBoundaries_4.ts ===
+ module P { }
++>P : any
++
+ import p = P;
+ >p : any
+ >P : any
+@@= skipped -9, +11 lines =@@
+ 
+ === duplicateVarsAcrossFileBoundaries_5.ts ===
+ module Q { }
++>Q : any
++
+ import q = Q;
+ >q : any
+ >Q : any

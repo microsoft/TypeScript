@@ -1,0 +1,68 @@
+--- old.exportAsNamespace_augment.types
++++ new.exportAsNamespace_augment.types
+@@= skipped -13, +13 lines =@@
+ 
+ === /b.ts ===
+ import * as a2 from "./a";
+->a2 : typeof a2
++>a2 : typeof import("/a")
+ 
+ declare global {
+ >global : typeof global
+ 
+     namespace a {
+->a : typeof a2
++>a : typeof import("/a")
+ 
+         export const y = 0;
+ >y : 0
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ declare module "./a" {
+->"./a" : typeof a2
++>"./a" : typeof import("/a")
+ 
+     export const z = 0;
+ >z : 0
+@@= skipped -16, +16 lines =@@
+ >a.x + a.y + a.z : number
+ >a.x + a.y : number
+ >a.x : 0
+->a : typeof a2
++>a : typeof import("/a")
+ >x : 0
+ >a.y : 0
+->a : typeof a2
++>a : typeof import("/a")
+ >y : 0
+ >a.z : 0
+->a : typeof a2
++>a : typeof import("/a")
+ >z : 0
+ >a.conflict : 0
+->a : typeof a2
++>a : typeof import("/a")
+ >conflict : 0
+ 
+ a2.x + a2.y + a2.z + a2.conflict;
+@@= skipped -17, +17 lines =@@
+ >a2.x + a2.y + a2.z : number
+ >a2.x + a2.y : number
+ >a2.x : 0
+->a2 : typeof a2
++>a2 : typeof import("/a")
+ >x : 0
+ >a2.y : 0
+->a2 : typeof a2
++>a2 : typeof import("/a")
+ >y : 0
+ >a2.z : 0
+->a2 : typeof a2
++>a2 : typeof import("/a")
+ >z : 0
+ >a2.conflict : 0
+->a2 : typeof a2
++>a2 : typeof import("/a")
+ >conflict : 0
+ 

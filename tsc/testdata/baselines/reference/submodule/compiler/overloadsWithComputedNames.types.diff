@@ -1,0 +1,78 @@
+--- old.overloadsWithComputedNames.types
++++ new.overloadsWithComputedNames.types
+@@= skipped -10, +10 lines =@@
+ >a : number
+ 
+     ["A"](a: string|number): number | string {
+->["A"] : (a: string | number) => number | string
++>["A"] : (a: string | number) => string | number
+ >"A" : "A"
+ >a : string | number
+ 
+@@= skipped -15, +15 lines =@@
+ 
+ p.A(0)
+ >p.A(0) : string | number
+->p.A : (a: string | number) => number | string
++>p.A : (a: string | number) => string | number
+ >p : Person
+->A : (a: string | number) => number | string
++>A : (a: string | number) => string | number
+ >0 : 0
+ 
+ p.B(0)
+@@= skipped -43, +43 lines =@@
+ >sym : symbol
+ 
+ declare const strUnion: 'foo' | 'bar';
+->strUnion : "foo" | "bar"
++>strUnion : "bar" | "foo"
+ 
+ class C1 {
+ >C1 : C1
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ interface I1 {
++>I1 : I1
++
+     [sym](): void;  // should error
+ >[sym] : () => void
+ >sym : symbol
+@@= skipped -22, +24 lines =@@
+ 
+     [strUnion](): void; // should error
+ >[strUnion] : () => void
+->strUnion : "foo" | "bar"
++>strUnion : "bar" | "foo"
+ 
+     [strUnion]() { }
+ >[strUnion] : () => void
+->strUnion : "foo" | "bar"
++>strUnion : "bar" | "foo"
+ }
+ 
+ class I2 {
+@@= skipped -12, +12 lines =@@
+ 
+     [strUnion](): void; // should error
+ >[strUnion] : () => void
+->strUnion : "foo" | "bar"
++>strUnion : "bar" | "foo"
+ 
+     [strUnion]() { }
+ >[strUnion] : () => void
+->strUnion : "foo" | "bar"
++>strUnion : "bar" | "foo"
+ }
+ 
+ class C3 {
+@@= skipped -24, +24 lines =@@
+ }
+ 
+ interface I3 {
++>I3 : I3
++
+     [1](): void;
+ >[1] : () => void
+ >1 : 1

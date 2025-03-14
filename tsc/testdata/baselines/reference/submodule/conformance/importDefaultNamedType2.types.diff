@@ -1,0 +1,14 @@
+--- old.importDefaultNamedType2.types
++++ new.importDefaultNamedType2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ export default class A {}
+->A : A
++>A : default
+ 
+ === /b.ts ===
+ import type from from './a';
+->from : from
++>from : default
+ 

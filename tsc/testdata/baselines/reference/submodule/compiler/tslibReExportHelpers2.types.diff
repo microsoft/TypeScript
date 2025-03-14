@@ -1,0 +1,45 @@
+--- old.tslibReExportHelpers2.types
++++ new.tslibReExportHelpers2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /node_modules/tslib/index.d.ts ===
+ export declare function __classPrivateFieldGet<T extends object, V>(
+->__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V | undefined; }, kind?: "f"): V; <T_1 extends new (...args: any[]) => unknown, V_1>(receiver: T_1, state: T_1, kind: "f", f: { value: V_1; }): V_1; }
++>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has: (o: T) => boolean; get: (o: T) => V; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
++>T : T
++>V : V
+ 
+   receiver: T,
+ >receiver : T
+ 
+   state: { has(o: T): boolean, get(o: T): V | undefined },
+->state : { has(o: T): boolean; get(o: T): V | undefined; }
++>state : { has: (o: T) => boolean; get: (o: T) => V; }
+ >has : (o: T) => boolean
+ >o : T
+->get : (o: T) => V | undefined
++>get : (o: T) => V
+ >o : T
+ 
+   kind?: "f"
+@@= skipped -17, +19 lines =@@
+ 
+ ): V;
+ export declare function __classPrivateFieldGet<T extends new (...args: any[]) => unknown, V>(
+->__classPrivateFieldGet : { <T_1 extends object, V_1>(receiver: T_1, state: { has(o: T_1): boolean; get(o: T_1): V_1 | undefined; }, kind?: "f"): V_1; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
++>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has: (o: T) => boolean; get: (o: T) => V; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
++>T : T
+ >args : any[]
++>V : V
+ 
+   receiver: T,
+ >receiver : T
+@@= skipped -20, +22 lines =@@
+ 
+ === /node_modules/tslib/index.d.mts ===
+ export { __classPrivateFieldGet } from "./index.js";
+->__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V | undefined; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
++>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has: (o: T) => boolean; get: (o: T) => V; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
+ 
+ === /index.mts ===
+ export class Foo {

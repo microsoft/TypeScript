@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/jsxPartialSpread.tsx] ////
+
+=== jsxPartialSpread.tsx ===
+/// <reference path="react16.d.ts" />
+const Select = (p: {value?: unknown}) => <p></p>;
+>Select : (p: { value?: unknown; }) => any
+>(p: {value?: unknown}) => <p></p> : (p: { value?: unknown; }) => any
+>p : { value?: unknown; }
+>value : unknown
+><p></p> : any
+>p : { value?: unknown; }
+>p : { value?: unknown; }
+
+import React from 'react';
+>React : any
+
+export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
+>Repro : (__0: { SelectProps?: Partial<{ value?: unknown; }> | undefined; }) => any
+>SelectProps : Partial<{ value?: unknown; }>
+>{} : {}
+>SelectProps : Partial<{ value?: unknown; }> | undefined
+
+    return (
+>(        <Select value={'test'} {...SelectProps} />    ) : any
+
+        <Select value={'test'} {...SelectProps} />
+><Select value={'test'} {...SelectProps} /> : any
+>Select : (p: { value?: unknown; }) => any
+>value : any
+>'test' : "test"
+>SelectProps : Partial<{ value?: unknown; }>
+
+    );
+}

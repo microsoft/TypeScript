@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/nodeResolution6.ts] ////
+
+=== b.ts ===
+import y = require("a"); 
+>y : typeof import("node_modules/a")
+
+=== node_modules/ref.ts ===
+var x = 1;
+>x : number
+>1 : 1
+
+=== node_modules/a.d.ts ===
+/// <reference path="ref.ts"/>
+export declare var y;
+>y : any
+
+

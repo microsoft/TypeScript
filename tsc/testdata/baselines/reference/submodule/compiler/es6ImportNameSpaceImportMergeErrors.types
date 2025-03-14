@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/es6ImportNameSpaceImportMergeErrors.ts] ////
+
+=== es6ImportNameSpaceImportMergeErrors_0.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+=== es6ImportNameSpaceImportMergeErrors_1.ts ===
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportMergeErrors_0"; 
+>nameSpaceBinding : typeof import("es6ImportNameSpaceImportMergeErrors_0")
+
+interface nameSpaceBinding { } // this should be ok
+>nameSpaceBinding : nameSpaceBinding
+
+import * as nameSpaceBinding1 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+>nameSpaceBinding1 : typeof import("es6ImportNameSpaceImportMergeErrors_0")
+
+import * as nameSpaceBinding1 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+>nameSpaceBinding1 : typeof import("es6ImportNameSpaceImportMergeErrors_0")
+
+import * as nameSpaceBinding3 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
+>nameSpaceBinding3 : number
+
+var nameSpaceBinding3 = 10;
+>nameSpaceBinding3 : number
+>10 : 10
+

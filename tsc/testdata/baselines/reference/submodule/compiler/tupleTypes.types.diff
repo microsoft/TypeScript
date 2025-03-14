@@ -1,0 +1,47 @@
+--- old.tupleTypes.types
++++ new.tupleTypes.types
+@@= skipped -88, +88 lines =@@
+ 
+ declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
+ >ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
++>T : T
++>U : U
+ >a : T
+ >b : [T, (x: T) => U]
+ >x : T
+@@= skipped -22, +24 lines =@@
+ 
+ function tuple2<T0, T1>(item0: T0, item1: T1): [T0, T1]{
+ >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
++>T0 : T0
++>T1 : T1
+ >item0 : T0
+ >item1 : T1
+ 
+@@= skipped -131, +133 lines =@@
+ >0 : 0
+ 
+ declare const b1: readonly [number?];
+->b1 : readonly [number?]
++>b1 : [number?]
+ 
+ b1.length = 0; // Error
+ >b1.length = 0 : 0
+ >b1.length : any
+->b1 : readonly [number?]
++>b1 : [number?]
+ >length : any
+ >0 : 0
+ 
+ declare const b2: readonly [number, ...number[]];
+->b2 : readonly [number, ...number[]]
++>b2 : [number, ...number[]]
+ 
+ b2.length = 0; // Error
+ >b2.length = 0 : 0
+ >b2.length : any
+->b2 : readonly [number, ...number[]]
++>b2 : [number, ...number[]]
+ >length : any
+ >0 : 0
+ 

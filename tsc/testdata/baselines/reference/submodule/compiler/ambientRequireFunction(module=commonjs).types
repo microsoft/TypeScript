@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/ambientRequireFunction.ts] ////
+
+=== app.js ===
+/// <reference path="node.d.ts"/>
+
+const fs = require("fs");
+>fs : any
+>require("fs") : any
+>require : (moduleName: string) => any
+>"fs" : "fs"
+
+const text = fs.readFileSync("/a/b/c");
+>text : any
+>fs.readFileSync("/a/b/c") : any
+>fs.readFileSync : any
+>fs : any
+>readFileSync : any
+>"/a/b/c" : "/a/b/c"
+
+=== node.d.ts ===
+declare function require(moduleName: string): any;
+>require : (moduleName: string) => any
+>moduleName : string
+
+declare module "fs" {
+>"fs" : typeof import("fs")
+
+    export function readFileSync(s: string): string;
+>readFileSync : (s: string) => string
+>s : string
+}
+

@@ -1,0 +1,87 @@
+--- old.types.forAwait.es2018.1.types
++++ new.types.forAwait.es2018.1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === types.forAwait.es2018.1.ts ===
+ declare const asyncIterable: AsyncIterable<number>;
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+ 
+ declare const iterable: Iterable<number>;
+->iterable : Iterable<number>
++>iterable : Iterable<number, any, any>
+ 
+ declare const iterableOfPromise: Iterable<Promise<number>>;
+->iterableOfPromise : Iterable<Promise<number>>
++>iterableOfPromise : Iterable<Promise<number>, any, any>
+ 
+ async function f1() {
+ >f1 : () => Promise<void>
+@@= skipped -16, +16 lines =@@
+ 
+     for await (const x of asyncIterable) {
+ >x : number
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+     }
+     for await (const x of iterable) {
+ >x : number
+->iterable : Iterable<number>
++>iterable : Iterable<number, any, any>
+     }
+     for await (const x of iterableOfPromise) {
+ >x : number
+->iterableOfPromise : Iterable<Promise<number>>
++>iterableOfPromise : Iterable<Promise<number>, any, any>
+     }
+     for await (y of asyncIterable) {
+ >y : number
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+     }
+     for await (y of iterable) {
+ >y : number
+->iterable : Iterable<number>
++>iterable : Iterable<number, any, any>
+     }
+     for await (y of iterableOfPromise) {
+ >y : number
+->iterableOfPromise : Iterable<Promise<number>>
++>iterableOfPromise : Iterable<Promise<number>, any, any>
+     }
+ }
+ async function * f2() {
+@@= skipped -31, +31 lines =@@
+ 
+     for await (const x of asyncIterable) {
+ >x : number
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+     }
+     for await (const x of iterable) {
+ >x : number
+->iterable : Iterable<number>
++>iterable : Iterable<number, any, any>
+     }
+     for await (const x of iterableOfPromise) {
+ >x : number
+->iterableOfPromise : Iterable<Promise<number>>
++>iterableOfPromise : Iterable<Promise<number>, any, any>
+     }
+     for await (y of asyncIterable) {
+ >y : number
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+     }
+     for await (y of iterable) {
+ >y : number
+->iterable : Iterable<number>
++>iterable : Iterable<number, any, any>
+     }
+     for await (y of iterableOfPromise) {
+ >y : number
+->iterableOfPromise : Iterable<Promise<number>>
++>iterableOfPromise : Iterable<Promise<number>, any, any>
+     }
+ }
+ 

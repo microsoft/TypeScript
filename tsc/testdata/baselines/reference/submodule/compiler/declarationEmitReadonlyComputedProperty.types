@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/declarationEmitReadonlyComputedProperty.ts] ////
+
+=== bug.ts ===
+export const SYMBOL = Symbol()
+>SYMBOL : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export interface Interface {
+>Interface : Interface
+
+  readonly [SYMBOL]: string; // remove readonly and @showEmit to see the expected error
+>[SYMBOL] : string
+>SYMBOL : unique symbol
+}
+
+export function createInstance(): Interface {
+>createInstance : () => Interface
+
+  return {
+>{    [SYMBOL]: ''  } : { [SYMBOL]: string; }
+
+    [SYMBOL]: ''
+>[SYMBOL] : string
+>SYMBOL : unique symbol
+>'' : ""
+  }
+}
+
+=== index.ts ===
+import { createInstance } from './bug'
+>createInstance : () => Interface
+
+export const spread = {
+>spread : { (Unique symbol): string; }
+>{  ...createInstance(),} : { (Unique symbol): string; }
+
+  ...createInstance(),
+>createInstance() : Interface
+>createInstance : () => Interface
+}

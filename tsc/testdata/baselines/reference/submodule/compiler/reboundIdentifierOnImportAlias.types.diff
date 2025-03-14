@@ -1,0 +1,11 @@
+--- old.reboundIdentifierOnImportAlias.types
++++ new.reboundIdentifierOnImportAlias.types
+@@= skipped -15, +15 lines =@@
+ >1 : 1
+ 
+     import F = Foo;
+->F : typeof F
+->Foo : typeof F
++>F : typeof Foo
++>Foo : typeof Foo
+ }

@@ -1,0 +1,10 @@
+--- old.genericTypeConstraints.types
++++ new.genericTypeConstraints.types
+@@= skipped -12, +12 lines =@@
+ 
+ class Bar<T extends Foo> { }
+ >Bar : Bar<T>
++>T : T
+ 
+ class BarExtended extends Bar<FooExtended> {
+ >BarExtended : BarExtended

@@ -1,0 +1,40 @@
+--- old.declarationEmitWithDefaultAsComputedName2.types
++++ new.declarationEmitWithDefaultAsComputedName2.types
+@@= skipped -2, +2 lines =@@
+ === other.ts ===
+ type Experiment<Name> = {
+ >Experiment : Experiment<Name>
++>Name : Name
+ 
+     name: Name;
+ >name : Name
+@@= skipped -7, +8 lines =@@
+ };
+ declare const createExperiment: <Name extends string>(
+ >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
++>Name : Name
+ 
+     options: Experiment<Name>
+ >options : Experiment<Name>
+@@= skipped -18, +19 lines =@@
+ 
+ === main.ts ===
+ import * as other2 from "./other";
+->other2 : typeof other2
++>other2 : typeof import("other")
+ 
+ export const obj = {
+ >obj : { foo: number; }
+@@= skipped -9, +9 lines =@@
+     [other2.default.name]: 1
+ >[other2.default.name] : number
+ >other2.default.name : "foo"
+->other2.default : { name: "foo"; }
+->other2 : typeof other2
+->default : { name: "foo"; }
++>other2.default : Experiment<"foo">
++>other2 : typeof import("other")
++>default : Experiment<"foo">
+ >name : "foo"
+ >1 : 1
+ 

@@ -1,0 +1,12 @@
+--- old.conditionalTypeGenericInSignatureTypeParameterConstraint.types
++++ new.conditionalTypeGenericInSignatureTypeParameterConstraint.types
+@@= skipped -3, +3 lines =@@
+ // should be x
+ type H_inline1<x> = (<o extends x>() => o) extends (() => infer o) ? o : never;
+ >H_inline1 : x
++>x : x
++>o : o
++>o : o
+ 
+ type Result = H_inline1<string>; // should be `string`
+ >Result : string

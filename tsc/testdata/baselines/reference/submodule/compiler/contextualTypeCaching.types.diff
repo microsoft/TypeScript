@@ -1,0 +1,46 @@
+--- old.contextualTypeCaching.types
++++ new.contextualTypeCaching.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #52575
+ 
+ export interface Event<T> {
++>Event : Event<T>
++>T : T
++
+     callback: (response: T) => void;
+ >callback : (response: T) => void
+ >response : T
+@@= skipped -26, +29 lines =@@
+ 
+ declare function emit<T extends keyof CustomEvents>(type: T, data: CustomEvents[T]): void
+ >emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
++>T : T
+ >type : T
+ >data : CustomEvents[T]
+ 
+@@= skipped -34, +35 lines =@@
+ >compile : () => void
+ }
+ interface WebpackPluginInstance {
++>WebpackPluginInstance : WebpackPluginInstance
++
+   apply: (compiler: MyCompiler) => void;
+ >apply : (compiler: MyCompiler) => void
+ >compiler : MyCompiler
+@@= skipped -10, +12 lines =@@
+ >compiler : MyCompiler
+ 
+ interface Optimization {
++>Optimization : Optimization
++
+   minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
+->minimizer : (WebpackPluginInstance | WebpackPluginFunction)[] | undefined
++>minimizer : (WebpackPluginFunction | WebpackPluginInstance)[] | undefined
+ }
+ declare const A: <T, P extends keyof T>(
+ >A : <T, P extends keyof T>(obj: T, prop: P, factory: () => T[P]) => void
++>T : T
++>P : P
+ 
+   obj: T,
+ >obj : T

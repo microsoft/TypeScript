@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/cloduleWithPriorInstantiatedModule.ts] ////
+
+=== cloduleWithPriorInstantiatedModule.ts ===
+// Non-ambient & instantiated module.
+module Moclodule {
+>Moclodule : typeof Moclodule
+
+    export interface Someinterface {
+>Someinterface : Someinterface
+
+        foo(): void;
+>foo : () => void
+    }
+    var x = 10;
+>x : number
+>10 : 10
+}
+
+class Moclodule {
+>Moclodule : Moclodule
+}
+
+// Instantiated module.
+module Moclodule {
+>Moclodule : typeof Moclodule
+
+    export class Manager {
+>Manager : Manager
+    }
+}

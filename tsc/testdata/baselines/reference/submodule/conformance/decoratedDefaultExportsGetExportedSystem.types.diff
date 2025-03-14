@@ -1,0 +1,11 @@
+--- old.decoratedDefaultExportsGetExportedSystem.types
++++ new.decoratedDefaultExportsGetExportedSystem.types
+@@= skipped -7, +7 lines =@@
+ >decorator : ClassDecorator
+ 
+ export default class Foo {}
+->Foo : Foo
++>Foo : default
+ 
+ === b.ts ===
+ var decorator: ClassDecorator;

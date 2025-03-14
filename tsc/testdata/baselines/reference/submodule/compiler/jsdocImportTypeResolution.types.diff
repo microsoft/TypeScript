@@ -1,0 +1,9 @@
+--- old.jsdocImportTypeResolution.types
++++ new.jsdocImportTypeResolution.types
+@@= skipped -11, +11 lines =@@
+  */
+ /** @type {options} */
+ let v;
+->v : options
++>v : any
+ 

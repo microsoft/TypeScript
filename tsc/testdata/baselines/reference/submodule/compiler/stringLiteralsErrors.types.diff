@@ -1,0 +1,32 @@
+--- old.stringLiteralsErrors.types
++++ new.stringLiteralsErrors.types
+@@= skipped -46, +46 lines =@@
+ 
+ var es8 = 'unterminated "
+ >es8 : string
+->'unterminated " : "unterminated \""
++>'unterminated " : "unterminated ""
+ 
+ // wrong unicode sequences
+ var es9 = "\u00";
+ >es9 : string
+->"\u00" : "\\u00"
++>"\u00" : "\u00"
+ 
+ var es10 = "\u00GG";
+ >es10 : string
+->"\u00GG" : "\\u00GG"
++>"\u00GG" : "\u00GG"
+ 
+ var es11 = "\x0";
+ >es11 : string
+->"\x0" : "\\x0"
++>"\x0" : "\x0"
+ 
+ var es12 = "\xmm";
+ >es12 : string
+->"\xmm" : "\\xmm"
++>"\xmm" : "\xmm"
+ 
+ // End of file
+ var es13 = " 

@@ -1,0 +1,10 @@
+--- old.primitiveTypeAsmoduleName.types
++++ new.primitiveTypeAsmoduleName.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/primitiveTypeAsmoduleName.ts] ////
+ 
+ === primitiveTypeAsmoduleName.ts ===
+-
+ module string {}
++>string : any
++

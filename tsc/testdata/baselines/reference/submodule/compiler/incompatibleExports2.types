@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/incompatibleExports2.ts] ////
+
+=== incompatibleExports2.ts ===
+declare module "foo" { 
+>"foo" : typeof import("foo")
+
+    export interface x { a: string } 
+>x : x
+>a : string
+
+    interface y { a: Date }
+>y : y
+>a : Date
+
+    export = y;
+>y : y
+}

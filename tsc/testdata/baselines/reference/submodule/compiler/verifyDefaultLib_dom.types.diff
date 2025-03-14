@@ -1,0 +1,13 @@
+--- old.verifyDefaultLib_dom.types
++++ new.verifyDefaultLib_dom.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/verifyDefaultLib_dom.ts] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 5,000
+-Type Count: 10,000
+-Instantiation count: 2,500
+-
+ === verifyDefaultLib_dom.ts ===
+ var x: HTMLElement;
+ >x : HTMLElement

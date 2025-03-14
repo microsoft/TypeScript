@@ -1,0 +1,11 @@
+--- old.exportAssignedTypeAsTypeAnnotation.types
++++ new.exportAssignedTypeAsTypeAnnotation.types
+@@= skipped -9, +9 lines =@@
+ 
+ === exportAssignedTypeAsTypeAnnotation_0.ts ===
+ interface x {
++>x : x
++
+     (): Date;
+     foo: string;
+ >foo : string

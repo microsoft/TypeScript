@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/globalThisDeclarationEmit3.ts] ////
+
+=== index.ts ===
+import { variable } from "./variable";
+>variable : typeof globalThis
+
+export { variable as globalThis };
+>variable : typeof globalThis
+>globalThis : typeof globalThis
+
+=== variable.ts ===
+import mod = globalThis;
+>mod : typeof globalThis
+>globalThis : typeof globalThis
+
+export { mod as variable };
+>mod : typeof globalThis
+>variable : typeof globalThis
+

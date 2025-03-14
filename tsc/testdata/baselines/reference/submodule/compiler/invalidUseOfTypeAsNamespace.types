@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/invalidUseOfTypeAsNamespace.ts] ////
+
+=== invalidUseOfTypeAsNamespace.ts ===
+interface OhNo {
+>OhNo : OhNo
+}
+
+declare let y: OhNo.hello;
+>y : hello
+>OhNo : any
+

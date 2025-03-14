@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReusesExistingNodesMappingJSDocTypes.ts] ////
+
+=== index.js ===
+/** @type {?} */
+export const a = null;
+>a : any
+
+/** @type {*} */
+export const b = null;
+>b : any
+
+/** @type {string?} */
+export const c = null;
+>c : any
+
+/** @type {string=} */
+export const d = null;
+>d : any
+
+/** @type {string!} */
+export const e = null;
+>e : any
+
+/** @type {function(string, number): object} */
+export const f = null;
+>f : any
+
+/** @type {function(new: object, string, number)} */
+export const g = null;
+>g : any
+
+/** @type {Object.<string, number>} */
+export const h = null;
+>h : any
+

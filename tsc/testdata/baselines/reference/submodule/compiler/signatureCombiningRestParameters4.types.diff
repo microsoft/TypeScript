@@ -1,0 +1,89 @@
+--- old.signatureCombiningRestParameters4.types
++++ new.signatureCombiningRestParameters4.types
+@@= skipped -2, +2 lines =@@
+ === signatureCombiningRestParameters4.ts ===
+ declare class Node<Options = any> {
+ >Node : Node<Options>
++>Options : Options
+ 
+   type: string;
+ >type : string
+@@= skipped -18, +19 lines =@@
+ }
+ 
+ interface NodeConfig<Options = any> {
++>NodeConfig : NodeConfig<Options>
++>Options : Options
++
+   extendMarkSchema?:
+->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Node) => Record<string, any>) | null | undefined
++>extendMarkSchema : (extension: Node<any>) => Record<string, any> | null | undefined
+ 
+     | ((
+         this: {
+@@= skipped -23, +26 lines =@@
+ 
+ declare class Mark<Options = any> {
+ >Mark : Mark<Options>
++>Options : Options
+ 
+   options: Options;
+ >options : Options
+@@= skipped -9, +10 lines =@@
+ }
+ 
+ interface MarkConfig<Options = any> {
++>MarkConfig : MarkConfig<Options>
++>Options : Options
++
+   extendMarkSchema?:
+->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark) => Record<string, any>) | null | undefined
++>extendMarkSchema : (extension: Mark<any>) => Record<string, any> | null | undefined
+ 
+     | ((
+         this: {
+@@= skipped -32, +35 lines =@@
+ 
+ type RemoveThis<T> = T extends (...args: any) => any
+ >RemoveThis : RemoveThis<T>
++>T : T
+ >args : any
+ 
+   ? (...args: Parameters<T>) => ReturnType<T>
+@@= skipped -8, +9 lines =@@
+   : T;
+ 
+ declare function getExtensionField<T = any>(
+->getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
++>getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
++>T : T
+ 
+   extension: AnyExtension,
+ >extension : AnyExtension
+@@= skipped -11, +12 lines =@@
+ ): RemoveThis<T>;
+ 
+ const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
+->extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
+->getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
+->getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
++>extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
++>getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
++>getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
+ 
+   e,
+ >e : AnyExtension
+@@= skipped -16, +16 lines =@@
+ >extension : Mark<any>
+ 
+ if (extendMarkSchema) {
+->extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
++>extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any> | null | undefined
+ 
+   extendMarkSchema(extension); // error
+ >extendMarkSchema(extension) : Record<string, any>
+->extendMarkSchema : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>)
++>extendMarkSchema : (...args: [extension: Node<any>]) => Record<string, any> | (...args: [extension: Mark<any>]) => Record<string, any>
+ >extension : Mark<any>
+ }
+ 

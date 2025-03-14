@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/salsa/commonJSReexport.ts] ////
+
+=== main.js ===
+const { hardline } = require('./second').nested;
+>hardline : any
+>require('./second').nested : any
+>require('./second') : any
+>require : any
+>'./second' : "./second"
+>nested : any
+
+hardline
+>hardline : any
+

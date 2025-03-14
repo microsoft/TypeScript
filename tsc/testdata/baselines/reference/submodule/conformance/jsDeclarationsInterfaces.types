@@ -1,0 +1,244 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsInterfaces.ts] ////
+
+=== index.js ===
+// Pretty much all of this should be an error, (since interfaces are forbidden in js),
+// but we should be able to synthesize declarations from the symbols regardless
+
+export interface A {}
+>A : A
+
+export interface B {
+>B : B
+
+    cat: string;
+>cat : string
+}
+
+export interface C<T, U> {
+>C : C<T, U>
+>T : T
+>U : U
+
+    field: T & U;
+>field : T & U
+
+    optionalField?: T;
+>optionalField : T
+
+    readonly readonlyField: T & U;
+>readonlyField : T & U
+
+    readonly readonlyOptionalField?: U;
+>readonlyOptionalField : U
+
+    (): number;
+    (x: T): U;
+>x : T
+
+    <Q>(x: Q): T & Q;
+>Q : Q
+>x : Q
+
+    new (): string;
+    new (x: T): U;
+>x : T
+
+    new <Q>(x: Q): T & Q;
+>Q : Q
+>x : Q
+
+    method<Q = number>(): number;
+>method : { <Q>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>Q : Q
+
+    method<Q>(a: T & Q): Q & number;
+>method : { <Q>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>Q : Q
+>a : T & Q
+
+    method(a?: number): number;
+>method : { <Q>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>a : number
+
+    method(...args: any[]): number;
+>method : { <Q>(): number; <Q>(a: T & Q): Q & number; (a?: number): number; (...args: any[]): number; }
+>args : any[]
+
+    optMethod?(): number;
+>optMethod : () => number
+}
+
+interface G {}
+>G : G
+
+export { G };
+>G : any
+
+interface HH {}
+>HH : HH
+
+export { HH as H };
+>HH : any
+>H : any
+
+export interface I {}
+>I : I
+
+export { I as II };
+>I : any
+>II : any
+
+export { J as JJ };
+>J : any
+>JJ : any
+
+export interface J {}
+>J : J
+
+export interface K extends I,J {
+>K : K
+
+    x: string;
+>x : string
+}
+
+export interface L extends K {
+>L : L
+
+    y: string;
+>y : string
+}
+
+export interface M<T> {
+>M : M<T>
+>T : T
+
+    field: T;
+>field : T
+}
+
+export interface N<U> extends M<U> {
+>N : N<U>
+>U : U
+
+    other: U;
+>other : U
+}
+
+export interface O {
+>O : O
+
+    [idx: string]: string;
+>idx : string
+}
+
+export interface P extends O {}
+>P : P
+
+export interface Q extends O {
+>Q : Q
+
+    [idx: string]: "ok";
+>idx : string
+}
+
+export interface R extends O {
+>R : R
+
+    [idx: number]: "ok";
+>idx : number
+}
+
+export interface S extends O {
+>S : S
+
+    [idx: string]: "ok";
+>idx : string
+
+    [idx: number]: never;
+>idx : number
+}
+
+export interface T {
+>T : T
+
+    [idx: number]: string;
+>idx : number
+}
+
+export interface U extends T {}
+>U : U
+
+
+export interface V extends T {
+>V : V
+
+    [idx: string]: string;
+>idx : string
+}
+
+export interface W extends T {
+>W : W
+
+    [idx: number]: "ok";
+>idx : number
+}
+
+export interface X extends T {
+>X : X
+
+    [idx: string]: string;
+>idx : string
+
+    [idx: number]: "ok";
+>idx : number
+}
+
+export interface Y {
+>Y : Y
+
+    [idx: string]: {x: number};
+>idx : string
+>x : number
+
+    [idx: number]: {x: number, y: number};
+>idx : number
+>x : number
+>y : number
+}
+
+export interface Z extends Y {}
+>Z : Z
+
+export interface AA extends Y {
+>AA : AA
+
+    [idx: string]: {x: number, y: number};
+>idx : string
+>x : number
+>y : number
+}
+
+export interface BB extends Y {
+>BB : BB
+
+    [idx: number]: {x: 0, y: 0};
+>idx : number
+>x : 0
+>y : 0
+}
+
+export interface CC extends Y {
+>CC : CC
+
+    [idx: string]: {x: number, y: number};
+>idx : string
+>x : number
+>y : number
+
+    [idx: number]: {x: 0, y: 0};
+>idx : number
+>x : 0
+>y : 0
+}
+

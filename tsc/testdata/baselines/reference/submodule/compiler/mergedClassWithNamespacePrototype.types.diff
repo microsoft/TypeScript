@@ -1,0 +1,11 @@
+--- old.mergedClassWithNamespacePrototype.types
++++ new.mergedClassWithNamespacePrototype.types
+@@= skipped -8, +8 lines =@@
+ >Foo : typeof Foo
+ 
+     namespace prototype {
+->prototype : typeof Foo.prototype
++>prototype : typeof prototype
+ 
+         function f(): void;
+ >f : () => void

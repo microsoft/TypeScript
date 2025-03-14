@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/jsdoc/thisTag1.ts] ////
+
+=== a.js ===
+/** @this {{ n: number }} Mount Holyoke Preparatory School
+ * @param {string} s
+ * @return {number}
+ */
+function f(s) {
+>f : (s: any) => any
+>s : any
+
+    return this.n + s.length
+>this.n + s.length : any
+>this.n : any
+>this : any
+>n : any
+>s.length : any
+>s : any
+>length : any
+}
+
+const o = {
+>o : { f: (s: any) => any; n: number; }
+>{    f,    n: 1} : { f: (s: any) => any; n: number; }
+
+    f,
+>f : any
+
+    n: 1
+>n : number
+>1 : 1
+}
+o.f('hi')
+>o.f('hi') : any
+>o.f : (s: any) => any
+>o : { f: (s: any) => any; n: number; }
+>f : (s: any) => any
+>'hi' : "hi"
+

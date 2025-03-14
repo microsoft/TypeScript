@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/emitTopOfFileTripleSlashCommentOnNotEmittedNodeIfRemoveCommentsIsFalse.ts] ////
+
+=== file1.ts ===
+/// <reference path="file0.ts" />
+declare var OData: any;
+>OData : any
+
+/// <reference path="file0.ts" />
+interface F { }
+>F : F
+
+
+
+=== file0.ts ===
+var x = 10
+>x : number
+>10 : 10
+

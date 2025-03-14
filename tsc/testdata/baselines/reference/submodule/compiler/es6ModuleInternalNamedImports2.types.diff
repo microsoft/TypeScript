@@ -1,0 +1,28 @@
+--- old.es6ModuleInternalNamedImports2.types
++++ new.es6ModuleInternalNamedImports2.types
+@@= skipped -10, +10 lines =@@
+ 
+     // interface
+     export interface M_I { }
++>M_I : M_I
++
+     //calss
+     export class M_C { }
+ >M_C : M_C
+@@= skipped -11, +13 lines =@@
+ 
+     // uninstantiated module
+     export module M_MU { }
++>M_MU : any
++
+     // function
+     export function M_F() { }
+ >M_F : () => void
+ 
+     // enum
+     export enum M_E { }
+->M_E : M_E
++>M_E : M.M_E
+ 
+     // type
+     export type M_T = number;

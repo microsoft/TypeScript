@@ -1,0 +1,18 @@
+--- old.es6ModuleConstEnumDeclaration2.types
++++ new.es6ModuleConstEnumDeclaration2.types
+@@= skipped -139, +139 lines =@@
+ >x : e6.x
+ 
+     var x3 = m1.e3.a;
+->x3 : m1.e3
+->m1.e3.a : m1.e3.a
+->m1.e3 : typeof m1.e3
++>x3 : e3
++>m1.e3.a : e3.a
++>m1.e3 : typeof e3
+ >m1 : typeof m1
+->e3 : typeof m1.e3
+->a : m1.e3.a
++>e3 : typeof e3
++>a : e3.a
+ }

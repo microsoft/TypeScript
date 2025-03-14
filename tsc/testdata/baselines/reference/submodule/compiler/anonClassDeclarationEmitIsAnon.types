@@ -1,0 +1,76 @@
+//// [tests/cases/compiler/anonClassDeclarationEmitIsAnon.ts] ////
+
+=== wrapClass.ts ===
+export function wrapClass(param: any) {
+>wrapClass : (param: any) => typeof Wrapped
+>param : any
+
+    return class Wrapped {
+>class Wrapped {        foo() {            return param;        }    } : typeof Wrapped
+>Wrapped : typeof Wrapped
+
+        foo() {
+>foo : () => any
+
+            return param;
+>param : any
+        }
+    }
+}
+
+export type Constructor<T = {}> = new (...args: any[]) => T;
+>Constructor : Constructor<T>
+>T : T
+>args : any[]
+
+export function Timestamped<TBase extends Constructor>(Base: TBase) {
+>Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>TBase : TBase
+>Base : TBase
+
+    return class extends Base {
+>class extends Base {        timestamp = Date.now();    } : { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>Base : {}
+
+        timestamp = Date.now();
+>timestamp : number
+>Date.now() : number
+>Date.now : () => number
+>Date : DateConstructor
+>now : () => number
+
+    };
+}
+
+=== index.ts ===
+import { wrapClass, Timestamped } from "./wrapClass";
+>wrapClass : (param: any) => typeof Wrapped
+>Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+
+export default wrapClass(0);
+>wrapClass(0) : typeof Wrapped
+>wrapClass : (param: any) => typeof Wrapped
+>0 : 0
+
+// Simple class
+export class User {
+>User : User
+
+    name = '';
+>name : string
+>'' : ""
+}
+
+// User that is Timestamped
+export class TimestampedUser extends Timestamped(User) {
+>TimestampedUser : TimestampedUser
+>Timestamped(User) : (Anonymous class)<typeof User> & User
+>Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>User : typeof User
+
+    constructor() {
+        super();
+>super() : void
+>super : { new (...args: any[]): (Anonymous class)<typeof User>; prototype: (Anonymous class)<any>; } & typeof User
+    }
+}

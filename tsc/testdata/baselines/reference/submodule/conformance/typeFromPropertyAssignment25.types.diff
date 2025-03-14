@@ -1,0 +1,99 @@
+--- old.typeFromPropertyAssignment25.types
++++ new.typeFromPropertyAssignment25.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bug24703.js ===
+ var Common = {};
+->Common : typeof Common
++>Common : {}
+ >{} : {}
+ 
+ Common.I = class {
+ >Common.I = class {    constructor() {        this.i = 1    }} : typeof I
+->Common.I : typeof I
+->Common : typeof Common
+->I : typeof I
++>Common.I : any
++>Common : {}
++>I : any
+ >class {    constructor() {        this.i = 1    }} : typeof I
+ 
+     constructor() {
+@@= skipped -21, +21 lines =@@
+ }
+ Common.O = class extends Common.I {
+ >Common.O = class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
+->Common.O : typeof O
+->Common : typeof Common
+->O : typeof O
++>Common.O : any
++>Common : {}
++>O : any
+ >class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
+->Common.I : I
+->Common : typeof Common
+->I : typeof I
++>Common.I : any
++>Common : {}
++>I : any
+ 
+     constructor() {
+         super()
+ >super() : void
+->super : typeof I
++>super : any
+ 
+         this.o = 2
+ >this.o = 2 : 2
+@@= skipped -22, +22 lines =@@
+     }
+ }
+ var o = new Common.O()
+->o : O
+->new Common.O() : O
+->Common.O : typeof O
+->Common : typeof Common
+->O : typeof O
++>o : any
++>new Common.O() : any
++>Common.O : any
++>Common : {}
++>O : any
+ 
+ var i = new Common.I()
+->i : I
+->new Common.I() : I
+->Common.I : typeof I
+->Common : typeof Common
+->I : typeof I
++>i : any
++>new Common.I() : any
++>Common.I : any
++>Common : {}
++>I : any
+ 
+ o.i
+->o.i : number
+->o : O
+->i : number
++>o.i : any
++>o : any
++>i : any
+ 
+ o.o
+->o.o : number
+->o : O
+->o : number
++>o.o : any
++>o : any
++>o : any
+ 
+ i.i
+->i.i : number
+->i : I
+->i : number
++>i.i : any
++>i : any
++>i : any
+ 
+ 

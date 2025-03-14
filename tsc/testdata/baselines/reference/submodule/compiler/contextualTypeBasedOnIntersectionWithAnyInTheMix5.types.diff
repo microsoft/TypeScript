@@ -1,0 +1,127 @@
+--- old.contextualTypeBasedOnIntersectionWithAnyInTheMix5.types
++++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix5.types
+@@= skipped -2, +2 lines =@@
+ === contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts ===
+ type ComputedGetter<T> = (oldValue?: T) => T;
+ >ComputedGetter : ComputedGetter<T>
++>T : T
+ >oldValue : T | undefined
+ 
+ type ComputedOptions = Record<string, ComputedGetter<any>>;
+@@= skipped -7, +8 lines =@@
+ 
+ type ExtractComputedReturns<T extends any> = {
+ >ExtractComputedReturns : ExtractComputedReturns<T>
++>T : T
+ 
+   [key in keyof T]: T[key] extends (...args: any[]) => infer TReturn
++>key : key
+ >args : any[]
++>TReturn : TReturn
+ 
+     ? TReturn
+     : never;
+ };
+ 
+ interface ComponentOptionsBase<D, C extends ComputedOptions> {
++>ComponentOptionsBase : ComponentOptionsBase<D, C>
++>D : D
++>C : C
++
+   data?: D;
+ >data : D | undefined
+ 
+@@= skipped -18, +25 lines =@@
+ 
+ type ComponentPublicInstance<D = {}, C extends ComputedOptions = {}> = D &
+ >ComponentPublicInstance : ComponentPublicInstance<D, C>
++>D : D
++>C : C
+ 
+   ExtractComputedReturns<C>;
+ 
+@@= skipped -7, +9 lines =@@
+ >ComponentOptions : ComponentOptions<D, C>
+ 
+   D = any,
++>D : D
++
+   C extends ComputedOptions = any,
++>C : C
++
+ > = ComponentOptionsBase<D, C> & ThisType<ComponentPublicInstance<D, C>>;
+ 
+ interface App {
++>App : App
++
+   mixin(mixin: ComponentOptions): this;
+->mixin : (mixin: ComponentOptions) => this
++>mixin : (mixin: ComponentOptions<any, any>) => this
+ >mixin : ComponentOptions<any, any>
+ }
+ 
+ interface InjectionKey<T> extends Symbol {}
++>InjectionKey : InjectionKey<T>
++>T : T
+ 
+ interface Ref<T> {
++>Ref : Ref<T>
++>T : T
++
+   _v: T;
+ >_v : T
+ }
+ 
+ declare function reactive<T extends object>(target: T): Ref<T>;
+ >reactive : <T extends object>(target: T) => Ref<T>
++>T : T
+ >target : T
+ 
+ interface ThemeInstance {
++>ThemeInstance : ThemeInstance
++
+   readonly name: Readonly<Ref<string>>;
+ >name : Readonly<Ref<string>>
+ }
+@@= skipped -29, +43 lines =@@
+ >ThemeSymbol : InjectionKey<ThemeInstance>
+ 
+ declare function inject(
+->inject : (this: ComponentPublicInstance, key: InjectionKey<any> | string) => any
++>inject : (key: string | InjectionKey<any>) => any
+ 
+   this: ComponentPublicInstance,
+ >this : ExtractComputedReturns<{}>
+@@= skipped -15, +15 lines =@@
+ 
+ app.mixin({
+ >app.mixin({  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },}) : App
+->app.mixin : (mixin: ComponentOptions) => App
++>app.mixin : (mixin: ComponentOptions<any, any>) => App
+ >app : App
+->mixin : (mixin: ComponentOptions) => App
+->{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify(): Ref<{ theme: any; }>; }; }
++>mixin : (mixin: ComponentOptions<any, any>) => App
++>{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify: () => Ref<{ theme: any; }>; }; }
+ 
+   computed: {
+->computed : { $vuetify(): Ref<{ theme: any; }>; }
+->{    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  } : { $vuetify(): Ref<{ theme: any; }>; }
++>computed : { $vuetify: () => Ref<{ theme: any; }>; }
++>{    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  } : { $vuetify: () => Ref<{ theme: any; }>; }
+ 
+     $vuetify() {
+ >$vuetify : () => Ref<{ theme: any; }>
+@@= skipped -21, +21 lines =@@
+         theme: inject.call(this, ThemeSymbol),
+ >theme : any
+ >inject.call(this, ThemeSymbol) : any
+->inject.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+->inject : (this: ComponentPublicInstance, key: InjectionKey<any> | string) => any
+->call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
++>inject.call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
++>inject : (key: string | InjectionKey<any>) => any
++>call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
+ >this : any
+ >ThemeSymbol : InjectionKey<ThemeInstance>
+ 

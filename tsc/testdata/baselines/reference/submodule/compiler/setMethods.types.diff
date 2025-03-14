@@ -1,0 +1,74 @@
+--- old.setMethods.types
++++ new.setMethods.types
+@@= skipped -30, +30 lines =@@
+ >{} : {}
+ 
+ let numberSetLike = {
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+->{  size: 1,  *keys() { yield 3 },  has(x) { return x === 3 },} : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
++>{  size: 1,  *keys() { yield 3 },  has(x) { return x === 3 },} : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 
+   size: 1,
+ >size : number
+@@= skipped -55, +55 lines =@@
+ >numberSet.union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+ >numberSet : Set<number>
+ >union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 
+ numberSet.intersection([]);
+ >numberSet.intersection([]) : Set<number>
+@@= skipped -36, +36 lines =@@
+ >numberSet.intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+ >numberSet : Set<number>
+ >intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 
+ numberSet.difference([]);
+ >numberSet.difference([]) : Set<number>
+@@= skipped -36, +36 lines =@@
+ >numberSet.difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+ >numberSet : Set<number>
+ >difference : <U>(other: ReadonlySetLike<U>) => Set<number>
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 
+ numberSet.symmetricDifference([]);
+ >numberSet.symmetricDifference([]) : Set<unknown>
+@@= skipped -36, +36 lines =@@
+ >numberSet.symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+ >numberSet : Set<number>
+ >symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 
+ numberSet.isSubsetOf([]);
+ >numberSet.isSubsetOf([]) : boolean
+@@= skipped -36, +36 lines =@@
+ >numberSet.isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+ >numberSet : Set<number>
+ >isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 
+ numberSet.isSupersetOf([]);
+ >numberSet.isSupersetOf([]) : boolean
+@@= skipped -36, +36 lines =@@
+ >numberSet.isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+ >numberSet : Set<number>
+ >isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 
+ numberSet.isDisjointFrom([]);
+ >numberSet.isDisjointFrom([]) : boolean
+@@= skipped -36, +36 lines =@@
+ >numberSet.isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+ >numberSet : Set<number>
+ >isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
+->numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
++>numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+ 

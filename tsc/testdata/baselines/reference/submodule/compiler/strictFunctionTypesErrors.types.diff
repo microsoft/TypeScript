@@ -1,0 +1,79 @@
+--- old.strictFunctionTypesErrors.types
++++ new.strictFunctionTypesErrors.types
+@@= skipped -81, +81 lines =@@
+ 
+ type Func<T, U> = (x: T) => U;
+ >Func : Func<T, U>
++>T : T
++>U : U
+ >x : T
+ 
+ declare let g1: Func<Object, Object>;
+@@= skipped -219, +221 lines =@@
+ >i3 : Func<string, Func<Object, void>>
+ 
+ interface Animal { animal: void }
++>Animal : Animal
+ >animal : void
+ 
+ interface Dog extends Animal { dog: void }
++>Dog : Dog
+ >dog : void
+ 
+ interface Cat extends Animal { cat: void }
++>Cat : Cat
+ >cat : void
+ 
+ interface Comparer1<T> {
++>Comparer1 : Comparer1<T>
++>T : T
++
+     compare(a: T, b: T): number;
+ >compare : (a: T, b: T) => number
+ >a : T
+@@= skipped -32, +38 lines =@@
+ >animalComparer1 : Comparer1<Animal>
+ 
+ interface Comparer2<T> {
++>Comparer2 : Comparer2<T>
++>T : T
++
+     compare: (a: T, b: T) => number;
+ >compare : (a: T, b: T) => number
+ >a : T
+@@= skipped -25, +28 lines =@@
+ // Crate<T> is invariant in --strictFunctionTypes mode
+ 
+ interface Crate<T> {
++>Crate : Crate<T>
++>T : T
++
+     item: T;
+ >item : T
+ 
+@@= skipped -70, +73 lines =@@
+     declare let f1: (cb: typeof Foo.f1) => void;
+ >f1 : (cb: (x: Animal) => Animal) => void
+ >cb : (x: Animal) => Animal
+->Foo.f1 : (x: Animal) => Animal
+ >Foo : typeof Foo
+->f1 : (x: Animal) => Animal
+ 
+     declare let f2: (cb: typeof Foo.f2) => void;
+ >f2 : (cb: (x: Dog) => Animal) => void
+ >cb : (x: Dog) => Animal
+->Foo.f2 : (x: Dog) => Animal
+ >Foo : typeof Foo
+->f2 : (x: Dog) => Animal
+ 
+     f1 = f2;
+ >f1 = f2 : (cb: (x: Dog) => Animal) => void
+@@= skipped -27, +23 lines =@@
+ 
+     type BivariantHack<Input, Output> = { foo(x: Input): Output }["foo"];
+ >BivariantHack : (x: Input) => Output
++>Input : Input
++>Output : Output
+ >foo : (x: Input) => Output
+ >x : Input
+ 

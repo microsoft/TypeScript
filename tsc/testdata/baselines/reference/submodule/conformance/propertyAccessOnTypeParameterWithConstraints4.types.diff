@@ -1,0 +1,36 @@
+--- old.propertyAccessOnTypeParameterWithConstraints4.types
++++ new.propertyAccessOnTypeParameterWithConstraints4.types
+@@= skipped -2, +2 lines =@@
+ === propertyAccessOnTypeParameterWithConstraints4.ts ===
+ class C<T extends Date> {
+ >C : C<T>
++>T : T
+ 
+     f() {
+ >f : () => any
+@@= skipped -34, +35 lines =@@
+ >f : () => any
+ 
+ interface I<T extends Date> {
++>I : I<T>
++>T : T
++
+     foo: T;
+ >foo : T
+ }
+@@= skipped -28, +31 lines =@@
+ >a : <T extends Date>() => T
+ 
+     <T extends Date>(): T;
++>T : T
+ }
+ var r3: string = a().notHere();
+ >r3 : string
+@@= skipped -24, +25 lines =@@
+     foo: <T extends Date>(x: T): T => {
+ >foo : <T extends Date>(x: T) => T
+ ><T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    } : <T extends Date>(x: T) => T
++>T : T
+ >x : T
+ 
+         var a = x['notHere'](); // should be string

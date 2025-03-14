@@ -1,0 +1,20 @@
+--- old.typeParameterAssignability3.types
++++ new.typeParameterAssignability3.types
+@@= skipped -8, +8 lines =@@
+ 
+ function foo<T extends Foo, U extends Foo>(t: T, u: U) {
+ >foo : <T extends Foo, U extends Foo>(t: T, u: U) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+@@= skipped -42, +44 lines =@@
+ 
+ class C<T extends Foo, U extends Foo> {
+ >C : C<T, U>
++>T : T
++>U : U
+ 
+     t: T;
+ >t : T

@@ -1,0 +1,74 @@
+--- old.unusedIdentifiersConsolidated1.types
++++ new.unusedIdentifiersConsolidated1.types
+@@= skipped -11, +11 lines =@@
+ 
+ class Dummy<usedtypeparameter, unusedtypeparameter> {
+ >Dummy : Dummy<usedtypeparameter, unusedtypeparameter>
++>usedtypeparameter : usedtypeparameter
++>unusedtypeparameter : unusedtypeparameter
+ 
+     private unusedprivatevariable: string;
+ >unusedprivatevariable : string
+@@= skipped -64, +66 lines =@@
+ >Validation : typeof Validation
+ 
+     export interface StringValidator {
++>StringValidator : StringValidator
++
+         isAcceptable(s: string): boolean;
+ >isAcceptable : (s: string) => boolean
+ >s : string
+@@= skipped -50, +52 lines =@@
+     }
+ 
+     interface usedLocallyInterface {
++>usedLocallyInterface : usedLocallyInterface
+     }
+ 
+     interface usedLocallyInterface2 {
++>usedLocallyInterface2 : usedLocallyInterface2
++
+         someFunction(s1: string): void;
+ >someFunction : (s1: string) => void
+ >s1 : string
+     }
+ 
+     export interface exportedInterface {
++>exportedInterface : exportedInterface
+     }
+ 
+     class dummy implements usedLocallyInterface {
+@@= skipped -16, +20 lines =@@
+     }
+ 
+     interface unusedInterface {
++>unusedInterface : unusedInterface
+     }
+ }
+ 
+@@= skipped -25, +26 lines =@@
+     }
+ 
+     interface interface1 {
++>interface1 : interface1
+     }
+ 
+     export interface interface2 extends interface1 {
++>interface2 : interface2
+     }
+ 
+     interface interface3 {
++>interface3 : interface3
+     }
+ 
+     export interface interface4 {
++>interface4 : interface4
+     }
+ 
+     export let a: interface3;
+ >a : interface3
+ 
+     interface interface5 {
++>interface5 : interface5
+     }
+ }

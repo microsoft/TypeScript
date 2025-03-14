@@ -1,0 +1,11 @@
+--- old.classImplementsMergedClassInterface.types
++++ new.classImplementsMergedClassInterface.types
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ interface C1 {
++>C1 : C1
++
+     y : number;
+ >y : number
+ }

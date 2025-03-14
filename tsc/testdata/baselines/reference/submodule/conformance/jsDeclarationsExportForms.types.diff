@@ -1,0 +1,129 @@
+--- old.jsDeclarationsExportForms.types
++++ new.jsDeclarationsExportForms.types
+@@= skipped -25, +25 lines =@@
+ 
+ === bat.js ===
+ import * as ns from "./cls";
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ export default ns;
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ === ban.js ===
+ import * as ns from "./cls";
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ export {ns};
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ === bol.js ===
+ import * as ns from "./cls";
+->ns : typeof ns
++>ns : typeof import("cls")
+ 
+ export { ns as classContainer };
+->ns : typeof ns
+->classContainer : typeof ns
++>ns : typeof import("cls")
++>classContainer : typeof import("cls")
+ 
+ === cjs.js ===
+ const ns = require("./cls");
+->ns : typeof ns
+->require("./cls") : typeof ns
++>ns : any
++>require("./cls") : any
+ >require : any
+ >"./cls" : "./cls"
+ 
+ module.exports = { ns };
+->module.exports = { ns } : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->{ ns } : { ns: typeof ns; }
+->ns : typeof ns
++>module.exports = { ns } : { ns: any; }
++>module.exports : any
++>module : any
++>exports : any
++>{ ns } : { ns: any; }
++>ns : any
+ 
+ === cjs2.js ===
+ const ns = require("./cls");
+->ns : typeof ns
+->require("./cls") : typeof ns
++>ns : any
++>require("./cls") : any
+ >require : any
+ >"./cls" : "./cls"
+ 
+ module.exports = ns;
+->module.exports = ns : typeof ns
+->module.exports : typeof ns
+->module : { exports: typeof ns; }
+->exports : typeof ns
+->ns : typeof ns
++>module.exports = ns : any
++>module.exports : any
++>module : any
++>exports : any
++>ns : any
+ 
+ === cjs3.js ===
+ const ns = require("./cls");
+->ns : typeof ns
+->require("./cls") : typeof ns
++>ns : any
++>require("./cls") : any
+ >require : any
+ >"./cls" : "./cls"
+ 
+ module.exports.ns = ns;
+->module.exports.ns = ns : typeof ns
+->module.exports.ns : typeof ns
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->ns : typeof ns
+->ns : typeof ns
++>module.exports.ns = ns : any
++>module.exports.ns : any
++>module.exports : any
++>module : any
++>exports : any
++>ns : any
++>ns : any
+ 
+ === cjs4.js ===
+ const ns = require("./cls");
+->ns : typeof ns
+->require("./cls") : typeof ns
++>ns : any
++>require("./cls") : any
+ >require : any
+ >"./cls" : "./cls"
+ 
+ module.exports.names = ns;
+->module.exports.names = ns : typeof ns
+->module.exports.names : typeof ns
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->names : typeof ns
+->ns : typeof ns
++>module.exports.names = ns : any
++>module.exports.names : any
++>module.exports : any
++>module : any
++>exports : any
++>names : any
++>ns : any
+ 
+ === includeAll.js ===
+ 

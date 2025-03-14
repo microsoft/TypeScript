@@ -1,0 +1,182 @@
+--- old.derivedClassOverridesProtectedMembers3.types
++++ new.derivedClassOverridesProtectedMembers3.types
+@@= skipped -14, +14 lines =@@
+ 
+     a: typeof x;
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     b(a: typeof x) { }
+->b : (a: typeof x) => void
++>b : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     get c() { return x; }
+ >c : { foo: string; }
+@@= skipped -14, +12 lines =@@
+     set c(v: typeof x) { }
+ >c : { foo: string; }
+ >v : { foo: string; }
+->x : { foo: string; }
+ 
+     d: (a: typeof x) => void;
+->d : (a: typeof x) => void
++>d : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     static r: typeof x;
+ >r : { foo: string; }
+->x : { foo: string; }
+ 
+     static s(a: typeof x) { }
+->s : (a: typeof x) => void
++>s : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     static get t() { return x; }
+ >t : { foo: string; }
+@@= skipped -23, +19 lines =@@
+     static set t(v: typeof x) { }
+ >t : { foo: string; }
+ >v : { foo: string; }
+->x : { foo: string; }
+ 
+     static u: (a: typeof x) => void;
+->u : (a: typeof x) => void
++>u : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) {}
+ >a : { foo: string; }
+->x : { foo: string; }
+ }
+ 
+ // Errors
+@@= skipped -20, +17 lines =@@
+ 
+     protected a: typeof x;
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -15, +13 lines =@@
+ >Base : Base
+ 
+     protected b(a: typeof x) { }
+->b : (a: typeof x) => void
++>b : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -22, +20 lines =@@
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -13, +12 lines =@@
+     protected set c(v: typeof x) { }
+ >c : { foo: string; }
+ >v : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -15, +13 lines =@@
+ >Base : Base
+ 
+     protected d: (a: typeof x) => void ;
+->d : (a: typeof x) => void
++>d : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -18, +16 lines =@@
+ 
+     protected static r: typeof x;
+ >r : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -15, +13 lines =@@
+ >Base : Base
+ 
+     protected static s(a: typeof x) { }
+->s : (a: typeof x) => void
++>s : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -22, +20 lines =@@
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -13, +12 lines =@@
+     protected static set t(v: typeof x) { }
+ >t : { foo: string; }
+ >v : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }
+@@= skipped -15, +13 lines =@@
+ >Base : Base
+ 
+     protected static u: (a: typeof x) => void ;
+->u : (a: typeof x) => void
++>u : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     constructor(a: typeof x) { super(a); }
+ >a : { foo: string; }
+->x : { foo: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; }

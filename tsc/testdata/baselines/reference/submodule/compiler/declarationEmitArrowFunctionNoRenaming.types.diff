@@ -1,0 +1,39 @@
+--- old.declarationEmitArrowFunctionNoRenaming.types
++++ new.declarationEmitArrowFunctionNoRenaming.types
+@@= skipped -4, +4 lines =@@
+ >Brand : Brand<Base, Branding, ReservedName>
+ 
+   Base,
++>Base : Base
++
+   Branding,
++>Branding : Branding
++
+   ReservedName extends string = "__type__"
++>ReservedName : ReservedName
++
+ > = Base & { [K in ReservedName]: Branding } & { __witness__: Base };
++>K : K
+ >__witness__ : Base
+ 
+ export type BoundedInteger<
+ >BoundedInteger : BoundedInteger<LowerBound, UpperBound>
+ 
+   LowerBound extends number,
++>LowerBound : LowerBound
++
+   UpperBound extends number
++>UpperBound : UpperBound
++
+ > = Brand<number, "BoundedInteger">;
+ 
+ export const toBoundedInteger =
+@@= skipped -17, +28 lines =@@
+ 
+   <LowerBound extends number, UpperBound extends number>(bounds: {
+ ><LowerBound extends number, UpperBound extends number>(bounds: {    lowerBound: LowerBound;    upperBound: UpperBound;  }) =>  (    n: number  ): BoundedInteger<LowerBound, UpperBound> =>  // Implementation doesn't matter here    ({} as any) : <LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) => (n: number) => BoundedInteger<LowerBound, UpperBound>
++>LowerBound : LowerBound
++>UpperBound : UpperBound
+ >bounds : { lowerBound: LowerBound; upperBound: UpperBound; }
+ 
+     lowerBound: LowerBound;

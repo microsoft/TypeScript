@@ -1,0 +1,78 @@
+--- old.commonJSImportNestedClassTypeReference.types
++++ new.commonJSImportNestedClassTypeReference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === main.js ===
+ const { K } = require("./mod1");
+->K : typeof K
+->require("./mod1") : typeof import("mod1")
++>K : any
++>require("./mod1") : any
+ >require : any
+ >"./mod1" : "./mod1"
+ 
+ /** @param {K} k */
+ function f(k) {
+->f : (k: K) => void
+->k : K
++>f : (k: any) => void
++>k : any
+ 
+     k.values()
+->k.values() : K
+->k.values : () => K
+->k : K
+->values : () => K
++>k.values() : any
++>k.values : any
++>k : any
++>values : any
+ }
+ 
+ === mod1.js ===
+ var NS = {}
+->NS : typeof NS
++>NS : {}
+ >{} : {}
+ 
+ NS.K =class {
+ >NS.K =class {    values() {        return new NS.K()    }} : typeof K
+->NS.K : typeof K
+->NS : typeof NS
+->K : typeof K
++>NS.K : any
++>NS : {}
++>K : any
+ >class {    values() {        return new NS.K()    }} : typeof K
+ 
+     values() {
+->values : () => K
++>values : () => any
+ 
+         return new NS.K()
+->new NS.K() : K
+->NS.K : typeof K
+->NS : typeof NS
+->K : typeof K
++>new NS.K() : any
++>NS.K : any
++>NS : {}
++>K : any
+     }
+ }
+ exports.K = NS.K;
+->exports.K = NS.K : typeof K
+->exports.K : typeof K
+->exports : typeof import("mod1")
+->K : typeof K
+->NS.K : typeof K
+->NS : typeof NS
+->K : typeof K
++>exports.K = NS.K : any
++>exports.K : any
++>exports : any
++>K : any
++>NS.K : any
++>NS : {}
++>K : any
+ 

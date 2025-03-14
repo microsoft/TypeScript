@@ -1,0 +1,21 @@
+--- old.functionOverloads43.types
++++ new.functionOverloads43.types
+@@= skipped -12, +12 lines =@@
+ 
+ function foo([x]: { a:number | string }[]): string | number {
+ >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
+->x : { a: number | string; }
++>x : { a: string | number; }
+ >a : string | number
+ 
+     if (x) {
+->x : { a: number | string; }
++>x : { a: string | number; }
+ 
+         return x.a;
+ >x.a : string | number
+->x : { a: number | string; }
++>x : { a: string | number; }
+ >a : string | number
+     }
+     

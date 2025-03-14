@@ -1,0 +1,25 @@
+--- old.topLevelAwaitErrors.1(module=es2022).types
++++ new.topLevelAwaitErrors.1(module=es2022).types
+@@= skipped -100, +100 lines =@@
+ >C7 : C7
+ 
+     method1(@await [x]) {}
+->method1 : ([x]: [any]) => void
++>method1 : (__0: [any]) => void
+ > : any
+ >x : any
+ 
+     method2(@await(1) [x]) {}
+->method2 : ([x]: [any]) => void
++>method2 : (__0: [any]) => void
+ >await(1) : any
+ > : any
+ >1 : 1
+ >x : any
+ 
+     method3(@(await) [x]) {}
+->method3 : ([x]: [any]) => void
++>method3 : (__0: [any]) => void
+ >(await) : any
+ >await : any
+ > : any

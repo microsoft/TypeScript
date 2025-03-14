@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeReassignmentFromDeclaration.ts] ////
+
+=== /some-mod.d.ts ===
+interface Item {
+>Item : Item
+
+    x: string;
+>x : string
+}
+declare const items: Item[];
+>items : Item[]
+
+export = items;
+>items : Item[]
+
+=== index.js ===
+/** @type {typeof import("/some-mod")} */
+const items = [];
+>items : any[]
+>[] : undefined[]
+
+module.exports = items;
+>module.exports = items : any[]
+>module.exports : any
+>module : any
+>exports : any
+>items : any[]
+

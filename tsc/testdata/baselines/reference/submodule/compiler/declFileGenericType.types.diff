@@ -1,0 +1,167 @@
+--- old.declFileGenericType.types
++++ new.declFileGenericType.types
+@@= skipped -5, +5 lines =@@
+ 
+     export class A<T>{ }
+ >A : A<T>
++>T : T
+ 
+     export class B { }
+ >B : B
+     
+     export function F<T>(x: T): A<B> { return null; }
+ >F : <T>(x: T) => A<B>
++>T : T
+ >x : T
+ 
+     export function F2<T>(x: T): C.A<C.B> { return null; }
+->F2 : <T>(x: T) => C.A<C.B>
++>F2 : <T>(x: T) => A<B>
++>T : T
+ >x : T
+ >C : any
+ >C : any
+ 
+     export function F3<T>(x: T): C.A<C.B>[] { return null; }
+->F3 : <T>(x: T) => C.A<C.B>[]
++>F3 : <T>(x: T) => A<B>[]
++>T : T
+ >x : T
+ >C : any
+ >C : any
+ 
+     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
+->F4 : <T extends A<B>>(x: T) => Array<C.A<C.B>>
++>F4 : <T extends A<B>>(x: T) => A<B>[]
++>T : T
+ >x : T
+ >C : any
+ >C : any
+ 
+     export function F5<T>(): T { return null; }
+ >F5 : <T>() => T
++>T : T
+ 
+     export function F6<T extends A<B>>(x: T): T { return null; }
+ >F6 : <T extends A<B>>(x: T) => T
++>T : T
+ >x : T
+ 
+     export class D<T>{
+ >D : D<T>
++>T : T
+ 
+         constructor(public val: T) { }
+ >val : T
+@@= skipped -43, +51 lines =@@
+ }
+ 
+ export var a: C.A<C.B>;
+->a : C.A<C.B>
++>a : A<B>
+ >C : any
+ >C : any
+ 
+ export var b = C.F;
+->b : <T>(x: T) => C.A<C.B>
+->C.F : <T>(x: T) => C.A<C.B>
++>b : <T>(x: T) => A<B>
++>C.F : <T>(x: T) => A<B>
+ >C : typeof C
+->F : <T>(x: T) => C.A<C.B>
++>F : <T>(x: T) => A<B>
+ 
+ export var c = C.F2;
+->c : <T>(x: T) => C.A<C.B>
+->C.F2 : <T>(x: T) => C.A<C.B>
++>c : <T>(x: T) => A<B>
++>C.F2 : <T>(x: T) => A<B>
+ >C : typeof C
+->F2 : <T>(x: T) => C.A<C.B>
++>F2 : <T>(x: T) => A<B>
+ 
+ export var d = C.F3;
+->d : <T>(x: T) => C.A<C.B>[]
+->C.F3 : <T>(x: T) => C.A<C.B>[]
++>d : <T>(x: T) => A<B>[]
++>C.F3 : <T>(x: T) => A<B>[]
+ >C : typeof C
+->F3 : <T>(x: T) => C.A<C.B>[]
++>F3 : <T>(x: T) => A<B>[]
+ 
+ export var e = C.F4;
+->e : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
+->C.F4 : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
++>e : <T extends A<B>>(x: T) => A<B>[]
++>C.F4 : <T extends A<B>>(x: T) => A<B>[]
+ >C : typeof C
+->F4 : <T extends C.A<C.B>>(x: T) => Array<C.A<C.B>>
++>F4 : <T extends A<B>>(x: T) => A<B>[]
+ 
+ export var x = (new C.D<C.A<C.B>>(new C.A<C.B>())).val;
+->x : C.A<C.B>
+->(new C.D<C.A<C.B>>(new C.A<C.B>())).val : C.A<C.B>
+->(new C.D<C.A<C.B>>(new C.A<C.B>())) : C.D<C.A<C.B>>
+->new C.D<C.A<C.B>>(new C.A<C.B>()) : C.D<C.A<C.B>>
+->C.D : typeof C.D
++>x : A<B>
++>(new C.D<C.A<C.B>>(new C.A<C.B>())).val : A<B>
++>(new C.D<C.A<C.B>>(new C.A<C.B>())) : D<A<B>>
++>new C.D<C.A<C.B>>(new C.A<C.B>()) : D<A<B>>
++>C.D : typeof D
+ >C : typeof C
+->D : typeof C.D
++>D : typeof D
+ >C : any
+ >C : any
+->new C.A<C.B>() : C.A<C.B>
+->C.A : typeof C.A
++>new C.A<C.B>() : A<B>
++>C.A : typeof A
+ >C : typeof C
+->A : typeof C.A
++>A : typeof A
+ >C : any
+->val : C.A<C.B>
++>val : A<B>
+ 
+ export function f<T extends C.A<C.B>>() { }
+->f : <T extends C.A<C.B>>() => void
++>f : <T extends A<B>>() => void
++>T : T
+ >C : any
+ >C : any
+ 
+ export var g = C.F5<C.A<C.B>>();
+->g : C.A<C.B>
+->C.F5<C.A<C.B>>() : C.A<C.B>
++>g : A<B>
++>C.F5<C.A<C.B>>() : A<B>
+ >C.F5 : <T>() => T
+ >C : typeof C
+ >F5 : <T>() => T
+@@= skipped -61, +62 lines =@@
+ 
+ export class h extends C.A<C.B>{ }
+ >h : h
+->C.A : C.A<C.B>
++>C.A : A<B>
+ >C : typeof C
+->A : typeof C.A
++>A : typeof A
+ >C : any
+ 
+ export interface i extends C.A<C.B> { }
++>i : i
+ >C : typeof C
+ >C : any
+ 
+ export var j = C.F6;
+->j : <T extends C.A<C.B>>(x: T) => T
+->C.F6 : <T extends C.A<C.B>>(x: T) => T
++>j : <T extends A<B>>(x: T) => T
++>C.F6 : <T extends A<B>>(x: T) => T
+ >C : typeof C
+->F6 : <T extends C.A<C.B>>(x: T) => T
++>F6 : <T extends A<B>>(x: T) => T
+ 

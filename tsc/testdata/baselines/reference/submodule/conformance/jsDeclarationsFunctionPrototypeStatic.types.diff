@@ -1,0 +1,47 @@
+--- old.jsDeclarationsFunctionPrototypeStatic.types
++++ new.jsDeclarationsFunctionPrototypeStatic.types
+@@= skipped -1, +1 lines =@@
+ 
+ === source.js ===
+ module.exports = MyClass;
+->module.exports = MyClass : typeof MyClass
+->module.exports : typeof MyClass
+->module : { exports: typeof MyClass; }
+->exports : typeof MyClass
+->MyClass : typeof MyClass
++>module.exports = MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
++>module.exports : any
++>module : any
++>exports : any
++>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+ 
+ function MyClass() {}
+->MyClass : typeof MyClass
++>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+ 
+ MyClass.staticMethod = function() {}
+ >MyClass.staticMethod = function() {} : () => void
+ >MyClass.staticMethod : () => void
+->MyClass : typeof MyClass
++>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+ >staticMethod : () => void
+ >function() {} : () => void
+ 
+@@= skipped -20, +20 lines =@@
+ >MyClass.prototype.method = function() {} : () => void
+ >MyClass.prototype.method : any
+ >MyClass.prototype : any
+->MyClass : typeof MyClass
++>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+ >prototype : any
+ >method : any
+ >function() {} : () => void
+@@= skipped -8, +8 lines =@@
+ MyClass.staticProperty = 123;
+ >MyClass.staticProperty = 123 : 123
+ >MyClass.staticProperty : number
+->MyClass : typeof MyClass
++>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
+ >staticProperty : number
+ >123 : 123
+ 

@@ -1,0 +1,48 @@
+--- old.newTarget.es6.types
++++ new.newTarget.es6.types
+@@= skipped -16, +16 lines =@@
+ >target : typeof A
+     }
+     static c = function () { return new.target; }
+->c : () => any
+->function () { return new.target; } : () => any
+->new.target : () => any
+->target : () => any
++>c : () => ???
++>function () { return new.target; } : () => ???
++>new.target : () => ???
++>target : () => ???
+ 
+     d = function () { return new.target; }
+->d : () => any
+->function () { return new.target; } : () => any
+->new.target : () => any
+->target : () => any
++>d : () => ???
++>function () { return new.target; } : () => ???
++>new.target : () => ???
++>target : () => ???
+ }
+ 
+ class B extends A {
+@@= skipped -66, +66 lines =@@
+ }
+ 
+ const O = {
+->O : { k: () => any; }
+->{    k: function () { return new.target; }} : { k: () => any; }
++>O : { k: () => ???; }
++>{    k: function () { return new.target; }} : { k: () => ???; }
+ 
+     k: function () { return new.target; }
+->k : () => any
+->function () { return new.target; } : () => any
+->new.target : () => any
+->target : () => any
++>k : () => ???
++>function () { return new.target; } : () => ???
++>new.target : () => ???
++>target : () => ???
+ 
+ };
+ 

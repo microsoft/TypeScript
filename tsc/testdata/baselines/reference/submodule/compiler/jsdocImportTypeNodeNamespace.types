@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/jsdocImportTypeNodeNamespace.ts] ////
+
+=== GeometryType.d.ts ===
+declare namespace _default {
+>_default : typeof _default
+
+  export const POINT: string;
+>POINT : string
+}
+export default _default;
+>_default : typeof _default
+
+=== Main.js ===
+export default function () {
+  return /** @type {import('./GeometryType.js').default} */ ('Point');
+>('Point') : "Point"
+>'Point' : "Point"
+}
+

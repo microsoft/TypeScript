@@ -1,0 +1,30 @@
+--- old.jsFileMethodOverloads3.types
++++ new.jsFileMethodOverloads3.types
+@@= skipped -15, +15 lines =@@
+  * @returns {string | number}
+  */
+ function id(x) {
+->id : { (x: number): any; (x: string): any; }
+->x : string | number
++>id : (x: any) => any
++>x : any
+ 
+     return x;
+->x : string | number
++>x : any
+ }
+ 
+ export let a = id(123);
+ >a : any
+ >id(123) : any
+->id : { (x: number): any; (x: string): any; }
++>id : (x: any) => any
+ >123 : 123
+ 
+ export let b = id("hello");
+ >b : any
+ >id("hello") : any
+->id : { (x: number): any; (x: string): any; }
++>id : (x: any) => any
+ >"hello" : "hello"
+ 

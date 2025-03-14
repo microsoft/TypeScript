@@ -1,0 +1,11 @@
+--- old.symbolDeclarationEmit12.types
++++ new.symbolDeclarationEmit12.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     interface I { }
++>I : I
++
+     export class C {
+ >C : C
+ 

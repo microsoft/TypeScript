@@ -1,0 +1,131 @@
+--- old.noUncheckedIndexedAccessDestructuring.types
++++ new.noUncheckedIndexedAccessDestructuring.types
+@@= skipped -33, +33 lines =@@
+ 
+ // Destructuring a rest element -> do not include undefined
+ const [, , ...s3] = strArray;
+-> : undefined
+-> : undefined
+ >s3 : string[]
+ >strArray : string[]
+ 
+@@= skipped -55, +53 lines =@@
+ 
+     x.toFixed(); // Should OK
+ >x.toFixed() : string
+->x.toFixed : (fractionDigits?: number) => string
++>x.toFixed : (fractionDigits?: number | undefined) => string
+ >x : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+     y.toFixed(); // Should OK
+ >y.toFixed() : string
+->y.toFixed : (fractionDigits?: number) => string
++>y.toFixed : (fractionDigits?: number | undefined) => string
+ >y : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+     z.toFixed(); // Should error
+ >z.toFixed() : string
+->z.toFixed : (fractionDigits?: number) => string
++>z.toFixed : (fractionDigits?: number | undefined) => string
+ >z : number | undefined
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ }
+ 
+ {
+@@= skipped -25, +25 lines =@@
+ 
+     x.toFixed(); // Should OK
+ >x.toFixed() : string
+->x.toFixed : (fractionDigits?: number) => string
++>x.toFixed : (fractionDigits?: number | undefined) => string
+ >x : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+     q.y.toFixed(); // Should OK
+ >q.y.toFixed() : string
+->q.y.toFixed : (fractionDigits?: number) => string
++>q.y.toFixed : (fractionDigits?: number | undefined) => string
+ >q.y : number
+ >q : { [s: string]: number; y: number; }
+ >y : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+     q.z.toFixed(); // Should error
+ >q.z.toFixed() : string
+->q.z.toFixed : (fractionDigits?: number) => string
++>q.z.toFixed : (fractionDigits?: number | undefined) => string
+ >q.z : number | undefined
+ >q : { [s: string]: number; y: number; }
+ >z : number | undefined
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ }
+ 
+ {
+@@= skipped -29, +29 lines =@@
+ 
+     x.
+ >x.    toFixed() : string
+->x.    toFixed : (fractionDigits?: number) => string
++>x.    toFixed : (fractionDigits?: number | undefined) => string
+ >x : number
+ 
+     toFixed(); // Should OK
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+     q.
+ >q.    y.toFixed() : string
+->q.    y.toFixed : (fractionDigits?: number) => string
++>q.    y.toFixed : (fractionDigits?: number | undefined) => string
+ >q.    y : number
+ >q : { [s: string]: number; y: number; }
+ 
+     y.toFixed(); // Should OK
+ >y : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ 
+     q.
+ >q.    z.toFixed() : string
+->q.    z.toFixed : (fractionDigits?: number) => string
++>q.    z.toFixed : (fractionDigits?: number | undefined) => string
+ >q.    z : number | undefined
+ >q : { [s: string]: number; y: number; }
+ 
+     z.toFixed(); // Should error
+ >z : number | undefined
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ }
+ 
+ 
+@@= skipped -70, +70 lines =@@
+ >({ x, y, z } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
+ >{ x, y, z } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+ >{ x, y, z } : { x: number; y: number; z: number | undefined; }
+->x : number
+->y : number
+->z : number | undefined
++>x : any
++>y : any
++>z : any
+ >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+ 
+     let q: number;
+@@= skipped -12, +12 lines =@@
+ >({ q } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
+ >{ q } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+ >{ q } : { q: number; }
+->q : number
++>q : any
+ >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
+ }
+ 

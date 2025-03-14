@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/tsxFragmentChildrenCheck.ts] ////
+
+=== my-component.tsx ===
+declare var React: any;
+>React : any
+
+export function MyComponent(props: any) {
+>MyComponent : (props: any) => any
+>props : any
+
+    return <span>my component</span>;
+><span>my component</span> : any
+>span : any
+>span : any
+}
+
+=== file1.tsx ===
+import * as React from 'react'
+>React : any
+
+import { MyComponent } from './my-component'
+>MyComponent : (props: any) => any
+
+const MY_STRING: string = 'Ceci n\'est pas une string.'
+>MY_STRING : string
+>'Ceci n\'est pas une string.' : "Ceci n'est pas une string."
+
+const MY_CLASSNAME: string = 'jeclass'
+>MY_CLASSNAME : string
+>'jeclass' : "jeclass"
+
+class RenderString extends React.PureComponent<any, any> {
+>RenderString : RenderString
+>React.PureComponent : any
+>React : any
+>PureComponent : any
+
+  render() {
+>render : () => any
+
+    return (
+>(      <>        <MyComponent />        <span>{ MY_STRING }</span>        <span className={ MY_CLASSNAME } />      </>    ) : any
+
+      <>
+><>        <MyComponent />        <span>{ MY_STRING }</span>        <span className={ MY_CLASSNAME } />      </> : any
+
+        <MyComponent />
+><MyComponent /> : any
+>MyComponent : (props: any) => any
+
+        <span>{ MY_STRING }</span>
+><span>{ MY_STRING }</span> : any
+>span : any
+>MY_STRING : string
+>span : any
+
+        <span className={ MY_CLASSNAME } />
+><span className={ MY_CLASSNAME } /> : any
+>span : any
+>className : any
+>MY_CLASSNAME : string
+
+      </>
+    )
+  }
+}
+
+export default RenderString
+>RenderString : RenderString
+

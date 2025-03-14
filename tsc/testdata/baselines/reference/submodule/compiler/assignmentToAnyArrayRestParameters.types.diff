@@ -1,0 +1,39 @@
+--- old.assignmentToAnyArrayRestParameters.types
++++ new.assignmentToAnyArrayRestParameters.types
+@@= skipped -4, +4 lines =@@
+ 
+ function foo<T extends string[]>(
+ >foo : <T extends string[]>(fa: (s: string, ...args: string[]) => string, fb: (s: string, ...args: T) => string) => void
++>T : T
+ 
+     fa: (s: string, ...args: string[]) => string,
+ >fa : (s: string, ...args: string[]) => string
+@@= skipped -35, +36 lines =@@
+ 
+ function bar<T extends string[], K extends number>() {
+ >bar : <T extends string[], K extends number>() => void
++>T : T
++>K : K
+ 
+     type T00 = string[]["0"];
+ >T00 : string
+@@= skipped -8, +10 lines =@@
+ >T01 : any
+ 
+     type T02 = string[][K | "0"];
+->T02 : string[][K | "0"]
++>T02 : T02
+ 
+     type T10 = T["0"];
+->T10 : T["0"]
++>T10 : T10
+ 
+     type T11 = T["0.0"];  // Error
+->T11 : T["0.0"]
++>T11 : T11
+ 
+     type T12 = T[K | "0"];
+->T12 : T[K | "0"]
++>T12 : T12
+ }
+ 

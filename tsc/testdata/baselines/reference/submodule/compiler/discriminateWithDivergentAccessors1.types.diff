@@ -1,0 +1,34 @@
+--- old.discriminateWithDivergentAccessors1.types
++++ new.discriminateWithDivergentAccessors1.types
+@@= skipped -2, +2 lines =@@
+ === discriminateWithDivergentAccessors1.ts ===
+ type WeirdoBox<T> =
+ >WeirdoBox : WeirdoBox<T>
++>T : T
+ 
+   | { get done(): false; set done(v: T | null) }
+ >done : false
+@@= skipped -24, +25 lines =@@
+ 
+   weirdoBox.value;
+ >weirdoBox.value : number
+->weirdoBox : { get done(): true; set done(v: T | null); value: number; }
++>weirdoBox : { done: true; value: number; }
+ >value : number
+ }
+ 
+ type WeirdoBox2<T> =
+ >WeirdoBox2 : WeirdoBox2<T>
++>T : T
+ 
+   | { get done(): false; set done(v: T | null) }
+ >done : false
+@@= skipped -37, +38 lines =@@
+ 
+   weirdoBox2.value;
+ >weirdoBox2.value : string | number
+->weirdoBox2 : { get done(): true; set done(v: T | null); value: string; } | { get done(): true; set done(v: T | null | undefined); value: number; }
++>weirdoBox2 : { done: true; value: string; } | { done: true; value: number; }
+ >value : string | number
+ }
+ 

@@ -1,0 +1,23 @@
+--- old.unionSignaturesWithThisParameter.types
++++ new.unionSignaturesWithThisParameter.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #20802
+ 
+ function x<T>(ctor: {
+->x : <T>(ctor: { (this: {}, v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }, t: T) => void
+->ctor : { (this: {}, v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
++>x : <T>(ctor: { (v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }, t: T) => void
++>T : T
++>ctor : { (v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
+ 
+     (this: {}, v: T): void;
+ >this : {}
+@@= skipped -22, +23 lines =@@
+ 
+     new ctor(t);
+ >new ctor(t) : void
+->ctor : { (this: {}, v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
++>ctor : { (v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
+ >t : T
+ }
+ 

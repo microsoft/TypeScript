@@ -1,0 +1,36 @@
+--- old.nodeModulesExportsSpecifierGenerationDirectory(module=node16).types
++++ new.nodeModulesExportsSpecifierGenerationDirectory(module=node16).types
+@@= skipped -5, +5 lines =@@
+ >Thing : any
+ 
+ export const a = (await import("inner/index.js")).x();
+->a : import("node_modules/inner/other").Thing
+->(await import("inner/index.js")).x() : import("node_modules/inner/other").Thing
+->(await import("inner/index.js")).x : () => import("node_modules/inner/other").Thing
+->(await import("inner/index.js")) : typeof import("node_modules/inner/index")
+->await import("inner/index.js") : typeof import("node_modules/inner/index")
+->import("inner/index.js") : Promise<typeof import("node_modules/inner/index")>
++>a : Thing
++>(await import("inner/index.js")).x() : Thing
++>(await import("inner/index.js")).x : () => Thing
++>(await import("inner/index.js")) : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
++>await import("inner/index.js") : { x: () => Thing; default: typeof import("node_modules/inner/index"); }
++>import("inner/index.js") : Promise<{ x: () => Thing; default: typeof import("node_modules/inner/index"); }>
+ >"inner/index.js" : "inner/index.js"
+->x : () => import("node_modules/inner/other").Thing
++>x : () => Thing
+ 
+ === node_modules/inner/index.d.ts ===
+ // esm format file
+ export { x } from "./other.js";
+->x : () => import("node_modules/inner/other").Thing
++>x : () => Thing
+ 
+ === node_modules/inner/other.d.ts ===
+ // esm format file
+ export interface Thing {}
++>Thing : Thing
++
+ export const x: () => Thing;
+ >x : () => Thing
+ 

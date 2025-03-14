@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/es6ImportEqualsDeclaration2.ts] ////
+
+=== server.d.ts ===
+declare module "other" {
+>"other" : typeof import("other")
+
+    export class C { }
+>C : C
+}
+
+declare module "server" {
+>"server" : typeof import("server")
+
+    import events = require("other"); // Ambient declaration, no error expected.
+>events : typeof import("other")
+
+    module S {
+>S : typeof S
+
+        export var a: number;
+>a : number
+    }
+
+    export = S; // Ambient declaration, no error expected.
+>S : typeof S
+}
+
+=== client.ts ===
+import {a} from "server";
+>a : number
+

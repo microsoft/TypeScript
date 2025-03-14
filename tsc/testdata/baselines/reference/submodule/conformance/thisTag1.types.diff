@@ -1,0 +1,53 @@
+--- old.thisTag1.types
++++ new.thisTag1.types
+@@= skipped -5, +5 lines =@@
+  * @return {number}
+  */
+ function f(s) {
+->f : (this: { n: number; }, s: string) => number
+->s : string
++>f : (s: any) => any
++>s : any
+ 
+     return this.n + s.length
+->this.n + s.length : number
+->this.n : number
+->this : { n: number; }
+->n : number
+->s.length : number
+->s : string
+->length : number
++>this.n + s.length : any
++>this.n : any
++>this : any
++>n : any
++>s.length : any
++>s : any
++>length : any
+ }
+ 
+ const o = {
+->o : { f: (this: { n: number; }, s: string) => number; n: number; }
+->{    f,    n: 1} : { f: (this: { n: number; }, s: string) => number; n: number; }
++>o : { f: (s: any) => any; n: number; }
++>{    f,    n: 1} : { f: (s: any) => any; n: number; }
+ 
+     f,
+->f : (this: { n: number; }, s: string) => number
++>f : any
+ 
+     n: 1
+ >n : number
+ >1 : 1
+ }
+ o.f('hi')
+->o.f('hi') : number
+->o.f : (this: { n: number; }, s: string) => number
+->o : { f: (this: { n: number; }, s: string) => number; n: number; }
+->f : (this: { n: number; }, s: string) => number
++>o.f('hi') : any
++>o.f : (s: any) => any
++>o : { f: (s: any) => any; n: number; }
++>f : (s: any) => any
+ >'hi' : "hi"
+ 

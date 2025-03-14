@@ -1,0 +1,32 @@
+--- old.eventEmitterPatternWithRecordOfFunction.types
++++ new.eventEmitterPatternWithRecordOfFunction.types
+@@= skipped -1, +1 lines =@@
+ 
+ === eventEmitterPatternWithRecordOfFunction.ts ===
+ interface A {
++>A : A
++
+     emit(event: string, ...args: any[]): boolean;
+ >emit : (event: string, ...args: any[]) => boolean
+ >event : string
+@@= skipped -8, +10 lines =@@
+ 
+ type Args<F> = F extends (...args: infer A) => void ? A : never;
+ >Args : Args<F>
++>F : F
+ >args : A
++>A : A
+ 
+ type EventMap = Record<string, Function>;
+ >EventMap : EventMap
+ 
+ interface B<M extends EventMap> extends A {
++>B : B<M>
++>M : M
++
+     emit<Event extends keyof M>(event: Event, ...args: Args<M[Event]>): boolean;
+ >emit : <Event extends keyof M>(event: Event, ...args: Args<M[Event]>) => boolean
++>Event : Event
+ >event : Event
+ >args : Args<M[Event]>
+ }

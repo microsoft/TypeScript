@@ -1,0 +1,61 @@
+--- old.exportAssignmentMergedInterface.types
++++ new.exportAssignmentMergedInterface.types
+@@= skipped -4, +4 lines =@@
+ >foo : any
+ 
+ var x: foo;
+->x : foo
++>x : Foo
+ 
+ x("test");
+ >x("test") : void
+->x : foo
++>x : Foo
+ >"test" : "test"
+ 
+ x(42);
+ >x(42) : number
+->x : foo
++>x : Foo
+ >42 : 42
+ 
+ var y: string = x.b;
+ >y : string
+ >x.b : string
+->x : foo
++>x : Foo
+ >b : string
+ 
+ if(!!x.c){ }
+ >!!x.c : boolean
+ >!x.c : boolean
+ >x.c : boolean
+->x : foo
++>x : Foo
+ >c : boolean
+ 
+ var z = {x: 1, y: 2};
+@@= skipped -37, +37 lines =@@
+ >z = x.d : { x: number; y: number; }
+ >z : { x: number; y: number; }
+ >x.d : { x: number; y: number; }
+->x : foo
++>x : Foo
+ >d : { x: number; y: number; }
+ 
+ === foo_0.ts ===
+ interface Foo {
++>Foo : Foo
++
+ 	(a: string): void;
+ >a : string
+ 
+@@= skipped -12, +14 lines =@@
+ >b : string
+ }
+ interface Foo {
++>Foo : Foo
++
+ 	(a: number): number;
+ >a : number
+ 

@@ -1,0 +1,10 @@
+--- old.typeParametersInStaticProperties.types
++++ new.typeParametersInStaticProperties.types
+@@= skipped -2, +2 lines =@@
+ === typeParametersInStaticProperties.ts ===
+ class foo<T> {
+ >foo : foo<T>
++>T : T
+ 
+     static P: T;
+ >P : T

@@ -1,0 +1,19 @@
+--- old.importTypeResolutionJSDocEOF.types
++++ new.importTypeResolutionJSDocEOF.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaces.d.ts ===
+ export interface Bar {
++>Bar : Bar
++
+     prop: string
+ >prop : string
+ }
+@@= skipped -7, +9 lines =@@
+ === usage.js ===
+ /** @type {Bar} */
+ export let bar;
+->bar : import("interfaces").Bar
++>bar : any
+ 
+ /** @typedef {import('./interfaces').Bar} Bar */

@@ -1,0 +1,13 @@
+--- old.symbolDeclarationEmit9.types
++++ new.symbolDeclarationEmit9.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolDeclarationEmit9.ts ===
+ var obj = {
+->obj : { [Symbol.isConcatSpreadable](): void; }
+->{    [Symbol.isConcatSpreadable]() { }} : { [Symbol.isConcatSpreadable](): void; }
++>obj : { [Symbol.isConcatSpreadable]: () => void; }
++>{    [Symbol.isConcatSpreadable]() { }} : { [Symbol.isConcatSpreadable]: () => void; }
+ 
+     [Symbol.isConcatSpreadable]() { }
+ >[Symbol.isConcatSpreadable] : () => void

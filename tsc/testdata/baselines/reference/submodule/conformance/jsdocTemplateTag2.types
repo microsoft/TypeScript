@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag2.ts] ////
+
+=== github17339.js ===
+var obj = {
+>obj : { x: (a: any) => any; }
+>{	/**	 * @template T	 * @param {T} a	 * @returns {T}	 */	x: function (a) {		return a;	},} : { x: (a: any) => any; }
+
+	/**
+	 * @template T
+	 * @param {T} a
+	 * @returns {T}
+	 */
+	x: function (a) {
+>x : (a: any) => any
+>function (a) {		return a;	} : (a: any) => any
+>a : any
+
+		return a;
+>a : any
+
+	},
+};
+

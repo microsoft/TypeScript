@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer.ts] ////
+
+=== extendingClassFromAliasAndUsageInIndexer_main.ts ===
+import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
+>Backbone : typeof import("extendingClassFromAliasAndUsageInIndexer_backbone")
+
+import moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
+>moduleA : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleA")
+
+import moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
+>moduleB : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleB")
+
+interface IHasVisualizationModel {
+>IHasVisualizationModel : IHasVisualizationModel
+
+    VisualizationModel: typeof Backbone.Model;
+>VisualizationModel : typeof Model
+>Backbone : typeof import("extendingClassFromAliasAndUsageInIndexer_backbone")
+}
+var moduleATyped: IHasVisualizationModel = moduleA;
+>moduleATyped : IHasVisualizationModel
+>moduleA : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleA")
+
+var moduleMap: { [key: string]: IHasVisualizationModel } = {
+>moduleMap : { [key: string]: IHasVisualizationModel; }
+>key : string
+>{    "moduleA": moduleA,    "moduleB": moduleB} : { moduleA: typeof import("extendingClassFromAliasAndUsageInIndexer_moduleA"); moduleB: typeof import("extendingClassFromAliasAndUsageInIndexer_moduleB"); }
+
+    "moduleA": moduleA,
+>"moduleA" : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleA")
+>moduleA : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleA")
+
+    "moduleB": moduleB
+>"moduleB" : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleB")
+>moduleB : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleB")
+
+};
+var moduleName: string;
+>moduleName : string
+
+var visModel = new moduleMap[moduleName].VisualizationModel();
+>visModel : Model
+>new moduleMap[moduleName].VisualizationModel() : Model
+>moduleMap[moduleName].VisualizationModel : typeof Model
+>moduleMap[moduleName] : IHasVisualizationModel
+>moduleMap : { [key: string]: IHasVisualizationModel; }
+>moduleName : string
+>VisualizationModel : typeof Model
+
+=== extendingClassFromAliasAndUsageInIndexer_backbone.ts ===
+export class Model {
+>Model : Model
+
+    public someData: string;
+>someData : string
+}
+
+=== extendingClassFromAliasAndUsageInIndexer_moduleA.ts ===
+import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
+>Backbone : typeof import("extendingClassFromAliasAndUsageInIndexer_backbone")
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone.Model : Model
+>Backbone : typeof import("extendingClassFromAliasAndUsageInIndexer_backbone")
+>Model : typeof Model
+
+    // interesting stuff here
+}
+
+=== extendingClassFromAliasAndUsageInIndexer_moduleB.ts ===
+import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
+>Backbone : typeof import("extendingClassFromAliasAndUsageInIndexer_backbone")
+
+export class VisualizationModel extends Backbone.Model {
+>VisualizationModel : VisualizationModel
+>Backbone.Model : Model
+>Backbone : typeof import("extendingClassFromAliasAndUsageInIndexer_backbone")
+>Model : typeof Model
+
+    // different interesting stuff here
+}
+

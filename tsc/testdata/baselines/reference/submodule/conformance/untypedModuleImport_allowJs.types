@@ -1,0 +1,12 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport_allowJs.ts] ////
+
+=== /a.ts ===
+import foo from "foo";
+>foo : any
+
+foo.bar();
+>foo.bar() : any
+>foo.bar : any
+>foo : any
+>bar : any
+

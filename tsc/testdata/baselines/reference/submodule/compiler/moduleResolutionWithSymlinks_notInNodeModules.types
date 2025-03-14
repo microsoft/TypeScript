@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_notInNodeModules.ts] ////
+
+=== /src/app.ts ===
+import { x } from "./shared/abc";
+>x : any
+
+import { x as x2 } from "./shared2/abc";
+>x : any
+>x2 : any
+
+x + x2;
+>x + x2 : any
+>x : any
+>x2 : any
+

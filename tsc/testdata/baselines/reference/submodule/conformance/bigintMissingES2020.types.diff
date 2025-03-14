@@ -1,0 +1,11 @@
+--- old.bigintMissingES2020.types
++++ new.bigintMissingES2020.types
+@@= skipped -2, +2 lines =@@
+ === bigintMissingES2020.ts ===
+ declare function test<A, B extends A>(): void;
+ >test : <A, B extends A>() => void
++>A : A
++>B : B
+ 
+ test<{t?: string}, object>();
+ >test<{t?: string}, object>() : void

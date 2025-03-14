@@ -1,0 +1,11 @@
+--- old.binderUninitializedModuleExportsAssignment.types
++++ new.binderUninitializedModuleExportsAssignment.types
+@@= skipped -11, +11 lines =@@
+ module.exports = loop2;
+ >module.exports = loop2 : any
+ >module.exports : any
+->module : { exports: any; }
++>module : any
+ >exports : any
+ >loop2 : any
+ 

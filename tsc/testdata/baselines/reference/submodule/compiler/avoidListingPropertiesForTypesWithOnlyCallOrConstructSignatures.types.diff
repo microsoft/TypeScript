@@ -1,0 +1,11 @@
+--- old.avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.types
++++ new.avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.types
+@@= skipped -1, +1 lines =@@
+ 
+ === avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts ===
+ interface Dog {
++>Dog : Dog
++
+     barkable: true
+ >barkable : true
+ >true : true

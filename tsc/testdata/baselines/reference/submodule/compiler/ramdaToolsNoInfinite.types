@@ -1,0 +1,284 @@
+//// [tests/cases/compiler/ramdaToolsNoInfinite.ts] ////
+
+=== ramdaToolsNoInfinite.ts ===
+// All the following types are explained here:
+// https://medium.freecodecamp.org/typescript-curry-ramda-types-f747e99744ab
+// https://github.com/pirix-gh/medium/blob/master/types-curry-ramda/src/index.ts
+declare namespace Tools {
+>Tools : any
+
+    type Head<T extends any[]> =
+>Head : Head<T>
+>T : T
+
+        T extends [any, ...any[]]
+        ? T[0]
+        : never;
+
+    type Tail<T extends any[]> =
+>Tail : Tail<T>
+>T : T
+
+        ((...t: T) => any) extends ((_: any, ...tail: infer TT) => any)
+>t : T
+>_ : any
+>tail : TT
+>TT : TT
+
+        ? TT
+        : [];
+
+    type HasTail<T extends any[]> =
+>HasTail : HasTail<T>
+>T : T
+
+        T extends ([] | [any])
+        ? false
+>false : false
+
+        : true;
+>true : true
+
+    type Last<T extends any[]> = {
+>Last : Last<T>
+>T : T
+
+        0: Last<Tail<T>>;
+>0 : Last<Tail<T>>
+
+        1: Head<T>;
+>1 : Head<T>
+
+    }[
+        HasTail<T> extends true
+>true : true
+
+        ? 0
+        : 1
+    ];
+
+    type Length<T extends any[]> =
+>Length : Length<T>
+>T : T
+
+        T['length'];
+
+    type Prepend<E, T extends any[]> =
+>Prepend : [head: E, ...args: T]
+>E : E
+>T : T
+
+        ((head: E, ...args: T) => any) extends ((...args: infer U) => any)
+>head : E
+>args : T
+>args : U
+>U : U
+
+        ? U
+        : T;
+
+    type Drop<N extends number, T extends any[], I extends any[] = []> = {
+>Drop : Drop<N, T, I>
+>N : N
+>T : T
+>I : I
+
+        0: Drop<N, Tail<T>, Prepend<any, I>>;
+>0 : Drop<N, Tail<T>, [head: any, ...args: I]>
+
+        1: T;
+>1 : T
+
+    }[
+        Length<I> extends N
+        ? 1
+        : 0
+    ];
+
+    type Cast<X, Y> = X extends Y ? X : Y;
+>Cast : Cast<X, Y>
+>X : X
+>Y : Y
+
+    type Pos<I extends any[]> =
+>Pos : Pos<I>
+>I : I
+
+        Length<I>;
+
+    type Next<I extends any[]> =
+>Next : [head: any, ...args: I]
+>I : I
+
+        Prepend<any, I>;
+
+    type Prev<I extends any[]> =
+>Prev : Prev<I>
+>I : I
+
+        Tail<I>;
+
+    type Iterator<Index extends number = 0, From extends any[] = [], I extends any[] = []> = {
+>Iterator : Iterator<Index, From, I>
+>Index : Index
+>From : From
+>I : I
+
+        0: Iterator<Index, Next<From>, Next<I>>;
+>0 : Iterator<Index, [head: any, ...args: From], [head: any, ...args: I]>
+
+        1: From;
+>1 : From
+
+    }[
+        Pos<I> extends Index
+        ? 1
+        : 0
+    ];
+
+    type Reverse<T extends any[], R extends any[] = [], I extends any[] = []> = {
+>Reverse : Reverse<T, R, I>
+>T : T
+>R : R
+>I : I
+
+        0: Reverse<T, Prepend<T[Pos<I>], R>, Next<I>>;
+>0 : Reverse<T, [head: T[Pos<I>], ...args: R], [head: any, ...args: I]>
+
+        1: R;
+>1 : R
+
+    }[
+        Pos<I> extends Length<T>
+        ? 1
+        : 0
+    ];
+
+    type Concat<T1 extends any[], T2 extends any[]> =
+>Concat : Concat<T1, T2>
+>T1 : T1
+>T2 : T2
+
+        Reverse<Reverse<T1> extends infer R ? Cast<R, any[]> : never, T2>;
+>R : R
+
+    type Append<E, T extends any[]> =
+>Append : Append<E, T>
+>E : E
+>T : T
+
+        Concat<T, [E]>;
+
+    type ValueOfRecord<R> = R extends Record<any, infer T> ? T : never;
+>ValueOfRecord : ValueOfRecord<R>
+>R : R
+>T : T
+}
+
+declare namespace R {
+>R : any
+
+    export type Placeholder = { __placeholder: void };
+>Placeholder : Placeholder
+>__placeholder : void
+}
+
+declare namespace Curry {
+>Curry : any
+
+    type GapOf<T1 extends any[], T2 extends any[], TN extends any[], I extends any[]> =
+>GapOf : GapOf<T1, T2, TN, I>
+>T1 : T1
+>T2 : T2
+>TN : TN
+>I : I
+
+        T1[Tools.Pos<I>] extends R.Placeholder
+>Tools : any
+>R : any
+
+        ? Tools.Append<T2[Tools.Pos<I>], TN>
+>Tools : any
+>Tools : any
+
+        : TN;
+
+    interface GapsOfWorker<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> {
+>GapsOfWorker : GapsOfWorker<T1, T2, TN, I>
+>T1 : T1
+>T2 : T2
+>TN : TN
+>I : I
+
+        0: GapsOf<T1, T2, GapOf<T1, T2, TN, I> extends infer G ? Tools.Cast<G, any[]> : never, Tools.Next<I>>;
+>0 : GapsOf<T1, T2, GapOf<T1, T2, TN, I> extends infer G ? Cast<G, any[]> : never, [head: any, ...args: I]>
+>G : G
+>Tools : any
+>Tools : any
+
+        1: Tools.Concat<TN, Tools.Drop<Tools.Pos<I>, T2> extends infer D ? Tools.Cast<D, any[]> : never>;
+>1 : Concat<TN, Drop<Pos<I>, T2, []> extends infer D ? Cast<D, any[]> : never>
+>Tools : any
+>Tools : any
+>Tools : any
+>D : D
+>Tools : any
+    }
+    type GapsOf<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> = GapsOfWorker<T1, T2, TN, I>[
+>GapsOf : GapsOf<T1, T2, TN, I>
+>T1 : T1
+>T2 : T2
+>TN : TN
+>I : I
+
+        Tools.Pos<I> extends Tools.Length<T1>
+>Tools : any
+>Tools : any
+
+        ? 1
+        : 0
+    ];
+
+    type PartialGaps<T extends any[]> = {
+>PartialGaps : PartialGaps<T>
+>T : T
+
+        [K in keyof T]?: T[K] | R.Placeholder
+>K : K
+>R : any
+
+    };
+
+    type CleanedGaps<T extends any[]> = {
+>CleanedGaps : CleanedGaps<T>
+>T : T
+
+        [K in keyof T]: NonNullable<T[K]>
+>K : K
+
+    };
+
+    type Gaps<T extends any[]> = CleanedGaps<PartialGaps<T>>;
+>Gaps : CleanedGaps<PartialGaps<T>>
+>T : T
+
+    type Curry<F extends ((...args: any) => any)> =
+>Curry : Curry<F>
+>F : F
+>args : any
+
+        <T extends any[]>(...args: Tools.Cast<Tools.Cast<T, Gaps<Parameters<F>>>, any[]>) =>
+>T : T
+>args : Cast<Cast<T, CleanedGaps<PartialGaps<Parameters<F>>>>, any[]>
+>Tools : any
+>Tools : any
+
+            GapsOf<T, Parameters<F>> extends [any, ...any[]]
+            ? Curry<(...args: GapsOf<T, Parameters<F>> extends infer G ? Tools.Cast<G, any[]> : never) => ReturnType<F>>
+>args : GapsOf<T, Parameters<F>, [], []> extends infer G ? Cast<G, any[]> : never
+>G : G
+>Tools : any
+
+            : ReturnType<F>;
+}
+

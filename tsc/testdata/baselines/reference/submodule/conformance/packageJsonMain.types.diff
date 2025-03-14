@@ -1,0 +1,17 @@
+--- old.packageJsonMain.types
++++ new.packageJsonMain.types
+@@= skipped -10, +10 lines =@@
+ >baz : any
+ 
+ foo + bar + baz;
+->foo + bar + baz : error
+->foo + bar : error
+->foo : error
+->bar : error
+->baz : error
++>foo + bar + baz : any
++>foo + bar : any
++>foo : any
++>bar : any
++>baz : any
+ 

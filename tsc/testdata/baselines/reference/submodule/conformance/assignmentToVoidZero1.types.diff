@@ -1,0 +1,42 @@
+--- old.assignmentToVoidZero1.types
++++ new.assignmentToVoidZero1.types
+@@= skipped -3, +3 lines =@@
+ // #38552
+ exports.y = exports.x = void 0;
+ >exports.y = exports.x = void 0 : undefined
+->exports.y : 2
+->exports : typeof import("assignmentToVoidZero1")
+->y : 2
++>exports.y : any
++>exports : any
++>y : any
+ >exports.x = void 0 : undefined
+->exports.x : 1
+->exports : typeof import("assignmentToVoidZero1")
+->x : 1
++>exports.x : any
++>exports : any
++>x : any
+ >void 0 : undefined
+ >0 : 0
+ 
+ exports.x = 1;
+ >exports.x = 1 : 1
+->exports.x : 1
+->exports : typeof import("assignmentToVoidZero1")
+->x : 1
++>exports.x : any
++>exports : any
++>x : any
+ >1 : 1
+ 
+ exports.y = 2;
+ >exports.y = 2 : 2
+->exports.y : 2
+->exports : typeof import("assignmentToVoidZero1")
+->y : 2
++>exports.y : any
++>exports : any
++>y : any
+ >2 : 2
+ 

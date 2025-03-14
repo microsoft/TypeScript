@@ -1,0 +1,27 @@
+--- old.outFilerootDirModuleNamesAmd.types
++++ new.outFilerootDirModuleNamesAmd.types
+@@= skipped -4, +4 lines =@@
+ >foo : () => void
+ 
+ export default class Foo {}
+->Foo : Foo
++>Foo : default
+ 
+ foo();
+ >foo() : void
+@@= skipped -8, +8 lines =@@
+ 
+ === src/b.ts ===
+ import Foo from "./a";
+->Foo : typeof Foo
++>Foo : typeof default
+ 
+ export default function foo() { new Foo(); }
+ >foo : () => void
+->new Foo() : Foo
+->Foo : typeof Foo
++>new Foo() : default
++>Foo : typeof default
+ 
+ // https://github.com/microsoft/TypeScript/issues/37429
+ import("./a");

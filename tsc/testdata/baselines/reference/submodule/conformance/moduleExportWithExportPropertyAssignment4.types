@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment4.ts] ////
+
+=== a.js ===
+/// <reference path='./requires.d.ts' />
+var mod1 = require('./mod1')
+>mod1 : any
+>require('./mod1') : any
+>require : (name: string) => any
+>'./mod1' : "./mod1"
+
+mod1.justExport.toFixed()
+>mod1.justExport.toFixed() : any
+>mod1.justExport.toFixed : any
+>mod1.justExport : any
+>mod1 : any
+>justExport : any
+>toFixed : any
+
+mod1.bothBefore.toFixed() // error
+>mod1.bothBefore.toFixed() : any
+>mod1.bothBefore.toFixed : any
+>mod1.bothBefore : any
+>mod1 : any
+>bothBefore : any
+>toFixed : any
+
+mod1.bothAfter.toFixed()
+>mod1.bothAfter.toFixed() : any
+>mod1.bothAfter.toFixed : any
+>mod1.bothAfter : any
+>mod1 : any
+>bothAfter : any
+>toFixed : any
+
+mod1.justProperty.length
+>mod1.justProperty.length : any
+>mod1.justProperty : any
+>mod1 : any
+>justProperty : any
+>length : any
+
+=== requires.d.ts ===
+declare var module: { exports: any };
+>module : { exports: any; }
+>exports : any
+
+declare function require(name: string): any;
+>require : (name: string) => any
+>name : string
+

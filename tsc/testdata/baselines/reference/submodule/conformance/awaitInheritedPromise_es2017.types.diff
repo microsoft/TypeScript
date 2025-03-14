@@ -1,0 +1,11 @@
+--- old.awaitInheritedPromise_es2017.types
++++ new.awaitInheritedPromise_es2017.types
+@@= skipped -1, +1 lines =@@
+ 
+ === awaitInheritedPromise_es2017.ts ===
+ interface A extends Promise<string> {}
++>A : A
++
+ declare var a: A;
+ >a : A
+ 

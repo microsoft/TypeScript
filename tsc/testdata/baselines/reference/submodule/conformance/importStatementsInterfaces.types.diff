@@ -1,0 +1,80 @@
+--- old.importStatementsInterfaces.types
++++ new.importStatementsInterfaces.types
+@@= skipped -1, +1 lines =@@
+ 
+ === importStatementsInterfaces.ts ===
+ module A {
++>A : any
++
+     export interface Point {
++>Point : Point
++
+         x: number;
+ >x : number
+ 
+@@= skipped -9, +13 lines =@@
+     }
+ 
+     export module inA {
++>inA : any
++
+         export interface Point3D extends Point {
++>Point3D : Point3D
++
+             z: number;
+ >z : number
+         }
+@@= skipped -9, +13 lines =@@
+ 
+ // no code gen expected
+ module B {
++>B : any
++
+     import a = A;
+ >a : any
+ >A : any
+@@= skipped -20, +22 lines =@@
+ 
+     var m: typeof a;
+ >m : any
+->a : any
+ 
+     var p: b.Point3D;
+->p : b.Point3D
++>p : Point3D
+ >b : any
+ 
+     var p = {x:0, y:0, z: 0 };
+->p : b.Point3D
++>p : Point3D
+ >{x:0, y:0, z: 0 } : { x: number; y: number; z: number; }
+ >x : number
+ >0 : 0
+@@= skipped -26, +25 lines =@@
+ >A : any
+ 
+     var p : a.Point;
+->p : a.Point
++>p : Point
+ >a : any
+ }
+ 
+@@= skipped -14, +14 lines =@@
+ >inA : any
+ 
+     export function xDist(x: a.Point3D) {
+->xDist : (x: a.Point3D) => number
+->x : a.Point3D
++>xDist : (x: Point3D) => number
++>x : Point3D
+ >a : any
+ 
+         return 0 - x.x;
+ >0 - x.x : number
+ >0 : 0
+ >x.x : number
+->x : a.Point3D
++>x : Point3D
+ >x : number
+     }
+ }

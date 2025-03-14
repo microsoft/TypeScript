@@ -1,0 +1,15 @@
+--- old.paramTagOnCallExpression.types
++++ new.paramTagOnCallExpression.types
+@@= skipped -9, +9 lines =@@
+ /** @param {function} ctor - A big long explanation follows */
+ exports.inherits = factory('inherits')
+ >exports.inherits = factory('inherits') : {}
+->exports.inherits : {}
+->exports : typeof import("a")
+->inherits : {}
++>exports.inherits : any
++>exports : any
++>inherits : any
+ >factory('inherits') : {}
+ >factory : (type: string) => {}
+ >'inherits' : "inherits"

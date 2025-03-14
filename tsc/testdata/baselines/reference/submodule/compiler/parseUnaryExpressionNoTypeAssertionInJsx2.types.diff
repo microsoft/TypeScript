@@ -1,0 +1,12 @@
+--- old.parseUnaryExpressionNoTypeAssertionInJsx2.types
++++ new.parseUnaryExpressionNoTypeAssertionInJsx2.types
+@@= skipped -6, +6 lines =@@
+ 
+ const y = + <> x;
+ >y : number
+->+ <> x; : number
+-><> x; : any
++>+ <> x : number
++><> x : any
++>x : "oops"
+ 

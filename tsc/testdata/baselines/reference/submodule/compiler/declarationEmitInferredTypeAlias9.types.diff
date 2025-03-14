@@ -1,0 +1,10 @@
+--- old.declarationEmitInferredTypeAlias9.types
++++ new.declarationEmitInferredTypeAlias9.types
+@@= skipped -2, +2 lines =@@
+ === declarationEmitInferredTypeAlias9.ts ===
+ type Foo<T> = T | { x: Foo<T> };
+ >Foo : Foo<T>
++>T : T
+ >x : Foo<T>
+ 
+ var x: Foo<number[]>;

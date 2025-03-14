@@ -1,0 +1,29 @@
+--- old.intersectionReductionGenericStringLikeType.types
++++ new.intersectionReductionGenericStringLikeType.types
+@@= skipped -17, +17 lines =@@
+ >keyContaining1 : keyContaining1<str, keys>
+ 
+     str extends string,
++>str : str
++
+     keys extends keyof obj = keyof obj,
++>keys : keys
++
+ > = keys extends infer key extends keyof obj
++>key : key
++
+     ? key extends `${string}${str}${string}`
+     ? obj[key]
+     : never
+@@= skipped -14, +20 lines =@@
+ >keyContaining2 : keyContaining2<str, keys>
+ 
+     str extends string,
++>str : str
++
+     keys extends keyof obj = keyof obj,
++>keys : keys
++
+ > = keys extends keys
+     ? keys extends `${string}${str}${string}`
+     ? obj[keys]

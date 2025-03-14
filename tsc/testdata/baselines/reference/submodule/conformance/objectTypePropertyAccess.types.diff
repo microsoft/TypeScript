@@ -1,0 +1,11 @@
+--- old.objectTypePropertyAccess.types
++++ new.objectTypePropertyAccess.types
+@@= skipped -38, +38 lines =@@
+ >'foo' : "foo"
+ 
+ interface I {
++>I : I
++
+     bar: string;
+ >bar : string
+ }

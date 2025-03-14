@@ -1,0 +1,11 @@
+--- old.circularOptionalityRemoval.types
++++ new.circularOptionalityRemoval.types
+@@= skipped -13, +13 lines =@@
+ 
+ // Report from user
+ function fn2(x?: string = someCondition ? 'value1' : x) { }
+->fn2 : (x?: string) => void
++>fn2 : (x?: string | undefined) => void
+ >x : string | undefined
+ >someCondition ? 'value1' : x : string | undefined
+ >someCondition : any

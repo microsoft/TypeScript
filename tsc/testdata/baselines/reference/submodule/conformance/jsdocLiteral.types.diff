@@ -1,0 +1,42 @@
+--- old.jsdocLiteral.types
++++ new.jsdocLiteral.types
+@@= skipped -8, +8 lines =@@
+  * @param {12 | true | 'str'} p5
+  */
+ function f(p1, p2, p3, p4, p5) {
+->f : (p1: "literal", p2: "literal", p3: "literal" | "other", p4: "literal" | number, p5: 12 | true | "str") => string
+->p1 : "literal"
+->p2 : "literal"
+->p3 : "literal" | "other"
+->p4 : number | "literal"
+->p5 : true | 12 | "str"
++>f : (p1: any, p2: any, p3: any, p4: any, p5: any) => string
++>p1 : any
++>p2 : any
++>p3 : any
++>p4 : any
++>p5 : any
+ 
+     return p1 + p2 + p3 + p4 + p5 + '.';
+ >p1 + p2 + p3 + p4 + p5 + '.' : string
+->p1 + p2 + p3 + p4 + p5 : string
+->p1 + p2 + p3 + p4 : string
+->p1 + p2 + p3 : string
+->p1 + p2 : string
+->p1 : "literal"
+->p2 : "literal"
+->p3 : "literal" | "other"
+->p4 : number | "literal"
+->p5 : true | 12 | "str"
++>p1 + p2 + p3 + p4 + p5 : any
++>p1 + p2 + p3 + p4 : any
++>p1 + p2 + p3 : any
++>p1 + p2 : any
++>p1 : any
++>p2 : any
++>p3 : any
++>p4 : any
++>p5 : any
+ >'.' : "."
+ }
+ 

@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/jsx/tsxDynamicTagName8.tsx] ////
+
+=== react.d.ts ===
+declare module 'react' {
+>'react' : typeof import("react")
+
+	class Component<T, U> { }
+>Component : Component<T, U>
+>T : T
+>U : U
+}
+
+=== app.tsx ===
+import * as React from 'react';
+>React : typeof import("react")
+
+export class Text extends React.Component<{}, {}> {
+>Text : Text
+>React.Component : Component<{}, {}>
+>React : typeof import("react")
+>Component : typeof Component
+
+  _tagName: string = 'div';
+>_tagName : string
+>'div' : "div"
+
+  render() {
+>render : () => any
+
+    return (
+>(      <this._tagName> Hello world </this._tagName>    ) : any
+
+      <this._tagName> Hello world </this._tagName>
+><this._tagName> Hello world </this._tagName> : any
+>this._tagName : string
+>this : this
+>_tagName : string
+>this._tagName : string
+>this : this
+>_tagName : string
+
+    );
+  }
+}

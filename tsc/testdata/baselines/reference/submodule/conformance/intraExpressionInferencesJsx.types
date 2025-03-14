@@ -1,0 +1,306 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesJsx.tsx] ////
+
+=== intraExpressionInferencesJsx.tsx ===
+/// <reference path="react16.d.ts" />
+
+// repro from #52798
+
+type A = {
+>A : A
+
+  a: boolean;
+>a : boolean
+
+};
+
+type B = {
+>B : B
+
+  b: string;
+>b : string
+
+};
+
+type C = {
+>C : C
+
+  c: number;
+>c : number
+
+};
+
+type Animations = {
+>Animations : Animations
+
+  [key: string]: { value: number } & (
+>key : string
+>value : number
+
+    | ({ kind: "a"; func?(): Partial<A> } & A)
+>kind : "a"
+>func : () => Partial<A> | undefined
+
+    | ({ kind: "b"; func?(): Partial<B> } & B)
+>kind : "b"
+>func : () => Partial<B> | undefined
+
+    | ({ kind: "c"; func?(): Partial<C> } & C)
+>kind : "c"
+>func : () => Partial<C> | undefined
+
+  );
+};
+
+type StyleParam<T extends Animations> = Record<keyof T, string>;
+>StyleParam : StyleParam<T>
+>T : T
+
+type AnimatedViewProps<T extends Animations> = {
+>AnimatedViewProps : AnimatedViewProps<T>
+>T : T
+
+  style: (animationsValues: StyleParam<T>) => string;
+>style : (animationsValues: StyleParam<T>) => string
+>animationsValues : StyleParam<T>
+
+  animations: T;
+>animations : T
+
+};
+
+const Component = <T extends Animations>({
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+>T : T
+
+  animations,
+>animations : T
+
+  style,
+>style : (animationsValues: StyleParam<T>) => string
+
+}: AnimatedViewProps<T>) => <></>;
+><></> : any
+
+<Component
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : any
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+
+  animations={{
+>animations : any
+>{    test: {      kind: "a",      value: 1,      a: true,    },  } : { test: { kind: string; value: number; a: boolean; }; }
+
+    test: {
+>test : { kind: string; value: number; a: boolean; }
+>{      kind: "a",      value: 1,      a: true,    } : { kind: string; value: number; a: boolean; }
+
+      kind: "a",
+>kind : string
+>"a" : "a"
+
+      value: 1,
+>value : number
+>1 : 1
+
+      a: true,
+>a : boolean
+>true : true
+
+    },
+  }}
+  style={(anim) => {
+>style : any
+>(anim) => {    return "";  } : (anim: any) => string
+>anim : any
+
+    return "";
+>"" : ""
+
+  }}
+/>;
+<Component
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : any
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+
+  animations={{
+>animations : any
+>{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  } : { test: { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }; }
+
+    test: {
+>test : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
+>{      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    } : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
+
+      kind: "a",
+>kind : string
+>"a" : "a"
+
+      value: 1,
+>value : number
+>1 : 1
+
+      a: true,
+>a : boolean
+>true : true
+
+      func() {
+>func : () => { a: boolean; }
+
+        return {
+>{          a: true,        } : { a: boolean; }
+
+          a: true,
+>a : boolean
+>true : true
+
+        };
+      },
+    },
+  }}
+  style={(anim) => {
+>style : any
+>(anim) => {    return "";  } : (anim: any) => string
+>anim : any
+
+    return "";
+>"" : ""
+
+  }}
+/>;
+<Component
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : any
+>Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
+
+  animations={{
+>animations : any
+>{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  } : { test: { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }; }
+
+    test: {
+>test : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
+>{      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    } : { kind: string; value: number; a: boolean; func: () => { a: boolean; }; }
+
+      kind: "a",
+>kind : string
+>"a" : "a"
+
+      value: 1,
+>value : number
+>1 : 1
+
+      a: true,
+>a : boolean
+>true : true
+
+      func: () => {
+>func : () => { a: boolean; }
+>() => {        return {          a: true,        };      } : () => { a: boolean; }
+
+        return {
+>{          a: true,        } : { a: boolean; }
+
+          a: true,
+>a : boolean
+>true : true
+
+        };
+      },
+    },
+  }}
+  style={(anim) => {
+>style : any
+>(anim) => {    return "";  } : (anim: any) => string
+>anim : any
+
+    return "";
+>"" : ""
+
+  }}
+/>;
+
+// repro from #52786
+
+interface Props<T> {
+>Props : Props<T>
+>T : T
+
+  a: (x: string) => T;
+>a : (x: string) => T
+>x : string
+
+  b: (arg: T) => void;
+>b : (arg: T) => void
+>arg : T
+}
+
+function Foo<T>(props: Props<T>) {
+>Foo : <T>(props: Props<T>) => any
+>T : T
+>props : Props<T>
+
+  return <div />;
+><div /> : any
+>div : any
+}
+
+<Foo
+><Foo  a={() => 10}  b={(arg) => { arg.toString(); }}/> : any
+>Foo : <T>(props: Props<T>) => any
+
+  a={() => 10}
+>a : any
+>() => 10 : () => number
+>10 : 10
+
+  b={(arg) => { arg.toString(); }}
+>b : any
+>(arg) => { arg.toString(); } : (arg: any) => void
+>arg : any
+>arg.toString() : any
+>arg.toString : any
+>arg : any
+>toString : any
+
+/>;
+
+<Foo
+><Foo  a={(x) => 10}  b={(arg) => { arg.toString(); }}/> : any
+>Foo : <T>(props: Props<T>) => any
+
+  a={(x) => 10}
+>a : any
+>(x) => 10 : (x: any) => number
+>x : any
+>10 : 10
+
+  b={(arg) => { arg.toString(); }}
+>b : any
+>(arg) => { arg.toString(); } : (arg: any) => void
+>arg : any
+>arg.toString() : any
+>arg.toString : any
+>arg : any
+>toString : any
+
+/>;
+
+<Foo {...{
+><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : any
+>Foo : <T>(props: Props<T>) => any
+>{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: any) => number; b: (arg: any) => void; }
+
+  a: (x) => 10,
+>a : (x: any) => number
+>(x) => 10 : (x: any) => number
+>x : any
+>10 : 10
+
+  b: (arg) => { arg.toString(); },
+>b : (arg: any) => void
+>(arg) => { arg.toString(); } : (arg: any) => void
+>arg : any
+>arg.toString() : any
+>arg.toString : any
+>arg : any
+>toString : any
+
+}} />;
+

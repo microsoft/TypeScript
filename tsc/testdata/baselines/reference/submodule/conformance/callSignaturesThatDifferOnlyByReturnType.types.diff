@@ -1,0 +1,53 @@
+--- old.callSignaturesThatDifferOnlyByReturnType.types
++++ new.callSignaturesThatDifferOnlyByReturnType.types
+@@= skipped -3, +3 lines =@@
+ // Each pair of signatures in these types has a signature that should cause an error. 
+ // Overloads, generic or not, that differ only by return type are an error.
+ interface I {
++>I : I
++
+     (x): number;
+ >x : any
+ 
+@@= skipped -7, +9 lines =@@
+ >x : any
+ 
+     <T>(x: T): number;
++>T : T
+ >x : T
+ 
+     <T>(x: T): string; // error
++>T : T
+ >x : T
+ }
+ 
+ interface I2 {
++>I2 : I2
++
+     <T>(x: T): number;
++>T : T
+ >x : T
+ 
+     <T>(x: T): string; // error
++>T : T
+ >x : T
+ }
+ 
+ interface I3<T> {
++>I3 : I3<T>
++>T : T
++
+     (x: T): number;
+ >x : T
+ 
+@@= skipped -38, +47 lines =@@
+ >a2 : { <T>(x: T): number; <T>(x: T): string; }
+ 
+     <T>(x: T): number;
++>T : T
+ >x : T
+ 
+     <T>(x: T): string; // error
++>T : T
+ >x : T
+ }

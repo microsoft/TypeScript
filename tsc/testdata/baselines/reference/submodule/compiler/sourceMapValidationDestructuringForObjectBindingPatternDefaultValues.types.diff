@@ -1,0 +1,136 @@
+--- old.sourceMapValidationDestructuringForObjectBindingPatternDefaultValues.types
++++ new.sourceMapValidationDestructuringForObjectBindingPatternDefaultValues.types
+@@= skipped -1, +1 lines =@@
+ 
+ === sourceMapValidationDestructuringForObjectBindingPatternDefaultValues.ts ===
+ declare var console: {
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ 
+     log(msg: any): void;
+ >log : (msg: any) => void
+ >msg : any
+ }
+ interface Robot {
++>Robot : Robot
++
+     name: string;
+ >name : string
+ 
+@@= skipped -15, +17 lines =@@
+ }
+ 
+ interface MultiRobot {
++>MultiRobot : MultiRobot
++
+     name: string;
+ >name : string
+ 
+@@= skipped -64, +66 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -21, +21 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -25, +25 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -38, +38 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -39, +39 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -49, +49 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -24, +24 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -24, +24 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -28, +28 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -43, +43 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -44, +44 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }
+@@= skipped -54, +54 lines =@@
+     console.log(primaryA);
+ >console.log(primaryA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >primaryA : string
+ }

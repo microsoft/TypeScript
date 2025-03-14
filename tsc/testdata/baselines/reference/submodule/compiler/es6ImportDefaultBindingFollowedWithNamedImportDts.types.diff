@@ -1,0 +1,57 @@
+--- old.es6ImportDefaultBindingFollowedWithNamedImportDts.types
++++ new.es6ImportDefaultBindingFollowedWithNamedImportDts.types
+@@= skipped -33, +33 lines =@@
+ 
+ import defaultBinding3, { a11 as b } from "./server";
+ >defaultBinding3 : any
+->a11 : typeof b
+->b : typeof b
++>a11 : typeof a11
++>b : typeof a11
+ 
+ export var x2 = new b();
+->x2 : b
+->new b() : b
+->b : typeof b
++>x2 : a11
++>new b() : a11
++>b : typeof a11
+ 
+ import defaultBinding4, { x, a12 as y } from "./server";
+ >defaultBinding4 : any
+ >x : typeof x
+->a12 : typeof y
+->y : typeof y
++>a12 : typeof a12
++>y : typeof a12
+ 
+ export var x4 = new x();
+ >x4 : x
+@@= skipped -20, +20 lines =@@
+ >x : typeof x
+ 
+ export var x5 = new y();
+->x5 : y
+->new y() : y
+->y : typeof y
++>x5 : a12
++>new y() : a12
++>y : typeof a12
+ 
+ import defaultBinding5, { x11 as z,  } from "./server";
+ >defaultBinding5 : any
+->x11 : typeof z
+->z : typeof z
++>x11 : typeof x11
++>z : typeof x11
+ 
+ export var x3 = new z();
+->x3 : z
+->new z() : z
+->z : typeof z
++>x3 : x11
++>new z() : x11
++>z : typeof x11
+ 
+ import defaultBinding6, { m,  } from "./server";
+ >defaultBinding6 : any

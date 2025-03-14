@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/unionTypeWithIndexedLiteralType.ts] ////
+
+=== unionTypeWithIndexedLiteralType.ts ===
+interface I { x: number; }
+>I : I
+>x : number
+
+interface Idx { [index: string]: U; }
+>Idx : Idx
+>index : string
+
+type U = Idx | I | "lit";
+>U : U
+
+const u: U = { x: "lit" };
+>u : U
+>{ x: "lit" } : { x: "lit"; }
+>x : "lit"
+>"lit" : "lit"
+

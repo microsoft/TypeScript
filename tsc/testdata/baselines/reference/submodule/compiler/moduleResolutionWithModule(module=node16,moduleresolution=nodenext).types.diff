@@ -1,0 +1,16 @@
+--- old.moduleResolutionWithModule(module=node16,moduleresolution=nodenext).types
++++ new.moduleResolutionWithModule(module=node16,moduleresolution=nodenext).types
+@@= skipped -5, +5 lines =@@
+ 
+ === index.ts ===
+ import * as p from "pkg";
+->p : typeof p
++>p : typeof import("node_modules/pkg/entrypoint")
+ 
+ p.thing();
+ >p.thing() : void
+ >p.thing : () => void
+->p : typeof p
++>p : typeof import("node_modules/pkg/entrypoint")
+ >thing : () => void
+ 

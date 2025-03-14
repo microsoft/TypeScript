@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/intersectionOfTypeVariableHasApparentSignatures.ts] ////
+
+=== intersectionOfTypeVariableHasApparentSignatures.ts ===
+interface Component<P> {
+>Component : Component<P>
+>P : P
+
+    props: Readonly<P> & Readonly<{ children?: {} }>;
+>props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
+>children : {} | undefined
+}
+
+interface Props {
+>Props : Props
+
+    children?: (items: {x: number}) => void
+>children : (items: { x: number; }) => void | undefined
+>items : { x: number; }
+>x : number
+}
+
+declare function f<T extends Props>(i: Component<T>): void;
+>f : <T extends Props>(i: Component<T>) => void
+>T : T
+>i : Component<T>
+
+f({
+>f({    props: {        children: (({ x }) => { })    }}) : void
+>f : <T extends Props>(i: Component<T>) => void
+>{    props: {        children: (({ x }) => { })    }} : { props: { children: (__0: { x: number; }) => void; }; }
+
+    props: {
+>props : { children: (__0: { x: number; }) => void; }
+>{        children: (({ x }) => { })    } : { children: (__0: { x: number; }) => void; }
+
+        children: (({ x }) => { })
+>children : (__0: { x: number; }) => void
+>(({ x }) => { }) : (__0: { x: number; }) => void
+>({ x }) => { } : (__0: { x: number; }) => void
+>x : number
+    }
+});

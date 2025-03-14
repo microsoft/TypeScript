@@ -1,0 +1,74 @@
+--- old.keyofDoesntContainSymbols.types
++++ new.keyofDoesntContainSymbols.types
+@@= skipped -10, +10 lines =@@
+ >0 : 0
+ 
+ const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
+->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+->{ num: 0, str: 's', [num]: num as 0, [sym]: sym } : { num: number; str: string; 0: 0; [sym]: symbol; }
++>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
++>{ num: 0, str: 's', [num]: num as 0, [sym]: sym } : { num: number; str: string; [num]: 0; [sym]: symbol; }
+ >num : number
+ >0 : 0
+ >str : string
+@@= skipped -16, +16 lines =@@
+ 
+ function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
+ >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
++>T : T
++>K : K
+ >obj : T
+ >key : K
+ >value : T[K]
+@@= skipped -16, +18 lines =@@
+ >val : string
+ >set(obj, 'str', '') : string
+ >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
++>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
+ >'str' : "str"
+ >'' : ""
+ 
+@@= skipped -9, +9 lines =@@
+ >valB : number
+ >set(obj, 'num', '') : number
+ >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
++>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
+ >'num' : "num"
+ >'' : ""
+ 
+@@= skipped -10, +10 lines =@@
+ >valC : symbol
+ >set(obj, sym, sym) : symbol
+ >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
++>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
+ >sym : unique symbol
+ >sym : unique symbol
+ 
+@@= skipped -10, +10 lines =@@
+ >valD : 0
+ >set(obj, num, num) : 0
+ >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
+->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
++>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
+ >num : 0
+ >num : 0
+ 
+ // Expect type error
+ // Argument of type '0' is not assignable to parameter of type "str" | "num"
+ type KeyofObj = keyof typeof obj;
+->KeyofObj : unique symbol | 0 | "str" | "num"
+->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
++>KeyofObj : "num" | "str" | 0 | unique symbol
+ 
+ // "str" | "num"
+ type Values<T> = T[keyof T];
+ >Values : Values<T>
++>T : T
+ 
+ type ValuesOfObj = Values<typeof obj>;
+ >ValuesOfObj : ValuesOfObj
+->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
+ 

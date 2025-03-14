@@ -1,0 +1,60 @@
+--- old.inferenceOptionalPropertiesStrict.types
++++ new.inferenceOptionalPropertiesStrict.types
+@@= skipped -2, +2 lines =@@
+ === inferenceOptionalPropertiesStrict.ts ===
+ declare function test<T>(x: { [key: string]: T }): T;
+ >test : <T>(x: { [key: string]: T; }) => T
++>T : T
+ >x : { [key: string]: T; }
+ >key : string
+ 
+ declare let x1: { a?: string, b?: number };
+->x1 : { a?: string; b?: number; }
++>x1 : { a?: string | undefined; b?: number | undefined; }
+ >a : string | undefined
+ >b : number | undefined
+ 
+ declare let x2: { a?: string, b?: number | undefined };
+->x2 : { a?: string; b?: number | undefined; }
++>x2 : { a?: string | undefined; b?: number | undefined; }
+ >a : string | undefined
+ >b : number | undefined
+ 
+@@= skipped -17, +18 lines =@@
+ >y1 : string | number
+ >test(x1) : string | number
+ >test : <T>(x: { [key: string]: T; }) => T
+->x1 : { a?: string; b?: number; }
++>x1 : { a?: string | undefined; b?: number | undefined; }
+ 
+ const y2 = test(x2);
+ >y2 : string | number | undefined
+ >test(x2) : string | number | undefined
+ >test : <T>(x: { [key: string]: T; }) => T
+->x2 : { a?: string; b?: number | undefined; }
++>x2 : { a?: string | undefined; b?: number | undefined; }
+ 
+ var v1: Required<{ a?: string, b?: number }>;
+->v1 : Required<{ a?: string; b?: number; }>
++>v1 : Required<{ a?: string | undefined; b?: number | undefined; }>
+ >a : string | undefined
+ >b : number | undefined
+ 
+ var v1: { a: string, b: number };
+->v1 : Required<{ a?: string; b?: number; }>
++>v1 : Required<{ a?: string | undefined; b?: number | undefined; }>
+ >a : string
+ >b : number
+ 
+ var v2: Required<{ a?: string, b?: number | undefined }>;
+->v2 : Required<{ a?: string; b?: number | undefined; }>
++>v2 : Required<{ a?: string | undefined; b?: number | undefined; }>
+ >a : string | undefined
+ >b : number | undefined
+ 
+ var v2: { a: string, b: number | undefined };
+->v2 : Required<{ a?: string; b?: number | undefined; }>
++>v2 : Required<{ a?: string | undefined; b?: number | undefined; }>
+ >a : string
+ >b : number | undefined
+ 

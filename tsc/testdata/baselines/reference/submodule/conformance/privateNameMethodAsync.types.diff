@@ -1,0 +1,54 @@
+--- old.privateNameMethodAsync.types
++++ new.privateNameMethodAsync.types
+@@= skipped -29, +29 lines =@@
+ >b : number
+ >(this.#baz().next().value || 0) : number
+ >this.#baz().next().value || 0 : number
+->this.#baz().next().value : number | void
++>this.#baz().next().value : void | number
+ >this.#baz().next() : IteratorResult<number, void>
+->this.#baz().next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
++>this.#baz().next : (...__0: [] | [unknown]) => IteratorResult<number, void>
+ >this.#baz() : Generator<number, void, unknown>
+ >this.#baz : () => Generator<number, void, unknown>
+ >this : this
+->next : (...[value]: [] | [unknown]) => IteratorResult<number, void>
+->value : number | void
++>next : (...__0: [] | [unknown]) => IteratorResult<number, void>
++>value : void | number
+ >0 : 0
+ >((await this.#qux().next()).value || 0) : number
+ >(await this.#qux().next()).value || 0 : number
+->(await this.#qux().next()).value : number | void
++>(await this.#qux().next()).value : void | number
+ >(await this.#qux().next()) : IteratorResult<number, void>
+ >await this.#qux().next() : IteratorResult<number, void>
+ >this.#qux().next() : Promise<IteratorResult<number, void>>
+->this.#qux().next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
++>this.#qux().next : (...__0: [] | [unknown]) => Promise<IteratorResult<number, void>>
+ >this.#qux() : AsyncGenerator<number, void, unknown>
+ >this.#qux : () => AsyncGenerator<number, void, unknown>
+ >this : this
+->next : (...[value]: [] | [unknown]) => Promise<IteratorResult<number, void>>
+->value : number | void
++>next : (...__0: [] | [unknown]) => Promise<IteratorResult<number, void>>
++>value : void | number
+ >0 : 0
+     }
+     *#baz() { yield 42; }
+@@= skipped -45, +45 lines =@@
+ 
+ new C().foo().then(console.log);
+ >new C().foo().then(console.log) : Promise<void>
+->new C().foo().then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>new C().foo().then : <TResult1, TResult2>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >new C().foo() : Promise<number>
+ >new C().foo : () => Promise<number>
+ >new C() : C
+ >C : typeof C
+ >foo : () => Promise<number>
+->then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void

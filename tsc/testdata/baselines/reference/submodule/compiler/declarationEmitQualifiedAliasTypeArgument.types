@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/declarationEmitQualifiedAliasTypeArgument.ts] ////
+
+=== bbb.d.ts ===
+export interface INode<T> {
+>INode : INode<T>
+>T : T
+
+    data: T;
+>data : T
+}
+
+export function create<T>(): () => INode<T>;
+>create : <T>() => () => INode<T>
+>T : T
+
+=== lib.d.ts ===
+export type G<T extends string> = { [P in T]: string };
+>G : G<T>
+>T : T
+>P : P
+
+export enum E {
+>E : E
+
+    A = "a",
+>A : E.A
+>"a" : "a"
+
+    B = "b"
+>B : E.B
+>"b" : "b"
+}
+
+export type T = G<E>;
+>T : T
+
+export type Q = G<E.A>;
+>Q : Q
+>E : any
+
+=== index.ts ===
+import { T, Q } from "./lib";
+>T : any
+>Q : any
+
+import { create } from "./bbb";
+>create : <T>() => () => INode<T>
+
+export const fun = create<T>();
+>fun : () => INode<T>
+>create<T>() : () => INode<T>
+>create : <T>() => () => INode<T>
+
+export const fun2 = create<Q>();
+>fun2 : () => INode<Q>
+>create<Q>() : () => INode<Q>
+>create : <T>() => () => INode<T>
+

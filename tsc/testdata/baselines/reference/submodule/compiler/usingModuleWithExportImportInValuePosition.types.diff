@@ -1,0 +1,41 @@
+--- old.usingModuleWithExportImportInValuePosition.types
++++ new.usingModuleWithExportImportInValuePosition.types
+@@= skipped -15, +15 lines =@@
+ >y : number
+     }
+     export module B {
++>B : any
++
+         export interface Id {
++>Id : Id
++
+             name: string;
+ >name : string
+         }
+@@= skipped -10, +14 lines =@@
+ >C : typeof C
+ 
+     export import a = A;
+->a : typeof a
+->A : typeof a
++>a : typeof A
++>A : typeof A
+ }
+ 
+ var a: string = C.a.x;
+@@= skipped -16, +16 lines =@@
+ >b : { x: number; y: number; }
+ >x : number
+ >y : number
+->new C.a.Point(0, 0) : A.Point
+->C.a.Point : typeof A.Point
++>new C.a.Point(0, 0) : Point
++>C.a.Point : typeof Point
+ >C.a : typeof A
+ >C : typeof C
+ >a : typeof A
+->Point : typeof A.Point
++>Point : typeof Point
+ >0 : 0
+ >0 : 0
+ 

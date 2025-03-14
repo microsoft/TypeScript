@@ -1,0 +1,12 @@
+--- old.declarationsForFileShadowingGlobalNoError.types
++++ new.declarationsForFileShadowingGlobalNoError.types
+@@= skipped -28, +28 lines =@@
+ >Base : Constructor
+ 
+     get(domNode: DOMNode) {}
+->get : (domNode: DOMNode) => void
+->domNode : globalThis.Node
++>get : (domNode: Node) => void
++>domNode : Node
+   }
+ }

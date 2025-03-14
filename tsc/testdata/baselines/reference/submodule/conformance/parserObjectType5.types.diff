@@ -1,0 +1,9 @@
+--- old.parserObjectType5.types
++++ new.parserObjectType5.types
+@@= skipped -7, +7 lines =@@
+ >A : B
+ 
+    <T>;
++>T : T
++
+ };

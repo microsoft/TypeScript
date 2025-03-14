@@ -1,0 +1,18 @@
+--- old.taggedTemplatesInModuleAndGlobal.types
++++ new.taggedTemplatesInModuleAndGlobal.types
+@@= skipped -5, +5 lines =@@
+ 
+     function id<T>(x: T): T {
+ >id : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+         return x;
+@@= skipped -26, +27 lines =@@
+ export { }
+ function id<T>(x: T): T {
+ >id : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+     return x;

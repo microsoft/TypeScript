@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/recursiveIdenticalOverloadResolution.ts] ////
+
+=== recursiveIdenticalOverloadResolution.ts ===
+module M {
+>M : typeof M
+
+   interface I { (i: I): I; }
+>I : I
+>i : I
+
+   function f(p: I) { return f };
+>f : (p: I) => ???
+>p : I
+>f : (p: I) => ???
+
+   var i: I;
+>i : I
+
+   f(i);
+>f(i) : (p: I) => ???
+>f : (p: I) => ???
+>i : I
+
+   f(f(i));
+>f(f(i)) : (p: I) => ???
+>f : (p: I) => ???
+>f(i) : (p: I) => ???
+>f : (p: I) => ???
+>i : I
+
+   f((f(f(i))));
+>f((f(f(i)))) : (p: I) => ???
+>f : (p: I) => ???
+>(f(f(i))) : (p: I) => ???
+>f(f(i)) : (p: I) => ???
+>f : (p: I) => ???
+>f(i) : (p: I) => ???
+>f : (p: I) => ???
+>i : I
+
+}
+

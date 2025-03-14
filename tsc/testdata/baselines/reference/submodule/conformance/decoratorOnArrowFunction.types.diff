@@ -1,0 +1,10 @@
+--- old.decoratorOnArrowFunction.types
++++ new.decoratorOnArrowFunction.types
+@@= skipped -2, +2 lines =@@
+ === decoratorOnArrowFunction.ts ===
+ declare function dec<T>(target: T): T;
+ >dec : <T>(target: T) => T
++>T : T
+ >target : T
+ 
+ var F = @dec () => {

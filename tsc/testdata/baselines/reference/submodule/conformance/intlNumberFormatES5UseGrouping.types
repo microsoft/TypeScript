@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/es2023/intlNumberFormatES5UseGrouping.ts] ////
+
+=== intlNumberFormatES5UseGrouping.ts ===
+new Intl.NumberFormat('en-GB', { useGrouping: true });
+>new Intl.NumberFormat('en-GB', { useGrouping: true }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-GB' : "en-GB"
+>{ useGrouping: true } : { useGrouping: true; }
+>useGrouping : true
+>true : true
+
+new Intl.NumberFormat('en-GB', { useGrouping: 'true' }); // expect error
+>new Intl.NumberFormat('en-GB', { useGrouping: 'true' }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-GB' : "en-GB"
+>{ useGrouping: 'true' } : { useGrouping: string; }
+>useGrouping : string
+>'true' : "true"
+
+new Intl.NumberFormat('en-GB', { useGrouping: 'always' }); // expect error
+>new Intl.NumberFormat('en-GB', { useGrouping: 'always' }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-GB' : "en-GB"
+>{ useGrouping: 'always' } : { useGrouping: string; }
+>useGrouping : string
+>'always' : "always"
+
+const { useGrouping } = new Intl.NumberFormat('en-GB').resolvedOptions();
+>useGrouping : boolean
+>new Intl.NumberFormat('en-GB').resolvedOptions() : ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-GB').resolvedOptions : () => ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-GB') : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-GB' : "en-GB"
+>resolvedOptions : () => ResolvedNumberFormatOptions
+

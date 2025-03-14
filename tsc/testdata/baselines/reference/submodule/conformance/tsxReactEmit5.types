@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/jsx/tsxReactEmit5.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+
+=== test.d.ts ===
+export var React;
+>React : any
+
+=== react-consumer.tsx ===
+import {React} from "./test";
+>React : any
+
+// Should emit test_1.React.createElement
+//  and React.__spread
+var foo: any;
+>foo : any
+
+var spread1 = <div x='' {...foo} y='' />;
+>spread1 : any
+><div x='' {...foo} y='' /> : any
+>div : any
+>x : any
+>foo : any
+>y : any
+

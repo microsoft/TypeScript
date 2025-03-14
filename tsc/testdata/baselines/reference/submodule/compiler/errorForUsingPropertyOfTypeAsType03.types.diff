@@ -1,0 +1,46 @@
+--- old.errorForUsingPropertyOfTypeAsType03.types
++++ new.errorForUsingPropertyOfTypeAsType03.types
+@@= skipped -21, +21 lines =@@
+ 
+     type C2 = typeof Color;
+ >C2 : typeof Color
+->Color : typeof Color
+ 
+     let a1: Color.Red.toString;
+->a1 : Color.Red.toString
++>a1 : toString
+ >Color : any
+ >Red : any
+ 
+@@= skipped -18, +17 lines =@@
+     //let b2: (typeof Color).Red["toString"];
+     let b3: (typeof Color)["Red"]["toString"];
+ >b3 : (radix?: number) => string
+->Color : typeof Color
+ 
+     let c1: C1.Red.toString;
+->c1 : C1.Red.toString
++>c1 : toString
+ >C1 : any
+ >Red : any
+ 
+     let c2: C1.Red["toString"];
+->c2 : C1.Red
++>c2 : Red
+ >C1 : any
+ 
+     let c3: C1["Red"]["toString"];
+ >c3 : any
+ 
+     let d1: C2.Red.toString;
+->d1 : C2.Red.toString
++>d1 : toString
+ >C2 : any
+ >Red : any
+ 
+     let d2: C2.Red["toString"];
+->d2 : C2.Red
++>d2 : Red
+ >C2 : any
+ 
+     let d3: C2["Red"]["toString"];

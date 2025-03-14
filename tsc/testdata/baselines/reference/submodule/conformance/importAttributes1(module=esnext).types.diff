@@ -1,0 +1,26 @@
+--- old.importAttributes1(module=esnext).types
++++ new.importAttributes1(module=esnext).types
+@@= skipped -17, +17 lines =@@
+ >b : 2
+ 
+ import * as foo from './0' with { type: "json" }
+->foo : typeof foo
++>foo : typeof import("0")
+ >type : any
+ 
+ a;
+@@= skipped -11, +11 lines =@@
+ 
+ foo.a;
+ >foo.a : 1
+->foo : typeof foo
++>foo : typeof import("0")
+ >a : 1
+ 
+ foo.b;
+ >foo.b : 2
+->foo : typeof foo
++>foo : typeof import("0")
+ >b : 2
+ 
+ === 2.ts ===

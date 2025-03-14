@@ -1,0 +1,35 @@
+--- old.aliasInstantiationExpressionGenericIntersectionNoCrash2.types
++++ new.aliasInstantiationExpressionGenericIntersectionNoCrash2.types
+@@= skipped -2, +2 lines =@@
+ === aliasInstantiationExpressionGenericIntersectionNoCrash2.ts ===
+ declare class Class<T> {
+ >Class : Class<T>
++>T : T
+ 
+   x: T;
+ >x : T
+@@= skipped -7, +8 lines =@@
+ 
+ declare function fn<T>(): T;
+ >fn : <T>() => T
++>T : T
+ 
+ 
+ type ClassAlias<T> = typeof Class<T>;
+->ClassAlias : typeof Class<T>
+->Class : typeof Class
++>ClassAlias : { new (): Class<T>; prototype: Class<any>; }
++>T : T
+ 
+ type FnAlias<T> = typeof fn<T>;
+->FnAlias : typeof fn<T>
+->fn : <T_1>() => T_1
++>FnAlias : () => T
++>T : T
+ 
+ type Wat<T> = ClassAlias<T> & FnAlias<T>;
+ >Wat : Wat<T>
++>T : T
+ 
+ 
+ declare const wat: Wat<number>;

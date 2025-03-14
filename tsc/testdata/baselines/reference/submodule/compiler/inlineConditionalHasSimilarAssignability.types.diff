@@ -1,0 +1,35 @@
+--- old.inlineConditionalHasSimilarAssignability.types
++++ new.inlineConditionalHasSimilarAssignability.types
+@@= skipped -2, +2 lines =@@
+ === inlineConditionalHasSimilarAssignability.ts ===
+ type MyExtract<T, U> = T extends U ? T : never
+ >MyExtract : MyExtract<T, U>
++>T : T
++>U : U
+ 
+ function foo<T>(a: T) {
+ >foo : <T>(a: T) => void
++>T : T
+ >a : T
+ 
+   const b: Extract<any[], T> = 0 as any;
+@@= skipped -36, +39 lines =@@
+ >d : MyExtract<any[], T>
+ 
+   type CustomType = any[] extends T ? any[] : never;
+->CustomType : any[] extends T ? any[] : never
++>CustomType : CustomType
+ 
+   const e: CustomType = 0 as any;
+->e : any[] extends T ? any[] : never
++>e : CustomType
+ >0 as any : any
+ >0 : 0
+ 
+   a = e;
+->a = e : any[] extends T ? any[] : never
++>a = e : CustomType
+ >a : T
+->e : any[] extends T ? any[] : never
++>e : CustomType
+ }

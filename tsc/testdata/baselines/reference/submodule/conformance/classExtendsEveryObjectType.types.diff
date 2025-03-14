@@ -1,0 +1,11 @@
+--- old.classExtendsEveryObjectType.types
++++ new.classExtendsEveryObjectType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classExtendsEveryObjectType.ts ===
+ interface I {
++>I : I
++
+     foo: string;
+ >foo : string
+ }

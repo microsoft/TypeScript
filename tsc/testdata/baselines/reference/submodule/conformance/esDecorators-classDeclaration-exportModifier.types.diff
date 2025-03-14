@@ -1,0 +1,34 @@
+--- old.esDecorators-classDeclaration-exportModifier.types
++++ new.esDecorators-classDeclaration-exportModifier.types
+@@= skipped -14, +14 lines =@@
+ // ok
+ @dec export default class C2 {}
+ >dec : any
+->C2 : C2
++>C2 : default
+ 
+ === file3.js ===
+ // error
+ export @dec default class C3 {}
+ >dec : any
+->C3 : C3
++>C3 : default
+ 
+ === file4.js ===
+ // ok
+@@= skipped -18, +18 lines =@@
+ // ok
+ export default @dec class C5 {}
+ >dec : any
+->C5 : C5
++>C5 : default
+ 
+ === file6.js ===
+ // error
+@@= skipped -14, +14 lines =@@
+ @dec export default @dec class C7 {}
+ >dec : any
+ >dec : any
+->C7 : C7
++>C7 : default
+ 

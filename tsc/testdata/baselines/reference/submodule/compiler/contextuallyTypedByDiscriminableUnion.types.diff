@@ -1,0 +1,42 @@
+--- old.contextuallyTypedByDiscriminableUnion.types
++++ new.contextuallyTypedByDiscriminableUnion.types
+@@= skipped -35, +35 lines =@@
+         item.method("");
+ >item.method("") : number
+ >item.method : (x: string) => number
+->item : { kind: "a"; method(x: string): number; }
++>item : { kind: "a"; method: (x: string) => number; }
+ >method : (x: string) => number
+ >"" : ""
+     }
+@@= skipped -8, +8 lines =@@
+         item.method(42);
+ >item.method(42) : string
+ >item.method : (x: number) => string
+->item : { kind: "b"; method(x: number): string; }
++>item : { kind: "b"; method: (x: number) => string; }
+ >method : (x: number) => string
+ >42 : 42
+     }
+@@= skipped -9, +9 lines =@@
+ invoke({
+ >invoke({    kind: "a",    method(a) {        return +a;    }}) : void
+ >invoke : (item: ADT) => void
+->{    kind: "a",    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
++>{    kind: "a",    method(a) {        return +a;    }} : { kind: "a"; method: (a: string) => number; }
+ 
+     kind: "a",
+ >kind : "a"
+@@= skipped -23, +23 lines =@@
+ invoke({
+ >invoke({    kind,    method(a) {        return +a;    }}) : void
+ >invoke : (item: ADT) => void
+->{    kind,    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
++>{    kind,    method(a) {        return +a;    }} : { kind: "a"; method: (a: string) => number; }
+ 
+     kind,
+->kind : "a"
++>kind : any
+ 
+     method(a) {
+ >method : (a: string) => number

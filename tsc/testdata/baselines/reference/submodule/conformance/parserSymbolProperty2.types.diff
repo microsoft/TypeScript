@@ -1,0 +1,11 @@
+--- old.parserSymbolProperty2.types
++++ new.parserSymbolProperty2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserSymbolProperty2.ts ===
+ interface I {
++>I : I
++
+     [Symbol.unscopables](): string;
+ >[Symbol.unscopables] : () => string
+ >Symbol.unscopables : unique symbol

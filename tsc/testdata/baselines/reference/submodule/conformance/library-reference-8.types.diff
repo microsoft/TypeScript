@@ -1,0 +1,34 @@
+--- old.library-reference-8.types
++++ new.library-reference-8.types
+@@= skipped -4, +4 lines =@@
+ /// <reference types="beta" />
+ var x: string = alpha.a + beta.b;
+ >x : string
+->alpha.a + beta.b : string
+->alpha.a : string
+->alpha : { a: string; }
+->a : string
+->beta.b : string
+->beta : { b: string; }
+->b : string
++>alpha.a + beta.b : any
++>alpha.a : any
++>alpha : any
++>a : any
++>beta.b : any
++>beta : any
++>b : any
+ 
+ 
+-=== /test/types/alpha/index.d.ts ===
+-/// <reference types="beta" />
+-declare var alpha: { a: string };
+->alpha : { a: string; }
+->a : string
+-
+-=== /test/types/beta/index.d.ts ===
+-/// <reference types="alpha" />
+-declare var beta: { b: string };
+->beta : { b: string; }
+->b : string
+-

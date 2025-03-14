@@ -1,0 +1,10 @@
+--- old.classWithTwoConstructorDefinitions.types
++++ new.classWithTwoConstructorDefinitions.types
+@@= skipped -10, +10 lines =@@
+ 
+ class D<T> {
+ >D : D<T>
++>T : T
+ 
+     constructor(x: T) { } // error
+ >x : T

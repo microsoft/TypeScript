@@ -1,0 +1,83 @@
+--- old.jsDeclarationsExportAssignedConstructorFunctionWithSub.types
++++ new.jsDeclarationsExportAssignedConstructorFunctionWithSub.types
+@@= skipped -4, +4 lines =@@
+  * @param {number} p
+  */
+ module.exports = function (p) {
+->module.exports = function (p) {    this.t = 12 + p;} : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+->exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->function (p) {    this.t = 12 + p;} : typeof exports
+->p : number
++>module.exports = function (p) {    this.t = 12 + p;} : (p: any) => void
++>module.exports : any
++>module : any
++>exports : any
++>function (p) {    this.t = 12 + p;} : (p: any) => void
++>p : any
+ 
+     this.t = 12 + p;
+->this.t = 12 + p : number
++>this.t = 12 + p : any
+ >this.t : any
+->this : this
++>this : any
+ >t : any
+->12 + p : number
++>12 + p : any
+ >12 : 12
+->p : number
++>p : any
+ }
+ module.exports.Sub = function() {
+->module.exports.Sub = function() {    this.instance = new module.exports(10);} : typeof Sub
+->module.exports.Sub : typeof Sub
+->module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+->exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->Sub : typeof Sub
+->function() {    this.instance = new module.exports(10);} : typeof Sub
++>module.exports.Sub = function() {    this.instance = new module.exports(10);} : () => void
++>module.exports.Sub : any
++>module.exports : any
++>module : any
++>exports : any
++>Sub : any
++>function() {    this.instance = new module.exports(10);} : () => void
+ 
+     this.instance = new module.exports(10);
+->this.instance = new module.exports(10) : exports
++>this.instance = new module.exports(10) : any
+ >this.instance : any
+->this : this
++>this : any
+ >instance : any
+->new module.exports(10) : exports
+->module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+->exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
++>new module.exports(10) : any
++>module.exports : any
++>module : any
++>exports : any
+ >10 : 10
+ }
+ module.exports.Sub.prototype = { }
+ >module.exports.Sub.prototype = { } : {}
+->module.exports.Sub.prototype : {}
+->module.exports.Sub : typeof Sub
+->module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->module : { exports: { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+->exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+->Sub : typeof Sub
+->prototype : {}
++>module.exports.Sub.prototype : any
++>module.exports.Sub : any
++>module.exports : any
++>module : any
++>exports : any
++>Sub : any
++>prototype : any
+ >{ } : {}
+ 

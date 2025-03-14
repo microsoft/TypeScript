@@ -1,0 +1,404 @@
+//// [tests/cases/compiler/awaitedTypeJQuery.ts] ////
+
+=== awaitedTypeJQuery.ts ===
+/// <reference lib="dom" />
+
+interface Thenable<T> extends PromiseLike<T> { }
+>Thenable : Thenable<T>
+>T : T
+
+// JQuery's Promise type
+interface PromiseBase<TR, TJ, TN,
+>PromiseBase : PromiseBase<TR, TJ, TN, UR, UJ, UN, VR, VJ, VN, SR, SJ, SN>
+>TR : TR
+>TJ : TJ
+>TN : TN
+
+    UR, UJ, UN,
+>UR : UR
+>UJ : UJ
+>UN : UN
+
+    VR, VJ, VN,
+>VR : VR
+>VJ : VJ
+>VN : VN
+
+    SR, SJ, SN> {
+>SR : SR
+>SJ : SJ
+>SN : SN
+
+    then<ARD = never, AJD = never, AND = never,
+>then : { <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP, BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP, CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP, RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP, BRF | BRP, BJF | BJP, BNF | BNP, CRF | CRP, CJF | CJP, CNF | CNP, RRF | RRP, RJF | RJP, RNF | RNP>; <ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: null, progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF, BRD | BRF, BJD | BJF, BND | BNF, CRD | CRF, CJD | CJF, CND | CNF, RRD | RRF, RJD | RJF, RND | RNF>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter?: null, progressFilter?: null): PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>; }
+>ARD : ARD
+>AJD : AJD
+>AND : AND
+
+        BRD = never, BJD = never, BND = never,
+>BRD : BRD
+>BJD : BJD
+>BND : BND
+
+        CRD = never, CJD = never, CND = never,
+>CRD : CRD
+>CJD : CJD
+>CND : CND
+
+        RRD = never, RJD = never, RND = never,
+>RRD : RRD
+>RJD : RJD
+>RND : RND
+
+        ARF = never, AJF = never, ANF = never,
+>ARF : ARF
+>AJF : AJF
+>ANF : ANF
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : BRF
+>BJF : BJF
+>BNF : BNF
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : CRF
+>CJF : CJF
+>CNF : CNF
+
+        RRF = never, RJF = never, RNF = never,
+>RRF : RRF
+>RJF : RJF
+>RNF : RNF
+
+        ARP = never, AJP = never, ANP = never,
+>ARP : ARP
+>AJP : AJP
+>ANP : ANP
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : BRP
+>BJP : BJP
+>BNP : BNP
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : CRP
+>CJP : CJP
+>CNP : CNP
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : RRP
+>RJP : RJP
+>RNP : RNP
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>
+>t : TR
+>u : UR
+>v : VR
+>s : SR[]
+
+                BRD, BJD, BND,
+                CRD, CJD, CND,
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>
+>t : TJ
+>u : UJ
+>v : VJ
+>s : SJ[]
+
+                BRF, BJF, BNF,
+                CRF, CJF, CNF,
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+            progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>
+>t : TN
+>u : UN
+>v : VN
+>s : SN[]
+
+                BRP, BJP, BNP,
+                CRP, CJP, CNP,
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP,
+        BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP,
+        CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP,
+        RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>;
+    then<ARF = never, AJF = never, ANF = never,
+>then : { <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP, BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP, CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP, RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP, BRF | BRP, BJF | BJP, BNF | BNP, CRF | CRP, CJF | CJP, CNF | CNP, RRF | RRP, RJF | RJP, RNF | RNP>; <ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: null, progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF, BRD | BRF, BJD | BJF, BND | BNF, CRD | CRF, CJD | CJF, CND | CNF, RRD | RRF, RJD | RJF, RND | RNF>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter?: null, progressFilter?: null): PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>; }
+>ARF : ARF
+>AJF : AJF
+>ANF : ANF
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : BRF
+>BJF : BJF
+>BNF : BNF
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : CRF
+>CJF : CJF
+>CNF : CNF
+
+        RRF = never, RJF = never, RNF = never,
+>RRF : RRF
+>RJF : RJF
+>RNF : RNF
+
+        ARP = never, AJP = never, ANP = never,
+>ARP : ARP
+>AJP : AJP
+>ANP : ANP
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : BRP
+>BJP : BJP
+>BNP : BNP
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : CRP
+>CJP : CJP
+>CNP : CNP
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : RRP
+>RJP : RJP
+>RNP : RNP
+
+            doneFilter: null,
+>doneFilter : null
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>
+>t : TJ
+>u : UJ
+>v : VJ
+>s : SJ[]
+
+                BRF, BJF, BNF,
+                CRF, CJF, CNF,
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+            progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>
+>t : TN
+>u : UN
+>v : VN
+>s : SN[]
+
+                BRP, BJP, BNP,
+                CRP, CJP, CNP,
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP,
+        BRF | BRP, BJF | BJP, BNF | BNP,
+        CRF | CRP, CJF | CJP, CNF | CNP,
+        RRF | RRP, RJF | RJP, RNF | RNP>;
+    then<ARP = never, AJP = never, ANP = never,
+>then : { <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP, BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP, CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP, RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP, BRF | BRP, BJF | BJP, BNF | BNP, CRF | CRP, CJF | CJP, CNF | CNP, RRF | RRP, RJF | RJP, RNF | RNP>; <ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: null, progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF, BRD | BRF, BJD | BJF, BND | BNF, CRD | CRF, CJD | CJF, CND | CNF, RRD | RRF, RJD | RJF, RND | RNF>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter?: null, progressFilter?: null): PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>; }
+>ARP : ARP
+>AJP : AJP
+>ANP : ANP
+
+        BRP = never, BJP = never, BNP = never,
+>BRP : BRP
+>BJP : BJP
+>BNP : BNP
+
+        CRP = never, CJP = never, CNP = never,
+>CRP : CRP
+>CJP : CJP
+>CNP : CNP
+
+        RRP = never, RJP = never, RNP = never>(
+>RRP : RRP
+>RJP : RJP
+>RNP : RNP
+
+            doneFilter: null,
+>doneFilter : null
+
+            failFilter: null,
+>failFilter : null
+
+            progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => PromiseBase<ARP, AJP, ANP,
+>progressFilter : (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>
+>t : TN
+>u : UN
+>v : VN
+>s : SN[]
+
+                BRP, BJP, BNP,
+                CRP, CJP, CNP,
+                RRP, RJP, RNP> | Thenable<ANP> | ANP): PromiseBase<ARP, AJP, ANP,
+        BRP, BJP, BNP,
+        CRP, CJP, CNP,
+        RRP, RJP, RNP>;
+    then<ARD = never, AJD = never, AND = never,
+>then : { <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP, BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP, CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP, RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP, BRF | BRP, BJF | BJP, BNF | BNP, CRF | CRP, CJF | CJP, CNF | CNP, RRF | RRP, RJF | RJP, RNF | RNP>; <ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: null, progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF, BRD | BRF, BJD | BJF, BND | BNF, CRD | CRF, CJD | CJF, CND | CNF, RRD | RRF, RJD | RJF, RND | RNF>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter?: null, progressFilter?: null): PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>; }
+>ARD : ARD
+>AJD : AJD
+>AND : AND
+
+        BRD = never, BJD = never, BND = never,
+>BRD : BRD
+>BJD : BJD
+>BND : BND
+
+        CRD = never, CJD = never, CND = never,
+>CRD : CRD
+>CJD : CJD
+>CND : CND
+
+        RRD = never, RJD = never, RND = never,
+>RRD : RRD
+>RJD : RJD
+>RND : RND
+
+        ARF = never, AJF = never, ANF = never,
+>ARF : ARF
+>AJF : AJF
+>ANF : ANF
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : BRF
+>BJF : BJF
+>BNF : BNF
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : CRF
+>CJF : CJF
+>CNF : CNF
+
+        RRF = never, RJF = never, RNF = never>(
+>RRF : RRF
+>RJF : RJF
+>RNF : RNF
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>
+>t : TR
+>u : UR
+>v : VR
+>s : SR[]
+
+                BRD, BJD, BND,
+                CRD, CJD, CND,
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>
+>t : TJ
+>u : UJ
+>v : VJ
+>s : SJ[]
+
+                BRF, BJF, BNF,
+                CRF, CJF, CNF,
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+            progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF,
+>progressFilter : null
+
+        BRD | BRF, BJD | BJF, BND | BNF,
+        CRD | CRF, CJD | CJF, CND | CNF,
+        RRD | RRF, RJD | RJF, RND | RNF>;
+    then<ARF = never, AJF = never, ANF = never,
+>then : { <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP, BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP, CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP, RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP, BRF | BRP, BJF | BJP, BNF | BNP, CRF | CRP, CJF | CJP, CNF | CNP, RRF | RRP, RJF | RJP, RNF | RNP>; <ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: null, progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF, BRD | BRF, BJD | BJF, BND | BNF, CRD | CRF, CJD | CJF, CND | CNF, RRD | RRF, RJD | RJF, RND | RNF>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter?: null, progressFilter?: null): PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>; }
+>ARF : ARF
+>AJF : AJF
+>ANF : ANF
+
+        BRF = never, BJF = never, BNF = never,
+>BRF : BRF
+>BJF : BJF
+>BNF : BNF
+
+        CRF = never, CJF = never, CNF = never,
+>CRF : CRF
+>CJF : CJF
+>CNF : CNF
+
+        RRF = never, RJF = never, RNF = never>(
+>RRF : RRF
+>RJF : RJF
+>RNF : RNF
+
+            doneFilter: null,
+>doneFilter : null
+
+            failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => PromiseBase<ARF, AJF, ANF,
+>failFilter : (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>
+>t : TJ
+>u : UJ
+>v : VJ
+>s : SJ[]
+
+                BRF, BJF, BNF,
+                CRF, CJF, CNF,
+                RRF, RJF, RNF> | Thenable<ARF> | ARF,
+            progressFilter?: null): PromiseBase<ARF, AJF, ANF,
+>progressFilter : null
+
+        BRF, BJF, BNF,
+        CRF, CJF, CNF,
+        RRF, RJF, RNF>;
+    then<ARD = never, AJD = never, AND = never,
+>then : { <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARD | ARF | ARP, AJD | AJF | AJP, AND | ANF | ANP, BRD | BRF | BRP, BJD | BJF | BJP, BND | BNF | BNP, CRD | CRF | CRP, CJD | CJF | CJP, CND | CNF | CNP, RRD | RRF | RRP, RJD | RJF | RJP, RND | RNF | RNP>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF, ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARF | ARP, AJF | AJP, ANF | ANP, BRF | BRP, BJF | BJP, BNF | BNP, CRF | CRP, CJF | CJP, CNF | CNP, RRF | RRP, RJF | RJP, RNF | RNP>; <ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>(doneFilter: null, failFilter: null, progressFilter?: (t: TN, u: UN, v: VN, ...s: SN[]) => ANP | PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP> | Thenable<ANP>): PromiseBase<ARP, AJP, ANP, BRP, BJP, BNP, CRP, CJP, CNP, RRP, RJP, RNP>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND, ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARD | ARF, AJD | AJF, AND | ANF, BRD | BRF, BJD | BJF, BND | BNF, CRD | CRF, CJD | CJF, CND | CNF, RRD | RRF, RJD | RJF, RND | RNF>; <ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>(doneFilter: null, failFilter: (t: TJ, u: UJ, v: VJ, ...s: SJ[]) => ARF | PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF> | Thenable<ARF>, progressFilter?: null): PromiseBase<ARF, AJF, ANF, BRF, BJF, BNF, CRF, CJF, CNF, RRF, RJF, RNF>; <ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>(doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>, failFilter?: null, progressFilter?: null): PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND>; }
+>ARD : ARD
+>AJD : AJD
+>AND : AND
+
+        BRD = never, BJD = never, BND = never,
+>BRD : BRD
+>BJD : BJD
+>BND : BND
+
+        CRD = never, CJD = never, CND = never,
+>CRD : CRD
+>CJD : CJD
+>CND : CND
+
+        RRD = never, RJD = never, RND = never>(
+>RRD : RRD
+>RJD : RJD
+>RND : RND
+
+            doneFilter: (t: TR, u: UR, v: VR, ...s: SR[]) => PromiseBase<ARD, AJD, AND,
+>doneFilter : (t: TR, u: UR, v: VR, ...s: SR[]) => ARD | PromiseBase<ARD, AJD, AND, BRD, BJD, BND, CRD, CJD, CND, RRD, RJD, RND> | Thenable<ARD>
+>t : TR
+>u : UR
+>v : VR
+>s : SR[]
+
+                BRD, BJD, BND,
+                CRD, CJD, CND,
+                RRD, RJD, RND> | Thenable<ARD> | ARD,
+            failFilter?: null,
+>failFilter : null
+
+            progressFilter?: null): PromiseBase<ARD, AJD, AND,
+>progressFilter : null
+
+        BRD, BJD, BND,
+        CRD, CJD, CND,
+        RRD, RJD, RND>;
+}
+
+interface Promise3<TR, TJ, TN,
+>Promise3 : Promise3<TR, TJ, TN, UR, UJ, UN, VR, VJ, VN>
+>TR : TR
+>TJ : TJ
+>TN : TN
+
+    UR, UJ, UN,
+>UR : UR
+>UJ : UJ
+>UN : UN
+
+    VR, VJ, VN> extends PromiseBase<TR, TJ, TN,
+>VR : VR
+>VJ : VJ
+>VN : VN
+
+    UR, UJ, UN,
+    VR, VJ, VN,
+    never, never, never> { }
+
+type T = Awaited<Promise3<string, Error, number, {}, string, boolean, any, Element, never>>; // string
+>T : string
+

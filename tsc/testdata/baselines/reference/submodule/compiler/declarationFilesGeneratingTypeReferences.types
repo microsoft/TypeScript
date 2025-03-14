@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/declarationFilesGeneratingTypeReferences.ts] ////
+
+=== /a/node_modules/@types/jquery/index.d.ts ===
+interface JQuery {
+>JQuery : JQuery
+
+}
+
+=== /a/app.ts ===
+/// <reference types="jquery" preserve="true" />
+namespace Test {
+>Test : typeof Test
+
+    export var x: JQuery;
+>x : JQuery
+}
+

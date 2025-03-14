@@ -1,0 +1,28 @@
+--- old.typeArgumentInferenceApparentType2.types
++++ new.typeArgumentInferenceApparentType2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeArgumentInferenceApparentType2.ts ===
+ function method<T>(iterable: Iterable<T>): T {
+->method : <T>(iterable: Iterable<T>) => T
+->iterable : Iterable<T>
++>method : <T>(iterable: Iterable<T, any, any>) => T
++>T : T
++>iterable : Iterable<T, any, any>
+ 
+     function inner<U extends Iterable<T>>() {
+->inner : <U extends Iterable<T>>() => void
++>inner : <U extends Iterable<T, any, any>>() => void
++>U : U
+ 
+         var u: U;
+ >u : U
+@@= skipped -12, +14 lines =@@
+         var res: T = method(u);
+ >res : T
+ >method(u) : T
+->method : <T>(iterable: Iterable<T>) => T
++>method : <T>(iterable: Iterable<T, any, any>) => T
+ >u : U
+     }
+     return;

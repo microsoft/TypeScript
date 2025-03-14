@@ -1,0 +1,38 @@
+--- old.declarationEmitMappedTypeDistributivityPreservesConstraints.types
++++ new.declarationEmitMappedTypeDistributivityPreservesConstraints.types
+@@= skipped -6, +6 lines =@@
+ 
+ type Map<T extends Fns> = { [K in keyof T]: T[K]; };
+ >Map : Map<T>
++>T : T
++>K : K
+ 
+ type AllArg<T extends Fns> = { [K in keyof T]: Parameters<T[K]> };
+ >AllArg : AllArg<T>
++>T : T
++>K : K
+ 
+ function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
+ >fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
++>T : T
+ >x : Map<T["x"]>
+ >sliceIndex : T
+ 
+@@= skipped -15, +20 lines =@@
+ 
+ export default { fn };
+ >{ fn } : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
+->fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
++>fn : any
+ 
+ === reexport.ts ===
+ import test from "./types";
+->test : { fn: <T extends { x: T["x"] extends infer T_1 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T_1]: T["x"][K]; } : never; }>(sliceIndex: T) => T["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T["x"][K_1]>; } : never; }
++>test : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
+ 
+ export default { test };
+->{ test } : { test: { fn: <T extends { x: T["x"] extends infer T_1 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T_1]: T["x"][K]; } : never; }>(sliceIndex: T) => T["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T["x"][K_1]>; } : never; }; }
+->test : { fn: <T extends { x: T["x"] extends infer T_1 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T_1]: T["x"][K]; } : never; }>(sliceIndex: T) => T["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T["x"][K_1]>; } : never; }
++>{ test } : { test: { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }; }
++>test : any
+ 

@@ -1,0 +1,51 @@
+--- old.mergedInterfacesWithMultipleBases4.types
++++ new.mergedInterfacesWithMultipleBases4.types
+@@= skipped -4, +4 lines =@@
+ 
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     a: T;
+ >a : T
+@@= skipped -7, +8 lines =@@
+ 
+ class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+     b: T;
+ >b : T
+@@= skipped -7, +8 lines =@@
+ 
+ class C3<T> {
+ >C3 : C3<T>
++>T : T
+ 
+     c: T;
+ >c : T
+@@= skipped -7, +8 lines =@@
+ 
+ class C4<T> {
+ >C4 : C4<T>
++>T : T
+ 
+     d: T;
+ >d : T
+ }
+ 
+ interface A<T> extends C<string>, C3<string> { // error
++>A : A<T>
++>T : T
++
+     y: T;
+ >y : T
+ }
+ 
+ interface A<T> extends C<number>, C4<string> {
++>A : A<T>
++>T : T
++
+     z: T;
+ >z : T
+ }

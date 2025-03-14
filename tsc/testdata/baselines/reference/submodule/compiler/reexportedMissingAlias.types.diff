@@ -1,0 +1,15 @@
+--- old.reexportedMissingAlias.types
++++ new.reexportedMissingAlias.types
+@@= skipped -6, +6 lines =@@
+ 
+ === first.d.ts ===
+ import * as Second from './second';
+->Second : typeof Second
++>Second : typeof import("second")
+ 
+ export = Second;
+->Second : typeof Second
++>Second : typeof import("second")
+ 
+ === crash.ts ===
+ import { Component } from './first';

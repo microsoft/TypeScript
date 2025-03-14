@@ -1,0 +1,90 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule.ts] ////
+
+=== commonjs.d.ts ===
+declare var module: { exports: any};
+>module : { exports: any; }
+>exports : any
+
+=== mod1.js ===
+/// <reference path="./commonjs.d.ts"/>
+/** @typedef {{ type: "a", x: 1 }} A */
+/** @typedef {{ type: "b", y: 1 }} B */
+/** @typedef {A | B} Both */
+module.exports = C
+>module.exports = C : () => void
+>module.exports : any
+>module : { exports: any; }
+>exports : any
+>C : () => void
+
+function C() {
+>C : () => void
+
+    this.p = 1
+>this.p = 1 : 1
+>this.p : any
+>this : any
+>p : any
+>1 : 1
+}
+
+=== mod2.js ===
+/// <reference path="./commonjs.d.ts"/>
+/** @typedef {{ type: "a", x: 1 }} A */
+/** @typedef {{ type: "b", y: 1 }} B */
+/** @typedef {A | B} Both */
+
+export function C() {
+>C : () => void
+
+    this.p = 1
+>this.p = 1 : 1
+>this.p : any
+>this : any
+>p : any
+>1 : 1
+}
+
+=== mod3.js ===
+/// <reference path="./commonjs.d.ts"/>
+/** @typedef {{ type: "a", x: 1 }} A */
+/** @typedef {{ type: "b", y: 1 }} B */
+/** @typedef {A | B} Both */
+
+exports.C = function() {
+>exports.C = function() {    this.p = 1} : () => void
+>exports.C : any
+>exports : any
+>C : any
+>function() {    this.p = 1} : () => void
+
+    this.p = 1
+>this.p = 1 : 1
+>this.p : any
+>this : any
+>p : any
+>1 : 1
+}
+
+=== use.js ===
+/** @type {import('./mod1').Both} */
+var both1 = { type: 'a', x: 1 };
+>both1 : { type: string; x: number; }
+>{ type: 'a', x: 1 } : { type: string; x: number; }
+>type : string
+>'a' : "a"
+>x : number
+>1 : 1
+
+/** @type {import('./mod2').Both} */
+var both2 = both1;
+>both2 : { type: string; x: number; }
+>both1 : { type: string; x: number; }
+
+/** @type {import('./mod3').Both} */
+var both3 = both2;
+>both3 : { type: string; x: number; }
+>both2 : { type: string; x: number; }
+
+
+

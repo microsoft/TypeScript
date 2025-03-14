@@ -1,0 +1,11 @@
+--- old.classWithNoConstructorOrBaseClass.types
++++ new.classWithNoConstructorOrBaseClass.types
+@@= skipped -18, +18 lines =@@
+ 
+ class D<T,U> {
+ >D : D<T, U>
++>T : T
++>U : U
+ 
+     x: T;
+ >x : T

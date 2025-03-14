@@ -1,0 +1,18 @@
+--- old.interfaceWithCallSignaturesThatHidesBaseSignature.types
++++ new.interfaceWithCallSignaturesThatHidesBaseSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceWithCallSignaturesThatHidesBaseSignature.ts ===
+ interface Foo {
++>Foo : Foo
++
+     (): { a: number };
+ >a : number
+ }
+ 
+ interface Derived extends Foo {
++>Derived : Derived
++
+     (): { a: number; b: number };
+ >a : number
+ >b : number

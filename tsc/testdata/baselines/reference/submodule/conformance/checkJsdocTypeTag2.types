@@ -1,0 +1,78 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag2.ts] ////
+
+=== 0.js ===
+// @ts-check
+/** @type {String} */
+var S = true;
+>S : boolean
+>true : true
+
+/** @type {number} */
+var n = "hello";
+>n : string
+>"hello" : "hello"
+
+/** @type {function (number)} */
+const x1 = (a) => a + 1;
+>x1 : (a: any) => any
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x1("string");
+>x1("string") : any
+>x1 : (a: any) => any
+>"string" : "string"
+
+/** @type {function (number): number} */
+const x2 = (a) => a + 1;
+>x2 : (a: any) => any
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+/** @type {string} */
+var a;
+>a : any
+
+a = x2(0);
+>a = x2(0) : any
+>a : any
+>x2(0) : any
+>x2 : (a: any) => any
+>0 : 0
+
+/** @type {function (number): number} */
+const x3 = (a) => a.concat("hi");
+>x3 : (a: any) => any
+>(a) => a.concat("hi") : (a: any) => any
+>a : any
+>a.concat("hi") : any
+>a.concat : any
+>a : any
+>concat : any
+>"hi" : "hi"
+
+x3(0);
+>x3(0) : any
+>x3 : (a: any) => any
+>0 : 0
+
+/** @type {function (number): string} */
+const x4 = (a) => a + 1;
+>x4 : (a: any) => any
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x4(0);
+>x4(0) : any
+>x4 : (a: any) => any
+>0 : 0
+

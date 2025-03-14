@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/commentOnAmbientModule.ts] ////
+
+=== b.ts ===
+///<reference path="a.ts"/>
+declare module E {
+>E : typeof E
+
+    class foobar extends D.bar {
+>foobar : foobar
+>D.bar : bar
+>D : typeof D
+>bar : typeof bar
+
+        foo();
+>foo : () => any
+    }
+}
+=== a.ts ===
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
+declare module C {
+>C : typeof C
+
+    function foo();
+>foo : () => any
+}
+
+// Don't keep this comment.
+declare module D {
+>D : typeof D
+
+    class bar { }
+>bar : bar
+}
+

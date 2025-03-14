@@ -1,0 +1,12 @@
+--- old.objectLiteralMemberWithModifiers1.types
++++ new.objectLiteralMemberWithModifiers1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectLiteralMemberWithModifiers1.ts ===
+ var v = { public foo() { } }
+->v : { foo(): void; }
+->{ public foo() { } } : { foo(): void; }
++>v : { foo: () => void; }
++>{ public foo() { } } : { foo: () => void; }
+ >foo : () => void
+ 

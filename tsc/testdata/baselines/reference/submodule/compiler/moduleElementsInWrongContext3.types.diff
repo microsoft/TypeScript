@@ -1,0 +1,21 @@
+--- old.moduleElementsInWrongContext3.types
++++ new.moduleElementsInWrongContext3.types
+@@= skipped -4, +4 lines =@@
+ >P : typeof P
+     {
+         module M { }
++>M : any
++
+         export namespace N {
++>N : any
++
+             export interface I { }
++>I : I
+         }
+ 
+         namespace Q.K { }
++>Q : any
++>K : any
+ 
+         declare module "ambient" {
+ >"ambient" : typeof import("ambient")

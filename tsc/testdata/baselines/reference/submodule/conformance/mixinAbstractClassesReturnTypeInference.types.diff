@@ -1,0 +1,46 @@
+--- old.mixinAbstractClassesReturnTypeInference.types
++++ new.mixinAbstractClassesReturnTypeInference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === mixinAbstractClassesReturnTypeInference.ts ===
+ interface Mixin1 {
++>Mixin1 : Mixin1
++
+     mixinMethod(): void;
+ >mixinMethod : () => void
+ }
+@@= skipped -12, +14 lines =@@
+ }
+ 
+ function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
+->Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
++>Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
++>TBase : TBase
+ >args : any[]
+ >baseClass : TBase
+ 
+     // must be `abstract` because we cannot know *all* of the possible abstract members that need to be
+     // implemented for this to be concrete.
+     abstract class MixinClass extends baseClass implements Mixin1 {
+->MixinClass : MixinClass
++>MixinClass : MixinClass<TBase>
+ >baseClass : TBase
+ 
+         mixinMethod(): void {}
+@@= skipped -17, +18 lines =@@
+ >staticMixinMethod : () => void
+     }
+     return MixinClass;
+->MixinClass : ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
++>MixinClass : { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
+ }
+ 
+ class DerivedFromAbstract2 extends Mixin2(AbstractBase) {
+ >DerivedFromAbstract2 : DerivedFromAbstract2
+->Mixin2(AbstractBase) : Mixin2<typeof AbstractBase>.MixinClass & AbstractBase
+->Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
++>Mixin2(AbstractBase) : MixinClass<typeof AbstractBase> & AbstractBase
++>Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
+ >AbstractBase : typeof AbstractBase
+ 
+     abstractBaseMethod() {}

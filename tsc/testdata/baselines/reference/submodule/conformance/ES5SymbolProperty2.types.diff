@@ -1,0 +1,18 @@
+--- old.ES5SymbolProperty2.types
++++ new.ES5SymbolProperty2.types
+@@= skipped -27, +27 lines =@@
+ 
+ (new M.C)[Symbol.iterator];
+ >(new M.C)[Symbol.iterator] : () => void
+->(new M.C) : M.C
+->new M.C : M.C
+->M.C : typeof M.C
++>(new M.C) : C
++>new M.C : C
++>M.C : typeof C
+ >M : typeof M
+->C : typeof M.C
++>C : typeof C
+ >Symbol.iterator : any
+ >Symbol : any
+ >iterator : any

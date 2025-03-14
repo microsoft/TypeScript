@@ -1,0 +1,11 @@
+--- old.errorsOnImportedSymbol.types
++++ new.errorsOnImportedSymbol.types
+@@= skipped -20, +20 lines =@@
+ 
+ === errorsOnImportedSymbol_0.ts ===
+ interface Sammy {
++>Sammy : Sammy
++
+     new (): any;
+     (): number;
+ }

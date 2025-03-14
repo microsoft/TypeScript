@@ -1,0 +1,11 @@
+--- old.overloadOnConstInObjectLiteralImplementingAnInterface.types
++++ new.overloadOnConstInObjectLiteralImplementingAnInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === overloadOnConstInObjectLiteralImplementingAnInterface.ts ===
+ interface I {
++>I : I
++
+     x1(a: number, callback: (x: 'hi') => number);
+ >x1 : (a: number, callback: (x: "hi") => number) => any
+ >a : number

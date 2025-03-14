@@ -1,0 +1,11 @@
+--- old.bundlerRelative1(module=esnext).types
++++ new.bundlerRelative1(module=esnext).types
+@@= skipped -40, +40 lines =@@
+ >a : string
+ 
+ import * as esm from "./types/esm";
+->esm : typeof esm
++>esm : typeof import("/types/esm")
+ 
+ import b from "./types/cjs";
+ >b : string

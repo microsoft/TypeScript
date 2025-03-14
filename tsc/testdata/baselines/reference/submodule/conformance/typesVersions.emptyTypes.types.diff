@@ -1,0 +1,9 @@
+--- old.typesVersions.emptyTypes.types
++++ new.typesVersions.emptyTypes.types
+@@= skipped -6, +6 lines =@@
+ 
+ === /b/user.ts ===
+ import { a } from "a";
+->a : 0
++>a : any
+ 

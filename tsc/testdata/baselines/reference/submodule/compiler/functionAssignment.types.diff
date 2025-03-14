@@ -1,0 +1,20 @@
+--- old.functionAssignment.types
++++ new.functionAssignment.types
+@@= skipped -10, +10 lines =@@
+ >function () { } : () => void
+ 
+ interface foo {
++>foo : foo
++
+     get(handler: (bar: number)=>void): void;
+ >get : (handler: (bar: number) => void) => void
+ >handler : (bar: number) => void
+@@= skipped -7, +9 lines =@@
+ }
+ 
+ interface baz {
++>baz : baz
++
+     get(callback: Function): number;
+ >get : (callback: Function) => number
+ >callback : Function

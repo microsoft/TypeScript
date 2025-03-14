@@ -1,0 +1,11 @@
+--- old.grammarAmbiguities1.types
++++ new.grammarAmbiguities1.types
+@@= skipped -15, +15 lines =@@
+ 
+ function g<T, U>(x) { return f(x); }
+ >g : <T, U>(x: any) => any
++>T : T
++>U : U
+ >x : any
+ >f(x) : any
+ >f : (x: any) => any

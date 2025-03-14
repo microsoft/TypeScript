@@ -1,0 +1,66 @@
+--- old.excessPropertyChecksWithNestedIntersections.types
++++ new.excessPropertyChecksWithNestedIntersections.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/Microsoft/TypeScript/issues/13813
+ 
+ interface A {
++>A : A
++
+     x: string
+ >x : string
+ }
+ 
+ interface B {
++>B : B
++
+     a: A;
+ >a : A
+ }
+ 
+ interface C {
++>C : C
++
+     c: number;
+ >c : number
+ }
+@@= skipped -90, +96 lines =@@
+ 
+ export const photo: typeof obj.photo = {
+ >photo : { id: number; } & { url: string; }
+->obj.photo : { id: number; } & { url: string; }
+ >obj : MyType
+->photo : { id: number; } & { url: string; }
+ >{    id: 1,    url: '',    xyz: 1 // Great! This causes an error!} : { id: number; url: string; xyz: number; }
+ 
+     id: 1,
+@@= skipped -53, +51 lines =@@
+ 
+ export type View<T> = { [K in keyof T]: T[K] extends object ? boolean | View<T[K]> : boolean };
+ >View : View<T>
++>T : T
++>K : K
+ 
+ interface TypeC {
++>TypeC : TypeC
++
+     foo: string;
+ >foo : string
+ 
+@@= skipped -10, +14 lines =@@
+ }
+ 
+ interface TypeB {
++>TypeB : TypeB
++
+     foo: string,
+ >foo : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface TypeA {
++>TypeA : TypeA
++
+     foo: string,
+ >foo : string
+ 

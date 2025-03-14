@@ -1,0 +1,18 @@
+--- old.genericCallWithObjectTypeArgs.types
++++ new.genericCallWithObjectTypeArgs.types
+@@= skipped -16, +16 lines =@@
+ 
+ class X<T> {
+ >X : X<T>
++>T : T
+ 
+     x: T;
+ >x : T
+@@= skipped -7, +8 lines =@@
+ 
+ function foo<T>(t: X<T>, t2: X<T>) {
+ >foo : <T>(t: X<T>, t2: X<T>) => T
++>T : T
+ >t : X<T>
+ >t2 : X<T>
+ 

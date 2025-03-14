@@ -1,0 +1,11 @@
+--- old.classAbstractManyKeywords.types
++++ new.classAbstractManyKeywords.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classAbstractManyKeywords.ts ===
+ export default abstract class A {}
+->A : A
++>A : default
+ 
+ export abstract class B {}
+ >B : B

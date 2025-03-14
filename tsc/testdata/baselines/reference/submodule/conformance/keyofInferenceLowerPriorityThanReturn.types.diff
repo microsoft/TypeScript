@@ -1,0 +1,73 @@
+--- old.keyofInferenceLowerPriorityThanReturn.types
++++ new.keyofInferenceLowerPriorityThanReturn.types
+@@= skipped -10, +10 lines =@@
+ 
+ declare class Col<s, a> {
+ >Col : Col<s, a>
++>s : s
++>a : a
+ 
+     protected dummy: [Col<s, a>, s, a];
+ >dummy : [Col<s, a>, s, a]
+@@= skipped -7, +9 lines =@@
+ 
+ declare class Table<Req, Def> {
+ >Table : Table<Req, Def>
++>Req : Req
++>Def : Def
+ 
+     protected dummy: [Table<Req, Def>, Req, Def];
+ >dummy : [Table<Req, Def>, Req, Def]
+@@= skipped -7, +9 lines =@@
+ 
+ type MakeTable<T1 extends object, T2 extends object> = {
+ >MakeTable : MakeTable<T1, T2>
++>T1 : T1
++>T2 : T2
+ 
+     [P in keyof T1]: Col<Write, T1[P]>;
++>P : P
++
+ } & {
+         [P in keyof T2]: Col<Write, T2[P]>;
++>P : P
++
+     };
+ 
+ declare class ConflictTarget<Cols> {
+ >ConflictTarget : ConflictTarget<Cols>
++>Cols : Cols
+ 
+     public static tableColumns<Cols>(cols: (keyof Cols)[]): ConflictTarget<Cols>;
+ >tableColumns : <Cols>(cols: (keyof Cols)[]) => ConflictTarget<Cols>
++>Cols : Cols
+ >cols : (keyof Cols)[]
+ 
+     protected dummy: [ConflictTarget<Cols>, Cols];
+@@= skipped -24, +32 lines =@@
+ >null as any : any
+ 
+ interface BookReq {
++>BookReq : BookReq
++
+     readonly title: string;
+ >title : string
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface BookDef {
++>BookDef : BookDef
++
+     readonly author: string;
+ >author : string
+ 
+@@= skipped -10, +12 lines =@@
+ 
+ function insertOnConflictDoNothing<Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>): boolean {
+ >insertOnConflictDoNothing : <Req extends object, Def extends object>(_table: Table<Req, Def>, _conflictTarget: ConflictTarget<Req & Def>) => boolean
++>Req : Req
++>Def : Def
+ >_table : Table<Req, Def>
+ >_conflictTarget : ConflictTarget<Req & Def>
+ 

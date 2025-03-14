@@ -1,0 +1,11 @@
+--- old.ambientClassMergesOverloadsWithInterface.types
++++ new.ambientClassMergesOverloadsWithInterface.types
+@@= skipped -11, +11 lines =@@
+ >n : number
+ }
+ interface C {
++>C : C
++
+     foo(n: number): any;
+ >foo : { (n: number): any; (n: number): any; }
+ >n : number

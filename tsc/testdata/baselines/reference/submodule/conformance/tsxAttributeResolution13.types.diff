@@ -1,0 +1,11 @@
+--- old.tsxAttributeResolution13.types
++++ new.tsxAttributeResolution13.types
+@@= skipped -4, +4 lines =@@
+ >Test : () => void
+ 
+ <Test></Test>
+-><Test></Test> : error
++><Test></Test> : any
+ >Test : () => void
+ >Test : () => void
+ 

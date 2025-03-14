@@ -1,0 +1,48 @@
+--- old.contextualSignatureInstantiation4.types
++++ new.contextualSignatureInstantiation4.types
+@@= skipped -4, +4 lines =@@
+ 
+ declare class Banana<T extends string> { constructor(a: string, property: T) }
+ >Banana : Banana<T>
++>T : T
+ >a : string
+ >property : T
+ 
+ declare function fruitFactory1<TFruit>(Fruit: new (...args: any[]) => TFruit): TFruit
+ >fruitFactory1 : <TFruit>(Fruit: new (...args: any[]) => TFruit) => TFruit
++>TFruit : TFruit
+ >Fruit : new (...args: any[]) => TFruit
+ >args : any[]
+ 
+@@= skipped -16, +18 lines =@@
+ 
+ declare function fruitFactory2<TFruit>(Fruit: new (a: string, ...args: any[]) => TFruit): TFruit
+ >fruitFactory2 : <TFruit>(Fruit: new (a: string, ...args: any[]) => TFruit) => TFruit
++>TFruit : TFruit
+ >Fruit : new (a: string, ...args: any[]) => TFruit
+ >a : string
+ >args : any[]
+@@= skipped -12, +13 lines =@@
+ 
+ declare function fruitFactory3<TFruit>(Fruit: new (a: string, s: "foo", ...args: any[]) => TFruit): TFruit
+ >fruitFactory3 : <TFruit>(Fruit: new (a: string, s: "foo", ...args: any[]) => TFruit) => TFruit
++>TFruit : TFruit
+ >Fruit : new (a: string, s: "foo", ...args: any[]) => TFruit
+ >a : string
+ >s : "foo"
+@@= skipped -13, +14 lines =@@
+ 
+ declare function fruitFactory4<TFruit>(Fruit: new (a: string, ...args: "foo"[]) => TFruit): TFruit
+ >fruitFactory4 : <TFruit>(Fruit: new (a: string, ...args: "foo"[]) => TFruit) => TFruit
++>TFruit : TFruit
+ >Fruit : new (a: string, ...args: "foo"[]) => TFruit
+ >a : string
+ >args : "foo"[]
+@@= skipped -12, +13 lines =@@
+ 
+ declare function fruitFactory5<TFruit>(Fruit: new (...args: "foo"[]) => TFruit): TFruit
+ >fruitFactory5 : <TFruit>(Fruit: new (...args: "foo"[]) => TFruit) => TFruit
++>TFruit : TFruit
+ >Fruit : new (...args: "foo"[]) => TFruit
+ >args : "foo"[]
+ 

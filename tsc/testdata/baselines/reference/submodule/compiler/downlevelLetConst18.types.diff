@@ -1,0 +1,13 @@
+--- old.downlevelLetConst18.types
++++ new.downlevelLetConst18.types
+@@= skipped -44, +44 lines =@@
+ >x : any
+ 
+     ({ foo() { x }})
+->({ foo() { x }}) : { foo(): void; }
+->{ foo() { x }} : { foo(): void; }
++>({ foo() { x }}) : { foo: () => void; }
++>{ foo() { x }} : { foo: () => void; }
+ >foo : () => void
+ >x : any
+ }

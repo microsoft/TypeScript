@@ -1,0 +1,12 @@
+--- old.mergedModuleDeclarationCodeGen3.types
++++ new.mergedModuleDeclarationCodeGen3.types
+@@= skipped -18, +18 lines =@@
+ >foo : any
+ 
+         buz();
+->buz() : void
+->buz : () => void
++>buz() : any
++>buz : any
+     }
+ }

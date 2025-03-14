@@ -1,0 +1,16 @@
+--- old.restParamUsingMappedTypeOverUnionConstraint.types
++++ new.restParamUsingMappedTypeOverUnionConstraint.types
+@@= skipped -4, +4 lines =@@
+ 
+ type HomomorphicMappedType<T> = { [P in keyof T]: T[P] extends string ? boolean : null }
+ >HomomorphicMappedType : HomomorphicMappedType<T>
++>T : T
++>P : P
+ 
+ declare function test<T extends [number] | [string]>(
+->test : <T extends [number] | [string]>(args: T, fn: (...args: HomomorphicMappedType<T>) => void) => void
++>test : <T extends [string] | [number]>(args: T, fn: (...args: HomomorphicMappedType<T>) => void) => void
++>T : T
+ 
+   args: T,
+ >args : T

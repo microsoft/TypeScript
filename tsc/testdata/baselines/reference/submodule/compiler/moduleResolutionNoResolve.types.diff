@@ -1,0 +1,11 @@
+--- old.moduleResolutionNoResolve.types
++++ new.moduleResolutionNoResolve.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ import a = require('./b');
+->a : typeof a
++>a : typeof import("b")
+ 
+ === b.ts ===
+ export var c = '';

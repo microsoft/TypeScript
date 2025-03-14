@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergedTypeReference.ts] ////
+
+=== prototypePropertyAssignmentMergedTypeReference.js ===
+var f = function() {
+>f : () => number
+>function() {    return 12;} : () => number
+
+    return 12;
+>12 : 12
+
+};
+
+f.prototype.a = "a";
+>f.prototype.a = "a" : "a"
+>f.prototype.a : any
+>f.prototype : any
+>f : () => number
+>prototype : any
+>a : any
+>"a" : "a"
+
+/** @type {new () => f} */
+var x = f;
+>x : () => number
+>f : () => number
+
+

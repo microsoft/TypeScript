@@ -1,0 +1,11 @@
+--- old.stringNamedPropertyAccess.types
++++ new.stringNamedPropertyAccess.types
+@@= skipped -25, +25 lines =@@
+ >'c d' : "c d"
+ 
+ interface I {
++>I : I
++
+     "a b": number;
+ >"a b" : number
+ }

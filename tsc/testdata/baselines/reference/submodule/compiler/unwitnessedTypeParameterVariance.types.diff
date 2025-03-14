@@ -1,0 +1,37 @@
+--- old.unwitnessedTypeParameterVariance.types
++++ new.unwitnessedTypeParameterVariance.types
+@@= skipped -3, +3 lines =@@
+ // Repros from #33872
+ 
+ export interface CalcObj<O> {
++>CalcObj : CalcObj<O>
++>O : O
++
+     read: (origin: O) => CalcValue<O>;
+ >read : (origin: O) => CalcValue<O>
+ >origin : O
+@@= skipped -7, +10 lines =@@
+ 
+ export type CalcValue<O> = CalcObj<O>;
+ >CalcValue : CalcValue<O>
++>O : O
+ 
+ function foo<O>() {
+ >foo : <O>() => void
++>O : O
+ 
+     const unk: CalcObj<unknown> = { read: (origin: unknown) => unk }
+ >unk : CalcObj<unknown>
+@@= skipped -19, +21 lines =@@
+ 
+ type A<T> = B<T>;
+ >A : A<T>
++>T : T
+ 
+ interface B<T> {
++>B : B<T>
++>T : T
++
+     prop: A<T>;
+ >prop : A<T>
+ }

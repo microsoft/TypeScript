@@ -1,0 +1,190 @@
+--- old.assignmentCompatWithCallSignatures5.types
++++ new.assignmentCompatWithCallSignatures5.types
+@@= skipped -23, +23 lines =@@
+ 
+ var a: <T>(x: T) => T[];
+ >a : <T>(x: T) => T[]
++>T : T
+ >x : T
+ 
+ var a2: <T>(x: T) => string[];
+ >a2 : <T>(x: T) => string[]
++>T : T
+ >x : T
+ 
+ var a3: <T>(x: T) => void;
+ >a3 : <T>(x: T) => void
++>T : T
+ >x : T
+ 
+ var a4: <T,U>(x: T, y: U) => string;
+ >a4 : <T, U>(x: T, y: U) => string
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+ var a5: <T,U>(x: (arg: T) => U) => T;
+ >a5 : <T, U>(x: (arg: T) => U) => T
++>T : T
++>U : U
+ >x : (arg: T) => U
+ >arg : T
+ 
+ var a6: <T extends Base>(x: (arg: T) => Derived) => T;
+ >a6 : <T extends Base>(x: (arg: T) => Derived) => T
++>T : T
+ >x : (arg: T) => Derived
+ >arg : T
+ 
+ var a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
+ >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
++>T : T
+ >x : { foo: T; }
+ >foo : T
+ >y : { foo: T; bar: T; }
+@@= skipped -35, +44 lines =@@
+ 
+ var a15: <T>(x: { a: T; b: T }) => T[];
+ >a15 : <T>(x: { a: T; b: T; }) => T[]
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T
+ 
+ var a16: <T extends Base>(x: { a: T; b: T }) => T[];
+ >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T
+@@= skipped -14, +16 lines =@@
+ >a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T extends Base>(x: (a: T) => T): T[]; }
+ 
+     <T extends Derived>(x: (a: T) => T): T[];
++>T : T
+ >x : (a: T) => T
+ >a : T
+ 
+     <T extends Base>(x: (a: T) => T): T[];        
++>T : T
+ >x : (a: T) => T
+ >a : T
+ 
+@@= skipped -15, +17 lines =@@
+ >x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+ 
+         <T extends Derived>(a: T): T;
++>T : T
+ >a : T
+ 
+         <T extends Base>(a: T): T;
++>T : T
+ >a : T
+ 
+     }): any[];
+@@= skipped -10, +12 lines =@@
+ >x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+ 
+         <T extends Derived2>(a: T): T;
++>T : T
+ >a : T
+ 
+         <T extends Base>(a: T): T;
++>T : T
+ >a : T
+ 
+     }): any[];
+@@= skipped -10, +12 lines =@@
+ 
+ var b: <T>(x: T) => T[]; 
+ >b : <T>(x: T) => T[]
++>T : T
+ >x : T
+ 
+ a = b; // ok
+@@= skipped -14, +15 lines =@@
+ 
+ var b2: <T>(x: T) => string[]; 
+ >b2 : <T>(x: T) => string[]
++>T : T
+ >x : T
+ 
+ a2 = b2; // ok
+@@= skipped -14, +15 lines =@@
+ 
+ var b3: <T>(x: T) => T; 
+ >b3 : <T>(x: T) => T
++>T : T
+ >x : T
+ 
+ a3 = b3; // ok
+@@= skipped -14, +15 lines =@@
+ 
+ var b4: <T, U>(x: T, y: U) => string; 
+ >b4 : <T, U>(x: T, y: U) => string
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+@@= skipped -15, +17 lines =@@
+ 
+ var b5: <T, U>(x: (arg: T) => U) => T; 
+ >b5 : <T, U>(x: (arg: T) => U) => T
++>T : T
++>U : U
+ >x : (arg: T) => U
+ >arg : T
+ 
+@@= skipped -15, +17 lines =@@
+ 
+ var b6: <T extends Base, U extends Derived>(x: (arg: T) => U) => T; 
+ >b6 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
++>T : T
++>U : U
+ >x : (arg: T) => U
+ >arg : T
+ 
+@@= skipped -15, +17 lines =@@
+ 
+ var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
+ >b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
++>T : T
++>U : U
+ >x : { foo: T; }
+ >foo : T
+ >y : { foo: U; bar: U; }
+@@= skipped -18, +20 lines =@@
+ 
+ var b15: <U, V>(x: { a: U; b: V; }) => U[]; 
+ >b15 : <U, V>(x: { a: U; b: V; }) => U[]
++>U : U
++>V : V
+ >x : { a: U; b: V; }
+ >a : U
+ >b : V
+@@= skipped -16, +18 lines =@@
+ 
+ var b16: <T>(x: { a: T; b: T }) => T[]; 
+ >b16 : <T>(x: { a: T; b: T; }) => T[]
++>T : T
+ >x : { a: T; b: T; }
+ >a : T
+ >b : T
+@@= skipped -16, +17 lines =@@
+ 
+ var b17: <T>(x: (a: T) => T) => T[]; 
+ >b17 : <T>(x: (a: T) => T) => T[]
++>T : T
+ >x : (a: T) => T
+ >a : T
+ 
+@@= skipped -16, +17 lines =@@
+ var b18: (x: <T>(a: T) => T) => any[]; 
+ >b18 : (x: <T>(a: T) => T) => any[]
+ >x : <T>(a: T) => T
++>T : T
+ >a : T
+ 
+ a18 = b18; // ok

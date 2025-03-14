@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/jsdoc/jsdocImportTypeReferenceToCommonjsModule.ts] ////
+
+=== ex.d.ts ===
+declare var config: {
+>config : { fix: boolean; }
+
+    fix: boolean
+>fix : boolean
+}
+export = config;
+>config : { fix: boolean; }
+
+=== test.js ===
+/** @param {import('./ex')} a */
+function demo(a) {
+>demo : (a: any) => void
+>a : any
+
+    a.fix
+>a.fix : any
+>a : any
+>fix : any
+}
+

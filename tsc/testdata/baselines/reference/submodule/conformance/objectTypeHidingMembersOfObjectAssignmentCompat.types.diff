@@ -1,0 +1,11 @@
+--- old.objectTypeHidingMembersOfObjectAssignmentCompat.types
++++ new.objectTypeHidingMembersOfObjectAssignmentCompat.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectTypeHidingMembersOfObjectAssignmentCompat.ts ===
+ interface I {
++>I : I
++
+     toString(): void;
+ >toString : () => void
+ }

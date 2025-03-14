@@ -1,0 +1,199 @@
+--- old.jsdocParamTagTypeLiteral.types
++++ new.jsdocParamTagTypeLiteral.types
+@@= skipped -5, +5 lines =@@
+  * @param {string} unrelated - not actually related because it's not notSpecial.unrelated
+  */
+ function normal(notSpecial) {
+->normal : (notSpecial: Object) => void
+->notSpecial : Object
++>normal : (notSpecial: any) => void
++>notSpecial : any
+ 
+     notSpecial; // should just be 'Object'
+->notSpecial : Object
++>notSpecial : any
+ }
+ normal(12);
+ >normal(12) : void
+->normal : (notSpecial: Object) => void
++>normal : (notSpecial: any) => void
+ >12 : 12
+ 
+ /**
+@@= skipped -19, +19 lines =@@
+  * @param {string} [opts1.w="hi"] doc5
+  */
+ function foo1(opts1) {
+->foo1 : (opts1: {    x: string;    y?: string | undefined;    z?: string | undefined;    w?: string | undefined;}) => void
+->opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
++>foo1 : (opts1: any) => void
++>opts1 : any
+ 
+     opts1.x;
+->opts1.x : string
+->opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
+->x : string
++>opts1.x : any
++>opts1 : any
++>x : any
+ }
+ 
+ foo1({x: 'abc'});
+ >foo1({x: 'abc'}) : void
+->foo1 : (opts1: {    x: string;    y?: string | undefined;    z?: string | undefined;    w?: string | undefined;}) => void
++>foo1 : (opts1: any) => void
+ >{x: 'abc'} : { x: string; }
+ >x : string
+ >'abc' : "abc"
+@@= skipped -22, +22 lines =@@
+  * @param {string=} opts2[].anotherY
+  */
+ function foo2(/** @param opts2 bad idea theatre! */opts2) {
+->foo2 : (opts2: {    anotherX: string;    anotherY?: string | undefined;}) => void
+->opts2 : { anotherX: string; anotherY?: string | undefined; }[]
++>foo2 : (opts2: any) => void
++>opts2 : any
+ 
+     opts2[0].anotherX;
+->opts2[0].anotherX : string
+->opts2[0] : { anotherX: string; anotherY?: string | undefined; }
+->opts2 : { anotherX: string; anotherY?: string | undefined; }[]
++>opts2[0].anotherX : any
++>opts2[0] : any
++>opts2 : any
+ >0 : 0
+->anotherX : string
++>anotherX : any
+ }
+ 
+ foo2([{anotherX: "world"}]);
+ >foo2([{anotherX: "world"}]) : void
+->foo2 : (opts2: {    anotherX: string;    anotherY?: string | undefined;}) => void
++>foo2 : (opts2: any) => void
+ >[{anotherX: "world"}] : { anotherX: string; }[]
+ >{anotherX: "world"} : { anotherX: string; }
+ >anotherX : string
+@@= skipped -24, +24 lines =@@
+  * @param {string} opts3.x
+  */
+ function foo3(opts3) {
+->foo3 : (opts3: {    x: string;}) => void
+->opts3 : { x: string; }
++>foo3 : (opts3: any) => void
++>opts3 : any
+ 
+     opts3.x;
+->opts3.x : string
+->opts3 : { x: string; }
+->x : string
++>opts3.x : any
++>opts3 : any
++>x : any
+ }
+ foo3({x: 'abc'});
+ >foo3({x: 'abc'}) : void
+->foo3 : (opts3: {    x: string;}) => void
++>foo3 : (opts3: any) => void
+ >{x: 'abc'} : { x: string; }
+ >x : string
+ >'abc' : "abc"
+@@= skipped -23, +23 lines =@@
+  * @param {string} [opts4[].w="hi"]
+  */
+ function foo4(opts4) {
+->foo4 : (opts4: {    x: string;    y?: string | undefined;    z?: string;    w?: string;}) => void
+->opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
++>foo4 : (opts4: any) => void
++>opts4 : any
+ 
+     opts4[0].x;
+->opts4[0].x : string
+->opts4[0] : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
+->opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
++>opts4[0].x : any
++>opts4[0] : any
++>opts4 : any
+ >0 : 0
+->x : string
++>x : any
+ }
+ 
+ foo4([{ x: 'hi' }]);
+ >foo4([{ x: 'hi' }]) : void
+->foo4 : (opts4: {    x: string;    y?: string | undefined;    z?: string;    w?: string;}) => void
++>foo4 : (opts4: any) => void
+ >[{ x: 'hi' }] : { x: string; }[]
+ >{ x: 'hi' } : { x: string; }
+ >x : string
+@@= skipped -30, +30 lines =@@
+  * @param {number} opts5[].unnest - Here we are almost all the way back at the beginning.
+  */
+ function foo5(opts5) {
+->foo5 : (opts5: {    help: string;    what: {        a: string;        bad: {            idea: string;            oh: boolean;        };    };    unnest: number;}) => void
+->opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
++>foo5 : (opts5: any) => void
++>opts5 : any
+ 
+     opts5[0].what.bad[0].idea;
+->opts5[0].what.bad[0].idea : string
+->opts5[0].what.bad[0] : { idea: string; oh: boolean; }
+->opts5[0].what.bad : { idea: string; oh: boolean; }[]
+->opts5[0].what : { a: string; bad: {    idea: string;    oh: boolean;}; }
+->opts5[0] : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }
+->opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
++>opts5[0].what.bad[0].idea : any
++>opts5[0].what.bad[0] : any
++>opts5[0].what.bad : any
++>opts5[0].what : any
++>opts5[0] : any
++>opts5 : any
+ >0 : 0
+->what : { a: string; bad: {    idea: string;    oh: boolean;}; }
+->bad : { idea: string; oh: boolean; }[]
++>what : any
++>bad : any
+ >0 : 0
+->idea : string
++>idea : any
+ 
+     opts5[0].unnest;
+->opts5[0].unnest : number
+->opts5[0] : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }
+->opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
++>opts5[0].unnest : any
++>opts5[0] : any
++>opts5 : any
+ >0 : 0
+->unnest : number
++>unnest : any
+ }
+ 
+ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]);
+ >foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]) : void
+->foo5 : (opts5: {    help: string;    what: {        a: string;        bad: {            idea: string;            oh: boolean;        };    };    unnest: number;}) => void
+->[{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }] : { help: string; what: { a: string; bad: { idea: string; oh: false; }[]; }; unnest: number; }[]
+->{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 } : { help: string; what: { a: string; bad: { idea: string; oh: false; }[]; }; unnest: number; }
++>foo5 : (opts5: any) => void
++>[{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }] : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]
++>{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 } : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }
+ >help : string
+ >"help" : "help"
+->what : { a: string; bad: { idea: string; oh: false; }[]; }
+->{ a: 'a', bad: [{ idea: 'idea', oh: false }] } : { a: string; bad: { idea: string; oh: false; }[]; }
++>what : { a: string; bad: { idea: string; oh: boolean; }[]; }
++>{ a: 'a', bad: [{ idea: 'idea', oh: false }] } : { a: string; bad: { idea: string; oh: boolean; }[]; }
+ >a : string
+ >'a' : "a"
+->bad : { idea: string; oh: false; }[]
+->[{ idea: 'idea', oh: false }] : { idea: string; oh: false; }[]
+->{ idea: 'idea', oh: false } : { idea: string; oh: false; }
++>bad : { idea: string; oh: boolean; }[]
++>[{ idea: 'idea', oh: false }] : { idea: string; oh: boolean; }[]
++>{ idea: 'idea', oh: false } : { idea: string; oh: boolean; }
+ >idea : string
+ >'idea' : "idea"
+->oh : false
++>oh : boolean
+ >false : false
+ >unnest : number
+ >1 : 1

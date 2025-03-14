@@ -1,0 +1,19 @@
+--- old.interMixingModulesInterfaces3.types
++++ new.interMixingModulesInterfaces3.types
+@@= skipped -14, +14 lines =@@
+     }
+ 
+     export interface B {
++>B : B
++
+         name: string;
+ >name : string
+ 
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ var x: A.B = null;
+->x : A.B
++>x : B
+ >A : any
+ 

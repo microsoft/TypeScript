@@ -1,0 +1,11 @@
+--- old.assignToFn.types
++++ new.assignToFn.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     interface I {
++>I : I
++
+ 	f(n:number):boolean;
+ >f : (n: number) => boolean
+ >n : number

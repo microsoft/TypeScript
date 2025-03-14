@@ -1,0 +1,36 @@
+--- old.potentiallyUncalledDecorators.types
++++ new.potentiallyUncalledDecorators.types
+@@= skipped -15, +15 lines =@@
+ 
+ // Glimmer-style tracked API:
+ declare const tracked: PropertyDecorator & { (...watchedProperties: string[]): any; }
+->tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
++>tracked : PropertyDecorator & (...watchedProperties: string[]) => any
+ >watchedProperties : string[]
+ 
+ class Person {
+ >Person : Person
+ 
+     @tracked person; any;
+->tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
++>tracked : PropertyDecorator & (...watchedProperties: string[]) => any
+ >person : any
+ >any : any
+ }
+@@= skipped -20, +20 lines =@@
+ 
+     @tracked('args')
+ >tracked('args') : any
+->tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
++>tracked : PropertyDecorator & (...watchedProperties: string[]) => any
+ >'args' : "args"
+ 
+     get multiplied() {
+@@= skipped -20, +20 lines =@@
+ // Other fun stuff.
+ 
+ interface OmniDecorator extends MethodDecorator, ClassDecorator, PropertyDecorator {
++>OmniDecorator : OmniDecorator
+ }
+ 
+ declare function noArgs(): OmniDecorator;

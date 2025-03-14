@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/genericCallWithoutArgs.ts] ////
+
+=== genericCallWithoutArgs.ts ===
+function f<X, Y>(x: X, y: Y) {
+>f : <X, Y>(x: X, y: Y) => void
+>X : X
+>Y : Y
+>x : X
+>y : Y
+}
+
+f<number,string>.
+>f<number,string>. : any
+>f<number,string> : (x: number, y: string) => void
+>f : <X, Y>(x: X, y: Y) => void
+> : any
+

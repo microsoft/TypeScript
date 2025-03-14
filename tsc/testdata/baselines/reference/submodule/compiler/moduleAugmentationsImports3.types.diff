@@ -1,0 +1,117 @@
+--- old.moduleAugmentationsImports3.types
++++ new.moduleAugmentationsImports3.types
+@@= skipped -11, +11 lines =@@
+ >a : A
+ 
+ let b = a.getB().x.toFixed();
+->b : string
+->a.getB().x.toFixed() : string
+->a.getB().x.toFixed : (fractionDigits?: number) => string
+->a.getB().x : number
+->a.getB() : import("b").B
+->a.getB : () => import("b").B
++>b : any
++>a.getB().x.toFixed() : any
++>a.getB().x.toFixed : any
++>a.getB().x : any
++>a.getB() : any
++>a.getB : any
+ >a : A
+->getB : () => import("b").B
+->x : number
+->toFixed : (fractionDigits?: number) => string
++>getB : any
++>x : any
++>toFixed : any
+ 
+ let c = a.getCls().y.toLowerCase();
+->c : string
+->a.getCls().y.toLowerCase() : string
+->a.getCls().y.toLowerCase : () => string
+->a.getCls().y : string
+->a.getCls() : import("C").Cls
+->a.getCls : () => import("C").Cls
++>c : any
++>a.getCls().y.toLowerCase() : any
++>a.getCls().y.toLowerCase : any
++>a.getCls().y : any
++>a.getCls() : any
++>a.getCls : any
+ >a : A
+->getCls : () => import("C").Cls
+->y : string
+->toLowerCase : () => string
++>getCls : any
++>y : any
++>toLowerCase : any
+ 
+ === a.ts ===
+ export class A {}
+ >A : A
+ 
+-=== b.ts ===
+-export class B {x: number;}
+->B : B
+->x : number
+-
+-=== c.d.ts ===
+-declare module "C" {
+->"C" : typeof import("C")
+-
+-    class Cls {y: string; }
+->Cls : Cls
+->y : string
+-}
+-
+ === d.d.ts ===
+ declare module "D" {
+ >"D" : typeof import("D")
+ 
+     import {A} from "a";
+->A : typeof A
++>A : any
+ 
+     import {B} from "b";
+->B : typeof B
++>B : any
+ 
+     module "a" {
+->"a" : typeof import("a")
++>"a" : any
+ 
+         interface A {
++>A : A
++
+             getB(): B;
+ >getB : () => B
+         }
+     }
+ }
+ 
+-=== e.ts ===
+-/// <reference path="c.d.ts" preserve="true"/>
+-import {A} from "./a";
+->A : typeof A
+-
+-import {Cls} from "C";
+->Cls : typeof Cls
+-
+-A.prototype.getCls = function () { return undefined; }
+->A.prototype.getCls = function () { return undefined; } : () => any
+->A.prototype.getCls : () => Cls
+->A.prototype : A
+->A : typeof A
+->prototype : A
+->getCls : () => Cls
+->function () { return undefined; } : () => any
+->undefined : undefined
+-
+-declare module "./a" {
+->"./a" : typeof import("a")
+-
+-    interface A {
+-        getCls(): Cls;
+->getCls : () => Cls
+-    }
+-}
+-

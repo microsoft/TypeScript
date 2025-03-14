@@ -1,0 +1,32 @@
+--- old.jsxElementsAsIdentifierNames.types
++++ new.jsxElementsAsIdentifierNames.types
+@@= skipped -4, +4 lines =@@
+ >React : any
+ 
+ declare module JSX {
++>JSX : any
++
+     interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+         ["package"]: any;
+ >["package"] : any
+ >"package" : "package"
+@@= skipped -11, +15 lines =@@
+ >A : () => any
+ 
+     return <package />
+-><package /> : error
++><package /> : any
+ >package : any
+ }
+ 
+@@= skipped -8, +8 lines =@@
+ >B : () => any
+ 
+     return <package></package>
+-><package></package> : error
++><package></package> : any
+ >package : any
+ >package : any
+ }

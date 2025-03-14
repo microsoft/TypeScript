@@ -1,0 +1,46 @@
+--- old.decoratorMetadataWithImportDeclarationNameCollision3.types
++++ new.decoratorMetadataWithImportDeclarationNameCollision3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === service.ts ===
+ import db = require('./db');
+->db : typeof db
++>db : typeof import("db")
+ 
+ function someDecorator(target) {
+ >someDecorator : (target: any) => any
+@@= skipped -16, +16 lines =@@
+ >MyClass : MyClass
+ 
+     db: db.db;
+->db : db.db
++>db : db
+ >db : any
+ 
+     constructor(db: db.db) { // collision with namespace of external module db
+->db : db.db
++>db : db
+ >db : any
+ 
+         this.db = db;
+->this.db = db : db.db
+->this.db : db.db
++>this.db = db : db
++>this.db : db
+ >this : this
+->db : db.db
+->db : db.db
++>db : db
++>db : db
+ 
+         this.db.doSomething();
+ >this.db.doSomething() : void
+ >this.db.doSomething : () => void
+->this.db : db.db
++>this.db : db
+ >this : this
+->db : db.db
++>db : db
+ >doSomething : () => void
+     }
+ }

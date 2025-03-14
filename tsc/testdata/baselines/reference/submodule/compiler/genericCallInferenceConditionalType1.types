@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/genericCallInferenceConditionalType1.ts] ////
+
+=== genericCallInferenceConditionalType1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59108
+
+declare const f: <T>(f: (x: T) => unknown) => (x: T) => unknown;
+>f : <T>(f: (x: T) => unknown) => (x: T) => unknown
+>T : T
+>f : (x: T) => unknown
+>x : T
+>x : T
+
+declare const g: <T extends unknown>(x: { foo: T }) => unknown;
+>g : <T extends unknown>(x: { foo: T; }) => unknown
+>T : T
+>x : { foo: T; }
+>foo : T
+
+const h = f(g);
+>h : <T extends unknown>(x: { foo: T; }) => unknown
+>f(g) : <T extends unknown>(x: { foo: T; }) => unknown
+>f : <T>(f: (x: T) => unknown) => (x: T) => unknown
+>g : <T extends unknown>(x: { foo: T; }) => unknown
+
+type FirstParameter<T> = T extends (x: infer P) => unknown ? P : unknown;
+>FirstParameter : FirstParameter<T>
+>T : T
+>x : P
+>P : P
+
+type X = FirstParameter<typeof h>["foo"];
+>X : unknown
+

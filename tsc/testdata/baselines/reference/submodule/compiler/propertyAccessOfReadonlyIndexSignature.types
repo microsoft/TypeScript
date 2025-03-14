@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/propertyAccessOfReadonlyIndexSignature.ts] ////
+
+=== propertyAccessOfReadonlyIndexSignature.ts ===
+interface Test {
+>Test : Test
+
+    readonly [key: string]: string;
+>key : string
+}
+
+declare var a: Test;
+>a : Test
+
+a.foo = 'baz';
+>a.foo = 'baz' : "baz"
+>a.foo : string
+>a : Test
+>foo : string
+>'baz' : "baz"
+

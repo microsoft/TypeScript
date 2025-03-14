@@ -1,0 +1,18 @@
+--- old.excessPropertyCheckWithEmptyObject.types
++++ new.excessPropertyCheckWithEmptyObject.types
+@@= skipped -17, +17 lines =@@
+ >false : false
+ 
+ interface A { x?: string }
++>A : A
+ >x : string
+ 
+ // Excess property error expected here
+@@= skipped -10, +11 lines =@@
+ >10 : 10
+ 
+ interface Empty {}
++>Empty : Empty
+ 
+ // Excess property error expected here
+ let x: Empty & { x: number } = { y: "hello" };

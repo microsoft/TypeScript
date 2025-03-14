@@ -1,0 +1,69 @@
+--- old.controlFlowForIndexSignatures.types
++++ new.controlFlowForIndexSignatures.types
+@@= skipped -11, +11 lines =@@
+ >'bar' : "bar"
+ 
+ function a(aboo1?: Foo) {
+->a : (aboo1?: Foo) => void
++>a : (aboo1?: Foo | undefined) => void
+ >aboo1 : Foo | undefined
+ 
+     if (!aboo1) return;
+@@= skipped -10, +10 lines =@@
+     const aboo2: { [key: string]: typeof aboo1.bar } = boo;
+ >aboo2 : { [key: string]: string; }
+ >key : string
+->aboo1.bar : string
+ >aboo1 : Foo
+->bar : string
+ >boo : Foo
+ }
+ 
+@@= skipped -15, +13 lines =@@
+     const bboo: { [key: string]: typeof b.bar } = boo;
+ >bboo : { [key: string]: string; }
+ >key : string
+->b.bar : string
+ >b : Foo
+->bar : string
+ >boo : Foo
+ }
+ b = boo;
+@@= skipped -13, +11 lines =@@
+ const bboo: { [key: string]: typeof b.bar } = boo;
+ >bboo : { [key: string]: string; }
+ >key : string
+->b.bar : string
+ >b : Foo
+->bar : string
+ >boo : Foo
+ 
+ declare let c: string | number;
+@@= skipped -10, +8 lines =@@
+ 
+ if (typeof c === 'string') {
+ >typeof c === 'string' : boolean
+->typeof c : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof c : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >c : string | number
+ >'string' : "string"
+ 
+     type C = { [key: string]: typeof c };
+->C : { [key: string]: string; }
++>C : C
+ >key : string
+->c : string
+ 
+     const boo1: C = { bar: 'works' };
+->boo1 : { [key: string]: string; }
++>boo1 : C
+ >{ bar: 'works' } : { bar: string; }
+ >bar : string
+ >'works' : "works"
+ 
+     const boo2: C = { bar: 1 }; // should error
+->boo2 : { [key: string]: string; }
++>boo2 : C
+ >{ bar: 1 } : { bar: number; }
+ >bar : number
+ >1 : 1

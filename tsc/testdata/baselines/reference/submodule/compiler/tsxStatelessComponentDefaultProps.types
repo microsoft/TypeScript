@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/tsxStatelessComponentDefaultProps.tsx] ////
+
+=== tsxStatelessComponentDefaultProps.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : any
+
+interface Props {
+>Props : Props
+
+    text: string;
+>text : string
+}
+
+function BackButton(_props: Props) {
+>BackButton : { (_props: Props): any; defaultProps: { text: string; }; }
+>_props : Props
+
+    return <div />
+><div /> : any
+>div : any
+}
+BackButton.defaultProps = {
+>BackButton.defaultProps = {    text: 'Go Back',} : { text: string; }
+>BackButton.defaultProps : { text: string; }
+>BackButton : { (_props: Props): any; defaultProps: { text: string; }; }
+>defaultProps : { text: string; }
+>{    text: 'Go Back',} : { text: string; }
+
+    text: 'Go Back',
+>text : string
+>'Go Back' : "Go Back"
+
+};
+let a = <BackButton />
+>a : any
+><BackButton /> : any
+>BackButton : { (_props: Props): any; defaultProps: { text: string; }; }
+

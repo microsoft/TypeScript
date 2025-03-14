@@ -1,0 +1,61 @@
+--- old.derivedInterfaceIncompatibleWithBaseIndexer.types
++++ new.derivedInterfaceIncompatibleWithBaseIndexer.types
+@@= skipped -1, +1 lines =@@
+ 
+ === derivedInterfaceIncompatibleWithBaseIndexer.ts ===
+ interface Base {
++>Base : Base
++
+     [x: number]: { x: number; y: number; };
+ >x : number
+ >x : number
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface Derived extends Base {
++>Derived : Derived
++
+     1: { y: number } // error
+ >1 : { y: number; }
+ >y : number
+ }
+ 
+ interface Derived2 extends Base {
++>Derived2 : Derived2
++
+     '1': { y: number } // error
+ >'1' : { y: number; }
+ >y : number
+ }
+ 
+ interface Derived3 extends Base {
++>Derived3 : Derived3
++
+     foo: { y: number } // error
+ >foo : { y: number; }
+ >y : number
+ }
+ 
+ interface Derived4 extends Base {
++>Derived4 : Derived4
++
+     foo(): { x: number } // error
+ >foo : () => { x: number; }
+ >x : number
+@@= skipped -25, +33 lines =@@
+ 
+ // satisifies string indexer but not numeric indexer
+ interface Derived5 extends Base {
++>Derived5 : Derived5
++
+     1: { x: number } // error
+ >1 : { x: number; }
+ >x : number
+ }
+ 
+ interface Derived5 extends Base {
++>Derived5 : Derived5
++
+     '1': { x: number } // error
+ >'1' : { x: number; }
+ >x : number

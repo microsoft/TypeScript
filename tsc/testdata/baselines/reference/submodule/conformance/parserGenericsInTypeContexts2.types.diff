@@ -1,0 +1,16 @@
+--- old.parserGenericsInTypeContexts2.types
++++ new.parserGenericsInTypeContexts2.types
+@@= skipped -12, +12 lines =@@
+ >v2 : D<X<T>, Y<Z<T>>>
+ 
+ var v3: E.F<X<T>, Y<Z<T>>>;
+->v3 : E.F<X<T>, Y<Z<T>>>
++>v3 : F<X<T>, Y<Z<T>>>
+ >E : any
+ 
+ var v4: G.H.I<X<T>, Y<Z<T>>>;
+->v4 : G.H.I<X<T>, Y<Z<T>>>
++>v4 : I<X<T>, Y<Z<T>>>
+ >G : any
+ >H : any
+ 

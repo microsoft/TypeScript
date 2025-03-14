@@ -1,0 +1,29 @@
+--- old.defaultDeclarationEmitDefaultImport.types
++++ new.defaultDeclarationEmitDefaultImport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === root.ts ===
+ export function getSomething(): Something { return null as any }
+->getSomething : () => Something
++>getSomething : () => default
+ >null as any : any
+ 
+ export default class Something {}
+->Something : Something
++>Something : default
+ 
+ === main.ts ===
+ import Thing, { getSomething } from "./root";
+->Thing : typeof Thing
+->getSomething : () => Thing
++>Thing : typeof default
++>getSomething : () => default
+ 
+ export const instance = getSomething();
+->instance : Thing
+->getSomething() : Thing
+->getSomething : () => Thing
++>instance : default
++>getSomething() : default
++>getSomething : () => default
+ 

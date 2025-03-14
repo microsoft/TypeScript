@@ -1,0 +1,34 @@
+--- old.identicalCallSignatures3.types
++++ new.identicalCallSignatures3.types
+@@= skipped -4, +4 lines =@@
+ // Here the multiple overloads come from multiple merged declarations, so we do not report errors.
+ 
+ interface I {
++>I : I
++
+     (x: number): string;
+ >x : number
+ }
+ 
+ interface I {
++>I : I
++
+     (x: number): string;
+ >x : number
+ }
+ 
+ interface I2<T> {
++>I2 : I2<T>
++>T : T
++
+     (x: number): string;
+ >x : number
+ }
+ 
+ interface I2<T> {
++>I2 : I2<T>
++>T : T
++
+     (x: number): string;
+ >x : number
+ }

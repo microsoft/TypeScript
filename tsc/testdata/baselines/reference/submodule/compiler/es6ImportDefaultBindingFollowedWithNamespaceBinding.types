@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding.ts] ////
+
+=== es6ImportDefaultBindingFollowedWithNamespaceBinding_0.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+=== es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts ===
+import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
+>defaultBinding : any
+>nameSpaceBinding : any
+
+var x: number = nameSpaceBinding.a;
+>x : number
+>nameSpaceBinding.a : any
+>nameSpaceBinding : any
+>a : any
+

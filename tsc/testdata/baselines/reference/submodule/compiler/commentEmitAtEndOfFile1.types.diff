@@ -1,0 +1,9 @@
+--- old.commentEmitAtEndOfFile1.types
++++ new.commentEmitAtEndOfFile1.types
+@@= skipped -14, +14 lines =@@
+ }
+ // test #3
+ module empty {
++>empty : any
+ }
+ // test #4

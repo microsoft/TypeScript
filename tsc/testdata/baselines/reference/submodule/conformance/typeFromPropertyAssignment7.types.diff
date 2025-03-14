@@ -1,0 +1,36 @@
+--- old.typeFromPropertyAssignment7.types
++++ new.typeFromPropertyAssignment7.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ var obj = {};
+->obj : typeof obj
++>obj : {}
+ >{} : {}
+ 
+ obj.method = function (hunch) {
+ >obj.method = function (hunch) {    return true;} : (hunch: any) => boolean
+->obj.method : (hunch: any) => boolean
+->obj : typeof obj
+->method : (hunch: any) => boolean
++>obj.method : any
++>obj : {}
++>method : any
+ >function (hunch) {    return true;} : (hunch: any) => boolean
+ >hunch : any
+ 
+@@= skipped -15, +15 lines =@@
+ >true : true
+ }
+ var b = obj.method();
+->b : boolean
+->obj.method() : boolean
+->obj.method : (hunch: any) => boolean
+->obj : typeof obj
+->method : (hunch: any) => boolean
++>b : any
++>obj.method() : any
++>obj.method : any
++>obj : {}
++>method : any
+ 

@@ -1,0 +1,30 @@
+--- old.resolutionModeImportType1(moduleresolution=bundler).types
++++ new.resolutionModeImportType1(moduleresolution=bundler).types
+@@= skipped -9, +9 lines =@@
+ 
+ === /app.ts ===
+ type Default = typeof import("foo").x;
+->Default : "module"
+->x : error
++>Default : "script"
+ 
+ type Import = typeof import("foo", { assert: { "resolution-mode": "import" } }).x;
+->Import : "module"
+->x : error
++>Import : "script"
+ 
+ type Require = typeof import("foo", { assert: { "resolution-mode": "require" } }).x;
+ >Require : "script"
+->x : error
+ 
+ // resolution-mode does not enforce file extension in `bundler`, just sets conditions
+ type ImportRelative = typeof import("./other", { assert: { "resolution-mode": "import" } }).x;
+ >ImportRelative : "other"
+->x : error
+ 
+ type RequireRelative = typeof import("./other", { assert: { "resolution-mode": "require" } }).x;
+ >RequireRelative : "other"
+->x : error
+ 
+ === /other.ts ===
+ export const x = "other";

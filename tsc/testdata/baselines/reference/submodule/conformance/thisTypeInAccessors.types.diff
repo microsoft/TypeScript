@@ -1,0 +1,11 @@
+--- old.thisTypeInAccessors.types
++++ new.thisTypeInAccessors.types
+@@= skipped -1, +1 lines =@@
+ 
+ === thisTypeInAccessors.ts ===
+ interface Foo {
++>Foo : Foo
++
+     n: number;
+ >n : number
+ 

@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingWithExport.ts] ////
+
+=== server.ts ===
+var a = 10;
+>a : number
+>10 : 10
+
+export default a;
+>a : number
+
+=== client.ts ===
+export import defaultBinding from "server";
+>defaultBinding : any
+
+export var x = defaultBinding;
+>x : any
+>defaultBinding : any
+
+export import defaultBinding2 from "server"; // non referenced
+>defaultBinding2 : any
+

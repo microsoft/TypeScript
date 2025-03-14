@@ -1,0 +1,21 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag7.ts] ////
+
+=== test.js ===
+/**
+ * @typedef {(a: string, b: number) => void} Foo
+ */
+
+class C {
+>C : C
+
+    /** @type {Foo} */
+    foo(a, b) {}
+>foo : (a: any, b: any) => void
+>a : any
+>b : any
+
+    /** @type {(optional?) => void} */
+    methodWithOptionalParameters() {}
+>methodWithOptionalParameters : () => void
+}
+

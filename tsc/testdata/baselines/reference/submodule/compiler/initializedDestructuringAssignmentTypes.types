@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/initializedDestructuringAssignmentTypes.ts] ////
+
+=== initializedDestructuringAssignmentTypes.ts ===
+const [, a = ''] = ''.match('') || [];
+>a : string
+>'' : ""
+>''.match('') || [] : RegExpMatchArray | []
+>''.match('') : RegExpMatchArray
+>''.match : (regexp: string | RegExp) => RegExpMatchArray
+>'' : ""
+>match : (regexp: string | RegExp) => RegExpMatchArray
+>'' : ""
+>[] : []
+
+a.toFixed()
+>a.toFixed() : any
+>a.toFixed : any
+>a : string
+>toFixed : any
+

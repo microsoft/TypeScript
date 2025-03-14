@@ -1,0 +1,219 @@
+--- old.genericCallWithGenericSignatureArguments2.types
++++ new.genericCallWithGenericSignatureArguments2.types
+@@= skipped -8, +8 lines =@@
+ 
+     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
+ >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
++>T : T
+ >a : (x: T) => T
+ >x : T
+ >b : (x: T) => T
+@@= skipped -27, +28 lines =@@
+ 
+     function other2<T extends Date>(x: T) {
+ >other2 : <T extends Date>(x: T) => void
++>T : T
+ >x : T
+ 
+         var r7 = foo((a: T) => a, (b: T) => b); // T => T
+ >r7 : (x: T) => T
+ >foo((a: T) => a, (b: T) => b) : (x: T) => T
+->foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a: T) => a : (a: T) => T
+ >a : T
+ >a : T
+@@= skipped -30, +31 lines =@@
+ 
+     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
+ >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
++>T : T
+ >a : (x: T) => T
+ >x : T
+ >b : (x: T) => T
+@@= skipped -15, +16 lines =@@
+ 
+     function other3<T extends RegExp>(x: T) {
+ >other3 : <T extends RegExp>(x: T) => void
++>T : T
+ >x : T
+ 
+         var r7 = foo2((a: T) => a, (b: T) => b); // error
+ >r7 : (x: Date) => Date
+ >foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
+->foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a: T) => a : (a: T) => T
+ >a : T
+ >a : T
+@@= skipped -16, +17 lines =@@
+         var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
+ >r7b : (x: Date) => Date
+ >foo2((a) => a, (b) => b) : (x: Date) => Date
+->foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
++>foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+ >(a) => a : (a: Date) => Date
+ >a : Date
+ >a : Date
+@@= skipped -10, +10 lines =@@
+     }
+ 
+     enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+     enum F { A }
+->F : F
++>F : F.A
+ >A : F.A
+ 
+     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
+ >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
++>T : T
+ >x : T
+ >a : (x: T) => T
+ >x : T
+@@= skipped -24, +25 lines =@@
+     }
+ 
+     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
+->r7 : (x: E) => E
+->foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
++>r7 : (x: E.A) => E.A
++>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E.A) => E.A
+ >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
+->(x) => E.A : (x: E) => E
+->x : E
+->E.A : E
++>A : E.A
++>(x) => E.A : (x: E.A) => E.A
++>x : E.A
++>E.A : E.A
+ >E : typeof E
+->A : E
+->(x) => F.A : (x: E) => F
+->x : E
+->F.A : F
++>A : E.A
++>(x) => F.A : (x: E.A) => F.A
++>x : E.A
++>F.A : F.A
+ >F : typeof F
+->A : F
++>A : F.A
+ }
+ 
+ module TU {
+@@= skipped -23, +23 lines =@@
+ 
+     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
+ >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
++>T : T
++>U : U
+ >a : (x: T) => T
+ >x : T
+ >b : (x: U) => U
+@@= skipped -27, +29 lines =@@
+ 
+     function other2<T extends Date>(x: T) {
+ >other2 : <T extends Date>(x: T) => void
++>T : T
+ >x : T
+ 
+         var r7 = foo((a: T) => a, (b: T) => b); 
+ >r7 : (x: T) => T
+ >foo((a: T) => a, (b: T) => b) : (x: T) => T
+->foo : <T_1, U>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
++>foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+ >(a: T) => a : (a: T) => T
+ >a : T
+ >a : T
+@@= skipped -29, +30 lines =@@
+ 
+     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
+ >foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
++>T : T
++>U : U
+ >a : (x: T) => T
+ >x : T
+ >b : (x: U) => U
+@@= skipped -15, +17 lines =@@
+ 
+     function other3<T extends RegExp>(x: T) {
+ >other3 : <T extends RegExp>(x: T) => void
++>T : T
+ >x : T
+ 
+         var r7 = foo2((a: T) => a, (b: T) => b); 
+ >r7 : (x: Date) => Date
+ >foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
+->foo2 : <T_1 extends Date, U extends Date>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
++>foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+ >(a: T) => a : (a: T) => T
+ >a : T
+ >a : T
+@@= skipped -16, +17 lines =@@
+         var r7b = foo2((a) => a, (b) => b); 
+ >r7b : (x: Date) => Date
+ >foo2((a) => a, (b) => b) : (x: Date) => Date
+->foo2 : <T_1 extends Date, U extends Date>(a: (x: T_1) => T_1, b: (x: U) => U) => (x: T_1) => T_1
++>foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+ >(a) => a : (a: Date) => Date
+ >a : Date
+ >a : Date
+@@= skipped -10, +10 lines =@@
+     }
+ 
+     enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+     enum F { A }
+->F : F
++>F : F.A
+ >A : F.A
+ 
+     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
+ >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
++>T : T
+ >x : T
+ >a : (x: T) => T
+ >x : T
+@@= skipped -24, +25 lines =@@
+     }
+ 
+     var r7 = foo3(E.A, (x) => E.A, (x) => F.A);
+->r7 : (x: E) => E
+->foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
++>r7 : (x: E.A) => E.A
++>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E.A) => E.A
+ >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
+->(x) => E.A : (x: E) => E
+->x : E
+->E.A : E
++>A : E.A
++>(x) => E.A : (x: E.A) => E.A
++>x : E.A
++>E.A : E.A
+ >E : typeof E
+->A : E
+->(x) => F.A : (x: U) => F
++>A : E.A
++>(x) => F.A : (x: U) => F.A
+ >x : U
+->F.A : F
++>F.A : F.A
+ >F : typeof F
+->A : F
++>A : F.A
+ }

@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/node/nodeModulesImportResolutionIntoExport.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as type from "#type";
+>type : typeof import("index")
+
+type;
+>type : typeof import("index")
+
+=== index.mts ===
+// esm format file
+import * as type from "#type";
+>type : typeof import("index")
+
+type;
+>type : typeof import("index")
+
+=== index.cts ===
+// esm format file
+import * as type from "#type";
+>type : typeof import("index")
+
+type;
+>type : typeof import("index")
+

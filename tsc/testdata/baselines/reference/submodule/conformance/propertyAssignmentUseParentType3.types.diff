@@ -1,0 +1,65 @@
+--- old.propertyAssignmentUseParentType3.types
++++ new.propertyAssignmentUseParentType3.types
+@@= skipped -3, +3 lines =@@
+ // don't use the parent type if it's a function declaration (#33741)
+ 
+ function foo1(): number {
+->foo1 : typeof foo1
++>foo1 : { (): number; toFixed: string; }
+ 
+     return 123;
+ >123 : 123
+@@= skipped -8, +8 lines =@@
+ foo1.toFixed = "";
+ >foo1.toFixed = "" : ""
+ >foo1.toFixed : string
+->foo1 : typeof foo1
++>foo1 : { (): number; toFixed: string; }
+ >toFixed : string
+ >"" : ""
+ 
+ function foo2(): any[] {
+->foo2 : typeof foo2
++>foo2 : { (): any[]; join: string; }
+ 
+     return [];
+ >[] : undefined[]
+@@= skipped -13, +13 lines =@@
+ foo2.join = "";
+ >foo2.join = "" : ""
+ >foo2.join : string
+->foo2 : typeof foo2
++>foo2 : { (): any[]; join: string; }
+ >join : string
+ >"" : ""
+ 
+ function foo3(): string {
+->foo3 : typeof foo3
++>foo3 : { (): string; trim: string; }
+ 
+     return "";
+ >"" : ""
+@@= skipped -13, +13 lines =@@
+ foo3.trim = "";
+ >foo3.trim = "" : ""
+ >foo3.trim : string
+->foo3 : typeof foo3
++>foo3 : { (): string; trim: string; }
+ >trim : string
+ >"" : ""
+ 
+ function foo4(): ({x: number}) {
+->foo4 : typeof foo4
++>foo4 : { (): { x: number; }; x: string; }
+ >x : number
+ 
+     return {x: 123};
+@@= skipped -16, +16 lines =@@
+ foo4.x = "456";
+ >foo4.x = "456" : "456"
+ >foo4.x : string
+->foo4 : typeof foo4
++>foo4 : { (): { x: number; }; x: string; }
+ >x : string
+ >"456" : "456"
+ 

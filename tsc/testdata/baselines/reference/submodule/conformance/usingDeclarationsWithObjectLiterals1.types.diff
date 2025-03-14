@@ -1,0 +1,82 @@
+--- old.usingDeclarationsWithObjectLiterals1.types
++++ new.usingDeclarationsWithObjectLiterals1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === usingDeclarationsWithObjectLiterals1.ts ===
+ interface MyDisposable {
++>MyDisposable : MyDisposable
++
+   value: number;
+ >value : number
+ 
+@@= skipped -12, +14 lines =@@
+ 
+ {
+   using _ = { [Symbol.dispose]() {} };
+->_ : { [Symbol.dispose](): void; }
+->{ [Symbol.dispose]() {} } : { [Symbol.dispose](): void; }
++>_ : { [Symbol.dispose]: () => void; }
++>{ [Symbol.dispose]() {} } : { [Symbol.dispose]: () => void; }
+ >[Symbol.dispose] : () => void
+ >Symbol.dispose : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -10, +10 lines =@@
+ 
+ {
+   using _ = { [Symbol.dispose]() {}, value: 1 };
+->_ : { [Symbol.dispose](): void; value: number; }
+->{ [Symbol.dispose]() {}, value: 1 } : { [Symbol.dispose](): void; value: number; }
++>_ : { [Symbol.dispose]: () => void; value: number; }
++>{ [Symbol.dispose]() {}, value: 1 } : { [Symbol.dispose]: () => void; value: number; }
+ >[Symbol.dispose] : () => void
+ >Symbol.dispose : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -13, +13 lines =@@
+ {
+   using _: MyDisposable = { [Symbol.dispose]() {}, value: 1, extra: "foo" };
+ >_ : MyDisposable
+->{ [Symbol.dispose]() {}, value: 1, extra: "foo" } : { [Symbol.dispose](): void; value: number; extra: string; }
++>{ [Symbol.dispose]() {}, value: 1, extra: "foo" } : { [Symbol.dispose]: () => void; value: number; extra: string; }
+ >[Symbol.dispose] : () => void
+ >Symbol.dispose : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ interface MyAsyncDisposable {
++>MyAsyncDisposable : MyAsyncDisposable
++
+   value: number;
+ >value : number
+ 
+@@= skipped -14, +16 lines =@@
+ >f : () => Promise<void>
+   {
+     await using _ = { async [Symbol.asyncDispose]() {} };
+->_ : { [Symbol.asyncDispose](): Promise<void>; }
+->{ async [Symbol.asyncDispose]() {} } : { [Symbol.asyncDispose](): Promise<void>; }
++>_ : { [Symbol.asyncDispose]: () => Promise<void>; }
++>{ async [Symbol.asyncDispose]() {} } : { [Symbol.asyncDispose]: () => Promise<void>; }
+ >[Symbol.asyncDispose] : () => Promise<void>
+ >Symbol.asyncDispose : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -10, +10 lines =@@
+ 
+   {
+     await using _ = { async [Symbol.asyncDispose]() {}, value: 1 };
+->_ : { [Symbol.asyncDispose](): Promise<void>; value: number; }
+->{ async [Symbol.asyncDispose]() {}, value: 1 } : { [Symbol.asyncDispose](): Promise<void>; value: number; }
++>_ : { [Symbol.asyncDispose]: () => Promise<void>; value: number; }
++>{ async [Symbol.asyncDispose]() {}, value: 1 } : { [Symbol.asyncDispose]: () => Promise<void>; value: number; }
+ >[Symbol.asyncDispose] : () => Promise<void>
+ >Symbol.asyncDispose : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -13, +13 lines =@@
+   {
+     await using _: MyAsyncDisposable = {
+ >_ : MyAsyncDisposable
+->{      async [Symbol.asyncDispose]() {},      value: 1,      extra: "foo",    } : { [Symbol.asyncDispose](): Promise<void>; value: number; extra: string; }
++>{      async [Symbol.asyncDispose]() {},      value: 1,      extra: "foo",    } : { [Symbol.asyncDispose]: () => Promise<void>; value: number; extra: string; }
+ 
+       async [Symbol.asyncDispose]() {},
+ >[Symbol.asyncDispose] : () => Promise<void>

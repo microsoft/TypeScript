@@ -1,0 +1,29 @@
+--- old.inferObjectTypeFromStringLiteralToKeyof.types
++++ new.inferObjectTypeFromStringLiteralToKeyof.types
+@@= skipped -2, +2 lines =@@
+ === inferObjectTypeFromStringLiteralToKeyof.ts ===
+ declare function inference1<T>(name: keyof T): T;
+ >inference1 : <T>(name: keyof T) => T
++>T : T
+ >name : keyof T
+ 
+ declare function inference2<T>(target: T, name: keyof T): T;
+ >inference2 : <T>(target: T, name: keyof T) => T
++>T : T
+ >target : T
+ >name : keyof T
+ 
+@@= skipped -17, +19 lines =@@
+ >two : "a" | "d"
+ 
+ const y = inference2({ a: 1, b: 2, c: 3, d(n) { return n } }, two);
+->y : { a: number; b: number; c: number; d(n: any): any; }
+->inference2({ a: 1, b: 2, c: 3, d(n) { return n } }, two) : { a: number; b: number; c: number; d(n: any): any; }
++>y : { a: number; b: number; c: number; d: (n: any) => any; }
++>inference2({ a: 1, b: 2, c: 3, d(n) { return n } }, two) : { a: number; b: number; c: number; d: (n: any) => any; }
+ >inference2 : <T>(target: T, name: keyof T) => T
+->{ a: 1, b: 2, c: 3, d(n) { return n } } : { a: number; b: number; c: number; d(n: any): any; }
++>{ a: 1, b: 2, c: 3, d(n) { return n } } : { a: number; b: number; c: number; d: (n: any) => any; }
+ >a : number
+ >1 : 1
+ >b : number

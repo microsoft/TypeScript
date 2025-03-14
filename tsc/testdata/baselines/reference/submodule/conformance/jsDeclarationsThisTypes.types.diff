@@ -1,0 +1,11 @@
+--- old.jsDeclarationsThisTypes.types
++++ new.jsDeclarationsThisTypes.types
+@@= skipped -12, +12 lines =@@
+     }
+ }
+ export default class Base extends A {
+->Base : Base
++>Base : default
+ >A : A
+ 
+     // This method is required to reproduce #35932

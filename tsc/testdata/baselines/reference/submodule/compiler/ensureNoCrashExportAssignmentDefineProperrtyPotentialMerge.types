@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.ts] ////
+
+=== index.js ===
+const _item = require("./namespacer");
+>_item : any
+>require("./namespacer") : any
+>require : any
+>"./namespacer" : "./namespacer"
+
+module.exports = 12;
+>module.exports = 12 : 12
+>module.exports : any
+>module : any
+>exports : any
+>12 : 12
+
+Object.defineProperty(module, "exports", { value: "oh no" });
+>Object.defineProperty(module, "exports", { value: "oh no" }) : any
+>Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>module : any
+>"exports" : "exports"
+>{ value: "oh no" } : { value: string; }
+>value : string
+>"oh no" : "oh no"
+

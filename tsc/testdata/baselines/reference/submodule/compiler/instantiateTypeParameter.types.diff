@@ -1,0 +1,12 @@
+--- old.instantiateTypeParameter.types
++++ new.instantiateTypeParameter.types
+@@= skipped -1, +1 lines =@@
+ 
+ === instantiateTypeParameter.ts ===
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+     var x: T<>;
+ >x : T
+ }

@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM.tsx] ////
+
+=== reactTagNameComponentWithPropsNoOOM.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : any
+
+declare const Tag: keyof React.ReactHTML;
+>Tag : string | number | symbol
+>React : any
+
+const classes = "";
+>classes : ""
+>"" : ""
+
+const rest: {} = {};
+>rest : {}
+>{} : {}
+
+const children: any[] = [];
+>children : any[]
+>[] : never[]
+
+<Tag className={classes} {...rest}>
+><Tag className={classes} {...rest}>{children}</Tag> : any
+>Tag : string | number | symbol
+>className : any
+>classes : ""
+>rest : {}
+
+{children}
+>children : any[]
+
+</Tag>
+>Tag : string | number | symbol
+

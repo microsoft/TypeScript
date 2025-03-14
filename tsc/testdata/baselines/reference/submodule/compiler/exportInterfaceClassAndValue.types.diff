@@ -1,0 +1,12 @@
+--- old.exportInterfaceClassAndValue.types
++++ new.exportInterfaceClassAndValue.types
+@@= skipped -5, +5 lines =@@
+ >1 : 1
+ 
+ export declare class foo {}
+->foo : import("exportInterfaceClassAndValue").foo
++>foo : foo
+ 
+ export interface foo {}
++>foo : foo
+ 

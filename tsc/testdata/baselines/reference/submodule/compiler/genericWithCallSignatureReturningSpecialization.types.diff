@@ -1,0 +1,12 @@
+--- old.genericWithCallSignatureReturningSpecialization.types
++++ new.genericWithCallSignatureReturningSpecialization.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericWithCallSignatureReturningSpecialization.ts ===
+ interface B<T> {
++>B : B<T>
++>T : T
++
+     f(): B<number>;
+ >f : () => B<number>
+ 

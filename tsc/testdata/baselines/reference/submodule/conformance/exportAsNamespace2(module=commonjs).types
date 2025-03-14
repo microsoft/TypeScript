@@ -1,0 +1,43 @@
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace2.ts] ////
+
+=== 0.ts ===
+export const a = 1;
+>a : 1
+>1 : 1
+
+export const b = 2;
+>b : 2
+>2 : 2
+
+=== 1.ts ===
+export * as ns from './0';
+>ns : typeof import("0")
+
+ns.a;
+>ns.a : any
+>ns : any
+>a : any
+
+ns.b;
+>ns.b : any
+>ns : any
+>b : any
+
+=== 2.ts ===
+import * as foo from './1'
+>foo : typeof import("1")
+
+foo.ns.a;
+>foo.ns.a : 1
+>foo.ns : typeof import("0")
+>foo : typeof import("1")
+>ns : typeof import("0")
+>a : 1
+
+foo.ns.b;
+>foo.ns.b : 2
+>foo.ns : typeof import("0")
+>foo : typeof import("1")
+>ns : typeof import("0")
+>b : 2
+

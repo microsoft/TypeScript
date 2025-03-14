@@ -1,0 +1,11 @@
+--- old.typeFromPropertyAssignment21.types
++++ new.typeFromPropertyAssignment21.types
+@@= skipped -13, +13 lines =@@
+     this.textContent = 'nope, not going to happen'
+ >this.textContent = 'nope, not going to happen' : "nope, not going to happen"
+ >this.textContent : any
+->this : Event
++>this : any
+ >textContent : any
+ >'nope, not going to happen' : "nope, not going to happen"
+ }

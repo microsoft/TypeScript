@@ -1,0 +1,246 @@
+--- old.recursiveTypeReferences1.types
++++ new.recursiveTypeReferences1.types
+@@= skipped -2, +2 lines =@@
+ === recursiveTypeReferences1.ts ===
+ type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
+ >ValueOrArray : ValueOrArray<T>
++>T : T
+ 
+ const a0: ValueOrArray<number> = 1;
+ >a0 : ValueOrArray<number>
+@@= skipped -83, +84 lines =@@
+ };
+ 
+ interface Box<T> { value: T };
++>Box : Box<T>
++>T : T
+ >value : T
+ 
+ type T1 = Box<T1>;
+@@= skipped -96, +98 lines =@@
+ 
+ type RecArray<T> = Array<T | RecArray<T>>;
+ >RecArray : RecArray<T>
++>T : T
+ 
+ declare function flat<T>(a: RecArray<T>): Array<T>;
+->flat : <T>(a: RecArray<T>) => Array<T>
++>flat : <T>(a: RecArray<T>) => T[]
++>T : T
+ >a : RecArray<T>
+ 
+ declare function flat1<T>(a: Array<T | Array<T>>): Array<T>
+->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
++>flat1 : <T>(a: (T | T[])[]) => T[]
++>T : T
+ >a : (T | T[])[]
+ 
+ declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
+->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
++>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
++>T : T
+ >a : (T | (T | T[])[])[]
+ 
+ flat([1, [2, [3]]]);  // number[]
+ >flat([1, [2, [3]]]) : number[]
+->flat : <T>(a: RecArray<T>) => Array<T>
++>flat : <T>(a: RecArray<T>) => T[]
+ >[1, [2, [3]]] : (number | (number | number[])[])[]
+ >1 : 1
+ >[2, [3]] : (number | number[])[]
+@@= skipped -25, +29 lines =@@
+ 
+ flat([[[0]]]);  // number[]
+ >flat([[[0]]]) : number[]
+->flat : <T>(a: RecArray<T>) => Array<T>
++>flat : <T>(a: RecArray<T>) => T[]
+ >[[[0]]] : number[][][]
+ >[[0]] : number[][]
+ >[0] : number[]
+@@= skipped -8, +8 lines =@@
+ 
+ flat([[[[[[[[[[[4]]]]]]]]]]]);  // number[]
+ >flat([[[[[[[[[[[4]]]]]]]]]]]) : number[]
+->flat : <T>(a: RecArray<T>) => Array<T>
+->[[[[[[[[[[[4]]]]]]]]]]] : number[][][][][][][][][][][]
+->[[[[[[[[[[4]]]]]]]]]] : number[][][][][][][][][][]
++>flat : <T>(a: RecArray<T>) => T[]
++>[[[[[[[[[[[4]]]]]]]]]]] : ???[][][][][][][][][]
++>[[[[[[[[[[4]]]]]]]]]] : ???[][][][][][][][][]
+ >[[[[[[[[[4]]]]]]]]] : number[][][][][][][][][]
+ >[[[[[[[[4]]]]]]]] : number[][][][][][][][]
+ >[[[[[[[4]]]]]]] : number[][][][][][][]
+@@= skipped -16, +16 lines =@@
+ 
+ flat([1, 'a', [2]]);  // (string | number)[]
+ >flat([1, 'a', [2]]) : (string | number)[]
+->flat : <T>(a: RecArray<T>) => Array<T>
++>flat : <T>(a: RecArray<T>) => T[]
+ >[1, 'a', [2]] : (string | number | number[])[]
+ >1 : 1
+ >'a' : "a"
+@@= skipped -9, +9 lines =@@
+ 
+ flat([1, [2, 'a']]);  // (string | number)[]
+ >flat([1, [2, 'a']]) : (string | number)[]
+->flat : <T>(a: RecArray<T>) => Array<T>
++>flat : <T>(a: RecArray<T>) => T[]
+ >[1, [2, 'a']] : (number | (string | number)[])[]
+ >1 : 1
+ >[2, 'a'] : (string | number)[]
+@@= skipped -9, +9 lines =@@
+ 
+ flat([1, ['a']]);  // Error
+ >flat([1, ['a']]) : string[]
+->flat : <T>(a: RecArray<T>) => Array<T>
++>flat : <T>(a: RecArray<T>) => T[]
+ >[1, ['a']] : (number | string[])[]
+ >1 : 1
+ >['a'] : string[]
+@@= skipped -8, +8 lines =@@
+ 
+ flat1([1, [2, [3]]]);  // (number | number[])[]
+ >flat1([1, [2, [3]]]) : (number | number[])[]
+->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
++>flat1 : <T>(a: (T | T[])[]) => T[]
+ >[1, [2, [3]]] : (number | (number | number[])[])[]
+ >1 : 1
+ >[2, [3]] : (number | number[])[]
+@@= skipped -10, +10 lines =@@
+ 
+ flat1([[[0]]]);  // number[][]
+ >flat1([[[0]]]) : number[][]
+->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
++>flat1 : <T>(a: (T | T[])[]) => T[]
+ >[[[0]]] : number[][][]
+ >[[0]] : number[][]
+ >[0] : number[]
+@@= skipped -8, +8 lines =@@
+ 
+ flat1([1, 'a', [2]]);  // (string | number)[]
+ >flat1([1, 'a', [2]]) : (string | number)[]
+->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
++>flat1 : <T>(a: (T | T[])[]) => T[]
+ >[1, 'a', [2]] : (string | number | number[])[]
+ >1 : 1
+ >'a' : "a"
+@@= skipped -9, +9 lines =@@
+ 
+ flat1([1, [2, 'a']]);  // (string | number)[]
+ >flat1([1, [2, 'a']]) : (string | number)[]
+->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
++>flat1 : <T>(a: (T | T[])[]) => T[]
+ >[1, [2, 'a']] : (number | (string | number)[])[]
+ >1 : 1
+ >[2, 'a'] : (string | number)[]
+@@= skipped -9, +9 lines =@@
+ 
+ flat1([1, ['a']]);  // Error
+ >flat1([1, ['a']]) : string[]
+->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
++>flat1 : <T>(a: (T | T[])[]) => T[]
+ >[1, ['a']] : (number | string[])[]
+ >1 : 1
+ >['a'] : string[]
+@@= skipped -8, +8 lines =@@
+ 
+ flat2([1, [2, [3]]]);  // number[]
+ >flat2([1, [2, [3]]]) : number[]
+->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
++>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+ >[1, [2, [3]]] : (number | (number | number[])[])[]
+ >1 : 1
+ >[2, [3]] : (number | number[])[]
+@@= skipped -10, +10 lines =@@
+ 
+ flat2([[[0]]]);  // number[]
+ >flat2([[[0]]]) : number[]
+->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
++>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+ >[[[0]]] : number[][][]
+ >[[0]] : number[][]
+ >[0] : number[]
+@@= skipped -8, +8 lines =@@
+ 
+ flat2([1, 'a', [2]]);  // (string | number)[]
+ >flat2([1, 'a', [2]]) : (string | number)[]
+->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
++>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+ >[1, 'a', [2]] : (string | number | number[])[]
+ >1 : 1
+ >'a' : "a"
+@@= skipped -9, +9 lines =@@
+ 
+ flat2([1, [2, 'a']]);  // (string | number)[]
+ >flat2([1, [2, 'a']]) : (string | number)[]
+->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
++>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+ >[1, [2, 'a']] : (number | (string | number)[])[]
+ >1 : 1
+ >[2, 'a'] : (string | number)[]
+@@= skipped -9, +9 lines =@@
+ 
+ flat2([1, ['a']]);  // Error
+ >flat2([1, ['a']]) : string[]
+->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
++>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+ >[1, ['a']] : (number | string[])[]
+ >1 : 1
+ >['a'] : string[]
+@@= skipped -24, +24 lines =@@
+ 
+ type T15<X> = X extends string ? T15<X>[] : never;
+ >T15 : T15<X>
++>X : X
+ 
+ type ValueOrArray1<T> = T | ValueOrArray1<T>[];
+ >ValueOrArray1 : ValueOrArray1<T>
++>T : T
+ 
+ type ValueOrArray2<T> = T | ValueOrArray2<T>[];
+ >ValueOrArray2 : ValueOrArray2<T>
++>T : T
+ 
+ declare function foo1<T>(a: ValueOrArray1<T>): T;
+ >foo1 : <T>(a: ValueOrArray1<T>) => T
++>T : T
+ >a : ValueOrArray1<T>
+ 
+ declare let ra1: ValueOrArray2<string>;
+@@= skipped -22, +26 lines =@@
+ 
+ type NumberOrArray1<T> = T | ValueOrArray1<T>[];
+ >NumberOrArray1 : NumberOrArray1<T>
++>T : T
+ 
+ type NumberOrArray2<T> = T | ValueOrArray2<T>[];
+ >NumberOrArray2 : NumberOrArray2<T>
++>T : T
+ 
+ declare function foo2<T>(a: ValueOrArray1<T>): T;
+ >foo2 : <T>(a: ValueOrArray1<T>) => T
++>T : T
+ >a : ValueOrArray1<T>
+ 
+ declare let ra2: ValueOrArray2<string>;
+@@= skipped -36, +39 lines =@@
+ >node.map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
+ >node : Tree
+ >map : <U>(callbackfn: (value: [HTMLHeadingElement, Tree], index: number, array: [HTMLHeadingElement, Tree][]) => U, thisArg?: any) => U[]
+->([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  } : ([el, children]: [HTMLHeadingElement, Tree], i: number) => any
++>([el, children], i) => {    const idx = [...index, i + 1];    return html('li', [      html('a', { href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent!),      children.length > 0 ? parse(children, idx) : frag()    ]);  } : (__0: [HTMLHeadingElement, Tree], i: number) => any
+ >el : HTMLHeadingElement
+ >children : Tree
+ >i : number
+@@= skipped -34, +34 lines =@@
+ >'noopener' : "noopener"
+ >'data-index' : string
+ >idx.join('.') : string
+->idx.join : (separator?: string) => string
++>idx.join : (separator?: string | undefined) => string
+ >idx : number[]
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >'.' : "."
+ >el.textContent! : string
+ >el.textContent : string | null

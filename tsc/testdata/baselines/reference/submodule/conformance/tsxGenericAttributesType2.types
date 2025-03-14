@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType2.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
+>decorator4 : <T extends { x: number; }>(Component: StatelessComponent<T>) => StatelessComponent<T>
+>function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} y={"blah"} ></Component>} : <T extends { x: number; }>(Component: StatelessComponent<T>) => StatelessComponent<T>
+>T : T
+>x : number
+>Component : StatelessComponent<T>
+>React : any
+>React : any
+
+    return (props) => <Component {...props} y={"blah"} ></Component>
+>(props) => <Component {...props} y={"blah"} ></Component> : (props: any) => any
+>props : any
+><Component {...props} y={"blah"} ></Component> : any
+>Component : StatelessComponent<T>
+>props : any
+>y : any
+>"blah" : "blah"
+>Component : StatelessComponent<T>
+
+};

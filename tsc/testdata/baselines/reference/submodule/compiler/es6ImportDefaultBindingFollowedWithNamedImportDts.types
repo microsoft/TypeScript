@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportDts.ts] ////
+
+=== server.ts ===
+export class a { }
+>a : a
+
+export class x { }
+>x : x
+
+export class m { }
+>m : m
+
+export class a11 { }
+>a11 : a11
+
+export class a12 { }
+>a12 : a12
+
+export class x11 { }
+>x11 : x11
+
+=== client.ts ===
+import defaultBinding1, { } from "./server";
+>defaultBinding1 : any
+
+import defaultBinding2, { a } from "./server";
+>defaultBinding2 : any
+>a : typeof a
+
+export var x1 = new a();
+>x1 : a
+>new a() : a
+>a : typeof a
+
+import defaultBinding3, { a11 as b } from "./server";
+>defaultBinding3 : any
+>a11 : typeof a11
+>b : typeof a11
+
+export var x2 = new b();
+>x2 : a11
+>new b() : a11
+>b : typeof a11
+
+import defaultBinding4, { x, a12 as y } from "./server";
+>defaultBinding4 : any
+>x : typeof x
+>a12 : typeof a12
+>y : typeof a12
+
+export var x4 = new x();
+>x4 : x
+>new x() : x
+>x : typeof x
+
+export var x5 = new y();
+>x5 : a12
+>new y() : a12
+>y : typeof a12
+
+import defaultBinding5, { x11 as z,  } from "./server";
+>defaultBinding5 : any
+>x11 : typeof x11
+>z : typeof x11
+
+export var x3 = new z();
+>x3 : x11
+>new z() : x11
+>z : typeof x11
+
+import defaultBinding6, { m,  } from "./server";
+>defaultBinding6 : any
+>m : typeof m
+
+export var x6 = new m();
+>x6 : m
+>new m() : m
+>m : typeof m
+

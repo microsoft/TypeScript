@@ -1,0 +1,16 @@
+//// [tests/cases/conformance/references/library-reference-12.ts] ////
+
+=== /a/b/consumer.ts ===
+/// <reference types="jquery" />
+$.foo();
+>$.foo() : void
+>$.foo : () => void
+>$ : { foo: () => void; }
+>foo : () => void
+
+=== /a/node_modules/jquery/dist/jquery.d.ts ===
+declare var $: { foo(): void };
+>$ : { foo: () => void; }
+>foo : () => void
+
+

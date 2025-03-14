@@ -1,0 +1,69 @@
+--- old.tsxStatelessFunctionComponentsWithTypeArguments4.types
++++ new.tsxStatelessFunctionComponentsWithTypeArguments4.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ import React = require('react')
+->React : typeof React
++>React : any
+ 
+ declare function OverloadComponent<U>(): JSX.Element;
+->OverloadComponent : { <U>(): JSX.Element; <U_1>(attr: { b: U_1; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U_1>(attr: { b: U_1; a: T; }): JSX.Element; }
++>OverloadComponent : { <U>(): Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): Element; <T, U>(attr: { b: U; a: T; }): Element; }
++>U : U
+ >JSX : any
+ 
+ declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
+->OverloadComponent : { <U_1>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U_1>(attr: { b: U_1; a: T; }): JSX.Element; }
++>OverloadComponent : { <U>(): Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): Element; <T, U>(attr: { b: U; a: T; }): Element; }
++>U : U
+ >attr : { b: U; a: string; "ignore-prop": boolean; }
+ >b : U
+ >a : string
+@@= skipped -15, +17 lines =@@
+ >JSX : any
+ 
+ declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
+->OverloadComponent : { <U_1>(): JSX.Element; <U_1>(attr: { b: U_1; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
++>OverloadComponent : { <U>(): Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): Element; <T, U>(attr: { b: U; a: T; }): Element; }
++>T : T
++>U : U
+ >attr : { b: U; a: T; }
+ >b : U
+ >a : T
+@@= skipped -9, +11 lines =@@
+ // Error
+ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
+ >Baz : <T extends { b: number; }, U extends { a: boolean; b: string; }>(arg1: T, arg2: U) => void
++>T : T
+ >b : number
++>U : U
+ >a : boolean
+ >b : string
+ >arg1 : T
+ >arg2 : U
+ 
+     let a0 = <OverloadComponent a={arg1.b}/>
+->a0 : JSX.Element
+-><OverloadComponent a={arg1.b}/> : JSX.Element
+->OverloadComponent : { <U_1>(): JSX.Element; <U_1>(attr: { b: U_1; a: string; "ignore-prop": boolean; }): JSX.Element; <T_1, U_1>(attr: { b: U_1; a: T_1; }): JSX.Element; }
+->a : number
++>a0 : any
++><OverloadComponent a={arg1.b}/> : any
++>OverloadComponent : { <U>(): Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): Element; <T, U>(attr: { b: U; a: T; }): Element; }
++>a : any
+ >arg1.b : number
+ >arg1 : T
+ >b : number
+ 
+     let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
+->a2 : JSX.Element
+-><OverloadComponent {...arg1} ignore-prop /> : JSX.Element
+->OverloadComponent : { <U_1>(): JSX.Element; <U_1>(attr: { b: U_1; a: string; "ignore-prop": boolean; }): JSX.Element; <T_1, U_1>(attr: { b: U_1; a: T_1; }): JSX.Element; }
++>a2 : any
++><OverloadComponent {...arg1} ignore-prop /> : any
++>OverloadComponent : { <U>(): Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): Element; <T, U>(attr: { b: U; a: T; }): Element; }
+ >arg1 : T
+->ignore-prop : true
++>ignore-prop : any
+ }

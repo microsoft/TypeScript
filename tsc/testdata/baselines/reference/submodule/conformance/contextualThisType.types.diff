@@ -1,0 +1,24 @@
+--- old.contextualThisType.types
++++ new.contextualThisType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextualThisType.ts ===
+ interface X {
++>X : X
++
+     a: (p: this) => this;
+ >a : (p: this) => this
+ >p : this
+ }
+ 
+ interface Y extends X {
++>Y : Y
+ }
+ 
+ var x: Y = {
+ >x : Y
+->{    a(p) {        return p;    }} : { a(p: Y): Y; }
++>{    a(p) {        return p;    }} : { a: (p: Y) => Y; }
+ 
+     a(p) {
+ >a : (p: Y) => Y

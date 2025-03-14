@@ -1,0 +1,206 @@
+//// [tests/cases/conformance/node/nodeModulesDeclarationEmitWithPackageExports.ts] ////
+
+=== index.ts ===
+// esm format file
+import * as cjs from "package/cjs";
+>cjs : typeof import("index")
+
+import * as mjs from "package/mjs";
+>mjs : typeof import("index")
+
+import * as type from "package";
+>type : typeof import("index")
+
+export const a = cjs;
+>a : typeof import("index")
+>cjs : typeof import("index")
+
+export const b = mjs;
+>b : typeof import("index")
+>mjs : typeof import("index")
+
+export const c = type;
+>c : typeof import("index")
+>type : typeof import("index")
+
+import * as cjsi from "inner/cjs";
+>cjsi : typeof import("node_modules/inner/index")
+
+import * as mjsi from "inner/mjs";
+>mjsi : typeof import("node_modules/inner/index")
+
+import * as typei from "inner";
+>typei : typeof import("node_modules/inner/index")
+
+export const d = cjsi;
+>d : typeof import("node_modules/inner/index")
+>cjsi : typeof import("node_modules/inner/index")
+
+export const e = mjsi;
+>e : typeof import("node_modules/inner/index")
+>mjsi : typeof import("node_modules/inner/index")
+
+export const f = typei;
+>f : typeof import("node_modules/inner/index")
+>typei : typeof import("node_modules/inner/index")
+
+=== index.mts ===
+// esm format file
+import * as cjs from "package/cjs";
+>cjs : typeof import("index")
+
+import * as mjs from "package/mjs";
+>mjs : typeof import("index")
+
+import * as type from "package";
+>type : typeof import("index")
+
+export const a = cjs;
+>a : typeof import("index")
+>cjs : typeof import("index")
+
+export const b = mjs;
+>b : typeof import("index")
+>mjs : typeof import("index")
+
+export const c = type;
+>c : typeof import("index")
+>type : typeof import("index")
+
+import * as cjsi from "inner/cjs";
+>cjsi : typeof import("node_modules/inner/index")
+
+import * as mjsi from "inner/mjs";
+>mjsi : typeof import("node_modules/inner/index")
+
+import * as typei from "inner";
+>typei : typeof import("node_modules/inner/index")
+
+export const d = cjsi;
+>d : typeof import("node_modules/inner/index")
+>cjsi : typeof import("node_modules/inner/index")
+
+export const e = mjsi;
+>e : typeof import("node_modules/inner/index")
+>mjsi : typeof import("node_modules/inner/index")
+
+export const f = typei;
+>f : typeof import("node_modules/inner/index")
+>typei : typeof import("node_modules/inner/index")
+
+=== index.cts ===
+// cjs format file
+import * as cjs from "package/cjs";
+>cjs : typeof import("index")
+
+import * as mjs from "package/mjs";
+>mjs : typeof import("index")
+
+import * as type from "package";
+>type : typeof import("index")
+
+export const a = cjs;
+>a : typeof import("index")
+>cjs : typeof import("index")
+
+export const b = mjs;
+>b : typeof import("index")
+>mjs : typeof import("index")
+
+export const c = type;
+>c : typeof import("index")
+>type : typeof import("index")
+
+import * as cjsi from "inner/cjs";
+>cjsi : typeof import("node_modules/inner/index")
+
+import * as mjsi from "inner/mjs";
+>mjsi : typeof import("node_modules/inner/index")
+
+import * as typei from "inner";
+>typei : typeof import("node_modules/inner/index")
+
+export const d = cjsi;
+>d : typeof import("node_modules/inner/index")
+>cjsi : typeof import("node_modules/inner/index")
+
+export const e = mjsi;
+>e : typeof import("node_modules/inner/index")
+>mjsi : typeof import("node_modules/inner/index")
+
+export const f = typei;
+>f : typeof import("node_modules/inner/index")
+>typei : typeof import("node_modules/inner/index")
+
+=== node_modules/inner/index.d.ts ===
+// cjs format file
+import * as cjs from "inner/cjs";
+>cjs : typeof import("node_modules/inner/index")
+
+import * as mjs from "inner/mjs";
+>mjs : typeof import("node_modules/inner/index")
+
+import * as type from "inner";
+>type : typeof import("node_modules/inner/index")
+
+cjs;
+>cjs : typeof import("node_modules/inner/index")
+
+mjs;
+>mjs : typeof import("node_modules/inner/index")
+
+type;
+>type : typeof import("node_modules/inner/index")
+
+export const cjsMain = true;
+>cjsMain : true
+>true : true
+
+=== node_modules/inner/index.d.mts ===
+// esm format file
+import * as cjs from "inner/cjs";
+>cjs : typeof import("node_modules/inner/index")
+
+import * as mjs from "inner/mjs";
+>mjs : typeof import("node_modules/inner/index")
+
+import * as type from "inner";
+>type : typeof import("node_modules/inner/index")
+
+cjs;
+>cjs : typeof import("node_modules/inner/index")
+
+mjs;
+>mjs : typeof import("node_modules/inner/index")
+
+type;
+>type : typeof import("node_modules/inner/index")
+
+export const esm = true;
+>esm : true
+>true : true
+
+=== node_modules/inner/index.d.cts ===
+// cjs format file
+import * as cjs from "inner/cjs";
+>cjs : typeof import("node_modules/inner/index")
+
+import * as mjs from "inner/mjs";
+>mjs : typeof import("node_modules/inner/index")
+
+import * as type from "inner";
+>type : typeof import("node_modules/inner/index")
+
+cjs;
+>cjs : typeof import("node_modules/inner/index")
+
+mjs;
+>mjs : typeof import("node_modules/inner/index")
+
+type;
+>type : typeof import("node_modules/inner/index")
+
+export const cjsNonmain = true;
+>cjsNonmain : true
+>true : true
+

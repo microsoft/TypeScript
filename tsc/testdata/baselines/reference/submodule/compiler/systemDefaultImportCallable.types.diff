@@ -1,0 +1,25 @@
+--- old.systemDefaultImportCallable.types
++++ new.systemDefaultImportCallable.types
+@@= skipped -4, +4 lines =@@
+ >core : typeof core
+ 
+     var String: {
+->String : { repeat(text: string, count: number): string; }
++>String : { repeat: (text: string, count: number) => string; }
+ 
+         repeat(text: string, count: number): string;
+ >repeat : (text: string, count: number) => string
+@@= skipped -14, +14 lines =@@
+ 
+     var repeat: typeof core.String.repeat;
+ >repeat : (text: string, count: number) => string
+->core.String.repeat : (text: string, count: number) => string
+->core.String : { repeat(text: string, count: number): string; }
++>core.String : { repeat: (text: string, count: number) => string; }
+ >core : typeof core
+->String : { repeat(text: string, count: number): string; }
+->repeat : (text: string, count: number) => string
++>String : { repeat: (text: string, count: number) => string; }
+ 
+     export default repeat;
+ >repeat : (text: string, count: number) => string

@@ -1,0 +1,18 @@
+--- old.equalityWithUnionTypes01.types
++++ new.equalityWithUnionTypes01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === equalityWithUnionTypes01.ts ===
+ interface I1 {
++>I1 : I1
++
+     p1: number
+ >p1 : number
+ }
+ 
+ interface I2 extends I1 {
++>I2 : I2
++
+     p2: number;
+ >p2 : number
+ }

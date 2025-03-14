@@ -1,0 +1,29 @@
+--- old.varianceRepeatedlyPropegatesWithUnreliableFlag.types
++++ new.varianceRepeatedlyPropegatesWithUnreliableFlag.types
+@@= skipped -10, +10 lines =@@
+ 
+ type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];
+ >X : X<T>
++>T : T
++>K : K
+ 
+ type P1<T> = { data: X<T> };
+ >P1 : P1<T>
++>T : T
+ >data : X<T>
+ 
+ type P2<T> = { data: X<T> };
+ >P2 : P2<T>
++>T : T
+ >data : X<T>
+ 
+ interface I<T> {
++>I : I<T>
++>T : T
++
+     fn<K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>): void;
+ >fn : <K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>) => void
++>K : K
+ >p1 : P1<Pick<T, K>>
+ >p2 : P2<Pick<T, K>>
+ }

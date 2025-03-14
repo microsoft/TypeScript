@@ -1,0 +1,26 @@
+--- old.objectTypesIdentityWithPrivates3.types
++++ new.objectTypesIdentityWithPrivates3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectTypesIdentityWithPrivates3.ts ===
+ interface T1 { }
++>T1 : T1
++
+ interface T2 { z }
++>T2 : T2
+ >z : any
+ 
+ class C1<T> {
+ >C1 : C1<T>
++>T : T
+ 
+     private x;
+ >x : any
+@@= skipped -28, +32 lines =@@
+ 
+ class C3<T> {
+ >C3 : C3<T>
++>T : T
+ 
+     private x: T; // This T is the difference between C3 and C1
+ >x : T

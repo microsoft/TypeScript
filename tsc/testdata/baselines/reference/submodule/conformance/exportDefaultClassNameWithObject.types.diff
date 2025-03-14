@@ -1,0 +1,9 @@
+--- old.exportDefaultClassNameWithObject.types
++++ new.exportDefaultClassNameWithObject.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportDefaultClassNameWithObject.ts ===
+ export default class Object {}
+->Object : Object
++>Object : default
+ 

@@ -1,0 +1,39 @@
+--- old.tsxDefaultImports.types
++++ new.tsxDefaultImports.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ enum SomeEnum {
+->SomeEnum : SomeEnum
++>SomeEnum : SomeEnum.one
+ 
+   one,
+ >one : SomeEnum.one
+ }
+ export default class SomeClass {
+->SomeClass : SomeClass
++>SomeClass : default
+ 
+   public static E = SomeEnum;
+ >E : typeof SomeEnum
+@@= skipped -15, +15 lines =@@
+ 
+ === b.ts ===
+ import {default as Def} from "./a"
+->default : typeof Def
+->Def : typeof Def
++>default : typeof default
++>Def : typeof default
+ 
+ let a = Def.E.one;
+->a : SomeEnum
+->Def.E.one : SomeEnum
++>a : SomeEnum.one
++>Def.E.one : SomeEnum.one
+ >Def.E : typeof SomeEnum
+->Def : typeof Def
++>Def : typeof default
+ >E : typeof SomeEnum
+->one : SomeEnum
++>one : SomeEnum.one
+ 

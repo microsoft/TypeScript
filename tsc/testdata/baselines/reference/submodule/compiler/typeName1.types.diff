@@ -1,0 +1,65 @@
+--- old.typeName1.types
++++ new.typeName1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeName1.ts ===
+ interface I {
++>I : I
++
+     k;
+ >k : any
+ }
+@@= skipped -14, +16 lines =@@
+ }
+ 
+ var x1:{ f(s:string):number;f(n:number):string; }=3;
+->x1 : { f(s: string): number; f(n: number): string; }
++>x1 : { f: { (s: string): number; (n: number): string; }; }
+ >f : { (s: string): number; (n: number): string; }
+ >s : string
+ >f : { (s: string): number; (n: number): string; }
+@@= skipped -8, +8 lines =@@
+ >3 : 3
+ 
+ var x2:{ f(s:string):number; } =3;
+->x2 : { f(s: string): number; }
++>x2 : { f: (s: string) => number; }
+ >f : (s: string) => number
+ >s : string
+ >3 : 3
+@@= skipped -12, +12 lines =@@
+ >3 : 3
+ 
+ var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
+->x4 : { x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
++>x4 : { x: any; y: any; z: number; f: { (n: number): string; (s: string): number; }; }
+ >x : any
+ >y : any
+ >z : number
+@@= skipped -11, +11 lines =@@
+ >3 : 3
+ 
+ var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
+->x5 : { (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
++>x5 : { (s: string): number; (n: number): string; x: any; y: any; z: number; f: { (n: number): string; (s: string): number; }; }
+ >s : string
+ >n : number
+ >x : any
+@@= skipped -51, +51 lines =@@
+ >3 : 3
+ 
+ var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
+->x12 : { z: I; x: boolean; y: (s: string) => boolean; w: { z: I; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; (): boolean; }; }[][]
++>x12 : { z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }; }[][]
+ >z : I
+ >x : boolean
+ >y : (s: string) => boolean
+@@= skipped -24, +24 lines =@@
+ >3 : 3
+ 
+ var x14:{ f(x:number):boolean; p; q; ():string; }=3;
+->x14 : { (): string; f(x: number): boolean; p: any; q: any; }
++>x14 : { (): string; f: (x: number) => boolean; p: any; q: any; }
+ >f : (x: number) => boolean
+ >x : number
+ >p : any

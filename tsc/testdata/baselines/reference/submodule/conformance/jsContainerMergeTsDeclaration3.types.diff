@@ -1,0 +1,19 @@
+--- old.jsContainerMergeTsDeclaration3.types
++++ new.jsContainerMergeTsDeclaration3.types
+@@= skipped -5, +5 lines =@@
+ 
+ === b.js ===
+ const A = { };
+->A : typeof A
++>A : {}
+ >{ } : {}
+ 
+ A.d = { };
+ >A.d = { } : {}
+->A.d : {}
++>A.d : any
+ >A : typeof A
+->d : {}
++>d : any
+ >{ } : {}
+ 

@@ -1,0 +1,9 @@
+--- old.importedEnumMemberMergedWithExportedAliasIsError.types
++++ new.importedEnumMemberMergedWithExportedAliasIsError.types
+@@= skipped -19, +19 lines =@@
+ >A : Enum.A
+ 
+ export type EnumA = [string] | [string, number];
+->EnumA : import("alias").EnumA
++>EnumA : EnumA
+ 

@@ -1,0 +1,36 @@
+--- old.typeofStripsFreshness.types
++++ new.typeofStripsFreshness.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeofStripsFreshness.ts ===
+ interface Collection<T> {
++>Collection : Collection<T>
++>T : T
++
+     elems: T[];
+ >elems : T[]
+ }
+ interface CollectionStatic {
++>CollectionStatic : CollectionStatic
++
+     new <T>(): Collection<T>;
++>T : T
+ }
+ declare const Collection: CollectionStatic;
+ >Collection : CollectionStatic
+@@= skipped -15, +21 lines =@@
+ 
+ type All = typeof ALL;
+ >All : "all"
+->ALL : "all"
+ 
+ const result: Collection<All> = new Collection();
+ >result : Collection<"all">
+@@= skipped -13, +12 lines =@@
+ 
+ type Another = typeof ANOTHER;
+ >Another : "another"
+->ANOTHER : "another"
+ 
+ type Both = Another | All;
+ >Both : Both

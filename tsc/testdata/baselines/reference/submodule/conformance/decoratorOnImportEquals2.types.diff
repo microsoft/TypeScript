@@ -1,0 +1,15 @@
+--- old.decoratorOnImportEquals2.types
++++ new.decoratorOnImportEquals2.types
+@@= skipped -4, +4 lines =@@
+ >dec : <T>(target: T) => T
+ 
+ import lib = require('./decoratorOnImportEquals2_0');
+->lib : typeof lib
++>lib : typeof import("decoratorOnImportEquals2_0")
+ 
+ declare function dec<T>(target: T): T;
+ >dec : <T>(target: T) => T
++>T : T
+ >target : T
+ 
+ === decoratorOnImportEquals2_0.ts ===

@@ -1,0 +1,14 @@
+--- old.nestedRecursiveArraysOrObjectsError01.types
++++ new.nestedRecursiveArraysOrObjectsError01.types
+@@= skipped -4, +4 lines =@@
+ >Style : Style
+ 
+ interface StyleArray extends Array<Style> {}
++>StyleArray : StyleArray
++
+ interface StyleBase {
++>StyleBase : StyleBase
++
+     foo: string;
+ >foo : string
+ }

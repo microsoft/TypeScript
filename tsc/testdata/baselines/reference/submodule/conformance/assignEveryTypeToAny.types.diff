@@ -1,0 +1,82 @@
+--- old.assignEveryTypeToAny.types
++++ new.assignEveryTypeToAny.types
+@@= skipped -66, +66 lines =@@
+ 
+ var e2: typeof undefined;
+ >e2 : any
+->undefined : undefined
+ 
+ x = e2;
+ >x = e2 : any
+@@= skipped -8, +7 lines =@@
+ >e2 : any
+ 
+ enum E {
+->E : E
++>E : E.A
+ 
+     A
+ >A : E.A
+ }
+ 
+ x = E.A;
+->x = E.A : E
++>x = E.A : E.A
+ >x : any
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+ var f = E.A;
+->f : E
+->E.A : E
++>f : E.A
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+ x = f;
+->x = f : E
++>x = f : E.A
+ >x : any
+->f : E
++>f : E.A
+ 
+ interface I {
++>I : I
++
+     foo: string;
+ >foo : string
+ }
+@@= skipped -61, +63 lines =@@
+ >i : () => string
+ 
+ x = { f() { return 1; } }
+->x = { f() { return 1; } } : { f(): number; }
++>x = { f() { return 1; } } : { f: () => number; }
+ >x : any
+->{ f() { return 1; } } : { f(): number; }
++>{ f() { return 1; } } : { f: () => number; }
+ >f : () => number
+ >1 : 1
+ 
+ x = { f<T>(x: T) { return x; } }
+->x = { f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
++>x = { f<T>(x: T) { return x; } } : { f: <T>(x: T) => T; }
+ >x : any
+->{ f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
++>{ f<T>(x: T) { return x; } } : { f: <T>(x: T) => T; }
+ >f : <T>(x: T) => T
++>T : T
+ >x : T
+ >x : T
+ 
+ function j<T>(a: T) {
+ >j : <T>(a: T) => void
++>T : T
+ >a : T
+ 
+     x = a;

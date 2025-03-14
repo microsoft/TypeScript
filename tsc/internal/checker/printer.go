@@ -133,6 +133,11 @@ func (p *Printer) printTypeEx(t *Type, precedence ast.TypePrecedence) {
 }
 
 func (p *Printer) printType(t *Type) {
+	if p.sb.Len() > 1_000_000 {
+		p.print("...")
+		return
+	}
+
 	if t.alias != nil && (p.flags&TypeFormatFlagsInTypeAlias == 0 || p.depth > 0) {
 		p.printName(t.alias.symbol)
 		p.printTypeArguments(t.alias.typeArguments)
@@ -249,8 +254,10 @@ func (p *Printer) printStringMappingType(t *Type) {
 }
 
 func (p *Printer) printEnumLiteral(t *Type) {
-	p.printName(p.c.getParentOfSymbol(t.symbol))
-	p.print(".")
+	if parent := p.c.getParentOfSymbol(t.symbol); parent != nil {
+		p.printName(parent)
+		p.print(".")
+	}
 	p.printName(t.symbol)
 }
 

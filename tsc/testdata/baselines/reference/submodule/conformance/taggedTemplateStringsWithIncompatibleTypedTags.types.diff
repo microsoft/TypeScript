@@ -1,0 +1,11 @@
+--- old.taggedTemplateStringsWithIncompatibleTypedTags.types
++++ new.taggedTemplateStringsWithIncompatibleTypedTags.types
+@@= skipped -1, +1 lines =@@
+ 
+ === taggedTemplateStringsWithIncompatibleTypedTags.ts ===
+ interface I {
++>I : I
++
+     (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
+ >stringParts : TemplateStringsArray
+ >rest : boolean[]

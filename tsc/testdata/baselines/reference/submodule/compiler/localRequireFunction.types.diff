@@ -1,0 +1,22 @@
+--- old.localRequireFunction.types
++++ new.localRequireFunction.types
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ const fs = require("fs");
+->fs : error
++>fs : any
+ >require("fs") : any
+ >require : (a: any) => any
+ >"fs" : "fs"
+ 
+ const text = fs.readFileSync("/a/b/c");
+->text : error
+->fs.readFileSync("/a/b/c") : error
+->fs.readFileSync : error
++>text : any
++>fs.readFileSync("/a/b/c") : any
++>fs.readFileSync : any
+ >fs : any
+ >readFileSync : any
+ >"/a/b/c" : "/a/b/c"

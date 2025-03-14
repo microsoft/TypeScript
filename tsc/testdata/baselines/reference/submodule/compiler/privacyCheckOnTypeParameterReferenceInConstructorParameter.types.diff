@@ -1,0 +1,18 @@
+--- old.privacyCheckOnTypeParameterReferenceInConstructorParameter.types
++++ new.privacyCheckOnTypeParameterReferenceInConstructorParameter.types
+@@= skipped -2, +2 lines =@@
+ === privacyCheckOnTypeParameterReferenceInConstructorParameter.ts ===
+ export class A<T1>{
+ >A : A<T1>
++>T1 : T1
+ 
+     constructor(callback: (self: A<T1>) => void) {
+ >callback : (self: A<T1>) => void
+@@= skipped -15, +16 lines =@@
+ 
+ export class B<T2> {
+ >B : B<T2>
++>T2 : T2
+ 
+     constructor(parent: T2) { }
+ >parent : T2

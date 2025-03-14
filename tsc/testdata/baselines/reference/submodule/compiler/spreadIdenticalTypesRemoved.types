@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/spreadIdenticalTypesRemoved.ts] ////
+
+=== spreadIdenticalTypesRemoved.ts ===
+interface Animal {
+>Animal : Animal
+
+    name: string;
+>name : string
+
+    kind: string;
+>kind : string
+
+    age: number;
+>age : number
+
+    location: string;
+>location : string
+
+    owner: object;
+>owner : object
+}
+
+function clonePet(pet: Animal, fullCopy?: boolean) {
+>clonePet : (pet: Animal, fullCopy?: boolean | undefined) => { age?: number | undefined; location?: string | undefined; owner?: object | undefined; name: string; kind: string; }
+>pet : Animal
+>fullCopy : boolean | undefined
+
+    return {
+>{        name: pet.name,        kind: pet.kind,        ...(fullCopy && pet),    } : { age?: number | undefined; location?: string | undefined; owner?: object | undefined; name: string; kind: string; }
+
+        name: pet.name,
+>name : string
+>pet.name : string
+>pet : Animal
+>name : string
+
+        kind: pet.kind,
+>kind : string
+>pet.kind : string
+>pet : Animal
+>kind : string
+
+        ...(fullCopy && pet),
+>(fullCopy && pet) : false | Animal | undefined
+>fullCopy && pet : false | Animal | undefined
+>fullCopy : boolean | undefined
+>pet : Animal
+    }
+}
+
+interface Animal2 {
+>Animal2 : Animal2
+
+    name: string;
+>name : string
+
+    owner?: string;
+>owner : string | undefined
+}
+function billOwner(pet: Animal2) {
+>billOwner : (pet: Animal2) => { name?: string | undefined; owner?: string | undefined; paid: boolean; }
+>pet : Animal2
+
+    return {
+>{        ...(pet.owner && pet),        paid: false    } : { name?: string | undefined; owner?: string | undefined; paid: boolean; }
+
+        ...(pet.owner && pet),
+>(pet.owner && pet) : "" | Animal2 | undefined
+>pet.owner && pet : "" | Animal2 | undefined
+>pet.owner : string | undefined
+>pet : Animal2
+>owner : string | undefined
+>pet : Animal2
+
+        paid: false
+>paid : boolean
+>false : false
+    }
+}
+

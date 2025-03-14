@@ -1,0 +1,186 @@
+--- old.derivedClassOverridesProtectedMembers2.types
++++ new.derivedClassOverridesProtectedMembers2.types
+@@= skipped -14, +14 lines =@@
+ 
+     protected a: typeof x;
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     protected b(a: typeof x) { }
+->b : (a: typeof x) => void
++>b : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     protected get c() { return x; }
+ >c : { foo: string; }
+@@= skipped -14, +12 lines =@@
+     protected set c(v: typeof x) { }
+ >c : { foo: string; }
+ >v : { foo: string; }
+->x : { foo: string; }
+ 
+     protected d: (a: typeof x) => void ;
+->d : (a: typeof x) => void
++>d : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     protected static r: typeof x;
+ >r : { foo: string; }
+->x : { foo: string; }
+ 
+     protected static s(a: typeof x) { }
+->s : (a: typeof x) => void
++>s : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+     protected static get t() { return x; }
+ >t : { foo: string; }
+@@= skipped -23, +19 lines =@@
+     protected static set t(v: typeof x) { }
+ >t : { foo: string; }
+ >v : { foo: string; }
+->x : { foo: string; }
+ 
+     protected static u: (a: typeof x) => void ;
+->u : (a: typeof x) => void
++>u : (a: { foo: string; }) => void
+ >a : { foo: string; }
+->x : { foo: string; }
+ 
+ constructor(a: typeof x) { }
+ >a : { foo: string; }
+->x : { foo: string; }
+ }
+ 
+ // Increase visibility of all protected members to public
+@@= skipped -19, +16 lines =@@
+ 
+     a: typeof y;
+ >a : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     b(a: typeof y) { }
+->b : (a: typeof y) => void
++>b : (a: { foo: string; bar: string; }) => void
+ >a : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     get c() { return y; }
+ >c : { foo: string; bar: string; }
+@@= skipped -14, +12 lines =@@
+     set c(v: typeof y) { }
+ >c : { foo: string; bar: string; }
+ >v : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     d: (a: typeof y) => void;
+->d : (a: typeof y) => void
++>d : (a: { foo: string; bar: string; }) => void
+ >a : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     static r: typeof y;
+ >r : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     static s(a: typeof y) { }
+->s : (a: typeof y) => void
++>s : (a: { foo: string; bar: string; }) => void
+ >a : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     static get t() { return y; }
+ >t : { foo: string; bar: string; }
+@@= skipped -23, +19 lines =@@
+     static set t(a: typeof y) { }
+ >t : { foo: string; bar: string; }
+ >a : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     static u: (a: typeof y) => void;
+->u : (a: typeof y) => void
++>u : (a: { foo: string; bar: string; }) => void
+ >a : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ 
+     constructor(a: typeof y) { super(a); }
+ >a : { foo: string; bar: string; }
+->y : { foo: string; bar: string; }
+ >super(a) : void
+ >super : typeof Base
+ >a : { foo: string; bar: string; }
+@@= skipped -30, +27 lines =@@
+ var r2 = d.b(y);
+ >r2 : void
+ >d.b(y) : void
+->d.b : (a: typeof y) => void
++>d.b : (a: { foo: string; bar: string; }) => void
+ >d : Derived
+->b : (a: typeof y) => void
++>b : (a: { foo: string; bar: string; }) => void
+ >y : { foo: string; bar: string; }
+ 
+ var r3 = d.c;
+@@= skipped -12, +12 lines =@@
+ >c : { foo: string; bar: string; }
+ 
+ var r3a = d.d;
+->r3a : (a: typeof y) => void
+->d.d : (a: typeof y) => void
++>r3a : (a: { foo: string; bar: string; }) => void
++>d.d : (a: { foo: string; bar: string; }) => void
+ >d : Derived
+->d : (a: typeof y) => void
++>d : (a: { foo: string; bar: string; }) => void
+ 
+ d.c = y;
+ >d.c = y : { foo: string; bar: string; }
+@@= skipped -21, +21 lines =@@
+ var r5 = Derived.s(y);
+ >r5 : void
+ >Derived.s(y) : void
+->Derived.s : (a: typeof y) => void
++>Derived.s : (a: { foo: string; bar: string; }) => void
+ >Derived : typeof Derived
+->s : (a: typeof y) => void
++>s : (a: { foo: string; bar: string; }) => void
+ >y : { foo: string; bar: string; }
+ 
+ var r6 = Derived.t;
+@@= skipped -12, +12 lines =@@
+ >t : { foo: string; bar: string; }
+ 
+ var r6a = Derived.u;
+->r6a : (a: typeof y) => void
+->Derived.u : (a: typeof y) => void
++>r6a : (a: { foo: string; bar: string; }) => void
++>Derived.u : (a: { foo: string; bar: string; }) => void
+ >Derived : typeof Derived
+->u : (a: typeof y) => void
++>u : (a: { foo: string; bar: string; }) => void
+ 
+ Derived.t = y;
+ >Derived.t = y : { foo: string; bar: string; }
+@@= skipped -20, +20 lines =@@
+ 
+     [i: number]: typeof x;
+ >i : number
+->x : { foo: string; }
+ }
+ 
+ class Derived2 extends Base2 {
+@@= skipped -9, +8 lines =@@
+ 
+     [i: string]: typeof x;
+ >i : string
+->x : { foo: string; }
+ 
+     [i: number]: typeof y;
+ >i : number
+->y : { foo: string; bar: string; }
+ }
+ 
+ var d2: Derived2;

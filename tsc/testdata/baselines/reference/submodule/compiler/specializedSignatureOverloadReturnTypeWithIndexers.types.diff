@@ -1,0 +1,38 @@
+--- old.specializedSignatureOverloadReturnTypeWithIndexers.types
++++ new.specializedSignatureOverloadReturnTypeWithIndexers.types
+@@= skipped -1, +1 lines =@@
+ 
+ === specializedSignatureOverloadReturnTypeWithIndexers.ts ===
+ interface A {
++>A : A
++
+     f(p: string): { [p: string]: string; };
+ >f : { (p: string): { [p: string]: string; }; (p: "spec"): { [p: string]: any; }; }
+ >p : string
+@@= skipped -11, +13 lines =@@
+ >p : string
+ }
+ interface B {
++>B : B
++
+     f(p: string): { [p: number]: string; };
+ >f : { (p: string): { [p: number]: string; }; (p: "spec"): { [p: string]: any; }; }
+ >p : string
+@@= skipped -11, +13 lines =@@
+ >p : string
+ }
+ interface C {
++>C : C
++
+     f(p: string): { [p: number]: string; };
+ >f : { (p: string): { [p: number]: string; }; (p: "spec"): { [p: number]: any; }; }
+ >p : string
+@@= skipped -11, +13 lines =@@
+ >p : number
+ }
+ interface D {
++>D : D
++
+     f(p: string): { [p: string]: string; };
+ >f : { (p: string): { [p: string]: string; }; (p: "spec"): { [p: number]: any; }; }
+ >p : string

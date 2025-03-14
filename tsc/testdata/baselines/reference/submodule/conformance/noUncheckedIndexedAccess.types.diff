@@ -1,0 +1,104 @@
+--- old.noUncheckedIndexedAccess.types
++++ new.noUncheckedIndexedAccess.types
+@@= skipped -2, +2 lines =@@
+ === noUncheckedIndexedAccess.ts ===
+ type CheckBooleanOnly<T extends boolean> = any;
+ >CheckBooleanOnly : any
++>T : T
+ 
+ // Validate CheckBooleanOnly works - should error
+ type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
+@@= skipped -75, +76 lines =@@
+ >e7 : boolean
+ >strMap["foo" as "foo" | "baz"] : boolean | undefined
+ >strMap : { [s: string]: boolean; }
+->"foo" as "foo" | "baz" : "foo" | "baz"
++>"foo" as "foo" | "baz" : "baz" | "foo"
+ >"foo" : "foo"
+ 
+ const e8: boolean = strMap[NumericEnum1.A];
+@@= skipped -75, +75 lines =@@
+ 
+ type T_OK1 = CheckBooleanOnly<(typeof strMap)[string]>;
+ >T_OK1 : any
+->strMap : { [s: string]: boolean; }
+ 
+ type T_OK2 = CheckBooleanOnly<(typeof strMap)["foo"]>;
+ >T_OK2 : any
+->strMap : { [s: string]: boolean; }
+ 
+ type T_OK3 = CheckBooleanOnly<(typeof strMap)["bar" | "baz"]>;
+ >T_OK3 : any
+->strMap : { [s: string]: boolean; }
+ 
+ type T_OK4 = CheckBooleanOnly<(typeof strMap)[number]>;
+ >T_OK4 : any
+->strMap : { [s: string]: boolean; }
+ 
+ type T_OK5 = CheckBooleanOnly<(typeof strMap)[any]>;
+ >T_OK5 : any
+->strMap : { [s: string]: boolean; }
+ 
+ // Writes don't allow 'undefined'; all should be errors
+ strMap["baz"] = undefined;
+@@= skipped -92, +87 lines =@@
+ // Generics
+ function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
+ >generic1 : <T extends { [s: string]: boolean; }>(arg: T) => boolean
++>T : T
+ >s : string
+ >arg : T
+ 
+@@= skipped -11, +12 lines =@@
+ }
+ function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
+ >generic2 : <T extends { [s: string]: boolean; }>(arg: T) => boolean
++>T : T
+ >s : string
+ >arg : T
+ 
+@@= skipped -12, +13 lines =@@
+ }
+ function generic3<T extends string>(arg: T): boolean {
+ >generic3 : <T extends string>(arg: T) => boolean
++>T : T
+ >arg : T
+ 
+     // Should error
+@@= skipped -112, +113 lines =@@
+ >key : string
+ 
+ const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
+->fn1 : <Key extends keyof typeof myRecord1>(key: Key) => string
+-><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
+->myRecord1 : { a: string; b: string; }
++>fn1 : <Key extends "a" | "b">(key: Key) => string
++><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends "a" | "b">(key: Key) => string
++>Key : Key
+ >key : Key
+ >myRecord1[key] : { a: string; b: string; }[Key]
+ >myRecord1 : { a: string; b: string; }
+ >key : Key
+ 
+ const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
+->fn2 : <Key extends keyof typeof myRecord1>(key: Key) => string
+-><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
+->myRecord1 : { a: string; b: string; }
++>fn2 : <Key extends "a" | "b">(key: Key) => string
++><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends "a" | "b">(key: Key) => string
++>Key : Key
+ >key : Key
+ >myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
+ >myRecord2 : { [key: string]: string; a: string; b: string; }
+ >key : Key
+ 
+ const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
+->fn3 : <Key extends keyof typeof myRecord2>(key: Key) => void
+-><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends keyof typeof myRecord2>(key: Key) => void
+->myRecord2 : { [key: string]: string; a: string; b: string; }
++>fn3 : <Key extends string | number>(key: Key) => void
++><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends string | number>(key: Key) => void
++>Key : Key
+ >key : Key
+ 
+     myRecord2[key] = undefined; // Should error

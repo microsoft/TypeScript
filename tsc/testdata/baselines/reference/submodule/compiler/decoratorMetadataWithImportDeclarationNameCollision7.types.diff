@@ -1,0 +1,55 @@
+--- old.decoratorMetadataWithImportDeclarationNameCollision7.types
++++ new.decoratorMetadataWithImportDeclarationNameCollision7.types
+@@= skipped -1, +1 lines =@@
+ 
+ === db.ts ===
+ export default class db {
+->db : db
++>db : default
+ 
+     public doSomething() {
+ >doSomething : () => void
+@@= skipped -9, +9 lines =@@
+ 
+ === service.ts ===
+ import db from './db';
+->db : typeof db
++>db : typeof default
+ 
+ function someDecorator(target) {
+ >someDecorator : (target: any) => any
+@@= skipped -16, +16 lines =@@
+ >MyClass : MyClass
+ 
+     db: db.db; //error
+->db : db.db
++>db : db
+ >db : any
+ 
+     constructor(db: db.db) { // error
+->db : db.db
++>db : db
+ >db : any
+ 
+         this.db = db;
+->this.db = db : db.db
+->this.db : db.db
++>this.db = db : db
++>this.db : db
+ >this : this
+->db : db.db
+->db : db.db
++>db : db
++>db : db
+ 
+         this.db.doSomething();
+ >this.db.doSomething() : any
+ >this.db.doSomething : any
+->this.db : db.db
++>this.db : db
+ >this : this
+->db : db.db
++>db : db
+ >doSomething : any
+     }
+ }

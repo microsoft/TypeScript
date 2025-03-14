@@ -1,0 +1,13 @@
+--- old.interfaceWithImplements1.types
++++ new.interfaceWithImplements1.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/interfaceWithImplements1.ts] ////
+ 
+ === interfaceWithImplements1.ts ===
+-
+ interface IFoo { }
++>IFoo : IFoo
+ 
+ interface IBar implements IFoo {
++>IBar : IBar
+ }

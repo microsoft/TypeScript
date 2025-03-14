@@ -1,0 +1,11 @@
+--- old.emptyArrayBindingPatternParameter04.types
++++ new.emptyArrayBindingPatternParameter04.types
+@@= skipped -1, +1 lines =@@
+ 
+ === emptyArrayBindingPatternParameter04.ts ===
+ function f([] = [1,2,3,4]) {
+->f : ([]?: number[]) => void
++>f : (__0?: number[]) => void
+ >[1,2,3,4] : number[]
+ >1 : 1
+ >2 : 2

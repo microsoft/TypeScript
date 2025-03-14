@@ -1,0 +1,11 @@
+--- old.jsDeclarationEmitExportedClassWithExtends.types
++++ new.jsDeclarationEmitExportedClassWithExtends.types
+@@= skipped -5, +5 lines =@@
+ === node_modules/lit-element/development/index.d.ts ===
+ 
+ export * from "./lit-element.js";
+-=== node_modules/lit-element/development//lit-element.d.ts ===
++=== node_modules/lit-element/development/lit-element.d.ts ===
+ export class LitElement {}
+ >LitElement : LitElement
+ 

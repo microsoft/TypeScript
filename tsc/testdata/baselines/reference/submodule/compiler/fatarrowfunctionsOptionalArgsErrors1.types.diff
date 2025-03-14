@@ -1,0 +1,27 @@
+--- old.fatarrowfunctionsOptionalArgsErrors1.types
++++ new.fatarrowfunctionsOptionalArgsErrors1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === fatarrowfunctionsOptionalArgsErrors1.ts ===
+ (arg1?, arg2) => 101;
+->(arg1?, arg2) => 101 : (arg1?: any, arg2: any) => number
++>(arg1?, arg2) => 101 : (arg1: any, arg2: any) => number
+ >arg1 : any
+ >arg2 : any
+ >101 : 101
+ 
+ (...arg?) => 102;
+->(...arg?) => 102 : (...arg?: any[]) => number
++>(...arg?) => 102 : (...arg: any[]) => number
+ >arg : any[]
+ >102 : 102
+ 
+@@= skipped -16, +16 lines =@@
+ >103 : 103
+ 
+ (...arg:number [] = []) => 104;
+->(...arg:number [] = []) => 104 : (...arg?: number[]) => number
++>(...arg:number [] = []) => 104 : (...arg: number[]) => number
+ >arg : number[]
+ >[] : undefined[]
+ >104 : 104

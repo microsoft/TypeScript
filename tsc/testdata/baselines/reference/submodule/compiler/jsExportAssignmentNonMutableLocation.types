@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/jsExportAssignmentNonMutableLocation.ts] ////
+
+=== file.js ===
+const customSymbol = Symbol("custom");
+>customSymbol : unique symbol
+>Symbol("custom") : unique symbol
+>Symbol : SymbolConstructor
+>"custom" : "custom"
+
+// This is a common pattern in Node’s built-in modules:
+module.exports = {
+>module.exports = {    customSymbol,} : { customSymbol: symbol; }
+>module.exports : any
+>module : any
+>exports : any
+>{    customSymbol,} : { customSymbol: symbol; }
+
+    customSymbol,
+>customSymbol : any
+
+};
+
+exports.customSymbol2 = Symbol("custom");
+>exports.customSymbol2 = Symbol("custom") : symbol
+>exports.customSymbol2 : any
+>exports : any
+>customSymbol2 : any
+>Symbol("custom") : symbol
+>Symbol : SymbolConstructor
+>"custom" : "custom"
+

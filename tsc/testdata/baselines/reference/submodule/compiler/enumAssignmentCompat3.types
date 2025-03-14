@@ -1,0 +1,272 @@
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
+=== enumAssignmentCompat3.ts ===
+namespace First {
+>First : typeof First
+
+    export enum E {
+>E : E
+
+        a, b, c,
+>a : E.a
+>b : E.b
+>c : E.c
+    }
+}
+namespace Abc {
+>Abc : typeof Abc
+
+    export enum E {
+>E : E
+
+        a, b, c,
+>a : E.a
+>b : E.b
+>c : E.c
+    }
+    export enum Nope {
+>Nope : Nope
+
+        a, b, c,
+>a : Nope.a
+>b : Nope.b
+>c : Nope.c
+    }
+}
+namespace Abcd {
+>Abcd : typeof Abcd
+
+    export enum E {
+>E : E
+
+        a, b, c, d,
+>a : E.a
+>b : E.b
+>c : E.c
+>d : E.d
+    }
+}
+namespace Ab {
+>Ab : typeof Ab
+
+    export enum E {
+>E : E
+
+        a, b,
+>a : E.a
+>b : E.b
+    }
+}
+namespace Cd {
+>Cd : typeof Cd
+
+    export enum E {
+>E : E
+
+        c, d,
+>c : E.c
+>d : E.d
+    }
+}
+namespace Const {
+>Const : typeof Const
+
+    export const enum E {
+>E : E
+
+        a, b, c,
+>a : E.a
+>b : E.b
+>c : E.c
+    }
+}
+namespace Decl {
+>Decl : typeof Decl
+
+    export declare enum E {
+>E : E
+
+        a, b, c = 3,
+>a : E.a
+>b : E.b
+>c : E.c
+>3 : 3
+    }
+}
+namespace Merged {
+>Merged : typeof Merged
+
+    export enum E {
+>E : E
+
+        a, b, 
+>a : E.a
+>b : E.b
+    }
+    export enum E {
+>E : E
+
+        c = 3, d,
+>c : E.c
+>3 : 3
+>d : E.d
+    }
+}
+
+namespace Merged2 {
+>Merged2 : typeof Merged2
+
+    export enum E {
+>E : E
+
+        a, b, c
+>a : E.a
+>b : E.b
+>c : E.c
+    }
+    export module E {
+>E : typeof E
+
+        export let d = 5;
+>d : number
+>5 : 5
+    }
+}
+
+var abc: First.E;
+>abc : E
+>First : any
+
+var secondAbc: Abc.E;
+>secondAbc : E
+>Abc : any
+
+var secondAbcd: Abcd.E;
+>secondAbcd : E
+>Abcd : any
+
+var secondAb: Ab.E;
+>secondAb : E
+>Ab : any
+
+var secondCd: Cd.E;
+>secondCd : E
+>Cd : any
+
+var nope: Abc.Nope;
+>nope : Nope
+>Abc : any
+
+var k: Const.E;
+>k : E
+>Const : any
+
+var decl: Decl.E;
+>decl : E
+>Decl : any
+
+var merged: Merged.E;
+>merged : E
+>Merged : any
+
+var merged2: Merged2.E;
+>merged2 : E
+>Merged2 : any
+
+abc = secondAbc; // ok
+>abc = secondAbc : E
+>abc : E
+>secondAbc : E
+
+abc = secondAbcd; // missing 'd'
+>abc = secondAbcd : E
+>abc : E
+>secondAbcd : E
+
+abc = secondAb; // ok
+>abc = secondAb : E
+>abc : E
+>secondAb : E
+
+abc = secondCd; // missing 'd'
+>abc = secondCd : E
+>abc : E
+>secondCd : E
+
+abc = nope; // nope!
+>abc = nope : Nope
+>abc : E
+>nope : Nope
+
+abc = decl; // bad - value of 'c' differs between these enums
+>abc = decl : E
+>abc : E
+>decl : E
+
+secondAbc = abc; // ok
+>secondAbc = abc : E
+>secondAbc : E
+>abc : E
+
+secondAbcd = abc; // ok
+>secondAbcd = abc : E
+>secondAbcd : E
+>abc : E
+
+secondAb = abc; // missing 'c'
+>secondAb = abc : E
+>secondAb : E
+>abc : E
+
+secondCd = abc; // missing 'a' and 'b'
+>secondCd = abc : E
+>secondCd : E
+>abc : E
+
+nope = abc; // nope!
+>nope = abc : E
+>nope : Nope
+>abc : E
+
+decl = abc; // bad - value of 'c' differs between these enums
+>decl = abc : E
+>decl : E
+>abc : E
+
+// const is only assignable to itself
+k = k;
+>k = k : E
+>k : E
+>k : E
+
+abc = k; // error
+>abc = k : E
+>abc : E
+>k : E
+
+k = abc;
+>k = abc : E
+>k : E
+>abc : E
+
+// merged enums compare all their members
+abc = merged; // missing 'd'
+>abc = merged : E
+>abc : E
+>merged : E
+
+merged = abc; // bad - value of 'c' differs between these enums
+>merged = abc : E
+>merged : E
+>abc : E
+
+abc = merged2; // ok
+>abc = merged2 : E
+>abc : E
+>merged2 : E
+
+merged2 = abc; // ok
+>merged2 = abc : E
+>merged2 : E
+>abc : E
+

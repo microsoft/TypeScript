@@ -1,0 +1,11 @@
+--- old.parserSymbolProperty8.types
++++ new.parserSymbolProperty8.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserSymbolProperty8.ts ===
+ var x: {
+->x : { [Symbol.toPrimitive](): string; }
++>x : { [Symbol.toPrimitive]: () => string; }
+ 
+     [Symbol.toPrimitive](): string
+ >[Symbol.toPrimitive] : () => string

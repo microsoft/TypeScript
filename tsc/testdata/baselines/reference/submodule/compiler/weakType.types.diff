@@ -1,0 +1,38 @@
+--- old.weakType.types
++++ new.weakType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === weakType.ts ===
+ interface Settings {
++>Settings : Settings
++
+     timeout?: number;
+ >timeout : number
+ 
+@@= skipped -16, +18 lines =@@
+ >1000 : 1000
+ }
+ interface CtorOnly {
++>CtorOnly : CtorOnly
++
+     new(s: string): { timeout: 1000 }
+ >s : string
+ >timeout : 1000
+@@= skipped -58, +60 lines =@@
+ >ConfigurableStartEnd : ConfigurableStartEnd
+ 
+ interface InsertOptions {
++>InsertOptions : InsertOptions
++
+     prefix?: string
+ >prefix : string
+ 
+@@= skipped -45, +47 lines =@@
+ }
+ // Ctor isn't a weak type because it has a construct signature
+ interface Ctor {
++>Ctor : Ctor
++
+     new (s: string): K
+ >s : string
+ 

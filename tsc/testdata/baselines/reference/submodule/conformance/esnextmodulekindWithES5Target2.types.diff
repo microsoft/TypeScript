@@ -1,0 +1,11 @@
+--- old.esnextmodulekindWithES5Target2.types
++++ new.esnextmodulekindWithES5Target2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === esnextmodulekindWithES5Target2.ts ===
+ export default class C {
+->C : C
++>C : default
+ 
+     static s = 0;
+ >s : number

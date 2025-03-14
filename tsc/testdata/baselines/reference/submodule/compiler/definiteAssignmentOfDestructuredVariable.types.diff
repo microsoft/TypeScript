@@ -1,0 +1,36 @@
+--- old.definiteAssignmentOfDestructuredVariable.types
++++ new.definiteAssignmentOfDestructuredVariable.types
+@@= skipped -2, +2 lines =@@
+ === definiteAssignmentOfDestructuredVariable.ts ===
+ // https://github.com/Microsoft/TypeScript/issues/20994
+ interface Options {
++>Options : Options
++
+     a?: number | object;
+ >a : number | object | undefined
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ class C<T extends Options> {
+ >C : C<T>
++>T : T
+ 
+     foo!: { [P in keyof T]: T[P] }
+->foo : { [P in keyof T]: T[P]; }
++>foo : { [P in keyof T]: T[P] }
++>P : P
+ 
+     method() {
+ >method : () => void
+@@= skipped -10, +12 lines =@@
+         let { a, b } = this.foo;
+ >a : T["a"] | undefined
+ >b : T["b"]
+->this.foo : { [P in keyof T]: T[P]; }
++>this.foo : { [P in keyof T]: T[P] }
+ >this : this
+->foo : { [P in keyof T]: T[P]; }
++>foo : { [P in keyof T]: T[P] }
+ 
+         !(a && b);
+ >!(a && b) : boolean

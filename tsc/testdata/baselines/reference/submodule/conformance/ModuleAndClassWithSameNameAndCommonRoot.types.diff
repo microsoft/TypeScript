@@ -1,0 +1,13 @@
+--- old.ModuleAndClassWithSameNameAndCommonRoot.types
++++ new.ModuleAndClassWithSameNameAndCommonRoot.types
+@@= skipped -8, +8 lines =@@
+ >Point : typeof Point
+ 
+         export var Origin = new Point(0, 0);
+->Origin : Point
+->new Point(0, 0) : Point
++>Origin : any
++>new Point(0, 0) : any
+ >Point : typeof Point
+ >0 : 0
+ >0 : 0

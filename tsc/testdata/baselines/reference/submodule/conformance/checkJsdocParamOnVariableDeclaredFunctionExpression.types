@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocParamOnVariableDeclaredFunctionExpression.ts] ////
+
+=== 0.js ===
+// @ts-check
+/**
+ * @param {number=} n
+ * @param {string} [s]
+ */
+var x = function foo(n, s) {}
+>x : (n: any, s: any) => void
+>function foo(n, s) {} : (n: any, s: any) => void
+>foo : (n: any, s: any) => void
+>n : any
+>s : any
+
+var y;
+>y : any
+
+/**
+ * @param {boolean!} b
+ */
+y = function bar(b) {}
+>y = function bar(b) {} : (b: any) => void
+>y : any
+>function bar(b) {} : (b: any) => void
+>bar : (b: any) => void
+>b : any
+
+/**
+ * @param {string} s
+ */
+var one = function (s) { }, two = function (untyped) { };
+>one : (s: any) => void
+>function (s) { } : (s: any) => void
+>s : any
+>two : (untyped: any) => void
+>function (untyped) { } : (untyped: any) => void
+>untyped : any
+

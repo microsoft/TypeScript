@@ -1,0 +1,36 @@
+--- old.stringLiteralTypesAsTags02.types
++++ new.stringLiteralTypesAsTags02.types
+@@= skipped -4, +4 lines =@@
+ >Kind : Kind
+ 
+ interface Entity {
++>Entity : Entity
++
+     kind: Kind;
+ >kind : Kind
+ }
+ 
+ interface A extends Entity {
++>A : A
++
+     kind: "A";
+ >kind : "A"
+ 
+@@= skipped -13, +17 lines =@@
+ }
+ 
+ interface B extends Entity {
++>B : B
++
+     kind: "B";
+ >kind : "B"
+ 
+@@= skipped -72, +74 lines =@@
+ }
+ else {
+     let d = x;
+->d : never
+->x : never
++>d : A & B
++>x : A & B
+ }

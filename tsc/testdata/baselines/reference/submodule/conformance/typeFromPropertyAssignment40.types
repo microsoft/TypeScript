@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment40.ts] ////
+
+=== typeFromPropertyAssignment40.js ===
+function Outer() {
+>Outer : () => void
+
+    var self = this
+>self : any
+>this : any
+
+    self.y = 2
+>self.y = 2 : 2
+>self.y : any
+>self : any
+>y : any
+>2 : 2
+}
+/** @type {Outer} */
+var ok
+>ok : any
+
+ok.y
+>ok.y : any
+>ok : any
+>y : any
+

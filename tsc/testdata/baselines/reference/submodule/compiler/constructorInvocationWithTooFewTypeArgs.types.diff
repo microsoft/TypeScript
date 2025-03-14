@@ -1,0 +1,11 @@
+--- old.constructorInvocationWithTooFewTypeArgs.types
++++ new.constructorInvocationWithTooFewTypeArgs.types
+@@= skipped -2, +2 lines =@@
+ === constructorInvocationWithTooFewTypeArgs.ts ===
+ class D<T, U> {
+ >D : D<T, U>
++>T : T
++>U : U
+ 
+    x: T
+ >x : T

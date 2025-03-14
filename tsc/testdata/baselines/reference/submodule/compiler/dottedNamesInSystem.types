@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/dottedNamesInSystem.ts] ////
+
+=== dottedNamesInSystem.ts ===
+export namespace A.B.C {
+>A : typeof A
+>B : typeof B
+>C : typeof C
+
+    export function foo() {}
+>foo : () => void
+}
+
+export function bar() {
+>bar : () => any
+
+    return A.B.C.foo();
+>A.B.C.foo() : any
+>A.B.C.foo : any
+>A.B.C : any
+>A.B : any
+>A : typeof A
+>B : any
+>C : any
+>foo : any
+}

@@ -1,0 +1,97 @@
+--- old.vueLikeDataAndPropsInference.types
++++ new.vueLikeDataAndPropsInference.types
+@@= skipped -1, +1 lines =@@
+ 
+ === vueLikeDataAndPropsInference.ts ===
+ interface Instance {
++>Instance : Instance
++
+     _instanceBrand: never
+ >_instanceBrand : never
+ }
+ 
+ type DataDef<Data, Props> = (this: Readonly<Props> & Instance) => Data
+ >DataDef : DataDef<Data, Props>
++>Data : Data
++>Props : Props
+ >this : Readonly<Props> & Instance
+ 
+ type PropsDefinition<T> = {
+ >PropsDefinition : PropsDefinition<T>
++>T : T
+ 
+     [K in keyof T]: T[K]
++>K : K
+ }
+ 
+ interface Options<
++>Options : Options<Data, PropsDef>
++
+     Data = ((this: Instance) => object),
++>Data : Data
+ >this : Instance
+ 
+     PropsDef = {}
++>PropsDef : PropsDef
++
+     > {
+     data?: Data
+ >data : Data
+@@= skipped -32, +43 lines =@@
+ 
+ type WatchHandler<T> = (val: T, oldVal: T) => void;
+ >WatchHandler : WatchHandler<T>
++>T : T
+ >val : T
+ >oldVal : T
+ 
+ type ThisTypedOptions<Data, Props> =
+ >ThisTypedOptions : ThisTypedOptions<Data, Props>
++>Data : Data
++>Props : Props
+ 
+     Options<DataDef<Data, Props>, PropsDefinition<Props>> &
+     ThisType<Data & Readonly<Props> & Instance>
+ 
+ declare function test<Data, Props>(fn: ThisTypedOptions<Data, Props>): void;
+->test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
++>test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options<() => object, {}>): void; }
++>Data : Data
++>Props : Props
+ >fn : ThisTypedOptions<Data, Props>
+ 
+ declare function test(fn: Options): void;
+->test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
+->fn : Options<(this: Instance) => object, {}>
++>test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options<() => object, {}>): void; }
++>fn : Options<() => object, {}>
+ 
+ test({
+ >test({    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }}) : void
+->test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
+->{    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }} : { props: { foo: string; }; data(this: Readonly<{ foo: string; }> & Instance): { bar: boolean; }; watch: { foo(newVal: string, oldVal: string): void; }; }
++>test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options<() => object, {}>): void; }
++>{    props: {        foo: ''    },    data(): { bar: boolean } {        return {            bar: true        }    },    watch: {        foo(newVal: string, oldVal: string): void {            this.bar = false        }    }} : { props: { foo: string; }; data: () => { bar: boolean; }; watch: { foo: (newVal: string, oldVal: string) => void; }; }
+ 
+     props: {
+ >props : { foo: string; }
+@@= skipped -33, +38 lines =@@
+     },
+ 
+     data(): { bar: boolean } {
+->data : (this: Readonly<{ foo: string; }> & Instance) => { bar: boolean; }
++>data : () => { bar: boolean; }
+ >bar : boolean
+ 
+         return {
+@@= skipped -13, +13 lines =@@
+     },
+ 
+     watch: {
+->watch : { foo(newVal: string, oldVal: string): void; }
+->{        foo(newVal: string, oldVal: string): void {            this.bar = false        }    } : { foo(newVal: string, oldVal: string): void; }
++>watch : { foo: (newVal: string, oldVal: string) => void; }
++>{        foo(newVal: string, oldVal: string): void {            this.bar = false        }    } : { foo: (newVal: string, oldVal: string) => void; }
+ 
+         foo(newVal: string, oldVal: string): void {
+ >foo : (newVal: string, oldVal: string) => void

@@ -1,0 +1,20 @@
+--- old.declFileTypeAnnotationTypeAlias.types
++++ new.declFileTypeAnnotationTypeAlias.types
+@@= skipped -25, +25 lines =@@
+     }
+ 
+     export type MC = m.c;
+->MC : m.c
++>MC : c
+ >m : any
+ 
+     export type fc = () => c;
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ interface Window {
++>Window : Window
++
+     someMethod();
+ >someMethod : () => any
+ }

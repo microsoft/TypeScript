@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/classImplementsPrimitive.ts] ////
+
+=== classImplementsPrimitive.ts ===
+// classes cannot implement primitives
+
+class C implements number { }
+>C : C
+
+class C2 implements string { }
+>C2 : C2
+
+class C3 implements boolean { }
+>C3 : C3
+

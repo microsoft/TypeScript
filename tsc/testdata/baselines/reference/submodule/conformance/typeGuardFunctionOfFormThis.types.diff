@@ -1,0 +1,52 @@
+--- old.typeGuardFunctionOfFormThis.types
++++ new.typeGuardFunctionOfFormThis.types
+@@= skipped -68, +68 lines =@@
+ }
+ 
+ interface GuardInterface extends RoyalGuard {}
++>GuardInterface : GuardInterface
+ 
+ let b: GuardInterface;
+ >b : GuardInterface
+@@= skipped -46, +47 lines =@@
+ var holder2 = {a};
+ >holder2 : { a: RoyalGuard; }
+ >{a} : { a: RoyalGuard; }
+->a : RoyalGuard
++>a : any
+ 
+ if (holder2.a.isLeader()) {
+ >holder2.a.isLeader() : boolean
+@@= skipped -92, +92 lines =@@
+ }
+ 
+ interface Supplies {
++>Supplies : Supplies
++
+     spoiled: boolean;
+ >spoiled : boolean
+ }
+ 
+ interface Sundries {
++>Sundries : Sundries
++
+     broken: boolean;
+ >broken : boolean
+ }
+ 
+ interface Crate<T> {
++>Crate : Crate<T>
++>T : T
++
+     contents: T;
+ >contents : T
+ 
+@@= skipped -156, +163 lines =@@
+ 
+ 
+ interface MimicGuardInterface {
++>MimicGuardInterface : MimicGuardInterface
++
+     isLeader(): this is LeadGuard;
+ >isLeader : () => this is LeadGuard
+ 

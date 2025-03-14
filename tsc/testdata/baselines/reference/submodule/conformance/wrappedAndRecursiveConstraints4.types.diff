@@ -1,0 +1,23 @@
+--- old.wrappedAndRecursiveConstraints4.types
++++ new.wrappedAndRecursiveConstraints4.types
+@@= skipped -2, +2 lines =@@
+ === wrappedAndRecursiveConstraints4.ts ===
+ class C<T extends { length: number }> {
+ >C : C<T>
++>T : T
+ >length : number
+ 
+     constructor(x: T) { }
+@@= skipped -7, +8 lines =@@
+ 
+     foo<U extends T>(x: U) {
+ >foo : <U extends T>(x: U) => <V extends U>(x: V) => V
++>U : U
+ >x : U
+ 
+         function bar<V extends U>(x: V) {
+ >bar : <V extends U>(x: V) => V
++>V : V
+ >x : V
+ 
+             return x;

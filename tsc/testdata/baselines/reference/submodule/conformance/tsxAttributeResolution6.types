@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution6.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		test1: { n?: boolean; s?: string};
+>test1 : { n?: boolean; s?: string; }
+>n : boolean
+>s : string
+
+		test2: { n: boolean; };
+>test2 : { n: boolean; }
+>n : boolean
+	}
+}
+
+// Error
+<test1 s />;
+><test1 s /> : any
+>test1 : any
+>s : any
+
+<test1 n='true' />;
+><test1 n='true' /> : any
+>test1 : any
+>n : any
+
+<test2 />;
+><test2 /> : any
+>test2 : any
+
+// OK
+<test1 n />;
+><test1 n /> : any
+>test1 : any
+>n : any
+
+<test1 n={false} />;
+><test1 n={false} /> : any
+>test1 : any
+>n : any
+>false : false
+
+<test2 n />;
+><test2 n /> : any
+>test2 : any
+>n : any
+

@@ -1,0 +1,9 @@
+--- old.jsdocAugments_nameMismatch.types
++++ new.jsdocAugments_nameMismatch.types
+@@= skipped -9, +9 lines =@@
+ /** @augments A */
+ class C extends B {}
+ >C : C
+->B : A
++>B : B
+ 

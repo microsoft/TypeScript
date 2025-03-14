@@ -1,0 +1,83 @@
+--- old.declFileTypeofInAnonymousType.types
++++ new.declFileTypeofInAnonymousType.types
+@@= skipped -20, +20 lines =@@
+     }
+ }
+ var a: { c: m1.c; };
+->a : { c: m1.c; }
+->c : m1.c
++>a : { c: c; }
++>c : c
+ >m1 : any
+ 
+ var b = {
+->b : { c: typeof m1.c; m1: typeof m1; }
+->{    c: m1.c,    m1: m1} : { c: typeof m1.c; m1: typeof m1; }
++>b : { c: typeof c; m1: typeof m1; }
++>{    c: m1.c,    m1: m1} : { c: typeof c; m1: typeof m1; }
+ 
+     c: m1.c,
+->c : typeof m1.c
+->m1.c : typeof m1.c
++>c : typeof c
++>m1.c : typeof c
+ >m1 : typeof m1
+->c : typeof m1.c
++>c : typeof c
+ 
+     m1: m1
+ >m1 : typeof m1
+@@= skipped -26, +26 lines =@@
+ >m1 : typeof m1
+ 
+ var d = {
+->d : { m: { mod: typeof m1; }; mc: { cl: typeof m1.c; }; me: { en: typeof m1.e; }; mh: m1.e; }
+->{    m: { mod: m1 },    mc: { cl: m1.c },    me: { en: m1.e },    mh: m1.e.holiday} : { m: { mod: typeof m1; }; mc: { cl: typeof m1.c; }; me: { en: typeof m1.e; }; mh: m1.e; }
++>d : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
++>{    m: { mod: m1 },    mc: { cl: m1.c },    me: { en: m1.e },    mh: m1.e.holiday} : { m: { mod: typeof m1; }; mc: { cl: typeof c; }; me: { en: typeof e; }; mh: e; }
+ 
+     m: { mod: m1 },
+ >m : { mod: typeof m1; }
+@@= skipped -10, +10 lines =@@
+ >m1 : typeof m1
+ 
+     mc: { cl: m1.c },
+->mc : { cl: typeof m1.c; }
+->{ cl: m1.c } : { cl: typeof m1.c; }
+->cl : typeof m1.c
+->m1.c : typeof m1.c
++>mc : { cl: typeof c; }
++>{ cl: m1.c } : { cl: typeof c; }
++>cl : typeof c
++>m1.c : typeof c
+ >m1 : typeof m1
+->c : typeof m1.c
++>c : typeof c
+ 
+     me: { en: m1.e },
+->me : { en: typeof m1.e; }
+->{ en: m1.e } : { en: typeof m1.e; }
+->en : typeof m1.e
+->m1.e : typeof m1.e
++>me : { en: typeof e; }
++>{ en: m1.e } : { en: typeof e; }
++>en : typeof e
++>m1.e : typeof e
+ >m1 : typeof m1
+->e : typeof m1.e
++>e : typeof e
+ 
+     mh: m1.e.holiday
+->mh : m1.e
+->m1.e.holiday : m1.e.holiday
+->m1.e : typeof m1.e
++>mh : e
++>m1.e.holiday : e.holiday
++>m1.e : typeof e
+ >m1 : typeof m1
+->e : typeof m1.e
+->holiday : m1.e.holiday
++>e : typeof e
++>holiday : e.holiday
+ 
+ };

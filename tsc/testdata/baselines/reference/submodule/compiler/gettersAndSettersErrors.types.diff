@@ -1,0 +1,11 @@
+--- old.gettersAndSettersErrors.types
++++ new.gettersAndSettersErrors.types
+@@= skipped -12, +12 lines =@@
+ >foo : string
+ 
+     public Foo = 0; // error - duplicate identifier Foo - confirmed
+->Foo : string
++>Foo : number
+ >0 : 0
+ 
+     public get Goo(v:string):string {return null;} // error - getters must not have a parameter

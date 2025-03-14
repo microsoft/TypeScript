@@ -1,0 +1,108 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution12.tsx] ////
+
+=== react.d.ts ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+	}
+	interface ElementAttributesProperty {
+>ElementAttributesProperty : ElementAttributesProperty
+
+		props;
+>props : any
+	}
+	interface IntrinsicAttributes {
+>IntrinsicAttributes : IntrinsicAttributes
+
+		ref?: string;
+>ref : string
+	}
+}
+
+=== file.tsx ===
+declare class Component<P, S>  {
+>Component : Component<P, S>
+>P : P
+>S : S
+
+	constructor(props?: P, context?: any);
+>props : P
+>context : any
+
+	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
+>setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
+>f : (prevState: S, props: P) => S
+>prevState : S
+>props : P
+>callback : () => any
+
+	setState(state: S, callback?: () => any): void;
+>setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
+>state : S
+>callback : () => any
+
+	forceUpdate(callBack?: () => any): void;
+>forceUpdate : (callBack?: () => any) => void
+>callBack : () => any
+
+	render(): JSX.Element;
+>render : () => Element
+>JSX : any
+
+	props: P;
+>props : P
+
+	state: S;
+>state : S
+
+	context: {};
+>context : {}
+}
+
+
+interface ComponentClass<P> {
+>ComponentClass : ComponentClass<P>
+>P : P
+
+	new (props?: P, context?: any): Component<P, any>;
+>props : P
+>context : any
+}
+
+declare module TestMod {
+>TestMod : typeof TestMod
+
+	interface TestClass extends ComponentClass<{reqd: any}> {
+>TestClass : TestClass
+>reqd : any
+	}
+	var Test: TestClass;
+>Test : TestClass
+}
+
+// Errors correctly
+const T = TestMod.Test;
+>T : TestClass
+>TestMod.Test : TestClass
+>TestMod : typeof TestMod
+>Test : TestClass
+
+var t1 = <T />;
+>t1 : any
+><T /> : any
+>T : TestClass
+
+// Should error
+var t2 = <TestMod.Test />;
+>t2 : any
+><TestMod.Test /> : any
+>TestMod.Test : TestClass
+>TestMod : typeof TestMod
+>Test : TestClass
+
+

@@ -1,0 +1,21 @@
+--- old.genericOfACloduleType1.types
++++ new.genericOfACloduleType1.types
+@@= skipped -2, +2 lines =@@
+ === genericOfACloduleType1.ts ===
+ class G<T>{ bar(x: T) { return x; } }
+ >G : G<T>
++>T : T
+ >bar : (x: T) => T
+ >x : T
+ >x : T
+@@= skipped -34, +35 lines =@@
+ >foo : () => void
+ }
+ var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.C'.
+->g2 : G<M.C>
+->new G<M.C>() : G<M.C>
++>g2 : G<C>
++>new G<M.C>() : G<C>
+ >G : typeof G
+ >M : any
+ 

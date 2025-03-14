@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/declFileExportImportChain2.ts] ////
+
+=== declFileExportImportChain2_d.ts ===
+import c = require("declFileExportImportChain2_c");
+>c : any
+
+export var x: c.b.m2.c1;
+>x : c1
+>c : any
+>b : any
+>m2 : any
+

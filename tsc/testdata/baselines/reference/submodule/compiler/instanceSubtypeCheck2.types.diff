@@ -1,0 +1,18 @@
+--- old.instanceSubtypeCheck2.types
++++ new.instanceSubtypeCheck2.types
+@@= skipped -2, +2 lines =@@
+ === instanceSubtypeCheck2.ts ===
+ class C1<T> {
+ >C1 : C1<T>
++>T : T
+ 
+     x: C2<T>;
+ >x : C2<T>
+@@= skipped -7, +8 lines =@@
+ 
+ class C2<T> extends C1<T> {
+ >C2 : C2<T>
++>T : T
+ >C1 : C1<T>
+ 
+     x: string

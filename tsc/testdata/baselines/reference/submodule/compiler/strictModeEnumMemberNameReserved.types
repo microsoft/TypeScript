@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/strictModeEnumMemberNameReserved.ts] ////
+
+=== strictModeEnumMemberNameReserved.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+enum E {
+>E : E.static
+
+    static
+>static : E.static
+}
+
+const x1: E.static = E.static;
+>x1 : E.static
+>E : any
+>E.static : E.static
+>E : typeof E
+>static : E.static
+

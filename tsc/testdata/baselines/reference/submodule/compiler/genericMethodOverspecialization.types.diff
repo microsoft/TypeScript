@@ -1,0 +1,35 @@
+--- old.genericMethodOverspecialization.types
++++ new.genericMethodOverspecialization.types
+@@= skipped -10, +10 lines =@@
+ >"summary" : "summary"
+ 
+ interface HTMLElement {
++>HTMLElement : HTMLElement
++
+     clientWidth: number;
+ >clientWidth : number
+ 
+@@= skipped -11, +13 lines =@@
+ >document : Document
+ 
+ interface Document {
++>Document : Document
++
+     getElementById(elementId: string): HTMLElement;
+->getElementById : { (elementId: string): HTMLElement | null; (elementId: string): HTMLElement; }
++>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+ >elementId : string
+ }
+ 
+@@= skipped -16, +18 lines =@@
+ 
+     return document.getElementById(name);
+ >document.getElementById(name) : HTMLElement
+->document.getElementById : { (elementId: string): HTMLElement | null; (elementId: string): HTMLElement; }
++>document.getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+ >document : Document
+->getElementById : { (elementId: string): HTMLElement | null; (elementId: string): HTMLElement; }
++>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
+ >name : string
+ 
+ });

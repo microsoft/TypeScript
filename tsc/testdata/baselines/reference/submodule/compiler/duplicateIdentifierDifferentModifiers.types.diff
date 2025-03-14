@@ -1,0 +1,32 @@
+--- old.duplicateIdentifierDifferentModifiers.types
++++ new.duplicateIdentifierDifferentModifiers.types
+@@= skipped -2, +2 lines =@@
+ === duplicateIdentifierDifferentModifiers.ts ===
+ // Not OK
+ interface B { x; }
++>B : B
+ >x : any
+ 
+ interface B { x?; }
++>B : B
+ >x : any
+ 
+ // OK
+@@= skipped -14, +16 lines =@@
+ }
+ 
+ interface A {
++>A : A
++
+   y: string;
+ >y : string
+ }
+@@= skipped -13, +15 lines =@@
+ }
+ 
+ interface C {
++>C : C
++
+   y: string;
+ >y : string
+ }

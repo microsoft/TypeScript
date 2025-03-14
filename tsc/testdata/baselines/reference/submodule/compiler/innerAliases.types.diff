@@ -1,0 +1,44 @@
+--- old.innerAliases.types
++++ new.innerAliases.types
+@@= skipped -19, +19 lines =@@
+ >D : typeof D
+ 
+     import inner = A.B.C; 
+->inner : typeof inner
++>inner : typeof C
+ >A : typeof A
+->B : typeof A.B
+->C : typeof inner
++>B : typeof B
++>C : typeof C
+    
+     var c1 = new inner.Class1(); 
+->c1 : inner.Class1
+->new inner.Class1() : inner.Class1
+->inner.Class1 : typeof inner.Class1
+->inner : typeof inner
+->Class1 : typeof inner.Class1
++>c1 : Class1
++>new inner.Class1() : Class1
++>inner.Class1 : typeof Class1
++>inner : typeof C
++>Class1 : typeof Class1
+ 
+     export module E { 
+ >E : typeof E
+@@= skipped -21, +21 lines =@@
+ }
+ 
+ var c: D.inner.Class1;
+->c : D.inner.Class1
++>c : Class1
+ >D : any
+ >inner : any
+ 
+ c = new D.inner.Class1();
+ >c = new D.inner.Class1() : any
+->c : D.inner.Class1
++>c : Class1
+ >new D.inner.Class1() : any
+ >D.inner.Class1 : any
+ >D.inner : any

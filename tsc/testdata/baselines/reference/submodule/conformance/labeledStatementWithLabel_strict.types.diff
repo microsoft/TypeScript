@@ -1,0 +1,25 @@
+--- old.labeledStatementWithLabel_strict.types
++++ new.labeledStatementWithLabel_strict.types
+@@= skipped -21, +21 lines =@@
+ 
+ label: interface I {}
+ >label : any
++>I : I
+ 
+ label: class C { }
+ >label : any
+@@= skipped -22, +23 lines =@@
+ 
+ label: module M { }
+ >label : any
++>M : any
+ 
+ label: namespace N {}
+ >label : any
++>N : any
+ 
+ label: type T = {}
+ >label : any
+->T : {}
++>T : T
+ 

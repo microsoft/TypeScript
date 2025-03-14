@@ -1,0 +1,75 @@
+--- old.contextualTypeBasedOnIntersectionWithAnyInTheMix2.types
++++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix2.types
+@@= skipped -4, +4 lines =@@
+ >IntrinsicElements : IntrinsicElements
+ 
+   a: {
+->a : { href?: string; }
++>a : { href?: string | undefined; }
+ 
+     href?: string;
+ >href : string | undefined
+ 
+   };
+   div: {
+->div : { dir?: string; }
++>div : { dir?: string | undefined; }
+ 
+     dir?: string;
+ >dir : string | undefined
+@@= skipped -17, +17 lines =@@
+ 
+ type Component<Props> = (props: Props) => unknown;
+ >Component : Component<Props>
++>Props : Props
+ >props : Props
+ 
+ interface NestedMDXComponents {
++>NestedMDXComponents : NestedMDXComponents
++
+   [key: string]: Component<any>;
+ >key : string
+ }
+@@= skipped -11, +14 lines =@@
+ >MDXComponents : MDXComponents
+ 
+   [Key in keyof IntrinsicElements]?: Component<IntrinsicElements[Key]>;
++>Key : Key
++
+ };
+ 
+ export interface MDXProps {
++>MDXProps : MDXProps
++
+   components?: MDXComponents;
+ >components : MDXComponents | undefined
+ }
+@@= skipped -14, +18 lines =@@
+ MyMDXComponent({
+ >MyMDXComponent({  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },}) : null
+ >MyMDXComponent : (props: MDXProps) => null
+->{  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },} : { components: { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }; }
++>{  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },} : { components: { a: (props: { href?: string | undefined; }) => null; div: (props: { dir?: string | undefined; }) => null; }; }
+ 
+   components: {
+->components : { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }
+->{    a(props) {      return null;    },    div(props) {      return null;    },  } : { a(props: { href?: string; }): null; div(props: { dir?: string; }): null; }
++>components : { a: (props: { href?: string | undefined; }) => null; div: (props: { dir?: string | undefined; }) => null; }
++>{    a(props) {      return null;    },    div(props) {      return null;    },  } : { a: (props: { href?: string | undefined; }) => null; div: (props: { dir?: string | undefined; }) => null; }
+ 
+     a(props) {
+->a : (props: { href?: string; }) => null
+->props : { href?: string; }
++>a : (props: { href?: string | undefined; }) => null
++>props : { href?: string | undefined; }
+ 
+       return null;
+     },
+     div(props) {
+->div : (props: { dir?: string; }) => null
+->props : { dir?: string; }
++>div : (props: { dir?: string | undefined; }) => null
++>props : { dir?: string | undefined; }
+ 
+       return null;
+     },

@@ -1,0 +1,42 @@
+--- old.tryCatchFinallyControlFlow.types
++++ new.tryCatchFinallyControlFlow.types
+@@= skipped -30, +30 lines =@@
+ >a : number | null
+ >a.toFixed(0) == "123" : boolean
+ >a.toFixed(0) : string
+->a.toFixed : (fractionDigits?: number) => string
++>a.toFixed : (fractionDigits?: number | undefined) => string
+ >a : number
+->toFixed : (fractionDigits?: number) => string
++>toFixed : (fractionDigits?: number | undefined) => string
+ >0 : 0
+ >"123" : "123"
+         }
+@@= skipped -596, +596 lines =@@
+ >err : unknown
+ 
+         state.tag;
+->state.tag : "one" | "two" | "three"
++>state.tag : "one" | "three" | "two"
+ >state : State
+->tag : "one" | "two" | "three"
++>tag : "one" | "three" | "two"
+ 
+         if (state.tag !== "one" && state.tag !== "two") {
+ >state.tag !== "one" && state.tag !== "two" : boolean
+ >state.tag !== "one" : boolean
+->state.tag : "one" | "two" | "three"
++>state.tag : "one" | "three" | "two"
+ >state : State
+->tag : "one" | "two" | "three"
++>tag : "one" | "three" | "two"
+ >"one" : "one"
+ >state.tag !== "two" : boolean
+->state.tag : "two" | "three"
++>state.tag : "three" | "two"
+ >state : { tag: "two"; } | { tag: "three"; }
+->tag : "two" | "three"
++>tag : "three" | "two"
+ >"two" : "two"
+ 
+             console.log(state.tag);

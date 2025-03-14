@@ -1,0 +1,90 @@
+//// [tests/cases/conformance/jsx/tsxEmit3.tsx] ////
+
+=== file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements { }
+>IntrinsicElements : IntrinsicElements
+}
+
+module M {
+>M : typeof M
+
+	export class Foo { constructor() { } }
+>Foo : Foo
+
+	export module S {
+>S : typeof S
+
+		export class Bar { }
+>Bar : Bar
+
+		// Emit Foo
+		// Foo, <Foo />;
+	}
+}
+
+module M {
+>M : typeof M
+
+	// Emit M.Foo
+	Foo, <Foo />;
+>Foo, <Foo /> : any
+>Foo : typeof Foo
+><Foo /> : any
+>Foo : typeof Foo
+
+	export module S {
+>S : typeof S
+
+		// Emit M.Foo
+		Foo, <Foo />;
+>Foo, <Foo /> : any
+>Foo : typeof Foo
+><Foo /> : any
+>Foo : typeof Foo
+
+		// Emit S.Bar
+		Bar, <Bar />;
+>Bar, <Bar /> : any
+>Bar : typeof Bar
+><Bar /> : any
+>Bar : typeof Bar
+	}
+
+}
+
+module M {
+>M : typeof M
+
+	// Emit M.S.Bar
+	S.Bar, <S.Bar />;
+>S.Bar, <S.Bar /> : any
+>S.Bar : typeof Bar
+>S : typeof S
+>Bar : typeof Bar
+><S.Bar /> : any
+>S.Bar : typeof Bar
+>S : typeof S
+>Bar : typeof Bar
+}
+
+module M {
+>M : typeof M
+
+	var M = 100;
+>M : number
+>100 : 100
+
+	// Emit M_1.Foo
+	Foo, <Foo />;
+>Foo, <Foo /> : any
+>Foo : typeof Foo
+><Foo /> : any
+>Foo : typeof Foo
+}
+

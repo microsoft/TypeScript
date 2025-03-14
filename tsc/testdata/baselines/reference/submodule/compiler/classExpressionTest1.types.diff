@@ -1,0 +1,25 @@
+--- old.classExpressionTest1.types
++++ new.classExpressionTest1.types
+@@= skipped -5, +5 lines =@@
+ 
+     class C<X> {
+ >C : C<X>
++>X : X
+ 
+         f<T>() {
+ >f : <T>() => { t: T; x: X; }
++>T : T
+ 
+             var t: T;
+ >t : T
+@@= skipped -12, +14 lines =@@
+ 
+             return { t, x };
+ >{ t, x } : { t: T; x: X; }
+->t : T
+->x : X
++>t : any
++>x : any
+         }
+     }
+ 

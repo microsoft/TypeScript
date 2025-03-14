@@ -1,0 +1,103 @@
+--- old.inferenceLimit.types
++++ new.inferenceLimit.types
+@@= skipped -4, +4 lines =@@
+ >"use strict" : "use strict"
+ 
+ import * as MyModule from "./mymodule";
+->MyModule : typeof MyModule
++>MyModule : typeof import("mymodule")
+ 
+ export class BrokenClass {
+ >BrokenClass : BrokenClass
+@@= skipped -8, +8 lines =@@
+   constructor() {}
+ 
+   public brokenMethod(field: string, value: string) {
+->brokenMethod : (field: string, value: string) => Promise<MyModule.MyModel[]>
++>brokenMethod : (field: string, value: string) => Promise<MyModel[]>
+ >field : string
+ >value : string
+ 
+   return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
+->new Promise<Array<MyModule.MyModel>>((resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    }) : Promise<MyModule.MyModel[]>
++>new Promise<Array<MyModule.MyModel>>((resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    }) : Promise<MyModel[]>
+ >Promise : PromiseConstructor
+ >MyModule : any
+->(resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    } : (resolve: (value: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void, reject: (reason?: any) => void) => Promise<void>
+->resolve : (value: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void
++>(resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    } : (resolve: (value: MyModel[] | PromiseLike<MyModel[]>) => void, reject: (reason?: any) => void) => Promise<void>
++>resolve : (value: MyModel[] | PromiseLike<MyModel[]>) => void
+ >reject : (reason?: any) => void
+ 
+     let result: Array<MyModule.MyModel> = [];
+->result : MyModule.MyModel[]
++>result : MyModel[]
+ >MyModule : any
+ >[] : undefined[]
+ 
+@@= skipped -31, +31 lines =@@
+ 
+         this.doStuff(order.id)
+ >this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          }) : Promise<void>
+->this.doStuff(order.id)          .then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>this.doStuff(order.id)          .then : <TResult1, TResult2>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >this.doStuff(order.id) : Promise<void>
+ >this.doStuff : (id: number) => Promise<void>
+ >this : this
+@@= skipped -10, +10 lines =@@
+ >id : any
+ 
+           .then((items) => {
+->then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >(items) => {            order.items = items;            resolve(order);          } : (items: void) => void
+ >items : void
+ 
+@@= skipped -22, +22 lines =@@
+ 
+     return Promise.all(result.map(populateItems))
+ >Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      }) : Promise<void>
+->Promise.all(result.map(populateItems))      .then : <TResult1 = unknown[], TResult2 = never>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>Promise.all(result.map(populateItems))      .then : <TResult1, TResult2>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >Promise.all(result.map(populateItems)) : Promise<unknown[]>
+->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >Promise : PromiseConstructor
+->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >result.map(populateItems) : Promise<unknown>[]
+->result.map : <U>(callbackfn: (value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg?: any) => U[]
+->result : MyModule.MyModel[]
+->map : <U>(callbackfn: (value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg?: any) => U[]
++>result.map : <U>(callbackfn: (value: MyModel, index: number, array: MyModel[]) => U, thisArg?: any) => U[]
++>result : MyModel[]
++>map : <U>(callbackfn: (value: MyModel, index: number, array: MyModel[]) => U, thisArg?: any) => U[]
+ >populateItems : (order: any) => Promise<unknown>
+ 
+       .then((orders: Array<MyModule.MyModel>) => {
+->then : <TResult1 = unknown[], TResult2 = never>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+->(orders: Array<MyModule.MyModel>) => {        resolve(orders);      } : (orders: Array<MyModule.MyModel>) => void
+->orders : MyModule.MyModel[]
++>then : <TResult1, TResult2>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>(orders: Array<MyModule.MyModel>) => {        resolve(orders);      } : (orders: MyModel[]) => void
++>orders : MyModel[]
+ >MyModule : any
+ 
+         resolve(orders);
+ >resolve(orders) : void
+->resolve : (value: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void
+->orders : MyModule.MyModel[]
++>resolve : (value: MyModel[] | PromiseLike<MyModel[]>) => void
++>orders : MyModel[]
+ 
+       });
+     });
+@@= skipped -36, +36 lines =@@
+ 
+ === mymodule.ts ===
+ export interface MyModel {
++>MyModel : MyModel
++
+     id: number;
+ >id : number
+ }

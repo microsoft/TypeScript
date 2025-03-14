@@ -1,0 +1,20 @@
+--- old.enumConstantMembers.types
++++ new.enumConstantMembers.types
+@@= skipped -78, +78 lines =@@
+ >0.0 : 0
+ 
+     e = NaN,
+->e : E5.d
++>e : E5.e
+ >NaN : number
+ 
+     f = Infinity,
+@@= skipped -41, +41 lines =@@
+ >0.0 : 0
+ 
+     e = NaN,
+->e : E6.d
++>e : E6.e
+ >NaN : number
+ 
+     f = Infinity,

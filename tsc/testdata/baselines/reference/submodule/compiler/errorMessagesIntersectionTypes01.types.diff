@@ -1,0 +1,29 @@
+--- old.errorMessagesIntersectionTypes01.types
++++ new.errorMessagesIntersectionTypes01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === errorMessagesIntersectionTypes01.ts ===
+ interface Foo {
++>Foo : Foo
++
+     fooProp: boolean;
+ >fooProp : boolean
+ }
+ 
+ interface Bar {
++>Bar : Bar
++
+     barProp: string;
+ >barProp : string
+ }
+ 
+ interface FooBar extends Foo, Bar {
++>FooBar : FooBar
+ }
+ 
+ declare function mixBar<T>(obj: T): T & Bar;
+ >mixBar : <T>(obj: T) => T & Bar
++>T : T
+ >obj : T
+ 
+ let fooBar: FooBar = mixBar({

@@ -1,0 +1,232 @@
+//// [tests/cases/conformance/jsx/tsxTypeArgumentResolution.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface Prop {
+>Prop : Prop
+
+    a: number,
+>a : number
+
+    b: string
+>b : string
+}
+
+declare class MyComp<P> extends React.Component<P, {}> {
+>MyComp : MyComp<P>
+>P : P
+>React.Component : any
+>React : any
+>Component : any
+
+    internalProp: P;
+>internalProp : P
+}
+
+let x = <MyComp<Prop> a={10} b="hi" />; // OK
+>x : any
+><MyComp<Prop> a={10} b="hi" /> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+
+x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
+>x = <MyComp<Prop> a={10} b="hi"></MyComp> : any
+>x : any
+><MyComp<Prop> a={10} b="hi"></MyComp> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+>MyComp : typeof MyComp
+
+x = <MyComp<Prop> a={10} b={20} />; // error
+>x = <MyComp<Prop> a={10} b={20} /> : any
+>x : any
+><MyComp<Prop> a={10} b={20} /> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+>20 : 20
+
+x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
+>x = <MyComp<Prop> a={10} b={20}></MyComp> : any
+>x : any
+><MyComp<Prop> a={10} b={20}></MyComp> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+>20 : 20
+>MyComp : typeof MyComp
+
+x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
+>x = <MyComp<Prop, Prop> a={10} b="hi" /> : any
+>x : any
+><MyComp<Prop, Prop> a={10} b="hi" /> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+
+x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
+>x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp> : any
+>x : any
+><MyComp<Prop, Prop> a={10} b="hi"></MyComp> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+>MyComp : typeof MyComp
+
+x = <MyComp<> a={10} b="hi" />; // error
+>x = <MyComp<> a={10} b="hi" /> : any
+>x : any
+><MyComp<> a={10} b="hi" /> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+
+x = <MyComp<> a={10} b="hi"></MyComp>; // error
+>x = <MyComp<> a={10} b="hi"></MyComp> : any
+>x : any
+><MyComp<> a={10} b="hi"></MyComp> : any
+>MyComp : typeof MyComp
+>a : any
+>10 : 10
+>b : any
+>MyComp : typeof MyComp
+
+x= <MyComp<{}> /> // OK
+>x= <MyComp<{}> /> : any
+>x : any
+><MyComp<{}> /> : any
+>MyComp : typeof MyComp
+
+x= <MyComp<{}>></MyComp> // OK
+>x= <MyComp<{}>></MyComp> : any
+>x : any
+><MyComp<{}>></MyComp> : any
+>MyComp : typeof MyComp
+>MyComp : typeof MyComp
+
+declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<P & P2, {}> {
+>MyComp2 : MyComp2<P, P2>
+>P : P
+>a : string
+>P2 : P2
+>React.Component : any
+>React : any
+>Component : any
+
+    internalProp: [P, P2];
+>internalProp : [P, P2]
+}
+x = <MyComp2<{a: string, b: string}> a="a" b="b" />; // OK
+>x = <MyComp2<{a: string, b: string}> a="a" b="b" /> : any
+>x : any
+><MyComp2<{a: string, b: string}> a="a" b="b" /> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : any
+>b : any
+
+x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2>; // OK
+>x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2> : any
+>x : any
+><MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : any
+>b : any
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<Prop> a={10} b="hi" />; // error
+>x = <MyComp2<Prop> a={10} b="hi" /> : any
+>x : any
+><MyComp2<Prop> a={10} b="hi" /> : any
+>MyComp2 : typeof MyComp2
+>a : any
+>10 : 10
+>b : any
+
+x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
+>x = <MyComp2<Prop> a={10} b="hi"></MyComp2> : any
+>x : any
+><MyComp2<Prop> a={10} b="hi"></MyComp2> : any
+>MyComp2 : typeof MyComp2
+>a : any
+>10 : 10
+>b : any
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" />; // OK
+>x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" /> : any
+>x : any
+><MyComp2<{a: string}, {b: string}> a="hi" b="hi" /> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : any
+>b : any
+
+x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2>; // OK
+>x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2> : any
+>x : any
+><MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : any
+>b : any
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" />; // error
+>x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" /> : any
+>x : any
+><MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" /> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : any
+>b : any
+
+x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
+>x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2> : any
+>x : any
+><MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : string
+>a : any
+>b : any
+>MyComp2 : typeof MyComp2
+
+x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" />; // error
+>x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" /> : any
+>x : any
+><MyComp2<{a: string}, {b: number}> a="hi" b="hi" /> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : number
+>a : any
+>b : any
+
+x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2>; // error
+>x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2> : any
+>x : any
+><MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2> : any
+>MyComp2 : typeof MyComp2
+>a : string
+>b : number
+>a : any
+>b : any
+>MyComp2 : typeof MyComp2
+

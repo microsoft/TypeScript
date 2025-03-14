@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts] ////
+
+=== stringLiteralsWithTypeAssertions01.ts ===
+let fooOrBar: "foo" | "bar";
+>fooOrBar : "bar" | "foo"
+
+let a = "foo" as "bar";
+>a : "bar"
+>"foo" as "bar" : "bar"
+>"foo" : "foo"
+
+let b = "bar" as "foo";
+>b : "foo"
+>"bar" as "foo" : "foo"
+>"bar" : "bar"
+
+let c = fooOrBar as "foo";
+>c : "foo"
+>fooOrBar as "foo" : "foo"
+>fooOrBar : "bar" | "foo"
+
+let d = fooOrBar as "bar";
+>d : "bar"
+>fooOrBar as "bar" : "bar"
+>fooOrBar : "bar" | "foo"
+
+let e = fooOrBar as "baz";
+>e : "baz"
+>fooOrBar as "baz" : "baz"
+>fooOrBar : "bar" | "foo"
+
+let f = "baz" as typeof fooOrBar;
+>f : "bar" | "foo"
+>"baz" as typeof fooOrBar : "bar" | "foo"
+>"baz" : "baz"
+

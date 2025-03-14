@@ -1,0 +1,11 @@
+--- old.controlFlowDestructuringParameters.types
++++ new.controlFlowDestructuringParameters.types
+@@= skipped -13, +13 lines =@@
+ >map : <U>(callbackfn: (value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg?: any) => U[]
+ 
+   ({ x }) => x
+->({ x }) => x : ({ x }: { x: number; }) => number
++>({ x }) => x : (__0: { x: number; }) => number
+ >x : number
+ >x : number
+ 

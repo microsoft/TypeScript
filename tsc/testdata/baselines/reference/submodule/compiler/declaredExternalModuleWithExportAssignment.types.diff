@@ -1,0 +1,37 @@
+--- old.declaredExternalModuleWithExportAssignment.types
++++ new.declaredExternalModuleWithExportAssignment.types
+@@= skipped -4, +4 lines =@@
+ >'connect' : typeof import("connect")
+ 
+     interface connectModule {
++>connectModule : connectModule
++
+         (res, req, next): void;
+ >res : any
+ >req : any
+@@= skipped -7, +9 lines =@@
+     }
+ 
+     interface connectExport {
++>connectExport : connectExport
++
+         use: (mod: connectModule) => connectExport;
+ >use : (mod: connectModule) => connectExport
+ >mod : connectModule
+@@= skipped -10, +12 lines =@@
+     }
+ 
+     var server: {
+->server : { (): connectExport; test1: connectModule; test2(): connectModule; }
++>server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+ 
+         (): connectExport;
+         test1: connectModule;
+@@= skipped -11, +11 lines =@@
+ 
+     };
+     export = server;
+->server : { (): connectExport; test1: connectModule; test2(): connectModule; }
++>server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+ }
+ 

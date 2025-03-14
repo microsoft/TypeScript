@@ -1,0 +1,18 @@
+--- old.doNotWidenAtObjectLiteralPropertyAssignment.types
++++ new.doNotWidenAtObjectLiteralPropertyAssignment.types
+@@= skipped -1, +1 lines =@@
+ 
+ === doNotWidenAtObjectLiteralPropertyAssignment.ts ===
+ interface ITestEventInterval {
++>ITestEventInterval : ITestEventInterval
++
+     begin: number;
+ >begin : number
+ }
+ 
+ interface IIntervalTreeNode {
++>IIntervalTreeNode : IIntervalTreeNode
++
+     interval: ITestEventInterval;
+ >interval : ITestEventInterval
+ 

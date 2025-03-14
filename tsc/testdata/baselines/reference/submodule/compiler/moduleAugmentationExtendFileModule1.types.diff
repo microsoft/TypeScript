@@ -1,0 +1,23 @@
+--- old.moduleAugmentationExtendFileModule1.types
++++ new.moduleAugmentationExtendFileModule1.types
+@@= skipped -18, +18 lines =@@
+ >"./observable" : typeof import("observable")
+ 
+     interface Observable<T> {
++>Observable : Observable<T>
++>T : T
++
+         map<U>(proj: (e:T) => U): Observable<U>
+ >map : <U>(proj: (e: T) => U) => Observable<U>
++>U : U
+ >proj : (e: T) => U
+ >e : T
+     }
+@@= skipped -16, +20 lines =@@
+ === observable.ts ===
+ export declare class Observable<T> {
+ >Observable : Observable<T>
++>T : T
+ 
+     filter(pred: (e:T) => boolean): Observable<T>;
+ >filter : (pred: (e: T) => boolean) => Observable<T>

@@ -1,0 +1,11 @@
+--- old.decoratorMetadataWithTypeOnlyImport2.types
++++ new.decoratorMetadataWithTypeOnlyImport2.types
+@@= skipped -22, +22 lines =@@
+ >decorator : any
+ 
+   field: Services.Service;
+->field : Services.Service
++>field : Service
+ >Services : any
+ }
+ 

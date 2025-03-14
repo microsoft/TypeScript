@@ -1,0 +1,10 @@
+--- old.declInput.types
++++ new.declInput.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declInput.ts ===
+ interface bar {
++>bar : bar
+ 
+ }
+ 

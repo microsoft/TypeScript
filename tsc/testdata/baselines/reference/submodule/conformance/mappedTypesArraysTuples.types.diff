@@ -1,0 +1,142 @@
+--- old.mappedTypesArraysTuples.types
++++ new.mappedTypesArraysTuples.types
+@@= skipped -2, +2 lines =@@
+ === mappedTypesArraysTuples.ts ===
+ type Box<T> = { value: T };
+ >Box : Box<T>
++>T : T
+ >value : T
+ 
+ type Boxified<T> = { [P in keyof T]: Box<T[P]> };
+ >Boxified : Boxified<T>
++>T : T
++>P : P
+ 
+ type T00 = Boxified<[number, string?, ...boolean[]]>;
+ >T00 : [Box<number>, (Box<string | undefined> | undefined)?, ...Box<boolean>[]]
+@@= skipped -69, +72 lines =@@
+ 
+ type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
+ >ReadWrite : ReadWrite<T>
++>T : T
++>P : P
+ 
+ type T50 = Readonly<string[]>;
+ >T50 : readonly string[]
+ 
+ type T51 = Readonly<[number, number]>;
+->T51 : readonly [number, number]
++>T51 : [number, number]
+ 
+ type T52 = Partial<Readonly<string[]>>;
+ >T52 : readonly (string | undefined)[]
+@@= skipped -18, +20 lines =@@
+ 
+ declare function unboxify<T>(x: Boxified<T>): T;
+ >unboxify : <T>(x: Boxified<T>) => T
++>T : T
+ >x : Boxified<T>
+ 
+ declare let x10: [Box<number>, Box<string>, ...Box<boolean>[]];
+@@= skipped -33, +34 lines =@@
+ 
+ declare function nonpartial<T>(x: Partial<T>): T;
+ >nonpartial : <T>(x: Partial<T>) => T
++>T : T
+ >x : Partial<T>
+ 
+ declare let x20: [number | undefined, string?, ...boolean[]];
+@@= skipped -21, +22 lines =@@
+ >x21 : (number | undefined)[]
+ 
+ declare let x22: { a: number | undefined, b?: string[] };
+->x22 : { a: number | undefined; b?: string[]; }
++>x22 : { a: number | undefined; b?: string[] | undefined; }
+ >a : number | undefined
+ >b : string[] | undefined
+ 
+@@= skipped -8, +8 lines =@@
+ >y22 : { a: number; b: string[]; }
+ >nonpartial(x22) : { a: number; b: string[]; }
+ >nonpartial : <T>(x: Partial<T>) => T
+->x22 : { a: number | undefined; b?: string[]; }
++>x22 : { a: number | undefined; b?: string[] | undefined; }
+ 
+ type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+ >__Awaited : __Awaited<T>
++>T : T
++>U : U
+ 
+ type Awaitified<T> = { [P in keyof T]: __Awaited<T[P]> };
+ >Awaitified : Awaitified<T>
++>T : T
++>P : P
+ 
+ declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
+ >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
++>T : T
+ >values : T
+ 
+ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
+@@= skipped -52, +57 lines =@@
+ 
+ function f2<T extends any[]>(a: Boxified<T>) {
+ >f2 : <T extends any[]>(a: Boxified<T>) => void
++>T : T
+ >a : Boxified<T>
+ 
+     let x: Box<any> | undefined = a.pop();
+@@= skipped -22, +23 lines =@@
+ 
+ type ElementType<T> = T extends Array<infer U> ? U : never;
+ >ElementType : ElementType<T>
++>T : T
++>U : U
+ 
+ type Mapped<T> = { [K in keyof T]: T[K] };
+ >Mapped : Mapped<T>
++>T : T
++>K : K
+ 
+ type F<T> = ElementType<Mapped<T>>;
+ >F : F<T>
++>T : T
+ 
+ type R1 = F<[string, number, boolean]>;  // string | number | boolean
+ >R1 : string | number | boolean
+@@= skipped -21, +26 lines =@@
+ 
+ declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
+ >mapArray : <T extends any[]>(arr: T) => Mapped<T>
++>T : T
+ >arr : T
+ 
+ function acceptMappedArray<T extends any[]>(arr: T) {
+ >acceptMappedArray : <T extends any[]>(arr: T) => void
++>T : T
+ >arr : T
+ 
+     acceptArray(mapArray(arr));
+ >acceptArray(mapArray(arr)) : void
+ >acceptArray : (arr: any[]) => void
+ >mapArray(arr) : Mapped<T>
+->mapArray : <T_1 extends any[]>(arr: T_1) => Mapped<T_1>
++>mapArray : <T extends any[]>(arr: T) => Mapped<T>
+ >arr : T
+ }
+ 
+@@= skipped -18, +20 lines =@@
+ 
+ type Unconstrained<T> = ElementType<Mapped<T>>;
+ >Unconstrained : Unconstrained<T>
++>T : T
+ 
+ type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
+ >T1 : string | number | boolean
+ 
+ type Constrained<T extends any[]> = ElementType<Mapped<T>>;
+ >Constrained : Constrained<T>
++>T : T
+ 
+ type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
+ >T2 : string | number | boolean

@@ -1,0 +1,15 @@
+--- old.declarationEmitExpressionWithNonlocalPrivateUniqueSymbol.types
++++ new.declarationEmitExpressionWithNonlocalPrivateUniqueSymbol.types
+@@= skipped -11, +11 lines =@@
+ 
+ === b.ts ===
+ import { A } from './a';
+->A : { readonly A: unique symbol; }
++>A : AX
+ 
+ export const A1 = A;
+->A1 : { readonly A: unique symbol; }
+->A : { readonly A: unique symbol; }
++>A1 : AX
++>A : AX
+ 

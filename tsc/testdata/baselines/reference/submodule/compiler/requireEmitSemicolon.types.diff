@@ -1,0 +1,37 @@
+--- old.requireEmitSemicolon.types
++++ new.requireEmitSemicolon.types
+@@= skipped -2, +2 lines =@@
+ === requireEmitSemicolon_1.ts ===
+ ///<reference path='requireEmitSemicolon_0.ts'/>
+ import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
+->P : typeof P
++>P : any
+ 
+ export module Database {
+ >Database : typeof Database
+@@= skipped -9, +9 lines =@@
+ >DB : DB
+ 
+ 	    public findPerson(id: number): P.Models.Person {
+->findPerson : (id: number) => P.Models.Person
++>findPerson : (id: number) => Person
+ >id : number
+ >P : any
+ >Models : any
+ 
+ 	        return new P.Models.Person("Rock");
+->new P.Models.Person("Rock") : P.Models.Person
+->P.Models.Person : typeof P.Models.Person
+->P.Models : typeof P.Models
+->P : typeof P
+->Models : typeof P.Models
+->Person : typeof P.Models.Person
++>new P.Models.Person("Rock") : any
++>P.Models.Person : any
++>P.Models : any
++>P : any
++>Models : any
++>Person : any
+ >"Rock" : "Rock"
+ 	    }
+ 	}

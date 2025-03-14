@@ -1,0 +1,29 @@
+--- old.commentsInheritance.types
++++ new.commentsInheritance.types
+@@= skipped -2, +2 lines =@@
+ === commentsInheritance.ts ===
+ /** i1 is interface with properties*/
+ interface i1 {
++>i1 : i1
++
+     /** i1_p1*/
+     i1_p1: number;
+ >i1_p1 : number
+@@= skipped -235, +237 lines =@@
+ >10 : 10
+ 
+ interface i2 {
++>i2 : i2
++
+     /** i2_p1*/
+     i2_p1: number;
+ >i2_p1 : number
+@@= skipped -44, +46 lines =@@
+ >nc_l1 : () => void
+ }
+ interface i3 extends i2 {
++>i3 : i3
++
+     /** i3 p1 */
+     p1: number;
+ >p1 : number

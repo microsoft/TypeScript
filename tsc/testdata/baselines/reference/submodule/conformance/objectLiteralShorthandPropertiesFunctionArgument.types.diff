@@ -1,0 +1,13 @@
+--- old.objectLiteralShorthandPropertiesFunctionArgument.types
++++ new.objectLiteralShorthandPropertiesFunctionArgument.types
+@@= skipped -11, +11 lines =@@
+ var person = { name, id };
+ >person : { name: string; id: number; }
+ >{ name, id } : { name: string; id: number; }
+->name : string
+->id : number
++>name : any
++>id : any
+ 
+ function foo(p: { name: string; id: number }) { }
+ >foo : (p: { name: string; id: number; }) => void

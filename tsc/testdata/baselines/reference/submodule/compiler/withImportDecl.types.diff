@@ -1,0 +1,31 @@
+--- old.withImportDecl.types
++++ new.withImportDecl.types
+@@= skipped -79, +79 lines =@@
+ }
+ 
+ import m3 = require("withImportDecl_0");
+->m3 : typeof m3
++>m3 : any
+ 
+ var b = new m3.A();
+->b : m3.A
+->new m3.A() : m3.A
+->m3.A : typeof m3.A
+->m3 : typeof m3
+->A : typeof m3.A
++>b : any
++>new m3.A() : any
++>m3.A : any
++>m3 : any
++>A : any
+ 
+ b.foo;
+->b.foo : string
+->b : m3.A
+->foo : string
++>b.foo : any
++>b : any
++>foo : any
+ 
+ === withImportDecl_0.ts ===
+ export class A { foo: string; }

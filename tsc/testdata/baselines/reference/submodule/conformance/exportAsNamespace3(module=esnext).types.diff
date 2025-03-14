@@ -1,0 +1,29 @@
+--- old.exportAsNamespace3(module=esnext).types
++++ new.exportAsNamespace3(module=esnext).types
+@@= skipped -42, +42 lines =@@
+ 
+ === 2.ts ===
+ import * as foo from './1'
+->foo : typeof foo
++>foo : typeof import("1")
+ 
+ foo.ns.a;
+ >foo.ns.a : 1
+->foo.ns : typeof foo.ns
+->foo : typeof foo
+->ns : typeof foo.ns
++>foo.ns : typeof import("0")
++>foo : typeof import("1")
++>ns : typeof import("0")
+ >a : 1
+ 
+ foo.ns.b;
+ >foo.ns.b : 2
+->foo.ns : typeof foo.ns
+->foo : typeof foo
+->ns : typeof foo.ns
++>foo.ns : typeof import("0")
++>foo : typeof import("1")
++>ns : typeof import("0")
+ >b : 2
+ 

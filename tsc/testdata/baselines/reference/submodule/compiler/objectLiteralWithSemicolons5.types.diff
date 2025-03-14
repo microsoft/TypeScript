@@ -1,0 +1,13 @@
+--- old.objectLiteralWithSemicolons5.types
++++ new.objectLiteralWithSemicolons5.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectLiteralWithSemicolons5.ts ===
+ var v = { foo() { }; a: b; get baz() { }; }
+->v : { foo(): void; a: any; readonly baz: void; }
+->{ foo() { }; a: b; get baz() { }; } : { foo(): void; a: any; readonly baz: void; }
++>v : { foo: () => void; a: any; readonly baz: void; }
++>{ foo() { }; a: b; get baz() { }; } : { foo: () => void; a: any; readonly baz: void; }
+ >foo : () => void
+ >a : any
+ >b : any

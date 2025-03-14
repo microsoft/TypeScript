@@ -1,0 +1,66 @@
+--- old.varRequireFromTypescript.types
++++ new.varRequireFromTypescript.types
+@@= skipped -1, +1 lines =@@
+ 
+ === use.js ===
+ var ex = require('./ex')
+->ex : typeof ex
+->require('./ex') : typeof ex
++>ex : any
++>require('./ex') : any
+ >require : any
+ >'./ex' : "./ex"
+ 
+ // values work
+ var crunch = new ex.Crunch(1);
+->crunch : ex.Crunch
+->new ex.Crunch(1) : ex.Crunch
+->ex.Crunch : typeof ex.Crunch
+->ex : typeof ex
+->Crunch : typeof ex.Crunch
++>crunch : any
++>new ex.Crunch(1) : any
++>ex.Crunch : any
++>ex : any
++>Crunch : any
+ >1 : 1
+ 
+ crunch.n
+->crunch.n : number
+->crunch : ex.Crunch
+->n : number
++>crunch.n : any
++>crunch : any
++>n : any
+ 
+ 
+ // types work
+@@= skipped -26, +26 lines =@@
+  * @param {ex.Crunch} wrap
+  */
+ function f(greatest, wrap) {
+->f : (greatest: ex.Greatest, wrap: ex.Crunch) => void
+->greatest : ex.Greatest
+->wrap : ex.Crunch
++>f : (greatest: any, wrap: any) => void
++>greatest : any
++>wrap : any
+ 
+     greatest.day
+->greatest.day : 1
+->greatest : ex.Greatest
+->day : 1
++>greatest.day : any
++>greatest : any
++>day : any
+ 
+     wrap.n
+->wrap.n : number
+->wrap : ex.Crunch
+->n : number
++>wrap.n : any
++>wrap : any
++>n : any
+ }
+ 
+ === ex.d.ts ===

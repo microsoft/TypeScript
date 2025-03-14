@@ -1,0 +1,55 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importClause_namespaceImport.ts] ////
+
+=== /a.ts ===
+export class A { a!: string }
+>A : A
+>a : string
+
+export class B { b!: number }
+>B : B
+>b : number
+
+export type C<T> = T;
+>C : T
+>T : T
+
+export const Value = {};
+>Value : {}
+>{} : {}
+
+=== /b.ts ===
+import type * as types from './a';
+>types : typeof import("/a")
+
+types;
+>types : typeof import("/a")
+
+types.Value;
+>types.Value : {}
+>types : typeof import("/a")
+>Value : {}
+
+let v: types.Value;
+>v : Value
+>types : any
+
+const a: types.A = {};
+>a : A
+>types : any
+>{} : {}
+
+const b: types.B = {};
+>b : B
+>types : any
+>{} : {}
+
+const c: types.C<string> = "";
+>c : string
+>types : any
+>"" : ""
+
+const d = { types };
+>d : { types: typeof import("/a"); }
+>{ types } : { types: typeof import("/a"); }
+>types : any
+

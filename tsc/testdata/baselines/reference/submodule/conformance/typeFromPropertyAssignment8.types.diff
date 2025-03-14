@@ -1,0 +1,129 @@
+--- old.typeFromPropertyAssignment8.types
++++ new.typeFromPropertyAssignment8.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ var my = my || {};
+->my : typeof my
+->my || {} : typeof my | {}
+->my : typeof my
++>my : any
++>my || {} : any
++>my : any
+ >{} : {}
+ 
+ my.app = my.app || {};
+->my.app = my.app || {} : typeof my.app
+->my.app : typeof my.app
+->my : typeof my
+->app : typeof my.app
+->my.app || {} : {}
+->my.app : typeof my.app
+->my : typeof my
+->app : typeof my.app
++>my.app = my.app || {} : any
++>my.app : any
++>my : any
++>app : any
++>my.app || {} : any
++>my.app : any
++>my : any
++>app : any
+ >{} : {}
+ 
+ my.app.Application = (function () {
+ >my.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
+->my.app.Application : () => void
+->my.app : typeof my.app
+->my : typeof my
+->app : typeof my.app
+->Application : () => void
++>my.app.Application : any
++>my.app : any
++>my : any
++>app : any
++>Application : any
+ >(function () {var Application = function () {    //...};return Application;})() : () => void
+ >(function () {var Application = function () {    //...};return Application;}) : () => () => void
+ >function () {var Application = function () {    //...};return Application;} : () => () => void
+@@= skipped -38, +38 lines =@@
+ 
+ })();
+ my.app.Application()
+->my.app.Application() : void
+->my.app.Application : () => void
+->my.app : typeof my.app
+->my : typeof my
+->app : typeof my.app
+->Application : () => void
++>my.app.Application() : any
++>my.app.Application : any
++>my.app : any
++>my : any
++>app : any
++>Application : any
+ 
+ === b.js ===
+ var min = window.min || {};
+->min : typeof min
+->window.min || {} : typeof min | {}
+->window.min : typeof min
++>min : any
++>window.min || {} : any
++>window.min : any
+ >window : Window & typeof globalThis
+->min : typeof min
++>min : any
+ >{} : {}
+ 
+ min.app = min.app || {};
+->min.app = min.app || {} : typeof min.app
+->min.app : typeof min.app
+->min : typeof min
+->app : typeof min.app
+->min.app || {} : {}
+->min.app : typeof min.app
+->min : typeof min
+->app : typeof min.app
++>min.app = min.app || {} : any
++>min.app : any
++>min : any
++>app : any
++>min.app || {} : any
++>min.app : any
++>min : any
++>app : any
+ >{} : {}
+ 
+ min.app.Application = (function () {
+ >min.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
+->min.app.Application : () => void
+->min.app : typeof min.app
+->min : typeof min
+->app : typeof min.app
+->Application : () => void
++>min.app.Application : any
++>min.app : any
++>min : any
++>app : any
++>Application : any
+ >(function () {var Application = function () {    //...};return Application;})() : () => void
+ >(function () {var Application = function () {    //...};return Application;}) : () => () => void
+ >function () {var Application = function () {    //...};return Application;} : () => () => void
+@@= skipped -49, +49 lines =@@
+ 
+ })();
+ min.app.Application()
+->min.app.Application() : void
+->min.app.Application : () => void
+->min.app : typeof min.app
+->min : typeof min
+->app : typeof min.app
+->Application : () => void
++>min.app.Application() : any
++>min.app.Application : any
++>min.app : any
++>min : any
++>app : any
++>Application : any
+ 

@@ -1,0 +1,11 @@
+--- old.exportDeclaration_moduleSpecifier.types
++++ new.exportDeclaration_moduleSpecifier.types
+@@= skipped -5, +5 lines =@@
+ 
+ === /b.ts ===
+ export type { A } from './a';
+->A : import("/a").A
++>A : A
+ 
+ === /c.ts ===
+ import { A } from './b';

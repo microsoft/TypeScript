@@ -1,0 +1,9 @@
+--- old.exportDeclaration_moduleSpecifier-isolatedModules.types
++++ new.exportDeclaration_moduleSpecifier-isolatedModules.types
+@@= skipped -5, +5 lines =@@
+ 
+ === /b.ts ===
+ export type { A } from './a'; // should not error, but would without `type`
+->A : import("/a").A
++>A : A
+ 

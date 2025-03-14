@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/declarationEmitWithDefaultAsComputedName2.ts] ////
+
+=== other.ts ===
+type Experiment<Name> = {
+>Experiment : Experiment<Name>
+>Name : Name
+
+    name: Name;
+>name : Name
+
+};
+declare const createExperiment: <Name extends string>(
+>createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
+>Name : Name
+
+    options: Experiment<Name>
+>options : Experiment<Name>
+
+) => Experiment<Name>;
+export default createExperiment({
+>createExperiment({    name: "foo"}) : Experiment<"foo">
+>createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
+>{    name: "foo"} : { name: "foo"; }
+
+    name: "foo"
+>name : "foo"
+>"foo" : "foo"
+
+});
+
+=== main.ts ===
+import * as other2 from "./other";
+>other2 : typeof import("other")
+
+export const obj = {
+>obj : { foo: number; }
+>{    [other2.default.name]: 1} : { foo: number; }
+
+    [other2.default.name]: 1
+>[other2.default.name] : number
+>other2.default.name : "foo"
+>other2.default : Experiment<"foo">
+>other2 : typeof import("other")
+>default : Experiment<"foo">
+>name : "foo"
+>1 : 1
+
+};

@@ -1,0 +1,22 @@
+--- old.declarationEmitThisPredicatesWithPrivateName02.types
++++ new.declarationEmitThisPredicatesWithPrivateName02.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitThisPredicatesWithPrivateName02.ts ===
+ interface Foo {
++>Foo : Foo
++
+     a: string;
+ >a : string
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ export const obj = {
+->obj : { m(): this is Foo; }
+->{    m(): this is Foo {        let dis = this as {} as Foo;        return dis.a != null && dis.b != null && dis.c != null;    }} : { m(): this is Foo; }
++>obj : { m: () => this is Foo; }
++>{    m(): this is Foo {        let dis = this as {} as Foo;        return dis.a != null && dis.b != null && dis.c != null;    }} : { m: () => this is Foo; }
+ 
+     m(): this is Foo {
+ >m : () => this is Foo

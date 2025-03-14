@@ -1,0 +1,64 @@
+--- old.declarationEmitExpandoWithGenericConstraint.types
++++ new.declarationEmitExpandoWithGenericConstraint.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitExpandoWithGenericConstraint.ts ===
+ export interface Point {
++>Point : Point
++
+     readonly x: number;
+ >x : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ export interface Rect<p extends Point> {
++>Rect : Rect<p>
++>p : p
++
+     readonly a: p;
+ >a : p
+ 
+@@= skipped -8, +11 lines =@@
+ }
+ 
+ export const Point = (x: number, y: number): Point => ({ x, y });
+->Point : { (x: number, y: number): Point; zero(): Point; }
+->(x: number, y: number): Point => ({ x, y }) : { (x: number, y: number): Point; zero(): Point; }
++>Point : { (x: number, y: number): Point; zero: () => Point; }
++>(x: number, y: number): Point => ({ x, y }) : { (x: number, y: number): Point; zero: () => Point; }
+ >x : number
+ >y : number
+ >({ x, y }) : { x: number; y: number; }
+ >{ x, y } : { x: number; y: number; }
+->x : number
+->y : number
++>x : any
++>y : any
+ 
+ export const Rect = <p extends Point>(a: p, b: p): Rect<p> => ({ a, b });
+ >Rect : <p extends Point>(a: p, b: p) => Rect<p>
+ ><p extends Point>(a: p, b: p): Rect<p> => ({ a, b }) : <p extends Point>(a: p, b: p) => Rect<p>
++>p : p
+ >a : p
+ >b : p
+ >({ a, b }) : { a: p; b: p; }
+ >{ a, b } : { a: p; b: p; }
+->a : p
+->b : p
++>a : any
++>b : any
+ 
+ Point.zero = (): Point => Point(0, 0);
+ >Point.zero = (): Point => Point(0, 0) : () => Point
+ >Point.zero : () => Point
+->Point : { (x: number, y: number): Point; zero(): Point; }
++>Point : { (x: number, y: number): Point; zero: () => Point; }
+ >zero : () => Point
+ >(): Point => Point(0, 0) : () => Point
+ >Point(0, 0) : Point
+->Point : { (x: number, y: number): Point; zero(): Point; }
++>Point : { (x: number, y: number): Point; zero: () => Point; }
+ >0 : 0
+ >0 : 0
+ 

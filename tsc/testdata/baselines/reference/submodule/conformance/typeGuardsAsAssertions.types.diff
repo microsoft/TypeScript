@@ -1,0 +1,218 @@
+--- old.typeGuardsAsAssertions.types
++++ new.typeGuardsAsAssertions.types
+@@= skipped -7, +7 lines =@@
+ 
+ export type Optional<a> = Some<a> | None;
+ >Optional : Optional<a>
++>a : a
+ 
+ export interface None { readonly none: string; }
++>None : None
+ >none : string
+ 
+ export interface Some<a> { readonly some: a; }
++>Some : Some<a>
++>a : a
+ >some : a
+ 
+ export const none : None = { none: '' };
+@@= skipped -15, +19 lines =@@
+ 
+ export function isSome<a>(value: Optional<a>): value is Some<a> {
+ >isSome : <a>(value: Optional<a>) => value is Some<a>
++>a : a
+ >value : Optional<a>
+ 
+     return 'some' in value;
+@@= skipped -10, +11 lines =@@
+ 
+ function someFrom<a>(some: a) {
+ >someFrom : <a>(some: a) => { some: a; }
++>a : a
+ >some : a
+ 
+     return { some };
+ >{ some } : { some: a; }
+->some : a
++>some : any
+ }
+ 
+ export function fn<r>(makeSome: () => r): void {
+ >fn : <r>(makeSome: () => r) => void
++>r : r
+ >makeSome : () => r
+ 
+     let result: Optional<r> = none;
+@@= skipped -65, +67 lines =@@
+ >x : string | number | boolean
+ >typeof x === "string" ? x.slice() : "abc" : string
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ >x.slice() : string
+->x.slice : (start?: number, end?: number) => string
++>x.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x : string
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ >"abc" : "abc"
+ 
+         x;  // string
+@@= skipped -34, +34 lines =@@
+ 
+         if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ 
+@@= skipped -8, +8 lines =@@
+ >x = x.slice() : string
+ >x : string | number | boolean
+ >x.slice() : string
+->x.slice : (start?: number, end?: number) => string
++>x.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x : string
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+         }
+         else {
+             x = "abc";
+@@= skipped -51, +51 lines =@@
+ 
+     if (typeof x === "string") {
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : undefined
+ >"string" : "string"
+ 
+@@= skipped -43, +43 lines =@@
+ 
+     if (typeof x === "boolean") {
+ >typeof x === "boolean" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : undefined
+ >"boolean" : "boolean"
+ 
+@@= skipped -18, +18 lines =@@
+     if (typeof x === "string" && typeof x === "number") {
+ >typeof x === "string" && typeof x === "number" : boolean
+ >typeof x === "string" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number
+ >"string" : "string"
+ >typeof x === "number" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string
+ >"number" : "number"
+ 
+@@= skipped -27, +27 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string | null | undefined
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ 
+     x = "";
+ >x = "" : ""
+@@= skipped -12, +12 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ 
+     x = undefined;
+ >x = undefined : undefined
+@@= skipped -12, +12 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string | null | undefined
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ 
+     x = null;
+ >x = null : null
+@@= skipped -11, +11 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string | null | undefined
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ 
+     x = <undefined | null>undefined;
+ >x = <undefined | null>undefined : null | undefined
+@@= skipped -13, +13 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string | null | undefined
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ 
+     x = <string | undefined>"";
+ >x = <string | undefined>"" : string | undefined
+@@= skipped -13, +13 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string | undefined
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ 
+     x = <string | null>"";
+ >x = <string | null>"" : string | null
+@@= skipped -13, +13 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string | null
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ }
+ 
+ function f7() {
+@@= skipped -14, +14 lines =@@
+ 
+     x!.slice();
+ >x!.slice() : string
+->x!.slice : (start?: number, end?: number) => string
++>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+ >x! : string
+ >x : string
+->slice : (start?: number, end?: number) => string
++>slice : (start?: number | undefined, end?: number | undefined) => string
+ }
+ 

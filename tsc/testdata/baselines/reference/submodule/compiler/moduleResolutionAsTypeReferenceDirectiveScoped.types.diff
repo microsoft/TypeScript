@@ -1,0 +1,42 @@
+--- old.moduleResolutionAsTypeReferenceDirectiveScoped.types
++++ new.moduleResolutionAsTypeReferenceDirectiveScoped.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.ts ===
+ import { typesCache } from "@scoped/typescache";
+->typesCache : number
++>typesCache : any
+ 
+ import { mangledTypes } from "@mangled/typescache";
+ >mangledTypes : any
+ 
+ import { nodeModulesCache } from "@scoped/nodemodulescache";
+->nodeModulesCache : number
++>nodeModulesCache : any
+ 
+ import { mangledNodeModules } from "@mangled/nodemodulescache";
+ >mangledNodeModules : any
+@@= skipped -15, +15 lines =@@
+ >atTypesCache : any
+ 
+ import { mangledAtTypesCache } from "@mangled/attypescache";
+->mangledAtTypesCache : number
++>mangledAtTypesCache : any
+ 
+-=== /a/types/dummy/index.d.ts ===
+-export const dummy: number;
+->dummy : number
+-
+-=== /a/types/@scoped/typescache/index.d.ts ===
+-export const typesCache: number;
+->typesCache : number
+-
+-=== /a/node_modules/@scoped/nodemodulescache/index.d.ts ===
+-export const nodeModulesCache: number;
+->nodeModulesCache : number
+-
+-=== /a/node_modules/@types/mangled__attypescache/index.d.ts ===
+-export const mangledAtTypesCache: number;
+->mangledAtTypesCache : number
+-
+-

@@ -1,0 +1,160 @@
+--- old.literalFreshnessPropagationOnNarrowing.types
++++ new.literalFreshnessPropagationOnNarrowing.types
+@@= skipped -10, +10 lines =@@
+     let obj = { b };
+ >obj : { b: boolean; }
+ >{ b } : { b: boolean; }
+->b : boolean
++>b : any
+ 
+     // Desired: OK
+     // 3.0: OK
+@@= skipped -18, +18 lines =@@
+ >f2 : () => void
+ 
+     type Element = (string | false);
+->Element : string | false
++>Element : Element
+ >false : false
+ 
+     type ElementOrArray = Element | Element[]; 
+->ElementOrArray : (string | false) | (string | false)[]
++>ElementOrArray : ElementOrArray
+ 
+     let el: Element = null as any;
+->el : string | false
++>el : Element
+ >null as any : any
+ 
+     let arr: Element[] = null as any;
+->arr : (string | false)[]
++>arr : Element[]
+ >null as any : any
+ 
+     let elOrA: ElementOrArray = null as any;
+->elOrA : (string | false) | (string | false)[]
++>elOrA : ElementOrArray
+ >null as any : any
+ 
+     // Desired/actual: All OK
+     let a1: ElementOrArray = el;
+->a1 : (string | false) | (string | false)[]
+->el : string | false
++>a1 : ElementOrArray
++>el : Element
+ 
+     let a2: ElementOrArray = arr;
+->a2 : (string | false) | (string | false)[]
+->arr : (string | false)[]
++>a2 : ElementOrArray
++>arr : Element[]
+ 
+     let a3: ElementOrArray = [el];
+->a3 : (string | false) | (string | false)[]
+->[el] : (string | false)[]
+->el : string | false
++>a3 : ElementOrArray
++>[el] : Element[]
++>el : Element
+ 
+     let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
+->a4 : (string | false) | (string | false)[]
+->Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
++>a4 : ElementOrArray
++>Array.isArray(elOrA) ? elOrA : [elOrA] : Element[]
+ >Array.isArray(elOrA) : boolean
+ >Array.isArray : (arg: any) => arg is any[]
+ >Array : ArrayConstructor
+ >isArray : (arg: any) => arg is any[]
+->elOrA : (string | false) | (string | false)[]
+->elOrA : (string | false)[]
+->[elOrA] : (string | false)[]
+->elOrA : string | false
++>elOrA : ElementOrArray
++>elOrA : Element[]
++>[elOrA] : Element[]
++>elOrA : Element
+ 
+     // Desired: OK
+     // 3.0: Error
+     // 3.1: OK
+     let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
+->a5 : (string | false) | (string | false)[]
+->[...Array.isArray(elOrA) ? elOrA : [elOrA]] : (string | false)[]
+->...Array.isArray(elOrA) ? elOrA : [elOrA] : string | false
+->Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
++>a5 : ElementOrArray
++>[...Array.isArray(elOrA) ? elOrA : [elOrA]] : Element[]
++>...Array.isArray(elOrA) ? elOrA : [elOrA] : Element
++>Array.isArray(elOrA) ? elOrA : [elOrA] : Element[]
+ >Array.isArray(elOrA) : boolean
+ >Array.isArray : (arg: any) => arg is any[]
+ >Array : ArrayConstructor
+ >isArray : (arg: any) => arg is any[]
+->elOrA : (string | false) | (string | false)[]
+->elOrA : (string | false)[]
+->[elOrA] : (string | false)[]
+->elOrA : string | false
++>elOrA : ElementOrArray
++>elOrA : Element[]
++>[elOrA] : Element[]
++>elOrA : Element
+ }
+ 
+ function f3() {
+ >f3 : () => void
+ 
+     type XY = 'x' | 'y';
+->XY : "x" | "y"
++>XY : XY
+ 
+     const x: XY = 'x';
+->x : "x" | "y"
++>x : XY
+ >'x' : "x"
+ 
+     let x2 = x;
+@@= skipped -86, +86 lines =@@
+ 
+     // Desired/actual: All OK
+     let x3: XY = x;
+->x3 : "x" | "y"
++>x3 : XY
+ >x : "x"
+ 
+     x3 = 'y';
+ >x3 = 'y' : "y"
+->x3 : "x" | "y"
++>x3 : XY
+ >'y' : "y"
+ }
+ 
+@@= skipped -34, +34 lines =@@
+ >f5 : () => void
+ 
+     type XY = 'x' | 'y';
+->XY : "x" | "y"
++>XY : XY
+ 
+     let arr: XY[] = ['x'];
+->arr : ("x" | "y")[]
++>arr : XY[]
+ >['x'] : "x"[]
+ >'x' : "x"
+ 
+     arr = ['y'];
+ >arr = ['y'] : "y"[]
+->arr : ("x" | "y")[]
++>arr : XY[]
+ >['y'] : "y"[]
+ >'y' : "y"
+ 
+@@= skipped -17, +17 lines =@@
+     // Error in all extant branches
+     arr = [...['y']];
+ >arr = [...['y']] : string[]
+->arr : ("x" | "y")[]
++>arr : XY[]
+ >[...['y']] : string[]
+ >...['y'] : string
+ >['y'] : string[]

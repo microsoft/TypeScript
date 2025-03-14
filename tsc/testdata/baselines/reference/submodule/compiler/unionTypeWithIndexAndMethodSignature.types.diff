@@ -1,0 +1,20 @@
+--- old.unionTypeWithIndexAndMethodSignature.types
++++ new.unionTypeWithIndexAndMethodSignature.types
+@@= skipped -1, +1 lines =@@
+ 
+ === unionTypeWithIndexAndMethodSignature.ts ===
+ interface Options {
++>Options : Options
++
+     m(x: number): void;
+ >m : (x: number) => void
+ >x : number
+@@= skipped -14, +16 lines =@@
+ f({
+ >f({    m(x) { },}) : void
+ >f : (options: number | Options) => void
+->{    m(x) { },} : { m(x: number): void; }
++>{    m(x) { },} : { m: (x: number) => void; }
+ 
+     m(x) { },
+ >m : (x: number) => void

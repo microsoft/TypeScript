@@ -1,0 +1,9 @@
+--- old.jsdocImportTypeReferenceToStringLiteral.types
++++ new.jsdocImportTypeReferenceToStringLiteral.types
+@@= skipped -7, +7 lines =@@
+ === a.js ===
+ /** @type {import('./b').FOO} */
+ let x;
+->x : "foo"
++>x : any
+ 

@@ -1,0 +1,11 @@
+--- old.jsdocAugments_qualifiedName.types
++++ new.jsdocAugments_qualifiedName.types
+@@= skipped -5, +5 lines =@@
+ 
+ === /b.js ===
+ import * as a from "./a";
+->a : typeof a
++>a : typeof import("/a")
+ 
+ /** @augments a.A */
+ class B {}

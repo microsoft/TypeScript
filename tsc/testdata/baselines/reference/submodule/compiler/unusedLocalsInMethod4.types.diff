@@ -1,0 +1,70 @@
+--- old.unusedLocalsInMethod4.types
++++ new.unusedLocalsInMethod4.types
+@@= skipped -2, +2 lines =@@
+ === unusedLocalsInMethod4.ts ===
+ function f<T, NonNull extends {}>() {
+ >f : <T, NonNull extends {}>() => void
++>T : T
++>NonNull : NonNull
+ 
+     let x1: number[]; // should error
+ >x1 : number[]
+@@= skipped -130, +132 lines =@@
+ 
+ function f2<T, NonNull extends {}>() {
+ >f2 : <T, NonNull extends {}>() => void
++>T : T
++>NonNull : NonNull
+ 
+     let x1: number[]; // should error
+ >x1 : number[]
+@@= skipped -113, +115 lines =@@
+ }
+ 
+ function f4() {
+->f4 : () => { foo(): string; }
++>f4 : () => { foo: () => string; }
+ 
+     let x: number;  // should error
+ >x : number
+ 
+     return {
+->{        foo() {            return x.toString();        }    } : { foo(): string; }
++>{        foo() {            return x.toString();        }    } : { foo: () => string; }
+ 
+         foo() {
+ >foo : () => string
+ 
+             return x.toString();
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+         }
+     };
+ }
+@@= skipped -28, +28 lines =@@
+ 
+     x.toString();
+ >x.toString() : string
+->x.toString : (radix?: number) => string
++>x.toString : (radix?: number | undefined) => string
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ }
+ export default {};
+ >{} : {}
+@@= skipped -171, +171 lines =@@
+ 
+         enabledSubstitutions.toString();
+ >enabledSubstitutions.toString() : string
+->enabledSubstitutions.toString : (radix?: number) => string
++>enabledSubstitutions.toString : (radix?: number | undefined) => string
+ >enabledSubstitutions : ClassPropertySubstitutionFlags
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+     }
+ }

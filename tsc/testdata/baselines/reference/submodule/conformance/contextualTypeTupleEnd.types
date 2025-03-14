@@ -1,0 +1,228 @@
+//// [tests/cases/conformance/types/tuple/contextualTypeTupleEnd.ts] ////
+
+=== contextualTypeTupleEnd.ts ===
+type Funcs = [...((arg: number) => void)[], (arg: string) => void];
+>Funcs : Funcs
+>arg : number
+>arg : string
+
+declare function num(x: number): void;
+>num : (x: number) => void
+>x : number
+
+declare function str(x: string): void;
+>str : (x: string) => void
+>x : string
+
+declare function f1(...args: Funcs): void;
+>f1 : (...args: Funcs) => void
+>args : Funcs
+
+f1();  // Error
+>f1() : void
+>f1 : (...args: Funcs) => void
+
+f1(x => str(x));
+>f1(x => str(x)) : void
+>f1 : (...args: Funcs) => void
+>x => str(x) : (x: any) => void
+>x : any
+>str(x) : void
+>str : (x: string) => void
+>x : any
+
+f1(x => num(x), x => str(x));
+>f1(x => num(x), x => str(x)) : void
+>f1 : (...args: Funcs) => void
+>x => num(x) : (x: any) => void
+>x : any
+>num(x) : void
+>num : (x: number) => void
+>x : any
+>x => str(x) : (x: any) => void
+>x : any
+>str(x) : void
+>str : (x: string) => void
+>x : any
+
+f1(x => num(x), x => num(x), x => str(x));
+>f1(x => num(x), x => num(x), x => str(x)) : void
+>f1 : (...args: Funcs) => void
+>x => num(x) : (x: any) => void
+>x : any
+>num(x) : void
+>num : (x: number) => void
+>x : any
+>x => num(x) : (x: any) => void
+>x : any
+>num(x) : void
+>num : (x: number) => void
+>x : any
+>x => str(x) : (x: any) => void
+>x : any
+>str(x) : void
+>str : (x: string) => void
+>x : any
+
+const a0: Funcs = [];  // Error
+>a0 : Funcs
+>[] : []
+
+const a1: Funcs = [x => str(x)];
+>a1 : Funcs
+>[x => str(x)] : [(x: string) => void]
+>x => str(x) : (x: string) => void
+>x : string
+>str(x) : void
+>str : (x: string) => void
+>x : string
+
+const a2: Funcs = [x => num(x), x => str(x)];
+>a2 : Funcs
+>[x => num(x), x => str(x)] : [(x: number) => void, (x: string) => void]
+>x => num(x) : (x: number) => void
+>x : number
+>num(x) : void
+>num : (x: number) => void
+>x : number
+>x => str(x) : (x: string) => void
+>x : string
+>str(x) : void
+>str : (x: string) => void
+>x : string
+
+const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
+>a3 : Funcs
+>[x => num(x), x => num(x), x => str(x)] : [(x: number) => void, (x: number) => void, (x: string) => void]
+>x => num(x) : (x: number) => void
+>x : number
+>num(x) : void
+>num : (x: number) => void
+>x : number
+>x => num(x) : (x: number) => void
+>x : number
+>num(x) : void
+>num : (x: number) => void
+>x : number
+>x => str(x) : (x: string) => void
+>x : string
+>str(x) : void
+>str : (x: string) => void
+>x : string
+
+// Repro from #43122
+
+export type Selector<State> = (state: State) => unknown;
+>Selector : Selector<State>
+>State : State
+>state : State
+
+export type SelectorTuple<State> = Selector<State>[];
+>SelectorTuple : SelectorTuple<State>
+>State : State
+
+export type ExampleState = {
+>ExampleState : ExampleState
+
+    foo: "foo";
+>foo : "foo"
+
+    bar: 42;
+>bar : 42
+
+};
+
+export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
+>createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
+>S : S
+>selectors : [...selectors: S, f: (x: any) => any]
+>x : any
+
+    console.log(selectors);
+>console.log(selectors) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>selectors : [...selectors: S, f: (x: any) => any]
+}
+
+createSelector(
+>createSelector(    x => x.foo,    x => x.bar,    () => 42) : void
+>createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
+
+    x => x.foo,
+>x => x.foo : (x: ExampleState) => "foo"
+>x : ExampleState
+>x.foo : "foo"
+>x : ExampleState
+>foo : "foo"
+
+    x => x.bar,
+>x => x.bar : (x: ExampleState) => 42
+>x : ExampleState
+>x.bar : 42
+>x : ExampleState
+>bar : 42
+
+    () => 42
+>() => 42 : () => number
+>42 : 42
+
+);
+
+// Repro from #43122
+
+declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void
+>example : (...args: [...(n: number) => void[], (x: any) => void]) => void
+>args : [...(n: number) => void[], (x: any) => void]
+>n : number
+>x : any
+
+example(
+>example(    x => x.foo,  // Error    x => x.bar,  // Error    x => x.baz,) : void
+>example : (...args: [...(n: number) => void[], (x: any) => void]) => void
+
+    x => x.foo,  // Error
+>x => x.foo : (x: any) => any
+>x : any
+>x.foo : any
+>x : any
+>foo : any
+
+    x => x.bar,  // Error
+>x => x.bar : (x: any) => any
+>x : any
+>x.bar : any
+>x : any
+>bar : any
+
+    x => x.baz,
+>x => x.baz : (x: any) => any
+>x : any
+>x.baz : any
+>x : any
+>baz : any
+
+);
+
+// Repro from #52846
+
+declare function test(...args: [...((arg: number) => void)[], (arg: string) => void]): void;
+>test : (...args: [...(arg: number) => void[], (arg: string) => void]) => void
+>args : [...(arg: number) => void[], (arg: string) => void]
+>arg : number
+>arg : string
+  
+test(a => a, b => b, c => c);
+>test(a => a, b => b, c => c) : void
+>test : (...args: [...(arg: number) => void[], (arg: string) => void]) => void
+>a => a : (a: any) => any
+>a : any
+>a : any
+>b => b : (b: any) => any
+>b : any
+>b : any
+>c => c : (c: any) => any
+>c : any
+>c : any
+

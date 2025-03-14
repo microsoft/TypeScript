@@ -1,0 +1,15 @@
+--- old.noCrashUMDMergedWithGlobalValue.types
++++ new.noCrashUMDMergedWithGlobalValue.types
+@@= skipped -8, +8 lines =@@
+ 
+ === /main.ts ===
+ interface SomeInterface {
++>SomeInterface : "/other"
++
+   readonly length: number;
+ >length : number
+ }
+ declare const value: SomeInterface;
+->value : import("/other")
++>value : "/other"
+ 

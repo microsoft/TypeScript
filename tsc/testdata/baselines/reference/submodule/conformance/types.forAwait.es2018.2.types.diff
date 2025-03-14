@@ -1,0 +1,39 @@
+--- old.types.forAwait.es2018.2.types
++++ new.types.forAwait.es2018.2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === types.forAwait.es2018.2.ts ===
+ declare const asyncIterable: AsyncIterable<number>;
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+ 
+ declare const iterable: Iterable<number>;
+->iterable : Iterable<number>
++>iterable : Iterable<number, any, any>
+ 
+ async function f() {
+ >f : () => Promise<void>
+@@= skipped -24, +24 lines =@@
+     }
+     for await (z of asyncIterable) {
+ >z : string
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+     }
+     for await (z of iterable) {
+ >z : string
+->iterable : Iterable<number>
++>iterable : Iterable<number, any, any>
+     }
+     for (const x of asyncIterable) {
+ >x : any
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+     }
+     for (y of asyncIterable) {
+ >y : number
+->asyncIterable : AsyncIterable<number>
++>asyncIterable : AsyncIterable<number, any, any>
+     }
+ }
+ 

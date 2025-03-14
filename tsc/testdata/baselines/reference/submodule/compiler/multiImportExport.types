@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/multiImportExport.ts] ////
+
+=== consumer.ts ===
+import Drawing = require('./Drawing');
+>Drawing : typeof import("Drawing")
+
+var addr = new Drawing.Math.Adder();
+>addr : Adder
+>new Drawing.Math.Adder() : Adder
+>Drawing.Math.Adder : typeof Adder
+>Drawing.Math : { Adder: typeof Adder; }
+>Drawing : typeof import("Drawing")
+>Math : { Adder: typeof Adder; }
+>Adder : typeof Adder
+
+=== Drawing.ts ===
+export import Math = require('./Math/Math')
+>Math : { Adder: typeof Adder; }
+
+=== Math/Math.ts ===
+import Adder = require('./Adder');
+>Adder : typeof Adder
+
+var Math = {
+>Math : { Adder: typeof Adder; }
+>{    Adder:Adder} : { Adder: typeof Adder; }
+
+    Adder:Adder
+>Adder : typeof Adder
+>Adder : typeof Adder
+
+};
+
+export = Math
+>Math : { Adder: typeof Adder; }
+
+=== Math/Adder.ts ===
+class Adder {
+>Adder : Adder
+
+    add(a: number, b: number) {
+>add : (a: number, b: number) => void
+>a : number
+>b : number
+        
+    }
+}
+
+export = Adder;
+>Adder : Adder
+

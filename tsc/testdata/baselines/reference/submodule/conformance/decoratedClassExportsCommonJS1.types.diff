@@ -1,0 +1,14 @@
+--- old.decoratedClassExportsCommonJS1.types
++++ new.decoratedClassExportsCommonJS1.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS1.ts] ////
+ 
+-=== decoratedClassExportsCommonJS1.ts ===
++=== a.ts ===
++declare function forwardRef(x: any): any;
++>forwardRef : (x: any) => any
++>x : any
++
+ declare var Something: any;
+ >Something : any
+ 

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsdocResolveNameFailureInTypedef.ts] ////
+
+=== /a.js ===
+/**
+ * @param {Ty} x
+ */
+function f(x) {}
+>f : (x: any) => void
+>x : any
+
+/**
+ * @typedef {CantResolveThis} Ty
+ */
+

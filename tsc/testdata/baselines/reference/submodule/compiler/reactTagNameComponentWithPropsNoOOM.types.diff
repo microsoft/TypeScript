@@ -1,0 +1,44 @@
+--- old.reactTagNameComponentWithPropsNoOOM.types
++++ new.reactTagNameComponentWithPropsNoOOM.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM.tsx] ////
+ 
+-=== Performance Stats ===
+-Assignability cache: 2,500
+-Type Count: 10,000
+-Instantiation count: 100,000
+-Symbol count: 100,000
+-
+ === reactTagNameComponentWithPropsNoOOM.tsx ===
+ /// <reference path="react16.d.ts" />
+ 
+ import * as React from "react";
+->React : typeof React
++>React : any
+ 
+ declare const Tag: keyof React.ReactHTML;
+->Tag : keyof React.ReactHTML
++>Tag : string | number | symbol
+ >React : any
+ 
+ const classes = "";
+@@= skipped -28, +22 lines =@@
+ >[] : never[]
+ 
+ <Tag className={classes} {...rest}>
+-><Tag className={classes} {...rest}>{children}</Tag> : JSX.Element
+->Tag : keyof React.ReactHTML
+->className : string
++><Tag className={classes} {...rest}>{children}</Tag> : any
++>Tag : string | number | symbol
++>className : any
+ >classes : ""
+ >rest : {}
+ 
+@@= skipped -10, +10 lines =@@
+ >children : any[]
+ 
+ </Tag>
+->Tag : keyof React.ReactHTML
++>Tag : string | number | symbol
+ 

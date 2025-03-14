@@ -1,0 +1,89 @@
+--- old.thisTypeInFunctions2.types
++++ new.thisTypeInFunctions2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === thisTypeInFunctions2.ts ===
+ interface IndexedWithThis {
++>IndexedWithThis : IndexedWithThis
++
+     // this is a workaround for React
+     init?: (this: this) => void;
+->init : (this: this) => void
++>init : () => void
+ >this : this
+ 
+     willDestroy?: (this: any) => void;
+->willDestroy : (this: any) => void
++>willDestroy : () => void
+ >this : any
+ 
+     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
+@@= skipped -15, +17 lines =@@
+ >args : any[]
+ }
+ interface IndexedWithoutThis {
++>IndexedWithoutThis : IndexedWithoutThis
++
+     // this is what React would like to write (and what they write today)
+     init?: () => void;
+ >init : () => void
+@@= skipped -11, +13 lines =@@
+ >propName : string
+ }
+ interface SimpleInterface {
++>SimpleInterface : SimpleInterface
++
+     foo(n: string);
+ >foo : (n: string) => any
+ >n : string
+@@= skipped -22, +24 lines =@@
+ extend1({
+ >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
+ >extend1 : (args: IndexedWithThis) => void
+->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
++>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init: () => void; mine: number; foo: () => void; }
+ 
+     init() {
+->init : (this: IndexedWithThis) => void
++>init : () => void
+ 
+         this // this: IndexedWithThis because of contextual typing.
+ >this : IndexedWithThis
+ 
+         // this.mine
+         this.willDestroy
+->this.willDestroy : (this: any) => void
++>this.willDestroy : () => void
+ >this : IndexedWithThis
+->willDestroy : (this: any) => void
++>willDestroy : () => void
+ 
+     },
+     mine: 12,
+@@= skipped -20, +20 lines =@@
+ >12 : 12
+ 
+     foo() {
+->foo : (this: any) => void
++>foo : () => void
+ 
+         this.url; // this: any because 'foo' matches the string indexer
+ >this.url : any
+@@= skipped -16, +16 lines =@@
+ extend2({
+ >extend2({    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }}) : void
+ >extend2 : (args: IndexedWithoutThis) => void
+->{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init(): void; mine: number; foo(): void; }
++>{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init: () => void; mine: number; foo: () => void; }
+ 
+     init() {
+ >init : () => void
+@@= skipped -34, +34 lines =@@
+ simple({
+ >simple({    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }}) : void
+ >simple : (arg: SimpleInterface) => void
+->{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): number; bar(): number; }
++>{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo: (n: string) => number; bar: () => number; }
+ 
+     foo(n) {
+ >foo : (n: string) => number

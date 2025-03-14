@@ -1,0 +1,23 @@
+--- old.bangInModuleName.types
++++ new.bangInModuleName.types
+@@= skipped -3, +3 lines =@@
+ /// <reference path="a.d.ts"/>
+ 
+ import * as http from 'intern/dojo/node!http';
+->http : typeof http
++>http : typeof import("http")
+ 
+ === a.d.ts ===
+ declare module "http" {
+@@= skipped -11, +11 lines =@@
+ >'intern/dojo/node!http' : typeof import("intern/dojo/node!http")
+ 
+     import http = require('http');
+->http : typeof http
++>http : typeof import("http")
+ 
+     export = http;
+->http : typeof http
++>http : typeof import("http")
+ }
+ 

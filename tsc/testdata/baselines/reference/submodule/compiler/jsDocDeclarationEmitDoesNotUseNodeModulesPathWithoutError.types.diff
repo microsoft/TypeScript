@@ -1,0 +1,39 @@
+--- old.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
++++ new.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
+@@= skipped -1, +1 lines =@@
+ 
+ === node_modules/@lion/ajax/dist-types/src/index.d.ts ===
+ export type LionRequestInit = import('../types/types.js').LionRequestInit;
+->LionRequestInit : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit
++>LionRequestInit : LionRequestInit
+ 
+ === node_modules/@lion/ajax/dist-types/types/types.d.ts ===
+ export interface LionRequestInit {
++>LionRequestInit : LionRequestInit
++
+     body?: null | Object;
+ >body : Object | null | undefined
+ } 
+@@= skipped -19, +21 lines =@@
+      * @param {LionRequestInit} [init]
+      */
+     case5_unexpectedlyResolvesPathToNodeModules(init) {}
+->case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
+->init : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit | undefined
++>case5_unexpectedlyResolvesPathToNodeModules : (init: any) => void
++>init : any
+ }
+ 
+ /**
+@@= skipped -9, +9 lines =@@
+  */
+ // @ts-expect-error
+ NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules;
+->NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
++>NewAjax.prototype.case6_unexpectedlyResolvesPathToNodeModules : any
+ >NewAjax.prototype : NewAjax
+ >NewAjax : typeof NewAjax
+ >prototype : NewAjax
+->case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
++>case6_unexpectedlyResolvesPathToNodeModules : any
+ 

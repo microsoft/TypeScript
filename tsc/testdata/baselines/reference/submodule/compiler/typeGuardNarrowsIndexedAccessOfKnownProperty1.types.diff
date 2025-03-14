@@ -1,0 +1,83 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty1.types
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeGuardNarrowsIndexedAccessOfKnownProperty1.ts ===
+ interface Square {
++>Square : Square
++
+     ["dash-ok"]: "square";
+ >["dash-ok"] : "square"
+ >"dash-ok" : "dash-ok"
+@@= skipped -9, +11 lines =@@
+ >"square-size" : "square-size"
+ }
+  interface Rectangle {
++>Rectangle : Rectangle
++
+     ["dash-ok"]: "rectangle";
+ >["dash-ok"] : "rectangle"
+ >"dash-ok" : "dash-ok"
+@@= skipped -11, +13 lines =@@
+ >height : number
+ }
+  interface Circle {
++>Circle : Circle
++
+     ["dash-ok"]: "circle";
+ >["dash-ok"] : "circle"
+ >"dash-ok" : "dash-ok"
+@@= skipped -11, +13 lines =@@
+ >Shape : Shape
+ 
+ interface Subshape {
++>Subshape : Subshape
++
+     "0": {
+ >"0" : { sub: { under: { shape: Shape; }; }; }
+ 
+@@= skipped -20, +22 lines =@@
+ >s : Shape
+ 
+     switch(s['dash-ok']) {
+->s['dash-ok'] : "square" | "rectangle" | "circle"
++>s['dash-ok'] : "circle" | "rectangle" | "square"
+ >s : Shape
+ >'dash-ok' : "dash-ok"
+ 
+@@= skipped -44, +44 lines =@@
+ >s : Subshape
+ 
+     switch(s[0]["sub"].under["shape"]["dash-ok"]) {
+->s[0]["sub"].under["shape"]["dash-ok"] : "square" | "rectangle" | "circle"
++>s[0]["sub"].under["shape"]["dash-ok"] : "circle" | "rectangle" | "square"
+ >s[0]["sub"].under["shape"] : Shape
+ >s[0]["sub"].under : { shape: Shape; }
+ >s[0]["sub"] : { under: { shape: Shape; }; }
+@@= skipped -97, +97 lines =@@
+ }
+ 
+ interface X {
++>X : X
++
+     0: "xx",
+ >0 : "xx"
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Y {
++>Y : Y
++
+     0: "yy",
+ >0 : "yy"
+ 
+@@= skipped -89, +91 lines =@@
+ }
+ 
+ export function g(pair: [number, string?]): string {
+->g : (pair: [number, string?]) => string
++>g : (pair: [number, (string | undefined)?]) => string
+ >pair : [number, (string | undefined)?]
+ 
+     return pair[1] ? pair[1] : 'nope';

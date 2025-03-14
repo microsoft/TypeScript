@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverrideOldResolutionError.ts] ////
+
+=== /index.ts ===
+/// <reference types="pkg" resolution-mode="require" />
+/// <reference types="pkg" resolution-mode="import" />
+foo;
+>foo : any
+
+bar;
+>bar : number
+
+export {};
+=== /node_modules/pkg/require.d.ts ===
+export {};
+declare global {
+>global : typeof global
+
+    var bar: number;
+>bar : number
+}

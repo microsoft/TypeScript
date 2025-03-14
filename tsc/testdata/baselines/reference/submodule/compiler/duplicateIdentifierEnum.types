@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/duplicateIdentifierEnum.ts] ////
+
+=== duplicateIdentifierEnum_A.ts ===
+enum A {
+>A : A.bar
+
+    bar
+>bar : A.bar
+}
+class A {
+>A : A
+
+    foo: number;
+>foo : number
+}
+
+interface B {
+>B : B
+
+    foo: number;
+>foo : number
+}
+const enum B {
+>B : B.bar
+
+    bar
+>bar : B.bar
+}
+
+const enum C {
+>C : C
+
+}
+function C() {
+>C : () => number
+
+    return 0;
+>0 : 0
+}
+
+enum D {
+>D : D.bar
+
+    bar
+>bar : D.bar
+}
+class E {
+>E : E
+
+    foo: number;
+>foo : number
+}
+// also make sure the error appears when trying to merge an enum in a separate file.
+=== duplicateIdentifierEnum_B.ts ===
+function D() {
+>D : () => number
+
+    return 0;
+>0 : 0
+}
+enum E {
+>E : E.bar
+
+    bar
+>bar : E.bar
+}

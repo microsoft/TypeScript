@@ -1,0 +1,10 @@
+--- old.conditionalTypeAnyUnion.types
++++ new.conditionalTypeAnyUnion.types
+@@= skipped -7, +7 lines =@@
+ 
+ type WithSpec<T extends number> = T
+ >WithSpec : T
++>T : T
+ 
+ type R = WithSpec<Spec> // should not error
+ >R : any

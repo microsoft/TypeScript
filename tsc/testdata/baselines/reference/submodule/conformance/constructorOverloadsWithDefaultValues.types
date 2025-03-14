@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts] ////
+
+=== constructorOverloadsWithDefaultValues.ts ===
+class C {
+>C : C
+
+    foo: string;
+>foo : string
+
+    constructor(x = 1); // error
+>x : number
+>1 : 1
+
+    constructor() {
+    }
+}
+
+class D<T> {
+>D : D<T>
+>T : T
+
+    foo: string;
+>foo : string
+
+    constructor(x = 1); // error
+>x : number
+>1 : 1
+
+    constructor() {
+    }
+}

@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/salsa/moduleExportAssignment.ts] ////
+
+=== use.js ===
+var npmlog = require('./npmlog')
+>npmlog : any
+>require('./npmlog') : any
+>require : any
+>'./npmlog' : "./npmlog"
+
+npmlog.x
+>npmlog.x : any
+>npmlog : any
+>x : any
+
+npmlog.on
+>npmlog.on : any
+>npmlog : any
+>on : any
+

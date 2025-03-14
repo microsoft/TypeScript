@@ -1,0 +1,17 @@
+--- old.moduleAugmentationGlobal7.types
++++ new.moduleAugmentationGlobal7.types
+@@= skipped -1, +1 lines =@@
+ 
+ === moduleAugmentationGlobal7.ts ===
+ namespace A {
++>A : any
++
+     declare global {
+ >global : typeof global
+ 
+         interface Array<T> { x }
++>Array : Array<T>
++>T : T
+ >x : any
+     }
+ }

@@ -1,0 +1,11 @@
+--- old.modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.types
++++ new.modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.types
+@@= skipped -29, +29 lines =@@
+ 
+ a[Symbol.isConcatSpreadable] = false;
+ >a[Symbol.isConcatSpreadable] = false : false
+->a[Symbol.isConcatSpreadable] : error
++>a[Symbol.isConcatSpreadable] : any
+ >a : string[]
+ >Symbol.isConcatSpreadable : unique symbol
+ >Symbol : SymbolConstructor

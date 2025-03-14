@@ -1,0 +1,51 @@
+--- old.tsxCorrectlyParseLessThanComparison1.types
++++ new.tsxCorrectlyParseLessThanComparison1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === tsxCorrectlyParseLessThanComparison1.tsx ===
+ declare module JSX {
++>JSX : any
++
+     interface Element {
++>Element : Element
++
+         div: string;
+ >div : string
+     }
+@@= skipped -10, +14 lines =@@
+ 
+     class Component<P, S> {
+ >Component : Component<P, S>
++>P : P
++>S : S
+ 
+         constructor(props?: P, context?: any);
+ >props : P
+@@= skipped -12, +14 lines =@@
+ 
+ export class ShortDetails extends React.Component<{ id: number }, {}> {
+ >ShortDetails : ShortDetails
+->React.Component : React.Component<{ id: number; }, {}>
++>React.Component : Component<{ id: number; }, {}>
+ >React : typeof React
+->Component : typeof React.Component
++>Component : typeof Component
+ >id : number
+ 
+     public render(): JSX.Element {
+->render : () => JSX.Element
++>render : () => Element
+ >JSX : any
+ 
+         if (this.props.id < 1) {
+@@= skipped -19, +19 lines =@@
+ >1 : 1
+ 
+             return (<div></div>);
+->(<div></div>) : error
+-><div></div> : error
++>(<div></div>) : any
++><div></div> : any
+ >div : any
+ >div : any
+         }

@@ -1,0 +1,25 @@
+--- old.esModuleInteropPrettyErrorRelatedInformation.types
++++ new.esModuleInteropPrettyErrorRelatedInformation.types
+@@= skipped -4, +4 lines =@@
+ >foo : () => void
+ 
+ declare namespace foo {}
++>foo : () => void
++
+ export = foo;
+ >foo : () => void
+ 
+ === index.ts ===
+ import * as foo from "./foo";
+->foo : { default: () => void; }
++>foo : () => void
+ 
+ function invoke(f: () => void) { f(); }
+ >invoke : (f: () => void) => void
+@@= skipped -16, +18 lines =@@
+ invoke(foo);
+ >invoke(foo) : void
+ >invoke : (f: () => void) => void
+->foo : { default: () => void; }
++>foo : () => void
+ 

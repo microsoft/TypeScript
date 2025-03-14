@@ -1,0 +1,15 @@
+--- old.typeReferenceDirectives1.types
++++ new.typeReferenceDirectives1.types
+@@= skipped -2, +2 lines =@@
+ === /app.ts ===
+ /// <reference types="lib" preserve="true" />
+ interface A {
++>A : A
++
+     x: $
+ >x : $
+ }
+-=== /types/lib/index.d.ts ===
+-interface $ { x }
+->x : any
+-

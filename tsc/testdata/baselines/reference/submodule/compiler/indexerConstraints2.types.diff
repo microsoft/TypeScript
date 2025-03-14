@@ -1,0 +1,83 @@
+--- old.indexerConstraints2.types
++++ new.indexerConstraints2.types
+@@= skipped -63, +63 lines =@@
+ >AliasedNumber : number
+ 
+ interface L {
++>L : L
++
+     [n: AliasedNumber]: A;
+ >n : number
+ }
+@@= skipped -8, +10 lines =@@
+ >AliasedString : string
+ 
+ interface M {
++>M : M
++
+     [s: AliasedString]: A;
+ >s : string
+ }
+@@= skipped -8, +10 lines =@@
+ >AliasedBoolean : boolean
+ 
+ interface N {
++>N : N
++
+     [b: AliasedBoolean]: A;
+ >b : boolean
+ }
+@@= skipped -8, +10 lines =@@
+ >IndexableUnion : IndexableUnion
+ 
+ interface O {
++>O : O
++
+     [u: IndexableUnion]: A;
+ >u : IndexableUnion
+ }
+@@= skipped -8, +10 lines =@@
+ >NonIndexableUnion : NonIndexableUnion
+ 
+ interface P {
++>P : P
++
+     [u: NonIndexableUnion]: A;
+ >u : NonIndexableUnion
+ }
+@@= skipped -8, +10 lines =@@
+ >NonIndexableUnion2 : NonIndexableUnion2
+ 
+ interface Q {
++>Q : Q
++
+     [u: NonIndexableUnion2]: A;
+ >u : NonIndexableUnion2
+ }
+@@= skipped -8, +10 lines =@@
+ >NonIndexableUnion3 : NonIndexableUnion3
+ 
+ interface R {
++>R : R
++
+     [u: NonIndexableUnion3]: A;
+ >u : NonIndexableUnion3
+ }
+ 
+ interface S {
++>S : S
++
+     [u: "foo" | "bar"]: A;
+->u : "foo" | "bar"
++>u : "bar" | "foo"
+ }
+ 
+ type Key = string;
+ >Key : string
+ 
+ interface T {
++>T : T
++
+     [key: Key]
+ >key : string
+ }

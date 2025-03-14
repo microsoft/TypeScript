@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution9.tsx] ////
+
+=== react.d.ts ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+	}
+	interface ElementAttributesProperty {
+>ElementAttributesProperty : ElementAttributesProperty
+
+		props;
+>props : any
+	}
+}
+
+interface Props {  
+>Props : Props
+
+  foo: string;
+>foo : string
+}
+
+=== file.tsx ===
+export class MyComponent {  
+>MyComponent : MyComponent
+
+  render() {
+>render : () => void
+  }
+
+  props: { foo: string; }
+>props : { foo: string; }
+>foo : string
+}
+
+<MyComponent foo="bar" />; // ok  
+><MyComponent foo="bar" /> : any
+>MyComponent : typeof MyComponent
+>foo : any
+
+<MyComponent foo={0} />; // should be an error
+><MyComponent foo={0} /> : any
+>MyComponent : typeof MyComponent
+>foo : any
+>0 : 0
+

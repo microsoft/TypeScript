@@ -1,0 +1,17 @@
+--- old.declarationEmitMethodDeclaration.types
++++ new.declarationEmitMethodDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a.js ===
+ export default {
+->{    methods: {        foo() { }    }} : { methods: { foo(): void; }; }
++>{    methods: {        foo() { }    }} : { methods: { foo: () => void; }; }
+ 
+     methods: {
+->methods : { foo(): void; }
+->{        foo() { }    } : { foo(): void; }
++>methods : { foo: () => void; }
++>{        foo() { }    } : { foo: () => void; }
+ 
+         foo() { }
+ >foo : () => void

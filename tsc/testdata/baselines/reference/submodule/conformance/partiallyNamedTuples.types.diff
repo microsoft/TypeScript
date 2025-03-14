@@ -1,0 +1,93 @@
+--- old.partiallyNamedTuples.types
++++ new.partiallyNamedTuples.types
+@@= skipped -4, +4 lines =@@
+ >NamedAndAnonymous : NamedAndAnonymous
+ 
+ function fa1(...args: NamedAndAnonymous) {}
+->fa1 : (a: string, args_1: number) => void
++>fa1 : (...args: NamedAndAnonymous) => void
+ >args : NamedAndAnonymous
+ 
+ function fa2(a: NamedAndAnonymous, ...args: NamedAndAnonymous) {}
+->fa2 : (a: NamedAndAnonymous, a: string, args_1: number) => void
++>fa2 : (a: NamedAndAnonymous, ...args: NamedAndAnonymous) => void
+ >a : NamedAndAnonymous
+ >args : NamedAndAnonymous
+ 
+@@= skipped -12, +12 lines =@@
+ >NamedAnonymousMixed : NamedAnonymousMixed
+ 
+ function fb1(...args: NamedAnonymousMixed) {}
+->fb1 : (a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
++>fb1 : (...args: NamedAnonymousMixed) => void
+ >args : NamedAnonymousMixed
+ 
+ function fb2(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) {}
+->fb2 : (a: NamedAnonymousMixed, a: string, args_1: number, c: number, args_3: NamedAndAnonymous) => void
++>fb2 : (a: NamedAnonymousMixed, ...args: NamedAnonymousMixed) => void
+ >a : NamedAnonymousMixed
+ >args : NamedAnonymousMixed
+ 
+ function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
+->fb3 : (a: NamedAnonymousMixed, a: string, args_1: number) => void
++>fb3 : (a: NamedAnonymousMixed, ...args: NamedAndAnonymous) => void
+ >a : NamedAnonymousMixed
+ >args : NamedAndAnonymous
+ 
+ type ToAnonymousTuple<T extends unknown[]> = {
+ >ToAnonymousTuple : ToAnonymousTuple<T>
++>T : T
+ 
+   [K in keyof T]: [K, T[K], keyof T, T];
++>K : K
++
+ };
+ 
+ type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
+@@= skipped -30, +33 lines =@@
+ 
+ type ToMixedTuple<T extends unknown[]> = {
+ >ToMixedTuple : ToMixedTuple<T>
++>T : T
+ 
+   [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
++>K : K
++
+ };
+ 
+ type AnonymousToMixed = ToMixedTuple<[boolean, number]>;
+@@= skipped -25, +28 lines =@@
+ 
+ type AddMixedConditional<T> = [
+ >AddMixedConditional : [first: boolean, null, third: T extends number ? "a" : "b", ...T extends 0 ? [fourth: "c"] : []]
++>T : T
+ 
+   first: boolean,
+   null,
+@@= skipped -17, +18 lines =@@
+ >AddMixedConditionalNumberPrimitive : [first: boolean, null, third: "a"]
+ 
+ declare function test<T extends readonly unknown[]>(
+->test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
++>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; } }]) => T
++>T : T
+ 
+   arg: [
+->arg : [...{ [K in keyof T]: { type: T[K]; }; }]
++>arg : [...{ [K in keyof T]: { type: T[K]; } }]
+ 
+     ...{
+       [K in keyof T]: {
++>K : K
++
+         type: T[K];
+ >type : T[K]
+ 
+@@= skipped -23, +26 lines =@@
+ const output = test(input);
+ >output : [first: number, string]
+ >test(input) : [first: number, string]
+->test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
++>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; } }]) => T
+ >input : [first: { type: number; }, { type: string; }]
+ 

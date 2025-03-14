@@ -1,0 +1,35 @@
+--- old.nodeNextImportModeImplicitIndexResolution2.types
++++ new.nodeNextImportModeImplicitIndexResolution2.types
+@@= skipped -17, +17 lines =@@
+ 
+ === /index.mts ===
+ import dedent from "dedent";
+->dedent : typeof dedent
++>dedent : typeof import("/node_modules/@types/dedent/index")
+ 
+ import dedent2 from "dedent2";
+->dedent2 : typeof dedent2
++>dedent2 : typeof import("/node_modules/@types/dedent2/index")
+ 
+ import dedent3 from "dedent3";
+->dedent3 : typeof dedent3
++>dedent3 : any
+ 
+ import dedent4 from "dedent4"; // Error
+ >dedent4 : any
+ 
+ === /index.cts ===
+ import dedent from "dedent";
+->dedent : typeof dedent
++>dedent : typeof import("/node_modules/@types/dedent/index")
+ 
+ import dedent2 from "dedent2";
+->dedent2 : typeof dedent2
++>dedent2 : typeof import("/node_modules/@types/dedent2/index")
+ 
+ import dedent3 from "dedent3";
+->dedent3 : typeof dedent3
++>dedent3 : any
+ 
+ import dedent4 from "dedent4"; // Error
+ >dedent4 : any

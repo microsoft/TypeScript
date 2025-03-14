@@ -1,0 +1,10 @@
+--- old.staticMethodsReferencingClassTypeParameters.types
++++ new.staticMethodsReferencingClassTypeParameters.types
+@@= skipped -2, +2 lines =@@
+ === staticMethodsReferencingClassTypeParameters.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     static s(p: T) { return p; }
+ >s : (p: T) => T

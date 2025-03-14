@@ -1,0 +1,20 @@
+--- old.bundlerNodeModules1(module=preserve).types
++++ new.bundlerNodeModules1(module=preserve).types
+@@= skipped -9, +9 lines =@@
+ 
+ === /main.ts ===
+ import { esm, cjs } from "dual";
+->esm : number
+->cjs : any
++>esm : any
++>cjs : number
+ 
+ === /main.mts ===
+ import { esm, cjs } from "dual";
+->esm : number
+->cjs : any
++>esm : any
++>cjs : number
+ 
+ === /main.cts ===
+ import { esm, cjs } from "dual";

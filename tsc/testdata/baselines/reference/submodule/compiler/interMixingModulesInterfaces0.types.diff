@@ -1,0 +1,30 @@
+--- old.interMixingModulesInterfaces0.types
++++ new.interMixingModulesInterfaces0.types
+@@= skipped -14, +14 lines =@@
+     }
+ 
+     export interface B {
++>B : B
++
+         name: string;
+ >name : string
+ 
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ var x: A.B = A.B.createB();
+->x : A.B
++>x : B
+ >A : any
+->A.B.createB() : A.B
+->A.B.createB : () => A.B
+->A.B : typeof A.B
++>A.B.createB() : B
++>A.B.createB : () => B
++>A.B : typeof B
+ >A : typeof A
+->B : typeof A.B
+->createB : () => A.B
++>B : typeof B
++>createB : () => B
+ 

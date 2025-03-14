@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/commentOnAmbientfunction.ts] ////
+
+=== b.ts ===
+///<reference path="a.ts"/>
+declare function foobar(a: typeof foo): typeof bar;
+>foobar : (a: () => any) => () => any
+>a : () => any
+
+=== a.ts ===
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
+declare function foo();
+>foo : () => any
+
+// Don't keep this comment.
+declare function bar();
+>bar : () => any
+

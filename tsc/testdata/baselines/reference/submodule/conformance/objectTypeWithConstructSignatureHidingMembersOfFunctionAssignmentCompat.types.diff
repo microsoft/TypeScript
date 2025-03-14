@@ -1,0 +1,11 @@
+--- old.objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.types
++++ new.objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
+ interface I {
++>I : I
++
+     new(): any;
+ }
+ 

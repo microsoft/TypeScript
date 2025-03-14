@@ -1,0 +1,236 @@
+--- old.dynamicNames.types
++++ new.dynamicNames.types
+@@= skipped -14, +14 lines =@@
+ >Symbol : SymbolConstructor
+ 
+ export interface T0 {
++>T0 : T0
++
+     [c0]: number;
+ >[c0] : number
+ >c0 : "a"
+@@= skipped -59, +61 lines =@@
+ >T3 : any
+ 
+ import * as M from "./module";
+->M : typeof M
++>M : typeof import("module")
+ 
+ namespace N {
+ >N : typeof N
+@@= skipped -16, +16 lines =@@
+     export const s1: typeof s0 = s0;
+ >s1 : unique symbol
+ >s0 : unique symbol
+->s0 : unique symbol
+ 
+     export interface T4 {
++>T4 : T4
++
+         [N.c2]: number;
+ >[N.c2] : number
+ >N.c2 : "a"
+@@= skipped -81, +82 lines =@@
+ export const s2: typeof s0 = s0;
+ >s2 : unique symbol
+ >s0 : unique symbol
+->s0 : unique symbol
+ 
+ interface T8 {
++>T8 : T8
++
+     [c4]: number;
+ >[c4] : number
+ >c4 : "a"
+@@= skipped -52, +53 lines =@@
+ };
+ 
+ interface T12 {
++>T12 : T12
++
+     a: number;
+ >a : number
+ 
+@@= skipped -85, +87 lines =@@
+ >M : any
+ 
+ let t4: N.T4;
+->t4 : N.T4
++>t4 : T4
+ >N : any
+ 
+ let t5: N.T5;
+->t5 : N.T5
++>t5 : T5
+ >N : any
+ 
+ let t6: N.T6;
+->t6 : N.T6
++>t6 : T6
+ >N : any
+ 
+ let t7: N.T7;
+->t7 : N.T7
++>t7 : T7
+ >N : any
+ 
+ let t8: T8;
+@@= skipped -90, +90 lines =@@
+ >t2 : T2
+ 
+ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : N.T6
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : N.T5
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : N.T4
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : N.T7
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : N.T5
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : N.T4
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : N.T7
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : N.T6
+->t4 = t5, t4 = t6, t4 = t7, t5 = t4 : N.T4
+->t4 = t5, t4 = t6, t4 = t7 : N.T7
+->t4 = t5, t4 = t6 : N.T6
+->t4 = t5 : N.T5
+->t4 : N.T4
+->t5 : N.T5
+->t4 = t6 : N.T6
+->t4 : N.T4
+->t6 : N.T6
+->t4 = t7 : N.T7
+->t4 : N.T4
+->t7 : N.T7
+->t5 = t4 : N.T4
+->t5 : N.T5
+->t4 : N.T4
+->t5 = t6 : N.T6
+->t5 : N.T5
+->t6 : N.T6
+->t5 = t7 : N.T7
+->t5 : N.T5
+->t7 : N.T7
+->t6 = t4 : N.T4
+->t6 : N.T6
+->t4 : N.T4
+->t6 = t5 : N.T5
+->t6 : N.T6
+->t5 : N.T5
+->t6 = t7 : N.T7
+->t6 : N.T6
+->t7 : N.T7
+->t7 = t4 : N.T4
+->t7 : N.T7
+->t4 : N.T4
+->t7 = t5 : N.T5
+->t7 : N.T7
+->t5 : N.T5
+->t7 = t6 : N.T6
+->t7 : N.T7
+->t6 : N.T6
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : T6
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : T5
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : T4
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : T7
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : T5
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : T4
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : T7
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : T6
++>t4 = t5, t4 = t6, t4 = t7, t5 = t4 : T4
++>t4 = t5, t4 = t6, t4 = t7 : T7
++>t4 = t5, t4 = t6 : T6
++>t4 = t5 : T5
++>t4 : T4
++>t5 : T5
++>t4 = t6 : T6
++>t4 : T4
++>t6 : T6
++>t4 = t7 : T7
++>t4 : T4
++>t7 : T7
++>t5 = t4 : T4
++>t5 : T5
++>t4 : T4
++>t5 = t6 : T6
++>t5 : T5
++>t6 : T6
++>t5 = t7 : T7
++>t5 : T5
++>t7 : T7
++>t6 = t4 : T4
++>t6 : T6
++>t4 : T4
++>t6 = t5 : T5
++>t6 : T6
++>t5 : T5
++>t6 = t7 : T7
++>t6 : T6
++>t7 : T7
++>t7 = t4 : T4
++>t7 : T7
++>t4 : T4
++>t7 = t5 : T5
++>t7 : T7
++>t5 : T5
++>t7 = t6 : T6
++>t7 : T7
++>t6 : T6
+ 
+ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+ >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0 : T0
+@@= skipped -88, +88 lines =@@
+ 
+ // object literals
+ export const o1 = {
+->o1 : { a: number; 1: string; [s0]: boolean; }
+->{    [c4]: 1,    [c5]: "a",    [s2]: true} : { a: number; 1: string; [s0]: boolean; }
++>o1 : { a: number; [c5]: string; [s2]: boolean; }
++>{    [c4]: 1,    [c5]: "a",    [s2]: true} : { a: number; [c5]: string; [s2]: boolean; }
+ 
+     [c4]: 1,
+ >[c4] : number
+@@= skipped -24, +24 lines =@@
+ export const o1_c4 = o1[c4];
+ >o1_c4 : number
+ >o1[c4] : number
+->o1 : { a: number; 1: string; [s0]: boolean; }
++>o1 : { a: number; [c5]: string; [s2]: boolean; }
+ >c4 : "a"
+ 
+ export const o1_c5 = o1[c5];
+ >o1_c5 : string
+ >o1[c5] : string
+->o1 : { a: number; 1: string; [s0]: boolean; }
++>o1 : { a: number; [c5]: string; [s2]: boolean; }
+ >c5 : 1
+ 
+ export const o1_s2 = o1[s2];
+ >o1_s2 : boolean
+ >o1[s2] : boolean
+->o1 : { a: number; 1: string; [s0]: boolean; }
++>o1 : { a: number; [c5]: string; [s2]: boolean; }
+ >s2 : unique symbol
+ 
+ export const o2: T0 = o1;
+ >o2 : T0
+->o1 : { a: number; 1: string; [s0]: boolean; }
++>o1 : { a: number; [c5]: string; [s2]: boolean; }
+ 
+ // recursive declarations
+ // (type parameter indirection courtesy of #20400)
+@@= skipped -30, +30 lines =@@
+ >x : "a"
+ 
+ interface RI<T extends "a" | "b"> {
++>RI : RI<T>
++>T : T
++
+     x: T;
+ >x : T
+ 
+@@= skipped -20, +23 lines =@@
+ 
+ declare class RC<T extends "a" | "b"> {
+ >RC : RC<T>
++>T : T
+ 
+     x: T;
+ >x : T

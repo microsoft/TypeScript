@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/mergedClassWithNamespacePrototype.ts] ////
+
+=== /a.d.ts ===
+declare class Foo {}
+>Foo : Foo
+
+=== /b.ts ===
+declare namespace Foo {
+>Foo : typeof Foo
+
+    namespace prototype {
+>prototype : typeof prototype
+
+        function f(): void;
+>f : () => void
+    }
+}
+

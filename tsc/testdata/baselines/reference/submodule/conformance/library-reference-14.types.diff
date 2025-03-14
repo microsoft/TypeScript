@@ -1,0 +1,21 @@
+--- old.library-reference-14.types
++++ new.library-reference-14.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /a/b/consumer.ts ===
+ $.foo();
+->$.foo() : void
+->$.foo : () => void
+->$ : { foo(): void; }
+->foo : () => void
++>$.foo() : any
++>$.foo : any
++>$ : any
++>foo : any
+ 
+-=== /a/types/jquery/index.d.ts ===
+-declare var $: { foo(): void };
+->$ : { foo(): void; }
+->foo : () => void
+-
+-

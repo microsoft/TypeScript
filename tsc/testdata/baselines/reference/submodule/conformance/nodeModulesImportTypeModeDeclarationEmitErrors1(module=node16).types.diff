@@ -1,0 +1,95 @@
+--- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node16).types
++++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node16).types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmitErrors1.ts] ////
+ 
+ === /node_modules/pkg/import.d.ts ===
+-
+ export interface ImportInterface {}
+-=== /node_modules/pkg/require.d.ts ===
++>ImportInterface : ImportInterface
+ 
++=== /node_modules/pkg/require.d.ts ===
+ export interface RequireInterface {}
++>RequireInterface : RequireInterface
++
+ === /index.ts ===
+ export type LocalInterface =
+->LocalInterface : LocalInterface
++>LocalInterface : any
+ 
+     & import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface
+     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+ 
+ export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
+->a : import("/node_modules/pkg/require").RequireInterface
+->(null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+->null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
++>a : RequireInterface
++>(null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface) : RequireInterface
++>null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface : RequireInterface
+ >null as any : any
+ 
+ export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+->b : import("/node_modules/pkg/import").ImportInterface
+->(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+->null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
++>b : any
++>(null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface) : any
++>null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface : any
+ >null as any : any
+ 
+ === /other.ts ===
+@@= skipped -37, +39 lines =@@
+ 
+     & import("pkg", {"resolution-mode": "import"}).ImportInterface;
+ >import("pkg", {"resolution-mode": "import"}).ImportInterface : any
+->import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
++>import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
+ >"pkg" : "pkg"
+ >{"resolution-mode": "import"} : { "resolution-mode": string; }
+ >"resolution-mode" : string
+@@= skipped -34, +34 lines =@@
+     & import("pkg", { assert: {"bad": "import"} }).ImportInterface;
+ 
+ export const a = (null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface);
+->a : import("/node_modules/pkg/require").RequireInterface
+->(null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+->null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
++>a : RequireInterface
++>(null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface) : RequireInterface
++>null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface : RequireInterface
+ >null as any : any
+ 
+ export const b = (null as any as import("pkg", { assert: {"bad": "import"} }).ImportInterface);
+@@= skipped -23, +23 lines =@@
+ 
+     & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
+ >import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
+->import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
++>import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
+ >"pkg" : "pkg"
+ >[ {"resolution-mode": "import"} ] : { "resolution-mode": string; }[]
+ >{"resolution-mode": "import"} : { "resolution-mode": string; }
+@@= skipped -48, +48 lines =@@
+ 
+     & import("pkg", Asserts2).ImportInterface;
+ >import("pkg", Asserts2).ImportInterface : any
+->import("pkg", Asserts2) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
++>import("pkg", Asserts2) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
+ >"pkg" : "pkg"
+ >Asserts2 : any
+ >ImportInterface : any
+@@= skipped -29, +29 lines =@@
+     & import("pkg", { assert: {} }).ImportInterface;
+ 
+ export const a = (null as any as import("pkg", { assert: {} }).RequireInterface);
+->a : import("/node_modules/pkg/require").RequireInterface
+->(null as any as import("pkg", { assert: {} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+->null as any as import("pkg", { assert: {} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
++>a : RequireInterface
++>(null as any as import("pkg", { assert: {} }).RequireInterface) : RequireInterface
++>null as any as import("pkg", { assert: {} }).RequireInterface : RequireInterface
+ >null as any : any
+ 
+ export const b = (null as any as import("pkg", { assert: {} }).ImportInterface);

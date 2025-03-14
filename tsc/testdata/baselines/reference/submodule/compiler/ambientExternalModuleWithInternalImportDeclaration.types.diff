@@ -1,0 +1,19 @@
+--- old.ambientExternalModuleWithInternalImportDeclaration.types
++++ new.ambientExternalModuleWithInternalImportDeclaration.types
+@@= skipped -2, +2 lines =@@
+ === ambientExternalModuleWithInternalImportDeclaration_1.ts ===
+ ///<reference path='ambientExternalModuleWithInternalImportDeclaration_0.ts'/>
+ import A = require('M');
+->A : typeof A
++>A : typeof C
+ 
+ var c = new A();
+->c : A
+->new A() : A
+->A : typeof A
++>c : C
++>new A() : C
++>A : typeof C
+ 
+ === ambientExternalModuleWithInternalImportDeclaration_0.ts ===
+ declare module 'M' {

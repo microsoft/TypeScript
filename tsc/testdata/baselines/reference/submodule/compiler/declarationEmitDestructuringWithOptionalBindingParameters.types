@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/declarationEmitDestructuringWithOptionalBindingParameters.ts] ////
+
+=== declarationEmitDestructuringWithOptionalBindingParameters.ts ===
+function foo([x,y,z]?: [string, number, boolean]) {
+>foo : (__0?: [string, number, boolean]) => void
+>x : string
+>y : number
+>z : boolean
+}
+function foo1( { x, y, z }?: { x: string; y: number; z: boolean }) {
+>foo1 : (__0?: { x: string; y: number; z: boolean; }) => void
+>x : string
+>y : number
+>z : boolean
+>x : string
+>y : number
+>z : boolean
+}

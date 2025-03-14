@@ -1,0 +1,24 @@
+--- old.typeUsedAsValueError2.types
++++ new.typeUsedAsValueError2.types
+@@= skipped -16, +16 lines =@@
+ >HelloNamespace : any
+ >world : any
+ 
+-=== helloInterface.ts ===
+-interface HelloInterface {
+-    world: any;
+->world : any
+-}
+-
+-export = HelloInterface;
+->HelloInterface : HelloInterface
+-
+-=== helloNamespace.ts ===
+-namespace HelloNamespace {
+-    export type world = any;
+->world : any
+-}
+-
+-export = HelloNamespace;
+->HelloNamespace : any
+-

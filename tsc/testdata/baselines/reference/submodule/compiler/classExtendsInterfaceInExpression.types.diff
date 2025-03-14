@@ -1,0 +1,22 @@
+--- old.classExtendsInterfaceInExpression.types
++++ new.classExtendsInterfaceInExpression.types
+@@= skipped -1, +1 lines =@@
+ 
+ === classExtendsInterfaceInExpression.ts ===
+ interface A {}
++>A : A
+ 
+ function factory(a: any): {new(): Object} {
+->factory : (a: any) => { new (): Object; }
++>factory : (a: any) => new () => Object
+ >a : any
+ 
+   return null;
+@@= skipped -11, +12 lines =@@
+ class C extends factory(A) {}
+ >C : C
+ >factory(A) : Object
+->factory : (a: any) => { new (): Object; }
++>factory : (a: any) => new () => Object
+ >A : any
+ 

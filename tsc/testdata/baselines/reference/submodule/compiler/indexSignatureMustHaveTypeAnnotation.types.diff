@@ -1,0 +1,11 @@
+--- old.indexSignatureMustHaveTypeAnnotation.types
++++ new.indexSignatureMustHaveTypeAnnotation.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexSignatureMustHaveTypeAnnotation.ts ===
+ interface I {
++>I : I
++
+     // Used to be indexer, now it is a computed property
+     [x]: string;
+ >[x] : string

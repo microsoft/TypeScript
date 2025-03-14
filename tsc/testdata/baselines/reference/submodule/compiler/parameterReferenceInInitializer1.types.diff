@@ -1,0 +1,18 @@
+--- old.parameterReferenceInInitializer1.types
++++ new.parameterReferenceInInitializer1.types
+@@= skipped -2, +2 lines =@@
+ === parameterReferenceInInitializer1.ts ===
+ function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
+ >fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
++>a : a
+ >y : Y
+ >set : (y: Y, x: number) => void
+ >y : Y
+@@= skipped -9, +10 lines =@@
+ >undefined : undefined
+ }
+ interface Y { x: number }
++>Y : Y
+ >x : number
+ 
+ class C {

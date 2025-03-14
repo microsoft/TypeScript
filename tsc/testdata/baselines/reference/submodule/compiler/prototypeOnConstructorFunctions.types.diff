@@ -1,0 +1,11 @@
+--- old.prototypeOnConstructorFunctions.types
++++ new.prototypeOnConstructorFunctions.types
+@@= skipped -1, +1 lines =@@
+ 
+ === prototypeOnConstructorFunctions.ts ===
+ interface I1 {
++>I1 : I1
++
+     const: new (options?, element?) => any;
+ >const : new (options?: any, element?: any) => any
+ >options : any

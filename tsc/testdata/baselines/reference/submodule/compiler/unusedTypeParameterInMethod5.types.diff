@@ -1,0 +1,10 @@
+--- old.unusedTypeParameterInMethod5.types
++++ new.unusedTypeParameterInMethod5.types
+@@= skipped -6, +6 lines =@@
+     public f1 = function<X>() {
+ >f1 : <X>() => void
+ >function<X>() {    } : <X>() => void
++>X : X
+ 
+     }
+ }

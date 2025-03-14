@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/importHelpersCommonJSJavaScript.ts] ////
+
+=== /node_modules/tslib/tslib.d.ts ===
+export declare var __extends: any;
+>__extends : any
+
+=== /node_modules/tslib/modules/index.d.ts ===
+
+export {};
+
+=== /index.js ===
+class Foo {}
+>Foo : Foo
+
+class Bar extends Foo {}
+>Bar : Bar
+>Foo : Foo
+
+module.exports = Bar;
+>module.exports = Bar : typeof Bar
+>module.exports : any
+>module : any
+>exports : any
+>Bar : typeof Bar
+

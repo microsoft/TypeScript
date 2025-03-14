@@ -1,0 +1,42 @@
+--- old.intersectionTypeInference3.types
++++ new.intersectionTypeInference3.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Nominal<Kind extends string, Type> = Type & {
+ >Nominal : Nominal<Kind, Type>
++>Kind : Kind
++>Type : Type
+ 
+     [Symbol.species]: Kind;
+ >[Symbol.species] : Kind
+@@= skipped -21, +23 lines =@@
+ const c1 = Array.from(a).concat(Array.from(b));
+ >c1 : A[]
+ >Array.from(a).concat(Array.from(b)) : A[]
+->Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
++>Array.from(a).concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
+ >Array.from(a) : A[]
+->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >Array : ArrayConstructor
+->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >a : Set<A>
+->concat : { (...items: ConcatArray<A>[]): A[]; (...items: (A | ConcatArray<A>)[]): A[]; }
++>concat : { (...items: ConcatArray<A>[]): A[]; (...items: (ConcatArray<A> | A)[]): A[]; }
+ >Array.from(b) : A[]
+->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >Array : ArrayConstructor
+->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >b : Set<A>
+ 
+ // Simpler repro
+ 
+ declare function from<T>(): T[];
+ >from : <T>() => T[]
++>T : T
+ 
+ const c2: ReadonlyArray<A> = from();
+ >c2 : readonly A[]

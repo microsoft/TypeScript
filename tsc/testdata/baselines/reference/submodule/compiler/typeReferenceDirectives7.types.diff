@@ -1,0 +1,19 @@
+--- old.typeReferenceDirectives7.types
++++ new.typeReferenceDirectives7.types
+@@= skipped -8, +8 lines =@@
+ 
+ export let x: typeof $;
+ >x : number
+->$ : number
+ 
+ export let y = () => x
+ >y : () => number
+ >() => x : () => number
+ >x : number
+ 
+-=== /types/lib/index.d.ts ===
+-declare let $: { x: number }
+->$ : { x: number; }
+->x : number
+-
+-

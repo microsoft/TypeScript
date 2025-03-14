@@ -1,0 +1,16 @@
+--- old.distributiveConditionalTypeNeverIntersection1.types
++++ new.distributiveConditionalTypeNeverIntersection1.types
+@@= skipped -4, +4 lines =@@
+ 
+ type IsNumber<T> = T extends number ? true : false;
+ >IsNumber : IsNumber<T>
++>T : T
+ >true : true
+ >false : false
+ 
+ type Conflicted = { x: true } & { x: false };
+->Conflicted : never
++>Conflicted : Conflicted
+ >x : true
+ >true : true
+ >x : false

@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-2.ts] ////
+
+=== a.ts ===
+export class Foo {
+>Foo : Foo
+
+    #x;
+>#x : any
+
+    copy(other: import("./b").Foo) {
+>copy : (other: Foo) => void
+>other : Foo
+
+        other.#x; // error
+>other.#x : any
+>other : Foo
+    }
+}
+    
+=== b.ts ===
+export class Foo {
+>Foo : Foo
+
+    #x;
+>#x : any
+}
+
+=== main.ts ===
+import { Foo as A } from "./a";
+>Foo : typeof Foo
+>A : typeof Foo
+
+import { Foo as B } from "./b";
+>Foo : typeof Foo
+>B : typeof Foo
+
+const a = new A();
+>a : Foo
+>new A() : Foo
+>A : typeof Foo
+
+const b = new B();
+>b : Foo
+>new B() : Foo
+>B : typeof Foo
+
+a.copy(b); // error
+>a.copy(b) : void
+>a.copy : (other: Foo) => void
+>a : Foo
+>copy : (other: Foo) => void
+>b : Foo
+

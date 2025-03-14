@@ -1,0 +1,29 @@
+--- old.circularConstructorWithReturn.types
++++ new.circularConstructorWithReturn.types
+@@= skipped -4, +4 lines =@@
+ // https://github.com/microsoft/TypeScript/pull/57465#issuecomment-1960271216
+ export type Client = ReturnType<typeof getPrismaClient> extends new () => infer T ? T : never
+ >Client : PrismaClient
+->getPrismaClient : (options?: any) => typeof PrismaClient
++>T : T
+ 
+ export function getPrismaClient(options?: any) {
+ >getPrismaClient : (options?: any) => typeof PrismaClient
+@@= skipped -22, +22 lines =@@
+ >this : this
+ >self : PrismaClient
+ >applyModelsAndClientExtensions(this) : PrismaClient
+->applyModelsAndClientExtensions : (client: Client) => PrismaClient
++>applyModelsAndClientExtensions : (client: PrismaClient) => PrismaClient
+ >this : this
+     }
+   }
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ export function applyModelsAndClientExtensions(client: Client) {
+->applyModelsAndClientExtensions : (client: Client) => PrismaClient
++>applyModelsAndClientExtensions : (client: PrismaClient) => PrismaClient
+ >client : PrismaClient
+ 
+   return client;

@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/jsdoc/jsdocParseMatchingBackticks.ts] ////
+
+=== jsdocParseMatchingBackticks.js ===
+/**
+ * `@param` initial at-param is OK in title comment
+ * @param {string} x hi there `@param`
+ * @param {string} y hi there `@ * param
+ *                   this is the margin
+ *                   so we'll drop everything before it
+ `@param` @param {string} z hello???
+ * `@param` @param {string} alpha hello???
+ * `@ * param` @param {string} beta hello???
+ * @param {string} gamma
+ */
+export function f(x, y, z, alpha, beta, gamma) {
+>f : (x: any, y: any, z: any, alpha: any, beta: any, gamma: any) => any
+>x : any
+>y : any
+>z : any
+>alpha : any
+>beta : any
+>gamma : any
+
+    return x + y + z + alpha + beta + gamma
+>x + y + z + alpha + beta + gamma : any
+>x + y + z + alpha + beta : any
+>x + y + z + alpha : any
+>x + y + z : any
+>x + y : any
+>x : any
+>y : any
+>z : any
+>alpha : any
+>beta : any
+>gamma : any
+}
+

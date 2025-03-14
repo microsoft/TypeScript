@@ -1,0 +1,47 @@
+--- old.importedAliasesInTypePositions.types
++++ new.importedAliasesInTypePositions.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file2.ts ===
+ import RT_ALIAS = require("file1");
+->RT_ALIAS : typeof RT_ALIAS
++>RT_ALIAS : any
+ 
+ import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
+->ReferredTo : typeof ReferredTo
+->RT_ALIAS : typeof RT_ALIAS
+->elaborate : typeof RT_ALIAS.elaborate
+->nested : typeof RT_ALIAS.elaborate.nested
+->mod : typeof RT_ALIAS.elaborate.nested.mod
+->name : typeof RT_ALIAS.elaborate.nested.mod.name
+->ReferredTo : ReferredTo
++>ReferredTo : any
++>RT_ALIAS : any
++>elaborate : any
++>nested : any
++>mod : any
++>name : any
++>ReferredTo : any
+ 
+ export module ImportingModule {
+ >ImportingModule : typeof ImportingModule
+@@= skipped -21, +21 lines =@@
+ >referred : ReferredTo
+     }
+ }
+-=== file1.ts ===
+-export module elaborate.nested.mod.name {
+->elaborate : typeof elaborate
+->nested : typeof nested
+->mod : typeof mod
+->name : typeof name
+-
+-    export class ReferredTo {
+->ReferredTo : ReferredTo
+-
+-        doSomething(): void {
+->doSomething : () => void
+-        }
+-    }
+-}
+-

@@ -1,0 +1,20 @@
+--- old.parser.asyncGenerators.classMethods.es2018.types
++++ new.parser.asyncGenerators.classMethods.es2018.types
+@@= skipped -201, +201 lines =@@
+ }
+ === awaitAsTypeIsOk.ts ===
+ interface await {}
++>await : await
++
+ class C19 {
+ >C19 : C19
+ 
+@@= skipped -12, +14 lines =@@
+ }
+ === yieldAsTypeIsStrictError.ts ===
+ interface yield {}
++>yield : yield
++
+ class C20 {
+ >C20 : C20
+ 

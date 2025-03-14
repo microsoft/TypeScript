@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/es2016/es2016IntlAPIs.ts] ////
+
+=== es2016IntlAPIs.ts ===
+// Sample from
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/getCanonicalLocales
+console.log(Intl.getCanonicalLocales('EN-US'));
+>console.log(Intl.getCanonicalLocales('EN-US')) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>Intl.getCanonicalLocales('EN-US') : string[]
+>Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
+>Intl : typeof Intl
+>getCanonicalLocales : (locale?: string | readonly string[]) => string[]
+>'EN-US' : "EN-US"
+
+// Expected output: Array ["en-US"]
+
+console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
+>console.log(Intl.getCanonicalLocales(['EN-US', 'Fr'])) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>Intl.getCanonicalLocales(['EN-US', 'Fr']) : string[]
+>Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
+>Intl : typeof Intl
+>getCanonicalLocales : (locale?: string | readonly string[]) => string[]
+>['EN-US', 'Fr'] : string[]
+>'EN-US' : "EN-US"
+>'Fr' : "Fr"
+
+// Expected output: Array ["en-US", "fr"]
+
+try {
+  Intl.getCanonicalLocales('EN_US');
+>Intl.getCanonicalLocales('EN_US') : string[]
+>Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
+>Intl : typeof Intl
+>getCanonicalLocales : (locale?: string | readonly string[]) => string[]
+>'EN_US' : "EN_US"
+
+} catch (err) {
+>err : any
+
+  console.log(err.toString());
+>console.log(err.toString()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>err.toString() : any
+>err.toString : any
+>err : any
+>toString : any
+
+  // Expected output: RangeError: invalid language tag: EN_US
+}
+

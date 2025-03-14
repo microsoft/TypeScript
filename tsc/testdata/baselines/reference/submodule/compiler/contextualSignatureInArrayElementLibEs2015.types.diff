@@ -1,0 +1,26 @@
+--- old.contextualSignatureInArrayElementLibEs2015.types
++++ new.contextualSignatureInArrayElementLibEs2015.types
+@@= skipped -3, +3 lines =@@
+ // See: https://github.com/microsoft/TypeScript/pull/53280#discussion_r1138684984
+ 
+ declare function test(
+->test : (arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>) => void
++>test : (arg: (arg: number) => void[] | Record<string, (arg: string) => void>) => void
+ 
+   arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>
+->arg : Record<string, (arg: string) => void> | ((arg: number) => void)[]
++>arg : (arg: number) => void[] | Record<string, (arg: string) => void>
+ >arg : string
+ >arg : number
+ 
+@@= skipped -11, +11 lines =@@
+ 
+ test([
+ >test([  (arg) => {    arg; // number  },]) : void
+->test : (arg: Record<string, (arg: string) => void> | Array<(arg: number) => void>) => void
+->[  (arg) => {    arg; // number  },] : ((arg: any) => void)[]
++>test : (arg: (arg: number) => void[] | Record<string, (arg: string) => void>) => void
++>[  (arg) => {    arg; // number  },] : (arg: any) => void[]
+ 
+   (arg) => {
+ >(arg) => {    arg; // number  } : (arg: any) => void

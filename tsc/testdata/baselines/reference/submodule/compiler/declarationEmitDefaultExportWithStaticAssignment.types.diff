@@ -1,0 +1,73 @@
+--- old.declarationEmitDefaultExportWithStaticAssignment.types
++++ new.declarationEmitDefaultExportWithStaticAssignment.types
+@@= skipped -8, +8 lines =@@
+ >Foo : typeof Foo
+ 
+ export default function Example() {}
+->Example : typeof Example
++>Example : { (): void; Foo: typeof Foo; }
+ 
+ Example.Foo = Foo
+ >Example.Foo = Foo : typeof Foo
+ >Example.Foo : typeof Foo
+->Example : typeof Example
++>Example : { (): void; Foo: typeof Foo; }
+ >Foo : typeof Foo
+ >Foo : typeof Foo
+ 
+@@= skipped -17, +17 lines =@@
+ >Foo : typeof Foo
+ 
+ export default function Example() {}
+->Example : typeof Example
++>Example : { (): void; Foo: typeof Foo; }
+ 
+ Example.Foo = Foo
+ >Example.Foo = Foo : typeof Foo
+ >Example.Foo : typeof Foo
+->Example : typeof Example
++>Example : { (): void; Foo: typeof Foo; }
+ >Foo : typeof Foo
+ >Foo : typeof Foo
+ 
+@@= skipped -14, +14 lines =@@
+ >Bar : Bar
+ 
+ export default function Example() {}
+->Example : typeof Example
++>Example : { (): void; Bar: typeof Bar; }
+ 
+ Example.Bar = Bar
+ >Example.Bar = Bar : typeof Bar
+ >Example.Bar : typeof Bar
+->Example : typeof Example
++>Example : { (): void; Bar: typeof Bar; }
+ >Bar : typeof Bar
+ >Bar : typeof Bar
+ 
+@@= skipped -17, +17 lines =@@
+ >B : () => void
+ 
+ export function C() {
+->C : typeof C
++>C : { (): any; A: () => void; B: () => void; }
+ 
+   return null;
+ }
+@@= skipped -8, +8 lines =@@
+ C.A = A;
+ >C.A = A : () => void
+ >C.A : () => void
+->C : typeof C
++>C : { (): any; A: () => void; B: () => void; }
+ >A : () => void
+ >A : () => void
+ 
+ C.B = B;
+ >C.B = B : () => void
+ >C.B : () => void
+->C : typeof C
++>C : { (): any; A: () => void; B: () => void; }
+ >B : () => void
+ >B : () => void
+ 

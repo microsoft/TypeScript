@@ -1,0 +1,11 @@
+--- old.emptyObjectBindingPatternParameter03.types
++++ new.emptyObjectBindingPatternParameter03.types
+@@= skipped -1, +1 lines =@@
+ 
+ === emptyObjectBindingPatternParameter03.ts ===
+ function f({}, a) {
+->f : ({}: {}, a: any) => void
++>f : (__0: {}, a: any) => void
+ >a : any
+ 
+     var x, y, z;

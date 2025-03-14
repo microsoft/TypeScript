@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/exportAssignmentInterface.ts] ////
+
+=== exportAssignmentInterface_B.ts ===
+import I1 = require("exportAssignmentInterface_A");
+>I1 : any
+
+var i: I1;
+>i : I1
+
+var n: number = i.p1;
+>n : number
+>i.p1 : any
+>i : I1
+>p1 : any
+

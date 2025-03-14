@@ -1,0 +1,64 @@
+--- old.contextualTypeBasedOnIntersectionWithAnyInTheMix3.types
++++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix3.types
+@@= skipped -12, +12 lines =@@
+ };
+ 
+ declare function test1<
+->test1 : <T extends { [K in keyof TypeMap]: TypeMap[K][]; } & { [k: string]: any[]; }>(arg: T) => T
++>test1 : <T extends { str: ("a" | "b" | "c")[]; num: (1 | 2 | 3)[]; } & { [k: string]: any[]; }>(arg: T) => T
+ 
+   T extends { [K in keyof TypeMap]: TypeMap[K][] } & { [k: string]: any[] },
++>T : T
++>K : K
+ >k : string
+ 
+ >(arg: T): T;
+@@= skipped -11, +13 lines =@@
+ const result = test1({
+ >result : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
+ >test1({  num: [1, 2],  str: ["a", "b"],  bool: [true, false],}) : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
+->test1 : <T extends { [K in keyof TypeMap]: TypeMap[K][]; } & { [k: string]: any[]; }>(arg: T) => T
++>test1 : <T extends { str: ("a" | "b" | "c")[]; num: (1 | 2 | 3)[]; } & { [k: string]: any[]; }>(arg: T) => T
+ >{  num: [1, 2],  str: ["a", "b"],  bool: [true, false],} : { num: (1 | 2)[]; str: ("a" | "b")[]; bool: boolean[]; }
+ 
+   num: [1, 2],
+@@= skipped -24, +24 lines =@@
+ });
+ 
+ declare function test2(a: { type: "foo" | "bar" } & { type: any }): void;
+->test2 : (a: { type: "foo" | "bar"; } & { type: any; }) => void
+->a : { type: "foo" | "bar"; } & { type: any; }
+->type : "foo" | "bar"
++>test2 : (a: { type: "bar" | "foo"; } & { type: any; }) => void
++>a : { type: "bar" | "foo"; } & { type: any; }
++>type : "bar" | "foo"
+ >type : any
+ 
+ test2({ type: "foo" });
+ >test2({ type: "foo" }) : void
+->test2 : (a: { type: "foo" | "bar"; } & { type: any; }) => void
++>test2 : (a: { type: "bar" | "foo"; } & { type: any; }) => void
+ >{ type: "foo" } : { type: "foo"; }
+ >type : "foo"
+ >"foo" : "foo"
+@@= skipped -42, +42 lines =@@
+ >1 : 1
+ 
+ const d: (() => { a: 1 }) & (() => { a: any }) = () => ({
+->d : (() => { a: 1; }) & (() => { a: any; })
++>d : () => { a: 1; } & () => { a: any; }
+ >a : 1
+ >a : any
+->() => ({  a: 1,}) : () => { a: 1; }
+->({  a: 1,}) : { a: 1; }
+->{  a: 1,} : { a: 1; }
++>() => ({  a: 1,}) : () => { a: number; }
++>({  a: 1,}) : { a: number; }
++>{  a: 1,} : { a: number; }
+ 
+   a: 1,
+->a : 1
++>a : number
+ >1 : 1
+ 
+ });

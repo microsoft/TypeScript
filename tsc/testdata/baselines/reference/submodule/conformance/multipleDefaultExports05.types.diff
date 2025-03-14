@@ -1,0 +1,17 @@
+--- old.multipleDefaultExports05.types
++++ new.multipleDefaultExports05.types
+@@= skipped -1, +1 lines =@@
+ 
+ === multipleDefaultExports05.ts ===
+ export default class AA1 {}
+->AA1 : AA1
++>AA1 : default
+ 
+ export default class BB1 {}
+->BB1 : import("multipleDefaultExports05").default
++>BB1 : default
+ 
+ export default class CC1 {}
+->CC1 : import("multipleDefaultExports05").default
++>CC1 : default
+ 

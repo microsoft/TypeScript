@@ -1,0 +1,46 @@
+--- old.duplicateObjectLiteralProperty_computedName1.types
++++ new.duplicateObjectLiteralProperty_computedName1.types
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ const t2 = {
+->t2 : { 1: number; }
+->{    1: 1,    [+1]: 0 // duplicate} : { 1: number; }
++>t2 : { [+1]: number; }
++>{    1: 1,    [+1]: 0 // duplicate} : { [+1]: number; }
+ 
+     1: 1,
+ >1 : number
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ const t3 = {
+->t3 : { 1: number; }
+->{    "1": 1,    [+1]: 0 // duplicate} : { 1: number; }
++>t3 : { [+1]: number; }
++>{    "1": 1,    [+1]: 0 // duplicate} : { [+1]: number; }
+ 
+     "1": 1,
+ >"1" : number
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ const t4 = {
+->t4 : { "+1": number; 1: number; }
+->{    "+1": 1,    [+1]: 0 // two different keys, "+1", "1"} : { "+1": number; 1: number; }
++>t4 : { "+1": number; "+1": number; }
++>{    "+1": 1,    [+1]: 0 // two different keys, "+1", "1"} : { "+1": number; "+1": number; }
+ 
+     "+1": 1,
+ >"+1" : number
+@@= skipped -29, +29 lines =@@
+ }
+ 
+ const t6 = {
+->t6 : { [-1]: number; }
+->{    "-1": 1,    [-1]: 0 // duplicate} : { [-1]: number; }
++>t6 : { "-1": number; }
++>{    "-1": 1,    [-1]: 0 // duplicate} : { "-1": number; }
+ 
+     "-1": 1,
+ >"-1" : number

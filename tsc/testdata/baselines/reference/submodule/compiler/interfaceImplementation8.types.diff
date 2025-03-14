@@ -1,0 +1,20 @@
+--- old.interfaceImplementation8.types
++++ new.interfaceImplementation8.types
+@@= skipped -4, +4 lines =@@
+     1
+ */
+ interface i1 {
++>i1 : i1
++
+     name: string;
+ >name : string
+ }
+@@= skipped -42, +44 lines =@@
+ */
+ 
+ interface i2 {
++>i2 : i2
++
+     name: string;
+ >name : string
+ 

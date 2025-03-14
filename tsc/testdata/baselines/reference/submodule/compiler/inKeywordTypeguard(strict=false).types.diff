@@ -1,0 +1,186 @@
+--- old.inKeywordTypeguard(strict=false).types
++++ new.inKeywordTypeguard(strict=false).types
+@@= skipped -441, +441 lines =@@
+ >window : Window & typeof globalThis
+ 
+         window.ontouchstart
+->window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
++>window.ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any
+ >window : Window & typeof globalThis
+->ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
++>ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any
+ 
+     } else {
+         window.ontouchstart
+->window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
++>window.ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any
+ >window : Window & typeof globalThis
+->ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
++>ontouchstart : (ev: TouchEvent) => any & (ev: TouchEvent) => any
+     }
+ }
+ 
+@@= skipped -43, +43 lines =@@
+ >x && typeof x === "object" : boolean
+ >x : unknown
+ >typeof x === "object" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"object" : "object"
+ >"a" in x : boolean
+@@= skipped -19, +19 lines =@@
+ >x && typeof x === "object" : boolean
+ >x : unknown
+ >typeof x === "object" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"object" : "object"
+ >"a" in x : boolean
+@@= skipped -76, +76 lines =@@
+ 
+ function f3<T>(x: T) {
+ >f3 : <T>(x: T) => void
++>T : T
+ >x : T
+ 
+     if ("a" in x) {
+@@= skipped -29, +30 lines =@@
+ >x && typeof x === "object" : boolean
+ >x : T
+ >typeof x === "object" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : T
+ >"object" : "object"
+ >"a" in x : boolean
+@@= skipped -19, +19 lines =@@
+ >x && typeof x === "object" : boolean
+ >x : T
+ >typeof x === "object" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : T
+ >"object" : "object"
+ >"a" in x : boolean
+@@= skipped -338, +338 lines =@@
+ }
+ 
+ function f14(x: { a: string | undefined }) {
+->f14 : (x: { a: string | undefined; }) => void
+->x : { a: string | undefined; }
++>f14 : (x: { a: string; }) => void
++>x : { a: string; }
+ >a : string
+ 
+     if ("a" in x) {
+ >"a" in x : boolean
+ >"a" : "a"
+->x : { a: string | undefined; }
++>x : { a: string; }
+ 
+         x;
+->x : { a: string | undefined; }
++>x : { a: string; }
+     }
+     else {
+         x;
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function f15(x: { a?: string | undefined }) {
+->f15 : (x: { a?: string | undefined; }) => void
+->x : { a?: string | undefined; }
++>f15 : (x: { a?: string; }) => void
++>x : { a?: string; }
+ >a : string
+ 
+     if ("a" in x) {
+ >"a" in x : boolean
+ >"a" : "a"
+->x : { a?: string | undefined; }
++>x : { a?: string; }
+ 
+         x;
+->x : { a?: string | undefined; }
++>x : { a?: string; }
+     }
+     else {
+         x;
+->x : { a?: string | undefined; }
++>x : { a?: string; }
+     }
+ }
+ 
+ function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+ >f16 : (x: typeof globalThis, y: Window & typeof globalThis) => void
+ >x : typeof globalThis
+->globalThis : typeof globalThis
+ >y : Window & typeof globalThis
+->globalThis : typeof globalThis
+ 
+     x = y;
+ >x = y : Window & typeof globalThis
+@@= skipped -35, +33 lines =@@
+ 
+ function foo<A>(value: A) {
+ >foo : <A>(value: A) => void
++>A : A
+ >value : A
+ 
+     if (typeof value === "object" && value !== null && "prop" in value) {
+ >typeof value === "object" && value !== null && "prop" in value : boolean
+ >typeof value === "object" && value !== null : boolean
+ >typeof value === "object" : boolean
+->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >value : A
+ >"object" : "object"
+ >value !== null : boolean
+@@= skipped -40, +41 lines =@@
+ // Repro from #51501
+ 
+ function isHTMLTable<T extends object | null>(table: T): boolean {
+->isHTMLTable : <T extends object | null>(table: T) => boolean
++>isHTMLTable : <T extends object>(table: T) => boolean
++>T : T
+ >table : T
+ 
+     return !!table && 'html' in table;
+@@= skipped -16, +17 lines =@@
+ // Repro from #51549
+ 
+ const f = <P extends object>(a: P & {}) => {
+->f : <P extends object>(a: P & {}) => void
+-><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
++>f : <P extends object>(a: P) => void
++><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P) => void
++>P : P
+ >a : P
+ 
+     "foo" in a;
+@@= skipped -15, +16 lines =@@
+ 
+ function test1<T extends any[] | Record<string, any>>(obj: T) {
+ >test1 : <T extends any[] | Record<string, any>>(obj: T) => void
++>T : T
+ >obj : T
+ 
+     if (Array.isArray(obj) || 'length' in obj) {
+@@= skipped -24, +25 lines =@@
+ 
+ function test2<T extends any[] | Record<string, any>>(obj: T) {
+ >test2 : <T extends any[] | Record<string, any>>(obj: T) => void
++>T : T
+ >obj : T
+ 
+     if (Array.isArray(obj)) {
+@@= skipped -20, +21 lines =@@
+ 
+ function test3<T extends any[] | Record<string, any>>(obj: T) {
+ >test3 : <T extends any[] | Record<string, any>>(obj: T) => void
++>T : T
+ >obj : T
+ 
+     if ('length' in obj) {

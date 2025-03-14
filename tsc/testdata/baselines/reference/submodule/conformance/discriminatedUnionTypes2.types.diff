@@ -1,0 +1,140 @@
+--- old.discriminatedUnionTypes2.types
++++ new.discriminatedUnionTypes2.types
+@@= skipped -108, +108 lines =@@
+ 
+ function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
+ >f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
++>T : T
+ >x : { a: 0; b: string; } | { a: T; c: number; }
+ >a : 0
+ >b : string
+@@= skipped -22, +23 lines =@@
+ 
+ type Result<T> = { error?: undefined, value: T } | { error: Error };
+ >Result : Result<T>
++>T : T
+ >error : undefined
+ >value : T
+ >error : Error
+@@= skipped -48, +49 lines =@@
+ // Repro from #24193
+ 
+ interface WithError {
++>WithError : WithError
++
+     error: Error
+ >error : Error
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface WithoutError<Data> {
++>WithoutError : WithoutError<Data>
++>Data : Data
++
+     error: null
+ >error : null
+ 
+@@= skipped -9, +12 lines =@@
+ 
+ type DataCarrier<Data> = WithError | WithoutError<Data>
+ >DataCarrier : DataCarrier<Data>
++>Data : Data
+ 
+ function f20<Data>(carrier: DataCarrier<Data>) {
+ >f20 : <Data>(carrier: DataCarrier<Data>) => void
++>Data : Data
+ >carrier : DataCarrier<Data>
+ 
+     if (carrier.error === null) {
+@@= skipped -123, +125 lines =@@
+ 
+ function f(problem: abc & (b | c)) {
+ >f : (problem: abc & (b | c)) => void
+->problem : b | c
++>problem : abc & (b | c)
+ 
+     if (problem.type === 'b') {
+ >problem.type === 'b' : boolean
+ >problem.type : "b" | "c"
+->problem : b | c
++>problem : abc & (b | c)
+ >type : "b" | "c"
+ >'b' : "b"
+ 
+         problem.name;
+ >problem.name : string
+->problem : b
++>problem : b | a & b | a & c | b & c | c & b
+ >name : string
+     }
+     else {
+         problem.other;
+ >problem.other : string
+->problem : c
++>problem : c | a & b | a & c | b & c | c & b
+ >other : string
+     }
+ }
+@@= skipped -39, +39 lines =@@
+ 
+ function foo1(x: RuntimeValue & { type: 'number' }) {
+ >foo1 : (x: RuntimeValue & { type: "number"; }) => void
+->x : { type: "number"; value: number; } & { type: "number"; }
++>x : RuntimeValue & { type: "number"; }
+ >type : "number"
+ 
+     if (x.type === 'number') {
+ >x.type === 'number' : boolean
+ >x.type : "number"
+->x : { type: "number"; value: number; } & { type: "number"; }
++>x : RuntimeValue & { type: "number"; }
+ >type : "number"
+ >'number' : "number"
+ 
+         x.value;  // number
+ >x.value : number
+->x : { type: "number"; value: number; } & { type: "number"; }
++>x : RuntimeValue & { type: "number"; }
+ >value : number
+     }
+     else {
+         x.value;  // number
+ >x.value : number
+->x : { type: "number"; value: number; } & { type: "number"; }
++>x : RuntimeValue & { type: "number"; }
+ >value : number
+     }
+ }
+ 
+ function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
+ >foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
+->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
++>x : RuntimeValue & ({ type: "number"; } | { type: "string"; })
+ >type : "number"
+ >type : "string"
+ 
+     if (x.type === 'number') {
+ >x.type === 'number' : boolean
+->x.type : "string" | "number"
+->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
+->type : "string" | "number"
++>x.type : "number" | "string"
++>x : RuntimeValue & ({ type: "number"; } | { type: "string"; })
++>type : "number" | "string"
+ >'number' : "number"
+ 
+         x.value;  // number
+ >x.value : number
+->x : { type: "number"; value: number; } & { type: "number"; }
++>x : { type: "number"; value: number; } & { type: "number"; } | { type: "number"; value: number; } & { type: "string"; } | { type: "string"; value: string; } & { type: "number"; } | { type: "boolean"; value: boolean; } & { type: "number"; } | { type: "boolean"; value: boolean; } & { type: "string"; }
+ >value : number
+     }
+     else {
+         x.value;  // string
+ >x.value : string
+->x : { type: "string"; value: string; } & { type: "string"; }
++>x : { type: "number"; value: number; } & { type: "string"; } | { type: "string"; value: string; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; } | { type: "boolean"; value: boolean; } & { type: "number"; } | { type: "boolean"; value: boolean; } & { type: "string"; }
+ >value : string
+     }
+ }

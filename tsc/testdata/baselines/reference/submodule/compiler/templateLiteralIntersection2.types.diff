@@ -1,0 +1,64 @@
+--- old.templateLiteralIntersection2.types
++++ new.templateLiteralIntersection2.types
+@@= skipped -8, +8 lines =@@
+ >JoinedPath : `${Path}/${Path}`
+ 
+ declare function joinedPath(p: JoinedPath): void;
+->joinedPath : (p: JoinedPath) => void
++>joinedPath : (p: `${Path}/${Path}`) => void
+ >p : `${Path}/${Path}`
+ 
+ joinedPath("foo/bar");
+ >joinedPath("foo/bar") : void
+->joinedPath : (p: JoinedPath) => void
++>joinedPath : (p: `${Path}/${Path}`) => void
+ >"foo/bar" : "foo/bar"
+ 
+ declare const somePath: Path;
+@@= skipped -13, +13 lines =@@
+ 
+ joinedPath(`${somePath}/${somePath}`);
+ >joinedPath(`${somePath}/${somePath}`) : void
+->joinedPath : (p: JoinedPath) => void
++>joinedPath : (p: `${Path}/${Path}`) => void
+ >`${somePath}/${somePath}` : `${Path}/${Path}`
+ >somePath : Path
+ >somePath : Path
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ declare function withinAs(p: StartsWithA & EndsWithA): void;
+->withinAs : (p: StartsWithA & EndsWithA) => void
++>withinAs : (p: `a${string}` & `${string}a`) => void
+ >p : `a${string}` & `${string}a`
+ 
+ withinAs("");
+ >withinAs("") : void
+->withinAs : (p: StartsWithA & EndsWithA) => void
++>withinAs : (p: `a${string}` & `${string}a`) => void
+ >"" : ""
+ 
+ withinAs("a");
+ >withinAs("a") : void
+->withinAs : (p: StartsWithA & EndsWithA) => void
++>withinAs : (p: `a${string}` & `${string}a`) => void
+ >"a" : "a"
+ 
+ withinAs("ab");
+ >withinAs("ab") : void
+->withinAs : (p: StartsWithA & EndsWithA) => void
++>withinAs : (p: `a${string}` & `${string}a`) => void
+ >"ab" : "ab"
+ 
+ withinAs("aba");
+ >withinAs("aba") : void
+->withinAs : (p: StartsWithA & EndsWithA) => void
++>withinAs : (p: `a${string}` & `${string}a`) => void
+ >"aba" : "aba"
+ 
+ withinAs("abavvvva");
+ >withinAs("abavvvva") : void
+->withinAs : (p: StartsWithA & EndsWithA) => void
++>withinAs : (p: `a${string}` & `${string}a`) => void
+ >"abavvvva" : "abavvvva"
+ 

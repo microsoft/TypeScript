@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/externalModules/topLevelAmbientModule.ts] ////
+
+=== foo_1.ts ===
+/// <reference path="foo_0.ts"/>
+import foo = require("foo");
+>foo : typeof import("foo")
+
+var z = foo.x + 10;
+>z : number
+>foo.x + 10 : number
+>foo.x : number
+>foo : typeof import("foo")
+>x : number
+>10 : 10
+
+=== foo_0.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+	export var x: number;
+>x : number
+}
+

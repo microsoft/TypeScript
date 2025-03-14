@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts] ////
+
+=== arrayBindingPatternOmittedExpressions.ts ===
+var results: string[];
+>results : string[]
+
+{
+    let [, b, , a] = results;
+>b : string
+>a : string
+>results : string[]
+
+    let x = {
+>x : { a: string; b: string; }
+>{        a,        b    } : { a: string; b: string; }
+
+        a,
+>a : any
+
+        b
+>b : any
+    }
+}
+
+
+function f([, a, , b, , , , s, , , ] = results) {
+>f : (__0?: string[]) => void
+>a : string
+>b : string
+>s : string
+>results : string[]
+
+    a = s[1];
+>a = s[1] : string
+>a : string
+>s[1] : string
+>s : string
+>1 : 1
+
+    b = s[2];
+>b = s[2] : string
+>b : string
+>s[2] : string
+>s : string
+>2 : 2
+}

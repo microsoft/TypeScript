@@ -1,0 +1,20 @@
+--- old.privateNameBadDeclaration.types
++++ new.privateNameBadDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === privateNameBadDeclaration.ts ===
+ function A() { }
+->A : () => void
++>A : { (): void; prototype: {}; }
+ 
+ A.prototype = {
+ >A.prototype = {  #x: 1,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+->A.prototype : any
+->A : () => void
+->prototype : any
++>A.prototype : {}
++>A : { (): void; prototype: {}; }
++>prototype : {}
+ >{  #x: 1,         // Error  #m() {},       // Error  get #p() { return "" } // Error} : {}
+ 
+   #x: 1,         // Error

@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/jsx/tsxGenericAttributesType9.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+export function makeP<P>(Ctor: React.ComponentClass<P>) {
+>makeP : <P>(Ctor: ComponentClass<P>) => typeof (Anonymous class)
+>P : P
+>Ctor : ComponentClass<P>
+>React : any
+
+	return class extends React.PureComponent<P, void> {
+>class extends React.PureComponent<P, void> {		public render(): JSX.Element {			return (				<Ctor {...this.props } />			);		}	} : typeof (Anonymous class)
+>React.PureComponent : any
+>React : any
+>PureComponent : any
+
+		public render(): JSX.Element {
+>render : () => Element
+>JSX : any
+
+			return (
+>(				<Ctor {...this.props } />			) : any
+
+				<Ctor {...this.props } />
+><Ctor {...this.props } /> : any
+>Ctor : ComponentClass<P>
+>this.props : any
+>this : this
+>props : any
+
+			);
+		}
+	};
+}
+
+

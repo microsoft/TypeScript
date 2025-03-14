@@ -1,0 +1,11 @@
+--- old.optionalProperties01.types
++++ new.optionalProperties01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === optionalProperties01.ts ===
+ interface Foo {
++>Foo : Foo
++
+   required1: string;
+ >required1 : string
+ 

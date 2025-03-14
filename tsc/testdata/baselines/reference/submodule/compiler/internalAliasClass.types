@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/internalAliasClass.ts] ////
+
+=== internalAliasClass.ts ===
+module a {
+>a : typeof a
+
+    export class c {
+>c : c
+    }
+}
+
+module c {
+>c : typeof c
+
+    import b = a.c;
+>b : typeof c
+>a : typeof a
+>c : c
+
+    export var x: b = new b();
+>x : c
+>new b() : c
+>b : typeof c
+}

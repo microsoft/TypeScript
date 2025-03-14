@@ -1,0 +1,11 @@
+--- old.abstractPropertyNegative.types
++++ new.abstractPropertyNegative.types
+@@= skipped -1, +1 lines =@@
+ 
+ === abstractPropertyNegative.ts ===
+ interface A {
++>A : A
++
+     prop: string;
+ >prop : string
+ 

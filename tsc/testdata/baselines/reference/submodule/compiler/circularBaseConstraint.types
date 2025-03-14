@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/circularBaseConstraint.ts] ////
+
+=== circularBaseConstraint.ts ===
+// Repro from #54610
+
+type A<T> = T;
+>A : T
+>T : T
+
+type B<T> = T extends any[]
+>B : B<T>
+>T : T
+
+    ? never
+    : A<T> extends infer key
+>key : key
+
+    ? key extends keyof T
+        ? B<T[key]>
+        : never
+    : never;
+
+function foo<T>() {
+>foo : <T>() => void
+>T : T
+
+    `${a}` as B<T>;
+>`${a}` as B<T> : B<T>
+>`${a}` : string
+>a : any
+}
+

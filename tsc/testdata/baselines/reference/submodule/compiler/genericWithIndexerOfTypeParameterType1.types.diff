@@ -1,0 +1,10 @@
+--- old.genericWithIndexerOfTypeParameterType1.types
++++ new.genericWithIndexerOfTypeParameterType1.types
+@@= skipped -2, +2 lines =@@
+ === genericWithIndexerOfTypeParameterType1.ts ===
+ class LazyArray<T> {
+ >LazyArray : LazyArray<T>
++>T : T
+ 
+     private objects = <{ [objectId: string]: T; }>{};
+ >objects : { [objectId: string]: T; }

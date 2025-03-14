@@ -1,0 +1,10 @@
+--- old.recursiveBaseCheck4.types
++++ new.recursiveBaseCheck4.types
+@@= skipped -2, +2 lines =@@
+ === recursiveBaseCheck4.ts ===
+ class M<T> extends M<string> { }
+ >M : M<T>
++>T : T
+ >M : typeof M
+ 
+ (new M).blah;

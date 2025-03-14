@@ -1,0 +1,32 @@
+--- old.noUnusedLocals_selfReference.types
++++ new.noUnusedLocals_selfReference.types
+@@= skipped -23, +23 lines =@@
+ >C : typeof C
+ }
+ enum E { A = 0, B = E.A }
+->E : E
++>E : E.A
+ >A : E.A
+ >0 : 0
+ >B : E.A
+->E.A : E
++>E.A : E.A
+ >E : typeof E
+->A : E
++>A : E.A
+ 
+ interface I { x: I };
++>I : I
+ >x : I
+ 
+ type T = { x: T };
+@@= skipped -23, +24 lines =@@
+ // Previously `T` was considered unused due to merging with the property,
+ // back when all non-blocks were checked for recursion.
+ export interface A<T> { T: T }
++>A : A<T>
+ >T : T
++>T : T
+ 
+ class P { private m() { this.m; } }
+ >P : P

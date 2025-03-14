@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/reverseMappedTypeRecursiveInference.ts] ////
+
+=== reverseMappedTypeRecursiveInference.ts ===
+type Foo<V> = {
+>Foo : Foo<V>
+>V : V
+
+    [K in keyof V]: Foo<V[K]>;
+>K : K
+}
+
+type Bar<V> = {
+>Bar : Bar<V>
+>V : V
+
+    [K in keyof V]: V[K] extends object ? Bar<V[K]> : string;
+>K : K
+}
+
+function test<V>(value: Foo<V>): V {
+>test : <V>(value: Foo<V>) => V
+>V : V
+>value : Foo<V>
+
+  console.log(value);
+>console.log(value) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>value : Foo<V>
+
+  return undefined as any;
+>undefined as any : any
+>undefined : undefined
+}
+
+const bar: Bar<any> = {};
+>bar : Bar<any>
+>{} : {}
+
+test(bar);
+>test(bar) : { [x: string]: { toString: unknown; charAt: unknown; charCodeAt: unknown; concat: unknown; indexOf: unknown; lastIndexOf: unknown; localeCompare: unknown; match: unknown; replace: unknown; search: unknown; slice: unknown; split: unknown; substring: unknown; toLowerCase: unknown; toLocaleLowerCase: unknown; toUpperCase: unknown; toLocaleUpperCase: unknown; trim: unknown; readonly length: { toString: unknown; toFixed: unknown; toExponential: unknown; toPrecision: unknown; valueOf: unknown; toLocaleString: unknown; }; substr: unknown; valueOf: unknown; } | { [x: string]: { toString: unknown; charAt: unknown; charCodeAt: unknown; concat: unknown; indexOf: unknown; lastIndexOf: unknown; localeCompare: unknown; match: unknown; replace: unknown; search: unknown; slice: unknown; split: unknown; substring: unknown; toLowerCase: unknown; toLocaleLowerCase: unknown; toUpperCase: unknown; toLocaleUpperCase: unknown; trim: unknown; readonly length: unknown; substr: unknown; valueOf: unknown; } | { [x: string]: unknown; }; }; }
+>test : <V>(value: Foo<V>) => V
+>bar : Bar<any>
+

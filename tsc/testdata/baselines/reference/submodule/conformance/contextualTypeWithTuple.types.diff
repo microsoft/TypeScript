@@ -1,0 +1,10 @@
+--- old.contextualTypeWithTuple.types
++++ new.contextualTypeWithTuple.types
+@@= skipped -146, +146 lines =@@
+ >EmptyTuple : []
+ 
+ interface MyEmptyTuple extends EmptyTuple { extraInfo?: any; }
++>MyEmptyTuple : MyEmptyTuple
+ >extraInfo : any
+ 
+ const withExtra: MyEmptyTuple = []

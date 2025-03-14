@@ -1,0 +1,11 @@
+--- old.unparenthesizedFunctionTypeInUnionOrIntersection.types
++++ new.unparenthesizedFunctionTypeInUnionOrIntersection.types
+@@= skipped -39, +39 lines =@@
+ >I3 : () => boolean
+ 
+ type I4 = & () => boolean & null;
+->I4 : () => boolean & null
++>I4 : () => null
+ 
+ type I5 = string & (any: any, any2: any) => any & any;
+ >I5 : I5

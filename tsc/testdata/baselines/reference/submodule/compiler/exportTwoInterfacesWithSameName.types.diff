@@ -1,0 +1,13 @@
+--- old.exportTwoInterfacesWithSameName.types
++++ new.exportTwoInterfacesWithSameName.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/exportTwoInterfacesWithSameName.ts] ////
+ 
+ === exportTwoInterfacesWithSameName.ts ===
++export interface I {}
++>I : I
+ 
+ export interface I {}
+-export interface I {}
++>I : I
+ 

@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/exportStarForValues7.ts] ////
+
+=== file1.ts ===
+export interface Foo { x }
+>Foo : Foo
+>x : any
+
+=== file2.ts ===
+export * from "file1"
+export var x = 1;
+>x : number
+>1 : 1
+
+=== file3.ts ===
+export * from "file2"
+export var x = 1;
+>x : number
+>1 : 1
+

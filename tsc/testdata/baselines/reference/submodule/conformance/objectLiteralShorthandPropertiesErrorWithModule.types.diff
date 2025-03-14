@@ -1,0 +1,17 @@
+--- old.objectLiteralShorthandPropertiesErrorWithModule.types
++++ new.objectLiteralShorthandPropertiesErrorWithModule.types
+@@= skipped -20, +20 lines =@@
+ >10000 : 10000
+ 
+     export var y = {
+->y : { m: typeof m; "": any; }
+->{        m.x  // error    } : { m: typeof m; "": any; }
++>y : { m: typeof m; : any; }
++>{        m.x  // error    } : { m: typeof m; : any; }
+ 
+         m.x  // error
+->m : typeof m
++>m : any
+ > : any
+ >.x : any
+ > : any

@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportAliasesEsModuleInterop.ts] ////
+
+=== cls.js ===
+class Foo {}
+>Foo : Foo
+
+module.exports = Foo;
+>module.exports = Foo : typeof Foo
+>module.exports : any
+>module : any
+>exports : any
+>Foo : typeof Foo
+
+=== usage.js ===
+import {default as Fooa} from "./cls";
+>default : any
+>Fooa : any
+
+export const x = new Fooa();
+>x : any
+>new Fooa() : any
+>Fooa : any
+
+export {default as Foob} from "./cls";
+>default : any
+>Foob : any
+

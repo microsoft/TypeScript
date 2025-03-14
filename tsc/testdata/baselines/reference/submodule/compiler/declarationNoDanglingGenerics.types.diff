@@ -1,0 +1,52 @@
+--- old.declarationNoDanglingGenerics.types
++++ new.declarationNoDanglingGenerics.types
+@@= skipped -6, +6 lines =@@
+ >{} : {}
+ 
+ function register(kind: string): void | never {
+->register : (kind: string) => void | never
++>register : (kind: string) => void
+ >kind : string
+ 
+   if (kindCache[kind]) {
+@@= skipped -24, +24 lines =@@
+ 
+ function ClassFactory<TKind extends string>(kind: TKind) {
+ >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
++>TKind : TKind
+ >kind : TKind
+ 
+   register(kind);
+ >register(kind) : void
+->register : (kind: string) => void | never
++>register : (kind: string) => void
+ >kind : TKind
+ 
+   return class {
+@@= skipped -39, +40 lines =@@
+ 
+ export class AKind extends ClassFactory(Kinds.A) {
+ >AKind : AKind
+->ClassFactory(Kinds.A) : ClassFactory<"A">.(Anonymous class)
++>ClassFactory(Kinds.A) : (Anonymous class)<"A">
+ >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
+ >Kinds.A : "A"
+ >Kinds : typeof Kinds
+@@= skipped -9, +9 lines =@@
+ 
+ export class BKind extends ClassFactory(Kinds.B) {
+ >BKind : BKind
+->ClassFactory(Kinds.B) : ClassFactory<"B">.(Anonymous class)
++>ClassFactory(Kinds.B) : (Anonymous class)<"B">
+ >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
+ >Kinds.B : "B"
+ >Kinds : typeof Kinds
+@@= skipped -9, +9 lines =@@
+ 
+ export class CKind extends ClassFactory(Kinds.C) {
+ >CKind : CKind
+->ClassFactory(Kinds.C) : ClassFactory<"C">.(Anonymous class)
++>ClassFactory(Kinds.C) : (Anonymous class)<"C">
+ >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
+ >Kinds.C : "C"
+ >Kinds : typeof Kinds

@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/unusedTypeParameterInMethod3.ts] ////
+
+=== unusedTypeParameterInMethod3.ts ===
+class A {
+>A : A
+
+    public f1<X, Y, Z>() {
+>f1 : <X, Y, Z>() => void
+>X : X
+>Y : Y
+>Z : Z
+
+        var a: X;
+>a : X
+
+        var b: Y;
+>b : Y
+
+        a;
+>a : X
+
+        b;
+>b : Y
+    }
+}

@@ -1,0 +1,14 @@
+--- old.multipleDefaultExports03.types
++++ new.multipleDefaultExports03.types
+@@= skipped -1, +1 lines =@@
+ 
+ === multipleDefaultExports03.ts ===
+ export default class C {
+->C : C
++>C : default
+ }
+ 
+ export default class C {
+->C : import("multipleDefaultExports03").default
++>C : default
+ }

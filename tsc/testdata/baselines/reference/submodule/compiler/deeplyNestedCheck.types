@@ -1,0 +1,140 @@
+//// [tests/cases/compiler/deeplyNestedCheck.ts] ////
+
+=== deeplyNestedCheck.ts ===
+// Repro from #14794
+
+interface DataSnapshot<X = {}> {
+>DataSnapshot : DataSnapshot<X>
+>X : X
+
+  child(path: string): DataSnapshot;
+>child : (path: string) => DataSnapshot<{}>
+>path : string
+}
+
+interface Snapshot<T> extends DataSnapshot {
+>Snapshot : Snapshot<T>
+>T : T
+
+  child<U extends Extract<keyof T, string>>(path: U): Snapshot<T[U]>;
+>child : <U extends Extract<keyof T, string>>(path: U) => Snapshot<T[U]>
+>U : U
+>path : U
+}
+
+// Repro from 34619
+
+interface A { b: B[] }
+>A : A
+>b : B[]
+
+interface B { c: C }
+>B : B
+>c : C
+
+interface C { d: D[] }
+>C : C
+>d : D[]
+
+interface D { e: E[] }
+>D : D
+>e : E[]
+
+interface E { f: F[] }
+>E : E
+>f : F[]
+
+interface F { g: G }
+>F : F
+>g : G
+
+interface G { h: H[] }
+>G : G
+>h : H[]
+
+interface H { i: string }
+>H : H
+>i : string
+
+const x: A = {
+>x : A
+>{  b: [    {      c: {        d: [          {            e: [              {                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              },            ],          },        ],      },    },  ],} : { b: { c: { d: { e: { f: ???[]; }[]; }[]; }; }[]; }
+
+  b: [
+>b : { c: { d: { e: { f: { g: ???; }[]; }[]; }[]; }; }[]
+>[    {      c: {        d: [          {            e: [              {                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              },            ],          },        ],      },    },  ] : { c: { d: { e: { f: { g: ???; }[]; }[]; }[]; }; }[]
+    {
+>{      c: {        d: [          {            e: [              {                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              },            ],          },        ],      },    } : { c: { d: { e: { f: { g: { h: ???; }; }[]; }[]; }[]; }; }
+
+      c: {
+>c : { d: { e: { f: { g: { h: ???[]; }; }[]; }[]; }[]; }
+>{        d: [          {            e: [              {                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              },            ],          },        ],      } : { d: { e: { f: { g: { h: ???[]; }; }[]; }[]; }[]; }
+
+        d: [
+>d : { e: { f: { g: { h: {}[]; }; }[]; }[]; }[]
+>[          {            e: [              {                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              },            ],          },        ] : { e: { f: { g: { h: {}[]; }; }[]; }[]; }[]
+          {
+>{            e: [              {                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              },            ],          } : { e: { f: { g: { h: {}[]; }; }[]; }[]; }
+
+            e: [
+>e : { f: { g: { h: {}[]; }; }[]; }[]
+>[              {                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              },            ] : { f: { g: { h: {}[]; }; }[]; }[]
+              {
+>{                f: [                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ],              } : { f: { g: { h: {}[]; }; }[]; }
+
+                f: [
+>f : { g: { h: {}[]; }; }[]
+>[                  {                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  },                ] : { g: { h: {}[]; }; }[]
+                  {
+>{                    g: {                      h: [                        {                          // i: '',                        },                      ],                    },                  } : { g: { h: {}[]; }; }
+
+                    g: {
+>g : { h: {}[]; }
+>{                      h: [                        {                          // i: '',                        },                      ],                    } : { h: {}[]; }
+
+                      h: [
+>h : {}[]
+>[                        {                          // i: '',                        },                      ] : {}[]
+                        {
+>{                          // i: '',                        } : {}
+
+                          // i: '',
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+};
+
+// Repro from 34619
+
+const a1: string[][][][][] = [[[[[42]]]]];
+>a1 : string[][][][][]
+>[[[[[42]]]]] : number[][][][][]
+>[[[[42]]]] : number[][][][]
+>[[[42]]] : number[][][]
+>[[42]] : number[][]
+>[42] : number[]
+>42 : 42
+
+const a2: string[][][][][][][][][][] = [[[[[[[[[[42]]]]]]]]]];
+>a2 : ???[][][][][][][][][]
+>[[[[[[[[[[42]]]]]]]]]] : ???[][][][][][][][][]
+>[[[[[[[[[42]]]]]]]]] : number[][][][][][][][][]
+>[[[[[[[[42]]]]]]]] : number[][][][][][][][]
+>[[[[[[[42]]]]]]] : number[][][][][][][]
+>[[[[[[42]]]]]] : number[][][][][][]
+>[[[[[42]]]]] : number[][][][][]
+>[[[[42]]]] : number[][][][]
+>[[[42]]] : number[][][]
+>[[42]] : number[][]
+>[42] : number[]
+>42 : 42
+

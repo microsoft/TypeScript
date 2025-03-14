@@ -1,0 +1,11 @@
+--- old.parserInterfaceKeywordInEnum.types
++++ new.parserInterfaceKeywordInEnum.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserInterfaceKeywordInEnum.ts ===
+ enum Bar {
+->Bar : Bar
++>Bar : Bar.interface
+ 
+     interface,
+ >interface : Bar.interface

@@ -1,0 +1,13 @@
+--- old.interfaceMayNotBeExtendedWitACall.types
++++ new.interfaceMayNotBeExtendedWitACall.types
+@@= skipped -1, +1 lines =@@
+ 
+ === interfaceMayNotBeExtendedWitACall.ts ===
+ interface color {}
++>color : color
+ 
+ interface blue extends color() { // error
++>blue : blue
+ >color() : any
+ >color : any
+ 

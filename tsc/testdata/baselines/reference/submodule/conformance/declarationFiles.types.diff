@@ -1,0 +1,21 @@
+--- old.declarationFiles.types
++++ new.declarationFiles.types
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ interface Foo<T> {
++>Foo : Foo<T>
++>T : T
++
+     x: T;
+ >x : T
+ 
+@@= skipped -37, +40 lines =@@
+ >h : Foo<this>
+ 
+     i: Foo<this | (() => this)>;
+->i : Foo<this | (() => this)>
++>i : Foo<this | () => this>
+ 
+     j: (x: any) => x is this;
+ >j : (x: any) => x is this

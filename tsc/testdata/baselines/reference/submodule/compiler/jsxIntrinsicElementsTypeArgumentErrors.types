@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/jsxIntrinsicElementsTypeArgumentErrors.tsx] ////
+
+=== jsxIntrinsicElementsTypeArgumentErrors.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : any
+
+// opening + closing
+const a = <div<>></div>; // empty type args
+>a : any
+><div<>></div> : any
+>div : any
+>div : any
+
+const b = <div<number,>></div>; // trailing comma type args
+>b : any
+><div<number,>></div> : any
+>div : any
+>div : any
+
+const c = <div<Missing>></div>; // nonexistant type args
+>c : any
+><div<Missing>></div> : any
+>div : any
+>div : any
+
+const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
+>d : any
+><div<Missing<AlsoMissing>>></div> : any
+>div : any
+>div : any
+
+const e = <div<Record<object, object>>></div>; // existing but incorrect nested type args
+>e : any
+><div<Record<object, object>>></div> : any
+>div : any
+>div : any
+
+const f = <div<number>></div>; // existing type argument with no internal issues
+>f : any
+><div<number>></div> : any
+>div : any
+>div : any
+
+// self-closing
+const g = <div<>/>; // empty type args
+>g : any
+><div<>/> : any
+>div : any
+
+const h = <div<number,>/>; // trailing comma type args
+>h : any
+><div<number,>/> : any
+>div : any
+
+const i = <div<Missing>/>; // nonexistant type args
+>i : any
+><div<Missing>/> : any
+>div : any
+
+const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
+>j : any
+><div<Missing<AlsoMissing>>/> : any
+>div : any
+
+const k = <div<Record<object, object>>/>; // existing but incorrect nested type args
+>k : any
+><div<Record<object, object>>/> : any
+>div : any
+
+const l = <div<number>/>; // existing type argument with no internal issues
+>l : any
+><div<number>/> : any
+>div : any
+

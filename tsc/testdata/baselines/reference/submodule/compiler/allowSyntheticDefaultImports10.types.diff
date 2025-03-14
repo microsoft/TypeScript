@@ -1,0 +1,27 @@
+--- old.allowSyntheticDefaultImports10.types
++++ new.allowSyntheticDefaultImports10.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ import Foo = require("./b");
+->Foo : typeof Foo
++>Foo : typeof import("b")
+ 
+ Foo.default.bar();
+ >Foo.default.bar() : any
+ >Foo.default.bar : any
+ >Foo.default : any
+->Foo : typeof Foo
++>Foo : typeof import("b")
+ >default : any
+ >bar : any
+ 
+@@= skipped -15, +15 lines =@@
+ >Foo.default.default.foo : any
+ >Foo.default.default : any
+ >Foo.default : any
+->Foo : typeof Foo
++>Foo : typeof import("b")
+ >default : any
+ >default : any
+ >foo : any

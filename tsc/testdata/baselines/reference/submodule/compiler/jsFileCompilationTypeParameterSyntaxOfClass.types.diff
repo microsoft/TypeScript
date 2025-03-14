@@ -1,0 +1,8 @@
+--- old.jsFileCompilationTypeParameterSyntaxOfClass.types
++++ new.jsFileCompilationTypeParameterSyntaxOfClass.types
+@@= skipped -2, +2 lines =@@
+ === a.js ===
+ class C<T> { }
+ >C : C<T>
++>T : T
+ 

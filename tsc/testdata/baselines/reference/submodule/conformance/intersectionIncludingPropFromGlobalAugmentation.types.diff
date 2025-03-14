@@ -1,0 +1,19 @@
+--- old.intersectionIncludingPropFromGlobalAugmentation.types
++++ new.intersectionIncludingPropFromGlobalAugmentation.types
+@@= skipped -3, +3 lines =@@
+ // repro from https://github.com/microsoft/TypeScript/issues/54345
+ 
+ interface Test1 { toString: null | 'string'; }
++>Test1 : Test1
+ >toString : "string" | null
+ 
+ type Test2 = Test1 & { optional?: unknown };
+@@= skipped -11, +12 lines =@@
+ 
+ const target: Test2 = { ...source };
+ >target : Test2
+->{ ...source } : { toString: null | "string"; }
++>{ ...source } : { toString: "string" | null; }
+ >source : Test1
+ 
+ const toString = target.toString;

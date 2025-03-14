@@ -1,0 +1,11 @@
+--- old.narrowByClauseExpressionInSwitchTrue9.types
++++ new.narrowByClauseExpressionInSwitchTrue9.types
+@@= skipped -1, +1 lines =@@
+ 
+ === narrowByClauseExpressionInSwitchTrue9.ts ===
+ interface IProps {
++>IProps : IProps
++
+     one: boolean;
+ >one : boolean
+ }

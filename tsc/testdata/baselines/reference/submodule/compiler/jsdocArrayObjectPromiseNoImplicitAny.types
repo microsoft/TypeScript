@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/jsdocArrayObjectPromiseNoImplicitAny.ts] ////
+
+=== jsdocArrayObjectPromiseNoImplicitAny.js ===
+/** @type {Array} */
+var notAnyArray = [5];
+>notAnyArray : number[]
+>[5] : number[]
+>5 : 5
+
+/** @type {Array<number>} */
+var numberArray = [5];
+>numberArray : number[]
+>[5] : number[]
+>5 : 5
+
+/**
+ * @param {Array} arr
+ * @return {Array}
+ */
+function returnNotAnyArray(arr) {
+>returnNotAnyArray : (arr: any) => any
+>arr : any
+
+  return arr;
+>arr : any
+}
+
+/** @type {Promise} */
+var notAnyPromise = Promise.resolve(5);
+>notAnyPromise : Promise<number>
+>Promise.resolve(5) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>5 : 5
+
+/** @type {Promise<number>} */
+var numberPromise = Promise.resolve(5);
+>numberPromise : Promise<number>
+>Promise.resolve(5) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>5 : 5
+
+/**
+ * @param {Promise} pr
+ * @return {Promise}
+ */
+function returnNotAnyPromise(pr) {
+>returnNotAnyPromise : (pr: any) => any
+>pr : any
+
+  return pr;
+>pr : any
+}
+
+/** @type {Object} */
+var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
+>notAnyObject : { valueOf: number; }
+>{valueOf: 1} : { valueOf: number; }
+>valueOf : number
+>1 : 1
+
+/** @type {Object<string, number>} */
+var paramedObject = {valueOf: 1};
+>paramedObject : { valueOf: number; }
+>{valueOf: 1} : { valueOf: number; }
+>valueOf : number
+>1 : 1
+
+/**
+ * @param {Object} obj
+ * @return {Object}
+ */
+function returnNotAnyObject(obj) {
+>returnNotAnyObject : (obj: any) => any
+>obj : any
+
+  return obj;
+>obj : any
+}
+

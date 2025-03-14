@@ -1,0 +1,10 @@
+--- old.functionDeclarationWithResolutionOfTypeNamedArguments01.types
++++ new.functionDeclarationWithResolutionOfTypeNamedArguments01.types
+@@= skipped -1, +1 lines =@@
+ 
+ === functionDeclarationWithResolutionOfTypeNamedArguments01.ts ===
+ interface arguments {
++>arguments : arguments
+ }
+ 
+ function f() {

@@ -1,0 +1,73 @@
+--- old.typeFromPropertyAssignment22.types
++++ new.typeFromPropertyAssignment22.types
+@@= skipped -1, +1 lines =@@
+ 
+ === npm-install.js ===
+ function Installer () {
+->Installer : typeof Installer
++>Installer : () => void
+ 
+     this.args = 0
+ >this.args = 0 : 0
+ >this.args : any
+->this : this
++>this : any
+ >args : any
+ >0 : 0
+ }
+@@= skipped -13, +13 lines =@@
+ >Installer.prototype.loadArgMetadata = function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
+ >Installer.prototype.loadArgMetadata : any
+ >Installer.prototype : any
+->Installer : typeof Installer
++>Installer : () => void
+ >prototype : any
+ >loadArgMetadata : any
+ >function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
+@@= skipped -13, +13 lines =@@
+ 
+         this.args = 'hi'
+ >this.args = 'hi' : "hi"
+->this.args : number
+->this : this
+->args : number
++>this.args : any
++>this : any
++>args : any
+ >'hi' : "hi"
+ 
+         this.newProperty = 1
+ >this.newProperty = 1 : 1
+->this.newProperty : number | undefined
+->this : this
+->newProperty : number | undefined
++>this.newProperty : any
++>this : any
++>newProperty : any
+ >1 : 1
+     }
+ }
+ var i = new Installer()
+->i : Installer
+->new Installer() : Installer
+->Installer : typeof Installer
++>i : any
++>new Installer() : any
++>Installer : () => void
+ 
+ i.newProperty = i.args // ok, number ==> number | undefined
+->i.newProperty = i.args : number
+->i.newProperty : number | undefined
+->i : Installer
+->newProperty : number | undefined
+->i.args : number
+->i : Installer
+->args : number
++>i.newProperty = i.args : any
++>i.newProperty : any
++>i : any
++>newProperty : any
++>i.args : any
++>i : any
++>args : any
+ 

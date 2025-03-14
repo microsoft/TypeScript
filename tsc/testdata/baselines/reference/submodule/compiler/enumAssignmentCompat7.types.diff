@@ -1,0 +1,62 @@
+--- old.enumAssignmentCompat7.types
++++ new.enumAssignmentCompat7.types
+@@= skipped -4, +4 lines =@@
+ >first : typeof first
+ 
+     export enum E { A = 1 }
+->E : E
++>E : E.A
+ >A : E.A
+ >1 : 1
+ }
+@@= skipped -9, +9 lines =@@
+ >second : typeof second
+ 
+     export enum E { A = 2 }
+->E : E
++>E : E.A
+ >A : E.A
+ >2 : 2
+ }
+@@= skipped -9, +9 lines =@@
+ >Base : Base
+ 
+     method(param: first.E) {
+->method : (param: first.E) => void
+->param : first.E
++>method : (param: E.A) => void
++>param : E.A
+ >first : any
+ 
+     }
+@@= skipped -12, +12 lines =@@
+ >Base : Base
+ 
+     override method(param: second.E) {
+->method : (param: second.E) => void
+->param : second.E
++>method : (param: E.A) => void
++>param : E.A
+ >second : any
+     }
+ }
+ 
+ function overloadingFunction(): first.E
+->overloadingFunction : () => first.E
++>overloadingFunction : () => E.A
+ >first : any
+ 
+ function overloadingFunction(): second.E {
+->overloadingFunction : () => first.E
++>overloadingFunction : () => E.A
+ >second : any
+ 
+     return second.E.B
+ >second.E.B : any
+->second.E : typeof second.E
++>second.E : typeof E
+ >second : typeof second
+->E : typeof second.E
++>E : typeof E
+ >B : any
+ }

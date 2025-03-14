@@ -1,0 +1,11 @@
+--- old.generatorTypeCheck20.types
++++ new.generatorTypeCheck20.types
+@@= skipped -9, +9 lines =@@
+ >z : number
+ 
+ function* g(): IterableIterator<Foo> {
+->g : () => IterableIterator<Foo>
++>g : () => IterableIterator<Foo, any, any>
+ 
+     yield;
+ >yield : any

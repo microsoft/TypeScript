@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/declarationEmitMappedTypeDistributivityPreservesConstraints.ts] ////
+
+=== types.ts ===
+type Fns = Record<string, (...params: unknown[]) => unknown>
+>Fns : Fns
+>params : unknown[]
+
+type Map<T extends Fns> = { [K in keyof T]: T[K]; };
+>Map : Map<T>
+>T : T
+>K : K
+
+type AllArg<T extends Fns> = { [K in keyof T]: Parameters<T[K]> };
+>AllArg : AllArg<T>
+>T : T
+>K : K
+
+function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
+>fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
+>T : T
+>x : Map<T["x"]>
+>sliceIndex : T
+
+    return null!;
+>null! : null
+}
+
+export default { fn };
+>{ fn } : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
+>fn : any
+
+=== reexport.ts ===
+import test from "./types";
+>test : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
+
+export default { test };
+>{ test } : { test: { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }; }
+>test : any
+

@@ -1,0 +1,11 @@
+--- old.ParameterList13.types
++++ new.ParameterList13.types
+@@= skipped -1, +1 lines =@@
+ 
+ === ParameterList13.ts ===
+ interface I {
++>I : I
++
+     new (public x);
+ >x : any
+ }

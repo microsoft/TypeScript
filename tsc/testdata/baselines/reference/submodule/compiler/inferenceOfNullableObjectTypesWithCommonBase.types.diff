@@ -1,0 +1,27 @@
+--- old.inferenceOfNullableObjectTypesWithCommonBase.types
++++ new.inferenceOfNullableObjectTypesWithCommonBase.types
+@@= skipped -2, +2 lines =@@
+ === inferenceOfNullableObjectTypesWithCommonBase.ts ===
+ function equal<T>(a: T, b: T) { }
+ >equal : <T>(a: T, b: T) => void
++>T : T
+ >a : T
+ >b : T
+ 
+@@= skipped -135, +136 lines =@@
+ >equal : <T>(a: T, b: T) => void
+ >v as string : string
+ >v : never
+->v as string & { tag: 'foo' } | undefined : (string & { tag: "foo"; }) | undefined
++>v as string & { tag: 'foo' } | undefined : string & { tag: "foo"; } | undefined
+ >v : never
+ >tag : "foo"
+ 
+ equal(v as string & { tag: 'foo' } | undefined, v as string);
+ >equal(v as string & { tag: 'foo' } | undefined, v as string) : void
+ >equal : <T>(a: T, b: T) => void
+->v as string & { tag: 'foo' } | undefined : (string & { tag: "foo"; }) | undefined
++>v as string & { tag: 'foo' } | undefined : string & { tag: "foo"; } | undefined
+ >v : never
+ >tag : "foo"
+ >v as string : string

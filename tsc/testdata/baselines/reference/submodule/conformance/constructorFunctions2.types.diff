@@ -1,0 +1,102 @@
+--- old.constructorFunctions2.types
++++ new.constructorFunctions2.types
+@@= skipped -10, +10 lines =@@
+ 
+ === index.js ===
+ const A = require("./other");
+->A : typeof A
+->require("./other") : typeof A
++>A : any
++>require("./other") : any
+ >require : (id: string) => any
+ >"./other" : "./other"
+ 
+ const a = new A().id;
+->a : number
+->new A().id : number
+->new A() : A
+->A : typeof A
+->id : number
++>a : any
++>new A().id : any
++>new A() : any
++>A : any
++>id : any
+ 
+ const B = function() { this.id = 1; }
+->B : typeof B
+->function() { this.id = 1; } : typeof B
++>B : () => void
++>function() { this.id = 1; } : () => void
+ >this.id = 1 : 1
+ >this.id : any
+->this : this
++>this : any
+ >id : any
+ >1 : 1
+ 
+@@= skipped -25, +25 lines =@@
+ >B.prototype.m = function() { this.x = 2; } : () => void
+ >B.prototype.m : any
+ >B.prototype : any
+->B : typeof B
++>B : () => void
+ >prototype : any
+ >m : any
+ >function() { this.x = 2; } : () => void
+ >this.x = 2 : 2
+->this.x : number
+->this : this
+->x : number
++>this.x : any
++>this : any
++>x : any
+ >2 : 2
+ 
+ const b = new B();
+->b : B
+->new B() : B
+->B : typeof B
++>b : any
++>new B() : any
++>B : () => void
+ 
+ b.id;
+->b.id : number
+->b : B
+->id : number
++>b.id : any
++>b : any
++>id : any
+ 
+ b.x;
+->b.x : number
+->b : B
+->x : number
++>b.x : any
++>b : any
++>x : any
+ 
+ === other.js ===
+ function A() { this.id = 1; }
+->A : typeof A
++>A : () => void
+ >this.id = 1 : 1
+ >this.id : any
+->this : this
++>this : any
+ >id : any
+ >1 : 1
+ 
+ module.exports = A;
+->module.exports = A : typeof A
+->module.exports : typeof A
+->module : { exports: typeof A; }
+->exports : typeof A
+->A : typeof A
++>module.exports = A : any
++>module.exports : any
++>module : any
++>exports : any
++>A : any
+ 

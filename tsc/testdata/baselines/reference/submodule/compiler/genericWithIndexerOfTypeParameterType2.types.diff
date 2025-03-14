@@ -1,0 +1,10 @@
+--- old.genericWithIndexerOfTypeParameterType2.types
++++ new.genericWithIndexerOfTypeParameterType2.types
+@@= skipped -2, +2 lines =@@
+ === genericWithIndexerOfTypeParameterType2.ts ===
+ export class Collection<TItem extends CollectionItem> {
+ >Collection : Collection<TItem>
++>TItem : TItem
+ 
+     _itemsByKey: { [key: string]: TItem; };
+ >_itemsByKey : { [key: string]: TItem; }

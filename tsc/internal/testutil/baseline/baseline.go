@@ -13,8 +13,9 @@ import (
 )
 
 type Options struct {
-	Subfolder   string
-	IsSubmodule bool
+	Subfolder    string
+	IsSubmodule  bool
+	DiffFixupOld func(string) string
 }
 
 const (
@@ -25,18 +26,21 @@ const (
 func Run(t *testing.T, fileName string, actual string, opts Options) {
 	if opts.IsSubmodule {
 		opts.Subfolder = filepath.Join(submoduleFolder, opts.Subfolder)
-		diff := getBaselineDiff(t, actual, fileName)
+		diff := getBaselineDiff(t, actual, fileName, opts.DiffFixupOld)
 		diffFileName := fileName + ".diff"
 		writeComparison(t, diff, diffFileName, false, opts)
 	}
 	writeComparison(t, actual, fileName, false, opts)
 }
 
-func getBaselineDiff(t *testing.T, actual string, fileName string) string {
+func getBaselineDiff(t *testing.T, actual string, fileName string, fixupOld func(string) string) string {
 	expected := NoContent
 	refFileName := submoduleReferencePath(fileName, "" /*subfolder*/)
 	if content, err := os.ReadFile(refFileName); err == nil {
 		expected = string(content)
+	}
+	if fixupOld != nil {
+		expected = fixupOld(expected)
 	}
 	if actual == expected {
 		return NoContent

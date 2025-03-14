@@ -1,0 +1,10 @@
+--- old.InterfaceDeclaration8.types
++++ new.InterfaceDeclaration8.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/InterfaceDeclaration8.ts] ////
+ 
+ === InterfaceDeclaration8.ts ===
+-
+ interface string {
++>string : string
+ }

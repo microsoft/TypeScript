@@ -1,0 +1,10 @@
+--- old.typeInferenceFixEarly.types
++++ new.typeInferenceFixEarly.types
+@@= skipped -2, +2 lines =@@
+ === typeInferenceFixEarly.ts ===
+ declare function f<T>(p: (t: T) => T): T;
+ >f : <T>(p: (t: T) => T) => T
++>T : T
+ >p : (t: T) => T
+ >t : T
+ 

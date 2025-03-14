@@ -1,0 +1,170 @@
+--- old.instantiatedModule.types
++++ new.instantiatedModule.types
+@@= skipped -6, +6 lines =@@
+ >M : typeof M
+ 
+     export interface Point { x: number; y: number }
++>Point : Point
+ >x : number
+ >y : number
+ 
+@@= skipped -11, +12 lines =@@
+ // primary expression
+ var m: typeof M;
+ >m : typeof M
+->M : typeof M
+ 
+ var m = M;
+ >m : typeof M
+@@= skipped -59, +58 lines =@@
+ 
+ var m2: typeof M2;
+ >m2 : typeof M2
+->M2 : typeof M2
+ 
+ var m2 = M2;
+ >m2 : typeof M2
+@@= skipped -8, +7 lines =@@
+ 
+ // static side of the class
+ var a2: typeof M2.Point;
+->a2 : typeof M2.Point
+->M2.Point : typeof M2.Point
++>a2 : typeof Point
+ >M2 : typeof M2
+->Point : typeof M2.Point
+ 
+ var a2 = m2.Point;
+->a2 : typeof M2.Point
+->m2.Point : typeof M2.Point
++>a2 : typeof Point
++>m2.Point : typeof Point
+ >m2 : typeof M2
+->Point : typeof M2.Point
++>Point : typeof Point
+ 
+ var a2 = M2.Point;
+->a2 : typeof M2.Point
+->M2.Point : typeof M2.Point
++>a2 : typeof Point
++>M2.Point : typeof Point
+ >M2 : typeof M2
+->Point : typeof M2.Point
++>Point : typeof Point
+ 
+ var o: M2.Point = a2.Origin();
+->o : M2.Point
++>o : Point
+ >M2 : any
+->a2.Origin() : M2.Point
+->a2.Origin : () => M2.Point
+->a2 : typeof M2.Point
+->Origin : () => M2.Point
++>a2.Origin() : Point
++>a2.Origin : () => Point
++>a2 : typeof Point
++>Origin : () => Point
+ 
+ var p2: { x: number; y: number }
+ >p2 : { x: number; y: number; }
+@@= skipped -36, +34 lines =@@
+ 
+ var p2 = new m2.Point();
+ >p2 : { x: number; y: number; }
+->new m2.Point() : M2.Point
+->m2.Point : typeof M2.Point
++>new m2.Point() : Point
++>m2.Point : typeof Point
+ >m2 : typeof M2
+->Point : typeof M2.Point
++>Point : typeof Point
+ 
+ var p2 = new M2.Point();
+ >p2 : { x: number; y: number; }
+->new M2.Point() : M2.Point
+->M2.Point : typeof M2.Point
++>new M2.Point() : Point
++>M2.Point : typeof Point
+ >M2 : typeof M2
+->Point : typeof M2.Point
++>Point : typeof Point
+ 
+ module M3 {
+ >M3 : typeof M3
+@@= skipped -23, +23 lines =@@
+ 
+ var m3: typeof M3;
+ >m3 : typeof M3
+->M3 : typeof M3
+ 
+ var m3 = M3;
+ >m3 : typeof M3
+ >M3 : typeof M3
+ 
+ var a3: typeof M3.Color;
+->a3 : typeof M3.Color
+->M3.Color : typeof M3.Color
++>a3 : typeof Color
+ >M3 : typeof M3
+->Color : typeof M3.Color
+ 
+ var a3 = m3.Color;
+->a3 : typeof M3.Color
+->m3.Color : typeof M3.Color
++>a3 : typeof Color
++>m3.Color : typeof Color
+ >m3 : typeof M3
+->Color : typeof M3.Color
++>Color : typeof Color
+ 
+ var a3 = M3.Color;
+->a3 : typeof M3.Color
+->M3.Color : typeof M3.Color
++>a3 : typeof Color
++>M3.Color : typeof Color
+ >M3 : typeof M3
+->Color : typeof M3.Color
++>Color : typeof Color
+ 
+ var blue: M3.Color = a3.Blue;
+->blue : M3.Color
++>blue : Color
+ >M3 : any
+->a3.Blue : M3.Color.Blue
+->a3 : typeof M3.Color
+->Blue : M3.Color.Blue
++>a3.Blue : Color.Blue
++>a3 : typeof Color
++>Blue : Color.Blue
+ 
+ var p3: M3.Color;
+->p3 : M3.Color
++>p3 : Color
+ >M3 : any
+ 
+ var p3 = M3.Color.Red;
+->p3 : M3.Color
+->M3.Color.Red : M3.Color.Red
+->M3.Color : typeof M3.Color
++>p3 : Color
++>M3.Color.Red : Color.Red
++>M3.Color : typeof Color
+ >M3 : typeof M3
+->Color : typeof M3.Color
+->Red : M3.Color.Red
++>Color : typeof Color
++>Red : Color.Red
+ 
+ var p3 = m3.Color.Blue;
+->p3 : M3.Color
+->m3.Color.Blue : M3.Color.Blue
+->m3.Color : typeof M3.Color
++>p3 : Color
++>m3.Color.Blue : Color.Blue
++>m3.Color : typeof Color
+ >m3 : typeof M3
+->Color : typeof M3.Color
+->Blue : M3.Color.Blue
++>Color : typeof Color
++>Blue : Color.Blue
+ 

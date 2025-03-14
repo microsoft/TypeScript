@@ -1,0 +1,11 @@
+--- old.importDefaultNamedType3.types
++++ new.importDefaultNamedType3.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /b.ts ===
+ import type from = require('./a');
+->from : typeof from
++>from : typeof import("/a")
+ 
+ === /a.ts ===
+ export class A {}

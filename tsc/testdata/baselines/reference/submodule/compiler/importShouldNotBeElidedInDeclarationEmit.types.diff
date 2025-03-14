@@ -1,0 +1,17 @@
+--- old.importShouldNotBeElidedInDeclarationEmit.types
++++ new.importShouldNotBeElidedInDeclarationEmit.types
+@@= skipped -15, +15 lines =@@
+ 
+ === index.ts ===
+ import { makeThing } from "umd";
+->makeThing : () => import("node_modules/umd").Thing
++>makeThing : () => Thing
+ 
+ export const thing = makeThing();
+->thing : import("node_modules/umd").Thing
+->makeThing() : import("node_modules/umd").Thing
+->makeThing : () => import("node_modules/umd").Thing
++>thing : Thing
++>makeThing() : Thing
++>makeThing : () => Thing
+ 

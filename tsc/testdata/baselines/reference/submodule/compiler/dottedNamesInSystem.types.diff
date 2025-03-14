@@ -1,0 +1,26 @@
+--- old.dottedNamesInSystem.types
++++ new.dottedNamesInSystem.types
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ export function bar() {
+->bar : () => void
++>bar : () => any
+ 
+     return A.B.C.foo();
+->A.B.C.foo() : void
+->A.B.C.foo : () => void
+->A.B.C : typeof A.B.C
+->A.B : typeof A.B
++>A.B.C.foo() : any
++>A.B.C.foo : any
++>A.B.C : any
++>A.B : any
+ >A : typeof A
+->B : typeof A.B
+->C : typeof A.B.C
+->foo : () => void
++>B : any
++>C : any
++>foo : any
+ }

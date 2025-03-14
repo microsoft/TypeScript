@@ -1,0 +1,11 @@
+--- old.arrayAssignmentTest2.types
++++ new.arrayAssignmentTest2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === arrayAssignmentTest2.ts ===
+ interface I1 {
++>I1 : I1
++
+ 	IM1():void[];
+ >IM1 : () => void[]
+ }

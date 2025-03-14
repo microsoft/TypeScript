@@ -1,0 +1,75 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty1.tsx] ////
+
+=== file.tsx ===
+import React = require('react');
+>React : any
+
+interface Prop {
+>Prop : Prop
+
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: string | JSX.Element
+>children : any
+>JSX : any
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => any
+>p : Prop
+
+    return <div>{p.b}</div>;
+><div>{p.b}</div> : any
+>div : any
+>p.b : string
+>p : Prop
+>b : string
+>div : any
+}
+
+// OK
+let k = <Comp a={10} b="hi" children ="lol" />;
+>k : any
+><Comp a={10} b="hi" children ="lol" /> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+>children : any
+
+let k1 =
+>k1 : any
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        hi hi hi!    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => any
+
+let k2 =
+>k2 : any
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        <div>hi hi hi!</div>    </Comp> : any
+>Comp : (p: Prop) => any
+>a : any
+>10 : 10
+>b : any
+
+        <div>hi hi hi!</div>
+><div>hi hi hi!</div> : any
+>div : any
+>div : any
+
+    </Comp>;
+>Comp : (p: Prop) => any
+

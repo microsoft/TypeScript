@@ -1,0 +1,28 @@
+--- old.deleteExpressionMustBeOptional(strict=false).types
++++ new.deleteExpressionMustBeOptional(strict=false).types
+@@= skipped -1, +1 lines =@@
+ 
+ === deleteExpressionMustBeOptional.ts ===
+ interface Foo {
++>Foo : Foo
++
+     a: number
+ >a : number
+ 
+@@= skipped -29, +31 lines =@@
+ }
+ 
+ interface AA {
++>AA : AA
++
+     [s: string]: number
+ >s : string
+ }
+@@= skipped -8, +10 lines =@@
+ >BB : BB
+ 
+     [P in keyof any]: number
++>P : P
+ }
+ 
+ declare const f: Foo

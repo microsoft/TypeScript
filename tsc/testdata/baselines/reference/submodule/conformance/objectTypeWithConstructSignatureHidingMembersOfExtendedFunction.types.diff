@@ -1,0 +1,77 @@
+--- old.objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.types
++++ new.objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts ===
+ interface Function {
++>Function : Function
++
+     data: number;
+ >data : number
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     new(): number;
+     apply(a: any, b?: any): void;
+ >apply : (a: any, b?: any) => void
+@@= skipped -44, +46 lines =@@
+ >data : number
+ 
+ var r1e = i['hm']; // should be Object
+->r1e : error
+->i['hm'] : error
++>r1e : any
++>i['hm'] : any
+ >i : I
+ >'hm' : "hm"
+ 
+ var x: {
+->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
++>x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+ 
+     new(): number;
+     apply(a: any, b?: any): void;
+@@= skipped -25, +25 lines =@@
+ >a : any
+ >b : any
+ >x.apply : (a: any, b?: any) => void
+->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
++>x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+ >apply : (a: any, b?: any) => void
+ 
+ var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
+@@= skipped -8, +8 lines =@@
+ >thisArg : number
+ >argArray : number[]
+ >x.call : (thisArg: number, ...argArray: number[]) => any
+->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
++>x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+ >call : (thisArg: number, ...argArray: number[]) => any
+ 
+ var r2c = x.arguments;
+ >r2c : any
+ >x.arguments : any
+->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
++>x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+ >arguments : any
+ 
+ var r2d = x.data;
+ >r2d : number
+ >x.data : number
+->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
++>x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+ >data : number
+ 
+ var r2e = x['hm']; // should be Object
+->r2e : error
+->x['hm'] : error
+->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
++>r2e : any
++>x['hm'] : any
++>x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+ >'hm' : "hm"
+ 

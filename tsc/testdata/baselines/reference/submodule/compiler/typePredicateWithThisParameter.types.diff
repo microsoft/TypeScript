@@ -1,0 +1,52 @@
+--- old.typePredicateWithThisParameter.types
++++ new.typePredicateWithThisParameter.types
+@@= skipped -3, +3 lines =@@
+ // Repro from #15310
+ 
+ interface Foo {
++>Foo : Foo
++
+     foo: string;
+ >foo : string
+ }
+ interface Bar {
++>Bar : Bar
++
+     bar: string;
+ >bar : string
+ }
+@@= skipped -19, +23 lines =@@
+ }
+ 
+ function isFoo2(this: void, object: {}): object is Foo {
+->isFoo2 : (this: void, object: {}) => object is Foo
++>isFoo2 : (object: {}) => object is Foo
+ >this : void
+ >object : {}
+ 
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ declare let test: Foo | Bar;
+->test : Foo | Bar
++>test : Bar | Foo
+ 
+ if (isFoo1(test)) {
+ >isFoo1(test) : boolean
+ >isFoo1 : (object: {}) => object is Foo
+->test : Foo | Bar
++>test : Bar | Foo
+ 
+     test.foo = 'hi';
+ >test.foo = 'hi' : "hi"
+@@= skipped -17, +17 lines =@@
+ 
+ if (isFoo2(test)) {
+ >isFoo2(test) : boolean
+->isFoo2 : (this: void, object: {}) => object is Foo
+->test : Foo | Bar
++>isFoo2 : (object: {}) => object is Foo
++>test : Bar | Foo
+ 
+     test.foo = 'hi';
+ >test.foo = 'hi' : "hi"

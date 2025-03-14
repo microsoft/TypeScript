@@ -1,0 +1,11 @@
+--- old.indexerSignatureWithRestParam.types
++++ new.indexerSignatureWithRestParam.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexerSignatureWithRestParam.ts ===
+ interface I {
++>I : I
++
+     [...x]: string;
+ >x : any[]
+ }

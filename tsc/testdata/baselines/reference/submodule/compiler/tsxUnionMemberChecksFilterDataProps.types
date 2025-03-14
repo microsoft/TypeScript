@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/tsxUnionMemberChecksFilterDataProps.tsx] ////
+
+=== tsxUnionMemberChecksFilterDataProps.tsx ===
+/// <reference path="react16.d.ts" />
+import React, { ReactElement } from "react";
+>React : any
+>ReactElement : any
+
+declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;
+>NotHappy : (props: { fixed?: boolean; } | { value?: number; }) => ReactElement<any>
+>props : { fixed?: boolean; } | { value?: number; }
+>fixed : boolean
+>value : number
+
+declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement<any>;
+>Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
+>props : { fixed?: boolean; value?: number; }
+>fixed : boolean
+>value : number
+
+const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
+>RootNotHappy : () => any
+>() => (<NotHappy data-testid="my-test-id" />) : () => any
+>(<NotHappy data-testid="my-test-id" />) : any
+><NotHappy data-testid="my-test-id" /> : any
+>NotHappy : (props: { fixed?: boolean; } | { value?: number; }) => ReactElement<any>
+>data-testid : any
+
+const RootHappy = () => (<Happy data-testid="my-test-id" />);
+>RootHappy : () => any
+>() => (<Happy data-testid="my-test-id" />) : () => any
+>(<Happy data-testid="my-test-id" />) : any
+><Happy data-testid="my-test-id" /> : any
+>Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
+>data-testid : any
+

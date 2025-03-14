@@ -1,0 +1,94 @@
+--- old.esNextWeakRefs_IterableWeakMap.types
++++ new.esNextWeakRefs_IterableWeakMap.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 1,000
+-Instantiation count: 2,500
+-
+ === esNextWeakRefs_IterableWeakMap.ts ===
+ /** `static #cleanup` */
+ const IterableWeakMap_cleanup = ({ ref, set }: {
+->IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
+->({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
++>IterableWeakMap_cleanup : (__0: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
++>({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : (__0: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
+ >ref : WeakRef<object>
+ >set : Set<WeakRef<object>>
+ 
+@@= skipped -30, +26 lines =@@
+ // Based on: https://github.com/tc39/proposal-weakrefs/blob/master/README.md#iterable-weakmaps
+ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
+ >IterableWeakMap : IterableWeakMap<K, V>
++>K : K
++>V : V
+ 
+     declare readonly [Symbol.toStringTag]: "IterableWeakMap";
+ >[Symbol.toStringTag] : "IterableWeakMap"
+@@= skipped -23, +25 lines =@@
+ >#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
+ >new FinalizationRegistry(IterableWeakMap_cleanup) : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
+ >FinalizationRegistry : FinalizationRegistryConstructor
+->IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
++>IterableWeakMap_cleanup : (__0: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
+ 
+     constructor(iterable: Iterable<[key: K, value: V]> | null = null) {
+->iterable : Iterable<[key: K, value: V]> | null
++>iterable : Iterable<[key: K, value: V], any, any> | null
+ 
+         if (iterable !== null) {
+ >iterable !== null : boolean
+->iterable : Iterable<[key: K, value: V]> | null
++>iterable : Iterable<[key: K, value: V], any, any> | null
+ 
+             for (const { 0: key, 1: value } of iterable) {
+ >key : K
+ >value : V
+->iterable : Iterable<[key: K, value: V]>
++>iterable : Iterable<[key: K, value: V], any, any>
+ 
+                 this.set(key, value);
+ >this.set(key, value) : this
+@@= skipped -66, +66 lines =@@
+ >set : (key: K, value: { readonly ref: WeakRef<K>; value: V; }) => WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
+ >key : K
+ >{ ref, value } : { ref: WeakRef<K>; value: V; }
+->ref : WeakRef<K>
+->value : V
++>ref : any
++>value : any
+ 
+             this.#refSet.add(ref);
+ >this.#refSet.add(ref) : Set<WeakRef<K>>
+@@= skipped -13, +13 lines =@@
+ 
+             this.#finalizationGroup.register(key, {
+ >this.#finalizationGroup.register(key, {                set: this.#refSet,                ref,            }, ref) : void
+->this.#finalizationGroup.register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey) => void
++>this.#finalizationGroup.register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey | undefined) => void
+ >this.#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
+ >this : this
+->register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey) => void
++>register : (target: WeakKey, heldValue: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }, unregisterToken?: WeakKey | undefined) => void
+ >key : K
+ >{                set: this.#refSet,                ref,            } : { set: Set<WeakRef<K>>; ref: WeakRef<K>; }
+ 
+@@= skipped -13, +13 lines =@@
+ >this : this
+ 
+                 ref,
+->ref : WeakRef<K>
++>ref : any
+ 
+             }, ref);
+ >ref : WeakRef<K>
+@@= skipped -98, +98 lines =@@
+ >iterator : unique symbol
+ 
+     *entries(): Generator<[key: K, value: V], void> {
+->entries : () => Generator<[key: K, value: V], void>
++>entries : () => Generator<[key: K, value: V], void, any>
+ 
+         for (const ref of this.#refSet) {
+ >ref : WeakRef<K>

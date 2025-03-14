@@ -1,0 +1,10 @@
+--- old.returnStatements.types
++++ new.returnStatements.types
+@@= skipped -33, +33 lines =@@
+ >fn8 : () => any
+ 
+ interface I { id: number }
++>I : I
+ >id : number
+ 
+ class C implements I {

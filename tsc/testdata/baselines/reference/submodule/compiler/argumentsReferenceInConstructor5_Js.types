@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/argumentsReferenceInConstructor5_Js.ts] ////
+
+=== /a.js ===
+const bar = {
+>bar : { arguments: {}; }
+>{	arguments: {}} : { arguments: {}; }
+
+	arguments: {}
+>arguments : {}
+>{} : {}
+}
+
+class A {
+>A : A
+
+	/**
+	 * Constructor
+	 *
+	 * @param {object} [foo={}]
+	 */
+	constructor(foo = {}) {
+>foo : {}
+>{} : {}
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this.foo = foo : {}
+>this.foo : any
+>this : this
+>foo : any
+>foo : {}
+
+		/**
+		 * @type object
+		 */
+		this.bar = bar.arguments;
+>this.bar = bar.arguments : {}
+>this.bar : any
+>this : this
+>bar : any
+>bar.arguments : {}
+>bar : { arguments: {}; }
+>arguments : {}
+	}
+}
+

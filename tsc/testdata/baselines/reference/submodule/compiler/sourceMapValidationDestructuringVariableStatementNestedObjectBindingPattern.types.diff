@@ -1,0 +1,37 @@
+--- old.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.types
++++ new.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.types
+@@= skipped -1, +1 lines =@@
+ 
+ === sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts ===
+ declare var console: {
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ 
+     log(msg: string): void;
+ >log : (msg: string) => void
+ >msg : string
+ }
+ interface Robot {
++>Robot : Robot
++
+     name: string;
+ >name : string
+ 
+@@= skipped -89, +91 lines =@@
+     console.log(nameC);
+ >console.log(nameC) : void
+ >console.log : (msg: string) => void
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ >log : (msg: string) => void
+ >nameC : string
+ }
+@@= skipped -8, +8 lines =@@
+     console.log(nameC);
+ >console.log(nameC) : void
+ >console.log : (msg: string) => void
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ >log : (msg: string) => void
+ >nameC : string
+ }

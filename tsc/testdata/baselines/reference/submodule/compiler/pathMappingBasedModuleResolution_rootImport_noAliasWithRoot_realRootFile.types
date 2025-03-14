@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution_rootImport_noAliasWithRoot_realRootFile.ts] ////
+
+=== /root/a.ts ===
+import { foo } from "/foo";
+>foo : () => void
+
+import { bar } from "/bar";
+>bar : any
+
+=== /foo.ts ===
+export function foo() {}
+>foo : () => void
+

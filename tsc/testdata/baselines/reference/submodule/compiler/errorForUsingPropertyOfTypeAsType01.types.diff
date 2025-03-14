@@ -1,0 +1,84 @@
+--- old.errorForUsingPropertyOfTypeAsType01.types
++++ new.errorForUsingPropertyOfTypeAsType01.types
+@@= skipped -4, +4 lines =@@
+ >Test1 : typeof Test1
+ 
+     export interface Foo {
++>Foo : Foo
++
+         bar: string;
+ >bar : string
+     }
+ 
+     var x: Foo.bar = "";
+->x : Foo.bar
++>x : bar
+ >Foo : any
+ >"" : ""
+ 
+     var y: Test1.Foo.bar = "";
+->y : Test1.Foo.bar
++>y : bar
+ >Test1 : any
+ >Foo : any
+ >"" : ""
+@@= skipped -27, +29 lines =@@
+     }
+ 
+     var x: Foo.bar = "";
+->x : Foo.bar
++>x : bar
+ >Foo : any
+ >"" : ""
+ 
+     var y: Test2.Foo.bar = "";
+->y : Test2.Foo.bar
++>y : bar
+ >Test2 : any
+ >Foo : any
+ >"" : ""
+@@= skipped -22, +22 lines =@@
+     }
+ 
+     var x: Foo.bar = "";
+->x : Foo.bar
++>x : bar
+ >Foo : any
+ >"" : ""
+ 
+     var y: Test3.Foo.bar = "";
+->y : Test3.Foo.bar
++>y : bar
+ >Test3 : any
+ >Foo : any
+ >"" : ""
+@@= skipped -22, +22 lines =@@
+ >bar : string
+ 
+     var x: Foo.bar = "";
+->x : Foo.bar
++>x : bar
+ >Foo : any
+ >"" : ""
+ 
+     var y: Test4.Foo.bar = "";
+->y : Test4.Foo.bar
++>y : bar
+ >Test4 : any
+ >Foo : any
+ >"" : ""
+@@= skipped -22, +22 lines =@@
+ >wat : string
+ 
+     var x: Foo.bar = "";
+->x : Foo.bar
++>x : bar
+ >Foo : any
+ >"" : ""
+ 
+     var y: Test5.Foo.bar = "";
+->y : Test5.Foo.bar
++>y : bar
+ >Test5 : any
+ >Foo : any
+ >"" : ""

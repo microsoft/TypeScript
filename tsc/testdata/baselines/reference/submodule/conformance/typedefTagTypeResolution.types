@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/jsdoc/typedefTagTypeResolution.ts] ////
+
+=== github20832.js ===
+// #20832
+/** @typedef {U} T - should be "error, can't find type named 'U' */
+/**
+ * @template U
+ * @param {U} x
+ * @return {T}
+ */
+function f(x) {
+>f : (x: any) => any
+>x : any
+
+    return x;
+>x : any
+}
+
+/** @type T - should be fine, since T will be any */
+const x = 3;
+>x : 3
+>3 : 3
+
+/**
+ * @callback Cb
+ * @param {V} firstParam
+ */
+/**
+ * @template V
+ * @param {V} vvvvv
+ */
+function g(vvvvv) {
+>g : (vvvvv: any) => void
+>vvvvv : any
+}
+
+/** @type {Cb} */
+const cb = x => {}
+>cb : (x: any) => void
+>x => {} : (x: any) => void
+>x : any
+

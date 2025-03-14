@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/nodeResolution2.ts] ////
+
+=== b.ts ===
+import y = require("a");
+>y : typeof import("node_modules/a")
+
+=== node_modules/a.d.ts ===
+export var x: number;
+>x : number
+

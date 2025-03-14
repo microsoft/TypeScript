@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/salsa/requireTwoPropertyAccesses.ts] ////
+
+=== requireTwoPropertyAccesses.js ===
+const value = require("./mod").x.y
+>value : any
+>require("./mod").x.y : any
+>require("./mod").x : any
+>require("./mod") : any
+>require : any
+>"./mod" : "./mod"
+>x : any
+>y : any
+
+console.log(value)
+>console.log(value) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>value : any
+

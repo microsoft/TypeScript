@@ -1,0 +1,35 @@
+--- old.tsxAttributeInvalidNames.types
++++ new.tsxAttributeInvalidNames.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file.tsx ===
+ declare module JSX {
++>JSX : any
++
+ 	interface Element { }
++>Element : Element
++
+ 	interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+ 		test1: { "data-foo"?: string };
+ >test1 : { "data-foo"?: string; }
+ >"data-foo" : string
+@@= skipped -14, +20 lines =@@
+ 
+ // Invalid names
+ <test1 32data={32} />;
+-><test1 : JSX.Element
++><test1 : any
+ >test1 : any
+ >32 : 32
+ >data={32} /> : boolean
+@@= skipped -15, +15 lines =@@
+ 
+ <test2 -data={32} />;
+ ><test2 -data : number
+-><test2 : JSX.Element
++><test2 : any
+ >test2 : any
+ >data : any
+ >32 : 32

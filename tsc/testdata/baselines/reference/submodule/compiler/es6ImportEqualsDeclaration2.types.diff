@@ -1,0 +1,11 @@
+--- old.es6ImportEqualsDeclaration2.types
++++ new.es6ImportEqualsDeclaration2.types
+@@= skipped -11, +11 lines =@@
+ >"server" : typeof import("server")
+ 
+     import events = require("other"); // Ambient declaration, no error expected.
+->events : typeof events
++>events : typeof import("other")
+ 
+     module S {
+ >S : typeof S

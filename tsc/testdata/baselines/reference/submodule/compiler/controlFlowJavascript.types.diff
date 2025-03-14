@@ -1,0 +1,90 @@
+--- old.controlFlowJavascript.types
++++ new.controlFlowJavascript.types
+@@= skipped -28, +28 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | undefined
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ }
+ 
+ // CFA for 'let' and 'undefined' initializer
+@@= skipped -29, +29 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | undefined
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ }
+ 
+ // CFA for 'let' and 'null' initializer
+@@= skipped -28, +28 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | null
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ }
+ 
+ // CFA for 'var' with no initializer
+@@= skipped -28, +28 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | undefined
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ }
+ 
+ // CFA for 'var' with 'undefined' initializer
+@@= skipped -29, +29 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | undefined
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ }
+ 
+ // CFA for 'var' with 'null' initializer
+@@= skipped -28, +28 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | null
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ }
+ 
+ // No CFA for captured outer variables
+@@= skipped -28, +28 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | undefined
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ 
+     function f() {
+ >f : () => void
+@@= skipped -36, +36 lines =@@
+ >"hello" : "hello"
+     }
+     const y = x;  // string | number | undefined
+->y : string | number
+->x : string | number
++>y : any
++>x : any
+ 
+     const f = () => {
+ >f : () => void

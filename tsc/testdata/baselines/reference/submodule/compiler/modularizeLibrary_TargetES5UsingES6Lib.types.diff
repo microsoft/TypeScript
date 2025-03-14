@@ -1,0 +1,58 @@
+--- old.modularizeLibrary_TargetES5UsingES6Lib.types
++++ new.modularizeLibrary_TargetES5UsingES6Lib.types
+@@= skipped -9, +9 lines =@@
+ 
+     return Array.from(arguments);
+ >Array.from(arguments) : any[]
+->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >Array : ArrayConstructor
+->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+ >arguments : IArguments
+ }
+ 
+@@= skipped -96, +96 lines =@@
+ 
+ // Using ES6 object
+ var o = {
+->o : { a: number; [Symbol.hasInstance](value: any): boolean; }
+->{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance](value: any): boolean; }
++>o : { a: number; [Symbol.hasInstance]: (value: any) => boolean; }
++>{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance]: (value: any) => boolean; }
+ 
+     a: 2,
+ >a : number
+@@= skipped -21, +21 lines =@@
+ o.hasOwnProperty(Symbol.hasInstance);
+ >o.hasOwnProperty(Symbol.hasInstance) : boolean
+ >o.hasOwnProperty : (v: PropertyKey) => boolean
+->o : { a: number; [Symbol.hasInstance](value: any): boolean; }
++>o : { a: number; [Symbol.hasInstance]: (value: any) => boolean; }
+ >hasOwnProperty : (v: PropertyKey) => boolean
+ >Symbol.hasInstance : unique symbol
+ >Symbol : SymbolConstructor
+@@= skipped -23, +23 lines =@@
+ 
+ out().then(() => {
+ >out().then(() => {    console.log("Yea!");}) : Promise<void>
+->out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>out().then : <TResult1, TResult2>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >out() : Promise<unknown>
+ >out : () => Promise<unknown>
+->then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >() => {    console.log("Yea!");} : () => void
+ 
+     console.log("Yea!");
+@@= skipped -68, +68 lines =@@
+ 
+ // Using ES6 wellknown-symbol
+ const o1 = {
+->o1 : { [Symbol.hasInstance](value: any): boolean; }
+->{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
++>o1 : { [Symbol.hasInstance]: (value: any) => boolean; }
++>{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance]: (value: any) => boolean; }
+ 
+     [Symbol.hasInstance](value: any) {
+ >[Symbol.hasInstance] : (value: any) => boolean

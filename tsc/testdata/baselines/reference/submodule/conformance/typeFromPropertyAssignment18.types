@@ -1,0 +1,54 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment18.ts] ////
+
+=== a.js ===
+var GLOBSTAR = m.GLOBSTAR = {}
+>GLOBSTAR : {}
+>m.GLOBSTAR = {} : {}
+>m.GLOBSTAR : {}
+>m : { (): void; GLOBSTAR: {}; }
+>GLOBSTAR : {}
+>{} : {}
+
+function m() {
+>m : { (): void; GLOBSTAR: {}; }
+}
+GLOBSTAR.p = 1
+>GLOBSTAR.p = 1 : 1
+>GLOBSTAR.p : any
+>GLOBSTAR : {}
+>p : any
+>1 : 1
+
+m.GLOBSTAR.q = 2
+>m.GLOBSTAR.q = 2 : 2
+>m.GLOBSTAR.q : any
+>m.GLOBSTAR : {}
+>m : { (): void; GLOBSTAR: {}; }
+>GLOBSTAR : {}
+>q : any
+>2 : 2
+
+GLOBSTAR.p
+>GLOBSTAR.p : any
+>GLOBSTAR : {}
+>p : any
+
+GLOBSTAR.q
+>GLOBSTAR.q : any
+>GLOBSTAR : {}
+>q : any
+
+m.GLOBSTAR.p
+>m.GLOBSTAR.p : any
+>m.GLOBSTAR : {}
+>m : { (): void; GLOBSTAR: {}; }
+>GLOBSTAR : {}
+>p : any
+
+m.GLOBSTAR.q
+>m.GLOBSTAR.q : any
+>m.GLOBSTAR : {}
+>m : { (): void; GLOBSTAR: {}; }
+>GLOBSTAR : {}
+>q : any
+

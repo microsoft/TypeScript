@@ -1,0 +1,103 @@
+--- old.contextuallyTypedIife.types
++++ new.contextuallyTypedIife.types
+@@= skipped -102, +102 lines =@@
+ // rest parameters
+ ((...numbers) => numbers.every(n => n > 0))(5,6,7);
+ >((...numbers) => numbers.every(n => n > 0))(5,6,7) : boolean
+->((...numbers) => numbers.every(n => n > 0)) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
+->(...numbers) => numbers.every(n => n > 0) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
++>((...numbers) => numbers.every(n => n > 0)) : (...numbers: [number, number, number]) => boolean
++>(...numbers) => numbers.every(n => n > 0) : (...numbers: [number, number, number]) => boolean
+ >numbers : [number, number, number]
+ >numbers.every(n => n > 0) : boolean
+ >numbers.every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+@@= skipped -18, +18 lines =@@
+ 
+ ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
+ >((...mixed) => mixed.every(n => !!n))(5,'oops','oh no') : boolean
+->((...mixed) => mixed.every(n => !!n)) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
+->(...mixed) => mixed.every(n => !!n) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
++>((...mixed) => mixed.every(n => !!n)) : (...mixed: [number, string, string]) => boolean
++>(...mixed) => mixed.every(n => !!n) : (...mixed: [number, string, string]) => boolean
+ >mixed : [number, string, string]
+ >mixed.every(n => !!n) : boolean
+ >mixed.every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
+@@= skipped -18, +18 lines =@@
+ 
+ ((...noNumbers) => noNumbers.some(n => n > 0))();
+ >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
+->((...noNumbers) => noNumbers.some(n => n > 0)) : () => boolean
+->(...noNumbers) => noNumbers.some(n => n > 0) : () => boolean
+->noNumbers : []
++>((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: any[]) => boolean
++>(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: any[]) => boolean
++>noNumbers : any[]
+ >noNumbers.some(n => n > 0) : boolean
+->noNumbers.some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
+->noNumbers : []
+->some : (predicate: (value: never, index: number, array: never[]) => unknown, thisArg?: any) => boolean
+->n => n > 0 : (n: never) => boolean
+->n : never
++>noNumbers.some : (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
++>noNumbers : any[]
++>some : (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any) => boolean
++>n => n > 0 : (n: any) => boolean
++>n : any
+ >n > 0 : boolean
+->n : never
++>n : any
+ >0 : 0
+ 
+ ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
+ >((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : boolean[]
+->((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, rest_0: number, rest_1: number) => boolean[]
+->(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, rest_0: number, rest_1: number) => boolean[]
++>((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, ...rest: [number, number]) => boolean[]
++>(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, ...rest: [number, number]) => boolean[]
+ >first : number
+ >rest : [number, number]
+ >first ? [] : rest.map(n => n > 0) : boolean[]
+@@= skipped -38, +38 lines =@@
+ // destructuring parameters (with defaults too!)
+ (({ q }) => q)({ q : 13 });
+ >(({ q }) => q)({ q : 13 }) : number
+->(({ q }) => q) : ({ q }: { q: number; }) => number
+->({ q }) => q : ({ q }: { q: number; }) => number
++>(({ q }) => q) : (__0: { q: number; }) => number
++>({ q }) => q : (__0: { q: number; }) => number
+ >q : number
+ >q : number
+ >{ q : 13 } : { q: number; }
+@@= skipped -10, +10 lines =@@
+ 
+ (({ p = 14 }) => p)({ p : 15 });
+ >(({ p = 14 }) => p)({ p : 15 }) : number
+->(({ p = 14 }) => p) : ({ p }: { p: number; }) => number
+->({ p = 14 }) => p : ({ p }: { p: number; }) => number
++>(({ p = 14 }) => p) : (__0: { p: number; }) => number
++>({ p = 14 }) => p : (__0: { p: number; }) => number
+ >p : number
+ >14 : 14
+ >p : number
+@@= skipped -11, +11 lines =@@
+ 
+ (({ r = 17 } = { r: 18 }) => r)({r : 19});
+ >(({ r = 17 } = { r: 18 }) => r)({r : 19}) : number
+->(({ r = 17 } = { r: 18 }) => r) : ({ r }?: { r: number; }) => number
+->({ r = 17 } = { r: 18 }) => r : ({ r }?: { r: number; }) => number
++>(({ r = 17 } = { r: 18 }) => r) : (__0?: { r: number; }) => number
++>({ r = 17 } = { r: 18 }) => r : (__0?: { r: number; }) => number
+ >r : number
+ >17 : 17
+ >{ r: 18 } : { r: number; }
+@@= skipped -14, +14 lines =@@
+ 
+ (({ u = 22 } = { u: 23 }) => u)();
+ >(({ u = 22 } = { u: 23 }) => u)() : number
+->(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: number; }) => number
+->({ u = 22 } = { u: 23 }) => u : ({ u }?: { u?: number; }) => number
++>(({ u = 22 } = { u: 23 }) => u) : (__0?: { u?: number; }) => number
++>({ u = 22 } = { u: 23 }) => u : (__0?: { u?: number; }) => number
+ >u : number
+ >22 : 22
+ >{ u: 23 } : { u?: number; }

@@ -1,0 +1,384 @@
+--- old.objectSpreadRepeatedNullCheckPerf.types
++++ new.objectSpreadRepeatedNullCheckPerf.types
+@@= skipped -1, +1 lines =@@
+ 
+ === objectSpreadRepeatedNullCheckPerf.ts ===
+ interface Props {
++>Props : Props
++
+     readonly a?: string
+ >a : string | undefined
+ 
+@@= skipped -84, +86 lines =@@
+ >config : Record<string, number>
+ 
+     return {
+->{        ...config.a !== undefined && { a: config.a.toString() },        ...config.b !== undefined && { b: config.b.toString() },        ...config.c !== undefined && { c: config.c.toString() },        ...config.d !== undefined && { d: config.d.toString() },        ...config.e !== undefined && { e: config.e.toString() },        ...config.f !== undefined && { f: config.f.toString() },        ...config.g !== undefined && { g: config.g.toString() },        ...config.h !== undefined && { h: config.h.toString() },        ...config.i !== undefined && { i: config.i.toString() },        ...config.j !== undefined && { j: config.j.toString() },        ...config.k !== undefined && { k: config.k.toString() },        ...config.l !== undefined && { l: config.l.toString() },        ...config.m !== undefined && { m: config.m.toString() },        ...config.n !== undefined && { n: config.n.toString() },        ...config.o !== undefined && { o: config.o.toString() },        ...config.p !== undefined && { p: config.p.toString() },        ...config.q !== undefined && { q: config.q.toString() },        ...config.r !== undefined && { r: config.r.toString() },        ...config.s !== undefined && { s: config.s.toString() },        ...config.t !== undefined && { t: config.t.toString() },        ...config.u !== undefined && { u: config.u.toString() },        ...config.v !== undefined && { v: config.v.toString() },        ...config.w !== undefined && { w: config.w.toString() },        ...config.x !== undefined && { x: config.x.toString() },        ...config.y !== undefined && { y: config.y.toString() },        ...config.z !== undefined && { z: config.z.toString() }    } : { z?: string | undefined; y?: string | undefined; x?: string | undefined; w?: string | undefined; v?: string | undefined; u?: string | undefined; t?: string | undefined; s?: string | undefined; r?: string | undefined; q?: string | undefined; p?: string | undefined; o?: string | undefined; n?: string | undefined; m?: string | undefined; l?: string | undefined; k?: string | undefined; j?: string | undefined; i?: string | undefined; h?: string | undefined; g?: string | undefined; f?: string | undefined; e?: string | undefined; d?: string | undefined; c?: string | undefined; b?: string | undefined; a?: string | undefined; }
++>{        ...config.a !== undefined && { a: config.a.toString() },        ...config.b !== undefined && { b: config.b.toString() },        ...config.c !== undefined && { c: config.c.toString() },        ...config.d !== undefined && { d: config.d.toString() },        ...config.e !== undefined && { e: config.e.toString() },        ...config.f !== undefined && { f: config.f.toString() },        ...config.g !== undefined && { g: config.g.toString() },        ...config.h !== undefined && { h: config.h.toString() },        ...config.i !== undefined && { i: config.i.toString() },        ...config.j !== undefined && { j: config.j.toString() },        ...config.k !== undefined && { k: config.k.toString() },        ...config.l !== undefined && { l: config.l.toString() },        ...config.m !== undefined && { m: config.m.toString() },        ...config.n !== undefined && { n: config.n.toString() },        ...config.o !== undefined && { o: config.o.toString() },        ...config.p !== undefined && { p: config.p.toString() },        ...config.q !== undefined && { q: config.q.toString() },        ...config.r !== undefined && { r: config.r.toString() },        ...config.s !== undefined && { s: config.s.toString() },        ...config.t !== undefined && { t: config.t.toString() },        ...config.u !== undefined && { u: config.u.toString() },        ...config.v !== undefined && { v: config.v.toString() },        ...config.w !== undefined && { w: config.w.toString() },        ...config.x !== undefined && { x: config.x.toString() },        ...config.y !== undefined && { y: config.y.toString() },        ...config.z !== undefined && { z: config.z.toString() }    } : { a?: string | undefined; b?: string | undefined; c?: string | undefined; d?: string | undefined; e?: string | undefined; f?: string | undefined; g?: string | undefined; h?: string | undefined; i?: string | undefined; j?: string | undefined; k?: string | undefined; l?: string | undefined; m?: string | undefined; n?: string | undefined; o?: string | undefined; p?: string | undefined; q?: string | undefined; r?: string | undefined; s?: string | undefined; t?: string | undefined; u?: string | undefined; v?: string | undefined; w?: string | undefined; x?: string | undefined; y?: string | undefined; z?: string | undefined; }
+ 
+         ...config.a !== undefined && { a: config.a.toString() },
+ >config.a !== undefined && { a: config.a.toString() } : false | { a: string; }
+@@= skipped -12, +12 lines =@@
+ >{ a: config.a.toString() } : { a: string; }
+ >a : string
+ >config.a.toString() : string
+->config.a.toString : (radix?: number) => string
++>config.a.toString : (radix?: number | undefined) => string
+ >config.a : number
+ >config : Record<string, number>
+ >a : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.b !== undefined && { b: config.b.toString() },
+ >config.b !== undefined && { b: config.b.toString() } : false | { b: string; }
+@@= skipped -16, +16 lines =@@
+ >{ b: config.b.toString() } : { b: string; }
+ >b : string
+ >config.b.toString() : string
+->config.b.toString : (radix?: number) => string
++>config.b.toString : (radix?: number | undefined) => string
+ >config.b : number
+ >config : Record<string, number>
+ >b : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.c !== undefined && { c: config.c.toString() },
+ >config.c !== undefined && { c: config.c.toString() } : false | { c: string; }
+@@= skipped -16, +16 lines =@@
+ >{ c: config.c.toString() } : { c: string; }
+ >c : string
+ >config.c.toString() : string
+->config.c.toString : (radix?: number) => string
++>config.c.toString : (radix?: number | undefined) => string
+ >config.c : number
+ >config : Record<string, number>
+ >c : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.d !== undefined && { d: config.d.toString() },
+ >config.d !== undefined && { d: config.d.toString() } : false | { d: string; }
+@@= skipped -16, +16 lines =@@
+ >{ d: config.d.toString() } : { d: string; }
+ >d : string
+ >config.d.toString() : string
+->config.d.toString : (radix?: number) => string
++>config.d.toString : (radix?: number | undefined) => string
+ >config.d : number
+ >config : Record<string, number>
+ >d : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.e !== undefined && { e: config.e.toString() },
+ >config.e !== undefined && { e: config.e.toString() } : false | { e: string; }
+@@= skipped -16, +16 lines =@@
+ >{ e: config.e.toString() } : { e: string; }
+ >e : string
+ >config.e.toString() : string
+->config.e.toString : (radix?: number) => string
++>config.e.toString : (radix?: number | undefined) => string
+ >config.e : number
+ >config : Record<string, number>
+ >e : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.f !== undefined && { f: config.f.toString() },
+ >config.f !== undefined && { f: config.f.toString() } : false | { f: string; }
+@@= skipped -16, +16 lines =@@
+ >{ f: config.f.toString() } : { f: string; }
+ >f : string
+ >config.f.toString() : string
+->config.f.toString : (radix?: number) => string
++>config.f.toString : (radix?: number | undefined) => string
+ >config.f : number
+ >config : Record<string, number>
+ >f : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.g !== undefined && { g: config.g.toString() },
+ >config.g !== undefined && { g: config.g.toString() } : false | { g: string; }
+@@= skipped -16, +16 lines =@@
+ >{ g: config.g.toString() } : { g: string; }
+ >g : string
+ >config.g.toString() : string
+->config.g.toString : (radix?: number) => string
++>config.g.toString : (radix?: number | undefined) => string
+ >config.g : number
+ >config : Record<string, number>
+ >g : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.h !== undefined && { h: config.h.toString() },
+ >config.h !== undefined && { h: config.h.toString() } : false | { h: string; }
+@@= skipped -16, +16 lines =@@
+ >{ h: config.h.toString() } : { h: string; }
+ >h : string
+ >config.h.toString() : string
+->config.h.toString : (radix?: number) => string
++>config.h.toString : (radix?: number | undefined) => string
+ >config.h : number
+ >config : Record<string, number>
+ >h : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.i !== undefined && { i: config.i.toString() },
+ >config.i !== undefined && { i: config.i.toString() } : false | { i: string; }
+@@= skipped -16, +16 lines =@@
+ >{ i: config.i.toString() } : { i: string; }
+ >i : string
+ >config.i.toString() : string
+->config.i.toString : (radix?: number) => string
++>config.i.toString : (radix?: number | undefined) => string
+ >config.i : number
+ >config : Record<string, number>
+ >i : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.j !== undefined && { j: config.j.toString() },
+ >config.j !== undefined && { j: config.j.toString() } : false | { j: string; }
+@@= skipped -16, +16 lines =@@
+ >{ j: config.j.toString() } : { j: string; }
+ >j : string
+ >config.j.toString() : string
+->config.j.toString : (radix?: number) => string
++>config.j.toString : (radix?: number | undefined) => string
+ >config.j : number
+ >config : Record<string, number>
+ >j : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.k !== undefined && { k: config.k.toString() },
+ >config.k !== undefined && { k: config.k.toString() } : false | { k: string; }
+@@= skipped -16, +16 lines =@@
+ >{ k: config.k.toString() } : { k: string; }
+ >k : string
+ >config.k.toString() : string
+->config.k.toString : (radix?: number) => string
++>config.k.toString : (radix?: number | undefined) => string
+ >config.k : number
+ >config : Record<string, number>
+ >k : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.l !== undefined && { l: config.l.toString() },
+ >config.l !== undefined && { l: config.l.toString() } : false | { l: string; }
+@@= skipped -16, +16 lines =@@
+ >{ l: config.l.toString() } : { l: string; }
+ >l : string
+ >config.l.toString() : string
+->config.l.toString : (radix?: number) => string
++>config.l.toString : (radix?: number | undefined) => string
+ >config.l : number
+ >config : Record<string, number>
+ >l : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.m !== undefined && { m: config.m.toString() },
+ >config.m !== undefined && { m: config.m.toString() } : false | { m: string; }
+@@= skipped -16, +16 lines =@@
+ >{ m: config.m.toString() } : { m: string; }
+ >m : string
+ >config.m.toString() : string
+->config.m.toString : (radix?: number) => string
++>config.m.toString : (radix?: number | undefined) => string
+ >config.m : number
+ >config : Record<string, number>
+ >m : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.n !== undefined && { n: config.n.toString() },
+ >config.n !== undefined && { n: config.n.toString() } : false | { n: string; }
+@@= skipped -16, +16 lines =@@
+ >{ n: config.n.toString() } : { n: string; }
+ >n : string
+ >config.n.toString() : string
+->config.n.toString : (radix?: number) => string
++>config.n.toString : (radix?: number | undefined) => string
+ >config.n : number
+ >config : Record<string, number>
+ >n : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.o !== undefined && { o: config.o.toString() },
+ >config.o !== undefined && { o: config.o.toString() } : false | { o: string; }
+@@= skipped -16, +16 lines =@@
+ >{ o: config.o.toString() } : { o: string; }
+ >o : string
+ >config.o.toString() : string
+->config.o.toString : (radix?: number) => string
++>config.o.toString : (radix?: number | undefined) => string
+ >config.o : number
+ >config : Record<string, number>
+ >o : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.p !== undefined && { p: config.p.toString() },
+ >config.p !== undefined && { p: config.p.toString() } : false | { p: string; }
+@@= skipped -16, +16 lines =@@
+ >{ p: config.p.toString() } : { p: string; }
+ >p : string
+ >config.p.toString() : string
+->config.p.toString : (radix?: number) => string
++>config.p.toString : (radix?: number | undefined) => string
+ >config.p : number
+ >config : Record<string, number>
+ >p : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.q !== undefined && { q: config.q.toString() },
+ >config.q !== undefined && { q: config.q.toString() } : false | { q: string; }
+@@= skipped -16, +16 lines =@@
+ >{ q: config.q.toString() } : { q: string; }
+ >q : string
+ >config.q.toString() : string
+->config.q.toString : (radix?: number) => string
++>config.q.toString : (radix?: number | undefined) => string
+ >config.q : number
+ >config : Record<string, number>
+ >q : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.r !== undefined && { r: config.r.toString() },
+ >config.r !== undefined && { r: config.r.toString() } : false | { r: string; }
+@@= skipped -16, +16 lines =@@
+ >{ r: config.r.toString() } : { r: string; }
+ >r : string
+ >config.r.toString() : string
+->config.r.toString : (radix?: number) => string
++>config.r.toString : (radix?: number | undefined) => string
+ >config.r : number
+ >config : Record<string, number>
+ >r : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.s !== undefined && { s: config.s.toString() },
+ >config.s !== undefined && { s: config.s.toString() } : false | { s: string; }
+@@= skipped -16, +16 lines =@@
+ >{ s: config.s.toString() } : { s: string; }
+ >s : string
+ >config.s.toString() : string
+->config.s.toString : (radix?: number) => string
++>config.s.toString : (radix?: number | undefined) => string
+ >config.s : number
+ >config : Record<string, number>
+ >s : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.t !== undefined && { t: config.t.toString() },
+ >config.t !== undefined && { t: config.t.toString() } : false | { t: string; }
+@@= skipped -16, +16 lines =@@
+ >{ t: config.t.toString() } : { t: string; }
+ >t : string
+ >config.t.toString() : string
+->config.t.toString : (radix?: number) => string
++>config.t.toString : (radix?: number | undefined) => string
+ >config.t : number
+ >config : Record<string, number>
+ >t : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.u !== undefined && { u: config.u.toString() },
+ >config.u !== undefined && { u: config.u.toString() } : false | { u: string; }
+@@= skipped -16, +16 lines =@@
+ >{ u: config.u.toString() } : { u: string; }
+ >u : string
+ >config.u.toString() : string
+->config.u.toString : (radix?: number) => string
++>config.u.toString : (radix?: number | undefined) => string
+ >config.u : number
+ >config : Record<string, number>
+ >u : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.v !== undefined && { v: config.v.toString() },
+ >config.v !== undefined && { v: config.v.toString() } : false | { v: string; }
+@@= skipped -16, +16 lines =@@
+ >{ v: config.v.toString() } : { v: string; }
+ >v : string
+ >config.v.toString() : string
+->config.v.toString : (radix?: number) => string
++>config.v.toString : (radix?: number | undefined) => string
+ >config.v : number
+ >config : Record<string, number>
+ >v : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.w !== undefined && { w: config.w.toString() },
+ >config.w !== undefined && { w: config.w.toString() } : false | { w: string; }
+@@= skipped -16, +16 lines =@@
+ >{ w: config.w.toString() } : { w: string; }
+ >w : string
+ >config.w.toString() : string
+->config.w.toString : (radix?: number) => string
++>config.w.toString : (radix?: number | undefined) => string
+ >config.w : number
+ >config : Record<string, number>
+ >w : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.x !== undefined && { x: config.x.toString() },
+ >config.x !== undefined && { x: config.x.toString() } : false | { x: string; }
+@@= skipped -16, +16 lines =@@
+ >{ x: config.x.toString() } : { x: string; }
+ >x : string
+ >config.x.toString() : string
+->config.x.toString : (radix?: number) => string
++>config.x.toString : (radix?: number | undefined) => string
+ >config.x : number
+ >config : Record<string, number>
+ >x : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.y !== undefined && { y: config.y.toString() },
+ >config.y !== undefined && { y: config.y.toString() } : false | { y: string; }
+@@= skipped -16, +16 lines =@@
+ >{ y: config.y.toString() } : { y: string; }
+ >y : string
+ >config.y.toString() : string
+->config.y.toString : (radix?: number) => string
++>config.y.toString : (radix?: number | undefined) => string
+ >config.y : number
+ >config : Record<string, number>
+ >y : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+ 
+         ...config.z !== undefined && { z: config.z.toString() }
+ >config.z !== undefined && { z: config.z.toString() } : false | { z: string; }
+@@= skipped -16, +16 lines =@@
+ >{ z: config.z.toString() } : { z: string; }
+ >z : string
+ >config.z.toString() : string
+->config.z.toString : (radix?: number) => string
++>config.z.toString : (radix?: number | undefined) => string
+ >config.z : number
+ >config : Record<string, number>
+ >z : number
+->toString : (radix?: number) => string
++>toString : (radix?: number | undefined) => string
+     }
+ }
+ 

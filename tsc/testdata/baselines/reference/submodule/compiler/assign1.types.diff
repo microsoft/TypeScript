@@ -1,0 +1,11 @@
+--- old.assign1.types
++++ new.assign1.types
+@@= skipped -4, +4 lines =@@
+ >M : typeof M
+ 
+     interface I {
++>I : I
++
+         salt:number;
+ >salt : number
+ 

@@ -1,0 +1,19 @@
+--- old.unionTypeReduction.types
++++ new.unionTypeReduction.types
+@@= skipped -1, +1 lines =@@
+ 
+ === unionTypeReduction.ts ===
+ interface I2 {
++>I2 : I2
++
+     (): number;
+     (q): boolean;
+ >q : any
+ }
+ 
+ interface I3 {
++>I3 : I3
++
+     (): number;
+ }
+ 

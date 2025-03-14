@@ -1,0 +1,139 @@
+--- old.declarationsAndAssignments.types
++++ new.declarationsAndAssignments.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 500 -> 1,000
+-
+ === declarationsAndAssignments.ts ===
+ function f0() {
+ >f0 : () => void
+@@= skipped -33, +30 lines =@@
+ >"hello" : "hello"
+ 
+     var [,, x] = [0, 1, 2];
+-> : undefined
+-> : undefined
+ >x : number
+ >[0, 1, 2] : [number, number, number]
+ >0 : 0
+@@= skipped -388, +386 lines =@@
+ }
+ 
+ function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
+->f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
++>f14 : (__0: [number, [string, { x: any; y?: boolean; }]]) => void
+ >a : number
+ >1 : 1
+ >b : string
+@@= skipped -21, +21 lines =@@
+ }
+ f14([2, ["abc", { x: 0, y: true }]]);
+ >f14([2, ["abc", { x: 0, y: true }]]) : void
+->f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
++>f14 : (__0: [number, [string, { x: any; y?: boolean; }]]) => void
+ >[2, ["abc", { x: 0, y: true }]] : [number, [string, { x: number; y: true; }]]
+ >2 : 2
+ >["abc", { x: 0, y: true }] : [string, { x: number; y: true; }]
+@@= skipped -13, +13 lines =@@
+ 
+ f14([2, ["abc", { x: 0 }]]);
+ >f14([2, ["abc", { x: 0 }]]) : void
+->f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
++>f14 : (__0: [number, [string, { x: any; y?: boolean; }]]) => void
+ >[2, ["abc", { x: 0 }]] : [number, [string, { x: number; }]]
+ >2 : 2
+ >["abc", { x: 0 }] : [string, { x: number; }]
+@@= skipped -11, +11 lines =@@
+ 
+ f14([2, ["abc", { y: false }]]);  // Error, no x
+ >f14([2, ["abc", { y: false }]]) : void
+->f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
++>f14 : (__0: [number, [string, { x: any; y?: boolean; }]]) => void
+ >[2, ["abc", { y: false }]] : [number, [string, { y: false; }]]
+ >2 : 2
+ >["abc", { y: false }] : [string, { y: false; }]
+@@= skipped -37, +37 lines =@@
+ 
+     return { a, b, c };
+ >{ a, b, c } : { a: string; b: number; c: boolean; }
+->a : string
+->b : number
+->c : boolean
++>a : any
++>b : any
++>c : any
+ }
+ 
+ function f16() {
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ function f17({ a = "", b = 0, c = false }) {
+->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
++>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
+ >a : string
+ >"" : ""
+ >b : number
+@@= skipped -11, +11 lines =@@
+ 
+ f17({});
+ >f17({}) : void
+->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
++>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
+ >{} : {}
+ 
+ f17({ a: "hello" });
+ >f17({ a: "hello" }) : void
+->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
++>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
+ >{ a: "hello" } : { a: string; }
+ >a : string
+ >"hello" : "hello"
+ 
+ f17({ c: true });
+ >f17({ c: true }) : void
+->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
++>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
+ >{ c: true } : { c: true; }
+ >c : true
+ >true : true
+ 
+ f17(f15());
+ >f17(f15()) : void
+->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
++>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
+ >f15() : { a: string; b: number; c: boolean; }
+ >f15 : () => { a: string; b: number; c: boolean; }
+ 
+@@= skipped -39, +39 lines =@@
+ >({ a, b } = { a, b }) : { a: number; b: string; }
+ >{ a, b } = { a, b } : { a: number; b: string; }
+ >{ a, b } : { a: number; b: string; }
+->a : number
+->b : string
++>a : any
++>b : any
+ >{ a, b } : { a: number; b: string; }
+->a : number
+->b : string
++>a : any
++>b : any
+ 
+     ({ a, b } = { b, a });
+ >({ a, b } = { b, a }) : { b: string; a: number; }
+ >{ a, b } = { b, a } : { b: string; a: number; }
+ >{ a, b } : { a: number; b: string; }
+->a : number
+->b : string
++>a : any
++>b : any
+ >{ b, a } : { b: string; a: number; }
+->b : string
+->a : number
++>b : any
++>a : any
+ 
+     [aa[0], b] = [a, b];
+ >[aa[0], b] = [a, b] : [number, string]

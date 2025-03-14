@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts] ////
+
+=== es5ExportDefaultFunctionDeclaration3.ts ===
+var before: typeof func = func();
+>before : () => ???
+>func() : () => ???
+>func : () => ???
+
+export default function func(): typeof func {
+>func : () => ???
+
+    return func;
+>func : () => ???
+}
+
+var after: typeof func = func();
+>after : () => ???
+>func() : () => ???
+>func : () => ???
+

@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/declarationEmitOfTypeofAliasedExport.ts] ////
+
+=== /a.ts ===
+class C {}
+>C : C
+
+export { C as D }
+>C : typeof C
+>D : typeof C
+
+=== /b.ts ===
+import * as a from "./a";
+>a : typeof import("/a")
+
+export default a.D;
+>a.D : typeof C
+>a : typeof import("/a")
+>D : typeof C
+

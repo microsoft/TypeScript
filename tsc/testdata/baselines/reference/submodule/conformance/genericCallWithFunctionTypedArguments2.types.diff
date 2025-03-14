@@ -1,0 +1,53 @@
+--- old.genericCallWithFunctionTypedArguments2.types
++++ new.genericCallWithFunctionTypedArguments2.types
+@@= skipped -5, +5 lines =@@
+ 
+ function foo<T>(x: new(a: T) => T) {
+ >foo : <T>(x: new (a: T) => T) => T
++>T : T
+ >x : new (a: T) => T
+ >a : T
+ 
+@@= skipped -9, +10 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     new <T>(x: T): T;
++>T : T
+ >x : T
+ }
+ interface I2<T> {
++>I2 : I2<T>
++>T : T
++
+     new (x: T): T;
+ >x : T
+ }
+@@= skipped -17, +23 lines =@@
+ >a : new <T>(x: T) => T
+ 
+     new <T>(x: T): T;
++>T : T
+ >x : T
+ }
+ 
+@@= skipped -29, +30 lines =@@
+ 
+ function foo2<T, U>(x: T, cb: new(a: T) => U) {
+ >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
++>T : T
++>U : U
+ >x : T
+ >cb : new (a: T) => U
+ >a : T
+@@= skipped -40, +42 lines =@@
+ 
+ function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
+ >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
++>T : T
++>U : U
+ >x : T
+ >cb : new (a: T) => U
+ >a : T

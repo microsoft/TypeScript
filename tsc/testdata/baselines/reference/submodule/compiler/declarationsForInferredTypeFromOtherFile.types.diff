@@ -1,0 +1,28 @@
+--- old.declarationsForInferredTypeFromOtherFile.types
++++ new.declarationsForInferredTypeFromOtherFile.types
+@@= skipped -5, +5 lines =@@
+ 
+ === file2.ts ===
+ export function foo(): import("./file1").Foo {
+->foo : () => import("./file1").Foo
++>foo : () => Foo
+ 
+     return null as any;
+ >null as any : any
+ }
+ === file3.ts ===
+ import {foo} from "./file2";
+->foo : () => import("file1").Foo
++>foo : () => Foo
+ 
+ export function bar() {
+->bar : () => import("file1").Foo
++>bar : () => Foo
+ 
+     return foo();
+->foo() : import("file1").Foo
+->foo : () => import("file1").Foo
++>foo() : Foo
++>foo : () => Foo
+ }
+ 

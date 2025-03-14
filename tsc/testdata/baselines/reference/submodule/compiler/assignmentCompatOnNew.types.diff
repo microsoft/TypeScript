@@ -1,0 +1,16 @@
+--- old.assignmentCompatOnNew.types
++++ new.assignmentCompatOnNew.types
+@@= skipped -4, +4 lines =@@
+ >Foo : Foo
+ 
+ function bar(x: {new(): Foo;}){}
+->bar : (x: { new (): Foo; }) => void
++>bar : (x: new () => Foo) => void
+ >x : new () => Foo
+ 
+ bar(Foo); // Error, but should be allowed
+ >bar(Foo) : void
+->bar : (x: { new (): Foo; }) => void
++>bar : (x: new () => Foo) => void
+ >Foo : typeof Foo
+ 

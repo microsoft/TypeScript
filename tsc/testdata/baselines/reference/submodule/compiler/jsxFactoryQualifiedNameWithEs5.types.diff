@@ -1,0 +1,11 @@
+--- old.jsxFactoryQualifiedNameWithEs5.types
++++ new.jsxFactoryQualifiedNameWithEs5.types
+@@= skipped -20, +20 lines =@@
+ >renderCallback : () => any
+ 
+         return <div>test</div>;
+-><div>test</div> : error
++><div>test</div> : any
+ >div : any
+ >div : any
+     }

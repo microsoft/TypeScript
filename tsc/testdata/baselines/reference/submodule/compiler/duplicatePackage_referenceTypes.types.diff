@@ -1,0 +1,20 @@
+--- old.duplicatePackage_referenceTypes.types
++++ new.duplicatePackage_referenceTypes.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /index.ts ===
+ import * as a from "a";
+->a : typeof a
++>a : typeof import("/node_modules/a/index")
+ 
+ import { Foo } from "foo";
+ >Foo : typeof Foo
+@@= skipped -8, +8 lines =@@
+ let foo: Foo = a.foo;
+ >foo : Foo
+ >a.foo : Foo
+->a : typeof a
++>a : typeof import("/node_modules/a/index")
+ >foo : Foo
+ 
+ === /node_modules/a/index.d.ts ===

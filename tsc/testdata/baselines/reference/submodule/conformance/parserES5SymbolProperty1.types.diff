@@ -1,0 +1,11 @@
+--- old.parserES5SymbolProperty1.types
++++ new.parserES5SymbolProperty1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === parserES5SymbolProperty1.ts ===
+ interface I {
++>I : I
++
+     [Symbol.iterator]: string;
+ >[Symbol.iterator] : string
+ >Symbol.iterator : any

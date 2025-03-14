@@ -1,0 +1,10 @@
+--- old.exportInterfaceClassAndValueWithDuplicatesInImportList.types
++++ new.exportInterfaceClassAndValueWithDuplicatesInImportList.types
+@@= skipped -8, +8 lines =@@
+ >Foo : Foo
+ 
+ interface Foo {}
++>Foo : Foo
+ 
+ export {foo, Foo, Foo}
+ >foo : 1

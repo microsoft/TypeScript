@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/circularTypeofWithFunctionModule.ts] ////
+
+=== circularTypeofWithFunctionModule.ts ===
+// Repro from #6072
+
+class Foo {}
+>Foo : Foo
+
+function maker (value: string): typeof maker.Bar {
+>maker : typeof maker
+>value : string
+>maker : typeof maker
+
+    return maker.Bar;
+>maker.Bar : typeof Bar
+>maker : typeof maker
+>Bar : typeof Bar
+}
+
+namespace maker {
+>maker : typeof maker
+
+    export class Bar extends Foo {}
+>Bar : Bar
+>Foo : Foo
+}
+

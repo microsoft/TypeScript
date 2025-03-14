@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/moduleAugmentationDoesInterfaceMergeOfReexport.ts] ////
+
+=== file.ts ===
+export interface Foo {
+>Foo : Foo
+
+    x: number;
+>x : number
+}
+=== reexport.ts ===
+
+export * from "./file";
+=== augment.ts ===
+import * as ns from "./reexport";
+>ns : typeof import("reexport")
+
+declare module "./reexport" {
+>"./reexport" : typeof import("reexport")
+
+    export interface Foo {
+>Foo : Foo
+
+        self: Foo;
+>self : Foo
+    }
+}
+
+declare const f: ns.Foo;
+>f : Foo
+>ns : any
+
+f.x;
+>f.x : number
+>f : Foo
+>x : number
+
+f.self;
+>f.self : Foo
+>f : Foo
+>self : Foo
+
+f.self.x;
+>f.self.x : number
+>f.self : Foo
+>f : Foo
+>self : Foo
+>x : number
+
+f.self.self;
+>f.self.self : Foo
+>f.self : Foo
+>f : Foo
+>self : Foo
+>self : Foo
+

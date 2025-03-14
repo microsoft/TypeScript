@@ -1,0 +1,256 @@
+--- old.propertiesOfGenericConstructorFunctions.types
++++ new.propertiesOfGenericConstructorFunctions.types
+@@= skipped -7, +7 lines =@@
+  * @param {V} iv
+  */
+ function Multimap(ik, iv) {
+->Multimap : typeof Multimap
+->ik : string
+->iv : V
++>Multimap : (ik: any, iv: any) => void
++>ik : any
++>iv : any
+ 
+     /** @type {{ [s: string]: V }} */
+     this._map = {};
+ >this._map = {} : {}
+->this._map : { [s: string]: V; }
+->this : this
+->_map : { [s: string]: V; }
++>this._map : any
++>this : any
++>_map : any
+ >{} : {}
+ 
+     // without type annotation
+     this._map2 = { [ik]: iv };
+->this._map2 = { [ik]: iv } : { [x: string]: V; }
++>this._map2 = { [ik]: iv } : { [x: number]: any; }
+ >this._map2 : any
+->this : this
++>this : any
+ >_map2 : any
+->{ [ik]: iv } : { [x: string]: V; }
+->[ik] : V
+->ik : string
+->iv : V
++>{ [ik]: iv } : { [x: number]: any; }
++>[ik] : any
++>ik : any
++>iv : any
+ 
+ };
+ 
+ /** @type {Multimap<"a" | "b", number>} with type annotation */
+ const map = new Multimap("a", 1);
+->map : Multimap<"a" | "b", number>
+->new Multimap("a", 1) : Multimap<"a" | "b", number>
+->Multimap : typeof Multimap
++>map : any
++>new Multimap("a", 1) : any
++>Multimap : (ik: any, iv: any) => void
+ >"a" : "a"
+ >1 : 1
+ 
+ // without type annotation
+ const map2 = new Multimap("m", 2);
+->map2 : Multimap<string, number>
+->new Multimap("m", 2) : Multimap<string, number>
+->Multimap : typeof Multimap
++>map2 : any
++>new Multimap("m", 2) : any
++>Multimap : (ik: any, iv: any) => void
+ >"m" : "m"
+ >2 : 2
+ 
+ /** @type {number} */
+ var n = map._map['hi']
+->n : number
+->map._map['hi'] : number
+->map._map : { [s: string]: number; }
+->map : Multimap<"a" | "b", number>
+->_map : { [s: string]: number; }
++>n : any
++>map._map['hi'] : any
++>map._map : any
++>map : any
++>_map : any
+ >'hi' : "hi"
+ 
+ /** @type {number} */
+ var n = map._map2['hi']
+->n : number
+->map._map2['hi'] : number
+->map._map2 : { [x: string]: number; }
+->map : Multimap<"a" | "b", number>
+->_map2 : { [x: string]: number; }
++>n : any
++>map._map2['hi'] : any
++>map._map2 : any
++>map : any
++>_map2 : any
+ >'hi' : "hi"
+ 
+ /** @type {number} */
+ var n = map2._map['hi']
+->n : number
+->map2._map['hi'] : number
+->map2._map : { [s: string]: number; }
+->map2 : Multimap<string, number>
+->_map : { [s: string]: number; }
++>n : any
++>map2._map['hi'] : any
++>map2._map : any
++>map2 : any
++>_map : any
+ >'hi' : "hi"
+ 
+ /** @type {number} */
+ var n = map._map2['hi']
+->n : number
+->map._map2['hi'] : number
+->map._map2 : { [x: string]: number; }
+->map : Multimap<"a" | "b", number>
+->_map2 : { [x: string]: number; }
++>n : any
++>map._map2['hi'] : any
++>map._map2 : any
++>map : any
++>_map2 : any
+ >'hi' : "hi"
+ 
+ /**
+@@= skipped -83, +83 lines =@@
+  * @param {T} t
+  */
+ function Cp(t) {
+->Cp : typeof Cp
+->t : T
++>Cp : { (t: any): void; prototype: { m1: () => any; m2: () => any; }; }
++>t : any
+ 
+     this.x = 1
+ >this.x = 1 : 1
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >1 : 1
+ 
+     this.y = t
+->this.y = t : T
++>this.y = t : any
+ >this.y : any
+->this : this
++>this : any
+ >y : any
+->t : T
++>t : any
+ }
+ Cp.prototype = {
+->Cp.prototype = {    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1(): number; m2(): T; }
+->Cp.prototype : { m1(): number; m2(): T; }
+->Cp : typeof Cp
+->prototype : { m1(): number; m2(): T; }
+->{    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1(): number; m2(): T; }
++>Cp.prototype = {    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1: () => any; m2: () => any; }
++>Cp.prototype : { m1: () => any; m2: () => any; }
++>Cp : { (t: any): void; prototype: { m1: () => any; m2: () => any; }; }
++>prototype : { m1: () => any; m2: () => any; }
++>{    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1: () => any; m2: () => any; }
+ 
+     m1() { return this.x },
+->m1 : () => number
+->this.x : number
+->this : this
+->x : number
++>m1 : () => any
++>this.x : any
++>this : any
++>x : any
+ 
+     m2() { this.z = this.x + 1; return this.y }
+->m2 : () => T
+->this.z = this.x + 1 : number
+->this.z : number
+->this : this
+->z : number
+->this.x + 1 : number
+->this.x : number
+->this : this
+->x : number
++>m2 : () => any
++>this.z = this.x + 1 : any
++>this.z : any
++>this : any
++>z : any
++>this.x + 1 : any
++>this.x : any
++>this : any
++>x : any
+ >1 : 1
+->this.y : T
+->this : this
+->y : T
++>this.y : any
++>this : any
++>y : any
+ }
+ var cp = new Cp(1)
+->cp : Cp<number>
+->new Cp(1) : Cp<number>
+->Cp : typeof Cp
++>cp : any
++>new Cp(1) : any
++>Cp : { (t: any): void; prototype: { m1: () => any; m2: () => any; }; }
+ >1 : 1
+ 
+ /** @type {number} */
+ var n = cp.x
+->n : number
+->cp.x : number
+->cp : Cp<number>
+->x : number
++>n : any
++>cp.x : any
++>cp : any
++>x : any
+ 
+ /** @type {number} */
+ var n = cp.y
+->n : number
+->cp.y : number
+->cp : Cp<number>
+->y : number
++>n : any
++>cp.y : any
++>cp : any
++>y : any
+ 
+ /** @type {number} */
+ var n = cp.m1()
+->n : number
+->cp.m1() : number
+->cp.m1 : () => number
+->cp : Cp<number>
+->m1 : () => number
++>n : any
++>cp.m1() : any
++>cp.m1 : any
++>cp : any
++>m1 : any
+ 
+ /** @type {number} */
+ var n = cp.m2()
+->n : number
+->cp.m2() : number
+->cp.m2 : () => number
+->cp : Cp<number>
+->m2 : () => number
++>n : any
++>cp.m2() : any
++>cp.m2 : any
++>cp : any
++>m2 : any
+ 
+ 

@@ -1,0 +1,19 @@
+--- old.instantiateGenericClassWithWrongNumberOfTypeArguments.types
++++ new.instantiateGenericClassWithWrongNumberOfTypeArguments.types
+@@= skipped -5, +5 lines =@@
+ 
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     x: T;
+ >x : T
+@@= skipped -12, +13 lines =@@
+ 
+ class D<T, U> {
+ >D : D<T, U>
++>T : T
++>U : U
+ 
+     x: T
+ >x : T

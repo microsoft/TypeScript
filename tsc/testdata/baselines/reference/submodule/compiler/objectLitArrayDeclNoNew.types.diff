@@ -1,0 +1,19 @@
+--- old.objectLitArrayDeclNoNew.types
++++ new.objectLitArrayDeclNoNew.types
+@@= skipped -10, +10 lines =@@
+ >Test : typeof Test
+ 
+     export interface IState {
++>IState : IState
+     }
+ 
+     export interface IToken {
++>IToken : IToken
+     }
+ 
+     export interface ILineTokens {
++>ILineTokens : ILineTokens
++
+         tokens: IToken[];
+ >tokens : IToken[]
+ 

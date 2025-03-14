@@ -1,0 +1,21 @@
+--- old.mergedDeclarations4.types
++++ new.mergedDeclarations4.types
+@@= skipped -52, +52 lines =@@
+  
+ M.f();
+ >M.f() : void
+->M.f : typeof M.f
++>M.f : typeof f
+ >M : typeof M
+->f : typeof M.f
++>f : typeof f
+ 
+ M.f.hello;
+ >M.f.hello : number
+->M.f : typeof M.f
++>M.f : typeof f
+ >M : typeof M
+->f : typeof M.f
++>f : typeof f
+ >hello : number
+ 

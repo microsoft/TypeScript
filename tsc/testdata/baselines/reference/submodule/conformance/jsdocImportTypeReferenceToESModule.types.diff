@@ -1,0 +1,20 @@
+--- old.jsdocImportTypeReferenceToESModule.types
++++ new.jsdocImportTypeReferenceToESModule.types
+@@= skipped -6, +6 lines =@@
+ === test.js ===
+ /** @param {import('./ex')} a */
+ function demo(a) {
+->demo : (a: typeof import("ex")) => void
+->a : typeof import("ex")
++>demo : (a: any) => void
++>a : any
+ 
+     a.config
+->a.config : {}
+->a : typeof import("ex")
+->config : {}
++>a.config : any
++>a : any
++>config : any
+ }
+ 

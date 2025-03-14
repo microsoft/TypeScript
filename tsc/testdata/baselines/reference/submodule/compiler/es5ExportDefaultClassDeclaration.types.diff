@@ -1,0 +1,11 @@
+--- old.es5ExportDefaultClassDeclaration.types
++++ new.es5ExportDefaultClassDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === es5ExportDefaultClassDeclaration.ts ===
+ export default class C {
+->C : C
++>C : default
+ 
+     method() { }
+ >method : () => void

@@ -1,0 +1,57 @@
+--- old.jsDeclarationsFunctionKeywordProp.types
++++ new.jsDeclarationsFunctionKeywordProp.types
+@@= skipped -1, +1 lines =@@
+ 
+ === source.js ===
+ function foo() {}
+->foo : typeof foo
++>foo : { (): void; null: boolean; }
+ 
+ foo.null = true;
+ >foo.null = true : true
+ >foo.null : boolean
+->foo : typeof foo
++>foo : { (): void; null: boolean; }
+ >null : boolean
+ >true : true
+ 
+ function bar() {}
+->bar : typeof bar
++>bar : { (): void; async: boolean; normal: boolean; }
+ 
+ bar.async = true;
+ >bar.async = true : true
+ >bar.async : boolean
+->bar : typeof bar
++>bar : { (): void; async: boolean; normal: boolean; }
+ >async : boolean
+ >true : true
+ 
+ bar.normal = false;
+ >bar.normal = false : false
+ >bar.normal : boolean
+->bar : typeof bar
++>bar : { (): void; async: boolean; normal: boolean; }
+ >normal : boolean
+ >false : false
+ 
+ function baz() {}
+->baz : typeof baz
++>baz : { (): void; class: boolean; normal: boolean; }
+ 
+ baz.class = true;
+ >baz.class = true : true
+ >baz.class : boolean
+->baz : typeof baz
++>baz : { (): void; class: boolean; normal: boolean; }
+ >class : boolean
+ >true : true
+ 
+ baz.normal = false;
+ >baz.normal = false : false
+ >baz.normal : boolean
+->baz : typeof baz
++>baz : { (): void; class: boolean; normal: boolean; }
+ >normal : boolean
+ >false : false
+ 

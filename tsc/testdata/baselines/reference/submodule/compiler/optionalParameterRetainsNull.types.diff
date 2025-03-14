@@ -1,0 +1,34 @@
+--- old.optionalParameterRetainsNull.types
++++ new.optionalParameterRetainsNull.types
+@@= skipped -1, +1 lines =@@
+ 
+ === optionalParameterRetainsNull.ts ===
+ interface Bar {  bar: number; foo: object | null;  }
++>Bar : Bar
+ >bar : number
+ >foo : object | null
+ 
+ let a = {
+->a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null): void; }
+->{  test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }} : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null): void; }
++>a : { test: <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void; }
++>{  test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }} : { test: <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void; }
+ 
+   test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }
+->test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
++>test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
++>K : K
+ >a : K
+ >b : Bar[K] | null | undefined
+ 
+ };
+ a.test("bar", null); // ok, null is assignable to number | null | undefined
+ >a.test("bar", null) : void
+->a.test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
+->a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null): void; }
+->test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
++>a.test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
++>a : { test: <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void; }
++>test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
+ >"bar" : "bar"
+ 

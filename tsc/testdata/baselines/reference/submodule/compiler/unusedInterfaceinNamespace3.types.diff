@@ -1,0 +1,25 @@
+--- old.unusedInterfaceinNamespace3.types
++++ new.unusedInterfaceinNamespace3.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/unusedInterfaceinNamespace3.ts] ////
+ 
+ === unusedInterfaceinNamespace3.ts ===
+-
+ namespace Validation {
++>Validation : any
++
+     interface i1 {
++>i1 : i1
+ 
+     }
+ 
+     export interface i2 {
++>i2 : i2
+ 
+     }
+ 
+     interface i3 extends i1 {
++>i3 : i3
+ 
+     }
+ }

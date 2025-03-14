@@ -1,0 +1,50 @@
+--- old.defaultPropsEmptyCurlyBecomesAnyForJs.types
++++ new.defaultPropsEmptyCurlyBecomesAnyForJs.types
+@@= skipped -2, +2 lines =@@
+ === library.d.ts ===
+ export class Foo<T = {}, U = {}> {
+ >Foo : Foo<T, U>
++>T : T
++>U : U
+ 
+     props: T;
+ >props : T
+@@= skipped -18, +20 lines =@@
+ 
+ export class MyFoo extends Foo {
+ >MyFoo : MyFoo
+->Foo : Foo<any, any>
++>Foo : Foo<{}, {}>
+ 
+     member;
+ >member : any
+@@= skipped -29, +29 lines =@@
+ 
+         this.props.x;
+ >this.props.x : any
+->this.props : any
++>this.props : {}
+ >this : this
+->props : any
++>props : {}
+ >x : any
+ 
+         this.props.y;
+ >this.props.y : any
+->this.props : any
++>this.props : {}
+ >this : this
+->props : any
++>props : {}
+ >y : any
+ 
+         this.state.value;
+ >this.state.value : any
+->this.state : any
++>this.state : {}
+ >this : this
+->state : any
++>state : {}
+ >value : any
+ 
+         this.member;

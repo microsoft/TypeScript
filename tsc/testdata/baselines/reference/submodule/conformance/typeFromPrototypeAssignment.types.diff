@@ -1,0 +1,224 @@
+--- old.typeFromPrototypeAssignment.types
++++ new.typeFromPrototypeAssignment.types
+@@= skipped -4, +4 lines =@@
+ 
+ /** @constructor */
+ var Multimap = function() {
+->Multimap : typeof Multimap
+->function() {    this._map = {};    this._map    this.set    this.get    this.addon} : typeof Multimap
++>Multimap : () => void
++>function() {    this._map = {};    this._map    this.set    this.get    this.addon} : () => void
+ 
+     this._map = {};
+ >this._map = {} : {}
+ >this._map : any
+->this : this
++>this : any
+ >_map : any
+ >{} : {}
+ 
+     this._map
+->this._map : {}
+->this : this
+->_map : {}
++>this._map : any
++>this : any
++>_map : any
+ 
+     this.set
+->this.set : () => void
+->this : this
+->set : () => void
++>this.set : any
++>this : any
++>set : any
+ 
+     this.get
+->this.get : () => void
+->this : this
+->get : () => void
++>this.get : any
++>this : any
++>get : any
+ 
+     this.addon
+->this.addon : () => void
+->this : this
+->addon : () => void
++>this.addon : any
++>this : any
++>addon : any
+ 
+ };
+ 
+ Multimap.prototype = {
+->Multimap.prototype = {    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get(): void; }
+->Multimap.prototype : { set: () => void; get(): void; }
+->Multimap : typeof Multimap
+->prototype : { set: () => void; get(): void; }
+->{    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get(): void; }
++>Multimap.prototype = {    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get: () => void; }
++>Multimap.prototype : any
++>Multimap : () => void
++>prototype : any
++>{    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get: () => void; }
+ 
+     set: function() {
+ >set : () => void
+ >function() {        this._map        this.set        this.get        this.addon    } : () => void
+ 
+         this._map
+->this._map : {}
+->this : this
+->_map : {}
++>this._map : any
++>this : any
++>_map : any
+ 
+         this.set
+->this.set : () => void
+->this : this
+->set : () => void
++>this.set : any
++>this : any
++>set : any
+ 
+         this.get
+->this.get : () => void
+->this : this
+->get : () => void
++>this.get : any
++>this : any
++>get : any
+ 
+         this.addon
+->this.addon : () => void
+->this : this
+->addon : () => void
++>this.addon : any
++>this : any
++>addon : any
+ 
+     },
+     get() {
+ >get : () => void
+ 
+         this._map
+->this._map : {}
+->this : this
+->_map : {}
++>this._map : any
++>this : any
++>_map : any
+ 
+         this.set
+->this.set : () => void
+->this : this
+->set : () => void
++>this.set : any
++>this : any
++>set : any
+ 
+         this.get
+->this.get : () => void
+->this : this
+->get : () => void
++>this.get : any
++>this : any
++>get : any
+ 
+         this.addon
+->this.addon : () => void
+->this : this
+->addon : () => void
++>this.addon : any
++>this : any
++>addon : any
+     }
+ }
+ 
+ Multimap.prototype.addon = function () {
+ >Multimap.prototype.addon = function () {    this._map    this.set    this.get    this.addon} : () => void
+ >Multimap.prototype.addon : any
+->Multimap.prototype : { set: () => void; get(): void; }
+->Multimap : typeof Multimap
+->prototype : { set: () => void; get(): void; }
++>Multimap.prototype : any
++>Multimap : () => void
++>prototype : any
+ >addon : any
+ >function () {    this._map    this.set    this.get    this.addon} : () => void
+ 
+     this._map
+->this._map : {}
+->this : this
+->_map : {}
++>this._map : any
++>this : any
++>_map : any
+ 
+     this.set
+->this.set : () => void
+->this : this
+->set : () => void
++>this.set : any
++>this : any
++>set : any
+ 
+     this.get
+->this.get : () => void
+->this : this
+->get : () => void
++>this.get : any
++>this : any
++>get : any
+ 
+     this.addon
+->this.addon : () => void
+->this : this
+->addon : () => void
++>this.addon : any
++>this : any
++>addon : any
+ }
+ 
+ var mm = new Multimap();
+->mm : Multimap
+->new Multimap() : Multimap
+->Multimap : typeof Multimap
++>mm : any
++>new Multimap() : any
++>Multimap : () => void
+ 
+ mm._map
+->mm._map : {}
+->mm : Multimap
+->_map : {}
++>mm._map : any
++>mm : any
++>_map : any
+ 
+ mm.set
+->mm.set : () => void
+->mm : Multimap
+->set : () => void
++>mm.set : any
++>mm : any
++>set : any
+ 
+ mm.get
+->mm.get : () => void
+->mm : Multimap
+->get : () => void
++>mm.get : any
++>mm : any
++>get : any
+ 
+ mm.addon
+->mm.addon : () => void
+->mm : Multimap
+->addon : () => void
++>mm.addon : any
++>mm : any
++>addon : any
+ 

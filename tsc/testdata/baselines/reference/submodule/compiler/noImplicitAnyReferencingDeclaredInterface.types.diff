@@ -1,0 +1,11 @@
+--- old.noImplicitAnyReferencingDeclaredInterface.types
++++ new.noImplicitAnyReferencingDeclaredInterface.types
+@@= skipped -1, +1 lines =@@
+ 
+ === noImplicitAnyReferencingDeclaredInterface.ts ===
+ interface Entry {
++>Entry : Entry
++
+     // Should return error for implicit any.
+     new ();
+ }

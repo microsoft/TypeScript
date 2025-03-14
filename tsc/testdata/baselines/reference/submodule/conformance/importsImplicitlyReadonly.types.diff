@@ -1,0 +1,70 @@
+--- old.importsImplicitlyReadonly.types
++++ new.importsImplicitlyReadonly.types
+@@= skipped -5, +5 lines =@@
+ >y : number
+ 
+ import * as a1 from "./a";
+->a1 : typeof a1
++>a1 : typeof import("a")
+ 
+ import a2 = require("./a");
+->a2 : typeof a1
++>a2 : typeof import("a")
+ 
+ const a3 = a1;
+->a3 : typeof a1
+->a1 : typeof a1
++>a3 : typeof import("a")
++>a1 : typeof import("a")
+ 
+ x = 1;     // Error
+ >x = 1 : 1
+@@= skipped -22, +22 lines =@@
+ a1.x = 1;  // Error
+ >a1.x = 1 : 1
+ >a1.x : any
+->a1 : typeof a1
++>a1 : typeof import("a")
+ >x : any
+ >1 : 1
+ 
+ a1.y = 1;  // Error
+ >a1.y = 1 : 1
+ >a1.y : any
+->a1 : typeof a1
++>a1 : typeof import("a")
+ >y : any
+ >1 : 1
+ 
+ a2.x = 1;
+ >a2.x = 1 : 1
+ >a2.x : number
+->a2 : typeof a1
++>a2 : typeof import("a")
+ >x : number
+ >1 : 1
+ 
+ a2.y = 1;
+ >a2.y = 1 : 1
+ >a2.y : number
+->a2 : typeof a1
++>a2 : typeof import("a")
+ >y : number
+ >1 : 1
+ 
+ a3.x = 1;
+ >a3.x = 1 : 1
+ >a3.x : number
+->a3 : typeof a1
++>a3 : typeof import("a")
+ >x : number
+ >1 : 1
+ 
+ a3.y = 1;
+ >a3.y = 1 : 1
+ >a3.y : number
+->a3 : typeof a1
++>a3 : typeof import("a")
+ >y : number
+ >1 : 1
+ 

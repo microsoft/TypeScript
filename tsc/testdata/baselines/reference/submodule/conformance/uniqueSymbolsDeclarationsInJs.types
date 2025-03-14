@@ -1,0 +1,56 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJs.ts] ////
+
+=== uniqueSymbolsDeclarationsInJs.js ===
+// classes
+class C {
+>C : C
+
+    /**
+     * @readonly
+     */
+    static readonlyStaticCall = Symbol();
+>readonlyStaticCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static readonlyStaticType;
+>readonlyStaticType : any
+
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static readonlyStaticTypeAndCall = Symbol();
+>readonlyStaticTypeAndCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+    static readwriteStaticCall = Symbol();
+>readwriteStaticCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+    /**
+     * @readonly
+     */
+    readonlyCall = Symbol();
+>readonlyCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+
+    readwriteCall = Symbol();
+>readwriteCall : symbol
+>Symbol() : symbol
+>Symbol : SymbolConstructor
+}
+
+/** @type {unique symbol} */
+const a = Symbol();
+>a : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+

@@ -1,0 +1,37 @@
+--- old.typeArgumentInferenceErrors.types
++++ new.typeArgumentInferenceErrors.types
+@@= skipped -3, +3 lines =@@
+ // Generic call with multiple type parameters and only one used in parameter type annotation
+ function someGenerics1<T, U>(n: T, m: number) { }
+ >someGenerics1 : <T, U>(n: T, m: number) => void
++>T : T
++>U : U
+ >n : T
+ >m : number
+ 
+@@= skipped -12, +14 lines =@@
+ // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
+ function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
+ >someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
++>T : T
++>U : U
+ >n : T
+ >f : (x: U) => void
+ >x : U
+@@= skipped -15, +17 lines =@@
+ // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
+ function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
+ >someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
++>U : U
++>T : T
+ >n : T
+ >f : (x: U) => void
+ >x : U
+@@= skipped -15, +17 lines =@@
+ // Generic call with multiple arguments of function types that each have parameters of the same generic type
+ function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
+ >someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
++>A : A
+ >a : (a: A) => A
+ >a : A
+ >b : (b: A) => A

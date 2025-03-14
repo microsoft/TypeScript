@@ -1,0 +1,31 @@
+--- old.expandoFunctionSymbolProperty.types
++++ new.expandoFunctionSymbolProperty.types
+@@= skipped -8, +8 lines =@@
+ >Symbol : SymbolConstructor
+ 
+ interface TestSymb {
++>TestSymb : TestSymb
++
+   (): void;
+   readonly [symb]: boolean;
+ >[symb] : boolean
+@@= skipped -10, +12 lines =@@
+ >test : () => TestSymb
+ 
+   function inner() {}
+->inner : { (): void; [symb]: boolean; }
++>inner : { (): void; inner[symb]: boolean; }
+ 
+   inner[symb] = true;
+ >inner[symb] = true : true
+ >inner[symb] : boolean
+->inner : { (): void; [symb]: boolean; }
++>inner : { (): void; inner[symb]: boolean; }
+ >symb : unique symbol
+ >true : true
+ 
+   return inner;
+->inner : { (): void; [symb]: boolean; }
++>inner : { (): void; inner[symb]: boolean; }
+ }
+ 

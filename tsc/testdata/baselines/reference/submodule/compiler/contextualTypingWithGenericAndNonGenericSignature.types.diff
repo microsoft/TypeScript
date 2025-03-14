@@ -1,0 +1,20 @@
+--- old.contextualTypingWithGenericAndNonGenericSignature.types
++++ new.contextualTypingWithGenericAndNonGenericSignature.types
+@@= skipped -10, +10 lines =@@
+ >y : number
+ 
+     <T, U>(x: T, y: U): T
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 
+@@= skipped -17, +19 lines =@@
+ >f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }
+ 
+     <T, U>(x: T, y: U): T
++>T : T
++>U : U
+ >x : T
+ >y : U
+ 

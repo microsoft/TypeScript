@@ -1,0 +1,60 @@
+--- old.overloadedConstructorFixesInferencesAppropriately.types
++++ new.overloadedConstructorFixesInferencesAppropriately.types
+@@= skipped -1, +1 lines =@@
+ 
+ === overloadedConstructorFixesInferencesAppropriately.ts ===
+ interface Box<T> {
++>Box : Box<T>
++>T : T
++
+     v: T;
+ >v : T
+ }
+ 
+ interface ErrorResult {
++>ErrorResult : ErrorResult
++
+     readonly error: true
+ >error : true
+ >true : true
+ }
+ 
+ interface AsyncLoaderProps<TResult extends {}> {
++>AsyncLoaderProps : AsyncLoaderProps<TResult>
++>TResult : TResult
++
+     readonly asyncLoad: () => Box<TResult>;
+ >asyncLoad : () => Box<TResult>
+ 
+@@= skipped -21, +29 lines =@@
+ 
+ class AsyncLoader<TResult extends {}> {
+ >AsyncLoader : AsyncLoader<TResult>
++>TResult : TResult
+ 
+     constructor(props: string, context: any);
+ >props : string
+@@= skipped -13, +14 lines =@@
+ }
+ 
+ function load(): Box<{ success: true } | ErrorResult> {
+->load : () => Box<{ success: true; } | ErrorResult>
++>load : () => Box<ErrorResult | { success: true; }>
+ >success : true
+ >true : true
+ 
+@@= skipped -11, +11 lines =@@
+ new AsyncLoader({
+ >new AsyncLoader({    asyncLoad: load,    children: result => result.success as any,}) : AsyncLoader<ErrorResult | { success: true; }>
+ >AsyncLoader : typeof AsyncLoader
+->{    asyncLoad: load,    children: result => result.success as any,} : { asyncLoad: () => Box<{ success: true; } | ErrorResult>; children: (result: { success: true; }) => any; }
++>{    asyncLoad: load,    children: result => result.success as any,} : { asyncLoad: () => Box<ErrorResult | { success: true; }>; children: (result: { success: true; }) => any; }
+ 
+     asyncLoad: load,
+->asyncLoad : () => Box<{ success: true; } | ErrorResult>
+->load : () => Box<{ success: true; } | ErrorResult>
++>asyncLoad : () => Box<ErrorResult | { success: true; }>
++>load : () => Box<ErrorResult | { success: true; }>
+ 
+     children: result => result.success as any,
+ >children : (result: { success: true; }) => any

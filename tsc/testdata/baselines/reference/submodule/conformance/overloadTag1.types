@@ -1,0 +1,114 @@
+//// [tests/cases/conformance/jsdoc/overloadTag1.ts] ////
+
+=== overloadTag1.js ===
+/**
+ * @overload
+ * @param {number} a 
+ * @param {number} b
+ * @returns {number} 
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ *
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
+export function overloaded(a,b) {
+>overloaded : (a: any, b: any) => string | number
+>a : any
+>b : any
+
+  if (typeof a === "string" && typeof b === "string") {
+>typeof a === "string" && typeof b === "string" : boolean
+>typeof a === "string" : boolean
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>a : any
+>"string" : "string"
+>typeof b === "string" : boolean
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>b : any
+>"string" : "string"
+
+    return a + b;
+>a + b : string
+>a : string
+>b : string
+
+  } else if (typeof a === "number" && typeof b === "number") {
+>typeof a === "number" && typeof b === "number" : boolean
+>typeof a === "number" : boolean
+>typeof a : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>a : any
+>"number" : "number"
+>typeof b === "number" : boolean
+>typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>b : any
+>"number" : "number"
+
+    return a + b;
+>a + b : number
+>a : number
+>b : number
+  }
+  throw new Error("Invalid arguments");
+>new Error("Invalid arguments") : Error
+>Error : ErrorConstructor
+>"Invalid arguments" : "Invalid arguments"
+}
+var o1 = overloaded(1,2)
+>o1 : string | number
+>overloaded(1,2) : string | number
+>overloaded : (a: any, b: any) => string | number
+>1 : 1
+>2 : 2
+
+var o2 = overloaded("zero", "one")
+>o2 : string | number
+>overloaded("zero", "one") : string | number
+>overloaded : (a: any, b: any) => string | number
+>"zero" : "zero"
+>"one" : "one"
+
+var o3 = overloaded("a",false)
+>o3 : string | number
+>overloaded("a",false) : string | number
+>overloaded : (a: any, b: any) => string | number
+>"a" : "a"
+>false : false
+
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
+export function uncheckedInternally(a, b) {
+>uncheckedInternally : (a: any, b: any) => any
+>a : any
+>b : any
+
+    return a + b;
+>a + b : any
+>a : any
+>b : any
+}
+uncheckedInternally(1,2)
+>uncheckedInternally(1,2) : any
+>uncheckedInternally : (a: any, b: any) => any
+>1 : 1
+>2 : 2
+
+uncheckedInternally("zero", "one")
+>uncheckedInternally("zero", "one") : any
+>uncheckedInternally : (a: any, b: any) => any
+>"zero" : "zero"
+>"one" : "one"
+

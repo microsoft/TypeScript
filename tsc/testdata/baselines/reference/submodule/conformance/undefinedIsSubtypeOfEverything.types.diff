@@ -1,0 +1,76 @@
+--- old.undefinedIsSubtypeOfEverything.types
++++ new.undefinedIsSubtypeOfEverything.types
+@@= skipped -7, +7 lines =@@
+ 
+     foo: typeof undefined;
+ >foo : any
+->undefined : undefined
+ } 
+ 
+ class D0 extends Base {
+@@= skipped -17, +16 lines =@@
+ 
+     foo: typeof undefined; 
+ >foo : any
+->undefined : undefined
+ }
+ 
+ class D1 extends Base {
+@@= skipped -98, +97 lines =@@
+ }
+ 
+ interface I1 {
++>I1 : I1
++
+     bar: string;
+ >bar : string
+ }
+@@= skipped -21, +23 lines =@@
+ }
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ class D11 extends Base {
+@@= skipped -8, +8 lines =@@
+ >Base : Base
+ 
+     foo: E;
+->foo : E
++>foo : E.A
+ }
+ 
+ function f() { }
+@@= skipped -19, +19 lines =@@
+ 
+     foo: typeof f;
+ >foo : typeof f
+->f : typeof f
+ }
+ 
+ 
+@@= skipped -21, +20 lines =@@
+ 
+     foo: typeof c;
+ >foo : typeof c
+->c : typeof c
+ }
+ 
+ 
+ class D14<T> extends Base {
+ >D14 : D14<T>
++>T : T
+ >Base : Base
+ 
+     foo: T;
+@@= skipped -15, +15 lines =@@
+ 
+ class D15<T, U> extends Base {
+ >D15 : D15<T, U>
++>T : T
++>U : U
+ >Base : Base
+ 
+     foo: U;

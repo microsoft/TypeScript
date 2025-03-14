@@ -1,0 +1,37 @@
+--- old.declarationEmitComputedPropertyName1.types
++++ new.declarationEmitComputedPropertyName1.types
+@@= skipped -4, +4 lines =@@
+ 
+ declare function create<T extends {}>(): T;
+ >create : <T extends {}>() => T
++>T : T
+ 
+ export const c = create<{
+->c : { data: { ["a_b_c"]: string; ["sss"]: string; s_d: string; queryData?: string; ["foo bar"]: string; }; a_b_c: string; }
+->create<{  data: {    ["a_b_c"]: string;    ["sss"]: string;    s_d: string;    queryData?: string;    ["foo bar"]: string;  };  ["a_b_c"]: string;}>() : { data: { ["a_b_c"]: string; ["sss"]: string; s_d: string; queryData?: string; ["foo bar"]: string; }; a_b_c: string; }
++>c : { data: { a_b_c: string; sss: string; s_d: string; queryData?: string | undefined; ["foo bar"]: string; }; a_b_c: string; }
++>create<{  data: {    ["a_b_c"]: string;    ["sss"]: string;    s_d: string;    queryData?: string;    ["foo bar"]: string;  };  ["a_b_c"]: string;}>() : { data: { a_b_c: string; sss: string; s_d: string; queryData?: string | undefined; ["foo bar"]: string; }; a_b_c: string; }
+ >create : <T extends {}>() => T
+ 
+   data: {
+->data : { a_b_c: string; sss: string; s_d: string; queryData?: string; "foo bar": string; }
++>data : { a_b_c: string; sss: string; s_d: string; queryData?: string | undefined; ["foo bar"]: string; }
+ 
+     ["a_b_c"]: string;
+ >["a_b_c"] : string
+@@= skipped -35, +36 lines =@@
+ }>();
+ 
+ export interface IData {
++>IData : IData
++
+   ["a_b_c"]: string;
+ >["a_b_c"] : string
+ >"a_b_c" : "a_b_c"
+ 
+   nested: {
+->nested : { d_e_f: string; value: string; "qwe rty": string; }
++>nested : { d_e_f: string; value: string; ["qwe rty"]: string; }
+ 
+     ["d_e_f"]: string;
+ >["d_e_f"] : string

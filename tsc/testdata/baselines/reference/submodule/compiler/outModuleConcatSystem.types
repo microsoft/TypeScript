@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/outModuleConcatSystem.ts] ////
+
+=== ref/a.ts ===
+export class A { }
+>A : A
+
+=== b.ts ===
+import {A} from "./ref/a";
+>A : typeof A
+
+export class B extends A { }
+>B : B
+>A : A
+

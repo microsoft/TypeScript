@@ -1,0 +1,41 @@
+--- old.exportAssignmentEnum.types
++++ new.exportAssignmentEnum.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportAssignmentEnum_B.ts ===
+ import EnumE = require("./exportAssignmentEnum_A");
+->EnumE : typeof EnumE
++>EnumE : typeof E
+ 
+ var a = EnumE.A;
+->a : EnumE
+->EnumE.A : EnumE.A
+->EnumE : typeof EnumE
+->A : EnumE.A
++>a : E
++>EnumE.A : E.A
++>EnumE : typeof E
++>A : E.A
+ 
+ var b = EnumE.B;
+->b : EnumE
+->EnumE.B : EnumE.B
+->EnumE : typeof EnumE
+->B : EnumE.B
++>b : E
++>EnumE.B : E.B
++>EnumE : typeof E
++>B : E.B
+ 
+ var c = EnumE.C;
+->c : EnumE
+->EnumE.C : EnumE.C
+->EnumE : typeof EnumE
+->C : EnumE.C
++>c : E
++>EnumE.C : E.C
++>EnumE : typeof E
++>C : E.C
+ 
+ === exportAssignmentEnum_A.ts ===
+ enum E {

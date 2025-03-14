@@ -1,0 +1,15 @@
+--- old.declarationEmitDestructuringObjectLiteralPattern.types
++++ new.declarationEmitDestructuringObjectLiteralPattern.types
+@@= skipped -99, +99 lines =@@
+ 
+     return { a4, b4, c4 };
+ >{ a4, b4, c4 } : { a4: string; b4: number; c4: boolean; }
+->a4 : string
+->b4 : number
+->c4 : boolean
++>a4 : any
++>b4 : any
++>c4 : any
+ }
+ var { a4, b4, c4 } = f15();
+ >a4 : string

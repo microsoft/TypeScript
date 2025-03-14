@@ -1,0 +1,259 @@
+--- old.variableDeclaratorResolvedDuringContextualTyping.types
++++ new.variableDeclaratorResolvedDuringContextualTyping.types
+@@= skipped -4, +4 lines =@@
+ >WinJS : typeof WinJS
+ 
+     export interface ValueCallback {
++>ValueCallback : ValueCallback
++
+         (value: any): any;
+ >value : any
+     }
+ 
+     export interface EventCallback {
++>EventCallback : EventCallback
++
+         (value: any): void;
+ >value : any
+     }
+ 
+     export interface ErrorCallback {
++>ErrorCallback : ErrorCallback
++
+         (error: any): any;
+ >error : any
+     }
+ 
+     export interface ProgressCallback {
++>ProgressCallback : ProgressCallback
++
+         (progress: any): any;
+ >progress : any
+     }
+@@= skipped -81, +89 lines =@@
+ 
+     export declare class TPromise<V> {
+ >TPromise : TPromise<V>
++>V : V
+ 
+         constructor(init: (complete: (value: V) => void, error: (err: any) => void, progress: ProgressCallback) => void, oncancel?: any);
+ >init : (complete: (value: V) => void, error: (err: any) => void, progress: ProgressCallback) => void
+@@= skipped -11, +12 lines =@@
+ >oncancel : any
+ 
+         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
+->then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
++>then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
++>U : U
+ >success : (value: V) => TPromise<U>
+ >value : V
+ >error : (err: any) => TPromise<U>
+@@= skipped -8, +9 lines =@@
+ >progress : ProgressCallback
+ 
+         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
+->then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
++>then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
++>U : U
+ >success : (value: V) => TPromise<U>
+ >value : V
+ >error : (err: any) => U
+@@= skipped -8, +9 lines =@@
+ >progress : ProgressCallback
+ 
+         public then<U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
+->then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; }
++>then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
++>U : U
+ >success : (value: V) => U
+ >value : V
+ >error : (err: any) => TPromise<U>
+@@= skipped -8, +9 lines =@@
+ >progress : ProgressCallback
+ 
+         public then<U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
+->then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U_1>(success?: (value: V) => U_1, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
++>then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
++>U : U
+ >success : (value: V) => U
+ >value : V
+ >error : (err: any) => U
+@@= skipped -20, +21 lines =@@
+ 
+         public static as<ValueType>(value: ValueType): TPromise<ValueType>;
+ >as : <ValueType>(value: ValueType) => TPromise<ValueType>
++>ValueType : ValueType
+ >value : ValueType
+ 
+         public static timeout(delay: number): TPromise<void>;
+@@= skipped -8, +9 lines =@@
+ 
+         public static join<ValueType>(promises: TPromise<ValueType>[]): TPromise<ValueType[]>;
+ >join : <ValueType>(promises: TPromise<ValueType>[]) => TPromise<ValueType[]>
++>ValueType : ValueType
+ >promises : TPromise<ValueType>[]
+ 
+         public static any<ValueType>(promises: TPromise<ValueType>[]): TPromise<ValueType>;
+ >any : <ValueType>(promises: TPromise<ValueType>[]) => TPromise<ValueType>
++>ValueType : ValueType
+ >promises : TPromise<ValueType>[]
+ 
+         public static wrapError<ValueType>(error: any): TPromise<ValueType>;
+ >wrapError : <ValueType>(error: any) => TPromise<ValueType>
++>ValueType : ValueType
+ >error : any
+     }
+ 
+     export interface IXHROptions {
++>IXHROptions : IXHROptions
++
+         type?: string;
+ >type : string
+ 
+@@= skipped -40, +45 lines =@@
+ }
+ 
+ module Services {
++>Services : any
++
+     export interface IRequestService {
++>IRequestService : IRequestService
++
+         /**
+          * Returns the URL that can be used to access the provided service. The optional second argument can
+          * be provided to narrow down the request URL to a specific file system resource. The third argument
+@@= skipped -22, +26 lines =@@
+          * of calling WinJS.XHR directly.
+          */
+         makeRequest(options: WinJS.IXHROptions): WinJS.Promise;
+->makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
+->options : WinJS.IXHROptions
++>makeRequest : (options: IXHROptions) => Promise
++>options : IXHROptions
+ >WinJS : any
+ >WinJS : any
+     }
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ module Files {
++>Files : any
++
+     export interface IUploadResult {
++>IUploadResult : IUploadResult
++
+         stat: string;
+ >stat : string
+ 
+@@= skipped -10, +14 lines =@@
+ }
+ 
+ interface XMLHttpRequest {
++>XMLHttpRequest : XMLHttpRequest
++
+     status: number;
+ >status : number
+ 
+@@= skipped -15, +17 lines =@@
+ >FileService : FileService
+ 
+     private requestService: Services.IRequestService;
+->requestService : Services.IRequestService
++>requestService : IRequestService
+ >Services : any
+ 
+     public uploadData(): WinJS.TPromise<Files.IUploadResult> {
+->uploadData : () => WinJS.TPromise<Files.IUploadResult>
++>uploadData : () => TPromise<IUploadResult>
+ >WinJS : any
+ >Files : any
+ 
+@@= skipped -13, +13 lines =@@
+ >"" : ""
+ 
+         return this.requestService.makeRequest({
+->this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }).then((response: XMLHttpRequest) => {                var result: IUploadResult = { // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                };                return WinJS.TPromise.as<Files.IUploadResult>(result);            }, (xhr: XMLHttpRequest) => {                return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));            }) : WinJS.Promise
+->this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }).then : (success?: WinJS.ValueCallback, error?: WinJS.ErrorCallback, progress?: WinJS.ProgressCallback) => WinJS.Promise
+->this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }) : WinJS.Promise
+->this.requestService.makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
+->this.requestService : Services.IRequestService
++>this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }).then((response: XMLHttpRequest) => {                var result: IUploadResult = { // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                };                return WinJS.TPromise.as<Files.IUploadResult>(result);            }, (xhr: XMLHttpRequest) => {                return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));            }) : Promise
++>this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }).then : (success?: ValueCallback, error?: ErrorCallback, progress?: ProgressCallback) => Promise
++>this.requestService.makeRequest({            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        }) : Promise
++>this.requestService.makeRequest : (options: IXHROptions) => Promise
++>this.requestService : IRequestService
+ >this : this
+->requestService : Services.IRequestService
+->makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
++>requestService : IRequestService
++>makeRequest : (options: IXHROptions) => Promise
+ >{            url: this.requestService.getRequestUrl('root', path),            type: 'POST',            headers: {},            data: "someData"        } : { url: string; type: string; headers: {}; data: string; }
+ 
+             url: this.requestService.getRequestUrl('root', path),
+ >url : string
+ >this.requestService.getRequestUrl('root', path) : string
+ >this.requestService.getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
+->this.requestService : Services.IRequestService
++>this.requestService : IRequestService
+ >this : this
+->requestService : Services.IRequestService
++>requestService : IRequestService
+ >getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
+ >'root' : "root"
+ >path : string
+@@= skipped -34, +34 lines =@@
+ >"someData" : "someData"
+ 
+         }).then((response: XMLHttpRequest) => {
+->then : (success?: WinJS.ValueCallback, error?: WinJS.ErrorCallback, progress?: WinJS.ProgressCallback) => WinJS.Promise
+->(response: XMLHttpRequest) => {                var result: IUploadResult = { // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                };                return WinJS.TPromise.as<Files.IUploadResult>(result);            } : (response: XMLHttpRequest) => WinJS.TPromise<Files.IUploadResult>
++>then : (success?: ValueCallback, error?: ErrorCallback, progress?: ProgressCallback) => Promise
++>(response: XMLHttpRequest) => {                var result: IUploadResult = { // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                };                return WinJS.TPromise.as<Files.IUploadResult>(result);            } : (response: XMLHttpRequest) => TPromise<IUploadResult>
+ >response : XMLHttpRequest
+ 
+                 var result: IUploadResult = { // This should be error
+@@= skipped -28, +28 lines =@@
+                 };
+ 
+                 return WinJS.TPromise.as<Files.IUploadResult>(result);
+->WinJS.TPromise.as<Files.IUploadResult>(result) : WinJS.TPromise<Files.IUploadResult>
+->WinJS.TPromise.as : <ValueType>(value: ValueType) => WinJS.TPromise<ValueType>
+->WinJS.TPromise : typeof WinJS.TPromise
++>WinJS.TPromise.as<Files.IUploadResult>(result) : TPromise<IUploadResult>
++>WinJS.TPromise.as : <ValueType>(value: ValueType) => TPromise<ValueType>
++>WinJS.TPromise : typeof TPromise
+ >WinJS : typeof WinJS
+->TPromise : typeof WinJS.TPromise
+->as : <ValueType>(value: ValueType) => WinJS.TPromise<ValueType>
++>TPromise : typeof TPromise
++>as : <ValueType>(value: ValueType) => TPromise<ValueType>
+ >Files : any
+ >result : IUploadResult
+ 
+             }, (xhr: XMLHttpRequest) => {
+->(xhr: XMLHttpRequest) => {                return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));            } : (xhr: XMLHttpRequest) => WinJS.Promise
++>(xhr: XMLHttpRequest) => {                return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));            } : (xhr: XMLHttpRequest) => Promise
+ >xhr : XMLHttpRequest
+ 
+                 return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));
+->WinJS.Promise.wrapError(new Errors.ConnectionError(xhr)) : WinJS.Promise
+->WinJS.Promise.wrapError : (error: any) => WinJS.Promise
+->WinJS.Promise : typeof WinJS.Promise
++>WinJS.Promise.wrapError(new Errors.ConnectionError(xhr)) : Promise
++>WinJS.Promise.wrapError : (error: any) => Promise
++>WinJS.Promise : typeof Promise
+ >WinJS : typeof WinJS
+->Promise : typeof WinJS.Promise
+->wrapError : (error: any) => WinJS.Promise
+->new Errors.ConnectionError(xhr) : Errors.ConnectionError
+->Errors.ConnectionError : typeof Errors.ConnectionError
++>Promise : typeof Promise
++>wrapError : (error: any) => Promise
++>new Errors.ConnectionError(xhr) : ConnectionError
++>Errors.ConnectionError : typeof ConnectionError
+ >Errors : typeof Errors
+->ConnectionError : typeof Errors.ConnectionError
++>ConnectionError : typeof ConnectionError
+ >xhr : XMLHttpRequest
+ 
+             });

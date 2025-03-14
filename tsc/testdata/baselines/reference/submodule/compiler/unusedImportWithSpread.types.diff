@@ -1,0 +1,40 @@
+--- old.unusedImportWithSpread.types
++++ new.unusedImportWithSpread.types
+@@= skipped -15, +15 lines =@@
+ >{} : {}
+ 
+ ({
+->({    // @ts-ignore    ...b1,    a}) : error
+->{    // @ts-ignore    ...b1,    a} : error
++>({    // @ts-ignore    ...b1,    a}) : any
++>{    // @ts-ignore    ...b1,    a} : any
+ 
+     // @ts-ignore
+     ...b1,
+ >b1 : unknown
+ 
+     a
+->a : { a: number; }
++>a : any
+ 
+ })
+ 
+@@= skipped -22, +22 lines =@@
+ >{} : {}
+ 
+ ({
+->({    // @ts-ignore    ...b2,    a}) : error
+->{    // @ts-ignore    ...b2,    a} : error
++>({    // @ts-ignore    ...b2,    a}) : any
++>{    // @ts-ignore    ...b2,    a} : any
+ 
+     // @ts-ignore
+     ...b2,
+ >b2 : never
+ 
+     a
+->a : { a: number; }
++>a : any
+ 
+ })
+ 

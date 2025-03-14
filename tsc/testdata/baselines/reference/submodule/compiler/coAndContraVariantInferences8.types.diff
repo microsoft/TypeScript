@@ -1,0 +1,34 @@
+--- old.coAndContraVariantInferences8.types
++++ new.coAndContraVariantInferences8.types
+@@= skipped -3, +3 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/58468
+ 
+ declare const fn: (() => void) | ((a: number) => void);
+->fn : (() => void) | ((a: number) => void)
++>fn : () => void | (a: number) => void
+ >a : number
+ 
+ declare const x: number;
+@@= skipped -11, +11 lines =@@
+ 
+ fn.call(null, x);
+ >fn.call(null, x) : void
+->fn.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+->fn : (() => void) | ((a: number) => void)
+->call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
++>fn.call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
++>fn : () => void | (a: number) => void
++>call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
+ >x : number
+ 
+ fn.call(null, y);
+ >fn.call(null, y) : void
+->fn.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+->fn : (() => void) | ((a: number) => void)
+->call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
++>fn.call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
++>fn : () => void | (a: number) => void
++>call : <T, A extends any[], R>(thisArg: T, ...args: A) => R
+ >y : any
+ 
+ export {};

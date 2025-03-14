@@ -1,0 +1,20 @@
+--- old.ambientInsideNonAmbient.types
++++ new.ambientInsideNonAmbient.types
+@@= skipped -13, +13 lines =@@
+ >C : C
+ 
+     export declare enum E { }
+->E : E
++>E : M.E
+ 
+     export declare module M { }
++>M : any
+ }
+ 
+ module M2 {
+@@= skipped -21, +22 lines =@@
+ >E : E
+ 
+     declare module M { }
++>M : any
+ }

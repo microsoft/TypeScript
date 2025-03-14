@@ -1,0 +1,21 @@
+--- old.declarationEmitLocalClassHasRequiredDeclare.types
++++ new.declarationEmitLocalClassHasRequiredDeclare.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmitLocalClassHasRequiredDeclare.ts ===
+ export declare namespace A {
++>A : typeof A
++
+     namespace X { }
++>X : typeof X
+ }
+ 
+ class X { }
+@@= skipped -15, +18 lines =@@
+ }
+ 
+ export declare namespace Y {
++>Y : typeof Y
+ 
+ }
+ 

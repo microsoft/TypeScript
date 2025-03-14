@@ -1,0 +1,9 @@
+--- old.parserUnfinishedTypeNameBeforeKeyword1.types
++++ new.parserUnfinishedTypeNameBeforeKeyword1.types
+@@= skipped -5, +5 lines =@@
+ >TypeModule1 : any
+ 
+ module TypeModule2 {
++>TypeModule2 : any
+ }
+ 

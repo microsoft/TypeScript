@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsx/tsxDynamicTagName6.tsx] ////
+
+=== tsxDynamicTagName6.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		div: any
+>div : any
+	}
+}
+
+const t = {tag:'h1'}
+>t : { tag: string; }
+>{tag:'h1'} : { tag: string; }
+>tag : string
+>'h1' : "h1"
+
+const foo = <t.tag/>  // No error
+>foo : any
+><t.tag/> : any
+>t.tag : string
+>t : { tag: string; }
+>tag : string
+

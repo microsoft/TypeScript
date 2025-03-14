@@ -1,0 +1,78 @@
+--- old.staticPropertyNameConflicts(usedefineforclassfields=true).types
++++ new.staticPropertyNameConflicts(usedefineforclassfields=true).types
+@@= skipped -649, +649 lines =@@
+ >TestOnDefaultExportedClass_3 : typeof TestOnDefaultExportedClass_3
+ 
+     export default class StaticLength {
+->StaticLength : StaticLength
++>StaticLength : default
+ 
+         static length: number; // error without useDefineForClassFields
+ >length : number
+@@= skipped -30, +30 lines =@@
+ >TestOnDefaultExportedClass_4 : typeof TestOnDefaultExportedClass_4
+ 
+     export default class StaticLengthFn {
+->StaticLengthFn : StaticLengthFn
++>StaticLengthFn : default
+ 
+         static length() {} // error without useDefineForClassFields
+ >length : () => void
+@@= skipped -31, +31 lines =@@
+ >TestOnDefaultExportedClass_5 : typeof TestOnDefaultExportedClass_5
+ 
+     export default class StaticPrototype {
+->StaticPrototype : StaticPrototype
++>StaticPrototype : default
+ 
+         static prototype: number; // always an error
+->prototype : StaticPrototype
++>prototype : default
+ 
+         prototype: string; // ok
+ >prototype : string
+@@= skipped -30, +30 lines =@@
+ >TestOnDefaultExportedClass_6 : typeof TestOnDefaultExportedClass_6
+ 
+     export default class StaticPrototypeFn {
+->StaticPrototypeFn : StaticPrototypeFn
++>StaticPrototypeFn : default
+ 
+         static prototype() {} // always an error
+ >prototype : () => void
+@@= skipped -31, +31 lines =@@
+ >TestOnDefaultExportedClass_7 : typeof TestOnDefaultExportedClass_7
+ 
+     export default class StaticCaller {
+->StaticCaller : StaticCaller
++>StaticCaller : default
+ 
+         static caller: number; // error without useDefineForClassFields
+ >caller : number
+@@= skipped -30, +30 lines =@@
+ >TestOnDefaultExportedClass_8 : typeof TestOnDefaultExportedClass_8
+ 
+     export default class StaticCallerFn {
+->StaticCallerFn : StaticCallerFn
++>StaticCallerFn : default
+ 
+         static caller() {} // error without useDefineForClassFields
+ >caller : () => void
+@@= skipped -31, +31 lines =@@
+ >TestOnDefaultExportedClass_9 : typeof TestOnDefaultExportedClass_9
+ 
+     export default class StaticArguments {
+->StaticArguments : StaticArguments
++>StaticArguments : default
+ 
+         static arguments: number; // error without useDefineForClassFields
+ >arguments : number
+@@= skipped -30, +30 lines =@@
+ >TestOnDefaultExportedClass_10 : typeof TestOnDefaultExportedClass_10
+ 
+     export default class StaticArgumentsFn {
+->StaticArgumentsFn : StaticArgumentsFn
++>StaticArgumentsFn : default
+ 
+         static arguments() {} // error without useDefineForClassFields
+ >arguments : () => void

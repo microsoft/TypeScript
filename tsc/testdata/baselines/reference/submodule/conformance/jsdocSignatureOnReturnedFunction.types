@@ -1,0 +1,75 @@
+//// [tests/cases/conformance/jsdoc/jsdocSignatureOnReturnedFunction.ts] ////
+
+=== jsdocSignatureOnReturnedFunction.js ===
+function f1() {
+>f1 : () => (a: any, b: any) => any
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
+    return (a, b) => {
+>(a, b) => {        return a + b;    } : (a: any, b: any) => any
+>a : any
+>b : any
+
+        return a + b;
+>a + b : any
+>a : any
+>b : any
+    }
+}
+
+function f2() {
+>f2 : () => (a: any, b: any) => any
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @returns {number}
+     */
+    return function (a, b){
+>function (a, b){        return a + b;    } : (a: any, b: any) => any
+>a : any
+>b : any
+
+        return a + b;
+>a + b : any
+>a : any
+>b : any
+    }
+}
+
+function f3() {
+>f3 : () => (a: any, b: any) => any
+
+    /** @type {(a: number, b: number) => number} */
+    return (a, b) => {
+>(a, b) => {        return a + b;    } : (a: any, b: any) => any
+>a : any
+>b : any
+
+        return a + b;
+>a + b : any
+>a : any
+>b : any
+    }
+}
+
+function f4() {
+>f4 : () => (a: any, b: any) => any
+
+    /** @type {(a: number, b: number) => number} */
+    return function (a, b){
+>function (a, b){        return a + b;    } : (a: any, b: any) => any
+>a : any
+>b : any
+
+        return a + b;
+>a + b : any
+>a : any
+>b : any
+    }
+}
+

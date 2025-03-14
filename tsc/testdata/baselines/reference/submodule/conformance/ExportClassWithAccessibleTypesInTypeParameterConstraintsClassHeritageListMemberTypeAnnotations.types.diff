@@ -1,0 +1,10 @@
+--- old.ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.types
++++ new.ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.types
+@@= skipped -41, +41 lines =@@
+ 
+     export class Line<TPoint extends Point>{
+ >Line : Line<TPoint>
++>TPoint : TPoint
+ 
+         constructor(public start: TPoint, public end: TPoint) { }
+ >start : TPoint

@@ -1,0 +1,11 @@
+--- old.unusedImports9.types
++++ new.unusedImports9.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file2.ts ===
+ import c = require('./file1')
+->c : typeof c
++>c : typeof import("file1")
+ 
+ === file1.ts ===
+ export class Calculator {

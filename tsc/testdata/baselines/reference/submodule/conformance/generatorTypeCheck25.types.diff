@@ -1,0 +1,11 @@
+--- old.generatorTypeCheck25.types
++++ new.generatorTypeCheck25.types
+@@= skipped -14, +14 lines =@@
+ >z : number
+ 
+ var g3: () => Iterable<Foo> = function* () {
+->g3 : () => Iterable<Foo>
++>g3 : () => Iterable<Foo, any, any>
+ >function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => Generator<Bar | Baz, void, unknown>
+ 
+     yield;

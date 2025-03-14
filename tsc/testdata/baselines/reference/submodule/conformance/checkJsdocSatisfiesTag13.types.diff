@@ -1,0 +1,27 @@
+--- old.checkJsdocSatisfiesTag13.types
++++ new.checkJsdocSatisfiesTag13.types
+@@= skipped -2, +2 lines =@@
+ === /a.js ===
+ /** @satisfies {{ f: (x: string) => string }} */
+ const t1 = { f: s => s.toLowerCase() }; // should work
+->t1 : { f: (s: string) => string; }
+->{ f: s => s.toLowerCase() } : { f: (s: string) => string; }
+->f : (s: string) => string
+->s => s.toLowerCase() : (s: string) => string
+->s : string
+->s.toLowerCase() : string
+->s.toLowerCase : () => string
+->s : string
+->toLowerCase : () => string
++>t1 : { f: (s: any) => any; }
++>{ f: s => s.toLowerCase() } : { f: (s: any) => any; }
++>f : (s: any) => any
++>s => s.toLowerCase() : (s: any) => any
++>s : any
++>s.toLowerCase() : any
++>s.toLowerCase : any
++>s : any
++>toLowerCase : any
+ 
+ /** @satisfies {{ f: (x: string) => string }} */
+ const t2 = { g: "oops" }; // should error

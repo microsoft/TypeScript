@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/ambient/ambientDeclarationsPatterns_merging2.ts] ////
+
+=== types.ts ===
+declare module "*.foo" {
+>"*.foo" : typeof import("*.foo")
+
+  let everywhere: string;
+>everywhere : string
+}
+
+
+=== testA.ts ===
+import { everywhere, onlyInA, alsoOnlyInA } from "a.foo";
+>everywhere : any
+>onlyInA : any
+>alsoOnlyInA : any
+
+declare module "a.foo" {
+>"a.foo" : typeof import("a.foo")
+
+  let onlyInA: number;
+>onlyInA : number
+}
+
+=== testB.ts ===
+import { everywhere, onlyInA, alsoOnlyInA } from "b.foo"; // Error
+>everywhere : any
+>onlyInA : any
+>alsoOnlyInA : any
+
+declare module "a.foo" {
+>"a.foo" : typeof import("a.foo")
+
+  let alsoOnlyInA: number;
+>alsoOnlyInA : number
+}

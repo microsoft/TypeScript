@@ -1,0 +1,19 @@
+--- old.isolatedModulesImportConstEnum.types
++++ new.isolatedModulesImportConstEnum.types
+@@= skipped -8, +8 lines =@@
+ >console.log : (...data: any[]) => void
+ >console : Console
+ >log : (...data: any[]) => void
+->Foo.BAR : Foo
++>Foo.BAR : Foo.BAR
+ >Foo : typeof Foo
+->BAR : Foo
++>BAR : Foo.BAR
+ 
+ === file2.ts ===
+ export const enum Foo {
+->Foo : Foo
++>Foo : Foo.BAR
+ 
+   BAR,
+ >BAR : Foo.BAR

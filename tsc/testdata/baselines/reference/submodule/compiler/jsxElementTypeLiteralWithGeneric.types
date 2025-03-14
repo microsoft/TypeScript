@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/jsxElementTypeLiteralWithGeneric.tsx] ////
+
+=== jsxElementTypeLiteralWithGeneric.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : any
+
+declare global {
+>global : any
+
+  namespace JSX {
+>JSX : any
+
+    type ElementType<P = any> =
+>ElementType : any
+>P : P
+
+      | {
+        [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
+>K : K
+>JSX : any
+>JSX : any
+
+        ? K
+        : never;
+      }[keyof JSX.IntrinsicElements]
+>JSX : any
+
+      | React.ComponentType<P>;
+>React : any
+  }
+}
+
+// should be fine - `ElementType` accepts `div`
+let a = <div />;
+>a : any
+><div /> : any
+>div : any
+
+// Should be an error.
+// `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
+let c = <ruhroh />;
+>c : any
+><ruhroh /> : any
+>ruhroh : any
+

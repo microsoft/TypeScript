@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/mergedDeclarationExports.ts] ////
+
+=== mergedDeclarationExports.ts ===
+// OK -- one is type, one is value
+interface b {}
+>b : b
+
+export const b = 1;
+>b : 1
+>1 : 1
+
+// OK -- one is a type, one is a namespace, one is a value.
+type t = 0;
+>t : 0
+
+namespace t { interface I {} }
+>t : any
+>I : I
+
+export const t = 0;
+>t : 0
+>0 : 0
+
+// Should get errors if they have some meaning in common.
+
+// both types
+interface c {}
+>c : c
+
+export interface c {}
+>c : c
+
+// both types (class is also value, but that doesn't matter)
+interface d {}
+>d : d
+
+export class d {}
+>d : d
+
+// both namespaces
+namespace N { }
+>N : any
+
+export namespace N {}
+>N : any
+

@@ -1,0 +1,79 @@
+--- old.contextualTypingOfTooShortOverloads.types
++++ new.contextualTypingOfTooShortOverloads.types
+@@= skipped -12, +12 lines =@@
+ >res : any
+ 
+ interface Overload {
++>Overload : Overload
++
+     (handler1: (req1: string) => void): void;
+ >handler1 : (req1: string) => void
+ >req1 : string
+@@= skipped -26, +28 lines =@@
+ 
+ 
+ interface MyApp {
++>MyApp : MyApp
++
+     use: IRouterHandler<this> & IRouterMatcher<this>;
+ >use : IRouterHandler<this> & IRouterMatcher<this>
+ }
+ 
+ interface IRouterHandler<T> {
++>IRouterHandler : IRouterHandler<T>
++>T : T
++
+     (...handlers: RequestHandler[]): T;
+ >handlers : RequestHandler[]
+ 
+@@= skipped -13, +18 lines =@@
+ }
+ 
+ interface IRouterMatcher<T> {
++>IRouterMatcher : IRouterMatcher<T>
++>T : T
++
+     (path: PathParams, ...handlers: RequestHandler[]): T;
+ >path : PathParams
+ >handlers : RequestHandler[]
+@@= skipped -16, +19 lines =@@
+ >RequestHandlerParams : RequestHandlerParams
+ 
+ interface RequestHandler {
++>RequestHandler : RequestHandler
++
+     (req: Request, res: Response, next: NextFunction): any;
+ >req : Request
+ >res : Response
+@@= skipped -7, +9 lines =@@
+ }
+ 
+ interface ErrorRequestHandler {
++>ErrorRequestHandler : ErrorRequestHandler
++
+     (err: any, req: Request, res: Response, next: NextFunction): any;
+ >err : any
+ >req : Request
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Request {
++>Request : Request
++
+     method: string;
+ >method : string
+ }
+ 
+ interface Response {
++>Response : Response
++
+     statusCode: number;
+ >statusCode : number
+ }
+ 
+ interface NextFunction {
++>NextFunction : NextFunction
++
+     (err?: any): void;
+ >err : any
+ }

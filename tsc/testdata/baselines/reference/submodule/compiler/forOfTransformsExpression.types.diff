@@ -1,0 +1,16 @@
+--- old.forOfTransformsExpression.types
++++ new.forOfTransformsExpression.types
+@@= skipped -24, +24 lines =@@
+ >a : { name: string; }
+ >b : { name: string; }
+ >a.name.localeCompare(b.name) : number
+->a.name.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; }
++>a.name.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: CollatorOptions): number; }
+ >a.name : string
+ >a : { name: string; }
+ >name : string
+->localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; }
++>localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: CollatorOptions): number; }
+ >b.name : string
+ >b : { name: string; }
+ >name : string

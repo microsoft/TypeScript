@@ -1,0 +1,9 @@
+--- old.privatePropertyUsingObjectType.types
++++ new.privatePropertyUsingObjectType.types
+@@= skipped -20, +20 lines =@@
+ >index : number
+ }
+ export interface IFilterProvider {
++>IFilterProvider : IFilterProvider
+ }
+ 

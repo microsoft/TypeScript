@@ -1,0 +1,50 @@
+--- old.typeFromPropertyAssignment34.types
++++ new.typeFromPropertyAssignment34.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file1.js ===
+ var N = {};
+->N : typeof N
++>N : {}
+ >{} : {}
+ 
+ N.commands = {};
+->N.commands = {} : typeof N.commands
+->N.commands : typeof N.commands
+->N : typeof N
+->commands : typeof N.commands
++>N.commands = {} : {}
++>N.commands : any
++>N : {}
++>commands : any
+ >{} : {}
+ 
+ === file2.js ===
+ N.commands.a = 111;
+ >N.commands.a = 111 : 111
+->N.commands.a : number
+->N.commands : typeof N.commands
+->N : typeof N
+->commands : typeof N.commands
+->a : number
++>N.commands.a : any
++>N.commands : any
++>N : {}
++>commands : any
++>a : any
+ >111 : 111
+ 
+ N.commands.b = function () { };
+ >N.commands.b = function () { } : () => void
+->N.commands.b : () => void
+->N.commands : typeof N.commands
+->N : typeof N
+->commands : typeof N.commands
+->b : () => void
++>N.commands.b : any
++>N.commands : any
++>N : {}
++>commands : any
++>b : any
+ >function () { } : () => void
+ 

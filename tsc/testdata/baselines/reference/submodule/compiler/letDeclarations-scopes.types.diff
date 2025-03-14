@@ -1,0 +1,13 @@
+--- old.letDeclarations-scopes.types
++++ new.letDeclarations-scopes.types
+@@= skipped -369, +369 lines =@@
+ 
+ // object literals
+ var o = {
+->o : { f(): void; f2: () => void; }
+->{    f() {        let l = 0;        n = l;    },    f2: () => {        let l = 0;        n = l;    }} : { f(): void; f2: () => void; }
++>o : { f: () => void; f2: () => void; }
++>{    f() {        let l = 0;        n = l;    },    f2: () => {        let l = 0;        n = l;    }} : { f: () => void; f2: () => void; }
+ 
+     f() {
+ >f : () => void

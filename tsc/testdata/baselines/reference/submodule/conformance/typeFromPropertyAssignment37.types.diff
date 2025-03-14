@@ -1,0 +1,56 @@
+--- old.typeFromPropertyAssignment37.types
++++ new.typeFromPropertyAssignment37.types
+@@= skipped -1, +1 lines =@@
+ 
+ === use.js ===
+ const util = require('./mod')
+->util : typeof util
+->require('./mod') : typeof util
++>util : any
++>require('./mod') : any
+ >require : any
+ >'./mod' : "./mod"
+ 
+@@= skipped -9, +9 lines =@@
+ >n : () => void
+ 
+     util.existy // no error
+->util.existy : () => void
+->util : typeof util
+->existy : () => void
++>util.existy : any
++>util : any
++>existy : any
+ }
+ util.existy // no error
+->util.existy : () => void
+->util : typeof util
+->existy : () => void
++>util.existy : any
++>util : any
++>existy : any
+ 
+-=== mod.js ===
+-const util = exports = module.exports = {}
+->util : typeof module.exports
+->exports = module.exports = {} : typeof module.exports
+->exports : typeof import("mod")
+->module.exports = {} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->{} : {}
+-
+-if (!!false) {
+->!!false : boolean
+->!false : true
+->false : false
+-
+-    util.existy = function () { }
+->util.existy = function () { } : () => void
+->util.existy : () => void
+->util : typeof module.exports
+->existy : () => void
+->function () { } : () => void
+-}
+-

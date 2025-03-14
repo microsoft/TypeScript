@@ -1,0 +1,16 @@
+--- old.prespecializedGenericMembers1.types
++++ new.prespecializedGenericMembers1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === prespecializedGenericMembers1.ts ===
+ export interface IKitty {
++>IKitty : IKitty
+ 
+     }
+ 
+ export class Cat<CatType extends IKitty> {
+ >Cat : Cat<CatType>
++>CatType : CatType
+ 
+     constructor() {
+     

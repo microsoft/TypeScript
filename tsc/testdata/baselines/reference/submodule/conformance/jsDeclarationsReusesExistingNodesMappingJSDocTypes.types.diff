@@ -1,0 +1,34 @@
+--- old.jsDeclarationsReusesExistingNodesMappingJSDocTypes.types
++++ new.jsDeclarationsReusesExistingNodesMappingJSDocTypes.types
+@@= skipped -10, +10 lines =@@
+ 
+ /** @type {string?} */
+ export const c = null;
+->c : string
++>c : any
+ 
+ /** @type {string=} */
+ export const d = null;
+->d : string
++>d : any
+ 
+ /** @type {string!} */
+ export const e = null;
+->e : string
++>e : any
+ 
+ /** @type {function(string, number): object} */
+ export const f = null;
+->f : (arg0: string, arg1: number) => object
++>f : any
+ 
+ /** @type {function(new: object, string, number)} */
+ export const g = null;
+->g : new (arg1: string, arg2: number) => any
++>g : any
+ 
+ /** @type {Object.<string, number>} */
+ export const h = null;
+->h : { [x: string]: number; }
++>h : any
+ 

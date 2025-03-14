@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule1.ts] ////
+
+=== main.ts ===
+/// <reference path="O.d.ts" />
+
+import {Observable} from "Observable";
+>Observable : typeof Observable
+
+let x: Observable;
+>x : Observable
+
+x.foo().x;
+>x.foo().x : any
+>x.foo() : any
+>x.foo : any
+>x : Observable
+>foo : any
+>x : any
+
+=== O.d.ts ===
+declare module "Observable" {
+>"Observable" : typeof import("Observable")
+
+    class Observable {}
+>Observable : Observable
+}
+
+declare module "M" {
+>"M" : typeof import("M")
+
+    class Cls { x: number }
+>Cls : Cls
+>x : number
+}
+
+declare module "Map" {
+>"Map" : typeof import("Map")
+
+    import { Cls } from "M";
+>Cls : typeof Cls
+
+    module "Observable" {
+>"Observable" : typeof import("Observable")
+
+        interface Observable {
+>Observable : Observable
+
+            foo(): Cls;
+>foo : () => Cls
+        }
+    }
+}
+

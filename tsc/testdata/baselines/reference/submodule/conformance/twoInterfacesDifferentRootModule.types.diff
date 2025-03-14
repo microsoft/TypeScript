@@ -1,0 +1,41 @@
+--- old.twoInterfacesDifferentRootModule.types
++++ new.twoInterfacesDifferentRootModule.types
+@@= skipped -3, +3 lines =@@
+ // two interfaces with different root modules should not merge
+ 
+ module M {
++>M : any
++
+     export interface A {
++>A : A
++
+         foo: string;
+ >foo : string
+     }
+ 
+     export interface B<T> {
++>B : B<T>
++>T : T
++
+         foo: T;
+ >foo : T
+     }
+@@= skipped -15, +22 lines =@@
+ >M2 : typeof M2
+ 
+     export interface A {
++>A : A
++
+         bar: number;
+ >bar : number
+     }
+@@= skipped -20, +22 lines =@@
+ >bar : number
+ 
+     export interface B<T> {
++>B : B<T>
++>T : T
++
+         bar: T;
+ >bar : T
+     }

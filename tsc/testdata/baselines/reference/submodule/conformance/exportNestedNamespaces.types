@@ -1,0 +1,89 @@
+//// [tests/cases/conformance/salsa/exportNestedNamespaces.ts] ////
+
+=== mod.js ===
+exports.n = {};
+>exports.n = {} : {}
+>exports.n : any
+>exports : any
+>n : any
+>{} : {}
+
+exports.n.K = function () {
+>exports.n.K = function () {    this.x = 10;} : () => void
+>exports.n.K : any
+>exports.n : any
+>exports : any
+>n : any
+>K : any
+>function () {    this.x = 10;} : () => void
+
+    this.x = 10;
+>this.x = 10 : 10
+>this.x : any
+>this : any
+>x : any
+>10 : 10
+}
+exports.Classic = class {
+>exports.Classic = class {    constructor() {        this.p = 1    }} : typeof Classic
+>exports.Classic : any
+>exports : any
+>Classic : any
+>class {    constructor() {        this.p = 1    }} : typeof Classic
+
+    constructor() {
+        this.p = 1
+>this.p = 1 : 1
+>this.p : any
+>this : this
+>p : any
+>1 : 1
+    }
+}
+
+=== use.js ===
+import * as s from './mod'
+>s : any
+
+var k = new s.n.K()
+>k : any
+>new s.n.K() : any
+>s.n.K : any
+>s.n : any
+>s : any
+>n : any
+>K : any
+
+k.x
+>k.x : any
+>k : any
+>x : any
+
+var classic = new s.Classic()
+>classic : any
+>new s.Classic() : any
+>s.Classic : any
+>s : any
+>Classic : any
+
+
+/** @param {s.n.K} c
+    @param {s.Classic} classic */
+function f(c, classic) {
+>f : (c: any, classic: any) => void
+>c : any
+>classic : any
+
+    c.x
+>c.x : any
+>c : any
+>x : any
+
+    classic.p
+>classic.p : any
+>classic : any
+>p : any
+}
+
+
+

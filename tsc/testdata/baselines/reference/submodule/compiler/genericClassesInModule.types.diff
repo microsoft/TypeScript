@@ -1,0 +1,24 @@
+--- old.genericClassesInModule.types
++++ new.genericClassesInModule.types
+@@= skipped -5, +5 lines =@@
+ 
+     export class B<T>{ }
+ >B : B<T>
++>T : T
+ 
+     export class A { }
+ >A : A
+ }
+ 
+ var a = new Foo.B<Foo.A>();
+->a : Foo.B<Foo.A>
+->new Foo.B<Foo.A>() : Foo.B<Foo.A>
+->Foo.B : typeof Foo.B
++>a : B<A>
++>new Foo.B<Foo.A>() : B<A>
++>Foo.B : typeof B
+ >Foo : typeof Foo
+->B : typeof Foo.B
++>B : typeof B
+ >Foo : any
+ 

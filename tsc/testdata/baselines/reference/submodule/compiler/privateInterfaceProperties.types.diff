@@ -1,0 +1,10 @@
+--- old.privateInterfaceProperties.types
++++ new.privateInterfaceProperties.types
+@@= skipped -1, +1 lines =@@
+ 
+ === privateInterfaceProperties.ts ===
+ interface i1 { name:string; }
++>i1 : i1
+ >name : string
+  
+ // should be an error 

@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/jsdocParamTagOnPropertyInitializer.ts] ////
+
+=== /a.js ===
+class Foo {
+>Foo : Foo
+
+    /**@param {string} x */
+    m = x => x.toLowerCase();
+>m : (x: any) => any
+>x => x.toLowerCase() : (x: any) => any
+>x : any
+>x.toLowerCase() : any
+>x.toLowerCase : any
+>x : any
+>toLowerCase : any
+}
+

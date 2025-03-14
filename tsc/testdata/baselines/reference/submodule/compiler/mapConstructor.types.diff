@@ -1,0 +1,35 @@
+--- old.mapConstructor.types
++++ new.mapConstructor.types
+@@= skipped -5, +5 lines =@@
+ >Map : MapConstructor
+ 
+ const potentiallyUndefinedIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined;
+->potentiallyUndefinedIterable : Iterable<[string, number]> | undefined
+->[['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined : Iterable<[string, number]> | undefined
++>potentiallyUndefinedIterable : Iterable<[string, number], any, any> | undefined
++>[['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined : Iterable<[string, number], any, any> | undefined
+ >[['1', 1], ['2', 2]] : [string, number][]
+ >['1', 1] : [string, number]
+ >'1' : "1"
+@@= skipped -13, +13 lines =@@
+ new Map(potentiallyUndefinedIterable);
+ >new Map(potentiallyUndefinedIterable) : Map<string, number>
+ >Map : MapConstructor
+->potentiallyUndefinedIterable : Iterable<[string, number]> | undefined
++>potentiallyUndefinedIterable : Iterable<[string, number], any, any> | undefined
+ 
+ const potentiallyNullIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | null;
+->potentiallyNullIterable : Iterable<[string, number]> | null
+->[['1', 1], ['2', 2]] as Iterable<[string, number]> | null : Iterable<[string, number]> | null
++>potentiallyNullIterable : Iterable<[string, number], any, any> | null
++>[['1', 1], ['2', 2]] as Iterable<[string, number]> | null : Iterable<[string, number], any, any> | null
+ >[['1', 1], ['2', 2]] : [string, number][]
+ >['1', 1] : [string, number]
+ >'1' : "1"
+@@= skipped -16, +16 lines =@@
+ new Map(potentiallyNullIterable);
+ >new Map(potentiallyNullIterable) : Map<string, number>
+ >Map : MapConstructor
+->potentiallyNullIterable : Iterable<[string, number]> | null
++>potentiallyNullIterable : Iterable<[string, number], any, any> | null
+ 

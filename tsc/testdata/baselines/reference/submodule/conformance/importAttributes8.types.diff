@@ -1,0 +1,9 @@
+--- old.importAttributes8.types
++++ new.importAttributes8.types
+@@= skipped -15, +15 lines =@@
+ === /b.ts ===
+ import a from "./a" with { a: "a", "b": "b" }; // ok
+ >a : { a: string; b: string; }
+->a : error
++>a : any
+ 

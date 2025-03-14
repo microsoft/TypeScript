@@ -1,0 +1,11 @@
+--- old.enumWithParenthesizedInitializer1.types
++++ new.enumWithParenthesizedInitializer1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === enumWithParenthesizedInitializer1.ts ===
+ enum E {
+->E : E
++>E : E.e
+ 
+  e = -(3
+ >e : E.e

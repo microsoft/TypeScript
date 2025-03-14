@@ -1,0 +1,39 @@
+--- old.typePredicatesOptionalChaining2.types
++++ new.typePredicatesOptionalChaining2.types
+@@= skipped -5, +5 lines =@@
+ >name : string
+ 
+ const getName1 = (person?: Person): string => {
+->getName1 : (person?: Person) => string
+->(person?: Person): string => {  return typeof person?.name === 'string' ? person?.name : '';} : (person?: Person) => string
++>getName1 : (person?: Person | undefined) => string
++>(person?: Person): string => {  return typeof person?.name === 'string' ? person?.name : '';} : (person?: Person | undefined) => string
+ >person : Person | undefined
+ 
+   return typeof person?.name === 'string' ? person?.name : '';
+ >typeof person?.name === 'string' ? person?.name : '' : string
+ >typeof person?.name === 'string' : boolean
+->typeof person?.name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof person?.name : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >person?.name : string | undefined
+ >person : Person | undefined
+ >name : string | undefined
+@@= skipped -26, +26 lines =@@
+ 
+   return typeof value === 'string';
+ >typeof value === 'string' : boolean
+->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >value : any
+ >'string' : "string"
+ 
+ };
+ 
+ const getName2 = (person?: Person): string => {
+->getName2 : (person?: Person) => string
+->(person?: Person): string => {  return isString(person?.name) ? person?.name : '';} : (person?: Person) => string
++>getName2 : (person?: Person | undefined) => string
++>(person?: Person): string => {  return isString(person?.name) ? person?.name : '';} : (person?: Person | undefined) => string
+ >person : Person | undefined
+ 
+   return isString(person?.name) ? person?.name : '';

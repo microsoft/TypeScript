@@ -1,0 +1,29 @@
+--- old.parserAstSpans1.types
++++ new.parserAstSpans1.types
+@@= skipped -2, +2 lines =@@
+ === parserAstSpans1.ts ===
+ /** i1 is interface with properties*/
+ interface i1 {
++>i1 : i1
++
+     /** i1_p1*/
+     i1_p1: number;
+ >i1_p1 : number
+@@= skipped -458, +460 lines =@@
+ >10 : 10
+ 
+ interface i2 {
++>i2 : i2
++
+     /** i2_p1*/
+     i2_p1: number;
+ >i2_p1 : number
+@@= skipped -43, +45 lines =@@
+ >nc_l1 : () => void
+ }
+ interface i3 extends i2 {
++>i3 : i3
++
+     /** i3 p1*/
+     p1: number;
+ >p1 : number

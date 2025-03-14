@@ -1,0 +1,11 @@
+--- old.interfaceExtendingClass2.types
++++ new.interfaceExtendingClass2.types
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ interface I2 extends Foo { // error
++>I2 : I2
++
+     a: {
+ >a : { toString: () => {}; }
+ 

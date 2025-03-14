@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/externalModules/umd3.ts] ////
+
+=== a.ts ===
+import * as Foo from './foo';
+>Foo : typeof import("foo")
+
+Foo.fn();
+>Foo.fn() : void
+>Foo.fn : () => void
+>Foo : typeof import("foo")
+>fn : () => void
+
+let x: Foo.Thing;
+>x : Thing
+>Foo : any
+
+let y: number = x.n;
+>y : number
+>x.n : number
+>x : Thing
+>n : number
+
+=== foo.d.ts ===
+export var x: number;
+>x : number
+
+export function fn(): void;
+>fn : () => void
+
+export interface Thing { n: typeof x }
+>Thing : Thing
+>n : number
+
+export as namespace Foo;
+>Foo : typeof import("foo")
+

@@ -1,0 +1,20 @@
+--- old.unusedParametersWithUnderscore.types
++++ new.unusedParametersWithUnderscore.types
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ function f2({_a, __b}) {
+->f2 : ({ _a, __b }: { _a: any; __b: any; }) => void
++>f2 : (__0: { __b: any; _a: any; }) => void
+ >_a : any
+ >__b : any
+ }
+ 
+ function f3([_a, ,__b]) {
+->f3 : ([_a, , __b]: [any, any, any]) => void
++>f3 : (__0: [any, any, any]) => void
+ >_a : any
+-> : undefined
+ >__b : any
+ }
+ 

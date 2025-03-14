@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment5.ts] ////
+
+=== a.js ===
+export default function MyClass() {
+>MyClass : { (): void; bar: typeof C; }
+}
+MyClass.bar = class C {
+>MyClass.bar = class C {} : typeof C
+>MyClass.bar : typeof C
+>MyClass : { (): void; bar: typeof C; }
+>bar : typeof C
+>class C {} : typeof C
+>C : typeof C
+}
+MyClass.bar
+>MyClass.bar : typeof C
+>MyClass : { (): void; bar: typeof C; }
+>bar : typeof C
+
+=== b.js ===
+import MC from './a'
+>MC : { (): void; bar: typeof C; }
+
+MC.bar
+>MC.bar : typeof C
+>MC : { (): void; bar: typeof C; }
+>bar : typeof C
+
+/** @type {MC.bar} */
+var x
+>x : any
+

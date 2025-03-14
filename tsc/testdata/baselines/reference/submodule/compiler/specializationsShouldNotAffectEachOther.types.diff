@@ -1,0 +1,11 @@
+--- old.specializationsShouldNotAffectEachOther.types
++++ new.specializationsShouldNotAffectEachOther.types
+@@= skipped -1, +1 lines =@@
+ 
+ === specializationsShouldNotAffectEachOther.ts ===
+ interface Series  {
++>Series : Series
++
+     data: string[];
+ >data : string[]
+ }

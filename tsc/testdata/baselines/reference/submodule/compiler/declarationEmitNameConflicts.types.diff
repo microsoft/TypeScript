@@ -1,0 +1,120 @@
+--- old.declarationEmitNameConflicts.types
++++ new.declarationEmitNameConflicts.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declarationEmit_nameConflicts_0.ts ===
+ import im = require('./declarationEmit_nameConflicts_1');
+->im : typeof im
++>im : typeof f
+ 
+ export module M {
+ >M : typeof M
+@@= skipped -18, +18 lines =@@
+ >g : () => void
+ 
+         export interface I { }
++>I : I
+     }
+ 
+     export import a = M.f;
+@@= skipped -17, +18 lines =@@
+ >N : typeof N
+ 
+     export import d = im;
+->d : typeof d
+->im : typeof d
++>d : typeof f
++>im : typeof f
+ }
+ 
+ export module M.P {
+@@= skipped -21, +21 lines =@@
+ >g : () => void
+ 
+         export interface I { }
++>I : I
+     }
+     export import im = M.P.f;
+->im : () => void
++>im : any
+ >M : typeof M
+->P : typeof P
+->f : () => void
++>P : any
++>f : any
+ 
+     export var a = M.a; // emitted incorrectly as typeof f
+ >a : () => void
+@@= skipped -14, +15 lines =@@
+ >a : () => void
+ 
+     export var b = M.b; // ok
+->b : typeof M.C
+->M.b : typeof M.C
++>b : typeof C
++>M.b : typeof C
+ >M : typeof M
+->b : typeof M.C
++>b : typeof C
+ 
+     export var c = M.c; // ok
+->c : typeof M.N
+->M.c : typeof M.N
++>c : typeof N
++>M.c : typeof N
+ >M : typeof M
+->c : typeof M.N
++>c : typeof N
+ 
+     export var g = M.c.g; // ok
+ >g : () => void
+ >M.c.g : () => void
+->M.c : typeof M.N
++>M.c : typeof N
+ >M : typeof M
+->c : typeof M.N
++>c : typeof N
+ >g : () => void
+ 
+     export var d = M.d; // emitted incorrectly as typeof im
+->d : typeof M.d
+->M.d : typeof M.d
++>d : typeof f
++>M.d : typeof f
+ >M : typeof M
+->d : typeof M.d
++>d : typeof f
+ }
+ 
+ export module M.Q {
+@@= skipped -43, +43 lines =@@
+ >g : () => void
+ 
+         export interface I { }
++>I : I
+     }
+     export interface b extends M.b { } // ok
++>b : b
+ >M : typeof M
+ 
+     export interface I extends M.c.I { } // ok
+->M.c : typeof M.N
++>I : I
++>M.c : typeof N
+ >M : typeof M
+->c : typeof M.N
++>c : typeof N
+ 
+     export module c {
++>c : any
++
+         export interface I extends M.c.I { } // ok
+->M.c : typeof M.N
++>I : I
++>M.c : typeof N
+ >M : typeof M
+->c : typeof M.N
++>c : typeof N
+     }
+ }
+ === declarationEmit_nameConflicts_1.ts ===

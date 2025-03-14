@@ -1,0 +1,28 @@
+--- old.commentOnElidedModule1.types
++++ new.commentOnElidedModule1.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/commentOnElidedModule1.ts] ////
+ 
+ === b.ts ===
+-
+ ///<reference path="a.ts"/>
+ module ElidedModule3 {
++>ElidedModule3 : any
+ }
+ === a.ts ===
+-
+ /*!=================
+     Keep this pinned
+    =================
+@@= skipped -13, +12 lines =@@
+ 
+ /*! Don't keep this pinned comment */
+ module ElidedModule {
++>ElidedModule : any
+ }
+ 
+ // Don't keep this comment.
+ module ElidedModule2 {
++>ElidedModule2 : any
+ }
+ 

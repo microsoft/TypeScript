@@ -1,0 +1,41 @@
+--- old.constructorFunctionMergeWithClass.types
++++ new.constructorFunctionMergeWithClass.types
+@@= skipped -1, +1 lines =@@
+ 
+ === file1.js ===
+ var SomeClass = function () {
+->SomeClass : typeof SomeClass
+->function () {    this.otherProp = 0;} : typeof SomeClass
++>SomeClass : () => void
++>function () {    this.otherProp = 0;} : () => void
+ 
+     this.otherProp = 0;
+ >this.otherProp = 0 : 0
+ >this.otherProp : any
+->this : this
++>this : any
+ >otherProp : any
+ >0 : 0
+ 
+ };
+ 
+ new SomeClass();
+->new SomeClass() : SomeClass
+->SomeClass : typeof SomeClass
++>new SomeClass() : any
++>SomeClass : () => void
+ 
+ === file2.js ===
+ class SomeClass { }
+@@= skipped -22, +22 lines =@@
+ 
+ SomeClass.prop = 0
+ >SomeClass.prop = 0 : 0
+->SomeClass.prop : number
+->SomeClass : typeof SomeClass
+->prop : number
++>SomeClass.prop : any
++>SomeClass : () => void
++>prop : any
+ >0 : 0
+ 

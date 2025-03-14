@@ -1,0 +1,29 @@
+--- old.privateVisibility.types
++++ new.privateVisibility.types
+@@= skipped -66, +66 lines =@@
+ 
+ 
+ var c = new M.C();
+->c : M.C
+->new M.C() : M.C
+->M.C : typeof M.C
++>c : C
++>new M.C() : C
++>M.C : typeof C
+ >M : typeof M
+->C : typeof M.C
++>C : typeof C
+ 
+ c.pub; // should work
+ >c.pub : number
+->c : M.C
++>c : C
+ >pub : number
+ 
+ c.priv; // should not work
+ >c.priv : number
+->c : M.C
++>c : C
+ >priv : number
+ 
+ 

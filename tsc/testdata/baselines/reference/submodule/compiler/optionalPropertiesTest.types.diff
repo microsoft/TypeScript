@@ -1,0 +1,37 @@
+--- old.optionalPropertiesTest.types
++++ new.optionalPropertiesTest.types
+@@= skipped -1, +1 lines =@@
+ 
+ === optionalPropertiesTest.ts ===
+ var x: {p1:number; p2?:string; p3?:{():number;};};
+->x : { p1: number; p2?: string; p3?: { (): number; }; }
++>x : { p1: number; p2?: string; p3?: () => number; }
+ >p1 : number
+ >p2 : string
+ >p3 : () => number
+ 
+ interface IFoo
++>IFoo : IFoo
+ {
+     id: number;
+ >id : number
+@@= skipped -73, +74 lines =@@
+ >print : () => void
+ 
+ interface i1 { M: () => void; };
++>i1 : i1
+ >M : () => void
+ 
+ interface i2 { M?: () => void; };
++>i2 : i2
+ >M : () => void
+ 
+ interface i3 { M: number; };
++>i3 : i3
+ >M : number
+ 
+ interface i4 { M?: number; };
++>i4 : i4
+ >M : number
+ 
+ var test1: i1 = {};

@@ -1,0 +1,28 @@
+--- old.typeParameterExtendingUnion2.types
++++ new.typeParameterExtendingUnion2.types
+@@= skipped -20, +20 lines =@@
+ 
+     a.run();
+ >a.run() : void
+->a.run : (() => void) | (() => void)
++>a.run : () => void | () => void
+ >a : Cat | Dog
+->run : (() => void) | (() => void)
++>run : () => void | () => void
+ }
+ 
+ function f<T extends Cat | Dog>(a: T) {
+ >f : <T extends Cat | Dog>(a: T) => void
++>T : T
+ >a : T
+ 
+     a.run();
+ >a.run() : void
+->a.run : (() => void) | (() => void)
++>a.run : () => void | () => void
+ >a : Cat | Dog
+->run : (() => void) | (() => void)
++>run : () => void | () => void
+ 
+     run(a);
+ >run(a) : void

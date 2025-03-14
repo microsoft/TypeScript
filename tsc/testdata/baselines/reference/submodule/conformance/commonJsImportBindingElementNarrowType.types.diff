@@ -1,0 +1,27 @@
+--- old.commonJsImportBindingElementNarrowType.types
++++ new.commonJsImportBindingElementNarrowType.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /bar.js ===
+ const { a } = require("./foo");
+->a : number | null
+->require("./foo") : typeof import("/foo")
++>a : any
++>require("./foo") : any
+ >require : any
+ >"./foo" : "./foo"
+ 
+ if (a) {
+->a : number | null
++>a : any
+ 
+   var x = a + 1;
+->x : number
+->a + 1 : number
+->a : number
++>x : any
++>a + 1 : any
++>a : any
+ >1 : 1
+ }
+ === /foo.d.ts ===

@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsSubclassWithExplicitNoArgumentConstructor.ts] ////
+
+=== index.js ===
+export class Super {
+>Super : Super
+
+    /**
+     * @param {string} firstArg
+     * @param {string} secondArg
+     */
+    constructor(firstArg, secondArg) { }
+>firstArg : any
+>secondArg : any
+}
+
+export class Sub extends Super {
+>Sub : Sub
+>Super : Super
+
+    constructor() {
+        super('first', 'second');
+>super('first', 'second') : void
+>super : typeof Super
+>'first' : "first"
+>'second' : "second"
+    }
+}

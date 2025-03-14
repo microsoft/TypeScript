@@ -1,0 +1,51 @@
+--- old.namespacesWithTypeAliasOnlyExportsMerge.types
++++ new.namespacesWithTypeAliasOnlyExportsMerge.types
+@@= skipped -7, +7 lines =@@
+ >Q : number
+ 
+ declare namespace Q {
++>Q : number
++
+     export { A };
+ >A : any
+ }
+@@= skipped -19, +21 lines =@@
+ >Q : any
+ 
+ declare namespace Q3 {
++>Q3 : any
++
+     export {A as B};
+ >A : any
+ >B : any
+@@= skipped -23, +25 lines =@@
+ export {};
+ === circular.ts ===
+ declare namespace NS1 {
++>NS1 : any
++
+     export { NS2 };
+ >NS2 : any
+ }
+ declare namespace NS2 {
++>NS2 : any
++
+     export { NS1 };
+ >NS1 : any
+ }
+@@= skipped -16, +20 lines =@@
+ >B : number
+ 
+ declare namespace NS1 {
++>NS1 : any
++
+     export { NS2, A };
+ >NS2 : any
+ >A : any
+ }
+ declare namespace NS2 {
++>NS2 : any
++
+     export { NS1, B };
+ >NS1 : any
+ >B : any

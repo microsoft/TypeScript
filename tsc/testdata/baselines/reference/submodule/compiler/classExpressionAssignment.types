@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/classExpressionAssignment.ts] ////
+
+=== classExpressionAssignment.ts ===
+interface A {
+>A : A
+
+  prop: string;
+>prop : string
+}
+
+// This is invalid
+const A: {new(): A} = class {}
+>A : new () => A
+>class {} : typeof A
+

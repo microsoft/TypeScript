@@ -1,0 +1,17 @@
+--- old.esnextmodulekindWithES5Target11.types
++++ new.esnextmodulekindWithES5Target11.types
+@@= skipped -8, +8 lines =@@
+ >foo : (...args: any[]) => any
+ 
+ export default class C {
+->C : C
++>C : default
+ 
+     static x() { return C.y; }
+ >x : () => number
+ >C.y : number
+->C : typeof C
++>C : typeof default
+ >y : number
+ 
+     static y = 1

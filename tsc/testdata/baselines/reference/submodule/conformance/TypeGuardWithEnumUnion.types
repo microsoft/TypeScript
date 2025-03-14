@@ -1,0 +1,97 @@
+//// [tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts] ////
+
+=== TypeGuardWithEnumUnion.ts ===
+enum Color { R, G, B }
+>Color : Color
+>R : Color.R
+>G : Color.G
+>B : Color.B
+
+function f1(x: Color | string) {
+>f1 : (x: string | Color) => void
+>x : string | Color
+
+    if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : string | Color
+>"number" : "number"
+
+        var y = x;
+>y : Color
+>x : Color
+
+        var y: Color;
+>y : Color
+    }
+    else {
+        var z = x;
+>z : string
+>x : string
+
+        var z: string;
+>z : string
+    }
+}
+
+function f2(x: Color | string | string[]) {
+>f2 : (x: string | string[] | Color) => void
+>x : string | string[] | Color
+
+    if (typeof x === "object") {
+>typeof x === "object" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : string | string[] | Color
+>"object" : "object"
+
+        var y = x;
+>y : string[]
+>x : string[]
+
+        var y: string[];
+>y : string[]
+    }
+    if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : string | string[] | Color
+>"number" : "number"
+
+        var z = x;
+>z : Color
+>x : Color
+
+        var z: Color;
+>z : Color
+    }
+    else {
+        var w = x;
+>w : string | string[]
+>x : string | string[]
+
+        var w: string | string[];
+>w : string | string[]
+    }
+    if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+>x : string | string[] | Color
+>"string" : "string"
+
+        var a = x;
+>a : string
+>x : string
+
+        var a: string;
+>a : string
+    }
+    else {
+        var b = x;
+>b : string[] | Color
+>x : string[] | Color
+
+        var b: Color | string[];
+>b : string[] | Color
+    }
+}
+

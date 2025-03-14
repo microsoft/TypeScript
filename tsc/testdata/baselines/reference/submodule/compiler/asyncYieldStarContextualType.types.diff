@@ -1,0 +1,58 @@
+--- old.asyncYieldStarContextualType.types
++++ new.asyncYieldStarContextualType.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/asyncYieldStarContextualType.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 1,000
+-Instantiation count: 2,500
+-
+ === asyncYieldStarContextualType.ts ===
+ // https://github.com/microsoft/TypeScript/issues/57903
+ interface Result<T, E> {
++>Result : Result<T, E>
++>T : T
++>E : E
++
+     [Symbol.iterator](): Generator<E, T, unknown>
+ >[Symbol.iterator] : () => Generator<E, T, unknown>
+ >Symbol.iterator : unique symbol
+@@= skipped -33, +33 lines =@@
+ 
+ declare const mapper: <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">;
+ >mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
++>T : T
+ >result : Result<T, "NOT_FOUND_AUTHOR">
+ 
+ declare const g: <T, U, V>() => AsyncGenerator<T, U, V>;
+ >g : <T, U, V>() => AsyncGenerator<T, U, V>
++>T : T
++>U : U
++>V : V
+ 
+ async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown> {
+ >f : () => AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown>
+@@= skipped -14, +18 lines =@@
+ >test1 : Result<Author, "NOT_FOUND_AUTHOR">
+ >await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR">
+ >authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+->authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>authorPromise.then : <TResult1, TResult2>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >authorPromise : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+->then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
+ 
+     // With yield*, the type of test2 is
+@@= skipped -13, +13 lines =@@
+ >yield* await authorPromise.then(mapper) : Author
+ >await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR">
+ >authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+->authorPromise.then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>authorPromise.then : <TResult1, TResult2>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >authorPromise : Promise<Result<Author, "NOT_FOUND_AUTHOR">>
+->then : <TResult1 = Result<Author, "NOT_FOUND_AUTHOR">, TResult2 = never>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
++>then : <TResult1, TResult2>(onfulfilled?: (value: Result<Author, "NOT_FOUND_AUTHOR">) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+ >mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
+ 
+     const x1 = yield* g();

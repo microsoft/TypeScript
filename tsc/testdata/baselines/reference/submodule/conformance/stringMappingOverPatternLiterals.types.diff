@@ -1,0 +1,38 @@
+--- old.stringMappingOverPatternLiterals.types
++++ new.stringMappingOverPatternLiterals.types
+@@= skipped -21, +21 lines =@@
+ >CTemplate : `aa${Lowercase<string>}`
+ 
+ function f1(
+->f1 : (a: A, b: B, c: C, a_template: ATemplate, b_template: BTemplate, c_template: CTemplate) => void
++>f1 : (a: "aA", b: "AA", c: "aa", a_template: `aA${string}`, b_template: `AA${Uppercase<string>}`, c_template: `aa${Lowercase<string>}`) => void
+ 
+     a: A,
+ >a : "aA"
+@@= skipped -149, +149 lines =@@
+ // Mappings over mappings
+ 
+ function f3(
+->f3 : (x1: Uppercase<string>, x2: Uppercase<Uppercase<string>>, x3: Uppercase<Lowercase<string>>) => void
++>f3 : (x1: Uppercase<string>, x2: Uppercase<string>, x3: Uppercase<Lowercase<string>>) => void
+ 
+     x1: Uppercase<string>,
+ >x1 : Uppercase<string>
+@@= skipped -91, +91 lines =@@
+ >EquivalentNonStringPat : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+ 
+ function f4(x1: NonStringPat, x2: EquivalentNonStringPat) {
+->f4 : (x1: NonStringPat, x2: EquivalentNonStringPat) => void
++>f4 : (x1: `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`, x2: `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`) => void
+ >x1 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+ >x2 : `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}FALSE` | `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}TRUE`
+ 
+@@= skipped -19, +19 lines =@@
+ // Capitalize and uncapitalize on template literals
+ 
+ function f5(
+->f5 : (cap_tem: `A${string}`, cap_str: Capitalize<string>, cap_tem_map: Capitalize<`A${string}`>, cap_tem_map2: Capitalize<`a${string}`>, uncap_tem: `a${string}`, uncap_str: Uncapitalize<string>, uncap_tem_map: Uncapitalize<`A${string}`>, uncap_tem_map2: Uncapitalize<`a${string}`>) => void
++>f5 : (cap_tem: `A${string}`, cap_str: Capitalize<string>, cap_tem_map: `A${string}`, cap_tem_map2: `A${string}`, uncap_tem: `a${string}`, uncap_str: Uncapitalize<string>, uncap_tem_map: `a${string}`, uncap_tem_map2: `a${string}`) => void
+ 
+     cap_tem: `A${string}`,
+ >cap_tem : `A${string}`

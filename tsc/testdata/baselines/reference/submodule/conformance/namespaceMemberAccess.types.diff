@@ -1,0 +1,20 @@
+--- old.namespaceMemberAccess.types
++++ new.namespaceMemberAccess.types
+@@= skipped -9, +9 lines =@@
+ 
+ === /b.ts ===
+ import * as types from './a';
+->types : typeof types
++>types : typeof import("/a")
+ 
+ types.A;
+ >types.A : any
+->types : typeof types
++>types : typeof import("/a")
+ >A : any
+ 
+ const { A } = types;
+ >A : any
+->types : typeof types
++>types : typeof import("/a")
+ 

@@ -1,0 +1,28 @@
+--- old.es5ExportEqualsDts.types
++++ new.es5ExportEqualsDts.types
+@@= skipped -4, +4 lines =@@
+ >A : A
+ 
+     foo() {
+->foo : () => A.B
++>foo : () => B
+ 
+         var aVal: A.B;
+->aVal : A.B
++>aVal : B
+ >A : any
+ 
+         return aVal;
+->aVal : A.B
++>aVal : B
+     }
+ }
+ 
+ module A {
++>A : typeof A
++
+     export interface B { }
++>B : B
+ }
+ 
+ export = A

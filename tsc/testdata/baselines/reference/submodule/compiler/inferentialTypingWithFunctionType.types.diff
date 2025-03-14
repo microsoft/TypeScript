@@ -1,0 +1,18 @@
+--- old.inferentialTypingWithFunctionType.types
++++ new.inferentialTypingWithFunctionType.types
+@@= skipped -2, +2 lines =@@
+ === inferentialTypingWithFunctionType.ts ===
+ declare function map<T, U>(x: T, f: (s: T) => U): U;
+ >map : <T, U>(x: T, f: (s: T) => U) => U
++>T : T
++>U : U
+ >x : T
+ >f : (s: T) => U
+ >s : T
+ 
+ declare function identity<V>(y: V): V;
+ >identity : <V>(y: V) => V
++>V : V
+ >y : V
+ 
+ var s = map("", identity);

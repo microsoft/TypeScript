@@ -1,0 +1,28 @@
+--- old.primtiveTypesAreIdentical.types
++++ new.primtiveTypesAreIdentical.types
+@@= skipped -67, +67 lines =@@
+ >x : any
+ 
+ enum E { A }
+->E : E
++>E : E.A
+ >A : E.A
+ 
+ function foo6(x: E);
+->foo6 : { (x: E): any; (x: E): any; }
+->x : E
++>foo6 : { (x: E.A): any; (x: E.A): any; }
++>x : E.A
+ 
+ function foo6(x: E);
+->foo6 : { (x: E): any; (x: E): any; }
+->x : E
++>foo6 : { (x: E.A): any; (x: E.A): any; }
++>x : E.A
+ 
+ function foo6(x: any) { }
+->foo6 : { (x: E): any; (x: E): any; }
++>foo6 : { (x: E.A): any; (x: E.A): any; }
+ >x : any
+ 
+ function foo7(x: void);

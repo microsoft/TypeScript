@@ -1,0 +1,75 @@
+--- old.stringLiteralTypesAsTags03.types
++++ new.stringLiteralTypesAsTags03.types
+@@= skipped -4, +4 lines =@@
+ >Kind : Kind
+ 
+ interface Entity {
++>Entity : Entity
++
+     kind: Kind;
+ >kind : Kind
+ }
+ 
+ interface A extends Entity {
++>A : A
++
+     kind: "A";
+ >kind : "A"
+ 
+@@= skipped -13, +17 lines =@@
+ }
+ 
+ interface B extends Entity {
++>B : B
++
+     kind: "B";
+ >kind : "B"
+ 
+@@= skipped -12, +14 lines =@@
+ // That way, we can avoid the need to look for a compatible overload
+ // signature and simply check compatibility with the implementation.
+ function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
+->hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
++>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+ >entity : Entity
+ >kind : "A"
+ 
+ function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
+->hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
++>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+ >entity : Entity
+ >kind : "B"
+ 
+ function hasKind(entity: Entity, kind: Kind): entity is Entity {
+->hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
++>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+ >entity : Entity
+ >kind : Kind
+ 
+@@= skipped -37, +37 lines =@@
+ 
+ if (hasKind(x, "A")) {
+ >hasKind(x, "A") : boolean
+->hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
++>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+ >x : A
+ >"A" : "A"
+ 
+@@= skipped -17, +17 lines =@@
+ if (!hasKind(x, "B")) {
+ >!hasKind(x, "B") : boolean
+ >hasKind(x, "B") : boolean
+->hasKind : { (entity: Entity, kind: "A" | "A"): entity is A; (entity: Entity, kind: "B" | "B"): entity is B; }
++>hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; }
+ >x : A
+ >"B" : "B"
+ 
+@@= skipped -10, +10 lines =@@
+ }
+ else {
+     let d = x;
+->d : never
+->x : never
++>d : A & B
++>x : A & B
+ }

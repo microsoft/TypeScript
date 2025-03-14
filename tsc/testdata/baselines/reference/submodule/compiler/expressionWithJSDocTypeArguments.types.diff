@@ -1,0 +1,148 @@
+--- old.expressionWithJSDocTypeArguments.types
++++ new.expressionWithJSDocTypeArguments.types
+@@= skipped -4, +4 lines =@@
+ 
+ function foo<T>(x: T): T { return x }
+ >foo : <T>(x: T) => T
++>T : T
+ >x : T
+ >x : T
+ 
+ class Bar<T> { constructor(public x: T) { } }
+ >Bar : Bar<T>
++>T : T
+ >x : T
+ 
+ // Errors expected on all of the following
+@@= skipped -15, +17 lines =@@
+ >foo : <T>(x: T) => T
+ 
+ const HuhFoo = foo<string?>;
+->HuhFoo : (x: string | null) => string | null
+->foo<string?> : (x: string | null) => string | null
++>HuhFoo : any
++>foo<string?> : any
++>foo<string : boolean
+ >foo : <T>(x: T) => T
++>string : any
++>> : boolean
++> : any
++> : any
++> : any
+ 
+ const NopeFoo = foo<?string>;
+->NopeFoo : (x: string | null) => string | null
+->foo<?string> : (x: string | null) => string | null
++>NopeFoo : (x: any) => any
++>foo<?string> : (x: any) => any
+ >foo : <T>(x: T) => T
+ 
+ const ComeOnFoo = foo<?string?>;
+->ComeOnFoo : (x: string | null) => string | null
+->foo<?string?> : (x: string | null) => string | null
++>ComeOnFoo : any
++>foo<?string?> : any
++>foo< : boolean
+ >foo : <T>(x: T) => T
++> : any
++>string?> : any
++>string : any
++>> : boolean
++> : any
++> : any
++> : any
++> : any
+ 
+ type TWhatFoo = typeof foo<?>;
+->TWhatFoo : typeof foo<unknown>
+->foo : <T>(x: T) => T
++>TWhatFoo : (x: any) => any
+ 
+ type THuhFoo = typeof foo<string?>;
+->THuhFoo : typeof foo<string | null>
+->foo : <T>(x: T) => T
++>THuhFoo : (x: string) => string
++>> : boolean
++> : any
++> : any
+ 
+ type TNopeFoo = typeof foo<?string>;
+->TNopeFoo : typeof foo<string | null>
+->foo : <T>(x: T) => T
++>TNopeFoo : (x: any) => any
+ 
+ type TComeOnFoo = typeof foo<?string?>;
+->TComeOnFoo : typeof foo<(string | null) | null>
+->foo : <T>(x: T) => T
++>TComeOnFoo : (x: any) => any
++>> : boolean
++> : any
++> : any
+ 
+ const WhatBar = Bar<?>;
+ >WhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+@@= skipped -36, +53 lines =@@
+ >Bar : typeof Bar
+ 
+ const HuhBar = Bar<string?>;
+->HuhBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
+->Bar<string?> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
++>HuhBar : any
++>Bar<string?> : any
++>Bar<string : boolean
+ >Bar : typeof Bar
++>string : any
++>> : boolean
++> : any
++> : any
++> : any
+ 
+ const NopeBar = Bar<?string>;
+->NopeBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
+->Bar<?string> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
++>NopeBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
++>Bar<?string> : { new (x: any): Bar<any>; prototype: Bar<any>; }
+ >Bar : typeof Bar
+ 
+ const ComeOnBar = Bar<?string?>;
+->ComeOnBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
+->Bar<?string?> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
++>ComeOnBar : any
++>Bar<?string?> : any
++>Bar< : boolean
+ >Bar : typeof Bar
++> : any
++>string?> : any
++>string : any
++>> : boolean
++> : any
++> : any
++> : any
++> : any
+ 
+ type TWhatBar = typeof Bar<?>;
+->TWhatBar : typeof Bar<unknown>
+->Bar : typeof Bar
++>TWhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+ 
+ type THuhBar = typeof Bar<string?>;
+->THuhBar : typeof Bar<string | null>
+->Bar : typeof Bar
++>THuhBar : { new (x: string): Bar<string>; prototype: Bar<any>; }
++>> : boolean
++> : any
++> : any
+ 
+ type TNopeBar = typeof Bar<?string>;
+->TNopeBar : typeof Bar<string | null>
+->Bar : typeof Bar
++>TNopeBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+ 
+ type TComeOnBar = typeof Bar<?string?>;
+->TComeOnBar : typeof Bar<(string | null) | null>
+->Bar : typeof Bar
++>TComeOnBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
++>> : boolean
++> : any
++> : any
+ 

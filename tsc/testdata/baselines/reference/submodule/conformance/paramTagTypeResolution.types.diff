@@ -1,0 +1,41 @@
+--- old.paramTagTypeResolution.types
++++ new.paramTagTypeResolution.types
+@@= skipped -1, +1 lines =@@
+ 
+ === main.js ===
+ var f = require('./first');
+->f : <T>(x: T, k: (t: T) => void) => void
+->require('./first') : <T>(x: T, k: (t: T) => void) => void
++>f : any
++>require('./first') : any
+ >require : any
+ >'./first' : "./first"
+ 
+ f(1, n => { })
+->f(1, n => { }) : void
+->f : <T>(x: T, k: (t: T) => void) => void
++>f(1, n => { }) : any
++>f : any
+ >1 : 1
+->n => { } : (n: number) => void
+->n : number
++>n => { } : (n: any) => void
++>n : any
+ 
+-=== first.js ===
+-/** @template T
+- * @param {T} x
+- * @param {(t: T) => void} k
+- */
+-module.exports = function (x, k) { return k(x) }
+->module.exports = function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
+->module.exports : <T>(x: T, k: (t: T) => void) => void
+->module : { exports: <T>(x: T, k: (t: T) => void) => void; }
+->exports : <T>(x: T, k: (t: T) => void) => void
+->function (x, k) { return k(x) } : <T>(x: T, k: (t: T) => void) => void
+->x : T
+->k : (t: T) => void
+->k(x) : void
+->k : (t: T) => void
+->x : T
+-

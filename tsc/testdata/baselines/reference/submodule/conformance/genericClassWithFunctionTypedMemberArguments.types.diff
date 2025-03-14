@@ -1,0 +1,172 @@
+--- old.genericClassWithFunctionTypedMemberArguments.types
++++ new.genericClassWithFunctionTypedMemberArguments.types
+@@= skipped -8, +8 lines =@@
+ 
+     class C<T> {
+ >C : C<T>
++>T : T
+ 
+         foo<T>(x: (a: T) => T) {
+ >foo : <T>(x: (a: T) => T) => T
++>T : T
+ >x : (a: T) => T
+ >a : T
+ 
+@@= skipped -24, +26 lines =@@
+ >c : C<number>
+ >foo : <T>(x: (a: T) => T) => T
+ ><U>(x: U) => '' : <U>(x: U) => string
++>U : U
+ >x : U
+ >'' : ""
+ 
+@@= skipped -10, +11 lines =@@
+ >c : C<number>
+ >foo : <T>(x: (a: T) => T) => T
+ ><U>(x: U) => '' : <U>(x: U) => string
++>U : U
+ >x : U
+ >'' : ""
+ 
+@@= skipped -15, +16 lines =@@
+ 
+     class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+         foo(x: (a: T) => T) {
+ >foo : (x: (a: T) => T) => T
+@@= skipped -24, +25 lines =@@
+ >c2 : C2<number>
+ >foo : (x: (a: number) => number) => number
+ ><U>(x: U) => 1 : <U>(x: U) => number
++>U : U
+ >x : U
+ >1 : 1
+ 
+@@= skipped -19, +20 lines =@@
+ 
+     class C<T> {
+ >C : C<T>
++>T : T
+ 
+         foo2<T, U>(x: T, cb: (a: T) => U) {
+ >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
++>T : T
++>U : U
+ >x : T
+ >cb : (a: T) => U
+ >a : T
+@@= skipped -25, +28 lines =@@
+ >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+ >1 : 1
+ >function <Z>(a: Z) { return '' } : <Z>(a: Z) => string
++>Z : Z
+ >a : Z
+ >'' : ""
+ 
+@@= skipped -22, +23 lines =@@
+ >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+ >'' : ""
+ ><Z>(a: Z) => 1 : <Z>(a: Z) => number
++>Z : Z
+ >a : Z
+ >1 : 1
+ 
+     class C2<T, U> {
+ >C2 : C2<T, U>
++>T : T
++>U : U
+ 
+         foo3(x: T, cb: (a: T) => U, y: U) {
+ >foo3 : (x: T, cb: (a: T) => U, y: U) => U
+@@= skipped -31, +34 lines =@@
+ >foo3 : (x: number, cb: (a: number) => string, y: string) => string
+ >1 : 1
+ ><Z>(a: Z) => '' : <Z>(a: Z) => string
++>Z : Z
+ >a : Z
+ >'' : ""
+ >'' : ""
+@@= skipped -18, +19 lines =@@
+ 
+     class C3<T, U> {
+ >C3 : C3<T, U>
++>T : T
++>U : U
+ 
+         foo3<T,U>(x: T, cb: (a: T) => U, y: U) {
+ >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
++>T : T
++>U : U
+ >x : T
+ >cb : (a: T) => U
+ >a : T
+@@= skipped -19, +23 lines =@@
+ 
+     function other<T, U>(t: T, u: U) {
+ >other : <T, U>(t: T, u: U) => void
++>T : T
++>U : U
+ >t : T
+ >u : U
+ 
+         var r10 = c.foo2(1, (x: T) => ''); // error
+ >r10 : string
+ >c.foo2(1, (x: T) => '') : string
+->c.foo2 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1) => U_1
++>c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+ >c : C<number>
+->foo2 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1) => U_1
++>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+ >1 : 1
+ >(x: T) => '' : (x: T) => string
+ >x : T
+@@= skipped -17, +19 lines =@@
+         var r10 = c.foo2(1, (x) => ''); // string
+ >r10 : string
+ >c.foo2(1, (x) => '') : string
+->c.foo2 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1) => U_1
++>c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+ >c : C<number>
+->foo2 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1) => U_1
++>foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+ >1 : 1
+ >(x) => '' : (x: number) => string
+ >x : number
+@@= skipped -11, +11 lines =@@
+         var r11 = c3.foo3(1, (x: T) => '', ''); // error
+ >r11 : string
+ >c3.foo3(1, (x: T) => '', '') : string
+->c3.foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
++>c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+ >c3 : C3<number, string>
+->foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
++>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+ >1 : 1
+ >(x: T) => '' : (x: T) => string
+ >x : T
+@@= skipped -12, +12 lines =@@
+         var r11b = c3.foo3(1, (x: T) => '', 1); // error
+ >r11b : string
+ >c3.foo3(1, (x: T) => '', 1) : string
+->c3.foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
++>c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+ >c3 : C3<number, string>
+->foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
++>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+ >1 : 1
+ >(x: T) => '' : (x: T) => string
+ >x : T
+@@= skipped -12, +12 lines =@@
+         var r12 = c3.foo3(1, function (a) { return '' }, 1); // error
+ >r12 : number
+ >c3.foo3(1, function (a) { return '' }, 1) : 1
+->c3.foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
++>c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+ >c3 : C3<number, string>
+->foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
++>foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+ >1 : 1
+ >function (a) { return '' } : (a: number) => string
+ >a : number

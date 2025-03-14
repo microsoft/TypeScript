@@ -1,0 +1,44 @@
+//// [tests/cases/conformance/jsdoc/jsdocImplements_namespacedInterface.ts] ////
+
+=== /defs.d.ts ===
+declare namespace N {
+>N : any
+
+    interface A {
+>A : A
+
+        mNumber(): number;
+>mNumber : () => number
+    }
+    interface AT<T> {
+>AT : AT<T>
+>T : T
+
+        gen(): T;
+>gen : () => T
+    }
+}
+=== /a.js ===
+/** @implements N.A */
+class B {
+>B : B
+
+    mNumber() {
+>mNumber : () => number
+
+        return 0;
+>0 : 0
+    }
+}
+/** @implements {N.AT<string>} */
+class BAT {
+>BAT : BAT
+
+    gen() {
+>gen : () => string
+
+        return "";
+>"" : ""
+    }
+}
+

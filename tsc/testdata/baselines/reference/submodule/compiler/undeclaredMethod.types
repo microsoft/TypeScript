@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/undeclaredMethod.ts] ////
+
+=== undeclaredMethod.ts ===
+module M {
+>M : typeof M
+
+    export class C {
+>C : C
+
+        public salt() {}
+>salt : () => void
+    }
+}
+
+var c:M.C = new M.C();
+>c : C
+>M : any
+>new M.C() : C
+>M.C : typeof C
+>M : typeof M
+>C : typeof C
+
+c.salt();	// cool
+>c.salt() : void
+>c.salt : () => void
+>c : C
+>salt : () => void
+
+c.saltbar();	// crash
+>c.saltbar() : any
+>c.saltbar : any
+>c : C
+>saltbar : any
+
+

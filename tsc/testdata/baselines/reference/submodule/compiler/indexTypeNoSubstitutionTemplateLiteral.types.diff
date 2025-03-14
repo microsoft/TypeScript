@@ -1,0 +1,22 @@
+--- old.indexTypeNoSubstitutionTemplateLiteral.types
++++ new.indexTypeNoSubstitutionTemplateLiteral.types
+@@= skipped -1, +1 lines =@@
+ 
+ === indexTypeNoSubstitutionTemplateLiteral.ts ===
+ function Foo() {}
+->Foo : typeof Foo
++>Foo : { (): void; b: () => void; }
+ 
+ Foo[`b`] = function () {};
+ >Foo[`b`] = function () {} : () => void
+ >Foo[`b`] : () => void
+->Foo : typeof Foo
++>Foo : { (): void; b: () => void; }
+ >`b` : "b"
+ >function () {} : () => void
+ 
+ type Test = keyof typeof Foo;
+ >Test : "b"
+->Foo : typeof Foo
+ 
+ 

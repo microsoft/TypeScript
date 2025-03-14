@@ -1,0 +1,139 @@
+//// [tests/cases/conformance/salsa/thisTypeOfConstructorFunctions.ts] ////
+
+=== thisTypeOfConstructorFunctions.js ===
+/**
+ * @class
+ * @template T
+ * @param {T} t
+ */
+function Cp(t) {
+>Cp : { (t: any): void; prototype: { m4: () => any; }; }
+>t : any
+
+    /** @type {this} */
+    this.dit = this
+>this.dit = this : any
+>this.dit : any
+>this : any
+>dit : any
+>this : any
+
+    this.y = t
+>this.y = t : any
+>this.y : any
+>this : any
+>y : any
+>t : any
+
+    /** @return {this} */
+    this.m3 = () => this
+>this.m3 = () => this : () => any
+>this.m3 : any
+>this : any
+>m3 : any
+>() => this : () => any
+>this : any
+}
+
+Cp.prototype = {
+>Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4: () => any; }
+>Cp.prototype : { m4: () => any; }
+>Cp : { (t: any): void; prototype: { m4: () => any; }; }
+>prototype : { m4: () => any; }
+>{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4: () => any; }
+
+    /** @return {this} */
+    m4() {
+>m4 : () => any
+
+        this.z = this.y; return this
+>this.z = this.y : any
+>this.z : any
+>this : any
+>z : any
+>this.y : any
+>this : any
+>y : any
+>this : any
+    }
+}
+
+/**
+ * @class
+ * @template T
+ * @param {T} t
+ */
+function Cpp(t) {
+>Cpp : (t: any) => void
+>t : any
+
+    this.y = t
+>this.y = t : any
+>this.y : any
+>this : any
+>y : any
+>t : any
+}
+/** @return {this} */
+Cpp.prototype.m2 = function () {
+>Cpp.prototype.m2 = function () {    this.z = this.y; return this} : () => any
+>Cpp.prototype.m2 : any
+>Cpp.prototype : any
+>Cpp : (t: any) => void
+>prototype : any
+>m2 : any
+>function () {    this.z = this.y; return this} : () => any
+
+    this.z = this.y; return this
+>this.z = this.y : any
+>this.z : any
+>this : any
+>z : any
+>this.y : any
+>this : any
+>y : any
+>this : any
+}
+
+var cp = new Cp(1)
+>cp : any
+>new Cp(1) : any
+>Cp : { (t: any): void; prototype: { m4: () => any; }; }
+>1 : 1
+
+var cpp = new Cpp(2)
+>cpp : any
+>new Cpp(2) : any
+>Cpp : (t: any) => void
+>2 : 2
+
+cp.dit
+>cp.dit : any
+>cp : any
+>dit : any
+
+/** @type {Cpp<number>} */
+var cppn = cpp.m2()
+>cppn : any
+>cpp.m2() : any
+>cpp.m2 : any
+>cpp : any
+>m2 : any
+
+/** @type {Cp<number>} */
+var cpn = cp.m3()
+>cpn : any
+>cp.m3() : any
+>cp.m3 : any
+>cp : any
+>m3 : any
+
+/** @type {Cp<number>} */
+var cpn = cp.m4()
+>cpn : any
+>cp.m4() : any
+>cp.m4 : any
+>cp : any
+>m4 : any
+
+

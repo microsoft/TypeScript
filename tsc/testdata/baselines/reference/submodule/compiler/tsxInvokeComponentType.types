@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/tsxInvokeComponentType.tsx] ////
+
+=== tsxInvokeComponentType.tsx ===
+/// <reference path="react16.d.ts" />
+import React, { ComponentType } from "react";
+>React : any
+>ComponentType : any
+
+declare const Elem: ComponentType<{ someKey: string }>;
+>Elem : ComponentType<{ someKey: string; }>
+>someKey : string
+
+const bad = <Elem />;
+>bad : any
+><Elem /> : any
+>Elem : ComponentType<{ someKey: string; }>
+
+const good = <Elem someKey="ok" />;
+>good : any
+><Elem someKey="ok" /> : any
+>Elem : ComponentType<{ someKey: string; }>
+>someKey : any
+
+declare const Elem2: ComponentType<{ opt?: number }>;
+>Elem2 : ComponentType<{ opt?: number | undefined; }>
+>opt : number | undefined
+
+const alsoOk = <Elem2>text</Elem2>;
+>alsoOk : any
+><Elem2>text</Elem2> : any
+>Elem2 : ComponentType<{ opt?: number | undefined; }>
+>Elem2 : ComponentType<{ opt?: number | undefined; }>
+

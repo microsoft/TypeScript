@@ -1,0 +1,55 @@
+--- old.shadowedInternalModule.types
++++ new.shadowedInternalModule.types
+@@= skipped -14, +14 lines =@@
+ >0 : 0
+ 
+     export interface Point {
++>Point : Point
++
+         x: number;
+ >x : number
+ 
+@@= skipped -20, +22 lines =@@
+ >0 : 0
+ 
+     import Point = A;
+->Point : typeof Point
+->A : typeof Point
++>Point : typeof A
++>A : typeof A
+ }
+ 
+ module X {
+ >X : typeof X
+ 
+     export module Y {
++>Y : typeof Y
++
+         export interface Point{
++>Point : Point
++
+             x: number;
+ >x : number
+ 
+@@= skipped -41, +45 lines =@@
+ //
+ 
+ module a {
++>a : any
++
+   export type A = number;
+ >A : number
+ }
+@@= skipped -13, +15 lines =@@
+ >A : number
+ 
+   export module A {}
++>A : any
+ }
+ 
+ module c {
++>c : any
++
+   import any = b.A;
+ >any : any
+ >b : typeof b

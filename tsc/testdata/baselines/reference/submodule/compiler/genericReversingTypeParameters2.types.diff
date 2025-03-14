@@ -1,0 +1,11 @@
+--- old.genericReversingTypeParameters2.types
++++ new.genericReversingTypeParameters2.types
+@@= skipped -2, +2 lines =@@
+ === genericReversingTypeParameters2.ts ===
+ class BiMap<K, V> {
+ >BiMap : BiMap<K, V>
++>K : K
++>V : V
+ 
+     private inverseBiMap: BiMap<V, K>;
+ >inverseBiMap : BiMap<V, K>

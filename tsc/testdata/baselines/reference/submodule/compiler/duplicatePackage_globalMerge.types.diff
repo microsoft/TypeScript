@@ -1,0 +1,11 @@
+--- old.duplicatePackage_globalMerge.types
++++ new.duplicatePackage_globalMerge.types
+@@= skipped -24, +24 lines =@@
+ 
+ === /tests/node_modules/@types/react/index.d.ts ===
+ 
+->global : typeof global
+-
+ === /node_modules/@types/react/index.d.ts ===
+ declare global { }
+ >global : typeof global

@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/systemModule3.ts] ////
+
+=== file1.ts ===
+
+export default function() {}
+
+=== file2.ts ===
+export default function f() {}
+>f : () => void
+
+=== file3.ts ===
+export default class C {}
+>C : default
+
+=== file4.ts ===
+
+export default class {}

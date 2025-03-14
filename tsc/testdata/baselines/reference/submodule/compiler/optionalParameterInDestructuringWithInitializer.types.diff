@@ -1,0 +1,132 @@
+--- old.optionalParameterInDestructuringWithInitializer.types
++++ new.optionalParameterInDestructuringWithInitializer.types
+@@= skipped -8, +8 lines =@@
+ >b : number
+ 
+ function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
+->func1 : ({ a, b }?: { a: number; b?: number; }) => void
++>func1 : (__0?: { a: number; b?: number | undefined; }) => void
+ >a : number
+ >b : number | undefined
+ >a : number
+@@= skipped -21, +21 lines =@@
+ }
+ 
+ function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
+->func2 : ({ a, b }?: { a: number; b?: number; }) => void
++>func2 : (__0?: { a: number; b?: number | undefined; }) => void
+ >a : number
+ >b : number
+ >3 : 3
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
+->func3 : ({ a, b }?: { a: number; b?: number; }) => void
++>func3 : (__0?: { a: number; b?: number | undefined; }) => void
+ >a : number
+ >b : number | undefined
+ >a : number
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
+->func4 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
++>func4 : (__0?: { a: { b: number; c?: number | undefined; }; d: number; }) => void
+ >a : any
+ >b : number
+ >c : number | undefined
+ >d : number
+->a : { b: number; c?: number; }
++>a : { b: number; c?: number | undefined; }
+ >b : number
+ >c : number | undefined
+ >d : number
+@@= skipped -29, +29 lines =@@
+ }
+ 
+ function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
+->func5 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
++>func5 : (__0?: { a: { b: number; c?: number | undefined; }; d: number; }) => void
+ >a : any
+ >b : number
+ >c : number
+ >4 : 4
+ >d : number
+->a : { b: number; c?: number; }
++>a : { b: number; c?: number | undefined; }
+ >b : number
+ >c : number | undefined
+ >d : number
+@@= skipped -30, +30 lines =@@
+ }
+ 
+ function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1,c: 2}, d: 3} ) {
+->func6 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
++>func6 : (__0?: { a: { b: number; c?: number | undefined; }; d: number; }) => void
+ >a : any
+ >b : number
+ >c : number | undefined
+@@= skipped -10, +10 lines =@@
+ >c : number
+ >5 : 5
+ >d : number
+->a : { b: number; c?: number; }
++>a : { b: number; c?: number | undefined; }
+ >b : number
+ >c : number | undefined
+ >d : number
+@@= skipped -24, +24 lines =@@
+ }
+ 
+ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1, c: 2}, d: 3} ) {
+->func7 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
++>func7 : (__0?: { a: { b: number; c?: number | undefined; }; d: number; }) => void
+ >a : any
+ >b : number
+ >c : number
+@@= skipped -11, +11 lines =@@
+ >c : number
+ >5 : 5
+ >d : number
+->a : { b: number; c?: number; }
++>a : { b: number; c?: number | undefined; }
+ >b : number
+ >c : number | undefined
+ >d : number
+@@= skipped -24, +24 lines =@@
+ }
+ 
+ interface Foo {
++>Foo : Foo
++
+   readonly bar?: number;
+ >bar : number | undefined
+ }
+ 
+ function performFoo({ bar }: Foo = {}) {
+->performFoo : ({ bar }?: Foo) => void
++>performFoo : (__0?: Foo) => void
+ >bar : number | undefined
+ >{} : {}
+ 
+@@= skipped -21, +23 lines =@@
+ 
+ performFoo();
+ >performFoo() : void
+->performFoo : ({ bar }?: Foo) => void
++>performFoo : (__0?: Foo) => void
+ 
+ function performFoo2({ bar = null }: Foo = {}) {
+->performFoo2 : ({ bar }?: Foo) => void
++>performFoo2 : (__0?: Foo) => void
+ >bar : number
+ >{} : {}
+ 
+@@= skipped -19, +19 lines =@@
+ 
+ performFoo2();
+ >performFoo2() : void
+->performFoo2 : ({ bar }?: Foo) => void
++>performFoo2 : (__0?: Foo) => void
+ 

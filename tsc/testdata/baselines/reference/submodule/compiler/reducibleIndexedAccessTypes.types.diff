@@ -1,0 +1,72 @@
+--- old.reducibleIndexedAccessTypes.types
++++ new.reducibleIndexedAccessTypes.types
+@@= skipped -9, +9 lines =@@
+ >C : Type.C
+ 
+ interface PayloadStructure {
++>PayloadStructure : PayloadStructure
++
+     dataType: Type;
+ >dataType : Type
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface PayloadA extends PayloadStructure {
++>PayloadA : PayloadA
++
+     dataType: Type.A;
+ >dataType : Type.A
+ >Type : any
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ interface PayloadB extends PayloadStructure {
++>PayloadB : PayloadB
++
+     dataType: Type.B;
+ >dataType : Type.B
+ >Type : any
+@@= skipped -9, +11 lines =@@
+ }
+ 
+ interface PayloadC extends PayloadStructure {
++>PayloadC : PayloadC
++
+     dataType: Type.C;
+ >dataType : Type.C
+ >Type : any
+@@= skipped -23, +25 lines =@@
+ >MappedPayload2 : MappedPayload2
+ 
+     [K in Type]?: (data: (Payload & { dataType: K })["data"]) => void
+->data : (Payload & { dataType: K; })["data"]
++>K : K
++>data : Payload & { dataType: K; }["data"]
+ >dataType : K
+ }
+ 
+ const payloads2: MappedPayload2 = {
+ >payloads2 : MappedPayload2
+->{    [Type.A]: data => { console.log(data) }} : { 0: (data: string) => void; }
++>{    [Type.A]: data => { console.log(data) }} : { [Type.A]: (data: string) => void; }
+ 
+     [Type.A]: data => { console.log(data) }
+ >[Type.A] : (data: string) => void
+@@= skipped -26, +27 lines =@@
+ 
+ type GetPayload<P extends Payload, K extends keyof P> = P extends { dataType: K } ? P["data"] : never;
+ >GetPayload : GetPayload<P, K>
++>P : P
++>K : K
+ >dataType : K
+ 
+ // Repro from #51161
+@@= skipped -12, +14 lines =@@
+ 
+ type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
+ >AnyOneofKind : AnyOneofKind<T>
++>T : T
+ >oneofKind : keyof T
+ 
+     ? T['oneofKind']

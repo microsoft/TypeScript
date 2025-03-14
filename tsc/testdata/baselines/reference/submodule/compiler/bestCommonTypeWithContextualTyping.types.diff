@@ -1,0 +1,20 @@
+--- old.bestCommonTypeWithContextualTyping.types
++++ new.bestCommonTypeWithContextualTyping.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bestCommonTypeWithContextualTyping.ts ===
+ interface Contextual {
++>Contextual : Contextual
++
+     dummy;
+ >dummy : any
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Ellement {
++>Ellement : Ellement
++
+     dummy;
+ >dummy : any
+ 

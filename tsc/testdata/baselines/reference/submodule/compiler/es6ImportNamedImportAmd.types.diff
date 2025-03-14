@@ -1,0 +1,143 @@
+--- old.es6ImportNamedImportAmd.types
++++ new.es6ImportNamedImportAmd.types
+@@= skipped -35, +35 lines =@@
+ === es6ImportNamedImportAmd_1.ts ===
+ import { } from "es6ImportNamedImportAmd_0";
+ import { a } from "es6ImportNamedImportAmd_0";
+->a : number
++>a : any
+ 
+ var xxxx = a;
+->xxxx : number
+->a : number
++>xxxx : any
++>a : any
+ 
+ import { a as b } from "es6ImportNamedImportAmd_0";
+->a : number
+->b : number
++>a : any
++>b : any
+ 
+ var xxxx = b;
+->xxxx : number
+->b : number
++>xxxx : any
++>b : any
+ 
+ import { x, a as y } from "es6ImportNamedImportAmd_0";
+->x : number
+->a : number
+->y : number
++>x : any
++>a : any
++>y : any
+ 
+ var xxxx = x;
+->xxxx : number
+->x : number
++>xxxx : any
++>x : any
+ 
+ var xxxx = y;
+->xxxx : number
+->y : number
++>xxxx : any
++>y : any
+ 
+ import { x as z,  } from "es6ImportNamedImportAmd_0";
+->x : number
+->z : number
++>x : any
++>z : any
+ 
+ var xxxx = z;
+->xxxx : number
+->z : number
++>xxxx : any
++>z : any
+ 
+ import { m,  } from "es6ImportNamedImportAmd_0";
+->m : number
++>m : any
+ 
+ var xxxx = m;
+->xxxx : number
+->m : number
++>xxxx : any
++>m : any
+ 
+ import { a1, x1 } from "es6ImportNamedImportAmd_0";
+->a1 : number
+->x1 : number
++>a1 : any
++>x1 : any
+ 
+ var xxxx = a1;
+->xxxx : number
+->a1 : number
++>xxxx : any
++>a1 : any
+ 
+ var xxxx = x1;
+->xxxx : number
+->x1 : number
++>xxxx : any
++>x1 : any
+ 
+ import { a1 as a11, x1 as x11 } from "es6ImportNamedImportAmd_0";
+->a1 : number
+->a11 : number
+->x1 : number
+->x11 : number
++>a1 : any
++>a11 : any
++>x1 : any
++>x11 : any
+ 
+ var xxxx = a11;
+->xxxx : number
+->a11 : number
++>xxxx : any
++>a11 : any
+ 
+ var xxxx = x11;
+->xxxx : number
+->x11 : number
++>xxxx : any
++>x11 : any
+ 
+ import { z1 } from "es6ImportNamedImportAmd_0";
+->z1 : number
++>z1 : any
+ 
+ var z111 = z1;
+->z111 : number
+->z1 : number
++>z111 : any
++>z1 : any
+ 
+ import { z2 as z3 } from "es6ImportNamedImportAmd_0";
+->z2 : number
+->z3 : number
++>z2 : any
++>z3 : any
+ 
+ var z2 = z3; // z2 shouldn't give redeclare error
+->z2 : number
+->z3 : number
++>z2 : any
++>z3 : any
+ 
+ // These are elided
+ import { aaaa } from "es6ImportNamedImportAmd_0";
+->aaaa : number
++>aaaa : any
+ 
+ // These are elided
+ import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
+->aaaa : number
+->bbbb : number
++>aaaa : any
++>bbbb : any
+ 

@@ -1,0 +1,23 @@
+--- old.allowSyntheticDefaultImports2.types
++++ new.allowSyntheticDefaultImports2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.ts ===
+ import Namespace from "./b";
+->Namespace : typeof Namespace
++>Namespace : typeof import("b")
+ 
+ export var x = new Namespace.Foo();
+->x : Namespace.Foo
+->new Namespace.Foo() : Namespace.Foo
+->Namespace.Foo : typeof Namespace.Foo
+->Namespace : typeof Namespace
+->Foo : typeof Namespace.Foo
++>x : Foo
++>new Namespace.Foo() : Foo
++>Namespace.Foo : typeof Foo
++>Namespace : typeof import("b")
++>Foo : typeof Foo
+ 
+ === b.d.ts ===
+ export class Foo {

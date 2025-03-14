@@ -1,0 +1,11 @@
+--- old.contextualTypeObjectSpreadExpression.types
++++ new.contextualTypeObjectSpreadExpression.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextualTypeObjectSpreadExpression.ts ===
+ interface I {
++>I : I
++
+     a: "a";
+ >a : "a"
+ }

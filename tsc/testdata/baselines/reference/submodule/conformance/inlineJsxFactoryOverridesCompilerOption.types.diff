@@ -1,0 +1,32 @@
+--- old.inlineJsxFactoryOverridesCompilerOption.types
++++ new.inlineJsxFactoryOverridesCompilerOption.types
+@@= skipped -4, +4 lines =@@
+ >global : any
+ 
+     namespace JSX {
++>JSX : any
++
+         interface IntrinsicElements {
++>IntrinsicElements : IntrinsicElements
++
+             [e: string]: any;
+ >e : string
+         }
+@@= skipped -19, +23 lines =@@
+ >dom : () => void
+ 
+ <h></h>
+-><h></h> : error
++><h></h> : any
+ >h : any
+ >h : any
+ 
+@@= skipped -9, +9 lines =@@
+ >p : () => void
+ 
+ <h></h>
+-><h></h> : error
++><h></h> : any
+ >h : any
+ >h : any
+ 

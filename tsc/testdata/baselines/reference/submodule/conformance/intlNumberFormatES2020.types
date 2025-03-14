@@ -1,0 +1,114 @@
+//// [tests/cases/conformance/es2020/intlNumberFormatES2020.ts] ////
+
+=== intlNumberFormatES2020.ts ===
+// New/updated resolved options in ES2020
+const { notation, style, signDisplay } = new Intl.NumberFormat('en-NZ').resolvedOptions();
+>notation : "compact" | "engineering" | "scientific" | "standard"
+>style : keyof NumberFormatOptionsStyleRegistry
+>signDisplay : keyof NumberFormatOptionsSignDisplayRegistry
+>new Intl.NumberFormat('en-NZ').resolvedOptions() : ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ').resolvedOptions : () => ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ') : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>resolvedOptions : () => ResolvedNumberFormatOptions
+
+// Empty options
+new Intl.NumberFormat('en-NZ', {});
+>new Intl.NumberFormat('en-NZ', {}) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{} : {}
+
+// Override numbering system
+new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' });
+>new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ numberingSystem: 'arab' } : { numberingSystem: string; }
+>numberingSystem : string
+>'arab' : "arab"
+
+// Currency
+const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+>currency : string | undefined
+>currencySign : "accounting" | "standard" | undefined
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : () => ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'currency', currency: 'NZD', currencySign: 'accounting' } : { style: "currency"; currency: string; currencySign: "accounting"; }
+>style : "currency"
+>'currency' : "currency"
+>currency : string
+>'NZD' : "NZD"
+>currencySign : "accounting"
+>'accounting' : "accounting"
+>resolvedOptions : () => ResolvedNumberFormatOptions
+
+// Units
+const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
+>unit : string | undefined
+>unitDisplay : "long" | "narrow" | "short" | undefined
+>new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions() : ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions : () => ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' } : { style: "unit"; unit: string; unitDisplay: "narrow"; }
+>style : "unit"
+>'unit' : "unit"
+>unit : string
+>'kilogram' : "kilogram"
+>unitDisplay : "narrow"
+>'narrow' : "narrow"
+>resolvedOptions : () => ResolvedNumberFormatOptions
+
+// Compact
+const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
+>compactDisplay : "long" | "short" | undefined
+>new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions() : ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions : () => ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ notation: 'compact', compactDisplay: 'long' } : { notation: "compact"; compactDisplay: "long"; }
+>notation : "compact"
+>'compact' : "compact"
+>compactDisplay : "long"
+>'long' : "long"
+>resolvedOptions : () => ResolvedNumberFormatOptions
+
+// Sign display
+new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
+>new Intl.NumberFormat('en-NZ', { signDisplay: 'always' }) : NumberFormat
+>Intl.NumberFormat : NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : NumberFormatConstructor
+>'en-NZ' : "en-NZ"
+>{ signDisplay: 'always' } : { signDisplay: "always"; }
+>signDisplay : "always"
+>'always' : "always"
+
+// New additions to NumberFormatPartTypes
+const types: Intl.NumberFormatPartTypes[] = [ 'compact', 'unit', 'unknown' ];
+>types : (keyof NumberFormatPartTypeRegistry)[]
+>Intl : any
+>[ 'compact', 'unit', 'unknown' ] : ("compact" | "unit" | "unknown")[]
+>'compact' : "compact"
+>'unit' : "unit"
+>'unknown' : "unknown"
+

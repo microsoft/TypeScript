@@ -1,0 +1,10 @@
+--- old.moduleAugmentationGlobal6.types
++++ new.moduleAugmentationGlobal6.types
+@@= skipped -4, +4 lines =@@
+ >global : typeof global
+ 
+     interface Array<T> { x }
++>Array : Array<T>
++>T : T
+ >x : any
+ }

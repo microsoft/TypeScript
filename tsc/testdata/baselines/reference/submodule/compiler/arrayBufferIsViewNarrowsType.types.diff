@@ -1,0 +1,14 @@
+--- old.arrayBufferIsViewNarrowsType.types
++++ new.arrayBufferIsViewNarrowsType.types
+@@= skipped -5, +5 lines =@@
+ 
+ if (ArrayBuffer.isView(obj)) {
+ >ArrayBuffer.isView(obj) : boolean
+->ArrayBuffer.isView : (arg: any) => arg is ArrayBufferView
++>ArrayBuffer.isView : (arg: any) => arg is ArrayBufferView<ArrayBuffer>
+ >ArrayBuffer : ArrayBufferConstructor
+->isView : (arg: any) => arg is ArrayBufferView
++>isView : (arg: any) => arg is ArrayBufferView<ArrayBuffer>
+ >obj : Object
+ 
+     // isView should be a guard that narrows type to ArrayBufferView.

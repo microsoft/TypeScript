@@ -1,0 +1,22 @@
+--- old.semicolonsInModuleDeclarations.types
++++ new.semicolonsInModuleDeclarations.types
+@@= skipped -4, +4 lines =@@
+ >ambiModule : typeof ambiModule
+ 
+    export interface i1 { };
++>i1 : i1
++
+    export interface i2 { }
++>i2 : i2
+ }
+ 
+ var n1: ambiModule.i1;
+->n1 : ambiModule.i1
++>n1 : i1
+ >ambiModule : any
+ 
+ var n2: ambiModule.i2;
+->n2 : ambiModule.i2
++>n2 : i2
+ >ambiModule : any
+ 

@@ -1,0 +1,122 @@
+--- old.escapedIdentifiers.types
++++ new.escapedIdentifiers.types
+@@= skipped -44, +44 lines =@@
+ >baz1 : number
+ }
+ module moduleType\u0032 { 
+->moduleType\u0032 : typeof moduleType\u0032
++>moduleType\u0032 : typeof moduleType2
+ 
+     export var baz2: number;
+ >baz2 : number
+@@= skipped -23, +23 lines =@@
+ moduleType2.baz2 = 3;
+ >moduleType2.baz2 = 3 : 3
+ >moduleType2.baz2 : number
+->moduleType2 : typeof moduleType\u0032
++>moduleType2 : typeof moduleType2
+ >baz2 : number
+ >3 : 3
+ 
+ moduleType\u0032.baz2 = 3;
+ >moduleType\u0032.baz2 = 3 : 3
+ >moduleType\u0032.baz2 : number
+->moduleType\u0032 : typeof moduleType\u0032
++>moduleType\u0032 : typeof moduleType2
+ >baz2 : number
+ >3 : 3
+ 
+@@= skipped -20, +20 lines =@@
+ >foo1 : number
+ }
+ class classType\u0032 { 
+->classType\u0032 : classType\u0032
++>classType\u0032 : classType2
+ 
+     public foo2: number;
+ >foo2 : number
+@@= skipped -31, +31 lines =@@
+ >2 : 2
+ 
+ var classType2Object1 = new classType2();
+->classType2Object1 : classType\u0032
+->new classType2() : classType\u0032
+->classType2 : typeof classType\u0032
++>classType2Object1 : classType2
++>new classType2() : classType2
++>classType2 : typeof classType2
+ 
+ classType2Object1.foo2 = 2;
+ >classType2Object1.foo2 = 2 : 2
+ >classType2Object1.foo2 : number
+->classType2Object1 : classType\u0032
++>classType2Object1 : classType2
+ >foo2 : number
+ >2 : 2
+ 
+ var classType2Object2 = new classType\u0032();
+->classType2Object2 : classType\u0032
+->new classType\u0032() : classType\u0032
+->classType\u0032 : typeof classType\u0032
++>classType2Object2 : classType2
++>new classType\u0032() : classType2
++>classType\u0032 : typeof classType2
+ 
+ classType2Object2.foo2 = 2;
+ >classType2Object2.foo2 = 2 : 2
+ >classType2Object2.foo2 : number
+->classType2Object2 : classType\u0032
++>classType2Object2 : classType2
+ >foo2 : number
+ >2 : 2
+ 
+ // interfaces
+ interface interfaceType1 { 
++>interfaceType1 : interfaceType1
++
+     bar1: number;
+ >bar1 : number
+ }
+ interface interfaceType\u0032 { 
++>interfaceType\u0032 : interfaceType2
++
+     bar2: number;
+ >bar2 : number
+ }
+@@= skipped -62, +66 lines =@@
+ >2 : 2
+ 
+ var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };
+->interfaceType2Object1 : interfaceType\u0032
+-><interfaceType2>{ bar2: 0 } : interfaceType\u0032
++>interfaceType2Object1 : interfaceType2
++><interfaceType2>{ bar2: 0 } : interfaceType2
+ >{ bar2: 0 } : { bar2: number; }
+ >bar2 : number
+ >0 : 0
+@@= skipped -9, +9 lines =@@
+ interfaceType2Object1.bar2 = 2;
+ >interfaceType2Object1.bar2 = 2 : 2
+ >interfaceType2Object1.bar2 : number
+->interfaceType2Object1 : interfaceType\u0032
++>interfaceType2Object1 : interfaceType2
+ >bar2 : number
+ >2 : 2
+ 
+ var interfaceType2Object2 = <interfaceType\u0032>{ bar2: 0 };
+->interfaceType2Object2 : interfaceType\u0032
+-><interfaceType\u0032>{ bar2: 0 } : interfaceType\u0032
++>interfaceType2Object2 : interfaceType2
++><interfaceType\u0032>{ bar2: 0 } : interfaceType2
+ >{ bar2: 0 } : { bar2: number; }
+ >bar2 : number
+ >0 : 0
+@@= skipped -14, +14 lines =@@
+ interfaceType2Object2.bar2 = 2;
+ >interfaceType2Object2.bar2 = 2 : 2
+ >interfaceType2Object2.bar2 : number
+->interfaceType2Object2 : interfaceType\u0032
++>interfaceType2Object2 : interfaceType2
+ >bar2 : number
+ >2 : 2
+ 

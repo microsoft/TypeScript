@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/types/primitives/undefined/validUndefinedValues.ts] ////
+
+=== validUndefinedValues.ts ===
+var x: typeof undefined;
+>x : any
+
+x = undefined;
+>x = undefined : undefined
+>x : any
+>undefined : undefined
+

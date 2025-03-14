@@ -1,0 +1,20 @@
+--- old.exportEqualsDefaultProperty.types
++++ new.exportEqualsDefaultProperty.types
+@@= skipped -19, +19 lines =@@
+ 
+ === imp.ts ===
+ import foo from "./exp";
+->foo : number
++>foo : { greeting: string; default: number; }
+ 
+ foo.toExponential(2);
+->foo.toExponential(2) : string
+->foo.toExponential : (fractionDigits?: number) => string
+->foo : number
+->toExponential : (fractionDigits?: number) => string
++>foo.toExponential(2) : any
++>foo.toExponential : any
++>foo : { greeting: string; default: number; }
++>toExponential : any
+ >2 : 2
+ 

@@ -1,0 +1,10 @@
+--- old.functionVariableInReturnTypeAnnotation.types
++++ new.functionVariableInReturnTypeAnnotation.types
+@@= skipped -2, +2 lines =@@
+ === functionVariableInReturnTypeAnnotation.ts ===
+ function bar(): typeof b {
+ >bar : () => any
+->b : any
+ 
+     var b = 1;
+ >b : number

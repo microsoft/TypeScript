@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/moduleAugmentationGlobal4.ts] ////
+
+=== f1.ts ===
+declare global {
+>global : any
+
+    interface Something {x}
+>Something : Something
+>x : any
+}
+export {};
+=== f2.ts ===
+declare global {
+>global : any
+
+    interface Something {y}
+>Something : Something
+>y : any
+}
+export {};
+=== f3.ts ===
+
+import "./f1";
+import "./f2";
+
+

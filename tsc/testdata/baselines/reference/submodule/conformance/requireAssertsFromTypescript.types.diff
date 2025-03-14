@@ -1,0 +1,43 @@
+--- old.requireAssertsFromTypescript.types
++++ new.requireAssertsFromTypescript.types
+@@= skipped -1, +1 lines =@@
+ 
+ === 38379.js ===
+ const { art } = require('./ex')
+->art : (value: any, message?: string | Error) => asserts value
+->require('./ex') : typeof import("ex")
++>art : any
++>require('./ex') : any
+ >require : any
+ >'./ex' : "./ex"
+ 
+ const artoo = require('./ex2')
+->artoo : (value: any, message?: string | Error) => asserts value
+->require('./ex2') : (value: any, message?: string | Error) => asserts value
++>artoo : any
++>require('./ex2') : any
+ >require : any
+ >'./ex2' : "./ex2"
+ 
+@@= skipped -16, +16 lines =@@
+ >1 : 1
+ 
+ art(x)
+->art(x) : void
+->art : (value: any, message?: string | Error) => asserts value
++>art(x) : any
++>art : any
+ >x : number
+ 
+ let y = 1
+@@= skipped -9, +9 lines =@@
+ >1 : 1
+ 
+ artoo(y)
+->artoo(y) : void
+->artoo : (value: any, message?: string | Error) => asserts value
++>artoo(y) : any
++>artoo : any
+ >y : number
+ 
+ === ex.d.ts ===

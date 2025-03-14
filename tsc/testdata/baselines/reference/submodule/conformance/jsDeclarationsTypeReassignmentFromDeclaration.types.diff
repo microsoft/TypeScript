@@ -1,0 +1,31 @@
+--- old.jsDeclarationsTypeReassignmentFromDeclaration.types
++++ new.jsDeclarationsTypeReassignmentFromDeclaration.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /some-mod.d.ts ===
+ interface Item {
++>Item : Item
++
+     x: string;
+ >x : string
+ }
+@@= skipped -12, +14 lines =@@
+ === index.js ===
+ /** @type {typeof import("/some-mod")} */
+ const items = [];
+->items : Item[]
++>items : any[]
+ >[] : undefined[]
+ 
+ module.exports = items;
+->module.exports = items : Item[]
+->module.exports : Item[]
+->module : { exports: Item[]; }
+->exports : Item[]
+->items : Item[]
++>module.exports = items : any[]
++>module.exports : any
++>module : any
++>exports : any
++>items : any[]
+ 

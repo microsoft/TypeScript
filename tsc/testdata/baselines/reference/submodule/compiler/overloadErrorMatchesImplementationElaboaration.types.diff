@@ -1,0 +1,10 @@
+--- old.overloadErrorMatchesImplementationElaboaration.types
++++ new.overloadErrorMatchesImplementationElaboaration.types
+@@= skipped -10, +10 lines =@@
+ 
+     publish<T>(event: T): void {}
+ >publish : (event: string, data?: any) => void
++>T : T
+ >event : T
+ }
+ 

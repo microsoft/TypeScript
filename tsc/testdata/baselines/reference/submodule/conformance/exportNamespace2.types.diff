@@ -1,0 +1,24 @@
+--- old.exportNamespace2.types
++++ new.exportNamespace2.types
+@@= skipped -12, +12 lines =@@
+ >a : any
+ 
+ export { a };
+->a : typeof a
++>a : typeof import("a")
+ 
+ === d.ts ===
+ import { a } from './c';
+->a : typeof a
++>a : typeof import("a")
+ 
+ new a.A(); // Error
+->new a.A() : a.A
+->a.A : typeof a.A
+->a : typeof a
+->A : typeof a.A
++>new a.A() : A
++>a.A : typeof A
++>a : typeof import("a")
++>A : typeof A
+ 

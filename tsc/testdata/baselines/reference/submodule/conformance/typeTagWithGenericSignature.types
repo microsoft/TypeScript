@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsdoc/typeTagWithGenericSignature.ts] ////
+
+=== bug25618.js ===
+/** @type {<T>(param?: T) => T | undefined} */
+function typed(param) {
+>typed : (param: any) => any
+>param : any
+
+    return param;
+>param : any
+}
+
+var n = typed(1);
+>n : any
+>typed(1) : any
+>typed : (param: any) => any
+>1 : 1
+
+

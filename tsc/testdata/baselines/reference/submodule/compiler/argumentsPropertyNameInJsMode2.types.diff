@@ -1,0 +1,20 @@
+--- old.argumentsPropertyNameInJsMode2.types
++++ new.argumentsPropertyNameInJsMode2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === a.js ===
+ function f(x) {
+->f : (x: any, ...args: any[]) => void
++>f : (x: any) => void
+ >x : any
+ 
+   arguments;
+@@= skipped -9, +9 lines =@@
+ 
+ f(1, 2, 3);
+ >f(1, 2, 3) : void
+->f : (x: any, ...args: any[]) => void
++>f : (x: any) => void
+ >1 : 1
+ >2 : 2
+ >3 : 3

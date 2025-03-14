@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/jsxIntrinsicElementsExtendsRecord.tsx] ////
+
+=== index.tsx ===
+declare namespace JSX {
+>JSX : any
+
+  interface IntrinsicElements extends Record<string, any> {}
+>IntrinsicElements : IntrinsicElements
+}
+
+<a />;
+><a /> : any
+>a : any
+

@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassInstance1.ts] ////
+
+=== index.js ===
+class Foo {}
+>Foo : Foo
+
+module.exports = new Foo();
+>module.exports = new Foo() : Foo
+>module.exports : any
+>module : any
+>exports : any
+>new Foo() : Foo
+>Foo : typeof Foo
+

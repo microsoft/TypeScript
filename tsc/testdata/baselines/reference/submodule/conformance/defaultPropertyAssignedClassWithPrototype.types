@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/salsa/defaultPropertyAssignedClassWithPrototype.ts] ////
+
+=== bug39167.js ===
+var test = {};
+>test : {}
+>{} : {}
+
+test.K = test.K ||
+>test.K = test.K ||    function () {} : any
+>test.K : any
+>test : {}
+>K : any
+>test.K ||    function () {} : any
+>test.K : any
+>test : {}
+>K : any
+
+    function () {}
+>function () {} : () => void
+
+test.K.prototype = {
+>test.K.prototype = {    add() {}} : { add: () => void; }
+>test.K.prototype : any
+>test.K : any
+>test : {}
+>K : any
+>prototype : any
+>{    add() {}} : { add: () => void; }
+
+    add() {}
+>add : () => void
+
+};
+
+new test.K().add;
+>new test.K().add : any
+>new test.K() : any
+>test.K : any
+>test : {}
+>K : any
+>add : any
+

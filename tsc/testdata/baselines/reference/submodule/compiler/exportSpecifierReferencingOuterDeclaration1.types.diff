@@ -1,0 +1,20 @@
+--- old.exportSpecifierReferencingOuterDeclaration1.types
++++ new.exportSpecifierReferencingOuterDeclaration1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportSpecifierReferencingOuterDeclaration1.ts ===
+ declare module X { export interface bar { } }
++>X : any
++>bar : bar
++
+ declare module "m" {
+ >"m" : typeof import("m")
+ 
+@@= skipped -7, +10 lines =@@
+ >X : any
+ 
+     export function foo(): X.bar;
+->foo : () => X.bar
++>foo : () => bar
+ >X : any
+ }

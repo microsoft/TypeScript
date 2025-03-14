@@ -1,0 +1,24 @@
+--- old.argumentsReferenceInConstructor2_Js.types
++++ new.argumentsReferenceInConstructor2_Js.types
+@@= skipped -9, +9 lines =@@
+ 	 * @param {object} [foo={}]
+ 	 */
+ 	constructor(foo = {}) {
+->foo : any
++>foo : {}
+ >{} : {}
+ 
+ 		/**
+ 		 * @type object
+ 		 */
+ 		this["arguments"] = foo;
+->this["arguments"] = foo : any
++>this["arguments"] = foo : {}
+ >this["arguments"] : any
+ >this : this
+ >"arguments" : "arguments"
+->foo : any
++>foo : {}
+ 	}
+ }
+ 

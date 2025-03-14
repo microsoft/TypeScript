@@ -1,0 +1,30 @@
+--- old.importNonExportedMember12.types
++++ new.importNonExportedMember12.types
+@@= skipped -1, +1 lines =@@
+ 
+ === /node_modules/foo/src/index.js ===
+ module.exports = 1;
+->module.exports = 1 : number
+->module.exports : number
+->module : { exports: number; }
+->exports : number
++>module.exports = 1 : 1
++>module.exports : any
++>module : any
++>exports : any
+ >1 : 1
+ 
+ === /a.js ===
+ export const A = require("foo");
+->A : number
+->require("foo") : number
++>A : any
++>require("foo") : any
+ >require : any
+ >"foo" : "foo"
+ 
+ === /b.ts ===
+ import { A } from "./a";
+->A : number
++>A : any
+ 

@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/moduleWithTryStatement1.ts] ////
+
+=== moduleWithTryStatement1.ts ===
+module M {
+>M : typeof M
+
+  try {
+  }
+  catch (e) {
+>e : any
+  }
+}
+var v = M;
+>v : typeof M
+>M : typeof M
+

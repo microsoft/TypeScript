@@ -1,0 +1,90 @@
+//// [tests/cases/conformance/salsa/constructorFunctionMethodTypeParameters.ts] ////
+
+=== constructorFunctionMethodTypeParameters.js ===
+/**
+ * @template {string} T
+ * @param {T} t
+ */
+function Cls(t) {
+>Cls : (t: any) => void
+>t : any
+
+    this.t = t;
+>this.t = t : any
+>this.t : any
+>this : any
+>t : any
+>t : any
+}
+
+/**
+ * @template {string} V
+ * @param {T} t
+ * @param {V} v
+ * @return {V}
+ */
+Cls.prototype.topLevelComment = function (t, v) {
+>Cls.prototype.topLevelComment = function (t, v) {    return v} : (t: any, v: any) => any
+>Cls.prototype.topLevelComment : any
+>Cls.prototype : any
+>Cls : (t: any) => void
+>prototype : any
+>topLevelComment : any
+>function (t, v) {    return v} : (t: any, v: any) => any
+>t : any
+>v : any
+
+    return v
+>v : any
+
+};
+
+Cls.prototype.nestedComment =
+>Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : (t: any, u: any) => any
+>Cls.prototype.nestedComment : any
+>Cls.prototype : any
+>Cls : (t: any) => void
+>prototype : any
+>nestedComment : any
+
+    /**
+     * @template {string} U
+     * @param {T} t
+     * @param {U} u
+     * @return {T}
+     */
+    function (t, u) {
+>function (t, u) {        return t    } : (t: any, u: any) => any
+>t : any
+>u : any
+
+        return t
+>t : any
+
+    };
+
+var c = new Cls('a');
+>c : any
+>new Cls('a') : any
+>Cls : (t: any) => void
+>'a' : "a"
+
+const s = c.topLevelComment('a', 'b');
+>s : any
+>c.topLevelComment('a', 'b') : any
+>c.topLevelComment : any
+>c : any
+>topLevelComment : any
+>'a' : "a"
+>'b' : "b"
+
+const t = c.nestedComment('a', 'b');
+>t : any
+>c.nestedComment('a', 'b') : any
+>c.nestedComment : any
+>c : any
+>nestedComment : any
+>'a' : "a"
+>'b' : "b"
+
+

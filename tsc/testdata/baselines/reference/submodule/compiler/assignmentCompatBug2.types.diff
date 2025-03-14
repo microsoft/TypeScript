@@ -1,0 +1,56 @@
+--- old.assignmentCompatBug2.types
++++ new.assignmentCompatBug2.types
+@@= skipped -24, +24 lines =@@
+ >0 : 0
+ 
+ var b3: { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; };
+->b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
++>b3 : { f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }
+ >f : (n: number) => number
+ >n : number
+ >g : (s: string) => number
+@@= skipped -12, +12 lines =@@
+ 
+ b3 = {
+ >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => number; g: (s: string) => number; m: number; }
+->b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
++>b3 : { f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }
+ >{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,} : { f: (n: number) => number; g: (s: string) => number; m: number; }
+ 
+     f: (n) => { return 0; },
+@@= skipped -23, +23 lines =@@
+ 
+ b3 = {
+ >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => number; g: (s: string) => number; }
+->b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
++>b3 : { f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }
+ >{    f: (n) => { return 0; },    g: (s) => { return 0; },} : { f: (n: number) => number; g: (s: string) => number; }
+ 
+     f: (n) => { return 0; },
+@@= skipped -19, +19 lines =@@
+ 
+ b3 = {
+ >b3 = {    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => number; m: number; }
+->b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
++>b3 : { f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }
+ >{    f: (n) => { return 0; },    m: 0,} : { f: (n: number) => number; m: number; }
+ 
+     f: (n) => { return 0; },
+@@= skipped -17, +17 lines =@@
+ 
+ b3 = {
+ >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
+->b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
++>b3 : { f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }
+ >{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
+ 
+     f: (n) => { return 0; },
+@@= skipped -32, +32 lines =@@
+ 
+ b3 = {
+ >b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
+->b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
++>b3 : { f: (n: number) => number; g: (s: string) => number; m: number; n?: number; k?: (a: any) => any; }
+ >{    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
+ 
+     f: (n) => { return 0; },

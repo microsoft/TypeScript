@@ -1,0 +1,10 @@
+--- old.staticMethodReferencingTypeArgument1.types
++++ new.staticMethodReferencingTypeArgument1.types
+@@= skipped -5, +5 lines =@@
+ 
+     export class List<T> {
+ >List : List<T>
++>T : T
+ 
+         next: List<T>;
+ >next : List<T>

@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/jsExtendsImplicitAny.ts] ////
+
+=== /a.d.ts ===
+declare class A<T> { x: T; }
+>A : A<T>
+>T : T
+>x : T
+
+=== /b.js ===
+class B extends A {}
+>B : B
+>A : typeof A
+
+new B().x;
+>new B().x : any
+>new B() : any
+>B : typeof B
+>x : any
+
+/** @augments A */
+class C extends A { }
+>C : C
+>A : typeof A
+
+new C().x;
+>new C().x : any
+>new C() : any
+>C : typeof C
+>x : any
+
+/** @augments A<number, number, number> */
+class D extends A {}
+>D : D
+>A : typeof A
+
+new D().x;
+>new D().x : any
+>new D() : any
+>D : typeof D
+>x : any
+

@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/noErrorUsingImportExportModuleAugmentationInDeclarationFile2.ts] ////
+
+=== 1.ts ===
+export var j = "hello"; // error
+>j : string
+>"hello" : "hello"
+
+=== 0.d.ts ===
+export = a;
+>a : number
+
+declare var a: number;
+>a : number
+

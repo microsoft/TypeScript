@@ -1,0 +1,154 @@
+--- old.contextualTypeShouldBeLiteral.types
++++ new.contextualTypeShouldBeLiteral.types
+@@= skipped -1, +1 lines =@@
+ 
+ === contextualTypeShouldBeLiteral.ts ===
+ interface X {
++>X : X
++
+     type: 'x';
+ >type : "x"
+ 
+@@= skipped -11, +13 lines =@@
+ }
+ 
+ interface Y {
++>Y : Y
++
+     type: 'y';
+ >type : "y"
+ 
+     value: 'none' | 'done';
+->value : "none" | "done"
++>value : "done" | "none"
+ 
+     method(): void;
+ >method : () => void
+@@= skipped -17, +19 lines =@@
+ foo({
+ >foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
+ >foo : (bar: X | Y) => void
+->{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method(): void; }
++>{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method: () => void; }
+ 
+     type: 'y',
+ >type : "y"
+@@= skipped -22, +22 lines =@@
+ >type : "y"
+ 
+         this.value;
+->this.value : "none" | "done"
++>this.value : "done" | "none"
+ >this : Y
+->value : "none" | "done"
++>value : "done" | "none"
+     }
+ });
+ 
+ interface X2 {
++>X2 : X2
++
+     type1: 'x';
+ >type1 : "x"
+ 
+@@= skipped -18, +20 lines =@@
+ }
+ 
+ interface Y2 {
++>Y2 : Y2
++
+     type2: 'y';
+ >type2 : "y"
+ 
+     value: 'none' | 'done';
+->value : "none" | "done"
++>value : "done" | "none"
+ 
+     method(): void;
+ >method : () => void
+@@= skipped -17, +19 lines =@@
+ foo2({
+ >foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
+ >foo2 : (bar: X2 | Y2) => void
+->{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
++>{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method: () => void; }
+ 
+     type2: 'y',
+ >type2 : "y"
+@@= skipped -14, +14 lines =@@
+ >method : () => void
+ 
+         this;
+->this : X2 | Y2
++>this : never
+ 
+         this.value;
+->this.value : string
+->this : X2 | Y2
+->value : string
++>this.value : any
++>this : never
++>value : any
+     }
+ });
+ 
+ interface X3 {
++>X3 : X3
++
+     type: 'x';
+ >type : "x"
+ 
+@@= skipped -21, +23 lines =@@
+ }
+ 
+ interface Y3 {
++>Y3 : Y3
++
+     type: 'y';
+ >type : "y"
+ 
+@@= skipped -33, +35 lines =@@
+ 
+ 
+ interface LikeA {
++>LikeA : LikeA
++
+     x: 'x';
+ >x : "x"
+ 
+@@= skipped -14, +16 lines =@@
+ }
+ 
+ interface LikeB {
++>LikeB : LikeB
++
+     x: 'xx';
+ >x : "xx"
+ 
+@@= skipped -15, +17 lines =@@
+ 
+ let xyz: LikeA | LikeB = {
+ >xyz : LikeA | LikeB
+->{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method(): void; }
++>{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method: () => void; }
+ 
+     x: 'x',
+ >x : "x"
+@@= skipped -43, +43 lines =@@
+ // Repro from #29168
+ 
+ interface TestObject {
++>TestObject : TestObject
++
+   type?: 'object';
+ >type : "object" | undefined
+ 
+@@= skipped -13, +15 lines =@@
+ }
+ 
+ interface TestString {
++>TestString : TestString
++
+   type: 'string';
+ >type : "string"
+ }

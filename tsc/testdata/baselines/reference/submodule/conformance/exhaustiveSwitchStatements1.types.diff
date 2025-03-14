@@ -1,0 +1,116 @@
+--- old.exhaustiveSwitchStatements1.types
++++ new.exhaustiveSwitchStatements1.types
+@@= skipped -139, +139 lines =@@
+ // Repro from #12668
+ 
+ interface Square { kind: "square"; size: number; }
++>Square : Square
+ >kind : "square"
+ >size : number
+ 
+ interface Rectangle { kind: "rectangle"; width: number; height: number; }
++>Rectangle : Rectangle
+ >kind : "rectangle"
+ >width : number
+ >height : number
+ 
+ interface Circle { kind: "circle"; radius: number; }
++>Circle : Circle
+ >kind : "circle"
+ >radius : number
+ 
+ interface Triangle { kind: "triangle"; side: number; }
++>Triangle : Triangle
+ >kind : "triangle"
+ >side : number
+ 
+@@= skipped -27, +31 lines =@@
+ >area : any
+ 
+     switch (s.kind) {
+->s.kind : "square" | "rectangle" | "circle" | "triangle"
++>s.kind : "circle" | "rectangle" | "square" | "triangle"
+ >s : Shape
+->kind : "square" | "rectangle" | "circle" | "triangle"
++>kind : "circle" | "rectangle" | "square" | "triangle"
+ 
+         case "square": area = s.size * s.size; break;
+ >"square" : "square"
+@@= skipped -83, +83 lines =@@
+ >() => {        switch (s.kind) {            case "square": return s.size * s.size;            case "rectangle": return s.width * s.height;            case "circle": return Math.PI * s.radius * s.radius;            case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;        }    } : () => number
+ 
+         switch (s.kind) {
+->s.kind : "square" | "rectangle" | "circle" | "triangle"
++>s.kind : "circle" | "rectangle" | "square" | "triangle"
+ >s : Shape
+->kind : "square" | "rectangle" | "circle" | "triangle"
++>kind : "circle" | "rectangle" | "square" | "triangle"
+ 
+             case "square": return s.size * s.size;
+ >"square" : "square"
+@@= skipped -217, +217 lines =@@
+ // Repro from #20409
+ 
+ interface Square2 {
++>Square2 : Square2
++
+     kind: "square";
+ >kind : "square"
+ 
+@@= skipped -8, +10 lines =@@
+ }
+ 
+ interface Circle2 {
++>Circle2 : Circle2
++
+     kind: "circle";
+ >kind : "circle"
+ 
+@@= skipped -16, +18 lines =@@
+ >s2 : Shape2
+ 
+     switch (s1.kind) {
+->s1.kind : "square" | "circle"
++>s1.kind : "circle" | "square"
+ >s1 : Shape2
+->kind : "square" | "circle"
++>kind : "circle" | "square"
+ 
+         case "square":
+ >"square" : "square"
+@@= skipped -14, +14 lines =@@
+ >"circle" : "circle"
+ 
+             switch (s2.kind) {
+->s2.kind : "square" | "circle"
++>s2.kind : "circle" | "square"
+ >s2 : Shape2
+->kind : "square" | "circle"
++>kind : "circle" | "square"
+ 
+                 case "square":
+ >"square" : "square"
+@@= skipped -29, +29 lines =@@
+ >s2 : Shape2
+ 
+     switch (s1.kind) {
+->s1.kind : "square" | "circle"
++>s1.kind : "circle" | "square"
+ >s1 : Shape2
+->kind : "square" | "circle"
++>kind : "circle" | "square"
+ 
+         case "square":
+ >"square" : "square"
+@@= skipped -14, +14 lines =@@
+ >"circle" : "circle"
+ 
+             switch (s2.kind) {
+->s2.kind : "square" | "circle"
++>s2.kind : "circle" | "square"
+ >s2 : Shape2
+->kind : "square" | "circle"
++>kind : "circle" | "square"
+ 
+                 case "square":
+ >"square" : "square"

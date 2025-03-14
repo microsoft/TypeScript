@@ -1,0 +1,52 @@
+--- old.exportDefaultProperty.types
++++ new.exportDefaultProperty.types
+@@= skipped -2, +2 lines =@@
+ === index.ts ===
+ /// <reference path="declarations.d.ts" />
+ import fooBar from "foobar";
+->fooBar : typeof fooBar
++>fooBar : typeof bar
+ 
+ import X = fooBar.X;
+ >X : number
+->fooBar : typeof fooBar
++>fooBar : typeof bar
+ >X : number
+ 
+ import X2 from "foobarx";
+@@= skipped -53, +53 lines =@@
+ >"foobar" : typeof import("foobar")
+ 
+     export default foo.bar;
+->foo.bar : typeof foo.bar
++>foo.bar : typeof bar
+ >foo : typeof foo
+->bar : typeof foo.bar
++>bar : typeof bar
+ }
+ 
+ declare module "foobarx" {
+@@= skipped -10, +10 lines =@@
+ 
+     export default foo.bar.X;
+ >foo.bar.X : number
+->foo.bar : typeof foo.bar
++>foo.bar : typeof bar
+ >foo : typeof foo
+->bar : typeof foo.bar
++>bar : typeof bar
+ >X : number
+ }
+ 
+@@= skipped -20, +20 lines =@@
+ >0 : 0
+ }
+ export default A.B;
+->A.B : typeof A.B
++>A.B : typeof B
+ >A : typeof A
+->B : typeof A.B
++>B : typeof B
+ 
+ === b.ts ===
+ export default "foo".length;

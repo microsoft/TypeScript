@@ -1,0 +1,13 @@
+--- old.exportDefaultForNonInstantiatedModule.types
++++ new.exportDefaultForNonInstantiatedModule.types
+@@= skipped -1, +1 lines =@@
+ 
+ === exportDefaultForNonInstantiatedModule.ts ===
+ module m {
++>m : any
++
+     export interface foo {
++>foo : foo
+     }
+ }
+ // Should not be emitted

@@ -1,0 +1,37 @@
+--- old.assignmentCompatability9.types
++++ new.assignmentCompatability9.types
+@@= skipped -4, +4 lines =@@
+ >__test1__ : typeof __test1__
+ 
+     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
++>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
++>T : T
++>U : U
+ >one : T
+ >two : U
+ >obj4 : interfaceWithPublicAndOptional<number, string>
+@@= skipped -16, +19 lines =@@
+ 
+     export          class classWithOptional<T> { constructor(public one?: T) {} }                       var x3 = new classWithOptional<number>();;
+ >classWithOptional : classWithOptional<T>
++>T : T
+ >one : T
+ >x3 : classWithOptional<number>
+ >new classWithOptional<number>() : classWithOptional<number>
+@@= skipped -10, +11 lines =@@
+ >x3 : classWithOptional<number>
+ }
+ __test2__.__val__x3 = __test1__.__val__obj4
+->__test2__.__val__x3 = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+->__test2__.__val__x3 : __test2__.classWithOptional<number>
++>__test2__.__val__x3 = __test1__.__val__obj4 : interfaceWithPublicAndOptional<number, string>
++>__test2__.__val__x3 : classWithOptional<number>
+ >__test2__ : typeof __test2__
+->__val__x3 : __test2__.classWithOptional<number>
+->__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
++>__val__x3 : classWithOptional<number>
++>__test1__.__val__obj4 : interfaceWithPublicAndOptional<number, string>
+ >__test1__ : typeof __test1__
+->__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
++>__val__obj4 : interfaceWithPublicAndOptional<number, string>
+ 

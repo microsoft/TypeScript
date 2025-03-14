@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/moduleAugmentationGlobal5.ts] ////
+
+=== f3.ts ===
+
+/// <reference path="f1.d.ts"/>
+/// <reference path="f2.d.ts"/>
+import "A";
+import "B";
+
+
+=== f1.d.ts ===
+declare module "A" {
+>"A" : typeof import("A")
+
+    global {
+>global : any
+
+        interface Something {x}
+>Something : Something
+>x : any
+    }
+}
+=== f2.d.ts ===
+declare module "B" {
+>"B" : typeof import("B")
+
+    global {
+>global : any
+
+        interface Something {y}
+>Something : Something
+>y : any
+    }
+}

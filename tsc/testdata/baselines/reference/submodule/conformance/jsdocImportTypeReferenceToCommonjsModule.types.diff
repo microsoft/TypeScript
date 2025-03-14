@@ -1,0 +1,20 @@
+--- old.jsdocImportTypeReferenceToCommonjsModule.types
++++ new.jsdocImportTypeReferenceToCommonjsModule.types
+@@= skipped -12, +12 lines =@@
+ === test.js ===
+ /** @param {import('./ex')} a */
+ function demo(a) {
+->demo : (a: { fix: boolean; }) => void
+->a : { fix: boolean; }
++>demo : (a: any) => void
++>a : any
+ 
+     a.fix
+->a.fix : boolean
+->a : { fix: boolean; }
+->fix : boolean
++>a.fix : any
++>a : any
++>fix : any
+ }
+ 

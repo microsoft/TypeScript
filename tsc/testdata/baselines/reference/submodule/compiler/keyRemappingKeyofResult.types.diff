@@ -1,0 +1,111 @@
+--- old.keyRemappingKeyofResult.types
++++ new.keyRemappingKeyofResult.types
+@@= skipped -20, +20 lines =@@
+ 
+ type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
+ >Remapped : Remapped
++>K : K
+ 
+ /* type Remapped = {
+     str: any;
+@@= skipped -28, +29 lines =@@
+ // equivalently, with an unresolved generic (no `exclude` shenanigans, since conditions won't execute):
+ function f<T>() {
+ >f : <T>() => void
++>T : T
+ 
+     type Orig = { [k: string]: any, str: any, [sym]: any } & T;
+->Orig : { [k: string]: any; str: any; [sym]: any; } & T
++>Orig : Orig
+ >k : string
+ >str : any
+ >[sym] : any
+@@= skipped -32, +33 lines =@@
+     // type Okay = string | number | typeof sym
+     
+     type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
+->Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
++>Remapped : Remapped
++>K : K
+ 
+     /* type Remapped = {
+         str: any;
+@@= skipped -9, +10 lines =@@
+     // no string index signature, right?
+     
+     type Oops = keyof Remapped;
+->Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
++>Oops : keyof Remapped
+ 
+     let x: Oops;
+->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
++>x : keyof Remapped
+ 
+     x = sym;
+ >x = sym : unique symbol
+->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
++>x : keyof Remapped
+ >sym : unique symbol
+ 
+     x = "str";
+ >x = "str" : "str"
+->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
++>x : keyof Remapped
+ >"str" : "str"
+ }
+ 
+ // and another generic case with a _distributive_ mapping, to trigger a different branch in `getIndexType`
+ function g<T>() {
+ >g : <T>() => void
++>T : T
+ 
+     type Orig = { [k: string]: any, str: any, [sym]: any } & T;
+->Orig : { [k: string]: any; str: any; [sym]: any; } & T
++>Orig : Orig
+ >k : string
+ >str : any
+ >[sym] : any
+@@= skipped -51, +52 lines =@@
+     // type Okay = string | number | typeof sym
+ 
+     type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
+->NonIndex : {} extends Record<T, any> ? never : T
++>NonIndex : NonIndex<T>
++>T : T
+ 
+     type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
+->DistributiveNonIndex : T extends unknown ? {} extends Record<T, any> ? never : T : never
++>DistributiveNonIndex : DistributiveNonIndex<T>
++>T : T
+     
+     type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
+->Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
++>Remapped : Remapped
++>K : K
+ 
+     /* type Remapped = {
+         str: any;
+@@= skipped -15, +18 lines =@@
+     // no string index signature, right?
+     
+     type Oops = keyof Remapped;
+->Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
++>Oops : keyof Remapped
+ 
+     let x: Oops;
+->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
++>x : keyof Remapped
+ 
+     x = sym;
+ >x = sym : unique symbol
+->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
++>x : keyof Remapped
+ >sym : unique symbol
+ 
+     x = "str";
+ >x = "str" : "str"
+->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
++>x : keyof Remapped
+ >"str" : "str"
+ }
+ 

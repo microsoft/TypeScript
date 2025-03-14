@@ -1,0 +1,166 @@
+--- old.typeGuardOfFormTypeOfFunction.types
++++ new.typeGuardOfFormTypeOfFunction.types
+@@= skipped -6, +6 lines =@@
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : any
+ >"function" : "function"
+ 
+@@= skipped -15, +15 lines =@@
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : unknown
+ >"function" : "function"
+ 
+@@= skipped -15, +15 lines =@@
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : {}
+ >"function" : "function"
+ 
+@@= skipped -11, +11 lines =@@
+ 
+ function f4<T>(x: T) {
+ >f4 : <T>(x: T) => void
++>T : T
+ >x : T
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : T
+ >"function" : "function"
+ 
+@@= skipped -20, +21 lines =@@
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : { s: string; }
+ >"function" : "function"
+ 
+@@= skipped -15, +15 lines =@@
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : () => string
+ >"function" : "function"
+ 
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ function f10(x: string | (() => string)) {
+->f10 : (x: string | (() => string)) => void
+->x : string | (() => string)
++>f10 : (x: string | () => string) => void
++>x : string | () => string
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->x : string | (() => string)
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>x : string | () => string
+ >"function" : "function"
+ 
+         x;  // () => string
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ function f11(x: { s: string } | (() => string)) {
+->f11 : (x: { s: string; } | (() => string)) => void
+->x : { s: string; } | (() => string)
++>f11 : (x: { s: string; } | () => string) => void
++>x : { s: string; } | () => string
+ >s : string
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->x : { s: string; } | (() => string)
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>x : { s: string; } | () => string
+ >"function" : "function"
+ 
+         x;  // () => string
+@@= skipped -27, +27 lines =@@
+ 
+     if (typeof x === "function") {
+ >typeof x === "function" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : { s: string; } | { n: number; }
+ >"function" : "function"
+ 
+@@= skipped -17, +17 lines =@@
+ 
+ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
+ >f100 : <T, K extends keyof T>(obj: T, keys: K[]) => void
++>T : T
++>K : K
+ >obj : T
+ >keys : K[]
+ 
+@@= skipped -15, +17 lines =@@
+ 
+         if (typeof item == 'function')
+ >typeof item == 'function' : boolean
+->typeof item : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof item : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >item : T[K]
+ >'function' : "function"
+ 
+             item.call(obj);
+ >item.call(obj) : any
+->item.call : (this: Function, thisArg: any, ...argArray: any[]) => any
++>item.call : (thisArg: any, ...argArray: any[]) => any
+ >item : T[K] & Function
+->call : (this: Function, thisArg: any, ...argArray: any[]) => any
++>call : (thisArg: any, ...argArray: any[]) => any
+ >obj : T
+     }
+ }
+@@= skipped -16, +16 lines =@@
+ // Repro from #49316
+ 
+ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
+->configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
+->reducer : Record<keyof S, () => void> | (() => void)
++>configureStore : <S extends object>(reducer: Record<keyof S, () => void> | () => void) => void
++>S : S
++>reducer : Record<keyof S, () => void> | () => void
+ 
+     let rootReducer: () => void;
+ >rootReducer : () => void
+ 
+     if (typeof reducer === 'function') {
+ >typeof reducer === 'function' : boolean
+->typeof reducer : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->reducer : Record<keyof S, () => void> | (() => void)
++>typeof reducer : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>reducer : Record<keyof S, () => void> | () => void
+ >'function' : "function"
+ 
+         rootReducer = reducer;
+@@= skipped -26, +27 lines =@@
+     return typeof x === "object" && x.anything;
+ >typeof x === "object" && x.anything : any
+ >typeof x === "object" : boolean
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | Record<string, any>
+ >"object" : "object"
+ >x.anything : any

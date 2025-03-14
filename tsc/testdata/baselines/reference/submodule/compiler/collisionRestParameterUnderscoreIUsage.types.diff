@@ -1,0 +1,20 @@
+--- old.collisionRestParameterUnderscoreIUsage.types
++++ new.collisionRestParameterUnderscoreIUsage.types
+@@= skipped -1, +1 lines =@@
+ 
+ === collisionRestParameterUnderscoreIUsage.ts ===
+ declare var console: { log(msg?: string): void; };
+->console : { log(msg?: string): void; }
++>console : { log: (msg?: string) => void; }
+ >log : (msg?: string) => void
+ >msg : string
+ 
+@@= skipped -17, +17 lines =@@
+         console.log(_i); // This should result in error
+ >console.log(_i) : void
+ >console.log : (msg?: string) => void
+->console : { log(msg?: string): void; }
++>console : { log: (msg?: string) => void; }
+ >log : (msg?: string) => void
+ >_i : string
+     }

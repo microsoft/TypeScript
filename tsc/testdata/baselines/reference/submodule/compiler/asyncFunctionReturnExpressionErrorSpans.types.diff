@@ -1,0 +1,11 @@
+--- old.asyncFunctionReturnExpressionErrorSpans.types
++++ new.asyncFunctionReturnExpressionErrorSpans.types
+@@= skipped -1, +1 lines =@@
+ 
+ === asyncFunctionReturnExpressionErrorSpans.ts ===
+ interface Foo {
++>Foo : Foo
++
+     bar: {
+ >bar : { baz: { inner: { thing: string; }; }; }
+ 

@@ -1,0 +1,25 @@
+--- old.circularMultipleAssignmentDeclaration.types
++++ new.circularMultipleAssignmentDeclaration.types
+@@= skipped -3, +3 lines =@@
+ ns.next = ns.next || { shared: {} };
+ >ns.next = ns.next || { shared: {} } : any
+ >ns.next : any
+->ns : typeof ns
++>ns : any
+ >next : any
+ >ns.next || { shared: {} } : any
+ >ns.next : any
+->ns : typeof ns
++>ns : any
+ >next : any
+ >{ shared: {} } : { shared: {}; }
+ >shared : {}
+@@= skipped -15, +15 lines =@@
+ >ns.next.shared.mymethod : any
+ >ns.next.shared : any
+ >ns.next : any
+->ns : typeof ns
++>ns : any
+ >next : any
+ >shared : any
+ >mymethod : any

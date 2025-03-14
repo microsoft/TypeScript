@@ -1,0 +1,59 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment15.ts] ////
+
+=== a.js ===
+var Outer = {};
+>Outer : {}
+>{} : {}
+
+Outer.Inner = class {
+>Outer.Inner = class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
+>Outer.Inner : any
+>Outer : {}
+>Inner : any
+>class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
+
+    constructor() {
+        this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+    }
+    m() { }
+>m : () => void
+}
+
+/** @type {Outer.Inner} */
+var inner
+>inner : any
+
+inner.x
+>inner.x : any
+>inner : any
+>x : any
+
+inner.m()
+>inner.m() : any
+>inner.m : any
+>inner : any
+>m : any
+
+var inno = new Outer.Inner()
+>inno : any
+>new Outer.Inner() : any
+>Outer.Inner : any
+>Outer : {}
+>Inner : any
+
+inno.x
+>inno.x : any
+>inno : any
+>x : any
+
+inno.m()
+>inno.m() : any
+>inno.m : any
+>inno : any
+>m : any
+

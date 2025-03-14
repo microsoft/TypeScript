@@ -1,0 +1,11 @@
+--- old.symbolType16.types
++++ new.symbolType16.types
+@@= skipped -1, +1 lines =@@
+ 
+ === symbolType16.ts ===
+ interface Symbol {
++>Symbol : Symbol
++
+     newSymbolProp: number;
+ >newSymbolProp : number
+ }

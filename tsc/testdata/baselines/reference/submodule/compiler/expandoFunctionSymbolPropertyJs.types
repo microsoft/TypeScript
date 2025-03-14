@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/expandoFunctionSymbolPropertyJs.ts] ////
+
+=== /types.ts ===
+export const symb = Symbol();
+>symb : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export interface TestSymb {
+>TestSymb : TestSymb
+
+  (): void;
+  readonly [symb]: boolean;
+>[symb] : boolean
+>symb : unique symbol
+}
+
+=== /a.js ===
+import { symb } from "./types";
+>symb : unique symbol
+
+/**
+ * @returns {import("./types").TestSymb}
+ */
+export function test() {
+>test : () => { (): void; inner[symb]: boolean; }
+
+  function inner() {}
+>inner : { (): void; inner[symb]: boolean; }
+
+  inner[symb] = true;
+>inner[symb] = true : true
+>inner[symb] : boolean
+>inner : { (): void; inner[symb]: boolean; }
+>symb : unique symbol
+>true : true
+
+  return inner;
+>inner : { (): void; inner[symb]: boolean; }
+}

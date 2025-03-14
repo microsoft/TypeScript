@@ -1,0 +1,43 @@
+--- old.correctOrderOfPromiseMethod.types
++++ new.correctOrderOfPromiseMethod.types
+@@= skipped -1, +1 lines =@@
+ 
+ === correctOrderOfPromiseMethod.ts ===
+ interface A {
++>A : A
++
+     id: string
+ >id : string
+ }
+ 
+ interface B {
++>B : B
++
+     id: string
+ >id : string
+ 
+@@= skipped -30, +34 lines =@@
+ >resultB : B[]
+ >await Promise.all([        providerA(),        providerB(),    ]) : [A[], B[]]
+ >Promise.all([        providerA(),        providerB(),    ]) : Promise<[A[], B[]]>
+->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >Promise : PromiseConstructor
+->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >[        providerA(),        providerB(),    ] : [Promise<A[]>, Promise<B[]>]
+ 
+         providerA(),
+@@= skipped -46, +46 lines =@@
+ const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a", "b", "c"]);
+ >expected : Promise<["a", "b", "c"]>
+ >Promise.all(undefined as readonly ["a", "b", "c"]) : Promise<["a", "b", "c"]>
+->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
++>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
+ >Promise : PromiseConstructor
+->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+->undefined as readonly ["a", "b", "c"] : readonly ["a", "b", "c"]
++>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
++>undefined as readonly ["a", "b", "c"] : ["a", "b", "c"]
+ >undefined : undefined
+ 

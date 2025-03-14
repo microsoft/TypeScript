@@ -1,0 +1,32 @@
+--- old.crashDeclareGlobalTypeofExport.types
++++ new.crashDeclareGlobalTypeofExport.types
+@@= skipped -1, +1 lines =@@
+ 
+ === bar.d.ts ===
+ import * as foo from './foo'
+->foo : { default: Root; }
++>foo : Root
+ 
+ export as namespace foo
+->foo : { default: Root; }
++>foo : Root
+ 
+ export = foo;
+->foo : { default: Root; }
++>foo : Root
+ 
+ declare global {
+ >global : typeof global
+ 
+     const foo: typeof foo;
+ >foo : any
+->foo : any
+ }
+ 
+ === foo.d.ts ===
+ interface Root {
++>Root : Root
++
+     /**
+      * A .default property for ES6 default import compatibility
+      */

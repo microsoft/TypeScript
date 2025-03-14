@@ -1,0 +1,15 @@
+--- old.exportEqualsOfModule.types
++++ new.exportEqualsOfModule.types
+@@= skipped -21, +21 lines =@@
+ >'popsicle' : typeof import("popsicle")
+ 
+     import alias = require('~popsicle/dist/common');
+->alias : typeof alias
++>alias : typeof import("~popsicle/dist/common")
+ 
+     export = alias;
+->alias : typeof alias
++>alias : typeof import("~popsicle/dist/common")
+ }
+ 
+ declare module 'popsicle-proxy-agent' {

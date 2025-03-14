@@ -1,0 +1,18 @@
+--- old.unionPropertyOfProtectedAndIntersectionProperty.types
++++ new.unionPropertyOfProtectedAndIntersectionProperty.types
+@@= skipped -18, +18 lines =@@
+ 
+ type Nothing<V extends Foo> = void;
+ >Nothing : void
++>V : V
+ 
+ type Broken<V extends Array<Foo | Bar>> = {
+ >Broken : Broken<V>
++>V : V
+ 
+   readonly [P in keyof V]: V[P] extends Foo ? Nothing<V[P]> : never;
++>P : P
++
+ };
+ 
+ // The issue above, #49517, is fixed very indirectly. Here's some code

@@ -1,0 +1,34 @@
+--- old.narrowExceptionVariableInCatchClause.types
++++ new.narrowExceptionVariableInCatchClause.types
+@@= skipped -1, +1 lines =@@
+ 
+ === narrowExceptionVariableInCatchClause.ts ===
+ declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
+->isFooError : (x: any) => x is { type: "foo"; dontPanic(): any; }
++>isFooError : (x: any) => x is { type: "foo"; dontPanic: () => any; }
+ >x : any
+ >type : "foo"
+ >dontPanic : () => any
+@@= skipped -16, +16 lines =@@
+ 
+         if (isFooError(err)) {
+ >isFooError(err) : boolean
+->isFooError : (x: any) => x is { type: "foo"; dontPanic(): any; }
++>isFooError : (x: any) => x is { type: "foo"; dontPanic: () => any; }
+ >err : any
+ 
+             err.dontPanic(); // OK
+ >err.dontPanic() : any
+ >err.dontPanic : () => any
+->err : { type: "foo"; dontPanic(): any; }
++>err : { type: "foo"; dontPanic: () => any; }
+ >dontPanic : () => any
+ 
+             err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
+ >err.doPanic() : any
+ >err.doPanic : any
+->err : { type: "foo"; dontPanic(): any; }
++>err : { type: "foo"; dontPanic: () => any; }
+ >doPanic : any
+         }
+ 

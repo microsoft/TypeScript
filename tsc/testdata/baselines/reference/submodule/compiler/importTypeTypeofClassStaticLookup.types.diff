@@ -1,0 +1,8 @@
+--- old.importTypeTypeofClassStaticLookup.types
++++ new.importTypeTypeofClassStaticLookup.types
+@@= skipped -11, +11 lines =@@
+ export const foo: typeof import("./a").A.foo;
+ >foo : () => void
+ >A : any
+->foo : any
+ 

@@ -1,0 +1,48 @@
+--- old.jsDeclarationsExportAssignedConstructorFunction.types
++++ new.jsDeclarationsExportAssignedConstructorFunction.types
+@@= skipped -2, +2 lines =@@
+ === jsDeclarationsExportAssignedConstructorFunction.js ===
+ /** @constructor */
+ module.exports.MyClass = function() {
+->module.exports.MyClass = function() {    this.x = 1} : typeof MyClass
+->module.exports.MyClass : typeof MyClass
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->MyClass : typeof MyClass
+->function() {    this.x = 1} : typeof MyClass
++>module.exports.MyClass = function() {    this.x = 1} : () => void
++>module.exports.MyClass : any
++>module.exports : any
++>module : any
++>exports : any
++>MyClass : any
++>function() {    this.x = 1} : () => void
+ 
+     this.x = 1
+ >this.x = 1 : 1
+ >this.x : any
+->this : this
++>this : any
+ >x : any
+ >1 : 1
+ }
+ module.exports.MyClass.prototype = {
+ >module.exports.MyClass.prototype = {    a: function() {    }} : { a: () => void; }
+->module.exports.MyClass.prototype : { a: () => void; }
+->module.exports.MyClass : typeof MyClass
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->MyClass : typeof MyClass
+->prototype : { a: () => void; }
++>module.exports.MyClass.prototype : any
++>module.exports.MyClass : any
++>module.exports : any
++>module : any
++>exports : any
++>MyClass : any
++>prototype : any
+ >{    a: function() {    }} : { a: () => void; }
+ 
+     a: function() {

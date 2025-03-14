@@ -1,0 +1,11 @@
+--- old.avoidCycleWithVoidExpressionReturnedFromArrow.types
++++ new.avoidCycleWithVoidExpressionReturnedFromArrow.types
+@@= skipped -6, +6 lines =@@
+ >error : unknown
+ 
+ interface HowlOptions {
++>HowlOptions : HowlOptions
++
+   onplayerror?: HowlErrorCallback | undefined;
+ >onplayerror : HowlErrorCallback | undefined
+ }

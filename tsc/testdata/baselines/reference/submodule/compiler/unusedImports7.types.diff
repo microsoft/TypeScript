@@ -1,0 +1,10 @@
+--- old.unusedImports7.types
++++ new.unusedImports7.types
+@@= skipped -19, +19 lines =@@
+ 
+ === file2.ts ===
+ import * as n from "./file1"
+->n : typeof n
++>n : typeof import("file1")
+ 
+ 

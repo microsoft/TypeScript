@@ -1,0 +1,108 @@
+--- old.checkJsdocTypeTag5.types
++++ new.checkJsdocTypeTag5.types
+@@= skipped -3, +3 lines =@@
+ // all 6 should error on return statement/expression
+ /** @type {(x: number) => string} */
+ function h(x) { return x }
+->h : (x: number) => string
+->x : number
+->x : number
++>h : (x: any) => any
++>x : any
++>x : any
+ 
+ /** @type {(x: number) => string} */
+ var f = x => x
+->f : (x: number) => string
+->x => x : (x: number) => string
+->x : number
+->x : number
++>f : (x: any) => any
++>x => x : (x: any) => any
++>x : any
++>x : any
+ 
+ /** @type {(x: number) => string} */
+ var g = function (x) { return x }
+->g : (x: number) => string
+->function (x) { return x } : (x: number) => string
+->x : number
+->x : number
++>g : (x: any) => any
++>function (x) { return x } : (x: any) => any
++>x : any
++>x : any
+ 
+ /** @type {{ (x: number): string }} */
+ function i(x) { return x }
+->i : (x: number) => string
+->x : number
+->x : number
++>i : (x: any) => any
++>x : any
++>x : any
+ 
+ /** @type {{ (x: number): string }} */
+ var j = x => x
+->j : (x: number) => string
+->x => x : (x: number) => string
+->x : number
+->x : number
++>j : (x: any) => any
++>x => x : (x: any) => any
++>x : any
++>x : any
+ 
+ /** @type {{ (x: number): string }} */
+ var k = function (x) { return x }
+->k : (x: number) => string
+->function (x) { return x } : (x: number) => string
+->x : number
+->x : number
++>k : (x: any) => any
++>function (x) { return x } : (x: any) => any
++>x : any
++>x : any
+ 
+ 
+ /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
+ /** @type {Argle} */
+ function blargle(s) {
+->blargle : (x: "hi" | "bye") => 0 | 1 | 2
+->s : "hi" | "bye"
++>blargle : (s: any) => number
++>s : any
+ 
+     return 0;
+ >0 : 0
+@@= skipped -51, +51 lines =@@
+ 
+ /** @type {0 | 1 | 2} - assignment should not error */
+ var zeroonetwo = blargle('hi')
+->zeroonetwo : 0 | 1 | 2
+->blargle('hi') : 0 | 1 | 2
+->blargle : (x: "hi" | "bye") => 0 | 1 | 2
++>zeroonetwo : number
++>blargle('hi') : number
++>blargle : (s: any) => number
+ >'hi' : "hi"
+ 
+ /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
+@@= skipped -15, +15 lines =@@
+     return typeof sb === 'string' ? 1 : 2;
+ >typeof sb === 'string' ? 1 : 2 : 1 | 2
+ >typeof sb === 'string' : boolean
+->typeof sb : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>typeof sb : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >sb : any
+ >'string' : "string"
+ >1 : 1
+@@= skipped -9, +9 lines =@@
+ 
+ /** @type {2 | 3} - overloads are not supported, so there will be an error */
+ var twothree = monaLisa(false);
+->twothree : 2 | 3
++>twothree : number
+ >monaLisa(false) : 1 | 2
+ >monaLisa : (sb: any) => 1 | 2
+ >false : false

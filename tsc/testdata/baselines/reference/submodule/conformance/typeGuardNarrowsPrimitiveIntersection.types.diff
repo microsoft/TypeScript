@@ -1,0 +1,49 @@
+--- old.typeGuardNarrowsPrimitiveIntersection.types
++++ new.typeGuardNarrowsPrimitiveIntersection.types
+@@= skipped -5, +5 lines =@@
+ >__tag : any
+ 
+ declare function isNonBlank(value: string) : value is (string & Tag);
+->isNonBlank : (value: string) => value is (string & Tag)
++>isNonBlank : (value: string) => value is string & Tag
+ >value : string
+ 
+ declare function doThis(value: string & Tag): void;
+@@= skipped -16, +16 lines =@@
+ 
+ if (isNonBlank(value)) {
+ >isNonBlank(value) : boolean
+->isNonBlank : (value: string) => value is (string & Tag)
++>isNonBlank : (value: string) => value is string & Tag
+ >value : string
+ 
+     doThis(value);
+@@= skipped -20, +20 lines =@@
+ >Tag2 : Tag2
+ 
+ declare function isNonBlank2(value: string) : value is (string & Tag2);
+->isNonBlank2 : (value: string) => value is (string & Tag2)
++>isNonBlank2 : (value: string) => value is never
+ >value : string
+ 
+ declare function doThis2(value: string & Tag2): void;
+->doThis2 : (value: string & Tag2) => void
++>doThis2 : (value: never) => void
+ >value : never
+ 
+ declare function doThat2(value: string) : void;
+@@= skipped -13, +13 lines =@@
+ 
+ if (isNonBlank2(value)) {
+ >isNonBlank2(value) : boolean
+->isNonBlank2 : (value: string) => value is (string & Tag2)
++>isNonBlank2 : (value: string) => value is never
+ >value : string
+ 
+     doThis2(value);
+ >doThis2(value) : void
+->doThis2 : (value: string & Tag2) => void
++>doThis2 : (value: never) => void
+ >value : never
+ 
+ } else {

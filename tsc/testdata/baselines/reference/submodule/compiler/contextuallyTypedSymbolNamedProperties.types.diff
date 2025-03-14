@@ -1,0 +1,35 @@
+--- old.contextuallyTypedSymbolNamedProperties.types
++++ new.contextuallyTypedSymbolNamedProperties.types
+@@= skipped -19, +19 lines =@@
+ 
+     | {type: typeof A, data: string}
+ >type : unique symbol
+->A : unique symbol
+ >data : string
+ 
+     | {type: typeof B, data: number}
+ >type : unique symbol
+->B : unique symbol
+ >data : number
+ 
+ declare const ab: Action;
+ >ab : Action
+ 
+ declare function f<T extends { type: string | symbol }>(action: T, blah: { [K in T['type']]: (p: K) => void }): any;
+->f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void; }) => any
++>f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void }) => any
++>T : T
+ >type : string | symbol
+ >action : T
+->blah : { [K in T["type"]]: (p: K) => void; }
++>blah : { [K in T["type"]]: (p: K) => void }
++>K : K
+ >p : K
+ 
+ f(ab, {
+ >f(ab, {    [A]: ap => { ap.description },    [B]: bp => { bp.description },}) : any
+->f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void; }) => any
++>f : <T extends { type: string | symbol; }>(action: T, blah: { [K in T["type"]]: (p: K) => void }) => any
+ >ab : Action
+ >{    [A]: ap => { ap.description },    [B]: bp => { bp.description },} : { [A]: (ap: unique symbol) => void; [B]: (bp: unique symbol) => void; }
+ 

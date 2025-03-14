@@ -1,0 +1,91 @@
+--- old.mappedTypeTupleConstraintAssignability.types
++++ new.mappedTypeTupleConstraintAssignability.types
+@@= skipped -4, +4 lines =@@
+ 
+ type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+ >Writeable : Writeable<T>
++>T : T
++>P : P
+ 
+ type EnumValues = [string, ...string[]];
+ >EnumValues : EnumValues
+ 
+ type Values<T extends EnumValues> = { [k in T[number]]: k; };
+ >Values : Values<T>
++>T : T
++>k : k
+ 
+ declare class ZodEnum<T extends [string, ...string[]]> {
+ >ZodEnum : ZodEnum<T>
++>T : T
+ 
+   get enum(): Values<T>
+ >enum : Values<T>
+ }
+ 
+ declare function createZodEnum<U extends string, T extends Readonly<[U, ...U[]]>>(values: T): ZodEnum<Writeable<T>>;
+->createZodEnum : <U extends string, T extends Readonly<[U, ...U[]]>>(values: T) => ZodEnum<Writeable<T>>
++>createZodEnum : <U extends string, T extends [U, ...U[]]>(values: T) => ZodEnum<Writeable<T>>
++>U : U
++>T : T
+ >values : T
+ 
+ // https://github.com/microsoft/TypeScript/issues/53359#issuecomment-1475390607
+ 
+ type Maybe<T> = T | null | undefined;
+ >Maybe : Maybe<T>
++>T : T
+ 
+ type AnyTuple = [unknown, ...unknown[]];
+ >AnyTuple : AnyTuple
+@@= skipped -34, +42 lines =@@
+ >Flags : Flags
+ 
+ interface ISchema<T, C = any, F extends Flags = any, D = any> {
++>ISchema : ISchema<T, C, F, D>
++>T : T
++>C : C
++>F : F
++>D : D
++
+   __flags: F;
+ >__flags : F
+ 
+@@= skipped -17, +23 lines =@@
+ >TupleSchema : TupleSchema<TType, TContext, TDefault, TFlags>
+ 
+   TType extends Maybe<AnyTuple> = AnyTuple | undefined,
++>TType : TType
++
+   TContext = AnyObject,
++>TContext : TContext
++
+   TDefault = undefined,
++>TDefault : TDefault
++
+   TFlags extends Flags = ""
++>TFlags : TFlags
++
+ > {
+   constructor(schemas: [ISchema<any>, ...ISchema<any>[]]);
+ >schemas : [ISchema<any, any, any, any>, ...ISchema<any, any, any, any>[]]
+ }
+ 
+ export function create<T extends AnyTuple>(schemas: {
+->create : <T extends AnyTuple>(schemas: { [K in keyof T]: ISchema<T[K]>; }) => TupleSchema<T | undefined, AnyObject, undefined, "">
+->schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
++>create : <T extends AnyTuple>(schemas: { [K in keyof T]: ISchema<T[K], any, any, any> }) => TupleSchema<T | undefined, AnyObject, undefined, "">
++>T : T
++>schemas : { [K in keyof T]: ISchema<T[K], any, any, any> }
+ 
+   [K in keyof T]: ISchema<T[K]>;
++>K : K
++
+ }) {
+   return new TupleSchema<T | undefined>(schemas);
+ >new TupleSchema<T | undefined>(schemas) : TupleSchema<T | undefined, AnyObject, undefined, "">
+ >TupleSchema : typeof TupleSchema
+->schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
++>schemas : { [K in keyof T]: ISchema<T[K], any, any, any> }
+ }
+ 

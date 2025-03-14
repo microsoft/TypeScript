@@ -1,0 +1,32 @@
+//// [tests/cases/compiler/experimentalDecoratorMetadataUnresolvedTypeObjectInEmit.ts] ////
+
+=== types.d.ts ===
+declare namespace A {
+>A : any
+
+    export namespace B {
+>B : any
+
+        export namespace C {
+>C : any
+
+            export namespace D {
+>D : any
+            }
+        }
+    }
+}
+=== usage.ts ===
+class Foo {
+>Foo : Foo
+
+    f(@decorate user: A.B.C.D.E): void {}
+>f : (user: E) => void
+>decorate : any
+>user : E
+>A : any
+>B : any
+>C : any
+>D : any
+}
+

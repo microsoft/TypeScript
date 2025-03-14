@@ -1,0 +1,16 @@
+--- old.importAsBaseClass.types
++++ new.importAsBaseClass.types
+@@= skipped -1, +1 lines =@@
+ 
+ === importAsBaseClass_1.ts ===
+ import Greeter = require("./importAsBaseClass_0");
+->Greeter : typeof Greeter
++>Greeter : typeof import("importAsBaseClass_0")
+ 
+ class Hello extends Greeter { }
+ >Hello : Hello
+->Greeter : typeof Greeter
++>Greeter : typeof import("importAsBaseClass_0")
+ 
+ === importAsBaseClass_0.ts ===
+ export class Greeter {

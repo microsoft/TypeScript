@@ -1,0 +1,15 @@
+--- old.genericConstraintSatisfaction1.types
++++ new.genericConstraintSatisfaction1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === genericConstraintSatisfaction1.ts ===
+ interface I<S> {
++>I : I<S>
++>S : S
++
+    f: <T extends S>(x: T) => void
+ >f : <T extends S>(x: T) => void
++>T : T
+ >x : T
+ }
+  

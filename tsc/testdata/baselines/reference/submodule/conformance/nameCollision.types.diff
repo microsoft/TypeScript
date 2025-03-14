@@ -1,0 +1,65 @@
+--- old.nameCollision.types
++++ new.nameCollision.types
+@@= skipped -1, +1 lines =@@
+ 
+ === nameCollision.ts ===
+ module A {
+->A : typeof globalThis.A
++>A : typeof A
+ 
+     // these 2 statements force an underscore before the 'A' 
+     // in the generated function call.
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ module B {
+->B : typeof globalThis.B
++>B : typeof B
+ 
+     // re-opened module with colliding name
+     // this should add an underscore.
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ module X {
+->X : typeof globalThis.X
++>X : typeof X
+ 
+     var X = 13;
+ >X : number
+ >13 : 13
+ 
+     export module Y {
+->Y : typeof globalThis.X.Y
++>Y : typeof Y
+ 
+         var Y = 13;
+ >Y : number
+ >13 : 13
+ 
+         export module Z {
+->Z : typeof globalThis.X.Y.Z
++>Z : typeof Z
+ 
+             var X = 12;
+ >X : number
+@@= skipped -32, +32 lines =@@
+ }
+ 
+ module Y.Y {
+->Y : typeof globalThis.Y
+->Y : typeof globalThis.Y.Y
++>Y : typeof Y
++>Y : typeof Y
+ 
+     export enum Y {
+ >Y : Y
+@@= skipped -18, +18 lines =@@
+ >D : typeof D
+ 
+     export interface D {
++>D : D
++
+         id: number;
+ >id : number
+     }

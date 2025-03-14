@@ -1,0 +1,51 @@
+--- old.mergedInterfacesWithMultipleBases.types
++++ new.mergedInterfacesWithMultipleBases.types
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ interface A extends C {
++>A : A
++
+     y: string;
+ >y : string
+ }
+ 
+ interface A extends C2 {
++>A : A
++
+     z: string;
+ >z : string
+ }
+@@= skipped -40, +44 lines =@@
+ 
+     class C<T> {
+ >C : C<T>
++>T : T
+ 
+         a: T;
+ >a : T
+@@= skipped -7, +8 lines =@@
+ 
+     class C2<T> {
+ >C2 : C2<T>
++>T : T
+ 
+         b: T;
+ >b : T
+     }
+ 
+     interface A<T> extends C<T> {
++>A : A<T>
++>T : T
++
+         y: T;
+ >y : T
+     }
+ 
+     interface A<T> extends C2<string> {
++>A : A<T>
++>T : T
++
+         z: T;
+ >z : T
+     }

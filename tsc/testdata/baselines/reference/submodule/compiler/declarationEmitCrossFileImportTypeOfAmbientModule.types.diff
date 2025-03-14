@@ -1,0 +1,19 @@
+--- old.declarationEmitCrossFileImportTypeOfAmbientModule.types
++++ new.declarationEmitCrossFileImportTypeOfAmbientModule.types
+@@= skipped -12, +12 lines =@@
+ 
+ export declare const item: typeof Foo;
+ >item : typeof Foo
+->Foo : typeof Foo
+ 
+ === packages/secondpackage/index.ts ===
+ import { item } from "../somepackage";
+->item : typeof import("@namespace/component").Foo
++>item : typeof Foo
+ 
+ export const reeexported = item;
+->reeexported : typeof import("@namespace/component").Foo
+->item : typeof import("@namespace/component").Foo
++>reeexported : typeof Foo
++>item : typeof Foo
+ 

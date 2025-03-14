@@ -1,0 +1,158 @@
+--- old.typeFromPropertyAssignment29.types
++++ new.typeFromPropertyAssignment29.types
+@@= skipped -1, +1 lines =@@
+ 
+ === typeFromPropertyAssignment29.ts ===
+ function ExpandoDecl(n: number) {
+->ExpandoDecl : typeof ExpandoDecl
++>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
+ >n : number
+ 
+     return n.toString();
+@@= skipped -12, +12 lines =@@
+ ExpandoDecl.prop = 2
+ >ExpandoDecl.prop = 2 : 2
+ >ExpandoDecl.prop : number
+->ExpandoDecl : typeof ExpandoDecl
++>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
+ >prop : number
+ >2 : 2
+ 
+ ExpandoDecl.m = function(n: number) {
+ >ExpandoDecl.m = function(n: number) {    return n + 1;} : (n: number) => number
+ >ExpandoDecl.m : (n: number) => number
+->ExpandoDecl : typeof ExpandoDecl
++>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
+ >m : (n: number) => number
+ >function(n: number) {    return n + 1;} : (n: number) => number
+ >n : number
+@@= skipped -22, +22 lines =@@
+ >ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length : number
+ >ExpandoDecl.prop + ExpandoDecl.m(12) : number
+ >ExpandoDecl.prop : number
+->ExpandoDecl : typeof ExpandoDecl
++>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
+ >prop : number
+ >ExpandoDecl.m(12) : number
+ >ExpandoDecl.m : (n: number) => number
+->ExpandoDecl : typeof ExpandoDecl
++>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
+ >m : (n: number) => number
+ >12 : 12
+ >ExpandoDecl(101).length : number
+ >ExpandoDecl(101) : string
+->ExpandoDecl : typeof ExpandoDecl
++>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
+ >101 : 101
+ >length : number
+ 
+ const ExpandoExpr = function (n: number) {
+->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+->function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
++>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
++>function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
+ >n : number
+ 
+     return n.toString();
+@@= skipped -26, +26 lines =@@
+ }
+ ExpandoExpr.prop = { x: 2 }
+ >ExpandoExpr.prop = { x: 2 } : { x: number; }
+->ExpandoExpr.prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
+->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+->prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
++>ExpandoExpr.prop : { x: number; y?: undefined; } | { x?: undefined; y: string; }
++>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
++>prop : { x: number; y?: undefined; } | { x?: undefined; y: string; }
+ >{ x: 2 } : { x: number; }
+ >x : number
+ >2 : 2
+ 
+ ExpandoExpr.prop = { y: "" }
+ >ExpandoExpr.prop = { y: "" } : { y: string; }
+->ExpandoExpr.prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
+->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+->prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
++>ExpandoExpr.prop : { x: number; y?: undefined; } | { x?: undefined; y: string; }
++>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
++>prop : { x: number; y?: undefined; } | { x?: undefined; y: string; }
+ >{ y: "" } : { y: string; }
+ >y : string
+ >"" : ""
+@@= skipped -19, +19 lines =@@
+ ExpandoExpr.m = function(n: number) {
+ >ExpandoExpr.m = function(n: number) {    return n + 1;} : (n: number) => number
+ >ExpandoExpr.m : (n: number) => number
+->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
++>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
+ >m : (n: number) => number
+ >function(n: number) {    return n + 1;} : (n: number) => number
+ >n : number
+@@= skipped -17, +17 lines =@@
+ >(ExpandoExpr.prop.x || 0) : 0
+ >ExpandoExpr.prop.x || 0 : 0
+ >ExpandoExpr.prop.x : undefined
+->ExpandoExpr.prop : { y: string; x?: undefined; }
+->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+->prop : { y: string; x?: undefined; }
++>ExpandoExpr.prop : { x?: undefined; y: string; }
++>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
++>prop : { x?: undefined; y: string; }
+ >x : undefined
+ >0 : 0
+ >ExpandoExpr.m(12) : number
+ >ExpandoExpr.m : (n: number) => number
+->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
++>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
+ >m : (n: number) => number
+ >12 : 12
+ >ExpandoExpr(101).length : number
+ >ExpandoExpr(101) : string
+->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
++>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
+ >101 : 101
+ >length : number
+ 
+ const ExpandoArrow = (n: number) => n.toString();
+->ExpandoArrow : { (n: number): string; prop: number; m(n: number): number; }
+->(n: number) => n.toString() : { (n: number): string; prop: number; m(n: number): number; }
++>ExpandoArrow : { (n: number): string; prop: number; m: (n: number) => number; }
++>(n: number) => n.toString() : { (n: number): string; prop: number; m: (n: number) => number; }
+ >n : number
+ >n.toString() : string
+ >n.toString : (radix?: number) => string
+@@= skipped -28, +28 lines =@@
+ ExpandoArrow.prop = 2
+ >ExpandoArrow.prop = 2 : 2
+ >ExpandoArrow.prop : number
+->ExpandoArrow : { (n: number): string; prop: number; m(n: number): number; }
++>ExpandoArrow : { (n: number): string; prop: number; m: (n: number) => number; }
+ >prop : number
+ >2 : 2
+ 
+ ExpandoArrow.m = function(n: number) {
+ >ExpandoArrow.m = function(n: number) {    return n + 1;} : (n: number) => number
+ >ExpandoArrow.m : (n: number) => number
+->ExpandoArrow : { (n: number): string; prop: number; m(n: number): number; }
++>ExpandoArrow : { (n: number): string; prop: number; m: (n: number) => number; }
+ >m : (n: number) => number
+ >function(n: number) {    return n + 1;} : (n: number) => number
+ >n : number
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ function ExpandoNested(n: number) {
+->ExpandoNested : typeof ExpandoNested
++>ExpandoNested : { (n: number): { (m: number): number; total: number; }; also: number; }
+ >n : number
+ 
+     const nested = function (m: number) {
+@@= skipped -29, +29 lines =@@
+ ExpandoNested.also = -1;
+ >ExpandoNested.also = -1 : -1
+ >ExpandoNested.also : number
+->ExpandoNested : typeof ExpandoNested
++>ExpandoNested : { (n: number): { (m: number): number; total: number; }; also: number; }
+ >also : number
+ >-1 : -1
+ >1 : 1

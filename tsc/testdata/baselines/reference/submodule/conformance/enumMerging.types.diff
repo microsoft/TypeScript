@@ -1,0 +1,52 @@
+--- old.enumMerging.types
++++ new.enumMerging.types
+@@= skipped -112, +112 lines =@@
+     }
+ 
+     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
+->x : EComp2[]
+->[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : EComp2[]
++>x : (EComp2)[]
++>[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : (EComp2)[]
+ >EComp2.A : EComp2.A
+ >EComp2 : typeof EComp2
+ >A : EComp2.A
+@@= skipped -84, +84 lines =@@
+ >A : typeof A
+ 
+         export enum Color { Yellow = 1 }
+->Color : Color
+->Yellow : Color.Green
++>Color : Color.Yellow
++>Yellow : Color.Yellow
+ >1 : 1
+     }
+     var t = A.Color.Yellow;
+->t : A.Color
+->A.Color.Yellow : A.Color.Green
+->A.Color : typeof A.Color
++>t : Color.Yellow
++>A.Color.Yellow : Color.Yellow
++>A.Color : typeof Color
+ >A : typeof A
+->Color : typeof A.Color
+->Yellow : A.Color.Green
++>Color : typeof Color
++>Yellow : Color.Yellow
+ 
+     t = A.Color.Red;
+->t = A.Color.Red : A.Color.Red
+->t : A.Color
+->A.Color.Red : A.Color.Red
+->A.Color : typeof A.Color
++>t = A.Color.Red : any
++>t : Color.Yellow
++>A.Color.Red : any
++>A.Color : typeof Color
+ >A : typeof A
+->Color : typeof A.Color
+->Red : A.Color.Red
++>Color : typeof Color
++>Red : any
+ }
+ 

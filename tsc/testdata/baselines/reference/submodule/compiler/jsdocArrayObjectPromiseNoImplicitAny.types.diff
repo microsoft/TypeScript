@@ -1,0 +1,75 @@
+--- old.jsdocArrayObjectPromiseNoImplicitAny.types
++++ new.jsdocArrayObjectPromiseNoImplicitAny.types
+@@= skipped -2, +2 lines =@@
+ === jsdocArrayObjectPromiseNoImplicitAny.js ===
+ /** @type {Array} */
+ var notAnyArray = [5];
+->notAnyArray : any[]
++>notAnyArray : number[]
+ >[5] : number[]
+ >5 : 5
+ 
+@@= skipped -15, +15 lines =@@
+  * @return {Array}
+  */
+ function returnNotAnyArray(arr) {
+->returnNotAnyArray : (arr: any[]) => any[]
+->arr : any[]
++>returnNotAnyArray : (arr: any) => any
++>arr : any
+ 
+   return arr;
+->arr : any[]
++>arr : any
+ }
+ 
+ /** @type {Promise} */
+ var notAnyPromise = Promise.resolve(5);
+->notAnyPromise : Promise<any>
++>notAnyPromise : Promise<number>
+ >Promise.resolve(5) : Promise<number>
+ >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+ >Promise : PromiseConstructor
+@@= skipped -30, +30 lines =@@
+  * @return {Promise}
+  */
+ function returnNotAnyPromise(pr) {
+->returnNotAnyPromise : (pr: Promise<any>) => Promise<any>
+->pr : Promise<any>
++>returnNotAnyPromise : (pr: any) => any
++>pr : any
+ 
+   return pr;
+->pr : Promise<any>
++>pr : any
+ }
+ 
+ /** @type {Object} */
+ var notAnyObject = {valueOf: 1}; // error since assigning to Object, not any.
+->notAnyObject : Object
++>notAnyObject : { valueOf: number; }
+ >{valueOf: 1} : { valueOf: number; }
+ >valueOf : number
+ >1 : 1
+ 
+ /** @type {Object<string, number>} */
+ var paramedObject = {valueOf: 1};
+->paramedObject : { [x: string]: number; }
++>paramedObject : { valueOf: number; }
+ >{valueOf: 1} : { valueOf: number; }
+ >valueOf : number
+ >1 : 1
+@@= skipped -26, +26 lines =@@
+  * @return {Object}
+  */
+ function returnNotAnyObject(obj) {
+->returnNotAnyObject : (obj: Object) => Object
+->obj : Object
++>returnNotAnyObject : (obj: any) => any
++>obj : any
+ 
+   return obj;
+->obj : Object
++>obj : any
+ }
+ 

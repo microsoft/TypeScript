@@ -1,0 +1,101 @@
+--- old.jsDeclarationsJSDocRedirectedLookups.types
++++ new.jsDeclarationsJSDocRedirectedLookups.types
+@@= skipped -2, +2 lines =@@
+ === index.js ===
+ // these are recognized as TS concepts by the checker
+ /** @type {String} */const a = "";
+->a : string
++>a : ""
+ >"" : ""
+ 
+ /** @type {Number} */const b = 0;
+->b : number
++>b : 0
+ >0 : 0
+ 
+ /** @type {Boolean} */const c = true;
+->c : boolean
++>c : true
+ >true : true
+ 
+ /** @type {Void} */const d = undefined;
+->d : void
++>d : undefined
+ >undefined : undefined
+ 
+ /** @type {Undefined} */const e = undefined;
+@@= skipped -23, +23 lines =@@
+ >f : null
+ 
+ /** @type {Function} */const g = () => void 0;
+->g : Function
++>g : () => undefined
+ >() => void 0 : () => undefined
+ >void 0 : undefined
+ >0 : 0
+ 
+ /** @type {function} */const h = () => void 0;
+->h : Function
++>h : () => undefined
+ >() => void 0 : () => undefined
+ >void 0 : undefined
+ >0 : 0
+ 
+ /** @type {array} */const i = [];
+->i : any[]
++>i : never[]
+ >[] : never[]
+ 
+ /** @type {promise} */const j = Promise.resolve(0);
+->j : Promise<any>
++>j : Promise<number>
+ >Promise.resolve(0) : Promise<number>
+ >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+ >Promise : PromiseConstructor
+@@= skipped -24, +24 lines =@@
+ >0 : 0
+ 
+ /** @type {Object<string, string>} */const k = {x: "x"};
+->k : { [x: string]: string; }
++>k : { x: string; }
+ >{x: "x"} : { x: string; }
+ >x : string
+ >"x" : "x"
+@@= skipped -10, +10 lines =@@
+ // ignore the errors to try to ensure they're emitted as `any` in declaration emit
+ // @ts-ignore
+ /** @type {class} */const l = true;
+->l : error
++>l : true
+ >true : true
+ 
+ // @ts-ignore
+ /** @type {bool} */const m = true;
+->m : error
++>m : true
+ >true : true
+ 
+ // @ts-ignore
+ /** @type {int} */const n = true;
+->n : error
++>n : true
+ >true : true
+ 
+ // @ts-ignore
+ /** @type {float} */const o = true;
+->o : error
++>o : true
+ >true : true
+ 
+ // @ts-ignore
+ /** @type {integer} */const p = true;
+->p : error
++>p : true
+ >true : true
+ 
+ // or, in the case of `event` likely erroneously refers to the type of the global Event object
+ /** @type {event} */const q = undefined;
+->q : Event | undefined
++>q : undefined
+ >undefined : undefined
+ 

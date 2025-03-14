@@ -1,0 +1,33 @@
+--- old.resolveNameWithNamspace.types
++++ new.resolveNameWithNamspace.types
+@@= skipped -17, +17 lines =@@
+ === ns.ts ===
+ /// <reference path="node.d.ts"/>
+ namespace myAssert {
++>myAssert : any
++
+     export type cool = 'cool'
+ >cool : "cool"
+ }
+@@= skipped -12, +14 lines =@@
+ === app.js ===
+ exports.equal = myAssert.equal
+ >exports.equal = myAssert.equal : any
+->exports.equal : error
+->exports : typeof import("app")
++>exports.equal : any
++>exports : any
+ >equal : any
+ >myAssert.equal : any
+ >myAssert : any
+ >equal : any
+ 
+ exports.equal()
+->exports.equal() : error
+->exports.equal : error
+->exports : typeof import("app")
++>exports.equal() : any
++>exports.equal : any
++>exports : any
+ >equal : any
+ 

@@ -1,0 +1,10 @@
+--- old.partiallyAnnotatedFunctionInferenceError.types
++++ new.partiallyAnnotatedFunctionInferenceError.types
+@@= skipped -17, +17 lines =@@
+ 
+ declare function testError<T extends C>(a: (t: T, t1: T) => void): T
+ >testError : <T extends C>(a: (t: T, t1: T) => void) => T
++>T : T
+ >a : (t: T, t1: T) => void
+ >t : T
+ >t1 : T

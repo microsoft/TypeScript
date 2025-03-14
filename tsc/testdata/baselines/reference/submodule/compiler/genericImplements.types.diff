@@ -1,0 +1,38 @@
+--- old.genericImplements.types
++++ new.genericImplements.types
+@@= skipped -9, +9 lines =@@
+ >b : any
+ 
+ interface I {
++>I : I
++
+     f<T extends A>(): T;
+ >f : <T extends A>() => T
++>T : T
+ 
+ } // { f: () => { a; } }
+ 
+@@= skipped -11, +14 lines =@@
+ 
+     f<T extends B>(): T { return undefined; }
+ >f : <T extends B>() => T
++>T : T
+ >undefined : undefined
+ 
+ } // { f: () => { b; } }
+@@= skipped -10, +11 lines =@@
+ 
+     f<T extends A>(): T { return undefined; }
+ >f : <T extends A>() => T
++>T : T
+ >undefined : undefined
+ 
+ } // { f: () => { a; } }
+@@= skipped -10, +11 lines =@@
+ 
+     f<T>(): T { return undefined; }
+ >f : <T>() => T
++>T : T
+ >undefined : undefined
+ 
+ } // { f: <T>() => T } 

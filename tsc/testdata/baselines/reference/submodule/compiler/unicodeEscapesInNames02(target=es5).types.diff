@@ -1,0 +1,14 @@
+--- old.unicodeEscapesInNames02(target=es5).types
++++ new.unicodeEscapesInNames02(target=es5).types
+@@= skipped -52, +52 lines =@@
+ >methodA : any
+ 
+         return this.𐊧;
+->this.𐊧 : any
++>this. : any
+ >this : undefined
+->𐊧 : any
++> : any
+     }
+ }
+ 

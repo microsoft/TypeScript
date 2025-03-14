@@ -1,0 +1,13 @@
+--- old.duplicateConstructSignature.types
++++ new.duplicateConstructSignature.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/duplicateConstructSignature.ts] ////
+ 
+ === duplicateConstructSignature.ts ===
+-
+ interface I {
++>I : I
++
+     (): number;
+     (): string;
+ }

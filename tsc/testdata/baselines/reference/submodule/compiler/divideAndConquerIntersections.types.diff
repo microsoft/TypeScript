@@ -1,0 +1,142 @@
+--- old.divideAndConquerIntersections.types
++++ new.divideAndConquerIntersections.types
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/divideAndConquerIntersections.ts] ////
+ 
+-=== Performance Stats ===
+-Type Count: 2,500
+-Instantiation count: 10,000
+-
+ === divideAndConquerIntersections.ts ===
+ type QQ<T extends string[]> =
+ >QQ : QQ<T>
++>T : T
+ 
+     & ("a" | T[0])
+     & ("b" | T[1])
+@@= skipped -31, +28 lines =@@
+ // Repro from #57863
+ 
+ export interface Update {
++>Update : Update
++
+     update_id: number;
+ >update_id : number
+ 
+@@= skipped -78, +80 lines =@@
+ 
+ type FilterFunction<U extends Update, V extends U> = (up: U) => up is V;
+ >FilterFunction : FilterFunction<U, V>
++>U : U
++>V : V
+ >up : U
+ 
+ export function matchFilter<U extends Update, Q extends FilterQuery>(
+->matchFilter : <U extends Update, Q extends FilterQuery>(filter: Q | Q[]) => FilterFunction<U, Filter<U, Q>>
++>matchFilter : <U extends Update, Q extends "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query">(filter: Q | Q[]) => FilterFunction<U, PerformQuery<U, Combine<L1Fragment<Q>, Q>>>
++>U : U
++>Q : Q
+ 
+     filter: Q | Q[],
+ >filter : Q | Q[]
+@@= skipped -16, +20 lines =@@
+ >console : Console
+ >log : (...data: any[]) => void
+ >"Matching" : "Matching"
+->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
++>filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
+ 
+     return (up: U): up is Filter<U, Q> => !!up;
+->(up: U): up is Filter<U, Q> => !!up : (up: U) => up is Filter<U, Q>
++>(up: U): up is Filter<U, Q> => !!up : (up: U) => up is PerformQuery<U, Combine<L1Fragment<Q>, Q>>
+ >up : U
+ >!!up : true
+ >!up : false
+@@= skipped -12, +12 lines =@@
+ 
+ /** All valid filter queries (every update key except update_id) */
+ export type FilterQuery = keyof Omit<Update, "update_id">;
+->FilterQuery : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost"
++>FilterQuery : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query"
+ 
+ /** Narrow down an update object based on a filter query */
+ export type Filter<U extends Update, Q extends FilterQuery> = PerformQuery<
+ >Filter : Filter<U, Q>
++>U : U
++>Q : Q
+ 
+     U,
+     RunQuery<Q>
+@@= skipped -13, +15 lines =@@
+ // generate an object structure that can be intersected with updates to narrow them down
+ type RunQuery<Q extends string> = Combine<L1Fragment<Q>, Q>;
+ >RunQuery : RunQuery<Q>
++>Q : Q
+ 
+ // maps each part of the filter query to Record<"key", object>
+ type L1Fragment<Q extends string> = Q extends unknown ? Record<Q, object>
+ >L1Fragment : L1Fragment<Q>
++>Q : Q
+ 
+     : never;
+ // define all other fields from query as keys with value `undefined`
+ type Combine<U, K extends string> = U extends unknown
+ >Combine : Combine<U, K>
++>U : U
++>K : K
+ 
+     ? U & Partial<Record<Exclude<K, keyof U>, undefined>>
+     : never;
+@@= skipped -17, +21 lines =@@
+ // and then using these values to override the actual update
+ type PerformQuery<U extends Update, R extends object> = R extends unknown
+ >PerformQuery : PerformQuery<U, R>
++>U : U
++>R : R
+ 
+     ? FilteredEvent<U, Update & R>
+     : never;
+@@= skipped -7, +9 lines =@@
+ // narrow down an update by intersecting it with a different update
+ type FilteredEvent<E extends Update, U extends Update> =
+ >FilteredEvent : FilteredEvent<E, U>
++>E : E
++>U : U
+ 
+     & E
+     & Omit<U, "update_id">;
+ 
+ type Middleware<U extends Update> = (ctx: U) => unknown | Promise<unknown>;
+ >Middleware : Middleware<U>
++>U : U
+ >ctx : U
+ 
+ class EventHub<U extends Update> {
+ >EventHub : EventHub<U>
++>U : U
+ 
+     use(...middleware: Array<Middleware<U>>): EventHub<U> {
+->use : (...middleware: Array<Middleware<U>>) => EventHub<U>
++>use : (...middleware: Middleware<U>[]) => EventHub<U>
+ >middleware : Middleware<U>[]
+ 
+         console.log("Adding", middleware.length, "generic handlers");
+@@= skipped -30, +34 lines =@@
+ >this : this
+     }
+     on<Q extends FilterQuery>(
+->on : <Q extends FilterQuery>(filter: Q | Q[], ...middleware: Array<Middleware<Filter<U, Q>>>) => EventHub<Filter<U, Q>>
++>on : <Q extends "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query">(filter: Q | Q[], ...middleware: Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]) => EventHub<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>
++>Q : Q
+ 
+         filter: Q | Q[],
+ >filter : Q | Q[]
+@@= skipped -20, +21 lines =@@
+ >middleware : Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]
+ >length : number
+ >"handlers for" : "handlers for"
+->filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
++>filter : "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query" | Q[]
+ 
+         return new EventHub<Filter<U, Q>>();
+ >new EventHub<Filter<U, Q>>() : EventHub<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>

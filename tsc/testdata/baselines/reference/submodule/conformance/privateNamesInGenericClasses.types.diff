@@ -1,0 +1,10 @@
+--- old.privateNamesInGenericClasses.types
++++ new.privateNamesInGenericClasses.types
+@@= skipped -2, +2 lines =@@
+ === privateNamesInGenericClasses.ts ===
+ class C<T> {
+ >C : C<T>
++>T : T
+ 
+     #foo: T;
+ >#foo : T

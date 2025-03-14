@@ -1,0 +1,18 @@
+--- old.genericWithCallSignatures1.types
++++ new.genericWithCallSignatures1.types
+@@= skipped -21, +21 lines =@@
+ }
+ === genericWithCallSignatures_0.ts ===
+ interface Callable<T> {
++>Callable : Callable<T>
++>T : T
++
+     (): T;
+     (value: T): void;
+ >value : T
+ }
+ 
+ interface CallableExtention<T> extends Callable<T> { }
++>CallableExtention : CallableExtention<T>
++>T : T
+ 

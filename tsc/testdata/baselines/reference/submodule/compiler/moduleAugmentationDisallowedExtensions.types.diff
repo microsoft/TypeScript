@@ -1,0 +1,18 @@
+--- old.moduleAugmentationDisallowedExtensions.types
++++ new.moduleAugmentationDisallowedExtensions.types
+@@= skipped -43, +43 lines =@@
+ >arr : number[]
+ 
+     interface A { x }
++>A : A
+ >x : any
+ 
+     namespace N {
+@@= skipped -39, +40 lines =@@
+ === observable.ts ===
+ export declare class Observable<T> {
+ >Observable : Observable<T>
++>T : T
+ 
+     filter(pred: (e:T) => boolean): Observable<T>;
+ >filter : (pred: (e: T) => boolean) => Observable<T>

@@ -1,0 +1,18 @@
+--- old.jsSelfReferencingArgumentsFunction.types
++++ new.jsSelfReferencingArgumentsFunction.types
+@@= skipped -2, +2 lines =@@
+ === foo.js ===
+ // Test #16139
+ function Foo() {
+->Foo : (...args: any[]) => any
++>Foo : () => any
+ 
+     arguments;
+ >arguments : IArguments
+ 
+     return new Foo();
+ >new Foo() : any
+->Foo : (...args: any[]) => any
++>Foo : () => any
+ }
+ 

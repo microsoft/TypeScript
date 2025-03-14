@@ -1,0 +1,11 @@
+--- old.declareClassInterfaceImplementation.types
++++ new.declareClassInterfaceImplementation.types
+@@= skipped -1, +1 lines =@@
+ 
+ === declareClassInterfaceImplementation.ts ===
+ interface IBuffer {
++>IBuffer : IBuffer
++
+     [index: number]: number;
+ >index : number
+ }

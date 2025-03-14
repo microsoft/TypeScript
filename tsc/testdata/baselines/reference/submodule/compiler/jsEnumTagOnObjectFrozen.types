@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/jsEnumTagOnObjectFrozen.ts] ////
+
+=== usage.js ===
+const { Thing, useThing, cbThing } = require("./index");
+>Thing : any
+>useThing : any
+>cbThing : any
+>require("./index") : any
+>require : any
+>"./index" : "./index"
+
+useThing(Thing.a);
+>useThing(Thing.a) : any
+>useThing : any
+>Thing.a : any
+>Thing : any
+>a : any
+
+/**
+ * @typedef {Object} LogEntry
+ * @property {string} type
+ * @property {number} time
+ */
+
+cbThing(type => {
+>cbThing(type => {    /** @type {LogEntry} */    const logEntry = {        time: Date.now(),        type,    };}) : any
+>cbThing : any
+>type => {    /** @type {LogEntry} */    const logEntry = {        time: Date.now(),        type,    };} : (type: any) => void
+>type : any
+
+    /** @type {LogEntry} */
+    const logEntry = {
+>logEntry : { time: number; type: any; }
+>{        time: Date.now(),        type,    } : { time: number; type: any; }
+
+        time: Date.now(),
+>time : number
+>Date.now() : number
+>Date.now : () => number
+>Date : DateConstructor
+>now : () => number
+
+        type,
+>type : any
+
+    };
+});
+

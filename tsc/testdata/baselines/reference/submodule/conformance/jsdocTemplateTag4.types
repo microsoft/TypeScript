@@ -1,0 +1,143 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag4.ts] ////
+
+=== a.js ===
+/**
+ * Should work for function declarations
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+function Multimap() {
+>Multimap : () => void
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+>this._map = {} : {}
+>this._map : any
+>this : any
+>_map : any
+>{} : {}
+
+};
+
+/**
+ * @param {K} key the key ok
+ * @returns {V} the value ok
+ */
+Multimap.prototype.get = function (key) {
+>Multimap.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+>Multimap.prototype.get : any
+>Multimap.prototype : any
+>Multimap : () => void
+>prototype : any
+>get : any
+>function (key) {    return this._map[key + ''];} : (key: any) => any
+>key : any
+
+    return this._map[key + ''];
+>this._map[key + ''] : any
+>this._map : any
+>this : any
+>_map : any
+>key + '' : string
+>key : any
+>'' : ""
+}
+
+/**
+ * Should work for initialisers too
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+var Multimap2 = function() {
+>Multimap2 : () => void
+>function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+>this._map = {} : {}
+>this._map : any
+>this : any
+>_map : any
+>{} : {}
+
+};
+
+/**
+ * @param {K} key the key ok
+ * @returns {V} the value ok
+ */
+Multimap2.prototype.get = function (key) {
+>Multimap2.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+>Multimap2.prototype.get : any
+>Multimap2.prototype : any
+>Multimap2 : () => void
+>prototype : any
+>get : any
+>function (key) {    return this._map[key + ''];} : (key: any) => any
+>key : any
+
+    return this._map[key + ''];
+>this._map[key + ''] : any
+>this._map : any
+>this : any
+>_map : any
+>key + '' : string
+>key : any
+>'' : ""
+}
+
+var Ns = {};
+>Ns : {}
+>{} : {}
+
+/**
+ * Should work for expando-namespaced initialisers too
+ * @constructor
+ * @template {string} K
+ * @template V
+ */
+Ns.Multimap3 = function() {
+>Ns.Multimap3 = function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
+>Ns.Multimap3 : any
+>Ns : {}
+>Multimap3 : any
+>function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
+
+    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
+    this._map = {};
+>this._map = {} : {}
+>this._map : any
+>this : {}
+>_map : any
+>{} : {}
+
+};
+
+/**
+ * @param {K} key the key ok
+ * @returns {V} the value ok
+ */
+Ns.Multimap3.prototype.get = function (key) {
+>Ns.Multimap3.prototype.get = function (key) {    return this._map[key + ''];} : (key: any) => any
+>Ns.Multimap3.prototype.get : any
+>Ns.Multimap3.prototype : any
+>Ns.Multimap3 : any
+>Ns : {}
+>Multimap3 : any
+>prototype : any
+>get : any
+>function (key) {    return this._map[key + ''];} : (key: any) => any
+>key : any
+
+    return this._map[key + ''];
+>this._map[key + ''] : any
+>this._map : any
+>this : any
+>_map : any
+>key + '' : string
+>key : any
+>'' : ""
+}
+

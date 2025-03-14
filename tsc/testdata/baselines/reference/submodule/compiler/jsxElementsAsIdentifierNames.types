@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/jsxElementsAsIdentifierNames.tsx] ////
+
+=== a.tsx ===
+declare const React: any;
+>React : any
+
+declare module JSX {
+>JSX : any
+
+    interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+        ["package"]: any;
+>["package"] : any
+>"package" : "package"
+    }
+}
+
+function A() {
+>A : () => any
+
+    return <package />
+><package /> : any
+>package : any
+}
+
+function B() {
+>B : () => any
+
+    return <package></package>
+><package></package> : any
+>package : any
+>package : any
+}
+

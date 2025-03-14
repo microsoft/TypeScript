@@ -1,0 +1,38 @@
+--- old.sourceMapValidationDestructuringVariableStatement1.types
++++ new.sourceMapValidationDestructuringVariableStatement1.types
+@@= skipped -1, +1 lines =@@
+ 
+ === sourceMapValidationDestructuringVariableStatement1.ts ===
+ interface Robot {
++>Robot : Robot
++
+     name: string;
+ >name : string
+ 
+@@= skipped -7, +9 lines =@@
+ >skill : string
+ }
+ declare var console: {
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ 
+     log(msg: string): void;
+ >log : (msg: string) => void
+@@= skipped -124, +124 lines =@@
+     console.log(skillB);
+ >console.log(skillB) : void
+ >console.log : (msg: string) => void
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ >log : (msg: string) => void
+ >skillB : string
+ }
+@@= skipped -8, +8 lines =@@
+     console.log(nameC);
+ >console.log(nameC) : void
+ >console.log : (msg: string) => void
+->console : { log(msg: string): void; }
++>console : { log: (msg: string) => void; }
+ >log : (msg: string) => void
+ >nameC : string
+ }

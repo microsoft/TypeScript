@@ -1,0 +1,130 @@
+--- old.jsdocTypeNongenericInstantiationAttempt.types
++++ new.jsdocTypeNongenericInstantiationAttempt.types
+@@= skipped -4, +4 lines =@@
+  * @param {<T>(m: Boolean<T>) => string} somebody
+  */
+ function sayHello(somebody) {
+->sayHello : (somebody: <T>(m: boolean) => string) => string
+->somebody : <T>(m: boolean) => string
++>sayHello : (somebody: any) => string
++>somebody : any
+ 
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: boolean) => string
++>somebody : any
+ }
+ 
+ === index2.js ===
+@@= skipped -14, +14 lines =@@
+  * @param {<T>(m: Void<T>) => string} somebody
+  */
+ function sayHello2(somebody) {
+->sayHello2 : (somebody: <T>(m: void) => string) => string
+->somebody : <T>(m: void) => string
++>sayHello2 : (somebody: any) => string
++>somebody : any
+ 
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: void) => string
++>somebody : any
+ }
+ 
+ 
+@@= skipped -15, +15 lines =@@
+  * @param {<T>(m: Undefined<T>) => string} somebody
+  */
+ function sayHello3(somebody) {
+->sayHello3 : (somebody: <T>(m: undefined) => string) => string
+->somebody : <T>(m: undefined) => string
++>sayHello3 : (somebody: any) => string
++>somebody : any
+ 
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: undefined) => string
++>somebody : any
+ }
+ 
+ 
+@@= skipped -15, +15 lines =@@
+  * @param {<T>(m: Function<T>) => string} somebody
+  */
+ function sayHello4(somebody) {
+->sayHello4 : (somebody: <T>(m: Function) => string) => string
+->somebody : <T>(m: Function) => string
++>sayHello4 : (somebody: any) => string
++>somebody : any
+ 
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: Function) => string
++>somebody : any
+ }
+ 
+ 
+@@= skipped -15, +15 lines =@@
+  * @param {<T>(m: String<T>) => string} somebody
+  */
+ function sayHello5(somebody) {
+->sayHello5 : (somebody: <T>(m: string) => string) => string
+->somebody : <T>(m: string) => string
++>sayHello5 : (somebody: any) => string
++>somebody : any
+ 
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: string) => string
++>somebody : any
+ }
+ 
+ 
+@@= skipped -15, +15 lines =@@
+  * @param {<T>(m: Number<T>) => string} somebody
+  */
+ function sayHello6(somebody) {
+->sayHello6 : (somebody: <T>(m: number) => string) => string
+->somebody : <T>(m: number) => string
++>sayHello6 : (somebody: any) => string
++>somebody : any
+ 
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: number) => string
++>somebody : any
+ }
+ 
+ 
+@@= skipped -15, +15 lines =@@
+  * @param {<T>(m: Object<T>) => string} somebody
+  */
+ function sayHello7(somebody) {
+->sayHello7 : (somebody: <T>(m: any) => string) => string
+->somebody : <T>(m: any) => string
++>sayHello7 : (somebody: any) => string
++>somebody : any
+ 
+     return 'Hello ' + somebody;
+ >'Hello ' + somebody : string
+ >'Hello ' : "Hello "
+->somebody : <T>(m: any) => string
++>somebody : any
+ }
+ 
+ === index8.js ===
+@@= skipped -17, +17 lines =@@
+  * @param {fn<T>} somebody
+  */
+ function sayHello8(somebody) { }
+->sayHello8 : (somebody: () => void) => void
+->somebody : () => void
++>sayHello8 : (somebody: any) => void
++>somebody : any
+ 

@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/esModuleInteropPrettyErrorRelatedInformation.ts] ////
+
+=== foo.d.ts ===
+declare function foo(): void;
+>foo : () => void
+
+declare namespace foo {}
+>foo : () => void
+
+export = foo;
+>foo : () => void
+
+=== index.ts ===
+import * as foo from "./foo";
+>foo : () => void
+
+function invoke(f: () => void) { f(); }
+>invoke : (f: () => void) => void
+>f : () => void
+>f() : void
+>f : () => void
+
+invoke(foo);
+>invoke(foo) : void
+>invoke : (f: () => void) => void
+>foo : () => void
+

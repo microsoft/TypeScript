@@ -1,0 +1,46 @@
+--- old.staticIndexSignature5.types
++++ new.staticIndexSignature5.types
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ interface I {
++>I : I
++
+     static readonly [s: string]: number;
+ >s : string
+ 
+@@= skipped -9, +11 lines =@@
+ 
+ type TA = (typeof B)["foo"]
+ >TA : number
+->B : typeof B
+ 
+ type TB = (typeof B)[42]
+ >TB : 42 | 233
+->B : typeof B
+ 
+ type TC = (typeof B)[string]
+ >TC : number
+->B : typeof B
+ 
+ type TD = (typeof B)[number]
+ >TD : 42 | 233
+->B : typeof B
+ 
+ type TE = keyof typeof B;
+ >TE : string | number
+->B : typeof B
+ 
+ type TF = Pick<typeof B, number>
+ >TF : TF
+->B : typeof B
+ 
+ type TFI = Pick<I, number>
+ >TFI : TFI
+ 
+ type TG = Omit<typeof B, number>
+ >TG : TG
+->B : typeof B
+ 
+ type TGI = Omit<I, number>
+ >TGI : TGI

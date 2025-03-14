@@ -1,0 +1,17 @@
+--- old.typeTagCircularReferenceOnConstructorFunction.types
++++ new.typeTagCircularReferenceOnConstructorFunction.types
+@@= skipped -4, +4 lines =@@
+  * @type {MyClass}
+  */
+ function MyClass() { }
+->MyClass : typeof MyClass
++>MyClass : { (): void; prototype: {}; }
+ 
+ MyClass.prototype = {};
+ >MyClass.prototype = {} : {}
+ >MyClass.prototype : {}
+->MyClass : typeof MyClass
++>MyClass : { (): void; prototype: {}; }
+ >prototype : {}
+ >{} : {}
+ 

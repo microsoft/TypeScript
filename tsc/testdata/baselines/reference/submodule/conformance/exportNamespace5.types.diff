@@ -1,0 +1,32 @@
+--- old.exportNamespace5.types
++++ new.exportNamespace5.types
+@@= skipped -12, +12 lines =@@
+ === /b.ts ===
+ export type * from "./a";
+ export { X } from "./a";
+->X : typeof import("/a").X
++>X : typeof X
+ 
+ === /c.ts ===
+ import { A, B as C, X } from "./b";
+ >A : typeof A
+->B : typeof C
+->C : typeof C
++>B : typeof B
++>C : typeof B
+ >X : typeof X
+ 
+ let _: A = new A();   // Error
+@@= skipped -15, +15 lines =@@
+ >A : typeof A
+ 
+ let __: C = new C();  // Error
+->__ : C
+->new C() : C
+->C : typeof C
++>__ : B
++>new C() : B
++>C : typeof B
+ 
+ let ___: X = new X(); // Ok
+ >___ : X

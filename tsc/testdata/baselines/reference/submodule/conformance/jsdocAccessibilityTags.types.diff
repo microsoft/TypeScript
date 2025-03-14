@@ -1,0 +1,93 @@
+--- old.jsdocAccessibilityTags.types
++++ new.jsdocAccessibilityTags.types
+@@= skipped -83, +83 lines =@@
+ >3 : 3
+     }
+     h() { return this.priv2 }
+->h : () => number
+->this.priv2 : number
++>h : () => any
++>this.priv2 : any
+ >this : this
+->priv2 : number
++>priv2 : any
+ }
+ class B extends A {
+ >B : B
+@@= skipped -34, +34 lines =@@
+ >n : () => void
+ 
+         this.priv2 + this.prot2 + this.pub2
+->this.priv2 + this.prot2 + this.pub2 : number
+->this.priv2 + this.prot2 : number
+->this.priv2 : number
++>this.priv2 + this.prot2 + this.pub2 : any
++>this.priv2 + this.prot2 : any
++>this.priv2 : any
+ >this : this
+->priv2 : number
+->this.prot2 : number
++>priv2 : any
++>this.prot2 : any
+ >this : this
+->prot2 : number
+->this.pub2 : number
++>prot2 : any
++>this.pub2 : any
+ >this : this
+->pub2 : number
++>pub2 : any
+     }
+ }
+ new A().priv + new A().prot + new A().pub
+@@= skipped -46, +46 lines =@@
+ >pub : number
+ 
+ new C().priv2 + new C().prot2 + new C().pub2
+->new C().priv2 + new C().prot2 + new C().pub2 : number
+->new C().priv2 + new C().prot2 : number
+->new C().priv2 : number
++>new C().priv2 + new C().prot2 + new C().pub2 : any
++>new C().priv2 + new C().prot2 : any
++>new C().priv2 : any
+ >new C() : C
+ >C : typeof C
+->priv2 : number
+->new C().prot2 : number
++>priv2 : any
++>new C().prot2 : any
+ >new C() : C
+ >C : typeof C
+->prot2 : number
+->new C().pub2 : number
++>prot2 : any
++>new C().pub2 : any
+ >new C() : C
+ >C : typeof C
+->pub2 : number
++>pub2 : any
+ 
+ new D().priv2 + new D().prot2 + new D().pub2
+->new D().priv2 + new D().prot2 + new D().pub2 : number
+->new D().priv2 + new D().prot2 : number
+->new D().priv2 : number
++>new D().priv2 + new D().prot2 + new D().pub2 : any
++>new D().priv2 + new D().prot2 : any
++>new D().priv2 : any
+ >new D() : D
+ >D : typeof D
+->priv2 : number
+->new D().prot2 : number
++>priv2 : any
++>new D().prot2 : any
+ >new D() : D
+ >D : typeof D
+->prot2 : number
+->new D().pub2 : number
++>prot2 : any
++>new D().pub2 : any
+ >new D() : D
+ >D : typeof D
+->pub2 : number
++>pub2 : any
+ 

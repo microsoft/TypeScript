@@ -1,0 +1,40 @@
+--- old.taggedTemplatesWithTypeArguments2.types
++++ new.taggedTemplatesWithTypeArguments2.types
+@@= skipped -1, +1 lines =@@
+ 
+ === taggedTemplatesWithTypeArguments2.ts ===
+ export interface SomethingTaggable {
++>SomethingTaggable : SomethingTaggable
++
+     <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
++>T : T
+ >t : TemplateStringsArray
+ >args : T[]
+ }
+ 
+ export interface SomethingNewable {
++>SomethingNewable : SomethingNewable
++
+     new <T>(...args: T[]): any;
++>T : T
+ >args : T[]
+ }
+ 
+@@= skipped -76, +82 lines =@@
+ 
+ class SomeBase<A, B, C> {
+ >SomeBase : SomeBase<A, B, C>
++>A : A
++>B : B
++>C : C
+ 
+     a!: A; b!: B; c!: C;
+ >a : A
+@@= skipped -9, +12 lines =@@
+ 
+ class SomeDerived<T> extends SomeBase<number, string, T> {
+ >SomeDerived : SomeDerived<T>
++>T : T
+ >SomeBase : SomeBase<number, string, T>
+ 
+     constructor() {

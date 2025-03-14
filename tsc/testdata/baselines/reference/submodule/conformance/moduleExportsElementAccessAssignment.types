@@ -1,0 +1,41 @@
+//// [tests/cases/conformance/jsdoc/moduleExportsElementAccessAssignment.ts] ////
+
+=== mod2.js ===
+const mod1 = require("./mod1");
+>mod1 : any
+>require("./mod1") : any
+>require : any
+>"./mod1" : "./mod1"
+
+mod1.a;
+>mod1.a : any
+>mod1 : any
+>a : any
+
+mod1.b;
+>mod1.b : any
+>mod1 : any
+>b : any
+
+mod1.c;
+>mod1.c : any
+>mod1 : any
+>c : any
+
+mod1.d;
+>mod1.d : any
+>mod1 : any
+>d : any
+
+mod1.d.e;
+>mod1.d.e : any
+>mod1.d : any
+>mod1 : any
+>d : any
+>e : any
+
+mod1.default;
+>mod1.default : any
+>mod1 : any
+>default : any
+
