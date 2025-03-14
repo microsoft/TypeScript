@@ -81,6 +81,7 @@ import {
     classOrConstructorParameterIsDecorated,
     ClassStaticBlockDeclaration,
     clear,
+    compareComparableValues,
     compareDiagnostics,
     comparePaths,
     compareValues,
@@ -1133,7 +1134,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    compareComparableValues,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -1492,7 +1492,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var cancellationToken: CancellationToken | undefined;
 
     var scanner: Scanner | undefined;
-    
+
     var fileIndexMap = new Map(host.getSourceFiles().map((file, i) => [file, i]));
 
     var Symbol = objectAllocator.getSymbolConstructor();
@@ -52848,7 +52848,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // In the same file, order by source position
         return n1.pos - n2.pos;
     }
-
 }
 
 function isNotAccessor(declaration: Declaration): boolean {
