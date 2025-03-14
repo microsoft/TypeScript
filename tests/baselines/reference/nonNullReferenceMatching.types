@@ -46,11 +46,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref);
->typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref) : false | void
+>typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref) : void | false
 >                                                                                                    : ^^^^^^^^^^^^
 >typeof this.props.thumbYProps!.elementRef === 'function' : boolean
 >                                                         : ^^^^^^^
->typeof this.props.thumbYProps!.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.props.thumbYProps!.elementRef : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbYProps!.elementRef : ElementRef | undefined
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^
@@ -92,11 +92,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref);
->typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref) : false | void
+>typeof (this.props.thumbYProps!.elementRef) === 'function' && this.props.thumbYProps!.elementRef(ref) : void | false
 >                                                                                                      : ^^^^^^^^^^^^
 >typeof (this.props.thumbYProps!.elementRef) === 'function' : boolean
 >                                                           : ^^^^^^^
->typeof (this.props.thumbYProps!.elementRef) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (this.props.thumbYProps!.elementRef) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(this.props.thumbYProps!.elementRef) : ElementRef | undefined
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^
@@ -140,11 +140,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref);
->typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref) : false | void
+>typeof ((this.props).thumbYProps!.elementRef)! === 'function' && this.props.thumbYProps!.elementRef(ref) : void | false
 >                                                                                                         : ^^^^^^^^^^^^
 >typeof ((this.props).thumbYProps!.elementRef)! === 'function' : boolean
 >                                                              : ^^^^^^^
->typeof ((this.props).thumbYProps!.elementRef)! : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ((this.props).thumbYProps!.elementRef)! : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >((this.props).thumbYProps!.elementRef)! : ElementRef
 >                                        : ^^^^^^^^^^
@@ -192,11 +192,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && this.props.thumbXProps.elementRef(ref);
->typeof this.props.thumbXProps.elementRef === 'function' && this.props.thumbXProps.elementRef(ref) : false | void
+>typeof this.props.thumbXProps.elementRef === 'function' && this.props.thumbXProps.elementRef(ref) : void | false
 >                                                                                                  : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
 >                                                        : ^^^^^^^
->typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.props.thumbXProps.elementRef : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^
@@ -234,11 +234,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && (this.props).thumbXProps.elementRef(ref);
->typeof this.props.thumbXProps.elementRef === 'function' && (this.props).thumbXProps.elementRef(ref) : false | void
+>typeof this.props.thumbXProps.elementRef === 'function' && (this.props).thumbXProps.elementRef(ref) : void | false
 >                                                                                                    : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
 >                                                        : ^^^^^^^
->typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.props.thumbXProps.elementRef : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^
@@ -278,11 +278,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && (this.props.thumbXProps).elementRef(ref);
->typeof this.props.thumbXProps.elementRef === 'function' && (this.props.thumbXProps).elementRef(ref) : false | void
+>typeof this.props.thumbXProps.elementRef === 'function' && (this.props.thumbXProps).elementRef(ref) : void | false
 >                                                                                                    : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
 >                                                        : ^^^^^^^
->typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.props.thumbXProps.elementRef : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^
@@ -322,11 +322,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props.thumbXProps.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);
->typeof this.props.thumbXProps.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : false | void
+>typeof this.props.thumbXProps.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : void | false
 >                                                                                                        : ^^^^^^^^^^^^
 >typeof this.props.thumbXProps.elementRef === 'function' : boolean
 >                                                        : ^^^^^^^
->typeof this.props.thumbXProps.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.props.thumbXProps.elementRef : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props.thumbXProps.elementRef : ElementRef | undefined
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^
@@ -372,11 +372,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);
->typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : false | void
+>typeof (this.props.thumbXProps).elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : void | false
 >                                                                                                          : ^^^^^^^^^^^^
 >typeof (this.props.thumbXProps).elementRef === 'function' : boolean
 >                                                          : ^^^^^^^
->typeof (this.props.thumbXProps).elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (this.props.thumbXProps).elementRef : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(this.props.thumbXProps).elementRef : ElementRef | undefined
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^
@@ -424,11 +424,11 @@ class Component {
 >    : ^^^^^^^^^^^^^^^^^^
 
         typeof this.props!.thumbXProps!.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref);
->typeof this.props!.thumbXProps!.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : false | void
+>typeof this.props!.thumbXProps!.elementRef === 'function' && ((this.props)!.thumbXProps)!.elementRef(ref) : void | false
 >                                                                                                          : ^^^^^^^^^^^^
 >typeof this.props!.thumbXProps!.elementRef === 'function' : boolean
 >                                                          : ^^^^^^^
->typeof this.props!.thumbXProps!.elementRef : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.props!.thumbXProps!.elementRef : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props!.thumbXProps!.elementRef : ElementRef | undefined
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^

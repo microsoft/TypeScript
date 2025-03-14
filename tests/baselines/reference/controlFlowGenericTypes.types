@@ -539,7 +539,7 @@ class EventEmitter<ET> {
     off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
 >off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
 >    : ^ ^^^^^^^^^        ^^^^^    ^^                               ^^^^^    
->args : [K, number] | [unknown, string]
+>args : [unknown, string] | [K, number]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {

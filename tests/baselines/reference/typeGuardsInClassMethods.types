@@ -31,7 +31,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -58,7 +58,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -81,7 +81,7 @@ class C1 {
 >                                          : ^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
->typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof param : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
@@ -111,7 +111,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -138,7 +138,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -161,7 +161,7 @@ class C1 {
 >                                          : ^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
->typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof param : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
@@ -191,7 +191,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -218,7 +218,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -241,7 +241,7 @@ class C1 {
 >                                          : ^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
->typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof param : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
@@ -271,7 +271,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -298,7 +298,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -321,7 +321,7 @@ class C1 {
 >                                          : ^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
->typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof param : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^
@@ -351,7 +351,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
->typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var1 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -378,7 +378,7 @@ class C1 {
 >                                        : ^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
->typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >var2 : string | number
 >     : ^^^^^^^^^^^^^^^
@@ -401,7 +401,7 @@ class C1 {
 >                                          : ^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
->typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof param : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : string | number
 >      : ^^^^^^^^^^^^^^^

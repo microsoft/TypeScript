@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionUnionTypeProperty4.ts ===
 // interface SnapCrackle {
-//     <|[|{| defId: 0 |}pop|](): string;|>
+//     <|[|{| defId: 2 |}pop|](): string;|>
 // }
 // 
 // interface Magnitude {
@@ -9,7 +9,7 @@
 // }
 // 
 // interface Art {
-//     <|[|{| defId: 2 |}pop|](): boolean;|>
+//     <|[|{| defId: 0 |}pop|](): boolean;|>
 // }
 // 
 // var art: Art;

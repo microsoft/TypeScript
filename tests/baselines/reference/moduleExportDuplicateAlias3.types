@@ -26,11 +26,11 @@ const result = apply.toFixed()
 exports.apply = undefined;
 >exports.apply = undefined : undefined
 >                          : ^^^^^^^^^
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : "ok" | 1 | (() => void) | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("moduleExportAliasDuplicateAlias")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->apply : (() => void) | "ok" | 1 | undefined
+>apply : "ok" | 1 | (() => void) | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
@@ -38,11 +38,11 @@ exports.apply = undefined;
 exports.apply = undefined;
 >exports.apply = undefined : undefined
 >                          : ^^^^^^^^^
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : "ok" | 1 | (() => void) | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("moduleExportAliasDuplicateAlias")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->apply : (() => void) | "ok" | 1 | undefined
+>apply : "ok" | 1 | (() => void) | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
@@ -54,11 +54,11 @@ function a() { }
 exports.apply = a;
 >exports.apply = a : () => void
 >                  : ^^^^^^^^^^
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : "ok" | 1 | (() => void) | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("moduleExportAliasDuplicateAlias")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->apply : (() => void) | "ok" | 1 | undefined
+>apply : "ok" | 1 | (() => void) | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : () => void
 >  : ^^^^^^^^^^
@@ -76,11 +76,11 @@ exports.apply()
 exports.apply = 'ok'
 >exports.apply = 'ok' : "ok"
 >                     : ^^^^
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : "ok" | 1 | (() => void) | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("moduleExportAliasDuplicateAlias")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->apply : (() => void) | "ok" | 1 | undefined
+>apply : "ok" | 1 | (() => void) | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'ok' : "ok"
 >     : ^^^^
@@ -104,11 +104,11 @@ var OK = exports.apply.toUpperCase()
 exports.apply = 1
 >exports.apply = 1 : 1
 >                  : ^
->exports.apply : (() => void) | "ok" | 1 | undefined
+>exports.apply : "ok" | 1 | (() => void) | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("moduleExportAliasDuplicateAlias")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->apply : (() => void) | "ok" | 1 | undefined
+>apply : "ok" | 1 | (() => void) | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^

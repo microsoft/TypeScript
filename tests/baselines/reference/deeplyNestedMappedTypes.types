@@ -112,8 +112,8 @@ type A = { a?: { b: { c: 1 | { d: 2000 } }}}
 >  : ^^^^^                        ^^^^^^^^^^^^^^^
 >b : { c: 1 | { d: 2000; }; }
 >  : ^^^^^                ^^^
->c : { d: 2000; } | 1
->  : ^^^^^    ^^^^^^^
+>c : 1 | { d: 2000; }
+>  : ^^^^^^^^^    ^^^
 >d : 2000
 >  : ^^^^
 
@@ -264,7 +264,7 @@ export const Input = Type.Object({
 })
 
 export type Output = Static<typeof Output>
->Output : { level1: { level2: { foo: string; bar: string; }; }; }
+>Output : { level1: { level2: { bar: string; foo: string; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Output : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -482,7 +482,7 @@ export type OptionalPropertyKeys<T extends TProperties> = { [K in keyof T]: T[K]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export type RequiredPropertyKeys<T extends TProperties> = keyof Omit<T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>
->RequiredPropertyKeys : Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>
+>RequiredPropertyKeys : Exclude<keyof T, OptionalPropertyKeys<T> | ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T>>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type PropertiesReducer<T extends TProperties, R extends Record<keyof any, unknown>> = Evaluate<(
@@ -516,7 +516,7 @@ export interface TObject<T extends TProperties = TProperties> extends TSchema {
 >     : ^^^^^^^^^^^^^
 
     static: PropertiesReduce<T, this['params']>
->static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>>>>
+>static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, OptionalPropertyKeys<T> | ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T>>>>>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: 'object'

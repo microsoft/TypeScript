@@ -143,9 +143,9 @@ function f2(options?: [string?, number?]) {
 >   : ^^^^^^^^^^^^^^^^^^
 >(options || {})[0] : string | undefined
 >                   : ^^^^^^^^^^^^^^^^^^
->(options || {}) : [(string | undefined)?, (number | undefined)?] | {}
+>(options || {}) : {} | [(string | undefined)?, (number | undefined)?]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options || {} : [(string | undefined)?, (number | undefined)?] | {}
+>options || {} : {} | [(string | undefined)?, (number | undefined)?]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : [(string | undefined)?, (number | undefined)?] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -239,7 +239,7 @@ function f4(options?: [string, number]) {
 >    : ^^^^^^^^^^^^^^^^^^
 >num : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->options || [] : [] | [string, number]
+>options || [] : [string, number] | []
 >              : ^^^^^^^^^^^^^^^^^^^^^
 >options : [string, number] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -247,7 +247,7 @@ function f4(options?: [string, number]) {
 >   : ^^
 
     [str, num] = options || [];
->[str, num] = options || [] : [] | [string, number]
+>[str, num] = options || [] : [string, number] | []
 >                           : ^^^^^^^^^^^^^^^^^^^^^
 >[str, num] : [string | undefined, number | undefined]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -255,7 +255,7 @@ function f4(options?: [string, number]) {
 >    : ^^^^^^^^^^^^^^^^^^
 >num : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->options || [] : [] | [string, number]
+>options || [] : [string, number] | []
 >              : ^^^^^^^^^^^^^^^^^^^^^
 >options : [string, number] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -267,9 +267,9 @@ function f4(options?: [string, number]) {
 >   : ^^^^^^^^^^^^^^^^^^
 >(options || {})[0] : string | undefined
 >                   : ^^^^^^^^^^^^^^^^^^
->(options || {}) : [string, number] | {}
+>(options || {}) : {} | [string, number]
 >                : ^^^^^^^^^^^^^^^^^^^^^
->options || {} : [string, number] | {}
+>options || {} : {} | [string, number]
 >              : ^^^^^^^^^^^^^^^^^^^^^
 >options : [string, number] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

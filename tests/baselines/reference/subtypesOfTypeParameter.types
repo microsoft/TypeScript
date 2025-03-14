@@ -269,9 +269,9 @@ function f2<T, U>(x: T, y: U) {
 >     : ^^^^^^^^^^^^^^^
 
     var r5 = true ? /1/ : x;
->r5 : RegExp | T
+>r5 : T | RegExp
 >   : ^^^^^^^^^^
->true ? /1/ : x : RegExp | T
+>true ? /1/ : x : T | RegExp
 >               : ^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -281,9 +281,9 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r5 = true ? x : /1/;
->r5 : RegExp | T
+>r5 : T | RegExp
 >   : ^^^^^^^^^^
->true ? x : /1/ : RegExp | T
+>true ? x : /1/ : T | RegExp
 >               : ^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -385,9 +385,9 @@ function f2<T, U>(x: T, y: U) {
 >   : ^^
 
     var r9 = true ? i1 : x;
->r9 : I1 | T
+>r9 : T | I1
 >   : ^^^^^^
->true ? i1 : x : I1 | T
+>true ? i1 : x : T | I1
 >              : ^^^^^^
 >true : true
 >     : ^^^^
@@ -397,9 +397,9 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r9 = true ? x : i1;
->r9 : I1 | T
+>r9 : T | I1
 >   : ^^^^^^
->true ? x : i1 : I1 | T
+>true ? x : i1 : T | I1
 >              : ^^^^^^
 >true : true
 >     : ^^^^
@@ -413,9 +413,9 @@ function f2<T, U>(x: T, y: U) {
 >   : ^^
 
     var r10 = true ? c1 : x;
->r10 : C1 | T
+>r10 : T | C1
 >    : ^^^^^^
->true ? c1 : x : C1 | T
+>true ? c1 : x : T | C1
 >              : ^^^^^^
 >true : true
 >     : ^^^^
@@ -425,9 +425,9 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r10 = true ? x : c1;
->r10 : C1 | T
+>r10 : T | C1
 >    : ^^^^^^
->true ? x : c1 : C1 | T
+>true ? x : c1 : T | C1
 >              : ^^^^^^
 >true : true
 >     : ^^^^
@@ -491,9 +491,9 @@ function f2<T, U>(x: T, y: U) {
 >  : ^^^^^^^^
 
     var r14 = true ? E.A : x;
->r14 : T | E
+>r14 : E | T
 >    : ^^^^^
->true ? E.A : x : T | E
+>true ? E.A : x : E | T
 >               : ^^^^^
 >true : true
 >     : ^^^^
@@ -507,9 +507,9 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r14 = true ? x : E.A;
->r14 : T | E
+>r14 : E | T
 >    : ^^^^^
->true ? x : E.A : T | E
+>true ? x : E.A : E | T
 >               : ^^^^^
 >true : true
 >     : ^^^^
@@ -559,9 +559,9 @@ function f2<T, U>(x: T, y: U) {
 >  : ^^^^^^^^
 
     var r16 = true ? ac : x;
->r16 : typeof c | T
+>r16 : T | typeof c
 >    : ^^^^^^^^^^^^
->true ? ac : x : typeof c | T
+>true ? ac : x : T | typeof c
 >              : ^^^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -571,9 +571,9 @@ function f2<T, U>(x: T, y: U) {
 >  : ^
 
     var r16 = true ? x : ac;
->r16 : typeof c | T
+>r16 : T | typeof c
 >    : ^^^^^^^^^^^^
->true ? x : ac : typeof c | T
+>true ? x : ac : T | typeof c
 >              : ^^^^^^^^^^^^
 >true : true
 >     : ^^^^

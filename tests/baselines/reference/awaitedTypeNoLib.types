@@ -31,7 +31,7 @@ class Thenable<T> {
 >              : ^       ^^      ^^                                                   ^^       ^^                 ^^^^^^^^^
 
     result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
->result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
+>result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     resolve: Receiver<TResult>,
@@ -42,7 +42,7 @@ class Thenable<T> {
     if (result instanceof Thenable) {
 >result instanceof Thenable : boolean
 >                           : ^^^^^^^
->result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
+>result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Thenable : typeof Thenable
 >         : ^^^^^^^^^^^^^^^
@@ -57,7 +57,7 @@ class Thenable<T> {
 >     : ^^^^
 >resolvePromise : <TResult_1>(result: Thenable<TResult_1>, resolve: Receiver<TResult_1>) => void
 >               : ^^^^^^^^^^^^      ^^                   ^^       ^^                   ^^^^^^^^^
->result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
+>result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >resolve : Receiver<TResult>
 >        : ^^^^^^^^^^^^^^^^^
