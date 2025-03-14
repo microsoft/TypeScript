@@ -81,6 +81,7 @@ import {
     classOrConstructorParameterIsDecorated,
     ClassStaticBlockDeclaration,
     clear,
+    compareComparableValues,
     compareDiagnostics,
     comparePaths,
     compareValues,
@@ -1491,6 +1492,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var cancellationToken: CancellationToken | undefined;
 
     var scanner: Scanner | undefined;
+
+    var fileIndexMap = new Map(host.getSourceFiles().map((file, i) => [file, i]));
 
     var Symbol = objectAllocator.getSymbolConstructor();
     var Type = objectAllocator.getTypeConstructor();
@@ -5467,6 +5470,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (result || (result = [])).push(symbol);
             }
         });
+        result?.sort(compareSymbols);
         return result || emptyArray;
     }
 
@@ -34524,7 +34528,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // So the table *contains* `x` but `x` isn't actually in scope.
         // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
         if (symbol) return symbol;
-        let candidates: Symbol[];
+        let candidates = arrayFrom(symbols.values()).sort(compareSymbols);
         if (symbols === globals) {
             const primitives = mapDefined(
                 ["string", "number", "boolean", "object", "bigint", "symbol"],
@@ -34532,10 +34536,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
                     : undefined,
             );
-            candidates = primitives.concat(arrayFrom(symbols.values()));
-        }
-        else {
-            candidates = arrayFrom(symbols.values());
+            candidates = concatenate(candidates, primitives);
         }
         return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
     }
@@ -34546,7 +34547,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
-        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
+        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule).sort(compareSymbols), SymbolFlags.ModuleMember); // eslint-disable-line local/no-array-mutating-method-expressions
     }
 
     function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression, keyedType: Type): string | undefined {
@@ -52816,6 +52817,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const specifier = file.imports[0];
         Debug.assert(specifier && nodeIsSynthesized(specifier) && specifier.text === "tslib", `Expected sourceFile.imports[0] to be the synthesized tslib import`);
         return specifier;
+    }
+
+    function compareSymbols(s1: Symbol | undefined, s2: Symbol | undefined): number {
+        if (s1 === s2) return 0;
+        if (s1 === undefined) return 1;
+        if (s2 === undefined) return -1;
+        if (length(s1.declarations) !== 0 && length(s2.declarations) !== 0) {
+            const r = compareNodes(s1.declarations![0], s2.declarations![0]);
+            if (r !== 0) return r;
+        }
+        else if (length(s1.declarations) !== 0) {
+            return -1;
+        }
+        else if (length(s2.declarations) !== 0) {
+            return 1;
+        }
+        const r = compareComparableValues(s1.escapedName as string, s2.escapedName as string);
+        if (r !== 0) return r;
+        return getSymbolId(s1) - getSymbolId(s2);
+    }
+
+    function compareNodes(n1: Node | undefined, n2: Node | undefined): number {
+        if (n1 === n2) return 0;
+        if (n1 === undefined) return 1;
+        if (n2 === undefined) return -1;
+        const f1 = fileIndexMap.get(getSourceFileOfNode(n1))!;
+        const f2 = fileIndexMap.get(getSourceFileOfNode(n2))!;
+        if (f1 !== f2) {
+            // Order by index of file in the containing program
+            return f1 - f2;
+        }
+        // In the same file, order by source position
+        return n1.pos - n2.pos;
     }
 }
 
