@@ -279,7 +279,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     let documentationFromAlias: SymbolDisplayPart[] | undefined;
     let tagsFromAlias: JSDocTagInfo[] | undefined;
     let hasMultipleSignatures = false;
-    const typeWriterOut: WriterContextOut | undefined = verbosityLevel !== undefined ? { couldUnfoldMore: false } : undefined;
+    const typeWriterOut: WriterContextOut = { couldUnfoldMore: false, truncated: false };
 
     if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
         return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -796,7 +796,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         documentation,
         symbolKind,
         tags: tags.length === 0 ? undefined : tags,
-        canIncreaseVerbosityLevel: typeWriterOut?.couldUnfoldMore,
+        canIncreaseVerbosityLevel: !typeWriterOut.truncated && typeWriterOut.couldUnfoldMore,
     };
 
     function getPrinter() {

@@ -5053,6 +5053,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFi
 /** @internal */
 export interface WriterContextOut {
     couldUnfoldMore: boolean;
+    truncated: boolean;
 }
 
 export interface TypeChecker {

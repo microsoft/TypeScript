@@ -6063,7 +6063,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         verbosityLevel?: number,
         out?: WriterContextOut,
     ): string {
-        const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation || verbosityLevel !== undefined;
+        const noTruncation = compilerOptions.noErrorTruncation ||
+            flags & TypeFormatFlags.NoTruncation;
         const typeNode = nodeBuilder.typeToTypeNode(
             type,
             enclosingDeclaration,
@@ -6409,6 +6410,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 depth: 0,
                 typeStack: [],
                 couldUnfoldMore: false,
+                truncated: false,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -6417,6 +6419,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (out) {
                 out.couldUnfoldMore = context.couldUnfoldMore;
+                out.truncated = context.truncated;
             }
             return context.encounteredError ? undefined : resultingNode;
         }
@@ -6464,8 +6467,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // Determines if a type can be unfolded, based on how many layers of type aliases we're allowed to unfold.
-        function canUnfoldType(type: Type, context: NodeBuilderContext): boolean {
-            if (isUnfoldableType(type)) {
+        function canUnfoldType(type: Type, context: NodeBuilderContext, isAlias = false): boolean {
+            if (!isAlias && isLibType(type)) {
                 return false;
             }
             for (let i = 0; i < context.typeStack.length - 1; i++) {
@@ -6481,9 +6484,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // Don't unfold types like `Array` or `Promise`, instead treating them as transparent.
-        function isUnfoldableType(type: Type): boolean {
+        function isLibType(type: Type): boolean {
             const symbol = (getObjectFlags(type) & ObjectFlags.Reference) !== 0 ? (type as TypeReference).target.symbol : type.symbol;
-            return !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))))
+            return isTupleType(type) || !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
         }
 
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
@@ -6637,7 +6640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                if (!canUnfoldType(type, context)) {
+                if (!canUnfoldType(type, context, true)) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
@@ -7358,6 +7361,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
                 if (checkTruncationLength(context)) {
+                    context.truncated = true;
                     if (context.flags & NodeBuilderFlags.NoTruncation) {
                         return [addSyntheticTrailingComment(factory.createNotEmittedTypeElement(), SyntaxKind.MultiLineCommentTrivia, "elided")];
                     }
@@ -7392,6 +7396,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
+                        context.truncated = true;
                         if (context.flags & NodeBuilderFlags.NoTruncation) {
                             const typeElement = typeElements.pop()!;
                             typeElements.push(addSyntheticTrailingComment(typeElement, SyntaxKind.MultiLineCommentTrivia, `... ${properties.length - i} more elided ...`));
@@ -7572,6 +7577,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function mapToTypeNodes(types: readonly Type[] | undefined, context: NodeBuilderContext, isBareList?: boolean): TypeNode[] | undefined {
             if (some(types)) {
                 if (checkTruncationLength(context)) {
+                    context.truncated = true;
                     if (!isBareList) {
                         return [
                             context.flags & NodeBuilderFlags.NoTruncation
@@ -7597,6 +7603,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const type of types) {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
+                        context.truncated = true;
                         result.push(
                             context.flags & NodeBuilderFlags.NoTruncation
                                 ? addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, `... ${types.length - i} more elided ...`)
@@ -53036,6 +53043,7 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
 
     // Output
     couldUnfoldMore: boolean; // Whether we found a type alias that we could unfold but didn't
+    truncated: boolean; // Whether we did truncation.
 }
 
 class SymbolTrackerImpl implements SymbolTracker {
