@@ -5420,6 +5420,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (result || (result = [])).push(symbol);
             }
         });
+        result?.sort(compareSymbols);
         return result || emptyArray;
     }
 
@@ -34716,7 +34717,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // So the table *contains* `x` but `x` isn't actually in scope.
         // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
         if (symbol) return symbol;
-        let candidates: Symbol[];
+        let candidates = arrayFrom(symbols.values()).sort(compareSymbols);
         if (symbols === globals) {
             const primitives = mapDefined(
                 ["string", "number", "boolean", "object", "bigint", "symbol"],
@@ -34724,10 +34725,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
                     : undefined,
             );
-            candidates = primitives.concat(arrayFrom(symbols.values()));
-        }
-        else {
-            candidates = arrayFrom(symbols.values());
+            candidates = concatenate(candidates, primitives);
         }
         return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
     }
@@ -34738,7 +34736,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
-        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
+        return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule).sort(compareSymbols), SymbolFlags.ModuleMember); // eslint-disable-line local/no-array-mutating-method-expressions
     }
 
     function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression, keyedType: Type): string | undefined {
