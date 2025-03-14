@@ -3951,6 +3951,9 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ClassStaticBlockDeclaration:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
+        case SyntaxKind.JSDocImportTag:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
+
         case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
