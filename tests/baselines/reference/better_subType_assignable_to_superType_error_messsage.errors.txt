@@ -1,0 +1,22 @@
+better_subType_assignable_to_superType_error_messsage.ts(2,3): error TS2552: Cannot find name 'subtype'. Did you mean 'subType2'?
+better_subType_assignable_to_superType_error_messsage.ts(5,3): error TS2322: Type 'SuperType' is not assignable to type 'SubType2'.
+  'SubType2' is constrained to be a subtype of 'SuperType'.
+
+
+==== better_subType_assignable_to_superType_error_messsage.ts (2 errors) ====
+    function parameterExtendsOtherParameter<SuperType, SubType extends SuperType, SubType2 extends SubType>(superType: SuperType, subType2: SubType2) {
+      subtype = superType;//error
+      ~~~~~~~
+!!! error TS2552: Cannot find name 'subtype'. Did you mean 'subType2'?
+!!! related TS2728 better_subType_assignable_to_superType_error_messsage.ts:1:127: 'subType2' is declared here.
+      
+      //ensures that supertypes are not assignable to 'grandchild' subtypes
+      subType2 = superType;//error
+      ~~~~~~~~
+!!! error TS2322: Type 'SuperType' is not assignable to type 'SubType2'.
+!!! error TS2322:   'SubType2' is constrained to be a subtype of 'SuperType'.
+!!! related TS2208 better_subType_assignable_to_superType_error_messsage.ts:1:41: This type parameter might need an `extends SubType2` constraint.
+    
+      superType = subType2;//ok
+    }
+    

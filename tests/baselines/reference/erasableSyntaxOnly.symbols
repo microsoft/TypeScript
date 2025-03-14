@@ -118,41 +118,6 @@ declare namespace AmbientStuff {
 >B : Symbol(FineAlias, Decl(index.ts, 58, 31))
 }
 
-// Not erasable
-(()=><any>{})();
-(()=>< any >{})();
-(()=> < any > {})();
-
-// Erasable
-(()=><any>({}))();
-(()=>(<any>{}))();
-<any>{};
-
-
-// return and yield ASI
-function *gen() {
->gen : Symbol(gen, Decl(index.ts, 73, 8))
-
-    yield <any>
-        1;
-    return <any>
-        1;
-}
-
-// at the start of an ExpressionStatement if followed by an object literal; though I'm not sure why one would use it there
-<unknown>{foo() {}}.foo();
->{foo() {}}.foo : Symbol(foo, Decl(index.ts, 85, 10))
->foo : Symbol(foo, Decl(index.ts, 85, 10))
->foo : Symbol(foo, Decl(index.ts, 85, 10))
-
-// at the start of an ExpressionStatement if followed by function keyword
-<unknown>function() {}();
-<unknown>function() {};
-
-// at the start of an ExpressionStatement if followed by an anonymous class expression
-// note that this exact syntax currently emits invalid JS (no parenthesis added like for function above)
-<unknown>class {}
-
 === commonjs.cts ===
 import foo = require("./other.cjs");
 >foo : Symbol(foo, Decl(commonjs.cts, 0, 0))
