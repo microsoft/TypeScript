@@ -2462,7 +2462,7 @@ export function scanTokenAtPosition(sourceFile: SourceFile, pos: number): Syntax
 
 function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunction): TextSpan {
     const pos = skipTrivia(sourceFile.text, node.pos);
-    if (node.body && node.body.kind === SyntaxKind.Block) {
+    if (node.body) {
         const { line: startLine } = getLineAndCharacterOfPosition(sourceFile, node.body.pos);
         const { line: endLine } = getLineAndCharacterOfPosition(sourceFile, node.body.end);
         if (startLine < endLine) {
