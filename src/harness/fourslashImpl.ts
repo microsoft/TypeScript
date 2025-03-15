@@ -215,6 +215,7 @@ interface RealizedDiagnostic {
     code: number;
     reportsUnnecessary?: {};
     reportsDeprecated?: {};
+    reportsExperimental?: {};
 }
 
 function realizeDiagnostics(diagnostics: readonly ts.Diagnostic[], newLine: string): RealizedDiagnostic[] {
@@ -230,6 +231,7 @@ function realizeDiagnostic(diagnostic: ts.Diagnostic, newLine: string): Realized
         code: diagnostic.code,
         reportsUnnecessary: diagnostic.reportsUnnecessary,
         reportsDeprecated: diagnostic.reportsDeprecated,
+        reportsExperimental: diagnostic.reportsExperimental
     };
 }
 
@@ -1898,6 +1900,7 @@ export class TestState {
                     ...ts.createTextSpanFromRange(range),
                     reportsUnnecessary: e.reportsUnnecessary,
                     reportsDeprecated: e.reportsDeprecated,
+                    reportsExperimental: e.reportsExperimental,
                 };
             }),
         );
