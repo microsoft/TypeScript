@@ -3555,6 +3555,14 @@ export function isJSXTagName(node: Node): boolean {
     return false;
 }
 
+/**
+ * @internal
+ * Returns true if React would emit this tag name as a string rather than an identifier or qualified name
+ */
+export function isJsxIntrinsicTagName(tagName: Node): tagName is Identifier | JsxNamespacedName {
+    return isIdentifier(tagName) && isIntrinsicJsxName(tagName.escapedText) || isJsxNamespacedName(tagName);
+}
+
 /** @internal */
 export function isExpressionNode(node: Node): boolean {
     switch (node.kind) {
