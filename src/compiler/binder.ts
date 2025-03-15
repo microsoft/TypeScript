@@ -57,6 +57,7 @@ import {
     ElementAccessExpression,
     EntityNameExpression,
     EnumDeclaration,
+    EnumLiteralExpression,
     escapeLeadingUnderscores,
     every,
     ExportAssignment,
@@ -155,6 +156,7 @@ import {
     isEmptyObjectLiteral,
     isEntityNameExpression,
     isEnumConst,
+    isEnumLiteralExpression,
     isExportAssignment,
     isExportDeclaration,
     isExportsIdentifier,
@@ -821,6 +823,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     // Assignment declarations are allowed to merge with variables, no matter what other flags they have.
                     if (isNamedDeclaration(node)) {
                         setParent(node.name, node);
+                    }
+                    if (isEnumLiteralExpression(node) && symbol.valueDeclaration === node.parent) {
+                        // This is not a real redeclaration, but is in fact two separate meanings for the same symbol.
                     }
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
@@ -2272,6 +2277,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.ClassDeclaration:
                 return declareClassMember(node, symbolFlags, symbolExcludes);
 
+            case SyntaxKind.EnumLiteralExpression:
             case SyntaxKind.EnumDeclaration:
                 return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
 
@@ -3044,6 +3050,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return bindBlockScopedDeclaration(node as Declaration, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
             case SyntaxKind.TypeAliasDeclaration:
                 return bindBlockScopedDeclaration(node as Declaration, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+            case SyntaxKind.EnumLiteralExpression:
+                return bindEnumLiteralExpression(node as EnumLiteralExpression);
             case SyntaxKind.EnumDeclaration:
                 return bindEnumDeclaration(node as EnumDeclaration);
             case SyntaxKind.ModuleDeclaration:
@@ -3655,6 +3663,17 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             : bindBlockScopedDeclaration(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
     }
 
+    function bindEnumLiteralExpression(node: EnumLiteralExpression) {
+        Debug.assert(isVariableDeclaration(node.parent));
+
+        const varSymbol: Symbol = node.parent.symbol;
+        node.symbol = varSymbol;
+        varSymbol.flags |= isEnumConst(node) ? SymbolFlags.ConstEnum : SymbolFlags.RegularEnum;
+        varSymbol.flags &= ~(SymbolFlags.Assignment | SymbolFlags.Variable);
+        varSymbol.exports ??= createSymbolTable();
+        appendIfUnique(varSymbol.declarations, node);
+    }
+
     function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
         if (inStrictMode) {
             checkStrictModeEvalOrArguments(node, node.name);
@@ -3914,6 +3933,7 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ClassExpression:
         case SyntaxKind.ClassDeclaration:
         case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.EnumLiteralExpression:
         case SyntaxKind.ObjectLiteralExpression:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.JSDocTypeLiteral:
