@@ -49,7 +49,7 @@ var isFileSystemCaseSensitive = func() bool {
 		panic(fmt.Sprintf("vfs: failed to get executable path: %v", err))
 	}
 
-	// If the current executable exists under a different case, we must be case-insensitve.
+	// If the current executable exists under a different case, we must be case-insensitive.
 	swapped := swapCase(exe)
 	if _, err := os.Stat(swapped); err != nil {
 		if os.IsNotExist(err) {
