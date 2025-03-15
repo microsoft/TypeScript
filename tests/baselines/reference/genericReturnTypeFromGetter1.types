@@ -11,17 +11,17 @@ export class DbSet<T> {
 >      : ^^^^^^^^
 
     _entityType: A;
->_entityType : any
->            : ^^^
+>_entityType : "genericReturnTypeFromGetter1".A<any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   get entityType() { return this._entityType; }  // used to ICE without return type annotation
->entityType : any
->           : ^^^
->this._entityType : any
->                 : ^^^
+>entityType : "genericReturnTypeFromGetter1".A<any>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this._entityType : "genericReturnTypeFromGetter1".A<any>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->_entityType : any
->            : ^^^
+>_entityType : "genericReturnTypeFromGetter1".A<any>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
