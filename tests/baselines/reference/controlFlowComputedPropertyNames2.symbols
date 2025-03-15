@@ -1,0 +1,141 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames2.ts] ////
+
+=== controlFlowComputedPropertyNames2.ts ===
+interface Type {
+>Type : Symbol(Type, Decl(controlFlowComputedPropertyNames2.ts, 0, 0))
+
+  kind: number;
+>kind : Symbol(Type.kind, Decl(controlFlowComputedPropertyNames2.ts, 0, 16))
+
+  isIndexType(): this is IndexType;
+>isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>IndexType : Symbol(IndexType, Decl(controlFlowComputedPropertyNames2.ts, 3, 1))
+}
+
+interface IndexType extends Type {
+>IndexType : Symbol(IndexType, Decl(controlFlowComputedPropertyNames2.ts, 3, 1))
+>Type : Symbol(Type, Decl(controlFlowComputedPropertyNames2.ts, 0, 0))
+
+  kind: 1;
+>kind : Symbol(IndexType.kind, Decl(controlFlowComputedPropertyNames2.ts, 5, 34))
+
+  type: Type;
+>type : Symbol(IndexType.type, Decl(controlFlowComputedPropertyNames2.ts, 6, 10))
+>Type : Symbol(Type, Decl(controlFlowComputedPropertyNames2.ts, 0, 0))
+}
+
+function test1(types: Type[]) {
+>test1 : Symbol(test1, Decl(controlFlowComputedPropertyNames2.ts, 8, 1))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 10, 15))
+>Type : Symbol(Type, Decl(controlFlowComputedPropertyNames2.ts, 0, 0))
+
+  for (let i = 0; i < types.length; i++) {
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 11, 10))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 11, 10))
+>types.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 10, 15))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 11, 10))
+
+    const t = types[i].isIndexType() ? types[i].type : types[i]; // ok
+>t : Symbol(t, Decl(controlFlowComputedPropertyNames2.ts, 12, 9))
+>types[i].isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 10, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 11, 10))
+>isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types[i].type : Symbol(IndexType.type, Decl(controlFlowComputedPropertyNames2.ts, 6, 10))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 10, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 11, 10))
+>type : Symbol(IndexType.type, Decl(controlFlowComputedPropertyNames2.ts, 6, 10))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 10, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 11, 10))
+  }
+}
+
+function test2(types: Type[]) {
+>test2 : Symbol(test2, Decl(controlFlowComputedPropertyNames2.ts, 14, 1))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 16, 15))
+>Type : Symbol(Type, Decl(controlFlowComputedPropertyNames2.ts, 0, 0))
+
+  for (let i = 0; i < types.length; i++) {
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 17, 10))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 17, 10))
+>types.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 16, 15))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 17, 10))
+
+    i++;
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 17, 10))
+
+    const t = types[i].isIndexType() ? types[i].type : types[i]; // error
+>t : Symbol(t, Decl(controlFlowComputedPropertyNames2.ts, 19, 9))
+>types[i].isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 16, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 17, 10))
+>isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 16, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 17, 10))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 16, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 17, 10))
+  }
+}
+
+function test3(types: Type[]) {
+>test3 : Symbol(test3, Decl(controlFlowComputedPropertyNames2.ts, 21, 1))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 23, 15))
+>Type : Symbol(Type, Decl(controlFlowComputedPropertyNames2.ts, 0, 0))
+
+  for (
+    let i = 0;
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 25, 7))
+
+    i < types.length;
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 25, 7))
+>types.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 23, 15))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    types[i].isIndexType() ? types[i].type : types[i], i++ // error
+>types[i].isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 23, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 25, 7))
+>isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 23, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 25, 7))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 23, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 25, 7))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 25, 7))
+
+  ) {}
+}
+
+function test4(types: Type[]) {
+>test4 : Symbol(test4, Decl(controlFlowComputedPropertyNames2.ts, 29, 1))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 31, 15))
+>Type : Symbol(Type, Decl(controlFlowComputedPropertyNames2.ts, 0, 0))
+
+  for (
+    let i = 0;
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 33, 7))
+
+    types[i].isIndexType() ? types[i].type : types[i], i < types.length; // error
+>types[i].isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 31, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 33, 7))
+>isIndexType : Symbol(Type.isIndexType, Decl(controlFlowComputedPropertyNames2.ts, 1, 15))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 31, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 33, 7))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 31, 15))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 33, 7))
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 33, 7))
+>types.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>types : Symbol(types, Decl(controlFlowComputedPropertyNames2.ts, 31, 15))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    i++
+>i : Symbol(i, Decl(controlFlowComputedPropertyNames2.ts, 33, 7))
+
+  ) {}
+}
+
