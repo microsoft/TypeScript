@@ -1,7 +1,8 @@
 destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2548: Type 'number[] | null' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
+destructuringArrayBindingPatternAndAssignment4.ts(5,17): error TS18047: 'data' is possibly 'null'.
 
 
-==== destructuringArrayBindingPatternAndAssignment4.ts (1 errors) ====
+==== destructuringArrayBindingPatternAndAssignment4.ts (2 errors) ====
     // #35497
     
     
@@ -9,4 +10,6 @@ destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2548: Type 'numb
     const [value] = data; // Error
           ~~~~~~~
 !!! error TS2548: Type 'number[] | null' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
+                    ~~~~
+!!! error TS18047: 'data' is possibly 'null'.
     
