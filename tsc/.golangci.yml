@@ -64,10 +64,6 @@ linters-settings:
     customlint:
       type: module
 
-  wrapcheck:
-    ignorePackageGlobs:
-      - encoding/*
-      - github.com/go-json-experiment/*
 #   revive:
 #     enable-all-rules: true
 #     rules:
