@@ -1,0 +1,190 @@
+//// [tests/cases/compiler/mappedTypeGenericIndexedAccess3.ts] ////
+
+=== mappedTypeGenericIndexedAccess3.ts ===
+type EventPayloads = {
+>EventPayloads : EventPayloads
+>              : ^^^^^^^^^^^^^
+
+  completeSprint: {
+>completeSprint : { automationId: string; spaceId: string; }
+>               : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^
+
+    automationId: string;
+>automationId : string
+>             : ^^^^^^
+
+    spaceId: string;
+>spaceId : string
+>        : ^^^^^^
+
+  };
+  sendMessage: {
+>sendMessage : { message: string; }
+>            : ^^^^^^^^^^^      ^^^
+
+    message: string;
+>message : string
+>        : ^^^^^^
+
+  };
+};
+
+type Nested = {
+>Nested : Nested
+>       : ^^^^^^
+
+  bar: {
+>bar : { a: string; }
+>    : ^^^^^      ^^^
+
+    a: string;
+>a : string
+>  : ^^^^^^
+
+  };
+  baz: {
+>baz : { b: string; }
+>    : ^^^^^      ^^^
+
+    b: string;
+>b : string
+>  : ^^^^^^
+
+  };
+};
+
+type CompletedEvent<T extends keyof EventPayloads, Z extends keyof Nested> = {
+>CompletedEvent : CompletedEvent<T, Z>
+>               : ^^^^^^^^^^^^^^^^^^^^
+
+  [E in T]: {
+    type: E;
+>type : E
+>     : ^
+
+    payload: {
+>payload : { [K in Z]: { other: string; nested: Nested[K]; }; }[Z]
+>        : ^^^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^         ^^^^^^^^^
+
+      [K in Z]: {
+        other: string;
+>other : string
+>      : ^^^^^^
+
+        nested: Nested[K];
+>nested : Nested[K]
+>       : ^^^^^^^^^
+
+      };
+    }[Z];
+    appName: string;
+>appName : string
+>        : ^^^^^^
+
+  };
+}[T];
+
+function overwriteAppName<
+>overwriteAppName : <U extends keyof EventPayloads, Z extends keyof Nested>(scheduled: CompletedEvent<U, Z>) => CompletedEvent<U, Z>
+>                 : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^            ^^         ^^                    ^^^^^                    
+
+  U extends keyof EventPayloads,
+  Z extends keyof Nested,
+>(scheduled: CompletedEvent<U, Z>): CompletedEvent<U, Z> {
+>scheduled : CompletedEvent<U, Z>
+>          : ^^^^^^^^^^^^^^^^^^^^
+
+  const { appName, type, ...rest } = scheduled;
+>appName : string
+>        : ^^^^^^
+>type : U
+>     : ^
+>rest : Omit<CompletedEvent<U, Z>, "appName" | "type">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>scheduled : CompletedEvent<U, Z>
+>          : ^^^^^^^^^^^^^^^^^^^^
+
+  const { other, ...restrest } = rest.payload;
+>other : string
+>      : ^^^^^^
+>restrest : Omit<CompletedEvent<U, Z>["payload"], "other">
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest.payload : CompletedEvent<U, Z>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<U, Z>, "appName" | "type">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<U, Z>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  rest.payload.nested = restrest.nested; // ok
+>rest.payload.nested = restrest.nested : CompletedEvent<U, Z>["payload"]["nested"]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest.payload.nested : Nested[Z]
+>                    : ^^^^^^^^^
+>rest.payload : CompletedEvent<U, Z>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<U, Z>, "appName" | "type">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<U, Z>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : Nested[Z]
+>       : ^^^^^^^^^
+>restrest.nested : CompletedEvent<U, Z>["payload"]["nested"]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>restrest : Omit<CompletedEvent<U, Z>["payload"], "other">
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : CompletedEvent<U, Z>["payload"]["nested"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  restrest.nested = rest.payload.nested; // ok
+>restrest.nested = rest.payload.nested : Nested[Z]
+>                                      : ^^^^^^^^^
+>restrest.nested : CompletedEvent<U, Z>["payload"]["nested"]
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>restrest : Omit<CompletedEvent<U, Z>["payload"], "other">
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : CompletedEvent<U, Z>["payload"]["nested"]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest.payload.nested : Nested[Z]
+>                    : ^^^^^^^^^
+>rest.payload : CompletedEvent<U, Z>["payload"]
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rest : Omit<CompletedEvent<U, Z>, "appName" | "type">
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload : CompletedEvent<U, Z>["payload"]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nested : Nested[Z]
+>       : ^^^^^^^^^
+
+  return {
+>{    type,    payload: {      ...restrest,      other,    },    appName: "test",  } : { type: U; payload: Omit<CompletedEvent<U, Z>["payload"], "other"> & { other: string; }; appName: string; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type,
+>type : U
+>     : ^
+
+    payload: {
+>payload : Omit<CompletedEvent<U, Z>["payload"], "other"> & { other: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{      ...restrest,      other,    } : Omit<CompletedEvent<U, Z>["payload"], "other"> & { other: string; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      ...restrest,
+>restrest : Omit<CompletedEvent<U, Z>["payload"], "other">
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      other,
+>other : string
+>      : ^^^^^^
+
+    },
+    appName: "test",
+>appName : string
+>        : ^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+
+  };
+}
+
