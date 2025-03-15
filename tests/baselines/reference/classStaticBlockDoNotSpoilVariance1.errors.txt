@@ -1,0 +1,41 @@
+classStaticBlockDoNotSpoilVariance1.ts(7,35): error TS2344: Type 'A<T>' does not satisfy the constraint 'A<number>'.
+  Type 'T' is not assignable to type 'number'.
+classStaticBlockDoNotSpoilVariance1.ts(20,36): error TS2344: Type 'A2<T>' does not satisfy the constraint 'A2<number>'.
+  Type 'T' is not assignable to type 'number'.
+
+
+==== classStaticBlockDoNotSpoilVariance1.ts (2 errors) ====
+    class A<T = number> {
+      static {
+        type _<T extends A = A> = T;
+      }
+    
+      value!: T;
+      child!: InstanceType<typeof A.B<A<T>>>;
+                                      ~~~~
+!!! error TS2344: Type 'A<T>' does not satisfy the constraint 'A<number>'.
+!!! error TS2344:   Type 'T' is not assignable to type 'number'.
+!!! related TS2208 classStaticBlockDoNotSpoilVariance1.ts:1:9: This type parameter might need an `extends number` constraint.
+    
+      static B = class B<T extends A = A> {
+        parent!: T;
+      };
+    }
+    
+    const A2 = class A2<T = number> {
+      static {
+        type _<T extends A2 = A2> = T;
+      }
+    
+      value!: T;
+      child!: InstanceType<typeof A2.B<A2<T>>>;
+                                       ~~~~~
+!!! error TS2344: Type 'A2<T>' does not satisfy the constraint 'A2<number>'.
+!!! error TS2344:   Type 'T' is not assignable to type 'number'.
+!!! related TS2208 classStaticBlockDoNotSpoilVariance1.ts:14:21: This type parameter might need an `extends number` constraint.
+    
+      static B = class B<T extends A2 = A2> {
+        parent!: T;
+      };
+    };
+    
