@@ -572,8 +572,7 @@ function executeCommandLineWorker(
         commandLine.errors.forEach(reportDiagnostic);
         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
-
-    if (commandLine.options.init) {
+    if (commandLine.options.init !== undefined) {
         writeConfigFile(sys, reportDiagnostic, commandLine.options, commandLine.fileNames);
         return sys.exit(ExitStatus.Success);
     }
