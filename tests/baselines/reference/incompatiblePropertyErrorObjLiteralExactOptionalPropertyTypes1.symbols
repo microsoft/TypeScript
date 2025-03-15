@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts] ////
+
+=== incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts ===
+type T1 = { a: number; b?: never };
+>T1 : Symbol(T1, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 0, 0))
+>a : Symbol(a, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 0, 11))
+>b : Symbol(b, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 0, 22))
+
+const t1: T1 = {
+>t1 : Symbol(t1, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 2, 5))
+>T1 : Symbol(T1, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 0, 0))
+
+  a: 0,
+>a : Symbol(a, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 2, 16))
+
+  b: 0,
+>b : Symbol(b, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 3, 7))
+
+};
+
+type T2 = { a: number; b?: never } | { a?: never; b: number };
+>T2 : Symbol(T2, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 5, 2))
+>a : Symbol(a, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 7, 11))
+>b : Symbol(b, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 7, 22))
+>a : Symbol(a, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 7, 38))
+>b : Symbol(b, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 7, 49))
+
+const t2: T2 = {
+>t2 : Symbol(t2, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 9, 5))
+>T2 : Symbol(T2, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 5, 2))
+
+  a: 0,
+>a : Symbol(a, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 9, 16))
+
+  b: 0,
+>b : Symbol(b, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 10, 7))
+
+};
+
+// for comparison with the above:
+const obj1 = {
+>obj1 : Symbol(obj1, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 15, 5))
+
+  a: 0,
+>a : Symbol(a, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 15, 14))
+
+  b: 0,
+>b : Symbol(b, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 16, 7))
+}
+
+const t3: T1 = obj1;
+>t3 : Symbol(t3, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 20, 5))
+>T1 : Symbol(T1, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 0, 0))
+>obj1 : Symbol(obj1, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 15, 5))
+
+const obj2 = {
+>obj2 : Symbol(obj2, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 22, 5))
+
+  a: 0,
+>a : Symbol(a, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 22, 14))
+
+  b: 0,
+>b : Symbol(b, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 23, 7))
+
+};
+
+const t4: T2 = obj2;
+>t4 : Symbol(t4, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 27, 5))
+>T2 : Symbol(T2, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 5, 2))
+>obj2 : Symbol(obj2, Decl(incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts, 22, 5))
+

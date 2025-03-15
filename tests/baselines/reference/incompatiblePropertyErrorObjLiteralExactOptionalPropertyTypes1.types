@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts] ////
+
+=== incompatiblePropertyErrorObjLiteralExactOptionalPropertyTypes1.ts ===
+type T1 = { a: number; b?: never };
+>T1 : T1
+>   : ^^
+>a : number
+>  : ^^^^^^
+>b : undefined
+>  : ^^^^^^^^^
+
+const t1: T1 = {
+>t1 : T1
+>   : ^^
+>{  a: 0,  b: 0,} : { a: number; b: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: 0,
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+  b: 0,
+>b : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+};
+
+type T2 = { a: number; b?: never } | { a?: never; b: number };
+>T2 : T2
+>   : ^^
+>a : number
+>  : ^^^^^^
+>b : undefined
+>  : ^^^^^^^^^
+>a : undefined
+>  : ^^^^^^^^^
+>b : number
+>  : ^^^^^^
+
+const t2: T2 = {
+>t2 : T2
+>   : ^^
+>{  a: 0,  b: 0,} : { a: number; b: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: 0,
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+  b: 0,
+>b : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+};
+
+// for comparison with the above:
+const obj1 = {
+>obj1 : { a: number; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  a: 0,  b: 0,} : { a: number; b: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: 0,
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+  b: 0,
+>b : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+}
+
+const t3: T1 = obj1;
+>t3 : T1
+>   : ^^
+>obj1 : { a: number; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const obj2 = {
+>obj2 : { a: number; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  a: 0,  b: 0,} : { a: number; b: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: 0,
+>a : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+  b: 0,
+>b : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+};
+
+const t4: T2 = obj2;
+>t4 : T2
+>   : ^^
+>obj2 : { a: number; b: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
