@@ -5824,7 +5824,7 @@ declare namespace ts {
         readonly name?: Identifier;
         readonly typeExpression: JSDocSignature;
     }
-    interface JSDocOverloadTag extends JSDocTag {
+    interface JSDocOverloadTag extends JSDocTag, LocalsContainer {
         readonly kind: SyntaxKind.JSDocOverloadTag;
         readonly parent: JSDoc;
         readonly typeExpression: JSDocSignature;

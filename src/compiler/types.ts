@@ -1537,6 +1537,7 @@ export type HasLocals =
     | JSDocFunctionType
     | JSDocSignature
     | JSDocTypedefTag
+    | JSDocOverloadTag
     | MappedTypeNode
     | MethodDeclaration
     | MethodSignature
@@ -4072,7 +4073,7 @@ export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsCont
     readonly typeExpression: JSDocSignature;
 }
 
-export interface JSDocOverloadTag extends JSDocTag {
+export interface JSDocOverloadTag extends JSDocTag, LocalsContainer {
     readonly kind: SyntaxKind.JSDocOverloadTag;
     readonly parent: JSDoc;
     readonly typeExpression: JSDocSignature;
