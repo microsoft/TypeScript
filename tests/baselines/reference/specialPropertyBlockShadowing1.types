@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/specialPropertyBlockShadowing1.ts] ////
+
+=== src/index.js ===
+export const X = {};
+>X : {}
+>  : ^^
+>{} : {}
+>   : ^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const X = {};
+>X : { test: number; }
+>  : ^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  X.test = 1;
+>X.test = 1 : 1
+>           : ^
+>X.test : number
+>       : ^^^^^^
+>X : { test: number; }
+>  : ^^^^^^^^^^^^^^^^^
+>test : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+export const Y = {};
+>Y : typeof Y
+>  : ^^^^^^^^
+>{} : {}
+>   : ^^
+
+Y.test = "foo";
+>Y.test = "foo" : "foo"
+>               : ^^^^^
+>Y.test : string
+>       : ^^^^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+>test : string
+>     : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const aliasTopY = Y;
+>aliasTopY : typeof Y
+>          : ^^^^^^^^
+>Y : typeof Y
+>  : ^^^^^^^^
+
+if (Math.random()) {
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  const Y = {};
+>Y : { test: number; }
+>  : ^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+  Y.test = 42;
+>Y.test = 42 : 42
+>            : ^^
+>Y.test : number
+>       : ^^^^^^
+>Y : { test: number; }
+>  : ^^^^^^^^^^^^^^^^^
+>test : number
+>     : ^^^^^^
+>42 : 42
+>   : ^^
+
+  /** @type {{ test: string }} */
+  const topYcheck = aliasTopY;
+>topYcheck : { test: string; }
+>          : ^^^^^^^^      ^^^
+>aliasTopY : typeof import("src/index").Y
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  /** @type {{ test: number }} */
+  const blockYcheck = Y;
+>blockYcheck : { test: number; }
+>            : ^^^^^^^^      ^^^
+>Y : { test: number; }
+>  : ^^^^^^^^^^^^^^^^^
+}
+
