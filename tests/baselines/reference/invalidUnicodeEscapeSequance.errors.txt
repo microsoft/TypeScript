@@ -3,5 +3,5 @@ invalidUnicodeEscapeSequance.ts(1,8): error TS1127: Invalid character.
 
 ==== invalidUnicodeEscapeSequance.ts (1 errors) ====
     var arg\u003
-           
+           ~
 !!! error TS1127: Invalid character.

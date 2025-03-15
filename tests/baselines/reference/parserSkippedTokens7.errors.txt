@@ -3,5 +3,5 @@ parserSkippedTokens7.ts(1,9): error TS1127: Invalid character.
 
 ==== parserSkippedTokens7.ts (1 errors) ====
     /*foo*/ \ /*bar*/
-            
+            ~
 !!! error TS1127: Invalid character.

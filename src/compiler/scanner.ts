@@ -974,10 +974,14 @@ export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | un
         ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
 }
 
-export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean {
+export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant): boolean;
+/** @internal separate public and internal signatures so that identifierVariant can be passed directly from scanIdentifierParts */
+// eslint-disable-next-line @typescript-eslint/unified-signatures
+export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant | "RegExpGroupName"): boolean;
+export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined, identifierVariant?: LanguageVariant | "RegExpGroupName"): boolean {
     return isWordCharacter(ch) || ch === CharacterCodes.$ ||
-        // "-" and ":" are valid in JSX Identifiers
-        (identifierVariant === LanguageVariant.JSX ? (ch === CharacterCodes.minus || ch === CharacterCodes.colon) : false) ||
+        // "-" is valid in JSX Identifiers. ":" is part of JSXNamespacedName but not JSXIdentifier.
+        identifierVariant === LanguageVariant.JSX && ch === CharacterCodes.minus ||
         ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
 }
 
@@ -1328,9 +1332,9 @@ export function createScanner(
         }
 
         const identifierStart = pos;
-        const { length } = scanIdentifierParts();
+        const { length } = scanIdentifierParts(languageVersion);
 
-        if (length === 1 && text[identifierStart] === "n") {
+        if (length === 1 && codePointUnchecked(identifierStart) === CharacterCodes.n) {
             if (isScientific) {
                 error(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, numericStart, identifierStart - numericStart + 1);
             }
@@ -1644,8 +1648,9 @@ export function createScanner(
                 const escapedValue = parseInt(text.substring(start + 2, pos), 16);
                 const escapedValueString = String.fromCharCode(escapedValue);
                 if (
-                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
-                    pos + 6 < end && text.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
+                    flags & EscapeSequenceScanningFlags.AnyUnicodeMode && isLeadingSurrogate(escapedValue) &&
+                    pos + 6 < end && codePointUnchecked(pos) === CharacterCodes.backslash &&
+                    codePointUnchecked(pos + 1) === CharacterCodes.u && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
                 ) {
                     // For regular expressions in any Unicode mode, \u HexLeadSurrogate \u HexTrailSurrogate is treated as a single character
                     // for the purpose of determining whether a character class range is out of order
@@ -1659,7 +1664,7 @@ export function createScanner(
                         }
                     }
                     const nextEscapedValue = parseInt(text.substring(nextStart + 2, nextPos), 16);
-                    if (nextEscapedValue >= 0xDC00 && nextEscapedValue <= 0xDFFF) {
+                    if (isTrailingSurrogate(nextEscapedValue)) {
                         pos = nextPos;
                         return escapedValueString + String.fromCharCode(nextEscapedValue);
                     }
@@ -1775,55 +1780,6 @@ export function createScanner(
             return escapedValue;
         }
         return -1;
-    }
-
-    function scanIdentifierParts(): string {
-        let result = "";
-        let start = pos;
-        while (pos < end) {
-            let ch = codePointUnchecked(pos);
-            if (isIdentifierPart(ch, languageVersion)) {
-                pos += charSize(ch);
-            }
-            else if (ch === CharacterCodes.backslash) {
-                ch = peekExtendedUnicodeEscape();
-                if (ch >= 0 && isIdentifierPart(ch, languageVersion)) {
-                    result += scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true);
-                    start = pos;
-                    continue;
-                }
-                ch = peekUnicodeEscape();
-                if (!(ch >= 0 && isIdentifierPart(ch, languageVersion))) {
-                    break;
-                }
-                tokenFlags |= TokenFlags.UnicodeEscape;
-                result += text.substring(start, pos);
-                result += utf16EncodeAsString(ch);
-                // Valid Unicode escape is always six characters
-                pos += 6;
-                start = pos;
-            }
-            else {
-                break;
-            }
-        }
-        result += text.substring(start, pos);
-        return result;
-    }
-
-    function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
-        // Reserved words are between 2 and 12 characters long and start with a lowercase letter
-        const len = tokenValue.length;
-        if (len >= 2 && len <= 12) {
-            const ch = tokenValue.charCodeAt(0);
-            if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
-                const keyword = textToKeyword.get(tokenValue);
-                if (keyword !== undefined) {
-                    return token = keyword;
-                }
-            }
-        }
-        return token = SyntaxKind.Identifier;
     }
 
     function scanBinaryOrOctalDigits(base: 2 | 8): string {
@@ -2302,72 +2258,26 @@ export function createScanner(
                 case CharacterCodes.at:
                     pos++;
                     return token = SyntaxKind.AtToken;
-                case CharacterCodes.backslash:
-                    const extendedCookedChar = peekExtendedUnicodeEscape();
-                    if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                        tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                        return token = getIdentifierToken();
-                    }
-
-                    const cookedChar = peekUnicodeEscape();
-                    if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                        pos += 6;
-                        tokenFlags |= TokenFlags.UnicodeEscape;
-                        tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
-                        return token = getIdentifierToken();
-                    }
-
-                    error(Diagnostics.Invalid_character);
-                    pos++;
-                    return token = SyntaxKind.Unknown;
                 case CharacterCodes.hash:
-                    if (pos !== 0 && text[pos + 1] === "!") {
-                        error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos, 2);
+                    pos++;
+                    if (pos !== 1 && codePointUnchecked(pos) === CharacterCodes.exclamation) {
                         pos++;
+                        error(Diagnostics.can_only_be_used_at_the_start_of_a_file, pos - 2, 2);
                         return token = SyntaxKind.Unknown;
                     }
 
-                    const charAfterHash = codePointUnchecked(pos + 1);
-                    if (charAfterHash === CharacterCodes.backslash) {
-                        pos++;
-                        const extendedCookedChar = peekExtendedUnicodeEscape();
-                        if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                            tokenValue = "#" + scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                            return token = SyntaxKind.PrivateIdentifier;
-                        }
-
-                        const cookedChar = peekUnicodeEscape();
-                        if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                            pos += 6;
-                            tokenFlags |= TokenFlags.UnicodeEscape;
-                            tokenValue = "#" + String.fromCharCode(cookedChar) + scanIdentifierParts();
-                            return token = SyntaxKind.PrivateIdentifier;
-                        }
-                        pos--;
+                    if (!scanIdentifier(languageVersion)) {
+                        error(Diagnostics.Invalid_character, pos - 1, 1);
                     }
-
-                    if (isIdentifierStart(charAfterHash, languageVersion)) {
-                        pos++;
-                        // We're relying on scanIdentifier's behavior and adjusting the token kind after the fact.
-                        // Notably absent from this block is the fact that calling a function named "scanIdentifier",
-                        // but identifiers don't include '#', and that function doesn't deal with it at all.
-                        // This works because 'scanIdentifier' tries to reuse source characters and builds up substrings;
-                        // however, it starts at the 'tokenPos' which includes the '#', and will "accidentally" prepend the '#' for us.
-                        scanIdentifier(charAfterHash, languageVersion);
-                    }
-                    else {
-                        tokenValue = "#";
-                        error(Diagnostics.Invalid_character, pos++, charSize(ch));
-                    }
+                    tokenValue = "#" + tokenValue;
                     return token = SyntaxKind.PrivateIdentifier;
                 case CharacterCodes.replacementCharacter:
                     error(Diagnostics.File_appears_to_be_binary, 0, 0);
                     pos = end;
                     return token = SyntaxKind.NonTextFileMarkerTrivia;
                 default:
-                    const identifierKind = scanIdentifier(ch, languageVersion);
-                    if (identifierKind) {
-                        return token = identifierKind;
+                    if (scanIdentifier(languageVersion)) {
+                        return token;
                     }
                     else if (isWhiteSpaceSingleLine(ch)) {
                         pos += charSize(ch);
@@ -2411,27 +2321,129 @@ export function createScanner(
     function reScanInvalidIdentifier(): SyntaxKind {
         Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
         pos = tokenStart = fullStartPos;
-        tokenFlags = 0;
-        const ch = codePointUnchecked(pos);
-        const identifierKind = scanIdentifier(ch, ScriptTarget.ESNext);
-        if (identifierKind) {
-            return token = identifierKind;
-        }
-        pos += charSize(ch);
-        return token; // Still `SyntaxKind.Unknown`
+        tokenFlags = TokenFlags.None;
+        return scanIdentifier(ScriptTarget.ESNext);
     }
 
-    function scanIdentifier(startCharacter: number, languageVersion: ScriptTarget) {
-        let ch = startCharacter;
-        if (isIdentifierStart(ch, languageVersion)) {
-            pos += charSize(ch);
-            while (pos < end && isIdentifierPart(ch = codePointUnchecked(pos), languageVersion)) pos += charSize(ch);
-            tokenValue = text.substring(tokenStart, pos);
-            if (ch === CharacterCodes.backslash) {
-                tokenValue += scanIdentifierParts();
+    function scanIdentifierStart(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant | "RegExpGroupName"): string {
+        const ch = codePointChecked(pos);
+        if (ch === CharacterCodes.backslash) {
+            const extendedCookedChar = peekExtendedUnicodeEscape();
+            if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
+                return scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true);
             }
-            return getIdentifierToken();
+
+            const cookedChar = peekUnicodeEscape();
+            if (cookedChar >= 0) {
+                if (isIdentifierStart(cookedChar, languageVersion)) {
+                    pos += 6; // Valid Unicode escape is always six characters
+                    tokenFlags |= TokenFlags.UnicodeEscape;
+                    return String.fromCharCode(cookedChar);
+                }
+                else if (identifierVariant === "RegExpGroupName" && isLeadingSurrogate(cookedChar) && codePointChecked(pos + 6) === CharacterCodes.backslash) {
+                    pos += 6;
+                    const nextCookedChar = peekUnicodeEscape();
+                    if (nextCookedChar >= 0 && isTrailingSurrogate(nextCookedChar)) {
+                        const codePoint = utf16SurrogatePairToCodePoint(cookedChar, nextCookedChar);
+                        if (isIdentifierStart(codePoint, languageVersion)) {
+                            // Unlike normal identifiers, group names in regular expressions, whether in Unicode mode or not,
+                            // accepts \u HexLeadSurrogate \u HexTrailSurrogate as part of RegExpIdentifierName.
+                            // See https://github.com/tc39/ecma262/pull/1869 for the change.
+                            pos += 6;
+                            tokenFlags |= TokenFlags.UnicodeEscape;
+                            return utf16EncodeAsString(codePoint);
+                        }
+                    }
+                    pos -= 6;
+                }
+            }
         }
+        else if (isIdentifierStart(ch, languageVersion)) {
+            pos += charSize(ch);
+            return utf16EncodeAsString(ch);
+        }
+        return "";
+    }
+
+    function scanIdentifierParts(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant | "RegExpGroupName"): string {
+        let result = "";
+        let start = pos;
+        while (pos < end) {
+            const ch = codePointUnchecked(pos);
+            if (isIdentifierPart(ch, languageVersion, identifierVariant)) {
+                pos += charSize(ch);
+                continue;
+            }
+
+            if (ch === CharacterCodes.backslash) {
+                const extendedCookedChar = peekExtendedUnicodeEscape();
+                if (extendedCookedChar >= 0 && isIdentifierPart(extendedCookedChar, languageVersion, identifierVariant)) {
+                    result += text.substring(start, pos);
+                    result += scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true);
+                    // scanExtendedUnicodeEscape advances pos for us
+                    start = pos;
+                    continue;
+                }
+
+                const cookedChar = peekUnicodeEscape();
+                if (cookedChar >= 0) {
+                    if (isIdentifierPart(cookedChar, languageVersion, identifierVariant)) {
+                        tokenFlags |= TokenFlags.UnicodeEscape;
+                        result += text.substring(start, pos);
+                        result += String.fromCharCode(cookedChar);
+                        pos += 6; // Valid Unicode escape is always six characters
+                        start = pos;
+                        continue;
+                    }
+                    else if (identifierVariant === "RegExpGroupName" && isLeadingSurrogate(cookedChar) && codePointChecked(pos + 6) === CharacterCodes.backslash) {
+                        pos += 6;
+                        const nextCookedChar = peekUnicodeEscape();
+                        if (nextCookedChar >= 0 && isTrailingSurrogate(nextCookedChar)) {
+                            const codePoint = utf16SurrogatePairToCodePoint(cookedChar, nextCookedChar);
+                            if (isIdentifierPart(codePoint, languageVersion, identifierVariant)) {
+                                // Unlike normal identifiers, group names in regular expressions, whether in Unicode mode or not,
+                                // accepts \u HexLeadSurrogate \u HexTrailSurrogate as part of RegExpIdentifierName.
+                                // See https://github.com/tc39/ecma262/pull/1869 for the change.
+                                tokenFlags |= TokenFlags.UnicodeEscape;
+                                result += text.substring(start, pos - 6);
+                                result += utf16EncodeAsString(codePoint);
+                                pos += 6;
+                                start = pos;
+                                continue;
+                            }
+                        }
+                        pos -= 6;
+                    }
+                }
+            }
+            break;
+        }
+        result += text.substring(start, pos);
+        return result;
+    }
+
+    function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
+        // Reserved words are between 2 and 12 characters long and start with a lowercase letter
+        const len = tokenValue.length;
+        if (len >= 2 && len <= 12) {
+            const ch = tokenValue.charCodeAt(0);
+            if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+                const keyword = textToKeyword.get(tokenValue);
+                if (keyword !== undefined) {
+                    return token = keyword;
+                }
+            }
+        }
+        return token = SyntaxKind.Identifier;
+    }
+
+    function scanIdentifier(languageVersion: ScriptTarget, identifierVariant?: LanguageVariant | "RegExpGroupName") {
+        tokenValue = scanIdentifierStart(languageVersion, identifierVariant);
+        if (tokenValue) {
+            tokenValue += scanIdentifierParts(languageVersion, identifierVariant);
+            return token = getIdentifierToken();
+        }
+        return token = SyntaxKind.Unknown;
     }
 
     function reScanGreaterToken(): SyntaxKind {
@@ -2996,8 +3008,7 @@ export function createScanner(
         function scanGroupName(isReference: boolean) {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.lessThan);
             tokenStart = pos;
-            scanIdentifier(codePointChecked(pos), languageVersion);
-            if (pos === tokenStart) {
+            if (!scanIdentifier(languageVersion, "RegExpGroupName")) {
                 error(Diagnostics.Expected_a_capturing_group_name);
             }
             else if (isReference) {
@@ -3772,19 +3783,8 @@ export function createScanner(
             // everything after it to the token
             // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
             // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
-            while (pos < end) {
-                const ch = charCodeUnchecked(pos);
-                if (ch === CharacterCodes.minus) {
-                    tokenValue += "-";
-                    pos++;
-                    continue;
-                }
-                const oldPos = pos;
-                tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
-                if (pos === oldPos) {
-                    break;
-                }
-            }
+            // Here `scanIdentifierParts` is reused to ensure unicode escapes are handled.
+            tokenValue += scanIdentifierParts(languageVersion, LanguageVariant.JSX);
             return getIdentifierToken();
         }
         return token;
@@ -3893,36 +3893,11 @@ export function createScanner(
                 return token = SyntaxKind.BacktickToken;
             case CharacterCodes.hash:
                 return token = SyntaxKind.HashToken;
-            case CharacterCodes.backslash:
-                pos--;
-                const extendedCookedChar = peekExtendedUnicodeEscape();
-                if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                    tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
-                    return token = getIdentifierToken();
-                }
-
-                const cookedChar = peekUnicodeEscape();
-                if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
-                    pos += 6;
-                    tokenFlags |= TokenFlags.UnicodeEscape;
-                    tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
-                    return token = getIdentifierToken();
-                }
-                pos++;
-                return token = SyntaxKind.Unknown;
-        }
-
-        if (isIdentifierStart(ch, languageVersion)) {
-            let char = ch;
-            while (pos < end && isIdentifierPart(char = codePointUnchecked(pos), languageVersion) || char === CharacterCodes.minus) pos += charSize(char);
-            tokenValue = text.substring(tokenStart, pos);
-            if (char === CharacterCodes.backslash) {
-                tokenValue += scanIdentifierParts();
-            }
-            return token = getIdentifierToken();
-        }
-        else {
-            return token = SyntaxKind.Unknown;
+            default:
+                pos = tokenStart;
+                const identifierKind = scanIdentifier(languageVersion, LanguageVariant.JSX);
+                if (!identifierKind) pos += charSize(ch); // skip the character
+                return identifierKind;
         }
     }
 
@@ -4045,16 +4020,16 @@ function charSize(ch: number) {
     return 1;
 }
 
-// Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
+// Derived from Section 11.1.1 UTF16EncodeCodePoint of the spec.
 function utf16EncodeAsStringFallback(codePoint: number) {
     Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
 
-    if (codePoint <= 65535) {
+    if (codePoint <= 0xFFFF) {
         return String.fromCharCode(codePoint);
     }
 
-    const codeUnit1 = Math.floor((codePoint - 65536) / 1024) + 0xD800;
-    const codeUnit2 = ((codePoint - 65536) % 1024) + 0xDC00;
+    const codeUnit1 = Math.floor((codePoint - 0x10000) / 0x400) + 0xD800;
+    const codeUnit2 = ((codePoint - 0x10000) % 0x400) + 0xDC00;
 
     return String.fromCharCode(codeUnit1, codeUnit2);
 }
@@ -4064,6 +4039,20 @@ const utf16EncodeAsStringWorker: (codePoint: number) => string = (String as any)
 /** @internal */
 export function utf16EncodeAsString(codePoint: number): string {
     return utf16EncodeAsStringWorker(codePoint);
+}
+
+// Derived from Section 11.1.3 UTF16SurrogatePairToCodePoint of the spec.
+function utf16SurrogatePairToCodePoint(leadingSurrogate: number, trailingSurrogate: number) {
+    Debug.assert(isLeadingSurrogate(leadingSurrogate) && isTrailingSurrogate(trailingSurrogate));
+    return (leadingSurrogate - 0xD800) * 0x400 + (trailingSurrogate - 0xDC00) + 0x10000;
+}
+
+function isLeadingSurrogate(ch: number) {
+    return 0xD800 <= ch && ch <= 0xDBFF;
+}
+
+function isTrailingSurrogate(ch: number) {
+    return 0xDC00 <= ch && ch <= 0xDFFF;
 }
 
 // Table 66: Non-binary Unicode property aliases and their canonical property names
