@@ -80,6 +80,7 @@ import {
     isCatchClause,
     isClassElement,
     isClassLike,
+    isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isDecorator,
     isElementAccessExpression,
@@ -221,10 +222,11 @@ const enum ClassFacts {
     HasStaticInitializedProperties = 1 << 0,
     HasClassOrConstructorParameterDecorators = 1 << 1,
     HasMemberDecorators = 1 << 2,
-    IsExportOfNamespace = 1 << 3,
-    IsNamedExternalExport = 1 << 4,
-    IsDefaultExternalExport = 1 << 5,
-    IsDerivedClass = 1 << 6,
+    HasStaticBlocks = 1 << 3,
+    IsExportOfNamespace = 1 << 4,
+    IsNamedExternalExport = 1 << 5,
+    IsDefaultExternalExport = 1 << 6,
+    IsDerivedClass = 1 << 7,
 
     HasAnyDecorators = HasClassOrConstructorParameterDecorators | HasMemberDecorators,
     MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
@@ -856,6 +858,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
     function getClassFacts(node: ClassDeclaration) {
         let facts = ClassFacts.None;
         if (some(getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
+        if (node.transformFlags & TransformFlags.ContainsClassFields && some(node.members, isClassStaticBlockDeclaration)) facts |= ClassFacts.HasStaticBlocks;
         const extendsClauseElement = getEffectiveBaseTypeNode(node);
         if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
         if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
@@ -885,7 +888,8 @@ export function transformTypeScript(context: TransformationContext): Transformer
         if (
             !isClassLikeDeclarationWithTypeScriptSyntax(node) &&
             !classOrConstructorParameterIsDecorated(legacyDecorators, node) &&
-            !isExportOfNamespace(node)
+            !isExportOfNamespace(node) &&
+            !(facts & ClassFacts.HasStaticBlocks && languageVersion < ScriptTarget.ES2022)
         ) {
             return factory.updateClassDeclaration(
                 node,
@@ -916,8 +920,7 @@ export function transformTypeScript(context: TransformationContext): Transformer
         }
 
         const needsName = moveModifiers && !node.name ||
-            facts & ClassFacts.HasMemberDecorators ||
-            facts & ClassFacts.HasStaticInitializedProperties;
+            facts & (ClassFacts.HasMemberDecorators | ClassFacts.HasStaticInitializedProperties | ClassFacts.HasStaticBlocks);
 
         const name = needsName ?
             node.name ?? factory.getGeneratedNameForNode(node) :
