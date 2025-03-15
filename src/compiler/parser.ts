@@ -110,7 +110,6 @@ import {
     getLeadingCommentRanges,
     getSpellingSuggestion,
     getTextOfNodeFromSourceText,
-    getTokenPosOfNode,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -330,7 +329,6 @@ import {
     ScriptKind,
     ScriptTarget,
     SetAccessorDeclaration,
-    setOriginalNode,
     setParent,
     setParentRecursive,
     setTextRange,
@@ -7097,7 +7095,7 @@ namespace Parser {
 
         let variableDeclaration;
         if (parseOptional(SyntaxKind.OpenParenToken)) {
-            variableDeclaration = parseVariableDeclaration() as VariableDeclaration;
+            variableDeclaration = parseVariableDeclaration();
             parseExpected(SyntaxKind.CloseParenToken);
         }
         else {
@@ -8268,7 +8266,6 @@ namespace Parser {
         // const MyEnum: enum = { name: value }
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        const tokenIsIdentifier = isIdentifier();
         const name = parsePropertyName();
         let initializer: Expression | undefined;
 

@@ -47104,6 +47104,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isConstEnum = isEnumConst(member.parent);
         const initializer = member.initializer!;
         const result = evaluate(initializer, member);
+        const isDecl = isEnumDeclaration(member.parent);
         if (result.value !== undefined) {
             if (isConstEnum && typeof result.value === "number" && !isFinite(result.value)) {
                 error(
@@ -47117,7 +47118,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(
                     initializer,
                     Diagnostics._0_has_a_string_type_but_must_have_syntactically_recognizable_string_syntax_when_isolatedModules_is_enabled,
-                    `${idText(member.parent.name)}.${getTextOfPropertyName(member.name)}`,
+                    isDecl ? `${idText(member.parent.name)}.${getTextOfPropertyName(member.name)}` : `${member.parent.name}.${getTextOfPropertyName(member.name)}`,
                 );
             }
         }
