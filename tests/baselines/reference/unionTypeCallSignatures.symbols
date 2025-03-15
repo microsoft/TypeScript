@@ -260,3 +260,63 @@ strOrNum = unionWithRestParameter4("hello", "world");
 >strOrNum : Symbol(strOrNum, Decl(unionTypeCallSignatures.ts, 2, 3))
 >unionWithRestParameter4 : Symbol(unionWithRestParameter4, Decl(unionTypeCallSignatures.ts, 71, 3))
 
+var unionWithAnyParameter1: { (a: string): void; } | { (a: any): void; };
+>unionWithAnyParameter1 : Symbol(unionWithAnyParameter1, Decl(unionTypeCallSignatures.ts, 75, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 75, 31))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 75, 56))
+
+unionWithAnyParameter1('hello');
+>unionWithAnyParameter1 : Symbol(unionWithAnyParameter1, Decl(unionTypeCallSignatures.ts, 75, 3))
+
+unionWithAnyParameter1({}); // wrong argument type
+>unionWithAnyParameter1 : Symbol(unionWithAnyParameter1, Decl(unionTypeCallSignatures.ts, 75, 3))
+
+var unionWithAnyParameter2: { (a: string, b: any): void; } | { (a: any, b: number): void; };
+>unionWithAnyParameter2 : Symbol(unionWithAnyParameter2, Decl(unionTypeCallSignatures.ts, 79, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 79, 31))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 79, 41))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 79, 64))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 79, 71))
+
+unionWithAnyParameter2('hello', 10);
+>unionWithAnyParameter2 : Symbol(unionWithAnyParameter2, Decl(unionTypeCallSignatures.ts, 79, 3))
+
+unionWithAnyParameter2(10, 'hello'); // error wrong arguments types
+>unionWithAnyParameter2 : Symbol(unionWithAnyParameter2, Decl(unionTypeCallSignatures.ts, 79, 3))
+
+unionWithAnyParameter2('hello', 'hello'); // error wrong argument type
+>unionWithAnyParameter2 : Symbol(unionWithAnyParameter2, Decl(unionTypeCallSignatures.ts, 79, 3))
+
+unionWithAnyParameter2(10, 10); // error wrong argument type
+>unionWithAnyParameter2 : Symbol(unionWithAnyParameter2, Decl(unionTypeCallSignatures.ts, 79, 3))
+
+var unionWithAnyParameter3: { (a: string | number, b: any): void; } | { (...a: string[]): void; };
+>unionWithAnyParameter3 : Symbol(unionWithAnyParameter3, Decl(unionTypeCallSignatures.ts, 85, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 85, 31))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 85, 50))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 85, 73))
+
+unionWithAnyParameter3('hello', 'hello');
+>unionWithAnyParameter3 : Symbol(unionWithAnyParameter3, Decl(unionTypeCallSignatures.ts, 85, 3))
+
+unionWithAnyParameter3('hello', 'hello', 'hello');
+>unionWithAnyParameter3 : Symbol(unionWithAnyParameter3, Decl(unionTypeCallSignatures.ts, 85, 3))
+
+unionWithAnyParameter3(10, 'hello'); // error wrong argument type
+>unionWithAnyParameter3 : Symbol(unionWithAnyParameter3, Decl(unionTypeCallSignatures.ts, 85, 3))
+
+unionWithAnyParameter3('hello', 10); // error wrong argument type
+>unionWithAnyParameter3 : Symbol(unionWithAnyParameter3, Decl(unionTypeCallSignatures.ts, 85, 3))
+
+var unionWithAnyParameter4: { (a: string, b: any): void; } | { (a: any): void; };
+>unionWithAnyParameter4 : Symbol(unionWithAnyParameter4, Decl(unionTypeCallSignatures.ts, 91, 3))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 91, 31))
+>b : Symbol(b, Decl(unionTypeCallSignatures.ts, 91, 41))
+>a : Symbol(a, Decl(unionTypeCallSignatures.ts, 91, 64))
+
+unionWithAnyParameter4('hello', {}); 
+>unionWithAnyParameter4 : Symbol(unionWithAnyParameter4, Decl(unionTypeCallSignatures.ts, 91, 3))
+
+unionWithAnyParameter4({}, {}); // error wrong argument type 
+>unionWithAnyParameter4 : Symbol(unionWithAnyParameter4, Decl(unionTypeCallSignatures.ts, 91, 3))
+
