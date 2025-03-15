@@ -438,7 +438,6 @@ export namespace SmartIndenter {
     // branch beginning on the line that the whenTrue branch ends.
     export function childIsUnindentedBranchOfConditionalExpression(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
         if (isConditionalExpression(parent) && (child === parent.whenTrue || child === parent.whenFalse)) {
-
             const conditionEndLine = getLineAndCharacterOfPosition(sourceFile, parent.condition.end).line;
             if (child === parent.whenTrue) {
                 return childStartLine === conditionEndLine;
