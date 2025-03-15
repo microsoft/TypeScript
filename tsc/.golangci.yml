@@ -36,11 +36,11 @@ linters:
     - perfsprint
     - predeclared
     - reassign
-    - tenv
     - testableexamples
     - tparallel
     - unconvert
     - usestdlibvars
+    - usetesting
     - whitespace
 
     - customlint
