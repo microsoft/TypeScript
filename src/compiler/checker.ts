@@ -1962,32 +1962,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function runWithoutResolvedSignatureCaching<T>(node: Node | undefined, fn: () => T): T {
+        const cachedResolvedSignatures = [];
+        const cachedTypes: (readonly [SymbolLinks, Type | undefined])[] = [];
         node = findAncestor(node, isCallLikeOrFunctionLikeExpression);
-        if (node) {
-            const cachedResolvedSignatures = [];
-            const cachedTypes = [];
-            while (node) {
-                const nodeLinks = getNodeLinks(node);
-                cachedResolvedSignatures.push([nodeLinks, nodeLinks.resolvedSignature] as const);
-                nodeLinks.resolvedSignature = undefined;
-                if (isFunctionExpressionOrArrowFunction(node)) {
-                    const symbolLinks = getSymbolLinks(getSymbolOfDeclaration(node));
-                    const type = symbolLinks.type;
-                    cachedTypes.push([symbolLinks, type] as const);
-                    symbolLinks.type = undefined;
-                }
-                node = findAncestor(node.parent, isCallLikeOrFunctionLikeExpression);
-            }
-            const result = fn();
-            for (const [nodeLinks, resolvedSignature] of cachedResolvedSignatures) {
-                nodeLinks.resolvedSignature = resolvedSignature;
-            }
-            for (const [symbolLinks, type] of cachedTypes) {
-                symbolLinks.type = type;
-            }
-            return result;
+        if (!node) {
+            return fn();
         }
-        return fn();
+        while (node) {
+            const nodeLinks = getNodeLinks(node);
+            cachedResolvedSignatures.push([nodeLinks, nodeLinks.resolvedSignature, nodeLinks.flags] as const);
+            nodeLinks.resolvedSignature = undefined;
+            nodeLinks.flags = NodeCheckFlags.None;
+            if (isFunctionExpressionOrArrowFunction(node)) {
+                resetCachedSymbolTypes(node);
+                for (const parameter of node.parameters) {
+                    resetCachedSymbolTypes(parameter);
+                }
+            }
+            node = findAncestor(node.parent, isCallLikeOrFunctionLikeExpression);
+        }
+        const result = fn();
+        for (const [nodeLinks, resolvedSignature, nodeCheckFlags] of cachedResolvedSignatures) {
+            nodeLinks.resolvedSignature = resolvedSignature;
+            nodeLinks.flags = nodeCheckFlags;
+        }
+        for (const [symbolLinks, type] of cachedTypes) {
+            symbolLinks.type = type;
+        }
+        return result;
+
+        function resetCachedSymbolTypes(declaration: Declaration) {
+            const symbolLinks = getSymbolLinks(getSymbolOfDeclaration(declaration));
+            const type = symbolLinks.type;
+
+            cachedTypes.push([symbolLinks, type] as const);
+            symbolLinks.type = undefined;
+        }
     }
 
     function runWithInferenceBlockedFromSourceNode<T>(node: Node | undefined, fn: () => T): T {
