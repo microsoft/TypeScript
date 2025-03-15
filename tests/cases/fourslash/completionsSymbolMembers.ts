@@ -19,7 +19,7 @@ verify.completions(
     },
     {
         marker: "j",
-        exact: { name: "N", insertText: "[N]", replacementSpan: test.ranges()[1] },
+        exact: { name: "N.s2", insertText: "[N.s2]", replacementSpan: test.ranges()[1] },
         preferences: { includeInsertTextCompletions: true },
     }
 );
