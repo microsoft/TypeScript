@@ -111,3 +111,17 @@ declare global {
 <a:b a="accepted" />;
 <a:b b="rejected" />;
 <a:b a="accepted" b="rejected" />;
+
+// GH#54702
+const A = <T extends unknown>({ a }: { a: T }) => (typeof a === "string" ? null : new Error("a must be a string")) as T extends string ? null : Error;
+
+// should ok
+const jsxGeneric1 = <A<string> a="a" />;
+
+const B = A<string>;
+
+// should ok
+const jsxGeneric2 = <B a="a" />;
+
+// should error
+const jsxGeneric3 = <A<number> a="a" />;
