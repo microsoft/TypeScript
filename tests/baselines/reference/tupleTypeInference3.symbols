@@ -1,0 +1,355 @@
+//// [tests/cases/compiler/tupleTypeInference3.ts] ////
+
+=== tupleTypeInference3.ts ===
+// Repro from #55632
+
+type InferArg =
+>InferArg : Symbol(InferArg, Decl(tupleTypeInference3.ts, 0, 0))
+
+  | [1, (a: number) => void]
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 3, 9))
+
+  | [2, (b: string) => void];
+>b : Symbol(b, Decl(tupleTypeInference3.ts, 4, 9))
+
+const arg: InferArg = [1, (a) => { }];
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 5, 5))
+>InferArg : Symbol(InferArg, Decl(tupleTypeInference3.ts, 0, 0))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 5, 27))
+
+// More tests
+
+type T1 = [1, (a: number) => void];
+>T1 : Symbol(T1, Decl(tupleTypeInference3.ts, 5, 38))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 9, 15))
+
+type T2 = { 0: 1, 1: (a: boolean) => void, 2: number };
+>T2 : Symbol(T2, Decl(tupleTypeInference3.ts, 9, 35))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 10, 11))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 10, 17))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 10, 22))
+>2 : Symbol(2, Decl(tupleTypeInference3.ts, 10, 42))
+
+type T3 = T1 | T2;
+>T3 : Symbol(T3, Decl(tupleTypeInference3.ts, 10, 55))
+>T1 : Symbol(T1, Decl(tupleTypeInference3.ts, 5, 38))
+>T2 : Symbol(T2, Decl(tupleTypeInference3.ts, 9, 35))
+
+const v31: T3 = [1, (a) => { a === 0 }];
+>v31 : Symbol(v31, Decl(tupleTypeInference3.ts, 12, 5))
+>T3 : Symbol(T3, Decl(tupleTypeInference3.ts, 10, 55))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 12, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 12, 21))
+
+const v32: T3 = [1, (a) => { a === true }, 0];
+>v32 : Symbol(v32, Decl(tupleTypeInference3.ts, 13, 5))
+>T3 : Symbol(T3, Decl(tupleTypeInference3.ts, 10, 55))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 13, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 13, 21))
+
+const v33: T3 = [1, (a) => { a === true }, 0, 0];
+>v33 : Symbol(v33, Decl(tupleTypeInference3.ts, 14, 5))
+>T3 : Symbol(T3, Decl(tupleTypeInference3.ts, 10, 55))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 14, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 14, 21))
+
+const v34: T3 = [1, (a: boolean) => { a === true }]; // Error
+>v34 : Symbol(v34, Decl(tupleTypeInference3.ts, 15, 5))
+>T3 : Symbol(T3, Decl(tupleTypeInference3.ts, 10, 55))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 15, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 15, 21))
+
+type T4 = T3 | [2, (b: string) => void]
+>T4 : Symbol(T4, Decl(tupleTypeInference3.ts, 15, 52))
+>T3 : Symbol(T3, Decl(tupleTypeInference3.ts, 10, 55))
+>b : Symbol(b, Decl(tupleTypeInference3.ts, 17, 20))
+
+const v41: T4 = [1, (a) => { a === 0 }];
+>v41 : Symbol(v41, Decl(tupleTypeInference3.ts, 18, 5))
+>T4 : Symbol(T4, Decl(tupleTypeInference3.ts, 15, 52))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 18, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 18, 21))
+
+const v42: T4 = [1, (a) => { a === true }, 0];
+>v42 : Symbol(v42, Decl(tupleTypeInference3.ts, 19, 5))
+>T4 : Symbol(T4, Decl(tupleTypeInference3.ts, 15, 52))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 19, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 19, 21))
+
+const v43: T4 = [2, (a) => { a === "" }];
+>v43 : Symbol(v43, Decl(tupleTypeInference3.ts, 20, 5))
+>T4 : Symbol(T4, Decl(tupleTypeInference3.ts, 15, 52))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 20, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 20, 21))
+
+type T5 = T4 | {}
+>T5 : Symbol(T5, Decl(tupleTypeInference3.ts, 20, 41))
+>T4 : Symbol(T4, Decl(tupleTypeInference3.ts, 15, 52))
+
+const v52: T5 = [1, (a) => { a === 0 }];
+>v52 : Symbol(v52, Decl(tupleTypeInference3.ts, 23, 5))
+>T5 : Symbol(T5, Decl(tupleTypeInference3.ts, 20, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 23, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 23, 21))
+
+const v53: T5 = [1, (a) => { a === true }, 0];
+>v53 : Symbol(v53, Decl(tupleTypeInference3.ts, 24, 5))
+>T5 : Symbol(T5, Decl(tupleTypeInference3.ts, 20, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 24, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 24, 21))
+
+const v54: T5 = [2, (a) => { a === "" }];
+>v54 : Symbol(v54, Decl(tupleTypeInference3.ts, 25, 5))
+>T5 : Symbol(T5, Decl(tupleTypeInference3.ts, 20, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 25, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 25, 21))
+
+type T6 = T1 | { 0: 1, 1: (a: boolean) => void, 2?: number }
+>T6 : Symbol(T6, Decl(tupleTypeInference3.ts, 25, 41))
+>T1 : Symbol(T1, Decl(tupleTypeInference3.ts, 5, 38))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 27, 16))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 27, 22))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 27, 27))
+>2 : Symbol(2, Decl(tupleTypeInference3.ts, 27, 47))
+
+const v61: T6 = [1, (a) => { a === true }, 0];
+>v61 : Symbol(v61, Decl(tupleTypeInference3.ts, 28, 5))
+>T6 : Symbol(T6, Decl(tupleTypeInference3.ts, 25, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 28, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 28, 21))
+
+const v62: T6 = [1, (a) => { }]; // Error
+>v62 : Symbol(v62, Decl(tupleTypeInference3.ts, 29, 5))
+>T6 : Symbol(T6, Decl(tupleTypeInference3.ts, 25, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 29, 21))
+
+type T7 = [1, (a: number) => void, ...number[]];
+>T7 : Symbol(T7, Decl(tupleTypeInference3.ts, 29, 32))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 31, 15))
+
+type T8 = T7 | [1, (a: boolean) => void]
+>T8 : Symbol(T8, Decl(tupleTypeInference3.ts, 31, 48))
+>T7 : Symbol(T7, Decl(tupleTypeInference3.ts, 29, 32))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 32, 20))
+
+const v81: T8 = [1, (a) => { a === 0 }, 0];
+>v81 : Symbol(v81, Decl(tupleTypeInference3.ts, 33, 5))
+>T8 : Symbol(T8, Decl(tupleTypeInference3.ts, 31, 48))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 33, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 33, 21))
+
+const v82: T8 = [1, (a) => { }]; // Error
+>v82 : Symbol(v82, Decl(tupleTypeInference3.ts, 34, 5))
+>T8 : Symbol(T8, Decl(tupleTypeInference3.ts, 31, 48))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 34, 21))
+
+type T9 = [1, (a: number) => void, ...[number, string]] | [1, (b: string) => void, number?];
+>T9 : Symbol(T9, Decl(tupleTypeInference3.ts, 34, 32))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 36, 15))
+>b : Symbol(b, Decl(tupleTypeInference3.ts, 36, 63))
+
+const v91: T9 = [1, (a) => { a === 0 }, 0, ""];
+>v91 : Symbol(v91, Decl(tupleTypeInference3.ts, 37, 5))
+>T9 : Symbol(T9, Decl(tupleTypeInference3.ts, 34, 32))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 37, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 37, 21))
+
+const v92: T9 = [1, (a) => { a === "" }];
+>v92 : Symbol(v92, Decl(tupleTypeInference3.ts, 38, 5))
+>T9 : Symbol(T9, Decl(tupleTypeInference3.ts, 34, 32))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 38, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 38, 21))
+
+const v93: T9 = [1, (a) => { a === "" }, 0];
+>v93 : Symbol(v93, Decl(tupleTypeInference3.ts, 39, 5))
+>T9 : Symbol(T9, Decl(tupleTypeInference3.ts, 34, 32))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 39, 21))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 39, 21))
+
+type T10 = [1, (a: number) => void, ...[number, string]] | [1, (b: string) => void, number?, string?];
+>T10 : Symbol(T10, Decl(tupleTypeInference3.ts, 39, 44))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 41, 16))
+>b : Symbol(b, Decl(tupleTypeInference3.ts, 41, 64))
+
+const v101: T10 = [1, (a) => { a === "" }];
+>v101 : Symbol(v101, Decl(tupleTypeInference3.ts, 42, 5))
+>T10 : Symbol(T10, Decl(tupleTypeInference3.ts, 39, 44))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 42, 23))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 42, 23))
+
+const v102: T10 = [1, (a) => { a === "" }, 0];
+>v102 : Symbol(v102, Decl(tupleTypeInference3.ts, 43, 5))
+>T10 : Symbol(T10, Decl(tupleTypeInference3.ts, 39, 44))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 43, 23))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 43, 23))
+
+const v103: T10 = [1, (a) => { }, 0, ""]; // Error
+>v103 : Symbol(v103, Decl(tupleTypeInference3.ts, 44, 5))
+>T10 : Symbol(T10, Decl(tupleTypeInference3.ts, 39, 44))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 44, 23))
+
+type T11 = [1, (a: number) => void, ...[number, string]] | [1, (b: string) => void, number?, boolean?];
+>T11 : Symbol(T11, Decl(tupleTypeInference3.ts, 44, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 46, 16))
+>b : Symbol(b, Decl(tupleTypeInference3.ts, 46, 64))
+
+const v111: T11 = [1, (a) => { a === "" }];
+>v111 : Symbol(v111, Decl(tupleTypeInference3.ts, 47, 5))
+>T11 : Symbol(T11, Decl(tupleTypeInference3.ts, 44, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 47, 23))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 47, 23))
+
+const v112: T11 = [1, (a) => { a === "" }, 0];
+>v112 : Symbol(v112, Decl(tupleTypeInference3.ts, 48, 5))
+>T11 : Symbol(T11, Decl(tupleTypeInference3.ts, 44, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 48, 23))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 48, 23))
+
+const v113: T11 = [1, (a) => { a === 0 }, 0, ""];
+>v113 : Symbol(v113, Decl(tupleTypeInference3.ts, 49, 5))
+>T11 : Symbol(T11, Decl(tupleTypeInference3.ts, 44, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 49, 23))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 49, 23))
+
+const v114: T11 = [1, (a) => { a === "" }, 0, true];
+>v114 : Symbol(v114, Decl(tupleTypeInference3.ts, 50, 5))
+>T11 : Symbol(T11, Decl(tupleTypeInference3.ts, 44, 41))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 50, 23))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 50, 23))
+
+type T12 =
+>T12 : Symbol(T12, Decl(tupleTypeInference3.ts, 50, 52))
+
+  | { 1: (arg: File) => void }
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 53, 5))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 53, 10))
+>File : Symbol(File, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  | { 0?: number, 1: (arg: Date) => void }
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 54, 5))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 54, 17))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 54, 22))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  | { 0: (arg: boolean) => void }
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 55, 5))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 55, 10))
+
+  | { 0: boolean, 1: (arg: number) => void }
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 56, 5))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 56, 17))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 56, 22))
+
+  | [null, (arg: string) => void];
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 57, 12))
+
+declare function f(a: T12): void;
+>f : Symbol(f, Decl(tupleTypeInference3.ts, 57, 34))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 58, 19))
+>T12 : Symbol(T12, Decl(tupleTypeInference3.ts, 50, 52))
+
+f([null, (a) => { a === "" }]);
+>f : Symbol(f, Decl(tupleTypeInference3.ts, 57, 34))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 59, 10))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 59, 10))
+
+f([true, (a) => { a === 0 }]);
+>f : Symbol(f, Decl(tupleTypeInference3.ts, 57, 34))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 60, 10))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 60, 10))
+
+f([(a) => { a === true }]);
+>f : Symbol(f, Decl(tupleTypeInference3.ts, 57, 34))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 61, 4))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 61, 4))
+
+f([0, (a) => { a as Date }]);
+>f : Symbol(f, Decl(tupleTypeInference3.ts, 57, 34))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 62, 7))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 62, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+f([, (a) => { }]); // Error
+>f : Symbol(f, Decl(tupleTypeInference3.ts, 57, 34))
+>a : Symbol(a, Decl(tupleTypeInference3.ts, 63, 6))
+
+declare function f2(_: { 0: number, 1: (arg: number) => void } | { 0: number, 1: (arg: boolean) => void, 2: any }): void;
+>f2 : Symbol(f2, Decl(tupleTypeInference3.ts, 63, 18))
+>_ : Symbol(_, Decl(tupleTypeInference3.ts, 65, 20))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 65, 24))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 65, 35))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 65, 40))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 65, 66))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 65, 77))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 65, 82))
+>2 : Symbol(2, Decl(tupleTypeInference3.ts, 65, 104))
+
+f2([1, arg => { arg === 0 }] as const);
+>f2 : Symbol(f2, Decl(tupleTypeInference3.ts, 63, 18))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 66, 6))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 66, 6))
+>const : Symbol(const)
+
+declare function f3(_: { 0: number, 1: (arg: number) => void } | { 0: number, 1: (arg: boolean) => void, 2?: any }): void;
+>f3 : Symbol(f3, Decl(tupleTypeInference3.ts, 66, 39))
+>_ : Symbol(_, Decl(tupleTypeInference3.ts, 68, 20))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 68, 24))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 68, 35))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 68, 40))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 68, 66))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 68, 77))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 68, 82))
+>2 : Symbol(2, Decl(tupleTypeInference3.ts, 68, 104))
+
+f3([1, arg => { }] as const); // Error
+>f3 : Symbol(f3, Decl(tupleTypeInference3.ts, 66, 39))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 69, 6))
+>const : Symbol(const)
+
+declare function f4(_: [(arg: number) => void] | [(arg: string) => void, true]): void;
+>f4 : Symbol(f4, Decl(tupleTypeInference3.ts, 69, 29))
+>_ : Symbol(_, Decl(tupleTypeInference3.ts, 71, 20))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 71, 25))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 71, 51))
+
+f4([arg => { arg === 0 }] as const);
+>f4 : Symbol(f4, Decl(tupleTypeInference3.ts, 69, 29))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 72, 4))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 72, 4))
+>const : Symbol(const)
+
+declare function f5(arg: { 0: null, 1: (arg: number) => void, foo?: string } | [1, (arg: boolean) => void]): void;
+>f5 : Symbol(f5, Decl(tupleTypeInference3.ts, 72, 36))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 74, 20))
+>0 : Symbol(0, Decl(tupleTypeInference3.ts, 74, 26))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 74, 35))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 74, 40))
+>foo : Symbol(foo, Decl(tupleTypeInference3.ts, 74, 61))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 74, 84))
+
+f5([null, (arg) => { arg === 0 }] as const);
+>f5 : Symbol(f5, Decl(tupleTypeInference3.ts, 72, 36))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 75, 11))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 75, 11))
+>const : Symbol(const)
+
+f5([1, (arg) => { arg === true }] as const);
+>f5 : Symbol(f5, Decl(tupleTypeInference3.ts, 72, 36))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 76, 8))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 76, 8))
+>const : Symbol(const)
+
+declare function f6(arg: { 1: (arg: number) => void, [k: number]: (...args: never) => void } | [1, (arg: boolean) => void]): void;
+>f6 : Symbol(f6, Decl(tupleTypeInference3.ts, 76, 44))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 78, 20))
+>1 : Symbol(1, Decl(tupleTypeInference3.ts, 78, 26))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 78, 31))
+>k : Symbol(k, Decl(tupleTypeInference3.ts, 78, 54))
+>args : Symbol(args, Decl(tupleTypeInference3.ts, 78, 67))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 78, 100))
+
+f6([1, (arg) => { }] as const); // Error
+>f6 : Symbol(f6, Decl(tupleTypeInference3.ts, 76, 44))
+>arg : Symbol(arg, Decl(tupleTypeInference3.ts, 79, 8))
+>const : Symbol(const)
+
