@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 5,000
+Instantiation count: 2,500 -> 5,000
 
 === dependentDestructuredVariables.ts ===
 type Action =

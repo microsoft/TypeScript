@@ -1,0 +1,377 @@
+//// [tests/cases/compiler/indexAccessCombinedInference.ts] ////
+
+=== indexAccessCombinedInference.ts ===
+// Simple case
+interface Args {
+>Args : Symbol(Args, Decl(indexAccessCombinedInference.ts, 0, 0))
+
+    TA: object,
+>TA : Symbol(Args.TA, Decl(indexAccessCombinedInference.ts, 1, 16))
+
+    TY: object
+>TY : Symbol(Args.TY, Decl(indexAccessCombinedInference.ts, 2, 15))
+}
+
+declare function foo<T extends Args>(
+>foo : Symbol(foo, Decl(indexAccessCombinedInference.ts, 4, 1))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 6, 21))
+>Args : Symbol(Args, Decl(indexAccessCombinedInference.ts, 0, 0))
+
+    a: T["TA"],
+>a : Symbol(a, Decl(indexAccessCombinedInference.ts, 6, 37))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 6, 21))
+
+    b: T["TY"]): T["TA"] & T["TY"];
+>b : Symbol(b, Decl(indexAccessCombinedInference.ts, 7, 15))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 6, 21))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 6, 21))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 6, 21))
+
+const x = foo({
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 10, 5))
+>foo : Symbol(foo, Decl(indexAccessCombinedInference.ts, 4, 1))
+
+    x: {
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 10, 15))
+
+        j: 12,
+>j : Symbol(j, Decl(indexAccessCombinedInference.ts, 11, 8))
+
+        i: 11
+>i : Symbol(i, Decl(indexAccessCombinedInference.ts, 12, 14))
+    }
+}, { y: 42 });
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 15, 4))
+
+// Union result type
+interface A {
+>A : Symbol(A, Decl(indexAccessCombinedInference.ts, 15, 14))
+
+    foo: number;
+>foo : Symbol(A.foo, Decl(indexAccessCombinedInference.ts, 18, 13))
+}
+interface B {
+>B : Symbol(B, Decl(indexAccessCombinedInference.ts, 20, 1))
+
+    bar: string;
+>bar : Symbol(B.bar, Decl(indexAccessCombinedInference.ts, 21, 13))
+}
+declare const something: A | B;
+>something : Symbol(something, Decl(indexAccessCombinedInference.ts, 24, 13))
+>A : Symbol(A, Decl(indexAccessCombinedInference.ts, 15, 14))
+>B : Symbol(B, Decl(indexAccessCombinedInference.ts, 20, 1))
+
+const y = foo(something, { bat: 42 });
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 26, 5))
+>foo : Symbol(foo, Decl(indexAccessCombinedInference.ts, 4, 1))
+>something : Symbol(something, Decl(indexAccessCombinedInference.ts, 24, 13))
+>bat : Symbol(bat, Decl(indexAccessCombinedInference.ts, 26, 26))
+
+// Union key type
+interface Args2 {
+>Args2 : Symbol(Args2, Decl(indexAccessCombinedInference.ts, 26, 38))
+
+    TA?: object, // Optional since only one of TA or TB needs to be infered in the below argument list
+>TA : Symbol(Args2.TA, Decl(indexAccessCombinedInference.ts, 29, 17))
+
+    TB?: object,
+>TB : Symbol(Args2.TB, Decl(indexAccessCombinedInference.ts, 30, 16))
+
+    TY: object
+>TY : Symbol(Args2.TY, Decl(indexAccessCombinedInference.ts, 31, 16))
+}
+declare function foo2<T extends Args2>(
+>foo2 : Symbol(foo2, Decl(indexAccessCombinedInference.ts, 33, 1))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 34, 22))
+>Args2 : Symbol(Args2, Decl(indexAccessCombinedInference.ts, 26, 38))
+
+    a: T["TA"] | T["TB"],
+>a : Symbol(a, Decl(indexAccessCombinedInference.ts, 34, 39))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 34, 22))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 34, 22))
+
+    b: T["TY"]): {a: T["TA"], b: T["TB"]} & T["TY"];
+>b : Symbol(b, Decl(indexAccessCombinedInference.ts, 35, 25))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 34, 22))
+>a : Symbol(a, Decl(indexAccessCombinedInference.ts, 36, 18))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 34, 22))
+>b : Symbol(b, Decl(indexAccessCombinedInference.ts, 36, 29))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 34, 22))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 34, 22))
+
+declare function foo3<T extends Args2>( // Morally equivalent to foo2
+>foo3 : Symbol(foo3, Decl(indexAccessCombinedInference.ts, 36, 52))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 37, 22))
+>Args2 : Symbol(Args2, Decl(indexAccessCombinedInference.ts, 26, 38))
+
+    a: T["TA" | "TB"],
+>a : Symbol(a, Decl(indexAccessCombinedInference.ts, 37, 39))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 37, 22))
+
+    b: T["TY"]): {a: T["TA"], b: T["TB"]} & T["TY"];
+>b : Symbol(b, Decl(indexAccessCombinedInference.ts, 38, 22))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 37, 22))
+>a : Symbol(a, Decl(indexAccessCombinedInference.ts, 39, 18))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 37, 22))
+>b : Symbol(b, Decl(indexAccessCombinedInference.ts, 39, 29))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 37, 22))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 37, 22))
+
+let z = foo2({
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 40, 3))
+>foo2 : Symbol(foo2, Decl(indexAccessCombinedInference.ts, 33, 1))
+
+    x: {
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 40, 14))
+
+        j: 12,
+>j : Symbol(j, Decl(indexAccessCombinedInference.ts, 41, 8))
+
+        i: 11
+>i : Symbol(i, Decl(indexAccessCombinedInference.ts, 42, 14))
+    }
+}, { y: 42 });
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 45, 4))
+
+let zz = foo3({
+>zz : Symbol(zz, Decl(indexAccessCombinedInference.ts, 46, 3))
+>foo3 : Symbol(foo3, Decl(indexAccessCombinedInference.ts, 36, 52))
+
+    x: {
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 46, 15))
+
+        j: 12,
+>j : Symbol(j, Decl(indexAccessCombinedInference.ts, 47, 8))
+
+        i: 11
+>i : Symbol(i, Decl(indexAccessCombinedInference.ts, 48, 14))
+    }
+}, { y: 42 });
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 51, 4))
+
+z = zz;
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 40, 3))
+>zz : Symbol(zz, Decl(indexAccessCombinedInference.ts, 46, 3))
+
+zz = z;
+>zz : Symbol(zz, Decl(indexAccessCombinedInference.ts, 46, 3))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 40, 3))
+
+// Higher-order
+interface Args3 {
+>Args3 : Symbol(Args3, Decl(indexAccessCombinedInference.ts, 53, 7), Decl(indexAccessCombinedInference.ts, 72, 33))
+
+    Key: "A" | "B",
+>Key : Symbol(Args3.Key, Decl(indexAccessCombinedInference.ts, 56, 17))
+
+    A: object,
+>A : Symbol(Args3.A, Decl(indexAccessCombinedInference.ts, 57, 19))
+
+    B: object,
+>B : Symbol(Args3.B, Decl(indexAccessCombinedInference.ts, 58, 14))
+
+    Merge: object,
+>Merge : Symbol(Args3.Merge, Decl(indexAccessCombinedInference.ts, 59, 14))
+}
+declare const either: "A" | "B";
+>either : Symbol(either, Decl(indexAccessCombinedInference.ts, 62, 13))
+
+declare function pickOne<T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"]): T[T["Key"]] & T["Merge"];
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+>Args3 : Symbol(Args3, Decl(indexAccessCombinedInference.ts, 53, 7), Decl(indexAccessCombinedInference.ts, 72, 33))
+>key : Symbol(key, Decl(indexAccessCombinedInference.ts, 63, 42))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+>left : Symbol(left, Decl(indexAccessCombinedInference.ts, 63, 56))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+>right : Symbol(right, Decl(indexAccessCombinedInference.ts, 63, 70))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+>into : Symbol(into, Decl(indexAccessCombinedInference.ts, 63, 85))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 63, 25))
+
+const opt1 = pickOne("A", {x: 12}, {y: ""}, {z: /./});
+>opt1 : Symbol(opt1, Decl(indexAccessCombinedInference.ts, 65, 5))
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 65, 27))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 65, 36))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 65, 45))
+
+const opt2 = pickOne("B", {x: 12}, {y: ""}, {z: /./});
+>opt2 : Symbol(opt2, Decl(indexAccessCombinedInference.ts, 66, 5))
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 66, 27))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 66, 36))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 66, 45))
+
+const opt3 = pickOne(either, {x: 12}, {y: ""}, {z: /./});
+>opt3 : Symbol(opt3, Decl(indexAccessCombinedInference.ts, 67, 5))
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>either : Symbol(either, Decl(indexAccessCombinedInference.ts, 62, 13))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 67, 30))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 67, 39))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 67, 48))
+
+const pickDelayed = <TKey extends Args3["Key"]>(x: TKey) => pickOne(x, {j: x}, {i: x}, {chosen: x});
+>pickDelayed : Symbol(pickDelayed, Decl(indexAccessCombinedInference.ts, 69, 5))
+>TKey : Symbol(TKey, Decl(indexAccessCombinedInference.ts, 69, 21))
+>Args3 : Symbol(Args3, Decl(indexAccessCombinedInference.ts, 53, 7), Decl(indexAccessCombinedInference.ts, 72, 33))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 69, 48))
+>TKey : Symbol(TKey, Decl(indexAccessCombinedInference.ts, 69, 21))
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 69, 48))
+>j : Symbol(j, Decl(indexAccessCombinedInference.ts, 69, 72))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 69, 48))
+>i : Symbol(i, Decl(indexAccessCombinedInference.ts, 69, 80))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 69, 48))
+>chosen : Symbol(chosen, Decl(indexAccessCombinedInference.ts, 69, 88))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 69, 48))
+
+const opt4 = pickDelayed("A");
+>opt4 : Symbol(opt4, Decl(indexAccessCombinedInference.ts, 70, 5))
+>pickDelayed : Symbol(pickDelayed, Decl(indexAccessCombinedInference.ts, 69, 5))
+
+const opt5 = pickDelayed("B");
+>opt5 : Symbol(opt5, Decl(indexAccessCombinedInference.ts, 71, 5))
+>pickDelayed : Symbol(pickDelayed, Decl(indexAccessCombinedInference.ts, 69, 5))
+
+const opt6 = pickDelayed(either);
+>opt6 : Symbol(opt6, Decl(indexAccessCombinedInference.ts, 72, 5))
+>pickDelayed : Symbol(pickDelayed, Decl(indexAccessCombinedInference.ts, 69, 5))
+>either : Symbol(either, Decl(indexAccessCombinedInference.ts, 62, 13))
+
+// Reopenable
+interface Args3 {
+>Args3 : Symbol(Args3, Decl(indexAccessCombinedInference.ts, 53, 7), Decl(indexAccessCombinedInference.ts, 72, 33))
+
+    /**
+     * One must make patched parameters optional, otherwise signatures expecting the unpatched
+     * interface (ie, pickOne above) will not be able to produce a type satisfying the interface
+     * (as there are no inference sites for the new members) and will fall back to the constraints on each member
+     */
+    Extra?: object,
+>Extra : Symbol(Args3.Extra, Decl(indexAccessCombinedInference.ts, 75, 17))
+}
+declare function pickOne<T extends Args3>(key: T["Key"], left: T["A"], right: T["B"], into: T["Merge"], extra: T["Extra"]): T[T["Key"]] & {into: T["Merge"], extra: T["Extra"]};
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>Args3 : Symbol(Args3, Decl(indexAccessCombinedInference.ts, 53, 7), Decl(indexAccessCombinedInference.ts, 72, 33))
+>key : Symbol(key, Decl(indexAccessCombinedInference.ts, 83, 42))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>left : Symbol(left, Decl(indexAccessCombinedInference.ts, 83, 56))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>right : Symbol(right, Decl(indexAccessCombinedInference.ts, 83, 70))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>into : Symbol(into, Decl(indexAccessCombinedInference.ts, 83, 85))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>extra : Symbol(extra, Decl(indexAccessCombinedInference.ts, 83, 103))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>into : Symbol(into, Decl(indexAccessCombinedInference.ts, 83, 139))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+>extra : Symbol(extra, Decl(indexAccessCombinedInference.ts, 83, 156))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 83, 25))
+
+const opt7 = pickOne("A", {x: 12}, {y: ""}, {z: /./}, {z: /./});
+>opt7 : Symbol(opt7, Decl(indexAccessCombinedInference.ts, 84, 5))
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 84, 27))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 84, 36))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 84, 45))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 84, 55))
+
+const opt8 = pickOne("B", {x: 12}, {y: ""}, {z: /./}, {z: /./});
+>opt8 : Symbol(opt8, Decl(indexAccessCombinedInference.ts, 85, 5))
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 85, 27))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 85, 36))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 85, 45))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 85, 55))
+
+const opt9 = pickOne(either, {x: 12}, {y: ""}, {z: /./}, {z: /./});
+>opt9 : Symbol(opt9, Decl(indexAccessCombinedInference.ts, 86, 5))
+>pickOne : Symbol(pickOne, Decl(indexAccessCombinedInference.ts, 62, 32), Decl(indexAccessCombinedInference.ts, 82, 1))
+>either : Symbol(either, Decl(indexAccessCombinedInference.ts, 62, 13))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 86, 30))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 86, 39))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 86, 48))
+>z : Symbol(z, Decl(indexAccessCombinedInference.ts, 86, 58))
+
+// Interactions with `this` types
+interface TPicker {
+>TPicker : Symbol(TPicker, Decl(indexAccessCombinedInference.ts, 86, 67))
+
+    Key: keyof this,
+>Key : Symbol(TPicker.Key, Decl(indexAccessCombinedInference.ts, 89, 19))
+
+    X: number,
+>X : Symbol(TPicker.X, Decl(indexAccessCombinedInference.ts, 90, 20))
+
+    Y: string
+>Y : Symbol(TPicker.Y, Decl(indexAccessCombinedInference.ts, 91, 14))
+}
+declare function chooseLiteral<T extends TPicker>(choice: T["Key"], x: T["X"], y:T["Y"]): T[T["Key"]];
+>chooseLiteral : Symbol(chooseLiteral, Decl(indexAccessCombinedInference.ts, 93, 1))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 94, 31))
+>TPicker : Symbol(TPicker, Decl(indexAccessCombinedInference.ts, 86, 67))
+>choice : Symbol(choice, Decl(indexAccessCombinedInference.ts, 94, 50))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 94, 31))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 94, 67))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 94, 31))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 94, 78))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 94, 31))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 94, 31))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 94, 31))
+
+const cx = chooseLiteral("X", 1, "no");
+>cx : Symbol(cx, Decl(indexAccessCombinedInference.ts, 95, 5))
+>chooseLiteral : Symbol(chooseLiteral, Decl(indexAccessCombinedInference.ts, 93, 1))
+
+const cy = chooseLiteral("Y", 0, "yes");
+>cy : Symbol(cy, Decl(indexAccessCombinedInference.ts, 96, 5))
+>chooseLiteral : Symbol(chooseLiteral, Decl(indexAccessCombinedInference.ts, 93, 1))
+
+const ceither = chooseLiteral("X" as "X" | "Y", 1, "yes");
+>ceither : Symbol(ceither, Decl(indexAccessCombinedInference.ts, 97, 5))
+>chooseLiteral : Symbol(chooseLiteral, Decl(indexAccessCombinedInference.ts, 93, 1))
+
+const cneither = chooseLiteral("Key", 0, "no");
+>cneither : Symbol(cneither, Decl(indexAccessCombinedInference.ts, 98, 5))
+>chooseLiteral : Symbol(chooseLiteral, Decl(indexAccessCombinedInference.ts, 93, 1))
+
+// Multiple inference sites
+interface Args4 {
+>Args4 : Symbol(Args4, Decl(indexAccessCombinedInference.ts, 98, 47))
+
+    0: object,
+>0 : Symbol(Args4[0], Decl(indexAccessCombinedInference.ts, 101, 17))
+
+    1: Record<keyof this[0], Function>,
+>1 : Symbol(Args4[1], Decl(indexAccessCombinedInference.ts, 102, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+declare function dualInputs<T extends Args4>(x: T[0], y: T[0], toDelay: T[1]): T[0] & {transformers: T[1]};
+>dualInputs : Symbol(dualInputs, Decl(indexAccessCombinedInference.ts, 104, 1))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
+>Args4 : Symbol(Args4, Decl(indexAccessCombinedInference.ts, 98, 47))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 105, 45))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
+>y : Symbol(y, Decl(indexAccessCombinedInference.ts, 105, 53))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
+>toDelay : Symbol(toDelay, Decl(indexAccessCombinedInference.ts, 105, 62))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
+>transformers : Symbol(transformers, Decl(indexAccessCombinedInference.ts, 105, 87))
+>T : Symbol(T, Decl(indexAccessCombinedInference.ts, 105, 28))
+
+const result = dualInputs({x: 0}, {x: 1}, {x: () => ""});
+>result : Symbol(result, Decl(indexAccessCombinedInference.ts, 107, 5))
+>dualInputs : Symbol(dualInputs, Decl(indexAccessCombinedInference.ts, 104, 1))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 107, 27))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 107, 35))
+>x : Symbol(x, Decl(indexAccessCombinedInference.ts, 107, 43))
+
