@@ -70,10 +70,10 @@ CreatingProgramWith::
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
 Loading config file: /user/username/projects/project/lib/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
