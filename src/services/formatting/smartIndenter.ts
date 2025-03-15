@@ -451,20 +451,8 @@ export namespace SmartIndenter {
                 //   ? 1 : (          L1: whenTrue indented because it's on a new line
                 //     0              L2: indented two stops, one because whenTrue was indented
                 //   );                   and one because of the parentheses spanning multiple lines
-
-                // However, when condition and whenTrue are on the same line, whenFalse should not be indented:
-                // 
-                // const z =
-                //     0 ? 1 :        L1: whenTrue indented because it's on a new line
-                //     2 ? 3 :        L2: not indented 
-                //     4;             L3: not indented
                 const trueStartLine = getStartLineAndCharacterForNode(parent.whenTrue, sourceFile).line;
                 const trueEndLine = getLineAndCharacterOfPosition(sourceFile, parent.whenTrue.end).line;
-
-                if (conditionEndLine === trueStartLine && trueStartLine === trueEndLine && trueEndLine !== childStartLine) {
-                    return true;
-                }
-
                 return conditionEndLine === trueStartLine && trueEndLine === childStartLine;
             }
         }
@@ -709,8 +697,9 @@ export namespace SmartIndenter {
                 break;
             case SyntaxKind.ConditionalExpression:
                 if (child && sourceFile) {
-                    const childStartCharacter = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).character;
-                    if (!rangeIsOnOneLine(sourceFile, parent) && childStartCharacter !== SyntaxKind.QuestionToken) {
+                    const childStartLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.pos)).line;
+                    const childEndLine = sourceFile.getLineAndCharacterOfPosition(skipTrivia(sourceFile.text, child.end)).line;
+                    if (!rangeIsOnOneLine(sourceFile, parent) && childStartLine !== childEndLine && childKind !== SyntaxKind.ParenthesizedExpression) {
                         return false;
                     }
                 }
