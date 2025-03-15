@@ -5375,10 +5375,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * Checks if two symbols, through aliasing and/or merging, refer to the same thing
      */
-    function getSymbolIfSameReference(s1: Symbol, s2: Symbol) {
-        if (getMergedSymbol(resolveSymbol(getMergedSymbol(s1))) === getMergedSymbol(resolveSymbol(getMergedSymbol(s2)))) {
-            return s1;
-        }
+    function getSymbolIfSameReference(s1: Symbol, s2: Symbol): boolean {
+        if (s1 === s2) return true;
+        s1 = getMergedSymbol(s1);
+        s2 = getMergedSymbol(s2);
+        if (s1 === s2) return true;
+        s1 = resolveSymbol(s1);
+        s2 = resolveSymbol(s2);
+        if (s1 === s2) return true;
+        s1 = getMergedSymbol(s1);
+        s2 = getMergedSymbol(s2);
+        if (s1 === s2) return true;
+
+        return false;
     }
 
     function getExportSymbolOfValueSymbolIfExported(symbol: Symbol): Symbol;
