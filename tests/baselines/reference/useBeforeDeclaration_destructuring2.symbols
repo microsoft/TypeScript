@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/useBeforeDeclaration_destructuring2.ts] ////
+
+=== useBeforeDeclaration_destructuring2.ts ===
+// https://github.com/microsoft/TypeScript/issues/58794
+
+export const fn1 = <const T,>({
+>fn1 : Symbol(fn1, Decl(useBeforeDeclaration_destructuring2.ts, 2, 12))
+>T : Symbol(T, Decl(useBeforeDeclaration_destructuring2.ts, 2, 20))
+
+  [length - 1]: finalItem,
+>length : Symbol(length, Decl(useBeforeDeclaration_destructuring2.ts, 3, 26))
+>finalItem : Symbol(finalItem, Decl(useBeforeDeclaration_destructuring2.ts, 2, 31))
+
+  length,
+>length : Symbol(length, Decl(useBeforeDeclaration_destructuring2.ts, 3, 26))
+
+}: readonly T[]): T | undefined => {
+>T : Symbol(T, Decl(useBeforeDeclaration_destructuring2.ts, 2, 20))
+>T : Symbol(T, Decl(useBeforeDeclaration_destructuring2.ts, 2, 20))
+
+  return finalItem;
+>finalItem : Symbol(finalItem, Decl(useBeforeDeclaration_destructuring2.ts, 2, 31))
+
+};
+
+export const fn2 = <const T,>({
+>fn2 : Symbol(fn2, Decl(useBeforeDeclaration_destructuring2.ts, 9, 12))
+>T : Symbol(T, Decl(useBeforeDeclaration_destructuring2.ts, 9, 20))
+
+  length,
+>length : Symbol(length, Decl(useBeforeDeclaration_destructuring2.ts, 9, 31))
+
+  [length - 1]: finalItem,
+>length : Symbol(length, Decl(useBeforeDeclaration_destructuring2.ts, 9, 31))
+>finalItem : Symbol(finalItem, Decl(useBeforeDeclaration_destructuring2.ts, 10, 9))
+
+}: readonly T[]): T | undefined => {
+>T : Symbol(T, Decl(useBeforeDeclaration_destructuring2.ts, 9, 20))
+>T : Symbol(T, Decl(useBeforeDeclaration_destructuring2.ts, 9, 20))
+
+  return finalItem;
+>finalItem : Symbol(finalItem, Decl(useBeforeDeclaration_destructuring2.ts, 10, 9))
+
+};
+
