@@ -1,0 +1,225 @@
+//// [tests/cases/compiler/falsinessCallExpressionCoercion.ts] ////
+
+=== falsinessCallExpressionCoercion.ts ===
+function test1() {
+>test1 : Symbol(test1, Decl(falsinessCallExpressionCoercion.ts, 0, 0))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 0, 18))
+
+    if (!canAccess) { // error
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 0, 18))
+    }
+}
+
+function test2() {
+>test2 : Symbol(test2, Decl(falsinessCallExpressionCoercion.ts, 5, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 7, 18))
+
+    if (!canAccess) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 7, 18))
+    }
+
+    canAccess();
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 7, 18))
+}
+
+function test3() {
+>test3 : Symbol(test3, Decl(falsinessCallExpressionCoercion.ts, 14, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 16, 18))
+
+    if (!!!canAccess) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 16, 18))
+    }
+}
+
+function test4(canAccess: () => boolean) {
+>test4 : Symbol(test4, Decl(falsinessCallExpressionCoercion.ts, 21, 1))
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 23, 15))
+
+    if (!canAccess) { // error
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 23, 15))
+    }
+}
+
+function test5(canAccess?: () => boolean) {
+>test5 : Symbol(test5, Decl(falsinessCallExpressionCoercion.ts, 26, 1))
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 28, 15))
+
+    if (!canAccess) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 28, 15))
+    }
+}
+
+function test6() {
+>test6 : Symbol(test6, Decl(falsinessCallExpressionCoercion.ts, 31, 1))
+
+    const x = {
+>x : Symbol(x, Decl(falsinessCallExpressionCoercion.ts, 34, 9))
+
+        foo: {
+>foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 34, 15))
+
+            bar() { return true; }
+>bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 35, 14))
+        }
+    };
+
+    if (!x.foo.bar) { // error
+>x.foo.bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 35, 14))
+>x.foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 34, 15))
+>x : Symbol(x, Decl(falsinessCallExpressionCoercion.ts, 34, 9))
+>foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 34, 15))
+>bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 35, 14))
+    }
+}
+
+function test7() {
+>test7 : Symbol(test7, Decl(falsinessCallExpressionCoercion.ts, 42, 1))
+
+    const x = {
+>x : Symbol(x, Decl(falsinessCallExpressionCoercion.ts, 45, 9))
+
+        foo: {
+>foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 45, 15))
+
+            bar() { return true; }
+>bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 46, 14))
+        }
+    };
+
+    if (!x.foo.bar) { // ok
+>x.foo.bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 46, 14))
+>x.foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 45, 15))
+>x : Symbol(x, Decl(falsinessCallExpressionCoercion.ts, 45, 9))
+>foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 45, 15))
+>bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 46, 14))
+    }
+
+    x.foo.bar();
+>x.foo.bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 46, 14))
+>x.foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 45, 15))
+>x : Symbol(x, Decl(falsinessCallExpressionCoercion.ts, 45, 9))
+>foo : Symbol(foo, Decl(falsinessCallExpressionCoercion.ts, 45, 15))
+>bar : Symbol(bar, Decl(falsinessCallExpressionCoercion.ts, 46, 14))
+}
+
+class Test8 {
+>Test8 : Symbol(Test8, Decl(falsinessCallExpressionCoercion.ts, 55, 1))
+
+    maybeIsUser?: () => boolean;
+>maybeIsUser : Symbol(Test8.maybeIsUser, Decl(falsinessCallExpressionCoercion.ts, 57, 13))
+
+    isUser() {
+>isUser : Symbol(Test8.isUser, Decl(falsinessCallExpressionCoercion.ts, 58, 32))
+
+        return true;
+    }
+
+    test() {
+>test : Symbol(Test8.test, Decl(falsinessCallExpressionCoercion.ts, 62, 5))
+
+        if (!this.isUser) { // error
+>this.isUser : Symbol(Test8.isUser, Decl(falsinessCallExpressionCoercion.ts, 58, 32))
+>this : Symbol(Test8, Decl(falsinessCallExpressionCoercion.ts, 55, 1))
+>isUser : Symbol(Test8.isUser, Decl(falsinessCallExpressionCoercion.ts, 58, 32))
+        }
+
+        if (!this.maybeIsUser) { // ok
+>this.maybeIsUser : Symbol(Test8.maybeIsUser, Decl(falsinessCallExpressionCoercion.ts, 57, 13))
+>this : Symbol(Test8, Decl(falsinessCallExpressionCoercion.ts, 55, 1))
+>maybeIsUser : Symbol(Test8.maybeIsUser, Decl(falsinessCallExpressionCoercion.ts, 57, 13))
+        }
+    }
+}
+
+class Test9 {
+>Test9 : Symbol(Test9, Decl(falsinessCallExpressionCoercion.ts, 71, 1))
+
+    isUser() {
+>isUser : Symbol(Test9.isUser, Decl(falsinessCallExpressionCoercion.ts, 73, 13))
+
+        return true;
+    }
+
+    test() {
+>test : Symbol(Test9.test, Decl(falsinessCallExpressionCoercion.ts, 76, 5))
+
+        if (!this.isUser) { // ok
+>this.isUser : Symbol(Test9.isUser, Decl(falsinessCallExpressionCoercion.ts, 73, 13))
+>this : Symbol(Test9, Decl(falsinessCallExpressionCoercion.ts, 71, 1))
+>isUser : Symbol(Test9.isUser, Decl(falsinessCallExpressionCoercion.ts, 73, 13))
+        }
+
+        this.isUser();
+>this.isUser : Symbol(Test9.isUser, Decl(falsinessCallExpressionCoercion.ts, 73, 13))
+>this : Symbol(Test9, Decl(falsinessCallExpressionCoercion.ts, 71, 1))
+>isUser : Symbol(Test9.isUser, Decl(falsinessCallExpressionCoercion.ts, 73, 13))
+    }
+}
+
+function test10() {
+>test10 : Symbol(test10, Decl(falsinessCallExpressionCoercion.ts, 84, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 86, 19))
+
+    const res = canAccess
+>res : Symbol(res, Decl(falsinessCallExpressionCoercion.ts, 89, 9))
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 86, 19))
+
+    if (!res) { // error
+>res : Symbol(res, Decl(falsinessCallExpressionCoercion.ts, 89, 9))
+    }
+}
+
+function test11() {
+>test11 : Symbol(test11, Decl(falsinessCallExpressionCoercion.ts, 92, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 94, 19))
+
+    if (!canAccess) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 94, 19))
+
+    } else {
+        canAccess()
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 94, 19))
+    }
+}
+
+function test12() {
+>test12 : Symbol(test12, Decl(falsinessCallExpressionCoercion.ts, 101, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 103, 19))
+
+    if (!canAccess || Math.random()) { // error
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 103, 19))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function test13() {
+>test13 : Symbol(test13, Decl(falsinessCallExpressionCoercion.ts, 108, 1))
+
+    function canAccess() { return false; }
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 110, 19))
+
+    if (!canAccess || Math.random()) { // ok
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 110, 19))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+    }
+
+    canAccess()
+>canAccess : Symbol(canAccess, Decl(falsinessCallExpressionCoercion.ts, 110, 19))
+}
+
