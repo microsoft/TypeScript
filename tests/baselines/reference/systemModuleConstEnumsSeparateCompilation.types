@@ -44,6 +44,9 @@ export function foo() {
 }
 
 module M {
+>M : typeof M
+>  : ^^^^^^^^
+
     export const enum NonTopLevelConstEnum { X }
 >NonTopLevelConstEnum : NonTopLevelConstEnum
 >                     : ^^^^^^^^^^^^^^^^^^^^

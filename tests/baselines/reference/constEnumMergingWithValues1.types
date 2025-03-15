@@ -6,6 +6,9 @@ function foo() {}
 >    : ^^^^^^^^^^
 
 module foo {
+>foo : typeof foo
+>    : ^^^^^^^^^^
+
     const enum E { X }
 >E : E
 >  : ^
