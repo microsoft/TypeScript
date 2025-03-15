@@ -1,0 +1,11 @@
+forIn3.ts(3,8): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+
+
+==== forIn3.ts (1 errors) ====
+    function test(obj: { a: 1; b: 2 }) {
+      let key: "a" | "b";
+      for (key in obj) {} // error
+           ~~~
+!!! error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+    }
+    
