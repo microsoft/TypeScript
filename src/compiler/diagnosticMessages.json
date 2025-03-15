@@ -8348,10 +8348,6 @@
         "category": "Error",
         "code": 18029
     },
-    "An optional chain cannot contain private identifiers.": {
-        "category": "Error",
-        "code": 18030
-    },
     "The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.": {
         "category": "Error",
         "code": 18031
