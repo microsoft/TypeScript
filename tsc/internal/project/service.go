@@ -540,7 +540,7 @@ func (s *Service) loadConfiguredProject(project *Project) {
 
 		s.logf("Config: %s : %s",
 			project.configFileName,
-			core.Must(core.StringifyJson(map[string]interface{}{
+			core.Must(core.StringifyJson(map[string]any{
 				"rootNames":         parsedCommandLine.FileNames(),
 				"options":           parsedCommandLine.CompilerOptions(),
 				"projectReferences": parsedCommandLine.ProjectReferences(),
@@ -608,6 +608,6 @@ func (s *Service) log(msg string) {
 	s.options.Logger.Info(msg)
 }
 
-func (s *Service) logf(format string, args ...interface{}) {
+func (s *Service) logf(format string, args ...any) {
 	s.log(fmt.Sprintf(format, args...))
 }

@@ -11,7 +11,7 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-func AssertPanics(tb testing.TB, fn func(), expected any, msgAndArgs ...interface{}) {
+func AssertPanics(tb testing.TB, fn func(), expected any, msgAndArgs ...any) {
 	tb.Helper()
 
 	var got any

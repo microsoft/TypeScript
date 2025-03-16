@@ -19,7 +19,7 @@ var emptyCaseAnalyzer = &analysis.Analyzer{
 	},
 }
 
-func runEmptyCase(pass *analysis.Pass) (interface{}, error) {
+func runEmptyCase(pass *analysis.Pass) (any, error) {
 	inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 
 	nodeFilter := []ast.Node{
