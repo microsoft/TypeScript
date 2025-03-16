@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -78,4 +79,9 @@ type statistic struct {
 
 func newStatistic(name string, count int) statistic {
 	return statistic{name, count}
+}
+
+func printVersion(sys System) {
+	fmt.Fprint(sys.Writer(), diagnostics.Version_0.Format(core.Version)+sys.NewLine())
+	sys.EndWrite()
 }

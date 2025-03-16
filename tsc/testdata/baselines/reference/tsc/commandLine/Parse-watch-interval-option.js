@@ -152,5 +152,5 @@ ParsedCommandLine::{
     "compileOnSave": null
 }
 Output::
-No output
+Version 7.0.0-dev
 
