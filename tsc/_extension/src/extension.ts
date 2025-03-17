@@ -26,15 +26,21 @@ export function activate(context: vscode.ExtensionContext) {
 
     output.appendLine(`Resolved to ${exe}`);
 
+    const config = vscode.workspace.getConfiguration("typescript-go");
+
+    // Get pprofDir
+    const pprofDir = config.get<string>("pprofDir");
+    const pprofArgs = pprofDir ? ["-pprofDir", pprofDir] : [];
+
     const serverOptions: ServerOptions = {
         run: {
             command: exe,
-            args: ["lsp"],
+            args: ["lsp", ...pprofArgs],
             transport: TransportKind.stdio,
         },
         debug: {
             command: exe,
-            args: ["lsp"],
+            args: ["lsp", ...pprofArgs],
             transport: TransportKind.stdio,
         },
     };

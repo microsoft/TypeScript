@@ -30,6 +30,10 @@
                         ],
                         "default": "verbose",
                         "description": "Trace TypeScript Go server communication."
+                    },
+                    "typescript-go.pprofDir": {
+                        "type": "string",
+                        "description": "Directory to write pprof profiles to."
                     }
                 }
             }

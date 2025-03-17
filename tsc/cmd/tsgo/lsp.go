@@ -10,12 +10,14 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp"
+	"github.com/microsoft/typescript-go/internal/pprof"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 )
 
 func runLSP(args []string) int {
 	flag := flag.NewFlagSet("lsp", flag.ContinueOnError)
 	stdio := flag.Bool("stdio", false, "use stdio for communication")
+	pprofDir := flag.String("pprofDir", "", "Generate pprof CPU/memory profiles to the given directory.")
 	pipe := flag.String("pipe", "", "use named pipe for communication")
 	_ = pipe
 	socket := flag.String("socket", "", "use socket for communication")
@@ -27,6 +29,12 @@ func runLSP(args []string) int {
 	if !*stdio {
 		fmt.Fprintln(os.Stderr, "only stdio is supported")
 		return 1
+	}
+
+	if *pprofDir != "" {
+		fmt.Fprintf(os.Stderr, "pprof profiles will be written to: %v\n", *pprofDir)
+		profileSession := pprof.BeginProfiling(*pprofDir, os.Stderr)
+		defer profileSession.Stop()
 	}
 
 	fs := bundled.WrapFS(osvfs.FS())

@@ -6,9 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 	"runtime"
-	"runtime/pprof"
 	"slices"
 	"strconv"
 	"strings"
@@ -21,6 +19,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/execute"
+	"github.com/microsoft/typescript-go/internal/pprof"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
@@ -135,8 +134,8 @@ func main() {
 	opts := parseArgs()
 
 	if opts.devel.pprofDir != "" {
-		profileSession := beginProfiling(opts.devel.pprofDir)
-		defer profileSession.stop()
+		profileSession := pprof.BeginProfiling(opts.devel.pprofDir, os.Stdout)
+		defer profileSession.Stop()
 	}
 
 	startTime := time.Now()
@@ -334,55 +333,4 @@ func printDiagnostics(diagnostics []*ast.Diagnostic, host ts.CompilerHost, compi
 			printDiagnostic(diagnostic, 0, formatOpts.ComparePathsOptions)
 		}
 	}
-}
-
-type profileSession struct {
-	cpuFilePath string
-	memFilePath string
-	cpuFile     *os.File
-	memFile     *os.File
-}
-
-func beginProfiling(profileDir string) *profileSession {
-	if err := os.MkdirAll(profileDir, 0o755); err != nil {
-		panic(err)
-	}
-
-	pid := os.Getpid()
-
-	cpuProfilePath := filepath.Join(profileDir, fmt.Sprintf("%d-cpuprofile.pb.gz", pid))
-	memProfilePath := filepath.Join(profileDir, fmt.Sprintf("%d-memprofile.pb.gz", pid))
-	cpuFile, err := os.Create(cpuProfilePath)
-	if err != nil {
-		panic(err)
-	}
-	memFile, err := os.Create(memProfilePath)
-	if err != nil {
-		panic(err)
-	}
-
-	if err := pprof.StartCPUProfile(cpuFile); err != nil {
-		panic(err)
-	}
-
-	return &profileSession{
-		cpuFilePath: cpuProfilePath,
-		memFilePath: memProfilePath,
-		cpuFile:     cpuFile,
-		memFile:     memFile,
-	}
-}
-
-func (p *profileSession) stop() {
-	pprof.StopCPUProfile()
-	err := pprof.Lookup("allocs").WriteTo(p.memFile, 0)
-	if err != nil {
-		panic(err)
-	}
-
-	p.cpuFile.Close()
-	p.memFile.Close()
-
-	fmt.Printf("CPU profile: %v\n", p.cpuFilePath)
-	fmt.Printf("Memory profile: %v\n", p.memFilePath)
 }
