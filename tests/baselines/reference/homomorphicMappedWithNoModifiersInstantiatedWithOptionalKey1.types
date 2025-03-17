@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts] ////
+
+=== homomorphicMappedWithNoModifiersInstantiatedWithOptionalKey1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59987
+
+type requiredKeyOf<o> = {
+>requiredKeyOf : requiredKeyOf<o>
+>              : ^^^^^^^^^^^^^^^^
+
+  [k in keyof o]-?: o extends { [_ in k]-?: o[k] } ? k : never;
+}[keyof o];
+
+type declared = {
+>declared : declared
+>         : ^^^^^^^^
+
+  bar?: number;
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+} & {
+  foo?: "default";
+>foo : "default" | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+type requiredDeclaredKey = requiredKeyOf<declared>; // never
+>requiredDeclaredKey : never
+>                    : ^^^^^
+
+type distill<t> = t extends object ? distillMappable<t> : t;
+>distill : distill<t>
+>        : ^^^^^^^^^^
+
+type distillMappable<o> = {
+>distillMappable : distillMappable<o>
+>                : ^^^^^^^^^^^^^^^^^^
+
+  [k in keyof o as k extends inferredDefaultKeyOf<o> ? never : k]: distill<
+    o[k]
+  >;
+} & {
+  [k in inferredDefaultKeyOf<o>]?: distill<o[k]>;
+};
+
+type inferredDefaultKeyOf<o> = {
+>inferredDefaultKeyOf : inferredDefaultKeyOf<o>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  [k in keyof o]: o[k] extends "default" ? k : never;
+}[keyof o];
+
+type distilled = distill<{
+>distilled : distillMappable<{ foo: "default"; bar?: number; }>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^      ^^^^
+
+  foo: "default";
+>foo : "default"
+>    : ^^^^^^^^^
+
+  bar?: number;
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+}>;
+
+type requiredDistilledKey = requiredKeyOf<distilled>; // never
+>requiredDistilledKey : never
+>                     : ^^^^^
+
+// simplified repro of the above
+type IndirectKeys<T> = { [K in keyof T]: K }[keyof T];
+>IndirectKeys : IndirectKeys<T>
+>             : ^^^^^^^^^^^^^^^
+
+type MappedBasedOnIndirectKeys<T> = {
+>MappedBasedOnIndirectKeys : MappedBasedOnIndirectKeys<T>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in IndirectKeys<T>]: unknown;
+};
+type AcceptPropertyKey<K extends PropertyKey> = K;
+>AcceptPropertyKey : K
+>                  : ^
+
+type Result = AcceptPropertyKey<keyof MappedBasedOnIndirectKeys<{ a?: string; b: number }>>; // "a" | "b"
+>Result : "a" | "b"
+>       : ^^^^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+
