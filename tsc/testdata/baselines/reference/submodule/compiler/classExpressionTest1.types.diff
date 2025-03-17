@@ -12,14 +12,3 @@
  
              var t: T;
  >t : T
-@@= skipped -12, +14 lines =@@
- 
-             return { t, x };
- >{ t, x } : { t: T; x: X; }
-->t : T
-->x : X
-+>t : any
-+>x : any
-         }
-     }
- 

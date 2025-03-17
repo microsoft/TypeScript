@@ -285,5 +285,5 @@ const res: (() => void) & { func: any } = assign(() => {}, { func });
 >assign : <T, U>(a: T, b: U) => T & U
 >() => {} : () => void
 >{ func } : { func: <T>() => void; }
->func : any
+>func : <T>() => void
 

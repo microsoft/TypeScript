@@ -37,16 +37,7 @@
  
      param1: 'value1',
  >param1 : string
-@@= skipped -12, +12 lines =@@
- >param2 ? {param2} : {} : { param2: string; } | {}
- >param2 : "value2" | null
- >{param2} : { param2: string; }
-->param2 : string
-+>param2 : any
- >{} : {}
- 
- };
-@@= skipped -8, +8 lines =@@
+@@= skipped -20, +20 lines =@@
  const query = Object.entries(obj).map(
  >query : string
  >Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&') : string

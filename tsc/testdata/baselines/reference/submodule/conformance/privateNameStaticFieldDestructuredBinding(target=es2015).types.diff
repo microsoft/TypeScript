@@ -1,15 +1,6 @@
 --- old.privateNameStaticFieldDestructuredBinding(target=es2015).types
 +++ new.privateNameStaticFieldDestructuredBinding(target=es2015).types
-@@= skipped -40, +40 lines =@@
- >x : number
- >A.#field : number
- >A : typeof A
-->y : number
-+>y : any
- >this.testObject() : { x: number; y: number; }
- >this.testObject : () => { x: number; y: number; }
- >this : this
-@@= skipped -91, +91 lines =@@
+@@= skipped -131, +131 lines =@@
      static test(_a: typeof A) {
  >test : (_a: typeof A) => void
  >_a : typeof A

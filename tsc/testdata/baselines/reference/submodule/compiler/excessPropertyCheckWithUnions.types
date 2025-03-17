@@ -424,10 +424,10 @@ F1({
 >{        prop1,        prop2,    } : { prop1: string; prop2: string | undefined; }
 
         prop1,
->prop1 : any
+>prop1 : string
 
         prop2,
->prop2 : any
+>prop2 : string | undefined
 
     },
 });
@@ -442,10 +442,10 @@ F2({
 >{    prop1,    prop2,} : { prop1: string; prop2: string | undefined; }
 
     prop1,
->prop1 : any
+>prop1 : string
 
     prop2,
->prop2 : any
+>prop2 : string | undefined
 
 });
 

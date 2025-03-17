@@ -43,7 +43,7 @@ function someFrom<a>(some: a) {
 
     return { some };
 >{ some } : { some: a; }
->some : any
+>some : a
 }
 
 export function fn<r>(makeSome: () => r): void {

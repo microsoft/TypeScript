@@ -16,19 +16,7 @@
 +>{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
  
      Thing,
-->Thing : typeof Thing
-+>Thing : any
- 
-     AnotherThing,
-->AnotherThing : typeof AnotherThing
-+>AnotherThing : any
- 
-     foo,
-->foo : () => number
-+>foo : any
- 
-     qux: bar,
- >qux : () => number
+ >Thing : typeof Thing
 @@= skipped -38, +38 lines =@@
   * @param {import("./mod").literal} g
   */

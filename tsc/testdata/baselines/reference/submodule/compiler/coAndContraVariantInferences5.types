@@ -21,10 +21,10 @@ function f(
 >{        options,        onChange,    } : { options: SelectOptions<Thing>; onChange: (status: Thing | null) => void; }
 
         options,
->options : any
+>options : SelectOptions<Thing>
 
         onChange,
->onChange : any
+>onChange : (status: Thing | null) => void
 
     });
 }

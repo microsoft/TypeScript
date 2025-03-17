@@ -211,9 +211,9 @@ declare let target_string_arr: string[];
 >({ x, y, z } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
 >{ x, y, z } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
 >{ x, y, z } : { x: number; y: number; z: number | undefined; }
->x : any
->y : any
->z : any
+>x : number
+>y : number
+>z : number | undefined
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
 
     let q: number;
@@ -223,7 +223,7 @@ declare let target_string_arr: string[];
 >({ q } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
 >{ q } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
 >{ q } : { q: number; }
->q : any
+>q : number
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
 }
 

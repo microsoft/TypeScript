@@ -8,5 +8,5 @@ var greet = "hello";
 var obj = { greet? }; 
 >obj : { greet: string; }
 >{ greet? } : { greet: string; }
->greet : any
+>greet : string
 

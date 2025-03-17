@@ -184,16 +184,7 @@
  >a : A[]
  >arrayMap(value => ({ value })) : (a: A[]) => { value: A; }[]
  >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
-@@= skipped -7, +8 lines =@@
- >value : A
- >({ value }) : { value: A; }
- >{ value } : { value: A; }
-->value : A
-+>value : any
- 
- const f30: (a: string[]) => string[] = arrayFilter(x => x.length > 10);
- >f30 : (a: string[]) => string[]
-@@= skipped -17, +17 lines =@@
+@@= skipped -24, +25 lines =@@
  
  const f31: <T extends Box<number>>(a: T[]) => T[] = arrayFilter(x => x.value > 10);
  >f31 : <T extends Box<number>>(a: T[]) => T[]

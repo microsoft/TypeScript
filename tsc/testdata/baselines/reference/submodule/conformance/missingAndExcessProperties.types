@@ -42,8 +42,8 @@ function f2() {
 >({ x, y } = {}) : {}
 >{ x, y } = {} : {}
 >{ x, y } : { x: number; y: number; }
->x : any
->y : any
+>x : number
+>y : number
 >{} : {}
 
     ({ x: x = 1, y } = {});
@@ -54,14 +54,14 @@ function f2() {
 >x = 1 : 1
 >x : number
 >1 : 1
->y : any
+>y : number
 >{} : {}
 
     ({ x, y: y = 1 } = {});
 >({ x, y: y = 1 } = {}) : {}
 >{ x, y: y = 1 } = {} : {}
 >{ x, y: y = 1 } : { x: number; y?: number; }
->x : any
+>x : number
 >y : number
 >y = 1 : 1
 >y : number
@@ -142,7 +142,7 @@ function f4() {
 >({ x } = { x: 0, y: 0 }) : { x: number; y: number; }
 >{ x } = { x: 0, y: 0 } : { x: number; y: number; }
 >{ x } : { x: number; }
->x : any
+>x : number
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -153,7 +153,7 @@ function f4() {
 >({ y } = { x: 0, y: 0 }) : { x: number; y: number; }
 >{ y } = { x: 0, y: 0 } : { x: number; y: number; }
 >{ y } : { y: number; }
->y : any
+>y : number
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -164,8 +164,8 @@ function f4() {
 >({ x, y } = { x: 0, y: 0 }) : { x: number; y: number; }
 >{ x, y } = { x: 0, y: 0 } : { x: number; y: number; }
 >{ x, y } : { x: number; y: number; }
->x : any
->y : any
+>x : number
+>y : number
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0

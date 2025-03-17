@@ -18,12 +18,7 @@
  >x : Map<T["x"]>
  >sliceIndex : T
  
-@@= skipped -15, +20 lines =@@
- 
- export default { fn };
- >{ fn } : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
-->fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
-+>fn : any
+@@= skipped -19, +24 lines =@@
  
  === reexport.ts ===
  import test from "./types";
@@ -34,5 +29,5 @@
 ->{ test } : { test: { fn: <T extends { x: T["x"] extends infer T_1 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T_1]: T["x"][K]; } : never; }>(sliceIndex: T) => T["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T["x"][K_1]>; } : never; }; }
 ->test : { fn: <T extends { x: T["x"] extends infer T_1 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T_1]: T["x"][K]; } : never; }>(sliceIndex: T) => T["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T["x"][K_1]>; } : never; }
 +>{ test } : { test: { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }; }
-+>test : any
++>test : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
  

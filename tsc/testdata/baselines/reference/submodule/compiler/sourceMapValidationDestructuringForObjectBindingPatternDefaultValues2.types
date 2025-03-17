@@ -321,7 +321,7 @@ for ({ name = "noName" } = robot, i = 0; i < 1; i++) {
 >{ name = "noName" } = robot, i = 0 : 0
 >{ name = "noName" } = robot : Robot
 >{ name = "noName" } : { name?: string; }
->name : any
+>name : string
 >"noName" : "noName"
 >robot : Robot
 >i = 0 : 0
@@ -344,7 +344,7 @@ for ({ name = "noName" } = getRobot(), i = 0; i < 1; i++) {
 >{ name = "noName" } = getRobot(), i = 0 : 0
 >{ name = "noName" } = getRobot() : Robot
 >{ name = "noName" } : { name?: string; }
->name : any
+>name : string
 >"noName" : "noName"
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -368,7 +368,7 @@ for ({ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0;
 >{ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0 : 0
 >{ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name = "noName" } : { name?: string; }
->name : any
+>name : string
 >"noName" : "noName"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
@@ -403,11 +403,11 @@ for ({
 >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
 
         primary = "primary",
->primary : any
+>primary : string
 >"primary" : "primary"
 
         secondary = "secondary"
->secondary : any
+>secondary : string
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
@@ -446,11 +446,11 @@ for ({
 >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
 
         primary = "primary",
->primary : any
+>primary : string
 >"primary" : "primary"
 
         secondary = "secondary"
->secondary : any
+>secondary : string
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
@@ -490,11 +490,11 @@ for ({
 >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
 
         primary = "primary",
->primary : any
+>primary : string
 >"primary" : "primary"
 
         secondary = "secondary"
->secondary : any
+>secondary : string
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
@@ -804,9 +804,9 @@ for ({ name = "noName", skill = "skill" } = robot, i = 0; i < 1; i++) {
 >{ name = "noName", skill = "skill" } = robot, i = 0 : 0
 >{ name = "noName", skill = "skill" } = robot : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
->name : any
+>name : string
 >"noName" : "noName"
->skill : any
+>skill : string
 >"skill" : "skill"
 >robot : Robot
 >i = 0 : 0
@@ -829,9 +829,9 @@ for ({ name = "noName", skill = "skill" } = getRobot(), i = 0; i < 1; i++) {
 >{ name = "noName", skill = "skill" } = getRobot(), i = 0 : 0
 >{ name = "noName", skill = "skill" } = getRobot() : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
->name : any
+>name : string
 >"noName" : "noName"
->skill : any
+>skill : string
 >"skill" : "skill"
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -855,9 +855,9 @@ for ({ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "tr
 >{ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0 : 0
 >{ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
->name : any
+>name : string
 >"noName" : "noName"
->skill : any
+>skill : string
 >"skill" : "skill"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
@@ -887,7 +887,7 @@ for ({
 >{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "none", secondary: "none" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name = "noName",
->name : any
+>name : string
 >"noName" : "noName"
 
     skills: {
@@ -896,11 +896,11 @@ for ({
 >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
 
         primary = "primary",
->primary : any
+>primary : string
 >"primary" : "primary"
 
         secondary = "secondary"
->secondary : any
+>secondary : string
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
@@ -934,7 +934,7 @@ for ({
 >{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "none", secondary: "none" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name = "noName",
->name : any
+>name : string
 >"noName" : "noName"
 
     skills: {
@@ -943,11 +943,11 @@ for ({
 >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
 
         primary = "primary",
->primary : any
+>primary : string
 >"primary" : "primary"
 
         secondary = "secondary"
->secondary : any
+>secondary : string
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
@@ -982,7 +982,7 @@ for ({
 >{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "none", secondary: "none" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
 
     name = "noName",
->name : any
+>name : string
 >"noName" : "noName"
 
     skills: {
@@ -991,11 +991,11 @@ for ({
 >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
 
         primary = "primary",
->primary : any
+>primary : string
 >"primary" : "primary"
 
         secondary = "secondary"
->secondary : any
+>secondary : string
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }

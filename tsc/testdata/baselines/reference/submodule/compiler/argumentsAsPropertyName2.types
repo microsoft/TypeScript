@@ -35,7 +35,7 @@ function foo() {
         ({ arguments });
 >({ arguments }) : { arguments: IArguments; }
 >{ arguments } : { arguments: IArguments; }
->arguments : any
+>arguments : IArguments
 
         ({ arguments: arguments });
 >({ arguments: arguments }) : { arguments: IArguments; }

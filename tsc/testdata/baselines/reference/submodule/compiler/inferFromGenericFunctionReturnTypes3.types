@@ -30,7 +30,7 @@ function wrap<T>(value: T): Wrap<T> {
 
     return { value };
 >{ value } : { value: T; }
->value : any
+>value : T
 }
 
 function wrappedFoo(): Wrap<'foo'> {
@@ -48,7 +48,7 @@ function wrapBar(value: 'bar'): Wrap<'bar'> {
 
     return { value };
 >{ value } : { value: "bar"; }
->value : any
+>value : "bar"
 }
 
 function wrappedBar(): Wrap<'bar'> {
@@ -404,7 +404,7 @@ const a3: I[] = ['a', 'b'].map(name => {
 >'mapped' : "mapped"
 
         name,
->name : any
+>name : string
     }
 });
 

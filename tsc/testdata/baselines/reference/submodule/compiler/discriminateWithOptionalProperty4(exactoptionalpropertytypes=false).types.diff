@@ -9,11 +9,6 @@
  >a ? { a } : { b: ["there"] } : { a: string[]; } | { b: string[]; }
  >a : string[] | undefined
  >{ a } : { a: string[]; }
-->a : string[]
-+>a : any
- >{ b: ["there"] } : { b: string[]; }
- >b : string[]
- >["there"] : string[]
 @@= skipped -13, +13 lines =@@
    z.a //
  >z.a //    ? z.a.toString()    : z.b.toString() : string

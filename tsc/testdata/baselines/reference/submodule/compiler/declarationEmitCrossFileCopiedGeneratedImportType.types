@@ -32,5 +32,5 @@ import {e} from "../projC";
 export const d = {e};
 >d : { e: { f: (foo: Foo) => boolean; }; }
 >{e} : { e: { f: (foo: Foo) => boolean; }; }
->e : any
+>e : { f: (foo: Foo) => boolean; }
 

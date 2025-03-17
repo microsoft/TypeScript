@@ -36,13 +36,6 @@
  >42 : 42
  
    },
-   /** @type {string} */
-   lol,
-->lol : string
-+>lol : any
- 
-   /** @type {number} */
-   ['b' + 'ar1']: 42,
 @@= skipped -38, +38 lines =@@
  
    /** @type {function(number): number} */

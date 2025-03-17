@@ -116,7 +116,7 @@ else if (b.isFollower()) {
 var holder2 = {a};
 >holder2 : { a: RoyalGuard; }
 >{a} : { a: RoyalGuard; }
->a : any
+>a : RoyalGuard
 
 if (holder2.a.isLeader()) {
 >holder2.a.isLeader() : boolean

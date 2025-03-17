@@ -24,7 +24,7 @@ const o = {
 >{    f,    n: 1} : { f: (s: any) => any; n: number; }
 
     f,
->f : any
+>f : (s: any) => any
 
     n: 1
 >n : number

@@ -63,10 +63,10 @@ module.exports = {
 >{    doTheThing,    ExportedThing,} : { doTheThing: (x: any) => { x: string; }; ExportedThing: typeof ExportedThing; }
 
     doTheThing,
->doTheThing : any
+>doTheThing : (x: any) => { x: string; }
 
     ExportedThing,
->ExportedThing : any
+>ExportedThing : typeof ExportedThing
 
 };
 class LocalThing {

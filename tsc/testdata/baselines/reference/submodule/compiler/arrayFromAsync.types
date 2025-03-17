@@ -285,6 +285,6 @@ const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ ind
 >index : number
 >({ index, str }) : { index: number; str: string; }
 >{ index, str } : { index: number; str: string; }
->index : any
->str : any
+>index : number
+>str : string
 

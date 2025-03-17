@@ -41,7 +41,7 @@ class A {
 >x : number
 >A.#field : number
 >A : typeof A
->y : any
+>y : number
 >this.testObject() : { x: number; y: number; }
 >this.testObject : () => { x: number; y: number; }
 >this : this

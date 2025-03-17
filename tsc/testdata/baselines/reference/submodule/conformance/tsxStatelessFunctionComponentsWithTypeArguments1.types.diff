@@ -46,8 +46,7 @@
 +><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : any
 +>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
  >{key1, value: value} : { key1: T; value: U; }
-->key1 : T
-+>key1 : any
+ >key1 : T
  >value : U
  >value : U
 ->key : string

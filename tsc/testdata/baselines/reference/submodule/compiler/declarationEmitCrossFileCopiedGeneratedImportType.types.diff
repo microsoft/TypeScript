@@ -25,5 +25,5 @@
 ->e : { f: (foo: import("projA/index").Foo) => boolean; }
 +>d : { e: { f: (foo: Foo) => boolean; }; }
 +>{e} : { e: { f: (foo: Foo) => boolean; }; }
-+>e : any
++>e : { f: (foo: Foo) => boolean; }
  

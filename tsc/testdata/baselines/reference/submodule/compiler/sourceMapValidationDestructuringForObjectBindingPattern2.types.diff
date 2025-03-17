@@ -80,16 +80,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name } = robot, i = 0 : 0
- >{ name } = robot : Robot
- >{ name } : { name: string; }
-->name : string
-+>name : any
- >robot : Robot
- >i = 0 : 0
- >i : number
-@@= skipped -14, +14 lines =@@
+@@= skipped -22, +22 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -98,16 +89,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name } = getRobot(), i = 0 : 0
- >{ name } = getRobot() : Robot
- >{ name } : { name: string; }
-->name : string
-+>name : any
- >getRobot() : Robot
- >getRobot : () => Robot
- >i = 0 : 0
-@@= skipped -15, +15 lines =@@
+@@= skipped -23, +23 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -116,16 +98,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0 : 0
- >{ name } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name } : { name: string; }
-->name : string
-+>name : any
- ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
- >name : string
-@@= skipped -19, +19 lines =@@
+@@= skipped -27, +27 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -134,18 +107,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -10, +10 lines =@@
- >{ skills: { primary, secondary } } : { skills: { primary: string; secondary: string; }; }
- >skills : { primary: string; secondary: string; }
- >{ primary, secondary } : { primary: string; secondary: string; }
-->primary : string
-->secondary : string
-+>primary : any
-+>secondary : any
- >multiRobot : MultiRobot
- >i = 0 : 0
- >i : number
-@@= skipped -15, +15 lines =@@
+@@= skipped -25, +25 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -154,18 +116,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -10, +10 lines =@@
- >{ skills: { primary, secondary } } : { skills: { primary: string; secondary: string; }; }
- >skills : { primary: string; secondary: string; }
- >{ primary, secondary } : { primary: string; secondary: string; }
-->primary : string
-->secondary : string
-+>primary : any
-+>secondary : any
- >getMultiRobot() : MultiRobot
- >getMultiRobot : () => MultiRobot
- >i = 0 : 0
-@@= skipped -16, +16 lines =@@
+@@= skipped -26, +26 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -174,18 +125,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -10, +10 lines =@@
- >{ skills: { primary, secondary } } : { skills: { primary: string; secondary: string; }; }
- >skills : { primary: string; secondary: string; }
- >{ primary, secondary } : { primary: string; secondary: string; }
-->primary : string
-->secondary : string
-+>primary : any
-+>secondary : any
- 
-     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
- ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
-@@= skipped -28, +28 lines =@@
+@@= skipped -38, +38 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -248,18 +188,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name, skill } = robot, i = 0 : 0
- >{ name, skill } = robot : Robot
- >{ name, skill } : { name: string; skill: string; }
-->name : string
-->skill : string
-+>name : any
-+>skill : any
- >robot : Robot
- >i = 0 : 0
- >i : number
-@@= skipped -15, +15 lines =@@
+@@= skipped -23, +23 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -268,18 +197,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name, skill } = getRobot(), i = 0 : 0
- >{ name, skill } = getRobot() : Robot
- >{ name, skill } : { name: string; skill: string; }
-->name : string
-->skill : string
-+>name : any
-+>skill : any
- >getRobot() : Robot
- >getRobot : () => Robot
- >i = 0 : 0
-@@= skipped -16, +16 lines =@@
+@@= skipped -24, +24 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -288,18 +206,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name, skill } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0 : 0
- >{ name, skill } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name, skill } : { name: string; skill: string; }
-->name : string
-->skill : string
-+>name : any
-+>skill : any
- ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
- >name : string
-@@= skipped -20, +20 lines =@@
+@@= skipped -28, +28 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -308,22 +215,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name, skills: { primary, secondary } } = multiRobot, i = 0 : 0
- >{ name, skills: { primary, secondary } } = multiRobot : MultiRobot
- >{ name, skills: { primary, secondary } } : { name: string; skills: { primary: string; secondary: string; }; }
-->name : string
-+>name : any
- >skills : { primary: string; secondary: string; }
- >{ primary, secondary } : { primary: string; secondary: string; }
-->primary : string
-->secondary : string
-+>primary : any
-+>secondary : any
- >multiRobot : MultiRobot
- >i = 0 : 0
- >i : number
-@@= skipped -18, +18 lines =@@
+@@= skipped -26, +26 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -332,22 +224,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name, skills: { primary, secondary } } = getMultiRobot(), i = 0 : 0
- >{ name, skills: { primary, secondary } } = getMultiRobot() : MultiRobot
- >{ name, skills: { primary, secondary } } : { name: string; skills: { primary: string; secondary: string; }; }
-->name : string
-+>name : any
- >skills : { primary: string; secondary: string; }
- >{ primary, secondary } : { primary: string; secondary: string; }
-->primary : string
-->secondary : string
-+>primary : any
-+>secondary : any
- >getMultiRobot() : MultiRobot
- >getMultiRobot : () => MultiRobot
- >i = 0 : 0
-@@= skipped -19, +19 lines =@@
+@@= skipped -27, +27 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -356,22 +233,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name, skills: { primary, secondary } } =    <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },    i = 0 : 0
- >{ name, skills: { primary, secondary } } =    <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
- >{ name, skills: { primary, secondary } } : { name: string; skills: { primary: string; secondary: string; }; }
-->name : string
-+>name : any
- >skills : { primary: string; secondary: string; }
- >{ primary, secondary } : { primary: string; secondary: string; }
-->primary : string
-->secondary : string
-+>primary : any
-+>secondary : any
- 
-     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
- ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
-@@= skipped -31, +31 lines =@@
+@@= skipped -39, +39 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void

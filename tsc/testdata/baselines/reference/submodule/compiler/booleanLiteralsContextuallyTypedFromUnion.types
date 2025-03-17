@@ -30,11 +30,11 @@ const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
 >isIt ? { isIt, text: 'hey' } : { isIt, value: 123 } : { isIt: true; text: string; } | { isIt: false; value: number; }
 >isIt : boolean
 >{ isIt, text: 'hey' } : { isIt: true; text: string; }
->isIt : any
+>isIt : true
 >text : string
 >'hey' : "hey"
 >{ isIt, value: 123 } : { isIt: false; value: number; }
->isIt : any
+>isIt : false
 >value : number
 >123 : 123
 

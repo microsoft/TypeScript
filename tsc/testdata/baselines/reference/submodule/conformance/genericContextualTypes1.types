@@ -231,7 +231,7 @@ const f23: <A>(a: A[]) => Box<A>[] = arrayMap(value => ({ value }));
 >value : A
 >({ value }) : { value: A; }
 >{ value } : { value: A; }
->value : any
+>value : A
 
 const f30: (a: string[]) => string[] = arrayFilter(x => x.length > 10);
 >f30 : (a: string[]) => string[]

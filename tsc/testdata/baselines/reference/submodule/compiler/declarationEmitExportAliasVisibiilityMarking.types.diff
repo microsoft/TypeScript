@@ -1,13 +1,6 @@
 --- old.declarationEmitExportAliasVisibiilityMarking.types
 +++ new.declarationEmitExportAliasVisibiilityMarking.types
-@@= skipped -21, +21 lines =@@
- >rank : Rank
- >({suit, rank}) : { suit: Suit; rank: Rank; }
- >{suit, rank} : { suit: Suit; rank: Rank; }
-->suit : Suit
-->rank : Rank
-+>suit : any
-+>rank : any
+@@= skipped -26, +26 lines =@@
  
  === index.ts ===
  export let lazyCard = () => import('./Card').then(a => a.default);

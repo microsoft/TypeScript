@@ -118,8 +118,8 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >set : (key: K, value: { readonly ref: WeakRef<K>; value: V; }) => WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >key : K
 >{ ref, value } : { ref: WeakRef<K>; value: V; }
->ref : any
->value : any
+>ref : WeakRef<K>
+>value : V
 
             this.#refSet.add(ref);
 >this.#refSet.add(ref) : Set<WeakRef<K>>
@@ -144,7 +144,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this : this
 
                 ref,
->ref : any
+>ref : WeakRef<K>
 
             }, ref);
 >ref : WeakRef<K>

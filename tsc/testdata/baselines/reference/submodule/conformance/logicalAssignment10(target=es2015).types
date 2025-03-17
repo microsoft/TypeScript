@@ -22,7 +22,7 @@ const oobj = {
 >{    obj} : { obj: {}; }
 
     obj
->obj : any
+>obj : {}
 }
 
 obj[incr()] ??= incr();

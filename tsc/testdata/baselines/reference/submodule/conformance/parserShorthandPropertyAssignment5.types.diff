@@ -1,9 +1,0 @@
---- old.parserShorthandPropertyAssignment5.types
-+++ new.parserShorthandPropertyAssignment5.types
-@@= skipped -7, +7 lines =@@
- var obj = { greet? }; 
- >obj : { greet: string; }
- >{ greet? } : { greet: string; }
-->greet : string
-+>greet : any
- 

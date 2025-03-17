@@ -115,7 +115,7 @@ else {
 let holder = {invalidGuard};
 >holder : { invalidGuard: (c: any) => this is number; }
 >{invalidGuard} : { invalidGuard: (c: any) => this is number; }
->invalidGuard : any
+>invalidGuard : (c: any) => this is number
 
 if (holder.invalidGuard(c)) {
 >holder.invalidGuard(c) : boolean

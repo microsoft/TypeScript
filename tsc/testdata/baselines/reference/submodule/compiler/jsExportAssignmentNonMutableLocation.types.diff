@@ -15,9 +15,7 @@
  >{    customSymbol,} : { customSymbol: symbol; }
  
      customSymbol,
-->customSymbol : symbol
-+>customSymbol : any
- 
+@@= skipped -12, +12 lines =@@
  };
  
  exports.customSymbol2 = Symbol("custom");

@@ -33,10 +33,9 @@
    return {combined, literal}
 ->{combined, literal} : { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 ->combined : (fn: (combined: A & B) => void) => any
-->literal : (fn: (aPlusB: A & B) => void) => any
 +>{combined, literal} : { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
-+>combined : any
-+>literal : any
++>combined : (fn: (combined: Combined) => void) => any
+ >literal : (fn: (aPlusB: A & B) => void) => any
  }
  
  const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})

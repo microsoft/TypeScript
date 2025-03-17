@@ -28,13 +28,13 @@ module.exports = {
 >{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
 
     Thing,
->Thing : any
+>Thing : typeof Thing
 
     AnotherThing,
->AnotherThing : any
+>AnotherThing : typeof AnotherThing
 
     foo,
->foo : any
+>foo : () => number
 
     qux: bar,
 >qux : () => number

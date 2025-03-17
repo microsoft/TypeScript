@@ -25,7 +25,7 @@ let x: number;
 >{ a: { x } } : { a: { x: number; }; }
 >a : { x: number; }
 >{ x } : { x: number; }
->x : any
+>x : number
 >[{ a: new C() }] : [{ a: C; }]
 >{ a: new C() } : { a: C; }
 >a : C

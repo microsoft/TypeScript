@@ -44,14 +44,14 @@ class Test {
 >this.#value : { foo: { bar: number; }; }
 >this : this
 >{ foo } : { foo: { bar: number; }; }
->foo : any
+>foo : { bar: number; }
 
     this.#value = { foo }; // ok
 >this.#value = { foo } : { foo: { bar: number; }; }
 >this.#value : { foo: { bar: number; }; }
 >this : this
 >{ foo } : { foo: { bar: number; }; }
->foo : any
+>foo : { bar: number; }
 
     this.#value.foo = foo; // error
 >this.#value.foo = foo : { bar: number; }
@@ -71,7 +71,7 @@ class Test {
 >{ o: { foo } } : { o: { foo: { bar: number; }; }; }
 >o : { foo: { bar: number; }; }
 >{ foo } : { foo: { bar: number; }; }
->foo : any
+>foo : { bar: number; }
 
     ({ ...this.#value } = { foo }); //ok
 >({ ...this.#value } = { foo }) : { foo: { bar: number; }; }
@@ -80,7 +80,7 @@ class Test {
 >this.#value : { foo: { bar: number; }; }
 >this : this
 >{ foo } : { foo: { bar: number; }; }
->foo : any
+>foo : { bar: number; }
 
     ({ foo: this.#value.foo } = { foo }); //error
 >({ foo: this.#value.foo } = { foo }) : { foo: { bar: number; }; }
@@ -92,7 +92,7 @@ class Test {
 >this : this
 >foo : { bar: number; }
 >{ foo } : { foo: { bar: number; }; }
->foo : any
+>foo : { bar: number; }
 
     ({
 >({      foo: { ...this.#value.foo },    } = { foo }) : { foo: { bar: number; }; }
@@ -109,7 +109,7 @@ class Test {
 
     } = { foo }); //error
 >{ foo } : { foo: { bar: number; }; }
->foo : any
+>foo : { bar: number; }
 
     let r = { o: this.#value }; //error
 >r : { o: { foo: { bar: number; }; }; }

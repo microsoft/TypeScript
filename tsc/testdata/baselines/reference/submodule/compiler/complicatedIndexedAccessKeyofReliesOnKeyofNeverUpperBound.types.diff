@@ -64,16 +64,7 @@
  >type : T
  
      const localChannelId = `blahblahblah`;
-@@= skipped -15, +17 lines =@@
- 
-     return { type, localChannelId };
- >{ type, localChannelId } : { type: T; localChannelId: string; }
-->type : T
-->localChannelId : string
-+>type : any
-+>localChannelId : any
- }
- 
+@@= skipped -22, +24 lines =@@
  const newTextChannel = makeNewChannel('text');
  >newTextChannel : NewChannel<TextChannel>
  >makeNewChannel('text') : NewChannel<TextChannel>
@@ -82,7 +73,7 @@
  >'text' : "text"
  
  // This should work
-@@= skipped -21, +21 lines =@@
+@@= skipped -14, +14 lines =@@
  const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
  >newTextChannel2 : NewChannel<TextChannel>
  >makeNewChannel('text') : NewChannel<TextChannel>

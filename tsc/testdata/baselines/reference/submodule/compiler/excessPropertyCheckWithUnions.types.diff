@@ -46,29 +46,3 @@
  
  }
  
-@@= skipped -46, +51 lines =@@
- >{        prop1,        prop2,    } : { prop1: string; prop2: string | undefined; }
- 
-         prop1,
-->prop1 : string
-+>prop1 : any
- 
-         prop2,
-->prop2 : string | undefined
-+>prop2 : any
- 
-     },
- });
-@@= skipped -18, +18 lines =@@
- >{    prop1,    prop2,} : { prop1: string; prop2: string | undefined; }
- 
-     prop1,
-->prop1 : string
-+>prop1 : any
- 
-     prop2,
-->prop2 : string | undefined
-+>prop2 : any
- 
- });
- 

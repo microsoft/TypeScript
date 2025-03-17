@@ -10,8 +10,4 @@
 +>{        m.x  // error    } : { m: typeof m; : any; }
  
          m.x  // error
-->m : typeof m
-+>m : any
- > : any
- >.x : any
- > : any
+ >m : typeof m

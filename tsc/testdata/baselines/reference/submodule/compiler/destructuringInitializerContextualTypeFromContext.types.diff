@@ -26,13 +26,7 @@
  
      children,
  >children : any
-@@= skipped -28, +33 lines =@@
- >Child({name, ...props}) : any
- >Child : SFC<Props>
- >{name, ...props} : { name: "Apollo" | "Artemis" | "Dionysus" | "Persephone"; }
-->name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
-+>name : any
- >props : {}
+@@= skipped -33, +38 lines =@@
  
  const Child: SFC<Props> = ({
  >Child : SFC<Props>
@@ -41,7 +35,7 @@
  
      children,
  >children : any
-@@= skipped -21, +21 lines =@@
+@@= skipped -16, +16 lines =@@
  >`name: ${name} props: ${JSON.stringify(props)}` : string
  >name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
  >JSON.stringify(props) : string

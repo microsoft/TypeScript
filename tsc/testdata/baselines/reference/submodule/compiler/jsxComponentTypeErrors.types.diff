@@ -27,12 +27,7 @@
  >type : T | undefined
  >type : T | undefined
  
-@@= skipped -19, +26 lines =@@
- >{    type  } : { type: T | undefined; }
- 
-     type
-->type : T | undefined
-+>type : any
+@@= skipped -23, +30 lines =@@
    }
  }
  FunctionComponent.useThis = function() {
@@ -57,7 +52,7 @@
  }
  
  class ClassComponent {
-@@= skipped -25, +25 lines =@@
+@@= skipped -21, +21 lines =@@
  }
  
  const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;

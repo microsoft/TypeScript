@@ -240,7 +240,7 @@ const iterable = {
 >0 : 0
 
       value,
->value : any
+>value : number
 
     });
   },

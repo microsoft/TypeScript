@@ -33,14 +33,14 @@ function foo<T>(v: T) {
 
         return { a, b };
 >{ a, b } : { a: <T>(a: T) => T; b: () => T; }
->a : any
->b : any
+>a : <T>(a: T) => T
+>b : () => T
     }
 
     return { a, b, c };
 >{ a, b, c } : { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
->a : any
->b : any
->c : any
+>a : <T>(a: T) => T
+>b : () => T
+>c : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }
 }
 

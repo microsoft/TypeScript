@@ -1,57 +1,6 @@
 --- old.shorthandPropertyAssignmentsInDestructuring_ES6.types
 +++ new.shorthandPropertyAssignmentsInDestructuring_ES6.types
-@@= skipped -118, +118 lines =@@
- 
- 	for ({ s3 = 5 } of [{ s3: "" }]) {
- >{ s3 = 5 } : { s3?: string; }
-->s3 : string
-+>s3 : any
- >5 : 5
- >[{ s3: "" }] : { s3: string; }[]
- >{ s3: "" } : { s3: string; }
-@@= skipped -80, +80 lines =@@
- >({ y0 = 5 } = { y0: 1 }) : { y0?: number; }
- >{ y0 = 5 } = { y0: 1 } : { y0?: number; }
- >{ y0 = 5 } : { y0?: number; }
-->y0 : number
-+>y0 : any
- >5 : 5
- >{ y0: 1 } : { y0?: number; }
- >y0 : number
-@@= skipped -40, +40 lines =@@
- >({ y1 = 5 } = {}) : {}
- >{ y1 = 5 } = {} : {}
- >{ y1 = 5 } : { y1?: string; }
-->y1 : string
-+>y1 : any
- >5 : 5
- >{} : {}
- 
-@@= skipped -38, +38 lines =@@
- >({ y2 = 5, y3 = { x: 1 } } = {}) : {}
- >{ y2 = 5, y3 = { x: 1 } } = {} : {}
- >{ y2 = 5, y3 = { x: 1 } } : { y2?: string; y3?: { x: string; }; }
-->y2 : string
-+>y2 : any
- >5 : 5
-->y3 : { x: string; }
-+>y3 : any
- >{ x: 1 } : { x: number; }
- >x : number
- >1 : 1
-@@= skipped -50, +50 lines =@@
- >({ y4 = 5, y5 = { x: 1 } } = {}) : {}
- >{ y4 = 5, y5 = { x: 1 } } = {} : {}
- >{ y4 = 5, y5 = { x: 1 } } : { y4?: number; y5?: { x: number; }; }
-->y4 : number
-+>y4 : any
- >5 : 5
-->y5 : { x: number; }
-+>y5 : any
- >{ x: 1 } : { x: number; }
- >x : number
- >1 : 1
-@@= skipped -100, +100 lines =@@
+@@= skipped -426, +426 lines =@@
  });
  
  function foo({a = 4, b = { x: 5 }}) {

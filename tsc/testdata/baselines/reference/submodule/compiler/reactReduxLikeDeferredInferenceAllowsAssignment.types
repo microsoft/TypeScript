@@ -268,7 +268,7 @@ const simpleAction = (payload: boolean) => ({
 >"SIMPLE_ACTION" : "SIMPLE_ACTION"
 
   payload
->payload : any
+>payload : boolean
 
 });
 const thunkAction = (param1: number, param2: string) => async (
@@ -313,8 +313,8 @@ class TestComponent extends Component<TestComponentProps> {}
 const mapDispatchToProps = { simpleAction, thunkAction };
 >mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
 >{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
->simpleAction : any
->thunkAction : any
+>simpleAction : (payload: boolean) => { type: string; payload: boolean; }
+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
 
 type Q = HandleThunkActionCreator<typeof simpleAction>;
 >Q : (payload: boolean) => { type: string; payload: boolean; }

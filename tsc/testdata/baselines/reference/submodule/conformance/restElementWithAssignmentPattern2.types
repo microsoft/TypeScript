@@ -14,7 +14,7 @@ var a: string, b: number;
 >a = "" : ""
 >a : string
 >"" : ""
->b : any
+>b : number
 >["", 1] : (string | number)[]
 >"" : ""
 >1 : 1

@@ -18,7 +18,7 @@ class C {
 >({ x } = this) : this
 >{ x } = this : this
 >{ x } : { x: number; }
->x : any
+>x : number
 >this : this
 
         return x;
@@ -35,7 +35,7 @@ class C {
 >({ f } = this) : this
 >{ f } = this : this
 >{ f } : { f: Function; }
->f : any
+>f : Function
 >this : this
 
         return f;

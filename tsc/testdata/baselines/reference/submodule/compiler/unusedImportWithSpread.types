@@ -24,7 +24,7 @@ const b1 = {} as unknown;
 >b1 : unknown
 
     a
->a : any
+>a : { a: number; }
 
 })
 
@@ -46,7 +46,7 @@ const b2 = {} as never;
 >b2 : never
 
     a
->a : any
+>a : { a: number; }
 
 })
 

@@ -152,12 +152,3 @@
  >["a", "b"] : string[]
  >"a" : "a"
  >"b" : "b"
-@@= skipped -20, +20 lines =@@
- >index : number
- >({ index, str }) : { index: number; str: string; }
- >{ index, str } : { index: number; str: string; }
-->index : number
-->str : string
-+>index : any
-+>str : any
- 

@@ -18,8 +18,7 @@
 +>({ x = 0 } = a) : { x?: number | undefined; y?: number | undefined; }
 +>{ x = 0 } = a : { x?: number | undefined; y?: number | undefined; }
  >{ x = 0 } : { x?: number; }
-->x : number
-+>x : any
+ >x : number
  >0 : 0
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
@@ -57,8 +56,7 @@
 +>({ x = undefined } = a) : { x?: number | undefined; y?: number | undefined; }
 +>{ x = undefined } = a : { x?: number | undefined; y?: number | undefined; }
  >{ x = undefined } : { x?: number; }
-->x : number
-+>x : any
+ >x : number
  >undefined : undefined
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
@@ -111,12 +109,7 @@
  
  
  declare const r: Iterator<number>;
-@@= skipped -87, +87 lines =@@
- >({ done = false, value } = r.next()) : IteratorResult<number, any>
- >{ done = false, value } = r.next() : IteratorResult<number, any>
- >{ done = false, value } : { done?: boolean; value: any; }
-->done : boolean
-+>done : any
+@@= skipped -91, +91 lines =@@
  >false : false
  >value : any
  >r.next() : IteratorResult<number, any>
@@ -128,7 +121,7 @@
  
  ({ done: done = false, value } = r.next());
  >({ done: done = false, value } = r.next()) : IteratorResult<number, any>
-@@= skipped -18, +18 lines =@@
+@@= skipped -14, +14 lines =@@
  >false : false
  >value : any
  >r.next() : IteratorResult<number, any>

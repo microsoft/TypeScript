@@ -197,7 +197,7 @@ function from16326(this: { header: Header }, header: Header, authToken: string):
 >authToken && { authToken } : "" | { authToken: string; }
 >authToken : string
 >{ authToken } : { authToken: string; }
->authToken : any
+>authToken : string
     }
 }
 // boolean && T results in Partial<T>
@@ -480,7 +480,7 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >b : string
 >{ ...o, a } : { b: string; a: number; }
 >o : { a: number; b: string; }
->a : any
+>a : number
 
 // non primitive
 let spreadNonPrimitive = { ...<object>{}};

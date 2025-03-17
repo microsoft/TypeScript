@@ -34,7 +34,7 @@
  
      f,
 ->f : (this: { n: number; }, s: string) => number
-+>f : any
++>f : (s: any) => any
  
      n: 1
  >n : number

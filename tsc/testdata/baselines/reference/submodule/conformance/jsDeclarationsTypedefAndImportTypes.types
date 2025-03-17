@@ -65,7 +65,7 @@ module.exports = {
 >{    Wrap} : { Wrap: typeof Wrap; }
 
     Wrap
->Wrap : any
+>Wrap : typeof Wrap
 
 };
 

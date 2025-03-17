@@ -34,7 +34,7 @@ export class Cls {
 >this : this
 >'y' : "y"
 >{ seed } : { seed: number; }
->seed : any
+>seed : number
 
         this['z'] = `${seed}`;
 >this['z'] = `${seed}` : string

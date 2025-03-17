@@ -39,16 +39,7 @@
  >this : this
  >{            type: "update",            object: this,            newValue,            oldValue        } : { type: string; object: this; newValue: T; oldValue: any; }
  
-@@= skipped -13, +13 lines =@@
- >this : this
- 
-             newValue,
-->newValue : T
-+>newValue : any
- 
-             oldValue
- >oldValue : any
-@@= skipped -12, +12 lines =@@
+@@= skipped -25, +25 lines =@@
  >[] : never[]
  
      observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}

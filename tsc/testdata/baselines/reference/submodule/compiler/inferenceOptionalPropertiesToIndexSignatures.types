@@ -77,7 +77,7 @@ const obj = {
 >param2 ? {param2} : {} : { param2: string; } | {}
 >param2 : "value2" | null
 >{param2} : { param2: string; }
->param2 : any
+>param2 : string
 >{} : {}
 
 };

@@ -20,7 +20,7 @@ enum E { x }
 
 for ({x, y: y = E.x} of array) {
 >{x, y: y = E.x} : { x: string; y?: E; }
->x : any
+>x : string
 >y : E
 >y = E.x : E
 >y : number

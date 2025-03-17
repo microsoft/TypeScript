@@ -205,7 +205,7 @@ export function T12(a: any, b: any, c: any, d: any) {
 >className : any
 >"T12" : "T12"
 >{ __proto__ } : { __proto__: string; }
->__proto__ : any
+>__proto__ : string
 >div : any
 }
 

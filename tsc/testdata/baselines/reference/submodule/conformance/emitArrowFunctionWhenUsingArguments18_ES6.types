@@ -8,7 +8,7 @@ function f() {
 >arguments : any
 >args : IArguments
 >{ arguments } : { arguments: IArguments; }
->arguments : any
+>arguments : IArguments
 
     if (Math.random()) {
 >Math.random() : number

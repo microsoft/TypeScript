@@ -20,8 +20,8 @@ function M() {
 
             return { t, x };
 >{ t, x } : { t: T; x: X; }
->t : any
->x : any
+>t : T
+>x : X
         }
     }
 

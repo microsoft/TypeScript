@@ -15,8 +15,3 @@
  >{    C} : { C: typeof C; }
  
      C
-->C : typeof C
-+>C : any
- 
- };
- 

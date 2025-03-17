@@ -118,7 +118,7 @@ class B extends A {
 >super : A
 >x : () => void
 >{ f } : { f: () => void; }
->f : any
+>f : () => void
 
         // destructuring assign with element access
         ({ f: super["x"] } = { f });
@@ -130,7 +130,7 @@ class B extends A {
 >super : A
 >"x" : "x"
 >{ f } : { f: () => void; }
->f : any
+>f : () => void
     }
 }
 

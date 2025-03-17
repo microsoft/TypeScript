@@ -206,12 +206,7 @@
    [extraProps: string]: any;
  >extraProps : string
  }
-@@= skipped -32, +44 lines =@@
- >"SIMPLE_ACTION" : "SIMPLE_ACTION"
- 
-   payload
-->payload : boolean
-+>payload : any
+@@= skipped -36, +48 lines =@@
  
  });
  const thunkAction = (param1: number, param2: string) => async (
@@ -226,7 +221,7 @@
  
    dispatch: Dispatch,
  >dispatch : Dispatch<AnyAction>
-@@= skipped -22, +22 lines =@@
+@@= skipped -18, +18 lines =@@
  
  };
  interface OwnProps {
@@ -250,12 +245,11 @@
  const mapDispatchToProps = { simpleAction, thunkAction };
 ->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
 ->{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
-->simpleAction : (payload: boolean) => { type: string; payload: boolean; }
-->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
 +>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
 +>{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
-+>simpleAction : any
-+>thunkAction : any
+ >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
+->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
++>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
  
  type Q = HandleThunkActionCreator<typeof simpleAction>;
  >Q : (payload: boolean) => { type: string; payload: boolean; }

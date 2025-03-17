@@ -472,7 +472,7 @@ function makeBox<T>(value: T) {
 
     return { value };
 >{ value } : { value: T; }
->value : any
+>value : T
 }
 
 type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }

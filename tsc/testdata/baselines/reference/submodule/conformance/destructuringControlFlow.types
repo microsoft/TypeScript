@@ -119,8 +119,8 @@ function f3(obj: { a?: number, b?: string }) {
 >({ a, b } = obj) : { a?: number | undefined; b?: string | undefined; }
 >{ a, b } = obj : { a?: number | undefined; b?: string | undefined; }
 >{ a, b } : { a: number; b: string; }
->a : any
->b : any
+>a : number
+>b : string
 >obj : { a?: number | undefined; b?: string | undefined; }
     }
 }
@@ -135,7 +135,7 @@ function f4() {
 >({ x } = 0) : 0
 >{ x } = 0 : 0
 >{ x } : { x: boolean; }
->x : any
+>x : boolean
 >0 : 0
 
     ({ ["x"]: x } = 0);  // Error

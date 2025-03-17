@@ -61,8 +61,8 @@
 +>module : any
 +>exports : any
 +>{testFn, testFnTypes} : { testFn: (input: any) => number; testFnTypes: {}; }
-+>testFn : any
-+>testFnTypes : any
++>testFn : (input: any) => number
++>testFnTypes : {}
  
 -=== file.js ===
 -/**

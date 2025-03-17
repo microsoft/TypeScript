@@ -18,8 +18,7 @@
 +>({x = 1} = a) : { x?: number | undefined; }
 +>{x = 1} = a : { x?: number | undefined; }
  >{x = 1} : { x?: number; }
-->x : number
-+>x : any
+ >x : number
  >1 : 1
 ->a : { x?: number; }
 +>a : { x?: number | undefined; }
@@ -49,12 +48,10 @@
 +>({ color, width } = options || {}) : { color?: string | undefined; width?: number | undefined; }
 +>{ color, width } = options || {} : { color?: string | undefined; width?: number | undefined; }
  >{ color, width } : { color: string | undefined; width: number | undefined; }
-->color : string | undefined
-->width : number | undefined
+ >color : string | undefined
+ >width : number | undefined
 ->options || {} : { color?: string; width?: number; }
 ->options : { color?: string; width?: number; } | undefined
-+>color : any
-+>width : any
 +>options || {} : { color?: string | undefined; width?: number | undefined; }
 +>options : { color?: string | undefined; width?: number | undefined; } | undefined
  >{} : {}
@@ -109,18 +106,7 @@
  >options : { color: string; width: number; } | undefined
  >color : string
  >width : number
-@@= skipped -24, +24 lines =@@
- >({ color, width } = options || {}) : { color: string; width: number; } | {}
- >{ color, width } = options || {} : { color: string; width: number; } | {}
- >{ color, width } : { color: string | undefined; width: number | undefined; }
-->color : string | undefined
-->width : number | undefined
-+>color : any
-+>width : any
- >options || {} : { color: string; width: number; } | {}
- >options : { color: string; width: number; } | undefined
- >{} : {}
-@@= skipped -26, +26 lines =@@
+@@= skipped -50, +50 lines =@@
  }
  
  function f4(options?: [string, number]) {

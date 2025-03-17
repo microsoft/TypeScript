@@ -14,7 +14,7 @@ module.exports = { abc };
 >module : any
 >exports : any
 >{ abc } : { abc: (a: any, b: any, c: any) => number; }
->abc : any
+>abc : (a: any, b: any, c: any) => number
 
 === use.js ===
 import { abc } from './bug24934';

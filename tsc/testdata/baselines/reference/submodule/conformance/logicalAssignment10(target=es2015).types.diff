@@ -1,11 +1,6 @@
 --- old.logicalAssignment10(target=es2015).types
 +++ new.logicalAssignment10(target=es2015).types
-@@= skipped -21, +21 lines =@@
- >{    obj} : { obj: {}; }
- 
-     obj
-->obj : {}
-+>obj : any
+@@= skipped -25, +25 lines =@@
  }
  
  obj[incr()] ??= incr();
@@ -16,7 +11,7 @@
  >obj : {}
  >incr() : number
  >incr : () => number
-@@= skipped -13, +13 lines =@@
+@@= skipped -9, +9 lines =@@
  >incr : () => number
  
  oobj["obj"][incr()] ??= incr();

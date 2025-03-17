@@ -20,7 +20,7 @@ for (const value of [1, 2, 3]) {
 >() => ({ value }) : () => { value: number; }
 >({ value }) : { value: number; }
 >{ value } : { value: number; }
->value : any
+>value : number
 }
 const result = fns.map(fn => fn());
 >result : any[]

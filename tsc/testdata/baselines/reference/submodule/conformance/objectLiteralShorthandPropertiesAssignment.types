@@ -14,8 +14,8 @@ var person: { name: string; id: number } = { name, id };
 >name : string
 >id : number
 >{ name, id } : { name: string; id: number; }
->name : any
->id : any
+>name : string
+>id : number
 
 function foo( obj:{ name: string }): void { };
 >foo : (obj: { name: string; }) => void
@@ -27,15 +27,15 @@ function bar(name: string, id: number) { return { name, id }; }
 >name : string
 >id : number
 >{ name, id } : { name: string; id: number; }
->name : any
->id : any
+>name : string
+>id : number
 
 function bar1(name: string, id: number) { return { name }; }
 >bar1 : (name: string, id: number) => { name: string; }
 >name : string
 >id : number
 >{ name } : { name: string; }
->name : any
+>name : string
 
 function baz(name: string, id: number): { name: string; id: number } { return { name, id }; }
 >baz : (name: string, id: number) => { name: string; id: number; }
@@ -44,8 +44,8 @@ function baz(name: string, id: number): { name: string; id: number } { return { 
 >name : string
 >id : number
 >{ name, id } : { name: string; id: number; }
->name : any
->id : any
+>name : string
+>id : number
 
 foo(person);
 >foo(person) : void

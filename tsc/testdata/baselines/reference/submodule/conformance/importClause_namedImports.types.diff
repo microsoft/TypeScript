@@ -1,9 +1,0 @@
---- old.importClause_namedImports.types
-+++ new.importClause_namedImports.types
-@@= skipped -35, +35 lines =@@
- const c = { A };
- >c : { A: typeof A; }
- >{ A } : { A: typeof A; }
-->A : typeof A
-+>A : any
- 

@@ -42,7 +42,7 @@ class A {
 >x : number
 >this.#field : number
 >this : this
->y : any
+>y : number
 >this.testObject() : { x: number; y: number; }
 >this.testObject : () => { x: number; y: number; }
 >this : this

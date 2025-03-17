@@ -12,7 +12,7 @@ namespace foo {
 >{        bar    } : { bar: () => void; }
 
         bar
->bar : any
+>bar : () => void
     }
 }
 

@@ -35,7 +35,7 @@ const Parent: SFC<Props> = ({
 >Child({name, ...props}) : any
 >Child : SFC<Props>
 >{name, ...props} : { name: "Apollo" | "Artemis" | "Dionysus" | "Persephone"; }
->name : any
+>name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
 >props : {}
 
 const Child: SFC<Props> = ({

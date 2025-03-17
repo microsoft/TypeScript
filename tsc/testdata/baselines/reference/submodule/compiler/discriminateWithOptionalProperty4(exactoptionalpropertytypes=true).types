@@ -12,7 +12,7 @@ export function main(a: string[] | undefined) {
 >a ? { a } : { b: ["there"] } : { a: string[]; } | { b: string[]; }
 >a : string[] | undefined
 >{ a } : { a: string[]; }
->a : any
+>a : string[]
 >{ b: ["there"] } : { b: string[]; }
 >b : string[]
 >["there"] : string[]

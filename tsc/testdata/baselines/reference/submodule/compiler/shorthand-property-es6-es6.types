@@ -12,5 +12,5 @@ const bar = { foo, baz };
 >bar : { foo: any; baz: number; }
 >{ foo, baz } : { foo: any; baz: number; }
 >foo : any
->baz : any
+>baz : number
 

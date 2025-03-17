@@ -109,16 +109,7 @@
  
    },
    next() {
-@@= skipped -44, +44 lines =@@
- >0 : 0
- 
-       value,
-->value : number
-+>value : any
- 
-     });
-   },
-@@= skipped -9, +9 lines =@@
+@@= skipped -53, +53 lines =@@
  const doubles = mapAsyncIterable(iterable, (x) => x + x);
  >doubles : AsyncGenerator<number, number, void>
  >mapAsyncIterable(iterable, (x) => x + x) : AsyncGenerator<number, number, void>

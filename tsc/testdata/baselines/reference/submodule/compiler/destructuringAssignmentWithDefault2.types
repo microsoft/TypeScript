@@ -15,7 +15,7 @@ let x: number;
 >({ x = 0 } = a) : { x?: number | undefined; y?: number | undefined; }
 >{ x = 0 } = a : { x?: number | undefined; y?: number | undefined; }
 >{ x = 0 } : { x?: number; }
->x : any
+>x : number
 >0 : 0
 >a : { x?: number | undefined; y?: number | undefined; }
 
@@ -44,7 +44,7 @@ let x: number;
 >({ x = undefined } = a) : { x?: number | undefined; y?: number | undefined; }
 >{ x = undefined } = a : { x?: number | undefined; y?: number | undefined; }
 >{ x = undefined } : { x?: number; }
->x : any
+>x : number
 >undefined : undefined
 >a : { x?: number | undefined; y?: number | undefined; }
 
@@ -99,7 +99,7 @@ let value;
 >({ done = false, value } = r.next()) : IteratorResult<number, any>
 >{ done = false, value } = r.next() : IteratorResult<number, any>
 >{ done = false, value } : { done?: boolean; value: any; }
->done : any
+>done : boolean
 >false : false
 >value : any
 >r.next() : IteratorResult<number, any>

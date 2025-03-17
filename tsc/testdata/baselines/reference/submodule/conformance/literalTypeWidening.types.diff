@@ -194,7 +194,7 @@
 +>code : "en" | "es" | "fr" | "it" | "nl"
 +>({ code }) : { code: "en" | "es" | "fr" | "it" | "nl"; }
 +>{ code } : { code: "en" | "es" | "fr" | "it" | "nl"; }
-+>code : any
++>code : "en" | "es" | "fr" | "it" | "nl"
  
  // Repro from #29081
  

@@ -494,11 +494,7 @@
  
      return function() { return { bar } };
  >function() { return { bar } } : () => { bar: (number: number) => boolean; }
- >{ bar } : { bar: (number: number) => boolean; }
-->bar : (number: number) => boolean
-+>bar : any
- }
- 
+@@= skipped -16, +14 lines =@@
  // Non-inference cases.
  
  export const explicitlyTypedVariable: (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN = (isNaN) => isNaN;
@@ -528,7 +524,7 @@
  
      return isNaN;
  >isNaN : (number: number) => boolean
-@@= skipped -48, +38 lines =@@
+@@= skipped -32, +24 lines =@@
  
      isNaN: typeof globalThis.isNaN;
  >isNaN : (number: number) => boolean

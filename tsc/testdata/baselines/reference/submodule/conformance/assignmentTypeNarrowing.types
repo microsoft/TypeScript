@@ -38,7 +38,7 @@ x; // string | number
 >({x} = {x: true}) : { x: true; }
 >{x} = {x: true} : { x: true; }
 >{x} : { x: string | number | boolean | RegExp; }
->x : any
+>x : string | number | boolean | RegExp
 >{x: true} : { x: true; }
 >x : true
 >true : true
@@ -63,7 +63,7 @@ x; // number
 >({x = ""} = {x: true}) : { x?: true; }
 >{x = ""} = {x: true} : { x?: true; }
 >{x = ""} : { x?: string | number | boolean | RegExp; }
->x : any
+>x : string | number | boolean | RegExp
 >"" : ""
 >{x: true} : { x?: true; }
 >x : true

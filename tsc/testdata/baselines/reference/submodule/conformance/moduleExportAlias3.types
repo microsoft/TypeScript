@@ -13,7 +13,7 @@ module.exports = {
 >{    C} : { C: typeof C; }
 
     C
->C : any
+>C : typeof C
 
 };
 

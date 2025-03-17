@@ -77,8 +77,8 @@ export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<Chann
 
     return { type, localChannelId };
 >{ type, localChannelId } : { type: T; localChannelId: string; }
->type : any
->localChannelId : any
+>type : T
+>localChannelId : string
 }
 
 const newTextChannel = makeNewChannel('text');

@@ -26,7 +26,7 @@ app.foo.bar = (function () {
 
   return { someFun };
 >{ someFun } : { someFun: (arg: number) => void; }
->someFun : any
+>someFun : (arg: number) => void
 
 })();
 

@@ -132,8 +132,4 @@
 +>className : any
  >"T11" : "T11"
  >{ __proto__ } : { __proto__: string; }
-->__proto__ : string
-+>__proto__ : any
- >div : any
- }
- 
+ >__proto__ : string

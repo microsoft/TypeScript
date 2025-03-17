@@ -8,16 +8,7 @@
  
  let b: GuardInterface;
  >b : GuardInterface
-@@= skipped -46, +47 lines =@@
- var holder2 = {a};
- >holder2 : { a: RoyalGuard; }
- >{a} : { a: RoyalGuard; }
-->a : RoyalGuard
-+>a : any
- 
- if (holder2.a.isLeader()) {
- >holder2.a.isLeader() : boolean
-@@= skipped -92, +92 lines =@@
+@@= skipped -138, +139 lines =@@
  }
  
  interface Supplies {

@@ -70,7 +70,7 @@ var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
 >y : { ka: string; x: string; }[]
 >b : { ki: string; ku: string; z: string; }
 >{ z, ...c } : { ki: string; ku: string; z: string; }
->z : any
+>z : string
 >c : { ki: string; ku: string; }
 >rest2 : { ke: string; ko: string; }
 >overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }

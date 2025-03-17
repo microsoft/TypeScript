@@ -185,7 +185,7 @@
  >y : number
  >12 : 12
 ->explicitStructural : (this: { y: number; }, x: number) => number
-+>explicitStructural : any
++>explicitStructural : (x: number) => number
  
  let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number} = { y: 'foo', explicitStructural };
 ->wrongPropertyType : { y: string; f: (this: { y: number; }, x: number) => number; }
@@ -201,7 +201,7 @@
  >y : string
  >'foo' : "foo"
 ->explicitStructural : (this: { y: number; }, x: number) => number
-+>explicitStructural : any
++>explicitStructural : (x: number) => number
  
  let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) => number} = { wrongName: 12, explicitStructural };
 ->wrongPropertyName : { wrongName: number; f: (this: { y: number; }, x: number) => number; }
@@ -217,7 +217,7 @@
  >wrongName : number
  >12 : 12
 ->explicitStructural : (this: { y: number; }, x: number) => number
-+>explicitStructural : any
++>explicitStructural : (x: number) => number
  
  ok.f(); // not enough arguments
  >ok.f() : number

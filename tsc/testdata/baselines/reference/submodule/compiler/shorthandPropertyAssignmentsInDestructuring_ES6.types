@@ -119,7 +119,7 @@
 
 	for ({ s3 = 5 } of [{ s3: "" }]) {
 >{ s3 = 5 } : { s3?: string; }
->s3 : any
+>s3 : string
 >5 : 5
 >[{ s3: "" }] : { s3: string; }[]
 >{ s3: "" } : { s3: string; }
@@ -199,7 +199,7 @@
 >({ y0 = 5 } = { y0: 1 }) : { y0?: number; }
 >{ y0 = 5 } = { y0: 1 } : { y0?: number; }
 >{ y0 = 5 } : { y0?: number; }
->y0 : any
+>y0 : number
 >5 : 5
 >{ y0: 1 } : { y0?: number; }
 >y0 : number
@@ -239,7 +239,7 @@
 >({ y1 = 5 } = {}) : {}
 >{ y1 = 5 } = {} : {}
 >{ y1 = 5 } : { y1?: string; }
->y1 : any
+>y1 : string
 >5 : 5
 >{} : {}
 
@@ -277,9 +277,9 @@
 >({ y2 = 5, y3 = { x: 1 } } = {}) : {}
 >{ y2 = 5, y3 = { x: 1 } } = {} : {}
 >{ y2 = 5, y3 = { x: 1 } } : { y2?: string; y3?: { x: string; }; }
->y2 : any
+>y2 : string
 >5 : 5
->y3 : any
+>y3 : { x: string; }
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
@@ -327,9 +327,9 @@
 >({ y4 = 5, y5 = { x: 1 } } = {}) : {}
 >{ y4 = 5, y5 = { x: 1 } } = {} : {}
 >{ y4 = 5, y5 = { x: 1 } } : { y4?: number; y5?: { x: number; }; }
->y4 : any
+>y4 : number
 >5 : 5
->y5 : any
+>y5 : { x: number; }
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : 1

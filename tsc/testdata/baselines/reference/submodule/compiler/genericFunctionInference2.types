@@ -33,7 +33,7 @@ const myReducer1: Reducer<MyState> = combineReducers({
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
 >{ foo } : { foo: Reducer<number>; }
->foo : any
+>foo : Reducer<number>
 
 });
 
@@ -48,7 +48,7 @@ const myReducer2 = combineReducers({
 >combineReducers({ foo }) : Reducer<{ foo: number; }>
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
 >{ foo } : { foo: Reducer<number>; }
->foo : any
+>foo : Reducer<number>
 
 });
 

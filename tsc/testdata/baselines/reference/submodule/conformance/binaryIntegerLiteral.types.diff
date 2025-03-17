@@ -11,16 +11,7 @@
  
      0b11010: "Hello",
  >0b11010 : string
-@@= skipped -12, +12 lines =@@
- >bin1 : number
- 
-     bin1,
-->bin1 : number
-+>bin1 : any
- 
-     b: 0b11010,
- >b : number
-@@= skipped -12, +12 lines =@@
+@@= skipped -24, +24 lines =@@
  }
  
  var obj2 = {
@@ -31,16 +22,7 @@
  
      0B11010: "World",
  >0B11010 : string
-@@= skipped -12, +12 lines =@@
- >bin2 : number
- 
-     bin2,
-->bin2 : number
-+>bin2 : any
- 
-     b: 0B11010,
- >b : number
-@@= skipped -13, +13 lines =@@
+@@= skipped -25, +25 lines =@@
  
  obj1[0b11010];    // string
  >obj1[0b11010] : string

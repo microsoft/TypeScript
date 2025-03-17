@@ -1,15 +1,6 @@
 --- old.literalFreshnessPropagationOnNarrowing.types
 +++ new.literalFreshnessPropagationOnNarrowing.types
-@@= skipped -10, +10 lines =@@
-     let obj = { b };
- >obj : { b: boolean; }
- >{ b } : { b: boolean; }
-->b : boolean
-+>b : any
- 
-     // Desired: OK
-     // 3.0: OK
-@@= skipped -18, +18 lines =@@
+@@= skipped -28, +28 lines =@@
  >f2 : () => void
  
      type Element = (string | false);

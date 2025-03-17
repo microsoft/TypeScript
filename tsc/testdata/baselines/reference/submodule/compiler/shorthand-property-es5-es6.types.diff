@@ -1,9 +1,0 @@
---- old.shorthand-property-es5-es6.types
-+++ new.shorthand-property-es5-es6.types
-@@= skipped -11, +11 lines =@@
- >bar : { foo: any; baz: number; }
- >{ foo, baz } : { foo: any; baz: number; }
- >foo : any
-->baz : number
-+>baz : any
- 

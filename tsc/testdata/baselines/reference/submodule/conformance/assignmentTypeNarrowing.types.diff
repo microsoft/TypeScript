@@ -1,24 +1,6 @@
 --- old.assignmentTypeNarrowing.types
 +++ new.assignmentTypeNarrowing.types
-@@= skipped -37, +37 lines =@@
- >({x} = {x: true}) : { x: true; }
- >{x} = {x: true} : { x: true; }
- >{x} : { x: string | number | boolean | RegExp; }
-->x : string | number | boolean | RegExp
-+>x : any
- >{x: true} : { x: true; }
- >x : true
- >true : true
-@@= skipped -25, +25 lines =@@
- >({x = ""} = {x: true}) : { x?: true; }
- >{x = ""} = {x: true} : { x?: true; }
- >{x = ""} : { x?: string | number | boolean | RegExp; }
-->x : string | number | boolean | RegExp
-+>x : any
- >"" : ""
- >{x: true} : { x?: true; }
- >x : true
-@@= skipped -39, +39 lines =@@
+@@= skipped -101, +101 lines =@@
  
  type AOrArrA<T> = T | T[];
  >AOrArrA : AOrArrA<T>

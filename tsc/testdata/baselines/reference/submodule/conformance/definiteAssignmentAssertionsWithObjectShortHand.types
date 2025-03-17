@@ -8,7 +8,7 @@ const a: string | undefined = 'ff';
 const foo = { a! }
 >foo : { a: string; }
 >{ a! } : { a: string; }
->a : any
+>a : string
 
 const bar = {
 >bar : { a?: () => void | undefined; }

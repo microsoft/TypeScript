@@ -371,7 +371,7 @@ async function myFunc(): Promise<void> {
 >{        lastId,    } : { lastId: number | undefined; }
 
         lastId,
->lastId : any
+>lastId : number | undefined
 
     });
 

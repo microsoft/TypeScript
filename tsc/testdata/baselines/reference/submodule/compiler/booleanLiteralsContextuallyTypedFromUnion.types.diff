@@ -14,21 +14,7 @@
  >isIt : false
  >false : false
  >value : number
-@@= skipped -26, +28 lines =@@
- >isIt ? { isIt, text: 'hey' } : { isIt, value: 123 } : { isIt: true; text: string; } | { isIt: false; value: number; }
- >isIt : boolean
- >{ isIt, text: 'hey' } : { isIt: true; text: string; }
-->isIt : true
-+>isIt : any
- >text : string
- >'hey' : "hey"
- >{ isIt, value: 123 } : { isIt: false; value: number; }
-->isIt : false
-+>isIt : any
- >value : number
- >123 : 123
- 
-@@= skipped -42, +42 lines =@@
+@@= skipped -68, +70 lines =@@
      };
  
  let Funk = (_props: ComponentProps) => <div>Hello</div>;

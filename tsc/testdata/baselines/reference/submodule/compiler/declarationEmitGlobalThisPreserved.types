@@ -363,7 +363,7 @@ export function fromParameter(isNaN: number, bar: typeof globalThis.isNaN) {
     return function() { return { bar } };
 >function() { return { bar } } : () => { bar: (number: number) => boolean; }
 >{ bar } : { bar: (number: number) => boolean; }
->bar : any
+>bar : (number: number) => boolean
 }
 
 // Non-inference cases.

@@ -16,9 +16,3 @@
  >current : T
  
      return { current };
- >{ current } : { current: T; }
-->current : T
-+>current : any
- }
- export const useCsvParser = () => {
- >useCsvParser : () => MutableRefObject<typeof import("/p1/node_modules/csv-parse/lib/index")>

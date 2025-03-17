@@ -31,11 +31,9 @@
 ->combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 +>combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
  >{ foo } : { foo: Reducer<number>; }
-->foo : Reducer<number>
-+>foo : any
+ >foo : Reducer<number>
  
- });
- 
+@@= skipped -15, +15 lines =@@
  const myReducer2 = combineReducers({
  >myReducer2 : Reducer<{ combined: { foo: number; }; }>
  >combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
@@ -49,12 +47,9 @@
 ->combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 +>combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]> }) => Reducer<S>
  >{ foo } : { foo: Reducer<number>; }
-->foo : Reducer<number>
-+>foo : any
+ >foo : Reducer<number>
  
- });
- 
-@@= skipped -31, +31 lines =@@
+@@= skipped -16, +16 lines =@@
  
  declare function withH<T, U>(handlerCreators: HandleCreatorsFactory<T, U>): U;
  >withH : <T, U>(handlerCreators: HandleCreatorsFactory<T, U>) => U

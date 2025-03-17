@@ -20,10 +20,7 @@
  >{  Abcde} : { Abcde: typeof Abcde; }
  
    Abcde
-->Abcde : typeof Abcde
-+>Abcde : any
- 
- };
+@@= skipped -17, +17 lines =@@
  
  === /index.ts ===
  import { Abcde } from "./test";

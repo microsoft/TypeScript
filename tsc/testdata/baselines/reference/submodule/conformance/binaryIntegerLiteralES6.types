@@ -30,7 +30,7 @@ var obj1 = {
 >bin1 : number
 
     bin1,
->bin1 : any
+>bin1 : number
 
     b: 0b11010,
 >b : number
@@ -54,7 +54,7 @@ var obj2 = {
 >bin2 : number
 
     bin2,
->bin2 : any
+>bin2 : number
 
     b: 0B11010,
 >b : number

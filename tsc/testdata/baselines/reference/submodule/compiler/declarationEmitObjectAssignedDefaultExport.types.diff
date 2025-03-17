@@ -118,11 +118,11 @@
  
      B,
 ->B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-+>B : any
++>B : StyledComponent<"div", DefaultTheme, {}, never>
  
      C
 ->C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
-+>C : any
++>C : StyledComponent<"div", DefaultTheme, {}, never>
  
  });
  

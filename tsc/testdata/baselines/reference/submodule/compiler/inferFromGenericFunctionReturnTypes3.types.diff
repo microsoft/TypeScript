@@ -26,22 +26,7 @@
  >value : T
  
      return { value };
- >{ value } : { value: T; }
-->value : T
-+>value : any
- }
- 
- function wrappedFoo(): Wrap<'foo'> {
-@@= skipped -28, +32 lines =@@
- 
-     return { value };
- >{ value } : { value: "bar"; }
-->value : "bar"
-+>value : any
- }
- 
- function wrappedBar(): Wrap<'bar'> {
-@@= skipped -54, +54 lines =@@
+@@= skipped -82, +86 lines =@@
  // Repro from #11152
  
  interface FolderContentItem {
@@ -120,16 +105,7 @@
      code: 'mapped',
  >code : "mapped"
  
-@@= skipped -26, +28 lines =@@
- >'mapped' : "mapped"
- 
-         name,
-->name : string
-+>name : any
-     }
- });
- 
-@@= skipped -16, +16 lines =@@
+@@= skipped -42, +44 lines =@@
  >age : number
  
      position: "STRIKER" | "GOALKEEPER",

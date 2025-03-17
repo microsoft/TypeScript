@@ -54,20 +54,7 @@
  >[2, ["abc", { y: false }]] : [number, [string, { y: false; }]]
  >2 : 2
  >["abc", { y: false }] : [string, { y: false; }]
-@@= skipped -37, +37 lines =@@
- 
-     return { a, b, c };
- >{ a, b, c } : { a: string; b: number; c: boolean; }
-->a : string
-->b : number
-->c : boolean
-+>a : any
-+>b : any
-+>c : any
- }
- 
- function f16() {
-@@= skipped -17, +17 lines =@@
+@@= skipped -54, +54 lines =@@
  }
  
  function f17({ a = "", b = 0, c = false }) {
@@ -107,33 +94,3 @@
  >f15() : { a: string; b: number; c: boolean; }
  >f15 : () => { a: string; b: number; c: boolean; }
  
-@@= skipped -39, +39 lines =@@
- >({ a, b } = { a, b }) : { a: number; b: string; }
- >{ a, b } = { a, b } : { a: number; b: string; }
- >{ a, b } : { a: number; b: string; }
-->a : number
-->b : string
-+>a : any
-+>b : any
- >{ a, b } : { a: number; b: string; }
-->a : number
-->b : string
-+>a : any
-+>b : any
- 
-     ({ a, b } = { b, a });
- >({ a, b } = { b, a }) : { b: string; a: number; }
- >{ a, b } = { b, a } : { b: string; a: number; }
- >{ a, b } : { a: number; b: string; }
-->a : number
-->b : string
-+>a : any
-+>b : any
- >{ b, a } : { b: string; a: number; }
-->b : string
-->a : number
-+>b : any
-+>a : any
- 
-     [aa[0], b] = [a, b];
- >[aa[0], b] = [a, b] : [number, string]

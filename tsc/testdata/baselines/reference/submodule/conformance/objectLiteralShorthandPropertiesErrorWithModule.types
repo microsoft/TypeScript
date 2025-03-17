@@ -25,7 +25,7 @@ module n {
 >{        m.x  // error    } : { m: typeof m; : any; }
 
         m.x  // error
->m : any
+>m : typeof m
 > : any
 >.x : any
 > : any

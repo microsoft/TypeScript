@@ -77,7 +77,7 @@ const identifierExtractor = createExtractor({
 >{      node,      kind: "identifier" as const,      value: node.name,    } : { node: Identifier; kind: "identifier"; value: string; }
 
       node,
->node : any
+>node : Identifier
 
       kind: "identifier" as const,
 >kind : "identifier"
@@ -127,7 +127,7 @@ const stringExtractor = createExtractor({
 >{      node,      kind: "string" as const,      value: node.value,    } : { node: StringLiteral; kind: "string"; value: string; }
 
       node,
->node : any
+>node : StringLiteral
 
       kind: "string" as const,
 >kind : "string"

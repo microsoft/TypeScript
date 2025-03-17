@@ -39,16 +39,7 @@
    kind: "identifier";
  >kind : "identifier"
  
-@@= skipped -30, +32 lines =@@
- >{      node,      kind: "identifier" as const,      value: node.name,    } : { node: Identifier; kind: "identifier"; value: string; }
- 
-       node,
-->node : Identifier
-+>node : any
- 
-       kind: "identifier" as const,
- >kind : "identifier"
-@@= skipped -18, +18 lines =@@
+@@= skipped -48, +50 lines =@@
  });
  
  interface StringLiteral {
@@ -57,16 +48,7 @@
    kind: "stringLiteral";
  >kind : "stringLiteral"
  
-@@= skipped -30, +32 lines =@@
- >{      node,      kind: "string" as const,      value: node.value,    } : { node: StringLiteral; kind: "string"; value: string; }
- 
-       node,
-->node : StringLiteral
-+>node : any
- 
-       kind: "string" as const,
- >kind : "string"
-@@= skipped -18, +18 lines =@@
+@@= skipped -48, +50 lines =@@
  });
  
  declare function unionType<Result extends readonly unknown[]>(parsers: {

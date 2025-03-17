@@ -57,8 +57,3 @@
  >{    Wrap} : { Wrap: typeof Wrap; }
  
      Wrap
-->Wrap : typeof Wrap
-+>Wrap : any
- 
- };
- 

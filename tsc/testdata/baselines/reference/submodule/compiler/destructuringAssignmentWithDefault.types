@@ -14,7 +14,7 @@ let x = 0;
 >({x = 1} = a) : { x?: number | undefined; }
 >{x = 1} = a : { x?: number | undefined; }
 >{x = 1} : { x?: number; }
->x : any
+>x : number
 >1 : 1
 >a : { x?: number | undefined; }
 
@@ -37,8 +37,8 @@ function f1(options?: { color?: string, width?: number }) {
 >({ color, width } = options || {}) : { color?: string | undefined; width?: number | undefined; }
 >{ color, width } = options || {} : { color?: string | undefined; width?: number | undefined; }
 >{ color, width } : { color: string | undefined; width: number | undefined; }
->color : any
->width : any
+>color : string | undefined
+>width : number | undefined
 >options || {} : { color?: string | undefined; width?: number | undefined; }
 >options : { color?: string | undefined; width?: number | undefined; } | undefined
 >{} : {}
@@ -109,8 +109,8 @@ function f3(options?: { color: string, width: number }) {
 >({ color, width } = options || {}) : { color: string; width: number; } | {}
 >{ color, width } = options || {} : { color: string; width: number; } | {}
 >{ color, width } : { color: string | undefined; width: number | undefined; }
->color : any
->width : any
+>color : string | undefined
+>width : number | undefined
 >options || {} : { color: string; width: number; } | {}
 >options : { color: string; width: number; } | undefined
 >{} : {}

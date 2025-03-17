@@ -75,12 +75,7 @@
  >Array.isArray(u) ? [] : {} : undefined[] | {}
  >Array.isArray(u) : boolean
  >Array.isArray : (arg: any) => arg is any[]
-@@= skipped -29, +29 lines =@@
- >updater(u) : U
- >updater : (u: U) => U
- >u : U
-->set : (newU: U) => T
-+>set : any
+@@= skipped -33, +33 lines =@@
  
      };
      return reduce<T>(t, (t: T) => t);
@@ -91,7 +86,7 @@
  >t : T
  >(t: T) => t : (t: T) => T
  >t : T
-@@= skipped -16, +16 lines =@@
+@@= skipped -12, +12 lines =@@
  // example from https://github.com/microsoft/TypeScript/issues/31605
  
  export const testRecFun = <T extends Object>(parent: T) => {

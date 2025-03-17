@@ -552,8 +552,8 @@ namespace GH58603 {
 >something({ kind, id }) : void
 >something : (a: MyType) => void
 >{ kind, id } : { kind: MyEnum; id: number; }
->kind : any
->id : any
+>kind : MyEnum
+>id : number
     }
     
     type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };

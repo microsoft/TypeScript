@@ -10,18 +10,7 @@
  >a : string
  >results : string[]
  
-@@= skipped -11, +9 lines =@@
- >{        a,        b    } : { a: string; b: string; }
- 
-         a,
-->a : string
-+>a : any
- 
-         b
-->b : string
-+>b : any
-     }
- }
+@@= skipped -20, +18 lines =@@
  
  
  function f([, a, , b, , , , s, , , ] = results) {

@@ -68,7 +68,7 @@ declare function configureStore<S = any, A extends Action = UnknownAction>(
 >configureStore({ reducer }) : void
 >configureStore : <S, A extends Action<string>>(options: ConfigureStoreOptions<S, A>) => void
 >{ reducer } : { reducer: Reducer<number, UnknownAction>; }
->reducer : any
+>reducer : Reducer<number, UnknownAction>
 }
 
 const counterReducer1: Reducer<number> = () => 0;

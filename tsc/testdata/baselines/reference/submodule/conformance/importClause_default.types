@@ -22,5 +22,5 @@ let a: A = { a: '' };
 let b = { A };
 >b : { A: typeof default; }
 >{ A } : { A: typeof default; }
->A : any
+>A : typeof default
 

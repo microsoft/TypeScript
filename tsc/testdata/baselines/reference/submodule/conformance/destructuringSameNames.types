@@ -15,8 +15,8 @@ let { foo, foo: bar } = { foo: 1 };
 >({ foo, foo } = { foo: 2 }) : { foo: number; }
 >{ foo, foo } = { foo: 2 } : { foo: number; }
 >{ foo, foo } : { foo: number; }
->foo : any
->foo : any
+>foo : number
+>foo : number
 >{ foo: 2 } : { foo: number; }
 >foo : number
 >2 : 2
@@ -25,8 +25,8 @@ let { foo, foo: bar } = { foo: 1 };
 >({ foo, foo: bar } = { foo: 3 }) : { foo: number; }
 >{ foo, foo: bar } = { foo: 3 } : { foo: number; }
 >{ foo, foo: bar } : { foo: number; }
->foo : any
->foo : any
+>foo : number
+>foo : number
 >bar : number
 >{ foo: 3 } : { foo: number; }
 >foo : number
@@ -47,7 +47,7 @@ let { foo, foo: bar } = { foo: 1 };
 >({ foo, bar: foo } = { foo: 3, bar: 33 }) : { foo: number; bar: number; }
 >{ foo, bar: foo } = { foo: 3, bar: 33 } : { foo: number; bar: number; }
 >{ foo, bar: foo } : { foo: number; bar: number; }
->foo : any
+>foo : number
 >bar : number
 >foo : number
 >{ foo: 3, bar: 33 } : { foo: number; bar: number; }
@@ -62,7 +62,7 @@ let { foo, foo: bar } = { foo: 1 };
 >{ bar: foo, foo } : { bar: number; foo: number; }
 >bar : number
 >foo : number
->foo : any
+>foo : number
 >{ foo: 4, bar: 44 } : { foo: number; bar: number; }
 >foo : number
 >4 : 4

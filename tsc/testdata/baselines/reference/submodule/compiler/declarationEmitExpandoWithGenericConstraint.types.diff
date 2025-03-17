@@ -30,12 +30,7 @@
  >x : number
  >y : number
  >({ x, y }) : { x: number; y: number; }
- >{ x, y } : { x: number; y: number; }
-->x : number
-->y : number
-+>x : any
-+>y : any
- 
+@@= skipped -12, +12 lines =@@
  export const Rect = <p extends Point>(a: p, b: p): Rect<p> => ({ a, b });
  >Rect : <p extends Point>(a: p, b: p) => Rect<p>
  ><p extends Point>(a: p, b: p): Rect<p> => ({ a, b }) : <p extends Point>(a: p, b: p) => Rect<p>
@@ -43,12 +38,7 @@
  >a : p
  >b : p
  >({ a, b }) : { a: p; b: p; }
- >{ a, b } : { a: p; b: p; }
-->a : p
-->b : p
-+>a : any
-+>b : any
- 
+@@= skipped -10, +11 lines =@@
  Point.zero = (): Point => Point(0, 0);
  >Point.zero = (): Point => Point(0, 0) : () => Point
  >Point.zero : () => Point

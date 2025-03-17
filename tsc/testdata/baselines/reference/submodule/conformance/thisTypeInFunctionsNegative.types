@@ -238,7 +238,7 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, ex
 >{ y: 12, explicitStructural } : { y: number; explicitStructural: (x: number) => number; }
 >y : number
 >12 : 12
->explicitStructural : any
+>explicitStructural : (x: number) => number
 
 let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number} = { y: 'foo', explicitStructural };
 >wrongPropertyType : { y: string; f: (x: number) => number; }
@@ -250,7 +250,7 @@ let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number
 >{ y: 'foo', explicitStructural } : { y: string; explicitStructural: (x: number) => number; }
 >y : string
 >'foo' : "foo"
->explicitStructural : any
+>explicitStructural : (x: number) => number
 
 let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) => number} = { wrongName: 12, explicitStructural };
 >wrongPropertyName : { wrongName: number; f: (x: number) => number; }
@@ -262,7 +262,7 @@ let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) =
 >{ wrongName: 12, explicitStructural } : { wrongName: number; explicitStructural: (x: number) => number; }
 >wrongName : number
 >12 : 12
->explicitStructural : any
+>explicitStructural : (x: number) => number
 
 ok.f(); // not enough arguments
 >ok.f() : number

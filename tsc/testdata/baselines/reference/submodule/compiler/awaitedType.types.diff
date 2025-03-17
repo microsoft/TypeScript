@@ -153,16 +153,7 @@
  >args : any[]
  >fn : T
  
-@@= skipped -33, +36 lines =@@
- 
-     return { x };
- >{ x } : { x: 123; }
-->x : 123
-+>x : any
- }
- 
- // https://github.com/microsoft/TypeScript/issues/47144
-@@= skipped -8, +8 lines =@@
+@@= skipped -41, +44 lines =@@
  >GenericStructure : GenericStructure<AcceptableKeyType>
  
    AcceptableKeyType extends string = string

@@ -20,8 +20,8 @@ enum E { x }
 
 for ({x, y = E.x} of array) {
 >{x, y = E.x} : { x: string; y?: number; }
->x : any
->y : any
+>x : string
+>y : number
 >E.x : E
 >E : typeof E
 >x : E

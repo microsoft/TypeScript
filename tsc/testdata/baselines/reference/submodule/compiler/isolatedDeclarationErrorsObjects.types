@@ -235,7 +235,7 @@ export const oWithSpread = {
 >1 : 1
 
     part,
->part : any
+>part : { a: number; }
 }
 
 

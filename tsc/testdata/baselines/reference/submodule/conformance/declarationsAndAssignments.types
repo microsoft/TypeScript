@@ -499,9 +499,9 @@ function f15() {
 
     return { a, b, c };
 >{ a, b, c } : { a: string; b: number; c: boolean; }
->a : any
->b : any
->c : any
+>a : string
+>b : number
+>c : boolean
 }
 
 function f16() {
@@ -566,21 +566,21 @@ function f18() {
 >({ a, b } = { a, b }) : { a: number; b: string; }
 >{ a, b } = { a, b } : { a: number; b: string; }
 >{ a, b } : { a: number; b: string; }
->a : any
->b : any
+>a : number
+>b : string
 >{ a, b } : { a: number; b: string; }
->a : any
->b : any
+>a : number
+>b : string
 
     ({ a, b } = { b, a });
 >({ a, b } = { b, a }) : { b: string; a: number; }
 >{ a, b } = { b, a } : { b: string; a: number; }
 >{ a, b } : { a: number; b: string; }
->a : any
->b : any
+>a : number
+>b : string
 >{ b, a } : { b: string; a: number; }
->b : any
->a : any
+>b : string
+>a : number
 
     [aa[0], b] = [a, b];
 >[aa[0], b] = [a, b] : [number, string]

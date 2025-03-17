@@ -402,9 +402,9 @@ function createEventListener<K extends keyof DocumentEventMap>({ name, once = fa
 
     return { name, once, callback };
 >{ name, once, callback } : { name: K; once: boolean; callback: (ev: DocumentEventMap[K]) => void; }
->name : any
->once : any
->callback : any
+>name : K
+>once : boolean
+>callback : (ev: DocumentEventMap[K]) => void
 }
 
 const clickEvent = createEventListener({

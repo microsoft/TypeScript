@@ -187,16 +187,7 @@
  >name : K
  >once : boolean
  >false : false
-@@= skipped -8, +9 lines =@@
- 
-     return { name, once, callback };
- >{ name, once, callback } : { name: K; once: boolean; callback: (ev: DocumentEventMap[K]) => void; }
-->name : K
-->once : boolean
-->callback : (ev: DocumentEventMap[K]) => void
-+>name : any
-+>once : any
-+>callback : any
+@@= skipped -14, +15 lines =@@
  }
  
  const clickEvent = createEventListener({
@@ -209,7 +200,7 @@
  >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent) => void; }
  
      name: "click",
-@@= skipped -28, +28 lines =@@
+@@= skipped -22, +22 lines =@@
  });
  
  const scrollEvent = createEventListener({

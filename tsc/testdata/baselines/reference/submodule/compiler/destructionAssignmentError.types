@@ -16,8 +16,8 @@ let b: number;
 >({ a, b } = fn()) : { a: 1; b: 2; }
 >{ a, b } = fn() : { a: 1; b: 2; }
 >{ a, b } : { a: number; b: number; }
->a : any
->b : any
+>a : number
+>b : number
 >fn() : { a: 1; b: 2; }
 >fn : () => { a: 1; b: 2; }
 
@@ -32,8 +32,8 @@ let b: number;
 >({ a, b } =fn()) : { a: 1; b: 2; }
 >{ a, b } =fn() : { a: 1; b: 2; }
 >{ a, b } : { a: number; b: number; }
->a : any
->b : any
+>a : number
+>b : number
 
 fn());
 >fn() : { a: 1; b: 2; }

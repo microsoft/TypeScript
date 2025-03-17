@@ -193,7 +193,7 @@ export function T11(a: any, b: any, c: any, d: any) {
 >className : any
 >"T11" : "T11"
 >{ __proto__ } : { __proto__: string; }
->__proto__ : any
+>__proto__ : string
 >div : any
 }
 

@@ -43,8 +43,7 @@
 +>post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
  >path : PATH
  >{ body } : { body: PostBody<PATH>; }
-->body : PostBody<PATH>
-+>body : any
+ >body : PostBody<PATH>
  }
  
  function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {

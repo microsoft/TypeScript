@@ -32,10 +32,7 @@
  >some : a
  
      return { some };
- >{ some } : { some: a; }
-->some : a
-+>some : any
- }
+@@= skipped -9, +10 lines =@@
  
  export function fn<r>(makeSome: () => r): void {
  >fn : <r>(makeSome: () => r) => void
@@ -43,7 +40,7 @@
  >makeSome : () => r
  
      let result: Optional<r> = none;
-@@= skipped -65, +67 lines =@@
+@@= skipped -56, +57 lines =@@
  >x : string | number | boolean
  >typeof x === "string" ? x.slice() : "abc" : string
  >typeof x === "string" : boolean

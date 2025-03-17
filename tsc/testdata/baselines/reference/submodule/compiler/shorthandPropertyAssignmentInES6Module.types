@@ -19,7 +19,7 @@ declare function use(a: any): void;
 const test = { x, foo };
 >test : { x: number; foo: any; }
 >{ x, foo } : { x: number; foo: any; }
->x : any
+>x : number
 >foo : any
 
 use(x);

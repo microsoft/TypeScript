@@ -13,11 +13,3 @@
  >{    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
  
      extends: 'base',
-@@= skipped -20, +20 lines =@@
- 
-     },
-     x
-->x : number
-+>x : any
- 
- };

@@ -276,7 +276,7 @@ abstract class C1 {
 >({ x, y: y1, "y": y1 } = this) : this
 >{ x, y: y1, "y": y1 } = this : this
 >{ x, y: y1, "y": y1 } : { x: string; y: string; }
->x : any
+>x : string
 >y : string
 >y1 : string
 >"y" : string
@@ -309,7 +309,7 @@ class C2 {
 >({ x, y: y1, "y": y1 } = this) : this
 >{ x, y: y1, "y": y1 } = this : this
 >{ x, y: y1, "y": y1 } : { x: string; y: string; }
->x : any
+>x : string
 >y : string
 >y1 : string
 >"y" : string

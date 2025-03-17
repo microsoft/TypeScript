@@ -32,13 +32,3 @@
  >a : any
  >z : number
  >1 : 1
-@@= skipped -17, +16 lines =@@
- >foo4 : (y?: { z: number; }, z?: number) => void
- >y : { z: number; }
- >{z} : { z: number; }
-+>z : any
- >z : number
-->z : number
- >1 : 1
- }
- 

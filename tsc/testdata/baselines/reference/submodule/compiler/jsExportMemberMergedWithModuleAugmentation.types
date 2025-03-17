@@ -17,7 +17,7 @@ module.exports = {
 >{  Abcde} : { Abcde: typeof Abcde; }
 
   Abcde
->Abcde : any
+>Abcde : typeof Abcde
 
 };
 

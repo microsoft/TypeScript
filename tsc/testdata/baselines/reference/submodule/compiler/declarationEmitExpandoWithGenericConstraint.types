@@ -29,8 +29,8 @@ export const Point = (x: number, y: number): Point => ({ x, y });
 >y : number
 >({ x, y }) : { x: number; y: number; }
 >{ x, y } : { x: number; y: number; }
->x : any
->y : any
+>x : number
+>y : number
 
 export const Rect = <p extends Point>(a: p, b: p): Rect<p> => ({ a, b });
 >Rect : <p extends Point>(a: p, b: p) => Rect<p>
@@ -40,8 +40,8 @@ export const Rect = <p extends Point>(a: p, b: p): Rect<p> => ({ a, b });
 >b : p
 >({ a, b }) : { a: p; b: p; }
 >{ a, b } : { a: p; b: p; }
->a : any
->b : any
+>a : p
+>b : p
 
 Point.zero = (): Point => Point(0, 0);
 >Point.zero = (): Point => Point(0, 0) : () => Point

@@ -28,7 +28,7 @@ function FunctionComponent<T extends string>({type}: {type?: T}) {
 >{    type  } : { type: T | undefined; }
 
     type
->type : any
+>type : T | undefined
   }
 }
 FunctionComponent.useThis = function() {

@@ -1,15 +1,6 @@
 --- old.objectRest.types
 +++ new.objectRest.types
-@@= skipped -121, +121 lines =@@
- >({ x, ...fresh } = { x: 1, y: 2 }) : { x: number; y: number; }
- >{ x, ...fresh } = { x: 1, y: 2 } : { x: number; y: number; }
- >{ x, ...fresh } : { y: number; x: number; }
-->x : number
-+>x : any
- >fresh : { y: number; }
- >{ x: 1, y: 2 } : { x: number; y: number; }
- >x : number
-@@= skipped -39, +39 lines =@@
+@@= skipped -160, +160 lines =@@
  >remainder : string
  }
  interface I {

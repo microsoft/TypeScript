@@ -210,6 +210,3 @@
  >assign : <T, U>(a: T, b: U) => T & U
  >() => {} : () => void
  >{ func } : { func: <T>() => void; }
-->func : <T>() => void
-+>func : any
- 

@@ -107,10 +107,10 @@ export default Object.assign(A, {
 >{    B,    C} : { B: StyledComponent<"div", DefaultTheme, {}, never>; C: StyledComponent<"div", DefaultTheme, {}, never>; }
 
     B,
->B : any
+>B : StyledComponent<"div", DefaultTheme, {}, never>
 
     C
->C : any
+>C : StyledComponent<"div", DefaultTheme, {}, never>
 
 });
 

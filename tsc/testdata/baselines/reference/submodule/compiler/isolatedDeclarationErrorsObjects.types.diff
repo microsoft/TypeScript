@@ -58,12 +58,3 @@
  
      b: 1,
  >b : number
-@@= skipped -15, +15 lines =@@
- >1 : 1
- 
-     part,
-->part : { a: number; }
-+>part : any
- }
- 
- 

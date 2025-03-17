@@ -20,6 +20,6 @@ var tuple: [string, number] = ["", 1];
 >a = "" : ""
 >a : string
 >"" : ""
->b : any
+>b : number
 >tuple : [string, number]
 

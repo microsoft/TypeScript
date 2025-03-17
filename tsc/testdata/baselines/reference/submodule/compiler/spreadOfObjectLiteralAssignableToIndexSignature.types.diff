@@ -9,30 +9,8 @@
  const recordOfRecords: RecordOfRecords = {}
  >recordOfRecords : RecordOfRecords
  >{} : {}
-@@= skipped -16, +18 lines =@@
+@@= skipped -46, +48 lines =@@
  >foo : Record<never, never>
- >undefined : undefined
- >{foo} : { foo: Record<never, never>; }
-->foo : Record<never, never>
-+>foo : any
- >{} : {}
- 
- recordOfRecords.propB = {...(foo && {foo})} // OK
-@@= skipped -13, +13 lines =@@
- >foo && {foo} : { foo: Record<never, never>; }
- >foo : Record<never, never>
- >{foo} : { foo: Record<never, never>; }
-->foo : Record<never, never>
-+>foo : any
- 
- recordOfRecords.propC = {...(foo !== undefined && {foo})} // error'd in 3.7 beta, should be OK
- >recordOfRecords.propC = {...(foo !== undefined && {foo})} : { foo?: Record<never, never> | undefined; }
-@@= skipped -14, +14 lines =@@
- >foo : Record<never, never>
- >undefined : undefined
- >{foo} : { foo: Record<never, never>; }
-->foo : Record<never, never>
-+>foo : any
  
  interface RecordOfRecordsOrEmpty extends Record<keyof any, RecordOfRecordsOrEmpty | {}> {}
 +>RecordOfRecordsOrEmpty : RecordOfRecordsOrEmpty
@@ -51,13 +29,7 @@
  >{...(foo !== undefined ? {foo} : {})} : { foo?: Record<never, never> | undefined; }
  >(foo !== undefined ? {foo} : {}) : { foo: Record<never, never>; } | {}
  >foo !== undefined ? {foo} : {} : { foo: Record<never, never>; } | {}
-@@= skipped -19, +21 lines =@@
- >foo : Record<never, never>
- >undefined : undefined
- >{foo} : { foo: Record<never, never>; }
-->foo : Record<never, never>
-+>foo : any
- >{} : {}
+@@= skipped -21, +23 lines =@@
  
  recordsOfRecordsOrEmpty.propB = {...(foo && {foo})} // OK
  >recordsOfRecordsOrEmpty.propB = {...(foo && {foo})} : { foo: Record<never, never>; }
@@ -69,10 +41,7 @@
  >{...(foo && {foo})} : { foo: Record<never, never>; }
  >(foo && {foo}) : { foo: Record<never, never>; }
  >foo && {foo} : { foo: Record<never, never>; }
- >foo : Record<never, never>
- >{foo} : { foo: Record<never, never>; }
-->foo : Record<never, never>
-+>foo : any
+@@= skipped -12, +12 lines =@@
  
  recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} // OK
  >recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} : { foo?: Record<never, never> | undefined; }
@@ -84,10 +53,3 @@
  >{...(foo !== undefined && {foo})} : { foo?: Record<never, never> | undefined; }
  >(foo !== undefined && {foo}) : false | { foo: Record<never, never>; }
  >foo !== undefined && {foo} : false | { foo: Record<never, never>; }
-@@= skipped -27, +27 lines =@@
- >foo : Record<never, never>
- >undefined : undefined
- >{foo} : { foo: Record<never, never>; }
-->foo : Record<never, never>
-+>foo : any
- 

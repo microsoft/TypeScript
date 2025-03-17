@@ -11,6 +11,6 @@ export function foo () {
   const x = { test };
 >x : { test: string; }
 >{ test } : { test: string; }
->test : any
+>test : string
 }
 

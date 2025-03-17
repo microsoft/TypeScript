@@ -84,16 +84,7 @@
  
          ...this.header,
  >this.header : Header
-@@= skipped -21, +21 lines =@@
- >authToken && { authToken } : "" | { authToken: string; }
- >authToken : string
- >{ authToken } : { authToken: string; }
-->authToken : string
-+>authToken : any
-     }
- }
- // boolean && T results in Partial<T>
-@@= skipped -157, +157 lines =@@
+@@= skipped -178, +178 lines =@@
  
  // own methods are enumerable
  let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
@@ -202,11 +193,8 @@
 ->{ ...o, a } : { a: number; b: string; }
 +>{ ...o, a } : { b: string; a: number; }
  >o : { a: number; b: string; }
-->a : number
-+>a : any
+ >a : number
  
- // non primitive
- let spreadNonPrimitive = { ...<object>{}};
 @@= skipped -15, +15 lines =@@
  
  function f<T, U>(t: T, u: U) {

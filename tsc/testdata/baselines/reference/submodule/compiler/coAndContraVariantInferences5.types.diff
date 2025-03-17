@@ -1,18 +1,6 @@
 --- old.coAndContraVariantInferences5.types
 +++ new.coAndContraVariantInferences5.types
-@@= skipped -20, +20 lines =@@
- >{        options,        onChange,    } : { options: SelectOptions<Thing>; onChange: (status: Thing | null) => void; }
- 
-         options,
-->options : SelectOptions<Thing>
-+>options : any
- 
-         onChange,
-->onChange : (status: Thing | null) => void
-+>onChange : any
- 
-     });
- }
+@@= skipped -30, +30 lines =@@
  
  declare function select<KeyT extends string>(props: SelectProps<KeyT>): void;
  >select : <KeyT extends string>(props: SelectProps<KeyT>) => void
@@ -25,7 +13,7 @@
  
      options?: SelectOptions<KeyT>;
  >options : SelectOptions<KeyT> | undefined
-@@= skipped -26, +28 lines =@@
+@@= skipped -16, +18 lines =@@
  
  type SelectOptions<KeyT extends string> =
  >SelectOptions : SelectOptions<KeyT>

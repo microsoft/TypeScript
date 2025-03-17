@@ -481,9 +481,7 @@
  >value : T
  
      return { value };
- >{ value } : { value: T; }
-->value : T
-+>value : any
+@@= skipped -74, +86 lines =@@
  }
  
  type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }

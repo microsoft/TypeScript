@@ -99,7 +99,7 @@ export const updateIfChanged = <T>(t: T) => {
 >updater(u) : U
 >updater : (u: U) => U
 >u : U
->set : any
+>set : (newU: U) => T
 
     };
     return reduce<T>(t, (t: T) => t);

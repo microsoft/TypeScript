@@ -53,7 +53,7 @@ export class ObservableValue<T> {
 >this : this
 
             newValue,
->newValue : any
+>newValue : T
 
             oldValue
 >oldValue : any

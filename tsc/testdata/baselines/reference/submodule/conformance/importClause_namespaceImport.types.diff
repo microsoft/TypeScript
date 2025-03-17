@@ -51,5 +51,5 @@
 ->types : typeof types
 +>d : { types: typeof import("/a"); }
 +>{ types } : { types: typeof import("/a"); }
-+>types : any
++>types : typeof import("/a")
  

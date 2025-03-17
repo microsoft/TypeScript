@@ -80,16 +80,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -9, +9 lines =@@
- >{ name = "noName" } = robot, i = 0 : 0
- >{ name = "noName" } = robot : Robot
- >{ name = "noName" } : { name?: string; }
-->name : string
-+>name : any
- >"noName" : "noName"
- >robot : Robot
- >i = 0 : 0
-@@= skipped -15, +15 lines =@@
+@@= skipped -24, +24 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -98,16 +89,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name = "noName" } = getRobot(), i = 0 : 0
- >{ name = "noName" } = getRobot() : Robot
- >{ name = "noName" } : { name?: string; }
-->name : string
-+>name : any
- >"noName" : "noName"
- >getRobot() : Robot
- >getRobot : () => Robot
-@@= skipped -16, +16 lines =@@
+@@= skipped -24, +24 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -116,39 +98,16 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0 : 0
- >{ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name = "noName" } : { name?: string; }
-->name : string
-+>name : any
- >"noName" : "noName"
- ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
-@@= skipped -20, +20 lines =@@
-     console.log(nameA);
- >console.log(nameA) : void
- >console.log : (msg: any) => void
-->console : { log(msg: any): void; }
-+>console : { log: (msg: any) => void; }
- >log : (msg: any) => void
- >nameA : string
- }
-@@= skipped -15, +15 lines =@@
- >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
- 
-         primary = "primary",
-->primary : string
-+>primary : any
- >"primary" : "primary"
- 
-         secondary = "secondary"
-->secondary : string
-+>secondary : any
- >"secondary" : "secondary"
- 
-     } = { primary: "none", secondary: "none" }
 @@= skipped -28, +28 lines =@@
+     console.log(nameA);
+ >console.log(nameA) : void
+ >console.log : (msg: any) => void
+->console : { log(msg: any): void; }
++>console : { log: (msg: any) => void; }
+ >log : (msg: any) => void
+ >nameA : string
+ }
+@@= skipped -43, +43 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -157,21 +116,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -15, +15 lines =@@
- >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
- 
-         primary = "primary",
-->primary : string
-+>primary : any
- >"primary" : "primary"
- 
-         secondary = "secondary"
-->secondary : string
-+>secondary : any
- >"secondary" : "secondary"
- 
-     } = { primary: "none", secondary: "none" }
-@@= skipped -29, +29 lines =@@
+@@= skipped -44, +44 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -180,21 +125,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -15, +15 lines =@@
- >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
- 
-         primary = "primary",
-->primary : string
-+>primary : any
- >"primary" : "primary"
- 
-         secondary = "secondary"
-->secondary : string
-+>secondary : any
- >"secondary" : "secondary"
- 
-     } = { primary: "none", secondary: "none" }
-@@= skipped -39, +39 lines =@@
+@@= skipped -54, +54 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -257,19 +188,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -9, +9 lines =@@
- >{ name = "noName", skill = "skill" } = robot, i = 0 : 0
- >{ name = "noName", skill = "skill" } = robot : Robot
- >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
-->name : string
-+>name : any
- >"noName" : "noName"
-->skill : string
-+>skill : any
- >"skill" : "skill"
- >robot : Robot
- >i = 0 : 0
-@@= skipped -17, +17 lines =@@
+@@= skipped -26, +26 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -278,19 +197,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name = "noName", skill = "skill" } = getRobot(), i = 0 : 0
- >{ name = "noName", skill = "skill" } = getRobot() : Robot
- >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
-->name : string
-+>name : any
- >"noName" : "noName"
-->skill : string
-+>skill : any
- >"skill" : "skill"
- >getRobot() : Robot
- >getRobot : () => Robot
-@@= skipped -18, +18 lines =@@
+@@= skipped -26, +26 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -299,19 +206,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -8, +8 lines =@@
- >{ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0 : 0
- >{ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
-->name : string
-+>name : any
- >"noName" : "noName"
-->skill : string
-+>skill : any
- >"skill" : "skill"
- ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
- >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
-@@= skipped -22, +22 lines =@@
+@@= skipped -30, +30 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void
@@ -320,30 +215,7 @@
  >log : (msg: any) => void
  >nameA : string
  }
-@@= skipped -10, +10 lines =@@
- >{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "none", secondary: "none" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
- 
-     name = "noName",
-->name : string
-+>name : any
- >"noName" : "noName"
- 
-     skills: {
-@@= skipped -9, +9 lines =@@
- >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
- 
-         primary = "primary",
-->primary : string
-+>primary : any
- >"primary" : "primary"
- 
-         secondary = "secondary"
-->secondary : string
-+>secondary : any
- >"secondary" : "secondary"
- 
-     } = { primary: "none", secondary: "none" }
-@@= skipped -28, +28 lines =@@
+@@= skipped -47, +47 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -352,30 +224,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -10, +10 lines =@@
- >{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "none", secondary: "none" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
- 
-     name = "noName",
-->name : string
-+>name : any
- >"noName" : "noName"
- 
-     skills: {
-@@= skipped -9, +9 lines =@@
- >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
- 
-         primary = "primary",
-->primary : string
-+>primary : any
- >"primary" : "primary"
- 
-         secondary = "secondary"
-->secondary : string
-+>secondary : any
- >"secondary" : "secondary"
- 
-     } = { primary: "none", secondary: "none" }
-@@= skipped -29, +29 lines =@@
+@@= skipped -48, +48 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void
@@ -384,30 +233,7 @@
  >log : (msg: any) => void
  >primaryA : string
  }
-@@= skipped -10, +10 lines =@@
- >{    name = "noName",    skills: {        primary = "primary",        secondary = "secondary"    } = { primary: "none", secondary: "none" }} : { name?: string; skills?: { primary?: string; secondary?: string; }; }
- 
-     name = "noName",
-->name : string
-+>name : any
- >"noName" : "noName"
- 
-     skills: {
-@@= skipped -9, +9 lines =@@
- >{        primary = "primary",        secondary = "secondary"    } : { primary?: string; secondary?: string; }
- 
-         primary = "primary",
-->primary : string
-+>primary : any
- >"primary" : "primary"
- 
-         secondary = "secondary"
-->secondary : string
-+>secondary : any
- >"secondary" : "secondary"
- 
-     } = { primary: "none", secondary: "none" }
-@@= skipped -39, +39 lines =@@
+@@= skipped -58, +58 lines =@@
      console.log(primaryA);
  >console.log(primaryA) : void
  >console.log : (msg: any) => void

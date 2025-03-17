@@ -14,7 +14,7 @@ function a () {
 >({ x, ...y } = ({ } as any)) : any
 >{ x, ...y } = ({ } as any) : any
 >{ x, ...y } : any
->x : any
+>x : number
 >y : any
 >({ } as any) : any
 >{ } as any : any

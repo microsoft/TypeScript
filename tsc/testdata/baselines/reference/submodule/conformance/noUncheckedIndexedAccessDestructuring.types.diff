@@ -107,25 +107,3 @@
  }
  
  
-@@= skipped -70, +70 lines =@@
- >({ x, y, z } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
- >{ x, y, z } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
- >{ x, y, z } : { x: number; y: number; z: number | undefined; }
-->x : number
-->y : number
-->z : number | undefined
-+>x : any
-+>y : any
-+>z : any
- >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
- 
-     let q: number;
-@@= skipped -12, +12 lines =@@
- >({ q } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
- >{ q } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }
- >{ q } : { q: number; }
-->q : number
-+>q : any
- >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
- }
- 

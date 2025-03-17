@@ -50,7 +50,7 @@ function foo4(y = {z}, z = 1) {
 >foo4 : (y?: { z: number; }, z?: number) => void
 >y : { z: number; }
 >{z} : { z: number; }
->z : any
+>z : number
 >z : number
 >1 : 1
 }

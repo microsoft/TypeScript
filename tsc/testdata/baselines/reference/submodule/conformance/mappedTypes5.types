@@ -129,14 +129,14 @@ function doit<T extends State>() {
     let args1: Args1<T> = { previous, current };
 >args1 : Args1<T>
 >{ previous, current } : { previous: Partial<T>; current: Partial<T>; }
->previous : any
->current : any
+>previous : Partial<T>
+>current : Partial<T>
 
     let args2: Args2<T> = { previous, current };
 >args2 : Args2<T>
 >{ previous, current } : { previous: Partial<T>; current: Partial<T>; }
->previous : any
->current : any
+>previous : Partial<T>
+>current : Partial<T>
 }
 
 type State2 = { foo: number, bar: string };
@@ -186,13 +186,13 @@ function doit2() {
     let args1: Args3 = { previous, current };
 >args1 : Args3
 >{ previous, current } : { previous: Partial<State2>; current: Partial<State2>; }
->previous : any
->current : any
+>previous : Partial<State2>
+>current : Partial<State2>
 
     let args2: Args4 = { previous, current };
 >args2 : Args4
 >{ previous, current } : { previous: Partial<State2>; current: Partial<State2>; }
->previous : any
->current : any
+>previous : Partial<State2>
+>current : Partial<State2>
 }
 

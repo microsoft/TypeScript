@@ -13,8 +13,5 @@
 +>module : any
 +>exports : any
  >{x, b} : { x: (a: any) => string; b: () => number; }
-->x : (a: any) => string
-->b : () => number
-+>x : any
-+>b : any
- 
+ >x : (a: any) => string
+ >b : () => number

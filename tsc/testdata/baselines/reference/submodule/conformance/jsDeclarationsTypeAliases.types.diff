@@ -36,11 +36,7 @@
  
      doTheThing,
 ->doTheThing : (x: number) => SomeType
-+>doTheThing : any
++>doTheThing : (x: any) => { x: string; }
  
      ExportedThing,
-->ExportedThing : typeof ExportedThing
-+>ExportedThing : any
- 
- };
- class LocalThing {
+ >ExportedThing : typeof ExportedThing

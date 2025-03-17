@@ -36,5 +36,5 @@ b.b;
 const c = { A };
 >c : { A: typeof A; }
 >{ A } : { A: typeof A; }
->A : any
+>A : typeof A
 

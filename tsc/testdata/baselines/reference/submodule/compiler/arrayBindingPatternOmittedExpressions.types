@@ -15,10 +15,10 @@ var results: string[];
 >{        a,        b    } : { a: string; b: string; }
 
         a,
->a : any
+>a : string
 
         b
->b : any
+>b : string
     }
 }
 

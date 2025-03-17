@@ -415,7 +415,7 @@ async function f17_usage() {
 
     return { x };
 >{ x } : { x: 123; }
->x : any
+>x : 123
 }
 
 // https://github.com/microsoft/TypeScript/issues/47144

@@ -33,7 +33,7 @@ const obj = {
   },
   /** @type {string} */
   lol,
->lol : any
+>lol : string
 
   /** @type {number} */
   ['b' + 'ar1']: 42,

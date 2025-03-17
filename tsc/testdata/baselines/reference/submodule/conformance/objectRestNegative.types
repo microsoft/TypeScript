@@ -25,7 +25,7 @@ let notAssignable: { a: string };
 >({ b, ...notAssignable } = o) : { a: number; b: string; }
 >{ b, ...notAssignable } = o : { a: number; b: string; }
 >{ b, ...notAssignable } : { a: string; b: string; }
->b : any
+>b : string
 >notAssignable : { a: string; }
 >o : { a: number; b: string; }
 
@@ -61,7 +61,7 @@ let rest: { b: string }
 >({a, ...rest.b + rest.b} = o) : { a: number; b: string; }
 >{a, ...rest.b + rest.b} = o : { a: number; b: string; }
 >{a, ...rest.b + rest.b} : any
->a : any
+>a : number
 >rest.b + rest.b : string
 >rest.b : string
 >rest : { b: string; }

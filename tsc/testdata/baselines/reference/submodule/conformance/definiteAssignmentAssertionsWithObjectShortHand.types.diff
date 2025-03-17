@@ -1,11 +1,7 @@
 --- old.definiteAssignmentAssertionsWithObjectShortHand.types
 +++ new.definiteAssignmentAssertionsWithObjectShortHand.types
-@@= skipped -7, +7 lines =@@
- const foo = { a! }
- >foo : { a: string; }
- >{ a! } : { a: string; }
-->a : string
-+>a : any
+@@= skipped -10, +10 lines =@@
+ >a : string
  
  const bar = {
 ->bar : { a?(): void; }

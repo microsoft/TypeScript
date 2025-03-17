@@ -22,13 +22,7 @@
  >(function () {  const someFun = (arg: number) => {};  return { someFun };})() : { someFun: (arg: number) => void; }
  >(function () {  const someFun = (arg: number) => {};  return { someFun };}) : () => { someFun: (arg: number) => void; }
  >function () {  const someFun = (arg: number) => {};  return { someFun };} : () => { someFun: (arg: number) => void; }
-@@= skipped -21, +21 lines =@@
- 
-   return { someFun };
- >{ someFun } : { someFun: (arg: number) => void; }
-->someFun : (arg: number) => void
-+>someFun : any
- 
+@@= skipped -26, +26 lines =@@
  })();
  
  app.foo.bar.someFun(1);

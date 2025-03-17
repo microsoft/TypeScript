@@ -27,6 +27,6 @@ module.exports = {
 
     },
     x
->x : any
+>x : number
 
 };

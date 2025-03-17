@@ -133,18 +133,7 @@
  >b === "a" || b === "b" : boolean
  >b === "a" : boolean
  >b : B
-@@= skipped -56, +56 lines =@@
- >something({ kind, id }) : void
- >something : (a: MyType) => void
- >{ kind, id } : { kind: MyEnum; id: number; }
-->kind : MyEnum
-->id : number
-+>kind : any
-+>id : any
-     }
-     
-     type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
-@@= skipped -14, +14 lines =@@
+@@= skipped -70, +70 lines =@@
  >value : undefined
      
      function test(obj: { kind: "a" | "b", value: number | undefined }) {
