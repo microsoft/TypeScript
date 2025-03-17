@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/jsdoc/importTag25.ts] ////
+
+=== types.d.ts ===
+export type T = {
+>T : T
+>  : ^
+
+    a: number;
+>a : number
+>  : ^^^^^^
+
+};
+
+=== foo.js ===
+/** @import { T } from "./types.d.ts" */
+
+export default async function f() {
+>f : () => Promise<T[]>
+>  : ^^^^^^^^^^^^^^^^^^
+
+	/** @type {T[]} */
+	const types = [];
+>types : T[]
+>      : ^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+	return types;
+>types : T[]
+>      : ^^^
+}
+
