@@ -9619,7 +9619,7 @@ func (c *Checker) isAritySmaller(signature *Signature, target *ast.Node) bool {
 		}
 		targetParameterCount++
 	}
-	if len(parameters) != 0 && parameterIsThisKeyword(parameters[0]) {
+	if len(parameters) != 0 && ast.IsThisParameter(parameters[0]) {
 		targetParameterCount--
 	}
 	return !c.hasEffectiveRestParameter(signature) && c.getParameterCount(signature) < targetParameterCount
@@ -18245,7 +18245,7 @@ func getEffectiveSetAccessorTypeAnnotationNode(node *ast.Node) *ast.Node {
 func getSetAccessorValueParameter(accessor *ast.Node) *ast.Node {
 	parameters := accessor.Parameters()
 	if len(parameters) > 0 {
-		hasThis := len(parameters) == 2 && parameterIsThisKeyword(parameters[0])
+		hasThis := len(parameters) == 2 && ast.IsThisParameter(parameters[0])
 		return parameters[core.IfElse(hasThis, 1, 0)]
 	}
 	return nil

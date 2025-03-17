@@ -1248,16 +1248,11 @@ func getThisParameter(signature *ast.Node) *ast.Node {
 	// callback tags do not currently support this parameters
 	if len(signature.Parameters()) != 0 {
 		thisParameter := signature.Parameters()[0]
-		if parameterIsThisKeyword(thisParameter) {
+		if ast.IsThisParameter(thisParameter) {
 			return thisParameter
 		}
 	}
 	return nil
-}
-
-// Deprecated: use ast.IsThisParameter
-func parameterIsThisKeyword(parameter *ast.Node) bool {
-	return ast.IsThisParameter(parameter)
 }
 
 func isObjectOrArrayLiteralType(t *Type) bool {
@@ -1512,7 +1507,7 @@ func hasContextSensitiveParameters(node *ast.Node) bool {
 			// If the first parameter is not an explicit 'this' parameter, then the function has
 			// an implicit 'this' parameter which is subject to contextual typing.
 			parameter := core.FirstOrNil(node.Parameters())
-			if parameter == nil || !parameterIsThisKeyword(parameter) {
+			if parameter == nil || !ast.IsThisParameter(parameter) {
 				return true
 			}
 		}
