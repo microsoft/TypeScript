@@ -7074,7 +7074,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isGenericMappedType(type) || (type as MappedType).containsError) {
                     return createMappedTypeNodeFromType(type as MappedType);
                 }
-
                 const resolved = resolveStructuredTypeMembers(type);
                 if (!resolved.properties.length && !resolved.indexInfos.length) {
                     if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
@@ -7119,12 +7118,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const restoreFlags = saveRestoreFlags(context);
                 context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
-                const members = createTypeNodesFromResolvedType(resolved);
+                let members = createTypeNodesFromResolvedType(resolved);
                 restoreFlags();
+                // Simplify enum type when expanding it for quickinfo.
+                if (context.unfoldDepth > 0 && type.symbol && type.symbol.flags & SymbolFlags.Enum) {
+                    members = mapDefined(members, simplifyEnumMember);
+                }
                 const typeLiteralNode = factory.createTypeLiteralNode(members);
                 context.approximateLength += 2;
                 setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 return typeLiteralNode;
+            }
+
+            function simplifyEnumMember(member: TypeElement): TypeElement | undefined {
+                // Skip printing reverse mapping signature.
+                if (member.kind === SyntaxKind.IndexSignature) {
+                    return undefined;
+                }
+                return factory.createPropertySignature(/*modifiers*/ undefined, member.name!, /*questionToken*/ undefined, /*typeNode*/ undefined);
             }
 
             function typeReferenceToTypeNode(type: TypeReference) {

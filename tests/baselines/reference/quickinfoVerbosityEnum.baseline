@@ -4,10 +4,9 @@
 //      ^^^^^
 // | ----------------------------------------------------------------------
 // | enum Color {
-// |     readonly [x: number]: string;
-// |     readonly Red: Color.Red;
-// |     readonly Green: Color.Green;
-// |     readonly Blue: Color.Blue;
+// |     Red;
+// |     Green;
+// |     Blue;
 // | }
 // | (verbosity level: 1)
 // | ----------------------------------------------------------------------
@@ -97,94 +96,10 @@
           "kind": "space"
         },
         {
-          "text": "readonly",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "[",
-          "kind": "punctuation"
-        },
-        {
-          "text": "x",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "]",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "readonly",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
           "text": "Red",
           "kind": "propertyName"
         },
         {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Color",
-          "kind": "enumName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Red",
-          "kind": "text"
-        },
-        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -194,14 +109,6 @@
         },
         {
           "text": "    ",
-          "kind": "space"
-        },
-        {
-          "text": "readonly",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
           "kind": "space"
         },
         {
@@ -209,26 +116,6 @@
           "kind": "propertyName"
         },
         {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Color",
-          "kind": "enumName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Green",
-          "kind": "text"
-        },
-        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -241,36 +128,8 @@
           "kind": "space"
         },
         {
-          "text": "readonly",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
           "text": "Blue",
           "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Color",
-          "kind": "enumName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Blue",
-          "kind": "text"
         },
         {
           "text": ";",
