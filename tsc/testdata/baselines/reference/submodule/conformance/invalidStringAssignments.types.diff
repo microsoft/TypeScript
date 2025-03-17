@@ -24,16 +24,3 @@
  >a : T
  
      a = x;
-@@= skipped -13, +14 lines =@@
- >x : string
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- var j: E = x;
-->j : E
-+>j : E.A
- >x : string
- 

@@ -1,22 +1,15 @@
 --- old.invalidVoidAssignments.errors.txt
 +++ new.invalidVoidAssignments.errors.txt
-@@= skipped -9, +9 lines =@@
-   'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
+@@= skipped -10, +10 lines =@@
  invalidVoidAssignments.ts(23,1): error TS2630: Cannot assign to 'i' because it is a function.
  invalidVoidAssignments.ts(26,1): error TS2322: Type 'typeof E' is not assignable to type 'void'.
--invalidVoidAssignments.ts(27,1): error TS2322: Type 'E' is not assignable to type 'void'.
+ invalidVoidAssignments.ts(27,1): error TS2322: Type 'E' is not assignable to type 'void'.
 -invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.
-+invalidVoidAssignments.ts(27,1): error TS2322: Type 'E.A' is not assignable to type 'void'.
 +invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f: () => void; }' is not assignable to type 'void'.
  
  
  ==== invalidVoidAssignments.ts (13 errors) ====
-@@= skipped -56, +56 lines =@@
- !!! error TS2322: Type 'typeof E' is not assignable to type 'void'.
-     x = E.A;
-     ~
--!!! error TS2322: Type 'E' is not assignable to type 'void'.
-+!!! error TS2322: Type 'E.A' is not assignable to type 'void'.
+@@= skipped -59, +59 lines =@@
      
      x = { f() { } }
      ~

@@ -1,15 +1,6 @@
 --- old.declarationEmitNameConflicts.symbols
 +++ new.declarationEmitNameConflicts.symbols
-@@= skipped -63, +63 lines =@@
-     export import im = M.P.f;
- >im : Symbol(im, Decl(declarationEmit_nameConflicts_0.ts, 21, 5))
- >M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
-->P : Symbol(P, Decl(declarationEmit_nameConflicts_0.ts, 15, 16))
-->f : Symbol(f, Decl(declarationEmit_nameConflicts_0.ts, 15, 19))
- 
-     export var a = M.a; // emitted incorrectly as typeof f
- >a : Symbol(a, Decl(declarationEmit_nameConflicts_0.ts, 23, 14))
-@@= skipped -23, +21 lines =@@
+@@= skipped -86, +86 lines =@@
  
      export var g = M.c.g; // ok
  >g : Symbol(g, Decl(declarationEmit_nameConflicts_0.ts, 26, 14))

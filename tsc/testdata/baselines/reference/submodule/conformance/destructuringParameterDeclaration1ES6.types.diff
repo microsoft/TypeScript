@@ -87,12 +87,7 @@
  >a : any
  >b : any
  >c : any
-@@= skipped -45, +45 lines =@@
- 
- // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
- enum Foo { a }
-->Foo : Foo
-+>Foo : Foo.a
+@@= skipped -49, +49 lines =@@
  >a : Foo.a
  
  function c0({z: {x, y: {j}}}) { }
@@ -123,7 +118,7 @@
  >b : string | number
  >b : string | number
  >{ b: "hello" } : { b: string; }
-@@= skipped -31, +31 lines =@@
+@@= skipped -27, +27 lines =@@
  >"hello" : "hello"
  
  function c5([a, b, [[c]]]) { }

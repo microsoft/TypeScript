@@ -24,13 +24,13 @@ module A {
 >o : any
 }
 enum A {
->A : A.b
+>A : A
 
     b
 >b : A.b
 }
 enum A {
->A : A.b
+>A : A
 
     c
 >c : A.b

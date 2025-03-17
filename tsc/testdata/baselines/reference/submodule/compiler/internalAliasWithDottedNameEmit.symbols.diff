@@ -1,10 +1,10 @@
 --- old.internalAliasWithDottedNameEmit.symbols
 +++ new.internalAliasWithDottedNameEmit.symbols
-@@= skipped -15, +15 lines =@@
- 
+@@= skipped -16, +16 lines =@@
        import g = b.c;
  >g : Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 3, 14))
-->b : Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))
+ >b : Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))
 ->c : Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
++>c : Symbol(c, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
  }
  

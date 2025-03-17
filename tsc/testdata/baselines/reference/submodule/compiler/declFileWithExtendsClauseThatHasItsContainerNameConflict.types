@@ -31,7 +31,7 @@ module A.B.C {
 
     export class ContextMenu extends EventManager {
 >ContextMenu : ContextMenu
->EventManager : any
+>EventManager : EventManager
 
         name: string;
 >name : string

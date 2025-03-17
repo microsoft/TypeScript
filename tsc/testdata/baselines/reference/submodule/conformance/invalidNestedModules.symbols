@@ -3,8 +3,8 @@
 === invalidNestedModules.ts ===
 module A.B.C {
 >A : Symbol(A, Decl(invalidNestedModules.ts, 0, 0), Decl(invalidNestedModules.ts, 5, 1))
->B : Symbol(B, Decl(invalidNestedModules.ts, 0, 9))
->C : Symbol(C, Decl(invalidNestedModules.ts, 0, 11))
+>B : Symbol(B, Decl(invalidNestedModules.ts, 0, 9), Decl(invalidNestedModules.ts, 7, 10))
+>C : Symbol(C, Decl(invalidNestedModules.ts, 0, 11), Decl(invalidNestedModules.ts, 8, 21))
 
     export class Point {
 >Point : Symbol(Point, Decl(invalidNestedModules.ts, 0, 14))
@@ -21,10 +21,10 @@ module A {
 >A : Symbol(A, Decl(invalidNestedModules.ts, 0, 0), Decl(invalidNestedModules.ts, 5, 1))
 
     export module B {
->B : Symbol(B, Decl(invalidNestedModules.ts, 7, 10))
+>B : Symbol(B, Decl(invalidNestedModules.ts, 0, 9), Decl(invalidNestedModules.ts, 7, 10))
 
         export class C { // Error
->C : Symbol(C, Decl(invalidNestedModules.ts, 8, 21))
+>C : Symbol(C, Decl(invalidNestedModules.ts, 0, 11), Decl(invalidNestedModules.ts, 8, 21))
 
             name: string;
 >name : Symbol(name, Decl(invalidNestedModules.ts, 9, 24))
@@ -34,7 +34,7 @@ module A {
 
 module M2.X {
 >M2 : Symbol(M2, Decl(invalidNestedModules.ts, 13, 1), Decl(invalidNestedModules.ts, 19, 1))
->X : Symbol(X, Decl(invalidNestedModules.ts, 15, 10))
+>X : Symbol(X, Decl(invalidNestedModules.ts, 15, 10), Decl(invalidNestedModules.ts, 21, 11))
 
     export class Point {
 >Point : Symbol(Point, Decl(invalidNestedModules.ts, 15, 13))
@@ -49,7 +49,7 @@ module M2 {
 >M2 : Symbol(M2, Decl(invalidNestedModules.ts, 13, 1), Decl(invalidNestedModules.ts, 19, 1))
 
     export module X {
->X : Symbol(X, Decl(invalidNestedModules.ts, 21, 11))
+>X : Symbol(X, Decl(invalidNestedModules.ts, 15, 10), Decl(invalidNestedModules.ts, 21, 11))
 
         export var Point: number; // Error
 >Point : Symbol(Point, Decl(invalidNestedModules.ts, 23, 18))

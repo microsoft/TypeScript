@@ -25,19 +25,15 @@
      export class W<TValue> extends X.Y.base.W {
  >W : W<TValue>
 ->X.Y.base.W : base.W
-->X.Y.base : typeof base
-->X.Y : typeof Y
 +>TValue : TValue
-+>X.Y.base.W : any
-+>X.Y.base : any
-+>X.Y : any
++>X.Y.base.W : W
+ >X.Y.base : typeof base
+ >X.Y : typeof Y
  >X : typeof X
-->Y : typeof Y
-->base : typeof base
+ >Y : typeof Y
+ >base : typeof base
 ->W : typeof base.W
-+>Y : any
-+>base : any
-+>W : any
++>W : typeof W
  
          value: boolean;
  >value : boolean

@@ -1,16 +1,6 @@
 --- old.importAliasFromNamespace.types
 +++ new.importAliasFromNamespace.types
-@@= skipped -6, +6 lines =@@
- >Thing : typeof Thing
- 
-     import Internal = My.Internal;
-->Internal : typeof Internal
-+>Internal : any
- >My : typeof My
-->Internal : typeof Internal
-+>Internal : any
- 
-     export class Foo {
+@@= skipped -14, +14 lines =@@
  >Foo : Foo
  
          private _which: Internal.WhichThing;
@@ -19,29 +9,21 @@
  >Internal : any
  
          constructor() {
-             Internal.getThing();
-->Internal.getThing() : void
-->Internal.getThing : () => void
-->Internal : typeof Internal
-->getThing : () => void
-+>Internal.getThing() : any
-+>Internal.getThing : any
-+>Internal : any
-+>getThing : any
+@@= skipped -11, +11 lines =@@
+ >getThing : () => void
  
              Internal.WhichThing.A ? "foo" : "bar";
 ->Internal.WhichThing.A ? "foo" : "bar" : "foo" | "bar"
 ->Internal.WhichThing.A : Internal.WhichThing.A
 ->Internal.WhichThing : typeof Internal.WhichThing
-->Internal : typeof Internal
++>Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
++>Internal.WhichThing.A : WhichThing.A
++>Internal.WhichThing : typeof WhichThing
+ >Internal : typeof Internal
 ->WhichThing : typeof Internal.WhichThing
 ->A : Internal.WhichThing.A
-+>Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
-+>Internal.WhichThing.A : any
-+>Internal.WhichThing : any
-+>Internal : any
-+>WhichThing : any
-+>A : any
++>WhichThing : typeof WhichThing
++>A : WhichThing.A
  >"foo" : "foo"
  >"bar" : "bar"
          }

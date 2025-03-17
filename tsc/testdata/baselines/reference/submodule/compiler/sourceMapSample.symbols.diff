@@ -21,18 +21,16 @@
          }
      }
  
-@@= skipped -18, +18 lines =@@
- >foo : Symbol(foo, Decl(sourceMapSample.ts, 10, 5))
+@@= skipped -19, +19 lines =@@
  >greeting : Symbol(greeting, Decl(sourceMapSample.ts, 13, 17))
  >Foo : Symbol(Foo, Decl(sourceMapSample.ts, 0, 0))
-->Bar : Symbol(Bar, Decl(sourceMapSample.ts, 0, 11))
+ >Bar : Symbol(Bar, Decl(sourceMapSample.ts, 0, 11))
 ->Greeter : Symbol(Foo.Bar.Greeter)
-+>Bar : Symbol(Bar)
 +>Greeter : Symbol(Greeter)
  
          return new Greeter(greeting);
  >Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
-@@= skipped -14, +14 lines =@@
+@@= skipped -13, +13 lines =@@
  
      var str = greeter.greet();
  >str : Symbol(str, Decl(sourceMapSample.ts, 18, 7))

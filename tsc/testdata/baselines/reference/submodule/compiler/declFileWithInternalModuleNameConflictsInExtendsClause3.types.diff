@@ -5,7 +5,7 @@
  === declFileWithInternalModuleNameConflictsInExtendsClause3.ts ===
  module X.A.C {
 +>X : typeof X
-+>A : any
++>A : typeof A
 +>C : any
 +
      export interface Z {
@@ -13,24 +13,14 @@
      }
  }
  module X.A.B.C {
-@@= skipped -12, +17 lines =@@
-     export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
- >W : W
- >X.A.C : any
-->X.A : typeof A
-+>X.A : any
- >X : typeof X
-->A : typeof A
-+>A : any
- >C : any
-     }
+@@= skipped -20, +25 lines =@@
  }
  
  module X.A.B.C {
 +>X : typeof X
-+>A : any
-+>B : any
-+>C : any
++>A : typeof A
++>B : typeof B
++>C : typeof C
 +
      export module A {
 +>A : any

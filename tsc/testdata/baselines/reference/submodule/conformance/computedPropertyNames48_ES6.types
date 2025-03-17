@@ -8,7 +8,7 @@ declare function extractIndexer<T>(p: { [n: number]: T }): T;
 >n : number
 
 enum E { x }
->E : E.x
+>E : E
 >x : E.x
 
 var a: any;
@@ -33,9 +33,9 @@ extractIndexer({
 
     [E.x]: ""
 >[E.x] : string
->E.x : E.x
+>E.x : E
 >E : typeof E
->x : E.x
+>x : E
 >"" : ""
 
 }); // Should return string

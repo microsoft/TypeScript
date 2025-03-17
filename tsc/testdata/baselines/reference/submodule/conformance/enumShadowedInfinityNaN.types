@@ -9,7 +9,7 @@
 >{} : {}
 
   enum En {
->En : En.X
+>En : En
 
     X = Infinity
 >X : En.X
@@ -23,7 +23,7 @@
 >{} : {}
 
   enum En {
->En : En.X
+>En : En
 
     X = NaN
 >X : En.X

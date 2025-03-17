@@ -2,7 +2,7 @@
 
 === parserEnum5.ts ===
 enum E2 { a, }
->E2 : E2.a
+>E2 : E2
 >a : E2.a
 
 enum E3 { a: 1, }

@@ -1,13 +1,6 @@
 --- old.computedPropertyNames7_ES5.types
 +++ new.computedPropertyNames7_ES5.types
-@@= skipped -1, +1 lines =@@
- 
- === computedPropertyNames7_ES5.ts ===
- enum E {
-->E : E
-+>E : E.member
- 
-     member
+@@= skipped -7, +7 lines =@@
  >member : E.member
  }
  var v = {
@@ -18,10 +11,3 @@
  
      [E.member]: 0
  >[E.member] : number
-->E.member : E
-+>E.member : E.member
- >E : typeof E
-->member : E
-+>member : E.member
- >0 : 0
- }

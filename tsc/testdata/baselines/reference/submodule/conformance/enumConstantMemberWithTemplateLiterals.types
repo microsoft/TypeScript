@@ -2,7 +2,7 @@
 
 === enumConstantMemberWithTemplateLiterals.ts ===
 enum T1 {
->T1 : T1.a
+>T1 : T1
 
     a = `1`
 >a : T1.a
@@ -26,7 +26,7 @@ enum T2 {
 }
 
 enum T3 {
->T3 : T3.a
+>T3 : T3
 
     a = `1` + `1`
 >a : T3.a

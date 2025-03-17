@@ -9,7 +9,7 @@ genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of t
   Types of parameters 'a' and 'x' are incompatible.
     Type 'Date' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
-genericCallWithGenericSignatureArguments2.ts(37,43): error TS2322: Type 'F.A' is not assignable to type 'E.A'.
+genericCallWithGenericSignatureArguments2.ts(37,43): error TS2322: Type 'F' is not assignable to type 'E'.
 genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
@@ -76,7 +76,7 @@ genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find n
     
         var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
                                               ~~~
-!!! error TS2322: Type 'F.A' is not assignable to type 'E.A'.
+!!! error TS2322: Type 'F' is not assignable to type 'E'.
 !!! related TS6502 genericCallWithGenericSignatureArguments2.ts:32:47: The expected type comes from the return type of this signature.
     }
     

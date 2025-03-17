@@ -20,11 +20,11 @@ var ai: I;
 >ai : I
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 var ae: E;
->ae : E.A
+>ae : E
 
 var b: number = null;
 >b : number
@@ -70,7 +70,7 @@ ai = null;
 
 ae = null;
 >ae = null : null
->ae : E.A
+>ae : E
 
 var m: number[] = null;
 >m : number[]

@@ -204,7 +204,7 @@ interface I13 {
 
 
 enum E2 { A }
->E2 : E2.A
+>E2 : E2
 >A : E2.A
 
 interface I14 {

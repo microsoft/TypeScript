@@ -15,18 +15,18 @@ var array = [{ x: "", y: true }]
 >true : true
 
 enum E { x }
->E : E.x
+>E : E
 >x : E.x
 
 for ({x, y: y = E.x} of array) {
->{x, y: y = E.x} : { x: string; y?: E.x; }
+>{x, y: y = E.x} : { x: string; y?: E; }
 >x : any
->y : E.x
->y = E.x : E.x
+>y : E
+>y = E.x : E
 >y : number
->E.x : E.x
+>E.x : E
 >E : typeof E
->x : E.x
+>x : E
 >array : { x: string; y: boolean; }[]
 
     x;

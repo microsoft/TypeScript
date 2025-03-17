@@ -4,7 +4,7 @@
 // enums are only subtypes of number, any and no other types
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 interface I {
@@ -14,7 +14,7 @@ interface I {
 >x : string
 
     foo: E; // ok
->foo : E.A
+>foo : E
 }
 
 
@@ -25,7 +25,7 @@ interface I2 {
 >x : string
 
     foo: E; // ok
->foo : E.A
+>foo : E
 }
 
 // error cases
@@ -36,7 +36,7 @@ interface I3 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -47,7 +47,7 @@ interface I4 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -58,7 +58,7 @@ interface I5 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -69,7 +69,7 @@ interface I6 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -81,7 +81,7 @@ interface I7 {
 >bar : number
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -92,7 +92,7 @@ interface I8 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -103,7 +103,7 @@ interface I9 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 class A { foo: number; }
@@ -117,7 +117,7 @@ interface I10 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 class A2<T> { foo: T; }
@@ -132,7 +132,7 @@ interface I11 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -144,7 +144,7 @@ interface I12 {
 >x : any
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -157,12 +157,12 @@ interface I13 {
 >x : T
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
 enum E2 { A }
->E2 : E2.A
+>E2 : E2
 >A : E2.A
 
 interface I14 {
@@ -172,7 +172,7 @@ interface I14 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -193,7 +193,7 @@ interface I15 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -215,7 +215,7 @@ interface I16 {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -227,7 +227,7 @@ interface I17<T> {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -240,7 +240,7 @@ interface I18<T, U extends T> {
 >x : string
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 
@@ -251,7 +251,7 @@ interface I19 {
 >x : string
 
     foo: E; // BUG 831833
->foo : E.A
+>foo : E
 }
 
 
@@ -262,5 +262,5 @@ interface I20 {
 >x : string
 
     foo: E; // BUG 831833
->foo : E.A
+>foo : E
 }

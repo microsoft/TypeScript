@@ -19,11 +19,6 @@
  
  module EndGate.Tweening {
  >EndGate : Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 17, 1))
-->Tweening : Symbol(Tweening, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 8, 15), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 19, 15))
-+>Tweening : Symbol(Tweening, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 8, 15))
- 
-     export class Tween<T extends ICloneable>{
- >Tween : Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 8, 25))
 @@= skipped -20, +20 lines =@@
  >ICloneable : Symbol(ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 24))
  
@@ -50,21 +45,3 @@
          }
      }
  }
- 
- module EndGate.Tweening {
- >EndGate : Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 17, 1))
-->Tweening : Symbol(Tweening, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 8, 15), Decl(genericConstraintOnExtendedBuiltinTypes.ts, 19, 15))
-+>Tweening : Symbol(Tweening, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 19, 15))
- 
-     export class NumberTween extends Tween<number>{
- >NumberTween : Symbol(NumberTween, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 19, 25))
-->Tween : Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 8, 25))
- 
-         constructor(from: number) {
- >from : Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 21, 20))
- 
-             super(from);
-->super : Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 8, 25))
- >from : Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes.ts, 21, 20))
-         }
-     }

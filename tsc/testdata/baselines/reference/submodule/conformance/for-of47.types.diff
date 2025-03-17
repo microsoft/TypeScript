@@ -1,28 +1,11 @@
 --- old.for-of47.types
 +++ new.for-of47.types
-@@= skipped -14, +14 lines =@@
- >true : true
- 
- enum E { x }
-->E : E
-+>E : E.x
- >x : E.x
+@@= skipped -19, +19 lines =@@
  
  for ({x, y: y = E.x} of array) {
-->{x, y: y = E.x} : { x: string; y?: E; }
+ >{x, y: y = E.x} : { x: string; y?: E; }
 ->x : string
-->y : E
-->y = E.x : E
-+>{x, y: y = E.x} : { x: string; y?: E.x; }
 +>x : any
-+>y : E.x
-+>y = E.x : E.x
+ >y : E
+ >y = E.x : E
  >y : number
-->E.x : E
-+>E.x : E.x
- >E : typeof E
-->x : E
-+>x : E.x
- >array : { x: string; y: boolean; }[]
- 
-     x;

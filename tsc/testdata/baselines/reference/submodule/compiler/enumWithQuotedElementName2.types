@@ -2,7 +2,7 @@
 
 === enumWithQuotedElementName2.ts ===
 enum E {
->E : E."fo'o"
+>E : E
 
    "fo'o",
 >"fo'o" : E."fo'o"

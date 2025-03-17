@@ -8,7 +8,7 @@
 
 declare module Sample.Thing {
 >Sample : typeof Sample
->Thing : any
+>Thing : typeof Thing
 
 	export interface IWidget {
 >IWidget : IWidget
@@ -65,9 +65,9 @@ module Sample.Actions.Thing.Find {
 
 	export class StartFindAction implements Sample.Thing.IAction {
 >StartFindAction : StartFindAction
->Sample.Thing : any
+>Sample.Thing : typeof Thing
 >Sample : typeof Sample
->Thing : any
+>Thing : typeof Thing
 		
 		public getId() { return "yo"; }
 >getId : () => string
@@ -92,9 +92,9 @@ module Sample.Thing.Widgets {
 
 	export class FindWidget implements Sample.Thing.IWidget {
 >FindWidget : FindWidget
->Sample.Thing : any
+>Sample.Thing : typeof Thing
 >Sample : typeof Sample
->Thing : any
+>Thing : typeof Thing
 
 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
 >gar : (runner: (widget: IWidget) => any) => any

@@ -42,7 +42,7 @@ module M.P {
 >C : C
 
     export enum D {
->D : D.f
+>D : D
 
         f
 >f : D.f

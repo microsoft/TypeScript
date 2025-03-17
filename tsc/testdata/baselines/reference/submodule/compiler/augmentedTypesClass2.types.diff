@@ -9,12 +9,3 @@
      bar(): void;
  >bar : () => void
  }
-@@= skipped -17, +19 lines =@@
-     }
- }
- enum c33 { One };
-->c33 : c33
-+>c33 : c33.One
- >One : c33.One
- 
- // class then import

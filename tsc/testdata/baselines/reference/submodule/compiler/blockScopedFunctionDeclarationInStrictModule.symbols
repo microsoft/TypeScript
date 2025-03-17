@@ -10,5 +10,3 @@ if (true) {
 }
 
 export = foo; // not ok
->foo : Symbol(foo, Decl(blockScopedFunctionDeclarationInStrictModule.ts, 0, 11))
-

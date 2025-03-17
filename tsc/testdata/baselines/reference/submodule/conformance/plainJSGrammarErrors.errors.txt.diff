@@ -71,15 +71,7 @@
  plainJSGrammarErrors.js(110,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
  plainJSGrammarErrors.js(111,19): error TS1255: A definite assignment assertion '!' is not permitted in this context.
  plainJSGrammarErrors.js(114,16): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
-@@= skipped -16, +18 lines =@@
- plainJSGrammarErrors.js(117,29): error TS1097: 'extends' list cannot be empty.
- plainJSGrammarErrors.js(120,7): error TS1182: A destructuring declaration must have an initializer.
- plainJSGrammarErrors.js(121,7): error TS1155: 'const' declarations must be initialized.
--plainJSGrammarErrors.js(122,5): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
- plainJSGrammarErrors.js(122,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
- plainJSGrammarErrors.js(124,5): error TS1156: 'let' declarations can only be declared inside a block.
- plainJSGrammarErrors.js(126,5): error TS1156: 'const' declarations can only be declared inside a block.
-@@= skipped -24, +23 lines =@@
+@@= skipped -40, +42 lines =@@
  plainJSGrammarErrors.js(202,22): error TS17012: 'targe' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
  plainJSGrammarErrors.js(203,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
  plainJSGrammarErrors.js(204,30): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
@@ -89,11 +81,7 @@
 +plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be used within a function body.
  
  
--==== plainJSGrammarErrors.js (102 errors) ====
-+==== plainJSGrammarErrors.js (101 errors) ====
-     class C {
-         // #private mistakes
-         q = #unbound
+ ==== plainJSGrammarErrors.js (102 errors) ====
 @@= skipped -14, +17 lines =@@
              ~~
  !!! error TS1451: Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression
@@ -213,16 +201,7 @@
                    ~
  !!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
          definiteMethod!() { return 13 },
-@@= skipped -35, +31 lines =@@
- !!! error TS1155: 'const' declarations must be initialized.
-     let let = 15;
-         ~~~
--!!! error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
--        ~~~
- !!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
-     if (true)
-         let onlyBlockLet = 17;
-@@= skipped -129, +127 lines =@@
+@@= skipped -164, +160 lines =@@
      const trinaryDynamicImport = import('1', '2', '3')
                                   ~~~~~~~~~~~~~~~~~~~~~
  !!! message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments

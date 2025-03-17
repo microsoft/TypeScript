@@ -137,12 +137,10 @@ func (n Number) Remainder(d Number) Number {
 	case n == 0:
 		return n
 	}
-
 	r := n - d*(n/d).trunc()
-	if r == 0 || n < 0 {
+	if r == 0 && n < 0 {
 		return negativeZero
 	}
-
 	return r
 }
 

@@ -1962,6 +1962,16 @@ func TokenToString(token ast.Kind) string {
 	return tokenToText[token]
 }
 
+func GetViableKeywordSuggestions() []string {
+	result := make([]string, 0, len(textToKeyword))
+	for text := range textToKeyword {
+		if len(text) > 2 {
+			result = append(result, text)
+		}
+	}
+	return result
+}
+
 func couldStartTrivia(text string, pos int) bool {
 	// Keep in sync with skipTrivia
 	switch ch := text[pos]; ch {

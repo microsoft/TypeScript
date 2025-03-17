@@ -8,14 +8,6 @@
  
  e = null; // ok
  >e = null : null
- >e : any
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- E.A = null; // error
 @@= skipped -32, +31 lines =@@
  >C : any
  

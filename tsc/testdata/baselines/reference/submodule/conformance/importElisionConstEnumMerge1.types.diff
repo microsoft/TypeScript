@@ -1,15 +1,6 @@
 --- old.importElisionConstEnumMerge1.types
 +++ new.importElisionConstEnumMerge1.types
-@@= skipped -1, +1 lines =@@
- 
- === enum.ts ===
- export const enum Enum {
-->Enum : Enum
-+>Enum : Enum.One
- 
-   One = 1,
- >One : Enum.One
-@@= skipped -12, +12 lines =@@
+@@= skipped -13, +13 lines =@@
  >Enum : typeof Enum
  
  namespace Enum {
@@ -29,7 +20,7 @@
 ->Enum.One : import("enum").Enum
 ->Enum : typeof import("enum").Enum
 ->One : import("enum").Enum
-+>Enum.One : Enum.One
++>Enum.One : Enum
 +>Enum : typeof Enum
-+>One : Enum.One
++>One : Enum
  

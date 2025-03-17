@@ -11,7 +11,7 @@ declare class C {}
 >C : C
 
 declare enum E {X = 1};
->E : E.X
+>E : E
 >X : E.X
 >1 : 1
 
@@ -45,7 +45,7 @@ export declare var v: number;
 
 === file5.ts ===
 export declare enum E {X = 1}
->E : E.X
+>E : E
 >X : E.X
 >1 : 1
 

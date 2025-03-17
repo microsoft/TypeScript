@@ -4,60 +4,60 @@
 // enums assignable to number, any, Object, errors unless otherwise noted
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 enum F { B }
->F : F.B
+>F : F
 >B : F.B
 
 var e = E.A;
->e : E.A
->E.A : E.A
+>e : E
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 var f = F.B;
->f : F.B
->F.B : F.B
+>f : F
+>F.B : F
 >F : typeof F
->B : F.B
+>B : F
 
 e = f; 
->e = f : F.B
->e : E.A
->f : F.B
+>e = f : F
+>e : E
+>f : F
 
 f = e; 
->f = e : E.A
->f : F.B
->e : E.A
+>f = e : E
+>f : F
+>e : E
 
 e = 1; // ok
 >e = 1 : 1
->e : E.A
+>e : E
 >1 : 1
 
 f = 1; // ok
 >f = 1 : 1
->f : F.B
+>f : F
 >1 : 1
 
 var x: number = e; // ok
 >x : number
->e : E.A
+>e : E
 
 x = f; // ok
->x = f : F.B
+>x = f : F
 >x : number
->f : F.B
+>f : F
 
 module Others {
 >Others : typeof Others
 
     var a: any = e; // ok
 >a : any
->e : E.A
+>e : E
 
     class C {
 >C : C
@@ -79,84 +79,84 @@ module Others {
 
     var b: number = e; // ok
 >b : number
->e : E.A
+>e : E
 
     var c: string = e;
 >c : string
->e : E.A
+>e : E
 
     var d: boolean = e;
 >d : boolean
->e : E.A
+>e : E
 
     var ee: Date = e;
 >ee : Date
->e : E.A
+>e : E
 
     var f: any = e; // ok
 >f : any
->e : E.A
+>e : E
 
     var g: void = e;
 >g : void
->e : E.A
+>e : E
 
     var h: Object = e;
 >h : Object
->e : E.A
+>e : E
 
     var i: {} = e;
 >i : {}
->e : E.A
+>e : E
 
     var j: () => {} = e;
 >j : () => {}
->e : E.A
+>e : E
 
     var k: Function = e;
 >k : Function
->e : E.A
+>e : E
 
     var l: (x: number) => string = e;
 >l : (x: number) => string
 >x : number
->e : E.A
+>e : E
 
     ac = e;
->ac = e : E.A
+>ac = e : E
 >ac : C
->e : E.A
+>e : E
 
     ai = e;
->ai = e : E.A
+>ai = e : E
 >ai : I
->e : E.A
+>e : E
 
     var m: number[] = e;
 >m : number[]
->e : E.A
+>e : E
 
     var n: { foo: string } = e;
 >n : { foo: string; }
 >foo : string
->e : E.A
+>e : E
 
     var o: <T>(x: T) => T = e;
 >o : <T>(x: T) => T
 >T : T
 >x : T
->e : E.A
+>e : E
 
     var p: Number = e;
 >p : Number
->e : E.A
+>e : E
 
     var q: String = e;
 >q : String
->e : E.A
+>e : E
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
->foo : <T, U extends T, V extends Date, A extends Number, B extends E.A>(x: T, y: U, z: V) => void
+>foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
 >T : T
 >U : U
 >V : V
@@ -167,26 +167,26 @@ module Others {
 >z : V
 
         x = e;
->x = e : E.A
+>x = e : E
 >x : T
->e : E.A
+>e : E
 
         y = e;
->y = e : E.A
+>y = e : E
 >y : U
->e : E.A
+>e : E
 
         z = e;
->z = e : E.A
+>z = e : E
 >z : V
->e : E.A
+>e : E
 
         var a: A = e;
 >a : A
->e : E.A
+>e : E
 
         var b: B = e;
 >b : B
->e : E.A
+>e : E
     }
 }

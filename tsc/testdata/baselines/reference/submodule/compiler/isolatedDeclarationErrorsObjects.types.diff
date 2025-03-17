@@ -36,15 +36,7 @@
  >v : T
  >v : T
  
-@@= skipped -13, +14 lines =@@
- >"" : ""
- 
- enum E {
-->E : E
-+>E : E.V
- 
-     V = 10,
- >V : E.V
+@@= skipped -20, +21 lines =@@
  >10 : 10
  }
  export const oWithComputedProperties = {
@@ -55,19 +47,7 @@
  
      [1]: 1,
  >[1] : number
-@@= skipped -36, +36 lines =@@
- 
-     [E.V]: 1,
- >[E.V] : number
-->E.V : E
-+>E.V : E.V
- >E : typeof E
-->V : E
-+>V : E.V
- >1 : 1
- 
-     [str]: 0,
-@@= skipped -18, +18 lines =@@
+@@= skipped -47, +47 lines =@@
  >1 : 1
  
  export const oWithSpread = {

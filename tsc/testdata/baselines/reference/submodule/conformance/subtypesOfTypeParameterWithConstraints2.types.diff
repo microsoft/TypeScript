@@ -44,11 +44,6 @@
  >foo : T
  
  enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- function f() { }
 @@= skipped -30, +31 lines =@@
  
  function f4<T extends Number>(x: T) {
@@ -179,45 +174,15 @@
  >x : T
  
      var c2: C2<number>;
-@@= skipped -21, +22 lines =@@
- }
+@@= skipped -22, +23 lines =@@
  
  function f16<T extends E>(x: T) {
-->f16 : <T extends E>(x: T) => void
-+>f16 : <T extends E.A>(x: T) => void
+ >f16 : <T extends E>(x: T) => void
 +>T : T
  >x : T
  
      var r13 = true ? E : x; // ok
-@@= skipped -18, +19 lines =@@
- >E : typeof E
- 
-     var r14 = true ? E.A : x; // ok
-->r14 : E
-->true ? E.A : x : E
-+>r14 : E.A
-+>true ? E.A : x : E.A
- >true : true
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- >x : T
- 
-     var r14 = true ? x : E.A; // ok
-->r14 : E
-->true ? x : E.A : E
-+>r14 : E.A
-+>true ? x : E.A : E.A
- >true : true
- >x : T
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- }
+@@= skipped -37, +38 lines =@@
  
  function f17<T extends typeof f>(x: T) {
  >f17 : <T extends typeof f>(x: T) => void
@@ -231,7 +196,7 @@
  
      var r15 = true ? af : x; // ok
  >r15 : typeof f
-@@= skipped -44, +43 lines =@@
+@@= skipped -24, +23 lines =@@
  
  function f18<T extends typeof c>(x: T) {
  >f18 : <T extends typeof c>(x: T) => void

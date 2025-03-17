@@ -2,7 +2,7 @@
 
 === parserEnumDeclaration3.ts ===
 declare enum E {
->E : E.A
+>E : E
 
   A = 1
 >A : E.A

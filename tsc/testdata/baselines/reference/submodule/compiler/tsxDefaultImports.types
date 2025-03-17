@@ -2,7 +2,7 @@
 
 === a.ts ===
 enum SomeEnum {
->SomeEnum : SomeEnum.one
+>SomeEnum : SomeEnum
 
   one,
 >one : SomeEnum.one
@@ -21,10 +21,10 @@ import {default as Def} from "./a"
 >Def : typeof default
 
 let a = Def.E.one;
->a : SomeEnum.one
->Def.E.one : SomeEnum.one
+>a : SomeEnum
+>Def.E.one : SomeEnum
 >Def.E : typeof SomeEnum
 >Def : typeof default
 >E : typeof SomeEnum
->one : SomeEnum.one
+>one : SomeEnum
 

@@ -1,9 +1,8 @@
 --- old.typedefOnStatements.errors.txt
 +++ new.typedefOnStatements.errors.txt
-@@= skipped -0, +0 lines =@@
- typedefOnStatements.js(26,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+@@= skipped -1, +1 lines =@@
  typedefOnStatements.js(31,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
--typedefOnStatements.js(33,1): error TS1101: 'with' statements are not allowed in strict mode.
+ typedefOnStatements.js(33,1): error TS1101: 'with' statements are not allowed in strict mode.
  typedefOnStatements.js(33,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 +typedefOnStatements.js(71,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
 +typedefOnStatements.js(71,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
@@ -25,20 +24,11 @@
  
  
 -==== typedefOnStatements.js (4 errors) ====
-+==== typedefOnStatements.js (20 errors) ====
++==== typedefOnStatements.js (21 errors) ====
      /** @typedef {{a: string}} A */
      ;
      /** @typedef {{ b: string }} B */
-@@= skipped -41, +57 lines =@@
- !!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
-     /** @typedef {{ m: string }} M */
-     with (name) {
--    ~~~~
--!!! error TS1101: 'with' statements are not allowed in strict mode.
-     ~~~~~~~~~~~
- !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-     }
-@@= skipped -42, +40 lines =@@
+@@= skipped -82, +99 lines =@@
       * @param {Q} q
       */
      function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {

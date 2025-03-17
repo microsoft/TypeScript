@@ -49,24 +49,7 @@
  >x : any
  
  enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- function f14(x: 'a');
-->f14 : { (x: "a"): any; (x: E): any; }
-+>f14 : { (x: "a"): any; (x: E.A): any; }
- >x : "a"
- 
- function f14(x: E);
-->f14 : { (x: "a"): any; (x: E): any; }
-->x : E
-+>f14 : { (x: "a"): any; (x: E.A): any; }
-+>x : E.A
- 
- function f14(x: any) { }
-->f14 : { (x: "a"): any; (x: E): any; }
-+>f14 : { (x: "a"): any; (x: E.A): any; }
+@@= skipped -40, +46 lines =@@
  >x : any
  
  function f15<T, U extends T>(x: 'a');

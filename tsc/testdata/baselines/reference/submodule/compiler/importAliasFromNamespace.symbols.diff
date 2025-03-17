@@ -1,12 +1,6 @@
 --- old.importAliasFromNamespace.symbols
 +++ new.importAliasFromNamespace.symbols
-@@= skipped -8, +8 lines =@@
-     import Internal = My.Internal;
- >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
- >My : Symbol(My, Decl(internal.ts, 0, 0))
-->Internal : Symbol(Internal, Decl(internal.ts, 0, 13))
- 
-     export class Foo {
+@@= skipped -14, +14 lines =@@
  >Foo : Symbol(Foo, Decl(usage.ts, 2, 34))
  
          private _which: Internal.WhichThing;
@@ -14,24 +8,30 @@
 +>_which : Symbol(_which, Decl(usage.ts, 3, 22))
  >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
 ->WhichThing : Symbol(Internal.WhichThing, Decl(internal.ts, 1, 39))
-+>WhichThing : Symbol(WhichThing)
++>WhichThing : Symbol(WhichThing, Decl(internal.ts, 1, 39))
  
          constructor() {
              Internal.getThing();
 ->Internal.getThing : Symbol(Internal.getThing, Decl(internal.ts, 0, 23))
++>Internal.getThing : Symbol(getThing, Decl(internal.ts, 0, 23))
  >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
 ->getThing : Symbol(Internal.getThing, Decl(internal.ts, 0, 23))
++>getThing : Symbol(getThing, Decl(internal.ts, 0, 23))
  
              Internal.WhichThing.A ? "foo" : "bar";
 ->Internal.WhichThing.A : Symbol(Internal.WhichThing.A, Decl(internal.ts, 2, 34))
 ->Internal.WhichThing : Symbol(Internal.WhichThing, Decl(internal.ts, 1, 39))
++>Internal.WhichThing.A : Symbol(A, Decl(internal.ts, 2, 34))
++>Internal.WhichThing : Symbol(WhichThing, Decl(internal.ts, 1, 39))
  >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
 ->WhichThing : Symbol(Internal.WhichThing, Decl(internal.ts, 1, 39))
 ->A : Symbol(Internal.WhichThing.A, Decl(internal.ts, 2, 34))
++>WhichThing : Symbol(WhichThing, Decl(internal.ts, 1, 39))
++>A : Symbol(A, Decl(internal.ts, 2, 34))
          }
      }
  }
-@@= skipped -37, +30 lines =@@
+@@= skipped -31, +31 lines =@@
  >WhichThing : Symbol(WhichThing, Decl(internal.ts, 1, 39))
  
          A, B, C

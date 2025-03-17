@@ -16,5 +16,7 @@ module a.e.f {
 
       import g = b.c;
 >g : Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 3, 14))
+>b : Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))
+>c : Symbol(c, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
 }
 

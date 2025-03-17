@@ -195,7 +195,7 @@ var r12 = true ? null : c2;
 >c2 : C2<number>
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 var r13 = true ? E : null;
@@ -211,20 +211,20 @@ var r13 = true ? null : E;
 >E : typeof E
 
 var r14 = true ? E.A : null;
->r14 : E.A
->true ? E.A : null : E.A
+>r14 : E
+>true ? E.A : null : E
 >true : true
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 var r14 = true ? null : E.A;
->r14 : E.A
->true ? null : E.A : E.A
+>r14 : E
+>true ? null : E.A : E
 >true : true
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 function f() { }
 >f : typeof f

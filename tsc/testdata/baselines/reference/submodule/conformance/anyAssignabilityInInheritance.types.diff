@@ -35,27 +35,7 @@
  >x : T
  
  declare function foo13(x: any): any;
-@@= skipped -14, +16 lines =@@
- >a : any
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- declare function foo14(x: E): E;
-->foo14 : { (x: E): E; (x: any): any; }
-->x : E
-+>foo14 : { (x: E.A): E.A; (x: any): any; }
-+>x : E.A
- 
- declare function foo14(x: any): any;
-->foo14 : { (x: E): E; (x: any): any; }
-+>foo14 : { (x: E.A): E.A; (x: any): any; }
- >x : any
- 
- var r3 = foo3(a); // any
-@@= skipped -30, +30 lines =@@
+@@= skipped -44, +46 lines =@@
  declare function foo15(x: typeof f): typeof f;
  >foo15 : { (x: typeof f): typeof f; (x: any): any; }
  >x : typeof f

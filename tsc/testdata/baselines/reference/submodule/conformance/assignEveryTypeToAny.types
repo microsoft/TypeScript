@@ -74,29 +74,29 @@ x = e2;
 >e2 : any
 
 enum E {
->E : E.A
+>E : E
 
     A
 >A : E.A
 }
 
 x = E.A;
->x = E.A : E.A
+>x = E.A : E
 >x : any
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 var f = E.A;
->f : E.A
->E.A : E.A
+>f : E
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 x = f;
->x = f : E.A
+>x = f : E
 >x : any
->f : E.A
+>f : E
 
 interface I {
 >I : I

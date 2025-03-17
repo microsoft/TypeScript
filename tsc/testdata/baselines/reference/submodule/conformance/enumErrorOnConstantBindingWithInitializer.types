@@ -18,7 +18,7 @@ const { value = "123" } = thing;
 >thing : Thing
 
 enum E {
->E : E.test
+>E : E
 
   test = value,
 >test : E.test

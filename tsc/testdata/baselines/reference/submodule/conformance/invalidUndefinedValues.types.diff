@@ -33,25 +33,3 @@
  >a : T
  
      x = a;
-@@= skipped -20, +21 lines =@@
- >f : <T>(a: T) => void
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- x = E;
-@@= skipped -9, +9 lines =@@
- >E : typeof E
- 
- x = E.A;
-->x = E.A : E
-+>x = E.A : E.A
- >x : any
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- 

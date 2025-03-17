@@ -111,11 +111,11 @@ module onlyT {
     }
 
     enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
     enum F { A }
->F : F.A
+>F : F
 >A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
@@ -136,22 +136,22 @@ module onlyT {
     }
 
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
->r7 : (x: E.A) => E.A
->foo3(E.A, (x) => E.A, (x) => F.A) : (x: E.A) => E.A
+>r7 : (x: E) => E
+>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
->(x) => E.A : (x: E.A) => E.A
->x : E.A
->E.A : E.A
+>A : E
+>(x) => E.A : (x: E) => E
+>x : E
+>E.A : E
 >E : typeof E
->A : E.A
->(x) => F.A : (x: E.A) => F.A
->x : E.A
->F.A : F.A
+>A : E
+>(x) => F.A : (x: E) => F
+>x : E
+>F.A : F
 >F : typeof F
->A : F.A
+>A : F
 }
 
 module TU {
@@ -262,11 +262,11 @@ module TU {
     }
 
     enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
     enum F { A }
->F : F.A
+>F : F
 >A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
@@ -287,20 +287,20 @@ module TU {
     }
 
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A);
->r7 : (x: E.A) => E.A
->foo3(E.A, (x) => E.A, (x) => F.A) : (x: E.A) => E.A
+>r7 : (x: E) => E
+>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
->(x) => E.A : (x: E.A) => E.A
->x : E.A
->E.A : E.A
+>A : E
+>(x) => E.A : (x: E) => E
+>x : E
+>E.A : E
 >E : typeof E
->A : E.A
->(x) => F.A : (x: U) => F.A
+>A : E
+>(x) => F.A : (x: U) => F
 >x : U
->F.A : F.A
+>F.A : F
 >F : typeof F
->A : F.A
+>A : F
 }

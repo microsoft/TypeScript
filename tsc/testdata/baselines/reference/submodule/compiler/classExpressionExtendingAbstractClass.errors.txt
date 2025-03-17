@@ -1,4 +1,4 @@
-classExpressionExtendingAbstractClass.ts(5,5): error TS2653: Non-abstract class expression does not implement inherited abstract member ''foo'' from class 'A'.
+classExpressionExtendingAbstractClass.ts(5,5): error TS2653: Non-abstract class expression does not implement inherited abstract member 'foo' from class 'A'.
 
 
 ==== classExpressionExtendingAbstractClass.ts (1 errors) ====
@@ -8,7 +8,7 @@ classExpressionExtendingAbstractClass.ts(5,5): error TS2653: Non-abstract class 
     
     var C = class extends A {     // no error reported!
         ~
-!!! error TS2653: Non-abstract class expression does not implement inherited abstract member ''foo'' from class 'A'.
+!!! error TS2653: Non-abstract class expression does not implement inherited abstract member 'foo' from class 'A'.
     };
     
     

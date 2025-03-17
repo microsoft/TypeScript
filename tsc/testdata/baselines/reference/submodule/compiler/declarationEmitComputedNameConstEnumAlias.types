@@ -2,7 +2,7 @@
 
 === EnumExample.ts ===
 enum EnumExample {
->EnumExample : EnumExample.TEST
+>EnumExample : EnumExample
 
     TEST = 'TEST',
 >TEST : EnumExample.TEST
@@ -10,7 +10,7 @@ enum EnumExample {
 }
 
 export default EnumExample;
->EnumExample : EnumExample.TEST
+>EnumExample : EnumExample
 
 === index.ts ===
 import EnumExample from './EnumExample';
@@ -21,9 +21,9 @@ export default {
 
     [EnumExample.TEST]: {},
 >[EnumExample.TEST] : {}
->EnumExample.TEST : EnumExample.TEST
+>EnumExample.TEST : EnumExample
 >EnumExample : typeof EnumExample
->TEST : EnumExample.TEST
+>TEST : EnumExample
 >{} : {}
 
 };

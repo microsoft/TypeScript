@@ -42,11 +42,6 @@
  >foo : T
  
  enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- function f() { }
 @@= skipped -31, +32 lines =@@
  // errors throughout
  function f2<T, U>(x: T, y: U) {
@@ -177,28 +172,23 @@
      var r14 = true ? E.A : x;
 ->r14 : T | E
 ->true ? E.A : x : T | E
-+>r14 : E.A | T
-+>true ? E.A : x : E.A | T
++>r14 : E | T
++>true ? E.A : x : E | T
  >true : true
-->E.A : E
-+>E.A : E.A
+ >E.A : E
  >E : typeof E
-->A : E
-+>A : E.A
+@@= skipped -9, +9 lines =@@
  >x : T
  
      var r14 = true ? x : E.A;
 ->r14 : T | E
 ->true ? x : E.A : T | E
-+>r14 : E.A | T
-+>true ? x : E.A : E.A | T
++>r14 : E | T
++>true ? x : E.A : E | T
  >true : true
  >x : T
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
+ >E.A : E
+@@= skipped -10, +10 lines =@@
  
      var af: typeof f;
  >af : typeof f
@@ -206,7 +196,7 @@
  
      var r15 = true ? af : x;
  >r15 : T | typeof f
-@@= skipped -37, +36 lines =@@
+@@= skipped -18, +17 lines =@@
  
      var ac: typeof c;
  >ac : typeof c

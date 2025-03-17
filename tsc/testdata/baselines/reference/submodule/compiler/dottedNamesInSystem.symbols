@@ -14,5 +14,11 @@ export function bar() {
 >bar : Symbol(bar, Decl(dottedNamesInSystem.ts, 2, 1))
 
     return A.B.C.foo();
+>A.B.C.foo : Symbol(foo, Decl(dottedNamesInSystem.ts, 0, 24))
+>A.B.C : Symbol(C, Decl(dottedNamesInSystem.ts, 0, 21))
+>A.B : Symbol(B, Decl(dottedNamesInSystem.ts, 0, 19))
 >A : Symbol(A, Decl(dottedNamesInSystem.ts, 0, 0))
+>B : Symbol(B, Decl(dottedNamesInSystem.ts, 0, 19))
+>C : Symbol(C, Decl(dottedNamesInSystem.ts, 0, 21))
+>foo : Symbol(foo, Decl(dottedNamesInSystem.ts, 0, 24))
 }

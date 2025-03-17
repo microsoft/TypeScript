@@ -5,7 +5,7 @@ namespace first {
 >first : typeof first
 
     export enum E { A = 1 }
->E : E.A
+>E : E
 >A : E.A
 >1 : 1
 }
@@ -14,7 +14,7 @@ namespace second {
 >second : typeof second
 
     export enum E { A = 2 }
->E : E.A
+>E : E
 >A : E.A
 >2 : 2
 }
@@ -23,8 +23,8 @@ class Base {
 >Base : Base
 
     method(param: first.E) {
->method : (param: E.A) => void
->param : E.A
+>method : (param: E) => void
+>param : E
 >first : any
 
     }
@@ -35,18 +35,18 @@ class Derived extends Base {
 >Base : Base
 
     override method(param: second.E) {
->method : (param: E.A) => void
->param : E.A
+>method : (param: E) => void
+>param : E
 >second : any
     }
 }
 
 function overloadingFunction(): first.E
->overloadingFunction : () => E.A
+>overloadingFunction : () => E
 >first : any
 
 function overloadingFunction(): second.E {
->overloadingFunction : () => E.A
+>overloadingFunction : () => E
 >second : any
 
     return second.E.B

@@ -8,12 +8,6 @@
  >p : { [n: number]: T; }
  >n : number
  
- enum E { x }
-->E : E
-+>E : E.x
- >x : E.x
- 
- var a: any;
 @@= skipped -25, +26 lines =@@
  extractIndexer({
  >extractIndexer({    [E.x]: ""}) : string
@@ -23,14 +17,6 @@
  
      [E.x]: ""
  >[E.x] : string
-->E.x : E
-+>E.x : E.x
- >E : typeof E
-->x : E
-+>x : E.x
- >"" : ""
- 
- }); // Should return string
 @@= skipped -14, +14 lines =@@
  extractIndexer({
  >extractIndexer({    ["" || 0]: ""}) : string

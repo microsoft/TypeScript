@@ -14,16 +14,12 @@
 ->f : typeof f
 ->Mode : typeof f.Mode
 ->Open : f.Mode
-+>x : Mode.Open
-+>f.Mode.Open : Mode.Open
++>x : Mode
++>f.Mode.Open : Mode
 +>f.Mode : typeof Mode
 +>f : typeof import("enumFromExternalModule_0")
 +>Mode : typeof Mode
-+>Open : Mode.Open
++>Open : Mode
  
  === enumFromExternalModule_0.ts ===
  export enum Mode { Open }
-->Mode : Mode
-+>Mode : Mode.Open
- >Open : Mode.Open
- 

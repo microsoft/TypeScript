@@ -1,6 +1,3 @@
-error TS2322: Type 'T' is not assignable to type '{}'.
-  Type 'string | undefined' is not assignable to type '{}'.
-    Type 'undefined' is not assignable to type '{}'.
 conditionalTypes1.ts(12,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
   Type 'T' is not assignable to type '{}'.
 conditionalTypes1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
@@ -82,9 +79,6 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
       Type 'boolean' is not assignable to type 'true'.
 
 
-!!! error TS2322: Type 'T' is not assignable to type '{}'.
-!!! error TS2322:   Type 'string | undefined' is not assignable to type '{}'.
-!!! error TS2322:     Type 'undefined' is not assignable to type '{}'.
 ==== conditionalTypes1.ts (20 errors) ====
     type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
     type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"

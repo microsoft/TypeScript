@@ -10,12 +10,12 @@ const s = "s";
 >"s" : "s"
 
 enum E1 { A = "ENUM_KEY" }
->E1 : E1.A
+>E1 : E1
 >A : E1.A
 >"ENUM_KEY" : "ENUM_KEY"
 
 enum E2 { B }
->E2 : E2.B
+>E2 : E2
 >B : E2.B
 
 const t1 = {
@@ -54,16 +54,16 @@ const t3 = {
 
     [E1.A]: 1,
 >[E1.A] : number
->E1.A : E1.A
+>E1.A : E1
 >E1 : typeof E1
->A : E1.A
+>A : E1
 >1 : 1
 
     [E1.A]: 1, // duplicate
 >[E1.A] : number
->E1.A : E1.A
+>E1.A : E1
 >E1 : typeof E1
->A : E1.A
+>A : E1
 >1 : 1
 }
 
@@ -73,16 +73,16 @@ const t4 = {
 
     [E2.B]: 1,
 >[E2.B] : number
->E2.B : E2.B
+>E2.B : E2
 >E2 : typeof E2
->B : E2.B
+>B : E2
 >1 : 1
 
     [E2.B]: 1, // duplicate
 >[E2.B] : number
->E2.B : E2.B
+>E2.B : E2
 >E2 : typeof E2
->B : E2.B
+>B : E2
 >1 : 1
 }
 

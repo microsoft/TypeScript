@@ -10,7 +10,7 @@ invalidVoidAssignments.ts(21,5): error TS2322: Type 'void' is not assignable to 
   'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
 invalidVoidAssignments.ts(23,1): error TS2630: Cannot assign to 'i' because it is a function.
 invalidVoidAssignments.ts(26,1): error TS2322: Type 'typeof E' is not assignable to type 'void'.
-invalidVoidAssignments.ts(27,1): error TS2322: Type 'E.A' is not assignable to type 'void'.
+invalidVoidAssignments.ts(27,1): error TS2322: Type 'E' is not assignable to type 'void'.
 invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f: () => void; }' is not assignable to type 'void'.
 
 
@@ -66,7 +66,7 @@ invalidVoidAssignments.ts(29,1): error TS2322: Type '{ f: () => void; }' is not 
 !!! error TS2322: Type 'typeof E' is not assignable to type 'void'.
     x = E.A;
     ~
-!!! error TS2322: Type 'E.A' is not assignable to type 'void'.
+!!! error TS2322: Type 'E' is not assignable to type 'void'.
     
     x = { f() { } }
     ~

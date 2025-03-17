@@ -1,7 +1,5 @@
 doNotElaborateAssignabilityToTypeParameters.ts(3,3): error TS2322: Type 'Yadda | Awaited<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Yadda | Awaited<T>'.
-    Type 'Yadda' is not assignable to type 'T'.
-      'T' could be instantiated with an arbitrary type which could be unrelated to 'Yadda'.
 
 
 ==== doNotElaborateAssignabilityToTypeParameters.ts (1 errors) ====
@@ -11,8 +9,6 @@ doNotElaborateAssignabilityToTypeParameters.ts(3,3): error TS2322: Type 'Yadda |
       ~~~~~~
 !!! error TS2322: Type 'Yadda | Awaited<T>' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Yadda | Awaited<T>'.
-!!! error TS2322:     Type 'Yadda' is not assignable to type 'T'.
-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Yadda'.
     }
     
     interface Yadda {

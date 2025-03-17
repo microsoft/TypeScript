@@ -39,16 +39,16 @@ const ab2: A2 & B2 = {} as C2;  // Error
 >{} : {}
 
 enum E { A = "A" }
->E : E.A
+>E : E
 >A : E.A
 >"A" : "A"
 
 let x: { nope?: any } = E.A;  // Error
 >x : { nope?: any; }
 >nope : any
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 let y: { nope?: any } = "A";  // Error
 >y : { nope?: any; }

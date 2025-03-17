@@ -152,7 +152,7 @@ class C2<T> { foo: T; }
 >foo : T
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 function f() { }
@@ -457,7 +457,7 @@ function f15<T extends C2<number>>(x: T) {
 }
 
 function f16<T extends E>(x: T) {
->f16 : <T extends E.A>(x: T) => void
+>f16 : <T extends E>(x: T) => void
 >T : T
 >x : T
 
@@ -476,22 +476,22 @@ function f16<T extends E>(x: T) {
 >E : typeof E
 
     var r14 = true ? E.A : x; // ok
->r14 : E.A
->true ? E.A : x : E.A
+>r14 : E
+>true ? E.A : x : E
 >true : true
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 >x : T
 
     var r14 = true ? x : E.A; // ok
->r14 : E.A
->true ? x : E.A : E.A
+>r14 : E
+>true ? x : E.A : E
 >true : true
 >x : T
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 }
 
 function f17<T extends typeof f>(x: T) {

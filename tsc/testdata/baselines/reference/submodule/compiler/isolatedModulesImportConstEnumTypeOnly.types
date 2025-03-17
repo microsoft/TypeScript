@@ -2,7 +2,7 @@
 
 === enum.ts ===
 export const enum Foo { Bar }
->Foo : Foo.Bar
+>Foo : Foo
 >Bar : Foo.Bar
 
 === index.ts ===
@@ -10,6 +10,6 @@ import { Foo } from "./enum";
 >Foo : typeof Foo
 
 function f(foo: Foo) { return; }
->f : (foo: Foo.Bar) => void
->foo : Foo.Bar
+>f : (foo: Foo) => void
+>foo : Foo
 

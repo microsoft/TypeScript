@@ -49,8 +49,8 @@
  }
  module templa.dom.mvc {
 +>templa : typeof templa
-+>dom : any
-+>mvc : any
++>dom : typeof dom
++>mvc : typeof mvc
 +
      export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
 +>IElementController : IElementController<ModelType>
@@ -98,19 +98,8 @@
  >templa : any
  >mvc : any
  >composite : any
-->templa.dom.mvc.AbstractElementController : AbstractElementController<ModelType>
-->templa.dom.mvc : typeof mvc
-->templa.dom : typeof dom
-+>templa.dom.mvc.AbstractElementController : any
-+>templa.dom.mvc : any
-+>templa.dom : any
- >templa : typeof templa
-->dom : typeof dom
-->mvc : typeof mvc
-->AbstractElementController : typeof AbstractElementController
-+>dom : any
-+>mvc : any
-+>AbstractElementController : any
+@@= skipped -12, +13 lines =@@
+ >AbstractElementController : typeof AbstractElementController
  
          public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
 ->_controllers : templa.mvc.IController<templa.mvc.IModel>[]
@@ -118,12 +107,7 @@
  >templa : any
  >mvc : any
  >templa : any
-@@= skipped -21, +22 lines =@@
-         constructor() {
-             super();
- >super() : void
-->super : typeof AbstractElementController
-+>super : any
+@@= skipped -13, +13 lines =@@
  
              this._controllers = [];
  >this._controllers = [] : undefined[]

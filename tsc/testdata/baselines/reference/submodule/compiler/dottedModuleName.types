@@ -44,7 +44,7 @@ module M.N {
 	    export var v=f(10);
 >v : any
 >f(10) : any
->f : any
+>f : (x: number) => any
 >10 : 10
 	}
     }

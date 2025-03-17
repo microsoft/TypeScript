@@ -2,7 +2,7 @@
 
 === enumWithUnicodeEscape1.ts ===
 enum E {
->E : E.'gold \u2730'
+>E : E
 
   'gold \u2730'
 >'gold \u2730' : E.'gold \u2730'

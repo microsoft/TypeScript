@@ -25,7 +25,7 @@ C = null; // Error
 >C : any
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 E = null; // Error

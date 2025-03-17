@@ -8,22 +8,4 @@
 +>M : typeof M
  
      export import M = Z.M;
-->M : typeof M
-+>M : any
- >Z : typeof Z
-->M : typeof M
-+>M : any
- 
-     export function bar() {
- >bar : () => void
-     }
-     M.bar(); // Should call Z.M.bar
-->M.bar() : string
-->M.bar : () => string
-->M : typeof M
-->bar : () => string
-+>M.bar() : any
-+>M.bar : any
-+>M : any
-+>bar : any
- }
+ >M : typeof M

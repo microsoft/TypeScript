@@ -26,11 +26,11 @@ var x: number;
 
 var x = A.B.x;
 >x : number
->A.B.x : any
->A.B : any
+>A.B.x : number
+>A.B : typeof B
 >A : typeof A
->B : any
->x : any
+>B : typeof B
+>x : number
 
 module X.Y.Z {
 >X : typeof X

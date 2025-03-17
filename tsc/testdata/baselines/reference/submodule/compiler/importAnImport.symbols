@@ -17,4 +17,6 @@ module m0 {
     import m8 = c.a.b.ma;
 >m8 : Symbol(m8, Decl(importAnImport.ts, 4, 11))
 >c : Symbol(c, Decl(importAnImport.ts, 0, 0))
+>a : Symbol(a, Decl(importAnImport.ts, 0, 9))
+>b : Symbol(b, Decl(importAnImport.ts, 0, 11))
 }

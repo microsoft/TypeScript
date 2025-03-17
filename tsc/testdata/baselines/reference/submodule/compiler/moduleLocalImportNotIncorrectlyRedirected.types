@@ -16,7 +16,7 @@ export interface ISpinButton {}
 export * from './positioning/index';
 === node_modules/troublesome-lib/lib/utilities/positioning/index.d.ts ===
 export declare enum Position {
->Position : Position.top
+>Position : Position
 
     top,
 >top : Position.top

@@ -8,8 +8,6 @@ mappedTypeConstraints2.ts(42,7): error TS2322: Type 'Mapped6<K>[keyof Mapped6<K>
     Type 'Mapped6<K>[string]' is not assignable to type '`_${string}`'.
 mappedTypeConstraints2.ts(51,57): error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
-    Type 'Foo<T>[`get${string}`]' is not assignable to type 'T'.
-      'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${string}`]'.
 mappedTypeConstraints2.ts(82,9): error TS2322: Type 'ObjectWithUnderscoredKeys<K>[`_${K}`]' is not assignable to type 'true'.
   Type 'ObjectWithUnderscoredKeys<K>[`_${string}`]' is not assignable to type 'true'.
 
@@ -80,8 +78,6 @@ mappedTypeConstraints2.ts(82,9): error TS2322: Type 'ObjectWithUnderscoredKeys<K
                                                             ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${T}`]'.
-!!! error TS2322:     Type 'Foo<T>[`get${string}`]' is not assignable to type 'T'.
-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo<T>[`get${string}`]'.
     
     // Repro from #48626
     

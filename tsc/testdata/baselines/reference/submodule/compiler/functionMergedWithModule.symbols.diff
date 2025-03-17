@@ -5,7 +5,9 @@
  
          Bar.f();
 ->Bar.f : Symbol(Bar.f, Decl(functionMergedWithModule.ts, 4, 16))
-->Bar : Symbol(Bar, Decl(functionMergedWithModule.ts, 4, 11))
++>Bar.f : Symbol(f, Decl(functionMergedWithModule.ts, 4, 16))
+ >Bar : Symbol(Bar, Decl(functionMergedWithModule.ts, 4, 11))
 ->f : Symbol(Bar.f, Decl(functionMergedWithModule.ts, 4, 16))
++>f : Symbol(f, Decl(functionMergedWithModule.ts, 4, 16))
      }
  }

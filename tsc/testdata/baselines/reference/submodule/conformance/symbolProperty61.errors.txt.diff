@@ -1,0 +1,41 @@
+--- old.symbolProperty61.errors.txt
++++ new.symbolProperty61.errors.txt
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++symbolProperty61.ts(22,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
++
++
++==== symbolProperty61.ts (1 errors) ====
++    declare global {
++      interface SymbolConstructor {
++        readonly obs: symbol
++      }
++    }
++    
++    const observable: typeof Symbol.obs = Symbol.obs
++    
++    export class MyObservable<T> {
++        constructor(private _val: T) {}
++    
++        subscribe(next: (val: T) => void) {
++            next(this._val)
++        }
++    
++        [observable]() {
++            return this
++        }
++    }
++    
++    type InteropObservable<T> = {
++        [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
++        ~~~~~~~~~~~~
++!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
++    }
++    
++    function from<T>(obs: InteropObservable<T>) {
++        return obs[Symbol.obs]()
++    }
++    
++    from(new MyObservable(42))
++    

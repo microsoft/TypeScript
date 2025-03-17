@@ -1,4 +1,4 @@
-/index.ts(4,7): error TS2719: Type 'default' is not assignable to type 'default'. Two different types with this name exist, but they are unrelated.
+/index.ts(4,7): error TS2322: Type 'import("/node_modules/a/node_modules/foo/Foo").default' is not assignable to type 'import("/node_modules/foo/Foo").default'.
   Property 'source' is protected but type 'default' is not a class derived from 'default'.
 
 
@@ -8,8 +8,8 @@
     
     const o: Foo = a.o;
           ~
-!!! error TS2719: Type 'default' is not assignable to type 'default'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   Property 'source' is protected but type 'default' is not a class derived from 'default'.
+!!! error TS2322: Type 'import("/node_modules/a/node_modules/foo/Foo").default' is not assignable to type 'import("/node_modules/foo/Foo").default'.
+!!! error TS2322:   Property 'source' is protected but type 'default' is not a class derived from 'default'.
     
 ==== /node_modules/a/index.d.ts (0 errors) ====
     import Foo from "foo/Foo";

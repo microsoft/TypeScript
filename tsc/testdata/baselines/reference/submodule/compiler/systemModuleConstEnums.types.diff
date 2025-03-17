@@ -1,43 +1,23 @@
 --- old.systemModuleConstEnums.types
 +++ new.systemModuleConstEnums.types
-@@= skipped -5, +5 lines =@@
- >a : any
- 
- const enum TopLevelConstEnum { X }
-->TopLevelConstEnum : TopLevelConstEnum
-+>TopLevelConstEnum : TopLevelConstEnum.X
- >X : TopLevelConstEnum.X
- 
- export function foo() {
-@@= skipped -9, +9 lines =@@
-     use(TopLevelConstEnum.X);
- >use(TopLevelConstEnum.X) : any
- >use : (a: any) => any
-->TopLevelConstEnum.X : TopLevelConstEnum
-+>TopLevelConstEnum.X : TopLevelConstEnum.X
- >TopLevelConstEnum : typeof TopLevelConstEnum
-->X : TopLevelConstEnum
-+>X : TopLevelConstEnum.X
- 
+@@= skipped -21, +21 lines =@@
      use(M.NonTopLevelConstEnum.X);
  >use(M.NonTopLevelConstEnum.X) : any
  >use : (a: any) => any
 ->M.NonTopLevelConstEnum.X : M.NonTopLevelConstEnum
 ->M.NonTopLevelConstEnum : typeof M.NonTopLevelConstEnum
-+>M.NonTopLevelConstEnum.X : NonTopLevelConstEnum.X
++>M.NonTopLevelConstEnum.X : NonTopLevelConstEnum
 +>M.NonTopLevelConstEnum : typeof NonTopLevelConstEnum
  >M : typeof M
 ->NonTopLevelConstEnum : typeof M.NonTopLevelConstEnum
 ->X : M.NonTopLevelConstEnum
 +>NonTopLevelConstEnum : typeof NonTopLevelConstEnum
-+>X : NonTopLevelConstEnum.X
++>X : NonTopLevelConstEnum
  }
  
  module M {
 +>M : typeof M
 +
      export const enum NonTopLevelConstEnum { X }
-->NonTopLevelConstEnum : NonTopLevelConstEnum
-+>NonTopLevelConstEnum : NonTopLevelConstEnum.X
+ >NonTopLevelConstEnum : NonTopLevelConstEnum
  >X : NonTopLevelConstEnum.X
- }

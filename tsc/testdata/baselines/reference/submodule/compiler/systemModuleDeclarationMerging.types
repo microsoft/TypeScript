@@ -16,7 +16,7 @@ export module C { var x; }
 >x : any
 
 export enum E {}
->E : "systemModuleDeclarationMerging".E
+>E : import("systemModuleDeclarationMerging").E
 
 export module E { var x; }
 >E : typeof E

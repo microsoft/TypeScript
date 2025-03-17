@@ -1,11 +1,6 @@
 --- old.enumIsNotASubtypeOfAnythingButNumber.types
 +++ new.enumIsNotASubtypeOfAnythingButNumber.types
-@@= skipped -3, +3 lines =@@
- // enums are only subtypes of number, any and no other types
- 
- enum E { A }
-->E : E
-+>E : E.A
+@@= skipped -7, +7 lines =@@
  >A : E.A
  
  interface I {
@@ -14,10 +9,7 @@
      [x: string]: any;
  >x : string
  
-     foo: E; // ok
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  
  interface I2 {
@@ -26,10 +18,7 @@
      [x: string]: number;
  >x : string
  
-     foo: E; // ok
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  // error cases
  interface I3 {
@@ -38,10 +27,7 @@
      [x: string]: string;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  
  interface I4 {
@@ -50,10 +36,7 @@
      [x: string]: boolean;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  
  interface I5 {
@@ -62,10 +45,7 @@
      [x: string]: Date;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  
  interface I6 {
@@ -74,10 +54,7 @@
      [x: string]: RegExp;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  
  interface I7 {
@@ -86,11 +63,7 @@
      [x: string]: { bar: number };
  >x : string
  >bar : number
- 
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -10, +12 lines =@@
  
  
  interface I8 {
@@ -99,10 +72,7 @@
      [x: string]: number[];
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  
  interface I9 {
@@ -111,13 +81,7 @@
      [x: string]: I8;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
- 
- class A { foo: number; }
-@@= skipped -89, +107 lines =@@
+@@= skipped -12, +14 lines =@@
  >foo : number
  
  interface I10 {
@@ -126,10 +90,7 @@
      [x: string]: A;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  class A2<T> { foo: T; }
  >A2 : A2<T>
@@ -142,10 +103,7 @@
      [x: string]: A2<number>;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -12, +15 lines =@@
  
  
  interface I12 {
@@ -154,11 +112,7 @@
      [x: string]: (x) => number;
  >x : string
  >x : any
- 
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -10, +12 lines =@@
  
  
  interface I13 {
@@ -170,14 +124,7 @@
  >x : T
  
      foo: E;
-->foo : E
-+>foo : E.A
- }
- 
- 
- enum E2 { A }
-->E2 : E2
-+>E2 : E2.A
+@@= skipped -14, +17 lines =@@
  >A : E2.A
  
  interface I14 {
@@ -186,13 +133,7 @@
      [x: string]: E2;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
- 
- 
-@@= skipped -64, +76 lines =@@
+@@= skipped -19, +21 lines =@@
  >1 : 1
  }
  interface I15 {
@@ -203,11 +144,7 @@
 ->f : typeof f
  
      foo: E;
-->foo : E
-+>foo : E.A
- }
- 
- 
+ >foo : E
 @@= skipped -21, +22 lines =@@
  >1 : 1
  }
@@ -219,9 +156,8 @@
 ->c : typeof c
  
      foo: E;
-->foo : E
-+>foo : E.A
- }
+ >foo : E
+@@= skipped -10, +11 lines =@@
  
  
  interface I17<T> {
@@ -231,10 +167,7 @@
      [x: string]: T;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +12 lines =@@
  
  
  interface I18<T, U extends T> {
@@ -245,10 +178,7 @@
      [x: string]: U;
  >x : string
  
-     foo: E;
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +13 lines =@@
  
  
  interface I19 {
@@ -257,10 +187,7 @@
      [x: string]: Object;
  >x : string
  
-     foo: E; // BUG 831833
-->foo : E
-+>foo : E.A
- }
+@@= skipped -9, +11 lines =@@
  
  
  interface I20 {
@@ -269,7 +196,3 @@
      [x: string]: {};
  >x : string
  
-     foo: E; // BUG 831833
-->foo : E
-+>foo : E.A
- }

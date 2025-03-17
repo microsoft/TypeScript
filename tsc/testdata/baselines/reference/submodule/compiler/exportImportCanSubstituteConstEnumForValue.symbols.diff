@@ -1,14 +1,6 @@
 --- old.exportImportCanSubstituteConstEnumForValue.symbols
 +++ new.exportImportCanSubstituteConstEnumForValue.symbols
-@@= skipped -2, +2 lines =@@
- === exportImportCanSubstituteConstEnumForValue.ts ===
- module MsPortalFx.ViewModels.Dialogs {
- >MsPortalFx : Symbol(MsPortalFx, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 0), Decl(exportImportCanSubstituteConstEnumForValue.ts, 27, 1))
-->ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 18), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 18))
-+>ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 18))
- >Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
- 
-     export const enum DialogResult {
+@@= skipped -9, +9 lines =@@
  >DialogResult : Symbol(DialogResult, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 38))
  
          Abort,
@@ -41,20 +33,7 @@
      }
  
      export interface DialogResultCallback {
-@@= skipped -34, +34 lines =@@
-         (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
- >result : Symbol(result, Decl(exportImportCanSubstituteConstEnumForValue.ts, 13, 9))
- >MsPortalFx : Symbol(MsPortalFx, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 0), Decl(exportImportCanSubstituteConstEnumForValue.ts, 27, 1))
-->ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 18), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 18))
-->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
-->DialogResult : Symbol(DialogResult, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 38))
-+>ViewModels : Symbol(ViewModels)
-+>Dialogs : Symbol(Dialogs)
-+>DialogResult : Symbol(DialogResult)
-     }
- 
-     export function someExportedFunction() {
-@@= skipped -13, +13 lines =@@
+@@= skipped -40, +40 lines =@@
  >MessageBoxButtons : Symbol(MessageBoxButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 17, 5))
  
          AbortRetryIgnore,
@@ -83,45 +62,42 @@
      }
  }
  
- 
- module MsPortalFx.ViewModels {
- >MsPortalFx : Symbol(MsPortalFx, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 0), Decl(exportImportCanSubstituteConstEnumForValue.ts, 27, 1))
-->ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 18), Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 18))
-+>ViewModels : Symbol(ViewModels, Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 18))
- 
-     /**
-      * For some reason javascript code is emitted for this re-exported const enum.
-      */
+@@= skipped -30, +30 lines =@@
      export import ReExportedEnum = Dialogs.DialogResult;
  >ReExportedEnum : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 30))
-->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
+ >Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
 ->DialogResult : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 38))
++>DialogResult : Symbol(DialogResult, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 38))
  
      /**
       * Not exported to show difference. No javascript is emmitted (as expected)
-      */
+@@= skipped -8, +8 lines =@@
      import DialogButtons = Dialogs.MessageBoxButtons;
  >DialogButtons : Symbol(DialogButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 35, 56))
-->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
+ >Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
 ->MessageBoxButtons : Symbol(DialogButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 17, 5))
++>MessageBoxButtons : Symbol(MessageBoxButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 17, 5))
  
      /**
       * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
-      */
+@@= skipped -8, +8 lines =@@
      export import Callback = Dialogs.DialogResultCallback;
  >Callback : Symbol(Callback, Decl(exportImportCanSubstituteConstEnumForValue.ts, 40, 53))
-->Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
+ >Dialogs : Symbol(Dialogs, Decl(exportImportCanSubstituteConstEnumForValue.ts, 0, 29))
 ->DialogResultCallback : Symbol(Callback, Decl(exportImportCanSubstituteConstEnumForValue.ts, 10, 5))
++>DialogResultCallback : Symbol(DialogResultCallback, Decl(exportImportCanSubstituteConstEnumForValue.ts, 10, 5))
  
      export class SomeUsagesOfTheseConsts {
  >SomeUsagesOfTheseConsts : Symbol(SomeUsagesOfTheseConsts, Decl(exportImportCanSubstituteConstEnumForValue.ts, 45, 58))
-@@= skipped -55, +49 lines =@@
+@@= skipped -9, +9 lines =@@
              // these do get replaced by the const value
              const value1 = ReExportedEnum.Cancel;
  >value1 : Symbol(value1, Decl(exportImportCanSubstituteConstEnumForValue.ts, 50, 17))
 ->ReExportedEnum.Cancel : Symbol(ReExportedEnum.Cancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 3, 14))
++>ReExportedEnum.Cancel : Symbol(Cancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 3, 14))
  >ReExportedEnum : Symbol(ReExportedEnum, Decl(exportImportCanSubstituteConstEnumForValue.ts, 30, 30))
 ->Cancel : Symbol(ReExportedEnum.Cancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 3, 14))
++>Cancel : Symbol(Cancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 3, 14))
  
              console.log(value1);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -134,8 +110,10 @@
              const value2 = DialogButtons.OKCancel;
  >value2 : Symbol(value2, Decl(exportImportCanSubstituteConstEnumForValue.ts, 52, 17))
 ->DialogButtons.OKCancel : Symbol(DialogButtons.OKCancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 21, 11))
++>DialogButtons.OKCancel : Symbol(OKCancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 21, 11))
  >DialogButtons : Symbol(DialogButtons, Decl(exportImportCanSubstituteConstEnumForValue.ts, 35, 56))
 ->OKCancel : Symbol(DialogButtons.OKCancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 21, 11))
++>OKCancel : Symbol(OKCancel, Decl(exportImportCanSubstituteConstEnumForValue.ts, 21, 11))
  
              console.log(value2);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

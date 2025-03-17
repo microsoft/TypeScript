@@ -21,7 +21,7 @@ class Unrelated {
 
     static fake() { new Base() } // error
 >fake : () => void
->new Base() : Base
+>new Base() : any
 >Base : typeof Base
 }
 

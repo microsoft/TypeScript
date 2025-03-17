@@ -5,20 +5,20 @@ namespace M {
 >M : typeof M
 
     export enum MyEnum {
->MyEnum : MyEnum.BAR
+>MyEnum : MyEnum
 
         BAR
 >BAR : MyEnum.BAR
     }
     export var object2 = {
->object2 : { foo: MyEnum.BAR; }
->{        foo: MyEnum.BAR    } : { foo: MyEnum.BAR; }
+>object2 : { foo: MyEnum; }
+>{        foo: MyEnum.BAR    } : { foo: MyEnum; }
 
         foo: MyEnum.BAR
->foo : MyEnum.BAR
->MyEnum.BAR : MyEnum.BAR
+>foo : MyEnum
+>MyEnum.BAR : MyEnum
 >MyEnum : typeof MyEnum
->BAR : MyEnum.BAR
+>BAR : MyEnum
 
     };
 }
@@ -27,38 +27,38 @@ namespace N {
 >N : typeof N
 
     export enum MyEnum {
->MyEnum : MyEnum.FOO
+>MyEnum : MyEnum
 
         FOO
 >FOO : MyEnum.FOO
 
     };
     export var object1 = {
->object1 : { foo: MyEnum.FOO; }
->{        foo: MyEnum.FOO    } : { foo: MyEnum.FOO; }
+>object1 : { foo: MyEnum; }
+>{        foo: MyEnum.FOO    } : { foo: MyEnum; }
 
         foo: MyEnum.FOO
->foo : MyEnum.FOO
->MyEnum.FOO : MyEnum.FOO
+>foo : MyEnum
+>MyEnum.FOO : MyEnum
 >MyEnum : typeof MyEnum
->FOO : MyEnum.FOO
+>FOO : MyEnum
 
     };
 }
 
 let broken = [
->broken : ({ foo: MyEnum.BAR; } | { foo: MyEnum.FOO; })[]
->[    N.object1,    M.object2] : ({ foo: MyEnum.BAR; } | { foo: MyEnum.FOO; })[]
+>broken : ({ foo: MyEnum; } | { foo: MyEnum; })[]
+>[    N.object1,    M.object2] : ({ foo: MyEnum; } | { foo: MyEnum; })[]
 
     N.object1,
->N.object1 : { foo: MyEnum.FOO; }
+>N.object1 : { foo: MyEnum; }
 >N : typeof N
->object1 : { foo: MyEnum.FOO; }
+>object1 : { foo: MyEnum; }
 
     M.object2
->M.object2 : { foo: MyEnum.BAR; }
+>M.object2 : { foo: MyEnum; }
 >M : typeof M
->object2 : { foo: MyEnum.BAR; }
+>object2 : { foo: MyEnum; }
 
 ];
 

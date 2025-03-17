@@ -19,13 +19,10 @@
 -  'T' could be instantiated with an arbitrary type which could be unrelated to '[{ a: boolean; }]'.
 +typeSatisfaction_errorLocations1.ts(16,5): error TS2345: Argument of type '{ a: boolean; }' is not assignable to parameter of type 'T[0]'.
 +  'T[0]' could be instantiated with an arbitrary type which could be unrelated to '{ a: boolean; }'.
-+    Type '{ a: boolean; }' is not assignable to type '{ a: true; }'.
-+      Types of property 'a' are incompatible.
-+        Type 'boolean' is not assignable to type 'true'.
  typeSatisfaction_errorLocations1.ts(18,5): error TS2345: Argument of type '[{ a: true; }]' is not assignable to parameter of type 'T'.
    '[{ a: true; }]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a: true; }[]'.
  typeSatisfaction_errorLocations1.ts(21,43): error TS2322: Type 'number' is not assignable to type 'boolean'.
-@@= skipped -18, +19 lines =@@
+@@= skipped -18, +16 lines =@@
  typeSatisfaction_errorLocations1.ts(25,20): error TS1360: Type 'number' does not satisfy the expected type 'boolean'.
  typeSatisfaction_errorLocations1.ts(26,7): error TS2322: Type '1' is not assignable to type 'true'.
  typeSatisfaction_errorLocations1.ts(29,18): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -63,13 +60,10 @@
 -!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to '[{ a: boolean; }]'.
 +!!! error TS2345: Argument of type '{ a: boolean; }' is not assignable to parameter of type 'T[0]'.
 +!!! error TS2345:   'T[0]' could be instantiated with an arbitrary type which could be unrelated to '{ a: boolean; }'.
-+!!! error TS2345:     Type '{ a: boolean; }' is not assignable to type '{ a: true; }'.
-+!!! error TS2345:       Types of property 'a' are incompatible.
-+!!! error TS2345:         Type 'boolean' is not assignable to type 'true'.
        const o = { a: true as const };
        f(o satisfies unknown);
          ~
-@@= skipped -31, +34 lines =@@
+@@= skipped -31, +31 lines =@@
      const tuple2 = [10, "20"] as const;
      fn3(10, ...(tuple2 satisfies number[]));
                         ~~~~~~~~~

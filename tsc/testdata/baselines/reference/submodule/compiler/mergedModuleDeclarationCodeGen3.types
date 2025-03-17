@@ -19,7 +19,7 @@ module my.data.foo {
 >foo : any
 
         buz();
->buz() : any
->buz : any
+>buz() : void
+>buz : () => void
     }
 }

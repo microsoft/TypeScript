@@ -9,7 +9,7 @@ namespace x {
 >123 : 123
 }
 enum x {
->x : x.z
+>x : x
 
   z = y
 >z : x.z

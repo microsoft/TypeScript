@@ -5,7 +5,7 @@ class Foo {}
 >Foo : Foo
 
 enum E { a }
->E : E.a
+>E : E
 >a : E.a
 
 var x: any;
@@ -23,7 +23,7 @@ var a3: {};
 >a3 : {}
 
 var a4: E;
->a4 : E.a
+>a4 : E
 
 var a5: Foo | string;
 >a5 : string | Foo
@@ -52,7 +52,7 @@ var ra3 = a3 in x;
 var ra4 = a4 in x;
 >ra4 : boolean
 >a4 in x : boolean
->a4 : E.a
+>a4 : E
 >x : any
 
 var ra5 = null in x;
@@ -69,9 +69,9 @@ var ra6 = undefined in x;
 var ra7 = E.a in x;
 >ra7 : boolean
 >E.a in x : boolean
->E.a : E.a
+>E.a : E
 >E : typeof E
->a : E.a
+>a : E
 >x : any
 
 var ra8 = false in x;

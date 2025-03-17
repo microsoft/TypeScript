@@ -55,18 +55,7 @@
  >(a) => a : (a: Date) => Date
  >a : Date
  >a : Date
-@@= skipped -10, +10 lines =@@
-     }
- 
-     enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
-     enum F { A }
-->F : F
-+>F : F.A
- >A : F.A
+@@= skipped -19, +19 lines =@@
  
      function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
  >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
@@ -74,42 +63,7 @@
  >x : T
  >a : (x: T) => T
  >x : T
-@@= skipped -24, +25 lines =@@
-     }
- 
-     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
-->r7 : (x: E) => E
-->foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
-+>r7 : (x: E.A) => E.A
-+>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E.A) => E.A
- >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-->(x) => E.A : (x: E) => E
-->x : E
-->E.A : E
-+>A : E.A
-+>(x) => E.A : (x: E.A) => E.A
-+>x : E.A
-+>E.A : E.A
- >E : typeof E
-->A : E
-->(x) => F.A : (x: E) => F
-->x : E
-->F.A : F
-+>A : E.A
-+>(x) => F.A : (x: E.A) => F.A
-+>x : E.A
-+>F.A : F.A
- >F : typeof F
-->A : F
-+>A : F.A
- }
- 
- module TU {
-@@= skipped -23, +23 lines =@@
+@@= skipped -38, +39 lines =@@
  
      function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
  >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
@@ -166,18 +120,7 @@
  >(a) => a : (a: Date) => Date
  >a : Date
  >a : Date
-@@= skipped -10, +10 lines =@@
-     }
- 
-     enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
-     enum F { A }
-->F : F
-+>F : F.A
- >A : F.A
+@@= skipped -19, +19 lines =@@
  
      function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
  >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
@@ -185,35 +128,3 @@
  >x : T
  >a : (x: T) => T
  >x : T
-@@= skipped -24, +25 lines =@@
-     }
- 
-     var r7 = foo3(E.A, (x) => E.A, (x) => F.A);
-->r7 : (x: E) => E
-->foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
-+>r7 : (x: E.A) => E.A
-+>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E.A) => E.A
- >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-->(x) => E.A : (x: E) => E
-->x : E
-->E.A : E
-+>A : E.A
-+>(x) => E.A : (x: E.A) => E.A
-+>x : E.A
-+>E.A : E.A
- >E : typeof E
-->A : E
-->(x) => F.A : (x: U) => F
-+>A : E.A
-+>(x) => F.A : (x: U) => F.A
- >x : U
-->F.A : F
-+>F.A : F.A
- >F : typeof F
-->A : F
-+>A : F.A
- }

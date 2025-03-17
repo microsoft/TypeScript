@@ -2,7 +2,7 @@
 
 === verbatimModuleSyntaxConstEnum.ts ===
 export const enum E {
->E : E.A
+>E : E
 
     A = 1,
 >A : E.A

@@ -2,17 +2,17 @@
 
 === mergedDeclarations2.ts ===
 enum Foo {
->Foo : Foo.b
+>Foo : Foo
 
     b
 >b : Foo.b
 }
 enum Foo {
->Foo : Foo.b
+>Foo : Foo
 
     a = b
 >a : Foo.b
->b : Foo.b
+>b : Foo
 }
 
 module Foo {

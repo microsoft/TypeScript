@@ -7,11 +7,7 @@
 ->undefined : undefined
  
  enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- E = x;
+ >E : E
 @@= skipped -31, +30 lines =@@
  >x : any
  

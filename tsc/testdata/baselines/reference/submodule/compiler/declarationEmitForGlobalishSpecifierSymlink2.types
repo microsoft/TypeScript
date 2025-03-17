@@ -2,10 +2,10 @@
 
 === /cache/typescript-fsa/src/impl.d.ts ===
 export function getA(): A;
->getA : () => A.Val
+>getA : () => A
 
 export enum A {
->A : A.Val
+>A : A
 
     Val
 >Val : A.Val
@@ -18,15 +18,15 @@ import * as _whatever from "p2";
 >_whatever : typeof import("/p2/index")
 
 import { getA } from "typescript-fsa";
->getA : () => A.Val
+>getA : () => A
 
 export const a = getA();
->a : A.Val
->getA() : A.Val
->getA : () => A.Val
+>a : A
+>getA() : A
+>getA : () => A
 
 === /p2/index.d.ts ===
 export const a: import("typescript-fsa").A;
->a : A.Val
+>a : A
 
 

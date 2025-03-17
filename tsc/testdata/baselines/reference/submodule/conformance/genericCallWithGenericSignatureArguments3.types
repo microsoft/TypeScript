@@ -91,30 +91,30 @@ var r5 = foo(new Object(), (x) => '', (x) => ''); // Object => Object
 >'' : ""
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 enum F { A }
->F : F.A
+>F : F
 >A : F.A
 
 var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number 
 >r6 : (x: number) => number
 >foo(E.A, (x: number) => E.A, (x: F) => F.A) : (x: number) => number
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
->(x: number) => E.A : (x: number) => E.A
+>A : E
+>(x: number) => E.A : (x: number) => E
 >x : number
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
->(x: F) => F.A : (x: F.A) => F.A
->x : F.A
->F.A : F.A
+>A : E
+>(x: F) => F.A : (x: F) => F
+>x : F
+>F.A : F
 >F : typeof F
->A : F.A
+>A : F
 
 
 function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {

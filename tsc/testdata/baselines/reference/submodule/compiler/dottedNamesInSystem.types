@@ -11,15 +11,15 @@ export namespace A.B.C {
 }
 
 export function bar() {
->bar : () => any
+>bar : () => void
 
     return A.B.C.foo();
->A.B.C.foo() : any
->A.B.C.foo : any
->A.B.C : any
->A.B : any
+>A.B.C.foo() : void
+>A.B.C.foo : () => void
+>A.B.C : typeof C
+>A.B : typeof B
 >A : typeof A
->B : any
->C : any
->foo : any
+>B : typeof B
+>C : typeof C
+>foo : () => void
 }

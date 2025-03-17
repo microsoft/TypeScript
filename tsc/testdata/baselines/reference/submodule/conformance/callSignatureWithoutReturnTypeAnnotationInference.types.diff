@@ -55,12 +55,3 @@
      y: number;
  >y : number
  }
-@@= skipped -69, +73 lines =@@
- >foo14 : () => typeof c1
- 
- enum e1 { A }
-->e1 : e1
-+>e1 : e1.A
- >A : e1.A
- 
- module e1 { export var y = 1; }

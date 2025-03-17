@@ -1,24 +1,6 @@
 --- old.ambientErrors.types
 +++ new.ambientErrors.types
-@@= skipped -44, +44 lines =@@
- 
- // Ambient enum with non - integer literal constant member
- declare enum E1 {
-->E1 : E1
-+>E1 : E1.y
- 
-     y = 4.23
- >y : E1.y
-@@= skipped -9, +9 lines =@@
- 
- // Ambient enum with computer member
- declare enum E2 {
-->E2 : E2
-+>E2 : E2.x
- 
-     x = 'foo'.length
- >x : E2.x
-@@= skipped -42, +42 lines =@@
+@@= skipped -95, +95 lines =@@
  
  // Ambient external module not in the global module
  module M2 {

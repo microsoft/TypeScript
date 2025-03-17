@@ -2,7 +2,7 @@
 
 === noImplicitAnyIndexing.ts ===
 enum MyEmusEnum {
->MyEmusEnum : MyEmusEnum.emu
+>MyEmusEnum : MyEmusEnum
 
     emu
 >emu : MyEmusEnum.emu
@@ -20,9 +20,9 @@ var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
 >strRepresentation2 : string
 >MyEmusEnum[MyEmusEnum.emu] : string
 >MyEmusEnum : typeof MyEmusEnum
->MyEmusEnum.emu : MyEmusEnum.emu
+>MyEmusEnum.emu : MyEmusEnum
 >MyEmusEnum : typeof MyEmusEnum
->emu : MyEmusEnum.emu
+>emu : MyEmusEnum
 
 // Should be implicit 'any' ; property access fails, no string indexer.
 var strRepresentation3 = MyEmusEnum["monehh"];
@@ -33,8 +33,8 @@ var strRepresentation3 = MyEmusEnum["monehh"];
 
 // Should be okay; should be a MyEmusEnum
 var strRepresentation4 = MyEmusEnum["emu"];
->strRepresentation4 : MyEmusEnum.emu
->MyEmusEnum["emu"] : MyEmusEnum.emu
+>strRepresentation4 : MyEmusEnum
+>MyEmusEnum["emu"] : MyEmusEnum
 >MyEmusEnum : typeof MyEmusEnum
 >"emu" : "emu"
 
@@ -111,9 +111,9 @@ var mResult1 = m[MyEmusEnum.emu];
 >mResult1 : number
 >m[MyEmusEnum.emu] : number
 >m : MyMap<number>
->MyEmusEnum.emu : MyEmusEnum.emu
+>MyEmusEnum.emu : MyEmusEnum
 >MyEmusEnum : typeof MyEmusEnum
->emu : MyEmusEnum.emu
+>emu : MyEmusEnum
 
 var mResult2 = m[MyEmusEnum[MyEmusEnum.emu]];
 >mResult2 : number
@@ -121,9 +121,9 @@ var mResult2 = m[MyEmusEnum[MyEmusEnum.emu]];
 >m : MyMap<number>
 >MyEmusEnum[MyEmusEnum.emu] : string
 >MyEmusEnum : typeof MyEmusEnum
->MyEmusEnum.emu : MyEmusEnum.emu
+>MyEmusEnum.emu : MyEmusEnum
 >MyEmusEnum : typeof MyEmusEnum
->emu : MyEmusEnum.emu
+>emu : MyEmusEnum
 
 var mResult3 = m[hi];
 >mResult3 : number

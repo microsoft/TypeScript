@@ -60,12 +60,7 @@
  >x : string
  
  type Meters = number
- >Meters : number
- 
- enum E { x = 10 }
-->E : E
-+>E : E.x
- >x : E.x
+@@= skipped -20, +20 lines =@@
  >10 : 10
  
  declare function f15(a: string): boolean;
@@ -83,12 +78,7 @@
  >f15(E.x).toLowerCase : () => string
  >f15(E.x) : string
 ->f15 : { (a: string): boolean; (a: Meters): string; }
-->E.x : E
 +>f15 : { (a: string): boolean; (a: number): string; }
-+>E.x : E.x
+ >E.x : E
  >E : typeof E
-->x : E
-+>x : E.x
- >toLowerCase : () => string
- 
- type StringAndBoolean = [string, boolean]
+ >x : E

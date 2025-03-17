@@ -9,27 +9,24 @@
 ->TypeScript.Strasse.Street.Rue : typeof TypeScript.Strasse.Street.Rue
 ->TypeScript.Strasse.Street : typeof TypeScript.Strasse.Street
 ->TypeScript.Strasse : typeof TypeScript.Strasse
-+>rue : any
-+>new TypeScript.Strasse.Street.Rue() : any
-+>TypeScript.Strasse.Street.Rue : any
-+>TypeScript.Strasse.Street : any
-+>TypeScript.Strasse : any
++>rue : Rue
++>new TypeScript.Strasse.Street.Rue() : Rue
++>TypeScript.Strasse.Street.Rue : typeof Rue
++>TypeScript.Strasse.Street : typeof Street
++>TypeScript.Strasse : typeof Strasse
  >TypeScript : typeof TypeScript
 ->Strasse : typeof TypeScript.Strasse
 ->Street : typeof TypeScript.Strasse.Street
 ->Rue : typeof TypeScript.Strasse.Street.Rue
-+>Strasse : any
-+>Street : any
-+>Rue : any
++>Strasse : typeof Strasse
++>Street : typeof Street
++>Rue : typeof Rue
  
  rue.address = "1 Main Street";
  >rue.address = "1 Main Street" : "1 Main Street"
-->rue.address : string
+ >rue.address : string
 ->rue : TypeScript.Strasse.Street.Rue
-->address : string
-+>rue.address : any
-+>rue : any
-+>address : any
++>rue : Rue
+ >address : string
  >"1 Main Street" : "1 Main Street"
  
- void 0;

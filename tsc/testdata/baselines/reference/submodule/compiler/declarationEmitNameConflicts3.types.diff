@@ -9,14 +9,7 @@
      export module D {
  >D : typeof D
  
-@@= skipped -35, +37 lines =@@
- >C : C
- 
-     export enum D {
-->D : D
-+>D : D.f
- 
-         f
+@@= skipped -41, +43 lines =@@
  >f : D.f
      }
      export var v: M.D; // ok

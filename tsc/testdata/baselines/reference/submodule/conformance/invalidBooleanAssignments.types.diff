@@ -8,16 +8,6 @@
  >x : true
  
  enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- var e: E = x;
-->e : E
-+>e : E.A
- >x : true
- 
- class C { foo: string }
 @@= skipped -20, +19 lines =@@
  >x : true
  

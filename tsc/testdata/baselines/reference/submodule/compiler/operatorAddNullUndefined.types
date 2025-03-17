@@ -2,7 +2,7 @@
 
 === operatorAddNullUndefined.ts ===
 enum E { x }
->E : E.x
+>E : E
 >x : E.x
 
 var x1 = null + null;
@@ -72,30 +72,30 @@ var x12 = undefined + "test";
 var x13 = null + E.x
 >x13 : any
 >null + E.x : any
->E.x : E.x
+>E.x : E
 >E : typeof E
->x : E.x
+>x : E
 
 var x14 = undefined + E.x
 >x14 : any
 >undefined + E.x : any
 >undefined : undefined
->E.x : E.x
+>E.x : E
 >E : typeof E
->x : E.x
+>x : E
 
 var x15 = E.x + null
 >x15 : any
 >E.x + null : any
->E.x : E.x
+>E.x : E
 >E : typeof E
->x : E.x
+>x : E
 
 var x16 = E.x + undefined
 >x16 : any
 >E.x + undefined : any
->E.x : E.x
+>E.x : E
 >E : typeof E
->x : E.x
+>x : E
 >undefined : undefined
 

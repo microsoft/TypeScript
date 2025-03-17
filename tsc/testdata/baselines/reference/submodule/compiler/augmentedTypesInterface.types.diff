@@ -33,10 +33,7 @@
      foo(): void;
  >foo : () => void
  }
- enum i3 { One }; // error
-->i3 : i3
-+>i3 : i3.One
- >One : i3.One
+@@= skipped -9, +11 lines =@@
  
  // interface then import
  interface i4 {

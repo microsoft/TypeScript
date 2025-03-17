@@ -144,7 +144,7 @@ class D10 extends Base {
 }
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 class D11 extends Base {
@@ -152,7 +152,7 @@ class D11 extends Base {
 >Base : Base
 
     foo: E;
->foo : E.A
+>foo : E
 }
 
 function f() { }

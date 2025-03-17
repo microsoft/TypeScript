@@ -1,24 +1,6 @@
 --- old.constEnumErrors.types
 +++ new.constEnumErrors.types
-@@= skipped -1, +1 lines =@@
- 
- === constEnumErrors.ts ===
- const enum E {
-->E : E
-+>E : E.A
- 
-     A
- >A : E.A
-@@= skipped -38, +38 lines =@@
- }
- 
- const enum E2 {
-->E2 : E2
-+>E2 : E2.A
- 
-     A
- >A : E2.A
-@@= skipped -34, +34 lines =@@
+@@= skipped -73, +73 lines =@@
  >E2 : typeof E2
  
  var y = [E2];

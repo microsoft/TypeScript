@@ -1,15 +1,6 @@
 --- old.duplicateIdentifierEnum.types
 +++ new.duplicateIdentifierEnum.types
-@@= skipped -1, +1 lines =@@
- 
- === duplicateIdentifierEnum_A.ts ===
- enum A {
-->A : A
-+>A : A.bar
- 
-     bar
- >bar : A.bar
-@@= skipped -13, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  }
  
  interface B {
@@ -18,27 +9,3 @@
      foo: number;
  >foo : number
  }
- const enum B {
-->B : B
-+>B : B.bar
- 
-     bar
- >bar : B.bar
-@@= skipped -22, +24 lines =@@
- }
- 
- enum D {
-->D : D
-+>D : D.bar
- 
-     bar
- >bar : D.bar
-@@= skipped -20, +20 lines =@@
- >0 : 0
- }
- enum E {
-->E : E
-+>E : E.bar
- 
-     bar
- >bar : E.bar

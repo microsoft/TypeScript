@@ -62,11 +62,11 @@ foo({
 });
 
 enum E1 { X }
->E1 : E1.X
+>E1 : E1
 >X : E1.X
 
 enum E2 { X }
->E2 : E2.X
+>E2 : E2
 >X : E2.X
 
 // Check that we infer from both a.r and b before fixing T in a.w
@@ -110,62 +110,62 @@ var v1 = f1({ w: x => x, r: () => 0 }, E1.X);
 >r : () => number
 >() => 0 : () => number
 >0 : 0
->E1.X : E1.X
+>E1.X : E1
 >E1 : typeof E1
->X : E1.X
+>X : E1
 
 var v1 = f1({ w: x => x, r: () => E1.X }, 0);
 >v1 : number
 >f1({ w: x => x, r: () => E1.X }, 0) : number
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
->{ w: x => x, r: () => E1.X } : { w: (x: 0) => number; r: () => E1.X; }
+>{ w: x => x, r: () => E1.X } : { w: (x: 0) => number; r: () => E1; }
 >w : (x: 0) => number
 >x => x : (x: 0) => number
 >x : 0
 >x : 0
->r : () => E1.X
->() => E1.X : () => E1.X
->E1.X : E1.X
+>r : () => E1
+>() => E1.X : () => E1
+>E1.X : E1
 >E1 : typeof E1
->X : E1.X
+>X : E1
 >0 : 0
 
 var v2: E1;
->v2 : E1.X
+>v2 : E1
 
 var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);
->v2 : E1.X
->f1({ w: x => x, r: () => E1.X }, E1.X) : E1.X
+>v2 : E1
+>f1({ w: x => x, r: () => E1.X }, E1.X) : E1
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
->{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1.X; r: () => E1.X; }
->w : (x: E1.X) => E1.X
->x => x : (x: E1.X) => E1.X
+>{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1; r: () => E1; }
+>w : (x: E1.X) => E1
+>x => x : (x: E1.X) => E1
 >x : E1.X
->x : E1.X
->r : () => E1.X
->() => E1.X : () => E1.X
->E1.X : E1.X
+>x : E1
+>r : () => E1
+>() => E1.X : () => E1
+>E1.X : E1
 >E1 : typeof E1
->X : E1.X
->E1.X : E1.X
+>X : E1
+>E1.X : E1
 >E1 : typeof E1
->X : E1.X
+>X : E1
 
 var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);  // Error
 >v3 : unknown
 >f1({ w: x => x, r: () => E1.X }, E2.X) : unknown
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
->{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1.X; r: () => E1.X; }
->w : (x: E1.X) => E1.X
->x => x : (x: E1.X) => E1.X
->x : E1.X
->x : E1.X
->r : () => E1.X
->() => E1.X : () => E1.X
->E1.X : E1.X
+>{ w: x => x, r: () => E1.X } : { w: (x: E1) => E1; r: () => E1; }
+>w : (x: E1) => E1
+>x => x : (x: E1) => E1
+>x : E1
+>x : E1
+>r : () => E1
+>() => E1.X : () => E1
+>E1.X : E1
 >E1 : typeof E1
->X : E1.X
->E2.X : E2.X
+>X : E1
+>E2.X : E2
 >E2 : typeof E2
->X : E2.X
+>X : E2
 

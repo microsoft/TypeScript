@@ -216,55 +216,48 @@
  }
  
  module M6.A {
- >M6 : Symbol(M6, Decl(enumMerging.ts, 53, 1), Decl(enumMerging.ts, 57, 1))
-->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
-+>A : Symbol(A, Decl(enumMerging.ts, 55, 10))
+@@= skipped -20, +20 lines =@@
  
      export enum Color { Red, Green, Blue }
-->Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+ >Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
 ->Red : Symbol(Color.Red, Decl(enumMerging.ts, 56, 23))
 ->Green : Symbol(Color.Green, Decl(enumMerging.ts, 56, 28))
 ->Blue : Symbol(Color.Blue, Decl(enumMerging.ts, 56, 35))
-+>Color : Symbol(Color, Decl(enumMerging.ts, 55, 13))
 +>Red : Symbol(Red, Decl(enumMerging.ts, 56, 23))
 +>Green : Symbol(Green, Decl(enumMerging.ts, 56, 28))
 +>Blue : Symbol(Blue, Decl(enumMerging.ts, 56, 35))
  }
  module M6 {
  >M6 : Symbol(M6, Decl(enumMerging.ts, 53, 1), Decl(enumMerging.ts, 57, 1))
- 
-     export module A {
-->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
-+>A : Symbol(A, Decl(enumMerging.ts, 58, 11))
+@@= skipped -12, +12 lines =@@
  
          export enum Color { Yellow = 1 }
-->Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+ >Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
 ->Yellow : Symbol(Color.Yellow, Decl(enumMerging.ts, 60, 27))
-+>Color : Symbol(Color, Decl(enumMerging.ts, 59, 21))
 +>Yellow : Symbol(Yellow, Decl(enumMerging.ts, 60, 27))
      }
      var t = A.Color.Yellow;
  >t : Symbol(t, Decl(enumMerging.ts, 62, 7))
 ->A.Color.Yellow : Symbol(A.Color.Yellow, Decl(enumMerging.ts, 60, 27))
 ->A.Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
-->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
++>A.Color.Yellow : Symbol(Yellow, Decl(enumMerging.ts, 60, 27))
++>A.Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+ >A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
 ->Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
 ->Yellow : Symbol(A.Color.Yellow, Decl(enumMerging.ts, 60, 27))
-+>A.Color.Yellow : Symbol(Yellow, Decl(enumMerging.ts, 60, 27))
-+>A.Color : Symbol(Color, Decl(enumMerging.ts, 59, 21))
-+>A : Symbol(A, Decl(enumMerging.ts, 58, 11))
-+>Color : Symbol(Color, Decl(enumMerging.ts, 59, 21))
++>Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
 +>Yellow : Symbol(Yellow, Decl(enumMerging.ts, 60, 27))
  
      t = A.Color.Red;
  >t : Symbol(t, Decl(enumMerging.ts, 62, 7))
 ->A.Color.Red : Symbol(A.Color.Red, Decl(enumMerging.ts, 56, 23))
 ->A.Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
-->A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
++>A.Color.Red : Symbol(Red, Decl(enumMerging.ts, 56, 23))
++>A.Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+ >A : Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
 ->Color : Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
 ->Red : Symbol(A.Color.Red, Decl(enumMerging.ts, 56, 23))
-+>A.Color : Symbol(Color, Decl(enumMerging.ts, 59, 21))
-+>A : Symbol(A, Decl(enumMerging.ts, 58, 11))
-+>Color : Symbol(Color, Decl(enumMerging.ts, 59, 21))
++>Color : Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
++>Red : Symbol(Red, Decl(enumMerging.ts, 56, 23))
  }
  

@@ -1,87 +1,6 @@
 --- old.enumAssignability.types
 +++ new.enumAssignability.types
-@@= skipped -3, +3 lines =@@
- // enums assignable to number, any, Object, errors unless otherwise noted
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- enum F { B }
-->F : F
-+>F : F.B
- >B : F.B
- 
- var e = E.A;
-->e : E
-->E.A : E
-+>e : E.A
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- 
- var f = F.B;
-->f : F
-->F.B : F
-+>f : F.B
-+>F.B : F.B
- >F : typeof F
-->B : F
-+>B : F.B
- 
- e = f; 
-->e = f : F
-->e : E
-->f : F
-+>e = f : F.B
-+>e : E.A
-+>f : F.B
- 
- f = e; 
-->f = e : E
-->f : F
-->e : E
-+>f = e : E.A
-+>f : F.B
-+>e : E.A
- 
- e = 1; // ok
- >e = 1 : 1
-->e : E
-+>e : E.A
- >1 : 1
- 
- f = 1; // ok
- >f = 1 : 1
-->f : F
-+>f : F.B
- >1 : 1
- 
- var x: number = e; // ok
- >x : number
-->e : E
-+>e : E.A
- 
- x = f; // ok
-->x = f : F
-+>x = f : F.B
- >x : number
-->f : F
-+>f : F.B
- 
- module Others {
- >Others : typeof Others
- 
-     var a: any = e; // ok
- >a : any
-->e : E
-+>e : E.A
- 
-     class C {
- >C : C
-@@= skipped -65, +65 lines =@@
+@@= skipped -68, +68 lines =@@
  >ac : C
  
      interface I {
@@ -90,109 +9,18 @@
          foo: string;
  >foo : string
      }
-@@= skipped -8, +10 lines =@@
- 
-     var b: number = e; // ok
- >b : number
-->e : E
-+>e : E.A
- 
-     var c: string = e;
- >c : string
-->e : E
-+>e : E.A
- 
-     var d: boolean = e;
- >d : boolean
-->e : E
-+>e : E.A
- 
-     var ee: Date = e;
- >ee : Date
-->e : E
-+>e : E.A
- 
-     var f: any = e; // ok
- >f : any
-->e : E
-+>e : E.A
- 
-     var g: void = e;
- >g : void
-->e : E
-+>e : E.A
- 
-     var h: Object = e;
- >h : Object
-->e : E
-+>e : E.A
- 
-     var i: {} = e;
- >i : {}
-->e : E
-+>e : E.A
- 
-     var j: () => {} = e;
- >j : () => {}
-->e : E
-+>e : E.A
- 
-     var k: Function = e;
- >k : Function
-->e : E
-+>e : E.A
- 
-     var l: (x: number) => string = e;
- >l : (x: number) => string
- >x : number
-->e : E
-+>e : E.A
- 
-     ac = e;
-->ac = e : E
-+>ac = e : E.A
- >ac : C
-->e : E
-+>e : E.A
- 
-     ai = e;
-->ai = e : E
-+>ai = e : E.A
- >ai : I
-->e : E
-+>e : E.A
- 
-     var m: number[] = e;
- >m : number[]
-->e : E
-+>e : E.A
- 
-     var n: { foo: string } = e;
- >n : { foo: string; }
- >foo : string
-->e : E
-+>e : E.A
+@@= skipped -72, +74 lines =@@
  
      var o: <T>(x: T) => T = e;
  >o : <T>(x: T) => T
 +>T : T
  >x : T
-->e : E
-+>e : E.A
+ >e : E
  
-     var p: Number = e;
- >p : Number
-->e : E
-+>e : E.A
- 
-     var q: String = e;
- >q : String
-->e : E
-+>e : E.A
+@@= skipped -13, +14 lines =@@
  
      function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
-->foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
-+>foo : <T, U extends T, V extends Date, A extends Number, B extends E.A>(x: T, y: U, z: V) => void
+ >foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
 +>T : T
 +>U : U
 +>V : V
@@ -201,36 +29,3 @@
  >x : T
  >y : U
  >z : V
- 
-         x = e;
-->x = e : E
-+>x = e : E.A
- >x : T
-->e : E
-+>e : E.A
- 
-         y = e;
-->y = e : E
-+>y = e : E.A
- >y : U
-->e : E
-+>e : E.A
- 
-         z = e;
-->z = e : E
-+>z = e : E.A
- >z : V
-->e : E
-+>e : E.A
- 
-         var a: A = e;
- >a : A
-->e : E
-+>e : E.A
- 
-         var b: B = e;
- >b : B
-->e : E
-+>e : E.A
-     }
- }

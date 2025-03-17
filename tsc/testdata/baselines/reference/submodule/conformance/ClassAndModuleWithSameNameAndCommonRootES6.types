@@ -43,8 +43,8 @@ module X.Y {
 >Point : typeof Point
 
         export var Origin = new Point(0, 0);
->Origin : any
->new Point(0, 0) : any
+>Origin : Point
+>new Point(0, 0) : Point
 >Point : typeof Point
 >0 : 0
 >0 : 0
@@ -54,25 +54,25 @@ module X.Y {
 === test.ts ===
 //var cl: { x: number; y: number; }
 var cl = new X.Y.Point(1,1);
->cl : any
->new X.Y.Point(1,1) : any
->X.Y.Point : any
->X.Y : any
+>cl : Point
+>new X.Y.Point(1,1) : Point
+>X.Y.Point : typeof Point
+>X.Y : typeof Y
 >X : typeof X
->Y : any
->Point : any
+>Y : typeof Y
+>Point : typeof Point
 >1 : 1
 >1 : 1
 
 var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
->cl : any
->X.Y.Point.Origin : any
->X.Y.Point : any
->X.Y : any
+>cl : Point
+>X.Y.Point.Origin : Point
+>X.Y.Point : typeof Point
+>X.Y : typeof Y
 >X : typeof X
->Y : any
->Point : any
->Origin : any
+>Y : typeof Y
+>Point : typeof Point
+>Origin : Point
 
 
 === simple.ts ===

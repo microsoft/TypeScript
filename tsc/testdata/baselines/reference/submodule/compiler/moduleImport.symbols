@@ -27,6 +27,8 @@ module X {
 	import ABC = A.B.C;
 >ABC : Symbol(ABC, Decl(moduleImport.ts, 7, 10))
 >A : Symbol(A, Decl(moduleImport.ts, 0, 0))
+>B : Symbol(B, Decl(moduleImport.ts, 0, 9))
+>C : Symbol(C, Decl(moduleImport.ts, 0, 11))
 
 	export function pong(x: number) {
 >pong : Symbol(pong, Decl(moduleImport.ts, 8, 20))
@@ -34,7 +36,9 @@ module X {
 
 		if (x > 0) ABC.ping(x-1);
 >x : Symbol(x, Decl(moduleImport.ts, 9, 22))
+>ABC.ping : Symbol(ping, Decl(moduleImport.ts, 1, 20))
 >ABC : Symbol(ABC, Decl(moduleImport.ts, 7, 10))
+>ping : Symbol(ping, Decl(moduleImport.ts, 1, 20))
 >x : Symbol(x, Decl(moduleImport.ts, 9, 22))
 	}
 }

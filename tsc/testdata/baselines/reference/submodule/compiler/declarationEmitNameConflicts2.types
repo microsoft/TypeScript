@@ -29,42 +29,42 @@ module X.Y.base.Z {
 >Z : typeof Z
 
     export var f = X.Y.base.f; // Should be base.f
->f : any
->X.Y.base.f : any
->X.Y.base : any
->X.Y : any
+>f : () => void
+>X.Y.base.f : () => void
+>X.Y.base : typeof base
+>X.Y : typeof Y
 >X : typeof X
->Y : any
->base : any
->f : any
+>Y : typeof Y
+>base : typeof base
+>f : () => void
 
     export var C = X.Y.base.C; // Should be base.C
->C : any
->X.Y.base.C : any
->X.Y.base : any
->X.Y : any
+>C : typeof C
+>X.Y.base.C : typeof C
+>X.Y.base : typeof base
+>X.Y : typeof Y
 >X : typeof X
->Y : any
->base : any
->C : any
+>Y : typeof Y
+>base : typeof base
+>C : typeof C
 
     export var M = X.Y.base.M; // Should be base.M
->M : any
->X.Y.base.M : any
->X.Y.base : any
->X.Y : any
+>M : typeof M
+>X.Y.base.M : typeof M
+>X.Y.base : typeof base
+>X.Y : typeof Y
 >X : typeof X
->Y : any
->base : any
->M : any
+>Y : typeof Y
+>base : typeof base
+>M : typeof M
 
     export var E = X.Y.base.E; // Should be base.E
->E : any
->X.Y.base.E : any
->X.Y.base : any
->X.Y : any
+>E : typeof E
+>X.Y.base.E : typeof E
+>X.Y.base : typeof base
+>X.Y : typeof Y
 >X : typeof X
->Y : any
->base : any
->E : any
+>Y : typeof Y
+>base : typeof base
+>E : typeof E
 }

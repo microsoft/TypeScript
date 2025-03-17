@@ -37,45 +37,7 @@
  >foo : T
  
  var c2: C2<number>;
-@@= skipped -18, +19 lines =@@
- >c2 : C2<number>
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- var r13 = true ? E : null;
-@@= skipped -16, +16 lines =@@
- >E : typeof E
- 
- var r14 = true ? E.A : null;
-->r14 : E
-->true ? E.A : null : E
-+>r14 : E.A
-+>true ? E.A : null : E.A
- >true : true
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- 
- var r14 = true ? null : E.A;
-->r14 : E
-->true ? null : E.A : E
-+>r14 : E.A
-+>true ? null : E.A : E.A
- >true : true
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- 
- function f() { }
- >f : typeof f
-@@= skipped -27, +27 lines =@@
+@@= skipped -61, +62 lines =@@
  }
  var af: typeof f;
  >af : typeof f

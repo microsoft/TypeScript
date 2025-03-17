@@ -29,7 +29,7 @@ module Foo.Bar {
 >foo : Symbol(foo, Decl(sourceMapSample.ts, 10, 5))
 >greeting : Symbol(greeting, Decl(sourceMapSample.ts, 13, 17))
 >Foo : Symbol(Foo, Decl(sourceMapSample.ts, 0, 0))
->Bar : Symbol(Bar)
+>Bar : Symbol(Bar, Decl(sourceMapSample.ts, 0, 11))
 >Greeter : Symbol(Greeter)
 
         return new Greeter(greeting);

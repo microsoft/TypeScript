@@ -73,12 +73,3 @@
  >{ x: '' } : { x: string; }
  >x : string
  >'' : ""
-@@= skipped -181, +181 lines =@@
- }
- 
- enum E {
-->E : E
-+>E : E.A
- 
-     A
- >A : E.A

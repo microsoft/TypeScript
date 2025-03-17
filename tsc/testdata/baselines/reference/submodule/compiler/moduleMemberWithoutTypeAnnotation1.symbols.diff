@@ -20,12 +20,14 @@
  
              return Syntax.childIndex();
 ->Syntax.childIndex : Symbol(Syntax.childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
-->Syntax : Symbol(Syntax, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 18))
++>Syntax.childIndex : Symbol(childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
+ >Syntax : Symbol(Syntax, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 18))
 ->childIndex : Symbol(Syntax.childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
++>childIndex : Symbol(childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
          }
      }
  
-@@= skipped -31, +28 lines =@@
+@@= skipped -31, +31 lines =@@
  >SyntaxNode : Symbol(SyntaxNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 24, 19))
  
          public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {

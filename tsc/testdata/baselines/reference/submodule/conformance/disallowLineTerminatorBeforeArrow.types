@@ -193,7 +193,7 @@ module m {
     }
 
     export enum Enum {
->Enum : Enum.claw
+>Enum : Enum
 
         claw = (()
 >claw : Enum.claw
@@ -213,8 +213,8 @@ module m {
         => new City(Enum.claw);
 >new City(Enum.claw) : City
 >City : typeof City
->Enum.claw : Enum.claw
+>Enum.claw : Enum
 >Enum : typeof Enum
->claw : Enum.claw
+>claw : Enum
 }
 

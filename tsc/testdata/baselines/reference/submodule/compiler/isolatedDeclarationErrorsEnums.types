@@ -50,7 +50,7 @@ enum F {
 
 
 enum Flag {
->Flag : Flag.A
+>Flag : Flag
 
     A = 1 >> 1,
 >A : Flag.A
@@ -73,24 +73,24 @@ enum Flag {
     AB = A | B,
 >AB : Flag.A
 >A | B : number
->A : Flag.A
->B : Flag.A
+>A : Flag
+>B : Flag
 
     ABC = Flag.AB | C,
 >ABC : Flag.A
 >Flag.AB | C : number
->Flag.AB : Flag.A
+>Flag.AB : Flag
 >Flag : typeof Flag
->AB : Flag.A
->C : Flag.A
+>AB : Flag
+>C : Flag
 
     AC = Flag["A"] | C,
 >AC : Flag.A
 >Flag["A"] | C : number
->Flag["A"] : Flag.A
+>Flag["A"] : Flag
 >Flag : typeof Flag
 >"A" : "A"
->C : Flag.A
+>C : Flag
 }
 
 const EV = 1;
@@ -113,15 +113,15 @@ enum ExtFlags {
     ABCD = Flag.ABC | D,
 >ABCD : ExtFlags.D
 >Flag.ABC | D : number
->Flag.ABC : Flag.A
+>Flag.ABC : Flag
 >Flag : typeof Flag
->ABC : Flag.A
+>ABC : Flag
 >D : ExtFlags.D
 
     AC = Flag["A"] | D,
 >AC : ExtFlags.D
 >Flag["A"] | D : number
->Flag["A"] : Flag.A
+>Flag["A"] : Flag
 >Flag : typeof Flag
 >"A" : "A"
 >D : ExtFlags.D

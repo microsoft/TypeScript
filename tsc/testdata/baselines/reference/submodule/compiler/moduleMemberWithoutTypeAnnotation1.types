@@ -29,14 +29,14 @@ module TypeScript {
 >PositionedElement : PositionedElement
 
         public childIndex(child: ISyntaxElement) {
->childIndex : (child: ISyntaxElement) => any
+>childIndex : (child: ISyntaxElement) => void
 >child : ISyntaxElement
 
             return Syntax.childIndex();
->Syntax.childIndex() : any
->Syntax.childIndex : any
->Syntax : any
->childIndex : any
+>Syntax.childIndex() : void
+>Syntax.childIndex : () => void
+>Syntax : typeof Syntax
+>childIndex : () => void
         }
     }
 

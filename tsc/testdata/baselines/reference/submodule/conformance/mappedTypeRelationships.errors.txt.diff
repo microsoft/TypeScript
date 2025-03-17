@@ -1,30 +1,6 @@
 --- old.mappedTypeRelationships.errors.txt
 +++ new.mappedTypeRelationships.errors.txt
-@@= skipped -9, +9 lines =@@
- mappedTypeRelationships.ts(26,12): error TS2536: Type 'K' cannot be used to index type 'T'.
- mappedTypeRelationships.ts(30,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
-+    Type 'undefined' is not assignable to type 'T[keyof T]'.
-+      'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
- mappedTypeRelationships.ts(35,5): error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
-   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
-+    Type 'undefined' is not assignable to type 'T[K]'.
-+      'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
- mappedTypeRelationships.ts(40,5): error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
-   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T] | undefined'.
-+    Type 'undefined' is not assignable to type 'T[keyof T]'.
-+      'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
- mappedTypeRelationships.ts(41,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
-   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[keyof T] | undefined'.
-     Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
- mappedTypeRelationships.ts(45,5): error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
-   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K] | undefined'.
-+    Type 'undefined' is not assignable to type 'T[K]'.
-+      'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
- mappedTypeRelationships.ts(46,5): error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-   Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
-     Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'U[K] | undefined'.
-@@= skipped -28, +36 lines =@@
+@@= skipped -37, +37 lines =@@
  mappedTypeRelationships.ts(78,5): error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
  mappedTypeRelationships.ts(88,5): error TS2322: Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'.
  mappedTypeRelationships.ts(127,5): error TS2322: Type 'Partial<U>' is not assignable to type 'Identity<U>'.
@@ -67,43 +43,7 @@
    Type 'T[P]' is not assignable to type 'U[P]'.
      Type 'T' is not assignable to type 'U'.
        'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-@@= skipped -87, +87 lines =@@
-         ~~~~
- !!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
- !!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'T[keyof T] | undefined'.
-+!!! error TS2322:     Type 'undefined' is not assignable to type 'T[keyof T]'.
-+!!! error TS2322:       'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
-         y[k] = x[k];
-     }
-     
-@@= skipped -8, +10 lines =@@
-         ~~~~
- !!! error TS2322: Type 'T[K] | undefined' is not assignable to type 'T[K]'.
- !!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'T[K] | undefined'.
-+!!! error TS2322:     Type 'undefined' is not assignable to type 'T[K]'.
-+!!! error TS2322:       'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
-         y[k] = x[k];
-     }
-     
-@@= skipped -8, +10 lines =@@
-         ~~~~
- !!! error TS2322: Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'.
- !!! error TS2322:   'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'U[keyof T] | undefined'.
-+!!! error TS2322:     Type 'undefined' is not assignable to type 'T[keyof T]'.
-+!!! error TS2322:       'T[keyof T]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
-         y[k] = x[k];  // Error
-         ~~~~
- !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
-@@= skipped -12, +14 lines =@@
-         ~~~~
- !!! error TS2322: Type 'U[K] | undefined' is not assignable to type 'T[K]'.
- !!! error TS2322:   'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'U[K] | undefined'.
-+!!! error TS2322:     Type 'undefined' is not assignable to type 'T[K]'.
-+!!! error TS2322:       'T[K]' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
-         y[k] = x[k];  // Error
-         ~~~~
- !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K] | undefined'.
-@@= skipped -131, +133 lines =@@
+@@= skipped -246, +246 lines =@@
          x = y;
          y = x;  // Error
          ~

@@ -1,14 +1,6 @@
 --- old.exportCodeGen.types
 +++ new.exportCodeGen.types
-@@= skipped -66, +66 lines =@@
- >E : typeof E
- 
-     export enum Color { Red }
-->Color : Color
-+>Color : Color.Red
- >Red : Color.Red
- 
-     export function fn() { }
+@@= skipped -73, +73 lines =@@
  >fn : () => void
  
      export interface I { id: number }
@@ -17,14 +9,6 @@
  
      export class C { name: string }
 @@= skipped -28, +29 lines =@@
- >F : typeof F
- 
-     enum Color { Red }
-->Color : Color
-+>Color : Color.Red
- >Red : Color.Red
- 
-     function fn() { }
  >fn : () => void
  
      interface I { id: number }

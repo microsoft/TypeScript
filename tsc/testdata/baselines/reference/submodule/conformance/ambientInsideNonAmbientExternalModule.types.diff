@@ -5,7 +5,7 @@
  
  export declare enum E { }
 ->E : E
-+>E : "ambientInsideNonAmbientExternalModule".E
++>E : import("ambientInsideNonAmbientExternalModule").E
  
  export declare module M { }
 +>M : any

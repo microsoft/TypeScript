@@ -8,11 +8,4 @@
 +>M : typeof M
  
      import M = Z.M;
-->M : typeof M
-+>M : any
- >Z : typeof Z
-->M : typeof M
-+>M : any
- 
-     export function bar() {
- >bar : () => void
+ >M : typeof M

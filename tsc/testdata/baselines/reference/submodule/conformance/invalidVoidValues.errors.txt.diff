@@ -1,11 +1,7 @@
 --- old.invalidVoidValues.errors.txt
 +++ new.invalidVoidValues.errors.txt
-@@= skipped -1, +1 lines =@@
- invalidVoidValues.ts(3,1): error TS2322: Type 'string' is not assignable to type 'void'.
- invalidVoidValues.ts(4,1): error TS2322: Type 'boolean' is not assignable to type 'void'.
- invalidVoidValues.ts(7,1): error TS2322: Type 'typeof E' is not assignable to type 'void'.
--invalidVoidValues.ts(8,1): error TS2322: Type 'E' is not assignable to type 'void'.
-+invalidVoidValues.ts(8,1): error TS2322: Type 'E.A' is not assignable to type 'void'.
+@@= skipped -4, +4 lines =@@
+ invalidVoidValues.ts(8,1): error TS2322: Type 'E' is not assignable to type 'void'.
  invalidVoidValues.ts(12,1): error TS2322: Type 'C' is not assignable to type 'void'.
  invalidVoidValues.ts(16,1): error TS2322: Type 'I' is not assignable to type 'void'.
 -invalidVoidValues.ts(18,1): error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.
@@ -13,16 +9,7 @@
  invalidVoidValues.ts(21,1): error TS2322: Type 'typeof M' is not assignable to type 'void'.
  invalidVoidValues.ts(24,5): error TS2322: Type 'T' is not assignable to type 'void'.
  invalidVoidValues.ts(26,5): error TS2322: Type '<T>(a: T) => void' is not assignable to type 'void'.
-@@= skipped -27, +27 lines =@@
- !!! error TS2322: Type 'typeof E' is not assignable to type 'void'.
-     x = E.A;
-     ~
--!!! error TS2322: Type 'E' is not assignable to type 'void'.
-+!!! error TS2322: Type 'E.A' is not assignable to type 'void'.
-     
-     class C { foo: string }
-     var a: C;
-@@= skipped -16, +16 lines =@@
+@@= skipped -40, +40 lines =@@
      
      x = { f() {} }
      ~

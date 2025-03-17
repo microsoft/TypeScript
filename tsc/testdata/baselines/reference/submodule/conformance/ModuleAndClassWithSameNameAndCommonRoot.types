@@ -9,8 +9,8 @@ module X.Y {
 >Point : typeof Point
 
         export var Origin = new Point(0, 0);
->Origin : any
->new Point(0, 0) : any
+>Origin : Point
+>new Point(0, 0) : Point
 >Point : typeof Point
 >0 : 0
 >0 : 0

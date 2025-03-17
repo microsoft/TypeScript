@@ -124,12 +124,7 @@
  >x : T
  
      foo: any;
-@@= skipped -10, +13 lines =@@
- 
- 
- enum E { A }
-->E : E
-+>E : E.A
+@@= skipped -14, +17 lines =@@
  >A : E.A
  
  interface I14 {
@@ -138,7 +133,7 @@
      [x: string]: E;
  >x : string
  
-@@= skipped -23, +25 lines =@@
+@@= skipped -19, +21 lines =@@
  >1 : 1
  }
  interface I15 {

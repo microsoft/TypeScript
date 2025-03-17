@@ -10,8 +10,7 @@
 +>MyEnumFromModule : typeof MyEnum
  
  enum MyEnum {
-->MyEnum : MyEnum
-+>MyEnum : MyEnum.a
+ >MyEnum : MyEnum
  
    a = MyEnumFromModule.a
  >a : MyEnum.a

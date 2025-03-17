@@ -25,6 +25,7 @@
  >e : Symbol(e, Decl(moduledecl.ts, 11, 17))
  >b : Symbol(b, Decl(moduledecl.ts, 1, 1))
 ->a : Symbol(e, Decl(moduledecl.ts, 3, 9))
++>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
  
      import d1 = a;
  >d1 : Symbol(d1, Decl(moduledecl.ts, 12, 19))
@@ -35,10 +36,11 @@
  >e1 : Symbol(e1, Decl(moduledecl.ts, 13, 18))
  >b : Symbol(b, Decl(moduledecl.ts, 1, 1))
 ->a : Symbol(e, Decl(moduledecl.ts, 3, 9))
++>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
  }
  
  module m0 {
-@@= skipped -41, +39 lines =@@
+@@= skipped -41, +41 lines =@@
  >c1 : Symbol(c1, Decl(moduledecl.ts, 24, 5))
  
          public a : ()=>string;
@@ -76,6 +78,7 @@
 ->b : Symbol(m3, Decl(moduledecl.ts, 1, 1))
 ->a : Symbol(m3.a, Decl(moduledecl.ts, 3, 9))
 +>b : Symbol(b, Decl(moduledecl.ts, 1, 1))
++>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
  
      import m5 = c;
  >m5 : Symbol(m5, Decl(moduledecl.ts, 40, 20))
@@ -87,6 +90,7 @@
 ->c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
 ->a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
 +>c : Symbol(c, Decl(moduledecl.ts, 4, 1))
++>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
  
      import m7 = c.a.b;
  >m7 : Symbol(m7, Decl(moduledecl.ts, 42, 20))
@@ -94,10 +98,12 @@
 ->a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
 ->b : Symbol(m6.b, Decl(moduledecl.ts, 6, 11))
 +>c : Symbol(c, Decl(moduledecl.ts, 4, 1))
++>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
++>b : Symbol(b, Decl(moduledecl.ts, 6, 11))
  }
  
  module m1 {
-@@= skipped -51, +47 lines =@@
+@@= skipped -51, +51 lines =@@
  >c1 : Symbol(c1, Decl(moduledecl.ts, 53, 5))
  
          public a: () =>string;
@@ -158,6 +164,7 @@
 ->b : Symbol(m3, Decl(moduledecl.ts, 1, 1))
 ->a : Symbol(m3.a, Decl(moduledecl.ts, 3, 9))
 +>b : Symbol(b, Decl(moduledecl.ts, 1, 1))
++>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
  
      import m5 = c;
  >m5 : Symbol(m5, Decl(moduledecl.ts, 77, 20))
@@ -169,6 +176,7 @@
 ->c : Symbol(m5, Decl(moduledecl.ts, 4, 1))
 ->a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
 +>c : Symbol(c, Decl(moduledecl.ts, 4, 1))
++>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
  
      import m7 = c.a.b;
  >m7 : Symbol(m7, Decl(moduledecl.ts, 79, 20))
@@ -176,10 +184,12 @@
 ->a : Symbol(m5.a, Decl(moduledecl.ts, 6, 9))
 ->b : Symbol(m6.b, Decl(moduledecl.ts, 6, 11))
 +>c : Symbol(c, Decl(moduledecl.ts, 4, 1))
++>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
++>b : Symbol(b, Decl(moduledecl.ts, 6, 11))
  }
  
  module m {
-@@= skipped -130, +126 lines =@@
+@@= skipped -130, +130 lines =@@
  >C1_public : Symbol(C1_public, Decl(moduledecl.ts, 137, 20))
  
          private f2() {

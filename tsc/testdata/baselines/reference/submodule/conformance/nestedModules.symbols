@@ -3,7 +3,7 @@
 === nestedModules.ts ===
 module A.B.C {
 >A : Symbol(A, Decl(nestedModules.ts, 0, 0), Decl(nestedModules.ts, 5, 1))
->B : Symbol(B, Decl(nestedModules.ts, 0, 9))
+>B : Symbol(B, Decl(nestedModules.ts, 0, 9), Decl(nestedModules.ts, 7, 10))
 >C : Symbol(C, Decl(nestedModules.ts, 0, 11))
 
     export interface Point {
@@ -21,12 +21,12 @@ module A {
 >A : Symbol(A, Decl(nestedModules.ts, 0, 0), Decl(nestedModules.ts, 5, 1))
 
     export module B {
->B : Symbol(B, Decl(nestedModules.ts, 7, 10))
+>B : Symbol(B, Decl(nestedModules.ts, 0, 9), Decl(nestedModules.ts, 7, 10))
 
         var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
 >Point : Symbol(Point, Decl(nestedModules.ts, 9, 11))
->C : Symbol(C)
->Point : Symbol(Point)
+>C : Symbol(C, Decl(nestedModules.ts, 0, 11))
+>Point : Symbol(Point, Decl(nestedModules.ts, 0, 14))
 >x : Symbol(x, Decl(nestedModules.ts, 9, 30))
 >y : Symbol(y, Decl(nestedModules.ts, 9, 36))
     }
@@ -34,10 +34,10 @@ module A {
 
 module M2.X {
 >M2 : Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
->X : Symbol(X, Decl(nestedModules.ts, 13, 10))
+>X : Symbol(X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
 
     export interface Point {
->Point : Symbol(Point, Decl(nestedModules.ts, 13, 13))
+>Point : Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
 
         x: number; y: number;
 >x : Symbol(x, Decl(nestedModules.ts, 14, 28))
@@ -49,27 +49,27 @@ module M2 {
 >M2 : Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
 
     export module X {
->X : Symbol(X, Decl(nestedModules.ts, 19, 11))
+>X : Symbol(X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
 
         export var Point: number;
->Point : Symbol(Point, Decl(nestedModules.ts, 21, 18))
+>Point : Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
     }
 }
 
 var m = M2.X;
 >m : Symbol(m, Decl(nestedModules.ts, 25, 3))
->M2.X : Symbol(X, Decl(nestedModules.ts, 19, 11))
+>M2.X : Symbol(X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
 >M2 : Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
->X : Symbol(X, Decl(nestedModules.ts, 19, 11))
+>X : Symbol(X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
 
 var point: number;
 >point : Symbol(point, Decl(nestedModules.ts, 26, 3), Decl(nestedModules.ts, 27, 3))
 
 var point = m.Point;
 >point : Symbol(point, Decl(nestedModules.ts, 26, 3), Decl(nestedModules.ts, 27, 3))
->m.Point : Symbol(Point, Decl(nestedModules.ts, 21, 18))
+>m.Point : Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
 >m : Symbol(m, Decl(nestedModules.ts, 25, 3))
->Point : Symbol(Point, Decl(nestedModules.ts, 21, 18))
+>Point : Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
 
 var p: { x: number; y: number; }
 >p : Symbol(p, Decl(nestedModules.ts, 29, 3), Decl(nestedModules.ts, 30, 3))
@@ -79,6 +79,6 @@ var p: { x: number; y: number; }
 var p: M2.X.Point;
 >p : Symbol(p, Decl(nestedModules.ts, 29, 3), Decl(nestedModules.ts, 30, 3))
 >M2 : Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
->X : Symbol(X, Decl(nestedModules.ts, 19, 11))
->Point : Symbol(Point)
+>X : Symbol(X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
+>Point : Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
 

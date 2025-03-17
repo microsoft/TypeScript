@@ -2,7 +2,7 @@
 
 === strictModeOctalLiterals.ts ===
 export enum E {
->E : E.A
+>E : E
 
     A = 12 + 01
 >A : E.A

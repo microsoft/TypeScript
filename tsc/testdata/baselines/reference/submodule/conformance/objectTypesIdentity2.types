@@ -37,16 +37,16 @@ var a: { foo: RegExp; }
 >foo : RegExp
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 var b = { foo: E.A };
->b : { foo: E.A; }
->{ foo: E.A } : { foo: E.A; }
->foo : E.A
->E.A : E.A
+>b : { foo: E; }
+>{ foo: E.A } : { foo: E; }
+>foo : E
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 function foo5(x: A);
 >foo5 : { (x: A): any; (x: B): any; }
@@ -133,15 +133,15 @@ function foo10(x: any) { }
 >x : any
 
 function foo11(x: B);
->foo11 : { (x: B): any; (x: { foo: E.A; }): any; }
+>foo11 : { (x: B): any; (x: { foo: E; }): any; }
 >x : B
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B): any; (x: { foo: E.A; }): any; }
->x : { foo: E.A; }
+>foo11 : { (x: B): any; (x: { foo: E; }): any; }
+>x : { foo: E; }
 
 function foo11(x: any) { }
->foo11 : { (x: B): any; (x: { foo: E.A; }): any; }
+>foo11 : { (x: B): any; (x: { foo: E; }): any; }
 >x : any
 
 function foo12(x: I);
@@ -169,14 +169,14 @@ function foo13(x: any) { }
 >x : any
 
 function foo14(x: I);
->foo14 : { (x: I): any; (x: { foo: E.A; }): any; }
+>foo14 : { (x: I): any; (x: { foo: E; }): any; }
 >x : I
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I): any; (x: { foo: E.A; }): any; }
->x : { foo: E.A; }
+>foo14 : { (x: I): any; (x: { foo: E; }): any; }
+>x : { foo: E; }
 
 function foo14(x: any) { }
->foo14 : { (x: I): any; (x: { foo: E.A; }): any; }
+>foo14 : { (x: I): any; (x: { foo: E; }): any; }
 >x : any
 

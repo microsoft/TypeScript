@@ -27,14 +27,14 @@
 ->new m2.m3.c() : m2.m3.c
 ->m2.m3.c : typeof m2.m3.c
 ->m2.m3 : typeof m2.m3
-+>new m2.m3.c() : any
-+>m2.m3.c : any
-+>m2.m3 : any
++>new m2.m3.c() : c
++>m2.m3.c : typeof c
++>m2.m3 : typeof m3
  >m2 : typeof m2
 ->m3 : typeof m2.m3
 ->c : typeof m2.m3.c
-+>m3 : any
-+>c : any
++>m3 : typeof m3
++>c : typeof c
  
  /** module comment of m3.m4.m5*/
  module m3.m4.m5 {
@@ -46,17 +46,17 @@
 ->m3.m4.m5.c : typeof m3.m4.m5.c
 ->m3.m4.m5 : typeof m3.m4.m5
 ->m3.m4 : typeof m3.m4
-+>new m3.m4.m5.c() : any
-+>m3.m4.m5.c : any
-+>m3.m4.m5 : any
-+>m3.m4 : any
++>new m3.m4.m5.c() : c
++>m3.m4.m5.c : typeof c
++>m3.m4.m5 : typeof m5
++>m3.m4 : typeof m4
  >m3 : typeof m3
 ->m4 : typeof m3.m4
 ->m5 : typeof m3.m4.m5
 ->c : typeof m3.m4.m5.c
-+>m4 : any
-+>m5 : any
-+>c : any
++>m4 : typeof m4
++>m5 : typeof m5
++>c : typeof c
  
  /** module comment of m4.m5.m6*/
  module m4.m5.m6 {
@@ -69,20 +69,20 @@
 ->m4.m5.m6.m7 : typeof m4.m5.m6.m7
 ->m4.m5.m6 : typeof m4.m5.m6
 ->m4.m5 : typeof m4.m5
-+>new m4.m5.m6.m7.c() : any
-+>m4.m5.m6.m7.c : any
-+>m4.m5.m6.m7 : any
-+>m4.m5.m6 : any
-+>m4.m5 : any
++>new m4.m5.m6.m7.c() : c
++>m4.m5.m6.m7.c : typeof c
++>m4.m5.m6.m7 : typeof m7
++>m4.m5.m6 : typeof m6
++>m4.m5 : typeof m5
  >m4 : typeof m4
 ->m5 : typeof m4.m5
 ->m6 : typeof m4.m5.m6
 ->m7 : typeof m4.m5.m6.m7
 ->c : typeof m4.m5.m6.m7.c
-+>m5 : any
-+>m6 : any
-+>m7 : any
-+>c : any
++>m5 : typeof m5
++>m6 : typeof m6
++>m7 : typeof m7
++>c : typeof c
  
  /** module comment of m5.m6.m7*/
  module m5.m6.m7 {
@@ -95,20 +95,20 @@
 ->m5.m6.m7.m8 : typeof m5.m6.m7.m8
 ->m5.m6.m7 : typeof m5.m6.m7
 ->m5.m6 : typeof m5.m6
-+>new m5.m6.m7.m8.c() : any
-+>m5.m6.m7.m8.c : any
-+>m5.m6.m7.m8 : any
-+>m5.m6.m7 : any
-+>m5.m6 : any
++>new m5.m6.m7.m8.c() : c
++>m5.m6.m7.m8.c : typeof c
++>m5.m6.m7.m8 : typeof m8
++>m5.m6.m7 : typeof m7
++>m5.m6 : typeof m6
  >m5 : typeof m5
 ->m6 : typeof m5.m6
 ->m7 : typeof m5.m6.m7
 ->m8 : typeof m5.m6.m7.m8
 ->c : typeof m5.m6.m7.m8.c
-+>m6 : any
-+>m7 : any
-+>m8 : any
-+>c : any
++>m6 : typeof m6
++>m7 : typeof m7
++>m8 : typeof m8
++>c : typeof c
  
  module m6.m7 {
  >m6 : typeof m6
@@ -120,17 +120,17 @@
 ->m6.m7.m8.c : typeof m6.m7.m8.c
 ->m6.m7.m8 : typeof m6.m7.m8
 ->m6.m7 : typeof m6.m7
-+>new m6.m7.m8.c() : any
-+>m6.m7.m8.c : any
-+>m6.m7.m8 : any
-+>m6.m7 : any
++>new m6.m7.m8.c() : c
++>m6.m7.m8.c : typeof c
++>m6.m7.m8 : typeof m8
++>m6.m7 : typeof m7
  >m6 : typeof m6
 ->m7 : typeof m6.m7
 ->m8 : typeof m6.m7.m8
 ->c : typeof m6.m7.m8.c
-+>m7 : any
-+>m8 : any
-+>c : any
++>m7 : typeof m7
++>m8 : typeof m8
++>c : typeof c
  
  module m7.m8 {
  >m7 : typeof m7
@@ -142,15 +142,15 @@
 ->m7.m8.m9.c : typeof m7.m8.m9.c
 ->m7.m8.m9 : typeof m7.m8.m9
 ->m7.m8 : typeof m7.m8
-+>new m7.m8.m9.c() : any
-+>m7.m8.m9.c : any
-+>m7.m8.m9 : any
-+>m7.m8 : any
++>new m7.m8.m9.c() : c
++>m7.m8.m9.c : typeof c
++>m7.m8.m9 : typeof m9
++>m7.m8 : typeof m8
  >m7 : typeof m7
 ->m8 : typeof m7.m8
 ->m9 : typeof m7.m8.m9
 ->c : typeof m7.m8.m9.c
-+>m8 : any
-+>m9 : any
-+>c : any
++>m8 : typeof m8
++>m9 : typeof m9
++>c : typeof c
  

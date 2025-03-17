@@ -75,20 +75,16 @@
 ->foo : string
  
  enum E {
-->E : E
-+>E : E.A
- 
-     A
- >A : E.A
+ >E : E
+@@= skipped -16, +13 lines =@@
  }
  export var r10: typeof E;
  >r10 : typeof E
 ->E : typeof E
  
  export var r11: typeof E.A;
-->r11 : E
+ >r11 : E
 ->E.A : E
-+>r11 : E.A
  >E : typeof E
 ->A : E
  
@@ -98,7 +94,7 @@
  
  function foo() { }
  >foo : typeof foo
-@@= skipped -47, +40 lines =@@
+@@= skipped -31, +27 lines =@@
  }
  export var r13: typeof foo;
  >r13 : typeof foo

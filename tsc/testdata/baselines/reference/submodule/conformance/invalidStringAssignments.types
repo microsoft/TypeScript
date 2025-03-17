@@ -73,10 +73,10 @@ i = x;
 >x : string
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 var j: E = x;
->j : E.A
+>j : E
 >x : string
 

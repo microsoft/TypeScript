@@ -15,27 +15,7 @@
  >b : string | undefined
  
  type C1 = { x: { c: string } };
-@@= skipped -36, +36 lines =@@
- >{} : {}
- 
- enum E { A = "A" }
-->E : E
-+>E : E.A
- >A : E.A
- >"A" : "A"
- 
- let x: { nope?: any } = E.A;  // Error
- >x : { nope?: any; }
- >nope : any
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- 
- let y: { nope?: any } = "A";  // Error
- >y : { nope?: any; }
-@@= skipped -26, +26 lines =@@
+@@= skipped -62, +62 lines =@@
  }
  
  const foo1: Partial<{ something: any }> & { variables: {

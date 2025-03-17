@@ -57,7 +57,7 @@ class C2<T> { foo: T; }
 >foo : T
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 function f() { }
@@ -311,22 +311,22 @@ function f2<T, U>(x: T, y: U) {
 >E : typeof E
 
     var r14 = true ? E.A : x;
->r14 : E.A | T
->true ? E.A : x : E.A | T
+>r14 : E | T
+>true ? E.A : x : E | T
 >true : true
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 >x : T
 
     var r14 = true ? x : E.A;
->r14 : E.A | T
->true ? x : E.A : E.A | T
+>r14 : E | T
+>true ? x : E.A : E | T
 >true : true
 >x : T
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
     var af: typeof f;
 >af : typeof f

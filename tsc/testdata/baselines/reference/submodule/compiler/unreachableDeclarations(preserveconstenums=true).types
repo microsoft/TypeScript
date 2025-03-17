@@ -13,18 +13,18 @@ function func1() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumA.Value : EnumA.Value
+>EnumA.Value : EnumA
 >EnumA : typeof EnumA
->Value : EnumA.Value
+>Value : EnumA
 
     console.log(EnumB.Value);
 >console.log(EnumB.Value) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumB.Value : EnumB.Value
+>EnumB.Value : EnumB
 >EnumB : typeof EnumB
->Value : EnumB.Value
+>Value : EnumB
 
     return;
 
@@ -36,26 +36,26 @@ function func1() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumA.Value : EnumA.Value
+>EnumA.Value : EnumA
 >EnumA : typeof EnumA
->Value : EnumA.Value
+>Value : EnumA
 
         console.log(EnumB.Value);
 >console.log(EnumB.Value) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumB.Value : EnumB.Value
+>EnumB.Value : EnumB
 >EnumB : typeof EnumB
->Value : EnumB.Value
+>Value : EnumB
     }
 
     enum EnumA { Value }
->EnumA : EnumA.Value
+>EnumA : EnumA
 >Value : EnumA.Value
 
     const enum EnumB { Value }
->EnumB : EnumB.Value
+>EnumB : EnumB
 >Value : EnumB.Value
 }
 
@@ -71,9 +71,9 @@ function func2() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumA.Value : EnumA.Value
+>EnumA.Value : EnumA
 >EnumA : typeof EnumA
->Value : EnumA.Value
+>Value : EnumA
 
     return;
 
@@ -85,13 +85,13 @@ function func2() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumA.Value : EnumA.Value
+>EnumA.Value : EnumA
 >EnumA : typeof EnumA
->Value : EnumA.Value
+>Value : EnumA
     }
 
     enum EnumA { Value }
->EnumA : EnumA.Value
+>EnumA : EnumA
 >Value : EnumA.Value
 }
 
@@ -107,9 +107,9 @@ function func3() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumB.Value : EnumB.Value
+>EnumB.Value : EnumB
 >EnumB : typeof EnumB
->Value : EnumB.Value
+>Value : EnumB
 
     return;
 
@@ -121,13 +121,13 @@ function func3() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->EnumB.Value : EnumB.Value
+>EnumB.Value : EnumB
 >EnumB : typeof EnumB
->Value : EnumB.Value
+>Value : EnumB
     }
 
     const enum EnumB { Value }
->EnumB : EnumB.Value
+>EnumB : EnumB
 >Value : EnumB.Value
 }
 
@@ -180,9 +180,9 @@ function func5() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->Bar.A : Bar.A
+>Bar.A : Bar
 >Bar : typeof Bar
->A : Bar.A
+>A : Bar
 
 	console.log(blah.prop);
 >console.log(blah.prop) : void
@@ -221,9 +221,9 @@ function func5() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->Bar.A : Bar.A
+>Bar.A : Bar
 >Bar : typeof Bar
->A : Bar.A
+>A : Bar
 
 		console.log(blah.prop);
 >console.log(blah.prop) : void
@@ -259,7 +259,7 @@ function func5() {
 >1234 : 1234
 
 	enum Bar { A }
->Bar : Bar.A
+>Bar : Bar
 >A : Bar.A
 
 	class Foo { x = 1234 }

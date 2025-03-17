@@ -30,27 +30,37 @@
  new m2.m3.c();
 ->m2.m3.c : Symbol(m2.m3.c, Decl(commentsModules.ts, 40, 14))
 ->m2.m3 : Symbol(m2.m3, Decl(commentsModules.ts, 40, 10))
++>m2.m3.c : Symbol(c, Decl(commentsModules.ts, 40, 14))
++>m2.m3 : Symbol(m3, Decl(commentsModules.ts, 40, 10))
  >m2 : Symbol(m2, Decl(commentsModules.ts, 38, 26))
 ->m3 : Symbol(m2.m3, Decl(commentsModules.ts, 40, 10))
 ->c : Symbol(m2.m3.c, Decl(commentsModules.ts, 40, 14))
++>m3 : Symbol(m3, Decl(commentsModules.ts, 40, 10))
++>c : Symbol(c, Decl(commentsModules.ts, 40, 14))
  
  /** module comment of m3.m4.m5*/
  module m3.m4.m5 {
-@@= skipped -18, +14 lines =@@
+@@= skipped -18, +18 lines =@@
      }
  } // trailing dotted module 2
  new m3.m4.m5.c();
 ->m3.m4.m5.c : Symbol(m3.m4.m5.c, Decl(commentsModules.ts, 47, 17))
 ->m3.m4.m5 : Symbol(m3.m4.m5, Decl(commentsModules.ts, 47, 13))
 ->m3.m4 : Symbol(m3.m4, Decl(commentsModules.ts, 47, 10))
++>m3.m4.m5.c : Symbol(c, Decl(commentsModules.ts, 47, 17))
++>m3.m4.m5 : Symbol(m5, Decl(commentsModules.ts, 47, 13))
++>m3.m4 : Symbol(m4, Decl(commentsModules.ts, 47, 10))
  >m3 : Symbol(m3, Decl(commentsModules.ts, 45, 14))
 ->m4 : Symbol(m3.m4, Decl(commentsModules.ts, 47, 10))
 ->m5 : Symbol(m3.m4.m5, Decl(commentsModules.ts, 47, 13))
 ->c : Symbol(m3.m4.m5.c, Decl(commentsModules.ts, 47, 17))
++>m4 : Symbol(m4, Decl(commentsModules.ts, 47, 10))
++>m5 : Symbol(m5, Decl(commentsModules.ts, 47, 13))
++>c : Symbol(c, Decl(commentsModules.ts, 47, 17))
  
  /** module comment of m4.m5.m6*/
  module m4.m5.m6 {
-@@= skipped -24, +18 lines =@@
+@@= skipped -24, +24 lines =@@
      } /* trailing inner module */ /* multiple comments*/
  }
  new m4.m5.m6.m7.c();
@@ -58,15 +68,23 @@
 ->m4.m5.m6.m7 : Symbol(m4.m5.m6.m7, Decl(commentsModules.ts, 54, 17))
 ->m4.m5.m6 : Symbol(m4.m5.m6, Decl(commentsModules.ts, 54, 13))
 ->m4.m5 : Symbol(m4.m5, Decl(commentsModules.ts, 54, 10))
++>m4.m5.m6.m7.c : Symbol(c, Decl(commentsModules.ts, 55, 22))
++>m4.m5.m6.m7 : Symbol(m7, Decl(commentsModules.ts, 54, 17))
++>m4.m5.m6 : Symbol(m6, Decl(commentsModules.ts, 54, 13))
++>m4.m5 : Symbol(m5, Decl(commentsModules.ts, 54, 10))
  >m4 : Symbol(m4, Decl(commentsModules.ts, 52, 17))
 ->m5 : Symbol(m4.m5, Decl(commentsModules.ts, 54, 10))
 ->m6 : Symbol(m4.m5.m6, Decl(commentsModules.ts, 54, 13))
 ->m7 : Symbol(m4.m5.m6.m7, Decl(commentsModules.ts, 54, 17))
 ->c : Symbol(m4.m5.m6.m7.c, Decl(commentsModules.ts, 55, 22))
++>m5 : Symbol(m5, Decl(commentsModules.ts, 54, 10))
++>m6 : Symbol(m6, Decl(commentsModules.ts, 54, 13))
++>m7 : Symbol(m7, Decl(commentsModules.ts, 54, 17))
++>c : Symbol(c, Decl(commentsModules.ts, 55, 22))
  
  /** module comment of m5.m6.m7*/
  module m5.m6.m7 {
-@@= skipped -27, +19 lines =@@
+@@= skipped -27, +27 lines =@@
      }
  }
  new m5.m6.m7.m8.c();
@@ -74,37 +92,57 @@
 ->m5.m6.m7.m8 : Symbol(m5.m6.m7.m8, Decl(commentsModules.ts, 63, 17))
 ->m5.m6.m7 : Symbol(m5.m6.m7, Decl(commentsModules.ts, 63, 13))
 ->m5.m6 : Symbol(m5.m6, Decl(commentsModules.ts, 63, 10))
++>m5.m6.m7.m8.c : Symbol(c, Decl(commentsModules.ts, 65, 22))
++>m5.m6.m7.m8 : Symbol(m8, Decl(commentsModules.ts, 63, 17))
++>m5.m6.m7 : Symbol(m7, Decl(commentsModules.ts, 63, 13))
++>m5.m6 : Symbol(m6, Decl(commentsModules.ts, 63, 10))
  >m5 : Symbol(m5, Decl(commentsModules.ts, 61, 20))
 ->m6 : Symbol(m5.m6, Decl(commentsModules.ts, 63, 10))
 ->m7 : Symbol(m5.m6.m7, Decl(commentsModules.ts, 63, 13))
 ->m8 : Symbol(m5.m6.m7.m8, Decl(commentsModules.ts, 63, 17))
 ->c : Symbol(m5.m6.m7.m8.c, Decl(commentsModules.ts, 65, 22))
++>m6 : Symbol(m6, Decl(commentsModules.ts, 63, 10))
++>m7 : Symbol(m7, Decl(commentsModules.ts, 63, 13))
++>m8 : Symbol(m8, Decl(commentsModules.ts, 63, 17))
++>c : Symbol(c, Decl(commentsModules.ts, 65, 22))
  
  module m6.m7 {
  >m6 : Symbol(m6, Decl(commentsModules.ts, 71, 20))
-@@= skipped -24, +16 lines =@@
+@@= skipped -24, +24 lines =@@
      }
  }
  new m6.m7.m8.c();
 ->m6.m7.m8.c : Symbol(m6.m7.m8.c, Decl(commentsModules.ts, 73, 22))
 ->m6.m7.m8 : Symbol(m6.m7.m8, Decl(commentsModules.ts, 72, 14))
 ->m6.m7 : Symbol(m6.m7, Decl(commentsModules.ts, 72, 10))
++>m6.m7.m8.c : Symbol(c, Decl(commentsModules.ts, 73, 22))
++>m6.m7.m8 : Symbol(m8, Decl(commentsModules.ts, 72, 14))
++>m6.m7 : Symbol(m7, Decl(commentsModules.ts, 72, 10))
  >m6 : Symbol(m6, Decl(commentsModules.ts, 71, 20))
 ->m7 : Symbol(m6.m7, Decl(commentsModules.ts, 72, 10))
 ->m8 : Symbol(m6.m7.m8, Decl(commentsModules.ts, 72, 14))
 ->c : Symbol(m6.m7.m8.c, Decl(commentsModules.ts, 73, 22))
++>m7 : Symbol(m7, Decl(commentsModules.ts, 72, 10))
++>m8 : Symbol(m8, Decl(commentsModules.ts, 72, 14))
++>c : Symbol(c, Decl(commentsModules.ts, 73, 22))
  
  module m7.m8 {
  >m7 : Symbol(m7, Decl(commentsModules.ts, 79, 17))
-@@= skipped -33, +27 lines =@@
+@@= skipped -33, +33 lines =@@
      }
  }
  new m7.m8.m9.c();
 ->m7.m8.m9.c : Symbol(m7.m8.m9.c, Decl(commentsModules.ts, 82, 22))
 ->m7.m8.m9 : Symbol(m7.m8.m9, Decl(commentsModules.ts, 80, 14))
 ->m7.m8 : Symbol(m7.m8, Decl(commentsModules.ts, 80, 10))
++>m7.m8.m9.c : Symbol(c, Decl(commentsModules.ts, 82, 22))
++>m7.m8.m9 : Symbol(m9, Decl(commentsModules.ts, 80, 14))
++>m7.m8 : Symbol(m8, Decl(commentsModules.ts, 80, 10))
  >m7 : Symbol(m7, Decl(commentsModules.ts, 79, 17))
 ->m8 : Symbol(m7.m8, Decl(commentsModules.ts, 80, 10))
 ->m9 : Symbol(m7.m8.m9, Decl(commentsModules.ts, 80, 14))
 ->c : Symbol(m7.m8.m9.c, Decl(commentsModules.ts, 82, 22))
++>m8 : Symbol(m8, Decl(commentsModules.ts, 80, 10))
++>m9 : Symbol(m9, Decl(commentsModules.ts, 80, 14))
++>c : Symbol(c, Decl(commentsModules.ts, 82, 22))
  

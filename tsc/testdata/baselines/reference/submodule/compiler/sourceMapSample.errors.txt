@@ -1,4 +1,4 @@
-sourceMapSample.ts(14,41): error TS2694: Namespace 'Foo' has no exported member 'Bar'.
+sourceMapSample.ts(14,45): error TS2694: Namespace 'Foo.Bar' has no exported member 'Greeter'.
 
 
 ==== sourceMapSample.ts (1 errors) ====
@@ -16,8 +16,8 @@ sourceMapSample.ts(14,41): error TS2694: Namespace 'Foo' has no exported member 
     
     
         function foo(greeting: string): Foo.Bar.Greeter {
-                                            ~~~
-!!! error TS2694: Namespace 'Foo' has no exported member 'Bar'.
+                                                ~~~~~~~
+!!! error TS2694: Namespace 'Foo.Bar' has no exported member 'Greeter'.
             return new Greeter(greeting);
         }
     

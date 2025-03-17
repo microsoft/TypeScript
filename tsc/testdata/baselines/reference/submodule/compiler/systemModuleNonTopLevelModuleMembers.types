@@ -12,7 +12,7 @@ export function TopLevelFunction(): void {}
 >TopLevelFunction : () => void
 
 export enum TopLevelEnum {E}
->TopLevelEnum : TopLevelEnum.E
+>TopLevelEnum : TopLevelEnum
 >E : TopLevelEnum.E
 
 export module TopLevelModule2 {
@@ -29,6 +29,6 @@ export module TopLevelModule2 {
 >NonTopLevelFunction : () => void
 
     export enum NonTopLevelEnum {E}
->NonTopLevelEnum : NonTopLevelEnum.E
+>NonTopLevelEnum : NonTopLevelEnum
 >E : NonTopLevelEnum.E
 }

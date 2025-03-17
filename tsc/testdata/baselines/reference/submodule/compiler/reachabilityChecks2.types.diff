@@ -1,23 +1,11 @@
 --- old.reachabilityChecks2.types
 +++ new.reachabilityChecks2.types
-@@= skipped -4, +4 lines =@@
- >true : true
- 
- const enum E { X }
-->E : E
-+>E : E.X
- >X : E.X
- 
- module A4 {
-@@= skipped -10, +10 lines =@@
+@@= skipped -14, +14 lines =@@
  >true : true
  
      module A {
 +>A : typeof A
 +
          const enum E { X }
-->E : E
-+>E : E.X
+ >E : E
  >X : E.X
-     }
- }

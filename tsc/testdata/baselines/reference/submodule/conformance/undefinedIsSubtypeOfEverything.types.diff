@@ -25,25 +25,7 @@
      bar: string;
  >bar : string
  }
-@@= skipped -21, +23 lines =@@
- }
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- class D11 extends Base {
-@@= skipped -8, +8 lines =@@
- >Base : Base
- 
-     foo: E;
-->foo : E
-+>foo : E.A
- }
- 
- function f() { }
-@@= skipped -19, +19 lines =@@
+@@= skipped -48, +50 lines =@@
  
      foo: typeof f;
  >foo : typeof f

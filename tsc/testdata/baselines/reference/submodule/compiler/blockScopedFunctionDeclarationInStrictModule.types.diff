@@ -1,9 +1,0 @@
---- old.blockScopedFunctionDeclarationInStrictModule.types
-+++ new.blockScopedFunctionDeclarationInStrictModule.types
-@@= skipped -12, +12 lines =@@
- }
- 
- export = foo; // not ok
-->foo : any
-+>foo : () => void
- 

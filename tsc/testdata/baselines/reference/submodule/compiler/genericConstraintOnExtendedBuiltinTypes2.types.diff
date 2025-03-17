@@ -27,20 +27,3 @@
  
          private _from: T;
  >_from : T
-@@= skipped -26, +27 lines =@@
- 
-     export class NumberTween extends Tween<Number>{
- >NumberTween : NumberTween
-->Tween : Tween<Number>
-+>Tween : any
- 
-         constructor(from: number) {
- >from : number
- 
-             super(from);
- >super(from) : void
-->super : typeof Tween
-+>super : any
- >from : number
-         }
-     }

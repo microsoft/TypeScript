@@ -122,6 +122,20 @@ func (p *Printer) printName(symbol *ast.Symbol) {
 	p.print(p.c.symbolToString(symbol))
 }
 
+func (p *Printer) printQualifiedName(symbol *ast.Symbol) {
+	if p.flags&TypeFormatFlagsUseFullyQualifiedType != 0 && symbol.Parent != nil {
+		p.printQualifiedName(symbol.Parent)
+		p.print(".")
+	}
+	if symbol.Flags&ast.SymbolFlagsModule != 0 && strings.HasPrefix(symbol.Name, "\"") {
+		p.print("import(")
+		p.print(symbol.Name)
+		p.print(")")
+		return
+	}
+	p.printName(symbol)
+}
+
 func (p *Printer) printTypeEx(t *Type, precedence ast.TypePrecedence) {
 	if p.c.getTypePrecedence(t) < precedence {
 		p.print("(")
@@ -139,7 +153,7 @@ func (p *Printer) printType(t *Type) {
 	}
 
 	if t.alias != nil && (p.flags&TypeFormatFlagsInTypeAlias == 0 || p.depth > 0) {
-		p.printName(t.alias.symbol)
+		p.printQualifiedName(t.alias.symbol)
 		p.printTypeArguments(t.alias.typeArguments)
 	} else {
 		p.printTypeNoAlias(t)
@@ -255,10 +269,14 @@ func (p *Printer) printStringMappingType(t *Type) {
 
 func (p *Printer) printEnumLiteral(t *Type) {
 	if parent := p.c.getParentOfSymbol(t.symbol); parent != nil {
-		p.printName(parent)
-		p.print(".")
+		p.printQualifiedName(parent)
+		if p.c.getDeclaredTypeOfSymbol(parent) != t {
+			p.print(".")
+			p.printName(t.symbol)
+		}
+		return
 	}
-	p.printName(t.symbol)
+	p.printQualifiedName(t.symbol)
 }
 
 func (p *Printer) printObjectType(t *Type) {
@@ -266,7 +284,7 @@ func (p *Printer) printObjectType(t *Type) {
 	case t.objectFlags&ObjectFlagsReference != 0:
 		p.printParameterizedType(t)
 	case t.objectFlags&ObjectFlagsClassOrInterface != 0:
-		p.printName(t.symbol)
+		p.printQualifiedName(t.symbol)
 	case p.c.isGenericMappedType(t) || t.objectFlags&ObjectFlagsMapped != 0 && t.AsMappedType().containsError:
 		p.printMappedType(t)
 	default:
@@ -286,7 +304,7 @@ func (p *Printer) printParameterizedType(t *Type) {
 }
 
 func (p *Printer) printTypeReference(t *Type) {
-	p.printName(t.symbol)
+	p.printQualifiedName(t.symbol)
 	p.printTypeArguments(p.c.getTypeArguments(t)[:p.c.getTypeReferenceArity(t)])
 }
 
@@ -360,13 +378,7 @@ func (p *Printer) printAnonymousType(t *Type) {
 		if t.symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsEnum|ast.SymbolFlagsValueModule) != 0 {
 			if t == p.c.getTypeOfSymbol(t.symbol) {
 				p.print("typeof ")
-				if t.symbol.Flags&ast.SymbolFlagsValueModule != 0 && t.symbol.Name[0] == '"' {
-					p.print("import(")
-					p.print(t.symbol.Name)
-					p.print(")")
-				} else {
-					p.printName(t.symbol)
-				}
+				p.printQualifiedName(t.symbol)
 				return
 			}
 		}
@@ -515,7 +527,7 @@ func (p *Printer) printUnionType(t *Type) {
 	case t.flags&TypeFlagsBoolean != 0:
 		p.print("boolean")
 	case t.flags&TypeFlagsEnumLiteral != 0:
-		p.printName(t.symbol)
+		p.printQualifiedName(t.symbol)
 	default:
 		u := t.AsUnionType()
 		if u.origin != nil {

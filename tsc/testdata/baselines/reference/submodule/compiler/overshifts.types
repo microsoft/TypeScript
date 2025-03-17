@@ -326,7 +326,7 @@ enum One {
 }
 
 enum Two {
->Two : Two.A
+>Two : Two
 
     A = 0xFF_FF_FF_FF >> 1, // ok
 >A : Two.A

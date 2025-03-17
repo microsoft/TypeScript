@@ -18,21 +18,21 @@ var c: number = x;
 >x : number
 
 enum E { A };
->E : E.A
+>E : E
 >A : E.A
 
 var d: E = x;
->d : E.A
+>d : E
 >x : number
 
 var e = E.A;
->e : E.A
->E.A : E.A
+>e : E
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 e = x;
 >e = x : number
->e : E.A
+>e : E
 >x : number
 

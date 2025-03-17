@@ -1,4 +1,4 @@
-typeArgumentInferenceWithObjectLiteral.ts(35,43): error TS2345: Argument of type 'E2.X' is not assignable to parameter of type 'E1.X'.
+typeArgumentInferenceWithObjectLiteral.ts(35,43): error TS2345: Argument of type 'E2' is not assignable to parameter of type 'E1'.
 
 
 ==== typeArgumentInferenceWithObjectLiteral.ts (1 errors) ====
@@ -38,5 +38,5 @@ typeArgumentInferenceWithObjectLiteral.ts(35,43): error TS2345: Argument of type
     
     var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);  // Error
                                               ~~~~
-!!! error TS2345: Argument of type 'E2.X' is not assignable to parameter of type 'E1.X'.
+!!! error TS2345: Argument of type 'E2' is not assignable to parameter of type 'E1'.
     

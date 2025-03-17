@@ -2,22 +2,22 @@
 
 === numberAssignableToEnum.ts ===
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 var n: number;
 >n : number
 
 var e: E;
->e : E.A
+>e : E
 
 e = n;
 >e = n : number
->e : E.A
+>e : E
 >n : number
 
 n = e;
->n = e : E.A
+>n = e : E
 >n : number
->e : E.A
+>e : E
 

@@ -1,10 +1,8 @@
 dottedModuleName.ts(3,29): error TS1144: '{' or ';' expected.
 dottedModuleName.ts(3,33): error TS2552: Cannot find name 'x'. Did you mean 'X'?
-dottedModuleName.ts(5,22): error TS2304: Cannot find name 'v'.
-dottedModuleName.ts(15,19): error TS2304: Cannot find name 'f'.
 
 
-==== dottedModuleName.ts (4 errors) ====
+==== dottedModuleName.ts (2 errors) ====
     module M {
         export module N {
     	export function f(x:number)=>2*x;
@@ -14,8 +12,6 @@ dottedModuleName.ts(15,19): error TS2304: Cannot find name 'f'.
 !!! error TS2552: Cannot find name 'x'. Did you mean 'X'?
     	export module X.Y.Z {
     	    export var v2=f(v);
-    	                    ~
-!!! error TS2304: Cannot find name 'v'.
     	}
         }
     }
@@ -26,8 +22,6 @@ dottedModuleName.ts(15,19): error TS2304: Cannot find name 'f'.
         export module X {
     	export module Y.Z {
     	    export var v=f(10);
-    	                 ~
-!!! error TS2304: Cannot find name 'f'.
     	}
         }
     }

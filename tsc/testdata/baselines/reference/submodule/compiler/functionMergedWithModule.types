@@ -27,9 +27,9 @@ module foo.Baz {
 >g : () => void
 
         Bar.f();
->Bar.f() : any
->Bar.f : any
->Bar : any
->f : any
+>Bar.f() : void
+>Bar.f : () => void
+>Bar : typeof Bar
+>f : () => void
     }
 }

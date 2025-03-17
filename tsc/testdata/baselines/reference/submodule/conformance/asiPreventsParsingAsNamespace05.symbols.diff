@@ -6,8 +6,12 @@
  a.b.c
 ->a.b.c : Symbol(a.b.c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
 ->a.b : Symbol(a.b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
++>a.b.c : Symbol(c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
++>a.b : Symbol(b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
  >a : Symbol(a, Decl(asiPreventsParsingAsNamespace05.ts, 0, 19))
 ->b : Symbol(a.b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
 ->c : Symbol(a.b.c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
++>b : Symbol(b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
++>c : Symbol(c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
  {
  }

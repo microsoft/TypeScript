@@ -1,15 +1,6 @@
 --- old.augmentedTypesFunction.types
 +++ new.augmentedTypesFunction.types
-@@= skipped -41, +41 lines =@@
- >y4 : () => void
- 
- enum y4 { One } // error
-->y4 : y4
-+>y4 : y4.One
- >One : y4.One
- 
- // function then internal module
-@@= skipped -8, +8 lines =@@
+@@= skipped -49, +49 lines =@@
  >y5 : () => void
  
  module y5 { } // ok since module is not instantiated

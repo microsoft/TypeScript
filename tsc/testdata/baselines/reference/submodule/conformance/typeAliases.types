@@ -166,7 +166,7 @@ type Meters = number
 >Meters : number
 
 enum E { x = 10 }
->E : E.x
+>E : E
 >x : E.x
 >10 : 10
 
@@ -183,9 +183,9 @@ f15(E.x).toLowerCase();
 >f15(E.x).toLowerCase : () => string
 >f15(E.x) : string
 >f15 : { (a: string): boolean; (a: number): string; }
->E.x : E.x
+>E.x : E
 >E : typeof E
->x : E.x
+>x : E
 >toLowerCase : () => string
 
 type StringAndBoolean = [string, boolean]

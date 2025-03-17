@@ -33,8 +33,8 @@ module superContain {
 >data : any
 
                     foo();
->foo() : any
->foo : any
+>foo() : void
+>foo : () => void
                 }
             }
         }

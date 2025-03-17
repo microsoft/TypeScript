@@ -1,5 +1,5 @@
 builtinIterator.ts(38,1): error TS2511: Cannot create an instance of an abstract class.
-builtinIterator.ts(40,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'next' from class 'Iterator<number, undefined, unknown>'.
+builtinIterator.ts(40,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member next from class 'Iterator<number, undefined, unknown>'.
 builtinIterator.ts(44,3): error TS2416: Property 'next' in type 'BadIterator1' is not assignable to the same property in base type 'Iterator<number, undefined, unknown>'.
   Type '() => { readonly done: false; readonly value: 0; } | { readonly done: true; readonly value: "a string"; }' is not assignable to type '(value?: unknown) => IteratorResult<number, undefined>'.
     Type '{ readonly done: false; readonly value: 0; } | { readonly done: true; readonly value: "a string"; }' is not assignable to type 'IteratorResult<number, undefined>'.
@@ -84,7 +84,7 @@ builtinIterator.ts(73,35): error TS2322: Type 'Generator<string, number, boolean
     
     class C extends Iterator<number> {}
           ~
-!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'next' from class 'Iterator<number, undefined, unknown>'.
+!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member next from class 'Iterator<number, undefined, unknown>'.
     
     // it's unfortunate that these are an error
     class BadIterator1 extends Iterator<number> {

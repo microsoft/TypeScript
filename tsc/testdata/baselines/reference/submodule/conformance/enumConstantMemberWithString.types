@@ -74,7 +74,7 @@ enum T3 {
 }
 
 enum T4 {
->T4 : T4.a
+>T4 : T4
 
     a = "1"
 >a : T4.a
@@ -82,7 +82,7 @@ enum T4 {
 }
 
 enum T5 {
->T5 : T5.a
+>T5 : T5
 
     a = "1" + "2"
 >a : T5.a

@@ -1,32 +1,6 @@
 --- old.declarationEmitForGlobalishSpecifierSymlink.types
 +++ new.declarationEmitForGlobalishSpecifierSymlink.types
-@@= skipped -1, +1 lines =@@
- 
- === /p1/node_modules/typescript-fsa/src/impl.d.ts ===
- export function getA(): A;
-->getA : () => A
-+>getA : () => A.Val
- 
- export enum A {
-->A : A
-+>A : A.Val
- 
-     Val
- >Val : A.Val
-@@= skipped -13, +13 lines =@@
- export * from "./src/impl";
- === /p2/node_modules/typescript-fsa/src/impl.d.ts ===
- export function getA(): A;
-->getA : () => A
-+>getA : () => A.Val
- 
- export enum A {
-->A : A
-+>A : A.Val
- 
-     Val
- >Val : A.Val
-@@= skipped -13, +13 lines =@@
+@@= skipped -27, +27 lines =@@
  export * from "./src/impl";
  === /p1/index.ts ===
  import * as _whatever from "p2";
@@ -35,19 +9,19 @@
  
  import { getA } from "typescript-fsa";
 ->getA : () => import("/p1/node_modules/typescript-fsa/index").A
-+>getA : () => A.Val
++>getA : () => A
  
  export const a = getA();
 ->a : import("/p1/node_modules/typescript-fsa/index").A
 ->getA() : import("/p1/node_modules/typescript-fsa/index").A
 ->getA : () => import("/p1/node_modules/typescript-fsa/index").A
-+>a : A.Val
-+>getA() : A.Val
-+>getA : () => A.Val
++>a : A
++>getA() : A
++>getA : () => A
  
  === /p2/index.d.ts ===
  export const a: import("typescript-fsa").A;
 ->a : import("/p2/node_modules/typescript-fsa/index").A
-+>a : A.Val
++>a : A
  
  

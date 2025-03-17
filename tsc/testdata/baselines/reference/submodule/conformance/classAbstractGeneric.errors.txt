@@ -1,7 +1,7 @@
 classAbstractGeneric.ts(10,7): error TS2654: Non-abstract class 'C<T>' is missing implementations for the following members of 'A<T>': 'foo', 'bar'.
 classAbstractGeneric.ts(12,7): error TS2654: Non-abstract class 'D' is missing implementations for the following members of 'A<number>': 'foo', 'bar'.
-classAbstractGeneric.ts(14,7): error TS2515: Non-abstract class 'E<T>' does not implement inherited abstract member 'bar' from class 'A<T>'.
-classAbstractGeneric.ts(18,7): error TS2515: Non-abstract class 'F<T>' does not implement inherited abstract member 'foo' from class 'A<T>'.
+classAbstractGeneric.ts(14,7): error TS2515: Non-abstract class 'E<T>' does not implement inherited abstract member bar from class 'A<T>'.
+classAbstractGeneric.ts(18,7): error TS2515: Non-abstract class 'F<T>' does not implement inherited abstract member foo from class 'A<T>'.
 
 
 ==== classAbstractGeneric.ts (4 errors) ====
@@ -24,13 +24,13 @@ classAbstractGeneric.ts(18,7): error TS2515: Non-abstract class 'F<T>' does not 
     
     class E<T> extends A<T> { // error -- doesn't implement bar
           ~
-!!! error TS2515: Non-abstract class 'E<T>' does not implement inherited abstract member 'bar' from class 'A<T>'.
+!!! error TS2515: Non-abstract class 'E<T>' does not implement inherited abstract member bar from class 'A<T>'.
         foo() { return this.t; }
     }
     
     class F<T> extends A<T> { // error -- doesn't implement foo
           ~
-!!! error TS2515: Non-abstract class 'F<T>' does not implement inherited abstract member 'foo' from class 'A<T>'.
+!!! error TS2515: Non-abstract class 'F<T>' does not implement inherited abstract member foo from class 'A<T>'.
         bar(t : T) {}
     }
     

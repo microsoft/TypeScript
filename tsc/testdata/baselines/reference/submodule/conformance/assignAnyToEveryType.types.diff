@@ -1,38 +1,6 @@
 --- old.assignAnyToEveryType.types
 +++ new.assignAnyToEveryType.types
-@@= skipped -39, +39 lines =@@
- >x : any
- 
- enum E {
-->E : E
-+>E : E.A
- 
-     A
- >A : E.A
- }
- 
- var g: E = x;
-->g : E
-+>g : E.A
- >x : any
- 
- var g2 = E.A;
-->g2 : E
-->E.A : E
-+>g2 : E.A
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- 
- g2 = x;
- >g2 = x : any
-->g2 : E
-+>g2 : E.A
- >x : any
- 
- class C {
-@@= skipped -33, +33 lines =@@
+@@= skipped -72, +72 lines =@@
  >x : any
  
  interface I {

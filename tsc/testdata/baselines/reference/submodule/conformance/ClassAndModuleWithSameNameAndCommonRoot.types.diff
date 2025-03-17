@@ -1,17 +1,6 @@
 --- old.ClassAndModuleWithSameNameAndCommonRoot.types
 +++ new.ClassAndModuleWithSameNameAndCommonRoot.types
-@@= skipped -42, +42 lines =@@
- >Point : typeof Point
- 
-         export var Origin = new Point(0, 0);
-->Origin : Point
-->new Point(0, 0) : Point
-+>Origin : any
-+>new Point(0, 0) : any
- >Point : typeof Point
- >0 : 0
- >0 : 0
-@@= skipped -11, +11 lines =@@
+@@= skipped -53, +53 lines =@@
  === test.ts ===
  //var cl: { x: number; y: number; }
  var cl = new X.Y.Point(1,1);
@@ -19,15 +8,15 @@
 ->new X.Y.Point(1,1) : X.Y.Point
 ->X.Y.Point : typeof X.Y.Point
 ->X.Y : typeof X.Y
-+>cl : any
-+>new X.Y.Point(1,1) : any
-+>X.Y.Point : any
-+>X.Y : any
++>cl : Point
++>new X.Y.Point(1,1) : Point
++>X.Y.Point : typeof Point
++>X.Y : typeof Y
  >X : typeof X
 ->Y : typeof X.Y
 ->Point : typeof X.Y.Point
-+>Y : any
-+>Point : any
++>Y : typeof Y
++>Point : typeof Point
  >1 : 1
  >1 : 1
  
@@ -36,17 +25,17 @@
 ->X.Y.Point.Origin : X.Y.Point
 ->X.Y.Point : typeof X.Y.Point
 ->X.Y : typeof X.Y
-+>cl : any
-+>X.Y.Point.Origin : any
-+>X.Y.Point : any
-+>X.Y : any
++>cl : Point
++>X.Y.Point.Origin : Point
++>X.Y.Point : typeof Point
++>X.Y : typeof Y
  >X : typeof X
 ->Y : typeof X.Y
 ->Point : typeof X.Y.Point
 ->Origin : X.Y.Point
-+>Y : any
-+>Point : any
-+>Origin : any
++>Y : typeof Y
++>Point : typeof Point
++>Origin : Point
  
  
  === simple.ts ===

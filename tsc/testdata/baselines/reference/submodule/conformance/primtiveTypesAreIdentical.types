@@ -68,19 +68,19 @@ function foo5(x: any) { }
 >x : any
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 function foo6(x: E);
->foo6 : { (x: E.A): any; (x: E.A): any; }
->x : E.A
+>foo6 : { (x: E): any; (x: E): any; }
+>x : E
 
 function foo6(x: E);
->foo6 : { (x: E.A): any; (x: E.A): any; }
->x : E.A
+>foo6 : { (x: E): any; (x: E): any; }
+>x : E
 
 function foo6(x: any) { }
->foo6 : { (x: E.A): any; (x: E.A): any; }
+>foo6 : { (x: E): any; (x: E): any; }
 >x : any
 
 function foo7(x: void);

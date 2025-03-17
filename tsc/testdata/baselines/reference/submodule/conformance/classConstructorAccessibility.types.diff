@@ -1,25 +1,6 @@
 --- old.classConstructorAccessibility.types
 +++ new.classConstructorAccessibility.types
-@@= skipped -28, +28 lines =@@
- >1 : 1
- 
- var d = new D(1); // error
-->d : any
-->new D(1) : any
-+>d : D
-+>new D(1) : D
- >D : typeof D
- >1 : 1
- 
- var e = new E(1); // error
-->e : any
-->new E(1) : any
-+>e : E
-+>new E(1) : E
- >E : typeof E
- >1 : 1
- 
-@@= skipped -16, +16 lines =@@
+@@= skipped -44, +44 lines =@@
  
      class C<T> {
  >C : C<T>
@@ -43,22 +24,3 @@
  
          protected constructor(public x: T) { }
  >x : T
-@@= skipped -12, +13 lines =@@
- >1 : 1
- 
-     var d = new D(1); // error
-->d : any
-->new D(1) : any
-+>d : D<number>
-+>new D(1) : D<number>
- >D : typeof D
- >1 : 1
- 
-     var e = new E(1); // error
-->e : any
-->new E(1) : any
-+>e : E<number>
-+>new E(1) : E<number>
- >E : typeof E
- >1 : 1
- }

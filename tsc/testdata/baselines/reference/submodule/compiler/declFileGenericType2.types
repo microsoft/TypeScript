@@ -49,8 +49,8 @@ declare module templa.mvc.composite {
 }
 module templa.dom.mvc {
 >templa : typeof templa
->dom : any
->mvc : any
+>dom : typeof dom
+>mvc : typeof mvc
 
     export interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
 >IElementController : IElementController<ModelType>
@@ -99,13 +99,13 @@ module templa.dom.mvc.composite {
 >templa : any
 >mvc : any
 >composite : any
->templa.dom.mvc.AbstractElementController : any
->templa.dom.mvc : any
->templa.dom : any
+>templa.dom.mvc.AbstractElementController : AbstractElementController<ModelType>
+>templa.dom.mvc : typeof mvc
+>templa.dom : typeof dom
 >templa : typeof templa
->dom : any
->mvc : any
->AbstractElementController : any
+>dom : typeof dom
+>mvc : typeof mvc
+>AbstractElementController : typeof AbstractElementController
 
         public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
 >_controllers : IController<IModel>[]
@@ -117,7 +117,7 @@ module templa.dom.mvc.composite {
         constructor() {
             super();
 >super() : void
->super : any
+>super : typeof AbstractElementController
 
             this._controllers = [];
 >this._controllers = [] : undefined[]

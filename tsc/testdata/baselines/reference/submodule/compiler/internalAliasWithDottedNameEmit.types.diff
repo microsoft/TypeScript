@@ -10,10 +10,9 @@
 +
        import g = b.c;
 ->g : typeof g
-->b : typeof b
++>g : typeof c
+ >b : typeof b
 ->c : typeof g
-+>g : any
-+>b : any
-+>c : any
++>c : typeof c
  }
  

@@ -2,7 +2,7 @@
 
 === enumMemberResolution.ts ===
 enum Position2 {
->Position2 : Position2.IgnoreRulesSpecific
+>Position2 : Position2
 
     IgnoreRulesSpecific = 0
 >IgnoreRulesSpecific : Position2.IgnoreRulesSpecific
@@ -19,8 +19,8 @@ var y = 1;
 >1 : 1
 
 var z = Position2.IgnoreRulesSpecific; // no error
->z : Position2.IgnoreRulesSpecific
->Position2.IgnoreRulesSpecific : Position2.IgnoreRulesSpecific
+>z : Position2
+>Position2.IgnoreRulesSpecific : Position2
 >Position2 : typeof Position2
->IgnoreRulesSpecific : Position2.IgnoreRulesSpecific
+>IgnoreRulesSpecific : Position2
 

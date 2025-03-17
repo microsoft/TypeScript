@@ -48,12 +48,7 @@
  
  module X.Y.Z {
  >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 17, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 23, 1))
-->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
-->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
-+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9))
-+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11))
- 
-     export class Line {
+@@= skipped -11, +11 lines =@@
  >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 14))
  
          length: number;
@@ -62,18 +57,7 @@
      }
  }
  
-@@= skipped -19, +19 lines =@@
- >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 17, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 23, 1))
- 
-     export module Y {
-->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
-+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
- 
-         export module Z {
-->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
-+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
- 
-             class Line {
+@@= skipped -17, +17 lines =@@
  >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 27, 25))
  
                  name: string;
@@ -82,15 +66,15 @@
              }
          }
      }
-@@= skipped -23, +23 lines =@@
+@@= skipped -14, +14 lines =@@
  var l: X.Y.Z.Line;
  >l : Symbol(l, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 36, 3), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 37, 3))
  >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 17, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 23, 1))
 ->Y : Symbol(X.Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
 ->Z : Symbol(X.Y.Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
 ->Line : Symbol(X.Y.Z.Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 14))
-+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
-+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
-+>Line : Symbol(Line)
++>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 25, 10))
++>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 26, 21))
++>Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts, 19, 14))
  
  

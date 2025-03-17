@@ -40,7 +40,7 @@ class C7 extends Undefined { }
 >Undefined : any
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 class C8 extends E { }

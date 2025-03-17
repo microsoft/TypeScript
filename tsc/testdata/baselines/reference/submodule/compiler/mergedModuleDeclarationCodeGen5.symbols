@@ -3,8 +3,8 @@
 === mergedModuleDeclarationCodeGen5.ts ===
 module M.buz.plop {
 >M : Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen5.ts, 3, 1))
->buz : Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 9))
->plop : Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 13))
+>buz : Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 9), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 9))
+>plop : Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 13), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 13))
 
     export function doom() { }
 >doom : Symbol(doom, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 19))
@@ -14,8 +14,8 @@ module M.buz.plop {
 }
 module M.buz.plop {
 >M : Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen5.ts, 3, 1))
->buz : Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 4, 9))
->plop : Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 4, 13))
+>buz : Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 9), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 9))
+>plop : Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 13), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 13))
 
     function gunk() { }
 >gunk : Symbol(gunk, Decl(mergedModuleDeclarationCodeGen5.ts, 4, 19))
@@ -40,10 +40,11 @@ module M.buz.plop {
 
     export var v3 = doom; // _plop.doom
 >v3 : Symbol(v3, Decl(mergedModuleDeclarationCodeGen5.ts, 13, 14))
+>doom : Symbol(doom, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 19))
 
     export var v4 = M; // _plop.M
 >v4 : Symbol(v4, Decl(mergedModuleDeclarationCodeGen5.ts, 14, 14))
->M : Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen5.ts, 3, 1))
+>M : Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 1, 30))
 
     export var v5 = fudge; // fudge
 >v5 : Symbol(v5, Decl(mergedModuleDeclarationCodeGen5.ts, 15, 14))

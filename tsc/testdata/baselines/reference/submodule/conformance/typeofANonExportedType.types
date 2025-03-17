@@ -89,7 +89,7 @@ export var r9: typeof Z.foo;
 >Z : typeof M
 
 enum E {
->E : E.A
+>E : E
 
     A
 >A : E.A
@@ -98,7 +98,7 @@ export var r10: typeof E;
 >r10 : typeof E
 
 export var r11: typeof E.A;
->r11 : E.A
+>r11 : E
 >E : typeof E
 
 export var r12: typeof r12;

@@ -6,7 +6,7 @@ declare function use(a: any);
 >a : any
 
 const enum TopLevelConstEnum { X }
->TopLevelConstEnum : TopLevelConstEnum.X
+>TopLevelConstEnum : TopLevelConstEnum
 >X : TopLevelConstEnum.X
 
 export function foo() {
@@ -15,24 +15,24 @@ export function foo() {
     use(TopLevelConstEnum.X);
 >use(TopLevelConstEnum.X) : any
 >use : (a: any) => any
->TopLevelConstEnum.X : TopLevelConstEnum.X
+>TopLevelConstEnum.X : TopLevelConstEnum
 >TopLevelConstEnum : typeof TopLevelConstEnum
->X : TopLevelConstEnum.X
+>X : TopLevelConstEnum
 
     use(M.NonTopLevelConstEnum.X);
 >use(M.NonTopLevelConstEnum.X) : any
 >use : (a: any) => any
->M.NonTopLevelConstEnum.X : NonTopLevelConstEnum.X
+>M.NonTopLevelConstEnum.X : NonTopLevelConstEnum
 >M.NonTopLevelConstEnum : typeof NonTopLevelConstEnum
 >M : typeof M
 >NonTopLevelConstEnum : typeof NonTopLevelConstEnum
->X : NonTopLevelConstEnum.X
+>X : NonTopLevelConstEnum
 }
 
 module M {
 >M : typeof M
 
     export const enum NonTopLevelConstEnum { X }
->NonTopLevelConstEnum : NonTopLevelConstEnum.X
+>NonTopLevelConstEnum : NonTopLevelConstEnum
 >X : NonTopLevelConstEnum.X
 }

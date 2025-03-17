@@ -13,7 +13,7 @@ module Outer {
 >Outer : typeof Outer
 
     export const enum A { X }
->A : A.X
+>A : A
 >X : A.X
 }
 
@@ -25,12 +25,12 @@ module B {
 >Outer : typeof Outer
 
     var x = O.A.X;
->x : A.X
->O.A.X : A.X
+>x : A
+>O.A.X : A
 >O.A : typeof A
 >O : typeof Outer
 >A : typeof A
->X : A.X
+>X : A
 
     var y = O.x;
 >y : number

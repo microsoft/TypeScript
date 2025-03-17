@@ -24,7 +24,7 @@ import { MyEnum as MyEnumFromModule } from "./enum";
 >MyEnumFromModule : typeof MyEnum
 
 enum MyEnum {
->MyEnum : MyEnum.a
+>MyEnum : MyEnum
 
   a = MyEnumFromModule.a
 >a : MyEnum.a

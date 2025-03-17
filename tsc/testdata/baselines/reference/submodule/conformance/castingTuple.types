@@ -28,11 +28,11 @@ class F extends A { f };
 >f : any
 
 enum E1 { one }
->E1 : E1.one
+>E1 : E1
 >one : E1.one
 
 enum E2 { one }
->E2 : E2.one
+>E2 : E2
 >one : E2.one
 
 // no error
@@ -93,19 +93,19 @@ var eleFromCDA2 = classCDATuple[5]; // C | D | A
 >5 : 5
 
 var t10: [E1, E2] = [E1.one, E2.one];
->t10 : [E1.one, E2.one]
->[E1.one, E2.one] : [E1.one, E2.one]
->E1.one : E1.one
+>t10 : [E1, E2]
+>[E1.one, E2.one] : [E1, E2]
+>E1.one : E1
 >E1 : typeof E1
->one : E1.one
->E2.one : E2.one
+>one : E1
+>E2.one : E2
 >E2 : typeof E2
->one : E2.one
+>one : E2
 
 var t11 = <[number, number]>t10;
 >t11 : [number, number]
 ><[number, number]>t10 : [number, number]
->t10 : [E1.one, E2.one]
+>t10 : [E1, E2]
 
 var array1 = <{}[]>emptyObjTuple;
 >array1 : {}[]

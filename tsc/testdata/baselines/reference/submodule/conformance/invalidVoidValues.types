@@ -20,7 +20,7 @@ x = true;
 >true : true
 
 enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 x = E;
@@ -29,11 +29,11 @@ x = E;
 >E : typeof E
 
 x = E.A;
->x = E.A : E.A
+>x = E.A : E
 >x : void
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 class C { foo: string }
 >C : C

@@ -9,21 +9,7 @@
      foo: string;
  >foo : string
  }
-@@= skipped -7, +9 lines =@@
- >ai : I
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- var ae: E;
-->ae : E
-+>ae : E.A
- 
- var b: number;
- >b : number
-@@= skipped -49, +49 lines =@@
+@@= skipped -56, +58 lines =@@
  
  var o: <T>(x: T) => T;
  >o : <T>(x: T) => T
@@ -31,15 +17,7 @@
  >x : T
  
  var p: Number;
-@@= skipped -94, +95 lines =@@
- >ai : I
- 
- a = ae;
-->a = ae : E
-+>a = ae : E.A
- >a : any
-->ae : E
-+>ae : E.A
+@@= skipped -100, +101 lines =@@
  
  function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
  >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void

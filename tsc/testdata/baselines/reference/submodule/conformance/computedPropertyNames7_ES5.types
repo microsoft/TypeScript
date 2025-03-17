@@ -2,7 +2,7 @@
 
 === computedPropertyNames7_ES5.ts ===
 enum E {
->E : E.member
+>E : E
 
     member
 >member : E.member
@@ -13,8 +13,8 @@ var v = {
 
     [E.member]: 0
 >[E.member] : number
->E.member : E.member
+>E.member : E
 >E : typeof E
->member : E.member
+>member : E
 >0 : 0
 }

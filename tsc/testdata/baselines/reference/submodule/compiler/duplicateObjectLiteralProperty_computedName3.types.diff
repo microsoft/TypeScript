@@ -1,18 +1,6 @@
 --- old.duplicateObjectLiteralProperty_computedName3.types
 +++ new.duplicateObjectLiteralProperty_computedName3.types
-@@= skipped -9, +9 lines =@@
- >"s" : "s"
- 
- export enum E1 { A = "ENUM_KEY" }
-->E1 : E1
-+>E1 : E1.A
- >A : E1.A
- >"ENUM_KEY" : "ENUM_KEY"
- 
- export enum E2 { B }
-->E2 : E2
-+>E2 : E2.B
- >B : E2.B
+@@= skipped -19, +19 lines =@@
  
  === b.ts ===
  import * as keys from "./a";
@@ -41,7 +29,7 @@
  >n : 1
  >1 : 1
  }
-@@= skipped -38, +38 lines =@@
+@@= skipped -28, +28 lines =@@
      [keys.s]: 1,
  >[keys.s] : number
  >keys.s : "s"
@@ -67,11 +55,11 @@
 ->keys : typeof keys
 ->E1 : typeof keys.E1
 ->A : keys.E1
-+>keys.E1.A : E1.A
++>keys.E1.A : E1
 +>keys.E1 : typeof E1
 +>keys : typeof import("a")
 +>E1 : typeof E1
-+>A : E1.A
++>A : E1
  >1 : 1
  
      [keys.E1.A]: 1, // duplicate
@@ -81,11 +69,11 @@
 ->keys : typeof keys
 ->E1 : typeof keys.E1
 ->A : keys.E1
-+>keys.E1.A : E1.A
++>keys.E1.A : E1
 +>keys.E1 : typeof E1
 +>keys : typeof import("a")
 +>E1 : typeof E1
-+>A : E1.A
++>A : E1
  >1 : 1
  }
  
@@ -102,11 +90,11 @@
 ->keys : typeof keys
 ->E2 : typeof keys.E2
 ->B : keys.E2
-+>keys.E2.B : E2.B
++>keys.E2.B : E2
 +>keys.E2 : typeof E2
 +>keys : typeof import("a")
 +>E2 : typeof E2
-+>B : E2.B
++>B : E2
  >1 : 1
  
      [keys.E2.B]: 1, // duplicate
@@ -116,11 +104,11 @@
 ->keys : typeof keys
 ->E2 : typeof keys.E2
 ->B : keys.E2
-+>keys.E2.B : E2.B
++>keys.E2.B : E2
 +>keys.E2 : typeof E2
 +>keys : typeof import("a")
 +>E2 : typeof E2
-+>B : E2.B
++>B : E2
  >1 : 1
  }
  

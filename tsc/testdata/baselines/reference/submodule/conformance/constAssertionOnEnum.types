@@ -43,27 +43,27 @@ namespace ns {
 >ns : typeof ns
 
     export enum Foo { X }
->Foo : Foo.X
+>Foo : Foo
 >X : Foo.X
 
     ns.Foo.X as const;
->ns.Foo.X as const : Foo.X
->ns.Foo.X : Foo.X
+>ns.Foo.X as const : Foo
+>ns.Foo.X : Foo
 >ns.Foo : typeof Foo
 >ns : typeof ns
 >Foo : typeof Foo
->X : Foo.X
+>X : Foo
 }
 
 === more.ts ===
 export enum Foo { X }
->Foo : Foo.X
+>Foo : Foo
 >X : Foo.X
 
 (Foo).X as const;
->(Foo).X as const : Foo.X
->(Foo).X : Foo.X
+>(Foo).X as const : Foo
+>(Foo).X : Foo
 >(Foo) : typeof Foo
 >Foo : typeof Foo
->X : Foo.X
+>X : Foo
 

@@ -2,7 +2,7 @@
 
 === enumWithNegativeInfinityProperty.ts ===
 enum A {
->A : A."-Infinity"
+>A : A
 
     "-Infinity" = 1
 >"-Infinity" : A."-Infinity"

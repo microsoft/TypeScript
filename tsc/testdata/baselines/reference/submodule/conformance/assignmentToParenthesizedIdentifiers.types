@@ -293,7 +293,7 @@ function fn2(x: number, y: { t: number }) {
 }
 
 enum E {
->E : E.A
+>E : E
 
     A
 >A : E.A

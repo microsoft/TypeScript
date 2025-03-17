@@ -11,7 +11,7 @@ export declare class C { }
 >C : C
 
 export declare enum E { }
->E : "ambientInsideNonAmbientExternalModule".E
+>E : import("ambientInsideNonAmbientExternalModule").E
 
 export declare module M { }
 >M : any

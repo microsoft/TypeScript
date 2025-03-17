@@ -16,6 +16,10 @@ namespace
 >namespace : Symbol(namespace, Decl(asiPreventsParsingAsNamespace05.ts, 0, 3))
 
 a.b.c
+>a.b.c : Symbol(c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
+>a.b : Symbol(b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
 >a : Symbol(a, Decl(asiPreventsParsingAsNamespace05.ts, 0, 19))
+>b : Symbol(b, Decl(asiPreventsParsingAsNamespace05.ts, 1, 12))
+>c : Symbol(c, Decl(asiPreventsParsingAsNamespace05.ts, 2, 14))
 {
 }

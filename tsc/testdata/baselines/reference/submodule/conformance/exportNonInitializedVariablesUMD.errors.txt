@@ -1,13 +1,16 @@
 exportNonInitializedVariablesUMD.ts(1,4): error TS1123: Variable declaration list cannot be empty.
+exportNonInitializedVariablesUMD.ts(2,1): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
 exportNonInitializedVariablesUMD.ts(2,1): error TS2304: Cannot find name 'let'.
 exportNonInitializedVariablesUMD.ts(3,6): error TS1123: Variable declaration list cannot be empty.
 
 
-==== exportNonInitializedVariablesUMD.ts (3 errors) ====
+==== exportNonInitializedVariablesUMD.ts (4 errors) ====
     var;
        
 !!! error TS1123: Variable declaration list cannot be empty.
     let;
+    ~~~
+!!! error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
     ~~~
 !!! error TS2304: Cannot find name 'let'.
     const;

@@ -39,12 +39,3 @@
  >u : U
  
          var x: { (): void; };
-@@= skipped -32, +33 lines =@@
- }
- 
- enum E {
-->E : E
-+>E : E.A
- 
-     A = (() => {
- >A : E.A

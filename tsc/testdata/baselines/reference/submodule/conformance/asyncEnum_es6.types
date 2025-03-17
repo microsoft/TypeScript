@@ -2,7 +2,7 @@
 
 === asyncEnum_es6.ts ===
 async enum E {  
->E : E.Value
+>E : E
 
   Value
 >Value : E.Value

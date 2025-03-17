@@ -5,7 +5,7 @@
 >"use strict" : "use strict"
 
 enum Bar {
->Bar : Bar.interface
+>Bar : Bar
 
     interface,
 >interface : Bar.interface

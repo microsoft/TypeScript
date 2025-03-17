@@ -62,10 +62,10 @@ export module M.P {
 >I : I
     }
     export import im = M.P.f;
->im : any
+>im : () => void
 >M : typeof M
->P : any
->f : any
+>P : typeof P
+>f : () => void
 
     export var a = M.a; // emitted incorrectly as typeof f
 >a : () => void

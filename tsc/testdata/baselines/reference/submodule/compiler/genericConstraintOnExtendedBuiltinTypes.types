@@ -50,14 +50,14 @@ module EndGate.Tweening {
 
     export class NumberTween extends Tween<number>{
 >NumberTween : NumberTween
->Tween : any
+>Tween : Tween<number>
 
         constructor(from: number) {
 >from : number
 
             super(from);
 >super(from) : void
->super : any
+>super : typeof Tween
 >from : number
         }
     }

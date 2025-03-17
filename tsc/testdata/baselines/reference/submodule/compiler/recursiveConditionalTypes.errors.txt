@@ -5,12 +5,6 @@ recursiveConditionalTypes.ts(20,5): error TS2322: Type '__Awaited<T>' is not ass
 recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
 recursiveConditionalTypes.ts(22,5): error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
-    Type '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T' is not assignable to type 'T'.
-      'T' could be instantiated with an arbitrary type which could be unrelated to '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T'.
-        Type 'T extends PromiseLike<infer U> ? __Awaited<U> : T' is not assignable to type 'T'.
-          'T' could be instantiated with an arbitrary type which could be unrelated to 'T extends PromiseLike<infer U> ? __Awaited<U> : T'.
-            Type 'unknown' is not assignable to type 'T'.
-              'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
 recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
 recursiveConditionalTypes.ts(47,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
@@ -67,12 +61,6 @@ recursiveConditionalTypes.ts(169,5): error TS2322: Type 'number' is not assignab
         ~~
 !!! error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
-!!! error TS2322:     Type '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T' is not assignable to type 'T'.
-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to '(T extends PromiseLike<infer U> ? __Awaited<U> : T) | T'.
-!!! error TS2322:         Type 'T extends PromiseLike<infer U> ? __Awaited<U> : T' is not assignable to type 'T'.
-!!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'T extends PromiseLike<infer U> ? __Awaited<U> : T'.
-!!! error TS2322:             Type 'unknown' is not assignable to type 'T'.
-!!! error TS2322:               'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
     }
     
     // Flattening arrays

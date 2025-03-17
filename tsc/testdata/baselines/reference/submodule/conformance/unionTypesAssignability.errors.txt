@@ -23,12 +23,8 @@ unionTypesAssignability.ts(65,5): error TS2322: Type 'T' is not assignable to ty
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-    Type 'U' is not assignable to type 'T'.
-      'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-    Type 'T' is not assignable to type 'U'.
-      'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
 ==== unionTypesAssignability.ts (19 errors) ====
@@ -155,15 +151,11 @@ unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable t
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! error TS2322:     Type 'U' is not assignable to type 'T'.
-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 !!! related TS2208 unionTypesAssignability.ts:63:17: This type parameter might need an `extends T` constraint.
         u = x; // error T not assignable to U
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
-!!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 !!! related TS2208 unionTypesAssignability.ts:63:14: This type parameter might need an `extends U` constraint.
     }
     

@@ -1,8 +1,10 @@
 file1.ts(1,5): error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
+file1.ts(6,5): error TS1214: Identifier expected. '\u0079ield' is a reserved word in strict mode. Modules are automatically in strict mode.
 file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved word at the top-level of a module.
+file2.ts(8,5): error TS1214: Identifier expected. '\u{0079}ield' is a reserved word in strict mode. Modules are automatically in strict mode.
 
 
-==== file1.ts (1 errors) ====
+==== file1.ts (2 errors) ====
     var \u0061wait = 12; // ok
         ~~~~~~~~~~
 !!! error TS1262: Identifier expected. '\u0061wait' is a reserved word at the top-level of a module.
@@ -11,6 +13,8 @@ file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved w
     }
     
     var \u0079ield = 12; // ok
+        ~~~~~~~~~~
+!!! error TS1214: Identifier expected. '\u0079ield' is a reserved word in strict mode. Modules are automatically in strict mode.
     function *gen() {
         \u0079ield 12; //not ok
     }
@@ -20,7 +24,7 @@ file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved w
     typ\u0065 notok = 0; // not ok
     
     export {};
-==== file2.ts (1 errors) ====
+==== file2.ts (2 errors) ====
     \u{0076}ar x = "hello"; // not ok
     
     var \u{0061}wait = 12; // ok
@@ -31,6 +35,8 @@ file2.ts(3,5): error TS1262: Identifier expected. '\u{0061}wait' is a reserved w
     }
     
     var \u{0079}ield = 12; // ok
+        ~~~~~~~~~~~~
+!!! error TS1214: Identifier expected. '\u{0079}ield' is a reserved word in strict mode. Modules are automatically in strict mode.
     function *gen() {
         \u{0079}ield 12; //not ok
     }

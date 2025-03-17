@@ -41,13 +41,6 @@
  
  module X.Y.Z {
  >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 16, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 22, 1))
-->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 24, 10))
-->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 25, 20))
-+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 9))
-+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 11))
- 
-     export interface Line {
- >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 14))
 @@= skipped -18, +18 lines =@@
          new (start: A.Point, end: A.Point);
  >start : Symbol(start, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 20, 13))
@@ -61,16 +54,7 @@
      }
  }
  
-@@= skipped -11, +11 lines =@@
- >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 16, 15), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 22, 1))
- 
-     export module Y.Z {
-->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 24, 10))
-->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 25, 20))
-+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 24, 10))
-+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 25, 20))
- 
-         interface Line {
+@@= skipped -18, +18 lines =@@
  >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 25, 23))
  
              start: A.Point;
@@ -89,7 +73,7 @@
          }
      }
  }
-@@= skipped -24, +24 lines =@@
+@@= skipped -17, +17 lines =@@
  >l : Symbol(l, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 34, 3), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 35, 3))
  >s : Symbol(s, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 34, 14))
  >A : Symbol(A, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 0, 0), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 6, 1))
@@ -106,7 +90,7 @@
 ->Y : Symbol(X.Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 24, 10))
 ->Z : Symbol(X.Y.Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 25, 20))
 ->Line : Symbol(X.Y.Z.Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 14))
-+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 24, 10))
-+>Z : Symbol(Z)
-+>Line : Symbol(Line)
++>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 9), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 24, 10))
++>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 11), Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 25, 20))
++>Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts, 18, 14))
  

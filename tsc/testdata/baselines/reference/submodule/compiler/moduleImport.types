@@ -34,10 +34,10 @@ module X {
 >X : typeof X
 
 	import ABC = A.B.C;
->ABC : any
+>ABC : typeof C
 >A : typeof A
->B : any
->C : any
+>B : typeof B
+>C : typeof C
 
 	export function pong(x: number) {
 >pong : (x: number) => void
@@ -47,10 +47,10 @@ module X {
 >x > 0 : boolean
 >x : number
 >0 : 0
->ABC.ping(x-1) : any
->ABC.ping : any
->ABC : any
->ping : any
+>ABC.ping(x-1) : void
+>ABC.ping : (x: number) => void
+>ABC : typeof C
+>ping : (x: number) => void
 >x-1 : number
 >x : number
 >1 : 1

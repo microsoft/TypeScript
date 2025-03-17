@@ -5,10 +5,10 @@
 // but we should be able to synthesize declarations from the symbols regardless
 
 export enum A {}
->A : "index".A
+>A : import("index").A
 
 export enum B {
->B : B.Member
+>B : B
 
     Member
 >Member : B.Member
@@ -28,7 +28,7 @@ export { DD as D };
 >D : typeof DD
 
 export enum E {}
->E : "index".E
+>E : import("index").E
 
 export { E as EE };
 >E : typeof E
@@ -39,7 +39,7 @@ export { F as FF };
 >FF : typeof F
 
 export enum F {}
->F : "index".F
+>F : import("index").F
 
 export enum G {
 >G : G

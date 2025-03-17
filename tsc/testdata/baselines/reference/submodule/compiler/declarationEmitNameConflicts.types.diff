@@ -35,16 +35,7 @@
 +>I : I
      }
      export import im = M.P.f;
-->im : () => void
-+>im : any
- >M : typeof M
-->P : typeof P
-->f : () => void
-+>P : any
-+>f : any
- 
-     export var a = M.a; // emitted incorrectly as typeof f
- >a : () => void
+ >im : () => void
 @@= skipped -14, +15 lines =@@
  >a : () => void
  

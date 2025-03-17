@@ -10,7 +10,6 @@ typeParametersShouldNotBeEqual2.ts(8,5): error TS2322: Type 'U' is not assignabl
   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Object'.
-    The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 
 
 ==== typeParametersShouldNotBeEqual2.ts (6 errors) ====
@@ -43,7 +42,6 @@ typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assi
         ~
 !!! error TS2322: Type 'Object' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Object'.
-!!! error TS2322:     The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
         zz = x;  // Ok
     }
     

@@ -8,6 +8,6 @@ class X<A,B,C> { }
 >C : C
 
 enum X { MyVal }
->X : X.MyVal
+>X : X
 >MyVal : X.MyVal
 

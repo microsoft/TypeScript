@@ -2,7 +2,7 @@
 
 === enumWithNaNProperty.ts ===
 enum A {
->A : A.NaN
+>A : A
 
     NaN = 1
 >NaN : A.NaN

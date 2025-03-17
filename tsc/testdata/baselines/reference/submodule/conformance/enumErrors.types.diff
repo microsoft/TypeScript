@@ -1,55 +1,6 @@
 --- old.enumErrors.types
 +++ new.enumErrors.types
-@@= skipped -15, +15 lines =@@
- 
- // Enum with computed member initializer of type Number
- enum E5 {
-->E5 : E5
-+>E5 : E5.C
- 
-     C = new Number(30)
- >C : E5.C
-@@= skipped -10, +10 lines =@@
- }
- 
- enum E9 {
-->E9 : E9
-+>E9 : E9.A
- 
-     A,
- >A : E9.A
- 
-     B = A
- >B : E9.A
-->A : E9
-+>A : E9.A
- }
- 
- //Enum with computed member intializer of different enum type
- // Bug 707850: This should be allowed
- enum E10 {
-->E10 : E10
-+>E10 : E10.A
- 
-     A = E9.A,
- >A : E10.A
-->E9.A : E9
-+>E9.A : E9.A
- >E9 : typeof E9
-->A : E9
-+>A : E9.A
- 
-     B = E9.B
- >B : E10.A
-->E9.B : E9
-+>E9.B : E9.A
- >E9 : typeof E9
-->B : E9
-+>B : E9.A
- }
- 
- // Enum with computed member intializer of other types
-@@= skipped -108, +108 lines =@@
+@@= skipped -133, +133 lines =@@
  
      postColonValueComma: 2,
  >postColonValueComma : E13.postColonValueComma

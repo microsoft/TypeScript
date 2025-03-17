@@ -17,9 +17,9 @@ module A.M {
 >M : typeof M
 
     import M = Z.M;
->M : any
+>M : typeof M
 >Z : typeof Z
->M : any
+>M : typeof M
 
     export function bar() {
 >bar : () => void

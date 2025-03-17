@@ -1,11 +1,7 @@
 --- old.enumWithUnicodeEscape1.types
 +++ new.enumWithUnicodeEscape1.types
-@@= skipped -1, +1 lines =@@
- 
- === enumWithUnicodeEscape1.ts ===
- enum E {
-->E : E
-+>E : E.'gold \u2730'
+@@= skipped -4, +4 lines =@@
+ >E : E
  
    'gold \u2730'
 ->'gold \u2730' : (typeof E)["gold \u2730"]

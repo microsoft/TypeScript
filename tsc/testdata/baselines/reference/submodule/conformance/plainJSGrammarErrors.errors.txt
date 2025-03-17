@@ -73,6 +73,7 @@ plainJSGrammarErrors.js(116,24): error TS1009: Trailing comma not allowed.
 plainJSGrammarErrors.js(117,29): error TS1097: 'extends' list cannot be empty.
 plainJSGrammarErrors.js(120,7): error TS1182: A destructuring declaration must have an initializer.
 plainJSGrammarErrors.js(121,7): error TS1155: 'const' declarations must be initialized.
+plainJSGrammarErrors.js(122,5): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
 plainJSGrammarErrors.js(122,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
 plainJSGrammarErrors.js(124,5): error TS1156: 'let' declarations can only be declared inside a block.
 plainJSGrammarErrors.js(126,5): error TS1156: 'const' declarations can only be declared inside a block.
@@ -102,7 +103,7 @@ plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot
 plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== plainJSGrammarErrors.js (101 errors) ====
+==== plainJSGrammarErrors.js (102 errors) ====
     class C {
         // #private mistakes
         q = #unbound
@@ -374,6 +375,8 @@ plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be u
           ~~~~~~
 !!! error TS1155: 'const' declarations must be initialized.
     let let = 15;
+        ~~~
+!!! error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
         ~~~
 !!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
     if (true)

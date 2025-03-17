@@ -1,23 +1,11 @@
 --- old.constEnumMergingWithValues3.types
 +++ new.constEnumMergingWithValues3.types
-@@= skipped -1, +1 lines =@@
- 
- === m1.ts ===
- enum foo { A }
-->foo : foo
-+>foo : foo.A
+@@= skipped -5, +5 lines =@@
  >A : foo.A
  
  module foo {
 +>foo : typeof foo
 +
      const enum E { X }
-->E : E
-+>E : E.X
+ >E : E
  >X : E.X
- }
- 
- export = foo
-->foo : foo
-+>foo : foo.A
- 

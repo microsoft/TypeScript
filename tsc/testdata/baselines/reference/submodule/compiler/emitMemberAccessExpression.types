@@ -38,10 +38,10 @@ module Microsoft.PeopleAtWork.Model {
 >raw : any
 
             var res = Model.KnockoutExtentions;
->res : any
->Model.KnockoutExtentions : any
+>res : typeof KnockoutExtentions
+>Model.KnockoutExtentions : typeof KnockoutExtentions
 >Model : typeof Model
->KnockoutExtentions : any
+>KnockoutExtentions : typeof KnockoutExtentions
         }
     }
 }

@@ -1,20 +1,16 @@
-typesWithPrivateConstructor.ts(6,5): error TS2322: Type 'Function' is not assignable to type '() => void'.
-  Type 'Function' provides no match for the signature '(): void'.
-typesWithPrivateConstructor.ts(13,10): error TS2554: Expected 1 arguments, but got 0.
-typesWithPrivateConstructor.ts(14,5): error TS2322: Type 'Function' is not assignable to type '(x: number) => void'.
-  Type 'Function' provides no match for the signature '(x: number): void'.
+typesWithPrivateConstructor.ts(5,9): error TS2673: Constructor of class 'C' is private and only accessible within the class declaration.
+typesWithPrivateConstructor.ts(13,10): error TS2673: Constructor of class 'C2' is private and only accessible within the class declaration.
 
 
-==== typesWithPrivateConstructor.ts (3 errors) ====
+==== typesWithPrivateConstructor.ts (2 errors) ====
     class C {
         private constructor() { }
     }
     
     var c = new C(); // error C is private
+            ~~~~~~~
+!!! error TS2673: Constructor of class 'C' is private and only accessible within the class declaration.
     var r: () => void = c.constructor;
-        ~
-!!! error TS2322: Type 'Function' is not assignable to type '() => void'.
-!!! error TS2322:   Type 'Function' provides no match for the signature '(): void'.
     
     class C2 {
         private constructor(x: number);
@@ -23,9 +19,5 @@ typesWithPrivateConstructor.ts(14,5): error TS2322: Type 'Function' is not assig
     
     var c2 = new C2(); // error C2 is private
              ~~~~~~~~
-!!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 typesWithPrivateConstructor.ts:9:25: An argument for 'x' was not provided.
+!!! error TS2673: Constructor of class 'C2' is private and only accessible within the class declaration.
     var r2: (x: number) => void = c2.constructor;
-        ~~
-!!! error TS2322: Type 'Function' is not assignable to type '(x: number) => void'.
-!!! error TS2322:   Type 'Function' provides no match for the signature '(x: number): void'.

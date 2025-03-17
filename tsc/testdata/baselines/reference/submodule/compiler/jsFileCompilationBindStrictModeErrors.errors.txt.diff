@@ -6,12 +6,9 @@
  a.js(15,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 -b.js(3,7): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'eval'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
  b.js(6,13): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
--c.js(1,12): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
--c.js(2,5): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
- d.js(2,9): error TS1489: Decimals with leading zeros are not allowed.
- 
- 
-@@= skipped -42, +39 lines =@@
+ c.js(1,12): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+ c.js(2,5): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
+@@= skipped -42, +41 lines =@@
          b = 10;
      }
      
@@ -25,18 +22,3 @@
          }
          method() {
              var let = 10; // error
-@@= skipped -14, +12 lines =@@
-         }
-     }
-     
--==== c.js (2 errors) ====
-+==== c.js (0 errors) ====
-     export var let = 10; // external modules are automatically in strict mode
--               ~~~
--!!! error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
-     var eval = function () {
--        ~~~~
--!!! error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
-     };
-     
- ==== d.js (1 errors) ====

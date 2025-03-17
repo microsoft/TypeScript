@@ -7,9 +7,9 @@ namespace SomeOther.Thing {
 >Thing : typeof Thing
 
     import Internal = My.Internal;
->Internal : any
+>Internal : typeof Internal
 >My : typeof My
->Internal : any
+>Internal : typeof Internal
 
     export class Foo {
 >Foo : Foo
@@ -20,18 +20,18 @@ namespace SomeOther.Thing {
 
         constructor() {
             Internal.getThing();
->Internal.getThing() : any
->Internal.getThing : any
->Internal : any
->getThing : any
+>Internal.getThing() : void
+>Internal.getThing : () => void
+>Internal : typeof Internal
+>getThing : () => void
 
             Internal.WhichThing.A ? "foo" : "bar";
 >Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
->Internal.WhichThing.A : any
->Internal.WhichThing : any
->Internal : any
->WhichThing : any
->A : any
+>Internal.WhichThing.A : WhichThing.A
+>Internal.WhichThing : typeof WhichThing
+>Internal : typeof Internal
+>WhichThing : typeof WhichThing
+>A : WhichThing.A
 >"foo" : "foo"
 >"bar" : "bar"
         }

@@ -24,27 +24,8 @@
  >a : T
  
      a = x;
-@@= skipped -13, +14 lines =@@
- >x : void
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- x = E;
-@@= skipped -9, +9 lines =@@
- >E : typeof E
- 
- x = E.A;
-->x = E.A : E
-+>x = E.A : E.A
- >x : void
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
+@@= skipped -29, +30 lines =@@
+ >A : E
  
  x = { f() { } }
 ->x = { f() { } } : { f(): void; }

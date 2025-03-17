@@ -13,5 +13,5 @@ if (true) {
 }
 
 export = foo; // not ok
->foo : () => void
+>foo : any
 

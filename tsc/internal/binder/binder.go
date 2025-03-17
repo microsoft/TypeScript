@@ -117,7 +117,7 @@ func bindSourceFile(file *ast.SourceFile, options *core.CompilerOptions) {
 		b.file = file
 		b.options = options
 		b.languageVersion = options.GetEmitScriptTarget()
-		b.inStrictMode = options.AlwaysStrict.IsTrue()
+		b.inStrictMode = (options.AlwaysStrict.IsTrue() || options.Strict.IsTrue()) && !file.IsDeclarationFile || ast.IsExternalModule(file)
 		b.unreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.reportedUnreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.bind(file.AsNode())

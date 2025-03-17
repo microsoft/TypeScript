@@ -50,11 +50,11 @@ var p: A.Point;
 
 module X.Y.Z {
 >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 16, 15), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 22, 1))
->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 9))
->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 11))
+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 9), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 24, 10))
+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 11), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 20))
 
     export interface Line {
->Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 14))
+>Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 14), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 23))
 
         new (start: A.Point, end: A.Point);
 >start : Symbol(start, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 20, 13))
@@ -70,11 +70,11 @@ module X {
 >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 16, 15), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 22, 1))
 
     export module Y.Z {
->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 24, 10))
->Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 20))
+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 9), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 24, 10))
+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 11), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 20))
 
         export interface Line {
->Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 23))
+>Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 14), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 23))
 
             start: A.Point;
 >start : Symbol(start, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 26, 31))
@@ -108,7 +108,7 @@ var l: { start: A.Point; end: A.Point; new (s: A.Point, e: A.Point); }
 var l: X.Y.Z.Line;
 >l : Symbol(l, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 34, 3), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 35, 3))
 >X : Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 16, 15), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 22, 1))
->Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 24, 10))
->Z : Symbol(Z)
->Line : Symbol(Line)
+>Y : Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 9), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 24, 10))
+>Z : Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 11), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 20))
+>Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 18, 14), Decl(TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.ts, 25, 23))
 

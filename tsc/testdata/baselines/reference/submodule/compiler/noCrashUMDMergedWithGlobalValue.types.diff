@@ -4,12 +4,8 @@
  
  === /main.ts ===
  interface SomeInterface {
-+>SomeInterface : "/other"
++>SomeInterface : import("/other")
 +
    readonly length: number;
  >length : number
  }
- declare const value: SomeInterface;
-->value : import("/other")
-+>value : "/other"
- 

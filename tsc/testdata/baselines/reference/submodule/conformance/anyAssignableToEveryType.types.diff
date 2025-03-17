@@ -9,30 +9,7 @@
      foo: string;
  >foo : string
  }
-@@= skipped -7, +9 lines =@@
- >ai : I
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- var ae: E;
-->ae : E
-+>ae : E.A
- 
- var b: number = a;
- >b : number
-@@= skipped -63, +63 lines =@@
- 
- ae = a;
- >ae = a : any
-->ae : E
-+>ae : E.A
- >a : any
- 
- var m: number[] = a;
-@@= skipped -14, +14 lines =@@
+@@= skipped -84, +86 lines =@@
  
  var o: <T>(x: T) => T = a;
  >o : <T>(x: T) => T

@@ -9,6 +9,7 @@ namespace SomeOther.Thing {
     import Internal = My.Internal;
 >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
 >My : Symbol(My, Decl(internal.ts, 0, 0))
+>Internal : Symbol(Internal, Decl(internal.ts, 0, 13))
 
     export class Foo {
 >Foo : Symbol(Foo, Decl(usage.ts, 2, 34))
@@ -16,14 +17,20 @@ namespace SomeOther.Thing {
         private _which: Internal.WhichThing;
 >_which : Symbol(_which, Decl(usage.ts, 3, 22))
 >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
->WhichThing : Symbol(WhichThing)
+>WhichThing : Symbol(WhichThing, Decl(internal.ts, 1, 39))
 
         constructor() {
             Internal.getThing();
+>Internal.getThing : Symbol(getThing, Decl(internal.ts, 0, 23))
 >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
+>getThing : Symbol(getThing, Decl(internal.ts, 0, 23))
 
             Internal.WhichThing.A ? "foo" : "bar";
+>Internal.WhichThing.A : Symbol(A, Decl(internal.ts, 2, 34))
+>Internal.WhichThing : Symbol(WhichThing, Decl(internal.ts, 1, 39))
 >Internal : Symbol(Internal, Decl(usage.ts, 1, 27))
+>WhichThing : Symbol(WhichThing, Decl(internal.ts, 1, 39))
+>A : Symbol(A, Decl(internal.ts, 2, 34))
         }
     }
 }

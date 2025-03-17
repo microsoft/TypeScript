@@ -2,7 +2,7 @@
 
 === parserInterfaceKeywordInEnum.ts ===
 enum Bar {
->Bar : Bar.interface
+>Bar : Bar
 
     interface,
 >interface : Bar.interface

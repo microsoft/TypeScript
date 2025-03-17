@@ -12,20 +12,16 @@
  >x : number
   
  var tmpError = A.B.x;
-->tmpError : number
-->A.B.x : number
+ >tmpError : number
+ >A.B.x : number
 ->A.B : typeof A.B
-+>tmpError : any
-+>A.B.x : any
-+>A.B : any
++>A.B : typeof B
  >A : typeof A
 ->B : typeof A.B
-->x : number
-+>B : any
-+>x : any
++>B : typeof B
+ >x : number
  
  
- module A.B.C
 @@= skipped -30, +30 lines =@@
   
   
@@ -44,19 +40,19 @@
 ->X2 : typeof X1.B
 ->A : typeof X1
 ->B : typeof X1.B
-+>X2 : any
++>X2 : typeof B
 +>A : typeof A
-+>B : any
++>B : typeof B
   
      import X3 = A.B.C;
 ->X3 : typeof X2.C
 ->A : typeof X1
 ->B : typeof X1.B
 ->C : typeof X2.C
-+>X3 : any
++>X3 : typeof C
 +>A : typeof A
-+>B : any
-+>C : any
++>B : typeof B
++>C : typeof C
   
  }
  

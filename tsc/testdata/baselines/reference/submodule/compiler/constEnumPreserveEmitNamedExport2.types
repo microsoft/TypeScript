@@ -2,7 +2,7 @@
 
 === a.ts ===
 const enum A {
->A : A.Foo
+>A : A
 
     Foo
 >Foo : A.Foo

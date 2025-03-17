@@ -1,30 +1,6 @@
 --- old.invalidVoidValues.types
 +++ new.invalidVoidValues.types
-@@= skipped -19, +19 lines =@@
- >true : true
- 
- enum E { A }
-->E : E
-+>E : E.A
- >A : E.A
- 
- x = E;
-@@= skipped -9, +9 lines =@@
- >E : typeof E
- 
- x = E.A;
-->x = E.A : E
-+>x = E.A : E.A
- >x : void
-->E.A : E
-+>E.A : E.A
- >E : typeof E
-->A : E
-+>A : E.A
- 
- class C { foo: string }
- >C : C
-@@= skipped -19, +19 lines =@@
+@@= skipped -47, +47 lines =@@
  >a : C
  
  interface I { foo: string }

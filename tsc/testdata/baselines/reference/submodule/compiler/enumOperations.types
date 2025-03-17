@@ -2,15 +2,15 @@
 
 === enumOperations.ts ===
 enum Enum { None = 0 }
->Enum : Enum.None
+>Enum : Enum
 >None : Enum.None
 >0 : 0
 
 var enumType: Enum = Enum.None;
->enumType : Enum.None
->Enum.None : Enum.None
+>enumType : Enum
+>Enum.None : Enum
 >Enum : typeof Enum
->None : Enum.None
+>None : Enum
 
 var numberType: number = 0;
 >numberType : number
@@ -22,7 +22,7 @@ var anyType: any = 0;
  
 enumType ^ numberType;
 >enumType ^ numberType : number
->enumType : Enum.None
+>enumType : Enum
 >numberType : number
 
 numberType ^ anyType;
@@ -32,17 +32,17 @@ numberType ^ anyType;
  
 enumType & anyType;
 >enumType & anyType : number
->enumType : Enum.None
+>enumType : Enum
 >anyType : any
 
 enumType | anyType;
 >enumType | anyType : number
->enumType : Enum.None
+>enumType : Enum
 >anyType : any
 
 enumType ^ anyType;
 >enumType ^ anyType : number
->enumType : Enum.None
+>enumType : Enum
 >anyType : any
 
 ~anyType;
@@ -51,16 +51,16 @@ enumType ^ anyType;
 
 enumType <<anyType;
 >enumType <<anyType : number
->enumType : Enum.None
+>enumType : Enum
 >anyType : any
 
 enumType >>anyType;
 >enumType >>anyType : number
->enumType : Enum.None
+>enumType : Enum
 >anyType : any
 
 enumType >>>anyType;
 >enumType >>>anyType : number
->enumType : Enum.None
+>enumType : Enum
 >anyType : any
 

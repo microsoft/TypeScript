@@ -18,10 +18,10 @@ namespace
 >namespace : number
 
 a.b.c
->a.b.c : any
->a.b : any
+>a.b.c : number
+>a.b : typeof b
 >a : typeof a
->b : any
->c : any
+>b : typeof b
+>c : number
 {
 }

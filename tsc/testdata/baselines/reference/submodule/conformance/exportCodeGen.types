@@ -67,7 +67,7 @@ module E {
 >E : typeof E
 
     export enum Color { Red }
->Color : Color.Red
+>Color : Color
 >Red : Color.Red
 
     export function fn() { }
@@ -96,7 +96,7 @@ module F {
 >F : typeof F
 
     enum Color { Red }
->Color : Color.Red
+>Color : Color
 >Red : Color.Red
 
     function fn() { }

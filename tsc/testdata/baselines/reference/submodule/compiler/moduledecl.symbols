@@ -30,6 +30,7 @@ module mImport {
     import e = b.a;
 >e : Symbol(e, Decl(moduledecl.ts, 11, 17))
 >b : Symbol(b, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
 
     import d1 = a;
 >d1 : Symbol(d1, Decl(moduledecl.ts, 12, 19))
@@ -38,6 +39,7 @@ module mImport {
     import e1 = b.a;
 >e1 : Symbol(e1, Decl(moduledecl.ts, 13, 18))
 >b : Symbol(b, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
 }
 
 module m0 {
@@ -98,6 +100,7 @@ module m0 {
     import m4 = b.a;
 >m4 : Symbol(m4, Decl(moduledecl.ts, 39, 18))
 >b : Symbol(b, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
 
     import m5 = c;
 >m5 : Symbol(m5, Decl(moduledecl.ts, 40, 20))
@@ -106,10 +109,13 @@ module m0 {
     import m6 = c.a;
 >m6 : Symbol(m6, Decl(moduledecl.ts, 41, 18))
 >c : Symbol(c, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
 
     import m7 = c.a.b;
 >m7 : Symbol(m7, Decl(moduledecl.ts, 42, 20))
 >c : Symbol(c, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
+>b : Symbol(b, Decl(moduledecl.ts, 6, 11))
 }
 
 module m1 {
@@ -188,6 +194,7 @@ module m1 {
     import m4 = b.a;
 >m4 : Symbol(m4, Decl(moduledecl.ts, 76, 18))
 >b : Symbol(b, Decl(moduledecl.ts, 1, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 3, 9))
 
     import m5 = c;
 >m5 : Symbol(m5, Decl(moduledecl.ts, 77, 20))
@@ -196,10 +203,13 @@ module m1 {
     import m6 = c.a;
 >m6 : Symbol(m6, Decl(moduledecl.ts, 78, 18))
 >c : Symbol(c, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
 
     import m7 = c.a.b;
 >m7 : Symbol(m7, Decl(moduledecl.ts, 79, 20))
 >c : Symbol(c, Decl(moduledecl.ts, 4, 1))
+>a : Symbol(a, Decl(moduledecl.ts, 6, 9))
+>b : Symbol(b, Decl(moduledecl.ts, 6, 11))
 }
 
 module m {

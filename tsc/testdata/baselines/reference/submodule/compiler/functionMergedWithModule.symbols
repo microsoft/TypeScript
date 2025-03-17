@@ -26,5 +26,8 @@ module foo.Baz {
 >g : Symbol(g, Decl(functionMergedWithModule.ts, 9, 16))
 
         Bar.f();
+>Bar.f : Symbol(f, Decl(functionMergedWithModule.ts, 4, 16))
+>Bar : Symbol(Bar, Decl(functionMergedWithModule.ts, 4, 11))
+>f : Symbol(f, Decl(functionMergedWithModule.ts, 4, 16))
     }
 }

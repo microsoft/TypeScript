@@ -1,11 +1,7 @@
 --- old.privateNameEnum.types
 +++ new.privateNameEnum.types
-@@= skipped -1, +1 lines =@@
- 
- === privateNameEnum.ts ===
- enum E {
-->E : E
-+>E : E.#x
+@@= skipped -4, +4 lines =@@
+ >E : E
  
      #x
 ->#x : E.__missing

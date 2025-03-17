@@ -1,13 +1,7 @@
 --- old.plainJSBinderErrors.errors.txt
 +++ new.plainJSBinderErrors.errors.txt
-@@= skipped -0, +0 lines =@@
- plainJSBinderErrors.js(1,1): error TS2528: A module cannot have multiple default exports.
- plainJSBinderErrors.js(2,1): error TS2528: A module cannot have multiple default exports.
- plainJSBinderErrors.js(3,7): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
--plainJSBinderErrors.js(4,7): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
- plainJSBinderErrors.js(6,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
--plainJSBinderErrors.js(9,11): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
-+plainJSBinderErrors.js(9,11): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+@@= skipped -5, +5 lines =@@
+ plainJSBinderErrors.js(9,11): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
  plainJSBinderErrors.js(12,5): error TS18012: '#constructor' is a reserved word.
  plainJSBinderErrors.js(15,20): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 +plainJSBinderErrors.js(15,20): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -21,34 +15,16 @@
 +plainJSBinderErrors.js(27,9): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
  plainJSBinderErrors.js(33,13): error TS1344: 'A label is not allowed here.
  plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function boundary.
--plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
--plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
+ plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
+ plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
  
  
 -==== plainJSBinderErrors.js (17 errors) ====
-+==== plainJSBinderErrors.js (18 errors) ====
++==== plainJSBinderErrors.js (21 errors) ====
      export default 12
      ~~~~~~~~~~~~~~~~~
  !!! error TS2528: A module cannot have multiple default exports.
-@@= skipped -29, +30 lines =@@
-           ~~~~~
- !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
-     const yield = 2
--          ~~~~~
--!!! error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
-     async function f() {
-         const await = 3
-               ~~~~~
-@@= skipped -10, +8 lines =@@
-     function* g() {
-         const yield = 4
-               ~~~~~
--!!! error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
-+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
-     }
-     class C {
-         #constructor = 5
-@@= skipped -11, +11 lines =@@
+@@= skipped -45, +49 lines =@@
                  delete f
                         ~
  !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
@@ -78,13 +54,3 @@
                  return toFixed()
              }
          }
-@@= skipped -16, +18 lines =@@
-         }
-     }
-     const eval = 9
--          ~~~~
--!!! error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
-     const arguments = 10
--          ~~~~~~~~~
--!!! error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
-     

@@ -5,10 +5,10 @@ class Foo {
 >Foo : Foo
 
     static enumMember = Enum.A;
->enumMember : Enum.A
->Enum.A : Enum.A
+>enumMember : Enum
+>Enum.A : Enum
 >Enum : typeof Enum
->A : Enum.A
+>A : Enum
 
     static objLiteralMember = ObjLiteral.A;
 >objLiteralMember : number
@@ -24,7 +24,7 @@ class Foo {
 }
 
 enum Enum {
->Enum : Enum.A
+>Enum : Enum
 
     A
 >A : Enum.A

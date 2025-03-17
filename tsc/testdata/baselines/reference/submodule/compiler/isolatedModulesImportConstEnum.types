@@ -9,13 +9,13 @@ console.log(Foo.BAR);
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->Foo.BAR : Foo.BAR
+>Foo.BAR : Foo
 >Foo : typeof Foo
->BAR : Foo.BAR
+>BAR : Foo
 
 === file2.ts ===
 export const enum Foo {
->Foo : Foo.BAR
+>Foo : Foo
 
   BAR,
 >BAR : Foo.BAR

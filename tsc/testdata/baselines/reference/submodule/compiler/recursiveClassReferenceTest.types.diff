@@ -5,7 +5,7 @@
  
  declare module Sample.Thing {
 +>Sample : typeof Sample
-+>Thing : any
++>Thing : typeof Thing
  
  	export interface IWidget {
 +>IWidget : IWidget
@@ -45,10 +45,10 @@
  	export class StartFindAction implements Sample.Thing.IAction {
  >StartFindAction : StartFindAction
 ->Sample.Thing : typeof Sample.Thing
-+>Sample.Thing : any
++>Sample.Thing : typeof Thing
  >Sample : typeof Sample
 ->Thing : typeof Sample.Thing
-+>Thing : any
++>Thing : typeof Thing
  		
  		public getId() { return "yo"; }
  >getId : () => string
@@ -62,15 +62,8 @@
  >Sample : any
  >Thing : any
  
-@@= skipped -27, +27 lines =@@
- 
- 	export class FindWidget implements Sample.Thing.IWidget {
- >FindWidget : FindWidget
-->Sample.Thing : typeof Thing
-+>Sample.Thing : any
- >Sample : typeof Sample
-->Thing : typeof Thing
-+>Thing : any
+@@= skipped -32, +32 lines =@@
+ >Thing : typeof Thing
  
  		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
 ->gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
@@ -87,7 +80,7 @@
  >this : this
  			
  		private domNode:any = null;
-@@= skipped -49, +49 lines =@@
+@@= skipped -44, +44 lines =@@
  }
  
  interface IMode { getInitialState(): IState;} 

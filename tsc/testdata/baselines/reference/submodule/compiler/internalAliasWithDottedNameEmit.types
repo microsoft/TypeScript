@@ -15,8 +15,8 @@ module a.e.f {
 >f : any
 
       import g = b.c;
->g : any
->b : any
->c : any
+>g : typeof c
+>b : typeof b
+>c : typeof c
 }
 

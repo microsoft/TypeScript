@@ -42,13 +42,13 @@ module X.Y.base.Z {
     export class W<TValue> extends X.Y.base.W {
 >W : W<TValue>
 >TValue : TValue
->X.Y.base.W : any
->X.Y.base : any
->X.Y : any
+>X.Y.base.W : W
+>X.Y.base : typeof base
+>X.Y : typeof Y
 >X : typeof X
->Y : any
->base : any
->W : any
+>Y : typeof Y
+>base : typeof base
+>W : typeof W
 
         value: boolean;
 >value : boolean

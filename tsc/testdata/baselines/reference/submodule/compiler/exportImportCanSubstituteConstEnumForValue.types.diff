@@ -14,36 +14,33 @@
       */
      export import ReExportedEnum = Dialogs.DialogResult;
 ->ReExportedEnum : typeof ReExportedEnum
-->Dialogs : typeof Dialogs
++>ReExportedEnum : typeof DialogResult
+ >Dialogs : typeof Dialogs
 ->DialogResult : ReExportedEnum
-+>ReExportedEnum : any
-+>Dialogs : any
-+>DialogResult : any
++>DialogResult : DialogResult
  
      /**
       * Not exported to show difference. No javascript is emmitted (as expected)
       */
      import DialogButtons = Dialogs.MessageBoxButtons;
 ->DialogButtons : typeof DialogButtons
-->Dialogs : typeof Dialogs
++>DialogButtons : typeof MessageBoxButtons
+ >Dialogs : typeof Dialogs
 ->MessageBoxButtons : DialogButtons
-+>DialogButtons : any
-+>Dialogs : any
-+>MessageBoxButtons : any
++>MessageBoxButtons : MessageBoxButtons
  
      /**
       * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
-      */
+@@= skipped -18, +18 lines =@@
      export import Callback = Dialogs.DialogResultCallback;
  >Callback : any
-->Dialogs : typeof Dialogs
+ >Dialogs : typeof Dialogs
 ->DialogResultCallback : Callback
-+>Dialogs : any
-+>DialogResultCallback : any
++>DialogResultCallback : DialogResultCallback
  
      export class SomeUsagesOfTheseConsts {
  >SomeUsagesOfTheseConsts : SomeUsagesOfTheseConsts
-@@= skipped -26, +26 lines =@@
+@@= skipped -8, +8 lines =@@
          constructor() {
              // these do get replaced by the const value
              const value1 = ReExportedEnum.Cancel;
@@ -51,10 +48,10 @@
 ->ReExportedEnum.Cancel : ReExportedEnum.Cancel
 ->ReExportedEnum : typeof ReExportedEnum
 ->Cancel : ReExportedEnum.Cancel
-+>value1 : any
-+>ReExportedEnum.Cancel : any
-+>ReExportedEnum : any
-+>Cancel : any
++>value1 : DialogResult.Cancel
++>ReExportedEnum.Cancel : DialogResult.Cancel
++>ReExportedEnum : typeof DialogResult
++>Cancel : DialogResult.Cancel
  
              console.log(value1);
  >console.log(value1) : void
@@ -62,17 +59,17 @@
  >console : Console
  >log : (...data: any[]) => void
 ->value1 : ReExportedEnum.Cancel
-+>value1 : any
++>value1 : DialogResult.Cancel
  
              const value2 = DialogButtons.OKCancel;
 ->value2 : DialogButtons.OKCancel
 ->DialogButtons.OKCancel : DialogButtons.OKCancel
 ->DialogButtons : typeof DialogButtons
 ->OKCancel : DialogButtons.OKCancel
-+>value2 : any
-+>DialogButtons.OKCancel : any
-+>DialogButtons : any
-+>OKCancel : any
++>value2 : MessageBoxButtons.OKCancel
++>DialogButtons.OKCancel : MessageBoxButtons.OKCancel
++>DialogButtons : typeof MessageBoxButtons
++>OKCancel : MessageBoxButtons.OKCancel
  
              console.log(value2);
  >console.log(value2) : void
@@ -80,7 +77,7 @@
  >console : Console
  >log : (...data: any[]) => void
 ->value2 : DialogButtons.OKCancel
-+>value2 : any
++>value2 : MessageBoxButtons.OKCancel
          }
      }
  }

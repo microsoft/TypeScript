@@ -8,7 +8,7 @@
 
 declare module Sample.Thing {
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 
 	export interface IWidget {
 >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
@@ -24,7 +24,7 @@ declare module Sample.Thing {
 >runner : Symbol(runner, Decl(recursiveClassReferenceTest.ts, 10, 6))
 >widget : Symbol(widget, Decl(recursiveClassReferenceTest.ts, 10, 14))
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
 	}
 
@@ -70,9 +70,9 @@ module Sample.Actions.Thing.Find {
 	export class StartFindAction implements Sample.Thing.IAction {
 >StartFindAction : Symbol(StartFindAction, Decl(recursiveClassReferenceTest.ts, 31, 34))
 >Sample.Thing.IAction : Symbol(IAction, Decl(recursiveClassReferenceTest.ts, 23, 2))
->Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >IAction : Symbol(IAction, Decl(recursiveClassReferenceTest.ts, 23, 2))
 		
 		public getId() { return "yo"; }
@@ -82,7 +82,7 @@ module Sample.Actions.Thing.Find {
 >run : Symbol(run, Decl(recursiveClassReferenceTest.ts, 34, 33))
 >Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 36, 13))
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >ICodeThing : Symbol(ICodeThing, Decl(recursiveClassReferenceTest.ts, 11, 2))
 
 			return true;
@@ -92,15 +92,15 @@ module Sample.Actions.Thing.Find {
 
 module Sample.Thing.Widgets {
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 43, 14))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >Widgets : Symbol(Widgets, Decl(recursiveClassReferenceTest.ts, 43, 20))
 
 	export class FindWidget implements Sample.Thing.IWidget {
 >FindWidget : Symbol(FindWidget, Decl(recursiveClassReferenceTest.ts, 43, 29))
 >Sample.Thing.IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
->Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Sample.Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
 
 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
@@ -108,7 +108,7 @@ module Sample.Thing.Widgets {
 >runner : Symbol(runner, Decl(recursiveClassReferenceTest.ts, 46, 13))
 >widget : Symbol(widget, Decl(recursiveClassReferenceTest.ts, 46, 21))
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >IWidget : Symbol(IWidget, Decl(recursiveClassReferenceTest.ts, 5, 29))
 >runner : Symbol(runner, Decl(recursiveClassReferenceTest.ts, 46, 13))
 >this : Symbol(FindWidget, Decl(recursiveClassReferenceTest.ts, 43, 29))
@@ -119,7 +119,7 @@ module Sample.Thing.Widgets {
 		constructor(private codeThing: Sample.Thing.ICodeThing) {
 >codeThing : Symbol(codeThing, Decl(recursiveClassReferenceTest.ts, 49, 14))
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >ICodeThing : Symbol(ICodeThing, Decl(recursiveClassReferenceTest.ts, 11, 2))
 
 		    // scenario 1
@@ -171,7 +171,7 @@ declare var self: Window;
 
 module Sample.Thing.Languages.PlainText {
 >Sample : Symbol(Sample, Decl(recursiveClassReferenceTest.ts, 0, 0), Decl(recursiveClassReferenceTest.ts, 29, 1), Decl(recursiveClassReferenceTest.ts, 41, 1), Decl(recursiveClassReferenceTest.ts, 73, 25))
->Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 75, 14))
+>Thing : Symbol(Thing, Decl(recursiveClassReferenceTest.ts, 5, 22), Decl(recursiveClassReferenceTest.ts, 43, 14), Decl(recursiveClassReferenceTest.ts, 75, 14))
 >Languages : Symbol(Languages, Decl(recursiveClassReferenceTest.ts, 75, 20))
 >PlainText : Symbol(PlainText, Decl(recursiveClassReferenceTest.ts, 75, 30))
 	

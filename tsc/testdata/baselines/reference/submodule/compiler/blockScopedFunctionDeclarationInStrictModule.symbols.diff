@@ -1,8 +1,0 @@
---- old.blockScopedFunctionDeclarationInStrictModule.symbols
-+++ new.blockScopedFunctionDeclarationInStrictModule.symbols
-@@= skipped -9, +9 lines =@@
- }
- 
- export = foo; // not ok
-+>foo : Symbol(foo, Decl(blockScopedFunctionDeclarationInStrictModule.ts, 0, 11))
-+

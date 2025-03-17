@@ -2,7 +2,7 @@
 
 === enum.ts ===
 export const enum Enum {
->Enum : Enum.One
+>Enum : Enum
 
   One = 1,
 >One : Enum.One
@@ -27,7 +27,7 @@ import { Enum } from "./merge";
 >Enum : typeof Enum
 
 Enum.One;
->Enum.One : Enum.One
+>Enum.One : Enum
 >Enum : typeof Enum
->One : Enum.One
+>One : Enum
 

@@ -11,21 +11,3 @@
  
      export class PositionedElement {
  >PositionedElement : PositionedElement
- 
-         public childIndex(child: ISyntaxElement) {
-->childIndex : (child: ISyntaxElement) => void
-+>childIndex : (child: ISyntaxElement) => any
- >child : ISyntaxElement
- 
-             return Syntax.childIndex();
-->Syntax.childIndex() : void
-->Syntax.childIndex : () => void
-->Syntax : typeof Syntax
-->childIndex : () => void
-+>Syntax.childIndex() : any
-+>Syntax.childIndex : any
-+>Syntax : any
-+>childIndex : any
-         }
-     }
- 

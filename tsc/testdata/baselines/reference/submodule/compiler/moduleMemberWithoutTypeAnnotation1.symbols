@@ -35,6 +35,9 @@ module TypeScript {
 >ISyntaxElement : Symbol(ISyntaxElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 8, 19))
 
             return Syntax.childIndex();
+>Syntax.childIndex : Symbol(childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
+>Syntax : Symbol(Syntax, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 18))
+>childIndex : Symbol(childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
         }
     }
 

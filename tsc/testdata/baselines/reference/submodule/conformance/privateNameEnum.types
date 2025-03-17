@@ -2,7 +2,7 @@
 
 === privateNameEnum.ts ===
 enum E {
->E : E.#x
+>E : E
 
     #x
 >#x : E.#x

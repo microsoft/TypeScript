@@ -365,10 +365,12 @@ func (c *Checker) checkTypeRelatedToEx(
 	headMessage *diagnostics.Message,
 	diagnosticOutput *[]*ast.Diagnostic,
 ) bool {
-	relaterCount := len(c.relaters)
-	c.relaters = slices.Grow(c.relaters, 1)[:relaterCount+1]
-	r := &c.relaters[relaterCount]
-	r.c = c
+	r := c.freeRelater
+	if r == nil {
+		r = &Relater{c: c}
+	} else {
+		c.freeRelater = r.next
+	}
 	r.relation = relation
 	r.errorNode = errorNode
 	r.relationCount = (16_000_000 - relation.size()) / 8
@@ -396,14 +398,16 @@ func (c *Checker) checkTypeRelatedToEx(
 		}
 		c.reportDiagnostic(createDiagnosticChainFromErrorChain(r.errorChain, r.errorNode, r.relatedInfo), diagnosticOutput)
 	}
-	c.relaters = c.relaters[:relaterCount]
 	r.maybeKeysSet.Clear()
 	*r = Relater{
+		c:            c,
 		maybeKeys:    r.maybeKeys[:0],
 		maybeKeysSet: r.maybeKeysSet,
 		sourceStack:  r.sourceStack[:0],
 		targetStack:  r.targetStack[:0],
+		next:         c.freeRelater,
 	}
+	c.freeRelater = r
 	return result != TernaryFalse
 }
 
@@ -2521,6 +2525,7 @@ type Relater struct {
 	expandingFlags ExpandingFlags
 	overflow       bool
 	relationCount  int
+	next           *Relater
 }
 
 func (r *Relater) isRelatedToSimple(source *Type, target *Type) Ternary {
@@ -4265,18 +4270,20 @@ func (r *Relater) reportUnmatchedProperty(source *Type, target *Type, unmatchedP
 	}
 	props := r.c.getUnmatchedProperties(source, target, requireOptionalProperties, false /*matchDiscriminantProperties*/)
 	if len(props) == 1 {
+		sourceType, targetType := r.c.getTypeNamesForErrorDisplay(source, target)
 		propName := r.c.symbolToString(unmatchedProperty)
-		r.reportError(diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, r.c.TypeToString(source), r.c.TypeToString(target))
+		r.reportError(diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, sourceType, targetType)
 		if len(unmatchedProperty.Declarations) != 0 {
 			r.relatedInfo = append(r.relatedInfo, createDiagnosticForNode(unmatchedProperty.Declarations[0], diagnostics.X_0_is_declared_here, propName))
 		}
 	} else if r.tryElaborateArrayLikeErrors(source, target, false /*reportErrors*/) {
+		sourceType, targetType := r.c.getTypeNamesForErrorDisplay(source, target)
 		if len(props) > 5 {
 			propNames := strings.Join(core.Map(props[:4], r.c.symbolToString), ", ")
-			r.reportError(diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, r.c.TypeToString(source), r.c.TypeToString(target), propNames, len(props)-4)
+			r.reportError(diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, sourceType, targetType, propNames, len(props)-4)
 		} else {
 			propNames := strings.Join(core.Map(props, r.c.symbolToString), ", ")
-			r.reportError(diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, r.c.TypeToString(source), r.c.TypeToString(target), propNames)
+			r.reportError(diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, sourceType, targetType, propNames)
 		}
 	}
 }
@@ -4677,6 +4684,7 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 		case constraint != nil && r.c.isTypeAssignableTo(source, constraint):
 			r.reportError(diagnostics.X_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2, sourceType, targetType, r.c.TypeToString(constraint))
 		default:
+			r.errorChain = nil // Only report this error once
 			r.reportError(diagnostics.X_0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1, targetType, generalizedSourceType)
 		}
 	}
@@ -4755,12 +4763,7 @@ func (r *Relater) reportError(message *diagnostics.Message, args ...any) {
 			diagnostics.The_types_returned_by_0_are_incompatible_between_these_types:
 			head := getPropertyNameArg(args[0])
 			tail := getPropertyNameArg(r.errorChain.next.args[0])
-			var arg string
-			if len(tail) != 0 && tail[0] == '[' {
-				arg = head + tail
-			} else {
-				arg = head + "." + tail
-			}
+			arg := addToDottedName(head, tail)
 			r.errorChain = r.errorChain.next.next
 			if message == diagnostics.Types_of_property_0_are_incompatible {
 				message = diagnostics.The_types_of_0_are_incompatible_between_these_types
@@ -4770,6 +4773,28 @@ func (r *Relater) reportError(message *diagnostics.Message, args ...any) {
 		}
 	}
 	r.errorChain = &ErrorChain{next: r.errorChain, message: message, args: args}
+}
+
+func addToDottedName(head string, tail string) string {
+	if strings.HasPrefix(head, "new ") {
+		head = "(" + head + ")"
+	}
+	pos := 0
+	for {
+		if strings.HasPrefix(tail[pos:], "(") {
+			pos++
+		} else if strings.HasPrefix(tail[pos:], "new ") {
+			pos += 4
+		} else {
+			break
+		}
+	}
+	prefix := tail[:pos]
+	suffix := tail[pos:]
+	if strings.HasPrefix(suffix, "[") {
+		return prefix + head + suffix
+	}
+	return prefix + head + "." + suffix
 }
 
 func (r *Relater) getChainMessage(index int) *diagnostics.Message {

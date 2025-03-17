@@ -2,13 +2,13 @@
 
 === assignmentCompatWithEnumIndexer.ts ===
 enum E {
->E : E.A
+>E : E
 
     A
 >A : E.A
 }
 
 let foo: Record<E, any> = {}
->foo : Record<E.A, any>
+>foo : Record<E, any>
 >{} : {}
 

@@ -1,5 +1,6 @@
 typedefOnStatements.js(26,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
 typedefOnStatements.js(31,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+typedefOnStatements.js(33,1): error TS1101: 'with' statements are not allowed in strict mode.
 typedefOnStatements.js(33,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 typedefOnStatements.js(71,17): error TS7006: Parameter 'a' implicitly has an 'any' type.
 typedefOnStatements.js(71,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
@@ -20,7 +21,7 @@ typedefOnStatements.js(71,47): error TS7006: Parameter 'p' implicitly has an 'an
 typedefOnStatements.js(71,49): error TS7006: Parameter 'q' implicitly has an 'any' type.
 
 
-==== typedefOnStatements.js (20 errors) ====
+==== typedefOnStatements.js (21 errors) ====
     /** @typedef {{a: string}} A */
     ;
     /** @typedef {{ b: string }} B */
@@ -58,6 +59,8 @@ typedefOnStatements.js(71,49): error TS7006: Parameter 'q' implicitly has an 'an
 !!! error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
     /** @typedef {{ m: string }} M */
     with (name) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
     ~~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
     }

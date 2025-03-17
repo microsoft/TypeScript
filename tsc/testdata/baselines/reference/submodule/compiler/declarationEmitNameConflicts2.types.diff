@@ -9,74 +9,45 @@
  }
  
  module X.Y.base.Z {
-@@= skipped -10, +10 lines =@@
- >Z : typeof Z
- 
-     export var f = X.Y.base.f; // Should be base.f
-->f : () => void
-->X.Y.base.f : () => void
-->X.Y.base : typeof base
-->X.Y : typeof Y
-+>f : any
-+>X.Y.base.f : any
-+>X.Y.base : any
-+>X.Y : any
- >X : typeof X
-->Y : typeof Y
-->base : typeof base
-->f : () => void
-+>Y : any
-+>base : any
-+>f : any
+@@= skipped -20, +20 lines =@@
+ >f : () => void
  
      export var C = X.Y.base.C; // Should be base.C
 ->C : typeof base.C
 ->X.Y.base.C : typeof base.C
-->X.Y.base : typeof base
-->X.Y : typeof Y
-+>C : any
-+>X.Y.base.C : any
-+>X.Y.base : any
-+>X.Y : any
++>C : typeof C
++>X.Y.base.C : typeof C
+ >X.Y.base : typeof base
+ >X.Y : typeof Y
  >X : typeof X
-->Y : typeof Y
-->base : typeof base
+ >Y : typeof Y
+ >base : typeof base
 ->C : typeof base.C
-+>Y : any
-+>base : any
-+>C : any
++>C : typeof C
  
      export var M = X.Y.base.M; // Should be base.M
 ->M : typeof base.M
 ->X.Y.base.M : typeof base.M
-->X.Y.base : typeof base
-->X.Y : typeof Y
-+>M : any
-+>X.Y.base.M : any
-+>X.Y.base : any
-+>X.Y : any
++>M : typeof M
++>X.Y.base.M : typeof M
+ >X.Y.base : typeof base
+ >X.Y : typeof Y
  >X : typeof X
-->Y : typeof Y
-->base : typeof base
+ >Y : typeof Y
+ >base : typeof base
 ->M : typeof base.M
-+>Y : any
-+>base : any
-+>M : any
++>M : typeof M
  
      export var E = X.Y.base.E; // Should be base.E
 ->E : typeof base.E
 ->X.Y.base.E : typeof base.E
-->X.Y.base : typeof base
-->X.Y : typeof Y
-+>E : any
-+>X.Y.base.E : any
-+>X.Y.base : any
-+>X.Y : any
++>E : typeof E
++>X.Y.base.E : typeof E
+ >X.Y.base : typeof base
+ >X.Y : typeof Y
  >X : typeof X
-->Y : typeof Y
-->base : typeof base
+ >Y : typeof Y
+ >base : typeof base
 ->E : typeof base.E
-+>Y : any
-+>base : any
-+>E : any
++>E : typeof E
  }

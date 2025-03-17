@@ -2,7 +2,7 @@
 
 === /a.ts ===
 export enum E { A }
->E : E.A
+>E : E
 >A : E.A
 
 === /b.js ===
@@ -12,7 +12,7 @@ import { E } from "./a";
 /** @type {E} */
 const e = E.A;
 >e : E.A
->E.A : E.A
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 

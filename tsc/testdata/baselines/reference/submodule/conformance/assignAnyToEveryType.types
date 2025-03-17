@@ -40,25 +40,25 @@ f = x;
 >x : any
 
 enum E {
->E : E.A
+>E : E
 
     A
 >A : E.A
 }
 
 var g: E = x;
->g : E.A
+>g : E
 >x : any
 
 var g2 = E.A;
->g2 : E.A
->E.A : E.A
+>g2 : E
+>E.A : E
 >E : typeof E
->A : E.A
+>A : E
 
 g2 = x;
 >g2 = x : any
->g2 : E.A
+>g2 : E
 >x : any
 
 class C {

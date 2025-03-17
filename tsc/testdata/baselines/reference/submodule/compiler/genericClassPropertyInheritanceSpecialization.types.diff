@@ -60,16 +60,16 @@
 ->Portal.Controls.Validators : typeof Portal.Controls.Validators
 ->Portal.Controls : typeof Portal.Controls
 +>TValue : TValue
-+>Portal.Controls.Validators.Validator : any
-+>Portal.Controls.Validators : any
-+>Portal.Controls : any
++>Portal.Controls.Validators.Validator : Validator<TValue>
++>Portal.Controls.Validators : typeof Validators
++>Portal.Controls : typeof Controls
  >Portal : typeof Portal
 ->Controls : typeof Portal.Controls
 ->Validators : typeof Portal.Controls.Validators
 ->Validator : typeof Portal.Controls.Validators.Validator
-+>Controls : any
-+>Validators : any
-+>Validator : any
++>Controls : typeof Controls
++>Validators : typeof Validators
++>Validator : typeof Validator
  
          constructor(message?: string) {
  >message : string
@@ -77,7 +77,7 @@
              super(message);
  >super(message) : void
 ->super : typeof Portal.Controls.Validators.Validator
-+>super : any
++>super : typeof Validator
  >message : string
          }
      }

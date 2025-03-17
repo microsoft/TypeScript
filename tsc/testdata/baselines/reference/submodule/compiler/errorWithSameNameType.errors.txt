@@ -1,5 +1,5 @@
-c.ts(7,5): error TS2367: This comparison appears to be unintentional because the types 'F' and 'F' have no overlap.
-c.ts(11,1): error TS2741: Property 'foo1' is missing in type 'F' but required in type 'F'.
+c.ts(7,5): error TS2367: This comparison appears to be unintentional because the types 'import("a").F' and 'import("b").F' have no overlap.
+c.ts(11,1): error TS2741: Property 'foo1' is missing in type 'import("b").F' but required in type 'import("a").F'.
 
 
 ==== a.ts (0 errors) ====
@@ -21,12 +21,12 @@ c.ts(11,1): error TS2741: Property 'foo1' is missing in type 'F' but required in
     
     if (a === b) {
         ~~~~~~~
-!!! error TS2367: This comparison appears to be unintentional because the types 'F' and 'F' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'import("a").F' and 'import("b").F' have no overlap.
     
     }
     
     a = b
     ~
-!!! error TS2741: Property 'foo1' is missing in type 'F' but required in type 'F'.
+!!! error TS2741: Property 'foo1' is missing in type 'import("b").F' but required in type 'import("a").F'.
 !!! related TS2728 a.ts:2:5: 'foo1' is declared here.
     

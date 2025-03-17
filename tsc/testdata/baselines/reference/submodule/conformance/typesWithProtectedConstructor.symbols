@@ -13,9 +13,7 @@ var c = new C(); // error C is protected
 
 var r: () => void = c.constructor;
 >r : Symbol(r, Decl(typesWithProtectedConstructor.ts, 5, 3))
->c.constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(typesWithProtectedConstructor.ts, 4, 3))
->constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
 
 class C2 {
 >C2 : Symbol(C2, Decl(typesWithProtectedConstructor.ts, 5, 34))
@@ -34,7 +32,5 @@ var c2 = new C2(); // error C2 is protected
 var r2: (x: number) => void = c2.constructor;
 >r2 : Symbol(r2, Decl(typesWithProtectedConstructor.ts, 13, 3))
 >x : Symbol(x, Decl(typesWithProtectedConstructor.ts, 13, 9))
->c2.constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
 >c2 : Symbol(c2, Decl(typesWithProtectedConstructor.ts, 12, 3))
->constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
 

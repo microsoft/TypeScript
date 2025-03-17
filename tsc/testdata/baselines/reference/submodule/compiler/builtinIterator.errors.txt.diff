@@ -1,12 +1,5 @@
 --- old.builtinIterator.errors.txt
 +++ new.builtinIterator.errors.txt
-@@= skipped -0, +0 lines =@@
- builtinIterator.ts(38,1): error TS2511: Cannot create an instance of an abstract class.
--builtinIterator.ts(40,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member next from class 'Iterator<number, undefined, unknown>'.
-+builtinIterator.ts(40,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'next' from class 'Iterator<number, undefined, unknown>'.
- builtinIterator.ts(44,3): error TS2416: Property 'next' in type 'BadIterator1' is not assignable to the same property in base type 'Iterator<number, undefined, unknown>'.
-   Type '() => { readonly done: false; readonly value: 0; } | { readonly done: true; readonly value: "a string"; }' is not assignable to type '(value?: unknown) => IteratorResult<number, undefined>'.
-     Type '{ readonly done: false; readonly value: 0; } | { readonly done: true; readonly value: "a string"; }' is not assignable to type 'IteratorResult<number, undefined>'.
 @@= skipped -19, +19 lines =@@
          Type '{ done: boolean; value: number; }' is not assignable to type 'IteratorYieldResult<number>'.
            Types of property 'done' are incompatible.
@@ -31,16 +24,7 @@
          Types of parameters '__0' and '__0' are incompatible.
            Type '[] | [undefined]' is not assignable to type '[] | [boolean]'.
              Type '[undefined]' is not assignable to type '[] | [boolean]'.
-@@= skipped -64, +64 lines =@@
-     
-     class C extends Iterator<number> {}
-           ~
--!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member next from class 'Iterator<number, undefined, unknown>'.
-+!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'next' from class 'Iterator<number, undefined, unknown>'.
-     
-     // it's unfortunate that these are an error
-     class BadIterator1 extends Iterator<number> {
-@@= skipped -55, +55 lines =@@
+@@= skipped -119, +119 lines =@@
      declare const g1: Generator<string, number, boolean>;
      const iter1 = Iterator.from(g1);
                                  ~~

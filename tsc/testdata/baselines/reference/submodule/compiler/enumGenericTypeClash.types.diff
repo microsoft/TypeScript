@@ -9,7 +9,4 @@
 +>C : C
  
  enum X { MyVal }
-->X : X
-+>X : X.MyVal
- >MyVal : X.MyVal
- 
+ >X : X

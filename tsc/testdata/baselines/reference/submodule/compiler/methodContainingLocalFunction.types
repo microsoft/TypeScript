@@ -108,7 +108,7 @@ module M {
 }
 
 enum E {
->E : E.A
+>E : E
 
     A = (() => {
 >A : E.A

@@ -166,7 +166,7 @@ const str: string = "";
 >"" : ""
 
 enum E {
->E : E.V
+>E : E
 
     V = 10,
 >V : E.V
@@ -202,9 +202,9 @@ export const oWithComputedProperties = {
 
     [E.V]: 1,
 >[E.V] : number
->E.V : E.V
+>E.V : E
 >E : typeof E
->V : E.V
+>V : E
 >1 : 1
 
     [str]: 0,

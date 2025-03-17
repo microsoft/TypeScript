@@ -5,7 +5,7 @@
  === declFileWithInternalModuleNameConflictsInExtendsClause2.ts ===
  module X.A.C {
 +>X : typeof X
-+>A : any
++>A : typeof A
 +>C : any
 +
      export interface Z {
@@ -18,9 +18,9 @@
  
  module X.A.B.C {
 +>X : typeof X
-+>A : any
-+>B : any
-+>C : any
++>A : typeof A
++>B : typeof B
++>C : typeof C
 +
      module A {
 +>A : any

@@ -2,7 +2,7 @@
 
 === enumConflictsWithGlobalIdentifier.ts ===
 enum Position { 
->Position : Position.IgnoreRulesSpecific
+>Position : Position
 
     IgnoreRulesSpecific = 0,
 >IgnoreRulesSpecific : Position.IgnoreRulesSpecific
@@ -15,8 +15,8 @@ var x = IgnoreRulesSpecific.
 
 var y = Position.IgnoreRulesSpecific;
 > : any
->y : Position.IgnoreRulesSpecific
->Position.IgnoreRulesSpecific : Position.IgnoreRulesSpecific
+>y : Position
+>Position.IgnoreRulesSpecific : Position
 >Position : typeof Position
->IgnoreRulesSpecific : Position.IgnoreRulesSpecific
+>IgnoreRulesSpecific : Position
 

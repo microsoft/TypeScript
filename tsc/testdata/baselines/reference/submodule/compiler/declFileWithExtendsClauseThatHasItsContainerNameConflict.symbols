@@ -3,8 +3,8 @@
 === declFileWithExtendsClauseThatHasItsContainerNameConflict.ts ===
 declare module A.B.C {
 >A : Symbol(A, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 0), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 3, 1), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 10, 1))
->B : Symbol(B, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 17))
->C : Symbol(C, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 19))
+>B : Symbol(B, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 17), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 5, 9), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 9))
+>C : Symbol(C, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 19), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 11))
 
     class B {
 >B : Symbol(B, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 22))
@@ -13,7 +13,7 @@ declare module A.B.C {
 
 module A.B {
 >A : Symbol(A, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 0), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 3, 1), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 10, 1))
->B : Symbol(B, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 5, 9))
+>B : Symbol(B, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 17), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 5, 9), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 9))
 
     export class EventManager {
 >EventManager : Symbol(EventManager, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 5, 12))
@@ -26,11 +26,12 @@ module A.B {
 
 module A.B.C {
 >A : Symbol(A, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 0), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 3, 1), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 10, 1))
->B : Symbol(B, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 9))
->C : Symbol(C, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 11))
+>B : Symbol(B, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 17), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 5, 9), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 9))
+>C : Symbol(C, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 0, 19), Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 11))
 
     export class ContextMenu extends EventManager {
 >ContextMenu : Symbol(ContextMenu, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 12, 14))
+>EventManager : Symbol(EventManager, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 5, 12))
 
         name: string;
 >name : Symbol(name, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 13, 51))

@@ -5,7 +5,7 @@
  === nestedModules.ts ===
  module A.B.C {
 +>A : typeof A
-+>B : any
++>B : typeof B
 +>C : any
 +
      export interface Point {
@@ -28,7 +28,7 @@
  
  module M2.X {
 +>M2 : typeof M2
-+>X : any
++>X : typeof X
 +
      export interface Point {
 +>Point : Point
