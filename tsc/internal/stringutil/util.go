@@ -2,6 +2,7 @@
 package stringutil
 
 import (
+	"strings"
 	"unicode/utf8"
 )
 
@@ -81,7 +82,7 @@ func IsASCIILetter(ch rune) bool {
 }
 
 func SplitLines(text string) []string {
-	var lines []string
+	lines := make([]string, 0, strings.Count(text, "\n")+1) // preallocate
 	start := 0
 	pos := 0
 	for pos < len(text) {
