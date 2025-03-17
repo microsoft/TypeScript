@@ -97,7 +97,7 @@ func (r *emitResolver) isAliasResolvedToValue(symbol *ast.Symbol, excludeTypeOnl
 		if container := ast.GetSourceFileOfNode(symbol.ValueDeclaration); container != nil {
 			fileSymbol := c.getSymbolOfDeclaration(container.AsNode())
 			// Ensures cjs export assignment is setup, since this symbol may point at, and merge with, the file itself.
-			// If we don't, the merge may not have yet occured, and the flags check below will be missing flags that
+			// If we don't, the merge may not have yet occurred, and the flags check below will be missing flags that
 			// are added as a result of the merge.
 			c.resolveExternalModuleSymbol(fileSymbol, false /*dontResolveAlias*/)
 		}

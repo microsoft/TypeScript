@@ -25,7 +25,7 @@ var getNodeExeOnce = sync.OnceValue(func() string {
 	return exe
 })
 
-// EvalNodeScript imports a Node.js script that deafult-exports a single function,
+// EvalNodeScript imports a Node.js script that default-exports a single function,
 // calls it with the provided arguments, and unmarshals the JSON-stringified
 // awaited return value into T.
 func EvalNodeScript[T any](t testing.TB, script string, dir string, args ...string) (result T, err error) {

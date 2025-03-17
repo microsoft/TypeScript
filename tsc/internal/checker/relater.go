@@ -3758,7 +3758,7 @@ func (r *Relater) structuredTypeRelatedToWorker(source *Type, target *Type, repo
 			// type references (which are intended by be compared structurally). Obtain the variance
 			// information for the type parameters and relate the type arguments accordingly.
 			variances := r.c.getVariances(source.Target())
-			// We return Ternary.Maybe for a recursive invocation of getVariances (signalled by emptyArray). This
+			// We return Ternary.Maybe for a recursive invocation of getVariances (signaled by emptyArray). This
 			// effectively means we measure variance only from type parameter occurrences that aren't nested in
 			// recursive instantiations of the generic type.
 			if len(variances) == 0 {

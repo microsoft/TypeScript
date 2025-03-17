@@ -17996,7 +17996,7 @@ func (c *Checker) getSignaturesOfSymbol(symbol *ast.Symbol) []*Signature {
 			}
 		}
 		// If this is a function or method declaration, get the signature from the @type tag for the sake of optional parameters.
-		// Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would supress checks that the two are compatible.
+		// Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would suppress checks that the two are compatible.
 		result = append(result, c.getSignatureFromDeclaration(decl))
 	}
 	return result
@@ -20241,7 +20241,7 @@ func (c *Checker) instantiateTypeWithAlias(t *Type, m *TypeMapper, alias *TypeAl
 	}
 	if c.instantiationDepth == 100 || c.instantiationCount >= 5_000_000 {
 		// We have reached 100 recursive type instantiations, or 5M type instantiations caused by the same statement
-		// or expression. There is a very high likelyhood we're dealing with a combination of infinite generic types
+		// or expression. There is a very high likelihood we're dealing with a combination of infinite generic types
 		// that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
 		c.error(c.currentNode, diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite)
 		return c.errorType

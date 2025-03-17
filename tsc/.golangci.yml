@@ -30,6 +30,7 @@ linters:
     - intrange
     - makezero
     - mirror
+    - misspell
     - musttag
     - nolintlint
     - paralleltest
