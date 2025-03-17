@@ -791,12 +791,13 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         tags = tagsFromAlias;
     }
 
+    const canIncreaseVerbosityLevel = !typeWriterOut.truncated && typeWriterOut.couldUnfoldMore;
     return {
         displayParts,
         documentation,
         symbolKind,
         tags: tags.length === 0 ? undefined : tags,
-        canIncreaseVerbosityLevel: !typeWriterOut.truncated && typeWriterOut.couldUnfoldMore,
+        canIncreaseVerbosityLevel: verbosityLevel !== undefined ? canIncreaseVerbosityLevel : undefined
     };
 
     function getPrinter() {

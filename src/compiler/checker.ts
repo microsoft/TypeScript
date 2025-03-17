@@ -6491,9 +6491,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
             const restoreFlags = saveRestoreFlags(context);
-            type && context.typeStack.push(type.id);
+            if (type) context.typeStack.push(type.id);
             const typeNode = typeToTypeNodeWorker(type, context);
-            type && context.typeStack.pop();
+            if (type) context.typeStack.pop();
             restoreFlags();
             return typeNode;
         }
@@ -6640,7 +6640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                if (!canUnfoldType(type, context, true)) {
+                if (!canUnfoldType(type, context, /*isAlias*/ true)) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {

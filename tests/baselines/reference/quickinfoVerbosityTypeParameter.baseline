@@ -36,6 +36,12 @@
 // | const y: <T extends FooType>(x: T) => void
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
+// type MixinCtor<A> = new () => A & { constructor: MixinCtor<A> };
+//                               ^
+// | ----------------------------------------------------------------------
+// | (type parameter) A in type MixinCtor
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
 
 [
   {
@@ -684,6 +690,70 @@
       "documentation": [],
       "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTypeParameter.ts",
+      "position": 181,
+      "name": "a"
+    },
+    "item": {
+      "kind": "type parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 180,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "type parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "in",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "type",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "MixinCtor",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 0
     }
   }
 ]
