@@ -20451,6 +20451,20 @@ func (c *Checker) getObjectTypeInstantiation(t *Type, m *TypeMapper, alias *Type
 			result = c.instantiateAnonymousType(target, newMapper, newAlias)
 		}
 		data.instantiations[key] = result
+		if result.flags&TypeFlagsObjectFlagsType != 0 && result.objectFlags&ObjectFlagsCouldContainTypeVariablesComputed == 0 {
+			// if `result` is one of the object types we tried to make (it may not be, due to how `instantiateMappedType` works), we can carry forward the type variable containment check from the input type arguments
+			resultCouldContainObjectFlags := core.Some(typeArguments, c.couldContainTypeVariables)
+			if result.objectFlags&ObjectFlagsCouldContainTypeVariablesComputed == 0 {
+				if result.objectFlags&(ObjectFlagsMapped|ObjectFlagsAnonymous|ObjectFlagsReference) != 0 {
+					result.objectFlags |= ObjectFlagsCouldContainTypeVariablesComputed | core.IfElse(resultCouldContainObjectFlags, ObjectFlagsCouldContainTypeVariables, 0)
+				} else {
+					// If none of the type arguments for the outer type parameters contain type variables, it follows
+					// that the instantiated type doesn't reference type variables.
+					// Intrinsics have `CouldContainTypeVariablesComputed` pre-set, so this should only cover unions and intersections resulting from `instantiateMappedType`
+					result.objectFlags |= core.IfElse(!resultCouldContainObjectFlags, ObjectFlagsCouldContainTypeVariablesComputed, 0)
+				}
+			}
+		}
 	}
 	return result
 }
