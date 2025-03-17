@@ -6467,7 +6467,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return context.depth < context.unfoldDepth || context.depth === context.unfoldDepth && !context.couldUnfoldMore;
         }
 
-        // Determines if a type can be unfolded, based on how many layers of type aliases we're allowed to unfold.
+        /** Determines if a type can be unfolded, based on how many layers of type aliases we're allowed to unfold.
+         * @param isAlias - Whether we're unfolding a type alias or not.
+         */
         function canUnfoldType(type: Type, context: NodeBuilderContext, isAlias = false): boolean {
             if (!isAlias && isLibType(type)) {
                 return false;
@@ -6499,6 +6501,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const inTypeAlias = context.flags & NodeBuilderFlags.InTypeAlias;
             context.flags &= ~NodeBuilderFlags.InTypeAlias;
+            let expandingEnum = false;
 
             if (!type) {
                 if (!(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
@@ -6567,7 +6570,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return Debug.fail("Unhandled type node kind returned from `symbolToTypeNode`.");
                     }
                 }
-                return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
+                if (!canUnfoldType(type, context)) {
+                    return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
+                }
+                else {
+                    expandingEnum = true;
+                }
             }
             if (type.flags & TypeFlags.StringLiteral) {
                 context.approximateLength += (type as StringLiteralType).value.length + 2;
@@ -6698,7 +6706,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 type = (type as UnionType).origin!;
             }
             if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types) : (type as IntersectionType).types;
+                const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types, expandingEnum) : (type as IntersectionType).types;
                 if (length(types) === 1) {
                     return typeToTypeNodeHelper(types[0], context);
                 }
@@ -10637,14 +10645,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function formatUnionTypes(types: readonly Type[]): Type[] {
+    function formatUnionTypes(types: readonly Type[], expandingEnum: boolean): Type[] {
         const result: Type[] = [];
         let flags = 0 as TypeFlags;
         for (let i = 0; i < types.length; i++) {
             const t = types[i];
             flags |= t.flags;
             if (!(t.flags & TypeFlags.Nullable)) {
-                if (t.flags & (TypeFlags.BooleanLiteral | TypeFlags.EnumLike)) {
+                if (t.flags & (TypeFlags.BooleanLiteral) || !expandingEnum && (t.flags | TypeFlags.EnumLike)) {
                     const baseType = t.flags & TypeFlags.BooleanLiteral ? booleanType : getBaseTypeOfEnumLikeType(t as LiteralType);
                     if (baseType.flags & TypeFlags.Union) {
                         const count = (baseType as UnionType).types.length;
