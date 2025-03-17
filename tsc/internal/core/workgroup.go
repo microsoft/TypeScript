@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"sync"
 	"sync/atomic"
 )
@@ -25,15 +24,6 @@ func NewWorkGroup(singleThreaded bool) WorkGroup {
 type parallelWorkGroup struct {
 	done atomic.Bool
 	wg   sync.WaitGroup
-}
-
-type panicValue struct {
-	value any
-	stack []byte
-}
-
-func (p *panicValue) String() string {
-	return fmt.Sprintf("%v\n%s", p.value, p.stack)
 }
 
 var _ WorkGroup = (*parallelWorkGroup)(nil)
