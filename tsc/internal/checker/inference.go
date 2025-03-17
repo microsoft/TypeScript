@@ -26,12 +26,32 @@ type InferenceState struct {
 	visited           map[InferenceKey]InferencePriority
 	sourceStack       []*Type
 	targetStack       []*Type
+	next              *InferenceState
+}
+
+func (c *Checker) getInferenceState() *InferenceState {
+	n := c.freeinferenceState
+	if n == nil {
+		n = &InferenceState{}
+	}
+	c.freeinferenceState = n.next
+	return n
+}
+
+func (c *Checker) putInferenceState(n *InferenceState) {
+	clear(n.visited)
+	*n = InferenceState{
+		inferences:  n.inferences[:0],
+		visited:     n.visited,
+		sourceStack: n.sourceStack[:0],
+		targetStack: n.targetStack[:0],
+		next:        c.freeinferenceState,
+	}
+	c.freeinferenceState = n
 }
 
 func (c *Checker) inferTypes(inferences []*InferenceInfo, originalSource *Type, originalTarget *Type, priority InferencePriority, contravariant bool) {
-	inferenceStateCount := len(c.inferenceStates)
-	c.inferenceStates = slices.Grow(c.inferenceStates, 1)[:inferenceStateCount+1]
-	n := &c.inferenceStates[inferenceStateCount]
+	n := c.getInferenceState()
 	n.inferences = inferences
 	n.originalSource = originalSource
 	n.originalTarget = originalTarget
@@ -39,8 +59,7 @@ func (c *Checker) inferTypes(inferences []*InferenceInfo, originalSource *Type, 
 	n.inferencePriority = InferencePriorityMaxValue
 	n.contravariant = contravariant
 	c.inferFromTypes(n, originalSource, originalTarget)
-	c.inferenceStates[inferenceStateCount] = InferenceState{}
-	c.inferenceStates = c.inferenceStates[:inferenceStateCount]
+	c.putInferenceState(n)
 }
 
 func (c *Checker) inferFromTypes(n *InferenceState, source *Type, target *Type) {

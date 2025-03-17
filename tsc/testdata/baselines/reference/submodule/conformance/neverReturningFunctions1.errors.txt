@@ -20,9 +20,10 @@ neverReturningFunctions1.ts(129,5): error TS7027: Unreachable code detected.
 neverReturningFunctions1.ts(139,9): error TS7027: Unreachable code detected.
 neverReturningFunctions1.ts(141,5): error TS7027: Unreachable code detected.
 neverReturningFunctions1.ts(148,9): error TS7027: Unreachable code detected.
+neverReturningFunctions1.ts(153,5): error TS7027: Unreachable code detected.
 
 
-==== neverReturningFunctions1.ts (22 errors) ====
+==== neverReturningFunctions1.ts (23 errors) ====
     function fail(message?: string): never {
         throw new Error(message);
     }
@@ -220,6 +221,8 @@ neverReturningFunctions1.ts(148,9): error TS7027: Unreachable code detected.
             x;
         }
         x;  // Unreachable
+        ~~
+!!! error TS7027: Unreachable code detected.
     }
     
     function f43() {

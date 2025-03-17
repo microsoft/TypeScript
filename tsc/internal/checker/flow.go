@@ -36,15 +36,32 @@ type SharedFlow struct {
 }
 
 type FlowState struct {
-	reference          *ast.Node
-	declaredType       *Type
-	initialType        *Type
-	flowContainer      *ast.Node
-	refKey             string
-	depth              int
-	sharedFlowStart    int
-	reduceLabels       []*ast.FlowReduceLabelData
-	reduceLabelsBuffer [4]*ast.FlowReduceLabelData
+	reference       *ast.Node
+	declaredType    *Type
+	initialType     *Type
+	flowContainer   *ast.Node
+	refKey          string
+	depth           int
+	sharedFlowStart int
+	reduceLabels    []*ast.FlowReduceLabelData
+	next            *FlowState
+}
+
+func (c *Checker) getFlowState() *FlowState {
+	f := c.freeFlowState
+	if f == nil {
+		f = &FlowState{}
+	}
+	c.freeFlowState = f.next
+	return f
+}
+
+func (c *Checker) putFlowState(f *FlowState) {
+	*f = FlowState{
+		reduceLabels: f.reduceLabels[:0],
+		next:         c.freeFlowState,
+	}
+	c.freeFlowState = f
 }
 
 func getFlowNodeOfNode(node *ast.Node) *ast.FlowNode {
@@ -69,20 +86,16 @@ func (c *Checker) getFlowTypeOfReferenceEx(reference *ast.Node, declaredType *Ty
 			return declaredType
 		}
 	}
-	flowStateCount := len(c.flowStates)
-	c.flowStates = slices.Grow(c.flowStates, 1)[:flowStateCount+1]
-	f := &c.flowStates[flowStateCount]
+	f := c.getFlowState()
 	f.reference = reference
 	f.declaredType = declaredType
 	f.initialType = core.Coalesce(initialType, declaredType)
 	f.flowContainer = flowContainer
 	f.sharedFlowStart = len(c.sharedFlows)
-	f.reduceLabels = f.reduceLabelsBuffer[:0]
 	c.flowInvocationCount++
 	evolvedType := c.getTypeAtFlowNode(f, flowNode).t
 	c.sharedFlows = c.sharedFlows[:f.sharedFlowStart]
-	c.flowStates[flowStateCount] = FlowState{}
-	c.flowStates = c.flowStates[:flowStateCount]
+	c.putFlowState(f)
 	// When the reference is 'x' in an 'x.length', 'x.push(value)', 'x.unshift(value)' or x[n] = value' operation,
 	// we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
 	// on empty arrays are possible without implicit any errors and new element types can be inferred without
@@ -2442,15 +2455,15 @@ func (c *Checker) getFlowTypeInStaticBlocks(symbol *ast.Symbol, staticBlocks []*
 }
 
 func (c *Checker) isReachableFlowNode(flow *ast.FlowNode) bool {
-	result := c.isReachableFlowNodeWorker(flow, false /*noCacheCheck*/)
+	f := c.getFlowState()
+	result := c.isReachableFlowNodeWorker(f, flow, false /*noCacheCheck*/)
+	c.putFlowState(f)
 	c.lastFlowNode = flow
 	c.lastFlowNodeReachable = result
 	return result
 }
 
-func (c *Checker) isReachableFlowNodeWorker(flow *ast.FlowNode, noCacheCheck bool) bool {
-	var reduceLabelsBuffer [4]*ast.FlowReduceLabelData
-	reduceLabels := reduceLabelsBuffer[:0]
+func (c *Checker) isReachableFlowNodeWorker(f *FlowState, flow *ast.FlowNode, noCacheCheck bool) bool {
 	for {
 		if flow == c.lastFlowNode {
 			return c.lastFlowNodeReachable
@@ -2461,7 +2474,7 @@ func (c *Checker) isReachableFlowNodeWorker(flow *ast.FlowNode, noCacheCheck boo
 				if reachable, ok := c.flowNodeReachable[flow]; ok {
 					return reachable
 				}
-				reachable := c.isReachableFlowNodeWorker(flow, true /*noCacheCheck*/)
+				reachable := c.isReachableFlowNodeWorker(f, flow, true /*noCacheCheck*/)
 				c.flowNodeReachable[flow] = reachable
 				return reachable
 			}
@@ -2487,8 +2500,8 @@ func (c *Checker) isReachableFlowNodeWorker(flow *ast.FlowNode, noCacheCheck boo
 			flow = flow.Antecedent
 		case flags&ast.FlowFlagsBranchLabel != 0:
 			// A branching point is reachable if any branch is reachable.
-			for list := getBranchLabelAntecedents(flow, reduceLabels); list != nil; list = list.Next {
-				if c.isReachableFlowNodeWorker(list.Flow, false /*noCacheCheck*/) {
+			for list := getBranchLabelAntecedents(flow, f.reduceLabels); list != nil; list = list.Next {
+				if c.isReachableFlowNodeWorker(f, list.Flow, false /*noCacheCheck*/) {
 					return true
 				}
 			}
@@ -2510,9 +2523,9 @@ func (c *Checker) isReachableFlowNodeWorker(flow *ast.FlowNode, noCacheCheck boo
 		case flags&ast.FlowFlagsReduceLabel != 0:
 			// Cache is unreliable once we start adjusting labels
 			c.lastFlowNode = nil
-			reduceLabels = append(reduceLabels, flow.Node.AsFlowReduceLabelData())
-			result := c.isReachableFlowNodeWorker(flow.Antecedent, false /*noCacheCheck*/)
-			reduceLabels = reduceLabels[:len(reduceLabels)-1]
+			f.reduceLabels = append(f.reduceLabels, flow.Node.AsFlowReduceLabelData())
+			result := c.isReachableFlowNodeWorker(f, flow.Antecedent, false /*noCacheCheck*/)
+			f.reduceLabels = f.reduceLabels[:len(f.reduceLabels)-1]
 			return result
 		default:
 			return flags&ast.FlowFlagsUnreachable == 0
@@ -2536,8 +2549,13 @@ func (c *Checker) isFalseExpression(expr *ast.Node) bool {
 // Return true if the given flow node is preceded by a 'super(...)' call in every possible code path
 // leading to the node.
 func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) bool {
-	var reduceLabelsBuffer [4]*ast.FlowReduceLabelData
-	reduceLabels := reduceLabelsBuffer[:0]
+	f := c.getFlowState()
+	result := c.isPostSuperFlowNodeWorker(f, flow, noCacheCheck)
+	c.putFlowState(f)
+	return result
+}
+
+func (c *Checker) isPostSuperFlowNodeWorker(f *FlowState, flow *ast.FlowNode, noCacheCheck bool) bool {
 	for {
 		flags := flow.Flags
 		if flags&ast.FlowFlagsShared != 0 {
@@ -2545,7 +2563,7 @@ func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) boo
 				if postSuper, ok := c.flowNodePostSuper[flow]; ok {
 					return postSuper
 				}
-				postSuper := c.isPostSuperFlowNode(flow, true /*noCacheCheck*/)
+				postSuper := c.isPostSuperFlowNodeWorker(f, flow, true /*noCacheCheck*/)
 				c.flowNodePostSuper[flow] = postSuper
 			}
 			noCacheCheck = false
@@ -2559,8 +2577,8 @@ func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) boo
 			}
 			flow = flow.Antecedent
 		case flags&ast.FlowFlagsBranchLabel != 0:
-			for list := getBranchLabelAntecedents(flow, reduceLabels); list != nil; list = list.Next {
-				if !c.isPostSuperFlowNode(list.Flow, false /*noCacheCheck*/) {
+			for list := getBranchLabelAntecedents(flow, f.reduceLabels); list != nil; list = list.Next {
+				if !c.isPostSuperFlowNodeWorker(f, list.Flow, false /*noCacheCheck*/) {
 					return false
 				}
 			}
@@ -2569,9 +2587,9 @@ func (c *Checker) isPostSuperFlowNode(flow *ast.FlowNode, noCacheCheck bool) boo
 			// A loop is post-super if the control flow path that leads to the top is post-super.
 			flow = flow.Antecedents.Flow
 		case flags&ast.FlowFlagsReduceLabel != 0:
-			reduceLabels = append(reduceLabels, flow.Node.AsFlowReduceLabelData())
-			result := c.isPostSuperFlowNode(flow.Antecedent, false /*noCacheCheck*/)
-			reduceLabels = reduceLabels[:len(reduceLabels)-1]
+			f.reduceLabels = append(f.reduceLabels, flow.Node.AsFlowReduceLabelData())
+			result := c.isPostSuperFlowNodeWorker(f, flow.Antecedent, false /*noCacheCheck*/)
+			f.reduceLabels = f.reduceLabels[:len(f.reduceLabels)-1]
 			return result
 		default:
 			// Unreachable nodes are considered post-super to silence errors

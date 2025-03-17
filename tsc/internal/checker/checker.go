@@ -721,8 +721,8 @@ type Checker struct {
 	lastGetCombinedNodeFlagsResult             ast.NodeFlags
 	lastGetCombinedModifierFlagsNode           *ast.Node
 	lastGetCombinedModifierFlagsResult         ast.ModifierFlags
-	inferenceStates                            []InferenceState
-	flowStates                                 []FlowState
+	freeinferenceState                         *InferenceState
+	freeFlowState                              *FlowState
 	flowLoopCache                              map[FlowLoopKey]*Type
 	flowLoopStack                              []FlowLoopInfo
 	sharedFlows                                []SharedFlow

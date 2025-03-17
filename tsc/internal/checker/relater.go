@@ -365,12 +365,7 @@ func (c *Checker) checkTypeRelatedToEx(
 	headMessage *diagnostics.Message,
 	diagnosticOutput *[]*ast.Diagnostic,
 ) bool {
-	r := c.freeRelater
-	if r == nil {
-		r = &Relater{c: c}
-	} else {
-		c.freeRelater = r.next
-	}
+	r := c.getRelater()
 	r.relation = relation
 	r.errorNode = errorNode
 	r.relationCount = (16_000_000 - relation.size()) / 8
@@ -398,16 +393,7 @@ func (c *Checker) checkTypeRelatedToEx(
 		}
 		c.reportDiagnostic(createDiagnosticChainFromErrorChain(r.errorChain, r.errorNode, r.relatedInfo), diagnosticOutput)
 	}
-	r.maybeKeysSet.Clear()
-	*r = Relater{
-		c:            c,
-		maybeKeys:    r.maybeKeys[:0],
-		maybeKeysSet: r.maybeKeysSet,
-		sourceStack:  r.sourceStack[:0],
-		targetStack:  r.targetStack[:0],
-		next:         c.freeRelater,
-	}
-	c.freeRelater = r
+	c.putRelater(r)
 	return result != TernaryFalse
 }
 
@@ -2526,6 +2512,28 @@ type Relater struct {
 	overflow       bool
 	relationCount  int
 	next           *Relater
+}
+
+func (c *Checker) getRelater() *Relater {
+	r := c.freeRelater
+	if r == nil {
+		r = &Relater{c: c}
+	}
+	c.freeRelater = r.next
+	return r
+}
+
+func (c *Checker) putRelater(r *Relater) {
+	r.maybeKeysSet.Clear()
+	*r = Relater{
+		c:            c,
+		maybeKeys:    r.maybeKeys[:0],
+		maybeKeysSet: r.maybeKeysSet,
+		sourceStack:  r.sourceStack[:0],
+		targetStack:  r.targetStack[:0],
+		next:         c.freeRelater,
+	}
+	c.freeRelater = r
 }
 
 func (r *Relater) isRelatedToSimple(source *Type, target *Type) Ternary {
