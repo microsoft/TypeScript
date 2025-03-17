@@ -1933,6 +1933,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeHasCallOrConstructSignatures,
         getSymbolFlags,
         getTypeArgumentsForResolvedSignature,
+        isLibType,
     };
 
     function getTypeArgumentsForResolvedSignature(signature: Signature) {
@@ -6483,12 +6484,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        // Don't unfold types like `Array` or `Promise`, instead treating them as transparent.
-        function isLibType(type: Type): boolean {
-            const symbol = (getObjectFlags(type) & ObjectFlags.Reference) !== 0 ? (type as TypeReference).target.symbol : type.symbol;
-            return isTupleType(type) || !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
-        }
-
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
             const restoreFlags = saveRestoreFlags(context);
             if (type) context.typeStack.push(type.id);
@@ -10609,6 +10604,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return localName;
             }
         }
+    }
+
+    /** Returns true if a type is declared in a lib file. */
+    // Don't unfold types like `Array` or `Promise`, instead treating them as transparent.
+    function isLibType(type: Type): boolean {
+        const symbol = (getObjectFlags(type) & ObjectFlags.Reference) !== 0 ? (type as TypeReference).target.symbol : type.symbol;
+        return isTupleType(type) || !!(symbol?.declarations?.some(decl => host.isSourceFileDefaultLibrary(getSourceFileOfNode(decl))));
     }
 
     function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer?: EmitTextWriter): string {

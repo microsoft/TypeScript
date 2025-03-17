@@ -549,7 +549,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
                     displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                     displayParts.push(spacePart());
                     addFullSymbolName(declaration.symbol);
-                    writeTypeParametersOfSymbol(symbol, sourceFile);
+                    writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                 }
             }
         }
@@ -824,13 +824,12 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
         displayParts.push(spacePart());
     }
 
-    // >> TODO: can this ever be called with depth > 0, i.e. not at the top level?
     function canUnfoldSymbol(symbol: Symbol, out: WriterContextOut | undefined): Type | undefined {
         if (verbosityLevel === undefined || !(symbol.flags & SymbolFlags.Type)) {
             return undefined;
         }
         const type = getTypeOfSymbol(symbol);
-        if (!type) {
+        if (!type || typeChecker.isLibType(type)) {
             return undefined;
         }
         if (0 < verbosityLevel) {

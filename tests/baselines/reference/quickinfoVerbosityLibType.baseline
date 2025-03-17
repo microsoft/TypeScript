@@ -35,6 +35,13 @@
 // | const u: Map<string, Apple>
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
+// type Foo<T> = Promise<T>;
+//               ^^^^^^^
+// | ----------------------------------------------------------------------
+// | interface Promise<T>
+// | Represents the completion of an asynchronous operation
+// | (verbosity level: 0)
+// | ----------------------------------------------------------------------
 
 [
   {
@@ -451,6 +458,55 @@
       "documentation": [],
       "canIncreaseVerbosityLevel": false,
       "verbosityLevel": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityLibType.ts",
+      "position": 218,
+      "name": "p"
+    },
+    "item": {
+      "kind": "interface",
+      "kindModifiers": "declare",
+      "textSpan": {
+        "start": 211,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Promise",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Represents the completion of an asynchronous operation",
+          "kind": "text"
+        }
+      ],
+      "canIncreaseVerbosityLevel": false,
+      "verbosityLevel": 0
     }
   }
 ]

@@ -39,7 +39,7 @@
 // type MixinCtor<A> = new () => A & { constructor: MixinCtor<A> };
 //                               ^
 // | ----------------------------------------------------------------------
-// | (type parameter) A in type MixinCtor
+// | (type parameter) A in type MixinCtor<A>
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
 
@@ -749,6 +749,18 @@
         {
           "text": "MixinCtor",
           "kind": "aliasName"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "A",
+          "kind": "typeParameterName"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
         }
       ],
       "documentation": [],
