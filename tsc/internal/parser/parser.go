@@ -3789,7 +3789,7 @@ func (p *Parser) parseDecorator() *ast.Node {
 
 func (p *Parser) parseDecoratorExpression() *ast.Expression {
 	if p.inAwaitContext() && p.token == ast.KindAwaitKeyword {
-		// `@await` is is disallowed in an [Await] context, but can cause parsing to go off the rails
+		// `@await` is disallowed in an [Await] context, but can cause parsing to go off the rails
 		// This simply parses the missing identifier and moves on.
 		pos := p.nodePos()
 		awaitExpression := p.parseIdentifierWithDiagnostic(diagnostics.Expression_expected, nil)

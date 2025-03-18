@@ -868,7 +868,7 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 				}
 			}
 		}
-		// For each constituent t in the current type, if t and and c are directly related, pick the most
+		// For each constituent t in the current type, if t and c are directly related, pick the most
 		// specific of the two. When t and c are related in both directions, we prefer c for type predicates
 		// because that is the asserted type, but t for `instanceof` because generics aren't reflected in
 		// prototype object types.

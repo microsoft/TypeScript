@@ -3874,7 +3874,7 @@ func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, varia
 			} else if variance == VarianceFlagsBivariant {
 				// In the bivariant case we first compare contravariantly without reporting
 				// errors. Then, if that doesn't succeed, we compare covariantly with error
-				// reporting. Thus, error elaboration will be based on the the covariant check,
+				// reporting. Thus, error elaboration will be based on the covariant check,
 				// which is generally easier to reason about.
 				related = r.isRelatedTo(t, s, RecursionFlagsBoth, false /*reportErrors*/)
 				if related == TernaryFalse {
