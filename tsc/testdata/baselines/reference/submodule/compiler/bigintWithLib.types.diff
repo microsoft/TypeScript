@@ -1,24 +1,6 @@
 --- old.bigintWithLib.types
 +++ new.bigintWithLib.types
-@@= skipped -27, +27 lines =@@
- >BigInt : BigIntConstructor
- >asIntN : (bits: number, int: bigint) => bigint
- >8 : 8
-->0xFFFFn : 65535n
-+>0xFFFFn : 0xffffn
- 
- bigintVal = BigInt.asUintN(8, 0xFFFFn);
- >bigintVal = BigInt.asUintN(8, 0xFFFFn) : bigint
-@@= skipped -10, +10 lines =@@
- >BigInt : BigIntConstructor
- >asUintN : (bits: number, int: bigint) => bigint
- >8 : 8
-->0xFFFFn : 65535n
-+>0xFFFFn : 0xffffn
- 
- bigintVal = bigintVal.valueOf();
- >bigintVal = bigintVal.valueOf() : bigint
-@@= skipped -30, +30 lines =@@
+@@= skipped -67, +67 lines =@@
  >stringVal = bigintVal.toLocaleString() : string
  >stringVal : string
  >bigintVal.toLocaleString() : string

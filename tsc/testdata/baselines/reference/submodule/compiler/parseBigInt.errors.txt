@@ -1,7 +1,4 @@
-parseBigInt.ts(43,7): error TS2322: Type '-0x10n' is not assignable to type '-16n'.
-parseBigInt.ts(46,7): error TS2322: Type '-0n' is not assignable to type '0n'.
-parseBigInt.ts(47,7): error TS2322: Type '0xffn' is not assignable to type '255n'.
-parseBigInt.ts(48,7): error TS2322: Type '0x000000ffn' is not assignable to type '0xffn'.
+parseBigInt.ts(46,7): error TS2719: Type '0n' is not assignable to type '0n'. Two different types with this name exist, but they are unrelated.
 parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
@@ -15,14 +12,14 @@ parseBigInt.ts(62,20): error TS1125: Hexadecimal digit expected.
 parseBigInt.ts(63,26): error TS2304: Cannot find name '_123n'.
 parseBigInt.ts(64,30): error TS6188: Numeric separators are not allowed here.
 parseBigInt.ts(65,33): error TS6189: Multiple consecutive numeric separators are not permitted.
-parseBigInt.ts(69,15): error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 2n | 3n'.
-parseBigInt.ts(70,15): error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 2n | 3n'.
-parseBigInt.ts(70,34): error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 2n | 3n'.
-parseBigInt.ts(70,53): error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 2n | 3n'.
-parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 2n | 3n'.
+parseBigInt.ts(69,15): error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,15): error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,34): error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,53): error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 3n | 2n'.
 
 
-==== parseBigInt.ts (22 errors) ====
+==== parseBigInt.ts (19 errors) ====
     // All bases should allow "n" suffix
     const bin = 0b101, binBig = 0b101n; // 5, 5n
     const oct = 0o567, octBig = 0o567n; // 375, 375n
@@ -66,19 +63,13 @@ parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to p
     // Test negative literals
     const neg = -123n;
     const negHex: -16n = -0x10n;
-          ~~~~~~
-!!! error TS2322: Type '-0x10n' is not assignable to type '-16n'.
     
     // Test normalization of bigints -- all of these should succeed
     const negZero: 0n = -0n;
           ~~~~~~~
-!!! error TS2322: Type '-0n' is not assignable to type '0n'.
+!!! error TS2719: Type '0n' is not assignable to type '0n'. Two different types with this name exist, but they are unrelated.
     const baseChange: 255n = 0xFFn;
-          ~~~~~~~~~~
-!!! error TS2322: Type '0xffn' is not assignable to type '255n'.
     const leadingZeros: 0xFFn = 0x000000FFn;
-          ~~~~~~~~~~~~
-!!! error TS2322: Type '0x000000ffn' is not assignable to type '0xffn'.
     
     // Plus not allowed on literals
     const unaryPlus = +123n;
@@ -127,13 +118,13 @@ parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to p
     const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
     oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
                   ~~
-!!! error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 2n | 3n'.
+!!! error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 3n | 2n'.
     oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
                   ~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 2n | 3n'.
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 3n | 2n'.
                                      ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 2n | 3n'.
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 3n | 2n'.
                                                         ~
-!!! error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 2n | 3n'.
+!!! error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 3n | 2n'.
                                                                            ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 2n | 3n'.
+!!! error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 3n | 2n'.

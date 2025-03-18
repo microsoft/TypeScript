@@ -17,12 +17,6 @@ templateLiteralTypesPatterns.ts(68,9): error TS2345: Argument of type '"a10"' is
 templateLiteralTypesPatterns.ts(69,9): error TS2345: Argument of type '"10a"' is not assignable to parameter of type '`${number}`'.
 templateLiteralTypesPatterns.ts(72,9): error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${number}`'.
 templateLiteralTypesPatterns.ts(73,9): error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${number}`'.
-templateLiteralTypesPatterns.ts(77,9): error TS2345: Argument of type '"1"' is not assignable to parameter of type '`${bigint}`'.
-templateLiteralTypesPatterns.ts(78,9): error TS2345: Argument of type '"-1"' is not assignable to parameter of type '`${bigint}`'.
-templateLiteralTypesPatterns.ts(79,9): error TS2345: Argument of type '"0"' is not assignable to parameter of type '`${bigint}`'.
-templateLiteralTypesPatterns.ts(80,9): error TS2345: Argument of type '"0b1"' is not assignable to parameter of type '`${bigint}`'.
-templateLiteralTypesPatterns.ts(81,9): error TS2345: Argument of type '"0x1"' is not assignable to parameter of type '`${bigint}`'.
-templateLiteralTypesPatterns.ts(82,9): error TS2345: Argument of type '"0o1"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(85,9): error TS2345: Argument of type '"1e21"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(86,9): error TS2345: Argument of type '"1E21"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(87,9): error TS2345: Argument of type '"1e-21"' is not assignable to parameter of type '`${bigint}`'.
@@ -39,8 +33,6 @@ templateLiteralTypesPatterns.ts(101,9): error TS2345: Argument of type '"Infinit
 templateLiteralTypesPatterns.ts(102,9): error TS2345: Argument of type '"+Infinity"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(103,9): error TS2345: Argument of type '"-Infinity"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(104,9): error TS2345: Argument of type '"1_000"' is not assignable to parameter of type '`${bigint}`'.
-templateLiteralTypesPatterns.ts(107,9): error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${bigint}`'.
-templateLiteralTypesPatterns.ts(108,9): error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(111,9): error TS2345: Argument of type '"a10n"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(112,9): error TS2345: Argument of type '"10an"' is not assignable to parameter of type '`${bigint}`'.
 templateLiteralTypesPatterns.ts(115,9): error TS2345: Argument of type '"1n"' is not assignable to parameter of type '`${bigint}`'.
@@ -64,7 +56,7 @@ templateLiteralTypesPatterns.ts(160,7): error TS2322: Type '"anything"' is not a
 templateLiteralTypesPatterns.ts(215,5): error TS2345: Argument of type '"abcTest"' is not assignable to parameter of type '`${`a${string}` & `${string}a`}Test`'.
 
 
-==== templateLiteralTypesPatterns.ts (64 errors) ====
+==== templateLiteralTypesPatterns.ts (56 errors) ====
     type RequiresLeadingSlash = `/${string}`;
     
     // ok
@@ -180,23 +172,11 @@ templateLiteralTypesPatterns.ts(215,5): error TS2345: Argument of type '"abcTest
     declare function bigints(x: `${bigint}`): void;
     // the following should work
     bigints("1");
-            ~~~
-!!! error TS2345: Argument of type '"1"' is not assignable to parameter of type '`${bigint}`'.
     bigints("-1");
-            ~~~~
-!!! error TS2345: Argument of type '"-1"' is not assignable to parameter of type '`${bigint}`'.
     bigints("0");
-            ~~~
-!!! error TS2345: Argument of type '"0"' is not assignable to parameter of type '`${bigint}`'.
     bigints("0b1");
-            ~~~~~
-!!! error TS2345: Argument of type '"0b1"' is not assignable to parameter of type '`${bigint}`'.
     bigints("0x1");
-            ~~~~~
-!!! error TS2345: Argument of type '"0x1"' is not assignable to parameter of type '`${bigint}`'.
     bigints("0o1");
-            ~~~~~
-!!! error TS2345: Argument of type '"0o1"' is not assignable to parameter of type '`${bigint}`'.
     
     // bigints do not allow scientific notation in their parsing/scanning, so these are all errors
     bigints("1e21");
@@ -254,11 +234,7 @@ templateLiteralTypesPatterns.ts(215,5): error TS2345: Argument of type '"abcTest
     
     // whitespace and comments aren't part of numbers
     bigints("- 1");
-            ~~~~~
-!!! error TS2345: Argument of type '"- 1"' is not assignable to parameter of type '`${bigint}`'.
     bigints("-/**/1");
-            ~~~~~~~~
-!!! error TS2345: Argument of type '"-/**/1"' is not assignable to parameter of type '`${bigint}`'.
     
     // the following should be errors since they don't match the pattern
     bigints("a10n");

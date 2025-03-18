@@ -5,20 +5,20 @@
 const bin = 0b101, binBig = 0b101n; // 5, 5n
 >bin : 5
 >0b101 : 5
->binBig : 0b101n
->0b101n : 0b101n
+>binBig : 5n
+>0b101n : 5n
 
 const oct = 0o567, octBig = 0o567n; // 375, 375n
 >oct : 375
 >0o567 : 375
->octBig : 0o567n
->0o567n : 0o567n
+>octBig : 375n
+>0o567n : 375n
 
 const hex = 0xC0B, hexBig = 0xC0Bn; // 3083, 3083n
 >hex : 3083
 >0xC0B : 3083
->hexBig : 0xc0bn
->0xC0Bn : 0xc0bn
+>hexBig : 3083n
+>0xC0Bn : 3083n
 
 const dec = 123,   decBig = 123n;
 >dec : 123
@@ -29,111 +29,111 @@ const dec = 123,   decBig = 123n;
 // Test literals whose values overflow a 53-bit integer
 // These should be represented exactly in the emitted JS
 const largeBin = 0b10101010101010101010101010101010101010101010101010101010101n; // 384307168202282325n
->largeBin : 0b10101010101010101010101010101010101010101010101010101010101n
->0b10101010101010101010101010101010101010101010101010101010101n : 0b10101010101010101010101010101010101010101010101010101010101n
+>largeBin : 384307168202282325n
+>0b10101010101010101010101010101010101010101010101010101010101n : 384307168202282325n
 
 const largeOct = 0o123456712345671234567n; // 1505852261029722487n
->largeOct : 0o123456712345671234567n
->0o123456712345671234567n : 0o123456712345671234567n
+>largeOct : 1505852261029722487n
+>0o123456712345671234567n : 1505852261029722487n
 
 const largeDec = 12345678091234567890n;
 >largeDec : 12345678091234567890n
 >12345678091234567890n : 12345678091234567890n
 
 const largeHex = 0x1234567890abcdefn; // 1311768467294899695n
->largeHex : 0x1234567890abcdefn
->0x1234567890abcdefn : 0x1234567890abcdefn
+>largeHex : 1311768467294899695n
+>0x1234567890abcdefn : 1311768467294899695n
 
 // Test literals with separators
 const separatedBin = 0b010_10_1n; // 21n
->separatedBin : 0b010101n
->0b010_10_1n : 0b010101n
+>separatedBin : 21n
+>0b010_10_1n : 21n
 
 const separatedOct = 0o1234_567n; // 342391n
->separatedOct : 0o1234567n
->0o1234_567n : 0o1234567n
+>separatedOct : 342391n
+>0o1234_567n : 342391n
 
 const separatedDec = 123_456_789n;
 >separatedDec : 123456789n
 >123_456_789n : 123456789n
 
 const separatedHex = 0x0_abcdefn; // 11259375n
->separatedHex : 0x0abcdefn
->0x0_abcdefn : 0x0abcdefn
+>separatedHex : 11259375n
+>0x0_abcdefn : 11259375n
 
 // Test parsing literals of different bit sizes
 // to ensure that parsePseudoBigInt() allocates enough space
 const zero         = 0b0n;
->zero : 0b0n
->0b0n : 0b0n
+>zero : 0n
+>0b0n : 0n
 
 const oneBit       = 0b1n;
->oneBit : 0b1n
->0b1n : 0b1n
+>oneBit : 1n
+>0b1n : 1n
 
 const twoBit       = 0b11n; // 3n
->twoBit : 0b11n
->0b11n : 0b11n
+>twoBit : 3n
+>0b11n : 3n
 
 const threeBit     = 0b111n; // 7n
->threeBit : 0b111n
->0b111n : 0b111n
+>threeBit : 7n
+>0b111n : 7n
 
 const fourBit      = 0b1111n; // 15n
->fourBit : 0b1111n
->0b1111n : 0b1111n
+>fourBit : 15n
+>0b1111n : 15n
 
 const fiveBit      = 0b11111n; // 31n
->fiveBit : 0b11111n
->0b11111n : 0b11111n
+>fiveBit : 31n
+>0b11111n : 31n
 
 const sixBit       = 0b111111n; // 63n
->sixBit : 0b111111n
->0b111111n : 0b111111n
+>sixBit : 63n
+>0b111111n : 63n
 
 const sevenBit     = 0b1111111n; // 127n
->sevenBit : 0b1111111n
->0b1111111n : 0b1111111n
+>sevenBit : 127n
+>0b1111111n : 127n
 
 const eightBit     = 0b11111111n; // 255n
->eightBit : 0b11111111n
->0b11111111n : 0b11111111n
+>eightBit : 255n
+>0b11111111n : 255n
 
 const nineBit      = 0b111111111n; // 511n
->nineBit : 0b111111111n
->0b111111111n : 0b111111111n
+>nineBit : 511n
+>0b111111111n : 511n
 
 const tenBit       = 0b1111111111n; // 1023n
->tenBit : 0b1111111111n
->0b1111111111n : 0b1111111111n
+>tenBit : 1023n
+>0b1111111111n : 1023n
 
 const elevenBit    = 0b11111111111n; // 2047n
->elevenBit : 0b11111111111n
->0b11111111111n : 0b11111111111n
+>elevenBit : 2047n
+>0b11111111111n : 2047n
 
 const twelveBit    = 0b111111111111n; // 4095n
->twelveBit : 0b111111111111n
->0b111111111111n : 0b111111111111n
+>twelveBit : 4095n
+>0b111111111111n : 4095n
 
 const thirteenBit  = 0b1111111111111n; // 8191n
->thirteenBit : 0b1111111111111n
->0b1111111111111n : 0b1111111111111n
+>thirteenBit : 8191n
+>0b1111111111111n : 8191n
 
 const fourteenBit  = 0b11111111111111n; // 16383n
->fourteenBit : 0b11111111111111n
->0b11111111111111n : 0b11111111111111n
+>fourteenBit : 16383n
+>0b11111111111111n : 16383n
 
 const fifteenBit   = 0b111111111111111n; // 32767n
->fifteenBit : 0b111111111111111n
->0b111111111111111n : 0b111111111111111n
+>fifteenBit : 32767n
+>0b111111111111111n : 32767n
 
 const sixteenBit   = 0b1111111111111111n; // 65535n
->sixteenBit : 0b1111111111111111n
->0b1111111111111111n : 0b1111111111111111n
+>sixteenBit : 65535n
+>0b1111111111111111n : 65535n
 
 const seventeenBit = 0b11111111111111111n; // 131071n
->seventeenBit : 0b11111111111111111n
->0b11111111111111111n : 0b11111111111111111n
+>seventeenBit : 131071n
+>0b11111111111111111n : 131071n
 
 // Test negative literals
 const neg = -123n;
@@ -145,22 +145,22 @@ const negHex: -16n = -0x10n;
 >negHex : -16n
 >-16n : -16n
 >16n : 16n
->-0x10n : -0x10n
->0x10n : 0x10n
+>-0x10n : -16n
+>0x10n : 16n
 
 // Test normalization of bigints -- all of these should succeed
 const negZero: 0n = -0n;
 >negZero : 0n
->-0n : -0n
+>-0n : 0n
 >0n : 0n
 
 const baseChange: 255n = 0xFFn;
 >baseChange : 255n
->0xFFn : 0xffn
+>0xFFn : 255n
 
 const leadingZeros: 0xFFn = 0x000000FFn;
->leadingZeros : 0xffn
->0x000000FFn : 0x000000ffn
+>leadingZeros : 255n
+>0x000000FFn : 255n
 
 // Plus not allowed on literals
 const unaryPlus = +123n;
@@ -171,7 +171,7 @@ const unaryPlus = +123n;
 const unaryPlusHex = +0x123n;
 >unaryPlusHex : number
 >+0x123n : number
->0x123n : 0x123n
+>0x123n : 291n
 
 // Parsing errors
 // In separate blocks because they each declare an "n" variable
@@ -193,16 +193,16 @@ const unaryPlusHex = +0x123n;
 >.1n : 0.1
 
 const emptyBinary = 0bn; // should error but infer 0n
->emptyBinary : 0b0n
->0bn : 0b0n
+>emptyBinary : 0n
+>0bn : 0n
 
 const emptyOct = 0on; // should error but infer 0n
->emptyOct : 0o0n
->0on : 0o0n
+>emptyOct : 0n
+>0on : 0n
 
 const emptyHex = 0xn; // should error but infer 0n
->emptyHex : 0x0n
->0xn : 0x0n
+>emptyHex : 0n
+>0xn : 0n
 
 const leadingSeparator = _123n;
 >leadingSeparator : any
@@ -218,38 +218,38 @@ const doubleSeparator = 123_456__789n;
 
 // Using literals as types
 const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
->(x: 1n | 2n | 3n): bigint => x ** 2n : (x: 1n | 2n | 3n) => bigint
->x : 1n | 2n | 3n
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
+>(x: 1n | 2n | 3n): bigint => x ** 2n : (x: 1n | 3n | 2n) => bigint
+>x : 1n | 3n | 2n
 >x ** 2n : bigint
->x : 1n | 2n | 3n
+>x : 1n | 3n | 2n
 >2n : 2n
 
 oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
 >oneTwoOrThree(0n) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >0n : 0n
 >oneTwoOrThree(1n) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >1n : 1n
 >oneTwoOrThree(2n) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >2n : 2n
 >oneTwoOrThree(3n) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >3n : 3n
 
 oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
 >oneTwoOrThree(0) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >0 : 0
 >oneTwoOrThree(1) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >1 : 1
 >oneTwoOrThree(2) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >2 : 2
 >oneTwoOrThree(3) : bigint
->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
 >3 : 3
 

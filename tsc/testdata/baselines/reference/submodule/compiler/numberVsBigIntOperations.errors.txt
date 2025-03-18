@@ -62,13 +62,11 @@ numberVsBigIntOperations.ts(61,1): error TS2365: Operator '<<' cannot be applied
 numberVsBigIntOperations.ts(70,2): error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
 numberVsBigIntOperations.ts(86,7): error TS1155: 'const' declarations must be initialized.
 numberVsBigIntOperations.ts(93,7): error TS1155: 'const' declarations must be initialized.
-numberVsBigIntOperations.ts(94,25): error TS2345: Argument of type '1 | 0n' is not assignable to parameter of type '1 | 1n'.
-  Type '0n' is not assignable to type '1 | 1n'.
 numberVsBigIntOperations.ts(98,6): error TS2736: Operator '+' cannot be applied to type 'S'.
 numberVsBigIntOperations.ts(99,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'S'.
 
 
-==== numberVsBigIntOperations.ts (67 errors) ====
+==== numberVsBigIntOperations.ts (66 errors) ====
     // Cannot mix bigints and numbers
     let bigInt = 1n, num = 2;
     bigInt = 1n; bigInt = 2; num = 1n; num = 2;
@@ -291,9 +289,6 @@ numberVsBigIntOperations.ts(99,5): error TS2365: Operator '+' cannot be applied 
           ~~~~~~~~~~~~
 !!! error TS1155: 'const' declarations must be initialized.
     if (bigZeroOrOne) isOne(bigZeroOrOne);
-                            ~~~~~~~~~~~~
-!!! error TS2345: Argument of type '1 | 0n' is not assignable to parameter of type '1 | 1n'.
-!!! error TS2345:   Type '0n' is not assignable to type '1 | 1n'.
     
     type NumberOrBigint = number | bigint;
     function getKey<S extends NumberOrBigint>(key: S) {

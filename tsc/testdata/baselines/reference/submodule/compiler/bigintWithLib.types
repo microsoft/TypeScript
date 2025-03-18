@@ -28,7 +28,7 @@ bigintVal = BigInt.asIntN(8, 0xFFFFn);
 >BigInt : BigIntConstructor
 >asIntN : (bits: number, int: bigint) => bigint
 >8 : 8
->0xFFFFn : 0xffffn
+>0xFFFFn : 65535n
 
 bigintVal = BigInt.asUintN(8, 0xFFFFn);
 >bigintVal = BigInt.asUintN(8, 0xFFFFn) : bigint
@@ -38,7 +38,7 @@ bigintVal = BigInt.asUintN(8, 0xFFFFn);
 >BigInt : BigIntConstructor
 >asUintN : (bits: number, int: bigint) => bigint
 >8 : 8
->0xFFFFn : 0xffffn
+>0xFFFFn : 65535n
 
 bigintVal = bigintVal.valueOf();
 >bigintVal = bigintVal.valueOf() : bigint

@@ -524,10 +524,6 @@ func hasExportAssignmentSymbol(moduleSymbol *ast.Symbol) bool {
 	return moduleSymbol.Exports[ast.InternalSymbolNameExportEquals] != nil
 }
 
-func parsePseudoBigInt(stringValue string) string {
-	return stringValue // !!!
-}
-
 func isTypeAlias(node *ast.Node) bool {
 	return ast.IsTypeAliasDeclaration(node)
 }
@@ -1219,7 +1215,29 @@ func isValidNumberString(s string, roundTripOnly bool) bool {
 }
 
 func isValidBigIntString(s string, roundTripOnly bool) bool {
-	return false // !!!
+	if s == "" {
+		return false
+	}
+	scanner := scanner.NewScanner()
+	scanner.SetSkipTrivia(false)
+	success := true
+	scanner.SetOnError(func(diagnostic *diagnostics.Message, start, length int, args ...any) {
+		success = false
+	})
+	scanner.SetText(s + "n")
+	result := scanner.Scan()
+	negative := result == ast.KindMinusToken
+	if negative {
+		result = scanner.Scan()
+	}
+	flags := scanner.TokenFlags()
+	// validate that
+	// * scanning proceeded without error
+	// * a bigint can be scanned, and that when it is scanned, it is
+	// * the full length of the input string (so the scanner is one character beyond the augmented input length)
+	// * it does not contain a numeric separator (the `BigInt` constructor does not accept a numeric separator in its input)
+	return success && result == ast.KindBigIntLiteral && scanner.TokenEnd() == len(s)+1 && flags&ast.TokenFlagsContainsSeparator == 0 &&
+		(!roundTripOnly || s == pseudoBigIntToString(jsnum.PseudoBigInt{Negative: negative, Base10Value: jsnum.ParsePseudoBigInt(scanner.TokenValue())}))
 }
 
 func isValidESSymbolDeclaration(node *ast.Node) bool {

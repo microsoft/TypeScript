@@ -330,6 +330,10 @@ func (scanner *Scanner) SetSkipJsDocLeadingAsterisks(skip bool) {
 	}
 }
 
+func (scanner *Scanner) SetSkipTrivia(skip bool) {
+	scanner.skipTrivia = skip
+}
+
 func (s *Scanner) HasUnicodeEscape() bool {
 	return s.tokenFlags&ast.TokenFlagsUnicodeEscape != 0
 }
@@ -1863,9 +1867,11 @@ func (s *Scanner) scanBinaryOrOctalDigits(base int32) string {
 
 func (s *Scanner) scanBigIntSuffix() ast.Kind {
 	if s.char() == 'n' {
-		s.pos++
 		s.tokenValue += "n"
-		// !!! Convert all bigint tokens to their normalized decimal representation
+		if s.tokenFlags&ast.TokenFlagsBinaryOrOctalSpecifier != 0 {
+			s.tokenValue = jsnum.ParsePseudoBigInt(s.tokenValue) + "n"
+		}
+		s.pos++
 		return ast.KindBigIntLiteral
 	}
 	s.tokenValue = jsnum.FromString(s.tokenValue).String()

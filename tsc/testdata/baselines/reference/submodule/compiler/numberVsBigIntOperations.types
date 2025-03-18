@@ -677,11 +677,11 @@ anyValue--; // should infer number
 
 // Distinguishing numbers from bigints with typeof
 const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
->isBigInt : (x: 1n | 0n) => bigint
->x : 1n | 0n
->(x: 0n | 1n) => x : (x: 1n | 0n) => 1n | 0n
->x : 1n | 0n
->x : 1n | 0n
+>isBigInt : (x: 0n | 1n) => bigint
+>x : 0n | 1n
+>(x: 0n | 1n) => x : (x: 0n | 1n) => 0n | 1n
+>x : 0n | 1n
+>x : 0n | 1n
 
 const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
 >isNumber : (x: 0 | 1) => number
@@ -699,7 +699,7 @@ if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
 >zeroOrBigOne : 0 | 1n
 >"bigint" : "bigint"
 >isBigInt(zeroOrBigOne) : bigint
->isBigInt : (x: 1n | 0n) => bigint
+>isBigInt : (x: 0n | 1n) => bigint
 >zeroOrBigOne : 1n
 
 else isNumber(zeroOrBigOne);
@@ -727,7 +727,7 @@ if (bigZeroOrOne) isOne(bigZeroOrOne);
 >bigZeroOrOne : 1 | 0n
 >isOne(bigZeroOrOne) : 1 | 1n
 >isOne : (x: 1 | 1n) => 1 | 1n
->bigZeroOrOne : 1 | 0n
+>bigZeroOrOne : 1
 
 type NumberOrBigint = number | bigint;
 >NumberOrBigint : NumberOrBigint

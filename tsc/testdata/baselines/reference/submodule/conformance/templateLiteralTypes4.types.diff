@@ -10,50 +10,7 @@
  === templateLiteralTypes4.ts ===
  // infer from number
  type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
-@@= skipped -34, +30 lines =@@
- 
- // infer from bigint
- type TBigInt0 = "100" extends `${infer N extends bigint}` ? N : never; // 100n
-->TBigInt0 : 100n
-+>TBigInt0 : never
- 
- type TBigInt1 = "-100" extends `${infer N extends bigint}` ? N : never; // -100n
-->TBigInt1 : -100n
-+>TBigInt1 : never
- 
- type TBigInt2 = "0x10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
-->TBigInt2 : bigint
-+>TBigInt2 : never
- 
- type TBigInt3 = "0o10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
-->TBigInt3 : bigint
-+>TBigInt3 : never
- 
- type TBigInt4 = "0b10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
-->TBigInt4 : bigint
-+>TBigInt4 : never
- 
- type TBigInt5 = "1.1" extends `${infer N extends bigint}` ? N : never; // never
- >TBigInt5 : never
-@@= skipped -353, +353 lines =@@
- >PExclude1 : 0
- 
- type PExclude2 = "0" extends `${infer T extends 1 | bigint}` ? T : never; // 0n
-->PExclude2 : 0n
-+>PExclude2 : never
- 
- type PExclude3 = "0" extends `${infer T extends NumberLiteralEnum.One | bigint}` ? T : never; // 0n
-->PExclude3 : 0n
-+>PExclude3 : never
- >NumberLiteralEnum : any
- 
- type PExclude4 = "100000000000000000000000" extends `${infer T extends number | bigint}` ? T : never; // 100000000000000000000000n
-->PExclude4 : 100000000000000000000000n
-+>PExclude4 : number | bigint
- 
- // infer to prefix from string
- type TPrefix0 = "100" extends `${infer T extends number}${string}` ? T : never; // 1
-@@= skipped -54, +54 lines =@@
+@@= skipped -441, +437 lines =@@
  >name : string
  
      readonly type: "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64";
@@ -76,12 +33,3 @@
  >index : I
  >value : FieldType<Extract<TDef[I], FieldDefinition>["type"]>
  }
-@@= skipped -102, +102 lines =@@
- >s : `**${T}**`
- 
- f3("**123**"); // 123n
-->f3("**123**") : 123n
-+>f3("**123**") : bigint
- >f3 : <T extends bigint>(s: `**${T}**`) => T
- >"**123**" : "**123**"
- 

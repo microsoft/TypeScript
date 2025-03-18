@@ -7071,7 +7071,7 @@ func (c *Checker) checkExpressionWorker(node *ast.Node, checkMode CheckMode) *Ty
 		c.checkGrammarBigIntLiteral(node.AsBigIntLiteral())
 		return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(jsnum.PseudoBigInt{
 			Negative:    false,
-			Base10Value: parsePseudoBigInt(node.Text()),
+			Base10Value: jsnum.ParsePseudoBigInt(node.Text()),
 		}))
 	case ast.KindTrueKeyword:
 		return c.trueType
@@ -10047,7 +10047,7 @@ func (c *Checker) checkPrefixUnaryExpression(node *ast.Node) *Type {
 		if expr.Operator == ast.KindMinusToken {
 			return c.getFreshTypeOfLiteralType(c.getBigIntLiteralType(jsnum.PseudoBigInt{
 				Negative:    true,
-				Base10Value: parsePseudoBigInt(expr.Operand.Text()),
+				Base10Value: jsnum.ParsePseudoBigInt(expr.Operand.Text()),
 			}))
 		}
 	}
@@ -23296,6 +23296,20 @@ func (c *Checker) getBigIntLiteralType(value jsnum.PseudoBigInt) *Type {
 		c.bigintLiteralTypes[value] = t
 	}
 	return t
+}
+
+func (c *Checker) parseBigIntLiteralType(text string) *Type {
+	return c.getBigIntLiteralType(parseValidBigInt(text))
+}
+
+// text is a valid bigint string excluding a trailing `n`, but including a possible prefix `-`.
+// Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
+func parseValidBigInt(text string) jsnum.PseudoBigInt {
+	text, negative := strings.CutPrefix(text, "-")
+	return jsnum.PseudoBigInt{
+		Negative:    negative,
+		Base10Value: jsnum.ParsePseudoBigInt(text),
+	}
 }
 
 func getStringLiteralValue(t *Type) string {

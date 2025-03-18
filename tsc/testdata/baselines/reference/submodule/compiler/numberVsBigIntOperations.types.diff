@@ -18,24 +18,7 @@
  >bigIntOrNumber : number | bigint
  >"number" : "number"
  
-@@= skipped -64, +64 lines =@@
- 
- // Distinguishing numbers from bigints with typeof
- const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
-->isBigInt : (x: 0n | 1n) => bigint
-->x : 0n | 1n
-->(x: 0n | 1n) => x : (x: 0n | 1n) => 0n | 1n
-->x : 0n | 1n
-->x : 0n | 1n
-+>isBigInt : (x: 1n | 0n) => bigint
-+>x : 1n | 0n
-+>(x: 0n | 1n) => x : (x: 1n | 0n) => 1n | 0n
-+>x : 1n | 0n
-+>x : 1n | 0n
- 
- const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
- >isNumber : (x: 0 | 1) => number
-@@= skipped -18, +18 lines =@@
+@@= skipped -82, +82 lines =@@
  
  if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
  >typeof zeroOrBigOne === "bigint" : boolean
@@ -44,11 +27,6 @@
  >zeroOrBigOne : 0 | 1n
  >"bigint" : "bigint"
  >isBigInt(zeroOrBigOne) : bigint
-->isBigInt : (x: 0n | 1n) => bigint
-+>isBigInt : (x: 1n | 0n) => bigint
- >zeroOrBigOne : 1n
- 
- else isNumber(zeroOrBigOne);
 @@= skipped -14, +14 lines =@@
  
  // Distinguishing truthy from falsy
@@ -78,11 +56,9 @@
 ->bigZeroOrOne : 0n | 1
 ->isOne(bigZeroOrOne) : 1n | 1
 ->isOne : (x: 1 | 1n) => 1n | 1
-->bigZeroOrOne : 1
 +>bigZeroOrOne : 1 | 0n
 +>isOne(bigZeroOrOne) : 1 | 1n
 +>isOne : (x: 1 | 1n) => 1 | 1n
-+>bigZeroOrOne : 1 | 0n
+ >bigZeroOrOne : 1
  
  type NumberOrBigint = number | bigint;
- >NumberOrBigint : NumberOrBigint

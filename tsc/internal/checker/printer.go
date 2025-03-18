@@ -239,7 +239,7 @@ func (p *Printer) printBooleanLiteral(b bool) {
 }
 
 func (p *Printer) printBigIntLiteral(b jsnum.PseudoBigInt) {
-	p.print(b.String())
+	p.print(b.String() + "n")
 }
 
 func (p *Printer) printUniqueESSymbolType(t *Type) {

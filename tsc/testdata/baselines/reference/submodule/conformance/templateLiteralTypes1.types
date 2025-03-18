@@ -43,7 +43,7 @@ type ToString<T extends string | number | boolean | bigint> = `${T}`;
 >ToString : `${T}`
 
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
->TS1 : "-1234n" | "42" | "abc" | "true"
+>TS1 : "-1234" | "42" | "abc" | "true"
 >true : true
 >-1234n : -1234n
 >1234n : 1234n

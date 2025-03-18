@@ -1,24 +1,6 @@
 --- old.bigintWithoutLib.types
 +++ new.bigintWithoutLib.types
-@@= skipped -29, +29 lines =@@
- >BigInt : any
- >asIntN : any
- >8 : 8
-->0xFFFFn : 65535n
-+>0xFFFFn : 0xffffn
- 
- bigintVal = BigInt.asUintN(8, 0xFFFFn);
- >bigintVal = BigInt.asUintN(8, 0xFFFFn) : any
-@@= skipped -10, +10 lines =@@
- >BigInt : any
- >asUintN : any
- >8 : 8
-->0xFFFFn : 65535n
-+>0xFFFFn : 0xffffn
- 
- bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
- >bigintVal = bigintVal.valueOf() : Object
-@@= skipped -335, +335 lines =@@
+@@= skipped -374, +374 lines =@@
  new Intl.NumberFormat("fr").format(3000n);
  >new Intl.NumberFormat("fr").format(3000n) : string
  >new Intl.NumberFormat("fr").format : (value: number) => string

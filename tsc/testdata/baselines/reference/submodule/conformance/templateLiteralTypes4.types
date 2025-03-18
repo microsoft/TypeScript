@@ -31,19 +31,19 @@ type TNumber8 = "abcd" extends `${infer N extends number}` ? N : never; // never
 
 // infer from bigint
 type TBigInt0 = "100" extends `${infer N extends bigint}` ? N : never; // 100n
->TBigInt0 : never
+>TBigInt0 : 100n
 
 type TBigInt1 = "-100" extends `${infer N extends bigint}` ? N : never; // -100n
->TBigInt1 : never
+>TBigInt1 : -100n
 
 type TBigInt2 = "0x10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
->TBigInt2 : never
+>TBigInt2 : bigint
 
 type TBigInt3 = "0o10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
->TBigInt3 : never
+>TBigInt3 : bigint
 
 type TBigInt4 = "0b10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
->TBigInt4 : never
+>TBigInt4 : bigint
 
 type TBigInt5 = "1.1" extends `${infer N extends bigint}` ? N : never; // never
 >TBigInt5 : never
@@ -384,14 +384,14 @@ type PExclude1 = "0" extends `${infer T extends `1${string}` | number}` ? T : ne
 >PExclude1 : 0
 
 type PExclude2 = "0" extends `${infer T extends 1 | bigint}` ? T : never; // 0n
->PExclude2 : never
+>PExclude2 : 0n
 
 type PExclude3 = "0" extends `${infer T extends NumberLiteralEnum.One | bigint}` ? T : never; // 0n
->PExclude3 : never
+>PExclude3 : 0n
 >NumberLiteralEnum : any
 
 type PExclude4 = "100000000000000000000000" extends `${infer T extends number | bigint}` ? T : never; // 100000000000000000000000n
->PExclude4 : number | bigint
+>PExclude4 : 100000000000000000000000n
 
 // infer to prefix from string
 type TPrefix0 = "100" extends `${infer T extends number}${string}` ? T : never; // 1
@@ -582,7 +582,7 @@ declare function f3<T extends bigint>(s: `**${T}**`): T;
 >s : `**${T}**`
 
 f3("**123**"); // 123n
->f3("**123**") : bigint
+>f3("**123**") : 123n
 >f3 : <T extends bigint>(s: `**${T}**`) => T
 >"**123**" : "**123**"
 
