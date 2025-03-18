@@ -156,7 +156,6 @@ import {
     isEmptyObjectLiteral,
     isEntityNameExpression,
     isEnumConst,
-    isEnumLiteralExpression,
     isExportAssignment,
     isExportDeclaration,
     isExportsIdentifier,
@@ -823,9 +822,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     // Assignment declarations are allowed to merge with variables, no matter what other flags they have.
                     if (isNamedDeclaration(node)) {
                         setParent(node.name, node);
-                    }
-                    if (isEnumLiteralExpression(node) && symbol.valueDeclaration === node.parent) {
-                        // This is not a real redeclaration, but is in fact two separate meanings for the same symbol.
                     }
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
