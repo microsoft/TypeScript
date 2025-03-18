@@ -3,7 +3,10 @@ package lsp
 import (
 	"fmt"
 	"net/url"
+	"slices"
 	"strings"
+	"unicode/utf16"
+	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler/diagnostics"
@@ -14,7 +17,8 @@ import (
 )
 
 type converters struct {
-	projectService *project.Service
+	projectService   *project.Service
+	positionEncoding lsproto.PositionEncodingKind
 }
 
 func (c *converters) toLspRange(fileName string, textRange core.TextRange) (lsproto.Range, error) {
@@ -24,8 +28,8 @@ func (c *converters) toLspRange(fileName string, textRange core.TextRange) (lspr
 	}
 
 	return lsproto.Range{
-		Start: positionToLineAndCharacter(textRange.Pos(), scriptInfo.LineMap()),
-		End:   positionToLineAndCharacter(textRange.End(), scriptInfo.LineMap()),
+		Start: positionToLineAndCharacter(scriptInfo, core.TextPos(textRange.Pos())),
+		End:   positionToLineAndCharacter(scriptInfo, core.TextPos(textRange.End())),
 	}, nil
 }
 
@@ -35,8 +39,8 @@ func (c *converters) fromLspRange(textRange lsproto.Range, fileName string) (cor
 		return core.TextRange{}, fmt.Errorf("no script info found for %s", fileName)
 	}
 	return core.NewTextRange(
-		lineAndCharacterToPosition(textRange.Start, scriptInfo.LineMap()),
-		lineAndCharacterToPosition(textRange.End, scriptInfo.LineMap()),
+		int(lineAndCharacterToPosition(scriptInfo, textRange.Start)),
+		int(lineAndCharacterToPosition(scriptInfo, textRange.End)),
 	), nil
 }
 
@@ -124,7 +128,7 @@ func (c *converters) lineAndCharacterToPosition(lineAndCharacter lsproto.Positio
 	if scriptInfo == nil {
 		return 0, fmt.Errorf("no script info found for %s", fileName)
 	}
-	return lineAndCharacterToPosition(lineAndCharacter, scriptInfo.LineMap()), nil
+	return int(lineAndCharacterToPosition(scriptInfo, lineAndCharacter)), nil
 }
 
 func languageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
@@ -188,23 +192,60 @@ func fileNameToDocumentUri(fileName string) lsproto.DocumentUri {
 	return lsproto.DocumentUri("file://" + fileName)
 }
 
-func lineAndCharacterToPosition(lineAndCharacter lsproto.Position, lineMap []core.TextPos) int {
-	line := int(lineAndCharacter.Line)
-	offset := int(lineAndCharacter.Character)
+func lineAndCharacterToPosition(scriptInfo *project.ScriptInfo, lineAndCharacter lsproto.Position) core.TextPos {
+	// UTF-8/16 0-indexed line and character to UTF-8 offset
 
-	if line < 0 || line >= len(lineMap) {
-		panic(fmt.Sprintf("bad line number. Line: %d, lineMap length: %d", line, len(lineMap)))
+	lineMap := scriptInfo.LineMapLSP()
+
+	line := core.TextPos(lineAndCharacter.Line)
+	char := core.TextPos(lineAndCharacter.Character)
+
+	if line < 0 || int(line) >= len(lineMap.LineStarts) {
+		panic(fmt.Sprintf("bad line number. Line: %d, lineMap length: %d", line, len(lineMap.LineStarts)))
 	}
 
-	res := int(lineMap[line]) + offset
-	if line < len(lineMap)-1 && res >= int(lineMap[line+1]) {
-		panic("resulting position is out of bounds")
+	start := lineMap.LineStarts[line]
+	if lineMap.AsciiOnly {
+		return start + char
 	}
-	return res
+
+	var utf8Char core.TextPos
+	var utf16Char core.TextPos
+
+	for i, r := range scriptInfo.Text()[start:] {
+		u16Len := core.TextPos(utf16.RuneLen(r))
+		if utf16Char+u16Len > char {
+			break
+		}
+		utf16Char += u16Len
+		utf8Char = core.TextPos(i + utf8.RuneLen(r))
+	}
+
+	return start + utf8Char
 }
 
-func positionToLineAndCharacter(position int, lineMap []core.TextPos) lsproto.Position {
-	line, character := core.PositionToLineAndCharacter(position, lineMap)
+func positionToLineAndCharacter(scriptInfo *project.ScriptInfo, position core.TextPos) lsproto.Position {
+	// UTF-8 offset to UTF-8/16 0-indexed line and character
+
+	lineMap := scriptInfo.LineMapLSP()
+
+	line, _ := slices.BinarySearch(lineMap.LineStarts, position)
+	line = max(0, line-1)
+
+	// The current line ranges from lineMap.LineStarts[line] (or 0) to lineMap.LineStarts[line+1] (or len(text)).
+
+	start := lineMap.LineStarts[line]
+
+	var character core.TextPos
+	if lineMap.AsciiOnly {
+		character = position - start
+	} else {
+		// We need to rescan the text as UTF-16 to find the character offset.
+		for _, r := range scriptInfo.Text()[start:position] {
+			character += core.TextPos(utf16.RuneLen(r))
+		}
+	}
+
 	return lsproto.Position{
 		Line:      uint32(line),
 		Character: uint32(character),

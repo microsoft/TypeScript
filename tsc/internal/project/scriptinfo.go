@@ -2,6 +2,8 @@ package project
 
 import (
 	"slices"
+	"strings"
+	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls"
@@ -17,7 +19,7 @@ type ScriptInfo struct {
 	scriptKind core.ScriptKind
 	text       string
 	version    int
-	lineMap    []core.TextPos
+	lineMap    *LineMap
 
 	isOpen                bool
 	pendingReloadFromDisk bool
@@ -47,11 +49,53 @@ func (s *ScriptInfo) Path() tspath.Path {
 	return s.path
 }
 
-func (s *ScriptInfo) LineMap() []core.TextPos {
+func (s *ScriptInfo) LineMapLSP() *LineMap {
 	if s.lineMap == nil {
-		s.lineMap = core.ComputeLineStarts(s.text)
+		s.lineMap = computeLineStartsLSP(s.text)
 	}
 	return s.lineMap
+}
+
+type LineMap struct {
+	LineStarts []core.TextPos
+	AsciiOnly  bool // TODO(jakebailey): collect ascii-only info per line
+}
+
+func computeLineStartsLSP(text string) *LineMap {
+	// This is like core.ComputeLineStarts, but only considers "\n", "\r", and "\r\n" as line breaks,
+	// and reports when the text is ASCII-only.
+	lineStarts := make([]core.TextPos, 0, strings.Count(text, "\n")+1)
+	asciiOnly := true
+
+	textLen := core.TextPos(len(text))
+	var pos core.TextPos
+	var lineStart core.TextPos
+	for pos < textLen {
+		b := text[pos]
+		if b < utf8.RuneSelf {
+			pos++
+			switch b {
+			case '\r':
+				if pos < textLen && text[pos] == '\n' {
+					pos++
+				}
+				fallthrough
+			case '\n':
+				lineStarts = append(lineStarts, lineStart)
+				lineStart = pos
+			}
+		} else {
+			_, size := utf8.DecodeRuneInString(text[pos:])
+			pos += core.TextPos(size)
+			asciiOnly = false
+		}
+	}
+	lineStarts = append(lineStarts, lineStart)
+
+	return &LineMap{
+		LineStarts: lineStarts,
+		AsciiOnly:  asciiOnly,
+	}
 }
 
 func (s *ScriptInfo) Text() string {

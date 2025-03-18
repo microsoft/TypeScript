@@ -561,7 +561,7 @@ func (s *Scanner) Scan() ast.Kind {
 			if s.charAt(1) == '/' {
 				s.pos += 2
 				for {
-					if ch := s.char(); ch <= 0x7F {
+					if ch := s.char(); ch < utf8.RuneSelf {
 						if ch < 0 || ch == '\r' || ch == '\n' {
 							break
 						}
@@ -583,7 +583,7 @@ func (s *Scanner) Scan() ast.Kind {
 				isJSDoc := s.char() == '*' && s.charAt(1) != '/'
 				for {
 					ch = s.char()
-					if ch <= 0x7F {
+					if ch < utf8.RuneSelf {
 						if ch < 0 {
 							s.error(diagnostics.Asterisk_Slash_expected)
 							break
@@ -1347,7 +1347,7 @@ func (s *Scanner) scanIdentifier(prefixLength int) bool {
 				break
 			}
 		}
-		if ch <= 0x7F && ch != '\\' {
+		if ch < utf8.RuneSelf && ch != '\\' {
 			s.tokenValue = s.text[start:s.pos]
 			return true
 		}
@@ -1913,11 +1913,11 @@ func isWordCharacter(ch rune) bool {
 }
 
 func isIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {
-	return stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' || ch > 0x7F && isUnicodeIdentifierStart(ch, languageVersion)
+	return stringutil.IsASCIILetter(ch) || ch == '_' || ch == '$' || ch >= utf8.RuneSelf && isUnicodeIdentifierStart(ch, languageVersion)
 }
 
 func isIdentifierPart(ch rune, languageVersion core.ScriptTarget) bool {
-	return isWordCharacter(ch) || ch == '$' || ch > 0x7F && isUnicodeIdentifierPart(ch, languageVersion)
+	return isWordCharacter(ch) || ch == '$' || ch >= utf8.RuneSelf && isUnicodeIdentifierPart(ch, languageVersion)
 }
 
 func isUnicodeIdentifierStart(ch rune, languageVersion core.ScriptTarget) bool {

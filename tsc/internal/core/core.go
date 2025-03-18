@@ -319,36 +319,37 @@ func ComputeLineStarts(text string) []TextPos {
 
 func ComputeLineStartsSeq(text string) iter.Seq[TextPos] {
 	return func(yield func(TextPos) bool) {
-		pos := 0
-		lineStart := 0
-		for pos < len(text) {
+		textLen := TextPos(len(text))
+		var pos TextPos
+		var lineStart TextPos
+		for pos < textLen {
 			b := text[pos]
-			if b < 0x7F {
+			if b < utf8.RuneSelf {
 				pos++
 				switch b {
 				case '\r':
-					if pos < len(text) && text[pos] == '\n' {
+					if pos < textLen && text[pos] == '\n' {
 						pos++
 					}
 					fallthrough
 				case '\n':
-					if !yield(TextPos(lineStart)) {
+					if !yield(lineStart) {
 						return
 					}
 					lineStart = pos
 				}
 			} else {
 				ch, size := utf8.DecodeRuneInString(text[pos:])
-				pos += size
+				pos += TextPos(size)
 				if stringutil.IsLineBreak(ch) {
-					if !yield(TextPos(lineStart)) {
+					if !yield(lineStart) {
 						return
 					}
 					lineStart = pos
 				}
 			}
 		}
-		yield(TextPos(lineStart))
+		yield(lineStart)
 	}
 }
 

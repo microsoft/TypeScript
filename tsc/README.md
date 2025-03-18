@@ -77,7 +77,6 @@ Status overview:
  * Build mode / project references: **not ready**
  * Incremental build: **not ready**
  * Language service (LSP): **prototype** only, expect minimal functionality (errors, hover, go to def). More features soon!
-   * ASCII files only for now
  * API: **not ready**
 
 Definitions:
