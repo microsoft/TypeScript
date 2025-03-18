@@ -1,0 +1,11 @@
+--- old.esDecorators-contextualTypes.2.js
++++ new.esDecorators-contextualTypes.2.js
+@@= skipped -33, +33 lines =@@
+ 
+ //// [esDecorators-contextualTypes.2.js]
+ class C {
+-    @boundMethodLogger("Yadda", /*bound*/ true)
++    @boundMethodLogger("Yadda", true)
+     foo() {
+         this.fooHelper();
+     }

@@ -1,0 +1,16 @@
+--- old.exportDeclareClass1.js
++++ new.exportDeclareClass1.js
+@@= skipped -11, +11 lines =@@
+     };
+ 
+ //// [exportDeclareClass1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    ;
+-    ;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++;
++;

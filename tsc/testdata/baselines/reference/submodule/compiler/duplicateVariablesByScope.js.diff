@@ -1,0 +1,31 @@
+--- old.duplicateVariablesByScope.js
++++ new.duplicateVariablesByScope.js
+@@= skipped -33, +33 lines =@@
+ }
+ 
+ //// [duplicateVariablesByScope.js]
+-// duplicate local variables are only reported at global scope
+ var M;
+ (function (M) {
+     for (var j = 0; j < 10; j++) {
+@@= skipped -18, +17 lines =@@
+         var result = 2;
+     }
+ }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function () {
++class C {
++    foo() {
+         try {
+             var x = 1;
+         }
+         catch (e) {
+             var x = 2;
+         }
+-    };
+-    return C;
+-}());
++    }
++}

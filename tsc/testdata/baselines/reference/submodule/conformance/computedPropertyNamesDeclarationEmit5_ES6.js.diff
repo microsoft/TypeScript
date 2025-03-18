@@ -1,0 +1,12 @@
+--- old.computedPropertyNamesDeclarationEmit5_ES6.js
++++ new.computedPropertyNamesDeclarationEmit5_ES6.js
+@@= skipped -14, +14 lines =@@
+     get ["" + ""]() { return 0; },
+     set ["" + ""](x) { }
+ };
+-
+-
+-//// [computedPropertyNamesDeclarationEmit5_ES6.d.ts]
+-declare var v: {
+-    [x: string]: any;
+-};

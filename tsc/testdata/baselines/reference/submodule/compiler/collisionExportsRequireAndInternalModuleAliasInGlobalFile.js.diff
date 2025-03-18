@@ -1,0 +1,20 @@
+--- old.collisionExportsRequireAndInternalModuleAliasInGlobalFile.js
++++ new.collisionExportsRequireAndInternalModuleAliasInGlobalFile.js
+@@= skipped -26, +26 lines =@@
+ //// [collisionExportsRequireAndInternalModuleAliasInGlobalFile.js]
+ var mOfGloalFile;
+ (function (mOfGloalFile) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
++    class c {
++    }
+     mOfGloalFile.c = c;
+ })(mOfGloalFile || (mOfGloalFile = {}));
+-var exports = mOfGloalFile.c;
+-var require = mOfGloalFile.c;
+ new exports();
+ new require();
+ var m1;

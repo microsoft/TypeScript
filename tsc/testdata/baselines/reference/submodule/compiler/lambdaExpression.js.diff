@@ -1,0 +1,12 @@
+--- old.lambdaExpression.js
++++ new.lambdaExpression.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [lambdaExpression.js]
+-(function () { return 0; }); // Needs to be wrapped in parens to be a valid expression (not declaration)
++() => 0;
+ var y = 0;
+-(function () { return 0; });
++(() => 0);
+ var x = 0;

@@ -1,0 +1,19 @@
+--- old.callWithSpread5.js
++++ new.callWithSpread5.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [callWithSpread5.js]
+-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+-        if (ar || !(i in from)) {
+-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+-            ar[i] = from[i];
+-        }
+-    }
+-    return to.concat(ar || Array.prototype.slice.call(from));
+-};
+-fn.apply(void 0, __spreadArray(__spreadArray([], nnnu, false), [x], false));
+-fn.apply(void 0, __spreadArray(__spreadArray([], nntnnnt, false), [x], false));
++fn(...nnnu, x);
++fn(...nntnnnt, x);

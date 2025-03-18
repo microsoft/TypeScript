@@ -1,0 +1,8 @@
+--- old.es5DateAPIs.js
++++ new.es5DateAPIs.js
+@@= skipped -3, +3 lines =@@
+ Date.UTC(2017); // should error
+ 
+ //// [es5DateAPIs.js]
+-Date.UTC(2017); // should error
++Date.UTC(2017);

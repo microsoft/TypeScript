@@ -1,0 +1,82 @@
+--- old.exportNamespace5.js
++++ new.exportNamespace5.js
+@@= skipped -28, +28 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.X = exports.B = exports.A = void 0;
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++}
+ exports.A = A;
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
++class B {
++}
+ exports.B = B;
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    return X;
+-}());
++class X {
++}
+ exports.X = X;
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.X = void 0;
+-var a_1 = require("./a");
++const a_1 = require("./a");
+ Object.defineProperty(exports, "X", { enumerable: true, get: function () { return a_1.X; } });
+ //// [c.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var b_1 = require("./b");
+-var _ = new A(); // Error
+-var __ = new C(); // Error
+-var ___ = new b_1.X(); // Ok
++const b_1 = require("./b");
++let _ = new A();
++let __ = new C();
++let ___ = new b_1.X();
+ //// [d.js]
+ "use strict";
+ var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+@@= skipped -52, +43 lines =@@
+ //// [e.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var d_1 = require("./d");
+-var _ = new d_1.A(); // Ok
+-var __ = new d_1.B(); // Ok
+-var ___ = new d_1.X(); // Ok
+-
+-
+-//// [a.d.ts]
+-export declare class A {
+-}
+-export declare class B {
+-}
+-export declare class X {
+-}
+-//// [b.d.ts]
+-export type * from "./a";
+-export { X } from "./a";
+-//// [c.d.ts]
+-export {};
+-//// [d.d.ts]
+-export type * from "./a";
+-export * from "./a";
+-//// [e.d.ts]
+-export {};
++const d_1 = require("./d");
++let _ = new d_1.A();
++let __ = new d_1.B();
++let ___ = new d_1.X();

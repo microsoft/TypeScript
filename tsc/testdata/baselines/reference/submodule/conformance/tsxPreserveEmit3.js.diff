@@ -1,0 +1,12 @@
+--- old.tsxPreserveEmit3.js
++++ new.tsxPreserveEmit3.js
+@@= skipped -17, +17 lines =@@
+ 
+ //// [file.jsx]
+ //// [react-consumer.jsx]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

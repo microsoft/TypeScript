@@ -1,0 +1,10 @@
+--- old.capturedLetConstInLoop9_ES6.js
++++ new.capturedLetConstInLoop9_ES6.js
+@@= skipped -235, +235 lines =@@
+     }
+ }
+ class C {
++    N;
+     constructor(N) {
+         this.N = N;
+     }

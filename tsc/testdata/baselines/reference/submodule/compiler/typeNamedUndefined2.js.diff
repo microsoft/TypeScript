@@ -1,0 +1,22 @@
+--- old.typeNamedUndefined2.js
++++ new.typeNamedUndefined2.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [typeNamedUndefined2.js]
+-export var ns;
++export { ns };
++var ns;
+ (function (ns) {
+     let undefined;
+     (function (undefined) {
+@@= skipped -15, +16 lines =@@
+ export function x(p) {
+     return p;
+ }
+-export var undefined;
++export { undefined };
++var undefined;
+ (function (undefined) {
+     undefined.s = Symbol();
+ })(undefined || (undefined = {}));

@@ -1,0 +1,8 @@
+--- old.excessPropertyErrorsSuppressed.js
++++ new.excessPropertyErrorsSuppressed.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [excessPropertyErrorsSuppressed.js]
+-var x = { a: "hello", b: 42 }; // No error
++var x = { a: "hello", b: 42 };

@@ -1,0 +1,13 @@
+--- old.importShouldNotBeElidedInDeclarationEmit.js
++++ new.importShouldNotBeElidedInDeclarationEmit.js
+@@= skipped -16, +16 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.thing = void 0;
+-var umd_1 = require("umd");
++const umd_1 = require("umd");
+ exports.thing = (0, umd_1.makeThing)();
+-
+-
+-//// [index.d.ts]
+-export declare const thing: import("umd").Thing;

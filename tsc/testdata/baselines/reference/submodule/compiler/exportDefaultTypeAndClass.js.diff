@@ -1,0 +1,14 @@
+--- old.exportDefaultTypeAndClass.js
++++ new.exportDefaultTypeAndClass.js
+@@= skipped -8, +8 lines =@@
+ //// [exportDefaultTypeAndClass.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ exports.default = Foo;

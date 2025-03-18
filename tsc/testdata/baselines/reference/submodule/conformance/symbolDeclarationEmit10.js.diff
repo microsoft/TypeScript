@@ -1,0 +1,12 @@
+--- old.symbolDeclarationEmit10.js
++++ new.symbolDeclarationEmit10.js
+@@= skipped -10, +10 lines =@@
+     get [Symbol.isConcatSpreadable]() { return ''; },
+     set [Symbol.isConcatSpreadable](x) { }
+ };
+-
+-
+-//// [symbolDeclarationEmit10.d.ts]
+-declare var obj: {
+-    [Symbol.isConcatSpreadable]: string;
+-};

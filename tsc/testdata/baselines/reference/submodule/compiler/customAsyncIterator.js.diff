@@ -1,0 +1,12 @@
+--- old.customAsyncIterator.js
++++ new.customAsyncIterator.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [customAsyncIterator.js]
+-// GH: https://github.com/microsoft/TypeScript/issues/33239
+ class ConstantIterator {
++    constant;
+     constructor(constant) {
+         this.constant = constant;
+     }

@@ -1,0 +1,110 @@
+--- old.privateNameWhenNotUseDefineForClassFieldsInEsNext(target=es2020).js
++++ new.privateNameWhenNotUseDefineForClassFieldsInEsNext(target=es2020).js
+@@= skipped -53, +53 lines =@@
+ }
+ 
+ //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.js]
+-"use strict";
+-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+-};
+-var _TestWithStatics_prop, _Inner_foo, _a, _TestNonStatics_prop;
+ class TestWithStatics {
+-    constructor() {
+-        _TestWithStatics_prop.set(this, 0);
+-    }
+-}
+-_TestWithStatics_prop = new WeakMap();
+-TestWithStatics.dd = __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
+-TestWithStatics["X_ z_ zz"] = (_a = class Inner {
+-        constructor() {
+-            _Inner_foo.set(this, 10);
+-        }
++    #prop = 0;
++    static dd = new TestWithStatics().#prop;
++    static ["X_ z_ zz"] = class Inner {
++        #foo = 10;
+         m() {
+-            __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
++            new TestWithStatics().#prop;
+         }
++        static C = class InnerInner {
++            m() {
++                new TestWithStatics().#prop;
++                new Inner().#foo;
++            }
++        };
+         static M() {
+             return class {
+                 m() {
+-                    __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
+-                    __classPrivateFieldGet(new _a(), _Inner_foo, "f"); // OK
++                    new TestWithStatics().#prop;
++                    new Inner().#foo;
+                 }
+             };
+         }
+-    },
+-    _Inner_foo = new WeakMap(),
+-    _a.C = class InnerInner {
++    };
++}
++class TestNonStatics {
++    #prop = 0;
++    dd = new TestNonStatics().#prop;
++    ["X_ z_ zz"] = class Inner {
++        #foo = 10;
+         m() {
+-            __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
+-            __classPrivateFieldGet(new _a(), _Inner_foo, "f"); // OK
++            new TestNonStatics().#prop;
+         }
+-    },
+-    _a);
+-class TestNonStatics {
+-    constructor() {
+-        var _Inner_foo_1, _b;
+-        _TestNonStatics_prop.set(this, 0);
+-        this.dd = __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // OK
+-        this["X_ z_ zz"] = (_b = class Inner {
+-                constructor() {
+-                    _Inner_foo_1.set(this, 10);
+-                    this.C = class InnerInner {
+-                        m() {
+-                            __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // Ok
+-                            __classPrivateFieldGet(new _b(), _Inner_foo_1, "f"); // Ok
+-                        }
+-                    };
+-                }
++        C = class InnerInner {
++            m() {
++                new TestNonStatics().#prop;
++                new Inner().#foo;
++            }
++        };
++        static M() {
++            return class {
+                 m() {
+-                    __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // Ok
++                    new TestNonStatics().#prop;
++                    new Inner().#foo;
+                 }
+-                static M() {
+-                    return class {
+-                        m() {
+-                            __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // OK
+-                            __classPrivateFieldGet(new _b(), _Inner_foo_1, "f"); // OK
+-                        }
+-                    };
+-                }
+-            },
+-            _Inner_foo_1 = new WeakMap(),
+-            _b);
+-    }
++            };
++        }
++    };
+ }
+-_TestNonStatics_prop = new WeakMap();

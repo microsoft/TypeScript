@@ -1,0 +1,25 @@
+--- old.declarationEmitFunctionKeywordProp.js
++++ new.declarationEmitFunctionKeywordProp.js
+@@= skipped -20, +20 lines =@@
+ function baz() { }
+ baz.class = true;
+ baz.normal = false;
+-
+-
+-//// [declarationEmitFunctionKeywordProp.d.ts]
+-declare function foo(): void;
+-declare namespace foo {
+-    var _a: boolean;
+-    export { _a as null };
+-}
+-declare function bar(): void;
+-declare namespace bar {
+-    var async: boolean;
+-    var normal: boolean;
+-}
+-declare function baz(): void;
+-declare namespace baz {
+-    var _a: boolean;
+-    export var normal: boolean;
+-    export { _a as class };
+-}

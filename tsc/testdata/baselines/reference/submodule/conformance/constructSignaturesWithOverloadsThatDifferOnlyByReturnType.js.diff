@@ -1,0 +1,25 @@
+--- old.constructSignaturesWithOverloadsThatDifferOnlyByReturnType.js
++++ new.constructSignaturesWithOverloadsThatDifferOnlyByReturnType.js
+@@= skipped -34, +34 lines =@@
+ }
+ 
+ //// [constructSignaturesWithOverloadsThatDifferOnlyByReturnType.js]
+-// Error for construct signature overloads to differ only by return type
+-var C = /** @class */ (function () {
+-    function C(x) {
+-    }
+-    return C;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2(x, y) {
+-    }
+-    return C2;
+-}());
++class C {
++    constructor(x) { }
++}
++class C2 {
++    constructor(x, y) { }
++}
+ var a;
+ var b;

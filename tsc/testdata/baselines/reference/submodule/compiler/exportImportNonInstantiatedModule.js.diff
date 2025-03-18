@@ -1,0 +1,9 @@
+--- old.exportImportNonInstantiatedModule.js
++++ new.exportImportNonInstantiatedModule.js
+@@= skipped -14, +14 lines =@@
+ //// [exportImportNonInstantiatedModule.js]
+ var B;
+ (function (B) {
++    B.A1 = A;
+ })(B || (B = {}));
+ var x = { x: 1 };

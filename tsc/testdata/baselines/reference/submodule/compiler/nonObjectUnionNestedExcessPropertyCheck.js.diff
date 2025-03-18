@@ -1,0 +1,15 @@
+--- old.nonObjectUnionNestedExcessPropertyCheck.js
++++ new.nonObjectUnionNestedExcessPropertyCheck.js
+@@= skipped -22, +22 lines =@@
+ 
+ 
+ //// [nonObjectUnionNestedExcessPropertyCheck.js]
+-// These are the types of errors we want:
+-var propB1 = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
+-// Nested typing works here and we also get an expected error:
+-var propB2 = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
+-// Want an error generated here but there isn't one.
+-var propA1 = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };
++const propB1 = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
++const propB2 = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
++const propA1 = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };

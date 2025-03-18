@@ -1,0 +1,51 @@
+--- old.privateVisibility.js
++++ new.privateVisibility.js
+@@= skipped -28, +28 lines =@@
+ 
+ 
+ //// [privateVisibility.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.pubProp = 0;
+-        this.privProp = 0;
+-    }
+-    Foo.prototype.pubMeth = function () { this.privMeth(); };
+-    Foo.prototype.privMeth = function () { };
+-    return Foo;
+-}());
++class Foo {
++    pubMeth() { this.privMeth(); }
++    privMeth() { }
++    pubProp = 0;
++    privProp = 0;
++}
+ var f = new Foo();
+-f.privMeth(); // should not work
+-f.privProp; // should not work
+-f.pubMeth(); // should work
+-f.pubProp; // should work
++f.privMeth();
++f.privProp;
++f.pubMeth();
++f.pubProp;
+ var M;
+ (function (M) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-            this.pub = 0;
+-            this.priv = 1;
+-        }
+-        return C;
+-    }());
++    class C {
++        pub = 0;
++        priv = 1;
++    }
+     M.C = C;
+     M.V = 0;
+ })(M || (M = {}));
+ var c = new M.C();
+-c.pub; // should work
+-c.priv; // should not work
++c.pub;
++c.priv;

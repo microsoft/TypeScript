@@ -1,0 +1,10 @@
+--- old.unicodeExtendedEscapesInRegularExpressions08(target=es5).js
++++ new.unicodeExtendedEscapesInRegularExpressions08(target=es5).js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [unicodeExtendedEscapesInRegularExpressions08.js]
+-// ES6 Spec - 10.1.1 Static Semantics: UTF16Encoding (cp)
+-//  2. If cp ≤ 65535, return cp.
+-// (FFFF == 65535)
+ var x = /\u{FFFF}/gu;

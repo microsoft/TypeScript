@@ -1,0 +1,21 @@
+--- old.importWithTrailingSlash.js
++++ new.importWithTrailingSlash.js
+@@= skipped -29, +29 lines =@@
+ //// [test.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var _1 = require(".");
+-var _2 = require("./");
++const _1 = require(".");
++const _2 = require("./");
+ _1.default.a;
+ _2.default.aIndex;
+ //// [test.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var __1 = require("..");
+-var __2 = require("../");
++const __1 = require("..");
++const __2 = require("../");
+ __1.default.a;
+ __2.default.aIndex;

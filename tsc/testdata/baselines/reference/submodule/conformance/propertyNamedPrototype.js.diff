@@ -1,0 +1,15 @@
+--- old.propertyNamedPrototype.js
++++ new.propertyNamedPrototype.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [propertyNamedPrototype.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    prototype;
++    static prototype;
++}

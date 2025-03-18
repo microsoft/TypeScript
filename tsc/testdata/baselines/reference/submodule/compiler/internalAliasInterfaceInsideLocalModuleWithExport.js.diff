@@ -1,0 +1,32 @@
+--- old.internalAliasInterfaceInsideLocalModuleWithExport.js
++++ new.internalAliasInterfaceInsideLocalModuleWithExport.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [internalAliasInterfaceInsideLocalModuleWithExport.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.c = void 0;
+-    var c;
+-    (function (c) {
+-    })(c || (exports.c = c = {}));
+-});
+-
+-
+-//// [internalAliasInterfaceInsideLocalModuleWithExport.d.ts]
+-export declare namespace a {
+-    interface I {
+-    }
+-}
+-export declare namespace c {
+-    export import b = a.I;
+-    var x: b;
+-}
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.c = void 0;
++var c;
++(function (c) {
++    c.b = a.I;
++})(c || (exports.c = c = {}));

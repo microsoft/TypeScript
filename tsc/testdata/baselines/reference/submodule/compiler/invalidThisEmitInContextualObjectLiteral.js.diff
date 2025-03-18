@@ -1,0 +1,24 @@
+--- old.invalidThisEmitInContextualObjectLiteral.js
++++ new.invalidThisEmitInContextualObjectLiteral.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [invalidThisEmitInContextualObjectLiteral.js]
+-var TestController = /** @class */ (function () {
+-    function TestController() {
+-        var _this = this;
+-        this.p = this.m({
+-            p1: function (e) { },
+-            p2: function () { return function (vvvvvvvvv) { return _this; }; },
+-        });
+-    }
+-    TestController.prototype.m = function (def) { };
+-    return TestController;
+-}());
++class TestController {
++    m(def) { }
++    p = this.m({
++        p1: e => { },
++        p2: () => { return vvvvvvvvv => this; },
++    });
++}

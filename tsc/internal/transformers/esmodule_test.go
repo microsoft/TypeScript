@@ -232,7 +232,7 @@ var __rewriteRelativeImportExtension;`,
 			}
 
 			emitContext := printer.NewEmitContext()
-			resolver := binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+			resolver := binder.NewReferenceResolver(&compilerOptions, binder.ReferenceResolverHooks{})
 			file = NewRuntimeSyntaxTransformer(emitContext, &compilerOptions, resolver).TransformSourceFile(file)
 			file = NewESModuleTransformer(emitContext, &compilerOptions, resolver).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)

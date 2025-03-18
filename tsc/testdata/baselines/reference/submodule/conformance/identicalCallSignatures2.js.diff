@@ -1,0 +1,8 @@
+--- old.identicalCallSignatures2.js
++++ new.identicalCallSignatures2.js
+@@= skipped -12, +12 lines =@@
+ interface I2<T> extends Base<string>, Base<number> { }
+ 
+ //// [identicalCallSignatures2.js]
+-// Normally it is an error to have multiple overloads with identical signatures in a single type declaration.
+-// Here the multiple overloads come from multiple bases.

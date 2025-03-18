@@ -1,0 +1,45 @@
+--- old.commentsDottedModuleName.js
++++ new.commentsDottedModuleName.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [commentsDottedModuleName.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.outerModule = void 0;
+-    /** this is multi declare module*/
+-    var outerModule;
+-    (function (outerModule) {
+-        var InnerModule;
+-        (function (InnerModule) {
+-            /// class b comment
+-            var b = /** @class */ (function () {
+-                function b() {
+-                }
+-                return b;
+-            }());
+-            InnerModule.b = b;
+-        })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
+-    })(outerModule || (exports.outerModule = outerModule = {}));
+-});
+-
+-
+-//// [commentsDottedModuleName.d.ts]
+-/** this is multi declare module*/
+-export declare namespace outerModule.InnerModule {
+-    class b {
+-    }
+-}
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.outerModule = void 0;
++var outerModule;
++(function (outerModule) {
++    let InnerModule;
++    (function (InnerModule) {
++        class b {
++        }
++        InnerModule.b = b;
++    })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
++})(outerModule || (exports.outerModule = outerModule = {}));

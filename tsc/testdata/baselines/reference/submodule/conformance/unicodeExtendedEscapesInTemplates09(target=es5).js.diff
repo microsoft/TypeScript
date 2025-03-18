@@ -1,0 +1,11 @@
+--- old.unicodeExtendedEscapesInTemplates09(target=es5).js
++++ new.unicodeExtendedEscapesInTemplates09(target=es5).js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [unicodeExtendedEscapesInTemplates09.js]
+-// ES6 Spec - 10.1.1 Static Semantics: UTF16Encoding (cp)
+-//  2. If cp ≤ 65535, return cp.
+-// (10000 == 65536)
+-var x = "\uD800\uDC00";
++var x = `\u{10000}`;

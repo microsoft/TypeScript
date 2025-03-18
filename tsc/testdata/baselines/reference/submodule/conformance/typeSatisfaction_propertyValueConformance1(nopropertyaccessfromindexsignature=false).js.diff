@@ -1,0 +1,24 @@
+--- old.typeSatisfaction_propertyValueConformance1(nopropertyaccessfromindexsignature=false).js
++++ new.typeSatisfaction_propertyValueConformance1(nopropertyaccessfromindexsignature=false).js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [typeSatisfaction_propertyValueConformance1.js]
+-var x = {
++const x = {
+     m: true
+ };
+-// Should be OK
+ checkTruths(x);
+-// Should be OK
+ checkM(x);
+-// Should fail under --noPropertyAccessFromIndexSignature
+ console.log(x.z);
+-var m = x.m;
+-// Should be able to detect a failure here
+-var x2 = {
++const m = x.m;
++const x2 = {
+     m: true,
+     s: "false"
+ };

@@ -1,0 +1,10 @@
+--- old.symbolProperty46.js
++++ new.symbolProperty46.js
+@@= skipped -17, +17 lines =@@
+     get [Symbol.hasInstance]() {
+         return "";
+     }
+-    // Should take a string
+     set [Symbol.hasInstance](x) {
+     }
+ }

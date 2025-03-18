@@ -1,0 +1,10 @@
+--- old.arrayFakeFlatNoCrashInferenceDeclarations.js
++++ new.arrayFakeFlatNoCrashInferenceDeclarations.js
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ //// [arrayFakeFlatNoCrashInferenceDeclarations.js]
+-"use strict";
+ function foo(arr, depth) {
+     return flat(arr, depth);
+ }

@@ -1,0 +1,57 @@
+--- old.exportStarForValuesInSystem.js
++++ new.exportStarForValuesInSystem.js
+@@= skipped -7, +7 lines =@@
+ var x = 1;
+ 
+ //// [file1.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ //// [file2.js]
+-System.register(["file1"], function (exports_1, context_1) {
+-    "use strict";
+-    var x;
+-    var __moduleName = context_1 && context_1.id;
+-    function exportStar_1(m) {
+-        var exports = {};
+-        for (var n in m) {
+-            if (n !== "default") exports[n] = m[n];
+-        }
+-        exports_1(exports);
++"use strict";
++var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    var desc = Object.getOwnPropertyDescriptor(m, k);
++    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
++      desc = { enumerable: true, get: function() { return m[k]; } };
+     }
+-    return {
+-        setters: [
+-            function (file1_1_1) {
+-                exportStar_1(file1_1_1);
+-            }
+-        ],
+-        execute: function () {
+-            x = 1;
+-        }
+-    };
+-});
++    Object.defineProperty(o, k2, desc);
++}) : (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    o[k2] = m[k];
++}));
++var __exportStar = (this && this.__exportStar) || function(m, exports) {
++    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
++};
++Object.defineProperty(exports, "__esModule", { value: true });
++__exportStar(require("file1"), exports);
++var x = 1;

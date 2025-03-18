@@ -1,0 +1,27 @@
+--- old.classVarianceCircularity.js
++++ new.classVarianceCircularity.js
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ //// [classVarianceCircularity.js]
+-"use strict";
+-// Issue #52813
+ function f() {
+-    var b = new Bar();
+-    // Uncomment to create error
++    const b = new Bar();
+     console.log(b.Value);
+ }
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-        // Or swap these two lines
+-        this.Field = this.num;
+-        this.Value = this.num;
+-    }
+-    return Bar;
+-}());
++class Bar {
++    num;
++    Field = this.num;
++    Value = this.num;
++}

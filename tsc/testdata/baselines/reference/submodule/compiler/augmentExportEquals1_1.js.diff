@@ -1,0 +1,21 @@
+--- old.augmentExportEquals1_1.js
++++ new.augmentExportEquals1_1.js
+@@= skipped -20, +20 lines =@@
+ import "file2";
+ let a: x.A; // should not work
+ 
+-//// [file2.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
+ //// [file3.js]
+-define(["require", "exports", "file2"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var a; // should not work
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++require("file2");
++let a;

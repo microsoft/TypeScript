@@ -1,0 +1,10 @@
+--- old.decoratorOnFunctionExpression.js
++++ new.decoratorOnFunctionExpression.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [decoratorOnFunctionExpression.js]
+-var F = ;
++var F = ();
+ function () {
+ }

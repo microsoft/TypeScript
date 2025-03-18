@@ -1,0 +1,8 @@
+--- old.resolveInterfaceNameWithSameLetDeclarationName1.js
++++ new.resolveInterfaceNameWithSameLetDeclarationName1.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [resolveInterfaceNameWithSameLetDeclarationName1.js]
+-var bar;
++let bar;

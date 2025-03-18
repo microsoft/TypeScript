@@ -1,0 +1,13 @@
+--- old.asiPreventsParsingAsInterface02.js
++++ new.asiPreventsParsingAsInterface02.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [asiPreventsParsingAsInterface02.js]
+ function f(interface, I) {
+-    interface; // This should be the identifier 'interface'
+-    I; // This should be the identifier 'I'
+-    { } // This should be a block body
++    interface;
++    I;
++    { }
+ }

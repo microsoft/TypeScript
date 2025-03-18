@@ -1,0 +1,15 @@
+--- old.declarationFileNoCrashOnExtraExportModifier.js
++++ new.declarationFileNoCrashOnExtraExportModifier.js
+@@= skipped -17, +17 lines =@@
+ //// [input.js]
+ "use strict";
+ exports.Sub = void 0;
+-var Sub = /** @class */ (function () {
+-    function Sub() {
+-    }
+-    return Sub;
+-}());
++class Sub {
++    instance;
++}
+ module.exports = exports;

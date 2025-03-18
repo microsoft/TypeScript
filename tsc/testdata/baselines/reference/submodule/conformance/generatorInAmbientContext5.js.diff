@@ -1,0 +1,12 @@
+--- old.generatorInAmbientContext5.js
++++ new.generatorInAmbientContext5.js
+@@= skipped -8, +8 lines =@@
+ class C {
+     *generator() { }
+ }
+-
+-
+-//// [generatorInAmbientContext5.d.ts]
+-declare class C {
+-    generator(): any;
+-}

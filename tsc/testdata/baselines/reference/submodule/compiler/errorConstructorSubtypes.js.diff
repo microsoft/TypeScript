@@ -1,0 +1,11 @@
+--- old.errorConstructorSubtypes.js
++++ new.errorConstructorSubtypes.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [errorConstructorSubtypes.js]
+-x = Error; // OK
++x = Error;
+ x = RangeError;
+ new x().message;
+ x.captureStackTrace;

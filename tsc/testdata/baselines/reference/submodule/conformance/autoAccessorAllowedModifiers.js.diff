@@ -1,0 +1,10 @@
+--- old.autoAccessorAllowedModifiers.js
++++ new.autoAccessorAllowedModifiers.js
+@@= skipped -34, +34 lines =@@
+     accessor b;
+     accessor c;
+     accessor d;
++    accessor e;
+     static accessor f;
+     static accessor g;
+     static accessor h;

@@ -1,0 +1,8 @@
+--- old.templateStringWithEmbeddedFunctionExpression.js
++++ new.templateStringWithEmbeddedFunctionExpression.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ function y() { return y; } }def`;
+ 
+ //// [templateStringWithEmbeddedFunctionExpression.js]
+-var x = "abc".concat(function y() { return y; }, "def");
++var x = `abc${function y() { return y; }}def`;

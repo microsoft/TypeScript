@@ -1,0 +1,54 @@
+--- old.typeGuardConstructorPrimitiveTypes.js
++++ new.typeGuardConstructorPrimitiveTypes.js
+@@= skipped -41, +41 lines =@@
+ 
+ 
+ //// [typeGuardConstructorPrimitiveTypes.js]
+-// Narrow a union of primitive types
+ let var1;
+ if (var1.constructor === String) {
+-    var1; // string
++    var1;
+ }
+ if (var1.constructor === Number) {
+-    var1; // number
++    var1;
+ }
+ if (var1.constructor === Boolean) {
+-    var1; // boolean
++    var1;
+ }
+ if (var1.constructor === Array) {
+-    var1; // any[]
++    var1;
+ }
+ if (var1.constructor === Symbol) {
+-    var1; // symbol
++    var1;
+ }
+ if (var1.constructor === BigInt) {
+-    var1; // bigint
++    var1;
+ }
+-// Narrow a union of primitive object types
+ let var2;
+ if (var2.constructor === String) {
+-    var2; // String
++    var2;
+ }
+ if (var2.constructor === Number) {
+-    var2; // Number
++    var2;
+ }
+ if (var2.constructor === Boolean) {
+-    var2; // Boolean
++    var2;
+ }
+ if (var2.constructor === Symbol) {
+-    var2; // Symbol
++    var2;
+ }
+ if (var2.constructor === BigInt) {
+-    var2; // BigInt
++    var2;
+ }

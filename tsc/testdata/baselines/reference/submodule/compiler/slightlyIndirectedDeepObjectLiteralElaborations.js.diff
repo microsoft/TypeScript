@@ -1,0 +1,13 @@
+--- old.slightlyIndirectedDeepObjectLiteralElaborations.js
++++ new.slightlyIndirectedDeepObjectLiteralElaborations.js
+@@= skipped -23, +23 lines =@@
+ 
+ 
+ //// [slightlyIndirectedDeepObjectLiteralElaborations.js]
+-var q;
+-var x = (void 0, {
++let q;
++const x = (void 0, {
+     a: q = {
+         b: ({
+             c: {

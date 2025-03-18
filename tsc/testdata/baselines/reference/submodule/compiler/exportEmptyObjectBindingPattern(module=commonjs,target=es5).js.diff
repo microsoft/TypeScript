@@ -1,0 +1,10 @@
+--- old.exportEmptyObjectBindingPattern(module=commonjs,target=es5).js
++++ new.exportEmptyObjectBindingPattern(module=commonjs,target=es5).js
+@@= skipped -4, +4 lines =@@
+ 
+ //// [exportEmptyObjectBindingPattern.js]
+ "use strict";
+-var _a;
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports._b = _a = {};
++({} = {});

@@ -1,0 +1,23 @@
+--- old.exportDefaultQualifiedNameNoError.js
++++ new.exportDefaultQualifiedNameNoError.js
+@@= skipped -9, +9 lines =@@
+ //// [code.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.x = 0;
+-    return C;
+-}());
++class C {
++    static x = 0;
++}
+ ;
+ exports.default = C.x;
+ //// [usage.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var code_1 = require("./code");
++const code_1 = require("./code");
+ void code_1.default;

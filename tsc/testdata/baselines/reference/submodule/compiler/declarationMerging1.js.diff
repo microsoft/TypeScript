@@ -1,0 +1,17 @@
+--- old.declarationMerging1.js
++++ new.declarationMerging1.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [file1.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A.prototype.getF = function () { return this._f; };
+-    return A;
+-}());
++class A {
++    _f;
++    getF() { return this._f; }
++}
+ //// [file2.js]

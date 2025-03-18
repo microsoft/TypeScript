@@ -1,0 +1,11 @@
+--- old.unionOfEnumInference.js
++++ new.unionOfEnumInference.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [unionOfEnumInference.js]
+-"use strict";
+-// Repro from #42932
+ var Enum;
+ (function (Enum) {
+     Enum[Enum["A"] = 0] = "A";

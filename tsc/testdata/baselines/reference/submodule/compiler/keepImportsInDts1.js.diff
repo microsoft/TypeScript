@@ -1,0 +1,17 @@
+--- old.keepImportsInDts1.js
++++ new.keepImportsInDts1.js
+@@= skipped -5, +5 lines =@@
+ import "test"
+ 
+ //// [main.js]
+-define(["require", "exports", "test"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
+-
+-
+-//// [main.d.ts]
+-import "test";
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++require("test");

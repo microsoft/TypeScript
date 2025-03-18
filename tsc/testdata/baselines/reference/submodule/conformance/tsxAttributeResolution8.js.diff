@@ -1,0 +1,8 @@
+--- old.tsxAttributeResolution8.js
++++ new.tsxAttributeResolution8.js
+@@= skipped -13, +13 lines =@@
+ 
+ //// [file.jsx]
+ var x;
+-// Should be OK
+ <test1 {...x}/>;

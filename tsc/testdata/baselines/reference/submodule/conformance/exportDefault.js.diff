@@ -1,0 +1,51 @@
+--- old.exportDefault.js
++++ new.exportDefault.js
+@@= skipped -31, +31 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.A = void 0;
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++}
+ exports.A = A;
+ //// [b.js]
+ "use strict";
+@@= skipped -35, +32 lines =@@
+     return result;
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var types = __importStar(require("./a"));
++const types = __importStar(require("./a"));
+ exports.default = types;
+ //// [d.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-new types.A(); // Error
++new types.A();
+ //// [e.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var types = require("./b");
+-new types.A(); // Error
++const types = require("./b");
++new types.A();
+ //// [f.js]
+ "use strict";
+ var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+@@= skipped -37, +37 lines =@@
+     return result;
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var types = __importStar(require("./b"));
+-new types.default.A(); // Error
++const types = __importStar(require("./b"));
++new types.default.A();
+ //// [g.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-new types.A(); // Error
++new types.A();

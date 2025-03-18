@@ -1,0 +1,15 @@
+--- old.resolveTypeAliasWithSameLetDeclarationName1.js
++++ new.resolveTypeAliasWithSameLetDeclarationName1.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [resolveTypeAliasWithSameLetDeclarationName1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var baz;
++class C {
++}
++let baz;

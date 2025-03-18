@@ -1,0 +1,8 @@
+--- old.templateStringWithEmbeddedModulo.js
++++ new.templateStringWithEmbeddedModulo.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ 1 % 1 }def`;
+ 
+ //// [templateStringWithEmbeddedModulo.js]
+-var x = "abc".concat(1 % 1, "def");
++var x = `abc${1 % 1}def`;

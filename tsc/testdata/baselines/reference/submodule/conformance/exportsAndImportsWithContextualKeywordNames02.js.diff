@@ -1,0 +1,18 @@
+--- old.exportsAndImportsWithContextualKeywordNames02.js
++++ new.exportsAndImportsWithContextualKeywordNames02.js
+@@= skipped -19, +19 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.as = exports.return = void 0;
+-var as = 100;
++let as = 100;
+ exports.return = as;
+ exports.as = as;
+ //// [t2.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var as = require("./t1");
++const as = require("./t1");
+ var x = as.as;
+ var y = as.return;
+ //// [t3.js]

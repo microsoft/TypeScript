@@ -1,0 +1,15 @@
+--- old.bind1.js
++++ new.bind1.js
+@@= skipped -9, +9 lines =@@
+ //// [bind1.js]
+ var M;
+ (function (M) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }()); // this should be an unresolved symbol I error
++    class C {
++    }
+     M.C = C;
+ })(M || (M = {}));

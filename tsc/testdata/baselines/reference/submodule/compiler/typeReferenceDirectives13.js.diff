@@ -1,0 +1,12 @@
+--- old.typeReferenceDirectives13.js
++++ new.typeReferenceDirectives13.js
+@@= skipped -16, +16 lines =@@
+ //// [app.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-
+-
+-//// [app.d.ts]
+-export interface A {
+-    x: () => typeof $;
+-}

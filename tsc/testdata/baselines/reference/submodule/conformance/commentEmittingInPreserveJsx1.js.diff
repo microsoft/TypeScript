@@ -1,0 +1,33 @@
+--- old.commentEmittingInPreserveJsx1.js
++++ new.commentEmittingInPreserveJsx1.js
+@@= skipped -34, +34 lines =@@
+ //// [file.jsx]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var React = require("react");
+ <div>
+     // Not Comment
+ </div>;
+ <div>
+     // Not Comment
+-    {
+-    //Comment just Fine
+-    }
++    
+     // Another not Comment
+ </div>;
+ <div>
+     // Not Comment
+-    {
+-    //Comment just Fine
+-    "Hi"}
++    {"Hi"}
+     // Another not Comment
+ </div>;
+ <div>
+     /* Not Comment */
+-    {
+-    //Comment just Fine
+-    "Hi"}
++    {"Hi"}
+ </div>;

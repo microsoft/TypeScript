@@ -1,0 +1,8 @@
+--- old.arrayAugment.js
++++ new.arrayAugment.js
+@@= skipped -12, +12 lines =@@
+ //// [arrayAugment.js]
+ var x = [''];
+ var y = x.split(4);
+-var y; // Expect no error here
++var y;

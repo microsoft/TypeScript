@@ -1,0 +1,43 @@
+--- old.importEquals1.js
++++ new.importEquals1.js
+@@= skipped -31, +31 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.A = void 0;
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++}
+ exports.A = A;
+ //// [b.js]
+ "use strict";
+@@= skipped -34, +31 lines =@@
+     __setModuleDefault(result, mod);
+     return result;
+ };
+-var types = __importStar(require("./a"));
++const types = __importStar(require("./a"));
+ module.exports = types;
+ //// [d.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-new types.A(); // Error
++new types.A();
+ //// [e.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-new types.A(); // Error
++new types.A();
+ //// [f.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-new types.A(); // Error
++new types.A();
+ //// [g.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-new types.A(); // Error
++new types.A();

@@ -1,0 +1,18 @@
+--- old.overloadResolutionOnDefaultConstructor1.js
++++ new.overloadResolutionOnDefaultConstructor1.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [overloadResolutionOnDefaultConstructor1.js]
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-    }
+-    Bar.prototype.clone = function () {
++class Bar {
++    clone() {
+         return new Bar(0);
+-    };
+-    return Bar;
+-}());
++    }
++}

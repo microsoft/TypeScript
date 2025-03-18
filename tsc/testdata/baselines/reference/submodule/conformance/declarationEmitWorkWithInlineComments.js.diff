@@ -1,0 +1,92 @@
+--- old.declarationEmitWorkWithInlineComments.js
++++ new.declarationEmitWorkWithInlineComments.js
+@@= skipped -39, +39 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Baz = exports.Bar = exports.Foo = void 0;
+-var Foo = /** @class */ (function () {
+-    function Foo(
+-    /** @internal */
+-    isInternal1, 
+-    /** @internal */ isInternal2, /** @internal */ isInternal3, 
+-    // @internal
+-    isInternal4, 
+-    // nothing
+-    /** @internal */
+-    isInternal5, 
+-    /* @internal */ isInternal6 /* trailing */, 
+-    /* @internal */ isInternal7, /** @internal */ 
+-    // not work
+-    notInternal1, 
+-    // @internal
+-    /* not work */
+-    notInternal2, 
+-    /* not work */
+-    // @internal
+-    /* not work */
+-    notInternal3) {
++class Foo {
++    isInternal1;
++    isInternal2;
++    isInternal3;
++    isInternal4;
++    isInternal5;
++    isInternal6;
++    isInternal7;
++    notInternal1;
++    notInternal2;
++    notInternal3;
++    constructor(isInternal1, isInternal2, isInternal3, isInternal4, isInternal5, isInternal6, isInternal7, notInternal1, notInternal2, notInternal3) {
+         this.isInternal1 = isInternal1;
+         this.isInternal2 = isInternal2;
+         this.isInternal3 = isInternal3;
+@@= skipped -32, +23 lines =@@
+         this.notInternal2 = notInternal2;
+         this.notInternal3 = notInternal3;
+     }
+-    return Foo;
+-}());
++}
+ exports.Foo = Foo;
+-var Bar = /** @class */ (function () {
+-    function Bar(/* @internal */ isInternal1) {
++class Bar {
++    isInternal1;
++    constructor(isInternal1) {
+         this.isInternal1 = isInternal1;
+     }
+-    return Bar;
+-}());
++}
+ exports.Bar = Bar;
+-var Baz = /** @class */ (function () {
+-    function Baz(/* @internal */ isInternal) {
++class Baz {
++    isInternal;
++    constructor(isInternal) {
+         this.isInternal = isInternal;
+     }
+-    return Baz;
+-}());
+-exports.Baz = Baz;
+-
+-
+-//// [declarationEmitWorkWithInlineComments.d.ts]
+-export declare class Foo {
+-    notInternal1: string;
+-    notInternal2: string;
+-    notInternal3: string;
+-    constructor(
+-    /** @internal */
+-    isInternal1: string, 
+-    /** @internal */ isInternal2: string, /** @internal */ isInternal3: string, isInternal4: string, 
+-    /** @internal */
+-    isInternal5: string, isInternal6: string, isInternal7: string, /** @internal */ notInternal1: string, notInternal2: string, notInternal3: string);
+ }
+-export declare class Bar {
+-    constructor(/* @internal */ isInternal1: string);
+-}
+-export declare class Baz {
+-    constructor(/* @internal */ isInternal: string);
+-}
++exports.Baz = Baz;

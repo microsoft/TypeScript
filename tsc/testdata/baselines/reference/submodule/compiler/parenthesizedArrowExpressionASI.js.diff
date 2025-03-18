@@ -1,0 +1,10 @@
+--- old.parenthesizedArrowExpressionASI.js
++++ new.parenthesizedArrowExpressionASI.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [parenthesizedArrowExpressionASI.js]
+-var x = function (a) { return (
+-// comment
+-undefined); };
++const x = (a) => undefined;

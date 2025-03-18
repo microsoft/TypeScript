@@ -1,0 +1,33 @@
+--- old.exhaustiveSwitchCheckCircularity.js
++++ new.exhaustiveSwitchCheckCircularity.js
+@@= skipped -39, +39 lines =@@
+ 
+ 
+ //// [exhaustiveSwitchCheckCircularity.js]
+-"use strict";
+-// Repro from #47539
+ function f() {
+-    var foo = "aaa";
++    let foo = "aaa";
+     while (true) {
+         switch (foo) {
+             case "aaa":
+@@= skipped -11, +9 lines =@@
+         if (foo === "aaa") {
+             foo = "bbb";
+         }
+-        else if (isNever(foo)) { // Error expected
++        else if (isNever(foo)) {
+             break;
+         }
+     }
+ }
+ function functionC() {
+-    var unionVal = "A";
++    let unionVal = "A";
+     while (true) {
+-        var key = void 0;
++        let key;
+         switch (unionVal) {
+             case "A": {
+                 key = "AA";

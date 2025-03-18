@@ -1,0 +1,18 @@
+--- old.isolatedDeclarationErrorsExpressions.js
++++ new.isolatedDeclarationErrorsExpressions.js
+@@= skipped -148, +148 lines =@@
+ export const bigIntConstBad3 = bigIntConst;
+ export const stringConst = "s";
+ export const stringConstBad = "s" + "s";
+-// These are just strings
+ export const templateConstOk1 = `s`;
+ export const templateConstNotOk2 = `s${1n}`;
+ export const templateConstNotOk3 = `s${1} - ${"S"}`;
+@@= skipped -20, +19 lines =@@
+ export let templateLetOk2 = `s${1} - ${"S"}`;
+ export let templateLetOk3 = `s${1} - ${"S"} - ${false}`;
+ export let templateLetOk4 = `s${1 + 1} - ${"S"} - ${!false}`;
+-// As const
+ export let numberLetAsConst = 1;
+ export let bigIntLetAsConst = 1n;
+ export let stringLetAsConst = "s";

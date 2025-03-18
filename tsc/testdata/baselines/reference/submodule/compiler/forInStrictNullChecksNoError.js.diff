@@ -1,0 +1,14 @@
+--- old.forInStrictNullChecksNoError.js
++++ new.forInStrictNullChecksNoError.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [forInStrictNullChecksNoError.js]
+ function f(x) {
+-    for (var key in x) { // 1
+-        console.log(x[key]); // 2
++    for (const key in x) {
++        console.log(x[key]);
+     }
+-    x["no"]; // should still error
++    x["no"];
+ }

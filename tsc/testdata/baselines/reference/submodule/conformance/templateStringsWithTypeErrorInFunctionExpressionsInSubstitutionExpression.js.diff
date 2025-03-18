@@ -1,0 +1,8 @@
+--- old.templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.js
++++ new.templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.js
+@@= skipped -3, +3 lines =@@
+ `${function (x: number) { x = "bad"; } }`;
+ 
+ //// [templateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpression.js]
+-"".concat(function (x) { x = "bad"; });
++`${function (x) { x = "bad"; }}`;

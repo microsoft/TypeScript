@@ -1,0 +1,26 @@
+--- old.thisCapture1.js
++++ new.thisCapture1.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [thisCapture1.js]
+-var X = /** @class */ (function () {
+-    function X() {
+-        this.y = 0;
+-    }
+-    X.prototype.getSettings = function (keys) {
+-        var _this = this;
++class X {
++    y = 0;
++    getSettings(keys) {
+         var ret;
+-        return ret.always(function () {
+-            _this.y = 0;
++        return ret.always(() => {
++            this.y = 0;
+         }).promise();
+-    };
+-    return X;
+-}());
++    }
++}

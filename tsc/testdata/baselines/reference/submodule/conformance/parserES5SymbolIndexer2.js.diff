@@ -1,0 +1,13 @@
+--- old.parserES5SymbolIndexer2.js
++++ new.parserES5SymbolIndexer2.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserES5SymbolIndexer2.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

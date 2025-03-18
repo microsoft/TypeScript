@@ -1,0 +1,13 @@
+--- old.typeSatisfaction_contextualTyping1.js
++++ new.typeSatisfaction_contextualTyping1.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [typeSatisfaction_contextualTyping1.js]
+-var p = {
+-    isEven: function (n) { return n % 2 === 0; },
+-    isOdd: function (n) { return n % 2 === 1; }
++const p = {
++    isEven: n => n % 2 === 0,
++    isOdd: n => n % 2 === 1
+ };

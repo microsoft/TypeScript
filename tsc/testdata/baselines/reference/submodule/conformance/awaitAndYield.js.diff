@@ -1,0 +1,14 @@
+--- old.awaitAndYield.js
++++ new.awaitAndYield.js
+@@= skipped -11, +11 lines =@@
+ async function* test(x) {
+     let E;
+     (function (E) {
+-        E[E["foo"] = await x] = "foo";
+-        E[E["baz"] = yield 1] = "baz";
++        E["foo"] = await x;
++        if (typeof E.foo !== "string") E[E.foo] = "foo";
++        E["baz"] = (yield 1);
++        if (typeof E.baz !== "string") E[E.baz] = "baz";
+     })(E || (E = {}));
+ }

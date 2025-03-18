@@ -1,0 +1,12 @@
+--- old.optionsCompositeWithIncrementalFalse.js
++++ new.optionsCompositeWithIncrementalFalse.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [optionsCompositeWithIncrementalFalse.js]
+-var x = "Hello World";
+-
+-
+-//// [optionsCompositeWithIncrementalFalse.d.ts]
+-declare const x = "Hello World";
++const x = "Hello World";

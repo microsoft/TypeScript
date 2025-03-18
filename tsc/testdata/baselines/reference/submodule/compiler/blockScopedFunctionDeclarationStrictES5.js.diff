@@ -1,0 +1,13 @@
+--- old.blockScopedFunctionDeclarationStrictES5.js
++++ new.blockScopedFunctionDeclarationStrictES5.js
+@@= skipped -10, +10 lines =@@
+ //// [blockScopedFunctionDeclarationStrictES5.js]
+ "use strict";
+ if (true) {
+-    function foo() { } // Error to declare function in block scope
+-    foo(); // This call should be ok
++    function foo() { }
++    foo();
+ }
+-foo(); // Error to find name foo
++foo();

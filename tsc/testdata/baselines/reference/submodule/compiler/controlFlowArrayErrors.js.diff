@@ -1,0 +1,84 @@
+--- old.controlFlowArrayErrors.js
++++ new.controlFlowArrayErrors.js
+@@= skipped -68, +68 lines =@@
+ 
+ //// [controlFlowArrayErrors.js]
+ function f1() {
+-    var x = []; // Implicit any[] error in some locations
+-    var y = x; // Implicit any[] error
++    let x = [];
++    let y = x;
+     x.push(5);
+-    var z = x;
++    let z = x;
+ }
+ function f2() {
+-    var x; // Implicit any[] error in some locations
++    let x;
+     x = [];
+-    var y = x; // Implicit any[] error
++    let y = x;
+     x.push(5);
+-    var z = x;
++    let z = x;
+ }
+ function f3() {
+-    var x = []; // Implicit any[] error in some locations
++    let x = [];
+     x.push(5);
+     function g() {
+-        x; // Implicit any[] error
++        x;
+     }
+ }
+ function f4() {
+-    var x;
+-    x = [5, "hello"]; // Non-evolving array
+-    x.push(true); // Error
++    let x;
++    x = [5, "hello"];
++    x.push(true);
+ }
+ function f5() {
+-    var x = [5, "hello"]; // Non-evolving array
+-    x.push(true); // Error
++    let x = [5, "hello"];
++    x.push(true);
+ }
+ function f6() {
+-    var x;
++    let x;
+     if (cond()) {
+         x = [];
+         x.push(5);
+         x.push("hello");
+     }
+     else {
+-        x = [true]; // Non-evolving array
++        x = [true];
+     }
+-    x; // boolean[] | (string | number)[]
+-    x.push(99); // Error
++    x;
++    x.push(99);
+ }
+ function f7() {
+-    var x = []; // x has evolving array value
++    let x = [];
+     x.push(5);
+-    var y = x; // y has non-evolving array value
+-    x.push("hello"); // Ok
+-    y.push("hello"); // Error
++    let y = x;
++    x.push("hello");
++    y.push("hello");
+ }
+ function f8() {
+-    var x = []; // Implicit any[] error in some locations
++    const x = [];
+     x.push(5);
+     function g() {
+-        x; // Implicit any[] error
++        x;
+     }
+ }

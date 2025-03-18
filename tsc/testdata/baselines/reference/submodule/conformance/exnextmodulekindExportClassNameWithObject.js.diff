@@ -1,0 +1,14 @@
+--- old.exnextmodulekindExportClassNameWithObject.js
++++ new.exnextmodulekindExportClassNameWithObject.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [exnextmodulekindExportClassNameWithObject.js]
+-var Object = /** @class */ (function () {
+-    function Object() {
+-    }
+-    return Object;
+-}());
+-export { Object };
++export class Object {
++}

@@ -1,0 +1,13 @@
+--- old.isolatedDeclarationErrorsDefault.js
++++ new.isolatedDeclarationErrorsDefault.js
+@@= skipped -32, +32 lines =@@
+ //// [f.js]
+ const a = { foo: 1 };
+ export default a;
+-
+-
+-//// [f.d.ts]
+-declare const a: {
+-    foo: number;
+-};
+-export default a;

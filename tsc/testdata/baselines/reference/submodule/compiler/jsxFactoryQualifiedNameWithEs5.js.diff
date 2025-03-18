@@ -1,0 +1,21 @@
+--- old.jsxFactoryQualifiedNameWithEs5.js
++++ new.jsxFactoryQualifiedNameWithEs5.js
+@@= skipped -16, +16 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ require("./jsx");
+ var skate;
+-var React = { createElement: skate.h };
+-var Component = /** @class */ (function () {
+-    function Component() {
++const React = { createElement: skate.h };
++class Component {
++    renderCallback() {
++        return <div>test</div>;
+     }
+-    Component.prototype.renderCallback = function () {
+-        return skate.h("div", null, "test");
+-    };
+-    return Component;
+-}());
++}
+ ;

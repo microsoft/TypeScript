@@ -1,0 +1,14 @@
+--- old.intersectionOfUnionNarrowing.js
++++ new.intersectionOfUnionNarrowing.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [intersectionOfUnionNarrowing.js]
+-"use strict";
+ if (q.a !== undefined) {
+     q.a.aProp;
+ }
+ else {
+-    // q.b is previously incorrectly inferred as potentially undefined
+     q.b.bProp;
+ }

@@ -1,0 +1,24 @@
+--- old.asiInES6Classes.js
++++ new.asiInES6Classes.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [asiInES6Classes.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.defaults = {
+-            done: false
+-        };
+-    }
+-    Foo.prototype.bar = function () {
+-        return 3;
++class Foo {
++    defaults = {
++        done: false
+     };
+-    return Foo;
+-}());
++    bar() {
++        return 3;
++    }
++}

@@ -1,0 +1,18 @@
+--- old.missingReturnStatement.js
++++ new.missingReturnStatement.js
+@@= skipped -11, +11 lines =@@
+ //// [missingReturnStatement.js]
+ var Test;
+ (function (Test) {
+-    var Bug = /** @class */ (function () {
+-        function Bug() {
++    class Bug {
++        foo() {
+         }
+-        Bug.prototype.foo = function () {
+-        };
+-        return Bug;
+-    }());
++    }
+     Test.Bug = Bug;
+ })(Test || (Test = {}));

@@ -1,0 +1,16 @@
+--- old.ES5SymbolProperty7.js
++++ new.ES5SymbolProperty7.js
+@@= skipped -10, +10 lines =@@
+ 
+ //// [ES5SymbolProperty7.js]
+ var Symbol;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype[Symbol.iterator] = function () { };
+-    return C;
+-}());
++class C {
++    [Symbol.iterator]() { }
++}
+ (new C)[Symbol.iterator];

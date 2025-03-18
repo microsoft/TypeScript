@@ -1,0 +1,7 @@
+--- old.commentsAtEndOfFile1.js
++++ new.commentsAtEndOfFile1.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [commentsAtEndOfFile1.js]
+ Input: ;
+-//Testing two

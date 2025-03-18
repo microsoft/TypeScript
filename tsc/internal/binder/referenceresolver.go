@@ -27,12 +27,14 @@ var _ ReferenceResolver = &referenceResolver{}
 
 type referenceResolver struct {
 	resolver *NameResolver
+	options  *core.CompilerOptions
 	hooks    ReferenceResolverHooks
 }
 
-func NewReferenceResolver(hooks ReferenceResolverHooks) ReferenceResolver {
+func NewReferenceResolver(options *core.CompilerOptions, hooks ReferenceResolverHooks) ReferenceResolver {
 	return &referenceResolver{
-		hooks: hooks,
+		options: options,
+		hooks:   hooks,
 	}
 }
 
@@ -91,7 +93,9 @@ func (r *referenceResolver) getReferencedValueSymbol(reference *ast.IdentifierNo
 	}
 
 	if r.resolver == nil {
-		r.resolver = &NameResolver{}
+		r.resolver = &NameResolver{
+			CompilerOptions: r.options,
+		}
 	}
 
 	return r.resolver.Resolve(location, reference.Text(), ast.SymbolFlagsExportValue|ast.SymbolFlagsValue|ast.SymbolFlagsAlias, nil /*nameNotFoundMessage*/, false /*isUse*/, false /*excludeGlobals*/)

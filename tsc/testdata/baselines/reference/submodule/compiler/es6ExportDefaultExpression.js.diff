@@ -1,0 +1,11 @@
+--- old.es6ExportDefaultExpression.js
++++ new.es6ExportDefaultExpression.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [es6ExportDefaultExpression.js]
+ export default (1 + 2);
+-
+-
+-//// [es6ExportDefaultExpression.d.ts]
+-declare const _default: number;
+-export default _default;

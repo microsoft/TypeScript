@@ -1,0 +1,24 @@
+--- old.restUnion3.js
++++ new.restUnion3.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [restUnion3.js]
+-"use strict";
+-var __rest = (this && this.__rest) || function (s, e) {
+-    var t = {};
+-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+-        t[p] = s[p];
+-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+-                t[p[i]] = s[p[i]];
+-        }
+-    return t;
+-};
+ var rest4;
+-var rest4 = __rest(nullAndUndefinedUnion, []);
++var { ...rest4 } = nullAndUndefinedUnion;
+ var rest5;
+-var rest5 = __rest(unionWithIntersection, []);
++var { ...rest5 } = unionWithIntersection;

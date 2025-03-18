@@ -1,0 +1,22 @@
+--- old.exportAssignmentFunction.js
++++ new.exportAssignmentFunction.js
+@@= skipped -9, +9 lines =@@
+ 
+ var n: number = fooFunc();
+ 
+-//// [exportAssignmentFunction_A.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    function foo() { return 0; }
+-    return foo;
+-});
+ //// [exportAssignmentFunction_B.js]
+-define(["require", "exports", "exportAssignmentFunction_A"], function (require, exports, fooFunc) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var n = fooFunc();
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const fooFunc = require("exportAssignmentFunction_A");
++var n = fooFunc();

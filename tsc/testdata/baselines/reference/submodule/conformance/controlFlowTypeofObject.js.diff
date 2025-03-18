@@ -1,0 +1,28 @@
+--- old.controlFlowTypeofObject.js
++++ new.controlFlowTypeofObject.js
+@@= skipped -71, +71 lines =@@
+ 
+ 
+ //// [controlFlowTypeofObject.js]
+-"use strict";
+ function f1(x) {
+     if (!x) {
+         return;
+@@= skipped -59, +58 lines =@@
+         }
+     }
+     if (typeof x === 'object') {
+-        obj(x); // Error
++        obj(x);
+     }
+ }
+-
+-
+-//// [controlFlowTypeofObject.d.ts]
+-declare function obj(x: object): void;
+-declare function f1(x: unknown): void;
+-declare function f2(x: unknown): void;
+-declare function f3(x: unknown): void;
+-declare function f4(x: unknown): void;
+-declare function f5(x: unknown): void;
+-declare function f6(x: unknown): void;

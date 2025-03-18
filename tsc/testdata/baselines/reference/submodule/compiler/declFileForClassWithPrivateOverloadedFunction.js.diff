@@ -1,0 +1,20 @@
+--- old.declFileForClassWithPrivateOverloadedFunction.js
++++ new.declFileForClassWithPrivateOverloadedFunction.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [declFileForClassWithPrivateOverloadedFunction.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function (x) { };
+-    return C;
+-}());
+-
+-
+-//// [declFileForClassWithPrivateOverloadedFunction.d.ts]
+-declare class C {
+-    private foo;
++class C {
++    foo(x) { }
+ }

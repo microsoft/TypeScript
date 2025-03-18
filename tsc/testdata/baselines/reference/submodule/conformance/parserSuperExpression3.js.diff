@@ -1,0 +1,18 @@
+--- old.parserSuperExpression3.js
++++ new.parserSuperExpression3.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [parserSuperExpression3.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.M = function () {
++class C {
++    M() {
+         this.super(0);
+-    };
+-    return C;
+-}());
++    }
++}

@@ -1,0 +1,9 @@
+--- old.unusedVariablesinNamespaces1.js
++++ new.unusedVariablesinNamespaces1.js
+@@= skipped -7, +7 lines =@@
+ //// [unusedVariablesinNamespaces1.js]
+ var Validation;
+ (function (Validation) {
+-    var lettersRegexp = /^[A-Za-z]+$/;
++    const lettersRegexp = /^[A-Za-z]+$/;
+ })(Validation || (Validation = {}));

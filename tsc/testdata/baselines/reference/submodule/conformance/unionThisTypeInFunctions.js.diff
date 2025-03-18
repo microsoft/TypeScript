@@ -1,0 +1,9 @@
+--- old.unionThisTypeInFunctions.js
++++ new.unionThisTypeInFunctions.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [unionThisTypeInFunctions.js]
+ function test(r) {
+-    r.method(12); // error
++    r.method(12);
+ }

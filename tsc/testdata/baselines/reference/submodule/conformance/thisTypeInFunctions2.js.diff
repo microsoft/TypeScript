@@ -1,0 +1,46 @@
+--- old.thisTypeInFunctions2.js
++++ new.thisTypeInFunctions2.js
+@@= skipped -56, +56 lines =@@
+ 
+ //// [thisTypeInFunctions2.js]
+ extend1({
+-    init: function () {
+-        this; // this: IndexedWithThis because of contextual typing.
+-        // this.mine
++    init() {
++        this;
+         this.willDestroy;
+     },
+     mine: 12,
+-    foo: function () {
+-        this.url; // this: any because 'foo' matches the string indexer
++    foo() {
++        this.url;
+         this.willDestroy;
+     }
+ });
+ extend2({
+-    init: function () {
+-        this; // this: IndexedWithoutThis because of contextual typing
++    init() {
++        this;
+         this.mine;
+     },
+     mine: 13,
+-    foo: function () {
+-        this; // this: IndexedWithoutThis because of contextual typing
++    foo() {
++        this;
+         this.mine;
+     }
+ });
+ simple({
+-    foo: function (n) {
++    foo(n) {
+         return n.length + this.bar();
+     },
+-    bar: function () {
++    bar() {
+         return 14;
+     }
+ });

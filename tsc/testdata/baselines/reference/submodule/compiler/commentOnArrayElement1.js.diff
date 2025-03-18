@@ -1,0 +1,15 @@
+--- old.commentOnArrayElement1.js
++++ new.commentOnArrayElement1.js
+@@= skipped -9, +9 lines =@@
+ ];
+ 
+ //// [commentOnArrayElement1.js]
+-var array = [
+-    /* element 1*/
+-    1
+-    /* end of element 1 */ ,
++const array = [
++    1,
+     2
+-    /* end of element 2 */
+ ];

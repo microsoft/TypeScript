@@ -1,0 +1,17 @@
+--- old.declarationEmitExpandoPropertyPrivateName.js
++++ new.declarationEmitExpandoPropertyPrivateName.js
+@@= skipped -18, +18 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.q = q;
+-var a_1 = require("./a");
++const a_1 = require("./a");
+ function q() { }
+ q.val = (0, a_1.f)();
+-
+-
+-//// [a.d.ts]
+-interface I {
+-}
+-export declare function f(): I;
+-export {};

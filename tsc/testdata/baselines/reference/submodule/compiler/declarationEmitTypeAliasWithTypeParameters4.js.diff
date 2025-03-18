@@ -1,0 +1,14 @@
+--- old.declarationEmitTypeAliasWithTypeParameters4.js
++++ new.declarationEmitTypeAliasWithTypeParameters4.js
+@@= skipped -14, +14 lines =@@
+ function foo() {
+     return {};
+ }
+-
+-
+-//// [declarationEmitTypeAliasWithTypeParameters4.d.ts]
+-type Foo<T, Y> = {
+-    foo<U, J>(): Foo<U, J>;
+-};
+-type SubFoo<R> = Foo<string, R>;
+-declare function foo(): SubFoo<number>;

@@ -1,0 +1,36 @@
+--- old.typeGuardsInForStatement.js
++++ new.typeGuardsInForStatement.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [typeGuardsInForStatement.js]
+-var cond;
++let cond;
+ function a(x) {
+     for (x = undefined; typeof x !== "number"; x = undefined) {
+-        x; // string
++        x;
+     }
+-    x; // number
++    x;
+ }
+ function b(x) {
+     for (x = undefined; typeof x !== "number"; x = undefined) {
+-        x; // string
++        x;
+         if (cond)
+             continue;
+     }
+-    x; // number
++    x;
+ }
+ function c(x) {
+     for (x = undefined; typeof x !== "number"; x = undefined) {
+-        x; // string
++        x;
+         if (cond)
+             break;
+     }
+-    x; // string | number
++    x;
+ }

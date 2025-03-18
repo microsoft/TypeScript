@@ -1,0 +1,80 @@
+--- old.discriminantPropertyCheck.js
++++ new.discriminantPropertyCheck.js
+@@= skipped -249, +249 lines =@@
+ }
+ function goo2(x) {
+     if (x.foo !== undefined && x.kind === "A") {
+-        x.foo.length; // Error, intervening discriminant guard
++        x.foo.length;
+     }
+ }
+ function foo1(x) {
+@@= skipped -30, +30 lines =@@
+ }
+ function foo6(x) {
+     if (x.foo !== undefined && x.qux) {
+-        x.foo.length; // Error, intervening discriminant guard
++        x.foo.length;
+     }
+ }
+-// Repro from #27493
+ var Types;
+ (function (Types) {
+     Types[Types["Str"] = 1] = "Str";
+@@= skipped -23, +22 lines =@@
+         }
+     }
+ }
+-// Repro from #29106
+-var f = function (_a, _b) { };
+-var u = {};
++const f = (_a, _b) => { };
++const u = {};
+ u.a && u.b && f(u.a, u.b);
+ u.b && u.a && f(u.a, u.b);
+ function foo(obj) {
+@@= skipped -16, +15 lines =@@
+ function onlyPlus(arg) {
+     return arg;
+ }
++var BarEnum;
++(function (BarEnum) {
++    BarEnum[BarEnum["bar1"] = 1] = "bar1";
++    BarEnum[BarEnum["bar2"] = 2] = "bar2";
++})(BarEnum || (BarEnum = {}));
+ function func3(value) {
+     if (value.type !== undefined) {
+         switch (value.type) {
+-            case 1 /* BarEnum.bar1 */:
++            case BarEnum.bar1:
+                 break;
+-            case 2 /* BarEnum.bar2 */:
++            case BarEnum.bar2:
+                 break;
+             default:
+                 never(value.type);
+@@= skipped -14, +19 lines =@@
+ }
+ function WorksProperly(data) {
+     if (data.Name === "TypeA") {
+-        var value1 = data.Value1;
++        const value1 = data.Value1;
+     }
+ }
+ function DoesNotWork(data) {
+     if (isType(data)) {
+         if (data.Name === "TypeA") {
+-            var value1 = data.Value1;
++            const value1 = data.Value1;
+         }
+     }
+ }
+-var doTestingStuff = function (mapOfTests, ids) {
+-    ids.forEach(function (id) {
+-        var test;
++const doTestingStuff = (mapOfTests, ids) => {
++    ids.forEach(id => {
++        let test;
+         test = mapOfTests[id];
+         if (test.type === 'testA') {
+             console.log(test.bananas);

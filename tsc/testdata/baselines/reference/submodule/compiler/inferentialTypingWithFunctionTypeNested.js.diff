@@ -1,0 +1,8 @@
+--- old.inferentialTypingWithFunctionTypeNested.js
++++ new.inferentialTypingWithFunctionTypeNested.js
+@@= skipped -6, +6 lines =@@
+ var s = map("", () => { return { x: identity }; });
+ 
+ //// [inferentialTypingWithFunctionTypeNested.js]
+-var s = map("", function () { return { x: identity }; });
++var s = map("", () => { return { x: identity }; });

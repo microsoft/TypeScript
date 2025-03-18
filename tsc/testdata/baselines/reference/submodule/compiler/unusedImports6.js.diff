@@ -1,0 +1,18 @@
+--- old.unusedImports6.js
++++ new.unusedImports6.js
+@@= skipped -25, +25 lines =@@
+ exports.Calculator = void 0;
+ exports.test = test;
+ exports.default = test2;
+-var Calculator = /** @class */ (function () {
+-    function Calculator() {
+-    }
+-    Calculator.prototype.handleChar = function () { };
+-    return Calculator;
+-}());
++class Calculator {
++    handleChar() { }
++}
+ exports.Calculator = Calculator;
+ function test() {
+ }

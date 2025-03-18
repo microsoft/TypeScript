@@ -1,0 +1,30 @@
+--- old.constAssertionOnEnum.js
++++ new.constAssertionOnEnum.js
+@@= skipped -27, +27 lines =@@
+ 
+ 
+ //// [enum.js]
+-export var Foo;
++export { Foo };
++var Foo;
+ (function (Foo) {
+     Foo[Foo["A"] = 0] = "A";
+     Foo[Foo["B"] = 1] = "B";
+@@= skipped -15, +16 lines =@@
+ let foo = Foo.A;
+ let bar = Bar.A;
+ //// [ns.js]
+-"use strict";
+ var ns;
+ (function (ns) {
+     let Foo;
+@@= skipped -10, +9 lines =@@
+     ns.Foo.X;
+ })(ns || (ns = {}));
+ //// [more.js]
+-export var Foo;
++export { Foo };
++var Foo;
+ (function (Foo) {
+     Foo[Foo["X"] = 0] = "X";
+ })(Foo || (Foo = {}));

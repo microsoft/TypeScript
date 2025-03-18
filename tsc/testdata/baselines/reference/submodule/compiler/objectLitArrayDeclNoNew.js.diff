@@ -1,0 +1,24 @@
+--- old.objectLitArrayDeclNoNew.js
++++ new.objectLitArrayDeclNoNew.js
+@@= skipped -32, +32 lines =@@
+ "use strict";
+ var Test;
+ (function (Test) {
+-    var Gar = /** @class */ (function () {
+-        function Gar() {
+-            this.moo = 0;
+-        }
+-        return Gar;
+-    }());
++    class Gar {
++        moo = 0;
++    }
+     Test.Gar = Gar;
+     function bug() {
+         var state = null;
+         return {
+-            tokens: Gar[], //IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]
++            tokens: Gar[],
+             endState: state
+         };
+     }

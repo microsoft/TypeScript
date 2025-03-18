@@ -1,0 +1,17 @@
+--- old.reachabilityChecks3.js
++++ new.reachabilityChecks3.js
+@@= skipped -16, +16 lines =@@
+ var y = () => { f: 1 }
+ 
+ //// [reachabilityChecks3.js]
+-var x = 1;
++let x = 1;
+ loop: while (true) {
+     if (x == 100) {
+         break;
+@@= skipped -12, +12 lines =@@
+ {
+     x: 100;
+ }
+-var y = function () { f: 1; };
++var y = () => { f: 1; };

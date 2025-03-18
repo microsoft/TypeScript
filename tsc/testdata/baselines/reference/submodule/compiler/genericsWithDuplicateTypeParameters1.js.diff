@@ -1,0 +1,20 @@
+--- old.genericsWithDuplicateTypeParameters1.js
++++ new.genericsWithDuplicateTypeParameters1.js
+@@= skipped -20, +20 lines =@@
+ //// [genericsWithDuplicateTypeParameters1.js]
+ function f() { }
+ function f2(a, b) { return null; }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.f = function () { };
+-    C.prototype.f2 = function (a, b) { return null; };
+-    return C;
+-}());
++class C {
++    f() { }
++    f2(a, b) { return null; }
++}
+ var m = {
+     a: function f() { },
+     b: function f2(a, b) { return null; }

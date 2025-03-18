@@ -1,0 +1,10 @@
+--- old.mappedTypeParameterConstraint.js
++++ new.mappedTypeParameterConstraint.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [mappedTypeParameterConstraint.js]
+-// Repro for #27596
+ function foo(arg) {
+     return arg;
+ }

@@ -1,0 +1,28 @@
+--- old.es6ClassTest3.js
++++ new.es6ClassTest3.js
+@@= skipped -18, +18 lines =@@
+ //// [es6ClassTest3.js]
+ var M;
+ (function (M) {
+-    var Visibility = /** @class */ (function () {
+-        function Visibility() {
++    class Visibility {
++        foo() { }
++        ;
++        bar() { }
++        ;
++        x;
++        y;
++        z;
++        constructor() {
+             this.x = 1;
+             this.y = 2;
+         }
+-        Visibility.prototype.foo = function () { };
+-        ;
+-        Visibility.prototype.bar = function () { };
+-        ;
+-        return Visibility;
+-    }());
++    }
+ })(M || (M = {}));

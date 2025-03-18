@@ -1,0 +1,11 @@
+--- old.objectLiteralShorthandPropertiesFunctionArgument.js
++++ new.objectLiteralShorthandPropertiesFunctionArgument.js
+@@= skipped -14, +14 lines =@@
+ //// [objectLiteralShorthandPropertiesFunctionArgument.js]
+ var id = 10000;
+ var name = "my name";
+-var person = { name: name, id: id };
++var person = { name, id };
+ function foo(p) { }
+ foo(person);
+ var obj = { name: name, id: id };

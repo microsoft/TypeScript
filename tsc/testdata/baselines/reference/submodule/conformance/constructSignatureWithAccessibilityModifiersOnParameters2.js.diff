@@ -1,0 +1,41 @@
+--- old.constructSignatureWithAccessibilityModifiersOnParameters2.js
++++ new.constructSignatureWithAccessibilityModifiersOnParameters2.js
+@@= skipped -38, +38 lines =@@
+ }
+ 
+ //// [constructSignatureWithAccessibilityModifiersOnParameters2.js]
+-// Parameter properties are not valid in overloads of constructors
+-var C = /** @class */ (function () {
+-    function C(x, y) {
++class C {
++    x;
++    y;
++    constructor(x, y) {
+         this.x = x;
+         this.y = y;
+     }
+-    return C;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2(x) {
++}
++class C2 {
++    x;
++    constructor(x) {
+         this.x = x;
+     }
+-    return C2;
+-}());
+-var C3 = /** @class */ (function () {
+-    function C3(y) {
++}
++class C3 {
++    y;
++    constructor(y) {
+         this.y = y;
+     }
+-    return C3;
+-}());
++}
+ var a;
+ var b;

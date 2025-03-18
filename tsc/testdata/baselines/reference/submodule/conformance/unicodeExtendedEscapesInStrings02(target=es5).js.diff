@@ -1,0 +1,8 @@
+--- old.unicodeExtendedEscapesInStrings02(target=es5).js
++++ new.unicodeExtendedEscapesInStrings02(target=es5).js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [unicodeExtendedEscapesInStrings02.js]
+-var x = "\0";
++var x = "\u{00}";

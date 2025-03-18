@@ -1,0 +1,25 @@
+--- old.classExpressionES63.js
++++ new.classExpressionES63.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [classExpressionES63.js]
+ let C = class extends class extends class {
+-    constructor() {
+-        this.a = 1;
+-    }
++    a = 1;
+ } {
+-    constructor() {
+-        super(...arguments);
+-        this.b = 2;
+-    }
++    b = 2;
+ } {
+-    constructor() {
+-        super(...arguments);
+-        this.c = 3;
+-    }
++    c = 3;
+ };
+ let c = new C();
+ c.a;

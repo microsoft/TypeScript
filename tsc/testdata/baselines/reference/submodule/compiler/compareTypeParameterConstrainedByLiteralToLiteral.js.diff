@@ -1,0 +1,13 @@
+--- old.compareTypeParameterConstrainedByLiteralToLiteral.js
++++ new.compareTypeParameterConstrainedByLiteralToLiteral.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [compareTypeParameterConstrainedByLiteralToLiteral.js]
+-// Test for #26758
+ function foo(t) {
+-    t === "a"; // Should be allowed
+-    t === "x"; // Should be error
++    t === "a";
++    t === "x";
+ }

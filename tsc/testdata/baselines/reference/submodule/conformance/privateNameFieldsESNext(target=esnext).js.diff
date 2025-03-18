@@ -1,0 +1,26 @@
+--- old.privateNameFieldsESNext(target=esnext).js
++++ new.privateNameFieldsESNext(target=esnext).js
+@@= skipped -23, +23 lines =@@
+ 
+ //// [privateNameFieldsESNext.js]
+ class C {
+-    constructor() {
+-        this.a = 123;
+-        this.#a = 10;
+-        this.c = "hello";
+-        this.#something = () => 1234;
+-    }
+-    #a;
++    a = 123;
++    #a = 10;
++    c = "hello";
+     #b;
+     method() {
+         console.log(this.#a);
+@@= skipped -19, +15 lines =@@
+         console.log(this.#m);
+         console.log(this.#x = "test");
+     }
+-    #something;
++    #something = () => 1234;
+ }

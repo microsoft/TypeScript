@@ -1,0 +1,21 @@
+--- old.es5-system2.js
++++ new.es5-system2.js
+@@= skipped -3, +3 lines =@@
+ export var __esModule = 1;
+ 
+ //// [es5-system2.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __esModule;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("__esModule", __esModule = 1);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.__esModule = void 0;
++exports.__esModule = 1;

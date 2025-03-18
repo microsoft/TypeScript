@@ -1,0 +1,21 @@
+--- old.letDeclarations-scopes-duplicates.js
++++ new.letDeclarations-scopes-duplicates.js
+@@= skipped -78, +78 lines =@@
+ 
+ 
+ //// [letDeclarations-scopes-duplicates.js]
+-// Errors: redeclaration
+ let var1 = 0;
+-let var1 = 0; // error
++let var1 = 0;
+ let var2 = 0;
+ const var2 = 0;
+ const var3 = 0;
+@@= skipped -38, +37 lines =@@
+     let var12;
+     let var12;
+ }
+-// OK
+ var var20 = 0;
+ var var20 = 0;
+ {

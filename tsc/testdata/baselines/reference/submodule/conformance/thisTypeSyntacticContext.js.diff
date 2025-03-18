@@ -1,0 +1,11 @@
+--- old.thisTypeSyntacticContext.js
++++ new.thisTypeSyntacticContext.js
+@@= skipped -18, +18 lines =@@
+ //// [thisTypeSyntacticContext.js]
+ function f() {
+ }
+-var o = { n: 1 };
++const o = { n: 1 };
+ o.test = f;
+ o.test();
+ o.test();

@@ -1,0 +1,20 @@
+--- old.implicitAnyDeclareMemberWithoutType2.js
++++ new.implicitAnyDeclareMemberWithoutType2.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [implicitAnyDeclareMemberWithoutType2.js]
+-// this should be an error
+-var C = /** @class */ (function () {
+-    function C(c1, c2, c3) {
+-        this.x = null; // error at "x"
+-    } // error at "c1, c2"
+-    C.prototype.funcOfC = function (f1, f2, f3) { }; // error at "f1,f2"
+-    return C;
+-}());
++class C {
++    x = null;
++    x1;
++    constructor(c1, c2, c3) { }
++    funcOfC(f1, f2, f3) { }
++}

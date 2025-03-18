@@ -1,0 +1,23 @@
+--- old.typeParametersAvailableInNestedScope3.js
++++ new.typeParametersAvailableInNestedScope3.js
+@@= skipped -21, +21 lines =@@
+     function c(v) {
+         function a(a) { return a; }
+         function b() { return v; }
+-        return { a: a, b: b };
++        return { a, b };
+     }
+-    return { a: a, b: b, c: c };
++    return { a, b, c };
+ }
+-
+-
+-//// [typeParametersAvailableInNestedScope3.d.ts]
+-declare function foo<T>(v: T): {
+-    a: <T_1>(a: T_1) => T_1;
+-    b: () => T;
+-    c: <T_1>(v: T_1) => {
+-        a: <T_2>(a: T_2) => T_2;
+-        b: () => T_1;
+-    };
+-};

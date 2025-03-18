@@ -1,0 +1,11 @@
+--- old.propertyOverridesAccessors5.js
++++ new.propertyOverridesAccessors5.js
+@@= skipped -17, +17 lines =@@
+ class B extends A {
+     p;
+     constructor(p) {
+-        super();
+         this.p = p;
++        super();
+     }
+ }

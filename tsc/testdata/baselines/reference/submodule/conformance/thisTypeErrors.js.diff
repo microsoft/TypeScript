@@ -1,0 +1,68 @@
+--- old.thisTypeErrors.js
++++ new.thisTypeErrors.js
+@@= skipped -65, +65 lines =@@
+     var y;
+     return this;
+ }
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    C2.foo = function (x) {
++class C1 {
++    a;
++    b;
++    c;
++    d;
++    e;
++}
++class C2 {
++    static x;
++    static y = undefined;
++    static foo(x) {
+         return undefined;
+-    };
+-    C2.y = undefined;
+-    return C2;
+-}());
++    }
++}
+ var N1;
+ (function (N1) {
+     N1.y = this;
+ })(N1 || (N1 = {}));
+-var C3 = /** @class */ (function () {
+-    function C3() {
+-        this.x1 = {
+-            g: function (x) {
+-                return undefined;
+-            }
+-        };
+-    }
+-    C3.prototype.f = function () {
++class C3 {
++    x1 = {
++        g(x) {
++            return undefined;
++        }
++    };
++    f() {
+         function g(x) {
+             return undefined;
+         }
+-        var x2 = {
+-            h: function (x) {
++        let x2 = {
++            h(x) {
+                 return undefined;
+             }
+         };
+-    };
+-    return C3;
+-}());
++    }
++}

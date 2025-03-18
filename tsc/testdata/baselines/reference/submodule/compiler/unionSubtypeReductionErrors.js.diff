@@ -1,0 +1,21 @@
+--- old.unionSubtypeReductionErrors.js
++++ new.unionSubtypeReductionErrors.js
+@@= skipped -6012, +6012 lines =@@
+ 
+ 
+ //// [unionSubtypeReductionErrors.js]
+-"use strict";
+-var a = [
++let a = [
+     0,
+     1,
+     2,
+@@= skipped -5005, +5004 lines =@@
+     5000,
+     5001,
+ ];
+-var b = [
++let b = [
+     { value: 0 },
+     { value: 1 },
+     { value: 2 },

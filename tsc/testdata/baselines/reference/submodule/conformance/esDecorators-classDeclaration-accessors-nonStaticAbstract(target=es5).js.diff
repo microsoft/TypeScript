@@ -1,0 +1,15 @@
+--- old.esDecorators-classDeclaration-accessors-nonStaticAbstract(target=es5).js
++++ new.esDecorators-classDeclaration-accessors-nonStaticAbstract(target=es5).js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [esDecorators-classDeclaration-accessors-nonStaticAbstract.js]
+-var method3 = "method3";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++const method3 = "method3";
++class C {
++}

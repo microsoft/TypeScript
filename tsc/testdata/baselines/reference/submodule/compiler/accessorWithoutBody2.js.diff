@@ -1,0 +1,8 @@
+--- old.accessorWithoutBody2.js
++++ new.accessorWithoutBody2.js
+@@= skipped -3, +3 lines =@@
+ var v = { set foo(a) }
+ 
+ //// [accessorWithoutBody2.js]
+-var v = { set foo(a) { } };
++var v = {};

@@ -1,0 +1,18 @@
+--- old.declarationEmitUnnessesaryTypeReferenceNotAdded.js
++++ new.declarationEmitUnnessesaryTypeReferenceNotAdded.js
+@@= skipped -33, +33 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.default = parseArgs;
+-var minimist = require("minimist");
+-var process = require("process");
++const minimist = require("minimist");
++const process = require("process");
+ function parseArgs() {
+     return minimist(process.argv.slice(2));
+ }
+-
+-
+-//// [index.d.ts]
+-import minimist = require('minimist');
+-export default function parseArgs(): minimist.ParsedArgs;

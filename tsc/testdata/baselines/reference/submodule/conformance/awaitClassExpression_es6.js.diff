@@ -1,0 +1,15 @@
+--- old.awaitClassExpression_es6.js
++++ new.awaitClassExpression_es6.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [awaitClassExpression_es6.js]
+-function func() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        class D extends (yield p) {
+-        }
+-    });
++async function func() {
++    class D extends (await p) {
++    }
+ }

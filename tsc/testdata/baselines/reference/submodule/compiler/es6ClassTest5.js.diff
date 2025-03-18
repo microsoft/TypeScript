@@ -1,0 +1,28 @@
+--- old.es6ClassTest5.js
++++ new.es6ClassTest5.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [es6ClassTest5.js]
+-var C1T5 = /** @class */ (function () {
+-    function C1T5() {
+-        this.foo = function (i) {
+-            return i;
+-        };
+-    }
+-    return C1T5;
+-}());
+-var bigClass = /** @class */ (function () {
+-    function bigClass() {
+-        this.break = 1;
+-    }
+-    return bigClass;
+-}());
++class C1T5 {
++    foo = (i) => {
++        return i;
++    };
++}
++class bigClass {
++    break = 1;
++}

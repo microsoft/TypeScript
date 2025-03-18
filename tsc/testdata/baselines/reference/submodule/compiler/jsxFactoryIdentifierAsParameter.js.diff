@@ -1,0 +1,12 @@
+--- old.jsxFactoryIdentifierAsParameter.js
++++ new.jsxFactoryIdentifierAsParameter.js
+@@= skipped -19, +19 lines =@@
+ exports.AppComponent = void 0;
+ class AppComponent {
+     render(createElement) {
+-        return createElement("div", null);
++        return <div />;
+     }
+ }
+ exports.AppComponent = AppComponent;
+-//# sourceMappingURL=test.js.map

@@ -1,0 +1,11 @@
+--- old.exportDeclaration_value.js
++++ new.exportDeclaration_value.js
+@@= skipped -12, +12 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.AA = void 0;
+-var A = {};
++const A = {};
+ exports.AA = {};
+ //// [b.js]
+ "use strict";

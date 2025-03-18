@@ -1,0 +1,17 @@
+--- old.parserES5SymbolProperty6.js
++++ new.parserES5SymbolProperty6.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserES5SymbolProperty6.js]
+-var _a;
+-var C = /** @class */ (function () {
+-    function C() {
+-        this[_a] = "";
+-    }
+-    return C;
+-}());
+-_a = Symbol.toStringTag;
++class C {
++    [Symbol.toStringTag] = "";
++}

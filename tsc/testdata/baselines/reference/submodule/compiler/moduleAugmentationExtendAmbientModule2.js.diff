@@ -1,0 +1,38 @@
+--- old.moduleAugmentationExtendAmbientModule2.js
++++ new.moduleAugmentationExtendAmbientModule2.js
+@@= skipped -36, +36 lines =@@
+ //// [map.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var observable_1 = require("observable");
++const observable_1 = require("observable");
+ observable_1.Observable.prototype.map = function () { };
+ //// [main.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-/// <reference path="observable.d.ts"/>
+-var observable_1 = require("observable");
++const observable_1 = require("observable");
+ require("./map");
+-var x;
+-var y = x.map(function (x) { return x + 1; });
+-var z1 = observable_1.Observable.someValue.toFixed();
+-var z2 = observable_1.Observable.someAnotherValue.toLowerCase();
+-
+-
+-//// [map.d.ts]
+-declare module "observable" {
+-    interface Observable<T> {
+-        map<U>(proj: (e: T) => U): Observable<U>;
+-    }
+-    namespace Observable {
+-        let someAnotherValue: string;
+-    }
+-}
+-export {};
+-//// [main.d.ts]
+-import "./map";
++let x;
++let y = x.map(x => x + 1);
++let z1 = observable_1.Observable.someValue.toFixed();
++let z2 = observable_1.Observable.someAnotherValue.toLowerCase();

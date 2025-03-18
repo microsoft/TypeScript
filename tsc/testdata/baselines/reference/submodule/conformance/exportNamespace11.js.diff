@@ -1,0 +1,24 @@
+--- old.exportNamespace11.js
++++ new.exportNamespace11.js
+@@= skipped -13, +13 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Ghost = void 0;
+-var Ghost = /** @class */ (function () {
+-    function Ghost() {
+-    }
+-    return Ghost;
+-}());
++class Ghost {
++}
+ exports.Ghost = Ghost;
+ //// [intermediate.js]
+ "use strict";
+@@= skipped -12, +9 lines =@@
+ //// [main.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var intermediate = require("./intermediate");
+-var ghost = new intermediate.Ghost();
++const intermediate = require("./intermediate");
++const ghost = new intermediate.Ghost();

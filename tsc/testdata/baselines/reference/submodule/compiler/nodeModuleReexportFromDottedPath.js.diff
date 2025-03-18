@@ -1,0 +1,17 @@
+--- old.nodeModuleReexportFromDottedPath.js
++++ new.nodeModuleReexportFromDottedPath.js
+@@= skipped -21, +21 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var client_1 = require("@prisma/client");
+-var EnhancedPrisma = enhancePrisma(client_1.PrismaClient);
++const client_1 = require("@prisma/client");
++const EnhancedPrisma = enhancePrisma(client_1.PrismaClient);
+ exports.default = new EnhancedPrisma();
+-
+-
+-//// [index.d.ts]
+-import { PrismaClient } from "@prisma/client";
+-declare const _default: PrismaClient<import(".prisma/client").PrismaClientOptions>;
+-export default _default;

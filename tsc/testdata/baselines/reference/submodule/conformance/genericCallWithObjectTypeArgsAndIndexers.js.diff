@@ -1,0 +1,10 @@
+--- old.genericCallWithObjectTypeArgsAndIndexers.js
++++ new.genericCallWithObjectTypeArgsAndIndexers.js
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ //// [genericCallWithObjectTypeArgsAndIndexers.js]
+-// Type inference infers from indexers in target type, no errors expected
+ function foo(x) {
+     return x;
+ }

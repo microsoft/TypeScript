@@ -1,0 +1,8 @@
+--- old.commentOnExpressionStatement1.js
++++ new.commentOnExpressionStatement1.js
+@@= skipped -3, +3 lines =@@
+ 1 + 1; // Comment.
+ 
+ //// [commentOnExpressionStatement1.js]
+-1 + 1; // Comment.
++1 + 1;

@@ -1,0 +1,17 @@
+--- old.propertyAccessibility1.js
++++ new.propertyAccessibility1.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [propertyAccessibility1.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.privProp = 0;
+-    }
+-    return Foo;
+-}());
++class Foo {
++    privProp = 0;
++}
+ var f = new Foo();
+ f.privProp;

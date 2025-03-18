@@ -1,0 +1,81 @@
+--- old.importTypeGenericTypes.js
++++ new.importTypeGenericTypes.js
+@@= skipped -51, +51 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Bar = void 0;
+-var Bar = /** @class */ (function () {
+-    function Bar(input) {
+-    }
+-    return Bar;
+-}());
++class Bar {
++    item;
++    constructor(input) { }
++}
+ exports.Bar = Bar;
+ //// [usage.js]
+ "use strict";
+@@= skipped -12, +11 lines =@@
+ exports.shim = exports.Bar2 = exports.y = exports.x = void 0;
+ exports.x = { x: 0, y: 0, data: { x: 12 } };
+ exports.y = { a: "", b: 0, data: { x: 12 } };
+-var Bar2 = /** @class */ (function () {
+-    function Bar2(input) {
+-    }
+-    return Bar2;
+-}());
++class Bar2 {
++    item;
++    constructor(input) { }
++}
+ exports.Bar2 = Bar2;
+ exports.shim = {
+     Bar: Bar2
+ };
+-
+-
+-//// [foo.d.ts]
+-interface Point<T> {
+-    x: number;
+-    y: number;
+-    data: T;
+-}
+-export = Point;
+-//// [foo2.d.ts]
+-declare namespace Bar {
+-    interface I<T> {
+-        a: string;
+-        b: number;
+-        data: T;
+-    }
+-}
+-export declare namespace Baz {
+-    interface J<T> {
+-        a: number;
+-        b: string;
+-        data: T;
+-    }
+-}
+-declare class Bar<T> {
+-    item: Bar.I<T>;
+-    constructor(input: Baz.J<T>);
+-}
+-export { Bar };
+-//// [usage.d.ts]
+-export declare const x: import("./foo")<{
+-    x: number;
+-}>;
+-export declare let y: import("./foo2").Bar.I<{
+-    x: number;
+-}>;
+-export declare class Bar2<T> {
+-    item: {
+-        a: string;
+-        b: number;
+-        c: object;
+-        data: T;
+-    };
+-    constructor(input?: any);
+-}
+-export declare let shim: typeof import("./foo2");

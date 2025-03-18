@@ -1,0 +1,12 @@
+--- old.emitArrowFunctionWhenUsingArguments14.js
++++ new.emitArrowFunctionWhenUsingArguments14.js
+@@= skipped -10, +10 lines =@@
+ //// [emitArrowFunctionWhenUsingArguments14.js]
+ function f() {
+     if (Math.random()) {
+-        var arguments_1 = 100;
+-        return function () { return arguments; };
++        const arguments = 100;
++        return () => arguments;
+     }
+ }

@@ -1,0 +1,13 @@
+--- old.primitiveTypeAsClassName.js
++++ new.primitiveTypeAsClassName.js
+@@= skipped -3, +3 lines =@@
+ class any {}
+ 
+ //// [primitiveTypeAsClassName.js]
+-var any = /** @class */ (function () {
+-    function any() {
+-    }
+-    return any;
+-}());
++class any {
++}

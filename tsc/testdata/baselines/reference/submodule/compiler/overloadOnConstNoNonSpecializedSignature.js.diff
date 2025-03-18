@@ -1,0 +1,15 @@
+--- old.overloadOnConstNoNonSpecializedSignature.js
++++ new.overloadOnConstNoNonSpecializedSignature.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [overloadOnConstNoNonSpecializedSignature.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.x1 = function (a) { };
+-    return C;
+-}());
++class C {
++    x1(a) { }
++}

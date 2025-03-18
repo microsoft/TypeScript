@@ -1,0 +1,11 @@
+--- old.sourceMapValidationLambdaSpanningMultipleLines.js
++++ new.sourceMapValidationLambdaSpanningMultipleLines.js
+@@= skipped -5, +5 lines =@@
+ )
+ 
+ //// [sourceMapValidationLambdaSpanningMultipleLines.js]
+-(function (item) {
+-    return item;
+-});
+-//# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map
++((item) => item);

@@ -1,0 +1,17 @@
+--- old.interfaceImplementation4.js
++++ new.interfaceImplementation4.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [interfaceImplementation4.js]
+-var C5 = /** @class */ (function () {
+-    function C5() {
+-    }
+-    C5.prototype.iFn = function () { };
+-    return C5;
+-}());
++class C5 {
++    iNum;
++    iAny;
++    iFn() { }
++}

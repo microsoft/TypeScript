@@ -1,0 +1,22 @@
+--- old.errorForUsingPropertyOfTypeAsType01.js
++++ new.errorForUsingPropertyOfTypeAsType01.js
+@@= skipped -53, +53 lines =@@
+ })(Test1 || (Test1 = {}));
+ var Test2;
+ (function (Test2) {
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-        }
+-        return Foo;
+-    }());
++    class Foo {
++        bar;
++    }
+     Test2.Foo = Foo;
+     var x = "";
+     var y = "";
+@@= skipped -24, +22 lines =@@
+     var x = "";
+     var y = "";
+ })(Test5 || (Test5 = {}));
+-var lol = Test5.Foo.;

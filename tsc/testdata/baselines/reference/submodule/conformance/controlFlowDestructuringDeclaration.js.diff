@@ -1,0 +1,75 @@
+--- old.controlFlowDestructuringDeclaration.js
++++ new.controlFlowDestructuringDeclaration.js
+@@= skipped -61, +61 lines =@@
+ 
+ //// [controlFlowDestructuringDeclaration.js]
+ function f1() {
+-    var x = 1;
++    let x = 1;
+     x;
+-    var y = "";
++    let y = "";
+     y;
+ }
+ function f2() {
+-    var x = [1][0];
++    let [x] = [1];
+     x;
+-    var y = [""][0];
++    let [y] = [""];
+     y;
+-    var _a = [undefined][0], z = _a === void 0 ? "" : _a;
++    let [z = ""] = [undefined];
+     z;
+ }
+ function f3() {
+-    var x = [1][0];
++    let [x] = [1];
+     x;
+-    var y = [""][0];
++    let [y] = [""];
+     y;
+-    var _a = [undefined][0], z = _a === void 0 ? "" : _a;
++    let [z = ""] = [undefined];
+     z;
+ }
+ function f4() {
+-    var x = { x: 1 }.x;
++    let { x } = { x: 1 };
+     x;
+-    var y = { y: "" }.y;
++    let { y } = { y: "" };
+     y;
+-    var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
++    let { z = "" } = { z: undefined };
+     z;
+ }
+ function f5() {
+-    var x = { x: 1 }.x;
++    let { x } = { x: 1 };
+     x;
+-    var y = { y: "" }.y;
++    let { y } = { y: "" };
+     y;
+-    var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
++    let { z = "" } = { z: undefined };
+     z;
+ }
+ function f6() {
+-    var x = {}.x;
++    let { x } = {};
+     x;
+-    var y = {}.y;
++    let { y } = {};
+     y;
+-    var _a = {}.z, z = _a === void 0 ? "" : _a;
++    let { z = "" } = {};
+     z;
+ }
+ function f7() {
+-    var o = { x: 1 };
+-    var x = o.x;
++    let o = { x: 1 };
++    let { x } = o;
+     x;
+ }

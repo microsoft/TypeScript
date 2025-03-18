@@ -1,0 +1,26 @@
+--- old.moduleScopingBug.js
++++ new.moduleScopingBug.js
+@@= skipped -35, +35 lines =@@
+ (function (M) {
+     var outer;
+     function f() {
+-        var inner = outer; // Ok
++        var inner = outer;
+     }
+-    var C = /** @class */ (function () {
+-        function C() {
+-            var inner = outer; // Ok
++    class C {
++        constructor() {
++            var inner = outer;
+         }
+-        return C;
+-    }());
+-    var X;
++    }
++    let X;
+     (function (X) {
+-        var inner = outer; // Error: outer not visible
++        var inner = outer;
+     })(X || (X = {}));
+ })(M || (M = {}));

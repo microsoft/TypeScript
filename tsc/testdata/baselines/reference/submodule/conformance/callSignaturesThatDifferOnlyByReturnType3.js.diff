@@ -1,0 +1,8 @@
+--- old.callSignaturesThatDifferOnlyByReturnType3.js
++++ new.callSignaturesThatDifferOnlyByReturnType3.js
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ //// [callSignaturesThatDifferOnlyByReturnType3.js]
+-// Normally it is an error to have multiple overloads with identical signatures in a single type declaration.
+-// Here the multiple overloads come from multiple merged declarations.

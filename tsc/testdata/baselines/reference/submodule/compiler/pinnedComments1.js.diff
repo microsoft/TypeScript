@@ -1,0 +1,17 @@
+--- old.pinnedComments1.js
++++ new.pinnedComments1.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [pinnedComments1.js]
+-/*!=========
+-    Keep this pinned comment
+-   =========
+-*/
+-var C = (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

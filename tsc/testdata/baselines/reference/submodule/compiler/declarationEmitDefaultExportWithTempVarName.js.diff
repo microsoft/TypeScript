@@ -1,0 +1,24 @@
+--- old.declarationEmitDefaultExportWithTempVarName.js
++++ new.declarationEmitDefaultExportWithTempVarName.js
+@@= skipped -3, +3 lines =@@
+ export default 3.14159;
+ 
+ //// [pi.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("default", 3.14159);
+-        }
+-    };
+-});
+-
+-
+-//// [pi.d.ts]
+-declare const _default: 3.14159;
+-export default _default;
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.default = 3.14159;

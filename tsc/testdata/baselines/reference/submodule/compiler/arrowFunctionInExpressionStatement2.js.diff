@@ -1,0 +1,9 @@
+--- old.arrowFunctionInExpressionStatement2.js
++++ new.arrowFunctionInExpressionStatement2.js
+@@= skipped -7, +7 lines =@@
+ //// [arrowFunctionInExpressionStatement2.js]
+ var M;
+ (function (M) {
+-    (function () { return 0; });
++    () => 0;
+ })(M || (M = {}));

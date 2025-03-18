@@ -1,0 +1,24 @@
+--- old.importHelpersNoHelpersForPrivateFields.js
++++ new.importHelpersNoHelpersForPrivateFields.js
+@@= skipped -14, +14 lines =@@
+ 
+ //// [main.js]
+ "use strict";
+-var _Foo_field;
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Foo = void 0;
+-const tslib_1 = require("tslib");
+ class Foo {
+-    constructor() {
+-        _Foo_field.set(this, true);
+-    }
++    #field = true;
+     f() {
+-        tslib_1.__classPrivateFieldSet(this, _Foo_field, tslib_1.__classPrivateFieldGet(this, _Foo_field, "f"), "f");
+-        tslib_1.__classPrivateFieldIn(_Foo_field, this);
++        this.#field = this.#field;
++        #field in this;
+     }
+ }
+ exports.Foo = Foo;
+-_Foo_field = new WeakMap();

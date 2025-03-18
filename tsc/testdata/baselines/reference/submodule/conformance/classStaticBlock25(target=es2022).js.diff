@@ -1,0 +1,14 @@
+--- old.classStaticBlock25(target=es2022).js
++++ new.classStaticBlock25(target=es2022).js
+@@= skipped -35, +35 lines =@@
+         b;
+     }
+ }
+-//# sourceMappingURL=classStaticBlock25.js.map
+-
+-//// [classStaticBlock25.d.ts]
+-declare const a = 1;
+-declare const b = 2;
+-declare class C {
+-}
+-//# sourceMappingURL=classStaticBlock25.d.ts.map

@@ -1,0 +1,14 @@
+--- old.undefinedAssignableToGenericMappedIntersection.js
++++ new.undefinedAssignableToGenericMappedIntersection.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [undefinedAssignableToGenericMappedIntersection.js]
+-"use strict";
+ function foo() {
+-    var obj;
+-    var x;
++    let obj;
++    let x;
+     obj[x] = undefined;
+ }

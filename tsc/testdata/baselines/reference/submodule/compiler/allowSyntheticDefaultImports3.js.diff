@@ -1,0 +1,50 @@
+--- old.allowSyntheticDefaultImports3.js
++++ new.allowSyntheticDefaultImports3.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [b.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var Foo;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            Foo = /** @class */ (function () {
+-                function Foo() {
+-                }
+-                return Foo;
+-            }());
+-            exports_1("Foo", Foo);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Foo = void 0;
++class Foo {
++    member;
++}
++exports.Foo = Foo;
+ //// [a.js]
+-System.register(["./b"], function (exports_1, context_1) {
+-    "use strict";
+-    var b_1, x;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (b_1_1) {
+-                b_1 = b_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            exports_1("x", x = new b_1.default.Foo());
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++const b_1 = require("./b");
++exports.x = new b_1.default.Foo();

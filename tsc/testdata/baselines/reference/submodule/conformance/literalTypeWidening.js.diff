@@ -1,0 +1,199 @@
+--- old.literalTypeWidening.js
++++ new.literalTypeWidening.js
+@@= skipped -147, +147 lines =@@
+ 
+ //// [literalTypeWidening.js]
+ "use strict";
+-// Widening vs. non-widening literal types
+-var __assign = (this && this.__assign) || function () {
+-    __assign = Object.assign || function(t) {
+-        for (var s, i = 1, n = arguments.length; i < n; i++) {
+-            s = arguments[i];
+-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+-                t[p] = s[p];
+-        }
+-        return t;
+-    };
+-    return __assign.apply(this, arguments);
+-};
+-var __rest = (this && this.__rest) || function (s, e) {
+-    var t = {};
+-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+-        t[p] = s[p];
+-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+-                t[p[i]] = s[p[i]];
+-        }
+-    return t;
+-};
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.langCodes = void 0;
+ exports.Set = Set;
+ exports.keys = keys;
+ function f1() {
+-    var c1 = "hello"; // Widening type "hello"
+-    var v1 = c1; // Type string
+-    var c2 = c1; // Widening type "hello"
+-    var v2 = c2; // Type string
+-    var c3 = "hello"; // Type "hello"
+-    var v3 = c3; // Type "hello"
+-    var c4 = c1; // Type "hello"
+-    var v4 = c4; // Type "hello"
++    const c1 = "hello";
++    let v1 = c1;
++    const c2 = c1;
++    let v2 = c2;
++    const c3 = "hello";
++    let v3 = c3;
++    const c4 = c1;
++    let v4 = c4;
+ }
+ function f2(cond) {
+-    var c1 = cond ? "foo" : "bar"; // widening "foo" | widening "bar"
+-    var c2 = c1; // "foo" | "bar"
+-    var c3 = cond ? c1 : c2; // "foo" | "bar"
+-    var c4 = cond ? c3 : "baz"; // "foo" | "bar" | widening "baz"
+-    var c5 = c4; // "foo" | "bar" | "baz"
+-    var v1 = c1; // string
+-    var v2 = c2; // "foo" | "bar"
+-    var v3 = c3; // "foo" | "bar"
+-    var v4 = c4; // string
+-    var v5 = c5; // "foo" | "bar" | "baz"
++    const c1 = cond ? "foo" : "bar";
++    const c2 = c1;
++    const c3 = cond ? c1 : c2;
++    const c4 = cond ? c3 : "baz";
++    const c5 = c4;
++    let v1 = c1;
++    let v2 = c2;
++    let v3 = c3;
++    let v4 = c4;
++    let v5 = c5;
+ }
+ function f3() {
+-    var c1 = 123; // Widening type 123
+-    var v1 = c1; // Type number
+-    var c2 = c1; // Widening type 123
+-    var v2 = c2; // Type number
+-    var c3 = 123; // Type 123
+-    var v3 = c3; // Type 123
+-    var c4 = c1; // Type 123
+-    var v4 = c4; // Type 123
++    const c1 = 123;
++    let v1 = c1;
++    const c2 = c1;
++    let v2 = c2;
++    const c3 = 123;
++    let v3 = c3;
++    const c4 = c1;
++    let v4 = c4;
+ }
+ function f4(cond) {
+-    var c1 = cond ? 123 : 456; // widening 123 | widening 456
+-    var c2 = c1; // 123 | 456
+-    var c3 = cond ? c1 : c2; // 123 | 456
+-    var c4 = cond ? c3 : 789; // 123 | 456 | widening 789
+-    var c5 = c4; // 123 | 456 | 789
+-    var v1 = c1; // number
+-    var v2 = c2; // 123 | 456
+-    var v3 = c3; // 123 | 456
+-    var v4 = c4; // number
+-    var v5 = c5; // 123 | 456 | 789
++    const c1 = cond ? 123 : 456;
++    const c2 = c1;
++    const c3 = cond ? c1 : c2;
++    const c4 = cond ? c3 : 789;
++    const c5 = c4;
++    let v1 = c1;
++    let v2 = c2;
++    let v3 = c3;
++    let v4 = c4;
++    let v5 = c5;
+ }
+ function f5() {
+-    var c1 = "foo";
+-    var v1 = c1;
+-    var c2 = "foo";
+-    var v2 = c2;
+-    var c3 = "foo";
+-    var v3 = c3;
+-    var c4 = "foo";
+-    var v4 = c4;
++    const c1 = "foo";
++    let v1 = c1;
++    const c2 = "foo";
++    let v2 = c2;
++    const c3 = "foo";
++    let v3 = c3;
++    const c4 = "foo";
++    let v4 = c4;
+ }
+ function f6(cond) {
+-    var x1 = widening('a');
+-    var x2 = widening(10);
+-    var x3 = widening(cond ? 'a' : 10);
+-    var y1 = nonWidening('a');
+-    var y2 = nonWidening(10);
+-    var y3 = nonWidening(cond ? 'a' : 10);
++    let x1 = widening('a');
++    let x2 = widening(10);
++    let x3 = widening(cond ? 'a' : 10);
++    let y1 = nonWidening('a');
++    let y2 = nonWidening(10);
++    let y3 = nonWidening(cond ? 'a' : 10);
+ }
+-var FAILURE = "FAILURE";
++const FAILURE = "FAILURE";
+ function doWork() {
+     return FAILURE;
+ }
+@@= skipped -102, +79 lines =@@
+ function increment(x) {
+     return x + 1;
+ }
+-var result = doWork();
++let result = doWork();
+ if (isSuccess(result)) {
+     increment(result);
+ }
+ function onMouseOver() { return "onmouseover"; }
+-var x = onMouseOver();
+-// Repro from #23649
+-function Set() {
+-    var keys = [];
+-    for (var _i = 0; _i < arguments.length; _i++) {
+-        keys[_i] = arguments[_i];
+-    }
+-    var result = {};
+-    keys.forEach(function (key) { return result[key] = true; });
++let x = onMouseOver();
++function Set(...keys) {
++    const result = {};
++    keys.forEach(key => result[key] = true);
+     return result;
+ }
+ function keys(obj) {
+     return Object.keys(obj);
+ }
+-var langCodeSet = Set('fr', 'en', 'es', 'it', 'nl');
++const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl');
+ exports.langCodes = keys(langCodeSet);
+-var arr = exports.langCodes.map(function (code) { return ({ code: code }); });
+-// Repro from #29081
++const arr = exports.langCodes.map(code => ({ code }));
+ function test(obj) {
+-    var a = obj.a, rest = __rest(obj, ["a"]);
+-    return __assign({ a: 'hello' }, rest);
++    let { a, ...rest } = obj;
++    return { a: 'hello', ...rest };
+ }
+ var E;
+ (function (E) {
+     E[E["A"] = 0] = "A";
+     E[E["B"] = 1] = "B";
+ })(E || (E = {}));
+-var a = f(E.A);
+-var b = a;
++const a = f(E.A);
++const b = a;

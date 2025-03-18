@@ -1,0 +1,35 @@
+--- old.declarationEmitTypeParameterNameInOuterScope.js
++++ new.declarationEmitTypeParameterNameInOuterScope.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [declarationEmitTypeParameterNameInOuterScope.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-var a = function (x) { return x; };
++class A {
++}
++var a = (x) => x;
+ function a2(x) { return x; }
+-var a3 = function (x) { return new A(); };
++var a3 = (x) => new A();
+ function a4(x) { return new A(); }
+-var b = function (x) { return x; };
++var b = (x) => x;
+ function b2(x) { return x; }
+-
+-
+-//// [declarationEmitTypeParameterNameInOuterScope.d.ts]
+-declare class A {
+-}
+-declare var a: <A>(x: A) => A;
+-declare function a2<A>(x: A): A;
+-declare var a3: <A>(x: A) => globalThis.A;
+-declare function a4<A>(x: A): globalThis.A;
+-interface B {
+-}
+-declare var b: <B>(x: B) => B;
+-declare function b2<B>(x: B): B;

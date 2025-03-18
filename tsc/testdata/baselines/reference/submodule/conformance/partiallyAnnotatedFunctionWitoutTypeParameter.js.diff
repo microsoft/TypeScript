@@ -1,0 +1,10 @@
+--- old.partiallyAnnotatedFunctionWitoutTypeParameter.js
++++ new.partiallyAnnotatedFunctionWitoutTypeParameter.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [partiallyAnnotatedFunctionWitoutTypeParameter.js]
+-simple(function (a, b) { });
+-simple(function (a, b) { });
++simple((a, b) => { });
++simple((a, b) => { });

@@ -1,0 +1,25 @@
+--- old.declFileForTypeParameters.js
++++ new.declFileForTypeParameters.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [declFileForTypeParameters.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function (a) {
++class C {
++    x;
++    foo(a) {
+         return this.x;
+-    };
+-    return C;
+-}());
+-
+-
+-//// [declFileForTypeParameters.d.ts]
+-declare class C<T> {
+-    x: T;
+-    foo(a: T): T;
++    }
+ }

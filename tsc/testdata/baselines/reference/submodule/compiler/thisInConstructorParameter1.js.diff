@@ -1,0 +1,16 @@
+--- old.thisInConstructorParameter1.js
++++ new.thisInConstructorParameter1.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [thisInConstructorParameter1.js]
+-var Foo = /** @class */ (function () {
+-    function Foo(x) {
+-        if (x === void 0) { x = this.y; }
+-    }
+-    return Foo;
+-}());
++class Foo {
++    y;
++    constructor(x = this.y) { }
++}

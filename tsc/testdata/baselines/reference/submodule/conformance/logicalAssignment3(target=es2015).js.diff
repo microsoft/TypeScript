@@ -1,0 +1,14 @@
+--- old.logicalAssignment3(target=es2015).js
++++ new.logicalAssignment3(target=es2015).js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [logicalAssignment3.js]
+-"use strict";
+-var _a;
+-a.baz && (a.baz = result.baz);
+-b.baz || (b.baz = result.baz);
+-(_a = c.baz) !== null && _a !== void 0 ? _a : (c.baz = result.baz);
++(a.baz) &&= result.baz;
++(b.baz) ||= result.baz;
++(c.baz) ??= result.baz;

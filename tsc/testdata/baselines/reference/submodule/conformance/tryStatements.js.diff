@@ -1,0 +1,33 @@
+--- old.tryStatements.js
++++ new.tryStatements.js
+@@= skipped -22, +22 lines =@@
+ //// [tryStatements.js]
+ function fn() {
+     try { }
+-    catch (_a) { }
++    catch { }
+     try { }
+-    catch (_b) {
++    catch {
+         try { }
+-        catch (_c) {
++        catch {
+             try { }
+-            catch (_d) { }
++            catch { }
+         }
+         try { }
+-        catch (_e) { }
++        catch { }
+     }
+     try { }
+     catch (x) {
+@@= skipped -18, +18 lines =@@
+     try { }
+     finally { }
+     try { }
+-    catch (_f) { }
++    catch { }
+     finally { }
+     try { }
+     catch (z) { }

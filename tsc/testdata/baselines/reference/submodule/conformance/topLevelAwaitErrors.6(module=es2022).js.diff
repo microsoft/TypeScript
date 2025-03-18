@@ -1,0 +1,9 @@
+--- old.topLevelAwaitErrors.6(module=es2022).js
++++ new.topLevelAwaitErrors.6(module=es2022).js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [topLevelAwaitErrors.6.js]
+-// await in exported function name should fail
+ export function await() {
+ }

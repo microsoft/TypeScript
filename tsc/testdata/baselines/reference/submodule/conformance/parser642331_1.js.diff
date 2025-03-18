@@ -1,0 +1,14 @@
+--- old.parser642331_1.js
++++ new.parser642331_1.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [parser642331_1.js]
+ "use strict";
+-var test = /** @class */ (function () {
+-    function test(static) {
+-    }
+-    return test;
+-}());
++class test {
++    constructor(static) { }
++}

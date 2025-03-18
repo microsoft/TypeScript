@@ -1,0 +1,11 @@
+--- old.assignmentToFunction.js
++++ new.assignmentToFunction.js
+@@= skipped -13, +13 lines =@@
+ 
+ //// [assignmentToFunction.js]
+ function fn() { }
+-fn = function () { return 3; };
++fn = () => 3;
+ var foo;
+ (function (foo) {
+     function xyz() {

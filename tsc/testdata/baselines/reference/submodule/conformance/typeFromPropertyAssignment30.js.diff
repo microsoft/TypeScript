@@ -1,0 +1,10 @@
+--- old.typeFromPropertyAssignment30.js
++++ new.typeFromPropertyAssignment30.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [typeFromPropertyAssignment30.js]
+-var c = function () { return 1; };
+-// should not be an expando object, but contextually typed by Combo.p
++const c = () => 1;
+ c.p = {};

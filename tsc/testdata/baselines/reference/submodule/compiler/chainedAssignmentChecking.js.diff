@@ -1,0 +1,43 @@
+--- old.chainedAssignmentChecking.js
++++ new.chainedAssignmentChecking.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [chainedAssignmentChecking.js]
+-var X = /** @class */ (function () {
+-    function X(z) {
++class X {
++    z;
++    constructor(z) {
+         this.z = z;
+     }
+-    return X;
+-}());
+-var Y = /** @class */ (function () {
+-    function Y(z) {
++    a;
++}
++class Y {
++    z;
++    constructor(z) {
+         this.z = z;
+     }
+-    return Y;
+-}());
+-var Z = /** @class */ (function () {
+-    function Z() {
+-    }
+-    return Z;
+-}());
++    a;
++    b;
++}
++class Z {
++    z;
++    c;
++}
+ var c1 = new X(3);
+ var c2 = new Y(5);
+ var c3 = new Z();
+-c1 = c2 = c3; // Should be error
++c1 = c2 = c3;

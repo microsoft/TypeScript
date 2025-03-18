@@ -1,0 +1,66 @@
+--- old.collisionRestParameterClassMethod.js
++++ new.collisionRestParameterClassMethod.js
+@@= skipped -40, +40 lines =@@
+ }
+ 
+ //// [collisionRestParameterClassMethod.js]
+-var c1 = /** @class */ (function () {
+-    function c1() {
++class c1 {
++    foo(_i, ...restParameters) {
++        var _i = 10;
+     }
+-    c1.prototype.foo = function (_i) {
+-        var restParameters = [];
+-        for (var _a = 1; _a < arguments.length; _a++) {
+-            restParameters[_a - 1] = arguments[_a];
+-        }
+-        var _i = 10; // no error
+-    };
+-    c1.prototype.fooNoError = function (_i) {
+-        var _i = 10; // no error
+-    };
+-    c1.prototype.f4 = function (_i) {
+-        var rest = [];
+-        for (var _a = 1; _a < arguments.length; _a++) {
+-            rest[_a - 1] = arguments[_a];
+-        }
+-        var _i; // no error
+-    };
+-    c1.prototype.f4NoError = function (_i) {
+-        var _i; // no error
+-    };
+-    return c1;
+-}());
+-var c3 = /** @class */ (function () {
+-    function c3() {
++    fooNoError(_i) {
++        var _i = 10;
+     }
+-    c3.prototype.foo = function () {
+-        var restParameters = [];
+-        for (var _a = 0; _a < arguments.length; _a++) {
+-            restParameters[_a] = arguments[_a];
+-        }
+-        var _i = 10; // no error
+-    };
+-    c3.prototype.fooNoError = function () {
+-        var _i = 10; // no error
+-    };
+-    return c3;
+-}());
++    f4(_i, ...rest) {
++        var _i;
++    }
++    f4NoError(_i) {
++        var _i;
++    }
++}
++class c3 {
++    foo(...restParameters) {
++        var _i = 10;
++    }
++    fooNoError() {
++        var _i = 10;
++    }
++}

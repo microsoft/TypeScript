@@ -1,0 +1,28 @@
+--- old.genericUnboundedTypeParamAssignability.js
++++ new.genericUnboundedTypeParamAssignability.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [genericUnboundedTypeParamAssignability.js]
+-"use strict";
+ function f1(o) {
+-    o.toString(); // error
++    o.toString();
+ }
+ function f2(o) {
+-    o.toString(); // no error
++    o.toString();
+ }
+ function f3(o) {
+-    o.toString(); // no error
++    o.toString();
+ }
+ function user(t) {
+     f1(t);
+-    f2(t); // error in strict, unbounded T doesn't satisfy the constraint
+-    f3(t); // error in strict, unbounded T doesn't satisfy the constraint
+-    t.toString(); // error, for the same reason as f1()
++    f2(t);
++    f3(t);
++    t.toString();
+ }

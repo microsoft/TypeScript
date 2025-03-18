@@ -1,0 +1,10 @@
+--- old.callConstructAssignment.js
++++ new.callConstructAssignment.js
+@@= skipped -10, +10 lines =@@
+ //// [callConstructAssignment.js]
+ var foo;
+ var bar;
+-foo = bar; // error
+-bar = foo; // error
++foo = bar;
++bar = foo;

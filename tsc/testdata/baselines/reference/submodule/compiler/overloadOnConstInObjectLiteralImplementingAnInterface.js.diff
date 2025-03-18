@@ -1,0 +1,8 @@
+--- old.overloadOnConstInObjectLiteralImplementingAnInterface.js
++++ new.overloadOnConstInObjectLiteralImplementingAnInterface.js
+@@= skipped -7, +7 lines =@@
+ var i2: I = { x1: (a: number, cb: (x: 'hi') => number) => { } }; // error
+ 
+ //// [overloadOnConstInObjectLiteralImplementingAnInterface.js]
+-var i2 = { x1: function (a, cb) { } }; // error
++var i2 = { x1: (a, cb) => { } };

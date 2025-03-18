@@ -1,0 +1,8 @@
+--- old.arrayFilter.js
++++ new.arrayFilter.js
+@@= skipped -14, +14 lines =@@
+     { name: null },
+     { name: 'baz' }
+ ];
+-foo.filter(function (x) { return x.name; }); //should accepted all possible types not only boolean! 
++foo.filter(x => x.name);

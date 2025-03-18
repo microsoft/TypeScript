@@ -1,0 +1,15 @@
+--- old.es6ImportNameSpaceImportInEs5.js
++++ new.es6ImportNameSpaceImportInEs5.js
+@@= skipped -16, +16 lines =@@
+ //// [es6ImportNameSpaceImportInEs5_1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var nameSpaceBinding = require("./es6ImportNameSpaceImportInEs5_0");
++const nameSpaceBinding = require("./es6ImportNameSpaceImportInEs5_0");
+ var x = nameSpaceBinding.a;
+-
+-
+-//// [es6ImportNameSpaceImportInEs5_0.d.ts]
+-export declare var a: number;
+-//// [es6ImportNameSpaceImportInEs5_1.d.ts]
+-export {};

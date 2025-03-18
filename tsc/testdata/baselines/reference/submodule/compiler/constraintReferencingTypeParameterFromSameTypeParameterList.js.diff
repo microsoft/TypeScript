@@ -1,0 +1,10 @@
+--- old.constraintReferencingTypeParameterFromSameTypeParameterList.js
++++ new.constraintReferencingTypeParameterFromSameTypeParameterList.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [constraintReferencingTypeParameterFromSameTypeParameterList.js]
+-// used to be valid, now an error to do this
+ function f() {
+ }
+ function foo() {

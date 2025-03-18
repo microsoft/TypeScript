@@ -1,0 +1,224 @@
+--- old.systemModule11.js
++++ new.systemModule11.js
+@@= skipped -32, +32 lines =@@
+ export * from 'a';
+ 
+ //// [file1.js]
+-System.register(["bar"], function (exports_1, context_1) {
+-    "use strict";
+-    var x;
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() { }
+-    exports_1("foo", foo);
+-    var exportedNames_1 = {
+-        "x": true,
+-        "foo": true
+-    };
+-    function exportStar_1(m) {
+-        var exports = {};
+-        for (var n in m) {
+-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+-        }
+-        exports_1(exports);
++"use strict";
++var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    var desc = Object.getOwnPropertyDescriptor(m, k);
++    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
++      desc = { enumerable: true, get: function() { return m[k]; } };
+     }
+-    return {
+-        setters: [
+-            function (bar_1_1) {
+-                exportStar_1(bar_1_1);
+-            }
+-        ],
+-        execute: function () {
+-        }
+-    };
+-});
++    Object.defineProperty(o, k2, desc);
++}) : (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    o[k2] = m[k];
++}));
++var __exportStar = (this && this.__exportStar) || function(m, exports) {
++    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
++};
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++exports.foo = foo;
++function foo() { }
++__exportStar(require("bar"), exports);
+ //// [file2.js]
+-System.register(["bar"], function (exports_1, context_1) {
+-    "use strict";
+-    var x, y;
+-    var __moduleName = context_1 && context_1.id;
+-    var exportedNames_1 = {
+-        "x": true,
+-        "y1": true
+-    };
+-    function exportStar_1(m) {
+-        var exports = {};
+-        for (var n in m) {
+-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+-        }
+-        exports_1(exports);
++"use strict";
++var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    var desc = Object.getOwnPropertyDescriptor(m, k);
++    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
++      desc = { enumerable: true, get: function() { return m[k]; } };
+     }
+-    return {
+-        setters: [
+-            function (bar_1_1) {
+-                exportStar_1(bar_1_1);
+-            }
+-        ],
+-        execute: function () {
+-        }
+-    };
+-});
++    Object.defineProperty(o, k2, desc);
++}) : (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    o[k2] = m[k];
++}));
++var __exportStar = (this && this.__exportStar) || function(m, exports) {
++    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
++};
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.y1 = exports.x = void 0;
++var x;
++var y;
++__exportStar(require("bar"), exports);
+ //// [file3.js]
+-System.register(["a", "bar"], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() { }
+-    exports_1("default", foo);
+-    var exportedNames_1 = {
+-        "x": true,
+-        "z": true
+-    };
+-    function exportStar_1(m) {
+-        var exports = {};
+-        for (var n in m) {
+-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+-        }
+-        exports_1(exports);
++"use strict";
++var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    var desc = Object.getOwnPropertyDescriptor(m, k);
++    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
++      desc = { enumerable: true, get: function() { return m[k]; } };
+     }
+-    return {
+-        setters: [
+-            function (a_1_1) {
+-                exports_1({
+-                    "x": a_1_1["x"],
+-                    "z": a_1_1["y"]
+-                });
+-            },
+-            function (bar_1_1) {
+-                exportStar_1(bar_1_1);
+-            }
+-        ],
+-        execute: function () {
+-        }
+-    };
+-});
++    Object.defineProperty(o, k2, desc);
++}) : (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    o[k2] = m[k];
++}));
++var __exportStar = (this && this.__exportStar) || function(m, exports) {
++    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
++};
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.z = exports.x = void 0;
++exports.default = foo;
++const a_1 = require("a");
++Object.defineProperty(exports, "x", { enumerable: true, get: function () { return a_1.x; } });
++Object.defineProperty(exports, "z", { enumerable: true, get: function () { return a_1.y; } });
++function foo() { }
++__exportStar(require("bar"), exports);
+ //// [file4.js]
+-System.register(["a"], function (exports_1, context_1) {
+-    "use strict";
+-    var x, z, z1;
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() { }
+-    exports_1("foo", foo);
+-    function default_1() { }
+-    exports_1("default", default_1);
+-    return {
+-        setters: [
+-            function (a_1_1) {
+-                exports_1({
+-                    "s": a_1_1["s"],
+-                    "s2": a_1_1["s1"]
+-                });
+-            }
+-        ],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.s2 = exports.s = exports.z2 = exports.z = exports.x = void 0;
++exports.foo = foo;
++exports.default = default_1;
++function foo() { }
++function default_1() { }
++var z, z1;
++const a_1 = require("a");
++Object.defineProperty(exports, "s", { enumerable: true, get: function () { return a_1.s; } });
++Object.defineProperty(exports, "s2", { enumerable: true, get: function () { return a_1.s1; } });
+ //// [file5.js]
+-System.register(["a"], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() { }
+-    function exportStar_1(m) {
+-        var exports = {};
+-        for (var n in m) {
+-            if (n !== "default") exports[n] = m[n];
+-        }
+-        exports_1(exports);
++"use strict";
++var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    var desc = Object.getOwnPropertyDescriptor(m, k);
++    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
++      desc = { enumerable: true, get: function() { return m[k]; } };
+     }
+-    return {
+-        setters: [
+-            function (a_1_1) {
+-                exportStar_1(a_1_1);
+-            }
+-        ],
+-        execute: function () {
+-        }
+-    };
+-});
++    Object.defineProperty(o, k2, desc);
++}) : (function(o, m, k, k2) {
++    if (k2 === undefined) k2 = k;
++    o[k2] = m[k];
++}));
++var __exportStar = (this && this.__exportStar) || function(m, exports) {
++    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
++};
++Object.defineProperty(exports, "__esModule", { value: true });
++function foo() { }
++__exportStar(require("a"), exports);

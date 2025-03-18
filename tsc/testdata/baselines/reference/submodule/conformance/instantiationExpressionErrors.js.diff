@@ -1,0 +1,250 @@
+--- old.instantiationExpressionErrors.js
++++ new.instantiationExpressionErrors.js
+@@= skipped -106, +106 lines =@@
+ 
+ 
+ //// [instantiationExpressionErrors.js]
+-"use strict";
+-var _a, _b, _c;
+-// Type arguments in member expressions
+-var a1 = (f); // { (): number; g<U>(): U; }
+-var a2 = (f.g); // () => number
+-var a3 = f.g; // <U>() => U
+-var a4 = (f.g); // () => number
+-var a5 = (f['g']); // () => number
+-// `[` is an expression starter and cannot immediately follow a type argument list
+-var a6 = f < number > ['g']; // Error
+-var a7 = (f)['g'];
+-// An `<` cannot immediately follow a type argument list
+-var a8 = f < number > ; // Relational operator error
+-var a9 = ((f)); // Error, no applicable signatures
+-// Type arguments with `?.` token
+-var b1 = f === null || f === void 0 ? void 0 : f(); // Error, `(` expected
+-var b2 = f === null || f === void 0 ? void 0 : f();
+-var b3 = (_a = (f)) === null || _a === void 0 ? void 0 : _a();
+-var b4 = (_b = (f)) === null || _b === void 0 ? void 0 : _b(); // Error, expected no type arguments
+-var c1 = (g) || (function (x) { return x; });
+-var c2 = (_c = (g)) !== null && _c !== void 0 ? _c : (function (x) { return x; });
+-var c3 = (g) && (function (x) { return x; });
+-// Parsed as function call, even though this differs from JavaScript
+-var x1 = f(true);
+-// Parsed as relational expressions
+-var r1 = f < true > true;
+-var r2 = f < true > +1;
+-var r3 = f < true > -1;
+-// All of the following are parsed as instantiation expressions
+-var x2 = (f);
++const a1 = f;
++const a2 = f.g;
++const a3 = f.g;
++const a4 = f.g;
++const a5 = f['g'];
++const a6 = f < number > ['g'];
++const a7 = (f)['g'];
++const a8 = f < number > ;
++const a9 = (f);
++const b1 = f?.();
++const b2 = f?.();
++const b3 = f?.();
++const b4 = f?.();
++const c1 = g || ((x) => x);
++const c2 = g ?? ((x) => x);
++const c3 = g && ((x) => x);
++const x1 = f(true);
++const r1 = f < true > true;
++const r2 = f < true > +1;
++const r3 = f < true > -1;
++const x2 = f;
+ true;
+-var x3 = (f);
++const x3 = f;
+ true;
+-var x4 = (f);
++const x4 = f;
+ if (true) { }
+-var x5 = (f);
+-var yy = 0;
+-var x6 = (f);
+-var x10 = (f);
++const x5 = f;
++let yy = 0;
++const x6 = f;
++let x10 = f;
+ this.bar();
+-var x11 = (f);
++let x11 = f;
+ function bar() { }
+-var x12 = (f);
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var x13 = (f);
++let x12 = f;
++class C {
++}
++let x13 = f;
+ bar();
+-var x14 = (f);
++let x14 = f;
+ void bar();
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    C1.specialFoo = (f);
+-    C1.bar = 123;
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-        this.specialFoo = (f);
+-        this.bar = 123;
+-    }
+-    return C2;
+-}());
+-var C3 = /** @class */ (function () {
+-    function C3() {
+-        this.specialFoo = (f);
+-        this.bar = 123;
+-    }
+-    return C3;
+-}());
+-var C4 = /** @class */ (function () {
+-    function C4() {
+-        this.specialFoo = (f);
+-        this.bar = 123;
+-    }
+-    return C4;
+-}());
+-var ver = 21;
+-var a = ver < (1 /* MyVer.v1 */ >= 2 /* MyVer.v2 */ ? 1 /* MyVer.v1 */ : 2 /* MyVer.v2 */);
+-
+-
+-//// [instantiationExpressionErrors.d.ts]
+-declare let f: {
+-    <T>(): T;
+-    g<U>(): U;
+-};
+-declare const a1: {
+-    (): number;
+-    g<U>(): U;
+-};
+-declare const a2: () => number;
+-declare const a3: <U>() => U;
+-declare const a4: () => number;
+-declare const a5: () => number;
+-declare const a6: boolean;
+-declare const a7: <U>() => U;
+-declare const a8: boolean;
+-declare const a9: {
+-    g<U>(): U;
+-};
+-declare const b1: number;
+-declare const b2: number;
+-declare const b3: number;
+-declare const b4: number;
+-declare let g: (<T>(x: T) => T) | undefined;
+-declare const c1: (x: string) => string;
+-declare const c2: (x: string) => string;
+-declare const c3: ((x: string) => string) | undefined;
+-declare const x1: true;
+-declare const r1: boolean;
+-declare const r2: boolean;
+-declare const r3: boolean;
+-declare const x2: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare const x3: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare const x4: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare const x5: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare let yy: number;
+-declare const x6: {
+-    (): true;
+-    g<U>(): U;
+-};
+-interface I {
++class C1 {
++    static specialFoo = f;
++    static bar = 123;
+ }
+-declare let x10: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare let x11: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare function bar(): void;
+-declare let x12: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare class C {
++class C2 {
++    specialFoo = f;
++    bar = 123;
+ }
+-declare let x13: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare let x14: {
+-    (): true;
+-    g<U>(): U;
+-};
+-declare class C1 {
+-    static specialFoo: {
+-        (): string;
+-        g<U>(): U;
+-    };
+-    static bar: number;
++class C3 {
++    specialFoo = f;
++    bar = 123;
+ }
+-declare class C2 {
+-    specialFoo: {
+-        (): string;
+-        g<U>(): U;
+-    };
+-    bar: number;
++class C4 {
++    specialFoo = f;
++    bar = 123;
+ }
+-declare class C3 {
+-    private specialFoo;
+-    private bar;
+-}
+-declare class C4 {
+-    protected specialFoo: {
+-        (): string;
+-        g<U>(): U;
+-    };
+-    protected bar: number;
+-}
+-declare const enum MyVer {
+-    v1 = 1,
+-    v2 = 2
+-}
+-declare let ver: number;
+-declare const a: boolean;
++var MyVer;
++(function (MyVer) {
++    MyVer[MyVer["v1"] = 1] = "v1";
++    MyVer[MyVer["v2"] = 2] = "v2";
++})(MyVer || (MyVer = {}));
++let ver = 21;
++const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2);

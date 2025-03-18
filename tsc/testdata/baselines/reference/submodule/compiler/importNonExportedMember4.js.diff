@@ -1,0 +1,16 @@
+--- old.importNonExportedMember4.js
++++ new.importNonExportedMember4.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [a.js]
+ "use strict";
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ module.exports = Foo;
+ //// [b.js]
+ "use strict";

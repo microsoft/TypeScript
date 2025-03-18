@@ -1,0 +1,9 @@
+--- old.noErrorTruncation.js
++++ new.noErrorTruncation.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [noErrorTruncation.js]
+-// @noErrorTruncation
+-var x = 42;
++const x = 42;

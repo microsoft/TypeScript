@@ -1,0 +1,38 @@
+--- old.privateNameFieldParenthesisLeftAssignment.js
++++ new.privateNameFieldParenthesisLeftAssignment.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [privateNameFieldParenthesisLeftAssignment.js]
+-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+-    if (kind === "m") throw new TypeError("Private method is not writable");
+-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+-    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+-};
+-var _Foo_p;
+ class Foo {
++    #p;
+     constructor(value) {
+-        _Foo_p.set(this, void 0);
+-        __classPrivateFieldSet(this, _Foo_p, value, "f");
++        this.#p = value;
+     }
+     t1(p) {
+-        __classPrivateFieldSet(this, _Foo_p, p, "f");
++        this.#p = p;
+     }
+     t2(p) {
+-        __classPrivateFieldSet(this, _Foo_p, p, "f");
++        this.#p = p;
+     }
+     t3(p) {
+-        __classPrivateFieldSet(this, _Foo_p, p, "f");
++        (this.#p) = p;
+     }
+     t4(p) {
+-        __classPrivateFieldSet(this, _Foo_p, p, "f");
++        (((this.#p))) = p;
+     }
+ }
+-_Foo_p = new WeakMap();

@@ -1,0 +1,8 @@
+--- old.for-inStatementsDestructuring.js
++++ new.for-inStatementsDestructuring.js
+@@= skipped -3, +3 lines =@@
+ for (var [a, b] in []) {}
+ 
+ //// [for-inStatementsDestructuring.js]
+-for (var _a = void 0, a = _a[0], b = _a[1] in []) { }
++for (var [a, b] in []) { }

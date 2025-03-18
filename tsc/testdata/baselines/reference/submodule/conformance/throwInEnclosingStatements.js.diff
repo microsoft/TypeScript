@@ -1,0 +1,38 @@
+--- old.throwInEnclosingStatements.js
++++ new.throwInEnclosingStatements.js
+@@= skipped -51, +51 lines =@@
+ function fn(x) {
+     throw x;
+ }
+-(function (x) { throw x; });
++(x) => { throw x; };
+ var y;
+ switch (y) {
+     case 'a':
+@@= skipped -25, +25 lines =@@
+ while (j < 0) {
+     throw j;
+ }
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    value;
++    biz() {
++        throw this.value;
++    }
++    constructor() {
+         throw this;
+     }
+-    C.prototype.biz = function () {
+-        throw this.value;
+-    };
+-    return C;
+-}());
++}
+ var aa = {
+     id: 12,
+-    biz: function () {
++    biz() {
+         throw this;
+     }
+ };

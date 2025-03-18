@@ -1,0 +1,43 @@
+--- old.truthinessPromiseCoercion.js
++++ new.truthinessPromiseCoercion.js
+@@= skipped -51, +51 lines =@@
+ 
+ //// [truthinessPromiseCoercion.js]
+ async function f() {
+-    if (p) { } // err
+-    if (!!p) { } // no err
+-    if (p2) { } // no err
++    if (p) { }
++    if (!!p) { }
++    if (p2) { }
+     p ? f.arguments : f.arguments;
+     !!p ? f.arguments : f.arguments;
+     p2 ? f.arguments : f.arguments;
+ }
+-// all ok
+ async function g() {
+     if (p) {
+         p;
+@@= skipped -22, +21 lines =@@
+     }
+ }
+ async function h() {
+-    if (obj.p) { } // error
+-    if (obj.p) { // ok
++    if (obj.p) { }
++    if (obj.p) {
+         await obj.p;
+     }
+-    if (obj.p && await obj.p) { } // ok
++    if (obj.p && await obj.p) { }
+ }
+ async function i() {
+-    if (pf()) { // error
++    if (pf()) {
+         return "true";
+     }
+-    if (pf()) { // error
++    if (pf()) {
+         pf().then();
+     }
+     return "false";

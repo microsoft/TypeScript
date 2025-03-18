@@ -1,0 +1,19 @@
+--- old.logicalAssignment6(target=es2020).js
++++ new.logicalAssignment6(target=es2020).js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [logicalAssignment6.js]
+-"use strict";
+ function foo1(results, results1) {
+-    (results || (results = results1 || (results1 = []))).push(100);
++    (results ||= (results1 ||= [])).push(100);
+ }
+ function foo2(results, results1) {
+-    (results ?? (results = results1 ?? (results1 = []))).push(100);
++    (results ??= (results1 ??= [])).push(100);
+ }
+ function foo3(results, results1) {
+-    (results && (results = results1 && (results1 = []))).push(100);
++    (results &&= (results1 &&= [])).push(100);
+ }

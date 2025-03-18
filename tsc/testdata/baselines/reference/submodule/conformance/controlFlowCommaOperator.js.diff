@@ -1,0 +1,41 @@
+--- old.controlFlowCommaOperator.js
++++ new.controlFlowCommaOperator.js
+@@= skipped -26, +26 lines =@@
+ 
+ //// [controlFlowCommaOperator.js]
+ function f(x) {
+-    var y = false;
+-    var z = false;
++    let y = false;
++    let z = false;
+     if (y = "", typeof x === "string") {
+-        x; // string
+-        y; // string
+-        z; // boolean
++        x;
++        y;
++        z;
+     }
+     else if (z = 1, typeof x === "number") {
+-        x; // number
+-        y; // string
+-        z; // number
++        x;
++        y;
++        z;
+     }
+     else {
+-        x; // boolean
+-        y; // string
+-        z; // number
++        x;
++        y;
++        z;
+     }
+-    x; // string | number | boolean
+-    y; // string
+-    z; // number | boolean
++    x;
++    y;
++    z;
+ }

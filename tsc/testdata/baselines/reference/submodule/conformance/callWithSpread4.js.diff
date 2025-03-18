@@ -1,0 +1,10 @@
+--- old.callWithSpread4.js
++++ new.callWithSpread4.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [callWithSpread4.js]
+-"use strict";
+ pli(reads, ...gun, tr, fun, ...gz, writes);
+ test(...anys);
+ pli(...[reads, writes, writes]);

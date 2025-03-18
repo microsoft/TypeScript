@@ -1,0 +1,11 @@
+--- old.commentOnSimpleArrowFunctionBody1.js
++++ new.commentOnSimpleArrowFunctionBody1.js
+@@= skipped -12, +12 lines =@@
+ //// [commentOnSimpleArrowFunctionBody1.js]
+ function Foo(x) {
+ }
+-Foo(function () {
+-    // do something
+-    return 127;
+-});
++Foo(() => 127);

@@ -1,0 +1,15 @@
+--- old.coAndContraVariantInferences4.js
++++ new.coAndContraVariantInferences4.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [coAndContraVariantInferences4.js]
+-"use strict";
++var SyntaxKind;
++(function (SyntaxKind) {
++    SyntaxKind[SyntaxKind["Modifier"] = 0] = "Modifier";
++    SyntaxKind[SyntaxKind["Decorator"] = 1] = "Decorator";
++})(SyntaxKind || (SyntaxKind = {}));
+ function foo() {
+     every(modifiers, isModifier);
+     every(modifiers, isDecorator);

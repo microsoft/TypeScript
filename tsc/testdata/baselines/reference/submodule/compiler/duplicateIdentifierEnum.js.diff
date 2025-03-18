@@ -1,0 +1,40 @@
+--- old.duplicateIdentifierEnum.js
++++ new.duplicateIdentifierEnum.js
+@@= skipped -41, +41 lines =@@
+ (function (A) {
+     A[A["bar"] = 0] = "bar";
+ })(A || (A = {}));
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++    foo;
++}
++var B;
++(function (B) {
++    B[B["bar"] = 0] = "bar";
++})(B || (B = {}));
++var C;
++(function (C) {
++})(C || (C = {}));
+ function C() {
+     return 0;
+ }
+@@= skipped -12, +17 lines =@@
+ (function (D) {
+     D[D["bar"] = 0] = "bar";
+ })(D || (D = {}));
+-var E = /** @class */ (function () {
+-    function E() {
+-    }
+-    return E;
+-}());
+-// also make sure the error appears when trying to merge an enum in a separate file.
++class E {
++    foo;
++}
+ //// [duplicateIdentifierEnum_B.js]
+ function D() {
+     return 0;

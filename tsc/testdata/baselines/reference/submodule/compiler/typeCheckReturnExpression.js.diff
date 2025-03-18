@@ -1,0 +1,8 @@
+--- old.typeCheckReturnExpression.js
++++ new.typeCheckReturnExpression.js
+@@= skipped -3, +3 lines =@@
+ var foo = () => undefined;
+ 
+ //// [typeCheckReturnExpression.js]
+-var foo = function () { return undefined; };
++var foo = () => undefined;

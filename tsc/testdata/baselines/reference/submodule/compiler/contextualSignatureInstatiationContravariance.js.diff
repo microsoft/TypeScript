@@ -1,0 +1,11 @@
+--- old.contextualSignatureInstatiationContravariance.js
++++ new.contextualSignatureInstatiationContravariance.js
+@@= skipped -15, +15 lines =@@
+ //// [contextualSignatureInstatiationContravariance.js]
+ var f2;
+ var g2;
+-g2 = f2; // error because Giraffe and Elephant are disjoint types
++g2 = f2;
+ var h2;
+-h2 = f2; // valid because Giraffe satisfies the constraint. It is safe in the traditional contravariant fashion.
++h2 = f2;

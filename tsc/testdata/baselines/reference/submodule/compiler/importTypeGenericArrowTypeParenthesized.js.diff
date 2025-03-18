@@ -1,0 +1,26 @@
+--- old.importTypeGenericArrowTypeParenthesized.js
++++ new.importTypeGenericArrowTypeParenthesized.js
+@@= skipped -22, +22 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.works2 = exports.works1 = exports.fail2 = exports.fail1 = void 0;
+-var module_1 = require("module");
+-exports.fail1 = (0, module_1.fn)(function (x) { return x; });
++const module_1 = require("module");
++exports.fail1 = (0, module_1.fn)((x) => x);
+ exports.fail2 = (0, module_1.fn)(function (x) {
+     return x;
+ });
+-exports.works1 = (0, module_1.fn)(function (x) { return x; });
+-exports.works2 = (0, module_1.fn)(function (x) { return x; });
+-
+-
+-//// [index.d.ts]
+-export declare const fail1: import("module").Modifier<(<T>(x: T) => T)>;
+-export declare const fail2: import("module").Modifier<(<T>(x: T) => T)>;
+-export declare const works1: import("module").Modifier<(x: number) => number>;
+-type MakeItWork = <T>(x: T) => T;
+-export declare const works2: import("module").Modifier<MakeItWork>;
+-export {};
++exports.works1 = (0, module_1.fn)((x) => x);
++exports.works2 = (0, module_1.fn)(x => x);

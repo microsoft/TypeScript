@@ -1,0 +1,19 @@
+--- old.ambientAccessors.js
++++ new.ambientAccessors.js
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ //// [ambientAccessors.js]
+-
+-
+-//// [ambientAccessors.d.ts]
+-declare class C {
+-    static get a(): string;
+-    static set a(value: string);
+-    private static get b();
+-    private static set b(value);
+-    get x(): string;
+-    set x(value: string);
+-    private get y();
+-    private set y(value);
+-}

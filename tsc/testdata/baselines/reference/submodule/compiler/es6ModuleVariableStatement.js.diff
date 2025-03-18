@@ -1,0 +1,12 @@
+--- old.es6ModuleVariableStatement.js
++++ new.es6ModuleVariableStatement.js
+@@= skipped -22, +22 lines =@@
+ export var x = a, y = x;
+ var b = y;
+ var c = b, d = c;
+-export var m1;
++export { m1 };
++var m1;
+ (function (m1) {
+     m1.k = a;
+     m1.l = b, m1.m = m1.k;

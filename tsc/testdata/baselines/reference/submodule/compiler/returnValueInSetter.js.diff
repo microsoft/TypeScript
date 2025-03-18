@@ -1,0 +1,22 @@
+--- old.returnValueInSetter.js
++++ new.returnValueInSetter.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [returnValueInSetter.js]
+-var f = /** @class */ (function () {
+-    function f() {
++class f {
++    set x(value) {
++        return null;
+     }
+-    Object.defineProperty(f.prototype, "x", {
+-        set: function (value) {
+-            return null; // Should be an error
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return f;
+-}());
++}

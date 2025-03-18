@@ -1,0 +1,8 @@
+--- old.for-of15.js
++++ new.for-of15.js
+@@= skipped -22, +22 lines =@@
+     }
+ }
+ var v;
+-for (v of new MyStringIterator) { } // Should fail
++for (v of new MyStringIterator) { }

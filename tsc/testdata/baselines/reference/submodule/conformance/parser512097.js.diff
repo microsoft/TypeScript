@@ -1,0 +1,10 @@
+--- old.parser512097.js
++++ new.parser512097.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [parser512097.js]
+-var tt = { aa: aa };
++var tt = { aa, };
+ if (true) {
+ }

@@ -1,0 +1,24 @@
+--- old.typePredicatesOptionalChaining3.js
++++ new.typePredicatesOptionalChaining3.js
+@@= skipped -27, +27 lines =@@
+ 
+ 
+ //// [typePredicatesOptionalChaining3.js]
+-"use strict";
+ function getBreedSizeWithoutFunction(animal) {
+-    var _a;
+-    if (((_a = animal === null || animal === void 0 ? void 0 : animal.breed) === null || _a === void 0 ? void 0 : _a.size) != null) {
++    if (animal?.breed?.size != null) {
+         return animal.breed.size;
+     }
+     else {
+@@= skipped -11, +9 lines =@@
+     }
+ }
+ function getBreedSizeWithFunction(animal) {
+-    var _a;
+-    if (!isNil((_a = animal === null || animal === void 0 ? void 0 : animal.breed) === null || _a === void 0 ? void 0 : _a.size)) {
++    if (!isNil(animal?.breed?.size)) {
+         return animal.breed.size;
+     }
+     else {

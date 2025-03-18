@@ -1,0 +1,10 @@
+--- old.divergentAccessorsTypes2.js
++++ new.divergentAccessorsTypes2.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [divergentAccessorsTypes2.js]
+-"use strict";
+ class Test1 {
+     get foo() { return null; }
+     set foo(s) {

@@ -1,0 +1,14 @@
+--- old.ParameterList6.js
++++ new.ParameterList6.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [ParameterList6.js]
+-var C = /** @class */ (function () {
+-    function C(C) {
++class C {
++    constructor(C) {
+     }
+-    return C;
+-}());
++}

@@ -1,0 +1,273 @@
+--- old.thisTypeInObjectLiterals2.js
++++ new.thisTypeInObjectLiterals2.js
+@@= skipped -244, +244 lines =@@
+ 
+ 
+ //// [thisTypeInObjectLiterals2.js]
+-"use strict";
+-// In methods of an object literal with no contextual type, 'this' has the type
+-// of the object literal.
+-var obj1 = {
++let obj1 = {
+     a: 1,
+-    f: function () {
++    f() {
+         return this.a;
+     },
+     b: "hello",
+     c: {
+-        g: function () {
++        g() {
+             this.g();
+         }
+     },
+@@= skipped -24, +21 lines =@@
+         this.b = value;
+     }
+ };
+-var p1 = {
++let p1 = {
+     x: 10,
+     y: 20,
+-    moveBy: function (dx, dy, dz) {
++    moveBy(dx, dy, dz) {
+         this.x += dx;
+         this.y += dy;
+         if (this.z && dz) {
+@@= skipped -11, +11 lines =@@
+         }
+     }
+ };
+-var p2 = {
++let p2 = {
+     x: 10,
+     y: 20,
+-    moveBy: function (dx, dy, dz) {
++    moveBy(dx, dy, dz) {
+         this.x += dx;
+         this.y += dy;
+         if (this.z && dz) {
+@@= skipped -11, +11 lines =@@
+         }
+     }
+ };
+-var p3 = {
++let p3 = {
+     x: 10,
+     y: 20,
+-    moveBy: function (dx, dy, dz) {
++    moveBy(dx, dy, dz) {
+         this.x += dx;
+         this.y += dy;
+         if (this.z && dz) {
+@@= skipped -11, +11 lines =@@
+         }
+     }
+ };
+-var p4 = {
++let p4 = {
+     x: 10,
+     y: 20,
+-    moveBy: function (dx, dy, dz) {
++    moveBy(dx, dy, dz) {
+         this.x += dx;
+         this.y += dy;
+         if (this.z && dz) {
+@@= skipped -14, +14 lines =@@
+ f1({
+     x: 10,
+     y: 20,
+-    moveBy: function (dx, dy, dz) {
++    moveBy(dx, dy, dz) {
+         this.x += dx;
+         this.y += dy;
+         if (this.z && dz) {
+@@= skipped -11, +11 lines =@@
+ f2({
+     x: 10,
+     y: 20,
+-    moveBy: function (dx, dy, dz) {
++    moveBy(dx, dy, dz) {
+         this.x += dx;
+         this.y += dy;
+         if (this.z && dz) {
+@@= skipped -8, +8 lines =@@
+         }
+     }
+ });
+-var x1 = makeObject({
++let x1 = makeObject({
+     data: { x: 0, y: 0 },
+     methods: {
+-        moveBy: function (dx, dy) {
+-            this.x += dx; // Strongly typed this
+-            this.y += dy; // Strongly typed this
++        moveBy(dx, dy) {
++            this.x += dx;
++            this.y += dy;
+         }
+     }
+ });
+-var x2 = makeObject2({
++let x2 = makeObject2({
+     data: { x: 0, y: 0 },
+     methods: {
+-        moveBy: function (dx, dy) {
+-            this.x += dx; // Strongly typed this
+-            this.y += dy; // Strongly typed this
++        moveBy(dx, dy) {
++            this.x += dx;
++            this.y += dy;
+         }
+     }
+ });
+-var p10 = defineProp(p1, "foo", { value: 42 });
++let p10 = defineProp(p1, "foo", { value: 42 });
+ p10.foo = p10.foo + 1;
+-var p11 = defineProp(p1, "bar", {
+-    get: function () {
++let p11 = defineProp(p1, "bar", {
++    get() {
+         return this.x;
+     },
+-    set: function (value) {
++    set(value) {
+         this.x = value;
+     }
+ });
+ p11.bar = p11.bar + 1;
+-var p12 = defineProps(p1, {
++let p12 = defineProps(p1, {
+     foo: {
+         value: 42
+     },
+     bar: {
+-        get: function () {
++        get() {
+             return this.x;
+         },
+-        set: function (value) {
++        set(value) {
+             this.x = value;
+         }
+     }
+ });
+ p12.foo = p12.foo + 1;
+ p12.bar = p12.bar + 1;
+-var vue = new Vue({
+-    data: function () { return ({ x: 1, y: 2 }); },
++let vue = new Vue({
++    data: () => ({ x: 1, y: 2 }),
+     methods: {
+-        f: function (x) {
++        f(x) {
+             return this.x;
+         }
+     },
+     computed: {
+-        test: function () {
++        test() {
+             return this.x;
+         },
+         hello: {
+-            get: function () {
++            get() {
+                 return "hi";
+             },
+-            set: function (value) {
++            set(value) {
+             }
+         }
+     }
+@@= skipped -69, +69 lines =@@
+ vue.f("abc");
+ vue.test;
+ vue.hello;
+-
+-
+-//// [thisTypeInObjectLiterals2.d.ts]
+-declare let obj1: {
+-    a: number;
+-    f(): number;
+-    b: string;
+-    c: {
+-        g(): void;
+-    };
+-    readonly d: number;
+-    e: string;
+-};
+-type Point = {
+-    x: number;
+-    y: number;
+-    z?: number;
+-    moveBy(dx: number, dy: number, dz?: number): void;
+-};
+-declare let p1: Point;
+-declare let p2: Point | null;
+-declare let p3: Point | undefined;
+-declare let p4: Point | null | undefined;
+-declare function f1(p: Point): void;
+-declare function f2(p: Point | null | undefined): void;
+-type ObjectDescriptor<D, M> = {
+-    data?: D;
+-    methods?: M & ThisType<D & M>;
+-};
+-declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
+-declare let x1: {
+-    x: number;
+-    y: number;
+-} & {
+-    moveBy(dx: number, dy: number): void;
+-};
+-type ObjectDescriptor2<D, M> = ThisType<D & M> & {
+-    data?: D;
+-    methods?: M;
+-};
+-declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
+-declare let x2: {
+-    x: number;
+-    y: number;
+-} & {
+-    moveBy(dx: number, dy: number): void;
+-};
+-type PropDesc<T> = {
+-    value?: T;
+-    get?(): T;
+-    set?(value: T): void;
+-};
+-type PropDescMap<T> = {
+-    [K in keyof T]: PropDesc<T[K]>;
+-};
+-declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
+-declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
+-declare let p10: Point & Record<"foo", number>;
+-declare let p11: Point & Record<"bar", number>;
+-declare let p12: Point & {
+-    foo: number;
+-    bar: number;
+-};
+-type Accessors<T> = {
+-    [K in keyof T]: (() => T[K]) | Computed<T[K]>;
+-};
+-type Dictionary<T> = {
+-    [x: string]: T;
+-};
+-type Computed<T> = {
+-    get?(): T;
+-    set?(value: T): void;
+-};
+-type VueOptions<D, M, P> = ThisType<D & M & P> & {
+-    data?: D | (() => D);
+-    methods?: M;
+-    computed?: Accessors<P>;
+-};
+-declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
+-declare let vue: {
+-    x: number;
+-    y: number;
+-} & {
+-    f(x: string): number;
+-} & {
+-    test: number;
+-    hello: string;
+-};

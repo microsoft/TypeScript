@@ -1,0 +1,9 @@
+--- old.unusedImports14.js
++++ new.unusedImports14.js
+@@= skipped -23, +23 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.FooComponent = void 0;
+-var React = require("react");
+-exports.FooComponent = React.createElement("div", null);
++exports.FooComponent = <div></div>;

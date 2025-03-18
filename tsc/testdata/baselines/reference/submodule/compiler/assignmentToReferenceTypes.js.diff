@@ -1,0 +1,18 @@
+--- old.assignmentToReferenceTypes.js
++++ new.assignmentToReferenceTypes.js
+@@= skipped -25, +25 lines =@@
+ }
+ 
+ //// [assignmentToReferenceTypes.js]
+-// Should all be allowed
+ M = null;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ C = null;
+ var E;
+ (function (E) {

@@ -1,0 +1,18 @@
+--- old.specialIntersectionsInMappedTypes.js
++++ new.specialIntersectionsInMappedTypes.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [specialIntersectionsInMappedTypes.js]
+-"use strict";
+-// Repro from #50683
+-var a = {
++const a = {
+     left: "align-left",
+     center: "align-center",
+     right: "align-right",
+     other: "align-other",
+ };
+ a.left.length;
+-a.other.length; // Error expected here
++a.other.length;

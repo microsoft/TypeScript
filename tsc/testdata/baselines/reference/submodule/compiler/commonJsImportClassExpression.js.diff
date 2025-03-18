@@ -1,0 +1,18 @@
+--- old.commonJsImportClassExpression.js
++++ new.commonJsImportClassExpression.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [mod1.js]
+ "use strict";
+-module.exports = /** @class */ (function () {
+-    function class_1() {
+-        this.chunk = 1;
+-    }
+-    return class_1;
+-}());
++module.exports = class {
++    chunk = 1;
++};
+ //// [use.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });

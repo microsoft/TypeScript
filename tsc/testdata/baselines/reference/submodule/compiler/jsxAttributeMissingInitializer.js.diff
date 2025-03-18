@@ -1,0 +1,10 @@
+--- old.jsxAttributeMissingInitializer.js
++++ new.jsxAttributeMissingInitializer.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [jsxAttributeMissingInitializer.jsx]
+-var x = <div foo></div>;
+-var y = 0;
++const x = <div foo></div>;
++const y = 0;

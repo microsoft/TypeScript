@@ -1,0 +1,11 @@
+--- old.importAliasInModuleAugmentation.js
++++ new.importAliasInModuleAugmentation.js
+@@= skipped -25, +25 lines =@@
+ (function (A) {
+     A.y = 34;
+ })(A || (A = {}));
+-var m = x;
+-var s = { s: "" };
++const m = x;
++let s = { s: "" };
+ void s.s;

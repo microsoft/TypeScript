@@ -1,0 +1,13 @@
+--- old.iterableArrayPattern10.js
++++ new.iterableArrayPattern10.js
+@@= skipped -20, +20 lines =@@
+ 
+ //// [iterableArrayPattern10.js]
+ class Bar {
++    x;
+ }
+ class Foo extends Bar {
++    y;
+ }
+ class FooIterator {
+     next() {

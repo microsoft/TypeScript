@@ -1,0 +1,15 @@
+--- old.classWithOverloadImplementationOfWrongName2.js
++++ new.classWithOverloadImplementationOfWrongName2.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [classWithOverloadImplementationOfWrongName2.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.bar = function (x) { };
+-    return C;
+-}());
++class C {
++    bar(x) { }
++}

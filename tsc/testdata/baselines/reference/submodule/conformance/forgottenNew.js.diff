@@ -1,0 +1,16 @@
+--- old.forgottenNew.js
++++ new.forgottenNew.js
+@@= skipped -9, +9 lines =@@
+ //// [forgottenNew.js]
+ var Tools;
+ (function (Tools) {
+-    var NullLogger = /** @class */ (function () {
+-        function NullLogger() {
+-        }
+-        return NullLogger;
+-    }());
++    class NullLogger {
++    }
+     Tools.NullLogger = NullLogger;
+ })(Tools || (Tools = {}));
+ var logger = Tools.NullLogger();

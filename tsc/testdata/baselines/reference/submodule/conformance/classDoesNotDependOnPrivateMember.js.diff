@@ -1,0 +1,24 @@
+--- old.classDoesNotDependOnPrivateMember.js
++++ new.classDoesNotDependOnPrivateMember.js
+@@= skipped -10, +10 lines =@@
+ //// [classDoesNotDependOnPrivateMember.js]
+ var M;
+ (function (M) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    M.C = C;
+-})(M || (M = {}));
+-
+-
+-//// [classDoesNotDependOnPrivateMember.d.ts]
+-declare namespace M {
+     class C {
+-        private x;
++        x;
+     }
+-}
++    M.C = C;
++})(M || (M = {}));

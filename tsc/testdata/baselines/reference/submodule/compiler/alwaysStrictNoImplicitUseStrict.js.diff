@@ -1,0 +1,10 @@
+--- old.alwaysStrictNoImplicitUseStrict.js
++++ new.alwaysStrictNoImplicitUseStrict.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [alwaysStrictNoImplicitUseStrict.js]
+-"use strict";
+ var M;
+ (function (M) {
+     function f() {

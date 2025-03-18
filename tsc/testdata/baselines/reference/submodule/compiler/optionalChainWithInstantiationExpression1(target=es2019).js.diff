@@ -1,0 +1,10 @@
+--- old.optionalChainWithInstantiationExpression1(target=es2019).js
++++ new.optionalChainWithInstantiationExpression1(target=es2019).js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [optionalChainWithInstantiationExpression1.js]
+-(a === null || a === void 0 ? void 0 : a.b).d;
+-a === null || a === void 0 ? void 0 : a.b.d;
++(a?.b).d;
++a?.b.d;

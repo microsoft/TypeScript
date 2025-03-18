@@ -1,0 +1,17 @@
+--- old.classMemberWithMissingIdentifier2.js
++++ new.classMemberWithMissingIdentifier2.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [classMemberWithMissingIdentifier2.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    ;
++}
+ {
+     [name, string];
+     VariableDeclaration;

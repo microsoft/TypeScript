@@ -1,0 +1,8 @@
+--- old.invalidConstraint1.js
++++ new.invalidConstraint1.js
+@@= skipped -11, +11 lines =@@
+ function f() {
+     return undefined;
+ }
+-f(); // should error
++f();

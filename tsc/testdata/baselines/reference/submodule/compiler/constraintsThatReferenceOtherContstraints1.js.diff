@@ -1,0 +1,23 @@
+--- old.constraintsThatReferenceOtherContstraints1.js
++++ new.constraintsThatReferenceOtherContstraints1.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [constraintsThatReferenceOtherContstraints1.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-    }
+-    return Bar;
+-}());
+-var x; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type 
++class Foo {
++}
++class Bar {
++    data;
++}
++var x;

@@ -1,0 +1,7 @@
+--- old.isolatedModulesExternalModuleForced.js
++++ new.isolatedModulesExternalModuleForced.js
+@@= skipped -4, +4 lines =@@
+ 
+ //// [file1.js]
+ var x;
+-export {};

@@ -1,0 +1,14 @@
+--- old.controlFlowStringIndex.js
++++ new.controlFlowStringIndex.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [controlFlowStringIndex.js]
+-"use strict";
+ if (value.foo !== null) {
+     value.foo.toExponential();
+-    value.other; // should still be number | null
+-    value.bar; // should still be number | null
++    value.other;
++    value.bar;
+ }

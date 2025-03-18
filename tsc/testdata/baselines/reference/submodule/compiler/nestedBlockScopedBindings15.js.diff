@@ -1,0 +1,47 @@
+--- old.nestedBlockScopedBindings15.js
++++ new.nestedBlockScopedBindings15.js
+@@= skipped -33, +33 lines =@@
+ }
+ 
+ //// [nestedBlockScopedBindings15.js]
+-var _loop_1 = function () {
++for (; false;) {
+     {
+-        var x_1;
+-        (function () { return x_1; });
++        let x;
++        () => x;
+     }
+-};
+-for (; false;) {
+-    _loop_1();
+ }
+ for (; false;) {
+     {
+-        var y = void 0;
++        let y;
+         y = 1;
+     }
+ }
+-var _loop_2 = function () {
++for (; false;) {
+     switch (1) {
+         case 1:
+-            var z0_1;
+-            (function () { return z0_1; });
++            let z0;
++            () => z0;
+             break;
+     }
+-};
+-for (; false;) {
+-    _loop_2();
+ }
+ for (; false;) {
+     switch (1) {
+         case 1:
+-            var z = void 0;
++            let z;
+             z = 1;
+             break;
+     }

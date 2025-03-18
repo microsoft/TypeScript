@@ -1,0 +1,11 @@
+--- old.unionSignaturesWithThisParameter.js
++++ new.unionSignaturesWithThisParameter.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [unionSignaturesWithThisParameter.js]
+-"use strict";
+-// Repro from #20802
+ function x(ctor, t) {
+     new ctor(t);
+ }

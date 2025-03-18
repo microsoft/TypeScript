@@ -1,0 +1,8 @@
+--- old.stringEnumInElementAccess01.js
++++ new.stringEnumInElementAccess01.js
+@@= skipped -24, +24 lines =@@
+     E["B"] = "b";
+     E["C"] = "c";
+ })(E || (E = {}));
+-var snb = item[e];
++const snb = item[e];

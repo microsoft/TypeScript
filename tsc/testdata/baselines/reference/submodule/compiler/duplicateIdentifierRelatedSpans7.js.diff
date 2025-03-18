@@ -1,0 +1,12 @@
+--- old.duplicateIdentifierRelatedSpans7.js
++++ new.duplicateIdentifierRelatedSpans7.js
+@@= skipped -32, +32 lines =@@
+ export {};
+ 
+ 
+-//// [file1.js]
+ //// [file2.js]
+ "use strict";
+-/// <reference path="./file1" />
+ Object.defineProperty(exports, "__esModule", { value: true });
++//// [file1.js]

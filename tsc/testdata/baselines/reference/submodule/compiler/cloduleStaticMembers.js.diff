@@ -1,0 +1,20 @@
+--- old.cloduleStaticMembers.js
++++ new.cloduleStaticMembers.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [cloduleStaticMembers.js]
+-var Clod = /** @class */ (function () {
+-    function Clod() {
+-    }
+-    Clod.x = 10;
+-    Clod.y = 10;
+-    return Clod;
+-}());
++class Clod {
++    static x = 10;
++    static y = 10;
++}
+ (function (Clod) {
+     var p = Clod.x;
+     var q = x;

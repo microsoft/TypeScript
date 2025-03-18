@@ -1,0 +1,15 @@
+--- old.jsxElementsAsIdentifierNames.js
++++ new.jsxElementsAsIdentifierNames.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [a.js]
+-"use strict";
+ function A() {
+-    return React.createElement("package", null);
++    return <package />;
+ }
+ function B() {
+-    return React.createElement("package", null);
++    return <package></package>;
+ }

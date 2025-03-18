@@ -1,0 +1,10 @@
+--- old.commentOnAmbientVariable1.js
++++ new.commentOnAmbientVariable1.js
+@@= skipped -12, +12 lines =@@
+ declare var y: number;
+ 
+ //// [commentOnAmbientVariable1.js]
+-/*!=========
+-    Keep this pinned comment
+-   =========
+-*/

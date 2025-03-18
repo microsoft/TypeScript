@@ -1,0 +1,16 @@
+--- old.sourceMapValidationModule.js
++++ new.sourceMapValidationModule.js
+@@= skipped -22, +22 lines =@@
+ })(m2 || (m2 = {}));
+ var m3;
+ (function (m3) {
+-    var m4;
++    let m4;
+     (function (m4) {
+         m4.x = 30;
+     })(m4 || (m4 = {}));
+@@= skipped -9, +9 lines =@@
+     }
+     m3.foo = foo;
+ })(m3 || (m3 = {}));
+-//# sourceMappingURL=sourceMapValidationModule.js.map

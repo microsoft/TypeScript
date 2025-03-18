@@ -1,0 +1,26 @@
+--- old.lambdaParameterWithTupleArgsHasCorrectAssignability.js
++++ new.lambdaParameterWithTupleArgsHasCorrectAssignability.js
+@@= skipped -23, +23 lines =@@
+ 
+ 
+ //// [lambdaParameterWithTupleArgsHasCorrectAssignability.js]
+-"use strict";
+-var GenericClass = /** @class */ (function () {
+-    function GenericClass() {
+-    }
+-    return GenericClass;
+-}());
++class GenericClass {
++    from;
++}
+ function createClass(f) {
+-    return new GenericClass( /* ... use f */);
++    return new GenericClass();
+ }
+ function consumeClass(c) { }
+-// should work
+-consumeClass(createClass(function (str) { return console.log(str.length); }));
+-// should work
+-consumeClass(createClass(function (str, _unused_num) { return console.log(str.length); }));
++consumeClass(createClass(str => console.log(str.length)));
++consumeClass(createClass((str, _unused_num) => console.log(str.length)));

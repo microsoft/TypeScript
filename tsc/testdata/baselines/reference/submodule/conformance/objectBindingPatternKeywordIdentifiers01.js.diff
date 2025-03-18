@@ -1,0 +1,8 @@
+--- old.objectBindingPatternKeywordIdentifiers01.js
++++ new.objectBindingPatternKeywordIdentifiers01.js
+@@= skipped -3, +3 lines =@@
+ var { while } = { while: 1 }
+ 
+ //// [objectBindingPatternKeywordIdentifiers01.js]
+-var  = { while: 1 }.while;
++var { while:  } = { while: 1 };

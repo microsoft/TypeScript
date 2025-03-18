@@ -1,0 +1,8 @@
+--- old.ambientDeclarationsPatterns_merging3.js
++++ new.ambientDeclarationsPatterns_merging3.js
+@@= skipped -17, +17 lines =@@
+ //// [test.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-ohno.a; // oh no
++ohno.a;

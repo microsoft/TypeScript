@@ -1,0 +1,108 @@
+--- old.typeGuardOfFormTypeOfNumber.js
++++ new.typeGuardOfFormTypeOfNumber.js
+@@= skipped -87, +87 lines =@@
+ 
+ 
+ //// [typeGuardOfFormTypeOfNumber.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    p;
++}
+ ;
+ var str;
+ var bool;
+@@= skipped -17, +15 lines =@@
+ var numOrC;
+ var boolOrC;
+ var c;
+-//	A type guard of the form typeof x === s, 
+-//  where s is a string literal with the value 'string', 'number', or 'boolean',
+-//  - when true, narrows the type of x to the given primitive type, or
+-//  - when false, removes the primitive type from the type of x.
+ if (typeof strOrNum === "number") {
+-    num = strOrNum; // number
++    num = strOrNum;
+ }
+ else {
+-    str === strOrNum; // string
++    str === strOrNum;
+ }
+ if (typeof numOrBool === "number") {
+-    num = numOrBool; // number
++    num = numOrBool;
+ }
+ else {
+-    var x = numOrBool; // number | boolean
++    var x = numOrBool;
+ }
+ if (typeof strOrNumOrBool === "number") {
+-    num = strOrNumOrBool; // number
++    num = strOrNumOrBool;
+ }
+ else {
+-    strOrBool = strOrNumOrBool; // string | boolean
++    strOrBool = strOrNumOrBool;
+ }
+ if (typeof numOrC === "number") {
+-    num = numOrC; // number
++    num = numOrC;
+ }
+ else {
+-    c = numOrC; // C
++    c = numOrC;
+ }
+ if (typeof strOrBool === "number") {
+-    var y1 = strOrBool; // {}
++    let y1 = strOrBool;
+ }
+ else {
+-    var y2 = strOrBool; // string | boolean
++    let y2 = strOrBool;
+ }
+-// A type guard of the form typeof x !== s, where s is a string literal,
+-//  - when true, narrows the type of x by typeof x === s when false, or
+-//  - when false, narrows the type of x by typeof x === s when true.
+ if (typeof strOrNum !== "number") {
+-    str === strOrNum; // string
++    str === strOrNum;
+ }
+ else {
+-    num = strOrNum; // number
++    num = strOrNum;
+ }
+ if (typeof numOrBool !== "number") {
+-    var x = numOrBool; // number | boolean
++    var x = numOrBool;
+ }
+ else {
+-    num = numOrBool; // number
++    num = numOrBool;
+ }
+ if (typeof strOrNumOrBool !== "number") {
+-    strOrBool = strOrNumOrBool; // string | boolean
++    strOrBool = strOrNumOrBool;
+ }
+ else {
+-    num = strOrNumOrBool; // number
++    num = strOrNumOrBool;
+ }
+ if (typeof numOrC !== "number") {
+-    c = numOrC; // C
++    c = numOrC;
+ }
+ else {
+-    num = numOrC; // number
++    num = numOrC;
+ }
+ if (typeof strOrBool !== "number") {
+-    var y1 = strOrBool; // string | boolean
++    let y1 = strOrBool;
+ }
+ else {
+-    var y2 = strOrBool; // {}
++    let y2 = strOrBool;
+ }

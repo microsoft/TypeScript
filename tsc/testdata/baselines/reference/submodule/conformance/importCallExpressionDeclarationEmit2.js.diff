@@ -1,0 +1,12 @@
+--- old.importCallExpressionDeclarationEmit2.js
++++ new.importCallExpressionDeclarationEmit2.js
+@@= skipped -10, +10 lines =@@
+ export function foo() { return "foo"; }
+ //// [1.js]
+ var p1 = import("./0");
+-
+-
+-//// [0.d.ts]
+-export declare function foo(): string;
+-//// [1.d.ts]
+-declare var p1: Promise<typeof import("./0")>;

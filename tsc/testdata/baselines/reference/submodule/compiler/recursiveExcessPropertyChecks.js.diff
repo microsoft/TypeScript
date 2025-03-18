@@ -1,0 +1,13 @@
+--- old.recursiveExcessPropertyChecks.js
++++ new.recursiveExcessPropertyChecks.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [recursiveExcessPropertyChecks.js]
+-"use strict";
+-// Repro from #35804
+ function getMaxId(items) {
+ }
+-var nodes = [];
++const nodes = [];
+ getMaxId(nodes);

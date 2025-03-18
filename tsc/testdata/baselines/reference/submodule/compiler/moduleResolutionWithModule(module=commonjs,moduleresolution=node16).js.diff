@@ -1,0 +1,9 @@
+--- old.moduleResolutionWithModule(module=commonjs,moduleresolution=node16).js
++++ new.moduleResolutionWithModule(module=commonjs,moduleresolution=node16).js
+@@= skipped -14, +14 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var p = require("pkg");
++const p = require("pkg");
+ p.thing();

@@ -1,0 +1,140 @@
+--- old.instanceOfAssignability.js
++++ new.instanceOfAssignability.js
+@@= skipped -91, +91 lines =@@
+ 
+ 
+ //// [instanceOfAssignability.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-// Derived1 is assignable to, but not a subtype of, Base
+-var Derived1 = /** @class */ (function () {
+-    function Derived1() {
+-    }
+-    return Derived1;
+-}());
+-// Derived2 is a subtype of Base that is not assignable to Derived1
+-var Derived2 = /** @class */ (function () {
+-    function Derived2() {
+-    }
+-    return Derived2;
+-}());
+-var Animal = /** @class */ (function () {
+-    function Animal() {
+-    }
+-    return Animal;
+-}());
+-var Mammal = /** @class */ (function (_super) {
+-    __extends(Mammal, _super);
+-    function Mammal() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Mammal;
+-}(Animal));
+-var Giraffe = /** @class */ (function (_super) {
+-    __extends(Giraffe, _super);
+-    function Giraffe() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Giraffe;
+-}(Mammal));
++class Derived1 {
++    foo;
++}
++class Derived2 {
++    foo;
++    optional;
++}
++class Animal {
++    move;
++}
++class Mammal extends Animal {
++    milk;
++}
++class Giraffe extends Mammal {
++    neck;
++}
+ function fn1(x) {
+     if (x instanceof Array) {
+-        // 1.5: y: Array<number>|Array<string>
+-        // Want: y: Array<number>|Array<string>
+-        var y = x;
++        let y = x;
+     }
+ }
+ function fn2(x) {
+     if (x instanceof Derived1) {
+-        // 1.5: y: Base
+-        // Want: y: Derived1
+-        var y = x;
++        let y = x;
+     }
+ }
+ function fn3(x) {
+     if (x instanceof Derived2) {
+-        // 1.5: y: Derived2
+-        // Want: Derived2
+-        var y = x;
++        let y = x;
+     }
+ }
+ function fn4(x) {
+     if (x instanceof Derived1) {
+-        // 1.5: y: {}
+-        // Want: Derived1
+-        var y = x;
++        let y = x;
+     }
+ }
+ function fn5(x) {
+     if (x instanceof Derived2) {
+-        // 1.5: y: Derived1
+-        // Want: ???
+-        var y = x;
++        let y = x;
+     }
+ }
+ function fn6(x) {
+     if (x instanceof Giraffe) {
+-        // 1.5: y: Derived1
+-        // Want: ???
+-        var y = x;
++        let y = x;
+     }
+ }
+ function fn7(x) {
+     if (x instanceof Array) {
+-        // 1.5: y: Array<number>|Array<string>
+-        // Want: y: Array<number>|Array<string>
+-        var y = x;
++        let y = x;
+     }
+ }
+-var ABC = /** @class */ (function () {
+-    function ABC() {
+-    }
+-    return ABC;
+-}());
++class ABC {
++    a;
++    b;
++    c;
++}
+ function fn8(x) {
+     if (x instanceof ABC) {
+-        var y = x;
++        let y = x;
+     }
+ }

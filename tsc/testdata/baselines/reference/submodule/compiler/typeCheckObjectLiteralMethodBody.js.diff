@@ -1,0 +1,8 @@
+--- old.typeCheckObjectLiteralMethodBody.js
++++ new.typeCheckObjectLiteralMethodBody.js
+@@= skipped -3, +3 lines =@@
+ var foo = { bar() { return undefined } };
+ 
+ //// [typeCheckObjectLiteralMethodBody.js]
+-var foo = { bar: function () { return undefined; } };
++var foo = { bar() { return undefined; } };

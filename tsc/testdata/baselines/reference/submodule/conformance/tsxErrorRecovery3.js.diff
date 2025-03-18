@@ -1,0 +1,14 @@
+--- old.tsxErrorRecovery3.js
++++ new.tsxErrorRecovery3.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [file1.js]
+-React.createElement("div", null)
++<div></div>
+     ,
+-        React.createElement("div", null);
++        <div></div>;
+ //// [file2.js]
+-var x = (React.createElement("div", null), React.createElement("div", null));
++var x = (<div></div>, <div></div>);

@@ -1,0 +1,22 @@
+--- old.privateIdentifierChain.1.js
++++ new.privateIdentifierChain.1.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [privateIdentifierChain.1.js]
+-"use strict";
+ class A {
++    a;
+     #b;
+     getA() {
+         return new A();
+     }
+     constructor() {
+-        this?.#b; // Error
+-        this?.a.#b; // Error
+-        this?.getA().#b; // Error
++        this?.#b;
++        this?.a.#b;
++        this?.getA().#b;
+     }
+ }

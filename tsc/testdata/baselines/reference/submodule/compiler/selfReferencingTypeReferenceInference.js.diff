@@ -1,0 +1,8 @@
+--- old.selfReferencingTypeReferenceInference.js
++++ new.selfReferencingTypeReferenceInference.js
+@@= skipped -20, +20 lines =@@
+   // They have same input type!
+ 
+ //// [selfReferencingTypeReferenceInference.js]
+-// Why is t2 and t3 different??
+-// They have same input type!

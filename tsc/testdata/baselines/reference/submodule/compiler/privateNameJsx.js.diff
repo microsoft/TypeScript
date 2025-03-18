@@ -1,0 +1,22 @@
+--- old.privateNameJsx.js
++++ new.privateNameJsx.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [privateNameJsx.jsx]
+-var _Test_prop;
+-var Test = /** @class */ (function () {
+-    function Test() {
+-        _Test_prop.set(this, function () { return <div />; });
+-    }
+-    Test.prototype.render = function () {
++class Test {
++    #prop = () => <div />;
++    render() {
+         return <this. />;
+-    };
+-    return Test;
+-}());
+-_Test_prop = new WeakMap();
++    }
++}

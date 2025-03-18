@@ -1,0 +1,10 @@
+--- old.strictTypeofUnionNarrowing.js
++++ new.strictTypeofUnionNarrowing.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [strictTypeofUnionNarrowing.js]
+-"use strict";
+ function stringify1(anything) {
+     return typeof anything === "string" ? anything.toUpperCase() : "";
+ }

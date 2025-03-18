@@ -1,0 +1,63 @@
+--- old.typeGuardOfFormNotExpr.js
++++ new.typeGuardOfFormNotExpr.js
+@@= skipped -61, +61 lines =@@
+ var strOrNum;
+ var strOrNumOrBool;
+ var numOrBool;
+-// A type guard of the form !expr
+-// - when true, narrows the type of x by expr when false, or
+-// - when false, narrows the type of x by expr when true.
+-// !typeguard1
+ if (!(typeof strOrNum === "string")) {
+-    num === strOrNum; // number
++    num === strOrNum;
+ }
+ else {
+-    str = strOrNum; // string
++    str = strOrNum;
+ }
+-// !(typeguard1 || typeguard2)
+ if (!(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number")) {
+-    bool = strOrNumOrBool; // boolean
++    bool = strOrNumOrBool;
+ }
+ else {
+-    strOrNum = strOrNumOrBool; // string | number
++    strOrNum = strOrNumOrBool;
+ }
+-// !(typeguard1) || !(typeguard2)
+ if (!(typeof strOrNumOrBool !== "string") || !(typeof strOrNumOrBool !== "number")) {
+-    strOrNum = strOrNumOrBool; // string | number
++    strOrNum = strOrNumOrBool;
+ }
+ else {
+-    bool = strOrNumOrBool; // boolean
++    bool = strOrNumOrBool;
+ }
+-// !(typeguard1 && typeguard2)
+ if (!(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number")) {
+-    strOrNum = strOrNumOrBool; // string | number
++    strOrNum = strOrNumOrBool;
+ }
+ else {
+-    bool = strOrNumOrBool; // boolean
++    bool = strOrNumOrBool;
+ }
+-// !(typeguard1) && !(typeguard2)
+ if (!(typeof strOrNumOrBool === "string") && !(typeof strOrNumOrBool === "number")) {
+-    bool = strOrNumOrBool; // boolean
++    bool = strOrNumOrBool;
+ }
+ else {
+-    strOrNum = strOrNumOrBool; // string | number
++    strOrNum = strOrNumOrBool;
+ }
+-// !(typeguard1) && simpleExpr
+ if (!(typeof strOrNumOrBool === "string") && numOrBool !== strOrNumOrBool) {
+-    numOrBool = strOrNumOrBool; // number | boolean
++    numOrBool = strOrNumOrBool;
+ }
+ else {
+-    var r1 = strOrNumOrBool; // string | number | boolean
++    var r1 = strOrNumOrBool;
+ }

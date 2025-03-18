@@ -1,0 +1,33 @@
+--- old.expandoFunctionNullishProperty.js
++++ new.expandoFunctionNullishProperty.js
+@@= skipped -37, +37 lines =@@
+ 
+ 
+ //// [expandoFunctionNullishProperty.js]
+-// mentioned in https://github.com/microsoft/TypeScript/issues/54220
+ export function testNull() {
+     function inner() { }
+     inner.prop = null;
+@@= skipped -16, +15 lines =@@
+     inner.prop = undefined;
+     return inner;
+ }
+-
+-
+-//// [expandoFunctionNullishProperty.d.ts]
+-interface TestNull {
+-    (): void;
+-    readonly prop: null;
+-}
+-export declare function testNull(): TestNull;
+-interface TestNull2 {
+-    (): void;
+-    prop: string | null;
+-}
+-export declare function testNull2(): TestNull2;
+-interface TestUndefined {
+-    (): void;
+-    readonly prop: undefined;
+-}
+-export declare function testUndefined(): TestUndefined;
+-export {};

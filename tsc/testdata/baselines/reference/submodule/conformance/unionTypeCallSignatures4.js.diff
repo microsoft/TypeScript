@@ -1,0 +1,23 @@
+--- old.unionTypeCallSignatures4.js
++++ new.unionTypeCallSignatures4.js
+@@= skipped -31, +31 lines =@@
+ var f12;
+ f12("a");
+ f12("a", "b");
+-f12("a", "b", "c"); // ok
++f12("a", "b", "c");
+ var f34;
+ f34("a");
+ f34("a", "b");
+@@= skipped -8, +8 lines =@@
+ var f1234;
+ f1234("a");
+ f1234("a", "b");
+-f1234("a", "b", "c"); // ok
++f1234("a", "b", "c");
+ var f12345;
+-f12345("a"); // error
++f12345("a");
+ f12345("a", "b");
+-f12345("a", "b", "c"); // error
++f12345("a", "b", "c");

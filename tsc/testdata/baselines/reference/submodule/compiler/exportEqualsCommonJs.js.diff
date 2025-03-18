@@ -1,0 +1,9 @@
+--- old.exportEqualsCommonJs.js
++++ new.exportEqualsCommonJs.js
+@@= skipped -4, +4 lines =@@
+ 
+ //// [exportEqualsCommonJs.js]
+ "use strict";
+-var _a;
+-module.exports = (_a = {}, _a["hi"] = "there", _a);
++module.exports = { ["hi"]: "there" };

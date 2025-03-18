@@ -1,0 +1,12 @@
+--- old.symbolDeclarationEmit8.js
++++ new.symbolDeclarationEmit8.js
+@@= skipped -8, +8 lines =@@
+ var obj = {
+     [Symbol.isConcatSpreadable]: 0
+ };
+-
+-
+-//// [symbolDeclarationEmit8.d.ts]
+-declare var obj: {
+-    [Symbol.isConcatSpreadable]: number;
+-};

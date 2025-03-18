@@ -1,0 +1,24 @@
+--- old.privateInterfaceProperties.js
++++ new.privateInterfaceProperties.js
+@@= skipped -11, +11 lines =@@
+  
+ 
+ //// [privateInterfaceProperties.js]
+-// should be an error 
+-var c1 = /** @class */ (function () {
+-    function c1() {
+-    }
+-    return c1;
+-}());
+-// should be ok 
+-var c2 = /** @class */ (function () {
+-    function c2() {
+-    }
+-    return c2;
+-}());
++class c1 {
++    name;
++}
++class c2 {
++    name;
++}

@@ -1,0 +1,10 @@
+--- old.es5ExportDefaultFunctionDeclaration.js
++++ new.es5ExportDefaultFunctionDeclaration.js
+@@= skipped -8, +8 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.default = f;
+ function f() { }
+-
+-
+-//// [es5ExportDefaultFunctionDeclaration.d.ts]
+-export default function f(): void;

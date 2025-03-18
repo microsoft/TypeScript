@@ -1,0 +1,27 @@
+--- old.identicalGenericConditionalsWithInferRelated.js
++++ new.identicalGenericConditionalsWithInferRelated.js
+@@= skipped -34, +34 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ function f(arg) {
+-    var x = null;
+-    var y = null;
+-    x = y; // is err, should be ok
+-    y = x; // is err, should be ok
++    let x = null;
++    let y = null;
++    x = y;
++    y = x;
+ }
+-var Y = /** @class */ (function () {
+-    function Y() {
+-    }
+-    Y.prototype.decode = function (ctor) {
++class Y {
++    decode(ctor) {
+         throw new Error();
+-    };
+-    return Y;
+-}());
++    }
++}

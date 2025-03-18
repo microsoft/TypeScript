@@ -1,0 +1,169 @@
+--- old.parserRealSource6.js
++++ new.parserRealSource6.js
+@@= skipped -222, +222 lines =@@
+     }
+ }
+ 
++//// [typescript.js]
+ //// [parserRealSource6.js]
+-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+-// See LICENSE.txt in the project root for complete license information.
+-///<reference path='typescript.ts' />
+ var TypeScript;
+ (function (TypeScript) {
+-    var TypeCollectionContext = /** @class */ (function () {
+-        function TypeCollectionContext(scopeChain, checker) {
++    class TypeCollectionContext {
++        scopeChain;
++        checker;
++        script = null;
++        constructor(scopeChain, checker) {
+             this.scopeChain = scopeChain;
+             this.checker = checker;
+-            this.script = null;
+         }
+-        return TypeCollectionContext;
+-    }());
++    }
+     TypeScript.TypeCollectionContext = TypeCollectionContext;
+-    var MemberScopeContext = /** @class */ (function () {
+-        function MemberScopeContext(flow, pos, matchFlag) {
++    class MemberScopeContext {
++        flow;
++        pos;
++        matchFlag;
++        type = null;
++        ast = null;
++        scope;
++        options = new AstWalkOptions();
++        constructor(flow, pos, matchFlag) {
+             this.flow = flow;
+             this.pos = pos;
+             this.matchFlag = matchFlag;
+-            this.type = null;
+-            this.ast = null;
+-            this.options = new AstWalkOptions();
+         }
+-        return MemberScopeContext;
+-    }());
++    }
+     TypeScript.MemberScopeContext = MemberScopeContext;
+-    var EnclosingScopeContext = /** @class */ (function () {
+-        function EnclosingScopeContext(logger, script, text, pos, isMemberCompletion) {
++    class EnclosingScopeContext {
++        logger;
++        script;
++        text;
++        pos;
++        isMemberCompletion;
++        scopeGetter = null;
++        objectLiteralScopeGetter = null;
++        scopeStartAST = null;
++        skipNextFuncDeclForClass = false;
++        deepestModuleDecl = null;
++        enclosingClassDecl = null;
++        enclosingObjectLit = null;
++        publicsOnly = true;
++        useFullAst = false;
++        scriptFragment;
++        constructor(logger, script, text, pos, isMemberCompletion) {
+             this.logger = logger;
+             this.script = script;
+             this.text = text;
+             this.pos = pos;
+             this.isMemberCompletion = isMemberCompletion;
+-            this.scopeGetter = null;
+-            this.objectLiteralScopeGetter = null;
+-            this.scopeStartAST = null;
+-            this.skipNextFuncDeclForClass = false;
+-            this.deepestModuleDecl = null;
+-            this.enclosingClassDecl = null;
+-            this.enclosingObjectLit = null;
+-            this.publicsOnly = true;
+-            this.useFullAst = false;
+         }
+-        EnclosingScopeContext.prototype.getScope = function () {
++        getScope() {
+             return this.scopeGetter();
+-        };
+-        EnclosingScopeContext.prototype.getObjectLiteralScope = function () {
++        }
++        getObjectLiteralScope() {
+             return this.objectLiteralScopeGetter();
+-        };
+-        EnclosingScopeContext.prototype.getScopeAST = function () {
++        }
++        getScopeAST() {
+             return this.scopeStartAST;
+-        };
+-        EnclosingScopeContext.prototype.getScopePosition = function () {
++        }
++        getScopePosition() {
+             return this.scopeStartAST.minChar;
+-        };
+-        EnclosingScopeContext.prototype.getScriptFragmentStartAST = function () {
++        }
++        getScriptFragmentStartAST() {
+             return this.scopeStartAST;
+-        };
+-        EnclosingScopeContext.prototype.getScriptFragmentPosition = function () {
++        }
++        getScriptFragmentPosition() {
+             return this.getScriptFragmentStartAST().minChar;
+-        };
+-        EnclosingScopeContext.prototype.getScriptFragment = function () {
++        }
++        getScriptFragment() {
+             if (this.scriptFragment == null) {
+                 var ast = this.getScriptFragmentStartAST();
+                 var minChar = ast.minChar;
+                 var limChar = (this.isMemberCompletion ? this.pos : this.pos + 1);
+-                this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null /*errorCapture*/).Script;
++                this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null).Script;
+             }
+             return this.scriptFragment;
+-        };
+-        return EnclosingScopeContext;
+-    }());
++        }
++    }
+     TypeScript.EnclosingScopeContext = EnclosingScopeContext;
+     function preFindMemberScope(ast, parent, walker) {
+         var memScope = walker.state;
+@@= skipped -104, +111 lines =@@
+         var context = walker.state;
+         var minChar = ast.minChar;
+         var limChar = ast.limChar;
+-        // Account for the fact completion list may be called at the end of a file which
+-        // is has not been fully re-parsed yet.
+         if (ast.nodeType == NodeType.Script && context.pos > limChar)
+             limChar = context.pos;
+         if ((minChar <= context.pos) &&
+@@= skipped -23, +21 lines =@@
+                     break;
+                 case NodeType.ObjectLit:
+                     var objectLit = ast;
+-                    // Only consider target-typed object literals
+                     if (objectLit.targetType) {
+                         context.scopeGetter = function () {
+                             return objectLit.targetType.containedScope;
+@@= skipped -32, +31 lines =@@
+                         }
+                         else {
+                             context.scopeGetter = function () {
+-                                // The scope of a class constructor is hidden somewhere we don't expect :-S
+                                 if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
+                                     if (ast.type && ast.type.enclosingType) {
+                                         return ast.type.enclosingType.constructorScope;
+@@= skipped -27, +26 lines =@@
+         return ast;
+     }
+     TypeScript.preFindEnclosingScope = preFindEnclosingScope;
+-    //
+-    // Find the enclosing scope context from a position inside a script AST.
+-    // The "scopeStartAST" of the returned scope is always valid.
+-    // Return "null" if the enclosing scope can't be found.
+-    //
+     function findEnclosingScopeAt(logger, script, text, pos, isMemberCompletion) {
+         var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
+         TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);

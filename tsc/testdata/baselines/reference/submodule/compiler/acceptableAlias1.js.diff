@@ -1,0 +1,8 @@
+--- old.acceptableAlias1.js
++++ new.acceptableAlias1.js
+@@= skipped -11, +11 lines =@@
+ //// [acceptableAlias1.js]
+ var M;
+ (function (M) {
++    M.X = N;
+ })(M || (M = {}));

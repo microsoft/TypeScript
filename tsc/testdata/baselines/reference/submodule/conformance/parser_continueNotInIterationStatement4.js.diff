@@ -1,0 +1,11 @@
+--- old.parser_continueNotInIterationStatement4.js
++++ new.parser_continueNotInIterationStatement4.js
+@@= skipped -10, +10 lines =@@
+ 
+ //// [parser_continueNotInIterationStatement4.js]
+ TWO: while (true) {
+-    var x = function () {
++    var x = () => {
+         continue TWO;
+     };
+ }

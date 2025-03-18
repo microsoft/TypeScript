@@ -1,0 +1,38 @@
+--- old.intersectionWithUnionConstraint.js
++++ new.intersectionWithUnionConstraint.js
+@@= skipped -42, +42 lines =@@
+ 
+ 
+ //// [intersectionWithUnionConstraint.js]
+-"use strict";
+ function f1(x) {
+-    // Combined constraint of 'T & U' is 'string | number'
+-    var y = x;
++    let y = x;
+ }
+ function f2(x) {
+-    var y1 = x; // Error
+-    var y2 = x; // Error
+-    var y3 = x;
+-    var y4 = x; // Error
+-    var y5 = x; // Error
+-    var y6 = x; // Error
++    let y1 = x;
++    let y2 = x;
++    let y3 = x;
++    let y4 = x;
++    let y5 = x;
++    let y6 = x;
+ }
+ function f3(x) {
+-    var y = x;
++    const y = x;
+ }
+ function f4(x) {
+-    var y = x;
++    const y = x;
+ }
+ function f5(x) {
+-    var y = x;
++    let y = x;
+ }

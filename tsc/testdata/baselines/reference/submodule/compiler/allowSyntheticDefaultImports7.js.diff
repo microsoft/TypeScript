@@ -1,0 +1,27 @@
+--- old.allowSyntheticDefaultImports7.js
++++ new.allowSyntheticDefaultImports7.js
+@@= skipped -10, +10 lines =@@
+ Foo.foo();
+ 
+ //// [a.js]
+-System.register(["./b"], function (exports_1, context_1) {
+-    "use strict";
+-    var b_1;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (b_1_1) {
+-                b_1 = b_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            b_1.default.bar();
+-            b_1.default.foo();
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const b_1 = require("./b");
++b_1.default.bar();
++b_1.default.foo();

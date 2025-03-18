@@ -1,0 +1,18 @@
+--- old.exportAssignmentWithImportStatementPrivacyError.js
++++ new.exportAssignmentWithImportStatementPrivacyError.js
+@@= skipped -23, +23 lines =@@
+ export = M;
+ 
+ //// [exportAssignmentWithImportStatementPrivacyError.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var M;
+-    (function (M) {
+-    })(M || (M = {}));
+-    return M;
+-});
++"use strict";
++var M;
++(function (M) {
++})(M || (M = {}));
++module.exports = M;

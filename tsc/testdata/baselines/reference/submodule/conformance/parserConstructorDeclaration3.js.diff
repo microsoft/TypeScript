@@ -1,0 +1,14 @@
+--- old.parserConstructorDeclaration3.js
++++ new.parserConstructorDeclaration3.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserConstructorDeclaration3.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    constructor() { }
++}

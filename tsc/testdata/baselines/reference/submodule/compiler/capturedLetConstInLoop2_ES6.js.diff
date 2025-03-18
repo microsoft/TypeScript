@@ -1,0 +1,18 @@
+--- old.capturedLetConstInLoop2_ES6.js
++++ new.capturedLetConstInLoop2_ES6.js
+@@= skipped -176, +176 lines =@@
+ }
+ 
+ //// [capturedLetConstInLoop2_ES6.js]
+-// ========let
+ function foo0(x) {
+     for (let x of []) {
+         let a = arguments.length;
+@@= skipped -76, +75 lines =@@
+         (() => x + y + a);
+     }
+ }
+-///=======const
+ function foo0_c(x) {
+     for (const x of []) {
+         const a = arguments.length;

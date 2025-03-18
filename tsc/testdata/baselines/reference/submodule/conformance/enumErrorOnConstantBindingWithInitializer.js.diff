@@ -1,0 +1,15 @@
+--- old.enumErrorOnConstantBindingWithInitializer.js
++++ new.enumErrorOnConstantBindingWithInitializer.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [enumErrorOnConstantBindingWithInitializer.js]
+-"use strict";
+-var _a = thing.value, value = _a === void 0 ? "123" : _a;
++const { value = "123" } = thing;
+ var E;
+ (function (E) {
+-    E[E["test"] = value] = "test";
++    E["test"] = value;
++    if (typeof E.test !== "string") E[E.test] = "test";
+ })(E || (E = {}));

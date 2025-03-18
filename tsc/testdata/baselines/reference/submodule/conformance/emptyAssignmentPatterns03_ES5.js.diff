@@ -1,0 +1,14 @@
+--- old.emptyAssignmentPatterns03_ES5.js
++++ new.emptyAssignmentPatterns03_ES5.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [emptyAssignmentPatterns03_ES5.js]
+ var a;
+-(a);
+-(a);
+-
+-
+-//// [emptyAssignmentPatterns03_ES5.d.ts]
+-declare var a: any;
++({} = {} = a);
++([] = [] = a);

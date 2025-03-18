@@ -1,0 +1,7 @@
+--- old.importMetaNarrowing(module=esnext).js
++++ new.importMetaNarrowing(module=esnext).js
+@@= skipped -12, +12 lines =@@
+ if (import.meta.foo) {
+     import.meta.foo();
+ }
+-export {};

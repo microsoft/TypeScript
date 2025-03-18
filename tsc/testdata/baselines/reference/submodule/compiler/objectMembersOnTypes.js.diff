@@ -1,0 +1,21 @@
+--- old.objectMembersOnTypes.js
++++ new.objectMembersOnTypes.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [objectMembersOnTypes.js]
+-var AAA = /** @class */ (function () {
+-    function AAA() {
+-    }
+-    return AAA;
+-}());
++class AAA {
++}
+ var x;
+ x.toString();
+ var i;
+-i.toString(); // used to be an error
++i.toString();
+ var c;
+-c.toString(); // used to be an error
++c.toString();

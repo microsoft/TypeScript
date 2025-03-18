@@ -1,0 +1,12 @@
+--- old.constEnumNoPreserveDeclarationReexport.js
++++ new.constEnumNoPreserveDeclarationReexport.js
+@@= skipped -22, +22 lines =@@
+ //// [usages.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-0 /* MyConstEnum.Foo */;
+-0 /* AlsoEnum.Foo */;
+-0 /* StillEnum.Foo */;
++ConstEnum_1.MyConstEnum.Foo;
++ImportExport_1.default.Foo;
++ReExport_1.default.Foo;

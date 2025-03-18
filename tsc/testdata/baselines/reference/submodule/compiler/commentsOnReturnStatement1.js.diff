@@ -1,0 +1,21 @@
+--- old.commentsOnReturnStatement1.js
++++ new.commentsOnReturnStatement1.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [commentsOnReturnStatement1.js]
+-var DebugClass = /** @class */ (function () {
+-    function DebugClass() {
+-    }
+-    DebugClass.debugFunc = function () {
+-        // Start Debugger Test Code
++class DebugClass {
++    static debugFunc() {
+         var i = 0;
+-        // End Debugger Test Code
+         return true;
+-    };
+-    return DebugClass;
+-}());
++    }
++}

@@ -1,0 +1,19 @@
+--- old.parserES3Accessors1.js
++++ new.parserES3Accessors1.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserES3Accessors1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    Object.defineProperty(C.prototype, "Foo", {
+-        get: function () { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++class C {
++    get Foo() { }
++}

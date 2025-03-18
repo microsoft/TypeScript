@@ -1,0 +1,27 @@
+--- old.enumWithNonLiteralStringInitializer.js
++++ new.enumWithNonLiteralStringInitializer.js
+@@= skipped -28, +28 lines =@@
+ //// [bad.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var helpers_1 = require("./helpers");
++const helpers_1 = require("./helpers");
+ var A;
+ (function (A) {
+-    A["a"] = "bar";
++    A["a"] = helpers_1.bar;
++    if (typeof A.a !== "string") A[A.a] = "a";
+ })(A || (A = {}));
+ //// [good.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var helpers_1 = require("./helpers");
++const helpers_1 = require("./helpers");
+ var A;
+ (function (A) {
+-    A["a"] = "2";
++    A["a"] = `${helpers_1.foo}`;
++    if (typeof A.a !== "string") A[A.a] = "a";
+     A["b"] = "2";
+     A["c"] = "2";
+     A["d"] = "foo";

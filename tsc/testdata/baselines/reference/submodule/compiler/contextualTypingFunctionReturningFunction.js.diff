@@ -1,0 +1,11 @@
+--- old.contextualTypingFunctionReturningFunction.js
++++ new.contextualTypingFunctionReturningFunction.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [contextualTypingFunctionReturningFunction.js]
+ f({
+-    a: function (s) { },
+-    b: function () { return function (n) { }; },
++    a: s => { },
++    b: () => n => { },
+ });

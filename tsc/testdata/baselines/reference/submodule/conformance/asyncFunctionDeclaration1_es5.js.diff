@@ -1,0 +1,14 @@
+--- old.asyncFunctionDeclaration1_es5.js
++++ new.asyncFunctionDeclaration1_es5.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [asyncFunctionDeclaration1_es5.js]
+-function foo() {
+-    return __awaiter(this, void 0, void 0, function () {
+-        return __generator(this, function (_a) {
+-            return [2 /*return*/];
+-        });
+-    });
++async function foo() {
+ }

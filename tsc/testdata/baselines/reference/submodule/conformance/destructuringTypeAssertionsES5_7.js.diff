@@ -1,0 +1,8 @@
+--- old.destructuringTypeAssertionsES5_7.js
++++ new.destructuringTypeAssertionsES5_7.js
+@@= skipped -3, +3 lines =@@
+ var { x } = <any><any>new Foo;
+ 
+ //// [destructuringTypeAssertionsES5_7.js]
+-var x = (new Foo).x;
++var { x } = new Foo;

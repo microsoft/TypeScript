@@ -1,0 +1,11 @@
+--- old.specializationsShouldNotAffectEachOther.js
++++ new.specializationsShouldNotAffectEachOther.js
+@@= skipped -23, +23 lines =@@
+ //// [specializationsShouldNotAffectEachOther.js]
+ var series;
+ function foo() {
+-    var seriesExtent = function (series) { return null; };
++    var seriesExtent = (series) => null;
+     var series2;
+     series2.map(seriesExtent);
+     return null;

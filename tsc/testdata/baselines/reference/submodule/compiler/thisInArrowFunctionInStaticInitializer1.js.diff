@@ -1,0 +1,21 @@
+--- old.thisInArrowFunctionInStaticInitializer1.js
++++ new.thisInArrowFunctionInStaticInitializer1.js
+@@= skipped -11, +11 lines =@@
+ 
+ //// [thisInArrowFunctionInStaticInitializer1.js]
+ function log(a) { }
+-var Vector = /** @class */ (function () {
+-    function Vector() {
+-    }
+-    var _a;
+-    _a = Vector;
+-    Vector.foo = function () {
+-        // 'this' should be allowed in a static initializer.
+-        log(_a);
++class Vector {
++    static foo = () => {
++        log(this);
+     };
+-    return Vector;
+-}());
++}

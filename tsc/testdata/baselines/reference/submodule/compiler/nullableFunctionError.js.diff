@@ -1,0 +1,9 @@
+--- old.nullableFunctionError.js
++++ new.nullableFunctionError.js
+@@= skipped -9, +9 lines =@@
+ //// [nullableFunctionError.js]
+ null();
+ undefined();
+-var f;
++let f;
+ f();

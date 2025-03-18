@@ -1,0 +1,16 @@
+--- old.declarationEmitUnknownImport2.js
++++ new.declarationEmitUnknownImport2.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [declarationEmitUnknownImport2.js]
+ "use strict";
++'./Foo';
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var Foo = From;
+-'./Foo'; // Syntax error
+ exports.default = Foo;
+-
+-
+-//// [declarationEmitUnknownImport2.d.ts]
+-import Foo = From;
+-export default Foo;

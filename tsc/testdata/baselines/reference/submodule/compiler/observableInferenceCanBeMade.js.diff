@@ -1,0 +1,11 @@
+--- old.observableInferenceCanBeMade.js
++++ new.observableInferenceCanBeMade.js
+@@= skipped -23, +23 lines =@@
+ 
+ 
+ //// [observableInferenceCanBeMade.js]
+-"use strict";
+-// Repro from #33131
+ function asObservable(input) {
+     return typeof input === 'string' ? of(input) : from(input);
+ }

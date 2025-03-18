@@ -1,0 +1,8 @@
+--- old.promiseTypeInference.js
++++ new.promiseTypeInference.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [promiseTypeInference.js]
+-var $$x = load("something").then(function (s) { return convert(s); });
++var $$x = load("something").then(s => convert(s));

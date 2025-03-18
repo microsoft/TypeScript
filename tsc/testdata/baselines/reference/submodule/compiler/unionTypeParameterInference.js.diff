@@ -1,0 +1,10 @@
+--- old.unionTypeParameterInference.js
++++ new.unionTypeParameterInference.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [unionTypeParameterInference.js]
+-// Regression test for #5861
+ function unlift(value) {
+     return lift(value).prop;
+ }

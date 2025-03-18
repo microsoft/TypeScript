@@ -1,0 +1,145 @@
+--- old.unusedLocalsInMethod4.js
++++ new.unusedLocalsInMethod4.js
+@@= skipped -148, +148 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ function f() {
+-    var x1; // should error
+-    var x2; // should error
+-    var x3; // should not error
+-    var x4; // should not error
+-    var x5; // should not error
+-    var x6; // should not error
+-    var x7; // should not error
+-    var x8; // should error
+-    var x9; // should error
+-    var x10; // should not error
+-    var x11; // should not error
++    let x1;
++    let x2;
++    let x3;
++    let x4;
++    let x5;
++    let x6;
++    let x7;
++    let x8;
++    let x9;
++    var x10;
++    let x11;
+     function foo() {
+         console.log(x1);
+         console.log(x2);
+@@= skipped -30, +30 lines =@@
+     foo();
+ }
+ function f2() {
+-    var x1; // should error
+-    var x2; // should error
+-    var x3; // should not error
+-    var x4; // should not error
+-    var x5; // should not error
+-    var x6; // should not error
+-    var x7; // should not error
+-    var x8; // should error
+-    var x9; // should error
++    let x1;
++    let x2;
++    let x3;
++    let x4;
++    let x5;
++    let x6;
++    let x7;
++    let x8;
++    let x9;
+     console.log(x1);
+     console.log(x2);
+     console.log(x3);
+@@= skipped -20, +20 lines =@@
+     console.log(x9);
+ }
+ function f3() {
+-    var x; // should error
++    let x;
+     function foo() {
+         x.toString();
+     }
+     foo();
+ }
+ function f4() {
+-    var x; // should error
++    let x;
+     return {
+-        foo: function () {
++        foo() {
+             return x.toString();
+         }
+     };
+@@= skipped -19, +19 lines =@@
+ }
+ exports.default = {};
+ function f6() {
+-    var key; // should not error
++    let key;
+     for (key in {}) {
+         console.log(key);
+     }
+ }
+ function f7() {
+-    var key; // should not error
+-    for (var _i = 0, _a = []; _i < _a.length; _i++) {
+-        key = _a[_i];
++    let key;
++    for (key of []) {
+         console.log(key);
+     }
+ }
+ function f8() {
+     function ff() {
+-        var _a;
+-        var _;
+-        var rest; // should not error
+-        _a = bar(), _ = _a[0], rest = _a.slice(1);
++        let _;
++        let rest;
++        [_, ...rest] = bar();
+     }
+ }
+ function f9() {
+-    var x; // should have only one error
++    const x;
+     function bar() {
+-        var y = x;
++        let y = x;
+     }
+ }
+ function rw() {
+-    var i; // should error
++    let i;
+     function inside() {
+         i++;
+-        console.log(i); // NaN
++        console.log(i);
+     }
+     inside();
+ }
+ rw();
+ function createBinder() {
+-    var file; // should not error
++    var file;
+     function bindSourceFile(f) {
+         file = f;
+         file.toString();
+     }
+ }
+ function transformClassFields() {
+-    var ClassPropertySubstitutionFlags;
++    let ClassPropertySubstitutionFlags;
+     (function (ClassPropertySubstitutionFlags) {
+         ClassPropertySubstitutionFlags[ClassPropertySubstitutionFlags["ClassAliases"] = 1] = "ClassAliases";
+         ClassPropertySubstitutionFlags[ClassPropertySubstitutionFlags["ClassStaticThisOrSuperReference"] = 2] = "ClassStaticThisOrSuperReference";
+     })(ClassPropertySubstitutionFlags || (ClassPropertySubstitutionFlags = {}));
+-    var enabledSubstitutions; // should error
++    let enabledSubstitutions;
+     function enableSubstitutionForClassAliases() {
+         enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+         enabledSubstitutions.toString();

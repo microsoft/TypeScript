@@ -1,0 +1,22 @@
+--- old.downlevelLetConst19.js
++++ new.downlevelLetConst19.js
+@@= skipped -25, +25 lines =@@
+ var x;
+ function a() {
+     {
+-        var x_1;
+-        use(x_1);
++        let x;
++        use(x);
+         function b() {
+             {
+-                var x_2;
+-                use(x_2);
++                let x;
++                use(x);
+             }
+-            use(x_1);
++            use(x);
+         }
+     }
+     use(x);

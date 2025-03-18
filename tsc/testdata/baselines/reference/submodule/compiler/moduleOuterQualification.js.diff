@@ -1,0 +1,17 @@
+--- old.moduleOuterQualification.js
++++ new.moduleOuterQualification.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [moduleOuterQualification.js]
+-
+-
+-//// [moduleOuterQualification.d.ts]
+-declare namespace outer {
+-    interface Beta {
+-    }
+-    namespace inner {
+-        interface Beta extends outer.Beta {
+-        }
+-    }
+-}

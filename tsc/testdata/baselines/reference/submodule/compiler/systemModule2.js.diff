@@ -1,0 +1,20 @@
+--- old.systemModule2.js
++++ new.systemModule2.js
+@@= skipped -4, +4 lines =@@
+ export = x;
+ 
+ //// [systemModule2.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var x;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            x = 1;
+-        }
+-    };
+-});
++"use strict";
++var x = 1;
++module.exports = x;

@@ -1,0 +1,13 @@
+--- old.taggedTemplateStringsWithManyCallAndMemberExpressions.js
++++ new.taggedTemplateStringsWithManyCallAndMemberExpressions.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [taggedTemplateStringsWithManyCallAndMemberExpressions.js]
+-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+-    return cooked;
+-};
+ var f;
+-var x = new new new (f(__makeTemplateObject(["abc", "def"], ["abc", "def"]), 0).member)("hello")(42) === true;
++var x = new new new f `abc${0}def`.member("hello")(42) === true;

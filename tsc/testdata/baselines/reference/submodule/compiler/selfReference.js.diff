@@ -1,0 +1,8 @@
+--- old.selfReference.js
++++ new.selfReference.js
+@@= skipped -4, +4 lines =@@
+ asFunction(() => { return 1; });
+ 
+ //// [selfReference.js]
+-asFunction(function () { return 1; });
++asFunction(() => { return 1; });

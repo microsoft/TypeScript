@@ -1,0 +1,20 @@
+--- old.TypeGuardWithArrayUnion.js
++++ new.TypeGuardWithArrayUnion.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [TypeGuardWithArrayUnion.js]
+-var Message = /** @class */ (function () {
+-    function Message() {
+-    }
+-    return Message;
+-}());
++class Message {
++    value;
++}
+ function saySize(message) {
+     if (message instanceof Array) {
+-        return message.length; // Should have type Message[] here
++        return message.length;
+     }
+ }

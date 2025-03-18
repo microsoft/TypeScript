@@ -1,0 +1,10 @@
+--- old.topLevelVarHoistingCommonJS.js
++++ new.topLevelVarHoistingCommonJS.js
+@@= skipped -142, +142 lines =@@
+     exports.x = x;
+     break label;
+ }
+-// @ts-ignore
+ with (_) {
+     var y = _;
+     exports.y = y;

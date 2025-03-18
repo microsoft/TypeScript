@@ -1,0 +1,8 @@
+--- old.typeInferenceConflictingCandidates.js
++++ new.typeInferenceConflictingCandidates.js
+@@= skipped -5, +5 lines =@@
+ g("", 3, a => a);
+ 
+ //// [typeInferenceConflictingCandidates.js]
+-g("", 3, function (a) { return a; });
++g("", 3, a => a);

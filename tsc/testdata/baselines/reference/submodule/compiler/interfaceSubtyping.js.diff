@@ -1,0 +1,18 @@
+--- old.interfaceSubtyping.js
++++ new.interfaceSubtyping.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [interfaceSubtyping.js]
+-var Camera = /** @class */ (function () {
+-    function Camera(str) {
++class Camera {
++    str;
++    constructor(str) {
+         this.str = str;
+     }
+-    Camera.prototype.foo = function () { return "s"; };
+-    return Camera;
+-}());
++    foo() { return "s"; }
++}

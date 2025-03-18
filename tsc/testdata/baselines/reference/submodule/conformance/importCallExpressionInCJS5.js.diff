@@ -1,0 +1,36 @@
+--- old.importCallExpressionInCJS5.js
++++ new.importCallExpressionInCJS5.js
+@@= skipped -59, +59 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.D = void 0;
+ class C {
+-    constructor() {
+-        this.myModule = Promise.resolve().then(() => require("./0"));
+-    }
++    myModule = Promise.resolve().then(() => require("./0"));
+     method() {
+         const loadAsync = Promise.resolve().then(() => require("./0"));
+         this.myModule.then(Zero => {
+             console.log(Zero.foo());
+-        }, async (err) => {
++        }, async err => {
+             console.log(err);
+             let one = await Promise.resolve().then(() => require("./1"));
+             console.log(one.backup());
+@@= skipped -15, +13 lines =@@
+     }
+ }
+ class D {
+-    constructor() {
+-        this.myModule = Promise.resolve().then(() => require("./0"));
+-    }
++    myModule = Promise.resolve().then(() => require("./0"));
+     method() {
+         const loadAsync = Promise.resolve().then(() => require("./0"));
+         this.myModule.then(Zero => {
+             console.log(Zero.foo());
+-        }, async (err) => {
++        }, async err => {
+             console.log(err);
+             let one = await Promise.resolve().then(() => require("./1"));
+             console.log(one.backup());

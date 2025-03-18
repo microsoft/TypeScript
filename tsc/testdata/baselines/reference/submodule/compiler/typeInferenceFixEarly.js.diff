@@ -1,0 +1,8 @@
+--- old.typeInferenceFixEarly.js
++++ new.typeInferenceFixEarly.js
+@@= skipped -5, +5 lines =@@
+ f(n => 3);
+ 
+ //// [typeInferenceFixEarly.js]
+-f(function (n) { return 3; });
++f(n => 3);

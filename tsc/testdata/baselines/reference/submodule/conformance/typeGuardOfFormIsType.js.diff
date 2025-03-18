@@ -1,0 +1,71 @@
+--- old.typeGuardOfFormIsType.js
++++ new.typeGuardOfFormIsType.js
+@@= skipped -38, +38 lines =@@
+ var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
+ 
+ //// [typeGuardOfFormIsType.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    return C2;
+-}());
+-var D1 = /** @class */ (function (_super) {
+-    __extends(D1, _super);
+-    function D1() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return D1;
+-}(C1));
++class C1 {
++    p1;
++}
++class C2 {
++    p2;
++}
++class D1 extends C1 {
++    p3;
++}
+ var str;
+ var num;
+ var strOrNum;
+@@= skipped -45, +22 lines =@@
+     return true;
+ }
+ var c1Orc2;
+-str = isC1(c1Orc2) && c1Orc2.p1; // C1
+-num = isC2(c1Orc2) && c1Orc2.p2; // C2
+-str = isD1(c1Orc2) && c1Orc2.p1; // D1
+-num = isD1(c1Orc2) && c1Orc2.p3; // D1
++str = isC1(c1Orc2) && c1Orc2.p1;
++num = isC2(c1Orc2) && c1Orc2.p2;
++str = isD1(c1Orc2) && c1Orc2.p1;
++num = isD1(c1Orc2) && c1Orc2.p3;
+ var c2Ord1;
+-num = isC2(c2Ord1) && c2Ord1.p2; // C2
+-num = isD1(c2Ord1) && c2Ord1.p3; // D1
+-str = isD1(c2Ord1) && c2Ord1.p1; // D1
+-var r2 = isC1(c2Ord1) && c2Ord1; // C2 | D1
++num = isC2(c2Ord1) && c2Ord1.p2;
++num = isD1(c2Ord1) && c2Ord1.p3;
++str = isD1(c2Ord1) && c2Ord1.p1;
++var r2 = isC1(c2Ord1) && c2Ord1;

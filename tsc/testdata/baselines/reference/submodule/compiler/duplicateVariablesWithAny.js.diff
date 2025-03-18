@@ -1,0 +1,25 @@
+--- old.duplicateVariablesWithAny.js
++++ new.duplicateVariablesWithAny.js
+@@= skipped -19, +19 lines =@@
+ var z; // ok
+ 
+ //// [duplicateVariablesWithAny.js]
+-// They should have to be the same even when one of the types is 'any'
+ var x;
+-var x = 2; //error
++var x = 2;
+ var y = "";
+-var y; //error
++var y;
+ var N;
+ (function (N) {
+     var x;
+-    var x = 2; //error
++    var x = 2;
+     var y = "";
+-    var y; //error
++    var y;
+ })(N || (N = {}));
+ var z;
+-var z; // ok
++var z;

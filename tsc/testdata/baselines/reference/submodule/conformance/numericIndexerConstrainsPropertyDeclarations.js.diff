@@ -1,0 +1,76 @@
+--- old.numericIndexerConstrainsPropertyDeclarations.js
++++ new.numericIndexerConstrainsPropertyDeclarations.js
+@@= skipped -99, +99 lines =@@
+ }
+ 
+ //// [numericIndexerConstrainsPropertyDeclarations.js]
+-// String indexer types constrain the types of named properties in their containing type
+-var C = /** @class */ (function () {
+-    function C() {
+-    } // ok
+-    Object.defineProperty(C.prototype, "X", {
+-        get: function () {
+-            return '';
+-        },
+-        set: function (v) { } // ok
+-        ,
+-        enumerable: false,
+-        configurable: true
+-    });
+-    C.prototype.foo = function () {
++class C {
++    constructor() { }
++    a;
++    b;
++    c;
++    "d";
++    "e";
++    1.0;
++    2.0;
++    "3.0";
++    "4.0";
++    3.0;
++    get X() {
+         return '';
+-    };
+-    C.foo = function () { }; // ok
+-    Object.defineProperty(C, "X", {
+-        get: function () {
+-            return 1;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++    }
++    set X(v) { }
++    foo() {
++        return '';
++    }
++    static sa;
++    static sb;
++    static foo() { }
++    static get X() {
++        return 1;
++    }
++}
+ var a;
+-// error
+ var b = {
+     a: '',
+     b: 1,
+-    c: function () { },
++    c: () => { },
+     "d": '',
+     "e": 1,
+     1.0: '',
+@@= skipped -43, +42 lines =@@
+         return '';
+     },
+     set X(v) { },
+-    foo: function () {
++    foo() {
+         return '';
+     }
+ };

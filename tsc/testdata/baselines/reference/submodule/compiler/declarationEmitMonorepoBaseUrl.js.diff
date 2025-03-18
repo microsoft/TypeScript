@@ -1,0 +1,26 @@
+--- old.declarationEmitMonorepoBaseUrl.js
++++ new.declarationEmitMonorepoBaseUrl.js
+@@= skipped -43, +43 lines =@@
+ 
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
++export {};
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.resolveParserPlugins = resolveParserPlugins;
+-const parser_1 = require("@babel/parser");
+-function resolveParserPlugins() {
+-    return [(0, parser_1.createPlugin)()];
++import { createPlugin } from "@babel/parser";
++export function resolveParserPlugins() {
++    return [createPlugin()];
+ }
+-
+-
+-//// [index.d.ts]
+-export {};
+-//// [index.d.ts]
+-export declare function resolveParserPlugins(): import("@babel/parser").PluginConfig[];

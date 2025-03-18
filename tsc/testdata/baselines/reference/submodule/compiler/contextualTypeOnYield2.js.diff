@@ -1,0 +1,10 @@
+--- old.contextualTypeOnYield2.js
++++ new.contextualTypeOnYield2.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [contextualTypeOnYield2.js]
+-"use strict";
+ const g = function* () {
+     return (num) => console.log(num);
+ };

@@ -1,0 +1,23 @@
+--- old.modulePrologueAMD.js
++++ new.modulePrologueAMD.js
+@@= skipped -5, +5 lines =@@
+ export class Foo {}
+ 
+ //// [modulePrologueAMD.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.Foo = void 0;
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-        }
+-        return Foo;
+-    }());
+-    exports.Foo = Foo;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Foo = void 0;
++class Foo {
++}
++exports.Foo = Foo;

@@ -1,0 +1,27 @@
+--- old.grammarAmbiguities1.js
++++ new.grammarAmbiguities1.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [grammarAmbiguities1.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A.prototype.foo = function () { };
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    B.prototype.bar = function () { };
+-    return B;
+-}());
++class A {
++    foo() { }
++}
++class B {
++    bar() { }
++}
+ function f(x) { return x; }
+ function g(x) { return f(x); }
+ g(7);

@@ -1,0 +1,8 @@
+--- old.parserErrorRecovery_ParameterList5.js
++++ new.parserErrorRecovery_ParameterList5.js
+@@= skipped -3, +3 lines =@@
+ (a:number => { }
+ 
+ //// [parserErrorRecovery_ParameterList5.js]
+-(function (a, _a) { return ; });
++(a, {}) => ;

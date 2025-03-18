@@ -1,0 +1,15 @@
+--- old.defaultOfAnyInStrictNullChecks.js
++++ new.defaultOfAnyInStrictNullChecks.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [defaultOfAnyInStrictNullChecks.js]
+-// Regression test for #8295
+ function foo() {
+     try {
+     }
+     catch (e) {
+-        var s = e.message;
++        let s = e.message;
+     }
+ }

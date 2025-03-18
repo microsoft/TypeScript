@@ -1,0 +1,10 @@
+--- old.objectLiteralsAgainstUnionsOfArrays01.js
++++ new.objectLiteralsAgainstUnionsOfArrays01.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [objectLiteralsAgainstUnionsOfArrays01.js]
+-var x = [
++let x = [
+     { bar: { prop: 100 } }
+ ];

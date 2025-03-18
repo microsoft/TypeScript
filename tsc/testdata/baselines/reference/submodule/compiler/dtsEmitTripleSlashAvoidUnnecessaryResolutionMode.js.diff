@@ -1,0 +1,14 @@
+--- old.dtsEmitTripleSlashAvoidUnnecessaryResolutionMode.js
++++ new.dtsEmitTripleSlashAvoidUnnecessaryResolutionMode.js
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ 
+-
+-
+-//// [app.d.mts]
+-/// <reference types="node" preserve="true" />
+-export declare function drainStream(stream: NodeJS.ReadableStream): Promise<void>;
++//// [app.mjs]
++export async function drainStream(stream) {
++}

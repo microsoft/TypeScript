@@ -1,0 +1,11 @@
+--- old.es5ExportEquals.js
++++ new.es5ExportEquals.js
+@@= skipped -9, +9 lines =@@
+ "use strict";
+ function f() { }
+ module.exports = f;
+-
+-
+-//// [es5ExportEquals.d.ts]
+-export declare function f(): void;
+-export = f;

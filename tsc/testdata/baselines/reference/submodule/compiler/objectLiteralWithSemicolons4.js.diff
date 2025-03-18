@@ -1,0 +1,9 @@
+--- old.objectLiteralWithSemicolons4.js
++++ new.objectLiteralWithSemicolons4.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [objectLiteralWithSemicolons4.js]
+ var v = {
+-    a: a
++    a
+ };

@@ -1,0 +1,27 @@
+--- old.commentOnClassAccessor2.js
++++ new.commentOnClassAccessor2.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [commentOnClassAccessor2.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    Object.defineProperty(C.prototype, "bar", {
+-        /**
+-         * Getter.
+-         */
+-        get: function () { return 1; },
+-        /**
+-         * Setter.
+-         */
+-        set: function (v) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++class C {
++    get bar() { return 1; }
++    set bar(v) { }
++}

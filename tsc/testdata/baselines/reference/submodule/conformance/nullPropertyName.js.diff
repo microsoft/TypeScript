@@ -1,0 +1,102 @@
+--- old.nullPropertyName.js
++++ new.nullPropertyName.js
+@@= skipped -86, +86 lines =@@
+ 
+ //// [nullPropertyName.js]
+ function foo() { }
+-// properties
+ foo.x = 1;
+ foo.y = 1;
+-// keywords
+ foo.break = 1;
+ foo.case = 1;
+ foo.catch = 1;
+@@= skipped -80, +78 lines =@@
+ foo.global = 1;
+ foo.bigint = 1;
+ foo.of = 1;
+-
+-
+-//// [nullPropertyName.d.ts]
+-declare function foo(): void;
+-declare namespace foo {
+-    export var x: number;
+-    export var y: number;
+-    var _a: number;
+-    var _b: number;
+-    var _c: number;
+-    var _d: number;
+-    var _e: number;
+-    var _f: number;
+-    var _g: number;
+-    var _h: number;
+-    var _j: number;
+-    var _k: number;
+-    var _l: number;
+-    var _m: number;
+-    var _o: number;
+-    var _p: number;
+-    var _q: number;
+-    var _r: number;
+-    var _s: number;
+-    var _t: number;
+-    var _u: number;
+-    var _v: number;
+-    var _w: number;
+-    var _x: number;
+-    var _y: number;
+-    var _z: number;
+-    var _0: number;
+-    var _1: number;
+-    var _2: number;
+-    var _3: number;
+-    var _4: number;
+-    var _5: number;
+-    var _6: number;
+-    var _7: number;
+-    var _8: number;
+-    var _9: number;
+-    var _10: number;
+-    var _11: number;
+-    var _12: number;
+-    var _13: number;
+-    var _14: number;
+-    var _15: number;
+-    var _16: number;
+-    var _17: number;
+-    var _18: number;
+-    var _19: number;
+-    var _20: number;
+-    export var abstract: number;
+-    export var as: number;
+-    export var asserts: number;
+-    export var any: number;
+-    export var async: number;
+-    export var await: number;
+-    export var boolean: number;
+-    export var constructor: number;
+-    export var declare: number;
+-    export var get: number;
+-    export var infer: number;
+-    export var is: number;
+-    export var keyof: number;
+-    export var module: number;
+-    export var namespace: number;
+-    export var never: number;
+-    export var readonly: number;
+-    export var require: number;
+-    export var number: number;
+-    export var object: number;
+-    export var set: number;
+-    export var string: number;
+-    export var symbol: number;
+-    export var type: number;
+-    export var undefined: number;
+-    export var unique: number;
+-    export var unknown: number;
+-    export var from: number;
+-    export var global: number;
+-    export var bigint: number;
+-    export var of: number;
+-    export { _a as break, _b as case, _c as catch, _d as class, _e as const, _f as continue, _g as debugger, _h as default, _j as delete, _k as do, _l as else, _m as enum, _o as export, _p as extends, _q as false, _r as finally, _s as for, _t as function, _u as if, _v as import, _w as in, _x as instanceof, _y as new, _z as null, _0 as return, _1 as super, _2 as switch, _3 as this, _4 as throw, _5 as true, _6 as try, _7 as typeof, _8 as var, _9 as void, _10 as while, _11 as with, _12 as implements, _13 as interface, _14 as let, _15 as package, _16 as private, _17 as protected, _18 as public, _19 as static, _20 as yield };
+-}

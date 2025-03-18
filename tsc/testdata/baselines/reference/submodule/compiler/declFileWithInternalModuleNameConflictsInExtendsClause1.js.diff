@@ -1,0 +1,38 @@
+--- old.declFileWithInternalModuleNameConflictsInExtendsClause1.js
++++ new.declFileWithInternalModuleNameConflictsInExtendsClause1.js
+@@= skipped -14, +14 lines =@@
+ //// [declFileWithInternalModuleNameConflictsInExtendsClause1.js]
+ var X;
+ (function (X) {
+-    var A;
++    let A;
+     (function (A) {
+-        var B;
++        let B;
+         (function (B) {
+-            var C;
++            let C;
+             (function (C) {
+-                var W = /** @class */ (function () {
+-                    function W() {
+-                    }
+-                    return W;
+-                }());
++                class W {
++                }
+                 C.W = W;
+             })(C = B.C || (B.C = {}));
+         })(B = A.B || (A.B = {}));
+     })(A = X.A || (X.A = {}));
+ })(X || (X = {}));
+-
+-
+-//// [declFileWithInternalModuleNameConflictsInExtendsClause1.d.ts]
+-declare namespace X.A.C {
+-    interface Z {
+-    }
+-}
+-declare namespace X.A.B.C {
+-    class W implements X.A.C.Z {
+-    }
+-}

@@ -1,0 +1,14 @@
+--- old.parserComputedPropertyName10.js
++++ new.parserComputedPropertyName10.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserComputedPropertyName10.js]
+-var _a;
+ class C {
+-    constructor() {
+-        this[_a] = 1;
+-    }
++    [e] = 1;
+ }
+-_a = e;

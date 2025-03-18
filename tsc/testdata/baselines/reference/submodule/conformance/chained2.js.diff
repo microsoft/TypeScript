@@ -1,0 +1,35 @@
+--- old.chained2.js
++++ new.chained2.js
+@@= skipped -23, +23 lines =@@
+ //// [a.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++    a;
++}
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -12, +10 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.default = void 0;
+-var types = require("./b");
++const types = require("./b");
+ exports.default = types;
+ //// [d.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var c_1 = require("./c");
++const c_1 = require("./c");
+ new c_1.default.A();
+ new c_1.default.B();
+-var a = {};
+-var b = {};
++const a = {};
++const b = {};

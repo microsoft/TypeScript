@@ -1,0 +1,27 @@
+--- old.privatePropertyUsingObjectType.js
++++ new.privatePropertyUsingObjectType.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [privatePropertyUsingObjectType.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.FilterManager = void 0;
+-    var FilterManager = /** @class */ (function () {
+-        function FilterManager() {
+-        }
+-        return FilterManager;
+-    }());
+-    exports.FilterManager = FilterManager;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.FilterManager = void 0;
++class FilterManager {
++    _filterProviders;
++    _filterProviders2;
++    _filterProviders3;
++    _filterProviders4;
++}
++exports.FilterManager = FilterManager;

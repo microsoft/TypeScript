@@ -1,0 +1,24 @@
+--- old.computedEnumMemberSyntacticallyString(isolatedmodules=true).js
++++ new.computedEnumMemberSyntacticallyString(isolatedmodules=true).js
+@@= skipped -21, +21 lines =@@
+ var Foo;
+ (function (Foo) {
+     Foo["A"] = `${BAR}`;
++    if (typeof Foo.A !== "string") Foo[Foo.A] = "A";
+     Foo["B"] = "2" + BAR;
++    if (typeof Foo.B !== "string") Foo[Foo.B] = "B";
+     Foo["C"] = (`${BAR}`);
+-    Foo[Foo["F"] = BAR] = "F";
+-    Foo[Foo["G"] = 2 + BAR] = "G";
++    if (typeof Foo.C !== "string") Foo[Foo.C] = "C";
++    Foo["F"] = BAR;
++    if (typeof Foo.F !== "string") Foo[Foo.F] = "F";
++    Foo["G"] = 2 + BAR;
++    if (typeof Foo.G !== "string") Foo[Foo.G] = "G";
+     Foo["H"] = Foo.A;
++    if (typeof Foo.H !== "string") Foo[Foo.H] = "H";
+     Foo["I"] = Foo.H + BAR;
++    if (typeof Foo.I !== "string") Foo[Foo.I] = "I";
+     Foo["J"] = Foo.H;
++    if (typeof Foo.J !== "string") Foo[Foo.J] = "J";
+ })(Foo || (Foo = {}));

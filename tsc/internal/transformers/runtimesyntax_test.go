@@ -235,7 +235,7 @@ var E;
 			parsetestutil.CheckDiagnostics(t, file)
 			binder.BindSourceFile(file, options)
 			emitContext := printer.NewEmitContext()
-			resolver := binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
 		})
 	}
@@ -413,7 +413,7 @@ func TestNamespaceTransformer(t *testing.T) {
 			parsetestutil.CheckDiagnostics(t, file)
 			binder.BindSourceFile(file, options)
 			emitContext := printer.NewEmitContext()
-			resolver := binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
 		})
 	}
@@ -442,7 +442,7 @@ func TestParameterPropertyTransformer(t *testing.T) {
 			parsetestutil.CheckDiagnostics(t, file)
 			binder.BindSourceFile(file, options)
 			emitContext := printer.NewEmitContext()
-			resolver := binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 			file = NewTypeEraserTransformer(emitContext, options).TransformSourceFile(file)
 			file = NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)

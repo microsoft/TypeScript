@@ -1,0 +1,24 @@
+--- old.tsxElementResolution12.js
++++ new.tsxElementResolution12.js
+@@= skipped -37, +37 lines =@@
+ 
+ //// [file.jsx]
+ var Obj1;
+-<Obj1 x={10}/>; // OK
++<Obj1 x={10}/>;
+ var Obj2;
+-<Obj2 x={10}/>; // OK
++<Obj2 x={10}/>;
+ var Obj3;
+-<Obj3 x={10}/>; // Error
++<Obj3 x={10}/>;
+ var attributes;
+-<Obj3 {...attributes}/>; // Error
+-<Obj3 {...{}}/>; // OK
++<Obj3 {...attributes}/>;
++<Obj3 {...{}}/>;
+ var Obj4;
+-<Obj4 x={10}/>; // OK
+-<Obj4 x={'10'}/>; // Error
++<Obj4 x={10}/>;
++<Obj4 x={'10'}/>;

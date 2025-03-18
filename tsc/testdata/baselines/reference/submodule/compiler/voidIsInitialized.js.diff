@@ -1,0 +1,19 @@
+--- old.voidIsInitialized.js
++++ new.voidIsInitialized.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [voidIsInitialized.js]
+-"use strict";
+-var x = undefined;
+-var y = undefined;
++const x = undefined;
++const y = undefined;
+ if (typeof x === "undefined") {
+-    x; // no error: assume x2 is initialised
++    x;
+ }
+ if (typeof y !== "undefined") {
+-    y; // no error: do not narrow void
++    y;
+ }

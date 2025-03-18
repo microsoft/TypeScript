@@ -1,0 +1,26 @@
+--- old.staticClassMemberError.js
++++ new.staticClassMemberError.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [staticClassMemberError.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.a = function () {
++class C {
++    static s;
++    a() {
+         s = 1;
+-    };
+-    return C;
+-}());
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+     }
+-    return Foo;
+-}());
++}
++class Foo {
++    static bar;
++}

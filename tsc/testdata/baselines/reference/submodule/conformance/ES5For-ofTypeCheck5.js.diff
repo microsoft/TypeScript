@@ -1,0 +1,10 @@
+--- old.ES5For-ofTypeCheck5.js
++++ new.ES5For-ofTypeCheck5.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [ES5For-ofTypeCheck5.js]
+ var union;
+-for (var _i = 0, union_1 = union; _i < union_1.length; _i++) {
+-    var v = union_1[_i];
+-}
++for (var v of union) { }

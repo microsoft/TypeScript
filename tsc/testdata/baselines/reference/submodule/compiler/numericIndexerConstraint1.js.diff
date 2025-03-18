@@ -1,0 +1,18 @@
+--- old.numericIndexerConstraint1.js
++++ new.numericIndexerConstraint1.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [numericIndexerConstraint1.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    Foo.prototype.foo = function () { };
+-    return Foo;
+-}());
++class Foo {
++    foo() { }
++}
+ var x;
+-var result = x["one"]; // error
++var result = x["one"];

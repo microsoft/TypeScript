@@ -1,0 +1,10 @@
+--- old.contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.js
++++ new.contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.js
+@@= skipped -17, +17 lines =@@
+ };
+ 
+ //// [contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.js]
+-"use strict";
+ const obj = {
+     field: {
+         validate: (_t, _p, _s) => false,

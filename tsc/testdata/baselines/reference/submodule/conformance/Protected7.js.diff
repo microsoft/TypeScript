@@ -1,0 +1,15 @@
+--- old.Protected7.js
++++ new.Protected7.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [Protected7.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.m = function () { };
+-    return C;
+-}());
++class C {
++    m() { }
++}

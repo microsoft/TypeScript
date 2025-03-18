@@ -1,0 +1,9 @@
+--- old.emptyVariableDeclarationBindingPatterns02_ES6.js
++++ new.emptyVariableDeclarationBindingPatterns02_ES6.js
+@@= skipped -19, +19 lines =@@
+     let [];
+     const [];
+ })();
+-
+-
+-//// [emptyVariableDeclarationBindingPatterns02_ES6.d.ts]

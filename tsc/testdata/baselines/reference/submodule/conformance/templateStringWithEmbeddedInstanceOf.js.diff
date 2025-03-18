@@ -1,0 +1,8 @@
+--- old.templateStringWithEmbeddedInstanceOf.js
++++ new.templateStringWithEmbeddedInstanceOf.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ "hello" instanceof String }def`;
+ 
+ //// [templateStringWithEmbeddedInstanceOf.js]
+-var x = "abc".concat("hello" instanceof String, "def");
++var x = `abc${"hello" instanceof String}def`;

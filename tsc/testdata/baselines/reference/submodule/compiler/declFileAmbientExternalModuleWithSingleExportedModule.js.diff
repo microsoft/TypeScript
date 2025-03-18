@@ -1,0 +1,21 @@
+--- old.declFileAmbientExternalModuleWithSingleExportedModule.js
++++ new.declFileAmbientExternalModuleWithSingleExportedModule.js
+@@= skipped -21, +21 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
+-
+-
+-//// [declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts]
+-declare module "SubModule" {
+-    namespace m {
+-        namespace m3 {
+-            interface c {
+-            }
+-        }
+-    }
+-}
+-//// [declFileAmbientExternalModuleWithSingleExportedModule_1.d.ts]
+-/// <reference path="declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts" preserve="true" />
+-import SubModule = require('SubModule');
+-export declare var x: SubModule.m.m3.c;

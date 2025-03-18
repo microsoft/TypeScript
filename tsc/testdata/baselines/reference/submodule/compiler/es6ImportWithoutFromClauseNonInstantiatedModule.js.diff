@@ -1,0 +1,13 @@
+--- old.es6ImportWithoutFromClauseNonInstantiatedModule.js
++++ new.es6ImportWithoutFromClauseNonInstantiatedModule.js
+@@= skipped -10, +10 lines =@@
+ export {};
+ //// [es6ImportWithoutFromClauseNonInstantiatedModule_1.js]
+ import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
+-
+-
+-//// [es6ImportWithoutFromClauseNonInstantiatedModule_0.d.ts]
+-export interface i {
+-}
+-//// [es6ImportWithoutFromClauseNonInstantiatedModule_1.d.ts]
+-import "es6ImportWithoutFromClauseNonInstantiatedModule_0";

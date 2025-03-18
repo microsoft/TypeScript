@@ -1,0 +1,8 @@
+--- old.destructuringVoidStrictNullChecks.js
++++ new.destructuringVoidStrictNullChecks.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [destructuringVoidStrictNullChecks.js]
+-var _a = v;
++const {} = v;

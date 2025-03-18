@@ -1,0 +1,10 @@
+--- old.infinitelyExpandingTypes4.js
++++ new.infinitelyExpandingTypes4.js
+@@= skipped -28, +28 lines =@@
+ var q1;
+ var q2;
+ var q3;
+-q1 = q2; // should error
+-q1 = q3; // should not error
++q1 = q2;
++q1 = q3;

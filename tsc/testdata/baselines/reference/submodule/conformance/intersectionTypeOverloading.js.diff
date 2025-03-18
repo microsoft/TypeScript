@@ -1,0 +1,11 @@
+--- old.intersectionTypeOverloading.js
++++ new.intersectionTypeOverloading.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [intersectionTypeOverloading.js]
+-// Check that order is preserved in intersection types for purposes of
+-// overload resolution
+ var fg;
+ var gf;
+ var x = fg("abc");

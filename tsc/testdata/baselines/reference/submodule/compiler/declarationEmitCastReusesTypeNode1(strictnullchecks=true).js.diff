@@ -1,0 +1,56 @@
+--- old.declarationEmitCastReusesTypeNode1(strictnullchecks=true).js
++++ new.declarationEmitCastReusesTypeNode1(strictnullchecks=true).js
+@@= skipped -27, +27 lines =@@
+ // allows `undefined` on the input side, thanks to the initializer
+ export function fnWithPartialAnnotationOnDefaultparam(x: P = null! as P, b: number) {}
+ 
+-
+-
+-//// [declarationEmitCastReusesTypeNode1.d.ts]
+-type P = {} & {
+-    name: string;
+-};
+-export declare let vLet: P;
+-export declare const vConst: P;
+-export declare function fn(p?: P): void;
+-export declare function fnWithRequiredDefaultParam(p: P | undefined, req: number): void;
+-export declare class C {
+-    ctorField: P;
+-    field: P;
+-    optField?: P;
+-    readonly roFiled: P;
+-    method(p?: P): void;
+-    methodWithRequiredDefault(p: P | undefined, req: number): void;
+-    constructor(ctorField?: P);
+-    get x(): P;
+-    set x(v: P);
++//// [declarationEmitCastReusesTypeNode1.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C = exports.vConst = exports.vLet = void 0;
++exports.fn = fn;
++exports.fnWithRequiredDefaultParam = fnWithRequiredDefaultParam;
++exports.fnWithPartialAnnotationOnDefaultparam = fnWithPartialAnnotationOnDefaultparam;
++exports.vLet = null;
++exports.vConst = null;
++function fn(p = null) { }
++function fnWithRequiredDefaultParam(p = null, req) { }
++class C {
++    ctorField;
++    field = null;
++    optField = null;
++    roFiled = null;
++    method(p = null) { }
++    methodWithRequiredDefault(p = null, req) { }
++    constructor(ctorField = null) {
++        this.ctorField = ctorField;
++    }
++    get x() { return null; }
++    set x(v) { }
+ }
+-declare const _default: P;
+-export default _default;
+-export declare function fnWithPartialAnnotationOnDefaultparam(x: P | undefined, b: number): void;
++exports.C = C;
++exports.default = null;
++function fnWithPartialAnnotationOnDefaultparam(x = null, b) { }

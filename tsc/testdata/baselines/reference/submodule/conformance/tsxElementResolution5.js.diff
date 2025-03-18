@@ -1,0 +1,8 @@
+--- old.tsxElementResolution5.js
++++ new.tsxElementResolution5.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [file1.jsx]
+-// OK, but implicit any
+ <div n='x'/>;

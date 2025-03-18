@@ -1,0 +1,9 @@
+--- old.topLevelLambda3.js
++++ new.topLevelLambda3.js
+@@= skipped -3, +3 lines =@@
+ var f = () => {this.window;}
+ 
+ //// [topLevelLambda3.js]
+-var _this = this;
+-var f = function () { _this.window; };
++var f = () => { this.window; };

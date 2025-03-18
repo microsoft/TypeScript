@@ -1,0 +1,10 @@
+--- old.enumWithExport.js
++++ new.enumWithExport.js
+@@= skipped -13, +13 lines =@@
+     x.y = 123;
+ })(x || (x = {}));
+ (function (x) {
+-    x[x["z"] = y] = "z";
++    x["z"] = y;
++    if (typeof x.z !== "string") x[x.z] = "z";
+ })(x || (x = {}));

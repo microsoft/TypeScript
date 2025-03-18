@@ -1,0 +1,23 @@
+--- old.requireOfJsonFileWithModuleNodeResolutionEmitSystem.js
++++ new.requireOfJsonFileWithModuleNodeResolutionEmitSystem.js
+@@= skipped -8, +8 lines =@@
+     "b": "hello"
+ }
+ 
+-//// [out/b.json]
+-{
+-    "a": true,
+-    "b": "hello"
+-}
+ //// [out/file1.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

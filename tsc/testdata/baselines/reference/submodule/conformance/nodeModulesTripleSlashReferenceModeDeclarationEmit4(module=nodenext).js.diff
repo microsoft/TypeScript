@@ -1,0 +1,16 @@
+--- old.nodeModulesTripleSlashReferenceModeDeclarationEmit4(module=nodenext).js
++++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit4(module=nodenext).js
+@@= skipped -23, +23 lines =@@
+ export interface LocalInterface extends ImportInterface {}
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-/// <reference types="pkg" resolution-mode="import" preserve="true" />
+-
+-
+-//// [index.d.ts]
+-/// <reference types="pkg" resolution-mode="import" preserve="true" />
+-export interface LocalInterface extends ImportInterface {
+-}
++export {};

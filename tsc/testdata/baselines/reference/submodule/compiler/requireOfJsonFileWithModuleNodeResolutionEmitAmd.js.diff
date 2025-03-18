@@ -1,0 +1,18 @@
+--- old.requireOfJsonFileWithModuleNodeResolutionEmitAmd.js
++++ new.requireOfJsonFileWithModuleNodeResolutionEmitAmd.js
+@@= skipped -8, +8 lines =@@
+     "b": "hello"
+ }
+ 
+-//// [out/b.json]
+-{
+-    "a": true,
+-    "b": "hello"
+-}
+ //// [out/file1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

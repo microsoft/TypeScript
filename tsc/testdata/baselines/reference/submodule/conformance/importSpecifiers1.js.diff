@@ -1,0 +1,68 @@
+--- old.importSpecifiers1.js
++++ new.importSpecifiers1.js
+@@= skipped -45, +45 lines =@@
+ 
+ 
+ //// [mod.js]
+-export var as = 0;
+-export var type = 0;
+-export var something = 0;
++export const as = 0;
++export const type = 0;
++export const something = 0;
+ //// [a.js]
+ import { type } from "./mod.js";
+ type;
+-as; // Error (used in emitting position)
++as;
+ //// [b.js]
+ import { type as as } from "./mod.js";
+-type; // Error (cannot resolve name)
++type;
+ as;
+ //// [c.js]
+-type; // Error (cannot resolve name)
+-as; // Error (used in emitting position)
++type;
++as;
+ export {};
+ //// [d.js]
+-export {};
++import "./mod.js";
+ //// [e.js]
+ import { type as type } from "./mod.js";
+ type;
+-as; // Error (used in emitting position)
++as;
+ //// [f.js]
+-type; // Error (cannot resolve name)
+-as; // Error (cannot resolve name)
+-something; // Error (used in emitting position)
+-s; // Error (used in emitting position)
++type;
++as;
++something;
++s;
+ export {};
+ //// [g.js]
+ export {};
+-
+-
+-//// [mod.d.ts]
+-export declare const as = 0;
+-export declare const type = 0;
+-export declare const something = 0;
+-//// [a.d.ts]
+-export {};
+-//// [b.d.ts]
+-export {};
+-//// [c.d.ts]
+-export {};
+-//// [d.d.ts]
+-export {};
+-//// [e.d.ts]
+-export {};
+-//// [f.d.ts]
+-export {};
+-//// [g.d.ts]
+-export {};

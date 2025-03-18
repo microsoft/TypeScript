@@ -1,0 +1,49 @@
+--- old.tsxEmitSpreadAttribute(target=es2015).js
++++ new.tsxEmitSpreadAttribute(target=es2015).js
+@@= skipped -51, +51 lines =@@
+ 
+ //// [test.js]
+ export function T1(a) {
+-    return React.createElement("div", Object.assign({ className: "T1" }, a), "T1");
++    return <div className={"T1"} {...a}>T1</div>;
+ }
+ export function T2(a, b) {
+-    return React.createElement("div", Object.assign({ className: "T2" }, a, b), "T2");
++    return <div className={"T2"} {...a} {...b}>T2</div>;
+ }
+ export function T3(a, b) {
+-    return React.createElement("div", Object.assign({}, a, { className: "T3" }, b), "T3");
++    return <div {...a} className={"T3"} {...b}>T3</div>;
+ }
+ export function T4(a, b) {
+-    return React.createElement("div", Object.assign({ className: "T4" }, a, b), "T4");
++    return <div className={"T4"} {...{ ...a, ...b }}>T4</div>;
+ }
+ export function T5(a, b, c, d) {
+-    return React.createElement("div", Object.assign({ className: "T5" }, a, b, { c, d }), "T5");
++    return <div className={"T5"} {...{ ...a, ...b, ...{ c, d } }}>T5</div>;
+ }
+ export function T6(a, b, c, d) {
+-    return React.createElement("div", Object.assign({ className: "T6" }, a, b, Object.assign(Object.assign({}, c), d)), "T6");
++    return <div className={"T6"} {...{ ...a, ...b, ...{ ...c, ...d } }}>T6</div>;
+ }
+ export function T7(a, b, c, d) {
+-    return React.createElement("div", Object.assign({ className: "T7" }, { __proto__: null, dir: 'rtl' }), "T7");
++    return <div className={"T7"} {...{ __proto__: null, dir: 'rtl' }}>T7</div>;
+ }
+ export function T8(a, b, c, d) {
+-    return React.createElement("div", Object.assign({ className: "T8" }, { "__proto__": null }), "T8");
++    return <div className={"T8"} {...{ "__proto__": null }}>T8</div>;
+ }
+ export function T9(a, b, c, d) {
+-    return React.createElement("div", { className: "T9", [__proto__]: null }, "T9");
++    return <div className={"T9"} {...{ [__proto__]: null }}>T9</div>;
+ }
+ export function T10(a, b, c, d) {
+-    return React.createElement("div", { className: "T10", ["__proto__"]: null }, "T10");
++    return <div className={"T10"} {...{ ["__proto__"]: null }}>T10</div>;
+ }
+ export function T11(a, b, c, d) {
+-    return React.createElement("div", { className: "T11", __proto__ }, "T11");
++    return <div className={"T11"} {...{ __proto__ }}>T11</div>;
+ }

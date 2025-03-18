@@ -1,0 +1,22 @@
+--- old.thisShadowingErrorSpans.js
++++ new.thisShadowingErrorSpans.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [thisShadowingErrorSpans.js]
+-"use strict";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.m = function () {
++class C {
++    m() {
+         this.m();
+         function f() {
+             this.m();
+         }
+-    };
+-    return C;
+-}());
++    }
++}

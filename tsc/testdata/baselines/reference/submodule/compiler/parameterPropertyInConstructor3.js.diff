@@ -1,0 +1,16 @@
+--- old.parameterPropertyInConstructor3.js
++++ new.parameterPropertyInConstructor3.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [parameterPropertyInConstructor3.js]
+-var Foo = /** @class */ (function () {
+-    function Foo(constructor) {
++class Foo {
++    constructor;
++    constructor(constructor) {
+         this.constructor = constructor;
+     }
+-    return Foo;
+-}());
++}

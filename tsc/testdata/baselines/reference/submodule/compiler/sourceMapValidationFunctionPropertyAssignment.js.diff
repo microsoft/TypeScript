@@ -1,0 +1,9 @@
+--- old.sourceMapValidationFunctionPropertyAssignment.js
++++ new.sourceMapValidationFunctionPropertyAssignment.js
+@@= skipped -3, +3 lines =@@
+ var x = { n() { } };
+ 
+ //// [sourceMapValidationFunctionPropertyAssignment.js]
+-var x = { n: function () { } };
+-//# sourceMappingURL=sourceMapValidationFunctionPropertyAssignment.js.map
++var x = { n() { } };

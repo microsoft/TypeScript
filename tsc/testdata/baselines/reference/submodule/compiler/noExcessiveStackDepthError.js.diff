@@ -1,0 +1,23 @@
+--- old.noExcessiveStackDepthError.js
++++ new.noExcessiveStackDepthError.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [noExcessiveStackDepthError.js]
+-"use strict";
+-// Repro from #46631
+ function foo() {
+     var x;
+-    var x; // Excessive stack depth error not expected here
++    var x;
+ }
+-
+-
+-//// [noExcessiveStackDepthError.d.ts]
+-interface FindOperator<T> {
+-    foo: T;
+-}
+-type FindConditions<T> = {
+-    [P in keyof T]?: FindConditions<T[P]> | FindOperator<FindConditions<T[P]>>;
+-};
+-declare function foo<Entity>(): void;

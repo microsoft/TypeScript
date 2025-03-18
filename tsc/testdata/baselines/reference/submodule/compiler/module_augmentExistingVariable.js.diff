@@ -1,0 +1,10 @@
+--- old.module_augmentExistingVariable.js
++++ new.module_augmentExistingVariable.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [module_augmentExistingVariable.js]
+ var console;
+-var console;
+ (function (console) {
+     console.x = 2;
+ })(console || (console = {}));

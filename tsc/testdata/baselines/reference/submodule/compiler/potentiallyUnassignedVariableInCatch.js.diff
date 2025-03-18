@@ -1,0 +1,18 @@
+--- old.potentiallyUnassignedVariableInCatch.js
++++ new.potentiallyUnassignedVariableInCatch.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [potentiallyUnassignedVariableInCatch.js]
+-"use strict";
+-var foo;
++let foo;
+ try {
+     if (Math.random() > 0.5) {
+         foo = 1234;
+     }
+ }
+-catch (_a) {
++catch {
+     foo;
+ }

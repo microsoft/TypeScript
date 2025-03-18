@@ -1,0 +1,11 @@
+--- old.switchWithConstrainedTypeVariable.js
++++ new.switchWithConstrainedTypeVariable.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [switchWithConstrainedTypeVariable.js]
+-"use strict";
+-// Repro from #20840
+ function function1(key) {
+     switch (key) {
+         case 'a':

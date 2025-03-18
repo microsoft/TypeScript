@@ -1,0 +1,20 @@
+--- old.parserParameterList9.js
++++ new.parserParameterList9.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserParameterList9.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function () {
+-        var bar = [];
+-        for (var _i = 0; _i < arguments.length; _i++) {
+-            bar[_i] = arguments[_i];
+-        }
+-    };
+-    return C;
+-}());
++class C {
++    foo(...bar) { }
++}

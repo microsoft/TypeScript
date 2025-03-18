@@ -1,0 +1,9 @@
+--- old.ambientDeclarations.js
++++ new.ambientDeclarations.js
+@@= skipped -79, +79 lines =@@
+ 
+ //// [ambientDeclarations.js]
+ var x = E3.B;
+-// Ambient module members are always exported with or without export keyword
+ var p = M1.x;
+ var q = M1.fn();

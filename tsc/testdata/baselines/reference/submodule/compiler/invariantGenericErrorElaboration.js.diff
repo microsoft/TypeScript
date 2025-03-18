@@ -1,0 +1,12 @@
+--- old.invariantGenericErrorElaboration.js
++++ new.invariantGenericErrorElaboration.js
+@@= skipped -25, +25 lines =@@
+ 
+ 
+ //// [invariantGenericErrorElaboration.js]
+-"use strict";
+-// Repro from #19746
+-var wat = Num;
+-var Foo = Obj({ foo: Num });
++const wat = Num;
++const Foo = Obj({ foo: Num });

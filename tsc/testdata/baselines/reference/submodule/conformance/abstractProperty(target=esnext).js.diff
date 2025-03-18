@@ -1,0 +1,10 @@
+--- old.abstractProperty(target=esnext).js
++++ new.abstractProperty(target=esnext).js
+@@= skipped -18, +18 lines =@@
+ 
+ //// [abstractProperty.js]
+ class A {
++    x;
+     foo() {
+         console.log(this.x);
+     }

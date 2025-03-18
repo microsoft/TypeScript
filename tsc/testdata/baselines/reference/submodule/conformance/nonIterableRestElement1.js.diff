@@ -1,0 +1,8 @@
+--- old.nonIterableRestElement1.js
++++ new.nonIterableRestElement1.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [nonIterableRestElement1.js]
+ var c = {};
+-c = ["", 0].slice(0);
++[...c] = ["", 0];

@@ -1,0 +1,8 @@
+--- old.shebang.js
++++ new.shebang.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [shebang.js]
+-#!/usr/bin/env node
+ var foo = 'I wish the generated JS to be executed in node';

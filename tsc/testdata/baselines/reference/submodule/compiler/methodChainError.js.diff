@@ -1,0 +1,22 @@
+--- old.methodChainError.js
++++ new.methodChainError.js
+@@= skipped -19, +19 lines =@@
+     .method("a");
+ 
+ //// [methodChainError.js]
+-var Builder = /** @class */ (function () {
+-    function Builder() {
+-    }
+-    Builder.prototype.method = function (param) {
++class Builder {
++    notMethod;
++    method(param) {
+         return this;
+-    };
+-    return Builder;
+-}());
++    }
++}
+ new Builder()
+     .method("a")
+     .method()

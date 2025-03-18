@@ -1,0 +1,54 @@
+--- old.noImplicitSymbolToString.js
++++ new.noImplicitSymbolToString.js
+@@= skipped -49, +49 lines =@@
+ 
+ 
+ //// [noImplicitSymbolToString.js]
+-// Fix #19666
+-var symbol;
+-var str = "hello ";
+-var templateStr = "hello ".concat(symbol);
+-var appendStr = "hello " + symbol;
++let symbol;
++let str = "hello ";
++const templateStr = `hello ${symbol}`;
++const appendStr = "hello " + symbol;
+ str += symbol;
+-var symbolUnionNumber;
+-var symbolUnionString;
+-var templateStrUnion = "union with number ".concat(symbolUnionNumber, " and union with string ").concat(symbolUnionString);
++let symbolUnionNumber;
++let symbolUnionString;
++const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
+ function getKey(key) {
+-    return "".concat(key, " is the key");
++    return `${key} is the key`;
+ }
+ function getKey1(key) {
+-    var s1;
+-    "".concat(s1);
++    let s1;
++    `${s1}`;
+     s1 + '';
+     +s1;
+-    var s2;
+-    "".concat(s2);
++    let s2;
++    `${s2}`;
+     s2 + '';
+     +s2;
+ }
+ function getKey2(key) {
+-    var s1;
+-    "".concat(s1);
++    let s1;
++    `${s1}`;
+     s1 + '';
+     +s1;
+-    var s2;
+-    "".concat(s2);
++    let s2;
++    `${s2}`;
+     s2 + '';
+     +s2;
+ }

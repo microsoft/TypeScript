@@ -1,0 +1,8 @@
+--- old.errorWithTruncatedType.js
++++ new.errorWithTruncatedType.js
+@@= skipped -14, +14 lines =@@
+ 
+ //// [errorWithTruncatedType.js]
+ var x;
+-// String representation of type of 'x' should be truncated in error message
+ var s = x;

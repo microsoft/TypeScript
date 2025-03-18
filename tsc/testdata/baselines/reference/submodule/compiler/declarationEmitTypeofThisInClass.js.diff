@@ -1,0 +1,22 @@
+--- old.declarationEmitTypeofThisInClass.js
++++ new.declarationEmitTypeofThisInClass.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [declarationEmitTypeofThisInClass.js]
+-"use strict";
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
+-
+-
+-//// [declarationEmitTypeofThisInClass.d.ts]
+-declare class Foo {
+-    foo: string;
+-    bar: typeof this.foo;
++class Foo {
++    foo;
++    bar;
+ }

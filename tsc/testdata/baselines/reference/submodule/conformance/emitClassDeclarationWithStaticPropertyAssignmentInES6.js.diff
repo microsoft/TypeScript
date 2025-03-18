@@ -1,0 +1,17 @@
+--- old.emitClassDeclarationWithStaticPropertyAssignmentInES6.js
++++ new.emitClassDeclarationWithStaticPropertyAssignmentInES6.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [emitClassDeclarationWithStaticPropertyAssignmentInES6.js]
+ class C {
++    static z = "Foo";
+ }
+-C.z = "Foo";
+ class D {
+-    constructor() {
+-        this.x = 20000;
+-    }
++    x = 20000;
++    static b = true;
+ }
+-D.b = true;

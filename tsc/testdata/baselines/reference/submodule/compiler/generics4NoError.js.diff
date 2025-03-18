@@ -1,0 +1,30 @@
+--- old.generics4NoError.js
++++ new.generics4NoError.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [generics4NoError.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    x;
++}
+ var a;
+ var b;
+-
+-
+-//// [generics4NoError.d.ts]
+-declare class C<T> {
+-    private x;
+-}
+-interface X {
+-    f(): string;
+-}
+-interface Y {
+-    f(): boolean;
+-}
+-declare var a: C<X>;
+-declare var b: C<Y>;

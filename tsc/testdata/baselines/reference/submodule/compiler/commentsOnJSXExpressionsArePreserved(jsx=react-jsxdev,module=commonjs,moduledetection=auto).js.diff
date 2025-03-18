@@ -1,0 +1,29 @@
+--- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=auto).js
++++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=auto).js
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ //// [commentsOnJSXExpressionsArePreserved.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+-var _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+-var Component = /** @class */ (function () {
+-    function Component() {
++class Component {
++    render() {
++        return <div>
++            
++            {null}
++            
++            
++            
++            
++        </div>;
+     }
+-    Component.prototype.render = function () {
+-        return (0, jsx_dev_runtime_1.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+-    };
+-    return Component;
+-}());
++}

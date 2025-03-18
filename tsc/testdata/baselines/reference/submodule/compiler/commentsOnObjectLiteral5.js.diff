@@ -1,0 +1,16 @@
+--- old.commentsOnObjectLiteral5.js
++++ new.commentsOnObjectLiteral5.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [commentsOnObjectLiteral5.js]
+-var a = {
+-    p0: 0, // Comment 0
+-    p1: 0, /* Comment 1
+-    A multiline comment. */
+-    p2: 0, // Comment 2
++const a = {
++    p0: 0,
++    p1: 0,
++    p2: 0,
+ };

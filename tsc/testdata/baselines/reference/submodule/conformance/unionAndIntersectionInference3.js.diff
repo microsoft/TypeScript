@@ -1,0 +1,29 @@
+--- old.unionAndIntersectionInference3.js
++++ new.unionAndIntersectionInference3.js
+@@= skipped -96, +96 lines =@@
+ 
+ 
+ //// [unionAndIntersectionInference3.js]
+-// Repro from #30720
+ concatMaybe([1, 2, 3], 4);
+-// Repros from #32247
+ const g = async (com) => {
+     throw com;
+ };
+@@= skipped -10, +8 lines =@@
+ f2 = f1;
+ g1 = g2;
+ g2 = g1;
+-let x1 = foo1(sa); // string
+-let y1 = foo1(sx); // string
+-let x2 = foo2(sa); // unknown
+-let y2 = foo2(sx); // { extra: number }
++let x1 = foo1(sa);
++let y1 = foo1(sx);
++let x2 = foo2(sa);
++let y2 = foo2(sx);
+ withRouter(MyComponent);
+-let z = foo(ab); // [AB<string>, string]
++let z = foo(ab);
+ a = b;
+ export {};

@@ -1,0 +1,12 @@
+--- old.exportedInterfaceInaccessibleInCallbackInModule.js
++++ new.exportedInterfaceInaccessibleInCallbackInModule.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [exportedInterfaceInaccessibleInCallbackInModule.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

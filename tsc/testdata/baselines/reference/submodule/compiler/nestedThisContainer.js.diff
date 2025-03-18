@@ -1,0 +1,16 @@
+--- old.nestedThisContainer.js
++++ new.nestedThisContainer.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [nestedThisContainer.js]
+-var foo = {};
++const foo = {};
+ foo.bar = function () {
+-    var self = this;
++    const self = this;
+ };
+ foo.zab = (function () {
+-    var self = this;
++    const self = this;
+ });

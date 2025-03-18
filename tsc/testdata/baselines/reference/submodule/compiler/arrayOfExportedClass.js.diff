@@ -1,0 +1,31 @@
+--- old.arrayOfExportedClass.js
++++ new.arrayOfExportedClass.js
+@@= skipped -25, +25 lines =@@
+ 
+ //// [arrayOfExportedClass_0.js]
+ "use strict";
+-var Car = /** @class */ (function () {
+-    function Car() {
+-    }
+-    return Car;
+-}());
++class Car {
++    foo;
++}
+ module.exports = Car;
+ //// [arrayOfExportedClass_1.js]
+ "use strict";
+-var Road = /** @class */ (function () {
+-    function Road() {
+-    }
+-    Road.prototype.AddCars = function (cars) {
++class Road {
++    cars;
++    AddCars(cars) {
+         this.cars = cars;
+-    };
+-    return Road;
+-}());
++    }
++}
+ module.exports = Road;

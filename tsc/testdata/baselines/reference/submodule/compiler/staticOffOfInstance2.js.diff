@@ -1,0 +1,22 @@
+--- old.staticOffOfInstance2.js
++++ new.staticOffOfInstance2.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [staticOffOfInstance2.js]
+-var List = /** @class */ (function () {
+-    function List() {
+-    }
+-    List.prototype.Blah = function () {
+-        this.Foo(); // no error
++class List {
++    Blah() {
++        this.Foo();
+         List.Foo();
+-    };
+-    List.Foo = function () { };
+-    return List;
+-}());
++    }
++    static Foo() { }
++}

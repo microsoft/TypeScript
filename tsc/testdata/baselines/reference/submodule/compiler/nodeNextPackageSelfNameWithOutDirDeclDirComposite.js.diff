@@ -1,0 +1,10 @@
+--- old.nodeNextPackageSelfNameWithOutDirDeclDirComposite.js
++++ new.nodeNextPackageSelfNameWithOutDirDeclDirComposite.js
+@@= skipped -22, +22 lines =@@
+ import * as me from "@this/package";
+ me.thing();
+ export function thing() { }
+-
+-
+-//// [index.d.ts]
+-export declare function thing(): void;

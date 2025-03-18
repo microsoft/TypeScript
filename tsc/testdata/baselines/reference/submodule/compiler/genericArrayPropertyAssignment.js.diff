@@ -1,0 +1,8 @@
+--- old.genericArrayPropertyAssignment.js
++++ new.genericArrayPropertyAssignment.js
+@@= skipped -13, +13 lines =@@
+ function isEmpty(list) {
+     return list.length === 0;
+ }
+-isEmpty([]); // error
++isEmpty([]);

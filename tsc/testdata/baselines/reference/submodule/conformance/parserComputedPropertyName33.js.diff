@@ -1,0 +1,16 @@
+--- old.parserComputedPropertyName33.js
++++ new.parserComputedPropertyName33.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [parserComputedPropertyName33.js]
+-var _a;
+ class C {
+-    constructor() {
+-        // No ASI
+-        this[_a] = 0[e2]();
+-    }
++    [e] = 0[e2]();
+ }
+-_a = e;
+ { }

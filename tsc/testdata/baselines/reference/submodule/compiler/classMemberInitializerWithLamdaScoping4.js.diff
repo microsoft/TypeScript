@@ -1,0 +1,23 @@
+--- old.classMemberInitializerWithLamdaScoping4.js
++++ new.classMemberInitializerWithLamdaScoping4.js
+@@= skipped -22, +22 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Test1 = void 0;
+-var Test1 = /** @class */ (function () {
+-    function Test1(field1) {
++class Test1 {
++    field1;
++    constructor(field1) {
+         this.field1 = field1;
+-        this.messageHandler = function () {
+-            console.log(field1); // Should be error that couldnt find symbol field1
+-        };
+     }
+-    return Test1;
+-}());
++    messageHandler = () => {
++        console.log(field1);
++    };
++}
+ exports.Test1 = Test1;

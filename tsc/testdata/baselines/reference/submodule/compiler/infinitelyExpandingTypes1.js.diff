@@ -1,0 +1,13 @@
+--- old.infinitelyExpandingTypes1.js
++++ new.infinitelyExpandingTypes1.js
+@@= skipped -27, +27 lines =@@
+ //// [infinitelyExpandingTypes1.js]
+ var l;
+ var m;
+-l == m; // should error
++l == m;
+ var l2;
+-l == l2; // should error;
+-l == l; // should not error
++l == l2;
++l == l;

@@ -1,0 +1,18 @@
+--- old.numericIndexerConstraint2.js
++++ new.numericIndexerConstraint2.js
+@@= skipped -6, +6 lines =@@
+ x = a;
+ 
+ //// [numericIndexerConstraint2.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    Foo.prototype.foo = function () { };
+-    return Foo;
+-}());
++class Foo {
++    foo() { }
++}
+ var x;
+ var a;
+ x = a;

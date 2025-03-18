@@ -1,0 +1,24 @@
+--- old.classExpressionTest1.js
++++ new.classExpressionTest1.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [classExpressionTest1.js]
+ function M() {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        C.prototype.f = function () {
++    class C {
++        f() {
+             var t;
+             var x;
+-            return { t: t, x: x };
+-        };
+-        return C;
+-    }());
++            return { t, x };
++        }
++    }
+     var v = new C();
+     return v.f();
+ }

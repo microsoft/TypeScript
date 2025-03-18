@@ -1,0 +1,23 @@
+--- old.unusedPrivateMethodInClass2.js
++++ new.unusedPrivateMethodInClass2.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [unusedPrivateMethodInClass2.js]
+-var greeter = /** @class */ (function () {
+-    function greeter() {
++class greeter {
++    function1() {
++        var y = 10;
+     }
+-    greeter.prototype.function1 = function () {
++    function2() {
+         var y = 10;
+-    };
+-    greeter.prototype.function2 = function () {
+-        var y = 10;
+-    };
+-    return greeter;
+-}());
++    }
++}

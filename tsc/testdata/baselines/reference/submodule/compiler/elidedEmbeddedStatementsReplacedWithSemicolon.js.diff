@@ -1,0 +1,65 @@
+--- old.elidedEmbeddedStatementsReplacedWithSemicolon.js
++++ new.elidedEmbeddedStatementsReplacedWithSemicolon.js
+@@= skipped -26, +26 lines =@@
+     const enum H {}
+ 
+ //// [elidedEmbeddedStatementsReplacedWithSemicolon.js]
+-if (1)
+-    ;
+-else
+-    ;
+-do
+-    ;
+-while (0);
+-while (0)
+-    ;
+-for (; 0;)
+-    ;
+-for (var _ in [])
+-    ;
+-for (var _i = 0, _a = []; _i < _a.length; _i++) {
+-    var _ = _a[_i];
+-    ;
++if (1) {
++    var A;
++    (function (A) {
++    })(A || (A = {}));
+ }
+-// @ts-ignore suppress `with` statement error
+-with (window)
+-    ;
++else {
++    var B;
++    (function (B) {
++    })(B || (B = {}));
++}
++do {
++    var C;
++    (function (C) {
++    })(C || (C = {}));
++} while (0);
++while (0) {
++    var D;
++    (function (D) {
++    })(D || (D = {}));
++}
++for (; 0;) {
++    var E;
++    (function (E) {
++    })(E || (E = {}));
++}
++for (let _ in []) {
++    var F;
++    (function (F) {
++    })(F || (F = {}));
++}
++for (let _ of []) {
++    var G;
++    (function (G) {
++    })(G || (G = {}));
++}
++with (window) {
++    var H;
++    (function (H) {
++    })(H || (H = {}));
++}

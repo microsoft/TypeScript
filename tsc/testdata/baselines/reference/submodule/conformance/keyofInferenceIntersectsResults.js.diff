@@ -1,0 +1,12 @@
+--- old.keyofInferenceIntersectsResults.js
++++ new.keyofInferenceIntersectsResults.js
+@@= skipped -13, +13 lines =@@
+ const c = bar('a', 'b');    // still clean
+ 
+ //// [keyofInferenceIntersectsResults.js]
+-var a = foo('a', 'b'); // compiles cleanly
+-var b = foo('a', 'b'); // also clean
+-var c = bar('a', 'b'); // still clean
++const a = foo('a', 'b');
++const b = foo('a', 'b');
++const c = bar('a', 'b');

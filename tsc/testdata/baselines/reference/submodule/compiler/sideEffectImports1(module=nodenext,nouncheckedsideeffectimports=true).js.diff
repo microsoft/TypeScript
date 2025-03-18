@@ -1,0 +1,14 @@
+--- old.sideEffectImports1(module=nodenext,nouncheckedsideeffectimports=true).js
++++ new.sideEffectImports1(module=nodenext,nouncheckedsideeffectimports=true).js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [sideEffectImports1.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-require("does-not-exist");
+-require("./does-not-exist-either");
+-require("./does-not-exist-either.js");
++import "does-not-exist";
++import "./does-not-exist-either";
++import "./does-not-exist-either.js";

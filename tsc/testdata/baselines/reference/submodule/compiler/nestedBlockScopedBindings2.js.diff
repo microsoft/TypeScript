@@ -1,0 +1,150 @@
+--- old.nestedBlockScopedBindings2.js
++++ new.nestedBlockScopedBindings2.js
+@@= skipped -131, +131 lines =@@
+ //// [nestedBlockScopedBindings2.js]
+ function a0() {
+     {
+-        var x_1 = 1;
+-        (function () { return x_1; });
++        let x = 1;
++        () => x;
+     }
+     {
+-        var x = 1;
++        let x = 1;
+     }
+ }
+ function a1() {
+     {
+-        var x = void 0;
++        let x;
+     }
+     {
+-        var x_2 = 1;
+-        (function () { return x_2; });
++        let x = 1;
++        () => x;
+     }
+ }
+ function a2() {
+     {
+-        var x_3 = 1;
+-        (function () { return x_3; });
++        let x = 1;
++        () => x;
+     }
+     {
+-        var x_4;
+-        (function () { return x_4; });
++        let x;
++        () => x;
+     }
+ }
+ function a3() {
+     {
+-        var x_5 = 1;
+-        (function () { return x_5; });
++        let x = 1;
++        () => x;
+     }
+     switch (1) {
+         case 1:
+-            var x_6;
+-            (function () { return x_6; });
++            let x;
++            () => x;
+             break;
+     }
+ }
+ function a4() {
+     {
+-        var x = void 0;
++        let x;
+     }
+     switch (1) {
+         case 1:
+-            var x_7;
+-            (function () { return x_7; });
++            let x;
++            () => x;
+             break;
+     }
+ }
+ function a5() {
+     {
+-        var x_8;
+-        (function () { return x_8; });
++        let x;
++        () => x;
+     }
+     switch (1) {
+         case 1:
+-            var x = void 0;
++            let x;
+             break;
+     }
+ }
+ function a6() {
+     switch (1) {
+         case 1:
+-            var x = void 0;
++            let x;
+             break;
+     }
+     switch (1) {
+         case 1:
+-            var x = void 0;
++            let x;
+             break;
+     }
+ }
+ function a7() {
+     switch (1) {
+         case 1:
+-            var x_9;
+-            (function () { return x_9; });
++            let x;
++            () => x;
+             break;
+     }
+     switch (1) {
+         case 1:
+-            var x = void 0;
++            let x;
+             break;
+     }
+ }
+ function a8() {
+     switch (1) {
+         case 1:
+-            var x = void 0;
++            let x;
+             break;
+     }
+     switch (1) {
+         case 1:
+-            var x_10;
+-            (function () { return x_10; });
++            let x;
++            () => x;
+             break;
+     }
+ }
+ function a9() {
+     switch (1) {
+         case 1:
+-            var x_11;
+-            (function () { return x_11; });
++            let x;
++            () => x;
+             break;
+     }
+     switch (1) {
+         case 1:
+-            var x_12;
+-            (function () { return x_12; });
++            let x;
++            () => x;
+             break;
+     }
+ }

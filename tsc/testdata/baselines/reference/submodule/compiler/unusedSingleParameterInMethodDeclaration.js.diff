@@ -1,0 +1,18 @@
+--- old.unusedSingleParameterInMethodDeclaration.js
++++ new.unusedSingleParameterInMethodDeclaration.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [unusedSingleParameterInMethodDeclaration.js]
+-var Dummy = /** @class */ (function () {
+-    function Dummy() {
+-    }
+-    Dummy.prototype.greeter = function (person) {
++class Dummy {
++    greeter(person) {
+         var unused = 20;
+-    };
+-    return Dummy;
+-}());
++    }
++}

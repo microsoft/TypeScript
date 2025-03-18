@@ -1,0 +1,56 @@
+--- old.importCallExpressionInUMD3.js
++++ new.importCallExpressionInUMD3.js
+@@= skipped -13, +13 lines =@@
+ foo();
+ 
+ //// [0.js]
+-(function (factory) {
+-    if (typeof module === "object" && typeof module.exports === "object") {
+-        var v = factory(require, exports);
+-        if (v !== undefined) module.exports = v;
+-    }
+-    else if (typeof define === "function" && define.amd) {
+-        define(["require", "exports"], factory);
+-    }
+-})(function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.B = void 0;
+-    class B {
+-        print() { return "I am B"; }
+-    }
+-    exports.B = B;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.B = void 0;
++class B {
++    print() { return "I am B"; }
++}
++exports.B = B;
+ //// [2.js]
+-(function (factory) {
+-    if (typeof module === "object" && typeof module.exports === "object") {
+-        var v = factory(require, exports);
+-        if (v !== undefined) module.exports = v;
++async function foo() {
++    class C extends (await Promise.resolve().then(() => require("./0"))).B {
+     }
+-    else if (typeof define === "function" && define.amd) {
+-        define(["require", "exports"], factory);
+-    }
+-})(function (require, exports) {
+-    "use strict";
+-    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+-    async function foo() {
+-        class C extends (await (__syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }))).B {
+-        }
+-        var c = new C();
+-        c.print();
+-    }
+-    foo();
+-});
++    var c = new C();
++    c.print();
++}
++foo();

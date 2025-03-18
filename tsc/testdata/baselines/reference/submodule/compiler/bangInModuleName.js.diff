@@ -1,0 +1,13 @@
+--- old.bangInModuleName.js
++++ new.bangInModuleName.js
+@@= skipped -14, +14 lines =@@
+ import * as http from 'intern/dojo/node!http';
+ 
+ //// [a.js]
+-/// <reference path="a.d.ts"/>
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

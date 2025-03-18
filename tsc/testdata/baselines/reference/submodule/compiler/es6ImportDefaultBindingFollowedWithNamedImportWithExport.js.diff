@@ -1,0 +1,64 @@
+--- old.es6ImportDefaultBindingFollowedWithNamedImportWithExport.js
++++ new.es6ImportDefaultBindingFollowedWithNamedImportWithExport.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [server.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.m = exports.x = exports.a = void 0;
+-    exports.a = 10;
+-    exports.x = exports.a;
+-    exports.m = exports.a;
+-    exports.default = {};
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.m = exports.x = exports.a = void 0;
++exports.a = 10;
++exports.x = exports.a;
++exports.m = exports.a;
++exports.default = {};
+ //// [client.js]
+-define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x1 = void 0;
+-    exports.x1 = server_1.a;
+-    exports.x1 = server_2.a;
+-    exports.x1 = server_3.x;
+-    exports.x1 = server_3.a;
+-    exports.x1 = server_4.x;
+-    exports.x1 = server_5.m;
+-});
+-
+-
+-//// [server.d.ts]
+-export declare var a: number;
+-export declare var x: number;
+-export declare var m: number;
+-declare const _default: {};
+-export default _default;
+-//// [client.d.ts]
+-export declare var x1: number;
+-export declare var x1: number;
+-export declare var x1: number;
+-export declare var x1: number;
+-export declare var x1: number;
+-export declare var x1: number;
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x1 = void 0;
++require("server");
++const server_1 = require("server");
++exports.x1 = server_1.a;
++const server_2 = require("server");
++exports.x1 = server_2.a;
++const server_3 = require("server");
++exports.x1 = server_3.x;
++exports.x1 = server_3.a;
++const server_4 = require("server");
++exports.x1 = server_4.x;
++const server_5 = require("server");
++exports.x1 = server_5.m;

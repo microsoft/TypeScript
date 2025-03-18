@@ -1,0 +1,22 @@
+--- old.cachedContextualTypes.js
++++ new.cachedContextualTypes.js
+@@= skipped -25, +25 lines =@@
+ 
+ //// [cachedContextualTypes.js]
+ "use strict";
+-// Repro from #52198
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var MenuWorkbenchToolBar = /** @class */ (function () {
+-    function MenuWorkbenchToolBar(options) {
+-    }
+-    return MenuWorkbenchToolBar;
+-}());
++class MenuWorkbenchToolBar {
++    constructor(options) { }
++}
+ createInstance(MenuWorkbenchToolBar, {
+     toolbarOptions: {
+-        foo: function (bar) { return bar; }
++        foo(bar) { return bar; }
+     }
+ });

@@ -1,0 +1,9 @@
+--- old.asyncFunctionDeclaration8_es5.js
++++ new.asyncFunctionDeclaration8_es5.js
+@@= skipped -3, +3 lines =@@
+ var v = { [await]: foo }
+ 
+ //// [asyncFunctionDeclaration8_es5.js]
+-var _a;
+-var v = (_a = {}, _a[await] = foo, _a);
++var v = { [await]: foo };

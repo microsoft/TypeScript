@@ -1,0 +1,67 @@
+--- old.typeGuardsInRightOperandOfOrOrOperator.js
++++ new.typeGuardsInRightOperandOfOrOrOperator.js
+@@= skipped -48, +48 lines =@@
+ 
+ 
+ //// [typeGuardsInRightOperandOfOrOrOperator.js]
+-// In the right operand of a || operation, 
+-// the type of a variable or parameter is narrowed by any type guard in the left operand when false, 
+-// provided the right operand contains no assignments to the variable or parameter.
+ function foo(x) {
+-    return typeof x !== "string" || x.length === 10; // string
++    return typeof x !== "string" || x.length === 10;
+ }
+ function foo2(x) {
+-    // modify x in right hand operand
+-    return typeof x !== "string" || ((x = 10) || x); // string | number
++    return typeof x !== "string" || ((x = 10) || x);
+ }
+ function foo3(x) {
+-    // modify x in right hand operand with string type itself
+-    return typeof x !== "string" || ((x = "hello") || x); // string | number
++    return typeof x !== "string" || ((x = "hello") || x);
+ }
+ function foo4(x) {
+-    return typeof x === "string" // string | number | boolean
+-        || typeof x === "number" // number | boolean
+-        || x; // boolean
++    return typeof x === "string"
++        || typeof x === "number"
++        || x;
+ }
+ function foo5(x) {
+-    // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
+     var b;
+-    return typeof x === "string" // string | number | boolean
+-        || ((b = x) || (typeof x === "number" // number | boolean
+-            || x)); // boolean
++    return typeof x === "string"
++        || ((b = x) || (typeof x === "number"
++            || x));
+ }
+ function foo6(x) {
+-    // Mixing typeguard
+-    return typeof x === "string" // string | number | boolean
+-        || (typeof x !== "number" // number | boolean
+-            ? x // boolean
+-            : x === 10); // number 
++    return typeof x === "string"
++        || (typeof x !== "number"
++            ? x
++            : x === 10);
+ }
+ function foo7(x) {
+     var y;
+     var z;
+-    // Mixing typeguard narrowing
+     return typeof x === "string"
+-        || ((z = x) // number | boolean
++        || ((z = x)
+             || (typeof x === "number"
+-                // change value of x
+-                ? ((x = 10) && x.toString()) // number | boolean | string
+-                // do not change value
+-                : ((y = x) && x.toString()))); // number | boolean | string
++                ? ((x = 10) && x.toString())
++                : ((y = x) && x.toString())));
+ }

@@ -1,0 +1,42 @@
+--- old.verbatimModuleSyntaxRestrictionsCJS.js
++++ new.verbatimModuleSyntaxRestrictionsCJS.js
+@@= skipped -85, +85 lines =@@
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Values = exports.x = void 0;
+-const decl_1 = __importDefault(require("./decl")); // error
+-const esmy2 = __importStar(require("./decl")); // error
+-const decl_2 = require("./decl"); // error
+-Promise.resolve().then(() => __importStar(require("./decl"))); // error
+-exports.x = 1; // error
++const decl_1 = __importDefault(require("./decl"));
++const esmy2 = __importStar(require("./decl"));
++const decl_2 = require("./decl");
++Promise.resolve().then(() => __importStar(require("./decl")));
++exports.x = 1;
+ var Values;
+ (function (Values) {
+     Values.x = 1;
+@@= skipped -22, +22 lines =@@
+ //// [main4.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.default = 1; // error
++exports.default = 1;
+ //// [main5.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ class C {
+-} // error
++}
+ exports.default = C;
+ //// [main6.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.default = I; // error
++exports.default = I;
+ //// [main7.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.default = esmy; // error
++exports.default = esmy;

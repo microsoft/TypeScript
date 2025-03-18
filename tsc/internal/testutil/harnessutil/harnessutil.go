@@ -15,6 +15,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
@@ -30,14 +31,6 @@ import (
 type TestFile struct {
 	UnitName string
 	Content  string
-}
-
-type CompilationResult struct {
-	Diagnostics    []*ast.Diagnostic
-	Program        *compiler.Program
-	Options        *core.CompilerOptions
-	HarnessOptions *HarnessOptions
-	// !!! outputs
 }
 
 // This maps a compiler setting to its string value, after splitting by commas,
@@ -103,6 +96,18 @@ func CompileFiles(
 		setOptionsFromTestConfig(t, testConfig, &compilerOptions, &harnessOptions)
 	}
 
+	return CompileFilesEx(t, inputFiles, otherFiles, &harnessOptions, &compilerOptions, currentDirectory, symlinks)
+}
+
+func CompileFilesEx(
+	t *testing.T,
+	inputFiles []*TestFile,
+	otherFiles []*TestFile,
+	harnessOptions *HarnessOptions,
+	compilerOptions *core.CompilerOptions,
+	currentDirectory string,
+	symlinks map[string]string,
+) *CompilationResult {
 	var programFileNames []string
 	for _, file := range inputFiles {
 		fileName := tspath.GetNormalizedAbsolutePath(file.UnitName, currentDirectory)
@@ -130,6 +135,30 @@ func CompileFiles(
 
 	// !!!
 	// ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
+	if compilerOptions.OutDir != "" {
+		compilerOptions.OutDir = tspath.GetNormalizedAbsolutePath(compilerOptions.OutDir, currentDirectory)
+	}
+	if compilerOptions.Project != "" {
+		compilerOptions.Project = tspath.GetNormalizedAbsolutePath(compilerOptions.Project, currentDirectory)
+	}
+	if compilerOptions.RootDir != "" {
+		compilerOptions.RootDir = tspath.GetNormalizedAbsolutePath(compilerOptions.RootDir, currentDirectory)
+	}
+	if compilerOptions.TsBuildInfoFile != "" {
+		compilerOptions.TsBuildInfoFile = tspath.GetNormalizedAbsolutePath(compilerOptions.TsBuildInfoFile, currentDirectory)
+	}
+	if compilerOptions.BaseUrl != "" {
+		compilerOptions.BaseUrl = tspath.GetNormalizedAbsolutePath(compilerOptions.BaseUrl, currentDirectory)
+	}
+	if compilerOptions.DeclarationDir != "" {
+		compilerOptions.DeclarationDir = tspath.GetNormalizedAbsolutePath(compilerOptions.DeclarationDir, currentDirectory)
+	}
+	for i, rootDir := range compilerOptions.RootDirs {
+		compilerOptions.RootDirs[i] = tspath.GetNormalizedAbsolutePath(rootDir, currentDirectory)
+	}
+	for i, typeRoot := range compilerOptions.TypeRoots {
+		compilerOptions.TypeRoots[i] = tspath.GetNormalizedAbsolutePath(typeRoot, currentDirectory)
+	}
 
 	// Create fake FS for testing
 	testfs := map[string]any{}
@@ -153,10 +182,17 @@ func CompileFiles(
 
 	fs := vfstest.FromMap(testfs, harnessOptions.UseCaseSensitiveFileNames)
 	fs = bundled.WrapFS(fs)
+	fs = NewOutputRecorderFS(fs)
 
-	host := createCompilerHost(fs, bundled.LibPath(), &compilerOptions, currentDirectory)
-	result := compileFilesWithHost(host, programFileNames, &compilerOptions, &harnessOptions)
-
+	host := createCompilerHost(fs, bundled.LibPath(), compilerOptions, currentDirectory)
+	result := compileFilesWithHost(host, programFileNames, compilerOptions, harnessOptions)
+	result.Symlinks = symlinks
+	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
+		newHarnessOptions := *harnessOptions
+		newCompilerOptions := *compilerOptions
+		setOptionsFromTestConfig(t, testConfig, &newCompilerOptions, &newHarnessOptions)
+		return CompileFilesEx(t, inputFiles, otherFiles, &newHarnessOptions, &newCompilerOptions, currentDirectory, symlinks)
+	}
 	return result
 }
 
@@ -464,26 +500,204 @@ func compileFilesWithHost(
 	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(nil)...)
 	diagnostics = append(diagnostics, program.GetSemanticDiagnostics(nil)...)
 	diagnostics = append(diagnostics, program.GetGlobalDiagnostics()...)
+	emitResult := program.Emit(compiler.EmitOptions{})
 
-	return newCompilationResult(options, program, diagnostics, harnessOptions)
+	return newCompilationResult(options, program, emitResult, diagnostics, harnessOptions)
+}
+
+type CompilationResult struct {
+	Diagnostics      []*ast.Diagnostic
+	Result           *compiler.EmitResult
+	Program          *compiler.Program
+	Options          *core.CompilerOptions
+	HarnessOptions   *HarnessOptions
+	Js               collections.OrderedMap[string, *TestFile]
+	Dts              collections.OrderedMap[string, *TestFile]
+	Maps             collections.OrderedMap[string, *TestFile]
+	Symlinks         map[string]string
+	Repeat           func(TestConfiguration) *CompilationResult
+	outputs          []*TestFile
+	inputs           []*TestFile
+	inputsAndOutputs collections.OrderedMap[string, *CompilationOutput]
+}
+
+type CompilationOutput struct {
+	Inputs []*TestFile
+	Js     *TestFile
+	Dts    *TestFile
+	Map    *TestFile
 }
 
 func newCompilationResult(
 	options *core.CompilerOptions,
 	program *compiler.Program,
+	result *compiler.EmitResult,
 	diagnostics []*ast.Diagnostic,
 	harnessOptions *HarnessOptions,
 ) *CompilationResult {
 	if program != nil {
 		options = program.Options()
 	}
-	// !!! Collect compilation outputs (js, dts, source maps)
-	return &CompilationResult{
+
+	c := &CompilationResult{
 		Diagnostics:    diagnostics,
+		Result:         result,
 		Program:        program,
 		Options:        options,
 		HarnessOptions: harnessOptions,
 	}
+
+	fs := program.Host().FS().(*OutputRecorderFS)
+	if fs != nil && program != nil {
+		// Corsa, unlike Strada, can use multiple threads for emit. As a result, the order of outputs is non-deterministic.
+		// To make the order deterministic, we sort the outputs by the order of the inputs.
+		var js, dts, maps collections.OrderedMap[string, *TestFile]
+		for _, document := range fs.Outputs() {
+			if tspath.HasJSFileExtension(document.UnitName) ||
+				tspath.HasJSONFileExtension(document.UnitName) {
+				js.Set(document.UnitName, document)
+			} else if tspath.IsDeclarationFileName(document.UnitName) {
+				dts.Set(document.UnitName, document)
+			} else if tspath.FileExtensionIs(document.UnitName, ".map") {
+				maps.Set(document.UnitName, document)
+			}
+		}
+
+		if options.OutFile != "" {
+			/// !!! options.OutFile not yet supported
+		} else {
+			// using the order from the inputs, populate the outputs
+			for _, sourceFile := range program.GetSourceFiles() {
+				input := &TestFile{UnitName: sourceFile.FileName(), Content: sourceFile.Text}
+				c.inputs = append(c.inputs, input)
+				if !tspath.IsDeclarationFileName(sourceFile.FileName()) {
+					extname := core.GetOutputExtension(sourceFile.FileName(), options.Jsx)
+					outputs := &CompilationOutput{
+						Inputs: []*TestFile{input},
+						Js:     js.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname)),
+						Dts:    dts.GetOrZero(c.getOutputPath(sourceFile.FileName(), tspath.GetDeclarationEmitExtensionForPath(sourceFile.FileName()))),
+						Map:    maps.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname+".map")),
+					}
+					c.inputsAndOutputs.Set(sourceFile.FileName(), outputs)
+					if outputs.Js != nil {
+						c.inputsAndOutputs.Set(outputs.Js.UnitName, outputs)
+						c.Js.Set(outputs.Js.UnitName, outputs.Js)
+						js.Delete(outputs.Js.UnitName)
+						c.outputs = append(c.outputs, outputs.Js)
+					}
+					if outputs.Dts != nil {
+						c.inputsAndOutputs.Set(outputs.Dts.UnitName, outputs)
+						c.Dts.Set(outputs.Dts.UnitName, outputs.Dts)
+						dts.Delete(outputs.Dts.UnitName)
+						c.outputs = append(c.outputs, outputs.Dts)
+					}
+					if outputs.Map != nil {
+						c.inputsAndOutputs.Set(outputs.Map.UnitName, outputs)
+						c.Maps.Set(outputs.Map.UnitName, outputs.Map)
+						maps.Delete(outputs.Map.UnitName)
+						c.outputs = append(c.outputs, outputs.Map)
+					}
+				}
+			}
+		}
+
+		// add any unhandled outputs, ordered by unit name
+		for _, document := range slices.SortedFunc(js.Values(), compareTestFiles) {
+			c.Js.Set(document.UnitName, document)
+		}
+		for _, document := range slices.SortedFunc(dts.Values(), compareTestFiles) {
+			c.Dts.Set(document.UnitName, document)
+		}
+		for _, document := range slices.SortedFunc(maps.Values(), compareTestFiles) {
+			c.Maps.Set(document.UnitName, document)
+		}
+	}
+
+	return c
+}
+
+func compareTestFiles(a *TestFile, b *TestFile) int {
+	return strings.Compare(a.UnitName, b.UnitName)
+}
+
+func (c *CompilationResult) getOutputPath(path string, ext string) string {
+	if c.Options.OutFile != "" {
+		/// !!! options.OutFile not yet supported
+	} else {
+		path = tspath.ResolvePath(c.Program.Host().GetCurrentDirectory(), path)
+		var outDir string
+		if ext == ".d.ts" || ext == ".d.mts" || ext == ".d.cts" || (strings.HasSuffix(ext, ".ts") && strings.Contains(ext, ".d.")) {
+			outDir = c.Options.DeclarationDir
+			if outDir == "" {
+				outDir = c.Options.OutDir
+			}
+		} else {
+			outDir = c.Options.OutDir
+		}
+		if outDir != "" {
+			common := c.Program.CommonSourceDirectory()
+			if common != "" {
+				path = tspath.GetRelativePathFromDirectory(common, path, tspath.ComparePathsOptions{
+					UseCaseSensitiveFileNames: c.Program.Host().FS().UseCaseSensitiveFileNames(),
+					CurrentDirectory:          c.Program.Host().GetCurrentDirectory(),
+				})
+				path = tspath.CombinePaths(tspath.ResolvePath(c.Program.Host().GetCurrentDirectory(), c.Options.OutDir), path)
+			}
+		}
+	}
+	return tspath.ChangeExtension(path, ext)
+}
+
+func (r *CompilationResult) FS() vfs.FS {
+	return r.Program.Host().FS()
+}
+
+func (r *CompilationResult) GetNumberOfJSFiles(includeJson bool) int {
+	if includeJson {
+		return r.Js.Size()
+	}
+	count := 0
+	for file := range r.Js.Values() {
+		if !tspath.FileExtensionIs(file.UnitName, tspath.ExtensionJson) {
+			count++
+		}
+	}
+	return count
+}
+
+func (c *CompilationResult) Inputs() []*TestFile {
+	return c.inputs
+}
+
+func (c *CompilationResult) Outputs() []*TestFile {
+	return c.outputs
+}
+
+func (c *CompilationResult) GetInputsAndOutputsForFile(path string) *CompilationOutput {
+	return c.inputsAndOutputs.GetOrZero(tspath.ResolvePath(c.Program.Host().GetCurrentDirectory(), path))
+}
+
+func (c *CompilationResult) GetInputsForFile(path string) []*TestFile {
+	outputs := c.GetInputsAndOutputsForFile(path)
+	if outputs != nil {
+		return outputs.Inputs
+	}
+	return nil
+}
+
+func (c *CompilationResult) GetOutput(path string, kind string /*"js" | "dts" | "map"*/) *TestFile {
+	outputs := c.GetInputsAndOutputsForFile(path)
+	if outputs != nil {
+		switch kind {
+		case "js":
+			return outputs.Js
+		case "dts":
+			return outputs.Dts
+		case "map":
+			return outputs.Map
+		}
+	}
+	return nil
 }
 
 func createProgram(host compiler.CompilerHost, options *core.CompilerOptions, rootFiles []string) *compiler.Program {

@@ -1,0 +1,18 @@
+--- old.controlFlowOuterVariable.js
++++ new.controlFlowOuterVariable.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [controlFlowOuterVariable.js]
+-// Repros from #10641
+-var CONFIG = {
++const CONFIG = {
+     foo: '',
+     setFoo: function (foo) {
+         CONFIG.foo = foo;
+     }
+ };
+-var helper = function (t) {
++const helper = function (t) {
+     helper(t.slice(1));
+ };

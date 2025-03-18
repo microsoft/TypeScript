@@ -1,0 +1,126 @@
+--- old.collisionExportsRequireAndClass.js
++++ new.collisionExportsRequireAndClass.js
+@@= skipped -36, +36 lines =@@
+ }
+ 
+ //// [collisionExportsRequireAndClass_externalmodule.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.exports = exports.require = void 0;
+-    var require = /** @class */ (function () {
+-        function require() {
+-        }
+-        return require;
+-    }());
+-    exports.require = require;
+-    var exports = /** @class */ (function () {
+-        function exports() {
+-        }
+-        return exports;
+-    }());
+-    exports.exports = exports;
+-    var m1;
+-    (function (m1) {
+-        var require = /** @class */ (function () {
+-            function require() {
+-            }
+-            return require;
+-        }());
+-        var exports = /** @class */ (function () {
+-            function exports() {
+-            }
+-            return exports;
+-        }());
+-    })(m1 || (m1 = {}));
+-    var m2;
+-    (function (m2) {
+-        var require = /** @class */ (function () {
+-            function require() {
+-            }
+-            return require;
+-        }());
+-        m2.require = require;
+-        var exports = /** @class */ (function () {
+-            function exports() {
+-            }
+-            return exports;
+-        }());
+-        m2.exports = exports;
+-    })(m2 || (m2 = {}));
+-});
+-//// [collisionExportsRequireAndClass_globalFile.js]
+-var require = /** @class */ (function () {
+-    function require() {
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.exports = exports.require = void 0;
++class require {
++}
++exports.require = require;
++class exports {
++}
++exports.exports = exports;
++var m1;
++(function (m1) {
++    class require {
+     }
+-    return require;
+-}());
+-var exports = /** @class */ (function () {
+-    function exports() {
++    class exports {
+     }
+-    return exports;
+-}());
++})(m1 || (m1 = {}));
++var m2;
++(function (m2) {
++    class require {
++    }
++    m2.require = require;
++    class exports {
++    }
++    m2.exports = exports;
++})(m2 || (m2 = {}));
++//// [collisionExportsRequireAndClass_globalFile.js]
++class require {
++}
++class exports {
++}
+ var m3;
+ (function (m3) {
+-    var require = /** @class */ (function () {
+-        function require() {
+-        }
+-        return require;
+-    }());
+-    var exports = /** @class */ (function () {
+-        function exports() {
+-        }
+-        return exports;
+-    }());
++    class require {
++    }
++    class exports {
++    }
+ })(m3 || (m3 = {}));
+ var m4;
+ (function (m4) {
+-    var require = /** @class */ (function () {
+-        function require() {
+-        }
+-        return require;
+-    }());
++    class require {
++    }
+     m4.require = require;
+-    var exports = /** @class */ (function () {
+-        function exports() {
+-        }
+-        return exports;
+-    }());
++    class exports {
++    }
+     m4.exports = exports;
+ })(m4 || (m4 = {}));

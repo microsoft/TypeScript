@@ -1,0 +1,18 @@
+--- old.declarationEmitExactOptionalPropertyTypesNodeNotReused(exactoptionalpropertytypes=false).js
++++ new.declarationEmitExactOptionalPropertyTypesNodeNotReused(exactoptionalpropertytypes=false).js
+@@= skipped -25, +25 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.baddts = void 0;
+-var foo = function () { return function (x) { return null; }; };
++const foo = () => (x) => null;
+ exports.baddts = foo();
+-
+-
+-//// [declarationEmitExactOptionalPropertyTypesNodeNotReused.d.ts]
+-export declare const baddts: (x: {
+-    foo?: string | undefined;
+-    baz?: undefined;
+-} & {
+-    bar: number;
+-}) => null;

@@ -1,0 +1,15 @@
+--- old.Protected6.js
++++ new.Protected6.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [Protected6.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.m = function () { };
+-    return C;
+-}());
++class C {
++    static m() { }
++}

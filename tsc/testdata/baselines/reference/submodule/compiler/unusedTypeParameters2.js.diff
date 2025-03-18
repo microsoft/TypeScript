@@ -1,0 +1,19 @@
+--- old.unusedTypeParameters2.js
++++ new.unusedTypeParameters2.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [unusedTypeParameters2.js]
+-var greeter = /** @class */ (function () {
+-    function greeter() {
+-    }
+-    greeter.prototype.function1 = function () {
++class greeter {
++    x;
++    function1() {
+         this.x;
+-    };
+-    return greeter;
+-}());
++    }
++}

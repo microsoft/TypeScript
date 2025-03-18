@@ -1,0 +1,36 @@
+--- old.thisInInnerFunctions.js
++++ new.thisInInnerFunctions.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [thisInInnerFunctions.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.x = "hello";
+-    }
+-    Foo.prototype.bar = function () {
++class Foo {
++    x = "hello";
++    bar() {
+         function inner() {
+-            var _this = this;
+-            this.y = "hi"; // 'this' should be not type to 'Foo' either
+-            var f = function () { return _this.y; }; // 'this' should be not type to 'Foo' either
++            this.y = "hi";
++            var f = () => this.y;
+         }
+-    };
+-    return Foo;
+-}());
++    }
++}
+ function test() {
+-    var _this = this;
+-    var x = function () {
+-        (function () { return _this; })();
+-        _this;
++    var x = () => {
++        (() => this)();
++        this;
+     };
+ }

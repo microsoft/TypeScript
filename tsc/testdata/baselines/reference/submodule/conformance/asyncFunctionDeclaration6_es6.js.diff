@@ -1,0 +1,11 @@
+--- old.asyncFunctionDeclaration6_es6.js
++++ new.asyncFunctionDeclaration6_es6.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [asyncFunctionDeclaration6_es6.js]
+-function foo() {
+-    return __awaiter(this, arguments, void 0, function* (a = yield ) {
+-    });
++async function foo(a = await ) {
+ }

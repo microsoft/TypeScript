@@ -1,0 +1,89 @@
+--- old.typeGuardsWithInstanceOfBySymbolHasInstance.js
++++ new.typeGuardsWithInstanceOfBySymbolHasInstance.js
+@@= skipped -215, +215 lines =@@
+ 
+ //// [typeGuardsWithInstanceOfBySymbolHasInstance.js]
+ var obj1;
+-if (obj1 instanceof A) { // narrowed to A.
++if (obj1 instanceof A) {
+     obj1.foo;
+     obj1.bar;
+ }
+@@= skipped -10, +10 lines =@@
+     obj2.bar;
+ }
+ var obj3;
+-if (obj3 instanceof B) { // narrowed to B<number>.
++if (obj3 instanceof B) {
+     obj3.foo = 1;
+     obj3.foo = "str";
+     obj3.bar = "str";
+@@= skipped -12, +12 lines =@@
+     obj4.bar = "str";
+ }
+ var obj5;
+-if (obj5 instanceof C) { // narrowed to C1.
++if (obj5 instanceof C) {
+     obj5.foo;
+     obj5.c;
+     obj5.bar1;
+@@= skipped -13, +13 lines =@@
+     obj6.bar2;
+ }
+ var obj7;
+-if (obj7 instanceof D) { // narrowed to D.
++if (obj7 instanceof D) {
+     obj7.foo;
+     obj7.bar;
+ }
+@@= skipped -10, +10 lines =@@
+     obj8.bar;
+ }
+ var obj9;
+-if (obj9 instanceof E) { // narrowed to E1
++if (obj9 instanceof E) {
+     obj9.foo;
+     obj9.bar1;
+     obj9.bar2;
+@@= skipped -12, +12 lines =@@
+     obj10.bar2;
+ }
+ var obj11;
+-if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
++if (obj11 instanceof F) {
+     obj11.foo;
+     obj11.bar;
+ }
+@@= skipped -10, +10 lines =@@
+     obj12.bar;
+ }
+ var obj13;
+-if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
++if (obj13 instanceof G) {
+     obj13.foo1;
+     obj13.foo2;
+ }
+@@= skipped -10, +10 lines =@@
+     obj14.foo2;
+ }
+ var obj15;
+-if (obj15 instanceof H) { // narrowed to H.
++if (obj15 instanceof H) {
+     obj15.foo;
+     obj15.bar;
+ }
+@@= skipped -10, +10 lines =@@
+     obj16.foo2;
+ }
+ var obj17;
+-if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
++if (obj17 instanceof Object) {
+     obj17.foo1;
+     obj17.foo2;
+ }
+ var obj18;
+-if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
++if (obj18 instanceof Function) {
+     obj18.foo1;
+     obj18.foo2;
+ }

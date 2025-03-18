@@ -1,0 +1,8 @@
+--- old.unicodeExtendedEscapesInStrings23(target=es5).js
++++ new.unicodeExtendedEscapesInStrings23(target=es5).js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [unicodeExtendedEscapesInStrings23.js]
+-var x = "g";
++var x = "\u{00000000000067}";

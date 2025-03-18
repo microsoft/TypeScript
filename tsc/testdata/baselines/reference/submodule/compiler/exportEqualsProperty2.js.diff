@@ -1,0 +1,22 @@
+--- old.exportEqualsProperty2.js
++++ new.exportEqualsProperty2.js
+@@= skipped -16, +16 lines =@@
+ 
+ //// [a.js]
+ "use strict";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    static B;
++}
+ module.exports = C.B;
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var B = require("./a");
+-var x = { c: B };
++const B = require("./a");
++const x = { c: B };

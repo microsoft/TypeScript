@@ -1,0 +1,13 @@
+--- old.iterableArrayPattern16.js
++++ new.iterableArrayPattern16.js
+@@= skipped -34, +34 lines =@@
+ function fun(...[a, b]) { }
+ fun(...new FooIteratorIterator);
+ class Bar {
++    x;
+ }
+ class Foo extends Bar {
++    y;
+ }
+ class FooIterator {
+     next() {

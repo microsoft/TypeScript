@@ -1,0 +1,26 @@
+--- old.implicitAnyWidenToAny.js
++++ new.implicitAnyWidenToAny.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [implicitAnyWidenToAny.js]
+-// these should be errors
+-var x = null; // error at "x"
+-var x1 = undefined; // error at "x1"
+-var widenArray = [null, undefined]; // error at "widenArray"
++var x = null;
++var x1 = undefined;
++var widenArray = [null, undefined];
+ var emptyArray = [];
+-// these should not be error
+-var AnimalObj = /** @class */ (function () {
+-    function AnimalObj() {
+-    }
+-    return AnimalObj;
+-}());
++class AnimalObj {
++    x;
++}
+ var foo = 5;
+ var bar = "Hello World";
+ var foo1 = null;

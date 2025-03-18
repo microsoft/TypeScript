@@ -1,0 +1,27 @@
+--- old.classInConvertedLoopES5.js
++++ new.classInConvertedLoopES5.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [classInConvertedLoopES5.js]
+-var classesByRow = {};
+-var _loop_1 = function (row) {
+-    var RowClass = /** @class */ (function () {
+-        function RowClass() {
+-            this.row = row;
+-        }
+-        RowClass.factory = function () { return new RowClass(); };
+-        return RowClass;
+-    }());
++const classesByRow = {};
++for (const row of ['1', '2', '3', '4', '5']) {
++    class RowClass {
++        row = row;
++        static factory = () => new RowClass();
++    }
+     classesByRow[row] = RowClass;
+-};
+-for (var _i = 0, _a = ['1', '2', '3', '4', '5']; _i < _a.length; _i++) {
+-    var row = _a[_i];
+-    _loop_1(row);
+ }

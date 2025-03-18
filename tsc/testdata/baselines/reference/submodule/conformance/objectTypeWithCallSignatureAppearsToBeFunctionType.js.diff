@@ -1,0 +1,11 @@
+--- old.objectTypeWithCallSignatureAppearsToBeFunctionType.js
++++ new.objectTypeWithCallSignatureAppearsToBeFunctionType.js
+@@= skipped -19, +19 lines =@@
+ var rb4: (x: any, y?: any) => any = b.apply;
+ 
+ //// [objectTypeWithCallSignatureAppearsToBeFunctionType.js]
+-// objects with call signatures should be permitted where function types are expected
+-// no errors expected below
+ var i;
+ var r2 = i();
+ var r2b = i.apply;

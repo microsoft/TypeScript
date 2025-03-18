@@ -1,0 +1,28 @@
+--- old.mixinAbstractClasses.js
++++ new.mixinAbstractClasses.js
+@@= skipped -59, +59 lines =@@
+ const wasAbstract = new DerivedFromAbstract();
+ wasAbstract.abstractBaseMethod();
+ wasAbstract.mixinMethod();
+-
+-
+-//// [mixinAbstractClasses.d.ts]
+-interface Mixin {
+-    mixinMethod(): void;
+-}
+-declare function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin);
+-declare class ConcreteBase {
+-    baseMethod(): void;
+-}
+-declare abstract class AbstractBase {
+-    abstract abstractBaseMethod(): void;
+-}
+-declare const DerivedFromConcrete_base: typeof ConcreteBase & (abstract new (...args: any) => Mixin);
+-declare class DerivedFromConcrete extends DerivedFromConcrete_base {
+-}
+-declare const wasConcrete: DerivedFromConcrete;
+-declare const DerivedFromAbstract_base: typeof AbstractBase & (abstract new (...args: any) => Mixin);
+-declare class DerivedFromAbstract extends DerivedFromAbstract_base {
+-    abstractBaseMethod(): void;
+-}
+-declare const wasAbstract: DerivedFromAbstract;

@@ -1,0 +1,28 @@
+--- old.override18(target=es2015).js
++++ new.override18(target=es2015).js
+@@= skipped -11, +11 lines =@@
+ 
+ //// [override18.js]
+ class A {
+-    constructor() {
+-        Object.defineProperty(this, "foo", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: void 0
+-        });
+-    }
++    foo;
+ }
+ class B extends A {
+-    constructor() {
+-        super(...arguments);
+-        Object.defineProperty(this, "foo", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: "string"
+-        });
+-    }
++    foo = "string";
+ }

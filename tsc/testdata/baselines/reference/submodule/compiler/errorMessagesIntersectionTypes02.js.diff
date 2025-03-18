@@ -1,0 +1,10 @@
+--- old.errorMessagesIntersectionTypes02.js
++++ new.errorMessagesIntersectionTypes02.js
+@@= skipped -18, +18 lines =@@
+ });
+ 
+ //// [errorMessagesIntersectionTypes02.js]
+-var fooBar = mixBar({
++let fooBar = mixBar({
+     fooProp: "frizzlebizzle"
+ });

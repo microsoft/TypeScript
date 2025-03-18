@@ -1,0 +1,13 @@
+--- old.parserClassDeclarationIndexSignature1.js
++++ new.parserClassDeclarationIndexSignature1.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserClassDeclarationIndexSignature1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

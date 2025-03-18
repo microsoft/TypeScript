@@ -1,0 +1,32 @@
+--- old.keyofIntersection.js
++++ new.keyofIntersection.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [keyofIntersection.js]
+-"use strict";
+-
+-
+-//// [keyofIntersection.d.ts]
+-type A = {
+-    a: string;
+-};
+-type B = {
+-    b: string;
+-};
+-type T01 = keyof (A & B);
+-type T02<T> = keyof (T & B);
+-type T03<U> = keyof (A & U);
+-type T04<T, U> = keyof (T & U);
+-type T05 = T02<A>;
+-type T06 = T03<B>;
+-type T07 = T04<A, B>;
+-type Example1<T extends string, U extends string> = keyof (Record<T, any> & Record<U, any>);
+-type Result1 = Example1<'x', 'y'>;
+-type Result2 = keyof (Record<'x', any> & Record<'y', any>);
+-type Example3<T extends string> = keyof (Record<T, any>);
+-type Result3 = Example3<'x' | 'y'>;
+-type Example4<T extends string, U extends string> = (Record<T, any> & Record<U, any>);
+-type Result4 = keyof Example4<'x', 'y'>;
+-type Example5<T, U> = keyof (T & U);
+-type Result5 = Example5<Record<'x', any>, Record<'y', any>>;

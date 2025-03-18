@@ -1,0 +1,11 @@
+--- old.tsxUnionTypeComponent2.js
++++ new.tsxUnionTypeComponent2.js
+@@= skipped -14, +14 lines =@@
+ //// [file.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var React = require("react");
+-var X = 1;
+-React.createElement(X, null);
++const X = 1;
++<X />;

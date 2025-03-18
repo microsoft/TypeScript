@@ -1,0 +1,11 @@
+--- old.asOperator4.js
++++ new.asOperator4.js
+@@= skipped -18, +18 lines =@@
+ //// [bar.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo_1 = require("./foo");
+-// These should emit identically
++const foo_1 = require("./foo");
+ foo_1.foo;
+ foo_1.foo;

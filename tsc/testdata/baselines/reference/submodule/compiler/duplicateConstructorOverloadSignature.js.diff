@@ -1,0 +1,14 @@
+--- old.duplicateConstructorOverloadSignature.js
++++ new.duplicateConstructorOverloadSignature.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [duplicateConstructorOverloadSignature.js]
+-var C = /** @class */ (function () {
+-    function C(x) {
+-    }
+-    return C;
+-}());
++class C {
++    constructor(x) { }
++}

@@ -1,0 +1,12 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty7.js
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty7.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [typeGuardNarrowsIndexedAccessOfKnownProperty7.js]
+-export var Foo;
++export { Foo };
++var Foo;
+ (function (Foo) {
+     Foo.key = Symbol();
+ })(Foo || (Foo = {}));

@@ -1,0 +1,8 @@
+--- old.templateStringUnterminated4.js
++++ new.templateStringUnterminated4.js
+@@= skipped -3, +3 lines =@@
+ `\\\`
+ 
+ //// [templateStringUnterminated4.js]
+-"\\`";
++`\\\`;

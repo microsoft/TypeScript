@@ -1,0 +1,52 @@
+--- old.arrayLiteralTypeInference.js
++++ new.arrayLiteralTypeInference.js
+@@= skipped -53, +53 lines =@@
+ 
+ 
+ //// [arrayLiteralTypeInference.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var Action = /** @class */ (function () {
+-    function Action() {
+-    }
+-    return Action;
+-}());
+-var ActionA = /** @class */ (function (_super) {
+-    __extends(ActionA, _super);
+-    function ActionA() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return ActionA;
+-}(Action));
+-var ActionB = /** @class */ (function (_super) {
+-    __extends(ActionB, _super);
+-    function ActionB() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return ActionB;
+-}(Action));
++class Action {
++    id;
++}
++class ActionA extends Action {
++    value;
++}
++class ActionB extends Action {
++    trueNess;
++}
+ var x1 = [
+     { id: 2, trueness: false },
+     { id: 3, name: "three" }

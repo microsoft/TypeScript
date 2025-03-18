@@ -1,0 +1,36 @@
+--- old.importAssertion2(module=commonjs).js
++++ new.importAssertion2(module=commonjs).js
+@@= skipped -38, +38 lines =@@
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ns = exports.b = exports.a = void 0;
+-var _0_1 = require("./0");
++const _0_1 = require("./0");
+ Object.defineProperty(exports, "a", { enumerable: true, get: function () { return _0_1.a; } });
+ Object.defineProperty(exports, "b", { enumerable: true, get: function () { return _0_1.b; } });
+ __exportStar(require("./0"), exports);
+@@= skipped -9, +9 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.d = exports.c = exports.b = exports.a = void 0;
+-var _0_1 = require("./0");
++const _0_1 = require("./0");
+ Object.defineProperty(exports, "a", { enumerable: true, get: function () { return _0_1.a; } });
+ Object.defineProperty(exports, "b", { enumerable: true, get: function () { return _0_1.b; } });
+-var _0_2 = require("./0");
++const _0_2 = require("./0");
+ Object.defineProperty(exports, "c", { enumerable: true, get: function () { return _0_2.a; } });
+ Object.defineProperty(exports, "d", { enumerable: true, get: function () { return _0_2.b; } });
+-
+-
+-//// [0.d.ts]
+-export declare const a = 1;
+-export declare const b = 2;
+-//// [1.d.ts]
+-export {} from './0';
+-export { a, b } from './0';
+-export * from './0';
+-export * as ns from './0';
+-//// [2.d.ts]
+-export { a, b } from './0';
+-export { a as c, b as d } from './0';

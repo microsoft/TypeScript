@@ -1,0 +1,18 @@
+--- old.errorsWithInvokablesInUnions01.js
++++ new.errorsWithInvokablesInUnions01.js
+@@= skipped -24, +24 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ctor = exports.blah = void 0;
+-var blah = function (x) { };
++let blah = (x) => { };
+ exports.blah = blah;
+-exports.ctor = /** @class */ (function () {
+-    function class_1() {
+-    }
+-    return class_1;
+-}());
++let ctor = class {
++    someUnaccountedProp;
++};
++exports.ctor = ctor;

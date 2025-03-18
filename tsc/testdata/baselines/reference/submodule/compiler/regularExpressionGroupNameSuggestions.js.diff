@@ -1,0 +1,8 @@
+--- old.regularExpressionGroupNameSuggestions.js
++++ new.regularExpressionGroupNameSuggestions.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [regularExpressionGroupNameSuggestions.js]
+-var regex = /(?<foo>)\k<Foo>/;
++const regex = /(?<foo>)\k<Foo>/;

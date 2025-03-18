@@ -1,0 +1,12 @@
+--- old.parseObjectLiteralsWithoutTypes.js
++++ new.parseObjectLiteralsWithoutTypes.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [parseObjectLiteralsWithoutTypes.js]
+-var x;
+-var y;
+-var z;
++let x;
++let y;
++let z;

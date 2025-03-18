@@ -1,0 +1,8 @@
+--- old.taggedTemplatesWithIncompleteTemplateExpressions3.js
++++ new.taggedTemplatesWithIncompleteTemplateExpressions3.js
+@@= skipped -9, +9 lines =@@
+ //// [taggedTemplatesWithIncompleteTemplateExpressions3.js]
+ function f(x, y, z) {
+ }
+-// Incomplete call, not enough parameters.
+ f `123qdawdrqw${1}${;

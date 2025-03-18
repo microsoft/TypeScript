@@ -1,0 +1,8 @@
+--- old.mappedTypeInferenceCircularity.js
++++ new.mappedTypeInferenceCircularity.js
+@@= skipped -9, +9 lines =@@
+ h.div(h);
+ 
+ //// [mappedTypeInferenceCircularity.js]
+-// Repro from #12511
+ h.div(h);

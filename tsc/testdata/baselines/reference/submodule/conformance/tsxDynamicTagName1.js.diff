@@ -1,0 +1,8 @@
+--- old.tsxDynamicTagName1.js
++++ new.tsxDynamicTagName1.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [tsxDynamicTagName1.jsx]
+ var CustomTag = "h1";
+-<CustomTag> Hello World </CustomTag>; // No error
++<CustomTag> Hello World </CustomTag>;

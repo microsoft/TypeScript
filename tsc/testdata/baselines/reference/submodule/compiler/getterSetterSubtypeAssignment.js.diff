@@ -1,0 +1,34 @@
+--- old.getterSetterSubtypeAssignment.js
++++ new.getterSetterSubtypeAssignment.js
+@@= skipped -88, +88 lines =@@
+ 
+ //// [getterSetterSubtypeAssignment.js]
+ class NumberOrUndefined {
+-    get x() { var _a; return (_a = this._x) !== null && _a !== void 0 ? _a : 0; }
++    _x;
++    get x() { return this._x ?? 0; }
+     set x(value) { this._x = value; }
+     additionAssignment() {
+         this.x += 1;
+@@= skipped -21, +22 lines =@@
+ numberOrUndefined.x *= 1;
+ numberOrUndefined.x /= 1;
+ class NumberOrString {
+-    constructor() {
+-        this._x = 0;
+-    }
++    _x = 0;
+     get x() { return typeof this._x === 'number' ? this._x : Number(this._x); }
+     set x(value) { this._x = value; }
+     additionAssignmentNumber() {
+@@= skipped -28, +26 lines =@@
+ numberOrString.x *= 1;
+ numberOrString.x /= 1;
+ class NumberOrObject {
+-    constructor() {
+-        this._x = 0;
+-    }
++    _x = 0;
+     get x() { return typeof this._x === 'number' ? this._x : this._x.bar; }
+     set x(value) { this._x = value; }
+     additionAssignment() {

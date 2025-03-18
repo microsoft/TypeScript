@@ -1,0 +1,22 @@
+--- old.labeledStatementExportDeclarationNoCrash1(module=system).js
++++ new.labeledStatementExportDeclarationNoCrash1(module=system).js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [labeledStatementExportDeclarationNoCrash1.js]
+-// https://github.com/microsoft/TypeScript/issues/59372
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var box, title;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            subTitle: ;
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.box = void 0;
++subTitle: export const title;

@@ -1,0 +1,14 @@
+--- old.classExpressionWithResolutionOfNamespaceOfSameName01.js
++++ new.classExpressionWithResolutionOfNamespaceOfSameName01.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [classExpressionWithResolutionOfNamespaceOfSameName01.js]
+-var x = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++var x = class C {
++    prop;
++};

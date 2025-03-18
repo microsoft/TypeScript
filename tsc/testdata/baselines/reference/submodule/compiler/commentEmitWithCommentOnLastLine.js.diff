@@ -1,0 +1,9 @@
+--- old.commentEmitWithCommentOnLastLine.js
++++ new.commentEmitWithCommentOnLastLine.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [commentEmitWithCommentOnLastLine.js]
+ var x;
+-/*
+-var bar;
+-*/ 

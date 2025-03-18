@@ -1,0 +1,26 @@
+--- old.controlFlowSelfReferentialLoop.js
++++ new.controlFlowSelfReferentialLoop.js
+@@= skipped -123, +123 lines =@@
+ 
+ //// [controlFlowSelfReferentialLoop.js]
+ "use strict";
+-// Repro from #12319
+ Object.defineProperty(exports, "__esModule", { value: true });
+ function md5(string) {
+     function FF(a, b, c, d, x, s, ac) {
+@@= skipped -106, +105 lines =@@
+     return {};
+ }
+ ;
+-(function () {
+-    var id = 'a';
++(() => {
++    let id = 'a';
+     while (1) {
+-        var data = getObject(id);
+-        var message = data.message;
++        const data = getObject(id);
++        const message = data.message;
+         id = message.id;
+     }
+ })();

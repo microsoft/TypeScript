@@ -1,0 +1,21 @@
+--- old.unexpectedStatementBlockTerminator.js
++++ new.unexpectedStatementBlockTerminator.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [unexpectedStatementBlockTerminator.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-    }
+-    return Bar;
+-}());
++class Foo {
++}
++class Bar {
++}
+ function Goo() { return { a: 1, b: 2 }; }

@@ -1,0 +1,10 @@
+--- old.unionTypeWithLeadingOperator.js
++++ new.unionTypeWithLeadingOperator.js
+@@= skipped -15, +15 lines =@@
+ //// [unionTypeWithLeadingOperator.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-
+-
+-//// [unionTypeWithLeadingOperator.d.ts]
+-export type D = /*leading1*/ 1 | /*leading2*/ 2;

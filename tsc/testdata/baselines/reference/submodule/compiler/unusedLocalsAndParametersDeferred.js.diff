@@ -1,0 +1,215 @@
+--- old.unusedLocalsAndParametersDeferred.js
++++ new.unusedLocalsAndParametersDeferred.js
+@@= skipped -166, +166 lines =@@
+ function defered(a) {
+     return a();
+ }
+-// function declaration paramter
+ function f(a) {
+-    defered(function () {
++    defered(() => {
+         a;
+     });
+ }
+ f(0);
+-// function expression paramter
+ var fexp = function (a) {
+-    defered(function () {
++    defered(() => {
+         a;
+     });
+ };
+ fexp(1);
+-// arrow function paramter
+-var farrow = function (a) {
+-    defered(function () {
++var farrow = (a) => {
++    defered(() => {
+         a;
+     });
+ };
+ farrow(2);
+-var prop1;
+-var C = /** @class */ (function () {
+-    function C() {
+-        // in a property initalizer
+-        this.p = defered(function () {
+-            prop1;
++let prop1;
++class C {
++    method(a) {
++        defered(() => {
++            a;
+         });
+     }
+-    // Method declaration paramter
+-    C.prototype.method = function (a) {
+-        defered(function () {
+-            a;
++    set x(v) {
++        defered(() => {
++            v;
+         });
+-    };
+-    Object.defineProperty(C.prototype, "x", {
+-        // Accessor declaration paramter
+-        set: function (v) {
+-            defered(function () {
+-                v;
+-            });
+-        },
+-        enumerable: false,
+-        configurable: true
++    }
++    p = defered(() => {
++        prop1;
+     });
+-    return C;
+-}());
++}
+ new C();
+-var prop2;
+-var E = /** @class */ (function () {
+-    function class_1() {
+-        // in a property initalizer
+-        this.p = defered(function () {
+-            prop2;
++let prop2;
++var E = class {
++    method(a) {
++        defered(() => {
++            a;
+         });
+     }
+-    // Method declaration paramter
+-    class_1.prototype.method = function (a) {
+-        defered(function () {
+-            a;
++    set x(v) {
++        defered(() => {
++            v;
+         });
+-    };
+-    Object.defineProperty(class_1.prototype, "x", {
+-        // Accessor declaration paramter
+-        set: function (v) {
+-            defered(function () {
+-                v;
+-            });
+-        },
+-        enumerable: false,
+-        configurable: true
++    }
++    p = defered(() => {
++        prop2;
+     });
+-    return class_1;
+-}());
++};
+ new E();
+ var o = {
+-    // Object literal method declaration paramter
+-    method: function (a) {
+-        defered(function () {
++    method(a) {
++        defered(() => {
+             a;
+         });
+     },
+-    // Accessor declaration paramter
+     set x(v) {
+-        defered(function () {
++        defered(() => {
+             v;
+         });
+     },
+-    // in a property initalizer
+-    p: defered(function () {
++    p: defered(() => {
+         prop1;
+     })
+ };
+ o;
+-var _loop_1 = function (i) {
+-    defered(function () {
++for (let i in o) {
++    defered(() => {
+         i;
+     });
+-};
+-// in a for..in statment
+-for (var i in o) {
+-    _loop_1(i);
+ }
+-var _loop_2 = function (i) {
+-    defered(function () {
++for (let i of [1, 2, 3]) {
++    defered(() => {
+         i;
+     });
+-};
+-// in a for..of statment
+-for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
+-    var i = _a[_i];
+-    _loop_2(i);
+ }
+-var _loop_3 = function (i) {
+-    defered(function () {
++for (let i = 0; i < 10; i++) {
++    defered(() => {
+         i;
+     });
+-};
+-// in a for. statment
+-for (var i = 0; i < 10; i++) {
+-    _loop_3(i);
+ }
+-// in a block
+-var condition = false;
++const condition = false;
+ if (condition) {
+-    var c_1 = 0;
+-    defered(function () {
+-        c_1;
++    const c = 0;
++    defered(() => {
++        c;
+     });
+ }
+-// in try/catch/finally
+ try {
+-    var a_1 = 0;
+-    defered(function () {
+-        a_1;
++    const a = 0;
++    defered(() => {
++        a;
+     });
+ }
+ catch (e) {
+-    var c_2 = 1;
+-    defered(function () {
+-        c_2;
++    const c = 1;
++    defered(() => {
++        c;
+     });
+ }
+ finally {
+-    var c_3 = 0;
+-    defered(function () {
+-        c_3;
++    const c = 0;
++    defered(() => {
++        c;
+     });
+ }
+-// in a namespace
+ var N;
+ (function (N) {
+     var x;
+-    defered(function () {
++    defered(() => {
+         x;
+     });
+ })(N || (N = {}));

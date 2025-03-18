@@ -1,0 +1,16 @@
+--- old.genericArrayWithoutTypeAnnotation.js
++++ new.genericArrayWithoutTypeAnnotation.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [genericArrayWithoutTypeAnnotation.js]
+-var Bar = /** @class */ (function () {
+-    function Bar() {
++class Bar {
++    getBar(foo) {
+     }
+-    Bar.prototype.getBar = function (foo) {
+-    };
+-    return Bar;
+-}());
++}

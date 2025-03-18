@@ -1,0 +1,28 @@
+--- old.exportAsNamespace3(module=commonjs).js
++++ new.exportAsNamespace3(module=commonjs).js
+@@= skipped -53, +53 lines =@@
+ exports.ns = __importStar(require("./0"));
+ ns.a;
+ ns.b;
+-var ns = { a: 1, b: 2 };
++let ns = { a: 1, b: 2 };
+ ns.a;
+ ns.b;
+ //// [2.js]
+@@= skipped -29, +29 lines =@@
+     return result;
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo = __importStar(require("./1"));
++const foo = __importStar(require("./1"));
+ foo.ns.a;
+ foo.ns.b;
+-
+-
+-//// [0.d.ts]
+-export declare const a = 1;
+-export declare const b = 2;
+-//// [1.d.ts]
+-export * as ns from './0';
+-//// [2.d.ts]
+-export {};

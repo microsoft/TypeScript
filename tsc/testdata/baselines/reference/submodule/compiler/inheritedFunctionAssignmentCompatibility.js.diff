@@ -1,0 +1,9 @@
+--- old.inheritedFunctionAssignmentCompatibility.js
++++ new.inheritedFunctionAssignmentCompatibility.js
+@@= skipped -11, +11 lines =@@
+ 
+ //// [inheritedFunctionAssignmentCompatibility.js]
+ function fn(cb) { }
++fn((a, b) => true);
+ fn(function (a, b) { return true; });
+-fn(function (a, b) { return true; });

@@ -1,0 +1,10 @@
+--- old.contravariantTypeAliasInference.js
++++ new.contravariantTypeAliasInference.js
+@@= skipped -20, +20 lines =@@
+ 
+ 
+ //// [contravariantTypeAliasInference.js]
+-"use strict";
+ foo(f1, f2);
+ bar(f1, f2);
+ bar(g1, g2);

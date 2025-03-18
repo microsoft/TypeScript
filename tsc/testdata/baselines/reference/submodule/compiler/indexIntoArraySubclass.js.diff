@@ -1,0 +1,10 @@
+--- old.indexIntoArraySubclass.js
++++ new.indexIntoArraySubclass.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [indexIntoArraySubclass.js]
+ var x2;
+-var r = x2[0]; // string
+-r = 0; //error
++var r = x2[0];
++r = 0;

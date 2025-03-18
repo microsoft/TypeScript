@@ -1,0 +1,10 @@
+--- old.nullishCoalescingOperatorInParameterBindingPattern(target=es2015).js
++++ new.nullishCoalescingOperatorInParameterBindingPattern(target=es2015).js
+@@= skipped -5, +5 lines =@@
+ (({ [a() ?? "d"]: c = "" }) => {})();
+ 
+ //// [nullishCoalescingOperatorInParameterBindingPattern.js]
+-// https://github.com/microsoft/TypeScript/issues/36295
+ const a = () => undefined;
+-((_a) => { var _b; var { [(_b = a()) !== null && _b !== void 0 ? _b : "d"]: c = "" } = _a; })();
++(({ [a() ?? "d"]: c = "" }) => { })();

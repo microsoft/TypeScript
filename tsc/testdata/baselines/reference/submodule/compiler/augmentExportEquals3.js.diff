@@ -1,0 +1,43 @@
+--- old.augmentExportEquals3.js
++++ new.augmentExportEquals3.js
+@@= skipped -23, +23 lines =@@
+ let b = x.b;
+ 
+ //// [file1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    function foo() { }
+-    (function (foo) {
+-        foo.v = 1;
+-    })(foo || (foo = {}));
+-    return foo;
+-});
++"use strict";
++function foo() { }
++(function (foo) {
++    foo.v = 1;
++})(foo || (foo = {}));
++module.exports = foo;
+ //// [file2.js]
+-define(["require", "exports", "./file1"], function (require, exports, x) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    x.b = 1;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const x = require("./file1");
++x.b = 1;
+ //// [file3.js]
+-define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var a;
+-    var b = x.b;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const x = require("./file1");
++require("./file2");
++let a;
++let b = x.b;

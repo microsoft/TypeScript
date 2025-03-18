@@ -1,0 +1,15 @@
+--- old.doNotEmitPinnedCommentOnNotEmittedNodets.js
++++ new.doNotEmitPinnedCommentOnNotEmittedNodets.js
+@@= skipped -10, +10 lines =@@
+ declare var OData: any;
+ 
+ //// [doNotEmitPinnedCommentOnNotEmittedNodets.js]
+-var C = (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function (x, y) { };
+-    return C;
+-}());
++class C {
++    foo(x, y) { }
++}

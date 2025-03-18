@@ -1,0 +1,9 @@
+--- old.moduleResolutionWithoutExtension7.js
++++ new.moduleResolutionWithoutExtension7.js
+@@= skipped -4, +4 lines =@@
+ import foo = require("./foo"); // should error, should not ask for extension
+ 
+ //// [bar.cjs]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
++export {};

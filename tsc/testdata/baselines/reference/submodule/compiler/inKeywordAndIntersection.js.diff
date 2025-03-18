@@ -1,0 +1,42 @@
+--- old.inKeywordAndIntersection.js
++++ new.inKeywordAndIntersection.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [inKeywordAndIntersection.js]
+-"use strict";
+-var A = /** @class */ (function () {
+-    function A() {
+-        this.a = 0;
+-    }
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+-        this.b = 0;
+-    }
+-    return B;
+-}());
++class A {
++    a = 0;
++}
++class B {
++    b = 0;
++}
+ function f10(obj) {
+     if (obj instanceof Object) {
+-        obj; // A & { x: string } | B
++        obj;
+     }
+     else {
+-        obj; // Error
++        obj;
+     }
+ }
+-var instance = {};
+-var ClassOne = {};
++const instance = {};
++const ClassOne = {};
+ if (instance instanceof ClassOne) {
+     instance.one();
+ }

@@ -1,0 +1,8 @@
+--- old.noImplicitAnyInContextuallyTypesFunctionParamter.js
++++ new.noImplicitAnyInContextuallyTypesFunctionParamter.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [noImplicitAnyInContextuallyTypesFunctionParamter.js]
+ var regexMatchList = ['', ''];
+-regexMatchList.forEach(function (match) { return ''.replace(match, ''); });
++regexMatchList.forEach(match => ''.replace(match, ''));

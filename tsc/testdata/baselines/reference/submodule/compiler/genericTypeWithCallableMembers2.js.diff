@@ -1,0 +1,13 @@
+--- old.genericTypeWithCallableMembers2.js
++++ new.genericTypeWithCallableMembers2.js
+@@= skipped -10, +10 lines =@@
+ 
+ //// [genericTypeWithCallableMembers2.js]
+ function foo1(f) {
+-    return f(); // should return 'string', once returned 'any'
++    return f();
+ }
+ function foo2(f) {
+-    return new f(); // should be legal, once was an error
++    return new f();
+ }

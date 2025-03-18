@@ -1,0 +1,70 @@
+--- old.excessPropertyCheckWithMultipleDiscriminants.js
++++ new.excessPropertyCheckWithMultipleDiscriminants.js
+@@= skipped -143, +143 lines =@@
+ 
+ //// [excessPropertyCheckWithMultipleDiscriminants.js]
+ "use strict";
+-// Repro from #32657
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo = {
++const foo = {
+     type: "number",
+     value: 10,
+-    multipleOf: 5, // excess property
++    multipleOf: 5,
+     format: "what?"
+ };
+-// This has excess error because variant three is the only applicable case.
+-var a = {
++const a = {
+     p1: 'left',
+     p2: false,
+     p3: 42,
+     p4: "hello"
+ };
+-// This has excess error because variant two is not applicable.
+-var b = {
++const b = {
+     p1: 'left',
+     p2: true,
+     p3: 42,
+     p4: "hello"
+ };
+-// This has excess error because variant two is the only applicable case
+-var c = {
++const c = {
+     p1: 'right',
+     p2: false,
+     p3: 42,
+     p4: "hello"
+ };
+-// Should reject { b } because reduced to Common | (Common & A)
+-var c1 = {
++const c1 = {
+     type: "A",
+     n: 1,
+     a: 1,
+-    b: 1 // excess property
++    b: 1
+ };
+-// Should still reject { b } because reduced to Common | A, even though these are now disjoint
+-var c2 = {
++const c2 = {
+     type: "A",
+     n: 1,
+     a: 1,
+-    b: 1 // excess property
++    b: 1
+ };
+-// both should error due to excess properties
+-var attributes = {
++const attributes = {
+     type: 'string',
+     autoIncrement: true,
+     required: true,
+ };
+-var attributes2 = {
++const attributes2 = {
+     type: 'string',
+     autoIncrement: true,
+     required: true,

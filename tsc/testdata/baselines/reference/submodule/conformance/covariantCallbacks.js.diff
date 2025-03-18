@@ -1,0 +1,51 @@
+--- old.covariantCallbacks.js
++++ new.covariantCallbacks.js
+@@= skipped -110, +110 lines =@@
+ 
+ 
+ //// [covariantCallbacks.js]
+-"use strict";
+-// Test that callback parameters are related covariantly
+ ;
+ function f1(a, b) {
+     a = b;
+-    b = a; // Error
++    b = a;
+ }
+ function f2(a, b) {
+     a = b;
+-    b = a; // Error
++    b = a;
+ }
+ function f11(a, b) {
+     a = b;
+-    b = a; // Error
++    b = a;
+ }
+ function f12(a, b) {
+     a = b;
+-    b = a; // Error
++    b = a;
+ }
+ function f13(a, b) {
+     a = b;
+-    b = a; // Error
++    b = a;
+ }
+ function f14(a, b) {
+     a = b;
+-    b = a; // Error
++    b = a;
+ }
+ bu = bs;
+ bs = bu;
+@@= skipped -33, +31 lines =@@
+ bfs = bfu;
+ b1fu = b2fs;
+ b2fs = b1fu;
+-sx = sy; // Error
++sx = sy;
+ sy = sx;
+-s1 = s2; // Error
++s1 = s2;
+ s2 = s1;

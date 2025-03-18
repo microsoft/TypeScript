@@ -1,0 +1,29 @@
+--- old.tsxPreserveEmit1.js
++++ new.tsxPreserveEmit1.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [test.jsx]
+-define(["require", "exports", "react", "react-router"], function (require, exports, React, ReactRouter) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var Route = ReactRouter.Route;
+-    var routes1 = <Route />;
+-    var M;
+-    (function (M) {
+-    })(M || (M = {}));
+-    (function (M) {
+-        // Should emit 'M.X' in both opening and closing tags
+-        var y = <M.X></M.X>;
+-    })(M || (M = {}));
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const ReactRouter = require("react-router");
++var routes1 = <Route />;
++var M;
++(function (M) {
++})(M || (M = {}));
++(function (M) {
++    var y = <X></X>;
++})(M || (M = {}));

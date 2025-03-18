@@ -1,0 +1,33 @@
+--- old.crashIntypeCheckObjectCreationExpression.js
++++ new.crashIntypeCheckObjectCreationExpression.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [crashIntypeCheckObjectCreationExpression.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.BuildWorkspaceService = void 0;
+-    var BuildWorkspaceService = /** @class */ (function () {
+-        function BuildWorkspaceService() {
+-        }
+-        BuildWorkspaceService.prototype.injectRequestService = function (service) {
+-            this.injectBuildService(new X(service));
+-        };
+-        BuildWorkspaceService.prototype.injectBuildService = function (service) {
+-        };
+-        return BuildWorkspaceService;
+-    }());
+-    exports.BuildWorkspaceService = BuildWorkspaceService;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.BuildWorkspaceService = void 0;
++class BuildWorkspaceService {
++    injectRequestService(service) {
++        this.injectBuildService(new X(service));
++    }
++    injectBuildService(service) {
++    }
++}
++exports.BuildWorkspaceService = BuildWorkspaceService;

@@ -1,0 +1,10 @@
+--- old.constDeclarationShadowedByVarDeclaration2.js
++++ new.constDeclarationShadowedByVarDeclaration2.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [constDeclarationShadowedByVarDeclaration2.js]
+-// No errors, const declaration is not shadowed
+ function outer() {
+     const x = 0;
+     function inner() {

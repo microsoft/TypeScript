@@ -1,0 +1,20 @@
+--- old.asyncGetter_es5.js
++++ new.asyncGetter_es5.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [asyncGetter_es5.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    async get foo() {
+     }
+-    Object.defineProperty(C.prototype, "foo", {
+-        get: function () {
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++}

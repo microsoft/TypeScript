@@ -1,0 +1,38 @@
+--- old.es6ExportClauseInEs5.js
++++ new.es6ExportClauseInEs5.js
+@@= skipped -20, +20 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = exports.instantiatedModule = exports.c2 = exports.c = void 0;
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    return c;
+-}());
++class c {
++}
+ exports.c = c;
+ exports.c2 = c;
+ var m;
+@@= skipped -13, +10 lines =@@
+ })(m || (exports.instantiatedModule = m = {}));
+ var x = 10;
+ exports.x = x;
+-
+-
+-//// [server.d.ts]
+-declare class c {
+-}
+-interface i {
+-}
+-declare namespace m {
+-    var x: number;
+-}
+-declare var x: number;
+-declare namespace uninstantiated {
+-}
+-export { c };
+-export { c as c2 };
+-export { i, m as instantiatedModule };
+-export { uninstantiated };
+-export { x };

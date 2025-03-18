@@ -1,0 +1,12 @@
+--- old.es6ExportClauseWithAssignmentInEs5.js
++++ new.es6ExportClauseWithAssignmentInEs5.js
+@@= skipped -33, +33 lines =@@
+ exports.buzz = buzz += 3;
+ var bizz = 8;
+ exports.bizz = bizz;
+-exports.bizz = (bizz++, bizz); // compiles to exports.bizz = (bizz++, bizz)
+-exports.bizz = (bizz--, bizz); // similarly
+-exports.bizz = ++bizz; // compiles to exports.bizz = ++bizz
++exports.bizz = (bizz++, bizz);
++exports.bizz = (bizz--, bizz);
++exports.bizz = ++bizz;

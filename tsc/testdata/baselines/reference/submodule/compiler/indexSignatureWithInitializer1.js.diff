@@ -1,0 +1,13 @@
+--- old.indexSignatureWithInitializer1.js
++++ new.indexSignatureWithInitializer1.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [indexSignatureWithInitializer1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

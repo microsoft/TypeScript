@@ -1,0 +1,30 @@
+--- old.genericGetter2.js
++++ new.genericGetter2.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [genericGetter2.js]
+-var A = /** @class */ (function () {
+-    function A() {
++class A {
++}
++class C {
++    data;
++    get x() {
++        return this.data;
+     }
+-    return A;
+-}());
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    Object.defineProperty(C.prototype, "x", {
+-        get: function () {
+-            return this.data;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++}

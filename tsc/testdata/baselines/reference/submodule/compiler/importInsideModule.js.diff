@@ -1,0 +1,9 @@
+--- old.importInsideModule.js
++++ new.importInsideModule.js
+@@= skipped -14, +14 lines =@@
+ exports.myModule = void 0;
+ var myModule;
+ (function (myModule) {
++    import foo = require("importInsideModule_file1");
+     var a = foo.x;
+ })(myModule || (exports.myModule = myModule = {}));

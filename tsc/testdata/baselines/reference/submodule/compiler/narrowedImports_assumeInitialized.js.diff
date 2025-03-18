@@ -1,0 +1,9 @@
+--- old.narrowedImports_assumeInitialized.js
++++ new.narrowedImports_assumeInitialized.js
+@@= skipped -13, +13 lines =@@
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a = require("./a");
++const a = require("./a");
+ a.x;

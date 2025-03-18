@@ -1,0 +1,14 @@
+--- old.multipleExportDefault5.js
++++ new.multipleExportDefault5.js
+@@= skipped -8, +8 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.default = bar;
+ function bar() { }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ exports.default = C;

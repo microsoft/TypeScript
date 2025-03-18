@@ -1,0 +1,26 @@
+--- old.covariance1.js
++++ new.covariance1.js
+@@= skipped -21, +21 lines =@@
+ //// [covariance1.js]
+ var M;
+ (function (M) {
+-    var XX = /** @class */ (function () {
+-        function XX(m1) {
++    class XX {
++        m1;
++        constructor(m1) {
+             this.m1 = m1;
+         }
+-        return XX;
+-    }());
++    }
+     M.XX = XX;
+     function f(y) { }
+     M.f = f;
+     var a;
+-    f({ x: a }); // ok
++    f({ x: a });
+     var b;
+-    f({ x: b }); // ok covariant subtype
++    f({ x: b });
+ })(M || (M = {}));

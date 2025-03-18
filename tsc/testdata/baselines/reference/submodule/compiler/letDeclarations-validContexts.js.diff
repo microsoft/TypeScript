@@ -1,0 +1,76 @@
+--- old.letDeclarations-validContexts.js
++++ new.letDeclarations-validContexts.js
+@@= skipped -143, +143 lines =@@
+ }
+ 
+ //// [letDeclarations-validContexts.js]
+-// Control flow statements with blocks
+ if (true) {
+     let l1 = 0;
+ }
+@@= skipped -29, +28 lines =@@
+ while (false) {
+     label2: label3: label4: let l9 = 0;
+ }
+-// Try/catch/finally
+ try {
+     let l10 = 0;
+ }
+@@= skipped -10, +9 lines =@@
+ finally {
+     let l12 = 0;
+ }
+-// Switch
+ switch (0) {
+     case 0:
+         let l13 = 0;
+@@= skipped -9, +8 lines =@@
+         let l14 = 0;
+         break;
+ }
+-// blocks
+ {
+     let l15 = 0;
+     {
+@@= skipped -8, +7 lines =@@
+         label17: let l17 = 0;
+     }
+ }
+-// global
+ let l18 = 0;
+-// functions
+ function F() {
+     let l19 = 0;
+ }
+@@= skipped -12, +10 lines =@@
+ var F3 = function () {
+     let l21 = 0;
+ };
+-// modules
+ var m;
+ (function (m) {
+     let l22 = 0;
+@@= skipped -8, +7 lines =@@
+         let l23 = 0;
+     }
+ })(m || (m = {}));
+-// methods
+ class C {
+     constructor() {
+         let l24 = 0;
+@@= skipped -16, +15 lines =@@
+         let l27 = value;
+     }
+ }
+-// object literals
+ var o = {
+     f() {
+         let l28 = 0;
+@@= skipped -9, +8 lines =@@
+         let l29 = 0;
+     }
+ };
+-// labels
+ label: let l30 = 0;
+ {
+     label2: let l31 = 0;

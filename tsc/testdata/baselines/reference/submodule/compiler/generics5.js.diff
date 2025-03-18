@@ -1,0 +1,8 @@
+--- old.generics5.js
++++ new.generics5.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [generics5.js]
+-var v3; // Error, A not valid argument for U
++var v3;

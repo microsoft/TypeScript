@@ -1,0 +1,7 @@
+--- old.deferredConditionalTypes.js
++++ new.deferredConditionalTypes.js
+@@= skipped -55, +55 lines =@@
+ type TestBitRes = TestBit<1, 1>; 
+ 
+ //// [deferredConditionalTypes.js]
+-"use strict";

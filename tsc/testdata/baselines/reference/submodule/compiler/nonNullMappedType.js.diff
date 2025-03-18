@@ -1,0 +1,11 @@
+--- old.nonNullMappedType.js
++++ new.nonNullMappedType.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [nonNullMappedType.js]
+-"use strict";
+ function f(p0, p1) {
+-    var v = p0[p1];
++    const v = p0[p1];
+ }

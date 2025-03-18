@@ -1,0 +1,16 @@
+--- old.syntheticDefaultExportsWithDynamicImports.js
++++ new.syntheticDefaultExportsWithDynamicImports.js
+@@= skipped -7, +7 lines =@@
+ import("package").then(({default: foo}) => foo(42));
+ 
+ //// [index.js]
+-System.register([], function (exports_1, context_1) {
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            context_1.import("package").then(({ default: foo }) => foo(42));
+-        }
+-    };
+-});
++Promise.resolve().then(() => require("package")).then(({ default: foo }) => foo(42));

@@ -1,0 +1,15 @@
+--- old.computedPropertyNamesContextualType9_ES5.js
++++ new.computedPropertyNamesContextualType9_ES5.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [computedPropertyNamesContextualType9_ES5.js]
+-var _a;
+-var o = (_a = {},
+-    _a[+"foo"] = "",
+-    _a[+"bar"] = 0,
+-    _a);
++var o = {
++    [+"foo"]: "",
++    [+"bar"]: 0
++};

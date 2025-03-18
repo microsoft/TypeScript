@@ -1,0 +1,20 @@
+--- old.typeofClassWithPrivates.js
++++ new.typeofClassWithPrivates.js
+@@= skipped -12, +12 lines =@@
+ var r2: typeof c;
+ 
+ //// [typeofClassWithPrivates.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    a;
++    static b;
++    x;
++    static y;
++}
+ var c;
+ var r;
+ var r2;

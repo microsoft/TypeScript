@@ -1,0 +1,24 @@
+--- old.taggedPrimitiveNarrowing.js
++++ new.taggedPrimitiveNarrowing.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [taggedPrimitiveNarrowing.js]
+-"use strict";
+ function getHashLength(hash) {
+     if (typeof hash !== "string") {
+         throw new Error("This doesn't look like a hash");
+@@= skipped -13, +12 lines =@@
+     }
+     return hash.length;
+ }
+-
+-
+-//// [taggedPrimitiveNarrowing.d.ts]
+-type Hash = string & {
+-    __hash: true;
+-};
+-declare function getHashLength(hash: Hash): number;
+-declare function getHashLength2<T extends {
+-    __tag__: unknown;
+-}>(hash: string & T): number;

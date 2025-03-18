@@ -1,0 +1,8 @@
+--- old.doNotInferUnrelatedTypes.js
++++ new.doNotInferUnrelatedTypes.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [doNotInferUnrelatedTypes.js]
+-var foo = dearray(alt);
++let foo = dearray(alt);

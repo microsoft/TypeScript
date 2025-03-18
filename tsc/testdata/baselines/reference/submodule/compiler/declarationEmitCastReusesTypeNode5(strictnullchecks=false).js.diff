@@ -1,0 +1,49 @@
+--- old.declarationEmitCastReusesTypeNode5(strictnullchecks=false).js
++++ new.declarationEmitCastReusesTypeNode5(strictnullchecks=false).js
+@@= skipped -24, +24 lines =@@
+     reuseType9? = null! as this | this;
+ }
+ 
+-
+-
+-//// [declarationEmitCastReusesTypeNode5.d.ts]
+-export declare const vNumberLiteral: 1 | 1;
+-export declare const vStringLiteral: "1" | "1";
+-export declare const vLiteral: "1" | "1";
+-type R = {
+-    foo: string;
+-};
+-export declare class C {
+-    tsResolve?: R | R;
+-    tsResolve2?: R | R | string;
+-    reuseType?: ((p: R) => void) | string | string;
+-    reuseType2?: (new (p: R) => R) | string | string;
+-    reuseType3?: string | number | bigint | symbol | unknown | any | never | symbol;
+-    reuseType4?: [R, R, R] | [R, R, R];
+-    reuseType5?: R[] | R[];
+-    reuseType6?: 1 | "2" | 1n | 1n;
+-    reuseType7?: `A` | `A`;
+-    reuseType8?: `${string}-ok` | `${string}-ok`;
+-    reuseType9?: this | this;
++//// [declarationEmitCastReusesTypeNode5.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C = exports.vLiteral = exports.vStringLiteral = exports.vNumberLiteral = void 0;
++exports.vNumberLiteral = null;
++exports.vStringLiteral = null;
++exports.vLiteral = null;
++class C {
++    tsResolve = null;
++    tsResolve2 = null;
++    reuseType = null;
++    reuseType2 = null;
++    reuseType3 = null;
++    reuseType4 = null;
++    reuseType5 = null;
++    reuseType6 = null;
++    reuseType7 = null;
++    reuseType8 = null;
++    reuseType9 = null;
+ }
+-export {};
++exports.C = C;

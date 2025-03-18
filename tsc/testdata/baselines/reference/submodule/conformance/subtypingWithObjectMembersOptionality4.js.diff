@@ -1,0 +1,12 @@
+--- old.subtypingWithObjectMembersOptionality4.js
++++ new.subtypingWithObjectMembersOptionality4.js
+@@= skipped -35, +35 lines =@@
+ var r = true ? a : b; // ok
+ 
+ //// [subtypingWithObjectMembersOptionality4.js]
+-// Base has required property, derived adds an optional property, no errors
+-// object literal case
+ var a;
+ var b;
+-var r = true ? a : b; // ok
++var r = true ? a : b;

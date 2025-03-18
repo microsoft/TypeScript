@@ -1,0 +1,9 @@
+--- old.continueStatementInternalComments.js
++++ new.continueStatementInternalComments.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [continueStatementInternalComments.js]
+ foo: for (;;) {
+-    /*1*/ continue /*2*/ foo /*3*/;
++    continue foo;
+ }

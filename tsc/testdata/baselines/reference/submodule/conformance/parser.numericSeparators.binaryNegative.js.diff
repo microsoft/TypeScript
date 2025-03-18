@@ -1,0 +1,23 @@
+--- old.parser.numericSeparators.binaryNegative.js
++++ new.parser.numericSeparators.binaryNegative.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [1.js]
+-0;
++0b00_;
+ //// [2.js]
+-6;
++0b_110;
+ //// [3.js]
+ 0;
+ B0101;
+ //// [4.js]
+-7;
++0b01__11;
+ //// [5.js]
+-102;
++0B0110_0110__;
+ //// [6.js]
+-1867;
++0b___0111010_0101_1;

@@ -1,0 +1,15 @@
+--- old.arrayReferenceWithoutTypeArgs.js
++++ new.arrayReferenceWithoutTypeArgs.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [arrayReferenceWithoutTypeArgs.js]
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    X.prototype.f = function (a) { };
+-    return X;
+-}());
++class X {
++    f(a) { }
++}

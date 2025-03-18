@@ -1,0 +1,8 @@
+--- old.arrayIndexWithArrayFails.js
++++ new.arrayIndexWithArrayFails.js
+@@= skipped -5, +5 lines =@@
+ const j = arr2[arr1[0]]; // should error
+ 
+ //// [arrayIndexWithArrayFails.js]
+-var j = arr2[arr1[0]]; // should error
++const j = arr2[arr1[0]];

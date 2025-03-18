@@ -1,0 +1,16 @@
+--- old.fatarrowfunctionsInFunctionParameterDefaults.js
++++ new.fatarrowfunctionsInFunctionParameterDefaults.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [fatarrowfunctionsInFunctionParameterDefaults.js]
+-function fn(x, y) {
+-    var _this = this;
+-    if (x === void 0) { x = function () { return _this; }; }
+-    if (y === void 0) { y = x(); }
+-    // should be 4
++function fn(x = () => this, y = x()) {
+     return y;
+ }
+-fn.call(4); // Should be 4
++fn.call(4);

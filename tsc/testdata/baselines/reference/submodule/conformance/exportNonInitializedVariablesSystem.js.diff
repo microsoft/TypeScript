@@ -1,0 +1,68 @@
+--- old.exportNonInitializedVariablesSystem.js
++++ new.exportNonInitializedVariablesSystem.js
+@@= skipped -35, +35 lines =@@
+ 
+ 
+ //// [exportNonInitializedVariablesSystem.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var a, b, c, d, A, e, f, B, C, a1, b1, c1, d1, D, e1, f1, g1, h1;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            let;
+-            A = /** @class */ (function () {
+-                function A() {
+-                }
+-                return A;
+-            }());
+-            (function (B) {
+-                B.a = 1, B.c = 2;
+-            })(B || (B = {}));
+-            (function (C) {
+-                C.a = 1, C.c = 2;
+-            })(C || (C = {}));
+-            // Shouldn't be filtered
+-            exports_1("a1", a1 = 1);
+-            exports_1("b1", b1 = 1);
+-            exports_1("c1", c1 = 'a');
+-            exports_1("d1", d1 = 1);
+-            D = /** @class */ (function () {
+-                function D() {
+-                }
+-                return D;
+-            }());
+-            exports_1("e1", e1 = new D);
+-            exports_1("f1", f1 = new D);
+-            exports_1("g1", g1 = new D);
+-            exports_1("h1", h1 = new D);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.h1 = exports.g1 = exports.f1 = exports.e1 = exports.d1 = exports.c1 = exports.b1 = exports.a1 = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
++var ;
++let;
++const ;
++class A {
++}
++var B;
++(function (B) {
++    B.a = 1, B.c = 2;
++})(B || (B = {}));
++var C;
++(function (C) {
++    C.a = 1, C.c = 2;
++})(C || (C = {}));
++exports.a1 = 1;
++exports.b1 = 1;
++exports.c1 = 'a';
++exports.d1 = 1;
++class D {
++}
++exports.e1 = new D;
++exports.f1 = new D;
++exports.g1 = new D;
++exports.h1 = new D;

@@ -1,0 +1,206 @@
+--- old.unspecializedConstraints.js
++++ new.unspecializedConstraints.js
+@@= skipped -155, +155 lines =@@
+ 
+ 
+ //// [unspecializedConstraints.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+ var ts;
+ (function (ts) {
+-    var Symbol = /** @class */ (function () {
+-        function Symbol() {
+-        }
+-        return Symbol;
+-    }());
+-    var Type = /** @class */ (function (_super) {
+-        __extends(Type, _super);
+-        function Type() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        Type.prototype.equals = function (that) {
++    class Symbol {
++    }
++    class Type extends Symbol {
++        equals(that) {
+             if (this === that)
+                 return true;
+             if (!(this.isObjectType() && that.isObjectType()))
+@@= skipped -51, +29 lines =@@
+                     return false;
+             }
+             return true;
+-        };
+-        Type.prototype.getProperties = function () {
++        }
++        getProperties() {
+             return [];
+-        };
+-        Type.prototype.getProperty = function (index) {
++        }
++        getProperty(index) {
+             return undefined;
+-        };
+-        Type.prototype.getPropertyByName = function (name) {
++        }
++        getPropertyByName(name) {
+             return undefined;
+-        };
+-        Type.prototype.getPropertyCount = function () {
++        }
++        getPropertyCount() {
+             return 0;
+-        };
+-        Type.prototype.getSignature = function (index) {
++        }
++        getSignature(index) {
+             return undefined;
+-        };
+-        Type.prototype.getSignatureCount = function () {
++        }
++        getSignatureCount() {
+             return 0;
+-        };
+-        Type.prototype.getSignatures = function () {
++        }
++        getSignatures() {
+             return [];
+-        };
+-        Type.prototype.isPrimitive = function () {
++        }
++        isPrimitive() {
+             return false;
+-        };
+-        Type.prototype.isObjectType = function () {
++        }
++        isObjectType() {
+             return false;
+-        };
+-        Type.prototype.isTypeParameter = function () {
++        }
++        isTypeParameter() {
+             return false;
+-        };
+-        Type.prototype.isSubTypeOf = function (type) {
+-        };
+-        return Type;
+-    }(Symbol));
+-    var Property = /** @class */ (function (_super) {
+-        __extends(Property, _super);
+-        function Property(name, type, flags) {
+-            var _this = _super.call(this) || this;
+-            _this.name = name;
+-            _this.type = type;
+-            _this.flags = flags;
+-            return _this;
+         }
+-        Property.prototype.equals = function (other) {
++        isSubTypeOf(type) {
++        }
++    }
++    class Property extends Symbol {
++        name;
++        type;
++        flags;
++        constructor(name, type, flags) {
++            this.name = name;
++            this.type = type;
++            this.flags = flags;
++            super();
++        }
++        equals(other) {
+             return this.name === other.name &&
+                 this.flags === other.flags &&
+                 this.type.equals(other.type);
+-        };
+-        return Property;
+-    }(Symbol));
+-    var PropertyFlags;
++        }
++    }
++    let PropertyFlags;
+     (function (PropertyFlags) {
+         PropertyFlags[PropertyFlags["Optional"] = 1] = "Optional";
+         PropertyFlags[PropertyFlags["Private"] = 2] = "Private";
+     })(PropertyFlags || (PropertyFlags = {}));
+-    var Signature = /** @class */ (function (_super) {
+-        __extends(Signature, _super);
+-        function Signature(typeParameters, parameters, returnType) {
+-            var _this = _super.call(this) || this;
+-            _this.typeParameters = typeParameters;
+-            _this.parameters = parameters;
+-            _this.returnType = returnType;
+-            return _this;
++    class Signature extends Symbol {
++        typeParameters;
++        parameters;
++        returnType;
++        constructor(typeParameters, parameters, returnType) {
++            this.typeParameters = typeParameters;
++            this.parameters = parameters;
++            this.returnType = returnType;
++            super();
+         }
+-        Signature.prototype.equalsNoReturn = function (other) {
++        equalsNoReturn(other) {
+             return this.parameters.length === other.parameters.length &&
+                 this.typeParameters.length === other.typeParameters.length &&
+                 arrayEquals(this.parameters, other.parameters) &&
+                 arrayEquals(this.typeParameters, other.typeParameters);
+-        };
+-        Signature.prototype.equals = function (other) {
++        }
++        equals(other) {
+             return this.equalsNoReturn(other) &&
+                 this.returnType.equals(other.returnType);
+-        };
+-        return Signature;
+-    }(Symbol));
+-    var Parameter = /** @class */ (function (_super) {
+-        __extends(Parameter, _super);
+-        function Parameter(name, type, flags) {
+-            var _this = _super.call(this) || this;
+-            _this.name = name;
+-            _this.type = type;
+-            _this.flags = flags;
+-            return _this;
+         }
+-        Parameter.prototype.equals = function (other) {
++    }
++    class Parameter extends Symbol {
++        name;
++        type;
++        flags;
++        constructor(name, type, flags) {
++            this.name = name;
++            this.type = type;
++            this.flags = flags;
++            super();
++        }
++        equals(other) {
+             return this.name === other.name &&
+                 this.flags === other.flags &&
+                 this.type.equals(other.type);
+-        };
+-        return Parameter;
+-    }(Symbol));
+-    var ParameterFlags;
++        }
++    }
++    let ParameterFlags;
+     (function (ParameterFlags) {
+         ParameterFlags[ParameterFlags["Optional"] = 1] = "Optional";
+         ParameterFlags[ParameterFlags["Rest"] = 2] = "Rest";

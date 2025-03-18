@@ -1,0 +1,9 @@
+--- old.methodSignaturesWithOverloads.js
++++ new.methodSignaturesWithOverloads.js
+@@= skipped -21, +21 lines =@@
+ };
+ 
+ //// [methodSignaturesWithOverloads.js]
+-// Object type literals permit overloads with optionality but they must match
+ var c;
+ var c2;

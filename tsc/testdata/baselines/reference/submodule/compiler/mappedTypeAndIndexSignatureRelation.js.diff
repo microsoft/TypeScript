@@ -1,0 +1,7 @@
+--- old.mappedTypeAndIndexSignatureRelation.js
++++ new.mappedTypeAndIndexSignatureRelation.js
+@@= skipped -34, +34 lines =@@
+ 
+ 
+ //// [mappedTypeAndIndexSignatureRelation.js]
+-"use strict";

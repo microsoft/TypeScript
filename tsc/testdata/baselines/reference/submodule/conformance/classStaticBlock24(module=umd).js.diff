@@ -1,0 +1,37 @@
+--- old.classStaticBlock24(module=umd).js
++++ new.classStaticBlock24(module=umd).js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [classStaticBlock24.js]
+-(function (factory) {
+-    if (typeof module === "object" && typeof module.exports === "object") {
+-        var v = factory(require, exports);
+-        if (v !== undefined) module.exports = v;
+-    }
+-    else if (typeof define === "function" && define.amd) {
+-        define(["require", "exports"], factory);
+-    }
+-})(function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.C = void 0;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    exports.C = C;
+-    (function () {
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C = void 0;
++class C {
++    static x;
++    static {
+         C.x = 1;
+-    })();
+-});
++    }
++}
++exports.C = C;

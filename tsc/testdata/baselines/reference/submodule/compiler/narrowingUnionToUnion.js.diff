@@ -1,0 +1,297 @@
+--- old.narrowingUnionToUnion.js
++++ new.narrowingUnionToUnion.js
+@@= skipped -265, +265 lines =@@
+ 
+ 
+ //// [narrowingUnionToUnion.js]
+-"use strict";
+ function fx1(x) {
+     if (isFalsy(x)) {
+-        x; // "" | 0 | undefined
++        x;
+     }
+ }
+ function fx2(x) {
+     if (isFalsy(x)) {
+-        x; // T & Falsy | undefined
++        x;
+     }
+ }
+ function fx3(x) {
+     if (isFalsy(x)) {
+-        x; // T & "" | T & 0
++        x;
+     }
+ }
+ function fx4(obj) {
+     if (isA(obj)) {
+-        obj; // { b: 0 }
++        obj;
+     }
+ }
+ function fx5(obj, c) {
+     if (obj instanceof c) {
+-        obj; // XS | YS
++        obj;
+     }
+     if (isXSorY(obj)) {
+-        obj; // XS | YS
++        obj;
+     }
+ }
+ function fx10(s) {
+     if (isEmptyStrOrUndefined(s)) {
+-        s; // "" | undefined
++        s;
+         if (s == undefined) {
+-            s; // undefined
++            s;
+         }
+         else {
+-            s; // ""
++            s;
+         }
+     }
+ }
+-// Repro from #37807
+ function f1(x) { }
+-var v1;
++let v1;
+ f1(v1);
+-v1; // number | undefined
++v1;
+ function f2(x) { }
+-var v2;
++let v2;
+ f2(v2);
+-v2; // 6 | undefined
+-var TEST_CASES = [
+-    function (value) {
++v2;
++const TEST_CASES = [
++    (value) => {
+         if (isEmptyString(value)) {
+-            value; // ""
++            value;
+         }
+         else {
+-            value; // string
++            value;
+         }
+         if (isMaybeEmptyString(value)) {
+-            value; // ""
++            value;
+         }
+         else {
+-            value; // string
++            value;
+         }
+     },
+-    function (value) {
++    (value) => {
+         if (isMaybeEmptyString(value)) {
+-            value; // "" | undefined
++            value;
+         }
+         else {
+-            value; // string
++            value;
+         }
+     },
+-    function (value) {
++    (value) => {
+         if (isZero(value)) {
+-            value; // 0
++            value;
+         }
+         else {
+-            value; // number
++            value;
+         }
+         if (isMaybeZero(value)) {
+-            value; // 0
++            value;
+         }
+         else {
+-            value; // number
++            value;
+         }
+     },
+-    function (value) {
++    (value) => {
+         if (isMaybeZero(value)) {
+-            value; // 0 | undefined
++            value;
+         }
+         else {
+-            value; // number
++            value;
+         }
+     },
+-    function (value) {
++    (value) => {
+         if (isEmptyArray(value)) {
+-            value; // []
++            value;
+         }
+         else {
+-            value; // string[]
++            value;
+         }
+         if (isMaybeEmptyArray(value)) {
+-            value; // []
++            value;
+         }
+         else {
+-            value; // string[]
++            value;
+         }
+     },
+-    function (value) {
++    (value) => {
+         if (isMaybeEmptyArray(value)) {
+-            value; // [] | undefined
++            value;
+         }
+         else {
+-            value; // string[]
++            value;
+         }
+     },
+ ];
+ function isEmpty(value) {
+     return value === '' || value === null || value === undefined;
+ }
+-var test;
++let test;
+ if (isEmpty(test)) {
+-    test; // EmptyString
++    test;
+ }
+ function test1(foo) {
+     assert(foo);
+-    foo; // string | 1
++    foo;
+ }
+-// Repro from #46909
+ function check1(x) {
+     return typeof x === "string" || x === 0;
+ }
+@@= skipped -137, +134 lines =@@
+ }
+ function test3(x) {
+     if (typeof x === "string" || x === 0) {
+-        x; // string | 0
++        x;
+         if (x === "hello" || x === 0) {
+-            x; // 0 | "hello"
++            x;
+         }
+     }
+     if (check1(x)) {
+-        x; // string | 0
++        x;
+         if (check2(x)) {
+-            x; // 0 | "hello"
++            x;
+         }
+     }
+ }
+-// Repro from #49588
+ function assertRelationIsNullOrStringArray(v) { }
+ function f1x(obj) {
+     assertRelationIsNullOrStringArray(obj);
+-    obj; // string[] | null
++    obj;
+ }
+ isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
+ isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
+@@= skipped -48, +47 lines =@@
+     }
+     return value;
+ }
+-
+-
+-//// [narrowingUnionToUnion.d.ts]
+-type Falsy = false | 0 | 0n | '' | null | undefined;
+-declare function isFalsy(value: unknown): value is Falsy;
+-declare function fx1(x: string | number | undefined): void;
+-declare function fx2<T>(x: T | undefined): void;
+-declare function fx3<T extends string | number>(x: T): void;
+-declare function isA(obj: unknown): obj is {
+-    a: false;
+-} | {
+-    b: 0;
+-};
+-declare function fx4(obj: {
+-    b: number;
+-}): void;
+-declare class X {
+-    x: string;
+-}
+-declare class XS extends X {
+-    xs: string;
+-}
+-declare class Y {
+-    y: string;
+-}
+-declare class YS extends Y {
+-    ys: string;
+-}
+-declare function isXSorY(obj: unknown): obj is XS | Y;
+-declare function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y): void;
+-declare function isEmptyStrOrUndefined(mixed: any): mixed is "" | undefined;
+-declare function fx10(s: string | undefined): void;
+-declare function f1(x: any): asserts x is number | undefined;
+-declare let v1: number | string | undefined;
+-declare function f2(x: any): asserts x is 6 | undefined;
+-declare let v2: number | string | undefined;
+-declare function isEmptyString(value: string): value is '';
+-declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
+-declare function isZero(value: number): value is 0;
+-declare function isMaybeZero(value: number | null | undefined): value is 0 | null | undefined;
+-declare function isEmptyArray<T>(value: T[]): value is [];
+-declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
+-declare const TEST_CASES: (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[];
+-type EmptyString = '' | null | undefined;
+-declare function isEmpty(value: string | EmptyString): value is EmptyString;
+-declare let test: string | null | undefined;
+-declare function assert<T>(value: any): asserts value is T;
+-declare function test1(foo: number | string | boolean): void;
+-declare function check1(x: unknown): x is (string | 0);
+-declare function check2(x: unknown): x is ("hello" | 0);
+-declare function test3(x: unknown): void;
+-declare function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null;
+-declare function f1x(obj: (string | number)[] | null): void;
+-type MyDiscriminatedUnion = {
+-    type: 'A';
+-    aProp: number;
+-} | {
+-    type: 'B';
+-    bProp: string;
+-};
+-declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+-declare const working: unknown;
+-declare const broken: Record<string, any> | undefined;
+-declare const workingAgain: Record<string, any> | undefined | unknown;
+-type Union = {
+-    type: 'a';
+-    variant: 1;
+-} | {
+-    type: 'a';
+-    variant: 2;
+-} | {
+-    type: 'b';
+-};
+-declare function example1(value: Union): {
+-    type: 'a';
+-    variant: 2;
+-} | null;
+-declare function example2(value: Union): {
+-    type: 'a';
+-    variant: 2;
+-} | null;
+-declare function example3(value: Union): {
+-    type: 'a';
+-    variant: 2;
+-} | null;

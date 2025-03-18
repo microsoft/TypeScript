@@ -1,0 +1,23 @@
+--- old.deepComparisons.js
++++ new.deepComparisons.js
+@@= skipped -41, +41 lines =@@
+ 
+ //// [deepComparisons.js]
+ function f1() {
+-    var v1 = 0; // Error
+-    var v2 = 0; // Error
+-    var v3 = 0; // No error
++    let v1 = 0;
++    let v2 = 0;
++    let v3 = 0;
+ }
+ function f2() {
+-    var x = 0; // Error, excessive stack depth
++    let x = 0;
+ }
+ function f3() {
+-    var x = 0; // No error!
++    let x = 0;
+ }
+ function g() {
+     return f();

@@ -1,0 +1,30 @@
+--- old.classWithOnlyPublicMembersEquivalentToInterface2.js
++++ new.classWithOnlyPublicMembersEquivalentToInterface2.js
+@@= skipped -29, +29 lines =@@
+ i = c;
+ 
+ //// [classWithOnlyPublicMembersEquivalentToInterface2.js]
+-// no errors expected
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.y = function (a) { return null; };
+-    Object.defineProperty(C.prototype, "z", {
+-        get: function () { return 1; },
+-        set: function (v) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++class C {
++    x;
++    y(a) { return null; }
++    get z() { return 1; }
++    set z(v) { }
++    0;
++    static foo;
++}
+ var c;
+ var i;
+ c = i;

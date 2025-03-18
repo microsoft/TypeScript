@@ -1,0 +1,43 @@
+--- old.narrowTypeByInstanceof.js
++++ new.narrowTypeByInstanceof.js
+@@= skipped -27, +27 lines =@@
+ 
+ 
+ //// [narrowTypeByInstanceof.js]
+-var Match = /** @class */ (function () {
+-    function Match() {
+-    }
+-    Match.prototype.range = function () {
++class Match {
++    range() {
+         return undefined;
+-    };
+-    return Match;
+-}());
+-var FileMatch = /** @class */ (function () {
+-    function FileMatch() {
+     }
+-    FileMatch.prototype.resource = function () {
++}
++class FileMatch {
++    resource() {
+         return undefined;
+-    };
+-    return FileMatch;
+-}());
+-var elementA, elementB;
++    }
++}
++let elementA, elementB;
+ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
+-    var a = elementA.resource().path;
+-    var b = elementB.resource().path;
++    let a = elementA.resource().path;
++    let b = elementB.resource().path;
+ }
+ else if (elementA instanceof Match && elementB instanceof Match) {
+-    var a = elementA.range();
+-    var b = elementB.range();
++    let a = elementA.range();
++    let b = elementB.range();
+ }

@@ -92,6 +92,14 @@ func HasImplementationTSFileExtension(path string) bool {
 	return FileExtensionIsOneOf(path, supportedTSImplementationExtensions) && !IsDeclarationFileName(path)
 }
 
+func HasJSFileExtension(path string) bool {
+	return FileExtensionIsOneOf(path, SupportedJSExtensionsFlat)
+}
+
+func HasJSONFileExtension(path string) bool {
+	return FileExtensionIs(path, ExtensionJson)
+}
+
 func IsDeclarationFileName(fileName string) bool {
 	return GetDeclarationFileExtension(fileName) != ""
 }
@@ -110,6 +118,19 @@ func GetDeclarationFileExtension(fileName string) string {
 		}
 	}
 	return ""
+}
+
+func GetDeclarationEmitExtensionForPath(path string) string {
+	switch {
+	case FileExtensionIsOneOf(path, []string{ExtensionMjs, ExtensionMts}):
+		return ExtensionDmts
+	case FileExtensionIsOneOf(path, []string{ExtensionCjs, ExtensionCts}):
+		return ExtensionDcts
+	case FileExtensionIsOneOf(path, []string{ExtensionJson}):
+		return `.d.json.ts` // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
+	default:
+		return ExtensionDts
+	}
 }
 
 // changeAnyExtension changes the extension of a path to the provided extension if it has one of the provided extensions.

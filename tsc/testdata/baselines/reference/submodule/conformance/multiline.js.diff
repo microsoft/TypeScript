@@ -1,0 +1,54 @@
+--- old.multiline.js
++++ new.multiline.js
+@@= skipped -57, +57 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.texts = void 0;
+ exports.texts = [];
+-/**
+- @ts-ignore */
+ exports.texts.push(100);
+-/**
+- @ts-expect-error */
+ exports.texts.push(100);
+-/**
+- @ts-expect-error */
+ exports.texts.push("100");
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.MyComponent = MyComponent;
+-var React = require("react");
+ function MyComponent(props) {
+-    return React.createElement("div", null);
++    return <div />;
+ }
+-var x = (React.createElement("div", null,
+-    React.createElement(MyComponent, { foo: 100 }),
+-    React.createElement(MyComponent, { foo: 100 }),
+-    React.createElement(MyComponent, { foo: 100 }),
+-    React.createElement(MyComponent, { foo: 100 }),
+-    React.createElement(MyComponent, { foo: 100 }),
+-    React.createElement(MyComponent, { foo: 100 }),
+-    React.createElement(MyComponent, { foo: "hooray" })));
++let x = (<div>
++    
++    <MyComponent foo={100}/>
++
++    
++    <MyComponent foo={100}/>
++
++    
++    <MyComponent foo={100}/>
++
++    
++    <MyComponent foo={100}/>
++
++    
++    <MyComponent foo={100}/>
++
++    
++    <MyComponent foo={100}/>
++
++    
++    <MyComponent foo={"hooray"}/>
++  </div>);

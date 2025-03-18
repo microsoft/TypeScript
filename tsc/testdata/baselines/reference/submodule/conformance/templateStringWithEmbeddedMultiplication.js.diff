@@ -1,0 +1,8 @@
+--- old.templateStringWithEmbeddedMultiplication.js
++++ new.templateStringWithEmbeddedMultiplication.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ 7 * 6 }def`;
+ 
+ //// [templateStringWithEmbeddedMultiplication.js]
+-var x = "abc".concat(7 * 6, "def");
++var x = `abc${7 * 6}def`;

@@ -1,0 +1,21 @@
+--- old.staticGetterAndSetter.js
++++ new.staticGetterAndSetter.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [staticGetterAndSetter.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    Object.defineProperty(Foo, "Foo", {
+-        get: function () { return 0; },
+-        set: function (n) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return Foo;
+-}());
++class Foo {
++    static get Foo() { return 0; }
++    static set Foo(n) { }
++}

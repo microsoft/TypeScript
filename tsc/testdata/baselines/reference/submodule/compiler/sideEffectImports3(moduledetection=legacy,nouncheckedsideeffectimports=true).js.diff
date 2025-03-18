@@ -1,0 +1,10 @@
+--- old.sideEffectImports3(moduledetection=legacy,nouncheckedsideeffectimports=true).js
++++ new.sideEffectImports3(moduledetection=legacy,nouncheckedsideeffectimports=true).js
+@@= skipped -9, +9 lines =@@
+ //// [not-a-module.js]
+ console.log("Hello, world!");
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-require("./not-a-module");
++import "./not-a-module";

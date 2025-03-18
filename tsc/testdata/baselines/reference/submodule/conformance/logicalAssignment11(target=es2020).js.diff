@@ -1,0 +1,15 @@
+--- old.logicalAssignment11(target=es2020).js
++++ new.logicalAssignment11(target=es2020).js
+@@= skipped -11, +11 lines =@@
+ e.length
+ 
+ //// [logicalAssignment11.js]
+-"use strict";
+ let x;
+ let d;
+ d ?? (d = x ?? "x");
+ d.length;
+ let e;
+-e ?? (e = x ?? "x");
++e ??= x ?? "x";
+ e.length;

@@ -1,0 +1,15 @@
+--- old.commentOnParameter1.js
++++ new.commentOnParameter1.js
+@@= skipped -11, +11 lines =@@
+ ){}
+ 
+ //// [commentOnParameter1.js]
+-function commentedParameters(
+-/* Parameter a */
+-a
+-/* End of parameter a */
+-/* Parameter b */
+-, b
+-/* End of parameter b */
+-) { }
++function commentedParameters(a, b) { }

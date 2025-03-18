@@ -1,0 +1,31 @@
+--- old.assignmentCompatWithStringIndexer3.js
++++ new.assignmentCompatWithStringIndexer3.js
+@@= skipped -25, +25 lines =@@
+ }
+ 
+ //// [assignmentCompatWithStringIndexer3.js]
+-// Derived type indexer must be subtype of base type indexer
+ var a;
+ var b1;
+-a = b1; // error
+-b1 = a; // error
++a = b1;
++b1 = a;
+ var Generics;
+ (function (Generics) {
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        return A;
+-    }());
++    class A {
++    }
+     function foo() {
+         var a;
+         var b;
+-        a = b; // error
+-        b = a; // error
++        a = b;
++        b = a;
+     }
+ })(Generics || (Generics = {}));

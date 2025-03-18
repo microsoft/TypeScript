@@ -1,0 +1,9 @@
+--- old.promiseIdentityWithAny.js
++++ new.promiseIdentityWithAny.js
+@@= skipped -14, +14 lines =@@
+ //// [promiseIdentityWithAny.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-// Should be ok because signature type parameters get erased to any
+ var x;
+ var x;

@@ -1,0 +1,11 @@
+--- old.exportSpecifierForAGlobal.js
++++ new.exportSpecifierForAGlobal.js
+@@= skipped -19, +19 lines =@@
+     var x;
+     return x;
+ }
+-
+-
+-//// [b.d.ts]
+-export { X };
+-export declare function f(): X;

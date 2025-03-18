@@ -1,0 +1,9 @@
+--- old.ArrowFunction1.js
++++ new.ArrowFunction1.js
+@@= skipped -5, +5 lines =@@
+ };
+ 
+ //// [ArrowFunction1.js]
+-var v = function (a) {
++var v = (a) => {
+ };

@@ -1,0 +1,324 @@
+--- old.moduledecl.js
++++ new.moduledecl.js
+@@= skipped -240, +240 lines =@@
+     }
+     function f2(ns) {
+     }
+-    var c1 = /** @class */ (function () {
+-        function c1() {
+-        }
+-        return c1;
+-    }());
++    class c1 {
++        a;
++        b;
++        static s1;
++        static s2;
++    }
++    var m2 = a;
++    var m3 = b;
++    var m4 = b.a;
++    var m5 = c;
++    var m6 = c.a;
++    var m7 = c.a.b;
+ })(m0 || (m0 = {}));
+ var m1;
+ (function (m1) {
+@@= skipped -14, +21 lines =@@
+     function f2(ns) {
+     }
+     m1.f2 = f2;
+-    var c1 = /** @class */ (function () {
+-        function c1(n, n2, n3, n4) {
++    class c1 {
++        n;
++        n2;
++        n3;
++        n4;
++        a;
++        b;
++        static s1;
++        static s2;
++        d() {
++            return "Hello";
++        }
++        e;
++        constructor(n, n2, n3, n4) {
+             this.n = n;
+             this.n2 = n2;
+             this.n3 = n3;
+             this.n4 = n4;
+         }
+-        c1.prototype.d = function () {
+-            return "Hello";
+-        };
+-        return c1;
+-    }());
++    }
+     m1.c1 = c1;
++    var m2 = a;
++    var m3 = b;
++    var m4 = b.a;
++    var m5 = c;
++    var m6 = c.a;
++    var m7 = c.a.b;
+ })(m1 || (m1 = {}));
+ var m;
+ (function (m) {
+-    var m2;
++    let m2;
+     (function (m2) {
+         var a = 10;
+     })(m2 = m.m2 || (m.m2 = {}));
+-    var m3;
++    let m3;
+     (function (m3) {
+     })(m3 = m.m3 || (m.m3 = {}));
+ })(m || (m = {}));
+ (function (m) {
+-    var m25;
++    let m25;
+     (function (m25) {
+-        var m5;
++        let m5;
+         (function (m5) {
+         })(m5 = m25.m5 || (m25.m5 = {}));
+     })(m25 = m.m25 || (m.m25 = {}));
+ })(m || (m = {}));
+ var m13;
+ (function (m13) {
+-    var m4;
++    let m4;
+     (function (m4) {
+-        var m2;
++        let m2;
+         (function (m2) {
+-            var m3;
++            let m3;
+             (function (m3) {
+             })(m3 = m2.m3 || (m2.m3 = {}));
+         })(m2 = m4.m2 || (m4.m2 = {}));
+@@= skipped -50, +64 lines =@@
+ })(m13 || (m13 = {}));
+ var exportTests;
+ (function (exportTests) {
+-    var C1_public = /** @class */ (function () {
+-        function C1_public() {
+-        }
+-        C1_public.prototype.f2 = function () {
++    class C1_public {
++        f2() {
+             return 30;
+-        };
+-        C1_public.prototype.f3 = function () {
++        }
++        f3() {
+             return "string";
+-        };
+-        return C1_public;
+-    }());
+-    exportTests.C1_public = C1_public;
+-    var C2_private = /** @class */ (function () {
+-        function C2_private() {
+         }
+-        C2_private.prototype.f2 = function () {
++    }
++    exportTests.C1_public = C1_public;
++    class C2_private {
++        f2() {
+             return 30;
+-        };
+-        C2_private.prototype.f3 = function () {
++        }
++        f3() {
+             return "string";
+-        };
+-        return C2_private;
+-    }());
+-    var C3_public = /** @class */ (function () {
+-        function C3_public() {
+         }
+-        C3_public.prototype.getC2_private = function () {
++    }
++    class C3_public {
++        getC2_private() {
+             return new C2_private();
+-        };
+-        C3_public.prototype.setC2_private = function (arg) {
+-        };
+-        Object.defineProperty(C3_public.prototype, "c2", {
+-            get: function () {
+-                return new C2_private();
+-            },
+-            enumerable: false,
+-            configurable: true
+-        });
+-        C3_public.prototype.getC1_public = function () {
++        }
++        setC2_private(arg) {
++        }
++        get c2() {
++            return new C2_private();
++        }
++        getC1_public() {
+             return new C1_public();
+-        };
+-        C3_public.prototype.setC1_public = function (arg) {
+-        };
+-        Object.defineProperty(C3_public.prototype, "c1", {
+-            get: function () {
+-                return new C1_public();
+-            },
+-            enumerable: false,
+-            configurable: true
+-        });
+-        return C3_public;
+-    }());
++        }
++        setC1_public(arg) {
++        }
++        get c1() {
++            return new C1_public();
++        }
++    }
+     exportTests.C3_public = C3_public;
+ })(exportTests || (exportTests = {}));
+ function foo() {
+@@= skipped -68, +51 lines =@@
+ var m3aVar = mAmbient.m3.aVar;
+ var m3bB;
+ var m3eVar;
+-
+-
+-//// [moduledecl.d.ts]
+-declare namespace a {
+-}
+-declare namespace b.a {
+-}
+-declare namespace c.a.b {
+-}
+-declare namespace mImport {
+-}
+-declare namespace m0 {
+-}
+-declare namespace m1 {
+-    function f1(): void;
+-    function f2(s: string): any;
+-    function f2(n: number): any;
+-    class c1 {
+-        n: any;
+-        n2: number;
+-        private n3;
+-        private n4;
+-        a: () => string;
+-        private b;
+-        private static s1;
+-        static s2: any;
+-        d(): string;
+-        e: {
+-            x: number;
+-            y: string;
+-        };
+-        constructor(n: any, n2: number, n3: any, n4: string);
+-    }
+-    interface i1 {
+-        (): Object;
+-        [n: number]: c1;
+-    }
+-}
+-declare namespace m {
+-    namespace m2 {
+-        var b: number;
+-    }
+-    namespace m3 {
+-        var c: number;
+-    }
+-}
+-declare namespace m {
+-    namespace m25 {
+-        namespace m5 {
+-            var c: number;
+-        }
+-    }
+-}
+-declare namespace m13 {
+-    namespace m4 {
+-        namespace m2 {
+-            namespace m3 {
+-                var c: number;
+-            }
+-        }
+-        function f(): number;
+-    }
+-}
+-declare namespace m4 {
+-    var b: any;
+-}
+-declare namespace m5 {
+-    var c: any;
+-}
+-declare namespace m43 {
+-    var b: any;
+-}
+-declare namespace m55 {
+-    var c: any;
+-}
+-declare module "m3" {
+-    var b: number;
+-}
+-declare namespace exportTests {
+-    class C1_public {
+-        private f2;
+-        f3(): string;
+-    }
+-    class C3_public {
+-        private getC2_private;
+-        private setC2_private;
+-        private get c2();
+-        getC1_public(): C1_public;
+-        setC1_public(arg: C1_public): void;
+-        get c1(): C1_public;
+-    }
+-}
+-declare namespace mAmbient {
+-    class C {
+-        myProp: number;
+-    }
+-    function foo(): C;
+-    var aVar: C;
+-    interface B {
+-        x: number;
+-        y: C;
+-    }
+-    enum e {
+-        x,
+-        y,
+-        z
+-    }
+-    namespace m3 {
+-        class C {
+-            myProp: number;
+-        }
+-        function foo(): C;
+-        var aVar: C;
+-        interface B {
+-            x: number;
+-            y: C;
+-        }
+-        enum e {
+-            x,
+-            y,
+-            z
+-        }
+-    }
+-}
+-declare function foo(): mAmbient.C;
+-declare var cVar: mAmbient.C;
+-declare var aVar: mAmbient.C;
+-declare var bB: mAmbient.B;
+-declare var eVar: mAmbient.e;
+-declare function m3foo(): mAmbient.m3.C;
+-declare var m3cVar: mAmbient.m3.C;
+-declare var m3aVar: mAmbient.m3.C;
+-declare var m3bB: mAmbient.m3.B;
+-declare var m3eVar: mAmbient.m3.e;

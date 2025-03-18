@@ -1,0 +1,40 @@
+--- old.systemModule10.js
++++ new.systemModule10.js
+@@= skipped -10, +10 lines =@@
+ export {n2 as n3}
+ 
+ //// [systemModule10.js]
+-System.register(["file1", "file2"], function (exports_1, context_1) {
+-    "use strict";
+-    var file1_1, n2;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (file1_1_1) {
+-                file1_1 = file1_1_1;
+-            },
+-            function (n2_1) {
+-                n2 = n2_1;
+-            }
+-        ],
+-        execute: function () {
+-            exports_1("n", file1_1.default);
+-            exports_1("n1", file1_1.default);
+-            exports_1("x", file1_1.x);
+-            exports_1("y", file1_1.x);
+-            exports_1("n2", n2);
+-            exports_1("n3", n2);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.n3 = exports.n2 = exports.n1 = exports.n = exports.y = exports.x = void 0;
++const file1_1 = require("file1");
++exports.n = file1_1.default;
++exports.n1 = file1_1.default;
++Object.defineProperty(exports, "x", { enumerable: true, get: function () { return file1_1.x; } });
++Object.defineProperty(exports, "y", { enumerable: true, get: function () { return file1_1.x; } });
++const n2 = require("file2");
++exports.n2 = n2;
++exports.n3 = n2;

@@ -1,0 +1,25 @@
+--- old.logicalAssignment1(target=es2015).js
++++ new.logicalAssignment1(target=es2015).js
+@@= skipped -28, +28 lines =@@
+ 
+ 
+ //// [logicalAssignment1.js]
+-"use strict";
+-a && (a = "foo");
+-b || (b = "foo");
+-c !== null && c !== void 0 ? c : (c = "foo");
+-d && (d = 42);
+-e || (e = 42);
+-f !== null && f !== void 0 ? f : (f = 42);
+-g && (g = 42);
+-h || (h = 42);
+-i !== null && i !== void 0 ? i : (i = 42);
++a &&= "foo";
++b ||= "foo";
++c ??= "foo";
++d &&= 42;
++e ||= 42;
++f ??= 42;
++g &&= 42;
++h ||= 42;
++i ??= 42;

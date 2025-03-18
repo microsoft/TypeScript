@@ -1,0 +1,12 @@
+--- old.tsxFragmentErrors.js
++++ new.tsxFragmentErrors.js
+@@= skipped -13, +13 lines =@@
+ <>eof   // Error
+ 
+ //// [file.js]
+-React.createElement(React.Fragment, null, "hi");
+-div > // Error
+-    React.createElement(React.Fragment, null, "eof   // Error");
++<>hi</>;
++div >
++    <>eof   // Error</>;

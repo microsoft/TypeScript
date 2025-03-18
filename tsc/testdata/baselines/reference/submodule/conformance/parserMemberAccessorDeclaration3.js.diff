@@ -1,0 +1,19 @@
+--- old.parserMemberAccessorDeclaration3.js
++++ new.parserMemberAccessorDeclaration3.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserMemberAccessorDeclaration3.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    Object.defineProperty(C.prototype, 0, {
+-        get: function () { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++class C {
++    get 0() { }
++}

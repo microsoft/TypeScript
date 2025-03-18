@@ -1,0 +1,8 @@
+--- old.parserArrowFunctionExpression1.js
++++ new.parserArrowFunctionExpression1.js
+@@= skipped -3, +3 lines =@@
+ var v = (public x: string) => { };
+ 
+ //// [parserArrowFunctionExpression1.js]
+-var v = function (x) { };
++var v = (x) => { };

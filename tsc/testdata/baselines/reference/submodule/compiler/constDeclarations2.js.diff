@@ -1,0 +1,21 @@
+--- old.constDeclarations2.js
++++ new.constDeclarations2.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [constDeclarations2.js]
+-// No error
+ var M;
+ (function (M) {
+     M.c1 = false;
+     M.c2 = 23;
+     M.c3 = 0, M.c4 = "", M.c5 = null;
+ })(M || (M = {}));
+-
+-
+-//// [constDeclarations2.d.ts]
+-declare namespace M {
+-    const c1 = false;
+-    const c2: number;
+-    const c3 = 0, c4: string, c5: any;
+-}

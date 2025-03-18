@@ -1,0 +1,60 @@
+--- old.isolatedDeclarationErrorsEnums.js
++++ new.isolatedDeclarationErrorsEnums.js
+@@= skipped -48, +48 lines =@@
+ }
+ 
+ //// [isolatedDeclarationErrorsEnums.js]
+-"use strict";
+ var E;
+ (function (E) {
+-    E[E["A"] = computed(0)] = "A";
+-    E[E["B"] = computed(1)] = "B";
+-    E[E["C"] = computed(2)] = "C";
+-    E[E["D"] = computed(3)] = "D";
++    E["A"] = computed(0);
++    if (typeof E.A !== "string") E[E.A] = "A";
++    E["B"] = computed(1);
++    if (typeof E.B !== "string") E[E.B] = "B";
++    E["C"] = computed(2);
++    if (typeof E.C !== "string") E[E.C] = "C";
++    E["D"] = computed(3);
++    if (typeof E.D !== "string") E[E.D] = "D";
+ })(E || (E = {}));
+ var F;
+ (function (F) {
+-    F[F["A"] = E.A] = "A";
+-    F[F["B"] = F.A] = "B";
++    F["A"] = E.A;
++    if (typeof F.A !== "string") F[F.A] = "A";
++    F["B"] = F.A;
++    if (typeof F.B !== "string") F[F.B] = "B";
+ })(F || (F = {}));
+ var Flag;
+ (function (Flag) {
+@@= skipped -26, +31 lines =@@
+ var ExtFlags;
+ (function (ExtFlags) {
+     ExtFlags[ExtFlags["D"] = 2] = "D";
+-    ExtFlags[ExtFlags["E"] = 1] = "E";
+-    ExtFlags[ExtFlags["ABCD"] = 2] = "ABCD";
+-    ExtFlags[ExtFlags["AC"] = 2] = "AC";
++    ExtFlags["E"] = EV;
++    if (typeof ExtFlags.E !== "string") ExtFlags[ExtFlags.E] = "E";
++    ExtFlags["ABCD"] = Flag.ABC | ExtFlags.D;
++    if (typeof ExtFlags.ABCD !== "string") ExtFlags[ExtFlags.ABCD] = "ABCD";
++    ExtFlags["AC"] = Flag["A"] | ExtFlags.D;
++    if (typeof ExtFlags.AC !== "string") ExtFlags[ExtFlags.AC] = "AC";
+ })(ExtFlags || (ExtFlags = {}));
+ var Str;
+ (function (Str) {
+@@= skipped -13, +16 lines =@@
+ var StrExt;
+ (function (StrExt) {
+     StrExt["D"] = "D";
+-    StrExt["ABD"] = "ABD";
+-    StrExt["AD"] = "AD";
++    StrExt["ABD"] = Str.AB + StrExt.D;
++    if (typeof StrExt.ABD !== "string") StrExt[StrExt.ABD] = "ABD";
++    StrExt["AD"] = Str["A"] + StrExt.D;
++    if (typeof StrExt.AD !== "string") StrExt[StrExt.AD] = "AD";
+ })(StrExt || (StrExt = {}));

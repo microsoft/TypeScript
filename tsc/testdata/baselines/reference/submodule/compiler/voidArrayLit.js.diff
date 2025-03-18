@@ -1,0 +1,13 @@
+--- old.voidArrayLit.js
++++ new.voidArrayLit.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [voidArrayLit.js]
+-var va = [(function () { })()]; // ok
+-(function () { })(); // ok
++var va = [(() => { })()];
++(() => { })();
+ function foo(s) { }
+-foo((function () { })()); // error
++foo((() => { })());

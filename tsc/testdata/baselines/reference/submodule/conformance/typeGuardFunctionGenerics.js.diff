@@ -1,0 +1,61 @@
+--- old.typeGuardFunctionGenerics.js
++++ new.typeGuardFunctionGenerics.js
+@@= skipped -34, +34 lines =@@
+ let test3: B = funE(isB, 1);
+ 
+ //// [typeGuardFunctionGenerics.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
+-var C = /** @class */ (function (_super) {
+-    __extends(C, _super);
+-    function C() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return C;
+-}(A));
+-var a;
+-var test1 = funA(isB);
++class A {
++    propA;
++}
++class B {
++    propB;
++}
++class C extends A {
++    propC;
++}
++let a;
++let test1 = funA(isB);
+ if (funB(retC, a)) {
+     a.propC;
+ }
+-var test2 = funC(isB);
++let test2 = funC(isB);
+ if (funD(isC, a)) {
+     a.propC;
+ }
+-var test3 = funE(isB, 1);
++let test3 = funE(isB, 1);

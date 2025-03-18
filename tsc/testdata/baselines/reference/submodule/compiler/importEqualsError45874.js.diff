@@ -1,0 +1,10 @@
+--- old.importEqualsError45874.js
++++ new.importEqualsError45874.js
+@@= skipped -15, +15 lines =@@
+ (function (globals) {
+     globals.Bar = {};
+ })(globals || (globals = {}));
+-var Foo = globals.toString.Blah;
+ //// [index.js]
+-var Foo = {};
++const Foo = {};

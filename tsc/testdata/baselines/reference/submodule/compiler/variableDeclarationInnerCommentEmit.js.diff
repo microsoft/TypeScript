@@ -1,0 +1,15 @@
+--- old.variableDeclarationInnerCommentEmit.js
++++ new.variableDeclarationInnerCommentEmit.js
+@@= skipped -8, +8 lines =@@
+ var a=/*some comment*/null;
+ 
+ //// [variableDeclarationInnerCommentEmit.js]
+-var a = /*some comment*/ null;
+-var b /*some comment*/ = null;
+-var /*some comment*/ c = null;
+-// no space
+-var a = /*some comment*/ null;
++var a = null;
++var b = null;
++var c = null;
++var a = null;

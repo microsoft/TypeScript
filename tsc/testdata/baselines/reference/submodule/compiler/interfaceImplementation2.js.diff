@@ -1,0 +1,16 @@
+--- old.interfaceImplementation2.js
++++ new.interfaceImplementation2.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [interfaceImplementation2.js]
+-var C3 = /** @class */ (function () {
+-    function C3() {
+-    }
+-    return C3;
+-}());
++class C3 {
++    iObj;
++    iNum;
++    iAny;
++}

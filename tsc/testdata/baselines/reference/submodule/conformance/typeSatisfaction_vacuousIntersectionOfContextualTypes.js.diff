@@ -1,0 +1,10 @@
+--- old.typeSatisfaction_vacuousIntersectionOfContextualTypes.js
++++ new.typeSatisfaction_vacuousIntersectionOfContextualTypes.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [typeSatisfaction_vacuousIntersectionOfContextualTypes.js]
+-var a = "foo";
+-var b = { xyz: "foo" };
++const a = "foo";
++const b = { xyz: "foo" };

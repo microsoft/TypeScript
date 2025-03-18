@@ -1,0 +1,46 @@
+--- old.typeofProperty.js
++++ new.typeofProperty.js
+@@= skipped -49, +49 lines =@@
+ 
+ 
+ //// [typeofProperty.js]
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    return C2;
+-}());
+-var C3 = /** @class */ (function () {
+-    function C3() {
+-    }
+-    return C3;
+-}());
+-var ValidClass = /** @class */ (function () {
+-    function ValidClass() {
+-    }
+-    return ValidClass;
+-}());
++class C1 {
++    a;
++    b;
++}
++class C2 {
++    c;
++    d;
++}
++class C3 {
++    e;
++}
++class ValidClass {
++    x;
++}
+ var vcInstance = new ValidClass();
+ var viInstance = vcInstance;
+-var x1; // x1: string
+-var x2; // x2: string
++var x1;
++var x2;

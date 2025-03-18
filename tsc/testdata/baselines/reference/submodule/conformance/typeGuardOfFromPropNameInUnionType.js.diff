@@ -1,0 +1,177 @@
+--- old.typeGuardOfFromPropNameInUnionType.js
++++ new.typeGuardOfFromPropNameInUnionType.js
+@@= skipped -108, +108 lines =@@
+ 
+ 
+ //// [typeGuardOfFromPropNameInUnionType.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var D = /** @class */ (function () {
+-    function D() {
+-    }
+-    return D;
+-}());
++class A {
++    a;
++}
++class B {
++    b;
++}
++class C {
++    b;
++}
++class D {
++    a;
++}
+ function namedClasses(x) {
+     if ("a" in x) {
+         x.a = "1";
+@@= skipped -30, +22 lines =@@
+ }
+ function multipleClasses(x) {
+     if ("a" in x) {
+-        var y = x.a;
++        let y = x.a;
+     }
+     else {
+-        var z = x.b;
++        let z = x.b;
+     }
+ }
+ function anonymousClasses(x) {
+     if ("a" in x) {
+-        var y = x.a;
++        let y = x.a;
+     }
+     else {
+-        var z = x.b;
++        let z = x.b;
+     }
+ }
+-var AWithOptionalProp = /** @class */ (function () {
+-    function AWithOptionalProp() {
+-    }
+-    return AWithOptionalProp;
+-}());
+-var BWithOptionalProp = /** @class */ (function () {
+-    function BWithOptionalProp() {
+-    }
+-    return BWithOptionalProp;
+-}());
++class AWithOptionalProp {
++    a;
++}
++class BWithOptionalProp {
++    b;
++}
+ function positiveTestClassesWithOptionalProperties(x) {
+     if ("a" in x) {
+         x.a = "1";
+     }
+     else {
+-        var y = x instanceof AWithOptionalProp
++        const y = x instanceof AWithOptionalProp
+             ? x.a
+             : x.b;
+     }
+ }
+ function inParenthesizedExpression(x) {
+     if ("a" in (x)) {
+-        var y = x.a;
++        let y = x.a;
+     }
+     else {
+-        var z = x.b;
++        let z = x.b;
+     }
+ }
+-var ClassWithUnionProp = /** @class */ (function () {
+-    function ClassWithUnionProp() {
+-    }
+-    return ClassWithUnionProp;
+-}());
++class ClassWithUnionProp {
++    prop;
++}
+ function inProperty(x) {
+     if ("a" in x.prop) {
+-        var y = x.prop.a;
++        let y = x.prop.a;
+     }
+     else {
+-        var z = x.prop.b;
++        let z = x.prop.b;
+     }
+ }
+-var NestedClassWithProp = /** @class */ (function () {
+-    function NestedClassWithProp() {
+-    }
+-    return NestedClassWithProp;
+-}());
++class NestedClassWithProp {
++    outer;
++}
+ function innestedProperty(x) {
+     if ("a" in x.outer.prop) {
+-        var y = x.outer.prop.a;
++        let y = x.outer.prop.a;
+     }
+     else {
+-        var z = x.outer.prop.b;
++        let z = x.outer.prop.b;
+     }
+ }
+-var InMemberOfClass = /** @class */ (function () {
+-    function InMemberOfClass() {
+-    }
+-    InMemberOfClass.prototype.inThis = function () {
++class InMemberOfClass {
++    prop;
++    inThis() {
+         if ("a" in this.prop) {
+-            var y = this.prop.a;
++            let y = this.prop.a;
+         }
+         else {
+-            var z = this.prop.b;
++            let z = this.prop.b;
+         }
+-    };
+-    return InMemberOfClass;
+-}());
+-// added for completeness
+-var SelfAssert = /** @class */ (function () {
+-    function SelfAssert() {
+     }
+-    SelfAssert.prototype.inThis = function () {
++}
++class SelfAssert {
++    a;
++    inThis() {
+         if ("a" in this) {
+-            var y = this.a;
++            let y = this.a;
+         }
+         else {
+         }
+-    };
+-    return SelfAssert;
+-}());
++    }
++}
+ function f(i) {
+     if ("a" in i) {
+         return i.a;

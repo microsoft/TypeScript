@@ -1,0 +1,92 @@
+--- old.duplicateIdentifiersAcrossFileBoundaries.js
++++ new.duplicateIdentifiersAcrossFileBoundaries.js
+@@= skipped -33, +33 lines =@@
+ 
+ 
+ //// [file1.js]
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    return C2;
+-}());
++class C1 {
++}
++class C2 {
++}
+ function f() { }
+ var v = 3;
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++    static x;
++}
+ var N;
+ (function (N) {
+-    var F;
++    let F;
+     (function (F) {
+         var t;
+     })(F = N.F || (N.F = {}));
+ })(N || (N = {}));
+ //// [file2.js]
+-var I = /** @class */ (function () {
+-    function I() {
+-    }
+-    return I;
+-}()); // error -- cannot merge interface with non-ambient class
+-function C2() { } // error -- cannot merge function with non-ambient class
+-var f = /** @class */ (function () {
+-    function f() {
+-    }
+-    return f;
+-}()); // error -- cannot merge function with non-ambient class
++class I {
++}
++function C2() { }
++class f {
++}
+ var v = 3;
+ var Foo;
+ (function (Foo) {
+ })(Foo || (Foo = {}));
+-
+-
+-//// [file1.d.ts]
+-interface I {
+-}
+-declare class C1 {
+-}
+-declare class C2 {
+-}
+-declare function f(): void;
+-declare var v: number;
+-declare class Foo {
+-    static x: number;
+-}
+-declare namespace N {
+-    namespace F {
+-    }
+-}
+-//// [file2.d.ts]
+-declare class I {
+-}
+-interface C1 {
+-}
+-declare function C2(): void;
+-declare class f {
+-}
+-declare var v: number;
+-declare namespace Foo {
+-    var x: number;
+-}
+-declare namespace N {
+-    function F(): any;
+-}

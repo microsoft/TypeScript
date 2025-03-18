@@ -1,0 +1,10 @@
+--- old.logicalAssignment5(target=es2021).js
++++ new.logicalAssignment5(target=es2021).js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [logicalAssignment5.js]
+-"use strict";
+ function foo1(f) {
+     f ??= (a => a);
+     f(42);

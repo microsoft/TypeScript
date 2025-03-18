@@ -1,0 +1,22 @@
+--- old.generatorTypeCheck63.js
++++ new.generatorTypeCheck63.js
+@@= skipped -56, +56 lines =@@
+     };
+ }
+ exports.Nothing = strategy("Nothing", function* (state) {
+-    yield 1; // number isn't a `State`, so this should error.
+-    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
++    yield 1;
++    return state;
+ });
+ exports.Nothing1 = strategy("Nothing", function* (state) {
+ });
+ exports.Nothing2 = strategy("Nothing", function* (state) {
+-    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
++    return 1;
+ });
+ exports.Nothing3 = strategy("Nothing", function* (state) {
+     yield state;
+-    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
++    return 1;
+ });

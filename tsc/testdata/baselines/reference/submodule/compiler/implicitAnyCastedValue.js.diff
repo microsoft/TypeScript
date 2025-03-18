@@ -1,0 +1,98 @@
+--- old.implicitAnyCastedValue.js
++++ new.implicitAnyCastedValue.js
+@@= skipped -81, +81 lines =@@
+ 
+ //// [implicitAnyCastedValue.js]
+ var x = function () {
+-    return 0; // this should not be an error
++    return 0;
+ };
+ function foo() {
+-    return "hello world"; // this should not be an error
++    return "hello world";
+ }
+-var C = /** @class */ (function () {
+-    function C() {
+-        this.bar = null; // this should be an error
+-        this.foo = undefined; // this should be an error
++class C {
++    bar = null;
++    foo = undefined;
++    get tempVar() {
++        return 0;
+     }
+-    Object.defineProperty(C.prototype, "tempVar", {
+-        get: function () {
+-            return 0; // this should not be an error
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    C.prototype.returnBarWithCase = function () {
++    returnBarWithCase() {
+         return this.bar;
+-    };
+-    C.prototype.returnFooWithCase = function () {
+-        return this.foo; // this should not be an error
+-    };
+-    return C;
+-}());
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-        this.getValue = null; // this should be an error
+     }
+-    Object.defineProperty(C1.prototype, "castedGet", {
+-        get: function () {
+-            return this.getValue; // this should not be an error
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(C1.prototype, "notCastedGet", {
+-        get: function () {
+-            return this.getValue; // this should not be an error
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C1;
+-}());
++    returnFooWithCase() {
++        return this.foo;
++    }
++}
++class C1 {
++    getValue = null;
++    get castedGet() {
++        return this.getValue;
++    }
++    get notCastedGet() {
++        return this.getValue;
++    }
++}
+ function castedNull() {
+-    return null; // this should not be an error
++    return null;
+ }
+ function notCastedNull() {
+-    return null; // this should be an error
++    return null;
+ }
+ function returnTypeBar() {
+-    return null; // this should not be an error
++    return null;
+ }
+ function undefinedBar() {
+-    return undefined; // this should not be an error
++    return undefined;
+ }
+ function multipleRets1(x) {
+     if (x) {
+@@= skipped -76, +58 lines =@@
+         return undefined;
+     }
+ }
+-// this should not be an error
+ var bar1 = null;
+ var bar2 = undefined;
+ var bar3 = 0;

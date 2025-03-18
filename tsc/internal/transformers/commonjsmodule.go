@@ -27,11 +27,8 @@ type CommonJSModuleTransformer struct {
 }
 
 func NewCommonJSModuleTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver binder.ReferenceResolver) *Transformer {
-	if compilerOptions.VerbatimModuleSyntax.IsTrue() {
-		panic("ImportElisionTransformer should not be used with VerbatimModuleSyntax")
-	}
 	if resolver == nil {
-		resolver = binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+		resolver = binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 	}
 	tx := &CommonJSModuleTransformer{compilerOptions: compilerOptions, resolver: resolver}
 	tx.topLevelVisitor = emitContext.NewNodeVisitor(tx.visitTopLevel)
@@ -473,7 +470,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfVariableDeclarationList(stat
 //   - The `statements` parameter is a statement list to which the down-level export statements are to be appended.
 //   - The `decl` parameter is the declaration whose exports are to be recorded.
 func (tx *CommonJSModuleTransformer) appendExportsOfBindingElement(statements []*ast.Statement, decl *ast.Node /*VariableDeclaration | BindingElement*/, isForInOrOfInitializer bool) []*ast.Statement {
-	if tx.currentModuleInfo.exportEquals != nil {
+	if tx.currentModuleInfo.exportEquals != nil || decl.Name() == nil {
 		return statements
 	}
 

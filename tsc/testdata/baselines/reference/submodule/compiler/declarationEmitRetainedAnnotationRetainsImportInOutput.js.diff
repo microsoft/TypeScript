@@ -1,0 +1,16 @@
+--- old.declarationEmitRetainedAnnotationRetainsImportInOutput.js
++++ new.declarationEmitRetainedAnnotationRetainsImportInOutput.js
+@@= skipped -12, +12 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.run = void 0;
+-var E = require("whatever");
+-var run = function (i) { return E.something(i); };
++const E = require("whatever");
++const run = (i) => E.something(i);
+ exports.run = run;
+-
+-
+-//// [index.d.ts]
+-import * as E from 'whatever';
+-export declare const run: <E>(i: () => E.Whatever<E>) => E.Whatever<E>;

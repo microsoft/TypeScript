@@ -1,0 +1,14 @@
+--- old.nodeModulesTripleSlashReferenceModeDeclarationEmit2(module=node16).js
++++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit2(module=node16).js
+@@= skipped -28, +28 lines =@@
+ export interface LocalInterface extends ImportInterface {}
+ 
+ //// [index.js]
+-/// <reference types="pkg" preserve="true" />
+ export {};
+-
+-
+-//// [index.d.ts]
+-/// <reference types="pkg" preserve="true" />
+-export interface LocalInterface extends ImportInterface {
+-}

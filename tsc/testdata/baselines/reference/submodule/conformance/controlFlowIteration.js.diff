@@ -1,0 +1,14 @@
+--- old.controlFlowIteration.js
++++ new.controlFlowIteration.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [controlFlowIteration.js]
+-var cond;
++let cond;
+ function ff() {
+-    var x;
++    let x;
+     while (true) {
+         if (cond) {
+             x = "";

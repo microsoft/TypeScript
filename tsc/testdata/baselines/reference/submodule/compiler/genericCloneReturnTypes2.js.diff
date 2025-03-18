@@ -1,0 +1,30 @@
+--- old.genericCloneReturnTypes2.js
++++ new.genericCloneReturnTypes2.js
+@@= skipped -17, +17 lines =@@
+ var d: MyList<number> = a.clone(); // error
+ 
+ //// [genericCloneReturnTypes2.js]
+-var MyList = /** @class */ (function () {
+-    function MyList(n) {
++class MyList {
++    size;
++    data;
++    constructor(n) {
+         this.size = n;
+         this.data = new Array(this.size);
+     }
+-    MyList.prototype.clone = function () {
++    clone() {
+         return new MyList(this.size);
+-    };
+-    return MyList;
+-}());
++    }
++}
+ var a;
+-var b = a.clone(); // ok
+-var c = a.clone(); // bug was there was an error on this line
+-var d = a.clone(); // error
++var b = a.clone();
++var c = a.clone();
++var d = a.clone();

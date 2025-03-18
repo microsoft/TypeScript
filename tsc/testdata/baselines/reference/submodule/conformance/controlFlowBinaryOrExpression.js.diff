@@ -1,0 +1,20 @@
+--- old.controlFlowBinaryOrExpression.js
++++ new.controlFlowBinaryOrExpression.js
+@@= skipped -40, +40 lines =@@
+ //// [controlFlowBinaryOrExpression.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var x;
+-var cond;
++let x;
++let cond;
+ (x = "") || (x = 0);
+-x; // string | number
++x;
+ x = "";
+ cond || (x = 0);
+-x; // string | number
++x;
+ var sourceObj = undefined;
+ if (isNodeList(sourceObj)) {
+     sourceObj.length;

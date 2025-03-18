@@ -1,0 +1,8 @@
+--- old.templateStringInTypeOf.js
++++ new.templateStringInTypeOf.js
+@@= skipped -3, +3 lines =@@
+ var x = typeof `abc${ 123 }def`;
+ 
+ //// [templateStringInTypeOf.js]
+-var x = typeof "abc".concat(123, "def");
++var x = typeof `abc${123}def`;

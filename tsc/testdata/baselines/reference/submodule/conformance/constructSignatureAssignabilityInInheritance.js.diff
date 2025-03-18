@@ -1,0 +1,10 @@
+--- old.constructSignatureAssignabilityInInheritance.js
++++ new.constructSignatureAssignabilityInInheritance.js
+@@= skipped -73, +73 lines =@@
+ }
+ 
+ //// [constructSignatureAssignabilityInInheritance.js]
+-// Checking basic subtype relations with construct signatures
+ var MemberWithConstructSignature;
+ (function (MemberWithConstructSignature) {
+     var b;

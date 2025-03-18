@@ -1,0 +1,20 @@
+--- old.classExpression4.js
++++ new.classExpression4.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [classExpression4.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function () {
++let C = class {
++    foo() {
+         return new C();
+-    };
+-    return C;
+-}());
+-var x = (new C).foo();
++    }
++};
++let x = (new C).foo();

@@ -1,0 +1,21 @@
+--- old.isolatedModulesExportDeclarationType.js
++++ new.isolatedModulesExportDeclarationType.js
+@@= skipped -28, +28 lines =@@
+ //// [test1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var T = 0; // Error as of #56354
+-exports.default = T; // Ok
++const T = 0;
++exports.default = T;
+ //// [test2.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -11, +11 lines =@@
+ //// [test4.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-// @ts-expect-error
+-var doesntexist_1 = require("./doesntexist");
++const doesntexist_1 = require("./doesntexist");
+ exports.default = doesntexist_1.default;

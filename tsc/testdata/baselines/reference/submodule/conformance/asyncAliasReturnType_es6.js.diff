@@ -1,0 +1,11 @@
+--- old.asyncAliasReturnType_es6.js
++++ new.asyncAliasReturnType_es6.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [asyncAliasReturnType_es6.js]
+-function f() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-    });
++async function f() {
+ }

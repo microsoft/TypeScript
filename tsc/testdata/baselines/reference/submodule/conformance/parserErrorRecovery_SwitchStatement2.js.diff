@@ -1,0 +1,23 @@
+--- old.parserErrorRecovery_SwitchStatement2.js
++++ new.parserErrorRecovery_SwitchStatement2.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [parserErrorRecovery_SwitchStatement2.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    constructor() {
+         switch (e) {
+         }
+-        var D = /** @class */ (function () {
+-            function D() {
+-            }
+-            return D;
+-        }());
++        class D {
++        }
+     }
+-    return C;
+-}());
++}

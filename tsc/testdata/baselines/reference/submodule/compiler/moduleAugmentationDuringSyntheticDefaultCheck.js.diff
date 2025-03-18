@@ -1,0 +1,14 @@
+--- old.moduleAugmentationDuringSyntheticDefaultCheck.js
++++ new.moduleAugmentationDuringSyntheticDefaultCheck.js
+@@= skipped -33, +33 lines =@@
+ import moment = require("moment-timezone");
+ 
+ 
+-//// [idx.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+ //// [idx.test.js]
+ "use strict";
+-/// <reference path="./idx" />
+ Object.defineProperty(exports, "__esModule", { value: true });
++//// [idx.js]

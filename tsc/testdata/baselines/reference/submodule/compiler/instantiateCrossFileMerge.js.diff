@@ -1,0 +1,8 @@
+--- old.instantiateCrossFileMerge.js
++++ new.instantiateCrossFileMerge.js
+@@= skipped -11, +11 lines =@@
+ 
+ //// [first.js]
+ //// [second.js]
+-new P(function (r) { r('foo'); });
++new P(r => { r('foo'); });

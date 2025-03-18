@@ -1,0 +1,8 @@
+--- old.unicodeExtendedEscapesInTemplates13(target=es5).js
++++ new.unicodeExtendedEscapesInTemplates13(target=es5).js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [unicodeExtendedEscapesInTemplates13.js]
+-var x = "\uDB37\uDDDD";
++var x = `\u{DDDDD}`;

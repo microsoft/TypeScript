@@ -1,0 +1,18 @@
+--- old.recurringTypeParamForContainerOfBase01.js
++++ new.recurringTypeParamForContainerOfBase01.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [recurringTypeParamForContainerOfBase01.js]
+-
+-
+-//// [recurringTypeParamForContainerOfBase01.d.ts]
+-interface BoxOfFoo<T extends Foo<T>> {
+-    item: T;
+-}
+-interface Foo<T extends Foo<T>> {
+-    self: T;
+-}
+-interface Bar<T extends Bar<T>> extends Foo<T> {
+-    other: BoxOfFoo<T>;
+-}

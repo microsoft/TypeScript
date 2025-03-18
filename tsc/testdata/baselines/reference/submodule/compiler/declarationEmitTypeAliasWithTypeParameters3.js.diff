@@ -1,0 +1,13 @@
+--- old.declarationEmitTypeAliasWithTypeParameters3.js
++++ new.declarationEmitTypeAliasWithTypeParameters3.js
+@@= skipped -12, +12 lines =@@
+ function bar() {
+     return {};
+ }
+-
+-
+-//// [declarationEmitTypeAliasWithTypeParameters3.d.ts]
+-type Foo<T> = {
+-    foo<U>(): Foo<U>;
+-};
+-declare function bar(): Foo<number>;

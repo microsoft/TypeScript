@@ -1,0 +1,154 @@
+--- old.assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js
++++ new.assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js
+@@= skipped -132, +132 lines =@@
+ }
+ 
+ //// [assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js]
+-// call signatures in derived types must have the same or fewer optional parameters as the target for assignment
+ var ClassTypeParam;
+ (function (ClassTypeParam) {
+-    var Base = /** @class */ (function () {
+-        function Base() {
+-            var _this = this;
+-            this.init = function () {
+-                _this.a = function () { return null; }; // ok, same T of required params
+-                _this.a = function (x) { return null; }; // ok, same T of required params
+-                _this.a = function (x) { return null; }; // error, too many required params
+-                _this.a2 = function () { return null; }; // ok, same T of required params
+-                _this.a2 = function (x) { return null; }; // ok, same T of required params
+-                _this.a2 = function (x) { return null; }; // ok, same number of params
+-                _this.a3 = function () { return null; }; // ok, fewer required params
+-                _this.a3 = function (x) { return null; }; // ok, fewer required params
+-                _this.a3 = function (x) { return null; }; // ok, same T of required params
+-                _this.a3 = function (x, y) { return null; }; // error, too many required params
+-                _this.a4 = function () { return null; }; // ok, fewer required params
+-                _this.a4 = function (x, y) { return null; }; // ok, fewer required params
+-                _this.a4 = function (x) { return null; }; // ok, same T of required params
+-                _this.a4 = function (x, y) { return null; }; // ok, same number of params
+-                _this.a5 = function () { return null; }; // ok, fewer required params
+-                _this.a5 = function (x, y) { return null; }; // ok, fewer required params
+-                _this.a5 = function (x) { return null; }; // ok, all present params match
+-                _this.a5 = function (x, y) { return null; }; // ok, same number of params
+-            };
+-        }
+-        return Base;
+-    }());
++    class Base {
++        a;
++        a2;
++        a3;
++        a4;
++        a5;
++        init = () => {
++            this.a = () => null;
++            this.a = (x) => null;
++            this.a = (x) => null;
++            this.a2 = () => null;
++            this.a2 = (x) => null;
++            this.a2 = (x) => null;
++            this.a3 = () => null;
++            this.a3 = (x) => null;
++            this.a3 = (x) => null;
++            this.a3 = (x, y) => null;
++            this.a4 = () => null;
++            this.a4 = (x, y) => null;
++            this.a4 = (x) => null;
++            this.a4 = (x, y) => null;
++            this.a5 = () => null;
++            this.a5 = (x, y) => null;
++            this.a5 = (x) => null;
++            this.a5 = (x, y) => null;
++        };
++    }
+ })(ClassTypeParam || (ClassTypeParam = {}));
+ var GenericSignaturesInvalid;
+ (function (GenericSignaturesInvalid) {
+-    var Base2 = /** @class */ (function () {
+-        function Base2() {
+-        }
+-        return Base2;
+-    }());
+-    var Target = /** @class */ (function () {
+-        function Target() {
+-        }
+-        return Target;
+-    }());
++    class Base2 {
++        a;
++        a2;
++        a3;
++        a4;
++        a5;
++    }
++    class Target {
++        a;
++        a2;
++        a3;
++        a4;
++        a5;
++    }
+     function foo() {
+         var b;
+         var t;
+-        // all errors
+         b.a = t.a;
+         b.a = t.a2;
+         b.a = t.a3;
+@@= skipped -75, +78 lines =@@
+ })(GenericSignaturesInvalid || (GenericSignaturesInvalid = {}));
+ var GenericSignaturesValid;
+ (function (GenericSignaturesValid) {
+-    var Base2 = /** @class */ (function () {
+-        function Base2() {
+-            var _this = this;
+-            this.init = function () {
+-                _this.a = function () { return null; }; // ok, same T of required params
+-                _this.a = function (x) { return null; }; // ok, same T of required params
+-                _this.a = function (x) { return null; }; // error, too many required params
+-                _this.a2 = function () { return null; }; // ok, same T of required params
+-                _this.a2 = function (x) { return null; }; // ok, same T of required params
+-                _this.a2 = function (x) { return null; }; // ok, same number of params
+-                _this.a3 = function () { return null; }; // ok, fewer required params
+-                _this.a3 = function (x) { return null; }; // ok, fewer required params
+-                _this.a3 = function (x) { return null; }; // ok, same T of required params
+-                _this.a3 = function (x, y) { return null; }; // error, too many required params
+-                _this.a4 = function () { return null; }; // ok, fewer required params
+-                _this.a4 = function (x, y) { return null; }; // ok, fewer required params
+-                _this.a4 = function (x) { return null; }; // ok, same T of required params
+-                _this.a4 = function (x, y) { return null; }; // ok, same number of params
+-                _this.a5 = function () { return null; }; // ok, fewer required params
+-                _this.a5 = function (x, y) { return null; }; // ok, fewer required params
+-                _this.a5 = function (x) { return null; }; // ok, all present params match
+-                _this.a5 = function (x, y) { return null; }; // ok, same number of params
+-            };
+-        }
+-        return Base2;
+-    }());
++    class Base2 {
++        a;
++        a2;
++        a3;
++        a4;
++        a5;
++        init = () => {
++            this.a = () => null;
++            this.a = (x) => null;
++            this.a = (x) => null;
++            this.a2 = () => null;
++            this.a2 = (x) => null;
++            this.a2 = (x) => null;
++            this.a3 = () => null;
++            this.a3 = (x) => null;
++            this.a3 = (x) => null;
++            this.a3 = (x, y) => null;
++            this.a4 = () => null;
++            this.a4 = (x, y) => null;
++            this.a4 = (x) => null;
++            this.a4 = (x, y) => null;
++            this.a5 = () => null;
++            this.a5 = (x, y) => null;
++            this.a5 = (x) => null;
++            this.a5 = (x, y) => null;
++        };
++    }
+ })(GenericSignaturesValid || (GenericSignaturesValid = {}));

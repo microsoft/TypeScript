@@ -1,0 +1,20 @@
+--- old.numericIndexingResults.js
++++ new.numericIndexingResults.js
+@@= skipped -58, +58 lines =@@
+ var r6 = b2[3];
+ 
+ //// [numericIndexingResults.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-        this[1] = '';
+-        this["2"] = '';
+-    }
+-    return C;
+-}());
++class C {
++    1 = '';
++    "2" = '';
++}
+ var c;
+ var r1 = c['1'];
+ var r2 = c['2'];

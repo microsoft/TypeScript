@@ -1,0 +1,15 @@
+--- old.decoratorOnClassMethodOverload1.js
++++ new.decoratorOnClassMethodOverload1.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [decoratorOnClassMethodOverload1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.method = function () { };
+-    return C;
+-}());
++class C {
++    method() { }
++}

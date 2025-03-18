@@ -1,0 +1,9 @@
+--- old.parserX_ArrowFunction1.js
++++ new.parserX_ArrowFunction1.js
+@@= skipped -5, +5 lines =@@
+ };
+ 
+ //// [parserX_ArrowFunction1.js]
+-var v = function (a) {
++var v = (a) => {
+ };

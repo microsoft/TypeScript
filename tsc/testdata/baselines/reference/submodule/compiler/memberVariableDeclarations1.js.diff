@@ -1,0 +1,41 @@
+--- old.memberVariableDeclarations1.js
++++ new.memberVariableDeclarations1.js
+@@= skipped -29, +29 lines =@@
+ e2 = e1;
+ 
+ //// [memberVariableDeclarations1.js]
+-// from spec
+-var Employee = /** @class */ (function () {
+-    function Employee() {
++class Employee {
++    name;
++    address;
++    retired = false;
++    manager = null;
++    reports = [];
++}
++class Employee2 {
++    name;
++    address;
++    retired;
++    manager;
++    reports;
++    constructor() {
+         this.retired = false;
+         this.manager = null;
+         this.reports = [];
+     }
+-    return Employee;
+-}());
+-var Employee2 = /** @class */ (function () {
+-    function Employee2() {
+-        this.retired = false;
+-        this.manager = null;
+-        this.reports = [];
+-    }
+-    return Employee2;
+-}());
++}
+ var e1;
+ var e2;
+ e1 = e2;

@@ -1,0 +1,10 @@
+--- old.esModuleIntersectionCrash.js
++++ new.esModuleIntersectionCrash.js
+@@= skipped -37, +37 lines =@@
+     return result;
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var mod = __importStar(require("./mod"));
++const mod = __importStar(require("./mod"));
+ mod.a;
+ mod.b;

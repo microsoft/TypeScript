@@ -1,0 +1,14 @@
+--- old.intersectionAsWeakTypeSource.js
++++ new.intersectionAsWeakTypeSource.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [intersectionAsWeakTypeSource.js]
+-var xy = { x: 'x', y: 10 };
+-var z1 = xy; // error, {xy} doesn't overlap with {z}
+-var wrapped = create({ first: { view: 0, styleMedia: "???" } });
+-var vs = wrapped.first; // error, first is a branded number
++const xy = { x: 'x', y: 10 };
++const z1 = xy;
++const wrapped = create({ first: { view: 0, styleMedia: "???" } });
++const vs = wrapped.first;

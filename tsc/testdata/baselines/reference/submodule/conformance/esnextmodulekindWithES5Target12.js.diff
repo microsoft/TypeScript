@@ -1,0 +1,33 @@
+--- old.esnextmodulekindWithES5Target12.js
++++ new.esnextmodulekindWithES5Target12.js
+@@= skipped -38, +38 lines =@@
+ }
+ 
+ //// [esnextmodulekindWithES5Target12.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-export { C };
++export class C {
++}
+ (function (C) {
+     C.x = 1;
+ })(C || (C = {}));
+-export var E;
++export { E };
++var E;
+ (function (E) {
+     E[E["w"] = 1] = "w";
+ })(E || (E = {}));
+@@= skipped -22, +19 lines =@@
+ (function (E) {
+     E.z = 1;
+ })(E || (E = {}));
+-export var N;
++export { N };
++var N;
+ (function (N) {
+     N.x = 1;
+ })(N || (N = {}));

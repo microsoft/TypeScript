@@ -1,0 +1,11 @@
+--- old.letShadowedByNameInNestedScope.js
++++ new.letShadowedByNameInNestedScope.js
+@@= skipped -12, +12 lines =@@
+ //// [letShadowedByNameInNestedScope.js]
+ var x;
+ function foo() {
+-    var x = 0;
++    let x = 0;
+     (function () {
+         var _x = 1;
+         console.log(x);

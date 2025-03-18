@@ -1,0 +1,9 @@
+--- old.commentOnIfStatement1.js
++++ new.commentOnIfStatement1.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [commentOnIfStatement1.js]
+-// Test
+ if (true) {
+ }

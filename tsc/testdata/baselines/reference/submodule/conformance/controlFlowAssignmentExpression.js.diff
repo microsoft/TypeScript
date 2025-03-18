@@ -1,0 +1,24 @@
+--- old.controlFlowAssignmentExpression.js
++++ new.controlFlowAssignmentExpression.js
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ //// [controlFlowAssignmentExpression.js]
+-var x;
+-var obj;
++let x;
++let obj;
+ x = "";
+ x = x.length;
+-x; // number
++x;
+ x = true;
+ (x = "", obj).foo = (x = x.length);
+-x; // number
+-var o;
++x;
++let o;
+ if ((o = fn()).done) {
+-    var y = o.value;
++    const y = o.value;
+ }

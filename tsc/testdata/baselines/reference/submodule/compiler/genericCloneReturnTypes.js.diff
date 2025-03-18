@@ -1,0 +1,25 @@
+--- old.genericCloneReturnTypes.js
++++ new.genericCloneReturnTypes.js
+@@= skipped -27, +27 lines =@@
+ b = b3;
+ 
+ //// [genericCloneReturnTypes.js]
+-var Bar = /** @class */ (function () {
+-    function Bar(x) {
++class Bar {
++    size;
++    t;
++    constructor(x) {
+         this.size = x;
+     }
+-    Bar.prototype.clone = function () {
++    clone() {
+         return new Bar(this.size);
+-    };
+-    return Bar;
+-}());
++    }
++}
+ var b;
+ var b2 = b.clone();
+ var b3;

@@ -1,0 +1,13 @@
+--- old.declarationEmitTypeParamMergedWithPrivate.js
++++ new.declarationEmitTypeParamMergedWithPrivate.js
+@@= skipped -19, +19 lines =@@
+         return null;
+     }
+ }
+-
+-
+-//// [declarationEmitTypeParamMergedWithPrivate.d.ts]
+-export declare class Test<T> {
+-    private get T();
+-    test(): T;
+-}

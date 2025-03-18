@@ -1,0 +1,22 @@
+--- old.typeArgumentInferenceErrors.js
++++ new.typeArgumentInferenceErrors.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [typeArgumentInferenceErrors.js]
+-// Generic call with multiple type parameters and only one used in parameter type annotation
+ function someGenerics1(n, m) { }
+-someGenerics1(3, 4); // Error
+-// 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
++someGenerics1(3, 4);
+ function someGenerics4(n, f) { }
+-someGenerics4('', function (x) { return ''; }); // Error
+-// 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
++someGenerics4('', (x) => '');
+ function someGenerics5(n, f) { }
+-someGenerics5('', function (x) { return ''; }); // Error
+-// Generic call with multiple arguments of function types that each have parameters of the same generic type
++someGenerics5('', (x) => '');
+ function someGenerics6(a, b, c) { }
+-someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Error
++someGenerics6((n) => n, (n) => n, (n) => n);

@@ -1,0 +1,15 @@
+--- old.computedPropertyNamesOnOverloads_ES5.js
++++ new.computedPropertyNamesOnOverloads_ES5.js
+@@= skipped -11, +11 lines =@@
+ //// [computedPropertyNamesOnOverloads_ES5.js]
+ var methodName = "method";
+ var accessorName = "accessor";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype[methodName] = function (v) { };
+-    return C;
+-}());
++class C {
++    [methodName](v) { }
++}

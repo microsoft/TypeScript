@@ -1,0 +1,8 @@
+--- old.incrementalTsBuildInfoFile.js
++++ new.incrementalTsBuildInfoFile.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [a.js]
+-var x = 10;
++const x = 10;

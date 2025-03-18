@@ -1,0 +1,16 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBinding1InEs5.js
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBinding1InEs5.js
+@@= skipped -15, +15 lines =@@
+ //// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
++const es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0");
+ var x = es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0_1.default;
+-
+-
+-//// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.d.ts]
+-declare var a: number;
+-export default a;
+-//// [es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.d.ts]
+-export {};

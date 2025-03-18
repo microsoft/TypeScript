@@ -1,0 +1,27 @@
+--- old.simplifyingConditionalWithInteriorConditionalIsRelated.js
++++ new.simplifyingConditionalWithInteriorConditionalIsRelated.js
+@@= skipped -31, +31 lines =@@
+ 
+ 
+ //// [simplifyingConditionalWithInteriorConditionalIsRelated.js]
+-"use strict";
+ function ConditionalOrUndefined() {
+     return 0;
+ }
+ function JustConditional() {
+-    return ConditionalOrUndefined(); // shouldn't error
++    return ConditionalOrUndefined();
+ }
+-// For comparison...
+ function genericOrUndefined() {
+     return 0;
+ }
+ function JustGeneric() {
+-    return genericOrUndefined(); // no error
++    return genericOrUndefined();
+ }
+-// Simplified example:
+ function f() {
+-    var x = null;
++    const x = null;
+ }

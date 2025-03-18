@@ -1,0 +1,36 @@
+--- old.internalAliasInitializedModuleInsideLocalModuleWithoutExport.js
++++ new.internalAliasInitializedModuleInsideLocalModuleWithoutExport.js
+@@= skipped -18, +18 lines =@@
+ exports.c = exports.a = void 0;
+ var a;
+ (function (a) {
+-    var b;
++    let b;
+     (function (b) {
+-        var c = /** @class */ (function () {
+-            function c() {
+-            }
+-            return c;
+-        }());
++        class c {
++        }
+         b.c = c;
+     })(b = a.b || (a.b = {}));
+ })(a || (exports.a = a = {}));
+@@= skipped -15, +12 lines =@@
+     var b = a.b;
+     c.x = new b.c();
+ })(c || (exports.c = c = {}));
+-
+-
+-//// [internalAliasInitializedModuleInsideLocalModuleWithoutExport.d.ts]
+-export declare namespace a {
+-    namespace b {
+-        class c {
+-        }
+-    }
+-}
+-export declare namespace c {
+-    import b = a.b;
+-    var x: b.c;
+-}

@@ -1,0 +1,47 @@
+--- old.declarationEmitObjectLiteralAccessors1.js
++++ new.declarationEmitObjectLiteralAccessors1.js
+@@= skipped -33, +33 lines =@@
+ };
+ 
+ 
+-
+-
+-//// [declarationEmitObjectLiteralAccessors1.d.ts]
+-export declare const obj1: {
+-    /** my awesome getter (first in source order) */
+-    x: string;
++//// [declarationEmitObjectLiteralAccessors1.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.obj4 = exports.obj3 = exports.obj2 = exports.obj1 = void 0;
++exports.obj1 = {
++    get x() {
++        return "";
++    },
++    set x(a) { },
+ };
+-export declare const obj2: {
+-    /** my awesome getter */
+-    get x(): string;
+-    /** my awesome setter */
+-    set x(a: number);
++exports.obj2 = {
++    get x() {
++        return "";
++    },
++    set x(a) { },
+ };
+-export declare const obj3: {
+-    /** my awesome getter */
+-    readonly x: string;
++exports.obj3 = {
++    get x() {
++        return "";
++    },
+ };
+-export declare const obj4: {
+-    /** my awesome setter */
+-    x: number;
++exports.obj4 = {
++    set x(a) { },
+ };

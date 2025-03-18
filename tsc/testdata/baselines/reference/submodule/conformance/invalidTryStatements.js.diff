@@ -1,0 +1,41 @@
+--- old.invalidTryStatements.js
++++ new.invalidTryStatements.js
+@@= skipped -25, +25 lines =@@
+ function fn() {
+     try {
+     }
+-    catch (x) { } // error missing try
+-    finally { } // potential error; can be absorbed by the 'catch'
++    catch (x) { }
++    finally { }
+     try { }
+-    finally { // error missing finally
+-     } // error missing finally
+-    ; // error missing finally
++    finally { }
++    ;
+ }
+ function fn2() {
+     try {
+     }
+-    finally { } // error missing try
++    finally { }
+     try {
+     }
+-    catch (x) { } // error missing try
++    catch (x) { }
+     try { }
+-    finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
++    finally { }
+     try {
+     }
+-    finally { } // error missing try
++    finally { }
+     try {
+     }
+-    catch (x) { } // error missing try
++    catch (x) { }
+     try { }
+-    catch () { } // error missing catch binding
++    catch () { }
+ }

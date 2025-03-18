@@ -1,0 +1,209 @@
+--- old.controlFlowArrays.js
++++ new.controlFlowArrays.js
+@@= skipped -190, +190 lines =@@
+ 
+ //// [controlFlowArrays.js]
+ function f1() {
+-    var x = [];
++    let x = [];
+     x[0] = 5;
+     x[1] = "hello";
+     x[2] = true;
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+ function f2() {
+-    var x = [];
++    let x = [];
+     x.push(5);
+     x.push("hello");
+     x.push(true);
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+ function f3() {
+-    var x;
++    let x;
+     x = [];
+     x.push(5, "hello");
+-    return x; // (string | number)[]
++    return x;
+ }
+ function f4() {
+-    var x = [];
++    let x = [];
+     if (cond()) {
+         x.push(5);
+     }
+     else {
+         x.push("hello");
+     }
+-    return x; // (string | number)[]
++    return x;
+ }
+ function f5() {
+-    var x;
++    let x;
+     if (cond()) {
+         x = [];
+         x.push(5);
+@@= skipped -39, +39 lines =@@
+         x = [];
+         x.push("hello");
+     }
+-    return x; // (string | number)[]
++    return x;
+ }
+ function f6() {
+-    var x;
++    let x;
+     if (cond()) {
+         x = 5;
+     }
+@@= skipped -11, +11 lines =@@
+         x = [];
+         x.push("hello");
+     }
+-    return x; // number | string[]
++    return x;
+ }
+ function f7() {
+-    var x = null;
++    let x = null;
+     if (cond()) {
+         x = [];
+         while (cond()) {
+             x.push("hello");
+         }
+     }
+-    return x; // string[] | null
++    return x;
+ }
+ function f8() {
+-    var x = [];
++    let x = [];
+     x.push(5);
+     if (cond())
+-        return x; // number[]
++        return x;
+     x.push("hello");
+     if (cond())
+-        return x; // (string | number)[]
++        return x;
+     x.push(true);
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+ function f9() {
+-    var x = [];
++    let x = [];
+     if (cond()) {
+         x.push(5);
+-        return x; // number[]
++        return x;
+     }
+     else {
+         x.push("hello");
+-        return x; // string[]
++        return x;
+     }
+ }
+ function f10() {
+-    var x = [];
++    let x = [];
+     if (cond()) {
+         x.push(true);
+-        x; // boolean[]
++        x;
+     }
+     else {
+         x.push(5);
+-        x; // number[]
++        x;
+         while (cond()) {
+             x.push("hello");
+         }
+-        x; // (string | number)[]
++        x;
+     }
+     x.push(99);
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+ function f11() {
+-    var x = [];
+-    if (x.length === 0) { // x.length ok on implicit any[]
++    let x = [];
++    if (x.length === 0) {
+         x.push("hello");
+     }
+     return x;
+ }
+ function f12() {
+-    var x;
++    let x;
+     x = [];
+-    if (x.length === 0) { // x.length ok on implicit any[]
++    if (x.length === 0) {
+         x.push("hello");
+     }
+     return x;
+@@= skipped -71, +71 lines =@@
+     x.push(5);
+     x.push("hello");
+     x.push(true);
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+ function f14() {
+-    var x = [];
++    const x = [];
+     x.push(5);
+     x.push("hello");
+     x.push(true);
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+ function f15() {
+-    var x = [];
++    let x = [];
+     while (cond()) {
+         while (cond()) { }
+         x.push("hello");
+     }
+-    return x; // string[]
++    return x;
+ }
+ function f16() {
+-    var x;
+-    var y;
++    let x;
++    let y;
+     (x = [], x).push(5);
+     (x.push("hello"), x).push(true);
+     ((x))[3] = { a: 1 };
+-    return x; // (string | number | boolean | { a: number })[]
++    return x;
+ }
+ function f17() {
+-    var x = [];
++    let x = [];
+     x.unshift(5);
+     x.unshift("hello");
+     x.unshift(true);
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+ function f18() {
+-    var x = [];
++    let x = [];
+     x.push(5);
+     x.unshift("hello");
+     x[2] = true;
+-    return x; // (string | number | boolean)[]
++    return x;
+ }
+-var arr = [];
++let arr = [];
+ arr.push({ val: 1, bar: 2 });
+ foo(arr);

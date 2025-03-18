@@ -1,0 +1,29 @@
+--- old.thisInFunctionCall.js
++++ new.thisInFunctionCall.js
+@@= skipped -39, +39 lines =@@
+ 
+ //// [thisInFunctionCall.js]
+ class Test {
++    data;
+     constructor() {
+         this.data = [1, 2, 3];
+     }
+@@= skipped -14, +15 lines =@@
+         });
+     }
+     forEacher() {
+-        this.data.forEach(
+-        /** @this {Test} */
+-        function (d) {
++        this.data.forEach(function (d) {
+             console.log(d === this.data.length);
+         }, this);
+     }
+     finder() {
+-        this.data.find(
+-        /** @this {Test} */
+-        function (d) {
++        this.data.find(function (d) {
+             return d === this.data.length;
+         }, this);
+     }

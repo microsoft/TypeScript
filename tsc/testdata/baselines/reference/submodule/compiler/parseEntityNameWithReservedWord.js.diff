@@ -1,0 +1,8 @@
+--- old.parseEntityNameWithReservedWord.js
++++ new.parseEntityNameWithReservedWord.js
+@@= skipped -9, +9 lines =@@
+ (function (Bool) {
+     Bool[Bool["false"] = 0] = "false";
+ })(Bool || (Bool = {}));
+-var x = Bool.false;
++const x = Bool.false;

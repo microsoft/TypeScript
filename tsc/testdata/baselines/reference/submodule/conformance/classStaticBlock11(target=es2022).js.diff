@@ -1,0 +1,10 @@
+--- old.classStaticBlock11(target=es2022).js
++++ new.classStaticBlock11(target=es2022).js
+@@= skipped -22, +22 lines =@@
+         this.#x = x;
+     }
+     static {
+-        // getX has privileged access to #x
+         getX = (obj) => obj.#x;
+     }
+ }

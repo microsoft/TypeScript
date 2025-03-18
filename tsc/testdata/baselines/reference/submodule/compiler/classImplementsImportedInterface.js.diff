@@ -1,0 +1,17 @@
+--- old.classImplementsImportedInterface.js
++++ new.classImplementsImportedInterface.js
+@@= skipped -16, +16 lines =@@
+ //// [classImplementsImportedInterface.js]
+ var M2;
+ (function (M2) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        C.prototype.foo = function () { };
+-        return C;
+-    }());
++    var T = M1.I;
++    class C {
++        foo() { }
++    }
+ })(M2 || (M2 = {}));

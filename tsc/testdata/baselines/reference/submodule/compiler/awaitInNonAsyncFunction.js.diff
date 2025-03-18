@@ -1,0 +1,10 @@
+--- old.awaitInNonAsyncFunction.js
++++ new.awaitInNonAsyncFunction.js
+@@= skipped -42, +42 lines =@@
+ await null;
+ 
+ //// [awaitInNonAsyncFunction.js]
+-// https://github.com/Microsoft/TypeScript/issues/26586
+ function normalFunc(p) {
+     for await (const _ of [])
+         ;

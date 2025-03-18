@@ -1,0 +1,18 @@
+--- old.constructorReturnsInvalidType.js
++++ new.constructorReturnsInvalidType.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [constructorReturnsInvalidType.js]
+-var X = /** @class */ (function () {
+-    function X() {
++class X {
++    constructor() {
+         return 1;
+     }
+-    X.prototype.foo = function () { };
+-    return X;
+-}());
++    foo() { }
++}
+ var x = new X();

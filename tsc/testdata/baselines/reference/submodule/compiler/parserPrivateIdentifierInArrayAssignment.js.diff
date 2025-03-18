@@ -1,0 +1,9 @@
+--- old.parserPrivateIdentifierInArrayAssignment.js
++++ new.parserPrivateIdentifierInArrayAssignment.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [parserPrivateIdentifierInArrayAssignment.js]
+-#abc = [0];
++[#abc] =
++;

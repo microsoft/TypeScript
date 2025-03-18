@@ -1,0 +1,8 @@
+--- old.destructuringVoid.js
++++ new.destructuringVoid.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [destructuringVoid.js]
+-var _a = v;
++const {} = v;

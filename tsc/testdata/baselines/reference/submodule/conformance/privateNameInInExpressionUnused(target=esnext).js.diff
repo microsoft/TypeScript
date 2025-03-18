@@ -1,0 +1,17 @@
+--- old.privateNameInInExpressionUnused(target=esnext).js
++++ new.privateNameInInExpressionUnused(target=esnext).js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [privateNameInInExpressionUnused.js]
+-"use strict";
+ class Foo {
+-    #unused; // expect unused error
+-    #brand; // expect no error
++    #unused;
++    #brand;
+     isFoo(v) {
+-        // This should count as using/reading '#brand'
+         return #brand in v;
+     }
+ }

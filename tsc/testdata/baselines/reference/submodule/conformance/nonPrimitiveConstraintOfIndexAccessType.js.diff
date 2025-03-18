@@ -1,0 +1,11 @@
+--- old.nonPrimitiveConstraintOfIndexAccessType.js
++++ new.nonPrimitiveConstraintOfIndexAccessType.js
+@@= skipped -34, +34 lines =@@
+ 
+ 
+ //// [nonPrimitiveConstraintOfIndexAccessType.js]
+-"use strict";
+-// test for #15371
+ function f(s, tp) {
+     tp = s;
+ }

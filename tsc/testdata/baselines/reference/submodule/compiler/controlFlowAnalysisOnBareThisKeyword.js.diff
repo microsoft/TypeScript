@@ -1,0 +1,19 @@
+--- old.controlFlowAnalysisOnBareThisKeyword.js
++++ new.controlFlowAnalysisOnBareThisKeyword.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [controlFlowAnalysisOnBareThisKeyword.js]
+-"use strict";
+ function bigger() {
+     if (isBig(this)) {
+-        this.big; // Expect property to exist
++        this.big;
+     }
+ }
+ function bar() {
+     if (typeof this === "string") {
+-        var x = this;
++        const x = this;
+     }
+ }

@@ -1,0 +1,11 @@
+--- old.genericFunduleInModule2.js
++++ new.genericFunduleInModule2.js
+@@= skipped -20, +20 lines =@@
+     A.B = B;
+ })(A || (A = {}));
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+         B.x = 1;
+     })(B = A.B || (A.B = {}));

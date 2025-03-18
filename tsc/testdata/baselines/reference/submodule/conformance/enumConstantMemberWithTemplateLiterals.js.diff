@@ -1,0 +1,22 @@
+--- old.enumConstantMemberWithTemplateLiterals.js
++++ new.enumConstantMemberWithTemplateLiterals.js
+@@= skipped -74, +74 lines =@@
+     T5["b"] = "12";
+     T5["c"] = "123";
+     T5[T5["d"] = 1] = "d";
+-    T5[T5["e"] = "1" - "1"] = "e";
++    T5["e"] = `1` - `1`;
++    if (typeof T5.e !== "string") T5[T5.e] = "e";
+     T5["f"] = "11";
+     T5["g"] = "123";
+-    T5[T5["h"] = "1".length] = "h";
++    T5["h"] = `1`.length;
++    if (typeof T5.h !== "string") T5[T5.h] = "h";
+ })(T5 || (T5 = {}));
+ var T6;
+ (function (T6) {
+     T6[T6["a"] = 1] = "a";
+-    T6[T6["b"] = "12".length] = "b";
++    T6["b"] = `12`.length;
++    if (typeof T6.b !== "string") T6[T6.b] = "b";
+ })(T6 || (T6 = {}));

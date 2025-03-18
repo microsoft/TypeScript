@@ -1,0 +1,9 @@
+--- old.recursiveBaseConstructorCreation3.js
++++ new.recursiveBaseConstructorCreation3.js
+@@= skipped -12, +12 lines =@@
+ var r: xyz = bar.foo;
+ 
+ //// [recursiveBaseConstructorCreation3.js]
+-var bar = new xyz(); // Error: Invalid 'new' expression.
++var bar = new xyz();
+ var r = bar.foo;

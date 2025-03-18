@@ -1,0 +1,7 @@
+--- old.ramdaToolsNoInfinite2.js
++++ new.ramdaToolsNoInfinite2.js
+@@= skipped -570, +570 lines =@@
+ 
+ 
+ //// [ramdaToolsNoInfinite2.js]
+-"use strict";

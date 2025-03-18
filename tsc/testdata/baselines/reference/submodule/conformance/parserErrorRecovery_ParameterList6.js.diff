@@ -1,0 +1,15 @@
+--- old.parserErrorRecovery_ParameterList6.js
++++ new.parserErrorRecovery_ParameterList6.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserErrorRecovery_ParameterList6.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    Foo.prototype.banana = function (x) { };
+-    return Foo;
+-}());
++class Foo {
++    banana(x) { }
++}

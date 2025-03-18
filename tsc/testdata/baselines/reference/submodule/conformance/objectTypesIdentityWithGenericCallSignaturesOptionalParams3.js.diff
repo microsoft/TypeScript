@@ -1,0 +1,42 @@
+--- old.objectTypesIdentityWithGenericCallSignaturesOptionalParams3.js
++++ new.objectTypesIdentityWithGenericCallSignaturesOptionalParams3.js
+@@= skipped -104, +104 lines =@@
+ function foo15(x: any) { }
+ 
+ //// [objectTypesIdentityWithGenericCallSignaturesOptionalParams3.js]
+-// Two call or construct signatures are considered identical when they have the same number of type parameters and, considering those 
+-// parameters pairwise identical, have identical type parameter constraints, identical number of parameters with identical kind(required, 
+-// optional or rest) and types, and identical return types.
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A.prototype.foo = function (x, y) { return null; };
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    B.prototype.foo = function (x, y) { return null; };
+-    return B;
+-}());
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function (x, y) { return null; };
+-    return C;
+-}());
++class A {
++    foo(x, y) { return null; }
++}
++class B {
++    foo(x, y) { return null; }
++}
++class C {
++    foo(x, y) { return null; }
++}
+ var a;
+-var b = { foo: function (x, y) { return x; } };
++var b = { foo(x, y) { return x; } };
+ function foo1(x) { }
+ function foo1b(x) { }
+ function foo1c(x) { }

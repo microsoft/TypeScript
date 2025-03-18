@@ -1,0 +1,25 @@
+--- old.scopeCheckInsideStaticMethod1.js
++++ new.scopeCheckInsideStaticMethod1.js
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ //// [scopeCheckInsideStaticMethod1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.b = function () {
+-        v = 1; // ERR
++class C {
++    v;
++    p;
++    static s;
++    static b() {
++        v = 1;
+         C.s = 1;
+-        this.p = 1; // ERR
+-    };
+-    return C;
+-}());
++        this.p = 1;
++    }
++}

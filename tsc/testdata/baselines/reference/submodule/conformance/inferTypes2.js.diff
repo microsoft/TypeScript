@@ -1,0 +1,32 @@
+--- old.inferTypes2.js
++++ new.inferTypes2.js
+@@= skipped -25, +25 lines =@@
+ 
+ //// [inferTypes2.js]
+ "use strict";
+-// Repros from #22755
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.bar = bar;
+ exports.bar2 = bar2;
+@@= skipped -10, +9 lines =@@
+ function bar2(obj) {
+     return foo2(obj);
+ }
+-var a = null;
+-var b = a;
+-
+-
+-//// [inferTypes2.d.ts]
+-export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
+-export declare function bar<T>(obj: T): T extends () => infer P ? P : never;
+-export type BadNested<T> = {
+-    x: T extends number ? T : string;
+-};
+-export declare function foo2<T>(obj: T): T extends {
+-    [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
+-} ? P : never;
+-export declare function bar2<T>(obj: T): T extends {
+-    x: infer P extends number ? infer P : string;
+-} ? P : never;
++const a = null;
++const b = a;

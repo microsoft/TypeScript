@@ -1,0 +1,13 @@
+--- old.stringLiteralsWithSwitchStatements01.js
++++ new.stringLiteralsWithSwitchStatements01.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [stringLiteralsWithSwitchStatements01.js]
+-var x;
+-var y;
++let x;
++let y;
+ switch (x) {
+     case "foo":
+         break;

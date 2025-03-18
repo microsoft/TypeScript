@@ -1675,7 +1675,7 @@ func GetExternalModuleName(node *Node) *Expression {
 	case KindImportType:
 		return getImportTypeNodeLiteral(node)
 	case KindCallExpression:
-		return node.AsCallExpression().Arguments.Nodes[0]
+		return core.FirstOrNil(node.AsCallExpression().Arguments.Nodes)
 	case KindModuleDeclaration:
 		if IsStringLiteral(node.AsModuleDeclaration().Name()) {
 			return node.AsModuleDeclaration().Name()

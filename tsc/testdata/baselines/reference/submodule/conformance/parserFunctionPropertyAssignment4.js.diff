@@ -1,0 +1,8 @@
+--- old.parserFunctionPropertyAssignment4.js
++++ new.parserFunctionPropertyAssignment4.js
+@@= skipped -3, +3 lines =@@
+ var v = { 0<T>() { } };
+ 
+ //// [parserFunctionPropertyAssignment4.js]
+-var v = { 0: function () { } };
++var v = { 0() { } };

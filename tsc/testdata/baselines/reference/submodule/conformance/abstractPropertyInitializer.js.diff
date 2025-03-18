@@ -1,0 +1,20 @@
+--- old.abstractPropertyInitializer.js
++++ new.abstractPropertyInitializer.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [abstractPropertyInitializer.js]
+-"use strict";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-
+-
+-//// [abstractPropertyInitializer.d.ts]
+-declare abstract class C {
+-    abstract prop: number;
++class C {
++    prop = 1;
+ }

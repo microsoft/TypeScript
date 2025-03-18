@@ -1,0 +1,12 @@
+--- old.genericRecursiveImplicitConstructorErrors1.js
++++ new.genericRecursiveImplicitConstructorErrors1.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [genericRecursiveImplicitConstructorErrors1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

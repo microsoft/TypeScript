@@ -1,0 +1,8 @@
+--- old.wideningTuples5.js
++++ new.wideningTuples5.js
+@@= skipped -3, +3 lines =@@
+ var [a, b] = [undefined, null];
+ 
+ //// [wideningTuples5.js]
+-var _a = [undefined, null], a = _a[0], b = _a[1];
++var [a, b] = [undefined, null];

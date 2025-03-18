@@ -1,0 +1,41 @@
+--- old.moduleDuplicateIdentifiers.js
++++ new.moduleDuplicateIdentifiers.js
+@@= skipped -46, +46 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Utensils = exports.Pot = exports.Kettle = exports.FooBar = exports.Foo = void 0;
+ exports.Foo = 2;
+-exports.Foo = 42; // Should error
++exports.Foo = 42;
+ var FooBar;
+ (function (FooBar) {
+     FooBar.member1 = 2;
+@@= skipped -8, +8 lines =@@
+ (function (FooBar) {
+     FooBar.member2 = 42;
+ })(FooBar || (exports.FooBar = FooBar = {}));
+-var Kettle = /** @class */ (function () {
+-    function Kettle() {
+-        this.member1 = 2;
+-    }
+-    return Kettle;
+-}());
++class Kettle {
++    member1 = 2;
++}
+ exports.Kettle = Kettle;
+-var Kettle = /** @class */ (function () {
+-    function Kettle() {
+-        this.member2 = 42;
+-    }
+-    return Kettle;
+-}());
++class Kettle {
++    member2 = 42;
++}
+ exports.Kettle = Kettle;
+ exports.Pot = 2;
+-exports.Pot = 42; // Shouldn't error
++exports.Pot = 42;
+ var Utensils;
+ (function (Utensils) {
+     Utensils[Utensils["Spoon"] = 0] = "Spoon";

@@ -1,0 +1,11 @@
+--- old.computedPropertyNamesDeclarationEmit2_ES6.js
++++ new.computedPropertyNamesDeclarationEmit2_ES6.js
+@@= skipped -12, +12 lines =@@
+     static get ["" + ""]() { return 0; }
+     static set ["" + ""](x) { }
+ }
+-
+-
+-//// [computedPropertyNamesDeclarationEmit2_ES6.d.ts]
+-declare class C {
+-}

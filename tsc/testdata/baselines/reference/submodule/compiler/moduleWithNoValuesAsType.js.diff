@@ -1,0 +1,12 @@
+--- old.moduleWithNoValuesAsType.js
++++ new.moduleWithNoValuesAsType.js
+@@= skipped -17, +17 lines =@@
+ var c: C; // error
+ 
+ //// [moduleWithNoValuesAsType.js]
+-var a; // error
+-var b; // error
+-var c; // error
++var a;
++var b;
++var c;

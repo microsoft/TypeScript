@@ -1,0 +1,8 @@
+--- old.globalThisAmbientModules.js
++++ new.globalThisAmbientModules.js
+@@= skipped -18, +18 lines =@@
+ (function (valueModule) {
+     valueModule.val = 1;
+ })(valueModule || (valueModule = {}));
+-var bad1 = 'ambientModule';
++const bad1 = 'ambientModule';

@@ -1,0 +1,26 @@
+--- old.paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.js
++++ new.paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.js
+@@= skipped -34, +34 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.appendToOptionalArray = appendToOptionalArray;
+ function appendToOptionalArray(object, key, value) {
+-    var array = object[key];
++    const array = object[key];
+     if (array) {
+         array.push(value);
+     }
+@@= skipped -8, +8 lines =@@
+         object[key] = [value];
+     }
+ }
+-// e.g.
+-var foo = {};
+-appendToOptionalArray(foo, 'x', 123); // ok
+-appendToOptionalArray(foo, 'y', 'bar'); // ok
+-appendToOptionalArray(foo, 'y', 12); // should fail
+-appendToOptionalArray(foo, 'x', "no"); // should fail
++const foo = {};
++appendToOptionalArray(foo, 'x', 123);
++appendToOptionalArray(foo, 'y', 'bar');
++appendToOptionalArray(foo, 'y', 12);
++appendToOptionalArray(foo, 'x', "no");

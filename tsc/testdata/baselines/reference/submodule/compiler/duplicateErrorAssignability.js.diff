@@ -1,0 +1,12 @@
+--- old.duplicateErrorAssignability.js
++++ new.duplicateErrorAssignability.js
+@@= skipped -14, +14 lines =@@
+ obj[x];
+ 
+ //// [duplicateErrorAssignability.js]
+-"use strict";
+-var x = a = b;
+-var obj = { 3: "three" };
++const x = a = b;
++let obj = { 3: "three" };
+ obj[x];

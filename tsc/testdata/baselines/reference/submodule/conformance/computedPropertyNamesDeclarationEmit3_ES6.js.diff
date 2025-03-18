@@ -1,0 +1,11 @@
+--- old.computedPropertyNamesDeclarationEmit3_ES6.js
++++ new.computedPropertyNamesDeclarationEmit3_ES6.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [computedPropertyNamesDeclarationEmit3_ES6.js]
+-
+-
+-//// [computedPropertyNamesDeclarationEmit3_ES6.d.ts]
+-interface I {
+-}

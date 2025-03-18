@@ -1,0 +1,16 @@
+--- old.functionCall17.js
++++ new.functionCall17.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [functionCall17.js]
+-function foo(a, b, c) {
+-    var d = [];
+-    for (var _i = 3; _i < arguments.length; _i++) {
+-        d[_i - 3] = arguments[_i];
+-    }
+-}
++function foo(a, b, c, ...d) { }
+ foo('foo', 1);
+ foo('foo');
+ foo();

@@ -1,0 +1,12 @@
+--- old.commentOnElidedModule1.js
++++ new.commentOnElidedModule1.js
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ //// [a.js]
+-/*!=================
+-    Keep this pinned
+-   =================
+-*/
+ //// [b.js]
+-///<reference path="a.ts"/>

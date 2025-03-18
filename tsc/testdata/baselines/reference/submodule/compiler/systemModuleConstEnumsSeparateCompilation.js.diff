@@ -1,0 +1,48 @@
+--- old.systemModuleConstEnumsSeparateCompilation.js
++++ new.systemModuleConstEnumsSeparateCompilation.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [systemModuleConstEnumsSeparateCompilation.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var TopLevelConstEnum, M;
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() {
+-        use(TopLevelConstEnum.X);
+-        use(M.NonTopLevelConstEnum.X);
+-    }
+-    exports_1("foo", foo);
+-    return {
+-        setters: [],
+-        execute: function () {
+-            (function (TopLevelConstEnum) {
+-                TopLevelConstEnum[TopLevelConstEnum["X"] = 0] = "X";
+-            })(TopLevelConstEnum || (TopLevelConstEnum = {}));
+-            (function (M) {
+-                var NonTopLevelConstEnum;
+-                (function (NonTopLevelConstEnum) {
+-                    NonTopLevelConstEnum[NonTopLevelConstEnum["X"] = 0] = "X";
+-                })(NonTopLevelConstEnum = M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
+-            })(M || (M = {}));
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.foo = foo;
++var TopLevelConstEnum;
++(function (TopLevelConstEnum) {
++    TopLevelConstEnum[TopLevelConstEnum["X"] = 0] = "X";
++})(TopLevelConstEnum || (TopLevelConstEnum = {}));
++function foo() {
++    use(TopLevelConstEnum.X);
++    use(M.NonTopLevelConstEnum.X);
++}
++var M;
++(function (M) {
++    let NonTopLevelConstEnum;
++    (function (NonTopLevelConstEnum) {
++        NonTopLevelConstEnum[NonTopLevelConstEnum["X"] = 0] = "X";
++    })(NonTopLevelConstEnum = M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
++})(M || (M = {}));

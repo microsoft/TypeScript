@@ -1,0 +1,13 @@
+--- old.emitArrowFunctionWhenUsingArguments18.js
++++ new.emitArrowFunctionWhenUsingArguments18.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [emitArrowFunctionWhenUsingArguments18.js]
+ function f() {
+-    var args = { arguments: arguments }.arguments;
++    var { arguments: args } = { arguments };
+     if (Math.random()) {
+-        return function () { return arguments; };
++        return () => arguments;
+     }
+ }

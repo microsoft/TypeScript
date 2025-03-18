@@ -1,0 +1,10 @@
+--- old.parseJsxExtends1.js
++++ new.parseJsxExtends1.js
+@@= skipped -13, +13 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Foo = Foo;
+ function Foo() {
+-    // No error; "const" is lowercase and therefore intrinsic.
+-    return React.createElement("const", { T: true, extends: true });
++    return <const T extends/>;
+ }

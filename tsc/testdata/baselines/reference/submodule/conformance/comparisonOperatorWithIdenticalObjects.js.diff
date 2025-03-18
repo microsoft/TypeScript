@@ -1,0 +1,150 @@
+--- old.comparisonOperatorWithIdenticalObjects.js
++++ new.comparisonOperatorWithIdenticalObjects.js
+@@= skipped -196, +196 lines =@@
+ var r8b7 = b6 !== a6;
+ 
+ //// [comparisonOperatorWithIdenticalObjects.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var A1 = /** @class */ (function () {
+-    function A1() {
+-    }
+-    A1.prototype.fn = function (a) {
++class A1 {
++    a;
++    b;
++    c;
++    d;
++    e;
++    fn(a) {
+         return null;
+-    };
+-    return A1;
+-}());
+-var B1 = /** @class */ (function () {
+-    function B1() {
+     }
+-    B1.prototype.fn = function (b) {
++}
++class B1 {
++    a;
++    b;
++    c;
++    d;
++    e;
++    fn(b) {
+         return null;
+-    };
+-    return B1;
+-}());
+-var Base = /** @class */ (function () {
+-    function Base() {
+     }
+-    Base.prototype.fn = function (b) {
++}
++class Base {
++    a;
++    fn(b) {
+         return null;
+-    };
+-    return Base;
+-}());
+-var A2 = /** @class */ (function (_super) {
+-    __extends(A2, _super);
+-    function A2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+     }
+-    return A2;
+-}(Base));
+-var B2 = /** @class */ (function (_super) {
+-    __extends(B2, _super);
+-    function B2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return B2;
+-}(Base));
++}
++class A2 extends Base {
++}
++class B2 extends Base {
++}
+ var a1;
+ var a2;
+ var a3;
+@@= skipped -67, +44 lines =@@
+ var b6;
+ var base1;
+ var base2;
+-// operator <
+ var r1a1 = a1 < b1;
+ var r1a2 = base1 < base2;
+ var r1a3 = a2 < b2;
+@@= skipped -15, +14 lines =@@
+ var r1b5 = b4 < a4;
+ var r1b6 = b5 < a5;
+ var r1b7 = b6 < a6;
+-// operator >
+ var r2a1 = a1 > b1;
+ var r2a2 = base1 > base2;
+ var r2a3 = a2 > b2;
+@@= skipped -15, +14 lines =@@
+ var r2b5 = b4 > a4;
+ var r2b6 = b5 > a5;
+ var r2b7 = b6 > a6;
+-// operator <=
+ var r3a1 = a1 <= b1;
+ var r3a2 = base1 <= base2;
+ var r3a3 = a2 <= b2;
+@@= skipped -15, +14 lines =@@
+ var r3b5 = b4 <= a4;
+ var r3b6 = b5 <= a5;
+ var r3b7 = b6 <= a6;
+-// operator >=
+ var r4a1 = a1 >= b1;
+ var r4a2 = base1 >= base2;
+ var r4a3 = a2 >= b2;
+@@= skipped -15, +14 lines =@@
+ var r4b5 = b4 >= a4;
+ var r4b6 = b5 >= a5;
+ var r4b7 = b6 >= a6;
+-// operator ==
+ var r5a1 = a1 == b1;
+ var r5a2 = base1 == base2;
+ var r5a3 = a2 == b2;
+@@= skipped -15, +14 lines =@@
+ var r5b5 = b4 == a4;
+ var r5b6 = b5 == a5;
+ var r5b7 = b6 == a6;
+-// operator !=
+ var r6a1 = a1 != b1;
+ var r6a2 = base1 != base2;
+ var r6a3 = a2 != b2;
+@@= skipped -15, +14 lines =@@
+ var r6b5 = b4 != a4;
+ var r6b6 = b5 != a5;
+ var r6b7 = b6 != a6;
+-// operator ===
+ var r7a1 = a1 === b1;
+ var r7a2 = base1 === base2;
+ var r7a3 = a2 === b2;
+@@= skipped -15, +14 lines =@@
+ var r7b5 = b4 === a4;
+ var r7b6 = b5 === a5;
+ var r7b7 = b6 === a6;
+-// operator !==
+ var r8a1 = a1 !== b1;
+ var r8a2 = base1 !== base2;
+ var r8a3 = a2 !== b2;

@@ -1,0 +1,33 @@
+--- old.typeParameterUsedAsTypeParameterConstraint2.js
++++ new.typeParameterUsedAsTypeParameterConstraint2.js
+@@= skipped -58, +58 lines =@@
+ }
+ 
+ //// [typeParameterUsedAsTypeParameterConstraint2.js]
+-// Type parameters are in scope in their own and other type parameter lists
+-// Nested local functions
+ function foo(x, y) {
+     function bar() {
+         function baz(a, b) {
+@@= skipped -34, +32 lines =@@
+         };
+     }
+ };
+-var f3 = function (x, y) {
++var f3 = (x, y) => {
+     function bar() {
+-        var g = function (a, b) {
++        var g = (a, b) => {
+             x = y;
+             return y;
+         };
+     }
+ };
+-var f4 = function (x, y) {
++var f4 = (x, y) => {
+     function bar() {
+-        var g = function (a, b) {
++        var g = (a, b) => {
+             x = y;
+             return y;
+         };

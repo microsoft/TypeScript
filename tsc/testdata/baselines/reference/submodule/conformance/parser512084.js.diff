@@ -1,0 +1,13 @@
+--- old.parser512084.js
++++ new.parser512084.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [parser512084.js]
+-var foo = /** @class */ (function () {
+-    function foo() {
+-    }
+-    return foo;
+-}());
++class foo {
++}

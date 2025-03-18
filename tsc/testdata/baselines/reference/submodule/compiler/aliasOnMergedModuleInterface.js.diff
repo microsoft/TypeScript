@@ -1,0 +1,10 @@
+--- old.aliasOnMergedModuleInterface.js
++++ new.aliasOnMergedModuleInterface.js
+@@= skipped -25, +25 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var z;
+-z.bar("hello"); // This should be ok
+-var x = foo.bar("hello"); // foo.A should be ok but foo.bar should be error
++z.bar("hello");
++var x = foo.bar("hello");

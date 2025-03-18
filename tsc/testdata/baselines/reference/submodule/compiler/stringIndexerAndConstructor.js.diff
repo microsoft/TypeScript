@@ -1,0 +1,16 @@
+--- old.stringIndexerAndConstructor.js
++++ new.stringIndexerAndConstructor.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [stringIndexerAndConstructor.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.v = function () { };
+-    return C;
+-}());
++class C {
++    constructor() { }
++    static v() { }
++}

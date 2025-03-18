@@ -1,0 +1,10 @@
+--- old.tsxDynamicTagName6.js
++++ new.tsxDynamicTagName6.js
+@@= skipped -11, +11 lines =@@
+ const foo = <t.tag/>  // No error
+ 
+ //// [tsxDynamicTagName6.jsx]
+-var t = { tag: 'h1' };
+-var foo = <t.tag />; // No error
++const t = { tag: 'h1' };
++const foo = <t.tag />;

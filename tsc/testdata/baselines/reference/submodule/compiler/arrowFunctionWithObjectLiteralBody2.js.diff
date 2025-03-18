@@ -1,0 +1,8 @@
+--- old.arrowFunctionWithObjectLiteralBody2.js
++++ new.arrowFunctionWithObjectLiteralBody2.js
+@@= skipped -3, +3 lines =@@
+ var v = a => <any><any>{}
+ 
+ //// [arrowFunctionWithObjectLiteralBody2.js]
+-var v = function (a) { return ({}); };
++var v = a => (({}));

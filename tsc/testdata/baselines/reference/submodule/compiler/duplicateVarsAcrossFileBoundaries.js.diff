@@ -1,0 +1,10 @@
+--- old.duplicateVarsAcrossFileBoundaries.js
++++ new.duplicateVarsAcrossFileBoundaries.js
+@@= skipped -42, +42 lines =@@
+ var y = "";
+ var z = 0;
+ //// [duplicateVarsAcrossFileBoundaries_4.js]
+-var p = P;
+ var q;
+ //// [duplicateVarsAcrossFileBoundaries_5.js]
+ var p;

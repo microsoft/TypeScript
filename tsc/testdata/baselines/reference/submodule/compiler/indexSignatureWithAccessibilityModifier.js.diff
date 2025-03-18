@@ -1,0 +1,13 @@
+--- old.indexSignatureWithAccessibilityModifier.js
++++ new.indexSignatureWithAccessibilityModifier.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [indexSignatureWithAccessibilityModifier.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

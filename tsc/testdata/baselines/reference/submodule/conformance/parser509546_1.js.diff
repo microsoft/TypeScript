@@ -1,0 +1,15 @@
+--- old.parser509546_1.js
++++ new.parser509546_1.js
+@@= skipped -9, +9 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Logger = void 0;
+-var Logger = /** @class */ (function () {
+-    function Logger() {
+-    }
+-    return Logger;
+-}());
++class Logger {
++    public;
++}
+ exports.Logger = Logger;

@@ -1,0 +1,15 @@
+--- old.contextualTyping14.js
++++ new.contextualTyping14.js
+@@= skipped -3, +3 lines =@@
+ class foo { public bar:(a:number)=>number = function(a){return a}; }
+ 
+ //// [contextualTyping14.js]
+-var foo = /** @class */ (function () {
+-    function foo() {
+-        this.bar = function (a) { return a; };
+-    }
+-    return foo;
+-}());
++class foo {
++    bar = function (a) { return a; };
++}

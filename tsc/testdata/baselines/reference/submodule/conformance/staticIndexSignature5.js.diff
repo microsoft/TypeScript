@@ -1,0 +1,14 @@
+--- old.staticIndexSignature5.js
++++ new.staticIndexSignature5.js
+@@= skipped -25, +25 lines =@@
+ 
+ 
+ //// [staticIndexSignature5.js]
+-"use strict";
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
++class B {
++}

@@ -1,0 +1,25 @@
+--- old.dottedSymbolResolution1.js
++++ new.dottedSymbolResolution1.js
+@@= skipped -27, +27 lines =@@
+ }
+ 
+ //// [dottedSymbolResolution1.js]
+-var Base = /** @class */ (function () {
+-    function Base() {
+-    }
+-    Base.prototype.foo = function () { };
+-    return Base;
+-}());
++class Base {
++    foo() { }
++}
+ function each(collection, callback) {
+     return null;
+ }
+ function _setBarAndText() {
+     var x, $;
+     each(x.find(" "), function () {
+-        var $this = $(''), thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
++        var $this = $(''), thisBar = $this.find(".fx-usagebars-calloutbar-this");
+     });
+ }

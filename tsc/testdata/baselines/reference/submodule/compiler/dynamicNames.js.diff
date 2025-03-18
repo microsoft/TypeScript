@@ -1,0 +1,62 @@
+--- old.dynamicNames.js
++++ new.dynamicNames.js
+@@= skipped -194, +194 lines =@@
+ let t13;
+ let t14;
+ let t15;
+-// assignability
+ t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
+ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
+ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+-t0 = C; // static side
+-// object literals
++t0 = C;
+ exports.o1 = {
+     [exports.c4]: 1,
+     [exports.c5]: "a",
+     [exports.s2]: true
+ };
+-// check element access types
+ exports.o1_c4 = exports.o1[exports.c4];
+ exports.o1_c5 = exports.o1[exports.c5];
+ exports.o1_s2 = exports.o1[exports.s2];
+ exports.o2 = exports.o1;
+ rI.x;
+ rC.x;
+-
+-
+-//// [module.d.ts]
+-export declare const c0 = "a";
+-export declare const c1 = 1;
+-export declare const s0: unique symbol;
+-export interface T0 {
+-    [c0]: number;
+-    [c1]: string;
+-    [s0]: boolean;
+-}
+-export declare class T1 implements T2 {
+-    [c0]: number;
+-    [c1]: string;
+-    [s0]: boolean;
+-}
+-export declare class T2 extends T1 {
+-}
+-export declare type T3 = {
+-    [c0]: number;
+-    [c1]: string;
+-    [s0]: boolean;
+-};
+-//// [main.d.ts]
+-import { s0, T0 } from "./module";
+-export declare const c4 = "a";
+-export declare const c5 = 1;
+-export declare const s2: typeof s0;
+-export declare const o1: {
+-    a: number;
+-    1: string;
+-    [s0]: boolean;
+-};
+-export declare const o1_c4: number;
+-export declare const o1_c5: string;
+-export declare const o1_s2: boolean;
+-export declare const o2: T0;

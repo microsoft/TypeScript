@@ -1,0 +1,8 @@
+--- old.symbolProperty57.js
++++ new.symbolProperty57.js
+@@= skipped -11, +11 lines =@@
+ var obj = {
+     [Symbol.iterator]: 0
+ };
+-// Should give type 'any'.
+ obj[Symbol["nonsense"]];

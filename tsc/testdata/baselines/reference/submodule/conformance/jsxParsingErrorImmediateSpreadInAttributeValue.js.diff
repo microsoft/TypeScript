@@ -1,0 +1,12 @@
+--- old.jsxParsingErrorImmediateSpreadInAttributeValue.js
++++ new.jsxParsingErrorImmediateSpreadInAttributeValue.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [a.js]
+-var X;
+-var a;
+-React.createElement(X, { a: , a: true });
++const X;
++const a;
++<X a={} a/>;

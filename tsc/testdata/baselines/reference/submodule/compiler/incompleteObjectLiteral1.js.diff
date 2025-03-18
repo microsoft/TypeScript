@@ -1,0 +1,9 @@
+--- old.incompleteObjectLiteral1.js
++++ new.incompleteObjectLiteral1.js
+@@= skipped -4, +4 lines =@@
+ var x = tt;
+ 
+ //// [incompleteObjectLiteral1.js]
+-var tt = { aa: aa };
++var tt = { aa, };
+ var x = tt;

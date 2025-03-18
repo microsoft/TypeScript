@@ -1,0 +1,29 @@
+--- old.declarationEmitPrivateReadonlyLiterals.js
++++ new.declarationEmitPrivateReadonlyLiterals.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [declarationEmitPrivateReadonlyLiterals.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.B = "b";
+-        this.D = 42;
+-    }
+-    Foo.A = "a";
+-    Foo.C = 42;
+-    return Foo;
+-}());
+-
+-
+-//// [declarationEmitPrivateReadonlyLiterals.d.ts]
+-declare class Foo {
+-    private static readonly A;
+-    private readonly B;
+-    private static readonly C;
+-    private readonly D;
++class Foo {
++    static A = "a";
++    B = "b";
++    static C = 42;
++    D = 42;
+ }

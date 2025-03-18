@@ -1,0 +1,15 @@
+--- old.moduleAugmentationInAmbientModule1.js
++++ new.moduleAugmentationInAmbientModule1.js
+@@= skipped -27, +27 lines =@@
+ 
+ //// [main.js]
+ "use strict";
+-/// <reference path="O.d.ts" />
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var x;
++let x;
+ x.foo().x;
+-
+-
+-//// [main.d.ts]
+-export {};

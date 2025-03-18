@@ -1,0 +1,16 @@
+--- old.generatorTypeCheck22.js
++++ new.generatorTypeCheck22.js
+@@= skipped -13, +13 lines =@@
+ 
+ //// [generatorTypeCheck22.js]
+ class Foo {
++    x;
+ }
+ class Bar extends Foo {
++    y;
+ }
+ class Baz {
++    z;
+ }
+ function* g3() {
+     yield;

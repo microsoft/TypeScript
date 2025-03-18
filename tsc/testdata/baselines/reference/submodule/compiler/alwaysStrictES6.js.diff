@@ -1,0 +1,10 @@
+--- old.alwaysStrictES6.js
++++ new.alwaysStrictES6.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [alwaysStrictES6.js]
+-"use strict";
+ function f() {
+     var arguments = [];
+ }

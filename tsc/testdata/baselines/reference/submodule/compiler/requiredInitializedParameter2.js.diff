@@ -1,0 +1,17 @@
+--- old.requiredInitializedParameter2.js
++++ new.requiredInitializedParameter2.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [requiredInitializedParameter2.js]
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    C1.prototype.method = function (a, b) {
+-        if (a === void 0) { a = 0; }
+-    };
+-    return C1;
+-}());
++class C1 {
++    method(a = 0, b) { }
++}

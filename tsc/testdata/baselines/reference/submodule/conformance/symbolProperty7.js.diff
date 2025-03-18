@@ -1,0 +1,18 @@
+--- old.symbolProperty7.js
++++ new.symbolProperty7.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [symbolProperty7.js]
+-var _a;
+ class C {
+-    constructor() {
+-        this[_a] = 0;
+-    }
+-    [(_a = Symbol(), Symbol(), Symbol())]() { }
++    [Symbol()] = 0;
++    [Symbol()];
++    [Symbol()]() { }
+     get [Symbol()]() {
+         return 0;
+     }

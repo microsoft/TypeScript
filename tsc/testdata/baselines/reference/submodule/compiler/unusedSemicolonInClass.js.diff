@@ -1,0 +1,14 @@
+--- old.unusedSemicolonInClass.js
++++ new.unusedSemicolonInClass.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [unusedSemicolonInClass.js]
+-var Unused = /** @class */ (function () {
+-    function Unused() {
+-    }
++class Unused {
+     ;
+-    return Unused;
+-}());
++}

@@ -1,0 +1,13 @@
+--- old.indexSignatureWithoutTypeAnnotation1.js
++++ new.indexSignatureWithoutTypeAnnotation1.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [indexSignatureWithoutTypeAnnotation1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

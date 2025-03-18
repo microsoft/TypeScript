@@ -1,0 +1,17 @@
+--- old.declarationEmitHasTypesRefOnNamespaceUse.js
++++ new.declarationEmitHasTypesRefOnNamespaceUse.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [index.js]
+-var Src = /** @class */ (function () {
+-    function Src() {
+-    }
+-    return Src;
+-}());
+-
+-
+-//// [index.d.ts]
+-declare class Src implements NS.Dep {
++class Src {
+ }

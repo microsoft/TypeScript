@@ -1,0 +1,20 @@
+--- old.classMemberInitializerWithLamdaScoping5.js
++++ new.classMemberInitializerWithLamdaScoping5.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [classMemberInitializerWithLamdaScoping5.js]
+-var Greeter = /** @class */ (function () {
+-    function Greeter(message) {
+-        this.messageHandler = function (message) {
+-            console.log(message); // This shouldnt be error
+-        };
++class Greeter {
++    constructor(message) {
+     }
+-    return Greeter;
+-}());
++    messageHandler = (message) => {
++        console.log(message);
++    };
++}

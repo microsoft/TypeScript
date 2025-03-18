@@ -1,0 +1,14 @@
+--- old.asOpEmitParens.js
++++ new.asOpEmitParens.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [asOpEmitParens.js]
+-// Must emit as (x + 1) * 3
+-(x + 1) * 3;
+-// Should still emit as x.y
++((x + 1)) * 3;
+ x.y;
+-// Emit as new (x())
+-new (x());
++new ((x()));

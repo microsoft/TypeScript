@@ -1,0 +1,9 @@
+--- old.umdGlobalAugmentationNoCrash.js
++++ new.umdGlobalAugmentationNoCrash.js
+@@= skipped -22, +22 lines =@@
+ React.foo;
+ export {};
+ //// [emits.js]
+-"use strict";
+ console.log("hello");
+ React.foo;

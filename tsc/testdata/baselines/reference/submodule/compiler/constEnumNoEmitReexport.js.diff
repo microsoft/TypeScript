@@ -1,0 +1,33 @@
+--- old.constEnumNoEmitReexport.js
++++ new.constEnumNoEmitReexport.js
+@@= skipped -30, +30 lines =@@
+ //// [ConstEnum.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
++exports.MyConstEnum = void 0;
++var MyConstEnum;
++(function (MyConstEnum) {
++    MyConstEnum[MyConstEnum["Foo"] = 0] = "Foo";
++    MyConstEnum[MyConstEnum["Bar"] = 1] = "Bar";
++})(MyConstEnum || (exports.MyConstEnum = MyConstEnum = {}));
+ ;
+ //// [ImportExport.js]
+ "use strict";
+@@= skipped -16, +22 lines =@@
+ //// [Usage1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-0 /* MyConstEnum1.Foo */;
+-0 /* MyConstEnum2.Foo */;
++ImportExportDefault_1.default.Foo;
++ReExportDefault_1.default.Foo;
+ //// [Usage2.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-0 /* MyConstEnum.Foo */;
++ImportExport_1.MyConstEnum.Foo;
+ //// [Usage3.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-0 /* MyConstEnum.Foo */;
++ReExport_1.MyConstEnum.Foo;

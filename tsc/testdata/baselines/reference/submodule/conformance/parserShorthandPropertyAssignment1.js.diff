@@ -1,0 +1,8 @@
+--- old.parserShorthandPropertyAssignment1.js
++++ new.parserShorthandPropertyAssignment1.js
+@@= skipped -7, +7 lines =@@
+ //// [parserShorthandPropertyAssignment1.js]
+ function foo(obj) { }
+ var name, id;
+-foo({ name: name, id: id });
++foo({ name, id });

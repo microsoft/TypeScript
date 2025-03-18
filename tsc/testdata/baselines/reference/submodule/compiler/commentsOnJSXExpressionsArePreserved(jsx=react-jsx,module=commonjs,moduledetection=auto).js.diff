@@ -1,0 +1,28 @@
+--- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=auto).js
++++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=auto).js
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ //// [commentsOnJSXExpressionsArePreserved.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-var jsx_runtime_1 = require("react/jsx-runtime");
+-var Component = /** @class */ (function () {
+-    function Component() {
++class Component {
++    render() {
++        return <div>
++            
++            {null}
++            
++            
++            
++            
++        </div>;
+     }
+-    Component.prototype.render = function () {
+-        return (0, jsx_runtime_1.jsx)("div", { children: null /* preserved */ });
+-    };
+-    return Component;
+-}());
++}

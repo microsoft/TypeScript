@@ -1,0 +1,10 @@
+--- old.omittedExpressionForOfLoop.js
++++ new.omittedExpressionForOfLoop.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [omittedExpressionForOfLoop.js]
+-"use strict";
+ for (const [,] of doesNotExist) {
+ }
+ for (const [,] of undefined) {

@@ -1,0 +1,44 @@
+--- old.privacyCheckAnonymousFunctionParameter2.js
++++ new.privacyCheckAnonymousFunctionParameter2.js
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ //// [privacyCheckAnonymousFunctionParameter2.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    exports.x = 1; // Makes this an external module 
+-    var Q;
+-    (function (Q) {
+-        function foo(x) {
+-            return x;
+-        }
+-        Q.foo = foo;
+-    })(Q || (Q = {}));
+-    (function (Q) {
+-        function bar() {
+-            Q.foo(null);
+-        }
+-    })(Q || (Q = {}));
+-});
+-
+-
+-//// [privacyCheckAnonymousFunctionParameter2.d.ts]
+-export declare var x: number;
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++exports.x = 1;
++var Q;
++(function (Q) {
++    function foo(x) {
++        return x;
++    }
++    Q.foo = foo;
++})(Q || (Q = {}));
++(function (Q) {
++    function bar() {
++        foo(null);
++    }
++})(Q || (Q = {}));

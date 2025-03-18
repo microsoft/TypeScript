@@ -1,0 +1,10 @@
+--- old.isolatedDeclarationErrorsClasses.js
++++ new.isolatedDeclarationErrorsClasses.js
+@@= skipped -81, +81 lines =@@
+ const noAnnotationLiteralName = "noAnnotationLiteralName";
+ const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
+ export class C {
+-    // Should not be reported as an isolated declaration error
+     [missing] = 1;
+     [noAnnotationLiteralName]() { }
+     [noParamAnnotationLiteralName](v) { }

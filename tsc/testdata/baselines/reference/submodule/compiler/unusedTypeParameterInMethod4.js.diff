@@ -1,0 +1,16 @@
+--- old.unusedTypeParameterInMethod4.js
++++ new.unusedTypeParameterInMethod4.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [unusedTypeParameterInMethod4.js]
+-var A = /** @class */ (function () {
+-    function A() {
++class A {
++    f1() {
+     }
+-    A.prototype.f1 = function () {
+-    };
+-    return A;
+-}());
++}

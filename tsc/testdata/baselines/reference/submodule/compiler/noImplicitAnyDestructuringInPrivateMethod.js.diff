@@ -1,0 +1,29 @@
+--- old.noImplicitAnyDestructuringInPrivateMethod.js
++++ new.noImplicitAnyDestructuringInPrivateMethod.js
+@@= skipped -16, +16 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Bar = void 0;
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-    }
+-    Bar.prototype.bar = function (_a) {
+-        var a = _a.a;
++class Bar {
++    bar({ a, }) {
+         return a;
+-    };
+-    return Bar;
+-}());
+-exports.Bar = Bar;
+-
+-
+-//// [noImplicitAnyDestructuringInPrivateMethod.d.ts]
+-export declare class Bar {
+-    private bar;
++    }
+ }
+-export declare class Bar2 {
+-    private bar;
+-}
++exports.Bar = Bar;

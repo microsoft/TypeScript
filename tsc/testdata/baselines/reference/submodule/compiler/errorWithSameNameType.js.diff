@@ -1,0 +1,13 @@
+--- old.errorWithSameNameType.js
++++ new.errorWithSameNameType.js
+@@= skipped -32, +32 lines =@@
+ //// [c.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a;
+-var b;
++let a;
++let b;
+ if (a === b) {
+ }
+ a = b;

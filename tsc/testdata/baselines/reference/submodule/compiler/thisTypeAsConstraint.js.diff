@@ -1,0 +1,16 @@
+--- old.thisTypeAsConstraint.js
++++ new.thisTypeAsConstraint.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [thisTypeAsConstraint.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    m() {
+     }
+-    C.prototype.m = function () {
+-    };
+-    return C;
+-}());
++}

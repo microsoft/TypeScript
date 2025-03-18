@@ -1,0 +1,14 @@
+--- old.parserIsClassMemberStart.js
++++ new.parserIsClassMemberStart.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [parserIsClassMemberStart.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    type;
++}

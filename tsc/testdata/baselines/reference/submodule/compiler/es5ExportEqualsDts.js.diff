@@ -1,0 +1,30 @@
+--- old.es5ExportEqualsDts.js
++++ new.es5ExportEqualsDts.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [es5ExportEqualsDts.js]
+ "use strict";
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A.prototype.foo = function () {
++class A {
++    foo() {
+         var aVal;
+         return aVal;
+-    };
+-    return A;
+-}());
+-module.exports = A;
+-
+-
+-//// [es5ExportEqualsDts.d.ts]
+-declare class A {
+-    foo(): A.B;
+-}
+-declare namespace A {
+-    interface B {
+     }
+ }
+-export = A;
++module.exports = A;

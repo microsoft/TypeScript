@@ -1,0 +1,14 @@
+--- old.importHelpersWithImportOrExportDefault(esmoduleinterop=false,module=commonjs).js
++++ new.importHelpersWithImportOrExportDefault(esmoduleinterop=false,module=commonjs).js
+@@= skipped -23, +23 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.a = exports.default = void 0;
+-var a_1 = require("./a");
++const a_1 = require("./a");
+ Object.defineProperty(exports, "default", { enumerable: true, get: function () { return a_1.default; } });
+-var a_2 = require("./a");
++const a_2 = require("./a");
+ Object.defineProperty(exports, "a", { enumerable: true, get: function () { return a_2.default; } });
+ const a_3 = require("./a");
+ void a_3.default;

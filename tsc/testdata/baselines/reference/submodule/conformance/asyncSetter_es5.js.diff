@@ -1,0 +1,20 @@
+--- old.asyncSetter_es5.js
++++ new.asyncSetter_es5.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [asyncSetter_es5.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    async set foo(value) {
+     }
+-    Object.defineProperty(C.prototype, "foo", {
+-        set: function (value) {
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++}

@@ -1,0 +1,16 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty10.js
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty10.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [typeGuardNarrowsIndexedAccessOfKnownProperty10.js]
+-"use strict";
+-var bar = {};
+-(function (foo) {
++const bar = {};
++(foo) => {
+     bar[id]++;
+-    var id = foo.bar;
+-});
++    const id = foo.bar;
++};

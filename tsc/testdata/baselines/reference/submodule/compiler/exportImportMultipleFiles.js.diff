@@ -1,0 +1,34 @@
+--- old.exportImportMultipleFiles.js
++++ new.exportImportMultipleFiles.js
+@@= skipped -11, +11 lines =@@
+ lib.math.add(3, 4); // Shouldnt be error
+ 
+ 
+-//// [exportImportMultipleFiles_math.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.add = add;
+-    function add(a, b) { return a + b; }
+-});
+ //// [exportImportMultipleFiles_library.js]
+-define(["require", "exports", "exportImportMultipleFiles_math"], function (require, exports, math) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.math = math;
+-    exports.math.add(3, 4); // OK
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.math = require("exportImportMultipleFiles_math");
++exports.math.add(3, 4);
+ //// [exportImportMultipleFiles_userCode.js]
+-define(["require", "exports", "./exportImportMultipleFiles_library"], function (require, exports, lib) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    lib.math.add(3, 4); // Shouldnt be error
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const lib = require("./exportImportMultipleFiles_library");
++lib.math.add(3, 4);

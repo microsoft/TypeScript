@@ -1,0 +1,11 @@
+--- old.duplicatePackage_relativeImportWithinPackage_scoped.js
++++ new.duplicatePackage_relativeImportWithinPackage_scoped.js
+@@= skipped -39, +39 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var use_1 = require("@foo/bar/use");
+-var a_1 = require("a");
++const use_1 = require("@foo/bar/use");
++const a_1 = require("a");
+ (0, use_1.use)(a_1.o);

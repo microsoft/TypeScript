@@ -1,0 +1,17 @@
+--- old.systemModule12.js
++++ new.systemModule12.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [systemModule12.js]
+-System.register("NamedModule", [], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,0 +1,15 @@
+--- old.classStaticBlock1(target=es2015).js
++++ new.classStaticBlock1(target=es2015).js
+@@= skipped -14, +14 lines =@@
+ //// [classStaticBlock1.js]
+ const a = 2;
+ class C {
++    static {
++        const a = 1;
++        a;
++    }
+ }
+-(() => {
+-    const a = 1;
+-    a;
+-})();

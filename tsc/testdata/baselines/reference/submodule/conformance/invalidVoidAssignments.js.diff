@@ -1,0 +1,23 @@
+--- old.invalidVoidAssignments.js
++++ new.invalidVoidAssignments.js
+@@= skipped -36, +36 lines =@@
+ var b = x;
+ var c = x;
+ var d = x;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    foo;
++}
+ var e = x;
+ var f = x;
+ var g = 1;
+@@= skipped -24, +22 lines =@@
+ })(E || (E = {}));
+ x = E;
+ x = E.A;
+-x = { f: function () { } };
++x = { f() { } };

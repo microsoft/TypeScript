@@ -1,0 +1,9 @@
+--- old.bundlerNodeModules1(module=esnext).js
++++ new.bundlerNodeModules1(module=esnext).js
+@@= skipped -41, +41 lines =@@
+ //// [main.mjs]
+ export {};
+ //// [main.cjs]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
++export {};

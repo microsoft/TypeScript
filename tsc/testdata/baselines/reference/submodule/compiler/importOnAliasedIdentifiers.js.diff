@@ -1,0 +1,11 @@
+--- old.importOnAliasedIdentifiers.js
++++ new.importOnAliasedIdentifiers.js
+@@= skipped -17, +17 lines =@@
+ })(A || (A = {}));
+ var B;
+ (function (B) {
+-    var Z = A.X; // Alias for both type and member A.X
++    var Y = A;
++    var Z = A.X;
+     var v = Z;
+ })(B || (B = {}));

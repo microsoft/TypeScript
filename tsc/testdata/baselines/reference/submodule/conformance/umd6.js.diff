@@ -1,0 +1,9 @@
+--- old.umd6.js
++++ new.umd6.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [a.js]
+-/// <reference path="foo.d.ts" />
+-var y = Foo.fn();
++let y = Foo.fn();

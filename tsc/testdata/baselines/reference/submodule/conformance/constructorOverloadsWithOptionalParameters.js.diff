@@ -1,0 +1,24 @@
+--- old.constructorOverloadsWithOptionalParameters.js
++++ new.constructorOverloadsWithOptionalParameters.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [constructorOverloadsWithOptionalParameters.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    foo;
++    constructor() {
+     }
+-    return C;
+-}());
+-var D = /** @class */ (function () {
+-    function D() {
++}
++class D {
++    foo;
++    constructor() {
+     }
+-    return D;
+-}());
++}

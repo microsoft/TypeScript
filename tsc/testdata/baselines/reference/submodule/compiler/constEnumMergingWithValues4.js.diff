@@ -1,0 +1,20 @@
+--- old.constEnumMergingWithValues4.js
++++ new.constEnumMergingWithValues4.js
+@@= skipped -12, +12 lines =@@
+ export = foo
+ 
+ //// [m1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var foo;
+-    (function (foo) {
+-        var x = 1;
+-    })(foo || (foo = {}));
+-    return foo;
+-});
++"use strict";
++var foo;
++(function (foo) {
++    var x = 1;
++})(foo || (foo = {}));
++module.exports = foo;

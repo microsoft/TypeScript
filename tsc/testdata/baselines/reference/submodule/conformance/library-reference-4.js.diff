@@ -1,0 +1,8 @@
+--- old.library-reference-4.js
++++ new.library-reference-4.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [root.js]
+-/// <reference types="foo" />
+-/// <reference types="bar" />

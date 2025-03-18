@@ -1,0 +1,20 @@
+--- old.getterMissingReturnError.js
++++ new.getterMissingReturnError.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [getterMissingReturnError.js]
+-var test = /** @class */ (function () {
+-    function test() {
++class test {
++    get p2() {
+     }
+-    Object.defineProperty(test.prototype, "p2", {
+-        get: function () {
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return test;
+-}());
++}

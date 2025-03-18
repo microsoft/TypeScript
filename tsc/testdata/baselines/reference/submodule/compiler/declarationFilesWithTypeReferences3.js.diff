@@ -1,0 +1,14 @@
+--- old.declarationFilesWithTypeReferences3.js
++++ new.declarationFilesWithTypeReferences3.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [app.js]
+-/// <reference types="node"/>
+ function foo() {
+     return undefined;
+ }
+-
+-
+-//// [app.d.ts]
+-declare function foo(): Error2;

@@ -1,0 +1,24 @@
+--- old.destructuringWithGenericParameter.js
++++ new.destructuringWithGenericParameter.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [destructuringWithGenericParameter.js]
+-var GenericClass = /** @class */ (function () {
+-    function GenericClass() {
+-    }
+-    return GenericClass;
+-}());
++class GenericClass {
++    payload;
++}
+ var genericObject = new GenericClass();
+ function genericFunction(object, callback) {
+     callback(object.payload);
+ }
+-genericFunction(genericObject, function (_a) {
+-    var greeting = _a.greeting;
+-    var s = greeting.toLocaleLowerCase(); // Greeting should be of type string
++genericFunction(genericObject, ({ greeting }) => {
++    var s = greeting.toLocaleLowerCase();
+ });

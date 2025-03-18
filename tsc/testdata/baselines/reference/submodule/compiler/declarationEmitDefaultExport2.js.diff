@@ -1,0 +1,11 @@
+--- old.declarationEmitDefaultExport2.js
++++ new.declarationEmitDefaultExport2.js
+@@= skipped -6, +6 lines =@@
+ //// [declarationEmitDefaultExport2.js]
+ export default class {
+ }
+-
+-
+-//// [declarationEmitDefaultExport2.d.ts]
+-export default class {
+-}

@@ -1,0 +1,12 @@
+--- old.symbolProperty9.js
++++ new.symbolProperty9.js
+@@= skipped -13, +13 lines =@@
+ 
+ //// [symbolProperty9.js]
+ class C {
++    [Symbol.iterator];
+ }
+-Symbol.iterator;
+ var i;
+ i = new C;
+ var c = i;

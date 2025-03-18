@@ -1,0 +1,8 @@
+--- old.spellingSuggestionGlobal1.js
++++ new.spellingSuggestionGlobal1.js
+@@= skipped -8, +8 lines =@@
+ //// [spellingSuggestionGlobal1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-global.x; // should not suggest `global` (GH#42209)
++global.x;

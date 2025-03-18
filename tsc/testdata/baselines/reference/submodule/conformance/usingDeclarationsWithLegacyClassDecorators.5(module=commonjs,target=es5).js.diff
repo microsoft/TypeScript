@@ -1,0 +1,30 @@
+--- old.usingDeclarationsWithLegacyClassDecorators.5(module=commonjs,target=es5).js
++++ new.usingDeclarationsWithLegacyClassDecorators.5(module=commonjs,target=es5).js
+@@= skipped -16, +16 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.C = void 0;
+-var before, C;
+-var env_1 = { stack: [], error: void 0, hasError: false };
+-try {
+-    before = __addDisposableResource(env_1, null, false);
+-    exports.C = C = /** @class */ (function () {
+-        function C() {
+-        }
+-        C = __decorate([
+-            dec
+-        ], C);
+-        return C;
+-    }());
++using before = null;
++@dec
++class C {
+ }
+-catch (e_1) {
+-    env_1.error = e_1;
+-    env_1.hasError = true;
+-}
+-finally {
+-    __disposeResources(env_1);
+-}
++exports.C = C;

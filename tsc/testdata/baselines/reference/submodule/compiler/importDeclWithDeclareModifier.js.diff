@@ -1,0 +1,22 @@
+--- old.importDeclWithDeclareModifier.js
++++ new.importDeclWithDeclareModifier.js
+@@= skipped -11, +11 lines =@@
+ //// [importDeclWithDeclareModifier.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.a = void 0;
+-exports.a = x.c;
+ var b;
+-
+-
+-!!!! File importDeclWithDeclareModifier.js differs from original emit in noCheck emit
+-//// [importDeclWithDeclareModifier.js]
+-===================================================================
+---- Expected	The full check baseline
+-+++ Actual	with noCheck set
+-@@= skipped --11, +-11 lines =@@
+- "use strict";
+- Object.defineProperty(exports, "__esModule", { value: true });
+--exports.a = void 0;
+--exports.a = x.c;
+- var b;

@@ -1,0 +1,8 @@
+--- old.noErrorUsingImportExportModuleAugmentationInDeclarationFile2.js
++++ new.noErrorUsingImportExportModuleAugmentationInDeclarationFile2.js
+@@= skipped -10, +10 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.j = void 0;
+-exports.j = "hello"; // error
++exports.j = "hello";

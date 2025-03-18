@@ -1,0 +1,16 @@
+--- old.indexSignatureTypeCheck2.js
++++ new.indexSignatureTypeCheck2.js
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ //// [indexSignatureTypeCheck2.js]
+-var IPropertySet = /** @class */ (function () {
+-    function IPropertySet() {
+-    }
+-    return IPropertySet;
+-}());
++class IPropertySet {
++}
+ var ps = null;
+ var index = "hello";
+ ps[index] = 12;

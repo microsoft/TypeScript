@@ -1,0 +1,59 @@
+--- old.destructuringControlFlow.js
++++ new.destructuringControlFlow.js
+@@= skipped -43, +43 lines =@@
+ 
+ 
+ //// [destructuringControlFlow.js]
+-"use strict";
+ function f1(obj) {
+     if (obj.a) {
+         obj = {};
+-        var a1 = obj["a"]; // string | undefined
+-        var a2 = obj.a; // string | undefined
++        let a1 = obj["a"];
++        let a2 = obj.a;
+     }
+ }
+ function f2(obj) {
+-    var a0 = obj[0]; // number | null
+-    var a1 = obj[1]; // string | null
+-    var b0 = obj[0], b1 = obj[1];
+-    (a0 = obj[0], a1 = obj[1]);
++    let a0 = obj[0];
++    let a1 = obj[1];
++    let [b0, b1] = obj;
++    ([a0, a1] = obj);
+     if (obj[0] && obj[1]) {
+-        var c0 = obj[0]; // number
+-        var c1 = obj[1]; // string
+-        var d0 = obj[0], d1 = obj[1];
+-        (c0 = obj[0], c1 = obj[1]);
++        let c0 = obj[0];
++        let c1 = obj[1];
++        let [d0, d1] = obj;
++        ([c0, c1] = obj);
+     }
+ }
+ function f3(obj) {
+     if (obj.a && obj.b) {
+-        var a = obj.a, b = obj.b; // number, string
+-        (a = obj.a, b = obj.b);
++        let { a, b } = obj;
++        ({ a, b } = obj);
+     }
+ }
+ function f4() {
+-    var _a, _b;
+-    var x;
+-    (x = 0..x); // Error
+-    (x = 0["x"]); // Error
+-    (_a = 0, _b = "x" + "", x = _a[_b]); // Errpr
++    let x;
++    ({ x } = 0);
++    ({ ["x"]: x } = 0);
++    ({ ["x" + ""]: x } = 0);
+ }
+-var _a = ["foo"], key = _a[0], value = _a[1];
+-value.toUpperCase(); // Error
++let [key, value] = ["foo"];
++value.toUpperCase();

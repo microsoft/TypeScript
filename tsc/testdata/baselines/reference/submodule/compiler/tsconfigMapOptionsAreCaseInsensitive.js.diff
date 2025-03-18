@@ -1,0 +1,28 @@
+--- old.tsconfigMapOptionsAreCaseInsensitive.js
++++ new.tsconfigMapOptionsAreCaseInsensitive.js
+@@= skipped -10, +10 lines =@@
+ };
+ 
+ //// [other.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.default = 42;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.default = 42;
+ //// [index.js]
+-define(["require", "exports", "./other.js"], function (require, exports, other_js_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    var x = 10 + other_js_1.default;
+-    exports.x = x;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++const other_js_1 = require("./other.js");
++const x = 10 + other_js_1.default;
++exports.x = x;

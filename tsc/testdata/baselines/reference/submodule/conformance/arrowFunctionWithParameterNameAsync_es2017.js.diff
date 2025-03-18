@@ -1,0 +1,8 @@
+--- old.arrowFunctionWithParameterNameAsync_es2017.js
++++ new.arrowFunctionWithParameterNameAsync_es2017.js
+@@= skipped -3, +3 lines =@@
+ const x = async => async;
+ 
+ //// [arrowFunctionWithParameterNameAsync_es2017.js]
+-var x = function (async) { return async; };
++const x = async => async;

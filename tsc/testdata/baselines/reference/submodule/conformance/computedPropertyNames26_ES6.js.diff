@@ -1,0 +1,10 @@
+--- old.computedPropertyNames26_ES6.js
++++ new.computedPropertyNames26_ES6.js
+@@= skipped -20, +20 lines =@@
+     }
+ }
+ class C extends Base {
+-    // Gets emitted as super, not _super, which is consistent with
+-    // use of super in static properties initializers.
+     [{ [super.bar()]: 1 }[0]]() { }
+ }

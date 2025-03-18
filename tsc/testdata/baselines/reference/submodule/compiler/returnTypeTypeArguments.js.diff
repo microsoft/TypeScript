@@ -1,0 +1,100 @@
+--- old.returnTypeTypeArguments.js
++++ new.returnTypeTypeArguments.js
+@@= skipped -78, +78 lines =@@
+ 
+ 
+ //// [returnTypeTypeArguments.js]
+-var One = /** @class */ (function () {
+-    function One() {
+-    }
+-    return One;
+-}());
+-var Two = /** @class */ (function () {
+-    function Two() {
+-    }
+-    return Two;
+-}());
+-var Three = /** @class */ (function () {
+-    function Three() {
+-    }
+-    return Three;
+-}());
++class One {
++    value;
++}
++class Two {
++    value;
++    id;
++}
++class Three {
++    value;
++    id;
++    name;
++}
+ function A1() { return null; }
+ function A2() { return null; }
+ function A3() { return null; }
+ function B1() { return null; }
+ function B2() { return null; }
+ function B3() { return null; }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.A1 = function () { return null; };
+-    C.prototype.A2 = function () { return null; };
+-    C.prototype.A3 = function () { return null; };
+-    C.prototype.B1 = function () { return null; };
+-    C.prototype.B2 = function () { return null; };
+-    C.prototype.B3 = function () { return null; };
+-    return C;
+-}());
+-var D = /** @class */ (function () {
+-    function D() {
+-    }
+-    D.prototype.A2 = function () { return null; };
+-    D.prototype.A3 = function () { return null; };
+-    D.prototype.B1 = function () { return null; };
+-    D.prototype.B2 = function () { return null; };
+-    D.prototype.B3 = function () { return null; };
+-    return D;
+-}());
+-var Y = /** @class */ (function () {
+-    function Y() {
+-    }
+-    return Y;
+-}());
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    return X;
+-}());
++class C {
++    A1() { return null; }
++    A2() { return null; }
++    A3() { return null; }
++    B1() { return null; }
++    B2() { return null; }
++    B3() { return null; }
++}
++class D {
++    A2() { return null; }
++    A3() { return null; }
++    B1() { return null; }
++    B2() { return null; }
++    B3() { return null; }
++}
++class Y {
++    value;
++}
++class X {
++    p1;
++    p2;
++    p3;
++    p4;
++    p5;
++    p6;
++    p7;
++    p8;
++    p9;
++    pa;
++}

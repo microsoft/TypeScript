@@ -1,0 +1,64 @@
+--- old.reachabilityChecks1.js
++++ new.reachabilityChecks1.js
+@@= skipped -83, +83 lines =@@
+ (function (A) {
+     while (true)
+         ;
+-    var x;
++    let x;
+ })(A || (A = {}));
+ var A1;
+ (function (A1) {
+@@= skipped -10, +10 lines =@@
+ (function (A2) {
+     while (true)
+         ;
+-    var A;
++    let A;
+     (function (A) {
+         var x = 1;
+     })(A || (A = {}));
+@@= skipped -14, +14 lines =@@
+ (function (A4) {
+     while (true)
+         ;
+-    var A;
++    let A;
+     (function (A) {
+-        var E;
++        let E;
+         (function (E) {
+             E[E["X"] = 0] = "X";
+         })(E || (E = {}));
+@@= skipped -19, +19 lines =@@
+ }
+ function f2() {
+     return;
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        return A;
+-    }());
++    class A {
++    }
+ }
+ var B;
+ (function (B) {
+@@= skipped -14, +11 lines =@@
+ function f3() {
+     do {
+     } while (true);
+-    var E;
++    let E;
+     (function (E) {
+         E[E["X"] = 1] = "X";
+     })(E || (E = {}));
+@@= skipped -9, +9 lines =@@
+     if (true) {
+         throw new Error();
+     }
+-    var E;
++    let E;
+     (function (E) {
+         E[E["X"] = 1] = "X";
+     })(E || (E = {}));

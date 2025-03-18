@@ -1,0 +1,8 @@
+--- old.templateStringInIndexExpression.js
++++ new.templateStringInIndexExpression.js
+@@= skipped -3, +3 lines =@@
+ `abc${0}abc`[`0`];
+ 
+ //// [templateStringInIndexExpression.js]
+-"abc".concat(0, "abc")["0"];
++`abc${0}abc`[`0`];

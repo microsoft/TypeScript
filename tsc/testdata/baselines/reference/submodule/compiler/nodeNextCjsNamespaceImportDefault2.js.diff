@@ -1,0 +1,29 @@
+--- old.nodeNextCjsNamespaceImportDefault2.js
++++ new.nodeNextCjsNamespaceImportDefault2.js
+@@= skipped -11, +11 lines =@@
+ ns.default.a;
+ 
+ //// [a.cjs]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.a = void 0;
+-exports.a = 1;
+-exports.default = 'string';
++export const a = 1;
++export default 'string';
+ //// [foo.mjs]
+ import d, { a } from './a.cjs';
+ import * as ns from './a.cjs';
+ export { d, a, ns };
+ d.a;
+ ns.default.a;
+-
+-
+-//// [a.d.cts]
+-export declare const a: number;
+-declare const _default: "string";
+-export default _default;
+-//// [foo.d.mts]
+-import d, { a } from './a.cjs';
+-import * as ns from './a.cjs';
+-export { d, a, ns };

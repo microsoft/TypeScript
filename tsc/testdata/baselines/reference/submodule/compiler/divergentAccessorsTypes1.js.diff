@@ -1,0 +1,34 @@
+--- old.divergentAccessorsTypes1.js
++++ new.divergentAccessorsTypes1.js
+@@= skipped -65, +65 lines =@@
+ }
+ 
+ //// [divergentAccessorsTypes1.js]
+-"use strict";
+ class Test1 {
+     get foo() { return ""; }
+     set foo(s) {
+@@= skipped -15, +14 lines =@@
+     const t = new Test1();
+     t.foo = 32;
+     let m = t.foo;
+-    // See how CFA interacts with out-of-type writes
+     t.bar = 42;
+     let n = t.bar;
+     t.bar = false;
+@@= skipped -10, +9 lines =@@
+     const t = {};
+     t.foo = 32;
+     let m = t.foo;
+-    // See how CFA interacts with out-of-type writes
+     t.bar = 42;
+     let n = t.bar;
+     t.bar = false;
+@@= skipped -10, +9 lines =@@
+     const t = {};
+     t.foo = 32;
+     let m = t.foo;
+-    // See how CFA interacts with out-of-type writes
+     t.bar = 42;
+     let n = t.bar;
+     t.bar = false;

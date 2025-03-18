@@ -1,0 +1,11 @@
+--- old.sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js
++++ new.sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js
+@@= skipped -11, +11 lines =@@
+ var Q;
+ (function (Q) {
+     function P() {
+-        // Test this
+         var a = 1;
+     }
+ })(Q || (Q = {}));
+-//# sourceMappingURL=sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js.map

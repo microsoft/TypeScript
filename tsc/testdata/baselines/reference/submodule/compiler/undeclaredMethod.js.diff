@@ -1,0 +1,22 @@
+--- old.undeclaredMethod.js
++++ new.undeclaredMethod.js
+@@= skipped -16, +16 lines =@@
+ //// [undeclaredMethod.js]
+ var M;
+ (function (M) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        C.prototype.salt = function () { };
+-        return C;
+-    }());
++    class C {
++        salt() { }
++    }
+     M.C = C;
+ })(M || (M = {}));
+ var c = new M.C();
+-c.salt(); // cool
+-c.saltbar(); // crash
++c.salt();
++c.saltbar();

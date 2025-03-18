@@ -1,0 +1,10 @@
+--- old.divergentAccessorsVisibility1.js
++++ new.divergentAccessorsVisibility1.js
+@@= skipped -160, +160 lines =@@
+ 
+ 
+ //// [divergentAccessorsVisibility1.js]
+-"use strict";
+ class Base {
+     get PublicPublic() { return 0; }
+     set PublicPublic(v) { return; }

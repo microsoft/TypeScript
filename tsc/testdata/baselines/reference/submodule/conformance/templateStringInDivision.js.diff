@@ -1,0 +1,8 @@
+--- old.templateStringInDivision.js
++++ new.templateStringInDivision.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ 1 }def` / 1;
+ 
+ //// [templateStringInDivision.js]
+-var x = "abc".concat(1, "def") / 1;
++var x = `abc${1}def` / 1;

@@ -1,0 +1,8 @@
+--- old.typingsLookup1.js
++++ new.typingsLookup1.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [a.js]
+-/// <reference types="jquery" />
+ $.x;

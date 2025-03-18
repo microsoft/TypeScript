@@ -1,0 +1,37 @@
+--- old.parserSuperExpression1.js
++++ new.parserSuperExpression1.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [parserSuperExpression1.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    foo() {
++        super.foo();
+     }
+-    C.prototype.foo = function () {
+-        _super.prototype.foo.call(this);
+-    };
+-    return C;
+-}());
++}
+ var M1;
+ (function (M1) {
+-    var M2;
++    let M2;
+     (function (M2) {
+-        var C = /** @class */ (function () {
+-            function C() {
++        class C {
++            foo() {
++                super.foo();
+             }
+-            C.prototype.foo = function () {
+-                _super.prototype.foo.call(this);
+-            };
+-            return C;
+-        }());
++        }
+     })(M2 = M1.M2 || (M1.M2 = {}));
+ })(M1 || (M1 = {}));

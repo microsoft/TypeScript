@@ -1,0 +1,42 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBindingDts1.js
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingDts1.js
+@@= skipped -8, +8 lines =@@
+ export var x = new defaultBinding();
+ 
+ //// [server.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var a = /** @class */ (function () {
+-        function a() {
+-        }
+-        return a;
+-    }());
+-    exports.default = a;
+-});
+-//// [client.js]
+-define(["require", "exports", "server"], function (require, exports, server_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    exports.x = new server_1.default();
+-});
+-
+-
+-//// [server.d.ts]
+-declare class a {
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++class a {
+ }
+-export default a;
+-//// [client.d.ts]
+-import defaultBinding from "server";
+-export declare var x: defaultBinding;
++exports.default = a;
++//// [client.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++const server_1 = require("server");
++exports.x = new server_1.default();

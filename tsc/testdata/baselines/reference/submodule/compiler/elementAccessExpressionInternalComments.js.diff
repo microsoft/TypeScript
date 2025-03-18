@@ -1,0 +1,14 @@
+--- old.elementAccessExpressionInternalComments.js
++++ new.elementAccessExpressionInternalComments.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [elementAccessExpressionInternalComments.js]
+-/*0*/ Array /*1*/[ /*2*/"toString" /*3*/] /*4*/; /*5*/
+-/*0*/ Array
+-// single line
+-/*1*/ [ /*2*/"toString"
+-// single line
+-/*3*/ ]; /*4*/
++Array["toString"];
++Array["toString"];

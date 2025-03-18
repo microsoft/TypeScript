@@ -1,0 +1,18 @@
+--- old.classStaticBlock21.js
++++ new.classStaticBlock21.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [classStaticBlock21.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    static {
+     }
+-    return C;
+-}());
+-/* jsdocs */
+-(function () {
+-    // something
+-})();
++}

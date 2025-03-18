@@ -1,0 +1,23 @@
+--- old.pathMappingBasedModuleResolution6_classic.js
++++ new.pathMappingBasedModuleResolution6_classic.js
+@@= skipped -10, +10 lines =@@
+ export let x: number;
+ 
+ 
+-//// [file3.js]
+-define(["require", "exports", "../file2"], function (require, exports, file2_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    Object.defineProperty(exports, "x", { enumerable: true, get: function () { return file2_1.x; } });
+-});
+ //// [file1.js]
+-define(["require", "exports", "./project/file3"], function (require, exports, file3_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    use(file3_1.x.toExponential());
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const file3_1 = require("./project/file3");
++use(file3_1.x.toExponential());

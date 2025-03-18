@@ -1,0 +1,18 @@
+--- old.stringIndexingResults.js
++++ new.stringIndexingResults.js
+@@= skipped -37, +37 lines =@@
+ 
+ 
+ //// [stringIndexingResults.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-        this.y = '';
+-    }
+-    return C;
+-}());
++class C {
++    y = '';
++}
+ var c;
+ var r1 = c['y'];
+ var r2 = c['a'];

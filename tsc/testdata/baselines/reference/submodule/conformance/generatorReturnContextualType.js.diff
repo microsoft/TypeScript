@@ -1,0 +1,23 @@
+--- old.generatorReturnContextualType.js
++++ new.generatorReturnContextualType.js
+@@= skipped -38, +38 lines =@@
+ 
+ 
+ //// [generatorReturnContextualType.js]
+-"use strict";
+-// #35995
+ function* f1() {
+     return { x: 'x' };
+ }
+@@= skipped -22, +20 lines =@@
+ }
+ async function* f4() {
+     const ret = { x: 'x' };
+-    return Promise.resolve(ret); // Error
++    return Promise.resolve(ret);
+ }
+ async function* g4() {
+     const ret = { x: 'x' };
+-    return Promise.resolve(ret); // Error
++    return Promise.resolve(ret);
+ }

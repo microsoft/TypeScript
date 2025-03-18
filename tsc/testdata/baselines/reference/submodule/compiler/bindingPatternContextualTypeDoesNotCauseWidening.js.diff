@@ -1,0 +1,10 @@
+--- old.bindingPatternContextualTypeDoesNotCauseWidening.js
++++ new.bindingPatternContextualTypeDoesNotCauseWidening.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [bindingPatternContextualTypeDoesNotCauseWidening.js]
+-var _ = pick(['b'], { a: 'a', b: 'b' }); // T: "b"
+-var _a = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)
++const _ = pick(['b'], { a: 'a', b: 'b' });
++const {} = pick(['b'], { a: 'a', b: 'b' });

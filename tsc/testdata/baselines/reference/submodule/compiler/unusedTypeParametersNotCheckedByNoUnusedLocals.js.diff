@@ -1,0 +1,18 @@
+--- old.unusedTypeParametersNotCheckedByNoUnusedLocals.js
++++ new.unusedTypeParametersNotCheckedByNoUnusedLocals.js
+@@= skipped -16, +16 lines =@@
+ //// [unusedTypeParametersNotCheckedByNoUnusedLocals.js]
+ function f() { }
+ ;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.m = function () { };
+-    return C;
+-}());
++class C {
++    m() { }
++}
+ ;
+-var l = function () { };
++let l = () => { };

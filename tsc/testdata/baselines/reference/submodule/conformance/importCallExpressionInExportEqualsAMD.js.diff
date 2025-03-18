@@ -1,0 +1,23 @@
+--- old.importCallExpressionInExportEqualsAMD.js
++++ new.importCallExpressionInExportEqualsAMD.js
+@@= skipped -8, +8 lines =@@
+ };
+ 
+ //// [something.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    return 42;
+-});
++"use strict";
++module.exports = 42;
+ //// [index.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    return async function () {
+-        const something = await new Promise((resolve_1, reject_1) => { require(["./something"], resolve_1, reject_1); });
+-    };
+-});
++"use strict";
++module.exports = async function () {
++    const something = await Promise.resolve().then(() => require("./something"));
++};

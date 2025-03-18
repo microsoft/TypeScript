@@ -1,0 +1,9 @@
+--- old.substitutionTypeNoMergeOfAssignableType.js
++++ new.substitutionTypeNoMergeOfAssignableType.js
+@@= skipped -30, +30 lines =@@
+ function makeEntityStore(config) {
+     return {};
+ }
+-var myTest = makeEntityStore({ test: { fields: { id: {} } } });
++const myTest = makeEntityStore({ test: { fields: { id: {} } } });
+ myTest.test;

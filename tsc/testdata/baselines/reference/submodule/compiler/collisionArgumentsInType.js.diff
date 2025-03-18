@@ -1,0 +1,12 @@
+--- old.collisionArgumentsInType.js
++++ new.collisionArgumentsInType.js
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ //// [collisionArgumentsInType.js]
+-var v1; // no error - no code gen
+-var v12; // no error - no code gen
++var v1;
++var v12;
+ var v2;
+ var v21;

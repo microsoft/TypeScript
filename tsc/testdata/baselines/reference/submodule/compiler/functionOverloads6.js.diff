@@ -1,0 +1,15 @@
+--- old.functionOverloads6.js
++++ new.functionOverloads6.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [functionOverloads6.js]
+-var foo = /** @class */ (function () {
+-    function foo() {
+-    }
+-    foo.fnOverload = function (foo) { };
+-    return foo;
+-}());
++class foo {
++    static fnOverload(foo) { }
++}

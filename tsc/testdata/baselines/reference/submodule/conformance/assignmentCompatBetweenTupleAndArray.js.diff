@@ -1,0 +1,15 @@
+--- old.assignmentCompatBetweenTupleAndArray.js
++++ new.assignmentCompatBetweenTupleAndArray.js
+@@= skipped -27, +27 lines =@@
+ var emptyObjTuple;
+ var numArray;
+ var emptyObjArray;
+-// no error
+ numArray = numNumTuple;
+ emptyObjArray = emptyObjTuple;
+ emptyObjArray = numStrTuple;
+ emptyObjArray = numNumTuple;
+ emptyObjArray = numEmptyObjTuple;
+-// error
+ numArray = numStrTuple;
+ emptyObjTuple = emptyObjArray;

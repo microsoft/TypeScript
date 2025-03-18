@@ -1,0 +1,53 @@
+--- old.staticVisibility.js
++++ new.staticVisibility.js
+@@= skipped -38, +38 lines =@@
+ 
+ 
+ //// [staticVisibility.js]
+-var C1 = /** @class */ (function () {
+-    function C1() {
++class C1 {
++    p;
++    static s;
++    constructor() {
+         var v = 0;
+-        s = 1; // should be error
+-        C1.s = 1; // should be ok
+-        b(); // should be error
+-        C1.b(); // should be ok
++        s = 1;
++        C1.s = 1;
++        b();
++        C1.b();
+     }
+-    C1.b = function () {
+-        v = 1; // should be error
+-        this.p = 0; // should be error
+-        C1.s = 1; // should be ok
+-    };
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-        this.barback = "";
++    static b() {
++        v = 1;
++        this.p = 0;
++        C1.s = 1;
+     }
+-    Object.defineProperty(C2, "Bar", {
+-        get: function () { return "bar"; } // ok
+-        ,
+-        set: function (bar) { barback = bar; } // not ok
+-        ,
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C2;
+-}());
++}
++class C2 {
++    barback = "";
++    static get Bar() { return "bar"; }
++    static set Bar(bar) { barback = bar; }
++}

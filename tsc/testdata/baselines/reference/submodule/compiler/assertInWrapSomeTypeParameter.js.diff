@@ -1,0 +1,18 @@
+--- old.assertInWrapSomeTypeParameter.js
++++ new.assertInWrapSomeTypeParameter.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [assertInWrapSomeTypeParameter.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function (x) {
++class C {
++    foo(x) {
+         return null;
+-    };
+-    return C;
+-}());
++    }
++}

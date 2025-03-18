@@ -1,0 +1,27 @@
+--- old.neverTypeErrors2.js
++++ new.neverTypeErrors2.js
+@@= skipped -50, +50 lines =@@
+ 
+ //// [neverTypeErrors2.js]
+ function f1() {
+-    var x;
++    let x;
+     x = 1;
+     x = "abc";
+     x = false;
+@@= skipped -17, +17 lines =@@
+ }
+ function f4() {
+ }
+-for (var _i = 0, _a = f4(); _i < _a.length; _i++) {
+-    var n = _a[_i];
+-}
+-for (var n in f4()) { }
++for (const n of f4()) { }
++for (const n in f4()) { }
+ function f5() {
+-    var x = []; // Ok
++    let x = [];
+ }
+ function func() {
+     return {

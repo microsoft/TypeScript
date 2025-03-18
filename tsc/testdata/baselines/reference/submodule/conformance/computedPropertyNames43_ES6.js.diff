@@ -1,0 +1,19 @@
+--- old.computedPropertyNames43_ES6.js
++++ new.computedPropertyNames43_ES6.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [computedPropertyNames43_ES6.js]
+ class Foo {
++    x;
+ }
+ class Foo2 {
++    x;
++    y;
+ }
+ class C {
+ }
+ class D extends C {
+-    // Computed properties
+     get ["get1"]() { return new Foo; }
+     set ["set1"](p) { }
+ }

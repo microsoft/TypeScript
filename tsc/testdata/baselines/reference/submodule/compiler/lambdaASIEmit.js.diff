@@ -1,0 +1,11 @@
+--- old.lambdaASIEmit.js
++++ new.lambdaASIEmit.js
+@@= skipped -12, +12 lines =@@
+ //// [lambdaASIEmit.js]
+ function Foo(x) {
+ }
+-Foo(function () {
+-    // do something
+-    return 127;
+-});
++Foo(() => 127);

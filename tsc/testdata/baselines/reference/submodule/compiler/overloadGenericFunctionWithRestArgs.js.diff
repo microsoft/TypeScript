@@ -1,0 +1,30 @@
+--- old.overloadGenericFunctionWithRestArgs.js
++++ new.overloadGenericFunctionWithRestArgs.js
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ //// [overloadGenericFunctionWithRestArgs.js]
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-function Choice() {
+-    var v_args = [];
+-    for (var _i = 0; _i < arguments.length; _i++) {
+-        v_args[_i] = arguments[_i];
+-    }
++class B {
++    id;
++}
++class A {
++    GetEnumerator;
++}
++function Choice(...v_args) {
+     return new A();
+ }

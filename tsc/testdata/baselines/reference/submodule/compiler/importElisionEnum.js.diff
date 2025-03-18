@@ -1,0 +1,10 @@
+--- old.importElisionEnum.js
++++ new.importElisionEnum.js
+@@= skipped -30, +30 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var MyEnum;
+ (function (MyEnum) {
+-    MyEnum[MyEnum["a"] = 0] = "a";
++    MyEnum["a"] = enum_1.MyEnum.a;
++    if (typeof MyEnum.a !== "string") MyEnum[MyEnum.a] = "a";
+ })(MyEnum || (MyEnum = {}));

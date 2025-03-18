@@ -1,0 +1,15 @@
+--- old.tsxElementResolution17.js
++++ new.tsxElementResolution17.js
+@@= skipped -27, +27 lines =@@
+ 
+ //// [file.jsx]
+ //// [consumer.jsx]
+-define(["require", "exports", "elements1"], function (require, exports, s1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    <s1.MyElement />;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const s1 = require("elements1");
++<s1.MyElement />;

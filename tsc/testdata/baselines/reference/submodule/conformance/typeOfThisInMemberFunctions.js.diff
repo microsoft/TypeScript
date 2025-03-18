@@ -1,0 +1,57 @@
+--- old.typeOfThisInMemberFunctions.js
++++ new.typeOfThisInMemberFunctions.js
+@@= skipped -33, +33 lines =@@
+ }
+ 
+ //// [typeOfThisInMemberFunctions.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function () {
++class C {
++    foo() {
+         var r = this;
+-    };
+-    C.bar = function () {
++    }
++    static bar() {
+         var r2 = this;
+-    };
+-    return C;
+-}());
+-var D = /** @class */ (function () {
+-    function D() {
+     }
+-    D.prototype.foo = function () {
++}
++class D {
++    x;
++    foo() {
+         var r = this;
+-    };
+-    D.bar = function () {
++    }
++    static bar() {
+         var r2 = this;
+-    };
+-    return D;
+-}());
+-var E = /** @class */ (function () {
+-    function E() {
+     }
+-    E.prototype.foo = function () {
++}
++class E {
++    x;
++    foo() {
+         var r = this;
+-    };
+-    E.bar = function () {
++    }
++    static bar() {
+         var r2 = this;
+-    };
+-    return E;
+-}());
++    }
++}

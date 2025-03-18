@@ -1,0 +1,37 @@
+--- old.typeParameterExplicitlyExtendsAny.js
++++ new.typeParameterExplicitlyExtendsAny.js
+@@= skipped -37, +37 lines =@@
+ //// [typeParameterExplicitlyExtendsAny.js]
+ function fee() {
+     var t;
+-    t.blah; // Error
+-    t.toString; // ok
++    t.blah;
++    t.toString;
+ }
+ function fee2() {
+     var t;
+-    t.blah; // ok
+-    t.toString; // ok
++    t.blah;
++    t.toString;
+ }
+ function f(x) {
+     x.children;
+@@= skipped -15, +15 lines =@@
+     x[100];
+     x['hello'];
+ }
+-var MyClass = /** @class */ (function () {
+-    function MyClass() {
+-    }
+-    MyClass.displayTree1 = function (tree) {
+-        // error "Property 'children' does not exist on type 'T'"
++class MyClass {
++    static displayTree1(tree) {
+         tree.children;
+-    };
+-    return MyClass;
+-}());
++    }
++}

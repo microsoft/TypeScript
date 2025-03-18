@@ -1,0 +1,17 @@
+--- old.narrowedImports.js
++++ new.narrowedImports.js
+@@= skipped -26, +26 lines =@@
+ //// [x.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a_1 = require("./a");
+-var b0 = require("./b");
+-var b1 = require("./b");
+-var x;
++const a_1 = require("./a");
++const b0 = require("./b");
++const b1 = require("./b");
++let x;
+ if (a_1.default)
+     x = a_1.default;
+ if (a_1.a1)

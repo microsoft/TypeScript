@@ -1,0 +1,20 @@
+--- old.this_inside-enum-should-not-be-allowed.js
++++ new.this_inside-enum-should-not-be-allowed.js
+@@= skipped -13, +13 lines =@@
+ //// [this_inside-enum-should-not-be-allowed.js]
+ var TopLevelEnum;
+ (function (TopLevelEnum) {
+-    TopLevelEnum[TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this] = "ThisWasAllowedButShouldNotBe"; // Should not be allowed
++    TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this;
++    if (typeof TopLevelEnum.ThisWasAllowedButShouldNotBe !== "string") TopLevelEnum[TopLevelEnum.ThisWasAllowedButShouldNotBe] = "ThisWasAllowedButShouldNotBe";
+ })(TopLevelEnum || (TopLevelEnum = {}));
+ var ModuleEnum;
+ (function (ModuleEnum) {
+-    var EnumInModule;
++    let EnumInModule;
+     (function (EnumInModule) {
+-        EnumInModule[EnumInModule["WasADifferentError"] = this] = "WasADifferentError"; // this was handled as if this was in a module
++        EnumInModule["WasADifferentError"] = this;
++        if (typeof EnumInModule.WasADifferentError !== "string") EnumInModule[EnumInModule.WasADifferentError] = "WasADifferentError";
+     })(EnumInModule || (EnumInModule = {}));
+ })(ModuleEnum || (ModuleEnum = {}));

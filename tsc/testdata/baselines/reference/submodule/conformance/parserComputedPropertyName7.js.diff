@@ -1,0 +1,8 @@
+--- old.parserComputedPropertyName7.js
++++ new.parserComputedPropertyName7.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [parserComputedPropertyName7.js]
+ class C {
++    [e];
+ }

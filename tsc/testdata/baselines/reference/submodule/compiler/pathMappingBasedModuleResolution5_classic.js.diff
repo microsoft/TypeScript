@@ -1,0 +1,64 @@
+--- old.pathMappingBasedModuleResolution5_classic.js
++++ new.pathMappingBasedModuleResolution5_classic.js
+@@= skipped -25, +25 lines =@@
+ 
+ 
+ //// [file1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    exports.x = 1;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++exports.x = 1;
+ //// [file2.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.y = void 0;
+-    exports.y = 1;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.y = void 0;
++exports.y = 1;
+ //// [file3.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.z = void 0;
+-    exports.z = 1;
+-});
+-//// [file4.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.z1 = void 0;
+-    exports.z1 = 1;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.z = void 0;
++exports.z = 1;
+ //// [file1.js]
+-define(["require", "exports", "folder2/file1", "folder3/file2", "components/file3", "file4"], function (require, exports, file1_1, file2_1, file3_1, file4_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    use(file1_1.x.toExponential());
+-    use(file2_1.y.toExponential());
+-    use(file3_1.z.toExponential());
+-    use(file4_1.z1.toExponential());
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const file1_1 = require("folder2/file1");
++const file2_1 = require("folder3/file2");
++const file3_1 = require("components/file3");
++const file4_1 = require("file4");
++use(file1_1.x.toExponential());
++use(file2_1.y.toExponential());
++use(file3_1.z.toExponential());
++use(file4_1.z1.toExponential());

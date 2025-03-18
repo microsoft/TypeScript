@@ -1,0 +1,14 @@
+--- old.declarationEmitInvalidReference.js
++++ new.declarationEmitInvalidReference.js
+@@= skipped -3, +3 lines =@@
+ /// <reference path="invalid.ts" />
+ var x = 0;
+ 
++//// [invalid.js]
+ //// [declarationEmitInvalidReference.js]
+-/// <reference path="invalid.ts" />
+ var x = 0;
+-
+-
+-//// [declarationEmitInvalidReference.d.ts]
+-declare var x: number;

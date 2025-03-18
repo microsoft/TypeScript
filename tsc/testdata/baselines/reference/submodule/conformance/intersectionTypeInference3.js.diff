@@ -1,0 +1,10 @@
+--- old.intersectionTypeInference3.js
++++ new.intersectionTypeInference3.js
+@@= skipped -20, +20 lines =@@
+ 
+ 
+ //// [intersectionTypeInference3.js]
+-"use strict";
+-// Repro from #19682
+ const c1 = Array.from(a).concat(Array.from(b));
+ const c2 = from();

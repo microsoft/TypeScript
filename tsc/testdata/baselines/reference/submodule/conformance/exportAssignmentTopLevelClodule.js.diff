@@ -1,0 +1,41 @@
+--- old.exportAssignmentTopLevelClodule.js
++++ new.exportAssignmentTopLevelClodule.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [foo_0.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-            this.test = "test";
+-        }
+-        return Foo;
+-    }());
+-    (function (Foo) {
+-        Foo.answer = 42;
+-    })(Foo || (Foo = {}));
+-    return Foo;
+-});
++"use strict";
++class Foo {
++    test = "test";
++}
++(function (Foo) {
++    Foo.answer = 42;
++})(Foo || (Foo = {}));
++module.exports = Foo;
+ //// [foo_1.js]
+-define(["require", "exports", "./foo_0"], function (require, exports, foo) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    if (foo.answer === 42) {
+-        var x = new foo();
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const foo = require("./foo_0");
++if (foo.answer === 42) {
++    var x = new foo();
++}

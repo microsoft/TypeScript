@@ -1,0 +1,24 @@
+--- old.parserErrorRecoveryIfStatement5.js
++++ new.parserErrorRecoveryIfStatement5.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [parserErrorRecoveryIfStatement5.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    Foo.prototype.f1 = function () {
++class Foo {
++    f1() {
+         if (a.b) {
+         }
+         f2();
+@@= skipped -12, +10 lines =@@
+         f3();
+         {
+         }
+-    };
+-    return Foo;
+-}());
++    }
++}

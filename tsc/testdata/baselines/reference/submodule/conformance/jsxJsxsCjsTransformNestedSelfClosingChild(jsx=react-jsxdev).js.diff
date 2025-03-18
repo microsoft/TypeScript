@@ -1,0 +1,23 @@
+--- old.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).js
++++ new.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).js
+@@= skipped -24, +24 lines =@@
+ 
+ //// [jsxJsxsCjsTransformNestedSelfClosingChild.js]
+ "use strict";
+-var _this = this;
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+-var _jsxFileName = "jsxJsxsCjsTransformNestedSelfClosingChild.tsx";
+-console.log((0, jsx_dev_runtime_1.jsxDEV)("div", { children: (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 5 }, this) }, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 13 }, this));
+-console.log((0, jsx_dev_runtime_1.jsxDEV)("div", { children: [(0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 12, columnNumber: 5 }, this), (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 13, columnNumber: 5 }, this)] }, void 0, true, { fileName: _jsxFileName, lineNumber: 10, columnNumber: 13 }, this));
+-console.log((0, jsx_dev_runtime_1.jsxDEV)("div", { children: [1, 2].map(function (i) { return (0, jsx_dev_runtime_1.jsxDEV)("div", { children: i }, i, false, { fileName: _jsxFileName, lineNumber: 19, columnNumber: 21 }, _this); }) }, void 0, false, { fileName: _jsxFileName, lineNumber: 17, columnNumber: 13 }, this));
++console.log(<div>
++    <div />
++  </div>);
++console.log(<div>
++    <div />
++    <div />
++  </div>);
++console.log(<div>
++    {[1, 2].map(i => <div key={i}>{i}</div>)}
++  </div>);

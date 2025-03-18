@@ -1,0 +1,28 @@
+--- old.stringLiteralTypesTypePredicates01.js
++++ new.stringLiteralTypesTypePredicates01.js
+@@= skipped -30, +30 lines =@@
+ }
+ var x = undefined;
+ if (kindIs(x, "A")) {
+-    var a = x;
++    let a = x;
+ }
+ else {
+-    var b = x;
++    let b = x;
+ }
+ if (!kindIs(x, "B")) {
+-    var c = x;
++    let c = x;
+ }
+ else {
+-    var d = x;
++    let d = x;
+ }
+-
+-
+-//// [stringLiteralTypesTypePredicates01.d.ts]
+-type Kind = "A" | "B";
+-declare function kindIs(kind: Kind, is: "A"): kind is "A";
+-declare function kindIs(kind: Kind, is: "B"): kind is "B";
+-declare var x: Kind;

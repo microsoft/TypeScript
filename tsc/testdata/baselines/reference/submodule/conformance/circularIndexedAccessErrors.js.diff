@@ -1,0 +1,57 @@
+--- old.circularIndexedAccessErrors.js
++++ new.circularIndexedAccessErrors.js
+@@= skipped -41, +41 lines =@@
+ 
+ 
+ //// [circularIndexedAccessErrors.js]
+-var x2x = x2.x;
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    return C2;
+-}());
+-function foo() {
++let x2x = x2.x;
++class C1 {
++    x;
+ }
+-
+-
+-//// [circularIndexedAccessErrors.d.ts]
+-type T1 = {
+-    x: T1["x"];
+-};
+-type T2<K extends "x" | "y"> = {
+-    x: T2<K>[K];
+-    y: number;
+-};
+-declare let x2: T2<"x">;
+-declare let x2x: any;
+-interface T3<T extends T3<T>> {
+-    x: T["x"];
++class C2 {
++    x;
++    y;
++    z;
+ }
+-interface T4<T extends T4<T>> {
+-    x: T4<T>["x"];
++function foo() {
+ }
+-declare class C1 {
+-    x: C1["x"];
+-}
+-declare class C2 {
+-    x: this["y"];
+-    y: this["z"];
+-    z: this["x"];
+-}
+-interface Foo {
+-    hello: boolean;
+-}
+-declare function foo<T extends Foo | T["hello"]>(): void;

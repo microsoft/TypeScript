@@ -1,0 +1,35 @@
+--- old.unknownSymbols2.js
++++ new.unknownSymbols2.js
+@@= skipped -36, +36 lines =@@
+ (function (M) {
+     var x;
+     var y = x + asdf;
+-    var z = x; // should be an error
++    var z = x;
+     if (asdf) {
+     }
+     else if (qwerty) {
+     }
+     try {
+     }
+-    catch (asdf) { // no error
++    catch (asdf) {
+     }
+     switch (asdf) {
+         case qwerty:
+@@= skipped -15, +15 lines =@@
+         default:
+             break;
+     }
+-    var a = function () { return asdf; };
+-    var b = function (asdf) { return qwerty; };
+-    var N;
++    var a = () => asdf;
++    var b = (asdf) => { return qwerty; };
++    let N;
+     (function (N) {
+         var x = 1;
+     })(N || (N = {}));
++    var c = N;
++    var d = asdf;
+ })(M || (M = {}));

@@ -1,0 +1,10 @@
+--- old.parseReplacementCharacter.js
++++ new.parseReplacementCharacter.js
+@@= skipped -11, +11 lines =@@
+ //// [parseReplacementCharacter.js]
+ "oops �� oops";
+ 'oops �� oops';
+-"oops \uFFFD\uFFFD oops";
+-"".concat("oops �� oops");
++`oops �� oops`;
++`${"oops �� oops"}`;

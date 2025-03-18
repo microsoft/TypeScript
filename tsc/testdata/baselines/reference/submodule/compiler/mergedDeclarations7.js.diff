@@ -1,0 +1,10 @@
+--- old.mergedDeclarations7.js
++++ new.mergedDeclarations7.js
+@@= skipped -24, +24 lines =@@
+ //// [test.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var passport = require("passport");
+-var p = passport.use();
++const passport = require("passport");
++let p = passport.use();

@@ -1,0 +1,15 @@
+--- old.noImplicitReturnInConstructors.js
++++ new.noImplicitReturnInConstructors.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [noImplicitReturnInConstructors.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    constructor() {
+         return;
+     }
+-    return C;
+-}());
++}

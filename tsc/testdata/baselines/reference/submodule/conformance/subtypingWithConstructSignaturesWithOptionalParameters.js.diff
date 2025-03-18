@@ -1,0 +1,7 @@
+--- old.subtypingWithConstructSignaturesWithOptionalParameters.js
++++ new.subtypingWithConstructSignaturesWithOptionalParameters.js
+@@= skipped -87, +87 lines =@@
+ }
+ 
+ //// [subtypingWithConstructSignaturesWithOptionalParameters.js]
+-// call signatures in derived types must have the same or fewer optional parameters as the base type

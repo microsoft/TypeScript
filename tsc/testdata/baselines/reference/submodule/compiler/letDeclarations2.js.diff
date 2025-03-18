@@ -1,0 +1,12 @@
+--- old.letDeclarations2.js
++++ new.letDeclarations2.js
+@@= skipped -11, +11 lines =@@
+     let l1 = "s";
+     M.l2 = 0;
+ })(M || (M = {}));
+-
+-
+-//// [letDeclarations2.d.ts]
+-declare namespace M {
+-    let l2: number;
+-}

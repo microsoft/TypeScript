@@ -1,0 +1,9 @@
+--- old.parserErrorRecovery_ObjectLiteral2.js
++++ new.parserErrorRecovery_ObjectLiteral2.js
+@@= skipped -4, +4 lines =@@
+ return;
+ 
+ //// [parserErrorRecovery_ObjectLiteral2.js]
+-var v = { a: a, return:  };
++var v = { a,
++    return: , };

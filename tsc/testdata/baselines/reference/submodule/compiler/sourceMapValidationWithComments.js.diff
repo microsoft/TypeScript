@@ -1,0 +1,28 @@
+--- old.sourceMapValidationWithComments.js
++++ new.sourceMapValidationWithComments.js
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ //// [sourceMapValidationWithComments.js]
+-var DebugClass = /** @class */ (function () {
+-    function DebugClass() {
+-    }
+-    DebugClass.debugFunc = function () {
+-        // Start Debugger Test Code
++class DebugClass {
++    static debugFunc() {
+         var i = 0;
+         i++;
+         i++;
+@@= skipped -15, +12 lines =@@
+         i++;
+         i++;
+         i++;
+-        // End Debugger Test Code
+         return true;
+-    };
+-    return DebugClass;
+-}());
+-//# sourceMappingURL=sourceMapValidationWithComments.js.map
++    }
++}

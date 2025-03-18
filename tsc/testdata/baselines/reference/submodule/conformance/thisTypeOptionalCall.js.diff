@@ -1,0 +1,9 @@
+--- old.thisTypeOptionalCall.js
++++ new.thisTypeOptionalCall.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [thisTypeOptionalCall.js]
+ function maybeBind(obj, fn) {
+-    return fn === null || fn === void 0 ? void 0 : fn.bind(obj);
++    return fn?.bind(obj);
+ }

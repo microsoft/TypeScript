@@ -1,0 +1,7 @@
+--- old.nonNullableAndObjectIntersections(strict=false).js
++++ new.nonNullableAndObjectIntersections(strict=false).js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [nonNullableAndObjectIntersections.js]
+-// These should all resolve to never

@@ -1,0 +1,15 @@
+--- old.typeParameterLeak.js
++++ new.typeParameterLeak.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [typeParameterLeak.js]
+-"use strict";
+-// Repro from #35655
+-var _a;
+-var b = (_a = f({ x: "", y: "" })) === null || _a === void 0 ? void 0 : _a.getBox();
++const b = f({ x: "", y: "" })?.getBox();
+ if (b) {
+-    var x = b.data;
++    const x = b.data;
+ }

@@ -1,0 +1,13 @@
+--- old.declarationEmitDefaultExport6.js
++++ new.declarationEmitDefaultExport6.js
+@@= skipped -8, +8 lines =@@
+ export class A {
+ }
+ export default new A();
+-
+-
+-//// [declarationEmitDefaultExport6.d.ts]
+-export declare class A {
+-}
+-declare const _default: A;
+-export default _default;

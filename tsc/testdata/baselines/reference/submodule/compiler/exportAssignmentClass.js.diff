@@ -1,0 +1,29 @@
+--- old.exportAssignmentClass.js
++++ new.exportAssignmentClass.js
+@@= skipped -10, +10 lines =@@
+ var d = new D();
+ var x = d.p;
+ 
+-//// [exportAssignmentClass_A.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var C = /** @class */ (function () {
+-        function C() {
+-            this.p = 0;
+-        }
+-        return C;
+-    }());
+-    return C;
+-});
+ //// [exportAssignmentClass_B.js]
+-define(["require", "exports", "exportAssignmentClass_A"], function (require, exports, D) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var d = new D();
+-    var x = d.p;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const D = require("exportAssignmentClass_A");
++var d = new D();
++var x = d.p;

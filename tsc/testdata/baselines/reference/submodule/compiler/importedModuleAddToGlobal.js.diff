@@ -1,0 +1,21 @@
+--- old.importedModuleAddToGlobal.js
++++ new.importedModuleAddToGlobal.js
+@@= skipped -20, +20 lines =@@
+ //// [importedModuleAddToGlobal.js]
+ var B;
+ (function (B_1) {
+-    var B = /** @class */ (function () {
+-        function B() {
+-        }
+-        return B;
+-    }());
++    var a = A;
++    class B {
++    }
+     B_1.B = B;
+ })(B || (B = {}));
+ var C;
+ (function (C) {
++    var a = A;
+     function hello() { return null; }
+ })(C || (C = {}));

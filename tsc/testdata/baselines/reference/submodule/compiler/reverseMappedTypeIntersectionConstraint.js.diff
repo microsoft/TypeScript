@@ -1,0 +1,79 @@
+--- old.reverseMappedTypeIntersectionConstraint.js
++++ new.reverseMappedTypeIntersectionConstraint.js
+@@= skipped -175, +175 lines =@@
+ 
+ 
+ //// [reverseMappedTypeIntersectionConstraint.js]
+-"use strict";
+-var __assign = (this && this.__assign) || function () {
+-    __assign = Object.assign || function(t) {
+-        for (var s, i = 1, n = arguments.length; i < n; i++) {
+-            s = arguments[i];
+-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+-                t[p] = s[p];
+-        }
+-        return t;
+-    };
+-    return __assign.apply(this, arguments);
+-};
+-var inferredParams1 = createMachine({
++const inferredParams1 = createMachine({
+     entry: "foo",
+     states: {
+         a: {
+@@= skipped -21, +9 lines =@@
+     },
+     extra: 12,
+ });
+-var inferredParams2 = createMachine({
++const inferredParams2 = createMachine({
+     entry: "foo",
+     states: {
+         a: {
+@@= skipped -9, +9 lines =@@
+     },
+     extra: 12,
+ });
+-// -----------------------------------------------------------------------------------------
+-var checkType = function () { return function (value) { return value; }; };
+-var checked = checkType()({
++const checkType = () => (value) => value;
++const checked = checkType()({
+     x: 1,
+     y: "y",
+-    z: "z", // undesirable property z is *not* allowed
++    z: "z",
+ });
+ checked;
+ function doStuffWithStuff(s) {
+@@= skipped -29, +28 lines =@@
+     { field: 1, anotherField: 'a', extra: 123 },
+ ]);
+ function bar(props) {
+-    return foo(props); // no error because lack of excess property check by design
++    return foo(props);
+ }
+ foo({ x: 1, y: 'foo' });
+-foo(__assign({ x: 1, y: 'foo' })); // no error because lack of excess property check by design
++foo({ ...{ x: 1, y: 'foo' } });
+ baz({ x: 1 });
+ baz({ x: 1, z: 123 });
+ baz({ x: 1, y: 'foo' });
+ baz({ x: 1, y: 'foo', z: 123 });
+-var wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
+-var child = function () { return Promise.resolve("foo"); };
+-var config = createXMachine({
++const wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
++const child = () => Promise.resolve("foo");
++const config = createXMachine({
+     types: {},
+     invoke: {
+         src: "str",
+     },
+     extra: 10
+ });
+-var config2 = createXMachine({
++const config2 = createXMachine({
+     invoke: {
+         src: "whatever",
+     },

@@ -1,0 +1,30 @@
+--- old.declarationEmitExpandoWithGenericConstraint.js
++++ new.declarationEmitExpandoWithGenericConstraint.js
+@@= skipped -19, +19 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Rect = exports.Point = void 0;
+-var Point = function (x, y) { return ({ x: x, y: y }); };
++const Point = (x, y) => ({ x, y });
+ exports.Point = Point;
+-var Rect = function (a, b) { return ({ a: a, b: b }); };
++const Rect = (a, b) => ({ a, b });
+ exports.Rect = Rect;
+-exports.Point.zero = function () { return (0, exports.Point)(0, 0); };
+-
+-
+-//// [declarationEmitExpandoWithGenericConstraint.d.ts]
+-export interface Point {
+-    readonly x: number;
+-    readonly y: number;
+-}
+-export interface Rect<p extends Point> {
+-    readonly a: p;
+-    readonly b: p;
+-}
+-export declare const Point: {
+-    (x: number, y: number): Point;
+-    zero(): Point;
+-};
+-export declare const Rect: <p extends Point>(a: p, b: p) => Rect<p>;
++exports.Point.zero = () => (0, exports.Point)(0, 0);

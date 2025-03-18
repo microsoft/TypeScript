@@ -1,0 +1,124 @@
+--- old.typeGuardsInConditionalExpression.js
++++ new.typeGuardsInConditionalExpression.js
+@@= skipped -91, +91 lines =@@
+ }
+ 
+ //// [typeGuardsInConditionalExpression.js]
+-// In the true expression of a conditional expression, 
+-// the type of a variable or parameter is narrowed by any type guard in the condition when true, 
+-// provided the true expression contains no assignments to the variable or parameter.
+-// In the false expression of a conditional expression, 
+-// the type of a variable or parameter is narrowed by any type guard in the condition when false, 
+-// provided the false expression contains no assignments to the variable or parameter.
+ function foo(x) {
+     return typeof x === "string"
+-        ? x.length // string
+-        : x++; // number
++        ? x.length
++        : x++;
+ }
+ function foo2(x) {
+     return typeof x === "string"
+-        ? ((x = "hello") && x) // string
+-        : x; // number
++        ? ((x = "hello") && x)
++        : x;
+ }
+ function foo3(x) {
+     return typeof x === "string"
+-        ? ((x = 10) && x) // number
+-        : x; // number
++        ? ((x = 10) && x)
++        : x;
+ }
+ function foo4(x) {
+     return typeof x === "string"
+-        ? x // string
+-        : ((x = 10) && x); // number
++        ? x
++        : ((x = 10) && x);
+ }
+ function foo5(x) {
+     return typeof x === "string"
+-        ? x // string
+-        : ((x = "hello") && x); // string
++        ? x
++        : ((x = "hello") && x);
+ }
+ function foo6(x) {
+-    // Modify in both branches
+     return typeof x === "string"
+-        ? ((x = 10) && x) // number
+-        : ((x = "hello") && x); // string
++        ? ((x = 10) && x)
++        : ((x = "hello") && x);
+ }
+ function foo7(x) {
+     return typeof x === "string"
+-        ? x === "hello" // boolean
++        ? x === "hello"
+         : typeof x === "boolean"
+-            ? x // boolean
+-            : x == 10; // boolean
++            ? x
++            : x == 10;
+ }
+ function foo8(x) {
+     var b;
+     return typeof x === "string"
+         ? x === "hello"
+-        : ((b = x) && //  number | boolean
++        : ((b = x) &&
+             (typeof x === "boolean"
+-                ? x // boolean
+-                : x == 10)); // boolean
++                ? x
++                : x == 10));
+ }
+ function foo9(x) {
+     var y = 10;
+-    // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
+     return typeof x === "string"
+-        ? ((y = x.length) && x === "hello") // boolean
+-        : x === 10; // boolean
++        ? ((y = x.length) && x === "hello")
++        : x === 10;
+ }
+ function foo10(x) {
+-    // Mixing typeguards
+     var b;
+     return typeof x === "string"
+-        ? x // string
+-        : ((b = x) // x is number | boolean
++        ? x
++        : ((b = x)
+             && typeof x === "number"
+-            && x.toString()); // x is number
++            && x.toString());
+ }
+ function foo11(x) {
+-    // Mixing typeguards
+     var b;
+     return typeof x === "string"
+-        ? x // string
+-        : ((b = x) // x is number | boolean
++        ? x
++        : ((b = x)
+             && typeof x === "number"
+-            && (x = 10) // assignment to x
+-            && x); // x is number
++            && (x = 10)
++            && x);
+ }
+ function foo12(x) {
+-    // Mixing typeguards
+     var b;
+     return typeof x === "string"
+-        ? ((x = 10) && x.toString().length) // number
+-        : ((b = x) // x is number | boolean
++        ? ((x = 10) && x.toString().length)
++        : ((b = x)
+             && typeof x === "number"
+-            && x); // x is number
++            && x);
+ }

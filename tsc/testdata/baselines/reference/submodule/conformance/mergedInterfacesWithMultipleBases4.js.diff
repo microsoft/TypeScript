@@ -1,0 +1,52 @@
+--- old.mergedInterfacesWithMultipleBases4.js
++++ new.mergedInterfacesWithMultipleBases4.js
+@@= skipped -36, +36 lines =@@
+ }
+ 
+ //// [mergedInterfacesWithMultipleBases4.js]
+-// merged interfaces behave as if all extends clauses from each declaration are merged together
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    return C2;
+-}());
+-var C3 = /** @class */ (function () {
+-    function C3() {
+-    }
+-    return C3;
+-}());
+-var C4 = /** @class */ (function () {
+-    function C4() {
+-    }
+-    return C4;
+-}());
+-var D = /** @class */ (function () {
+-    function D() {
+-    }
+-    return D;
+-}());
++class C {
++    a;
++}
++class C2 {
++    b;
++}
++class C3 {
++    c;
++}
++class C4 {
++    d;
++}
++class D {
++    a;
++    b;
++    c;
++    d;
++    y;
++    z;
++}

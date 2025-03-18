@@ -1,0 +1,20 @@
+--- old.classExpressions.js
++++ new.classExpressions.js
+@@= skipped -10, +10 lines =@@
+ };
+ 
+ //// [classExpressions.js]
+-var x = /** @class */ (function () {
+-    function B() {
+-        this.func = function () {
+-        };
++let x = class B {
++    prop;
++    onStart() {
+     }
+-    B.prototype.onStart = function () {
++    func = () => {
+     };
+-    return B;
+-}());
++};

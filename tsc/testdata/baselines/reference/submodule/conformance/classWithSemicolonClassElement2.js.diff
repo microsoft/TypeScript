@@ -1,0 +1,15 @@
+--- old.classWithSemicolonClassElement2.js
++++ new.classWithSemicolonClassElement2.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [classWithSemicolonClassElement2.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
++class C {
+     ;
+     ;
+-    return C;
+-}());
++}

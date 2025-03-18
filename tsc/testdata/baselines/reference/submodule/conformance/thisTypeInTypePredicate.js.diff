@@ -1,0 +1,8 @@
+--- old.thisTypeInTypePredicate.js
++++ new.thisTypeInTypePredicate.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [thisTypeInTypePredicate.js]
+-var numbers = filter(function (x) { return 'number' == typeof x; });
++const numbers = filter((x) => 'number' == typeof x);

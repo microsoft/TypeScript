@@ -1,0 +1,8 @@
+--- old.mutuallyRecursiveGenericBaseTypes1.js
++++ new.mutuallyRecursiveGenericBaseTypes1.js
+@@= skipped -19, +19 lines =@@
+ 
+ //// [mutuallyRecursiveGenericBaseTypes1.js]
+ var b;
+-b.foo(); // should not error
++b.foo();

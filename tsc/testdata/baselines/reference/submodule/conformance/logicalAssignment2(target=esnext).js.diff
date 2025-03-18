@@ -1,0 +1,10 @@
+--- old.logicalAssignment2(target=esnext).js
++++ new.logicalAssignment2(target=esnext).js
+@@= skipped -30, +30 lines =@@
+ 
+ 
+ //// [logicalAssignment2.js]
+-"use strict";
+ a.baz &&= result.baz;
+ b.baz ||= result.baz;
+ c.baz ??= result.baz;

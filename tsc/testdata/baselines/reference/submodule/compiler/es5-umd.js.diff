@@ -1,0 +1,19 @@
+--- old.es5-umd.js
++++ new.es5-umd.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [es5-umd.js]
+-var A = /** @class */ (function () {
+-    function A() {
++class A {
++    constructor() {
+     }
+-    A.prototype.B = function () {
++    B() {
+         return 42;
+-    };
+-    return A;
+-}());
++    }
++}

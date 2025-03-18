@@ -1,0 +1,22 @@
+--- old.systemModuleTrailingComments.js
++++ new.systemModuleTrailingComments.js
+@@= skipped -5, +5 lines =@@
+ //some comment
+ 
+ //// [systemModuleTrailingComments.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var test;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("test", test = "TEST");
+-            //some comment
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.test = void 0;
++exports.test = "TEST";

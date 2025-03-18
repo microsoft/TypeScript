@@ -1,0 +1,10 @@
+--- old.crashInResolveInterface.js
++++ new.crashInResolveInterface.js
+@@= skipped -19, +19 lines =@@
+ 
+ //// [file1.js]
+ var q1;
+-var x = q1.each(function (x) { return c.log(x); });
++var x = q1.each(x => c.log(x));
+ //// [file2.js]
+-///<reference path='file1.ts'/>

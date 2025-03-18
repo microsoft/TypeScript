@@ -1,0 +1,32 @@
+--- old.decoratorMetadataWithConstructorType.js
++++ new.decoratorMetadataWithConstructorType.js
+@@= skipped -21, +21 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.B = void 0;
+-var A = /** @class */ (function () {
+-    function A() {
+-        console.log('new A');
+-    }
+-    return A;
+-}());
++class A {
++    constructor() { console.log('new A'); }
++}
+ function decorator(target, propertyKey) {
+ }
+-var B = /** @class */ (function () {
+-    function B() {
+-        this.x = new A();
+-    }
+-    __decorate([
+-        decorator,
+-        __metadata("design:type", A)
+-    ], B.prototype, "x", void 0);
+-    return B;
+-}());
++class B {
++    @decorator
++    x = new A();
++}
+ exports.B = B;

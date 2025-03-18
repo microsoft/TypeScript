@@ -1,0 +1,16 @@
+--- old.noCircularDefinitionOnExportOfPrivateInMergedNamespace.js
++++ new.noCircularDefinitionOnExportOfPrivateInMergedNamespace.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [noCircularDefinitionOnExportOfPrivateInMergedNamespace.js]
+ "use strict";
+-var cat = 12;
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++const cat = 12;
++class Foo {
++}
+ module.exports = Foo;

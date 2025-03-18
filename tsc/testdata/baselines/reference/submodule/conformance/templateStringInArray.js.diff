@@ -1,0 +1,8 @@
+--- old.templateStringInArray.js
++++ new.templateStringInArray.js
+@@= skipped -3, +3 lines =@@
+ var x = [1, 2, `abc${ 123 }def`];
+ 
+ //// [templateStringInArray.js]
+-var x = [1, 2, "abc".concat(123, "def")];
++var x = [1, 2, `abc${123}def`];

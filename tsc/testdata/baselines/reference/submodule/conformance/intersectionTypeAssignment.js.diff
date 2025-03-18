@@ -1,0 +1,18 @@
+--- old.intersectionTypeAssignment.js
++++ new.intersectionTypeAssignment.js
+@@= skipped -26, +26 lines =@@
+ var y;
+ a = x;
+ a = y;
+-x = a; // Error
+-y = a; // Error
++x = a;
++y = a;
+ b = x;
+ b = y;
+-x = b; // Error
+-y = b; // Error
++x = b;
++y = b;
+ x = y;
+ y = x;

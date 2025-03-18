@@ -1,0 +1,37 @@
+--- old.decoratorChecksFunctionBodies.js
++++ new.decoratorChecksFunctionBodies.js
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ //// [decoratorChecksFunctionBodies.js]
+-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+-};
+-// from #2971
+ function func(s) {
+ }
+-var A = /** @class */ (function () {
+-    function A() {
++class A {
++    @((x, p, d) => {
++        var a = 3;
++        func(a);
++        return d;
++    })
++    m() {
+     }
+-    A.prototype.m = function () {
+-    };
+-    __decorate([
+-        (function (x, p, d) {
+-            var a = 3;
+-            func(a);
+-            return d;
+-        })
+-    ], A.prototype, "m", null);
+-    return A;
+-}());
++}

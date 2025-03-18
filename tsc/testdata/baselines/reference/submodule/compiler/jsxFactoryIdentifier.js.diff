@@ -1,0 +1,22 @@
+--- old.jsxFactoryIdentifier.js
++++ new.jsxFactoryIdentifier.js
+@@= skipped -68, +68 lines =@@
+ function toCamelCase(text) {
+     return text[0].toLowerCase() + text.substring(1);
+ }
+-//# sourceMappingURL=Element.js.map
+ //// [test.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -10, +9 lines =@@
+ class A {
+     view() {
+         return [
+-            createElement("meta", { content: "helloworld" }),
+-            createElement("meta", { content: c.a.b })
++            <meta content="helloworld"></meta>,
++            <meta content={c.a.b}></meta>
+         ];
+     }
+ }
+-//# sourceMappingURL=test.js.map

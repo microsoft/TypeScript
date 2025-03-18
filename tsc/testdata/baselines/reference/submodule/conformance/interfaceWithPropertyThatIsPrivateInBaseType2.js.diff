@@ -1,0 +1,24 @@
+--- old.interfaceWithPropertyThatIsPrivateInBaseType2.js
++++ new.interfaceWithPropertyThatIsPrivateInBaseType2.js
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ //// [interfaceWithPropertyThatIsPrivateInBaseType2.js]
+-var Base = /** @class */ (function () {
+-    function Base() {
+-    }
+-    Base.prototype.x = function () { };
+-    return Base;
+-}());
+-var Base2 = /** @class */ (function () {
+-    function Base2() {
+-    }
+-    Base2.prototype.x = function () { };
+-    return Base2;
+-}());
++class Base {
++    x() { }
++}
++class Base2 {
++    x() { }
++}

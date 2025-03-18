@@ -1,0 +1,12 @@
+--- old.overloadsAndTypeArgumentArityErrors.js
++++ new.overloadsAndTypeArgumentArityErrors.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [overloadsAndTypeArgumentArityErrors.js]
+-Callbacks('s'); // wrong number of type arguments
+-new Callbacks('s'); // wrong number of type arguments
+-f(); // wrong number of arguments (#25683)
++Callbacks('s');
++new Callbacks('s');
++f();

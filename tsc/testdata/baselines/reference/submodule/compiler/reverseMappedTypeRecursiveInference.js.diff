@@ -1,0 +1,14 @@
+--- old.reverseMappedTypeRecursiveInference.js
++++ new.reverseMappedTypeRecursiveInference.js
+@@= skipped -18, +18 lines =@@
+ test(bar);
+ 
+ //// [reverseMappedTypeRecursiveInference.js]
+-"use strict";
+ function test(value) {
+     console.log(value);
+     return undefined;
+ }
+-var bar = {};
++const bar = {};
+ test(bar);

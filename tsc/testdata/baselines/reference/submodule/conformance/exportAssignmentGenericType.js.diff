@@ -1,0 +1,22 @@
+--- old.exportAssignmentGenericType.js
++++ new.exportAssignmentGenericType.js
+@@= skipped -13, +13 lines =@@
+ 
+ //// [foo_0.js]
+ "use strict";
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++    test;
++}
+ module.exports = Foo;
+ //// [foo_1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo = require("./foo_0");
++const foo = require("./foo_0");
+ var x = new foo();
+ var y = x.test;

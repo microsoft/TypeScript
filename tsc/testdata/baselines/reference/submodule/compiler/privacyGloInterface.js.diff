@@ -1,0 +1,35 @@
+--- old.privacyGloInterface.js
++++ new.privacyGloInterface.js
+@@= skipped -123, +123 lines =@@
+ //// [privacyGloInterface.js]
+ var m1;
+ (function (m1) {
+-    var C1_public = /** @class */ (function () {
+-        function C1_public() {
++    class C1_public {
++        f1() {
+         }
+-        C1_public.prototype.f1 = function () {
+-        };
+-        return C1_public;
+-    }());
++    }
+     m1.C1_public = C1_public;
+-    var C2_private = /** @class */ (function () {
+-        function C2_private() {
+-        }
+-        return C2_private;
+-    }());
++    class C2_private {
++    }
+ })(m1 || (m1 = {}));
+-var C5_public = /** @class */ (function () {
+-    function C5_public() {
++class C5_public {
++    f1() {
+     }
+-    C5_public.prototype.f1 = function () {
+-    };
+-    return C5_public;
+-}());
++}

@@ -1,0 +1,50 @@
+--- old.exportedBlockScopedDeclarations.js
++++ new.exportedBlockScopedDeclarations.js
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ //// [exportedBlockScopedDeclarations.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.bar1 = exports.bar = void 0;
+-    var foo = foo; // compile error
+-    exports.bar = exports.bar; // should be compile error
+-    function f() {
+-        var bar = bar; // compile error
+-    }
+-    var NS;
+-    (function (NS) {
+-        NS.bar = NS.bar; // should be compile error
+-    })(NS || (NS = {}));
+-    var foo1 = foo1; // compile error
+-    exports.bar1 = exports.bar1; // should be compile error
+-    function f1() {
+-        var bar1 = bar1; // compile error
+-    }
+-    var NS1;
+-    (function (NS1) {
+-        NS1.bar1 = NS1.bar1; // should be compile error
+-    })(NS1 || (NS1 = {}));
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.bar1 = exports.bar = void 0;
++const foo = foo;
++exports.bar = exports.bar;
++function f() {
++    const bar = bar;
++}
++var NS;
++(function (NS) {
++    NS.bar = NS.bar;
++})(NS || (NS = {}));
++let foo1 = foo1;
++exports.bar1 = exports.bar1;
++function f1() {
++    let bar1 = bar1;
++}
++var NS1;
++(function (NS1) {
++    NS1.bar1 = NS1.bar1;
++})(NS1 || (NS1 = {}));

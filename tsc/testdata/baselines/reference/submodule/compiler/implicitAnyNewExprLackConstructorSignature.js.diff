@@ -1,0 +1,8 @@
+--- old.implicitAnyNewExprLackConstructorSignature.js
++++ new.implicitAnyNewExprLackConstructorSignature.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [implicitAnyNewExprLackConstructorSignature.js]
+ function Point() { this.x = 3; }
+-var x = new Point(); // error at "new"
++var x = new Point();

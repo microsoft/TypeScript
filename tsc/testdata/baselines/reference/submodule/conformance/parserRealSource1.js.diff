@@ -1,0 +1,147 @@
+--- old.parserRealSource1.js
++++ new.parserRealSource1.js
+@@= skipped -155, +155 lines =@@
+ }
+ 
+ 
++//// [typescript.js]
+ //// [parserRealSource1.js]
+-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+-// See LICENSE.txt in the project root for complete license information.
+-///<reference path='typescript.ts' />
+ var TypeScript;
+ (function (TypeScript) {
+-    var CompilerDiagnostics;
++    let CompilerDiagnostics;
+     (function (CompilerDiagnostics) {
+         CompilerDiagnostics.debug = false;
+         CompilerDiagnostics.diagnosticWriter = null;
+@@= skipped -32, +30 lines =@@
+         }
+         CompilerDiagnostics.assert = assert;
+     })(CompilerDiagnostics = TypeScript.CompilerDiagnostics || (TypeScript.CompilerDiagnostics = {}));
+-    var NullLogger = /** @class */ (function () {
+-        function NullLogger() {
++    class NullLogger {
++        information() { return false; }
++        debug() { return false; }
++        warning() { return false; }
++        error() { return false; }
++        fatal() { return false; }
++        log(s) {
+         }
+-        NullLogger.prototype.information = function () { return false; };
+-        NullLogger.prototype.debug = function () { return false; };
+-        NullLogger.prototype.warning = function () { return false; };
+-        NullLogger.prototype.error = function () { return false; };
+-        NullLogger.prototype.fatal = function () { return false; };
+-        NullLogger.prototype.log = function (s) {
+-        };
+-        return NullLogger;
+-    }());
++    }
+     TypeScript.NullLogger = NullLogger;
+-    var LoggerAdapter = /** @class */ (function () {
+-        function LoggerAdapter(logger) {
++    class LoggerAdapter {
++        logger;
++        _information;
++        _debug;
++        _warning;
++        _error;
++        _fatal;
++        constructor(logger) {
+             this.logger = logger;
+             this._information = this.logger.information();
+             this._debug = this.logger.debug();
+@@= skipped -22, +25 lines =@@
+             this._error = this.logger.error();
+             this._fatal = this.logger.fatal();
+         }
+-        LoggerAdapter.prototype.information = function () { return this._information; };
+-        LoggerAdapter.prototype.debug = function () { return this._debug; };
+-        LoggerAdapter.prototype.warning = function () { return this._warning; };
+-        LoggerAdapter.prototype.error = function () { return this._error; };
+-        LoggerAdapter.prototype.fatal = function () { return this._fatal; };
+-        LoggerAdapter.prototype.log = function (s) {
++        information() { return this._information; }
++        debug() { return this._debug; }
++        warning() { return this._warning; }
++        error() { return this._error; }
++        fatal() { return this._fatal; }
++        log(s) {
+             this.logger.log(s);
+-        };
+-        return LoggerAdapter;
+-    }());
+-    TypeScript.LoggerAdapter = LoggerAdapter;
+-    var BufferedLogger = /** @class */ (function () {
+-        function BufferedLogger() {
+-            this.logContents = [];
+         }
+-        BufferedLogger.prototype.information = function () { return false; };
+-        BufferedLogger.prototype.debug = function () { return false; };
+-        BufferedLogger.prototype.warning = function () { return false; };
+-        BufferedLogger.prototype.error = function () { return false; };
+-        BufferedLogger.prototype.fatal = function () { return false; };
+-        BufferedLogger.prototype.log = function (s) {
++    }
++    TypeScript.LoggerAdapter = LoggerAdapter;
++    class BufferedLogger {
++        logContents = [];
++        information() { return false; }
++        debug() { return false; }
++        warning() { return false; }
++        error() { return false; }
++        fatal() { return false; }
++        log(s) {
+             this.logContents.push(s);
+-        };
+-        return BufferedLogger;
+-    }());
++        }
++    }
+     TypeScript.BufferedLogger = BufferedLogger;
+     function timeFunction(logger, funcDescription, func) {
+         var start = +new Date();
+@@= skipped -36, +32 lines =@@
+     TypeScript.timeFunction = timeFunction;
+     function stringToLiteral(value, length) {
+         var result = "";
+-        var addChar = function (index) {
++        var addChar = (index) => {
+             var ch = value.charCodeAt(index);
+             switch (ch) {
+-                case 0x09: // tab
++                case 0x09:
+                     result += "\\t";
+                     break;
+-                case 0x0a: // line feed
++                case 0x0a:
+                     result += "\\n";
+                     break;
+-                case 0x0b: // vertical tab
++                case 0x0b:
+                     result += "\\v";
+                     break;
+-                case 0x0c: // form feed
++                case 0x0c:
+                     result += "\\f";
+                     break;
+-                case 0x0d: // carriage return
++                case 0x0d:
+                     result += "\\r";
+                     break;
+-                case 0x22: // double quote
++                case 0x22:
+                     result += "\\\"";
+                     break;
+-                case 0x27: // single quote
++                case 0x27:
+                     result += "\\\'";
+                     break;
+-                case 0x5c: // Backslash
++                case 0x5c:
+                     result += "\\";
+                     break;
+                 default:

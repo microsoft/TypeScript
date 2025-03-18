@@ -1,0 +1,24 @@
+--- old.await_unaryExpression_es2017_3.js
++++ new.await_unaryExpression_es2017_3.js
+@@= skipped -21, +21 lines =@@
+ //// [await_unaryExpression_es2017_3.js]
+ async function bar1() {
+     ++;
+-    await 42; // Error
++    await 42;
+ }
+ async function bar2() {
+     --;
+-    await 42; // Error
++    await 42;
+ }
+ async function bar3() {
+     var x = 42;
+-    await x++; // OK but shouldn't need parenthesis
++    await x++;
+ }
+ async function bar4() {
+     var x = 42;
+-    await x--; // OK but shouldn't need parenthesis
++    await x--;
+ }

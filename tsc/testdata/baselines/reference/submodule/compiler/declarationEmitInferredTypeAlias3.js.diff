@@ -1,0 +1,21 @@
+--- old.declarationEmitInferredTypeAlias3.js
++++ new.declarationEmitInferredTypeAlias3.js
+@@= skipped -14, +14 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ {
+-    var obj = true;
++    let obj = true;
+ }
+ //// [1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var x = "hi" || 5;
+ exports.default = x;
+-
+-
+-//// [0.d.ts]
+-export {};
+-//// [1.d.ts]
+-declare var x: string | number;
+-export default x;

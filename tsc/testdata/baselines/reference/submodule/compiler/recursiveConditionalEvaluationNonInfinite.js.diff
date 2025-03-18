@@ -1,0 +1,10 @@
+--- old.recursiveConditionalEvaluationNonInfinite.js
++++ new.recursiveConditionalEvaluationNonInfinite.js
+@@= skipped -7, +7 lines =@@
+ const b: { notArray: number } = a; // Works
+ 
+ //// [recursiveConditionalEvaluationNonInfinite.js]
+-var y = x; // Error
+-var b = a; // Works
++const y = x;
++const b = a;

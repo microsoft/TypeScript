@@ -1,0 +1,10 @@
+--- old.overloadBindingAcrossDeclarationBoundaries.js
++++ new.overloadBindingAcrossDeclarationBoundaries.js
+@@= skipped -37, +37 lines =@@
+ 
+ //// [overloadBindingAcrossDeclarationBoundaries.js]
+ var a;
+-// These should all be Opt3
+ var a1 = a.a({});
+ var a1 = a({});
+ var a1 = new a({});

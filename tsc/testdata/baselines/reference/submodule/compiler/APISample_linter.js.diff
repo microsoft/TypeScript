@@ -1,0 +1,56 @@
+--- old.APISample_linter.js
++++ new.APISample_linter.js
+@@= skipped -73, +73 lines =@@
+ 
+ //// [APISample_linter.js]
+ "use strict";
+-/*
+- * Note: This test is a public API sample. The sample sources can be found
+- *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
+- *       Please log a "breaking change" issue for any API breaking change affecting this issue
+- */
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.delint = delint;
+-var ts = require("typescript");
++const ts = require("typescript");
+ function delint(sourceFile) {
+     delintNode(sourceFile);
+     function delintNode(node) {
+@@= skipped -21, +16 lines =@@
+                 }
+                 break;
+             case ts.SyntaxKind.IfStatement:
+-                var ifStatement = node;
++                let ifStatement = node;
+                 if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
+                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
+                 }
+@@= skipped -11, +11 lines =@@
+                 }
+                 break;
+             case ts.SyntaxKind.BinaryExpression:
+-                var op = node.operatorToken.kind;
++                let op = node.operatorToken.kind;
+                 if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
+                     report(node, "Use '===' and '!=='.");
+                 }
+@@= skipped -9, +9 lines =@@
+         ts.forEachChild(node, delintNode);
+     }
+     function report(node, message) {
+-        var _a = sourceFile.getLineAndCharacterOfPosition(node.getStart()), line = _a.line, character = _a.character;
+-        console.log("".concat(sourceFile.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
++        let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
++        console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
+     }
+ }
+-var fileNames = process.argv.slice(2);
+-fileNames.forEach(function (fileName) {
+-    // Parse a file
+-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
+-    // delint it
++const fileNames = process.argv.slice(2);
++fileNames.forEach(fileName => {
++    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, true);
+     delint(sourceFile);
+ });

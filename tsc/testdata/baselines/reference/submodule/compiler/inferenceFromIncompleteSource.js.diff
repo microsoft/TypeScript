@@ -1,0 +1,9 @@
+--- old.inferenceFromIncompleteSource.js
++++ new.inferenceFromIncompleteSource.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [inferenceFromIncompleteSource.js]
+-"use strict";
+-// Repro from #42030
+ Component({ items: [{ name: ' string' }], itemKey: 'name' });

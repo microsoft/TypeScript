@@ -1,0 +1,17 @@
+--- old.assignmentCompatInterfaceWithStringIndexSignature.js
++++ new.assignmentCompatInterfaceWithStringIndexSignature.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [assignmentCompatInterfaceWithStringIndexSignature.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    Foo.prototype.Boz = function () { };
+-    return Foo;
+-}());
++class Foo {
++    Boz() { }
++}
+ function Biz(map) { }
+ Biz(new Foo());

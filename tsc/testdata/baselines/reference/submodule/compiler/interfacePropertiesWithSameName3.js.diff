@@ -1,0 +1,22 @@
+--- old.interfacePropertiesWithSameName3.js
++++ new.interfacePropertiesWithSameName3.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [interfacePropertiesWithSameName3.js]
+-var D2 = /** @class */ (function () {
+-    function D2() {
+-    }
+-    return D2;
+-}());
+-var E2 = /** @class */ (function () {
+-    function E2() {
+-    }
+-    return E2;
+-}());
++class D2 {
++    a;
++}
++class E2 {
++    a;
++}

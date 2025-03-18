@@ -1,0 +1,8 @@
+--- old.noImplicitAnyAndPrivateMembersWithoutTypeAnnotations.js
++++ new.noImplicitAnyAndPrivateMembersWithoutTypeAnnotations.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [app.js]
+-/// <reference path="test.d.ts" />
+ var x = new Something();

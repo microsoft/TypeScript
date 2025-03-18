@@ -1,0 +1,35 @@
+--- old.parserRealSource13.js
++++ new.parserRealSource13.js
+@@= skipped -147, +147 lines =@@
+     }
+ }
+ 
++//// [typescript.js]
+ //// [parserRealSource13.js]
+-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+-// See LICENSE.txt in the project root for complete license information.
+-///<reference path='typescript.ts' />
+ var TypeScript;
+ (function (TypeScript) {
+-    var AstWalkerWithDetailCallback;
++    let AstWalkerWithDetailCallback;
+     (function (AstWalkerWithDetailCallback) {
+         function walk(script, callback) {
+-            var pre = function (cur, parent) {
++            var pre = (cur, parent) => {
+                 walker.options.goChildren = AstWalkerCallback(true, cur, callback);
+                 return cur;
+             };
+-            var post = function (cur, parent) {
++            var post = (cur, parent) => {
+                 AstWalkerCallback(false, cur, callback);
+                 return cur;
+             };
+@@= skipped -22, +20 lines =@@
+         }
+         AstWalkerWithDetailCallback.walk = walk;
+         function AstWalkerCallback(pre, ast, callback) {
+-            // See if the Callback needs to be handled using specific one or default one
+             var nodeType = ast.nodeType;
+             var callbackString = NodeType._map[nodeType] + "Callback";
+             if (callback[callbackString]) {

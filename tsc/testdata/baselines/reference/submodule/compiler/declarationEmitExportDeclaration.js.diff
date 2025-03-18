@@ -1,0 +1,22 @@
+--- old.declarationEmitExportDeclaration.js
++++ new.declarationEmitExportDeclaration.js
+@@= skipped -22, +22 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.bar = void 0;
+-var utils_1 = require("./utils");
++const utils_1 = require("./utils");
+ Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return utils_1.bar; } });
+ (0, utils_1.foo)();
+-var obj;
+-
+-
+-//// [utils.d.ts]
+-export declare function foo(): void;
+-export declare function bar(): void;
+-export interface Buzz {
+-}
+-//// [index.d.ts]
+-import { bar } from "./utils";
+-export { bar };
++let obj;

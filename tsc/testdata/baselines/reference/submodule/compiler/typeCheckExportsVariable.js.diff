@@ -1,0 +1,9 @@
+--- old.typeCheckExportsVariable.js
++++ new.typeCheckExportsVariable.js
+@@= skipped -4, +4 lines =@@
+ exports = '';
+ 
+ //// [typeCheckExportsVariable.js]
+-var exports;
++let exports;
+ exports = '';

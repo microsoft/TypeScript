@@ -1,0 +1,22 @@
+--- old.declarationEmitReexportedSymlinkReference.js
++++ new.declarationEmitReexportedSymlinkReference.js
+@@= skipped -46, +46 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ADMIN = void 0;
+-var pkg2_1 = require("@raymondfeng/pkg2");
++const pkg2_1 = require("@raymondfeng/pkg2");
+ exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
+ //// [index.js]
+ "use strict";
+@@= skipped -20, +20 lines =@@
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ __exportStar(require("./keys"), exports);
+-
+-
+-//// [keys.d.ts]
+-import { MetadataAccessor } from "@raymondfeng/pkg2";
+-export declare const ADMIN: MetadataAccessor<boolean, import("@raymondfeng/pkg2").IdType>;
+-//// [index.d.ts]
+-export * from './keys';

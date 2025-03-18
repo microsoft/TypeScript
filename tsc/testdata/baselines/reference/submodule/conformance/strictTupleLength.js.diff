@@ -1,0 +1,16 @@
+--- old.strictTupleLength.js
++++ new.strictTupleLength.js
+@@= skipped -30, +30 lines =@@
+ var len1 = t1.length;
+ var len2 = t2.length;
+ var lena = arr.length;
+-var t1 = t2; // error
+-var t2 = t1; // error
++var t1 = t2;
++var t2 = t1;
+ var b;
+ var c = b;
+-t1 = arr; // error with or without strict
+-arr = t1; // ok with or without strict
++t1 = arr;
++arr = t1;

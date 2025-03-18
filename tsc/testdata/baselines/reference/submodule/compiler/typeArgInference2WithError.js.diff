@@ -1,0 +1,8 @@
+--- old.typeArgInference2WithError.js
++++ new.typeArgInference2WithError.js
+@@= skipped -9, +9 lines =@@
+ var z7 = foo("abc", 5); // Error
+ 
+ //// [typeArgInference2WithError.js]
+-var z7 = foo("abc", 5); // Error
++var z7 = foo("abc", 5);

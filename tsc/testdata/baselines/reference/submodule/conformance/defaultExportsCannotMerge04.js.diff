@@ -1,0 +1,8 @@
+--- old.defaultExportsCannotMerge04.js
++++ new.defaultExportsCannotMerge04.js
+@@= skipped -20, +20 lines =@@
+ function Foo() {
+ }
+ (function (Foo) {
+-})(exports.Foo || (exports.Foo = {}));
++})(Foo || (Foo = {}));

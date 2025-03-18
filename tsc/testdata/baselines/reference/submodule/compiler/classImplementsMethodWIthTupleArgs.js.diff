@@ -1,0 +1,7 @@
+--- old.classImplementsMethodWIthTupleArgs.js
++++ new.classImplementsMethodWIthTupleArgs.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [classImplementsMethodWIthTupleArgs.js]
+-"use strict";

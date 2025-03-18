@@ -1,0 +1,11 @@
+--- old.stackDepthLimitCastingType.js
++++ new.stackDepthLimitCastingType.js
+@@= skipped -41, +41 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var Backbone = require("backbone");
+-var hoge = new Backbone.Model();
++const Backbone = require("backbone");
++const hoge = new Backbone.Model();
+ hoge.fetch(null);

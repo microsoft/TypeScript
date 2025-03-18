@@ -1,0 +1,13 @@
+--- old.parserGenericClass1.js
++++ new.parserGenericClass1.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [parserGenericClass1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

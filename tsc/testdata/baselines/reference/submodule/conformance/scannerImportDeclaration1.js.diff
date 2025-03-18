@@ -1,0 +1,7 @@
+--- old.scannerImportDeclaration1.js
++++ new.scannerImportDeclaration1.js
+@@= skipped -3, +3 lines =@@
+ import TypeScript = TypeScriptServices.TypeScript;
+ 
+ //// [scannerImportDeclaration1.js]
+-var TypeScript = TypeScriptServices.TypeScript;

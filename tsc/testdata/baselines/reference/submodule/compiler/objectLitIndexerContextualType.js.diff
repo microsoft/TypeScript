@@ -1,0 +1,21 @@
+--- old.objectLitIndexerContextualType.js
++++ new.objectLitIndexerContextualType.js
+@@= skipped -28, +28 lines =@@
+ var x;
+ var y;
+ x = {
+-    s: function (t) { return t * t; }, // Should error
++    s: t => t * t,
+ };
+ x = {
+-    0: function (t) { return t * t; }, // Should error
++    0: t => t * t,
+ };
+ y = {
+-    s: function (t) { return t * t; }, // Should error
++    s: t => t * t,
+ };
+ y = {
+-    0: function (t) { return t * t; }, // Should error
++    0: t => t * t,
+ };

@@ -1,0 +1,12 @@
+--- old.autoAccessor11.js
++++ new.autoAccessor11.js
+@@= skipped -24, +24 lines =@@
+     b;
+     static accessor;
+     c;
+-    #accessor_accessor_storage;
+-    get accessor() { return this.#accessor_accessor_storage; }
+-    set accessor(value) { this.#accessor_accessor_storage = value; }
++    accessor accessor;
+     d;
+ }

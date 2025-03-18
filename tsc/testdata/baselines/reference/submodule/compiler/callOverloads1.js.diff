@@ -1,0 +1,20 @@
+--- old.callOverloads1.js
++++ new.callOverloads1.js
+@@= skipped -19, +19 lines =@@
+ Foo();
+ 
+ //// [callOverloads1.js]
+-var Foo = /** @class */ (function () {
+-    function Foo(x) {
+-        // WScript.Echo("Constructor function has executed");
++class Foo {
++    bar1() { }
++    constructor(x) {
+     }
+-    Foo.prototype.bar1 = function () { };
+-    return Foo;
+-}());
++}
+ function F1(a) { return a; }
+ var f1 = new Foo("hey");
+ f1.bar1();

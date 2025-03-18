@@ -1,0 +1,10 @@
+--- old.narrowingTypeofObject.js
++++ new.narrowingTypeofObject.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [narrowingTypeofObject.js]
+-"use strict";
+ function test(x) {
+     if (typeof x === 'object') {
+         x;

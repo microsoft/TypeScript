@@ -1,0 +1,18 @@
+--- old.unusedTypeParametersWithUnderscore.js
++++ new.unusedTypeParametersWithUnderscore.js
+@@= skipped -16, +16 lines =@@
+ //// [unusedTypeParametersWithUnderscore.js]
+ function f() { }
+ ;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.m = function () { };
+-    return C;
+-}());
++class C {
++    m() { }
++}
+ ;
+-var l = function () { };
++let l = () => { };

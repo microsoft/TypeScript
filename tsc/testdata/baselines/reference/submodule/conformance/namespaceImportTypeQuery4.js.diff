@@ -1,0 +1,24 @@
+--- old.namespaceImportTypeQuery4.js
++++ new.namespaceImportTypeQuery4.js
+@@= skipped -17, +17 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.B = void 0;
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
++class B {
++}
+ exports.B = B;
+ ;
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var t = {
+-    A: undefined, // error
++let t = {
++    A: undefined,
+     B: undefined,
+ };

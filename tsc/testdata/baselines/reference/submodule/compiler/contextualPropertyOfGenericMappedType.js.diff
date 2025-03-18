@@ -1,0 +1,9 @@
+--- old.contextualPropertyOfGenericMappedType.js
++++ new.contextualPropertyOfGenericMappedType.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [contextualPropertyOfGenericMappedType.js]
+-// Repro for #24694
+-f({ data: 0 }, { data: function (value, key) { } });
++f({ data: 0 }, { data(value, key) { } });

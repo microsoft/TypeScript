@@ -1,0 +1,40 @@
+--- old.typeOfThisInFunctionExpression.js
++++ new.typeOfThisInFunctionExpression.js
+@@= skipped -47, +47 lines =@@
+ }
+ 
+ //// [typeOfThisInFunctionExpression.js]
+-// type of 'this' in FunctionExpression is Any
+ function fn() {
+     var p = this;
+     var p;
+@@= skipped -13, +12 lines =@@
+     var x = this;
+     var x;
+ };
+-var C = /** @class */ (function () {
+-    function C() {
+-        this.x = function () {
+-            var q;
+-            var q = this;
+-        };
+-        this.y = function ff() {
+-            var q;
+-            var q = this;
+-        };
+-    }
+-    return C;
+-}());
++class C {
++    x = function () {
++        var q;
++        var q = this;
++    };
++    y = function ff() {
++        var q;
++        var q = this;
++    };
++}
+ var M;
+ (function (M) {
+     function fn() {

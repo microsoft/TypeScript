@@ -1,0 +1,14 @@
+--- old.deleteReadonlyInStrictNullChecks.js
++++ new.deleteReadonlyInStrictNullChecks.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [deleteReadonlyInStrictNullChecks.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ delete Foo.name;

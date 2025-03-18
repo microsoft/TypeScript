@@ -1,0 +1,45 @@
+--- old.conditionalTypesSimplifyWhenTrivial.js
++++ new.conditionalTypesSimplifyWhenTrivial.js
+@@= skipped -67, +67 lines =@@
+ 
+ 
+ //// [conditionalTypesSimplifyWhenTrivial.js]
+-"use strict";
+-var fn1 = function (params) { return params; };
++const fn1 = (params) => params;
+ function fn2(x) {
+     var y = x;
+     x = y;
+ }
+-var fn3 = function (params) { return params; };
++const fn3 = (params) => params;
+ function fn4(x) {
+     var y = x;
+     x = y;
+ }
+-var fn5 = function (params) { return params; };
++const fn5 = (params) => params;
+ function fn6(x) {
+     var y = x;
+     x = y;
+ }
+-var fn7 = function (params) { return params; };
++const fn7 = (params) => params;
+ function fn8(x) {
+     var y = x;
+     x = y;
+ }
+-var fn9 = function (params) { return params; };
++const fn9 = (params) => params;
+ function fn10(x) {
+     var y = x;
+     x = y;
+ }
+-var fn11 = function (params) { return params; };
++const fn11 = (params) => params;
+ function fn12(x) {
+     var y = x;
+     x = y;
+ }
+-var zee = z; // since x is `any`, `x extends null | undefined` should be both true and false - and thus yield `any` 
++const zee = z;

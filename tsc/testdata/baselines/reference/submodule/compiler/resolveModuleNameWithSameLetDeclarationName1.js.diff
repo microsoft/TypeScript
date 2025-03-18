@@ -1,0 +1,8 @@
+--- old.resolveModuleNameWithSameLetDeclarationName1.js
++++ new.resolveModuleNameWithSameLetDeclarationName1.js
+@@= skipped -10, +10 lines =@@
+ let foo: foo.Bar; 
+ 
+ //// [resolveModuleNameWithSameLetDeclarationName1.js]
+-var foo;
++let foo;

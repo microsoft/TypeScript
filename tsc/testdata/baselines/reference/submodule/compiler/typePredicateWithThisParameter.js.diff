@@ -1,0 +1,10 @@
+--- old.typePredicateWithThisParameter.js
++++ new.typePredicateWithThisParameter.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [typePredicateWithThisParameter.js]
+-// Repro from #15310
+ function isFoo1(object) {
+     return 'foo' in object;
+ }

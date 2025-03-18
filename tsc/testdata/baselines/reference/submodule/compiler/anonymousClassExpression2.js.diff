@@ -1,0 +1,37 @@
+--- old.anonymousClassExpression2.js
++++ new.anonymousClassExpression2.js
+@@= skipped -20, +20 lines =@@
+ 
+ 
+ //// [anonymousClassExpression2.js]
+-// Fixes #14860
+-// note: repros with `while (0);` too
+-// but it's less inscrutable and more obvious to put it *inside* the loop
+ while (0) {
+-    var A = /** @class */ (function () {
+-        function A() {
++    class A {
++        methodA() {
++            this;
+         }
+-        A.prototype.methodA = function () {
+-            this; //note: a this reference of some kind is required to trigger the bug
+-        };
+-        return A;
+-    }());
+-    var B = /** @class */ (function () {
+-        function B() {
++    }
++    class B {
++        methodB() {
++            this.methodA;
++            this.methodB;
+         }
+-        B.prototype.methodB = function () {
+-            this.methodA; // error
+-            this.methodB; // ok
+-        };
+-        return B;
+-    }());
++    }
+ }

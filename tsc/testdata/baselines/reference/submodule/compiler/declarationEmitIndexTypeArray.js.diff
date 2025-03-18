@@ -1,0 +1,25 @@
+--- old.declarationEmitIndexTypeArray.js
++++ new.declarationEmitIndexTypeArray.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [declarationEmitIndexTypeArray.js]
+-function doSomethingWithKeys() {
+-    var keys = [];
+-    for (var _i = 0; _i < arguments.length; _i++) {
+-        keys[_i] = arguments[_i];
+-    }
+-}
+-var utilityFunctions = {
+-    doSomethingWithKeys: doSomethingWithKeys
++function doSomethingWithKeys(...keys) { }
++const utilityFunctions = {
++    doSomethingWithKeys
+ };
+-
+-
+-//// [declarationEmitIndexTypeArray.d.ts]
+-declare function doSomethingWithKeys<T>(...keys: (keyof T)[]): void;
+-declare const utilityFunctions: {
+-    doSomethingWithKeys: typeof doSomethingWithKeys;
+-};

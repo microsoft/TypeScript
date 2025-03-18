@@ -1,0 +1,29 @@
+--- old.classStaticBlock24(module=amd).js
++++ new.classStaticBlock24(module=amd).js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [classStaticBlock24.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.C = void 0;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    exports.C = C;
+-    (function () {
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C = void 0;
++class C {
++    static x;
++    static {
+         C.x = 1;
+-    })();
+-});
++    }
++}
++exports.C = C;

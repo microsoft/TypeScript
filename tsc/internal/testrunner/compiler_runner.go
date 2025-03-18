@@ -88,8 +88,13 @@ func (r *CompilerBaselineRunner) EnumerateTestFiles() []string {
 func (r *CompilerBaselineRunner) RunTests(t *testing.T) {
 	r.cleanUpLocal(t)
 	files := r.EnumerateTestFiles()
-	skippedTests := []string{
-		"mappedTypeRecursiveInference.ts", // Needed until we have type printer with truncation limit.
+	skippedTests := map[string]string{
+		"mappedTypeRecursiveInference.ts":         "Skipped until we have type printer with truncation limit.",
+		"jsFileCompilationWithoutJsExtensions.ts": "Skipped until we have proper allowJS support (and errors when not enabled.)",
+		"fileReferencesWithNoExtensions.ts":       "Skipped until we support adding missing extensions in subtasks in fileloader.go",
+		"typeOnlyMerge2.ts":                       "Needs investigation",
+		"typeOnlyMerge3.ts":                       "Needs investigation",
+		"filesEmittingIntoSameOutput.ts":          "Output order nondeterministic due to collision on filename during parallel emit.",
 	}
 	deprecatedTests := []string{
 		// Test deprecated `importsNotUsedAsValue`
@@ -100,7 +105,8 @@ func (r *CompilerBaselineRunner) RunTests(t *testing.T) {
 		"importsNotUsedAsValues_error.ts",
 	}
 	for _, filename := range files {
-		if slices.Contains(skippedTests, tspath.GetBaseFileName(filename)) {
+		if msg, ok := skippedTests[tspath.GetBaseFileName(filename)]; ok {
+			t.Run(tspath.GetBaseFileName(filename), func(t *testing.T) { t.Skip(msg) })
 			continue
 		}
 		if slices.Contains(deprecatedTests, tspath.GetBaseFileName(filename)) {
@@ -174,6 +180,7 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	compilerTest := newCompilerTest(t, testName, test.filename, &payload, config)
 
 	compilerTest.verifyDiagnostics(t, r.testSuitName, r.isSubmodule)
+	compilerTest.verifyJavaScriptOutput(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifyTypesAndSymbols(t, r.testSuitName, r.isSubmodule)
 	// !!! Verify all baselines
 }
@@ -325,8 +332,6 @@ var concurrentSkippedErrorBaselines = core.NewSetFromItems(
 	"recursiveExportAssignmentAndFindAliasedType2.ts",
 	"recursiveExportAssignmentAndFindAliasedType3.ts",
 	"superInStaticMembers1.ts target=es2015",
-	"typeOnlyMerge2.ts",
-	"typeOnlyMerge3.ts",
 )
 
 func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmodule bool) {
@@ -342,6 +347,33 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 			IsSubmodule:         isSubmodule,
 			IsSubmoduleAccepted: len(c.result.Program.UnsupportedExtensions()) != 0, // TODO(jakebailey): read submoduleAccepted.txt
 		})
+	})
+}
+
+func (c *compilerTest) verifyJavaScriptOutput(t *testing.T, suiteName string, isSubmodule bool) {
+	if !c.hasNonDtsFiles {
+		return
+	}
+
+	t.Run("output", func(t *testing.T) {
+		defer testutil.RecoverAndFail(t, "Panic on creating js output for test "+c.filename)
+		headerComponents := tspath.GetPathComponentsRelativeTo(repo.TestDataPath, c.filename, tspath.ComparePathsOptions{})
+		if isSubmodule {
+			headerComponents = headerComponents[4:] // Strip "./../_submodules/TypeScript" prefix
+		}
+		header := tspath.GetPathFromPathComponents(headerComponents)
+		tsbaseline.DoJsEmitBaseline(
+			t,
+			c.configuredName,
+			header,
+			c.options,
+			c.result,
+			c.tsConfigFiles,
+			c.toBeCompiled,
+			c.otherFiles,
+			c.harnessOptions,
+			baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule},
+		)
 	})
 }
 

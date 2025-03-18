@@ -1,0 +1,17 @@
+--- old.commentOnStaticMember1.js
++++ new.commentOnStaticMember1.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [commentOnStaticMember1.js]
+-var Greeter = /** @class */ (function () {
+-    function Greeter() {
++class Greeter {
++    static foo() {
+     }
+-    //Hello World
+-    Greeter.foo = function () {
+-    };
+-    return Greeter;
+-}());
++}

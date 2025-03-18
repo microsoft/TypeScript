@@ -1,0 +1,19 @@
+--- old.assignmentCompatability8.js
++++ new.assignmentCompatability8.js
+@@= skipped -20, +20 lines =@@
+ })(__test1__ || (__test1__ = {}));
+ var __test2__;
+ (function (__test2__) {
+-    var classWithPublic = /** @class */ (function () {
+-        function classWithPublic(one) {
++    class classWithPublic {
++        one;
++        constructor(one) {
+             this.one = one;
+         }
+-        return classWithPublic;
+-    }());
++    }
+     __test2__.classWithPublic = classWithPublic;
+     var x1 = new classWithPublic(1);
+     ;

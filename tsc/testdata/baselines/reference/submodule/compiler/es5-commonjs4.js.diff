@@ -1,0 +1,21 @@
+--- old.es5-commonjs4.js
++++ new.es5-commonjs4.js
+@@= skipped -19, +19 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.__esModule = void 0;
+-var A = /** @class */ (function () {
+-    function A() {
++class A {
++    constructor() {
+     }
+-    A.prototype.B = function () {
++    B() {
+         return 42;
+-    };
+-    return A;
+-}());
++    }
++}
+ exports.default = A;
+ exports.__esModule = 1;

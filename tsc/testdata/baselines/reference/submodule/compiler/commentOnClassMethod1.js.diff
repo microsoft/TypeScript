@@ -1,0 +1,19 @@
+--- old.commentOnClassMethod1.js
++++ new.commentOnClassMethod1.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [commentOnClassMethod1.js]
+-var WebControls = /** @class */ (function () {
+-    function WebControls() {
++class WebControls {
++    createControl() {
+     }
+-    /**
+-     * Render a control
+-     */
+-    WebControls.prototype.createControl = function () {
+-    };
+-    return WebControls;
+-}());
++}

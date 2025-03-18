@@ -1,0 +1,20 @@
+--- old.optionalProperties01.js
++++ new.optionalProperties01.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [optionalProperties01.js]
+-var foo1 = { required1: "hello" };
+-var foo2 = { required1: "hello", optional: "bar" };
+-
+-
+-//// [optionalProperties01.d.ts]
+-interface Foo {
+-    required1: string;
+-    required2: string;
+-    optional?: string;
+-}
+-declare const foo1: Foo;
+-declare const foo2: Foo;
++const foo1 = { required1: "hello" };
++const foo2 = { required1: "hello", optional: "bar" };

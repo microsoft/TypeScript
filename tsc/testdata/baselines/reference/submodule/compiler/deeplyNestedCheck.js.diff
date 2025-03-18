@@ -1,0 +1,32 @@
+--- old.deeplyNestedCheck.js
++++ new.deeplyNestedCheck.js
+@@= skipped -56, +56 lines =@@
+ 
+ 
+ //// [deeplyNestedCheck.js]
+-// Repro from #14794
+-var x = {
++const x = {
+     b: [
+         {
+             c: {
+@@= skipped -13, +12 lines =@@
+                                     {
+                                         g: {
+                                             h: [
+-                                                {
+-                                                // i: '',
+-                                                },
++                                                {},
+                                             ],
+                                         },
+                                     },
+@@= skipped -15, +13 lines =@@
+         },
+     ],
+ };
+-// Repro from 34619
+-var a1 = [[[[[42]]]]];
+-var a2 = [[[[[[[[[[42]]]]]]]]]];
++const a1 = [[[[[42]]]]];
++const a2 = [[[[[[[[[[42]]]]]]]]]];

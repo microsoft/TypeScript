@@ -1,0 +1,13 @@
+--- old.structuralTypeInDeclareFileForModule.js
++++ new.structuralTypeInDeclareFileForModule.js
+@@= skipped -8, +8 lines =@@
+ (function (M) {
+ })(M || (M = {}));
+ var m = M;
+-
+-
+-//// [structuralTypeInDeclareFileForModule.d.ts]
+-declare namespace M {
+-    var x: any;
+-}
+-declare var m: typeof M;

@@ -1,0 +1,43 @@
+--- old.generatorReturnTypeInferenceNonStrict.js
++++ new.generatorReturnTypeInferenceNonStrict.js
+@@= skipped -139, +139 lines =@@
+ //// [generatorReturnTypeInferenceNonStrict.js]
+ function* g000() {
+ }
+-// 'yield' iteration type inference
+ function* g001() {
+     yield;
+ }
+@@= skipped -8, +7 lines =@@
+     yield 1;
+ }
+ function* g003() {
+-    // NOTE: In strict mode, `[]` produces the type `never[]`.
+-    //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.
+     yield* [];
+ }
+ function* g004() {
+@@= skipped -17, +15 lines =@@
+ function* g007() {
+     yield never;
+ }
+-// 'return' iteration type inference
+ function* g102() {
+     return 1;
+ }
+@@= skipped -12, +11 lines =@@
+ function* g104() {
+     return never;
+ }
+-// 'next' iteration type inference
+ function* g201() {
+     let a = yield 1;
+ }
+@@= skipped -14, +13 lines =@@
+ function* g204() {
+     const x = f2(yield 1);
+ }
+-// mixed iteration types inference
+ function* g301() {
+     yield;
+     return;

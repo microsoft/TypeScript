@@ -1,0 +1,130 @@
+--- old.catchClauseWithTypeAnnotation.js
++++ new.catchClauseWithTypeAnnotation.js
+@@= skipped -44, +44 lines =@@
+ 
+ //// [catchClauseWithTypeAnnotation.js]
+ function fn(x) {
+-    // no type annotation allowed other than `any` and `unknown`
+     try { }
+-    catch (x) { } // should be OK
++    catch (x) { }
+     try { }
+-    catch (x) { } // should be OK
++    catch (x) { }
+     try { }
+-    catch (x) { } // should be OK
++    catch (x) { }
+     try { }
+-    catch (x) { } // should be OK
++    catch (x) { }
+     try { }
+-    catch (x) { } // should be OK
++    catch (x) { }
+     try { }
+     catch (x) {
+         x.foo;
+-    } // should be OK
++    }
+     try { }
+     catch (x) {
+         x.foo;
+-    } // should be OK
++    }
+     try { }
+     catch (x) {
+         x.foo;
+-    } // should be OK
++    }
+     try { }
+     catch (x) {
+         console.log(x);
+-    } // should be OK
++    }
+     try { }
+     catch (x) {
+         console.log(x);
+-    } // should be OK
++    }
+     try { }
+     catch (x) {
+         x.foo;
+-    } // error in the body
++    }
+     try { }
+     catch (x) {
+         x.foo;
+-    } // error in the body
++    }
+     try { }
+-    catch (x) { } // error in the type
++    catch (x) { }
+     try { }
+-    catch (x) { } // error in the type
++    catch (x) { }
+     try {
+         console.log();
+     }
+-    // @ts-ignore
+-    catch (e) { // e should not be a `number`
++    catch (e) {
+         console.log(e.toLowerCase());
+     }
+-    // minor bug: shows that the `catch` argument is skipped when checking scope
+     try { }
+     catch (x) {
+-        var x_1;
++        let x;
+     }
+     try { }
+     catch (x) {
+@@= skipped -64, +61 lines =@@
+         var x;
+     }
+     try { }
+-    catch (_a) {
+-        var x_2 = _a.x;
+-    } // should be OK
++    catch ({ x }) { }
+     try { }
+-    catch (_b) {
+-        var x_3 = _b.x;
+-        x_3.foo;
+-    } // should be OK
++    catch ({ x }) {
++        x.foo;
++    }
+     try { }
+-    catch (_c) {
+-        var x_4 = _c.x;
+-        x_4.foo;
+-    } // should be OK
++    catch ({ x }) {
++        x.foo;
++    }
+     try { }
+-    catch (_d) {
+-        var x_5 = _d.x;
+-        console.log(x_5);
+-    } // error in the destructure
++    catch ({ x }) {
++        console.log(x);
++    }
+     try { }
+-    catch (_e) {
+-        var x_6 = _e.x;
+-        console.log(x_6);
+-    } // error in the destructure
++    catch ({ x }) {
++        console.log(x);
++    }
+     try { }
+-    catch (_f) {
+-        var x_7 = _f.x;
+-    } // error in the type
++    catch ({ x }) { }
+     try { }
+-    catch (_g) {
+-        var x_8 = _g.x;
+-    } // error in the type
++    catch ({ x }) { }
+ }

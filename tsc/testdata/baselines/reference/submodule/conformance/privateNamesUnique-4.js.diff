@@ -1,0 +1,17 @@
+--- old.privateNamesUnique-4.js
++++ new.privateNamesUnique-4.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [privateNamesUnique-4.js]
+-var _C_something;
+ class A1 {
+ }
+ class C {
+-    constructor() {
+-        _C_something.set(this, void 0);
+-    }
++    #something;
+ }
+-_C_something = new WeakMap();
+ const c = a;

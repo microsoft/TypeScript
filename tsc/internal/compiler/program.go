@@ -528,7 +528,7 @@ type sourceMapEmitResult struct {
 	sourceMap            *sourcemap.RawSourceMap
 }
 
-func (p *Program) Emit(options *EmitOptions) *EmitResult {
+func (p *Program) Emit(options EmitOptions) *EmitResult {
 	// !!! performance measurement
 	p.BindSourceFiles()
 

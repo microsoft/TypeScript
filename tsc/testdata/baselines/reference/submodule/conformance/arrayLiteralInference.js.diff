@@ -1,0 +1,23 @@
+--- old.arrayLiteralInference.js
++++ new.arrayLiteralInference.js
+@@= skipped -36, +36 lines =@@
+ 
+ 
+ //// [arrayLiteralInference.js]
+-// Repro from #31204
+-export var AppType;
++export { AppType };
++var AppType;
+ (function (AppType) {
+     AppType["HeaderDetail"] = "HeaderDetail";
+     AppType["HeaderMultiDetail"] = "HeaderMultiDetail";
+@@= skipped -13, +13 lines =@@
+     AppType["ListOnly"] = "ListOnly";
+     AppType["ModuleSettings"] = "ModuleSettings";
+ })(AppType || (AppType = {}));
+-export var AppStyle;
++export { AppStyle };
++var AppStyle;
+ (function (AppStyle) {
+     AppStyle[AppStyle["Tree"] = 0] = "Tree";
+     AppStyle[AppStyle["TreeEntity"] = 1] = "TreeEntity";

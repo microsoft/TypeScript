@@ -1,0 +1,49 @@
+--- old.inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js
++++ new.inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js
+@@= skipped -37, +37 lines =@@
+ //// [inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var ClassA = /** @class */ (function () {
+-    function ClassA(entity, settings) {
++class ClassA {
++    entity;
++    settings;
++    constructor(entity, settings) {
+         this.entity = entity;
+         this.settings = settings;
+     }
+-    return ClassA;
+-}());
+-var ConcreteClass = /** @class */ (function () {
+-    function ConcreteClass() {
+-        this.theName = 'myClass';
+-    }
+-    return ConcreteClass;
+-}());
++}
++class ConcreteClass {
++    theName = 'myClass';
++}
+ var thisGetsTheFalseError = new ClassA(new ConcreteClass(), {
+-    values: function (o) { return [
++    values: o => [
+         {
+             value: o.theName,
+-            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'; }
++            func: x => 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'
+         }
+-    ]; }
++    ]
+ });
+ var thisIsOk = new ClassA(new ConcreteClass(), {
+-    values: function (o) { return [
++    values: o => [
+         {
+             value: o.theName,
+-            func: function (x) { return 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'; }
++            func: x => 'asdfkjhgfdfghjkjhgfdfghjklkjhgfdfghjklkjhgfghj'
+         }
+-    ]; }
++    ]
+ });

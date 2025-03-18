@@ -1,0 +1,15 @@
+--- old.moduleNoneErrors.js
++++ new.moduleNoneErrors.js
+@@= skipped -9, +9 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Foo = void 0;
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++    foo;
++}
+ exports.Foo = Foo;

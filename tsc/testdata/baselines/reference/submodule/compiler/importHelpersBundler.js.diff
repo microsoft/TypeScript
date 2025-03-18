@@ -1,0 +1,12 @@
+--- old.importHelpersBundler.js
++++ new.importHelpersBundler.js
+@@= skipped -43, +43 lines =@@
+ 
+ 
+ //// [main.js]
+-import { __rest } from "tslib";
+ export function foo(args) {
+-    const { bar } = args, extraArgs = __rest(args, ["bar"]);
++    const { bar, ...extraArgs } = args;
+     return extraArgs;
+ }

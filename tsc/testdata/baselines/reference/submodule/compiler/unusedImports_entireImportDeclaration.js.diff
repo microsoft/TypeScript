@@ -1,0 +1,15 @@
+--- old.unusedImports_entireImportDeclaration.js
++++ new.unusedImports_entireImportDeclaration.js
+@@= skipped -26, +26 lines =@@
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a_1 = require("./a");
++const a_1 = require("./a");
+ a_1.default;
+-var a_2 = require("./a");
++const a_2 = require("./a");
+ a_2.default;
+-var ns3 = require("./a");
++const ns3 = require("./a");
+ ns3;

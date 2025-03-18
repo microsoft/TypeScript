@@ -1,0 +1,35 @@
+--- old.propertyAccessOnTypeParameterWithoutConstraints.js
++++ new.propertyAccessOnTypeParameterWithoutConstraints.js
+@@= skipped -33, +33 lines =@@
+ var r4 = b.foo(1);
+ 
+ //// [propertyAccessOnTypeParameterWithoutConstraints.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.f = function () {
++class C {
++    f() {
+         var x;
+-        var a = x['toString'](); // should be string
++        var a = x['toString']();
+         return a + x.toString();
+-    };
+-    return C;
+-}());
++    }
++}
+ var r = (new C()).f();
+ var i;
+ var r2 = i.foo.toString();
+@@= skipped -18, +15 lines =@@
+ var r3 = a().toString();
+ var r3b = a()['toString']();
+ var b = {
+-    foo: function (x) {
+-        var a = x['toString'](); // should be string
++    foo: (x) => {
++        var a = x['toString']();
+         return a + x.toString();
+     }
+ };

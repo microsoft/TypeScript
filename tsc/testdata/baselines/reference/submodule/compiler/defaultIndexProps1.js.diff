@@ -1,0 +1,18 @@
+--- old.defaultIndexProps1.js
++++ new.defaultIndexProps1.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [defaultIndexProps1.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.v = "Yo";
+-    }
+-    return Foo;
+-}());
++class Foo {
++    v = "Yo";
++}
+ var f = new Foo();
+ var q = f["v"];
+ var o = { v: "Yo2" };

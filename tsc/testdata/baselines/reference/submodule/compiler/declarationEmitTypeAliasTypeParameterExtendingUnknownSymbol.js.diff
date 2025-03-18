@@ -1,0 +1,10 @@
+--- old.declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.js
++++ new.declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.js
+@@= skipped -3, +3 lines =@@
+ type A<T extends Unknown> = {}
+ 
+ //// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.js]
+-
+-
+-//// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.d.ts]
+-type A<T extends Unknown> = {};

@@ -1,0 +1,47 @@
+--- old.systemObjectShorthandRename.js
++++ new.systemObjectShorthandRename.js
+@@= skipped -11, +11 lines =@@
+ const b = {x3}
+ 
+ //// [x.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var x;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("x", x = 'X');
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++exports.x = 'X';
+ //// [index.js]
+-System.register(["./x.js"], function (exports_1, context_1) {
+-    "use strict";
+-    var x_js_1, x2, a, x3, b;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (x_js_1_1) {
+-                x_js_1 = x_js_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            x2 = { x: x_js_1.x };
+-            a = { x2 };
+-            x3 = x_js_1.x;
+-            b = { x3 };
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const x_js_1 = require("./x.js");
++const x2 = { x: x_js_1.x };
++const a = { x2 };
++const x3 = x_js_1.x;
++const b = { x3 };

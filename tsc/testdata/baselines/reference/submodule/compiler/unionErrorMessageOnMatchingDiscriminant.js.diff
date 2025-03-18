@@ -1,0 +1,13 @@
+--- old.unionErrorMessageOnMatchingDiscriminant.js
++++ new.unionErrorMessageOnMatchingDiscriminant.js
+@@= skipped -24, +24 lines =@@
+ };
+ 
+ //// [unionErrorMessageOnMatchingDiscriminant.js]
+-"use strict";
+-// error
+-var foo = {
++const foo = {
+     type: 'a',
+     data: null
+ };

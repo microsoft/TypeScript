@@ -1,0 +1,46 @@
+--- old.enumConstantMemberWithTemplateLiteralsEmitDeclaration.js
++++ new.enumConstantMemberWithTemplateLiteralsEmitDeclaration.js
+@@= skipped -74, +74 lines =@@
+ var T6;
+ (function (T6) {
+     T6[T6["a"] = 1] = "a";
+-    T6[T6["b"] = "12".length] = "b";
++    T6["b"] = `12`.length;
++    if (typeof T6.b !== "string") T6[T6.b] = "b";
+ })(T6 || (T6 = {}));
+-
+-
+-//// [enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts]
+-declare enum T1 {
+-    a = "1"
+-}
+-declare enum T2 {
+-    a = "1",
+-    b = "2",
+-    c = 3
+-}
+-declare enum T3 {
+-    a = "11"
+-}
+-declare enum T4 {
+-    a = "1",
+-    b = "11",
+-    c = "12",
+-    d = "21",
+-    e = "211"
+-}
+-declare enum T5 {
+-    a = "1",
+-    b = "12",
+-    c = "123",
+-    d = 1
+-}
+-declare enum T6 {
+-    a = 1,
+-    b
+-}
+-declare enum T7 {
+-    a = "1",
+-    b = "11",
+-    c = "21"
+-}

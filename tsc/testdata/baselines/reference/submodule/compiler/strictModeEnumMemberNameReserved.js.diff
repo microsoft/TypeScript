@@ -1,0 +1,8 @@
+--- old.strictModeEnumMemberNameReserved.js
++++ new.strictModeEnumMemberNameReserved.js
+@@= skipped -14, +14 lines =@@
+ (function (E) {
+     E[E["static"] = 0] = "static";
+ })(E || (E = {}));
+-var x1 = E.static;
++const x1 = E.static;

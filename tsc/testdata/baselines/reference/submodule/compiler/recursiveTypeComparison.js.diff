@@ -1,0 +1,9 @@
+--- old.recursiveTypeComparison.js
++++ new.recursiveTypeComparison.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [recursiveTypeComparison.js]
+-// Before fix this would take an exceeding long time to complete (#1170)
+ var p;
+ var stuck = p;

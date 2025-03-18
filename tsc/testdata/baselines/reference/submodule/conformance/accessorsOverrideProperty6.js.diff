@@ -1,0 +1,32 @@
+--- old.accessorsOverrideProperty6.js
++++ new.accessorsOverrideProperty6.js
+@@= skipped -18, +18 lines =@@
+ 
+ //// [accessorsOverrideProperty6.js]
+ class A {
+-    constructor() {
+-        this.p = 'yep';
+-    }
++    p = 'yep';
+ }
+ class B extends A {
+-    get p() { return 'oh no'; } // error
++    get p() { return 'oh no'; }
+ }
+ class C {
+-    constructor() {
+-        this.p = 101;
+-    }
++    p = 101;
+ }
+ class D extends C {
+-    constructor() {
+-        super(...arguments);
+-        this._secret = 11;
+-    }
+-    get p() { return this._secret; } // error
+-    set p(value) { this._secret = value; } // error
++    _secret = 11;
++    get p() { return this._secret; }
++    set p(value) { this._secret = value; }
+ }

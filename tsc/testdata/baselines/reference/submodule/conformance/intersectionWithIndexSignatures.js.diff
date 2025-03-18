@@ -1,0 +1,20 @@
+--- old.intersectionWithIndexSignatures.js
++++ new.intersectionWithIndexSignatures.js
+@@= skipped -38, +38 lines =@@
+ 
+ 
+ //// [intersectionWithIndexSignatures.js]
+-"use strict";
+ ta1 = sa1;
+ ta1 = sa2;
+ ta2 = sa1;
+ ta2 = sa2;
+-tb1 = sb1; // Error
++tb1 = sb1;
+ q["asd"].a.substr(1);
+-q["asd"].b; // Error
+-var d = q; // Error
+-tt = ss; // Error
++q["asd"].b;
++const d = q;
++tt = ss;

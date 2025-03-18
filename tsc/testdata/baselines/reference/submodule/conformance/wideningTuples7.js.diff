@@ -1,0 +1,10 @@
+--- old.wideningTuples7.js
++++ new.wideningTuples7.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [wideningTuples7.js]
+ var foo = function bar() {
+-    var intermediate;
++    let intermediate;
+     return intermediate = [undefined];
+ };

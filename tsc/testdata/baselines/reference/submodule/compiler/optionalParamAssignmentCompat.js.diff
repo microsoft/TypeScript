@@ -1,0 +1,10 @@
+--- old.optionalParamAssignmentCompat.js
++++ new.optionalParamAssignmentCompat.js
+@@= skipped -14, +14 lines =@@
+ 
+ //// [optionalParamAssignmentCompat.js]
+ var i2;
+-var c = i2.p1; // should be ok
+-var d = i2.m1; // should error
++var c = i2.p1;
++var d = i2.m1;

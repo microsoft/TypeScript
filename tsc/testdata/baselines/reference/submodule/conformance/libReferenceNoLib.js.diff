@@ -1,0 +1,32 @@
+--- old.libReferenceNoLib.js
++++ new.libReferenceNoLib.js
+@@= skipped -21, +21 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.elem = void 0;
+-/// <reference lib="dom" />
+ exports.elem = { field: 'a' };
+-
+-
+-//// [fakelib.d.ts]
+-interface Object {
+-}
+-interface Array<T> {
+-}
+-interface String {
+-}
+-interface Boolean {
+-}
+-interface Number {
+-}
+-interface Function {
+-}
+-interface RegExp {
+-}
+-interface IArguments {
+-}
+-//// [file1.d.ts]
+-export declare interface HTMLElement {
+-    field: string;
+-}
+-export declare const elem: HTMLElement;

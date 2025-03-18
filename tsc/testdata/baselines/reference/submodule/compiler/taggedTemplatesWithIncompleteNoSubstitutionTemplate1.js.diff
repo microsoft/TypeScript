@@ -1,0 +1,8 @@
+--- old.taggedTemplatesWithIncompleteNoSubstitutionTemplate1.js
++++ new.taggedTemplatesWithIncompleteNoSubstitutionTemplate1.js
+@@= skipped -9, +9 lines =@@
+ //// [taggedTemplatesWithIncompleteNoSubstitutionTemplate1.js]
+ function f(x, y, z) {
+ }
+-// Incomplete call, not enough parameters.
+ f `123qdawdrqw;

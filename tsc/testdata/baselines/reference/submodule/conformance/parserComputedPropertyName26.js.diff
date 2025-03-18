@@ -1,0 +1,11 @@
+--- old.parserComputedPropertyName26.js
++++ new.parserComputedPropertyName26.js
+@@= skipped -9, +9 lines =@@
+ //// [parserComputedPropertyName26.js]
+ var E;
+ (function (E) {
+-    // No ASI
+-    E[E[e] = 0[e2] = 1] = e;
++    E[e] = 0[e2] = 1;
++    if (typeof E[e] !== "string") E[E[e]] = e;
+ })(E || (E = {}));

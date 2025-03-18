@@ -1,0 +1,26 @@
+--- old.computedPropertyNamesSourceMap2_ES5.js
++++ new.computedPropertyNamesSourceMap2_ES5.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [computedPropertyNamesSourceMap2_ES5.js]
+-var _a;
+-var v = (_a = {},
+-    _a["hello"] = function () {
++var v = {
++    ["hello"]() {
+         debugger;
+     },
+-    Object.defineProperty(_a, "goodbye", {
+-        get: function () {
+-            return 0;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    }),
+-    _a);
+-//# sourceMappingURL=computedPropertyNamesSourceMap2_ES5.js.map
++    get ["goodbye"]() {
++        return 0;
++    }
++};

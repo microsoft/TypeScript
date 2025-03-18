@@ -1,0 +1,16 @@
+--- old.stringLiteralTypesAsTypeParameterConstraint02.js
++++ new.stringLiteralTypesAsTypeParameterConstraint02.js
+@@= skipped -11, +11 lines =@@
+ function foo(f) {
+     return f;
+ }
+-var f = foo(function (y) { return y === "foo" ? y : "foo"; });
+-var fResult = f("foo");
+-
+-
+-//// [stringLiteralTypesAsTypeParameterConstraint02.d.ts]
+-declare function foo<T extends "foo">(f: (x: T) => T): (x: T) => T;
+-declare let f: (x: "foo") => "foo";
+-declare let fResult: "foo";
++let f = foo((y) => y === "foo" ? y : "foo");
++let fResult = f("foo");

@@ -1,0 +1,8 @@
+--- old.incrementalConfig.js
++++ new.incrementalConfig.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [a.js]
+-var x = 10;
++const x = 10;

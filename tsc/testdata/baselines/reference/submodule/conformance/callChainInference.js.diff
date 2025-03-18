@@ -1,0 +1,14 @@
+--- old.callChainInference.js
++++ new.callChainInference.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [callChainInference.js]
+-"use strict";
+-// Repro from #42404
+ if (value) {
+-    value === null || value === void 0 ? void 0 : value.foo("a");
++    value?.foo("a");
+ }
+-value === null || value === void 0 ? void 0 : value.foo("a");
++value?.foo("a");

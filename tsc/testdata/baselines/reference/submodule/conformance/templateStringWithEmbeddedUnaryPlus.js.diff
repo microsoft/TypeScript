@@ -1,0 +1,8 @@
+--- old.templateStringWithEmbeddedUnaryPlus.js
++++ new.templateStringWithEmbeddedUnaryPlus.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ +Infinity }def`;
+ 
+ //// [templateStringWithEmbeddedUnaryPlus.js]
+-var x = "abc".concat(+Infinity, "def");
++var x = `abc${+Infinity}def`;

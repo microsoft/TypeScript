@@ -1,0 +1,8 @@
+--- old.signatureLengthMismatchInOverload.js
++++ new.signatureLengthMismatchInOverload.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [signatureLengthMismatchInOverload.js]
+ function f(callback) { }
+-f(function (arg, arg2) { });
++f((arg, arg2) => { });

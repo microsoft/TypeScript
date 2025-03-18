@@ -1,0 +1,17 @@
+--- old.newTarget.es6.js
++++ new.newTarget.es6.js
+@@= skipped -36, +36 lines =@@
+ //// [newTarget.es6.js]
+ class A {
+     constructor() {
+-        this.d = function () { return new.target; };
+         const a = new.target;
+         const b = () => new.target;
+     }
++    static c = function () { return new.target; };
++    d = function () { return new.target; };
+ }
+-A.c = function () { return new.target; };
+ class B extends A {
+     constructor() {
+         super();

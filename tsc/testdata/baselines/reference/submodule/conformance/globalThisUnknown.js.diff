@@ -1,0 +1,15 @@
+--- old.globalThisUnknown.js
++++ new.globalThisUnknown.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [globalThisUnknown.js]
+-// this access should be an error
+ win.hi;
+-// these two should be fine, with type any
+ this.hi;
+ globalThis.hi;
+-// element access is always ok without noImplicitAny
+ win['hi'];
+ this['hi'];
+ globalThis['hi'];

@@ -1,0 +1,10 @@
+--- old.importTypeNested.js
++++ new.importTypeNested.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [chainer.js]
+ export const x = "yes";
+-
+-
+-//// [chainer.d.ts]
+-export declare const x: import(import("./a").LookAt).Value;

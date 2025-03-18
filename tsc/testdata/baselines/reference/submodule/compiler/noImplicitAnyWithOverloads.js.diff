@@ -1,0 +1,8 @@
+--- old.noImplicitAnyWithOverloads.js
++++ new.noImplicitAnyWithOverloads.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [noImplicitAnyWithOverloads.js]
+ function callb(a) { }
+-callb(function (a) { a.foo; }); // error, chose first overload
++callb((a) => { a.foo; });

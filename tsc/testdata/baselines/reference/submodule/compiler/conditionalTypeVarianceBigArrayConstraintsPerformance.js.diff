@@ -1,0 +1,11 @@
+--- old.conditionalTypeVarianceBigArrayConstraintsPerformance.js
++++ new.conditionalTypeVarianceBigArrayConstraintsPerformance.js
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ //// [conditionalTypeVarianceBigArrayConstraintsPerformance.js]
+-/// <reference path="react16.d.ts" />
+ function F(p1, p2) {
+-    p1 = p2; // Error
++    p1 = p2;
+ }

@@ -1,0 +1,40 @@
+--- old.operatorsAndIntersectionTypes.js
++++ new.operatorsAndIntersectionTypes.js
+@@= skipped -39, +39 lines =@@
+ function createSerialNo() {
+     return 12345;
+ }
+-var map1 = {};
+-var guid = createGuid();
+-map1[guid] = 123; // Can with tagged string
+-var map2 = {};
+-var serialNo = createSerialNo();
+-map2[serialNo] = "hello"; // Can index with tagged number
+-var s1 = "{" + guid + "}";
+-var s2 = guid.toLowerCase();
+-var s3 = guid + guid;
+-var s4 = guid + serialNo;
+-var s5 = serialNo.toPrecision(0);
+-var n1 = serialNo * 3;
+-var n2 = serialNo + serialNo;
+-var b1 = guid === "";
+-var b2 = guid === guid;
+-var b3 = serialNo === 0;
+-var b4 = serialNo === serialNo;
++let map1 = {};
++let guid = createGuid();
++map1[guid] = 123;
++let map2 = {};
++let serialNo = createSerialNo();
++map2[serialNo] = "hello";
++const s1 = "{" + guid + "}";
++const s2 = guid.toLowerCase();
++const s3 = guid + guid;
++const s4 = guid + serialNo;
++const s5 = serialNo.toPrecision(0);
++const n1 = serialNo * 3;
++const n2 = serialNo + serialNo;
++const b1 = guid === "";
++const b2 = guid === guid;
++const b3 = serialNo === 0;
++const b4 = serialNo === serialNo;

@@ -1,0 +1,77 @@
+--- old.esDecorators-decoratorExpression.1(experimentaldecorators=false).js
++++ new.esDecorators-decoratorExpression.1(experimentaldecorators=false).js
+@@= skipped -54, +54 lines =@@
+     }
+ }
+ {
+-    @new x
++    @(new x)
+     class C {
+     }
+ }
+@@= skipped -10, +10 lines =@@
+     }
+ }
+ {
+-    @x?.y
++    @(x?.y)
+     class C {
+     }
+ }
+ {
+-    @x?.y()
++    @(x?.y())
+     class C {
+     }
+ }
+ {
+-    @x?.["y"]
++    @(x?.["y"])
+     class C {
+     }
+ }
+ {
+-    @x?.()
++    @(x?.())
+     class C {
+     }
+ }
+@@= skipped -47, +47 lines =@@
+ }
+ {
+     class C {
+-        @new x
++        @(new x)
+         m() { }
+     }
+ }
+@@= skipped -12, +12 lines =@@
+ }
+ {
+     class C {
+-        @x?.y
++        @(x?.y)
+         m() { }
+     }
+ }
+ {
+     class C {
+-        @x?.y()
++        @(x?.y())
+         m() { }
+     }
+ }
+ {
+     class C {
+-        @x?.["y"]
++        @(x?.["y"])
+         m() { }
+     }
+ }
+ {
+     class C {
+-        @x?.()
++        @(x?.())
+         m() { }
+     }
+ }

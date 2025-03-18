@@ -1,0 +1,31 @@
+--- old.controlFlowAliasingCatchVariables(useunknownincatchvariables=false).js
++++ new.controlFlowAliasingCatchVariables(useunknownincatchvariables=false).js
+@@= skipped -31, +31 lines =@@
+ //// [controlFlowAliasingCatchVariables.js]
+ try { }
+ catch (e) {
+-    var isString = typeof e === 'string';
++    const isString = typeof e === 'string';
+     if (isString) {
+-        e.toUpperCase(); // e string
++        e.toUpperCase();
+     }
+     if (typeof e === 'string') {
+-        e.toUpperCase(); // e string
++        e.toUpperCase();
+     }
+ }
+ try { }
+ catch (e) {
+-    var isString = typeof e === 'string';
++    const isString = typeof e === 'string';
+     e = 1;
+     if (isString) {
+-        e.toUpperCase(); // e any/unknown
++        e.toUpperCase();
+     }
+     if (typeof e === 'string') {
+-        e.toUpperCase(); // e string
++        e.toUpperCase();
+     }
+ }

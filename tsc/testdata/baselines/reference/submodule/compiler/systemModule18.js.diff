@@ -1,0 +1,48 @@
+--- old.systemModule18.js
++++ new.systemModule18.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [react.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    function createElement() { }
+-    exports_1("createElement", createElement);
+-    function lazy() { }
+-    exports_1("lazy", lazy);
+-    function useState() { }
+-    exports_1("useState", useState);
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.createElement = createElement;
++exports.lazy = lazy;
++exports.useState = useState;
++function createElement() { }
++function lazy() { }
++function useState() { }
+ //// [index.js]
+-System.register(["./react.js"], function (exports_1, context_1) {
+-    "use strict";
+-    var React;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (React_1) {
+-                React = React_1;
+-                exports_1("React", React_1);
+-            }
+-        ],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.React = require("./react.js");

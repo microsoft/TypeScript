@@ -1,0 +1,18 @@
+--- old.typeAliasDeclarationEmit2.js
++++ new.typeAliasDeclarationEmit2.js
+@@= skipped -3, +3 lines =@@
+ export type A<a> = { value: a };
+ 
+ //// [typeAliasDeclarationEmit2.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
+-
+-
+-//// [typeAliasDeclarationEmit2.d.ts]
+-export type A<a> = {
+-    value: a;
+-};
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

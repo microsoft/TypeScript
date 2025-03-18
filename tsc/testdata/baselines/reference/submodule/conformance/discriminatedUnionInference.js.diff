@@ -1,0 +1,12 @@
+--- old.discriminatedUnionInference.js
++++ new.discriminatedUnionInference.js
+@@= skipped -22, +22 lines =@@
+ 
+ 
+ //// [discriminatedUnionInference.js]
+-"use strict";
+-// Repro from #28862
+-var x1 = foo({ kind: 'a', data: 42 }); // number
+-var x2 = foo({ kind: 'b', data: [1, 2] }); // number
++let x1 = foo({ kind: 'a', data: 42 });
++let x2 = foo({ kind: 'b', data: [1, 2] });

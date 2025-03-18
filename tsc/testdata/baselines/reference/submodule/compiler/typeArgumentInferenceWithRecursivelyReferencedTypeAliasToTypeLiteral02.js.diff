@@ -1,0 +1,8 @@
+--- old.typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.js
++++ new.typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.js
+@@= skipped -16, +16 lines =@@
+ 
+ //// [typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.js]
+ var nodes;
+-nodes.map(function (n) { return n.name; });
++nodes.map(n => n.name);

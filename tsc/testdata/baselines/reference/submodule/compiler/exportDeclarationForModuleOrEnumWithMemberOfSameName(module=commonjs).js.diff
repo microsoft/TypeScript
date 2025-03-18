@@ -1,0 +1,10 @@
+--- old.exportDeclarationForModuleOrEnumWithMemberOfSameName(module=commonjs).js
++++ new.exportDeclarationForModuleOrEnumWithMemberOfSameName(module=commonjs).js
+@@= skipped -17, +17 lines =@@
+ 
+ //// [exportDeclarationForModuleOrEnumWithMemberOfSameName.js]
+ "use strict";
+-// https://github.com/microsoft/TypeScript/issues/55038
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.B = exports.A = void 0;
+ var A;

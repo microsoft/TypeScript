@@ -1,0 +1,83 @@
+--- old.neverType.js
++++ new.neverType.js
+@@= skipped -132, +132 lines =@@
+ function check(x) {
+     return x || error("Undefined value");
+ }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.void1 = function () {
++class C {
++    void1() {
+         throw new Error();
+-    };
+-    C.prototype.void2 = function () {
++    }
++    void2() {
+         while (true) { }
+-    };
+-    C.prototype.never1 = function () {
++    }
++    never1() {
+         throw new Error();
+-    };
+-    C.prototype.never2 = function () {
++    }
++    never2() {
+         while (true) { }
+-    };
+-    return C;
+-}());
++    }
++}
+ function f1(x) {
+     if (typeof x === "boolean") {
+-        x; // never
++        x;
+     }
+ }
+ function f2(x) {
+     while (true) {
+         if (typeof x === "boolean") {
+-            return x; // never
++            return x;
+         }
+     }
+ }
+ function test(cb) {
+-    var s = cb();
++    let s = cb();
+     return s;
+ }
+-var errorCallback = function () { return error("Error callback"); };
+-test(function () { return "hello"; });
+-test(function () { return fail(); });
+-test(function () { throw new Error(); });
++let errorCallback = () => error("Error callback");
++test(() => "hello");
++test(() => fail());
++test(() => { throw new Error(); });
+ test(errorCallback);
+-
+-
+-//// [neverType.d.ts]
+-declare function error(message: string): never;
+-declare function errorVoid(message: string): void;
+-declare function fail(): never;
+-declare function failOrThrow(shouldFail: boolean): never;
+-declare function infiniteLoop1(): void;
+-declare function infiniteLoop2(): never;
+-declare function move1(direction: "up" | "down"): 1 | -1;
+-declare function move2(direction: "up" | "down"): 1 | -1;
+-declare function check<T>(x: T | undefined): NonNullable<T>;
+-declare class C {
+-    void1(): void;
+-    void2(): void;
+-    never1(): never;
+-    never2(): never;
+-}
+-declare function f1(x: string | number): void;
+-declare function f2(x: string | number): never;
+-declare function test(cb: () => string): string;
+-declare let errorCallback: () => never;

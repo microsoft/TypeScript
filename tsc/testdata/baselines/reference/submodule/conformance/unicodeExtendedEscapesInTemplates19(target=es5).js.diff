@@ -1,0 +1,8 @@
+--- old.unicodeExtendedEscapesInTemplates19(target=es5).js
++++ new.unicodeExtendedEscapesInTemplates19(target=es5).js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [unicodeExtendedEscapesInTemplates19.js]
+-var x = "\\u{}";
++var x = `\u{}`;

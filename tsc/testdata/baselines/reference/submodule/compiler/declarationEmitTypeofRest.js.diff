@@ -1,0 +1,13 @@
+--- old.declarationEmitTypeofRest.js
++++ new.declarationEmitTypeofRest.js
+@@= skipped -27, +27 lines =@@
+ export const v2 = (...a) => {
+     return null;
+ };
+-
+-
+-//// [v1.d.ts]
+-export declare const v1: (n: "n", a: "a") => {
+-    /** r rest param */
+-    a: [n: "n", a: "a"];
+-};

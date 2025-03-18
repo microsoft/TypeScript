@@ -1,0 +1,29 @@
+--- old.declarationEmitNonExportedBindingPattern.js
++++ new.declarationEmitNonExportedBindingPattern.js
+@@= skipped -27, +27 lines =@@
+ function getFoo() {
+     return { foo: { test: 42 } };
+ }
+-var foo = getFoo().foo;
+-var renamed = getFoo().foo;
++const { foo } = getFoo();
++const { foo: renamed } = getFoo();
+ function getNested() {
+     return { a: { b: { c: 'd' } } };
+ }
+-var c = getNested().a.b.c;
+-
+-
+-//// [test.d.ts]
+-declare const foo: {
+-    test: number;
+-};
+-export type AliasType = typeof foo;
+-declare const renamed: {
+-    test: number;
+-};
+-export type AliasType2 = typeof renamed;
+-declare const c: string;
+-export type AliasType3 = typeof c;
+-export {};
++const { a: { b: { c } } } = getNested();

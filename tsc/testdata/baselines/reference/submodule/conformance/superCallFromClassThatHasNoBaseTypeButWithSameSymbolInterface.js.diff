@@ -1,0 +1,16 @@
+--- old.superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.js
++++ new.superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        return _super.call(this) || this; // error
++class Foo {
++    constructor() {
++        super();
+     }
+-    return Foo;
+-}());
++}

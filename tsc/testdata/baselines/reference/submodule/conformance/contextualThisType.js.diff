@@ -1,0 +1,11 @@
+--- old.contextualThisType.js
++++ new.contextualThisType.js
+@@= skipped -18, +18 lines =@@
+ 
+ //// [contextualThisType.js]
+ var x = {
+-    a: function (p) {
++    a(p) {
+         return p;
+     }
+ };

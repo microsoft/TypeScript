@@ -1,0 +1,27 @@
+--- old.interfaceExtendingClass2.js
++++ new.interfaceExtendingClass2.js
+@@= skipped -17, +17 lines =@@
+     }
+ 
+ //// [interfaceExtendingClass2.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
++class Foo {
++    x;
++    y() { }
++    get Z() {
++        return 1;
+     }
+-    Foo.prototype.y = function () { };
+-    Object.defineProperty(Foo.prototype, "Z", {
+-        get: function () {
+-            return 1;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return Foo;
+-}());
++}
+ return 1;
+ ;

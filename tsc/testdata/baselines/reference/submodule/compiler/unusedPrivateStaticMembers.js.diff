@@ -1,0 +1,27 @@
+--- old.unusedPrivateStaticMembers.js
++++ new.unusedPrivateStaticMembers.js
+@@= skipped -52, +52 lines =@@
+     }
+ }
+ class Test2 {
+-    static { this.p1 = 0; }
++    static p1 = 0;
+     static test() {
+         Test2.p1;
+     }
+ }
+ class Test3 {
+-    static { this.p1 = 0; }
++    static p1 = 0;
+     static m1() { }
+ }
+ class Test4 {
+@@= skipped -24, +24 lines =@@
+     }
+ }
+ class Test6 {
+-    static { this.p1 = 0; }
++    static p1 = 0;
+     static test() {
+         Test6["p1"];
+     }

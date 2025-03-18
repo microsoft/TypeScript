@@ -1,0 +1,44 @@
+--- old.collisionExportsRequireAndVar.js
++++ new.collisionExportsRequireAndVar.js
+@@= skipped -26, +26 lines =@@
+ }
+ 
+ //// [collisionExportsRequireAndVar_externalmodule.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.foo = foo;
+-    function foo() {
+-    }
+-    var exports = 1;
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.foo = foo;
++function foo() {
++}
++var exports = 1;
++var require = "require";
++var m1;
++(function (m1) {
++    var exports = 0;
+     var require = "require";
+-    var m1;
+-    (function (m1) {
+-        var exports = 0;
+-        var require = "require";
+-    })(m1 || (m1 = {}));
+-    var m2;
+-    (function (m2) {
+-        m2.exports = 0;
+-        m2.require = "require";
+-    })(m2 || (m2 = {}));
+-});
++})(m1 || (m1 = {}));
++var m2;
++(function (m2) {
++    m2.exports = 0;
++    m2.require = "require";
++})(m2 || (m2 = {}));
+ //// [collisionExportsRequireAndVar_globalFile.js]
+ var exports = 0;
+ var require = "require";

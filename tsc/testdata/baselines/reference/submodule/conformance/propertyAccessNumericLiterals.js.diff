@@ -1,0 +1,19 @@
+--- old.propertyAccessNumericLiterals.js
++++ new.propertyAccessNumericLiterals.js
+@@= skipped -16, +16 lines =@@
+ 
+ //// [propertyAccessNumericLiterals.js]
+ 0xffffffff.toString();
+-668..toString();
+-109..toString();
++0o01234.toString();
++0b01101101.toString();
+ 1234..toString();
+ 1e0.toString();
+ 0..toString();
+@@= skipped -11, +11 lines =@@
+ 880000..toString();
+ 880000..toString();
+ 88e4.toString();
+-880000..toString();
++8_8e4..toString();

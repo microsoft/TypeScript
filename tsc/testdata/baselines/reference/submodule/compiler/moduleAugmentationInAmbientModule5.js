@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule5.ts] ////
+
+//// [array.d.ts]
+declare module "A" {
+    class A { x: number; }
+}
+
+declare module "array" {
+    import {A} from "A";
+    global {
+        interface Array<T> {
+            getA(): A;
+        }
+    }
+}
+
+//// [f.ts]
+/// <reference path="array.d.ts"/>
+import "array";
+
+let x = [1];
+let y = x.getA().x;
+
+
+//// [f.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("array");
+let x = [1];
+let y = x.getA().x;

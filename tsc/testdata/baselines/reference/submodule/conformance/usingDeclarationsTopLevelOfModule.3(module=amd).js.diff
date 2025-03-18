@@ -1,0 +1,41 @@
+--- old.usingDeclarationsTopLevelOfModule.3(module=amd).js
++++ new.usingDeclarationsTopLevelOfModule.3(module=amd).js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [usingDeclarationsTopLevelOfModule.3.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.y = void 0;
+-    function f() {
+-        console.log(y, z);
+-    }
+-    var z;
+-    const env_1 = { stack: [], error: void 0, hasError: false };
+-    try {
+-        z = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);
+-        if (false) {
+-            var y = 1;
+-            exports.y = y;
+-        }
+-    }
+-    catch (e_1) {
+-        env_1.error = e_1;
+-        env_1.hasError = true;
+-    }
+-    finally {
+-        __disposeResources(env_1);
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.y = void 0;
++using z = { [Symbol.dispose]() { } };
++if (false) {
++    var y = 1;
++    exports.y = y;
++}
++function f() {
++    console.log(y, z);
++}

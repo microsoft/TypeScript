@@ -1,0 +1,17 @@
+--- old.objectLiteralDeclarationGeneration1.js
++++ new.objectLiteralDeclarationGeneration1.js
+@@= skipped -3, +3 lines =@@
+ class y<T extends {}>{ }
+ 
+ //// [objectLiteralDeclarationGeneration1.js]
+-var y = /** @class */ (function () {
+-    function y() {
+-    }
+-    return y;
+-}());
+-
+-
+-//// [objectLiteralDeclarationGeneration1.d.ts]
+-declare class y<T extends {}> {
++class y {
+ }

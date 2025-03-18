@@ -1,0 +1,27 @@
+--- old.es5ExportDefaultClassDeclaration3.js
++++ new.es5ExportDefaultClassDeclaration3.js
+@@= skipped -18, +18 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ var before = new C();
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.method = function () {
++class C {
++    method() {
+         return new C();
+-    };
+-    return C;
+-}());
++    }
++}
+ exports.default = C;
+ var after = new C();
+ var t = C;
+-
+-
+-//// [es5ExportDefaultClassDeclaration3.d.ts]
+-export default class C {
+-    method(): C;
+-}

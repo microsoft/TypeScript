@@ -1,0 +1,25 @@
+--- old.tsxTypeArgumentsJsxPreserveOutput.js
++++ new.tsxTypeArgumentsJsxPreserveOutput.js
+@@= skipped -39, +39 lines =@@
+ //// [foo.jsx]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var React = require("react");
+ function Foo() {
+     return null;
+ }
+ <>
+-    {/* JsxSelfClosingElement */}
++    
+     <Foo />
+     <Foo />
+     <Foo />
+@@= skipped -17, +16 lines =@@
+     <Foo />
+     <Foo />
+ 
+-    {/* JsxOpeningElement */}
++    
+     <Foo></Foo>
+     <Foo></Foo>
+     <Foo></Foo>

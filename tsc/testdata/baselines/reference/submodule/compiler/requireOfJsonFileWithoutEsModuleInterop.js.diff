@@ -1,0 +1,14 @@
+--- old.requireOfJsonFileWithoutEsModuleInterop.js
++++ new.requireOfJsonFileWithoutEsModuleInterop.js
+@@= skipped -8, +8 lines =@@
+     "b": "hello"
+ }
+ 
+-//// [out/test.json]
+-{
+-    "a": true,
+-    "b": "hello"
+-}
+ //// [out/file1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });

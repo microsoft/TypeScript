@@ -1,0 +1,14 @@
+--- old.functionWithDefaultParameterWithNoStatements7.js
++++ new.functionWithDefaultParameterWithNoStatements7.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [functionWithDefaultParameterWithNoStatements7.js]
+-function foo(a) {
+-    if (a === void 0) { a = false; }
++function foo(a = false) { }
++function bar(a = false) {
+ }
+-function bar(a) {
+-    if (a === void 0) { a = false; }
+-}

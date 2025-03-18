@@ -1,0 +1,35 @@
+--- old.mergedModuleDeclarationCodeGen.js
++++ new.mergedModuleDeclarationCodeGen.js
+@@= skipped -22, +22 lines =@@
+ exports.X = void 0;
+ var X;
+ (function (X) {
+-    var Y;
++    let Y;
+     (function (Y_1) {
+-        var A = /** @class */ (function () {
+-            function A(Y) {
+-                new Y_1.B();
++        class A {
++            constructor(Y) {
++                new B();
+             }
+-            return A;
+-        }());
++        }
+     })(Y = X.Y || (X.Y = {}));
+ })(X || (exports.X = X = {}));
+ (function (X) {
+-    var Y;
++    let Y;
+     (function (Y) {
+-        var B = /** @class */ (function () {
+-            function B() {
+-            }
+-            return B;
+-        }());
++        class B {
++        }
+         Y.B = B;
+     })(Y = X.Y || (X.Y = {}));
+ })(X || (exports.X = X = {}));

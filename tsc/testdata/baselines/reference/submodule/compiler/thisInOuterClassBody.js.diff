@@ -1,0 +1,36 @@
+--- old.thisInOuterClassBody.js
++++ new.thisInOuterClassBody.js
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ //// [thisInOuterClassBody.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.x = this;
+-    }
+-    Foo.prototype.bar = function () {
+-        var _this = this;
+-        this.x; // 'this' is type 'Foo'
+-        var f = function () { return _this.x; }; // 'this' should be type 'Foo' as well
++class Foo {
++    x = this;
++    static y = this;
++    bar() {
++        this.x;
++        var f = () => this.x;
+         var p = this.y;
+         return this;
+-    };
+-    Foo.bar2 = function () {
++    }
++    static bar2() {
+         var a = this.y;
+         var b = this.x;
+-    };
+-    var _a;
+-    _a = Foo;
+-    Foo.y = _a;
+-    return Foo;
+-}());
++    }
++}

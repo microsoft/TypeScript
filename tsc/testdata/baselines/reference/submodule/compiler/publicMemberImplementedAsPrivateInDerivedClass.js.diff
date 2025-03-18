@@ -1,0 +1,14 @@
+--- old.publicMemberImplementedAsPrivateInDerivedClass.js
++++ new.publicMemberImplementedAsPrivateInDerivedClass.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [publicMemberImplementedAsPrivateInDerivedClass.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++    Bar;
++}

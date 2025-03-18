@@ -1,0 +1,23 @@
+--- old.unusedSetterInClass.js
++++ new.unusedSetterInClass.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [unusedSetterInClass.js]
+-var Employee = /** @class */ (function () {
+-    function Employee() {
++class Employee {
++    _fullName;
++    set fullName(newName) {
++        this._fullName = newName;
+     }
+-    Object.defineProperty(Employee.prototype, "fullName", {
+-        set: function (newName) {
+-            this._fullName = newName;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return Employee;
+-}());
++}

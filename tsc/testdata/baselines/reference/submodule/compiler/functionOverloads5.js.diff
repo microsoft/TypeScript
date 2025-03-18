@@ -1,0 +1,15 @@
+--- old.functionOverloads5.js
++++ new.functionOverloads5.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [functionOverloads5.js]
+-var baz = /** @class */ (function () {
+-    function baz() {
+-    }
+-    baz.prototype.foo = function (bar) { };
+-    return baz;
+-}());
++class baz {
++    foo(bar) { }
++}

@@ -1,0 +1,8 @@
+--- old.intersectionsAndReadonlyProperties.js
++++ new.intersectionsAndReadonlyProperties.js
+@@= skipped -22, +22 lines =@@
+ //// [intersectionsAndReadonlyProperties.js]
+ i1.a = 2;
+ i2.a = 2;
+-ia.a = 2; // Error
++ia.a = 2;

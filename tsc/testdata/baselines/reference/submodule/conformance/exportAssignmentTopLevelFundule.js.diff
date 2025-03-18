@@ -1,0 +1,38 @@
+--- old.exportAssignmentTopLevelFundule.js
++++ new.exportAssignmentTopLevelFundule.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [foo_0.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    function foo() {
+-        return "test";
+-    }
+-    (function (foo) {
+-        foo.answer = 42;
+-    })(foo || (foo = {}));
+-    return foo;
+-});
++"use strict";
++function foo() {
++    return "test";
++}
++(function (foo) {
++    foo.answer = 42;
++})(foo || (foo = {}));
++module.exports = foo;
+ //// [foo_1.js]
+-define(["require", "exports", "./foo_0"], function (require, exports, foo) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    if (foo.answer === 42) {
+-        var x = foo();
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const foo = require("./foo_0");
++if (foo.answer === 42) {
++    var x = foo();
++}

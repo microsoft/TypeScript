@@ -1,0 +1,11 @@
+--- old.tsxAttributeQuickinfoTypesSameAsObjectLiteral.js
++++ new.tsxAttributeQuickinfoTypesSameAsObjectLiteral.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [tsxAttributeQuickinfoTypesSameAsObjectLiteral.jsx]
+-var Foo = function (props) { return <span>{props.foo}</span>; };
++const Foo = (props) => <span>{props.foo}</span>;
+ Foo({
+     foo: "B"
+ });

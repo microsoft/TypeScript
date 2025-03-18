@@ -1,0 +1,28 @@
+--- old.augmentExportEquals3_1.js
++++ new.augmentExportEquals3_1.js
+@@= skipped -27, +27 lines =@@
+ let b = x.b;
+ 
+ //// [file2.js]
+-define(["require", "exports", "file1"], function (require, exports, x) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    x.b = 1;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const x = require("file1");
++x.b = 1;
+ //// [file3.js]
+-define(["require", "exports", "file1", "file2"], function (require, exports, x) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var a;
+-    var b = x.b;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const x = require("file1");
++require("file2");
++let a;
++let b = x.b;

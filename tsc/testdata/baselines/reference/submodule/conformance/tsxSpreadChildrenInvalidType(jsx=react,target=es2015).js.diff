@@ -1,0 +1,25 @@
+--- old.tsxSpreadChildrenInvalidType(jsx=react,target=es2015).js
++++ new.tsxSpreadChildrenInvalidType(jsx=react,target=es2015).js
+@@= skipped -35, +35 lines =@@
+ 
+ //// [tsxSpreadChildrenInvalidType.js]
+ function Todo(prop) {
+-    return React.createElement("div", null, prop.key.toString() + prop.todo);
++    return <div>{prop.key.toString() + prop.todo}</div>;
+ }
+ function TodoList({ todos }) {
+-    return React.createElement("div", null, ...React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
++    return <div>
++        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
++    </div>;
+ }
+ function TodoListNoError({ todos }) {
+-    // any is not checked
+-    return React.createElement("div", null, ...React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
++    return <div>
++        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
++    </div>;
+ }
+ let x;
+-React.createElement(TodoList, Object.assign({}, x));
++<TodoList {...x}/>;

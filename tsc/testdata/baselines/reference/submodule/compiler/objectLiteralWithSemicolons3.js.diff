@@ -1,0 +1,13 @@
+--- old.objectLiteralWithSemicolons3.js
++++ new.objectLiteralWithSemicolons3.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [objectLiteralWithSemicolons3.js]
+ var v = {
+-    a: a,
+-    b: b,
+-    c: c
++    a,
++    b,
++    c,
+ };

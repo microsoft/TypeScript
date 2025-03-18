@@ -1,0 +1,20 @@
+--- old.capturedShorthandPropertyAssignmentNoCheck.js
++++ new.capturedShorthandPropertyAssignmentNoCheck.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [capturedShorthandPropertyAssignmentNoCheck.js]
+-var fns = [];
+-var _loop_1 = function (value) {
+-    fns.push(function () { return ({ value: value }); });
+-};
+-for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
+-    var value = _a[_i];
+-    _loop_1(value);
++const fns = [];
++for (const value of [1, 2, 3]) {
++    fns.push(() => ({ value }));
+ }
+-var result = fns.map(function (fn) { return fn(); });
++const result = fns.map(fn => fn());
+ console.log(result);

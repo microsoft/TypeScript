@@ -1,0 +1,31 @@
+--- old.parseImportAttributesError.js
++++ new.parseImportAttributesError.js
+@@= skipped -25, +25 lines =@@
+ 
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.b = exports.a = void 0;
+ 1234, "resolution-mode";
+ "require";
+ RequireInterface
+     & import("pkg", { with: { 1234: , "resolution-mode": "import" } }).ImportInterface;
+-exports.a = null;
++export const a = null;
+ 1234, "resolution-mode";
+ "require";
+ RequireInterface;
+ ;
+-exports.b = null;
++export const b = null;
+ 1234, "resolution-mode";
+ "import";
+ ImportInterface;
+ ;
+-
+-
+-//// [index.d.ts]
+-export type LocalInterface = import("pkg", { with: {} });
+-export declare const a: any;
+-export declare const b: any;

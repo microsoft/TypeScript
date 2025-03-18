@@ -1,0 +1,27 @@
+--- old.declarationEmitArrowFunctionNoRenaming.js
++++ new.declarationEmitArrowFunctionNoRenaming.js
+@@= skipped -27, +27 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.toBoundedInteger = void 0;
+-var toBoundedInteger = function (bounds) {
+-    return function (n) {
+-        // Implementation doesn't matter here
+-        return ({});
+-    };
+-};
++const toBoundedInteger = (bounds) => (n) => (({}));
+ exports.toBoundedInteger = toBoundedInteger;
+-
+-
+-//// [declarationEmitArrowFunctionNoRenaming.d.ts]
+-export type Brand<Base, Branding, ReservedName extends string = "__type__"> = Base & {
+-    [K in ReservedName]: Branding;
+-} & {
+-    __witness__: Base;
+-};
+-export type BoundedInteger<LowerBound extends number, UpperBound extends number> = Brand<number, "BoundedInteger">;
+-export declare const toBoundedInteger: <LowerBound extends number, UpperBound extends number>(bounds: {
+-    lowerBound: LowerBound;
+-    upperBound: UpperBound;
+-}) => (n: number) => BoundedInteger<LowerBound, UpperBound>;

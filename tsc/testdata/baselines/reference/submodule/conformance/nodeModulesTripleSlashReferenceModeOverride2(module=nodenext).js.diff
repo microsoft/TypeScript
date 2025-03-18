@@ -1,0 +1,11 @@
+--- old.nodeModulesTripleSlashReferenceModeOverride2(module=nodenext).js
++++ new.nodeModulesTripleSlashReferenceModeOverride2(module=nodenext).js
+@@= skipped -30, +30 lines =@@
+ export {};
+ 
+ //// [index.js]
+-/// <reference types="pkg" />
+-foo; // foo should resolve while bar should not, since index.js is esm
++foo;
+ bar;
+ export {};

@@ -1,0 +1,32 @@
+--- old.ModuleAndFunctionWithSameNameAndCommonRoot.js
++++ new.ModuleAndFunctionWithSameNameAndCommonRoot.js
+@@= skipped -31, +31 lines =@@
+ //// [module.js]
+ var A;
+ (function (A) {
+-    var Point;
++    let Point;
+     (function (Point) {
+         Point.Origin = { x: 0, y: 0 };
+     })(Point = A.Point || (A.Point = {}));
+@@= skipped -8, +8 lines =@@
+ //// [function.js]
+ var A;
+ (function (A) {
+-    // duplicate identifier error
+     function Point() {
+         return { x: 0, y: 0 };
+     }
+@@= skipped -9, +8 lines =@@
+ //// [simple.js]
+ var B;
+ (function (B) {
+-    var Point;
++    let Point;
+     (function (Point) {
+         Point.Origin = { x: 0, y: 0 };
+     })(Point = B.Point || (B.Point = {}));
+-    // duplicate identifier error
+     function Point() {
+         return { x: 0, y: 0 };
+     }

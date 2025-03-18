@@ -1,0 +1,22 @@
+--- old.definiteAssignmentOfDestructuredVariable.js
++++ new.definiteAssignmentOfDestructuredVariable.js
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ //// [definiteAssignmentOfDestructuredVariable.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.method = function () {
+-        var _a = this.foo, a = _a.a, b = _a.b;
++class C {
++    foo;
++    method() {
++        let { a, b } = this.foo;
+         !(a && b);
+         a;
+-    };
+-    return C;
+-}());
++    }
++}

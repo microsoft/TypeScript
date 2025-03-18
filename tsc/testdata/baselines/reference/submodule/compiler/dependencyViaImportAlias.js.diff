@@ -1,0 +1,27 @@
+--- old.dependencyViaImportAlias.js
++++ new.dependencyViaImportAlias.js
+@@= skipped -9, +9 lines =@@
+ 
+ export = A;
+ 
+-//// [A.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.A = void 0;
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        return A;
+-    }());
+-    exports.A = A;
+-});
+ //// [B.js]
+-define(["require", "exports", "A"], function (require, exports, a) {
+-    "use strict";
+-    var A = a.A;
+-    return A;
+-});
++"use strict";
++const a = require("A");
++module.exports = A;

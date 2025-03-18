@@ -1,0 +1,28 @@
+--- old.declarationEmitWithDefaultAsComputedName2.js
++++ new.declarationEmitWithDefaultAsComputedName2.js
+@@= skipped -24, +24 lines =@@
+ });
+ //// [main.js]
+ "use strict";
+-var _a;
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.obj = void 0;
+-var other2 = require("./other");
+-exports.obj = (_a = {},
+-    _a[other2.default.name] = 1,
+-    _a);
+-
+-
+-//// [other.d.ts]
+-type Experiment<Name> = {
+-    name: Name;
++const other2 = require("./other");
++exports.obj = {
++    [other2.default.name]: 1
+ };
+-declare const _default: Experiment<"foo">;
+-export default _default;
+-//// [main.d.ts]
+-export declare const obj: {
+-    foo: number;
+-};

@@ -1,0 +1,10 @@
+--- old.switchCaseCircularRefeference.js
++++ new.switchCaseCircularRefeference.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [switchCaseCircularRefeference.js]
+-// Repro from #9507
+ function f(x) {
+     switch (x.a) {
+         case x:

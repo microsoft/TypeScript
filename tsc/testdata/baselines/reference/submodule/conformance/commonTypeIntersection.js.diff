@@ -1,0 +1,10 @@
+--- old.commonTypeIntersection.js
++++ new.commonTypeIntersection.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [commonTypeIntersection.js]
+-var y1 = x1; // should error here
+-var y2 = x2; // should error here
++let y1 = x1;
++let y2 = x2;

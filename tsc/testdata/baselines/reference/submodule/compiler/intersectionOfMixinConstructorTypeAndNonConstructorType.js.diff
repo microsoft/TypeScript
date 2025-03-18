@@ -1,0 +1,8 @@
+--- old.intersectionOfMixinConstructorTypeAndNonConstructorType.js
++++ new.intersectionOfMixinConstructorTypeAndNonConstructorType.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [intersectionOfMixinConstructorTypeAndNonConstructorType.js]
+-// Repro for #17388
+ new x();

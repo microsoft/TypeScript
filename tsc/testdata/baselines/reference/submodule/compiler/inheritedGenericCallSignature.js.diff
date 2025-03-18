@@ -1,0 +1,8 @@
+--- old.inheritedGenericCallSignature.js
++++ new.inheritedGenericCallSignature.js
+@@= skipped -31, +31 lines =@@
+ //// [inheritedGenericCallSignature.js]
+ var x;
+ var y = x(undefined);
+-y.length; // should not error
++y.length;

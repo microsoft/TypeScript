@@ -1,0 +1,16 @@
+--- old.classAbstractAsIdentifier.js
++++ new.classAbstractAsIdentifier.js
+@@= skipped -7, +7 lines =@@
+ new abstract;
+ 
+ //// [classAbstractAsIdentifier.js]
+-var abstract = /** @class */ (function () {
+-    function abstract() {
+-    }
+-    abstract.prototype.foo = function () { return 1; };
+-    return abstract;
+-}());
++class abstract {
++    foo() { return 1; }
++}
+ new abstract;

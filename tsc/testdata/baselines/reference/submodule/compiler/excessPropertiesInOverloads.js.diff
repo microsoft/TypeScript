@@ -1,0 +1,8 @@
+--- old.excessPropertiesInOverloads.js
++++ new.excessPropertiesInOverloads.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [excessPropertiesInOverloads.js]
+-"use strict";
+ fn({ z: 3, a: 3 });

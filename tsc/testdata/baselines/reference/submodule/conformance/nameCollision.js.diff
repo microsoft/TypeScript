@@ -1,0 +1,63 @@
+--- old.nameCollision.js
++++ new.nameCollision.js
+@@= skipped -50, +50 lines =@@
+ //// [nameCollision.js]
+ var A;
+ (function (A_1) {
+-    // these 2 statements force an underscore before the 'A' 
+-    // in the generated function call.
+     var A = 12;
+     var _A = '';
+ })(A || (A = {}));
+@@= skipped -10, +8 lines =@@
+     var A = 12;
+ })(B || (B = {}));
+ (function (B_1) {
+-    // re-opened module with colliding name
+-    // this should add an underscore.
+-    var B = /** @class */ (function () {
+-        function B() {
+-        }
+-        return B;
+-    }());
++    class B {
++        name;
++    }
+ })(B || (B = {}));
+ var X;
+ (function (X_1) {
+     var X = 13;
+-    var Y;
++    let Y;
+     (function (Y_1) {
+         var Y = 13;
+-        var Z;
++        let Z;
+         (function (Z_1) {
+             var X = 12;
+             var Y = 12;
+@@= skipped -23, +19 lines =@@
+     })(Y = X_1.Y || (X_1.Y = {}));
+ })(X || (X = {}));
+ var Y;
+-(function (Y_2) {
+-    var Y;
+-    (function (Y_3) {
+-        var Y;
++(function (Y_1) {
++    let Y;
++    (function (Y_1) {
++        let Y;
+         (function (Y) {
+             Y[Y["Red"] = 0] = "Red";
+             Y[Y["Blue"] = 1] = "Blue";
+-        })(Y = Y_3.Y || (Y_3.Y = {}));
+-    })(Y = Y_2.Y || (Y_2.Y = {}));
++        })(Y = Y_1.Y || (Y_1.Y = {}));
++    })(Y = Y_1.Y || (Y_1.Y = {}));
+ })(Y || (Y = {}));
+-// no collision, since interface doesn't
+-// generate code.
+ var D;
+ (function (D) {
+     D.E = 'hello';

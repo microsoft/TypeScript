@@ -1,0 +1,13 @@
+--- old.umd8.js
++++ new.umd8.js
+@@= skipped -22, +22 lines =@@
+ //// [a.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var y; // OK in type position
++let y;
+ y.foo();
+-var z; // OK in ns position
+-var x = Foo; // Not OK in value position
++let z;
++let x = Foo;

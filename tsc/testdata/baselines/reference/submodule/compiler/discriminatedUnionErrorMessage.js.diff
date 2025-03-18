@@ -1,0 +1,11 @@
+--- old.discriminatedUnionErrorMessage.js
++++ new.discriminatedUnionErrorMessage.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [discriminatedUnionErrorMessage.js]
+-var shape = {
++let shape = {
+     kind: "sq",
+     x: 12,
+     y: 13,

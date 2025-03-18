@@ -1,0 +1,31 @@
+--- old.dottedModuleName2.js
++++ new.dottedModuleName2.js
+@@= skipped -47, +47 lines =@@
+ //// [dottedModuleName2.js]
+ var A;
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+         B.x = 1;
+     })(B = A.B || (A.B = {}));
+ })(A || (A = {}));
+ var AA;
+ (function (AA) {
+-    var B;
++    let B;
+     (function (B) {
+         B.x = 1;
+     })(B = AA.B || (AA.B = {}));
+@@= skipped -15, +15 lines =@@
+ var tmpOK = AA.B.x;
+ var tmpError = A.B.x;
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+-        var C;
++        let C;
+         (function (C) {
+             C.x = 1;
+         })(C = B.C || (B.C = {}));

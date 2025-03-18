@@ -1,0 +1,19 @@
+--- old.constEnumMergingWithValues2.js
++++ new.constEnumMergingWithValues2.js
+@@= skipped -8, +8 lines =@@
+ export = foo
+ 
+ //// [m1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var foo = /** @class */ (function () {
+-        function foo() {
+-        }
+-        return foo;
+-    }());
+-    return foo;
+-});
++"use strict";
++class foo {
++}
++module.exports = foo;

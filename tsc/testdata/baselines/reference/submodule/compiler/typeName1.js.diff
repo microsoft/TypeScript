@@ -1,0 +1,18 @@
+--- old.typeName1.js
++++ new.typeName1.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [typeName1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    eek;
++    static zeek;
++}
+ var x1 = 3;
+ var x2 = 3;
+ var x3 = 3;

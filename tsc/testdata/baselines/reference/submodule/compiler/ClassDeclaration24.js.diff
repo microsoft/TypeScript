@@ -1,0 +1,13 @@
+--- old.ClassDeclaration24.js
++++ new.ClassDeclaration24.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [ClassDeclaration24.js]
+-var any = /** @class */ (function () {
+-    function any() {
+-    }
+-    return any;
+-}());
++class any {
++}

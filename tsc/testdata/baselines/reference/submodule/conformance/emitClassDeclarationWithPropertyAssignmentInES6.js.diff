@@ -1,0 +1,35 @@
+--- old.emitClassDeclarationWithPropertyAssignmentInES6.js
++++ new.emitClassDeclarationWithPropertyAssignmentInES6.js
+@@= skipped -27, +27 lines =@@
+ 
+ //// [emitClassDeclarationWithPropertyAssignmentInES6.js]
+ class C {
+-    constructor() {
+-        this.x = "Hello world";
+-    }
++    x = "Hello world";
+ }
+ class D {
++    x = "Hello world";
++    y;
+     constructor() {
+-        this.x = "Hello world";
+         this.y = 10;
+     }
+ }
+ class E extends D {
+-    constructor() {
+-        super(...arguments);
+-        this.z = true;
+-    }
++    z = true;
+ }
+ class F extends D {
++    z = true;
++    j;
+     constructor() {
+         super();
+-        this.z = true;
+         this.j = "HI";
+     }
+ }

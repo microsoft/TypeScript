@@ -1,0 +1,24 @@
+--- old.tsxElementResolution8.js
++++ new.tsxElementResolution8.js
+@@= skipped -37, +37 lines =@@
+ 
+ 
+ //// [file.jsx]
+-// Error
+ var Div = 3;
+ <Div />;
+-// OK
+ function Fact() { return null; }
+ <Fact />;
+-// Error
+ function Fnum() { return 42; }
+ <Fnum />;
+ var Obj1;
+-<Obj1 />; // OK, prefer construct signatures
++<Obj1 />;
+ var Obj2;
+-<Obj2 />; // Error
++<Obj2 />;
+ var Obj3;
+-<Obj3 />; // Error
++<Obj3 />;

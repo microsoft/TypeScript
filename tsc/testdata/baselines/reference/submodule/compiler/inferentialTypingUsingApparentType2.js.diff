@@ -1,0 +1,8 @@
+--- old.inferentialTypingUsingApparentType2.js
++++ new.inferentialTypingUsingApparentType2.js
+@@= skipped -10, +10 lines =@@
+ function foo(x) {
+     return undefined;
+ }
+-foo({ m: function (x) { return x.length; } });
++foo({ m(x) { return x.length; } });

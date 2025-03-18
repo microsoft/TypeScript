@@ -1,0 +1,20 @@
+--- old.declarationFunctionTypeNonlocalShouldNotBeAnError.js
++++ new.declarationFunctionTypeNonlocalShouldNotBeAnError.js
+@@= skipped -14, +14 lines =@@
+ (function (foo) {
+     function bar() { }
+     foo.obj = {
+-        bar: bar
++        bar
+     };
+ })(foo || (foo = {}));
+-
+-
+-//// [declarationFunctionTypeNonlocalShouldNotBeAnError.d.ts]
+-declare namespace foo {
+-    function bar(): void;
+-    export const obj: {
+-        bar: typeof bar;
+-    };
+-    export {};
+-}

@@ -1,0 +1,11 @@
+--- old.asyncArrowFunction9_es5.js
++++ new.asyncArrowFunction9_es5.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [asyncArrowFunction9_es5.js]
+-var foo = async(a = function (await) { return await; }), Promise;
++var foo = async(a = await => await), Promise;
+ ;
+ {
+ }

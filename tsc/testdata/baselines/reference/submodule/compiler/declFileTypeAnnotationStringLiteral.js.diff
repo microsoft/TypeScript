@@ -1,0 +1,12 @@
+--- old.declFileTypeAnnotationStringLiteral.js
++++ new.declFileTypeAnnotationStringLiteral.js
+@@= skipped -18, +18 lines =@@
+     }
+     return a;
+ }
+-
+-
+-//// [declFileTypeAnnotationStringLiteral.d.ts]
+-declare function foo(a: "hello"): number;
+-declare function foo(a: "name"): string;
+-declare function foo(a: string): string | number;

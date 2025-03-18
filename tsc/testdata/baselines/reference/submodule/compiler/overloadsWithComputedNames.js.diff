@@ -1,0 +1,71 @@
+--- old.overloadsWithComputedNames.js
++++ new.overloadsWithComputedNames.js
+@@= skipped -63, +63 lines =@@
+ }
+ 
+ //// [overloadsWithComputedNames.js]
+-// https://github.com/microsoft/TypeScript/issues/52329
+-var Person = /** @class */ (function () {
+-    function Person() {
+-    }
+-    Person.prototype["A"] = function (a) {
++class Person {
++    ["A"](a) {
+         return 0;
+-    };
+-    return Person;
+-}());
+-var p = new Person();
++    }
++}
++let p = new Person();
+ p.A(0);
+ p.B(0);
+-// https://github.com/microsoft/TypeScript/issues/17345
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype["foo"] = function () {
++class C {
++    ["foo"]() {
+         return 0;
+-    };
+-    return C;
+-}());
+-var C1 = /** @class */ (function () {
+-    function C1() {
+     }
+-    C1.prototype[uniqueSym] = function () { };
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    C2.prototype[strUnion] = function () { };
+-    return C2;
+-}());
+-var I2 = /** @class */ (function () {
+-    function I2() {
+-    }
+-    I2.prototype[strUnion] = function () { };
+-    return I2;
+-}());
+-var C3 = /** @class */ (function () {
+-    function C3() {
+-    }
+-    C3.prototype[2] = function () { };
+-    return C3;
+-}());
++}
++class C1 {
++    [uniqueSym]() { }
++}
++class C2 {
++    [strUnion]() { }
++}
++class I2 {
++    [strUnion]() { }
++}
++class C3 {
++    [2]() { }
++}

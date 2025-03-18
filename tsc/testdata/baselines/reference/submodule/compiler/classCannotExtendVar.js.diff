@@ -1,0 +1,14 @@
+--- old.classCannotExtendVar.js
++++ new.classCannotExtendVar.js
+@@= skipped -10, +10 lines =@@
+ 
+ //// [classCannotExtendVar.js]
+ var Markup;
+-var Markup = /** @class */ (function () {
+-    function Markup() {
++class Markup {
++    constructor() {
+     }
+-    return Markup;
+-}());
++}

@@ -1,0 +1,299 @@
+--- old.strictOptionalProperties1.js
++++ new.strictOptionalProperties1.js
+@@= skipped -237, +237 lines =@@
+ 
+ 
+ //// [strictOptionalProperties1.js]
+-"use strict";
+-var __assign = (this && this.__assign) || function () {
+-    __assign = Object.assign || function(t) {
+-        for (var s, i = 1, n = arguments.length; i < n; i++) {
+-            s = arguments[i];
+-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+-                t[p] = s[p];
+-        }
+-        return t;
+-    };
+-    return __assign.apply(this, arguments);
+-};
+ function f1(obj) {
+-    var a = obj.a; // string | undefined
+-    var b = obj.b; // string | undefined
++    let a = obj.a;
++    let b = obj.b;
+     obj.a = 'hello';
+     obj.b = 'hello';
+-    obj.a = undefined; // Error
++    obj.a = undefined;
+     obj.b = undefined;
+ }
+ function f2(obj) {
+     obj = obj;
+-    obj.a = obj.a; // Error
++    obj.a = obj.a;
+     obj.b = obj.b;
+     if ('a' in obj) {
+         obj.a;
+@@= skipped -30, +18 lines =@@
+     }
+     else {
+         obj.a;
+-        obj.a = obj.a; // Error
++        obj.a = obj.a;
+     }
+     if (obj.hasOwnProperty('a')) {
+         obj.a;
+@@= skipped -8, +8 lines =@@
+     }
+     else {
+         obj.a;
+-        obj.a = obj.a; // Error
++        obj.a = obj.a;
+     }
+     if ('b' in obj) {
+         obj.b;
+@@= skipped -20, +20 lines =@@
+     }
+ }
+ function f3(obj) {
+-    var a = obj.a; // string | undefined
+-    var b = obj.b; // string | undefined
++    let a = obj.a;
++    let b = obj.b;
+     obj.a = 'hello';
+     obj.b = 'hello';
+-    obj.a = undefined; // Error
++    obj.a = undefined;
+     obj.b = undefined;
+ }
+ function f4(t) {
+-    var x = t[0]; // string | undefined
++    let x = t[0];
+     t[0] = 'hello';
+-    t[0] = undefined; // Error
++    t[0] = undefined;
+ }
+ function f4a(t1, t2) {
+-    t1 = t2; // Wasn't an error, but should be
++    t1 = t2;
+ }
+ function f5(t) {
+     t = [42];
+@@= skipped -21, +21 lines =@@
+     t = [42, 'abc', true];
+     t = [42, ,];
+     t = [42, , ,];
+-    t = [42, , , ,]; // Error
+-    t = [, , true]; // Error
+-    t = [42, undefined, true]; // Error
++    t = [42, , , ,];
++    t = [, , true];
++    t = [42, undefined, true];
+ }
+ function f6() {
+-    var t1 = [1, 2];
+-    var t2 = [1, 2, ,];
+-    var t3 = [1, 2, , ,];
+-    var t4 = [1, , 2];
+-    var t5 = [1, , , 2];
++    const t1 = [1, 2];
++    const t2 = [1, 2, ,];
++    const t3 = [1, 2, , ,];
++    const t4 = [1, , 2];
++    const t5 = [1, , , 2];
+ }
+-var defaultProps = { foo: 'foo' };
+-var inputProps = { foo: undefined, bar: 'bar' };
+-var completeProps = __assign(__assign({}, defaultProps), inputProps);
+-// Example from #13195
+-var t1 = [1];
+-var t2 = [1, undefined];
+-var t3 = [1, "string", undefined];
+-var t4 = [1, undefined, undefined];
+-// Example from #13195
+-var x = { foo: undefined };
+-var y = __assign({ foo: 123 }, x);
+-f11(ox1); // string
+-f11(ox2); // string | undefined
+-f11(ox3); // string
+-f11(ox4); // string | undefined
+-f12(tx1); // string
+-f12(tx2); // string | undefined
+-f12(tx3); // string
+-f12(tx4); // string | undefined
+-f13(ox1); // { p: string }
+-f13(ox2); // { p: string | undefined }
+-f13(ox3); // { p: string }
+-f13(ox4); // { p: string | undefined }
+-f13(tx1); // [string]
+-f13(tx2); // [string | undefined]
+-f13(tx3); // [string]
+-f13(tx4); // [string | undefined]
++const defaultProps = { foo: 'foo' };
++const inputProps = { foo: undefined, bar: 'bar' };
++const completeProps = { ...defaultProps, ...inputProps };
++const t1 = [1];
++const t2 = [1, undefined];
++const t3 = [1, "string", undefined];
++const t4 = [1, undefined, undefined];
++const x = { foo: undefined };
++const y = { foo: 123, ...x };
++f11(ox1);
++f11(ox2);
++f11(ox3);
++f11(ox4);
++f12(tx1);
++f12(tx2);
++f12(tx3);
++f12(tx4);
++f13(ox1);
++f13(ox2);
++f13(ox3);
++f13(ox4);
++f13(tx1);
++f13(tx2);
++f13(tx3);
++f13(tx4);
+ function expectNotUndefined(value) {
+     if (value === undefined) {
+         throw new TypeError('value is undefined');
+@@= skipped -45, +43 lines =@@
+     return value;
+ }
+ function aa(input) {
+-    var notUndefinedVal = expectNotUndefined(input.bar);
++    const notUndefinedVal = expectNotUndefined(input.bar);
+     bb(notUndefinedVal);
+ }
+-u1.email = e; // error, but only because boolean isn't in email's type
+-u2.email = e; // error, and suggest adding undefined
++u1.email = e;
++u2.email = e;
+ u2 = {
+     name: 'hi',
+     email: undefined
+ };
+ a = b;
+ a = c;
+-a = d; // Error
+-a = e; // Error
+-
+-
+-//// [strictOptionalProperties1.d.ts]
+-declare function f1(obj: {
+-    a?: string;
+-    b?: string | undefined;
+-}): void;
+-declare function f2(obj: {
+-    a?: string;
+-    b?: string | undefined;
+-}): void;
+-declare function f3(obj: Partial<{
+-    a: string;
+-    b: string | undefined;
+-}>): void;
+-declare function f4(t: [string?]): void;
+-declare function f4a(t1: [number, string?], t2: [number, string?, string?]): void;
+-declare function f5(t: [number, string?, boolean?]): void;
+-declare function f6(): void;
+-type Props = {
+-    foo: string;
+-    bar: string;
+-};
+-type InputProps = {
+-    foo?: string;
+-    bar: string;
+-};
+-declare const defaultProps: Pick<Props, 'foo'>;
+-declare const inputProps: InputProps;
+-declare const completeProps: Props;
+-declare const t1: [number, string?, boolean?];
+-declare const t2: [number, string?, boolean?];
+-declare const t3: [number, string?, boolean?];
+-declare const t4: [number, string?, boolean?];
+-declare const x: {
+-    foo?: number;
+-};
+-declare const y: {
+-    foo: number;
+-};
+-interface Test {
+-    [key: string]: string;
+-    foo?: string;
+-    bar?: string | undefined;
+-}
+-declare let ox1: {
+-    p: string;
+-};
+-declare let ox2: {
+-    p: string | undefined;
+-};
+-declare let ox3: {
+-    p?: string;
+-};
+-declare let ox4: {
+-    p?: string | undefined;
+-};
+-declare let tx1: [string];
+-declare let tx2: [string | undefined];
+-declare let tx3: [string?];
+-declare let tx4: [(string | undefined)?];
+-declare function f11<T>(x: {
+-    p?: T;
+-}): T;
+-declare function f12<T>(x: [T?]): T;
+-declare function f13<T>(x: Partial<T>): T;
+-type Undefinable<T> = T | undefined;
+-declare function expectNotUndefined<T>(value: Undefinable<T>): T;
+-interface Bar {
+-    bar?: number;
+-}
+-declare function aa(input: Bar): void;
+-declare function bb(input: number): void;
+-interface U1 {
+-    name: string;
+-    email?: string | number | undefined;
+-}
+-interface U2 {
+-    name: string;
+-    email?: string | number;
+-}
+-declare const e: string | boolean | undefined;
+-declare const u1: U1;
+-declare let u2: U2;
+-declare var a: {
+-    [x: string]: number | string;
+-};
+-declare var b: {
+-    a: number;
+-    b: string;
+-};
+-declare var c: {
+-    a: number;
+-    b?: string;
+-};
+-declare var d: {
+-    a: number;
+-    b: string | undefined;
+-};
+-declare var e: {
+-    a: number;
+-    b?: string | undefined;
+-};
+-interface PropsFromReact {
+-    onClick?: () => void;
+-}
+-interface PropsFromMaterialUI {
+-    onClick?: (() => void) | undefined;
+-}
+-type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+-interface NavBottomListItem extends TheTypeFromMaterialUI {
+-    value: string;
+-}
+-type UA = undefined;
+-type UB = {
+-    x?: never;
+-}['x'];
+-type UC = UA & UB;
++a = d;
++a = e;

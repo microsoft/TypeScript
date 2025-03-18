@@ -1,0 +1,49 @@
+--- old.infinitelyExpandingTypesNonGenericBase.js
++++ new.infinitelyExpandingTypesNonGenericBase.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [infinitelyExpandingTypesNonGenericBase.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var Functionality = /** @class */ (function () {
+-    function Functionality() {
+-    }
+-    return Functionality;
+-}());
+-var Base = /** @class */ (function () {
+-    function Base() {
+-    }
+-    return Base;
+-}());
+-var A = /** @class */ (function (_super) {
+-    __extends(A, _super);
+-    function A() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return A;
+-}(Base));
++class Functionality {
++    property;
++}
++class Base {
++}
++class A extends Base {
++    options;
++}
+ function o(type) {
+ }
+ o(A);

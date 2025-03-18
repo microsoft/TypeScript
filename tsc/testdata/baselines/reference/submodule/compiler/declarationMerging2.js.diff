@@ -1,0 +1,33 @@
+--- old.declarationMerging2.js
++++ new.declarationMerging2.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [a.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.A = void 0;
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        A.prototype.getF = function () { return this._f; };
+-        return A;
+-    }());
+-    exports.A = A;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.A = void 0;
++class A {
++    _f;
++    getF() { return this._f; }
++}
++exports.A = A;
+ //// [b.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

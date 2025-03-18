@@ -1,0 +1,31 @@
+--- old.ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.js
++++ new.ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.js
+@@= skipped -19, +19 lines =@@
+ //// [ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.js]
+ var A;
+ (function (A) {
+-    var Point = /** @class */ (function () {
+-        function Point() {
+-        }
+-        return Point;
+-    }());
++    class Point {
++        x;
++        y;
++    }
+     A.Point = Point;
+-    var Line = /** @class */ (function () {
+-        function Line(start, end) {
++    class Line {
++        start;
++        end;
++        constructor(start, end) {
+             this.start = start;
+             this.end = end;
+         }
+-        return Line;
+-    }());
++    }
+     function fromOrigin(p) {
+         return new Line({ x: 0, y: 0 }, p);
+     }

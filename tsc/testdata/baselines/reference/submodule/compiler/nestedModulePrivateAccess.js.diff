@@ -1,0 +1,13 @@
+--- old.nestedModulePrivateAccess.js
++++ new.nestedModulePrivateAccess.js
+@@= skipped -11, +11 lines =@@
+ var a;
+ (function (a) {
+     var x;
+-    var b;
++    let b;
+     (function (b) {
+-        var y = x; // should not be an error
++        var y = x;
+     })(b || (b = {}));
+ })(a || (a = {}));

@@ -1,0 +1,9 @@
+--- old.noCollisionThisExpressionAndLocalVarInFunction.js
++++ new.noCollisionThisExpressionAndLocalVarInFunction.js
+@@= skipped -12, +12 lines =@@
+ var console;
+ function x() {
+     var _this = 5;
+-    (function (x) { console.log(_this); });
++    x => { console.log(_this); };
+ }

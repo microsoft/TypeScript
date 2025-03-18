@@ -1,0 +1,11 @@
+--- old.deeplyNestedAssignabilityIssue.js
++++ new.deeplyNestedAssignabilityIssue.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [deeplyNestedAssignabilityIssue.js]
+-var x = {
++const x = {
+     something: {
+         another: {
+             more: {

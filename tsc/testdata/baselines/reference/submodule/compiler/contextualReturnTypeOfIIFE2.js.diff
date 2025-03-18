@@ -1,0 +1,12 @@
+--- old.contextualReturnTypeOfIIFE2.js
++++ new.contextualReturnTypeOfIIFE2.js
+@@= skipped -14, +14 lines =@@
+ 
+ //// [contextualReturnTypeOfIIFE2.js]
+ app.foo.bar = (function () {
+-    var someFun = function (arg) { };
+-    return { someFun: someFun };
++    const someFun = (arg) => { };
++    return { someFun };
+ })();
+ app.foo.bar.someFun(1);

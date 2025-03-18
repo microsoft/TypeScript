@@ -1,0 +1,36 @@
+--- old.internalAliasInitializedModule.js
++++ new.internalAliasInitializedModule.js
+@@= skipped -15, +15 lines =@@
+ //// [internalAliasInitializedModule.js]
+ var a;
+ (function (a) {
+-    var b;
++    let b;
+     (function (b) {
+-        var c = /** @class */ (function () {
+-            function c() {
+-            }
+-            return c;
+-        }());
++        class c {
++        }
+         b.c = c;
+     })(b = a.b || (a.b = {}));
+ })(a || (a = {}));
+@@= skipped -15, +12 lines =@@
+     var b = a.b;
+     c.x = new b.c();
+ })(c || (c = {}));
+-
+-
+-//// [internalAliasInitializedModule.d.ts]
+-declare namespace a {
+-    namespace b {
+-        class c {
+-        }
+-    }
+-}
+-declare namespace c {
+-    import b = a.b;
+-    var x: b.c;
+-}

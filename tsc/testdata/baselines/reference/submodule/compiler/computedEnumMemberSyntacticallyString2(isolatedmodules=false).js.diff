@@ -1,0 +1,40 @@
+--- old.computedEnumMemberSyntacticallyString2(isolatedmodules=false).js
++++ new.computedEnumMemberSyntacticallyString2(isolatedmodules=false).js
+@@= skipped -31, +31 lines =@@
+ const LOCAL = 'LOCAL';
+ var Foo;
+ (function (Foo) {
+-    Foo["A"] = "bar";
+-    Foo["B"] = "LOCAL";
+-    Foo["C"] = "LOCAL";
+-    Foo["D"] = "LOCALBAR";
+-    Foo[Foo["E1"] = (`${BAR}`)] = "E1";
+-    Foo[Foo["E2"] = `${BAR}`] = "E2";
+-    Foo["F"] = "bar";
+-    Foo["G"] = "2bar";
+-    Foo["H"] = "bar";
+-    Foo["I"] = "barbar";
+-    Foo["J"] = "bar";
++    Foo["A"] = `${BAR}`;
++    if (typeof Foo.A !== "string") Foo[Foo.A] = "A";
++    Foo["B"] = LOCAL;
++    if (typeof Foo.B !== "string") Foo[Foo.B] = "B";
++    Foo["C"] = Foo.B;
++    if (typeof Foo.C !== "string") Foo[Foo.C] = "C";
++    Foo["D"] = Foo.C + 'BAR';
++    if (typeof Foo.D !== "string") Foo[Foo.D] = "D";
++    Foo["E1"] = (`${BAR}`);
++    if (typeof Foo.E1 !== "string") Foo[Foo.E1] = "E1";
++    Foo["E2"] = `${BAR}`;
++    if (typeof Foo.E2 !== "string") Foo[Foo.E2] = "E2";
++    Foo["F"] = BAR;
++    if (typeof Foo.F !== "string") Foo[Foo.F] = "F";
++    Foo["G"] = 2 + BAR;
++    if (typeof Foo.G !== "string") Foo[Foo.G] = "G";
++    Foo["H"] = Foo.A;
++    if (typeof Foo.H !== "string") Foo[Foo.H] = "H";
++    Foo["I"] = Foo.H + BAR;
++    if (typeof Foo.I !== "string") Foo[Foo.I] = "I";
++    Foo["J"] = Foo.H;
++    if (typeof Foo.J !== "string") Foo[Foo.J] = "J";
+ })(Foo || (Foo = {}));

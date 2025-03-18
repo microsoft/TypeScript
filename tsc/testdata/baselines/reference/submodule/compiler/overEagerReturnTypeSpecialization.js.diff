@@ -1,0 +1,15 @@
+--- old.overEagerReturnTypeSpecialization.js
++++ new.overEagerReturnTypeSpecialization.js
+@@= skipped -16, +16 lines =@@
+  
+ 
+ //// [overEagerReturnTypeSpecialization.js]
+-//Note: Below simpler repro
+-var r1 = v1.func(function (num) { return num.toString(); }) // Correctly returns an I1<string>
+-    .func(function (str) { return str.length; }); // should error
+-var r2 = v1.func(function (num) { return num.toString(); }) // Correctly returns an I1<string>
+-    .func(function (str) { return str.length; }); // should be ok 
++var r1 = v1.func(num => num.toString())
++    .func(str => str.length);
++var r2 = v1.func(num => num.toString())
++    .func(str => str.length);

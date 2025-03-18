@@ -1,0 +1,10 @@
+--- old.thisInClassBodyStaticESNext.js
++++ new.thisInClassBodyStaticESNext.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [thisInClassBodyStaticESNext.js]
+-// all are allowed with es-compliant class field emit
+ class Foo {
+     x = this;
+     static t = this;

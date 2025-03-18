@@ -1,0 +1,18 @@
+--- old.tooManyTypeParameters1.js
++++ new.tooManyTypeParameters1.js
+@@= skipped -15, +15 lines =@@
+ //// [tooManyTypeParameters1.js]
+ function f() { }
+ f();
+-var x = function () { };
++var x = () => { };
+ x();
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ var c = new C();
+ var i;

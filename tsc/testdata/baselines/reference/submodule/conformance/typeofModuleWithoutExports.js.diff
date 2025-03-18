@@ -1,0 +1,16 @@
+--- old.typeofModuleWithoutExports.js
++++ new.typeofModuleWithoutExports.js
+@@= skipped -13, +13 lines =@@
+ var M;
+ (function (M) {
+     var x = 1;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
++    class C {
++        foo;
++    }
+ })(M || (M = {}));
+ var r;

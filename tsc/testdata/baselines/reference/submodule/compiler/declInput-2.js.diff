@@ -1,0 +1,77 @@
+--- old.declInput-2.js
++++ new.declInput-2.js
+@@= skipped -25, +25 lines =@@
+ //// [declInput-2.js]
+ var M;
+ (function (M) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    var E = /** @class */ (function () {
+-        function E() {
+-        }
+-        return E;
+-    }());
+-    M.E = E;
+-    var D = /** @class */ (function () {
+-        function D() {
+-        }
+-        D.prototype.m232 = function () { return null; };
+-        D.prototype.m242 = function () { return null; };
+-        D.prototype.m252 = function () { return null; }; // don't generate
+-        D.prototype.m26 = function (i) { };
+-        D.prototype.m262 = function (i) { };
+-        D.prototype.m3 = function () { return new C(); };
+-        return D;
+-    }());
+-    M.D = D;
+-})(M || (M = {}));
+-
+-
+-//// [declInput-2.d.ts]
+-declare namespace M {
+     class C {
+     }
+-    export class E {
++    class E {
+     }
+-    export interface I1 {
++    M.E = E;
++    class D {
++        c;
++        m1;
++        m2;
++        m22;
++        m23;
++        m24;
++        m25;
++        m232() { return null; }
++        m242() { return null; }
++        m252() { return null; }
++        m26(i) { }
++        m262(i) { }
++        m3() { return new C(); }
+     }
+-    interface I2 {
+-    }
+-    export class D {
+-        private c;
+-        m1: number;
+-        m2: string;
+-        m22: C;
+-        m23: E;
+-        m24: I1;
+-        m25: I2;
+-        m232(): E;
+-        m242(): I1;
+-        m252(): I2;
+-        m26(i: I1): void;
+-        m262(i: I2): void;
+-        m3(): C;
+-    }
+-    export {};
+-}
++    M.D = D;
++})(M || (M = {}));

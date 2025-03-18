@@ -1,0 +1,13 @@
+--- old.commentEmitOnParenthesizedAssertionInReturnStatement2.js
++++ new.commentEmitOnParenthesizedAssertionInReturnStatement2.js
+@@= skipped -18, +18 lines =@@
+         getThing: () => Promise.resolve('')
+     };
+     foo() {
+-        return (
+-        /* TODO: please refactor */ this.client
+-            .getThing());
++        return this.client
++            .getThing();
+     }
+ }

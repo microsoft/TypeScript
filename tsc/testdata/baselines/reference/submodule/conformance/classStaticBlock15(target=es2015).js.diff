@@ -1,0 +1,36 @@
+--- old.classStaticBlock15(target=es2015).js
++++ new.classStaticBlock15(target=es2015).js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [classStaticBlock15.js]
+-var _a, _C__1_1, _C__3, _C__5;
+ var _C__1;
+ class C {
++    static #_1 = 1;
++    static #_3 = 3;
++    static #_5 = 5;
++    static { }
++    static { }
++    static { }
++    static { }
++    static { }
++    static { }
+ }
+-_a = C;
+-_C__1_1 = { value: 1 };
+-_C__3 = { value: 3 };
+-_C__5 = { value: 5 };
+-(() => {
+-})();
+-(() => {
+-})();
+-(() => {
+-})();
+-(() => {
+-})();
+-(() => {
+-})();
+-(() => {
+-})();
+ console.log(_C__1);

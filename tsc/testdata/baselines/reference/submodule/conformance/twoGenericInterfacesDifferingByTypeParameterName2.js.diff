@@ -1,0 +1,7 @@
+--- old.twoGenericInterfacesDifferingByTypeParameterName2.js
++++ new.twoGenericInterfacesDifferingByTypeParameterName2.js
+@@= skipped -47, +47 lines =@@
+ 
+ 
+ //// [twoGenericInterfacesDifferingByTypeParameterName2.js]
+-// type parameter names are relevant when choosing whether to merge interface declarations

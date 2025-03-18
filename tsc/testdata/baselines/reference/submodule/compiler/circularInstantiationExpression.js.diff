@@ -1,0 +1,10 @@
+--- old.circularInstantiationExpression.js
++++ new.circularInstantiationExpression.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [circularInstantiationExpression.js]
+ foo("");
+-
+-
+-//// [circularInstantiationExpression.d.ts]
+-declare function foo<T>(t: T): typeof foo<T>;

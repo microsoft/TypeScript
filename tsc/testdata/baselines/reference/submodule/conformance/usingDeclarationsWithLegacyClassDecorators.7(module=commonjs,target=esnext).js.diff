@@ -1,0 +1,15 @@
+--- old.usingDeclarationsWithLegacyClassDecorators.7(module=commonjs,target=esnext).js
++++ new.usingDeclarationsWithLegacyClassDecorators.7(module=commonjs,target=esnext).js
+@@= skipped -14, +14 lines =@@
+ //// [usingDeclarationsWithLegacyClassDecorators.7.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-let C = class C {
+-};
+-C = __decorate([
+-    dec
+-], C);
++@dec
++class C {
++}
+ using after = null;

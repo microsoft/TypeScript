@@ -1,0 +1,8 @@
+--- old.privateNamesNotAllowedInVariableDeclarations.js
++++ new.privateNamesNotAllowedInVariableDeclarations.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [privateNamesNotAllowedInVariableDeclarations.js]
+-"use strict";
+ const #foo = 3;

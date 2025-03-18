@@ -1,0 +1,14 @@
+--- old.classIndexer4.js
++++ new.classIndexer4.js
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ //// [classIndexer4.js]
+-var C123 = /** @class */ (function () {
+-    function C123() {
++class C123 {
++    constructor() {
+     }
+-    return C123;
+-}());
++}

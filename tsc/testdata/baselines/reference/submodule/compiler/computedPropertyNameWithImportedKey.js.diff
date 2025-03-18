@@ -1,0 +1,20 @@
+--- old.computedPropertyNameWithImportedKey.js
++++ new.computedPropertyNameWithImportedKey.js
+@@= skipped -18, +18 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.fn = fn;
+-var a_1 = require("./a");
+-function fn(_a) {
+-    var _b = a_1.a, value = _a[_b];
++const a_1 = require("./a");
++function fn({ [a_1.a]: value }) {
+     return value;
+ }
+-
+-
+-//// [a.d.ts]
+-export declare const a: unique symbol;
+-//// [b.d.ts]
+-import { a } from "./a";
+-export declare function fn({ [a]: value }: any): string;

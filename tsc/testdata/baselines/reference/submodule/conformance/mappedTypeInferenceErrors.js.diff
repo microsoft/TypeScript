@@ -1,0 +1,18 @@
+--- old.mappedTypeInferenceErrors.js
++++ new.mappedTypeInferenceErrors.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [mappedTypeInferenceErrors.js]
+-"use strict";
+-// Repro from #19316
+ foo({
+     props: { x: 10, y: 20 },
+     computed: {
+-        bar: function () {
+-            var z = this.bar;
++        bar() {
++            let z = this.bar;
+             return 42;
+         },
+         baz: 42

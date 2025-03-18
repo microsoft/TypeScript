@@ -1,0 +1,8 @@
+--- old.exportAsNamespace_nonExistent.js
++++ new.exportAsNamespace_nonExistent.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [exportAsNamespace_nonExistent.js]
+-export * as ns from './nonexistent'; // Error
++export * as ns from './nonexistent';

@@ -1,0 +1,15 @@
+--- old.parserMemberFunctionDeclaration5.js
++++ new.parserMemberFunctionDeclaration5.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserMemberFunctionDeclaration5.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.Foo = function () { };
+-    return C;
+-}());
++class C {
++    Foo() { }
++}

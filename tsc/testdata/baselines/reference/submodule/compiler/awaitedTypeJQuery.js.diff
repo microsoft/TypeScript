@@ -1,0 +1,7 @@
+--- old.awaitedTypeJQuery.js
++++ new.awaitedTypeJQuery.js
+@@= skipped -127, +127 lines =@@
+ type T = Awaited<Promise3<string, Error, number, {}, string, boolean, any, Element, never>>; // string
+ 
+ //// [awaitedTypeJQuery.js]
+-/// <reference lib="dom" />

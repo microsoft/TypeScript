@@ -1,0 +1,10 @@
+--- old.assignFromNumberInterface2.js
++++ new.assignFromNumberInterface2.js
+@@= skipped -36, +36 lines =@@
+ a = b;
+ b = a;
+ b = x;
+-x = a; // expected error
+-x = b; // expected error
++x = a;
++x = b;

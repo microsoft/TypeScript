@@ -1,0 +1,21 @@
+--- old.privacyCheckTypeOfInvisibleModuleNoError.js
++++ new.privacyCheckTypeOfInvisibleModuleNoError.js
+@@= skipped -12, +12 lines =@@
+ //// [privacyCheckTypeOfInvisibleModuleNoError.js]
+ var Outer;
+ (function (Outer) {
+-    var Inner;
++    let Inner;
+     (function (Inner) {
+     })(Inner || (Inner = {}));
+ })(Outer || (Outer = {}));
+-
+-
+-//// [privacyCheckTypeOfInvisibleModuleNoError.d.ts]
+-declare namespace Outer {
+-    namespace Inner {
+-        var m: number;
+-    }
+-    export var f: typeof Inner;
+-    export {};
+-}

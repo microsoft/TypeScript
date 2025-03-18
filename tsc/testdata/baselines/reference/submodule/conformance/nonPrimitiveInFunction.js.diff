@@ -1,0 +1,23 @@
+--- old.nonPrimitiveInFunction.js
++++ new.nonPrimitiveInFunction.js
+@@= skipped -29, +29 lines =@@
+ var primitive;
+ takeObject(nonPrimitive);
+ nonPrimitive = returnObject();
+-takeObject(primitive); // expect error
+-primitive = returnObject(); // expect error
++takeObject(primitive);
++primitive = returnObject();
+ function returnError() {
+     var ret = 123;
+-    return ret; // expect error
++    return ret;
+ }
+-
+-
+-//// [nonPrimitiveInFunction.d.ts]
+-declare function takeObject(o: object): void;
+-declare function returnObject(): object;
+-declare var nonPrimitive: object;
+-declare var primitive: boolean;
+-declare function returnError(): object;

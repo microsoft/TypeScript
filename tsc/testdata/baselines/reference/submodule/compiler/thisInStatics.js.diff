@@ -1,0 +1,30 @@
+--- old.thisInStatics.js
++++ new.thisInStatics.js
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ //// [thisInStatics.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    static f() {
++        var y = this;
+     }
+-    C.f = function () {
+-        var y /*1*/ = this;
+-    };
+-    Object.defineProperty(C, "x", {
+-        get: function () {
+-            var y /*2*/ = this;
+-            return y;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++    static get x() {
++        var y = this;
++        return y;
++    }
++}

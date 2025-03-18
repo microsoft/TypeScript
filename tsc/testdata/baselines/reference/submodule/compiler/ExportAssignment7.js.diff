@@ -1,0 +1,14 @@
+--- old.ExportAssignment7.js
++++ new.ExportAssignment7.js
+@@= skipped -8, +8 lines =@@
+ //// [ExportAssignment7.js]
+ "use strict";
+ exports.C = void 0;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ module.exports = B;

@@ -1,0 +1,9 @@
+--- old.errorForBareSpecifierWithImplicitModuleResolutionNone.js
++++ new.errorForBareSpecifierWithImplicitModuleResolutionNone.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [errorForBareSpecifierWithImplicitModuleResolutionNone.js]
+-// This would be classed as moduleResolutionKind: Classic
+ import { thing } from "non-existent-module";
+ thing();

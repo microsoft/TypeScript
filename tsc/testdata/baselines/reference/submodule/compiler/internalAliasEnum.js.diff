@@ -1,0 +1,29 @@
+--- old.internalAliasEnum.js
++++ new.internalAliasEnum.js
+@@= skipped -17, +17 lines =@@
+ //// [internalAliasEnum.js]
+ var a;
+ (function (a) {
+-    var weekend;
++    let weekend;
+     (function (weekend) {
+         weekend[weekend["Friday"] = 0] = "Friday";
+         weekend[weekend["Saturday"] = 1] = "Saturday";
+@@= skipped -12, +12 lines =@@
+     var b = a.weekend;
+     c.bVal = b.Sunday;
+ })(c || (c = {}));
+-
+-
+-//// [internalAliasEnum.d.ts]
+-declare namespace a {
+-    enum weekend {
+-        Friday = 0,
+-        Saturday = 1,
+-        Sunday = 2
+-    }
+-}
+-declare namespace c {
+-    import b = a.weekend;
+-    var bVal: b;
+-}

@@ -1,0 +1,14 @@
+--- old.callOnClass.js
++++ new.callOnClass.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [callOnClass.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ var c = C();

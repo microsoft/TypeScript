@@ -1,0 +1,10 @@
+--- old.asyncFunctionDeclarationParameterEvaluation(target=es2017).js
++++ new.asyncFunctionDeclarationParameterEvaluation(target=es2017).js
+@@= skipped -27, +27 lines =@@
+ }
+ 
+ //// [asyncFunctionDeclarationParameterEvaluation.js]
+-// https://github.com/microsoft/TypeScript/issues/40410
+ async function f1(x, y = z) { }
+ async function f2({ [z]: x }) { }
+ async function f3(x = z) { return async () => arguments; }

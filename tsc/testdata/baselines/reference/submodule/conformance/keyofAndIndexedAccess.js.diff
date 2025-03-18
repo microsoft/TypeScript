@@ -1,0 +1,951 @@
+--- old.keyofAndIndexedAccess.js
++++ new.keyofAndIndexedAccess.js
+@@= skipped -660, +660 lines =@@
+ 
+ 
+ //// [keyofAndIndexedAccess.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+-        if (ar || !(i in from)) {
+-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+-            ar[i] = from[i];
+-        }
+-    }
+-    return to.concat(ar || Array.prototype.slice.call(from));
+-};
+-var Shape = /** @class */ (function () {
+-    function Shape() {
+-    }
+-    return Shape;
+-}());
+-var TaggedShape = /** @class */ (function (_super) {
+-    __extends(TaggedShape, _super);
+-    function TaggedShape() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return TaggedShape;
+-}(Shape));
+-var Item = /** @class */ (function () {
+-    function Item() {
+-    }
+-    return Item;
+-}());
+-var Options = /** @class */ (function () {
+-    function Options() {
+-    }
+-    return Options;
+-}());
++class Shape {
++    name;
++    width;
++    height;
++    visible;
++}
++class TaggedShape extends Shape {
++    tag;
++}
++class Item {
++    name;
++    price;
++}
++class Options {
++    visible;
++}
++var E;
++(function (E) {
++    E[E["A"] = 0] = "A";
++    E[E["B"] = 1] = "B";
++    E[E["C"] = 2] = "C";
++})(E || (E = {}));
+ function getProperty(obj, key) {
+     return obj[key];
+ }
+@@= skipped -53, +29 lines =@@
+     obj[key] = value;
+ }
+ function f10(shape) {
+-    var name = getProperty(shape, "name"); // string
+-    var widthOrHeight = getProperty(shape, cond ? "width" : "height"); // number
+-    var nameOrVisible = getProperty(shape, cond ? "name" : "visible"); // string | boolean
++    let name = getProperty(shape, "name");
++    let widthOrHeight = getProperty(shape, cond ? "width" : "height");
++    let nameOrVisible = getProperty(shape, cond ? "name" : "visible");
+     setProperty(shape, "name", "rectangle");
+     setProperty(shape, cond ? "width" : "height", 10);
+-    setProperty(shape, cond ? "name" : "visible", true); // Technically not safe
++    setProperty(shape, cond ? "name" : "visible", true);
+ }
+ function f11(a) {
+-    var len = getProperty(a, "length"); // number
++    let len = getProperty(a, "length");
+     setProperty(a, "length", len);
+ }
+ function f12(t) {
+-    var len = getProperty(t, "length");
+-    var s2 = getProperty(t, "0"); // Shape
+-    var b2 = getProperty(t, "1"); // boolean
++    let len = getProperty(t, "length");
++    let s2 = getProperty(t, "0");
++    let b2 = getProperty(t, "1");
+ }
+ function f13(foo, bar) {
+-    var x = getProperty(foo, "x"); // any
+-    var y = getProperty(foo, "100"); // any
+-    var z = getProperty(foo, bar); // any
++    let x = getProperty(foo, "x");
++    let y = getProperty(foo, "100");
++    let z = getProperty(foo, bar);
+ }
+-var Component = /** @class */ (function () {
+-    function Component() {
+-    }
+-    Component.prototype.getProperty = function (key) {
++class Component {
++    props;
++    getProperty(key) {
+         return this.props[key];
+-    };
+-    Component.prototype.setProperty = function (key, value) {
++    }
++    setProperty(key, value) {
+         this.props[key] = value;
+-    };
+-    return Component;
+-}());
++    }
++}
+ function f20(component) {
+-    var name = component.getProperty("name"); // string
+-    var widthOrHeight = component.getProperty(cond ? "width" : "height"); // number
+-    var nameOrVisible = component.getProperty(cond ? "name" : "visible"); // string | boolean
++    let name = component.getProperty("name");
++    let widthOrHeight = component.getProperty(cond ? "width" : "height");
++    let nameOrVisible = component.getProperty(cond ? "name" : "visible");
+     component.setProperty("name", "rectangle");
+     component.setProperty(cond ? "width" : "height", 10);
+-    component.setProperty(cond ? "name" : "visible", true); // Technically not safe
++    component.setProperty(cond ? "name" : "visible", true);
+ }
+ function pluck(array, key) {
+-    return array.map(function (x) { return x[key]; });
++    return array.map(x => x[key]);
+ }
+ function f30(shapes) {
+-    var names = pluck(shapes, "name"); // string[]
+-    var widths = pluck(shapes, "width"); // number[]
+-    var nameOrVisibles = pluck(shapes, cond ? "name" : "visible"); // (string | boolean)[]
++    let names = pluck(shapes, "name");
++    let widths = pluck(shapes, "width");
++    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible");
+ }
+ function f31(key) {
+-    var shape = { name: "foo", width: 5, height: 10, visible: true };
+-    return shape[key]; // Shape[K]
++    const shape = { name: "foo", width: 5, height: 10, visible: true };
++    return shape[key];
+ }
+ function f32(key) {
+-    var shape = { name: "foo", width: 5, height: 10, visible: true };
+-    return shape[key]; // Shape[K]
++    const shape = { name: "foo", width: 5, height: 10, visible: true };
++    return shape[key];
+ }
+ function f33(shape, key) {
+-    var name = getProperty(shape, "name");
+-    var prop = getProperty(shape, key);
++    let name = getProperty(shape, "name");
++    let prop = getProperty(shape, key);
+     return prop;
+ }
+ function f34(ts) {
+-    var tag1 = f33(ts, "tag");
+-    var tag2 = getProperty(ts, "tag");
++    let tag1 = f33(ts, "tag");
++    let tag2 = getProperty(ts, "tag");
+ }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-// Indexed access expressions have always permitted access to private and protected members.
+-// For consistency we also permit such access in indexed access types.
++class C {
++    x;
++    y;
++    z;
++}
+ function f40(c) {
+-    var x = c["x"];
+-    var y = c["y"];
+-    var z = c["z"];
++    let x = c["x"];
++    let y = c["y"];
++    let z = c["z"];
+ }
+ function f50(k, s) {
+-    var x1 = s;
+-    var x2 = k;
++    const x1 = s;
++    const x2 = k;
+ }
+ function f51(k, s) {
+-    var x1 = s;
+-    var x2 = k;
++    const x1 = s;
++    const x2 = k;
+ }
+ function f52(obj, k, s, n) {
+-    var x1 = obj[s];
+-    var x2 = obj[n];
+-    var x3 = obj[k];
++    const x1 = obj[s];
++    const x2 = obj[n];
++    const x3 = obj[k];
+ }
+ function f53(obj, k, s, n) {
+-    var x1 = obj[s];
+-    var x2 = obj[n];
+-    var x3 = obj[k];
++    const x1 = obj[s];
++    const x2 = obj[n];
++    const x3 = obj[k];
+ }
+ function f54(obj, key) {
+-    for (var s in obj[key]) {
++    for (let s in obj[key]) {
+     }
+-    var b = "foo" in obj[key];
++    const b = "foo" in obj[key];
+ }
+ function f55(obj, key) {
+-    for (var s in obj[key]) {
++    for (let s in obj[key]) {
+     }
+-    var b = "foo" in obj[key];
++    const b = "foo" in obj[key];
+ }
+ function f60(source, target) {
+-    for (var k in source) {
++    for (let k in source) {
+         target[k] = source[k];
+     }
+ }
+@@= skipped -116, +112 lines =@@
+     func('a', 'c');
+ }
+ function f71(func) {
+-    var x = func({ a: 1, b: "hello" }, { c: true });
+-    x.a; // number | undefined
+-    x.b; // string | undefined
+-    x.c; // boolean | undefined
++    let x = func({ a: 1, b: "hello" }, { c: true });
++    x.a;
++    x.b;
++    x.c;
+ }
+ function f72(func) {
+-    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+-    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+-    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
++    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');
++    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');
++    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');
+ }
+ function f73(func) {
+-    var a = func({ a: 1, b: "hello" }, { c: true }, 'a'); // number
+-    var b = func({ a: 1, b: "hello" }, { c: true }, 'b'); // string
+-    var c = func({ a: 1, b: "hello" }, { c: true }, 'c'); // boolean
++    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');
++    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');
++    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');
+ }
+ function f74(func) {
+-    var a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a'); // number
+-    var b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b'); // string | boolean
++    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');
++    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');
+ }
+ function f80(obj) {
+-    var a1 = obj.a; // { x: any }
+-    var a2 = obj['a']; // { x: any }
+-    var a3 = obj['a']; // T["a"]
+-    var x1 = obj.a.x; // any
+-    var x2 = obj['a']['x']; // any
+-    var x3 = obj['a']['x']; // T["a"]["x"]
++    let a1 = obj.a;
++    let a2 = obj['a'];
++    let a3 = obj['a'];
++    let x1 = obj.a.x;
++    let x2 = obj['a']['x'];
++    let x3 = obj['a']['x'];
+ }
+ function f81(obj) {
+     return obj['a']['x'];
+ }
+ function f82() {
+-    var x1 = f81({ a: { x: "hello" } }); // string
+-    var x2 = f81({ a: { x: 42 } }); // number
++    let x1 = f81({ a: { x: "hello" } });
++    let x2 = f81({ a: { x: 42 } });
+ }
+ function f83(obj, key) {
+     return obj[key]['x'];
+ }
+ function f84() {
+-    var x1 = f83({ foo: { x: "hello" } }, "foo"); // string
+-    var x2 = f83({ bar: { x: 42 } }, "bar"); // number
++    let x1 = f83({ foo: { x: "hello" } }, "foo");
++    let x2 = f83({ bar: { x: 42 } }, "bar");
+ }
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    C1.prototype.get = function (key) {
++class C1 {
++    x;
++    get(key) {
+         return this[key];
+-    };
+-    C1.prototype.set = function (key, value) {
++    }
++    set(key, value) {
+         this[key] = value;
+-    };
+-    C1.prototype.foo = function () {
+-        var x1 = this.x; // number
+-        var x2 = this["x"]; // number
+-        var x3 = this.get("x"); // this["x"]
+-        var x4 = getProperty(this, "x"); // this["x"]
++    }
++    foo() {
++        let x1 = this.x;
++        let x2 = this["x"];
++        let x3 = this.get("x");
++        let x4 = getProperty(this, "x");
+         this.x = 42;
+         this["x"] = 42;
+         this.set("x", 42);
+         setProperty(this, "x", 42);
+-    };
+-    return C1;
+-}());
++    }
++}
+ function f90(x1, x2, x3) {
+     x1 = x2;
+     x1 = x3;
+@@= skipped -74, +72 lines =@@
+     x3.length;
+ }
+ function f91(x, y, z) {
+-    var a;
++    let a;
+     a = x;
+     a = y;
+     a = z;
+ }
+ function f92(x, y, z) {
+-    var a;
++    let a;
+     a = x;
+     a = y;
+     a = z;
+ }
+-// Repros from #12011
+-var Base = /** @class */ (function () {
+-    function Base() {
+-    }
+-    Base.prototype.get = function (prop) {
++class Base {
++    get(prop) {
+         return this[prop];
+-    };
+-    Base.prototype.set = function (prop, value) {
++    }
++    set(prop, value) {
+         this[prop] = value;
+-    };
+-    return Base;
+-}());
+-var Person = /** @class */ (function (_super) {
+-    __extends(Person, _super);
+-    function Person(parts) {
+-        var _this = _super.call(this) || this;
+-        _this.set("parts", parts);
+-        return _this;
+     }
+-    Person.prototype.getParts = function () {
++}
++class Person extends Base {
++    parts;
++    constructor(parts) {
++        super();
++        this.set("parts", parts);
++    }
++    getParts() {
+         return this.get("parts");
+-    };
+-    return Person;
+-}(Base));
+-var OtherPerson = /** @class */ (function () {
+-    function OtherPerson(parts) {
++    }
++}
++class OtherPerson {
++    parts;
++    constructor(parts) {
+         setProperty(this, "parts", parts);
+     }
+-    OtherPerson.prototype.getParts = function () {
++    getParts() {
+         return getProperty(this, "parts");
+-    };
+-    return OtherPerson;
+-}());
+-function path(obj) {
+-    var keys = [];
+-    for (var _i = 1; _i < arguments.length; _i++) {
+-        keys[_i - 1] = arguments[_i];
+     }
+-    var result = obj;
+-    for (var _a = 0, keys_1 = keys; _a < keys_1.length; _a++) {
+-        var k = keys_1[_a];
++}
++function path(obj, ...keys) {
++    let result = obj;
++    for (let k of keys) {
+         result = result[k];
+     }
+     return result;
+ }
+ function f1(thing) {
+-    var x1 = path(thing, 'a'); // { x: number, y: string }
+-    var x2 = path(thing, 'a', 'y'); // string
+-    var x3 = path(thing, 'b'); // boolean
+-    var x4 = path.apply(void 0, __spreadArray([thing], ['a', 'x'], false)); // any
++    let x1 = path(thing, 'a');
++    let x2 = path(thing, 'a', 'y');
++    let x3 = path(thing, 'b');
++    let x4 = path(thing, ...['a', 'x']);
+ }
+-// Repro from comment in #12114
+-var assignTo2 = function (object, key1, key2) {
+-    return function (value) { return object[key1][key2] = value; };
+-};
+-var empty = one(function () { }); // inferred as {}, expected
+-var hashOfEmpty1 = on({ test: function () { } }); // {}
+-var hashOfEmpty2 = on({ test: function (x) { } }); // { test: boolean }
+-var c1 = new Component1({
++const assignTo2 = (object, key1, key2) => (value) => object[key1][key2] = value;
++var empty = one(() => { });
++var hashOfEmpty1 = on({ test: () => { } });
++var hashOfEmpty2 = on({ test: (x) => { } });
++let c1 = new Component1({
+     data: {
+         hello: ""
+     }
+ });
+ c1.get("hello");
+ function f(p) {
+-    var a;
+-    a[p].add; // any
++    let a;
++    a[p].add;
+ }
+-var result = dispatchMethod("someMethod", ["hello", 35]);
+-var MyThingy;
++let result = dispatchMethod("someMethod", ["hello", 35]);
++let MyThingy;
+ function addToMyThingy(key) {
+     MyThingy[key].push("a");
+ }
+ function onChangeGenericFunction(handler) {
+     handler.onChange('preset');
+ }
+-// Repro from #13285
+ function updateIds(obj, idFields, idMapping) {
+-    for (var _i = 0, idFields_1 = idFields; _i < idFields_1.length; _i++) {
+-        var idField = idFields_1[_i];
+-        var newId = idMapping[obj[idField]];
++    for (const idField of idFields) {
++        const newId = idMapping[obj[idField]];
+         if (newId) {
+             obj[idField] = newId;
+         }
+     }
+     return obj;
+ }
+-// Repro from #13285
+ function updateIds2(obj, key, stringMap) {
+     var x = obj[key];
+-    stringMap[x]; // Should be OK.
++    stringMap[x];
+ }
+-// Repro from #13604
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-var B = /** @class */ (function (_super) {
+-    __extends(B, _super);
+-    function B() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    B.prototype.f = function (p) {
++class A {
++    props;
++}
++class B extends A {
++    f(p) {
+         p.x;
+-    };
+-    return B;
+-}(A));
+-// Repro from #13749
+-var Form = /** @class */ (function () {
+-    function Form() {
+     }
+-    Form.prototype.set = function (prop, value) {
++}
++class Form {
++    childFormFactories;
++    set(prop, value) {
+         this.childFormFactories[prop](value);
+-    };
+-    return Form;
+-}());
+-// Repro from #13787
+-var SampleClass = /** @class */ (function () {
+-    function SampleClass(props) {
++    }
++}
++class SampleClass {
++    props;
++    constructor(props) {
+         this.props = Object.freeze(props);
+     }
+-    return SampleClass;
+-}());
+-var AnotherSampleClass = /** @class */ (function (_super) {
+-    __extends(AnotherSampleClass, _super);
+-    function AnotherSampleClass(props) {
+-        var foo = { foo: "bar" };
+-        return _super.call(this, merge(props, foo)) || this;
++}
++class AnotherSampleClass extends SampleClass {
++    constructor(props) {
++        const foo = { foo: "bar" };
++        super(merge(props, foo));
+     }
+-    AnotherSampleClass.prototype.brokenMethod = function () {
++    brokenMethod() {
+         this.props.foo.concat;
+-    };
+-    return AnotherSampleClass;
+-}(SampleClass));
++    }
++}
+ new AnotherSampleClass({});
+-// Positive repro from #17166
+ function f3(t, k, tk) {
+-    for (var key in t) {
+-        key = k; // ok, K ==> keyof T
+-        t[key] = tk; // ok, T[K] ==> T[keyof T]
++    for (let key in t) {
++        key = k;
++        t[key] = tk;
+     }
+ }
+ var Flag;
+@@= skipped -169, +137 lines =@@
+     take(o[k]);
+     take(o[k]);
+ }
+-// Repro from #23133
+-var Unbounded = /** @class */ (function () {
+-    function Unbounded() {
++class Unbounded {
++    foo(x) {
++        let y = x;
+     }
+-    Unbounded.prototype.foo = function (x) {
+-        var y = x;
+-    };
+-    return Unbounded;
+-}());
++}
+ function ff1(dd, k1, k2) {
+     return dd[k1][k2];
+ }
+ function ff2(dd, k1, k2) {
+-    var d = dd[k1];
++    const d = dd[k1];
+     return d[k2];
+ }
+-// Repro from #26409
+-var cf1 = function (t, k) {
+-    var s = t[k];
++const cf1 = (t, k) => {
++    const s = t[k];
+     t.cool;
+ };
+-var cf2 = function (t, k) {
+-    var s = t[k];
++const cf2 = (t, k) => {
++    const s = t[k];
+     t.cool;
+ };
+-
+-
+-//// [keyofAndIndexedAccess.d.ts]
+-declare class Shape {
+-    name: string;
+-    width: number;
+-    height: number;
+-    visible: boolean;
+-}
+-declare class TaggedShape extends Shape {
+-    tag: string;
+-}
+-declare class Item {
+-    name: string;
+-    price: number;
+-}
+-declare class Options {
+-    visible: "yes" | "no";
+-}
+-type Dictionary<T> = {
+-    [x: string]: T;
+-};
+-type NumericallyIndexed<T> = {
+-    [x: number]: T;
+-};
+-declare const enum E {
+-    A = 0,
+-    B = 1,
+-    C = 2
+-}
+-type K00 = keyof any;
+-type K01 = keyof string;
+-type K02 = keyof number;
+-type K03 = keyof boolean;
+-type K04 = keyof void;
+-type K05 = keyof undefined;
+-type K06 = keyof null;
+-type K07 = keyof never;
+-type K08 = keyof unknown;
+-type K10 = keyof Shape;
+-type K11 = keyof Shape[];
+-type K12 = keyof Dictionary<Shape>;
+-type K13 = keyof {};
+-type K14 = keyof Object;
+-type K15 = keyof E;
+-type K16 = keyof [string, number];
+-type K17 = keyof (Shape | Item);
+-type K18 = keyof (Shape & Item);
+-type K19 = keyof NumericallyIndexed<Shape>;
+-type KeyOf<T> = keyof T;
+-type K20 = KeyOf<Shape>;
+-type K21 = KeyOf<Dictionary<Shape>>;
+-type NAME = "name";
+-type WIDTH_OR_HEIGHT = "width" | "height";
+-type Q10 = Shape["name"];
+-type Q11 = Shape["width" | "height"];
+-type Q12 = Shape["name" | "visible"];
+-type Q20 = Shape[NAME];
+-type Q21 = Shape[WIDTH_OR_HEIGHT];
+-type Q30 = [string, number][0];
+-type Q31 = [string, number][1];
+-type Q32 = [string, number][number];
+-type Q33 = [string, number][E.A];
+-type Q34 = [string, number][E.B];
+-type Q35 = [string, number]["0"];
+-type Q36 = [string, number]["1"];
+-type Q40 = (Shape | Options)["visible"];
+-type Q41 = (Shape & Options)["visible"];
+-type Q50 = Dictionary<Shape>["howdy"];
+-type Q51 = Dictionary<Shape>[123];
+-type Q52 = Dictionary<Shape>[E.B];
+-declare let cond: boolean;
+-declare function getProperty<T, K extends keyof T>(obj: T, key: K): T[K];
+-declare function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]): void;
+-declare function f10(shape: Shape): void;
+-declare function f11(a: Shape[]): void;
+-declare function f12(t: [Shape, boolean]): void;
+-declare function f13(foo: any, bar: any): void;
+-declare class Component<PropType> {
+-    props: PropType;
+-    getProperty<K extends keyof PropType>(key: K): PropType[K];
+-    setProperty<K extends keyof PropType>(key: K, value: PropType[K]): void;
+-}
+-declare function f20(component: Component<Shape>): void;
+-declare function pluck<T, K extends keyof T>(array: T[], key: K): T[K][];
+-declare function f30(shapes: Shape[]): void;
+-declare function f31<K extends keyof Shape>(key: K): Shape[K];
+-declare function f32<K extends "width" | "height">(key: K): Shape[K];
+-declare function f33<S extends Shape, K extends keyof S>(shape: S, key: K): S[K];
+-declare function f34(ts: TaggedShape): void;
+-declare class C {
+-    x: string;
+-    protected y: string;
+-    private z;
+-}
+-declare function f40(c: C): void;
+-declare function f50<T>(k: keyof T, s: string): void;
+-declare function f51<T, K extends keyof T>(k: K, s: string): void;
+-declare function f52<T>(obj: {
+-    [x: string]: boolean;
+-}, k: Exclude<keyof T, symbol>, s: string, n: number): void;
+-declare function f53<T, K extends Exclude<keyof T, symbol>>(obj: {
+-    [x: string]: boolean;
+-}, k: K, s: string, n: number): void;
+-declare function f54<T>(obj: T, key: keyof T): void;
+-declare function f55<T, K extends keyof T>(obj: T, key: K): void;
+-declare function f60<T>(source: T, target: T): void;
+-declare function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void): void;
+-declare function f71(func: <T, U>(x: T, y: U) => Partial<T & U>): void;
+-declare function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]): void;
+-declare function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]): void;
+-declare function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]): void;
+-declare function f80<T extends {
+-    a: {
+-        x: any;
+-    };
+-}>(obj: T): void;
+-declare function f81<T extends {
+-    a: {
+-        x: any;
+-    };
+-}>(obj: T): T["a"]["x"];
+-declare function f82(): void;
+-declare function f83<T extends {
+-    [x: string]: {
+-        x: any;
+-    };
+-}, K extends keyof T>(obj: T, key: K): T[K]["x"];
+-declare function f84(): void;
+-declare class C1 {
+-    x: number;
+-    get<K extends keyof this>(key: K): this[K];
+-    set<K extends keyof this>(key: K, value: this[K]): void;
+-    foo(): void;
+-}
+-type S2 = {
+-    a: string;
+-    b: string;
+-};
+-declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]): void;
+-declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
+-declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
+-declare class Base {
+-    get<K extends keyof this>(prop: K): this[K];
+-    set<K extends keyof this>(prop: K, value: this[K]): void;
+-}
+-declare class Person extends Base {
+-    parts: number;
+-    constructor(parts: number);
+-    getParts(): this["parts"];
+-}
+-declare class OtherPerson {
+-    parts: number;
+-    constructor(parts: number);
+-    getParts(): this["parts"];
+-}
+-declare function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
+-declare function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
+-declare function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
+-declare function path(obj: any, ...keys: (string | number)[]): any;
+-type Thing = {
+-    a: {
+-        x: number;
+-        y: string;
+-    };
+-    b: boolean;
+-};
+-declare function f1(thing: Thing): void;
+-declare const assignTo2: <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2];
+-declare function one<T>(handler: (t: T) => void): T;
+-declare var empty: unknown;
+-type Handlers<T> = {
+-    [K in keyof T]: (t: T[K]) => void;
+-};
+-declare function on<T>(handlerHash: Handlers<T>): T;
+-declare var hashOfEmpty1: {
+-    test: unknown;
+-};
+-declare var hashOfEmpty2: {
+-    test: boolean;
+-};
+-interface Options1<Data, Computed> {
+-    data?: Data;
+-    computed?: Computed;
+-}
+-declare class Component1<Data, Computed> {
+-    constructor(options: Options1<Data, Computed>);
+-    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+-}
+-declare let c1: Component1<{
+-    hello: string;
+-}, unknown>;
+-interface Options2<Data, Computed> {
+-    data?: Data;
+-    computed?: Computed;
+-}
+-declare class Component2<Data, Computed> {
+-    constructor(options: Options2<Data, Computed>);
+-    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+-}
+-interface R {
+-    p: number;
+-}
+-declare function f<K extends keyof R>(p: K): void;
+-type MethodDescriptor = {
+-    name: string;
+-    args: any[];
+-    returnValue: any;
+-};
+-declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+-type SomeMethodDescriptor = {
+-    name: "someMethod";
+-    args: [string, number];
+-    returnValue: string[];
+-};
+-declare let result: string[];
+-type KeyTypes = "a" | "b";
+-declare let MyThingy: {
+-    [key in KeyTypes]: string[];
+-};
+-declare function addToMyThingy<S extends KeyTypes>(key: S): void;
+-type Handler<T> = {
+-    onChange: (name: keyof T) => void;
+-};
+-declare function onChangeGenericFunction<T>(handler: Handler<T & {
+-    preset: number;
+-}>): void;
+-declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: Partial<Record<T[K], T[K]>>): Record<K, string>;
+-declare function updateIds2<T extends {
+-    [x: string]: string;
+-}, K extends keyof T>(obj: T, key: K, stringMap: {
+-    [oldId: string]: string;
+-}): void;
+-declare function head<T extends Array<any>>(list: T): T[0];
+-declare class A<T> {
+-    props: T & {
+-        foo: string;
+-    };
+-}
+-declare class B extends A<{
+-    x: number;
+-}> {
+-    f(p: this["props"]): void;
+-}
+-declare class Form<T> {
+-    private childFormFactories;
+-    set<K extends keyof T>(prop: K, value: T[K]): void;
+-}
+-declare class SampleClass<P> {
+-    props: Readonly<P>;
+-    constructor(props: P);
+-}
+-interface Foo {
+-    foo: string;
+-}
+-declare function merge<T, U>(obj1: T, obj2: U): T & U;
+-declare class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+-    constructor(props: T);
+-    brokenMethod(): void;
+-}
+-declare function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void;
+-type Predicates<TaggedRecord> = {
+-    [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T];
+-};
+-type Example<T extends {
+-    [K in keyof T]: {
+-        prop: any;
+-    };
+-}> = {
+-    [K in keyof T]: T[K]["prop"];
+-};
+-type Result = Example<{
+-    a: {
+-        prop: string;
+-    };
+-    b: {
+-        prop: number;
+-    };
+-}>;
+-type Helper2<T> = {
+-    [K in keyof T]: Extract<T[K], {
+-        prop: any;
+-    }>;
+-};
+-type Example2<T> = {
+-    [K in keyof Helper2<T>]: Helper2<T>[K]["prop"];
+-};
+-type Result2 = Example2<{
+-    1: {
+-        prop: string;
+-    };
+-    2: {
+-        prop: number;
+-    };
+-}>;
+-type DBBoolTable<K extends string> = {
+-    [k in K]: 0 | 1;
+-};
+-declare enum Flag {
+-    FLAG_1 = "flag_1",
+-    FLAG_2 = "flag_2"
+-}
+-type SimpleDBRecord<Flag extends string> = {
+-    staticField: number;
+-} & DBBoolTable<Flag>;
+-declare function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]): SimpleDBRecord<Flag>[Flag];
+-type DynamicDBRecord<Flag extends string> = ({
+-    dynamicField: number;
+-} | {
+-    dynamicField: string;
+-}) & DBBoolTable<Flag>;
+-declare function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]): DynamicDBRecord<Flag>[Flag];
+-interface I {
+-    foo: string;
+-}
+-declare function take<T>(p: T): void;
+-declare function fn<T extends I, K extends keyof T>(o: T, k: K): void;
+-declare class Unbounded<T> {
+-    foo(x: T[keyof T]): void;
+-}
+-interface I7 {
+-    x: any;
+-}
+-type Foo7<T extends number> = T;
+-declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+-type Dict<T extends string> = {
+-    [key in T]: number;
+-};
+-type DictDict<V extends string, T extends string> = {
+-    [key in V]: Dict<T>;
+-};
+-declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+-declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+-declare const cf1: <T extends { [P in K]: string; } & {
+-    cool: string;
+-}, K extends keyof T>(t: T, k: K) => void;
+-declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;

@@ -1,0 +1,24 @@
+--- old.blockScopedFunctionDeclarationInStrictClass.js
++++ new.blockScopedFunctionDeclarationInStrictClass.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [blockScopedFunctionDeclarationInStrictClass.js]
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    c.prototype.method = function () {
++class c {
++    method() {
+         if (true) {
+             function foo() { }
+-            foo(); // ok
++            foo();
+         }
+-        foo(); // not ok
+-    };
+-    return c;
+-}());
++        foo();
++    }
++}

@@ -1,0 +1,51 @@
+--- old.systemModuleTargetES6.js
++++ new.systemModuleTargetES6.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [systemModuleTargetES6.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var MyClass, MyClass2;
+-    var __moduleName = context_1 && context_1.id;
+-    function myFunction() {
+-        return new MyClass();
+-    }
+-    exports_1("myFunction", myFunction);
+-    function myFunction2() {
+-        return new MyClass2();
+-    }
+-    exports_1("myFunction2", myFunction2);
+-    return {
+-        setters: [],
+-        execute: function () {
+-            MyClass = class MyClass {
+-            };
+-            exports_1("MyClass", MyClass);
+-            MyClass2 = class MyClass2 {
+-                static getInstance() { return MyClass2.value; }
+-            };
+-            exports_1("MyClass2", MyClass2);
+-            MyClass2.value = 42;
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.MyClass2 = exports.MyClass = void 0;
++exports.myFunction = myFunction;
++exports.myFunction2 = myFunction2;
++class MyClass {
++}
++exports.MyClass = MyClass;
++class MyClass2 {
++    static value = 42;
++    static getInstance() { return MyClass2.value; }
++}
++exports.MyClass2 = MyClass2;
++function myFunction() {
++    return new MyClass();
++}
++function myFunction2() {
++    return new MyClass2();
++}

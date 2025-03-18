@@ -1,0 +1,19 @@
+--- old.trailingCommasInGetter.js
++++ new.trailingCommasInGetter.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [trailingCommasInGetter.js]
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    Object.defineProperty(X.prototype, "x", {
+-        get: function () { return 0; },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return X;
+-}());
++class X {
++    get x() { return 0; }
++}

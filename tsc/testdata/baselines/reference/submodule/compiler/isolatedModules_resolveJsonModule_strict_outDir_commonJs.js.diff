@@ -1,0 +1,11 @@
+--- old.isolatedModules_resolveJsonModule_strict_outDir_commonJs.js
++++ new.isolatedModules_resolveJsonModule_strict_outDir_commonJs.js
+@@= skipped -6, +6 lines =@@
+ {}
+ 
+ 
+-//// [j.json]
+-{}
+ //// [a.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });

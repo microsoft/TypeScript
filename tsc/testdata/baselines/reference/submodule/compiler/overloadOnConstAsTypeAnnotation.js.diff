@@ -1,0 +1,8 @@
+--- old.overloadOnConstAsTypeAnnotation.js
++++ new.overloadOnConstAsTypeAnnotation.js
+@@= skipped -3, +3 lines =@@
+ var f: (x: 'hi') => number = (x: 'hi') => { return 1; };
+ 
+ //// [overloadOnConstAsTypeAnnotation.js]
+-var f = function (x) { return 1; };
++var f = (x) => { return 1; };

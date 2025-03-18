@@ -1,0 +1,24 @@
+--- old.sourceMapValidationImport.js
++++ new.sourceMapValidationImport.js
+@@= skipped -12, +12 lines =@@
+ //// [sourceMapValidationImport.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.b = exports.m = void 0;
++exports.m = void 0;
+ var m;
+ (function (m) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
++    class c {
++    }
+     m.c = c;
+ })(m || (exports.m = m = {}));
+-var a = m.c;
+-exports.b = m.c;
+ var x = new a();
+ var y = new exports.b();
+-//# sourceMappingURL=sourceMapValidationImport.js.map

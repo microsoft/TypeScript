@@ -438,12 +438,12 @@ func (tx *RuntimeSyntaxTransformer) transformEnumMember(
 		case jsnum.Number:
 			hasNumericInitializer = true
 			*autoValue = value
-			expression = constantExpression(value, tx.factory) // TODO: preserve original expression after Strada migration
+			expression = core.Coalesce(constantExpression(value, tx.factory), expression) // TODO: preserve original expression after Strada migration
 			tx.cacheEnumMemberValue(enum.AsNode(), memberName, result)
 		case string:
 			hasStringInitializer = true
 			*autoValue = jsnum.NaN()
-			expression = constantExpression(value, tx.factory) // TODO: preserve original expression after Strada migration
+			expression = core.Coalesce(constantExpression(value, tx.factory), expression) // TODO: preserve original expression after Strada migration
 			tx.cacheEnumMemberValue(enum.AsNode(), memberName, result)
 		default:
 			*autoValue = jsnum.NaN()
@@ -715,7 +715,10 @@ func (tx *RuntimeSyntaxTransformer) visitFunctionDeclaration(node *ast.FunctionD
 			tx.visitor.VisitNode(node.Body),
 		)
 		export := tx.createExportStatementForDeclaration(node.AsNode())
-		return tx.factory.NewSyntaxList([]*ast.Node{updated, export})
+		if export != nil {
+			return tx.factory.NewSyntaxList([]*ast.Node{updated, export})
+		}
+		return updated
 	}
 	return tx.visitor.VisitEachChild(node.AsNode())
 }
@@ -771,7 +774,9 @@ func (tx *RuntimeSyntaxTransformer) visitClassDeclaration(node *ast.ClassDeclara
 	updated := tx.factory.UpdateClassDeclaration(node, modifiers, name, nil /*typeParameters*/, heritageClauses, members)
 	if exported {
 		export := tx.createExportStatementForDeclaration(node.AsNode())
-		return tx.factory.NewSyntaxList([]*ast.Node{updated, export})
+		if export != nil {
+			return tx.factory.NewSyntaxList([]*ast.Node{updated, export})
+		}
 	}
 	return updated
 }
@@ -1017,7 +1022,7 @@ func (tx *RuntimeSyntaxTransformer) visitExpressionIdentifier(node *ast.Identifi
 	if (tx.currentEnum != nil || tx.currentNamespace != nil) && !isGeneratedIdentifier(tx.emitContext, node) && !isLocalName(tx.emitContext, node) {
 		location := tx.emitContext.MostOriginal(node.AsNode())
 		if tx.resolver == nil {
-			tx.resolver = binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+			tx.resolver = binder.NewReferenceResolver(tx.compilerOptions, binder.ReferenceResolverHooks{})
 		}
 		container := tx.resolver.GetReferencedExportContainer(location, false /*prefixLocals*/)
 		if container != nil && (ast.IsEnumDeclaration(container) || ast.IsModuleDeclaration(container)) && container.Contains(location) {

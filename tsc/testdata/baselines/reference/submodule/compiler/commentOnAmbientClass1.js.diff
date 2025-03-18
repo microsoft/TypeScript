@@ -1,0 +1,12 @@
+--- old.commentOnAmbientClass1.js
++++ new.commentOnAmbientClass1.js
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ //// [a.js]
+-/*!=========
+-    Keep this pinned comment
+-   =========
+-*/
+ //// [b.js]
+-///<reference path="a.ts"/>

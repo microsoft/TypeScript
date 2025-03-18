@@ -1,0 +1,10 @@
+--- old.asyncSetter_es6.js
++++ new.asyncSetter_es6.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [asyncSetter_es6.js]
+ class C {
+-    set foo(value) {
++    async set foo(value) {
+     }
+ }

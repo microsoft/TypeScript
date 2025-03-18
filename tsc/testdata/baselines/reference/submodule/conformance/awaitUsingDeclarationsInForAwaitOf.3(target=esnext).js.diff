@@ -1,0 +1,10 @@
+--- old.awaitUsingDeclarationsInForAwaitOf.3(target=esnext).js
++++ new.awaitUsingDeclarationsInForAwaitOf.3(target=esnext).js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [awaitUsingDeclarationsInForAwaitOf.3.js]
+-// https://github.com/microsoft/TypeScript/pull/55558#issuecomment-1817595357
+ for await (await using  of x)
+     ;
+ export async function test() {

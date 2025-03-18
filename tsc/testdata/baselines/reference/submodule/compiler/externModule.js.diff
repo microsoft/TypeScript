@@ -1,0 +1,17 @@
+--- old.externModule.js
++++ new.externModule.js
+@@= skipped -44, +44 lines =@@
+ declare;
+ module;
+ {
+-    var XDate = /** @class */ (function () {
+-        function XDate() {
+-        }
+-        return XDate;
+-    }());
+-    export { XDate };
++    export class XDate {
++    }
+ }
+ var d = new XDate();
+ d.getDay();

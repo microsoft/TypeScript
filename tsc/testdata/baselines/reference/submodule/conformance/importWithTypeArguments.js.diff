@@ -1,0 +1,8 @@
+--- old.importWithTypeArguments.js
++++ new.importWithTypeArguments.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [importWithTypeArguments.js]
+ import;
+-var a = (import);
++const a = import;

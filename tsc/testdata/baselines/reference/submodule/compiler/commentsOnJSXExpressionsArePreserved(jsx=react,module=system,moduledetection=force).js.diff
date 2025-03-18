@@ -1,0 +1,36 @@
+--- old.commentsOnJSXExpressionsArePreserved(jsx=react,module=system,moduledetection=force).js
++++ new.commentsOnJSXExpressionsArePreserved(jsx=react,module=system,moduledetection=force).js
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ //// [commentsOnJSXExpressionsArePreserved.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var Component;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            Component = /** @class */ (function () {
+-                function Component() {
+-                }
+-                Component.prototype.render = function () {
+-                    return React.createElement("div", null, null /* preserved */);
+-                };
+-                return Component;
+-            }());
+-        }
+-    };
+-});
++class Component {
++    render() {
++        return <div>
++            
++            {null}
++            
++            
++            
++            
++        </div>;
++    }
++}

@@ -1,0 +1,15 @@
+--- old.asyncArrowFunction10_es5.js
++++ new.asyncArrowFunction10_es5.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [asyncArrowFunction10_es5.js]
+-var _this = this;
+-var foo = function () { return __awaiter(_this, void 0, void 0, function () {
++var foo = async () => {
+     var v;
+-    return __generator(this, function (_a) {
+-        return [2 /*return*/];
+-    });
+-}); };
++};

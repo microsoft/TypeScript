@@ -1,0 +1,22 @@
+--- old.unknownSymbolInGenericReturnType.js
++++ new.unknownSymbolInGenericReturnType.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [unknownSymbolInGenericReturnType.js]
+-var Linq = /** @class */ (function () {
+-    function Linq() {
+-    }
+-    Linq.select = function (values, func) {
++class Linq {
++    static select(values, func) {
+         var result = new Array(values.length);
+         for (var i = 0; i < values.length; i++) {
+             result[i] = func(values[i]);
+         }
+         return result;
+-    };
+-    return Linq;
+-}());
++    }
++}

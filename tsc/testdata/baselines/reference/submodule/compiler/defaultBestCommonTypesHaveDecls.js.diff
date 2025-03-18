@@ -1,0 +1,13 @@
+--- old.defaultBestCommonTypesHaveDecls.js
++++ new.defaultBestCommonTypesHaveDecls.js
+@@= skipped -22, +22 lines =@@
+ var obj2;
+ obj2.length;
+ function concat(x, y) { return null; }
+-var result = concat(1, ""); // error
++var result = concat(1, "");
+ var elementCount = result.length;
+ function concat2(x, y) { return null; }
+-var result2 = concat2(1, ""); // result2 will be number|string
++var result2 = concat2(1, "");
+ var elementCount2 = result.length;

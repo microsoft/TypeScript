@@ -1,0 +1,16 @@
+--- old.exportEqualNamespaces.js
++++ new.exportEqualNamespaces.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [exportEqualNamespaces.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var x = 5;
+-    var server = new Date();
+-    return server;
+-});
++"use strict";
++var x = 5;
++var server = new Date();
++module.exports = server;

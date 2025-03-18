@@ -1,0 +1,21 @@
+--- old.weakTypeAndPrimitiveNarrowing.js
++++ new.weakTypeAndPrimitiveNarrowing.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [weakTypeAndPrimitiveNarrowing.js]
+-"use strict";
+-var g = function (arg) {
++const g = (arg) => {
+     if (arg === 'A') {
+         arg;
+     }
+@@= skipped -9, +8 lines =@@
+         arg;
+     }
+ };
+-var h = function (arg) {
++const h = (arg) => {
+     if (arg === 'A') {
+         arg;
+     }

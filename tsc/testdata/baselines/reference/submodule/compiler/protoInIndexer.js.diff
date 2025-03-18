@@ -1,0 +1,16 @@
+--- old.protoInIndexer.js
++++ new.protoInIndexer.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [protoInIndexer.js]
+-var X = /** @class */ (function () {
+-    function X() {
+-        this['__proto__'] = null; // used to cause ICE
++class X {
++    constructor() {
++        this['__proto__'] = null;
+     }
+-    return X;
+-}());
++}

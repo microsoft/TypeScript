@@ -1,0 +1,9 @@
+--- old.commentsPropertySignature1.js
++++ new.commentsPropertySignature1.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [commentsPropertySignature1.js]
+ var a = {
+-    /** own x*/
+     x: 0
+ };

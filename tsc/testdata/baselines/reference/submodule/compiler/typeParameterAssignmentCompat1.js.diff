@@ -1,0 +1,26 @@
+--- old.typeParameterAssignmentCompat1.js
++++ new.typeParameterAssignmentCompat1.js
+@@= skipped -24, +24 lines =@@
+ function f() {
+     var x;
+     var y;
+-    x = y; // should be an error
++    x = y;
+     return x;
+ }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.f = function () {
++class C {
++    f() {
+         var x;
+         var y;
+-        x = y; // should be an error
++        x = y;
+         return x;
+-    };
+-    return C;
+-}());
++    }
++}

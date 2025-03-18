@@ -1,0 +1,11 @@
+--- old.limitDeepInstantiations.js
++++ new.limitDeepInstantiations.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [limitDeepInstantiations.js]
+-// Repro from #14837
+-var f1;
+-var f2;
++let f1;
++let f2;

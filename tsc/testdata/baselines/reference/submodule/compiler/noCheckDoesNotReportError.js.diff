@@ -1,0 +1,15 @@
+--- old.noCheckDoesNotReportError.js
++++ new.noCheckDoesNotReportError.js
+@@= skipped -3, +3 lines =@@
+ export const a: number = "not ok";
+ 
+ 
+-
+-
+-//// [noCheckDoesNotReportError.d.ts]
+-export declare const a: number;
++//// [noCheckDoesNotReportError.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.a = void 0;
++exports.a = "not ok";

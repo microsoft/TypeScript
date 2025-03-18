@@ -1,0 +1,37 @@
+--- old.reverseMappedTypeDeepDeclarationEmit.js
++++ new.reverseMappedTypeDeepDeclarationEmit.js
+@@= skipped -50, +50 lines =@@
+         },
+     }
+ });
+-
+-
+-//// [reverseMappedTypeDeepDeclarationEmit.d.ts]
+-export type Validator<T> = NativeTypeValidator<T> | ObjectValidator<T>;
+-export type NativeTypeValidator<T> = (n: any) => T | undefined;
+-export type ObjectValidator<O> = {
+-    [K in keyof O]: Validator<O[K]>;
+-};
+-export declare const SimpleStringValidator: NativeTypeValidator<string>;
+-export declare const ObjValidator: <V>(validatorObj: ObjectValidator<V>) => (o: any) => V;
+-export declare const test: {
+-    Test: {
+-        Test1: {
+-            Test2: NativeTypeValidator<string>;
+-        };
+-    };
+-};
+-export declare const validatorFunc: (o: any) => {
+-    Test: {
+-        Test1: {
+-            Test2: string;
+-        };
+-    };
+-};
+-export declare const outputExample: {
+-    Test: {
+-        Test1: {
+-            Test2: string;
+-        };
+-    };
+-};

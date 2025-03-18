@@ -1,0 +1,23 @@
+--- old.emitSuperCallBeforeEmitParameterPropertyDeclaration1ES6.js
++++ new.emitSuperCallBeforeEmitParameterPropertyDeclaration1ES6.js
+@@= skipped -16, +16 lines =@@
+ 
+ //// [emitSuperCallBeforeEmitParameterPropertyDeclaration1ES6.js]
+ class A {
+-    constructor() {
+-        this.blub = 6;
+-    }
++    blub = 6;
+ }
+ class B extends A {
++    x;
+     constructor(x) {
+         "use strict";
+         'someStringForEgngInject';
+-        super();
++        "use strict";
++        'someStringForEgngInject';
+         this.x = x;
++        super();
+     }
+ }

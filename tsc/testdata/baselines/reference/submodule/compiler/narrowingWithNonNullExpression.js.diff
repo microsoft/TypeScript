@@ -1,0 +1,11 @@
+--- old.narrowingWithNonNullExpression.js
++++ new.narrowingWithNonNullExpression.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [narrowingWithNonNullExpression.js]
+-var m = ''.match('');
++const m = ''.match('');
+ m && m[0];
+-(m === null || m === void 0 ? void 0 : m[0]) && m[0];
++m?.[0] && m[0];

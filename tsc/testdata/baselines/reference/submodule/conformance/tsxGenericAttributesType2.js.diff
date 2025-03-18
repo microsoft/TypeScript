@@ -1,0 +1,12 @@
+--- old.tsxGenericAttributesType2.js
++++ new.tsxGenericAttributesType2.js
+@@= skipped -9, +9 lines =@@
+ //// [file.jsx]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var React = require("react");
+-var decorator4 = function (Component) {
+-    return function (props) { return <Component {...props} y={"blah"}></Component>; };
++const decorator4 = function (Component) {
++    return (props) => <Component {...props} y={"blah"}></Component>;
+ };

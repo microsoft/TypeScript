@@ -1,0 +1,16 @@
+--- old.es6ImportEqualsExportModuleEs2015Error.js
++++ new.es6ImportEqualsExportModuleEs2015Error.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [a.js]
+-var a = /** @class */ (function () {
+-    function a() {
+-    }
+-    return a;
+-}());
++class a {
++}
+ export {};
+ //// [main.js]
+ import * as a from "./a";

@@ -1,0 +1,12 @@
+--- old.contextuallyTypeLogicalAnd03.js
++++ new.contextuallyTypeLogicalAnd03.js
+@@= skipped -6, +6 lines =@@
+ x = (a => a) && (b => b);
+ 
+ //// [contextuallyTypeLogicalAnd03.js]
+-var x;
+-var y = true;
+-x = (function (a) { return a; }) && (function (b) { return b; });
++let x;
++let y = true;
++x = (a => a) && (b => b);

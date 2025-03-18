@@ -1,0 +1,22 @@
+--- old.mappedTypeGenericInstantiationPreservesInlineForm.js
++++ new.mappedTypeGenericInstantiationPreservesInlineForm.js
+@@= skipped -11, +11 lines =@@
+ }) {};
+ 
+ 
+-
+-
+-//// [mappedTypeGenericInstantiationPreservesInlineForm.d.ts]
+-export declare const test1: <T = Record<string, never>>(schema: { [K in keyof Required<T>]: T[K]; }) => void;
+-export declare function test2<T = Record<string, never>>(schema: {
+-    [K in keyof Required<T>]: T[K];
+-}): void;
++//// [mappedTypeGenericInstantiationPreservesInlineForm.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.test1 = void 0;
++exports.test2 = test2;
++const test1 = (schema) => { };
++exports.test1 = test1;
++function test2(schema) { }
++;

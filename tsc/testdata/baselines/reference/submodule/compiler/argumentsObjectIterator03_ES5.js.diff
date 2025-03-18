@@ -1,0 +1,10 @@
+--- old.argumentsObjectIterator03_ES5.js
++++ new.argumentsObjectIterator03_ES5.js
+@@= skipped -10, +10 lines =@@
+ 
+ //// [argumentsObjectIterator03_ES5.js]
+ function asReversedTuple(a, b, c) {
+-    var x = arguments[0], y = arguments[1], z = arguments[2];
++    let [x, y, z] = arguments;
+     return [z, y, x];
+ }

@@ -1,0 +1,14 @@
+--- old.commentsBeforeVariableStatement1.js
++++ new.commentsBeforeVariableStatement1.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [commentsBeforeVariableStatement1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.b = void 0;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.b = void 0;

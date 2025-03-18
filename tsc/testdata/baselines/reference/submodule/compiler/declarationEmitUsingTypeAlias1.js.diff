@@ -1,0 +1,19 @@
+--- old.declarationEmitUsingTypeAlias1.js
++++ new.declarationEmitUsingTypeAlias1.js
+@@= skipped -27, +27 lines =@@
+ };
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.bar = exports.foo = void 0;
+-const foo = (thing) => {
++export const foo = (thing) => {
+     return thing;
+ };
+-exports.foo = foo;
+-const bar = (thing) => {
++export const bar = (thing) => {
+     return thing.arg;
+ };
+-exports.bar = bar;

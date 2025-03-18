@@ -1,0 +1,29 @@
+--- old.commentsEnums.js
++++ new.commentsEnums.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [commentsEnums.js]
+-/** Enum of colors*/
+ var Colors;
+ (function (Colors) {
+-    /** Fancy name for 'blue'*/
+-    Colors[Colors["Cornflower"] = 0] = "Cornflower"; /* blue */
+-    /** Fancy name for 'pink'*/
++    Colors[Colors["Cornflower"] = 0] = "Cornflower";
+     Colors[Colors["FancyPink"] = 1] = "FancyPink";
+-})(Colors || (Colors = {})); // trailing comment
++})(Colors || (Colors = {}));
+ var x = Colors.Cornflower;
+ x = Colors.FancyPink;
+-
+-
+-//// [commentsEnums.d.ts]
+-/** Enum of colors*/
+-declare enum Colors {
+-    /** Fancy name for 'blue'*/
+-    Cornflower = 0,
+-    /** Fancy name for 'pink'*/
+-    FancyPink = 1
+-}
+-declare var x: Colors;

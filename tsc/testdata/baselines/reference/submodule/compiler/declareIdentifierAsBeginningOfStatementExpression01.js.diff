@@ -1,0 +1,15 @@
+--- old.declareIdentifierAsBeginningOfStatementExpression01.js
++++ new.declareIdentifierAsBeginningOfStatementExpression01.js
+@@= skipped -8, +8 lines =@@
+ declare instanceof C;
+ 
+ //// [declareIdentifierAsBeginningOfStatementExpression01.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ var declare;
+ declare instanceof C;

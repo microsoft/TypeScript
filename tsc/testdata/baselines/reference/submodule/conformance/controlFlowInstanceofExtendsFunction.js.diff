@@ -1,0 +1,37 @@
+--- old.controlFlowInstanceofExtendsFunction.js
++++ new.controlFlowInstanceofExtendsFunction.js
+@@= skipped -40, +40 lines =@@
+ Function.prototype.now = function () {
+     return "now";
+ };
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    X.now = function () {
++class X {
++    static now() {
+         return {};
+-    };
+-    X.prototype.why = function () {
+-    };
+-    return X;
+-}());
+-var Y = /** @class */ (function () {
+-    function Y() {
+     }
+-    return Y;
+-}());
+-console.log(X.now()); // works as expected
+-console.log(Y.now()); // works as expected
++    why() {
++    }
++}
++class Y {
++}
++console.log(X.now());
++console.log(Y.now());
+ exports.x = Math.random() > 0.5 ? new X() : 1;
+ if (exports.x instanceof X) {
+-    exports.x.why(); // should compile
++    exports.x.why();
+ }

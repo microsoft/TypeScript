@@ -1,0 +1,15 @@
+--- old.parserParameterList16.js
++++ new.parserParameterList16.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [parserParameterList16.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function (a, b) { };
+-    return C;
+-}());
++class C {
++    foo(a, b) { }
++}

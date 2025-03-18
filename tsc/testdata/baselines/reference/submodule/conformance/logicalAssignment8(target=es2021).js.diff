@@ -1,0 +1,10 @@
+--- old.logicalAssignment8(target=es2021).js
++++ new.logicalAssignment8(target=es2021).js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [logicalAssignment8.js]
+-"use strict";
+ function foo1(results) {
+     (results ||= bar?.value ?? []).push(100);
+ }

@@ -1,0 +1,203 @@
+--- old.mappedTypeErrors.js
++++ new.mappedTypeErrors.js
+@@= skipped -157, +157 lines =@@
+ 
+ //// [mappedTypeErrors.js]
+ function f1(x) {
+-    var y; // Error
++    let y;
+ }
+ function f2(x) {
+-    var y; // Error
++    let y;
+ }
+ function f3(x) {
+-    var y;
++    let y;
+ }
+ function f4(x) {
+-    var y;
++    let y;
+ }
+-// Type identity checking
+ function f10() {
+     var x;
+     var x;
+@@= skipped -19, +18 lines =@@
+ }
+ function f11() {
+     var x;
+-    var x; // Error
+-    var x; // Error
+-    var x; // Error
++    var x;
++    var x;
++    var x;
+ }
+ function f12() {
+     var x;
+-    var x; // Error
++    var x;
+ }
+ function f20() {
+-    var x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 }); // Error
+-    var x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
+-    var x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }); // Error
++    let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });
++    let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
++    let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });
+ }
+ function f21() {
+-    var x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
+-    var x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
+-    var x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }); // Error
++    let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
++    let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
++    let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });
+ }
+ function setState(obj, props) {
+-    for (var k in props) {
++    for (let k in props) {
+         obj[k] = props[k];
+     }
+ }
+-var foo = { a: "hello", b: 42 };
++let foo = { a: "hello", b: 42 };
+ setState(foo, { a: "test", b: 43 });
+ setState(foo, { a: "hi" });
+ setState(foo, { b: undefined });
+ setState(foo, {});
+ setState(foo, foo);
+-setState(foo, { a: undefined }); // Error
+-setState(foo, { c: true }); // Error
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.setState = function (props) {
+-        for (var k in props) {
++setState(foo, { a: undefined });
++setState(foo, { c: true });
++class C {
++    state;
++    setState(props) {
++        for (let k in props) {
+             this.state[k] = props[k];
+         }
+-    };
+-    return C;
+-}());
+-var c = new C();
++    }
++}
++let c = new C();
+ c.setState({ a: "test", b: 43 });
+ c.setState({ a: "hi" });
+ c.setState({ b: undefined });
+ c.setState({});
+ c.setState(foo);
+-c.setState({ a: undefined }); // Error
+-c.setState({ c: true }); // Error
+-var x1 = { a: 'no' }; // Error
+-var x2 = { a: 'no' }; // Error
+-var x3 = { a: 'no' }; // Error
+-var o = { x: 5, y: false };
+-var f = {
++c.setState({ a: undefined });
++c.setState({ c: true });
++let x1 = { a: 'no' };
++let x2 = { a: 'no' };
++let x3 = { a: 'no' };
++let o = { x: 5, y: false };
++let f = {
+     pf: { x: 7 },
+     pt: { x: 7, y: false },
+ };
+-// Repro from #28170
+ function test1(obj) {
+-    var x = obj.foo; // Error
++    let x = obj.foo;
+ }
+ function test2(obj) {
+-    var x = obj.foo; // Error
++    let x = obj.foo;
+ }
+-
+-
+-//// [mappedTypeErrors.d.ts]
+-interface Shape {
+-    name: string;
+-    width: number;
+-    height: number;
+-    visible: boolean;
+-}
+-interface Named {
+-    name: string;
+-}
+-interface Point {
+-    x: number;
+-    y: number;
+-}
+-type T00 = {
+-    [P in P]: string;
+-};
+-type T01 = {
+-    [P in number]: string;
+-};
+-type T02 = {
+-    [P in Date]: number;
+-};
+-type T03 = Record<Date, number>;
+-type T10 = Pick<Shape, "name">;
+-type T11 = Pick<Shape, "foo">;
+-type T12 = Pick<Shape, "name" | "foo">;
+-type T13 = Pick<Shape, keyof Named>;
+-type T14 = Pick<Shape, keyof Point>;
+-type T15 = Pick<Shape, never>;
+-type T16 = Pick<Shape, undefined>;
+-declare function f1<T>(x: T): void;
+-declare function f2<T extends string | number>(x: T): void;
+-declare function f3<T extends keyof Shape>(x: T): void;
+-declare function f4<T extends keyof Named>(x: T): void;
+-declare function f10<T>(): void;
+-declare function f11<T>(): void;
+-declare function f12<T>(): void;
+-declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
+-declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
+-declare function f20(): void;
+-declare function f21(): void;
+-interface Foo {
+-    a: string;
+-    b?: number;
+-}
+-declare function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>): void;
+-declare let foo: Foo;
+-declare class C<T> {
+-    state: T;
+-    setState<K extends keyof T>(props: Pick<T, K>): void;
+-}
+-declare let c: C<Foo>;
+-type T2 = {
+-    a?: number;
+-    [key: string]: any;
+-};
+-declare let x1: T2;
+-declare let x2: Partial<T2>;
+-declare let x3: {
+-    [P in keyof T2]: T2[P];
+-};
+-type Foo2<T, F extends keyof T> = {
+-    pf: {
+-        [P in F]?: T[P];
+-    };
+-    pt: {
+-        [P in T]?: T[P];
+-    };
+-};
+-type O = {
+-    x: number;
+-    y: boolean;
+-};
+-declare let o: O;
+-declare let f: Foo2<O, 'x'>;
+-declare function test1<T, K extends keyof T>(obj: Pick<T, K>): void;
+-declare function test2<T, K extends keyof T>(obj: Record<K, number>): void;

@@ -1,0 +1,21 @@
+--- old.contextuallyTypedByDiscriminableUnion.js
++++ new.contextuallyTypedByDiscriminableUnion.js
+@@= skipped -45, +45 lines =@@
+ }
+ invoke({
+     kind: "a",
+-    method: function (a) {
++    method(a) {
+         return +a;
+     }
+ });
+-var kind = "a";
++const kind = "a";
+ invoke({
+-    kind: kind,
+-    method: function (a) {
++    kind,
++    method(a) {
+         return +a;
+     }
+ });

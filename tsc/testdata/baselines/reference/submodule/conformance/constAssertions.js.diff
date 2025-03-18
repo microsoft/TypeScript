@@ -1,0 +1,159 @@
+--- old.constAssertions.js
++++ new.constAssertions.js
+@@= skipped -122, +122 lines =@@
+ 
+ 
+ //// [constAssertions.js]
+-"use strict";
+ let v1 = 'abc';
+ let v2 = `abc`;
+ let v3 = 10;
+@@= skipped -38, +37 lines =@@
+ let o6 = { ...o5 };
+ let o7 = { ...d };
+ let o8 = { ...o7 };
+-let o9 = { x: 10, foo() { this.x = 20; } }; // Error
++let o9 = { x: 10, foo() { this.x = 20; } };
+ let p1 = (10);
+ let p2 = ((-10));
+ let p3 = ([(10)]);
+@@= skipped -11, +11 lines =@@
+ let q3 = true;
+ let q4 = [1, 2, 3];
+ let q5 = { x: 10, y: 20 };
+-let e1 = v1; // Error
+-let e2 = (true ? 1 : 0); // Error
+-let e3 = id(1); // Error
++let e1 = v1;
++let e2 = (true ? 1 : 0);
++let e3 = id(1);
+ let t1 = 'foo';
+ let t2 = 'bar';
+ let t3 = `${t1}-${t2}`;
+@@= skipped -39, +39 lines =@@
+     a: 1,
+     b: 3
+ };
+-
+-
+-//// [constAssertions.d.ts]
+-declare let v1: "abc";
+-declare let v2: "abc";
+-declare let v3: 10;
+-declare let v4: -10;
+-declare let v5: 10;
+-declare let v6: 10n;
+-declare let v7: -10n;
+-declare let v8: true;
+-declare let v9: false;
+-declare let c1: "abc";
+-declare let c2: "abc";
+-declare let c3: 10;
+-declare let c4: -10;
+-declare let c5: 10;
+-declare let c6: 10n;
+-declare let c7: -10n;
+-declare let c8: true;
+-declare let c9: false;
+-declare let vv1: "abc";
+-declare let vc1: "abc";
+-declare let a1: readonly [];
+-declare let a2: readonly [1, 2, 3];
+-declare let a3: readonly [10, "hello", true];
+-declare let a4: readonly [1, 2, 3];
+-declare let a5: number[];
+-declare let a6: readonly number[];
+-declare let a7: number[];
+-declare let a8: readonly ["abc", ...number[]];
+-declare let a9: (number | "abc")[];
+-declare let d: {
+-    [x: string]: string;
+-};
+-declare let o1: {
+-    readonly x: 10;
+-    readonly y: 20;
+-};
+-declare let o2: {
+-    readonly [x: string]: 1 | 2 | 3 | (() => void) | 4;
+-    readonly a: 1;
+-    readonly b: 2;
+-    readonly c: 3;
+-    readonly d: () => void;
+-};
+-declare let o3: {
+-    readonly a: 1;
+-    readonly b: 2;
+-    readonly c: 3;
+-    readonly d: () => void;
+-    readonly x: 10;
+-    readonly y: 20;
+-};
+-declare let o4: {
+-    a: number;
+-    b: number;
+-};
+-declare let o5: {
+-    readonly a: number;
+-    readonly b: number;
+-};
+-declare let o6: {
+-    a: number;
+-    b: number;
+-};
+-declare let o7: {
+-    readonly [x: string]: string;
+-};
+-declare let o8: {
+-    [x: string]: string;
+-};
+-declare let o9: {
+-    readonly x: 10;
+-    readonly foo: () => void;
+-};
+-declare let p1: 10;
+-declare let p2: -10;
+-declare let p3: readonly [10];
+-declare let p4: readonly [readonly [readonly [readonly [10]]]];
+-declare let x1: {
+-    readonly x: 10;
+-    readonly y: readonly [20, 30];
+-    readonly z: {
+-        readonly a: {
+-            readonly b: 42;
+-        };
+-    };
+-};
+-declare let q1: 10;
+-declare let q2: "abc";
+-declare let q3: true;
+-declare let q4: readonly [1, 2, 3];
+-declare let q5: {
+-    readonly x: 10;
+-    readonly y: 20;
+-};
+-declare function id<T>(x: T): T;
+-declare let e1: "abc";
+-declare let e2: 0 | 1;
+-declare let e3: 1;
+-declare let t1: "foo";
+-declare let t2: "bar";
+-declare let t3: "foo-bar";
+-declare let t4: "(foo)-(bar)";
+-declare function ff1(x: 'foo' | 'bar', y: 1 | 2): "foo-1" | "foo-2" | "bar-1" | "bar-2";
+-declare function ff2<T extends string, U extends string>(x: T, y: U): `${T}-${U}`;
+-declare const ts1: "foo-bar";
+-declare const ts2: "foo-1" | "foo-0";
+-declare const ts3: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+-declare function ff3(x: 'foo' | 'bar', y: object): `foo${string}` | `bar${string}`;
+-type Action = "verify" | "write";
+-type ContentMatch = "match" | "nonMatch";
+-type Outcome = `${Action}_${ContentMatch}`;
+-declare function ff4(verify: boolean, contentMatches: boolean): "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch";
+-declare function ff5(verify: boolean, contentMatches: boolean): "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch";
+-declare function accessorNames<S extends string>(propName: S): readonly [`get-${S}`, `set-${S}`];
+-declare const ns1: readonly ["get-foo", "set-foo"];
+-interface Foo54374 {
+-    a: 1;
+-    b: 2;
+-}
+-declare const fooConst54374: Foo54374;

@@ -1,0 +1,31 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty5.js
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty5.js
+@@= skipped -23, +23 lines =@@
+ 
+ 
+ //// [typeGuardNarrowsIndexedAccessOfKnownProperty5.js]
+-"use strict";
+-var a = {};
+-var aIndex = "key";
++const a = {};
++const aIndex = "key";
+ if (a[aIndex] && a[aIndex].x) {
+-    a[aIndex].x; // number
++    a[aIndex].x;
+ }
+-var b = { key: {} };
+-var bIndex = "key";
++const b = { key: {} };
++const bIndex = "key";
+ if (b[bIndex].x) {
+-    b[bIndex].x; // number
++    b[bIndex].x;
+ }
+-var c = [];
+-var cIndex = 1;
++const c = [];
++const cIndex = 1;
+ if (c[cIndex].x) {
+-    c[cIndex].x; // number
++    c[cIndex].x;
+ }

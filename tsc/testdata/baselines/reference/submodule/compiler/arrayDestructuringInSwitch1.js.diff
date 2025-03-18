@@ -1,0 +1,22 @@
+--- old.arrayDestructuringInSwitch1.js
++++ new.arrayDestructuringInSwitch1.js
+@@= skipped -28, +28 lines =@@
+ exports.evaluate = evaluate;
+ function evaluate(expression) {
+     if (Array.isArray(expression)) {
+-        var operator = expression[0], operands = expression.slice(1);
++        const [operator, ...operands] = expression;
+         switch (operator) {
+             case 'and': {
+-                return operands.every(function (child) { return evaluate(child); });
++                return operands.every((child) => evaluate(child));
+             }
+             case 'not': {
+                 return !evaluate(operands[0]);
+             }
+             default: {
+-                throw new Error("".concat(operator, " is not a supported operator"));
++                throw new Error(`${operator} is not a supported operator`);
+             }
+         }
+     }

@@ -1,0 +1,15 @@
+--- old.narrowingUnionToNeverAssigment.js
++++ new.narrowingUnionToNeverAssigment.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [narrowingUnionToNeverAssigment.js]
+-"use strict";
+ function fx1(x) {
+     if (x === "a" || x === "b") {
+     }
+     else {
+-        var y = x;
++        const y = x;
+     }
+ }

@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/taggedPrimitiveNarrowing.ts] ////
+
+//// [taggedPrimitiveNarrowing.ts]
+type Hash = string & { __hash: true };
+
+function getHashLength(hash: Hash): number {
+    if (typeof hash !== "string") {
+        throw new Error("This doesn't look like a hash");
+    }
+    return hash.length;
+}
+
+function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number {
+    if (typeof hash !== "string") {
+        throw new Error("This doesn't look like a hash");
+    }
+    return hash.length;
+}
+
+
+//// [taggedPrimitiveNarrowing.js]
+function getHashLength(hash) {
+    if (typeof hash !== "string") {
+        throw new Error("This doesn't look like a hash");
+    }
+    return hash.length;
+}
+function getHashLength2(hash) {
+    if (typeof hash !== "string") {
+        throw new Error("This doesn't look like a hash");
+    }
+    return hash.length;
+}

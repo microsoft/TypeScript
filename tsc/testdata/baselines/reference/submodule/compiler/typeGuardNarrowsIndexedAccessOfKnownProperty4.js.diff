@@ -1,0 +1,25 @@
+--- old.typeGuardNarrowsIndexedAccessOfKnownProperty4.js
++++ new.typeGuardNarrowsIndexedAccessOfKnownProperty4.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [typeGuardNarrowsIndexedAccessOfKnownProperty4.js]
+-"use strict";
+-var Foo = /** @class */ (function () {
+-    function Foo() {
++class Foo {
++    x;
++    constructor() {
+         this.x = 5;
+-        this.x; // number
+-        this['x']; // number
+-        var key = 'x';
+-        this[key]; // number
++        this.x;
++        this['x'];
++        const key = 'x';
++        this[key];
+     }
+-    return Foo;
+-}());
++}

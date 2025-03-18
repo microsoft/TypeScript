@@ -1,0 +1,34 @@
+--- old.declFileModuleContinuation.js
++++ new.declFileModuleContinuation.js
+@@= skipped -13, +13 lines =@@
+ //// [declFileModuleContinuation.js]
+ var A;
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+-        var C;
++        let C;
+         (function (C) {
+-            var W = /** @class */ (function () {
+-                function W() {
+-                }
+-                return W;
+-            }());
++            class W {
++            }
+             C.W = W;
+         })(C = B.C || (B.C = {}));
+     })(B = A.B || (A.B = {}));
+ })(A || (A = {}));
+-
+-
+-//// [declFileModuleContinuation.d.ts]
+-declare namespace A.C {
+-    interface Z {
+-    }
+-}
+-declare namespace A.B.C {
+-    class W implements A.C.Z {
+-    }
+-}

@@ -1,0 +1,7 @@
+--- old.strictModeReservedWordInImportEqualDeclaration.js
++++ new.strictModeReservedWordInImportEqualDeclaration.js
+@@= skipped -6, +6 lines =@@
+ //// [strictModeReservedWordInImportEqualDeclaration.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
++"use strict";

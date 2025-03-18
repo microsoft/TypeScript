@@ -1,0 +1,23 @@
+--- old.useBeforeDeclaration_jsx.js
++++ new.useBeforeDeclaration_jsx.js
+@@= skipped -18, +18 lines =@@
+ 
+ //// [useBeforeDeclaration_jsx.jsx]
+ class C {
++    static a = <C.z></C.z>;
++    static b = <C.z />;
++    static c = <span {...C.x}></span>;
++    static d = <span id={C.y}></span>;
++    static e = <span>{C.y}</span>;
++    static x = {};
++    static y = '';
++    static z = () => <b></b>;
+ }
+-C.a = <C.z></C.z>;
+-C.b = <C.z />;
+-C.c = <span {...C.x}></span>;
+-C.d = <span id={C.y}></span>;
+-C.e = <span>{C.y}</span>;
+-C.x = {};
+-C.y = '';
+-C.z = () => <b></b>;

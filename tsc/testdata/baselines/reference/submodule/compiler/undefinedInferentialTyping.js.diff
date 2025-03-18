@@ -1,0 +1,8 @@
+--- old.undefinedInferentialTyping.js
++++ new.undefinedInferentialTyping.js
+@@= skipped -10, +10 lines =@@
+ function f(arr, elemnt) {
+     return null;
+ }
+-var a = f([], 3); // should be number
++var a = f([], 3);

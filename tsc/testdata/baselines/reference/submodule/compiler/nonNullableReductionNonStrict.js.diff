@@ -1,0 +1,21 @@
+--- old.nonNullableReductionNonStrict.js
++++ new.nonNullableReductionNonStrict.js
+@@= skipped -20, +20 lines =@@
+ 
+ 
+ //// [nonNullableReductionNonStrict.js]
+-// Repros from #43425
+ function test(f1, f2) {
+-    f1 === null || f1 === void 0 ? void 0 : f1("hello");
+-    f2 === null || f2 === void 0 ? void 0 : f2("hello");
++    f1?.("hello");
++    f2?.("hello");
+ }
+ function f1(x) {
+-    var z = x; // NonNullable<T>
++    let z = x;
+ }
+ function f2(x) {
+-    var z = x; // NonNullable<T>
++    let z = x;
+ }

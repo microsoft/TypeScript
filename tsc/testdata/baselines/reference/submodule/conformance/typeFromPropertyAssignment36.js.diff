@@ -1,0 +1,42 @@
+--- old.typeFromPropertyAssignment36.js
++++ new.typeFromPropertyAssignment36.js
+@@= skipped -75, +75 lines =@@
+ 
+ 
+ //// [typeFromPropertyAssignment36.js]
+-"use strict";
+ function f(b) {
+     function d() {
+     }
+@@= skipped -9, +8 lines =@@
+     if (b) {
+         d.q = false;
+     }
+-    // error d.q might not be assigned
+     d.q;
+     if (b) {
+         d.q = false;
+@@= skipped -21, +20 lines =@@
+     }
+     return d;
+ }
+-// OK to access possibly-unassigned properties outside the initialising scope
+ var test = f(true).s;
+ function d() {
+ }
+@@= skipped -24, +23 lines =@@
+     d.r = 2;
+ }
+ d.r;
+-// test function expressions too
+-var g = function () {
++const g = function () {
+ };
+ if (!!false) {
+     g.expando = 1;
+ }
+-g.expando; // error
++g.expando;
+ if (!!false) {
+     g.both = 'hi';
+ }

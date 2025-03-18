@@ -1,0 +1,20 @@
+--- old.noEmitHelpers2.js
++++ new.noEmitHelpers2.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [noEmitHelpers2.js]
+-var A = /** @class */ (function () {
+-    function A(a, b) {
++@decorator
++class A {
++    constructor(a, b) {
+     }
+-    A = __decorate([
+-        decorator,
+-        __param(1, decorator),
+-        __metadata("design:paramtypes", [Number, String])
+-    ], A);
+-    return A;
+-}());
++}

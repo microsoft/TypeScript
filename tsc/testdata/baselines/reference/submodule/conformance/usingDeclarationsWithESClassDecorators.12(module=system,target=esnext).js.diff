@@ -1,0 +1,30 @@
+--- old.usingDeclarationsWithESClassDecorators.12(module=system,target=esnext).js
++++ new.usingDeclarationsWithESClassDecorators.12(module=system,target=esnext).js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [usingDeclarationsWithESClassDecorators.12.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var C, after;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            C = 
+-            @dec
+-            class C {
+-            };
+-            exports_1("D", C);
+-            using after_1 = after = null;
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.D = void 0;
++@dec
++class C {
++}
++exports.D = C;
++using after = null;

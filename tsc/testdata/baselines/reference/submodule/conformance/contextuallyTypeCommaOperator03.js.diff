@@ -1,0 +1,10 @@
+--- old.contextuallyTypeCommaOperator03.js
++++ new.contextuallyTypeCommaOperator03.js
+@@= skipped -5, +5 lines =@@
+ x = (a => a, b => b);
+ 
+ //// [contextuallyTypeCommaOperator03.js]
+-var x;
+-x = (function (a) { return a; }, function (b) { return b; });
++let x;
++x = (a => a, b => b);

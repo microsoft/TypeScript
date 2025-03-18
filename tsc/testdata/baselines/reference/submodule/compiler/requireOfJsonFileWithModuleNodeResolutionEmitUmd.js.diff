@@ -1,0 +1,26 @@
+--- old.requireOfJsonFileWithModuleNodeResolutionEmitUmd.js
++++ new.requireOfJsonFileWithModuleNodeResolutionEmitUmd.js
+@@= skipped -8, +8 lines =@@
+     "b": "hello"
+ }
+ 
+-//// [out/b.json]
+-{
+-    "a": true,
+-    "b": "hello"
+-}
+ //// [out/file1.js]
+-(function (factory) {
+-    if (typeof module === "object" && typeof module.exports === "object") {
+-        var v = factory(require, exports);
+-        if (v !== undefined) module.exports = v;
+-    }
+-    else if (typeof define === "function" && define.amd) {
+-        define(["require", "exports"], factory);
+-    }
+-})(function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

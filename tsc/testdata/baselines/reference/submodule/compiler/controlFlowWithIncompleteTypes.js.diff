@@ -1,0 +1,22 @@
+--- old.controlFlowWithIncompleteTypes.js
++++ new.controlFlowWithIncompleteTypes.js
+@@= skipped -29, +29 lines =@@
+ }
+ 
+ //// [controlFlowWithIncompleteTypes.js]
+-// Repro from #11000
+ function foo1() {
+-    var x = 0;
++    let x = 0;
+     while (cond) {
+         if (typeof x === "string") {
+             x = x.slice();
+@@= skipped -13, +12 lines =@@
+     }
+ }
+ function foo2() {
+-    var x = 0;
++    let x = 0;
+     while (cond) {
+         if (typeof x === "number") {
+             x = "abc";

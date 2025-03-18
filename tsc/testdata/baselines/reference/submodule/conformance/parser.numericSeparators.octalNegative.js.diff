@@ -1,0 +1,23 @@
+--- old.parser.numericSeparators.octalNegative.js
++++ new.parser.numericSeparators.octalNegative.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [1.js]
+-0;
++0o00_;
+ //// [2.js]
+-72;
++0o_110;
+ //// [3.js]
+ 0;
+ O0101;
+ //// [4.js]
+-73;
++0o01__11;
+ //// [5.js]
+-294984;
++0O0110_0110__;
+ //// [6.js]
+-1224999433;
++0o___0111010_0101_1;

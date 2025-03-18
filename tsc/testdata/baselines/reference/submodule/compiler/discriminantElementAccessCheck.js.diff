@@ -1,0 +1,20 @@
+--- old.discriminantElementAccessCheck.js
++++ new.discriminantElementAccessCheck.js
+@@= skipped -76, +76 lines =@@
+     }
+ }
+ function IfWithTemplate(val) {
+-    if (val["kind"] === 'B') {
++    if (val[`kind`] === 'B') {
+         return val.b;
+     }
+     else {
+@@= skipped -8, +8 lines =@@
+     }
+ }
+ function SwitchWithTemplate(val) {
+-    switch (val["kind"]) {
++    switch (val[`kind`]) {
+         case 'A':
+             return val.a;
+         case 'B':

@@ -1,0 +1,16 @@
+--- old.hidingCallSignatures.js
++++ new.hidingCallSignatures.js
+@@= skipped -28, +28 lines =@@
+ 
+ //// [hidingCallSignatures.js]
+ var d;
+-d(""); // number
+-new d(""); // should be string
++d("");
++new d("");
+ var f;
+-f(""); // string
++f("");
+ var e;
+-e(""); // {}
++e("");

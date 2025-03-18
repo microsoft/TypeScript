@@ -1,0 +1,35 @@
+--- old.propertyAccessOnTypeParameterWithConstraints4.js
++++ new.propertyAccessOnTypeParameterWithConstraints4.js
+@@= skipped -34, +34 lines =@@
+ var r4 = b.foo(new Date());
+ 
+ //// [propertyAccessOnTypeParameterWithConstraints4.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.f = function () {
++class C {
++    f() {
+         var x;
+-        var a = x['notHere'](); // should be string
++        var a = x['notHere']();
+         return a + x.notHere();
+-    };
+-    return C;
+-}());
++    }
++}
+ var r = (new C()).f();
+ var i;
+ var r2 = i.foo.notHere();
+@@= skipped -18, +15 lines =@@
+ var r3 = a().notHere();
+ var r3b = a()['notHere']();
+ var b = {
+-    foo: function (x) {
+-        var a = x['notHere'](); // should be string
++    foo: (x) => {
++        var a = x['notHere']();
+         return a + x.notHere();
+     },
+     bar: b.foo().notHere()

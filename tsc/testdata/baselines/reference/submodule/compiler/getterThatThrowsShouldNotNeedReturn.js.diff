@@ -1,0 +1,28 @@
+--- old.getterThatThrowsShouldNotNeedReturn.js
++++ new.getterThatThrowsShouldNotNeedReturn.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [getterThatThrowsShouldNotNeedReturn.js]
+-var Greeter = /** @class */ (function () {
+-    function Greeter() {
++class Greeter {
++    get greet() {
++        throw '';
+     }
+-    Object.defineProperty(Greeter.prototype, "greet", {
+-        get: function () {
+-            throw ''; // should not raise an error
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Greeter.prototype.greeting = function () {
+-        throw ''; // should not raise an error
+-    };
+-    return Greeter;
+-}());
++    greeting() {
++        throw '';
++    }
++}

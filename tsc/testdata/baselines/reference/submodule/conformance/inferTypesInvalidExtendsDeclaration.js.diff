@@ -1,0 +1,10 @@
+--- old.inferTypesInvalidExtendsDeclaration.js
++++ new.inferTypesInvalidExtendsDeclaration.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [inferTypesInvalidExtendsDeclaration.js]
+-
+-
+-//// [inferTypesInvalidExtendsDeclaration.d.ts]
+-type Test<T> = T extends infer A extends B ? number : string;

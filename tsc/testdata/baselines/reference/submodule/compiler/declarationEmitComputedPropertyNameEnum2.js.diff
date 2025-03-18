@@ -1,0 +1,26 @@
+--- old.declarationEmitComputedPropertyNameEnum2.js
++++ new.declarationEmitComputedPropertyNameEnum2.js
+@@= skipped -8, +8 lines =@@
+ export const foo = { ...({} as Type) };
+ 
+ 
+-
+-
+-//// [type.d.ts]
+-export type Type = {
+-    x?: {};
+-};
+-//// [index.d.ts]
+-export declare const foo: {
+-    x?: {
+-        [Enum.A]: 0;
+-    };
+-};
++//// [type.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++//// [index.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.foo = void 0;
++exports.foo = { ...{} };

@@ -1,0 +1,24 @@
+--- old.literalTypesAndTypeAssertions.js
++++ new.literalTypesAndTypeAssertions.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [literalTypesAndTypeAssertions.js]
+-var obj = {
++const obj = {
+     a: "foo",
+     b: "foo",
+     c: "foo"
+ };
+-var x1 = 1;
+-var x2 = 1;
+-var _a = { a: "foo" }.a, a = _a === void 0 ? "foo" : _a;
+-var _b = { b: "bar" }.b, b = _b === void 0 ? "foo" : _b;
+-var _c = { c: "bar" }.c, c = _c === void 0 ? "foo" : _c;
+-var _d = { d: "bar" }.d, d = _d === void 0 ? "foo" : _d;
++let x1 = 1;
++let x2 = 1;
++let { a = "foo" } = { a: "foo" };
++let { b = "foo" } = { b: "bar" };
++let { c = "foo" } = { c: "bar" };
++let { d = "foo" } = { d: "bar" };

@@ -1,0 +1,15 @@
+--- old.defaultValueInConstructorOverload1.js
++++ new.defaultValueInConstructorOverload1.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [defaultValueInConstructorOverload1.js]
+-var C = /** @class */ (function () {
+-    function C(x) {
+-        if (x === void 0) { x = ''; }
++class C {
++    constructor(x = '') {
+     }
+-    return C;
+-}());
++}

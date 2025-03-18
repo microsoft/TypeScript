@@ -1,0 +1,61 @@
+--- old.requireEmitSemicolon.js
++++ new.requireEmitSemicolon.js
+@@= skipped -19, +19 lines =@@
+ } 
+ 
+ //// [requireEmitSemicolon_0.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.Models = void 0;
+-    var Models;
+-    (function (Models) {
+-        var Person = /** @class */ (function () {
+-            function Person(name) {
+-            }
+-            return Person;
+-        }());
+-        Models.Person = Person;
+-    })(Models || (exports.Models = Models = {}));
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Models = void 0;
++var Models;
++(function (Models) {
++    class Person {
++        constructor(name) { }
++    }
++    Models.Person = Person;
++})(Models || (exports.Models = Models = {}));
+ //// [requireEmitSemicolon_1.js]
+-define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.Database = void 0;
+-    var Database;
+-    (function (Database) {
+-        var DB = /** @class */ (function () {
+-            function DB() {
+-            }
+-            DB.prototype.findPerson = function (id) {
+-                return new P.Models.Person("Rock");
+-            };
+-            return DB;
+-        }());
+-        Database.DB = DB;
+-    })(Database || (exports.Database = Database = {}));
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Database = void 0;
++const P = require("requireEmitSemicolon_0");
++var Database;
++(function (Database) {
++    class DB {
++        findPerson(id) {
++            return new P.Models.Person("Rock");
++        }
++    }
++    Database.DB = DB;
++})(Database || (exports.Database = Database = {}));

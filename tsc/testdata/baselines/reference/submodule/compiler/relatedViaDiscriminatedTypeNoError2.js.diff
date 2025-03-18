@@ -1,0 +1,9 @@
+--- old.relatedViaDiscriminatedTypeNoError2.js
++++ new.relatedViaDiscriminatedTypeNoError2.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [relatedViaDiscriminatedTypeNoError2.js]
+-"use strict";
+ x = y;
+ y = x;

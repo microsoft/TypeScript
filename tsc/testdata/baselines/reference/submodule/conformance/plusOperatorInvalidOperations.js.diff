@@ -1,0 +1,13 @@
+--- old.plusOperatorInvalidOperations.js
++++ new.plusOperatorInvalidOperations.js
+@@= skipped -10, +10 lines =@@
+ var result2 =+;
+ 
+ //// [plusOperatorInvalidOperations.js]
+-// Unary operator +
+ var b;
+-// operand before +
+-var result1 = b + ; //expect error
+-// miss  an operand
++var result1 = b + ;
+ var result2 = +;

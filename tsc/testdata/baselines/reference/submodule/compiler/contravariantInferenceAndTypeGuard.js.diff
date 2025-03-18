@@ -1,0 +1,23 @@
+--- old.contravariantInferenceAndTypeGuard.js
++++ new.contravariantInferenceAndTypeGuard.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [contravariantInferenceAndTypeGuard.js]
+-"use strict";
+-var list2 = new List();
+-var filter1 = list2.filter(function (item, node, list) {
+-    this.b; // $ExpectType string
+-    item; // $ExpectType Test | null
+-    node; // $ExpectType ListItem<Test | null>
+-    list; // $ExpectType List<Test | null>
++const list2 = new List();
++const filter1 = list2.filter(function (item, node, list) {
++    this.b;
++    item;
++    node;
++    list;
+     return !!item;
+ }, { b: 'c' });
+-var x = filter1; // $ExpectType List<Test>
++const x = filter1;

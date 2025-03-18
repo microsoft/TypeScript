@@ -1,0 +1,9 @@
+--- old.asyncUseStrict_es2017.js
++++ new.asyncUseStrict_es2017.js
+@@= skipped -10, +10 lines =@@
+ //// [asyncUseStrict_es2017.js]
+ async function func() {
+     "use strict";
++    "use strict";
+     var b = await p || a;
+ }

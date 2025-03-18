@@ -1,0 +1,13 @@
+--- old.bundlerRelative1(module=esnext).js
++++ new.bundlerRelative1(module=esnext).js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [index.js]
+-export var x = 0;
++export const x = 0;
+ //// [index.js]
+-export var y = 0;
++export const y = 0;
+ //// [main.js]
+ export {};

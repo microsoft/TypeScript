@@ -1,0 +1,14 @@
+--- old.classInsideBlock.js
++++ new.classInsideBlock.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [classInsideBlock.js]
+ function foo() {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
++    class C {
++    }
+ }

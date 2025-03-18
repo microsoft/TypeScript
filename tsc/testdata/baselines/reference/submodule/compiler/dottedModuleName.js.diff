@@ -1,0 +1,46 @@
+--- old.dottedModuleName.js
++++ new.dottedModuleName.js
+@@= skipped -23, +23 lines =@@
+ //// [dottedModuleName.js]
+ var M;
+ (function (M) {
+-    var N;
++    let N;
+     (function (N) {
++        function f(x) { }
++        N.f = f;
+         2 * x;
+-        var X;
++        let X;
+         (function (X) {
+-            var Y;
++            let Y;
+             (function (Y) {
+-                var Z;
++                let Z;
+                 (function (Z) {
+-                    Z.v2 = f(Z.v);
++                    Z.v2 = f(v);
+                 })(Z = Y.Z || (Y.Z = {}));
+             })(Y = X.Y || (X.Y = {}));
+         })(X = N.X || (N.X = {}));
+     })(N = M.N || (M.N = {}));
+ })(M || (M = {}));
+ (function (M) {
+-    var N;
++    let N;
+     (function (N) {
+-        var X;
++        let X;
+         (function (X) {
+-            var Y;
++            let Y;
+             (function (Y) {
+-                var Z;
++                let Z;
+                 (function (Z) {
+-                    Z.v = N.f(10);
++                    Z.v = f(10);
+                 })(Z = Y.Z || (Y.Z = {}));
+             })(Y = X.Y || (X.Y = {}));
+         })(X = N.X || (N.X = {}));

@@ -1,0 +1,9 @@
+--- old.reactNamespaceMissingDeclaration.js
++++ new.reactNamespaceMissingDeclaration.js
+@@= skipped -4, +4 lines =@@
+ <foo data/>
+ 
+ //// [reactNamespaceMissingDeclaration.js]
+-// Error myReactLib not declared
+-myReactLib.createElement("foo", { data: true });
++<foo data/>;

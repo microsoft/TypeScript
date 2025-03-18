@@ -1,0 +1,240 @@
+--- old.exhaustiveSwitchStatements1.js
++++ new.exhaustiveSwitchStatements1.js
+@@= skipped -251, +251 lines =@@
+ }
+ 
+ //// [exhaustiveSwitchStatements1.js]
+-"use strict";
+ function f1(x) {
+     if (!!true) {
+         switch (x) {
+             case 1: return 'a';
+             case 2: return 'b';
+         }
+-        x; // Unreachable
++        x;
+     }
+     else {
+         throw 0;
+     }
+ }
+ function f2(x) {
+-    var z;
++    let z;
+     switch (x) {
+         case 1:
+             z = 10;
+@@= skipped -23, +22 lines =@@
+             z = 20;
+             break;
+     }
+-    z; // Definitely assigned
++    z;
+ }
+ function f3(x) {
+     switch (x) {
+         case 1: return 10;
+         case 2: return 20;
+-        // Default considered reachable to allow defensive coding
+         default: throw new Error("Bad input");
+     }
+ }
+-// Repro from #11572
+ var E;
+ (function (E) {
+     E[E["A"] = 0] = "A";
+@@= skipped -32, +30 lines =@@
+         }
+ }
+ function area(s) {
+-    var area;
++    let area;
+     switch (s.kind) {
+         case "square":
+             area = s.size * s.size;
+@@= skipped -18, +18 lines =@@
+     return area;
+ }
+ function areaWrapped(s) {
+-    var area;
+-    area = (function () {
++    let area;
++    area = (() => {
+         switch (s.kind) {
+             case "square": return s.size * s.size;
+             case "rectangle": return s.width * s.height;
+@@= skipped -11, +11 lines =@@
+     })();
+     return area;
+ }
+-// Repro from #13241
+ var MyEnum;
+ (function (MyEnum) {
+     MyEnum[MyEnum["A"] = 0] = "A";
+     MyEnum[MyEnum["B"] = 1] = "B";
+ })(MyEnum || (MyEnum = {}));
+ function thisGivesError(e) {
+-    var s;
++    let s;
+     switch (e) {
+         case MyEnum.A:
+             s = "it was A";
+@@= skipped -19, +18 lines =@@
+     return s;
+ }
+ function good1(e) {
+-    var s;
++    let s;
+     switch (e) {
+         case MyEnum.A:
+             s = "it was A";
+@@= skipped -20, +20 lines =@@
+         case MyEnum.B: return "it was B";
+     }
+ }
+-// Repro from #18362
+ var Level;
+ (function (Level) {
+     Level[Level["One"] = 0] = "One";
+     Level[Level["Two"] = 1] = "Two";
+ })(Level || (Level = {}));
+-var doSomethingWithLevel = function (level) {
+-    var next;
++const doSomethingWithLevel = (level) => {
++    let next;
+     switch (level) {
+         case Level.One:
+             next = Level.Two;
+@@= skipped -46, +45 lines =@@
+             }
+     }
+ }
+-// Repro from #20823
+ function test4(value) {
+-    var x;
++    let x;
+     switch (value) {
+         case 1:
+             x = "one";
+@@= skipped -13, +12 lines =@@
+     }
+     return x;
+ }
+-// Repro from #34661
+ var Animal;
+ (function (Animal) {
+     Animal[Animal["DOG"] = 0] = "DOG";
+     Animal[Animal["CAT"] = 1] = "CAT";
+ })(Animal || (Animal = {}));
+ function expression() {
+-    var _a;
+-    switch ((_a = zoo === null || zoo === void 0 ? void 0 : zoo.animal) !== null && _a !== void 0 ? _a : Animal.DOG) {
++    switch (zoo?.animal ?? Animal.DOG) {
+         case Animal.DOG: return Animal.DOG;
+         case Animal.CAT: return Animal.CAT;
+     }
+ }
+-// Repro from #34840
+ function foo() {
+-    var foo = 0;
++    const foo = 0;
+     while (true) {
+-        var stats = foo;
++        const stats = foo;
+         switch (stats) {
+             case 1: break;
+             case 2: break;
+@@= skipped -29, +26 lines =@@
+         case 'c':
+             k = 'a';
+     }
+-    k === 'c'; // Error
++    k === 'c';
+     return o[k];
+ }
+ function f35431(a) {
+@@= skipped -8, +8 lines =@@
+         case "abc":
+         case "def": return;
+         default:
+-            a.kind; // Error expected
++            a.kind;
+     }
+ }
+-
+-
+-//// [exhaustiveSwitchStatements1.d.ts]
+-declare function f1(x: 1 | 2): string;
+-declare function f2(x: 1 | 2): void;
+-declare function f3(x: 1 | 2): 10 | 20;
+-declare enum E {
+-    A = 0,
+-    B = 1
+-}
+-declare function f(e: E): number;
+-declare function g(e: E): number;
+-interface Square {
+-    kind: "square";
+-    size: number;
+-}
+-interface Rectangle {
+-    kind: "rectangle";
+-    width: number;
+-    height: number;
+-}
+-interface Circle {
+-    kind: "circle";
+-    radius: number;
+-}
+-interface Triangle {
+-    kind: "triangle";
+-    side: number;
+-}
+-type Shape = Square | Rectangle | Circle | Triangle;
+-declare function area(s: Shape): number;
+-declare function areaWrapped(s: Shape): number;
+-declare enum MyEnum {
+-    A = 0,
+-    B = 1
+-}
+-declare function thisGivesError(e: MyEnum): string;
+-declare function good1(e: MyEnum): string;
+-declare function good2(e: MyEnum): string;
+-declare enum Level {
+-    One = 0,
+-    Two = 1
+-}
+-declare const doSomethingWithLevel: (level: Level) => Level;
+-interface Square2 {
+-    kind: "square";
+-    size: number;
+-}
+-interface Circle2 {
+-    kind: "circle";
+-    radius: number;
+-}
+-type Shape2 = Square2 | Circle2;
+-declare function withDefault(s1: Shape2, s2: Shape2): string;
+-declare function withoutDefault(s1: Shape2, s2: Shape2): string;
+-declare function test4(value: 1 | 2): string;
+-declare enum Animal {
+-    DOG = 0,
+-    CAT = 1
+-}
+-declare const zoo: {
+-    animal: Animal;
+-} | undefined;
+-declare function expression(): Animal;
+-declare function foo(): void;
+-type O = {
+-    a: number;
+-    b: number;
+-};
+-type K = keyof O | 'c';
+-declare function ff(o: O, k: K): number;
+-type A = {
+-    kind: "abc";
+-} | {
+-    kind: "def";
+-};
+-declare function f35431(a: A): void;

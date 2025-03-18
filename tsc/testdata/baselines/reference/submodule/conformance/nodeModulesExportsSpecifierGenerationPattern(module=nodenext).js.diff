@@ -1,0 +1,10 @@
+--- old.nodeModulesExportsSpecifierGenerationPattern(module=nodenext).js
++++ new.nodeModulesExportsSpecifierGenerationPattern(module=nodenext).js
+@@= skipped -29, +29 lines =@@
+ 
+ //// [index.js]
+ export const a = (await import("inner/index.js")).x();
+-
+-
+-//// [index.d.ts]
+-export declare const a: import("inner/other.js").Thing;

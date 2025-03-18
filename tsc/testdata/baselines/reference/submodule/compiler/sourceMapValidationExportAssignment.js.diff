@@ -1,0 +1,21 @@
+--- old.sourceMapValidationExportAssignment.js
++++ new.sourceMapValidationExportAssignment.js
+@@= skipped -6, +6 lines =@@
+ export = a;
+ 
+ //// [sourceMapValidationExportAssignment.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var a = /** @class */ (function () {
+-        function a() {
+-        }
+-        return a;
+-    }());
+-    return a;
+-});
+-//# sourceMappingURL=sourceMapValidationExportAssignment.js.map
++"use strict";
++class a {
++    c;
++}
++module.exports = a;

@@ -1,0 +1,10 @@
+--- old.indexedAccessWithFreshObjectLiteral.js
++++ new.indexedAccessWithFreshObjectLiteral.js
+@@= skipped -56, +56 lines =@@
+ 
+ 
+ //// [indexedAccessWithFreshObjectLiteral.js]
+-"use strict";
+ function foo(id) {
+     return {
+         a: 1,

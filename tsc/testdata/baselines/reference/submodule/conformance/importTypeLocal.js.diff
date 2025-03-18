@@ -1,0 +1,73 @@
+--- old.importTypeLocal.js
++++ new.importTypeLocal.js
+@@= skipped -48, +48 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Bar = void 0;
+-var Bar = /** @class */ (function () {
+-    function Bar(input) {
+-    }
+-    return Bar;
+-}());
++class Bar {
++    item;
++    constructor(input) { }
++}
+ exports.Bar = Bar;
+ //// [usage.js]
+ "use strict";
+@@= skipped -12, +11 lines =@@
+ exports.shim = exports.Bar2 = exports.y = exports.x = void 0;
+ exports.x = { x: 0, y: 0 };
+ exports.y = { a: "", b: 0 };
+-var Bar2 = /** @class */ (function () {
+-    function Bar2(input) {
+-    }
+-    return Bar2;
+-}());
++class Bar2 {
++    item;
++    constructor(input) { }
++}
+ exports.Bar2 = Bar2;
+ exports.shim = {
+     Bar: Bar2
+ };
+-
+-
+-//// [foo.d.ts]
+-interface Point {
+-    x: number;
+-    y: number;
+-}
+-export = Point;
+-//// [foo2.d.ts]
+-declare namespace Bar {
+-    interface I {
+-        a: string;
+-        b: number;
+-    }
+-}
+-export declare namespace Baz {
+-    interface J {
+-        a: number;
+-        b: string;
+-    }
+-}
+-declare class Bar {
+-    item: Bar.I;
+-    constructor(input: Baz.J);
+-}
+-export { Bar };
+-//// [usage.d.ts]
+-export declare const x: import("./foo");
+-export declare let y: import("./foo2").Bar.I;
+-export declare class Bar2 {
+-    item: {
+-        a: string;
+-        b: number;
+-        c: object;
+-    };
+-    constructor(input?: any);
+-}
+-export declare let shim: typeof import("./foo2");

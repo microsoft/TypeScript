@@ -1,0 +1,56 @@
+--- old.mergedDeclarations3.js
++++ new.mergedDeclarations3.js
+@@= skipped -43, +43 lines =@@
+ //// [mergedDeclarations3.js]
+ var M;
+ (function (M) {
+-    var Color;
++    let Color;
+     (function (Color) {
+         Color[Color["Red"] = 0] = "Red";
+         Color[Color["Green"] = 1] = "Green";
+     })(Color = M.Color || (M.Color = {}));
+ })(M || (M = {}));
+ (function (M) {
+-    var Color;
++    let Color;
+     (function (Color) {
+         Color.Blue = 4;
+     })(Color = M.Color || (M.Color = {}));
+ })(M || (M = {}));
+-var p = M.Color.Blue; // ok
++var p = M.Color.Blue;
+ (function (M) {
+     function foo() {
+     }
+     M.foo = foo;
+ })(M || (M = {}));
+ (function (M) {
+-    var foo;
++    let foo;
+     (function (foo) {
+         foo.x = 1;
+     })(foo || (foo = {}));
+ })(M || (M = {}));
+ (function (M) {
+-    var foo;
++    let foo;
+     (function (foo) {
+         foo.y = 2;
+     })(foo = M.foo || (M.foo = {}));
+ })(M || (M = {}));
+ (function (M) {
+-    var foo;
++    let foo;
+     (function (foo) {
+         foo.z = 1;
+     })(foo || (foo = {}));
+ })(M || (M = {}));
+-M.foo(); // ok
+-M.foo.x; // error
+-M.foo.y; // ok
+-M.foo.z; // error
++M.foo();
++M.foo.x;
++M.foo.y;
++M.foo.z;

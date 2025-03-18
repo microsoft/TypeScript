@@ -1,0 +1,14 @@
+--- old.emitThisInObjectLiteralGetter.js
++++ new.emitThisInObjectLiteralGetter.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [emitThisInObjectLiteralGetter.js]
+-var example = {
++const example = {
+     get foo() {
+-        var _this = this;
+-        return function (item) { return _this.bar(item); };
++        return item => this.bar(item);
+     }
+ };

@@ -1,0 +1,34 @@
+--- old.typeParametersAvailableInNestedScope.js
++++ new.typeParametersAvailableInNestedScope.js
+@@= skipped -23, +23 lines =@@
+ 
+ 
+ //// [typeParametersAvailableInNestedScope.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-        this.x = function (a) {
+-            var y;
+-            return y;
+-        };
+-    }
+-    C.prototype.foo = function () {
++class C {
++    data;
++    x = (a) => {
++        var y;
++        return y;
++    };
++    foo() {
+         function temp(a) {
+             var y;
+             return y;
+         }
+         return temp(null);
+-    };
+-    return C;
+-}());
++    }
++}
+ var c = new C();
+ c.data = c.x(null);
+ c.data = c.foo();

@@ -1,0 +1,7 @@
+--- old.inferTypesWithExtends2.js
++++ new.inferTypesWithExtends2.js
+@@= skipped -11, +11 lines =@@
+     never;
+ 
+ //// [inferTypesWithExtends2.js]
+-"use strict";

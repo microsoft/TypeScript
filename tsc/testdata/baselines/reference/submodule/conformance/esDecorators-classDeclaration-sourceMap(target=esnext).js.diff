@@ -1,0 +1,19 @@
+--- old.esDecorators-classDeclaration-sourceMap(target=esnext).js
++++ new.esDecorators-classDeclaration-sourceMap(target=esnext).js
+@@= skipped -82, +82 lines =@@
+     @dec
+     static accessor #z = 1;
+ }
+-//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
+-
+-//// [esDecorators-classDeclaration-sourceMap.d.ts]
+-declare var dec: any;
+-declare class C {
+-    #private;
+-    method(): void;
+-    get x(): number;
+-    set x(value: number);
+-    y: number;
+-    accessor z: number;
+-}
+-//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.d.ts.map

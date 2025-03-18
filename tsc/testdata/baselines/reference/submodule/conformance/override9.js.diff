@@ -1,0 +1,19 @@
+--- old.override9.js
++++ new.override9.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [override9.js]
+-
+-
+-//// [override9.d.ts]
+-interface B {
+-    foo(): void;
+-    bar(): void;
+-}
+-interface D extends B {
+-    foo(): void;
+-    bar(): void;
+-    baz(): void;
+-    bazz(): void;
+-}

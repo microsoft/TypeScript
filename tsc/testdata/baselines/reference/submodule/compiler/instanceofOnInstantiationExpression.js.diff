@@ -1,0 +1,20 @@
+--- old.instanceofOnInstantiationExpression.js
++++ new.instanceofOnInstantiationExpression.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [instanceofOnInstantiationExpression.js]
+-maybeBox instanceof Box; // OK
+-maybeBox instanceof (Box); // error
+-maybeBox instanceof (Box); // error
+-maybeBox instanceof ((Box)); // error
+-(Box) instanceof Object; // OK
+-(Box) instanceof Object; // OK
+-((Box)) instanceof Object; // OK
++maybeBox instanceof Box;
++maybeBox instanceof Box;
++maybeBox instanceof (Box);
++maybeBox instanceof ((Box));
++Box instanceof Object;
++(Box) instanceof Object;
++((Box)) instanceof Object;

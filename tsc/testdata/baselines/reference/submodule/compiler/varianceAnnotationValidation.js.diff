@@ -1,0 +1,44 @@
+--- old.varianceAnnotationValidation.js
++++ new.varianceAnnotationValidation.js
+@@= skipped -30, +30 lines =@@
+ 
+ 
+ //// [varianceAnnotationValidation.js]
+-"use strict";
+-// Repro from #49607
+ ;
+-var Dog = /** @class */ (function () {
+-    function Dog() {
+-    }
+-    Dog.prototype.run = function () { };
++class Dog {
++    run() { }
+     ;
+-    Dog.prototype.bark = function () { };
++    bark() { }
+     ;
+-    return Dog;
+-}());
+-ca = cd; // Ok
+-cd = ca; // Error
+-
+-
+-//// [varianceAnnotationValidation.d.ts]
+-interface Controller<out T> {
+-    createAnimal: () => T;
+-    run: (animal: T) => void;
+ }
+-interface Animal {
+-    run(): void;
+-}
+-declare class Dog implements Animal {
+-    run(): void;
+-    bark(): void;
+-}
+-interface AnimalContainer<T> {
+-    controller: Controller<T>;
+-}
+-declare let ca: AnimalContainer<Animal>;
+-declare let cd: AnimalContainer<Dog>;
++ca = cd;
++cd = ca;

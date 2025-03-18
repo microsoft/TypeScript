@@ -1,0 +1,81 @@
+--- old.thisInAccessors.js
++++ new.thisInAccessors.js
+@@= skipped -32, +32 lines =@@
+ }
+ 
+ //// [thisInAccessors.js]
+-// this capture only in getter
+-var GetterOnly = /** @class */ (function () {
+-    function GetterOnly() {
++class GetterOnly {
++    get Value() {
++        var fn = () => this;
++        return '';
+     }
+-    Object.defineProperty(GetterOnly.prototype, "Value", {
+-        get: function () {
+-            var _this = this;
+-            var fn = function () { return _this; };
+-            return '';
+-        },
+-        set: function (val) {
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return GetterOnly;
+-}());
+-// this capture only in setter
+-var SetterOnly = /** @class */ (function () {
+-    function SetterOnly() {
++    set Value(val) {
+     }
+-    Object.defineProperty(SetterOnly.prototype, "Value", {
+-        get: function () {
+-            return '';
+-        },
+-        set: function (val) {
+-            var _this = this;
+-            var fn = function () { return _this; };
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return SetterOnly;
+-}());
+-// this capture only in both setter and getter
+-var GetterAndSetter = /** @class */ (function () {
+-    function GetterAndSetter() {
++}
++class SetterOnly {
++    get Value() {
++        return '';
+     }
+-    Object.defineProperty(GetterAndSetter.prototype, "Value", {
+-        get: function () {
+-            var _this = this;
+-            var fn = function () { return _this; };
+-            return '';
+-        },
+-        set: function (val) {
+-            var _this = this;
+-            var fn = function () { return _this; };
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return GetterAndSetter;
+-}());
++    set Value(val) {
++        var fn = () => this;
++    }
++}
++class GetterAndSetter {
++    get Value() {
++        var fn = () => this;
++        return '';
++    }
++    set Value(val) {
++        var fn = () => this;
++    }
++}

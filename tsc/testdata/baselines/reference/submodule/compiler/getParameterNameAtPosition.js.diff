@@ -1,0 +1,10 @@
+--- old.getParameterNameAtPosition.js
++++ new.getParameterNameAtPosition.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [getParameterNameAtPosition.js]
+-"use strict";
+-// Repro from #30171
+-cases(fn(function (opts) { }));
++cases(fn(opts => { }));

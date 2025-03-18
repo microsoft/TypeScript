@@ -1,0 +1,15 @@
+--- old.neverInference.js
++++ new.neverInference.js
+@@= skipped -31, +31 lines =@@
+ 
+ 
+ //// [neverInference.js]
+-"use strict";
+ let neverArray = [];
+-let a1 = f1([]); // never
+-let a2 = f1(neverArray); // never
++let a1 = f1([]);
++let a2 = f1(neverArray);
+ const list = mkList([], compareNumbers);
+ f2(Array.from([0]), [], (a1, a2) => a1 - a2);
+ f2(Array.from([]), [0], (a1, a2) => a1 - a2);

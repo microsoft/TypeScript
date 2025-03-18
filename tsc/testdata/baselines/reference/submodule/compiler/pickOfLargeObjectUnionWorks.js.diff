@@ -1,0 +1,8 @@
+--- old.pickOfLargeObjectUnionWorks.js
++++ new.pickOfLargeObjectUnionWorks.js
+@@= skipped -81, +81 lines =@@
+   const xyz: Pick<A | B | C, 'id'> = {id: 'id'}
+ 
+ //// [pickOfLargeObjectUnionWorks.js]
+-var xyz = { id: 'id' };
++const xyz = { id: 'id' };

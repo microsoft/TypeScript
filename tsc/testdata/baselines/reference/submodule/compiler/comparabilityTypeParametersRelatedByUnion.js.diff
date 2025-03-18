@@ -1,0 +1,26 @@
+--- old.comparabilityTypeParametersRelatedByUnion.js
++++ new.comparabilityTypeParametersRelatedByUnion.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [comparabilityTypeParametersRelatedByUnion.js]
+-var C = /** @class */ (function () {
+-    function C(x) {
++class C {
++    x;
++    constructor(x) {
+         this.x = x;
+     }
+-    C.prototype.good = function (y) {
++    good(y) {
+         if (y === this.x) { }
+-    };
+-    C.prototype.bad = function (y) {
++    }
++    bad(y) {
+         if (y === this.x) { }
+-    };
+-    return C;
+-}());
++    }
++}

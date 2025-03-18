@@ -1,0 +1,7 @@
+--- old.substitutionTypesCompareCorrectlyInRestrictiveInstances.js
++++ new.substitutionTypesCompareCorrectlyInRestrictiveInstances.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [substitutionTypesCompareCorrectlyInRestrictiveInstances.js]
+-"use strict";

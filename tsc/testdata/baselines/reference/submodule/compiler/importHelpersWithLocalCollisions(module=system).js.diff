@@ -1,0 +1,37 @@
+--- old.importHelpersWithLocalCollisions(module=system).js
++++ new.importHelpersWithLocalCollisions(module=system).js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [a.js]
+-System.register(["tslib"], function (exports_1, context_1) {
+-    "use strict";
+-    var tslib_1, A, o, y;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (tslib_1_1) {
+-                tslib_1 = tslib_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            A = class A {
+-            };
+-            exports_1("A", A);
+-            exports_1("A", A = tslib_1.__decorate([
+-                dec
+-            ], A));
+-            o = { a: 1 };
+-            y = Object.assign({}, o);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.A = void 0;
++@dec
++class A {
++}
++exports.A = A;
++const o = { a: 1 };
++const y = { ...o };

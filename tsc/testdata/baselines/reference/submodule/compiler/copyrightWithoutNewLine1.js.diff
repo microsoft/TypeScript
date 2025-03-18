@@ -1,0 +1,20 @@
+--- old.copyrightWithoutNewLine1.js
++++ new.copyrightWithoutNewLine1.js
+@@= skipped -10, +10 lines =@@
+ greeter.start();
+ 
+ //// [copyrightWithoutNewLine1.js]
+-define(["require", "exports", "./greeter"], function (require, exports, model) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var el = document.getElementById('content');
+-    var greeter = new model.Greeter(el);
+-    /** things */
+-    greeter.start();
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const model = require("./greeter");
++var el = document.getElementById('content');
++var greeter = new model.Greeter(el);
++greeter.start();

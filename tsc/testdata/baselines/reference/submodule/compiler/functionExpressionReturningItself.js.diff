@@ -1,0 +1,10 @@
+--- old.functionExpressionReturningItself.js
++++ new.functionExpressionReturningItself.js
+@@= skipped -4, +4 lines =@@
+ 
+ //// [functionExpressionReturningItself.js]
+ var x = function somefn() { return somefn; };
+-
+-
+-//// [functionExpressionReturningItself.d.ts]
+-declare var x: () => /*elided*/ any;

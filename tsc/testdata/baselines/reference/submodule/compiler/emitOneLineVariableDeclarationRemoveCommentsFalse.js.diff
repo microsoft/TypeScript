@@ -1,0 +1,20 @@
+--- old.emitOneLineVariableDeclarationRemoveCommentsFalse.js
++++ new.emitOneLineVariableDeclarationRemoveCommentsFalse.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [emitOneLineVariableDeclarationRemoveCommentsFalse.js]
+-var a = /*[[${something}]]*/ {};
+-var b = /*[[${something}]]*/ {};
+-var c = /*[[${something}]]*/ { hoge: true };
+-var d /*[[${something}]]*/ = {};
+-var e /*[[${something}]]*/ = {};
+-var f = /* comment1 */ d(e);
+-var g = /* comment2 */ d(e);
++let a = {};
++let b = {};
++let c = { hoge: true };
++let d = {};
++let e = {};
++let f = d(e);
++let g = d(e);

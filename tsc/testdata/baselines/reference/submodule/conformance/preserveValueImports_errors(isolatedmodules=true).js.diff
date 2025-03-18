@@ -1,0 +1,16 @@
+--- old.preserveValueImports_errors(isolatedmodules=true).js
++++ new.preserveValueImports_errors(isolatedmodules=true).js
+@@= skipped -47, +47 lines =@@
+ //// [a.js]
+ export {};
+ //// [b.js]
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
++class B {
++}
+ ;
+ export {};
+ //// [c.js]

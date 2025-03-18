@@ -1,0 +1,28 @@
+--- old.constEnumNamespaceReferenceCausesNoImport2.js
++++ new.constEnumNamespaceReferenceCausesNoImport2.js
+@@= skipped -27, +27 lines =@@
+ exports.ConstEnumOnlyModule = void 0;
+ var ConstEnumOnlyModule;
+ (function (ConstEnumOnlyModule) {
+-    var ConstFooEnum;
++    let ConstFooEnum;
+     (function (ConstFooEnum) {
+         ConstFooEnum[ConstFooEnum["Some"] = 0] = "Some";
+         ConstFooEnum[ConstFooEnum["Values"] = 1] = "Values";
+@@= skipped -9, +9 lines =@@
+ })(ConstEnumOnlyModule || (exports.ConstEnumOnlyModule = ConstEnumOnlyModule = {}));
+ //// [reexport.js]
+ "use strict";
+-var Foo = require("./foo");
++const Foo = require("./foo");
+ module.exports = Foo.ConstEnumOnlyModule;
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ function check(x) {
+     switch (x) {
+-        case 0 /* Foo.ConstFooEnum.Some */:
++        case Foo.ConstFooEnum.Some:
+             break;
+     }
+ }

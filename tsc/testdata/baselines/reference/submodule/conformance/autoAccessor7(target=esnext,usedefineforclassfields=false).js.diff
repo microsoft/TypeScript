@@ -1,0 +1,10 @@
+--- old.autoAccessor7(target=esnext,usedefineforclassfields=false).js
++++ new.autoAccessor7(target=esnext,usedefineforclassfields=false).js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [autoAccessor7.js]
+ class C1 {
++    accessor a;
+ }
+ class C2 extends C1 {
+     accessor a = 1;

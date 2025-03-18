@@ -1,0 +1,8 @@
+--- old.partiallyAmbientFundule.js
++++ new.partiallyAmbientFundule.js
+@@= skipped -6, +6 lines =@@
+ function foo () { } // Legal, because module is ambient
+ 
+ //// [partiallyAmbientFundule.js]
+-function foo() { } // Legal, because module is ambient
++function foo() { }

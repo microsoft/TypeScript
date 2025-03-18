@@ -1,0 +1,21 @@
+--- old.esDecorators-classDeclaration-fields-nonStaticAbstract(target=es5).js
++++ new.esDecorators-classDeclaration-fields-nonStaticAbstract(target=es5).js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [esDecorators-classDeclaration-fields-nonStaticAbstract.js]
+-var field3 = "field3";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++const field3 = "field3";
++class C {
++    @dec(1)
++    field1;
++    @dec(2)
++    ["field2"];
++    @dec(3)
++    [field3];
++}

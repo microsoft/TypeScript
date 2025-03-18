@@ -1,0 +1,157 @@
+--- old.declarationEmitNameConflicts.js
++++ new.declarationEmitNameConflicts.js
+@@= skipped -52, +52 lines =@@
+ "use strict";
+ var f;
+ (function (f) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
++    class c {
++    }
+     f.c = c;
+ })(f || (f = {}));
+ module.exports = f;
+@@= skipped -12, +9 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.M = void 0;
+-var im = require("./declarationEmit_nameConflicts_1");
++const im = require("./declarationEmit_nameConflicts_1");
+ var M;
+ (function (M) {
+     function f() { }
+     M.f = f;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
++    class C {
++    }
+     M.C = C;
+-    var N;
++    let N;
+     (function (N) {
+         function g() { }
+         N.g = g;
+@@= skipped -23, +20 lines =@@
+     M.d = im;
+ })(M || (exports.M = M = {}));
+ (function (M) {
+-    var P;
++    let P;
+     (function (P) {
+         function f() { }
+         P.f = f;
+-        var C = /** @class */ (function () {
+-            function C() {
+-            }
+-            return C;
+-        }());
++        class C {
++        }
+         P.C = C;
+-        var N;
++        let N;
+         (function (N) {
+             function g() { }
+             N.g = g;
+             ;
+         })(N = P.N || (P.N = {}));
+         P.im = M.P.f;
+-        P.a = M.a; // emitted incorrectly as typeof f
+-        P.b = M.b; // ok
+-        P.c = M.c; // ok
+-        P.g = M.c.g; // ok
+-        P.d = M.d; // emitted incorrectly as typeof im
++        P.a = M.a;
++        P.b = M.b;
++        P.c = M.c;
++        P.g = M.c.g;
++        P.d = M.d;
+     })(P = M.P || (M.P = {}));
+ })(M || (exports.M = M = {}));
+ (function (M) {
+-    var Q;
++    let Q;
+     (function (Q) {
+         function f() { }
+         Q.f = f;
+-        var C = /** @class */ (function () {
+-            function C() {
+-            }
+-            return C;
+-        }());
++        class C {
++        }
+         Q.C = C;
+-        var N;
++        let N;
+         (function (N) {
+             function g() { }
+             N.g = g;
+@@= skipped -43, +37 lines =@@
+         })(N = Q.N || (Q.N = {}));
+     })(Q = M.Q || (M.Q = {}));
+ })(M || (exports.M = M = {}));
+-
+-
+-//// [declarationEmit_nameConflicts_1.d.ts]
+-declare namespace f {
+-    class c {
+-    }
+-}
+-export = f;
+-//// [declarationEmit_nameConflicts_0.d.ts]
+-import im = require('./declarationEmit_nameConflicts_1');
+-export declare namespace M {
+-    function f(): void;
+-    class C {
+-    }
+-    namespace N {
+-        function g(): void;
+-        interface I {
+-        }
+-    }
+-    export import a = M.f;
+-    export import b = M.C;
+-    export import c = N;
+-    export import d = im;
+-}
+-export declare namespace M.P {
+-    function f(): void;
+-    class C {
+-    }
+-    namespace N {
+-        function g(): void;
+-        interface I {
+-        }
+-    }
+-    export import im = M.P.f;
+-    var a: typeof M.f;
+-    var b: typeof M.C;
+-    var c: typeof M.N;
+-    var g: typeof M.N.g;
+-    var d: typeof M.d;
+-}
+-export declare namespace M.Q {
+-    function f(): void;
+-    class C {
+-    }
+-    namespace N {
+-        function g(): void;
+-        interface I {
+-        }
+-    }
+-    interface b extends M.b {
+-    }
+-    interface I extends M.c.I {
+-    }
+-    namespace c {
+-        interface I extends M.c.I {
+-        }
+-    }
+-}

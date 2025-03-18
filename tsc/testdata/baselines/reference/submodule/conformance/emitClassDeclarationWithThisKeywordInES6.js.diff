@@ -1,0 +1,13 @@
+--- old.emitClassDeclarationWithThisKeywordInES6.js
++++ new.emitClassDeclarationWithThisKeywordInES6.js
+@@= skipped -21, +21 lines =@@
+ 
+ //// [emitClassDeclarationWithThisKeywordInES6.js]
+ class B {
++    x = 10;
+     constructor() {
+         this.x = 10;
+-        this.x = 10;
+     }
+     static log(a) { }
+     foo() {

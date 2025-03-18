@@ -1,0 +1,13 @@
+--- old.typeofOperatorInvalidOperations.js
++++ new.typeofOperatorInvalidOperations.js
+@@= skipped -9, +9 lines =@@
+ var ANY1 = typeof ;
+ 
+ //// [typeofOperatorInvalidOperations.js]
+-// Unary operator typeof
+-// opreand before typeof
+ var ANY = ANY;
+-typeof ; //expect error
+-// miss an operand
++typeof ;
+ var ANY1 = typeof ;

@@ -1,0 +1,13 @@
+--- old.parserGenericConstraint4.js
++++ new.parserGenericConstraint4.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [parserGenericConstraint4.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

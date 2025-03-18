@@ -1,0 +1,13 @@
+--- old.esDecorators-classDeclaration-fields-nonStaticAbstract(target=es2022).js
++++ new.esDecorators-classDeclaration-fields-nonStaticAbstract(target=es2022).js
+@@= skipped -14, +14 lines =@@
+ //// [esDecorators-classDeclaration-fields-nonStaticAbstract.js]
+ const field3 = "field3";
+ class C {
++    @dec(1)
++    field1;
++    @dec(2)
++    ["field2"];
++    @dec(3)
++    [field3];
+ }

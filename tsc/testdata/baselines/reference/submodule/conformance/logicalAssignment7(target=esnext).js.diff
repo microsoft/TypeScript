@@ -1,0 +1,10 @@
+--- old.logicalAssignment7(target=esnext).js
++++ new.logicalAssignment7(target=esnext).js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [logicalAssignment7.js]
+-"use strict";
+ function foo1(results, results1) {
+     (results ||= results1 ||= []).push(100);
+ }

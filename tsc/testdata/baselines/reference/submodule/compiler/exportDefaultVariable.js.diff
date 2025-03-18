@@ -1,0 +1,7 @@
+--- old.exportDefaultVariable.js
++++ new.exportDefaultVariable.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [exportDefaultVariable.js]
+-// Regression test for #3018

@@ -1,0 +1,17 @@
+--- old.letKeepNamesOfTopLevelItems.js
++++ new.letKeepNamesOfTopLevelItems.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [letKeepNamesOfTopLevelItems.js]
+-var x;
++let x;
+ function foo() {
+-    var x;
++    let x;
+ }
+ var A;
+ (function (A) {
+-    var x;
++    let x;
+ })(A || (A = {}));

@@ -1,0 +1,14 @@
+--- old.newOperatorErrorCases_noImplicitAny.js
++++ new.newOperatorErrorCases_noImplicitAny.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [newOperatorErrorCases_noImplicitAny.js]
+ function fnNumber() { return 90; }
+-new fnNumber(); // Error
++new fnNumber();
+ function fnVoid() { }
+-new fnVoid(); // Error
++new fnVoid();
+ function functionVoidNoThis() { }
+-new functionVoidNoThis(); // Error
++new functionVoidNoThis();

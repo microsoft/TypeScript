@@ -1,0 +1,25 @@
+--- old.declarationEmitDestructuringPrivacyError.js
++++ new.declarationEmitDestructuringPrivacyError.js
+@@= skipped -9, +9 lines =@@
+ //// [declarationEmitDestructuringPrivacyError.js]
+ var m;
+ (function (m) {
+-    var _a;
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
+-    _a = [10, new c(), 30], m.x = _a[0], m.y = _a[1], m.z = _a[2];
+-})(m || (m = {}));
+-
+-
+-//// [declarationEmitDestructuringPrivacyError.d.ts]
+-declare namespace m {
+     class c {
+     }
+-    export var x: number, y: c, z: number;
+-    export {};
+-}
++    [m.x, m.y, m.z] = [10, new c(), 30];
++})(m || (m = {}));

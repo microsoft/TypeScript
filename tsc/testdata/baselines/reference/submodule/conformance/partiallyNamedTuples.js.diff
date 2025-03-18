@@ -1,0 +1,43 @@
+--- old.partiallyNamedTuples.js
++++ new.partiallyNamedTuples.js
+@@= skipped -61, +61 lines =@@
+ 
+ 
+ //// [partiallyNamedTuples.js]
+-function fa1() {
+-    var args = [];
+-    for (var _i = 0; _i < arguments.length; _i++) {
+-        args[_i] = arguments[_i];
+-    }
+-}
+-function fa2(a) {
+-    var args = [];
+-    for (var _i = 1; _i < arguments.length; _i++) {
+-        args[_i - 1] = arguments[_i];
+-    }
+-}
+-function fb1() {
+-    var args = [];
+-    for (var _i = 0; _i < arguments.length; _i++) {
+-        args[_i] = arguments[_i];
+-    }
+-}
+-function fb2(a) {
+-    var args = [];
+-    for (var _i = 1; _i < arguments.length; _i++) {
+-        args[_i - 1] = arguments[_i];
+-    }
+-}
+-function fb3(a) {
+-    var args = [];
+-    for (var _i = 1; _i < arguments.length; _i++) {
+-        args[_i - 1] = arguments[_i];
+-    }
+-}
+-var output = test(input);
++function fa1(...args) { }
++function fa2(a, ...args) { }
++function fb1(...args) { }
++function fb2(a, ...args) { }
++function fb3(a, ...args) { }
++const output = test(input);

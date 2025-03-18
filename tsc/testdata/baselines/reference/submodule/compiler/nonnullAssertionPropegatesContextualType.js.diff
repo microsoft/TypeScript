@@ -1,0 +1,9 @@
+--- old.nonnullAssertionPropegatesContextualType.js
++++ new.nonnullAssertionPropegatesContextualType.js
+@@= skipped -3, +3 lines =@@
+ let rect2: SVGRectElement = document.querySelector('.svg-rectangle')!; // Error: Element
+ 
+ //// [nonnullAssertionPropegatesContextualType.js]
+-"use strict";
+-var rect2 = document.querySelector('.svg-rectangle'); // Error: Element
++let rect2 = document.querySelector('.svg-rectangle');

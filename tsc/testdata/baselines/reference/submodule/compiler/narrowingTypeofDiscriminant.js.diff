@@ -1,0 +1,48 @@
+--- old.narrowingTypeofDiscriminant.js
++++ new.narrowingTypeofDiscriminant.js
+@@= skipped -45, +45 lines =@@
+ 
+ 
+ //// [narrowingTypeofDiscriminant.js]
+-"use strict";
+ function f1(obj) {
+     if (typeof obj.kind === "string") {
+-        obj; // { kind: 'a', data: string }
++        obj;
+     }
+     else {
+-        obj; // { kind: 1, data: number }
++        obj;
+     }
+ }
+ function f2(obj) {
+-    if (typeof (obj === null || obj === void 0 ? void 0 : obj.kind) === "string") {
+-        obj; // { kind: 'a', data: string }
++    if (typeof obj?.kind === "string") {
++        obj;
+     }
+     else {
+-        obj; // { kind: 1, data: number } | undefined
++        obj;
+     }
+ }
+ function numberOk(wrapped) {
+-    if (typeof (wrapped === null || wrapped === void 0 ? void 0 : wrapped.value) !== 'string') {
++    if (typeof wrapped?.value !== 'string') {
+         return null;
+     }
+     return wrapped.value;
+ }
+ function booleanBad(wrapped) {
+-    if (typeof (wrapped === null || wrapped === void 0 ? void 0 : wrapped.value) !== 'string') {
++    if (typeof wrapped?.value !== 'string') {
+         return null;
+     }
+     return wrapped.value;
+ }
+ function booleanFixed(wrapped) {
+-    if (typeof (wrapped === null || wrapped === void 0 ? void 0 : wrapped.value) !== 'string') {
++    if (typeof (wrapped?.value) !== 'string') {
+         return null;
+     }
+     return wrapped.value;

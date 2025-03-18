@@ -1,0 +1,26 @@
+--- old.importAttributes1(module=commonjs).js
++++ new.importAttributes1(module=commonjs).js
+@@= skipped -66, +66 lines =@@
+ const f = Promise.resolve().then(() => require());
+ const g = Promise.resolve().then(() => require('./0'));
+ const h = Promise.resolve().then(() => require('./0'));
+-
+-
+-//// [0.d.ts]
+-export declare const a = 1;
+-export declare const b = 2;
+-//// [1.d.ts]
+-import './0';
+-//// [2.d.ts]
+-export {};
+-//// [3.d.ts]
+-declare const a: Promise<typeof import("./0")>;
+-declare const b: Promise<typeof import("./0")>;
+-declare const c: Promise<typeof import("./0")>;
+-declare const d: Promise<typeof import("./0")>;
+-declare const dd: Promise<typeof import("./0")>;
+-declare function foo(): any;
+-declare const e: Promise<typeof import("./0")>;
+-declare const f: Promise<any>;
+-declare const g: Promise<typeof import("./0")>;
+-declare const h: Promise<typeof import("./0")>;

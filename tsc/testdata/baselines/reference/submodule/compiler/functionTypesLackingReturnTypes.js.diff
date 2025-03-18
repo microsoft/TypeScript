@@ -1,0 +1,15 @@
+--- old.functionTypesLackingReturnTypes.js
++++ new.functionTypesLackingReturnTypes.js
+@@= skipped -14, +14 lines =@@
+ var i: { new () }
+ 
+ //// [functionTypesLackingReturnTypes.js]
+-// Error (no '=>')
+ function f(x) {
+ }
+-// Error (no '=>')
+ var g;
+-// Okay
+ var h;
+-// Okay
+ var i;

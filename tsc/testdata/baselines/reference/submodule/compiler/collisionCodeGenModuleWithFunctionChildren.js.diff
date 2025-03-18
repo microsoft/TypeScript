@@ -1,0 +1,28 @@
+--- old.collisionCodeGenModuleWithFunctionChildren.js
++++ new.collisionCodeGenModuleWithFunctionChildren.js
+@@= skipped -24, +24 lines =@@
+ var M;
+ (function (M_1) {
+     M_1.x = 3;
+-    function fn(M, p) {
+-        if (p === void 0) { p = M_1.x; }
+-    }
++    function fn(M, p = M_1.x) { }
+ })(M || (M = {}));
+-(function (M_2) {
++(function (M_1) {
+     function fn2() {
+         var M;
+-        var p = M_2.x;
++        var p = x;
+     }
+ })(M || (M = {}));
+-(function (M_3) {
++(function (M_1) {
+     function fn3() {
+         function M() {
+-            var p = M_3.x;
++            var p = x;
+         }
+     }
+ })(M || (M = {}));

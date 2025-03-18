@@ -1,0 +1,36 @@
+--- old.classStaticBlock26(target=es2022).js
++++ new.classStaticBlock26(target=es2022).js
+@@= skipped -33, +33 lines =@@
+ //// [classStaticBlock26.js]
+ class C {
+     static {
+-        await ; // illegal
++        await ;
+     }
+     static {
+-        await (1); // illegal
++        await (1);
+     }
+     static {
+-        ({ [await ]: 1 }); // illegal
++        ({ [await ]: 1 });
+     }
+     static {
+         class D {
+-            [await ] = 1; // illegal (computed property names are evaluated outside of a class body
++            [await ] = 1;
+         }
+         ;
+     }
+     static {
+-        ({ await:  }); // illegal short-hand property reference
++        ({ await:  });
+     }
+     static {
+         await ;
+         break ;
+-        await ; // illegal, 'await' cannot be used as a label
++        await ;
+     }
+     static {
+         function f(await) { }

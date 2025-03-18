@@ -1,0 +1,26 @@
+--- old.initializationOrdering1(target=es2021,usedefineforclassfields=true).js
++++ new.initializationOrdering1(target=es2021,usedefineforclassfields=true).js
+@@= skipped -23, +23 lines =@@
+     }
+ }
+ export class Broken {
++    facade;
+     constructor(facade) {
+-        Object.defineProperty(this, "facade", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: facade
+-        });
+-        Object.defineProperty(this, "bug", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: this.facade.create()
+-        });
++        this.facade = facade;
+         console.log(this.bug);
+     }
++    bug = this.facade.create();
+ }
+ new Broken(new Helper);

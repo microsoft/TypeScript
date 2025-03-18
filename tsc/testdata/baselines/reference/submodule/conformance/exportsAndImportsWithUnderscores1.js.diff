@@ -1,0 +1,10 @@
+--- old.exportsAndImportsWithUnderscores1.js
++++ new.exportsAndImportsWithUnderscores1.js
+@@= skipped -24, +24 lines =@@
+ //// [m2.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var m1_1 = require("./m1");
+-var __ = m1_1.default.__, _ = m1_1.default._, ___ = m1_1.default.___;
++const m1_1 = require("./m1");
++const { __, _, ___ } = m1_1.default;

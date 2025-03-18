@@ -1,0 +1,8 @@
+--- old.templateStringWhitespaceEscapes1.js
++++ new.templateStringWhitespaceEscapes1.js
+@@= skipped -3, +3 lines =@@
+ `\t\n\v\f\r`;
+ 
+ //// [templateStringWhitespaceEscapes1.js]
+-"\t\n\v\f\r";
++`\t\n\v\f\r`;

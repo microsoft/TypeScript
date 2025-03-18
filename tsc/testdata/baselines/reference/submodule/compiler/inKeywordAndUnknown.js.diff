@@ -1,0 +1,29 @@
+--- old.inKeywordAndUnknown.js
++++ new.inKeywordAndUnknown.js
+@@= skipped -53, +53 lines =@@
+ 
+ 
+ //// [inKeywordAndUnknown.js]
+-"use strict";
+-// Repro from #50531
+ function f(x, y) {
+     if (!("a" in x)) {
+         return;
+     }
+-    x; // {}
++    x;
+     if (!y) {
+         return;
+     }
+-    y; // {}
++    y;
+     if (!("a" in y)) {
+         return;
+     }
+-    y; // {}
++    y;
+ }
+-// Repro from #51007
+ function isHTMLTable(table) {
+     return !!table && table instanceof Object && 'html' in table;
+ }

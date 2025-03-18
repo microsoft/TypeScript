@@ -1,0 +1,10 @@
+--- old.for-of27.js
++++ new.for-of27.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [for-of27.js]
+ class MyStringIterator {
++    [Symbol.iterator];
+ }
+-Symbol.iterator;
+ for (var v of new MyStringIterator) { }

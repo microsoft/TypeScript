@@ -1,0 +1,13 @@
+--- old.nodeModulesTripleSlashReferenceModeOverride1(module=nodenext).js
++++ new.nodeModulesTripleSlashReferenceModeOverride1(module=nodenext).js
+@@= skipped -25, +25 lines =@@
+ export {};
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-/// <reference types="pkg" />
+ foo;
+-bar; // bar should resolve while foo should not, since index.js is cjs
++bar;
++export {};

@@ -1,0 +1,12 @@
+--- old.commentsOnObjectLiteral1.js
++++ new.commentsOnObjectLiteral1.js
+@@= skipped -9, +9 lines =@@
+ );
+ 
+ //// [commentsOnObjectLiteral1.js]
+-var Person = makeClass(
+-/**
+-  @scope Person
+-*/
+-{});
++var Person = makeClass({});

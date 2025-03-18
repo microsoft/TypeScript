@@ -1,0 +1,38 @@
+--- old.instanceOfInExternalModules.js
++++ new.instanceOfInExternalModules.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [instanceOfInExternalModules_require.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.Foo = void 0;
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-        }
+-        return Foo;
+-    }());
+-    exports.Foo = Foo;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Foo = void 0;
++class Foo {
++    foo;
++}
++exports.Foo = Foo;
+ //// [instanceOfInExternalModules_1.js]
+-define(["require", "exports", "instanceOfInExternalModules_require"], function (require, exports, Bar) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    function IsFoo(value) {
+-        return value instanceof Bar.Foo;
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const Bar = require("instanceOfInExternalModules_require");
++function IsFoo(value) {
++    return value instanceof Bar.Foo;
++}

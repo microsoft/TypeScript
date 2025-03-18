@@ -1,0 +1,35 @@
+--- old.es6ImportDefaultBindingWithExport.js
++++ new.es6ImportDefaultBindingWithExport.js
+@@= skipped -9, +9 lines =@@
+ export import defaultBinding2 from "server"; // non referenced
+ 
+ //// [server.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var a = 10;
+-    exports.default = a;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++var a = 10;
++exports.default = a;
+ //// [client.js]
+-define(["require", "exports", "server"], function (require, exports, server_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    exports.x = server_1.default;
+-});
+-
+-
+-//// [server.d.ts]
+-declare var a: number;
+-export default a;
+-//// [client.d.ts]
+-export declare var x: number;
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++const server_1 = require("server");
++exports.x = server_1.default;

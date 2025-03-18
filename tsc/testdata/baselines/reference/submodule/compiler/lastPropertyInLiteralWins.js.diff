@@ -1,0 +1,17 @@
+--- old.lastPropertyInLiteralWins.js
++++ new.lastPropertyInLiteralWins.js
+@@= skipped -22, +22 lines =@@
+     thing.thunk("str");
+ }
+ test({
+-    thunk: function (str) { },
+-    thunk: function (num) { }
++    thunk: (str) => { },
++    thunk: (num) => { }
+ });
+ test({
+-    thunk: function (num) { },
+-    thunk: function (str) { }
++    thunk: (num) => { },
++    thunk: (str) => { }
+ });

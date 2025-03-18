@@ -1,0 +1,17 @@
+--- old.exportAssignImportedIdentifier.js
++++ new.exportAssignImportedIdentifier.js
+@@= skipped -22, +22 lines =@@
+ }
+ //// [foo2.js]
+ "use strict";
+-var foo1 = require("./foo1");
++const foo1 = require("./foo1");
+ var x = foo1.x;
+ module.exports = x;
+ //// [foo3.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo2 = require("./foo2");
+-var x = foo2(); // should be boolean
++const foo2 = require("./foo2");
++var x = foo2();

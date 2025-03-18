@@ -1,0 +1,20 @@
+--- old.genericWithCallSignatures1.js
++++ new.genericWithCallSignatures1.js
+@@= skipped -19, +19 lines =@@
+ 
+ //// [genericWithCallSignatures_0.js]
+ //// [genericWithCallSignatures_1.js]
+-///<reference path="genericWithCallSignatures_0.ts"/>
+-var MyClass = /** @class */ (function () {
+-    function MyClass() {
+-    }
+-    MyClass.prototype.myMethod = function () {
++class MyClass {
++    callableThing;
++    myMethod() {
+         var x = this.callableThing();
+-    };
+-    return MyClass;
+-}());
++    }
++}

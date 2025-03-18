@@ -1,0 +1,40 @@
+--- old.verbatimModuleSyntaxNoElisionESM.js
++++ new.verbatimModuleSyntaxNoElisionESM.js
+@@= skipped -34, +34 lines =@@
+ 
+ 
+ //// [a.js]
+-export var a = 0;
+-var AClass = /** @class */ (function () {
+-    function AClass() {
+-    }
+-    return AClass;
+-}());
+-export { AClass };
++export const a = 0;
++export class AClass {
++}
+ //// [b.js]
+ import { a, A, AClass } from "./a";
+ import {} from "./a";
+@@= skipped -16, +12 lines =@@
+ //// [c.js]
+ import { AClass } from "./b";
+ //// [main4.js]
+-export default 1; // ok
++export default 1;
+ //// [main5.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}()); // ok
+-export default C;
++export default class C {
++}
+ //// [main6.js]
+-export default I; // error
++export default I;
+ //// [main7.js]
+-export default C; // error
++export default C;

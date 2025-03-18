@@ -1,0 +1,8 @@
+--- old.comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.js
++++ new.comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.js
+@@= skipped -15, +15 lines =@@
+ //// [comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var x = null;
++const x = null;

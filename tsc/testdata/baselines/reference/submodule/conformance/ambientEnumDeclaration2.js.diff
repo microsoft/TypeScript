@@ -1,0 +1,8 @@
+--- old.ambientEnumDeclaration2.js
++++ new.ambientEnumDeclaration2.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [ambientEnumDeclaration2.js]
+-// In ambient enum declarations that specify no const modifier, enum member declarations
+-// that omit a value are considered computed members (as opposed to having auto- incremented values assigned).

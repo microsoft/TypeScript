@@ -1,0 +1,45 @@
+--- old.declarationEmitClassMemberNameConflict2.js
++++ new.declarationEmitClassMemberNameConflict2.js
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ //// [declarationEmitClassMemberNameConflict2.js]
+-var Bar = 'bar';
++const Bar = 'bar';
+ var Hello;
+ (function (Hello) {
+     Hello[Hello["World"] = 0] = "World";
+@@= skipped -9, +9 lines =@@
+ (function (Hello1) {
+     Hello1[Hello1["World1"] = 0] = "World1";
+ })(Hello1 || (Hello1 = {}));
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        // Same names + string => OK
+-        this.Bar = Bar;
+-        // Same names + enum => OK
+-        this.Hello = Hello;
+-        // Different names + enum => OK
+-        this.Hello2 = Hello1;
+-    }
+-    return Foo;
+-}());
+-
+-
+-//// [declarationEmitClassMemberNameConflict2.d.ts]
+-declare const Bar = "bar";
+-declare enum Hello {
+-    World = 0
++class Foo {
++    Bar = Bar;
++    Hello = Hello;
++    Hello2 = Hello1;
+ }
+-declare enum Hello1 {
+-    World1 = 0
+-}
+-declare class Foo {
+-    Bar: string;
+-    Hello: typeof Hello;
+-    Hello2: typeof Hello1;
+-}

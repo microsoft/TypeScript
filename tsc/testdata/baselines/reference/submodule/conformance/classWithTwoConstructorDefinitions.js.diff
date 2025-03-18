@@ -1,0 +1,24 @@
+--- old.classWithTwoConstructorDefinitions.js
++++ new.classWithTwoConstructorDefinitions.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [classWithTwoConstructorDefinitions.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    } // error
+-    return C;
+-}());
+-var D = /** @class */ (function () {
+-    function D(x) {
+-    } // error
+-    return D;
+-}());
++class C {
++    constructor() { }
++    constructor(x) { }
++}
++class D {
++    constructor(x) { }
++    constructor(x, y) { }
++}

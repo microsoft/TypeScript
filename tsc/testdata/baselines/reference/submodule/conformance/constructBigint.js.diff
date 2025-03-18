@@ -1,0 +1,10 @@
+--- old.constructBigint.js
++++ new.constructBigint.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [constructBigint.js]
+-"use strict";
+ BigInt(1);
+ BigInt(1n);
+ BigInt("0");

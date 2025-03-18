@@ -1,0 +1,36 @@
+--- old.tsxStatelessFunctionComponentsWithTypeArguments2.js
++++ new.tsxStatelessFunctionComponentsWithTypeArguments2.js
+@@= skipped -34, +34 lines =@@
+ 
+ 
+ //// [file.jsx]
+-define(["require", "exports", "react"], function (require, exports, React) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    // Error
+-    function Bar(arg) {
+-        var a1 = <ComponentSpecific1 {...arg} ignore-prop={10}/>;
+-    }
+-    // Error
+-    function Baz(arg) {
+-        var a0 = <ComponentSpecific1 {...arg}/>;
+-    }
+-    // Error
+-    function createLink(func) {
+-        var o = <Link func={func}/>;
+-    }
+-    // Error
+-    var i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={function (val) { }}/>;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++function Bar(arg) {
++    let a1 = <ComponentSpecific1 {...arg} ignore-prop={10}/>;
++}
++function Baz(arg) {
++    let a0 = <ComponentSpecific1 {...arg}/>;
++}
++function createLink(func) {
++    let o = <Link func={func}/>;
++}
++let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }}/>;

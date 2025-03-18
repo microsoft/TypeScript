@@ -1,0 +1,55 @@
+--- old.importHelpersWithImportOrExportDefault(esmoduleinterop=false,module=system).js
++++ new.importHelpersWithImportOrExportDefault(esmoduleinterop=false,module=system).js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [a.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var default_1;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            default_1 = class {
+-            };
+-            exports_1("default", default_1);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++class default_1 {
++}
++exports.default = default_1;
+ //// [b.js]
+-System.register(["./a"], function (exports_1, context_1) {
+-    "use strict";
+-    var a_1;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (a_2_1) {
+-                exports_1({
+-                    "default": a_2_1["default"]
+-                });
+-                exports_1({
+-                    "a": a_2_1["default"]
+-                });
+-                a_1 = a_2_1;
+-            }
+-        ],
+-        execute: function () {
+-            void a_1.default;
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.a = exports.default = void 0;
++const a_1 = require("./a");
++Object.defineProperty(exports, "default", { enumerable: true, get: function () { return a_1.default; } });
++const a_2 = require("./a");
++Object.defineProperty(exports, "a", { enumerable: true, get: function () { return a_2.default; } });
++const a_3 = require("./a");
++void a_3.default;

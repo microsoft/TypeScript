@@ -1,0 +1,18 @@
+--- old.asyncFunctionDeclaration7_es6.js
++++ new.asyncFunctionDeclaration7_es6.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [asyncFunctionDeclaration7_es6.js]
+-function bar() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        // 'await' here is an identifier, and not a yield expression.
+-        function foo() {
+-            return __awaiter(this, arguments, void 0, function* (a = yield ) {
+-            });
+-        }
+-    });
++async function bar() {
++    async function foo(a = await ) {
++    }
+ }

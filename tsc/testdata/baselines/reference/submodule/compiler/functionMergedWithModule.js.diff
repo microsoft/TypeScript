@@ -1,0 +1,24 @@
+--- old.functionMergedWithModule.js
++++ new.functionMergedWithModule.js
+@@= skipped -20, +20 lines =@@
+     var x = 10;
+ }
+ (function (foo) {
+-    var Bar;
++    let Bar;
+     (function (Bar) {
+         function f() {
+         }
+@@= skipped -8, +8 lines =@@
+     })(Bar = foo.Bar || (foo.Bar = {}));
+ })(foo || (foo = {}));
+ (function (foo) {
+-    var Baz;
++    let Baz;
+     (function (Baz) {
+         function g() {
+-            foo.Bar.f();
++            Bar.f();
+         }
+         Baz.g = g;
+     })(Baz = foo.Baz || (foo.Baz = {}));

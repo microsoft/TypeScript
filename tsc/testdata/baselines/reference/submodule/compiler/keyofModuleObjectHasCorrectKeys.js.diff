@@ -1,0 +1,9 @@
+--- old.keyofModuleObjectHasCorrectKeys.js
++++ new.keyofModuleObjectHasCorrectKeys.js
+@@= skipped -22, +22 lines =@@
+ //// [test.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var example = require("./example");
++const example = require("./example");
+ test(example, "default");

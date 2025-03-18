@@ -1,0 +1,31 @@
+--- old.reexportMissingDefault5.js
++++ new.reexportMissingDefault5.js
+@@= skipped -8, +8 lines =@@
+ export { default as Foo } from "./b";
+ 
+ //// [a.js]
+-System.register(["./b"], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (b_1_1) {
+-                exports_1({
+-                    "b": b_1_1["b"]
+-                });
+-                exports_1({
+-                    "Foo": b_1_1["default"]
+-                });
+-            }
+-        ],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Foo = exports.b = void 0;
++const b_1 = require("./b");
++Object.defineProperty(exports, "b", { enumerable: true, get: function () { return b_1.b; } });
++const b_2 = require("./b");
++Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return b_2.default; } });

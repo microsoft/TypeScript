@@ -1,0 +1,10 @@
+--- old.privateNamesAssertion(target=esnext).js
++++ new.privateNamesAssertion(target=esnext).js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [privateNamesAssertion.js]
+-"use strict";
+ class Foo {
+     #p1 = (v) => {
+         if (typeof v !== "string") {

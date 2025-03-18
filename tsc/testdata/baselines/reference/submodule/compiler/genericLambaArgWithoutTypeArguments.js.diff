@@ -1,0 +1,8 @@
+--- old.genericLambaArgWithoutTypeArguments.js
++++ new.genericLambaArgWithoutTypeArguments.js
+@@= skipped -13, +13 lines =@@
+ function foo(a) {
+     return null;
+ }
+-foo(function (arg) { return arg.x; });
++foo((arg) => { return arg.x; });

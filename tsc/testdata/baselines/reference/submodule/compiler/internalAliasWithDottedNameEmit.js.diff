@@ -1,0 +1,23 @@
+--- old.internalAliasWithDottedNameEmit.js
++++ new.internalAliasWithDottedNameEmit.js
+@@= skipped -11, +11 lines =@@
+ //// [internalAliasWithDottedNameEmit.js]
+ var a;
+ (function (a) {
+-    var b;
++    let b;
+     (function (b) {
+-        var c;
++        let c;
+         (function (c) {
+         })(c = b.c || (b.c = {}));
+     })(b = a.b || (a.b = {}));
+ })(a || (a = {}));
+-
+-
+-//// [internalAliasWithDottedNameEmit.d.ts]
+-declare namespace a.b.c {
+-    var d: any;
+-}
+-declare namespace a.e.f {
+-}

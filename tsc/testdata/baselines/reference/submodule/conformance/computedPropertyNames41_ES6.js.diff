@@ -1,0 +1,16 @@
+--- old.computedPropertyNames41_ES6.js
++++ new.computedPropertyNames41_ES6.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [computedPropertyNames41_ES6.js]
+ class Foo {
++    x;
+ }
+ class Foo2 {
++    x;
++    y;
+ }
+ class C {
+-    // Computed properties
+     static [""]() { return new Foo; }
+ }

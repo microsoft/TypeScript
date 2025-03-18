@@ -1,0 +1,16 @@
+--- old.privatePropertyInUnion.js
++++ new.privatePropertyInUnion.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [privatePropertyInUnion.js]
+-"use strict";
+-// Repro from #38236
+-var SyncableObject = /** @class */ (function () {
+-    function SyncableObject() {
+-    }
+-    return SyncableObject;
+-}());
++class SyncableObject {
++    foo;
++}

@@ -1,0 +1,33 @@
+--- old.topLevelVarHoistingSystem.js
++++ new.topLevelVarHoistingSystem.js
+@@= skipped -11, +11 lines =@@
+ export { y };
+ 
+ //// [topLevelVarHoistingSystem.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var y;
+-    var __moduleName = context_1 && context_1.id;
+-    function f() {
+-        console.log(y);
+-    }
+-    return {
+-        setters: [],
+-        execute: function () {
+-            if (false) {
+-                y = 1;
+-                exports_1("y", y);
+-            }
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.y = void 0;
++if (false) {
++    var y = 1;
++    exports.y = y;
++}
++function f() {
++    console.log(y);
++}

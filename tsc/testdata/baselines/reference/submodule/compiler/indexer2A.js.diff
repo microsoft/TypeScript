@@ -1,0 +1,21 @@
+--- old.indexer2A.js
++++ new.indexer2A.js
+@@= skipped -9, +9 lines =@@
+ var directChildrenMap = <IDirectChildrenMap>{}; 
+ 
+ //// [indexer2A.js]
+-var IHeapObjectProperty = /** @class */ (function () {
+-    function IHeapObjectProperty() {
+-    }
+-    return IHeapObjectProperty;
+-}());
+-var IDirectChildrenMap = /** @class */ (function () {
+-    function IDirectChildrenMap() {
+-    }
+-    return IDirectChildrenMap;
+-}());
++class IHeapObjectProperty {
++}
++class IDirectChildrenMap {
++}
+ var directChildrenMap = {};

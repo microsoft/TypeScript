@@ -1,0 +1,15 @@
+--- old.esDecorators-classDeclaration-fields-staticAmbient(target=es5).js
++++ new.esDecorators-classDeclaration-fields-staticAmbient(target=es5).js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [esDecorators-classDeclaration-fields-staticAmbient.js]
+-var field3 = "field3";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++const field3 = "field3";
++class C {
++}

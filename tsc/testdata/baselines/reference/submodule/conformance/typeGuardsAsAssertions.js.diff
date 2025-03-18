@@ -1,0 +1,141 @@
+--- old.typeGuardsAsAssertions.js
++++ new.typeGuardsAsAssertions.js
+@@= skipped -129, +129 lines =@@
+ 
+ //// [typeGuardsAsAssertions.js]
+ "use strict";
+-// Repro from #8513
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.none = void 0;
+ exports.isSome = isSome;
+ exports.fn = fn;
+-var cond;
++let cond;
+ exports.none = { none: '' };
+ function isSome(value) {
+     return 'some' in value;
+ }
+ function someFrom(some) {
+-    return { some: some };
++    return { some };
+ }
+ function fn(makeSome) {
+-    var result = exports.none;
+-    result; // None
++    let result = exports.none;
++    result;
+     while (cond) {
+-        result; // Some<r> | None
++        result;
+         result = someFrom(isSome(result) ? result.some : makeSome());
+-        result; // Some<r>
++        result;
+     }
+ }
+ function foo1() {
+-    var x = 0;
+-    x; // number
++    let x = 0;
++    x;
+     while (cond) {
+-        x; // number, then string | number
++        x;
+         x = typeof x === "string" ? x.slice() : "abc";
+-        x; // string
++        x;
+     }
+     x;
+ }
+ function foo2() {
+-    var x = 0;
+-    x; // number
++    let x = 0;
++    x;
+     while (cond) {
+-        x; // number, then string | number
++        x;
+         if (typeof x === "string") {
+             x = x.slice();
+         }
+         else {
+             x = "abc";
+         }
+-        x; // string
++        x;
+     }
+     x;
+ }
+-// Type guards as assertions
+ function f1() {
+-    var x = undefined;
+-    x; // undefined
++    let x = undefined;
++    x;
+     if (x) {
+-        x; // string | number (guard as assertion)
++        x;
+     }
+-    x; // string | number | undefined
++    x;
+ }
+ function f2() {
+-    var x = undefined;
+-    x; // undefined
++    let x = undefined;
++    x;
+     if (typeof x === "string") {
+-        x; // string (guard as assertion)
++        x;
+     }
+-    x; // string | undefined
++    x;
+ }
+ function f3() {
+-    var x = undefined;
+-    x; // undefined
++    let x = undefined;
++    x;
+     if (!x) {
+         return;
+     }
+-    x; // string | number (guard as assertion)
++    x;
+ }
+ function f4() {
+-    var x = undefined;
+-    x; // undefined
++    let x = undefined;
++    x;
+     if (typeof x === "boolean") {
+-        x; // nothing (boolean not in declared type)
++        x;
+     }
+-    x; // undefined
++    x;
+ }
+ function f5(x) {
+     if (typeof x === "string" && typeof x === "number") {
+-        x; // number (guard as assertion)
++        x;
+     }
+     else {
+-        x; // string | number
++        x;
+     }
+-    x; // string | number
++    x;
+ }
+ function f6() {
+-    var x;
++    let x;
+     x.slice();
+     x = "";
+     x.slice();
+@@= skipped -106, +104 lines =@@
+     x.slice();
+ }
+ function f7() {
+-    var x;
++    let x;
+     x.slice();
+ }

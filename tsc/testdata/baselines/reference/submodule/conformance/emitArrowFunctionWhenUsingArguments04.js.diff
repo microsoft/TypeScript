@@ -1,0 +1,9 @@
+--- old.emitArrowFunctionWhenUsingArguments04.js
++++ new.emitArrowFunctionWhenUsingArguments04.js
+@@= skipped -8, +8 lines =@@
+ //// [emitArrowFunctionWhenUsingArguments04.js]
+ function f() {
+     var arguments;
+-    var a = function () { return arguments; };
++    var a = () => arguments;
+ }

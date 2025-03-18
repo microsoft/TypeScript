@@ -1,0 +1,67 @@
+--- old.throwStatements.js
++++ new.throwStatements.js
+@@= skipped -87, +87 lines =@@
+ 
+ 
+ //// [throwStatements.js]
+-// all legal
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var D = /** @class */ (function () {
+-    function D() {
+-    }
+-    return D;
+-}());
++class C {
++    id;
++}
++class D {
++    source;
++    recurse;
++    wrapped;
++}
+ function F(x) { return 42; }
+ var M;
+ (function (M) {
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        return A;
+-    }());
++    class A {
++        name;
++    }
+     M.A = A;
+     function F2(x) { return x.toString(); }
+     M.F2 = F2;
+@@= skipped -46, +41 lines =@@
+ var aFunction = F;
+ throw aFunction;
+ throw aFunction('');
+-var aLambda = function (x) { return 2; };
++var aLambda = (x) => 2;
+ throw aLambda;
+ throw aLambda(1);
+ var aModule = M;
+@@= skipped -10, +10 lines =@@
+ throw aClassInModule;
+ var aFunctionInModule = M.F2;
+ throw aFunctionInModule;
+-// no initializer or annotation, so this is an 'any'
+ var x;
+ throw x;
+-// literals
+ throw 0.0;
+ throw false;
+ throw null;
+ throw undefined;
+ throw 'a string';
+ throw function () { return 'a string'; };
+-throw function (x) { return 42; };
++throw (x) => 42;
+ throw { x: 12, y: 13 };
+ throw [];
+ throw ['a', ['b']];

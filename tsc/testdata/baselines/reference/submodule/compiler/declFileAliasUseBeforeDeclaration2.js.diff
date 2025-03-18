@@ -1,0 +1,18 @@
+--- old.declFileAliasUseBeforeDeclaration2.js
++++ new.declFileAliasUseBeforeDeclaration2.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [declFileAliasUseBeforeDeclaration2.js]
+-
+-
+-//// [declFileAliasUseBeforeDeclaration2.d.ts]
+-declare module "test" {
+-    namespace A {
+-        class C {
+-        }
+-    }
+-    class B extends E {
+-    }
+-    import E = A.C;
+-}

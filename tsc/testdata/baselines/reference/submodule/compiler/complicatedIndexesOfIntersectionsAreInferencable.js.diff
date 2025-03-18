@@ -1,0 +1,16 @@
+--- old.complicatedIndexesOfIntersectionsAreInferencable.js
++++ new.complicatedIndexesOfIntersectionsAreInferencable.js
+@@= skipped -23, +23 lines =@@
+ });
+ 
+ //// [complicatedIndexesOfIntersectionsAreInferencable.js]
+-"use strict";
+ Func({
+     initialValues: {
+         foo: ""
+     },
+-    validate: function (props) {
++    validate: props => {
+         props.foo;
+     }
+ });

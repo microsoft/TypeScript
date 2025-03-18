@@ -1,0 +1,13 @@
+--- old.duplicateVarAndImport2.js
++++ new.duplicateVarAndImport2.js
+@@= skipped -6, +6 lines =@@
+ import a = M;
+ 
+ //// [duplicateVarAndImport2.js]
+-// error since module is instantiated
+ var a;
+ var M;
+ (function (M) {
+     M.x = 1;
+ })(M || (M = {}));
+-var a = M;

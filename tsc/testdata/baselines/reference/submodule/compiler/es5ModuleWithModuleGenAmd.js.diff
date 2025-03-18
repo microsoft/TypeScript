@@ -1,0 +1,31 @@
+--- old.es5ModuleWithModuleGenAmd.js
++++ new.es5ModuleWithModuleGenAmd.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [es5ModuleWithModuleGenAmd.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.A = void 0;
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        A.prototype.B = function () {
+-            return 42;
+-        };
+-        return A;
+-    }());
+-    exports.A = A;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.A = void 0;
++class A {
++    constructor() {
++    }
++    B() {
++        return 42;
++    }
++}
++exports.A = A;

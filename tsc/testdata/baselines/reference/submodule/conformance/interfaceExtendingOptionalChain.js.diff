@@ -1,0 +1,15 @@
+--- old.interfaceExtendingOptionalChain.js
++++ new.interfaceExtendingOptionalChain.js
+@@= skipped -10, +10 lines =@@
+ //// [interfaceExtendingOptionalChain.js]
+ var Foo;
+ (function (Foo) {
+-    var Bar = /** @class */ (function () {
+-        function Bar() {
+-        }
+-        return Bar;
+-    }());
++    class Bar {
++    }
+     Foo.Bar = Bar;
+ })(Foo || (Foo = {}));

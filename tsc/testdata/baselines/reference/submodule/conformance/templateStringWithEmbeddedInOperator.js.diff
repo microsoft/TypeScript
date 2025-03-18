@@ -1,0 +1,8 @@
+--- old.templateStringWithEmbeddedInOperator.js
++++ new.templateStringWithEmbeddedInOperator.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ "hi" in { hi: 10, hello: 20} }def`;
+ 
+ //// [templateStringWithEmbeddedInOperator.js]
+-var x = "abc".concat("hi" in { hi: 10, hello: 20 }, "def");
++var x = `abc${"hi" in { hi: 10, hello: 20 }}def`;

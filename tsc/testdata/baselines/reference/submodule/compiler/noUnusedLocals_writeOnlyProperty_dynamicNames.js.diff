@@ -1,0 +1,26 @@
+--- old.noUnusedLocals_writeOnlyProperty_dynamicNames.js
++++ new.noUnusedLocals_writeOnlyProperty_dynamicNames.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [noUnusedLocals_writeOnlyProperty_dynamicNames.js]
+-var x = Symbol("x");
+-var y = Symbol("y");
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.m = function () {
+-        this[x] = 0; // write-only
++const x = Symbol("x");
++const y = Symbol("y");
++class C {
++    [x];
++    [y];
++    m() {
++        this[x] = 0;
+         this[y];
+-    };
+-    return C;
+-}());
++    }
++}

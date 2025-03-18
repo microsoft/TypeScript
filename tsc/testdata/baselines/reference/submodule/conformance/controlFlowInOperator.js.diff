@@ -1,0 +1,68 @@
+--- old.controlFlowInOperator.js
++++ new.controlFlowInOperator.js
+@@= skipped -68, +68 lines =@@
+ 
+ 
+ //// [controlFlowInOperator.js]
+-var a = 'a';
+-var b = 'b';
+-var d = 'd';
++const a = 'a';
++const b = 'b';
++const d = 'd';
+ if ('a' in c) {
+-    c; // A
+-    c['a']; // number;
++    c;
++    c['a'];
+ }
+ if ('d' in c) {
+-    c; // never
++    c;
+ }
+ if (a in c) {
+-    c; // A
+-    c[a]; // number;
++    c;
++    c[a];
+ }
+ if (d in c) {
+-    c; // never
++    c;
+ }
+-// repro from https://github.com/microsoft/TypeScript/issues/54790
+ function uniqueID_54790(id, seenIDs) {
+     if (id === undefined) {
+         id = "1";
+@@= skipped -25, +24 lines =@@
+     if (!(id in seenIDs)) {
+         return id;
+     }
+-    for (var i = 1; i < Number.MAX_VALUE; i++) {
+-        var newID = "".concat(id, "-").concat(i);
++    for (let i = 1; i < Number.MAX_VALUE; i++) {
++        const newID = `${id}-${i}`;
+         if (!(newID in seenIDs)) {
+             return newID;
+         }
+@@= skipped -10, +10 lines =@@
+ }
+ function uniqueID_54790_2(id, seenIDs) {
+     id = "a";
+-    for (var i = 1; i < 3; i++) {
+-        var newID = "".concat(id);
++    for (let i = 1; i < 3; i++) {
++        const newID = `${id}`;
+         if (newID in seenIDs) {
+         }
+     }
+ }
+ function uniqueID_54790_3(id, seenIDs) {
+     id = "a";
+-    for (var i = 1; i < 3; i++) {
+-        var newID = id;
++    for (let i = 1; i < 3; i++) {
++        const newID = id;
+         if (newID in seenIDs) {
+         }
+     }

@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/externalModules/umd3.ts] ////
+
+//// [foo.d.ts]
+export var x: number;
+export function fn(): void;
+export interface Thing { n: typeof x }
+export as namespace Foo;
+
+//// [a.ts]
+import * as Foo from './foo';
+Foo.fn();
+let x: Foo.Thing;
+let y: number = x.n;
+
+
+//// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Foo = require("./foo");
+Foo.fn();
+let x;
+let y = x.n;

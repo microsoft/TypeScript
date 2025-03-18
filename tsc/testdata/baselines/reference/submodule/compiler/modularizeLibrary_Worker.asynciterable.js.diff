@@ -1,0 +1,11 @@
+--- old.modularizeLibrary_Worker.asynciterable.js
++++ new.modularizeLibrary_Worker.asynciterable.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [modularizeLibrary_Worker.asynciterable.js]
+-navigator.storage.getDirectory().then(async (directory) => {
++navigator.storage.getDirectory().then(async directory => {
+     for await (const [key, handle] of directory) {
+         handle.kind;
+     }

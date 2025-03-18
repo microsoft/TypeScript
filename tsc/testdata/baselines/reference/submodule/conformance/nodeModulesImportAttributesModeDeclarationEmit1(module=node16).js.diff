@@ -1,0 +1,22 @@
+--- old.nodeModulesImportAttributesModeDeclarationEmit1(module=node16).js
++++ new.nodeModulesImportAttributesModeDeclarationEmit1(module=node16).js
+@@= skipped -27, +27 lines =@@
+ 
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-
+-
+-//// [index.d.ts]
+-import type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+-import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+-export interface LocalInterface extends RequireInterface, ImportInterface {
+-}
+-import { type RequireInterface as Req } from "pkg" with { "resolution-mode": "require" };
+-import { type ImportInterface as Imp } from "pkg" with { "resolution-mode": "import" };
+-export interface Loc extends Req, Imp {
+-}
+-export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+-export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
++export {};

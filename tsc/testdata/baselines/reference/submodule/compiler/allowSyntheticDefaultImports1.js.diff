@@ -1,0 +1,9 @@
+--- old.allowSyntheticDefaultImports1.js
++++ new.allowSyntheticDefaultImports1.js
+@@= skipped -13, +13 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
+-var b_1 = require("./b");
++const b_1 = require("./b");
+ exports.x = new b_1.default.Foo();

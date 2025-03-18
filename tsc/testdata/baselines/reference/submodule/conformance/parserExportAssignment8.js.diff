@@ -1,0 +1,14 @@
+--- old.parserExportAssignment8.js
++++ new.parserExportAssignment8.js
+@@= skipped -8, +8 lines =@@
+ //// [parserExportAssignment8.js]
+ "use strict";
+ exports.C = void 0;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ module.exports = B;

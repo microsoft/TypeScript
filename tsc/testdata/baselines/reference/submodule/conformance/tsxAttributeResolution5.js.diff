@@ -1,0 +1,21 @@
+--- old.tsxAttributeResolution5.js
++++ new.tsxAttributeResolution5.js
+@@= skipped -34, +34 lines =@@
+ 
+ //// [file.jsx]
+ function make1(obj) {
+-    return <test1 {...obj}/>; // OK
++    return <test1 {...obj}/>;
+ }
+ function make2(obj) {
+-    return <test1 {...obj}/>; // Error (x is number, not string)
++    return <test1 {...obj}/>;
+ }
+ function make3(obj) {
+-    return <test1 {...obj}/>; // Error, missing x
++    return <test1 {...obj}/>;
+ }
+-<test1 {...{}}/>; // Error, missing x
+-<test2 {...{}}/>; // Error, missing toString
++<test1 {...{}}/>;
++<test2 {...{}}/>;

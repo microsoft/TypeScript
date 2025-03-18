@@ -1,0 +1,9 @@
+--- old.exportAssignmentWithDeclareModifier.js
++++ new.exportAssignmentWithDeclareModifier.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [exportAssignmentWithDeclareModifier.js]
+ "use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ var x;
+-module.exports = x;

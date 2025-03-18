@@ -1,0 +1,9 @@
+--- old.nullishCoalescingOperatorInParameterBindingPattern(target=esnext).js
++++ new.nullishCoalescingOperatorInParameterBindingPattern(target=esnext).js
+@@= skipped -5, +5 lines =@@
+ (({ [a() ?? "d"]: c = "" }) => {})();
+ 
+ //// [nullishCoalescingOperatorInParameterBindingPattern.js]
+-// https://github.com/microsoft/TypeScript/issues/36295
+ const a = () => undefined;
+ (({ [a() ?? "d"]: c = "" }) => { })();

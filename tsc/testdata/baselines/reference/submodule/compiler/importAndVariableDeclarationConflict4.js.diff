@@ -1,0 +1,7 @@
+--- old.importAndVariableDeclarationConflict4.js
++++ new.importAndVariableDeclarationConflict4.js
+@@= skipped -14, +14 lines =@@
+     m_1.m = '';
+ })(m || (m = {}));
+ var x = '';
+-var x = m.m;

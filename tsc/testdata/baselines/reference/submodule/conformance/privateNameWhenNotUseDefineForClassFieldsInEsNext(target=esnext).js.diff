@@ -1,0 +1,90 @@
+--- old.privateNameWhenNotUseDefineForClassFieldsInEsNext(target=esnext).js
++++ new.privateNameWhenNotUseDefineForClassFieldsInEsNext(target=esnext).js
+@@= skipped -53, +53 lines =@@
+ }
+ 
+ //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.js]
+-"use strict";
+ class TestWithStatics {
+     #prop = 0;
+-    static { this.dd = new TestWithStatics().#prop; } // OK
+-    static { this["X_ z_ zz"] = class Inner {
++    static dd = new TestWithStatics().#prop;
++    static ["X_ z_ zz"] = class Inner {
+         #foo = 10;
+         m() {
+-            new TestWithStatics().#prop; // OK
++            new TestWithStatics().#prop;
+         }
+-        static { this.C = class InnerInner {
++        static C = class InnerInner {
+             m() {
+-                new TestWithStatics().#prop; // OK
+-                new Inner().#foo; // OK
++                new TestWithStatics().#prop;
++                new Inner().#foo;
+             }
+-        }; }
++        };
+         static M() {
+             return class {
+                 m() {
+-                    new TestWithStatics().#prop; // OK
+-                    new Inner().#foo; // OK
++                    new TestWithStatics().#prop;
++                    new Inner().#foo;
+                 }
+             };
+         }
+-    }; }
++    };
+ }
+ class TestNonStatics {
+-    constructor() {
+-        this.#prop = 0;
+-        this.dd = new TestNonStatics().#prop; // OK
+-        this["X_ z_ zz"] = class Inner {
+-            constructor() {
+-                this.#foo = 10;
+-                this.C = class InnerInner {
+-                    m() {
+-                        new TestNonStatics().#prop; // Ok
+-                        new Inner().#foo; // Ok
+-                    }
+-                };
+-            }
+-            #foo;
++    #prop = 0;
++    dd = new TestNonStatics().#prop;
++    ["X_ z_ zz"] = class Inner {
++        #foo = 10;
++        m() {
++            new TestNonStatics().#prop;
++        }
++        C = class InnerInner {
+             m() {
+-                new TestNonStatics().#prop; // Ok
++                new TestNonStatics().#prop;
++                new Inner().#foo;
+             }
+-            static M() {
+-                return class {
+-                    m() {
+-                        new TestNonStatics().#prop; // OK
+-                        new Inner().#foo; // OK
+-                    }
+-                };
+-            }
+         };
+-    }
+-    #prop;
++        static M() {
++            return class {
++                m() {
++                    new TestNonStatics().#prop;
++                    new Inner().#foo;
++                }
++            };
++        }
++    };
+ }

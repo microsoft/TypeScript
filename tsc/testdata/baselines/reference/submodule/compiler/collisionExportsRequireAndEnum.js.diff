@@ -1,0 +1,113 @@
+--- old.collisionExportsRequireAndEnum.js
++++ new.collisionExportsRequireAndEnum.js
+@@= skipped -60, +60 lines =@@
+ }
+ 
+ //// [collisionExportsRequireAndEnum_externalmodule.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.exports = exports.require = void 0;
+-    var require;
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.exports = exports.require = void 0;
++var require;
++(function (require) {
++    require[require["_thisVal1"] = 0] = "_thisVal1";
++    require[require["_thisVal2"] = 1] = "_thisVal2";
++})(require || (exports.require = require = {}));
++var exports;
++(function (exports) {
++    exports[exports["_thisVal1"] = 0] = "_thisVal1";
++    exports[exports["_thisVal2"] = 1] = "_thisVal2";
++})(exports || (exports.exports = exports = {}));
++var m1;
++(function (m1) {
++    let require;
+     (function (require) {
+         require[require["_thisVal1"] = 0] = "_thisVal1";
+         require[require["_thisVal2"] = 1] = "_thisVal2";
+-    })(require || (exports.require = require = {}));
+-    var exports;
++    })(require || (require = {}));
++    let exports;
+     (function (exports) {
+         exports[exports["_thisVal1"] = 0] = "_thisVal1";
+         exports[exports["_thisVal2"] = 1] = "_thisVal2";
+-    })(exports || (exports.exports = exports = {}));
+-    var m1;
+-    (function (m1) {
+-        var require;
+-        (function (require) {
+-            require[require["_thisVal1"] = 0] = "_thisVal1";
+-            require[require["_thisVal2"] = 1] = "_thisVal2";
+-        })(require || (require = {}));
+-        var exports;
+-        (function (exports) {
+-            exports[exports["_thisVal1"] = 0] = "_thisVal1";
+-            exports[exports["_thisVal2"] = 1] = "_thisVal2";
+-        })(exports || (exports = {}));
+-    })(m1 || (m1 = {}));
+-    var m2;
+-    (function (m2) {
+-        var require;
+-        (function (require) {
+-            require[require["_thisVal1"] = 0] = "_thisVal1";
+-            require[require["_thisVal2"] = 1] = "_thisVal2";
+-        })(require = m2.require || (m2.require = {}));
+-        var exports;
+-        (function (exports) {
+-            exports[exports["_thisVal1"] = 0] = "_thisVal1";
+-            exports[exports["_thisVal2"] = 1] = "_thisVal2";
+-        })(exports = m2.exports || (m2.exports = {}));
+-    })(m2 || (m2 = {}));
+-});
++    })(exports || (exports = {}));
++})(m1 || (m1 = {}));
++var m2;
++(function (m2) {
++    let require;
++    (function (require) {
++        require[require["_thisVal1"] = 0] = "_thisVal1";
++        require[require["_thisVal2"] = 1] = "_thisVal2";
++    })(require = m2.require || (m2.require = {}));
++    let exports;
++    (function (exports) {
++        exports[exports["_thisVal1"] = 0] = "_thisVal1";
++        exports[exports["_thisVal2"] = 1] = "_thisVal2";
++    })(exports = m2.exports || (m2.exports = {}));
++})(m2 || (m2 = {}));
+ //// [collisionExportsRequireAndEnum_globalFile.js]
+ var require;
+ (function (require) {
+@@= skipped -54, +52 lines =@@
+ })(exports || (exports = {}));
+ var m3;
+ (function (m3) {
+-    var require;
++    let require;
+     (function (require) {
+         require[require["_thisVal1"] = 0] = "_thisVal1";
+         require[require["_thisVal2"] = 1] = "_thisVal2";
+     })(require || (require = {}));
+-    var exports;
++    let exports;
+     (function (exports) {
+         exports[exports["_thisVal1"] = 0] = "_thisVal1";
+         exports[exports["_thisVal2"] = 1] = "_thisVal2";
+@@= skipped -13, +13 lines =@@
+ })(m3 || (m3 = {}));
+ var m4;
+ (function (m4) {
+-    var require;
++    let require;
+     (function (require) {
+         require[require["_thisVal1"] = 0] = "_thisVal1";
+         require[require["_thisVal2"] = 1] = "_thisVal2";
+     })(require = m4.require || (m4.require = {}));
+-    var exports;
++    let exports;
+     (function (exports) {
+         exports[exports["_thisVal1"] = 0] = "_thisVal1";
+         exports[exports["_thisVal2"] = 1] = "_thisVal2";

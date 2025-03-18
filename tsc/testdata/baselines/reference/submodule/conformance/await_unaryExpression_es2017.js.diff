@@ -1,0 +1,21 @@
+--- old.await_unaryExpression_es2017.js
++++ new.await_unaryExpression_es2017.js
+@@= skipped -18, +18 lines =@@
+ 
+ //// [await_unaryExpression_es2017.js]
+ async function bar() {
+-    !await 42; // OK
++    !await 42;
+ }
+ async function bar1() {
+-    +await 42; // OK
++    +await 42;
+ }
+ async function bar3() {
+-    -await 42; // OK
++    -await 42;
+ }
+ async function bar4() {
+-    ~await 42; // OK
++    ~await 42;
+ }

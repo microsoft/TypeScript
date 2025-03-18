@@ -1,0 +1,14 @@
+--- old.globalThisReadonlyProperties.js
++++ new.globalThisReadonlyProperties.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [globalThisReadonlyProperties.js]
+-globalThis.globalThis = 1; // should error
++globalThis.globalThis = 1;
+ var x = 1;
+-var y = 2;
++const y = 2;
+ globalThis.x = 3;
+-globalThis.y = 4; // should error
++globalThis.y = 4;

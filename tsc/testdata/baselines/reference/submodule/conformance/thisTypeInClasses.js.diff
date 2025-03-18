@@ -1,0 +1,76 @@
+--- old.thisTypeInClasses.js
++++ new.thisTypeInClasses.js
+@@= skipped -52, +52 lines =@@
+ 
+ 
+ //// [thisTypeInClasses.js]
+-var C1 = /** @class */ (function () {
+-    function C1() {
+-    }
+-    C1.prototype.f = function (x) { return undefined; };
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
+-    }
+-    return C2;
+-}());
+-var C3 = /** @class */ (function () {
+-    function C3() {
+-    }
+-    return C3;
+-}());
+-var C5 = /** @class */ (function () {
+-    function C5() {
+-    }
+-    C5.prototype.foo = function () {
+-        var _this = this;
+-        var f1 = function (x) { return _this; };
+-        var f2 = function (x) { return _this; };
+-        var f3 = function (x) { return function (y) { return _this; }; };
+-        var f4 = function (x) {
+-            var g = function (y) {
+-                return function () { return _this; };
++class C1 {
++    x;
++    f(x) { return undefined; }
++}
++class C2 {
++}
++class C3 {
++    a;
++    b;
++    c;
++    d;
++    e;
++    f;
++    g;
++    h;
++    i;
++    j;
++}
++class C5 {
++    foo() {
++        let f1 = (x) => this;
++        let f2 = (x) => this;
++        let f3 = (x) => (y) => this;
++        let f4 = (x) => {
++            let g = (y) => {
++                return () => this;
+             };
+-            return g(_this);
++            return g(this);
+         };
+-    };
+-    C5.prototype.bar = function () {
+-        var x1 = undefined;
+-        var x2 = undefined;
+-    };
+-    return C5;
+-}());
++    }
++    bar() {
++        let x1 = undefined;
++        let x2 = undefined;
++    }
++}

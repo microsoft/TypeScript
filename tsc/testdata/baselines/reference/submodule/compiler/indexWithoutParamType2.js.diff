@@ -1,0 +1,14 @@
+--- old.indexWithoutParamType2.js
++++ new.indexWithoutParamType2.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [indexWithoutParamType2.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    [x];
++}

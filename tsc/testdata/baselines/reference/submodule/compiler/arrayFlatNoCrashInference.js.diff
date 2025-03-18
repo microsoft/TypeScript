@@ -1,0 +1,10 @@
+--- old.arrayFlatNoCrashInference.js
++++ new.arrayFlatNoCrashInference.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [arrayFlatNoCrashInference.js]
+-"use strict";
+ function foo(arr, depth) {
+     return arr.flat(depth);
+ }

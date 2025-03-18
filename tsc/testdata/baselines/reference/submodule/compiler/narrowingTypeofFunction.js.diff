@@ -1,0 +1,10 @@
+--- old.narrowingTypeofFunction.js
++++ new.narrowingTypeofFunction.js
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ //// [narrowingTypeofFunction.js]
+-"use strict";
+ function f1(a) {
+     if (typeof a === "function") {
+         a;

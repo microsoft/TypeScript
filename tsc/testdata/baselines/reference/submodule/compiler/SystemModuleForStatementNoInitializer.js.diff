@@ -1,0 +1,40 @@
+--- old.SystemModuleForStatementNoInitializer.js
++++ new.SystemModuleForStatementNoInitializer.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [SystemModuleForStatementNoInitializer.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var i, limit;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            i = 0;
+-            limit = 10;
+-            for (; i < limit; ++i) {
+-                break;
+-            }
+-            for (;; ++i) {
+-                break;
+-            }
+-            for (;;) {
+-                break;
+-            }
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++let i = 0;
++let limit = 10;
++for (; i < limit; ++i) {
++    break;
++}
++for (;; ++i) {
++    break;
++}
++for (;;) {
++    break;
++}

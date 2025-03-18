@@ -1,0 +1,29 @@
+--- old.crashIntypeCheckInvocationExpression.js
++++ new.crashIntypeCheckInvocationExpression.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [crashIntypeCheckInvocationExpression.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.compileServer = void 0;
+-    var nake;
+-    function doCompile(fileset, moduleType) {
+-        return undefined;
+-    }
+-    exports.compileServer = task(function () {
+-        var folder = path.join(), fileset = nake.fileSetSync(folder);
+-        return doCompile(fileset, moduleType);
+-    });
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.compileServer = void 0;
++var nake;
++function doCompile(fileset, moduleType) {
++    return undefined;
++}
++exports.compileServer = task(() => {
++    var folder = path.join(), fileset = nake.fileSetSync(folder);
++    return doCompile(fileset, moduleType);
+ });

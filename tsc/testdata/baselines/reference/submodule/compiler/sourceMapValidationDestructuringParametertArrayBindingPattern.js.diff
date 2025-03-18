@@ -1,0 +1,32 @@
+--- old.sourceMapValidationDestructuringParametertArrayBindingPattern.js
++++ new.sourceMapValidationDestructuringParametertArrayBindingPattern.js
+@@= skipped -36, +36 lines =@@
+ 
+ //// [sourceMapValidationDestructuringParametertArrayBindingPattern.js]
+ var robotA = [1, "mower", "mowing"];
+-function foo1(_a) {
+-    var nameA = _a[1];
++function foo1([, nameA]) {
+     console.log(nameA);
+ }
+-function foo2(_a) {
+-    var numberB = _a[0];
++function foo2([numberB]) {
+     console.log(numberB);
+ }
+-function foo3(_a) {
+-    var numberA2 = _a[0], nameA2 = _a[1], skillA2 = _a[2];
++function foo3([numberA2, nameA2, skillA2]) {
+     console.log(nameA2);
+ }
+-function foo4(_a) {
+-    var numberA3 = _a[0], robotAInfo = _a.slice(1);
++function foo4([numberA3, ...robotAInfo]) {
+     console.log(robotAInfo);
+ }
+ foo1(robotA);
+@@= skipped -24, +20 lines =@@
+ foo3([2, "trimmer", "trimming"]);
+ foo4(robotA);
+ foo4([2, "trimmer", "trimming"]);
+-//# sourceMappingURL=sourceMapValidationDestructuringParametertArrayBindingPattern.js.map

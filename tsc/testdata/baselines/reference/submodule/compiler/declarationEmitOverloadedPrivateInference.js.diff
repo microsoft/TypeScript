@@ -1,0 +1,36 @@
+--- old.declarationEmitOverloadedPrivateInference.js
++++ new.declarationEmitOverloadedPrivateInference.js
+@@= skipped -32, +32 lines =@@
+ function oneArg(input) {
+     return null;
+ }
+-var Wrapper = /** @class */ (function () {
+-    function Wrapper() {
+-        this.Proxies = {
+-            Failure: this.proxy(noArgs, true),
+-            Success: this.proxy(oneArg),
+-        };
+-    }
+-    Wrapper.prototype.proxy = function (fn) {
++class Wrapper {
++    proxy(fn) {
+         return null;
++    }
++    Proxies = {
++        Failure: this.proxy(noArgs, true),
++        Success: this.proxy(oneArg),
+     };
+-    return Wrapper;
+-}());
+-exports.Wrapper = Wrapper;
+-
+-
+-//// [declarationEmitOverloadedPrivateInference.d.ts]
+-export declare class Wrapper {
+-    private proxy;
+-    Proxies: {
+-        Failure: (options?: unknown) => string;
+-        Success: (options: string) => string;
+-    };
+ }
++exports.Wrapper = Wrapper;

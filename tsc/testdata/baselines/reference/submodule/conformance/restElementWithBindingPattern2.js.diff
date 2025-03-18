@@ -1,0 +1,8 @@
+--- old.restElementWithBindingPattern2.js
++++ new.restElementWithBindingPattern2.js
+@@= skipped -3, +3 lines =@@
+ var [...{0: a, b }] = [0, 1];
+ 
+ //// [restElementWithBindingPattern2.js]
+-var _a = [0, 1].slice(0), a = _a[0], b = _a.b;
++var [...{ 0: a, b }] = [0, 1];

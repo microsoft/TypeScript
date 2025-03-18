@@ -1,0 +1,10 @@
+--- old.overloadsAndTypeArgumentArity.js
++++ new.overloadsAndTypeArgumentArity.js
+@@= skipped -9, +9 lines =@@
+ new Callbacks<number, string, boolean>('s'); // no error
+ 
+ //// [overloadsAndTypeArgumentArity.js]
+-Callbacks('s'); // no error
+-new Callbacks('s'); // no error
++Callbacks('s');
++new Callbacks('s');

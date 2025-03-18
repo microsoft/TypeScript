@@ -1,0 +1,13 @@
+--- old.classFieldsBrokenConstructorEmitNoCrash1.js
++++ new.classFieldsBrokenConstructorEmitNoCrash1.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [classFieldsBrokenConstructorEmitNoCrash1.js]
+-"use strict";
+ class Test {
+-    constructor() {
+-        this.prop = 42;
+-    }
++    prop = 42;
+ }

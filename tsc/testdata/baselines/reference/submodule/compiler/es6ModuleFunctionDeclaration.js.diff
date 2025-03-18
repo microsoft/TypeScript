@@ -1,0 +1,12 @@
+--- old.es6ModuleFunctionDeclaration.js
++++ new.es6ModuleFunctionDeclaration.js
+@@= skipped -36, +36 lines =@@
+ }
+ foo();
+ foo2();
+-export var m1;
++export { m1 };
++var m1;
+ (function (m1) {
+     function foo3() {
+     }

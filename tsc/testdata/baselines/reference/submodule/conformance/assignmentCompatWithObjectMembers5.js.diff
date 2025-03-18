@@ -1,0 +1,20 @@
+--- old.assignmentCompatWithObjectMembers5.js
++++ new.assignmentCompatWithObjectMembers5.js
+@@= skipped -16, +16 lines =@@
+ i = c; // error
+ 
+ //// [assignmentCompatWithObjectMembers5.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    foo;
++}
+ var c;
+ var i;
+-c = i; // error
+-i = c; // error
++c = i;
++i = c;

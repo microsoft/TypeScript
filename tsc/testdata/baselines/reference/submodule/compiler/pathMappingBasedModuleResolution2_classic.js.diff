@@ -1,0 +1,16 @@
+--- old.pathMappingBasedModuleResolution2_classic.js
++++ new.pathMappingBasedModuleResolution2_classic.js
+@@= skipped -3, +3 lines =@@
+ export var x = 1;
+ 
+ //// [file1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    exports.x = 1;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++exports.x = 1;

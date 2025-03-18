@@ -1,0 +1,24 @@
+--- old.propertyParameterWithQuestionMark.js
++++ new.propertyParameterWithQuestionMark.js
+@@= skipped -11, +11 lines =@@
+ var v3: { x } = new C; // Should fail
+ 
+ //// [propertyParameterWithQuestionMark.js]
+-var C = /** @class */ (function () {
+-    function C(x) {
++class C {
++    x;
++    constructor(x) {
+         this.x = x;
+     }
+-    return C;
+-}());
+-// x should be an optional property
+-var v = {}; // Should succeed
++}
++var v = {};
+ var v2;
+-v = v2; // Should succeed
+-var v3 = new C; // Should fail
++v = v2;
++var v3 = new C;

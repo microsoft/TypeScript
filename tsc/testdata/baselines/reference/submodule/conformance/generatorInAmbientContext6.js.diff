@@ -1,0 +1,12 @@
+--- old.generatorInAmbientContext6.js
++++ new.generatorInAmbientContext6.js
+@@= skipped -10, +10 lines =@@
+     function* generator() { }
+     M.generator = generator;
+ })(M || (M = {}));
+-
+-
+-//// [generatorInAmbientContext6.d.ts]
+-declare namespace M {
+-    function generator(): any;
+-}

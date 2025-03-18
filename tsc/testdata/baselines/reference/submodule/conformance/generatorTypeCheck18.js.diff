@@ -1,0 +1,13 @@
+--- old.generatorTypeCheck18.js
++++ new.generatorTypeCheck18.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [generatorTypeCheck18.js]
+ class Foo {
++    x;
+ }
+ class Baz {
++    z;
+ }
+ function* g() {
+     yield;

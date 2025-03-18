@@ -1,0 +1,15 @@
+--- old.classOverloadForFunction.js
++++ new.classOverloadForFunction.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [classOverloadForFunction.js]
+-var foo = /** @class */ (function () {
+-    function foo() {
+-    }
+-    return foo;
+-}());
++class foo {
++}
+ ;
+ function foo() { }

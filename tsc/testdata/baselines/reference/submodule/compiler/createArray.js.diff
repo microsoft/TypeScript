@@ -1,0 +1,22 @@
+--- old.createArray.js
++++ new.createArray.js
+@@= skipped -18, +18 lines =@@
+ 
+ //// [createArray.js]
+ var na = new number[];
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ new C[];
+ var ba = new boolean[];
+ var sa = new string[];
+@@= skipped -14, +11 lines =@@
+ if (ba[14]) {
+     na[2] = f(sa[3]);
+ }
+-new C[1]; // not an error
++new C[1];

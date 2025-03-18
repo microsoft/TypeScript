@@ -1,0 +1,9 @@
+--- old.exportEmptyArrayBindingPattern(module=esnext,target=es5).js
++++ new.exportEmptyArrayBindingPattern(module=esnext,target=es5).js
+@@= skipped -3, +3 lines =@@
+ export const [] = [];
+ 
+ //// [exportEmptyArrayBindingPattern.js]
+-var _a;
+-export var _b = _a = [];
++export const [] = [];

@@ -1,0 +1,83 @@
+--- old.declarationEmitDefaultExportWithStaticAssignment.js
++++ new.declarationEmitDefaultExportWithStaticAssignment.js
+@@= skipped -35, +35 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Foo = void 0;
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ exports.Foo = Foo;
+ //// [index1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.default = Example;
+-var foo_1 = require("./foo");
++const foo_1 = require("./foo");
+ function Example() { }
+ Example.Foo = foo_1.Foo;
+ //// [index2.js]
+@@= skipped -18, +15 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Foo = void 0;
+ exports.default = Example;
+-var foo_1 = require("./foo");
++const foo_1 = require("./foo");
+ Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return foo_1.Foo; } });
+ function Example() { }
+ Example.Foo = foo_1.Foo;
+@@= skipped -9, +9 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Bar = void 0;
+ exports.default = Example;
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-    }
+-    return Bar;
+-}());
++class Bar {
++}
+ exports.Bar = Bar;
+ function Example() { }
+ Example.Bar = Bar;
+@@= skipped -19, +16 lines =@@
+ }
+ C.A = A;
+ C.B = B;
+-
+-
+-//// [foo.d.ts]
+-export declare class Foo {
+-}
+-//// [index1.d.ts]
+-declare function Example(): void;
+-declare namespace Example {
+-    var Foo: typeof import("./foo").Foo;
+-}
+-export default Example;
+-//// [index2.d.ts]
+-import { Foo } from './foo';
+-export { Foo };
+-declare function Example(): void;
+-declare namespace Example {
+-    var Foo: typeof import("./foo").Foo;
+-}
+-export default Example;
+-//// [index3.d.ts]
+-export declare class Bar {
+-}
+-declare function Example(): void;
+-declare namespace Example {
+-    var Bar: typeof import("./index3").Bar;
+-}
+-export default Example;
+-//// [index4.d.ts]
+-export declare function C(): any;
+-export declare namespace C {
+-    var A: () => void;
+-    var B: () => void;
+-}

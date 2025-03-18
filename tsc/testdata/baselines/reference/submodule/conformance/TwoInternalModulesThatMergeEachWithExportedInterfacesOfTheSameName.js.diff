@@ -1,0 +1,12 @@
+--- old.TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.js
++++ new.TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.js
+@@= skipped -39, +39 lines =@@
+ 
+ 
+ //// [TwoInternalModulesThatMergeEachWithExportedInterfacesOfTheSameName.js]
+-// ensure merges as expected
+ var p;
+ var p;
+-// ensure merges as expected
+ var l;
+ var l;

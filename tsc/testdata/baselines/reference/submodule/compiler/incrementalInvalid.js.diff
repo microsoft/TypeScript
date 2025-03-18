@@ -1,0 +1,8 @@
+--- old.incrementalInvalid.js
++++ new.incrementalInvalid.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [incrementalInvalid.js]
+-var x = 10;
++const x = 10;

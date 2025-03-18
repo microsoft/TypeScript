@@ -1,0 +1,10 @@
+--- old.decoratorOnArrowFunction.js
++++ new.decoratorOnArrowFunction.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [decoratorOnArrowFunction.js]
+-var F = ;
++var F = ();
+ {
+ }

@@ -1,0 +1,8 @@
+--- old.overloadCrash.js
++++ new.overloadCrash.js
+@@= skipped -17, +17 lines =@@
+ ;
+ ;
+ var i3;
+-foo(i3, i3); // should not crash the compiler :)
++foo(i3, i3);

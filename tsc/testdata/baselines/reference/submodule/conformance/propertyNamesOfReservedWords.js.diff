@@ -1,0 +1,79 @@
+--- old.propertyNamesOfReservedWords.js
++++ new.propertyNamesOfReservedWords.js
+@@= skipped -278, +278 lines =@@
+ var r8 = E.as;
+ 
+ //// [propertyNamesOfReservedWords.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    abstract;
++    as;
++    boolean;
++    break;
++    byte;
++    case;
++    catch;
++    char;
++    class;
++    continue;
++    const;
++    debugger;
++    default;
++    delete;
++    do;
++    double;
++    else;
++    enum;
++    export;
++    extends;
++    false;
++    final;
++    finally;
++    float;
++    for;
++    function;
++    goto;
++    if;
++    implements;
++    import;
++    in;
++    instanceof;
++    int;
++    interface;
++    is;
++    long;
++    namespace;
++    native;
++    new;
++    null;
++    package;
++    private;
++    protected;
++    public;
++    return;
++    short;
++    static;
++    super;
++    switch;
++    synchronized;
++    this;
++    throw;
++    throws;
++    transient;
++    true;
++    try;
++    typeof;
++    use;
++    var;
++    void;
++    volatile;
++    while;
++    with;
++}
+ var c;
+ var r1 = c.abstract;
+ var r2 = c.as;

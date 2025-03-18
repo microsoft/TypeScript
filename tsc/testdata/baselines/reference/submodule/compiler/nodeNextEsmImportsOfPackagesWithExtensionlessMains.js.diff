@@ -1,0 +1,11 @@
+--- old.nodeNextEsmImportsOfPackagesWithExtensionlessMains.js
++++ new.nodeNextEsmImportsOfPackagesWithExtensionlessMains.js
+@@= skipped -35, +35 lines =@@
+ 
+ //// [index.js]
+ import * as ip from 'ip';
+-import nullthrows from 'nullthrows'; // shouldn't be callable, `nullthrows` is a cjs package, so the `default` is the module itself
++import nullthrows from 'nullthrows';
+ export function getAddress() {
+     return nullthrows(ip.address());
+ }

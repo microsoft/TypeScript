@@ -1,0 +1,17 @@
+--- old.jsxCallElaborationCheckNoCrash1.js
++++ new.jsxCallElaborationCheckNoCrash1.js
+@@= skipped -16, +16 lines =@@
+ 
+ //// [jsxCallElaborationCheckNoCrash1.js]
+ "use strict";
+-/// <reference path="react16.d.ts" />
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Hoc = void 0;
+-var React = require("react");
+-var Hoc = function (TagElement) {
+-    var Component = function () { return React.createElement(TagElement, null); };
++const Hoc = (TagElement) => {
++    const Component = () => <TagElement />;
+     return Component;
+ };
+ exports.Hoc = Hoc;

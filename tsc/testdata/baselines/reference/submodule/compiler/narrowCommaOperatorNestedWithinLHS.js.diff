@@ -1,0 +1,26 @@
+--- old.narrowCommaOperatorNestedWithinLHS.js
++++ new.narrowCommaOperatorNestedWithinLHS.js
+@@= skipped -18, +18 lines =@@
+ }
+ 
+ //// [narrowCommaOperatorNestedWithinLHS.js]
+-var otherValue = function () { return true; };
+-var value = null;
++const otherValue = () => true;
++const value = null;
+ function isNumber(obj) {
+-    return true; // method implementation irrelevant
++    return true;
+ }
+ if (typeof (otherValue(), value).inner === 'number') {
+-    var a = value.inner; // number
+-    var b = (otherValue(), value).inner; // string | number , but should be number
++    const a = value.inner;
++    const b = (otherValue(), value).inner;
+ }
+ if (isNumber((otherValue(), value).inner)) {
+-    var a = value.inner; // number
+-    var b = (otherValue(), value).inner; // string | number , but should be number
++    const a = value.inner;
++    const b = (otherValue(), value).inner;
+ }

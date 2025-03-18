@@ -1,0 +1,10 @@
+--- old.letInVarDeclOfForIn_ES5.js
++++ new.letInVarDeclOfForIn_ES5.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [letInVarDeclOfForIn_ES5.js]
+-// should not be an error
+ for (var let in [1, 2, 3]) { }
+ {
+     for (var let in [1, 2, 3]) { }

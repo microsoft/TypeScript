@@ -1,0 +1,23 @@
+--- old.invalidVoidValues.js
++++ new.invalidVoidValues.js
+@@= skipped -38, +38 lines =@@
+ })(E || (E = {}));
+ x = E;
+ x = E.A;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    foo;
++}
+ var a;
+ x = a;
+ var b;
+ x = b;
+-x = { f: function () { } };
++x = { f() { } };
+ var M;
+ (function (M) {
+     M.x = 1;

@@ -1,0 +1,16 @@
+--- old.conditionalTypeContextualTypeSimplificationsSuceeds.js
++++ new.conditionalTypeContextualTypeSimplificationsSuceeds.js
+@@= skipped -17, +17 lines =@@
+ good2({ when: value => false });
+ 
+ //// [conditionalTypeContextualTypeSimplificationsSuceeds.js]
+-"use strict";
+ function bad(attrs) { }
+ function good1(attrs) { }
+ function good2(attrs) { }
+-bad({ when: function (value) { return false; } });
+-good1({ when: function (value) { return false; } });
+-good2({ when: function (value) { return false; } });
++bad({ when: value => false });
++good1({ when: value => false });
++good2({ when: value => false });

@@ -1,0 +1,47 @@
+--- old.augmentedTypesModules2.js
++++ new.augmentedTypesModules2.js
+@@= skipped -31, +31 lines =@@
+ 
+ //// [augmentedTypesModules2.js]
+ function m2() { }
+-; // ok since the module is not instantiated
++;
+ var m2a;
+ (function (m2a) {
+     var y = 2;
+ })(m2a || (m2a = {}));
+ function m2a() { }
+-; // error since the module is instantiated
++;
+ var m2b;
+ (function (m2b) {
+     m2b.y = 2;
+ })(m2b || (m2b = {}));
+ function m2b() { }
+-; // error since the module is instantiated
++;
+ function m2c() { }
+ ;
+ (function (m2c) {
+@@= skipped -23, +23 lines =@@
+     m2cc.y = 2;
+ })(m2cc || (m2cc = {}));
+ function m2cc() { }
+-; // error to have module first
++;
+ function m2f() { }
+ ;
+ function m2g() { }
+ ;
+ (function (m2g) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        C.prototype.foo = function () { };
+-        return C;
+-    }());
++    class C {
++        foo() { }
++    }
+     m2g.C = C;
+ })(m2g || (m2g = {}));

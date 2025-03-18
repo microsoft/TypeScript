@@ -1,0 +1,17 @@
+--- old.strictOptionalProperties2.js
++++ new.strictOptionalProperties2.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [strictOptionalProperties2.js]
+-"use strict";
+-// Repro from #44567
+-
+-
+-//// [strictOptionalProperties2.d.ts]
+-type T1 = {
+-    0?: string | undefined;
+-} extends {
+-    0?: string;
+-} ? true : false;
+-type T2 = [(string | undefined)?] extends [string?] ? true : false;

@@ -1,0 +1,16 @@
+--- old.propertyAccessibility2.js
++++ new.propertyAccessibility2.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [propertyAccessibility2.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.x = 1;
+-    return C;
+-}());
++class C {
++    static x = 1;
++}
+ var c = C.x;

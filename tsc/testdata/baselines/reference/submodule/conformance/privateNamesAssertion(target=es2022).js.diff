@@ -1,0 +1,10 @@
+--- old.privateNamesAssertion(target=es2022).js
++++ new.privateNamesAssertion(target=es2022).js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [privateNamesAssertion.js]
+-"use strict";
+ class Foo {
+     #p1 = (v) => {
+         if (typeof v !== "string") {

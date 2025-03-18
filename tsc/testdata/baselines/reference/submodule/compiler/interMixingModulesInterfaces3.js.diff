@@ -1,0 +1,11 @@
+--- old.interMixingModulesInterfaces3.js
++++ new.interMixingModulesInterfaces3.js
+@@= skipped -19, +19 lines =@@
+ //// [interMixingModulesInterfaces3.js]
+ var A;
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+         function createB() {
+             return null;

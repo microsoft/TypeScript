@@ -1,0 +1,15 @@
+--- old.unusedParametersinConstructor2.js
++++ new.unusedParametersinConstructor2.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [unusedParametersinConstructor2.js]
+-var greeter = /** @class */ (function () {
+-    function greeter(param1, param2) {
++class greeter {
++    constructor(param1, param2) {
+         param2 = param2 + "dummy value";
+     }
+-    return greeter;
+-}());
++}

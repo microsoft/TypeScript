@@ -1,0 +1,10 @@
+--- old.es6modulekindWithES5Target8.js
++++ new.es6modulekindWithES5Target8.js
+@@= skipped -4, +4 lines =@@
+ export let l = 1;
+ 
+ //// [es6modulekindWithES5Target8.js]
+-export var c = 0;
+-export var l = 1;
++export const c = 0;
++export let l = 1;

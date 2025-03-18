@@ -1,0 +1,24 @@
+--- old.externalModuleExportingGenericClass.js
++++ new.externalModuleExportingGenericClass.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [externalModuleExportingGenericClass_file0.js]
+ "use strict";
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    foo;
++}
+ module.exports = C;
+ //// [externalModuleExportingGenericClass_file1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a = require("./externalModuleExportingGenericClass_file0");
+-var v; // this should report error
++const a = require("./externalModuleExportingGenericClass_file0");
++var v;
+ var v2 = (new a()).foo;
+ var v3 = (new a()).foo;

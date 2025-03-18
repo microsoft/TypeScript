@@ -1,0 +1,22 @@
+--- old.declarationEmitTopLevelNodeFromCrossFile2.js
++++ new.declarationEmitTopLevelNodeFromCrossFile2.js
+@@= skipped -25, +25 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports._ = void 0;
+-var boxedBox_1 = require("./boxedBox");
++const boxedBox_1 = require("./boxedBox");
+ exports._ = boxedBox_1.boxedBox;
+-// At index 83
+-/**
+- * wat
+- */
+-
+-
+-//// [a.d.ts]
+-export declare const _: import("./box").Box<{
+-    boxed: import("./box").Box<number>;
+-}>;
+-/**
+- * wat
+- */

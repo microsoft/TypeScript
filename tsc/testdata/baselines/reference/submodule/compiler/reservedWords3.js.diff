@@ -1,0 +1,16 @@
+--- old.reservedWords3.js
++++ new.reservedWords3.js
+@@= skipped -14, +14 lines =@@
+ })( || ( = {}));
+ { }
+ function f2() { }
+-var default_1 = /** @class */ (function () {
+-    function default_1() {
+-    }
+-    return default_1;
+-}());
++class {
++}
+ { }
+ function f3() { }
+ function () { }

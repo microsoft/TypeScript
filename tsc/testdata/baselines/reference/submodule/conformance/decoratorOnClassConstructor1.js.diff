@@ -1,0 +1,14 @@
+--- old.decoratorOnClassConstructor1.js
++++ new.decoratorOnClassConstructor1.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [decoratorOnClassConstructor1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    constructor() { }
++}

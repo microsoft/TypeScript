@@ -1,0 +1,8 @@
+--- old.reboundIdentifierOnImportAlias.js
++++ new.reboundIdentifierOnImportAlias.js
+@@= skipped -16, +16 lines =@@
+ var Bar;
+ (function (Bar) {
+     var Foo = 1;
++    var F = Foo;
+ })(Bar || (Bar = {}));

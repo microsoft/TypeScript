@@ -1,0 +1,19 @@
+--- old.errorSpanForUnclosedJsxTag.js
++++ new.errorSpanForUnclosedJsxTag.js
+@@= skipped -13, +13 lines =@@
+ let y = <   Baz >Hello
+ 
+ //// [errorSpanForUnclosedJsxTag.js]
+-var Foo = {
+-    Bar: function () { }
++let Foo = {
++    Bar() { }
+ };
+-var Baz = function () { };
+-var x = React.createElement(Foo.Bar, null,
+-    "Hello let y = ",
+-    React.createElement(Baz, null, "Hello"));
++let Baz = () => { };
++let x = <Foo.Bar>Hello
++
++let y = <Baz>Hello</></>;

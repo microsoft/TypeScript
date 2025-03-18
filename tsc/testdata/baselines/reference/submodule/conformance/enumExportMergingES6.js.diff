@@ -1,0 +1,20 @@
+--- old.enumExportMergingES6.js
++++ new.enumExportMergingES6.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [enumExportMergingES6.js]
+-export var Animals;
++export { Animals };
++var Animals;
+ (function (Animals) {
+     Animals[Animals["Cat"] = 1] = "Cat";
+ })(Animals || (Animals = {}));
+@@= skipped -8, +9 lines =@@
+     Animals[Animals["Dog"] = 2] = "Dog";
+ })(Animals || (Animals = {}));
+ (function (Animals) {
+-    Animals[Animals["CatDog"] = 3] = "CatDog";
++    Animals["CatDog"] = Cat | Dog;
++    if (typeof Animals.CatDog !== "string") Animals[Animals.CatDog] = "CatDog";
+ })(Animals || (Animals = {}));

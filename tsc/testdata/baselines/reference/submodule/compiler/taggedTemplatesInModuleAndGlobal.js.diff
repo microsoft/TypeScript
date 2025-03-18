@@ -1,0 +1,39 @@
+--- old.taggedTemplatesInModuleAndGlobal.js
++++ new.taggedTemplatesInModuleAndGlobal.js
+@@= skipped -23, +23 lines =@@
+ 
+ 
+ //// [global.js]
+-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+-    return cooked;
+-};
+ var n;
+ (function (n) {
+     function id(x) {
+         return x;
+     }
+     function templateObjectFactory() {
+-        return id(__makeTemplateObject(["hello world"], ["hello world"]));
++        return id `hello world`;
+     }
+-    var result = templateObjectFactory() === templateObjectFactory();
++    let result = templateObjectFactory() === templateObjectFactory();
+ })(n || (n = {}));
+ //// [module.js]
+ "use strict";
+-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+-    return cooked;
+-};
+ Object.defineProperty(exports, "__esModule", { value: true });
+ function id(x) {
+     return x;
+ }
+ function templateObjectFactory() {
+-    return id(templateObject_1 || (templateObject_1 = __makeTemplateObject(["hello world"], ["hello world"])));
++    return id `hello world`;
+ }
+-var result = templateObjectFactory() === templateObjectFactory();
+-var templateObject_1;
++let result = templateObjectFactory() === templateObjectFactory();

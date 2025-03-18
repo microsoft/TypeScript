@@ -1,0 +1,8 @@
+--- old.enumIndexer.js
++++ new.enumIndexer.js
+@@= skipped -16, +16 lines =@@
+ })(MyEnumType || (MyEnumType = {}));
+ var _arr = [{ key: 'foo' }, { key: 'bar' }];
+ var enumValue = MyEnumType.foo;
+-var x = _arr.map(function (o) { return MyEnumType[o.key] === enumValue; }); // these are not same type
++var x = _arr.map(o => MyEnumType[o.key] === enumValue);

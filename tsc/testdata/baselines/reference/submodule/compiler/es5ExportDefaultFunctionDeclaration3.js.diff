@@ -1,0 +1,10 @@
+--- old.es5ExportDefaultFunctionDeclaration3.js
++++ new.es5ExportDefaultFunctionDeclaration3.js
+@@= skipped -17, +17 lines =@@
+     return func;
+ }
+ var after = func();
+-
+-
+-//// [es5ExportDefaultFunctionDeclaration3.d.ts]
+-export default function func(): typeof func;

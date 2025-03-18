@@ -1,0 +1,8 @@
+--- old.inferringAnyFunctionType5.js
++++ new.inferringAnyFunctionType5.js
+@@= skipped -10, +10 lines =@@
+ function f(p) {
+     return p;
+ }
+-var v = f({ q: function (x) { return x; } });
++var v = f({ q: x => x });

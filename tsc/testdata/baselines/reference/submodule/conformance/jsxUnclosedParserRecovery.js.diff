@@ -1,0 +1,27 @@
+--- old.jsxUnclosedParserRecovery.js
++++ new.jsxUnclosedParserRecovery.js
+@@= skipped -140, +140 lines =@@
+ 
+ 
+ //// [jsxParserRecovery.jsx]
+-// should have no errors here; all these functions should parse and resolve
+ noName();
+ noClose();
+ noCloseTypeArg();
+@@= skipped -16, +15 lines =@@
+ noCloseAttrsTrailingTag();
+ noCloseTypeArgAttrsTrailingTag();
+ noCloseBracketTrailingTag();
+-noCloseBracketTypeArgAttrsTrailingTag(); // noSelfcloseTrailingTag(); noSelfcloseTypeArgAttrsTrailingTag();
++noCloseBracketTypeArgAttrsTrailingTag();
+ noNameTrailingText();
+ noCloseTrailingText();
+ noCloseTypeArgTrailingText();
+ noCloseAttrsTrailingText();
+ noCloseTypeArgAttrsTrailingText();
+ noCloseBracketTrailingText();
+-noCloseBracketTypeArgAttrsTrailingText(); // noSelfcloseTrailingText(); noSelfcloseTypeArgAttrsTrailingText();
++noCloseBracketTypeArgAttrsTrailingText();
+ function diddy() {
+     return null;
+ }

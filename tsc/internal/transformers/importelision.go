@@ -24,24 +24,24 @@ func NewImportElisionTransformer(emitContext *printer.EmitContext, compilerOptio
 func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindImportEqualsDeclaration:
-		n := node.AsImportEqualsDeclaration()
-		if !tx.shouldEmitImportEqualsDeclaration(n) {
+		if !tx.isElisionBlocked(node) && !tx.shouldEmitImportEqualsDeclaration(node.AsImportEqualsDeclaration()) {
 			return nil
 		}
 		return tx.visitor.VisitEachChild(node)
-
 	case ast.KindImportDeclaration:
-		n := node.AsImportDeclaration()
-		if n.ImportClause == nil {
+		if !tx.isElisionBlocked(node) {
+			n := node.AsImportDeclaration()
 			// Do not elide a side-effect only import declaration.
 			//  import "foo";
-			return node
+			if n.ImportClause != nil {
+				importClause := tx.visitor.VisitNode(n.ImportClause)
+				if importClause == nil {
+					return nil
+				}
+				return tx.factory.UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, tx.visitor.VisitNode(n.Attributes))
+			}
 		}
-		importClause := tx.visitor.VisitNode(n.ImportClause)
-		if importClause == nil {
-			return nil
-		}
-		return tx.factory.UpdateImportDeclaration(n, n.Modifiers(), importClause, n.ModuleSpecifier, n.Attributes)
+		return tx.visitor.VisitEachChild(node)
 	case ast.KindImportClause:
 		n := node.AsImportClause()
 		name := core.IfElse(tx.shouldEmitAliasDeclaration(node), n.Name(), nil)
@@ -72,22 +72,25 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		}
 		return node
 	case ast.KindExportAssignment:
-		if !tx.isValueAliasDeclaration(node) {
+		if !tx.isElisionBlocked(node) && !tx.compilerOptions.VerbatimModuleSyntax.IsTrue() && !tx.isValueAliasDeclaration(node) {
 			// elide unused import
 			return nil
 		}
 		return tx.visitor.VisitEachChild(node)
 	case ast.KindExportDeclaration:
-		n := node.AsExportDeclaration()
-		var exportClause *ast.Node
-		if n.ExportClause != nil {
-			exportClause = tx.visitor.VisitNode(n.ExportClause)
-			if exportClause == nil {
-				// all export bindings were elided
-				return nil
+		if !tx.isElisionBlocked(node) {
+			n := node.AsExportDeclaration()
+			var exportClause *ast.Node
+			if n.ExportClause != nil {
+				exportClause = tx.visitor.VisitNode(n.ExportClause)
+				if exportClause == nil {
+					// all export bindings were elided
+					return nil
+				}
 			}
+			return tx.factory.UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.visitor.VisitNode(n.ModuleSpecifier), tx.visitor.VisitNode(n.Attributes))
 		}
-		return tx.factory.UpdateExportDeclaration(n, nil /*modifiers*/, false /*isTypeOnly*/, exportClause, tx.visitor.VisitNode(n.ModuleSpecifier), tx.visitor.VisitNode(n.Attributes))
+		return tx.visitor.VisitEachChild(node)
 	case ast.KindNamedExports:
 		n := node.AsNamedExports()
 		elements := tx.visitor.VisitNodes(n.Elements)
@@ -109,7 +112,7 @@ func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {
 		tx.currentSourceFile = savedCurrentSourceFile
 		return node
 	default:
-		return tx.visitor.VisitEachChild(node)
+		return node
 	}
 }
 
@@ -131,16 +134,69 @@ func (tx *ImportElisionTransformer) shouldEmitImportEqualsDeclaration(node *ast.
 }
 
 func (tx *ImportElisionTransformer) isReferencedAliasDeclaration(node *ast.Node) bool {
-	node = tx.emitContext.MostOriginal(node)
-	return tx.emitResolver.IsReferencedAliasDeclaration(node)
+	node = tx.emitContext.ParseNode(node)
+	return node == nil || tx.emitResolver.IsReferencedAliasDeclaration(node)
 }
 
 func (tx *ImportElisionTransformer) isValueAliasDeclaration(node *ast.Node) bool {
-	node = tx.emitContext.MostOriginal(node)
-	return tx.emitResolver.IsValueAliasDeclaration(node)
+	node = tx.emitContext.ParseNode(node)
+	return node == nil || tx.emitResolver.IsValueAliasDeclaration(node)
 }
 
 func (tx *ImportElisionTransformer) isTopLevelValueImportEqualsWithEntityName(node *ast.Node) bool {
-	node = tx.emitContext.MostOriginal(node)
-	return tx.emitResolver.IsTopLevelValueImportEqualsWithEntityName(node)
+	node = tx.emitContext.ParseNode(node)
+	return node != nil && tx.emitResolver.IsTopLevelValueImportEqualsWithEntityName(node)
+}
+
+// Determines whether import/export elision is blocked for this statement.
+//
+// @description
+// We generally block import/export elision if the statement was modified by a `before` custom
+// transform, although we will continue to allow it if the statement hasn't replaced a node of a different kind and
+// as long as the local bindings for the declarations are unchanged.
+func (tx *ImportElisionTransformer) isElisionBlocked(node *ast.Node /*ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration*/) bool {
+	parsed := tx.emitContext.ParseNode(node)
+	if parsed == node || ast.IsExportAssignment(node) {
+		return false
+	}
+
+	if parsed == nil || parsed.Kind != node.Kind {
+		// no longer safe to elide as the declaration was replaced with a node of a different kind
+		return true
+	}
+
+	switch node.Kind {
+	case ast.KindImportDeclaration:
+		n := node.AsImportDeclaration()
+		p := parsed.AsImportDeclaration()
+		if n.ImportClause != p.ImportClause {
+			return true // no longer safe to elide as the import clause has changed
+		}
+		if n.Attributes != p.Attributes {
+			return true // no longer safe to elide as the import attributes have changed
+		}
+	case ast.KindImportEqualsDeclaration:
+		n := node.AsImportEqualsDeclaration()
+		p := parsed.AsImportEqualsDeclaration()
+		if n.Name() != p.Name() {
+			return true // no longer safe to elide as local binding has changed
+		}
+		if n.IsTypeOnly != p.IsTypeOnly {
+			return true // no longer safe to elide as `type` modifier has changed
+		}
+		if n.ModuleReference != p.ModuleReference && (ast.IsEntityName(n.ModuleReference) || ast.IsEntityName(p.ModuleReference)) {
+			return true // no longer safe to elide as EntityName reference has changed.
+		}
+	case ast.KindExportDeclaration:
+		n := node.AsExportDeclaration()
+		p := parsed.AsExportDeclaration()
+		if n.ExportClause != p.ExportClause {
+			return true // no longer safe to elide as the export clause has changed
+		}
+		if n.Attributes != p.Attributes {
+			return true // no longer safe to elide as the export attributes have changed
+		}
+	}
+
+	return false
 }

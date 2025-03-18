@@ -1,0 +1,14 @@
+--- old.newAbstractInstance.js
++++ new.newAbstractInstance.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [newAbstractInstance.js]
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
++class B {
++}
+ new b();

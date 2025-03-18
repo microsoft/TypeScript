@@ -1,0 +1,10 @@
+--- old.asyncGetter_es6.js
++++ new.asyncGetter_es6.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [asyncGetter_es6.js]
+ class C {
+-    get foo() {
++    async get foo() {
+     }
+ }

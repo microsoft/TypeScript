@@ -1,0 +1,23 @@
+--- old.parser.numericSeparators.hexNegative.js
++++ new.parser.numericSeparators.hexNegative.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [1.js]
+-0;
++0x00_;
+ //// [2.js]
+-272;
++0x_110;
+ //// [3.js]
+ 0;
+ X0101;
+ //// [4.js]
+-273;
++0x01__11;
+ //// [5.js]
+-17826064;
++0X0110_0110__;
+ //// [6.js]
+-1172542853137;
++0x___0111010_0101_1;

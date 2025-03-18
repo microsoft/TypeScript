@@ -1,0 +1,26 @@
+--- old.commentsOnObjectLiteral3.js
++++ new.commentsOnObjectLiteral3.js
+@@= skipped -21, +21 lines =@@
+ 
+ //// [commentsOnObjectLiteral3.js]
+ var v = {
+-    //property
+-    prop: 1 /* multiple trailing comments */ /*trailing comments*/,
+-    //property
++    prop: 1,
+     func: function () {
+     },
+-    //PropertyName + CallSignature
+-    func1: function () { },
+-    //getter
++    func1() { },
+     get a() {
+         return this.prop;
+-    } /*trailing 1*/,
+-    //setter
++    },
+     set a(value) {
+         this.prop = value;
+-    } // trailing 2
++    }
+ };

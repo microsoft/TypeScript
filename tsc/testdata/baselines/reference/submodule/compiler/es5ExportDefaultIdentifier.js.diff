@@ -1,0 +1,11 @@
+--- old.es5ExportDefaultIdentifier.js
++++ new.es5ExportDefaultIdentifier.js
+@@= skipped -11, +11 lines =@@
+ exports.f = f;
+ function f() { }
+ exports.default = f;
+-
+-
+-//// [es5ExportDefaultIdentifier.d.ts]
+-export declare function f(): void;
+-export default f;

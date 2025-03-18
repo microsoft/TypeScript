@@ -1,0 +1,11 @@
+--- old.computerPropertiesInES5ShouldBeTransformed.js
++++ new.computerPropertiesInES5ShouldBeTransformed.js
+@@= skipped -3, +3 lines =@@
+ const b = ({ [`key`]: renamed }) => renamed;
+ 
+ //// [computerPropertiesInES5ShouldBeTransformed.js]
+-var b = function (_a) {
+-    var _b = "key", renamed = _a[_b];
+-    return renamed;
+-};
++const b = ({ [`key`]: renamed }) => renamed;

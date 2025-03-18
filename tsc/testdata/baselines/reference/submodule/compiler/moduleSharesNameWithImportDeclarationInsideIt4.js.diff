@@ -1,0 +1,26 @@
+--- old.moduleSharesNameWithImportDeclarationInsideIt4.js
++++ new.moduleSharesNameWithImportDeclarationInsideIt4.js
+@@= skipped -16, +16 lines =@@
+ //// [moduleSharesNameWithImportDeclarationInsideIt4.js]
+ var Z;
+ (function (Z) {
+-    var M;
++    let M;
+     (function (M) {
+         function bar() {
+             return "";
+@@= skipped -10, +10 lines =@@
+ })(Z || (Z = {}));
+ var A;
+ (function (A) {
+-    var M;
++    let M;
+     (function (M_1) {
+         var M = Z.M;
+         function bar() {
+         }
+         M_1.bar = bar;
+-        M.bar(); // Should call Z.M.bar
++        M.bar();
+     })(M = A.M || (A.M = {}));
+ })(A || (A = {}));

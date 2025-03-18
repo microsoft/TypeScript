@@ -1,0 +1,11 @@
+--- old.jsxFactoryMissingErrorInsideAClass.js
++++ new.jsxFactoryMissingErrorInsideAClass.js
+@@= skipped -13, +13 lines =@@
+ exports.C = void 0;
+ class C {
+     factory() {
+-        return factory.createElement("div", null);
++        return <div></div>;
+     }
+ }
+ exports.C = C;

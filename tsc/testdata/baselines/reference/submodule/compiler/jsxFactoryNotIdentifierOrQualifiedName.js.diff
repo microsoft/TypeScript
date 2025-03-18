@@ -1,0 +1,13 @@
+--- old.jsxFactoryNotIdentifierOrQualifiedName.js
++++ new.jsxFactoryNotIdentifierOrQualifiedName.js
+@@= skipped -74, +74 lines =@@
+ class A {
+     view() {
+         return [
+-            React.createElement("meta", { content: "helloworld" }),
+-            React.createElement("meta", { content: c.a.b })
++            <meta content="helloworld"></meta>,
++            <meta content={c.a.b}></meta>
+         ];
+     }
+ }

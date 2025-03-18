@@ -1,0 +1,14 @@
+--- old.emptyArrayBindingPatternParameter01.js
++++ new.emptyArrayBindingPatternParameter01.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [emptyArrayBindingPatternParameter01.js]
+-function f(_a) {
++function f([]) {
+     var x, y, z;
+ }
+-
+-
+-//// [emptyArrayBindingPatternParameter01.d.ts]
+-declare function f([]: any[]): void;

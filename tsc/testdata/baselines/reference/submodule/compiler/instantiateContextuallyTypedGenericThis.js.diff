@@ -1,0 +1,13 @@
+--- old.instantiateContextuallyTypedGenericThis.js
++++ new.instantiateContextuallyTypedGenericThis.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [instantiateContextuallyTypedGenericThis.js]
+-var $;
+-var lines;
++let $;
++let lines;
+ $.each(lines, function (dit) {
+     return dit.charAt(0) + this.charAt(1);
+ });

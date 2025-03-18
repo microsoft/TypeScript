@@ -1,0 +1,28 @@
+--- old.commentOnSignature1.js
++++ new.commentOnSignature1.js
+@@= skipped -37, +37 lines =@@
+ }
+ 
+ //// [a.js]
+-/*!=================
+-    Keep this pinned
+-   =================
+-*/
+ function foo(a) {
+ }
+-var c = /** @class */ (function () {
+-    function c(a) {
++class c {
++    constructor(a) {
+     }
+-    c.prototype.foo = function (a) {
+-    };
+-    return c;
+-}());
++    foo(a) {
++    }
++}
+ //// [b.js]
+-///<reference path='a.ts'/>
+ function foo2(a) {
+ }

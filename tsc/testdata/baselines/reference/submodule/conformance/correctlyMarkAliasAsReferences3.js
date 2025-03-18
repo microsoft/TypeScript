@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsx/correctlyMarkAliasAsReferences3.tsx] ////
+
+//// [declaration.d.ts]
+declare module "classnames";
+
+//// [0.tsx]
+///<reference path="declaration.d.ts" />
+import * as cx from 'classnames';
+import * as React from "react";
+
+let buttonProps;
+let k = <button {...buttonProps}>
+            <span className={cx('class1', { class2: true })} />
+        </button>;
+
+
+//// [0.js]
+import * as cx from 'classnames';
+let buttonProps;
+let k = <button {...buttonProps}>
+            <span className={cx('class1', { class2: true })}/>
+        </button>;

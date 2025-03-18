@@ -1,0 +1,37 @@
+--- old.stringLiteralTypesInVariableDeclarations01.js
++++ new.stringLiteralTypesInVariableDeclarations01.js
+@@= skipped -19, +19 lines =@@
+ g = "bar";
+ 
+ //// [stringLiteralTypesInVariableDeclarations01.js]
+-var a;
++let a;
+ var b;
+-var c;
+-var d;
++let c;
++const d;
+ a = "";
+ b = "foo";
+ c = "bar";
+-var e = "";
++let e = "";
+ var f = "foo";
+-var g = "bar";
+-var h = "baz";
++let g = "bar";
++const h = "baz";
+ e = "";
+ f = "foo";
+ g = "bar";
+-
+-
+-//// [stringLiteralTypesInVariableDeclarations01.d.ts]
+-declare let a: "";
+-declare var b: "foo";
+-declare let c: "bar";
+-declare const d: "baz";
+-declare let e: "";
+-declare var f: "foo";
+-declare let g: "bar";
+-declare const h: "baz";

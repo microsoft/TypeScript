@@ -1,0 +1,22 @@
+--- old.decoratorOnClassConstructorParameter5.js
++++ new.decoratorOnClassConstructorParameter5.js
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ //// [decoratorOnClassConstructorParameter5.js]
+-var BulkEditPreviewProvider_1;
+-let BulkEditPreviewProvider = BulkEditPreviewProvider_1 = class BulkEditPreviewProvider {
++class BulkEditPreviewProvider {
++    _modeService;
++    static Schema = 'vscode-bulkeditpreview';
++    static emptyPreview = { scheme: BulkEditPreviewProvider.Schema };
+     constructor(_modeService) {
+         this._modeService = _modeService;
+     }
+-};
+-BulkEditPreviewProvider.Schema = 'vscode-bulkeditpreview';
+-BulkEditPreviewProvider.emptyPreview = { scheme: BulkEditPreviewProvider_1.Schema };
+-BulkEditPreviewProvider = BulkEditPreviewProvider_1 = __decorate([
+-    __param(0, IFoo)
+-], BulkEditPreviewProvider);
++}

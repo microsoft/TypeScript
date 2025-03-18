@@ -1,0 +1,10 @@
+--- old.jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.js
++++ new.jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.js
+@@= skipped -22, +22 lines =@@
+ </NoticeList>;
+ 
+ //// [jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.jsx]
+-"use strict";
+ function NoticeList(props) {
+     return null;
+ }

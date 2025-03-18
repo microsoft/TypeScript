@@ -1,0 +1,38 @@
+--- old.comparisonOperatorWithNumericLiteral.js
++++ new.comparisonOperatorWithNumericLiteral.js
+@@= skipped -46, +46 lines =@@
+ 
+ //// [comparisonOperatorWithNumericLiteral.js]
+ var x;
+-// operator >
+ x > 0;
+ x > 0;
+ x > 0;
+-// operator <
+ x < 0;
+ x < 0;
+ x < 0;
+-// operator >=
+ x >= 0;
+ x >= 0;
+ x >= 0;
+-// operator <=
+ x <= 0;
+ x <= 0;
+ x <= 0;
+-// operator ==
+ x == 0;
+ x == 0;
+ x == 0;
+-// operator !=
+ x != 0;
+ x != 0;
+ x != 0;
+-// operator ===
+ x === 0;
+ x === 0;
+ x === 0;
+-// operator !==
+ x !== 0;
+ x !== 0;
+ x !== 0;

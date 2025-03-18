@@ -1,0 +1,26 @@
+--- old.nullAssignableToEveryType.js
++++ new.nullAssignableToEveryType.js
+@@= skipped -45, +45 lines =@@
+ //}
+ 
+ //// [nullAssignableToEveryType.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    foo;
++}
+ var ac;
+ var ai;
+ var E;
+@@= skipped -36, +34 lines =@@
+     y = null;
+     z = null;
+ }
+-//function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
+-//    x = null;
+-//    y = null;
+-//    z = null;
+-//}

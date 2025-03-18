@@ -1,0 +1,15 @@
+--- old.constInClassExpression.js
++++ new.constInClassExpression.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [constInClassExpression.js]
+-var C = /** @class */ (function () {
+-    function class_1() {
+-        this.a = 4;
+-    }
+-    return class_1;
+-}());
++let C = class {
++    a = 4;
++};

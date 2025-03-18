@@ -1,0 +1,17 @@
+--- old.declarationEmitTypeParameterNameShadowedInternally.js
++++ new.declarationEmitTypeParameterNameShadowedInternally.js
+@@= skipped -10, +10 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.foo = void 0;
+-var foo = function (x) {
+-    var inner = function (y) { return [x, y]; };
++const foo = (x) => {
++    const inner = (y) => [x, y];
+     return inner;
+ };
+ exports.foo = foo;
+-
+-
+-//// [declarationEmitTypeParameterNameShadowedInternally.d.ts]
+-export declare const foo: <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1];

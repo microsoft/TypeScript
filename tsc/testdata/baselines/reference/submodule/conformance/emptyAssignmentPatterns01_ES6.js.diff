@@ -1,0 +1,10 @@
+--- old.emptyAssignmentPatterns01_ES6.js
++++ new.emptyAssignmentPatterns01_ES6.js
+@@= skipped -9, +9 lines =@@
+ var a;
+ ({} = a);
+ ([] = a);
+-
+-
+-//// [emptyAssignmentPatterns01_ES6.d.ts]
+-declare var a: any;

@@ -1,0 +1,10 @@
+--- old.logicalAssignment3(target=es2021).js
++++ new.logicalAssignment3(target=es2021).js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [logicalAssignment3.js]
+-"use strict";
+ (a.baz) &&= result.baz;
+ (b.baz) ||= result.baz;
+ (c.baz) ??= result.baz;

@@ -1,0 +1,11 @@
+--- old.mergeMultipleInterfacesReexported.js
++++ new.mergeMultipleInterfacesReexported.js
+@@= skipped -55, +55 lines =@@
+ //// [test.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var t = p012;
++const t = p012;
+ //// [foo.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });

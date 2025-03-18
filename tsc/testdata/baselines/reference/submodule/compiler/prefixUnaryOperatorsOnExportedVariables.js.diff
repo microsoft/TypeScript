@@ -1,0 +1,51 @@
+--- old.prefixUnaryOperatorsOnExportedVariables.js
++++ new.prefixUnaryOperatorsOnExportedVariables.js
+@@= skipped -31, +31 lines =@@
+ }
+ 
+ //// [prefixUnaryOperatorsOnExportedVariables.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var x, y;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("x", x = false);
+-            exports_1("y", y = 1);
+-            if (!x) {
+-            }
+-            if (+x) {
+-            }
+-            if (-x) {
+-            }
+-            if (~x) {
+-            }
+-            if (void x) {
+-            }
+-            if (typeof x) {
+-            }
+-            if (exports_1("y", ++y)) {
+-            }
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.y = exports.x = void 0;
++exports.x = false;
++exports.y = 1;
++if (!exports.x) {
++}
++if (+exports.x) {
++}
++if (-exports.x) {
++}
++if (~exports.x) {
++}
++if (void exports.x) {
++}
++if (typeof exports.x) {
++}
++if (++exports.y) {
++}

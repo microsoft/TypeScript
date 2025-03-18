@@ -1,0 +1,27 @@
+--- old.declarationEmitComputedNameConstEnumAlias.js
++++ new.declarationEmitComputedNameConstEnumAlias.js
+@@= skipped -23, +23 lines =@@
+ exports.default = EnumExample;
+ //// [index.js]
+ "use strict";
+-var _a;
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var EnumExample_1 = require("./EnumExample");
+-exports.default = (_a = {},
+-    _a[EnumExample_1.default.TEST] = {},
+-    _a);
+-
+-
+-//// [EnumExample.d.ts]
+-declare enum EnumExample {
+-    TEST = "TEST"
+-}
+-export default EnumExample;
+-//// [index.d.ts]
+-declare const _default: {
+-    TEST: {};
++const EnumExample_1 = require("./EnumExample");
++exports.default = {
++    [EnumExample_1.default.TEST]: {},
+ };
+-export default _default;

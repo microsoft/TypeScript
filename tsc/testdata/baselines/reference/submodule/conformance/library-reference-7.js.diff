@@ -1,0 +1,8 @@
+--- old.library-reference-7.js
++++ new.library-reference-7.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [consumer.js]
+-/// <reference types="jquery" />
+ $.foo();

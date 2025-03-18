@@ -1,0 +1,18 @@
+--- old.badArraySyntax.js
++++ new.badArraySyntax.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [badArraySyntax.js]
+-var Z = /** @class */ (function () {
+-    function Z() {
+-        this.x = "";
+-    }
+-    return Z;
+-}());
++class Z {
++    x = "";
++}
+ var a1 = [];
+ var a2 = new Z[];
+ var a3 = new Z[]();

@@ -1,0 +1,26 @@
+--- old.mergedModuleDeclarationCodeGen3.js
++++ new.mergedModuleDeclarationCodeGen3.js
+@@= skipped -12, +12 lines =@@
+ //// [mergedModuleDeclarationCodeGen3.js]
+ var my;
+ (function (my) {
+-    var data;
++    let data;
+     (function (data) {
+         function buz() { }
+         data.buz = buz;
+     })(data = my.data || (my.data = {}));
+ })(my || (my = {}));
+ (function (my_1) {
+-    var data;
++    let data;
+     (function (data_1) {
+-        var foo;
++        let foo;
+         (function (foo_1) {
+             function data(my, foo) {
+-                data_1.buz();
++                buz();
+             }
+         })(foo = data_1.foo || (data_1.foo = {}));
+     })(data = my_1.data || (my_1.data = {}));

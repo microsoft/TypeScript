@@ -1,0 +1,8 @@
+--- old.contextualSignature_objectLiteralMethodMayReturnNever.js
++++ new.contextualSignature_objectLiteralMethodMayReturnNever.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [contextualSignature_objectLiteralMethodMayReturnNever.js]
+-var o = { m: function () { throw new Error("not implemented"); } };
++const o = { m() { throw new Error("not implemented"); } };

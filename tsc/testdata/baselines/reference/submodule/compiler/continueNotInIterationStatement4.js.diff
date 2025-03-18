@@ -1,0 +1,11 @@
+--- old.continueNotInIterationStatement4.js
++++ new.continueNotInIterationStatement4.js
+@@= skipped -10, +10 lines =@@
+ 
+ //// [continueNotInIterationStatement4.js]
+ TWO: while (true) {
+-    var x = function () {
++    var x = () => {
+         continue TWO;
+     };
+ }

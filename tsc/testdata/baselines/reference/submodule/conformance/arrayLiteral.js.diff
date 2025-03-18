@@ -1,0 +1,10 @@
+--- old.arrayLiteral.js
++++ new.arrayLiteral.js
+@@= skipped -17, +17 lines =@@
+ var y2: number[] = new Array<number>();
+ 
+ //// [arrayLiteral.js]
+-// valid uses of array literals
+ var x = [];
+ var x = new Array(1);
+ var y = [1];

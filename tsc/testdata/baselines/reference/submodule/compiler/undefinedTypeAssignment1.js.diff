@@ -1,0 +1,11 @@
+--- old.undefinedTypeAssignment1.js
++++ new.undefinedTypeAssignment1.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [undefinedTypeAssignment1.js]
+-function p(undefined) {
+-    if (undefined === void 0) { undefined = "wat"; }
++function p(undefined = "wat") {
+     return undefined;
+ }

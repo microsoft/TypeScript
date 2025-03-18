@@ -1,0 +1,18 @@
+--- old.logicalAssignment10(target=es2020).js
++++ new.logicalAssignment10(target=es2020).js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [logicalAssignment10.js]
+-var _a, _b, _c;
+ var count = 0;
+ var obj = {};
+ function incr() {
+@@= skipped -9, +8 lines =@@
+ const oobj = {
+     obj
+ };
+-obj[_a = incr()] ?? (obj[_a] = incr());
+-(_b = oobj["obj"])[_c = incr()] ?? (_b[_c] = incr());
++obj[incr()] ??= incr();
++oobj["obj"][incr()] ??= incr();

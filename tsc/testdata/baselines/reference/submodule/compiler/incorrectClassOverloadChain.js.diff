@@ -1,0 +1,15 @@
+--- old.incorrectClassOverloadChain.js
++++ new.incorrectClassOverloadChain.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [incorrectClassOverloadChain.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-        this.x = 1;
+-    }
+-    return C;
+-}());
++class C {
++    x = 1;
++}

@@ -1,0 +1,8 @@
+--- old.conflictMarkerTrivia3.js
++++ new.conflictMarkerTrivia3.js
+@@= skipped -4, +4 lines =@@
+ <<<<<<< HEAD
+ 
+ //// [conflictMarkerTrivia3.js]
+-var x = <div></>;
++const x = <div></>;

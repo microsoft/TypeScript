@@ -1,0 +1,18 @@
+--- old.regularExpressionAnnexB.js
++++ new.regularExpressionAnnexB.js
+@@= skipped -50, +50 lines =@@
+     /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/,
+     /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/,
+     /\P[\P\w-_]/,
+-    // Compare to
+     /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u,
+     /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u,
+     /\P[\P\w-_]/u,
+@@= skipped -20, +19 lines =@@
+     /{1,}??/,
+     /{1,2}??/,
+     /{2,1}??/,
+-    // Compare to
+     /{??/u,
+     /{,??/u,
+     /{,1??/u,

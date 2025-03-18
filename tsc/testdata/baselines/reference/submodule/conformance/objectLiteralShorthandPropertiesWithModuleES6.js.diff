@@ -1,0 +1,15 @@
+--- old.objectLiteralShorthandPropertiesWithModuleES6.js
++++ new.objectLiteralShorthandPropertiesWithModuleES6.js
+@@= skipped -18, +18 lines =@@
+ (function (m) {
+ })(m || (m = {}));
+ (function (m) {
+-    var z = m.x;
++    var z = x;
+     var y = {
+-        a: m.x,
+-        x: m.x
++        a: x,
++        x
+     };
+ })(m || (m = {}));

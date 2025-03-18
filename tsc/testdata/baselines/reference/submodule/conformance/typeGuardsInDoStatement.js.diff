@@ -1,0 +1,42 @@
+--- old.typeGuardsInDoStatement.js
++++ new.typeGuardsInDoStatement.js
+@@= skipped -30, +30 lines =@@
+ 
+ 
+ //// [typeGuardsInDoStatement.js]
+-var cond;
++let cond;
+ function a(x) {
+     x = true;
+     do {
+-        x; // boolean | string
++        x;
+         x = undefined;
+     } while (typeof x === "string");
+-    x; // number | boolean
++    x;
+ }
+ function b(x) {
+     x = true;
+     do {
+-        x; // boolean | string
++        x;
+         if (cond)
+             continue;
+         x = undefined;
+     } while (typeof x === "string");
+-    x; // number | boolean
++    x;
+ }
+ function c(x) {
+     x = "";
+     do {
+-        x; // string
++        x;
+         if (cond)
+             break;
+         x = undefined;
+     } while (typeof x === "string");
+-    x; // string | number
++    x;
+ }

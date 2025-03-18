@@ -1,0 +1,115 @@
+--- old.quickinfoTypeAtReturnPositionsInaccurate.js
++++ new.quickinfoTypeAtReturnPositionsInaccurate.js
+@@= skipped -107, +107 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.listFiles = listFiles;
+-var NumClass = /** @class */ (function () {
+-    function NumClass() {
+-    }
+-    NumClass.prototype.get = function () {
++class NumClass {
++    value;
++    get() {
+         return this.value;
+-    };
+-    NumClass.prototype.numExclusive = function () { };
+-    return NumClass;
+-}());
+-var StrClass = /** @class */ (function () {
+-    function StrClass() {
+     }
+-    StrClass.prototype.get = function () {
++    numExclusive() { }
++}
++class StrClass {
++    value;
++    get() {
+         return this.value;
+-    };
+-    StrClass.prototype.strExclusive = function () { };
+-    return StrClass;
+-}());
+-var isNumClass = function (item) {
++    }
++    strExclusive() { }
++}
++const isNumClass = (item) => {
+     return (item instanceof NumClass);
+ };
+-/**
+- * An example with one dimensional dictionary. Everything worked ok here, even in prior
+- * versions.
+- */
+-var SimpleStore = /** @class */ (function () {
+-    function SimpleStore() {
+-        this.entries = {};
+-    }
+-    SimpleStore.prototype.get = function (entryId) {
+-        var entry = this.entries[entryId];
+-        entry.numExclusive(); // error - expected.
++class SimpleStore {
++    entries = {};
++    get(entryId) {
++        let entry = this.entries[entryId];
++        entry.numExclusive();
+         if (isNumClass(entry)) {
+-            entry.numExclusive(); // works
++            entry.numExclusive();
+             return entry;
+         }
+-        return entry; // type is Entries[EntryId] - all fine
+-    };
+-    return SimpleStore;
+-}());
+-/**
+- * A an example with 2-dimensional dictionary.
+- *
+- * In v4.1 the `isNumClass` type guard doesn't work at all.
+- * In v4.2 or later, `isNumClass` type guard leaks outside its
+- * scope.
+- */
+-var ComplexStore = /** @class */ (function () {
+-    function ComplexStore() {
+-        this.slices = {};
++        return entry;
+     }
+-    ComplexStore.prototype.get = function (sliceId, sliceKey) {
+-        var item = this.slices[sliceId][sliceKey];
++}
++class ComplexStore {
++    slices = {};
++    get(sliceId, sliceKey) {
++        let item = this.slices[sliceId][sliceKey];
+         if (isNumClass(item)) {
+-            item.numExclusive(); // works only since version 4.2
++            item.numExclusive();
+         }
+         item.get();
+-        // unfortunately, doesn't work completely.
+-        // it seems like item's predicated type leaks outside the bracket...
+-        return item; // type is Extract ...
+-    };
+-    ComplexStore.prototype.get2 = function (sliceId, sliceKey) {
+-        var item = this.slices[sliceId][sliceKey];
++        return item;
++    }
++    get2(sliceId, sliceKey) {
++        let item = this.slices[sliceId][sliceKey];
+         if (isNumClass(item)) {
+             return item;
+         }
+-        // it seems like the compiler asumes the above condition is always
+-        // truthy
+         item.get();
+-        return item; // type is never
+-    };
+-    return ComplexStore;
+-}());
++        return item;
++    }
++}
+ function listFiles(program) {
+-    var x = isBuilderProgram(program) ? program.getProgram() : program;
++    const x = isBuilderProgram(program) ? program.getProgram() : program;
+ }

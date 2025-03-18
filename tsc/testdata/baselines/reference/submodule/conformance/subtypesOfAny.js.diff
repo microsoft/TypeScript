@@ -1,0 +1,41 @@
+--- old.subtypesOfAny.js
++++ new.subtypesOfAny.js
+@@= skipped -135, +135 lines =@@
+ }
+ 
+ //// [subtypesOfAny.js]
+-// every type is a subtype of any, no errors expected
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-var A2 = /** @class */ (function () {
+-    function A2() {
+-    }
+-    return A2;
+-}());
++class A {
++    foo;
++}
++class A2 {
++    foo;
++}
+ var E;
+ (function (E) {
+     E[E["A"] = 0] = "A";
+@@= skipped -19, +14 lines =@@
+ (function (f) {
+     f.bar = 1;
+ })(f || (f = {}));
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    return c;
+-}());
++class c {
++    baz;
++}
+ (function (c) {
+     c.bar = 1;
+ })(c || (c = {}));

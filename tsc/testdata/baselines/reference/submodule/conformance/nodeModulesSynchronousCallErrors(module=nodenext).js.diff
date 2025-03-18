@@ -1,0 +1,25 @@
+--- old.nodeModulesSynchronousCallErrors(module=nodenext).js
++++ new.nodeModulesSynchronousCallErrors(module=nodenext).js
+@@= skipped -40, +40 lines =@@
+     f();
+ }
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.f = f;
+-// cjs format file
+-const index_js_1 = require("../index.js");
+-async function f() {
++import { h } from "../index.js";
++export async function f() {
+     const mod3 = await import("../index.js");
+     const mod4 = await import("./index.js");
+-    (0, index_js_1.h)();
++    h();
+ }
+-
+-
+-//// [index.d.ts]
+-export declare function h(): Promise<void>;
+-//// [index.d.ts]
+-export declare function f(): Promise<void>;

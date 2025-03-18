@@ -1,0 +1,21 @@
+--- old.controlFlowFinallyNoCatchAssignments.js
++++ new.controlFlowFinallyNoCatchAssignments.js
+@@= skipped -16, +16 lines =@@
+ console.log(a); // <- error here
+ 
+ //// [controlFlowFinallyNoCatchAssignments.js]
+-"use strict";
+-var x;
++let x;
+ x = Math.random();
+-var a;
++let a;
+ try {
+     if (x) {
+         a = 1;
+@@= skipped -15, +14 lines =@@
+ finally {
+     console.log(x);
+ }
+-console.log(a); // <- error here
++console.log(a);

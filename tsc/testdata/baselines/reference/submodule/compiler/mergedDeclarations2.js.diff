@@ -1,0 +1,12 @@
+--- old.mergedDeclarations2.js
++++ new.mergedDeclarations2.js
+@@= skipped -17, +17 lines =@@
+     Foo[Foo["b"] = 0] = "b";
+ })(Foo || (Foo = {}));
+ (function (Foo) {
+-    Foo[Foo["a"] = 0] = "a";
++    Foo["a"] = b;
++    if (typeof Foo.a !== "string") Foo[Foo.a] = "a";
+ })(Foo || (Foo = {}));
+ (function (Foo) {
+     Foo.x = b;

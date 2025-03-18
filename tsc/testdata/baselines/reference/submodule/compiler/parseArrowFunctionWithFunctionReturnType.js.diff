@@ -1,0 +1,8 @@
+--- old.parseArrowFunctionWithFunctionReturnType.js
++++ new.parseArrowFunctionWithFunctionReturnType.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [parseArrowFunctionWithFunctionReturnType.js]
+-var fn = function () { return null; };
++const fn = () => null;

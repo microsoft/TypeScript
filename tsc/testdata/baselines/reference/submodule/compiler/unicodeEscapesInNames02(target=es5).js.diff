@@ -1,0 +1,46 @@
+--- old.unicodeEscapesInNames02(target=es5).js
++++ new.unicodeEscapesInNames02(target=es5).js
+@@= skipped -30, +30 lines =@@
+ 
+ 
+ //// [extendedEscapesForAstralsInVarsAndClasses.js]
+-// U+102A7 CARIAN LETTER A2
+ var string;
+-var u, A7 = (void 0)[102];
++var u, { 102: A7 };
+ if (Math.random()) {
+     "hello";
+ }
+@@= skipped -14, +13 lines =@@
+     }
+     "hallo";
+ }
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++    u;
++}
+ {
+     102;
+     A7;
+@@= skipped -22, +20 lines =@@
+ }
+ methodA();
+ {
+-    return this.𐊧;
++    return this.;
++    ;
+ }
+ export var _;
+ new Foo().;
+@@= skipped -17, +18 lines =@@
+     A7;
+ }
+ "!";
+-//# sourceMappingURL=extendedEscapesForAstralsInVarsAndClasses.js.map
+ //// [astralAsSurrogatePair.js]
+ export {};
+-//# sourceMappingURL=astralAsSurrogatePair.js.map

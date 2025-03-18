@@ -1,0 +1,11 @@
+--- old.es6ImportEqualsDeclaration.js
++++ new.es6ImportEqualsDeclaration.js
+@@= skipped -6, +6 lines =@@
+ //// [client.ts]
+ import a = require("server");
+ 
+-//// [server.js]
+-var a = 10;
+-export {};
+ //// [client.js]
+ export {};

@@ -1,0 +1,44 @@
+--- old.aliasesInSystemModule2.js
++++ new.aliasesInSystemModule2.js
+@@= skipped -16, +16 lines =@@
+ }
+ 
+ //// [aliasesInSystemModule2.js]
+-System.register(["foo"], function (exports_1, context_1) {
+-    "use strict";
+-    var foo_1, cls, cls2, x, y, z, M;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (foo_1_1) {
+-                foo_1 = foo_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            cls = foo_1.alias.Class;
+-            exports_1("cls2", cls2 = foo_1.alias.Class);
+-            x = new foo_1.alias.Class();
+-            y = new cls();
+-            z = new cls2();
+-            (function (M) {
+-                M.cls = foo_1.alias.Class;
+-                var x = new foo_1.alias.Class();
+-                var y = new M.cls();
+-                var z = new cls2();
+-            })(M || (M = {}));
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const foo_1 = require("foo");
++let x = new foo_1.alias.Class();
++let y = new cls();
++let z = new exports.cls2();
++var M;
++(function (M) {
++    M.cls = foo_1.alias.Class;
++    let x = new foo_1.alias.Class();
++    let y = new M.cls();
++    let z = new exports.cls2();
++})(M || (M = {}));

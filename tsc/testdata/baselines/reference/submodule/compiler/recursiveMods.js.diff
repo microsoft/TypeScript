@@ -1,0 +1,25 @@
+--- old.recursiveMods.js
++++ new.recursiveMods.js
+@@= skipped -30, +30 lines =@@
+ exports.Foo = void 0;
+ var Foo;
+ (function (Foo) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
++    class C {
++    }
+     Foo.C = C;
+ })(Foo || (exports.Foo = Foo = {}));
+ (function (Foo) {
+@@= skipped -12, +9 lines =@@
+         if (true) {
+             return Bar();
+         }
+-        return new Foo.C();
++        return new C();
+     }
+     function Baz() {
+         var c = Baz();

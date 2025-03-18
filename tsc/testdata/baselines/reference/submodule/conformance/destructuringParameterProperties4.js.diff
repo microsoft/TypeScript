@@ -1,0 +1,10 @@
+--- old.destructuringParameterProperties4.js
++++ new.destructuringParameterProperties4.js
+@@= skipped -29, +29 lines =@@
+ 
+ //// [destructuringParameterProperties4.js]
+ class C1 {
++    k;
+     constructor(k, [a, b, c]) {
+         this.k = k;
+         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {

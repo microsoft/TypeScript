@@ -1,0 +1,9 @@
+--- old.classDeclarationCheckUsedBeforeDefinitionInItself.js
++++ new.classDeclarationCheckUsedBeforeDefinitionInItself.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [classDeclarationCheckUsedBeforeDefinitionInItself.js]
+ class C3 {
++    static intance = new C3();
+ }
+-C3.intance = new C3(); // ok

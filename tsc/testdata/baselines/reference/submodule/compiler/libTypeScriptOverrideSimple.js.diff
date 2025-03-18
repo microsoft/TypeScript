@@ -1,0 +1,12 @@
+--- old.libTypeScriptOverrideSimple.js
++++ new.libTypeScriptOverrideSimple.js
+@@= skipped -10, +10 lines =@@
+ window.localStorage
+ 
+ //// [index.js]
+-/// <reference lib="dom" />
+-var a = { abc: "Hello" };
+-// This should fail because libdom has been replaced
+-// by the module above ^
++const a = { abc: "Hello" };
+ window.localStorage;

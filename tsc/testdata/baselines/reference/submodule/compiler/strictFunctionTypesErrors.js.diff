@@ -1,0 +1,145 @@
+--- old.strictFunctionTypesErrors.js
++++ new.strictFunctionTypesErrors.js
+@@= skipped -160, +160 lines =@@
+ //// [strictFunctionTypesErrors.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-f1 = f2; // Ok
+-f1 = f3; // Error
+-f1 = f4; // Error
+-f2 = f1; // Error
+-f2 = f3; // Error
+-f2 = f4; // Error
+-f3 = f1; // Ok
+-f3 = f2; // Ok
+-f3 = f4; // Ok
+-f4 = f1; // Error
+-f4 = f2; // Ok
+-f4 = f3; // Error
+-g1 = g2; // Ok
+-g1 = g3; // Error
+-g1 = g4; // Error
+-g2 = g1; // Error
+-g2 = g3; // Error
+-g2 = g4; // Error
+-g3 = g1; // Ok
+-g3 = g2; // Ok
+-g3 = g4; // Ok
+-g4 = g1; // Error
+-g4 = g2; // Ok
+-g4 = g3; // Error
+-h1 = h2; // Ok
+-h1 = h3; // Ok
+-h1 = h4; // Ok
+-h2 = h1; // Error
+-h2 = h3; // Error
+-h2 = h4; // Ok
+-h3 = h1; // Error
+-h3 = h2; // Error
+-h3 = h4; // Ok
+-h4 = h1; // Error
+-h4 = h2; // Error
+-h4 = h3; // Error
+-i1 = i2; // Error
+-i1 = i3; // Error
+-i1 = i4; // Error
+-i2 = i1; // Ok
+-i2 = i3; // Error
+-i2 = i4; // Error
+-i3 = i1; // Ok
+-i3 = i2; // Error
+-i3 = i4; // Error
+-i4 = i1; // Ok
+-i4 = i2; // Ok
+-i4 = i3; // Ok
+-animalComparer1 = dogComparer1; // Ok
+-dogComparer1 = animalComparer1; // Ok
+-animalComparer2 = dogComparer2; // Error
+-dogComparer2 = animalComparer2; // Ok
+-// Errors below should elaborate the reason for invariance
+-animalCrate = dogCrate; // Error
+-dogCrate = animalCrate; // Error
+-fc1 = fc2; // Error
+-fc2 = fc1; // Error
+-// Verify that callback parameters aren't loosely checked when types
+-// originate in method declarations
++f1 = f2;
++f1 = f3;
++f1 = f4;
++f2 = f1;
++f2 = f3;
++f2 = f4;
++f3 = f1;
++f3 = f2;
++f3 = f4;
++f4 = f1;
++f4 = f2;
++f4 = f3;
++g1 = g2;
++g1 = g3;
++g1 = g4;
++g2 = g1;
++g2 = g3;
++g2 = g4;
++g3 = g1;
++g3 = g2;
++g3 = g4;
++g4 = g1;
++g4 = g2;
++g4 = g3;
++h1 = h2;
++h1 = h3;
++h1 = h4;
++h2 = h1;
++h2 = h3;
++h2 = h4;
++h3 = h1;
++h3 = h2;
++h3 = h4;
++h4 = h1;
++h4 = h2;
++h4 = h3;
++i1 = i2;
++i1 = i3;
++i1 = i4;
++i2 = i1;
++i2 = i3;
++i2 = i4;
++i3 = i1;
++i3 = i2;
++i3 = i4;
++i4 = i1;
++i4 = i2;
++i4 = i3;
++animalComparer1 = dogComparer1;
++dogComparer1 = animalComparer1;
++animalComparer2 = dogComparer2;
++dogComparer2 = animalComparer2;
++animalCrate = dogCrate;
++dogCrate = animalCrate;
++fc1 = fc2;
++fc2 = fc1;
+ var n1;
+ (function (n1) {
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-        }
+-        Foo.f1 = function (x) { throw "wat"; };
+-        Foo.f2 = function (x) { throw "wat"; };
++    class Foo {
++        static f1(x) { throw "wat"; }
++        static f2(x) { throw "wat"; }
+         ;
+-        return Foo;
+-    }());
++    }
+     f1 = f2;
+-    f2 = f1; // Error
++    f2 = f1;
+ })(n1 || (n1 = {}));
+ var n2;
+ (function (n2) {
+     f1 = f2;
+-    f2 = f1; // Error
++    f2 = f1;
+ })(n2 || (n2 = {}));

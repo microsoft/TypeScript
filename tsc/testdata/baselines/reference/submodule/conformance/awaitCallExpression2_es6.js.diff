@@ -1,0 +1,17 @@
+--- old.awaitCallExpression2_es6.js
++++ new.awaitCallExpression2_es6.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [awaitCallExpression2_es6.js]
+-function func() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        before();
+-        var b = fn(yield p, a, a);
+-        after();
+-    });
++async function func() {
++    before();
++    var b = fn(await p, a, a);
++    after();
+ }

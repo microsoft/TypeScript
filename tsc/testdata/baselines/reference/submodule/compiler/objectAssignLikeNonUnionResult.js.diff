@@ -1,0 +1,12 @@
+--- old.objectAssignLikeNonUnionResult.js
++++ new.objectAssignLikeNonUnionResult.js
+@@= skipped -20, +20 lines =@@
+ type e1 = Explode<typeof data1>;
+ 
+ //// [objectAssignLikeNonUnionResult.js]
+-var defaultValue = { field: 1 };
+-// Displayed type: Interface & { field: number }
+-// Underlying type: Something else...
+-var data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
++const defaultValue = { field: 1 };
++const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});

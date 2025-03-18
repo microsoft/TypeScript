@@ -1,0 +1,62 @@
+--- old.exportsAndImports4-amd.js
++++ new.exportsAndImports4-amd.js
+@@= skipped -38, +38 lines =@@
+ 
+ 
+ //// [t1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.default = "hello";
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.default = "hello";
+ //// [t3.js]
+-define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], function (require, exports, a, t1_1, c, t1_2, t1_3, t1_4) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.f2 = exports.f1 = exports.e2 = exports.e1 = exports.d = exports.c = exports.b = exports.a = void 0;
+-    exports.a = a;
+-    a.default;
+-    exports.b = t1_1.default;
+-    t1_1.default;
+-    exports.c = c;
+-    c.default;
+-    Object.defineProperty(exports, "d", { enumerable: true, get: function () { return t1_2.default; } });
+-    t1_2.default;
+-    var e2 = t1_3;
+-    exports.e1 = t1_3.default;
+-    exports.e2 = e2;
+-    t1_3.default;
+-    e2.default;
+-    exports.f1 = t1_4.default;
+-    Object.defineProperty(exports, "f2", { enumerable: true, get: function () { return t1_4.default; } });
+-    t1_4.default;
+-    t1_4.default;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.f2 = exports.f1 = exports.e2 = exports.e1 = exports.d = exports.c = exports.b = exports.a = void 0;
++const a = require("./t1");
++exports.a = a;
++a.default;
++const t1_1 = require("./t1");
++exports.b = t1_1.default;
++t1_1.default;
++const c = require("./t1");
++exports.c = c;
++c.default;
++const t1_2 = require("./t1");
++Object.defineProperty(exports, "d", { enumerable: true, get: function () { return t1_2.default; } });
++t1_2.default;
++const t1_3 = require("./t1"), e2 = t1_3;
++exports.e1 = t1_3.default;
++exports.e2 = e2;
++t1_3.default;
++e2.default;
++const t1_4 = require("./t1");
++exports.f1 = t1_4.default;
++Object.defineProperty(exports, "f2", { enumerable: true, get: function () { return t1_4.default; } });
++t1_4.default;
++t1_4.default;

@@ -1,0 +1,33 @@
+--- old.destructuringAssignmentWithExportedName.js
++++ new.destructuringAssignmentWithExportedName.js
+@@= skipped -28, +28 lines =@@
+ 
+ //// [destructuringAssignmentWithExportedName.js]
+ "use strict";
+-var _a, _b, _c, _d, _e;
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.nfoo = exports.foo = exports.nonexportedFoo = exports.exportedFoo = void 0;
+ let nonexportedFoo;
+-// sanity checks
+ exports.foo = exports.exportedFoo = null;
+ exports.nfoo = exports.nonexportedFoo = nonexportedFoo = null;
+ if (null) {
+-    (_a = null, exports.foo = exports.exportedFoo = _a.exportedFoo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _a.nonexportedFoo);
++    ({ exportedFoo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, nonexportedFoo: { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value } = null);
+ }
+ else if (null) {
+-    (_b = null, exports.foo = exports.exportedFoo = _b.foo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _b.bar);
++    ({ foo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, bar: { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value } = null);
+ }
+ else if (null) {
+-    (_c = null.foo, exports.foo = exports.exportedFoo = _c.bar, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _c.baz);
++    ({ foo: { bar: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, baz: { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value } } = null);
+ }
+ else if (null) {
+-    (_d = null, exports.foo = exports.exportedFoo = _d[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _d[1]);
++    ([{ set value(value) { exports.foo = exports.exportedFoo = value; } }.value, { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value] = null);
+ }
+ else {
+-    (_e = null[0], exports.foo = exports.exportedFoo = _e[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _e[1]);
++    ([[{ set value(value) { exports.foo = exports.exportedFoo = value; } }.value, { set value(value) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value; } }.value]] = null);
+ }

@@ -1,0 +1,35 @@
+--- old.referenceSatisfiesExpression.js
++++ new.referenceSatisfiesExpression.js
+@@= skipped -28, +28 lines =@@
+ 
+ 
+ //// [referenceSatisfiesExpression.js]
+-var a = 10;
++let a = 10;
+ --a;
+ ++a;
+ a++;
+ a--;
+-var b;
++let b;
+ b = 10;
+-var c;
+-c = [10][0];
+-var d, e = 1;
+-(e = { d: 10 }.d);
+-var g = 1;
+-for (var _i = 0, _a = [10]; _i < _a.length; _i++) {
+-    g = _a[_i];
++let c;
++[c] = [10];
++let d, e = 1;
++({ d: e } = { d: 10 });
++let g = 1;
++for (g of [10]) {
+     console.log(g);
+ }
+-var x = "hello";
++let x = "hello";
+ for (x in { a: 10 }) {
+     console.log(x);
+ }

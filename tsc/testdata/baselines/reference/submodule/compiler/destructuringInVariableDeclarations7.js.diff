@@ -1,0 +1,27 @@
+--- old.destructuringInVariableDeclarations7.js
++++ new.destructuringInVariableDeclarations7.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [destructuringInVariableDeclarations7.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var toString;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("toString", toString = 1..toString);
+-            {
+-                let { toFixed } = 1;
+-            }
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.toString = void 0;
++({ toString: exports.toString } = 1);
++{
++    let { toFixed } = 1;
++}

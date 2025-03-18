@@ -1,0 +1,8 @@
+--- old.optionsTsBuildInfoFileWithoutIncrementalAndComposite.js
++++ new.optionsTsBuildInfoFileWithoutIncrementalAndComposite.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [optionsTsBuildInfoFileWithoutIncrementalAndComposite.js]
+-var x = "Hello World";
++const x = "Hello World";

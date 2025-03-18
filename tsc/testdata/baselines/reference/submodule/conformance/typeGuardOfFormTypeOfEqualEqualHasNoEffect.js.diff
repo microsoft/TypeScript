@@ -1,0 +1,52 @@
+--- old.typeGuardOfFormTypeOfEqualEqualHasNoEffect.js
++++ new.typeGuardOfFormTypeOfEqualEqualHasNoEffect.js
+@@= skipped -37, +37 lines =@@
+ }
+ 
+ //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    p;
++}
+ ;
+ var strOrNum;
+ var strOrBool;
+ var numOrBool;
+ var strOrC;
+-// typeof x == s has not effect on typeguard
+ if (typeof strOrNum == "string") {
+-    var r1 = strOrNum; // string | number
++    var r1 = strOrNum;
+ }
+ else {
+-    var r1 = strOrNum; // string | number
++    var r1 = strOrNum;
+ }
+ if (typeof strOrBool == "boolean") {
+-    var r2 = strOrBool; // string | boolean
++    var r2 = strOrBool;
+ }
+ else {
+-    var r2 = strOrBool; // string | boolean
++    var r2 = strOrBool;
+ }
+ if (typeof numOrBool == "number") {
+-    var r3 = numOrBool; // number | boolean
++    var r3 = numOrBool;
+ }
+ else {
+-    var r3 = numOrBool; // number | boolean
++    var r3 = numOrBool;
+ }
+ if (typeof strOrC == "Object") {
+-    var r4 = strOrC; // string | C
++    var r4 = strOrC;
+ }
+ else {
+-    var r4 = strOrC; // string | C
++    var r4 = strOrC;
+ }

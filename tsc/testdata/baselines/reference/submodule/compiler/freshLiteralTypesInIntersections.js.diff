@@ -1,0 +1,11 @@
+--- old.freshLiteralTypesInIntersections.js
++++ new.freshLiteralTypesInIntersections.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [freshLiteralTypesInIntersections.js]
+-"use strict";
+-// Repro from #19657
+-var q = func("x", ["x"]);
++const q = func("x", ["x"]);
+ q("x");

@@ -1,0 +1,18 @@
+--- old.moduleVariables.js
++++ new.moduleVariables.js
+@@= skipped -23, +23 lines =@@
+ var M;
+ (function (M) {
+     M.x = 2;
+-    console.log(M.x); // 2
++    console.log(M.x);
+ })(M || (M = {}));
+ (function (M) {
+-    console.log(M.x); // 2
++    console.log(x);
+ })(M || (M = {}));
+ (function (M) {
+     var x = 3;
+-    console.log(x); // 3
++    console.log(x);
+ })(M || (M = {}));

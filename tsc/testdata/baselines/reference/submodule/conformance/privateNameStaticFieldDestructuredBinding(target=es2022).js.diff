@@ -1,0 +1,18 @@
+--- old.privateNameStaticFieldDestructuredBinding(target=es2022).js
++++ new.privateNameStaticFieldDestructuredBinding(target=es2022).js
+@@= skipped -28, +28 lines =@@
+ //// [privateNameStaticFieldDestructuredBinding.js]
+ class A {
+     static #field = 1;
++    otherClass = A;
+     testObject() {
+         return { x: 10, y: 6 };
+     }
+@@= skipped -7, +8 lines =@@
+         return [10, 11];
+     }
+     constructor() {
+-        this.otherClass = A;
+         let y;
+         ({ x: A.#field, y } = this.testObject());
+         ([A.#field, y] = this.testArray());

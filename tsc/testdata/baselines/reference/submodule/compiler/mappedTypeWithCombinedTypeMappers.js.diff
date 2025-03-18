@@ -1,0 +1,9 @@
+--- old.mappedTypeWithCombinedTypeMappers.js
++++ new.mappedTypeWithCombinedTypeMappers.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [mappedTypeWithCombinedTypeMappers.js]
+-// Repro from #13351
+-var shouldFail = output.x.children;
++const shouldFail = output.x.children;

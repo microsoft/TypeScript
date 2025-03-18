@@ -1,0 +1,10 @@
+--- old.exportDefaultParenthesizeES6.js
++++ new.exportDefaultParenthesizeES6.js
+@@= skipped -3, +3 lines =@@
+ export default (class Foo {} as any);
+ 
+ //// [classexpr.js]
+-export default (class Foo {
+-});
++export default ((class Foo {
++}));

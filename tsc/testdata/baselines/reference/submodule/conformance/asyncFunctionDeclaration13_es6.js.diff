@@ -1,0 +1,14 @@
+--- old.asyncFunctionDeclaration13_es6.js
++++ new.asyncFunctionDeclaration13_es6.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [asyncFunctionDeclaration13_es6.js]
+-function foo() {
+-    return __awaiter(this, void 0, void 0, function* () {
+-        // Legal to use 'await' in a type context.
+-        var v;
+-    });
++async function foo() {
++    var v;
+ }

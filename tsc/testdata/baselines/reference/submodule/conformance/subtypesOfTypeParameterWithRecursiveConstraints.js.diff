@@ -1,0 +1,270 @@
+--- old.subtypesOfTypeParameterWithRecursiveConstraints.js
++++ new.subtypesOfTypeParameterWithRecursiveConstraints.js
+@@= skipped -159, +159 lines =@@
+ }
+ 
+ //// [subtypesOfTypeParameterWithRecursiveConstraints.js]
+-// checking whether other types are subtypes of type parameters with constraints
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++    foo;
++}
+ function f(t, u, v) {
+-    // ok
+     var r1 = true ? t : u;
+     var r1 = true ? u : t;
+-    // ok
+     var r2 = true ? t : v;
+     var r2 = true ? v : t;
+-    // ok
+     var r3 = true ? v : u;
+     var r3 = true ? u : v;
+-    // ok
+     var r4 = true ? t : new Foo();
+     var r4 = true ? new Foo() : t;
+-    // ok
+     var r5 = true ? u : new Foo();
+     var r5 = true ? new Foo() : u;
+-    // ok
+     var r6 = true ? v : new Foo();
+     var r6 = true ? new Foo() : v;
+-    // ok
+     var r7 = true ? t : new Foo();
+     var r7 = true ? new Foo() : t;
+-    // ok
+     var r8 = true ? u : new Foo();
+     var r8 = true ? new Foo() : u;
+-    // ok
+     var r9 = true ? v : new Foo();
+     var r9 = true ? new Foo() : v;
+-    // ok
+     var r10 = true ? t : new Foo();
+     var r10 = true ? new Foo() : t;
+-    // ok
+     var r11 = true ? u : new Foo();
+     var r11 = true ? new Foo() : u;
+-    // ok
+     var r12 = true ? v : new Foo();
+     var r12 = true ? new Foo() : v;
+ }
+ var M1;
+ (function (M1) {
+-    var Base = /** @class */ (function () {
+-        function Base() {
+-        }
+-        return Base;
+-    }());
+-    var D1 = /** @class */ (function (_super) {
+-        __extends(D1, _super);
+-        function D1() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D1;
+-    }(Base));
+-    var D2 = /** @class */ (function (_super) {
+-        __extends(D2, _super);
+-        function D2() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D2;
+-    }(Base));
+-    var D3 = /** @class */ (function (_super) {
+-        __extends(D3, _super);
+-        function D3() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D3;
+-    }(Base));
+-    var D4 = /** @class */ (function (_super) {
+-        __extends(D4, _super);
+-        function D4() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D4;
+-    }(Base));
+-    var D5 = /** @class */ (function (_super) {
+-        __extends(D5, _super);
+-        function D5() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D5;
+-    }(Base));
+-    var D6 = /** @class */ (function (_super) {
+-        __extends(D6, _super);
+-        function D6() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D6;
+-    }(Base));
+-    var D7 = /** @class */ (function (_super) {
+-        __extends(D7, _super);
+-        function D7() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D7;
+-    }(Base));
+-    var D8 = /** @class */ (function (_super) {
+-        __extends(D8, _super);
+-        function D8() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D8;
+-    }(Base));
+-    var D9 = /** @class */ (function (_super) {
+-        __extends(D9, _super);
+-        function D9() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D9;
+-    }(Base));
++    class Base {
++        foo;
++    }
++    class D1 extends Base {
++        foo;
++    }
++    class D2 extends Base {
++        foo;
++    }
++    class D3 extends Base {
++        foo;
++    }
++    class D4 extends Base {
++        foo;
++    }
++    class D5 extends Base {
++        foo;
++    }
++    class D6 extends Base {
++        foo;
++    }
++    class D7 extends Base {
++        foo;
++    }
++    class D8 extends Base {
++        foo;
++    }
++    class D9 extends Base {
++        foo;
++    }
+ })(M1 || (M1 = {}));
+ var M2;
+ (function (M2) {
+-    var Base2 = /** @class */ (function () {
+-        function Base2() {
+-        }
+-        return Base2;
+-    }());
+-    var D1 = /** @class */ (function (_super) {
+-        __extends(D1, _super);
+-        function D1() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D1;
+-    }(Base2));
+-    var D2 = /** @class */ (function (_super) {
+-        __extends(D2, _super);
+-        function D2() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D2;
+-    }(Base2));
+-    var D3 = /** @class */ (function (_super) {
+-        __extends(D3, _super);
+-        function D3() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D3;
+-    }(Base2));
+-    var D4 = /** @class */ (function (_super) {
+-        __extends(D4, _super);
+-        function D4() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D4;
+-    }(Base2));
+-    var D5 = /** @class */ (function (_super) {
+-        __extends(D5, _super);
+-        function D5() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D5;
+-    }(Base2));
+-    var D6 = /** @class */ (function (_super) {
+-        __extends(D6, _super);
+-        function D6() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D6;
+-    }(Base2));
+-    var D7 = /** @class */ (function (_super) {
+-        __extends(D7, _super);
+-        function D7() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D7;
+-    }(Base2));
+-    var D8 = /** @class */ (function (_super) {
+-        __extends(D8, _super);
+-        function D8() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D8;
+-    }(Base2));
+-    var D9 = /** @class */ (function (_super) {
+-        __extends(D9, _super);
+-        function D9() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return D9;
+-    }(Base2));
++    class Base2 {
++        foo;
++    }
++    class D1 extends Base2 {
++        foo;
++    }
++    class D2 extends Base2 {
++        foo;
++    }
++    class D3 extends Base2 {
++        foo;
++    }
++    class D4 extends Base2 {
++        foo;
++    }
++    class D5 extends Base2 {
++        foo;
++    }
++    class D6 extends Base2 {
++        foo;
++    }
++    class D7 extends Base2 {
++        foo;
++    }
++    class D8 extends Base2 {
++        foo;
++    }
++    class D9 extends Base2 {
++        foo;
++    }
+ })(M2 || (M2 = {}));

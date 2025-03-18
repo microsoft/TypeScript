@@ -1,0 +1,24 @@
+--- old.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=system).js
++++ new.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=system).js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [exportNonInitializedVariablesInIfThenStatementNoCrash1.js]
+-// https://github.com/microsoft/TypeScript/issues/59373
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var cssExports;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            if (true) { }
+-            exports_1("default", cssExports);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++if (true)
++    export const cssExports;
++exports.default = exports.cssExports;

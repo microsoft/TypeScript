@@ -1,0 +1,127 @@
+--- old.es6ExportEqualsInterop.js
++++ new.es6ExportEqualsInterop.js
+@@= skipped -207, +207 lines =@@
+ 
+ //// [main.js]
+ "use strict";
+-/// <reference path="modules.d.ts"/>
+ var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+     if (k2 === undefined) k2 = k;
+     var desc = Object.getOwnPropertyDescriptor(m, k);
+@@= skipped -17, +16 lines =@@
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.a0 = exports.a9 = exports.a8 = exports.a7 = exports.a6 = exports.a5 = exports.a4 = exports.a3 = exports.a2 = exports.a1 = void 0;
+-var z2 = require("variable");
+-var z3 = require("interface-variable");
+-var z4 = require("module");
+-var z5 = require("interface-module");
+-var z6 = require("variable-module");
+-var z7 = require("function");
+-var z8 = require("function-module");
+-var z9 = require("class");
+-var z0 = require("class-module");
++const z2 = require("variable");
++const z3 = require("interface-variable");
++const z4 = require("module");
++const z5 = require("interface-module");
++const z6 = require("variable-module");
++const z7 = require("function");
++const z8 = require("function-module");
++const z9 = require("class");
++const z0 = require("class-module");
+ z1.a;
+ z2.a;
+ z3.a;
+@@= skipped -19, +19 lines =@@
+ z8.a;
+ z9.a;
+ z0.a;
+-var y2 = require("variable");
+-var y3 = require("interface-variable");
+-var y4 = require("module");
+-var y5 = require("interface-module");
+-var y6 = require("variable-module");
+-var y7 = require("function");
+-var y8 = require("function-module");
+-var y9 = require("class");
+-var y0 = require("class-module");
++const y2 = require("variable");
++const y3 = require("interface-variable");
++const y4 = require("module");
++const y5 = require("interface-module");
++const y6 = require("variable-module");
++const y7 = require("function");
++const y8 = require("function-module");
++const y9 = require("class");
++const y0 = require("class-module");
+ y1.a;
+ y2.a;
+ y3.a;
+@@= skipped -19, +19 lines =@@
+ y8.a;
+ y9.a;
+ y0.a;
+-// named import
+-var interface_1 = require("interface");
+-var variable_1 = require("variable");
+-var interface_variable_1 = require("interface-variable");
+-var module_1 = require("module");
+-var interface_module_1 = require("interface-module");
+-var variable_module_1 = require("variable-module");
+-var function_1 = require("function");
+-var function_module_1 = require("function-module");
+-var class_1 = require("class");
+-var class_module_1 = require("class-module");
++const interface_1 = require("interface");
++const variable_1 = require("variable");
++const interface_variable_1 = require("interface-variable");
++const module_1 = require("module");
++const interface_module_1 = require("interface-module");
++const variable_module_1 = require("variable-module");
++const function_1 = require("function");
++const function_module_1 = require("function-module");
++const class_1 = require("class");
++const class_module_1 = require("class-module");
+ interface_1.a;
+ variable_1.a;
+ interface_variable_1.a;
+@@= skipped -21, +20 lines =@@
+ function_module_1.a;
+ class_1.a;
+ class_module_1.a;
+-// named export
+-var interface_2 = require("interface");
++const interface_2 = require("interface");
+ Object.defineProperty(exports, "a1", { enumerable: true, get: function () { return interface_2.a; } });
+-var variable_2 = require("variable");
++const variable_2 = require("variable");
+ Object.defineProperty(exports, "a2", { enumerable: true, get: function () { return variable_2.a; } });
+-var interface_variable_2 = require("interface-variable");
++const interface_variable_2 = require("interface-variable");
+ Object.defineProperty(exports, "a3", { enumerable: true, get: function () { return interface_variable_2.a; } });
+-var module_2 = require("module");
++const module_2 = require("module");
+ Object.defineProperty(exports, "a4", { enumerable: true, get: function () { return module_2.a; } });
+-var interface_module_2 = require("interface-module");
++const interface_module_2 = require("interface-module");
+ Object.defineProperty(exports, "a5", { enumerable: true, get: function () { return interface_module_2.a; } });
+-var variable_module_2 = require("variable-module");
++const variable_module_2 = require("variable-module");
+ Object.defineProperty(exports, "a6", { enumerable: true, get: function () { return variable_module_2.a; } });
+-var function_2 = require("function");
++const function_2 = require("function");
+ Object.defineProperty(exports, "a7", { enumerable: true, get: function () { return function_2.a; } });
+-var function_module_2 = require("function-module");
++const function_module_2 = require("function-module");
+ Object.defineProperty(exports, "a8", { enumerable: true, get: function () { return function_module_2.a; } });
+-var class_2 = require("class");
++const class_2 = require("class");
+ Object.defineProperty(exports, "a9", { enumerable: true, get: function () { return class_2.a; } });
+-var class_module_2 = require("class-module");
++const class_module_2 = require("class-module");
+ Object.defineProperty(exports, "a0", { enumerable: true, get: function () { return class_module_2.a; } });
+-// export-star
+ __exportStar(require("interface"), exports);
+ __exportStar(require("variable"), exports);
+ __exportStar(require("interface-variable"), exports);

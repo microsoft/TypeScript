@@ -1,0 +1,10 @@
+--- old.esModuleInteropPrettyErrorRelatedInformation.js
++++ new.esModuleInteropPrettyErrorRelatedInformation.js
+@@= skipped -35, +35 lines =@@
+     return result;
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo = __importStar(require("./foo"));
++const foo = __importStar(require("./foo"));
+ function invoke(f) { f(); }
+ invoke(foo);

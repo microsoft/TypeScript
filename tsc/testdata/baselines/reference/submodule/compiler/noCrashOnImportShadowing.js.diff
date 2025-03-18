@@ -1,0 +1,25 @@
+--- old.noCrashOnImportShadowing.js
++++ new.noCrashOnImportShadowing.js
+@@= skipped -34, +34 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.B = void 0;
+-var B = require("./b");
++const B = require("./b");
+ exports.B = B;
+-var x = { x: "" };
++const x = { x: "" };
+ B.zzz;
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a_1 = require("./a");
+-var x = { x: "" };
++const a_1 = require("./a");
++const x = { x: "" };
+ a_1.B.zzz;
+-var OriginalB = require("./b");
++const OriginalB = require("./b");
+ OriginalB.zzz;
+-var y = x;
++const y = x;

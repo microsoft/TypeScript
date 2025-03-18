@@ -1,0 +1,20 @@
+--- old.genericTypeAliases.js
++++ new.genericTypeAliases.js
+@@= skipped -88, +88 lines =@@
+ };
+ var ls;
+ ls = "eager";
+-ls = function () { return "lazy"; };
+-// Deeply instantiated generics
++ls = () => "lazy";
+ var x;
+ var y;
+ x = y;
+@@= skipped -27, +26 lines =@@
+     var x;
+     return x;
+ }
+-// Deeply instantiated generics
+ var a = f();
+ var b = g();
+ a = b;

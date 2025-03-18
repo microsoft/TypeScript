@@ -1,0 +1,92 @@
+--- old.narrowByInstanceof.js
++++ new.narrowByInstanceof.js
+@@= skipped -72, +72 lines =@@
+ 
+ 
+ //// [narrowByInstanceof.js]
+-"use strict";
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+ function foo(x, A, B, AB) {
+     if (x instanceof A) {
+-        x; // A
++        x;
+     }
+     else {
+-        x; // B | C
++        x;
+     }
+     if (x instanceof B) {
+-        x; // B
++        x;
+     }
+     else {
+-        x; // A | C
++        x;
+     }
+     if (x instanceof AB) {
+-        x; // A | B
++        x;
+     }
+     else {
+-        x; // A | B | C
++        x;
+     }
+ }
+ function bar(target, Promise) {
+@@= skipped -41, +25 lines =@@
+         target.__then();
+     }
+ }
+-// Repro from #52571
+-var PersonMixin = /** @class */ (function (_super) {
+-    __extends(PersonMixin, _super);
+-    function PersonMixin() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    PersonMixin.prototype.check = function (o) {
++class PersonMixin extends Function {
++    check(o) {
+         return typeof o === "object" && o !== null && o instanceof Person;
+-    };
+-    return PersonMixin;
+-}(Function));
+-var cls = new PersonMixin();
+-var Person = /** @class */ (function () {
+-    function Person() {
+     }
+-    Person.prototype.work = function () { console.log("work"); };
+-    Person.prototype.sayHi = function () { console.log("Hi"); };
+-    return Person;
+-}());
+-var Car = /** @class */ (function () {
+-    function Car() {
+-    }
+-    Car.prototype.sayHi = function () { console.log("Wof Wof"); };
+-    return Car;
+-}());
++}
++const cls = new PersonMixin();
++class Person {
++    work() { console.log("work"); }
++    sayHi() { console.log("Hi"); }
++}
++class Car {
++    sayHi() { console.log("Wof Wof"); }
++}
+ function test(o) {
+     if (o instanceof cls) {
+         console.log("Is Person");

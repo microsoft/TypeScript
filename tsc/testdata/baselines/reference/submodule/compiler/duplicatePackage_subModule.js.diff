@@ -1,0 +1,10 @@
+--- old.duplicatePackage_subModule.js
++++ new.duplicatePackage_subModule.js
+@@= skipped -29, +29 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a = require("a");
+-var o = a.o;
++const a = require("a");
++const o = a.o;

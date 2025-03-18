@@ -1,0 +1,10 @@
+--- old.tsxElementResolution1.js
++++ new.tsxElementResolution1.js
+@@= skipped -14, +14 lines =@@
+ <span />;
+ 
+ //// [file.jsx]
+-// OK
+ <div />;
+-// Fail
+ <span />;

@@ -1,0 +1,13 @@
+--- old.classWithEmptyTypeParameter.js
++++ new.classWithEmptyTypeParameter.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [classWithEmptyTypeParameter.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

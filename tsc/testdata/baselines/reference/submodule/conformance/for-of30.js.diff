@@ -1,0 +1,19 @@
+--- old.for-of30.js
++++ new.for-of30.js
+@@= skipped -19, +19 lines =@@
+ 
+ //// [for-of30.js]
+ class MyStringIterator {
+-    constructor() {
+-        this.return = 0;
+-    }
+     next() {
+         return {
+             done: false,
+             value: ""
+         };
+     }
++    return = 0;
+     [Symbol.iterator]() {
+         return this;
+     }

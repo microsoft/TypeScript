@@ -1,0 +1,29 @@
+--- old.es6ImportDefaultBindingFollowedWithNamespaceBindingDts.js
++++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingDts.js
+@@= skipped -10, +10 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.a = void 0;
+-var a = /** @class */ (function () {
+-    function a() {
+-    }
+-    return a;
+-}());
++class a {
++}
+ exports.a = a;
+ //// [client.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
+-var nameSpaceBinding = require("./server");
++const nameSpaceBinding = require("./server");
+ exports.x = new nameSpaceBinding.a();
+-
+-
+-//// [server.d.ts]
+-export declare class a {
+-}
+-//// [client.d.ts]
+-import * as nameSpaceBinding from "./server";
+-export declare var x: nameSpaceBinding.a;

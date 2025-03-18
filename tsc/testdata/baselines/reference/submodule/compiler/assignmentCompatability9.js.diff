@@ -1,0 +1,19 @@
+--- old.assignmentCompatability9.js
++++ new.assignmentCompatability9.js
+@@= skipped -20, +20 lines =@@
+ })(__test1__ || (__test1__ = {}));
+ var __test2__;
+ (function (__test2__) {
+-    var classWithOptional = /** @class */ (function () {
+-        function classWithOptional(one) {
++    class classWithOptional {
++        one;
++        constructor(one) {
+             this.one = one;
+         }
+-        return classWithOptional;
+-    }());
++    }
+     __test2__.classWithOptional = classWithOptional;
+     var x3 = new classWithOptional();
+     ;

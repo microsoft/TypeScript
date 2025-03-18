@@ -1,0 +1,10 @@
+--- old.corrupted.js
++++ new.corrupted.js
+@@= skipped -0, +0 lines =@@
+ //// [tests/cases/compiler/corrupted.ts] ////
+ 
+ //// [corrupted.ts]
+-ï¿½ï¿½ï¿½
++Æ¼Á
+ 
+ //// [corrupted.js]

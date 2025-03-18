@@ -1,0 +1,18 @@
+--- old.capturedLetConstInLoop1_ES6.js
++++ new.capturedLetConstInLoop1_ES6.js
+@@= skipped -115, +115 lines =@@
+ }
+ 
+ //// [capturedLetConstInLoop1_ES6.js]
+-//==== let
+ for (let x in {}) {
+     (function () { return x; });
+     (() => x);
+@@= skipped -47, +46 lines =@@
+     (function () { return x + y; });
+     (() => x + y);
+ }
+-//=========const
+ for (const x in {}) {
+     (function () { return x; });
+     (() => x);

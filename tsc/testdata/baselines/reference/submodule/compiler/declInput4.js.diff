@@ -1,0 +1,57 @@
+--- old.declInput4.js
++++ new.declInput4.js
+@@= skipped -19, +19 lines =@@
+ //// [declInput4.js]
+ var M;
+ (function (M) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    var E = /** @class */ (function () {
+-        function E() {
+-        }
+-        return E;
+-    }());
+-    M.E = E;
+-    var D = /** @class */ (function () {
+-        function D() {
+-        }
+-        D.prototype.m232 = function () { return null; };
+-        D.prototype.m242 = function () { return null; };
+-        D.prototype.m26 = function (i) { };
+-        return D;
+-    }());
+-    M.D = D;
+-})(M || (M = {}));
+-
+-
+-//// [declInput4.d.ts]
+-declare namespace M {
++    class C {
++    }
+     class E {
+     }
+-    interface I1 {
+-    }
++    M.E = E;
+     class D {
+-        m1: number;
+-        m2: string;
+-        m23: E;
+-        m24: I1;
+-        m232(): E;
+-        m242(): I1;
+-        m26(i: I1): void;
++        m1;
++        m2;
++        m23;
++        m24;
++        m232() { return null; }
++        m242() { return null; }
++        m26(i) { }
+     }
+-}
++    M.D = D;
++})(M || (M = {}));

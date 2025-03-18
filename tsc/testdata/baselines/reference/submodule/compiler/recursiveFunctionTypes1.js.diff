@@ -1,0 +1,15 @@
+--- old.recursiveFunctionTypes1.js
++++ new.recursiveFunctionTypes1.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [recursiveFunctionTypes1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.g = function (t) { };
+-    return C;
+-}());
++class C {
++    static g(t) { }
++}

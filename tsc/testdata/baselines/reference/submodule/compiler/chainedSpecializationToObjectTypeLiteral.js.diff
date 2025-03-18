@@ -1,0 +1,10 @@
+--- old.chainedSpecializationToObjectTypeLiteral.js
++++ new.chainedSpecializationToObjectTypeLiteral.js
+@@= skipped -14, +14 lines =@@
+ 
+ //// [chainedSpecializationToObjectTypeLiteral.js]
+ var s;
+-var s2 = s.groupBy(function (s) { return s.length; });
+-var s3 = s2.each(function (x) { x.key; /* Type is K, should be number */ });
++var s2 = s.groupBy(s => s.length);
++var s3 = s2.each(x => { x.key; });

@@ -1,0 +1,23 @@
+--- old.stripInternal1.js
++++ new.stripInternal1.js
+@@= skipped -7, +7 lines =@@
+ }
+ 
+ //// [stripInternal1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.foo = function () { };
+-    // @internal
+-    C.prototype.bar = function () { };
+-    return C;
+-}());
+-
+-
+-//// [stripInternal1.d.ts]
+-declare class C {
+-    foo(): void;
++class C {
++    foo() { }
++    bar() { }
+ }

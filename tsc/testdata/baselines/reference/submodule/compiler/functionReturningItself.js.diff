@@ -1,0 +1,10 @@
+--- old.functionReturningItself.js
++++ new.functionReturningItself.js
+@@= skipped -8, +8 lines =@@
+ function somefn() {
+     return somefn;
+ }
+-
+-
+-//// [functionReturningItself.d.ts]
+-declare function somefn(): typeof somefn;

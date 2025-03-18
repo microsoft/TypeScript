@@ -1,0 +1,11 @@
+--- old.templateStringMultiline1.js
++++ new.templateStringMultiline1.js
+@@= skipped -6, +6 lines =@@
+ `
+ 
+ //// [templateStringMultiline1.js]
+-// newlines are <CR><LF>
+-"\n";
++`
++\
++`;

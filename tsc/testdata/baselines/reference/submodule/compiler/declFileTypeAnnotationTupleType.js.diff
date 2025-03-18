@@ -1,0 +1,62 @@
+--- old.declFileTypeAnnotationTupleType.js
++++ new.declFileTypeAnnotationTupleType.js
+@@= skipped -19, +19 lines =@@
+ var y = x;
+ 
+ //// [declFileTypeAnnotationTupleType.js]
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    return c;
+-}());
++class c {
++}
+ var m;
+ (function (m) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
++    class c {
++    }
+     m.c = c;
+-    var g = /** @class */ (function () {
+-        function g() {
+-        }
+-        return g;
+-    }());
++    class g {
++    }
+     m.g = g;
+ })(m || (m = {}));
+-var g = /** @class */ (function () {
+-    function g() {
+-    }
+-    return g;
+-}());
+-// Just the name
++class g {
++}
+ var k = [new c(), new m.c()];
+ var l = k;
+-var x = [new g(), new m.g(), function () { return new c(); }];
++var x = [new g(), new m.g(), () => new c()];
+ var y = x;
+-
+-
+-//// [declFileTypeAnnotationTupleType.d.ts]
+-declare class c {
+-}
+-declare namespace m {
+-    class c {
+-    }
+-    class g<T> {
+-    }
+-}
+-declare class g<T> {
+-}
+-declare var k: [c, m.c];
+-declare var l: [c, m.c];
+-declare var x: [g<string>, m.g<number>, () => c];
+-declare var y: [g<string>, m.g<number>, () => c];

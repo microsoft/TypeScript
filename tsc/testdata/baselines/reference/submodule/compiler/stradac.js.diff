@@ -1,0 +1,13 @@
+--- old.stradac.js
++++ new.stradac.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [stradac.js]
+ var x = 10;
+-// C++-style comment
+-/*
+-    C-Style comment
+-    */
+ function foo() {
+     x++;
+ }

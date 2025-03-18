@@ -1,0 +1,8 @@
+--- old.importCallExpressionInScriptContext1.js
++++ new.importCallExpressionInScriptContext1.js
+@@= skipped -13, +13 lines =@@
+ function foo() { return "foo"; }
+ //// [1.js]
+ var p1 = Promise.resolve().then(() => require("./0"));
+-function arguments() { } // this is allow as the file doesn't have implicit "use strict"
++function arguments() { }

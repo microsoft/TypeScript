@@ -1,0 +1,10 @@
+--- old.esModuleInteropImportCall.js
++++ new.esModuleInteropImportCall.js
+@@= skipped -33, +33 lines =@@
+     __setModuleDefault(result, mod);
+     return result;
+ };
+-Promise.resolve().then(function () { return __importStar(require("./foo")); }).then(function (f) {
++Promise.resolve().then(() => __importStar(require("./foo"))).then(f => {
+     f.default;
+ });

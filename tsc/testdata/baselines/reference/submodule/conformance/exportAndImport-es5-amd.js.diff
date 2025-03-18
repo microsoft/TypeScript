@@ -1,0 +1,34 @@
+--- old.exportAndImport-es5-amd.js
++++ new.exportAndImport-es5-amd.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [m1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.default = f1;
+-    function f1() {
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.default = f1;
++function f1() {
++}
+ //// [m2.js]
+-define(["require", "exports", "./m1"], function (require, exports, m1_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.default = f2;
+-    function f2() {
+-        (0, m1_1.default)();
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.default = f2;
++const m1_1 = require("./m1");
++function f2() {
++    (0, m1_1.default)();
++}

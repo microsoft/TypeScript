@@ -1,0 +1,14 @@
+--- old.classExpressionWithStaticPropertiesES64.js
++++ new.classExpressionWithStaticPropertiesES64.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [classExpressionWithStaticPropertiesES64.js]
+-var _a;
+-(_a = class {
+-    },
+-    _a.x = 0,
+-    _a);
++(class {
++    static x = 0;
++});

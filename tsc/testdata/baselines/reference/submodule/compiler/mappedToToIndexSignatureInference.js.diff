@@ -1,0 +1,8 @@
+--- old.mappedToToIndexSignatureInference.js
++++ new.mappedToToIndexSignatureInference.js
+@@= skipped -20, +20 lines =@@
+     E["A"] = "foo";
+     E["B"] = "bar";
+ })(E || (E = {}));
+-var x = enumValues(E);
++let x = enumValues(E);

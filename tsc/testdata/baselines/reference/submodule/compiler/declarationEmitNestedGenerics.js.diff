@@ -1,0 +1,20 @@
+--- old.declarationEmitNestedGenerics.js
++++ new.declarationEmitNestedGenerics.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [declarationEmitNestedGenerics.js]
+ function f(p) {
+-    var g = null;
++    let g = null;
+     return g;
+ }
+ function g(x) {
+-    var y = null;
++    let y = null;
+     return y;
+ }
+-
+-
+-//// [declarationEmitNestedGenerics.d.ts]
+-declare function f<T>(p: T): <T_1>(x: T_1) => typeof p;
+-declare function g<T>(x: T): T extends (infer T_1)[] ? T_1 : T;

@@ -1,0 +1,18 @@
+--- old.decrementAndIncrementOperators.js
++++ new.decrementAndIncrementOperators.js
+@@= skipped -41, +41 lines =@@
+ 
+ //// [decrementAndIncrementOperators.js]
+ var x = 0;
+-// errors
+ 1++;
+ (1)++;
+ (1)--;
+@@= skipped -14, +13 lines =@@
+ (x + x)--;
+ ++(x + x);
+ --(x + x);
+-//OK
+ x++;
+ x--;
+ ++x;

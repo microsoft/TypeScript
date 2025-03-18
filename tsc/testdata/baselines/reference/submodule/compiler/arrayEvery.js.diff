@@ -1,0 +1,13 @@
+--- old.arrayEvery.js
++++ new.arrayEvery.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [arrayEvery.js]
+-var foo = ['aaa'];
+-var isString = function (x) { return typeof x === 'string'; };
++const foo = ['aaa'];
++const isString = (x) => typeof x === 'string';
+ if (foo.every(isString)) {
+     foo[0].slice(0);
+ }

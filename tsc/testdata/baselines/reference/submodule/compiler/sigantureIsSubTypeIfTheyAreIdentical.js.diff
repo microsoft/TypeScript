@@ -1,0 +1,18 @@
+--- old.sigantureIsSubTypeIfTheyAreIdentical.js
++++ new.sigantureIsSubTypeIfTheyAreIdentical.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [sigantureIsSubTypeIfTheyAreIdentical.js]
+-var CacheService = /** @class */ (function () {
+-    function CacheService() {
+-    }
+-    CacheService.prototype.get = function (key) {
++class CacheService {
++    get(key) {
+         return undefined;
+-    };
+-    return CacheService;
+-}());
++    }
++}

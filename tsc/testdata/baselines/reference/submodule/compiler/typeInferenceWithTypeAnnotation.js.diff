@@ -1,0 +1,8 @@
+--- old.typeInferenceWithTypeAnnotation.js
++++ new.typeInferenceWithTypeAnnotation.js
+@@= skipped -5, +5 lines =@@
+ f((n: number) => n); 
+ 
+ //// [typeInferenceWithTypeAnnotation.js]
+-f(function (n) { return n; });
++f((n) => n);

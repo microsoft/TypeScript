@@ -1,0 +1,20 @@
+--- old.stringNamedPropertyDuplicates.js
++++ new.stringNamedPropertyDuplicates.js
+@@= skipped -23, +23 lines =@@
+ }
+ 
+ //// [stringNamedPropertyDuplicates.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    "a b";
++    "a b";
++    static "c d";
++    static "c d";
++}
+ var a;
+ var b = {
+     "a b": 1,

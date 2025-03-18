@@ -1,0 +1,8 @@
+--- old.duplicateVarAndImport.js
++++ new.duplicateVarAndImport.js
+@@= skipped -7, +7 lines =@@
+ import a = M;
+ 
+ //// [duplicateVarAndImport.js]
+-// no error since module is not instantiated
+ var a;

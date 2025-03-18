@@ -1,0 +1,40 @@
+--- old.thisInGenericStaticMembers.js
++++ new.thisInGenericStaticMembers.js
+@@= skipped -28, +28 lines =@@
+ 
+ 
+ //// [thisInGenericStaticMembers.js]
+-// this.call in static generic method not resolved correctly
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A.one = function (source, value) {
++class A {
++    static one(source, value) {
+         return source;
+-    };
+-    A.two = function (source) {
++    }
++    static two(source) {
+         return this.one(source, 42);
+-    };
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+     }
+-    B.one = function (source, value) {
++}
++class B {
++    static one(source, value) {
+         return source;
+-    };
+-    B.two = function (source) {
++    }
++    static two(source) {
+         return this.one(source, 42);
+-    };
+-    return B;
+-}());
++    }
++}

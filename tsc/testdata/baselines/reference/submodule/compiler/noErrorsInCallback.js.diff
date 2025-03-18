@@ -1,0 +1,23 @@
+--- old.noErrorsInCallback.js
++++ new.noErrorsInCallback.js
+@@= skipped -10, +10 lines =@@
+  
+ 
+ //// [noErrorsInCallback.js]
+-var Bar = /** @class */ (function () {
+-    function Bar(foo) {
++class Bar {
++    foo;
++    constructor(foo) {
+         this.foo = foo;
+     }
+-    return Bar;
+-}());
+-var one = new Bar({}); // Error
+-[].forEach(function () {
+-    var two = new Bar({}); // No error?
++}
++var one = new Bar({});
++[].forEach(() => {
++    var two = new Bar({});
+ });

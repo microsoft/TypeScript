@@ -1,0 +1,78 @@
+--- old.declarationFiles.js
++++ new.declarationFiles.js
+@@= skipped -49, +49 lines =@@
+ 
+ 
+ //// [declarationFiles.js]
+-var C1 = /** @class */ (function () {
+-    function C1(x) {
++class C1 {
++    x;
++    f(x) { return undefined; }
++    constructor(x) { }
++}
++class C2 {
++}
++class C3 {
++    a;
++    b;
++    c;
++    d;
++    e;
++    f;
++    g;
++    h;
++    i;
++    j;
++}
++class C4 {
++    x1 = { a: this };
++    x2 = [this];
++    x3 = [{ a: this }];
++    x4 = () => this;
++    f1() {
++        return { a: this };
+     }
+-    C1.prototype.f = function (x) { return undefined; };
+-    return C1;
+-}());
+-var C2 = /** @class */ (function () {
+-    function C2() {
++    f2() {
++        return [this];
+     }
+-    return C2;
+-}());
+-var C3 = /** @class */ (function () {
+-    function C3() {
++    f3() {
++        return [{ a: this }];
+     }
+-    return C3;
+-}());
+-var C4 = /** @class */ (function () {
+-    function C4() {
+-        var _this = this;
+-        this.x1 = { a: this };
+-        this.x2 = [this];
+-        this.x3 = [{ a: this }];
+-        this.x4 = function () { return _this; };
++    f4() {
++        return () => this;
+     }
+-    C4.prototype.f1 = function () {
+-        return { a: this };
+-    };
+-    C4.prototype.f2 = function () {
+-        return [this];
+-    };
+-    C4.prototype.f3 = function () {
+-        return [{ a: this }];
+-    };
+-    C4.prototype.f4 = function () {
+-        var _this = this;
+-        return function () { return _this; };
+-    };
+-    return C4;
+-}());
++}

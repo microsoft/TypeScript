@@ -1,0 +1,59 @@
+--- old.mappedTypesAndObjects.js
++++ new.mappedTypesAndObjects.js
+@@= skipped -46, +46 lines =@@
+ 
+ //// [mappedTypesAndObjects.js]
+ function f1(x, y) {
+-    var obj;
++    let obj;
+     obj = x;
+     obj = y;
+ }
+ function f2(x, y) {
+-    var obj;
++    let obj;
+     obj = x;
+     obj = y;
+ }
+@@= skipped -13, +13 lines =@@
+     x = {};
+ }
+ ;
+-// Repro from #13747
+-var Form = /** @class */ (function () {
+-    function Form() {
+-        this.values = {};
+-    }
+-    return Form;
+-}());
+-
+-
+-//// [mappedTypesAndObjects.d.ts]
+-declare function f1<T>(x: Partial<T>, y: Readonly<T>): void;
+-declare function f2<T>(x: Partial<T>, y: Readonly<T>): void;
+-declare function f3<T>(x: Partial<T>): void;
+-interface Base {
+-    foo: {
+-        [key: string]: any;
+-    };
+-    bar: any;
+-    baz: any;
++class Form {
++    values = {};
+ }
+-interface E1<T> extends Base {
+-    foo: T;
+-}
+-interface Something {
+-    name: string;
+-    value: string;
+-}
+-interface E2 extends Base {
+-    foo: Partial<Something>;
+-}
+-interface E3<T> extends Base {
+-    foo: Partial<T>;
+-}
+-declare class Form<T> {
+-    private values;
+-}

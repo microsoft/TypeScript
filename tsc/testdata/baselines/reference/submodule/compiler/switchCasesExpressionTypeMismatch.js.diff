@@ -1,0 +1,37 @@
+--- old.switchCasesExpressionTypeMismatch.js
++++ new.switchCasesExpressionTypeMismatch.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [switchCasesExpressionTypeMismatch.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ switch (0) {
+-    case Foo: break; // Error
+-    case "sss": break; // Error
+-    case 123: break; // Error
+-    case true: break; // Error
++    case Foo: break;
++    case "sss": break;
++    case 123: break;
++    case true: break;
+ }
+ switch (r) {
+     case q: break;
+     case 42: break;
+-    case true: break; // Error
++    case true: break;
+     case "hello": break;
+-    case "world": break; // Error
++    case "world": break;
+ }
+ var s = 0;
+-// No error for all
+ switch (s) {
+     case Foo: break;
+     case "sss": break;

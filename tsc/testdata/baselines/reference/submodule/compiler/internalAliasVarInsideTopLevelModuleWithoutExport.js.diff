@@ -1,0 +1,15 @@
+--- old.internalAliasVarInsideTopLevelModuleWithoutExport.js
++++ new.internalAliasVarInsideTopLevelModuleWithoutExport.js
+@@= skipped -17, +17 lines =@@
+ (function (a) {
+     a.x = 10;
+ })(a || (exports.a = a = {}));
+-var b = a.x;
+ exports.bVal = b;
+-
+-
+-//// [internalAliasVarInsideTopLevelModuleWithoutExport.d.ts]
+-export declare namespace a {
+-    var x: number;
+-}
+-export declare var bVal: number;

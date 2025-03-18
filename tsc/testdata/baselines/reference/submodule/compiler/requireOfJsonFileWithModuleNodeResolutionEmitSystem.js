@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/requireOfJsonFileWithModuleNodeResolutionEmitSystem.ts] ////
+
+//// [file1.ts]
+import * as b from './b.json';
+
+//// [b.json]
+{
+    "a": true,
+    "b": "hello"
+}
+
+//// [out/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

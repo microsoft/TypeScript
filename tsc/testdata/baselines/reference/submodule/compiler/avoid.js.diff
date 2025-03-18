@@ -1,0 +1,27 @@
+--- old.avoid.js
++++ new.avoid.js
+@@= skipped -24, +24 lines =@@
+ function f() {
+     var x = 1;
+ }
+-var y = f(); // error void fn
+-var why = f(); // error void fn
++var y = f();
++var why = f();
+ var w;
+-w = f(); // error void fn
+-var C = /** @class */ (function () {
+-    function C() {
++w = f();
++class C {
++    g() {
+     }
+-    C.prototype.g = function () {
+-    };
+-    return C;
+-}());
+-var z = new C().g(); // error void fn
+-var N = new f(); // ok with void fn
++}
++var z = new C().g();
++var N = new f();

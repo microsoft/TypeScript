@@ -1,0 +1,10 @@
+--- old.parserGreaterThanTokenAmbiguity20.js
++++ new.parserGreaterThanTokenAmbiguity20.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [parserGreaterThanTokenAmbiguity20.js]
+ 1
+-    // Before
+-    >>>= // after
++    >>>=
+         2;

@@ -1,0 +1,10 @@
+--- old.nameCollisionWithBlockScopedVariable1.js
++++ new.nameCollisionWithBlockScopedVariable1.js
+@@= skipped -20, +20 lines =@@
+ (function (M_1) {
+     {
+         let M = 0;
+-        new M_1.C();
++        new C();
+     }
+ })(M || (M = {}));

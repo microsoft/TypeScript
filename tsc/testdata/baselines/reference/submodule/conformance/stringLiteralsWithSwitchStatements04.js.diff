@@ -1,0 +1,13 @@
+--- old.stringLiteralsWithSwitchStatements04.js
++++ new.stringLiteralsWithSwitchStatements04.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [stringLiteralsWithSwitchStatements04.js]
+-var x;
+-var y;
++let x;
++let y;
+ switch (y) {
+     case "foo", x:
+         break;

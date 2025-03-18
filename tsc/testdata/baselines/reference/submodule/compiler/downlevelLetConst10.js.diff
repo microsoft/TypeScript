@@ -1,0 +1,8 @@
+--- old.downlevelLetConst10.js
++++ new.downlevelLetConst10.js
+@@= skipped -3, +3 lines =@@
+ let a: number = 1
+ 
+ //// [downlevelLetConst10.js]
+-var a = 1;
++let a = 1;

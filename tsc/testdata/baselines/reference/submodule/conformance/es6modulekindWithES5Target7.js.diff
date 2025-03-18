@@ -1,0 +1,12 @@
+--- old.es6modulekindWithES5Target7.js
++++ new.es6modulekindWithES5Target7.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [es6modulekindWithES5Target7.js]
+-export var N;
++export { N };
++var N;
+ (function (N) {
+     var x = 0;
+ })(N || (N = {}));

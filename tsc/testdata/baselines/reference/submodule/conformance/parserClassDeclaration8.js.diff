@@ -1,0 +1,13 @@
+--- old.parserClassDeclaration8.js
++++ new.parserClassDeclaration8.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserClassDeclaration8.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

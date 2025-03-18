@@ -1,0 +1,11 @@
+--- old.commentOnBlock1.js
++++ new.commentOnBlock1.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [commentOnBlock1.js]
+-// asdf
+ function f() {
+-    /*asdf*/ { }
++    { }
+ }

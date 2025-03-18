@@ -1,0 +1,19 @@
+--- old.esDecorators-decoratorExpression.3(experimentaldecorators=true).js
++++ new.esDecorators-decoratorExpression.3(experimentaldecorators=true).js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [esDecorators-decoratorExpression.3.js]
+-// existing errors
+ {
+-    class C {
+-    };
++    ((class C {
++    }));
+ }
+ {
+-    class C {
+-    };
++    ((class C {
++    }));
+ }

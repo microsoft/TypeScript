@@ -1,0 +1,21 @@
+--- old.inlineConditionalHasSimilarAssignability.js
++++ new.inlineConditionalHasSimilarAssignability.js
+@@= skipped -19, +19 lines =@@
+ 
+ //// [inlineConditionalHasSimilarAssignability.js]
+ function foo(a) {
+-    var b = 0;
+-    a = b; // ok
+-    var c = 0;
++    const b = 0;
++    a = b;
++    const c = 0;
+     a = c;
+-    var d = 0;
+-    a = d; // ok
+-    var e = 0;
++    const d = 0;
++    a = d;
++    const e = 0;
+     a = e;
+ }

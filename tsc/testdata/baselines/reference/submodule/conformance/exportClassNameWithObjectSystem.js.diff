@@ -1,0 +1,28 @@
+--- old.exportClassNameWithObjectSystem.js
++++ new.exportClassNameWithObjectSystem.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [exportClassNameWithObjectSystem.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var Object;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            Object = /** @class */ (function () {
+-                function Object() {
+-                }
+-                return Object;
+-            }());
+-            exports_1("Object", Object);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Object = void 0;
++class Object {
++}
++exports.Object = Object;

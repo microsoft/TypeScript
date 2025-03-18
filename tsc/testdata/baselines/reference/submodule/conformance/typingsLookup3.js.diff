@@ -1,0 +1,8 @@
+--- old.typingsLookup3.js
++++ new.typingsLookup3.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [a.js]
+-/// <reference types="JqUeRy" />
+ $.x;

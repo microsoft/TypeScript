@@ -1,0 +1,39 @@
+--- old.declarationEmitComputedPropertyNameEnum3.js
++++ new.declarationEmitComputedPropertyNameEnum3.js
+@@= skipped -14, +14 lines =@@
+ export const foo = { ...({} as Type) };
+ 
+ 
+-
+-
+-//// [type.d.ts]
+-export declare namespace Foo {
+-    enum Enum {
+-        A = "a",
+-        B = "b"
+-    }
+-}
+-export type Type = {
+-    x?: {};
+-};
+-//// [index.d.ts]
+-export declare const foo: {
+-    x?: {};
+-};
++//// [type.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Foo = void 0;
++var Foo;
++(function (Foo) {
++    let Enum;
++    (function (Enum) {
++        Enum["A"] = "a";
++        Enum["B"] = "b";
++    })(Enum = Foo.Enum || (Foo.Enum = {}));
++})(Foo || (exports.Foo = Foo = {}));
++//// [index.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.foo = void 0;
++exports.foo = { ...{} };

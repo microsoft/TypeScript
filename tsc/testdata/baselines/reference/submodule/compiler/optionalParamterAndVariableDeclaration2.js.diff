@@ -1,0 +1,15 @@
+--- old.optionalParamterAndVariableDeclaration2.js
++++ new.optionalParamterAndVariableDeclaration2.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [optionalParamterAndVariableDeclaration2.js]
+-var C = /** @class */ (function () {
+-    function C(options) {
++class C {
++    constructor(options) {
+         var options = (options || 0);
+     }
+-    return C;
+-}());
++}

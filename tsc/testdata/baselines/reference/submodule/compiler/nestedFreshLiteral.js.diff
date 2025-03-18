@@ -1,0 +1,10 @@
+--- old.nestedFreshLiteral.js
++++ new.nestedFreshLiteral.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [nestedFreshLiteral.js]
+-var stylen = {
++let stylen = {
+     nested: { prop: { colour: 'red' } }
+ };

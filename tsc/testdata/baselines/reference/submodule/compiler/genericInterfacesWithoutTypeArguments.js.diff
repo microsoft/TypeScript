@@ -1,0 +1,15 @@
+--- old.genericInterfacesWithoutTypeArguments.js
++++ new.genericInterfacesWithoutTypeArguments.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [genericInterfacesWithoutTypeArguments.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ var i;
+ var c;

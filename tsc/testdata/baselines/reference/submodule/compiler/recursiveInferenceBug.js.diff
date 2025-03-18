@@ -1,0 +1,10 @@
+--- old.recursiveInferenceBug.js
++++ new.recursiveInferenceBug.js
+@@= skipped -18, +18 lines =@@
+     return x;
+ }
+ var zz = {
+-    g: function () { },
++    g: () => { },
+     get f() { return "abc"; },
+ };

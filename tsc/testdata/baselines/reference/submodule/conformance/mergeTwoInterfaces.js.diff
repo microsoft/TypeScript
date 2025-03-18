@@ -1,0 +1,27 @@
+--- old.mergeTwoInterfaces.js
++++ new.mergeTwoInterfaces.js
+@@= skipped -59, +59 lines =@@
+ }
+ 
+ //// [mergeTwoInterfaces.js]
+-// two interfaces with the same root module should merge
+ var a;
+ var r1 = a.foo;
+ var r2 = a.bar;
+ var b;
+ var r3 = b.foo;
+ var r4 = b.bar;
+-// basic non-generic and generic case inside a module
+ var M;
+ (function (M) {
+     var a;
+     var r1 = a.foo;
+-    // BUG 856491
+-    var r2 = a.bar; // any, should be number
++    var r2 = a.bar;
+     var b;
+     var r3 = b.foo;
+-    // BUG 856491
+-    var r4 = b.bar; // any, should be string
++    var r4 = b.bar;
+ })(M || (M = {}));

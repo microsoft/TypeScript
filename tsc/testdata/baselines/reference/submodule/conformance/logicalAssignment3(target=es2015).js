@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment3.ts] ////
+
+//// [logicalAssignment3.ts]
+interface A {
+    baz: 0 | 1 | 42 | undefined | ''
+}
+
+declare const result: A;
+declare const a: A;
+declare const b: A;
+declare const c: A;
+
+(a.baz) &&= result.baz;
+(b.baz) ||= result.baz;
+(c.baz) ??= result.baz;
+
+
+
+//// [logicalAssignment3.js]
+(a.baz) &&= result.baz;
+(b.baz) ||= result.baz;
+(c.baz) ??= result.baz;

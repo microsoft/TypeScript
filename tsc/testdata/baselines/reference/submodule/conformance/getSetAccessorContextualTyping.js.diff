@@ -1,0 +1,63 @@
+--- old.getSetAccessorContextualTyping.js
++++ new.getSetAccessorContextualTyping.js
+@@= skipped -27, +27 lines =@@
+ }
+ 
+ //// [getSetAccessorContextualTyping.js]
+-// In the body of a get accessor with no return type annotation,
+-// if a matching set accessor exists and that set accessor has a parameter type annotation,
+-// return expressions are contextually typed by the type given in the set accessor's parameter type annotation.
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    set X(x) { }
++    get X() {
++        return "string";
+     }
+-    Object.defineProperty(C.prototype, "X", {
+-        get: function () {
+-            return "string"; // Error; get contextual type by set accessor parameter type annotation
+-        },
+-        set: function (x) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(C.prototype, "Y", {
+-        get: function () {
+-            return true;
+-        },
+-        set: function (y) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(C.prototype, "W", {
+-        get: function () {
+-            return true;
+-        },
+-        set: function (w) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(C.prototype, "Z", {
+-        get: function () {
+-            return 1;
+-        },
+-        set: function (z) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++    set Y(y) { }
++    get Y() {
++        return true;
++    }
++    set W(w) { }
++    get W() {
++        return true;
++    }
++    set Z(z) { }
++    get Z() {
++        return 1;
++    }
++}

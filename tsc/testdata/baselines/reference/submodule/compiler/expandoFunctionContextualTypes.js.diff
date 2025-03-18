@@ -1,0 +1,11 @@
+--- old.expandoFunctionContextualTypes.js
++++ new.expandoFunctionContextualTypes.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [expandoFunctionContextualTypes.js]
+-var MyComponent = function () { return null; };
++const MyComponent = () => null;
+ MyComponent.defaultProps = {
+     color: "red"
+ };

@@ -1,0 +1,23 @@
+--- old.tsxDefaultImports.js
++++ new.tsxDefaultImports.js
+@@= skipped -19, +19 lines =@@
+ (function (SomeEnum) {
+     SomeEnum[SomeEnum["one"] = 0] = "one";
+ })(SomeEnum || (SomeEnum = {}));
+-var SomeClass = /** @class */ (function () {
+-    function SomeClass() {
+-    }
+-    SomeClass.E = SomeEnum;
+-    return SomeClass;
+-}());
++class SomeClass {
++    static E = SomeEnum;
++}
+ exports.default = SomeClass;
+ //// [b.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a_1 = require("./a");
+-var a = a_1.default.E.one;
++const a_1 = require("./a");
++let a = a_1.default.E.one;

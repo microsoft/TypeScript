@@ -1,0 +1,9 @@
+--- old.assignLambdaToNominalSubtypeOfFunction.js
++++ new.assignLambdaToNominalSubtypeOfFunction.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [assignLambdaToNominalSubtypeOfFunction.js]
+ function fn(cb) { }
++fn((a, b) => true);
+ fn(function (a, b) { return true; });
+-fn(function (a, b) { return true; });

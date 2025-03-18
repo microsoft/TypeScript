@@ -1,0 +1,27 @@
+--- old.tsxUnionElementType5.js
++++ new.tsxUnionElementType5.js
+@@= skipped -24, +24 lines =@@
+ //// [file.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var React = require("react");
+ function EmptySFC1() {
+-    return React.createElement("div", null, "hello");
++    return <div>hello</div>;
+ }
+ function EmptySFC2() {
+-    return React.createElement("div", null, "Hello");
++    return <div>Hello</div>;
+ }
+ function SFC2(prop) {
+-    return React.createElement("h1", null, "World");
++    return <h1>World</h1>;
+ }
+ var EmptySFCComp = EmptySFC1 || EmptySFC2;
+ var SFC2AndEmptyComp = SFC2 || EmptySFC1;
+-var a = React.createElement(EmptySFCComp, null);
+-var a1 = React.createElement(EmptySFCComp, { "data-prop": true });
+-var b = React.createElement(SFC2AndEmptyComp, { x: true });
++let a = <EmptySFCComp />;
++let a1 = <EmptySFCComp data-prop/>;
++let b = <SFC2AndEmptyComp x/>;

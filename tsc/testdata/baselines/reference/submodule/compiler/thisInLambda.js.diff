@@ -1,0 +1,41 @@
+--- old.thisInLambda.js
++++ new.thisInLambda.js
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ //// [thisInLambda.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-        this.x = "hello";
++class Foo {
++    x = "hello";
++    bar() {
++        this.x;
++        var f = () => this.x;
+     }
+-    Foo.prototype.bar = function () {
+-        var _this = this;
+-        this.x; // 'this' is type 'Foo'
+-        var f = function () { return _this.x; }; // 'this' should be type 'Foo' as well
+-    };
+-    return Foo;
+-}());
++}
+ function myFn(a) { }
+-var myCls = /** @class */ (function () {
+-    function myCls() {
+-        var _this = this;
+-        myFn(function () {
+-            myFn(function () {
+-                var x = _this;
++class myCls {
++    constructor() {
++        myFn(() => {
++            myFn(() => {
++                var x = this;
+             });
+         });
+     }
+-    return myCls;
+-}());
++}

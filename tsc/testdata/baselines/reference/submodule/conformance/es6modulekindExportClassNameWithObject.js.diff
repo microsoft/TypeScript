@@ -1,0 +1,14 @@
+--- old.es6modulekindExportClassNameWithObject.js
++++ new.es6modulekindExportClassNameWithObject.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [es6modulekindExportClassNameWithObject.js]
+-var Object = /** @class */ (function () {
+-    function Object() {
+-    }
+-    return Object;
+-}());
+-export { Object };
++export class Object {
++}

@@ -1,0 +1,34 @@
+--- old.nonPrimitiveNarrow.js
++++ new.nonPrimitiveNarrow.js
+@@= skipped -25, +25 lines =@@
+ 
+ 
+ //// [nonPrimitiveNarrow.js]
+-var Narrow = /** @class */ (function () {
+-    function Narrow() {
+-    }
+-    return Narrow;
+-}());
++class Narrow {
++    narrowed;
++}
+ var a;
+ if (a instanceof Narrow) {
+-    a.narrowed; // ok
+-    a = 123; // error
++    a.narrowed;
++    a = 123;
+ }
+ if (typeof a === 'number') {
+-    a.toFixed(); // error, never
++    a.toFixed();
+ }
+ var b;
+ if (typeof b === 'object') {
+-    b.toString(); // ok, object | null
++    b.toString();
+ }
+ else {
+-    b.toString(); // error, never
++    b.toString();
+ }

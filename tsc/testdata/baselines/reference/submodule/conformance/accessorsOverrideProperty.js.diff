@@ -1,0 +1,19 @@
+--- old.accessorsOverrideProperty.js
++++ new.accessorsOverrideProperty.js
+@@= skipped -21, +21 lines =@@
+     p = 'yep';
+ }
+ class B extends A {
+-    get p() { return 'oh no'; } // error
++    get p() { return 'oh no'; }
+ }
+ class C {
+     p = 101;
+ }
+ class D extends C {
+     _secret = 11;
+-    get p() { return this._secret; } // error
+-    set p(value) { this._secret = value; } // error
++    get p() { return this._secret; }
++    set p(value) { this._secret = value; }
+ }

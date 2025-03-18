@@ -1,0 +1,30 @@
+--- old.classVarianceResolveCircularity2.js
++++ new.classVarianceResolveCircularity2.js
+@@= skipped -21, +21 lines =@@
+ 
+ //// [classVarianceResolveCircularity2.js]
+ "use strict";
+-// Issue #52813
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-        this.Value = callme(new Foo(this)).bar.num;
+-        this.Field = callme(new Foo(this)).bar.num;
+-    }
+-    return Bar;
+-}());
+-var Foo = /** @class */ (function () {
+-    function Foo(bar) {
++class Bar {
++    num;
++    Value = callme(new Foo(this)).bar.num;
++    Field = callme(new Foo(this)).bar.num;
++}
++class Foo {
++    bar;
++    constructor(bar) {
+         this.bar = bar;
+     }
+-    return Foo;
+-}());
++}

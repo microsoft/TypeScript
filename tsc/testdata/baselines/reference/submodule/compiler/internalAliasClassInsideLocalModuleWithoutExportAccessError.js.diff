@@ -1,0 +1,27 @@
+--- old.internalAliasClassInsideLocalModuleWithoutExportAccessError.js
++++ new.internalAliasClassInsideLocalModuleWithoutExportAccessError.js
+@@= skipped -24, +24 lines =@@
+ exports.d = exports.m2 = exports.x = void 0;
+ var x;
+ (function (x) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        c.prototype.foo = function (a) {
++    class c {
++        foo(a) {
+             return a;
+-        };
+-        return c;
+-    }());
++        }
++    }
+     x.c = c;
+ })(x || (exports.x = x = {}));
+ var m2;
+ (function (m2) {
+-    var m3;
++    let m3;
+     (function (m3) {
+         var c = x.c;
+         m3.cProp = new c();

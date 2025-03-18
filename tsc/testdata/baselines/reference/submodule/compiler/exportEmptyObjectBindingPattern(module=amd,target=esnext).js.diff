@@ -1,0 +1,15 @@
+--- old.exportEmptyObjectBindingPattern(module=amd,target=esnext).js
++++ new.exportEmptyObjectBindingPattern(module=amd,target=esnext).js
+@@= skipped -3, +3 lines =@@
+ export const {} = {};
+ 
+ //// [exportEmptyObjectBindingPattern.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var _a;
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    _a = {};
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++({} = {});

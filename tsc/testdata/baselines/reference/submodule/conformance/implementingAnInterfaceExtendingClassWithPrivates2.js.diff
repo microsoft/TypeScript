@@ -1,0 +1,174 @@
+--- old.implementingAnInterfaceExtendingClassWithPrivates2.js
++++ new.implementingAnInterfaceExtendingClassWithPrivates2.js
+@@= skipped -87, +87 lines =@@
+ }
+ 
+ //// [implementingAnInterfaceExtendingClassWithPrivates2.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var Foo = /** @class */ (function () {
+-    function Foo() {
++class Foo {
++    x;
++}
++class Bar extends Foo {
++    y;
++}
++class Bar2 extends Foo {
++    x;
++    y;
++}
++class Bar3 extends Foo {
++    x;
++    y;
++}
++var M;
++(function (M) {
++    class Foo {
++        x;
+     }
+-    return Foo;
+-}());
+-var Bar = /** @class */ (function (_super) {
+-    __extends(Bar, _super);
+-    function Bar() {
+-        return _super !== null && _super.apply(this, arguments) || this;
++    class Baz extends Foo {
++        z;
+     }
+-    return Bar;
+-}(Foo));
+-var Bar2 = /** @class */ (function (_super) {
+-    __extends(Bar2, _super);
+-    function Bar2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
++    class Bar extends Foo {
++        y;
++        z;
+     }
+-    return Bar2;
+-}(Foo));
+-var Bar3 = /** @class */ (function (_super) {
+-    __extends(Bar3, _super);
+-    function Bar3() {
+-        return _super !== null && _super.apply(this, arguments) || this;
++    class Bar2 extends Foo {
++        x;
++        y;
+     }
+-    return Bar3;
+-}(Foo));
+-// another level of indirection
+-var M;
+-(function (M) {
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-        }
+-        return Foo;
+-    }());
+-    var Baz = /** @class */ (function (_super) {
+-        __extends(Baz, _super);
+-        function Baz() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Baz;
+-    }(Foo));
+-    var Bar = /** @class */ (function (_super) {
+-        __extends(Bar, _super);
+-        function Bar() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Bar;
+-    }(Foo));
+-    var Bar2 = /** @class */ (function (_super) {
+-        __extends(Bar2, _super);
+-        function Bar2() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Bar2;
+-    }(Foo));
+-    var Bar3 = /** @class */ (function (_super) {
+-        __extends(Bar3, _super);
+-        function Bar3() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Bar3;
+-    }(Foo));
++    class Bar3 extends Foo {
++        x;
++        y;
++    }
+ })(M || (M = {}));
+-// two levels of privates
+ var M2;
+ (function (M2) {
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-        }
+-        return Foo;
+-    }());
+-    var Baz = /** @class */ (function (_super) {
+-        __extends(Baz, _super);
+-        function Baz() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Baz;
+-    }(Foo));
+-    var Bar = /** @class */ (function (_super) {
+-        __extends(Bar, _super);
+-        function Bar() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Bar;
+-    }(Foo));
++    class Foo {
++        x;
++    }
++    class Baz extends Foo {
++        y;
++    }
++    class Bar extends Foo {
++        z;
++    }
+     var b;
+     var r1 = b.z;
+-    var r2 = b.x; // error
+-    var r3 = b.y; // error
+-    var Bar2 = /** @class */ (function (_super) {
+-        __extends(Bar2, _super);
+-        function Bar2() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Bar2;
+-    }(Foo));
+-    var Bar3 = /** @class */ (function (_super) {
+-        __extends(Bar3, _super);
+-        function Bar3() {
+-            return _super !== null && _super.apply(this, arguments) || this;
+-        }
+-        return Bar3;
+-    }(Foo));
++    var r2 = b.x;
++    var r3 = b.y;
++    class Bar2 extends Foo {
++        x;
++        z;
++    }
++    class Bar3 extends Foo {
++        x;
++        z;
++    }
+ })(M2 || (M2 = {}));

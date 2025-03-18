@@ -1,0 +1,11 @@
+--- old.numericIndexerTyping1.js
++++ new.numericIndexerTyping1.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [numericIndexerTyping1.js]
+ var i;
+-var r = i[1]; // error: numeric indexer returns the type of the string indexer
++var r = i[1];
+ var i2;
+-var r2 = i2[1]; // error: numeric indexer returns the type of the string indexer
++var r2 = i2[1];

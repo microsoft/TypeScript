@@ -1,0 +1,16 @@
+--- old.enumDecl1.js
++++ new.enumDecl1.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [enumDecl1.js]
+-
+-
+-//// [enumDecl1.d.ts]
+-declare namespace mAmbient {
+-    enum e {
+-        x,
+-        y,
+-        z
+-    }
+-}

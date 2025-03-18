@@ -1,0 +1,8 @@
+--- old.preserveValueImports_mixedImports.js
++++ new.preserveValueImports_mixedImports.js
+@@= skipped -15, +15 lines =@@
+ //// [index.js]
+ export {};
+ //// [index.fixed.js]
+-export {};
++import "./exports.js";

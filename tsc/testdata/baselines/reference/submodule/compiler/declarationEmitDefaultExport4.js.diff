@@ -1,0 +1,10 @@
+--- old.declarationEmitDefaultExport4.js
++++ new.declarationEmitDefaultExport4.js
+@@= skipped -8, +8 lines =@@
+ export default function () {
+     return 1;
+ }
+-
+-
+-//// [declarationEmitDefaultExport4.d.ts]
+-export default function (): number;

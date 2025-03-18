@@ -1,0 +1,8 @@
+--- old.simpleArrowFunctionParameterReferencedInObjectLiteral1.js
++++ new.simpleArrowFunctionParameterReferencedInObjectLiteral1.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [simpleArrowFunctionParameterReferencedInObjectLiteral1.js]
+-[].map(function () { return [].map(function (p) { return ({ X: p }); }); });
++[].map(() => [].map(p => ({ X: p })));

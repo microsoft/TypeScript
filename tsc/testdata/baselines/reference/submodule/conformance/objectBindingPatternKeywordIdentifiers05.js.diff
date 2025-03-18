@@ -1,0 +1,8 @@
+--- old.objectBindingPatternKeywordIdentifiers05.js
++++ new.objectBindingPatternKeywordIdentifiers05.js
+@@= skipped -3, +3 lines =@@
+ var { as } = { as: 1 }
+ 
+ //// [objectBindingPatternKeywordIdentifiers05.js]
+-var as = { as: 1 }.as;
++var { as } = { as: 1 };

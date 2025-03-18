@@ -1,0 +1,35 @@
+--- old.invalidSyntaxNamespaceImportWithAMD.js
++++ new.invalidSyntaxNamespaceImportWithAMD.js
+@@= skipped -6, +6 lines =@@
+ import * from Zero from "./0"
+ 
+ //// [0.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.C = void 0;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    exports.C = C;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C = void 0;
++class C {
++}
++exports.C = C;
+ //// [1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    from;
+-    "./0";
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const from = require();
++from;
++"./0";

@@ -1,0 +1,74 @@
+--- old.declarationEmitNameConflicts2.js
++++ new.declarationEmitNameConflicts2.js
+@@= skipped -19, +19 lines =@@
+ //// [declarationEmitNameConflicts2.js]
+ var X;
+ (function (X) {
+-    var Y;
++    let Y;
+     (function (Y) {
+-        var base;
++        let base;
+         (function (base) {
+             function f() { }
+             base.f = f;
+-            var C = /** @class */ (function () {
+-                function C() {
+-                }
+-                return C;
+-            }());
++            class C {
++            }
+             base.C = C;
+-            var M;
++            let M;
+             (function (M) {
+             })(M = base.M || (base.M = {}));
+-            var E;
++            let E;
+             (function (E) {
+             })(E = base.E || (base.E = {}));
+         })(base = Y.base || (Y.base = {}));
+     })(Y = X.Y || (X.Y = {}));
+ })(X || (X = {}));
+ (function (X) {
+-    var Y;
++    let Y;
+     (function (Y) {
+-        var base;
++        let base;
+         (function (base) {
+-            var Z;
++            let Z;
+             (function (Z) {
+-                Z.f = X.Y.base.f; // Should be base.f
+-                Z.C = X.Y.base.C; // Should be base.C
+-                Z.M = X.Y.base.M; // Should be base.M
+-                Z.E = X.Y.base.E; // Should be base.E
++                Z.f = X.Y.base.f;
++                Z.C = X.Y.base.C;
++                Z.M = X.Y.base.M;
++                Z.E = X.Y.base.E;
+             })(Z = base.Z || (base.Z = {}));
+         })(base = Y.base || (Y.base = {}));
+     })(Y = X.Y || (X.Y = {}));
+ })(X || (X = {}));
+-
+-
+-//// [declarationEmitNameConflicts2.d.ts]
+-declare namespace X.Y.base {
+-    function f(): void;
+-    class C {
+-    }
+-    namespace M {
+-        var v: any;
+-    }
+-    enum E {
+-    }
+-}
+-declare namespace X.Y.base.Z {
+-    var f: typeof base.f;
+-    var C: typeof base.C;
+-    var M: typeof base.M;
+-    var E: typeof base.E;
+-}

@@ -1,0 +1,18 @@
+--- old.discriminatedUnionWithIndexSignature.js
++++ new.discriminatedUnionWithIndexSignature.js
+@@= skipped -31, +31 lines =@@
+ //// [discriminatedUnionWithIndexSignature.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var withoutAsConst = {
++const withoutAsConst = {
+     1: {
+-        type: 'text' /*as const*/,
++        type: 'text',
+     },
+ };
+-var withAsConst = {
++const withAsConst = {
+     1: {
+         type: 'text',
+     },

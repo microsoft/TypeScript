@@ -1,0 +1,10 @@
+--- old.shorthand-property-es6-es6.js
++++ new.shorthand-property-es6-es6.js
+@@= skipped -9, +9 lines =@@
+ import { foo } from './foo';
+ const baz = 42;
+ const bar = { foo, baz };
+-
+-
+-//// [test.d.ts]
+-export {};

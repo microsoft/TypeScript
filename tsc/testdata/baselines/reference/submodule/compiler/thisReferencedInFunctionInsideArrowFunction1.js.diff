@@ -1,0 +1,14 @@
+--- old.thisReferencedInFunctionInsideArrowFunction1.js
++++ new.thisReferencedInFunctionInsideArrowFunction1.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [thisReferencedInFunctionInsideArrowFunction1.js]
+-var foo = function (dummy) { };
++var foo = (dummy) => { };
+ function test() {
+-    foo(function () {
+-        return function () { return this; };
+-    });
++    foo(() => function () { return this; });
+ }

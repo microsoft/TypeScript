@@ -1,0 +1,29 @@
+--- old.typeUsedAsValueError2.js
++++ new.typeUsedAsValueError2.js
+@@= skipped -20, +20 lines =@@
+ HelloInterface.world;
+ HelloNamespace.world;
+ 
+-//// [helloInterface.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
+-//// [helloNamespace.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
+ //// [world.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    HelloInterface.world;
+-    HelloNamespace.world;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const HelloInterface = require("helloInterface");
++const HelloNamespace = require("helloNamespace");
++HelloInterface.world;
++HelloNamespace.world;

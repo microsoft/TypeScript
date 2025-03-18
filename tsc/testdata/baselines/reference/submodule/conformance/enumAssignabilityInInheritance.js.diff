@@ -1,0 +1,59 @@
+--- old.enumAssignabilityInInheritance.js
++++ new.enumAssignabilityInInheritance.js
+@@= skipped -111, +111 lines =@@
+ var r4 = foo16(E.A);
+ 
+ //// [enumAssignabilityInInheritance.js]
+-// enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
+ var E;
+ (function (E) {
+     E[E["A"] = 0] = "A";
+ })(E || (E = {}));
+-var r = foo(E.A); // E
+-var r2 = foo(1); // number
+-var r3 = foo(null); // any
++var r = foo(E.A);
++var r2 = foo(1);
++var r3 = foo(null);
+ var r4 = foo2(E.A);
+ var r4 = foo3(E.A);
+ var r4 = foo4(E.A);
+@@= skipped -15, +14 lines =@@
+ var r4 = foo6(E.A);
+ var r4 = foo7(E.A);
+ var r4 = foo8(E.A);
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++    foo;
++}
+ var r4 = foo9(E.A);
+-var A2 = /** @class */ (function () {
+-    function A2() {
+-    }
+-    return A2;
+-}());
++class A2 {
++    foo;
++}
+ var r4 = foo10(E.A);
+ var r4 = foo11(E.A);
+ var r4 = foo12(E.A);
+@@= skipped -24, +20 lines =@@
+     f.bar = 1;
+ })(f || (f = {}));
+ var r4 = foo14(E.A);
+-var CC = /** @class */ (function () {
+-    function CC() {
+-    }
+-    return CC;
+-}());
++class CC {
++    baz;
++}
+ (function (CC) {
+     CC.bar = 1;
+ })(CC || (CC = {}));

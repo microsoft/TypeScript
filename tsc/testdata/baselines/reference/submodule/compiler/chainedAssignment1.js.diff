@@ -1,0 +1,45 @@
+--- old.chainedAssignment1.js
++++ new.chainedAssignment1.js
+@@= skipped -24, +24 lines =@@
+ c2 = c3; // Error TS111: Cannot convert Z to Y
+ 
+ //// [chainedAssignment1.js]
+-var X = /** @class */ (function () {
+-    function X(z) {
++class X {
++    z;
++    constructor(z) {
+         this.z = z;
+     }
+-    return X;
+-}());
+-var Y = /** @class */ (function () {
+-    function Y(z) {
++    a;
++}
++class Y {
++    z;
++    constructor(z) {
+         this.z = z;
+     }
+-    return Y;
+-}());
+-var Z = /** @class */ (function () {
+-    function Z() {
+-    }
+-    return Z;
+-}());
++    a;
++    b;
++}
++class Z {
++    z;
++    c;
++}
+ var c1 = new X(3);
+ var c2 = new Y(5);
+ var c3 = new Z();
+-c1 = c2 = c3; // a bug made this not report the same error as below
+-c2 = c3; // Error TS111: Cannot convert Z to Y
++c1 = c2 = c3;
++c2 = c3;

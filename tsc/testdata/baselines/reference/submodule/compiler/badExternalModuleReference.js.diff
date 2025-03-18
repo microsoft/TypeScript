@@ -1,0 +1,12 @@
+--- old.badExternalModuleReference.js
++++ new.badExternalModuleReference.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [badExternalModuleReference.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

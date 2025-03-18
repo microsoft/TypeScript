@@ -1,0 +1,12 @@
+--- old.configFileExtendsAsList.js
++++ new.configFileExtendsAsList.js
+@@= skipped -19, +19 lines =@@
+ y.toLowerCase(); // strictNullChecks error
+ 
+ //// [index.js]
+-function f(x) { } // noImplicitAny error
+-var y;
+-y.toLowerCase(); // strictNullChecks error
++function f(x) { }
++let y;
++y.toLowerCase();

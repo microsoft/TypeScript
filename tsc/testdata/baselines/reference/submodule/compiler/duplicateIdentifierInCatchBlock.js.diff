@@ -1,0 +1,14 @@
+--- old.duplicateIdentifierInCatchBlock.js
++++ new.duplicateIdentifierInCatchBlock.js
+@@= skipped -32, +32 lines =@@
+ try { }
+ catch (e) {
+     var x;
+-    function x() { } // error
+-    function e() { } // error
++    function x() { }
++    function e() { }
+     var p;
+-    var p; // error
++    var p;
+ }

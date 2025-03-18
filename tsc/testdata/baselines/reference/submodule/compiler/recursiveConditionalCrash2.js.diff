@@ -1,0 +1,8 @@
+--- old.recursiveConditionalCrash2.js
++++ new.recursiveConditionalCrash2.js
+@@= skipped -18, +18 lines =@@
+ 
+ //// [recursiveConditionalCrash2.js]
+ "use strict";
+-// Simplified #43529
+ Object.defineProperty(exports, "__esModule", { value: true });

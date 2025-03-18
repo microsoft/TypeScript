@@ -1,0 +1,13 @@
+--- old.staticIndexSignatureAndNormalIndexSignature.js
++++ new.staticIndexSignatureAndNormalIndexSignature.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [staticIndexSignatureAndNormalIndexSignature.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}

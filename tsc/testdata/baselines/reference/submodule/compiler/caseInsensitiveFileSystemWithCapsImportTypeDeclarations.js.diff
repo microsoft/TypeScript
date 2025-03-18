@@ -1,0 +1,38 @@
+--- old.caseInsensitiveFileSystemWithCapsImportTypeDeclarations.js
++++ new.caseInsensitiveFileSystemWithCapsImportTypeDeclarations.js
+@@= skipped -35, +35 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Broken = void 0;
+-var Broken = /** @class */ (function () {
+-    function Broken() {
+-    }
+-    Broken.prototype.method = function () {
++class Broken {
++    method() {
+         return {};
+-    };
+-    return Broken;
+-}());
+-exports.Broken = Broken;
+-
+-
+-//// [types.d.ts]
+-export type Merge<T, U> = T & U;
+-//// [type-a.d.ts]
+-export type TypeA = {
+-    a: string;
+-};
+-//// [type-b.d.ts]
+-import { Merge } from './types';
+-import { TypeA } from './type-a';
+-export type TypeB = Merge<TypeA, {
+-    b: string;
+-}>;
+-//// [index.d.ts]
+-import { TypeB } from './type-b';
+-export declare class Broken {
+-    method(): TypeB;
++    }
+ }
++exports.Broken = Broken;

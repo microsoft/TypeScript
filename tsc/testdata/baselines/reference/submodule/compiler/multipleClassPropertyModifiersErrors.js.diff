@@ -1,0 +1,21 @@
+--- old.multipleClassPropertyModifiersErrors.js
++++ new.multipleClassPropertyModifiersErrors.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [multipleClassPropertyModifiersErrors.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    p1;
++    p2;
++    static static;
++    p3;
++    p4;
++    p5;
++    static p6;
++    static p7;
++}

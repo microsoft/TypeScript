@@ -1,0 +1,16 @@
+--- old.tsxReactComponentWithDefaultTypeParameter3.js
++++ new.tsxReactComponentWithDefaultTypeParameter3.js
+@@= skipped -23, +23 lines =@@
+ //// [file.jsx]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var React = require("react");
+-// Error
+-var x1 = <MyComp />;
+-// OK
+-var x = <MyComp a={10} b="hi"/>;
+-// Error
+-var x2 = <MyComp a="hi"/>;
++let x1 = <MyComp />;
++let x = <MyComp a={10} b="hi"/>;
++let x2 = <MyComp a="hi"/>;

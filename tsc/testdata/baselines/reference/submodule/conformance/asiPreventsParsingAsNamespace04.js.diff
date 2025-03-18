@@ -1,0 +1,9 @@
+--- old.asiPreventsParsingAsNamespace04.js
++++ new.asiPreventsParsingAsNamespace04.js
+@@= skipped -4, +4 lines =@@
+ module in {}
+ 
+ //// [asiPreventsParsingAsNamespace04.js]
+-var module = 10;
++let module = 10;
+ module in {};

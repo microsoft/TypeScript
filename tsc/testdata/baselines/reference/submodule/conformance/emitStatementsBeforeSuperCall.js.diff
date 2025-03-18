@@ -1,0 +1,31 @@
+--- old.emitStatementsBeforeSuperCall.js
++++ new.emitStatementsBeforeSuperCall.js
+@@= skipped -26, +26 lines =@@
+ class Base {
+ }
+ class Sub extends Base {
+-    // @ts-ignore
++    p;
+     constructor(p) {
+-        console.log('hi'); // should emit before super
+-        super();
+         this.p = p;
+-        this.field = 0;
++        console.log('hi');
++        super();
+     }
++    field = 0;
+ }
+ class Test extends Base {
+-    // @ts-ignore
++    p;
++    prop;
+     constructor(p) {
+-        1; // should emit before super
+-        super();
+         this.p = p;
++        1;
++        super();
+         this.prop = 1;
+     }
+ }

@@ -1,0 +1,35 @@
+--- old.2dArrays.js
++++ new.2dArrays.js
+@@= skipped -17, +17 lines =@@
+ }
+ 
+ //// [2dArrays.js]
+-var Cell = /** @class */ (function () {
+-    function Cell() {
+-    }
+-    return Cell;
+-}());
+-var Ship = /** @class */ (function () {
+-    function Ship() {
+-    }
+-    return Ship;
+-}());
+-var Board = /** @class */ (function () {
+-    function Board() {
+-    }
+-    Board.prototype.allShipsSunk = function () {
++class Cell {
++}
++class Ship {
++    isSunk;
++}
++class Board {
++    ships;
++    cells;
++    allShipsSunk() {
+         return this.ships.every(function (val) { return val.isSunk; });
+-    };
+-    return Board;
+-}());
++    }
++}

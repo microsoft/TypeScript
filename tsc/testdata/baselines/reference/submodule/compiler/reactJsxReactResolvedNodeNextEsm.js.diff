@@ -1,0 +1,9 @@
+--- old.reactJsxReactResolvedNodeNextEsm.js
++++ new.reactJsxReactResolvedNodeNextEsm.js
+@@= skipped -27, +27 lines =@@
+ 
+ 
+ //// [file.js]
+-import { jsx as _jsx } from "react/jsx-runtime";
+-export const a = _jsx("div", {});
++export const a = <div></div>;

@@ -1,0 +1,43 @@
+--- old.emitArrowFunctionWhenUsingArguments01.js
++++ new.emitArrowFunctionWhenUsingArguments01.js
+@@= skipped -33, +33 lines =@@
+ }
+ 
+ //// [emitArrowFunctionWhenUsingArguments01.js]
+-var a = function () {
+-    var arg = arguments[0]; // error
++var a = () => {
++    var arg = arguments[0];
+ };
+ var b = function () {
+-    var a = function () {
+-        var arg = arguments[0]; // error
++    var a = () => {
++        var arg = arguments[0];
+     };
+ };
+ function baz() {
+-    (function () {
++    () => {
+         var arg = arguments[0];
+-    });
++    };
+ }
+ function foo(inputFunc) { }
+-foo(function () {
+-    var arg = arguments[0]; // error
++foo(() => {
++    var arg = arguments[0];
+ });
+ function bar() {
+-    var arg = arguments[0]; // no error
++    var arg = arguments[0];
+ }
+-(function () {
++() => {
+     function foo() {
+-        var arg = arguments[0]; // no error
++        var arg = arguments[0];
+     }
+-});
++};

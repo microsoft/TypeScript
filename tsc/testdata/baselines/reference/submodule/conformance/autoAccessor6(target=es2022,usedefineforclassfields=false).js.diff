@@ -1,0 +1,20 @@
+--- old.autoAccessor6(target=es2022,usedefineforclassfields=false).js
++++ new.autoAccessor6(target=es2022,usedefineforclassfields=false).js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [autoAccessor6.js]
+ class C1 {
+-    #a_accessor_storage;
+-    get a() { return this.#a_accessor_storage; }
+-    set a(value) { this.#a_accessor_storage = value; }
++    accessor a;
+ }
+ class C2 extends C1 {
+-    constructor() {
+-        super(...arguments);
+-        this.a = 1;
+-    }
++    a = 1;
+ }
+ class C3 extends C1 {
+     get a() { return super.a; }

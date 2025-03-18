@@ -1,0 +1,14 @@
+--- old.exportDefaultClassNameWithObject.js
++++ new.exportDefaultClassNameWithObject.js
+@@= skipped -6, +6 lines =@@
+ //// [exportDefaultClassNameWithObject.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var Object = /** @class */ (function () {
+-    function Object() {
+-    }
+-    return Object;
+-}());
++class Object {
++}
+ exports.default = Object;

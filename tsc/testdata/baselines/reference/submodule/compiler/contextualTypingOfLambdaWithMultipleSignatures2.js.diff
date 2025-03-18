@@ -1,0 +1,8 @@
+--- old.contextualTypingOfLambdaWithMultipleSignatures2.js
++++ new.contextualTypingOfLambdaWithMultipleSignatures2.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [contextualTypingOfLambdaWithMultipleSignatures2.js]
+ var f;
+-f = function (a) { return a.asdf; };
++f = (a) => { return a.asdf; };

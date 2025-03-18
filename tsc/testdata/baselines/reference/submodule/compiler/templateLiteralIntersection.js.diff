@@ -1,0 +1,9 @@
+--- old.templateLiteralIntersection.js
++++ new.templateLiteralIntersection.js
+@@= skipped -30, +30 lines =@@
+ type OriginF = `${A}foo${A}`;
+ 
+ //// [templateLiteralIntersection.js]
+-// https://github.com/microsoft/TypeScript/issues/48034
+-var a = 'a';
++const a = 'a';

@@ -1,0 +1,10 @@
+--- old.externalModuleResolution2.js
++++ new.externalModuleResolution2.js
+@@= skipped -26, +26 lines =@@
+ //// [consumer.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var x = require("./foo");
+-x.X; // .ts should be picked
++const x = require("./foo");
++x.X;

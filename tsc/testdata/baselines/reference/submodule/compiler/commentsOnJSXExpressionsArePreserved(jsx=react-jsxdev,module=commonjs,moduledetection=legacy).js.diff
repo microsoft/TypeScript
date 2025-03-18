@@ -1,0 +1,26 @@
+--- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).js
++++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=commonjs,moduledetection=legacy).js
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ //// [commentsOnJSXExpressionsArePreserved.js]
+-var _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+-var Component = /** @class */ (function () {
+-    function Component() {
++class Component {
++    render() {
++        return <div>
++            
++            {null}
++            
++            
++            
++            
++        </div>;
+     }
+-    Component.prototype.render = function () {
+-        return (0, _a.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+-    };
+-    return Component;
+-}());
++}

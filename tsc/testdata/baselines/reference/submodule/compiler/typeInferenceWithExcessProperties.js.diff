@@ -1,0 +1,18 @@
+--- old.typeInferenceWithExcessProperties.js
++++ new.typeInferenceWithExcessProperties.js
+@@= skipped -33, +33 lines =@@
+ 
+ 
+ //// [typeInferenceWithExcessProperties.js]
+-// Repro from #17041
+ function parrot(obj) {
+     return obj;
+ }
+@@= skipped -17, +16 lines =@@
+ });
+ parrot({
+     name: "TypeScript",
+-    sayHello: function () {
++    sayHello() {
+     },
+ });

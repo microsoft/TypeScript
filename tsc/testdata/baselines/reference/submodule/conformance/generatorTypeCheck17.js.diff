@@ -1,0 +1,13 @@
+--- old.generatorTypeCheck17.js
++++ new.generatorTypeCheck17.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [generatorTypeCheck17.js]
+ class Foo {
++    x;
+ }
+ class Bar extends Foo {
++    y;
+ }
+ function* g() {
+     yield;

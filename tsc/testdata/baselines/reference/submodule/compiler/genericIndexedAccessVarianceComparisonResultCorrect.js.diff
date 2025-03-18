@@ -1,0 +1,31 @@
+--- old.genericIndexedAccessVarianceComparisonResultCorrect.js
++++ new.genericIndexedAccessVarianceComparisonResultCorrect.js
+@@= skipped -28, +28 lines =@@
+ c = d;
+ 
+ //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-        this.x = 'A';
+-        this.y = 0;
+-    }
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+-        this.x = 'B';
+-        this.z = true;
+-    }
+-    return B;
+-}());
+-b = a; // should be no error
++class A {
++    x = 'A';
++    y = 0;
++}
++class B {
++    x = 'B';
++    z = true;
++}
++b = a;
+ c = d;

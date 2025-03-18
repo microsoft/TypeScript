@@ -1,0 +1,14 @@
+--- old.Protected3.js
++++ new.Protected3.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [Protected3.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    constructor() { }
++}

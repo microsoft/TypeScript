@@ -1,0 +1,9 @@
+--- old.parser509669.js
++++ new.parser509669.js
+@@= skipped -6, +6 lines =@@
+ 
+ //// [parser509669.js]
+ function foo() {
+-    return function () { };
++    return () => { };
+ }

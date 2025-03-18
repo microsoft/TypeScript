@@ -1,0 +1,87 @@
+--- old.methodContainingLocalFunction.js
++++ new.methodContainingLocalFunction.js
+@@= skipped -52, +52 lines =@@
+ }
+ 
+ //// [methodContainingLocalFunction.js]
+-// The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
+-var BugExhibition = /** @class */ (function () {
+-    function BugExhibition() {
++class BugExhibition {
++    exhibitBug() {
++        function localFunction() { }
++        var x;
++        x = localFunction;
+     }
+-    BugExhibition.prototype.exhibitBug = function () {
++}
++class BugExhibition2 {
++    static get exhibitBug() {
+         function localFunction() { }
+         var x;
+         x = localFunction;
+-    };
+-    return BugExhibition;
+-}());
+-var BugExhibition2 = /** @class */ (function () {
+-    function BugExhibition2() {
++        return null;
+     }
+-    Object.defineProperty(BugExhibition2, "exhibitBug", {
+-        get: function () {
+-            function localFunction() { }
+-            var x;
+-            x = localFunction;
+-            return null;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return BugExhibition2;
+-}());
+-var BugExhibition3 = /** @class */ (function () {
+-    function BugExhibition3() {
+-    }
+-    BugExhibition3.prototype.exhibitBug = function () {
++}
++class BugExhibition3 {
++    exhibitBug() {
+         function localGenericFunction(u) { }
+         var x;
+         x = localGenericFunction;
+-    };
+-    return BugExhibition3;
+-}());
+-var C = /** @class */ (function () {
+-    function C() {
+     }
+-    C.prototype.exhibit = function () {
+-        var funcExpr = function (u) { };
++}
++class C {
++    exhibit() {
++        var funcExpr = (u) => { };
+         var x;
+         x = funcExpr;
+-    };
+-    return C;
+-}());
++    }
++}
+ var M;
+ (function (M) {
+     function exhibitBug() {
+@@= skipped -57, +40 lines =@@
+ })(M || (M = {}));
+ var E;
+ (function (E) {
+-    E[E["A"] = (function () {
++    E["A"] = (() => {
+         function localFunction() { }
+         var x;
+         x = localFunction;
+         return 0;
+-    })()] = "A";
++    })();
++    if (typeof E.A !== "string") E[E.A] = "A";
+ })(E || (E = {}));

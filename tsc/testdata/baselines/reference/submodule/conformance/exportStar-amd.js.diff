@@ -1,0 +1,90 @@
+--- old.exportStar-amd.js
++++ new.exportStar-amd.js
+@@= skipped -28, +28 lines =@@
+ 
+ 
+ //// [t1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.y = exports.x = void 0;
+-    exports.x = 1;
+-    exports.y = 2;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.y = exports.x = void 0;
++exports.x = 1;
++exports.y = 2;
+ //// [t2.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.foo = foo;
+-    exports.default = "hello";
+-    function foo() { }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.foo = foo;
++exports.default = "hello";
++function foo() { }
+ //// [t3.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.z = exports.y = exports.x = void 0;
+-    var x = "x";
+-    exports.x = x;
+-    var y = "y";
+-    exports.y = y;
+-    var z = "z";
+-    exports.z = z;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.z = exports.y = exports.x = void 0;
++var x = "x";
++exports.x = x;
++var y = "y";
++exports.y = y;
++var z = "z";
++exports.z = z;
+ //// [t4.js]
++"use strict";
+ var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+     if (k2 === undefined) k2 = k;
+     var desc = Object.getOwnPropertyDescriptor(m, k);
+@@= skipped -42, +37 lines =@@
+ var __exportStar = (this && this.__exportStar) || function(m, exports) {
+     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+ };
+-define(["require", "exports", "./t1", "./t2", "./t3"], function (require, exports, t1_1, t2_1, t3_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    __exportStar(t1_1, exports);
+-    __exportStar(t2_1, exports);
+-    __exportStar(t3_1, exports);
+-});
++Object.defineProperty(exports, "__esModule", { value: true });
++__exportStar(require("./t1"), exports);
++__exportStar(require("./t2"), exports);
++__exportStar(require("./t3"), exports);
+ //// [main.js]
+-define(["require", "exports", "./t4"], function (require, exports, t4_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    t4_1.default;
+-    t4_1.x;
+-    t4_1.y;
+-    t4_1.z;
+-    t4_1.foo;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const t4_1 = require("./t4");
++t4_1.default;
++t4_1.x;
++t4_1.y;
++t4_1.z;
++t4_1.foo;

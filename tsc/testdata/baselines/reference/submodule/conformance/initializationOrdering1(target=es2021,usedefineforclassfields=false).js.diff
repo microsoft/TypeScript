@@ -1,0 +1,15 @@
+--- old.initializationOrdering1(target=es2021,usedefineforclassfields=false).js
++++ new.initializationOrdering1(target=es2021,usedefineforclassfields=false).js
+@@= skipped -23, +23 lines =@@
+     }
+ }
+ export class Broken {
++    facade;
+     constructor(facade) {
+         this.facade = facade;
+-        this.bug = this.facade.create();
+         console.log(this.bug);
+     }
++    bug = this.facade.create();
+ }
+ new Broken(new Helper);

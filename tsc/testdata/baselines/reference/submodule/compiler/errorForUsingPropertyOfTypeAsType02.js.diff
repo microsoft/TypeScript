@@ -1,0 +1,10 @@
+--- old.errorForUsingPropertyOfTypeAsType02.js
++++ new.errorForUsingPropertyOfTypeAsType02.js
+@@= skipped -10, +10 lines =@@
+ var Test1;
+ (function (Test1) {
+     function foo(x) {
+-        var a = x.abc;
++        let a = x.abc;
+     }
+ })(Test1 || (Test1 = {}));

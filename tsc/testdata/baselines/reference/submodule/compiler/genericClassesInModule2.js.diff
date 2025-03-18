@@ -1,0 +1,50 @@
+--- old.genericClassesInModule2.js
++++ new.genericClassesInModule2.js
+@@= skipped -22, +22 lines =@@
+ 
+ 
+ //// [genericClassesInModule2.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.B = exports.A = void 0;
+-    var A = /** @class */ (function () {
+-        function A(callback) {
+-            this.callback = callback;
+-            var child = new B(this);
+-        }
+-        A.prototype.AAA = function (callback) {
+-            var child = new B(this);
+-        };
+-        return A;
+-    }());
+-    exports.A = A;
+-    var B = /** @class */ (function () {
+-        function B(parent) {
+-            this.parent = parent;
+-        }
+-        return B;
+-    }());
+-    exports.B = B;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.B = exports.A = void 0;
++class A {
++    callback;
++    constructor(callback) {
++        this.callback = callback;
++        var child = new B(this);
++    }
++    AAA(callback) {
++        var child = new B(this);
++    }
++}
++exports.A = A;
++class B {
++    parent;
++    constructor(parent) {
++        this.parent = parent;
++    }
++}
++exports.B = B;

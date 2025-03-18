@@ -1,0 +1,19 @@
+--- old.parameterPropertyInitializerInInitializers.js
++++ new.parameterPropertyInitializerInInitializers.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parameterPropertyInitializerInInitializers.js]
+-var Foo = /** @class */ (function () {
+-    function Foo(x, y) {
+-        if (y === void 0) { y = x; }
++class Foo {
++    x;
++    y;
++    constructor(x, y = x) {
+         this.x = x;
+         this.y = y;
+     }
+-    return Foo;
+-}());
++}

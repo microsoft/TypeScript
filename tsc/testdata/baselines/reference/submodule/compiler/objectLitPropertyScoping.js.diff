@@ -1,0 +1,10 @@
+--- old.objectLitPropertyScoping.js
++++ new.objectLitPropertyScoping.js
+@@= skipped -17, +17 lines =@@
+ };
+ 
+ //// [objectLitPropertyScoping.js]
+-// Should compile, x and y should not be picked up from the properties
+ function makePoint(x, y) {
+     return {
+         get x() {

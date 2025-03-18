@@ -1,0 +1,14 @@
+--- old.declarationEmitRecursiveConditionalAliasPreserved.js
++++ new.declarationEmitRecursiveConditionalAliasPreserved.js
+@@= skipped -106, +106 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.power = void 0;
+-var power = function (num, powerOf) { return (Math.pow(num, powerOf)); };
++const power = (num, powerOf) => (num ** powerOf);
+ exports.power = power;
+-
+-
+-//// [a.d.ts]
+-import { Power } from "./input";
+-export declare const power: <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>;

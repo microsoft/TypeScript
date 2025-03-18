@@ -1,0 +1,37 @@
+--- old.arithAssignTyping.js
++++ new.arithAssignTyping.js
+@@= skipped -16, +16 lines =@@
+ f ^= 1; // error
+ 
+ //// [arithAssignTyping.js]
+-var f = /** @class */ (function () {
+-    function f() {
+-    }
+-    return f;
+-}());
+-f += ''; // error
+-f += 1; // error
+-f -= 1; // error
+-f *= 1; // error
+-f /= 1; // error
+-f %= 1; // error
+-f &= 1; // error
+-f |= 1; // error
+-f <<= 1; // error
+-f >>= 1; // error
+-f >>>= 1; // error
+-f ^= 1; // error
++class f {
++}
++f += '';
++f += 1;
++f -= 1;
++f *= 1;
++f /= 1;
++f %= 1;
++f &= 1;
++f |= 1;
++f <<= 1;
++f >>= 1;
++f >>>= 1;
++f ^= 1;

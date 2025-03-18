@@ -1,0 +1,41 @@
+--- old.jsdocDisallowedInTypescript.js
++++ new.jsdocDisallowedInTypescript.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [jsdocDisallowedInTypescript.js]
+-"use strict";
+-// grammar error from checker
+ var ara = [1, 2, 3];
+ function f(x, y) {
+     return x ? x + y[1] : y[0];
+ }
+-function hof(ctor) {
++function hof(ctor) { }
++(new );
++number, string;
++{
+     return new ctor('hi');
+ }
+-function hof2(f) {
++function hof2(f) { }
++(string) => ;
++{
+     return f(12, 'hullo');
+ }
+ var whatevs = 1001;
+ var ques = 'what';
+-var g = function (n, m) { return n + m; };
++var g;
++(number, number);
++number = (n, m) => n + m;
+ var most = 'definite';
+-var postfixdef = 101;
+-var postfixopt = undefined;
++var postfixdef;
++!;
++101;
++var postfixopt, undefined;
+ var nns;
+ var dns;
+ var anys;

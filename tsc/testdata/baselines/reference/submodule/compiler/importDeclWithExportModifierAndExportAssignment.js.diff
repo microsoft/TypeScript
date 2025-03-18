@@ -1,0 +1,9 @@
+--- old.importDeclWithExportModifierAndExportAssignment.js
++++ new.importDeclWithExportModifierAndExportAssignment.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [importDeclWithExportModifierAndExportAssignment.js]
+ "use strict";
+-exports.a = void 0;
+-exports.a = x.c;
+ module.exports = x;

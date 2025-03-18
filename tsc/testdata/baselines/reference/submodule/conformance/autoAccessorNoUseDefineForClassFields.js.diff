@@ -1,0 +1,36 @@
+--- old.autoAccessorNoUseDefineForClassFields.js
++++ new.autoAccessorNoUseDefineForClassFields.js
+@@= skipped -40, +40 lines =@@
+ 
+ 
+ //// [file1.js]
+-// https://github.com/microsoft/TypeScript/issues/51528
+ class C1 {
+     static accessor x = 0;
+ }
+@@= skipped -18, +17 lines =@@
+ }
+ //// [file5.js]
+ class C5 {
+-    constructor() {
+-        this.x = 0;
+-        this.#x_accessor_storage = 1;
+-    }
+-    #x_accessor_storage;
+-    get #x() { return this.#x_accessor_storage; }
+-    set #x(value) { this.#x_accessor_storage = value; }
++    x = 0;
++    accessor #x = 1;
+ }
+ //// [file6.js]
+ class C6 {
+-    constructor() {
+-        this.#x_accessor_storage = 0;
+-        this.x = 1;
+-    }
+-    #x_accessor_storage;
+-    get #x() { return this.#x_accessor_storage; }
+-    set #x(value) { this.#x_accessor_storage = value; }
++    accessor #x = 0;
++    x = 1;
+ }

@@ -1,0 +1,10 @@
+--- old.duplicatePackage_referenceTypes.js
++++ new.duplicatePackage_referenceTypes.js
+@@= skipped -26, +26 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var a = require("a");
+-var foo = a.foo;
++const a = require("a");
++let foo = a.foo;

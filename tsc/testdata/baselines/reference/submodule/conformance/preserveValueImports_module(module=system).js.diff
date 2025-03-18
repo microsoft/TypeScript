@@ -1,0 +1,17 @@
+--- old.preserveValueImports_module(module=system).js
++++ new.preserveValueImports_module(module=system).js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [preserveValueImports_module.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

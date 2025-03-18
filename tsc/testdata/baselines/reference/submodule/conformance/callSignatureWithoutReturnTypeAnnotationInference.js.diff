@@ -1,0 +1,65 @@
+--- old.callSignatureWithoutReturnTypeAnnotationInference.js
++++ new.callSignatureWithoutReturnTypeAnnotationInference.js
+@@= skipped -122, +122 lines =@@
+ var r15 = foo15();
+ 
+ //// [callSignatureWithoutReturnTypeAnnotationInference.js]
+-// Call signatures without a return type should infer one from the function body (if present)
+-// Simple types
+ function foo(x) {
+     return 1;
+ }
+@@= skipped -42, +40 lines =@@
+     return typeof x;
+ }
+ var r7 = foo7(1);
+-// object types
+ function foo8(x) {
+     return { x: x };
+ }
+@@= skipped -10, +9 lines =@@
+     return i;
+ }
+ var r9 = foo9(1);
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    foo;
++}
+ function foo10(x) {
+     var c;
+     return c;
+@@= skipped -13, +11 lines =@@
+ var M;
+ (function (M) {
+     M.x = 1;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
++    class C {
++        foo;
++    }
+     M.C = C;
+ })(M || (M = {}));
+ function foo11() {
+@@= skipped -24, +22 lines =@@
+     return m1;
+ }
+ var r13 = foo13();
+-var c1 = /** @class */ (function () {
+-    function c1(x) {
+-    }
+-    return c1;
+-}());
++class c1 {
++    foo;
++    constructor(x) { }
++}
+ (function (c1) {
+     c1.x = 1;
+ })(c1 || (c1 = {}));

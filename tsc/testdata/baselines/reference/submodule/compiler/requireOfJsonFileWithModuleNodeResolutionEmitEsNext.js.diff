@@ -1,0 +1,13 @@
+--- old.requireOfJsonFileWithModuleNodeResolutionEmitEsNext.js
++++ new.requireOfJsonFileWithModuleNodeResolutionEmitEsNext.js
+@@= skipped -8, +8 lines =@@
+     "b": "hello"
+ }
+ 
+-//// [out/b.json]
+-{
+-    "a": true,
+-    "b": "hello"
+-}
+ //// [out/file1.js]
+ export {};

@@ -1,0 +1,39 @@
+--- old.intrinsics.js
++++ new.intrinsics.js
+@@= skipped -16, +16 lines =@@
+ var foo: (__proto__: number) => void;
+ 
+ //// [intrinsics.js]
+-var hasOwnProperty; // Error
++var hasOwnProperty;
+ var m1;
+ (function (m1) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
++    class C {
++    }
+ })(m1 || (m1 = {}));
+-__proto__ = 0; // Error, __proto__ not defined
++__proto__ = 0;
+ m1.__proto__ = 0;
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
+-var foo;
+-
+-
+-//// [intrinsics.d.ts]
+-declare var hasOwnProperty: hasOwnProperty;
+-declare namespace m1 {
+-    var __proto__: any;
++class Foo {
+ }
+-declare class Foo<__proto__> {
+-}
+-declare var foo: (__proto__: number) => void;
++var foo;

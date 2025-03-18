@@ -1,0 +1,10 @@
+--- old.scannerNonAsciiHorizontalWhitespace.js
++++ new.scannerNonAsciiHorizontalWhitespace.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [scannerNonAsciiHorizontalWhitespace.js]
+-//// [scannerNonAsciiHorizontalWhitespace.ts]
+ "  function f() {}";
+-//// [scannerNonAsciiHorizontalWhitespace.js]
+ "  function f() {}";

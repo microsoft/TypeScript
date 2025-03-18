@@ -1,0 +1,74 @@
+--- old.importCallExpressionES6System.js
++++ new.importCallExpressionES6System.js
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ //// [0.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() { return "foo"; }
+-    exports_1("foo", foo);
+-    return {
+-        setters: [],
+-        execute: function () {
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.foo = foo;
++function foo() { return "foo"; }
+ //// [1.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var p1, p2, C, D;
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() {
+-        const p2 = context_1.import("./0");
+-    }
+-    return {
+-        setters: [],
+-        execute: function () {
+-            context_1.import("./0");
+-            p1 = context_1.import("./0");
+-            p1.then(zero => {
+-                return zero.foo();
+-            });
+-            exports_1("p2", p2 = context_1.import("./0"));
+-            C = class C {
+-                method() {
+-                    const loadAsync = context_1.import("./0");
+-                }
+-            };
+-            D = class D {
+-                method() {
+-                    const loadAsync = context_1.import("./0");
+-                }
+-            };
+-            exports_1("D", D);
+-        }
+-    };
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.D = exports.p2 = void 0;
++Promise.resolve().then(() => require("./0"));
++var p1 = Promise.resolve().then(() => require("./0"));
++p1.then(zero => {
++    return zero.foo();
+ });
++exports.p2 = Promise.resolve().then(() => require("./0"));
++function foo() {
++    const p2 = Promise.resolve().then(() => require("./0"));
++}
++class C {
++    method() {
++        const loadAsync = Promise.resolve().then(() => require("./0"));
++    }
++}
++class D {
++    method() {
++        const loadAsync = Promise.resolve().then(() => require("./0"));
++    }
++}
++exports.D = D;

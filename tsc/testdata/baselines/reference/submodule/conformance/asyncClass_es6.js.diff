@@ -1,0 +1,9 @@
+--- old.asyncClass_es6.js
++++ new.asyncClass_es6.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [asyncClass_es6.js]
+-class C {
++async class C {
+ }

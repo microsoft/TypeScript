@@ -1,0 +1,7 @@
+--- old.conditionalTypeSimplification.js
++++ new.conditionalTypeSimplification.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [conditionalTypeSimplification.js]
+-// Repro from #30794

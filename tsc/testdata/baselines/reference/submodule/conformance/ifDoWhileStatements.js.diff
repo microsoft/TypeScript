@@ -1,0 +1,104 @@
+--- old.ifDoWhileStatements.js
++++ new.ifDoWhileStatements.js
+@@= skipped -164, +164 lines =@@
+ 
+ 
+ //// [ifDoWhileStatements.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var C2 = /** @class */ (function (_super) {
+-    __extends(C2, _super);
+-    function C2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return C2;
+-}(C));
+-var D = /** @class */ (function () {
+-    function D() {
+-    }
+-    return D;
+-}());
++class C {
++    id;
++    name;
++}
++class C2 extends C {
++    valid;
++}
++class D {
++    source;
++    recurse;
++    wrapped;
++}
+ function F(x) { return 42; }
+ function F2(x) { return x < 42; }
+ var M;
+ (function (M) {
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        return A;
+-    }());
++    class A {
++        name;
++    }
+     M.A = A;
+     function F2(x) { return x.toString(); }
+     M.F2 = F2;
+ })(M || (M = {}));
+ var N;
+ (function (N) {
+-    var A = /** @class */ (function () {
+-        function A() {
+-        }
+-        return A;
+-    }());
++    class A {
++        id;
++    }
+     N.A = A;
+     function F2(x) { return x.toString(); }
+     N.F2 = F2;
+ })(N || (N = {}));
+-// literals
+ if (true) { }
+ while (true) { }
+ do { } while (true);
+@@= skipped -90, +65 lines =@@
+ if ({ x: 1, y: 'a' }) { }
+ while ({ x: 1, y: 'a' }) { }
+ do { } while ({ x: 1, y: 'a' });
+-if (function () { return 43; }) { }
+-while (function () { return 43; }) { }
+-do { } while (function () { return 43; });
++if (() => 43) { }
++while (() => 43) { }
++do { } while (() => 43);
+ if (new C()) { }
+ while (new C()) { }
+ do { } while (new C());
+ if (new D()) { }
+ while (new D()) { }
+ do { } while (new D());
+-// references
+ var a = true;
+ if (a) { }
+ while (a) { }

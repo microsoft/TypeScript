@@ -1,0 +1,16 @@
+--- old.functionCall10.js
++++ new.functionCall10.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [functionCall10.js]
+-function foo() {
+-    var a = [];
+-    for (var _i = 0; _i < arguments.length; _i++) {
+-        a[_i] = arguments[_i];
+-    }
+-}
++function foo(...a) { }
+ ;
+ foo(0, 1);
+ foo('foo');

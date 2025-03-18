@@ -1,0 +1,13 @@
+--- old.computedPropertyNameAndTypeParameterConflict.js
++++ new.computedPropertyNameAndTypeParameterConflict.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [computedPropertyNameAndTypeParameterConflict.js]
+-
+-
+-//// [computedPropertyNameAndTypeParameterConflict.d.ts]
+-declare const O: unique symbol;
+-declare class Bar<O> {
+-    [O]: number;
+-}

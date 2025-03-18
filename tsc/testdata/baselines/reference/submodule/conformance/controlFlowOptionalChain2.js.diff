@@ -1,0 +1,115 @@
+--- old.controlFlowOptionalChain2.js
++++ new.controlFlowOptionalChain2.js
+@@= skipped -108, +108 lines =@@
+ 
+ //// [controlFlowOptionalChain2.js]
+ function funcTwo(arg) {
+-    if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
+-        arg; // `B`
++    if (arg?.type === 'B') {
++        arg;
+         return;
+     }
+     arg;
+-    arg === null || arg === void 0 ? void 0 : arg.name;
++    arg?.name;
+ }
+ function funcThree(arg) {
+-    if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
+-        arg; // `B`
++    if (arg?.type === 'B') {
++        arg;
+         return;
+     }
+     arg;
+-    arg === null || arg === void 0 ? void 0 : arg.name;
++    arg?.name;
+ }
+ function f1(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+-        x; // U | undefined
++    if (x?.kind === undefined) {
++        x;
+     }
+     else {
+-        x; // X
++        x;
+     }
+ }
+ function f2(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+-        x; // undefined
++    if (x?.kind === undefined) {
++        x;
+     }
+     else {
+-        x; // X | N
++        x;
+     }
+ }
+ function f3(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+-        x; // U | null
++    if (x?.kind === undefined) {
++        x;
+     }
+     else {
+-        x; // X
++        x;
+     }
+ }
+ function f4(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === undefined) {
+-        x; // null
++    if (x?.kind === undefined) {
++        x;
+     }
+     else {
+-        x; // X | N
++        x;
+     }
+ }
+ function f5(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+-        x; // never
++    if (x?.kind === null) {
++        x;
+     }
+     else {
+-        x; // X | U | undefined
++        x;
+     }
+ }
+ function f6(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+-        x; // N
++    if (x?.kind === null) {
++        x;
+     }
+     else {
+-        x; // X | undefined
++        x;
+     }
+ }
+ function f7(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+-        x; // never
++    if (x?.kind === null) {
++        x;
+     }
+     else {
+-        x; // X | U | null
++        x;
+     }
+ }
+ function f8(x) {
+-    if ((x === null || x === void 0 ? void 0 : x.kind) === null) {
+-        x; // N
++    if (x?.kind === null) {
++        x;
+     }
+     else {
+-        x; // X | null
++        x;
+     }
+ }

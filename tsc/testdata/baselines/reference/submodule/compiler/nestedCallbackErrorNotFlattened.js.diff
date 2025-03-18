@@ -1,0 +1,8 @@
+--- old.nestedCallbackErrorNotFlattened.js
++++ new.nestedCallbackErrorNotFlattened.js
+@@= skipped -8, +8 lines =@@
+ y = x;
+ 
+ //// [nestedCallbackErrorNotFlattened.js]
+-"use strict";
+ y = x;

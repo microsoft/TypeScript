@@ -1,0 +1,11 @@
+--- old.hidingIndexSignatures.js
++++ new.hidingIndexSignatures.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [hidingIndexSignatures.js]
+ var b;
+-b[""]; // Should be number
++b[""];
+ var a;
+-a[""]; // Should be {}
++a[""];

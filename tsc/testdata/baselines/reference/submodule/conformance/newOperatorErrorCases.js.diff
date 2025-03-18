@@ -1,0 +1,45 @@
+--- old.newOperatorErrorCases.js
++++ new.newOperatorErrorCases.js
+@@= skipped -39, +39 lines =@@
+ 
+ 
+ //// [newOperatorErrorCases.js]
+-var C0 = /** @class */ (function () {
+-    function C0() {
+-    }
+-    return C0;
+-}());
+-var C1 = /** @class */ (function () {
+-    function C1(n, s) {
+-    }
+-    return C1;
+-}());
+-var T = /** @class */ (function () {
+-    function T(n) {
+-    }
+-    return T;
+-}());
++class C0 {
++}
++class C1 {
++    constructor(n, s) { }
++}
++class T {
++    constructor(n) { }
++}
+ var anyCtor;
+ var anyCtor1;
+ var nestedCtor;
+-// Construct expression with no parentheses for construct signature with > 0 parameters
+ var b = new C0;
+-32, ''; // Parse error
+-// Generic construct expression with no parentheses
++32, '';
+ var c1 = new T;
+ var c1;
+-var c2 = new T; // Ok
+-// Construct expression of non-void returning function
++var c2 = new T;
+ function fnNumber() { return 32; }
+-var s = new fnNumber(); // Error
++var s = new fnNumber();

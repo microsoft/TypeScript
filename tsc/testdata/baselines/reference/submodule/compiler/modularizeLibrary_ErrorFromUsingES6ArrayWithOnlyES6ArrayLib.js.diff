@@ -1,0 +1,10 @@
+--- old.modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.js
++++ new.modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.js]
+-// Error missing basic JavaScript objects
+ function f(x, y, z) {
+     return Array.from(arguments);
+ }

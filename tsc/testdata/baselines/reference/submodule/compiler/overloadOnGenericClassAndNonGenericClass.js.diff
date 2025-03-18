@@ -1,0 +1,60 @@
+--- old.overloadOnGenericClassAndNonGenericClass.js
++++ new.overloadOnGenericClassAndNonGenericClass.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [overloadOnGenericClassAndNonGenericClass.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    return X;
+-}());
+-var X1 = /** @class */ (function () {
+-    function X1() {
+-    }
+-    return X1;
+-}());
+-var X2 = /** @class */ (function () {
+-    function X2() {
+-    }
+-    return X2;
+-}());
++class A {
++    a;
++}
++class B {
++    b;
++}
++class C {
++    c;
++}
++class X {
++    x;
++}
++class X1 {
++    x;
++}
++class X2 {
++    x;
++}
+ function f(a) {
+ }
+ var xs;
+ var t3 = f(xs);
+-var t3; // should not error
++var t3;

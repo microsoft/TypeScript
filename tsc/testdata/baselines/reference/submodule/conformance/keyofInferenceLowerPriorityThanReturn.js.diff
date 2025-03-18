@@ -1,0 +1,15 @@
+--- old.keyofInferenceLowerPriorityThanReturn.js
++++ new.keyofInferenceLowerPriorityThanReturn.js
+@@= skipped -49, +49 lines =@@
+ 
+ 
+ //// [keyofInferenceLowerPriorityThanReturn.js]
+-var bookTable = null;
++const bookTable = null;
+ function insertOnConflictDoNothing(_table, _conflictTarget) {
+     throw new Error();
+ }
+ function f() {
+-    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"])); // <-- No error here; should use the type inferred for the return type of `tableColumns`
++    insertOnConflictDoNothing(bookTable, ConflictTarget.tableColumns(["serial"]));
+ }

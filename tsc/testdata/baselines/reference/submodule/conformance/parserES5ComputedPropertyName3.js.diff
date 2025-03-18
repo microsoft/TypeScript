@@ -1,0 +1,9 @@
+--- old.parserES5ComputedPropertyName3.js
++++ new.parserES5ComputedPropertyName3.js
+@@= skipped -3, +3 lines =@@
+ var v = { [e]() { } };
+ 
+ //// [parserES5ComputedPropertyName3.js]
+-var _a;
+-var v = (_a = {}, _a[e] = function () { }, _a);
++var v = { [e]() { } };

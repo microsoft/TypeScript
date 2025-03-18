@@ -1,0 +1,19 @@
+--- old.typeReferenceDirectives7.js
++++ new.typeReferenceDirectives7.js
+@@= skipped -13, +13 lines =@@
+ 
+ //// [app.js]
+ "use strict";
+-/// <reference types="lib"/>
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.y = exports.x = exports.$ = void 0;
+ exports.$ = 1;
+-var y = function () { return exports.x; };
++let y = () => exports.x;
+ exports.y = y;
+-
+-
+-//// [app.d.ts]
+-export declare let $: number;
+-export declare let x: typeof $;
+-export declare let y: () => number;

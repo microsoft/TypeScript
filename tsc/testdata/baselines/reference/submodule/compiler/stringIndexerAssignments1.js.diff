@@ -1,0 +1,8 @@
+--- old.stringIndexerAssignments1.js
++++ new.stringIndexerAssignments1.js
+@@= skipped -12, +12 lines =@@
+ var a;
+ var b;
+ x = a;
+-x = b; // error
++x = b;

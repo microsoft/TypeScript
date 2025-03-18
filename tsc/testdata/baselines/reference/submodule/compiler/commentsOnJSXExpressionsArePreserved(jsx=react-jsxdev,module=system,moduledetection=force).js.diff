@@ -1,0 +1,41 @@
+--- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=system,moduledetection=force).js
++++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=system,moduledetection=force).js
+@@= skipped -22, +22 lines =@@
+ }
+ 
+ //// [commentsOnJSXExpressionsArePreserved.js]
+-System.register(["react/jsx-dev-runtime"], function (exports_1, context_1) {
+-    "use strict";
+-    var jsx_dev_runtime_1, _jsxFileName, Component;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (jsx_dev_runtime_1_1) {
+-                jsx_dev_runtime_1 = jsx_dev_runtime_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+-            Component = /** @class */ (function () {
+-                function Component() {
+-                }
+-                Component.prototype.render = function () {
+-                    return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+-                };
+-                return Component;
+-            }());
+-        }
+-    };
+-});
++class Component {
++    render() {
++        return <div>
++            
++            {null}
++            
++            
++            
++            
++        </div>;
++    }
++}

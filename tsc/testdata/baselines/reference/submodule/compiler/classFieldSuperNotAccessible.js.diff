@@ -1,0 +1,11 @@
+--- old.classFieldSuperNotAccessible.js
++++ new.classFieldSuperNotAccessible.js
+@@= skipped -18, +18 lines =@@
+ }
+ class T2 extends T {
+     f() {
+-        super.field(); // error
++        super.field();
+     }
+ }
+ new T2().f();

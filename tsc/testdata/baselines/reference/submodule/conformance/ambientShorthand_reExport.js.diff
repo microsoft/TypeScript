@@ -1,0 +1,21 @@
+--- old.ambientShorthand_reExport.js
++++ new.ambientShorthand_reExport.js
+@@= skipped -19, +19 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
+-var jquery_1 = require("jquery");
++const jquery_1 = require("jquery");
+ Object.defineProperty(exports, "x", { enumerable: true, get: function () { return jquery_1.x; } });
+ //// [reExportAll.js]
+ "use strict";
+@@= skipped -23, +23 lines =@@
+ //// [reExportUser.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var reExportX_1 = require("./reExportX");
+-var $ = require("./reExportAll");
+-// '$' is not callable, it is an object.
++const reExportX_1 = require("./reExportX");
++const $ = require("./reExportAll");
+ (0, reExportX_1.x)($);

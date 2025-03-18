@@ -1,0 +1,8 @@
+--- old.assigningFunctionToTupleIssuesError.js
++++ new.assigningFunctionToTupleIssuesError.js
+@@= skipped -4, +4 lines =@@
+ let b: [string] = a;
+ 
+ //// [assigningFunctionToTupleIssuesError.js]
+-var b = a;
++let b = a;

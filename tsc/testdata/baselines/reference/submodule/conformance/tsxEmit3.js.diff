@@ -1,0 +1,57 @@
+--- old.tsxEmit3.js
++++ new.tsxEmit3.js
+@@= skipped -44, +44 lines =@@
+ //// [file.jsx]
+ var M;
+ (function (M) {
+-    var Foo = /** @class */ (function () {
+-        function Foo() {
+-        }
+-        return Foo;
+-    }());
++    class Foo {
++        constructor() { }
++    }
+     M.Foo = Foo;
+-    var S;
++    let S;
+     (function (S) {
+-        var Bar = /** @class */ (function () {
+-            function Bar() {
+-            }
+-            return Bar;
+-        }());
++        class Bar {
++        }
+         S.Bar = Bar;
+-        // Emit Foo
+-        // Foo, <Foo />;
+     })(S = M.S || (M.S = {}));
+ })(M || (M = {}));
+ (function (M) {
+-    // Emit M.Foo
+-    M.Foo, <M.Foo />;
+-    var S;
++    Foo, <Foo />;
++    let S;
+     (function (S) {
+-        // Emit M.Foo
+-        M.Foo, <M.Foo />;
+-        // Emit S.Bar
+-        S.Bar, <S.Bar />;
++        Foo, <Foo />;
++        Bar, <Bar />;
+     })(S = M.S || (M.S = {}));
+ })(M || (M = {}));
+ (function (M) {
+-    // Emit M.S.Bar
+-    M.S.Bar, <M.S.Bar />;
++    S.Bar, <S.Bar />;
+ })(M || (M = {}));
+ (function (M_1) {
+     var M = 100;
+-    // Emit M_1.Foo
+-    M_1.Foo, <M_1.Foo />;
++    Foo, <Foo />;
+ })(M || (M = {}));
+-//# sourceMappingURL=file.jsx.map

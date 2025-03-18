@@ -1,0 +1,9 @@
+--- old.nonPrimitiveIndexingWithForInNoImplicitAny.js
++++ new.nonPrimitiveIndexingWithForInNoImplicitAny.js
+@@= skipped -10, +10 lines =@@
+ //// [nonPrimitiveIndexingWithForInNoImplicitAny.js]
+ var a;
+ for (var key in a) {
+-    var value = a[key]; // error
++    var value = a[key];
+ }

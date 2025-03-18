@@ -1,0 +1,13 @@
+--- old.nodeModulesTripleSlashReferenceModeOverrideModeError(module=node16).js
++++ new.nodeModulesTripleSlashReferenceModeOverrideModeError(module=node16).js
+@@= skipped -25, +25 lines =@@
+ export {};
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-/// <reference types="pkg" resolution-mode="esm"/>
+-foo; // bad resolution mode, which resolves is arbitrary
++foo;
+ bar;
++export {};

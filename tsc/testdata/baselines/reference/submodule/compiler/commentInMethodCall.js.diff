@@ -1,0 +1,11 @@
+--- old.commentInMethodCall.js
++++ new.commentInMethodCall.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [commentInMethodCall.js]
+-//commment here
+ var s;
+-s.map(// do something
+-function () { });
++s.map(function () { });

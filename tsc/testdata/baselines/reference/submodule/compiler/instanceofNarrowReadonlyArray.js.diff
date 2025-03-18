@@ -1,0 +1,10 @@
+--- old.instanceofNarrowReadonlyArray.js
++++ new.instanceofNarrowReadonlyArray.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [instanceofNarrowReadonlyArray.js]
+-// @strict
+ function narrow(x) {
+     if (x instanceof Array) {
+         return x;

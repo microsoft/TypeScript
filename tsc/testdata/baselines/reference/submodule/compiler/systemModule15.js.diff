@@ -1,0 +1,92 @@
+--- old.systemModule15.js
++++ new.systemModule15.js
+@@= skipped -28, +28 lines =@@
+ export var value2 = "v";
+ 
+ //// [file3.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var value;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("value", value = "youpi");
+-            exports_1("default", value);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.value = void 0;
++exports.value = "youpi";
++exports.default = exports.value;
+ //// [file4.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var value2;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("value2", value2 = "v");
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.value2 = void 0;
++exports.value2 = "v";
+ //// [file2.js]
+-System.register(["./file3"], function (exports_1, context_1) {
+-    "use strict";
+-    var moduleCStar, file3_1, file3_2;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (moduleCStar_1) {
+-                moduleCStar = moduleCStar_1;
+-                file3_1 = moduleCStar_1;
+-                file3_2 = moduleCStar_1;
+-            }
+-        ],
+-        execute: function () {
+-            exports_1("moduleCStar", moduleCStar);
+-            exports_1("moduleC", file3_1.default);
+-            exports_1("value", file3_2.value);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.value = exports.moduleC = exports.moduleCStar = void 0;
++const moduleCStar = require("./file3");
++exports.moduleCStar = moduleCStar;
++const file3_1 = require("./file3");
++exports.moduleC = file3_1.default;
++const file3_2 = require("./file3");
++Object.defineProperty(exports, "value", { enumerable: true, get: function () { return file3_2.value; } });
+ //// [file1.js]
+-System.register(["./file2"], function (exports_1, context_1) {
+-    "use strict";
+-    var moduleB;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (moduleB_1) {
+-                moduleB = moduleB_1;
+-            }
+-        ],
+-        execute: function () {
+-            use(moduleB.value);
+-            use(moduleB.moduleC);
+-            use(moduleB.moduleCStar);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const moduleB = require("./file2");
++use(moduleB.value);
++use(moduleB.moduleC);
++use(moduleB.moduleCStar);

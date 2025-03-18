@@ -1,0 +1,10 @@
+--- old.emitClassDeclarationWithGetterSetterInES6.js
++++ new.emitClassDeclarationWithGetterSetterInES6.js
+@@= skipped -30, +30 lines =@@
+ 
+ //// [emitClassDeclarationWithGetterSetterInES6.js]
+ class C {
++    _name;
+     get name() {
+         return this._name;
+     }

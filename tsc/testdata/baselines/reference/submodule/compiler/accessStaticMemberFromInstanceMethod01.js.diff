@@ -1,0 +1,19 @@
+--- old.accessStaticMemberFromInstanceMethod01.js
++++ new.accessStaticMemberFromInstanceMethod01.js
+@@= skipped -9, +9 lines =@@
+ }
+ 
+ //// [accessStaticMemberFromInstanceMethod01.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    foo;
++    static bar() {
++        let k = foo;
+     }
+-    C.bar = function () {
+-        var k = foo;
+-    };
+-    return C;
+-}());
++}

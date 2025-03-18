@@ -1,0 +1,8 @@
+--- old.indexSignatureOfTypeUnknownStillRequiresIndexSignature.js
++++ new.indexSignatureOfTypeUnknownStillRequiresIndexSignature.js
+@@= skipped -17, +17 lines =@@
+     { name: "larry", age: 50 },
+     { name: "curly", age: 60 }
+ ];
+-f(stooges); // Should throw
++f(stooges);

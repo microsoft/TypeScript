@@ -1,0 +1,19 @@
+--- old.importHelpersWithLocalCollisions(module=es2015).js
++++ new.importHelpersWithLocalCollisions(module=es2015).js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [a.js]
+-import { __decorate as __decorate_1 } from "tslib";
+-let A = class A {
+-};
+-A = __decorate_1([
+-    dec
+-], A);
+-export { A };
++@dec
++export class A {
++}
+ const o = { a: 1 };
+-const y = Object.assign({}, o);
++const y = { ...o };

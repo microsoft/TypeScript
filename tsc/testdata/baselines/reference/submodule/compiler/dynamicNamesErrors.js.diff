@@ -1,0 +1,50 @@
+--- old.dynamicNamesErrors.js
++++ new.dynamicNamesErrors.js
+@@= skipped -75, +75 lines =@@
+ const z = Symbol();
+ const w = Symbol();
+ class ClassMemberVisibility {
++    static [x];
+     static [y]() { return 0; }
+     static get [z]() { return 0; }
+     static set [w](value) { }
++    [x];
+     [y]() { return 0; }
+     get [z]() { return 0; }
+     set [w](value) { }
+@@= skipped -14, +16 lines =@@
+     get [z]() { return 0; },
+     set [w](value) { },
+ };
+-
+-
+-//// [dynamicNamesErrors.d.ts]
+-declare const x: unique symbol;
+-declare const y: unique symbol;
+-declare const z: unique symbol;
+-declare const w: unique symbol;
+-export interface InterfaceMemberVisibility {
+-    [x]: number;
+-    [y](): number;
+-}
+-export declare class ClassMemberVisibility {
+-    static [x]: number;
+-    static [y](): number;
+-    static get [z](): number;
+-    static set [w](value: number);
+-    [x]: number;
+-    [y](): number;
+-    get [z](): number;
+-    set [w](value: number);
+-}
+-export type ObjectTypeVisibility = {
+-    [x]: number;
+-    [y](): number;
+-};
+-export declare const ObjectLiteralVisibility: {
+-    [x]: number;
+-    [y](): number;
+-    readonly [z]: number;
+-    [w]: number;
+-};
+-export {};

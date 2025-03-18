@@ -1,0 +1,15 @@
+--- old.moduleCrashBug1.js
++++ new.moduleCrashBug1.js
+@@= skipped -25, +25 lines =@@
+ //// [moduleCrashBug1.js]
+ var _modes;
+ (function (_modes) {
+-    var Mode = /** @class */ (function () {
+-        function Mode() {
+-        }
+-        return Mode;
+-    }());
++    class Mode {
++    }
+ })(_modes || (_modes = {}));
+ var m;

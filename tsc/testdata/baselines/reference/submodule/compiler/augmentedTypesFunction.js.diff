@@ -1,0 +1,64 @@
+--- old.augmentedTypesFunction.js
++++ new.augmentedTypesFunction.js
+@@= skipped -40, +40 lines =@@
+ //import y6 = require('');
+ 
+ //// [augmentedTypesFunction.js]
+-// function then var
+-function y1() { } // error
+-var y1 = 1; // error
+-// function then function
+-function y2() { } // error
+-function y2() { } // error
+-function y2a() { } // error
+-var y2a = function () { }; // error
+-// function then class
+-function y3() { } // error
+-var y3 = /** @class */ (function () {
+-    function y3() {
+-    }
+-    return y3;
+-}()); // error
+-function y3a() { } // error
+-var y3a = /** @class */ (function () {
+-    function y3a() {
+-    }
+-    y3a.prototype.foo = function () { };
+-    return y3a;
+-}()); // error
+-// function then enum
+-function y4() { } // error
++function y1() { }
++var y1 = 1;
++function y2() { }
++function y2() { }
++function y2a() { }
++var y2a = () => { };
++function y3() { }
++class y3 {
++}
++function y3a() { }
++class y3a {
++    foo() { }
++}
++function y4() { }
+ (function (y4) {
+     y4[y4["One"] = 0] = "One";
+-})(y4 || (y4 = {})); // error
+-// function then internal module
++})(y4 || (y4 = {}));
+ function y5() { }
+ function y5a() { }
+ (function (y5a) {
+     var y = 2;
+-})(y5a || (y5a = {})); // should be an error
++})(y5a || (y5a = {}));
+ function y5b() { }
+ (function (y5b) {
+     y5b.y = 3;
+-})(y5b || (y5b = {})); // should be an error
++})(y5b || (y5b = {}));
+ function y5c() { }
+-// function then import, messes with other errors
+-//function y6() { }
+-//import y6 = require('');

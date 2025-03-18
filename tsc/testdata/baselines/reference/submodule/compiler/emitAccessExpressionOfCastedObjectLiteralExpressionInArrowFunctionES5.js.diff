@@ -1,0 +1,10 @@
+--- old.emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.js
++++ new.emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.js
+@@= skipped -4, +4 lines =@@
+ (x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x;
+ 
+ //// [emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.js]
+-(function (x) { return ({ "1": "one", "2": "two" }[x]); });
+-(function (x) { return ({ "1": "one", "2": "two" }.x); });
++(x) => ({ "1": "one", "2": "two" }[x]);
++(x) => ({ "1": "one", "2": "two" }.x);

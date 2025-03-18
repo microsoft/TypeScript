@@ -1,0 +1,681 @@
+--- old.controlFlowOptionalChain.js
++++ new.controlFlowOptionalChain.js
+@@= skipped -609, +609 lines =@@
+ }
+ 
+ //// [controlFlowOptionalChain.js]
+-"use strict";
+-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
+-var a;
+-o === null || o === void 0 ? void 0 : o[a = 1];
++let a;
++o?.[a = 1];
+ a.toString();
+-var b;
+-o === null || o === void 0 ? void 0 : o.x[b = 1];
++let b;
++o?.x[b = 1];
+ b.toString();
+-var c;
+-o === null || o === void 0 ? void 0 : o(c = 1);
++let c;
++o?.(c = 1);
+ c.toString();
+-var d;
+-o === null || o === void 0 ? void 0 : o.x(d = 1);
++let d;
++o?.x(d = 1);
+ d.toString();
+-if (f === null || f === void 0 ? void 0 : f(x)) {
+-    x; // number
+-    f; // (x: any) => x is number
++if (f?.(x)) {
++    x;
++    f;
+     f(x);
+ }
+ else {
+@@= skipped -27, +25 lines =@@
+ x;
+ f;
+ f(x);
+-if (o2 === null || o2 === void 0 ? void 0 : o2.f(x)) {
+-    x; // number
+-    o2.f; // (x: any) => x is number
+-    o2 === null || o2 === void 0 ? void 0 : o2.f;
+-    o2 === null || o2 === void 0 ? void 0 : o2.f(x);
++if (o2?.f(x)) {
++    x;
++    o2.f;
++    o2?.f;
++    o2?.f(x);
+ }
+ else {
+     x;
+     o2;
+-    o2 === null || o2 === void 0 ? void 0 : o2.f;
++    o2?.f;
+     o2.f;
+ }
+ x;
+ o2;
+-o2 === null || o2 === void 0 ? void 0 : o2.f;
++o2?.f;
+ o2.f;
+-if ((o3 === null || o3 === void 0 ? void 0 : o3.x) === 1) {
++if (o3?.x === 1) {
+     o3;
+     o3.x;
+-    o3 === null || o3 === void 0 ? void 0 : o3.x;
++    o3?.x;
+ }
+ else {
+     o3;
+-    o3 === null || o3 === void 0 ? void 0 : o3.x;
++    o3?.x;
+     o3.x;
+ }
+ o3;
+-o3 === null || o3 === void 0 ? void 0 : o3.x;
++o3?.x;
+ o3.x;
+-if ((_a = o4.x) === null || _a === void 0 ? void 0 : _a.y) {
+-    o4.x; // { y: boolean }
+-    o4.x.y; // true
+-    (_b = o4.x) === null || _b === void 0 ? void 0 : _b.y; // true
++if (o4.x?.y) {
++    o4.x;
++    o4.x.y;
++    o4.x?.y;
+ }
+ else {
+     o4.x;
+-    (_c = o4.x) === null || _c === void 0 ? void 0 : _c.y;
++    o4.x?.y;
+     o4.x.y;
+ }
+ o4.x;
+-(_d = o4.x) === null || _d === void 0 ? void 0 : _d.y;
++o4.x?.y;
+ o4.x.y;
+-if ((_f = (_e = o5.x) === null || _e === void 0 ? void 0 : _e.y.z) === null || _f === void 0 ? void 0 : _f.w) {
++if (o5.x?.y.z?.w) {
+     o5.x;
+     o5.x.y;
+     o5.x.y.z;
+-    o5.x.y.z.w; // true
+-    (_g = o5.x.y.z) === null || _g === void 0 ? void 0 : _g.w; // true
+-    (_h = o5.x) === null || _h === void 0 ? void 0 : _h.y.z.w; // true
+-    (_k = (_j = o5.x) === null || _j === void 0 ? void 0 : _j.y.z) === null || _k === void 0 ? void 0 : _k.w; // true
++    o5.x.y.z.w;
++    o5.x.y.z?.w;
++    o5.x?.y.z.w;
++    o5.x?.y.z?.w;
+ }
+ else {
+     o5.x;
+-    (_l = o5.x) === null || _l === void 0 ? void 0 : _l.y;
+-    (_m = o5.x) === null || _m === void 0 ? void 0 : _m.y.z;
+-    (_p = (_o = o5.x) === null || _o === void 0 ? void 0 : _o.y.z) === null || _p === void 0 ? void 0 : _p.w;
++    o5.x?.y;
++    o5.x?.y.z;
++    o5.x?.y.z?.w;
+     o5.x.y;
+     o5.x.y.z.w;
+ }
+ o5.x;
+-(_q = o5.x) === null || _q === void 0 ? void 0 : _q.y;
+-(_r = o5.x) === null || _r === void 0 ? void 0 : _r.y.z;
+-(_t = (_s = o5.x) === null || _s === void 0 ? void 0 : _s.y.z) === null || _t === void 0 ? void 0 : _t.w;
++o5.x?.y;
++o5.x?.y.z;
++o5.x?.y.z?.w;
+ o5.x.y;
+ o5.x.y.z.w;
+-if (o6 === null || o6 === void 0 ? void 0 : o6.f()) {
+-    o6; // Derived
++if (o6?.f()) {
++    o6;
+     o6.f;
+ }
+ else {
+     o6;
+-    o6 === null || o6 === void 0 ? void 0 : o6.f;
++    o6?.f;
+     o6.f;
+ }
+ o6;
+-o6 === null || o6 === void 0 ? void 0 : o6.f;
++o6?.f;
+ o6.f;
+ function f01(x) {
+     if (!!true) {
+-        isString === null || isString === void 0 ? void 0 : isString(x);
++        isString?.(x);
+         x;
+     }
+     if (!!true) {
+-        maybeIsString === null || maybeIsString === void 0 ? void 0 : maybeIsString(x);
++        maybeIsString?.(x);
+         x;
+     }
+     if (!!true) {
+         isDefined(maybeIsString);
+-        maybeIsString === null || maybeIsString === void 0 ? void 0 : maybeIsString(x);
++        maybeIsString?.(x);
+         x;
+     }
+     if (!!true) {
+-        maybeNever === null || maybeNever === void 0 ? void 0 : maybeNever();
++        maybeNever?.();
+         x;
+     }
+ }
+ function f10(o, value) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
++    if (o?.foo === value) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) === value) {
++    if (o?.["foo"] === value) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) === value) {
++    if (o?.bar() === value) {
+         o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
++    if (o?.foo == value) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) == value) {
++    if (o?.["foo"] == value) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) == value) {
++    if (o?.bar() == value) {
+         o.bar;
+     }
+ }
+ function f11(o, value) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
++    if (o?.foo === value) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) === value) {
++    if (o?.["foo"] === value) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) === value) {
++    if (o?.bar() === value) {
+         o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
++    if (o?.foo == value) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) == value) {
++    if (o?.["foo"] == value) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) == value) {
++    if (o?.bar() == value) {
+         o.bar;
+     }
+ }
+ function f12(o, value) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
+-        o.foo; // Error
++    if (o?.foo === value) {
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) === value) {
+-        o["foo"]; // Error
++    if (o?.["foo"] === value) {
++        o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) === value) {
+-        o.bar; // Error
++    if (o?.bar() === value) {
++        o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
+-        o.foo; // Error
++    if (o?.foo == value) {
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) == value) {
+-        o["foo"]; // Error
++    if (o?.["foo"] == value) {
++        o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) == value) {
+-        o.bar; // Error
++    if (o?.bar() == value) {
++        o.bar;
+     }
+ }
+ function f12a(o, value) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
++    if (o?.foo === value) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) === value) {
++    if (o?.["foo"] === value) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) === value) {
++    if (o?.bar() === value) {
+         o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
+-        o.foo; // Error
++    if (o?.foo == value) {
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) == value) {
+-        o["foo"]; // Error
++    if (o?.["foo"] == value) {
++        o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) == value) {
+-        o.bar; // Error
++    if (o?.bar() == value) {
++        o.bar;
+     }
+ }
+ function f13(o) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) !== undefined) {
++    if (o?.foo !== undefined) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) !== undefined) {
++    if (o?.["foo"] !== undefined) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) !== undefined) {
++    if (o?.bar() !== undefined) {
+         o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) != undefined) {
++    if (o?.foo != undefined) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) != undefined) {
++    if (o?.["foo"] != undefined) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) != undefined) {
++    if (o?.bar() != undefined) {
+         o.bar;
+     }
+ }
+ function f13a(o) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) !== null) {
+-        o.foo; // Error
++    if (o?.foo !== null) {
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) !== null) {
+-        o["foo"]; // Error
++    if (o?.["foo"] !== null) {
++        o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) !== null) {
+-        o.bar; // Error
++    if (o?.bar() !== null) {
++        o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) != null) {
++    if (o?.foo != null) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) != null) {
++    if (o?.["foo"] != null) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) != null) {
++    if (o?.bar() != null) {
+         o.bar;
+     }
+ }
+ function f14(o) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) !== undefined) {
++    if (o?.foo !== undefined) {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o["foo"]) !== undefined) {
++    if (o?.["foo"] !== undefined) {
+         o["foo"];
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.bar()) !== undefined) {
++    if (o?.bar() !== undefined) {
+         o.bar;
+     }
+ }
+ function f15(o, value) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
++    if (o?.foo === value) {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) !== value) {
+-        o.foo; // Error
++    if (o?.foo !== value) {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
++    if (o?.foo == value) {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) != value) {
+-        o.foo; // Error
++    if (o?.foo != value) {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+ }
+ function f15a(o, value) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
+-        o.foo; // Error
++    if (o?.foo === value) {
++        o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) !== value) {
+-        o.foo; // Error
++    if (o?.foo !== value) {
++        o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
+-        o.foo; // Error
++    if (o?.foo == value) {
++        o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) != value) {
+-        o.foo; // Error
++    if (o?.foo != value) {
++        o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+ }
+ function f16(o) {
+-    if ((o === null || o === void 0 ? void 0 : o.foo) === undefined) {
+-        o.foo; // Error
++    if (o?.foo === undefined) {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) !== undefined) {
++    if (o?.foo !== undefined) {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) == undefined) {
+-        o.foo; // Error
++    if (o?.foo == undefined) {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.foo) != undefined) {
++    if (o?.foo != undefined) {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+ }
+ function f20(o) {
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "number") {
++    if (typeof o?.foo === "number") {
+         o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o["foo"]) === "number") {
++    if (typeof o?.["foo"] === "number") {
+         o["foo"];
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.bar()) === "number") {
++    if (typeof o?.bar() === "number") {
+         o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.baz) instanceof Error) {
++    if (o?.baz instanceof Error) {
+         o.baz;
+     }
+ }
+ function f21(o) {
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "number") {
++    if (typeof o?.foo === "number") {
+         o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o["foo"]) === "number") {
++    if (typeof o?.["foo"] === "number") {
+         o["foo"];
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.bar()) === "number") {
++    if (typeof o?.bar() === "number") {
+         o.bar;
+     }
+-    if ((o === null || o === void 0 ? void 0 : o.baz) instanceof Error) {
++    if (o?.baz instanceof Error) {
+         o.baz;
+     }
+ }
+ function f22(o) {
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "number") {
++    if (typeof o?.foo === "number") {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) !== "number") {
+-        o.foo; // Error
++    if (typeof o?.foo !== "number") {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) == "number") {
++    if (typeof o?.foo == "number") {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) != "number") {
+-        o.foo; // Error
++    if (typeof o?.foo != "number") {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+ }
+ function f23(o) {
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) === "undefined") {
+-        o.foo; // Error
++    if (typeof o?.foo === "undefined") {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) !== "undefined") {
++    if (typeof o?.foo !== "undefined") {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) == "undefined") {
+-        o.foo; // Error
++    if (typeof o?.foo == "undefined") {
++        o.foo;
+     }
+     else {
+         o.foo;
+     }
+-    if (typeof (o === null || o === void 0 ? void 0 : o.foo) != "undefined") {
++    if (typeof o?.foo != "undefined") {
+         o.foo;
+     }
+     else {
+-        o.foo; // Error
++        o.foo;
+     }
+ }
+ function f30(o) {
+     if (!!true) {
+-        assert(o === null || o === void 0 ? void 0 : o.foo);
++        assert(o?.foo);
+         o.foo;
+     }
+     if (!!true) {
+-        assert((o === null || o === void 0 ? void 0 : o.foo) === 42);
++        assert(o?.foo === 42);
+         o.foo;
+     }
+     if (!!true) {
+-        assert(typeof (o === null || o === void 0 ? void 0 : o.foo) === "number");
++        assert(typeof o?.foo === "number");
+         o.foo;
+     }
+     if (!!true) {
+-        assertNonNull(o === null || o === void 0 ? void 0 : o.foo);
++        assertNonNull(o?.foo);
+         o.foo;
+     }
+ }
+ function f40(o) {
+-    switch (o === null || o === void 0 ? void 0 : o.foo) {
++    switch (o?.foo) {
+         case "abc":
+             o.foo;
+             break;
+@@= skipped -412, +412 lines =@@
+             o.foo;
+             break;
+         case undefined:
+-            o.foo; // Error
++            o.foo;
+             break;
+         default:
+-            o.foo; // Error
++            o.foo;
+             break;
+     }
+ }
+ function f41(o) {
+-    switch (typeof (o === null || o === void 0 ? void 0 : o.foo)) {
++    switch (typeof o?.foo) {
+         case "string":
+             o.foo;
+             break;
+@@= skipped -16, +16 lines =@@
+             o.foo;
+             break;
+         case "undefined":
+-            o.foo; // Error
++            o.foo;
+             break;
+         default:
+-            o.foo; // Error
++            o.foo;
+             break;
+     }
+ }
+ function getArea(shape) {
+-    switch (shape === null || shape === void 0 ? void 0 : shape.type) {
++    switch (shape?.type) {
+         case 'circle':
+-            return Math.PI * Math.pow(shape.radius, 2);
++            return Math.PI * shape.radius ** 2;
+         case 'rectangle':
+             return shape.width * shape.height;
+         default:
+@@= skipped -18, +18 lines =@@
+     }
+ }
+ function extractCoordinates(f) {
+-    var _a;
+-    if (((_a = f.geometry) === null || _a === void 0 ? void 0 : _a.type) !== 'test') {
++    if (f.geometry?.type !== 'test') {
+         return [];
+     }
+     return f.geometry.coordinates;
+ }
+-var lastSomeProperty;
++let lastSomeProperty;
+ function someFunction(someOptionalObject) {
+-    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== lastSomeProperty) {
++    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+         console.log(someOptionalObject);
+-        console.log(someOptionalObject.someProperty); // Error
+-        lastSomeProperty = someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty;
++        console.log(someOptionalObject.someProperty);
++        lastSomeProperty = someOptionalObject?.someProperty;
+     }
+ }
+-var someObject = {
++const someObject = {
+     someProperty: 42
+ };
+ someFunction(someObject);
+ someFunction(undefined);
+-// Repro from #35970
+-var i = 0;
+-while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
++let i = 0;
++while (arr[i]?.tag === "left") {
+     i += 1;
+-    if (((_v = arr[i]) === null || _v === void 0 ? void 0 : _v.tag) === "right") {
++    if (arr[i]?.tag === "right") {
+         console.log("I should ALSO be reachable");
+     }
+ }
+ function f50(obj) {
+-    var _a;
+-    for (var key in (_a = obj.main) === null || _a === void 0 ? void 0 : _a.childs) {
++    for (const key in obj.main?.childs) {
+         if (obj.main.childs[key] === obj) {
+             return obj;
+         }

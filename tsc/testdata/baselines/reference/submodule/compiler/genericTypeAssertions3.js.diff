@@ -1,0 +1,10 @@
+--- old.genericTypeAssertions3.js
++++ new.genericTypeAssertions3.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [genericTypeAssertions3.js]
+-var r = (function (x) { return null; }); // bug was 'could not find dotted symbol T' on x's annotation in the type assertion instead of no error
+-var s = (function (x) { return null; }); // no error
++var r = ((x) => { return null; });
++var s = ((x) => { return null; });

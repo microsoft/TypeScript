@@ -1,0 +1,10 @@
+--- old.genericCallWithObjectLiteralArguments1.js
++++ new.genericCallWithObjectLiteralArguments1.js
+@@= skipped -10, +10 lines =@@
+ 
+ //// [genericCallWithObjectLiteralArguments1.js]
+ function foo(n, m) { return m; }
+-// these are all errors
+ var x = foo({ x: 3, y: "" }, 4);
+ var x2 = foo({ x: 3, y: "" }, 4);
+ var x3 = foo({ x: 3, y: "" }, 4);

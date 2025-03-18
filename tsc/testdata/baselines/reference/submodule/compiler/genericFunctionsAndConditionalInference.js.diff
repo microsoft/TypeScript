@@ -1,0 +1,24 @@
+--- old.genericFunctionsAndConditionalInference.js
++++ new.genericFunctionsAndConditionalInference.js
+@@= skipped -43, +43 lines =@@
+ function foo(obj) {
+     return unboxify(obj);
+ }
+-var qq = foo({ u: { value: 10 }, v: { value: 'hello' } }); // { u: U, v: V } but should be { u: number, v: string }
+-var left = {};
+-var right = {};
+-var ok = function (at) { return ({ lr: at.lr(at.str, at.num) }); };
+-var orphaned = function (at) { return at.dict(ok(at)); };
+-var leftOk = ok(left);
+-var leftOrphaned = orphaned(left);
+-var rightOk = ok(right);
+-var rightOrphaned = orphaned(right);
++let qq = foo({ u: { value: 10 }, v: { value: 'hello' } });
++const left = {};
++const right = {};
++const ok = (at) => ({ lr: at.lr(at.str, at.num) });
++const orphaned = (at) => at.dict(ok(at));
++const leftOk = ok(left);
++const leftOrphaned = orphaned(left);
++const rightOk = ok(right);
++const rightOrphaned = orphaned(right);

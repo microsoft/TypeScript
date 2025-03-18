@@ -1,0 +1,12 @@
+--- old.functionDeclarationWithArgumentOfTypeFunctionTypeArray.js
++++ new.functionDeclarationWithArgumentOfTypeFunctionTypeArray.js
+@@= skipped -9, +9 lines =@@
+ function foo(args) {
+     return args.length;
+ }
+-
+-
+-//// [functionDeclarationWithArgumentOfTypeFunctionTypeArray.d.ts]
+-declare function foo(args: {
+-    (x: any): number;
+-}[]): number;

@@ -1,0 +1,42 @@
+--- old.inferParameterWithMethodCallInitializer.js
++++ new.inferParameterWithMethodCallInitializer.js
+@@= skipped -25, +25 lines =@@
+ function getNumber() {
+     return 1;
+ }
+-var Example = /** @class */ (function () {
+-    function Example() {
+-    }
+-    Example.prototype.getNumber = function () {
++class Example {
++    getNumber() {
+         return 1;
+-    };
+-    Example.prototype.doSomething = function (a) {
+-        if (a === void 0) { a = this.getNumber(); }
++    }
++    doSomething(a = this.getNumber()) {
+         return a;
+-    };
+-    return Example;
+-}());
+-function weird(a) {
+-    if (a === void 0) { a = this.getNumber(); }
++    }
++}
++function weird(a = this.getNumber()) {
+     return a;
+ }
+-var Weird = /** @class */ (function () {
+-    function Weird() {
+-    }
+-    Weird.prototype.doSomething = function (a) {
+-        if (a === void 0) { a = this.getNumber(); }
++class Weird {
++    doSomething(a = this.getNumber()) {
+         return a;
+-    };
+-    return Weird;
+-}());
++    }
++}

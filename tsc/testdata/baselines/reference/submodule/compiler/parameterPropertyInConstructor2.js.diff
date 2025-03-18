@@ -1,0 +1,19 @@
+--- old.parameterPropertyInConstructor2.js
++++ new.parameterPropertyInConstructor2.js
+@@= skipped -12, +12 lines =@@
+ //// [parameterPropertyInConstructor2.js]
+ var mod;
+ (function (mod) {
+-    var Customers = /** @class */ (function () {
+-        function Customers(names, ages) {
++    class Customers {
++        names;
++        ages;
++        constructor(names, ages) {
+             this.names = names;
+             this.ages = ages;
+         }
+-        return Customers;
+-    }());
++    }
+ })(mod || (mod = {}));

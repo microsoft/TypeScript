@@ -1,0 +1,50 @@
+--- old.importEqualsDeclaration.js
++++ new.importEqualsDeclaration.js
+@@= skipped -19, +19 lines =@@
+ 
+ //// [a.js]
+ "use strict";
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++    a;
++}
+ module.exports = A;
+ //// [b.js]
+ "use strict";
+-var SomeClass = /** @class */ (function () {
+-    function SomeClass() {
+-    }
+-    return SomeClass;
+-}());
++class SomeClass {
++}
+ module.exports = SomeClass;
+ //// [c.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var type = require("./b"); // Ok
+-A.prototype; // Error
+-var a = { a: 'a' }; // Ok
+-void type; // Ok
+-
+-
+-//// [a.d.ts]
+-declare class A {
+-    a: string;
+-}
+-export = A;
+-//// [b.d.ts]
+-declare class SomeClass {
+-}
+-export = SomeClass;
+-//// [c.d.ts]
+-import type A = require('./a');
+-export declare const AConstructor: typeof A;
++const type = require("./b");
++A.prototype;
++const a = { a: 'a' };
++void type;

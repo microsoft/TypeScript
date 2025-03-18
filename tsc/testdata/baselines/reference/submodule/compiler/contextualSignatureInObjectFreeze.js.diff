@@ -1,0 +1,10 @@
+--- old.contextualSignatureInObjectFreeze.js
++++ new.contextualSignatureInObjectFreeze.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [contextualSignatureInObjectFreeze.js]
+-// #49101
+ Object.freeze({
+     f: function () { }
+ });

@@ -1,0 +1,9 @@
+--- old.umdNamespaceMergedWithGlobalAugmentationIsNotCircular.js
++++ new.umdNamespaceMergedWithGlobalAugmentationIsNotCircular.js
+@@= skipped -26, +26 lines =@@
+ React.createRef;
+ export {};
+ //// [emits.js]
+-"use strict";
+ console.log("hello");
+ React.createRef;

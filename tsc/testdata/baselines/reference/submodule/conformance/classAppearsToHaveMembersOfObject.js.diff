@@ -1,0 +1,17 @@
+--- old.classAppearsToHaveMembersOfObject.js
++++ new.classAppearsToHaveMembersOfObject.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [classAppearsToHaveMembersOfObject.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    foo;
++}
+ var c;
+ var r = c.toString();
+ var r2 = c.hasOwnProperty('');

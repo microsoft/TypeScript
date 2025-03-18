@@ -1,0 +1,13 @@
+--- old.jsxImportInAttribute.js
++++ new.jsxImportInAttribute.js
+@@= skipped -15, +15 lines =@@
+ //// [consumer.jsx]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-/// <reference path="component.d.ts" />
+-var Test_1 = require("Test");
+-var x = Test_1.default; // emit test_1.default
+-<anything attr={Test_1.default}/>; // ?
++const Test_1 = require("Test");
++let x = Test_1.default;
++<anything attr={Test_1.default}/>;

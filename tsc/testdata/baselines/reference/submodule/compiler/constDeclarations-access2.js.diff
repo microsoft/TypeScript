@@ -1,0 +1,18 @@
+--- old.constDeclarations-access2.js
++++ new.constDeclarations-access2.js
+@@= skipped -42, +42 lines =@@
+ 
+ //// [constDeclarations-access2.js]
+ const x = 0;
+-// Errors
+ x = 1;
+ x += 2;
+ x -= 3;
+@@= skipped -18, +17 lines =@@
+ ++x;
+ --x;
+ ++((x));
+-// OK
+ var a = x + 1;
+ function f(v) { }
+ f(x);

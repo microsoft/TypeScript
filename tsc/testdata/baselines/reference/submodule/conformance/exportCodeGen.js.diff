@@ -1,0 +1,86 @@
+--- old.exportCodeGen.js
++++ new.exportCodeGen.js
+@@= skipped -55, +55 lines =@@
+ }
+ 
+ //// [exportCodeGen.js]
+-// should replace all refs to 'x' in the body,
+-// with fully qualified
+ var A;
+ (function (A) {
+     A.x = 12;
+@@= skipped -9, +7 lines =@@
+         return A.x < 12;
+     }
+ })(A || (A = {}));
+-// should not fully qualify 'x'
+ var B;
+ (function (B) {
+     var x = 12;
+@@= skipped -8, +7 lines =@@
+         return x < 12;
+     }
+ })(B || (B = {}));
+-// not copied, since not exported
+ var C;
+ (function (C) {
+     function no() {
+         return false;
+     }
+ })(C || (C = {}));
+-// copies, since exported
+ var D;
+ (function (D) {
+     function yes() {
+@@= skipped -15, +13 lines =@@
+     }
+     D.yes = yes;
+ })(D || (D = {}));
+-// validate all exportable statements
+ var E;
+ (function (E) {
+-    var Color;
++    let Color;
+     (function (Color) {
+         Color[Color["Red"] = 0] = "Red";
+     })(Color = E.Color || (E.Color = {}));
+     function fn() { }
+     E.fn = fn;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
++    class C {
++        name;
++    }
+     E.C = C;
+-    var M;
++    let M;
+     (function (M) {
+         M.x = 42;
+     })(M = E.M || (E.M = {}));
+ })(E || (E = {}));
+-// validate all exportable statements,
+-// which are not exported
+ var F;
+ (function (F) {
+-    var Color;
++    let Color;
+     (function (Color) {
+         Color[Color["Red"] = 0] = "Red";
+     })(Color || (Color = {}));
+     function fn() { }
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    var M;
++    class C {
++        name;
++    }
++    let M;
+     (function (M) {
+         var x = 42;
+     })(M || (M = {}));

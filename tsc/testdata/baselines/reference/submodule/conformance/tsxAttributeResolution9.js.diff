@@ -1,0 +1,32 @@
+--- old.tsxAttributeResolution9.js
++++ new.tsxAttributeResolution9.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [file.jsx]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.MyComponent = void 0;
+-    var MyComponent = /** @class */ (function () {
+-        function MyComponent() {
+-        }
+-        MyComponent.prototype.render = function () {
+-        };
+-        return MyComponent;
+-    }());
+-    exports.MyComponent = MyComponent;
+-    <MyComponent foo="bar"/>; // ok  
+-    <MyComponent foo={0}/>; // should be an error
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.MyComponent = void 0;
++class MyComponent {
++    render() {
++    }
++    props;
++}
++exports.MyComponent = MyComponent;
++<MyComponent foo="bar"/>;
++<MyComponent foo={0}/>;

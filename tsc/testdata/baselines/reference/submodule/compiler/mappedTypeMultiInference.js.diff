@@ -1,0 +1,16 @@
+--- old.mappedTypeMultiInference.js
++++ new.mappedTypeMultiInference.js
+@@= skipped -23, +23 lines =@@
+ )
+ 
+ //// [mappedTypeMultiInference.js]
+-// Expected:
+-//   let x: {
+-//       a: Style;
+-//       b: Style;
+-//   }
+-var x = mergeStyleSets({}, {
++let x = mergeStyleSets({}, {
+     a: { flashy: true },
+ }, {
+     b: { flashy: true },

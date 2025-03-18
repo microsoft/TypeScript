@@ -1,0 +1,14 @@
+--- old.declarationEmitTypeAliasWithTypeParameters5.js
++++ new.declarationEmitTypeAliasWithTypeParameters5.js
+@@= skipped -16, +16 lines =@@
+ function foo() {
+     return {};
+ }
+-
+-
+-//// [declarationEmitTypeAliasWithTypeParameters5.d.ts]
+-type Foo<T, Y> = {
+-    foo<U, J>(): Foo<U, J>;
+-};
+-export type SubFoo<R> = Foo<string, R>;
+-export {};

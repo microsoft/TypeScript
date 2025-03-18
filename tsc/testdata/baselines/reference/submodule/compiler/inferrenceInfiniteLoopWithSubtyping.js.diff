@@ -1,0 +1,13 @@
+--- old.inferrenceInfiniteLoopWithSubtyping.js
++++ new.inferrenceInfiniteLoopWithSubtyping.js
+@@= skipped -40, +40 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ User.addResolver({
+-    type: User, // `User as any` fix the problem
++    type: User,
+ });
+-
+-
+-//// [app.d.ts]
+-export {};

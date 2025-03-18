@@ -1,0 +1,33 @@
+--- old.variance.js
++++ new.variance.js
+@@= skipped -28, +28 lines =@@
+ 
+ 
+ //// [variance.js]
+-"use strict";
+-// Test cases for parameter variances affected by conditional types.
+-var foo = { prop: true };
+-var x = foo;
+-var y = foo;
+-var z = x;
+-// Repro from #30118
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-    }
+-    Bar.prototype.cast = function (_name) { };
+-    Bar.prototype.pushThis = function () {
++const foo = { prop: true };
++const x = foo;
++const y = foo;
++const z = x;
++class Bar {
++    static instance = [];
++    cast(_name) { }
++    pushThis() {
+         Bar.instance.push(this);
+-    };
+-    Bar.instance = [];
+-    return Bar;
+-}());
++    }
++}

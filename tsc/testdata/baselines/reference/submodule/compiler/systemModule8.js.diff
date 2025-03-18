@@ -1,0 +1,73 @@
+--- old.systemModule8.js
++++ new.systemModule8.js
+@@= skipped -31, +31 lines =@@
+ for ([x] of [[1]]) {}
+ 
+ //// [systemModule8.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var _a, x, y, z0, z1;
+-    var __moduleName = context_1 && context_1.id;
+-    function foo() {
+-        exports_1("x", x = 100);
+-    }
+-    return {
+-        setters: [],
+-        execute: function () {
+-            exports_1("x", x = 1);
+-            exports_1("x", (x++, x));
+-            exports_1("x", (x--, x));
+-            exports_1("x", ++x);
+-            exports_1("x", --x);
+-            exports_1("x", x += 1);
+-            exports_1("x", x -= 1);
+-            exports_1("x", x *= 1);
+-            exports_1("x", x /= 1);
+-            exports_1("x", x |= 1);
+-            exports_1("x", x &= 1);
+-            x + 1;
+-            x - 1;
+-            x & 1;
+-            x | 1;
+-            for (exports_1("x", x = 5);; exports_1("x", (x++, x))) { }
+-            for (exports_1("x", x = 8);; exports_1("x", (x--, x))) { }
+-            for (exports_1("x", x = 15);; exports_1("x", ++x)) { }
+-            for (exports_1("x", x = 18);; exports_1("x", --x)) { }
+-            for (var x_1 = 50;;) { }
+-            exports_1("y", y = [1][0]);
+-            exports_1("z0", z0 = (_a = { a: true, b: { c: "123" } }, _a.a)), exports_1("z1", z1 = _a.b.c);
+-            for (var _i = 0, _a = [[1]]; _i < _a.length; _i++) {
+-                exports_1("x", x = _a[_i][0]);
+-            }
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.z1 = exports.z0 = exports.y = exports.x = void 0;
++exports.x = 1;
++exports.x++;
++exports.x--;
++++exports.x;
++--exports.x;
++exports.x += 1;
++exports.x -= 1;
++exports.x *= 1;
++exports.x /= 1;
++exports.x |= 1;
++exports.x &= 1;
++exports.x + 1;
++exports.x - 1;
++exports.x & 1;
++exports.x | 1;
++for (exports.x = 5;; exports.x++) { }
++for (exports.x = 8;; exports.x--) { }
++for (exports.x = 15;; ++exports.x) { }
++for (exports.x = 18;; --exports.x) { }
++for (let x = 50;;) { }
++function foo() {
++    exports.x = 100;
++}
++[exports.y] = [1];
++({ a: exports.z0, b: { c: exports.z1 } } = { a: true, b: { c: "123" } });
++for ([exports.x] of [[1]]) { }

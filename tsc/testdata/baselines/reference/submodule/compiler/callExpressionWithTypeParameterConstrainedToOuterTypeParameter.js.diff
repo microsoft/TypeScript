@@ -1,0 +1,8 @@
+--- old.callExpressionWithTypeParameterConstrainedToOuterTypeParameter.js
++++ new.callExpressionWithTypeParameterConstrainedToOuterTypeParameter.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [callExpressionWithTypeParameterConstrainedToOuterTypeParameter.js]
+ var i;
+-var y = i(""); // y should be string
++var y = i("");

@@ -1,0 +1,24 @@
+--- old.declFileModuleWithPropertyOfTypeModule.js
++++ new.declFileModuleWithPropertyOfTypeModule.js
+@@= skipped -10, +10 lines =@@
+ //// [declFileModuleWithPropertyOfTypeModule.js]
+ var m;
+ (function (m) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
++    class c {
++    }
+     m.c = c;
+     m.a = m;
+ })(m || (m = {}));
+-
+-
+-//// [declFileModuleWithPropertyOfTypeModule.d.ts]
+-declare namespace m {
+-    class c {
+-    }
+-    var a: typeof m;
+-}

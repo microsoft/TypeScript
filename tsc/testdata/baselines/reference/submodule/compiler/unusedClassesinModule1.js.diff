@@ -1,0 +1,17 @@
+--- old.unusedClassesinModule1.js
++++ new.unusedClassesinModule1.js
+@@= skipped -10, +10 lines =@@
+ //// [unusedClassesinModule1.js]
+ var A;
+ (function (A) {
+-    var Calculator = /** @class */ (function () {
+-        function Calculator() {
++    class Calculator {
++        handelChar() {
+         }
+-        Calculator.prototype.handelChar = function () {
+-        };
+-        return Calculator;
+-    }());
++    }
+ })(A || (A = {}));

@@ -1,0 +1,21 @@
+--- old.typeSatisfaction_propNameConstraining.js
++++ new.typeSatisfaction_propNameConstraining.js
+@@= skipped -16, +16 lines =@@
+ 
+ 
+ //// [typeSatisfaction_propNameConstraining.js]
+-var p = {
++const p = {
+     a: 0,
+     b: "hello",
+-    x: 8 // Should error, 'x' isn't in 'Keys'
++    x: 8
+ };
+-// Should be OK -- retain info that a is number and b is string
+-var a = p.a.toFixed();
+-var b = p.b.substring(1);
+-// Should error even though 'd' is in 'Keys'
+-var d = p.d;
++let a = p.a.toFixed();
++let b = p.b.substring(1);
++let d = p.d;

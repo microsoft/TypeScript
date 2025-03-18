@@ -1,0 +1,46 @@
+--- old.switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.js
++++ new.switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.js
+@@= skipped -45, +45 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.narrowToStringOrNumber = exports.narrowToString = exports.narrowToLiterals = void 0;
+-var narrowToLiterals = function (str) {
++const narrowToLiterals = (str) => {
+     switch (str) {
+         case 'abc': {
+-            // inferred type as `abc`
+             return str;
+         }
+         default:
+@@= skipped -11, +10 lines =@@
+     }
+ };
+ exports.narrowToLiterals = narrowToLiterals;
+-var narrowToString = function (str, someOtherStr) {
++const narrowToString = (str, someOtherStr) => {
+     switch (str) {
+         case 'abc': {
+-            // inferred type should be `abc`
+             return str;
+         }
+         case someOtherStr: {
+-            // `string`
+             return str;
+         }
+         default:
+@@= skipped -15, +13 lines =@@
+     }
+ };
+ exports.narrowToString = narrowToString;
+-var narrowToStringOrNumber = function (str, someNumber) {
++const narrowToStringOrNumber = (str, someNumber) => {
+     switch (str) {
+         case 'abc': {
+-            // inferred type should be `abc`
+             return str;
+         }
+         case someNumber: {
+-            // inferred type should be `number`
+             return str;
+         }
+         default:

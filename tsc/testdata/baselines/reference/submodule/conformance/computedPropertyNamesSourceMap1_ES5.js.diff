@@ -1,0 +1,29 @@
+--- old.computedPropertyNamesSourceMap1_ES5.js
++++ new.computedPropertyNamesSourceMap1_ES5.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [computedPropertyNamesSourceMap1_ES5.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype["hello"] = function () {
++class C {
++    ["hello"]() {
+         debugger;
+-    };
+-    Object.defineProperty(C.prototype, "goodbye", {
+-        get: function () {
+-            return 0;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
+-//# sourceMappingURL=computedPropertyNamesSourceMap1_ES5.js.map
++    }
++    get ["goodbye"]() {
++        return 0;
++    }
++}

@@ -1,0 +1,8 @@
+--- old.library-reference-6.js
++++ new.library-reference-6.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [foo.js]
+-/// <reference types="alpha" />
+ var x = alpha.a;

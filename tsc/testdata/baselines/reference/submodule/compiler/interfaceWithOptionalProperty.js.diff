@@ -1,0 +1,12 @@
+--- old.interfaceWithOptionalProperty.js
++++ new.interfaceWithOptionalProperty.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [interfaceWithOptionalProperty.js]
+-
+-
+-//// [interfaceWithOptionalProperty.d.ts]
+-interface I {
+-    x?: number;
+-}

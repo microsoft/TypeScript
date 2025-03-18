@@ -1,0 +1,11 @@
+--- old.exhaustiveSwitchImplicitReturn.js
++++ new.exhaustiveSwitchImplicitReturn.js
+@@= skipped -68, +68 lines =@@
+         case "a":
+             return 1;
+     }
+-    var unusedVariable;
++    let unusedVariable;
+ }
+ function foo3(bar) {
+     switch (bar) {

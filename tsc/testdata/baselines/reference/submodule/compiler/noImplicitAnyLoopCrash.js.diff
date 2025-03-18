@@ -1,0 +1,14 @@
+--- old.noImplicitAnyLoopCrash.js
++++ new.noImplicitAnyLoopCrash.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [noImplicitAnyLoopCrash.js]
+-var foo = function () { };
+-var bar;
++let foo = () => { };
++let bar;
+ while (1) {
+-    bar = ~foo.apply(void 0, bar);
++    bar = ~foo(...bar);
+ }

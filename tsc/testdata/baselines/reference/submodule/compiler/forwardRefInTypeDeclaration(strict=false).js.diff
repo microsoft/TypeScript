@@ -1,0 +1,27 @@
+--- old.forwardRefInTypeDeclaration(strict=false).js
++++ new.forwardRefInTypeDeclaration(strict=false).js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [forwardRefInTypeDeclaration.js]
+-var s1 = "x";
+-var s2 = "x";
+-var s3 = "x";
+-var s4 = "x";
+-var s5 = "x";
+-var Cls2 = /** @class */ (function () {
+-    function Cls2() {
+-    }
+-    Cls2.b = "b";
+-    return Cls2;
+-}());
+-var obj2 = { d: 'd' };
++const s1 = "x";
++const s2 = "x";
++const s3 = "x";
++const s4 = "x";
++const s5 = "x";
++class Cls2 {
++    static b = "b";
++}
++const obj2 = { d: 'd' };

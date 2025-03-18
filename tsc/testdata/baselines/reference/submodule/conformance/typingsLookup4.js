@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/typings/typingsLookup4.ts] ////
+
+//// [package.json]
+{ "typings": "jquery.d.ts" }
+
+//// [jquery.d.ts]
+export const j: number;
+
+//// [package.json]
+{ "typings": "kquery" }
+
+//// [kquery.d.ts]
+export const k: number;
+
+//// [package.json]
+{ "typings": "lquery" }
+
+//// [lquery.ts]
+export const l = 2;
+
+//// [package.json]
+{ "typings": "mquery" }
+
+//// [index.tsx]
+export const m = 3;
+
+//// [a.ts]
+import { j } from "jquery";
+import { k } from "kquery";
+import { l } from "lquery";
+import { m } from "mquery";
+j + k + l + m;
+
+
+//// [lquery.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.l = void 0;
+exports.l = 2;
+//// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.m = void 0;
+exports.m = 3;
+//// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jquery_1 = require("jquery");
+const kquery_1 = require("kquery");
+const lquery_1 = require("lquery");
+const mquery_1 = require("mquery");
+jquery_1.j + kquery_1.k + lquery_1.l + mquery_1.m;

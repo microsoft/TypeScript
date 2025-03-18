@@ -1,0 +1,8 @@
+--- old.unicodeExtendedEscapesInTemplates18(target=es5).js
++++ new.unicodeExtendedEscapesInTemplates18(target=es5).js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [unicodeExtendedEscapesInTemplates18.js]
+-var x = "ee";
++var x = `\u{65}\u{65}`;

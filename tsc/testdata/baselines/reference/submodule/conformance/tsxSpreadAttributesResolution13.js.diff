@@ -1,0 +1,22 @@
+--- old.tsxSpreadAttributesResolution13.js
++++ new.tsxSpreadAttributesResolution13.js
+@@= skipped -33, +33 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.default = Component;
+-var React = require("react");
+ function Component(props) {
+-    var condition1;
++    let condition1;
+     if (condition1) {
+         return (<ChildComponent {...props}/>);
+     }
+@@= skipped -10, +9 lines =@@
+         return (<ChildComponent {...props} property1="NewString"/>);
+     }
+ }
+-function ChildComponent(_a) {
+-    var property1 = _a.property1;
++function ChildComponent({ property1 }) {
+     return (<span>{property1}</span>);
+ }

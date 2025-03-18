@@ -1,0 +1,39 @@
+--- old.declarationEmitForModuleImportingModuleAugmentationRetainsImport.js
++++ new.declarationEmitForModuleImportingModuleAugmentationRetainsImport.js
+@@= skipped -23, +23 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ParentThing = void 0;
+-var child1_1 = require("./child1"); // this import should still exist in some form in the output, since it augments this module
+-var ParentThing = /** @class */ (function () {
+-    function ParentThing() {
+-    }
+-    return ParentThing;
+-}());
++const child1_1 = require("./child1");
++class ParentThing {
++}
+ exports.ParentThing = ParentThing;
+ (0, child1_1.child1)(ParentThing.prototype);
+ //// [child1.js]
+@@= skipped -13, +10 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.child1 = child1;
+ function child1(prototype) {
+-    prototype.add = function (a, b) { return a + b; };
++    prototype.add = (a, b) => a + b;
+ }
+-
+-
+-//// [parent.d.ts]
+-import './child1';
+-export declare class ParentThing implements ParentThing {
+-}
+-//// [child1.d.ts]
+-import { ParentThing } from './parent';
+-declare module './parent' {
+-    interface ParentThing {
+-        add: (a: number, b: number) => number;
+-    }
+-}
+-export declare function child1(prototype: ParentThing): void;

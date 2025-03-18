@@ -1,0 +1,10 @@
+--- old.privateNamesAndStaticMethods(target=esnext).js
++++ new.privateNamesAndStaticMethods(target=esnext).js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [privateNamesAndStaticMethods.js]
+-"use strict";
+ class A {
+     static #foo(a) { }
+     static async #bar(a) { }

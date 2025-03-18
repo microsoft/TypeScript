@@ -1,0 +1,9 @@
+--- old.parserArrowFunctionExpression2.js
++++ new.parserArrowFunctionExpression2.js
+@@= skipped -3, +3 lines =@@
+ a = () => { } || a
+ 
+ //// [parserArrowFunctionExpression2.js]
+-a = function () { };
++a = () => { };
+  || a;

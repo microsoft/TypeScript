@@ -1,0 +1,19 @@
+--- old.generativeRecursionWithTypeOf.js
++++ new.generativeRecursionWithTypeOf.js
+@@= skipped -12, +12 lines =@@
+ }
+ 
+ //// [generativeRecursionWithTypeOf.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.foo = function (x) { };
+-    return C;
+-}());
++class C {
++    static foo(x) { }
++    type;
++}
+ var M;
+ (function (M) {
+     function f(x) {

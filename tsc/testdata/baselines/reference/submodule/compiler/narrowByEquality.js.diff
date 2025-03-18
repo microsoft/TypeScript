@@ -1,0 +1,27 @@
+--- old.narrowByEquality.js
++++ new.narrowByEquality.js
+@@= skipped -75, +75 lines =@@
+ 
+ 
+ //// [narrowByEquality.js]
+-"use strict";
+ if (x == n) {
+     x;
+ }
+@@= skipped -32, +31 lines =@@
+     x;
+     xAndObj;
+ }
+-// Repro from #24991
+ function test(level) {
+     if (level == +level) {
+-        var q2 = level; // error
++        const q2 = level;
+         return level;
+     }
+     return 0;
+ }
+-// From issue #32798
+ if (xUnknown == null) {
+     xUnknown;
+ }

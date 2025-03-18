@@ -1,0 +1,21 @@
+--- old.declFileTypeofEnum.js
++++ new.declFileTypeofEnum.js
+@@= skipped -28, +28 lines =@@
+ var weekendDay = days.saturday;
+ var daysOfMonth = days;
+ var daysOfYear;
+-
+-
+-//// [declFileTypeofEnum.d.ts]
+-declare enum days {
+-    monday = 0,
+-    tuesday = 1,
+-    wednesday = 2,
+-    thursday = 3,
+-    friday = 4,
+-    saturday = 5,
+-    sunday = 6
+-}
+-declare var weekendDay: days;
+-declare var daysOfMonth: typeof days;
+-declare var daysOfYear: typeof days;

@@ -1,0 +1,32 @@
+--- old.controlFlowNullTypeAndLiteral.js
++++ new.controlFlowNullTypeAndLiteral.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [controlFlowNullTypeAndLiteral.js]
+-"use strict";
+-// Repros from #23771
+-var myNull = null;
+-var objWithValMaybeNull = { val: 1 };
+-var addOne = function (num) {
++const myNull = null;
++const objWithValMaybeNull = { val: 1 };
++const addOne = function (num) {
+     return num + 1;
+ };
+ if (objWithValMaybeNull.val !== null)
+@@= skipped -12, +10 lines =@@
+ if (objWithValMaybeNull.val !== myNull)
+     addOne(objWithValMaybeNull.val);
+ if (objWithValMaybeNull.val === null)
+-    addOne(objWithValMaybeNull.val); // Error
++    addOne(objWithValMaybeNull.val);
+ if (objWithValMaybeNull.val === myNull)
+-    addOne(objWithValMaybeNull.val); // Error
++    addOne(objWithValMaybeNull.val);
+ function f(x) {
+     if (x === myNull) {
+-        var s = x; // Error
++        const s = x;
+     }
+ }

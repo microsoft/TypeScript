@@ -1,0 +1,52 @@
+--- old.interfaceImplementation6.js
++++ new.interfaceImplementation6.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [interfaceImplementation6.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.Test = void 0;
+-    var C1 = /** @class */ (function () {
+-        function C1() {
+-        }
+-        return C1;
+-    }());
+-    var C2 = /** @class */ (function () {
+-        function C2() {
+-        }
+-        return C2;
+-    }());
+-    var C3 = /** @class */ (function () {
+-        function C3() {
+-            var item;
+-        }
+-        return C3;
+-    }());
+-    var Test = /** @class */ (function () {
+-        function Test() {
+-            this.pt = { item: 1 };
+-        }
+-        return Test;
+-    }());
+-    exports.Test = Test;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.Test = void 0;
++class C1 {
++    item;
++}
++class C2 {
++    item;
++}
++class C3 {
++    constructor() {
++        var item;
++    }
++}
++class Test {
++    pt = { item: 1 };
++}
++exports.Test = Test;

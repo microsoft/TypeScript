@@ -1,0 +1,38 @@
+--- old.privateNameBadDeclaration.js
++++ new.privateNameBadDeclaration.js
+@@= skipped -21, +21 lines =@@
+ //// [privateNameBadDeclaration.js]
+ function A() { }
+ A.prototype = {
+-    : 1, // Error
+-    : function () { }, // Error
+-    get () { return ""; } // Error
++    #x: 1,
++    #m() { },
++    get #p() { return ""; }
+ };
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
++class B {
++}
+ B.prototype = {
+-    : 2, // Error
+-    : function () { }, // Error
+-    get () { return ""; } // Error
++    #y: 2,
++    #m() { },
++    get #p() { return ""; }
+ };
+-var C = /** @class */ (function () {
+-    function C() {
+-        this. = 3;
++class C {
++    constructor() {
++        this.#z = 3;
+     }
+-    return C;
+-}());
++}

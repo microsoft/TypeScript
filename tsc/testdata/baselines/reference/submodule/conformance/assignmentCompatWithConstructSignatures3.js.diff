@@ -1,0 +1,157 @@
+--- old.assignmentCompatWithConstructSignatures3.js
++++ new.assignmentCompatWithConstructSignatures3.js
+@@= skipped -101, +101 lines =@@
+ 
+ 
+ //// [assignmentCompatWithConstructSignatures3.js]
+-// checking assignment compatibility relations for function types. All of these are valid.
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var Base = /** @class */ (function () {
+-    function Base() {
+-    }
+-    return Base;
+-}());
+-var Derived = /** @class */ (function (_super) {
+-    __extends(Derived, _super);
+-    function Derived() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Derived;
+-}(Base));
+-var Derived2 = /** @class */ (function (_super) {
+-    __extends(Derived2, _super);
+-    function Derived2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Derived2;
+-}(Derived));
+-var OtherDerived = /** @class */ (function (_super) {
+-    __extends(OtherDerived, _super);
+-    function OtherDerived() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return OtherDerived;
+-}(Base));
++class Base {
++    foo;
++}
++class Derived extends Base {
++    bar;
++}
++class Derived2 extends Derived {
++    baz;
++}
++class OtherDerived extends Base {
++    bing;
++}
+ var a;
+ var a2;
+ var a3;
+@@= skipped -61, +31 lines =@@
+ var a17;
+ var a18;
+ var b;
+-a = b; // ok
+-b = a; // ok
++a = b;
++b = a;
+ var b2;
+-a2 = b2; // ok 
+-b2 = a2; // ok
++a2 = b2;
++b2 = a2;
+ var b3;
+-a3 = b3; // ok
+-b3 = a3; // ok
++a3 = b3;
++b3 = a3;
+ var b4;
+-a4 = b4; // ok
+-b4 = a4; // ok
++a4 = b4;
++b4 = a4;
+ var b5;
+-a5 = b5; // ok
+-b5 = a5; // ok
++a5 = b5;
++b5 = a5;
+ var b6;
+-a6 = b6; // ok
+-b6 = a6; // ok
++a6 = b6;
++b6 = a6;
+ var b7;
+-a7 = b7; // ok
+-b7 = a7; // ok
++a7 = b7;
++b7 = a7;
+ var b8;
+-a8 = b8; // ok
+-b8 = a8; // ok
++a8 = b8;
++b8 = a8;
+ var b9;
+-a9 = b9; // ok
+-b9 = a9; // ok
++a9 = b9;
++b9 = a9;
+ var b10;
+-a10 = b10; // ok
+-b10 = a10; // ok
++a10 = b10;
++b10 = a10;
+ var b11;
+-a11 = b11; // ok
+-b11 = a11; // ok
++a11 = b11;
++b11 = a11;
+ var b12;
+-a12 = b12; // ok
+-b12 = a12; // ok
++a12 = b12;
++b12 = a12;
+ var b13;
+-a13 = b13; // ok
+-b13 = a13; // ok
++a13 = b13;
++b13 = a13;
+ var b14;
+-a14 = b14; // ok
+-b14 = a14; // ok
++a14 = b14;
++b14 = a14;
+ var b15;
+-a15 = b15; // ok
+-b15 = a15; // ok
++a15 = b15;
++b15 = a15;
+ var b16;
+-a16 = b16; // ok
+-b16 = a16; // ok
+-var b17; // ok
+-a17 = b17; // ok
+-b17 = a17; // ok
++a16 = b16;
++b16 = a16;
++var b17;
++a17 = b17;
++b17 = a17;
+ var b18;
+-a18 = b18; // ok
+-b18 = a18; // ok
++a18 = b18;
++b18 = a18;

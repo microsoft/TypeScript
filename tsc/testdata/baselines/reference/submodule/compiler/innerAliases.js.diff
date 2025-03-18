@@ -1,0 +1,39 @@
+--- old.innerAliases.js
++++ new.innerAliases.js
+@@= skipped -27, +27 lines =@@
+ //// [innerAliases.js]
+ var A;
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+-        var C;
++        let C;
+         (function (C) {
+-            var Class1 = /** @class */ (function () {
+-                function Class1() {
+-                }
+-                return Class1;
+-            }());
++            class Class1 {
++            }
+             C.Class1 = Class1;
+         })(C = B.C || (B.C = {}));
+     })(B = A.B || (A.B = {}));
+@@= skipped -17, +14 lines =@@
+ (function (D) {
+     var inner = A.B.C;
+     var c1 = new inner.Class1();
+-    var E;
++    let E;
+     (function (E) {
+-        var Class2 = /** @class */ (function () {
+-            function Class2() {
+-            }
+-            return Class2;
+-        }());
++        class Class2 {
++        }
+         E.Class2 = Class2;
+     })(E = D.E || (D.E = {}));
+ })(D || (D = {}));

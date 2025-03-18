@@ -1,0 +1,23 @@
+--- old.narrowFromAnyWithTypePredicate.js
++++ new.narrowFromAnyWithTypePredicate.js
+@@= skipped -37, +37 lines =@@
+ 
+ 
+ //// [narrowFromAnyWithTypePredicate.js]
+-if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
++if (isFunction(x)) {
+     x();
+     x(1, 2, 3);
+     x("hello!");
+     x.prop;
+ }
+-if (isObject(x)) { // 'any' is not narrowed when target type is 'Object'
++if (isObject(x)) {
+     x.method();
+     x();
+ }
+-if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object' (including {})
++if (isAnything(x)) {
+     x.method();
+     x();
+ }

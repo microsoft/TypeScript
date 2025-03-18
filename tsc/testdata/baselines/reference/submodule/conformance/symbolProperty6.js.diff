@@ -1,0 +1,18 @@
+--- old.symbolProperty6.js
++++ new.symbolProperty6.js
+@@= skipped -10, +10 lines =@@
+ }
+ 
+ //// [symbolProperty6.js]
+-var _a;
+ class C {
+-    constructor() {
+-        this[_a] = 0;
+-    }
+-    [(_a = Symbol.iterator, Symbol.unscopables, Symbol.toPrimitive)]() { }
++    [Symbol.iterator] = 0;
++    [Symbol.unscopables];
++    [Symbol.toPrimitive]() { }
+     get [Symbol.toStringTag]() {
+         return 0;
+     }

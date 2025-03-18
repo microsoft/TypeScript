@@ -1,0 +1,24 @@
+--- old.invalidModuleWithVarStatements.js
++++ new.invalidModuleWithVarStatements.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [invalidModuleWithVarStatements.js]
+-// All of these should be an error
+ var Y;
+ (function (Y) {
+     var x = 0;
+@@= skipped -11, +10 lines =@@
+ })(Y2 || (Y2 = {}));
+ var Y4;
+ (function (Y4) {
+-    var x = 0;
++    static var x = 0;
+ })(Y4 || (Y4 = {}));
+ var YY;
+ (function (YY) {
+-    function fn(x) { }
++    static function fn(x) { }
+ })(YY || (YY = {}));
+ var YY2;
+ (function (YY2) {

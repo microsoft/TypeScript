@@ -1,0 +1,19 @@
+--- old.stringLiteralTypesOverloadAssignability03.js
++++ new.stringLiteralTypesOverloadAssignability03.js
+@@= skipped -23, +23 lines =@@
+ function g(x) {
+     return 0;
+ }
+-var a = f;
+-var b = g;
++let a = f;
++let b = g;
+ a = b;
+ b = a;
+-
+-
+-//// [stringLiteralTypesOverloadAssignability03.d.ts]
+-declare function f(x: "foo"): number;
+-declare function g(x: "foo"): number;
+-declare let a: typeof f;
+-declare let b: typeof g;

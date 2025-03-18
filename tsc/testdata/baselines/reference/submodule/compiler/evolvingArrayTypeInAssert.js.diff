@@ -1,0 +1,11 @@
+--- old.evolvingArrayTypeInAssert.js
++++ new.evolvingArrayTypeInAssert.js
+@@= skipped -16, +16 lines =@@
+ exports.unsafeCast = unsafeCast;
+ function unsafeCast(_value) { }
+ function yadda() {
+-    var out = [];
++    let out = [];
+     out.push(100);
+     unsafeCast(out);
+     return out;

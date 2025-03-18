@@ -1,0 +1,14 @@
+--- old.mapOnTupleTypes02.js
++++ new.mapOnTupleTypes02.js
+@@= skipped -11, +11 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.increment = increment;
+ function increment(point) {
+-    return point.map(function (d) { return d + 1; });
++    return point.map(d => d + 1);
+ }
+-
+-
+-//// [mapOnTupleTypes02.d.ts]
+-export type Point = [number, number];
+-export declare function increment(point: Point): number[];

@@ -1,0 +1,7 @@
+--- old.neverUnionIntersection.js
++++ new.neverUnionIntersection.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [neverUnionIntersection.js]
+-"use strict";

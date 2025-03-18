@@ -1,0 +1,18 @@
+--- old.computedPropertyNames51_ES5.js
++++ new.computedPropertyNames51_ES5.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [computedPropertyNames51_ES5.js]
+ function f() {
+-    var _a;
+     var t;
+     var k;
+-    var v = (_a = {},
+-        _a[t] = 0,
+-        _a[k] = 1,
+-        _a);
++    var v = {
++        [t]: 0,
++        [k]: 1
++    };
+ }

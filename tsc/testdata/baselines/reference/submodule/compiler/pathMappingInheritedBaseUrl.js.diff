@@ -1,0 +1,11 @@
+--- old.pathMappingInheritedBaseUrl.js
++++ new.pathMappingInheritedBaseUrl.js
+@@= skipped -16, +16 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.p1 = void 0;
+-exports.p1 = 0;
+-//// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });

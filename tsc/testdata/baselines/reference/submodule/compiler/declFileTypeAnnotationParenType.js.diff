@@ -1,0 +1,31 @@
+--- old.declFileTypeAnnotationParenType.js
++++ new.declFileTypeAnnotationParenType.js
+@@= skipped -11, +11 lines =@@
+ var l = (() => new c()) || "";
+ 
+ //// [declFileTypeAnnotationParenType.js]
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    return c;
+-}());
+-var x = [function () { return new c(); }];
+-var y = [function () { return new c(); }];
+-var k = (function () { return new c(); }) || "";
+-var l = (function () { return new c(); }) || "";
+-
+-
+-//// [declFileTypeAnnotationParenType.d.ts]
+-declare class c {
+-    private p;
++class c {
++    p;
+ }
+-declare var x: (() => c)[];
+-declare var y: (() => c)[];
+-declare var k: (() => c) | string;
+-declare var l: string | (() => c);
++var x = [() => new c()];
++var y = [() => new c()];
++var k = (() => new c()) || "";
++var l = (() => new c()) || "";

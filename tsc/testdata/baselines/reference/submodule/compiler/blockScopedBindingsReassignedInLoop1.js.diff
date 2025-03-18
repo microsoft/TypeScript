@@ -1,0 +1,19 @@
+--- old.blockScopedBindingsReassignedInLoop1.js
++++ new.blockScopedBindingsReassignedInLoop1.js
+@@= skipped -11, +11 lines =@@
+ //// [blockScopedBindingsReassignedInLoop1.js]
+ (function () {
+     'use strict';
+-    var _loop_1 = function (i) {
+-        (function () { return use(++i); })();
+-        out_i_1 = i;
+-    };
+-    var out_i_1;
+-    for (var i = 0; i < 9; ++i) {
+-        _loop_1(i);
+-        i = out_i_1;
++    'use strict';
++    for (let i = 0; i < 9; ++i) {
++        (() => use(++i))();
+     }
+ })();

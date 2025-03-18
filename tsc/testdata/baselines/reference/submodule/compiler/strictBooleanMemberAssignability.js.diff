@@ -1,0 +1,17 @@
+--- old.strictBooleanMemberAssignability.js
++++ new.strictBooleanMemberAssignability.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [strictBooleanMemberAssignability.js]
+-"use strict";
+-var Abc = /** @class */ (function () {
+-    function Abc() {
++class Abc {
++    def;
++    constructor() {
+         this.def = true;
+     }
+-    return Abc;
+-}());
++}

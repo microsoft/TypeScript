@@ -1,0 +1,10 @@
+--- old.parserParenthesizedVariableAndFunctionInTernary.js
++++ new.parserParenthesizedVariableAndFunctionInTernary.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [parserParenthesizedVariableAndFunctionInTernary.js]
+-var a;
+-var c = true ? (a) : function () { };
++let a;
++const c = true ? (a) : function () { };

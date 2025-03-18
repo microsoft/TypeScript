@@ -1,0 +1,17 @@
+--- old.parserES5ComputedPropertyName10.js
++++ new.parserES5ComputedPropertyName10.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserES5ComputedPropertyName10.js]
+-var _a;
+-var C = /** @class */ (function () {
+-    function C() {
+-        this[_a] = 1;
+-    }
+-    return C;
+-}());
+-_a = e;
++class C {
++    [e] = 1;
++}

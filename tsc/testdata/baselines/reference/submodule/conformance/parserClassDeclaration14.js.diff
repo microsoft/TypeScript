@@ -1,0 +1,13 @@
+--- old.parserClassDeclaration14.js
++++ new.parserClassDeclaration14.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [parserClassDeclaration14.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

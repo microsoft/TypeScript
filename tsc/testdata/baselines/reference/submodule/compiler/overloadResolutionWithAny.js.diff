@@ -1,0 +1,22 @@
+--- old.overloadResolutionWithAny.js
++++ new.overloadResolutionWithAny.js
+@@= skipped -24, +24 lines =@@
+ 
+ //// [overloadResolutionWithAny.js]
+ var func;
+-func(""); // number
+-func(3); // string
++func("");
++func(3);
+ var x;
+-func(x); // string
++func(x);
+ var func2;
+-func2(x, x); // string
+-func2("", ""); // number
+-func2(x, ""); // boolean
+-func2("", x); // RegExp
++func2(x, x);
++func2("", "");
++func2(x, "");
++func2("", x);

@@ -1,0 +1,33 @@
+--- old.tsxElementResolution19.js
++++ new.tsxElementResolution19.js
+@@= skipped -19, +19 lines =@@
+ 
+ 
+ //// [file1.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.MyClass = void 0;
+-    var MyClass = /** @class */ (function () {
+-        function MyClass() {
+-        }
+-        return MyClass;
+-    }());
+-    exports.MyClass = MyClass;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.MyClass = void 0;
++class MyClass {
++}
++exports.MyClass = MyClass;
+ //// [file2.js]
+-define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    React.createElement(file1_1.MyClass, null);
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const file1_1 = require("./file1");
++<file1_1.MyClass />;

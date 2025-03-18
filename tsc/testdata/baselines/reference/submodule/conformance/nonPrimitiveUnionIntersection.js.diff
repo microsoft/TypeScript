@@ -1,0 +1,30 @@
+--- old.nonPrimitiveUnionIntersection.js
++++ new.nonPrimitiveUnionIntersection.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [nonPrimitiveUnionIntersection.js]
+-var a = ""; // error
+-var b = ""; // ok
+-var c = 123; // error
+-a = b; // error
+-b = a; // ok
+-var foo = { bar: 'bar' }; // ok
+-var bar = { bar: 'bar' }; // error
+-
+-
+-//// [nonPrimitiveUnionIntersection.d.ts]
+-declare var a: object & string;
+-declare var b: object | string;
+-declare var c: object & {};
+-declare const foo: object & {};
+-declare const bar: object & {
+-    err: string;
+-};
++var a = "";
++var b = "";
++var c = 123;
++a = b;
++b = a;
++const foo = { bar: 'bar' };
++const bar = { bar: 'bar' };

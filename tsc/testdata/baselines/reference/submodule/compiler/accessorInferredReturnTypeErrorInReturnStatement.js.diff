@@ -1,0 +1,12 @@
+--- old.accessorInferredReturnTypeErrorInReturnStatement.js
++++ new.accessorInferredReturnTypeErrorInReturnStatement.js
+@@= skipped -18, +18 lines =@@
+         return _this.collection.schema.primaryPath;
+     },
+ };
+-
+-
+-//// [accessorInferredReturnTypeErrorInReturnStatement.d.ts]
+-export declare var basePrototype: {
+-    readonly primaryPath: any;
+-};

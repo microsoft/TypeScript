@@ -1,0 +1,9 @@
+--- old.mutuallyRecursiveCallbacks.js
++++ new.mutuallyRecursiveCallbacks.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [mutuallyRecursiveCallbacks.js]
+-// Repro from #18277
+ ;
+ bar = foo;

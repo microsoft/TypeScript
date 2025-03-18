@@ -1,0 +1,29 @@
+--- old.instanceMemberAssignsToClassPrototype.js
++++ new.instanceMemberAssignsToClassPrototype.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [instanceMemberAssignsToClassPrototype.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    foo() {
++        C.prototype.foo = () => { };
+     }
+-    C.prototype.foo = function () {
+-        C.prototype.foo = function () { };
+-    };
+-    C.prototype.bar = function (x) {
+-        C.prototype.bar = function () { }; // error
+-        C.prototype.bar = function (x) { return x; }; // ok
+-        C.prototype.bar = function (x) { return 1; }; // ok
++    bar(x) {
++        C.prototype.bar = () => { };
++        C.prototype.bar = (x) => x;
++        C.prototype.bar = (x) => 1;
+         return 1;
+-    };
+-    return C;
+-}());
++    }
++}

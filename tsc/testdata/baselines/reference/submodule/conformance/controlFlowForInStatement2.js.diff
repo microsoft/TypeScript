@@ -1,0 +1,28 @@
+--- old.controlFlowForInStatement2.js
++++ new.controlFlowForInStatement2.js
+@@= skipped -27, +27 lines =@@
+ }
+ 
+ //// [controlFlowForInStatement2.js]
+-var keywordA = 'a';
+-var keywordB = 'b';
++const keywordA = 'a';
++const keywordB = 'b';
+ if ('a' in c) {
+-    c; // narrowed to `A`
++    c;
+ }
+ if (keywordA in c) {
+-    c; // also narrowed to `A`
++    c;
+ }
+-var stringB = 'b';
++let stringB = 'b';
+ if (stringB in c) {
+-    c; // narrowed to `B`
++    c;
+ }
+ if (stringB in c) {
+-    c; // not narrowed
++    c;
+ }

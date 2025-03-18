@@ -1,0 +1,87 @@
+--- old.controlFlowIterationErrors.js
++++ new.controlFlowIterationErrors.js
+@@= skipped -94, +94 lines =@@
+ 
+ 
+ //// [controlFlowIterationErrors.js]
+-var cond;
++let cond;
+ function len(s) {
+     return s.length;
+ }
+ function f1() {
+-    var x;
++    let x;
+     x = "";
+     while (cond) {
+         x = len(x);
+@@= skipped -14, +14 lines =@@
+     x;
+ }
+ function f2() {
+-    var x;
++    let x;
+     x = "";
+     while (cond) {
+         x;
+@@= skipped -9, +9 lines =@@
+     x;
+ }
+ function g1() {
+-    var x;
++    let x;
+     x = "";
+     while (cond) {
+         x = foo(x);
+@@= skipped -9, +9 lines =@@
+     x;
+ }
+ function g2() {
+-    var x;
++    let x;
+     x = "";
+     while (cond) {
+         x;
+@@= skipped -12, +12 lines =@@
+     return +x;
+ }
+ function h1() {
+-    var x;
++    let x;
+     x = "0";
+     while (cond) {
+         x = +x + 1;
+@@= skipped -8, +8 lines =@@
+     }
+ }
+ function h2() {
+-    var x;
++    let x;
+     x = "0";
+     while (cond) {
+         x = asNumber(x) + 1;
+@@= skipped -8, +8 lines =@@
+     }
+ }
+ function h3() {
+-    var x;
++    let x;
+     x = "0";
+     while (cond) {
+-        var y = asNumber(x);
++        let y = asNumber(x);
+         x = y + 1;
+         x;
+     }
+ }
+ function h4() {
+-    var x;
++    let x;
+     x = "0";
+     while (cond) {
+         x;
+-        var y = asNumber(x);
++        let y = asNumber(x);
+         x = y + 1;
+         x;
+     }

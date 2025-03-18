@@ -1,0 +1,14 @@
+--- old.constructorArgsErrors1.js
++++ new.constructorArgsErrors1.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [constructorArgsErrors1.js]
+-var foo = /** @class */ (function () {
+-    function foo(a) {
++class foo {
++    constructor(a) {
+     }
+-    return foo;
+-}());
++}

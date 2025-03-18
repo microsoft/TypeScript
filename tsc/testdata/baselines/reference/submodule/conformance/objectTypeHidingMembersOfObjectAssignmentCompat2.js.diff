@@ -1,0 +1,32 @@
+--- old.objectTypeHidingMembersOfObjectAssignmentCompat2.js
++++ new.objectTypeHidingMembersOfObjectAssignmentCompat2.js
+@@= skipped -25, +25 lines =@@
+ //// [objectTypeHidingMembersOfObjectAssignmentCompat2.js]
+ var i;
+ var o;
+-o = i; // error
+-i = o; // error
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.toString = function () { return 1; };
+-    return C;
+-}());
++o = i;
++i = o;
++class C {
++    toString() { return 1; }
++}
+ var c;
+-o = c; // error
+-c = o; // error
++o = c;
++c = o;
+ var a = {
+-    toString: function () { }
++    toString: () => { }
+ };
+-o = a; // error
+-a = o; // ok
++o = a;
++a = o;

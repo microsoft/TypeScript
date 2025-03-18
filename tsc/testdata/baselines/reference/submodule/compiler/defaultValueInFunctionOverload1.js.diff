@@ -1,0 +1,10 @@
+--- old.defaultValueInFunctionOverload1.js
++++ new.defaultValueInFunctionOverload1.js
+@@= skipped -4, +4 lines =@@
+ function foo(x = '') { }
+ 
+ //// [defaultValueInFunctionOverload1.js]
+-function foo(x) {
+-    if (x === void 0) { x = ''; }
+-}
++function foo(x = '') { }

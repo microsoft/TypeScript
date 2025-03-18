@@ -1,0 +1,60 @@
+--- old.controlFlowIfStatement.js
++++ new.controlFlowIfStatement.js
+@@= skipped -64, +64 lines =@@
+ 
+ 
+ //// [controlFlowIfStatement.js]
+-var x;
+-var cond;
++let x;
++let cond;
+ x = /a/;
+-if (x /* RegExp */, (x = true)) {
+-    x; // boolean
++if (x, (x = true)) {
++    x;
+     x = "";
+ }
+ else {
+-    x; // boolean
++    x;
+     x = 42;
+ }
+-x; // string | number
++x;
+ function a() {
+-    var x;
++    let x;
+     if (cond) {
+         x = 42;
+     }
+@@= skipped -21, +21 lines =@@
+         x = "";
+         return;
+     }
+-    x; // number
++    x;
+ }
+ function b() {
+-    var x;
++    let x;
+     if (cond) {
+         x = 42;
+         throw "";
+@@= skipped -11, +11 lines =@@
+     else {
+         x = "";
+     }
+-    x; // string
++    x;
+ }
+ function c(data) {
+     if (typeof data === 'string') {
+@@= skipped -20, +20 lines =@@
+ }
+ function e(x) {
+     if (x.p === "A") {
+-        var a_1 = null;
++        let a = null;
+     }
+ }

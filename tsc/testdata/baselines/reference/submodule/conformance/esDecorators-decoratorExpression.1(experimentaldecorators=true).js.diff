@@ -1,0 +1,214 @@
+--- old.esDecorators-decoratorExpression.1(experimentaldecorators=true).js
++++ new.esDecorators-decoratorExpression.1(experimentaldecorators=true).js
+@@= skipped -49, +49 lines =@@
+ 
+ //// [esDecorators-decoratorExpression.1.js]
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x().y
+-    ], C);
++    @x().y
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        new x
+-    ], C);
++    @(new x)
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x().y()
+-    ], C);
++    @x().y()
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x?.y
+-    ], C);
++    @(x?.y)
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x?.y()
+-    ], C);
++    @(x?.y())
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x?.["y"]
+-    ], C);
++    @(x?.["y"])
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x?.()
+-    ], C);
++    @(x?.())
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x ``
+-    ], C);
++    @x ``
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x ``()
+-    ], C);
++    @x ``()
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x.y ``
+-    ], C);
++    @x.y ``
++    class C {
++    }
+ }
+ {
+-    let C = class C {
+-    };
+-    C = __decorate([
+-        x.y ``()
+-    ], C);
++    @x.y ``()
++    class C {
++    }
+ }
+ {
+     class C {
++        @x().y
+         m() { }
+     }
+-    __decorate([
+-        x().y
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @(new x)
+         m() { }
+     }
+-    __decorate([
+-        new x
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @x().y()
+         m() { }
+     }
+-    __decorate([
+-        x().y()
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @(x?.y)
+         m() { }
+     }
+-    __decorate([
+-        x?.y
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @(x?.y())
+         m() { }
+     }
+-    __decorate([
+-        x?.y()
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @(x?.["y"])
+         m() { }
+     }
+-    __decorate([
+-        x?.["y"]
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @(x?.())
+         m() { }
+     }
+-    __decorate([
+-        x?.()
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @x ``
+         m() { }
+     }
+-    __decorate([
+-        x ``
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @x ``()
+         m() { }
+     }
+-    __decorate([
+-        x ``()
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @x.y ``
+         m() { }
+     }
+-    __decorate([
+-        x.y ``
+-    ], C.prototype, "m", null);
+ }
+ {
+     class C {
++        @x.y ``()
+         m() { }
+     }
+-    __decorate([
+-        x.y ``()
+-    ], C.prototype, "m", null);
+ }

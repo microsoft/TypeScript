@@ -1,0 +1,10 @@
+--- old.mapConstructor.js
++++ new.mapConstructor.js
+@@= skipped -9, +9 lines =@@
+ new Map(potentiallyNullIterable);
+ 
+ //// [mapConstructor.js]
+-"use strict";
+ new Map();
+ const potentiallyUndefinedIterable = [['1', 1], ['2', 2]];
+ new Map(potentiallyUndefinedIterable);

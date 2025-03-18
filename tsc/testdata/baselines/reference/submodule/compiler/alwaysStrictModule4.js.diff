@@ -1,0 +1,8 @@
+--- old.alwaysStrictModule4.js
++++ new.alwaysStrictModule4.js
+@@= skipped -7, +7 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.a = void 0;
+-// Module commonjs
+ exports.a = 1;

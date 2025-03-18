@@ -1,0 +1,16 @@
+--- old.usingDeclarationsWithLegacyClassDecorators.7(module=esnext,target=esnext).js
++++ new.usingDeclarationsWithLegacyClassDecorators.7(module=esnext,target=esnext).js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [usingDeclarationsWithLegacyClassDecorators.7.js]
+-let C = class C {
+-};
+-C = __decorate([
+-    dec
+-], C);
++@dec
++class C {
++}
+ using after = null;
+ export {};

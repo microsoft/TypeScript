@@ -1,0 +1,35 @@
+--- old.es5-system.js
++++ new.es5-system.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [es5-system.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var A;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            A = /** @class */ (function () {
+-                function A() {
+-                }
+-                A.prototype.B = function () {
+-                    return 42;
+-                };
+-                return A;
+-            }());
+-            exports_1("default", A);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++class A {
++    constructor() {
++    }
++    B() {
++        return 42;
++    }
++}
++exports.default = A;

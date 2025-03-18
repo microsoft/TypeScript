@@ -1,0 +1,16 @@
+--- old.jsxAndTypeAssertion.js
++++ new.jsxAndTypeAssertion.js
+@@= skipped -23, +23 lines =@@
+ 
+ 
+ //// [jsxAndTypeAssertion.jsx]
+-var foo = /** @class */ (function () {
+-    function foo() {
+-    }
+-    return foo;
+-}());
++class foo {
++}
+ var x;
+ x = <any> {test}: <any></any> };
+ 

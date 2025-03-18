@@ -1,0 +1,50 @@
+--- old.intersectionWithConflictingPrivates.js
++++ new.intersectionWithConflictingPrivates.js
+@@= skipped -59, +59 lines =@@
+ 
+ 
+ //// [intersectionWithConflictingPrivates.js]
+-"use strict";
+ class A {
++    x;
++    y;
+ }
+ class B {
++    x;
++    y;
+ }
+ ab.y = 'hello';
+ ab = {};
+ function f1(node) {
+     if (node instanceof A || node instanceof A) {
+-        node; // A
++        node;
+     }
+     else {
+-        node; // B
++        node;
+     }
+-    node; // A | B
++    node;
+ }
+-// Repro from #37659
+ class ViewNode {
+ }
+ class ViewRefNode extends ViewNode {
+@@= skipped -24, +26 lines =@@
+ class ViewRefFileNode extends ViewRefNode {
+ }
+ class CommitFileNode extends ViewRefFileNode {
++    _id;
+ }
+ class ResultsFileNode extends ViewRefFileNode {
++    _id;
+ }
+ class StashFileNode extends CommitFileNode {
++    _id2;
+ }
+ class StatusFileNode extends ViewNode {
++    _id;
+ }
+ class Foo {
+     async foo(node) {

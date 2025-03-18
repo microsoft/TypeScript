@@ -1,0 +1,8 @@
+--- old.spaceBeforeQuestionMarkInPropertyAssignment.js
++++ new.spaceBeforeQuestionMarkInPropertyAssignment.js
+@@= skipped -3, +3 lines =@@
+ var x = {x ?: 1} // should not crash
+ 
+ //// [spaceBeforeQuestionMarkInPropertyAssignment.js]
+-var x = { x: 1 }; // should not crash
++var x = { x: 1 };

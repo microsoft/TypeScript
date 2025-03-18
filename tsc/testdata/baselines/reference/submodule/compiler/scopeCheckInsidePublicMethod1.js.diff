@@ -1,0 +1,19 @@
+--- old.scopeCheckInsidePublicMethod1.js
++++ new.scopeCheckInsidePublicMethod1.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [scopeCheckInsidePublicMethod1.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    static s;
++    a() {
++        s = 1;
+     }
+-    C.prototype.a = function () {
+-        s = 1; // ERR
+-    };
+-    return C;
+-}());
++}

@@ -1,0 +1,18 @@
+--- old.exportStarNotElided.js
++++ new.exportStarNotElided.js
+@@= skipped -16, +16 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.register = register;
+-var r = [];
++const r = [];
+ function register(data) {
+     r.push(data);
+ }
+@@= skipped -28, +28 lines =@@
+ //// [data1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var _1 = require("./");
++const _1 = require("./");
+ (0, _1.register)("ok");

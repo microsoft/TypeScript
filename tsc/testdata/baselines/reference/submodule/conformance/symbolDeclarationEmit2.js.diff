@@ -1,0 +1,20 @@
+--- old.symbolDeclarationEmit2.js
++++ new.symbolDeclarationEmit2.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [symbolDeclarationEmit2.js]
+-var _a;
+ class C {
+-    constructor() {
+-        this[_a] = "";
+-    }
++    [Symbol.toPrimitive] = "";
+ }
+-_a = Symbol.toPrimitive;
+-
+-
+-//// [symbolDeclarationEmit2.d.ts]
+-declare class C {
+-    [Symbol.toPrimitive]: string;
+-}

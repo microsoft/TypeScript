@@ -1,0 +1,7 @@
+--- old.mergedInterfacesWithIndexers2.js
++++ new.mergedInterfacesWithIndexers2.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [mergedInterfacesWithIndexers2.js]
+-// indexers should behave like other members when merging interface declarations

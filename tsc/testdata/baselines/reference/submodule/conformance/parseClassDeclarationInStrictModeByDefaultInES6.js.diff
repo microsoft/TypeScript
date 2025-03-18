@@ -1,0 +1,13 @@
+--- old.parseClassDeclarationInStrictModeByDefaultInES6.js
++++ new.parseClassDeclarationInStrictModeByDefaultInES6.js
+@@= skipped -11, +11 lines =@@
+ 
+ //// [parseClassDeclarationInStrictModeByDefaultInES6.js]
+ class C {
+-    constructor() {
+-        this.interface = 10;
+-    }
++    interface = 10;
+     implements() { }
+     foo(arguments) { }
+     bar(eval) {

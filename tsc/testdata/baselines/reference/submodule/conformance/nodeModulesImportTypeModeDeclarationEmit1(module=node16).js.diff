@@ -1,0 +1,19 @@
+--- old.nodeModulesImportTypeModeDeclarationEmit1(module=node16).js
++++ new.nodeModulesImportTypeModeDeclarationEmit1(module=node16).js
+@@= skipped -22, +22 lines =@@
+ 
+ 
+ //// [index.js]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.b = exports.a = void 0;
+-exports.a = null;
+-exports.b = null;
+-
+-
+-//// [index.d.ts]
+-export type LocalInterface = import("pkg", { assert: { "resolution-mode": "require" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
+-export declare const a: import("pkg").RequireInterface;
+-export declare const b: import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
++export const a = null;
++export const b = null;

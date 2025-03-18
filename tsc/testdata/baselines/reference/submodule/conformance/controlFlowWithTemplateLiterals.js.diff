@@ -1,0 +1,14 @@
+--- old.controlFlowWithTemplateLiterals.js
++++ new.controlFlowWithTemplateLiterals.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [controlFlowWithTemplateLiterals.js]
+-if (typeof envVar === "string") {
++if (typeof envVar === `string`) {
+     envVar.slice(0);
+ }
+-if ("test" in obj) {
++if (`test` in obj) {
+     obj.test.slice(0);
+ }

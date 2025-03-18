@@ -1,0 +1,73 @@
+--- old.systemModule17.js
++++ new.systemModule17.js
+@@= skipped -38, +38 lines =@@
+ export {II as II1};
+ 
+ //// [f1.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var A;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            A = /** @class */ (function () {
+-                function A() {
+-                }
+-                return A;
+-            }());
+-            exports_1("A", A);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.A = void 0;
++class A {
++}
++exports.A = A;
+ //// [f2.js]
+-System.register(["f1"], function (exports_1, context_1) {
+-    "use strict";
+-    var x, N, IX, f1_1;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (f1_1_1) {
+-                f1_1 = f1_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            x = 1;
+-            exports_1("x", x);
+-            exports_1("x1", x);
+-            (function (N) {
+-                N.x = 1;
+-            })(N || (N = {}));
+-            IX = N.x;
+-            exports_1("IX", IX);
+-            exports_1("IX1", IX);
+-            exports_1("A", f1_1.A);
+-            exports_1("A1", f1_1.A);
+-            exports_1("EA", f1_1.A);
+-            exports_1("EA1", f1_1.A);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.IX1 = exports.IX = exports.EI1 = exports.EI = exports.EA1 = exports.EA = exports.A1 = exports.A = exports.x1 = exports.x = void 0;
++var x = 1;
++exports.x = x;
++exports.x1 = x;
++var N;
++(function (N) {
++    N.x = 1;
++})(N || (N = {}));
++const f1_1 = require("f1");
++Object.defineProperty(exports, "A", { enumerable: true, get: function () { return f1_1.A; } });
++Object.defineProperty(exports, "A1", { enumerable: true, get: function () { return f1_1.A; } });
++Object.defineProperty(exports, "EA", { enumerable: true, get: function () { return f1_1.A; } });
++Object.defineProperty(exports, "EA1", { enumerable: true, get: function () { return f1_1.A; } });
++Object.defineProperty(exports, "EI", { enumerable: true, get: function () { return f1_1.I; } });
++Object.defineProperty(exports, "EI1", { enumerable: true, get: function () { return f1_1.I; } });

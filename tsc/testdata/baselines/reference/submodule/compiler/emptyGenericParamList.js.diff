@@ -1,0 +1,14 @@
+--- old.emptyGenericParamList.js
++++ new.emptyGenericParamList.js
+@@= skipped -4, +4 lines =@@
+ var x: I<>;
+ 
+ //// [emptyGenericParamList.js]
+-var I = /** @class */ (function () {
+-    function I() {
+-    }
+-    return I;
+-}());
++class I {
++}
+ var x;

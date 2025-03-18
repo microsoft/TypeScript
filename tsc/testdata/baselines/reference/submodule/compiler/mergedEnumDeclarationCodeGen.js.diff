@@ -1,0 +1,10 @@
+--- old.mergedEnumDeclarationCodeGen.js
++++ new.mergedEnumDeclarationCodeGen.js
+@@= skipped -15, +15 lines =@@
+     E[E["b"] = 0] = "b";
+ })(E || (E = {}));
+ (function (E) {
+-    E[E["c"] = 0] = "c";
++    E["c"] = a;
++    if (typeof E.c !== "string") E[E.c] = "c";
+ })(E || (E = {}));

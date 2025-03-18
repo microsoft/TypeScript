@@ -1,0 +1,9 @@
+--- old.typeofThisWithImplicitThis.js
++++ new.typeofThisWithImplicitThis.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [typeofThisWithImplicitThis.js]
+ function Test1() {
+-    var x = 1;
++    let x = 1;
+ }

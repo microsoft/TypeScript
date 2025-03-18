@@ -1,0 +1,13 @@
+--- old.isArray.js
++++ new.isArray.js
+@@= skipped -13, +13 lines =@@
+ //// [isArray.js]
+ var maybeArray;
+ if (Array.isArray(maybeArray)) {
+-    maybeArray.length; // OK
++    maybeArray.length;
+ }
+ else {
+-    maybeArray.toFixed(); // OK
++    maybeArray.toFixed();
+ }

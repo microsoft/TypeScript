@@ -1,0 +1,20 @@
+--- old.testContainerList.js
++++ new.testContainerList.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [testContainerList.js]
+-// Regression test for #325
+ var A;
+ (function (A) {
+-    var C = /** @class */ (function () {
+-        function C(d) {
++    class C {
++        d;
++        constructor(d) {
+             this.d = d;
+         }
+-        return C;
+-    }());
++    }
+ })(A || (A = {}));

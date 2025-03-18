@@ -1,0 +1,17 @@
+--- old.genericMergedDeclarationUsingTypeParameter2.js
++++ new.genericMergedDeclarationUsingTypeParameter2.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [genericMergedDeclarationUsingTypeParameter2.js]
+-var foo = /** @class */ (function () {
+-    function foo(x) {
+-    }
+-    return foo;
+-}());
++class foo {
++    constructor(x) { }
++}
+ (function (foo) {
+     var y = 1;
+ })(foo || (foo = {}));

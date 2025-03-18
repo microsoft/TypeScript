@@ -1,0 +1,15 @@
+--- old.ClassDeclaration13.js
++++ new.ClassDeclaration13.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [ClassDeclaration13.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.bar = function () { };
+-    return C;
+-}());
++class C {
++    bar() { }
++}

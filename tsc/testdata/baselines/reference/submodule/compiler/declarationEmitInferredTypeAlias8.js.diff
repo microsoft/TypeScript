@@ -1,0 +1,14 @@
+--- old.declarationEmitInferredTypeAlias8.js
++++ new.declarationEmitInferredTypeAlias8.js
+@@= skipped -12, +12 lines =@@
+ function returnSomeGlobalValue() {
+     return x;
+ }
+-
+-
+-//// [declarationEmitInferredTypeAlias8.d.ts]
+-type Foo<T> = T | {
+-    x: Foo<T>;
+-};
+-declare var x: Foo<number[]>;
+-declare function returnSomeGlobalValue(): Foo<number[]>;

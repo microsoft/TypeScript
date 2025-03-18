@@ -1,0 +1,25 @@
+--- old.recursiveExportAssignmentAndFindAliasedType2.js
++++ new.recursiveExportAssignmentAndFindAliasedType2.js
+@@= skipped -19, +19 lines =@@
+ import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
+ export var b: ClassB; // This should result in type ClassB
+ 
+-//// [recursiveExportAssignmentAndFindAliasedType2_moduleB.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var ClassB = /** @class */ (function () {
+-        function ClassB() {
+-        }
+-        return ClassB;
+-    }());
+-    return ClassB;
+-});
+ //// [recursiveExportAssignmentAndFindAliasedType2_moduleA.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.b = void 0;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.b = void 0;

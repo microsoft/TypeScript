@@ -1,0 +1,9 @@
+--- old.objectSpreadSetonlyAccessor.js
++++ new.objectSpreadSetonlyAccessor.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [objectSpreadSetonlyAccessor.js]
+-"use strict";
+ const o1 = { foo: 1, ...{ set bar(_v) { } } };
+ const o2 = { foo: 1, ...{ set foo(_v) { } } };

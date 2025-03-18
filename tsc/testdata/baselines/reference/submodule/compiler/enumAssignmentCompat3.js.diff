@@ -1,0 +1,114 @@
+--- old.enumAssignmentCompat3.js
++++ new.enumAssignmentCompat3.js
+@@= skipped -93, +93 lines =@@
+ //// [enumAssignmentCompat3.js]
+ var First;
+ (function (First) {
+-    var E;
++    let E;
+     (function (E) {
+         E[E["a"] = 0] = "a";
+         E[E["b"] = 1] = "b";
+@@= skipped -9, +9 lines =@@
+ })(First || (First = {}));
+ var Abc;
+ (function (Abc) {
+-    var E;
++    let E;
+     (function (E) {
+         E[E["a"] = 0] = "a";
+         E[E["b"] = 1] = "b";
+         E[E["c"] = 2] = "c";
+     })(E = Abc.E || (Abc.E = {}));
+-    var Nope;
++    let Nope;
+     (function (Nope) {
+         Nope[Nope["a"] = 0] = "a";
+         Nope[Nope["b"] = 1] = "b";
+@@= skipped -15, +15 lines =@@
+ })(Abc || (Abc = {}));
+ var Abcd;
+ (function (Abcd) {
+-    var E;
++    let E;
+     (function (E) {
+         E[E["a"] = 0] = "a";
+         E[E["b"] = 1] = "b";
+@@= skipped -10, +10 lines =@@
+ })(Abcd || (Abcd = {}));
+ var Ab;
+ (function (Ab) {
+-    var E;
++    let E;
+     (function (E) {
+         E[E["a"] = 0] = "a";
+         E[E["b"] = 1] = "b";
+@@= skipped -8, +8 lines =@@
+ })(Ab || (Ab = {}));
+ var Cd;
+ (function (Cd) {
+-    var E;
++    let E;
+     (function (E) {
+         E[E["c"] = 0] = "c";
+         E[E["d"] = 1] = "d";
+@@= skipped -11, +11 lines =@@
+ })(Decl || (Decl = {}));
+ var Merged;
+ (function (Merged) {
+-    var E;
++    let E;
+     (function (E) {
+         E[E["a"] = 0] = "a";
+         E[E["b"] = 1] = "b";
+@@= skipped -12, +12 lines =@@
+ })(Merged || (Merged = {}));
+ var Merged2;
+ (function (Merged2) {
+-    var E;
++    let E;
+     (function (E) {
+         E[E["a"] = 0] = "a";
+         E[E["b"] = 1] = "b";
+@@= skipped -20, +20 lines =@@
+ var decl;
+ var merged;
+ var merged2;
+-abc = secondAbc; // ok
+-abc = secondAbcd; // missing 'd'
+-abc = secondAb; // ok
+-abc = secondCd; // missing 'd'
+-abc = nope; // nope!
+-abc = decl; // bad - value of 'c' differs between these enums
+-secondAbc = abc; // ok
+-secondAbcd = abc; // ok
+-secondAb = abc; // missing 'c'
+-secondCd = abc; // missing 'a' and 'b'
+-nope = abc; // nope!
+-decl = abc; // bad - value of 'c' differs between these enums
+-// const is only assignable to itself
++abc = secondAbc;
++abc = secondAbcd;
++abc = secondAb;
++abc = secondCd;
++abc = nope;
++abc = decl;
++secondAbc = abc;
++secondAbcd = abc;
++secondAb = abc;
++secondCd = abc;
++nope = abc;
++decl = abc;
+ k = k;
+-abc = k; // error
++abc = k;
+ k = abc;
+-// merged enums compare all their members
+-abc = merged; // missing 'd'
+-merged = abc; // bad - value of 'c' differs between these enums
+-abc = merged2; // ok
+-merged2 = abc; // ok
++abc = merged;
++merged = abc;
++abc = merged2;
++merged2 = abc;

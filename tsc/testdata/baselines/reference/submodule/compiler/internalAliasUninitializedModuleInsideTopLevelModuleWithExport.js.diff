@@ -1,0 +1,28 @@
+--- old.internalAliasUninitializedModuleInsideTopLevelModuleWithExport.js
++++ new.internalAliasUninitializedModuleInsideTopLevelModuleWithExport.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [internalAliasUninitializedModuleInsideTopLevelModuleWithExport.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.x = void 0;
+-    exports.x.foo();
+-});
+-
+-
+-//// [internalAliasUninitializedModuleInsideTopLevelModuleWithExport.d.ts]
+-export declare namespace a {
+-    namespace b {
+-        interface I {
+-            foo(): any;
+-        }
+-    }
+-}
+-export import b = a.b;
+-export declare var x: b.I;
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.x = void 0;
++exports.x.foo();

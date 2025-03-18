@@ -1,0 +1,18 @@
+--- old.unionPropertyExistence.js
++++ new.unionPropertyExistence.js
+@@= skipped -47, +47 lines =@@
+ var abc;
+ x.nope();
+ bFoo.onlyInB;
+-x.length; // Ok
++x.length;
+ bFoo.length;
+ ab.onlyInB;
+-ab.notInC; // Ok
++ab.notInC;
+ abc.notInC;
+ ab.notInB;
+ abc.notInB;
+-abc.inAll; // Ok
++abc.inAll;
+ abc.inNone;

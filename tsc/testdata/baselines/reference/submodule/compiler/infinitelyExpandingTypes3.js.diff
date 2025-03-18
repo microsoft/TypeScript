@@ -1,0 +1,8 @@
+--- old.infinitelyExpandingTypes3.js
++++ new.infinitelyExpandingTypes3.js
+@@= skipped -22, +22 lines =@@
+ //// [infinitelyExpandingTypes3.js]
+ var o1;
+ var o2;
+-o1 = o2; // should not error
++o1 = o2;

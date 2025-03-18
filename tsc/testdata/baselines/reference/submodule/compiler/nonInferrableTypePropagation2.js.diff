@@ -1,0 +1,8 @@
+--- old.nonInferrableTypePropagation2.js
++++ new.nonInferrableTypePropagation2.js
+@@= skipped -36, +36 lines =@@
+ //// [nonInferrableTypePropagation2.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var x = pipe(es, filter(exists(function (n) { return n > 0; })));
++const x = pipe(es, filter(exists((n) => n > 0)));

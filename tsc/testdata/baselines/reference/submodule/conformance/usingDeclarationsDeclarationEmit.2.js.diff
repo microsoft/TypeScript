@@ -1,0 +1,18 @@
+--- old.usingDeclarationsDeclarationEmit.2.js
++++ new.usingDeclarationsDeclarationEmit.2.js
+@@= skipped -11, +11 lines =@@
+ using r1 = { [Symbol.dispose]() { } };
+ await using r2 = { async [Symbol.asyncDispose]() { } };
+ export {};
+-
+-
+-//// [usingDeclarationsDeclarationEmit.2.d.ts]
+-declare const r1: {
+-    [Symbol.dispose](): void;
+-};
+-export type R1 = typeof r1;
+-declare const r2: {
+-    [Symbol.asyncDispose](): Promise<void>;
+-};
+-export type R2 = typeof r2;
+-export {};

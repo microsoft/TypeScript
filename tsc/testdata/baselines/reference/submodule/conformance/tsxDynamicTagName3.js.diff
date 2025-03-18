@@ -1,0 +1,8 @@
+--- old.tsxDynamicTagName3.js
++++ new.tsxDynamicTagName3.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [tsxDynamicTagName3.jsx]
+ var CustomTag = "h1";
+-<CustomTag> Hello World </CustomTag>; // This should be an error. we will try look up string literal type in JSX.IntrinsicElements
++<CustomTag> Hello World </CustomTag>;

@@ -1,0 +1,16 @@
+--- old.switchStatementsWithMultipleDefaults1.js
++++ new.switchStatementsWithMultipleDefaults1.js
+@@= skipped -18, +18 lines =@@
+ switch (x) {
+     case 1:
+     case 2:
+-    default: // No issues.
++    default:
+         break;
+-    default: // Error; second 'default' clause.
+-    default: // Error; third 'default' clause.
++    default:
++    default:
+     case 3:
+         x *= x;
+ }

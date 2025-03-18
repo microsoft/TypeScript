@@ -1,0 +1,18 @@
+--- old.vueLikeDataAndPropsInference.js
++++ new.vueLikeDataAndPropsInference.js
+@@= skipped -51, +51 lines =@@
+     props: {
+         foo: ''
+     },
+-    data: function () {
++    data() {
+         return {
+             bar: true
+         };
+     },
+     watch: {
+-        foo: function (newVal, oldVal) {
++        foo(newVal, oldVal) {
+             this.bar = false;
+         }
+     }

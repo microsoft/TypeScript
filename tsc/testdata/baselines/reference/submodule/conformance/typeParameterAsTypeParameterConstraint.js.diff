@@ -1,0 +1,11 @@
+--- old.typeParameterAsTypeParameterConstraint.js
++++ new.typeParameterAsTypeParameterConstraint.js
+@@= skipped -28, +28 lines =@@
+ foo2(1, ['']);
+ 
+ //// [typeParameterAsTypeParameterConstraint.js]
+-// using a type parameter as a constraint for a type parameter is valid
+-// no errors expected except illegal constraints
+ function foo(x, y) { return y; }
+ var r = foo(1, 2);
+ var r = foo({}, 1);

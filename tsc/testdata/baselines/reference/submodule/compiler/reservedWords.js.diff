@@ -1,0 +1,10 @@
+--- old.reservedWords.js
++++ new.reservedWords.js
+@@= skipped -25, +25 lines =@@
+     break: 3,
+     function: 4
+ };
+-//This compiles.
+ var obj2 = {
+     if: 0,
+     while: 1,

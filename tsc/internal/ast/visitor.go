@@ -258,18 +258,21 @@ func (v *NodeVisitor) visitTopLevelStatements(nodes *StatementList) *StatementLi
 }
 
 func (v *NodeVisitor) liftToBlock(node *Statement) *Statement {
-	if node != nil && node.Kind == KindSyntaxList {
-		nodes := node.AsSyntaxList().Children
-		if len(nodes) == 0 {
-			node = nil
-		} else if len(nodes) == 1 {
-			node = nodes[0]
+	var nodes []*Node
+	if node != nil {
+		if node.Kind == KindSyntaxList {
+			nodes = node.AsSyntaxList().Children
 		} else {
-			node = v.Factory.NewBlock(v.Factory.NewNodeList(nodes), true /*multiLine*/)
+			nodes = []*Node{node}
 		}
-		if node != nil && node.Kind == KindSyntaxList {
-			panic("The result of visiting and lifting a Node may not be SyntaxList")
-		}
+	}
+	if len(nodes) == 1 {
+		node = nodes[0]
+	} else {
+		node = v.Factory.NewBlock(v.Factory.NewNodeList(nodes), true /*multiLine*/)
+	}
+	if node.Kind == KindSyntaxList {
+		panic("The result of visiting and lifting a Node may not be SyntaxList")
 	}
 	return node
 }

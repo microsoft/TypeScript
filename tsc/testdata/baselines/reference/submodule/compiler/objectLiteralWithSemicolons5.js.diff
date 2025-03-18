@@ -1,0 +1,8 @@
+--- old.objectLiteralWithSemicolons5.js
++++ new.objectLiteralWithSemicolons5.js
+@@= skipped -3, +3 lines =@@
+ var v = { foo() { }; a: b; get baz() { }; }
+ 
+ //// [objectLiteralWithSemicolons5.js]
+-var v = { foo: function () { }, a: b, get baz() { } };
++var v = { foo() { }, a: b, get baz() { }, };

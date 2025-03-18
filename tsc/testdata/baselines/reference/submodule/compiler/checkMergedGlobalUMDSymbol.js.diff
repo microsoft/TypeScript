@@ -1,0 +1,8 @@
+--- old.checkMergedGlobalUMDSymbol.js
++++ new.checkMergedGlobalUMDSymbol.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [test.js]
+-var m = THREE;
++const m = THREE;

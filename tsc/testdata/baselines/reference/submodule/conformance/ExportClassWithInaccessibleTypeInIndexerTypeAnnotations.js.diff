@@ -1,0 +1,24 @@
+--- old.ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.js
++++ new.ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.js
+@@= skipped -19, +19 lines =@@
+ //// [ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.js]
+ var A;
+ (function (A) {
+-    var Point = /** @class */ (function () {
+-        function Point() {
+-        }
+-        return Point;
+-    }());
+-    var points = /** @class */ (function () {
+-        function points() {
+-        }
+-        return points;
+-    }());
++    class Point {
++        x;
++        y;
++    }
++    class points {
++    }
+     A.points = points;
+ })(A || (A = {}));

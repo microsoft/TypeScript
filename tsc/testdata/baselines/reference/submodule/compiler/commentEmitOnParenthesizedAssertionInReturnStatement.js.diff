@@ -1,0 +1,13 @@
+--- old.commentEmitOnParenthesizedAssertionInReturnStatement.js
++++ new.commentEmitOnParenthesizedAssertionInReturnStatement.js
+@@= skipped -20, +20 lines =@@
+         getThing: () => Promise.resolve('')
+     };
+     foo() {
+-        return (
+-        /* TODO: Avoid using type assertions, please refactor. */ this.client
+-            .getThing());
++        return this.client
++            .getThing();
+     }
+ }

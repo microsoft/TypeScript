@@ -1,0 +1,12 @@
+--- old.es6ExportDefaultClassDeclaration2.js
++++ new.es6ExportDefaultClassDeclaration2.js
+@@= skipped -9, +9 lines =@@
+ export default class {
+     method() { }
+ }
+-
+-
+-//// [es6ExportDefaultClassDeclaration2.d.ts]
+-export default class {
+-    method(): void;
+-}

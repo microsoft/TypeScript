@@ -1,0 +1,33 @@
+--- old.classStaticPropertyAccess.js
++++ new.classStaticPropertyAccess.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [classStaticPropertyAccess.js]
+-"use strict";
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A["\""] = function () { };
+-    A.x = 1;
+-    A.y = 1;
+-    A._b = 2;
+-    return A;
+-}());
+-var a = new A();
+-a["\""]; // Error
+-a['y']; // Error
+-a.y; // Error
+-A._b; // Error
++class A {
++    static "\""() { }
++    static x = 1;
++    static y = 1;
++    static _b = 2;
++}
++const a = new A();
++a["\""];
++a['y'];
++a.y;
++A._b;
+ A.a;

@@ -1,0 +1,11 @@
+--- old.exportObjectRest(module=commonjs,target=es5).js
++++ new.exportObjectRest(module=commonjs,target=es5).js
+@@= skipped -4, +4 lines =@@
+ 
+ //// [exportObjectRest.js]
+ "use strict";
+-var _a;
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.rest = exports.x = void 0;
+-exports.x = (_a = { x: 'x', y: 'y' }, _a).x, exports.rest = __rest(_a, ["x"]);
++({ x: exports.x, ...exports.rest } = { x: 'x', y: 'y' });

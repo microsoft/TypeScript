@@ -1,0 +1,34 @@
+--- old.declFileImportChainInExportAssignment.js
++++ new.declFileImportChainInExportAssignment.js
+@@= skipped -14, +14 lines =@@
+ "use strict";
+ var m;
+ (function (m) {
+-    var c;
++    let c;
+     (function (c_1) {
+-        var c = /** @class */ (function () {
+-            function c() {
+-            }
+-            return c;
+-        }());
++        class c {
++        }
+         c_1.c = c;
+     })(c = m.c || (m.c = {}));
+ })(m || (m = {}));
+-var a = m.c;
+-var b = a;
+ module.exports = b;
+-
+-
+-//// [declFileImportChainInExportAssignment.d.ts]
+-declare namespace m {
+-    namespace c {
+-        class c {
+-        }
+-    }
+-}
+-import a = m.c;
+-import b = a;
+-export = b;

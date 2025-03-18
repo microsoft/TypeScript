@@ -1,0 +1,13 @@
+--- old.declFileEmitDeclarationOnlyError1.js
++++ new.declFileEmitDeclarationOnlyError1.js
+@@= skipped -0, +-1 lines =@@
+-<no content>
+@@= skipped --1, +1 lines =@@
++//// [tests/cases/compiler/declFileEmitDeclarationOnlyError1.ts] ////
++
++//// [hello.ts]
++var hello = "yo!";
++
++
++//// [hello.js]
++var hello = "yo!";

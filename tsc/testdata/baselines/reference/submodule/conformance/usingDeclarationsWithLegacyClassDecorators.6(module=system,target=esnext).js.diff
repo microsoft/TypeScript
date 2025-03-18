@@ -1,0 +1,31 @@
+--- old.usingDeclarationsWithLegacyClassDecorators.6(module=system,target=esnext).js
++++ new.usingDeclarationsWithLegacyClassDecorators.6(module=system,target=esnext).js
+@@= skipped -13, +13 lines =@@
+ export { C as D };
+ 
+ //// [usingDeclarationsWithLegacyClassDecorators.6.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var before, C;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [],
+-        execute: function () {
+-            using before_1 = before = null;
+-            C = class C {
+-            };
+-            exports_1("D", C);
+-            exports_1("D", C = __decorate([
+-                dec
+-            ], C));
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.D = void 0;
++using before = null;
++@dec
++class C {
++}
++exports.D = C;

@@ -1,0 +1,9 @@
+--- old.untypedModuleImport_withAugmentation.js
++++ new.untypedModuleImport_withAugmentation.js
+@@= skipped -13, +13 lines =@@
+ //// [a.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo_1 = require("foo");
++const foo_1 = require("foo");
+ foo_1.x;

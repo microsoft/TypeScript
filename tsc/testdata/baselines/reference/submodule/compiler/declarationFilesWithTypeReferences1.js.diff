@@ -1,0 +1,10 @@
+--- old.declarationFilesWithTypeReferences1.js
++++ new.declarationFilesWithTypeReferences1.js
+@@= skipped -13, +13 lines =@@
+ function foo() {
+     return undefined;
+ }
+-
+-
+-//// [app.d.ts]
+-declare function foo(): Error;

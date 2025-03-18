@@ -1,0 +1,12 @@
+--- old.genericCapturingFunctionNarrowing.js
++++ new.genericCapturingFunctionNarrowing.js
+@@= skipped -20, +20 lines =@@
+         console.log(thing.foo);
+     }
+     else {
+-        // I would expect this to work because the type should be narrowed in this branch to `Second`
+-        console.log(thing.bar); // Error: Property 'bar' does not exist on type 'First | Second'.
++        console.log(thing.bar);
+     }
+     function hasAFoo(value) {
+         return "foo" in value;

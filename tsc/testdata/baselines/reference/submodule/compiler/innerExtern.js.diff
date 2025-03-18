@@ -1,0 +1,21 @@
+--- old.innerExtern.js
++++ new.innerExtern.js
+@@= skipped -17, +17 lines =@@
+ //// [innerExtern.js]
+ var A;
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+-        var C = /** @class */ (function () {
+-            function C() {
+-                this.x = BB.Elephant.X;
+-            }
+-            return C;
+-        }());
++        class C {
++            x = BB.Elephant.X;
++        }
+         B.C = C;
+     })(B = A.B || (A.B = {}));
+ })(A || (A = {}));

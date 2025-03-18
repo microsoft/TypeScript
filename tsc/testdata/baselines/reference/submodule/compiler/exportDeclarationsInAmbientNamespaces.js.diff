@@ -1,0 +1,8 @@
+--- old.exportDeclarationsInAmbientNamespaces.js
++++ new.exportDeclarationsInAmbientNamespaces.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [exportDeclarationsInAmbientNamespaces.js]
+-Q.try(function () { });
++Q.try(() => { });

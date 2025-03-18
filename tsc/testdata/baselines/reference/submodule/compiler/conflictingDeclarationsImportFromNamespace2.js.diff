@@ -1,0 +1,11 @@
+--- old.conflictingDeclarationsImportFromNamespace2.js
++++ new.conflictingDeclarationsImportFromNamespace2.js
+@@= skipped -32, +32 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.pick = void 0;
+-var pick = require("lodash/pick");
+-var pick = function () { return (0, exports.pick)(); };
++const pick = require("lodash/pick");
++const pick = () => (0, exports.pick)();
+ exports.pick = pick;

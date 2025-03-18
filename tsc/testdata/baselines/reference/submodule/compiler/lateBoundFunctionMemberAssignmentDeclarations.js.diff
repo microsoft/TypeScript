@@ -1,0 +1,13 @@
+--- old.lateBoundFunctionMemberAssignmentDeclarations.js
++++ new.lateBoundFunctionMemberAssignmentDeclarations.js
+@@= skipped -14, +14 lines =@@
+ const _private = Symbol();
+ foo[_private] = "ok";
+ const x = foo[_private];
+-
+-
+-//// [index.d.ts]
+-export declare function foo(): void;
+-export declare namespace foo {
+-    var bar: number;
+-}

@@ -1,0 +1,8 @@
+--- old.objectLiteralMemberWithModifiers1.js
++++ new.objectLiteralMemberWithModifiers1.js
+@@= skipped -3, +3 lines =@@
+ var v = { public foo() { } }
+ 
+ //// [objectLiteralMemberWithModifiers1.js]
+-var v = { foo: function () { } };
++var v = { foo() { } };

@@ -1,0 +1,11 @@
+--- old.shorthandOfExportedEntity01_targetES2015_CommonJS.js
++++ new.shorthandOfExportedEntity01_targetES2015_CommonJS.js
+@@= skipped -16, +16 lines =@@
+ function foo() {
+     const x = { test: exports.test };
+ }
+-
+-
+-//// [shorthandOfExportedEntity01_targetES2015_CommonJS.d.ts]
+-export declare const test = "test";
+-export declare function foo(): void;

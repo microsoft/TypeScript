@@ -1,0 +1,10 @@
+--- old.acceptSymbolAsWeakType.js
++++ new.acceptSymbolAsWeakType.js
+@@= skipped -21, +21 lines =@@
+ f.unregister(s);
+ 
+ //// [acceptSymbolAsWeakType.js]
+-"use strict";
+ const s = Symbol('s');
+ const ws = new WeakSet([s]);
+ ws.add(s);

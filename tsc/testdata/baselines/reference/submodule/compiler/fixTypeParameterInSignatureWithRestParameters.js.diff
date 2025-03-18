@@ -1,0 +1,8 @@
+--- old.fixTypeParameterInSignatureWithRestParameters.js
++++ new.fixTypeParameterInSignatureWithRestParameters.js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [fixTypeParameterInSignatureWithRestParameters.js]
+ function bar(item1, item2) { }
+-bar(1, ""); // Should be ok
++bar(1, "");

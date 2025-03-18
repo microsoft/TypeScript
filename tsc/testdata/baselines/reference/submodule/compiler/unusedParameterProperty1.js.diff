@@ -1,0 +1,18 @@
+--- old.unusedParameterProperty1.js
++++ new.unusedParameterProperty1.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [unusedParameterProperty1.js]
+-var A = /** @class */ (function () {
+-    function A(used) {
++class A {
++    used;
++    constructor(used) {
+         this.used = used;
+-        var foge = used;
++        let foge = used;
+     }
+-    return A;
+-}());
++}

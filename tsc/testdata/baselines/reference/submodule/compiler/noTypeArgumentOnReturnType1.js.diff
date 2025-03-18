@@ -1,0 +1,18 @@
+--- old.noTypeArgumentOnReturnType1.js
++++ new.noTypeArgumentOnReturnType1.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [noTypeArgumentOnReturnType1.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A.prototype.foo = function () {
++class A {
++    foo() {
+         return null;
+-    };
+-    return A;
+-}());
++    }
++}

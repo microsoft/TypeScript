@@ -1,0 +1,18 @@
+--- old.classExpression5.js
++++ new.classExpression5.js
+@@= skipped -7, +7 lines =@@
+ }().hi();
+ 
+ //// [classExpression5.js]
+-new /** @class */ (function () {
+-    function class_1() {
+-    }
+-    class_1.prototype.hi = function () {
++new class {
++    hi() {
+         return "Hi!";
+-    };
+-    return class_1;
+-}())().hi();
++    }
++}().hi();

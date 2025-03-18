@@ -1,0 +1,49 @@
+--- old.arbitraryModuleNamespaceIdentifiers_syntax.js
++++ new.arbitraryModuleNamespaceIdentifiers_syntax.js
+@@= skipped -94, +94 lines =@@
+ export {};
+ //// [type-clause-type-as-as.js]
+ export {};
+-
+-
+-//// [values-valid.d.ts]
+-export declare const foo = 123;
+-export { foo as "valid 1" };
+-export { "valid 1" as "valid 2" } from "./values-valid";
+-export { foo as "valid 3" } from "./values-valid";
+-export * as "valid 4" from "./values-valid";
+-//// [values-bad-import.d.ts]
+-export {};
+-//// [values-bad-export.d.ts]
+-export { "invalid 3" as baz };
+-//// [values-no-as.d.ts]
+-export {};
+-//// [values-type-as.d.ts]
+-export {};
+-//// [type-decls-valid.d.ts]
+-export type foo = 123;
+-export type { foo as "valid 1" };
+-export type { "valid 1" as "valid 2" } from "./type-decls-valid";
+-export type { foo as "valid 3" } from "./type-decls-valid";
+-export type * as "valid 4" from "./type-decls-valid";
+-//// [type-decls-bad-import.d.ts]
+-export {};
+-//// [type-decls-bad-export.d.ts]
+-export type { "invalid 3" as baz };
+-//// [type-decls-no-as.d.ts]
+-export {};
+-//// [type-decls-type-as.d.ts]
+-export {};
+-//// [type-clause-valid.d.ts]
+-export type foo = 123;
+-export { type foo as "valid 1" };
+-export { type "valid 1" as "valid 2" } from "./type-clause-valid";
+-export { type foo as "valid 3" } from "./type-clause-valid";
+-//// [type-clause-bad-import.d.ts]
+-export {};
+-//// [type-clause-bad-export.d.ts]
+-export { type "invalid 3" as baz };
+-//// [type-clause-no-as.d.ts]
+-export {};
+-//// [type-clause-type-as-as.d.ts]
+-export {};

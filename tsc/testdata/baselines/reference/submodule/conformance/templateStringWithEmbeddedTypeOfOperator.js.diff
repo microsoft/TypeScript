@@ -1,0 +1,8 @@
+--- old.templateStringWithEmbeddedTypeOfOperator.js
++++ new.templateStringWithEmbeddedTypeOfOperator.js
+@@= skipped -3, +3 lines =@@
+ var x = `abc${ typeof "hi" }def`;
+ 
+ //// [templateStringWithEmbeddedTypeOfOperator.js]
+-var x = "abc".concat(typeof "hi", "def");
++var x = `abc${typeof "hi"}def`;

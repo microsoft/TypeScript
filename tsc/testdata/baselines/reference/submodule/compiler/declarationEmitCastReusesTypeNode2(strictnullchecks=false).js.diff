@@ -1,0 +1,83 @@
+--- old.declarationEmitCastReusesTypeNode2(strictnullchecks=false).js
++++ new.declarationEmitCastReusesTypeNode2(strictnullchecks=false).js
+@@= skipped -25, +25 lines =@@
+ // allows `undefined` on the input side, thanks to the initializer
+ export function fnWithPartialAnnotationOnDefaultparam(x: {} & { name: string } = null! as {} & { name: string }, b: number) {}
+ 
+-
+-
+-//// [declarationEmitCastReusesTypeNode2.d.ts]
+-export declare let vLet: {} & {
+-    name: string;
+-};
+-export declare const vConst: {} & {
+-    name: string;
+-};
+-export declare function fn(p?: {} & {
+-    name: string;
+-}): void;
+-export declare function fnWithRequiredDefaultParam(p: {} & {
+-    name: string;
+-}, req: number): void;
+-export declare class C {
+-    ctorField: {} & {
+-        name: string;
+-    };
+-    field: {} & {
+-        name: string;
+-    };
+-    optField?: {} & {
+-        name: string;
+-    };
+-    readonly roFiled: {} & {
+-        name: string;
+-    };
+-    method(p?: {} & {
+-        name: string;
+-    }): void;
+-    methodWithRequiredDefault(p: {} & {
+-        name: string;
+-    }, req: number): void;
+-    constructor(ctorField?: {} & {
+-        name: string;
+-    });
+-    get x(): {} & {
+-        name: string;
+-    };
+-    set x(v: {} & {
+-        name: string;
+-    });
++//// [declarationEmitCastReusesTypeNode2.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C = exports.vConst = exports.vLet = void 0;
++exports.fn = fn;
++exports.fnWithRequiredDefaultParam = fnWithRequiredDefaultParam;
++exports.fnWithPartialAnnotationOnDefaultparam = fnWithPartialAnnotationOnDefaultparam;
++exports.vLet = null;
++exports.vConst = null;
++function fn(p = null) { }
++function fnWithRequiredDefaultParam(p = null, req) { }
++class C {
++    ctorField;
++    field = null;
++    optField = null;
++    roFiled = null;
++    method(p = null) { }
++    methodWithRequiredDefault(p = null, req) { }
++    constructor(ctorField = null) {
++        this.ctorField = ctorField;
++    }
++    get x() { return null; }
++    set x(v) { }
+ }
+-declare const _default: {} & {
+-    name: string;
+-};
+-export default _default;
+-export declare function fnWithPartialAnnotationOnDefaultparam(x: {} & {
+-    name: string;
+-}, b: number): void;
++exports.C = C;
++exports.default = null;
++function fnWithPartialAnnotationOnDefaultparam(x = null, b) { }

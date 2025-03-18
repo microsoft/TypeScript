@@ -1,0 +1,14 @@
+--- old.unusedTypeParameters8.js
++++ new.unusedTypeParameters8.js
+@@= skipped -6, +6 lines =@@
+ interface C<T> { }
+ 
+ //// [a.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ //// [b.js]

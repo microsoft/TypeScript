@@ -1,0 +1,10 @@
+--- old.computedPropertyNames50_ES6.js
++++ new.computedPropertyNames50_ES6.js
+@@= skipped -37, +37 lines =@@
+         throw 10;
+     },
+     set [1 + 1]() {
+-        // just throw
+         throw 10;
+     },
+     get [1 + 1]() {

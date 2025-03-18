@@ -1,0 +1,16 @@
+--- old.arrowFunctionInConstructorArgument1.js
++++ new.arrowFunctionInConstructorArgument1.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [arrowFunctionInConstructorArgument1.js]
+-var C = /** @class */ (function () {
+-    function C(x) {
+-    }
+-    return C;
+-}());
+-var c = new C(function () { return asdf; }); // should error
++class C {
++    constructor(x) { }
++}
++var c = new C(() => { return asdf; });

@@ -74,7 +74,7 @@ func (e *emitter) getScriptTransformers(emitContext *printer.EmitContext, source
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
 	} else {
-		referenceResolver = binder.NewReferenceResolver(binder.ReferenceResolverHooks{})
+		referenceResolver = binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 	}
 
 	// erase types

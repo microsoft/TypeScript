@@ -1,0 +1,10 @@
+--- old.logicalAssignment4(target=es2021).js
++++ new.logicalAssignment4(target=es2021).js
+@@= skipped -51, +51 lines =@@
+ 
+ 
+ //// [logicalAssignment4.js]
+-"use strict";
+ function foo1(results) {
+     (results ||= []).push(100);
+ }

@@ -1,0 +1,11 @@
+--- old.nodeModulesImportAttributes(module=node16).js
++++ new.nodeModulesImportAttributes(module=node16).js
+@@= skipped -15, +15 lines =@@
+ //// [index.js]
+ export {};
+ //// [otherc.cjs]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
+-const json2 = import("./package.json", { with: { type: "json" } }); // should be fine
++const json2 = import("./package.json", { with: { type: "json" } });
++export {};

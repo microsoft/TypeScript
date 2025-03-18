@@ -1,0 +1,11 @@
+--- old.constEnumBadPropertyNames.js
++++ new.constEnumBadPropertyNames.js
+@@= skipped -4, +4 lines =@@
+ var x = E["B"]
+ 
+ //// [constEnumBadPropertyNames.js]
++var E;
++(function (E) {
++    E[E["A"] = 0] = "A";
++})(E || (E = {}));
+ var x = E["B"];

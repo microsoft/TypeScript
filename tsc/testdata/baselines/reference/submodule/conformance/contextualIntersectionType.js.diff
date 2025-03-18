@@ -1,0 +1,11 @@
+--- old.contextualIntersectionType.js
++++ new.contextualIntersectionType.js
+@@= skipped -10, +10 lines =@@
+ //// [contextualIntersectionType.js]
+ var x;
+ x = {
+-    a: function (s) { return s; },
+-    b: function (n) { return n; }
++    a: s => s,
++    b: n => n
+ };

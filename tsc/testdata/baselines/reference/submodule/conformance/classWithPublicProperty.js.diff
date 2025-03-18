@@ -1,0 +1,31 @@
+--- old.classWithPublicProperty.js
++++ new.classWithPublicProperty.js
+@@= skipped -23, +23 lines =@@
+ var r8: string = C.g();
+ 
+ //// [classWithPublicProperty.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-        this.a = '';
+-        this.b = '';
+-        this.d = function () { return ''; };
+-    }
+-    C.prototype.c = function () { return ''; };
+-    C.f = function () { return ''; };
+-    C.g = function () { return ''; };
+-    return C;
+-}());
+-// all of these are valid
++class C {
++    x;
++    a = '';
++    b = '';
++    c() { return ''; }
++    d = () => '';
++    static e;
++    static f() { return ''; }
++    static g = () => '';
++}
+ var c = new C();
+ var r1 = c.x;
+ var r2 = c.a;

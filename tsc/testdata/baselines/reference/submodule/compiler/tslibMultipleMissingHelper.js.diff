@@ -1,0 +1,39 @@
+--- old.tslibMultipleMissingHelper.js
++++ new.tslibMultipleMissingHelper.js
+@@= skipped -44, +44 lines =@@
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const tslib_1 = require("tslib");
+-function foo() {
+-    return tslib_1.__awaiter(this, void 0, void 0, function* () { });
+-}
+-function bar() {
+-    return tslib_1.__awaiter(this, void 0, void 0, function* () { });
+-}
++async function foo() { }
++async function bar() { }
+ //// [other.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.noop = noop;
+ exports.spread = spread;
+-const tslib_1 = require("tslib");
+-function noop() {
+-    return tslib_1.__awaiter(this, void 0, void 0, function* () { });
++async function noop() { }
++function spread({ a, ...rest }) {
++    return { c: "c", ...rest };
+ }
+-function spread(_a) {
+-    var { a } = _a, rest = tslib_1.__rest(_a, ["a"]);
+-    return Object.assign({ c: "c" }, rest);
+-}
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const tslib_1 = require("tslib");
+-function foo() {
+-    return tslib_1.__awaiter(this, void 0, void 0, function* () { });
+-}
++async function foo() { }

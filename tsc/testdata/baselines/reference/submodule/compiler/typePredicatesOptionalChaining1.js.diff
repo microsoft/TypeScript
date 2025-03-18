@@ -1,0 +1,22 @@
+--- old.typePredicatesOptionalChaining1.js
++++ new.typePredicatesOptionalChaining1.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [typePredicatesOptionalChaining1.js]
+-"use strict";
+-var _a;
+-var x = {
++const x = {
+     y: {},
+ };
+-// type guard
+ function isNotNull(x) {
+     return x !== null && x !== undefined;
+ }
+-// function which I want to call in the result of the expression
+ function title(str) {
+     return str.length > 0 ? "Dear " + str : "Dear nobody";
+ }
+-isNotNull((_a = x === null || x === void 0 ? void 0 : x.y) === null || _a === void 0 ? void 0 : _a.z) ? title(x.y.z) : null; // should not error
++isNotNull(x?.y?.z) ? title(x.y.z) : null;

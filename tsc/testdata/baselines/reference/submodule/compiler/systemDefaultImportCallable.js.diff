@@ -1,0 +1,25 @@
+--- old.systemDefaultImportCallable.js
++++ new.systemDefaultImportCallable.js
+@@= skipped -15, +15 lines =@@
+ const _: string = repeat(new Date().toUTCString() + " ", 2);
+ 
+ //// [greeter.js]
+-System.register(["core-js/fn/string/repeat"], function (exports_1, context_1) {
+-    "use strict";
+-    var repeat_1, _;
+-    var __moduleName = context_1 && context_1.id;
+-    return {
+-        setters: [
+-            function (repeat_1_1) {
+-                repeat_1 = repeat_1_1;
+-            }
+-        ],
+-        execute: function () {
+-            _ = repeat_1.default(new Date().toUTCString() + " ", 2);
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const repeat_1 = require("core-js/fn/string/repeat");
++const _ = (0, repeat_1.default)(new Date().toUTCString() + " ", 2);

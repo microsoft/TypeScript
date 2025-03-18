@@ -1,0 +1,10 @@
+--- old.classWithStaticFieldInParameterBindingPattern(target=esnext).js
++++ new.classWithStaticFieldInParameterBindingPattern(target=esnext).js
+@@= skipped -4, +4 lines =@@
+ (({ [class { static x = 1 }.x]: b = "" }) => {})();
+ 
+ //// [classWithStaticFieldInParameterBindingPattern.js]
+-// https://github.com/microsoft/TypeScript/issues/36295
+ (({ [class {
+     static x = 1;
+ }.x]: b = "" }) => { })();

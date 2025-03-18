@@ -1,0 +1,24 @@
+--- old.controlFlowForInStatement.js
++++ new.controlFlowForInStatement.js
+@@= skipped -20, +20 lines =@@
+ 
+ 
+ //// [controlFlowForInStatement.js]
+-var x;
+-var obj;
+-var cond;
++let x;
++let obj;
++let cond;
+ x = /a/;
+-for (var y in obj) {
++for (let y in obj) {
+     x = y;
+     if (cond) {
+         x = 42;
+@@= skipped -15, +15 lines =@@
+         break;
+     }
+ }
+-x; // RegExp | string | number | boolean
++x;

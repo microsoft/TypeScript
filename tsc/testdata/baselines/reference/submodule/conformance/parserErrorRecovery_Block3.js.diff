@@ -1,0 +1,20 @@
+--- old.parserErrorRecovery_Block3.js
++++ new.parserErrorRecovery_Block3.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [parserErrorRecovery_Block3.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    a() {
+     }
+-    C.prototype.a = function () {
+-    };
+-    C.prototype.b = function () {
+-    };
+-    return C;
+-}());
++    b() {
++    }
++}

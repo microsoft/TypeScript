@@ -1,0 +1,8 @@
+--- old.reactNamespaceImportPresevation.js
++++ new.reactNamespaceImportPresevation.js
+@@= skipped -15, +15 lines =@@
+ //// [test.jsx]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var myReactLib = require("my-React-Lib"); // should not be elided
+ <foo data/>;

@@ -1,0 +1,27 @@
+--- old.accessorsOverrideProperty9.js
++++ new.accessorsOverrideProperty9.js
+@@= skipped -50, +50 lines =@@
+ 
+ 
+ //// [accessorsOverrideProperty9.js]
+-// #41347, based on microsoft/rushstack
+-// Base class
+ class ApiItem {
+     get members() {
+         return [];
+     }
+ }
+-// Normal subclass
+ class ApiEnumMember extends ApiItem {
+ }
+ function ApiItemContainerMixin(baseClass) {
+@@= skipped -21, +18 lines =@@
+     }
+     return MixedClass;
+ }
+-// Subclass inheriting from mixin
+ export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
+-    // This worked prior to TypeScript 4.0:
+     get members() {
+         return [];
+     }

@@ -1,0 +1,25 @@
+--- old.typeAliases.js
++++ new.typeAliases.js
+@@= skipped -82, +82 lines =@@
+ y[0].toLowerCase();
+ 
+ //// [typeAliases.js]
+-// Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
+ var x1;
+ var x1;
+ var x2;
+@@= skipped -13, +12 lines =@@
+ var x5;
+ var x6;
+ var x6;
+-var C7 = /** @class */ (function () {
+-    function C7() {
+-    }
+-    return C7;
+-}());
++class C7 {
++    x;
++}
+ var x7;
+ var x7;
+ var x8;

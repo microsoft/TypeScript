@@ -1,0 +1,33 @@
+--- old.declarationEmitImportInExportAssignmentModule.js
++++ new.declarationEmitImportInExportAssignmentModule.js
+@@= skipped -14, +14 lines =@@
+ "use strict";
+ var m;
+ (function (m) {
+-    var c;
++    let c;
+     (function (c_1) {
+-        var c = /** @class */ (function () {
+-            function c() {
+-            }
+-            return c;
+-        }());
++        class c {
++        }
+         c_1.c = c;
+     })(c = m.c || (m.c = {}));
++    var x = c;
+ })(m || (m = {}));
+ module.exports = m;
+-
+-
+-//// [declarationEmitImportInExportAssignmentModule.d.ts]
+-declare namespace m {
+-    namespace c {
+-        class c {
+-        }
+-    }
+-    import x = c;
+-    var a: typeof x;
+-}
+-export = m;

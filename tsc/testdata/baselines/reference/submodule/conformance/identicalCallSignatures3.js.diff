@@ -1,0 +1,8 @@
+--- old.identicalCallSignatures3.js
++++ new.identicalCallSignatures3.js
+@@= skipped -20, +20 lines =@@
+ }
+ 
+ //// [identicalCallSignatures3.js]
+-// Normally it is an error to have multiple overloads with identical signatures in a single type declaration.
+-// Here the multiple overloads come from multiple merged declarations, so we do not report errors.

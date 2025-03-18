@@ -1,0 +1,14 @@
+--- old.classAbstractConstructor.js
++++ new.classAbstractConstructor.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [classAbstractConstructor.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
++class A {
++    constructor() { }
++}

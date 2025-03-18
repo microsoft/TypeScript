@@ -1,0 +1,12 @@
+--- old.jsxFactoryQualifiedNameResolutionError.js
++++ new.jsxFactoryQualifiedNameResolutionError.js
+@@= skipped -18, +18 lines =@@
+ exports.AppComponent = void 0;
+ class AppComponent {
+     render(createElement) {
+-        return MyElement.createElement("div", null);
++        return <div />;
+     }
+ }
+ exports.AppComponent = AppComponent;
+-//# sourceMappingURL=test.js.map

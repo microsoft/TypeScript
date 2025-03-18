@@ -1,0 +1,20 @@
+--- old.blockScopedFunctionDeclarationInStrictModule.js
++++ new.blockScopedFunctionDeclarationInStrictModule.js
+@@= skipped -8, +8 lines =@@
+ export = foo; // not ok
+ 
+ //// [blockScopedFunctionDeclarationInStrictModule.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    if (true) {
+-        function foo() { }
+-        foo(); // ok
+-    }
+-    return foo;
+-});
++"use strict";
++if (true) {
++    function foo() { }
++    foo();
++}
++module.exports = foo;

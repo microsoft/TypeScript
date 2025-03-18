@@ -1,0 +1,13 @@
+--- old.commentOnImportStatement1.js
++++ new.commentOnImportStatement1.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [commentOnImportStatement1.js]
+-/* Copyright */
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,0 +1,10 @@
+--- old.declarationEmitIdentifierPredicates01.js
++++ new.declarationEmitIdentifierPredicates01.js
+@@= skipped -11, +11 lines =@@
+ function f(x) {
+     return typeof x === "number";
+ }
+-
+-
+-//// [declarationEmitIdentifierPredicates01.d.ts]
+-export declare function f(x: any): x is number;

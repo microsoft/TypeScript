@@ -1,0 +1,129 @@
+--- old.privateNameInInExpression(target=esnext).js
++++ new.privateNameInInExpression(target=esnext).js
+@@= skipped -118, +118 lines =@@
+ 
+ 
+ //// [privateNameInInExpression.js]
+-"use strict";
+ class Foo {
+     #field = 1;
+     static #staticField = 2;
+@@= skipped -12, +11 lines =@@
+         const c = #field in v;
+         const d = #field in v;
+         const e = #field in v;
+-        for (let f in #field in v) { /**/ } // unlikely but valid
++        for (let f in #field in v) { }
+     }
+     badRhs(v) {
+-        const a = #field in v; // Bad - RHS of in must be object type or any
+-        const b = #fiel in v; // Bad - typo in privateID
+-        const c = (#field) in v; // Bad - privateID is not an expression on its own
+-        for (#field in v) { /**/ } // Bad - 'in' not allowed
+-        for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
++        const a = #field in v;
++        const b = #fiel in v;
++        const c = (#field) in v;
++        for (#field in v) { }
++        for (let d in #field in v) { }
+     }
+     whitespace(v) {
+-        const a = v && /*0*/ #field /*1*/
+-            /*2*/ in /*3*/
+-                /*4*/ v; /*5*/
++        const a = v && #field
++            in
++                v;
+     }
+     flow(u, n, fb, fs, b, fsb, fsfb) {
+         if (typeof u === 'object') {
+             if (#field in n) {
+-                n; // good n is never
++                n;
+             }
+             if (#field in u) {
+-                u; // good u is Foo
++                u;
+             }
+             else {
+-                u; // good u is object | null
++                u;
+             }
+             if (u !== null) {
+                 if (#field in u) {
+-                    u; // good u is Foo
++                    u;
+                 }
+                 else {
+-                    u; // good u is object
++                    u;
+                 }
+                 if (#method in u) {
+-                    u; // good u is Foo
++                    u;
+                 }
+                 if (#staticField in u) {
+-                    u; // good u is typeof Foo
++                    u;
+                 }
+                 if (#staticMethod in u) {
+-                    u; // good u is typeof Foo
++                    u;
+                 }
+             }
+         }
+         if (#field in fb) {
+-            fb; // good fb is Foo
++            fb;
+         }
+         else {
+-            fb; // good fb is Bar
++            fb;
+         }
+         if (#field in fs) {
+-            fs; // good fs is FooSub
++            fs;
+         }
+         else {
+-            fs; // good fs is never
++            fs;
+         }
+         if (#field in b) {
+-            b; // good b is 'Bar & Foo'
++            b;
+         }
+         else {
+-            b; // good b is Bar
++            b;
+         }
+         if (#field in fsb) {
+-            fsb; // good fsb is FooSub
++            fsb;
+         }
+         else {
+-            fsb; // good fsb is Bar
++            fsb;
+         }
+         if (#field in fsfb) {
+-            fsfb; // good fsfb is 'Foo | FooSub'
++            fsfb;
+         }
+         else {
+-            fsfb; // good fsfb is Bar
++            fsfb;
+         }
+         class Nested {
+             m(v) {
+                 if (#field in v) {
+-                    v; // good v is Foo
++                    v;
+                 }
+             }
+         }
+@@= skipped -89, +89 lines =@@
+     notFoo = true;
+ }
+ function badSyntax(v) {
+-    return #field in v; // Bad - outside of class
++    return #field in v;
+ }

@@ -1,0 +1,40 @@
+--- old.genericCallWithObjectTypeArgs.js
++++ new.genericCallWithObjectTypeArgs.js
+@@= skipped -23, +23 lines =@@
+ var r2 = foo(c1, c1); // ok
+ 
+ //// [genericCallWithObjectTypeArgs.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
+-var D = /** @class */ (function () {
+-    function D() {
+-    }
+-    return D;
+-}());
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    return X;
+-}());
++class C {
++    x;
++}
++class D {
++    x;
++}
++class X {
++    x;
++}
+ function foo(t, t2) {
+     var x;
+     return x;
+ }
+ var c1 = new X();
+ var d1 = new X();
+-var r = foo(c1, d1); // error
+-var r2 = foo(c1, c1); // ok
++var r = foo(c1, d1);
++var r2 = foo(c1, c1);

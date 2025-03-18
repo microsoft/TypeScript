@@ -1,0 +1,9 @@
+--- old.tsxResolveExternalModuleExportsTypes.js
++++ new.tsxResolveExternalModuleExportsTypes.js
+@@= skipped -22, +22 lines =@@
+ 
+ 
+ //// [foo.jsx]
+-var Foo = (<h1></h1>);
++const Foo = (<h1></h1>);
+ export {};

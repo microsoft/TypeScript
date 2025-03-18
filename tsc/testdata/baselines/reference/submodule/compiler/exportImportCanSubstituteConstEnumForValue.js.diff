@@ -1,0 +1,101 @@
+--- old.exportImportCanSubstituteConstEnumForValue.js
++++ new.exportImportCanSubstituteConstEnumForValue.js
+@@= skipped -62, +62 lines =@@
+ //// [exportImportCanSubstituteConstEnumForValue.js]
+ var MsPortalFx;
+ (function (MsPortalFx) {
+-    var ViewModels;
++    let ViewModels;
+     (function (ViewModels) {
+-        var Dialogs;
++        let Dialogs;
+         (function (Dialogs) {
++            let DialogResult;
++            (function (DialogResult) {
++                DialogResult[DialogResult["Abort"] = 0] = "Abort";
++                DialogResult[DialogResult["Cancel"] = 1] = "Cancel";
++                DialogResult[DialogResult["Ignore"] = 2] = "Ignore";
++                DialogResult[DialogResult["No"] = 3] = "No";
++                DialogResult[DialogResult["Ok"] = 4] = "Ok";
++                DialogResult[DialogResult["Retry"] = 5] = "Retry";
++                DialogResult[DialogResult["Yes"] = 6] = "Yes";
++            })(DialogResult = Dialogs.DialogResult || (Dialogs.DialogResult = {}));
+             function someExportedFunction() {
+             }
+             Dialogs.someExportedFunction = someExportedFunction;
++            let MessageBoxButtons;
++            (function (MessageBoxButtons) {
++                MessageBoxButtons[MessageBoxButtons["AbortRetryIgnore"] = 0] = "AbortRetryIgnore";
++                MessageBoxButtons[MessageBoxButtons["OK"] = 1] = "OK";
++                MessageBoxButtons[MessageBoxButtons["OKCancel"] = 2] = "OKCancel";
++                MessageBoxButtons[MessageBoxButtons["RetryCancel"] = 3] = "RetryCancel";
++                MessageBoxButtons[MessageBoxButtons["YesNo"] = 4] = "YesNo";
++                MessageBoxButtons[MessageBoxButtons["YesNoCancel"] = 5] = "YesNoCancel";
++            })(MessageBoxButtons = Dialogs.MessageBoxButtons || (Dialogs.MessageBoxButtons = {}));
+         })(Dialogs = ViewModels.Dialogs || (ViewModels.Dialogs = {}));
+     })(ViewModels = MsPortalFx.ViewModels || (MsPortalFx.ViewModels = {}));
+ })(MsPortalFx || (MsPortalFx = {}));
+ (function (MsPortalFx) {
+-    var ViewModels;
++    let ViewModels;
+     (function (ViewModels) {
+-        var SomeUsagesOfTheseConsts = /** @class */ (function () {
+-            function SomeUsagesOfTheseConsts() {
+-                // these do get replaced by the const value
+-                var value1 = 1 /* ReExportedEnum.Cancel */;
++        ViewModels.ReExportedEnum = Dialogs.DialogResult;
++        var DialogButtons = Dialogs.MessageBoxButtons;
++        ViewModels.Callback = Dialogs.DialogResultCallback;
++        class SomeUsagesOfTheseConsts {
++            constructor() {
++                const value1 = ViewModels.ReExportedEnum.Cancel;
+                 console.log(value1);
+-                var value2 = 2 /* DialogButtons.OKCancel */;
++                const value2 = DialogButtons.OKCancel;
+                 console.log(value2);
+             }
+-            return SomeUsagesOfTheseConsts;
+-        }());
++        }
+         ViewModels.SomeUsagesOfTheseConsts = SomeUsagesOfTheseConsts;
+     })(ViewModels = MsPortalFx.ViewModels || (MsPortalFx.ViewModels = {}));
+ })(MsPortalFx || (MsPortalFx = {}));
+-
+-
+-//// [exportImportCanSubstituteConstEnumForValue.d.ts]
+-declare namespace MsPortalFx.ViewModels.Dialogs {
+-    const enum DialogResult {
+-        Abort = 0,
+-        Cancel = 1,
+-        Ignore = 2,
+-        No = 3,
+-        Ok = 4,
+-        Retry = 5,
+-        Yes = 6
+-    }
+-    interface DialogResultCallback {
+-        (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
+-    }
+-    function someExportedFunction(): void;
+-    const enum MessageBoxButtons {
+-        AbortRetryIgnore = 0,
+-        OK = 1,
+-        OKCancel = 2,
+-        RetryCancel = 3,
+-        YesNo = 4,
+-        YesNoCancel = 5
+-    }
+-}
+-declare namespace MsPortalFx.ViewModels {
+-    /**
+-     * For some reason javascript code is emitted for this re-exported const enum.
+-     */
+-    export import ReExportedEnum = Dialogs.DialogResult;
+-    /**
+-     * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+-     */
+-    export import Callback = Dialogs.DialogResultCallback;
+-    class SomeUsagesOfTheseConsts {
+-        constructor();
+-    }
+-}

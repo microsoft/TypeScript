@@ -225,7 +225,7 @@ func compileAndEmit(sys System, program *compiler.Program, reportDiagnostic diag
 	emitResult := &compiler.EmitResult{EmitSkipped: true, Diagnostics: []*ast.Diagnostic{}}
 	if !options.ListFilesOnly.IsTrue() {
 		// !!! Emit is not yet fully implemented, will not emit unless `outfile` specified
-		emitResult = program.Emit(&compiler.EmitOptions{})
+		emitResult = program.Emit(compiler.EmitOptions{})
 	}
 	diagnostics = append(diagnostics, emitResult.Diagnostics...)
 

@@ -1,0 +1,32 @@
+--- old.implicitAnyAnyReturningFunction.js
++++ new.implicitAnyAnyReturningFunction.js
+@@= skipped -29, +29 lines =@@
+     var someLocal = {};
+     return someLocal;
+ }
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.A = function () {
++class C {
++    A() {
+         return "";
+-    };
+-    C.prototype.B = function () {
++    }
++    B() {
+         var someLocal = {};
+         return someLocal;
+-    };
+-    return C;
+-}());
+-
+-
+-//// [implicitAnyAnyReturningFunction.d.ts]
+-declare function A(): any;
+-declare function B(): any;
+-declare class C {
+-    A(): any;
+-    B(): any;
++    }
+ }

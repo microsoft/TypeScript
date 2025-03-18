@@ -1,0 +1,34 @@
+--- old.declarationEmitExportAliasVisibiilityMarking.js
++++ new.declarationEmitExportAliasVisibiilityMarking.js
+@@= skipped -19, +19 lines =@@
+ //// [Card.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.default = (function (suit, rank) { return ({ suit: suit, rank: rank }); });
++exports.default = (suit, rank) => ({ suit, rank });
+ //// [index.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.lazyCard = void 0;
+-var lazyCard = function () { return Promise.resolve().then(function () { return require('./Card'); }).then(function (a) { return a.default; }); };
++let lazyCard = () => Promise.resolve().then(() => require('./Card')).then(a => a.default);
+ exports.lazyCard = lazyCard;
+-
+-
+-//// [Types.d.ts]
+-type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
+-type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'King';
+-export { Suit, Rank };
+-//// [Card.d.ts]
+-import { Suit, Rank } from './Types';
+-declare const _default: (suit: Suit, rank: Rank) => {
+-    suit: Suit;
+-    rank: Rank;
+-};
+-export default _default;
+-//// [index.d.ts]
+-export declare let lazyCard: () => Promise<(suit: import("./Types").Suit, rank: import("./Types").Rank) => {
+-    suit: import("./Types").Suit;
+-    rank: import("./Types").Rank;
+-}>;
+-export { Suit, Rank } from './Types';

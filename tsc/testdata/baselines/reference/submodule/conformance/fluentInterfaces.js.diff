@@ -1,0 +1,8 @@
+--- old.fluentInterfaces.js
++++ new.fluentInterfaces.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [fluentInterfaces.js]
+ var c;
+-var z = c.foo().bar().baz(); // Fluent pattern
++var z = c.foo().bar().baz();

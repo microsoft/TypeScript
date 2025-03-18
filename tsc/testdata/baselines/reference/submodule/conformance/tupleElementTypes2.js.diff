@@ -1,0 +1,10 @@
+--- old.tupleElementTypes2.js
++++ new.tupleElementTypes2.js
+@@= skipped -3, +3 lines =@@
+ function f([a, b]: [number, any]) { }
+ 
+ //// [tupleElementTypes2.js]
+-function f(_a) {
+-    var a = _a[0], b = _a[1];
+-}
++function f([a, b]) { }

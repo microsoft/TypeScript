@@ -1,0 +1,11 @@
+--- old.localImportNameVsGlobalName.js
++++ new.localImportNameVsGlobalName.js
+@@= skipped -17, +17 lines =@@
+ //// [localImportNameVsGlobalName.js]
+ var Keyboard;
+ (function (Keyboard) {
+-    var Key;
++    let Key;
+     (function (Key) {
+         Key[Key["UP"] = 0] = "UP";
+         Key[Key["DOWN"] = 1] = "DOWN";

@@ -1,0 +1,19 @@
+--- old.es5-amd.js
++++ new.es5-amd.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ //// [es5-amd.js]
+-var A = /** @class */ (function () {
+-    function A() {
++class A {
++    constructor() {
+     }
+-    A.prototype.B = function () {
++    B() {
+         return 42;
+-    };
+-    return A;
+-}());
++    }
++}

@@ -1,0 +1,22 @@
+--- old.propertyOrdering2.js
++++ new.propertyOrdering2.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [propertyOrdering2.js]
+-var Foo = /** @class */ (function () {
+-    function Foo(x, y) {
++class Foo {
++    x;
++    constructor(x, y) {
+         this.x = x;
+     }
+-    Foo.prototype.foo = function () {
++    foo() {
+         var a = this.x;
+         return this.y;
+-    };
+-    return Foo;
+-}());
++    }
++}

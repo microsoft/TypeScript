@@ -1,0 +1,20 @@
+--- old.generatorES6InAMDModule.js
++++ new.generatorES6InAMDModule.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [generatorES6InAMDModule.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.foo = foo;
+-    function* foo() {
+-        yield;
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.foo = foo;
++function* foo() {
++    yield;
++}

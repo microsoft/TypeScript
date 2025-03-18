@@ -1,0 +1,9 @@
+--- old.emptyFile-declaration.js
++++ new.emptyFile-declaration.js
+@@= skipped -3, +3 lines =@@
+ 
+ 
+ //// [emptyFile-declaration.js]
+-
+-
+-//// [emptyFile-declaration.d.ts]

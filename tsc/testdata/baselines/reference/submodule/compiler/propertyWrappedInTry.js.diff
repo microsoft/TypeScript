@@ -1,0 +1,22 @@
+--- old.propertyWrappedInTry.js
++++ new.propertyWrappedInTry.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [propertyWrappedInTry.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ try {
+     bar = someInitThatMightFail();
+ }
+ catch (e) { }
+ baz();
+ {
+-    return this.bar; // doesn't get rewritten to Foo.bar.
++    return this.bar;
+ }

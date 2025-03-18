@@ -1,0 +1,31 @@
+--- old.enumBasics2.js
++++ new.enumBasics2.js
+@@= skipped -21, +21 lines =@@
+ (function (Foo) {
+     Foo[Foo["a"] = 2] = "a";
+     Foo[Foo["b"] = 3] = "b";
+-    Foo[Foo["x"] = Foo.a.b] = "x";
+-    Foo[Foo["y"] = Foo.b.a] = "y";
+-    Foo[Foo["z"] = Foo.y.x * Foo.a.x] = "z";
++    Foo["x"] = Foo.a.b;
++    if (typeof Foo.x !== "string") Foo[Foo.x] = "x";
++    Foo["y"] = Foo.b.a;
++    if (typeof Foo.y !== "string") Foo[Foo.y] = "y";
++    Foo["z"] = Foo.y.x * Foo.a.x;
++    if (typeof Foo.z !== "string") Foo[Foo.z] = "z";
+ })(Foo || (Foo = {}));
+ var Bar;
+ (function (Bar) {
+-    Bar[Bar["a"] = (1).valueOf()] = "a";
+-    Bar[Bar["b"] = 2] = "b";
+-    Bar[Bar["c"] = Foo.a.valueOf()] = "c";
+-    Bar[Bar["d"] = Foo.a.a] = "d";
++    Bar["a"] = (1).valueOf();
++    if (typeof Bar.a !== "string") Bar[Bar.a] = "a";
++    Bar["b"] = Foo.a;
++    if (typeof Bar.b !== "string") Bar[Bar.b] = "b";
++    Bar["c"] = Foo.a.valueOf();
++    if (typeof Bar.c !== "string") Bar[Bar.c] = "c";
++    Bar["d"] = Foo.a.a;
++    if (typeof Bar.d !== "string") Bar[Bar.d] = "d";
+ })(Bar || (Bar = {}));

@@ -1,0 +1,29 @@
+--- old.enumAssignmentCompat4.js
++++ new.enumAssignmentCompat4.js
+@@= skipped -27, +27 lines =@@
+ //// [enumAssignmentCompat4.js]
+ var M;
+ (function (M) {
+-    var MyEnum;
++    let MyEnum;
+     (function (MyEnum) {
+         MyEnum[MyEnum["BAR"] = 0] = "BAR";
+     })(MyEnum = M.MyEnum || (M.MyEnum = {}));
+@@= skipped -10, +10 lines =@@
+ })(M || (M = {}));
+ var N;
+ (function (N) {
+-    var MyEnum;
++    let MyEnum;
+     (function (MyEnum) {
+         MyEnum[MyEnum["FOO"] = 0] = "FOO";
+     })(MyEnum = N.MyEnum || (N.MyEnum = {}));
+@@= skipped -9, +9 lines =@@
+         foo: MyEnum.FOO
+     };
+ })(N || (N = {}));
+-var broken = [
++let broken = [
+     N.object1,
+     M.object2
+ ];

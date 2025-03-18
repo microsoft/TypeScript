@@ -1,0 +1,64 @@
+--- old.staticMethodWithTypeParameterExtendsClauseDeclFile.js
++++ new.staticMethodWithTypeParameterExtendsClauseDeclFile.js
+@@= skipped -26, +26 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.publicClassWithWithPrivateTypeParameters = exports.publicClass = void 0;
+-var privateClass = /** @class */ (function () {
+-    function privateClass() {
++class privateClass {
++}
++class publicClass {
++}
++exports.publicClass = publicClass;
++class publicClassWithWithPrivateTypeParameters {
++    static myPrivateStaticMethod1() {
+     }
+-    return privateClass;
+-}());
+-var publicClass = /** @class */ (function () {
+-    function publicClass() {
++    myPrivateMethod1() {
+     }
+-    return publicClass;
+-}());
+-exports.publicClass = publicClass;
+-var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
+-    function publicClassWithWithPrivateTypeParameters() {
++    static myPrivateStaticMethod2() {
+     }
+-    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () {
+-    };
+-    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod1 = function () {
+-    };
+-    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod2 = function () {
+-    };
+-    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod2 = function () {
+-    };
+-    publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
+-    };
+-    publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
+-    };
+-    return publicClassWithWithPrivateTypeParameters;
+-}());
+-exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
+-
+-
+-//// [staticMethodWithTypeParameterExtendsClauseDeclFile.d.ts]
+-export declare class publicClass {
++    myPrivateMethod2() {
++    }
++    static myPublicStaticMethod() {
++    }
++    myPublicMethod() {
++    }
+ }
+-export declare class publicClassWithWithPrivateTypeParameters {
+-    private static myPrivateStaticMethod1;
+-    private myPrivateMethod1;
+-    private static myPrivateStaticMethod2;
+-    private myPrivateMethod2;
+-    static myPublicStaticMethod<T extends publicClass>(): void;
+-    myPublicMethod<T extends publicClass>(): void;
+-}
++exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;

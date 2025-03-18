@@ -1,0 +1,9 @@
+--- old.FunctionDeclaration13_es6.js
++++ new.FunctionDeclaration13_es6.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [FunctionDeclaration13_es6.js]
+ function* foo() {
+-    // Legal to use 'yield' in a type context.
+     var v;
+ }

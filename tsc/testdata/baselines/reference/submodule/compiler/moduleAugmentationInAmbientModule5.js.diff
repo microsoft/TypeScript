@@ -1,0 +1,16 @@
+--- old.moduleAugmentationInAmbientModule5.js
++++ new.moduleAugmentationInAmbientModule5.js
+@@= skipped -24, +24 lines =@@
+ //// [f.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-/// <reference path="array.d.ts"/>
+ require("array");
+-var x = [1];
+-var y = x.getA().x;
+-
+-
+-//// [f.d.ts]
+-import "array";
++let x = [1];
++let y = x.getA().x;

@@ -1,0 +1,15 @@
+--- old.stringLiteralsWithSwitchStatements03.js
++++ new.stringLiteralsWithSwitchStatements03.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [stringLiteralsWithSwitchStatements03.js]
+-var x;
+-var y;
+-var z;
++let x;
++let y;
++let z;
+ switch (x) {
+     case randBool() ? "foo" : "baz":
+         break;

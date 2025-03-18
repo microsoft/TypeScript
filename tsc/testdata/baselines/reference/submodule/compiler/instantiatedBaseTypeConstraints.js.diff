@@ -1,0 +1,16 @@
+--- old.instantiatedBaseTypeConstraints.js
++++ new.instantiatedBaseTypeConstraints.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [instantiatedBaseTypeConstraints.js]
+-var Bar = /** @class */ (function () {
+-    function Bar() {
++class Bar {
++    foo(bar) {
+     }
+-    Bar.prototype.foo = function (bar) {
+-    };
+-    return Bar;
+-}());
++}

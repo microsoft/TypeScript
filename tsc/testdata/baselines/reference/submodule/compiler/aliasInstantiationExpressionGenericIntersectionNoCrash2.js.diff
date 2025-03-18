@@ -1,0 +1,8 @@
+--- old.aliasInstantiationExpressionGenericIntersectionNoCrash2.js
++++ new.aliasInstantiationExpressionGenericIntersectionNoCrash2.js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [aliasInstantiationExpressionGenericIntersectionNoCrash2.js]
+-"use strict";
+ wat;

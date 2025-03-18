@@ -1,0 +1,19 @@
+--- old.declarationEmitAliasFromIndirectFile.js
++++ new.declarationEmitAliasFromIndirectFile.js
+@@= skipped -29, +29 lines =@@
+ //// [app.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var fp = { l10ns: {} };
++const fp = { l10ns: {} };
+ exports.default = fp.l10ns;
+-
+-
+-//// [app.d.ts]
+-declare const _default: {
+-    ar?: import("./locale").CustomLocale;
+-    bg?: import("./locale").CustomLocale;
+-} & {
+-    default: import("./locale").Locale;
+-};
+-export default _default;

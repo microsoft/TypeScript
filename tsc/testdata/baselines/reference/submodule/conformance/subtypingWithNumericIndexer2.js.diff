@@ -1,0 +1,7 @@
+--- old.subtypingWithNumericIndexer2.js
++++ new.subtypingWithNumericIndexer2.js
+@@= skipped -45, +45 lines =@@
+ }
+ 
+ //// [subtypingWithNumericIndexer2.js]
+-// Derived type indexer must be subtype of base type indexer

@@ -1,0 +1,25 @@
+--- old.enumKeysQuotedAsObjectPropertiesInDeclarationEmit.js
++++ new.enumKeysQuotedAsObjectPropertiesInDeclarationEmit.js
+@@= skipped -39, +39 lines =@@
+     "3": MouseButton.XBUTTON1_BUTTON,
+     "4": MouseButton.XBUTTON2_BUTTON,
+ };
+-
+-
+-//// [enumKeysQuotedAsObjectPropertiesInDeclarationEmit.d.ts]
+-export declare enum MouseButton {
+-    LEFT_BUTTON = 1,
+-    RIGHT_BUTTON = 2,
+-    MIDDLE_BUTTON = 4,
+-    XBUTTON1_BUTTON = 5,
+-    XBUTTON2_BUTTON = 6,
+-    NO_BUTTON = 0
+-}
+-export declare const DOMMouseButton: {
+-    '-1': MouseButton;
+-    "0": MouseButton;
+-    "1": MouseButton;
+-    "2": MouseButton;
+-    "3": MouseButton;
+-    "4": MouseButton;
+-};

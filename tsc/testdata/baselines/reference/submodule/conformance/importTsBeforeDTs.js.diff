@@ -1,0 +1,12 @@
+--- old.importTsBeforeDTs.js
++++ new.importTsBeforeDTs.js
+@@= skipped -20, +20 lines =@@
+ //// [foo_1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var foo = require("./foo_0");
+-var z1 = foo.x + 10; // Should error, as .ts preferred over .d.ts
+-var z2 = foo.y + 10; // Should resolve
++const foo = require("./foo_0");
++var z1 = foo.x + 10;
++var z2 = foo.y + 10;

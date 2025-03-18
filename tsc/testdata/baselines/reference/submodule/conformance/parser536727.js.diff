@@ -1,0 +1,14 @@
+--- old.parser536727.js
++++ new.parser536727.js
+@@= skipped -14, +14 lines =@@
+ function foo(f) {
+     return f("");
+ }
+-var g = function (x) { return x + "blah"; };
+-var x = function () { return g; };
++var g = (x) => x + "blah";
++var x = () => g;
+ foo(g);
+-foo(function () { return g; });
++foo(() => g);
+ foo(x);

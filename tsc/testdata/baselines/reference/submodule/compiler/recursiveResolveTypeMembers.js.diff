@@ -1,0 +1,7 @@
+--- old.recursiveResolveTypeMembers.js
++++ new.recursiveResolveTypeMembers.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [recursiveResolveTypeMembers.js]
+-// Repro from #25291

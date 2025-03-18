@@ -1,0 +1,66 @@
+--- old.externalModuleAssignToVar.js
++++ new.externalModuleAssignToVar.js
+@@= skipped -26, +26 lines =@@
+ 
+ 
+ //// [externalModuleAssignToVar_core_require.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.C = void 0;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    exports.C = C;
+-});
+-//// [externalModuleAssignToVar_core_require2.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    return C;
+-});
+-//// [externalModuleAssignToVar_ext.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var D = /** @class */ (function () {
+-        function D() {
+-        }
+-        return D;
+-    }());
+-    return D;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C = void 0;
++class C {
++    bar;
++}
++exports.C = C;
+ //// [externalModuleAssignToVar_core.js]
+-define(["require", "exports", "externalModuleAssignToVar_core_require", "externalModuleAssignToVar_core_require2", "externalModuleAssignToVar_ext"], function (require, exports, ext, ext2, ext3) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var y1 = ext;
+-    y1 = ext; // ok
+-    var y2 = ext2;
+-    y2 = ext2; // ok
+-    var y3 = ext3;
+-    y3 = ext3; // ok
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const ext = require("externalModuleAssignToVar_core_require");
++var y1 = ext;
++y1 = ext;
++const ext2 = require("externalModuleAssignToVar_core_require2");
++var y2 = ext2;
++y2 = ext2;
++const ext3 = require("externalModuleAssignToVar_ext");
++var y3 = ext3;
++y3 = ext3;

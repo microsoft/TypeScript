@@ -1,0 +1,8 @@
+--- old.dataViewConstructor.js
++++ new.dataViewConstructor.js
+@@= skipped -3, +3 lines =@@
+ new DataView(new Uint8Array(32)); // should error
+ 
+ //// [dataViewConstructor.js]
+-new DataView(new Uint8Array(32)); // should error
++new DataView(new Uint8Array(32));

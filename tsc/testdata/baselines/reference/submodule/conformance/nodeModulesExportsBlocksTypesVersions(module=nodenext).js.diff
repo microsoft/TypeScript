@@ -1,0 +1,11 @@
+--- old.nodeModulesExportsBlocksTypesVersions(module=nodenext).js
++++ new.nodeModulesExportsBlocksTypesVersions(module=nodenext).js
+@@= skipped -63, +63 lines =@@
+ 
+ 
+ //// [main.cjs]
+-"use strict";
+-Object.defineProperty(exports, "__esModule", { value: true });
++export {};
+ //// [main.mjs]
+ export {};

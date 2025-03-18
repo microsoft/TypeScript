@@ -1,0 +1,15 @@
+--- old.constructorStaticParamName.js
++++ new.constructorStaticParamName.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [constructorStaticParamName.js]
+-// static as constructor parameter name should only give error if 'use strict'
+-var test = /** @class */ (function () {
+-    function test(static) {
+-    }
+-    return test;
+-}());
++class test {
++    constructor(static) { }
++}

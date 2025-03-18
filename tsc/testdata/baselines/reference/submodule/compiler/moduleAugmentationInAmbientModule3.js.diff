@@ -1,0 +1,13 @@
+--- old.moduleAugmentationInAmbientModule3.js
++++ new.moduleAugmentationInAmbientModule3.js
+@@= skipped -38, +38 lines =@@
+ 
+ //// [main.js]
+ "use strict";
+-/// <reference path="O.d.ts" />
+ Object.defineProperty(exports, "__esModule", { value: true });
+ require("Map");
+-var x;
++let x;
+ x.foo().x;
+ x.foo2().x2;

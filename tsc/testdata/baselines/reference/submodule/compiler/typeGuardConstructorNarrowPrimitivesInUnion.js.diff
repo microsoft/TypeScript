@@ -1,0 +1,25 @@
+--- old.typeGuardConstructorNarrowPrimitivesInUnion.js
++++ new.typeGuardConstructorNarrowPrimitivesInUnion.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [typeGuardConstructorNarrowPrimitivesInUnion.js]
+-// Union of primitives, number, arrays, and C1
+-var var1;
++let var1;
+ if (var1.constructor === Number) {
+-    var1; // number
++    var1;
+ }
+ if (var1.constructor === String) {
+-    var1; // "hello" | "world"
++    var1;
+ }
+ if (var1.constructor === Boolean) {
+-    var1; // boolean
++    var1;
+ }
+ if (var1.constructor === Array) {
+-    var1; // number[] | string[]
++    var1;
+ }

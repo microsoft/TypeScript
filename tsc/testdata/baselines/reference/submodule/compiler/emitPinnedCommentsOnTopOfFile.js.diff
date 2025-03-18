@@ -1,0 +1,12 @@
+--- old.emitPinnedCommentsOnTopOfFile.js
++++ new.emitPinnedCommentsOnTopOfFile.js
+@@= skipped -9, +9 lines =@@
+ var x = 10;
+ 
+ //// [emitPinnedCommentsOnTopOfFile.js]
+-/*!
+-
+-    multi line
+-    comment
+-*/
+ var x = 10;

@@ -1,0 +1,8 @@
+--- old.jsxLibraryManagedAttributesUnusedGeneric.js
++++ new.jsxLibraryManagedAttributesUnusedGeneric.js
+@@= skipped -32, +32 lines =@@
+ //// [jsxLibraryManagedAttributesUnusedGeneric.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-jsx(Comp, { css: "color:hotpink;" });
++<Comp css="color:hotpink;"/>;

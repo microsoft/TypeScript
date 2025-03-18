@@ -1,0 +1,93 @@
+--- old.excessPropertyCheckWithUnions.js
++++ new.excessPropertyCheckWithUnions.js
+@@= skipped -154, +154 lines =@@
+ 
+ 
+ //// [excessPropertyCheckWithUnions.js]
+-"use strict";
+-var __assign = (this && this.__assign) || function () {
+-    __assign = Object.assign || function(t) {
+-        for (var s, i = 1, n = arguments.length; i < n; i++) {
+-            s = arguments[i];
+-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+-                t[p] = s[p];
+-        }
+-        return t;
+-    };
+-    return __assign.apply(this, arguments);
+-};
+-var wrong = { tag: "T", a1: "extra" };
++let wrong = { tag: "T", a1: "extra" };
+ wrong = { tag: "A", d20: 12 };
+ wrong = { tag: "D" };
+-var amb;
+-// no error for ambiguous tag, even when it could satisfy both constituents at once
++let amb;
+ amb = { tag: "A", x: "hi" };
+ amb = { tag: "A", y: 12 };
+ amb = { tag: "A", x: "hi", y: 12 };
+-// correctly error on excess property 'extra', even when ambiguous
+ amb = { tag: "A", x: "hi", extra: 12 };
+ amb = { tag: "A", y: 12, extra: 12 };
+-// assignability errors still work
+ amb = { tag: "A" };
+ amb = { tag: "A", z: true };
+-var over;
+-// these two are still errors despite their doubled up discriminants
++let over;
+ over = { a: 1, b: 1, first: "ok", second: "error" };
+ over = { a: 1, b: 1, first: "ok", third: "error" };
+-var t2 = __assign({}, t1);
++let t2 = { ...t1 };
+ t0 = t2;
+-var abab = {
++const abab = {
+     kind: "A",
+     n: {
+         a: "a",
+-        b: "b", // excess -- kind: "A"
++        b: "b",
+     }
+ };
+-var abac = {
++const abac = {
+     kind: "A",
+     n: {
+         a: "a",
+-        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
++        c: "c",
+     }
+ };
+-var obj = {
++const obj = {
+     tag: 'button',
+     type: 'submit',
+-    // should have error here
+     href: 'foo',
+ };
+ ;
+-var dataSpecification = {
++const dataSpecification = {
+     foo: "asdfsadffsd"
+ };
+-// Repro from #34611
+-var obj1 = { a: 'abc' }; // Error
+-var obj2 = { a: 5, c: 'abc' }; // Error
++const obj1 = { a: 'abc' };
++const obj2 = { a: 5, c: 'abc' };
+ function F1(_arg) { }
+ F1({
+     props: {
+-        prop1: prop1,
+-        prop2: prop2,
++        prop1,
++        prop2,
+     },
+ });
+ function F2(_props) { }
+ F2({
+-    prop1: prop1,
+-    prop2: prop2,
++    prop1,
++    prop2,
+ });

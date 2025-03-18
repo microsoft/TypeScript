@@ -1,0 +1,17 @@
+--- old.typeSatisfaction_ensureInterfaceImpl.js
++++ new.typeSatisfaction_ensureInterfaceImpl.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [typeSatisfaction_ensureInterfaceImpl.js]
+-var car = {
+-    start: function () { },
+-    move: function (d) {
+-        // d should be number
++const car = {
++    start() { },
++    move(d) {
+     },
+-    stop: function () { }
++    stop() { }
+ };

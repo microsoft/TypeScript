@@ -1,0 +1,12 @@
+--- old.prototypes.js
++++ new.prototypes.js
+@@= skipped -6, +6 lines =@@
+ f.prototype;
+ 
+ //// [prototypes.js]
+-Object.prototype; // ok
+-new Object().prototype; // error
++Object.prototype;
++new Object().prototype;
+ function f() { }
+ f.prototype;

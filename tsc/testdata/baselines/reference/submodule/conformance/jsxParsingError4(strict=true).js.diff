@@ -1,0 +1,11 @@
+--- old.jsxParsingError4(strict=true).js
++++ new.jsxParsingError4(strict=true).js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [a.js]
+-"use strict";
+-var a = (React.createElement("public-foo", null));
+-var b = (React.createElement("public", null));
++const a = (<public-foo></public-foo>);
++const b = (<public></public>);

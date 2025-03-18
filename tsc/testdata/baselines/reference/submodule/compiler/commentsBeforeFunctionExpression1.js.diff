@@ -1,0 +1,9 @@
+--- old.commentsBeforeFunctionExpression1.js
++++ new.commentsBeforeFunctionExpression1.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [commentsBeforeFunctionExpression1.js]
+ var v = {
+-    f: /**own f*/ function (a) { return 0; }
++    f: (a) => 0
+ };

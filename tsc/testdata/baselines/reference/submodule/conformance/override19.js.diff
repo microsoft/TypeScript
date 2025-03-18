@@ -1,0 +1,13 @@
+--- old.override19.js
++++ new.override19.js
+@@= skipped -26, +26 lines =@@
+     doSomething() { }
+ }
+ class B extends CreateMixin(Context, A) {
+-    foo() { } // Remove override
++    foo() { }
+ }
+ class C extends CreateMixin(Context, A) {
+-    doSomethang() { } // Suggestion 'doSomething'
++    doSomethang() { }
+ }

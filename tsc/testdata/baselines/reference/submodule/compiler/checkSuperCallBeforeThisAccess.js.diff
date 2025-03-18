@@ -1,0 +1,83 @@
+--- old.checkSuperCallBeforeThisAccess.js
++++ new.checkSuperCallBeforeThisAccess.js
+@@= skipped -84, +84 lines =@@
+ 
+ //// [checkSuperCallBeforeThisAccess.js]
+ class A {
+-    constructor() {
+-        this.x = 1;
+-    }
++    x = 1;
+ }
+ class C1 extends A {
+     constructor(n) {
+-        let a1 = this; // Error
+-        let a2 = this.x; // Error
+-        let a3 = super.x; // Error
++        let a1 = this;
++        let a2 = this.x;
++        let a3 = super.x;
+         let a4 = () => this;
+         let a5 = () => this.x;
+         let a6 = () => super.x;
+@@= skipped -19, +17 lines =@@
+             let b3 = super.x;
+         }
+         else {
+-            let c1 = this; // Error
+-            let c2 = this.x; // Error
+-            let c3 = super.x; // Error
++            let c1 = this;
++            let c2 = this.x;
++            let c3 = super.x;
+         }
+         if (!!true) {
+             switch (n) {
+@@= skipped -10, +10 lines =@@
+                     super();
+                     let d1 = this.x;
+                 case 2:
+-                    let d2 = this.x; // Error
++                    let d2 = this.x;
+                 default:
+                     super();
+                     let d3 = this.x;
+@@= skipped -9, +9 lines =@@
+         }
+         if (!!true) {
+             let e1 = { w: !!true ? super() : 0 };
+-            let e2 = this.x; // Error
++            let e2 = this.x;
+             let e3 = { w: !!true ? super() : super() };
+             let e4 = this.x;
+         }
+-        let f1 = this; // Error
+-        let f2 = this.x; // Error
+-        let f3 = super.x; // Error
++        let f1 = this;
++        let f2 = this.x;
++        let f3 = super.x;
+     }
+ }
+-// Repro from #38512
+ export class Foo {
+     constructor(value) {
+     }
+@@= skipped -17, +16 lines =@@
+ export class BarCorrectlyFails extends Foo {
+     constructor(something) {
+         if (!something) {
+-            const value = this.bar(); // Error
++            const value = this.bar();
+             super(value);
+         }
+         else {
+@@= skipped -15, +15 lines =@@
+             super(1337);
+         }
+         else {
+-            const value = this.bar(); // Error
++            const value = this.bar();
+             super(value);
+         }
+     }

@@ -1,0 +1,209 @@
+--- old.privacyImportParseErrors.js
++++ new.privacyImportParseErrors.js
+@@= skipped -360, +360 lines =@@
+ //// [privacyImportParseErrors.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-exports.m3 = exports.glo_im2_public = exports.glo_im1_public = exports.glo_im4_private_v4_public = exports.glo_im4_private_v3_public = exports.glo_im4_private_v2_public = exports.glo_im4_private_v1_public = exports.glo_im3_private_v4_public = exports.glo_im3_private_v3_public = exports.glo_im3_private_v2_public = exports.glo_im3_private_v1_public = exports.glo_im2_private_v4_public = exports.glo_im2_private_v3_public = exports.glo_im2_private_v2_public = exports.glo_im2_private_v1_public = exports.glo_im1_private_v4_public = exports.glo_im1_private_v3_public = exports.glo_im1_private_v2_public = exports.glo_im1_private_v1_public = exports.glo_M3_private = exports.glo_M1_public = exports.m1 = void 0;
++exports.m3 = exports.glo_im4_private_v4_public = exports.glo_im4_private_v3_public = exports.glo_im4_private_v2_public = exports.glo_im4_private_v1_public = exports.glo_im3_private_v4_public = exports.glo_im3_private_v3_public = exports.glo_im3_private_v2_public = exports.glo_im3_private_v1_public = exports.glo_im2_private_v4_public = exports.glo_im2_private_v3_public = exports.glo_im2_private_v2_public = exports.glo_im2_private_v1_public = exports.glo_im1_private_v4_public = exports.glo_im1_private_v3_public = exports.glo_im1_private_v2_public = exports.glo_im1_private_v1_public = exports.glo_M3_private = exports.glo_M1_public = exports.m1 = void 0;
+ var m1;
+ (function (m1) {
+-    var m1_M1_public;
++    let m1_M1_public;
+     (function (m1_M1_public) {
+-        var c1 = /** @class */ (function () {
+-            function c1() {
+-            }
+-            return c1;
+-        }());
++        class c1 {
++        }
+         m1_M1_public.c1 = c1;
+         function f1() {
+             return new c1;
+@@= skipped -17, +14 lines =@@
+         m1_M1_public.f1 = f1;
+         m1_M1_public.v1 = c1;
+     })(m1_M1_public = m1.m1_M1_public || (m1.m1_M1_public = {}));
+-    var m1_M2_private;
++    let m1_M2_private;
+     (function (m1_M2_private) {
+-        var c1 = /** @class */ (function () {
+-            function c1() {
+-            }
+-            return c1;
+-        }());
++        class c1 {
++        }
+         m1_M2_private.c1 = c1;
+         function f1() {
+             return new c1;
+@@= skipped -32, +29 lines =@@
+     var m1_im2_private_v2_private = new m1_im2_private.c1();
+     var m1_im2_private_v3_private = m1_im2_private.f1;
+     var m1_im2_private_v4_private = m1_im2_private.f1();
++    import m1_im3_private = require("m1_M3_public");
+     m1.m1_im3_private_v1_public = m1_im3_private.c1;
+     m1.m1_im3_private_v2_public = new m1_im3_private.c1();
+     m1.m1_im3_private_v3_public = m1_im3_private.f1;
+@@= skipped -8, +9 lines =@@
+     var m1_im3_private_v2_private = new m1_im3_private.c1();
+     var m1_im3_private_v3_private = m1_im3_private.f1;
+     var m1_im3_private_v4_private = m1_im3_private.f1();
++    import m1_im4_private = require("m1_M4_private");
+     m1.m1_im4_private_v1_public = m1_im4_private.c1;
+     m1.m1_im4_private_v2_public = new m1_im4_private.c1();
+     m1.m1_im4_private_v3_public = m1_im4_private.f1;
+@@= skipped -10, +11 lines =@@
+     var m1_im4_private_v4_private = m1_im4_private.f1();
+     m1.m1_im1_public = m1_M1_public;
+     m1.m1_im2_public = m1_M2_private;
++    export import m1_im3_public = require("m1_M3_public");
++    export import m1_im4_public = require("m1_M4_private");
+ })(m1 || (exports.m1 = m1 = {}));
+ var m2;
+ (function (m2) {
+-    var m2_M1_public;
++    let m2_M1_public;
+     (function (m2_M1_public) {
+-        var c1 = /** @class */ (function () {
+-            function c1() {
+-            }
+-            return c1;
+-        }());
++        class c1 {
++        }
+         m2_M1_public.c1 = c1;
+         function f1() {
+             return new c1;
+@@= skipped -17, +16 lines =@@
+         m2_M1_public.f1 = f1;
+         m2_M1_public.v1 = c1;
+     })(m2_M1_public = m2.m2_M1_public || (m2.m2_M1_public = {}));
+-    var m2_M2_private;
++    let m2_M2_private;
+     (function (m2_M2_private) {
+-        var c1 = /** @class */ (function () {
+-            function c1() {
+-            }
+-            return c1;
+-        }());
++        class c1 {
++        }
+         m2_M2_private.c1 = c1;
+         function f1() {
+             return new c1;
+@@= skipped -32, +29 lines =@@
+     var m1_im2_private_v2_private = new m1_im2_private.c1();
+     var m1_im2_private_v3_private = m1_im2_private.f1;
+     var m1_im2_private_v4_private = m1_im2_private.f1();
++    import m1_im3_private = require("m2_M3_public");
+     m2.m1_im3_private_v1_public = m1_im3_private.c1;
+     m2.m1_im3_private_v2_public = new m1_im3_private.c1();
+     m2.m1_im3_private_v3_public = m1_im3_private.f1;
+@@= skipped -8, +9 lines =@@
+     var m1_im3_private_v2_private = new m1_im3_private.c1();
+     var m1_im3_private_v3_private = m1_im3_private.f1;
+     var m1_im3_private_v4_private = m1_im3_private.f1();
++    import m1_im4_private = require("m2_M4_private");
+     m2.m1_im4_private_v1_public = m1_im4_private.c1;
+     m2.m1_im4_private_v2_public = new m1_im4_private.c1();
+     m2.m1_im4_private_v3_public = m1_im4_private.f1;
+@@= skipped -8, +9 lines =@@
+     var m1_im4_private_v2_private = new m1_im4_private.c1();
+     var m1_im4_private_v3_private = m1_im4_private.f1;
+     var m1_im4_private_v4_private = m1_im4_private.f1();
+-    // Parse error to export module
+     m2.m1_im1_public = m2_M1_public;
+     m2.m1_im2_public = m2_M2_private;
++    export import m1_im3_public = require("m2_M3_public");
++    export import m1_im4_public = require("m2_M4_private");
+ })(m2 || (m2 = {}));
+ var glo_M1_public;
+ (function (glo_M1_public) {
+-    var c1 = /** @class */ (function () {
+-        function c1() {
+-        }
+-        return c1;
+-    }());
++    class c1 {
++    }
+     glo_M1_public.c1 = c1;
+     function f1() {
+         return new c1;
+@@= skipped -20, +18 lines =@@
+ })(glo_M1_public || (exports.glo_M1_public = glo_M1_public = {}));
+ var glo_M3_private;
+ (function (glo_M3_private) {
+-    var c1 = /** @class */ (function () {
+-        function c1() {
+-        }
+-        return c1;
+-    }());
++    class c1 {
++    }
+     glo_M3_private.c1 = c1;
+     function f1() {
+         return new c1;
+@@= skipped -12, +9 lines =@@
+     glo_M3_private.f1 = f1;
+     glo_M3_private.v1 = c1;
+ })(glo_M3_private || (exports.glo_M3_private = glo_M3_private = {}));
+-var glo_im1_private = glo_M1_public;
+ exports.glo_im1_private_v1_public = glo_im1_private.c1;
+ exports.glo_im1_private_v2_public = new glo_im1_private.c1();
+ exports.glo_im1_private_v3_public = glo_im1_private.f1;
+@@= skipped -9, +8 lines =@@
+ var glo_im1_private_v2_private = new glo_im1_private.c1();
+ var glo_im1_private_v3_private = glo_im1_private.f1;
+ var glo_im1_private_v4_private = glo_im1_private.f1();
+-var glo_im2_private = require("glo_M2_public");
++const glo_im2_private = require("glo_M2_public");
+ exports.glo_im2_private_v1_public = glo_im2_private.c1;
+ exports.glo_im2_private_v2_public = new glo_im2_private.c1();
+ exports.glo_im2_private_v3_public = glo_im2_private.f1;
+@@= skipped -9, +9 lines =@@
+ var glo_im2_private_v2_private = new glo_im2_private.c1();
+ var glo_im2_private_v3_private = glo_im2_private.f1;
+ var glo_im2_private_v4_private = glo_im2_private.f1();
+-var glo_im3_private = glo_M3_private;
+ exports.glo_im3_private_v1_public = glo_im3_private.c1;
+ exports.glo_im3_private_v2_public = new glo_im3_private.c1();
+ exports.glo_im3_private_v3_public = glo_im3_private.f1;
+@@= skipped -9, +8 lines =@@
+ var glo_im3_private_v2_private = new glo_im3_private.c1();
+ var glo_im3_private_v3_private = glo_im3_private.f1;
+ var glo_im3_private_v4_private = glo_im3_private.f1();
+-var glo_im4_private = require("glo_M4_private");
++const glo_im4_private = require("glo_M4_private");
+ exports.glo_im4_private_v1_public = glo_im4_private.c1;
+ exports.glo_im4_private_v2_public = new glo_im4_private.c1();
+ exports.glo_im4_private_v3_public = glo_im4_private.f1;
+@@= skipped -9, +9 lines =@@
+ var glo_im4_private_v2_private = new glo_im4_private.c1();
+ var glo_im4_private_v3_private = glo_im4_private.f1;
+ var glo_im4_private_v4_private = glo_im4_private.f1();
+-// Parse error to export module
+-exports.glo_im1_public = glo_M1_public;
+-exports.glo_im2_public = glo_M3_private;
+ exports.glo_im3_public = require("glo_M2_public");
+ exports.glo_im4_public = require("glo_M4_private");
+ (function (m2_1) {
+-    var m4;
++    import m3 = require("use_glo_M1_public");
++    let m4;
+     (function (m4) {
+         var a = 10;
++        import m2 = require("use_glo_M1_public");
+     })(m4 || (m4 = {}));
+ })(m2 || (m2 = {}));
+ var m3;
+ (function (m3_1) {
+-    var m4;
++    import m3 = require("use_glo_M1_public");
++    let m4;
+     (function (m4) {
+         var a = 10;
++        import m2 = require("use_glo_M1_public");
+     })(m4 || (m4 = {}));
+ })(m3 || (exports.m3 = m3 = {}));

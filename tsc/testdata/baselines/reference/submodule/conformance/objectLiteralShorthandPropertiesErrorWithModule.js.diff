@@ -1,0 +1,20 @@
+--- old.objectLiteralShorthandPropertiesErrorWithModule.js
++++ new.objectLiteralShorthandPropertiesErrorWithModule.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [objectLiteralShorthandPropertiesErrorWithModule.js]
+-// module export
+ var x = "Foo";
+ var m;
+ (function (m) {
+@@= skipped -9, +8 lines =@@
+ (function (n) {
+     var z = 10000;
+     n.y = {
+-        m: m,
+-        : .x // error
++        m, : .x
+     };
+ })(n || (n = {}));
+ m.y.x;

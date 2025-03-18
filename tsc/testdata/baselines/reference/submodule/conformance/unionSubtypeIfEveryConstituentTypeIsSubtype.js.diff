@@ -1,0 +1,40 @@
+--- old.unionSubtypeIfEveryConstituentTypeIsSubtype.js
++++ new.unionSubtypeIfEveryConstituentTypeIsSubtype.js
+@@= skipped -150, +150 lines =@@
+     e[e["e1"] = 0] = "e1";
+     e[e["e2"] = 1] = "e2";
+ })(e || (e = {}));
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-var A2 = /** @class */ (function () {
+-    function A2() {
+-    }
+-    return A2;
+-}());
++class A {
++    foo;
++}
++class A2 {
++    foo;
++}
+ var E2;
+ (function (E2) {
+     E2[E2["A"] = 0] = "A";
+@@= skipped -18, +14 lines =@@
+ (function (f) {
+     f.bar = 1;
+ })(f || (f = {}));
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    return c;
+-}());
++class c {
++    baz;
++}
+ (function (c) {
+     c.bar = 1;
+ })(c || (c = {}));

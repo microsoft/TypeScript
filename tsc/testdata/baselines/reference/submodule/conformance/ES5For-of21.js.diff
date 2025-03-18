@@ -1,0 +1,14 @@
+--- old.ES5For-of21.js
++++ new.ES5For-of21.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [ES5For-of21.js]
+-for (var _a = 0, _b = []; _a < _b.length; _a++) {
+-    var v = _b[_a];
+-    for (var _c = 0, _d = []; _c < _d.length; _c++) {
+-        var _i = _d[_c];
+-    }
++for (let v of []) {
++    for (let _i of []) { }
+ }

@@ -1,0 +1,11 @@
+--- old.typeGuardTautologicalConsistiency.js
++++ new.typeGuardTautologicalConsistiency.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [typeGuardTautologicalConsistiency.js]
+-var stringOrNumber;
++let stringOrNumber;
+ if (typeof stringOrNumber === "number") {
+     if (typeof stringOrNumber !== "number") {
+         stringOrNumber;

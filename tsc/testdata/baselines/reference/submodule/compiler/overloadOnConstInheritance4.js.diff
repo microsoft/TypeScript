@@ -1,0 +1,16 @@
+--- old.overloadOnConstInheritance4.js
++++ new.overloadOnConstInheritance4.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [overloadOnConstInheritance4.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    x1(a, callback) {
+     }
+-    C.prototype.x1 = function (a, callback) {
+-    };
+-    return C;
+-}());
++}

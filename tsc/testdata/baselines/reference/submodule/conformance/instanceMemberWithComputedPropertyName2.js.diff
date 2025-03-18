@@ -1,0 +1,22 @@
+--- old.instanceMemberWithComputedPropertyName2.js
++++ new.instanceMemberWithComputedPropertyName2.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [instanceMemberWithComputedPropertyName2.js]
+-// https://github.com/microsoft/TypeScript/issues/33857
+ "use strict";
+-var _a;
+ const x = 1;
+ class C {
+-    constructor() {
+-        Object.defineProperty(this, _a, {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: void 0
+-        });
+-    }
++    [x];
+ }
+-_a = x;

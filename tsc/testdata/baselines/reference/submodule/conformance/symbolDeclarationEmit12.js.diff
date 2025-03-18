@@ -1,0 +1,30 @@
+--- old.symbolDeclarationEmit12.js
++++ new.symbolDeclarationEmit12.js
+@@= skipped -17, +17 lines =@@
+ var M;
+ (function (M) {
+     class C {
+-        [(Symbol.iterator, Symbol.toPrimitive)](x) { }
++        [Symbol.iterator];
++        [Symbol.toPrimitive](x) { }
+         [Symbol.isConcatSpreadable]() {
+             return undefined;
+         }
+@@= skipped -9, +10 lines =@@
+     }
+     M.C = C;
+ })(M || (M = {}));
+-
+-
+-//// [symbolDeclarationEmit12.d.ts]
+-declare namespace M {
+-    interface I {
+-    }
+-    export class C {
+-        [Symbol.iterator]: I;
+-        [Symbol.isConcatSpreadable](): I;
+-        get [Symbol.toPrimitive](): I;
+-        set [Symbol.toPrimitive](x: I);
+-    }
+-    export {};
+-}

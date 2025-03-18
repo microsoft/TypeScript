@@ -1,0 +1,19 @@
+--- old.jsxElementClassTooManyParams.js
++++ new.jsxElementClassTooManyParams.js
+@@= skipped -18, +18 lines =@@
+ const elem = <ElemClass x={12} y={24} />
+ 
+ //// [jsxElementClassTooManyParams.jsx]
+-"use strict";
+-var ElemClass = /** @class */ (function () {
+-    function ElemClass(props) {
++class ElemClass {
++    props;
++    constructor(props) {
+         this.props = props;
+     }
+-    return ElemClass;
+-}());
+-var elem = <ElemClass x={12} y={24}/>;
++}
++const elem = <ElemClass x={12} y={24}/>;

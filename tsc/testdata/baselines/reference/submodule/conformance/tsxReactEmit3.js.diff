@@ -1,0 +1,15 @@
+--- old.tsxReactEmit3.js
++++ new.tsxReactEmit3.js
+@@= skipped -8, +8 lines =@@
+ <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
+ 
+ //// [test.js]
+-React.createElement(Foo, null,
+-    " ",
+-    React.createElement(Bar, null, " q "),
+-    " ",
+-    React.createElement(Bar, null),
+-    "   s ",
+-    React.createElement(Bar, null),
+-    React.createElement(Bar, null));
++<Foo> <Bar> q </Bar> <Bar />   s <Bar /><Bar /></Foo>;

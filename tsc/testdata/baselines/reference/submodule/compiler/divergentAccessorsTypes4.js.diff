@@ -1,0 +1,56 @@
+--- old.divergentAccessorsTypes4.js
++++ new.divergentAccessorsTypes4.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [divergentAccessorsTypes4.js]
+-var One = /** @class */ (function () {
+-    function One() {
+-    }
+-    Object.defineProperty(One.prototype, "prop1", {
+-        get: function () { return ""; },
+-        set: function (s) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return One;
+-}());
+-var Two = /** @class */ (function () {
+-    function Two() {
+-    }
+-    Object.defineProperty(Two.prototype, "prop1", {
+-        get: function () { return "hello"; },
+-        set: function (s) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(Two.prototype, "prop2", {
+-        get: function () { return ""; },
+-        set: function (s) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return Two;
+-}());
+-// "hello"
++class One {
++    get prop1() { return ""; }
++    set prop1(s) { }
++    prop2;
++}
++class Two {
++    get prop1() { return "hello"; }
++    set prop1(s) { }
++    get prop2() { return ""; }
++    set prop2(s) { }
++}
+ i.prop1;
+-// number | "hello"
+ i.prop1 = 42;
+ i.prop1 = "hello";
+-// never
+ i.prop2;
+-// 42
+ i.prop2 = 42;
+-i.prop2 = "hello"; // error
++i.prop2 = "hello";

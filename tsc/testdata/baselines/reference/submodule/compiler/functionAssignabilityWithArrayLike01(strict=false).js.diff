@@ -1,0 +1,8 @@
+--- old.functionAssignabilityWithArrayLike01(strict=false).js
++++ new.functionAssignabilityWithArrayLike01(strict=false).js
+@@= skipped -5, +5 lines =@@
+ 
+ //// [functionAssignabilityWithArrayLike01.js]
+ function func() { }
+-var array = func;
++const array = func;

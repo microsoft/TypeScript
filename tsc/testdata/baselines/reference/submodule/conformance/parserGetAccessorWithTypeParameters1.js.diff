@@ -1,0 +1,19 @@
+--- old.parserGetAccessorWithTypeParameters1.js
++++ new.parserGetAccessorWithTypeParameters1.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [parserGetAccessorWithTypeParameters1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    Object.defineProperty(C.prototype, "foo", {
+-        get: function () { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++class C {
++    get foo() { }
++}

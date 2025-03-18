@@ -1,0 +1,8 @@
+--- old.propagateNonInferrableType.js
++++ new.propagateNonInferrableType.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [propagateNonInferrableType.js]
+-"use strict";
+ wrapResolver(resolver() || []);

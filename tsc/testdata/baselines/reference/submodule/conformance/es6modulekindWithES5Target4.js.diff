@@ -1,0 +1,14 @@
+--- old.es6modulekindWithES5Target4.js
++++ new.es6modulekindWithES5Target4.js
+@@= skipped -4, +4 lines =@@
+ export default E;
+ 
+ //// [es6modulekindWithES5Target4.js]
+-var E = /** @class */ (function () {
+-    function E() {
+-    }
+-    return E;
+-}());
++class E {
++}
+ export default E;

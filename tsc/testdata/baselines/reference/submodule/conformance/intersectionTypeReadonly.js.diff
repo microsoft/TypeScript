@@ -1,0 +1,25 @@
+--- old.intersectionTypeReadonly.js
++++ new.intersectionTypeReadonly.js
+@@= skipped -28, +28 lines =@@
+ 
+ 
+ //// [intersectionTypeReadonly.js]
+-var base;
+-base.value = 12; // error, lhs can't be a readonly property
+-var identical;
+-identical.value = 12; // error, lhs can't be a readonly property
+-var mutable;
++let base;
++base.value = 12;
++let identical;
++identical.value = 12;
++let mutable;
+ mutable.value = 12;
+-var differentType;
+-differentType.value = 12; // error, lhs can't be a readonly property
+-var differentName;
+-differentName.value = 12; // error, property 'value' doesn't exist
++let differentType;
++differentType.value = 12;
++let differentName;
++differentName.value = 12;

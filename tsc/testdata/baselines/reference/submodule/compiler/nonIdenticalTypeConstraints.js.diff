@@ -1,0 +1,56 @@
+--- old.nonIdenticalTypeConstraints.js
++++ new.nonIdenticalTypeConstraints.js
+@@= skipped -40, +40 lines =@@
+ }
+ 
+ //// [nonIdenticalTypeConstraints.js]
+-var Different = /** @class */ (function () {
+-    function Different() {
+-    }
+-    return Different;
+-}());
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
+-var Qux = /** @class */ (function () {
+-    function Qux() {
+-    }
+-    return Qux;
+-}());
+-var Bar = /** @class */ (function () {
+-    function Bar() {
+-    }
+-    return Bar;
+-}());
+-var Baz = /** @class */ (function () {
+-    function Baz() {
+-    }
+-    return Baz;
+-}());
+-var Quux = /** @class */ (function () {
+-    function Quux() {
+-    }
+-    return Quux;
+-}());
++class Different {
++    a;
++    b;
++    c;
++}
++class Foo {
++    n;
++}
++class Qux {
++    n;
++}
++class Bar {
++    n;
++}
++class Baz {
++    n;
++}
++class Quux {
++    n;
++}

@@ -1,0 +1,16 @@
+--- old.enumGenericTypeClash.js
++++ new.enumGenericTypeClash.js
+@@= skipped -5, +5 lines =@@
+ 
+ 
+ //// [enumGenericTypeClash.js]
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    return X;
+-}());
++class X {
++}
+ (function (X) {
+     X[X["MyVal"] = 0] = "MyVal";
+ })(X || (X = {}));

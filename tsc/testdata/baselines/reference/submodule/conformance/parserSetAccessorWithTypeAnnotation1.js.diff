@@ -1,0 +1,20 @@
+--- old.parserSetAccessorWithTypeAnnotation1.js
++++ new.parserSetAccessorWithTypeAnnotation1.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [parserSetAccessorWithTypeAnnotation1.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    set foo(v) {
+     }
+-    Object.defineProperty(C.prototype, "foo", {
+-        set: function (v) {
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++}

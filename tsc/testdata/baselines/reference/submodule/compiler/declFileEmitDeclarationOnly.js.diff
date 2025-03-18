@@ -1,0 +1,28 @@
+--- old.declFileEmitDeclarationOnly.js
++++ new.declFileEmitDeclarationOnly.js
+@@= skipped -14, +14 lines =@@
+ }
+ 
+ 
+-
+-
+-//// [helloworld.d.ts]
+-declare const Log: {
+-    info(msg: string): void;
++//// [helloworld.js]
++const Log = {
++    info(msg) { }
+ };
+-declare class HelloWorld {
+-    private name;
+-    constructor(name: string);
+-    hello(): void;
++class HelloWorld {
++    name;
++    constructor(name) {
++        this.name = name;
++    }
++    hello() {
++        Log.info(`Hello ${this.name}`);
++    }
+ }

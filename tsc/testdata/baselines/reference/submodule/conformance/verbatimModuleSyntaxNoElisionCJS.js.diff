@@ -1,0 +1,7 @@
+--- old.verbatimModuleSyntaxNoElisionCJS.js
++++ new.verbatimModuleSyntaxNoElisionCJS.js
+@@= skipped -53, +53 lines =@@
+ const I = {};
+ module.exports = I;
+ //// [z.js]
+-// test harness is weird if the last file includs a require >:(

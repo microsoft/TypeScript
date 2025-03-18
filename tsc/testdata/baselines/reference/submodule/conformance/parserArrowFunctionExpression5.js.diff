@@ -1,0 +1,8 @@
+--- old.parserArrowFunctionExpression5.js
++++ new.parserArrowFunctionExpression5.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [parserArrowFunctionExpression5.js]
+-(bar(x, function () { }, function () { }));
++(bar(x, () => { }, () => { }));

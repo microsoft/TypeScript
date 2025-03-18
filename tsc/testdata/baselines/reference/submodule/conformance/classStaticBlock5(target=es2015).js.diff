@@ -1,0 +1,31 @@
+--- old.classStaticBlock5(target=es2015).js
++++ new.classStaticBlock5(target=es2015).js
+@@= skipped -18, +18 lines =@@
+ 
+ 
+ //// [classStaticBlock5.js]
+-var _a, _b;
+ class B {
++    static a = 1;
++    static b = 2;
+ }
+-B.a = 1;
+-B.b = 2;
+-class C extends (_b = B) {
++class C extends B {
++    static b = 3;
++    static c = super.a;
++    static {
++        this.b;
++        super.b;
++        super.a;
++    }
+ }
+-_a = C;
+-C.b = 3;
+-C.c = Reflect.get(_b, "a", _a);
+-(() => {
+-    _a.b;
+-    Reflect.get(_b, "b", _a);
+-    Reflect.get(_b, "a", _a);
+-})();

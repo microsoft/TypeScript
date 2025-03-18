@@ -1,0 +1,14 @@
+--- old.conditionalTypesASI.js
++++ new.conditionalTypesASI.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [conditionalTypesASI.js]
+-// Repro from #21637
+-
+-
+-//// [conditionalTypesASI.d.ts]
+-interface JSONSchema4 {
+-    a?: number;
+-    extends?: string | string[];
+-}

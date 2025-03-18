@@ -1,0 +1,16 @@
+--- old.commentOnBinaryOperator1.js
++++ new.commentOnBinaryOperator1.js
+@@= skipped -15, +15 lines =@@
+ 
+ //// [commentOnBinaryOperator1.js]
+ var a = 'some'
+-    // comment
+     + 'text';
+ var b = 'some'
+-    /* comment */
+     + 'text';
+ var c = 'some'
+-    /* comment */
+-    + /*comment1*/
++    +
+         'text';

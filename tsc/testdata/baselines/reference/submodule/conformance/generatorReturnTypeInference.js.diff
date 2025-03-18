@@ -1,0 +1,34 @@
+--- old.generatorReturnTypeInference.js
++++ new.generatorReturnTypeInference.js
+@@= skipped -137, +137 lines =@@
+ //// [generatorReturnTypeInference.js]
+ function* g000() {
+ }
+-// 'yield' iteration type inference
+ function* g001() {
+     yield;
+ }
+@@= skipped -23, +22 lines =@@
+ function* g007() {
+     yield never;
+ }
+-// 'return' iteration type inference
+ function* g102() {
+     return 1;
+ }
+@@= skipped -12, +11 lines =@@
+ function* g104() {
+     return never;
+ }
+-// 'next' iteration type inference
+ function* g201() {
+     let a = yield 1;
+ }
+@@= skipped -14, +13 lines =@@
+ function* g204() {
+     const x = f2(yield 1);
+ }
+-// mixed iteration types inference
+ function* g301() {
+     yield;
+     return;

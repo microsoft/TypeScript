@@ -1,0 +1,12 @@
+--- old.tupleTypeInference.js
++++ new.tupleTypeInference.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [tupleTypeInference.js]
+-// Implicit different types
+ var a = $q.all([$q.when(), $q.when()]);
+-// Explicit different types
+ var b = $q.all([$q.when(), $q.when()]);
+-// Implicit identical types
+ var c = $q.all([$q.when(), $q.when()]);

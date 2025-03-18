@@ -1,0 +1,73 @@
+--- old.stringEnumLiteralTypes2.js
++++ new.stringEnumLiteralTypes2.js
+@@= skipped -101, +101 lines =@@
+ }
+ 
+ //// [stringEnumLiteralTypes2.js]
++var Choice;
++(function (Choice) {
++    Choice["Unknown"] = "";
++    Choice["Yes"] = "yes";
++    Choice["No"] = "no";
++})(Choice || (Choice = {}));
+ ;
+ function f1() {
+     var a;
+@@= skipped -25, +31 lines =@@
+     var y = !b;
+ }
+ function f5(a, b, c) {
+-    var z1 = g("yes" /* Choice.Yes */);
+-    var z2 = g("no" /* Choice.No */);
++    var z1 = g(Choice.Yes);
++    var z2 = g(Choice.No);
+     var z3 = g(a);
+     var z4 = g(b);
+     var z5 = g(c);
+@@= skipped -11, +11 lines =@@
+ }
+ function f10(x) {
+     switch (x) {
+-        case "yes" /* Choice.Yes */: return "true";
+-        case "no" /* Choice.No */: return "false";
++        case Choice.Yes: return "true";
++        case Choice.No: return "false";
+     }
+ }
+ function f11(x) {
+     switch (x) {
+-        case "yes" /* Choice.Yes */: return "true";
+-        case "no" /* Choice.No */: return "false";
++        case Choice.Yes: return "true";
++        case Choice.No: return "false";
+     }
+     return assertNever(x);
+ }
+@@= skipped -20, +20 lines =@@
+     }
+ }
+ function f13(x) {
+-    if (x === "yes" /* Choice.Yes */) {
++    if (x === Choice.Yes) {
+         x;
+     }
+     else {
+@@= skipped -9, +9 lines =@@
+ }
+ function f20(x) {
+     switch (x.kind) {
+-        case "yes" /* Choice.Yes */: return x.a;
+-        case "no" /* Choice.No */: return x.b;
++        case Choice.Yes: return x.a;
++        case Choice.No: return x.b;
+     }
+ }
+ function f21(x) {
+     switch (x.kind) {
+-        case "yes" /* Choice.Yes */: return x.a;
+-        case "no" /* Choice.No */: return x.b;
++        case Choice.Yes: return x.a;
++        case Choice.No: return x.b;
+     }
+     return assertNever(x);
+ }

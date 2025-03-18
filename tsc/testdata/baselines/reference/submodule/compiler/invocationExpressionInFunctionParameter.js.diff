@@ -1,0 +1,10 @@
+--- old.invocationExpressionInFunctionParameter.js
++++ new.invocationExpressionInFunctionParameter.js
+@@= skipped -8, +8 lines =@@
+ //// [invocationExpressionInFunctionParameter.js]
+ function foo1(val) {
+ }
+-function foo3(x) {
+-    if (x === void 0) { x = foo1(123); }
++function foo3(x = foo1(123)) {
+ }

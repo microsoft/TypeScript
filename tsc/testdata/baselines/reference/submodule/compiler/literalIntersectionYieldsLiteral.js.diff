@@ -1,0 +1,8 @@
+--- old.literalIntersectionYieldsLiteral.js
++++ new.literalIntersectionYieldsLiteral.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [literalIntersectionYieldsLiteral.js]
+-var x = { type: "string" };
++const x = { type: "string" };

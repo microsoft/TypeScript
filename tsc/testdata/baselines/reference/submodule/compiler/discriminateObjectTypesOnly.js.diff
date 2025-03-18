@@ -1,0 +1,15 @@
+--- old.discriminateObjectTypesOnly.js
++++ new.discriminateObjectTypesOnly.js
+@@= skipped -12, +12 lines =@@
+ 
+ 
+ //// [discriminateObjectTypesOnly.js]
+-"use strict";
+-var k = { toFixed: null }; // OK, satisfies object
+-var q = { toFixed: null };
+-var h = { toString: null }; // OK, satisfies object
+-var l = { toString: undefined }; // error, toFixed isn't null
++const k = { toFixed: null };
++const q = { toFixed: null };
++const h = { toString: null };
++const l = { toString: undefined };

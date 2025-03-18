@@ -1,0 +1,8 @@
+--- old.reactNamespaceInvalidInput.js
++++ new.reactNamespaceInvalidInput.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [reactNamespaceInvalidInput.js]
+-my-React-Lib.createElement("foo", { data: true });
++<foo data/>;

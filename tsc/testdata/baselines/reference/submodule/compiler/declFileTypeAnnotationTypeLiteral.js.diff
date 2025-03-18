@@ -1,0 +1,62 @@
+--- old.declFileTypeAnnotationTypeLiteral.js
++++ new.declFileTypeAnnotationTypeLiteral.js
+@@= skipped -40, +40 lines =@@
+ var z: new (a: string) => m.c;
+ 
+ //// [declFileTypeAnnotationTypeLiteral.js]
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    return c;
+-}());
+-var g = /** @class */ (function () {
+-    function g() {
+-    }
+-    return g;
+-}());
++class c {
++}
++class g {
++}
+ var m;
+ (function (m) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
++    class c {
++    }
+     m.c = c;
+ })(m || (m = {}));
+-// Object literal with everything
+ var x;
+-// Function type
+ var y;
+-// constructor type
+ var z;
+-
+-
+-//// [declFileTypeAnnotationTypeLiteral.d.ts]
+-declare class c {
+-}
+-declare class g<T> {
+-}
+-declare namespace m {
+-    class c {
+-    }
+-}
+-declare var x: {
+-    (a: number): c;
+-    (a: string): g<string>;
+-    new (a: number): c;
+-    new (a: string): m.c;
+-    [n: number]: c;
+-    [n: string]: c;
+-    a: c;
+-    b: g<string>;
+-    m1(): g<number>;
+-    m2(a: string, b?: number, ...c: c[]): string;
+-};
+-declare var y: (a: string) => string;
+-declare var z: new (a: string) => m.c;

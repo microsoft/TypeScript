@@ -1,0 +1,11 @@
+--- old.excessPropertyCheckingIntersectionWithConditional.js
++++ new.excessPropertyCheckingIntersectionWithConditional.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [excessPropertyCheckingIntersectionWithConditional.js]
+-var createDefaultExample = function (x) {
+-    return { a: 1, x: x }; // okay in TS 4.7.4, error in TS 4.8.2
++const createDefaultExample = (x) => {
++    return { a: 1, x: x };
+ };

@@ -1,0 +1,14 @@
+--- old.discriminatedUnionTypes3.js
++++ new.discriminatedUnionTypes3.js
+@@= skipped -19, +19 lines =@@
+ }
+ 
+ //// [discriminatedUnionTypes3.js]
+-"use strict";
+-// Repro from #44435
+-var example = {};
++const example = {};
+ if (example.err === undefined) {
+-    example.property; // true
++    example.property;
+ }

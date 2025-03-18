@@ -1,0 +1,14 @@
+--- old.moduleImport.js
++++ new.moduleImport.js
+@@= skipped -17, +17 lines =@@
+ //// [moduleImport.js]
+ var A;
+ (function (A) {
+-    var B;
++    let B;
+     (function (B) {
+-        var C;
++        let C;
+         (function (C) {
+             var XYZ = X.Y.Z;
+             function ping(x) {

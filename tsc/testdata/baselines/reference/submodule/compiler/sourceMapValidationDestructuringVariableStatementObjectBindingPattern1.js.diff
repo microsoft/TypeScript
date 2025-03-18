@@ -1,0 +1,9 @@
+--- old.sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js
++++ new.sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js
+@@= skipped -3, +3 lines =@@
+ var {x} = { x: 20 };
+ 
+ //// [sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js]
+-var x = { x: 20 }.x;
+-//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map
++var { x } = { x: 20 };

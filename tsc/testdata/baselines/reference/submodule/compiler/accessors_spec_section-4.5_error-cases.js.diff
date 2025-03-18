@@ -1,0 +1,45 @@
+--- old.accessors_spec_section-4.5_error-cases.js
++++ new.accessors_spec_section-4.5_error-cases.js
+@@= skipped -15, +15 lines =@@
+ }
+ 
+ //// [accessors_spec_section-4.5_error-cases.js]
+-var LanguageSpec_section_4_5_error_cases = /** @class */ (function () {
+-    function LanguageSpec_section_4_5_error_cases() {
+-    }
+-    Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedSetter_SetterFirst", {
+-        get: function () { return ""; },
+-        set: function (a) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedSetter_SetterLast", {
+-        get: function () { return ""; },
+-        set: function (a) { },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedGetter_GetterFirst", {
+-        get: function () { return ""; },
+-        set: function (aStr) { aStr = 0; },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedGetter_GetterLast", {
+-        get: function () { return ""; },
+-        set: function (aStr) { aStr = 0; },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return LanguageSpec_section_4_5_error_cases;
+-}());
++class LanguageSpec_section_4_5_error_cases {
++    set AnnotatedSetter_SetterFirst(a) { }
++    get AnnotatedSetter_SetterFirst() { return ""; }
++    get AnnotatedSetter_SetterLast() { return ""; }
++    set AnnotatedSetter_SetterLast(a) { }
++    get AnnotatedGetter_GetterFirst() { return ""; }
++    set AnnotatedGetter_GetterFirst(aStr) { aStr = 0; }
++    set AnnotatedGetter_GetterLast(aStr) { aStr = 0; }
++    get AnnotatedGetter_GetterLast() { return ""; }
++}

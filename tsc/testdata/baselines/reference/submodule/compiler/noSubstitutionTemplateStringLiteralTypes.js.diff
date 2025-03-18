@@ -1,0 +1,8 @@
+--- old.noSubstitutionTemplateStringLiteralTypes.js
++++ new.noSubstitutionTemplateStringLiteralTypes.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [noSubstitutionTemplateStringLiteralTypes.js]
+-var x = "foo";
++const x = "foo";

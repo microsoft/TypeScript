@@ -1,0 +1,12 @@
+--- old.optionalTupleElementsAndUndefined.js
++++ new.optionalTupleElementsAndUndefined.js
+@@= skipped -21, +21 lines =@@
+ 
+ 
+ //// [optionalTupleElementsAndUndefined.js]
+-"use strict";
+-// Repro from #50753
+-// Types in the following declarations should be identical
+ var v;
+ var v;
+ var v;

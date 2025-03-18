@@ -1,0 +1,13 @@
+--- old.commentsAfterFunctionExpression1.js
++++ new.commentsAfterFunctionExpression1.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [commentsAfterFunctionExpression1.js]
+ var v = {
+-    f: function (a) { return 0; } /*t1*/,
+-    g: (function (a) { return 0; }) /*t2*/,
+-    h: (function (a) { return 0; } /*t3*/)
++    f: a => 0,
++    g: (a => 0),
++    h: (a => 0)
+ };

@@ -1,0 +1,30 @@
+--- old.es6ImportNameSpaceImportDts.js
++++ new.es6ImportNameSpaceImportDts.js
+@@= skipped -11, +11 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.c = void 0;
+-var c = /** @class */ (function () {
+-    function c() {
+-    }
+-    return c;
+-}());
++class c {
++}
+ exports.c = c;
+ ;
+ //// [client.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
+-var nameSpaceBinding = require("./server");
++const nameSpaceBinding = require("./server");
+ exports.x = new nameSpaceBinding.c();
+-
+-
+-//// [server.d.ts]
+-export declare class c {
+-}
+-//// [client.d.ts]
+-import * as nameSpaceBinding from "./server";
+-export declare var x: nameSpaceBinding.c;

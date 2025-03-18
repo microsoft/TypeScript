@@ -1,0 +1,13 @@
+--- old.indexerAsOptional.js
++++ new.indexerAsOptional.js
+@@= skipped -11, +11 lines =@@
+ }
+ 
+ //// [indexerAsOptional.js]
+-var indexSig2 = /** @class */ (function () {
+-    function indexSig2() {
+-    }
+-    return indexSig2;
+-}());
++class indexSig2 {
++}

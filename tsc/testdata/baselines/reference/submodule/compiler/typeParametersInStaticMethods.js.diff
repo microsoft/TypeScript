@@ -1,0 +1,16 @@
+--- old.typeParametersInStaticMethods.js
++++ new.typeParametersInStaticMethods.js
+@@= skipped -6, +6 lines =@@
+ } 
+ 
+ //// [typeParametersInStaticMethods.js]
+-var foo = /** @class */ (function () {
+-    function foo() {
++class foo {
++    static M(x) {
+     }
+-    foo.M = function (x) {
+-    };
+-    return foo;
+-}());
++}

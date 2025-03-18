@@ -1,0 +1,10 @@
+--- old.typePredicateStructuralMatch.js
++++ new.typePredicateStructuralMatch.js
+@@= skipped -28, +28 lines =@@
+ }
+ 
+ //// [typePredicateStructuralMatch.js]
+-// Repro from #12235
+ getResults1([]);
+ getResults1({ data: [] });
+ getResults2([]);

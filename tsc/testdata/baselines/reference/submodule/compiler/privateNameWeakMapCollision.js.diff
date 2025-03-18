@@ -1,0 +1,17 @@
+--- old.privateNameWeakMapCollision.js
++++ new.privateNameWeakMapCollision.js
+@@= skipped -11, +11 lines =@@
+ 
+ //// [privateNameWeakMapCollision.js]
+ function test() {
+-    var _C_x;
+     let WeakMap;
+     let WeakSet;
+     class C {
+-        constructor() {
+-            _C_x.set(this, void 0);
+-        }
++        #x;
+     }
+-    _C_x = new WeakMap();
+ }

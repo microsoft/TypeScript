@@ -1,0 +1,9 @@
+--- old.mixedPropertyElementAccessAssignmentDeclaration.js
++++ new.mixedPropertyElementAccessAssignmentDeclaration.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [mixedPropertyElementAccessAssignmentDeclaration.js]
+-// Should not crash: #34642
+ var arr = [];
+ arr[0].prop[2] = {};

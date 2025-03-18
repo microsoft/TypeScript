@@ -1,0 +1,11 @@
+--- old.labeledStatementExportDeclarationNoCrash1(module=commonjs).js
++++ new.labeledStatementExportDeclarationNoCrash1(module=commonjs).js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [labeledStatementExportDeclarationNoCrash1.js]
+ "use strict";
+-// https://github.com/microsoft/TypeScript/issues/59372
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.box = void 0;
+-subTitle: ;
++subTitle: export const title;

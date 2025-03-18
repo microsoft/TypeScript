@@ -1,0 +1,14 @@
+--- old.functionWithDefaultParameterWithNoStatements12.js
++++ new.functionWithDefaultParameterWithNoStatements12.js
+@@= skipped -9, +9 lines =@@
+ 
+ //// [functionWithDefaultParameterWithNoStatements12.js]
+ var v;
+-function foo(a) {
+-    if (a === void 0) { a = (v); }
++function foo(a = (v)) { }
++function bar(a = (v)) {
+ }
+-function bar(a) {
+-    if (a === void 0) { a = (v); }
+-}

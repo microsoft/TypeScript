@@ -1,0 +1,29 @@
+--- old.intersectionTypeMembers.js
++++ new.intersectionTypeMembers.js
+@@= skipped -69, +69 lines =@@
+ 
+ 
+ //// [intersectionTypeMembers.js]
+-// An intersection type has those members that are present in any of its constituent types,
+-// with types that are intersections of the respective members in the constituent types
+ var abc;
+ abc.a = "hello";
+ abc.b = "hello";
+@@= skipped -13, +11 lines =@@
+ var f;
+ var s = f("hello");
+ var n = f(42);
+-var de = {
++const de = {
+     nested: {
+         doublyNested: {
+             d: 'yes',
+@@= skipped -10, +10 lines =@@
+         other: { g: 101 }
+     }
+ };
+-var defg = {
++const defg = {
+     nested: {
+         doublyNested: {
+             d: 'yes',

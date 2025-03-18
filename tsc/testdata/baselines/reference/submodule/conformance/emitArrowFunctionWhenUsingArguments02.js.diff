@@ -1,0 +1,8 @@
+--- old.emitArrowFunctionWhenUsingArguments02.js
++++ new.emitArrowFunctionWhenUsingArguments02.js
+@@= skipped -3, +3 lines =@@
+ var a = () => arguments;
+ 
+ //// [emitArrowFunctionWhenUsingArguments02.js]
+-var a = function () { return arguments; };
++var a = () => arguments;

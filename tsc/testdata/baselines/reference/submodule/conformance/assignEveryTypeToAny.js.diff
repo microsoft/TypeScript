@@ -1,0 +1,33 @@
+--- old.assignEveryTypeToAny.js
++++ new.assignEveryTypeToAny.js
+@@= skipped -57, +57 lines =@@
+ }
+ 
+ //// [assignEveryTypeToAny.js]
+-// all of these are valid
+ var x;
+ x = 1;
+ var a = 2;
+@@= skipped -26, +25 lines =@@
+ x = f;
+ var g;
+ x = g;
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++    bar;
++}
+ var h;
+ x = h;
+ var i;
+ x = i;
+-x = { f: function () { return 1; } };
+-x = { f: function (x) { return x; } };
++x = { f() { return 1; } };
++x = { f(x) { return x; } };
+ function j(a) {
+     x = a;
+ }

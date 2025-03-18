@@ -1,0 +1,33 @@
+--- old.es6ImportDefaultBindingAmd.js
++++ new.es6ImportDefaultBindingAmd.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [es6ImportDefaultBindingAmd_0.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var a = 10;
+-    exports.default = a;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++var a = 10;
++exports.default = a;
+ //// [es6ImportDefaultBindingAmd_1.js]
+-define(["require", "exports", "es6ImportDefaultBindingAmd_0"], function (require, exports, es6ImportDefaultBindingAmd_0_1) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var x = es6ImportDefaultBindingAmd_0_1.default;
+-});
+-
+-
+-//// [es6ImportDefaultBindingAmd_0.d.ts]
+-declare var a: number;
+-export default a;
+-//// [es6ImportDefaultBindingAmd_1.d.ts]
+-export {};
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const es6ImportDefaultBindingAmd_0_1 = require("es6ImportDefaultBindingAmd_0");
++var x = es6ImportDefaultBindingAmd_0_1.default;

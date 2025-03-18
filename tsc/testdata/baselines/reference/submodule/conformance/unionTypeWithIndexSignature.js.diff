@@ -1,0 +1,18 @@
+--- old.unionTypeWithIndexSignature.js
++++ new.unionTypeWithIndexSignature.js
+@@= skipped -29, +29 lines =@@
+ 
+ 
+ //// [unionTypeWithIndexSignature.js]
+-"use strict";
+ u.foo = 'bye';
+ u.baz = 'hi';
+ v.foo = false;
+@@= skipped -12, +11 lines =@@
+ const sym = Symbol();
+ both['s'] = 'ok';
+ both[0] = 1;
+-both[1] = 0; // not ok
++both[1] = 0;
+ both[0] = 'not ok';
+ both[sym] = 'not ok';

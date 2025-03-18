@@ -1,0 +1,11 @@
+--- old.generatorTypeCheck58.js
++++ new.generatorTypeCheck58.js
+@@= skipped -9, +9 lines =@@
+ //// [generatorTypeCheck58.js]
+ function* g() {
+     class C {
++        static x = yield 0;
+     }
+-    C.x = yield 0;
+     ;
+ }

@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts] ////
+
+//// [destructuringArrayBindingPatternAndAssignment3.ts]
+const [a, b = a] = [1]; // ok
+const [c, d = c, e = e] = [1]; // error for e = e
+const [f, g = f, h = i, i = f] = [1]; // error for h = i
+
+(function ([a, b = a]) { // ok
+})([1]);
+(function ([c, d = c, e = e]) { // error for e = e
+})([1]);
+(function ([f, g = f, h = i, i = f]) { // error for h = i
+})([1])
+
+
+//// [destructuringArrayBindingPatternAndAssignment3.js]
+const [a, b = a] = [1];
+const [c, d = c, e = e] = [1];
+const [f, g = f, h = i, i = f] = [1];
+(function ([a, b = a]) {
+})([1]);
+(function ([c, d = c, e = e]) {
+})([1]);
+(function ([f, g = f, h = i, i = f]) {
+})([1]);

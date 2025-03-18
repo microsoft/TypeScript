@@ -1,0 +1,47 @@
+--- old.assignmentTypeNarrowing.js
++++ new.assignmentTypeNarrowing.js
+@@= skipped -37, +37 lines =@@
+ 
+ 
+ //// [assignmentTypeNarrowing.js]
+-var _a, _b, _c;
+-var x;
++let x;
+ x = "";
+-x; // string
+-x = [true][0];
+-x; // boolean
+-_a = [1][0], x = _a === void 0 ? "" : _a;
+-x; // string | number
+-(x = { x: true }.x);
+-x; // boolean
+-(x = { y: 1 }.y);
+-x; // number
+-(_b = { x: true }.x, x = _b === void 0 ? "" : _b);
+-x; // string | boolean
+-(_c = { y: 1 }.y, x = _c === void 0 ? /a/ : _c);
+-x; // number | RegExp
+-var a;
+-for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
+-    x = a_1[_i];
+-    x; // string
++x;
++[x] = [true];
++x;
++[x = ""] = [1];
++x;
++({ x } = { x: true });
++x;
++({ y: x } = { y: 1 });
++x;
++({ x = "" } = { x: true });
++x;
++({ y: x = /a/ } = { y: 1 });
++x;
++let a;
++for (x of a) {
++    x;
+ }
+-var arr = [{ x: "ok" }]; // weak type
++const arr = [{ x: "ok" }];
+ arr.push({ x: "ok" });

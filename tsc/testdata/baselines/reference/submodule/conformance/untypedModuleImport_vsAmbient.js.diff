@@ -1,0 +1,10 @@
+--- old.untypedModuleImport_vsAmbient.js
++++ new.untypedModuleImport_vsAmbient.js
+@@= skipped -16, +16 lines =@@
+ //// [a.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-/// <reference path="./declarations.d.ts" />
+-var foo_1 = require("foo");
++const foo_1 = require("foo");
+ foo_1.x;

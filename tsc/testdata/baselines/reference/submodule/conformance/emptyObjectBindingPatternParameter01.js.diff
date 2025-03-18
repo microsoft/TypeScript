@@ -1,0 +1,14 @@
+--- old.emptyObjectBindingPatternParameter01.js
++++ new.emptyObjectBindingPatternParameter01.js
+@@= skipped -5, +5 lines =@@
+ }
+ 
+ //// [emptyObjectBindingPatternParameter01.js]
+-function f(_a) {
++function f({}) {
+     var x, y, z;
+ }
+-
+-
+-//// [emptyObjectBindingPatternParameter01.d.ts]
+-declare function f({}: {}): void;

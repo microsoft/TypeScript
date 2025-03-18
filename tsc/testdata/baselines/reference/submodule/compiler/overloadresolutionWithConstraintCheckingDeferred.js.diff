@@ -1,0 +1,24 @@
+--- old.overloadresolutionWithConstraintCheckingDeferred.js
++++ new.overloadresolutionWithConstraintCheckingDeferred.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [overloadresolutionWithConstraintCheckingDeferred.js]
+-var G = /** @class */ (function () {
+-    function G(x) {
+-    }
+-    return G;
+-}());
+-var result = foo(function (x) { return new G(x); }); // x has type D, new G(x) fails, so first overload is picked.
+-var result2 = foo(function (x) { return new G(x); }); // x has type D, new G(x) fails, so first overload is picked.
+-var result3 = foo(function (x) {
+-    var y; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
++class G {
++    constructor(x) { }
++}
++var result = foo(x => new G(x));
++var result2 = foo(x => new G(x));
++var result3 = foo(x => {
++    var y;
+     return y;
+ });

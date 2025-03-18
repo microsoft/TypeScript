@@ -1,0 +1,26 @@
+--- old.declarationEmitPrefersPathKindBasedOnBundling.js
++++ new.declarationEmitPrefersPathKindBasedOnBundling.js
+@@= skipped -28, +28 lines =@@
+ //// [spacing.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var scalar_1 = require("../lib/operators/scalar");
++const scalar_1 = require("../lib/operators/scalar");
+ exports.default = {
+     get xs() {
+         return (0, scalar_1.scalar)("14px");
+     }
+ };
+-
+-
+-//// [scalar.d.ts]
+-export interface Scalar {
+-    (): string;
+-    value: number;
+-}
+-export declare function scalar(value: string): Scalar;
+-//// [spacing.d.ts]
+-declare const _default: {
+-    readonly xs: import("../lib/operators/scalar").Scalar;
+-};
+-export default _default;

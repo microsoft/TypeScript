@@ -1,0 +1,11 @@
+--- old.typeGuardNarrowsToLiteralTypeUnion.js
++++ new.typeGuardNarrowsToLiteralTypeUnion.js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [typeGuardNarrowsToLiteralTypeUnion.js]
+-var value;
++let value;
+ if (isFoo(value)) {
+     doThis(value);
+ }

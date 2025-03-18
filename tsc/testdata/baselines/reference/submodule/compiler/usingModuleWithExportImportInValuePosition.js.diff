@@ -1,0 +1,21 @@
+--- old.usingModuleWithExportImportInValuePosition.js
++++ new.usingModuleWithExportImportInValuePosition.js
+@@= skipped -24, +24 lines =@@
+ var A;
+ (function (A) {
+     A.x = 'hello world';
+-    var Point = /** @class */ (function () {
+-        function Point(x, y) {
++    class Point {
++        x;
++        y;
++        constructor(x, y) {
+             this.x = x;
+             this.y = y;
+         }
+-        return Point;
+-    }());
++    }
+     A.Point = Point;
+ })(A || (A = {}));
+ var C;

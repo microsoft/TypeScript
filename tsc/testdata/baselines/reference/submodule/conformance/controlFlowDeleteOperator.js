@@ -1,0 +1,37 @@
+//// [tests/cases/conformance/controlFlow/controlFlowDeleteOperator.ts] ////
+
+//// [controlFlowDeleteOperator.ts]
+function f() {
+    let x: { a?: number | string, b: number | string } = { b: 1 };
+    x.a;
+    x.b;
+    x.a = 1;
+    x.b = 1;
+    x.a;
+    x.b;
+    delete x.a;
+    delete x.b;
+    x.a;
+    x.b;
+    x;
+    delete x;  // No effect
+    x;
+}
+
+//// [controlFlowDeleteOperator.js]
+function f() {
+    let x = { b: 1 };
+    x.a;
+    x.b;
+    x.a = 1;
+    x.b = 1;
+    x.a;
+    x.b;
+    delete x.a;
+    delete x.b;
+    x.a;
+    x.b;
+    x;
+    delete x;
+    x;
+}

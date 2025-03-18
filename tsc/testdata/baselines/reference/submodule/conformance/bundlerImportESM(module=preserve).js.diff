@@ -1,0 +1,10 @@
+--- old.bundlerImportESM(module=preserve).js
++++ new.bundlerImportESM(module=preserve).js
+@@= skipped -13, +13 lines =@@
+ 
+ 
+ //// [esm.mjs]
+-export var esm = 0;
++export const esm = 0;
+ //// [not-actually-cjs.cjs]
+ //// [still-not-cjs.js]

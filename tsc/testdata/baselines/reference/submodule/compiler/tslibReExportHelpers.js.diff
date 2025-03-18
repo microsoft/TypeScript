@@ -1,0 +1,16 @@
+--- old.tslibReExportHelpers.js
++++ new.tslibReExportHelpers.js
+@@= skipped -27, +27 lines =@@
+ 
+ 
+ //// [index.mjs]
+-import { __decorate } from "tslib";
+-let Foo = class Foo {
+-};
+-Foo = __decorate([
+-    decorator
+-], Foo);
+-export { Foo };
++@decorator
++export class Foo {
++}

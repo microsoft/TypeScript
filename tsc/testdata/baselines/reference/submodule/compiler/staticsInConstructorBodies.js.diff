@@ -1,0 +1,18 @@
+--- old.staticsInConstructorBodies.js
++++ new.staticsInConstructorBodies.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [staticsInConstructorBodies.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    constructor() {
+     }
+-    C.m1 = function () { }; // ERROR
+-    C.p1 = 0; // ERROR
+-    return C;
+-}());
++    static p1 = 0;
++    static m1() { }
++}

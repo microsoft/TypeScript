@@ -1,0 +1,10 @@
+--- old.deleteExpressionMustBeOptional(strict=true).js
++++ new.deleteExpressionMustBeOptional(strict=true).js
+@@= skipped -43, +43 lines =@@
+ 
+ 
+ //// [deleteExpressionMustBeOptional.js]
+-"use strict";
+ delete f.a;
+ delete f.b;
+ delete f.c;

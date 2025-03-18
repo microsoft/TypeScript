@@ -1,0 +1,10 @@
+--- old.umd2.js
++++ new.umd2.js
+@@= skipped -12, +12 lines =@@
+ 
+ //// [a.js]
+ Foo.fn();
+-var x;
+-var y = x.n;
++let x;
++let y = x.n;

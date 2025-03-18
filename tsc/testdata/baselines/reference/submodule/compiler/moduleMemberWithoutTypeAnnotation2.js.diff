@@ -1,0 +1,11 @@
+--- old.moduleMemberWithoutTypeAnnotation2.js
++++ new.moduleMemberWithoutTypeAnnotation2.js
+@@= skipped -21, +21 lines =@@
+ //// [moduleMemberWithoutTypeAnnotation2.js]
+ var TypeScript;
+ (function (TypeScript) {
+-    var CompilerDiagnostics;
++    let CompilerDiagnostics;
+     (function (CompilerDiagnostics) {
+         CompilerDiagnostics.diagnosticWriter = null;
+         function Alert(output) {

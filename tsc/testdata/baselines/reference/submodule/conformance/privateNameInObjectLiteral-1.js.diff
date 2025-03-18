@@ -1,0 +1,11 @@
+--- old.privateNameInObjectLiteral-1.js
++++ new.privateNameInObjectLiteral-1.js
+@@= skipped -6, +6 lines =@@
+ 
+ 
+ //// [privateNameInObjectLiteral-1.js]
+-var obj = {
+-    : 1
++const obj = {
++    #foo: 1
+ };

@@ -1,0 +1,8 @@
+--- old.typeParameterConstrainedToOuterTypeParameter.js
++++ new.typeParameterConstrainedToOuterTypeParameter.js
+@@= skipped -13, +13 lines =@@
+ 
+ //// [typeParameterConstrainedToOuterTypeParameter.js]
+ var a;
+-var b = a; // assignment should be legal (both U's get instantiated to any for comparison)
++var b = a;

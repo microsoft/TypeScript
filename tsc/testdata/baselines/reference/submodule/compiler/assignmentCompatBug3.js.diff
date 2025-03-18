@@ -1,0 +1,37 @@
+--- old.assignmentCompatBug3.js
++++ new.assignmentCompatBug3.js
+@@= skipped -29, +29 lines =@@
+ //// [assignmentCompatBug3.js]
+ function makePoint(x, y) {
+     return {
+-        get x() { return x; }, // shouldn't be "void"
+-        get y() { return y; }, // shouldn't be "void"
+-        //x: "yo",
+-        //y: "boo",
++        get x() { return x; },
++        get y() { return y; },
+         dist: function () {
+-            return Math.sqrt(x * x + y * y); // shouldn't be picking up "x" and "y" from the object lit
++            return Math.sqrt(x * x + y * y);
+         }
+     };
+ }
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    get x() {
++        return 0;
+     }
+-    Object.defineProperty(C.prototype, "x", {
+-        get: function () {
+-            return 0;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
++}
+ function foo(test) { }
+ var x;
+ var y;

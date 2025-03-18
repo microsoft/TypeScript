@@ -1,0 +1,113 @@
+--- old.vardecl.js
++++ new.vardecl.js
+@@= skipped -135, +135 lines =@@
+     var m1;
+     var a2, b22 = 10, b222;
+     var m3;
+-    var C = /** @class */ (function () {
+-        function C(b) {
++    class C {
++        b;
++        constructor(b) {
+             this.b = b;
+         }
+-        return C;
+-    }());
+-    var C2 = /** @class */ (function () {
+-        function C2(b) {
++    }
++    class C2 {
++        b;
++        constructor(b) {
+             this.b = b;
+         }
+-        return C2;
+-    }());
++    }
+     m2.C2 = C2;
+     var m;
+     var b23;
+@@= skipped -32, +32 lines =@@
+     k++;
+ }
+ var b = 10;
+-
+-
+-//// [vardecl.d.ts]
+-declare var simpleVar: any;
+-declare var anotherVar: any;
+-declare var varWithSimpleType: number;
+-declare var varWithArrayType: number[];
+-declare var varWithInitialValue: number;
+-declare var withComplicatedValue: {
+-    x: number;
+-    y: number;
+-    desc: string;
+-};
+-declare var declaredVar: any;
+-declare var declareVar2: any;
+-declare var declaredVar3: any;
+-declare var deckareVarWithType: number;
+-declare var arrayVar: string[];
+-declare var complicatedArrayVar: {
+-    x: number;
+-    y: string;
+-}[];
+-declare var n1: {
+-    [s: string]: number;
+-};
+-declare var c: {
+-    new?(): any;
+-};
+-declare var d: {
+-    foo?(): {
+-        x: number;
+-    };
+-};
+-declare var d3: {
+-    foo(): {
+-        x: number;
+-        y: number;
+-    };
+-};
+-declare var d2: {
+-    foo(): {
+-        x: number;
+-    };
+-};
+-declare var n2: {
+-    (): void;
+-};
+-declare var n4: {
+-    (): void;
+-}[];
+-declare var d4: {
+-    foo(n: string, x: {
+-        x: number;
+-        y: number;
+-    }): {
+-        x: number;
+-        y: number;
+-    };
+-};
+-declare namespace m2 {
+-    var a: any, b2: number, b: any;
+-    class C2 {
+-        b: any;
+-        constructor(b: any);
+-    }
+-    var mE: any;
+-    var d1E: any, d2E: any;
+-    var b2E: any;
+-    var v1E: any;
+-}
+-declare var a22: any, b22: number, c22: number;
+-declare var nn: any;
+-declare var da1: any, da2: any;
+-declare var normalVar: any;
+-declare var dv1: any;
+-declare var xl: any;
+-declare var x: any;
+-declare var z: any;
+-declare function foo(a2: any): void;
+-declare var b: number;

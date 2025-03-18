@@ -1,0 +1,25 @@
+--- old.classExpressionWithStaticProperties2.js
++++ new.classExpressionWithStaticProperties2.js
+@@= skipped -10, +10 lines =@@
+  };
+ 
+ //// [classExpressionWithStaticProperties2.js]
+-var _a;
+-var v = (_a = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }()),
+-    _a.a = 1,
+-    _a.c = {
++var v = class C {
++    static a = 1;
++    static b;
++    static c = {
+         x: "hi"
+-    },
+-    _a.d = _a.c.x + " world",
+-    _a);
++    };
++    static d = C.c.x + " world";
++};

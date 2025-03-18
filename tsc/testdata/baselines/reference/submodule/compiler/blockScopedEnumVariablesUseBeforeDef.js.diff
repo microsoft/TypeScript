@@ -1,0 +1,29 @@
+--- old.blockScopedEnumVariablesUseBeforeDef.js
++++ new.blockScopedEnumVariablesUseBeforeDef.js
+@@= skipped -22, +22 lines =@@
+ //// [blockScopedEnumVariablesUseBeforeDef.js]
+ function foo1() {
+     return E.A;
+-    var E;
++    let E;
+     (function (E) {
+         E[E["A"] = 0] = "A";
+     })(E || (E = {}));
+ }
+ function foo2() {
+-    return 0 /* E.A */;
++    return E.A;
++    let E;
++    (function (E) {
++        E[E["A"] = 0] = "A";
++    })(E || (E = {}));
+ }
+-var config = {
+-    a: 2 /* AfterObject.A */,
++const config = {
++    a: AfterObject.A,
+ };
++var AfterObject;
++(function (AfterObject) {
++    AfterObject[AfterObject["A"] = 2] = "A";
++})(AfterObject || (AfterObject = {}));

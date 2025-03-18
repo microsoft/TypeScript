@@ -1,0 +1,15 @@
+--- old.interfaceDeclaration1.js
++++ new.interfaceDeclaration1.js
+@@= skipped -57, +57 lines =@@
+ //// [interfaceDeclaration1.js]
+ var v1;
+ v1();
+-var C1 = /** @class */ (function () {
+-    function C1() {
++class C1 {
++    constructor() {
+         var prototype = 3;
+     }
+-    return C1;
+-}());
++}

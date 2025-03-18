@@ -1,0 +1,22 @@
+--- old.methodSignatureDeclarationEmit1.js
++++ new.methodSignatureDeclarationEmit1.js
+@@= skipped -8, +8 lines =@@
+ }
+ 
+ //// [methodSignatureDeclarationEmit1.js]
+-var C = /** @class */ (function () {
+-    function C() {
++class C {
++    foo(a) {
+     }
+-    C.prototype.foo = function (a) {
+-    };
+-    return C;
+-}());
+-
+-
+-//// [methodSignatureDeclarationEmit1.d.ts]
+-declare class C {
+-    foo(n: number): void;
+-    foo(s: string): void;
+ }

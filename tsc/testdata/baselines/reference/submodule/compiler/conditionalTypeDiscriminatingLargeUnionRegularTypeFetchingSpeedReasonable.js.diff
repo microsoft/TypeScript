@@ -1,0 +1,10 @@
+--- old.conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.js
++++ new.conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.js
+@@= skipped -8017, +8017 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.makeThing = makeThing;
+-function makeThing(name, children) {
+-    if (children === void 0) { children = []; }
+-}
++function makeThing(name, children = []) { }

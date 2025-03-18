@@ -1,0 +1,9 @@
+--- old.abstractIdentifierNameStrict.js
++++ new.abstractIdentifierNameStrict.js
+@@= skipped -11, +11 lines =@@
+ var abstract = true;
+ function foo() {
+     "use strict";
++    "use strict";
+     var abstract = true;
+ }

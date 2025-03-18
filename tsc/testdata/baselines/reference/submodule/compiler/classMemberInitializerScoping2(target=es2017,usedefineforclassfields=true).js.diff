@@ -1,0 +1,17 @@
+--- old.classMemberInitializerScoping2(target=es2017,usedefineforclassfields=true).js
++++ new.classMemberInitializerScoping2(target=es2017,usedefineforclassfields=true).js
+@@= skipped -10, +10 lines =@@
+ //// [classMemberInitializerScoping2.js]
+ const x = 1;
+ class C {
+-    constructor(x) {
+-        Object.defineProperty(this, "p", {
+-            enumerable: true,
+-            configurable: true,
+-            writable: true,
+-            value: x
+-        });
+-    }
++    p = x;
++    constructor(x) { }
+ }

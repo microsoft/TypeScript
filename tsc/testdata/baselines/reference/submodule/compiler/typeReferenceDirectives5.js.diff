@@ -1,0 +1,12 @@
+--- old.typeReferenceDirectives5.js
++++ new.typeReferenceDirectives5.js
+@@= skipped -15, +15 lines =@@
+ //// [app.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-
+-
+-//// [app.d.ts]
+-export interface A {
+-    x: typeof $;
+-}

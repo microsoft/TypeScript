@@ -1,0 +1,12 @@
+--- old.preserveValueImports_module(module=amd).js
++++ new.preserveValueImports_module(module=amd).js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [preserveValueImports_module.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });

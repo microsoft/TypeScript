@@ -1,0 +1,18 @@
+--- old.overloadedStaticMethodSpecialization.js
++++ new.overloadedStaticMethodSpecialization.js
+@@= skipped -10, +10 lines =@@
+ 
+ 
+ //// [overloadedStaticMethodSpecialization.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    A.B = function (v) {
++class A {
++    static B(v) {
+         return null;
+-    };
+-    return A;
+-}());
++    }
++}

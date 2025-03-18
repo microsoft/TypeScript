@@ -1,0 +1,16 @@
+--- old.multipleExportDefault4.js
++++ new.multipleExportDefault4.js
+@@= skipped -9, +9 lines =@@
+ //// [multipleExportDefault4.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ exports.default = C;
+ exports.default = {
+     uhoh: "another default",

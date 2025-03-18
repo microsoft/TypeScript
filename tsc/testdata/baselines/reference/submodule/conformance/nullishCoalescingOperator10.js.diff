@@ -1,0 +1,10 @@
+--- old.nullishCoalescingOperator10.js
++++ new.nullishCoalescingOperator10.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [nullishCoalescingOperator10.js]
+-"use strict";
+-var _a;
+-var gg = (_a = f()) !== null && _a !== void 0 ? _a : 'foo';
++let gg = f() ?? 'foo';

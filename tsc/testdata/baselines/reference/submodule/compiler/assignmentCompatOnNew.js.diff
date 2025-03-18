@@ -1,0 +1,17 @@
+--- old.assignmentCompatOnNew.js
++++ new.assignmentCompatOnNew.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [assignmentCompatOnNew.js]
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ ;
+ function bar(x) { }
+-bar(Foo); // Error, but should be allowed
++bar(Foo);

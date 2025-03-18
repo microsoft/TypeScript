@@ -1,0 +1,8 @@
+--- old.genericInference1.js
++++ new.genericInference1.js
+@@= skipped -3, +3 lines =@@
+ ['a', 'b', 'c'].map(x => x.length);
+ 
+ //// [genericInference1.js]
+-['a', 'b', 'c'].map(function (x) { return x.length; });
++['a', 'b', 'c'].map(x => x.length);

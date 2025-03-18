@@ -1,0 +1,10 @@
+--- old.evolvingArrayResolvedAssert.js
++++ new.evolvingArrayResolvedAssert.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [evolvingArrayResolvedAssert.js]
+-"use strict";
+ var C = [];
+ for (var a in C) {
+     if (C.hasOwnProperty(a)) {

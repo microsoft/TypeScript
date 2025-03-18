@@ -1,0 +1,29 @@
+--- old.es6ModuleWithModuleGenTargetAmd.js
++++ new.es6ModuleWithModuleGenTargetAmd.js
+@@= skipped -13, +13 lines =@@
+ }
+ 
+ //// [es6ModuleWithModuleGenTargetAmd.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.A = void 0;
+-    class A {
+-        constructor() {
+-        }
+-        B() {
+-            return 42;
+-        }
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.A = void 0;
++class A {
++    constructor() {
+     }
+-    exports.A = A;
+-});
++    B() {
++        return 42;
++    }
++}
++exports.A = A;

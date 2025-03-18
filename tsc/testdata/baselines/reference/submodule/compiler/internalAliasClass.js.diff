@@ -1,0 +1,31 @@
+--- old.internalAliasClass.js
++++ new.internalAliasClass.js
+@@= skipped -13, +13 lines =@@
+ //// [internalAliasClass.js]
+ var a;
+ (function (a) {
+-    var c = /** @class */ (function () {
+-        function c() {
+-        }
+-        return c;
+-    }());
++    class c {
++    }
+     a.c = c;
+ })(a || (a = {}));
+ var c;
+@@= skipped -12, +9 lines =@@
+     var b = a.c;
+     c.x = new b();
+ })(c || (c = {}));
+-
+-
+-//// [internalAliasClass.d.ts]
+-declare namespace a {
+-    class c {
+-    }
+-}
+-declare namespace c {
+-    import b = a.c;
+-    var x: b;
+-}

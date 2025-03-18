@@ -1,0 +1,14 @@
+--- old.varianceRepeatedlyPropegatesWithUnreliableFlag.js
++++ new.varianceRepeatedlyPropegatesWithUnreliableFlag.js
+@@= skipped -19, +19 lines =@@
+ const _i: I<A> = i;
+ 
+ //// [varianceRepeatedlyPropegatesWithUnreliableFlag.js]
+-var i = null;
+-var p2 = null;
+-// Commenting out the below line will remove the error on the `const _i: I<A> = i;`
++const i = null;
++const p2 = null;
+ i.fn(null, p2);
+-var _i = i;
++const _i = i;

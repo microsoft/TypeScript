@@ -1,0 +1,32 @@
+--- old.typeGuardConstructorNarrowAny.js
++++ new.typeGuardConstructorNarrowAny.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [typeGuardConstructorNarrowAny.js]
+-// Narrowing any to primitives
+ let var1;
+ if (var1.constructor === String) {
+-    var1; // String
++    var1;
+ }
+ if (var1.constructor === Number) {
+-    var1; // Number
++    var1;
+ }
+ if (var1.constructor === Boolean) {
+-    var1; // Boolean
++    var1;
+ }
+ if (var1.constructor === Array) {
+-    var1; // any[]
++    var1;
+ }
+ if (var1.constructor === Symbol) {
+-    var1; // Symbol
++    var1;
+ }
+ if (var1.constructor === BigInt) {
+-    var1; // BigInt
++    var1;
+ }

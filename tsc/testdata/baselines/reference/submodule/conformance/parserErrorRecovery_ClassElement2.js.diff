@@ -1,0 +1,18 @@
+--- old.parserErrorRecovery_ClassElement2.js
++++ new.parserErrorRecovery_ClassElement2.js
+@@= skipped -10, +10 lines =@@
+ //// [parserErrorRecovery_ClassElement2.js]
+ var M;
+ (function (M) {
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    var E;
++    class C {
++    }
++    let E;
+     (function (E) {
+     })(E || (E = {}));
+ })(M || (M = {}));

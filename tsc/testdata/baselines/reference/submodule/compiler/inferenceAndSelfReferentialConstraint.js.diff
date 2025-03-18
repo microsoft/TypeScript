@@ -1,0 +1,30 @@
+--- old.inferenceAndSelfReferentialConstraint.js
++++ new.inferenceAndSelfReferentialConstraint.js
+@@= skipped -32, +32 lines =@@
+ 
+ 
+ //// [inferenceAndSelfReferentialConstraint.js]
+-// @strict
+ function test(arg) {
+     return arg;
+ }
+-var res1 = test({
++const res1 = test({
+     foo: true,
+-    bar: function () {
++    bar() {
+     }
+ });
+-var res2 = test({
++const res2 = test({
+     foo: true,
+     bar: function () {
+     }
+ });
+-var res3 = test({
++const res3 = test({
+     foo: true,
+-    bar: function () {
++    bar: () => {
+     }
+ });

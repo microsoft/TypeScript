@@ -1,0 +1,8 @@
+--- old.templateStringInDeleteExpression.js
++++ new.templateStringInDeleteExpression.js
+@@= skipped -3, +3 lines =@@
+ delete `abc${0}abc`;
+ 
+ //// [templateStringInDeleteExpression.js]
+-delete "abc".concat(0, "abc");
++delete `abc${0}abc`;

@@ -1,0 +1,16 @@
+--- old.propagationOfPromiseInitialization.js
++++ new.propagationOfPromiseInitialization.js
+@@= skipped -17, +17 lines =@@
+ 
+ //// [propagationOfPromiseInitialization.js]
+ var foo;
+-foo.then(function (x) {
+-    // x is inferred to be a number
++foo.then((x) => {
+     return "asdf";
+-}).then(function (x) {
+-    // x is inferred to be string
++}).then((x) => {
+     x.length;
+     return 123;
+ });

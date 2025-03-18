@@ -1,0 +1,25 @@
+--- old.declarationEmitThisPredicatesWithPrivateName02.js
++++ new.declarationEmitThisPredicatesWithPrivateName02.js
+@@= skipped -18, +18 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.obj = void 0;
+ exports.obj = {
+-    m: function () {
+-        var dis = this;
++    m() {
++        let dis = this;
+         return dis.a != null && dis.b != null && dis.c != null;
+     }
+ };
+-
+-
+-//// [declarationEmitThisPredicatesWithPrivateName02.d.ts]
+-interface Foo {
+-    a: string;
+-    b: number;
+-    c: boolean;
+-}
+-export declare const obj: {
+-    m(): this is Foo;
+-};
+-export {};

@@ -1,0 +1,10 @@
+--- old.objectTypesIdentityWithCallSignatures3.js
++++ new.objectTypesIdentityWithCallSignatures3.js
+@@= skipped -41, +41 lines =@@
+ function foo15(x: any) { }
+ 
+ //// [objectTypesIdentityWithCallSignatures3.js]
+-// object types are identical structurally
+ var a;
+ function foo2(x) { }
+ function foo3(x) { }

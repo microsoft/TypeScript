@@ -1,0 +1,9 @@
+--- old.typeGuardNarrowByMutableUntypedField.js
++++ new.typeGuardNarrowByMutableUntypedField.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [typeGuardNarrowByMutableUntypedField.js]
+ if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
+-    var x = arrayLikeOrIterable.length;
++    let x = arrayLikeOrIterable.length;
+ }

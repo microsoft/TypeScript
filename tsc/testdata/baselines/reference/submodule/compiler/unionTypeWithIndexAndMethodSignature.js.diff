@@ -1,0 +1,11 @@
+--- old.unionTypeWithIndexAndMethodSignature.js
++++ new.unionTypeWithIndexAndMethodSignature.js
+@@= skipped -10, +10 lines =@@
+ });
+ 
+ //// [unionTypeWithIndexAndMethodSignature.js]
+-"use strict";
+ f({
+-    m: function (x) { },
++    m(x) { },
+ });

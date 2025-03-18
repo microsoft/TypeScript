@@ -1,0 +1,14 @@
+--- old.multipleExportDefault3.js
++++ new.multipleExportDefault3.js
+@@= skipped -14, +14 lines =@@
+ exports.default = {
+     uhoh: "another default",
+ };
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}
+ exports.default = C;

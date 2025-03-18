@@ -1,0 +1,12 @@
+--- old.noCatchBlock.js
++++ new.noCatchBlock.js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [noCatchBlock.js]
+ try {
+-    // ...
+ }
+ finally {
+-    // N.B. No 'catch' block
+ }
+-//# sourceMappingURL=noCatchBlock.js.map

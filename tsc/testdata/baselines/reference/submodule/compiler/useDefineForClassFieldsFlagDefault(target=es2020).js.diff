@@ -1,0 +1,11 @@
+--- old.useDefineForClassFieldsFlagDefault(target=es2020).js
++++ new.useDefineForClassFieldsFlagDefault(target=es2020).js
+@@= skipped -8, +8 lines =@@
+ 
+ //// [useDefineForClassFieldsFlagDefault.js]
+ class Foo {
++    static x = 1;
+ }
+-// For esNext should be emitted 'as is' because useDefineForClassFields defaults to true 
+-// For es2020 should be emitted as an assignment after the class definition (not Object.defineProperty) because useDefineForClassFields defaults to false
+-Foo.x = 1;

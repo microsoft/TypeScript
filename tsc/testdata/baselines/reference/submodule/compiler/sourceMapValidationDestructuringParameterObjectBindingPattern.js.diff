@@ -1,0 +1,27 @@
+--- old.sourceMapValidationDestructuringParameterObjectBindingPattern.js
++++ new.sourceMapValidationDestructuringParameterObjectBindingPattern.js
+@@= skipped -33, +33 lines =@@
+ //// [sourceMapValidationDestructuringParameterObjectBindingPattern.js]
+ var hello = "hello";
+ var robotA = { name: "mower", skill: "mowing" };
+-function foo1(_a) {
+-    var nameA = _a.name;
++function foo1({ name: nameA }) {
+     console.log(nameA);
+ }
+-function foo2(_a) {
+-    var nameB = _a.name, skillB = _a.skill;
++function foo2({ name: nameB, skill: skillB }) {
+     console.log(nameB);
+ }
+-function foo3(_a) {
+-    var name = _a.name;
++function foo3({ name }) {
+     console.log(name);
+ }
+ foo1(robotA);
+@@= skipped -18, +15 lines =@@
+ foo2({ name: "Edger", skill: "cutting edges" });
+ foo3(robotA);
+ foo3({ name: "Edger", skill: "cutting edges" });
+-//# sourceMappingURL=sourceMapValidationDestructuringParameterObjectBindingPattern.js.map

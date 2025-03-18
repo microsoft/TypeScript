@@ -1,0 +1,22 @@
+--- old.castParentheses.js
++++ new.castParentheses.js
+@@= skipped -13, +13 lines =@@
+ var b = (<any>new a).b 
+ 
+ //// [castParentheses.js]
+-var a = /** @class */ (function () {
+-    function a() {
+-    }
+-    return a;
+-}());
++class a {
++    static b;
++}
+ var b = a;
+ var b = a.b;
+ var b = a.b.c;
+ var b = a.b().c;
+ var b = new a;
+ var b = new a.b;
+-var b = (new a).b;
++var b = ((new a)).b;

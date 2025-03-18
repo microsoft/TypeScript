@@ -1,0 +1,16 @@
+--- old.importDeclWithExportModifier.js
++++ new.importDeclWithExportModifier.js
+@@= skipped -9, +9 lines =@@
+ 
+ 
+ //// [importDeclWithExportModifier.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    exports.a = void 0;
+-    exports.a = x.c;
+-    var b;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++var b;

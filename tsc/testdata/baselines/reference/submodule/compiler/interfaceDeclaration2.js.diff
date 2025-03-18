@@ -1,0 +1,15 @@
+--- old.interfaceDeclaration2.js
++++ new.interfaceDeclaration2.js
+@@= skipped -15, +15 lines =@@
+ 
+ 
+ //// [interfaceDeclaration2.js]
+-var I2 = /** @class */ (function () {
+-    function I2() {
+-    }
+-    return I2;
+-}());
++class I2 {
++}
+ function I3() { }
+ var I4;

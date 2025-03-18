@@ -1,0 +1,16 @@
+--- old.declarationsIndirectGeneratedAliasReference.js
++++ new.declarationsIndirectGeneratedAliasReference.js
+@@= skipped -21, +21 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.MyComp = void 0;
+-var ns = require("mod");
+-var Ctor = ns.default;
++const ns = require("mod");
++const Ctor = ns.default;
+ exports.MyComp = Ctor.extends({ foo: "bar" });
+-
+-
+-//// [index.d.ts]
+-import * as ns from "mod";
+-export declare const MyComp: import("mod/ctor").ExtendedCtor<ns.default>;

@@ -1,0 +1,46 @@
+--- old.contextSensitiveReturnTypeInference.js
++++ new.contextSensitiveReturnTypeInference.js
+@@= skipped -59, +59 lines =@@
+ 
+ 
+ //// [contextSensitiveReturnTypeInference.js]
+-"use strict";
+-// Repro from #34849
+-var DEPS = {
++const DEPS = {
+     foo: 1
+ };
+-test(function (deps, data) { return ({
++test((deps, data) => ({
+     fn1: function () { return deps.foo; },
+     fn2: data.bar
+-}); }, DEPS);
+-test(function (deps, data) { return ({
++}), DEPS);
++test((deps, data) => ({
+     fn1: function () { return deps.foo; },
+     fn2: data.bar
+-}); }, DEPS);
+-test(function (deps, data) { return ({
+-    fn1: function () { return deps.foo; },
++}), DEPS);
++test((deps, data) => ({
++    fn1: () => deps.foo,
+     fn2: data.bar
+-}); }, DEPS);
+-test(function (deps, data) {
++}), DEPS);
++test((deps, data) => {
+     return {
+-        fn1: function () { return deps.foo; },
++        fn1() { return deps.foo; },
+         fn2: data.bar
+     };
+ }, DEPS);
+-test(function (deps) { return ({
+-    fn1: function () { return deps.foo; },
++test((deps) => ({
++    fn1() { return deps.foo; },
+     fn2: 1
+-}); }, DEPS);
++}), DEPS);

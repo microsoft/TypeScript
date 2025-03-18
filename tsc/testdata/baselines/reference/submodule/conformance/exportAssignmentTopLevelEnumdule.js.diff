@@ -1,0 +1,46 @@
+--- old.exportAssignmentTopLevelEnumdule.js
++++ new.exportAssignmentTopLevelEnumdule.js
+@@= skipped -17, +17 lines =@@
+ 
+ 
+ //// [foo_0.js]
+-define(["require", "exports"], function (require, exports) {
+-    "use strict";
+-    var foo;
+-    (function (foo) {
+-        foo[foo["red"] = 0] = "red";
+-        foo[foo["green"] = 1] = "green";
+-        foo[foo["blue"] = 2] = "blue";
+-    })(foo || (foo = {}));
+-    (function (foo) {
+-        foo.answer = 42;
+-    })(foo || (foo = {}));
+-    return foo;
+-});
++"use strict";
++var foo;
++(function (foo) {
++    foo[foo["red"] = 0] = "red";
++    foo[foo["green"] = 1] = "green";
++    foo[foo["blue"] = 2] = "blue";
++})(foo || (foo = {}));
++(function (foo) {
++    foo.answer = 42;
++})(foo || (foo = {}));
++module.exports = foo;
+ //// [foo_1.js]
+-define(["require", "exports", "./foo_0"], function (require, exports, foo) {
+-    "use strict";
+-    Object.defineProperty(exports, "__esModule", { value: true });
+-    var color;
+-    if (color === foo.green) {
+-        color = foo.answer;
+-    }
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++const foo = require("./foo_0");
++var color;
++if (color === foo.green) {
++    color = foo.answer;
++}

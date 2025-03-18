@@ -1,0 +1,8 @@
+--- old.templateStringWithPropertyAccess.js
++++ new.templateStringWithPropertyAccess.js
+@@= skipped -3, +3 lines =@@
+ `abc${0}abc`.indexOf(`abc`);
+ 
+ //// [templateStringWithPropertyAccess.js]
+-"abc".concat(0, "abc").indexOf("abc");
++`abc${0}abc`.indexOf(`abc`);

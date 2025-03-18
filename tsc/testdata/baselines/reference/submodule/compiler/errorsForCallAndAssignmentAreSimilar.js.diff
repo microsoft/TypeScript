@@ -1,0 +1,11 @@
+--- old.errorsForCallAndAssignmentAreSimilar.js
++++ new.errorsForCallAndAssignmentAreSimilar.js
+@@= skipped -27, +27 lines =@@
+         { kind: "bluray", },
+         { kind: "hdpvd", }
+     ]);
+-    var ds = [
++    const ds = [
+         { kind: "bluray", },
+         { kind: "hdpvd", }
+     ];

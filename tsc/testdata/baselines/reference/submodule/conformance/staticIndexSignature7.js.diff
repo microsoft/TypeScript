@@ -1,0 +1,25 @@
+--- old.staticIndexSignature7.js
++++ new.staticIndexSignature7.js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [staticIndexSignature7.js]
+-"use strict";
+-var X = /** @class */ (function () {
+-    function X() {
+-    }
+-    X.x = 12; // Should error, incompatible with index signature
+-    return X;
+-}());
+-var Y = /** @class */ (function () {
+-    function Y() {
+-    }
+-    Y.foo = function () { }; // should error, incompatible with index signature
+-    return Y;
+-}());
++class X {
++    static x = 12;
++}
++class Y {
++    static foo() { }
++}

@@ -1,0 +1,8 @@
+--- old.typingsSuggestionBun2.js
++++ new.typingsSuggestionBun2.js
+@@= skipped -4, +4 lines =@@
+ 
+ 
+ //// [a.js]
+-var file = Bun.file("/a.ts");
++const file = Bun.file("/a.ts");

@@ -1,0 +1,22 @@
+--- old.builtinIterator.js
++++ new.builtinIterator.js
+@@= skipped -75, +75 lines =@@
+ const iter3 = iter2.flatMap(() => g1);
+ 
+ //// [builtinIterator.js]
+-"use strict";
+ const iterator = Iterator.from([0, 1, 2]);
+ const mapped = iterator.map(String);
+ const filtered = iterator.filter(x => x > 0);
+@@= skipped -26, +25 lines =@@
+         return { done: false, value: 0 };
+     }
+ }
+-// error cases
+ new Iterator();
+ class C extends Iterator {
+ }
+-// it's unfortunate that these are an error
+ class BadIterator1 extends Iterator {
+     next() {
+         if (Math.random() < .5) {

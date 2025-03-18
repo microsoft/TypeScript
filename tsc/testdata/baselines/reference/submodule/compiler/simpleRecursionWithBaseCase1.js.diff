@@ -1,0 +1,24 @@
+--- old.simpleRecursionWithBaseCase1.js
++++ new.simpleRecursionWithBaseCase1.js
+@@= skipped -36, +36 lines =@@
+ 
+ 
+ //// [simpleRecursionWithBaseCase1.js]
+-"use strict";
+ function fn1(n) {
+     if (n === 0) {
+         return 3;
+@@= skipped -9, +8 lines =@@
+         return fn1(n - 1);
+     }
+ }
+-var num = fn1();
++const num = fn1();
+ function fn2(n) {
+     return fn2(n);
+ }
+-var nev = fn2();
++const nev = fn2();
+ function fn3(n) {
+     if (n === 0) {
+         return 3;

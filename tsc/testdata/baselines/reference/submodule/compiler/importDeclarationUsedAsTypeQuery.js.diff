@@ -1,0 +1,28 @@
+--- old.importDeclarationUsedAsTypeQuery.js
++++ new.importDeclarationUsedAsTypeQuery.js
+@@= skipped -14, +14 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.B = void 0;
+-var B = /** @class */ (function () {
+-    function B() {
+-    }
+-    return B;
+-}());
++class B {
++    id;
++}
+ exports.B = B;
+ //// [importDeclarationUsedAsTypeQuery_1.js]
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.x = void 0;
+-
+-
+-//// [importDeclarationUsedAsTypeQuery_require.d.ts]
+-export declare class B {
+-    id: number;
+-}
+-//// [importDeclarationUsedAsTypeQuery_1.d.ts]
+-import a = require('./importDeclarationUsedAsTypeQuery_require');
+-export declare var x: typeof a;

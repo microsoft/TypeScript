@@ -1,0 +1,34 @@
+--- old.declarationsForInferredTypeFromOtherFile.js
++++ new.declarationsForInferredTypeFromOtherFile.js
+@@= skipped -16, +16 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Foo = void 0;
+-var Foo = /** @class */ (function () {
+-    function Foo() {
+-    }
+-    return Foo;
+-}());
++class Foo {
++}
+ exports.Foo = Foo;
+ //// [file2.js]
+ "use strict";
+@@= skipped -17, +14 lines =@@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.bar = bar;
+-var file2_1 = require("./file2");
++const file2_1 = require("./file2");
+ function bar() {
+     return (0, file2_1.foo)();
+ }
+-
+-
+-//// [file1.d.ts]
+-export declare class Foo {
+-}
+-//// [file2.d.ts]
+-export declare function foo(): import("./file1").Foo;
+-//// [file3.d.ts]
+-export declare function bar(): import("./file1").Foo;

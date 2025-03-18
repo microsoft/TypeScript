@@ -1,0 +1,14 @@
+--- old.contextuallyTypeCommaOperator02.js
++++ new.contextuallyTypeCommaOperator02.js
+@@= skipped -8, +8 lines =@@
+ });
+ 
+ //// [contextuallyTypeCommaOperator02.js]
+-var x;
+-x = (100, function (a) {
+-    var b = a;
++let x;
++x = (100, a => {
++    const b = a;
+     return b;
+ });

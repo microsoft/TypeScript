@@ -1,0 +1,29 @@
+--- old.intersectionAndUnionTypes.js
++++ new.intersectionAndUnionTypes.js
+@@= skipped -51, +51 lines =@@
+ var cod;
+ var x;
+ var y;
+-a = anb; // Ok
+-b = anb; // Ok
++a = anb;
++b = anb;
+ anb = a;
+ anb = b;
+-x = anb; // Ok
++x = anb;
+ x = aob;
+-x = cnd; // Ok
++x = cnd;
+ x = cod;
+ anb = x;
+ aob = x;
+@@= skipped -17, +17 lines =@@
+ y = cnd;
+ y = cod;
+ anb = y;
+-aob = y; // Ok
++aob = y;
+ cnd = y;
+-cod = y; // Ok
++cod = y;

@@ -1,0 +1,55 @@
+--- old.systemModuleDeclarationMerging.js
++++ new.systemModuleDeclarationMerging.js
+@@= skipped -10, +10 lines =@@
+ export module E { var x; }
+ 
+ //// [systemModuleDeclarationMerging.js]
+-System.register([], function (exports_1, context_1) {
+-    "use strict";
+-    var C, E;
+-    var __moduleName = context_1 && context_1.id;
+-    function F() { }
+-    exports_1("F", F);
+-    return {
+-        setters: [],
+-        execute: function () {
+-            (function (F) {
+-                var x;
+-            })(F || (exports_1("F", F = {})));
+-            C = /** @class */ (function () {
+-                function C() {
+-                }
+-                return C;
+-            }());
+-            exports_1("C", C);
+-            (function (C) {
+-                var x;
+-            })(C || (exports_1("C", C = {})));
+-            (function (E) {
+-            })(E || (exports_1("E", E = {})));
+-            (function (E) {
+-                var x;
+-            })(E || (exports_1("E", E = {})));
+-        }
+-    };
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.E = exports.C = void 0;
++exports.F = F;
++function F() { }
++(function (F) {
++    var x;
++})(F || (exports.F = F = {}));
++class C {
++}
++exports.C = C;
++(function (C) {
++    var x;
++})(C || (exports.C = C = {}));
++var E;
++(function (E) {
++})(E || (exports.E = E = {}));
++(function (E) {
++    var x;
++})(E || (exports.E = E = {}));

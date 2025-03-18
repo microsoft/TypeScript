@@ -1,0 +1,17 @@
+--- old.parsingClassRecoversWhenHittingUnexpectedSemicolon.js
++++ new.parsingClassRecoversWhenHittingUnexpectedSemicolon.js
+@@= skipped -7, +7 lines =@@
+ 
+ 
+ //// [parsingClassRecoversWhenHittingUnexpectedSemicolon.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    C.prototype.f = function () { };
++class C {
++    f() { }
+     ;
+-    return C;
+-}());
++    m;
++}

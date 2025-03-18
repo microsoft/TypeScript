@@ -1,0 +1,38 @@
+--- old.computedPropertyNamesWithStaticProperty.js
++++ new.computedPropertyNamesWithStaticProperty.js
+@@= skipped -24, +24 lines =@@
+ 
+ 
+ //// [computedPropertyNamesWithStaticProperty.js]
+-var _a;
+ class C1 {
++    static staticProp = 10;
+     get [C1.staticProp]() {
+         return "hello";
+     }
+@@= skipped -10, +10 lines =@@
+     }
+     [C1.staticProp]() { }
+ }
+-C1.staticProp = 10;
+-(_a = class C2 {
+-        get [C2.staticProp]() {
+-            return "hello";
+-        }
+-        set [C2.staticProp](x) {
+-            var y = x;
+-        }
+-        [C2.staticProp]() { }
+-    },
+-    _a.staticProp = 10,
+-    _a);
++(class C2 {
++    static staticProp = 10;
++    get [C2.staticProp]() {
++        return "hello";
++    }
++    set [C2.staticProp](x) {
++        var y = x;
++    }
++    [C2.staticProp]() { }
++});

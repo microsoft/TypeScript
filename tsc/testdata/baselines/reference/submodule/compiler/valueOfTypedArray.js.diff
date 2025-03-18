@@ -1,0 +1,10 @@
+--- old.valueOfTypedArray.js
++++ new.valueOfTypedArray.js
+@@= skipped -14, +14 lines =@@
+ 
+ 
+ //// [valueOfTypedArray.js]
+-// All declarations should pass, as valueOf has been specialized for all TypedArrays
+ const typedArray0 = (new Int8Array()).valueOf();
+ const typedArray1 = (new Uint8Array()).valueOf();
+ const typedArray2 = (new Int16Array()).valueOf();

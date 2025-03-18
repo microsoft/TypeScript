@@ -1,0 +1,9 @@
+--- old.invalidSymbolInTypeParameter1.js
++++ new.invalidSymbolInTypeParameter1.js
+@@= skipped -7, +7 lines =@@
+ 
+ //// [invalidSymbolInTypeParameter1.js]
+ function test() {
+-    var cats = new Array(); // WAWA is not a valid type
++    var cats = new Array();
+ }

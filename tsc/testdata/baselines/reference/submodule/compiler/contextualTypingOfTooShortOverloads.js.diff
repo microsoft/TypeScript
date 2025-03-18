@@ -1,0 +1,15 @@
+--- old.contextualTypingOfTooShortOverloads.js
++++ new.contextualTypingOfTooShortOverloads.js
+@@= skipped -52, +52 lines =@@
+ 
+ 
+ //// [contextualTypingOfTooShortOverloads.js]
+-// small repro from #11875
+ var use;
+-use(function (req, res) { });
+-// larger repro from #11875
+-var app;
+-app.use(function (err, req, res, next) { return; });
++use((req, res) => { });
++let app;
++app.use((err, req, res, next) => { return; });

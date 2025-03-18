@@ -1,0 +1,16 @@
+--- old.hidingConstructSignatures.js
++++ new.hidingConstructSignatures.js
+@@= skipped -28, +28 lines =@@
+ 
+ //// [hidingConstructSignatures.js]
+ var d;
+-d(""); // string
+-new d(""); // should be number
++d("");
++new d("");
+ var f;
+-new f(""); // string
++new f("");
+ var e;
+-new e(""); // {}
++new e("");

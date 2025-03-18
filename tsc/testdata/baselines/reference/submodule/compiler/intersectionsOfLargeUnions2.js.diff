@@ -1,0 +1,23 @@
+--- old.intersectionsOfLargeUnions2.js
++++ new.intersectionsOfLargeUnions2.js
+@@= skipped -39, +39 lines =@@
+ 
+ //// [intersectionsOfLargeUnions2.js]
+ "use strict";
+-// Repro from #24233
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.assertIsElement = assertIsElement;
+ exports.assertNodeTagName = assertNodeTagName;
+ exports.assertNodeProperty = assertNodeProperty;
+ function assertIsElement(node) {
+-    var nodeType = node === null ? null : node.nodeType;
++    let nodeType = node === null ? null : node.nodeType;
+     return nodeType === 1;
+ }
+ function assertNodeTagName(node, tagName) {
+     if (assertIsElement(node)) {
+-        var nodeTagName = node.tagName.toLowerCase();
++        const nodeTagName = node.tagName.toLowerCase();
+         return nodeTagName === tagName;
+     }
+     return false;

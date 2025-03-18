@@ -1,0 +1,12 @@
+--- old.functionOverloads43.js
++++ new.functionOverloads43.js
+@@= skipped -14, +14 lines =@@
+ var y = foo([{a: 100}]);
+ 
+ //// [functionOverloads43.js]
+-function foo(_a) {
+-    var x = _a[0];
++function foo([x]) {
+     if (x) {
+         return x.a;
+     }

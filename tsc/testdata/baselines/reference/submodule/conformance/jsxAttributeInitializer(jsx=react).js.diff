@@ -1,0 +1,18 @@
+--- old.jsxAttributeInitializer(jsx=react).js
++++ new.jsxAttributeInitializer(jsx=react).js
+@@= skipped -11, +11 lines =@@
+ 
+ 
+ //// [a.js]
+-React.createElement("div", null,
+-    React.createElement("div", { attr: React.createElement("div", null) }),
+-    React.createElement("div", { attr: React.createElement("div", null, "foo") }),
+-    React.createElement("div", { attr: React.createElement(React.Fragment, null,
+-            React.createElement("div", null, "foo")) }),
+-    React.createElement("div", { attr: true }));
++<div>
++    <div attr=<div />/>
++    <div attr=<div>foo</div>/>
++    <div attr=<><div>foo</div></>/>
++    <div attr/>
++</div>;

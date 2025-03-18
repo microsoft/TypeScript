@@ -1,0 +1,19 @@
+--- old.staticModifierAlreadySeen.js
++++ new.staticModifierAlreadySeen.js
+@@= skipped -6, +6 lines =@@
+ }
+ 
+ //// [staticModifierAlreadySeen.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-        this.foo = 1;
+-    }
+-    C.prototype.bar = function () { };
+-    return C;
+-}());
++class C {
++    static static;
++    foo = 1;
++    static static;
++    bar() { }
++}

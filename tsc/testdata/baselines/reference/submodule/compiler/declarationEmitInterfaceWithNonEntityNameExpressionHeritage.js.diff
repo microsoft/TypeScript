@@ -1,0 +1,19 @@
+--- old.declarationEmitInterfaceWithNonEntityNameExpressionHeritage.js
++++ new.declarationEmitInterfaceWithNonEntityNameExpressionHeritage.js
+@@= skipped -4, +4 lines =@@
+ interface Class extends (typeof A) { }
+ 
+ //// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.js]
+-var A = /** @class */ (function () {
+-    function A() {
+-    }
+-    return A;
+-}());
+-
+-
+-//// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.d.ts]
+-declare class A {
++class A {
+ }
+-interface Class {
+-}

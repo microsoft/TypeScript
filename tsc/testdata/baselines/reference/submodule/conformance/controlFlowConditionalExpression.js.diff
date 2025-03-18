@@ -1,0 +1,13 @@
+--- old.controlFlowConditionalExpression.js
++++ new.controlFlowConditionalExpression.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [controlFlowConditionalExpression.js]
+-var x;
+-var cond;
++let x;
++let cond;
+ cond ? x = "" : x = 3;
+-x; // string | number
++x;

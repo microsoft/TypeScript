@@ -1,0 +1,8 @@
+--- old.isLiteral1.js
++++ new.isLiteral1.js
+@@= skipped -3, +3 lines =@@
+ var x: number = 02343;
+ 
+ //// [isLiteral1.js]
+-var x = 1251;
++var x = 2343;

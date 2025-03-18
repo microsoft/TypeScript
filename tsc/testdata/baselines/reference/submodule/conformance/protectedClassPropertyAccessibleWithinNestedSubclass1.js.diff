@@ -1,0 +1,227 @@
+--- old.protectedClassPropertyAccessibleWithinNestedSubclass1.js
++++ new.protectedClassPropertyAccessibleWithinNestedSubclass1.js
+@@= skipped -116, +116 lines =@@
+ d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
+ 
+ //// [protectedClassPropertyAccessibleWithinNestedSubclass1.js]
+-var __extends = (this && this.__extends) || (function () {
+-    var extendStatics = function (d, b) {
+-        extendStatics = Object.setPrototypeOf ||
+-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+-        return extendStatics(d, b);
+-    };
+-    return function (d, b) {
+-        if (typeof b !== "function" && b !== null)
+-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+-        extendStatics(d, b);
+-        function __() { this.constructor = d; }
+-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+-    };
+-})();
+-var Base = /** @class */ (function () {
+-    function Base() {
+-    }
+-    Base.prototype.method = function () {
+-        var A = /** @class */ (function () {
+-            function A() {
+-            }
+-            A.prototype.methoda = function () {
++class Base {
++    x;
++    method() {
++        class A {
++            methoda() {
+                 var b;
+                 var d1;
+                 var d2;
+                 var d3;
+                 var d4;
+-                b.x; // OK, accessed within their declaring class
+-                d1.x; // OK, accessed within their declaring class
+-                d2.x; // OK, accessed within their declaring class
+-                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+-                d4.x; // OK, accessed within their declaring class
+-            };
+-            return A;
+-        }());
+-    };
+-    return Base;
+-}());
+-var Derived1 = /** @class */ (function (_super) {
+-    __extends(Derived1, _super);
+-    function Derived1() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    Derived1.prototype.method1 = function () {
+-        var B = /** @class */ (function () {
+-            function B() {
++                b.x;
++                d1.x;
++                d2.x;
++                d3.x;
++                d4.x;
+             }
+-            B.prototype.method1b = function () {
++        }
++    }
++}
++class Derived1 extends Base {
++    method1() {
++        class B {
++            method1b() {
+                 var b;
+                 var d1;
+                 var d2;
+                 var d3;
+                 var d4;
+-                b.x; // Error, isn't accessed through an instance of the enclosing class
+-                d1.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+-                d2.x; // Error, isn't accessed through an instance of the enclosing class
+-                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+-                d4.x; // Error, isn't accessed through an instance of the enclosing class
+-            };
+-            return B;
+-        }());
+-    };
+-    return Derived1;
+-}(Base));
+-var Derived2 = /** @class */ (function (_super) {
+-    __extends(Derived2, _super);
+-    function Derived2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    Derived2.prototype.method2 = function () {
+-        var C = /** @class */ (function () {
+-            function C() {
++                b.x;
++                d1.x;
++                d2.x;
++                d3.x;
++                d4.x;
+             }
+-            C.prototype.method2c = function () {
++        }
++    }
++}
++class Derived2 extends Base {
++    method2() {
++        class C {
++            method2c() {
+                 var b;
+                 var d1;
+                 var d2;
+                 var d3;
+                 var d4;
+-                b.x; // Error, isn't accessed through an instance of the enclosing class
+-                d1.x; // Error, isn't accessed through an instance of the enclosing class
+-                d2.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+-                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+-                d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
+-            };
+-            return C;
+-        }());
+-    };
+-    return Derived2;
+-}(Base));
+-var Derived3 = /** @class */ (function (_super) {
+-    __extends(Derived3, _super);
+-    function Derived3() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    Derived3.prototype.method3 = function () {
+-        var D = /** @class */ (function () {
+-            function D() {
++                b.x;
++                d1.x;
++                d2.x;
++                d3.x;
++                d4.x;
+             }
+-            D.prototype.method3d = function () {
++        }
++    }
++}
++class Derived3 extends Derived1 {
++    x;
++    method3() {
++        class D {
++            method3d() {
+                 var b;
+                 var d1;
+                 var d2;
+                 var d3;
+                 var d4;
+-                b.x; // Error, isn't accessed through an instance of the enclosing class
+-                d1.x; // Error, isn't accessed through an instance of the enclosing class
+-                d2.x; // Error, isn't accessed through an instance of the enclosing class
+-                d3.x; // OK, accessed within their declaring class
+-                d4.x; // Error, isn't accessed through an instance of the enclosing class
+-            };
+-            return D;
+-        }());
+-    };
+-    return Derived3;
+-}(Derived1));
+-var Derived4 = /** @class */ (function (_super) {
+-    __extends(Derived4, _super);
+-    function Derived4() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    Derived4.prototype.method4 = function () {
+-        var E = /** @class */ (function () {
+-            function E() {
++                b.x;
++                d1.x;
++                d2.x;
++                d3.x;
++                d4.x;
+             }
+-            E.prototype.method4e = function () {
++        }
++    }
++}
++class Derived4 extends Derived2 {
++    method4() {
++        class E {
++            method4e() {
+                 var b;
+                 var d1;
+                 var d2;
+                 var d3;
+                 var d4;
+-                b.x; // Error, isn't accessed through an instance of the enclosing class
+-                d1.x; // Error, isn't accessed through an instance of the enclosing class
+-                d2.x; // Error, isn't accessed through an instance of the enclosing class
+-                d3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
+-                d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
+-            };
+-            return E;
+-        }());
+-    };
+-    return Derived4;
+-}(Derived2));
++                b.x;
++                d1.x;
++                d2.x;
++                d3.x;
++                d4.x;
++            }
++        }
++    }
++}
+ var b;
+ var d1;
+ var d2;
+ var d3;
+ var d4;
+-b.x; // Error, neither within their declaring class nor classes derived from their declaring class
+-d1.x; // Error, neither within their declaring class nor classes derived from their declaring class
+-d2.x; // Error, neither within their declaring class nor classes derived from their declaring class
+-d3.x; // Error, neither within their declaring class nor classes derived from their declaring class
+-d4.x; // Error, neither within their declaring class nor classes derived from their declaring class
++b.x;
++d1.x;
++d2.x;
++d3.x;
++d4.x;

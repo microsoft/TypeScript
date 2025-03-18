@@ -81,7 +81,7 @@ func (r *emitResolver) isValueAliasDeclarationWorker(node *ast.Node) bool {
 			core.Some(exportClause.AsNamedExports().Elements.Nodes, r.isValueAliasDeclaration))
 	case ast.KindExportAssignment:
 		if node.AsExportAssignment().Expression != nil && node.AsExportAssignment().Expression.Kind == ast.KindIdentifier {
-			return r.isAliasResolvedToValue(c.getSymbolOfDeclaration(node) /*excludeTypeOnlyValues*/, true)
+			return r.isAliasResolvedToValue(c.getSymbolOfDeclaration(node), true /*excludeTypeOnlyValues*/)
 		}
 		return true
 	}
@@ -166,7 +166,7 @@ func (r *emitResolver) GetExternalModuleFileFromDeclaration(node *ast.Node) *ast
 
 func (r *emitResolver) getReferenceResolver() binder.ReferenceResolver {
 	if r.referenceResolver == nil {
-		r.referenceResolver = binder.NewReferenceResolver(binder.ReferenceResolverHooks{
+		r.referenceResolver = binder.NewReferenceResolver(r.checker.compilerOptions, binder.ReferenceResolverHooks{
 			ResolveName:                            r.checker.resolveName,
 			GetResolvedSymbol:                      r.checker.getResolvedSymbol,
 			GetMergedSymbol:                        r.checker.getMergedSymbol,

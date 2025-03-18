@@ -1,0 +1,11 @@
+--- old.computedPropertyNames31_ES6.js
++++ new.computedPropertyNames31_ES6.js
+@@= skipped -26, +26 lines =@@
+     foo() {
+         () => {
+             var obj = {
+-                [super.bar()]() { } // needs capture
++                [super.bar()]() { }
+             };
+         };
+         return 0;

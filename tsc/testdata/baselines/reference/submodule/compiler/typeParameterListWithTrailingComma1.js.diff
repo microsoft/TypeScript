@@ -1,0 +1,13 @@
+--- old.typeParameterListWithTrailingComma1.js
++++ new.typeParameterListWithTrailingComma1.js
+@@= skipped -4, +4 lines =@@
+ }
+ 
+ //// [typeParameterListWithTrailingComma1.js]
+-var C = /** @class */ (function () {
+-    function C() {
+-    }
+-    return C;
+-}());
++class C {
++}

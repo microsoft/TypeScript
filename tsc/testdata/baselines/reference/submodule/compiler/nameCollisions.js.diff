@@ -1,0 +1,78 @@
+--- old.nameCollisions.js
++++ new.nameCollisions.js
+@@= skipped -52, +52 lines =@@
+ var T;
+ (function (T) {
+     var x = 2;
+-    var x;
+     (function (x) {
+-        var Bar = /** @class */ (function () {
+-            function Bar() {
+-            }
+-            return Bar;
+-        }());
++        class Bar {
++            test;
++        }
+         x.Bar = Bar;
+     })(x || (x = {}));
+-    var z;
++    let z;
+     (function (z) {
+         var t;
+     })(z || (z = {}));
+-    var z; // error
+-    var y;
++    var z;
++    let y;
+     (function (y) {
+         var b;
+     })(y || (y = {}));
+-    var y = /** @class */ (function () {
+-        function y() {
+-        }
+-        return y;
+-    }()); // error
++    class y {
++    }
+     var w;
+     var f;
+-    function f() { } //error
++    function f() { }
+     function f2() { }
+-    var f2; // error
++    var f2;
+     var i;
+-    var C = /** @class */ (function () {
+-        function C() {
+-        }
+-        return C;
+-    }());
+-    function C() { } // error
++    class C {
++    }
++    function C() { }
+     function C2() { }
+-    var C2 = /** @class */ (function () {
+-        function C2() {
+-        }
+-        return C2;
+-    }()); // error
++    class C2 {
++    }
+     function fi() { }
+-    var cli = /** @class */ (function () {
+-        function cli() {
+-        }
+-        return cli;
+-    }());
+-    var cli2 = /** @class */ (function () {
+-        function cli2() {
+-        }
+-        return cli2;
+-    }());
++    class cli {
++    }
++    class cli2 {
++    }
+ })(T || (T = {}));

@@ -1,0 +1,12 @@
+--- old.genericFunctionsNotContextSensitive.js
++++ new.genericFunctionsNotContextSensitive.js
+@@= skipped -8, +8 lines =@@
+ 
+ 
+ //// [genericFunctionsNotContextSensitive.js]
+-"use strict";
+-// Repro from #37110
+-var f = function (_) { return _; };
+-var a = f(function (_) { return function (_) { return ({}); }; }); // <K extends string>(_: K) => <G>(_: G) => {}
++const f = (_) => _;
++const a = f((_) => _ => ({}));

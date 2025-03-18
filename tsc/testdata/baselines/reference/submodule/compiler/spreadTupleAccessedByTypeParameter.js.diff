@@ -1,0 +1,12 @@
+--- old.spreadTupleAccessedByTypeParameter.js
++++ new.spreadTupleAccessedByTypeParameter.js
+@@= skipped -13, +13 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.test = test;
+ function test(singletons, i) {
+-    var singleton = singletons[i];
+-    var rest = singleton.slice(1);
++    const singleton = singletons[i];
++    const [, ...rest] = singleton;
+     return rest;
+ }

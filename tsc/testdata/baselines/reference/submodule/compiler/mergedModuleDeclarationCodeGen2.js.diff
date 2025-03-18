@@ -1,0 +1,27 @@
+--- old.mergedModuleDeclarationCodeGen2.js
++++ new.mergedModuleDeclarationCodeGen2.js
+@@= skipped -12, +12 lines =@@
+ //// [mergedModuleDeclarationCodeGen2.js]
+ var my;
+ (function (my) {
+-    var data;
++    let data;
+     (function (data) {
+-        var foo;
++        let foo;
+         (function (foo) {
+             function buz() { }
+             foo.buz = buz;
+@@= skipped -10, +10 lines =@@
+     })(data = my.data || (my.data = {}));
+ })(my || (my = {}));
+ (function (my_1) {
+-    var data;
++    let data;
+     (function (data_1) {
+         function data(my) {
+-            data_1.foo.buz();
++            foo.buz();
+         }
+     })(data = my_1.data || (my_1.data = {}));
+ })(my || (my = {}));
