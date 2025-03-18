@@ -97,7 +97,7 @@ type PrintHandlers struct {
 
 	// !!!
 	////OnEmitSourceMapOfNode func(hint EmitHint, node *ast.Node, emitCallback func(hint EmitHint, node *ast.Node))
-	////OnEmitSourceMapOfToken func(nodeOpt *ast.Node | undefined, toke: ast.Kind, writeKind WriteKind, pos int, emitCallback func(token ast.Kind, writeKind WriteKind, pos int) int) int
+	////OnEmitSourceMapOfToken func(nodeOpt *ast.Node | undefined, token: ast.Kind, writeKind WriteKind, pos int, emitCallback func(token ast.Kind, writeKind WriteKind, pos int) int) int
 	////OnEmitSourceMapOfPosition func(pos int)
 
 	OnBeforeEmitNode     func(nodeOpt *ast.Node)
@@ -166,7 +166,7 @@ func (p *Printer) getLiteralTextOfNode(node *ast.LiteralLikeNode, sourceFile *as
 	}
 
 	// !!! Printer option to control whether to terminate unterminated literals
-	// !!! If necessary, printer option to control whether to preserve numeric seperators
+	// !!! If necessary, printer option to control whether to preserve numeric separators
 	if p.emitContext.EmitFlags(node)&EFNoAsciiEscaping != 0 {
 		flags |= getLiteralTextFlagsNeverAsciiEscape
 	}

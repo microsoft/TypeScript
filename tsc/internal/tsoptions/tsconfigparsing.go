@@ -1418,7 +1418,7 @@ func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles co
 // basePath is the base path for any relative file specifications.
 // options is the Compiler options.
 // host is the host used to resolve files and directories.
-// extraFileExtensions optionaly file extra file extension information from host
+// extraFileExtensions optionally file extra file extension information from host
 
 func getFileNamesFromConfigSpecs(
 	configFileSpecs configFileSpecs,

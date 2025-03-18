@@ -3860,7 +3860,7 @@ func (r *Relater) typeArgumentsRelatedTo(sources []*Type, targets []*Type, varia
 			var related Ternary
 			if varianceFlags&VarianceFlagsUnmeasurable != 0 {
 				// Even an `Unmeasurable` variance works out without a structural check if the source and target are _identical_.
-				// We can't simply assume invariance, because `Unmeasurable` marks nonlinear relations, for example, a relation tained by
+				// We can't simply assume invariance, because `Unmeasurable` marks nonlinear relations, for example, a relation tainted by
 				// the `-?` modifier in a mapped type (where, no matter how the inputs are related, the outputs still might not be)
 				if r.relation == r.c.identityRelation {
 					related = r.isRelatedTo(s, t, RecursionFlagsBoth, false /*reportErrors*/)

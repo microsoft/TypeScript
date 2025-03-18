@@ -17728,7 +17728,7 @@ func (c *Checker) isValidBaseType(t *Type) bool {
 			return c.isValidBaseType(constraint)
 		}
 	}
-	// TODO: Given that we allow type parmeters here now, is this `!isGenericMappedType(type)` check really needed?
+	// TODO: Given that we allow type parameters here now, is this `!isGenericMappedType(type)` check really needed?
 	// There's no reason a `T` should be allowed while a `Readonly<T>` should not.
 	return t.flags&(TypeFlagsObject|TypeFlagsNonPrimitive|TypeFlagsAny) != 0 && !c.isGenericMappedType(t) ||
 		t.flags&TypeFlagsIntersection != 0 && core.Every(t.Types(), c.isValidBaseType)
