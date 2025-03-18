@@ -1,21 +1,6 @@
 --- old.partiallyAnnotatedFunctionInferenceWithTypeParameter.types
 +++ new.partiallyAnnotatedFunctionInferenceWithTypeParameter.types
-@@= skipped -17, +17 lines =@@
- 
- declare function test<T extends C>(a: (t: T, t1: T) => void): T
- >test : <T extends C>(a: (t: T, t1: T) => void) => T
-+>T : T
- >a : (t: T, t1: T) => void
- >t : T
- >t1 : T
- 
- declare function testRest<T extends C>(a: (t: T, t1: T, ...ts: T[]) => void): T
- >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
-+>T : T
- >a : (t: T, t1: T, ...ts: T[]) => void
- >t : T
- >t1 : T
-@@= skipped -87, +89 lines =@@
+@@= skipped -104, +104 lines =@@
  testRest((t2: D, ...t3) => {})
  >testRest((t2: D, ...t3) => {}) : D
  >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T

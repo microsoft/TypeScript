@@ -7,8 +7,6 @@ export const SYMBOL = Symbol()
 >Symbol : SymbolConstructor
 
 export interface Interface {
->Interface : Interface
-
   readonly [SYMBOL]: string; // remove readonly and @showEmit to see the expected error
 >[SYMBOL] : string
 >SYMBOL : unique symbol

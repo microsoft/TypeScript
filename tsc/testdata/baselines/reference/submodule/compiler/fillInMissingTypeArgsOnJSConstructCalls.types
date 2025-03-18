@@ -18,8 +18,6 @@ import BaseA from './BaseA';
 
 export default class B<T: BaseA> {
 >B : default<T, BaseA>
->T : T
->BaseA : BaseA
 
     _AClass: Class<T>;
 >_AClass : Class<T>

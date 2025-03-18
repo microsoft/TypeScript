@@ -11,12 +11,3 @@
  === /main.ts ===
  export class Cls {
  >Cls : Cls
-@@= skipped -32, +28 lines =@@
- >"./main" : typeof import("/main")
- 
-     interface Cls {
-+>Cls : Cls
-+
-         foo(): Lib;
- >foo : () => Lib
-     }

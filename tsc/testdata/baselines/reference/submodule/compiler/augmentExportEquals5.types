@@ -2,16 +2,9 @@
 
 === express.d.ts ===
 declare module Express {
->Express : any
-
     export interface Request { }
->Request : Request
-
     export interface Response { }
->Response : Response
-
     export interface Application { }
->Application : Application
 }
 
 declare module "express" {
@@ -25,26 +18,18 @@ declare module "express" {
 >e : typeof e
 
         interface IRoute {
->IRoute : IRoute
-
             all(...handler: RequestHandler[]): IRoute;
 >all : (...handler: RequestHandler[]) => IRoute
 >handler : RequestHandler[]
         }
 
         interface IRouterMatcher<T> {
->IRouterMatcher : IRouterMatcher<T>
->T : T
-
             (name: string|RegExp, ...handlers: RequestHandler[]): T;
 >name : string | RegExp
 >handlers : RequestHandler[]
         }
 
         interface IRouter<T> extends RequestHandler {
->IRouter : IRouter<T>
->T : T
-
             route(path: string): IRoute;
 >route : (path: string) => IRoute
 >path : string
@@ -55,14 +40,11 @@ declare module "express" {
 >options : any
 
         export interface Router extends IRouter<Router> {}
->Router : Router
 
         interface Errback { (err: Error): void; }
->Errback : Errback
 >err : Error
 
         interface Request extends Express.Request {
->Request : Request
 >Express : any
 
             get (name: string): string;
@@ -71,7 +53,6 @@ declare module "express" {
         }
 
         interface Response extends Express.Response {
->Response : Response
 >Express : any
 
             charset: string;
@@ -79,8 +60,6 @@ declare module "express" {
         }
 
         interface ErrorRequestHandler {
->ErrorRequestHandler : ErrorRequestHandler
-
             (err: any, req: Request, res: Response, next: Function): any;
 >err : any
 >req : Request
@@ -89,8 +68,6 @@ declare module "express" {
         }
 
         interface RequestHandler {
->RequestHandler : RequestHandler
-
             (req: Request, res: Response, next: Function): any;
 >req : Request
 >res : Response
@@ -98,11 +75,8 @@ declare module "express" {
         }
 
         interface Handler extends RequestHandler {}
->Handler : Handler
 
         interface RequestParamHandler {
->RequestParamHandler : RequestParamHandler
-
             (req: Request, res: Response, next: Function, param: any): any;
 >req : Request
 >res : Response
@@ -111,7 +85,6 @@ declare module "express" {
         }
 
         interface Application extends IRouter<Application>, Express.Application {
->Application : Application
 >Express : any
 
             routes: any;
@@ -119,8 +92,6 @@ declare module "express" {
         }
 
         interface Express extends Application {
->Express : Express
-
             createApplication(): Application;
 >createApplication : () => Application
         }
@@ -142,8 +113,6 @@ declare module "express" {
 >"express" : typeof e
 
     interface Request {
->Request : Request
-
         id: number;
 >id : number
     }

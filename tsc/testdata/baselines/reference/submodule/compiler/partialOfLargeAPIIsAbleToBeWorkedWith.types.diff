@@ -1,15 +1,6 @@
 --- old.partialOfLargeAPIIsAbleToBeWorkedWith.types
 +++ new.partialOfLargeAPIIsAbleToBeWorkedWith.types
-@@= skipped -1, +1 lines =@@
- 
- === partialOfLargeAPIIsAbleToBeWorkedWith.ts ===
- interface MyAPI {
-+>MyAPI : MyAPI
-+
-     0: (x: 0) => string;
- >0 : (x: 0) => string
- >x : 0
-@@= skipped -222, +224 lines =@@
+@@= skipped -223, +223 lines =@@
  
      obj[k] = () => "12"; // shouldn't cause a complexity error
  >obj[k] = () => "12" : () => string
@@ -18,16 +9,7 @@
  >obj : Partial<MyAPI>
  >k : keyof MyAPI
  >() => "12" : () => string
-@@= skipped -9, +9 lines =@@
- 
- type PartialNull<T> = {[K in keyof T]?: T[K] | null};
- >PartialNull : PartialNull<T>
-+>T : T
-+>K : K
- 
- const obj2: PartialNull<MyAPI> = {};
- >obj2 : PartialNull<MyAPI>
-@@= skipped -11, +13 lines =@@
+@@= skipped -20, +20 lines =@@
  
      obj2[k] = () => "12"; // shouldn't cause a complexity error
  >obj2[k] = () => "12" : () => string

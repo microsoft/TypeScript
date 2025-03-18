@@ -38,11 +38,8 @@
  
  declare let optionalUndefined: { k1?: undefined };
  >optionalUndefined : { k1?: undefined; }
-@@= skipped -19, +19 lines =@@
- 
- function f<T>() {
+@@= skipped -21, +21 lines =@@
  >f : <T>() => void
-+>T : T
  
  	let optional: { k1?: T } = undefined!;
 ->optional : { k1?: T; }
@@ -50,7 +47,7 @@
  >k1 : T | undefined
  >undefined! : never
  >undefined : undefined
-@@= skipped -10, +11 lines =@@
+@@= skipped -8, +8 lines =@@
  	let dict: { [key: string]: T | number } = optional; // ok
  >dict : { [key: string]: number | T; }
  >key : string

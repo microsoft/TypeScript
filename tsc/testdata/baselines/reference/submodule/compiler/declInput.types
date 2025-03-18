@@ -2,7 +2,6 @@
 
 === declInput.ts ===
 interface bar {
->bar : bar
 
 }
 

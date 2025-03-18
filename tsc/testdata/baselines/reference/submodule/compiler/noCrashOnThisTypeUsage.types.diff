@@ -1,12 +1,6 @@
 --- old.noCrashOnThisTypeUsage.types
 +++ new.noCrashOnThisTypeUsage.types
-@@= skipped -1, +1 lines =@@
- 
- === noCrashOnThisTypeUsage.ts ===
- interface IListenable {
-+>IListenable : IListenable
-+
-     changeListeners: Function[] | null
+@@= skipped -5, +5 lines =@@
  >changeListeners : Function[] | null
  
      observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
@@ -15,22 +9,7 @@
  >handler : (change: any, oldValue?: any) => void
  >change : any
  >oldValue : any
-@@= skipped -13, +15 lines =@@
- 
- function notifyListeners<T>(listenable: IListenable, change: T) {
- >notifyListeners : <T>(listenable: IListenable, change: T) => void
-+>T : T
- >listenable : IListenable
- >change : T
- }
- 
- export class ObservableValue<T> {
- >ObservableValue : ObservableValue<T>
-+>T : T
- 
-     constructor(
-         public value: T
-@@= skipped -21, +23 lines =@@
+@@= skipped -30, +30 lines =@@
  
          notifyListeners(this, {
  >notifyListeners(this, {            type: "update",            object: this,            newValue,            oldValue        }) : void

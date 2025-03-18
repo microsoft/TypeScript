@@ -1,22 +1,7 @@
 --- old.moduledecl.types
 +++ new.moduledecl.types
-@@= skipped -1, +1 lines =@@
- 
- === moduledecl.ts ===
- module a {
-+>a : any
- }
- 
- module b.a {
-+>b : any
-+>a : any
- }
- 
+@@= skipped -9, +9 lines =@@
  module c.a.b {
-+>c : any
-+>a : any
-+>b : any
-+
      import ma = a;
  >ma : any
 ->a : error
@@ -24,8 +9,6 @@
  }
  
  module mImport {
-+>mImport : any
-+
      import d = a;
  >d : any
 ->a : error
@@ -33,7 +16,7 @@
  
      import e = b.a;
  >e : any
-@@= skipped -23, +32 lines =@@
+@@= skipped -15, +15 lines =@@
  
      import d1 = a;
  >d1 : any
@@ -42,16 +25,7 @@
  
      import e1 = b.a;
  >e1 : any
-@@= skipped -45, +45 lines =@@
-     }
- 
-     interface i1 {
-+>i1 : i1
-+
-         () : Object;
-         [n: number]: c1;
- >n : number
-@@= skipped -7, +9 lines =@@
+@@= skipped -52, +52 lines =@@
  
      import m2 = a;
  >m2 : any
@@ -74,16 +48,7 @@
  
      import m6 = c.a;
  >m6 : any
-@@= skipped -70, +70 lines =@@
-     }
- 
-     export interface i1 {
-+>i1 : i1
-+
-         () : Object;
-         [n: number]: c1;
- >n : number
-@@= skipped -7, +9 lines =@@
+@@= skipped -77, +77 lines =@@
  
      import m2 = a;
  >m2 : any
@@ -106,25 +71,7 @@
  
      import m6 = c.a;
  >m6 : any
-@@= skipped -209, +209 lines =@@
- >aVar : C
- 
-     interface B {
-+>B : B
-+
-         x: number;
- >x : number
- 
-@@= skipped -36, +38 lines =@@
- >aVar : C
- 
-         interface B {
-+>B : B
-+
-             x: number;
- >x : number
- 
-@@= skipped -22, +24 lines =@@
+@@= skipped -267, +267 lines =@@
  }
  
  function foo() {

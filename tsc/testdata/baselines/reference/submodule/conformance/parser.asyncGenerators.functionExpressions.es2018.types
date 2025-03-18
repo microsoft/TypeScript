@@ -164,8 +164,6 @@ const f18 = async function * () {
 };
 === awaitAsTypeIsOk.ts ===
 interface await {}
->await : await
-
 const f19 = async function * () {
 >f19 : () => AsyncGenerator<never, void, unknown>
 >async function * () {    let x: await;} : () => AsyncGenerator<never, void, unknown>
@@ -176,8 +174,6 @@ const f19 = async function * () {
 };
 === yieldAsTypeIsOk.ts ===
 interface yield {}
->yield : yield
-
 const f20 = async function * () {
 >f20 : () => AsyncGenerator<never, void, unknown>
 >async function * () {    let x: yield;} : () => AsyncGenerator<never, void, unknown>

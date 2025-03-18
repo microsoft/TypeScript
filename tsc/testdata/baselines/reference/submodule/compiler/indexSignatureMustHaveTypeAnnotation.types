@@ -2,8 +2,6 @@
 
 === indexSignatureMustHaveTypeAnnotation.ts ===
 interface I {
->I : I
-
     // Used to be indexer, now it is a computed property
     [x]: string;
 >[x] : string

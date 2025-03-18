@@ -2,9 +2,6 @@
 
 === privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts ===
 export interface A<T> {
->A : A<T>
->T : T
-
     f1(callback: (p: T) => any); 
 >f1 : (callback: (p: T) => any) => any
 >callback : (p: T) => any
@@ -12,7 +9,5 @@ export interface A<T> {
 }
  
 export interface B<T> extends A<T> {
->B : B<T>
->T : T
 }
 

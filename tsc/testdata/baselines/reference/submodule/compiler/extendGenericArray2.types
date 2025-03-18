@@ -2,16 +2,11 @@
 
 === extendGenericArray2.ts ===
 interface IFoo<T> {
->IFoo : IFoo<T>
->T : T
-
     x: T;
 >x : T
 }
 
 interface Array<T> extends IFoo<T> { }
->Array : T[]
->T : T
 
 var arr: string[] = [];
 >arr : string[]

@@ -25,8 +25,6 @@ class B extends A {
 
 class C<U extends A, T extends U> {
 >C : C<U, T>
->U : U
->T : T
 
     f() {
 >f : () => string
@@ -94,10 +92,6 @@ var r1b = (new C<A, B>()).g(new B());
 >B : typeof B
 
 interface I<U extends A, T extends U> {
->I : I<U, T>
->U : U
->T : T
-
     foo: T;
 >foo : T
 }
@@ -126,12 +120,7 @@ var a: {
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
 
     <U extends A, T extends U>(): T;
->U : U
->T : T
-
     <U extends T, T extends A>(x: U): U;
->U : U
->T : T
 >x : U
 }
 var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constraint
@@ -178,8 +167,6 @@ var b = {
     foo: <U extends A, T extends U>(x: T) => {
 >foo : <U extends A, T extends U>(x: T) => string
 ><U extends A, T extends U>(x: T) => {        // BUG 823818        var a = x['foo'](); // should be string        return a + x.foo();    } : <U extends A, T extends U>(x: T) => string
->U : U
->T : T
 >x : T
 
         // BUG 823818

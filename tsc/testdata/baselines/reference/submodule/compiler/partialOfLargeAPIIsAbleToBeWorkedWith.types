@@ -2,8 +2,6 @@
 
 === partialOfLargeAPIIsAbleToBeWorkedWith.ts ===
 interface MyAPI {
->MyAPI : MyAPI
-
     0: (x: 0) => string;
 >0 : (x: 0) => string
 >x : 0
@@ -235,8 +233,6 @@ for (const k of keys) {
 
 type PartialNull<T> = {[K in keyof T]?: T[K] | null};
 >PartialNull : PartialNull<T>
->T : T
->K : K
 
 const obj2: PartialNull<MyAPI> = {};
 >obj2 : PartialNull<MyAPI>

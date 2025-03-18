@@ -2,8 +2,6 @@
 
 === interfacePropertiesWithSameName2.ts ===
 interface Mover {
->Mover : Mover
-
     move(): void;
 >move : () => void
 
@@ -12,8 +10,6 @@ interface Mover {
 >speed : number
 }
 interface Shaker {
->Shaker : Shaker
-
     shake(): void;
 >shake : () => void
 
@@ -23,7 +19,6 @@ interface Shaker {
 }
 
 interface MoverShaker extends Mover, Shaker {
->MoverShaker : MoverShaker
 
 }
 
@@ -42,8 +37,6 @@ declare module MoversAndShakers {
 >speed : number
     }
     export interface Shaker {
->Shaker : Shaker
-
         shake(): void;
 >shake : () => void
 
@@ -54,12 +47,10 @@ declare module MoversAndShakers {
 }
 
 interface MoverShaker2 extends MoversAndShakers.Mover, MoversAndShakers.Shaker { } // error
->MoverShaker2 : MoverShaker2
 >MoversAndShakers : typeof MoversAndShakers
 >MoversAndShakers : typeof MoversAndShakers
 
 interface MoverShaker3 extends MoversAndShakers.Mover, MoversAndShakers.Shaker {
->MoverShaker3 : MoverShaker3
 >MoversAndShakers : typeof MoversAndShakers
 >MoversAndShakers : typeof MoversAndShakers
 

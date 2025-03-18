@@ -38,4 +38,5 @@ var daysOfMonth = days;
 
 var daysOfYear: typeof days;
 >daysOfYear : typeof days
+>days : typeof days
 

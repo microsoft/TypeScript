@@ -11,7 +11,6 @@
 ->a.types : typeof a.types
 ->a : typeof a
 ->types : typeof a.types
-+>B : B
 +>a.types : typeof types
 +>a : typeof import("a")
 +>types : typeof types

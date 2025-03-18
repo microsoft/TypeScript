@@ -11,9 +11,6 @@ class Test extends Array1 {
 
 === other.ts ===
 interface Array1<T> {
->Array1 : Array1<T>
->T : T
-
   length: number;
 >length : number
 
@@ -22,8 +19,6 @@ interface Array1<T> {
 }
 
 interface ArrayConstructor1 {
->ArrayConstructor1 : ArrayConstructor1
-
   new(arrayLength?: number): Array1<any>;
 >arrayLength : number
 }
@@ -33,9 +28,6 @@ declare var Array1: ArrayConstructor1;
 
 // iterable.d.ts
 interface Array1<T> {
->Array1 : Array1<T>
->T : T
-
   [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : () => IterableIterator<T, any, any>
 >Symbol.iterator : unique symbol
@@ -45,9 +37,6 @@ interface Array1<T> {
 
 // symbol.wellknown.d.ts
 interface Array1<T> {
->Array1 : Array1<T>
->T : T
-
   /**
    * Returns an object whose properties have the value 'true'
    * when they will be absent when used in a 'with' statement.

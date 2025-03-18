@@ -5,12 +5,9 @@ declare module M {
 >M : typeof M
 
     interface iBar { t: any; }
->iBar : iBar
 >t : any
 
     interface iFoo extends iBar {
->iFoo : iFoo
-
         s: any;
 >s : any
     }
@@ -28,8 +25,6 @@ declare module M {
 }
 
 interface myInt {
->myInt : myInt
-
     voidFn(): void;
 >voidFn : () => void
 }

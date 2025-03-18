@@ -88,8 +88,6 @@ if(isA(union)) {
 
 // Call signature
 interface I1 {
->I1 : I1
-
     (p1: A): p1 is C;
 >p1 : A
 }

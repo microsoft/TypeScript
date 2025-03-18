@@ -4,19 +4,12 @@
 // https://github.com/microsoft/TypeScript/issues/57356
 
 interface Err<T> {
->Err : Err<T>
->T : T
-
   f<U>(a: (err: T) => U): Err<U>;
 >f : <U>(a: (err: T) => U) => Err<U>
->U : U
 >a : (err: T) => U
 >err : T
 }
 interface Ok<T> {
->Ok : Ok<T>
->T : T
-
   f(a: (err: T) => unknown): Err<T>;
 >f : (a: (err: T) => unknown) => Err<T>
 >a : (err: T) => unknown

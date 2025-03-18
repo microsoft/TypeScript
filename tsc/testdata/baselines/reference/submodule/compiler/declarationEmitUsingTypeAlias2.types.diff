@@ -6,34 +6,19 @@
  export declare const goodDeclaration: <T>() => () => { 
 ->goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? Other : "N"; shouldLookupName: typeof import("./other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof reuseDepName; }
 +>goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends unique symbol ? Other : "N"; shouldLookupName: unique symbol; shouldReuseLocalName: unique symbol; reuseDepName: unique symbol; }
-+>T : T
  
    /** Other Can't be named in index.ts, but the whole conditional type can be resolved  */
    shouldPrintResult: T extends Other? "O": "N",
-@@= skipped -9, +10 lines =@@
-   /** Symbol shouldBeElided should not be present in index.d.ts, it might be since it's tracked before Other is seen and an error reported */ 
-   shouldPrintResult2: T extends typeof shouldBeElided? Other: "N", 
- >shouldPrintResult2 : T extends unique symbol ? Other : "N"
-->shouldBeElided : unique symbol
- 
+@@= skipped -14, +14 lines =@@
    /** Specifier should come from module, local path should not be reused */ 
    shouldLookupName: typeof import('./other').shouldLookupName,
  >shouldLookupName : unique symbol
 ->shouldLookupName : error
++>shouldLookupName : any
  
    /** This is imported in index so local name should be reused */ 
    shouldReuseLocalName: typeof shouldReuseLocalName
- >shouldReuseLocalName : unique symbol
-->shouldReuseLocalName : unique symbol
- 
-   /** This is NOT imported in index so import should be created */ 
-   reuseDepName: typeof reuseDepName,
- >reuseDepName : unique symbol
-->reuseDepName : unique symbol
- }
- export { shouldLookupName, shouldReuseLocalName, reuseDepName, shouldBeElided };
- >shouldLookupName : unique symbol
-@@= skipped -25, +21 lines =@@
+@@= skipped -20, +20 lines =@@
  
  === src/index.ts ===
  import { goodDeclaration, shouldReuseLocalName, shouldBeElided } from "some-dep";

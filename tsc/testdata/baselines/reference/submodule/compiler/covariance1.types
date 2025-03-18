@@ -5,7 +5,6 @@ module M {
 >M : typeof M
 
     interface X { m1:number; }
->X : X
 >m1 : number
 
     export class XX implements X { constructor(public m1:number) { } }
@@ -13,7 +12,6 @@ module M {
 >m1 : number
 
     interface Y { x:X; }
->Y : Y
 >x : X
 
     export function f(y:Y) { }

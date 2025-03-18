@@ -2,8 +2,6 @@
 
 === asyncFunctionReturnExpressionErrorSpans.ts ===
 interface Foo {
->Foo : Foo
-
     bar: {
 >bar : { baz: { inner: { thing: string; }; }; }
 

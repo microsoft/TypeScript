@@ -3,13 +3,10 @@
 === declarationEmitClassMixinLocalClassDeclaration.ts ===
 export type AnyFunction<Result = any> = (...input: any[]) => Result
 >AnyFunction : AnyFunction<Result>
->Result : Result
 >input : any[]
 
 export type AnyConstructor<Instance extends object = object, Static extends object = object> =
 >AnyConstructor : AnyConstructor<Instance, Static>
->Instance : Instance
->Static : Static
 
     (new (...input: any[]) => Instance) & Static
 >input : any[]
@@ -17,11 +14,8 @@ export type AnyConstructor<Instance extends object = object, Static extends obje
 
 type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T extends AnyFunction<infer M> ? M : never
 >MixinHelperFunc : MixinHelperFunc
->A : A
->T : T
 >required : [A]
 >arg : T
->M : M
 
 
 export const Mixin: MixinHelperFunc = null as any
@@ -45,6 +39,7 @@ export class XmlElement2 extends Mixin(
     (base: AnyConstructor<Base, typeof Base>) => {
 >(base: AnyConstructor<Base, typeof Base>) => {        class XmlElement2 extends base {            num: number = 0        }        return XmlElement2;    } : (base: AnyConstructor<Base, typeof Base>) => typeof XmlElement2
 >base : AnyConstructor<Base, typeof Base>
+>Base : typeof Base
 
         class XmlElement2 extends base {
 >XmlElement2 : XmlElement2

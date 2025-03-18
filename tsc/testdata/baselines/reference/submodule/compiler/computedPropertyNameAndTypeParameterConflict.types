@@ -6,7 +6,6 @@ declare const O: unique symbol;
 
 declare class Bar<O> {
 >Bar : Bar<O>
->O : O
 
     [O]: number;
 >[O] : number

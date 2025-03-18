@@ -2,8 +2,6 @@
 
 === types.ts ===
 export interface I {}
->I : I
-
 export class C {}
 >C : C
 
@@ -23,17 +21,11 @@ import type { C, I } from './types';
 >I : I
 
 interface Q extends C {}
->Q : Q
-
 interface R extends I {}
->R : R
-
 interface S extends types.C {}
->S : S
 >types : typeof import("types")
 
 interface T extends types.I {}
->T : T
 >types : typeof import("types")
 
 class U extends C {} // Error

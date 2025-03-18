@@ -3,8 +3,6 @@
 === conditionalTypeContextualTypeSimplificationsSuceeds.ts ===
 // repro from https://github.com/Microsoft/TypeScript/issues/26395
 interface Props {
->Props : Props
-
     when: (value: string) => boolean;
 >when : (value: string) => boolean
 >value : string
@@ -12,28 +10,21 @@ interface Props {
 
 function bad<P extends Props>(
 >bad : <P extends Props>(attrs: string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }) => void
->P : P
 
     attrs: string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }) { }
 >attrs : string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }
->K : K
->K : K
 
 function good1<P extends Props>(
 >good1 : <P extends Props>(attrs: string extends keyof P ? P : { [K in keyof P]: P[K] }) => void
->P : P
 
     attrs: string extends keyof P ? P : { [K in keyof P]: P[K] }) { }
 >attrs : string extends keyof P ? P : { [K in keyof P]: P[K] }
->K : K
 
 function good2<P extends Props>(
 >good2 : <P extends Props>(attrs: { [K in keyof P]: P[K] }) => void
->P : P
 
     attrs: { [K in keyof P]: P[K] }) { }
 >attrs : { [K in keyof P]: P[K] }
->K : K
 
 bad({ when: value => false });
 >bad({ when: value => false }) : void

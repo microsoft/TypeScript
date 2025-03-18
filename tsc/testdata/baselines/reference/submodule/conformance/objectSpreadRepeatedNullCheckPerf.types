@@ -2,8 +2,6 @@
 
 === objectSpreadRepeatedNullCheckPerf.ts ===
 interface Props {
->Props : Props
-
     readonly a?: string
 >a : string | undefined
 

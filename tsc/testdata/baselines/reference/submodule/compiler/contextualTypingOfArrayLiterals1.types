@@ -2,8 +2,6 @@
 
 === contextualTypingOfArrayLiterals1.ts ===
 interface I {
->I : I
-
    [x: number]: Date;
 >x : number
 }

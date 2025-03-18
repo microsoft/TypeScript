@@ -12,9 +12,6 @@ export {
 };
 
 interface Hash<T> {
->Hash : Hash<T>
->T : T
-
     [key: string]: T;
 >key : string
 }
@@ -23,8 +20,6 @@ type StringHash = Hash<string>;
 >StringHash : StringHash
 
 interface StringHash2 extends Hash<string> {}
->StringHash2 : StringHash2
-
 === a.ts ===
 import {StringHash, StringHash2} from "./b";
 >StringHash : any

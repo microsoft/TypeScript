@@ -6,7 +6,6 @@ class C { foo: string; }
 >foo : string
 
 interface C { foo: string; }
->C : C
 >foo : string
 
 module M {
@@ -20,8 +19,6 @@ module M {
     }
 
     interface D {
->D : D
-
         bar: string;
 >bar : string
     }

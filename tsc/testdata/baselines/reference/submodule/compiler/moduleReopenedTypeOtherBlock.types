@@ -8,7 +8,6 @@ module M {
 >C1 : C1
 
     export interface I { n: number; }
->I : I
 >n : number
 }
 module M {

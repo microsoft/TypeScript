@@ -5,7 +5,6 @@
 
 function foo<T extends { a: string, b: string }>() {
 >foo : <T extends { a: string; b: string; }>() => void
->T : T
 >a : string
 >b : string
 
@@ -27,8 +26,6 @@ function foo<T extends { a: string, b: string }>() {
 
 declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
 >pick : <T, K extends keyof T>(obj: T, propNames: K[]) => Pick<T, K>
->T : T
->K : K
 >obj : T
 >propNames : K[]
 

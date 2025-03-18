@@ -1,21 +1,6 @@
 --- old.tsxDynamicTagName3.types
 +++ new.tsxDynamicTagName3.types
-@@= skipped -1, +1 lines =@@
- 
- === tsxDynamicTagName3.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		div: any
- >div : any
- 	}
-@@= skipped -12, +18 lines =@@
+@@= skipped -13, +13 lines =@@
  >"h1" : "h1"
  
  <CustomTag> Hello World </CustomTag>  // This should be an error. we will try look up string literal type in JSX.IntrinsicElements

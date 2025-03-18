@@ -2,11 +2,7 @@
 
 === jsxNamespacePrefixIntrinsics.tsx ===
 declare namespace JSX {
->JSX : any
-
   interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
     "ns:element": {
 >"ns:element" : { "ns:attribute": string; }
 

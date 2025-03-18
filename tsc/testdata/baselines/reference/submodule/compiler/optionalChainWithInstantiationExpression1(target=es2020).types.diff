@@ -1,18 +1,6 @@
 --- old.optionalChainWithInstantiationExpression1(target=es2020).types
 +++ new.optionalChainWithInstantiationExpression1(target=es2020).types
-@@= skipped -5, +5 lines =@@
- 
-     export class b<T> {
- >b : b<T>
-+>T : T
- 
-         static d: number;
- >d : number
-@@= skipped -14, +15 lines =@@
- 
- declare const a: typeof A | undefined;
- >a : typeof A
-->A : typeof A
+@@= skipped -23, +23 lines =@@
  
  a?.b<c>.d;
  >a?.b<c>.d : number

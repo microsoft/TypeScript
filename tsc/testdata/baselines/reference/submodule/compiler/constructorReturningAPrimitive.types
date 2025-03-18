@@ -20,7 +20,6 @@ var a = new A();
 
 class B<T> {
 >B : B<T>
->T : T
 
     constructor() {
         var x: T;

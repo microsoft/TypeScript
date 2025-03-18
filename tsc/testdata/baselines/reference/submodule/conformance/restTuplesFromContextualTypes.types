@@ -56,6 +56,7 @@ declare function f1(cb: (...args: typeof t1) => void): void;
 >f1 : (cb: (...args: [number, boolean, string]) => void) => void
 >cb : (...args: [number, boolean, string]) => void
 >args : [number, boolean, string]
+>t1 : [number, boolean, string]
 
 f1((a, b, c) => {})
 >f1((a, b, c) => {}) : void
@@ -150,6 +151,7 @@ declare function f2(cb: (...args: typeof t2) => void): void;
 >f2 : (cb: (...args: [number, boolean, ...string[]]) => void) => void
 >cb : (...args: [number, boolean, ...string[]]) => void
 >args : [number, boolean, ...string[]]
+>t2 : [number, boolean, ...string[]]
 
 f2((a, b, c) => {})
 >f2((a, b, c) => {}) : void
@@ -250,6 +252,7 @@ declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
 >cb : (x: number, ...args: [boolean, ...string[]]) => void
 >x : number
 >args : [boolean, ...string[]]
+>t3 : [boolean, ...string[]]
 
 f3((a, b, c) => {})
 >f3((a, b, c) => {}) : void
@@ -291,7 +294,6 @@ f3((a, b, c, ...x) => {})
 
 function f4<T extends any[]>(t: T) {
 >f4 : <T extends any[]>(t: T) => void
->T : T
 >t : T
 
     (function(...x){})(...t);
@@ -353,8 +355,6 @@ function f4<T extends any[]>(t: T) {
 
 declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
->T : T
->U : U
 >f : (...args: T) => U
 >args : T
 >args : T
@@ -405,9 +405,6 @@ let g4 = f5((...args) => true);
 
 declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
->A : A
->B : B
->C : C
 >f : (...args: A) => B
 >args : A
 >g : (x: B) => C

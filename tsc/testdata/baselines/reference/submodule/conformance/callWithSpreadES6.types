@@ -2,8 +2,6 @@
 
 === callWithSpreadES6.ts ===
 interface X {
->X : X
-
     foo(x: number, y: number, ...z: string[]);
 >foo : (x: number, y: number, ...z: string[]) => any
 >x : number

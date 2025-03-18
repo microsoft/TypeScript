@@ -1,18 +1,6 @@
 --- old.usingModuleWithExportImportInValuePosition.types
 +++ new.usingModuleWithExportImportInValuePosition.types
-@@= skipped -15, +15 lines =@@
- >y : number
-     }
-     export module B {
-+>B : any
-+
-         export interface Id {
-+>Id : Id
-+
-             name: string;
- >name : string
-         }
-@@= skipped -10, +14 lines =@@
+@@= skipped -25, +25 lines =@@
  >C : typeof C
  
      export import a = A;

@@ -5,8 +5,6 @@ module A {
 >A : typeof A
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -19,7 +17,6 @@ module A {
 
         export function mirror<T extends Point>(p: T) {
 >mirror : <T extends Point>(p: T) => { x: number; y: number; }
->T : T
 >p : T
 
             return { x: p.y, y: p.x };

@@ -1,22 +1,6 @@
 --- old.emitDecoratorMetadata_isolatedModules(module=commonjs).types
 +++ new.emitDecoratorMetadata_isolatedModules(module=commonjs).types
-@@= skipped -1, +1 lines =@@
- 
- === type1.ts ===
- interface T1 {}
-+>T1 : T1
-+
- export type { T1 }
- >T1 : T1
- 
- === type2.ts ===
--
- export interface T2 {}
-+>T2 : T2
- 
- === class3.ts ===
- export class C3 {}
-@@= skipped -16, +18 lines =@@
+@@= skipped -17, +17 lines =@@
  >T1 : any
  
  import * as t1 from "./type1";

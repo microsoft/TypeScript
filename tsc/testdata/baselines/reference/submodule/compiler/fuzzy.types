@@ -5,8 +5,6 @@ module M {
 >M : typeof M
 
     export interface I {
->I : I
-
         works:()=>R;
 >works : () => R
 
@@ -18,8 +16,6 @@ module M {
     }
 
     export interface R {
->R : R
-
         anything:number;
 >anything : number
 

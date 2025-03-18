@@ -2,8 +2,6 @@
 
 === typeAnnotationBestCommonTypeInArrayLiteral.ts ===
 interface IMenuItem {
->IMenuItem : IMenuItem
-
     id: string;
 >id : string
 

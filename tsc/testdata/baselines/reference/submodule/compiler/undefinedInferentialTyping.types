@@ -3,7 +3,6 @@
 === undefinedInferentialTyping.ts ===
 function f<T>(arr: T[], elemnt: T): T {
 >f : <T>(arr: T[], elemnt: T) => T
->T : T
 >arr : T[]
 >elemnt : T
 

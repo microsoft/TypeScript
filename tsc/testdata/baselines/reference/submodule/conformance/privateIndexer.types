@@ -19,7 +19,6 @@ class D {
 
 class E<T> {
 >E : E<T>
->T : T
 
     private [x: string]: T;
 >x : string

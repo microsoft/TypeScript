@@ -1,24 +1,6 @@
 --- old.unionOfArraysFilterCall.types
 +++ new.unionOfArraysFilterCall.types
-@@= skipped -1, +1 lines =@@
- 
- === unionOfArraysFilterCall.ts ===
- interface Fizz {
-+>Fizz : Fizz
-+
-     id: number;
- >id : number
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface Buzz {
-+>Buzz : Buzz
-+
-     id: number;
- >id : number
- 
-@@= skipped -8, +10 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  ([] as Fizz[] | Buzz[]).filter(item => item.id < 5);

@@ -16,15 +16,11 @@ class B {
 }
 
 interface I {
->I : I
-
     baz();
 >baz : () => any
 }
 
 interface J {
->J : J
-
     bat();
 >bat : () => any
 }
@@ -41,5 +37,4 @@ class D implements I, J {
 }
 
 interface I extends A, B {
->I : I
 }

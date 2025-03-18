@@ -3,12 +3,9 @@
 === circularContextualMappedType.ts ===
 type Func<T> = () => T;
 >Func : Func<T>
->T : T
 
 type Mapped<T> = { [K in keyof T]: Func<T[K]> };
 >Mapped : Mapped<T>
->T : T
->K : K
 
 declare function reproduce(options: number): void;
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
@@ -16,7 +13,6 @@ declare function reproduce(options: number): void;
 
 declare function reproduce<T>(options: Mapped<T>): T
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
->T : T
 >options : Mapped<T>
 
 reproduce({

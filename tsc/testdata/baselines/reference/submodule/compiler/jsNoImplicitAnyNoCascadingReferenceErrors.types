@@ -3,7 +3,6 @@
 === somelib.d.ts ===
 export declare class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     prop: T;
 >prop : T

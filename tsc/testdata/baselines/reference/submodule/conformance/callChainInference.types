@@ -4,11 +4,8 @@
 // Repro from #42404
 
 interface Y {
->Y : Y
-
     foo<T>(this: T, arg: keyof T): void;
 >foo : <T>(arg: keyof T) => void
->T : T
 >this : T
 >arg : keyof T
 

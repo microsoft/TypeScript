@@ -2,14 +2,8 @@
 
 === tsxDynamicTagName4.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		div: any
 >div : any
 

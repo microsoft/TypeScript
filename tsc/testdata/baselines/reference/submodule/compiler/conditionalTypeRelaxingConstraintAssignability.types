@@ -11,8 +11,6 @@ export type ElChildren =
 >ElChildren : any
 
 export namespace ElChildren {
->ElChildren : any
-
   export type Void = undefined;
 >Void : undefined
 
@@ -22,7 +20,6 @@ export namespace ElChildren {
 
 type Relax<C extends ElChildren> = C extends ElChildren.Text ? ElChildren.Text : C;
 >Relax : Relax<C>
->C : C
 >ElChildren : any
 >ElChildren : any
 
@@ -30,8 +27,6 @@ export class Elem<
 >Elem : Elem<C>
 
   C extends ElChildren,
->C : C
-
   > {
   constructor(
     private children_: Relax<C>,
@@ -72,19 +67,15 @@ new Elem('' as ElChildren); // error
 // Repro from #31766
 
 interface I { a: string }
->I : I
 >a : string
 
 type DeepPartial<T> =
 >DeepPartial : DeepPartial<T>
->T : T
 
     T extends object ? {[K in keyof T]?: DeepPartial<T[K]>} : T;
->K : K
 
 declare function f<T>(t: T, partial: DeepPartial<T>): T;
 >f : <T>(t: T, partial: DeepPartial<T>) => T
->T : T
 >t : T
 >partial : DeepPartial<T>
 

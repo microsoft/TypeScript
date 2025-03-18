@@ -12,9 +12,7 @@
  }
  
  function f<T extends Cat | Dog>(a: T) {
- >f : <T extends Cat | Dog>(a: T) => void
-+>T : T
- >a : T
+@@= skipped -11, +11 lines =@@
  
      a.run();
  >a.run() : void

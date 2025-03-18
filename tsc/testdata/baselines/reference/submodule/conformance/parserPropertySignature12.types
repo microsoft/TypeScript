@@ -2,8 +2,6 @@
 
 === parserPropertySignature12.ts ===
 interface I {
->I : I
-
   3?:any;
 >3 : any
 }

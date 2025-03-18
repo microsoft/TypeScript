@@ -2,7 +2,6 @@
 
 === genericPrototypeProperty2.ts ===
 interface EventTarget { x } 
->EventTarget : EventTarget
 >x : any
 
 class BaseEvent {
@@ -14,7 +13,6 @@ class BaseEvent {
 
 class MyEvent<T extends EventTarget> extends BaseEvent {
 >MyEvent : MyEvent<T>
->T : T
 >BaseEvent : BaseEvent
 
     target: T;

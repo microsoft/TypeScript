@@ -4,11 +4,9 @@
 // Repro from #28758
 
 interface NumVal { val: number; }
->NumVal : NumVal
 >val : number
 
 interface StrVal { val: string; }
->StrVal : StrVal
 >val : string
 
 type Val = NumVal | StrVal;

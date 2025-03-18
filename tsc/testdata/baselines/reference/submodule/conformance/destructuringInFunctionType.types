@@ -2,15 +2,12 @@
 
 === destructuringInFunctionType.ts ===
 interface a { a }
->a : a
 >a : any
 
 interface b { b }
->b : b
 >b : any
 
 interface c { c }
->c : c
 >c : any
 
 type T1 = ([a, b, c]);

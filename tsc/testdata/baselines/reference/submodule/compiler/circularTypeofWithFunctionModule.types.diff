@@ -5,8 +5,10 @@
  >maker : typeof maker
  >value : string
 ->maker.Bar : typeof maker.Bar
++>maker.Bar : typeof Bar
  >maker : typeof maker
 ->Bar : typeof maker.Bar
++>Bar : typeof Bar
  
      return maker.Bar;
 ->maker.Bar : typeof maker.Bar

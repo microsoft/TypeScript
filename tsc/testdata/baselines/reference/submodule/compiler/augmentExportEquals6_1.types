@@ -28,7 +28,6 @@ declare module "file1" {
 >"file1" : typeof foo
 
     interface A { a: number }
->A : A
 >a : number
 }
 

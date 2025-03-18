@@ -9,30 +9,3 @@
  >(() => { foo = undefined })() : void
  >(() => { foo = undefined }) : () => void
  >() => { foo = undefined } : () => void
-@@= skipped -45, +45 lines =@@
- 
- {
-     interface Window {
-+>Window : Window
-+
-         window: Window;
- >window : Window
-     }
-@@= skipped -44, +46 lines =@@
- 
- {
-     interface Window {
-+>Window : Window
-+
-         window: Window;
- >window : Window
-     }
-@@= skipped -44, +46 lines =@@
- 
- {
-     interface Window {
-+>Window : Window
-+
-         window: Window;
- >window : Window
-     }

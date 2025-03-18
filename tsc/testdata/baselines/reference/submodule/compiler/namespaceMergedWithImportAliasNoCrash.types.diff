@@ -1,13 +1,6 @@
 --- old.namespaceMergedWithImportAliasNoCrash.types
 +++ new.namespaceMergedWithImportAliasNoCrash.types
-@@= skipped -1, +1 lines =@@
- 
- === file1.ts ===
- export namespace Library {
-+>Library : any
-+
-     export type Bar = { a: number };
- >Bar : Bar
+@@= skipped -6, +6 lines =@@
  >a : number
  }
  var x: Library.Bar; // should work
@@ -16,7 +9,7 @@
  >Library : any
  
  Library.foo; // should be an error
-@@= skipped -30, +32 lines =@@
+@@= skipped -25, +25 lines =@@
  >foo : string
  
  var x: Lib.Bar; // should be an error

@@ -8,11 +8,10 @@
 ->fn : (first: { value: typeof val; }) => O
 ->first : { value: typeof val; }
 +>decorateA : <O extends unknown>(fn: (first: { value: number; }) => O) => () => O
-+>O : O
 +>fn : (first: { value: number; }) => O
 +>first : { value: number; }
  >value : number
-->val : number
+ >val : number
  
      return (): O => fn({value: val})
  >(): O => fn({value: val}) : () => O
@@ -37,10 +36,9 @@
 ->decorateB : <O extends unknown>(fn: (first: typeof val) => O) => () => O
 ->fn : (first: typeof val) => O
 +>decorateB : <O extends unknown>(fn: (first: number) => O) => () => O
-+>O : O
 +>fn : (first: number) => O
  >first : number
-->val : number
+ >val : number
  
      return (): O => fn(val)
  >(): O => fn(val) : () => O
@@ -57,14 +55,7 @@
  >(value) => 5 : (value: number) => number
  >value : number
  >5 : 5
- 
- function decorateC<O extends any>(fn: (first: {value: number}) => O) {
- >decorateC : <O extends unknown>(fn: (first: { value: number; }) => O) => () => O
-+>O : O
- >fn : (first: { value: number; }) => O
- >first : { value: number; }
- >value : number
-@@= skipped -43, +44 lines =@@
+@@= skipped -43, +43 lines =@@
  >c : () => number
  >decorateC(({value}) => 5) : () => number
  >decorateC : <O extends unknown>(fn: (first: { value: number; }) => O) => () => O
@@ -72,17 +63,6 @@
 +>({value}) => 5 : (__0: { value: number; }) => number
  >value : number
  >5 : 5
- 
- type First = {value: typeof val}
- >First : First
- >value : number
-->val : number
- 
- function decorateD<O extends any>(fn: (first: First) => O) {
- >decorateD : <O extends unknown>(fn: (first: First) => O) => () => O
-+>O : O
- >fn : (first: First) => O
- >first : First
  
 @@= skipped -26, +26 lines =@@
  >d : () => number

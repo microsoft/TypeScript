@@ -116,7 +116,6 @@ const appTypeStylesWithError: Map<AppType, Array<AppStyle>> = new Map([
 
 declare function foo<T>(...args: T[]): T[];
 >foo : <T>(...args: T[]) => T[]
->T : T
 >args : T[]
 
 let b1: { x: boolean }[] = foo({ x: true }, { x: false });

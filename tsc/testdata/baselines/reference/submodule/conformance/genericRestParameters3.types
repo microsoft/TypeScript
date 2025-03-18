@@ -118,16 +118,12 @@ f1 = f4;
 // Repro from #26110
 
 interface CoolArray<E> extends Array<E> { 
->CoolArray : CoolArray<E>
->E : E
-
     hello: number;
 >hello : number
 }
 
 declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->T : T
 >cb : (...args: T) => void
 >args : T
 
@@ -147,7 +143,6 @@ foo<CoolArray<any>>(foo);  // Error
 
 function bar<T extends any[]>(...args: T): T {
 >bar : <T extends any[]>(...args: T) => T
->T : T
 >args : T
 
     return args;
@@ -170,7 +165,6 @@ let b = bar<CoolArray<number>>(10, 20);  // Error
 
 declare function baz<T>(...args: CoolArray<T>): void;
 >baz : <T>(...args: CoolArray<T>) => void
->T : T
 >args : CoolArray<T>
 
 declare const ca: CoolArray<number>;
@@ -201,7 +195,6 @@ baz(...ca);  // Error
 
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
 >hmm : <A extends [] | [number, string]>(...args: A) => void
->A : A
 >args : A
 
 hmm(); // okay, A = []
@@ -270,7 +263,6 @@ ff2 = ff1;
 
 function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
 >ff3 : <A extends unknown[]>(s1: (...args: [x: string, number] | [x: string, ...rest: A]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
->A : A
 >s1 : (...args: [x: string, number] | [x: string, ...rest: A]) => void
 >args : [x: string, number] | [x: string, ...rest: A]
 >s2 : (x: string, ...rest: A | [number]) => void

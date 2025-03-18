@@ -3,9 +3,6 @@
 === constraintsUsedInPrototypeProperty.ts ===
 class Foo<T extends number, U, V extends string> { }
 >Foo : Foo<T, U, V>
->T : T
->U : U
->V : V
 
 Foo.prototype; // Foo<any, any, any>
 >Foo.prototype : Foo<any, any, any>

@@ -3,11 +3,9 @@
 === crashInGetTextOfComputedPropertyName.ts ===
 // https://github.com/Microsoft/TypeScript/issues/29006
 export interface A { type: 'a' }
->A : A
 >type : "a"
 
 export interface B { type: 'b' }
->B : B
 >type : "b"
 
 export type AB = A | B
@@ -34,8 +32,6 @@ typeof itemOk1 // pass
 
 // --- test on second level ---
 interface ObjWithItems {
->ObjWithItems : ObjWithItems
-
     items: {[s: string]: AB}
 >items : { [s: string]: AB; }
 >s : string

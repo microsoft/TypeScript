@@ -1,22 +1,6 @@
 --- old.stringLiteralsWithEqualityChecks03.types
 +++ new.stringLiteralsWithEqualityChecks03.types
-@@= skipped -1, +1 lines =@@
- 
- === stringLiteralsWithEqualityChecks03.ts ===
- interface Runnable {
-+>Runnable : Runnable
-+
-     isRunning: boolean;
- >isRunning : boolean
- }
- 
- interface Refrigerator extends Runnable {
-+>Refrigerator : Refrigerator
-+
-     makesFoodGoBrrr: boolean;
- >makesFoodGoBrrr : boolean
- }
-@@= skipped -13, +17 lines =@@
+@@= skipped -14, +14 lines =@@
  >x : string
  
  let y: "foo" | Refrigerator;

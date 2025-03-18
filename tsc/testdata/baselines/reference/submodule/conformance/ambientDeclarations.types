@@ -55,7 +55,6 @@ declare function fn9(...q: {}[]);
 
 declare function fn10<T>(...q: T[]);
 >fn10 : <T>(...q: T[]) => any
->T : T
 >q : T[]
 
 // Ambient class

@@ -14,8 +14,6 @@ var r = foo(1); // void since there's a body
 >1 : 1
 
 interface I {
->I : I
-
     ();
     f();
 >f : () => any

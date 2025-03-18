@@ -50,24 +50,7 @@
  
      export var usePull = false;
  >usePull : boolean
- >false : false
- 
-     export interface ITestMetadata {
-+>ITestMetadata : ITestMetadata
-+
-         id: string;
- >id : string
- 
-@@= skipped -41, +43 lines =@@
-         };
-     }
-     export interface IScenarioMetadata {
-+>IScenarioMetadata : IScenarioMetadata
-+
-         id: string;
- >id : string
- 
-@@= skipped -62, +64 lines =@@
+@@= skipped -103, +103 lines =@@
              var bugs = content.match(/\bbug (\d+)/i);
  >bugs : RegExpMatchArray
  >content.match(/\bbug (\d+)/i) : RegExpMatchArray
@@ -248,16 +231,7 @@
          }
          return lines;
  >lines : string[]
-@@= skipped -64, +65 lines =@@
- 
-     // Logger
-     export interface ILogger {
-+>ILogger : ILogger
-+
-         start: (fileName?: string, priority?: number) => void;
- >start : (fileName?: string, priority?: number) => void
- >fileName : string
-@@= skipped -141, +143 lines =@@
+@@= skipped -205, +206 lines =@@
  
              if (typeof loggers[i][field] === 'function') {
  >typeof loggers[i][field] === 'function' : boolean
@@ -266,16 +240,7 @@
  >loggers[i][field] : any
  >loggers[i] : ILogger
  >loggers : ILogger[]
-@@= skipped -27, +27 lines =@@
- 
-     // BDD Framework
-     export interface IDone {
-+>IDone : IDone
-+
-         (e?: Error): void;
- >e : Error
-     }
-@@= skipped -176, +178 lines =@@
+@@= skipped -203, +203 lines =@@
          }
  
          static errorHandlerStack: { (e: Error): void; }[] = [];
@@ -1242,16 +1207,7 @@
  >errorReporter : any
  >hasErrors : any
  >false : false
-@@= skipped -9, +9 lines =@@
-         // Defines functions to invoke before compiling a piece of code and a post compile action intended to clean up the
-         // effects of preCompile, preferably with something lighter weight than a full recreate()
-         export interface CompilationContext {
-+>CompilationContext : CompilationContext
-+
-             filename: string;
- >filename : string
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -20, +20 lines =@@
          }
  
          export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
@@ -1824,25 +1780,7 @@
  >name : string
  
                      });
-@@= skipped -56, +56 lines =@@
- 
-         /** all the necesarry information to set the right compiler settings */
-         export interface CompilerSetting {
-+>CompilerSetting : CompilerSetting
-+
-             flag: string;
- >flag : string
- 
-@@= skipped -9, +11 lines =@@
- 
-         /** All the necessary information to turn a multi file test into useful units for later compilation */
-         export interface TestUnitData {
-+>TestUnitData : TestUnitData
-+
-             content: string;
- >content : string
- 
-@@= skipped -10, +12 lines =@@
+@@= skipped -75, +75 lines =@@
  >originalFilePath : string
  
              references: TypeScript.IFileReference[];
@@ -2901,13 +2839,7 @@
  >("</style>") : "</style>"
  >"</style>" : "</style>"
  
-         export interface BaselineOptions {
-+>BaselineOptions : BaselineOptions
-+
-             LineEndingSensitive?: boolean;
- >LineEndingSensitive : boolean
-         }
-@@= skipped -205, +208 lines =@@
+@@= skipped -205, +206 lines =@@
                  throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
  >new Error('The generated content was "undefined". Return "null" if no baselining is required."') : Error
  >Error : ErrorConstructor

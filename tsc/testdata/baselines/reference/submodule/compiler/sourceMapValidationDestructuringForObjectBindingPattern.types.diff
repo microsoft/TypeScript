@@ -9,24 +9,7 @@
  
      log(msg: any): void;
  >log : (msg: any) => void
- >msg : any
- }
- interface Robot {
-+>Robot : Robot
-+
-     name: string;
- >name : string
- 
-@@= skipped -15, +17 lines =@@
- }
- 
- interface MultiRobot {
-+>MultiRobot : MultiRobot
-+
-     name: string;
- >name : string
- 
-@@= skipped -63, +65 lines =@@
+@@= skipped -78, +78 lines =@@
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: any) => void

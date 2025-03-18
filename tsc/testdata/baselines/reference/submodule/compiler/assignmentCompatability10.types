@@ -5,9 +5,6 @@ module __test1__ {
 >__test1__ : typeof __test1__
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
->interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
->T : T
->U : U
 >one : T
 >two : U
 >obj4 : interfaceWithPublicAndOptional<number, string>
@@ -24,8 +21,6 @@ module __test2__ {
 
     export class classWithPublicAndOptional<T,U> { constructor(public one: T, public two?: U) {} }   var x4 = new classWithPublicAndOptional<number, string>(1);;
 >classWithPublicAndOptional : classWithPublicAndOptional<T, U>
->T : T
->U : U
 >one : T
 >two : U
 >x4 : classWithPublicAndOptional<number, string>

@@ -4,8 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/57999
 
 interface A {
->A : A
-
   optionalProp?: "hello";
 >optionalProp : "hello" | undefined
 }

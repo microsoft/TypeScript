@@ -2,17 +2,9 @@
 
 === classMergedWithInterfaceMultipleBasesNoError.ts ===
 interface Bar { }
->Bar : Bar
-
 interface Baz { }
->Baz : Baz
-
 interface Q { }
->Q : Q
-
 interface Foo extends Bar, Baz { }
->Foo : Foo
-
 class Foo { }
 >Foo : Foo
 

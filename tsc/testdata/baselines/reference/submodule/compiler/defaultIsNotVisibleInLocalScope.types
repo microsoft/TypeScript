@@ -7,6 +7,7 @@ export default function () {
 }
 export type X = typeof default;  // expect error
 >X : any
+>default : any
 
 === b.ts ===
 export default { a: true }
@@ -16,4 +17,5 @@ export default { a: true }
 
 export type X = typeof default; // expect error
 >X : any
+>default : any
 

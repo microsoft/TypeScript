@@ -3,12 +3,10 @@
 === assignmentCompatibilityForConstrainedTypeParameters.ts ===
 function foo<T extends { bar: string }>() {
 >foo : <T extends { bar: string; }>() => void
->T : T
 >bar : string
 
   function bar<S extends T>() {
 >bar : <S extends T>() => void
->S : S
 
     var x: S;
 >x : S

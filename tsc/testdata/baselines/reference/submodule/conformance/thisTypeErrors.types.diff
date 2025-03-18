@@ -17,12 +17,9 @@
  >x : any
  
      var y: this;
-@@= skipped -18, +18 lines =@@
- }
+@@= skipped -19, +19 lines =@@
  
  interface I1 {
-+>I1 : I1
-+
      a: { x: this };
 ->a : { x: this; }
 +>a : { x: any; }
@@ -48,7 +45,7 @@
  >x : any
  }
  
-@@= skipped -24, +26 lines =@@
+@@= skipped -23, +23 lines =@@
  >C1 : C1
  
      a: { x: this };

@@ -2,11 +2,7 @@
 
 === TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts ===
 module A {
->A : any
-
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -19,11 +15,7 @@ module A {
 }
 
 module A {
->A : any
-
     interface Point {
->Point : Point
-
         fromCarth(): Point;
 >fromCarth : () => Point
     }
@@ -42,13 +34,7 @@ var p: A.Point;
 >A : any
 
 module X.Y.Z {
->X : any
->Y : any
->Z : any
-
     export interface Line {
->Line : Line
-
         new (start: A.Point, end: A.Point);
 >start : Point
 >A : any
@@ -58,15 +44,8 @@ module X.Y.Z {
 }
 
 module X {
->X : any
-
     export module Y.Z {
->Y : any
->Z : any
-
         interface Line {
->Line : Line
-
             start: A.Point;
 >start : Point
 >A : any

@@ -1,27 +1,6 @@
 --- old.jsxChildrenGenericContextualTypes.types
 +++ new.jsxChildrenGenericContextualTypes.types
-@@= skipped -1, +1 lines =@@
- 
- === jsxChildrenGenericContextualTypes.tsx ===
- namespace JSX {
-+>JSX : any
-+
-     export interface Element {}
-+>Element : Element
-+
-     export interface ElementAttributesProperty { props: {}; }
-+>ElementAttributesProperty : ElementAttributesProperty
- >props : {}
- 
-     export interface ElementChildrenAttribute { children: {}; }
-+>ElementChildrenAttribute : ElementChildrenAttribute
- >children : {}
- 
-     export interface IntrinsicAttributes {}
-+>IntrinsicAttributes : IntrinsicAttributes
-+
-     export interface IntrinsicElements { [key: string]: Element }
-+>IntrinsicElements : IntrinsicElements
+@@= skipped -13, +13 lines =@@
  >key : string
  }
  const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
@@ -29,8 +8,6 @@
 -><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
 +>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
 +><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
-+>T : T
-+>U : U
  >p : { prop: T; children: (t: T) => T; }
  >prop : T
  >children : (t: T) => T
@@ -48,7 +25,7 @@
  >{prop: {a: "x"}, children: i => ({a: "z"})} : { prop: { a: string; }; children: (i: { a: string; }) => { a: string; }; }
  >prop : { a: string; }
  >{a: "x"} : { a: string; }
-@@= skipped -39, +50 lines =@@
+@@= skipped -27, +27 lines =@@
  >"z" : "z"
  
  const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
@@ -98,10 +75,8 @@
 +>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
  
  interface LitProps<T> { prop: T, children: (x: this) => T }
-+>LitProps : LitProps<T>
-+>T : T
  >prop : T
- >children : (x: this) => T
+@@= skipped -37, +37 lines =@@
  >x : this
  
  const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
@@ -109,7 +84,6 @@
 -><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => JSX.Element
 +>ElemLit : <T extends string>(p: LitProps<T>) => any
 +><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => any
-+>T : T
  >p : LitProps<T>
 -><div></div> : JSX.Element
 +><div></div> : any
@@ -124,7 +98,7 @@
  >{prop: "x", children: () => "x"} : { prop: "x"; children: () => "x"; }
  >prop : "x"
  >"x" : "x"
-@@= skipped -55, +58 lines =@@
+@@= skipped -18, +18 lines =@@
  >"x" : "x"
  
  const j = <ElemLit prop="x" children={() => "x"} />

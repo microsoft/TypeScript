@@ -3,7 +3,6 @@
 === freshLiteralInference.ts ===
 declare function f1<T extends "1" | "2" | "3">(x: T): T;
 >f1 : <T extends "1" | "2" | "3">(x: T) => T
->T : T
 >x : T
 
 const value = f1("1");  // regular "1"
@@ -18,7 +17,6 @@ let x1 = value;  // regular "1"
 
 declare function f2<T extends "1" | "2" | "3">(x: { value: T }): { value: T };
 >f2 : <T extends "1" | "2" | "3">(x: { value: T; }) => { value: T; }
->T : T
 >x : { value: T; }
 >value : T
 >value : T
@@ -39,7 +37,6 @@ let x2 = obj2.value;  // regular "1"
 
 declare function f3<T extends { value: "1" | "2" | "3" }>(obj: T): T;
 >f3 : <T extends { value: "1" | "2" | "3"; }>(obj: T) => T
->T : T
 >value : "1" | "2" | "3"
 >obj : T
 

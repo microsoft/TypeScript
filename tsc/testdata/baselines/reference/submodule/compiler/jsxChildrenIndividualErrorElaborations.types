@@ -6,8 +6,6 @@ import * as React from "react";
 >React : any
 
 interface Props {
->Props : Props
-
   children: (x: number) => string;
 >children : (x: number) => string
 >x : number
@@ -69,8 +67,6 @@ var a = <Blah>
 >Blah : (props: Props) => any
 
 interface PropsArr {
->PropsArr : PropsArr
-
   children: ((x: number) => string)[];
 >children : (x: number) => string[]
 >x : number
@@ -132,8 +128,6 @@ type Cb = (x: number) => string;
 >x : number
 
 interface PropsMixed {
->PropsMixed : PropsMixed
-
   children: Cb | Cb[];
 >children : Cb[] | Cb
 }

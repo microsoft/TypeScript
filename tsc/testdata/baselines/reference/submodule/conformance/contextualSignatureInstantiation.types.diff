@@ -1,47 +1,6 @@
 --- old.contextualSignatureInstantiation.types
 +++ new.contextualSignatureInstantiation.types
-@@= skipped -8, +8 lines =@@
- 
- declare function foo<T>(cb: (x: number, y: string) => T): T;
- >foo : <T>(cb: (x: number, y: string) => T) => T
-+>T : T
- >cb : (x: number, y: string) => T
- >x : number
- >y : string
- 
- declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
- >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
-+>T : T
-+>U : U
-+>V : V
- >x : T
- >y : U
- >cb : (x: T, y: U) => V
-@@= skipped -14, +18 lines =@@
- 
- declare function baz<T, U>(x: T, y: T, cb: (x: T, y: T) => U): U;
- >baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
-+>T : T
-+>U : U
- >x : T
- >y : T
- >cb : (x: T, y: T) => U
-@@= skipped -8, +10 lines =@@
- 
- declare function g<T>(x: T, y: T): T;
- >g : <T>(x: T, y: T) => T
-+>T : T
- >x : T
- >y : T
- 
- declare function h<T, U>(x: T, y: U): T[] | U[];
- >h : <T, U>(x: T, y: U) => T[] | U[]
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -61, +64 lines =@@
+@@= skipped -91, +91 lines =@@
  >g : <T>(x: T, y: T) => T
  
  var d: number[] | string[];

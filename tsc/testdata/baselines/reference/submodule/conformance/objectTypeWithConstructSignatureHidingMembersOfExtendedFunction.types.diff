@@ -1,24 +1,6 @@
 --- old.objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.types
 +++ new.objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.types
-@@= skipped -1, +1 lines =@@
- 
- === objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts ===
- interface Function {
-+>Function : Function
-+
-     data: number;
- >data : number
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     new(): number;
-     apply(a: any, b?: any): void;
- >apply : (a: any, b?: any) => void
-@@= skipped -44, +46 lines =@@
+@@= skipped -53, +53 lines =@@
  >data : number
  
  var r1e = i['hm']; // should be Object

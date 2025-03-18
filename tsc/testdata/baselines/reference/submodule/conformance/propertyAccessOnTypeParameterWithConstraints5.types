@@ -23,8 +23,6 @@ class B extends A {
 
 class C<U extends T, T extends A> {
 >C : C<U, T>
->U : U
->T : T
 
     f() {
 >f : () => string
@@ -64,10 +62,6 @@ var r = (new C<B, A>()).f();
 >f : () => string
 
 interface I<U extends T, T extends A> {
->I : I<U, T>
->U : U
->T : T
-
     foo: U;
 >foo : U
 }
@@ -96,8 +90,6 @@ var a: {
 >a : <U extends T, T extends A>() => U
 
     <U extends T, T extends A>(): U;
->U : U
->T : T
 }
 // BUG 794164
 var r3: string = a().notHere();
@@ -123,8 +115,6 @@ var b = {
     foo: <U extends T, T extends A>(x: U): U => {
 >foo : <U extends T, T extends A>(x: U) => U
 ><U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    } : <U extends T, T extends A>(x: U) => U
->U : U
->T : T
 >x : U
 
         var a = x['foo'](); // should be string

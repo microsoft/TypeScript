@@ -3,7 +3,6 @@
 === functionOverloadsRecursiveGenericReturnType.ts ===
 class B<V>{
 >B : B<V>
->V : V
 
     private id: V;
 >id : V
@@ -11,7 +10,6 @@ class B<V>{
 
 class A<U>{
 >A : A<U>
->U : U
 
     GetEnumerator: () => B<U>;
 >GetEnumerator : () => B<U>
@@ -19,17 +17,14 @@ class A<U>{
 
 function Choice<T>(args: T[]): A<T>;
 >Choice : { <T>(args: T[]): A<T>; <T>(...v_args: T[]): A<T>; }
->T : T
 >args : T[]
 
 function Choice<T>(...v_args: T[]): A<T>;
 >Choice : { <T>(args: T[]): A<T>; <T>(...v_args: T[]): A<T>; }
->T : T
 >v_args : T[]
 
 function Choice<T>(...v_args: any[]): A<T>{
 >Choice : { <T>(args: T[]): A<T>; <T>(...v_args: T[]): A<T>; }
->T : T
 >v_args : any[]
 
     return new A<T>();

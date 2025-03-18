@@ -3,16 +3,12 @@
 === typeParameterDiamond2.ts ===
 function diamondTop<Top>() {
 >diamondTop : <Top>() => void
->Top : Top
 
     function diamondMiddle<T extends Top, U>() {
 >diamondMiddle : <T extends Top, U>() => void
->T : T
->U : U
 
         function diamondBottom<Bottom extends T | U>() {
 >diamondBottom : <Bottom extends T | U>() => void
->Bottom : Bottom
 
             var top: Top;
 >top : Top

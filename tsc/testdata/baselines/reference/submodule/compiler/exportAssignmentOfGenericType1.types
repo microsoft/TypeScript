@@ -24,6 +24,5 @@ export = T;
 
 class T<X> { foo: X; }
 >T : T<X>
->X : X
 >foo : X
 

@@ -5,7 +5,6 @@
 
 declare class StateMachine<T> {
 >StateMachine : StateMachine<T>
->T : T
 
   onDone: (a: T) => void;
 >onDone : (a: T) => void
@@ -14,7 +13,6 @@ declare class StateMachine<T> {
 
 declare function createMachine<T>(implementations: {
 >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
->T : T
 >implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
 
   services: Record<string, () => Promise<T> | StateMachine<T>>;

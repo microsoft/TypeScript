@@ -8,16 +8,15 @@
 +>Timestamp : { (Unique symbol): true; }
  
      [TKey in typeof timestampSymbol]: true;
-->timestampSymbol : unique symbol
-+>TKey : TKey
- >true : true
- 
+ >timestampSymbol : unique symbol
+@@= skipped -9, +9 lines =@@
  };
  
  export declare function now(): typeof Timestamp;
 ->now : () => typeof Timestamp
 ->Timestamp : { [timestampSymbol]: true; }
 +>now : () => { (Unique symbol): true; }
++>Timestamp : { (Unique symbol): true; }
  
  === b.ts ===
  import * as x from "./a";

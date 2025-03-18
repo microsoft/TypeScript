@@ -2,8 +2,6 @@
 
 === taggedTemplateStringsWithIncompatibleTypedTags.ts ===
 interface I {
->I : I
-
     (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
 >stringParts : TemplateStringsArray
 >rest : boolean[]

@@ -19,7 +19,6 @@
 ->f : <P>(App: React.ComponentClass<P> | React.StatelessComponent<P>) => void
 ->App : React.ComponentClass<P, any> | React.StatelessComponent<P>
 +>f : <P>(App: any) => void
-+>P : P
 +>App : any
  >React : any
  >React : any

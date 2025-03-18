@@ -1,15 +1,6 @@
 --- old.interMixingModulesInterfaces2.types
 +++ new.interMixingModulesInterfaces2.types
-@@= skipped -4, +4 lines =@@
- >A : typeof A
- 
-     export interface B {
-+>B : B
-+
-         name: string;
- >name : string
- 
-@@= skipped -19, +21 lines =@@
+@@= skipped -23, +23 lines =@@
  }
  
  var x: A.B = null;

@@ -2,15 +2,11 @@
 
 === deeplyNestedAssignabilityIssue.ts ===
 interface A {
->A : A
-
     a: number;
 >a : number
 }
 
 interface Large {
->Large : Large
-
     something: {
 >something : { another: { more: { thing: A; }; yetstill: { another: A; }; }; }
 

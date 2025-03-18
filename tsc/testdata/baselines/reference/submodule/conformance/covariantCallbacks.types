@@ -4,9 +4,6 @@
 // Test that callback parameters are related covariantly
 
 interface P<T> {
->P : P<T>
->T : T
-
     then(cb: (value: T) => void): void;
 >then : (cb: (value: T) => void) => void
 >cb : (value: T) => void
@@ -15,11 +12,9 @@ interface P<T> {
 };
 
 interface A { a: string }
->A : A
 >a : string
 
 interface B extends A { b: string }
->B : B
 >b : string
 
 function f1(a: P<A>, b: P<B>) {
@@ -55,8 +50,6 @@ function f2(a: Promise<A>, b: Promise<B>) {
 }
 
 interface AList1 {
->AList1 : AList1
-
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
 >cb : (item: A) => void
@@ -64,8 +57,6 @@ interface AList1 {
 }
 
 interface BList1 {
->BList1 : BList1
-
     forEach(cb: (item: B) => void): void;
 >forEach : (cb: (item: B) => void) => void
 >cb : (item: B) => void
@@ -89,8 +80,6 @@ function f11(a: AList1, b: BList1) {
 }
 
 interface AList2 {
->AList2 : AList2
-
     forEach(cb: (item: A) => boolean): void;
 >forEach : (cb: (item: A) => boolean) => void
 >cb : (item: A) => boolean
@@ -98,8 +87,6 @@ interface AList2 {
 }
 
 interface BList2 {
->BList2 : BList2
-
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
 >cb : (item: A) => void
@@ -123,8 +110,6 @@ function f12(a: AList2, b: BList2) {
 }
 
 interface AList3 {
->AList3 : AList3
-
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
 >cb : (item: A) => void
@@ -132,8 +117,6 @@ interface AList3 {
 }
 
 interface BList3 {
->BList3 : BList3
-
     forEach(cb: (item: A, context: any) => void): void;
 >forEach : (cb: (item: A, context: any) => void) => void
 >cb : (item: A, context: any) => void
@@ -158,8 +141,6 @@ function f13(a: AList3, b: BList3) {
 }
 
 interface AList4 {
->AList4 : AList4
-
     forEach(cb: (item: A) => A): void;
 >forEach : (cb: (item: A) => A) => void
 >cb : (item: A) => A
@@ -167,8 +148,6 @@ interface AList4 {
 }
 
 interface BList4 {
->BList4 : BList4
-
     forEach(cb: (item: B) => B): void;
 >forEach : (cb: (item: B) => B) => void
 >cb : (item: B) => B
@@ -195,7 +174,6 @@ function f14(a: AList4, b: BList4) {
 
 type Bivar<T> = { set(value: T): void }
 >Bivar : Bivar<T>
->T : T
 >set : (value: T) => void
 >value : T
 
@@ -235,13 +213,11 @@ bfs = bfu;
 
 type Bivar1<T> = { set(value: T): void }
 >Bivar1 : Bivar1<T>
->T : T
 >set : (value: T) => void
 >value : T
 
 type Bivar2<T> = { set(value: T): void }
 >Bivar2 : Bivar2<T>
->T : T
 >set : (value: T) => void
 >value : T
 
@@ -265,7 +241,6 @@ b2fs = b1fu;
 
 type SetLike<T> = { set(value: T): void, get(): T }
 >SetLike : SetLike<T>
->T : T
 >set : (value: T) => void
 >value : T
 >get : () => T
@@ -290,14 +265,12 @@ sy = sx;
 
 type SetLike1<T> = { set(value: T): void, get(): T }
 >SetLike1 : SetLike1<T>
->T : T
 >set : (value: T) => void
 >value : T
 >get : () => T
 
 type SetLike2<T> = { set(value: T): void, get(): T }
 >SetLike2 : SetLike2<T>
->T : T
 >set : (value: T) => void
 >value : T
 >get : () => T

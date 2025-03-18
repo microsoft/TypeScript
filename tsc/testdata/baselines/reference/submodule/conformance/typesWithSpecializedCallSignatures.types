@@ -46,8 +46,6 @@ var c = new C();
 >C : typeof C
 
 interface I {
->I : I
-
     foo(x: 'hi'): Derived1;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "hi"

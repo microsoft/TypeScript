@@ -5,8 +5,6 @@
 // no errors expected below 
 
 interface Function {
->Function : Function
-
     data: number;
 >data : number
 
@@ -15,8 +13,6 @@ interface Function {
 }
 
 interface I {
->I : I
-
     (): void;
     apply(a: any, b?: any): void;
 >apply : (a: any, b?: any) => void

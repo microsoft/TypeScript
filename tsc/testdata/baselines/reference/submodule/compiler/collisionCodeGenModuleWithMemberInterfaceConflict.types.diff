@@ -1,13 +1,6 @@
 --- old.collisionCodeGenModuleWithMemberInterfaceConflict.types
 +++ new.collisionCodeGenModuleWithMemberInterfaceConflict.types
-@@= skipped -4, +4 lines =@@
- >m1 : typeof m1
- 
-     export interface m1 {
-+>m1 : m1
-     }
-     export class m2 implements m1 {
- >m2 : m2
+@@= skipped -10, +10 lines =@@
      }
  }
  var foo = new m1.m2();

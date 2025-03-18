@@ -26,8 +26,6 @@ var r1b = C['c d'];
 >'c d' : "c d"
 
 interface I {
->I : I
-
     "a b": number;
 >"a b" : number
 }

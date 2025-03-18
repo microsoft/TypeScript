@@ -2,7 +2,6 @@
 
 === contextuallyTypeAsyncFunctionReturnType.ts ===
 interface Obj { key: "value"; }
->Obj : Obj
 >key : "value"
 
 async function fn1(): Promise<Obj> {
@@ -83,8 +82,6 @@ type AsyncFunc = (this: Context) => PromiseLike<any>;
 >this : Context
 
 interface TestFunction {
->TestFunction : TestFunction
-
   (fn: Func): void;
 >fn : Func
 
@@ -104,8 +101,6 @@ declare const test: TestFunction;
 >test : TestFunction
 
 interface ProcessTreeNode {
->ProcessTreeNode : ProcessTreeNode
-
   pid: number;
 >pid : number
 
@@ -174,8 +169,6 @@ test("windows-process-tree", async () => {
 });
 
 interface ILocalExtension {
->ILocalExtension : ILocalExtension
-
   isApplicationScoped: boolean;
 >isApplicationScoped : boolean
 

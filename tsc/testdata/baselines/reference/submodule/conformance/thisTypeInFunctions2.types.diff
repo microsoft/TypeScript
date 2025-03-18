@@ -1,11 +1,7 @@
 --- old.thisTypeInFunctions2.types
 +++ new.thisTypeInFunctions2.types
-@@= skipped -1, +1 lines =@@
- 
- === thisTypeInFunctions2.ts ===
+@@= skipped -3, +3 lines =@@
  interface IndexedWithThis {
-+>IndexedWithThis : IndexedWithThis
-+
      // this is a workaround for React
      init?: (this: this) => void;
 ->init : (this: this) => void
@@ -18,25 +14,7 @@
  >this : any
  
      [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
-@@= skipped -15, +17 lines =@@
- >args : any[]
- }
- interface IndexedWithoutThis {
-+>IndexedWithoutThis : IndexedWithoutThis
-+
-     // this is what React would like to write (and what they write today)
-     init?: () => void;
- >init : () => void
-@@= skipped -11, +13 lines =@@
- >propName : string
- }
- interface SimpleInterface {
-+>SimpleInterface : SimpleInterface
-+
-     foo(n: string);
- >foo : (n: string) => any
- >n : string
-@@= skipped -22, +24 lines =@@
+@@= skipped -46, +46 lines =@@
  extend1({
  >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
  >extend1 : (args: IndexedWithThis) => void

@@ -5,8 +5,6 @@ module M {
 >M : typeof M
 
     export interface I {
->I : I
-
 	z;
 >z : any
     }

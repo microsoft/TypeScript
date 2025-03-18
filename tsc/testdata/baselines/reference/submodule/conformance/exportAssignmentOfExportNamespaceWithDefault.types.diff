@@ -14,11 +14,3 @@
  
  === external.d.ts ===
  declare module "b" {
-@@= skipped -18, +18 lines =@@
- 
-         var _a: typeof a;
- >_a : typeof a
-->a : typeof a
- 
-         export { _a as default };
- >_a : typeof a

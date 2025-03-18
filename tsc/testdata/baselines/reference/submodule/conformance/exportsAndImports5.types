@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports5.ts] ////
 
 === a.ts ===
+
 export interface A { }
->A : A
 
 === b.ts ===
 import { A } from "./a"

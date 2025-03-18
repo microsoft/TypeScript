@@ -1,15 +1,6 @@
 --- old.noSymbolForMergeCrash.types
 +++ new.noSymbolForMergeCrash.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/noSymbolForMergeCrash.ts] ////
- 
- === initial.ts ===
--
- interface A { }
-+>A : A
-+
- namespace A {}
-+>A : any
+@@= skipped -6, +6 lines =@@
  
  === final.ts ===
  type A = {}

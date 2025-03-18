@@ -9,19 +9,7 @@
  >fn : () => Base
  
  var b1: { new (): Base };
-@@= skipped -49, +49 lines =@@
- 
- var a7: { new <T>(t: T): T };
- >a7 : new <T>(t: T) => T
-+>T : T
- >t : T
- 
- var b7: { new <T>(t: T[]): T };
- >b7 : new <T>(t: T[]) => T
-+>T : T
- >t : T[]
- 
- // operator <
+@@= skipped -59, +59 lines =@@
  var r1a1 = a1 < b1;
  >r1a1 : boolean
  >a1 < b1 : boolean
@@ -30,7 +18,7 @@
  >b1 : new () => Base
  
  var r1a2 = a2 < b2;
-@@= skipped -53, +55 lines =@@
+@@= skipped -43, +43 lines =@@
  >r1b1 : boolean
  >b1 < a1 : boolean
  >b1 : new () => Base

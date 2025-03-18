@@ -1,24 +1,6 @@
 --- old.nonInferrableTypePropagation3.types
 +++ new.nonInferrableTypePropagation3.types
-@@= skipped -4, +4 lines =@@
- 
- declare type Callback<Args extends any[], Out, R> = (...args: Args) => (data: Out) => R;
- >Callback : Callback<Args, Out, R>
-+>Args : Args
-+>Out : Out
-+>R : R
- >args : Args
- >data : Out
- 
- declare function factory<Out>(): <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R;
- >factory : <Out>() => <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R
-+>Out : Out
-+>Args : Args
-+>R : R
- >callback : Callback<Args, Out, R>
- >args : Args
- 
-@@= skipped -16, +22 lines =@@
+@@= skipped -20, +20 lines =@@
  >age : number
  
  const usersOverAge = make((age: number) => data => {

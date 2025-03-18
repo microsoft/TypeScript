@@ -1,40 +1,6 @@
 --- old.overloadedConstructorFixesInferencesAppropriately.types
 +++ new.overloadedConstructorFixesInferencesAppropriately.types
-@@= skipped -1, +1 lines =@@
- 
- === overloadedConstructorFixesInferencesAppropriately.ts ===
- interface Box<T> {
-+>Box : Box<T>
-+>T : T
-+
-     v: T;
- >v : T
- }
- 
- interface ErrorResult {
-+>ErrorResult : ErrorResult
-+
-     readonly error: true
- >error : true
- >true : true
- }
- 
- interface AsyncLoaderProps<TResult extends {}> {
-+>AsyncLoaderProps : AsyncLoaderProps<TResult>
-+>TResult : TResult
-+
-     readonly asyncLoad: () => Box<TResult>;
- >asyncLoad : () => Box<TResult>
- 
-@@= skipped -21, +29 lines =@@
- 
- class AsyncLoader<TResult extends {}> {
- >AsyncLoader : AsyncLoader<TResult>
-+>TResult : TResult
- 
-     constructor(props: string, context: any);
- >props : string
-@@= skipped -13, +14 lines =@@
+@@= skipped -35, +35 lines =@@
  }
  
  function load(): Box<{ success: true } | ErrorResult> {

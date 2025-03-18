@@ -23,7 +23,6 @@ class D {
 
 class X<T> {
 >X : X<T>
->T : T
 
     x: T;
 >x : T
@@ -31,7 +30,6 @@ class X<T> {
 
 function foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
 >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
->T : T
 >x : string
 >t : X<T>
 >t2 : X<T>
@@ -69,7 +67,6 @@ var r2 = foo(c1, c1);
 
 function foo2<T extends C>(t: X<T>, t2: X<T>) {
 >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
->T : T
 >t : X<T>
 >t2 : X<T>
 

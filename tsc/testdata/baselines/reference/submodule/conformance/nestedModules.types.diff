@@ -1,20 +1,6 @@
 --- old.nestedModules.types
 +++ new.nestedModules.types
-@@= skipped -1, +1 lines =@@
- 
- === nestedModules.ts ===
- module A.B.C {
-+>A : typeof A
-+>B : typeof B
-+>C : any
-+
-     export interface Point {
-+>Point : Point
-+
-         x: number;
- >x : number
- 
-@@= skipped -16, +22 lines =@@
+@@= skipped -17, +17 lines =@@
  >B : typeof B
  
          var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
@@ -23,20 +9,7 @@
  >C : any
  >{ x: 0, y: 0 } : { x: number; y: number; }
  >x : number
-@@= skipped -11, +11 lines =@@
- }
- 
- module M2.X {
-+>M2 : typeof M2
-+>X : typeof X
-+
-     export interface Point {
-+>Point : Point
-+
-         x: number; y: number;
- >x : number
- >y : number
-@@= skipped -19, +24 lines =@@
+@@= skipped -30, +30 lines =@@
  }
  
  var m = M2.X;

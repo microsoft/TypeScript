@@ -1,15 +1,6 @@
 --- old.assignmentCompatWithCallSignatures2.types
 +++ new.assignmentCompatWithCallSignatures2.types
-@@= skipped -3, +3 lines =@@
- // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
- 
- interface T {
-+>T : T
-+
-     f(x: number): void;
- >f : (x: number) => void
- >x : number
-@@= skipped -8, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  >t : T
  
  var a: { f(x: number): void };
@@ -32,12 +23,7 @@
  >t : T
  
  interface S {
-+>S : S
-+
-     f(x: number): string;
- >f : (x: number) => string
- >x : number
-@@= skipped -23, +25 lines =@@
+@@= skipped -23, +23 lines =@@
  >s : S
  
  var a2: { f(x: number): string };
@@ -72,15 +58,7 @@
  
  t = { f: () => 1 };
  >t = { f: () => 1 } : { f: () => number; }
-@@= skipped -28, +28 lines =@@
- >{ f: <T>(x:T) => 1 } : { f: <T>(x: T) => number; }
- >f : <T>(x: T) => number
- ><T>(x:T) => 1 : <T>(x: T) => number
-+>T : T
- >x : T
- >1 : 1
- 
-@@= skipped -13, +14 lines =@@
+@@= skipped -41, +41 lines =@@
  >1 : 1
  
  t = { f(x: number) { return ''; } }
@@ -109,9 +87,7 @@
  >{ f: <T>(x: T) => 1 } : { f: <T>(x: T) => number; }
  >f : <T>(x: T) => number
  ><T>(x: T) => 1 : <T>(x: T) => number
-+>T : T
- >x : T
- >1 : 1
+@@= skipped -9, +9 lines =@@
  
  a = { f: function (x: number) { return ''; } }
  >a = { f: function (x: number) { return ''; } } : { f: (x: number) => string; }
@@ -120,7 +96,7 @@
  >{ f: function (x: number) { return ''; } } : { f: (x: number) => string; }
  >f : (x: number) => string
  >function (x: number) { return ''; } : (x: number) => string
-@@= skipped -32, +33 lines =@@
+@@= skipped -23, +23 lines =@@
  
  a = () => 1;
  >a = () => 1 : () => number
@@ -136,14 +112,7 @@
  >function (x: number) { return ''; } : (x: number) => string
  >x : number
  >'' : ""
- 
- interface S2 {
-+>S2 : S2
-+
-     f(x: string): void;
- >f : (x: string) => void
- >x : string
-@@= skipped -20, +22 lines =@@
+@@= skipped -20, +20 lines =@@
  >s2 : S2
  
  var a3: { f(x: string): void };

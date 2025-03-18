@@ -3,6 +3,7 @@
 === c.ts ===
 let foo: typeof C;
 >foo : typeof C
+>C : typeof C
 
 === b.ts ===
 class C { }

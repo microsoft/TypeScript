@@ -9,6 +9,7 @@
 ->f : { (n: typeof f): string; (n: typeof g): string; }
 +>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 +>n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
++>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
  
  function f(n: typeof g): string;
 ->f : { (n: typeof f): string; (n: typeof g): string; }
@@ -16,6 +17,7 @@
 ->g : { (n: typeof g): number; (n: typeof f): number; }
 +>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 +>n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
++>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
  
  function f() { return undefined; }
 ->f : { (n: typeof f): string; (n: typeof g): string; }
@@ -28,6 +30,7 @@
 ->g : { (n: typeof g): number; (n: typeof f): number; }
 +>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 +>n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
++>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
  
  function g(n: typeof f): number;
 ->g : { (n: typeof g): number; (n: typeof f): number; }
@@ -35,6 +38,7 @@
 ->f : { (n: typeof f): string; (n: typeof g): string; }
 +>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 +>n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
++>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
  
  function g() { return undefined; }
 ->g : { (n: typeof g): number; (n: typeof f): number; }
@@ -44,6 +48,7 @@
  var b: () => typeof b;
 ->b : () => typeof b
 ->b : () => typeof b
++>b : () => ???
 +>b : () => ???
  
  function b1() {
@@ -59,6 +64,7 @@
 ->foo : () => typeof foo
 ->foo : () => typeof foo
 +>foo : () => ???
++>foo : () => ???
  
      return null;
  }
@@ -66,6 +72,7 @@
 ->foo1 : () => typeof foo
 ->foo : () => typeof foo
 +>foo1 : () => ???
++>foo : () => ???
  
  var foo2 = foo;
 ->foo2 : () => typeof foo

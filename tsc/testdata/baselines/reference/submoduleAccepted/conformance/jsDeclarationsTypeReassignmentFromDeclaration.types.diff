@@ -1,15 +1,6 @@
 --- old.jsDeclarationsTypeReassignmentFromDeclaration.types
 +++ new.jsDeclarationsTypeReassignmentFromDeclaration.types
-@@= skipped -1, +1 lines =@@
- 
- === /some-mod.d.ts ===
- interface Item {
-+>Item : Item
-+
-     x: string;
- >x : string
- }
-@@= skipped -12, +14 lines =@@
+@@= skipped -13, +13 lines =@@
  === index.js ===
  /** @type {typeof import("/some-mod")} */
  const items = [];

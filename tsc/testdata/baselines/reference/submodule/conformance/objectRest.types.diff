@@ -1,15 +1,6 @@
 --- old.objectRest.types
 +++ new.objectRest.types
-@@= skipped -160, +160 lines =@@
- >remainder : string
- }
- interface I {
-+>I : I
-+
-     m(): void;
- >m : () => void
- 
-@@= skipped -25, +27 lines =@@
+@@= skipped -185, +185 lines =@@
  
  var { removed, ...removableRest2 } = i;
  >removed : string

@@ -13,8 +13,6 @@ declare class D extends C { }
 
 // Destructuring
 interface I {
->I : I
-
     ({descendants, read}?: {
 >descendants : boolean
 >read : any
@@ -31,8 +29,6 @@ interface I {
 
 // Object Rest
 interface Foo {
->Foo : Foo
-
     a: number; b: string;
 >a : number
 >b : string
@@ -56,8 +52,6 @@ declare namespace N {
 
 	// Destructuring
 	interface I {
->I : I
-
 		({descendants, read}?: {
 >descendants : boolean
 >read : any
@@ -74,8 +68,6 @@ declare namespace N {
 
 	// Object Rest
 	interface Foo {
->Foo : Foo
-
 		a: number; b: string;
 >a : number
 >b : string

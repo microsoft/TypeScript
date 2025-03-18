@@ -2,9 +2,6 @@
 
 === nestedGenerics.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
 	t: T;
 >t : T
 }

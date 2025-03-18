@@ -2,8 +2,6 @@
 
 === publicMemberImplementedAsPrivateInDerivedClass.ts ===
 interface Qux {
->Qux : Qux
-
  Bar: number;
 >Bar : number
 }

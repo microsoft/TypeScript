@@ -1,28 +1,6 @@
 --- old.mixinClassesAnnotated.types
 +++ new.mixinClassesAnnotated.types
-@@= skipped -2, +2 lines =@@
- === mixinClassesAnnotated.ts ===
- type Constructor<T> = new(...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
- >args : any[]
- 
- class Base {
-@@= skipped -28, +29 lines =@@
- }
- 
- interface Printable {
-+>Printable : Printable
-+
-     print(): void;
- >print : () => void
- }
-@@= skipped -7, +9 lines =@@
- const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
- >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
- ><T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>    class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
-+>T : T
- >superClass : T
+@@= skipped -41, +41 lines =@@
  >message : string
  
      class extends superClass {
@@ -31,19 +9,7 @@
  >superClass : Base
  
          static message = "hello";
-@@= skipped -29, +30 lines =@@
-     }
- 
- interface Tagged {
-+>Tagged : Tagged
-+
-     _tag: string;
- >_tag : string
- }
- 
- function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
- >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
-+>T : T
+@@= skipped -34, +34 lines =@@
  >superClass : T
  
      class C extends superClass {
@@ -52,7 +18,7 @@
  >superClass : {}
  
          _tag: string;
-@@= skipped -33, +36 lines =@@
+@@= skipped -24, +24 lines =@@
          }
      }
      return C;

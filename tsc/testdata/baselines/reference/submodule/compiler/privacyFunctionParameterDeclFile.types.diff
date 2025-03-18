@@ -1,47 +1,8 @@
 --- old.privacyFunctionParameterDeclFile.types
 +++ new.privacyFunctionParameterDeclFile.types
-@@= skipped -9, +9 lines =@@
- }
- 
- export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-     new (param: privateClass): publicClass; // Error
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
- }
- 
- export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-     new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -12, +14 lines =@@
- }
- 
- interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-     new (param: privateClass): privateClass;
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
- }
- 
- interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-     new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -149, +151 lines =@@
- >param : publicClass
+@@= skipped -195, +195 lines =@@
  
  export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
      new (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
@@ -103,8 +64,6 @@
  >privateModule : any
  
  interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
      new (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
@@ -166,48 +125,9 @@
  >privateModule : any
  
  export module publicModule {
-@@= skipped -104, +108 lines =@@
- 
- 
-     export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-         new (param: privateClass): publicClass; // Error
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-         new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-         new (param: privateClass): privateClass;
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-         new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -149, +151 lines =@@
- >param : publicClass
+@@= skipped -289, +289 lines =@@
  
      export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
          new (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
@@ -269,8 +189,6 @@
  >privateModule : any
  
      interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
          new (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
@@ -332,52 +250,7 @@
  >privateModule : any
  
  }
-@@= skipped -105, +109 lines =@@
-     }
- 
-     export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-         new (param: privateClass): publicClass;
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-         new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-         new (param: privateClass): privateClass;
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-         new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -149, +151 lines =@@
- >param : publicClass
- 
-     export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
-         new (param: privateModule.publicClass): publicClass;
- >param : publicClass
- >privateModule : any
-@@= skipped -9, +11 lines =@@
+@@= skipped -298, +298 lines =@@
  >privateModule : any
  
          myMethod(param: privateModule.publicClass): void;
@@ -416,13 +289,7 @@
  >param : publicClass
  >privateModule : any
  
-     interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
-         new (param: privateModule.publicClass): publicClass;
- >param : publicClass
- >privateModule : any
-@@= skipped -19, +21 lines =@@
+@@= skipped -19, +19 lines =@@
  >privateModule : any
  
          myMethod(param: privateModule.publicClass): void;
@@ -461,61 +328,7 @@
  >param : publicClass
  >privateModule : any
  }
-@@= skipped -15, +15 lines =@@
- >publicClassInGlobal : publicClassInGlobal
- }
- interface publicInterfaceWithPublicParmeterTypesInGlobal {
-+>publicInterfaceWithPublicParmeterTypesInGlobal : publicInterfaceWithPublicParmeterTypesInGlobal
-+
-     new (param: publicClassInGlobal): publicClassInGlobal;
- >param : publicClassInGlobal
- 
-@@= skipped -66, +68 lines =@@
-         }
- 
-         export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-             new (param: privateClass): publicClass;
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
-         }
- 
-         export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-             new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -12, +14 lines =@@
-         }
- 
-         interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-             new (param: privateClass): privateClass;
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
-         }
- 
-         interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-             new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -149, +151 lines =@@
- >param : publicClass
- 
-         export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
-             new (param: privateModule.publicClass): publicClass;
- >param : publicClass
- >privateModule : any
-@@= skipped -9, +11 lines =@@
+@@= skipped -275, +275 lines =@@
  >privateModule : any
  
              myMethod(param: privateModule.publicClass): void;
@@ -554,13 +367,7 @@
  >param : publicClass
  >privateModule : any
  
-         interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
-             new (param: privateModule.publicClass): publicClass;
- >param : publicClass
- >privateModule : any
-@@= skipped -19, +21 lines =@@
+@@= skipped -19, +19 lines =@@
  >privateModule : any
  
              myMethod(param: privateModule.publicClass): void;
@@ -599,46 +406,9 @@
  >param : publicClass
  >privateModule : any
      }
- 
-     export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-         new (param: privateClass): publicClass; // Error
- >param : privateClass
- 
-@@= skipped -23, +25 lines =@@
-     }
- 
-     export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-         new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-         new (param: privateClass): privateClass;
- >param : privateClass
- 
-@@= skipped -12, +14 lines =@@
-     }
- 
-     interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-         new (param: publicClass): publicClass;
- >param : publicClass
- 
-@@= skipped -149, +151 lines =@@
- >param : publicClass
+@@= skipped -197, +197 lines =@@
  
      export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
          new (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
@@ -700,8 +470,6 @@
  >privateModule : any
  
      interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
          new (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass

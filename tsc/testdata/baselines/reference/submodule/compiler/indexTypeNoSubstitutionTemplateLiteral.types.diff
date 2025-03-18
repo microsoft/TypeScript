@@ -18,5 +18,6 @@
  type Test = keyof typeof Foo;
  >Test : "b"
 ->Foo : typeof Foo
++>Foo : { (): void; b: () => void; }
  
  

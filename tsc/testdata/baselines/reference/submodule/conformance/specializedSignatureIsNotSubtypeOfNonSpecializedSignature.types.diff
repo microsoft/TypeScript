@@ -1,51 +1,6 @@
 --- old.specializedSignatureIsNotSubtypeOfNonSpecializedSignature.types
 +++ new.specializedSignatureIsNotSubtypeOfNonSpecializedSignature.types
-@@= skipped -26, +26 lines =@@
- 
- class C2<T> {
- >C2 : C2<T>
-+>T : T
- 
-     foo(x: 'a');
- >foo : { (x: "a"): any; (x: T): any; }
-@@= skipped -16, +17 lines =@@
- 
- class C3<T extends String> {
- >C3 : C3<T>
-+>T : T
- 
-     foo(x: 'a');
- >foo : { (x: "a"): any; (x: T): any; }
-@@= skipped -15, +16 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     (x: 'a');
- >x : "a"
- 
-@@= skipped -16, +18 lines =@@
- }
- 
- interface I2<T> {
-+>I2 : I2<T>
-+>T : T
-+
-     (x: 'a');
- >x : "a"
- 
-@@= skipped -16, +19 lines =@@
- }
- 
- interface I3<T extends String> {
-+>I3 : I3<T>
-+>T : T
-+
-     (x: 'a');
- >x : "a"
- 
-@@= skipped -16, +19 lines =@@
+@@= skipped -105, +105 lines =@@
  }
  
  var a: {
@@ -63,18 +18,7 @@
  
      (x: 'a');
  >x : "a"
- 
-     <T>(x: T);
-+>T : T
- >x : T
- 
-     foo(x: 'a');
-@@= skipped -14, +15 lines =@@
- 
-     foo<T>(x: T);
- >foo : { (x: "a"): any; <T>(x: T): any; }
-+>T : T
- >x : T
+@@= skipped -18, +18 lines =@@
  }
  
  var a3: {
@@ -83,17 +27,3 @@
  
      (x: 'a');
  >x : "a"
- 
-     <T>(x: T);
-+>T : T
- >x : T
- 
-     foo(x: 'a');
-@@= skipped -18, +20 lines =@@
- 
-     foo<T extends String>(x: T);
- >foo : { (x: "a"): any; <T extends String>(x: T): any; }
-+>T : T
- >x : T
- }
- 

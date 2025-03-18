@@ -9,22 +9,17 @@ class C {
 }
 
 interface I {
->I : I
-
     x(): Goo;
 >x : () => Goo
 }
 
 interface Goo {
->Goo : Goo
-
     p: string;
 >p : string
 }
 
 function foo<T>(f: { y: T }): T { return null }
 >foo : <T>(f: { y: T; }) => T
->T : T
 >f : { y: T; }
 >y : T
 

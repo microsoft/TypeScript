@@ -21,8 +21,6 @@ var y = Sammy.Sammy();
 
 === errorsOnImportedSymbol_0.ts ===
 interface Sammy {
->Sammy : Sammy
-
     new (): any;
     (): number;
 }

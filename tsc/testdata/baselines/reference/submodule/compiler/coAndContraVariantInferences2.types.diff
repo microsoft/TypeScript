@@ -1,88 +1,11 @@
 --- old.coAndContraVariantInferences2.types
 +++ new.coAndContraVariantInferences2.types
-@@= skipped -1, +1 lines =@@
- 
- === coAndContraVariantInferences2.ts ===
- interface A { a: string }
-+>A : A
- >a : string
- 
- interface B extends A { b: string }
-+>B : B
- >b : string
- 
- interface C extends A { c: string }
-+>C : C
- >c : string
- 
- declare function cast<T, U extends T>(x: T, test: (x: T) => x is U): U;
- >cast : <T, U extends T>(x: T, test: (x: T) => x is U) => U
-+>T : T
-+>U : U
- >x : T
- >test : (x: T) => x is U
- >x : T
-@@= skipped -44, +49 lines =@@
- 
- declare function consume<T, U extends T>(t: T, u: U, f: (x: T) => void): void;
- >consume : <T, U extends T>(t: T, u: U, f: (x: T) => void) => void
-+>T : T
-+>U : U
- >t : T
- >u : U
- >f : (x: T) => void
-@@= skipped -41, +43 lines =@@
- 
- declare function every<T, U extends T>(array: readonly T[], f: (x: T) => x is U): array is readonly U[];
- >every : <T, U extends T>(array: readonly T[], f: (x: T) => x is U) => array is readonly U[]
-+>T : T
-+>U : U
- >array : readonly T[]
- >f : (x: T) => x is U
- >x : T
-@@= skipped -45, +47 lines =@@
- }
- 
- interface Node { kind: SyntaxKind; }
-+>Node : Node
- >kind : SyntaxKind
- 
- interface Expression extends Node { _expressionBrand: any; }
-+>Expression : Expression
- >_expressionBrand : any
- 
- interface Declaration extends Node { _declarationBrand: any; }
-+>Declaration : Declaration
- >_declarationBrand : any
- 
- interface Block extends Node { kind: SyntaxKind.Block; }
-+>Block : Block
- >kind : SyntaxKind.Block
- >SyntaxKind : any
- 
- interface Identifier extends Expression, Declaration { kind: SyntaxKind.Identifier; }
-+>Identifier : Identifier
- >kind : SyntaxKind.Identifier
- >SyntaxKind : any
- 
- interface CaseClause extends Node { kind: SyntaxKind.CaseClause; }
-+>CaseClause : CaseClause
- >kind : SyntaxKind.CaseClause
- >SyntaxKind : any
- 
- interface FunctionDeclaration extends Declaration { kind: SyntaxKind.FunctionDeclaration; }
-+>FunctionDeclaration : FunctionDeclaration
- >kind : SyntaxKind.FunctionDeclaration
- >SyntaxKind : any
- 
-@@= skipped -32, +39 lines =@@
+@@= skipped -163, +163 lines =@@
  >node : Node
  
  declare function assertNode<T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U;
 ->assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: ((node: Node) => boolean) | undefined): void; }
 +>assertNode : { <T extends Node, U extends T>(node: T | undefined, test: (node: T) => node is U): asserts node is U; (node: Node | undefined, test: (node: Node) => boolean | undefined): void; }
-+>T : T
-+>U : U
  >node : T | undefined
  >test : (node: T) => node is U
  >node : T
@@ -107,14 +30,12 @@
  >node : CaseClause | FunctionDeclaration
  >canHaveLocals : (node: Node) => node is HasLocals
  
-@@= skipped -30, +32 lines =@@
+@@= skipped -30, +30 lines =@@
  >node : Node
  
  declare function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut;
 ->tryCast : <TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
 +>tryCast : <TOut extends TIn, TIn>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
-+>TOut : TOut
-+>TIn : TIn
  >value : TIn | undefined
  >test : (value: TIn) => value is TOut
  >value : TIn
@@ -135,38 +56,7 @@
  >isExpression : (node: Node) => node is Expression
  }
  
-@@= skipped -30, +32 lines =@@
- }
- 
- interface Node1 {
-+>Node1 : Node1
-+
-     kind: SyntaxKind1;
- >kind : SyntaxKind1
- }
- 
- interface Statement1 extends Node1 {
-+>Statement1 : Statement1
-+
-     _statementBrand: any;
- >_statementBrand : any
- }
- 
- interface ClassExpression1 extends Node1 {
-+>ClassExpression1 : ClassExpression1
-+
-     kind: SyntaxKind1.ClassExpression;
- >kind : SyntaxKind1.ClassExpression
- >SyntaxKind1 : any
- }
- 
- interface ClassStatement1 extends Statement1 {
-+>ClassStatement1 : ClassStatement1
-+
-     kind: SyntaxKind1.ClassStatement;
- >kind : SyntaxKind1.ClassStatement
- >SyntaxKind1 : any
-@@= skipped -34, +42 lines =@@
+@@= skipped -64, +64 lines =@@
  const maybeClassStatement = tryCast(statement, isClassLike);  // ClassLike1
  >maybeClassStatement : ClassLike1
  >tryCast(statement, isClassLike) : ClassLike1
@@ -175,30 +65,7 @@
  >statement : Statement1 | undefined
  >isClassLike : (node: Node1) => node is ClassLike1
  
- // Repro from #49924
- 
- interface TypeNode extends Node {
-+>TypeNode : TypeNode
-+
-     typeInfo: string;
- >typeInfo : string
- }
- 
- interface NodeArray<T extends Node> extends Array<T> {
-+>NodeArray : NodeArray<T>
-+>T : T
-+
-     someProp: string;
- >someProp : string
- }
- 
- declare function isNodeArray<T extends Node>(array: readonly T[]): array is NodeArray<T>;
- >isNodeArray : <T extends Node>(array: readonly T[]) => array is NodeArray<T>
-+>T : T
- >array : readonly T[]
- 
- declare const types: readonly TypeNode[];
-@@= skipped -26, +32 lines =@@
+@@= skipped -26, +26 lines =@@
  const x = tryCast(types, isNodeArray);  // NodeAray<TypeNode>
  >x : NodeArray<TypeNode>
  >tryCast(types, isNodeArray) : NodeArray<TypeNode>

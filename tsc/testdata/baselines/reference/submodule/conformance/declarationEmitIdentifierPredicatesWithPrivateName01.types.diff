@@ -1,15 +1,6 @@
 --- old.declarationEmitIdentifierPredicatesWithPrivateName01.types
 +++ new.declarationEmitIdentifierPredicatesWithPrivateName01.types
-@@= skipped -1, +1 lines =@@
- 
- === declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
- interface I {
-+>I : I
-+
-     a: number;
- >a : number
- }
-@@= skipped -10, +12 lines =@@
+@@= skipped -11, +11 lines =@@
  
      return typeof x.a === "number";
  >typeof x.a === "number" : boolean

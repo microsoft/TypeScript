@@ -1,15 +1,6 @@
 --- old.interMixingModulesInterfaces4.types
 +++ new.interMixingModulesInterfaces4.types
-@@= skipped -14, +14 lines =@@
-     }
- 
-     interface B {
-+>B : B
-+
-         name: string;
- >name : string
- 
-@@= skipped -12, +14 lines =@@
+@@= skipped -26, +26 lines =@@
  >x : number
  >A.B.createB() : number
  >A.B.createB : () => number

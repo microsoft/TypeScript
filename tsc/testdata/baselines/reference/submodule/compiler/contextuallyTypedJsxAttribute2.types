@@ -12,7 +12,6 @@ import { ComponentPropsWithRef, ElementType } from "react";
 
 function UnwrappedLink<T extends ElementType = ElementType>(
 >UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => any
->T : T
 
   props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">,
 >props : Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">
@@ -33,7 +32,6 @@ function UnwrappedLink<T extends ElementType = ElementType>(
 
 function UnwrappedLink2<T extends ElementType = ElementType>(
 >UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
->T : T
 
   props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & {
 >props : Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }

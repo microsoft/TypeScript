@@ -18,15 +18,7 @@
  >obj?.kind : "a" | 1 | undefined
  >obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
  >kind : "a" | 1 | undefined
-@@= skipped -19, +19 lines =@@
- 
- type WrappedStringOr<T> = { value?: string } | { value?: T };
- >WrappedStringOr : WrappedStringOr<T>
-+>T : T
- >value : string | undefined
- >value : T | undefined
- 
-@@= skipped -9, +10 lines =@@
+@@= skipped -28, +28 lines =@@
  
      if (typeof wrapped?.value !== 'string') {
  >typeof wrapped?.value !== 'string' : boolean

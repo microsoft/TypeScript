@@ -2,19 +2,13 @@
 
 === taggedTemplatesWithTypeArguments2.ts ===
 export interface SomethingTaggable {
->SomethingTaggable : SomethingTaggable
-
     <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
->T : T
 >t : TemplateStringsArray
 >args : T[]
 }
 
 export interface SomethingNewable {
->SomethingNewable : SomethingNewable
-
     new <T>(...args: T[]): any;
->T : T
 >args : T[]
 }
 
@@ -84,9 +78,6 @@ const e = new tag<number>
 
 class SomeBase<A, B, C> {
 >SomeBase : SomeBase<A, B, C>
->A : A
->B : B
->C : C
 
     a!: A; b!: B; c!: C;
 >a : A
@@ -96,7 +87,6 @@ class SomeBase<A, B, C> {
 
 class SomeDerived<T> extends SomeBase<number, string, T> {
 >SomeDerived : SomeDerived<T>
->T : T
 >SomeBase : SomeBase<number, string, T>
 
     constructor() {

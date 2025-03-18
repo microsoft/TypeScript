@@ -2,8 +2,6 @@
 
 === newOperator.ts ===
 interface ifc { }
->ifc : ifc
-
 // Attempting to 'new' an interface yields poor error
 var i = new ifc();
 >i : any
@@ -112,9 +110,7 @@ new ctorUnion("");
 // Error on union with incompatible constructors
 declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
 >ctorUnion2 : new <T extends number>(a: T) => void | new <T>(a: string) => void
->T : T
 >a : T
->T : T
 >a : string
 
 new ctorUnion2("");

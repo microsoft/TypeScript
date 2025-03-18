@@ -1,15 +1,6 @@
 --- old.sourceMapValidationDestructuringVariableStatement.types
 +++ new.sourceMapValidationDestructuringVariableStatement.types
-@@= skipped -1, +1 lines =@@
- 
- === sourceMapValidationDestructuringVariableStatement.ts ===
- interface Robot {
-+>Robot : Robot
-+
-     name: string;
- >name : string
- 
-@@= skipped -7, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >skill : string
  }
  declare var console: {

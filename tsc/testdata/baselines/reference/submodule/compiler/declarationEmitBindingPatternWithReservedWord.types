@@ -6,19 +6,14 @@ type LocaleData = Record<string, never>
 
 type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<
 >ConvertLocaleConfig : ConvertLocaleConfig<T>
->T : T
 
   string,
   T
 >;
 type LocaleConfig<T extends LocaleData = LocaleData> = Record<string, Partial<T>>;
 >LocaleConfig : LocaleConfig<T>
->T : T
 
 export interface GetLocalesOptions<T extends LocaleData> {
->GetLocalesOptions : GetLocalesOptions<T>
->T : T
-
     app: unknown;
 >app : unknown
 
@@ -35,7 +30,6 @@ export interface GetLocalesOptions<T extends LocaleData> {
 export const getLocales = <T extends LocaleData>({
 >getLocales : <T extends LocaleData>(__0: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
 ><T extends LocaleData>({    app,    name,    default: defaultLocalesConfig,    config: userLocalesConfig = {},}: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {    return defaultLocalesConfig;} : <T extends LocaleData>(__0: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
->T : T
 
     app,
 >app : unknown

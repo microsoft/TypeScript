@@ -196,24 +196,31 @@ function values(
 
     a: typeof import('./mod').Thing,
 >a : any
+>Thing : any
 
     b: typeof import('./mod').AnotherThing,
 >b : any
+>AnotherThing : any
 
     c: typeof import('./mod').foo,
 >c : any
+>foo : any
 
     d: typeof import('./mod').qux,
 >d : any
+>qux : any
 
     e: typeof import('./mod').baz,
 >e : any
+>baz : any
 
     f: typeof import('./mod').buz,
 >f : any
+>buz : any
 
     g: typeof import('./mod').literal,
 >g : any
+>literal : any
 
 ) {
     return a.length + b.length + c() + d() + e() + f() + g.length

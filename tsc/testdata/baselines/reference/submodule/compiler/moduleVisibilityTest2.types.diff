@@ -12,16 +12,7 @@
  
  module M {
  >M : typeof M
-@@= skipped -44, +44 lines =@@
- 
- 
- 	interface I {
-+>I : I
-+
- 		someMethod():number;
- >someMethod : () => number
- 	}
-@@= skipped -16, +18 lines =@@
+@@= skipped -60, +60 lines =@@
  >someMethodThatCallsAnOuterMethod : () => string
  >OuterInnerAlias.someExportedOuterInnerFunc() : string
  >OuterInnerAlias.someExportedOuterInnerFunc : () => string

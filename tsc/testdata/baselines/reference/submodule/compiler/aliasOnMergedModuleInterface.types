@@ -29,15 +29,10 @@ declare module "foo"
 >"foo" : typeof import("foo")
 {
     module B {
->B : any
-
         export interface A {
->A : A
         }
     }
     interface B {
->B : B
-
         bar(name: string): B.A;
 >bar : (name: string) => A
 >name : string

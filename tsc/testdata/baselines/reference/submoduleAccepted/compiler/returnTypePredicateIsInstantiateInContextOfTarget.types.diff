@@ -24,19 +24,9 @@
 +>React : any
 +>Component : any
  >isAny : <T>(obj: any) => obj is T
-+>T : T
  >obj : any
  
-     static defaultProps = {
-@@= skipped -32, +27 lines =@@
-     // Type guard is defined as a static class property
-     static isAny<T>(obj: any): obj is T {
- >isAny : <T>(obj: any) => obj is T
-+>T : T
- >obj : any
- 
-         return true;
-@@= skipped -8, +9 lines =@@
+@@= skipped -40, +34 lines =@@
  }
  
  const TestRender = () => <TestComponent />;

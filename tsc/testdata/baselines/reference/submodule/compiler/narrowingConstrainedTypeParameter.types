@@ -4,8 +4,6 @@
 // Repro from #10811
 
 interface Pet {
->Pet : Pet
-
     name: string;
 >name : string
 }
@@ -25,7 +23,6 @@ function isPet(pet: any): pet is Pet {
 
 export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string): string {
 >speak : <TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string) => string
->TPet : TPet
 >pet : TPet
 >voice : (pet: TPet) => string
 >pet : TPet

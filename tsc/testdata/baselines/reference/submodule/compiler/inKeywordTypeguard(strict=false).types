@@ -580,7 +580,6 @@ function f2(x: object) {
 
 function f3<T>(x: T) {
 >f3 : <T>(x: T) => void
->T : T
 >x : T
 
     if ("a" in x) {
@@ -1007,7 +1006,9 @@ function f15(x: { a?: string | undefined }) {
 function f16(x: typeof globalThis, y: Window & typeof globalThis) {
 >f16 : (x: typeof globalThis, y: Window & typeof globalThis) => void
 >x : typeof globalThis
+>globalThis : typeof globalThis
 >y : Window & typeof globalThis
+>globalThis : typeof globalThis
 
     x = y;
 >x = y : Window & typeof globalThis
@@ -1019,7 +1020,6 @@ function f16(x: typeof globalThis, y: Window & typeof globalThis) {
 
 function foo<A>(value: A) {
 >foo : <A>(value: A) => void
->A : A
 >value : A
 
     if (typeof value === "object" && value !== null && "prop" in value) {
@@ -1061,7 +1061,6 @@ const checkIsTouchDevice = () =>
 
 function isHTMLTable<T extends object | null>(table: T): boolean {
 >isHTMLTable : <T extends object>(table: T) => boolean
->T : T
 >table : T
 
     return !!table && 'html' in table;
@@ -1079,7 +1078,6 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P) => void
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P) => void
->P : P
 >a : P
 
     "foo" in a;
@@ -1093,7 +1091,6 @@ const f = <P extends object>(a: P & {}) => {
 
 function test1<T extends any[] | Record<string, any>>(obj: T) {
 >test1 : <T extends any[] | Record<string, any>>(obj: T) => void
->T : T
 >obj : T
 
     if (Array.isArray(obj) || 'length' in obj) {
@@ -1118,7 +1115,6 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 
 function test2<T extends any[] | Record<string, any>>(obj: T) {
 >test2 : <T extends any[] | Record<string, any>>(obj: T) => void
->T : T
 >obj : T
 
     if (Array.isArray(obj)) {
@@ -1139,7 +1135,6 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 
 function test3<T extends any[] | Record<string, any>>(obj: T) {
 >test3 : <T extends any[] | Record<string, any>>(obj: T) => void
->T : T
 >obj : T
 
     if ('length' in obj) {

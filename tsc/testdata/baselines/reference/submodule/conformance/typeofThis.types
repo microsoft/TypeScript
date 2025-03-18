@@ -11,7 +11,9 @@ class Test {
     constructor() {
         var copy: typeof this.data = {};
 >copy : {}
+>this.data : {}
 >this : this
+>data : {}
 >{} : {}
     }
 }
@@ -33,20 +35,25 @@ class Test1 {
     constructor() {
         var copy: typeof this.data = { foo: '' };
 >copy : { foo: string; }
+>this.data : { foo: string; }
 >this : this
+>data : { foo: string; }
 >{ foo: '' } : { foo: string; }
 >foo : string
 >'' : ""
 
         var foo: typeof this.data.foo = '';
 >foo : string
+>this.data.foo : string
 >this.data : { foo: string; }
 >this : this
 >data : { foo: string; }
+>foo : string
 >'' : ""
 
         var self: typeof this = this;
 >self : this
+>this : this
 >this : this
 
         self.data;
@@ -56,7 +63,9 @@ class Test1 {
 
         var str: typeof this.this = '';
 >str : string
+>this.this : string
 >this : this
+>this : string
 >'' : ""
     }
 }
@@ -67,7 +76,9 @@ function Test2() {
 
     let x: typeof this.no = 1;
 >x : any
+>this.no : any
 >this : any
+>no : any
 >1 : 1
 }
 
@@ -78,7 +89,9 @@ function Test3(this: { no: number }) {
 
     let x: typeof this.no = 1;
 >x : number
+>this.no : number
 >this : { no: number; }
+>no : number
 >1 : 1
 }
 
@@ -89,7 +102,9 @@ function Test4(this: { no: number } | undefined) {
 
     let x: typeof this.no = 1;
 >x : number
+>this.no : number
 >this : { no: number; } | undefined
+>no : number
 >1 : 1
 }
 
@@ -107,7 +122,9 @@ class Test5 {
         // should not capture this.
         let x: typeof this.no = 1;
 >x : number
+>this.no : number
 >this : this
+>no : number
 >1 : 1
     }
 }
@@ -121,7 +138,9 @@ namespace Test6 {
 
         let x: typeof this.no = 1;
 >x : any
+>this.no : any
 >this : any
+>no : any
 >1 : 1
     }
 }
@@ -135,7 +154,9 @@ module Test7 {
 
         let x: typeof this.no = 1;
 >x : any
+>this.no : any
 >this : any
+>no : any
 >1 : 1
     }
 }
@@ -146,7 +167,9 @@ const Test8 = () => {
 
     let x: typeof this.no = 1;
 >x : any
+>this.no : any
 >this : typeof globalThis
+>no : any
 >1 : 1
 }
 
@@ -172,6 +195,7 @@ class Test9 {
             const d1: typeof this = this;
 >d1 : this & Test9D1
 >this : this & Test9D1
+>this : this & Test9D1
 
             d1.f1();
 >d1.f1() : void
@@ -187,6 +211,7 @@ class Test9 {
 
             const d2: typeof this = this;
 >d2 : this & Test9D2
+>this : this & Test9D2
 >this : this & Test9D2
 
             d2.f2();
@@ -209,7 +234,9 @@ class Test9 {
 
             const no: typeof this.no = this.no;
 >no : 1
+>this.no : 1
 >this : this
+>no : 1
 >this.no : 1
 >this : this
 >no : 1
@@ -224,7 +251,9 @@ class Test9 {
 
             const no: typeof this.this = this.this;
 >no : 1
+>this.this : 1
 >this : this
+>this : 1
 >this.this : 1
 >this : this
 >this : 1
@@ -258,7 +287,9 @@ class Test10 {
 
         let a: typeof this.a = undefined as any;
 >a : { b?: string | undefined; } | undefined
+>this.a : { b?: string | undefined; } | undefined
 >this : this
+>a : { b?: string | undefined; } | undefined
 >undefined as any : any
 >undefined : undefined
 
@@ -269,15 +300,19 @@ class Test10 {
 
             let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
 >a : { b?: string | undefined; }
+>this.a : { b?: string | undefined; }
 >this : this
+>a : { b?: string | undefined; }
 >undefined as any : any
 >undefined : undefined
 
             let b: typeof this.a.b = undefined as any;
 >b : string | undefined
+>this.a.b : string | undefined
 >this.a : { b?: string | undefined; }
 >this : this
 >a : { b?: string | undefined; }
+>b : string | undefined
 >undefined as any : any
 >undefined : undefined
 
@@ -290,9 +325,11 @@ class Test10 {
 
                 let b: typeof this.a.b = undefined as any;   // should narrow to string
 >b : string
+>this.a.b : string
 >this.a : { b?: string | undefined; }
 >this : this
 >a : { b?: string | undefined; }
+>b : string
 >undefined as any : any
 >undefined : undefined
             }
@@ -316,7 +353,9 @@ class Test11 {
 
         let bar: typeof o.this = {};
 >bar : { x?: string | undefined; } | undefined
+>o.this : { x?: string | undefined; } | undefined
 >o : this
+>this : { x?: string | undefined; } | undefined
 >{} : {}
 
         if (o.this && o.this.x) {
@@ -349,6 +388,7 @@ class Tests12 {
 
         type Test = typeof this;
 >Test : this
+>this : this
     }
 
     test2() { // OK
@@ -357,6 +397,7 @@ class Tests12 {
         for (;;) {}
         type Test = typeof this;
 >Test : this
+>this : this
     }
 
     test3() { // expected no compile errors
@@ -368,6 +409,7 @@ class Tests12 {
 
         type Test = typeof this;
 >Test : this
+>this : this
     }
 
     test4() { // expected no compile errors
@@ -379,5 +421,6 @@ class Tests12 {
 
         type Test = typeof this;
 >Test : this
+>this : this
     }
 }

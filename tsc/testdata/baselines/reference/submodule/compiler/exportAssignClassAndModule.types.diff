@@ -28,10 +28,3 @@
  >Foo : any
  }
  module Foo {
-+>Foo : typeof Foo
-+
-     export interface Bar {
-+>Bar : Bar
-     }
- }
- export = Foo;

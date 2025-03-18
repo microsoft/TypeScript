@@ -1,83 +1,6 @@
 --- old.tsxLibraryManagedAttributes.types
 +++ new.tsxLibraryManagedAttributes.types
-@@= skipped -2, +2 lines =@@
- === tsxLibraryManagedAttributes.tsx ===
- type Defaultize<TProps, TDefaults> =
- >Defaultize : Defaultize<TProps, TDefaults>
-+>TProps : TProps
-+>TDefaults : TDefaults
- 
-     & {[K in Extract<keyof TProps, keyof TDefaults>]?: TProps[K]}
-+>K : K
-+
-     & {[K in Exclude<keyof TProps, keyof TDefaults>]: TProps[K]}
-+>K : K
-+
-     & Partial<TDefaults>;
- 
- type InferredPropTypes<P> = {[K in keyof P]: P[K] extends PropTypeChecker<infer T, infer U> ? PropTypeChecker<T, U>[typeof checkedType] : {}};
- >InferredPropTypes : InferredPropTypes<P>
-->checkedType : unique symbol
-+>P : P
-+>K : K
-+>T : T
-+>U : U
- 
- declare const checkedType: unique symbol;
- >checkedType : unique symbol
- 
- interface PropTypeChecker<U, TRequired = false> {
-+>PropTypeChecker : PropTypeChecker<U, TRequired>
-+>U : U
-+>TRequired : TRequired
- >false : false
- 
-     (props: any, propName: string, componentName: string, location: any, propFullName: string): boolean;
-@@= skipped -50, +62 lines =@@
- 
- declare class ReactComponent<P={}, S={}> {
- >ReactComponent : ReactComponent<P, S>
-+>P : P
-+>S : S
- 
-     constructor(props: P);
- >props : P
-@@= skipped -17, +19 lines =@@
- }
- 
- declare namespace JSX {
-+>JSX : any
-+
-     interface Element extends ReactComponent {}
-+>Element : Element
-+
-     interface IntrinsicElements {}
-+>IntrinsicElements : IntrinsicElements
-+
-     type LibraryManagedAttributes<TComponent, TProps> =
- >LibraryManagedAttributes : LibraryManagedAttributes<TComponent, TProps>
-+>TComponent : TComponent
-+>TProps : TProps
- 
-         TComponent extends { defaultProps: infer D; propTypes: infer P; }
- >defaultProps : D
-+>D : D
- >propTypes : P
-+>P : P
- 
-             ? Defaultize<TProps & InferredPropTypes<P>, D>
-             : TComponent extends { defaultProps: infer D }
- >defaultProps : D
-+>D : D
- 
-                 ? Defaultize<TProps, D>
-                 : TComponent extends { propTypes: infer P }
- >propTypes : P
-+>P : P
- 
-                     ? TProps & InferredPropTypes<P>
-                     : TProps;
-@@= skipped -61, +73 lines =@@
+@@= skipped -130, +130 lines =@@
  }
  
  const a = <Component foo={12} bar="yes" baz="yeah" />;
@@ -242,12 +165,8 @@
 +>foo : any
  
  interface FooProps {
-+>FooProps : FooProps
-+
      foo: string;
- >foo : string
- }
-@@= skipped -65, +67 lines =@@
+@@= skipped -65, +65 lines =@@
      };
  }
  const n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} />;

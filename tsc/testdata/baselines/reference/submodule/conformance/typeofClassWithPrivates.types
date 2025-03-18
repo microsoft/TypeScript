@@ -3,7 +3,6 @@
 === typeofClassWithPrivates.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     private a: number;
 >a : number
@@ -23,7 +22,9 @@ var c: C<string>;
 
 var r: typeof C;
 >r : typeof C
+>C : typeof C
 
 var r2: typeof c;
 >r2 : C<string>
+>c : C<string>
 

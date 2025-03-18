@@ -1,14 +1,6 @@
 --- old.narrowingTypeofObject.types
 +++ new.narrowingTypeofObject.types
-@@= skipped -1, +1 lines =@@
- 
- === narrowingTypeofObject.ts ===
- interface F { (): string }
-+>F : F
- 
- function test(x: number & { _foo: string }) {
- >test : (x: number & { _foo: string; }) => void
-@@= skipped -8, +9 lines =@@
+@@= skipped -9, +9 lines =@@
  
      if (typeof x === 'object') {
  >typeof x === 'object' : boolean

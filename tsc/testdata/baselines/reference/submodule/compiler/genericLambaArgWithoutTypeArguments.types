@@ -2,9 +2,6 @@
 
 === genericLambaArgWithoutTypeArguments.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
    x: T;
 >x : T
 }

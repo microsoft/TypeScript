@@ -2,8 +2,6 @@
 
 === multiCallOverloads.ts ===
 interface ICallback {
->ICallback : ICallback
-
     (x?: string):void;
 >x : string
 }

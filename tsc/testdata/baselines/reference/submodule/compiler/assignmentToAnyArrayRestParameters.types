@@ -5,7 +5,6 @@
 
 function foo<T extends string[]>(
 >foo : <T extends string[]>(fa: (s: string, ...args: string[]) => string, fb: (s: string, ...args: T) => string) => void
->T : T
 
     fa: (s: string, ...args: string[]) => string,
 >fa : (s: string, ...args: string[]) => string
@@ -41,8 +40,6 @@ function foo<T extends string[]>(
 
 function bar<T extends string[], K extends number>() {
 >bar : <T extends string[], K extends number>() => void
->T : T
->K : K
 
     type T00 = string[]["0"];
 >T00 : string

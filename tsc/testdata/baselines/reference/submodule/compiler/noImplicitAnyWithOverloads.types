@@ -2,13 +2,10 @@
 
 === noImplicitAnyWithOverloads.ts ===
 interface A {
->A : A
-
     foo;
 >foo : any
 }
 interface B { }
->B : B
 
 function callb(lam: (l: A) => void);
 >callb : { (lam: (l: A) => void): any; (lam: (n: B) => void): any; }

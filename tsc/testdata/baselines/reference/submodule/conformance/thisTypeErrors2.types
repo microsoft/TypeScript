@@ -10,7 +10,6 @@ class Base {
 }
 class Generic<T> {
 >Generic : Generic<T>
->T : T
 }
 class Derived {
 >Derived : Derived

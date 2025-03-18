@@ -2,11 +2,7 @@
 
 === importStatementsInterfaces.ts ===
 module A {
->A : any
-
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -15,11 +11,7 @@ module A {
     }
 
     export module inA {
->inA : any
-
         export interface Point3D extends Point {
->Point3D : Point3D
-
             z: number;
 >z : number
         }
@@ -28,8 +20,6 @@ module A {
 
 // no code gen expected
 module B {
->B : any
-
     import a = A;
 >a : any
 >A : any
@@ -50,6 +40,7 @@ module C {
 
     var m: typeof a;
 >m : any
+>a : any
 
     var p: b.Point3D;
 >p : Point3D

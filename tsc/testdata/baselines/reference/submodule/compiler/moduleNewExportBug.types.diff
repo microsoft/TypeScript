@@ -1,15 +1,6 @@
 --- old.moduleNewExportBug.types
 +++ new.moduleNewExportBug.types
-@@= skipped -4, +4 lines =@@
- >mod1 : typeof mod1
- 
- 	interface mInt {
-+>mInt : mInt
-+
- 		new (bar:any):any;
- >bar : any
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -18, +18 lines =@@
  }
  
  var c : mod1.C; // ERROR: C should not be visible

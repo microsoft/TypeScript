@@ -5,14 +5,12 @@
 
 class C<T extends Date> {
 >C : C<T>
->T : T
 
     constructor(public data: T) { }
 >data : T
 
     foo<U extends T>(x: U) {
 >foo : <U extends T>(x: U) => U
->U : U
 >x : U
 
         return x;
@@ -21,8 +19,6 @@ class C<T extends Date> {
 }
 
 interface Foo extends Date {
->Foo : Foo
-
     foo: string;
 >foo : string
 }

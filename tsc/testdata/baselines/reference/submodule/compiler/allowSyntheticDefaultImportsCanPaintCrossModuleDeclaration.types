@@ -2,8 +2,6 @@
 
 === color.ts ===
 interface Color {
->Color : Color
-
     c: string;
 >c : string
 }

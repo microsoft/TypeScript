@@ -4,7 +4,6 @@
 // Should be error to use 'T' in all declarations within Foo.
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     static a = (n: T) => { };
 >a : (n: T) => void

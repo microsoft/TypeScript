@@ -2,9 +2,6 @@
 
 === genericConstructInvocationWithNoTypeArg.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
    new (x: number): Foo<T>;
 >x : number
 }

@@ -1,22 +1,6 @@
 --- old.errorWithSameNameType.types
 +++ new.errorWithSameNameType.types
-@@= skipped -1, +1 lines =@@
- 
- === a.ts ===
- export interface F {
-+>F : F
-+
-     foo1: number
- >foo1 : number
- }
- 
- === b.ts ===
- export interface F {
-+>F : F
-+
-     foo2: number
- >foo2 : number
- }
+@@= skipped -13, +13 lines =@@
  
  === c.ts ===
  import * as A from './a'

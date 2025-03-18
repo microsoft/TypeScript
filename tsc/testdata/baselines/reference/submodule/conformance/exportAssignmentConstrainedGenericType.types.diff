@@ -35,10 +35,3 @@
  >test : { a: string; b: number; }
  >b : number
  
- === foo_0.ts ===
- class Foo<T extends {a: string; b:number;}>{
- >Foo : Foo<T>
-+>T : T
- >a : string
- >b : number
- 

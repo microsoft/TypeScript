@@ -7,20 +7,13 @@ type LengthDown<
 >LengthDown : LengthDown<Str, Length, It>
 
   Str extends string,
->Str : Str
-
   Length extends number | bigint,
->Length : Length
-
   It
->It : It
-
 > = It extends StrIter.Iterator
 >StrIter : any
 
   ? StrIter.CutAt<Str, It> extends `${infer $Rest}`
 >StrIter : any
->$Rest : $Rest
 
     ? LengthDown<$Rest, Add<Length, StrIter.Value<It>>, It>
 >StrIter : any
@@ -32,11 +25,8 @@ type LengthDown<
 
 type Foo<T> = T extends unknown
 >Foo : Foo<T>
->T : T
 
   ? unknown extends `${infer $Rest}`
->$Rest : $Rest
-
     ? Foo<T>
     : Foo<unknown>
   : unknown;

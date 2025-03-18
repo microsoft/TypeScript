@@ -1,22 +1,6 @@
 --- old.indexingTypesWithNever.types
 +++ new.indexingTypesWithNever.types
-@@= skipped -24, +24 lines =@@
- 
- declare function genericFn1<T>(obj: T): T[never];
- >genericFn1 : <T>(obj: T) => T[never]
-+>T : T
- >obj : T
- 
- // Should be never
-@@= skipped -15, +16 lines =@@
- 
- declare function genericFn2<T extends { [ind: string]: string }>(
- >genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
-+>T : T
- >ind : string
- 
-   obj: T
-@@= skipped -19, +20 lines =@@
+@@= skipped -58, +58 lines =@@
  >"ftest" : "ftest"
  
  declare function genericFn3<
@@ -24,19 +8,8 @@
 +>genericFn3 : <T extends { [K in keyof T]: T[K] }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
  
    T extends { [K in keyof T]: T[K] },
-+>T : T
-+>K : K
-+
    U extends keyof T,
-+>U : U
-+
-   V extends keyof T
-+>V : V
-+
- >(obj: T, u: U, v: V): T[U & V];
- >obj : T
- >u : U
-@@= skipped -14, +21 lines =@@
+@@= skipped -14, +14 lines =@@
  const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
  >result5 : never
  >genericFn3({ g: "gtest", h: "htest" }, "g", "h") : never
@@ -45,56 +18,3 @@
  >{ g: "gtest", h: "htest" } : { g: string; h: string; }
  >g : string
  >"gtest" : "gtest"
-@@= skipped -27, +27 lines =@@
- // Expanded examples from https://github.com/Microsoft/TypeScript/issues/21988
- type RequiredPropNames<T> = {
- >RequiredPropNames : RequiredPropNames<T>
-+>T : T
- 
-   [P in keyof T]-?: undefined extends T[P] ? never : P
-+>P : P
-+
- }[keyof T];
- 
- type OptionalPropNames<T> = {
- >OptionalPropNames : OptionalPropNames<T>
-+>T : T
- 
-   [P in keyof T]-?: undefined extends T[P] ? P : never
-+>P : P
-+
- }[keyof T];
- 
- type RequiredProps<T> = { [P in RequiredPropNames<T>]: T[P] };
- >RequiredProps : RequiredProps<T>
-+>T : T
-+>P : P
- 
- type OptionalProps<T> = { [P in OptionalPropNames<T>]?: T[P] };
- >OptionalProps : OptionalProps<T>
-+>T : T
-+>P : P
- 
- type Match<Exp, Act> = [Exp] extends [Act]
- >Match : Match<Exp, Act>
-+>Exp : Exp
-+>Act : Act
- 
-   ? ([Act] extends [Exp] ? "Match" : "Did not match 2")
-   : "Did not match 1";
- 
- type ExpectType<Exp, Act> = Match<Exp, Act> extends "Match"
- >ExpectType : ExpectType<Exp, Act>
-+>Exp : Exp
-+>Act : Act
- 
-   ? ({} extends Exp ? Match<Required<Exp>, Required<Act>> : "Match")
-   : "Did not match";
-@@= skipped -170, +184 lines =@@
- 
- type Example<T extends Record<'a', string>> = T['a'];
- >Example : Example<T>
-+>T : T
- 
- type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
- >Res1 : "x" | "y"

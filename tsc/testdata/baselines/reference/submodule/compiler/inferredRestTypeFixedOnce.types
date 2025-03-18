@@ -3,7 +3,6 @@
 === inferredRestTypeFixedOnce.ts ===
 function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
 >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void
->Args : Args
 >_ : (...args: Args) => void
 >args : Args
 

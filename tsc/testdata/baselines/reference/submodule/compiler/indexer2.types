@@ -2,11 +2,7 @@
 
 === indexer2.ts ===
 interface IHeapObjectProperty {}
->IHeapObjectProperty : IHeapObjectProperty
-
 interface IDirectChildrenMap { 
->IDirectChildrenMap : IDirectChildrenMap
-
         hasOwnProperty(objectId: number) : boolean; 
 >hasOwnProperty : (objectId: number) => boolean
 >objectId : number

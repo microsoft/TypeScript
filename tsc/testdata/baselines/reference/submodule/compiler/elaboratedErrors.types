@@ -2,8 +2,6 @@
 
 === elaboratedErrors.ts ===
 interface FileSystem {
->FileSystem : FileSystem
-
   read: number;
 >read : number
 }
@@ -29,11 +27,9 @@ class WorkerFS implements FileSystem {
 }
 
 interface Alpha { x: string; }
->Alpha : Alpha
 >x : string
 
 interface Beta { y: number; }
->Beta : Beta
 >y : number
 
 var x: Alpha;

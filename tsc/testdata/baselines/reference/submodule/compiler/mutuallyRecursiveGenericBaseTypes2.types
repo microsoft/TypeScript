@@ -3,7 +3,6 @@
 === mutuallyRecursiveGenericBaseTypes2.ts ===
 class foo<T>
 >foo : foo<T>
->T : T
 {
     bar(): foo2<T[]> { return null; }
 >bar : () => foo2<T[]>
@@ -11,7 +10,6 @@ class foo<T>
  
 class foo2<T> extends foo<T> {
 >foo2 : foo2<T>
->T : T
 >foo : foo<T>
 }
  

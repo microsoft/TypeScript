@@ -1,144 +1,24 @@
 --- old.mappedTypeConstraints2.types
 +++ new.mappedTypeConstraints2.types
-@@= skipped -2, +2 lines =@@
- === mappedTypeConstraints2.ts ===
- type Mapped1<K extends string> = { [P in K]: { a: P } };
- >Mapped1 : Mapped1<K>
-+>K : K
-+>P : P
- >a : P
- 
- function f1<K extends string>(obj: Mapped1<K>, key: K) {
- >f1 : <K extends string>(obj: Mapped1<K>, key: K) => void
-+>K : K
- >obj : Mapped1<K>
- >key : K
- 
-@@= skipped -17, +20 lines =@@
- 
- type Mapped2<K extends string> = { [P in K as `get${P}`]: { a: P } };
- >Mapped2 : Mapped2<K>
-+>K : K
-+>P : P
- >a : P
- 
- function f2<K extends string>(obj: Mapped2<K>, key: `get${K}`) {
- >f2 : <K extends string>(obj: Mapped2<K>, key: `get${K}`) => void
-+>K : K
- >obj : Mapped2<K>
- >key : `get${K}`
- 
-@@= skipped -17, +20 lines =@@
- 
- type Mapped3<K extends string> = { [P in K as Uppercase<P>]: { a: P } };
- >Mapped3 : Mapped3<K>
-+>K : K
-+>P : P
- >a : P
- 
- function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
- >f3 : <K extends string>(obj: Mapped3<K>, key: Uppercase<K>) => void
-+>K : K
- >obj : Mapped3<K>
- >key : Uppercase<K>
- 
-@@= skipped -17, +20 lines =@@
- 
- type Mapped4<K extends `_${string}`> = {
- >Mapped4 : Mapped4<K>
-+>K : K
- 
-   [P in K]: P;
-+>P : P
-+
+@@= skipped -58, +58 lines =@@
  };
  
  function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
 ->f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) => void
 +>f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: K) => void
-+>K : K
  >obj : Mapped4<K>
  >key : K
  
-@@= skipped -18, +22 lines =@@
- 
- type Mapped5<K extends string> = {
- >Mapped5 : Mapped5<K>
-+>K : K
- 
-   [P in K as P extends `_${string}` ? P : never]: P;
-+>P : P
-+
+@@= skipped -18, +18 lines =@@
  };
  
  function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
 ->f5 : <K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) => void
 +>f5 : <K extends string>(obj: Mapped5<K>, key: K extends `_${string}` ? K : never) => void
-+>K : K
  >obj : Mapped5<K>
  >key : K extends `_${string}` ? K : never
  
-@@= skipped -20, +24 lines =@@
- 
- type Mapped6<K extends string> = {
- >Mapped6 : Mapped6<K>
-+>K : K
- 
-   [P in K as `_${P}`]: P;
-+>P : P
-+
- };
- 
- function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
- >f6 : <K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) => void
-+>K : K
- >obj : Mapped6<K>
- >key : keyof Mapped6<K>
- 
-@@= skipped -20, +24 lines =@@
- 
- type Foo<T extends string> = {
- >Foo : Foo<T>
-+>T : T
- 
-     [RemappedT in T as `get${RemappedT}`]: RemappedT;
-+>RemappedT : RemappedT
-+
- };
- 
- const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
- >get : <T extends string>(t: T, foo: Foo<T>) => T
- ><T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`] : <T extends string>(t: T, foo: Foo<T>) => T
-+>T : T
- >t : T
- >foo : Foo<T>
- >foo[`get${t}`] : Foo<T>[`get${T}`]
-@@= skipped -17, +21 lines =@@
- // Repro from #48626
- 
- interface Bounds {
-+>Bounds : Bounds
-+
-     min: number;
- >min : number
- 
-@@= skipped -9, +11 lines =@@
- 
- type NumericBoundsOf<T> = {
- >NumericBoundsOf : NumericBoundsOf<T>
-+>T : T
- 
-     [K in keyof T as T[K] extends number | undefined ? K : never]: Bounds;
-+>K : K
- }
- 
- function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
- >validate : <T extends object>(obj: T, bounds: NumericBoundsOf<T>) => boolean
-+>T : T
- >obj : T
- >bounds : NumericBoundsOf<T>
- 
-@@= skipped -13, +16 lines =@@
+@@= skipped -74, +74 lines =@@
  >key : string
  >val : any
  >Object.entries(obj) : [string, any][]
@@ -150,21 +30,3 @@
  >obj : T
  
          const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];
-@@= skipped -39, +39 lines =@@
- 
- type ObjectWithUnderscoredKeys<K extends string> = {
- >ObjectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
-+>K : K
- 
-     [k in K as `_${k}`]: true;
-+>k : k
- >true : true
- 
- };
- 
- function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
- >genericTest : <K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) => void
-+>K : K
- >objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
- >key : K
- 

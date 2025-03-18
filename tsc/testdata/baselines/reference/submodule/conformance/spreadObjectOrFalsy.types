@@ -3,7 +3,6 @@
 === spreadObjectOrFalsy.ts ===
 function f1<T>(a: T & undefined) {
 >f1 : <T>(a: T & undefined) => any
->T : T
 >a : T & undefined
 
     return { ...a };  // Error
@@ -13,7 +12,6 @@ function f1<T>(a: T & undefined) {
 
 function f2<T>(a: T | T & undefined) {
 >f2 : <T>(a: T | T & undefined) => T | T & undefined
->T : T
 >a : T | T & undefined
 
     return { ...a };
@@ -23,7 +21,6 @@ function f2<T>(a: T | T & undefined) {
 
 function f3<T extends undefined>(a: T) {
 >f3 : <T extends undefined>(a: T) => any
->T : T
 >a : T
 
     return { ...a };  // Error
@@ -33,7 +30,6 @@ function f3<T extends undefined>(a: T) {
 
 function f4<T extends undefined>(a: object | T) {
 >f4 : <T extends undefined>(a: T | object) => {}
->T : T
 >a : T | object
 
     return { ...a };
@@ -43,8 +39,6 @@ function f4<T extends undefined>(a: object | T) {
 
 function f5<S, T extends undefined>(a: S | T) {
 >f5 : <S, T extends undefined>(a: S | T) => S | T
->S : S
->T : T
 >a : S | T
 
     return { ...a };
@@ -54,7 +48,6 @@ function f5<S, T extends undefined>(a: S | T) {
 
 function f6<T extends object | undefined>(a: T) {
 >f6 : <T extends object | undefined>(a: T) => T
->T : T
 >a : T
 
     return { ...a };
@@ -66,8 +59,6 @@ function f6<T extends object | undefined>(a: T) {
 
 function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
 >g1 : <T extends {}, A extends { z: T; }>(a: A) => T
->T : T
->A : A
 >z : T
 >a : A
 
@@ -87,16 +78,12 @@ function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
 // Repro from #47028
 
 interface DatafulFoo<T> {
->DatafulFoo : DatafulFoo<T>
->T : T
-
     data: T;
 >data : T
 }
 
 class Foo<T extends string> {
 >Foo : Foo<T>
->T : T
 
     data: T | undefined;
 >data : T | undefined

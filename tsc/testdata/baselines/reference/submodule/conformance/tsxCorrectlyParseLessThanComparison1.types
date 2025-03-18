@@ -2,11 +2,7 @@
 
 === tsxCorrectlyParseLessThanComparison1.tsx ===
 declare module JSX {
->JSX : any
-
     interface Element {
->Element : Element
-
         div: string;
 >div : string
     }
@@ -16,8 +12,6 @@ declare namespace React {
 
     class Component<P, S> {
 >Component : Component<P, S>
->P : P
->S : S
 
         constructor(props?: P, context?: any);
 >props : P

@@ -1,25 +1,6 @@
 --- old.reactImportDropped.types
 +++ new.reactImportDropped.types
-@@= skipped -14, +14 lines =@@
- >spec : any
- 
-     interface ClassicComponentClass {
-+>ClassicComponentClass : ClassicComponentClass
-+
-         new (props?: any): ClassicComponentClass;
- >props : any
-     }
-@@= skipped -9, +11 lines =@@
- >global : any
- 
-     namespace JSX {
-+>JSX : any
-+
-         interface ElementAttributesProperty { }
-+>ElementAttributesProperty : ElementAttributesProperty
-     }
- }
- 
+@@= skipped -30, +30 lines =@@
  
  === src/components/TabBar.js ===
  export default React.createClass({
@@ -36,7 +17,7 @@
  
    render() {
  >render : () => any
-@@= skipped -26, +29 lines =@@
+@@= skipped -19, +19 lines =@@
  
  === src/modules/navigation/NavigationView.js ===
  import TabBar from '../../components/TabBar';

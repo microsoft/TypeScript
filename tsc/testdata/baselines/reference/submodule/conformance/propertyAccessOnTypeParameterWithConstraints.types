@@ -6,7 +6,6 @@
 
 class C<T extends Date> {
 >C : C<T>
->T : T
 
     f() {
 >f : () => number
@@ -41,9 +40,6 @@ var r = (new C<Date>()).f();
 >f : () => number
 
 interface I<T extends Date> {
->I : I<T>
->T : T
-
     foo: T;
 >foo : T
 }
@@ -72,7 +68,6 @@ var a: {
 >a : <T extends Date>() => T
 
     <T extends Date>(): T;
->T : T
 }
 var r3 = a<Date>().getDate();
 >r3 : number
@@ -97,7 +92,6 @@ var b = {
     foo: <T extends Date>(x: T) => {
 >foo : <T extends Date>(x: T) => number
 ><T extends Date>(x: T) => {        var a = x['getDate'](); // number        return a + x.getDate();    } : <T extends Date>(x: T) => number
->T : T
 >x : T
 
         var a = x['getDate'](); // number

@@ -9,25 +9,7 @@
  
  type T10 = [string, ...[...string[]]];
  >T10 : T10
-@@= skipped -16, +16 lines =@@
- 
- declare function assign<T, S extends T>(): void;
- >assign : <T, S extends T>() => void
-+>T : T
-+>S : S
- 
- assign<number[], [...number[]]>();
- >assign<number[], [...number[]]>() : void
-@@= skipped -122, +124 lines =@@
- 
- declare function f0<T, U>(x: [T, ...U[]]): [T, U];
- >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
-+>T : T
-+>U : U
- >x : [T, ...U[]]
- 
- f0([]);  // Error
-@@= skipped -30, +32 lines =@@
+@@= skipped -168, +168 lines =@@
  >true : true
  
  declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;

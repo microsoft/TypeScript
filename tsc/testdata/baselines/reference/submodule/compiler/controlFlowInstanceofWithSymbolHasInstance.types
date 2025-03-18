@@ -2,8 +2,6 @@
 
 === controlFlowInstanceofWithSymbolHasInstance.ts ===
 interface PromiseConstructor {
->PromiseConstructor : PromiseConstructor
-
     [Symbol.hasInstance](value: any): value is Promise<any>;
 >[Symbol.hasInstance] : (value: any) => value is Promise<any>
 >Symbol.hasInstance : unique symbol
@@ -13,8 +11,6 @@ interface PromiseConstructor {
 }
 
 interface SetConstructor {
->SetConstructor : SetConstructor
-
     [Symbol.hasInstance](value: any): value is Set<any>;
 >[Symbol.hasInstance] : (value: any) => value is Set<any>
 >Symbol.hasInstance : unique symbol
@@ -148,13 +144,11 @@ class A {
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
 >hasInstance : unique symbol
->T : T
 >this : T
 >value : unknown
 
         T extends (abstract new (...args: any) => infer U) ? U :
 >args : any
->U : U
 
         never
     ) {
@@ -264,8 +258,6 @@ function foo(x: A | undefined) {
 // Y is assignable to X, but not a subtype of X
 
 interface X {
->X : X
-
     x?: string;
 >x : string | undefined
 }

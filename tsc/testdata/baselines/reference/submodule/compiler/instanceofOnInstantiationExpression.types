@@ -3,7 +3,6 @@
 === instanceofOnInstantiationExpression.ts ===
 declare class Box<T> {
 >Box : Box<T>
->T : T
 
     value: T;
 >value : T

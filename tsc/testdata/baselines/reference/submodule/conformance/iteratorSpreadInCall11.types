@@ -3,7 +3,6 @@
 === iteratorSpreadInCall11.ts ===
 function foo<T>(...s: T[]) { return s[0] }
 >foo : <T>(...s: T[]) => T
->T : T
 >s : T[]
 >s[0] : T
 >s : T[]

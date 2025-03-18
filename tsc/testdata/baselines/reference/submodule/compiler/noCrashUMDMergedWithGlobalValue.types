@@ -9,8 +9,6 @@ export type Action = "PUSH" | "POP" | "REPLACE";
 
 === /main.ts ===
 interface SomeInterface {
->SomeInterface : import("/other")
-
   readonly length: number;
 >length : number
 }

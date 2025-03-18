@@ -12,8 +12,6 @@ class _Color {
 }
 
 interface NamedColors {
->NamedColors : NamedColors
-
     azure: _Color;
 >azure : _Color
 

@@ -2,15 +2,11 @@
 
 === assignmentCompatInterfaceWithStringIndexSignature.ts ===
 interface IHandler {
->IHandler : IHandler
-
     (e): boolean;
 >e : any
 }
 
 interface IHandlerMap {
->IHandlerMap : IHandlerMap
-
     [type: string]: IHandler;
 >type : string
 }

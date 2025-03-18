@@ -79,12 +79,8 @@
 +>M2D : typeof M2D
  
  	interface Point {
-+>Point : Point
-+
  		x: number;
- >x : number
- 
-@@= skipped -86, +88 lines =@@
+@@= skipped -86, +86 lines =@@
  
  === math2d-augment.d.ts ===
  import * as Math2d from 'math2d';
@@ -98,8 +94,6 @@
  
  	// Add a method to the class
  	interface Vector {
-+>Vector : Vector
-+
  		reverse(): Math2d.Point;
 ->reverse : () => Math2d.Point
 +>reverse : () => Point

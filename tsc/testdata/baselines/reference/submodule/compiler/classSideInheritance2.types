@@ -2,14 +2,11 @@
 
 === classSideInheritance2.ts ===
 interface IText {
->IText : IText
-
     foo: number;
 >foo : number
 }
 
 interface TextSpan {}
->TextSpan : TextSpan
 
 class SubText extends TextBase {
 >SubText : SubText

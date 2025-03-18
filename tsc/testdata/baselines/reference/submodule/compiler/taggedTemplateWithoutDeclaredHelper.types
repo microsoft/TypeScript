@@ -3,7 +3,6 @@
 === foo.ts ===
 function id<T>(x: T) {
 >id : <T>(x: T) => T
->T : T
 >x : T
 
   return x;

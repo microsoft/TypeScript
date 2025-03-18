@@ -1,8 +1,0 @@
---- old.exportDefaultInterfaceAndFunctionOverloads.types
-+++ new.exportDefaultInterfaceAndFunctionOverloads.types
-@@= skipped -16, +16 lines =@@
- >1 : 1
- }
- export default interface Foo {}
-+>Foo : default
- 

@@ -22,12 +22,7 @@
  >x : number
  
  
-@@= skipped -30, +30 lines =@@
-  
-  
- module M
-+>M : any
-  
+@@= skipped -34, +34 lines =@@
  {
   
      import X1 = A;

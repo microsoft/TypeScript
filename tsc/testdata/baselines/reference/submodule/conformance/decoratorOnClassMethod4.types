@@ -3,7 +3,6 @@
 === decoratorOnClassMethod4.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->T : T
 >target : any
 >propertyKey : string
 >descriptor : TypedPropertyDescriptor<T>

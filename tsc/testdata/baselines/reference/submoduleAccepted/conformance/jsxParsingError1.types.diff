@@ -1,21 +1,6 @@
 --- old.jsxParsingError1.types
 +++ new.jsxParsingError1.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		[s: string]: any;
- >s : string
- 	}
-@@= skipped -17, +23 lines =@@
+@@= skipped -18, +18 lines =@@
  >"bar" : "bar"
  
  const elem = <div className={class1, class2}/>;

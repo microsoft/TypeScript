@@ -1,16 +1,6 @@
 --- old.restParameterTypeInstantiation.types
 +++ new.restParameterTypeInstantiation.types
-@@= skipped -3, +3 lines =@@
- // Repro from #33823
- 
- interface TestGeneric<TG> {
-+>TestGeneric : TestGeneric<TG>
-+>TG : TG
-+
-   f: string
- >f : string
- 
-@@= skipped -8, +11 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  const removeF = <TX>({ f, ...rest }: TestGeneric<TX>) => {
@@ -18,11 +8,10 @@
 -><TX>({ f, ...rest }: TestGeneric<TX>) => {  return rest} : <TX>({ f, ...rest }: TestGeneric<TX>) => { g: TX; }
 +>removeF : <TX>(__0: TestGeneric<TX>) => { g: TX; }
 +><TX>({ f, ...rest }: TestGeneric<TX>) => {  return rest} : <TX>(__0: TestGeneric<TX>) => { g: TX; }
-+>TX : TX
  >f : string
  >rest : { g: TX; }
  
-@@= skipped -13, +14 lines =@@
+@@= skipped -13, +13 lines =@@
  >result : number
  >removeF<number>({ f: '', g: 3 }).g : number
  >removeF<number>({ f: '', g: 3 }) : { g: number; }

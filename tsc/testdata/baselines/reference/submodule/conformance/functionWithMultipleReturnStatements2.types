@@ -69,7 +69,6 @@ function f5() {
 
 function f6<T>(x: T) {
 >f6 : <T>(x: T) => T
->T : T
 >x : T
 
     if (true) {

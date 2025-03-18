@@ -11,13 +11,7 @@
  >x : number[]
  >y : number[]
  
-@@= skipped -14, +14 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     (...x: number[]);
+@@= skipped -18, +18 lines =@@
  >x : number[]
  
      foo(...x: number[], ...y: number[]);
@@ -33,7 +27,7 @@
  
      (...x: number[]);
  >x : number[]
-@@= skipped -21, +23 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  var b = {
@@ -90,10 +84,7 @@
  >x : string[]
  }
  
- interface I2 {
-+>I2 : I2
-+
-     (...x: Array<string>);
+@@= skipped -9, +9 lines =@@
  >x : string[]
  
      foo(...x: Array<string>, ...y: Array<string>);

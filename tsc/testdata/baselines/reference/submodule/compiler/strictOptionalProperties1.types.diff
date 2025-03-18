@@ -501,13 +501,7 @@
  
  // Index signatures and strict optional properties
  
- interface Test {
-+>Test : Test
-+
-     [key: string]: string;
- >key : string
- 
-@@= skipped -26, +28 lines =@@
+@@= skipped -26, +26 lines =@@
  >p : string | undefined
  
  declare let ox3: { p?: string };
@@ -530,7 +524,6 @@
 ->f11 : <T>(x: { p?: T; }) => T
 ->x : { p?: T; }
 +>f11 : <T>(x: { p?: T | undefined; }) => T
-+>T : T
 +>x : { p?: T | undefined; }
  >p : T | undefined
  
@@ -563,7 +556,6 @@
 ->f12 : <T>(x: [T?]) => T
 ->x : [T?]
 +>f12 : <T>(x: [(T | undefined)?]) => T
-+>T : T
 +>x : [(T | undefined)?]
  
  f12(tx1);  // string
@@ -592,12 +584,7 @@
  >tx4 : [(string | undefined)?]
  
  declare function f13<T>(x: Partial<T>): T;
- >f13 : <T>(x: Partial<T>) => T
-+>T : T
- >x : Partial<T>
- 
- f13(ox1);  // { p: string }
-@@= skipped -71, +74 lines =@@
+@@= skipped -71, +71 lines =@@
  f13(ox3);  // { p: string }
  >f13(ox3) : { p: string; }
  >f13 : <T>(x: Partial<T>) => T
@@ -615,46 +602,7 @@
  
  f13(tx4);  // [string | undefined]
  >f13(tx4) : [string | undefined]
-@@= skipped -11, +11 lines =@@
- 
- type Undefinable<T> = T | undefined;
- >Undefinable : Undefinable<T>
-+>T : T
- 
- function expectNotUndefined<T>(value: Undefinable<T>): T {
- >expectNotUndefined : <T>(value: Undefinable<T>) => T
-+>T : T
- >value : Undefinable<T>
- 
-     if (value === undefined) {
-@@= skipped -20, +22 lines =@@
- }
- 
- interface Bar {
-+>Bar : Bar
-+
-     bar?: number;
- >bar : number | undefined
- }
-@@= skipped -27, +29 lines =@@
- >input : number
- 
- interface U1 {
-+>U1 : U1
-+
-     name: string
- >name : string
- 
-@@= skipped -7, +9 lines =@@
- >email : string | number | undefined
- }
- interface U2 {
-+>U2 : U2
-+
-     name: string
- >name : string
- 
-@@= skipped -55, +57 lines =@@
+@@= skipped -120, +120 lines =@@
  >b : string
  
  declare var c: {a: number, b?: string}
@@ -675,31 +623,18 @@
  
  a = d;  // Error
  >a = d : { a: number; b: string | undefined; }
-@@= skipped -17, +17 lines =@@
- // Repro from #46004
+@@= skipped -18, +18 lines =@@
  
  interface PropsFromReact {
-+>PropsFromReact : PropsFromReact
-+
      onClick?: () => void;
 ->onClick : (() => void) | undefined
 +>onClick : () => void | undefined
  }
  
  interface PropsFromMaterialUI {
-+>PropsFromMaterialUI : PropsFromMaterialUI
-+
      onClick?: (() => void) | undefined;
 ->onClick : (() => void) | undefined
 +>onClick : () => void | undefined
  }
  
  type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
- >TheTypeFromMaterialUI : TheTypeFromMaterialUI
- 
- interface NavBottomListItem extends TheTypeFromMaterialUI {
-+>NavBottomListItem : NavBottomListItem
-+
-     value: string;
- >value : string
- }

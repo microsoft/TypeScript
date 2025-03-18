@@ -10,15 +10,11 @@ export var Foo = 42; // Should error
 >42 : 42
 
 export interface Bar {
->Bar : Bar
-
 	_brand1: any;
 >_brand1 : any
 }
 
 export interface Bar { // Shouldn't error
->Bar : Bar
-
 	_brand2: any;
 >_brand2 : any
 }

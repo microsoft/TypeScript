@@ -1,20 +1,6 @@
 --- old.abstractClassUnionInstantiation.types
 +++ new.abstractClassUnionInstantiation.types
-@@= skipped -16, +16 lines =@@
- 
- type Abstracts = typeof AbstractA | typeof AbstractB;
- >Abstracts : Abstracts
-->AbstractA : typeof AbstractA
-->AbstractB : typeof AbstractB
- 
- type Concretes = typeof ConcreteA | typeof ConcreteB;
- >Concretes : Concretes
-->ConcreteA : typeof ConcreteA
-->ConcreteB : typeof ConcreteB
- 
- type ConcretesOrAbstracts = Concretes | Abstracts;
- >ConcretesOrAbstracts : ConcretesOrAbstracts
-@@= skipped -29, +25 lines =@@
+@@= skipped -45, +45 lines =@@
  >cls2 : Abstracts
  
  new cls3(); // should work

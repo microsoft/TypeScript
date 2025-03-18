@@ -1,11 +1,6 @@
 --- old.contextualSignature_objectLiteralMethodMayReturnNever.types
 +++ new.contextualSignature_objectLiteralMethodMayReturnNever.types
-@@= skipped -1, +1 lines =@@
- 
- === contextualSignature_objectLiteralMethodMayReturnNever.ts ===
- interface I { m(): number; }
-+>I : I
- >m : () => number
+@@= skipped -5, +5 lines =@@
  
  const o: I = { m() { throw new Error("not implemented"); } };
  >o : I

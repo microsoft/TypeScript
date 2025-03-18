@@ -2,8 +2,6 @@
 
 === mergedInheritedClassInterface.ts ===
 interface BaseInterface {
->BaseInterface : BaseInterface
-
     required: number;
 >required : number
 
@@ -22,8 +20,6 @@ class BaseClass {
 }
 
 interface Child extends BaseInterface {
->Child : Child
-
     additional: number;
 >additional : number
 }
@@ -40,8 +36,6 @@ class Child extends BaseClass {
 }
 
 interface ChildNoBaseClass extends BaseInterface {
->ChildNoBaseClass : ChildNoBaseClass
-
     additional2: string;
 >additional2 : string
 }

@@ -6,8 +6,6 @@ export var x = 1;  // Makes this an external module
 >1 : 1
 
 interface Iterator<T> {
->Iterator : Iterator<T>
->T : T
 }
 
 module Query {
@@ -15,7 +13,6 @@ module Query {
 
     export function fromDoWhile<T>(doWhile: (test: Iterator<T>) => boolean): Iterator<T> {
 >fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
->T : T
 >doWhile : (test: Iterator<T>) => boolean
 >test : Iterator<T>
 

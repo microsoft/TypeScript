@@ -227,11 +227,13 @@ var fnCallResult: any;
 function fnArg1(x: typeof fnArg1, y: number) {
 >fnArg1 : (x: ???, y: number) => void
 >x : (x: ???, y: number) => void
+>fnArg1 : (x: ???, y: number) => void
 >y : number
 
     var x: (n: typeof fnArg1, m: number) => void;
 >x : (x: ???, y: number) => void
 >n : (x: ???, y: number) => void
+>fnArg1 : (x: ???, y: number) => void
 >m : number
 
     fnArg1(fnArg1, 0);

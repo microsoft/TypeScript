@@ -3,7 +3,6 @@
 === other.ts ===
 type Experiment<Name> = {
 >Experiment : Experiment<Name>
->Name : Name
 
     name: Name;
 >name : Name
@@ -11,7 +10,6 @@ type Experiment<Name> = {
 };
 declare const createExperiment: <Name extends string>(
 >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
->Name : Name
 
     options: Experiment<Name>
 >options : Experiment<Name>

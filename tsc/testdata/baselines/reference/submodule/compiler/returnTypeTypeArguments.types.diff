@@ -1,32 +1,6 @@
 --- old.returnTypeTypeArguments.types
 +++ new.returnTypeTypeArguments.types
-@@= skipped -2, +2 lines =@@
- === returnTypeTypeArguments.ts ===
- class One<T>{
- >One : One<T>
-+>T : T
- 
-     value: T;
- >value : T
- }
- class Two<T, U>{
- >Two : Two<T, U>
-+>T : T
-+>U : U
- 
-     value: T;
- >value : T
-@@= skipped -15, +18 lines =@@
- }
- class Three<T, U, V>{
- >Three : Three<T, U, V>
-+>T : T
-+>U : U
-+>V : V
- 
-     value: T;
- >value : T
-@@= skipped -12, +15 lines =@@
+@@= skipped -29, +29 lines =@@
  }
  
  function A1(): One { return null; }
@@ -83,7 +57,6 @@
  
  class D<T> {
  >D : D<T>
-+>T : T
  
      A2(): Two<T> { return null; }
 ->A2 : () => Two<T>
@@ -107,24 +80,8 @@
  }
  
  interface I<T> {
-+>I : I<T>
-+>T : T
-+
-     value: T;
- >value : T
- }
- 
- class Y<T>
- >Y : Y<T>
-+>T : T
- {
-     value: T;
- >value : T
-@@= skipped -72, +77 lines =@@
- 
- class X<T>
+@@= skipped -74, +74 lines =@@
  >X : X<T>
-+>T : T
  {
      p1: () => X;
 ->p1 : () => X
@@ -132,7 +89,7 @@
  
      p2: { [idx: number]: X }
  >p2 : { [idx: number]: any; }
-@@= skipped -18, +19 lines =@@
+@@= skipped -16, +16 lines =@@
  >p5 : any
  
      p6: () => Y;

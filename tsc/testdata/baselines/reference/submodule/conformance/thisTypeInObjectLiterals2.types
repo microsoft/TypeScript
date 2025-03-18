@@ -401,8 +401,6 @@ f2({
 
 type ObjectDescriptor<D, M> = {
 >ObjectDescriptor : ObjectDescriptor<D, M>
->D : D
->M : M
 
     data?: D;
 >data : D | undefined
@@ -413,8 +411,6 @@ type ObjectDescriptor<D, M> = {
 
 declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->D : D
->M : M
 >desc : ObjectDescriptor<D, M>
 
 let x1 = makeObject({
@@ -462,8 +458,6 @@ let x1 = makeObject({
 
 type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 >ObjectDescriptor2 : ObjectDescriptor2<D, M>
->D : D
->M : M
 
     data?: D;
 >data : D | undefined
@@ -474,8 +468,6 @@ type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 
 declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->D : D
->M : M
 >desc : ObjectDescriptor<D, M>
 
 let x2 = makeObject2({
@@ -522,7 +514,6 @@ let x2 = makeObject2({
 
 type PropDesc<T> = {
 >PropDesc : PropDesc<T>
->T : T
 
     value?: T;
 >value : T | undefined
@@ -537,25 +528,18 @@ type PropDesc<T> = {
 
 type PropDescMap<T> = {
 >PropDescMap : PropDescMap<T>
->T : T
 
     [K in keyof T]: PropDesc<T[K]>;
->K : K
 }
 
 declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->T : T
->K : K
->U : U
 >obj : T
 >name : K
 >desc : PropDesc<U> & ThisType<T>
 
 declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
->T : T
->U : U
 >obj : T
 >descs : PropDescMap<U> & ThisType<T>
 
@@ -688,17 +672,13 @@ p12.bar = p12.bar + 1;
 
 type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
 >Accessors : Accessors<T>
->T : T
->K : K
 
 type Dictionary<T> = { [x: string]: T }
 >Dictionary : Dictionary<T>
->T : T
 >x : string
 
 type Computed<T> = {
 >Computed : Computed<T>
->T : T
 
     get?(): T;
 >get : () => T | undefined
@@ -710,9 +690,6 @@ type Computed<T> = {
 
 type VueOptions<D, M, P> = ThisType<D & M & P> & {
 >VueOptions : VueOptions<D, M, P>
->D : D
->M : M
->P : P
 
     data?: D | (() => D);
 >data : D | () => D | undefined
@@ -726,9 +703,6 @@ type VueOptions<D, M, P> = ThisType<D & M & P> & {
 
 declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
->D : D
->M : M
->P : P
 >options : VueOptions<D, M, P>
 
 let vue = new Vue({

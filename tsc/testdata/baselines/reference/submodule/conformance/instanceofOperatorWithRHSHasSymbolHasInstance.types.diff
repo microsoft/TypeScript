@@ -1,26 +1,6 @@
 --- old.instanceofOperatorWithRHSHasSymbolHasInstance.types
 +++ new.instanceofOperatorWithRHSHasSymbolHasInstance.types
-@@= skipped -1, +1 lines =@@
- 
- === instanceofOperatorWithRHSHasSymbolHasInstance.ts ===
- interface Point { x: number, y: number }
-+>Point : Point
- >x : number
- >y : number
- 
- interface Point3D { x: number, y: number, z: number }
-+>Point3D : Point3D
- >x : number
- >y : number
- >z : number
- 
- interface Point3D2 extends Point { z: number }
-+>Point3D2 : Point3D2
- >z : number
- 
- interface Line { start: Point, end: Point }
-+>Line : Line
- >start : Point
+@@= skipped -17, +17 lines =@@
  >end : Point
  
  declare var rhs0: { [Symbol.hasInstance](value: unknown): boolean; };
@@ -29,7 +9,7 @@
  >[Symbol.hasInstance] : (value: unknown) => boolean
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
-@@= skipped -24, +28 lines =@@
+@@= skipped -8, +8 lines =@@
  >value : unknown
  
  declare var rhs1: { [Symbol.hasInstance](value: any): boolean; };
@@ -604,51 +584,7 @@
  >Symbol.hasInstance : unique symbol
  >Symbol : SymbolConstructor
  >hasInstance : unique symbol
-+>T : T
- >this : T
- >value : unknown
- 
-@@= skipped -12, +13 lines =@@
- 
-             T extends { readonly prototype: infer U } ?
- >prototype : U
-+>U : U
- 
-                 boolean extends (U extends never ? true : false) ? // <- tests whether 'U' is 'any'
- >true : true
-@@= skipped -7, +8 lines =@@
- 
-                     T extends (abstract new (...args: any) => infer V) ? V : {} :
- >args : any
-+>V : V
- 
-                 U :
-             never :
-@@= skipped -36, +37 lines =@@
- // https://github.com/microsoft/TypeScript/issues/56536
- 
- interface HasInstanceOf { [Symbol.hasInstance](x: unknown): boolean }
-+>HasInstanceOf : HasInstanceOf
- >[Symbol.hasInstance] : (x: unknown) => boolean
- >Symbol.hasInstance : unique symbol
- >Symbol : SymbolConstructor
-@@= skipped -22, +23 lines =@@
- // unions
- 
- interface HasInstanceOf1 { [Symbol.hasInstance](x: unknown): x is Point }
-+>HasInstanceOf1 : HasInstanceOf1
- >[Symbol.hasInstance] : (x: unknown) => x is Point
- >Symbol.hasInstance : unique symbol
- >Symbol : SymbolConstructor
-@@= skipped -7, +8 lines =@@
- >x : unknown
- 
- interface HasInstanceOf2 { [Symbol.hasInstance](x: unknown): x is Line }
-+>HasInstanceOf2 : HasInstanceOf2
- >[Symbol.hasInstance] : (x: unknown) => x is Line
- >Symbol.hasInstance : unique symbol
- >Symbol : SymbolConstructor
-@@= skipped -13, +14 lines =@@
+@@= skipped -97, +97 lines =@@
  >rhs15 : Rhs15
  
  lhs0 instanceof rhs15 && lhs0;

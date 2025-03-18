@@ -94,78 +94,7 @@
  >...ns : string | number
  >ns : [number, string]
  >true : true
-@@= skipped -75, +75 lines =@@
- 
- declare function f10<T extends unknown[]>(...args: T): T;
- >f10 : <T extends unknown[]>(...args: T) => T
-+>T : T
- >args : T
- 
- const x10 = f10(42, "hello", true);  // [number, string, boolean]
-@@= skipped -72, +73 lines =@@
- 
- function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
- >g10 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
-+>U : U
-+>V : V
- >u : U
- >v : V
- 
-@@= skipped -37, +39 lines =@@
- 
- declare function f11<T extends (string | number | boolean)[]>(...args: T): T;
- >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
-+>T : T
- >args : T
- 
- const z10 = f11(42, "hello", true);  // [42, "hello", true]
-@@= skipped -72, +73 lines =@@
- 
- function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
- >g11 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
-+>U : U
-+>V : V
- >u : U
- >v : V
- 
-@@= skipped -37, +39 lines =@@
- 
- function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
- >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
-+>T : T
-+>U : U
- >f : (...args: T) => U
- >args : T
- >args : T
-@@= skipped -13, +15 lines =@@
- 
- function callr<T extends unknown[], U>(args: T, f: (...args: T) => U) {
- >callr : <T extends unknown[], U>(args: T, f: (...args: T) => U) => U
-+>T : T
-+>U : U
- >args : T
- >f : (...args: T) => U
- >args : T
-@@= skipped -18, +20 lines =@@
- 
- declare function f16<A, B>(a: A, b: B): A | B;
- >f16 : <A, B>(a: A, b: B) => A | B
-+>A : A
-+>B : B
- >a : A
- >b : B
- 
-@@= skipped -81, +83 lines =@@
- 
- function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
- >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
-+>T : T
-+>U : U
-+>V : V
- >f : (x: T, ...rest: U) => V
- >x : T
- >rest : U
-@@= skipped -22, +25 lines =@@
+@@= skipped -427, +427 lines =@@
  >z : boolean
  
  const f21 = bind(f20, 42);  // (y: string, z: boolean) => string[]
@@ -313,12 +242,10 @@
  declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
 ->f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
 +>f30 : <T, U extends (x: T) => any[]>(x: T, ...args: U) => U
-+>T : T
-+>U : U
  >x : T
  >x : T
  >args : U
-@@= skipped -95, +97 lines =@@
+@@= skipped -95, +95 lines =@@
  const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: number) => number]
  >c30 : [(x: number) => string, (x: number) => number]
  >f30(42, x => "" + x, x => x + 1) : [(x: number) => string, (x: number) => number]
@@ -327,30 +254,7 @@
  >42 : 42
  >x => "" + x : (x: number) => string
  >x : number
-@@= skipped -35, +35 lines =@@
- 
- type T05<T> = Parameters<(...args: T[]) => void>;
- >T05 : T[]
-+>T : T
- >args : T[]
- 
- type T06<T> = ConstructorParameters<new (...args: []) => void>;
- >T06 : []
-+>T : T
- >args : []
- 
- type T07<T extends any[]> = Parameters<(...args: T) => void>;
- >T07 : T
-+>T : T
- >args : T
- 
- type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
- >T08 : T
-+>T : T
- >args : T
- 
- type T09 = Parameters<Function>;
-@@= skipped -24, +28 lines =@@
+@@= skipped -59, +59 lines =@@
  >move : [number, "left" | "right"]
  
    jump: [number, 'up' | 'down'];
@@ -359,20 +263,16 @@
  
    stop: string;
  >stop : string
-@@= skipped -11, +11 lines =@@
- 
- type EventType<T> = {
+@@= skipped -13, +13 lines =@@
  >EventType : EventType<T>
-+>T : T
  
    emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 
 ->emit : <K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]) => void
 +>emit : <K extends keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]) => void
-+>K : K
  >e : K
  >payload : T[K] extends any[] ? T[K] : [T[K]]
  }
-@@= skipped -12, +14 lines =@@
+@@= skipped -10, +10 lines =@@
  
  events.emit('move', 10, 'left');
  >events.emit('move', 10, 'left') : void

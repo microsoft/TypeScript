@@ -9,8 +9,6 @@ declare class C1 {
 }
 
 interface C1 {
->C1 : C1
-
     x : number;
 >x : number
 }
@@ -23,8 +21,6 @@ declare class C2 {
 }
 
 interface C2 {
->C2 : C2
-
     x : number;
 >x : number
 }
@@ -37,8 +33,6 @@ declare class C3 {
 }
 
 interface C3 {
->C3 : C3
-
     x : number;
 >x : number
 }

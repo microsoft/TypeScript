@@ -5,7 +5,6 @@
 
 function foo<T extends "a" | "b">(t: T) {
 >foo : <T extends "a" | "b">(t: T) => void
->T : T
 >t : T
 
     t === "a";  // Should be allowed

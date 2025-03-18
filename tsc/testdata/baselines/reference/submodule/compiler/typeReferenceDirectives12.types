@@ -53,8 +53,6 @@ declare module "./main" {
 >"./main" : typeof import("/main")
 
     interface Cls {
->Cls : Cls
-
         foo(): Lib;
 >foo : () => Lib
     }

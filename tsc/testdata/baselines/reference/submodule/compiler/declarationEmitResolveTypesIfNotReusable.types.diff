@@ -8,11 +8,8 @@
 +>a : { b: "value of b"; notNecessary: "X"; }
  >b : "value of b"
  >notNecessary : "X"
-->u : "X"
- 
- const a = { a: "value of a", notNecessary: u } as const
- >a : { readonly a: "value of a"; readonly notNecessary: "X"; }
-@@= skipped -16, +15 lines =@@
+ >u : "X"
+@@= skipped -16, +16 lines =@@
  
  
  export const o1 = (o: A['a']['b']) => {}
@@ -28,7 +25,7 @@
 +>o2 : (o: "value of a") => void
 +>(o: (typeof a)['a']) => {} : (o: "value of a") => void
  >o : "value of a"
-->a : { readonly a: "value of a"; readonly notNecessary: "X"; }
+ >a : { readonly a: "value of a"; readonly notNecessary: "X"; }
  
  export const o3 = (o:  typeof a['a']) => {}
 ->o3 : (o: (typeof a)["a"]) => void
@@ -36,7 +33,7 @@
 +>o3 : (o: "value of a") => void
 +>(o:  typeof a['a']) => {} : (o: "value of a") => void
  >o : "value of a"
-->a : { readonly a: "value of a"; readonly notNecessary: "X"; }
+ >a : { readonly a: "value of a"; readonly notNecessary: "X"; }
  
  export const o4 = (o: keyof (A['a'])) => {}
 ->o4 : (o: keyof A["a"]) => void

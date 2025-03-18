@@ -1,13 +1,6 @@
 --- old.tsxErrorRecovery1.types
 +++ new.tsxErrorRecovery1.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare namespace JSX { interface Element { } }
-+>JSX : any
-+>Element : Element
- 
- function foo() {
+@@= skipped -6, +6 lines =@@
  >foo : () => void
  
  	var x = <div>  { </div>

@@ -2,8 +2,6 @@
 
 === parserIndexSignature11.ts ===
 interface I {
->I : I
-
         [p]; // Used to be indexer, now it is a computed property
 >[p] : any
 >p : any

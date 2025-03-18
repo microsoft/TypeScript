@@ -48,6 +48,6 @@ export const b = (null as any as import("pkg", { with: {1234, "resolution-mode":
 >ImportInterface : any
 
 === /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
->RequireInterface : RequireInterface
 

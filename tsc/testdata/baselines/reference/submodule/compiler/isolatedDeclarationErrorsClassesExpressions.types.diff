@@ -1,14 +1,6 @@
 --- old.isolatedDeclarationErrorsClassesExpressions.types
 +++ new.isolatedDeclarationErrorsClassesExpressions.types
-@@= skipped -12, +12 lines =@@
- 
- function id<T extends new (...a: any[]) => any>(cls: T) {
- >id : <T extends new (...a: any[]) => any>(cls: T) => T
-+>T : T
- >a : any[]
- >cls : T
- 
-@@= skipped -22, +23 lines =@@
+@@= skipped -34, +34 lines =@@
  }
  
  export const classes = [class {}, class{}] as const

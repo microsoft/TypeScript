@@ -2,10 +2,6 @@
 
 === tile1.ts ===
 interface Lifecycle<Attrs, State> {
->Lifecycle : Lifecycle<Attrs, State>
->Attrs : Attrs
->State : State
-
 	oninit?(vnode: Vnode<Attrs, State>): number;
 >oninit : (vnode: Vnode<Attrs, State>) => number
 >vnode : Vnode<Attrs, State>
@@ -15,19 +11,11 @@ interface Lifecycle<Attrs, State> {
 }
 
 interface Vnode<Attrs, State extends Lifecycle<Attrs, State> = Lifecycle<Attrs, State>> {
->Vnode : Vnode<Attrs, State>
->Attrs : Attrs
->State : State
-
 	tag: Component<Attrs, State>;
 >tag : Component<Attrs, State>
 }
 
 interface Component<Attrs, State> {
->Component : Component<Attrs, State>
->Attrs : Attrs
->State : State
-
 	view(this: State, vnode: Vnode<Attrs, State>): number;
 >view : (vnode: Vnode<Attrs, State>) => number
 >this : State
@@ -35,9 +23,6 @@ interface Component<Attrs, State> {
 }
 
 interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
->ClassComponent : ClassComponent<A>
->A : A
-
 	oninit?(vnode: Vnode<A, this>): number;
 >oninit : (vnode: Vnode<A, this>) => number
 >vnode : Vnode<A, this>
@@ -48,7 +33,6 @@ interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
 }
 
 interface MyAttrs { id: number }
->MyAttrs : MyAttrs
 >id : number
 
 class C implements ClassComponent<MyAttrs> {

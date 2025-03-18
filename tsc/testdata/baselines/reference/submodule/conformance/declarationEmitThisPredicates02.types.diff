@@ -1,15 +1,6 @@
 --- old.declarationEmitThisPredicates02.types
 +++ new.declarationEmitThisPredicates02.types
-@@= skipped -1, +1 lines =@@
- 
- === declarationEmitThisPredicates02.ts ===
- export interface Foo {
-+>Foo : Foo
-+
-     a: string;
- >a : string
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -12, +12 lines =@@
  }
  
  export const obj = {

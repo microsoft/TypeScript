@@ -4,39 +4,26 @@
 // https://github.com/microsoft/TypeScript/issues/57911
 
 interface ExactProps {
->ExactProps : ExactProps
-
   value: "A" | "B";
 >value : "A" | "B"
 }
 interface FunctionComponent<P = {}> {
->FunctionComponent : FunctionComponent<P>
->P : P
-
   (props: P): ReactElement<any> | null;
 >props : P
 }
 declare class Component<P> {
 >Component : Component<P>
->P : P
 
   constructor(props: P);
 >props : P
 }
 interface ComponentClass<P = {}> {
->ComponentClass : ComponentClass<P>
->P : P
-
   new (props: P): Component<P>;
 >props : P
 }
 
 interface ReactElement<
->ReactElement : ReactElement<T>
-
   T extends string | JSXElementConstructor<any> =
->T : T
-
     | string
     | JSXElementConstructor<any>,
 > {
@@ -46,7 +33,6 @@ interface ReactElement<
 
 type JSXElementConstructor<P> =
 >JSXElementConstructor : JSXElementConstructor<P>
->P : P
 
   | ((props: P) => ReactElement<any> | null)
 >props : P
@@ -56,7 +42,6 @@ type JSXElementConstructor<P> =
 
 declare function createElementIsolated<P extends {}>(
 >createElementIsolated : <P extends {}>(type: string | ComponentClass<P> | FunctionComponent<P>, props?: P | null | undefined) => void
->P : P
 
   type: FunctionComponent<P> | ComponentClass<P> | string,
 >type : string | ComponentClass<P> | FunctionComponent<P>

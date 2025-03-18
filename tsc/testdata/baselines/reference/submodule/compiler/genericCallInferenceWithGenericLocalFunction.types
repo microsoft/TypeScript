@@ -6,21 +6,17 @@
 const createTransform = <I, O>(tr: (from: I) => O) => tr;
 >createTransform : <I, O>(tr: (from: I) => O) => (from: I) => O
 ><I, O>(tr: (from: I) => O) => tr : <I, O>(tr: (from: I) => O) => (from: I) => O
->I : I
->O : O
 >tr : (from: I) => O
 >from : I
 >tr : (from: I) => O
 
 function withP2<P>(p: P) {
 >withP2 : <P>(p: P) => <I>(from: I) => I & P
->P : P
 >p : P
 
   const m = <I,>(from: I) => ({ ...from, ...p });
 >m : <I>(from: I) => I & P
 ><I,>(from: I) => ({ ...from, ...p }) : <I>(from: I) => I & P
->I : I
 >from : I
 >({ ...from, ...p }) : I & P
 >{ ...from, ...p } : I & P

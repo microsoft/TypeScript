@@ -6,7 +6,6 @@ class c {
 }
 class g<T> {
 >g : g<T>
->T : T
 }
 module m {
 >m : typeof m

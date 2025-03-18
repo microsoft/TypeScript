@@ -2,14 +2,10 @@
 
 === duplicateErrorAssignability.ts ===
 interface A {
->A : A
-
     x: number;
 >x : number
 }
 interface B {
->B : B
-
     y: string;
 >y : string
 }

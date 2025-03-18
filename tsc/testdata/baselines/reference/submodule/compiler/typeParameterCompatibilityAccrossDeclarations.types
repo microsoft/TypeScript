@@ -8,7 +8,6 @@ var a = {
    x: function <T>(y: T): T { return null; }
 >x : <T>(y: T) => T
 >function <T>(y: T): T { return null; } : <T>(y: T) => T
->T : T
 >y : T
 }
 var a2 = {
@@ -21,16 +20,11 @@ var a2 = {
 >y : any
 }
 export interface I {
->I : I
-
    x<T>(y: T): T;
 >x : <T>(y: T) => T
->T : T
 >y : T
 }
 export interface I2 {
->I2 : I2
-
    x(y: any): any;
 >x : (y: any) => any
 >y : any

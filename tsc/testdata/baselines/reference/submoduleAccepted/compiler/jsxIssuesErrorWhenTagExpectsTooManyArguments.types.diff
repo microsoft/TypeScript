@@ -17,10 +17,8 @@
 +>React : any
  
  interface MyProps {
-+>MyProps : MyProps
-+
      x: number;
- >x : number
+@@= skipped -17, +11 lines =@@
  }
  
  function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {

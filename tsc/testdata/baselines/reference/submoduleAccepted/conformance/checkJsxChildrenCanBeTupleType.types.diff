@@ -17,8 +17,6 @@
 +>React : any
  
  interface ResizablePanelProps {
-+>ResizablePanelProps : ResizablePanelProps
-+
    children: [React.ReactNode, React.ReactNode]
 ->children : [React.ReactNode, React.ReactNode]
 +>children : [ReactNode, ReactNode]

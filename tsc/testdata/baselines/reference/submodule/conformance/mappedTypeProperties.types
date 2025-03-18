@@ -21,8 +21,6 @@ type After = {
 >After : After
 
     [placeType in PlaceType]: void;
->placeType : placeType
-
     model: 'hour' | 'day'
 >model : "day" | "hour"
 }
@@ -31,8 +29,6 @@ type AfterQuestion = {
 >AfterQuestion : AfterQuestion
 
     [placeType in PlaceType]?: void;
->placeType : placeType
-
     model: 'hour' | 'day';
 >model : "day" | "hour"
 }
@@ -40,8 +36,6 @@ type AfterMethod = {
 >AfterMethod : AfterMethod
 
     [placeType in PlaceType]?: void;
->placeType : placeType
-
     model(duration: number): 'hour' | 'day';
 >model : (duration: number) => "day" | "hour"
 >duration : number
@@ -51,8 +45,6 @@ type AfterImplicit = {
 >AfterImplicit : AfterImplicit
 
     [placeType in PlaceType]
->placeType : placeType
-
     model: 'hour' | 'day';
 >model : "day" | "hour"
 }
@@ -60,15 +52,11 @@ type AfterImplicitQ = {
 >AfterImplicitQ : AfterImplicitQ
 
     [placeType in PlaceType]?
->placeType : placeType
-
     model: 'hour' | 'day'
 >model : "day" | "hour"
 }
 
 interface I {
->I : I
-
     [P in PlaceType]: any
 >[P in PlaceType] : any
 >P in PlaceType : boolean

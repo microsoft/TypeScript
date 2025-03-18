@@ -1,16 +1,11 @@
 --- old.emitClassExpressionInDeclarationFile2.types
 +++ new.emitClassExpressionInDeclarationFile2.types
-@@= skipped -37, +37 lines =@@
- 
- export type Constructor<T> = new(...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
+@@= skipped -40, +40 lines =@@
  >args : any[]
  
  export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 ->WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
 +>WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; getTags: () => void; prototype: (Anonymous class)<any>; } & T
-+>T : T
  >Base : T
  
      return class extends Base {
@@ -19,7 +14,7 @@
  >Base : FooItem
  
          static getTags(): void { }
-@@= skipped -20, +22 lines =@@
+@@= skipped -17, +17 lines =@@
  
  export class Test extends WithTags(FooItem) {}
  >Test : Test

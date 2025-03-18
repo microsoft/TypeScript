@@ -734,7 +734,6 @@ type NumberOrBigint = number | bigint;
 
 function getKey<S extends NumberOrBigint>(key: S) {
 >getKey : <S extends NumberOrBigint>(key: S) => void
->S : S
 >key : S
 
     +key;   // should error

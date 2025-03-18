@@ -14,6 +14,7 @@
 ->T27 : { prop: number; } | { prop: T27; }
 ->a27 : { prop: number; } | { prop: T27; }
 +>T27 : { prop: number; } | { prop: { prop: number; } | ???; }
++>a27 : { prop: number; } | { prop: { prop: number; } | ???; }
  
  var b: T27;
 ->b : { prop: number; } | { prop: T27; }

@@ -188,8 +188,6 @@ module Harness {
 >false : false
 
     export interface ITestMetadata {
->ITestMetadata : ITestMetadata
-
         id: string;
 >id : string
 
@@ -220,8 +218,6 @@ module Harness {
         };
     }
     export interface IScenarioMetadata {
->IScenarioMetadata : IScenarioMetadata
-
         id: string;
 >id : string
 
@@ -871,8 +867,6 @@ Actual errors follow: "
 
     // Logger
     export interface ILogger {
->ILogger : ILogger
-
         start: (fileName?: string, priority?: number) => void;
 >start : (fileName?: string, priority?: number) => void
 >fileName : string
@@ -1041,8 +1035,6 @@ Actual errors follow: "
 
     // BDD Framework
     export interface IDone {
->IDone : IDone
-
         (e?: Error): void;
 >e : Error
     }
@@ -5139,8 +5131,6 @@ Actual errors follow: "
         // Defines functions to invoke before compiling a piece of code and a post compile action intended to clean up the
         // effects of preCompile, preferably with something lighter weight than a full recreate()
         export interface CompilationContext {
->CompilationContext : CompilationContext
-
             filename: string;
 >filename : string
 
@@ -5825,8 +5815,6 @@ Actual errors follow: "
 
         /** all the necesarry information to set the right compiler settings */
         export interface CompilerSetting {
->CompilerSetting : CompilerSetting
-
             flag: string;
 >flag : string
 
@@ -5836,8 +5824,6 @@ Actual errors follow: "
 
         /** All the necessary information to turn a multi file test into useful units for later compilation */
         export interface TestUnitData {
->TestUnitData : TestUnitData
-
             content: string;
 >content : string
 
@@ -7970,8 +7956,6 @@ Actual errors follow: "
 >"</style>" : "</style>"
 
         export interface BaselineOptions {
->BaselineOptions : BaselineOptions
-
             LineEndingSensitive?: boolean;
 >LineEndingSensitive : boolean
         }

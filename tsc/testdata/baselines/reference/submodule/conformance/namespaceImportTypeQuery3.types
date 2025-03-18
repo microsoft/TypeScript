@@ -20,6 +20,7 @@ import * as types from './a';
 
 let t: typeof types = {
 >t : typeof import("/a")
+>types : typeof import("/a")
 >{  A: undefined as any, // ok  B: undefined as any,} : { A: any; B: any; }
 
   A: undefined as any, // ok

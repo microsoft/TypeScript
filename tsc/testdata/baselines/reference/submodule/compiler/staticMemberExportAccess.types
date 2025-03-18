@@ -24,8 +24,6 @@ module Sammy {
 >1 : 1
 }
 interface JQueryStatic {
->JQueryStatic : JQueryStatic
-
     sammy: Sammy; // class instance
 >sammy : Sammy
 }

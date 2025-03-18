@@ -9,7 +9,6 @@ class Foo {}
 >Foo : Foo
 
 interface Foo {}
->Foo : Foo
 
 export {foo, Foo, Foo}
 >foo : 1

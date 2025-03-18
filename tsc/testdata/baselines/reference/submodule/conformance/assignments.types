@@ -11,8 +11,6 @@
 //  Assign to an interface
 
 module M { }
->M : any
-
 M = null; // Error
 >M = null : null
 >M : any
@@ -62,8 +60,6 @@ function fn2(p) {
 }
 
 interface I { }
->I : I
-
 I = null; // Error
 >I = null : null
 >I : any

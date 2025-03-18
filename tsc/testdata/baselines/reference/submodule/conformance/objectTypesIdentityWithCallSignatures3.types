@@ -4,16 +4,11 @@
 // object types are identical structurally
 
 interface I {
->I : I
-
     (x: string): string;
 >x : string
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     (x: T): T;
 >x : T
 }
@@ -37,10 +32,12 @@ function foo2(x: any) { }
 function foo3(x: typeof a);
 >foo3 : { (x: (x: string) => string): any; (x: (x: string) => string): any; }
 >x : (x: string) => string
+>a : (x: string) => string
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: (x: string) => string): any; (x: (x: string) => string): any; }
 >x : (x: string) => string
+>a : (x: string) => string
 
 function foo3(x: any) { }
 >foo3 : { (x: (x: string) => string): any; (x: (x: string) => string): any; }
@@ -49,10 +46,12 @@ function foo3(x: any) { }
 function foo4(x: typeof b);
 >foo4 : { (x: any): any; (x: any): any; }
 >x : any
+>b : any
 
 function foo4(x: typeof b); // error
 >foo4 : { (x: any): any; (x: any): any; }
 >x : any
+>b : any
 
 function foo4(x: any) { }
 >foo4 : { (x: any): any; (x: any): any; }
@@ -65,6 +64,7 @@ function foo13(x: I);
 function foo13(x: typeof a); // error
 >foo13 : { (x: I): any; (x: (x: string) => string): any; }
 >x : (x: string) => string
+>a : (x: string) => string
 
 function foo13(x: any) { }
 >foo13 : { (x: I): any; (x: (x: string) => string): any; }
@@ -85,6 +85,7 @@ function foo14(x: any) { }
 function foo14b(x: typeof a);
 >foo14b : { (x: (x: string) => string): any; (x: I2<string>): any; }
 >x : (x: string) => string
+>a : (x: string) => string
 
 function foo14b(x: I2<string>); // error
 >foo14b : { (x: (x: string) => string): any; (x: I2<string>): any; }

@@ -13,10 +13,8 @@ type Entity = {
 
 type RowRendererMeta<TInput extends {}> = {
 >RowRendererMeta : RowRendererMeta<TInput>
->TInput : TInput
 
     [key in keyof TInput]: { key: key; caption: string; formatter?: (value: TInput[key]) => string; };
->key : key
 >key : key
 >caption : string
 >formatter : (value: TInput[key]) => string | undefined
@@ -25,7 +23,6 @@ type RowRendererMeta<TInput extends {}> = {
 
 type RowRenderer<TInput extends {}> = RowRendererMeta<TInput>[keyof RowRendererMeta<TInput>];
 >RowRenderer : RowRenderer<TInput>
->TInput : TInput
 
 const test: RowRenderer<Entity> = {
 >test : RowRenderer<Entity>

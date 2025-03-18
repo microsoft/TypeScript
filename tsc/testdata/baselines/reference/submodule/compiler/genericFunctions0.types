@@ -3,7 +3,6 @@
 === genericFunctions0.ts ===
 function foo<T > (x: T) { return x; }
 >foo : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 

@@ -2,20 +2,16 @@
 
 === contextualSignatureInstatiationCovariance.ts ===
 interface Animal { x }
->Animal : Animal
 >x : any
 
 interface TallThing { x2 }
->TallThing : TallThing
 >x2 : any
 
 interface Giraffe extends Animal, TallThing { y }
->Giraffe : Giraffe
 >y : any
 
 var f2: <T extends Giraffe>(x: T, y: T) => void;
 >f2 : <T extends Giraffe>(x: T, y: T) => void
->T : T
 >x : T
 >y : T
 

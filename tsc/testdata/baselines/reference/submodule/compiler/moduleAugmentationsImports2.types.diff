@@ -1,24 +1,6 @@
 --- old.moduleAugmentationsImports2.types
 +++ new.moduleAugmentationsImports2.types
-@@= skipped -40, +40 lines =@@
- >"./a" : typeof import("a")
- 
-     interface A {
-+>A : A
-+
-         getB(): B;
- >getB : () => B
-     }
-@@= skipped -26, +28 lines =@@
- >"./a" : typeof import("a")
- 
-     interface A {
-+>A : A
-+
-         getCls(): Cls;
- >getCls : () => Cls
-     }
-@@= skipped -20, +22 lines =@@
+@@= skipped -86, +86 lines =@@
  >a.getB().x.toFixed() : string
  >a.getB().x.toFixed : (fractionDigits?: number) => string
  >a.getB().x : number

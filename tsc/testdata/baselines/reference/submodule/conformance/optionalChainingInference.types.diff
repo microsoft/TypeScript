@@ -7,12 +7,11 @@
 ->unbox : <T>(box: { value: T | undefined; }) => T
 ->box : { value: T | undefined; }
 +>unbox : <T>(box: { value: T; }) => T
-+>T : T
 +>box : { value: T; }
  >value : T
  
  declare const su: string | undefined;
-@@= skipped -29, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  const v1: number = unbox(b1);
  >v1 : number
  >unbox(b1) : number

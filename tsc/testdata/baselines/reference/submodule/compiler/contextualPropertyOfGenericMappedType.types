@@ -5,10 +5,8 @@
 
 declare function f<T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }): void;
 >f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void }) => void
->T : T
 >data : T
 >handlers : { [P in keyof T]: (value: T[P], prop: P) => void }
->P : P
 >value : T[P]
 >prop : P
 

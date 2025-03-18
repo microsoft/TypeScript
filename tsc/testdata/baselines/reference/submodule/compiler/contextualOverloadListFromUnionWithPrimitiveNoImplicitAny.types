@@ -9,8 +9,6 @@ type Validate = (text: string, pos: number, self: Rule) => number | boolean;
 >self : Rule
 
 interface FullRule {
->FullRule : FullRule
-
     validate: string | RegExp | Validate;
 >validate : string | RegExp | Validate
 

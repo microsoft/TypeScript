@@ -1,26 +1,6 @@
 --- old.declFileExportAssignmentImportInternalModule.types
 +++ new.declFileExportAssignmentImportInternalModule.types
-@@= skipped -4, +4 lines =@@
- >m3 : typeof m3
- 
-     export module m2 {
-+>m2 : any
-+
-         export interface connectModule {
-+>connectModule : connectModule
-+
-             (res, req, next): void;
- >res : any
- >req : any
- >next : any
-         }
-         export interface connectExport {
-+>connectExport : connectExport
-+
-             use: (mod: connectModule) => connectExport;
- >use : (mod: connectModule) => connectExport
- >mod : connectModule
-@@= skipped -19, +25 lines =@@
+@@= skipped -23, +23 lines =@@
      }
  
      export var server: {

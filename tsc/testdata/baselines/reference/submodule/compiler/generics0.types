@@ -2,9 +2,6 @@
 
 === generics0.ts ===
 interface G<T> {
->G : G<T>
->T : T
-
     x: T;
 >x : T
 }

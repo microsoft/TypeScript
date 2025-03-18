@@ -2,8 +2,6 @@
 
 === interfaceContextualType.ts ===
 export interface IOptions {
->IOptions : IOptions
-
     italic?: boolean;
 >italic : boolean
 
@@ -11,8 +9,6 @@ export interface IOptions {
 >bold : boolean
 }
 export interface IMap {
->IMap : IMap
-
     [s: string]: IOptions;
 >s : string
 }

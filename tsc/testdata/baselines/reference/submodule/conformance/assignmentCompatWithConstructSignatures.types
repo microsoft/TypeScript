@@ -4,8 +4,6 @@
 // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 
 interface T {
->T : T
-
     new (x: number): void;
 >x : number
 }
@@ -27,8 +25,6 @@ a = t;
 >t : T
 
 interface S {
->S : S
-
     new (x: number): string;
 >x : number
 }
@@ -60,8 +56,6 @@ a = a2;
 >a2 : new (x: number) => string
 
 interface S2 {
->S2 : S2
-
     (x: string): void;
 >x : string
 }

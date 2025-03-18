@@ -194,12 +194,7 @@
  >b : number | undefined
  
  declare function f<T>(...items: T[]): T;
- >f : <T>(...items: T[]) => T
-+>T : T
- >items : T[]
- 
- declare let data: { a: 1, b: "abc", c: true };
-@@= skipped -49, +50 lines =@@
+@@= skipped -49, +49 lines =@@
  
  // Object literals are inferred as a single normalized union type
  let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});

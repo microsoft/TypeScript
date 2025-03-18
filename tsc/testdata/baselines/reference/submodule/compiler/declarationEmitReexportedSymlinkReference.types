@@ -38,8 +38,6 @@ export declare type IdType = A | B;
 
 export declare class MetadataAccessor<T, D extends IdType = IdType> {
 >MetadataAccessor : MetadataAccessor<T, D>
->T : T
->D : D
 
     readonly key: string;
 >key : string
@@ -50,8 +48,6 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
 
     static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
 >create : <T, D extends IdType>(key: string) => MetadataAccessor<T, D>
->T : T
->D : D
 >key : string
 }
 === monorepo/pkg2/dist/index.d.ts ===

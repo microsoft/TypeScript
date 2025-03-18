@@ -5,22 +5,13 @@ type Computed = () => any;
 >Computed : Computed
 
 interface Mapper<R> {
->Mapper : Mapper<R>
->R : R
-
     <Key extends string>(map: Key[]): { [K in Key]: R };
->Key : Key
 >map : Key[]
->K : K
 
     <Map extends Record<string, string>>(map: Map): { [K in keyof Map]: R };
->Map : Map
 >map : Map
->K : K
 }
 interface NamespacedMappers {
->NamespacedMappers : NamespacedMappers
-
     mapState: Mapper<Computed>;
 >mapState : Mapper<Computed>
 }

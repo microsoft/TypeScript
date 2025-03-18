@@ -2,28 +2,22 @@
 
 === genericDefaults.ts ===
 interface A { a: number; }
->A : A
 >a : number
 
 interface B { b: number; }
->B : B
 >b : number
 
 interface C { c: number; }
->C : C
 >c : number
 
 interface D { d: number; }
->D : D
 >d : number
 
 interface AB { a: number; b: number; }
->AB : AB
 >a : number
 >b : number
 
 interface BC { b: number; c: number; }
->BC : BC
 >b : number
 >c : number
 
@@ -66,7 +60,6 @@ f00(a);
 // function with a type parameter without a default
 declare function f01<T>(a?: T): T;
 >f01 : <T>(a?: T) => T
->T : T
 >a : T
 
 // inference
@@ -92,7 +85,6 @@ f01<A>(a);
 // function with a type paramter with a default
 declare function f02<T = A>(a?: T): T;
 >f02 : <T>(a?: T) => T
->T : T
 >a : T
 
 // inference
@@ -132,7 +124,6 @@ f02<B>(b);
 // function with a type parameter with a default that refers to itself
 declare function f03<T = T>(a?: T): T;
 >f03 : <T>(a?: T) => T
->T : T
 >a : T
 
 // inference
@@ -172,8 +163,6 @@ f03<B>(b);
 // function with a type paramter without a default and a type parameter with a default
 declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 >f04 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -249,8 +238,6 @@ f04<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter
 declare function f05<T, U = T>(a?: T, b?: U): [T, U];
 >f05 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -311,8 +298,6 @@ f05<A, B>(a, b);
 // function with a type parameter with a default that refers to an earlier type parameter with a default
 declare function f06<T = A, U = T>(a?: T, b?: U): [T, U];
 >f06 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -415,9 +400,6 @@ f06<B, C>(b, c);
 // function with a type parameter without a default and a type parameter with a default that refers to an earlier type parameter with a default
 declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 >f07 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
->T : T
->U : U
->V : V
 >a : T
 >b : U
 >c : V
@@ -582,8 +564,6 @@ f07<A, C, D>(a, c, d);
 // function with a type parameter with a default that refers to an earlier type parameter with a constraint
 declare function f08<T extends A, U = T>(a?: T, b?: U): [T, U];
 >f08 : <T extends A, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -644,8 +624,6 @@ f08<A, B>(a, b);
 // function with a type parameter with a constraint and a default that refers to an earlier type parameter
 declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
 >f09 : <T, U extends T>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -712,8 +690,6 @@ f09<A, AB>(a, ab);
 // function with a type parameter with a constraint and a default that refers to an earlier type parameter with a constraint
 declare function f10<T extends A, U extends T = T>(a?: T, b?: U): [T, U];
 >f10 : <T extends A, U extends T>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -801,8 +777,6 @@ f10<A, AB>(a, ab);
 // function with a type parameter with a default that refers to an earier type parameter in a union
 declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
 >f11 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -875,8 +849,6 @@ f11<A, C>(a, c);
 // function with a type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
 >f12 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -943,8 +915,6 @@ f12<A, C>(a, c);
 // function with a type parameter with a default that refers to a later type parameter with a default
 declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
 >f13 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -1011,9 +981,6 @@ f13<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default
 declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
 >f14 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
->T : T
->U : U
->V : V
 >a : T
 >b : U
 >c : V
@@ -1119,8 +1086,6 @@ f14<A, B, D>(a, b, d);
 // function with two type parameters with defaults that mutually refer to each other
 declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
 >f15 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -1175,9 +1140,6 @@ f15<A, B>(a, b);
 // function with a type parameter without a default and two type parameters with defaults that mutually refer to each other
 declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 >f16 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
->T : T
->U : U
->V : V
 >a : T
 >b : U
 >c : V
@@ -1276,8 +1238,6 @@ f16<A, B, D>(a, b, d);
 // function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
 >f17 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -1350,9 +1310,6 @@ f17<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in a union
 declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
 >f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
->T : T
->U : U
->V : V
 >a : T
 >b : U
 >c : V
@@ -1472,8 +1429,6 @@ f18<A, B, D>(a, b, d);
 // function with a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
 >f19 : <T, U>(a?: T, b?: U) => [T, U]
->T : T
->U : U
 >a : T
 >b : U
 
@@ -1546,9 +1501,6 @@ f19<A, C>(a, c);
 // function with a type parameter without a default and a type parameter with a default that refers to a later type parameter with a default that refers to an earlier type parameter in an intersection
 declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 >f20 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
->T : T
->U : U
->V : V
 >a : T
 >b : U
 >c : V
@@ -1645,8 +1597,6 @@ f20<A, B, D>(a, b, d);
 >d : D
 
 interface i00<T = number> { a: T; }
->i00 : i00<T>
->T : T
 >a : T
 
 const i00c00 = (<i00>x).a;
@@ -1666,9 +1616,6 @@ const i00c01 = (<i00<number>>x).a;
 >a : number
 
 interface i01<T, U = T> { a: [T, U]; }
->i01 : i01<T, U>
->T : T
->U : U
 >a : [T, U]
 
 const i01c00 = (<i01<number>>x).a;
@@ -1688,9 +1635,6 @@ const i01c01 = (<i01<number, string>>x).a;
 >a : [number, string]
 
 interface i02<T extends number, U = T> { a: [T, U]; }
->i02 : i02<T, U>
->T : T
->U : U
 >a : [T, U]
 
 const i02c00 = (<i02<number>>x).a;
@@ -1734,9 +1678,6 @@ const i02c04 = (<i02<number, 1>>x).a;
 >a : [number, 1]
 
 interface i03<T extends number, U extends T = T> { a: [T, U]; }
->i03 : i03<T, U>
->T : T
->U : U
 >a : [T, U]
 
 const i03c00 = (<i03<number>>x).a;
@@ -1780,24 +1721,11 @@ const i03c04 = (<i03<number, 1>>x).a;
 >a : [number, 1]
 
 interface i04 {}
->i04 : i04<T, U>
-
 interface i04<T> {}
->i04 : i04<T, U>
->T : T
-
 interface i04<T = number> {}
->i04 : i04<T, U>
->T : T
-
 interface i04<T = number, U = string> {}
->i04 : i04<T, U>
->T : T
->U : U
 
 interface i05<T = T> { a: T; }
->i05 : i05<T>
->T : T
 >a : T
 
 const i05c00 = (<i05>x).a;
@@ -1817,9 +1745,6 @@ const i05c01 = (<i05<number>>x).a;
 >a : number
 
 interface i06<T = U, U = T> { a: [T, U]; }
->i06 : i06<T, U>
->T : T
->U : U
 >a : [T, U]
 
 const i06c00 = (<i06>x).a;
@@ -1847,12 +1772,9 @@ const i06c02 = (<i06<number, string>>x).a;
 >a : [number, string]
 
 interface i07 { a: A; }
->i07 : i07<A>
 >a : A
 
 interface i07<A = number> { b: A; }
->i07 : i07<A>
->A : A
 >b : A
 
 const i07c00 = (<i07>x).a;
@@ -1888,13 +1810,9 @@ const i07c03 = (<i07<B>>x).b;
 >b : B
 
 interface Base01<T> { a: T; }
->Base01 : Base01<T>
->T : T
 >a : T
 
 interface Base01Constructor { new <T = number>(a?: T): Base01<T>; }
->Base01Constructor : Base01Constructor
->T : T
 >a : T
 
 declare const Base01: Base01Constructor;
@@ -1924,7 +1842,6 @@ const Base01c03 = new Base01<number>(1);
 
 declare class Derived01<T> extends Base01<T> { }
 >Derived01 : Derived01<T>
->T : T
 >Base01 : Base01<T>
 
 const Derived01c00 = new Derived01();
@@ -1951,7 +1868,6 @@ const Derived01c03 = new Derived01<number>(1);
 
 declare class Derived02<T = string> extends Base01<T> { }
 >Derived02 : Derived02<T>
->T : T
 >Base01 : Base01<T>
 
 const Derived02c00 = new Derived02();
@@ -1978,11 +1894,7 @@ const Derived02c03 = new Derived02<number>(1);
 
 // https://github.com/Microsoft/TypeScript/issues/16211
 interface Base02 {}
->Base02 : Base02
-
 interface Base02Constructor { new <T = A>(a: T): Base02 & T; }
->Base02Constructor : Base02Constructor
->T : T
 >a : T
 
 declare const Base02: Base02Constructor;
@@ -2009,7 +1921,6 @@ type DerivedProps = keyof Derived03;
 
 type t00<T = number> = { a: T; }
 >t00 : t00<T>
->T : T
 >a : T
 
 const t00c00 = (<t00>x).a;
@@ -2030,8 +1941,6 @@ const t00c01 = (<t00<number>>x).a;
 
 type t01<T, U = T> = { a: [T, U]; }
 >t01 : t01<T, U>
->T : T
->U : U
 >a : [T, U]
 
 const t01c00 = (<t01<number>>x).a;
@@ -2052,8 +1961,6 @@ const t01c01 = (<t01<number, string>>x).a;
 
 type t02<T extends number, U = T> = { a: [T, U]; }
 >t02 : t02<T, U>
->T : T
->U : U
 >a : [T, U]
 
 const t02c00 = (<t02<number>>x).a;
@@ -2098,8 +2005,6 @@ const t02c04 = (<t02<number, 1>>x).a;
 
 type t03<T extends number, U extends T = T> = { a: [T, U]; }
 >t03 : t03<T, U>
->T : T
->U : U
 >a : [T, U]
 
 const t03c00 = (<t03<number>>x).a;
@@ -2144,6 +2049,3 @@ const t03c04 = (<t03<number, 1>>x).a;
 
 // https://github.com/Microsoft/TypeScript/issues/16221
 interface SelfReference<T = SelfReference<string>> {}
->SelfReference : SelfReference<T>
->T : T
-

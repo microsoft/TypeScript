@@ -1,8 +1,0 @@
---- old.parserTypeQuery2.types
-+++ new.parserTypeQuery2.types
-@@= skipped -2, +2 lines =@@
- === parserTypeQuery2.ts ===
- var v: typeof A;
- >v : any
-->A : any
- 

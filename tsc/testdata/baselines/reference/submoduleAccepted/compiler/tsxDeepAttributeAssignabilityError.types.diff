@@ -8,19 +8,8 @@
 +>React : any
  
  interface MyProps {
-+>MyProps : MyProps
-+
      x: string;
- >x : string
- 
-@@= skipped -11, +13 lines =@@
- }
- 
- interface MyInnerProps {
-+>MyInnerProps : MyInnerProps
-+
-     value: string;
- >value : string
+@@= skipped -16, +16 lines =@@
  }
  
  export function MyComponent(_props: MyProps) {

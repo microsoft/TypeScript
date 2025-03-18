@@ -27,7 +27,6 @@ var r1 = new C(1, '');
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     constructor(x: T, y?: string);
 >x : T
@@ -49,8 +48,6 @@ var r2 = new C2(1, '');
 >'' : ""
 
 interface I {
->I : I
-
     new(x: number, y?: string): C;
 >x : number
 >y : string
@@ -71,9 +68,6 @@ var r3 = new i(1, '');
 >'' : ""
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     new (x: T, y?: string): C2<T>;
 >x : T
 >y : string
@@ -83,12 +77,10 @@ interface I2<T> {
 >y : string
 
     new <T>(x: T, y?: string): C2<T>;
->T : T
 >x : T
 >y : string
 
     new <T>(x: T, y: string): C2<T>;
->T : T
 >x : T
 >y : string
 
@@ -127,12 +119,10 @@ var b: {
 >b : { new <T>(x: T, y?: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
 
     new<T>(x: T, y?: string): C2<T>;
->T : T
 >x : T
 >y : string
 
     new<T>(x: T, y: string): C2<T>;
->T : T
 >x : T
 >y : string
 }

@@ -1,12 +1,12 @@
 //// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmitErrors.ts] ////
 
 === /node_modules/pkg/import.d.ts ===
+
 export interface ImportInterface {}
->ImportInterface : ImportInterface
 
 === /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
->RequireInterface : RequireInterface
 
 === /index.ts ===
 export type LocalInterface =

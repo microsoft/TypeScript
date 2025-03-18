@@ -6,16 +6,9 @@ declare module "lib/result" {
 
     export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);
 >Result : Result<E, T>
->E : E
->T : T
 
     export interface Failure<E extends Error> { }
->Failure : Failure<E>
->E : E
-
     export interface Success<T> { }
->Success : Success<T>
->T : T
 }
 
 === src/datastore_result.ts ===
@@ -24,7 +17,6 @@ import { Result } from "lib/result";
 
 export type T<T> = Result<Error, T>;
 >T : T<T>
->T : T
 
 === src/conditional_directive_field.ts ===
 import * as DatastoreResult from "src/datastore_result";

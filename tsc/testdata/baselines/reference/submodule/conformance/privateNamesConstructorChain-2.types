@@ -3,7 +3,6 @@
 === privateNamesConstructorChain-2.ts ===
 class Parent<T> {
 >Parent : Parent<T>
->T : T
 
     #foo = 3;
 >#foo : number
@@ -29,7 +28,6 @@ class Parent<T> {
 
 class Child<T> extends Parent<T> {
 >Child : Child<T>
->T : T
 >Parent : Parent<T>
 
     #foo = "foo";       // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)

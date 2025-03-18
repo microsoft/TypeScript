@@ -4,9 +4,6 @@
 // instantiating a derived type can cause an infinitely expanding type reference to be generated
 
 interface List<T> {
->List : List<T>
->T : T
-
     data: T;
 >data : T
 
@@ -19,9 +16,6 @@ interface List<T> {
 
 // will have an owner property that is an infinitely expanding type reference
 interface OwnerList<U> extends List<List<U>> {
->OwnerList : OwnerList<U>
->U : U
-
     name: string;
 >name : string
 }
@@ -39,7 +33,6 @@ list = ownerList;
 
 function other<T>(x: T) {
 >other : <T>(x: T) => void
->T : T
 >x : T
 
     var list: List<T>;

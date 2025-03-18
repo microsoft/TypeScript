@@ -7,6 +7,7 @@
 ->before : () => typeof func
 ->func : () => typeof func
 +>before : () => ???
++>func : () => ???
  
      export function normal(): void;
  >normal : () => void
@@ -15,11 +16,13 @@
 ->func : () => typeof func
 ->func : () => typeof func
 +>func : () => ???
++>func : () => ???
  
      var after: typeof func;
 ->after : () => typeof func
 ->func : () => typeof func
 +>after : () => ???
++>func : () => ???
  
      export {}
  }

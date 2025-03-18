@@ -7,9 +7,7 @@
 ->foo_ : <T extends XNumber_>(props: { [K in keyof T & keyof XNumber_]: T[K]; }) => T
 ->props : { [K in keyof T & "x"]: T[K]; }
 +>foo_ : <T extends XNumber_>(props: { [K in keyof T & "x"]: T[K] }) => T
-+>T : T
 +>props : { [K in keyof T & "x"]: T[K] }
-+>K : K
  
  foo_({x: 1, y: 'foo'});
  >foo_({x: 1, y: 'foo'}) : { x: 1; }
@@ -18,7 +16,7 @@
  >{x: 1, y: 'foo'} : { x: 1; y: string; }
  >x : 1
  >1 : 1
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  // -----------------------------------------------------------------------------------------
  
  const checkType_ = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
@@ -29,11 +27,8 @@
 ->value : { [K in keyof U & keyof T]: U[K]; }
 +>checkType_ : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => { [K in keyof U & keyof T]: U[K] }
 +><T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => { [K in keyof U & keyof T]: U[K] }
-+>T : T
 +><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => { [K in keyof U & keyof T]: U[K] }
-+>U : U
 +>value : { [K in keyof U & keyof T]: U[K] }
-+>K : K
 +>value : { [K in keyof U & keyof T]: U[K] }
  
  const checked_ = checkType_<{x: number, y: string}>()({

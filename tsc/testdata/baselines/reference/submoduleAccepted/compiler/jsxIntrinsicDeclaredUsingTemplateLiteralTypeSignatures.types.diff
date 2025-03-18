@@ -1,18 +1,6 @@
 --- old.jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.types
 +++ new.jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.types
-@@= skipped -3, +3 lines =@@
- // https://github.com/microsoft/TypeScript/issues/55240
- 
- declare namespace JSX {
-+>JSX : any
-+
-   interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-     [k: `foo${string}`]: { prop: string };
- >k : `foo${string}`
- >prop : string
-@@= skipped -14, +18 lines =@@
+@@= skipped -17, +17 lines =@@
  <foobaz prop="smth" />;
  ><foobaz prop="smth" /> : any
  >foobaz : any

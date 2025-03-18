@@ -24,7 +24,6 @@ const x: X = {
 // type guard
 function isNotNull<A>(x: A): x is NonNullable<A> {
 >isNotNull : <A>(x: A) => x is NonNullable<A>
->A : A
 >x : A
 
   return x !== null && x !== undefined;

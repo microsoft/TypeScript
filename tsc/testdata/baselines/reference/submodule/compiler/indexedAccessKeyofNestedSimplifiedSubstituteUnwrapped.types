@@ -7,22 +7,15 @@ type AnyFunction = (...args: any[]) => any;
 
 type Params<T> = Parameters<Extract<T, AnyFunction>>;
 >Params : Params<T>
->T : T
 
 interface Wrapper<T> {
->Wrapper : Wrapper<T>
->T : T
-
 	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;
 >call : <K extends keyof T>(event: K, ...args: Parameters<Extract<T[K], AnyFunction>>) => void
->K : K
 >event : K
 >args : Parameters<Extract<T[K], AnyFunction>>
 }
 
 interface AWrapped {
->AWrapped : AWrapped
-
 	foo(): void;
 >foo : () => void
 }
@@ -35,8 +28,6 @@ class A {
 }
 
 interface BWrapped extends AWrapped {
->BWrapped : BWrapped
-
 	bar(): void;
 >bar : () => void
 }

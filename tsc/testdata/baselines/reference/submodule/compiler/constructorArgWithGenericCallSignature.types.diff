@@ -1,17 +1,6 @@
 --- old.constructorArgWithGenericCallSignature.types
 +++ new.constructorArgWithGenericCallSignature.types
-@@= skipped -4, +4 lines =@@
- >Test : typeof Test
- 
-     export interface MyFunc {
-+>MyFunc : MyFunc
-+
-         <T>(value1: T): T;
-+>T : T
- >value1 : T
-     }
-     export class MyClass {
-@@= skipped -15, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  >func : MyFunc
  }
  var func: Test.MyFunc;

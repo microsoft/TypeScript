@@ -3,7 +3,6 @@
 === inferenceDoesntCompareAgainstUninstantiatedTypeParameter.ts ===
 class ClassA<TEntityClass>  {
 >ClassA : ClassA<TEntityClass>
->TEntityClass : TEntityClass
 
     constructor(private entity?: TEntityClass, public settings?: SettingsInterface<TEntityClass>) {
 >entity : TEntityClass
@@ -12,9 +11,6 @@ class ClassA<TEntityClass>  {
     }
 }
 export interface ValueInterface<TValueClass> {
->ValueInterface : ValueInterface<TValueClass>
->TValueClass : TValueClass
-
     func?: (row: TValueClass) => any;
 >func : (row: TValueClass) => any
 >row : TValueClass
@@ -23,9 +19,6 @@ export interface ValueInterface<TValueClass> {
 >value : string
 }
 export interface SettingsInterface<TClass> {
->SettingsInterface : SettingsInterface<TClass>
->TClass : TClass
-
     values?: (row: TClass) => ValueInterface<TClass>[],
 >values : (row: TClass) => ValueInterface<TClass>[]
 >row : TClass

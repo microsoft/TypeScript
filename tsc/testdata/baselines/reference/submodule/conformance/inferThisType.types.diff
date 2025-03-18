@@ -7,7 +7,6 @@
 ->f : <T>(g: (this: T) => void) => T
 ->g : (this: T) => void
 +>f : <T>(g: () => void) => T
-+>T : T
 +>g : () => void
  >this : T
  
@@ -25,20 +24,3 @@
  
  // works with infer types as well
  type Check<T> = T extends (this: infer U, ...args: any[]) => any ? string : unknown;
- >Check : Check<T>
-+>T : T
- >this : U
-+>U : U
- >args : any[]
- 
- type r1 = Check<(this: number) => void>; // should be string
-@@= skipped -25, +28 lines =@@
- 
- type This<T>  = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
- >This : This<T>
-+>T : T
- >this : U
-+>U : U
- >args : any[]
- 
- type r2 = This<(this: number) => void>; // should be number

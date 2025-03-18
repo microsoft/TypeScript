@@ -1,19 +1,7 @@
 --- old.unionAndIntersectionInference1.types
 +++ new.unionAndIntersectionInference1.types
-@@= skipped -3, +3 lines =@@
- // Repro from #2264
- 
- interface Y { 'i am a very certain type': Y }
-+>Y : Y
- >'i am a very certain type' : Y
- 
- var y: Y = <Y>undefined;
-@@= skipped -9, +10 lines =@@
- 
- function destructure<a, r>(
+@@= skipped -14, +14 lines =@@
  >destructure : <a, r>(something: a | Y, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
-+>a : a
-+>r : r
  
      something: a | Y,
 ->something : Y | a
@@ -21,7 +9,7 @@
  
      haveValue: (value: a) => r,
  >haveValue : (value: a) => r
-@@= skipped -16, +18 lines =@@
+@@= skipped -14, +14 lines =@@
      return something === y ? haveY(y) : haveValue(<a>something);
  >something === y ? haveY(y) : haveValue(<a>something) : r
  >something === y : boolean
@@ -45,28 +33,7 @@
  >Math.random() > 0.5 : boolean
  >Math.random() : number
  >Math.random : () => number
-@@= skipped -32, +32 lines =@@
- 
- function isVoid<a>(value: void | a): value is void {
- >isVoid : <a>(value: void | a) => value is void
-+>a : a
- >value : void | a
- 
-     return undefined;
-@@= skipped -8, +9 lines =@@
- 
- function isNonVoid<a>(value: void | a) : value is a {
- >isNonVoid : <a>(value: void | a) => value is a
-+>a : a
- >value : void | a
- 
-     return undefined;
-@@= skipped -8, +9 lines =@@
- 
- function foo1<a>(value: void|a): void {
- >foo1 : <a>(value: void | a) => void
-+>a : a
- >value : void | a
+@@= skipped -52, +52 lines =@@
  
      if (isVoid(value)) {
  >isVoid(value) : boolean
@@ -75,12 +42,7 @@
  >value : void | a
  
          value; // value is void
-@@= skipped -18, +19 lines =@@
- 
- function baz1<a>(value: void|a): void {
- >baz1 : <a>(value: void | a) => void
-+>a : a
- >value : void | a
+@@= skipped -18, +18 lines =@@
  
        if (isNonVoid(value)) {
  >isNonVoid(value) : boolean
@@ -89,20 +51,16 @@
  >value : void | a
  
            value; // value is a
-@@= skipped -20, +21 lines =@@
- 
- type Maybe<T> = T | void;
+@@= skipped -18, +18 lines =@@
  >Maybe : Maybe<T>
-+>T : T
  
  function get<U>(x: U | void): U {
 ->get : <U>(x: U | void) => U
 +>get : <U>(x: void | U) => U
-+>U : U
  >x : void | U
  
     return null; // just an example
-@@= skipped -15, +17 lines =@@
+@@= skipped -13, +13 lines =@@
  >get(foo).toUpperCase() : string
  >get(foo).toUpperCase : () => string
  >get(foo) : string
@@ -111,45 +69,7 @@
  >foo : Maybe<string>
  >toUpperCase : () => string
  
- // Repro from #5456
- 
- interface Man {
-+>Man : Man
-+
-     walks: boolean;
- >walks : boolean
- }
- 
- interface Bear {
-+>Bear : Bear
-+
-     roars: boolean;
- >roars : boolean
- }
- 
- interface Pig {
-+>Pig : Pig
-+
-     oinks: boolean;
- >oinks : boolean
- }
- 
- declare function pigify<T>(y: T & Bear): T & Pig;
- >pigify : <T>(y: T & Bear) => T & Pig
-+>T : T
- >y : T & Bear
- 
- declare var mbp: Man & Bear;
-@@= skipped -45, +52 lines =@@
- // Repros from #29815
- 
- interface ITest {
-+>ITest : ITest
-+
-   name: 'test'
- >name : "test"
- }
-@@= skipped -8, +10 lines =@@
+@@= skipped -53, +53 lines =@@
  >createTestAsync : () => Promise<ITest>
  >(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
  >Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
@@ -164,32 +84,7 @@
  >() => ({ name: 'test' }) : () => { name: "test"; }
  >({ name: 'test' }) : { name: "test"; }
  >{ name: 'test' } : { name: "test"; }
-@@= skipped -24, +24 lines =@@
- 
- declare function f1<T, U>(x: T | U): T | U;
- >f1 : <T, U>(x: T | U) => T | U
-+>T : T
-+>U : U
- >x : T | U
- 
- declare function f2<T, U>(x: T, y: U): T | U;
- >f2 : <T, U>(x: T, y: U) => T | U
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -25, +29 lines =@@
- const func = <T>() => {};
- >func : <T>() => void
- ><T>() => {} : <T>() => void
-+>T : T
- 
- const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
- >assign : <T, U>(a: T, b: U) => T & U
- ><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => T & U
-+>T : T
-+>U : U
+@@= skipped -56, +56 lines =@@
  >a : T
  >b : U
  >Object.assign(a, b) : T & U

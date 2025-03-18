@@ -237,9 +237,6 @@ function B(a: Nested, b: Nested) {
 } 
 
 interface StatsBase<T> {
->StatsBase : StatsBase<T>
->T : T
-
     isDirectory(): boolean;
 >isDirectory : () => boolean
 
@@ -248,8 +245,6 @@ interface StatsBase<T> {
 }
 
 interface Nested {
->Nested : Nested
-
     stats: StatsBase<any>;
 >stats : StatsBase<any>
 }

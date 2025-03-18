@@ -1,33 +1,6 @@
 --- old.tsxAttributeResolution14.types
 +++ new.tsxAttributeResolution14.types
-@@= skipped -1, +1 lines =@@
- 
- === react.d.ts ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         div: any;
- >div : any
- 	}
-     interface ElementAttributesProperty { prop: any }
-+>ElementAttributesProperty : ElementAttributesProperty
- >prop : any
- }
- 
- === file.tsx ===
- interface IProps {
-+>IProps : IProps
-+
-   primaryText: string,
- >primaryText : string
- 
-@@= skipped -19, +28 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  
  function VerticalNavMenuItem(prop: IProps) {

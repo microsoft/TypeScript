@@ -2,16 +2,12 @@
 
 === checkJsxIntersectionElementPropsType.tsx ===
 declare namespace JSX {
->JSX : any
-
     interface ElementAttributesProperty { props: {}; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : {}
 }
 
 declare class Component<P> {
 >Component : Component<P>
->P : P
 
   constructor(props: Readonly<P>);
 >props : Readonly<P>
@@ -22,7 +18,6 @@ declare class Component<P> {
 
 class C<T> extends Component<{ x?: boolean; } & T> {}
 >C : C<T>
->T : T
 >Component : Component<{ x?: boolean | undefined; } & T>
 >x : boolean | undefined
 

@@ -1,23 +1,6 @@
 --- old.tsxAttributeQuickinfoTypesSameAsObjectLiteral.types
 +++ new.tsxAttributeQuickinfoTypesSameAsObjectLiteral.types
-@@= skipped -1, +1 lines =@@
- 
- === tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx ===
- namespace JSX {
-+>JSX : any
-+
-     export interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         span: {};
- >span : {}
-     }
-     export interface Element {
-+>Element : Element
-+
- 		something?: any;
- >something : any
-     }
+@@= skipped -12, +12 lines =@@
  }
  
  const Foo = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
@@ -32,7 +15,7 @@
  >span : any
  >props.foo : "A" | "B" | "C"
  >props : { foo: "A" | "B" | "C"; }
-@@= skipped -23, +29 lines =@@
+@@= skipped -12, +12 lines =@@
  >span : any
  
  Foo({

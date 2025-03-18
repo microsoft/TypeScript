@@ -2,8 +2,6 @@
 
 === parserExportAsFunctionIdentifier.ts ===
 interface Foo {
->Foo : Foo
-
        export(): string;
 >export : () => string
 }

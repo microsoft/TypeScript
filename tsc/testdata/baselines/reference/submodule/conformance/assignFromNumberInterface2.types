@@ -2,15 +2,11 @@
 
 === assignFromNumberInterface2.ts ===
 interface Number {
->Number : Number
-
     doStuff(): string;
 >doStuff : () => string
 }
 
 interface NotNumber {
->NotNumber : NotNumber
-
     toString(radix?: number): string;
 >toString : (radix?: number) => string
 >radix : number

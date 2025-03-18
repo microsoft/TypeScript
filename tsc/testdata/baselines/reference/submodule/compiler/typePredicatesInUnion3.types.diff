@@ -51,23 +51,7 @@
  >x : unknown
  
          x;  // unknown
-@@= skipped -18, +18 lines =@@
- 
- type HasAttribute<T> = T & { attribute: number };
- >HasAttribute : HasAttribute<T>
-+>T : T
- >attribute : number
- 
- class Type1 {
-@@= skipped -32, +33 lines =@@
- 
- function assertType<T>(_val: T) {
- >assertType : <T>(_val: T) => void
-+>T : T
- >_val : T
- }
- 
-@@= skipped -8, +9 lines =@@
+@@= skipped -58, +58 lines =@@
  
  if (val.predicate()) {
  >val.predicate() : boolean

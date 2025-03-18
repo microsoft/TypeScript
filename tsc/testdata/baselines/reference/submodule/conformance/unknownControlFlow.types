@@ -92,7 +92,6 @@ function f10(x: unknown) {
 
 function f11<T>(x: T) {
 >f11 : <T>(x: T) => void
->T : T
 >x : T
 
     if (x) {
@@ -120,7 +119,6 @@ function f11<T>(x: T) {
 
 function f12<T extends {}>(x: T) {
 >f12 : <T extends {}>(x: T) => void
->T : T
 >x : T
 
     if (x) {
@@ -204,7 +202,6 @@ function f20(x: unknown) {
 
 function f21<T>(x: T) {
 >f21 : <T>(x: T) => void
->T : T
 >x : T
 
     if (x !== undefined) {
@@ -272,7 +269,6 @@ function f21<T>(x: T) {
 
 function f22<T extends {} | undefined>(x: T) {
 >f22 : <T extends {} | undefined>(x: T) => void
->T : T
 >x : T
 
     if (x !== undefined) {
@@ -340,7 +336,6 @@ function f22<T extends {} | undefined>(x: T) {
 
 function f23<T>(x: T | undefined | null) {
 >f23 : <T>(x: T | null | undefined) => void
->T : T
 >x : T | null | undefined
 
     if (x !== undefined) {
@@ -392,7 +387,6 @@ function f30(x: {}) {
 
 function f31<T>(x: T) {
 >f31 : <T>(x: T) => void
->T : T
 >x : T
 
     if (typeof x === "object") {
@@ -430,7 +424,6 @@ function f31<T>(x: T) {
 
 function f32<T extends {} | undefined>(x: T) {
 >f32 : <T extends {} | undefined>(x: T) => void
->T : T
 >x : T
 
     if (typeof x === "object") {
@@ -446,7 +439,6 @@ function f32<T extends {} | undefined>(x: T) {
 
 function possiblyNull<T>(x: T) {
 >possiblyNull : <T>(x: T) => T | null
->T : T
 >x : T
 
     return !!true ? x : null;  // T | null
@@ -459,7 +451,6 @@ function possiblyNull<T>(x: T) {
 
 function possiblyUndefined<T>(x: T) {
 >possiblyUndefined : <T>(x: T) => T | undefined
->T : T
 >x : T
 
     return !!true ? x : undefined;  // T | undefined
@@ -473,7 +464,6 @@ function possiblyUndefined<T>(x: T) {
 
 function possiblyNullOrUndefined<T>(x: T) {
 >possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
->T : T
 >x : T
 
     return possiblyUndefined(possiblyNull(x));  // T | null | undefined
@@ -486,7 +476,6 @@ function possiblyNullOrUndefined<T>(x: T) {
 
 function ensureNotNull<T>(x: T) {
 >ensureNotNull : <T>(x: T) => T & ({} | undefined)
->T : T
 >x : T
 
     if (x === null) throw Error();
@@ -501,7 +490,6 @@ function ensureNotNull<T>(x: T) {
 
 function ensureNotUndefined<T>(x: T) {
 >ensureNotUndefined : <T>(x: T) => T & ({} | null)
->T : T
 >x : T
 
     if (x === undefined) throw Error();
@@ -517,7 +505,6 @@ function ensureNotUndefined<T>(x: T) {
 
 function ensureNotNullOrUndefined<T>(x: T) {
 >ensureNotNullOrUndefined : <T>(x: T) => T & {}
->T : T
 >x : T
 
     return ensureNotUndefined(ensureNotNull(x));  // T & {}
@@ -548,11 +535,9 @@ function f40(a: string | undefined, b: number | null | undefined) {
 
 type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
 >QQ : QQ<T>
->T : T
 
 function f41<T>(a: T) {
 >f41 : <T>(a: T) => void
->T : T
 >a : T
 
     let a1 = ensureNotUndefined(ensureNotNull(a));  // T & {}
@@ -632,7 +617,6 @@ function f41<T>(a: T) {
 
 function deepEquals<T>(a: T, b: T): boolean {
 >deepEquals : <T>(a: T, b: T) => boolean
->T : T
 >a : T
 >b : T
 
@@ -700,7 +684,6 @@ function deepEquals<T>(a: T, b: T): boolean {
 
 function foo<T>(x: T | null) {
 >foo : <T>(x: T | null) => void
->T : T
 >x : T | null
 
     let y = x;
@@ -722,7 +705,6 @@ function foo<T>(x: T | null) {
 
 function ff1<T>(t: T, k: keyof T) {
 >ff1 : <T>(t: T, k: keyof T) => void
->T : T
 >t : T
 >k : keyof T
 
@@ -734,7 +716,6 @@ function ff1<T>(t: T, k: keyof T) {
 
 function ff2<T>(t: T & {}, k: keyof T) {
 >ff2 : <T>(t: T & {}, k: keyof T) => void
->T : T
 >t : T & {}
 >k : keyof T
 
@@ -746,7 +727,6 @@ function ff2<T>(t: T & {}, k: keyof T) {
 
 function ff3<T>(t: T, k: keyof (T & {})) {
 >ff3 : <T>(t: T, k: keyof (T & {})) => void
->T : T
 >t : T
 >k : keyof (T & {})
 
@@ -758,7 +738,6 @@ function ff3<T>(t: T, k: keyof (T & {})) {
 
 function ff4<T>(t: T & {}, k: keyof (T & {})) {
 >ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
->T : T
 >t : T & {}
 >k : keyof (T & {})
 
@@ -799,13 +778,11 @@ type NullableFoo = Foo | undefined;
 
 type Bar<T extends NullableFoo> = NonNullable<T>[string];
 >Bar : Bar<T>
->T : T
 
 // Generics and intersections with {}
 
 function fx0<T>(value: T & ({} | null)) {
 >fx0 : <T>(value: T & ({} | null)) => void
->T : T
 >value : T & ({} | null)
 
     if (value === 42) {
@@ -824,7 +801,6 @@ function fx0<T>(value: T & ({} | null)) {
 
 function fx1<T extends unknown>(value: T & ({} | null)) {
 >fx1 : <T extends unknown>(value: T & ({} | null)) => void
->T : T
 >value : T & ({} | null)
 
     if (value === 42) {
@@ -843,7 +819,6 @@ function fx1<T extends unknown>(value: T & ({} | null)) {
 
 function fx2<T extends {}>(value: T & ({} | null)) {
 >fx2 : <T extends {}>(value: T) => void
->T : T
 >value : T
 
     if (value === 42) {
@@ -862,7 +837,6 @@ function fx2<T extends {}>(value: T & ({} | null)) {
 
 function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 >fx3 : <T extends {} | undefined>(value: T & {}) => void
->T : T
 >value : T & {}
 
     if (value === 42) {
@@ -881,7 +855,6 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 
 function fx4<T extends {} | null>(value: T & ({} | null)) {
 >fx4 : <T extends {} | null>(value: T) => void
->T : T
 >value : T
 
     if (value === 42) {
@@ -900,7 +873,6 @@ function fx4<T extends {} | null>(value: T & ({} | null)) {
 
 function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
 >fx5 : <T extends {} | null | undefined>(value: T & ({} | null)) => void
->T : T
 >value : T & ({} | null)
 
     if (value === 42) {
@@ -977,7 +949,6 @@ function SendBlob(encoding: unknown) {
 
 function doSomething1<T extends unknown>(value: T): T {
 >doSomething1 : <T extends unknown>(value: T) => T
->T : T
 >value : T
 
     if (value === undefined) {
@@ -1050,13 +1021,11 @@ type TypeB = {
 
 type R<T extends keyof TypeA> =
 >R : R<T>
->T : T
 
     T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
 
 type R2<T extends PropertyKey> =
 >R2 : R2<T>
->T : T
 
     T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
 
@@ -1067,7 +1036,6 @@ type AB = "A" | "B";
 
 function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
 >x : <T_AB extends AB>(x: never, y: any) => void
->T_AB : T_AB
 >x : never
 >y : any
 

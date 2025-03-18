@@ -3,10 +3,10 @@
 === asyncAwait_es6.ts ===
 type MyPromise<T> = Promise<T>;
 >MyPromise : MyPromise<T>
->T : T
 
 declare var MyPromise: typeof Promise;
 >MyPromise : PromiseConstructor
+>Promise : PromiseConstructor
 
 declare var p: Promise<number>;
 >p : Promise<number>

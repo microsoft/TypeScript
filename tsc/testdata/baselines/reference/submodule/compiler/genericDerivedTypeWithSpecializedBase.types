@@ -3,7 +3,6 @@
 === genericDerivedTypeWithSpecializedBase.ts ===
 class A<T> {
 >A : A<T>
->T : T
 
     x: T;
 >x : T
@@ -11,7 +10,6 @@ class A<T> {
 
 class B<U> extends A<string> {
 >B : B<U>
->U : U
 >A : A<string>
 
     y: U;

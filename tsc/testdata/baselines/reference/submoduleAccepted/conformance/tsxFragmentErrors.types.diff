@@ -1,21 +1,6 @@
 --- old.tsxFragmentErrors.types
 +++ new.tsxFragmentErrors.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		[s: string]: any;
- >s : string
- 	}
-@@= skipped -10, +16 lines =@@
+@@= skipped -11, +11 lines =@@
  >React : any
  
  <>hi</div> // Error

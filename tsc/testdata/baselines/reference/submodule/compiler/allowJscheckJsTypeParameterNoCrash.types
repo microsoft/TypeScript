@@ -2,15 +2,11 @@
 
 === func.ts ===
 interface ComponentOptions<V> {
->ComponentOptions : ComponentOptions<V>
->V : V
-
     watch: Record<string, WatchHandler<any>>;
 >watch : Record<string, WatchHandler<any>>
 }
 type WatchHandler<T> = (val: T) => void;
 >WatchHandler : WatchHandler<T>
->T : T
 >val : T
 
 declare function extend(options: ComponentOptions<{}>): void;

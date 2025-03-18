@@ -2,15 +2,11 @@
 
 === intersectionSatisfiesConstraint.ts ===
 interface FirstInterface {
->FirstInterface : FirstInterface
-
     commonProperty: number
 >commonProperty : number
 }
 
 interface SecondInterface {
->SecondInterface : SecondInterface
-
     commonProperty: number
 >commonProperty : number
 }
@@ -18,7 +14,6 @@ interface SecondInterface {
 const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) => {
 >myFirstFunction : <T extends FirstInterface | SecondInterface>(param1: T) => void
 ><T extends FirstInterface | SecondInterface>(param1: T) => {    const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })    mySecondFunction(newParam)} : <T extends FirstInterface | SecondInterface>(param1: T) => void
->T : T
 >param1 : T
 
     const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })
@@ -42,7 +37,6 @@ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) 
 const mySecondFunction = <T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {
 >mySecondFunction : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
 ><T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {    return newParam} : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
->T : T
 >commonProperty : number
 >otherProperty : number
 >newParam : T

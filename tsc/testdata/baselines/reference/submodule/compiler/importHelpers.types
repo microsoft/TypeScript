@@ -26,7 +26,6 @@ class C {
 
 function id<T>(x: T) {
 >id : <T>(x: T) => T
->T : T
 >x : T
 
     return x;
@@ -65,7 +64,6 @@ class C {
 
 function id<T>(x: T) {
 >id : <T>(x: T) => T
->T : T
 >x : T
 
     return x;

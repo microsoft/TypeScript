@@ -170,7 +170,6 @@ function isNonNullVar(x: number | null) {
 
 function isNonNullGeneric<T>(x: T) {
 >isNonNullGeneric : <T>(x: T) => x is T & ({} | undefined)
->T : T
 >x : T
 
   return x !== null;
@@ -700,8 +699,6 @@ const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
 
 // inferred guards in methods
 interface NumberInferrer {
->NumberInferrer : NumberInferrer
-
   isNumber(x: number | string): x is number;
 >isNumber : (x: string | number) => x is number
 >x : string | number
@@ -998,6 +995,7 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 >foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
 >(fb: typeof foobar) => fb.type === "foo" : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
 >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
 >fb.type === "foo" : boolean
 >fb.type : "bar" | "foo"
 >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }

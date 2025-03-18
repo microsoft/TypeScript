@@ -3,7 +3,6 @@
 === indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts ===
 declare function f<T extends unknown = unknown>(x: { [x: string]: T }): T;
 >f : <T extends unknown>(x: { [x: string]: T; }) => T
->T : T
 >x : { [x: string]: T; }
 >x : string
 

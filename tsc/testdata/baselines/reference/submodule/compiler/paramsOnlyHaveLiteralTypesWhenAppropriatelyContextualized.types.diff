@@ -1,31 +1,22 @@
 --- old.paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.types
 +++ new.paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.types
-@@= skipped -6, +6 lines =@@
- // order would usually imply
- type Lower<T> = { [K in keyof T]: T[K] };
+@@= skipped -8, +8 lines =@@
  >Lower : Lower<T>
-+>T : T
-+>K : K
  
  export function appendToOptionalArray<
 ->appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
 +>appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined }, key: K, value: T) => void
  
    K extends string | number | symbol,
-+>K : K
-+
    T
-+>T : T
-+
  >(
    object: { [x in K]?: Lower<T>[] },
 ->object : { [x in K]?: Lower<T>[] | undefined; }
 +>object : { [x in K]?: Lower<T>[] | undefined }
-+>x : x
  
    key: K,
  >key : K
-@@= skipped -18, +25 lines =@@
+@@= skipped -16, +16 lines =@@
  
  ) {
    const array = object[key];

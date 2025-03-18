@@ -116,8 +116,6 @@
 
 {
     interface Window {
->Window : Window
-
         window: Window;
 >window : Window
     }
@@ -162,8 +160,6 @@
 
 {
     interface Window {
->Window : Window
-
         window: Window;
 >window : Window
     }
@@ -208,8 +204,6 @@
 
 {
     interface Window {
->Window : Window
-
         window: Window;
 >window : Window
     }

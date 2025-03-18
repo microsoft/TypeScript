@@ -4,13 +4,8 @@
 // Check that type parameter constraints are properly instantiated
 
 interface Mapper<T> {
->Mapper : Mapper<T>
->T : T
-
     map<U extends T, V extends U[]>(f: (item: T) => U): V;
 >map : <U extends T, V extends U[]>(f: (item: T) => U) => V
->U : U
->V : V
 >f : (item: T) => U
 >item : T
 }

@@ -3,7 +3,6 @@
 === mixinClassesAnnotated.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 class Base {
@@ -32,8 +31,6 @@ class Derived extends Base {
 }
 
 interface Printable {
->Printable : Printable
-
     print(): void;
 >print : () => void
 }
@@ -41,7 +38,6 @@ interface Printable {
 const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
 >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
 ><T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>    class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
->T : T
 >superClass : T
 >message : string
 
@@ -71,15 +67,12 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
     }
 
 interface Tagged {
->Tagged : Tagged
-
     _tag: string;
 >_tag : string
 }
 
 function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
->T : T
 >superClass : T
 
     class C extends superClass {

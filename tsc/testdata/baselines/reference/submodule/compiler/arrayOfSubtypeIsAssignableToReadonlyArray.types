@@ -12,7 +12,6 @@ class B extends A { b }
 
 class C<T> extends Array<T> { c }
 >C : C<T>
->T : T
 >Array : T[]
 >c : any
 

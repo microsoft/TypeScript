@@ -3,22 +3,17 @@
 === mappedTypes4.ts ===
 type Box<T> = {
 >Box : Box<T>
->T : T
 
 };
 
 type Boxified<T> = {
 >Boxified : Boxified<T>
->T : T
 
     [P in keyof T]: Box<T[P]>;
->P : P
-
 };
 
 function boxify<T>(obj: T): Boxified<T> {
 >boxify : <T>(obj: T) => Boxified<T>
->T : T
 >obj : T
 
     if (typeof obj === "object") {
@@ -97,11 +92,8 @@ type T05 = Partial<"hello" | "world" | 42>;
 
 type BoxifiedWithSentinel<T, U> = {
 >BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
->T : T
->U : U
 
     [P in keyof T]: Box<T[P]> | U;
->P : P
 }
 
 type T10 = BoxifiedWithSentinel<A | B | C, null>;
@@ -115,11 +107,8 @@ type T12 = BoxifiedWithSentinel<string, undefined>;
 
 type DeepReadonly<T> = {
 >DeepReadonly : DeepReadonly<T>
->T : T
 
     readonly [P in keyof T]: DeepReadonly<T[P]>;
->P : P
-
 };
 
 type Foo = {
@@ -168,11 +157,8 @@ type Z = { a: number };
 
 type Clone<T> = {
 >Clone : Clone<T>
->T : T
 
   [P in keyof (T & {})]: (T & {})[P];
->P : P
-
 };
 type M = Clone<Z>; // M should be { a: number }
 >M : M

@@ -5,10 +5,6 @@ type Mxs = Mx<'list', Mxs['p1']>;
 >Mxs : Mxs
 
 interface Mx<T, K> {
->Mx : Mx<T, K>
->T : T
->K : K
-
   p1: T;
 >p1 : T
 

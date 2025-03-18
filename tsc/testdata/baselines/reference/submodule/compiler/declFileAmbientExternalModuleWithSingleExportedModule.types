@@ -17,13 +17,8 @@ declare module "SubModule" {
 >"SubModule" : typeof import("SubModule")
 
     export module m {
->m : any
-
         export module m3 {
->m3 : any
-
             interface c {
->c : c
             }
         }
     }

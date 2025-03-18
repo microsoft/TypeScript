@@ -1,16 +1,11 @@
 --- old.duplicateTypeParameters3.types
 +++ new.duplicateTypeParameters3.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === duplicateTypeParameters3.ts ===
  interface X {
-+>X : X
-+
  x: () => <A, A>() => void;
 ->x : () => <A, A>() => void
 +>x : () => <A>() => void
-+>A : A
-+>A : A
  }
   
  

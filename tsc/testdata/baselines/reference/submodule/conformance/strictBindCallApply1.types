@@ -16,7 +16,6 @@ declare function overloaded(n: number): string;
 
 declare function generic<T>(x: T): T;
 >generic : <T>(x: T) => T
->T : T
 >x : T
 
 let f00 = foo.bind(undefined);
@@ -186,7 +185,6 @@ class C {
 
     generic<T>(x: T): T { return x }
 >generic : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 }
@@ -512,7 +510,6 @@ C.apply(c, [10, "hello", 30]);  // Error
 
 function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 >bar : <T extends unknown[]>(callback: (...args: T) => void) => void
->T : T
 >callback : (...args: T) => void
 >this : 1
 >args : T
@@ -534,7 +531,6 @@ function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 
 function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
 >baz : <T extends 1 | 2>(callback: (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
->T : T
 >callback : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >this : 1
 >args : T extends 1 ? [unknown] : [unknown, unknown]
@@ -557,7 +553,6 @@ function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknow
 // Repro from #32964
 class Foo<T extends unknown[]> {
 >Foo : Foo<T>
->T : T
 
     constructor() {
         this.fn.bind(this);
@@ -577,7 +572,6 @@ class Foo<T extends unknown[]> {
 
 class Bar<T extends 1 | 2> {
 >Bar : Bar<T>
->T : T
 
     constructor() {
         this.fn.bind(this);

@@ -1,15 +1,6 @@
 --- old.stringLiteralTypesInImplementationSignatures.types
 +++ new.stringLiteralTypesInImplementationSignatures.types
-@@= skipped -27, +27 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     (x: 'hi');
- >x : "hi"
- 
-@@= skipped -10, +12 lines =@@
+@@= skipped -37, +37 lines =@@
  }
  
  var a: {

@@ -5,7 +5,6 @@
 
 export type CanBeExpanded<T extends object> = {
 >CanBeExpanded : CanBeExpanded<T>
->T : T
 
   value: T
 >value : T
@@ -13,9 +12,6 @@ export type CanBeExpanded<T extends object> = {
 
 type Expand__<O, N, Depth> =
 >Expand__ : Expand__<O, N, Depth>
->O : O
->N : N
->Depth : Depth
 
   N extends Depth ?
       unknown :
@@ -25,5 +21,4 @@ type Expand__<O, N, Depth> =
 
 export type UseQueryOptions<T> = Expand__<T, 4, 2>
 >UseQueryOptions : T extends CanBeExpanded<any> ? T["value"] extends CanBeExpanded<any> ? T["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"] extends CanBeExpanded<any> ? T["value"]["value"]["value"]["value"] extends CanBeExpanded<any> ? ???["value"]["value"]["value"] extends CanBeExpanded<any> ? ???["value"]["value"] extends CanBeExpanded<any> ? ???["value"] extends CanBeExpanded<any> ? ??? extends CanBeExpanded<any> ? ??? : ??? : ???["value"] : ???["value"]["value"] : ???["value"]["value"]["value"] : T["value"]["value"]["value"]["value"] : T["value"]["value"]["value"] : T["value"]["value"] : T["value"] : T
->T : T
 

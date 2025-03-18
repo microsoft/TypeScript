@@ -2,15 +2,12 @@
 
 === /node_modules/.prisma/client/index.d.ts ===
 export interface PrismaClientOptions {
->PrismaClientOptions : PrismaClientOptions
-
   rejectOnNotFound?: any;
 >rejectOnNotFound : any
 }
 
 export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
 >PrismaClient : PrismaClient<T>
->T : T
 
   private fetcher;
 >fetcher : any
@@ -26,7 +23,6 @@ import { PrismaClient } from "@prisma/client";
 
 declare const enhancePrisma: <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown };
 >enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown; }
->TPrismaClientCtor : TPrismaClientCtor
 >client : TPrismaClientCtor
 >enhanced : unknown
 

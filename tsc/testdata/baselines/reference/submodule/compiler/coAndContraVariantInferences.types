@@ -21,7 +21,6 @@ declare function fab(arg: A | B): void;
 
 declare function foo<T>(x: { kind: T }, f: (arg: { kind: T }) => void): void;
 >foo : <T>(x: { kind: T; }, f: (arg: { kind: T; }) => void) => void
->T : T
 >x : { kind: T; }
 >kind : T
 >f : (arg: { kind: T; }) => void
@@ -43,10 +42,6 @@ foo(b, fab);
 // Repro from #45603
 
 interface Action<TName extends string,TPayload> {
->Action : Action<TName, TPayload>
->TName : TName
->TPayload : TPayload
-
     name: TName,
 >name : TName
 
@@ -70,8 +65,6 @@ const actionB = { payload: true } as Action<'ACTION_B', boolean>;
 
 function call<TName extends string,TPayload>(
 >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
->TName : TName
->TPayload : TPayload
 
   action: Action<TName,TPayload>,
 >action : Action<TName, TPayload>
@@ -91,6 +84,8 @@ const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
 >printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
 >(action: typeof actionA | typeof actionB)=> console.log(action) : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
 >action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
+>actionA : Action<"ACTION_A", string>
+>actionB : Action<"ACTION_B", boolean>
 >console.log(action) : void
 >console.log : (...data: any[]) => void
 >console : Console

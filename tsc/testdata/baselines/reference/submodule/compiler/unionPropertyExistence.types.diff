@@ -1,33 +1,6 @@
 --- old.unionPropertyExistence.types
 +++ new.unionPropertyExistence.types
-@@= skipped -1, +1 lines =@@
- 
- === unionPropertyExistence.ts ===
- interface A {
-+>A : A
-+
-     inAll: string;
- >inAll : string
- 
-@@= skipped -11, +13 lines =@@
- }
- 
- interface B {
-+>B : B
-+
-     inAll: boolean;
- >inAll : boolean
- 
-@@= skipped -11, +13 lines =@@
- }
- 
- interface C {
-+>C : C
-+
-     inAll: number;
- >inAll : number
- 
-@@= skipped -20, +22 lines =@@
+@@= skipped -43, +43 lines =@@
  >abc : ABC
  
  declare const x: "foo" | "bar";

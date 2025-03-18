@@ -1,11 +1,8 @@
 --- old.importStatements.types
 +++ new.importStatements.types
-@@= skipped -21, +21 lines =@@
- 
+@@= skipped -22, +22 lines =@@
  // no code gen expected
  module B {
-+>B : any
-+
      import a = A; //Error generates 'var <Alias> = <EntityName>;'
 ->a : typeof a
 ->A : typeof a
@@ -14,7 +11,7 @@
  }
  
  // no code gen expected
-@@= skipped -10, +12 lines =@@
+@@= skipped -9, +9 lines =@@
  >C : typeof C
  
      import a = A; //Error generates 'var <Alias> = <EntityName>;'
@@ -27,6 +24,7 @@
 ->m : typeof a
 ->a : typeof a
 +>m : typeof A
++>a : typeof A
  
      var p: a.Point;
 ->p : a.Point
@@ -39,7 +37,7 @@
  >{x:0, y:0 } : { x: number; y: number; }
  >x : number
  >0 : 0
-@@= skipped -25, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  >D : typeof D
  
      import a = A;

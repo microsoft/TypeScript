@@ -1,16 +1,6 @@
 --- old.useBeforeDeclaration_jsx.types
 +++ new.useBeforeDeclaration_jsx.types
-@@= skipped -1, +1 lines =@@
- 
- === useBeforeDeclaration_jsx.tsx ===
- namespace JSX {
-+>JSX : any
-+
-     export interface Element {}
-+>Element : Element
- }
- 
- class C {
+@@= skipped -8, +8 lines =@@
  >C : C
  
      static a = <C.z></C.z>;
@@ -48,7 +38,7 @@
  >span : any
  >C.x : {}
  >C : typeof C
-@@= skipped -33, +36 lines =@@
+@@= skipped -26, +26 lines =@@
  >span : any
  
      static d = <span id={C.y}></span>;

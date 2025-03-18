@@ -39,6 +39,7 @@ type F6 = ({ a: string }) => typeof string;
 >F6 : F6
 >a : any
 >string : any
+>string : any
 
 type F7 = ({ a: string, b: number }) => typeof number; 
 >F7 : F7
@@ -46,11 +47,13 @@ type F7 = ({ a: string, b: number }) => typeof number;
 >string : any
 >b : any
 >number : any
+>number : any
 
 type F8 = ({ a, b: number }) => typeof number; 
 >F8 : F8
 >a : any
 >b : any
+>number : any
 >number : any
 
 type F9 = ([a, b, c]) => void; 
@@ -91,6 +94,7 @@ type G6 = ({ a: string }) => typeof string;
 >G6 : G6
 >a : any
 >string : any
+>string : any
 
 type G7 = ({ a: string, b: number }) => typeof number; 
 >G7 : G7
@@ -98,11 +102,13 @@ type G7 = ({ a: string, b: number }) => typeof number;
 >string : any
 >b : any
 >number : any
+>number : any
 
 type G8 = ({ a, b: number }) => typeof number; 
 >G8 : G8
 >a : any
 >b : any
+>number : any
 >number : any
 
 type G9 = ([a, b, c]) => void; 
@@ -112,8 +118,6 @@ type G9 = ([a, b, c]) => void;
 >c : any
 
 interface I {
->I : I
-
   method1(arg: number): any; 
 >method1 : (arg: number) => any
 >arg : number

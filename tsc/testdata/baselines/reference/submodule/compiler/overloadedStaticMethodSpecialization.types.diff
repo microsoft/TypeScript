@@ -1,27 +1,21 @@
 --- old.overloadedStaticMethodSpecialization.types
 +++ new.overloadedStaticMethodSpecialization.types
-@@= skipped -2, +2 lines =@@
- === overloadedStaticMethodSpecialization.ts ===
- class A<T> {
+@@= skipped -4, +4 lines =@@
  >A : A<T>
-+>T : T
  
      static B<S>(v: A<S>): A<S>;
 ->B : { <S>(v: A<S>): A<S>; <S_1>(v: S_1): A<S_1>; }
 +>B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
-+>S : S
  >v : A<S>
  
      static B<S>(v: S): A<S>;
 ->B : { <S_1>(v: A<S_1>): A<S_1>; <S>(v: S): A<S>; }
 +>B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
-+>S : S
  >v : S
  
      static B<S>(v: any): A<S> {
 ->B : { <S_1>(v: A<S_1>): A<S_1>; <S_1>(v: S_1): A<S_1>; }
 +>B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
-+>S : S
  >v : any
  
          return null;

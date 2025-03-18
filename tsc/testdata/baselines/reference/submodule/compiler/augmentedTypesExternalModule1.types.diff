@@ -1,8 +1,0 @@
---- old.augmentedTypesExternalModule1.types
-+++ new.augmentedTypesExternalModule1.types
-@@= skipped -9, +9 lines =@@
- >foo : () => void
- 
- module c5 { } // should be ok everywhere
-+>c5 : typeof c5
-+

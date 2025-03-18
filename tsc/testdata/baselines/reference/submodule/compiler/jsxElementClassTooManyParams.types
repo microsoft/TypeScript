@@ -2,16 +2,8 @@
 
 === jsxElementClassTooManyParams.tsx ===
 namespace JSX {
->JSX : any
-
     export interface Element {}
->Element : Element
-
     export interface IntrinsicClassAttributes<TClass, TOther=never> {
->IntrinsicClassAttributes : IntrinsicClassAttributes<TClass, TOther>
->TClass : TClass
->TOther : TOther
-
         ref?: TClass;
 >ref : TClass | undefined
 
@@ -19,26 +11,18 @@ namespace JSX {
 >item : TOther | undefined
     }
     export interface ElementClass extends Element {}
->ElementClass : ElementClass
-
     export interface ElementAttributesProperty { props: {}; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : {}
 
     export interface ElementChildrenAttribute { children: {}; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : {}
 
     export interface IntrinsicAttributes {}
->IntrinsicAttributes : IntrinsicAttributes
-
     export interface IntrinsicElements { [key: string]: Element }
->IntrinsicElements : IntrinsicElements
 >key : string
 }
 class ElemClass<T extends {x: number}> implements JSX.ElementClass {
 >ElemClass : ElemClass<T>
->T : T
 >x : number
 >JSX : any
 

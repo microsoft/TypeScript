@@ -1,78 +1,6 @@
 --- old.genericCallWithFunctionTypedArguments.types
 +++ new.genericCallWithFunctionTypedArguments.types
-@@= skipped -5, +5 lines =@@
- 
- function foo<T>(x: (a: T) => T) {
- >foo : <T>(x: (a: T) => T) => T
-+>T : T
- >x : (a: T) => T
- >a : T
- 
-@@= skipped -13, +14 lines =@@
- >foo(<U>(x: U) => '') : unknown
- >foo : <T>(x: (a: T) => T) => T
- ><U>(x: U) => '' : <U>(x: U) => string
-+>U : U
- >x : U
- >'' : ""
- 
-@@= skipped -8, +9 lines =@@
- >foo<string>(<U>(x: U) => '') : string
- >foo : <T>(x: (a: T) => T) => T
- ><U>(x: U) => '' : <U>(x: U) => string
-+>U : U
- >x : U
- >'' : ""
- 
-@@= skipped -13, +14 lines =@@
- 
- function foo2<T, U>(x: T, cb: (a: T) => U) {
- >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
-+>T : T
-+>U : U
- >x : T
- >cb : (a: T) => U
- >a : T
-@@= skipped -16, +18 lines =@@
- >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
- >1 : 1
- >function <Z>(a: Z) { return '' } : <Z>(a: Z) => string
-+>Z : Z
- >a : Z
- >'' : ""
- 
-@@= skipped -18, +19 lines =@@
- >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
- >'' : ""
- ><Z>(a: Z) => 1 : <Z>(a: Z) => number
-+>Z : Z
- >a : Z
- >1 : 1
- 
- function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
- >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
-+>T : T
-+>U : U
- >x : T
- >cb : (a: T) => U
- >a : T
-@@= skipped -22, +25 lines =@@
- >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
- >1 : 1
- ><Z>(a: Z) => '' : <Z>(a: Z) => string
-+>Z : Z
- >a : Z
- >'' : ""
- >'' : ""
-@@= skipped -26, +27 lines =@@
- 
- function other<T, U>(t: T, u: U) {
- >other : <T, U>(t: T, u: U) => void
-+>T : T
-+>U : U
- >t : T
- >u : U
- 
+@@= skipped -127, +127 lines =@@
      var r10 = foo2(1, (x: T) => ''); // error
  >r10 : string
  >foo2(1, (x: T) => '') : string
@@ -81,7 +9,7 @@
  >1 : 1
  >(x: T) => '' : (x: T) => string
  >x : T
-@@= skipped -15, +17 lines =@@
+@@= skipped -9, +9 lines =@@
      var r10 = foo2(1, (x) => ''); // string
  >r10 : string
  >foo2(1, (x) => '') : string

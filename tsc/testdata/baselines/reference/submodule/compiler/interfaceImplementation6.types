@@ -2,8 +2,6 @@
 
 === interfaceImplementation6.ts ===
 interface I1 {
->I1 : I1
-
     item:number;
 >item : number
 }

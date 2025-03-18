@@ -22,8 +22,6 @@ declare module "ext" {
 >"ext" : typeof import("ext")
 
     export interface A {}
->A : A
-
     export function fa(): A;
 >fa : () => A
 }
@@ -31,8 +29,6 @@ declare module "ext/other" {
 >"ext/other" : typeof import("ext/other")
 
     export interface B {}
->B : B
-
     export function fb(): B;
 >fb : () => B
 }

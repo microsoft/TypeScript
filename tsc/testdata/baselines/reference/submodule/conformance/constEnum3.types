@@ -8,6 +8,7 @@ const enum TestType { foo, bar }
 
 type TestTypeStr = keyof typeof TestType;
 >TestTypeStr : "bar" | "foo"
+>TestType : typeof TestType
 
 function f1(f: TestType) { }
 >f1 : (f: TestType) => void

@@ -1,46 +1,7 @@
 --- old.importTypeGenericTypes.types
 +++ new.importTypeGenericTypes.types
-@@= skipped -1, +1 lines =@@
- 
- === foo.ts ===
- interface Point<T> {
-+>Point : Point<T>
-+>T : T
-+
-     x: number;
- >x : number
- 
-@@= skipped -14, +17 lines =@@
- 
- === foo2.ts ===
- namespace Bar {
-+>Bar : typeof Bar
-+
-     export interface I<T> {
-+>I : I<T>
-+>T : T
-+
-         a: string;
- >a : string
- 
-@@= skipped -13, +18 lines =@@
- }
- 
- export namespace Baz {
-+>Baz : any
-+
-     export interface J<T> {
-+>J : J<T>
-+>T : T
-+
-         a: number;
- >a : number
- 
-@@= skipped -14, +19 lines =@@
- 
- class Bar<T> {
+@@= skipped -44, +44 lines =@@
  >Bar : Bar<T>
-+>T : T
  
      item: Bar.I<T>;
 ->item : Bar.I<T>
@@ -53,7 +14,7 @@
  >Baz : any
  }
  export { Bar }
-@@= skipped -14, +15 lines =@@
+@@= skipped -12, +12 lines =@@
  
  === usage.ts ===
  export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
@@ -71,11 +32,3 @@
  >Bar : any
  >x : number
  >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
-@@= skipped -15, +15 lines =@@
- 
- export class Bar2<T> {
- >Bar2 : Bar2<T>
-+>T : T
- 
-     item: {a: string, b: number, c: object, data: T};
- >item : { a: string; b: number; c: object; data: T; }

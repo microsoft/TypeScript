@@ -1,14 +1,6 @@
 --- old.verbatim-declarations-parameters.types
 +++ new.verbatim-declarations-parameters.types
-@@= skipped -2, +2 lines =@@
- === verbatim-declarations-parameters.ts ===
- type Map = {} & { [P in string]: any }
- >Map : { [x: string]: any; }
-+>P : P
- 
- type MapOrUndefined = Map | undefined | "dummy"
- >MapOrUndefined : MapOrUndefined
-@@= skipped -23, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  }
  
  export function foo1(

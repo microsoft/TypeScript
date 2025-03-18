@@ -9,77 +9,7 @@
  === node_modules/prop-types/index.d.ts ===
  export const nominalTypeHack: unique symbol;
  >nominalTypeHack : unique symbol
- 
- export type IsOptional<T> = undefined | null extends T ? true : undefined extends T ? true : null extends T ? true : false;
- >IsOptional : IsOptional<T>
-+>T : T
- >true : true
- >true : true
- >true : true
-@@= skipped -15, +13 lines =@@
- 
- export type RequiredKeys<V> = { [K in keyof V]-?: Exclude<V[K], undefined> extends Validator<infer T> ? IsOptional<T> extends true ? never : K : never }[keyof V];
- >RequiredKeys : RequiredKeys<V>
-+>V : V
-+>K : K
-+>T : T
- >true : true
- 
- export type OptionalKeys<V> = Exclude<keyof V, RequiredKeys<V>>;
- >OptionalKeys : OptionalKeys<V>
-+>V : V
- 
- export type InferPropsInner<V> = { [K in keyof V]-?: InferType<V[K]>; };
- >InferPropsInner : InferPropsInner<V>
-+>V : V
-+>K : K
- 
- export interface Validator<T> {
-+>Validator : Validator<T>
-+>T : T
-+
-     (props: object, propName: string, componentName: string, location: string, propFullName: string): Error | null;
- >props : object
- >propName : string
-@@= skipped -22, +31 lines =@@
- }
- 
- export interface Requireable<T> extends Validator<T> {
-+>Requireable : Requireable<T>
-+>T : T
-+
-     isRequired: Validator<NonNullable<T>>;
- >isRequired : Validator<NonNullable<T>>
- }
- 
- export type ValidationMap<T> = { [K in keyof T]?: Validator<T[K]> };
- >ValidationMap : ValidationMap<T>
-+>T : T
-+>K : K
- 
- export type InferType<V> = V extends Validator<infer T> ? T : any;
- >InferType : InferType<V>
-+>V : V
-+>T : T
- 
- export type InferProps<V> =
- >InferProps : InferProps<V>
-+>V : V
- 
-     & InferPropsInner<Pick<V, RequiredKeys<V>>>
-     & Partial<InferPropsInner<Pick<V, OptionalKeys<V>>>>;
-@@= skipped -33, +41 lines =@@
- 
- export function shape<P extends ValidationMap<any>>(type: P): Requireable<InferProps<P>>;
- >shape : <P extends ValidationMap<any>>(type: P) => Requireable<InferProps<P>>
-+>P : P
- >type : P
- 
- export function oneOfType<T extends Validator<any>>(types: T[]): Requireable<NonNullable<InferType<T>>>;
- >oneOfType : <T extends Validator<any>>(types: T[]) => Requireable<NonNullable<InferType<T>>>
-+>T : T
- >types : T[]
- 
+@@= skipped -79, +76 lines =@@
  
  === file.ts ===
  import * as PropTypes from "prop-types";
@@ -87,12 +17,8 @@
 +>PropTypes : typeof import("node_modules/prop-types/index")
  
  interface Props {
-+>Props : Props
-+
      any?: any;
- >any : any
- 
-@@= skipped -22, +26 lines =@@
+@@= skipped -13, +13 lines =@@
  >bool : boolean
  
      shape: {
@@ -384,11 +310,13 @@
  >ExtractedProps : ExtractedProps
  >PropTypes : any
 ->propTypes : PropTypes.ValidationMap<Props>
++>propTypes : ValidationMap<Props>
  
  type ExtractedPropsWithoutAnnotation = PropTypes.InferProps<typeof propTypesWithoutAnnotation>;
  >ExtractedPropsWithoutAnnotation : ExtractedPropsWithoutAnnotation
  >PropTypes : any
 ->propTypesWithoutAnnotation : { any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>; oneOfType: PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>; }
++>propTypesWithoutAnnotation : { any: Requireable<any>; array: Validator<any[]>; bool: Validator<boolean>; shape: Validator<NonNullable<InferProps<{ foo: Validator<string>; bar: Requireable<boolean>; baz: Requireable<any>; }>>>; oneOfType: Validator<NonNullable<NonNullable<string | boolean | InferProps<{ foo: Requireable<string>; bar: Validator<number>; }>>>>; }
  
  type ExtractPropsMatch = ExtractedProps extends ExtractedPropsWithoutAnnotation ? true : false;
  >ExtractPropsMatch : true

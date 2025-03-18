@@ -2,8 +2,6 @@
 
 === usingDeclarationsWithObjectLiterals1.ts ===
 interface MyDisposable {
->MyDisposable : MyDisposable
-
   value: number;
 >value : number
 
@@ -51,8 +49,6 @@ interface MyDisposable {
 }
 
 interface MyAsyncDisposable {
->MyAsyncDisposable : MyAsyncDisposable
-
   value: number;
 >value : number
 

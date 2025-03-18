@@ -2,12 +2,8 @@
 
 === optionalFunctionArgAssignability.ts ===
 interface Promise<T> {
->Promise : Promise<T>
->T : T
-
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
 >then : { <TResult1, TResult2>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>; }
->U : U
 >onFulfill : (value: T) => U
 >value : T
 >onReject : (reason: any) => U
@@ -18,7 +14,6 @@ var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: a
 >a : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
 >function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U): Promise<U> { return null } : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
 >then : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
->U : U
 >onFulfill : (value: string) => U
 >value : string
 >onReject : (reason: any) => U
@@ -28,7 +23,6 @@ var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: a
 >b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
 >function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null } : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
 >then : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
->U : U
 >onFulFill : (value: number) => U
 >value : number
 >onReject : (reason: any) => U

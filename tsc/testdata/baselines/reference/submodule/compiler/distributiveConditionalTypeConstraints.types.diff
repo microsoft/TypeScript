@@ -1,56 +1,6 @@
 --- old.distributiveConditionalTypeConstraints.types
 +++ new.distributiveConditionalTypeConstraints.types
-@@= skipped -2, +2 lines =@@
- === distributiveConditionalTypeConstraints.ts ===
- type IsArray<T> = T extends unknown[] ? true : false;
- >IsArray : IsArray<T>
-+>T : T
- >true : true
- >false : false
- 
- function f1<T extends object>(x: IsArray<T>) {
- >f1 : <T extends object>(x: IsArray<T>) => void
-+>T : T
- >x : IsArray<T>
- 
-     let t: true = x;   // Error
-@@= skipped -20, +22 lines =@@
- 
- function f2<T extends unknown[]>(x: IsArray<T>) {
- >f2 : <T extends unknown[]>(x: IsArray<T>) => void
-+>T : T
- >x : IsArray<T>
- 
-     let t: true = x;
-@@= skipped -15, +16 lines =@@
- 
- function f3<T extends string[]>(x: IsArray<T>) {
- >f3 : <T extends string[]>(x: IsArray<T>) => void
-+>T : T
- >x : IsArray<T>
- 
-     let t: true = x;
-@@= skipped -15, +16 lines =@@
- 
- function f4<T extends Function>(x: IsArray<T>) {
- >f4 : <T extends Function>(x: IsArray<T>) => void
-+>T : T
- >x : IsArray<T>
- 
-     let t: true = x;   // Error
-@@= skipped -15, +16 lines =@@
- 
- type ZeroOf<T> =
- >ZeroOf : ZeroOf<T>
-+>T : T
- 
-     T extends null ? null :
-     T extends undefined ? undefined :
-@@= skipped -12, +13 lines =@@
- 
- function f10<T extends {}>(x: ZeroOf<T>) {
- >f10 : <T extends {}>(x: ZeroOf<T>) => void
-+>T : T
+@@= skipped -82, +82 lines =@@
  >x : ZeroOf<T>
  
      let t: "" | 0 | false = x;
@@ -62,37 +12,7 @@
  }
  
  type Foo<T> = T extends "abc" | 42 ? true : false;
- >Foo : Foo<T>
-+>T : T
- >true : true
- >false : false
- 
- function f20<T extends string>(x: Foo<T>) {
- >f20 : <T extends string>(x: Foo<T>) => void
-+>T : T
- >x : Foo<T>
- 
-     let t: false = x;  // Error
-@@= skipped -26, +29 lines =@@
- // Modified repro from #30152
- 
- interface A { foo(): void; }
-+>A : A
- >foo : () => void
- 
- interface B { bar(): void; }
-+>B : B
- >bar : () => void
- 
- interface C { foo(): void, bar(): void }
-+>C : C
- >foo : () => void
- >bar : () => void
- 
- function test1<T extends A>(y: T extends B ? number : string) {
- >test1 : <T extends A>(y: T extends B ? number : string) => void
-+>T : T
- >y : T extends B ? number : string
+@@= skipped -38, +38 lines =@@
  
      if (typeof y == 'string') {
  >typeof y == 'string' : boolean
@@ -101,12 +21,7 @@
  >y : T extends B ? number : string
  >'string' : "string"
  
-@@= skipped -36, +40 lines =@@
- 
- function test2<T extends A>(y: T extends B ? string : number) {
- >test2 : <T extends A>(y: T extends B ? string : number) => void
-+>T : T
- >y : T extends B ? string : number
+@@= skipped -25, +25 lines =@@
  
      if (typeof y == 'string') {
  >typeof y == 'string' : boolean
@@ -115,12 +30,7 @@
  >y : T extends B ? string : number
  >'string' : "string"
  
-@@= skipped -25, +26 lines =@@
- 
- function test3<T extends A>(y: T extends C ? number : string) {
- >test3 : <T extends A>(y: T extends C ? number : string) => void
-+>T : T
- >y : T extends C ? number : string
+@@= skipped -25, +25 lines =@@
  
      if (typeof y == 'string') {
  >typeof y == 'string' : boolean
@@ -129,12 +39,7 @@
  >y : T extends C ? number : string
  >'string' : "string"
  
-@@= skipped -25, +26 lines =@@
- 
- function test4<T extends A>(y: T extends C ? string : number) {
- >test4 : <T extends A>(y: T extends C ? string : number) => void
-+>T : T
- >y : T extends C ? string : number
+@@= skipped -25, +25 lines =@@
  
      if (typeof y == 'string') {
  >typeof y == 'string' : boolean

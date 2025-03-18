@@ -1,41 +1,6 @@
 --- old.declarationEmitCommonJsModuleReferencedType.types
 +++ new.declarationEmitCommonJsModuleReferencedType.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/declarationEmitCommonJsModuleReferencedType.ts] ////
- 
- === r/node_modules/foo/node_modules/nested/index.d.ts ===
--
- export interface NestedProps {}
--=== r/node_modules/foo/other/index.d.ts ===
-+>NestedProps : NestedProps
- 
-+=== r/node_modules/foo/other/index.d.ts ===
- export interface OtherIndexProps {}
--=== r/node_modules/foo/other.d.ts ===
-+>OtherIndexProps : OtherIndexProps
- 
-+=== r/node_modules/foo/other.d.ts ===
- export interface OtherProps {}
-+>OtherProps : OtherProps
-+
- === r/node_modules/foo/index.d.ts ===
- import { OtherProps } from "./other";
- >OtherProps : any
-@@= skipped -19, +22 lines =@@
- >NestedProps : any
- 
- export interface SomeProps {}
-+>SomeProps : SomeProps
- 
- export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
- >foo : () => [SomeProps, OtherProps, OtherIndexProps, NestedProps]
- 
- === node_modules/root/index.d.ts ===
- export interface RootProps {}
-+>RootProps : RootProps
- 
- export function bar(): RootProps;
- >bar : () => RootProps
+@@= skipped -31, +31 lines =@@
  
  === r/entry.ts ===
  import { foo } from "foo";

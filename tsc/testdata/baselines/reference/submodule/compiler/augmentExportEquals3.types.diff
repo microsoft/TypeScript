@@ -38,11 +38,8 @@
 +>"./file1" : typeof foo
  
      interface A { a }
-+>A : A
  >a : any
- 
-     let b: number;
-@@= skipped -36, +37 lines =@@
+@@= skipped -36, +36 lines =@@
  
  === file3.ts ===
  import * as x from "./file1";

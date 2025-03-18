@@ -3,7 +3,6 @@
 === aliasInstantiationExpressionGenericIntersectionNoCrash1.ts ===
 class ErrImpl<E> {
 >ErrImpl : ErrImpl<E>
->E : E
 
   e!: E;
 >e : E
@@ -11,11 +10,11 @@ class ErrImpl<E> {
 
 declare const Err: typeof ErrImpl & (<T>() => T);
 >Err : typeof ErrImpl & <T>() => T
->T : T
+>ErrImpl : typeof ErrImpl
 
 type ErrAlias<U> = typeof Err<U>;
 >ErrAlias : { new (): ErrImpl<U>; prototype: ErrImpl<any>; } & () => U
->U : U
+>Err : typeof ErrImpl & <T>() => T
 
 declare const e: ErrAlias<number>;
 >e : { new (): ErrImpl<number>; prototype: ErrImpl<any>; } & () => number

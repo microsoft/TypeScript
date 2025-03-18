@@ -1,15 +1,6 @@
 --- old.spreadIdenticalTypesRemoved.types
 +++ new.spreadIdenticalTypesRemoved.types
-@@= skipped -1, +1 lines =@@
- 
- === spreadIdenticalTypesRemoved.ts ===
- interface Animal {
-+>Animal : Animal
-+
-     name: string;
- >name : string
- 
-@@= skipped -17, +19 lines =@@
+@@= skipped -18, +18 lines =@@
  }
  
  function clonePet(pet: Animal, fullCopy?: boolean) {
@@ -24,16 +15,7 @@
  
          name: pet.name,
  >name : string
-@@= skipped -28, +28 lines =@@
- }
- 
- interface Animal2 {
-+>Animal2 : Animal2
-+
-     name: string;
- >name : string
- 
-@@= skipped -7, +9 lines =@@
+@@= skipped -35, +35 lines =@@
  >owner : string | undefined
  }
  function billOwner(pet: Animal2) {

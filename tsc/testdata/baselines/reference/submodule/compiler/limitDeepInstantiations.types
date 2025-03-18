@@ -5,8 +5,6 @@
 
 type Foo<T extends "true", B> = { "true": Foo<T, Foo<T, B>> }[T];
 >Foo : Foo<T, B>
->T : T
->B : B
 >"true" : Foo<T, Foo<T, B>>
 
 let f1: Foo<"true", {}>;

@@ -38,7 +38,6 @@ declare const c4: boolean | undefined | null
 >c4 : boolean | null | undefined
 
 interface I { a: string }
->I : I
 >a : string
 
 declare const d1: I | undefined | null

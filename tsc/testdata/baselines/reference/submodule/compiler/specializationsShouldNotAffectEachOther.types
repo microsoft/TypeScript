@@ -2,8 +2,6 @@
 
 === specializationsShouldNotAffectEachOther.ts ===
 interface Series  {
->Series : Series
-
     data: string[];
 >data : string[]
 }

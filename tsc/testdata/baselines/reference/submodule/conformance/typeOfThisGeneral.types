@@ -105,6 +105,7 @@ class MyTestClass {
 
         var t: typeof MyTestClass;
 >t : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
 
         var t = MyTestClass;
 >t : typeof MyTestClass
@@ -122,6 +123,7 @@ class MyTestClass {
 
         var p: typeof MyTestClass;
 >p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
 
         var p = MyTestClass;
 >p : typeof MyTestClass
@@ -143,6 +145,7 @@ class MyTestClass {
 
         var p: typeof MyTestClass;
 >p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
 
         var p = MyTestClass;
 >p : typeof MyTestClass
@@ -159,6 +162,7 @@ class MyTestClass {
     static set staticProp(v: typeof MyTestClass) {
 >staticProp : typeof MyTestClass
 >v : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
 
         //type of 'this' in static accessor body is constructor function type
         var p = this;
@@ -167,6 +171,7 @@ class MyTestClass {
 
         var p: typeof MyTestClass;
 >p : typeof MyTestClass
+>MyTestClass : typeof MyTestClass
 
         var p = MyTestClass;
 >p : typeof MyTestClass
@@ -181,8 +186,6 @@ class MyTestClass {
 
 class MyGenericTestClass<T, U> {
 >MyGenericTestClass : MyGenericTestClass<T, U>
->T : T
->U : U
 
     private canary: number;
 >canary : number
@@ -285,6 +288,7 @@ class MyGenericTestClass<T, U> {
 
         var t: typeof MyGenericTestClass;
 >t : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
 
         var t = MyGenericTestClass;
 >t : typeof MyGenericTestClass
@@ -302,6 +306,7 @@ class MyGenericTestClass<T, U> {
 
         var p: typeof MyGenericTestClass;
 >p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
 
         var p = MyGenericTestClass;
 >p : typeof MyGenericTestClass
@@ -323,6 +328,7 @@ class MyGenericTestClass<T, U> {
 
         var p: typeof MyGenericTestClass;
 >p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
 
         var p = MyGenericTestClass;
 >p : typeof MyGenericTestClass
@@ -339,6 +345,7 @@ class MyGenericTestClass<T, U> {
     static set staticProp(v: typeof MyGenericTestClass) {
 >staticProp : typeof MyGenericTestClass
 >v : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
 
         //type of 'this' in static accessor body is constructor function type
         var p = this;
@@ -347,6 +354,7 @@ class MyGenericTestClass<T, U> {
 
         var p: typeof MyGenericTestClass;
 >p : typeof MyGenericTestClass
+>MyGenericTestClass : typeof MyGenericTestClass
 
         var p = MyGenericTestClass;
 >p : typeof MyGenericTestClass
@@ -433,6 +441,7 @@ var q2 = (s = this) => {
 
     var s: typeof globalThis;
 >s : typeof globalThis
+>globalThis : typeof globalThis
 
     s.spaaaaaaace = 4;
 >s.spaaaaaaace = 4 : 4
@@ -444,6 +453,7 @@ var q2 = (s = this) => {
     //type of 'this' in a fat arrow expression body is typeof globalThis
     var t: typeof globalThis;
 >t : typeof globalThis
+>globalThis : typeof globalThis
 
     var t = this;
 >t : typeof globalThis
@@ -460,6 +470,7 @@ var q2 = (s = this) => {
 //type of 'this' in global module is GlobalThis
 var t: typeof globalThis;
 >t : typeof globalThis
+>globalThis : typeof globalThis
 
 var t = this;
 >t : typeof globalThis

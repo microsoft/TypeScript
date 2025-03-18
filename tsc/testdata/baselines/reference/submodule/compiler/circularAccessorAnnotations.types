@@ -6,7 +6,9 @@ declare const c1: {
 
     get foo(): typeof c1.foo;
 >foo : any
+>c1.foo : any
 >c1 : { readonly foo: any; }
+>foo : any
 }
 
 declare const c2: {
@@ -15,7 +17,9 @@ declare const c2: {
     set foo(value: typeof c2.foo);
 >foo : any
 >value : any
+>c2.foo : any
 >c2 : { foo: any; }
+>foo : any
 }
 
 declare const c3: {
@@ -27,7 +31,9 @@ declare const c3: {
     set foo(value: typeof c3.foo);
 >foo : string
 >value : string
+>c3.foo : string
 >c3 : { foo: string; }
+>foo : string
 }
 
 type T1 = {

@@ -5,7 +5,6 @@
 
 function test<T extends { a: string }>(obj: T) {
 >test : <T extends { a: string; }>(obj: T) => Omit<T, "a"> & { b: string; }
->T : T
 >a : string
 >obj : T
 

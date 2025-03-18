@@ -17,14 +17,7 @@
  
  declare global {
  >global : any
- 
-   namespace JSX {
-+>JSX : any
-+
-     // This should only use keys of JSX.IntrinsicElements.
-     // Diverging here to illustrate different error messages.
-     type ElementType = "div";
-@@= skipped -23, +19 lines =@@
+@@= skipped -23, +17 lines =@@
  
  // should be fine - `ElementType` accepts `div`
  let a = <div />;

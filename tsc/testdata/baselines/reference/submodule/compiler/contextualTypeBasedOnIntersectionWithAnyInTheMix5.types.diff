@@ -1,89 +1,15 @@
 --- old.contextualTypeBasedOnIntersectionWithAnyInTheMix5.types
 +++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix5.types
-@@= skipped -2, +2 lines =@@
- === contextualTypeBasedOnIntersectionWithAnyInTheMix5.ts ===
- type ComputedGetter<T> = (oldValue?: T) => T;
- >ComputedGetter : ComputedGetter<T>
-+>T : T
- >oldValue : T | undefined
- 
- type ComputedOptions = Record<string, ComputedGetter<any>>;
-@@= skipped -7, +8 lines =@@
- 
- type ExtractComputedReturns<T extends any> = {
- >ExtractComputedReturns : ExtractComputedReturns<T>
-+>T : T
- 
-   [key in keyof T]: T[key] extends (...args: any[]) => infer TReturn
-+>key : key
- >args : any[]
-+>TReturn : TReturn
- 
-     ? TReturn
-     : never;
- };
- 
- interface ComponentOptionsBase<D, C extends ComputedOptions> {
-+>ComponentOptionsBase : ComponentOptionsBase<D, C>
-+>D : D
-+>C : C
-+
-   data?: D;
- >data : D | undefined
- 
-@@= skipped -18, +25 lines =@@
- 
- type ComponentPublicInstance<D = {}, C extends ComputedOptions = {}> = D &
- >ComponentPublicInstance : ComponentPublicInstance<D, C>
-+>D : D
-+>C : C
- 
-   ExtractComputedReturns<C>;
- 
-@@= skipped -7, +9 lines =@@
- >ComponentOptions : ComponentOptions<D, C>
- 
-   D = any,
-+>D : D
-+
-   C extends ComputedOptions = any,
-+>C : C
-+
- > = ComponentOptionsBase<D, C> & ThisType<ComponentPublicInstance<D, C>>;
+@@= skipped -39, +39 lines =@@
  
  interface App {
-+>App : App
-+
    mixin(mixin: ComponentOptions): this;
 ->mixin : (mixin: ComponentOptions) => this
 +>mixin : (mixin: ComponentOptions<any, any>) => this
  >mixin : ComponentOptions<any, any>
  }
  
- interface InjectionKey<T> extends Symbol {}
-+>InjectionKey : InjectionKey<T>
-+>T : T
- 
- interface Ref<T> {
-+>Ref : Ref<T>
-+>T : T
-+
-   _v: T;
- >_v : T
- }
- 
- declare function reactive<T extends object>(target: T): Ref<T>;
- >reactive : <T extends object>(target: T) => Ref<T>
-+>T : T
- >target : T
- 
- interface ThemeInstance {
-+>ThemeInstance : ThemeInstance
-+
-   readonly name: Readonly<Ref<string>>;
- >name : Readonly<Ref<string>>
- }
-@@= skipped -29, +43 lines =@@
+@@= skipped -24, +24 lines =@@
  >ThemeSymbol : InjectionKey<ThemeInstance>
  
  declare function inject(

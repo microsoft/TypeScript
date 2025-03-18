@@ -1,41 +1,15 @@
 --- old.accessorsOverrideProperty9.types
 +++ new.accessorsOverrideProperty9.types
-@@= skipped -5, +5 lines =@@
- // Mixin utilities
- export type Constructor<T = {}> = new (...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
- >args : any[]
- 
- export type PropertiesOf<T> = { [K in keyof T]: T[K] };
- >PropertiesOf : PropertiesOf<T>
-+>T : T
-+>K : K
- 
- interface IApiItemConstructor extends Constructor<ApiItem>, PropertiesOf<typeof ApiItem> {}
-->ApiItem : typeof ApiItem
-+>IApiItemConstructor : IApiItemConstructor
- 
- // Base class
- class ApiItem {
-@@= skipped -28, +31 lines =@@
- 
- // Mixin base class
- interface ApiItemContainerMixin extends ApiItem {
-+>ApiItemContainerMixin : ApiItemContainerMixin
-+
-   readonly members: ReadonlyArray<ApiItem>;
- >members : readonly ApiItem[]
+@@= skipped -38, +38 lines =@@
  }
  
  function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 ->ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
 +>ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & new (...args: any[]) => ApiItemContainerMixin
-+>TBaseClass : TBaseClass
  
    baseClass: TBaseClass
  >baseClass : TBaseClass
-@@= skipped -14, +17 lines =@@
+@@= skipped -9, +9 lines =@@
  >args : any[]
  
    abstract class MixedClass extends baseClass implements ApiItemContainerMixin {

@@ -2,9 +2,6 @@
 
 === typeArgumentInferenceWithObjectLiteral.ts ===
 interface Computed<T> {
->Computed : Computed<T>
->T : T
-
     read(): T;
 >read : () => T
 
@@ -15,7 +12,6 @@ interface Computed<T> {
 
 function foo<T>(x: Computed<T>) { }
 >foo : <T>(x: Computed<T>) => void
->T : T
 >x : Computed<T>
 
 var s: string;
@@ -73,8 +69,6 @@ enum E2 { X }
 
 declare function f1<T, U>(a: { w: (x: T) => U; r: () => T; }, b: T): U;
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
->T : T
->U : U
 >a : { w: (x: T) => U; r: () => T; }
 >w : (x: T) => U
 >x : T

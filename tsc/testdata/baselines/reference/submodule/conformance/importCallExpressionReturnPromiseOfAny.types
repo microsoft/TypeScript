@@ -51,6 +51,7 @@ var p1: Promise<any> = import(getSpecifier());
 
 var p11: Promise<typeof defaultModule> = import(getSpecifier());
 >p11 : Promise<typeof import("defaultPath")>
+>defaultModule : typeof import("defaultPath")
 >import(getSpecifier()) : Promise<any>
 >getSpecifier() : string
 >getSpecifier : () => string
@@ -64,6 +65,7 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof 
 >getSpecifier() : string
 >getSpecifier : () => string
 >"defaulPath" : "defaulPath"
+>defaultModule : typeof import("defaultPath")
 
 p1.then(zero => {
 >p1.then(zero => {    return zero.foo();  // ok, zero is any}) : Promise<any>
@@ -86,6 +88,7 @@ let j: string;
 
 var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 >p3 : Promise<typeof import("defaultPath")>
+>defaultModule : typeof import("defaultPath")
 >import(j=getSpecifier()) : Promise<any>
 >j=getSpecifier() : string
 >j : string

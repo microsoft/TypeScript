@@ -6,9 +6,6 @@
 // Variance annotation error expected
 
 interface Controller<out T> {
->Controller : Controller<T>
->T : T
-
 	createAnimal: () => T;
 >createAnimal : () => T
 
@@ -18,8 +15,6 @@ interface Controller<out T> {
 }
 
 interface Animal {
->Animal : Animal
-
 	run(): void;
 >run : () => void
 
@@ -36,9 +31,6 @@ class Dog implements Animal {
 }
 
 interface AnimalContainer<T> {
->AnimalContainer : AnimalContainer<T>
->T : T
-
 	controller: Controller<T>;
 >controller : Controller<T>
 }

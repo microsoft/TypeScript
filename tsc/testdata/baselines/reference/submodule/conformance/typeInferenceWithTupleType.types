@@ -3,8 +3,6 @@
 === typeInferenceWithTupleType.ts ===
 function combine<T, U>(x: T, y: U): [T, U] {
 >combine : <T, U>(x: T, y: U) => [T, U]
->T : T
->U : U
 >x : T
 >y : U
 
@@ -35,8 +33,6 @@ var combineEle2 = combineResult[1]; // number
 
 function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 >zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
->T : T
->U : U
 >array1 : T[]
 >array2 : U[]
 
@@ -119,14 +115,10 @@ var zipResultEleEle = zipResult[0][0]; // string
 
 declare function f1<T1, T2>(values: [T1[], T2[]]): T1;
 >f1 : <T1, T2>(values: [T1[], T2[]]) => T1
->T1 : T1
->T2 : T2
 >values : [T1[], T2[]]
 
 declare function f2<T1, T2>(values: readonly [T1[], T2[]]): T1;
 >f2 : <T1, T2>(values: [T1[], T2[]]) => T1
->T1 : T1
->T2 : T2
 >values : [T1[], T2[]]
 
 let expected: "a";

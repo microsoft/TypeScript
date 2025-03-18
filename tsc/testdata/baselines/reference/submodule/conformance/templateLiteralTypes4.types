@@ -4,103 +4,79 @@
 // infer from number
 type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
 >TNumber0 : 100
->N : N
 
 type TNumber1 = "-100" extends `${infer N extends number}` ? N : never; // -100
 >TNumber1 : -100
->N : N
 
 type TNumber2 = "1.1" extends `${infer N extends number}` ? N : never; // 1.1
 >TNumber2 : 1.1
->N : N
 
 type TNumber3 = "8e-11" extends `${infer N extends number}` ? N : never; // 8e-11 (0.00000000008)
 >TNumber3 : 8e-11
->N : N
 
 type TNumber4 = "0x10" extends `${infer N extends number}` ? N : never; // number (not round-trippable)
 >TNumber4 : number
->N : N
 
 type TNumber5 = "0o10" extends `${infer N extends number}` ? N : never; // number (not round-trippable)
 >TNumber5 : number
->N : N
 
 type TNumber6 = "0b10" extends `${infer N extends number}` ? N : never; // number (not round-trippable)
 >TNumber6 : number
->N : N
 
 type TNumber7 = "10e2" extends `${infer N extends number}` ? N : never; // number (not round-trippable)
 >TNumber7 : number
->N : N
 
 type TNumber8 = "abcd" extends `${infer N extends number}` ? N : never; // never
 >TNumber8 : never
->N : N
 
 // infer from bigint
 type TBigInt0 = "100" extends `${infer N extends bigint}` ? N : never; // 100n
 >TBigInt0 : never
->N : N
 
 type TBigInt1 = "-100" extends `${infer N extends bigint}` ? N : never; // -100n
 >TBigInt1 : never
->N : N
 
 type TBigInt2 = "0x10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
 >TBigInt2 : never
->N : N
 
 type TBigInt3 = "0o10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
 >TBigInt3 : never
->N : N
 
 type TBigInt4 = "0b10" extends `${infer N extends bigint}` ? N : never; // bigint (not round-trippable)
 >TBigInt4 : never
->N : N
 
 type TBigInt5 = "1.1" extends `${infer N extends bigint}` ? N : never; // never
 >TBigInt5 : never
->N : N
 
 type TBigInt6 = "10e2" extends `${infer N extends bigint}` ? N : never; // never
 >TBigInt6 : never
->N : N
 
 type TBigInt7 = "abcd" extends `${infer N extends bigint}` ? N : never; // never
 >TBigInt7 : never
->N : N
 
 // infer from boolean
 type TBoolean0 = "true" extends `${infer T extends boolean}` ? T : never; // true
 >TBoolean0 : true
->T : T
 
 type TBoolean1 = "false" extends `${infer T extends boolean}` ? T : never; // false
 >TBoolean1 : false
->T : T
 
 type TBoolean2 = "abcd" extends `${infer T extends boolean}` ? T : never; // never
 >TBoolean2 : never
->T : T
 
 // infer from null
 type TNull0 = "null" extends `${infer T extends null}` ? T : never; // null
 >TNull0 : null
->T : T
 
 type TNull1 = "abcd" extends `${infer T extends null}` ? T : never; // never
 >TNull1 : never
->T : T
 
 // infer from undefined
 type TUndefined0 = "undefined" extends `${infer T extends undefined}` ? T : never; // undefined
 >TUndefined0 : undefined
->T : T
 
 type TUndefined1 = "abcd" extends `${infer T extends undefined}` ? T : never; // never
 >TUndefined1 : never
->T : T
 
 // infer from literal enums
 const enum StringLiteralEnum { Zero = "0", True = "true", False = "false", Undefined = "undefined", Null = "null" }
@@ -118,7 +94,6 @@ const enum StringLiteralEnum { Zero = "0", True = "true", False = "false", Undef
 
 type TStringLiteralEnum0 = "0" extends `${infer T extends StringLiteralEnum}` ? T : never; // StringLiteralEnum.Zero
 >TStringLiteralEnum0 : StringLiteralEnum.Zero
->T : T
 
 const enum NumberLiteralEnum { Zero, One }
 >NumberLiteralEnum : NumberLiteralEnum
@@ -127,7 +102,6 @@ const enum NumberLiteralEnum { Zero, One }
 
 type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? T : never; // NumberLiteralEnum.Zero
 >TNumberLiteralEnum0 : NumberLiteralEnum.Zero
->T : T
 
 // infer from non-literal enums
 const enum NonLiteralEnum { Zero = NumberLiteralEnum.Zero, One = NumberLiteralEnum.One }
@@ -143,7 +117,6 @@ const enum NonLiteralEnum { Zero = NumberLiteralEnum.Zero, One = NumberLiteralEn
 
 type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never; // 0
 >TNonLiteralEnum0 : NonLiteralEnum.Zero
->T : T
 
 // infer using priority:
 //     string > template-literal > (string-literal | string-literal-enum) >
@@ -155,64 +128,51 @@ type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : ne
 // string > string-literal-enum
 type PString00 = "0" extends `${infer T extends string | StringLiteralEnum}` ? T : never; // "0"
 >PString00 : "0"
->T : T
 
 // string > number
 type PString01 = "0" extends `${infer T extends string | number}` ? T : never; // "0"
 >PString01 : "0"
->T : T
 
 // string > enum
 type PString02 = "0" extends `${infer T extends string | NonLiteralEnum}` ? T : never; // "0"
 >PString02 : "0"
->T : T
 
 // string > (number-literal | number-literal-enum)
 type PString03 = "0" extends `${infer T extends string | 0}` ? T : never; // "0"
 >PString03 : "0"
->T : T
 
 type PString04 = "0" extends `${infer T extends string | NumberLiteralEnum}` ? T : never; // "0"
 >PString04 : "0"
->T : T
 
 // string > bigint
 type PString05 = "0" extends `${infer T extends string | bigint}` ? T : never; // "0"
 >PString05 : "0"
->T : T
 
 // string > bigint-literal
 type PString06 = "0" extends `${infer T extends string | 0n}` ? T : never; // "0"
 >PString06 : "0"
->T : T
 
 // string > boolean
 type PString07 = "true" extends `${infer T extends string | boolean}` ? T : never; // "true"
 >PString07 : "true"
->T : T
 
 type PString08 = "false" extends `${infer T extends string | boolean}` ? T : never; // "false"
 >PString08 : "false"
->T : T
 
 // string > (boolean-literal | undefined | null)
 type PString09 = "true" extends `${infer T extends string | true}` ? T : never; // "true"
 >PString09 : "true"
->T : T
 >true : true
 
 type PString10 = "false" extends `${infer T extends string | false}` ? T : never; // "false"
 >PString10 : "false"
->T : T
 >false : false
 
 type PString11 = "undefined" extends `${infer T extends string | undefined}` ? T : never; // "undefined"
 >PString11 : "undefined"
->T : T
 
 type PString12 = "null" extends `${infer T extends string | null}` ? T : never; // "null"
 >PString12 : "null"
->T : T
 
 // #endregion string
 
@@ -220,59 +180,47 @@ type PString12 = "null" extends `${infer T extends string | null}` ? T : never; 
 // template-literal > number
 type PTemplate00 = "10" extends `${infer T extends `1${string}` | number}` ? T : never; // "10"
 >PTemplate00 : "10"
->T : T
 
 // template-literal > enum
 type PTemplate01 = "10" extends `${infer T extends `1${string}` | NonLiteralEnum}` ? T : never; // "10"
 >PTemplate01 : "10"
->T : T
 
 // template-literal > (number-literal | number-literal-enum)
 type PTemplate02 = "10" extends `${infer T extends `1${string}` | 10}` ? T : never; // "10"
 >PTemplate02 : "10"
->T : T
 
 type PTemplate03 = "10" extends `${infer T extends `1${string}` | NumberLiteralEnum}` ? T : never; // "10"
 >PTemplate03 : "10"
->T : T
 
 // template-literal > bigint
 type PTemplate04 = "10" extends `${infer T extends `1${string}` | bigint}` ? T : never; // "10"
 >PTemplate04 : "10"
->T : T
 
 // template-literal > bigint-literal
 type PTemplate05 = "10" extends `${infer T extends `1${string}` | 10n}` ? T : never; // "10"
 >PTemplate05 : "10"
->T : T
 
 // template-literal > boolean
 type PTemplate06 = "true" extends `${infer T extends `${string}e` | boolean}` ? T : never; // "true"
 >PTemplate06 : "true"
->T : T
 
 type PTemplate07 = "false" extends `${infer T extends `${string}e` | boolean}` ? T : never; // "false"
 >PTemplate07 : "false"
->T : T
 
 // template-literal > (boolean-literal | undefined | null)
 type PTemplate08 = "true" extends `${infer T extends `${"t"}${string}` | true}` ? T : never; // "true"
 >PTemplate08 : "true"
->T : T
 >true : true
 
 type PTemplate09 = "false" extends `${infer T extends `${"f"}${string}` | false}` ? T : never; // "false"
 >PTemplate09 : "false"
->T : T
 >false : false
 
 type PTemplate10 = "undefined" extends `${infer T extends `${"u"}${string}` | undefined}` ? T : never; // "undefined"
 >PTemplate10 : "undefined"
->T : T
 
 type PTemplate11 = "null" extends `${infer T extends `${"n"}${string}` | null}` ? T : never; // "null"
 >PTemplate11 : "null"
->T : T
 
 // #endregion template-literal
 
@@ -280,59 +228,47 @@ type PTemplate11 = "null" extends `${infer T extends `${"n"}${string}` | null}` 
 // string-literal > number
 type PStringLiteral00 = "0" extends `${infer T extends "0" | number}` ? T : never; // "0"
 >PStringLiteral00 : "0"
->T : T
 
 // string-literal > enum
 type PStringLiteral01 = "0" extends `${infer T extends "0" | NonLiteralEnum}` ? T : never; // "0"
 >PStringLiteral01 : "0"
->T : T
 
 // string-literal > (number-literal | number-literal-enum)
 type PStringLiteral02 = "0" extends `${infer T extends "0" | 0}` ? T : never; // "0"
 >PStringLiteral02 : "0"
->T : T
 
 type PStringLiteral03 = "0" extends `${infer T extends "0" | NumberLiteralEnum}` ? T : never; // "0"
 >PStringLiteral03 : "0"
->T : T
 
 // string-literal > bigint
 type PStringLiteral04 = "0" extends `${infer T extends "0" | bigint}` ? T : never; // "0"
 >PStringLiteral04 : "0"
->T : T
 
 // string-literal > bigint-literal
 type PStringLiteral05 = "0" extends `${infer T extends "0" | 0n}` ? T : never; // "0"
 >PStringLiteral05 : "0"
->T : T
 
 // string-literal > boolean
 type PStringLiteral06 = "true" extends `${infer T extends "true" | "false" | boolean}` ? T : never; // "true"
 >PStringLiteral06 : "true"
->T : T
 
 type PStringLiteral07 = "false" extends `${infer T extends "true" | "false" | boolean}` ? T : never; // "false"
 >PStringLiteral07 : "false"
->T : T
 
 // string-literal > (boolean-literal | undefined | null)
 type PStringLiteral08 = "true" extends `${infer T extends "true" | true}` ? T : never; // "true"
 >PStringLiteral08 : "true"
->T : T
 >true : true
 
 type PStringLiteral09 = "false" extends `${infer T extends "false" | false}` ? T : never; // "false"
 >PStringLiteral09 : "false"
->T : T
 >false : false
 
 type PStringLiteral10 = "undefined" extends `${infer T extends "undefined" | undefined}` ? T : never; // "undefined"
 >PStringLiteral10 : "undefined"
->T : T
 
 type PStringLiteral11 = "null" extends `${infer T extends "null" | null}` ? T : never; // "null"
 >PStringLiteral11 : "null"
->T : T
 
 // #endregion string-literal
 
@@ -340,59 +276,47 @@ type PStringLiteral11 = "null" extends `${infer T extends "null" | null}` ? T : 
 // string-literal-enum > number
 type PStringLiteralEnum00 = "0" extends `${infer T extends StringLiteralEnum | number}` ? T : never; // StringLiteralEnum.Zero
 >PStringLiteralEnum00 : StringLiteralEnum.Zero
->T : T
 
 // string-literal-enum > enum
 type PStringLiteralEnum01 = "0" extends `${infer T extends StringLiteralEnum | NonLiteralEnum}` ? T : never; // StringLiteralEnum.Zero
 >PStringLiteralEnum01 : StringLiteralEnum.Zero
->T : T
 
 // string-literal-enum > (number-literal | number-literal-enum)
 type PStringLiteralEnum02 = "0" extends `${infer T extends StringLiteralEnum | 0}` ? T : never; // StringLiteralEnum.Zero
 >PStringLiteralEnum02 : StringLiteralEnum.Zero
->T : T
 
 type PStringLiteralEnum03 = "0" extends `${infer T extends StringLiteralEnum | NumberLiteralEnum}` ? T : never; // StringLiteralEnum.Zero
 >PStringLiteralEnum03 : StringLiteralEnum.Zero
->T : T
 
 // string-literal-enum > bigint
 type PStringLiteralEnum04 = "0" extends `${infer T extends StringLiteralEnum | bigint}` ? T : never; // StringLiteralEnum.Zero
 >PStringLiteralEnum04 : StringLiteralEnum.Zero
->T : T
 
 // string-literal-enum > bigint-literal
 type PStringLiteralEnum05 = "0" extends `${infer T extends StringLiteralEnum | 0n}` ? T : never; // StringLiteralEnum.Zero
 >PStringLiteralEnum05 : StringLiteralEnum.Zero
->T : T
 
 // string-literal-enum > boolean
 type PStringLiteralEnum06 = "true" extends `${infer T extends StringLiteralEnum | boolean}` ? T : never; // StringLiteralEnum.True
 >PStringLiteralEnum06 : StringLiteralEnum.True
->T : T
 
 type PStringLiteralEnum07 = "false" extends `${infer T extends StringLiteralEnum | boolean}` ? T : never; // StringLiteralEnum.False
 >PStringLiteralEnum07 : StringLiteralEnum.False
->T : T
 
 // string-literal-enum > (boolean-literal | undefined | null)
 type PStringLiteralEnum08 = "true" extends `${infer T extends StringLiteralEnum | true}` ? T : never; // StringLiteralEnum.True
 >PStringLiteralEnum08 : StringLiteralEnum.True
->T : T
 >true : true
 
 type PStringLiteralEnum09 = "false" extends `${infer T extends StringLiteralEnum | false}` ? T : never; // StringLiteralEnum.False
 >PStringLiteralEnum09 : StringLiteralEnum.False
->T : T
 >false : false
 
 type PStringLiteralEnum10 = "undefined" extends `${infer T extends StringLiteralEnum | undefined}` ? T : never; // StringLiteralEnum.Undefined
 >PStringLiteralEnum10 : StringLiteralEnum.Undefined
->T : T
 
 type PStringLiteralEnum11 = "null" extends `${infer T extends StringLiteralEnum | null}` ? T : never; // StringLiteralEnum.Null
 >PStringLiteralEnum11 : StringLiteralEnum.Null
->T : T
 
 // #endregion string-literal-enum
 
@@ -400,22 +324,18 @@ type PStringLiteralEnum11 = "null" extends `${infer T extends StringLiteralEnum 
 // number > enum
 type PNumber0 = "0" extends `${infer T extends number | NonLiteralEnum}` ? T : never; // 0
 >PNumber0 : 0
->T : T
 
 // number > number-literal-enum
 type PNumber1 = "0" extends `${infer T extends number | NumberLiteralEnum}` ? T : never; // 0
 >PNumber1 : 0
->T : T
 
 // number > bigint
 type PNumber2 = "0" extends `${infer T extends number | bigint}` ? T : never; // 0
 >PNumber2 : 0
->T : T
 
 // number > bigint-literal
 type PNumber3 = "0" extends `${infer T extends number | 0n}` ? T : never; // 0
 >PNumber3 : 0
->T : T
 
 // #endregion number
 
@@ -423,17 +343,14 @@ type PNumber3 = "0" extends `${infer T extends number | 0n}` ? T : never; // 0
 // enum > number-literal-enum
 type PEnum0 = "0" extends `${infer T extends NonLiteralEnum | NumberLiteralEnum}` ? T : never; // 0
 >PEnum0 : NumberLiteralEnum.Zero
->T : T
 
 // enum > bigint
 type PEnum1 = "0" extends `${infer T extends NonLiteralEnum | bigint}` ? T : never; // 0
 >PEnum1 : NonLiteralEnum.Zero
->T : T
 
 // enum > bigint-literal
 type PEnum2 = "0" extends `${infer T extends NonLiteralEnum | 0n}` ? T : never; // 0
 >PEnum2 : NonLiteralEnum.Zero
->T : T
 
 // #endregion enum
 
@@ -441,12 +358,10 @@ type PEnum2 = "0" extends `${infer T extends NonLiteralEnum | 0n}` ? T : never; 
 // number-literal > bigint
 type PNumberLiteral0 = "0" extends `${infer T extends 0 | bigint}` ? T : never; // 0
 >PNumberLiteral0 : 0
->T : T
 
 // number-literal > bigint-literal
 type PNumberLiteral1 = "0" extends `${infer T extends 0 | 0n}` ? T : never; // 0
 >PNumberLiteral1 : 0
->T : T
 
 // #endregion number-literal
 
@@ -454,65 +369,48 @@ type PNumberLiteral1 = "0" extends `${infer T extends 0 | 0n}` ? T : never; // 0
 // number-literal-enum > bigint
 type PNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum | bigint}` ? T : never; // NumberLiteralEnum.Zero
 >PNumberLiteralEnum0 : NumberLiteralEnum.Zero
->T : T
 
 // number-literal-enum > bigint-literal
 type PNumberLiteralEnum1 = "0" extends `${infer T extends NumberLiteralEnum | 0n}` ? T : never; // NumberLiteralEnum.Zero
 >PNumberLiteralEnum1 : NumberLiteralEnum.Zero
->T : T
 
 // #endregion number-literal-enum
 
 // non-matchable constituents are excluded
 type PExclude0 = "0" extends `${infer T extends "1" | number}` ? T : never; // 0
 >PExclude0 : 0
->T : T
 
 type PExclude1 = "0" extends `${infer T extends `1${string}` | number}` ? T : never; // 0
 >PExclude1 : 0
->T : T
 
 type PExclude2 = "0" extends `${infer T extends 1 | bigint}` ? T : never; // 0n
 >PExclude2 : never
->T : T
 
 type PExclude3 = "0" extends `${infer T extends NumberLiteralEnum.One | bigint}` ? T : never; // 0n
 >PExclude3 : never
->T : T
 >NumberLiteralEnum : any
 
 type PExclude4 = "100000000000000000000000" extends `${infer T extends number | bigint}` ? T : never; // 100000000000000000000000n
 >PExclude4 : number | bigint
->T : T
 
 // infer to prefix from string
 type TPrefix0 = "100" extends `${infer T extends number}${string}` ? T : never; // 1
 >TPrefix0 : 1
->T : T
 
 type TPrefix1 = "trueabc" extends `${infer T extends boolean}${string}` ? T : never; // boolean (T only receives 't', not the whole string)
 >TPrefix1 : boolean
->T : T
 
 type TPrefix2 = `100:${string}` extends `${infer T extends number}:${string}` ? T : never; // 100 (T receives '100' because it scans until ':')
 >TPrefix2 : 100
->T : T
 
 // can use union w/multiple branches to extract each possibility
 type ExtractPrimitives<T extends string> =
 >ExtractPrimitives : ExtractPrimitives<T>
->T : T
 
     | T
     | (T extends `${infer U extends number}` ? U : never)
->U : U
-
     | (T extends `${infer U extends bigint}` ? U : never)
->U : U
-
     | (T extends `${infer U extends boolean | null | undefined}` ? U : never)
->U : U
-
     ;
 
 type TExtract0 = ExtractPrimitives<"100">; // "100" | 100 | 100n
@@ -531,16 +429,11 @@ type TExtract2 = ExtractPrimitives<"true">; // "true" | true
 // Use constrained `infer` in template literal to get ordinal indices as numbers:
 type IndexFor<S extends string> = S extends `${infer N extends number}` ? N : never;
 >IndexFor : IndexFor<S>
->S : S
->N : N
 
 type IndicesOf<T> = IndexFor<Extract<keyof T, string>>; // ordinal indices as number literals
 >IndicesOf : IndicesOf<T>
->T : T
 
 interface FieldDefinition {
->FieldDefinition : FieldDefinition
-
     readonly name: string;
 >name : string
 
@@ -550,7 +443,6 @@ interface FieldDefinition {
 
 type FieldType<T extends FieldDefinition["type"]> =
 >FieldType : FieldType<T>
->T : T
 
     T extends "i8" | "i16" | "i32" | "u8" | "u16" | "u32" | "f32" | "f64" ? number :
     T extends "f32" | "f64" ? bigint :
@@ -559,10 +451,8 @@ type FieldType<T extends FieldDefinition["type"]> =
 // Generates named members like `{ x: number, y: bigint }` from `[{ name: "x", type: "i32" }, { name: "y", type: "i64" }]`
 type TypedObjectNamedMembers<TDef extends readonly FieldDefinition[]> = {
 >TypedObjectNamedMembers : TypedObjectNamedMembers<TDef>
->TDef : TDef
 
     [P in TDef[number]["name"]]: FieldType<Extract<TDef[number], { readonly name: P }>["type"]>;
->P : P
 >name : P
 
 };
@@ -570,28 +460,20 @@ type TypedObjectNamedMembers<TDef extends readonly FieldDefinition[]> = {
 // Generates ordinal members like `{ 0: number, 1: bigint }` from `[{ name: "x", type: "i32" }, { name: "y", type: "i64" }]`
 type TypedObjectOrdinalMembers<TDef extends readonly FieldDefinition[]> = {
 >TypedObjectOrdinalMembers : TypedObjectOrdinalMembers<TDef>
->TDef : TDef
 
     [I in Extract<keyof TDef, `${number}`>]: FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
->I : I
-
 };
 
 // Default members
 interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
->TypedObjectMembers : TypedObjectMembers<TDef>
->TDef : TDef
-
     // get/set a field by name
     get<K extends TDef[number]["name"]>(key: K): FieldType<Extract<TDef[number], { readonly name: K }>["type"]>;
 >get : <K extends TDef[number]["name"]>(key: K) => FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
->K : K
 >key : K
 >name : K
 
     set<K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K }>["type"]>): void;
 >set : <K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>) => void
->K : K
 >key : K
 >value : FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
 >name : K
@@ -599,19 +481,16 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
     // get/set a field by index
     getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
 >getIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
->I : I
 >index : I
 
     setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
 >setIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
->I : I
 >index : I
 >value : FieldType<Extract<TDef[I], FieldDefinition>["type"]>
 }
 
 type TypedObject<TDef extends readonly FieldDefinition[]> =
 >TypedObject : TypedObject<TDef>
->TDef : TDef
 
     & TypedObjectMembers<TDef>
     & TypedObjectNamedMembers<TDef>
@@ -682,7 +561,6 @@ p.setIndex(2, 3); // error, 2 is not a valid index
 // function inference
 declare function f1<T extends string | number>(s: `**${T}**`): T;
 >f1 : <T extends string | number>(s: `**${T}**`) => T
->T : T
 >s : `**${T}**`
 
 f1("**123**"); // "123"
@@ -692,7 +570,6 @@ f1("**123**"); // "123"
 
 declare function f2<T extends number>(s: `**${T}**`): T;
 >f2 : <T extends number>(s: `**${T}**`) => T
->T : T
 >s : `**${T}**`
 
 f2("**123**"); // 123
@@ -702,7 +579,6 @@ f2("**123**"); // 123
 
 declare function f3<T extends bigint>(s: `**${T}**`): T;
 >f3 : <T extends bigint>(s: `**${T}**`) => T
->T : T
 >s : `**${T}**`
 
 f3("**123**"); // 123n
@@ -712,7 +588,6 @@ f3("**123**"); // 123n
 
 declare function f4<T extends boolean>(s: `**${T}**`): T;
 >f4 : <T extends boolean>(s: `**${T}**`) => T
->T : T
 >s : `**${T}**`
 
 f4("**true**"); // true | "true"

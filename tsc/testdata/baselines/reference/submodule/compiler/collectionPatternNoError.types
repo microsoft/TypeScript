@@ -2,9 +2,6 @@
 
 === collectionPatternNoError.ts ===
 interface MsgConstructor<T extends Message> {
->MsgConstructor : MsgConstructor<T>
->T : T
-
   new(data: Array<{}>): T;
 >data : {}[]
 }
@@ -19,16 +16,12 @@ class Message {
   }
 }
 interface MessageList<T extends Message> extends Message {
->MessageList : MessageList<T>
->T : T
-
   methodOnMessageList(): T[];
 >methodOnMessageList : () => T[]
 }
 
 function fetchMsg<V extends Message>(protoCtor: MsgConstructor<V>): V {
 >fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
->V : V
 >protoCtor : MsgConstructor<V>
 
   return null!;
@@ -37,8 +30,6 @@ function fetchMsg<V extends Message>(protoCtor: MsgConstructor<V>): V {
 
 class DataProvider<T extends Message, U extends MessageList<T>> {
 >DataProvider : DataProvider<T, U>
->T : T
->U : U
 
   constructor(
     private readonly message: MsgConstructor<T>,
@@ -74,12 +65,9 @@ function f<
 >f : <U extends { TType: MessageList<T>; }, T extends Message>(message: MsgConstructor<T>, messageList: MsgConstructor<U["TType"]>) => void
 
   U extends {TType: MessageList<T>},
->U : U
 >TType : MessageList<T>
 
   T extends Message
->T : T
-
 >(message: MsgConstructor<T>, messageList: MsgConstructor<U["TType"]>) {
 >message : MsgConstructor<T>
 >messageList : MsgConstructor<U["TType"]>

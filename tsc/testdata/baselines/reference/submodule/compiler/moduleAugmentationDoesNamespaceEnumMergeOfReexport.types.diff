@@ -1,19 +1,6 @@
 --- old.moduleAugmentationDoesNamespaceEnumMergeOfReexport.types
 +++ new.moduleAugmentationDoesNamespaceEnumMergeOfReexport.types
-@@= skipped -1, +1 lines =@@
- 
- === file.ts ===
- export namespace Root {
-+>Root : typeof Root
-+
-     // type-only NS
-     export interface Foo {
-+>Foo : Foo
-+
-         x: number;
- >x : number
-     }
-@@= skipped -11, +15 lines =@@
+@@= skipped -12, +12 lines =@@
  export * from "./file";
  === augment.ts ===
  import * as ns from "./reexport";

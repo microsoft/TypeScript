@@ -6,7 +6,6 @@ class CollectionItem2 { }
 
 class BaseCollection2<TItem extends CollectionItem2> {
 >BaseCollection2 : BaseCollection2<TItem>
->TItem : TItem
 
     _itemsByKey: { [key: string]: TItem; };
 >_itemsByKey : { [key: string]: TItem; }

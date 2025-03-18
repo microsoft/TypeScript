@@ -1,31 +1,6 @@
 --- old.exportClassExtendingIntersection.types
 +++ new.exportClassExtendingIntersection.types
-@@= skipped -2, +2 lines =@@
- === BaseClass.ts ===
- export type Constructor<T> = new (...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
- >args : any[]
- 
- export class MyBaseClass<T> {
- >MyBaseClass : MyBaseClass<T>
-+>T : T
- 
-     baseProperty: string;
- >baseProperty : string
-@@= skipped -17, +19 lines =@@
- >MyBaseClass : typeof MyBaseClass
- 
- export interface MyMixin {
-+>MyMixin : MyMixin
-+
-     mixinProperty: string;
- >mixinProperty : string
- }
- 
- export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
- >MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
-+>T : T
+@@= skipped -28, +28 lines =@@
  >base : T
  
      return class extends base {
@@ -34,7 +9,7 @@
  >base : MyBaseClass<any>
  
          mixinProperty: string;
-@@= skipped -21, +24 lines =@@
+@@= skipped -12, +12 lines =@@
  >MyBaseClass : typeof MyBaseClass
  
  import { MyMixin } from './MixinClass';

@@ -1,15 +1,11 @@
 --- old.instantiateContextuallyTypedGenericThis.types
 +++ new.instantiateContextuallyTypedGenericThis.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === instantiateContextuallyTypedGenericThis.ts ===
  interface JQuery {
-+>JQuery : JQuery
-+
      each<T>(
 ->each : <T>(collection: T[], callback: (this: T, dit: T) => T) => T[]
 +>each : <T>(collection: T[], callback: (dit: T) => T) => T[]
-+>T : T
  
          collection: T[], callback: (this: T, dit: T) => T
  >collection : T[]
@@ -18,7 +14,7 @@
  >this : T
  >dit : T
  
-@@= skipped -20, +23 lines =@@
+@@= skipped -19, +19 lines =@@
  
  $.each(lines, function(dit) {
  >$.each(lines, function(dit) {    return dit.charAt(0) + this.charAt(1);}) : string[]

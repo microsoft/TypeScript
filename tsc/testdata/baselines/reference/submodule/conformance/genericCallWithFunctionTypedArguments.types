@@ -6,7 +6,6 @@
 
 function foo<T>(x: (a: T) => T) {
 >foo : <T>(x: (a: T) => T) => T
->T : T
 >x : (a: T) => T
 >a : T
 
@@ -20,7 +19,6 @@ var r = foo(<U>(x: U) => ''); // {}
 >foo(<U>(x: U) => '') : unknown
 >foo : <T>(x: (a: T) => T) => T
 ><U>(x: U) => '' : <U>(x: U) => string
->U : U
 >x : U
 >'' : ""
 
@@ -29,7 +27,6 @@ var r2 = foo<string>(<U>(x: U) => ''); // string
 >foo<string>(<U>(x: U) => '') : string
 >foo : <T>(x: (a: T) => T) => T
 ><U>(x: U) => '' : <U>(x: U) => string
->U : U
 >x : U
 >'' : ""
 
@@ -43,8 +40,6 @@ var r3 = foo(x => ''); // {}
 
 function foo2<T, U>(x: T, cb: (a: T) => U) {
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
->T : T
->U : U
 >x : T
 >cb : (a: T) => U
 >a : T
@@ -61,7 +56,6 @@ var r4 = foo2(1, function <Z>(a: Z) { return '' }); // string, contextual signat
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >1 : 1
 >function <Z>(a: Z) { return '' } : <Z>(a: Z) => string
->Z : Z
 >a : Z
 >'' : ""
 
@@ -80,14 +74,11 @@ var r6 = foo2<string, number>('', <Z>(a: Z) => 1);
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >'' : ""
 ><Z>(a: Z) => 1 : <Z>(a: Z) => number
->Z : Z
 >a : Z
 >1 : 1
 
 function foo3<T, U>(x: T, cb: (a: T) => U, y: U) {
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
->T : T
->U : U
 >x : T
 >cb : (a: T) => U
 >a : T
@@ -105,7 +96,6 @@ var r7 = foo3(1, <Z>(a: Z) => '', ''); // string
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >1 : 1
 ><Z>(a: Z) => '' : <Z>(a: Z) => string
->Z : Z
 >a : Z
 >'' : ""
 >'' : ""
@@ -132,8 +122,6 @@ var r9 = foo3<number, string>(1, (a) => '', ''); // string
 
 function other<T, U>(t: T, u: U) {
 >other : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 

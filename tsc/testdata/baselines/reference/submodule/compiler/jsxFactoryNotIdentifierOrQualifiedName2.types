@@ -2,11 +2,7 @@
 
 === Element.ts ===
 declare namespace JSX {
->JSX : any
-
     interface Element {
->Element : Element
-
         name: string;
 >name : string
 

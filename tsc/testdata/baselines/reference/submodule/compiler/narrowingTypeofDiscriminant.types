@@ -55,7 +55,6 @@ function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undef
 
 type WrappedStringOr<T> = { value?: string } | { value?: T };
 >WrappedStringOr : WrappedStringOr<T>
->T : T
 >value : string | undefined
 >value : T | undefined
 

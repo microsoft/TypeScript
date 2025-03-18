@@ -2,8 +2,6 @@
 
 === privateNameConstructorSignature.ts ===
 interface D {
->D : D
-
     x: number;
 >x : number
 }
@@ -42,8 +40,6 @@ class C {
     }
 }
 interface C {
->C : C
-
     new (): D;
 }
 

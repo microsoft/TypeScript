@@ -1,14 +1,6 @@
 --- old.controlFlowCommaExpressionAssertionMultiple.types
 +++ new.controlFlowCommaExpressionAssertionMultiple.types
-@@= skipped -2, +2 lines =@@
- === controlFlowCommaExpressionAssertionMultiple.ts ===
- function Narrow<T>(value: any): asserts value is T {}
- >Narrow : <T>(value: any) => asserts value is T
-+>T : T
- >value : any
- 
- function func(foo: any, bar: any) {
-@@= skipped -17, +18 lines =@@
+@@= skipped -19, +19 lines =@@
  >bar : any
  
      foo;

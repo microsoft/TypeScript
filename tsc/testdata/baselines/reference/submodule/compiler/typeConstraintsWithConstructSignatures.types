@@ -2,14 +2,11 @@
 
 === typeConstraintsWithConstructSignatures.ts ===
 interface Constructable {
->Constructable : Constructable
-
     new (): any;
 }
 
 class C<T extends Constructable> {
 >C : C<T>
->T : T
 
     constructor(public data: T, public data2: Constructable) { }
 >data : T

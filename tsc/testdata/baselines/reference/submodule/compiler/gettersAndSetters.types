@@ -126,8 +126,6 @@ o.Foo = 0;
 
 
 interface I1 {
->I1 : I1
-
     (n:number):number;
 >n : number
 }

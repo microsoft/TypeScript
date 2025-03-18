@@ -5,7 +5,6 @@
 
 function x<T>(ctor: {
 >x : <T>(ctor: { (v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }, t: T) => void
->T : T
 >ctor : { (v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
 
     (this: {}, v: T): void;

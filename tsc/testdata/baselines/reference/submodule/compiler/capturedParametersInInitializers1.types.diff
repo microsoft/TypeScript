@@ -12,11 +12,8 @@
 +>function(x: typeof z) {} : (x: number) => void
  >x : number
  >z : number
-->z : number
- >1 : 1
-     
- }
-@@= skipped -15, +14 lines =@@
+ >z : number
+@@= skipped -15, +15 lines =@@
  >a : any
  
  function foo3(y = { x: <typeof z>a }, z = 1) {
@@ -28,7 +25,4 @@
 +>{ x: <typeof z>a } : { x: number; }
  >x : number
  ><typeof z>a : number
-->z : number
- >a : any
  >z : number
- >1 : 1

@@ -14,8 +14,6 @@ class Shape {
 }
 
 interface ShapeFactory {
->ShapeFactory : ShapeFactory
-
     create(): Shape;
 >create : () => Shape
 }

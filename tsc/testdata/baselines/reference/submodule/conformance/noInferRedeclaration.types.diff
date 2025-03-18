@@ -8,7 +8,6 @@
 -><T>(x: T, y: NoInfer<T>) => x : <T>(x: T, y: NoInfer<T>) => T
 +>f : <T>(x: T, y: T) => T
 +><T>(x: T, y: NoInfer<T>) => x : <T>(x: T, y: T) => T
-+>T : T
  >x : T
 ->y : NoInfer<T>
 +>y : T
@@ -21,7 +20,6 @@
  
  type NoInfer<T> = T & number;
  >NoInfer : NoInfer<T>
-+>T : T
  
  export const g = f;
 ->g : <T>(x: T, y: globalThis.NoInfer<T>) => T

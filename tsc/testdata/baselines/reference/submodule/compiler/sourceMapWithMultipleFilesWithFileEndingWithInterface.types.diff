@@ -1,11 +1,8 @@
 --- old.sourceMapWithMultipleFilesWithFileEndingWithInterface.types
 +++ new.sourceMapWithMultipleFilesWithFileEndingWithInterface.types
-@@= skipped -8, +8 lines =@@
- >1 : 1
+@@= skipped -9, +9 lines =@@
  }
  interface Navigator {
-+>Navigator : Navigator
-+
      getGamepads(func?: any): any;
 ->getGamepads : { (): (Gamepad | null)[]; (func?: any): any; }
 +>getGamepads : { (): Gamepad[]; (func?: any): any; }

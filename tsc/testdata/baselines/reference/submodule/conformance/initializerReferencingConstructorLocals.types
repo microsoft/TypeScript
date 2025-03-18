@@ -12,6 +12,7 @@ class C {
 
     b: typeof z; // error
 >b : any
+>z : any
 
     c = this.z; // error
 >c : any
@@ -21,7 +22,9 @@ class C {
 
     d: typeof this.z; // error
 >d : any
+>this.z : any
 >this : this
+>z : any
 
     constructor(x) {
 >x : any
@@ -35,7 +38,6 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     a = z; // error
 >a : any
@@ -43,6 +45,7 @@ class D<T> {
 
     b: typeof z; // error
 >b : any
+>z : any
 
     c = this.z; // error
 >c : any
@@ -52,7 +55,9 @@ class D<T> {
 
     d: typeof this.z; // error
 >d : any
+>this.z : any
 >this : this
+>z : any
 
     constructor(x: T) {
 >x : T

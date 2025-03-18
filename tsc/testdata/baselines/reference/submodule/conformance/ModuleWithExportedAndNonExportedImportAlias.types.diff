@@ -1,27 +1,6 @@
 --- old.ModuleWithExportedAndNonExportedImportAlias.types
 +++ new.ModuleWithExportedAndNonExportedImportAlias.types
-@@= skipped -1, +1 lines =@@
- 
- === ModuleWithExportedAndNonExportedImportAlias.ts ===
- module A {
-+>A : any
-+
-     export interface Point {
-+>Point : Point
-+
-         x: number;
- >x : number
- 
-@@= skipped -9, +13 lines =@@
-     }
- 
-     interface Point3d extends Point {
-+>Point3d : Point3d
-+
-         z: number;
- >z : number
-     }
-@@= skipped -12, +14 lines =@@
+@@= skipped -22, +22 lines =@@
  >Line : Line
  
          constructor(public start: A.Point, public end: A.Point) { }

@@ -2,8 +2,6 @@
 
 === parserES5SymbolIndexer1.ts ===
 interface I {
->I : I
-
     [s: symbol]: string;
 >s : symbol
 }

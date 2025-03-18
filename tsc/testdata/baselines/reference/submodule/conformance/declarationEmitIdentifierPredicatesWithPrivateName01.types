@@ -2,8 +2,6 @@
 
 === declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
 interface I {
->I : I
-
     a: number;
 >a : number
 }

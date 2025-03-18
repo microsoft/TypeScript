@@ -1,14 +1,6 @@
 --- old.narrowingUnionToUnion.types
 +++ new.narrowingUnionToUnion.types
-@@= skipped -24, +24 lines =@@
- 
- function fx2<T>(x: T | undefined) {
- >fx2 : <T>(x: T | undefined) => void
-+>T : T
- >x : T | undefined
- 
-     if (isFalsy(x)) {
-@@= skipped -8, +9 lines =@@
+@@= skipped -32, +32 lines =@@
  >x : T | undefined
  
          x;  // T & Falsy | undefined
@@ -17,13 +9,7 @@
      }
  }
  
- function fx3<T extends string | number>(x: T) {
- >fx3 : <T extends string | number>(x: T) => void
-+>T : T
- >x : T
- 
-     if (isFalsy(x)) {
-@@= skipped -14, +15 lines =@@
+@@= skipped -14, +14 lines =@@
  >x : string | number
  
          x;  // T & "" | T & 0
@@ -32,28 +18,7 @@
      }
  }
  
-@@= skipped -50, +50 lines =@@
- 
- function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
- >fx5 : <T extends X>(obj: X | YS, c: typeof XS | typeof Y) => void
-+>T : T
- >obj : X | YS
- >c : typeof XS | typeof Y
-->XS : typeof XS
-->Y : typeof Y
- 
-     if (obj instanceof c) {
- >obj instanceof c : boolean
-@@= skipped -108, +107 lines =@@
- 
- declare function isEmptyArray<T>(value: T[]): value is [];
- >isEmptyArray : <T>(value: T[]) => value is []
-+>T : T
- >value : T[]
- 
- declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
- >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
-+>T : T
+@@= skipped -165, +165 lines =@@
  >value : T[] | null | undefined
  
  const TEST_CASES = [
@@ -64,7 +29,7 @@
  
      (value: string) => {
  >(value: string) => {        if (isEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }        if (isMaybeEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }    } : (value: string) => void
-@@= skipped -40, +42 lines =@@
+@@= skipped -33, +33 lines =@@
          }
      },
      (value?: string) => {
@@ -109,11 +74,7 @@
  >test : string | null | undefined
  
      test;  // EmptyString
-@@= skipped -11, +11 lines =@@
- 
- declare function assert<T>(value: any): asserts value is T
- >assert : <T>(value: any) => asserts value is T
-+>T : T
+@@= skipped -14, +14 lines =@@
  >value : any
  
  function test1(foo: number | string | boolean) {
@@ -122,7 +83,7 @@
  >foo : string | number | boolean
  
      assert<1 | string>(foo);
-@@= skipped -18, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  // Repro from #46909
  
  function check1(x: unknown): x is (string | 0) {

@@ -6,7 +6,6 @@ import * as React from "react";
 
 export declare class MyComp<P> extends React.Component<P, {}> {
 >MyComp : MyComp<P>
->P : P
 >React.Component : any
 >React : any
 >Component : any
@@ -16,8 +15,6 @@ export declare class MyComp<P> extends React.Component<P, {}> {
 }
 
 export interface Prop {
->Prop : Prop
-
     a: number,
 >a : number
 

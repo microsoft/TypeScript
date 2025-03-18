@@ -1,26 +1,6 @@
 --- old.tsxElementResolution9.types
 +++ new.tsxElementResolution9.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { something; }
-+>Element : Element
- >something : any
- 
- 	interface IntrinsicElements { }
-+>IntrinsicElements : IntrinsicElements
- }
- 
- interface Obj1 {
-+>Obj1 : Obj1
-+
- 	new(n: string): { x: number };
- >n : string
- >x : number
-@@= skipped -19, +25 lines =@@
+@@= skipped -20, +20 lines =@@
  >Obj1 : Obj1
  
  <Obj1 />; // Error, return type is not an object type
@@ -29,12 +9,7 @@
  >Obj1 : Obj1
  
  interface Obj2 {
-+>Obj2 : Obj2
-+
- 	(n: string): { x: number };
- >n : string
- >x : number
-@@= skipped -16, +18 lines =@@
+@@= skipped -16, +16 lines =@@
  >Obj2 : Obj2
  
  <Obj2 />; // Error, return type is not an object type
@@ -43,12 +18,7 @@
  >Obj2 : Obj2
  
  interface Obj3 {
-+>Obj3 : Obj3
-+
- 	(n: string): { x: number };
- >n : string
- >x : number
-@@= skipped -17, +19 lines =@@
+@@= skipped -17, +17 lines =@@
  >Obj3 : Obj3
  
  <Obj3 x={42} />; // OK

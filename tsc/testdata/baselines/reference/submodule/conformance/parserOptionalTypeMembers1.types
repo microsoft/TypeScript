@@ -2,8 +2,6 @@
 
 === parserOptionalTypeMembers1.ts ===
 interface PropertyDescriptor2 {
->PropertyDescriptor2 : PropertyDescriptor2
-
     configurable?: boolean;
 >configurable : boolean
 

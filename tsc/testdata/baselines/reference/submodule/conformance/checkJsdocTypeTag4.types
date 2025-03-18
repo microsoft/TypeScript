@@ -3,7 +3,6 @@
 === t.d.ts ===
 type A<T extends string> = { a: T }
 >A : A<T>
->T : T
 >a : T
 
 === test.js ===

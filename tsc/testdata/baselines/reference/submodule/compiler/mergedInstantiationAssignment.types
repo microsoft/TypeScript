@@ -5,7 +5,6 @@
 
 class GenericObject<T = number> {
 >GenericObject : GenericObject<T>
->T : T
 
   set x(x: T) {}
 >x : T
@@ -31,7 +30,6 @@ v1.x = 432;
 
 class GenericObjectWithoutSetter<T = number> {
 >GenericObjectWithoutSetter : GenericObjectWithoutSetter<T>
->T : T
 
   declare x: T;
 >x : T

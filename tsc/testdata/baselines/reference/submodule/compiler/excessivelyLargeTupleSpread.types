@@ -5,8 +5,6 @@
 
 type BuildTuple<L extends number, T extends any[] = [any]> = 
 >BuildTuple : BuildTuple<L, T>
->L : L
->T : T
 
     T['length'] extends L ? T : BuildTuple<L, [...T, ...T]>;
 

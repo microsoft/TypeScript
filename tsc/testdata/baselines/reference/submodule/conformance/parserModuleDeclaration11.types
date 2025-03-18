@@ -5,8 +5,6 @@ declare module string {
 >string : typeof string
 
     interface X { }
->X : X
-
     export function foo(s: string);
 >foo : (s: string) => any
 >s : string

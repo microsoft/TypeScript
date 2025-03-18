@@ -4,7 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/34579
 declare function unbox<T>(box: { value: T | undefined }): T;
 >unbox : <T>(box: { value: T; }) => T
->T : T
 >box : { value: T; }
 >value : T
 

@@ -9,49 +9,16 @@
  >x : string
  >u : unknown
  
-@@= skipped -38, +38 lines =@@
- 
- function f11<T>(x: T) {
- >f11 : <T>(x: T) => void
-+>T : T
- >x : T
- 
-     if (x) {
-@@= skipped -27, +28 lines =@@
- 
- function f12<T extends {}>(x: T) {
- >f12 : <T extends {}>(x: T) => void
-+>T : T
- >x : T
- 
-     if (x) {
-@@= skipped -83, +84 lines =@@
- 
- function f21<T>(x: T) {
- >f21 : <T>(x: T) => void
-+>T : T
- >x : T
- 
-     if (x !== undefined) {
-@@= skipped -67, +68 lines =@@
- 
- function f22<T extends {} | undefined>(x: T) {
- >f22 : <T extends {} | undefined>(x: T) => void
-+>T : T
- >x : T
- 
-     if (x !== undefined) {
-@@= skipped -66, +67 lines =@@
+@@= skipped -281, +281 lines =@@
  }
  
  function f23<T>(x: T | undefined | null) {
 ->f23 : <T>(x: T | undefined | null) => void
 +>f23 : <T>(x: T | null | undefined) => void
-+>T : T
  >x : T | null | undefined
  
      if (x !== undefined) {
-@@= skipped -9, +10 lines =@@
+@@= skipped -9, +9 lines =@@
  >undefined : undefined
  
          x;  // T & {} | null
@@ -77,12 +44,7 @@
  >x : {}
  >"object" : "object"
  
-@@= skipped -11, +11 lines =@@
- 
- function f31<T>(x: T) {
- >f31 : <T>(x: T) => void
-+>T : T
- >x : T
+@@= skipped -15, +15 lines =@@
  
      if (typeof x === "object") {
  >typeof x === "object" : boolean
@@ -104,7 +66,7 @@
  >x : NonNullable<T>
  >"object" : "object"
  
-@@= skipped -23, +24 lines =@@
+@@= skipped -19, +19 lines =@@
  >x : T & object
      }
      if (typeof x === "object" && x) {
@@ -120,12 +82,7 @@
  
          x;  // T & object
  >x : T & object
-@@= skipped -14, +14 lines =@@
- 
- function f32<T extends {} | undefined>(x: T) {
- >f32 : <T extends {} | undefined>(x: T) => void
-+>T : T
- >x : T
+@@= skipped -18, +18 lines =@@
  
      if (typeof x === "object") {
  >typeof x === "object" : boolean
@@ -134,28 +91,7 @@
  >x : T
  >"object" : "object"
  
-@@= skipped -15, +16 lines =@@
- 
- function possiblyNull<T>(x: T) {
- >possiblyNull : <T>(x: T) => T | null
-+>T : T
- >x : T
- 
-     return !!true ? x : null;  // T | null
-@@= skipped -12, +13 lines =@@
- 
- function possiblyUndefined<T>(x: T) {
- >possiblyUndefined : <T>(x: T) => T | undefined
-+>T : T
- >x : T
- 
-     return !!true ? x : undefined;  // T | undefined
-@@= skipped -13, +14 lines =@@
- 
- function possiblyNullOrUndefined<T>(x: T) {
- >possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
-+>T : T
- >x : T
+@@= skipped -40, +40 lines =@@
  
      return possiblyUndefined(possiblyNull(x));  // T | null | undefined
  >possiblyUndefined(possiblyNull(x)) : T | null | undefined
@@ -167,26 +103,7 @@
  >x : T
  }
  
- function ensureNotNull<T>(x: T) {
- >ensureNotNull : <T>(x: T) => T & ({} | undefined)
-+>T : T
- >x : T
- 
-     if (x === null) throw Error();
-@@= skipped -26, +28 lines =@@
- 
- function ensureNotUndefined<T>(x: T) {
- >ensureNotUndefined : <T>(x: T) => T & ({} | null)
-+>T : T
- >x : T
- 
-     if (x === undefined) throw Error();
-@@= skipped -15, +16 lines =@@
- 
- function ensureNotNullOrUndefined<T>(x: T) {
- >ensureNotNullOrUndefined : <T>(x: T) => T & {}
-+>T : T
- >x : T
+@@= skipped -41, +41 lines =@@
  
      return ensureNotUndefined(ensureNotNull(x));  // T & {}
  >ensureNotUndefined(ensureNotNull(x)) : T & {}
@@ -198,17 +115,7 @@
  >x : T
  }
  
-@@= skipped -30, +31 lines =@@
- 
- type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
- >QQ : QQ<T>
-+>T : T
- 
- function f41<T>(a: T) {
- >f41 : <T>(a: T) => void
-+>T : T
- >a : T
- 
+@@= skipped -34, +34 lines =@@
      let a1 = ensureNotUndefined(ensureNotNull(a));  // T & {}
  >a1 : T & {}
  >ensureNotUndefined(ensureNotNull(a)) : T & {}
@@ -312,15 +219,7 @@
  >a : T
  }
  
-@@= skipped -82, +84 lines =@@
- 
- function deepEquals<T>(a: T, b: T): boolean {
- >deepEquals : <T>(a: T, b: T) => boolean
-+>T : T
- >a : T
- >b : T
- 
-@@= skipped -8, +9 lines =@@
+@@= skipped -82, +82 lines =@@
  >typeof a !== 'object' || typeof b !== 'object' || !a : boolean
  >typeof a !== 'object' || typeof b !== 'object' : boolean
  >typeof a !== 'object' : boolean
@@ -342,28 +241,7 @@
  
          return false;
  >false : false
-@@= skipped -59, +59 lines =@@
- 
- function foo<T>(x: T | null) {
- >foo : <T>(x: T | null) => void
-+>T : T
- >x : T | null
- 
-     let y = x;
-@@= skipped -21, +22 lines =@@
- 
- function ff1<T>(t: T, k: keyof T) {
- >ff1 : <T>(t: T, k: keyof T) => void
-+>T : T
- >t : T
- >k : keyof T
- 
-@@= skipped -11, +12 lines =@@
- 
- function ff2<T>(t: T & {}, k: keyof T) {
- >ff2 : <T>(t: T & {}, k: keyof T) => void
-+>T : T
- >t : T & {}
+@@= skipped -95, +95 lines =@@
  >k : keyof T
  
      t[k];
@@ -372,19 +250,7 @@
  >t : T & {}
  >k : keyof T
  }
- 
- function ff3<T>(t: T, k: keyof (T & {})) {
- >ff3 : <T>(t: T, k: keyof (T & {})) => void
-+>T : T
- >t : T
- >k : keyof (T & {})
- 
-@@= skipped -22, +24 lines =@@
- 
- function ff4<T>(t: T & {}, k: keyof (T & {})) {
- >ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
-+>T : T
- >t : T & {}
+@@= skipped -22, +22 lines =@@
  >k : keyof (T & {})
  
      t[k];
@@ -393,95 +259,39 @@
  >t : T & {}
  >k : keyof (T & {})
  }
-@@= skipped -40, +41 lines =@@
- 
- type Bar<T extends NullableFoo> = NonNullable<T>[string];
- >Bar : Bar<T>
-+>T : T
- 
- // Generics and intersections with {}
- 
- function fx0<T>(value: T & ({} | null)) {
- >fx0 : <T>(value: T & ({} | null)) => void
-+>T : T
- >value : T & ({} | null)
- 
-     if (value === 42) {
-@@= skipped -23, +25 lines =@@
- 
- function fx1<T extends unknown>(value: T & ({} | null)) {
- >fx1 : <T extends unknown>(value: T & ({} | null)) => void
-+>T : T
- >value : T & ({} | null)
- 
-     if (value === 42) {
-@@= skipped -17, +18 lines =@@
+@@= skipped -76, +76 lines =@@
  }
  
  function fx2<T extends {}>(value: T & ({} | null)) {
 ->fx2 : <T extends {}>(value: T & ({} | null)) => void
 +>fx2 : <T extends {}>(value: T) => void
-+>T : T
  >value : T
  
      if (value === 42) {
-@@= skipped -18, +19 lines =@@
+@@= skipped -18, +18 lines =@@
  }
  
  function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 ->fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
 +>fx3 : <T extends {} | undefined>(value: T & {}) => void
-+>T : T
  >value : T & {}
  
      if (value === 42) {
-@@= skipped -18, +19 lines =@@
+@@= skipped -18, +18 lines =@@
  }
  
  function fx4<T extends {} | null>(value: T & ({} | null)) {
 ->fx4 : <T extends {} | null>(value: T & ({} | null)) => void
 +>fx4 : <T extends {} | null>(value: T) => void
-+>T : T
  >value : T
  
      if (value === 42) {
-@@= skipped -19, +20 lines =@@
- 
- function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
- >fx5 : <T extends {} | null | undefined>(value: T & ({} | null)) => void
-+>T : T
- >value : T & ({} | null)
- 
-     if (value === 42) {
-@@= skipped -76, +77 lines =@@
- 
- function doSomething1<T extends unknown>(value: T): T {
- >doSomething1 : <T extends unknown>(value: T) => T
-+>T : T
- >value : T
- 
-     if (value === undefined) {
-@@= skipped -72, +73 lines =@@
- 
- type R<T extends keyof TypeA> =
- >R : R<T>
-+>T : T
- 
-     T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never;
- 
- type R2<T extends PropertyKey> =
- >R2 : R2<T>
-+>T : T
- 
-     T extends keyof TypeA ? T extends keyof TypeB ? [TypeA[T], TypeB[T]] : never : never;
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -181, +181 lines =@@
  >AB : AB
  
  function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
 ->x : <T_AB extends AB>(x: T_AB & undefined, y: any) => void
 +>x : <T_AB extends AB>(x: never, y: any) => void
-+>T_AB : T_AB
  >x : never
  >y : any
  

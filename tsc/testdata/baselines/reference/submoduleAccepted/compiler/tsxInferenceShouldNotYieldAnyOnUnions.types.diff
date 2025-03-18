@@ -1,40 +1,11 @@
 --- old.tsxInferenceShouldNotYieldAnyOnUnions.types
 +++ new.tsxInferenceShouldNotYieldAnyOnUnions.types
-@@= skipped -1, +1 lines =@@
- 
- === index.tsx ===
- namespace JSX {
-+>JSX : any
-+
-     export interface Element {}
-+>Element : Element
- }
- 
- type Props<T> = PropsBase<string> | PropsWithConvert<T>;
- >Props : Props<T>
-+>T : T
- 
- interface PropsBase<T> {
-+>PropsBase : PropsBase<T>
-+>T : T
-+
-     data: T;
- >data : T
- }
- 
- interface PropsWithConvert<T> extends PropsBase<T> {
-+>PropsWithConvert : PropsWithConvert<T>
-+>T : T
-+
-     convert: (t: T) => string;
- >convert : (t: T) => string
- >t : T
+@@= skipped -19, +19 lines =@@
  }
  
  function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 ->ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 +>ShouldInferFromData : <T>(props: Props<T>) => Element
-+>T : T
  >props : Props<T>
  >JSX : any
  
@@ -62,7 +33,7 @@
  >{ data: "1", convert: n => "" + n } : { data: string; convert: (n: string) => string; }
  >data : string
  >"1" : "1"
-@@= skipped -49, +60 lines =@@
+@@= skipped -31, +31 lines =@@
  >n : string
  
  ShouldInferFromData({ data: 2, convert: n => "" + n });

@@ -19,7 +19,6 @@
 ->SomeComponent : <T extends "button" | "a">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
 ->props : { element?: T; } & JSX.IntrinsicElements[T]
 +>SomeComponent : <T extends "a" | "button">(props: any) => Element
-+>T : T
 +>props : any
  >element : T | undefined
  >JSX : any
@@ -35,7 +34,6 @@
  function Test<T extends 'button' | 'a'>(el: T) {
 ->Test : <T extends "button" | "a">(el: T) => JSX.Element
 +>Test : <T extends "a" | "button">(el: T) => any
-+>T : T
  >el : T
  
      return <SomeComponent element={el} />

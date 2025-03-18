@@ -2,32 +2,22 @@
 
 === unionTypeReadonly.ts ===
 interface Base {
->Base : Base
-
     readonly value: number;
 >value : number
 }
 interface Identical {
->Identical : Identical
-
     readonly value: number;
 >value : number
 }
 interface Mutable {
->Mutable : Mutable
-
     value: number;
 >value : number
 }
 interface DifferentType {
->DifferentType : DifferentType
-
     readonly value: string;
 >value : string
 }
 interface DifferentName {
->DifferentName : DifferentName
-
     readonly other: number;
 >other : number
 }

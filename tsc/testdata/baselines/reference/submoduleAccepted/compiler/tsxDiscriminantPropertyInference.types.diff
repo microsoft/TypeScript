@@ -1,17 +1,6 @@
 --- old.tsxDiscriminantPropertyInference.types
 +++ new.tsxDiscriminantPropertyInference.types
-@@= skipped -2, +2 lines =@@
- === tsxDiscriminantPropertyInference.tsx ===
- // Repro from #41759
- namespace JSX {
-+>JSX : any
-+
-     export interface Element {}
-+>Element : Element
- }
- 
- type DiscriminatorTrue = {
-@@= skipped -31, +34 lines =@@
+@@= skipped -33, +33 lines =@@
  >Props : Props
  
  declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;

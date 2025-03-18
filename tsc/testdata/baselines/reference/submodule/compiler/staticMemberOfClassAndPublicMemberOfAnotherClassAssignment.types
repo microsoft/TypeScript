@@ -2,8 +2,6 @@
 
 === staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts ===
 interface A {
->A : A
-
     prop();
 >prop : () => any
 }

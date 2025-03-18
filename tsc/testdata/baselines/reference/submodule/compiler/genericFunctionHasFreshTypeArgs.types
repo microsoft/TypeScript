@@ -4,7 +4,6 @@
 function f(p: <T>(x: T) => void) { };
 >f : (p: <T>(x: T) => void) => void
 >p : <T>(x: T) => void
->T : T
 >x : T
 
 f(x => f(y => x = y));

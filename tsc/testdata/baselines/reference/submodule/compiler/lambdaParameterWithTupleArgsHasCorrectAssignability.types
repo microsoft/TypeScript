@@ -9,12 +9,10 @@ type MyTuple = [MyTupleItem, ...MyTupleItem[]];
 
 type GenericFunction<T extends MyTuple> = (...fromArgs: T) => void;
 >GenericFunction : GenericFunction<T>
->T : T
 >fromArgs : T
 
 class GenericClass<T extends MyTuple> {
 >GenericClass : GenericClass<T>
->T : T
 
     from: GenericFunction<T> | undefined;
 >from : GenericFunction<T> | undefined
@@ -22,7 +20,6 @@ class GenericClass<T extends MyTuple> {
 
 function createClass<T extends MyTuple>(f: GenericFunction<T>): GenericClass<T> {
 >createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
->T : T
 >f : GenericFunction<T>
 
     return new GenericClass<T>(/* ... use f */);

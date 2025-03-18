@@ -2,8 +2,6 @@
 
 === typeGuardNarrowsIndexedAccessOfKnownProperty1.ts ===
 interface Square {
->Square : Square
-
     ["dash-ok"]: "square";
 >["dash-ok"] : "square"
 >"dash-ok" : "dash-ok"
@@ -13,8 +11,6 @@ interface Square {
 >"square-size" : "square-size"
 }
  interface Rectangle {
->Rectangle : Rectangle
-
     ["dash-ok"]: "rectangle";
 >["dash-ok"] : "rectangle"
 >"dash-ok" : "dash-ok"
@@ -26,8 +22,6 @@ interface Square {
 >height : number
 }
  interface Circle {
->Circle : Circle
-
     ["dash-ok"]: "circle";
 >["dash-ok"] : "circle"
 >"dash-ok" : "dash-ok"
@@ -39,8 +33,6 @@ interface Square {
 >Shape : Shape
 
 interface Subshape {
->Subshape : Subshape
-
     "0": {
 >"0" : { sub: { under: { shape: Shape; }; }; }
 
@@ -202,8 +194,6 @@ function subarea(s: Subshape): number {
 }
 
 interface X {
->X : X
-
     0: "xx",
 >0 : "xx"
 
@@ -212,8 +202,6 @@ interface X {
 }
 
 interface Y {
->Y : Y
-
     0: "yy",
 >0 : "yy"
 

@@ -6,14 +6,10 @@ import * as React from "react";
 >React : any
 
 interface ErrorResult { error: true }
->ErrorResult : ErrorResult
 >error : true
 >true : true
 
 interface AsyncLoaderProps<TResult> {
->AsyncLoaderProps : AsyncLoaderProps<TResult>
->TResult : TResult
-
     readonly prop1: () => Promise<TResult>;
 >prop1 : () => Promise<TResult>
 
@@ -24,7 +20,6 @@ interface AsyncLoaderProps<TResult> {
 
 class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 >AsyncLoader : AsyncLoader<TResult>
->TResult : TResult
 >React.Component : any
 >React : any
 >Component : any

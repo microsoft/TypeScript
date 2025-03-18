@@ -2,13 +2,11 @@
 
 === booleanLiteralsContextuallyTypedFromUnion.tsx ===
 interface A { isIt: true; text: string; }
->A : A
 >isIt : true
 >true : true
 >text : string
 
 interface B { isIt: false; value: number; }
->B : B
 >isIt : false
 >false : false
 >value : number

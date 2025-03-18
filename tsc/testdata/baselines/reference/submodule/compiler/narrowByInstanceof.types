@@ -2,15 +2,12 @@
 
 === narrowByInstanceof.ts ===
 interface A { a: string }
->A : A
 >a : string
 
 interface B { b: string }
->B : B
 >b : string
 
 interface C { c: string }
->C : C
 >c : string
 
 type AA = {

@@ -1,15 +1,6 @@
 --- old.importTag4.types
 +++ new.importTag4.types
-@@= skipped -1, +1 lines =@@
- 
- === /types.ts ===
- export interface Foo {
-+>Foo : Foo
-+
-     a: number;
- >a : number
- }
-@@= skipped -17, +19 lines =@@
+@@= skipped -18, +18 lines =@@
   * @param { Foo } foo
   */
  function f(foo) {}

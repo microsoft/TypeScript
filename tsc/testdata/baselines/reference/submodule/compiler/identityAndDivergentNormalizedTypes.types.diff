@@ -1,10 +1,6 @@
 --- old.identityAndDivergentNormalizedTypes.types
 +++ new.identityAndDivergentNormalizedTypes.types
-@@= skipped -26, +26 lines =@@
- 
- type PostBody<PATH extends PostPath> = Extract<ApiPost, { path: PATH }>["body"];
- >PostBody : PostBody<PATH>
-+>PATH : PATH
+@@= skipped -29, +29 lines =@@
  >path : PATH
  
  const post = <PATH extends PostPath>(
@@ -12,7 +8,6 @@
 -><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 +>post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 +><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
-+>PATH : PATH
  
      path: PATH,
  >path : PATH
@@ -31,11 +26,10 @@
 -><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends PostPath>(path: PATH, body: PostBody<PATH>) => void
 +>tmp : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
 +><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
-+>PATH : PATH
  
    path: PATH,
  >path : PATH
-@@= skipped -30, +33 lines =@@
+@@= skipped -27, +27 lines =@@
  ) => {
    post<PATH>(path, { body })
  >post<PATH>(path, { body }) : void
@@ -49,7 +43,6 @@
  function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {
 ->fx1 : <P extends PostPath>(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
 +>fx1 : <P extends "/login" | "/user">(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
-+>P : P
  >x : { body: PostBody<P>; }
  >body : PostBody<P>
  >y : { body: PostBody<P>; }

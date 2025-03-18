@@ -20,7 +20,6 @@ class Derived extends Base {
 
 function f<T extends Base>(x: { foo: T; bar: T }) {
 >f : <T extends Base>(x: { foo: T; bar: T; }) => T
->T : T
 >x : { foo: T; bar: T; }
 >foo : T
 >bar : T
@@ -57,15 +56,11 @@ var r2 = f({ foo: new Derived(), bar: new Derived() });
 
 
 interface I<T> {
->I : I<T>
->T : T
-
     a: T;
 >a : T
 }
 function f2<T extends Base>(x: I<T>) {
 >f2 : <T extends Base>(x: I<T>) => T
->T : T
 >x : I<T>
 
     var r: T;
@@ -86,7 +81,6 @@ var r3 = f2(i);
 
 function f3<T extends Base>(x: T, y: (a: T) => T) {
 >f3 : <T extends Base>(x: T, y: (a: T) => T) => T
->T : T
 >x : T
 >y : (a: T) => T
 >a : T

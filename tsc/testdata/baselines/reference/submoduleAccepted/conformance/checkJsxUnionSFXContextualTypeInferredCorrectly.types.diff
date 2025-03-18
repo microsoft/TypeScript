@@ -17,21 +17,8 @@
 +>React : any
  
  interface PS {
-+>PS : PS
-+
      multi: false
- >multi : false
- >false : false
-@@= skipped -25, +21 lines =@@
- }
- 
- interface PM {
-+>PM : PM
-+
-     multi: true
- >multi : true
- >true : true
-@@= skipped -13, +15 lines =@@
+@@= skipped -38, +32 lines =@@
  }
  
  export function ComponentWithUnion(props: PM | PS) {

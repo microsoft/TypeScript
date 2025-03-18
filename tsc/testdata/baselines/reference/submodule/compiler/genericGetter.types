@@ -3,7 +3,6 @@
 === genericGetter.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     data: T;
 >data : T

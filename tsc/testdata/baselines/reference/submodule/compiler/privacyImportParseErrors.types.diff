@@ -575,9 +575,7 @@
  >use_glo_M2_public : any
  
      module m2 {
-+>m2 : any
-+
-         import errorImport = require("glo_M2_public");
+@@= skipped -55, +55 lines =@@
  >errorImport : any
  
          import nonerrorImport = glo_M1_public;
@@ -587,8 +585,6 @@
 +>glo_M1_public : typeof glo_M1_public
  
          module m5 {
-+>m5 : any
-+
              import m5_errorImport = require("glo_M2_public");
  >m5_errorImport : any
  
@@ -600,7 +596,7 @@
          }
      }
  }
-@@= skipped -74, +78 lines =@@
+@@= skipped -19, +19 lines =@@
  >"use_glo_M3_private" : typeof import("use_glo_M3_private")
  
      import use_glo_M3_private = glo_M3_private;
@@ -665,9 +661,7 @@
  >use_glo_M4_private : any
  
      module m2 {
-+>m2 : any
-+
-         import errorImport = require("glo_M4_private");
+@@= skipped -55, +55 lines =@@
  >errorImport : any
  
          import nonerrorImport = glo_M3_private;
@@ -677,8 +671,6 @@
 +>glo_M3_private : typeof glo_M3_private
  
          module m5 {
-+>m5 : any
-+
              import m5_errorImport = require("glo_M4_private");
  >m5_errorImport : any
  
@@ -690,41 +682,7 @@
          }
      }
  }
-@@= skipped -73, +77 lines =@@
- >"anotherParseError" : any
- 
-     module m2 {
-+>m2 : any
-+
-         declare module "abc" {
- >"abc" : typeof import("abc")
-         }
-     }
- 
-     module m2 {
-+>m2 : any
-+
-         module "abc2" {
- >"abc2" : typeof import("abc2")
-         }
-@@= skipped -19, +23 lines =@@
- >"anotherParseError2" : any
- 
-     module m2 {
-+>m2 : any
-+
-         declare module "abc" {
- >"abc" : typeof import("abc")
-         }
-     }
- 
-     module m2 {
-+>m2 : any
-+
-         module "abc2" {
- >"abc2" : typeof import("abc2")
-         }
-@@= skipped -35, +39 lines =@@
+@@= skipped -72, +72 lines =@@
  }
  
  export module m3 {

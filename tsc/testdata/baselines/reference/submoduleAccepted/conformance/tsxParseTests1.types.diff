@@ -1,18 +1,6 @@
 --- old.tsxParseTests1.types
 +++ new.tsxParseTests1.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements { div; span; }
-+>IntrinsicElements : IntrinsicElements
- >div : any
- >span : any
+@@= skipped -8, +8 lines =@@
  }
  
  var x = <div><div><span><div></div></span></div></div>;

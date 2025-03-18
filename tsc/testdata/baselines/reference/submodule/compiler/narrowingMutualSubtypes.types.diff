@@ -1,23 +1,6 @@
 --- old.narrowingMutualSubtypes.types
 +++ new.narrowingMutualSubtypes.types
-@@= skipped -188, +188 lines =@@
- 
- type Identity<T> = {[K in keyof T]: T[K]};
- >Identity : Identity<T>
-+>T : T
-+>K : K
- 
- type Self<T> = T extends unknown ? Identity<T> : never;
- >Self : Self<T>
-+>T : T
- 
- function is<T>(value: T): value is Self<T> {
- >is : <T>(value: T) => value is Self<T>
-+>T : T
- >value : T
- 
-     return true;
-@@= skipped -67, +71 lines =@@
+@@= skipped -255, +255 lines =@@
  }
  
  function checksArrayOrObject1(obj: Record<string, any> | Record<string, any>[]) {

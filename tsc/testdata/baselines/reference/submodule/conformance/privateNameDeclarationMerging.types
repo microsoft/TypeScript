@@ -33,8 +33,6 @@ class C {
     }
 }
 interface C {
->C : C
-
     new (): D;
 }
 

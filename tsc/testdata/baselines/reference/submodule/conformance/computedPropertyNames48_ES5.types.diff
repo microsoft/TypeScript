@@ -1,14 +1,6 @@
 --- old.computedPropertyNames48_ES5.types
 +++ new.computedPropertyNames48_ES5.types
-@@= skipped -2, +2 lines =@@
- === computedPropertyNames48_ES5.ts ===
- declare function extractIndexer<T>(p: { [n: number]: T }): T;
- >extractIndexer : <T>(p: { [n: number]: T; }) => T
-+>T : T
- >p : { [n: number]: T; }
- >n : number
- 
-@@= skipped -25, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  extractIndexer({
  >extractIndexer({    [E.x]: ""}) : string
  >extractIndexer : <T>(p: { [n: number]: T; }) => T

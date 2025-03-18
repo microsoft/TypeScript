@@ -2,8 +2,6 @@
 
 === indexTypeCheck.ts ===
 interface Red {
->Red : Red
-
 	[n:number]; // ok
 >n : number
 
@@ -12,8 +10,6 @@ interface Red {
 }
 
 interface Blue {
->Blue : Blue
-
 	[n:number]: any; // ok
 >n : number
 
@@ -22,8 +18,6 @@ interface Blue {
 }
 
 interface Yellow {
->Yellow : Yellow
-
 	[n:number]: Red; // ok
 >n : number
 
@@ -32,8 +26,6 @@ interface Yellow {
 }
 
 interface Orange {
->Orange : Orange
-
 	[n:number]: number; // ok
 >n : number
 
@@ -42,8 +34,6 @@ interface Orange {
 }
 
 interface Green {
->Green : Green
-
 	[n:number]: Orange; // error
 >n : number
 
@@ -52,8 +42,6 @@ interface Green {
 }
 
 interface Cyan {
->Cyan : Cyan
-
 	[n:number]: number; // error
 >n : number
 
@@ -62,16 +50,12 @@ interface Cyan {
 }
 
 interface Purple {
->Purple : Purple
-
 	[n:number, s:string]; // error
 >n : number
 >s : string
 }
 
 interface Magenta {
->Magenta : Magenta
-
 	[p:Purple]; // error
 >p : Purple
 }

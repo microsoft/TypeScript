@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface PoisonedProp {
->PoisonedProp : PoisonedProp
-
     x: string;
 >x : string
 

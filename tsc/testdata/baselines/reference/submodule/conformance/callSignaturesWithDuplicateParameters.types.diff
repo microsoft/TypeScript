@@ -1,43 +1,6 @@
 --- old.callSignaturesWithDuplicateParameters.types
 +++ new.callSignaturesWithDuplicateParameters.types
-@@= skipped -29, +29 lines =@@
- var f4 = <T>(x: T, x: T) => { }
- >f4 : <T>(x: T, x: T) => void
- ><T>(x: T, x: T) => { } : <T>(x: T, x: T) => void
-+>T : T
- >x : T
- >x : T
- 
-@@= skipped -30, +31 lines =@@
- var f8 = <T>(x: T, y: T) => { }
- >f8 : <T>(x: T, y: T) => void
- ><T>(x: T, y: T) => { } : <T>(x: T, y: T) => void
-+>T : T
- >x : T
- >y : T
- 
-@@= skipped -18, +19 lines =@@
- 
-     foo3<T>(x: T, x: T) { }
- >foo3 : <T>(x: T, x: T) => void
-+>T : T
- >x : T
- >x : T
- }
- 
- interface I {
-+>I : I
-+
-     (x, x);
- >x : any
- >x : any
-@@= skipped -25, +28 lines =@@
- 
-     foo3<T>(x: T, x: T);
- >foo3 : <T>(x: T, x: T) => any
-+>T : T
- >x : T
- >x : T
+@@= skipped -107, +107 lines =@@
  }
  
  var a: {
@@ -46,7 +9,7 @@
  
      foo(x, x);
  >foo : (x: any, x: any) => any
-@@= skipped -20, +21 lines =@@
+@@= skipped -15, +15 lines =@@
  };
  
  var b = {
@@ -57,11 +20,3 @@
  
      foo(x, x) { },
  >foo : (x: any, x: any) => void
-@@= skipped -18, +18 lines =@@
-     b: <T>(x: T, x: T) => { }
- >b : <T>(x: T, x: T) => void
- ><T>(x: T, x: T) => { } : <T>(x: T, x: T) => void
-+>T : T
- >x : T
- >x : T
- }

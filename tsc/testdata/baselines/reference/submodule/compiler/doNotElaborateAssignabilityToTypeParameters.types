@@ -3,7 +3,6 @@
 === doNotElaborateAssignabilityToTypeParameters.ts ===
 async function foo<T>(x: T): Promise<T> {
 >foo : <T>(x: T) => Promise<T>
->T : T
 >x : T
 
   let yaddable = await getXOrYadda(x);
@@ -18,8 +17,6 @@ async function foo<T>(x: T): Promise<T> {
 }
 
 interface Yadda {
->Yadda : Yadda
-
   stuff: string,
 >stuff : string
 
@@ -29,6 +26,5 @@ interface Yadda {
 
 declare function getXOrYadda<T>(x: T): T | Yadda;
 >getXOrYadda : <T>(x: T) => T | Yadda
->T : T
 >x : T
 

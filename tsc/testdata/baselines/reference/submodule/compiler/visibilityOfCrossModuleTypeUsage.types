@@ -29,8 +29,6 @@ import server = require('./visibilityOfCrossModuleTypeUsage_server');
 >server : typeof import("visibilityOfCrossModuleTypeUsage_server")
 
 export interface IConfiguration {
->IConfiguration : IConfiguration
-
     workspace: server.IWorkspace;
 >workspace : IWorkspace
 >server : any
@@ -42,12 +40,9 @@ export interface IConfiguration {
 
 === visibilityOfCrossModuleTypeUsage_server.ts ===
 export interface IServer {
->IServer : IServer
 }
 
 export interface IWorkspace {
->IWorkspace : IWorkspace
-
     toAbsolutePath(server: IServer, workspaceRelativePath?: string): string;
 >toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
 >server : IServer

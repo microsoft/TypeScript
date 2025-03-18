@@ -1,26 +1,6 @@
 --- old.silentNeverPropagation.types
 +++ new.silentNeverPropagation.types
-@@= skipped -4, +4 lines =@@
- 
- type ModuleWithState<TState> = {
- >ModuleWithState : ModuleWithState<TState>
-+>TState : TState
- 
-     state: TState;
- >state : TState
-@@= skipped -24, +25 lines =@@
- 
- declare function createModule<TState, TActions>(state: TState, actions: TActions): ModuleWithState<TState> & TActions;
- >createModule : <TState, TActions>(state: TState, actions: TActions) => ModuleWithState<TState> & TActions
-+>TState : TState
-+>TActions : TActions
- >state : TState
- >actions : TActions
- 
- declare function convert<TState, TActions>(m: ModuleWithState<TState> & TActions): ModuleWithState<TState & MoreState> & TActions;
- >convert : <TState, TActions>(m: ModuleWithState<TState> & TActions) => ModuleWithState<TState & MoreState> & TActions
-+>TState : TState
-+>TActions : TActions
+@@= skipped -36, +36 lines =@@
  >m : ModuleWithState<TState> & TActions
  
  const breaks = convert(
@@ -42,7 +22,7 @@
  >foo : () => true
  >true : true
  
-@@= skipped -27, +31 lines =@@
+@@= skipped -19, +19 lines =@@
  breaks.state.a
  >breaks.state.a : number
  >breaks.state : { a: number; } & MoreState

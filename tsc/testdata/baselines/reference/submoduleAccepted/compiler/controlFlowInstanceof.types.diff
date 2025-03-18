@@ -1,15 +1,6 @@
 --- old.controlFlowInstanceof.types
 +++ new.controlFlowInstanceof.types
-@@= skipped -211, +211 lines =@@
- // Y is assignable to X, but not a subtype of X
- 
- interface X {
-+>X : X
-+
-     x?: string;
- >x : string | undefined
- }
-@@= skipped -35, +37 lines =@@
+@@= skipped -246, +246 lines =@@
  // Repro from #27282
  
  declare const x: (() => void)|null;

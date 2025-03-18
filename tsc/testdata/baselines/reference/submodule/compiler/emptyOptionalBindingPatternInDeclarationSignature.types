@@ -40,8 +40,6 @@ declare class C1 {
 }
 
 interface I1 {
->I1 : I1
-
     method({}?: { x: string }): void
 >method : (__0?: { x: string; } | undefined) => void
 >x : string

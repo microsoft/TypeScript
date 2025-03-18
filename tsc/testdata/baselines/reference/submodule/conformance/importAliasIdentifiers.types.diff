@@ -19,16 +19,7 @@
  >x : number
  >y : number
  
-@@= skipped -23, +23 lines =@@
- >clodule : typeof clodule
- 
-     export interface Point {
-+>Point : Point
-+
-         x: number; y: number;
- >x : number
- >y : number
-@@= skipped -18, +20 lines =@@
+@@= skipped -41, +41 lines =@@
  >clodule : clodule
  
  var p: clolias.Point;
@@ -47,16 +38,7 @@
  >x : number
  >y : number
  
-@@= skipped -28, +28 lines =@@
- >fundule : typeof fundule
- 
-     export interface Point {
-+>Point : Point
-+
-         x: number; y: number;
- >x : number
- >y : number
-@@= skipped -18, +20 lines =@@
+@@= skipped -46, +46 lines =@@
  >fundule : typeof fundule
  
  var p: funlias.Point;

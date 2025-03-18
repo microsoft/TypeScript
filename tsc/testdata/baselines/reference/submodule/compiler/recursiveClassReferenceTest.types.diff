@@ -1,19 +1,6 @@
 --- old.recursiveClassReferenceTest.types
 +++ new.recursiveClassReferenceTest.types
-@@= skipped -6, +6 lines =@@
- 
- 
- declare module Sample.Thing {
-+>Sample : typeof Sample
-+>Thing : typeof Thing
- 
- 	export interface IWidget {
-+>IWidget : IWidget
-+
- 		getDomNode(): any;
- >getDomNode : () => any
- 
-@@= skipped -9, +13 lines =@@
+@@= skipped -15, +15 lines =@@
  >destroy : () => any
  
  		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
@@ -24,23 +11,7 @@
  >widget : IWidget
  >Sample : any
  >Thing : any
- 	}
- 
- 	export interface ICodeThing {
-+>ICodeThing : ICodeThing
-   
-   		getDomNode(): Element;
- >getDomNode : () => Element
-@@= skipped -25, +26 lines =@@
- 	}
- 
- 	export interface IAction {
-+>IAction : IAction
-+
- 		run(Thing:ICodeThing):boolean;
- >run : (Thing: ICodeThing) => boolean
- >Thing : ICodeThing
-@@= skipped -17, +19 lines =@@
+@@= skipped -42, +42 lines =@@
  
  	export class StartFindAction implements Sample.Thing.IAction {
  >StartFindAction : StartFindAction
@@ -80,23 +51,3 @@
  >this : this
  			
  		private domNode:any = null;
-@@= skipped -44, +44 lines =@@
- }
- 
- interface IMode { getInitialState(): IState;} 
-+>IMode : IMode
- >getInitialState : () => IState
- 
- class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
-@@= skipped -7, +8 lines =@@
- >getInitialState : () => IState
- 
- interface IState {}
-+>IState : IState
- 
- interface Window {
-+>Window : Window
-+
-     opener: Window;
- >opener : Window
- }

@@ -30,5 +30,3 @@ type StringTree = string | StringTreeArray;
 >StringTree : StringTree
 
 interface StringTreeArray extends Array<StringTree> { }
->StringTreeArray : StringTreeArray
-

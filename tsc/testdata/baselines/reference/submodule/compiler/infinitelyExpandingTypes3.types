@@ -2,9 +2,6 @@
 
 === infinitelyExpandingTypes3.ts ===
 interface List<T> {
->List : List<T>
->T : T
-
     data: T;
 >data : T
 
@@ -16,17 +13,11 @@ interface List<T> {
 }
 
 interface OwnerList<U> extends List<List<U>> {
->OwnerList : OwnerList<U>
->U : U
-
     name: string;
 >name : string
 }
 
 interface OwnerList2<U> extends List<List<U>> {
->OwnerList2 : OwnerList2<U>
->U : U
-
     name: string;
 >name : string
 }

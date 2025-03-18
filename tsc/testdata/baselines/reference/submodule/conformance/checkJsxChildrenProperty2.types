@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface Prop {
->Prop : Prop
-
     a: number,
 >a : number
 

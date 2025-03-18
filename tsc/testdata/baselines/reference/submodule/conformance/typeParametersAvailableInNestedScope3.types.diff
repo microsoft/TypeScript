@@ -6,31 +6,19 @@
  function foo<T>(v: T) {
 ->foo : <T>(v: T) => { a: <T_1>(a: T_1) => T_1; b: () => T; c: <T_1>(v: T_1) => { a: <T_2>(a: T_2) => T_2; b: () => T_1; }; }
 +>foo : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
-+>T : T
  >v : T
  
      function a<T>(a: T) { return a; }
- >a : <T>(a: T) => T
-+>T : T
- >a : T
- >a : T
- 
-@@= skipped -13, +15 lines =@@
+@@= skipped -13, +13 lines =@@
  >v : T
  
      function c<T>(v: T) {
 ->c : <T>(v: T) => { a: <T_1>(a: T_1) => T_1; b: () => T; }
 +>c : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }
-+>T : T
  >v : T
  
          function a<T>(a: T) { return a; }
- >a : <T>(a: T) => T
-+>T : T
- >a : T
- >a : T
- 
-@@= skipped -13, +15 lines =@@
+@@= skipped -13, +13 lines =@@
  >v : T
  
          return { a, b };

@@ -18,7 +18,6 @@ class Derived extends Base {
 
 var a1: { new <T>(x: T): T };
 >a1 : new <T>(x: T) => T
->T : T
 >x : T
 
 var b1: { new (x: string): string };
@@ -27,7 +26,6 @@ var b1: { new (x: string): string };
 
 var a2: { new <T>(x: T): T };
 >a2 : new <T>(x: T) => T
->T : T
 >x : T
 
 var b2: { new (x: string, y: number): string };
@@ -37,8 +35,6 @@ var b2: { new (x: string, y: number): string };
 
 var a3: { new <T, U>(x: T, y: U): T };
 >a3 : new <T, U>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -49,7 +45,6 @@ var b3: { new (x: string, y: number): string };
 
 var a4: { new <T>(x?: T): T };
 >a4 : new <T>(x?: T) => T
->T : T
 >x : T
 
 var b4: { new (x?: string): string };
@@ -58,7 +53,6 @@ var b4: { new (x?: string): string };
 
 var a5: { new <T>(...x: T[]): T };
 >a5 : new <T>(...x: T[]) => T
->T : T
 >x : T[]
 
 var b5: { new (...x: string[]): string };
@@ -67,7 +61,6 @@ var b5: { new (...x: string[]): string };
 
 var a6: { new <T>(x: T, y: T): T };
 >a6 : new <T>(x: T, y: T) => T
->T : T
 >x : T
 >y : T
 

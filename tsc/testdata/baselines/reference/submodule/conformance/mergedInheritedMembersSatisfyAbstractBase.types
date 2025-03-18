@@ -14,13 +14,10 @@ class Broken extends BaseClass {}
 
 // declaration merging should satisfy abstract bar
 interface IGetters {
->IGetters : IGetters
-
   bar: number;
 >bar : number
 }
 interface Broken extends IGetters {}
->Broken : Broken
 
 new Broken().bar
 >new Broken().bar : number
@@ -33,11 +30,8 @@ class IncorrectlyExtends extends BaseClass {}
 >BaseClass : BaseClass
 
 interface IncorrectGetters {
->IncorrectGetters : IncorrectGetters
-
   bar: string;
 >bar : string
 }
 interface IncorrectlyExtends extends IncorrectGetters {}
->IncorrectlyExtends : IncorrectlyExtends
 

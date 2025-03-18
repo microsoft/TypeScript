@@ -34,8 +34,6 @@ var r3 = c[1];
 >1 : 1
 
 interface I {
->I : I
-
     [x: string]: string;
 >x : string
 

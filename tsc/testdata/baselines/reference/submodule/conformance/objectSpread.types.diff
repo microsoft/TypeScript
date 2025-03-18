@@ -195,16 +195,7 @@
  >o : { a: number; b: string; }
  >a : number
  
-@@= skipped -15, +15 lines =@@
- 
- function f<T, U>(t: T, u: U) {
- >f : <T, U>(t: T, u: U) => T & U & { id: string; }
-+>T : T
-+>U : U
- >t : T
- >u : U
- 
-@@= skipped -74, +76 lines =@@
+@@= skipped -89, +89 lines =@@
  >d : string
  
      f({ a: 1, id: true }, { c: 1, d: 'no' })
@@ -213,16 +204,7 @@
  >f : <T, U>(t: T, u: U) => T & U & { id: string; }
  >{ a: 1, id: true } : { a: number; id: true; }
  >a : number
-@@= skipped -15, +15 lines =@@
- 
- function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
- >genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
-+>T : T
-+>U : U
- >t : T
- >u : U
- >v : T | U
-@@= skipped -90, +92 lines =@@
+@@= skipped -105, +105 lines =@@
  >v : T | U
  
      let x12 = { ...v, ...obj };

@@ -4,23 +4,19 @@
 // from https://github.com/microsoft/TypeScript/issues/30717
 declare class Test<T> {
 >Test : Test<T>
->T : T
 
     obj: T;
 >obj : T
 
     get<K extends keyof T>(k: K): T[K];
 >get : <K extends keyof T>(k: K) => T[K]
->K : K
 >k : K
 }
 
 interface A { t: "A" }
->A : A
 >t : "A"
 
 interface B { t: "B" }
->B : B
 >t : "B"
 
 declare const tmp: Test<A> | Test<B>;

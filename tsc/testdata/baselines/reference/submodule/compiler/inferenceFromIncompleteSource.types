@@ -4,10 +4,6 @@
 // Repro from #42030
 
 interface ListProps<T, K extends keyof T> {
->ListProps : ListProps<T, K>
->T : T
->K : K
-
   items: T[];
 >items : T[]
 
@@ -20,8 +16,6 @@ interface ListProps<T, K extends keyof T> {
 
 declare const Component: <T, K extends keyof T>(x: ListProps<T, K>) => void;
 >Component : <T, K extends keyof T>(x: ListProps<T, K>) => void
->T : T
->K : K
 >x : ListProps<T, K>
 
 Component({items: [{name:' string'}], itemKey: 'name' });

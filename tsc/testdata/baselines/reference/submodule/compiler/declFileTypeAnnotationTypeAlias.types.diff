@@ -9,12 +9,3 @@
  >m : any
  
      export type fc = () => c;
-@@= skipped -8, +8 lines =@@
- }
- 
- interface Window {
-+>Window : Window
-+
-     someMethod();
- >someMethod : () => any
- }

@@ -9,7 +9,6 @@ import lib = require('./decoratorOnImportEquals2_0');
 
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
->T : T
 >target : T
 
 === decoratorOnImportEquals2_0.ts ===

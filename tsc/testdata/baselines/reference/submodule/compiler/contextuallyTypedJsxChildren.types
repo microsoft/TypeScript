@@ -8,11 +8,7 @@ import React from 'react';
 
 // repro from https://github.com/microsoft/TypeScript/issues/53941
 declare namespace DropdownMenu {
->DropdownMenu : ComponentType<Props>
-
   interface BaseProps {
->BaseProps : BaseProps
-
     icon: string;
 >icon : string
 
@@ -20,8 +16,6 @@ declare namespace DropdownMenu {
 >label : string
   }
   interface PropsWithChildren extends BaseProps {
->PropsWithChildren : PropsWithChildren
-
     children(props: { onClose: () => void }): JSX.Element;
 >children : (props: { onClose: () => void; }) => Element
 >props : { onClose: () => void; }
@@ -32,8 +26,6 @@ declare namespace DropdownMenu {
 >controls : undefined
   }
   interface PropsWithControls extends BaseProps {
->PropsWithControls : PropsWithControls
-
     controls: Control[];
 >controls : Control[]
 
@@ -41,8 +33,6 @@ declare namespace DropdownMenu {
 >children : undefined
   }
   interface Control {
->Control : Control
-
     title: string;
 >title : string
   }

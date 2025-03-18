@@ -14,7 +14,6 @@ class Base {
 // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
 class Derived<U extends String> extends Base { // error
 >Derived : Derived<U>
->U : U
 >Base : Base
 
     x: U;

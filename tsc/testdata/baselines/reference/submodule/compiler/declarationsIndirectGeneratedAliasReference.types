@@ -2,23 +2,17 @@
 
 === node_modules/mod/ctor.d.ts ===
 export interface Ctor {
->Ctor : Ctor
-
     x: number;
 >x : number
 }
 export type ExtendedCtor<T> = {x: number, ext: T};
 >ExtendedCtor : ExtendedCtor<T>
->T : T
 >x : number
 >ext : T
 
 export interface CtorConstructor {
->CtorConstructor : CtorConstructor
-
     extends<T>(x: T): ExtendedCtor<T extends unknown ? Ctor : undefined>;
 >extends : <T>(x: T) => ExtendedCtor<T extends unknown ? Ctor : undefined>
->T : T
 >x : T
 }
 export const Ctor: CtorConstructor;

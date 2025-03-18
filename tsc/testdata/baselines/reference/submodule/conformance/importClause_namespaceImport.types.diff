@@ -1,14 +1,6 @@
 --- old.importClause_namespaceImport.types
 +++ new.importClause_namespaceImport.types
-@@= skipped -10, +10 lines =@@
- 
- export type C<T> = T;
- >C : T
-+>T : T
- 
- export const Value = {};
- >Value : {}
-@@= skipped -7, +8 lines =@@
+@@= skipped -17, +17 lines =@@
  
  === /b.ts ===
  import type * as types from './a';

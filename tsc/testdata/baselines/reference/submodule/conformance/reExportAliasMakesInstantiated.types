@@ -27,8 +27,6 @@ export import test1 = pack2.test1;
 >test1 : string
 
 declare module mod1 {
->mod1 : any
-
   type test1 = string;
 >test1 : string
 

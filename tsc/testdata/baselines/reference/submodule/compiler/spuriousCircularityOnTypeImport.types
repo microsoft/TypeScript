@@ -3,23 +3,17 @@
 === types.ts ===
 export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
 >SelectorMap : SelectorMap<T>
->T : T
 >params : unknown[]
 
     [key in keyof T]: T[key];
->key : key
-
 };
 
 === index.ts ===
 export type SelectorMap<T extends Record<string, (...params: unknown[]) => unknown>> = {
 >SelectorMap : SelectorMap<T>
->T : T
 >params : unknown[]
 
     [key in keyof T]: T[key];
->key : key
-
 };
 
 export declare const value2: {
@@ -27,9 +21,7 @@ export declare const value2: {
 
     sliceSelectors: <FuncMap extends import('./types').SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> };
 >sliceSelectors : <FuncMap extends SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> }
->FuncMap : FuncMap
 >selectorsBySlice : FuncMap
->P : P
 
 };
 
@@ -38,9 +30,7 @@ export declare const value3: {
 
     sliceSelectors: <FuncMap extends SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> };
 >sliceSelectors : <FuncMap extends SelectorMap<FuncMap>>(selectorsBySlice: FuncMap) => { [P in keyof FuncMap]: Parameters<FuncMap[P]> }
->FuncMap : FuncMap
 >selectorsBySlice : FuncMap
->P : P
 
 };
 

@@ -3,7 +3,6 @@
 === genericWithIndexerOfTypeParameterType2.ts ===
 export class Collection<TItem extends CollectionItem> {
 >Collection : Collection<TItem>
->TItem : TItem
 
     _itemsByKey: { [key: string]: TItem; };
 >_itemsByKey : { [key: string]: TItem; }

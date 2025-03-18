@@ -6,20 +6,14 @@
 
 function foo<T, U extends T>(x: T, y: U) {
 >foo : <T, U extends T>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->V : V
->W : W
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->Y : Y
 >a : X
 >b : Y
 
@@ -36,20 +30,14 @@ function foo<T, U extends T>(x: T, y: U) {
 
 function foo2<U extends T, T>(x: T, y: U) {
 >foo2 : <U extends T, T>(x: T, y: U) => void
->U : U
->T : T
 >x : T
 >y : U
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->V : V
->W : W
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->Y : Y
 >a : X
 >b : Y
 
@@ -67,21 +55,15 @@ function foo2<U extends T, T>(x: T, y: U) {
 var f = function <T, U extends T>(x: T, y: U) {
 >f : <T, U extends T>(x: T, y: U) => void
 >function <T, U extends T>(x: T, y: U) {    function bar<V extends T, W extends U>() {        var g = function <X extends W, Y extends V>(a: X, b: Y): T {            x = y;            return y;        }    }} : <T, U extends T>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->V : V
->W : W
 
         var g = function <X extends W, Y extends V>(a: X, b: Y): T {
 >g : <X extends W, Y extends V>(a: X, b: Y) => T
 >function <X extends W, Y extends V>(a: X, b: Y): T {            x = y;            return y;        } : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->Y : Y
 >a : X
 >b : Y
 
@@ -99,22 +81,16 @@ var f = function <T, U extends T>(x: T, y: U) {
 var f2 = function <U extends T, T>(x: T, y: U) {
 >f2 : <U extends T, T>(x: T, y: U) => void
 >function <U extends T, T>(x: T, y: U) {    function bar<V extends T, W extends U>() {        var g = function baz<X extends W, Y extends V>(a: X, b: Y): T {            x = y;            return y;        }    }} : <U extends T, T>(x: T, y: U) => void
->U : U
->T : T
 >x : T
 >y : U
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->V : V
->W : W
 
         var g = function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >g : <X extends W, Y extends V>(a: X, b: Y) => T
 >function baz<X extends W, Y extends V>(a: X, b: Y): T {            x = y;            return y;        } : <X extends W, Y extends V>(a: X, b: Y) => T
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->Y : Y
 >a : X
 >b : Y
 
@@ -132,21 +108,15 @@ var f2 = function <U extends T, T>(x: T, y: U) {
 var f3 = <T, U extends T>(x: T, y: U) => {
 >f3 : <T, U extends T>(x: T, y: U) => void
 ><T, U extends T>(x: T, y: U) => {    function bar<V extends T, W extends U>() {        var g = <X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        }    }} : <T, U extends T>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->V : V
->W : W
 
         var g = <X extends W, Y extends V>(a: X, b: Y): T => {
 >g : <X extends W, Y extends V>(a: X, b: Y) => T
 ><X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        } : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->Y : Y
 >a : X
 >b : Y
 
@@ -164,21 +134,15 @@ var f3 = <T, U extends T>(x: T, y: U) => {
 var f4 = <U extends T, T>(x: T, y: U) => {
 >f4 : <U extends T, T>(x: T, y: U) => void
 ><U extends T, T>(x: T, y: U) => {    function bar<V extends T, W extends U>() {        var g = <X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        }    }} : <U extends T, T>(x: T, y: U) => void
->U : U
->T : T
 >x : T
 >y : U
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->V : V
->W : W
 
         var g = <X extends W, Y extends V>(a: X, b: Y): T => {
 >g : <X extends W, Y extends V>(a: X, b: Y) => T
 ><X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        } : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->Y : Y
 >a : X
 >b : Y
 

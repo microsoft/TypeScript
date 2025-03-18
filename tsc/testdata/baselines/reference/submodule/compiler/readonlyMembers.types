@@ -2,8 +2,6 @@
 
 === readonlyMembers.ts ===
 interface X {
->X : X
-
     readonly a: number;
 >a : number
 

@@ -16,11 +16,13 @@ function foo(x: "hi", items: string[]): typeof foo;
 >foo : (x: "hi", items: string[]) => ???
 >x : "hi"
 >items : string[]
+>foo : (x: "hi", items: string[]) => ???
 
 function foo(x: string, items: string[]): typeof foo {
 >foo : (x: "hi", items: string[]) => ???
 >x : string
 >items : string[]
+>foo : (x: "hi", items: string[]) => ???
 
     return null;
 }

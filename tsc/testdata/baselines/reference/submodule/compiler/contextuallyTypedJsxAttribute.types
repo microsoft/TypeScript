@@ -2,8 +2,6 @@
 
 === index.tsx ===
 interface Elements {
->Elements : Elements
-
   foo: { callback?: (value: number) => void };
 >foo : { callback?: (value: number) => void; }
 >callback : (value: number) => void
@@ -17,12 +15,10 @@ interface Elements {
 
 type Props<C extends keyof Elements> = { as?: C } & Elements[C];
 >Props : Props<C>
->C : C
 >as : C
 
 declare function Test<C extends keyof Elements>(props: Props<C>): null;
 >Test : <C extends keyof Elements>(props: Props<C>) => null
->C : C
 >props : Props<C>
 
 <Test

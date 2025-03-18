@@ -63,8 +63,6 @@ let b4 = x.a ?? 2 as const;
 // Repro from #35693
 
 interface Foo {
->Foo : Foo
-
   bar: 'yo' | 'ha' | undefined;
 >bar : "ha" | "yo" | undefined
 }

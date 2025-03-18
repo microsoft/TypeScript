@@ -1,19 +1,11 @@
 --- old.mixinAbstractClasses.2.types
 +++ new.mixinAbstractClasses.2.types
-@@= skipped -1, +1 lines =@@
- 
- === mixinAbstractClasses.2.ts ===
- interface Mixin {
-+>Mixin : Mixin
-+
-     mixinMethod(): void;
- >mixinMethod : () => void
+@@= skipped -6, +6 lines =@@
  }
  
  function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
 ->Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
 +>Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
-+>TBaseClass : TBaseClass
  >args : any
  >baseClass : TBaseClass
  >args : any
@@ -25,7 +17,7 @@
  >baseClass : TBaseClass
  
          mixinMethod() {
-@@= skipped -20, +23 lines =@@
+@@= skipped -15, +15 lines =@@
          }
      }
      return MixinClass;

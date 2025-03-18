@@ -3,21 +3,17 @@
 === commentsInterface.ts ===
 /** this is interface 1*/
 interface i1 {
->i1 : i1
 }
 var i1_i: i1;
 >i1_i : i1
 
 interface nc_i1 {
->nc_i1 : nc_i1
 }
 var nc_i1_i: nc_i1;
 >nc_i1_i : nc_i1
 
 /** this is interface 2 with memebers*/
 interface i2 {
->i2 : i2
-
     /** this is x*/
     x: number;
 >x : number
@@ -160,8 +156,6 @@ var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
 >10 : 10
 
 interface i3 {
->i3 : i3
-
     /** Comment i3 x*/
     x: number;
 >x : number

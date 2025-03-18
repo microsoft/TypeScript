@@ -5,17 +5,11 @@
 
 declare type Callback<Args extends any[], Out, R> = (...args: Args) => (data: Out) => R;
 >Callback : Callback<Args, Out, R>
->Args : Args
->Out : Out
->R : R
 >args : Args
 >data : Out
 
 declare function factory<Out>(): <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R;
 >factory : <Out>() => <Args extends any[], R>(callback: Callback<Args, Out, R>) => (...args: Args) => R
->Out : Out
->Args : Args
->R : R
 >callback : Callback<Args, Out, R>
 >args : Args
 

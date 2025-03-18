@@ -1,21 +1,6 @@
 --- old.moduleAugmentationImportsAndExports2.types
 +++ new.moduleAugmentationImportsAndExports2.types
-@@= skipped -26, +26 lines =@@
- >undefined : undefined
- 
- namespace N {
-+>N : any
-+
-     export interface Ifc { a }
-+>Ifc : Ifc
- >a : any
- 
-     export interface Cls { a }
-+>Cls : Cls
- >a : any
- }
- 
-@@= skipped -19, +23 lines =@@
+@@= skipped -45, +45 lines =@@
      import I = N.Ifc;
  >I : any
  >N : any
@@ -30,9 +15,7 @@
  
      // should have explicit export
      interface A {
-+>A : A
-+
-         foo(): B;
+@@= skipped -13, +13 lines =@@
  >foo : () => B
  
          bar(): I;

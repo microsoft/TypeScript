@@ -3,7 +3,6 @@
 === nonNullableTypes1.ts ===
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
->T : T
 >x : T
 
     let y = x || "hello";  // NonNullable<T> | string
@@ -23,7 +22,6 @@ function error(): never {
 
 function f2<T>(x: T) {  // NonNullable<T>
 >f2 : <T>(x: T) => NonNullable<T>
->T : T
 >x : T
 
     return x || error();
@@ -45,7 +43,6 @@ function f3(x: unknown) {
 
 function f4<T extends { x: string } | undefined>(obj: T) {
 >f4 : <T extends { x: string; } | undefined>(obj: T) => void
->T : T
 >x : string
 >obj : T
 

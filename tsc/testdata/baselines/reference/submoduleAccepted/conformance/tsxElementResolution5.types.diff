@@ -1,14 +1,6 @@
 --- old.tsxElementResolution5.types
 +++ new.tsxElementResolution5.types
-@@= skipped -1, +1 lines =@@
- 
- === file1.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
- }
+@@= skipped -6, +6 lines =@@
  
  // OK, but implicit any
  <div n='x' />;

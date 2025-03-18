@@ -1,28 +1,6 @@
 --- old.higherOrderMappedIndexLookupInference.types
 +++ new.higherOrderMappedIndexLookupInference.types
-@@= skipped -5, +5 lines =@@
- function f1(a: <T>() => keyof T, b: <U>() => keyof U) {
- >f1 : (a: <T>() => keyof T, b: <U>() => keyof U) => void
- >a : <T>() => keyof T
-+>T : T
- >b : <U>() => keyof U
-+>U : U
- 
-     a = b;
- >a = b : <U>() => keyof U
-@@= skipped -16, +18 lines =@@
- function f2(a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) {
- >f2 : (a: <T, K extends keyof T>() => T[K], b: <U, L extends keyof U>() => U[L]) => void
- >a : <T, K extends keyof T>() => T[K]
-+>T : T
-+>K : K
- >b : <U, L extends keyof U>() => U[L]
-+>U : U
-+>L : L
- 
-     a = b;
- >a = b : <U, L extends keyof U>() => U[L]
-@@= skipped -14, +18 lines =@@
+@@= skipped -35, +35 lines =@@
  }
  
  function f3(a: <T>() => { [K in keyof T]: T[K] }, b: <U>() => { [K in keyof U]: U[K] }) {
@@ -31,11 +9,7 @@
 ->b : <U>() => { [K in keyof U]: U[K]; }
 +>f3 : (a: <T>() => { [K in keyof T]: T[K] }, b: <U>() => { [K in keyof U]: U[K] }) => void
 +>a : <T>() => { [K in keyof T]: T[K] }
-+>T : T
-+>K : K
 +>b : <U>() => { [K in keyof U]: U[K] }
-+>U : U
-+>K : K
  
      a = b;
 ->a = b : <U>() => { [K in keyof U]: U[K]; }
@@ -55,25 +29,17 @@
  }
  
  // Repro from #18338
- 
- type IdMapped<T> = { [K in keyof T]: T[K] }
- >IdMapped : IdMapped<T>
-+>T : T
-+>K : K
- 
- declare const f: <T>() => IdMapped<T>;
+@@= skipped -24, +24 lines =@@
  >f : <T>() => IdMapped<T>
-+>T : T
  
  declare const g: <U>() => { [K in keyof U]: U[K] };
 ->g : <U>() => { [K in keyof U]: U[K]; }
 +>g : <U>() => { [K in keyof U]: U[K] }
-+>U : U
-+>K : K
  
  const h: typeof g = f;
 ->h : <U>() => { [K in keyof U]: U[K]; }
 ->g : <U>() => { [K in keyof U]: U[K]; }
 +>h : <U>() => { [K in keyof U]: U[K] }
++>g : <U>() => { [K in keyof U]: U[K] }
  >f : <T>() => IdMapped<T>
  

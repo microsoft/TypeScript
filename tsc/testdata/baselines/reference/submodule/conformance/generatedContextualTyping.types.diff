@@ -9,16 +9,7 @@
  === generatedContextualTyping.ts ===
  class Base { private p; }
  >Base : Base
-@@= skipped -18, +15 lines =@@
- >n : any
- 
- interface Genric<T> { func(n: T[]); }
-+>Genric : Genric<T>
-+>T : T
- >func : (n: T[]) => any
- >n : T[]
- 
-@@= skipped -1038, +1040 lines =@@
+@@= skipped -1056, +1053 lines =@@
  >d2 : Derived2
  
  function x124(parm: { (): Base[]; } = () => [d1, d2]) { }

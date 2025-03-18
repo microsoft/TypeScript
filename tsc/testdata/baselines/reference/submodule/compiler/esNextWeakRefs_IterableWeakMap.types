@@ -27,8 +27,6 @@ const IterableWeakMap_cleanup = ({ ref, set }: {
 // Based on: https://github.com/tc39/proposal-weakrefs/blob/master/README.md#iterable-weakmaps
 export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >IterableWeakMap : IterableWeakMap<K, V>
->K : K
->V : V
 
     declare readonly [Symbol.toStringTag]: "IterableWeakMap";
 >[Symbol.toStringTag] : "IterableWeakMap"

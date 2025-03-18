@@ -1,28 +1,6 @@
 --- old.tsxAttributeResolution3.types
 +++ new.tsxAttributeResolution3.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		test1: Attribs1;
- >test1 : Attribs1
- 	}
- }
- interface Attribs1 {
-+>Attribs1 : Attribs1
-+
- 	x: string;
- >x : string
- 
-@@= skipped -25, +33 lines =@@
+@@= skipped -26, +26 lines =@@
  >'foo' : "foo"
  
  <test1 {...obj1} />

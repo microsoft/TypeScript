@@ -244,7 +244,6 @@ o3["b"]?.(1, ...[2, 3], 4).c;
 
 declare const o4: undefined | (<T>(f: (a: T) => T) => T);
 >o4 : <T>(f: (a: T) => T) => T | undefined
->T : T
 >f : (a: T) => T
 >a : T
 
@@ -261,7 +260,6 @@ const v: number | undefined = o4?.(incr);
 // GH#33744
 declare const o5: <T>() => undefined | (() => void);
 >o5 : <T>() => () => void | undefined
->T : T
 
 o5<number>()?.();
 >o5<number>()?.() : void | undefined

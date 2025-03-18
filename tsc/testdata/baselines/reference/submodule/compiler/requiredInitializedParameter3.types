@@ -2,8 +2,6 @@
 
 === requiredInitializedParameter3.ts ===
 interface I1 {
->I1 : I1
-
     method();
 >method : () => any
 }

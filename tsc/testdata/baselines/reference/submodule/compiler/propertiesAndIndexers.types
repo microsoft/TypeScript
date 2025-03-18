@@ -2,24 +2,16 @@
 
 === propertiesAndIndexers.ts ===
 interface X { }
->X : X
-
 interface Y {
->Y : Y
-
     n: number;
 >n : number
 }
 interface Z {
->Z : Z
-
     s: string;
 >s : string
 }
 
 interface A {
->A : A
-
     a: Y;
 >a : Y
 
@@ -31,8 +23,6 @@ interface A {
 }
 
 interface B extends A {
->B : B
-
     [n: number]: string;
 >n : number
 
@@ -47,8 +37,6 @@ interface B extends A {
 }
 
 interface B {
->B : B
-
     4: boolean;
 >4 : boolean
 
@@ -57,8 +45,6 @@ interface B {
 }
 
 interface C extends A {
->C : C
-
     [s: string]: number;
 >s : string
 
@@ -70,8 +56,6 @@ interface C extends A {
 }
 
 interface D extends B, C {
->D : D
-
     2: Z;
 >2 : Z
 

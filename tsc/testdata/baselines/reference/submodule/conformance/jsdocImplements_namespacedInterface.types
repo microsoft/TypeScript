@@ -2,18 +2,11 @@
 
 === /defs.d.ts ===
 declare namespace N {
->N : any
-
     interface A {
->A : A
-
         mNumber(): number;
 >mNumber : () => number
     }
     interface AT<T> {
->AT : AT<T>
->T : T
-
         gen(): T;
 >gen : () => T
     }

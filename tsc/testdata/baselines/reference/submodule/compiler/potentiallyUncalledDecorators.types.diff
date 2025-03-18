@@ -26,11 +26,3 @@
  >'args' : "args"
  
      get multiplied() {
-@@= skipped -20, +20 lines =@@
- // Other fun stuff.
- 
- interface OmniDecorator extends MethodDecorator, ClassDecorator, PropertyDecorator {
-+>OmniDecorator : OmniDecorator
- }
- 
- declare function noArgs(): OmniDecorator;

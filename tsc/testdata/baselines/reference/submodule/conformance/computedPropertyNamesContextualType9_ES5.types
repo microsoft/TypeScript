@@ -2,8 +2,6 @@
 
 === computedPropertyNamesContextualType9_ES5.ts ===
 interface I {
->I : I
-
     [s: string]: boolean;
 >s : string
 

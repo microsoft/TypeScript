@@ -1,13 +1,6 @@
 --- old.fallbackToBindingPatternForTypeInference.types
 +++ new.fallbackToBindingPatternForTypeInference.types
-@@= skipped -2, +2 lines =@@
- === fallbackToBindingPatternForTypeInference.ts ===
- declare function trans<T>(f: (x: T) => string): number;
- >trans : <T>(f: (x: T) => string) => number
-+>T : T
- >f : (x: T) => string
- >x : T
- 
+@@= skipped -8, +8 lines =@@
  trans(({a}) => a);
  >trans(({a}) => a) : number
  >trans : <T>(f: (x: T) => string) => number
@@ -24,7 +17,7 @@
  >b : any
  >c : any
  >'foo' : "foo"
-@@= skipped -21, +22 lines =@@
+@@= skipped -15, +15 lines =@@
  trans(({d: [e,f]}) => 'foo');
  >trans(({d: [e,f]}) => 'foo') : number
  >trans : <T>(f: (x: T) => string) => number

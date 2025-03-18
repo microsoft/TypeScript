@@ -34,7 +34,6 @@ module O {
 
     class C2<T> extends Q.E2<T> { foo: T; } // error
 >C2 : C2<T>
->T : T
 >Q.E2 : typeof E2
 >Q : typeof Q
 >E2 : typeof E2
@@ -45,7 +44,6 @@ module O {
 
         export class D2<T> extends C2<T> { bar: T; }
 >D2 : D2<T>
->T : T
 >C2 : typeof C2
 >bar : T
     }
@@ -55,7 +53,6 @@ module O {
 
         export class E2<T> extends P.D2<T> { baz: T; }
 >E2 : E2<T>
->T : T
 >P.D2 : typeof D2
 >P : typeof P
 >D2 : typeof D2

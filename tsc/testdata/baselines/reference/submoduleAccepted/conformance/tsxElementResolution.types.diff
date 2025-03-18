@@ -1,18 +1,6 @@
 --- old.tsxElementResolution.types
 +++ new.tsxElementResolution.types
-@@= skipped -1, +1 lines =@@
- 
- === tsxElementResolution.tsx ===
- declare namespace JSX {
-+>JSX : any
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		foundFirst: { x: string };
- >foundFirst : { x: string; }
- >x : string
-@@= skipped -28, +32 lines =@@
+@@= skipped -29, +29 lines =@@
  
  // Should find the intrinsic element, not the class element
  var a = <foundFirst  x="hello" />;

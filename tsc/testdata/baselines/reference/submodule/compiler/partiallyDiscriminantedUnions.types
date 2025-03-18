@@ -4,8 +4,6 @@
 // Repro from #10586
 
 interface A1 {
->A1 : A1
-
     type: 'a';
 >type : "a"
 
@@ -14,8 +12,6 @@ interface A1 {
 }
 
 interface A2 {
->A2 : A2
-
     type: 'a';
 >type : "a"
 
@@ -27,8 +23,6 @@ interface A2 {
 }
 
 interface B {
->B : B
-
     type: 'b';
 >type : "b"
 }

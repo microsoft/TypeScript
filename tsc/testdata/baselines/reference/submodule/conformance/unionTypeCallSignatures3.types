@@ -35,6 +35,13 @@ function f7(s: string, ...sRest: string[]) { }
 
 var fUnion: typeof f1 | typeof f2 | typeof f3 | typeof f4 | typeof f5 | typeof f6 | typeof f7;
 >fUnion : (s: string) => void | (s?: string) => void | (...s: string[]) => void | (s: string, s2?: string) => void | (s?: string, n?: number) => void | (s?: string, ...n: number[]) => void | (s: string, ...sRest: string[]) => void
+>f1 : (s: string) => void
+>f2 : (s?: string) => void
+>f3 : (...s: string[]) => void
+>f4 : (s: string, s2?: string) => void
+>f5 : (s?: string, n?: number) => void
+>f6 : (s?: string, ...n: number[]) => void
+>f7 : (s: string, ...sRest: string[]) => void
 
 fUnion(""); // All constituents can be called by passing a single string.
 >fUnion("") : void

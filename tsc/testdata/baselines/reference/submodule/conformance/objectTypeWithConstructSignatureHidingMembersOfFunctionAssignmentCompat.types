@@ -2,8 +2,6 @@
 
 === objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
 interface I {
->I : I
-
     new(): any;
 }
 

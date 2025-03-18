@@ -6,6 +6,8 @@ function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
 >c1 : Function
 >c2 : () => object
 >callable : Function | () => object
+>c1 : Function
+>c2 : () => object
 
     const a = c1();
 >a : any

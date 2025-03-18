@@ -1,15 +1,6 @@
 --- old.declarationEmitNameConflicts3.types
 +++ new.declarationEmitNameConflicts3.types
-@@= skipped -4, +4 lines =@@
- >M : typeof M
- 
-     export interface D { }
-+>D : D
-+
-     export module D {
- >D : typeof D
- 
-@@= skipped -41, +43 lines =@@
+@@= skipped -45, +45 lines =@@
  >f : D.f
      }
      export var v: M.D; // ok

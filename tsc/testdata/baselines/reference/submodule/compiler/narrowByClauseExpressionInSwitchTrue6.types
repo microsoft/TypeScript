@@ -2,8 +2,6 @@
 
 === narrowByClauseExpressionInSwitchTrue6.ts ===
 interface A {
->A : A
-
     kind: "a";
 >kind : "a"
 
@@ -12,8 +10,6 @@ interface A {
 }
 
 interface B {
->B : B
-
     kind: "b";
 >kind : "b"
 
@@ -22,8 +18,6 @@ interface B {
 }
 
 interface C {
->C : C
-
     kind: "c";
 >kind : "c"
 

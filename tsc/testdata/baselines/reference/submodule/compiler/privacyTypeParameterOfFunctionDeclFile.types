@@ -10,59 +10,31 @@ export class publicClass {
 }
 
 export interface publicInterfaceWithPrivateTypeParameters {
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters
-
     new <T extends privateClass>(): privateClass;  // Error
->T : T
-
     <T extends privateClass>(): privateClass;  // Error
->T : T
-
     myMethod<T extends privateClass>(): privateClass;  // Error
 >myMethod : <T extends privateClass>() => privateClass
->T : T
 }
 
 export interface publicInterfaceWithPublicTypeParameters {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters
-
     new <T extends publicClass>(): publicClass;
->T : T
-
     <T extends publicClass>(): publicClass;
->T : T
-
     myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->T : T
 }
 
 interface privateInterfaceWithPrivateTypeParameters {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters
-
     new <T extends privateClass>(): privateClass;
->T : T
-
     <T extends privateClass>(): privateClass;
->T : T
-
     myMethod<T extends privateClass>(): privateClass;
 >myMethod : <T extends privateClass>() => privateClass
->T : T
 }
 
 interface privateInterfaceWithPublicTypeParameters {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters
-
     new <T extends publicClass>(): publicClass;
->T : T
-
     <T extends publicClass>(): publicClass;
->T : T
-
     myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->T : T
 }
 
 export class publicClassWithWithPrivateTypeParameters {
@@ -70,19 +42,15 @@ export class publicClassWithWithPrivateTypeParameters {
 
     static myPublicStaticMethod<T extends privateClass>() {  // Error
 >myPublicStaticMethod : <T extends privateClass>() => void
->T : T
     }
     private static myPrivateStaticMethod<T extends privateClass>() {
 >myPrivateStaticMethod : <T extends privateClass>() => void
->T : T
     }
     myPublicMethod<T extends privateClass>() {  // Error
 >myPublicMethod : <T extends privateClass>() => void
->T : T
     }
     private myPrivateMethod<T extends privateClass>() {
 >myPrivateMethod : <T extends privateClass>() => void
->T : T
     }
 }
 
@@ -91,19 +59,15 @@ export class publicClassWithWithPublicTypeParameters {
 
     static myPublicStaticMethod<T extends publicClass>() {
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
     }
     private static myPrivateStaticMethod<T extends publicClass>() { 
 >myPrivateStaticMethod : <T extends publicClass>() => void
->T : T
     }
     myPublicMethod<T extends publicClass>() {
 >myPublicMethod : <T extends publicClass>() => void
->T : T
     }
     private myPrivateMethod<T extends publicClass>() {
 >myPrivateMethod : <T extends publicClass>() => void
->T : T
     }
 }
 
@@ -112,19 +76,15 @@ class privateClassWithWithPrivateTypeParameters {
 
     static myPublicStaticMethod<T extends privateClass>() {
 >myPublicStaticMethod : <T extends privateClass>() => void
->T : T
     }
     private static myPrivateStaticMethod<T extends privateClass>() {
 >myPrivateStaticMethod : <T extends privateClass>() => void
->T : T
     }
     myPublicMethod<T extends privateClass>() {
 >myPublicMethod : <T extends privateClass>() => void
->T : T
     }
     private myPrivateMethod<T extends privateClass>() {
 >myPrivateMethod : <T extends privateClass>() => void
->T : T
     }
 }
 
@@ -133,68 +93,46 @@ class privateClassWithWithPublicTypeParameters {
 
     static myPublicStaticMethod<T extends publicClass>() {
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
     }
     private static myPrivateStaticMethod<T extends publicClass>() {
 >myPrivateStaticMethod : <T extends publicClass>() => void
->T : T
     }
     myPublicMethod<T extends publicClass>() {
 >myPublicMethod : <T extends publicClass>() => void
->T : T
     }
     private myPrivateMethod<T extends publicClass>() {
 >myPrivateMethod : <T extends publicClass>() => void
->T : T
     }
 }
 
 export function publicFunctionWithPrivateTypeParameters<T extends privateClass>() {  // Error
 >publicFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
->T : T
 }
 
 export function publicFunctionWithPublicTypeParameters<T extends publicClass>() {
 >publicFunctionWithPublicTypeParameters : <T extends publicClass>() => void
->T : T
 }
 
 function privateFunctionWithPrivateTypeParameters<T extends privateClass>() {
 >privateFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
->T : T
 }
 
 function privateFunctionWithPublicTypeParameters<T extends publicClass>() {
 >privateFunctionWithPublicTypeParameters : <T extends publicClass>() => void
->T : T
 }
 
 export interface publicInterfaceWithPublicTypeParametersWithoutExtends {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends
-
     new <T>(): publicClass;
->T : T
-
     <T>(): publicClass;
->T : T
-
     myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->T : T
 }
 
 interface privateInterfaceWithPublicTypeParametersWithoutExtends {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends
-
     new <T>(): publicClass;
->T : T
-
     <T>(): publicClass;
->T : T
-
     myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->T : T
 }
 
 export class publicClassWithWithPublicTypeParametersWithoutExtends {
@@ -202,19 +140,15 @@ export class publicClassWithWithPublicTypeParametersWithoutExtends {
 
     static myPublicStaticMethod<T>() {
 >myPublicStaticMethod : <T>() => void
->T : T
     }
     private static myPrivateStaticMethod<T>() {
 >myPrivateStaticMethod : <T>() => void
->T : T
     }
     myPublicMethod<T>() {
 >myPublicMethod : <T>() => void
->T : T
     }
     private myPrivateMethod<T>() {
 >myPrivateMethod : <T>() => void
->T : T
     }
 }
 class privateClassWithWithPublicTypeParametersWithoutExtends {
@@ -222,48 +156,37 @@ class privateClassWithWithPublicTypeParametersWithoutExtends {
 
     static myPublicStaticMethod<T>() {
 >myPublicStaticMethod : <T>() => void
->T : T
     }
     private static myPrivateStaticMethod<T>() {
 >myPrivateStaticMethod : <T>() => void
->T : T
     }
     myPublicMethod<T>() {
 >myPublicMethod : <T>() => void
->T : T
     }
     private myPrivateMethod<T>() {
 >myPrivateMethod : <T>() => void
->T : T
     }
 }
 
 export function publicFunctionWithPublicTypeParametersWithoutExtends<T>() {
 >publicFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
->T : T
 }
 
 function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 >privateFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
->T : T
 }
 
 export interface publicInterfaceWithPrivatModuleTypeParameters {
->publicInterfaceWithPrivatModuleTypeParameters : publicInterfaceWithPrivatModuleTypeParameters
-
     new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->T : T
 >privateModule : any
 >privateModule : any
 
     <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->T : T
 >privateModule : any
 >privateModule : any
 
     myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
 >myMethod : <T extends publicClass>() => publicClass
->T : T
 >privateModule : any
 >privateModule : any
 }
@@ -272,38 +195,30 @@ export class publicClassWithWithPrivateModuleTypeParameters {
 
     static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
     }
     myPublicMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
     }
 }
 export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
 >publicFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
->T : T
 >privateModule : any
 }
 
 
 interface privateInterfaceWithPrivatModuleTypeParameters {
->privateInterfaceWithPrivatModuleTypeParameters : privateInterfaceWithPrivatModuleTypeParameters
-
     new <T extends privateModule.publicClass>(): privateModule.publicClass;
->T : T
 >privateModule : any
 >privateModule : any
 
     <T extends privateModule.publicClass>(): privateModule.publicClass;
->T : T
 >privateModule : any
 >privateModule : any
 
     myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->T : T
 >privateModule : any
 >privateModule : any
 }
@@ -312,18 +227,15 @@ class privateClassWithWithPrivateModuleTypeParameters {
 
     static myPublicStaticMethod<T extends privateModule.publicClass>() {
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
     }
     myPublicMethod<T extends privateModule.publicClass>() {
 >myPublicMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
     }
 }
 function privateFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {
 >privateFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
->T : T
 >privateModule : any
 }
 
@@ -340,59 +252,31 @@ export module publicModule {
     }
 
     export interface publicInterfaceWithPrivateTypeParameters {
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters
-
         new <T extends privateClass>(): privateClass;  // Error
->T : T
-
         <T extends privateClass>(): privateClass;  // Error
->T : T
-
         myMethod<T extends privateClass>(): privateClass;  // Error
 >myMethod : <T extends privateClass>() => privateClass
->T : T
     }
 
     export interface publicInterfaceWithPublicTypeParameters {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters
-
         new <T extends publicClass>(): publicClass;
->T : T
-
         <T extends publicClass>(): publicClass;
->T : T
-
         myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->T : T
     }
 
     interface privateInterfaceWithPrivateTypeParameters {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters
-
         new <T extends privateClass>(): privateClass;
->T : T
-
         <T extends privateClass>(): privateClass;
->T : T
-
         myMethod<T extends privateClass>(): privateClass;
 >myMethod : <T extends privateClass>() => privateClass
->T : T
     }
 
     interface privateInterfaceWithPublicTypeParameters {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters
-
         new <T extends publicClass>(): publicClass;
->T : T
-
         <T extends publicClass>(): publicClass;
->T : T
-
         myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->T : T
     }
 
     export class publicClassWithWithPrivateTypeParameters {
@@ -400,19 +284,15 @@ export module publicModule {
 
         static myPublicStaticMethod<T extends privateClass>() {  // Error
 >myPublicStaticMethod : <T extends privateClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends privateClass>() {
 >myPrivateStaticMethod : <T extends privateClass>() => void
->T : T
         }
         myPublicMethod<T extends privateClass>() {  // Error
 >myPublicMethod : <T extends privateClass>() => void
->T : T
         }
         private myPrivateMethod<T extends privateClass>() {
 >myPrivateMethod : <T extends privateClass>() => void
->T : T
         }
     }
 
@@ -421,19 +301,15 @@ export module publicModule {
 
         static myPublicStaticMethod<T extends publicClass>() {
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends publicClass>() {
 >myPrivateStaticMethod : <T extends publicClass>() => void
->T : T
         }
         myPublicMethod<T extends publicClass>() {
 >myPublicMethod : <T extends publicClass>() => void
->T : T
         }
         private myPrivateMethod<T extends publicClass>() {
 >myPrivateMethod : <T extends publicClass>() => void
->T : T
         }
     }
 
@@ -442,19 +318,15 @@ export module publicModule {
 
         static myPublicStaticMethod<T extends privateClass>() {
 >myPublicStaticMethod : <T extends privateClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends privateClass>() {
 >myPrivateStaticMethod : <T extends privateClass>() => void
->T : T
         }
         myPublicMethod<T extends privateClass>() {
 >myPublicMethod : <T extends privateClass>() => void
->T : T
         }
         private myPrivateMethod<T extends privateClass>() {
 >myPrivateMethod : <T extends privateClass>() => void
->T : T
         }
     }
 
@@ -463,68 +335,46 @@ export module publicModule {
 
         static myPublicStaticMethod<T extends publicClass>() {
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends publicClass>() {
 >myPrivateStaticMethod : <T extends publicClass>() => void
->T : T
         }
         myPublicMethod<T extends publicClass>() {
 >myPublicMethod : <T extends publicClass>() => void
->T : T
         }
         private myPrivateMethod<T extends publicClass>() {
 >myPrivateMethod : <T extends publicClass>() => void
->T : T
         }
     }
 
     export function publicFunctionWithPrivateTypeParameters<T extends privateClass>() {  // Error
 >publicFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
->T : T
     }
 
     export function publicFunctionWithPublicTypeParameters<T extends publicClass>() {
 >publicFunctionWithPublicTypeParameters : <T extends publicClass>() => void
->T : T
     }
 
     function privateFunctionWithPrivateTypeParameters<T extends privateClass>() {
 >privateFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
->T : T
     }
 
     function privateFunctionWithPublicTypeParameters<T extends publicClass>() {
 >privateFunctionWithPublicTypeParameters : <T extends publicClass>() => void
->T : T
     }
 
     export interface publicInterfaceWithPublicTypeParametersWithoutExtends {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends
-
         new <T>(): publicClass;
->T : T
-
         <T>(): publicClass;
->T : T
-
         myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->T : T
     }
 
     interface privateInterfaceWithPublicTypeParametersWithoutExtends {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends
-
         new <T>(): publicClass;
->T : T
-
         <T>(): publicClass;
->T : T
-
         myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->T : T
     }
 
     export class publicClassWithWithPublicTypeParametersWithoutExtends {
@@ -532,19 +382,15 @@ export module publicModule {
 
         static myPublicStaticMethod<T>() {
 >myPublicStaticMethod : <T>() => void
->T : T
         }
         private static myPrivateStaticMethod<T>() {
 >myPrivateStaticMethod : <T>() => void
->T : T
         }
         myPublicMethod<T>() {
 >myPublicMethod : <T>() => void
->T : T
         }
         private myPrivateMethod<T>() {
 >myPrivateMethod : <T>() => void
->T : T
         }
     }
     class privateClassWithWithPublicTypeParametersWithoutExtends {
@@ -552,48 +398,37 @@ export module publicModule {
 
         static myPublicStaticMethod<T>() {
 >myPublicStaticMethod : <T>() => void
->T : T
         }
         private static myPrivateStaticMethod<T>() {
 >myPrivateStaticMethod : <T>() => void
->T : T
         }
         myPublicMethod<T>() {
 >myPublicMethod : <T>() => void
->T : T
         }
         private myPrivateMethod<T>() {
 >myPrivateMethod : <T>() => void
->T : T
         }
     }
 
     export function publicFunctionWithPublicTypeParametersWithoutExtends<T>() {
 >publicFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
->T : T
     }
 
     function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 >privateFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
->T : T
     }
 
     export interface publicInterfaceWithPrivatModuleTypeParameters {
->publicInterfaceWithPrivatModuleTypeParameters : publicInterfaceWithPrivatModuleTypeParameters
-
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->T : T
 >privateModule : any
 >privateModule : any
 
         <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->T : T
 >privateModule : any
 >privateModule : any
 
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
 >myMethod : <T extends publicClass>() => publicClass
->T : T
 >privateModule : any
 >privateModule : any
     }
@@ -602,38 +437,30 @@ export module publicModule {
 
         static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
         }
         myPublicMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
         }
     }
     export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
 >publicFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
->T : T
 >privateModule : any
     }
 
 
     interface privateInterfaceWithPrivatModuleTypeParameters {
->privateInterfaceWithPrivatModuleTypeParameters : privateInterfaceWithPrivatModuleTypeParameters
-
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  
->T : T
 >privateModule : any
 >privateModule : any
 
         <T extends privateModule.publicClass>(): privateModule.publicClass;  
->T : T
 >privateModule : any
 >privateModule : any
 
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  
 >myMethod : <T extends publicClass>() => publicClass
->T : T
 >privateModule : any
 >privateModule : any
     }
@@ -642,18 +469,15 @@ export module publicModule {
 
         static myPublicStaticMethod<T extends privateModule.publicClass>() {  
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
         }
         myPublicMethod<T extends privateModule.publicClass>() { 
 >myPublicMethod : <T extends publicClass>() => void
->T : T
 >privateModule : any
         }
     }
     function privateFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() { 
 >privateFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
->T : T
 >privateModule : any
     }
 
@@ -671,59 +495,31 @@ module privateModule {
     }
 
     export interface publicInterfaceWithPrivateTypeParameters {
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters
-
         new <T extends privateClass>(): privateClass; 
->T : T
-
         <T extends privateClass>(): privateClass;
->T : T
-
         myMethod<T extends privateClass>(): privateClass; 
 >myMethod : <T extends privateClass>() => privateClass
->T : T
     }
 
     export interface publicInterfaceWithPublicTypeParameters {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters
-
         new <T extends publicClass>(): publicClass;
->T : T
-
         <T extends publicClass>(): publicClass;
->T : T
-
         myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->T : T
     }
 
     interface privateInterfaceWithPrivateTypeParameters {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters
-
         new <T extends privateClass>(): privateClass;
->T : T
-
         <T extends privateClass>(): privateClass;
->T : T
-
         myMethod<T extends privateClass>(): privateClass;
 >myMethod : <T extends privateClass>() => privateClass
->T : T
     }
 
     interface privateInterfaceWithPublicTypeParameters {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters
-
         new <T extends publicClass>(): publicClass;
->T : T
-
         <T extends publicClass>(): publicClass;
->T : T
-
         myMethod<T extends publicClass>(): publicClass;
 >myMethod : <T extends publicClass>() => publicClass
->T : T
     }
 
     export class publicClassWithWithPrivateTypeParameters {
@@ -731,19 +527,15 @@ module privateModule {
 
         static myPublicStaticMethod<T extends privateClass>() { 
 >myPublicStaticMethod : <T extends privateClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends privateClass>() {
 >myPrivateStaticMethod : <T extends privateClass>() => void
->T : T
         }
         myPublicMethod<T extends privateClass>() {  
 >myPublicMethod : <T extends privateClass>() => void
->T : T
         }
         private myPrivateMethod<T extends privateClass>() {
 >myPrivateMethod : <T extends privateClass>() => void
->T : T
         }
     }
 
@@ -752,19 +544,15 @@ module privateModule {
 
         static myPublicStaticMethod<T extends publicClass>() {
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends publicClass>() {
 >myPrivateStaticMethod : <T extends publicClass>() => void
->T : T
         }
         myPublicMethod<T extends publicClass>() {
 >myPublicMethod : <T extends publicClass>() => void
->T : T
         }
         private myPrivateMethod<T extends publicClass>() {
 >myPrivateMethod : <T extends publicClass>() => void
->T : T
         }
     }
 
@@ -773,19 +561,15 @@ module privateModule {
 
         static myPublicStaticMethod<T extends privateClass>() {
 >myPublicStaticMethod : <T extends privateClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends privateClass>() {
 >myPrivateStaticMethod : <T extends privateClass>() => void
->T : T
         }
         myPublicMethod<T extends privateClass>() {
 >myPublicMethod : <T extends privateClass>() => void
->T : T
         }
         private myPrivateMethod<T extends privateClass>() {
 >myPrivateMethod : <T extends privateClass>() => void
->T : T
         }
     }
 
@@ -794,68 +578,46 @@ module privateModule {
 
         static myPublicStaticMethod<T extends publicClass>() {
 >myPublicStaticMethod : <T extends publicClass>() => void
->T : T
         }
         private static myPrivateStaticMethod<T extends publicClass>() {
 >myPrivateStaticMethod : <T extends publicClass>() => void
->T : T
         }
         myPublicMethod<T extends publicClass>() {
 >myPublicMethod : <T extends publicClass>() => void
->T : T
         }
         private myPrivateMethod<T extends publicClass>() {
 >myPrivateMethod : <T extends publicClass>() => void
->T : T
         }
     }
 
     export function publicFunctionWithPrivateTypeParameters<T extends privateClass>() { 
 >publicFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
->T : T
     }
 
     export function publicFunctionWithPublicTypeParameters<T extends publicClass>() {
 >publicFunctionWithPublicTypeParameters : <T extends publicClass>() => void
->T : T
     }
 
     function privateFunctionWithPrivateTypeParameters<T extends privateClass>() {
 >privateFunctionWithPrivateTypeParameters : <T extends privateClass>() => void
->T : T
     }
 
     function privateFunctionWithPublicTypeParameters<T extends publicClass>() {
 >privateFunctionWithPublicTypeParameters : <T extends publicClass>() => void
->T : T
     }
 
     export interface publicInterfaceWithPublicTypeParametersWithoutExtends {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends
-
         new <T>(): publicClass;
->T : T
-
         <T>(): publicClass;
->T : T
-
         myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->T : T
     }
 
     interface privateInterfaceWithPublicTypeParametersWithoutExtends {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends
-
         new <T>(): publicClass;
->T : T
-
         <T>(): publicClass;
->T : T
-
         myMethod<T>(): publicClass;
 >myMethod : <T>() => publicClass
->T : T
     }
 
     export class publicClassWithWithPublicTypeParametersWithoutExtends {
@@ -863,19 +625,15 @@ module privateModule {
 
         static myPublicStaticMethod<T>() {
 >myPublicStaticMethod : <T>() => void
->T : T
         }
         private static myPrivateStaticMethod<T>() {
 >myPrivateStaticMethod : <T>() => void
->T : T
         }
         myPublicMethod<T>() {
 >myPublicMethod : <T>() => void
->T : T
         }
         private myPrivateMethod<T>() {
 >myPrivateMethod : <T>() => void
->T : T
         }
     }
     class privateClassWithWithPublicTypeParametersWithoutExtends {
@@ -883,29 +641,23 @@ module privateModule {
 
         static myPublicStaticMethod<T>() {
 >myPublicStaticMethod : <T>() => void
->T : T
         }
         private static myPrivateStaticMethod<T>() {
 >myPrivateStaticMethod : <T>() => void
->T : T
         }
         myPublicMethod<T>() {
 >myPublicMethod : <T>() => void
->T : T
         }
         private myPrivateMethod<T>() {
 >myPrivateMethod : <T>() => void
->T : T
         }
     }
 
     export function publicFunctionWithPublicTypeParametersWithoutExtends<T>() {
 >publicFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
->T : T
     }
 
     function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 >privateFunctionWithPublicTypeParametersWithoutExtends : <T>() => void
->T : T
     }
 }

@@ -1,10 +1,7 @@
 --- old.typeReferenceDirectives4.types
 +++ new.typeReferenceDirectives4.types
-@@= skipped -13, +13 lines =@@
- 
- === /ref.d.ts ===
+@@= skipped -15, +15 lines =@@
  interface $ { x }
-+>$ : $
  >x : any
  
 -=== /types/lib/index.d.ts ===

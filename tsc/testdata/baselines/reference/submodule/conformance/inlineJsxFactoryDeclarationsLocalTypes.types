@@ -2,20 +2,12 @@
 
 === renderer.d.ts ===
 export namespace dom {
->dom : () => Element
-
     namespace JSX {
->JSX : any
-
         interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
             [e: string]: {};
 >e : string
         }
         interface Element {
->Element : Element
-
             __domBrand: void;
 >__domBrand : void
 
@@ -28,17 +20,13 @@ export namespace dom {
             };
         }
         interface ElementClass extends Element {
->ElementClass : ElementClass
-
             render(): Element;
 >render : () => Element
         }
         interface ElementAttributesProperty { props: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : any
 
         interface ElementChildrenAttribute { children: any; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : any
     }
 }
@@ -49,20 +37,12 @@ export function dom(): dom.JSX.Element;
 
 === renderer2.d.ts ===
 export namespace predom {
->predom : () => Element
-
     namespace JSX {
->JSX : any
-
         interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
             [e: string]: {};
 >e : string
         }
         interface Element {
->Element : Element
-
             __predomBrand: void;
 >__predomBrand : void
 
@@ -75,17 +55,13 @@ export namespace predom {
             };
         }
         interface ElementClass extends Element {
->ElementClass : ElementClass
-
             render(): Element;
 >render : () => Element
         }
         interface ElementAttributesProperty { props: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : any
 
         interface ElementChildrenAttribute { children: any; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : any
     }
 }

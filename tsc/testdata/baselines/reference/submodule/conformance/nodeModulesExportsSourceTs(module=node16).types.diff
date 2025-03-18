@@ -31,9 +31,3 @@
  
  === node_modules/inner/other.ts ===
  // esm format file
- export interface Thing {}
-+>Thing : Thing
-+
- export const x: () => Thing = null as any;
- >x : () => Thing
- >null as any : any

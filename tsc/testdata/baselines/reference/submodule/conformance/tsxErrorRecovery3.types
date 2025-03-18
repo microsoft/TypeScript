@@ -2,8 +2,6 @@
 
 === file1.tsx ===
 declare namespace JSX { interface Element { } }
->JSX : any
->Element : Element
 
 <div></div>
 ><div></div><div></div> : any

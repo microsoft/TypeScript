@@ -1,21 +1,6 @@
 --- old.tsxInArrowFunction.types
 +++ new.tsxInArrowFunction.types
-@@= skipped -1, +1 lines =@@
- 
- === tsxInArrowFunction.tsx ===
- declare namespace JSX {
-+>JSX : any
-+
-     interface Element { }
-+>Element : Element
-+
-     interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         div: {
- >div : { text?: string; }
- 
-@@= skipped -14, +20 lines =@@
+@@= skipped -15, +15 lines =@@
  
  // didn't work
  <div>{() => <div text="wat" />}</div>;

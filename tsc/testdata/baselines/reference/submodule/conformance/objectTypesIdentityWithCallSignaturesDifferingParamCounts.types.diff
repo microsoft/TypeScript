@@ -1,31 +1,6 @@
 --- old.objectTypesIdentityWithCallSignaturesDifferingParamCounts.types
 +++ new.objectTypesIdentityWithCallSignaturesDifferingParamCounts.types
-@@= skipped -21, +21 lines =@@
- 
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     foo(x: T, y: T): T { return null; }
- >foo : (x: T, y: T) => T
-@@= skipped -8, +9 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     foo(x: string): string;
- >foo : (x: string) => string
- >x : string
- }
- 
- interface I2<T> {
-+>I2 : I2<T>
-+>T : T
-+
-     foo(x: T): T;
- >foo : (x: T) => T
- >x : T
+@@= skipped -41, +41 lines =@@
  }
  
  var a: { foo(x: string, y: string): string }
@@ -43,7 +18,7 @@
  >foo : (x: string) => string
  >x : string
  >'' : ""
-@@= skipped -73, +78 lines =@@
+@@= skipped -61, +61 lines =@@
  >x : any
  
  function foo3(x: typeof a);
@@ -52,6 +27,7 @@
 ->a : { foo(x: string, y: string): string; }
 +>foo3 : { (x: { foo: (x: string, y: string) => string; }): any; (x: { foo: (x: string, y: string) => string; }): any; }
 +>x : { foo: (x: string, y: string) => string; }
++>a : { foo: (x: string, y: string) => string; }
  
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -59,6 +35,7 @@
 ->a : { foo(x: string, y: string): string; }
 +>foo3 : { (x: { foo: (x: string, y: string) => string; }): any; (x: { foo: (x: string, y: string) => string; }): any; }
 +>x : { foo: (x: string, y: string) => string; }
++>a : { foo: (x: string, y: string) => string; }
  
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -71,6 +48,7 @@
 ->b : { foo(x: string): string; }
 +>foo4 : { (x: { foo: (x: string) => string; }): any; (x: { foo: (x: string) => string; }): any; }
 +>x : { foo: (x: string) => string; }
++>b : { foo: (x: string) => string; }
  
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -78,6 +56,7 @@
 ->b : { foo(x: string): string; }
 +>foo4 : { (x: { foo: (x: string) => string; }): any; (x: { foo: (x: string) => string; }): any; }
 +>x : { foo: (x: string) => string; }
++>b : { foo: (x: string) => string; }
  
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -85,7 +64,7 @@
  >x : any
  
  function foo5(x: A);
-@@= skipped -64, +60 lines =@@
+@@= skipped -64, +64 lines =@@
  >x : any
  
  function foo7(x: A);
@@ -99,6 +78,7 @@
 ->a : { foo(x: string, y: string): string; }
 +>foo7 : { (x: A): any; (x: { foo: (x: string, y: string) => string; }): any; }
 +>x : { foo: (x: string, y: string) => string; }
++>a : { foo: (x: string, y: string) => string; }
  
  function foo7(x: any) { }
 ->foo7 : { (x: A): any; (x: typeof a): any; }
@@ -106,7 +86,7 @@
  >x : any
  
  function foo8(x: B);
-@@= skipped -37, +36 lines =@@
+@@= skipped -37, +37 lines =@@
  >x : any
  
  function foo10(x: B);
@@ -120,6 +100,7 @@
 ->a : { foo(x: string, y: string): string; }
 +>foo10 : { (x: B): any; (x: { foo: (x: string, y: string) => string; }): any; }
 +>x : { foo: (x: string, y: string) => string; }
++>a : { foo: (x: string, y: string) => string; }
  
  function foo10(x: any) { }
 ->foo10 : { (x: B): any; (x: typeof a): any; }
@@ -137,6 +118,7 @@
 ->b : { foo(x: string): string; }
 +>foo11 : { (x: B): any; (x: { foo: (x: string) => string; }): any; }
 +>x : { foo: (x: string) => string; }
++>b : { foo: (x: string) => string; }
  
  function foo11(x: any) { }
 ->foo11 : { (x: B): any; (x: typeof b): any; }
@@ -144,7 +126,7 @@
  >x : any
  
  function foo12(x: I);
-@@= skipped -50, +48 lines =@@
+@@= skipped -50, +50 lines =@@
  >x : any
  
  function foo13(x: I);
@@ -158,6 +140,7 @@
 ->a : { foo(x: string, y: string): string; }
 +>foo13 : { (x: I): any; (x: { foo: (x: string, y: string) => string; }): any; }
 +>x : { foo: (x: string, y: string) => string; }
++>a : { foo: (x: string, y: string) => string; }
  
  function foo13(x: any) { }
 ->foo13 : { (x: I): any; (x: typeof a): any; }
@@ -175,6 +158,7 @@
 ->b : { foo(x: string): string; }
 +>foo14 : { (x: I): any; (x: { foo: (x: string) => string; }): any; }
 +>x : { foo: (x: string) => string; }
++>b : { foo: (x: string) => string; }
  
  function foo14(x: any) { }
 ->foo14 : { (x: I): any; (x: typeof b): any; }

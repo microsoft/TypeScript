@@ -59,8 +59,6 @@ namespace Test {
 >children : FileSystemObject[]
 	}
 	export interface Networked {
->Networked : Networked
-
 		host: string;
 >host : string
 	}
@@ -149,25 +147,16 @@ namespace Test {
 	}
 	
 	interface GenericLeadGuard<T> extends GenericGuard<T> {
->GenericLeadGuard : GenericLeadGuard<T>
->T : T
-
 		lead(): void;
 >lead : () => void
 	}
 	
 	interface GenericFollowerGuard<T> extends GenericGuard<T> {
->GenericFollowerGuard : GenericFollowerGuard<T>
->T : T
-
 		follow(): void;
 >follow : () => void
 	}
 	
 	interface GenericGuard<T> {
->GenericGuard : GenericGuard<T>
->T : T
-
 		target: T;
 >target : T
 
@@ -205,15 +194,11 @@ namespace Test {
 	}
 
 	interface SpecificGuard {
->SpecificGuard : SpecificGuard
-
 		isMoreSpecific: this is MoreSpecificGuard;
 >isMoreSpecific : boolean
 	}
 
 	interface MoreSpecificGuard extends SpecificGuard {
->MoreSpecificGuard : MoreSpecificGuard
-
 		do(): void;
 >do : () => void
 	}

@@ -47,8 +47,6 @@ z = x.d;
 
 === foo_0.ts ===
 interface Foo {
->Foo : Foo
-
 	(a: string): void;
 >a : string
 
@@ -56,8 +54,6 @@ interface Foo {
 >b : string
 }
 interface Foo {
->Foo : Foo
-
 	(a: number): number;
 >a : number
 

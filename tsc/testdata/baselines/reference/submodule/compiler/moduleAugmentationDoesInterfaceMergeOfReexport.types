@@ -2,8 +2,6 @@
 
 === file.ts ===
 export interface Foo {
->Foo : Foo
-
     x: number;
 >x : number
 }
@@ -18,8 +16,6 @@ declare module "./reexport" {
 >"./reexport" : typeof import("reexport")
 
     export interface Foo {
->Foo : Foo
-
         self: Foo;
 >self : Foo
     }

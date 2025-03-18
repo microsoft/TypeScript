@@ -3,7 +3,6 @@
 === nonPrimitiveInGeneric.ts ===
 function generic<T>(t: T) {
 >generic : <T>(t: T) => void
->T : T
 >t : T
 
     var o: object = t; // expect error
@@ -40,7 +39,6 @@ generic<object>(b); // expect error
 
 function bound<T extends object>(t: T) {
 >bound : <T extends object>(t: T) => void
->T : T
 >t : T
 
     var o: object = t; // ok
@@ -70,7 +68,6 @@ bound(b); // expect error
 
 function bound2<T extends object>() {}
 >bound2 : <T extends object>() => void
->T : T
 
 bound2<{}>();
 >bound2<{}>() : void
@@ -90,7 +87,6 @@ bound2<string>(); // expect error
 
 function bound3<T extends {}>(t: T) {
 >bound3 : <T extends {}>(t: T) => void
->T : T
 >t : T
 
     var o: object = t; // ok
@@ -99,8 +95,6 @@ function bound3<T extends {}>(t: T) {
 }
 
 interface Proxy<T extends object> {}
->Proxy : Proxy<T>
->T : T
 
 var x: Proxy<number>; // error
 >x : Proxy<number>
@@ -113,8 +107,6 @@ var z: Proxy<undefined> ; // ok
 
 
 interface Blah {
->Blah : Blah
-
     foo: number;
 >foo : number
 }

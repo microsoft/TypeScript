@@ -2,15 +2,12 @@
 
 === generatorTypeCheck63.ts ===
 export interface StrategicState {
->StrategicState : StrategicState
-
     lastStrategyApplied?: string;
 >lastStrategyApplied : string
 }
 
 export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
 >strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T, void, any>) => (a: T) => IterableIterator<T, void, any>
->T : T
 >stratName : string
 >gen : (a: T) => IterableIterator<T, void, any>
 >a : T
@@ -44,16 +41,11 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 }
 
 export interface Strategy<T> {
->Strategy : Strategy<T>
->T : T
-
     (a: T): IterableIterator<T | undefined, void>;
 >a : T
 }
 
 export interface State extends StrategicState {
->State : State
-
     foo: number;
 >foo : number
 }

@@ -46,7 +46,6 @@ type StringOrSymbol = string | symbol;
 
 function getKey<S extends StringOrSymbol>(key: S) {
 >getKey : <S extends StringOrSymbol>(key: S) => string
->S : S
 >key : S
 
     return `${key} is the key`;
@@ -56,7 +55,6 @@ function getKey<S extends StringOrSymbol>(key: S) {
 
 function getKey1<S extends symbol>(key: S) {
 >getKey1 : <S extends symbol>(key: S) => void
->S : S
 >key : S
 
     let s1!: S;
@@ -94,7 +92,6 @@ function getKey1<S extends symbol>(key: S) {
 
 function getKey2<S extends string>(key: S) {
 >getKey2 : <S extends string>(key: S) => void
->S : S
 >key : S
 
     let s1!: S;

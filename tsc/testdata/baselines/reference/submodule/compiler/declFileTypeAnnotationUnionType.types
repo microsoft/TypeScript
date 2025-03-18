@@ -18,7 +18,6 @@ module m {
     }
     export class g<T> {
 >g : g<T>
->T : T
 
         private r: string;
 >r : string
@@ -26,7 +25,6 @@ module m {
 }
 class g<T> {
 >g : g<T>
->T : T
 
     private s: string;
 >s : string

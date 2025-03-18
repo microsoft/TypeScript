@@ -1,21 +1,6 @@
 --- old.internalAliasUninitializedModuleInsideLocalModuleWithExport.types
 +++ new.internalAliasUninitializedModuleInsideLocalModuleWithExport.types
-@@= skipped -1, +1 lines =@@
- 
- === internalAliasUninitializedModuleInsideLocalModuleWithExport.ts ===
- export module a {
-+>a : any
-+
-     export module b {
-+>b : any
-+
-         export interface I {
-+>I : I
-+
-             foo();
- >foo : () => any
-         }
-@@= skipped -17, +23 lines =@@
+@@= skipped -18, +18 lines =@@
  >b : any
  
      export var x: b.I;

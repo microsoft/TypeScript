@@ -2,7 +2,6 @@
 
 === privateInterfaceProperties.ts ===
 interface i1 { name:string; }
->i1 : i1
 >name : string
  
 // should be an error 

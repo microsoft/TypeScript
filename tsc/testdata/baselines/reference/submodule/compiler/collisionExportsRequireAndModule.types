@@ -5,7 +5,6 @@ export module require {
 >require : typeof require
 
     export interface I {
->I : I
     }
     export class C {
 >C : C
@@ -21,7 +20,6 @@ export module exports {
 >exports : typeof exports
 
     export interface I {
->I : I
     }
     export class C {
 >C : C
@@ -40,7 +38,6 @@ module m1 {
 >require : typeof require
 
         export interface I {
->I : I
         }
         export class C {
 >C : C
@@ -50,7 +47,6 @@ module m1 {
 >exports : typeof exports
 
         export interface I {
->I : I
         }
         export class C {
 >C : C
@@ -64,7 +60,6 @@ module m2 {
 >require : typeof require
 
         export interface I {
->I : I
         }
         export class C {
 >C : C
@@ -74,7 +69,6 @@ module m2 {
 >exports : typeof exports
 
         export interface I {
->I : I
         }
         export class C {
 >C : C
@@ -87,7 +81,6 @@ module require {
 >require : typeof require
 
     export interface I {
->I : I
     }
     export class C {
 >C : C
@@ -97,7 +90,6 @@ module exports {
 >exports : typeof exports
 
     export interface I {
->I : I
     }
     export class C {
 >C : C
@@ -110,7 +102,6 @@ module m3 {
 >require : typeof require
 
         export interface I {
->I : I
         }
         export class C {
 >C : C
@@ -120,7 +111,6 @@ module m3 {
 >exports : typeof exports
 
         export interface I {
->I : I
         }
         export class C {
 >C : C
@@ -134,7 +124,6 @@ module m4 {
 >require : typeof require
 
         export interface I {
->I : I
         }
         export class C {
 >C : C
@@ -144,7 +133,6 @@ module m4 {
 >exports : typeof exports
 
         export interface I {
->I : I
         }
         export class C {
 >C : C

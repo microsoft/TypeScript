@@ -85,15 +85,12 @@ const foo1: Partial<{ something: any }> & { variables: {
 
 
 interface Unrelated { _?: any }
->Unrelated : Unrelated
 >_ : any
 
 interface VariablesA { overrides?: OverridesInput; }
->VariablesA : VariablesA
 >overrides : OverridesInput | undefined
 
 interface VariablesB { overrides?: OverridesInput; }
->VariablesB : VariablesB
 >overrides : OverridesInput | undefined
 
 const foo2: Unrelated & { variables: VariablesA & VariablesB } = {

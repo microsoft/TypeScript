@@ -1,14 +1,6 @@
 --- old.typeNamedUndefined2.types
 +++ new.typeNamedUndefined2.types
-@@= skipped -13, +13 lines =@@
- 
-         export type undefined = typeof s;
- >undefined : unique symbol
-->s : unique symbol
- 
-     };
-     export function x(p: undefined): undefined {
-@@= skipped -13, +12 lines =@@
+@@= skipped -26, +26 lines =@@
  }
  
  export function x(p: ns.undefined.undefined) {
@@ -17,11 +9,3 @@
  >p : unique symbol
  >ns : any
  >undefined : any
-@@= skipped -19, +19 lines =@@
- 
-     export type undefined = typeof s;
- >undefined : unique symbol
-->s : unique symbol
- 
- };
- 

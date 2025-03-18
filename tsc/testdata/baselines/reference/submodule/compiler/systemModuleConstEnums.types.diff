@@ -16,8 +16,3 @@
  }
  
  module M {
-+>M : typeof M
-+
-     export const enum NonTopLevelConstEnum { X }
- >NonTopLevelConstEnum : NonTopLevelConstEnum
- >X : NonTopLevelConstEnum.X

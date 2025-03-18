@@ -1,20 +1,6 @@
 --- old.neverTypeErrors1.types
 +++ new.neverTypeErrors1.types
-@@= skipped -78, +78 lines =@@
- // Repro from #46032
- 
- interface A {
-+>A : A
-+
-     foo: "a";
- >foo : "a"
- }
- 
- interface B {
-+>B : B
-+
-     foo: "b";
- >foo : "b"
+@@= skipped -88, +88 lines =@@
  }
  
  type Union = A & B;

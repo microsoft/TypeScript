@@ -1,91 +1,47 @@
 --- old.genericCallToOverloadedMethodWithOverloadedArguments.types
 +++ new.genericCallToOverloadedMethodWithOverloadedArguments.types
-@@= skipped -4, +4 lines =@@
- >m1 : typeof m1
+@@= skipped -65, +65 lines =@@
  
      interface Promise<T> {
-+>Promise : Promise<T>
-+>T : T
-+
-         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
- >then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
-+>U : U
- >cb : (x: T) => Promise<U>
- >x : T
-     }
-@@= skipped -28, +32 lines =@@
- >m2 : typeof m2
- 
-     interface Promise<T> {
-+>Promise : Promise<T>
-+>T : T
-+
-         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
- >then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
-+>U : U
- >cb : (x: T) => Promise<U>
- >x : T
-     }
-@@= skipped -32, +36 lines =@@
- >m3 : typeof m3
- 
-     interface Promise<T> {
-+>Promise : Promise<T>
-+>T : T
-+
          then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 ->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  
          then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 ->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  >error : (error: any) => Promise<U>
-@@= skipped -35, +40 lines =@@
- >m4 : typeof m4
+@@= skipped -35, +35 lines =@@
  
      interface Promise<T> {
-+>Promise : Promise<T>
-+>T : T
-+
          then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 ->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  
          then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 ->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  >error : (error: any) => Promise<U>
-@@= skipped -39, +44 lines =@@
- >m5 : typeof m5
+@@= skipped -39, +39 lines =@@
  
      interface Promise<T> {
-+>Promise : Promise<T>
-+>T : T
-+
          then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 ->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => U_1, progress?: (preservation: any) => void): Promise<U_1>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  
          then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 ->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => U_1, progress?: (preservation: any) => void): Promise<U_1>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  >error : (error: any) => Promise<U>
@@ -94,28 +50,21 @@
          then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>;
 ->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  >error : (error: any) => U
-@@= skipped -48, +54 lines =@@
- >m6 : typeof m6
+@@= skipped -48, +48 lines =@@
  
      interface Promise<T> {
-+>Promise : Promise<T>
-+>T : T
-+
          then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 ->then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U_1>(cb: (x: T) => Promise<U_1>, error?: (error: any) => Promise<U_1>): Promise<U_1>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  
          then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 ->then : { <U_1>(cb: (x: T) => Promise<U_1>): Promise<U_1>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
 +>then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
-+>U : U
  >cb : (x: T) => Promise<U>
  >x : T
  >error : (error: any) => Promise<U>

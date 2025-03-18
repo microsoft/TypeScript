@@ -4,8 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/14295
 
 interface Obj1 {
->Obj1 : Obj1
-
     readonly [key: string]: string;
 >key : string
 }
@@ -13,8 +11,6 @@ type Res1 = Pick<Obj1, keyof Obj1>
 >Res1 : Res1
 
 interface Obj2 {
->Obj2 : Obj2
-
     concreteProp: 'hello';
 >concreteProp : "hello"
 
@@ -25,8 +21,6 @@ type Res2 = Pick<Obj2, keyof Obj2>
 >Res2 : Res2
 
 interface Obj3 {
->Obj3 : Obj3
-
     readonly [key: string]: string;
 >key : string
 
@@ -37,8 +31,6 @@ type Res3 = Pick<Obj3, keyof Obj3>
 >Res3 : Res3
 
 interface Obj4 {
->Obj4 : Obj4
-
     [key: string]: string;
 >key : string
 
@@ -49,8 +41,6 @@ type Res4 = Pick<Obj4, keyof Obj4>
 >Res4 : Res4
 
 interface Obj5 {
->Obj5 : Obj5
-
     readonly [key: string]: string;
 >key : string
 
@@ -62,12 +52,8 @@ type Res5 = Pick<Obj5, keyof Obj5>
 
 type Identity<T> = { [P in keyof T]: T[P]; }
 >Identity : Identity<T>
->T : T
->P : P
 
 interface Obj6 {
->Obj6 : Obj6
-
     readonly [key: `wow${string}`]: 'foo';
 >key : `wow${string}`
 }
@@ -75,8 +61,6 @@ type Res6 = Identity<Obj6>
 >Res6 : Identity<Obj6>
 
 interface Obj7 {
->Obj7 : Obj7
-
     [key: string]: string;
 >key : string
 
@@ -87,8 +71,6 @@ type Res7 = Identity<Obj7>
 >Res7 : Identity<Obj7>
 
 interface Obj8 {
->Obj8 : Obj8
-
     readonly [key: string]: string;
 >key : string
 
@@ -100,13 +82,8 @@ type Res8 = Identity<Obj8>
 
 type StrippingPick<T, K extends keyof T> = { -readonly [P in K]: T[P]; }
 >StrippingPick : StrippingPick<T, K>
->T : T
->K : K
->P : P
 
 interface Obj9 {
->Obj9 : Obj9
-
     readonly [key: string]: string;
 >key : string
 }
@@ -114,8 +91,6 @@ type Res9 = StrippingPick<Obj9, keyof Obj9>
 >Res9 : Res9
 
 interface Obj10 {
->Obj10 : Obj10
-
     readonly [key: string]: string;
 >key : string
 
@@ -126,8 +101,6 @@ type Res10 = StrippingPick<Obj10, keyof Obj10>
 >Res10 : Res10
 
 interface Obj11 {
->Obj11 : Obj11
-
     [key: string]: string;
 >key : string
 
@@ -138,8 +111,6 @@ type Res11 = StrippingPick<Obj11, keyof Obj11>
 >Res11 : Res11
 
 interface Obj12 {
->Obj12 : Obj12
-
     readonly [key: string]: string;
 >key : string
 
@@ -151,12 +122,8 @@ type Res12 = StrippingPick<Obj12, keyof Obj12>
 
 type StrippingIdentity<T> = { -readonly [P in keyof T]: T[P]; }
 >StrippingIdentity : StrippingIdentity<T>
->T : T
->P : P
 
 interface Obj13 {
->Obj13 : Obj13
-
     readonly [key: `wow${string}`]: 'foo';
 >key : `wow${string}`
 }

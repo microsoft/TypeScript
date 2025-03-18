@@ -3,8 +3,6 @@
 === definiteAssignmentOfDestructuredVariable.ts ===
 // https://github.com/Microsoft/TypeScript/issues/20994
 interface Options {
->Options : Options
-
     a?: number | object;
 >a : number | object | undefined
 
@@ -14,11 +12,9 @@ interface Options {
 
 class C<T extends Options> {
 >C : C<T>
->T : T
 
     foo!: { [P in keyof T]: T[P] }
 >foo : { [P in keyof T]: T[P] }
->P : P
 
     method() {
 >method : () => void

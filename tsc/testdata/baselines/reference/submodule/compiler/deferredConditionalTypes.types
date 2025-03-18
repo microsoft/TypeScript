@@ -3,37 +3,29 @@
 === deferredConditionalTypes.ts ===
 type A<T> = { x: T } extends { x: 0 } ? 1 : 0;
 >A : A<T>
->T : T
 >x : T
 >x : 0
 
 type T0<T> = A<T> extends 0 ? 1 : 0;  // Deferred
 >T0 : T0<T>
->T : T
 
 type T1<T> = [A<T>] extends [0] ? 1 : 0;  // Deferred
 >T1 : T1<T>
->T : T
 
 type T2<T> = [A<T>, A<T>] extends [0, 0] ? 1 : 0;  // Deferred
 >T2 : T2<T>
->T : T
 
 type T3<T> = [A<T>, A<T>, A<T>] extends [0, 0, 0] ? 1 : 0;  // Deferred
 >T3 : T3<T>
->T : T
 
 type T4<T> = [A<T>] extends [0, 0] ? 1 : 0;  // 0
 >T4 : 0
->T : T
 
 type T5<T> = [A<T>, A<T>] extends [0] ? 1 : 0;  // 0
 >T5 : 0
->T : T
 
 type T6<T> = { y: A<T> } extends { y: 0 } ? 1 : 0;  // 0, but should be deferred
 >T6 : 0
->T : T
 >y : A<T>
 >y : 0
 
@@ -41,8 +33,6 @@ type T6<T> = { y: A<T> } extends { y: 0 } ? 1 : 0;  // 0, but should be deferred
 
 type Or<A extends boolean, B extends boolean> = [A, B] extends [false, false] ? false : true;
 >Or : Or<A, B>
->A : A
->B : B
 >false : false
 >false : false
 >false : false
@@ -50,8 +40,6 @@ type Or<A extends boolean, B extends boolean> = [A, B] extends [false, false] ? 
 
 type And<A extends boolean, B extends boolean> = [A, B] extends [true, true] ? true : false;
 >And : And<A, B>
->A : A
->B : B
 >true : true
 >true : true
 >true : true
@@ -59,32 +47,26 @@ type And<A extends boolean, B extends boolean> = [A, B] extends [true, true] ? t
 
 type Not<T extends boolean> = T extends true ? false : true;
 >Not : Not<T>
->T : T
 >true : true
 >false : false
 >true : true
 
 type Extends<A, B> = A extends B ? true : false;
 >Extends : Extends<A, B>
->A : A
->B : B
 >true : true
 >false : false
 
 type IsNumberLiteral<T> = And<Extends<T, number>, Not<Extends<number, T>>>;
 >IsNumberLiteral : IsNumberLiteral<T>
->T : T
 
 type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
 >IsLiteral : IsLiteral<T>
->T : T
 >false : false
 
 // Repro from #51145#issuecomment-1276804047
 
 type Values<O extends object> =
 >Values : Values<O>
->O : O
 
   O extends any[] 
     ? O[number]
@@ -92,23 +74,18 @@ type Values<O extends object> =
 
 type Equals<A, B> = [A, B] extends [B, A] ? true : false;
 >Equals : Equals<A, B>
->A : A
->B : B
 >true : true
 >false : false
 
 type FilterByStringValue<O extends object> = {
 >FilterByStringValue : FilterByStringValue<O>
->O : O
 
   [K in keyof O as Equals<O[K], string> extends true ? K : never]: any
->K : K
 >true : true
 }
 
 type FilteredValuesMatchNever<O extends object>
 >FilteredValuesMatchNever : FilteredValuesMatchNever<O>
->O : O
 
   = Equals<Values<FilterByStringValue<[O]>>, never>
 
@@ -122,13 +99,9 @@ type Bit = 0 | 1;
 
 type AndBit<A extends Bit, B extends Bit> = [A, B] extends [1, 1] ? 1 : 0;
 >AndBit : AndBit<A, B>
->A : A
->B : B
 
 type TestBit<A extends Bit, B extends Bit> = AndBit<
 >TestBit : TestBit<A, B>
->A : A
->B : B
 
   A extends 1 ? 0 : 1,
   B extends 1 ? 0 : 1

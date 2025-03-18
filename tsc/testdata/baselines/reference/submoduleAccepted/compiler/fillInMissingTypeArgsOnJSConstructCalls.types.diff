@@ -26,12 +26,10 @@
  export default class B<T: BaseA> {
 ->B : B<T, BaseA>
 +>B : default<T, BaseA>
-+>T : T
-+>BaseA : BaseA
  
      _AClass: Class<T>;
  >_AClass : Class<T>
-@@= skipped -33, +35 lines =@@
+@@= skipped -33, +33 lines =@@
  }
  === SubB.js ===
  import SubA from './SubA';

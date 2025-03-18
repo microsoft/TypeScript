@@ -386,7 +386,6 @@ f13(42, "hello", true, ...t4, false, ...t3);
 
 declare const f20: <T extends unknown[]>(...args: T) => T;
 >f20 : <T extends unknown[]>(...args: T) => T
->T : T
 >args : T
 
 f20(...t1);
@@ -441,7 +440,6 @@ type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) =
 
 type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
 >T05 : [x: string, ...args: T]
->T : T
 >x : string
 >args : T
 
@@ -450,11 +448,8 @@ type T06 = T05<[number, ...boolean[]]>;
 
 type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
 >P1 : P1<T>
->T : T
 >head : A
->A : A
 >tail : B
->B : B
 >head : A
 >tail : B
 

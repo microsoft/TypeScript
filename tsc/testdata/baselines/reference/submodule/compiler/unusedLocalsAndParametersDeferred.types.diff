@@ -1,14 +1,6 @@
 --- old.unusedLocalsAndParametersDeferred.types
 +++ new.unusedLocalsAndParametersDeferred.types
-@@= skipped -4, +4 lines =@@
- 
- function defered<T>(a: () => T): T {
- >defered : <T>(a: () => T) => T
-+>T : T
- >a : () => T
- 
-     return a();
-@@= skipped -178, +179 lines =@@
+@@= skipped -182, +182 lines =@@
  
  
  var o = {

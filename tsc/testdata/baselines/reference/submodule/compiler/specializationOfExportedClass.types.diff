@@ -1,11 +1,6 @@
 --- old.specializationOfExportedClass.types
 +++ new.specializationOfExportedClass.types
-@@= skipped -5, +5 lines =@@
- 
- export class C<T> { }
- >C : C<T>
-+>T : T
- 
+@@= skipped -9, +9 lines =@@
  }
   
  var x = new M.C<string>();

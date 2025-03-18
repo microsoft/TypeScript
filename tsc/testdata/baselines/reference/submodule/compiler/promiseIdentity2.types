@@ -2,26 +2,14 @@
 
 === promiseIdentity2.ts ===
 export interface IPromise<T, V> {
->IPromise : IPromise<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->U : U
->W : W
 >callback : (x: T) => IPromise<U, W>
 >x : T
 }
 export interface Promise<T, V> {
->Promise : Promise<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => Promise<T, U>): Promise<T, W>;
 >then : <U, W>(callback: (x: T) => Promise<T, U>) => Promise<T, W>
->U : U
->W : W
 >callback : (x: T) => Promise<T, U>
 >x : T
 }

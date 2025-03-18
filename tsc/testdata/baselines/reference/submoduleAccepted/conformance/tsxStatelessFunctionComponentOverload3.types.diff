@@ -1,12 +1,6 @@
 --- old.tsxStatelessFunctionComponentOverload3.types
 +++ new.tsxStatelessFunctionComponentOverload3.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- interface Context {
-+>Context : Context
-+
-     color: any;
+@@= skipped -5, +5 lines =@@
  >color : any
  }
  declare function ZeroThingOrTwoThing(): JSX.Element;
@@ -20,7 +14,7 @@
  >l : { yy: number; yy1: string; }
  >yy : number
  >yy1 : string
-@@= skipped -20, +22 lines =@@
+@@= skipped -16, +16 lines =@@
  
  // OK
  const two1 = <ZeroThingOrTwoThing />;

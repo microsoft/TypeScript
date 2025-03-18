@@ -470,9 +470,6 @@ function f43() {
 // Repro from #33582
 
 export interface Component<T extends object = any> {
->Component : Component<T>
->T : T
-
 	attrName?: string;
 >attrName : string | undefined
 
@@ -534,9 +531,6 @@ export interface Component<T extends object = any> {
 }
 
 export interface ComponentConstructor<T extends object> {
->ComponentConstructor : ComponentConstructor<T>
->T : T
-
 	new (el: unknown, attrValue: string, id: string): T & Component;
 >el : unknown
 >attrValue : string
@@ -562,7 +556,6 @@ export interface ComponentConstructor<T extends object> {
 
 declare function registerComponent<T extends object>(
 >registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
->T : T
 
     name: string,
 >name : string
@@ -574,7 +567,6 @@ declare function registerComponent<T extends object>(
 
 export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
 >ComponentDefinition : ComponentDefinition<T>
->T : T
 
 const Component = registerComponent('test-component', {
 >Component : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse: () => boolean[]; }; string: { type: string; }; num: number; }; init: () => void; update: () => void; tick: () => void; remove: () => void; pause: () => void; play: () => void; multiply: (f: number) => number; }>
@@ -719,8 +711,6 @@ class SuperThrowable extends MyThrowable {
 // Repro from #40346
 
 interface Services {
->Services : Services
-
     panic(message: string): never;
 >panic : (message: string) => never
 >message : string

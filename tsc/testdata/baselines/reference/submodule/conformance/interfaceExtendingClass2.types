@@ -21,8 +21,6 @@ class Foo {
 }
 
 interface I2 extends Foo { // error
->I2 : I2
-
     a: {
 >a : { toString: () => {}; }
 

@@ -45,22 +45,3 @@
  
      return 1;
  >1 : 1
-@@= skipped -11, +11 lines =@@
- 
- function f6<T, U>(x: T, y:U) {
- >f6 : <T, U>(x: T, y: U) => T | U
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -17, +19 lines =@@
- 
- function f8<T extends U, U extends V, V>(x: T, y: U) {
- >f8 : <T extends U, U extends V, V>(x: T, y: U) => U
-+>T : T
-+>U : U
-+>V : V
- >x : T
- >y : U
- 

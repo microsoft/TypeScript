@@ -2,9 +2,6 @@
 
 === contextualTypingOfGenericFunctionTypedArguments1.ts ===
 interface Collection<T> {
->Collection : Collection<T>
->T : T
-
     length: number;
 >length : number
 
@@ -18,11 +15,8 @@ interface Collection<T> {
 }
 
 interface Combinators {
->Combinators : Combinators
-
     forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
 >forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
->T : T
 >c : Collection<T>
 >f : (x: T) => Date
 >x : T

@@ -2,8 +2,6 @@
 
 === prototypeOnConstructorFunctions.ts ===
 interface I1 {
->I1 : I1
-
     const: new (options?, element?) => any;
 >const : new (options?: any, element?: any) => any
 >options : any

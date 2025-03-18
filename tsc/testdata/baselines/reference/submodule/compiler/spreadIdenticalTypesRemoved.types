@@ -2,8 +2,6 @@
 
 === spreadIdenticalTypesRemoved.ts ===
 interface Animal {
->Animal : Animal
-
     name: string;
 >name : string
 
@@ -49,8 +47,6 @@ function clonePet(pet: Animal, fullCopy?: boolean) {
 }
 
 interface Animal2 {
->Animal2 : Animal2
-
     name: string;
 >name : string
 

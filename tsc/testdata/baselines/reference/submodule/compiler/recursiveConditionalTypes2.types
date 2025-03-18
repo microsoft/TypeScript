@@ -5,21 +5,17 @@
 
 type UnionToIntersection<U> = (
 >UnionToIntersection : UnionToIntersection<U>
->U : U
 
   U extends any ? (k: U) => unknown : never
 >k : U
 
 ) extends (k: infer I) => unknown
 >k : I
->I : I
 
   ? I
   : never;
 
 interface ClassSpec {
->ClassSpec : ClassSpec
-
   public?: object;
 >public : object | undefined
 
@@ -35,23 +31,18 @@ interface ClassSpec {
 
 type MaybeMergePrivateSuperSpec<T> = T extends Record<string, ClassSpec>
 >MaybeMergePrivateSuperSpec : MaybeMergePrivateSuperSpec<T>
->T : T
 
   ? MergePrivateSuperSpec<T>
   : {};
 
 type MaybeMergePrivateSpecs<T extends ClassSpec, U> = U extends ClassSpec
 >MaybeMergePrivateSpecs : MaybeMergePrivateSpecs<T, U>
->T : T
->U : U
 
   ? MergePrivateSpecs<U, T>
   : T;
 
 type MergePrivateSpecs<T extends ClassSpec, U extends ClassSpec> = {
 >MergePrivateSpecs : MergePrivateSpecs<T, U>
->T : T
->U : U
 
   public: T["public"] & U["public"];
 >public : T["public"] & U["public"]
@@ -63,19 +54,15 @@ type MergePrivateSpecs<T extends ClassSpec, U extends ClassSpec> = {
 
 type MergePrivateSuperSpec<T extends Record<string, ClassSpec>> =
 >MergePrivateSuperSpec : MergePrivateSuperSpec<T>
->T : T
 
   UnionToIntersection<
     {
       [P in keyof T]: SimplifyPrivateSpec<T[P]>;
->P : P
-
     }[keyof T]
   >;
 
 export type SimplifyPrivateSpec<T extends ClassSpec> = MaybeMergePrivateSpecs<
 >SimplifyPrivateSpec : SimplifyPrivateSpec<T>
->T : T
 
   MaybeMergePrivateSpecs<T, MaybeMergePrivateSuperSpec<T["publicExtends"]>>,
   MaybeMergePrivateSuperSpec<T["privateExtends"]>
@@ -85,21 +72,14 @@ export type SimplifyPrivateSpec<T extends ClassSpec> = MaybeMergePrivateSpecs<
 
 type Converted<T> = {
 >Converted : Converted<T>
->T : T
 
   [P in keyof T]: null extends T[P] ? T[P] : T[P];
->P : P
-
 };
 
 type DefaultsDeep<T, U extends T> = {
 >DefaultsDeep : DefaultsDeep<T, U>
->T : T
->U : U
 
   [P in keyof T]-?: U[P] extends T[P]
->P : P
-
     ? null extends U[P]
       ? Converted<DefaultsDeep<T[P], NonNullable<U[P]>>>
       : T[P]
@@ -107,12 +87,8 @@ type DefaultsDeep<T, U extends T> = {
 };
 
 interface _Array<T> {
->_Array : _Array<T>
->T : T
-
   find<S extends T>(predicate: (value: T) => boolean): void;
 >find : <S extends T>(predicate: (value: T) => boolean) => void
->S : S
 >predicate : (value: T) => boolean
 >value : T
 }

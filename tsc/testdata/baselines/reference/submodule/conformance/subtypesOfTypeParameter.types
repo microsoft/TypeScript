@@ -5,7 +5,6 @@
 
 class C3<T> {
 >C3 : C3<T>
->T : T
 
     foo: T;
 >foo : T
@@ -13,8 +12,6 @@ class C3<T> {
 
 class D1<T, U> extends C3<T> {
 >D1 : D1<T, U>
->T : T
->U : U
 >C3 : C3<T>
 
     foo: U; // error
@@ -23,8 +20,6 @@ class D1<T, U> extends C3<T> {
 
 function f1<T, U>(x: T, y: U) {
 >f1 : <T, U>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 
@@ -44,7 +39,6 @@ function f1<T, U>(x: T, y: U) {
 }
 
 interface I1 { foo: number; }
->I1 : I1
 >foo : number
 
 class C1 { foo: number; }
@@ -53,7 +47,6 @@ class C1 { foo: number; }
 
 class C2<T> { foo: T; }
 >C2 : C2<T>
->T : T
 >foo : T
 
 enum E { A }
@@ -85,8 +78,6 @@ module c {
 // errors throughout
 function f2<T, U>(x: T, y: U) {
 >f2 : <T, U>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 
@@ -104,6 +95,7 @@ function f2<T, U>(x: T, y: U) {
 
     var u: typeof undefined;
 >u : any
+>undefined : undefined
 
     var r0b = true ? u : x;
 >r0b : any
@@ -228,7 +220,6 @@ function f2<T, U>(x: T, y: U) {
 >true ? <T>(x: T) => { return x } : x : T | <T>(x: T) => T
 >true : true
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 >x : T
@@ -239,7 +230,6 @@ function f2<T, U>(x: T, y: U) {
 >true : true
 >x : T
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 
@@ -330,6 +320,7 @@ function f2<T, U>(x: T, y: U) {
 
     var af: typeof f;
 >af : typeof f
+>f : typeof f
 
     var r15 = true ? af : x;
 >r15 : T | typeof f
@@ -347,6 +338,7 @@ function f2<T, U>(x: T, y: U) {
 
     var ac: typeof c;
 >ac : typeof c
+>c : typeof c
 
     var r16 = true ? ac : x;
 >r16 : T | typeof c
@@ -364,7 +356,6 @@ function f2<T, U>(x: T, y: U) {
 
     function f17<T>(a: T) {
 >f17 : <T>(a: T) => void
->T : T
 >a : T
 
         var r17 = true ? x : a;
@@ -384,8 +375,6 @@ function f2<T, U>(x: T, y: U) {
 
     function f18<T, U extends T>(a: U) {
 >f18 : <T, U extends T>(a: U) => void
->T : T
->U : U
 >a : U
 
         var r18 = true ? x : a;

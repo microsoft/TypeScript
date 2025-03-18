@@ -6,7 +6,6 @@
 
 class C<T> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T
@@ -19,8 +18,6 @@ var c = new C<number, number>();
 
 class D<T, U> {
 >D : D<T, U>
->T : T
->U : U
 
     x: T
 >x : T

@@ -36,7 +36,6 @@
  function getStuff<T>() {
 ->getStuff : <T>() => { exportedDirectly(): void; func: () => void; klass: typeof stuff.klass; obj: { x: boolean; }; }
 +>getStuff : <T>() => { func: () => void; klass: typeof klass; obj: { x: boolean; }; exportedDirectly: () => void; }
-+>T : T
  
    const thing = { ...stuff };
 ->thing : { exportedDirectly(): void; func: () => void; klass: typeof stuff.klass; obj: { x: boolean; }; }

@@ -44,6 +44,7 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 
         type T = typeof this;
 >T : CorrectObject
+>this : CorrectObject
 
     });
 }

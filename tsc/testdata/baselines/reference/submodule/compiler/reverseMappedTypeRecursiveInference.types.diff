@@ -1,30 +1,6 @@
 --- old.reverseMappedTypeRecursiveInference.types
 +++ new.reverseMappedTypeRecursiveInference.types
-@@= skipped -2, +2 lines =@@
- === reverseMappedTypeRecursiveInference.ts ===
- type Foo<V> = {
- >Foo : Foo<V>
-+>V : V
- 
-     [K in keyof V]: Foo<V[K]>;
-+>K : K
- }
- 
- type Bar<V> = {
- >Bar : Bar<V>
-+>V : V
- 
-     [K in keyof V]: V[K] extends object ? Bar<V[K]> : string;
-+>K : K
- }
- 
- function test<V>(value: Foo<V>): V {
- >test : <V>(value: Foo<V>) => V
-+>V : V
- >value : Foo<V>
- 
-   console.log(value);
-@@= skipped -31, +36 lines =@@
+@@= skipped -33, +33 lines =@@
  >{} : {}
  
  test(bar);

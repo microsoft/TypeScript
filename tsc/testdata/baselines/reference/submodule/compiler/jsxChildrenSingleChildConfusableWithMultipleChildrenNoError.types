@@ -11,8 +11,6 @@ type Tab = [string, React.ReactNode]  // [tabName, tabContent]
 >React : any
 
 interface Props {
->Props : Props
-
     children: Tab[]
 >children : Tab[]
 }

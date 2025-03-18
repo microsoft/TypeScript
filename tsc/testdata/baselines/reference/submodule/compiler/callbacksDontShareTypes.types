@@ -2,9 +2,6 @@
 
 === callbacksDontShareTypes.ts ===
 interface Collection<T> {
->Collection : Collection<T>
->T : T
-
     length: number;
 >length : number
 
@@ -17,19 +14,14 @@ interface Collection<T> {
 >x : T
 }
 interface Combinators {
->Combinators : Combinators
-
     map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
 >map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->T : T
->U : U
 >c : Collection<T>
 >f : (x: T) => U
 >x : T
 
     map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
 >map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->T : T
 >c : Collection<T>
 >f : (x: T) => any
 >x : T

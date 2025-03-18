@@ -39,8 +39,6 @@ class FollowerGuard extends RoyalGuard {
 }
 
 interface GuardInterface extends RoyalGuard {}
->GuardInterface : GuardInterface
-
 let a: RoyalGuard = new FollowerGuard();
 >a : RoyalGuard
 >new FollowerGuard() : FollowerGuard

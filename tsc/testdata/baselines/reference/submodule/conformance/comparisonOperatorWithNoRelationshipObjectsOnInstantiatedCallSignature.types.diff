@@ -7,7 +7,6 @@
 ->a1 : { fn<T>(x: T): T; }
 +>a1 : { fn: <T>(x: T) => T; }
  >fn : <T>(x: T) => T
-+>T : T
  >x : T
  
  var b1: { fn(): string };
@@ -19,7 +18,6 @@
 ->a2 : { fn<T>(x: T): T; }
 +>a2 : { fn: <T>(x: T) => T; }
  >fn : <T>(x: T) => T
-+>T : T
  >x : T
  
  var b2: { fn(x: string): number };
@@ -32,7 +30,6 @@
 ->a3 : { fn<T>(x?: T): T; }
 +>a3 : { fn: <T>(x?: T) => T; }
  >fn : <T>(x?: T) => T
-+>T : T
  >x : T
  
  var b3: { fn(x?: string): number };
@@ -45,7 +42,6 @@
 ->a4 : { fn<T>(...x: T[]): T; }
 +>a4 : { fn: <T>(...x: T[]) => T; }
  >fn : <T>(...x: T[]) => T
-+>T : T
  >x : T[]
  
  var b4: { fn(...x: string[]): number };
@@ -58,7 +54,6 @@
 ->a5 : { fn<T>(x: T, y: T): T; }
 +>a5 : { fn: <T>(x: T, y: T) => T; }
  >fn : <T>(x: T, y: T) => T
-+>T : T
  >x : T
  >y : T
  
@@ -73,8 +68,6 @@
 ->a6 : { fn<T, U extends T>(x: T, y: U): T; }
 +>a6 : { fn: <T, U extends T>(x: T, y: U) => T; }
  >fn : <T, U extends T>(x: T, y: U) => T
-+>T : T
-+>U : U
  >x : T
  >y : U
  
@@ -84,7 +77,7 @@
  >fn : (x: Base, y: C) => Base
  >x : Base
  >y : C
-@@= skipped -66, +73 lines =@@
+@@= skipped -66, +66 lines =@@
  var r1a1 = a1 < b1;
  >r1a1 : boolean
  >a1 < b1 : boolean

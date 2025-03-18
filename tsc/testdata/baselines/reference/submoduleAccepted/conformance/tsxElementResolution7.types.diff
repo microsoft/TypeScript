@@ -1,20 +1,6 @@
 --- old.tsxElementResolution7.types
 +++ new.tsxElementResolution7.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements { }
-+>IntrinsicElements : IntrinsicElements
- }
- 
- module my {
-@@= skipped -12, +17 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  // OK
  <my.div n='x' />;

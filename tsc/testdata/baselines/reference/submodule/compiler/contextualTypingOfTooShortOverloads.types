@@ -13,8 +13,6 @@ use((req, res) => {});
 >res : any
 
 interface Overload {
->Overload : Overload
-
     (handler1: (req1: string) => void): void;
 >handler1 : (req1: string) => void
 >req1 : string
@@ -41,16 +39,11 @@ app.use((err: any, req, res, next) => { return; });
 
 
 interface MyApp {
->MyApp : MyApp
-
     use: IRouterHandler<this> & IRouterMatcher<this>;
 >use : IRouterHandler<this> & IRouterMatcher<this>
 }
 
 interface IRouterHandler<T> {
->IRouterHandler : IRouterHandler<T>
->T : T
-
     (...handlers: RequestHandler[]): T;
 >handlers : RequestHandler[]
 
@@ -59,9 +52,6 @@ interface IRouterHandler<T> {
 }
 
 interface IRouterMatcher<T> {
->IRouterMatcher : IRouterMatcher<T>
->T : T
-
     (path: PathParams, ...handlers: RequestHandler[]): T;
 >path : PathParams
 >handlers : RequestHandler[]
@@ -78,8 +68,6 @@ type RequestHandlerParams = RequestHandler | ErrorRequestHandler | (RequestHandl
 >RequestHandlerParams : RequestHandlerParams
 
 interface RequestHandler {
->RequestHandler : RequestHandler
-
     (req: Request, res: Response, next: NextFunction): any;
 >req : Request
 >res : Response
@@ -87,8 +75,6 @@ interface RequestHandler {
 }
 
 interface ErrorRequestHandler {
->ErrorRequestHandler : ErrorRequestHandler
-
     (err: any, req: Request, res: Response, next: NextFunction): any;
 >err : any
 >req : Request
@@ -97,22 +83,16 @@ interface ErrorRequestHandler {
 }
 
 interface Request {
->Request : Request
-
     method: string;
 >method : string
 }
 
 interface Response {
->Response : Response
-
     statusCode: number;
 >statusCode : number
 }
 
 interface NextFunction {
->NextFunction : NextFunction
-
     (err?: any): void;
 >err : any
 }

@@ -5,8 +5,6 @@ type CanvasDirection = "RIGHT" | "LEFT";
 >CanvasDirection : CanvasDirection
 
 interface GraphActions {
->GraphActions : GraphActions
-
   setDirection: (direction: CanvasDirection) => void;
 >setDirection : (direction: CanvasDirection) => void
 >direction : CanvasDirection
@@ -14,7 +12,6 @@ interface GraphActions {
 
 export declare function create<T>(config: T): void;
 >create : <T>(config: T) => void
->T : T
 >config : T
 
 declare function takesDirection(direction: CanvasDirection): void;

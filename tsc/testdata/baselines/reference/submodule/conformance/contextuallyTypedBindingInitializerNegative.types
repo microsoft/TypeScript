@@ -2,8 +2,6 @@
 
 === contextuallyTypedBindingInitializerNegative.ts ===
 interface Show {
->Show : Show
-
     show: (x: number) => string;
 >show : (x: number) => string
 >x : number
@@ -32,8 +30,6 @@ function f3({ ["show"]: showRename = v => v }: Show) {}
 >v : number
 
 interface Nested {
->Nested : Nested
-
     nested: Show
 >nested : Show
 }
@@ -48,8 +44,6 @@ function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
 >v : number
 
 interface StringIdentity {
->StringIdentity : StringIdentity
-
     stringIdentity(s: string): string;
 >stringIdentity : (s: string) => string
 >s : string
@@ -69,8 +63,6 @@ let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentit
 >x : string
 
 interface Tuples {
->Tuples : Tuples
-
     prop: [string, number];
 >prop : [string, number]
 }
@@ -82,8 +74,6 @@ function g({ prop = [101, 1234] }: Tuples) {}
 >1234 : 1234
 
 interface StringUnion {
->StringUnion : StringUnion
-
     prop: "foo" | "bar";
 >prop : "bar" | "foo"
 }

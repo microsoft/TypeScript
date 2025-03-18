@@ -4,8 +4,6 @@
 // all legal
 
 interface I {
->I : I
-
     id: number;
 >id : number
 }
@@ -19,7 +17,6 @@ class C implements I {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T
@@ -216,7 +213,6 @@ throw function () { return 'a string' };
 
 throw <T>(x:T) => 42;
 ><T>(x:T) => 42 : <T>(x: T) => number
->T : T
 >x : T
 >42 : 42
 

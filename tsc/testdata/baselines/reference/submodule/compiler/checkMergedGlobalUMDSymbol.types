@@ -20,6 +20,7 @@ declare global {
 
   export const THREE: typeof _three;
 >THREE : typeof import("three")
+>_three : typeof import("three")
 }
 
 === test.ts ===

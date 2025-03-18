@@ -3,10 +3,6 @@
 === asyncYieldStarContextualType.ts ===
 // https://github.com/microsoft/TypeScript/issues/57903
 interface Result<T, E> {
->Result : Result<T, E>
->T : T
->E : E
-
     [Symbol.iterator](): Generator<E, T, unknown>
 >[Symbol.iterator] : () => Generator<E, T, unknown>
 >Symbol.iterator : unique symbol
@@ -34,14 +30,10 @@ declare const authorPromise: Promise<Result<Author, "NOT_FOUND_AUTHOR">>;
 
 declare const mapper: <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">;
 >mapper : <T>(result: Result<T, "NOT_FOUND_AUTHOR">) => Result<T, "NOT_FOUND_AUTHOR">
->T : T
 >result : Result<T, "NOT_FOUND_AUTHOR">
 
 declare const g: <T, U, V>() => AsyncGenerator<T, U, V>;
 >g : <T, U, V>() => AsyncGenerator<T, U, V>
->T : T
->U : U
->V : V
 
 async function* f(): AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown> {
 >f : () => AsyncGenerator<"NOT_FOUND_AUTHOR" | "NOT_FOUND_BOOK", BookWithAuthor, unknown>

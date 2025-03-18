@@ -2,10 +2,7 @@
 
 === index.tsx ===
 namespace JSX {
->JSX : any
-
     export interface Element {}
->Element : Element
 }
 
 export type CatInfo = { type: 'Cat'; subType: string; };

@@ -13,17 +13,7 @@
  >modObj : any
  >modObj : any
  
- declare namespace modObj {
-+>modObj : A & B
-+
-     interface A { (): void; a: string; }
-+>A : A
- >a : string
- 
-     interface B { (x: string): void; b: string; }
-+>B : B
- >x : string
- >b : string
+@@= skipped -17, +17 lines =@@
  }
  === idx.ts ===
  import * as mod from "./mod";

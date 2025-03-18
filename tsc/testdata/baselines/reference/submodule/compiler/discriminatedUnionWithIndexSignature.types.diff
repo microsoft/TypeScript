@@ -1,18 +1,8 @@
 --- old.discriminatedUnionWithIndexSignature.types
 +++ new.discriminatedUnionWithIndexSignature.types
-@@= skipped -1, +1 lines =@@
- 
- === discriminatedUnionWithIndexSignature.ts ===
- export interface UnionAltA {
-+>UnionAltA : UnionAltA
-+
-     type?: 'text';
- >type : "text" | undefined
- }
+@@= skipped -7, +7 lines =@@
  
  export interface UnionAltB {
-+>UnionAltB : UnionAltB
-+
      type?: 'image' | 'video' | 'document';
 ->type : "image" | "video" | "document" | undefined
 +>type : "document" | "image" | "video" | undefined

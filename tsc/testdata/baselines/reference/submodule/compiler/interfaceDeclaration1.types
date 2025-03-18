@@ -2,8 +2,6 @@
 
 === interfaceDeclaration1.ts ===
 interface I1 {
->I1 : I1
-
     item:number;
 >item : number
 
@@ -12,8 +10,6 @@ interface I1 {
 }
 
 interface I2 {
->I2 : I2
-
     item:any;
 >item : any
 
@@ -22,15 +18,11 @@ interface I2 {
 }
 
 interface I3 {
->I3 : I3
-
     prototype:number;
 >prototype : number
 }
 
 interface I4 {
->I4 : I4
-
     class:number;
 >class : number
 
@@ -45,20 +37,15 @@ interface I4 {
 }
 
 interface I5 extends I5 { 
->I5 : I5
-
     foo():void;
 >foo : () => void
 }
 
 interface I6 {
->I6 : I6
-
 	():void;
 }
 
 interface I7 extends I6 { }
->I7 : I7
 
 var v1:I7;
 >v1 : I7
@@ -78,25 +65,17 @@ class C1 implements I3 {
 }
 
 interface i8 extends i9 { }
->i8 : i8
-
 interface i9 extends i8 { }
->i9 : i9
 
 interface i10 {
->i10 : i10
-
 	foo():number;
 >foo : () => number
 }
 
 interface i11{
->i11 : i11
-
 	foo():string;
 >foo : () => string
 }
 
 interface i12 extends i10, i11 { }
->i12 : i12
 

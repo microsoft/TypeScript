@@ -11,9 +11,6 @@ import {N} from "./f1";
 >N : typeof N
 
 export namespace N {
->N : any
-
     export interface I {x: any}
->I : I
 >x : any
 }

@@ -6,10 +6,8 @@
  declare function hasOwnProperty<P extends PropertyKey>(target: {}, property: P): target is { readonly [K in P]: unknown };
 ->hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { readonly [K in P]: unknown; }
 +>hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { readonly [K in P]: unknown }
-+>P : P
  >target : {}
  >property : P
-+>K : K
  
  declare const arrayLikeOrIterable: ArrayLike<any> | Iterable<any>;
 ->arrayLikeOrIterable : ArrayLike<any> | Iterable<any>

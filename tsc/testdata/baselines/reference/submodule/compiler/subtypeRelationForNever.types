@@ -10,8 +10,6 @@ function fail(message: string) : never { throw new Error(message); }
 
 function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r {
 >withFew : <a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r) => r
->a : a
->r : r
 >values : a[]
 >haveFew : (values: a[]) => r
 >values : a[]
@@ -34,7 +32,6 @@ function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reas
 }
 function id<a>(value: a) : a { return value; }
 >id : <a>(value: a) => a
->a : a
 >value : a
 >value : a
 

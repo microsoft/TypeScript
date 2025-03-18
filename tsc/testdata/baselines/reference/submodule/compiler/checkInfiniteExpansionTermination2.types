@@ -5,19 +5,13 @@
 // Before fix this code would cause infinite loop
 
 interface IObservable<T> {
->IObservable : IObservable<T>
->T : T
-
     n: IObservable<T[]>;
 >n : IObservable<T[]>
 }
 interface ISubject<T> extends IObservable<T> { }
->ISubject : ISubject<T>
->T : T
 
 declare function combineLatest<TOther>(x: IObservable<TOther>[]): void;
 >combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
->TOther : TOther
 >x : IObservable<TOther>[]
 
 declare function combineLatest(): void;
@@ -25,7 +19,6 @@ declare function combineLatest(): void;
 
 function fn<T>() {
 >fn : <T>() => void
->T : T
 
     var values: ISubject<any>[] = [];
 >values : ISubject<any>[]

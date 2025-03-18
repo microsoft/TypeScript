@@ -7,22 +7,15 @@
 // order would usually imply
 type Lower<T> = { [K in keyof T]: T[K] };
 >Lower : Lower<T>
->T : T
->K : K
 
 export function appendToOptionalArray<
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined }, key: K, value: T) => void
 
   K extends string | number | symbol,
->K : K
-
   T
->T : T
-
 >(
   object: { [x in K]?: Lower<T>[] },
 >object : { [x in K]?: Lower<T>[] | undefined }
->x : x
 
   key: K,
 >key : K

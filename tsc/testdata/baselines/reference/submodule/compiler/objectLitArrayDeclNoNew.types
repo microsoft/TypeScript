@@ -11,16 +11,12 @@ module Test {
 >Test : typeof Test
 
     export interface IState {
->IState : IState
     }
 
     export interface IToken {
->IToken : IToken
     }
 
     export interface ILineTokens {
->ILineTokens : ILineTokens
-
         tokens: IToken[];
 >tokens : IToken[]
 

@@ -1,18 +1,6 @@
 --- old.importOnAliasedIdentifiers.types
 +++ new.importOnAliasedIdentifiers.types
-@@= skipped -4, +4 lines =@@
- >A : typeof A
- 
-     export interface X { s: string }
-+>X : X
- >s : string
- 
-     export var X: X;
-@@= skipped -9, +10 lines =@@
- >B : typeof B
- 
-     interface A { n: number }
-+>A : A
+@@= skipped -16, +16 lines =@@
  >n : number
  
      import Y = A; // Alias only for module A

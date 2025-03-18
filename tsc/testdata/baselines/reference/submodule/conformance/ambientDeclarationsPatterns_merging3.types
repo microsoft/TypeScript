@@ -5,7 +5,6 @@ declare module "*.foo" {
 >"*.foo" : typeof import("*.foo")
 
   export interface OhNo { star: string }
->OhNo : OhNo
 >star : string
 }
 
@@ -14,7 +13,6 @@ declare module "a.foo" {
 >"a.foo" : any
 
   export interface OhNo { a: string }
->OhNo : OhNo
 >a : string
 }
 import { OhNo } from "b.foo"

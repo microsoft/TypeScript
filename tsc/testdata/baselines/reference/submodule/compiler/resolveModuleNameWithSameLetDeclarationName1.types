@@ -2,10 +2,8 @@
 
 === resolveModuleNameWithSameLetDeclarationName1.ts ===
 declare module foo {
->foo : Bar
 
     interface Bar {
->Bar : Bar
 
     }
 }

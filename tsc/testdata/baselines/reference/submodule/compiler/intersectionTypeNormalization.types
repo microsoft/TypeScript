@@ -2,19 +2,15 @@
 
 === intersectionTypeNormalization.ts ===
 interface A { a: string }
->A : A
 >a : string
 
 interface B { b: string }
->B : B
 >b : string
 
 interface C { c: string }
->C : C
 >c : string
 
 interface D { d: string }
->D : D
 >d : string
 
 // Identical ways of writing the same type
@@ -37,11 +33,9 @@ var x: X3;
 >x : X1
 
 interface X { x: string }
->X : X
 >x : string
 
 interface Y { y: string }
->Y : Y
 >y : string
 
 // Identical ways of writing the same type
@@ -64,11 +58,9 @@ var y: Y3;
 >y : Y1
 
 interface M { m: string }
->M : M
 >m : string
 
 interface N { n: string }
->N : N
 >n : string
 
 // Identical ways of writing the same type
@@ -153,8 +145,6 @@ function getValueAsString(value: IntersectionFail): string {
 // Repro from #12535
 
 namespace enums {
->enums : typeof enums
-
     export const enum A {
 >A : A
 

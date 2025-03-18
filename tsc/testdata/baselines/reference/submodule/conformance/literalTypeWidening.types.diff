@@ -75,38 +75,7 @@
  }
  
  function f3() {
-@@= skipped -179, +179 lines =@@
- 
- declare function widening<T>(x: T): T;
- >widening : <T>(x: T) => T
-+>T : T
- >x : T
- 
- declare function nonWidening<T extends string | number | symbol>(x: T): T;
- >nonWidening : <T extends string | number | symbol>(x: T) => T
-+>T : T
- >x : T
- 
- function f6(cond: boolean) {
-@@= skipped -64, +66 lines =@@
- 
- type Result<T> = T | FAILURE;
- >Result : Result<T>
-+>T : T
- 
- function doWork<T>(): Result<T> {
- >doWork : <T>() => Result<T>
-+>T : T
- 
-   return FAILURE;
- >FAILURE : "FAILURE"
-@@= skipped -10, +12 lines =@@
- 
- function isSuccess<T>(result: Result<T>): result is T {
- >isSuccess : <T>(result: Result<T>) => result is T
-+>T : T
- >result : Result<T>
- 
+@@= skipped -258, +258 lines =@@
    return !isFailure(result);
  >!isFailure(result) : boolean
  >isFailure(result) : boolean
@@ -118,30 +87,19 @@
  function isFailure<T>(result: Result<T>): result is FAILURE {
 ->isFailure : <T>(result: Result<T>) => result is FAILURE
 +>isFailure : <T>(result: Result<T>) => result is "FAILURE"
-+>T : T
  >result : Result<T>
  
    return result === FAILURE;
-@@= skipped -62, +64 lines =@@
+@@= skipped -57, +57 lines =@@
  // Repro from #23649
  
  export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
 ->Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
 +>Set : <K extends string>(...keys: K[]) => Record<K, true>
-+>K : K
  >keys : K[]
  >true : true
  
-@@= skipped -29, +30 lines =@@
- 
- export function keys<K extends string, V>(obj: Record<K, V>): K[] {
- >keys : <K extends string, V>(obj: Record<K, V>) => K[]
-+>K : K
-+>V : V
- >obj : Record<K, V>
- 
-   return Object.keys(obj) as K[]
-@@= skipped -13, +15 lines =@@
+@@= skipped -42, +42 lines =@@
  
  type Obj = { code: LangCode }
  >Obj : Obj
@@ -165,6 +123,7 @@
 ->LangCode : "fr" | "en" | "es" | "it" | "nl"
 ->langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
 +>LangCode : "en" | "es" | "fr" | "it" | "nl"
++>langCodeSet : Record<"en" | "es" | "fr" | "it" | "nl", true>
  
  export const langCodes = keys(langCodeSet)
 ->langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
@@ -198,17 +157,3 @@
  
  // Repro from #29081
  
- function test<T extends { a: string, b: string }>(obj: T): T {
- >test : <T extends { a: string; b: string; }>(obj: T) => T
-+>T : T
- >a : string
- >b : string
- >obj : T
-@@= skipped -46, +46 lines =@@
- 
- declare function f<T>(x: T): NonNullable<T>;
- >f : <T>(x: T) => NonNullable<T>
-+>T : T
- >x : T
- 
- enum E { A, B }

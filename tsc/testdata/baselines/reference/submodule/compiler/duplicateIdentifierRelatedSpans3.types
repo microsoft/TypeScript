@@ -2,8 +2,6 @@
 
 === file1.ts ===
 interface TopLevel {
->TopLevel : TopLevel
-
     duplicate1: () => string;
 >duplicate1 : () => string
 
@@ -15,8 +13,6 @@ interface TopLevel {
 }
 === file2.ts ===
 interface TopLevel {
->TopLevel : TopLevel
-
     duplicate1(): number;
 >duplicate1 : () => number
 

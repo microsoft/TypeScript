@@ -2,18 +2,12 @@
 
 === infinitelyExpandingTypes5.ts ===
 interface Query<T> {
->Query : Query<T>
->T : T
-
     foo(x: T): Query<T[]>;
 >foo : (x: T) => Query<T[]>
 >x : T
 }
 
 interface Enumerator<T> {
->Enumerator : Enumerator<T>
->T : T
-
     (action: (item: T, index: number) => boolean): boolean;
 >action : (item: T, index: number) => boolean
 >item : T
@@ -22,12 +16,10 @@ interface Enumerator<T> {
 
 function from<T>(array: T[]): Query<T>;
 >from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
->T : T
 >array : T[]
 
 function from<T>(enumerator: Enumerator<T>): Query<T>;
 >from : { <T>(array: T[]): Query<T>; <T>(enumerator: Enumerator<T>): Query<T>; }
->T : T
 >enumerator : Enumerator<T>
 
 function from(arg: any): any {

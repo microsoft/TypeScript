@@ -114,12 +114,10 @@ const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
 
 export type Selector<State> = (state: State) => unknown;
 >Selector : Selector<State>
->State : State
 >state : State
 
 export type SelectorTuple<State> = Selector<State>[];
 >SelectorTuple : SelectorTuple<State>
->State : State
 
 export type ExampleState = {
 >ExampleState : ExampleState
@@ -134,7 +132,6 @@ export type ExampleState = {
 
 export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
 >createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
->S : S
 >selectors : [...selectors: S, f: (x: any) => any]
 >x : any
 

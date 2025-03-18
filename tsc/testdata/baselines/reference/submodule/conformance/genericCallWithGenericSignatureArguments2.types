@@ -9,7 +9,6 @@ module onlyT {
 
     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
 >a : (x: T) => T
 >x : T
 >b : (x: T) => T
@@ -37,7 +36,6 @@ module onlyT {
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->T : T
 >x : T
 
         var r7 = foo((a: T) => a, (b: T) => b); // T => T
@@ -68,7 +66,6 @@ module onlyT {
 
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
 >a : (x: T) => T
 >x : T
 >b : (x: T) => T
@@ -84,7 +81,6 @@ module onlyT {
 
     function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->T : T
 >x : T
 
         var r7 = foo2((a: T) => a, (b: T) => b); // error
@@ -120,7 +116,6 @@ module onlyT {
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
 >x : T
 >a : (x: T) => T
 >x : T
@@ -159,8 +154,6 @@ module TU {
 
     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
 >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->T : T
->U : U
 >a : (x: T) => T
 >x : T
 >b : (x: U) => U
@@ -188,7 +181,6 @@ module TU {
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->T : T
 >x : T
 
         var r7 = foo((a: T) => a, (b: T) => b); 
@@ -218,8 +210,6 @@ module TU {
 
     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
 >foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->T : T
->U : U
 >a : (x: T) => T
 >x : T
 >b : (x: U) => U
@@ -235,7 +225,6 @@ module TU {
 
     function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->T : T
 >x : T
 
         var r7 = foo2((a: T) => a, (b: T) => b); 
@@ -271,7 +260,6 @@ module TU {
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->T : T
 >x : T
 >a : (x: T) => T
 >x : T

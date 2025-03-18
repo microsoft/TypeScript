@@ -6,6 +6,8 @@ declare class C {
 
     get foo(): typeof this.foo;
 >foo : any
+>this.foo : any
 >this : this
+>foo : any
 }
 

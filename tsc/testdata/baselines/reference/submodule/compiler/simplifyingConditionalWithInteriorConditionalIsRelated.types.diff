@@ -1,23 +1,6 @@
 --- old.simplifyingConditionalWithInteriorConditionalIsRelated.types
 +++ new.simplifyingConditionalWithInteriorConditionalIsRelated.types
-@@= skipped -3, +3 lines =@@
- // from https://github.com/microsoft/TypeScript/issues/30706
- type ConditionalType<T> = T extends string ? string : number;
- >ConditionalType : ConditionalType<T>
-+>T : T
- 
- function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
- >ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
-+>T : T
- 
-     return 0 as any;
- >0 as any : any
-@@= skipped -11, +13 lines =@@
- 
- function JustConditional<T>(): ConditionalType<T> {
- >JustConditional : <T>() => ConditionalType<T>
-+>T : T
- 
+@@= skipped -18, +18 lines =@@
      return ConditionalOrUndefined<T>()!; // shouldn't error
  >ConditionalOrUndefined<T>()! : ConditionalType<T>
  >ConditionalOrUndefined<T>() : ConditionalType<T> | undefined
@@ -26,19 +9,7 @@
  }
  
  
- // For comparison...
- function genericOrUndefined<T>(): T | undefined {
- >genericOrUndefined : <T>() => T | undefined
-+>T : T
- 
-     return 0 as any;
- >0 as any : any
-@@= skipped -19, +21 lines =@@
- 
- function JustGeneric<T>(): T {
- >JustGeneric : <T>() => T
-+>T : T
- 
+@@= skipped -19, +19 lines =@@
      return genericOrUndefined<T>()!; // no error
  >genericOrUndefined<T>()! : NonNullable<T>
  >genericOrUndefined<T>() : T | undefined
@@ -47,10 +18,8 @@
  }
  
  // Simplified example:
- 
- function f<T>() {
+@@= skipped -9, +9 lines =@@
  >f : <T>() => void
-+>T : T
  
      type One = T extends string ? string : string;
 ->One : T extends string ? string : string

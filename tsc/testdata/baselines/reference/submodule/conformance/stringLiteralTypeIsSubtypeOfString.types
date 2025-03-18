@@ -218,8 +218,6 @@ function f10(x: any) { }
 >x : any
 
 interface I extends String {
->I : I
-
     foo: string;
 >foo : string
 }
@@ -239,32 +237,26 @@ function f11(x: any) { }
 
 function f12<T>(x: 'a');
 >f12 : { <T>(x: "a"): any; <T>(x: T): any; }
->T : T
 >x : "a"
 
 function f12<T>(x: T);
 >f12 : { <T>(x: "a"): any; <T>(x: T): any; }
->T : T
 >x : T
 
 function f12<T>(x: any) { }
 >f12 : { <T>(x: "a"): any; <T>(x: T): any; }
->T : T
 >x : any
 
 function f13<T extends String>(x: 'a');
 >f13 : { <T extends String>(x: "a"): any; <T extends String>(x: T): any; }
->T : T
 >x : "a"
 
 function f13<T extends String>(x: T);
 >f13 : { <T extends String>(x: "a"): any; <T extends String>(x: T): any; }
->T : T
 >x : T
 
 function f13<T extends String>(x: any) { }
 >f13 : { <T extends String>(x: "a"): any; <T extends String>(x: T): any; }
->T : T
 >x : any
 
 enum E { A }
@@ -285,37 +277,25 @@ function f14(x: any) { }
 
 function f15<T, U extends T>(x: 'a');
 >f15 : { <T, U extends T>(x: "a"): any; <T, U extends T>(x: U): any; }
->T : T
->U : U
 >x : "a"
 
 function f15<T, U extends T>(x: U);
 >f15 : { <T, U extends T>(x: "a"): any; <T, U extends T>(x: U): any; }
->T : T
->U : U
 >x : U
 
 function f15<T, U extends T>(x: any) { }
 >f15 : { <T, U extends T>(x: "a"): any; <T, U extends T>(x: U): any; }
->T : T
->U : U
 >x : any
 
 function f16<T extends String, U extends T>(x: 'a');
 >f16 : { <T extends String, U extends T>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
->T : T
->U : U
 >x : "a"
 
 function f16<T extends String, U extends T>(x: U);
 >f16 : { <T extends String, U extends T>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
->T : T
->U : U
 >x : U
 
 function f16<T extends String, U extends T>(x: any) { }
 >f16 : { <T extends String, U extends T>(x: "a"): any; <T extends String, U extends T>(x: U): any; }
->T : T
->U : U
 >x : any
 

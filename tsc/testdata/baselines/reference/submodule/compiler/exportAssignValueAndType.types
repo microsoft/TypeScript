@@ -2,16 +2,11 @@
 
 === exportAssignValueAndType.ts ===
 declare module http {
->http : any
-
 	export interface Server { openPort: number; }
->Server : Server
 >openPort : number
 }
 
 interface server {
->server : server
-
     (): http.Server;
 >http : any
 

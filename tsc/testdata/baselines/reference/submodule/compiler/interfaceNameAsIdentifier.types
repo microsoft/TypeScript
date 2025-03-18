@@ -2,8 +2,6 @@
 
 === interfaceNameAsIdentifier.ts ===
 interface C {
->C : C
-
     (): void;
 }
 C();
@@ -11,11 +9,7 @@ C();
 >C : any
 
 module m2 {
->m2 : any
-
     export interface C {
->C : C
-
         (): void;
     }
 }

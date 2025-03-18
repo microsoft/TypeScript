@@ -21,6 +21,5 @@ export class FilterManager {
 >index : number
 }
 export interface IFilterProvider {
->IFilterProvider : IFilterProvider
 }
 

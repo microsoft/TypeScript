@@ -3,7 +3,6 @@
 === declFileImportedTypeUseInTypeArgPosition.ts ===
 class List<T> { }
 >List : List<T>
->T : T
 
 declare module 'mod1' {
 >'mod1' : typeof import("mod1")

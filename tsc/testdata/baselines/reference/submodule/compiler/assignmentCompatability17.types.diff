@@ -1,16 +1,6 @@
 --- old.assignmentCompatability17.types
 +++ new.assignmentCompatability17.types
-@@= skipped -4, +4 lines =@@
- >__test1__ : typeof __test1__
- 
-     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
-+>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
-+>T : T
-+>U : U
- >one : T
- >two : U
- >obj4 : interfaceWithPublicAndOptional<number, string>
-@@= skipped -27, +30 lines =@@
+@@= skipped -31, +31 lines =@@
  >obj : { two: any[]; }
  }
  __test2__.__val__obj = __test1__.__val__obj4

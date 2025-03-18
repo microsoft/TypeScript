@@ -19,6 +19,7 @@ var c: void = x;
 
 var d: typeof undefined = x;
 >d : any
+>undefined : undefined
 >x : string
 
 class C { foo: string; }
@@ -30,7 +31,6 @@ var e: C = x;
 >x : string
 
 interface I { bar: string; }
->I : I
 >bar : string
 
 var f: I = x;
@@ -59,7 +59,6 @@ M = x;
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
->T : T
 >a : T
 
     a = x;

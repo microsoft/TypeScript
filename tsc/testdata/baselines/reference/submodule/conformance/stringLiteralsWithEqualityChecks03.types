@@ -2,15 +2,11 @@
 
 === stringLiteralsWithEqualityChecks03.ts ===
 interface Runnable {
->Runnable : Runnable
-
     isRunning: boolean;
 >isRunning : boolean
 }
 
 interface Refrigerator extends Runnable {
->Refrigerator : Refrigerator
-
     makesFoodGoBrrr: boolean;
 >makesFoodGoBrrr : boolean
 }

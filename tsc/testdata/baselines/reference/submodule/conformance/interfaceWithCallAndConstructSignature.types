@@ -2,8 +2,6 @@
 
 === interfaceWithCallAndConstructSignature.ts ===
 interface Foo {
->Foo : Foo
-
     (): number;
     new (): any;
 }

@@ -6,8 +6,6 @@ export type LionRequestInit = import('../types/types.js').LionRequestInit;
 
 === node_modules/@lion/ajax/dist-types/types/types.d.ts ===
 export interface LionRequestInit {
->LionRequestInit : LionRequestInit
-
     body?: null | Object;
 >body : Object | null | undefined
 } 

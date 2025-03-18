@@ -6,7 +6,6 @@ declare namespace A {
 
     export class b<T> {
 >b : b<T>
->T : T
 
         static d: number;
 >d : number
@@ -21,6 +20,7 @@ type c = unknown;
 
 declare const a: typeof A | undefined;
 >a : typeof A
+>A : typeof A
 
 a?.b<c>.d;
 >a?.b<c>.d : number

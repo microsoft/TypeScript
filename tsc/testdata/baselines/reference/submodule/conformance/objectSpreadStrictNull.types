@@ -114,8 +114,6 @@ const x: Movie = { ...m, title: undefined };
 >undefined : undefined
 
 interface Fields {
->Fields : Fields
-
     foo: number;
 >foo : number
 
@@ -123,8 +121,6 @@ interface Fields {
 >bar : string
 }
 interface NearlyPartialFields {
->NearlyPartialFields : NearlyPartialFields
-
     foo: number | undefined;
 >foo : number | undefined
 

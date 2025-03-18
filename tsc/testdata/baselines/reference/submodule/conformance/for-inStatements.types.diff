@@ -1,31 +1,6 @@
 --- old.for-inStatements.types
 +++ new.for-inStatements.types
-@@= skipped -101, +101 lines =@@
- >x : string
- >(<T>(x: T) => x) : <T>(x: T) => T
- ><T>(x: T) => x : <T>(x: T) => T
-+>T : T
- >x : T
- >x : T
- 
-@@= skipped -104, +105 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     id: number;
- >id : number
- 
-@@= skipped -21, +23 lines =@@
- 
-     export class X<T> {
- >X : X<T>
-+>T : T
- 
-         name:string
- >name : string
-@@= skipped -12, +13 lines =@@
+@@= skipped -238, +238 lines =@@
  
  for (var x in M.X) { }
  >x : string

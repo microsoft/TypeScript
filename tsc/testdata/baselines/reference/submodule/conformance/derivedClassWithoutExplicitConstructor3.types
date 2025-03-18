@@ -78,7 +78,6 @@ var r3 = new Derived('', '');
 
 class Base2<T> {
 >Base2 : Base2<T>
->T : T
 
     a: T;
 >a : T
@@ -94,7 +93,6 @@ class Base2<T> {
 
 class D<T> extends Base {
 >D : D<T>
->T : T
 >Base : Base
 
     b: T = null;
@@ -121,7 +119,6 @@ class D<T> extends Base {
 
 class D2<T extends Date> extends D<T> {
 >D2 : D2<T>
->T : T
 >D : D<T>
 
     x = 2

@@ -3,12 +3,10 @@
 === typeArgumentInferenceApparentType2.ts ===
 function method<T>(iterable: Iterable<T>): T {
 >method : <T>(iterable: Iterable<T, any, any>) => T
->T : T
 >iterable : Iterable<T, any, any>
 
     function inner<U extends Iterable<T>>() {
 >inner : <U extends Iterable<T, any, any>>() => void
->U : U
 
         var u: U;
 >u : U

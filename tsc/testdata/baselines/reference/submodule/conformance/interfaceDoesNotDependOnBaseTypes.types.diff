@@ -9,9 +9,3 @@
  >x : StringTree
  >"string" : "string"
  
-@@= skipped -24, +24 lines =@@
- >StringTree : StringTree
- 
- interface StringTreeArray extends Array<StringTree> { }
-+>StringTreeArray : StringTreeArray
-+

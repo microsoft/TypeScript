@@ -1,23 +1,6 @@
 --- old.parametersWithNoAnnotationAreAny.types
 +++ new.parametersWithNoAnnotationAreAny.types
-@@= skipped -21, +21 lines =@@
- var f3 = <T>(x) => x;
- >f3 : <T>(x: any) => any
- ><T>(x) => x : <T>(x: any) => any
-+>T : T
- >x : any
- >x : any
- 
-@@= skipped -16, +17 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     foo(x);
- >foo : (x: any) => any
- >x : any
-@@= skipped -11, +13 lines =@@
+@@= skipped -48, +48 lines =@@
  }
  
  var a: {

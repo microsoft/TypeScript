@@ -25,7 +25,6 @@ declare module '.' {
 
   type Row2<T> = {}
 >Row2 : Row2<T>
->T : T
 
   type C = { s : string }
 >C : C
@@ -37,6 +36,5 @@ export type {Row2} from './common';
 >Row2 : Row2
 
 === common.d.ts ===
-export interface Row2 {}
->Row2 : Row2
 
+export interface Row2 {}

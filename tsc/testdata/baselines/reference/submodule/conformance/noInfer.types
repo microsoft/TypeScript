@@ -37,15 +37,12 @@ type T11 = NoInfer<{ x: string }>;
 
 type T20<T> = NoInfer<NoInfer<T>>;
 >T20 : T
->T : T
 
 type T21<T> = NoInfer<NoInfer<T> & string>;
 >T21 : T & string
->T : T
 
 type T22<T> = NoInfer<NoInfer<T> & string[]>;
 >T22 : T & string[]
->T : T
 
 // keyof NoInfer<T> is transformed into NoInfer<keyof T>
 
@@ -56,42 +53,35 @@ type T30 = keyof NoInfer<{ a: string, b: string }>;
 
 type T31<T> = keyof NoInfer<T>;
 >T31 : keyof T
->T : T
 
 type T32 = { [K in keyof NoInfer<{ a: string, b: string }>]: K };
 >T32 : T32
->K : K
 >a : string
 >b : string
 
 declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
 >foo1 : <T extends string>(a: T, b: T) => void
->T : T
 >a : T
 >b : T
 
 declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
 >foo2 : <T extends string>(a: T, b: T[]) => void
->T : T
 >a : T
 >b : T[]
 
 declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
 >foo3 : <T extends string>(a: T, b: T[]) => void
->T : T
 >a : T
 >b : T[]
 
 declare function foo4<T extends string>(a: T, b: { x: NoInfer<T> }): void
 >foo4 : <T extends string>(a: T, b: { x: T; }) => void
->T : T
 >a : T
 >b : { x: T; }
 >x : T
 
 declare function foo5<T extends string>(a: T, b: NoInfer<{ x: T }>): void
 >foo5 : <T extends string>(a: T, b: { x: T; }) => void
->T : T
 >a : T
 >b : { x: T; }
 >x : T
@@ -149,7 +139,6 @@ declare class Dog extends Animal { woof(): void }
 
 declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
 >doSomething : <T>(value: T, getDefault: () => T) => void
->T : T
 >value : T
 >getDefault : () => T
 
@@ -182,7 +171,6 @@ doSomething(new Dog(), () => new Animal()); // error
 
 declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
 >assertEqual : <T>(actual: T, expected: T) => boolean
->T : T
 >actual : T
 >expected : T
 
@@ -214,8 +202,6 @@ assertEqual(g, { x: 3 }); // error
 
 declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
 >invoke : <T, R>(func: (value: T) => R, value: T) => R
->T : T
->R : R
 >func : (value: T) => R
 >value : T
 >value : T
@@ -246,12 +232,10 @@ test({ x: 1, y: 2 }); // error
 
 type Component<Props> = { props: Props; };
 >Component : Component<Props>
->Props : Props
 >props : Props
 
 declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
 >doWork : <Props>(Component: Component<Props>, props: Props) => void
->Props : Props
 >Component : Component<Props>
 >props : Props
 
@@ -275,7 +259,6 @@ doWork(comp, {}); // error
 
 declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
 >mutate : <T>(callback: (a: T, b: number) => T) => T
->T : T
 >callback : (a: T, b: number) => T
 >a : T
 >b : number
@@ -291,11 +274,9 @@ const mutate1 = mutate((a, b) => b);
 
 declare class ExampleClass<T> {}
 >ExampleClass : ExampleClass<T>
->T : T
 
 class OkClass<T> {
 >OkClass : OkClass<T>
->T : T
 
     constructor(private clazz: ExampleClass<T>, private _value: NoInfer<T>) {}
 >clazz : ExampleClass<T>
@@ -312,7 +293,6 @@ class OkClass<T> {
 }
 class OkClass2<T> {
 >OkClass2 : OkClass2<T>
->T : T
 
     constructor(private clazz: ExampleClass<T>, public _value: NoInfer<T>) {}
 >clazz : ExampleClass<T>

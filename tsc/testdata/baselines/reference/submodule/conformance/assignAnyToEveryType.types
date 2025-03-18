@@ -73,8 +73,6 @@ var h: C = x;
 >x : any
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
@@ -89,7 +87,6 @@ var j: { (): string } = x;
 
 var j2: { <T>(x: T): string } = x;
 >j2 : <T>(x: T) => string
->T : T
 >x : T
 >x : any
 
@@ -108,7 +105,6 @@ M = x;
 
 function k<T>(a: T) {
 >k : <T>(a: T) => void
->T : T
 >a : T
 
     a = x;

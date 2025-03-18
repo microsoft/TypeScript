@@ -1,22 +1,6 @@
 --- old.typeInferenceWithExcessProperties.types
 +++ new.typeInferenceWithExcessProperties.types
-@@= skipped -3, +3 lines =@@
- // Repro from #17041
- 
- interface Named {
-+>Named : Named
-+
-     name: string;
- >name : string
- }
- 
- function parrot<T extends Named>(obj: T): T {
- >parrot : <T extends Named>(obj: T) => T
-+>T : T
- >obj : T
- 
-     return obj;
-@@= skipped -55, +58 lines =@@
+@@= skipped -58, +58 lines =@@
  });
  
  parrot({

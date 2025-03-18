@@ -3,6 +3,7 @@
 === invalidUndefinedAssignments.ts ===
 var x: typeof undefined;
 >x : any
+>undefined : undefined
 
 enum E { A }
 >E : E
@@ -33,7 +34,6 @@ C = x;
 >x : any
 
 interface I { foo: string }
->I : I
 >foo : string
 
 var g: I;
@@ -61,7 +61,6 @@ M = x;
 
 function i<T>(a: T) { }
 >i : <T>(a: T) => void
->T : T
 >a : T
 
 // BUG 767030

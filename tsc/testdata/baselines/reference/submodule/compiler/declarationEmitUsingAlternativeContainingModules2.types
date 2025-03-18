@@ -5,21 +5,18 @@ type QueryKey = ReadonlyArray<unknown>;
 >QueryKey : QueryKey
 
 interface Register {}
->Register : Register
 
 type DefaultError = Register extends {
 >DefaultError : Error
 
   defaultError: infer TError;
 >defaultError : TError
->TError : TError
 }
   ? TError
   : Error;
 
 type ShouldRetryFunction<TError = DefaultError> = (
 >ShouldRetryFunction : ShouldRetryFunction<TError>
->TError : TError
 
   failureCount: number,
 >failureCount : number
@@ -30,17 +27,12 @@ type ShouldRetryFunction<TError = DefaultError> = (
 ) => boolean;
 type RetryValue<TError> = boolean | number | ShouldRetryFunction<TError>;
 >RetryValue : RetryValue<TError>
->TError : TError
 
 type QueryFunctionContext<
 >QueryFunctionContext : QueryFunctionContext<TQueryKey, TPageParam>
 
   TQueryKey extends QueryKey = QueryKey,
->TQueryKey : TQueryKey
-
   TPageParam = never,
->TPageParam : TPageParam
-
 > = [TPageParam] extends [never]
   ? {
       queryKey: TQueryKey;
@@ -59,35 +51,17 @@ type QueryFunction<
 >QueryFunction : QueryFunction<T, TQueryKey, TPageParam>
 
   T = unknown,
->T : T
-
   TQueryKey extends QueryKey = QueryKey,
->TQueryKey : TQueryKey
-
   TPageParam = never,
->TPageParam : TPageParam
-
 > = (context: QueryFunctionContext<TQueryKey, TPageParam>) => T | Promise<T>;
 >context : QueryFunctionContext<TQueryKey, TPageParam>
 
 interface QueryOptions<
->QueryOptions : QueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam>
-
   TQueryFnData = unknown,
->TQueryFnData : TQueryFnData
-
   TError = DefaultError,
->TError : TError
-
   TData = TQueryFnData,
->TData : TData
-
   TQueryKey extends QueryKey = QueryKey,
->TQueryKey : TQueryKey
-
   TPageParam = never,
->TPageParam : TPageParam
-
 > {
   retry?: RetryValue<TError>;
 >retry : RetryValue<TError> | undefined
@@ -106,26 +80,12 @@ interface QueryOptions<
 }
 
 interface QueryObserverOptions<
->QueryObserverOptions : QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey, TPageParam>
-
   TQueryFnData = unknown,
->TQueryFnData : TQueryFnData
-
   TError = DefaultError,
->TError : TError
-
   TData = TQueryFnData,
->TData : TData
-
   TQueryData = TQueryFnData,
->TQueryData : TQueryData
-
   TQueryKey extends QueryKey = QueryKey,
->TQueryKey : TQueryKey
-
   TPageParam = never,
->TPageParam : TPageParam
-
 > extends QueryOptions<
     TQueryFnData,
     TError,
@@ -148,24 +108,12 @@ type UseQueryOptions<
 >UseQueryOptions : UseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>
 
   TQueryFnData = unknown,
->TQueryFnData : TQueryFnData
-
   TError = DefaultError,
->TError : TError
-
   TData = TQueryFnData,
->TData : TData
-
   TQueryData = TQueryFnData,
->TQueryData : TQueryData
-
   TQueryKey extends QueryKey = QueryKey,
->TQueryKey : TQueryKey
-
 > = {
   [Property in keyof QueryObserverOptions<
->Property : Property
-
     TQueryFnData,
     TError,
     TData,
@@ -184,17 +132,9 @@ type UndefinedInitialQueryOptions<
 >UndefinedInitialQueryOptions : UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>
 
   TQueryFnData = unknown,
->TQueryFnData : TQueryFnData
-
   TError = DefaultError,
->TError : TError
-
   TData = TQueryFnData,
->TData : TData
-
   TQueryKey extends QueryKey = QueryKey,
->TQueryKey : TQueryKey
-
 > = UseQueryOptions<TQueryFnData, TError, TData, TQueryFnData, TQueryKey> & {
   initialData?: undefined;
 >initialData : undefined
@@ -202,10 +142,6 @@ type UndefinedInitialQueryOptions<
 };
 
 interface QueryObserverBaseResult<TData = unknown, TError = DefaultError> {
->QueryObserverBaseResult : QueryObserverBaseResult<TData, TError>
->TData : TData
->TError : TError
-
   data: TData | undefined;
 >data : TData | undefined
 
@@ -271,10 +207,6 @@ interface QueryObserverBaseResult<TData = unknown, TError = DefaultError> {
 }
 
 interface QueryObserverSuccessResult<TData = unknown, TError = DefaultError>
->QueryObserverSuccessResult : QueryObserverSuccessResult<TData, TError>
->TData : TData
->TError : TError
-
   extends QueryObserverBaseResult<TData, TError> {
   data: TData;
 >data : TData
@@ -310,26 +242,17 @@ type DefinedQueryObserverResult<
 >DefinedQueryObserverResult : DefinedQueryObserverResult<TData, TError>
 
   TData = unknown,
->TData : TData
-
   TError = DefaultError,
->TError : TError
-
 > = QueryObserverSuccessResult<TData, TError>;
 type QueryObserverResult<
 >QueryObserverResult : QueryObserverResult<TData, TError>
 
   TData = unknown,
->TData : TData
-
   TError = DefaultError,
->TError : TError
-
 > = DefinedQueryObserverResult<TData, TError>;
 
 type ToRef<T> = {
 >ToRef : ToRef<T>
->T : T
 
   value: T;
 >value : T
@@ -340,18 +263,10 @@ type UseBaseQueryReturnType<
 >UseBaseQueryReturnType : UseBaseQueryReturnType<TData, TError, Result>
 
   TData,
->TData : TData
-
   TError,
->TError : TError
-
   Result = QueryObserverResult<TData, TError>,
->Result : Result
-
 > = {
   [K in keyof Result]: K extends
->K : K
-
     | "fetchNextPage"
     | "fetchPreviousPage"
     | "refetch"
@@ -365,24 +280,14 @@ type UseBaseQueryReturnType<
 
 type UseQueryReturnType<TData, TError> = UseBaseQueryReturnType<TData, TError>;
 >UseQueryReturnType : UseQueryReturnType<TData, TError>
->TData : TData
->TError : TError
 
 declare function useQuery<
 >useQuery : <TQueryFnData, TError, TData, TQueryKey extends QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
 
   TQueryFnData = unknown,
->TQueryFnData : TQueryFnData
-
   TError = DefaultError,
->TError : TError
-
   TData = TQueryFnData,
->TData : TData
-
   TQueryKey extends QueryKey = QueryKey,
->TQueryKey : TQueryKey
-
 >(
   options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
 >options : UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>
@@ -411,8 +316,6 @@ const baseUrl = 'https://api.publicapis.org/'
 >'https://api.publicapis.org/' : "https://api.publicapis.org/"
 
 interface IEntry {
->IEntry : IEntry
-
   API: string
 >API : string
 

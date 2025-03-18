@@ -15,7 +15,6 @@ class C1 {
 
 class T<T> {
 >T : T<T>
->T : T
 
     constructor(n?: T) { }
 >n : T
@@ -36,8 +35,6 @@ var anyCtor1: {
 };
 
 interface nestedCtor {
->nestedCtor : nestedCtor
-
     new (): nestedCtor;
 }
 var nestedCtor: nestedCtor;
@@ -81,7 +78,6 @@ var d = new anyCtor1(undefined);
 // Construct expression of type where apparent type has a construct signature with 0 arguments
 function newFn1<T extends { new (): number }>(s: T) {
 >newFn1 : <T extends new () => number>(s: T) => void
->T : T
 >s : T
 
     var p = new s;
@@ -96,7 +92,6 @@ function newFn1<T extends { new (): number }>(s: T) {
 // Construct expression of type where apparent type has a construct signature with 1 arguments
 function newFn2<T extends { new (s: number): string}>(s: T) {
 >newFn2 : <T extends new (s: number) => string>(s: T) => void
->T : T
 >s : number
 >s : T
 

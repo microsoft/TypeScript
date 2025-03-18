@@ -2,8 +2,6 @@
 
 === a.ts ===
 interface Foo {
->Foo : Foo
-
     a: number;
 >a : number
 }
@@ -13,8 +11,6 @@ export default {} satisfies Foo;
 
 === b.ts ===
 interface Foo {
->Foo : Foo
-
     a: number;
 >a : number
 }

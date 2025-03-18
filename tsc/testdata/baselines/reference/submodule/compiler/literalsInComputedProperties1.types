@@ -56,8 +56,6 @@ x[4].toExponential();
 >toExponential : (fractionDigits?: number) => string
 
 interface A {
->A : A
-
     1:number;
 >1 : number
 

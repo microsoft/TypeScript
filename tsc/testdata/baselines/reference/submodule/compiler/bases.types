@@ -2,8 +2,6 @@
 
 === bases.ts ===
 interface I {
->I : I
-
     x;
 >x : any
 }

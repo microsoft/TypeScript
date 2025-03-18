@@ -18,11 +18,7 @@ module A {
 >y : number
     }
     export module B {
->B : any
-
         export interface Id {
->Id : Id
-
             name: string;
 >name : string
         }
@@ -139,8 +135,6 @@ module K {
 >12 : 12
 
         export interface Point {
->Point : Point
-
             x: number;
 >x : number
 

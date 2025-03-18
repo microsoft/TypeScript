@@ -1,30 +1,15 @@
 --- old.jsFileImportPreservedWhenUsed.types
 +++ new.jsFileImportPreservedWhenUsed.types
-@@= skipped -2, +2 lines =@@
- === dash.d.ts ===
- type ObjectIterator<TObject, TResult> = (value: TObject[keyof TObject], key: string, collection: TObject) => TResult;
- >ObjectIterator : ObjectIterator<TObject, TResult>
-+>TObject : TObject
-+>TResult : TResult
- >value : TObject[keyof TObject]
- >key : string
- >collection : TObject
+@@= skipped -8, +8 lines =@@
  
  interface LoDashStatic {
-+>LoDashStatic : LoDashStatic
-+
      mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
 ->mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult; }
 +>mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
-+>T : T
-+>TResult : TResult
  >obj : T | null | undefined
  >callback : ObjectIterator<T, TResult>
-+>P : P
  }
- declare const _: LoDashStatic;
- >_ : LoDashStatic
-@@= skipped -36, +43 lines =@@
+@@= skipped -30, +30 lines =@@
       * @param {object} vm
       */
      test(obj, vm) {

@@ -12,8 +12,6 @@ import type { onInit } from "./framework-hooks";
 >onInit : any
 
 interface Component {
->Component : Component
-
   [onInit]?(): void;
 >[onInit] : () => void
 >onInit : unique symbol

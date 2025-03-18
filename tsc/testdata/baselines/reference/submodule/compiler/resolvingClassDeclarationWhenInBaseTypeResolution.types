@@ -70,8 +70,6 @@ module rionegrensis {
   }
   export class veraecrucis<T0, T1> extends trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus> {
 >veraecrucis : veraecrucis<T0, T1>
->T0 : T0
->T1 : T1
 >trivirgatus.mixtus : mixtus<amicus, punicus>
 >trivirgatus : typeof trivirgatus
 >mixtus : typeof mixtus
@@ -307,8 +305,6 @@ module julianae {
   }
   export class albidens<T0, T1> {
 >albidens : albidens<T0, T1>
->T0 : T0
->T1 : T1
 
     mattheyi() : samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>> { var x : samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>; () => { var y = this; }; return x; }
 >mattheyi : () => fuscus<wilsoni, sarasinorum<jugularis, subspinosus>>
@@ -390,8 +386,6 @@ module julianae {
   }
   export class oralis<T0, T1> extends caurinus.psilurus {
 >oralis : oralis<T0, T1>
->T0 : T0
->T1 : T1
 >caurinus.psilurus : psilurus
 >caurinus : typeof caurinus
 >psilurus : typeof psilurus
@@ -658,8 +652,6 @@ module julianae {
   }
   export class gerbillus<T0, T1> {
 >gerbillus : gerbillus<T0, T1>
->T0 : T0
->T1 : T1
 
     pundti() : sagitta.sicarius<dogramacii.koepckeae, caurinus.psilurus> { var x : sagitta.sicarius<dogramacii.koepckeae, caurinus.psilurus>; () => { var y = this; }; return x; }
 >pundti : () => sicarius<koepckeae, psilurus>
@@ -998,8 +990,6 @@ module ruatanica {
 
   export class hector<T0, T1> {
 >hector : hector<T0, T1>
->T0 : T0
->T1 : T1
 
     humulis() : julianae.steerii { var x : julianae.steerii; () => { var y = this; }; return x; }
 >humulis : () => steerii
@@ -1035,8 +1025,6 @@ module Lanthanum {
 
   export class suillus<T0, T1> {
 >suillus : suillus<T0, T1>
->T0 : T0
->T1 : T1
 
     spilosoma() : quasiater.carolinensis { var x : quasiater.carolinensis; () => { var y = this; }; return x; }
 >spilosoma : () => carolinensis
@@ -1070,8 +1058,6 @@ module Lanthanum {
   }
   export class nitidus<T0, T1> extends argurus.gilbertii<lavali.thaeleri, lutreolus.punicus> {
 >nitidus : nitidus<T0, T1>
->T0 : T0
->T1 : T1
 >argurus.gilbertii : gilbertii<thaeleri, punicus>
 >argurus : typeof argurus
 >gilbertii : typeof gilbertii
@@ -1663,8 +1649,6 @@ module rendalli {
   }
   export class moojeni<T0, T1> {
 >moojeni : moojeni<T0, T1>
->T0 : T0
->T1 : T1
 
     floweri() : lavali.otion { var x : lavali.otion; () => { var y = this; }; return x; }
 >floweri : () => otion
@@ -1802,8 +1786,6 @@ module rendalli {
   }
   export class crenulata<T0, T1> extends trivirgatus.falconeri {
 >crenulata : crenulata<T0, T1>
->T0 : T0
->T1 : T1
 >trivirgatus.falconeri : falconeri
 >trivirgatus : typeof trivirgatus
 >falconeri : typeof falconeri
@@ -1860,8 +1842,6 @@ module trivirgatus {
 
   export class tumidifrons<T0, T1> {
 >tumidifrons : tumidifrons<T0, T1>
->T0 : T0
->T1 : T1
 
     nivalis() : dogramacii.kaiseri { var x : dogramacii.kaiseri; () => { var y = this; }; return x; }
 >nivalis : () => kaiseri
@@ -1951,8 +1931,6 @@ module trivirgatus {
   }
   export class mixtus<T0, T1> extends argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>> {
 >mixtus : mixtus<T0, T1>
->T0 : T0
->T1 : T1
 >argurus.pygmaea : pygmaea<oreas, fundatus<carolinensis, daphaenodon>>
 >argurus : typeof argurus
 >pygmaea : typeof pygmaea
@@ -2067,8 +2045,6 @@ module trivirgatus {
   }
   export class lotor<T0, T1> {
 >lotor : lotor<T0, T1>
->T0 : T0
->T1 : T1
 
     balensis() : samarensis.pallidus { var x : samarensis.pallidus; () => { var y = this; }; return x; }
 >balensis : () => pallidus
@@ -3820,8 +3796,6 @@ module argurus {
 
   export class dauricus<T0, T1> {
 >dauricus : dauricus<T0, T1>
->T0 : T0
->T1 : T1
 
     chinensis() : Lanthanum.jugularis { var x : Lanthanum.jugularis; () => { var y = this; }; return x; }
 >chinensis : () => jugularis
@@ -3987,8 +3961,6 @@ module nigra {
 
   export class dolichurus<T0, T1> {
 >dolichurus : dolichurus<T0, T1>
->T0 : T0
->T1 : T1
 
     solomonis() : panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>> { var x : panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>>; () => { var y = this; }; return x; }
 >solomonis : () => abidi<carolinensis, crenulata<klossii<nudicaudus, aurata>, netscheri<inez<peninsulae, nudicaudus>, oralis<xanthognathus, oreas>>>>
@@ -4124,8 +4096,6 @@ module panglima {
 
     export class amphibius<T0, T1> extends caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis> {
 >amphibius : amphibius<T0, T1>
->T0 : T0
->T1 : T1
 >caurinus.johorensis : johorensis<nitidus<minutilla, sumatrana>, jugularis>
 >caurinus : typeof caurinus
 >johorensis : typeof johorensis
@@ -4218,8 +4188,6 @@ module panglima {
     }
     export class fundatus<T0, T1> extends lutreolus.schlegeli {
 >fundatus : fundatus<T0, T1>
->T0 : T0
->T1 : T1
 >lutreolus.schlegeli : schlegeli
 >lutreolus : typeof lutreolus
 >schlegeli : typeof schlegeli
@@ -4286,8 +4254,6 @@ module panglima {
     }
     export class abidi<T0, T1> extends argurus.dauricus<argurus.germaini, julianae.durangae> {
 >abidi : abidi<T0, T1>
->T0 : T0
->T1 : T1
 >argurus.dauricus : dauricus<germaini, durangae>
 >argurus : typeof argurus
 >dauricus : typeof dauricus
@@ -4451,8 +4417,6 @@ module minutus {
 
     export class himalayana<T0, T1> extends lutreolus.punicus {
 >himalayana : himalayana<T0, T1>
->T0 : T0
->T1 : T1
 >lutreolus.punicus : punicus
 >lutreolus : typeof lutreolus
 >punicus : typeof punicus
@@ -4627,8 +4591,6 @@ module caurinus {
 
     export class mahaganus<T0, T1> extends panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon> {
 >mahaganus : mahaganus<T0, T1>
->T0 : T0
->T1 : T1
 >panglima.fundatus : fundatus<carolinensis, daphaenodon>
 >panglima : typeof panglima
 >fundatus : typeof fundatus
@@ -4769,8 +4731,6 @@ module macrorhinos {
 
     export class marmosurus<T0, T1> {
 >marmosurus : marmosurus<T0, T1>
->T0 : T0
->T1 : T1
 
         tansaniana(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
 >tansaniana : () => punicus
@@ -4788,8 +4748,6 @@ module howi {
 
     export class angulatus<T0, T1> extends sagitta.stolzmanni {
 >angulatus : angulatus<T0, T1>
->T0 : T0
->T1 : T1
 >sagitta.stolzmanni : stolzmanni
 >sagitta : typeof sagitta
 >stolzmanni : typeof stolzmanni
@@ -4810,8 +4768,6 @@ module daubentonii {
 
     export class nesiotes<T0, T1> {
 >nesiotes : nesiotes<T0, T1>
->T0 : T0
->T1 : T1
     }
 }
 module nigra {
@@ -4819,8 +4775,6 @@ module nigra {
 
     export class thalia<T0, T1> {
 >thalia : thalia<T0, T1>
->T0 : T0
->T1 : T1
 
         dichotomus(): quasiater.carolinensis { var x: quasiater.carolinensis; () => { var y = this; }; return x; }
 >dichotomus : () => carolinensis
@@ -4968,8 +4922,6 @@ module minutus {
 
     export class inez<T0, T1> extends samarensis.pelurus<argurus.germaini, julianae.durangae> {
 >inez : inez<T0, T1>
->T0 : T0
->T1 : T1
 >samarensis.pelurus : pelurus<germaini, durangae>
 >samarensis : typeof samarensis
 >pelurus : typeof pelurus
@@ -5008,8 +4960,6 @@ module panamensis {
 
     export class linulus<T0, T1> extends ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>> {
 >linulus : linulus<T0, T1>
->T0 : T0
->T1 : T1
 >ruatanica.hector : hector<sumatrana, pelurus<jugularis, walkeri>>
 >ruatanica : typeof ruatanica
 >hector : typeof hector
@@ -5146,8 +5096,6 @@ module nigra {
 
     export class gracilis<T0, T1> {
 >gracilis : gracilis<T0, T1>
->T0 : T0
->T1 : T1
 
         weddellii(): nigra.dolichurus<dogramacii.aurata, julianae.steerii> { var x: nigra.dolichurus<dogramacii.aurata, julianae.steerii>; () => { var y = this; }; return x; }
 >weddellii : () => dolichurus<aurata, steerii>
@@ -5337,8 +5285,6 @@ module samarensis {
 
     export class pelurus<T0, T1> extends sagitta.stolzmanni {
 >pelurus : pelurus<T0, T1>
->T0 : T0
->T1 : T1
 >sagitta.stolzmanni : stolzmanni
 >sagitta : typeof sagitta
 >stolzmanni : typeof stolzmanni
@@ -5521,8 +5467,6 @@ module samarensis {
     }
     export class fuscus<T0, T1> extends macrorhinos.daphaenodon {
 >fuscus : fuscus<T0, T1>
->T0 : T0
->T1 : T1
 >macrorhinos.daphaenodon : daphaenodon
 >macrorhinos : typeof macrorhinos
 >daphaenodon : typeof daphaenodon
@@ -5770,8 +5714,6 @@ module samarensis {
     }
     export class cahirinus<T0, T1> {
 >cahirinus : cahirinus<T0, T1>
->T0 : T0
->T1 : T1
 
         alashanicus(): nigra.caucasica<ruatanica.americanus, argurus.peninsulae> { var x: nigra.caucasica<ruatanica.americanus, argurus.peninsulae>; () => { var y = this; }; return x; }
 >alashanicus : () => caucasica<americanus, peninsulae>
@@ -5861,8 +5803,6 @@ module sagitta {
 
     export class leptoceros<T0, T1> extends caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>> {
 >leptoceros : leptoceros<T0, T1>
->T0 : T0
->T1 : T1
 >caurinus.johorensis : johorensis<peninsulae, arboreus<germaini, stolzmanni>>
 >caurinus : typeof caurinus
 >johorensis : typeof johorensis
@@ -5943,8 +5883,6 @@ module daubentonii {
 
     export class nigricans<T0, T1> extends sagitta.stolzmanni {
 >nigricans : nigricans<T0, T1>
->T0 : T0
->T1 : T1
 >sagitta.stolzmanni : stolzmanni
 >sagitta : typeof sagitta
 >stolzmanni : typeof stolzmanni
@@ -5965,8 +5903,6 @@ module dammermani {
 
     export class siberu<T0, T1> {
 >siberu : siberu<T0, T1>
->T0 : T0
->T1 : T1
     }
 }
 module argurus {
@@ -5974,8 +5910,6 @@ module argurus {
 
     export class pygmaea<T0, T1> extends rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus> {
 >pygmaea : pygmaea<T0, T1>
->T0 : T0
->T1 : T1
 >rendalli.moojeni : moojeni<konganensis, echinatus>
 >rendalli : typeof rendalli
 >moojeni : typeof moojeni
@@ -6018,8 +5952,6 @@ module chrysaeolus {
 
     export class sarasinorum<T0, T1> extends caurinus.psilurus {
 >sarasinorum : sarasinorum<T0, T1>
->T0 : T0
->T1 : T1
 >caurinus.psilurus : psilurus
 >caurinus : typeof caurinus
 >psilurus : typeof psilurus
@@ -6112,8 +6044,6 @@ module argurus {
 
     export class wetmorei<T0, T1> {
 >wetmorei : wetmorei<T0, T1>
->T0 : T0
->T1 : T1
 
         leucoptera(): petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina> { var x: petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina>; () => { var y = this; }; return x; }
 >leucoptera : () => rosalia<koepckeae, foina>
@@ -6313,8 +6243,6 @@ module daubentonii {
 
     export class arboreus<T0, T1> {
 >arboreus : arboreus<T0, T1>
->T0 : T0
->T1 : T1
 
         capreolus(): rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni> { var x: rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>; () => { var y = this; }; return x; }
 >capreolus : () => crenulata<pelurus<jugularis, americanus>, wilsoni>
@@ -6709,8 +6637,6 @@ module sagitta {
 
     export class sicarius<T0, T1> {
 >sicarius : sicarius<T0, T1>
->T0 : T0
->T1 : T1
 
         Chlorine(): samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus> { var x: samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus>; () => { var y = this; }; return x; }
 >Chlorine : () => cahirinus<gracilis<luctuosa, subspinosus>, robustulus>
@@ -6968,8 +6894,6 @@ module argurus {
 
     export class gilbertii<T0, T1> {
 >gilbertii : gilbertii<T0, T1>
->T0 : T0
->T1 : T1
 
         nasutus(): lavali.lepturus { var x: lavali.lepturus; () => { var y = this; }; return x; }
 >nasutus : () => lepturus
@@ -7384,8 +7308,6 @@ module sagitta {
 
     export class cinereus<T0, T1> {
 >cinereus : cinereus<T0, T1>
->T0 : T0
->T1 : T1
 
         zunigae(): rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>> { var x: rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>; () => { var y = this; }; return x; }
 >zunigae : () => crenulata<konganensis, dolichurus<lepturus, pallidus>>
@@ -7557,8 +7479,6 @@ module nigra {
 
     export class caucasica<T0, T1> {
 >caucasica : caucasica<T0, T1>
->T0 : T0
->T1 : T1
     }
 }
 module gabriellae {
@@ -7566,8 +7486,6 @@ module gabriellae {
 
     export class klossii<T0, T1> extends imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus> {
 >klossii : klossii<T0, T1>
->T0 : T0
->T1 : T1
 >imperfecta.lasiurus : lasiurus<robustulus, psilurus>
 >imperfecta : typeof imperfecta
 >lasiurus : typeof lasiurus
@@ -7740,8 +7658,6 @@ module imperfecta {
 
     export class lasiurus<T0, T1> {
 >lasiurus : lasiurus<T0, T1>
->T0 : T0
->T1 : T1
 
         marisae(): lavali.thaeleri { var x: lavali.thaeleri; () => { var y = this; }; return x; }
 >marisae : () => thaeleri
@@ -7946,8 +7862,6 @@ module imperfecta {
     }
     export class ciliolabrum<T0, T1> extends dogramacii.robustulus {
 >ciliolabrum : ciliolabrum<T0, T1>
->T0 : T0
->T1 : T1
 >dogramacii.robustulus : robustulus
 >dogramacii : typeof dogramacii
 >robustulus : typeof robustulus
@@ -8004,8 +7918,6 @@ module quasiater {
 
     export class wattsi<T0, T1> {
 >wattsi : wattsi<T0, T1>
->T0 : T0
->T1 : T1
 
         lagotis(): lavali.xanthognathus { var x: lavali.xanthognathus; () => { var y = this; }; return x; }
 >lagotis : () => xanthognathus
@@ -8061,15 +7973,12 @@ module quasiater {
     }
 }
 module butleri {
->butleri : any
 }
 module petrophilus {
 >petrophilus : typeof petrophilus
 
     export class sodyi<T0, T1> extends quasiater.bobrinskoi {
 >sodyi : sodyi<T0, T1>
->T0 : T0
->T1 : T1
 >quasiater.bobrinskoi : bobrinskoi
 >quasiater : typeof quasiater
 >bobrinskoi : typeof bobrinskoi
@@ -8502,8 +8411,6 @@ module lutreolus {
 
     export class cor<T0, T1> extends panglima.fundatus<panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops> {
 >cor : cor<T0, T1>
->T0 : T0
->T1 : T1
 >panglima.fundatus : fundatus<linulus<lotor<luctuosa, wilsoni>, beisa>, melanops>
 >panglima : typeof panglima
 >fundatus : typeof fundatus
@@ -8656,8 +8563,6 @@ module howi {
 
     export class coludo<T0, T1> {
 >coludo : coludo<T0, T1>
->T0 : T0
->T1 : T1
 
         bernhardi(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
 >bernhardi : () => punicus
@@ -9144,8 +9049,6 @@ module argurus {
 
     export class netscheri<T0, T1> {
 >netscheri : netscheri<T0, T1>
->T0 : T0
->T1 : T1
 
         gravis(): nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri> { var x: nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri>; () => { var y = this; }; return x; }
 >gravis : () => caucasica<crenulata<falconeri, marcanoi>, kaiseri>
@@ -9359,8 +9262,6 @@ module ruatanica {
 
     export class Praseodymium<T0, T1> extends ruatanica.hector<lutreolus.punicus, gabriellae.amicus> {
 >Praseodymium : Praseodymium<T0, T1>
->T0 : T0
->T1 : T1
 >ruatanica.hector : hector<punicus, amicus>
 >ruatanica : typeof ruatanica
 >hector : typeof hector
@@ -9591,8 +9492,6 @@ module caurinus {
 
     export class johorensis<T0, T1> extends lutreolus.punicus {
 >johorensis : johorensis<T0, T1>
->T0 : T0
->T1 : T1
 >lutreolus.punicus : punicus
 >lutreolus : typeof lutreolus
 >punicus : typeof punicus
@@ -9650,8 +9549,6 @@ module panamensis {
 
     export class setulosus<T0, T1> {
 >setulosus : setulosus<T0, T1>
->T0 : T0
->T1 : T1
 
         duthieae(): caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata> { var x: caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata>; () => { var y = this; }; return x; }
 >duthieae : () => mahaganus<coludo<oreas, marcanoi>, aurata>
@@ -9791,8 +9688,6 @@ module petrophilus {
 
     export class rosalia<T0, T1> {
 >rosalia : rosalia<T0, T1>
->T0 : T0
->T1 : T1
 
         palmeri(): panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>> { var x: panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>>; () => { var y = this; }; return x; }
 >palmeri : () => amphibius<coludo<daphaenodon, amphibius<daphaenodon, uralensis>>, mixtus<dauricus<aurata, melanops>, amphibius<lepturus, carolinensis>>>

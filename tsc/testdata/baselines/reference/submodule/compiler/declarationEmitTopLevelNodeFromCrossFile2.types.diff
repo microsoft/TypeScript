@@ -28,17 +28,3 @@
  
  }>;                        // ^This is index 83 in this file
  
- === box.d.ts ===
- export declare class Box<T> {
- >Box : Box<T>
-+>T : T
- 
-     value: T;
- >value : T
-@@= skipped -19, +20 lines =@@
- }
- export declare function box<T>(value: T): Box<T>;
- >box : <T>(value: T) => Box<T>
-+>T : T
- >value : T
- 

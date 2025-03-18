@@ -17,11 +17,9 @@ declare enum E2 { ONE, TWO, THREE }
 
 type Bins1 = { [k in E1]?: string; }
 >Bins1 : Bins1
->k : k
 
 type Bins2 = { [k in E2]?: string; }
 >Bins2 : Bins2
->k : k
 
 const b1: Bins1 = {};
 >b1 : Bins1
@@ -96,7 +94,6 @@ enum N2 { C = val(), D = val() }
 
 type T1 = { [K in N1 | N2]: K };
 >T1 : T1
->K : K
 
 // Enum types with string valued members are always literal enum types and therefore
 // ONE and TWO below are not computed members but rather just numerically valued members

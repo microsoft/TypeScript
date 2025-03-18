@@ -3,28 +3,18 @@
 === contextualTypesNegatedTypeLikeConstraintInGenericMappedType2.ts ===
 type Tags<D extends string, P> = P extends Record<D, infer X> ? X : never;
 >Tags : Tags<D, P>
->D : D
->P : P
->X : X
 
 declare const typeTags: <I>() => <
 >typeTags : <I>() => <P extends { readonly [Tag in Tags<"_tag", I> & string]: (_: Extract<I, { readonly _tag: Tag; }>) => any } & { readonly [Tag in Exclude<keyof P, Tags<"_tag", I>>]: never }>(fields: P) => unknown
->I : I
 
   P extends {
->P : P
-
     readonly [Tag in Tags<"_tag", I> & string]: (
->Tag : Tag
-
       _: Extract<I, { readonly _tag: Tag }>,
 >_ : Extract<I, { readonly _tag: Tag; }>
 >_tag : Tag
 
     ) => any;
   } & { readonly [Tag in Exclude<keyof P, Tags<"_tag", I>>]: never },
->Tag : Tag
-
 >(
   fields: P,
 >fields : P

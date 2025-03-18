@@ -18,5 +18,6 @@ class B extends A {
 }
 const b: typeof A = B;
 >b : typeof A
+>A : typeof A
 >B : typeof B
 

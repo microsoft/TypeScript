@@ -1,9 +1,0 @@
---- old.interfaceExtendingOptionalChain.types
-+++ new.interfaceExtendingOptionalChain.types
-@@= skipped -8, +8 lines =@@
- }
- 
- interface C1 extends Foo?.Bar {}
-+>C1 : C1
- >Foo : typeof Foo
- 

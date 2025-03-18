@@ -11,37 +11,3 @@
  === duplicateNumericIndexers.ts ===
  // it is an error to have duplicate index signatures of the same kind in a type
  
- interface Number {
-+>Number : Number
-+
-     [x: number]: string;
- >x : number
- 
-@@= skipped -16, +13 lines =@@
- }
- 
- interface String {
-+>String : String
-+
-     [x: number]: string;
- >x : number
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface Array<T> {
-+>Array : T[]
-+>T : T
-+
-     [x: number]: T;
- >x : number
- 
-@@= skipped -18, +21 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     [x: number]: string;
- >x : number
- 

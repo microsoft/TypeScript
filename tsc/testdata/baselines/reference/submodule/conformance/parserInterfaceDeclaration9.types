@@ -2,8 +2,6 @@
 
 === parserInterfaceDeclaration9.ts ===
 interface I1 {
->I1 : I1
-
     get foo(): number,
 >foo : number
 
@@ -13,8 +11,6 @@ interface I1 {
 }
 
 interface I2 {
->I2 : I2
-
     get foo(): number;
 >foo : number
 
@@ -24,8 +20,6 @@ interface I2 {
 }
 
 interface I3 {
->I3 : I3
-
     get foo(): number
 >foo : number
 

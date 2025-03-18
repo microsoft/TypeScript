@@ -2,15 +2,11 @@
 
 === optionalParamAssignmentCompat.ts ===
 interface I1 {
->I1 : I1
-
     (p1: number, p2: string): void;
 >p1 : number
 >p2 : string
 }
 interface I2 {
->I2 : I2
-
     p1: I1;
 >p1 : I1
 

@@ -45,8 +45,6 @@ type L15 = T15["length"];  // number
 
 declare function assign<T, S extends T>(): void;
 >assign : <T, S extends T>() => void
->T : T
->S : S
 
 assign<number[], [...number[]]>();
 >assign<number[], [...number[]]>() : void
@@ -169,8 +167,6 @@ let ex = t[x];  // number | string | boolean
 
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->T : T
->U : U
 >x : [T, ...U[]]
 
 f0([]);  // Error

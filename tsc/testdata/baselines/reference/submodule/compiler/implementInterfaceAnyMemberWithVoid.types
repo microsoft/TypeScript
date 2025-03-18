@@ -2,8 +2,6 @@
 
 === implementInterfaceAnyMemberWithVoid.ts ===
 interface I {
->I : I
-
     foo(value: number);
 >foo : (value: number) => any
 >value : number

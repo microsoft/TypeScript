@@ -70,11 +70,10 @@
  function f13<T extends Action>({ kind, payload }: T) {
 ->f13 : <T extends Action>({ kind, payload }: T) => void
 +>f13 : <T extends Action>(__0: T) => void
-+>T : T
  >kind : "A" | "B"
  >payload : string | number
  
-@@= skipped -11, +12 lines =@@
+@@= skipped -11, +11 lines =@@
  
          payload.toFixed();
  >payload.toFixed() : string
@@ -86,15 +85,7 @@
      }
      if (kind === 'B') {
  >kind === 'B' : boolean
-@@= skipped -19, +19 lines =@@
- 
- function f14<T extends Action>(t: T) {
- >f14 : <T extends Action>(t: T) => void
-+>T : T
- >t : T
- 
-     const { kind, payload } = t;
-@@= skipped -14, +15 lines =@@
+@@= skipped -33, +33 lines =@@
  
          payload.toFixed();
  >payload.toFixed() : string
@@ -202,43 +193,16 @@
      }
      if (kind === 'B') {
  >kind === 'B' : boolean
-@@= skipped -20, +20 lines =@@
- // Repro from #35283
- 
- interface A<T> { variant: 'a', value: T }
-+>A : A<T>
-+>T : T
- >variant : "a"
- >value : T
- 
- interface B<T> { variant: 'b', value: Array<T> }
-+>B : B<T>
-+>T : T
- >variant : "b"
- >value : T[]
- 
- type AB<T> = A<T> | B<T>;
- >AB : AB<T>
-+>T : T
- 
- declare function printValue<T>(t: T): void;
- >printValue : <T>(t: T) => void
-+>T : T
+@@= skipped -35, +35 lines =@@
  >t : T
  
  declare function printValueList<T>(t: Array<T>): void;
 ->printValueList : <T>(t: Array<T>) => void
 +>printValueList : <T>(t: T[]) => void
-+>T : T
  >t : T[]
  
  function unrefined1<T>(ab: AB<T>): void {
- >unrefined1 : <T>(ab: AB<T>) => void
-+>T : T
- >ab : AB<T>
- 
-     const { variant, value } = ab;
-@@= skipped -34, +42 lines =@@
+@@= skipped -19, +19 lines =@@
  
          printValue<T>(value);
  >printValue<T>(value) : void
@@ -456,15 +420,7 @@
  >'num' : "num"
  
        cb(123)
-@@= skipped -30, +30 lines =@@
- 
- type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
- >Func : Func
-+>T : T
- >args : T
- 
- const f60: Func = (kind, payload) => {
-@@= skipped -15, +16 lines =@@
+@@= skipped -45, +45 lines =@@
  
          payload.toFixed();  // error
  >payload.toFixed() : string
@@ -515,24 +471,7 @@
  >true : true
  >false : false
  >(guard, value) => {    if (guard) {        for (;;) {            value;  // number        }    }    else {        while (!!true) {            value;  // string        }    }} : (guard: boolean, value: string | number) => void
-@@= skipped -31, +31 lines =@@
- // Repro from #52152
- 
- interface ClientEvents {
-+>ClientEvents : ClientEvents
-+
-     warn: [message: string];
- >warn : [message: string]
- 
-@@= skipped -12, +14 lines =@@
- 
-     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
- >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
-+>K : K
- >event : K
- >listener : (...args: ClientEvents[K]) => void
- >args : ClientEvents[K]
-@@= skipped -61, +62 lines =@@
+@@= skipped -104, +104 lines =@@
  // Destructuring tuple types with different arities
  
  function fz1([x, y]: [1, 2] | [3, 4] | [5]) {

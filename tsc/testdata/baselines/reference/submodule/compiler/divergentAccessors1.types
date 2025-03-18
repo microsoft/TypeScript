@@ -5,8 +5,6 @@
 
 {
     interface IHasGetSet {
->IHasGetSet : IHasGetSet
-
         get foo(): number;
 >foo : number
 

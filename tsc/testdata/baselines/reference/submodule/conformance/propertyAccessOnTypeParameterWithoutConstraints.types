@@ -3,7 +3,6 @@
 === propertyAccessOnTypeParameterWithoutConstraints.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     f() {
 >f : () => string
@@ -38,9 +37,6 @@ var r = (new C<number>()).f();
 >f : () => string
 
 interface I<T> {
->I : I<T>
->T : T
-
     foo: T;
 >foo : T
 }
@@ -69,7 +65,6 @@ var a: {
 >a : <T>() => T
 
     <T>(): T;
->T : T
 }
 var r3: string = a().toString();
 >r3 : string
@@ -94,7 +89,6 @@ var b = {
     foo: <T>(x: T) => {
 >foo : <T>(x: T) => string
 ><T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    } : <T>(x: T) => string
->T : T
 >x : T
 
         var a = x['toString'](); // should be string

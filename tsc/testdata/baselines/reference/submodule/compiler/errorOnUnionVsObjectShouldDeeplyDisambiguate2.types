@@ -2,8 +2,6 @@
 
 === errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts ===
 interface Stuff {
->Stuff : Stuff
-
   a?: () => Promise<number[]>;
 >a : () => Promise<number[]>
 

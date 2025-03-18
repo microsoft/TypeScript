@@ -9,23 +9,18 @@
  
      [placeType in PlaceType]: void;
  >[placeType in PlaceType] : void
-@@= skipped -13, +13 lines =@@
- >After : After
+@@= skipped -14, +14 lines =@@
  
      [placeType in PlaceType]: void;
-+>placeType : placeType
-+
      model: 'hour' | 'day'
 ->model : "hour" | "day"
 +>model : "day" | "hour"
  }
  
  type AfterQuestion = {
- >AfterQuestion : AfterQuestion
+@@= skipped -8, +8 lines =@@
  
      [placeType in PlaceType]?: void;
-+>placeType : placeType
-+
      model: 'hour' | 'day';
 ->model : "hour" | "day"
 +>model : "day" | "hour"
@@ -34,20 +29,15 @@
  >AfterMethod : AfterMethod
  
      [placeType in PlaceType]?: void;
-+>placeType : placeType
-+
      model(duration: number): 'hour' | 'day';
 ->model : (duration: number) => "hour" | "day"
 +>model : (duration: number) => "day" | "hour"
  >duration : number
  }
  
-@@= skipped -24, +30 lines =@@
- >AfterImplicit : AfterImplicit
+@@= skipped -16, +16 lines =@@
  
      [placeType in PlaceType]
-+>placeType : placeType
-+
      model: 'hour' | 'day';
 ->model : "hour" | "day"
 +>model : "day" | "hour"
@@ -56,16 +46,9 @@
  >AfterImplicitQ : AfterImplicitQ
  
      [placeType in PlaceType]?
-+>placeType : placeType
-+
      model: 'hour' | 'day'
 ->model : "hour" | "day"
 +>model : "day" | "hour"
  }
  
  interface I {
-+>I : I
-+
-     [P in PlaceType]: any
- >[P in PlaceType] : any
- >P in PlaceType : boolean

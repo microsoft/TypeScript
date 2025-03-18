@@ -21,8 +21,6 @@ class C {
 }
 
 interface I {
->I : I
-
     1;
 >1 : any
 

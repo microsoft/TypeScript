@@ -7,7 +7,6 @@ declare function takeArray(arr: Array<unknown>): void;
 
 function fn<T extends Array<unknown> | undefined>(arg: T) {
 >fn : <T extends unknown[] | undefined>(arg: T) => void
->T : T
 >arg : T
 
     if (typeof arg !== "undefined") {

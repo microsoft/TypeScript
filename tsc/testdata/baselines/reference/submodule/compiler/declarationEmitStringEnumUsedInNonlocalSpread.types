@@ -14,8 +14,6 @@ export const enum TestEnum {
 }
 
 export interface ITest {
->ITest : ITest
-
     [TestEnum.Test1]: string;
 >[TestEnum.Test1] : string
 >TestEnum.Test1 : TestEnum.Test1

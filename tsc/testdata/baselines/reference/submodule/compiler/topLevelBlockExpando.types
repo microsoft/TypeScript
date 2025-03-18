@@ -3,8 +3,6 @@
 === check.ts ===
 // https://github.com/microsoft/TypeScript/issues/31972
 interface Person {
->Person : Person
-
   first: string;
 >first : string
 

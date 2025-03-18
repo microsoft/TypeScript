@@ -5,7 +5,6 @@
 
 class Bar<T> {
 >Bar : Bar<T>
->T : T
 
     num!: number;
 >num : number

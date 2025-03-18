@@ -2,8 +2,6 @@
 
 === staticFieldWithInterfaceContext.ts ===
 interface I {
->I : I
-
     x: { a: "a" };
 >x : { a: "a"; }
 >a : "a"

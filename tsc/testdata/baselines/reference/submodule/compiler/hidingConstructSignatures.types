@@ -2,29 +2,21 @@
 
 === hidingConstructSignatures.ts ===
 interface C {
->C : C
-
     (a: string): string;
 >a : string
 }
 
 interface D extends C {
->D : D
-
     new (a: string): number; // Should be ok
 >a : string
 }
 
 interface E {
->E : E
-
     new (a: string): {};
 >a : string
 }
 
 interface F extends E {
->F : F
-
     new (a: string): string;
 >a : string
 }

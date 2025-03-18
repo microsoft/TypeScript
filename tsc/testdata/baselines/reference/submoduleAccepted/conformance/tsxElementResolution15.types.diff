@@ -1,30 +1,6 @@
 --- old.tsxElementResolution15.types
 +++ new.tsxElementResolution15.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface ElementAttributesProperty { pr1: any; pr2: any; }
-+>ElementAttributesProperty : ElementAttributesProperty
- >pr1 : any
- >pr2 : any
- 
- 	interface IntrinsicElements { }
-+>IntrinsicElements : IntrinsicElements
- }
- 
- interface Obj1type {
-+>Obj1type : Obj1type
-+
- 	new(n: string): {};
- >n : string
- }
-@@= skipped -16, +24 lines =@@
+@@= skipped -17, +17 lines =@@
  >Obj1 : Obj1type
  
  <Obj1 x={10} />; // Error

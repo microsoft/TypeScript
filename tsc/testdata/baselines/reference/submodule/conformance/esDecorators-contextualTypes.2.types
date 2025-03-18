@@ -36,9 +36,6 @@ export { C };
 
 function boundMethodLogger<This, Args extends any[], Return>(source: string, bound = true) {
 >boundMethodLogger : <This, Args extends any[], Return>(source: string, bound?: boolean) => (target: (...args: Args) => Return, context: ClassMethodDecoratorContext<This, (...args: Args) => Return>) => (...args: Args) => Return
->This : This
->Args : Args
->Return : Return
 >source : string
 >bound : boolean
 >true : true

@@ -13,8 +13,6 @@ class C {
 >y : any
 }
 interface I {
->I : I
-
     [Symbol.iterator]?: { x };
 >[Symbol.iterator] : { x: any; }
 >Symbol.iterator : unique symbol

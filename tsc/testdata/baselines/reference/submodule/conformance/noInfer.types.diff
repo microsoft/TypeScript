@@ -17,38 +17,32 @@
  type T20<T> = NoInfer<NoInfer<T>>;
 ->T20 : NoInfer<T>
 +>T20 : T
-+>T : T
  
  type T21<T> = NoInfer<NoInfer<T> & string>;
 ->T21 : NoInfer<T> & string
 +>T21 : T & string
-+>T : T
  
  type T22<T> = NoInfer<NoInfer<T> & string[]>;
 ->T22 : NoInfer<NoInfer<T> & string[]>
 +>T22 : T & string[]
-+>T : T
  
  // keyof NoInfer<T> is transformed into NoInfer<keyof T>
  
-@@= skipped -25, +28 lines =@@
+@@= skipped -25, +25 lines =@@
  >b : string
  
  type T31<T> = keyof NoInfer<T>;
 ->T31 : NoInfer<keyof T>
 +>T31 : keyof T
-+>T : T
  
  type T32 = { [K in keyof NoInfer<{ a: string, b: string }>]: K };
  >T32 : T32
-+>K : K
- >a : string
+@@= skipped -8, +8 lines =@@
  >b : string
  
  declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
 ->foo1 : <T extends string>(a: T, b: NoInfer<T>) => void
 +>foo1 : <T extends string>(a: T, b: T) => void
-+>T : T
  >a : T
 ->b : NoInfer<T>
 +>b : T
@@ -56,7 +50,6 @@
  declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
 ->foo2 : <T extends string>(a: T, b: NoInfer<T>[]) => void
 +>foo2 : <T extends string>(a: T, b: T[]) => void
-+>T : T
  >a : T
 ->b : NoInfer<T>[]
 +>b : T[]
@@ -64,7 +57,6 @@
  declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
 ->foo3 : <T extends string>(a: T, b: NoInfer<T[]>) => void
 +>foo3 : <T extends string>(a: T, b: T[]) => void
-+>T : T
  >a : T
 ->b : NoInfer<T[]>
 +>b : T[]
@@ -72,7 +64,6 @@
  declare function foo4<T extends string>(a: T, b: { x: NoInfer<T> }): void
 ->foo4 : <T extends string>(a: T, b: { x: NoInfer<T>; }) => void
 +>foo4 : <T extends string>(a: T, b: { x: T; }) => void
-+>T : T
  >a : T
 ->b : { x: NoInfer<T>; }
 ->x : NoInfer<T>
@@ -82,7 +73,6 @@
  declare function foo5<T extends string>(a: T, b: NoInfer<{ x: T }>): void
 ->foo5 : <T extends string>(a: T, b: NoInfer<{ x: T; }>) => void
 +>foo5 : <T extends string>(a: T, b: { x: T; }) => void
-+>T : T
  >a : T
 ->b : NoInfer<{ x: T; }>
 +>b : { x: T; }
@@ -125,7 +115,7 @@
  >'foo' : "foo"
  >{ x: 'bar' } : { x: "bar"; }
  >x : "bar"
-@@= skipped -70, +77 lines =@@
+@@= skipped -62, +62 lines =@@
  
  foo5('foo', { x: 'bar' }) // error
  >foo5('foo', { x: 'bar' }) : void
@@ -140,7 +130,6 @@
  declare function doSomething<T>(value: T, getDefault: () => NoInfer<T>): void;
 ->doSomething : <T>(value: T, getDefault: () => NoInfer<T>) => void
 +>doSomething : <T>(value: T, getDefault: () => T) => void
-+>T : T
  >value : T
 ->getDefault : () => NoInfer<T>
 +>getDefault : () => T
@@ -152,7 +141,7 @@
  >new Animal() : Animal
  >Animal : typeof Animal
  >() => new Animal() : () => Animal
-@@= skipped -15, +16 lines =@@
+@@= skipped -15, +15 lines =@@
  
  doSomething(new Animal(), () => new Dog()); // ok
  >doSomething(new Animal(), () => new Dog()) : void
@@ -176,7 +165,6 @@
  declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
 ->assertEqual : <T>(actual: T, expected: NoInfer<T>) => boolean
 +>assertEqual : <T>(actual: T, expected: T) => boolean
-+>T : T
  >actual : T
 ->expected : NoInfer<T>
 +>expected : T
@@ -188,7 +176,7 @@
  >{ x: 1 } : { x: number; }
  >x : number
  >1 : 1
-@@= skipped -24, +25 lines =@@
+@@= skipped -24, +24 lines =@@
  
  assertEqual(g, { x: 3 }); // error
  >assertEqual(g, { x: 3 }) : boolean
@@ -202,8 +190,6 @@
  declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
 ->invoke : <T, R>(func: (value: T) => R, value: NoInfer<T>) => R
 +>invoke : <T, R>(func: (value: T) => R, value: T) => R
-+>T : T
-+>R : R
  >func : (value: T) => R
  >value : T
 ->value : NoInfer<T>
@@ -211,7 +197,7 @@
  
  declare function test(value: { x: number; }): number;
  >test : (value: { x: number; }) => number
-@@= skipped -19, +21 lines =@@
+@@= skipped -19, +19 lines =@@
  
  invoke(test, { x: 1, y: 2 }); // error
  >invoke(test, { x: 1, y: 2 }) : number
@@ -220,24 +206,19 @@
  >test : (value: { x: number; }) => number
  >{ x: 1, y: 2 } : { x: number; y: number; }
  >x : number
-@@= skipped -19, +19 lines =@@
- 
- type Component<Props> = { props: Props; };
- >Component : Component<Props>
-+>Props : Props
+@@= skipped -22, +22 lines =@@
  >props : Props
  
  declare function doWork<Props>(Component: Component<Props>, props: NoInfer<Props>): void;
 ->doWork : <Props>(Component: Component<Props>, props: NoInfer<Props>) => void
 +>doWork : <Props>(Component: Component<Props>, props: Props) => void
-+>Props : Props
  >Component : Component<Props>
 ->props : NoInfer<Props>
 +>props : Props
  
  declare const comp: Component<{ foo: number }>;
  >comp : Component<{ foo: number; }>
-@@= skipped -13, +15 lines =@@
+@@= skipped -10, +10 lines =@@
  
  doWork(comp, { foo: 42 }); // ok
  >doWork(comp, { foo: 42 }) : void
@@ -260,7 +241,6 @@
 ->callback : (a: NoInfer<T>, b: number) => T
 ->a : NoInfer<T>
 +>mutate : <T>(callback: (a: T, b: number) => T) => T
-+>T : T
 +>callback : (a: T, b: number) => T
 +>a : T
  >b : number
@@ -273,15 +253,7 @@
  >(a, b) => b : (a: unknown, b: number) => number
  >a : unknown
  >b : number
-@@= skipped -21, +22 lines =@@
- 
- declare class ExampleClass<T> {}
- >ExampleClass : ExampleClass<T>
-+>T : T
- 
- class OkClass<T> {
- >OkClass : OkClass<T>
-+>T : T
+@@= skipped -27, +27 lines =@@
  
      constructor(private clazz: ExampleClass<T>, private _value: NoInfer<T>) {}
  >clazz : ExampleClass<T>
@@ -290,11 +262,7 @@
  
      get value(): T {
  >value : T
-@@= skipped -19, +21 lines =@@
- }
- class OkClass2<T> {
- >OkClass2 : OkClass2<T>
-+>T : T
+@@= skipped -16, +16 lines =@@
  
      constructor(private clazz: ExampleClass<T>, public _value: NoInfer<T>) {}
  >clazz : ExampleClass<T>

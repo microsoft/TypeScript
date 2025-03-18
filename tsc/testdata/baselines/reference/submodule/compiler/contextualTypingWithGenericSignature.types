@@ -7,8 +7,6 @@ var f2: {
 >f2 : <T, U>(x: T, y: U) => T
 
     <T, U>(x: T, y: U): T
->T : T
->U : U
 >x : T
 >y : U
 

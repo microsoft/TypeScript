@@ -2,7 +2,6 @@
 
 === node_modules/pkg/index.d.ts ===
 interface GlobalThing { a: number }
->GlobalThing : GlobalThing
 >a : number
 
 === usage.ts ===

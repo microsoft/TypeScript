@@ -493,8 +493,6 @@ let spreadNonPrimitive = { ...<object>{}};
 
 function f<T, U>(t: T, u: U) {
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
->T : T
->U : U
 >t : T
 >u : U
 
@@ -584,8 +582,6 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 
 function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
 >genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
->T : T
->U : U
 >t : T
 >u : U
 >v : T | U

@@ -66,10 +66,3 @@
  >bIndex : "key"
  >x : number
  }
- 
- interface Foo {
-+>Foo : Foo
-+
-     x: number | undefined;
- >x : number | undefined
- }

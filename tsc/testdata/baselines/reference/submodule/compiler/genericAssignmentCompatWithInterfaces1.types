@@ -2,30 +2,20 @@
 
 === genericAssignmentCompatWithInterfaces1.ts ===
 interface Comparable<T> {
->Comparable : Comparable<T>
->T : T
-
    compareTo(other: T): number;
 >compareTo : (other: T) => number
 >other : T
 }
 interface I<T> {
->I : I<T>
->T : T
-
     x: Comparable<T>;
 >x : Comparable<T>
 }
 interface K<T> {
->K : K<T>
->T : T
-
    x: A<T>;
 >x : A<T>
 }
 class A<T> implements Comparable<T> { compareTo(other: T) { return 1; } }
 >A : A<T>
->T : T
 >compareTo : (other: T) => number
 >other : T
 >1 : 1

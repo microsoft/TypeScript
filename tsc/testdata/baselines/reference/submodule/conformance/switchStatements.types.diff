@@ -14,35 +14,3 @@
  >M : typeof M
  
      case M.fn(1):
-@@= skipped -16, +16 lines =@@
- 
-     case <T>(x: number) => '':
- ><T>(x: number) => '' : <T>(x: number) => string
-+>T : T
- >x : number
- >'' : ""
- 
-@@= skipped -7, +8 lines =@@
- >(<T>(x: number) => '')(2) : string
- >(<T>(x: number) => '') : <T>(x: number) => string
- ><T>(x: number) => '' : <T>(x: number) => string
-+>T : T
- >x : number
- >'' : ""
- >2 : 2
-@@= skipped -79, +80 lines =@@
- 
- switch (<T>(x: number) => '') { }
- ><T>(x: number) => '' : <T>(x: number) => string
-+>T : T
- >x : number
- >'' : ""
- 
-@@= skipped -7, +8 lines =@@
- >(<T>(x: T) => '')(1) : string
- >(<T>(x: T) => '') : <T>(x: T) => string
- ><T>(x: T) => '' : <T>(x: T) => string
-+>T : T
- >x : T
- >'' : ""
- >1 : 1

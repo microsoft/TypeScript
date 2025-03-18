@@ -12,7 +12,6 @@ declare const sn: string | number;
 
 declare function f1<T>(x: T, y: string | T): T;
 >f1 : <T>(x: T, y: string | T) => T
->T : T
 >x : T
 >y : string | T
 
@@ -67,7 +66,6 @@ const a7 = f1("hello", 1);  // Error
 
 declare function f2<T>(value: [string, T]): T;
 >f2 : <T>(value: [string, T]) => T
->T : T
 >value : [string, T]
 
 var b1 = f2(["string", true]);  // boolean
@@ -80,7 +78,6 @@ var b1 = f2(["string", true]);  // boolean
 
 declare function f3<T>(x: string | false | T): T;
 >f3 : <T>(x: string | false | T) => T
->T : T
 >x : string | false | T
 >false : false
 
@@ -116,7 +113,6 @@ const c5 = f3("abc");  // never
 
 declare function f4<T>(x: string & T): T;
 >f4 : <T>(x: string & T) => T
->T : T
 >x : string & T
 
 const d1 = f4("abc");
@@ -138,23 +134,15 @@ const d3 = f4(42);  // Error
 >42 : 42
 
 export interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;
 >then : <U>(f: (x: T) => U | Foo<U>, g: U) => Foo<U>
->U : U
 >f : (x: T) => U | Foo<U>
 >x : T
 >g : U
 }
 export interface Bar<T> {
->Bar : Bar<T>
->T : T
-
     then<S>(f: (x: T) => S | Bar<S>, g: S): Bar<S>;
 >then : <S>(f: (x: T) => S | Bar<S>, g: S) => Bar<S>
->S : S
 >f : (x: T) => S | Bar<S>
 >x : T
 >g : S
@@ -175,7 +163,6 @@ function qux(p1: Foo<void>, p2: Bar<void>) {
 
 declare function foo<T>(x: T | Promise<T>): void;
 >foo : <T>(x: T | Promise<T>) => void
->T : T
 >x : T | Promise<T>
 
 declare let x: false | Promise<true>;
@@ -190,7 +177,6 @@ foo(x);
 
 declare function bar<T>(x: T, y: string | T): T;
 >bar : <T>(x: T, y: string | T) => T
->T : T
 >x : T
 >y : string | T
 
@@ -210,7 +196,6 @@ const containsPromises: unique symbol = Symbol();
 
 type DeepPromised<T> =
 >DeepPromised : DeepPromised<T>
->T : T
 
     { [containsPromises]?: true } &
 >[containsPromises] : true | undefined
@@ -218,11 +203,9 @@ type DeepPromised<T> =
 >true : true
 
     { [TKey in keyof T]: T[TKey] | DeepPromised<T[TKey]> | Promise<DeepPromised<T[TKey]>> };
->TKey : TKey
 
 async function fun<T>(deepPromised: DeepPromised<T>) {
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
->T : T
 >deepPromised : DeepPromised<T>
 
     const deepPromisedWithIndexer: DeepPromised<{ [name: string]: {} | null | undefined }> = deepPromised;
@@ -258,12 +241,9 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 
 type Deep<T> = { [K in keyof T]: T[K] | Deep<T[K]> };
 >Deep : Deep<T>
->T : T
->K : K
 
 declare function baz<T>(dp: Deep<T>): T;
 >baz : <T>(dp: Deep<T>) => T
->T : T
 >dp : Deep<T>
 
 declare let xx: { a: string | undefined };

@@ -5,13 +5,11 @@
 
 function foo<T>(x: T): T { return x }
 >foo : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 
 class Bar<T> { constructor(public x: T) { } }
 >Bar : Bar<T>
->T : T
 >x : T
 
 // Errors expected on all of the following
@@ -53,18 +51,22 @@ const ComeOnFoo = foo<?string?>;
 
 type TWhatFoo = typeof foo<?>;
 >TWhatFoo : (x: any) => any
+>foo : <T>(x: T) => T
 
 type THuhFoo = typeof foo<string?>;
 >THuhFoo : (x: string) => string
+>foo : <T>(x: T) => T
 >> : boolean
 > : any
 > : any
 
 type TNopeFoo = typeof foo<?string>;
 >TNopeFoo : (x: any) => any
+>foo : <T>(x: T) => T
 
 type TComeOnFoo = typeof foo<?string?>;
 >TComeOnFoo : (x: any) => any
+>foo : <T>(x: T) => T
 >> : boolean
 > : any
 > : any
@@ -106,18 +108,22 @@ const ComeOnBar = Bar<?string?>;
 
 type TWhatBar = typeof Bar<?>;
 >TWhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>Bar : typeof Bar
 
 type THuhBar = typeof Bar<string?>;
 >THuhBar : { new (x: string): Bar<string>; prototype: Bar<any>; }
+>Bar : typeof Bar
 >> : boolean
 > : any
 > : any
 
 type TNopeBar = typeof Bar<?string>;
 >TNopeBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>Bar : typeof Bar
 
 type TComeOnBar = typeof Bar<?string?>;
 >TComeOnBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
+>Bar : typeof Bar
 >> : boolean
 > : any
 > : any

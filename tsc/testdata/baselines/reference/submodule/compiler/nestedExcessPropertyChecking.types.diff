@@ -27,23 +27,7 @@
  
      overrides?: OverridesInput;
  >overrides : OverridesInput | undefined
-@@= skipped -20, +20 lines =@@
- 
- 
- interface Unrelated { _?: any }
-+>Unrelated : Unrelated
- >_ : any
- 
- interface VariablesA { overrides?: OverridesInput; }
-+>VariablesA : VariablesA
- >overrides : OverridesInput | undefined
- 
- interface VariablesB { overrides?: OverridesInput; }
-+>VariablesB : VariablesB
- >overrides : OverridesInput | undefined
- 
- const foo2: Unrelated & { variables: VariablesA & VariablesB } = {
-@@= skipped -29, +32 lines =@@
+@@= skipped -49, +49 lines =@@
  >T1 : T1
  
      primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },

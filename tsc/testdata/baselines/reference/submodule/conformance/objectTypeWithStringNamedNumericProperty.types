@@ -144,8 +144,6 @@ var r13 = i[-01]
 >01 : 1
 
 interface I {
->I : I
-
     "0.1": void;
 >"0.1" : void
 

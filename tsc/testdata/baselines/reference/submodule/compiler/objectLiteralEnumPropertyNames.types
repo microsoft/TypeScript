@@ -15,7 +15,6 @@ enum Strs {
 }
 type TestStrs = { [key in Strs]: string }
 >TestStrs : TestStrs
->key : key
 
 const x: TestStrs = {
 >x : TestStrs

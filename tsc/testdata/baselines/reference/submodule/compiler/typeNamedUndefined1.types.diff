@@ -1,14 +1,6 @@
 --- old.typeNamedUndefined1.types
 +++ new.typeNamedUndefined1.types
-@@= skipped -10, +10 lines =@@
- 
-     export type undefined = typeof s;
- >undefined : unique symbol
-->s : unique symbol
- 
-     export function x(p: undefined): undefined { // global undefined
- >x : (p: undefined) => undefined
-@@= skipped -12, +11 lines =@@
+@@= skipped -22, +22 lines =@@
  }
  
  export function x(p: ns.undefined) { // undefined from the namespace

@@ -3,15 +3,11 @@
 === multipleInferenceContexts.ts ===
 type ConstructorOptions<Data> =
 >ConstructorOptions : ConstructorOptions<Data>
->Data : Data
 
     & ComponentOptionsProperties<Data>
     & ThisType<Instance<Data>>;
 
 interface ComponentOptionsProperties<Data> {
->ComponentOptionsProperties : ComponentOptionsProperties<Data>
->Data : Data
-
     data: Data;
 >data : Data
 
@@ -20,12 +16,8 @@ interface ComponentOptionsProperties<Data> {
 }
 
 interface Instance<Data> {
->Instance : Instance<Data>
->Data : Data
-
     get<K extends keyof Data>(name: K): unknown;
 >get : <K extends keyof Data>(name: K) => unknown
->K : K
 >name : K
 }
 
@@ -33,7 +25,6 @@ declare var Moon: {
 >Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
 
     <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
->Data : Data
 >options : ConstructorOptions<Data> | undefined
 
 };

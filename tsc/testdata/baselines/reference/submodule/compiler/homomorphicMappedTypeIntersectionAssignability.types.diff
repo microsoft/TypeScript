@@ -6,7 +6,6 @@
  function f<TType>(
 ->f : <TType>(a: { weak?: string; } & Readonly<TType> & { name: "ok"; }, b: Readonly<TType & { name: string; }>, c: Readonly<TType> & { name: string; }) => void
 +>f : <TType>(a: { weak?: string | undefined; } & Readonly<TType> & { name: "ok"; }, b: Readonly<TType & { name: string; }>, c: Readonly<TType> & { name: string; }) => void
-+>TType : TType
  
      a: { weak?: string } & Readonly<TType> & { name: "ok" },
 ->a : { weak?: string; } & Readonly<TType> & { name: "ok"; }
@@ -14,7 +13,7 @@
  >weak : string | undefined
  >name : "ok"
  
-@@= skipped -16, +17 lines =@@
+@@= skipped -16, +16 lines =@@
  >name : string
  
      c = a; // Works

@@ -1,64 +1,7 @@
 --- old.templateLiteralTypes3.types
 +++ new.templateLiteralTypes3.types
-@@= skipped -4, +4 lines =@@
- 
- type Foo1<T> = T extends `*${infer U}*` ? U : never;
- >Foo1 : Foo1<T>
-+>T : T
-+>U : U
- 
- type T01 = Foo1<'hello'>;
- >T01 : never
-@@= skipped -36, +38 lines =@@
- 
- declare function foo1<V extends string>(arg: `*${V}*`): V;
- >foo1 : <V extends string>(arg: `*${V}*`) => V
-+>V : V
- >arg : `*${V}*`
- 
- function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
- >f1 : <T extends string>(s: string, n: number, b: boolean, t: T) => void
-+>T : T
- >s : string
- >n : number
- >b : boolean
-@@= skipped -73, +75 lines =@@
- 
- type Parts<T> =
- >Parts : Parts<T>
-+>T : T
- 
-     T extends '' ? [] :
-     T extends `${infer Head}${infer Tail}` ? [Head, ...Parts<Tail>] :
-+>Head : Head
-+>Tail : Tail
-+
-     never;
- 
- type T20 = Parts<`abc`>;
-@@= skipped -73, +77 lines =@@
- 
- function f3<T extends string>(s: string, n: number, b: boolean, t: T) {
- >f3 : <T extends string>(s: string, n: number, b: boolean, t: T) => void
-+>T : T
- >s : string
- >n : number
- >b : boolean
-@@= skipped -61, +62 lines =@@
- 
- function f4<T extends number>(s: string, n: number, b: boolean, t: T) {
- >f4 : <T extends number>(s: string, n: number, b: boolean, t: T) => void
-+>T : T
- >s : string
- >n : number
- >b : boolean
-@@= skipped -56, +57 lines =@@
- 
- type A<T> = T extends `${infer U}.${infer V}` ? U | V : never
+@@= skipped -305, +305 lines =@@
  >A : A<T>
-+>T : T
-+>U : U
-+>V : V
  
  type B = A<`test.1024`>;  // "test" | "1024"
 ->B : "test" | "1024"
@@ -70,18 +13,8 @@
  
  type D<T> = T extends `${infer U}.${number}` ? U : never
  >D : D<T>
-+>T : T
-+>U : U
- 
- type E = D<`test.1024`>;  // "test"
- >E : "test"
-@@= skipped -18, +23 lines =@@
- 
- type G<T> = T extends `${infer U}.${infer V}` ? U | V : never
+@@= skipped -18, +18 lines =@@
  >G : G<T>
-+>T : T
-+>U : U
-+>V : V
  
  type H = G<`test.hoge`>;  // "test" | "hoge"
 ->H : "test" | "hoge"
@@ -89,35 +22,12 @@
  
  type I = G<`test.${string}`>;  // string ("test" | string reduces to string)
  >I : string
- 
- type J<T> = T extends `${infer U}.${string}` ? U : never
- >J : J<T>
-+>T : T
-+>U : U
- 
- type K = J<`test.hoge`>;  // "test"
- >K : "test"
-@@= skipped -53, +58 lines =@@
- 
- type PrefixData<P extends Prefixes> = `${P}:baz`;
- >PrefixData : `${P}:baz`
-+>P : P
- 
- interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
-+>ITest : ITest<P, E>
-+>P : P
-+>E : E
-+
-     blah: string;
- >blah : string
- }
-@@= skipped -15, +20 lines =@@
+@@= skipped -66, +66 lines =@@
  >c : number
  
  declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 ->chain : <F extends keyof Schema>(field: F | `${F}.${F}`) => void
 +>chain : <F extends "a">(field: F | `${F}.${F}`) => void
-+>F : F
  >field : F | `${F}.${F}`
  
  chain("a");
@@ -127,15 +37,7 @@
  >"a" : "a"
  
  // Repro from #46125
-@@= skipped -33, +34 lines =@@
- 
- function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
- >ff2 : <T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) => void
-+>T : T
- >x : `foo-${T}`
- >y : `${T}-bar`
- >z : `baz-${T}`
-@@= skipped -20, +21 lines =@@
+@@= skipped -53, +53 lines =@@
  }
  
  function ff3(x: string, y: `foo-${string}` | 'bar') {
@@ -150,13 +52,11 @@
  declare function noSpread<P extends DotString>(args: P[]): P;
 ->noSpread : <P extends DotString>(args: P[]) => P
 +>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
-+>P : P
  >args : P[]
  
  declare function spread<P extends DotString>(...args: P[]): P;
 ->spread : <P extends DotString>(...args: P[]) => P
 +>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
-+>P : P
  >args : P[]
  
  noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
@@ -166,7 +66,7 @@
  >[`1.${'2'}.3`, `1.${'2'}.4`] : ("1.2.3" | "1.2.4")[]
  >`1.${'2'}.3` : "1.2.3"
  >'2' : "2"
-@@= skipped -18, +20 lines =@@
+@@= skipped -18, +18 lines =@@
  
  noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
  >noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]) : `1.${string}.3` | `1.${string}.4`
@@ -199,11 +99,10 @@
  function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
 ->ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void
 +>ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: `1.${Uppercase<T>}.3`, u2: `1.${Uppercase<T>}.4`) => void
-+>T : T
  >t : T
  >u : Uppercase<T>
  >u1 : `1.${Uppercase<T>}.3`
-@@= skipped -8, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  
      spread(`1.${t}.3`, `1.${t}.4`);
  >spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
@@ -230,11 +129,7 @@
  >u1 : `1.${Uppercase<T>}.3`
  >u2 : `1.${Uppercase<T>}.4`
  }
-@@= skipped -14, +14 lines =@@
- 
- function a<T extends {id: string}>() {
- >a : <T extends { id: string; }>() => void
-+>T : T
+@@= skipped -17, +17 lines =@@
  >id : string
  
      let x: keyof T & string | `-${keyof T & string}`;

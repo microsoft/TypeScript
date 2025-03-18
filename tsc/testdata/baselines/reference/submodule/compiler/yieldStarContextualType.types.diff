@@ -10,9 +10,3 @@
  === yieldStarContextualType.ts ===
  declare const g: <T, U, V>() => Generator<T, U, V>;
  >g : <T, U, V>() => Generator<T, U, V>
-+>T : T
-+>U : U
-+>V : V
- 
- function* f(): Generator<string, void, unknown> {
- >f : () => Generator<string, void, unknown>

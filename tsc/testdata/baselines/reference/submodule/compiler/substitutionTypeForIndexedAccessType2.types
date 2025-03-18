@@ -2,19 +2,15 @@
 
 === substitutionTypeForIndexedAccessType2.ts ===
 interface Foo {
->Foo : Foo
-
   foo: string|undefined
 >foo : string
 }
 
 type Str<T extends string> = T
 >Str : T
->T : T
 
 type Bar<T> = 
 >Bar : Bar<T>
->T : T
 
   T extends Foo
     ? T['foo'] extends string

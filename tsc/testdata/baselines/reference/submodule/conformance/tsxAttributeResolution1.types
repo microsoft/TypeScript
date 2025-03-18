@@ -2,14 +2,8 @@
 
 === file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		test1: Attribs1;
 >test1 : Attribs1
 
@@ -23,8 +17,6 @@ declare module JSX {
 	}
 }
 interface Attribs1 {
->Attribs1 : Attribs1
-
 	x?: number;
 >x : number
 

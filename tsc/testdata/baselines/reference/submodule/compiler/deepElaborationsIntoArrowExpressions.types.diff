@@ -9,12 +9,3 @@
  
      y(): "a"
  >y : () => "a"
-@@= skipped -16, +16 lines =@@
- };
- 
- interface Foo {
-+>Foo : Foo
-+
-     a: number;
- >a : number
- }

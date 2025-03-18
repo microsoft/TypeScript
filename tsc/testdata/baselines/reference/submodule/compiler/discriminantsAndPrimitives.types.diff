@@ -1,24 +1,6 @@
 --- old.discriminantsAndPrimitives.types
 +++ new.discriminantsAndPrimitives.types
-@@= skipped -3, +3 lines =@@
- // Repro from #10257 plus other tests
- 
- interface Foo {
-+>Foo : Foo
-+
-     kind: "foo";
- >kind : "foo"
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface Bar {
-+>Bar : Bar
-+
-     kind: "bar";
- >kind : "bar"
- 
-@@= skipped -8, +10 lines =@@
+@@= skipped -19, +19 lines =@@
  }
  
  function f1(x: Foo | Bar | string) {
@@ -134,32 +116,7 @@
  
              case 'foo':
  >'foo' : "foo"
-@@= skipped -45, +45 lines =@@
- >NodeA : NodeA
- 
- interface NodeBase {
-+>NodeBase : NodeBase
-+
-     type: NodeA["type"]
- >type : EnumTypeNode
- }
- 
- interface Disjunction extends NodeBase {
-+>Disjunction : Disjunction
-+
-     type: EnumTypeNode.Disjunction
- >type : EnumTypeNode.Disjunction
- >EnumTypeNode : any
-@@= skipped -14, +18 lines =@@
- }
- 
- interface Pattern extends NodeBase {
-+>Pattern : Pattern
-+
-     type: EnumTypeNode.Pattern
- >type : EnumTypeNode.Pattern
- >EnumTypeNode : any
-@@= skipped -20, +22 lines =@@
+@@= skipped -79, +79 lines =@@
  
      n.alternatives.slice()
  >n.alternatives.slice() : string[]

@@ -1,16 +1,6 @@
 --- old.internalAliasInterfaceInsideTopLevelModuleWithoutExport.types
 +++ new.internalAliasInterfaceInsideTopLevelModuleWithoutExport.types
-@@= skipped -1, +1 lines =@@
- 
- === internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts ===
- export module a {
-+>a : any
-+
-     export interface I {
-+>I : I
-     }
- }
- 
+@@= skipped -8, +8 lines =@@
  import b = a.I;
  >b : any
  >a : any

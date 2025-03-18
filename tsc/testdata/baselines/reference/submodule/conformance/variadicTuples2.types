@@ -37,9 +37,6 @@ type V18 = [...Array<string>, ...Array<number>];  // Error
 
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
 >Tup3 : [...T, ...U, ...V]
->T : T
->U : U
->V : V
 
 type V20 = Tup3<[number], string[], [number]>;  // [number, ...string[], number]
 >V20 : [number, ...string[], number]
@@ -67,39 +64,30 @@ type V27 = Tup3<[number?], [string], [boolean?]>;  // [number | undefined, strin
 
 type V30<A extends unknown[]> = Tup3<A, string[], number[]>;  // [...A, ...(string | number)[]]
 >V30 : [...A, ...(string | number)[]]
->A : A
 
 type V31<A extends unknown[]> = Tup3<string[], A, number[]>;  // (string | number | A[number])[]
 >V31 : (string | number | A[number])[]
->A : A
 
 type V32<A extends unknown[]> = Tup3<string[], number[], A>;  // [...(string | number)[], ...A]
 >V32 : [...(string | number)[], ...A]
->A : A
 
 type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;  // [...A, string?, ...number[]]
 >V40 : [...A, (string | undefined)?, ...number[]]
->A : A
 
 type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;  // [string?, ...A, ...number[]]
 >V41 : [(string | undefined)?, ...A, ...number[]]
->A : A
 
 type V42<A extends unknown[]> = Tup3<[string?], number[], A>;  // [string?, ...number[], ...A]
 >V42 : [(string | undefined)?, ...number[], ...A]
->A : A
 
 type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;  // [...A, ...(string | number | undefined)[]]
 >V50 : [...A, ...(string | number | undefined)[]]
->A : A
 
 type V51<A extends unknown[]> = Tup3<string[], A, [number?]>;  // (string | number | A[number] | undefined)[]
 >V51 : (string | number | A[number] | undefined)[]
->A : A
 
 type V52<A extends unknown[]> = Tup3<string[], [number?], A>;  // [...(string | number | undefined)[], ...A]
 >V52 : [...(string | number | undefined)[], ...A]
->A : A
 
 // Assignability
 
@@ -298,7 +286,6 @@ ft2(0, 'abc', 'def', true);  // Error
 
 function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) {
 >ft3 : <T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) => void
->T : T
 >x : [number, ...T]
 >y : [number, number]
 >z : [number, ...number[]]
@@ -336,7 +323,6 @@ let tt4: [number, ...number[]] = tt3  // Error
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->T : T
 >args : [...T, (...values: T) => void]
 >values : T
 
@@ -470,8 +456,6 @@ pipe(...sa);  // Error
 
 declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
->T : T
->U : U
 >t : [...unknown[], T, U]
 
 fn1([]);  // Error
@@ -502,8 +486,6 @@ fn1([1, 'abc', true]);  // [string, boolean]
 
 declare function fn2<T, U>(t: [T, ...unknown[], U]): [T, U];
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
->T : T
->U : U
 >t : [T, ...unknown[], U]
 
 fn2([]);  // Error
@@ -536,7 +518,6 @@ fn2([1, 'abc', true]);  // [number, boolean]
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
 >foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
->S : S
 >stringsAndNumber : [...S, number]
 
 const a1 = foo('blah1', 1);

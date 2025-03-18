@@ -1,35 +1,19 @@
 --- old.objectTypesIdentityWithOptionality.types
 +++ new.objectTypesIdentityWithOptionality.types
-@@= skipped -18, +18 lines =@@
- 
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     foo: T;
- >foo : T
- }
- 
- interface I {
-+>I : I
-+
-     foo?: string;
- >foo : string
- }
-@@= skipped -33, +36 lines =@@
+@@= skipped -51, +51 lines =@@
  >x : any
  
  function foo3(x: typeof a);
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }
  >x : { foo?: string; }
-->a : { foo?: string; }
+ >a : { foo?: string; }
  
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }
  >x : { foo?: string; }
-->a : { foo?: string; }
+ >a : { foo?: string; }
  
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -37,7 +21,7 @@
  >x : any
  
  function foo6(x: A);
-@@= skipped -26, +24 lines =@@
+@@= skipped -26, +26 lines =@@
  >x : any
  
  function foo7(x: A);
@@ -49,7 +33,7 @@
 ->foo7 : { (x: A): any; (x: typeof a): any; }
 +>foo7 : { (x: A): any; (x: { foo?: string; }): any; }
  >x : { foo?: string; }
-->a : { foo?: string; }
+ >a : { foo?: string; }
  
  function foo7(x: any) { }
 ->foo7 : { (x: A): any; (x: typeof a): any; }
@@ -57,7 +41,7 @@
  >x : any
  
  function foo8(x: B);
-@@= skipped -25, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  >x : any
  
  function foo10(x: B);
@@ -69,7 +53,7 @@
 ->foo10 : { (x: B): any; (x: typeof a): any; }
 +>foo10 : { (x: B): any; (x: { foo?: string; }): any; }
  >x : { foo?: string; }
-->a : { foo?: string; }
+ >a : { foo?: string; }
  
  function foo10(x: any) { }
 ->foo10 : { (x: B): any; (x: typeof a): any; }
@@ -77,7 +61,7 @@
  >x : any
  
  function foo12(x: I);
-@@= skipped -25, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  >x : any
  
  function foo13(x: I);
@@ -89,7 +73,7 @@
 ->foo13 : { (x: I): any; (x: typeof a): any; }
 +>foo13 : { (x: I): any; (x: { foo?: string; }): any; }
  >x : { foo?: string; }
-->a : { foo?: string; }
+ >a : { foo?: string; }
  
  function foo13(x: any) { }
 ->foo13 : { (x: I): any; (x: typeof a): any; }
@@ -105,7 +89,7 @@
 ->foo14 : { (x: I): any; (x: typeof b): any; }
 +>foo14 : { (x: I): any; (x: { foo: string; }): any; }
  >x : { foo: string; }
-->b : { foo: string; }
+ >b : { foo: string; }
  
  function foo14(x: any) { }
 ->foo14 : { (x: I): any; (x: typeof b): any; }

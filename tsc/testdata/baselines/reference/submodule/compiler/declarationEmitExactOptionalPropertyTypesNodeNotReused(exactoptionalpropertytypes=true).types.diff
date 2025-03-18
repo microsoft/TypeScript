@@ -1,24 +1,6 @@
 --- old.declarationEmitExactOptionalPropertyTypesNodeNotReused(exactoptionalpropertytypes=true).types
 +++ new.declarationEmitExactOptionalPropertyTypesNodeNotReused(exactoptionalpropertytypes=true).types
-@@= skipped -2, +2 lines =@@
- === declarationEmitExactOptionalPropertyTypesNodeNotReused.ts ===
- type InexactOptionals<A> = {
- >InexactOptionals : InexactOptionals<A>
-+>A : A
- 
-     [K in keyof A as undefined extends A[K] ? K : never]?: undefined extends A[K]
-+>K : K
-+
-     ? A[K] | undefined
-     : A[K];
- } & {
-     [K in keyof A as undefined extends A[K] ? never : K]: A[K];
-+>K : K
-+
- };
- 
- type In = {
-@@= skipped -25, +30 lines =@@
+@@= skipped -27, +27 lines =@@
  >Out : Out
  
  const foo = <A = {}>() => (x: Out & A) => null
@@ -27,7 +9,6 @@
 ->(x: Out & A) => null : (x: Out & A) => null
 +>foo : <A>() => (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
 +><A = {}>() => (x: Out & A) => null : <A>() => (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
-+>A : A
 +>(x: Out & A) => null : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
  >x : { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A
  

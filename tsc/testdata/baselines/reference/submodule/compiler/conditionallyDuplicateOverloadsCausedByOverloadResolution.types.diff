@@ -13,13 +13,13 @@
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
  >a : string
-->x : string
+ >x : string
  
      function bar(b: typeof y): void;
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
  >b : string
-->y : string
+ >y : string
  
      function bar() { }
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
@@ -31,7 +31,7 @@
  
  });
  
-@@= skipped -38, +36 lines =@@
+@@= skipped -38, +38 lines =@@
  >out2 : boolean
  >foo2((x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;}) : boolean
  >foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
@@ -46,11 +46,7 @@
  
          (a: typeof x): void;
  >a : string
-->x : string
- 
-         (b: typeof y): void;
- >b : string
-->y : string
+@@= skipped -17, +17 lines =@@
  
      };
      return bar;

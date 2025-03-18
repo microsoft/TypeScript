@@ -3,11 +3,8 @@
 === reverseMappedIntersectionInference2.ts ===
 type Results<T> = {
 >Results : Results<T>
->T : T
 
   [K in keyof T]: {
->K : K
-
     data: T[K];
 >data : T[K]
 
@@ -20,11 +17,8 @@ type Results<T> = {
 
 type Errors<E> = {
 >Errors : Errors<E>
->E : E
 
   [K in keyof E]: {
->K : K
-
     error: E[K];
 >error : E[K]
 
@@ -37,9 +31,7 @@ type Errors<E> = {
 
 declare function withTupleLike<T extends { 0: unknown }, E extends { 0: unknown }>(
 >withTupleLike : <T extends { 0: unknown; }, E extends { 0: unknown; }>(arg: Results<T> & Errors<E>) => [T, E]
->T : T
 >0 : unknown
->E : E
 >0 : unknown
 
   arg: Results<T> & Errors<E>

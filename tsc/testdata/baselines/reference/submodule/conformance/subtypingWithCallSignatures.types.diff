@@ -8,7 +8,7 @@
 +>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
  >cb : (x: number) => void
  >x : number
-->cb : (x: number) => void
+ >cb : (x: number) => void
  
      declare function foo1(cb: any): any;
 ->foo1 : { (cb: (x: number) => void): typeof cb; (cb: any): any; }
@@ -23,14 +23,13 @@
  >(x: number) => 1 : (x: number) => number
  >x : number
  >1 : 1
-@@= skipped -20, +19 lines =@@
+@@= skipped -20, +20 lines =@@
      var r2 = foo1(<T>(x: T) => ''); // ok because base returns void
  >r2 : (x: number) => void
  >foo1(<T>(x: T) => '') : (x: number) => void
 ->foo1 : { (cb: (x: number) => void): typeof cb; (cb: any): any; }
 +>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
  ><T>(x: T) => '' : <T>(x: T) => string
-+>T : T
  >x : T
  >'' : ""
  
@@ -40,7 +39,7 @@
  >cb : (x: number, y: number) => void
  >x : number
  >y : number
-->cb : (x: number, y: number) => void
+ >cb : (x: number, y: number) => void
  
      declare function foo2(cb: any): any;
 ->foo2 : { (cb: (x: number, y: number) => void): typeof cb; (cb: any): any; }
@@ -62,7 +61,5 @@
 ->foo2 : { (cb: (x: number, y: number) => void): typeof cb; (cb: any): any; }
 +>foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
  ><T>(x: T) => '' : <T>(x: T) => string
-+>T : T
  >x : T
  >'' : ""
- }

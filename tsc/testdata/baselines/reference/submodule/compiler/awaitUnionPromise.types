@@ -7,9 +7,6 @@ class AsyncEnumeratorDone { };
 >AsyncEnumeratorDone : AsyncEnumeratorDone
 
 interface IAsyncEnumerator<T> {
->IAsyncEnumerator : IAsyncEnumerator<T>
->T : T
-
     next1(): Promise<T | AsyncEnumeratorDone>;
 >next1 : () => Promise<T | AsyncEnumeratorDone>
 

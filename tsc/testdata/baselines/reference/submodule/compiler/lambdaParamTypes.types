@@ -2,9 +2,6 @@
 
 === lambdaParamTypes.ts ===
 interface MyArrayWrapper<T> {
->MyArrayWrapper : MyArrayWrapper<T>
->T : T
-
     constructor(initialItems?: T[]);
 >constructor : (initialItems?: T[]) => any
 >initialItems : T[]
@@ -18,7 +15,6 @@ interface MyArrayWrapper<T> {
 
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->T : T
 >initialValues : T[]
 
 var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);

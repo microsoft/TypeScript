@@ -1,15 +1,6 @@
 --- old.spreadMethods.types
 +++ new.spreadMethods.types
-@@= skipped -15, +15 lines =@@
- >0 : 0
- }
- interface I {
-+>I : I
-+
-     p: number;
- >p : number
- 
-@@= skipped -60, +62 lines =@@
+@@= skipped -75, +75 lines =@@
  
  let i: I = { p: 12, m() { }, get g() { return 0; } };
  >i : I

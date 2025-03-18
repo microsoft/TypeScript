@@ -8,5 +8,4 @@
 +>Foo : default
  
  export default interface Foo {}
-+>Foo : default
  

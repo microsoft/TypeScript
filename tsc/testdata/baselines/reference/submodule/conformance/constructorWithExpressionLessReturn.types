@@ -32,7 +32,6 @@ class E {
 
 class F<T> {
 >F : F<T>
->T : T
 
     constructor(public x: T) {
 >x : T

@@ -1,15 +1,6 @@
 --- old.symbolProperty20.types
 +++ new.symbolProperty20.types
-@@= skipped -1, +1 lines =@@
- 
- === symbolProperty20.ts ===
- interface I {
-+>I : I
-+
-     [Symbol.iterator]: (s: string) => string;
- >[Symbol.iterator] : (s: string) => string
- >Symbol.iterator : unique symbol
-@@= skipped -17, +19 lines =@@
+@@= skipped -18, +18 lines =@@
  
  var i: I = {
  >i : I

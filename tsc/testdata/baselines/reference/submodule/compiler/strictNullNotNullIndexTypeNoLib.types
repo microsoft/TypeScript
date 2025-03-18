@@ -3,12 +3,8 @@
 === strictNullNotNullIndexTypeNoLib.ts ===
 type Readonly<T> = {readonly [K in keyof T]: T[K]}
 >Readonly : Readonly<T>
->T : T
->K : K
 
 interface A {
->A : A
-
     params?: { name: string; };
 >params : { name: string; } | undefined
 >name : string
@@ -16,7 +12,6 @@ interface A {
 
 class Test<T extends A> {
 >Test : Test<T>
->T : T
 
     attrs: Readonly<T>;
 >attrs : Readonly<T>
@@ -37,15 +32,12 @@ class Test<T extends A> {
 }
 
 interface Foo {
->Foo : Foo
-
     foo?: number;
 >foo : number | undefined
 }
 
 class FooClass<P extends Foo = Foo> {
 >FooClass : FooClass<P>
->P : P
 
     properties: Readonly<P>;
 >properties : Readonly<P>
@@ -67,7 +59,6 @@ class FooClass<P extends Foo = Foo> {
 
 class Test2<T extends A> {
 >Test2 : Test2<T>
->T : T
 
     attrs: Readonly<T>;
 >attrs : Readonly<T>

@@ -66,12 +66,3 @@
  >bIndex : "key"
  >x : number
  }
-@@= skipped -17, +17 lines =@@
- >cIndex : 1
- 
- interface Foo {
-+>Foo : Foo
-+
-     x: number | undefined;
- >x : number | undefined
- }

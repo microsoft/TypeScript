@@ -33,8 +33,8 @@
  >value : any
  >alias : string
  >value : string
+@@= skipped -8, +8 lines =@@
  >value : string
-->value : string
  
  function notReferenced({ name: alias }: Named) {
 ->notReferenced : ({ name: alias }: Named) => void
@@ -57,7 +57,7 @@
  >a : Named
  >b : Named
  >name : any
-@@= skipped -29, +28 lines =@@
+@@= skipped -21, +21 lines =@@
  }
  
  function referencedInCode({ name: alias }: Named) {
@@ -74,10 +74,8 @@
 +>referencedInSignarture : (__0: Named) => string
  >name : any
  >alias : string
-->alias : string
- 
-     return alias;
  >alias : string
+@@= skipped -10, +10 lines =@@
  }
  
  function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
@@ -86,10 +84,7 @@
  >function : any
  >alias : string
  >function : string
-->alias : string
- 
-     return null!;
- >null! : null
+@@= skipped -11, +11 lines =@@
  }
  
  function referencedInInferredType({ name: alias }: Named) {
@@ -102,7 +97,7 @@
 ->Named2 : { name: typeof alias; }
 +>Named2 : Named2
  >name : string
-->alias : string
+ >alias : string
  
      return null! as Named2
 ->null! as Named2 : { name: typeof alias; }
@@ -120,9 +115,9 @@
 ->function(p: typeof alias) {    } : (p: typeof alias) => void
 +>function(p: typeof alias) {    } : (p: string) => void
  >p : string
-->alias : string
+ >alias : string
  
-     }
+@@= skipped -28, +28 lines =@@
  }
  
  function referencedNestedAlias({ p: { name: alias } }: { p: Named }): typeof alias {
@@ -131,11 +126,7 @@
  >p : any
  >name : any
  >alias : string
- >p : Named
-->alias : string
- 
- 	return alias;
- >alias : string
+@@= skipped -12, +12 lines =@@
  }
  
  function referencedArrayAlias([a, b, { name: alias }]: Named[]): typeof alias {
@@ -144,12 +135,7 @@
  >a : Named
  >b : Named
  >name : any
- >alias : string
-->alias : string
- 
- 	return alias;
- >alias : string
-@@= skipped -93, +87 lines =@@
+@@= skipped -32, +32 lines =@@
  >alias : string
      }
  	m({ name: alias }: Named) {
@@ -167,15 +153,7 @@
  >name : any
  >alias : string
  
-@@= skipped -20, +20 lines =@@
- >name : any
- >alias : string
- >p : string
-->alias : string
- 
- 		console.log(alias);
- >console.log(alias) : void
-@@= skipped -10, +9 lines =@@
+@@= skipped -30, +30 lines =@@
  >alias : string
  	}
  	set x({ name: alias }: Named & { o: typeof alias }) {
@@ -184,7 +162,7 @@
  >name : any
  >alias : string
  >o : string
-->alias : string
+@@= skipped -8, +8 lines =@@
          
      }
  	mReturnType({ name: alias }: Named): typeof alias {
@@ -192,9 +170,8 @@
 +>mReturnType : (__0: Named) => string
  >name : any
  >alias : string
-->alias : string
- 
-         return null!
+ >alias : string
+@@= skipped -9, +9 lines =@@
  >null! : null
      }
  	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias> {
@@ -202,9 +179,8 @@
 +>mRerturnTypeNested : (__0: Named) => string
  >name : any
  >alias : string
-->alias : string
- 
-         return null!
+ >alias : string
+@@= skipped -9, +9 lines =@@
  >null! : null
      }
      mParameter({ name: alias }: Named, p: typeof alias) {
@@ -213,11 +189,7 @@
  >name : any
  >alias : string
  >p : string
-->alias : string
- 
-         return null!
- >null! : null
-@@= skipped -38, +34 lines =@@
+@@= skipped -12, +12 lines =@@
  }
  
  let notReferencedFnType: ({ name: alias }: Named) => void;
@@ -231,7 +203,7 @@
 +>referencedInSignartureReturnTypeFnType : (__0: Named) => string
  >name : any
  >alias : string
-->alias : string
+ >alias : string
  
  let referencedInSignartureParamTypeFnType: ({ name: alias }: Named, p: typeof alias) => void;
 ->referencedInSignartureParamTypeFnType : ({ name: alias }: Named, p: typeof alias) => void
@@ -239,7 +211,7 @@
  >name : any
  >alias : string
  >p : string
-->alias : string
+ >alias : string
  
  let notReferencedCtorType: new ({ name: alias }: Named) => void;
 ->notReferencedCtorType : new ({ name: alias }: Named) => void
@@ -252,7 +224,7 @@
 +>referencedInSignartureReturnTypeCtorType : new (__0: Named) => string
  >name : any
  >alias : string
-->alias : string
+ >alias : string
  
  let referencedInSignartureParamTypeCtorType: new  ({ name: alias }: Named, p: typeof alias) => void;
 ->referencedInSignartureParamTypeCtorType : new ({ name: alias }: Named, p: typeof alias) => void
@@ -260,16 +232,7 @@
  >name : any
  >alias : string
  >p : string
-->alias : string
- 
- 
- interface NotReferencedInterface {
-+>NotReferencedInterface : NotReferencedInterface
-+
- 	({ name: alias }: Named): void
- >name : any
- >alias : string
-@@= skipped -51, +49 lines =@@
+@@= skipped -51, +51 lines =@@
  >alias : string
  
  	m({ name: alias }: Named);
@@ -278,31 +241,8 @@
  >name : any
  >alias : string
  }
- 
- interface ReferencedInSignartureInterface {
-+>ReferencedInSignartureInterface : ReferencedInSignartureInterface
-+
- 	({ name: alias }: Named, p: typeof alias): void
- >name : any
+@@= skipped -29, +29 lines =@@
  >alias : string
- >p : string
-->alias : string
- 
- 	({ name: alias }: Named): typeof alias
- >name : any
- >alias : string
-->alias : string
- 	
- 	new ({ name: alias }: Named, p: typeof alias): void
- >name : any
- >alias : string
- >p : string
-->alias : string
- 
- 	new ({ name: alias }: Named): typeof alias
- >name : any
- >alias : string
-->alias : string
  
  	set x({ name: alias }: Named & { o: typeof alias })
 ->x : Named & { o: typeof alias; }
@@ -310,21 +250,21 @@
  >name : any
  >alias : string
  >o : string
-->alias : string
+ >alias : string
  
  	mReturnType({ name: alias }: Named): typeof alias;
 ->mReturnType : ({ name: alias }: Named) => typeof alias
 +>mReturnType : (__0: Named) => string
  >name : any
  >alias : string
-->alias : string
+ >alias : string
  
  	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
 ->mRerturnTypeNested : ({ name: alias }: Named) => NonNullable<typeof alias>
 +>mRerturnTypeNested : (__0: Named) => string
  >name : any
  >alias : string
-->alias : string
+ >alias : string
  
      mParameter({ name: alias }: Named, p: typeof alias);
 ->mParameter : ({ name: alias }: Named, p: typeof alias) => any
@@ -332,5 +272,3 @@
  >name : any
  >alias : string
  >p : string
-->alias : string
- }

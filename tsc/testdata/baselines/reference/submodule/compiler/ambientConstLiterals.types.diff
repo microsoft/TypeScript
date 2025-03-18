@@ -1,14 +1,6 @@
 --- old.ambientConstLiterals.types
 +++ new.ambientConstLiterals.types
-@@= skipped -2, +2 lines =@@
- === ambientConstLiterals.ts ===
- function f<T>(x: T): T {
- >f : <T>(x: T) => T
-+>T : T
- >x : T
- 
-     return x;
-@@= skipped -11, +12 lines =@@
+@@= skipped -13, +13 lines =@@
  >A : E.A
  >B : E.B
  >C : E.C

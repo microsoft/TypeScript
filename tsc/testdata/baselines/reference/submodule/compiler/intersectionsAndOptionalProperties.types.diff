@@ -24,10 +24,3 @@
  >z : { a: null; } & { b: string; }
  
  // Repro from #36604
- 
- interface To {
-+>To : To
-+
-     field?: number;
- >field : number | undefined
- 

@@ -2,11 +2,7 @@
 
 === file.ts ===
 export namespace Root {
->Root : any
-
     export interface Foo {
->Foo : Foo
-
         x: number;
 >x : number
     }
@@ -22,11 +18,7 @@ declare module "./reexport" {
 >"./reexport" : typeof import("reexport")
 
     export namespace Root {
->Root : any
-
         export interface Foo {
->Foo : Foo
-
             self: Foo;
 >self : Foo
         }

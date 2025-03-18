@@ -4,16 +4,20 @@
 // Error expected
 var a: typeof a;
 >a : any
+>a : any
 
 // Error expected on b or c
 var b: typeof c;
 >b : any
+>c : any
 
 var c: typeof b;
 >c : any
+>b : any
 
 // Error expected
 var d: Array<typeof d>;
+>d : any
 >d : any
 
 function f() { return f; }
@@ -64,8 +68,6 @@ function h() {
 }
 
 interface A {
->A : A
-
     s: string;
 >s : string
 }

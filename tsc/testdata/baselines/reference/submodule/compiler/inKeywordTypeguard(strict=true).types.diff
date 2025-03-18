@@ -47,15 +47,7 @@
  >x : {}
  >"object" : "object"
  >"a" in x : boolean
-@@= skipped -76, +76 lines =@@
- 
- function f3<T>(x: T) {
- >f3 : <T>(x: T) => void
-+>T : T
- >x : T
- 
-     if ("a" in x) {
-@@= skipped -29, +30 lines =@@
+@@= skipped -105, +105 lines =@@
  >x && typeof x === "object" : boolean
  >x : T
  >typeof x === "object" : boolean
@@ -100,24 +92,7 @@
      }
  }
  
-@@= skipped -59, +59 lines =@@
- function f16(x: typeof globalThis, y: Window & typeof globalThis) {
- >f16 : (x: typeof globalThis, y: Window & typeof globalThis) => void
- >x : typeof globalThis
-->globalThis : typeof globalThis
- >y : Window & typeof globalThis
-->globalThis : typeof globalThis
- 
-     x = y;
- >x = y : Window & typeof globalThis
-@@= skipped -14, +12 lines =@@
- 
- function foo<A>(value: A) {
- >foo : <A>(value: A) => void
-+>A : A
- >value : A
- 
-     if (typeof value === "object" && value !== null && "prop" in value) {
+@@= skipped -79, +79 lines =@@
  >typeof value === "object" && value !== null && "prop" in value : boolean
  >typeof value === "object" && value !== null : boolean
  >typeof value === "object" : boolean
@@ -131,15 +106,7 @@
  >"prop" in value : boolean
  >"prop" : "prop"
  >value : A & object
-@@= skipped -41, +42 lines =@@
- 
- function isHTMLTable<T extends object | null>(table: T): boolean {
- >isHTMLTable : <T extends object | null>(table: T) => boolean
-+>T : T
- >table : T
- 
-     return !!table && 'html' in table;
-@@= skipped -15, +16 lines =@@
+@@= skipped -50, +50 lines =@@
  // Repro from #51549
  
  const f = <P extends object>(a: P & {}) => {
@@ -147,31 +114,6 @@
 -><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
 +>f : <P extends object>(a: P) => void
 +><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P) => void
-+>P : P
  >a : P
  
      "foo" in a;
-@@= skipped -15, +16 lines =@@
- 
- function test1<T extends any[] | Record<string, any>>(obj: T) {
- >test1 : <T extends any[] | Record<string, any>>(obj: T) => void
-+>T : T
- >obj : T
- 
-     if (Array.isArray(obj) || 'length' in obj) {
-@@= skipped -24, +25 lines =@@
- 
- function test2<T extends any[] | Record<string, any>>(obj: T) {
- >test2 : <T extends any[] | Record<string, any>>(obj: T) => void
-+>T : T
- >obj : T
- 
-     if (Array.isArray(obj)) {
-@@= skipped -20, +21 lines =@@
- 
- function test3<T extends any[] | Record<string, any>>(obj: T) {
- >test3 : <T extends any[] | Record<string, any>>(obj: T) => void
-+>T : T
- >obj : T
- 
-     if ('length' in obj) {

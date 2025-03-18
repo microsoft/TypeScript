@@ -1,15 +1,6 @@
 --- old.importTypeAmbient.types
 +++ new.importTypeAmbient.types
-@@= skipped -4, +4 lines =@@
- >"foo" : typeof import("foo")
- 
-     interface Point {
-+>Point : Point
-+
-         x: number;
- >x : number
- 
-@@= skipped -10, +12 lines =@@
+@@= skipped -14, +14 lines =@@
  >Point : Point
  }
  const x: import("foo") = { x: 0, y: 0 };
@@ -18,31 +9,7 @@
  >{ x: 0, y: 0 } : { x: number; y: number; }
  >x : number
  >0 : 0
-@@= skipped -11, +11 lines =@@
- >"foo2" : typeof import("foo2")
- 
-     namespace Bar {
-+>Bar : typeof Bar
-+
-         interface I {
-+>I : I
-+
-             a: string;
- >a : string
- 
-@@= skipped -10, +14 lines =@@
-     }
- 
-     namespace Baz {
-+>Baz : any
-+
-         interface J {
-+>J : J
-+
-             a: number;
- >a : number
- 
-@@= skipped -13, +17 lines =@@
+@@= skipped -34, +34 lines =@@
  >Bar : Bar
  
          item: Bar.I;

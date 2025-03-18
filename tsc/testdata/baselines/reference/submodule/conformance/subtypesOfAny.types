@@ -4,8 +4,6 @@
 // every type is a subtype of any, no errors expected
 
 interface I {
->I : I
-
     [x: string]: any;
 >x : string
 
@@ -15,8 +13,6 @@ interface I {
 
 
 interface I2 {
->I2 : I2
-
     [x: string]: any;
 >x : string
 
@@ -26,8 +22,6 @@ interface I2 {
 
 
 interface I3 {
->I3 : I3
-
     [x: string]: any;
 >x : string
 
@@ -37,8 +31,6 @@ interface I3 {
 
 
 interface I4 {
->I4 : I4
-
     [x: string]: any;
 >x : string
 
@@ -48,8 +40,6 @@ interface I4 {
 
 
 interface I5 {
->I5 : I5
-
     [x: string]: any;
 >x : string
 
@@ -59,8 +49,6 @@ interface I5 {
 
 
 interface I6 {
->I6 : I6
-
     [x: string]: any;
 >x : string
 
@@ -70,8 +58,6 @@ interface I6 {
 
 
 interface I7 {
->I7 : I7
-
     [x: string]: any;
 >x : string
 
@@ -82,8 +68,6 @@ interface I7 {
 
 
 interface I8 {
->I8 : I8
-
     [x: string]: any;
 >x : string
 
@@ -93,8 +77,6 @@ interface I8 {
 
 
 interface I9 {
->I9 : I9
-
     [x: string]: any;
 >x : string
 
@@ -107,8 +89,6 @@ class A { foo: number; }
 >foo : number
 
 interface I10 {
->I10 : I10
-
     [x: string]: any;
 >x : string
 
@@ -118,12 +98,9 @@ interface I10 {
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
->T : T
 >foo : T
 
 interface I11 {
->I11 : I11
-
     [x: string]: any;
 >x : string
 
@@ -133,8 +110,6 @@ interface I11 {
 
 
 interface I12 {
->I12 : I12
-
     [x: string]: any;
 >x : string
 
@@ -145,14 +120,11 @@ interface I12 {
 
 
 interface I13 {
->I13 : I13
-
     [x: string]: any;
 >x : string
 
     foo: <T>(x:T) => T;
 >foo : <T>(x: T) => T
->T : T
 >x : T
 }
 
@@ -162,8 +134,6 @@ enum E { A }
 >A : E.A
 
 interface I14 {
->I14 : I14
-
     [x: string]: any;
 >x : string
 
@@ -183,13 +153,12 @@ module f {
 >1 : 1
 }
 interface I15 {
->I15 : I15
-
     [x: string]: any;
 >x : string
 
     foo: typeof f;
 >foo : typeof f
+>f : typeof f
 }
 
 
@@ -205,20 +174,16 @@ module c {
 >1 : 1
 }
 interface I16 {
->I16 : I16
-
     [x: string]: any;
 >x : string
 
     foo: typeof c;
 >foo : typeof c
+>c : typeof c
 }
 
 
 interface I17<T> {
->I17 : I17<T>
->T : T
-
     [x: string]: any;
 >x : string
 
@@ -228,10 +193,6 @@ interface I17<T> {
 
 
 interface I18<T, U> {
->I18 : I18<T, U>
->T : T
->U : U
-
     [x: string]: any;
 >x : string
 
@@ -245,8 +206,6 @@ interface I18<T, U> {
 
 
 interface I19 {
->I19 : I19
-
     [x: string]: any;
 >x : string
 
@@ -256,8 +215,6 @@ interface I19 {
 
 
 interface I20 {
->I20 : I20
-
     [x: string]: any;
 >x : string
 

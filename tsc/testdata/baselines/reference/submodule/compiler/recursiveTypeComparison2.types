@@ -7,21 +7,12 @@ declare module Bacon {
 >Bacon : typeof Bacon
 
     interface Event<T> {
->Event : Event<T>
->T : T
     }
     interface Error<T> extends Event<T> {
->Error : Error<T>
->T : T
     }
     interface Observable<T> {
->Observable : Observable<T>
->T : T
-
         zip<U, V>(other: EventStream<U>, f: (a: T, b: U) => V): EventStream<V>;
 >zip : <U, V>(other: EventStream<U>, f: (a: T, b: U) => V) => EventStream<V>
->U : U
->V : V
 >other : EventStream<U>
 >f : (a: T, b: U) => V
 >a : T
@@ -37,8 +28,6 @@ declare module Bacon {
 
         combine<U, V>(other: Observable<U>, f: (a: T, b: U) => V): Property<V>;
 >combine : <U, V>(other: Observable<U>, f: (a: T, b: U) => V) => Property<V>
->U : U
->V : V
 >other : Observable<U>
 >f : (a: T, b: U) => V
 >a : T
@@ -46,8 +35,6 @@ declare module Bacon {
 
         withStateMachine<U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>): EventStream<V>;
 >withStateMachine : <U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>) => EventStream<V>
->U : U
->V : V
 >initState : U
 >f : (state: U, event: Event<T>) => StateValue<U, V>
 >state : U
@@ -59,7 +46,6 @@ declare module Bacon {
 
         awaiting<U>(other: Observable<U>): Property<boolean>;
 >awaiting : <U>(other: Observable<U>) => Property<boolean>
->U : U
 >other : Observable<U>
 
         endOnError(f?: (value: T) => boolean): Observable<T>;
@@ -81,20 +67,13 @@ declare module Bacon {
 >args : any[]
     }
     interface Property<T> extends Observable<T> {
->Property : Property<T>
->T : T
     }
     interface EventStream<T> extends Observable<T> {
->EventStream : EventStream<T>
->T : T
     }
     interface Bus<T> extends EventStream<T> {
->Bus : Bus<T>
->T : T
     }
     var Bus: new <T>() => Bus<T>;
 >Bus : new <T>() => Bus<T>
->T : T
 }
 
 var stuck: Bacon.Bus<number> = new Bacon.Bus();

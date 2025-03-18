@@ -1,22 +1,6 @@
 --- old.baseConstraintOfDecorator.types
 +++ new.baseConstraintOfDecorator.types
-@@= skipped -2, +2 lines =@@
- === baseConstraintOfDecorator.ts ===
- export function classExtender<TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
- >classExtender : <TFunction>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void) => TFunction
-+>TFunction : TFunction
- >superClass : TFunction
- >_instanceModifier : (instance: any, args: any[]) => void
- >instance : any
-@@= skipped -34, +35 lines =@@
- 
- export function classExtender2<TFunction extends new (...args: string[]) => MyClass>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
- >classExtender2 : <TFunction extends new (...args: string[]) => MyClass>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void) => TFunction
-+>TFunction : TFunction
- >args : string[]
- >superClass : TFunction
- >_instanceModifier : (instance: any, args: any[]) => void
-@@= skipped -7, +8 lines =@@
+@@= skipped -43, +43 lines =@@
  >args : any[]
  
      return class decoratorFunc extends superClass {

@@ -2,7 +2,6 @@
 
 === file1.ts ===
 export interface Foo { x }
->Foo : Foo
 >x : any
 
 === file2.ts ===

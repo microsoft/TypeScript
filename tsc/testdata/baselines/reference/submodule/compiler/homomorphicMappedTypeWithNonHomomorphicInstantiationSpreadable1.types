@@ -3,11 +3,8 @@
 === homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts ===
 type HandleOptions<O> = {
 >HandleOptions : HandleOptions<O>
->O : O
 
     [I in keyof O]: {
->I : I
-
         value: O[I];
 >value : O[I]
 
@@ -18,14 +15,10 @@ declare function func1<
 >func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }) => T
 
     T extends Record<PropertyKey, readonly any[]>,
->T : T
-
 >(fields: {
 >fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; } }
 
     [K in keyof T]: {
->K : K
-
         label: string;
 >label : string
 

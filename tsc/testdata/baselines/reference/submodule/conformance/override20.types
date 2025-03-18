@@ -15,15 +15,11 @@ const Foo: C1 & C2 =
     }
 
 interface I1 {
->I1 : I1
-
     m1(): void;
 >m1 : () => void
 }
 
 interface I2 {
->I2 : I2
-
     m1(): void;
 >m1 : () => void
 
@@ -32,15 +28,11 @@ interface I2 {
 }
 
 interface C1 {
->C1 : C1
-
     new(...args: any[]): I1;
 >args : any[]
 }
 
 interface C2 {
->C2 : C2
-
     new(...args: any[]): I2;
 >args : any[]
 }

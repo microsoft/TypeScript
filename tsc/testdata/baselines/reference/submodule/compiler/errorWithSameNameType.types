@@ -2,16 +2,12 @@
 
 === a.ts ===
 export interface F {
->F : F
-
     foo1: number
 >foo1 : number
 }
 
 === b.ts ===
 export interface F {
->F : F
-
     foo2: number
 >foo2 : number
 }

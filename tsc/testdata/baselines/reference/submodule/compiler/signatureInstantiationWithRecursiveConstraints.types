@@ -8,7 +8,6 @@ class Foo {
 
   myFunc<T extends Foo>(arg: T) {}
 >myFunc : <T extends Foo>(arg: T) => void
->T : T
 >arg : T
 }
 
@@ -17,7 +16,6 @@ class Bar {
 
   myFunc<T extends Bar>(arg: T) {}
 >myFunc : <T extends Bar>(arg: T) => void
->T : T
 >arg : T
 }
 

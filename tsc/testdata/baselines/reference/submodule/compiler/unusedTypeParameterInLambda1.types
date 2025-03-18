@@ -9,7 +9,6 @@ class A {
 
         return <T>() => {
 ><T>() => {        } : <T>() => void
->T : T
 
         }
     }

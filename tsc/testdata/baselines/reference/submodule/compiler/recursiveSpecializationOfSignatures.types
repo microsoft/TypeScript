@@ -3,8 +3,6 @@
 === recursiveSpecializationOfSignatures.ts ===
 class S0<B, A> {
 >S0 : S0<B, A>
->B : B
->A : A
 
 set S1(S2: S0<any,any>) {
 >S1 : S0<any, any>

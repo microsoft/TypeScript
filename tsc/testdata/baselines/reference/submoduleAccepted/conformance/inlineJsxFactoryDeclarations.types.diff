@@ -1,18 +1,6 @@
 --- old.inlineJsxFactoryDeclarations.types
 +++ new.inlineJsxFactoryDeclarations.types
-@@= skipped -4, +4 lines =@@
- >global : any
- 
-     namespace JSX {
-+>JSX : any
-+
-         interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-             [e: string]: any;
- >e : string
-         }
-@@= skipped -22, +26 lines =@@
+@@= skipped -26, +26 lines =@@
  === otherreacty.tsx ===
  /** @jsx React.createElement */
  import * as React from "./renderer";

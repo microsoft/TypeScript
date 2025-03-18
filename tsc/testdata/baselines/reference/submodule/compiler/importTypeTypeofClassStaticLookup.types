@@ -12,4 +12,5 @@ export declare class A {
 export const foo: typeof import("./a").A.foo;
 >foo : () => void
 >A : any
+>foo : any
 

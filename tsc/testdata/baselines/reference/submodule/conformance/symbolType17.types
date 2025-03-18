@@ -2,7 +2,6 @@
 
 === symbolType17.ts ===
 interface Foo { prop }
->Foo : Foo
 >prop : any
 
 var x: symbol | Foo;

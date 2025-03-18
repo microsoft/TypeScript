@@ -36,6 +36,5 @@ export type {Row2} from './common';
  
 === common.d.ts ===
 export interface Row2 { b: string }
->Row2 : Row2
 >b : string
 

@@ -5,8 +5,6 @@ module Events {
 >Events : typeof Events
 
     export interface ListenerCallback {
->ListenerCallback : ListenerCallback
-
         (value:any):void;
 >value : any
     }

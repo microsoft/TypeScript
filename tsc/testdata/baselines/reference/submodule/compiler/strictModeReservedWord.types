@@ -38,8 +38,6 @@ function foo() {
 
     function baz<implements, protected>() { }
 >baz : <implements, protected>() => void
->implements : implements
->protected : protected
 
     function barn(cb: (private, public, package) => void) { }
 >barn : (cb: (private: any, public: any, package: any) => void) => void

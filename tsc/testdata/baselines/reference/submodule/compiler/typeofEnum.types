@@ -13,6 +13,7 @@ enum E {
 
 var e1: typeof E;
 >e1 : typeof E
+>E : typeof E
 
 e1.e1;
 >e1.e1 : E.e1

@@ -2,8 +2,6 @@
 
 === a/b/c.ts ===
 export interface Foo {
->Foo : Foo
-
     x: 12;
 >x : 12
 }

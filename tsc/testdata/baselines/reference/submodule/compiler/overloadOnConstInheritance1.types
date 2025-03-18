@@ -2,8 +2,6 @@
 
 === overloadOnConstInheritance1.ts ===
 interface Base {
->Base : Base
-
     addEventListener(x: string): any;
 >addEventListener : { (x: string): any; (x: "foo"): string; }
 >x : string
@@ -13,8 +11,6 @@ interface Base {
 >x : "foo"
 }
 interface Deriver extends Base {
->Deriver : Deriver
-
     addEventListener(x: string): any;
 >addEventListener : { (x: string): any; (x: "bar"): string; }
 >x : string

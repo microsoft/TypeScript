@@ -2,8 +2,6 @@
 
 === declareClassInterfaceImplementation.ts ===
 interface IBuffer {
->IBuffer : IBuffer
-
     [index: number]: number;
 >index : number
 }

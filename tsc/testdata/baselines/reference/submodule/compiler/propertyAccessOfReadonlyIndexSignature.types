@@ -2,8 +2,6 @@
 
 === propertyAccessOfReadonlyIndexSignature.ts ===
 interface Test {
->Test : Test
-
     readonly [key: string]: string;
 >key : string
 }

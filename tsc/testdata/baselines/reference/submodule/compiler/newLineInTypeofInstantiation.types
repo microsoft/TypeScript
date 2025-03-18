@@ -2,12 +2,10 @@
 
 === newLineInTypeofInstantiation.ts ===
 interface Example {
->Example : Example
-
     (a: number): typeof a
+>a : number
 >a : number
   
     <T>(): void
->T : T
 }
 

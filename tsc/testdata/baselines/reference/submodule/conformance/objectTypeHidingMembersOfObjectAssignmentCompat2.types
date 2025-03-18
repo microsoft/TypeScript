@@ -2,8 +2,6 @@
 
 === objectTypeHidingMembersOfObjectAssignmentCompat2.ts ===
 interface I {
->I : I
-
     toString(): number;
 >toString : () => number
 }

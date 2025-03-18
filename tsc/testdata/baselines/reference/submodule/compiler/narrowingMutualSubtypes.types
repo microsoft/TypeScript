@@ -189,16 +189,12 @@ function gg4(x: Record<string, any>) {
 
 type Identity<T> = {[K in keyof T]: T[K]};
 >Identity : Identity<T>
->T : T
->K : K
 
 type Self<T> = T extends unknown ? Identity<T> : never;
 >Self : Self<T>
->T : T
 
 function is<T>(value: T): value is Self<T> {
 >is : <T>(value: T) => value is Self<T>
->T : T
 >value : T
 
     return true;

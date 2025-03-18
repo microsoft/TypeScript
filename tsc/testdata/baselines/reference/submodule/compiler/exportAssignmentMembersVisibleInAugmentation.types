@@ -5,8 +5,6 @@ export = foo;
 >foo : typeof foo
 
 declare namespace foo {
->foo : typeof foo
-
     export type T = number;
 >T : number
 }

@@ -1,15 +1,6 @@
 --- old.resolveModuleNameWithSameLetDeclarationName1.types
 +++ new.resolveModuleNameWithSameLetDeclarationName1.types
-@@= skipped -1, +1 lines =@@
- 
- === resolveModuleNameWithSameLetDeclarationName1.ts ===
- declare module foo {
-+>foo : Bar
- 
-     interface Bar {
-+>Bar : Bar
- 
-     }
+@@= skipped -8, +8 lines =@@
  }
  
  let foo: foo.Bar; 

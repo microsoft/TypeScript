@@ -5,15 +5,11 @@ type Kind = "A" | "B"
 >Kind : Kind
 
 interface Entity {
->Entity : Entity
-
     kind: Kind;
 >kind : Kind
 }
 
 interface A extends Entity {
->A : A
-
     kind: "A";
 >kind : "A"
 
@@ -22,8 +18,6 @@ interface A extends Entity {
 }
 
 interface B extends Entity {
->B : B
-
     kind: "B";
 >kind : "B"
 

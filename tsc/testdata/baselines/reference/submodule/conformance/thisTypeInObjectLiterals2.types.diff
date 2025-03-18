@@ -130,14 +130,7 @@
  
      x: 10,
  >x : number
-@@= skipped -52, +52 lines =@@
- 
- type ObjectDescriptor<D, M> = {
- >ObjectDescriptor : ObjectDescriptor<D, M>
-+>D : D
-+>M : M
- 
-     data?: D;
+@@= skipped -57, +57 lines =@@
  >data : D | undefined
  
      methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
@@ -146,9 +139,7 @@
  }
  
  declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
- >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
-+>D : D
-+>M : M
+@@= skipped -8, +8 lines =@@
  >desc : ObjectDescriptor<D, M>
  
  let x1 = makeObject({
@@ -162,7 +153,7 @@
  
      data: { x: 0, y: 0 },
  >data : { x: number; y: number; }
-@@= skipped -27, +31 lines =@@
+@@= skipped -14, +14 lines =@@
  >0 : 0
  
      methods: {
@@ -190,21 +181,7 @@
  >y : number
  >dy : number
          }
-@@= skipped -19, +19 lines =@@
- 
- type ObjectDescriptor2<D, M> = ThisType<D & M> & {
- >ObjectDescriptor2 : ObjectDescriptor2<D, M>
-+>D : D
-+>M : M
- 
-     data?: D;
- >data : D | undefined
-@@= skipped -10, +12 lines =@@
- 
- declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
- >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
-+>D : D
-+>M : M
+@@= skipped -32, +32 lines =@@
  >desc : ObjectDescriptor<D, M>
  
  let x2 = makeObject2({
@@ -218,7 +195,7 @@
  
      data: { x: 0, y: 0 },
  >data : { x: number; y: number; }
-@@= skipped -17, +19 lines =@@
+@@= skipped -14, +14 lines =@@
  >0 : 0
  
      methods: {
@@ -246,13 +223,7 @@
  >y : number
  >dy : number
          }
-@@= skipped -18, +18 lines =@@
- 
- type PropDesc<T> = {
- >PropDesc : PropDesc<T>
-+>T : T
- 
-     value?: T;
+@@= skipped -23, +23 lines =@@
  >value : T | undefined
  
      get?(): T;
@@ -265,31 +236,7 @@
  >value : T
  }
  
- type PropDescMap<T> = {
- >PropDescMap : PropDescMap<T>
-+>T : T
- 
-     [K in keyof T]: PropDesc<T[K]>;
-+>K : K
- }
- 
- declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
- >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
-+>T : T
-+>K : K
-+>U : U
- >obj : T
- >name : K
- >desc : PropDesc<U> & ThisType<T>
- 
- declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
- >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
-+>T : T
-+>U : U
- >obj : T
- >descs : PropDescMap<U> & ThisType<T>
- 
-@@= skipped -56, +64 lines =@@
+@@= skipped -51, +51 lines =@@
  >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
  >p1 : Point
  >"bar" : "bar"
@@ -318,21 +265,8 @@
  
          get(): number {
  >get : () => number
-@@= skipped -51, +51 lines =@@
- 
- type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
- >Accessors : Accessors<T>
-+>T : T
-+>K : K
- 
- type Dictionary<T> = { [x: string]: T }
- >Dictionary : Dictionary<T>
-+>T : T
- >x : string
- 
- type Computed<T> = {
+@@= skipped -60, +60 lines =@@
  >Computed : Computed<T>
-+>T : T
  
      get?(): T;
 ->get : (() => T) | undefined
@@ -344,11 +278,8 @@
  >value : T
  }
  
- type VueOptions<D, M, P> = ThisType<D & M & P> & {
+@@= skipped -11, +11 lines =@@
  >VueOptions : VueOptions<D, M, P>
-+>D : D
-+>M : M
-+>P : P
  
      data?: D | (() => D);
 ->data : D | (() => D) | undefined
@@ -356,13 +287,7 @@
  
      methods?: M;
  >methods : M | undefined
-@@= skipped -31, +38 lines =@@
- 
- declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
- >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
-+>D : D
-+>M : M
-+>P : P
+@@= skipped -14, +14 lines =@@
  >options : VueOptions<D, M, P>
  
  let vue = new Vue({
@@ -376,7 +301,7 @@
  
      data: () => ({ x: 1, y: 2 }),
  >data : () => { x: number; y: number; }
-@@= skipped -19, +22 lines =@@
+@@= skipped -16, +16 lines =@@
  >2 : 2
  
      methods: {

@@ -4,8 +4,6 @@
 // any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
 
 interface I {
->I : I
-
     [x: string]: any;
 >x : string
 
@@ -117,7 +115,6 @@ var r3 = foo3(a); // any
 >a : any
 
 interface I8 { foo: string }
->I8 : I8
 >foo : string
 
 declare function foo9(x: I8): I8;
@@ -154,7 +151,6 @@ var r3 = foo3(a); // any
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
->T : T
 >foo : T
 
 declare function foo11(x: A2<string>): A2<string>;
@@ -190,9 +186,7 @@ var r3 = foo3(a); // any
 declare function foo13(x: <T>(x: T) => T): <T>(x: T) => T;
 >foo13 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: any): any; }
 >x : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 declare function foo13(x: any): any;
@@ -236,6 +230,8 @@ module f {
 declare function foo15(x: typeof f): typeof f;
 >foo15 : { (x: typeof f): typeof f; (x: any): any; }
 >x : typeof f
+>f : typeof f
+>f : typeof f
 
 declare function foo15(x: any): any;
 >foo15 : { (x: typeof f): typeof f; (x: any): any; }

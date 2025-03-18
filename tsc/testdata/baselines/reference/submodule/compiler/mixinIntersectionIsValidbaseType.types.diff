@@ -1,19 +1,6 @@
 --- old.mixinIntersectionIsValidbaseType.types
 +++ new.mixinIntersectionIsValidbaseType.types
-@@= skipped -2, +2 lines =@@
- === mixinIntersectionIsValidbaseType.ts ===
- export type Constructor<T extends object = object> = new (...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
- >args : any[]
- 
- export interface Initable {
-+>Initable : Initable
-+
-     init(...args: any[]): void;
- >init : (...args: any[]) => void
- >args : any[]
-@@= skipped -12, +15 lines =@@
+@@= skipped -14, +14 lines =@@
   * Plain mixin where the superclass must be Initable
   */
  export const Serializable = <K extends Constructor<Initable> & Initable>(
@@ -21,7 +8,6 @@
 -><K extends Constructor<Initable> & Initable>(    SuperClass: K) => {    const LocalMixin = (InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    };    let ResultClass = LocalMixin(SuperClass);    return ResultClass;} : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
 +>Serializable : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
 +><K extends Constructor<Initable> & Initable>(    SuperClass: K) => {    const LocalMixin = (InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    };    let ResultClass = LocalMixin(SuperClass);    return ResultClass;} : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
-+>K : K
  
      SuperClass: K
  >SuperClass : K
@@ -57,10 +43,7 @@
  
  };
  
- const AMixin = <K extends Constructor<Initable> & Initable>(SuperClass: K) => {
- >AMixin : <K extends Constructor<Initable> & Initable>(SuperClass: K) => void
- ><K extends Constructor<Initable> & Initable>(SuperClass: K) => {    let SomeHowOkay = class A extends SuperClass {    };    let SomeHowNotOkay = class A extends Serializable(SuperClass) {    };} : <K extends Constructor<Initable> & Initable>(SuperClass: K) => void
-+>K : K
+@@= skipped -35, +35 lines =@@
  >SuperClass : K
  
      let SomeHowOkay = class A extends SuperClass {

@@ -13,12 +13,7 @@
  declare global {
  >global : any
  
-     interface  ImportAttributes {
-+>ImportAttributes : ImportAttributes
-+
-         type: "json"
- >type : "json"
-     }
+@@= skipped -14, +14 lines =@@
  }
  
  import * as ns from "./a" with { type: "not-json" };

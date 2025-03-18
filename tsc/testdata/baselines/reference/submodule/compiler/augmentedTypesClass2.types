@@ -16,8 +16,6 @@ class c11 {
 }
 
 interface c11 {
->c11 : c11
-
     bar(): void;
 >bar : () => void
 }

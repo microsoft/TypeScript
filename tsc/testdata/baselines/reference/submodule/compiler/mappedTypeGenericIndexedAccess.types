@@ -27,7 +27,6 @@ class Test {
 
     entries: { [T in keyof Types]?: Types[T][] };
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
->T : T
 
     constructor() {
         this.entries = {};
@@ -40,7 +39,6 @@ class Test {
 
     addEntry<T extends keyof Types>(name: T, entry: Types[T]) {
 >addEntry : <T extends keyof Types>(name: T, entry: Types[T]) => void
->T : T
 >name : T
 >entry : Types[T]
 
@@ -93,14 +91,12 @@ type TypesMap = {
 
 type P<T extends keyof TypesMap> = { t: T; } & TypesMap[T];
 >P : P<T>
->T : T
 >t : T
 
 type TypeHandlers = {
 >TypeHandlers : TypeHandlers
 
     [T in keyof TypesMap]?: (p: P<T>) => void;
->T : T
 >p : P<T>
 
 };
@@ -140,7 +136,6 @@ const typeHandlers: TypeHandlers = {
 const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >onSomeEvent : <T extends keyof TypesMap>(p: P<T>) => void | undefined
 ><T extends keyof TypesMap>(p: P<T>) =>    typeHandlers[p.t]?.(p) : <T extends keyof TypesMap>(p: P<T>) => void | undefined
->T : T
 >p : P<T>
 
     typeHandlers[p.t]?.(p);

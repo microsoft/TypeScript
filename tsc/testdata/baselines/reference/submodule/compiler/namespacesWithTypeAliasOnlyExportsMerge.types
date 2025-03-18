@@ -8,8 +8,6 @@ declare const Q: number;
 >Q : number
 
 declare namespace Q {
->Q : number
-
     export { A };
 >A : any
 }
@@ -29,8 +27,6 @@ declare const try2: Q2.Q.A;
 >Q : any
 
 declare namespace Q3 {
->Q3 : any
-
     export {A as B};
 >A : any
 >B : any
@@ -54,14 +50,10 @@ declare const try4: Q4.default.A;
 export {};
 === circular.ts ===
 declare namespace NS1 {
->NS1 : any
-
     export { NS2 };
 >NS2 : any
 }
 declare namespace NS2 {
->NS2 : any
-
     export { NS1 };
 >NS1 : any
 }
@@ -74,15 +66,11 @@ type B = number;
 >B : number
 
 declare namespace NS1 {
->NS1 : any
-
     export { NS2, A };
 >NS2 : any
 >A : any
 }
 declare namespace NS2 {
->NS2 : any
-
     export { NS1, B };
 >NS1 : any
 >B : any

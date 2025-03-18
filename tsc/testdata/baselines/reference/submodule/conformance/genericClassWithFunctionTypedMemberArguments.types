@@ -9,11 +9,9 @@ module ImmediatelyFix {
 
     class C<T> {
 >C : C<T>
->T : T
 
         foo<T>(x: (a: T) => T) {
 >foo : <T>(x: (a: T) => T) => T
->T : T
 >x : (a: T) => T
 >a : T
 
@@ -35,7 +33,6 @@ module ImmediatelyFix {
 >c : C<number>
 >foo : <T>(x: (a: T) => T) => T
 ><U>(x: U) => '' : <U>(x: U) => string
->U : U
 >x : U
 >'' : ""
 
@@ -46,7 +43,6 @@ module ImmediatelyFix {
 >c : C<number>
 >foo : <T>(x: (a: T) => T) => T
 ><U>(x: U) => '' : <U>(x: U) => string
->U : U
 >x : U
 >'' : ""
 
@@ -62,7 +58,6 @@ module ImmediatelyFix {
 
     class C2<T> {
 >C2 : C2<T>
->T : T
 
         foo(x: (a: T) => T) {
 >foo : (x: (a: T) => T) => T
@@ -87,7 +82,6 @@ module ImmediatelyFix {
 >c2 : C2<number>
 >foo : (x: (a: number) => number) => number
 ><U>(x: U) => 1 : <U>(x: U) => number
->U : U
 >x : U
 >1 : 1
 
@@ -107,12 +101,9 @@ module WithCandidates {
 
     class C<T> {
 >C : C<T>
->T : T
 
         foo2<T, U>(x: T, cb: (a: T) => U) {
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
->T : T
->U : U
 >x : T
 >cb : (a: T) => U
 >a : T
@@ -135,7 +126,6 @@ module WithCandidates {
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >1 : 1
 >function <Z>(a: Z) { return '' } : <Z>(a: Z) => string
->Z : Z
 >a : Z
 >'' : ""
 
@@ -158,14 +148,11 @@ module WithCandidates {
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >'' : ""
 ><Z>(a: Z) => 1 : <Z>(a: Z) => number
->Z : Z
 >a : Z
 >1 : 1
 
     class C2<T, U> {
 >C2 : C2<T, U>
->T : T
->U : U
 
         foo3(x: T, cb: (a: T) => U, y: U) {
 >foo3 : (x: T, cb: (a: T) => U, y: U) => U
@@ -192,7 +179,6 @@ module WithCandidates {
 >foo3 : (x: number, cb: (a: number) => string, y: string) => string
 >1 : 1
 ><Z>(a: Z) => '' : <Z>(a: Z) => string
->Z : Z
 >a : Z
 >'' : ""
 >'' : ""
@@ -211,13 +197,9 @@ module WithCandidates {
 
     class C3<T, U> {
 >C3 : C3<T, U>
->T : T
->U : U
 
         foo3<T,U>(x: T, cb: (a: T) => U, y: U) {
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
->T : T
->U : U
 >x : T
 >cb : (a: T) => U
 >a : T
@@ -234,8 +216,6 @@ module WithCandidates {
 
     function other<T, U>(t: T, u: U) {
 >other : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 

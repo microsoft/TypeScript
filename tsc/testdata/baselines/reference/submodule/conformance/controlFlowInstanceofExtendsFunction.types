@@ -5,8 +5,6 @@ declare global {
 >global : any
 
     interface Function {
->Function : Function
-
         now(): string;
 >now : () => string
     }

@@ -2,8 +2,6 @@
 
 === mergedDeclarations1.ts ===
 interface Point {
->Point : Point
-
     x: number;
 >x : number
 

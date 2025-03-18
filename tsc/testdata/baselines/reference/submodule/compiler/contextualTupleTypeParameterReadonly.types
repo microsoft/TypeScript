@@ -3,7 +3,6 @@
 === contextualTupleTypeParameterReadonly.ts ===
 declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
 >each : <T extends readonly any[]>(cases: readonly T[]) => (fn: (...args: T) => any) => void
->T : T
 >cases : readonly T[]
 >fn : (...args: T) => any
 >args : T

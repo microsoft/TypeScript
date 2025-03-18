@@ -1,14 +1,6 @@
 --- old.invalidVoidValues.types
 +++ new.invalidVoidValues.types
-@@= skipped -47, +47 lines =@@
- >a : C
- 
- interface I { foo: string }
-+>I : I
- >foo : string
- 
- var b: I;
-@@= skipped -11, +12 lines =@@
+@@= skipped -58, +58 lines =@@
  >b : I
  
  x = { f() {} }
@@ -20,11 +12,3 @@
  >f : () => void
  
  module M { export var x = 1; }
-@@= skipped -17, +17 lines =@@
- 
- function f<T>(a: T) {
- >f : <T>(a: T) => void
-+>T : T
- >a : T
- 
-     x = a;

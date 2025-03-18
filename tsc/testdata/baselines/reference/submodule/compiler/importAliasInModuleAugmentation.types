@@ -11,7 +11,6 @@ namespace A {
 >34 : 34
 
     export interface y { s: string }
->y : y
 >s : string
 }
 

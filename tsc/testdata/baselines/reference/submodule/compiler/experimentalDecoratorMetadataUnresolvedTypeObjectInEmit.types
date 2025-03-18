@@ -1,17 +1,11 @@
 //// [tests/cases/compiler/experimentalDecoratorMetadataUnresolvedTypeObjectInEmit.ts] ////
 
 === types.d.ts ===
+
 declare namespace A {
->A : any
-
     export namespace B {
->B : any
-
         export namespace C {
->C : any
-
             export namespace D {
->D : any
             }
         }
     }

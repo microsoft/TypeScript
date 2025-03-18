@@ -2,8 +2,6 @@
 
 === typeGuardsWithInstanceOfBySymbolHasInstance.ts ===
 interface AConstructor {
->AConstructor : AConstructor
-
     new (): A;
     [Symbol.hasInstance](value: unknown): value is A;
 >[Symbol.hasInstance] : (value: unknown) => value is A
@@ -13,8 +11,6 @@ interface AConstructor {
 >value : unknown
 }
 interface A {
->A : A
-
     foo: string;
 >foo : string
 }
@@ -61,11 +57,7 @@ if (obj2 instanceof A) {
 
 // a construct signature with generics
 interface BConstructor {
->BConstructor : BConstructor
-
     new <T>(): B<T>;
->T : T
-
     [Symbol.hasInstance](value: unknown): value is B<any>;
 >[Symbol.hasInstance] : (value: unknown) => value is B<any>
 >Symbol.hasInstance : unique symbol
@@ -74,9 +66,6 @@ interface BConstructor {
 >value : unknown
 }
 interface B<T> {
->B : B<T>
->T : T
-
     foo: T;
 >foo : T
 }
@@ -145,8 +134,6 @@ if (obj4 instanceof B) {
 
 // has multiple construct signature
 interface CConstructor {
->CConstructor : CConstructor
-
     new (value: string): C1;
 >value : string
 
@@ -161,8 +148,6 @@ interface CConstructor {
 >value : unknown
 }
 interface C1 {
->C1 : C1
-
     foo: string;
 >foo : string
 
@@ -173,8 +158,6 @@ interface C1 {
 >bar1 : number
 }
 interface C2 {
->C2 : C2
-
     foo: string;
 >foo : string
 
@@ -242,8 +225,6 @@ if (obj6 instanceof C) {
 
 // with object type literal
 interface D {
->D : D
-
     foo: string;
 >foo : string
 }
@@ -300,8 +281,6 @@ if (obj8 instanceof D) {
 
 // a construct signature that returns a union type
 interface EConstructor {
->EConstructor : EConstructor
-
     new (): E1 | E2;
     [Symbol.hasInstance](value: unknown): value is E1 | E2;
 >[Symbol.hasInstance] : (value: unknown) => value is E1 | E2
@@ -311,8 +290,6 @@ interface EConstructor {
 >value : unknown
 }
 interface E1 {
->E1 : E1
-
     foo: string;
 >foo : string
 
@@ -320,8 +297,6 @@ interface E1 {
 >bar1 : number
 }
 interface E2 {
->E2 : E2
-
     foo: string;
 >foo : string
 
@@ -381,8 +356,6 @@ if (obj10 instanceof E) {
 
 // a construct signature that returns any
 interface FConstructor {
->FConstructor : FConstructor
-
     new (): any;
     [Symbol.hasInstance](value: unknown): value is any;
 >[Symbol.hasInstance] : (value: unknown) => value is any
@@ -392,8 +365,6 @@ interface FConstructor {
 >value : unknown
 }
 interface F {
->F : F
-
     foo: string;
 >foo : string
 
@@ -443,8 +414,6 @@ if (obj12 instanceof F) {
 
 // a type with a prototype, it overrides the construct signature
 interface GConstructor {
->GConstructor : GConstructor
-
     prototype: G1; // high priority
 >prototype : G1
 
@@ -457,14 +426,10 @@ interface GConstructor {
 >value : unknown
 }
 interface G1 {
->G1 : G1
-
     foo1: number;
 >foo1 : number
 }
 interface G2 {
->G2 : G2
-
     foo2: boolean;
 >foo2 : boolean
 }
@@ -511,8 +476,6 @@ if (obj14 instanceof G) {
 
 // a type with a prototype that has any type
 interface HConstructor {
->HConstructor : HConstructor
-
     prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
 >prototype : any
 
@@ -525,8 +488,6 @@ interface HConstructor {
 >value : unknown
 }
 interface H {
->H : H
-
     foo: number;
 >foo : number
 }

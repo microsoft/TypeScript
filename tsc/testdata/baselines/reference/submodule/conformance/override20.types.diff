@@ -1,38 +1,6 @@
 --- old.override20.types
 +++ new.override20.types
-@@= skipped -14, +14 lines =@@
-     }
- 
- interface I1 {
-+>I1 : I1
-+
-     m1(): void;
- >m1 : () => void
- }
- 
- interface I2 {
-+>I2 : I2
-+
-     m1(): void;
- >m1 : () => void
- 
-@@= skipped -13, +17 lines =@@
- }
- 
- interface C1 {
-+>C1 : C1
-+
-     new(...args: any[]): I1;
- >args : any[]
- }
- 
- interface C2 {
-+>C2 : C2
-+
-     new(...args: any[]): I2;
- >args : any[]
- }
-@@= skipped -18, +22 lines =@@
+@@= skipped -45, +45 lines =@@
  
          super.m1();
  >super.m1() : void

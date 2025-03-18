@@ -2,8 +2,6 @@
 
 === objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts ===
 interface Function {
->Function : Function
-
     data: number;
 >data : number
 
@@ -12,8 +10,6 @@ interface Function {
 }
 
 interface I {
->I : I
-
     new(): number;
     apply(a: any, b?: any): void;
 >apply : (a: any, b?: any) => void

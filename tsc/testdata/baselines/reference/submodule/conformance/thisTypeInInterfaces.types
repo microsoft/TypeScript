@@ -2,8 +2,6 @@
 
 === thisTypeInInterfaces.ts ===
 interface I1 {
->I1 : I1
-
     x: this;
 >x : this
 
@@ -13,8 +11,6 @@ interface I1 {
 }
 
 interface I2 {
->I2 : I2
-
     (x: this): this;
 >x : this
 
@@ -26,9 +22,6 @@ interface I2 {
 }
 
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     x: T;
 >x : T
 
@@ -37,8 +30,6 @@ interface Foo<T> {
 }
 
 interface I3 {
->I3 : I3
-
     a: this[];
 >a : this[]
 

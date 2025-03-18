@@ -1,20 +1,6 @@
 --- old.knockout.types
 +++ new.knockout.types
-@@= skipped -4, +4 lines =@@
- >ko : typeof ko
- 
-    export interface Observable<T> {
-+>Observable : Observable<T>
-+>T : T
-+
-      (): T;
-      (value: T): any;
- >value : T
-@@= skipped -15, +18 lines =@@
-    }
-    export function observable<T>(value: T): Observable<T>;
- >observable : <T>(value: T) => Observable<T>
-+>T : T
+@@= skipped -22, +22 lines =@@
  >value : T
   }
   var o = {

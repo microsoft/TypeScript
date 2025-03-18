@@ -1,14 +1,6 @@
 --- old.deeplyNestedConditionalTypes.types
 +++ new.deeplyNestedConditionalTypes.types
-@@= skipped -2, +2 lines =@@
- === deeplyNestedConditionalTypes.ts ===
- type Foo<T> =
- >Foo : Foo<T>
-+>T : T
- 
-     T extends 0 ? '0' :
-     T extends 1 ? '1' :
-@@= skipped -107, +108 lines =@@
+@@= skipped -109, +109 lines =@@
  >T0 : "99"
  
  type T1 = Foo<any>;

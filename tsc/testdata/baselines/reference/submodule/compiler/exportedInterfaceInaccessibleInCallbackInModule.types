@@ -2,8 +2,6 @@
 
 === exportedInterfaceInaccessibleInCallbackInModule.ts ===
 export interface ProgressCallback {
->ProgressCallback : ProgressCallback
-
 	(progress:any):any;
 >progress : any
 }	
@@ -11,7 +9,6 @@ export interface ProgressCallback {
 // --- Generic promise
 export declare class TPromise<V> {
 >TPromise : TPromise<V>
->V : V
 	
 	constructor(init:(complete: (value:V)=>void, error:(err:any)=>void, progress:ProgressCallback)=>void, oncancel?: any);
 >init : (complete: (value: V) => void, error: (err: any) => void, progress: ProgressCallback) => void
@@ -25,7 +22,6 @@ export declare class TPromise<V> {
     // removing this method fixes the error squiggle.....
 	public then<U>(success?: (value:V)=>TPromise<U>, error?: (err:any)=>TPromise<U>, progress?:ProgressCallback): TPromise<U>;
 >then : <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback) => TPromise<U>
->U : U
 >success : (value: V) => TPromise<U>
 >value : V
 >error : (err: any) => TPromise<U>

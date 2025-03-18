@@ -1,21 +1,6 @@
 --- old.jsxParsingError3.types
 +++ new.jsxParsingError3.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
-   interface Element {}
-+>Element : Element
-+
-   interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-     [s: string]: any;
- >s : string
-   }
-@@= skipped -9, +15 lines =@@
+@@= skipped -10, +10 lines =@@
  
  === Error1.tsx ===
  let x1 = <div>}</div>;

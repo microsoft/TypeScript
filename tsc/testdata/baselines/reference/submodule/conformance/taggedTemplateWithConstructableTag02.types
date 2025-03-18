@@ -2,8 +2,6 @@
 
 === taggedTemplateWithConstructableTag02.ts ===
 interface I {
->I : I
-
     new (...args: any[]): string;
 >args : any[]
 

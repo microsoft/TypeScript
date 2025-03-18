@@ -1,29 +1,6 @@
 --- old.declarationEmitQualifiedAliasTypeArgument.types
 +++ new.declarationEmitQualifiedAliasTypeArgument.types
-@@= skipped -1, +1 lines =@@
- 
- === bbb.d.ts ===
- export interface INode<T> {
-+>INode : INode<T>
-+>T : T
-+
-     data: T;
- >data : T
- }
- 
- export function create<T>(): () => INode<T>;
- >create : <T>() => () => INode<T>
-+>T : T
- 
- === lib.d.ts ===
- export type G<T extends string> = { [P in T]: string };
- >G : G<T>
-+>T : T
-+>P : P
- 
- export enum E {
- >E : E
-@@= skipped -36, +42 lines =@@
+@@= skipped -37, +37 lines =@@
  >Q : any
  
  import { create } from "./bbb";

@@ -1,93 +1,11 @@
 --- old.typeVariableTypeGuards.types
 +++ new.typeVariableTypeGuards.types
-@@= skipped -3, +3 lines =@@
- // Repro from #14091
- 
- interface Foo {
-+>Foo : Foo
-+
-     foo(): void
- >foo : () => void
- }
- 
- class A<P extends Partial<Foo>> {
- >A : A<P>
-+>P : P
- 
-     constructor(public props: Readonly<P>) {}
- >props : Readonly<P>
-@@= skipped -32, +35 lines =@@
- // Repro from #14415
- 
- interface Banana {
-+>Banana : Banana
-+
-     color: 'yellow';
- >color : "yellow"
- }
- 
- class Monkey<T extends Banana | undefined> {
- >Monkey : Monkey<T>
-+>T : T
- 
-     constructor(public a: T) {}
- >a : T
-@@= skipped -29, +32 lines =@@
- }
- 
- interface BigBanana extends Banana {
-+>BigBanana : BigBanana
- }
- 
- class BigMonkey extends Monkey<BigBanana> {
-@@= skipped -36, +37 lines =@@
- 
- function f1<T extends Item | undefined>(obj: T) {
- >f1 : <T extends Item | undefined>(obj: T) => void
-+>T : T
- >obj : T
- 
-     if (obj) {
-@@= skipped -23, +24 lines =@@
- 
- function f2<T extends Item | undefined>(obj: T | undefined) {
- >f2 : <T extends Item | undefined>(obj: T | undefined) => void
-+>T : T
- >obj : T | undefined
- 
-     if (obj) {
-@@= skipped -23, +24 lines =@@
- 
- function f3<T extends Item | undefined>(obj: T | null) {
- >f3 : <T extends Item | undefined>(obj: T | null) => void
-+>T : T
- >obj : T | null
- 
-     if (obj) {
-@@= skipped -23, +24 lines =@@
- 
- function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
- >f4 : <T extends string[] | undefined>(obj: T | undefined, x: number) => void
-+>T : T
- >obj : T | undefined
- >x : number
- 
-@@= skipped -17, +18 lines =@@
- 
- function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
- >f5 : <T, K extends keyof T>(obj: T | undefined, key: K) => void
-+>T : T
-+>K : K
- >obj : T | undefined
- >key : K
- 
-@@= skipped -16, +18 lines =@@
+@@= skipped -202, +202 lines =@@
  // https://github.com/microsoft/TypeScript/issues/57381
  
  function f6<T extends string | (new () => {})>(a: T) {
 ->f6 : <T extends string | (new () => {})>(a: T) => void
 +>f6 : <T extends string | new () => {}>(a: T) => void
-+>T : T
  >a : T
  
    if (typeof a !== "string") {

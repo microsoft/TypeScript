@@ -8,12 +8,8 @@
 +>"someMod" : any
  
      export interface TopLevel {
-+>TopLevel : TopLevel
-+
          duplicate1(): number;
- >duplicate1 : () => number
- 
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  }
  export {};
  

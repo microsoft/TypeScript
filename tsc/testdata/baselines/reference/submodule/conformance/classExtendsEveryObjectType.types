@@ -2,8 +2,6 @@
 
 === classExtendsEveryObjectType.ts ===
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }

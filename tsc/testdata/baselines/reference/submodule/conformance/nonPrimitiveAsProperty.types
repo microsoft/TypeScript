@@ -2,8 +2,6 @@
 
 === nonPrimitiveAsProperty.ts ===
 interface WithNonPrimitive {
->WithNonPrimitive : WithNonPrimitive
-
     foo: object
 >foo : object
 }

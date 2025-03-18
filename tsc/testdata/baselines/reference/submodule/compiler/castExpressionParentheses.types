@@ -206,7 +206,6 @@ new (<any>A());
 >(<Tany>()=> {})() : void
 >(<Tany>()=> {}) : <Tany>() => void
 ><Tany>()=> {} : <Tany>() => void
->Tany : Tany
 
 (<any>function foo() { })();
 >(<any>function foo() { })() : any

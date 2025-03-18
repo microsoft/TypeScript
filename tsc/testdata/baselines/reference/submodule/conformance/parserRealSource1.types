@@ -17,8 +17,6 @@ module TypeScript {
 >false : false
 
         export interface IDiagnosticWriter {
->IDiagnosticWriter : IDiagnosticWriter
-
             Alert(output: string): void;
 >Alert : (output: string) => void
 >output : string
@@ -84,8 +82,6 @@ module TypeScript {
     }
 
     export interface ILogger {
->ILogger : ILogger
-
         information(): boolean;
 >information : () => boolean
 

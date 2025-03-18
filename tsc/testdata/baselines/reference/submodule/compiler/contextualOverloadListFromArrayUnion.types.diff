@@ -31,23 +31,7 @@
  >item => item.length : (item: string | number[]) => number
  >item : string | number[]
  >item.length : number
-@@= skipped -12, +12 lines =@@
- === three.ts ===
- // #42504
- interface ResizeObserverCallback {
-+>ResizeObserverCallback : ResizeObserverCallback
-+
-     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
- >entries : ResizeObserverEntry[]
- >observer : ResizeObserver
- }
- interface ResizeObserverCallback { // duplicate for effect
-+>ResizeObserverCallback : ResizeObserverCallback
-+
-     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
- >entries : ResizeObserverEntry[]
- >observer : ResizeObserver
-@@= skipped -13, +17 lines =@@
+@@= skipped -25, +25 lines =@@
  const resizeObserver = new ResizeObserver(([entry]) => {
  >resizeObserver : ResizeObserver
  >new ResizeObserver(([entry]) => {    entry}) : ResizeObserver
@@ -58,34 +42,7 @@
  >entry : ResizeObserverEntry
  
      entry
-@@= skipped -10, +10 lines =@@
- });
- // comment in #35501
- interface Callback<T> {
-+>Callback : Callback<T>
-+>T : T
-+
-     (error: null, result: T): unknown
- >error : null
- >result : T
-@@= skipped -10, +13 lines =@@
- }
- 
- interface Task<T> {
-+>Task : Task<T>
-+>T : T
-+
-     (callback: Callback<T>): unknown
- >callback : Callback<T>
- }
- 
- export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
- >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
-+>T : T
- >tasks : Task<T>[]
- >callback : Callback<T[]>
- 
-@@= skipped -77, +81 lines =@@
+@@= skipped -97, +97 lines =@@
  series([
  >series([    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),], (error, results) => {    if (error) {        console.error(error)    } else {        console.log(results)    }}) : void
  >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void

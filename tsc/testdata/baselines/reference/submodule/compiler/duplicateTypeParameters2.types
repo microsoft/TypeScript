@@ -10,7 +10,3 @@ class B { public bar() { } }
 >bar : () => void
 
 interface I<T extends A, T extends B> {}
->I : I<T>
->T : T
->T : T
-

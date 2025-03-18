@@ -3,8 +3,6 @@
 === node_modules/aws-lambda/index.d.ts ===
 export type Handler<TEvent = any, TResult = any> = (
 >Handler : Handler<TEvent, TResult>
->TEvent : TEvent
->TResult : TResult
 
     event: TEvent,
 >event : TEvent
@@ -19,7 +17,6 @@ export type Handler<TEvent = any, TResult = any> = (
 
 export type Callback<TResult = any> = (error?: Error | string | null, result?: TResult) => void;
 >Callback : Callback<TResult>
->TResult : TResult
 >error : string | Error
 >result : TResult
 
@@ -33,26 +30,17 @@ declare namespace lambdaTester {
 
     type HandlerEvent<T extends Handler> = T extends Handler<infer TEvent> ? TEvent : never;
 >HandlerEvent : HandlerEvent<T>
->T : T
->TEvent : TEvent
 
     type HandlerResult<T extends Handler> = T extends Handler<any, infer TResult> ? TResult : never;
 >HandlerResult : HandlerResult<T>
->T : T
->TResult : TResult
 
     type HandlerError<T extends Handler> = T extends Handler<any, infer TResult>
 >HandlerError : HandlerError<T>
->T : T
->TResult : TResult
 
         ? NonNullable<Parameters<Callback<TResult>>['0']>
         : never;
 
     interface VerifierFn<S> {
->VerifierFn : VerifierFn<S>
->S : S
-
         (result: S, additional?: any): void | Promise<void>;
 >result : S
 >additional : any
@@ -64,7 +52,6 @@ declare namespace lambdaTester {
     }
     type Verifier<S> = S extends HandlerError<Handler>
 >Verifier : Verifier<S>
->S : S
 
         ? S extends string
             ? VerifierFn<string>
@@ -75,7 +62,6 @@ declare namespace lambdaTester {
 
     class LambdaTester<T extends Handler> {
 >LambdaTester : LambdaTester<T>
->T : T
 
         event(event: HandlerEvent<T>): this;
 >event : (event: HandlerEvent<T>) => this
@@ -85,7 +71,6 @@ declare namespace lambdaTester {
 
 declare function lambdaTester<T extends Handler>(handler: T): lambdaTester.LambdaTester<T>;
 >lambdaTester : typeof lambdaTester
->T : T
 >handler : T
 >lambdaTester : any
 

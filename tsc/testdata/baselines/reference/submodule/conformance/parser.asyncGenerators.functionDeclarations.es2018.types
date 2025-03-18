@@ -130,8 +130,6 @@ async function * f18() {
 }
 === awaitAsTypeIsOk.ts ===
 interface await {}
->await : await
-
 async function * f19() {
 >f19 : () => AsyncGenerator<never, void, unknown>
 
@@ -140,8 +138,6 @@ async function * f19() {
 }
 === yieldAsTypeIsOk.ts ===
 interface yield {}
->yield : yield
-
 async function * f20() {
 >f20 : () => AsyncGenerator<never, void, unknown>
 

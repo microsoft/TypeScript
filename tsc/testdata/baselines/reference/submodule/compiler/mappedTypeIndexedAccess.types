@@ -5,11 +5,8 @@
 
 type Pairs<T> = {
 >Pairs : Pairs<T>
->T : T
 
     [TKey in keyof T]: {
->TKey : TKey
-
         key: TKey;
 >key : TKey
 
@@ -21,7 +18,6 @@ type Pairs<T> = {
 
 type Pair<T> = Pairs<T>[keyof T];
 >Pair : Pair<T>
->T : T
 
 type FooBar = {
 >FooBar : FooBar

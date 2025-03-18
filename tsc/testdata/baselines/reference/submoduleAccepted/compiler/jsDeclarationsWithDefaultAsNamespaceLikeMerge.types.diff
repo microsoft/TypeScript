@@ -1,29 +1,6 @@
 --- old.jsDeclarationsWithDefaultAsNamespaceLikeMerge.types
 +++ new.jsDeclarationsWithDefaultAsNamespaceLikeMerge.types
-@@= skipped -4, +4 lines =@@
- >Computed : Computed
- 
- interface Mapper<R> {
-+>Mapper : Mapper<R>
-+>R : R
-+
-     <Key extends string>(map: Key[]): { [K in Key]: R };
-+>Key : Key
- >map : Key[]
-+>K : K
- 
-     <Map extends Record<string, string>>(map: Map): { [K in keyof Map]: R };
-+>Map : Map
- >map : Map
-+>K : K
- }
- interface NamespacedMappers {
-+>NamespacedMappers : NamespacedMappers
-+
-     mapState: Mapper<Computed>;
- >mapState : Mapper<Computed>
- }
-@@= skipped -15, +24 lines =@@
+@@= skipped -19, +19 lines =@@
  
  === /index.js ===
  import { createNamespacedHelpers } from './helper'

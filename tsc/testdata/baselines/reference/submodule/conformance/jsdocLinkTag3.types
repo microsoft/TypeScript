@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/jsdoc/jsdocLinkTag3.ts] ////
 
 === /a.ts ===
+
 export interface A {}
->A : A
 
 === /b.ts ===
 import type { A } from "./a";

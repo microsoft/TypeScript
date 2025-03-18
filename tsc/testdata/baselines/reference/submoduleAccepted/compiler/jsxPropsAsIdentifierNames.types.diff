@@ -1,21 +1,6 @@
 --- old.jsxPropsAsIdentifierNames.types
 +++ new.jsxPropsAsIdentifierNames.types
-@@= skipped -1, +1 lines =@@
- 
- === index.tsx ===
- declare namespace JSX {
-+>JSX : any
-+
-     interface Element { }
-+>Element : Element
-+
-     interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         div: {
- >div : { static?: boolean; }
- 
-@@= skipped -14, +20 lines =@@
+@@= skipped -15, +15 lines =@@
  export default <div static={true} />;
  ><div static={true} /> : any
  >div : any

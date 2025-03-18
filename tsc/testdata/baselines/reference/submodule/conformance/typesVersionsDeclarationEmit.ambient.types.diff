@@ -32,18 +32,7 @@
  declare module "ext" {
  >"ext" : typeof import("ext")
  
-     export interface A {}
-+>A : A
-+
-     export function fa(): A;
- >fa : () => A
- }
-@@= skipped -27, +29 lines =@@
- >"ext/other" : typeof import("ext/other")
- 
-     export interface B {}
-+>B : B
-+
+@@= skipped -30, +30 lines =@@
      export function fb(): B;
  >fb : () => B
  }

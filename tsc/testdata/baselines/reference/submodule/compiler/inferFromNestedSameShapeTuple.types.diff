@@ -1,29 +1,6 @@
 --- old.inferFromNestedSameShapeTuple.types
 +++ new.inferFromNestedSameShapeTuple.types
-@@= skipped -4, +4 lines =@@
- 
- type Magic<X> = X extends [[infer Y, ...infer _], ...infer __] ? Y : never;
- >Magic : Magic<X>
-+>X : X
-+>Y : Y
-+>_ : _
-+>__ : __
- 
- type R = Magic<[[number]]>
- >R : number
-@@= skipped -8, +12 lines =@@
- 
- type Recursive<Id> = {
- >Recursive : Recursive<Id>
-+>Id : Id
- 
-     id: Id
- >id : Id
-@@= skipped -10, +11 lines =@@
- 
- declare function getIds<Id>(items: readonly Recursive<Id>[]): Id[];
- >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
-+>Id : Id
+@@= skipped -25, +25 lines =@@
  >items : readonly Recursive<Id>[]
  
  const items = [{
@@ -62,7 +39,7 @@
  
      }]
  }] as const satisfies readonly Recursive<string>[]
-@@= skipped -33, +34 lines =@@
+@@= skipped -30, +30 lines =@@
  >foo : ("a" | "b")[]
  >getIds(items) : ("a" | "b")[]
  >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
@@ -105,21 +82,3 @@
  
      }]
  }] as const)
-@@= skipped -35, +35 lines =@@
- 
- type T1<T> = [number, T1<{ x: T }>];
- >T1 : T1<T>
-+>T : T
- >x : T
- 
- type T2<T> = [42, T2<{ x: T }>];
- >T2 : T2<T>
-+>T : T
- >x : T
- 
- function qq<U>(x: T1<U>, y: T2<U>) {
- >qq : <U>(x: T1<U>, y: T2<U>) => void
-+>U : U
- >x : T1<U>
- >y : T2<U>
- 

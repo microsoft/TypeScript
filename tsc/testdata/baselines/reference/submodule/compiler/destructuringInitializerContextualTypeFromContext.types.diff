@@ -1,23 +1,6 @@
 --- old.destructuringInitializerContextualTypeFromContext.types
 +++ new.destructuringInitializerContextualTypeFromContext.types
-@@= skipped -1, +1 lines =@@
- 
- === destructuringInitializerContextualTypeFromContext.ts ===
- interface SFC<P = {}> {
-+>SFC : SFC<P>
-+>P : P
-+
-     (props: P & { children?: any }): any | null;
- >props : P & { children?: any; }
- >children : any
- }
- 
- interface Props {
-+>Props : Props
-+
-     name: "Apollo" | "Artemis" | "Dionysus" | "Persephone";
- >name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
- }
+@@= skipped -13, +13 lines =@@
  
  const Parent: SFC<Props> = ({
  >Parent : SFC<Props>
@@ -26,7 +9,7 @@
  
      children,
  >children : any
-@@= skipped -33, +38 lines =@@
+@@= skipped -21, +21 lines =@@
  
  const Child: SFC<Props> = ({
  >Child : SFC<Props>

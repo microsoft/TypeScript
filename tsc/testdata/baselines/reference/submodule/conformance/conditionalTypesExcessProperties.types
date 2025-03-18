@@ -3,7 +3,6 @@
 === conditionalTypesExcessProperties.ts ===
 type Something<T> = { test: string } &  (T extends object ? {
 >Something : Something<T>
->T : T
 >test : string
 
     arg: T
@@ -17,7 +16,6 @@ type Something<T> = { test: string } &  (T extends object ? {
 
 function testFunc2<A extends object>(a: A, sa: Something<A>) {
 >testFunc2 : <A extends object>(a: A, sa: Something<A>) => void
->A : A
 >a : A
 >sa : Something<A>
 

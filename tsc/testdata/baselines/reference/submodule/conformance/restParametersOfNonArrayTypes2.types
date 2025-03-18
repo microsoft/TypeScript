@@ -5,11 +5,7 @@
 // user defined subtypes of array do not count, all of these are errors
 
 interface MyThing extends Array<any> { }
->MyThing : MyThing
-
 interface MyThing2<T> extends Array<T> { }
->MyThing2 : MyThing2<T>
->T : T
 
 function foo(...x: MyThing) { }
 >foo : (...x: MyThing) => void
@@ -36,8 +32,6 @@ class C {
 }
 
 interface I {
->I : I
-
     (...x: MyThing);
 >x : MyThing
 
@@ -107,8 +101,6 @@ class C2 {
 }
 
 interface I2 {
->I2 : I2
-
     (...x: MyThing2<string>);
 >x : MyThing2<string>
 

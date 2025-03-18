@@ -1,65 +1,15 @@
 --- old.declarationEmitObjectAssignedDefaultExport.types
 +++ new.declarationEmitObjectAssignedDefaultExport.types
-@@= skipped -1, +1 lines =@@
- 
- === node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
- interface Statics {
-+>Statics : Statics
-+
-     "$$whatever": string;
- >"$$whatever" : string
- }
- declare namespace hoistNonReactStatics {
-+>hoistNonReactStatics : any
-+
-     type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
- >NonReactStatics : NonReactStatics<T>
-+>T : T
-+>X : X
- }
- export = hoistNonReactStatics;
- >hoistNonReactStatics : any
-@@= skipped -15, +21 lines =@@
- >hoistNonReactStatics : any
- 
- export interface DefaultTheme {}
-+>DefaultTheme : DefaultTheme
-+
- export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =
- >StyledComponent : StyledComponent<TTag, TTheme, TStyle, TWhatever>
-+>TTag : TTag
-+>TTheme : TTheme
-+>TStyle : TStyle
-+>TWhatever : TWhatever
- 
-     string
-     & StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
-@@= skipped -9, +15 lines =@@
- >hoistNonReactStatics : any
- 
- export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> {
-+>StyledComponentBase : StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
-+>TTag : TTag
-+>TTheme : TTheme
-+>TStyle : TStyle
-+>TWhatever : TWhatever
-+
-     tag: TTag;
- >tag : TTag
- 
-@@= skipped -13, +19 lines =@@
- >whatever : TWhatever
+@@= skipped -39, +39 lines =@@
  }
  export interface StyledInterface {
-+>StyledInterface : StyledInterface
-+
      div: (a: TemplateStringsArray) => StyledComponent<"div">;
 ->div : (a: TemplateStringsArray) => StyledComponent<"div">
 +>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
  >a : TemplateStringsArray
  }
  
-@@= skipped -13, +15 lines =@@
+@@= skipped -12, +12 lines =@@
  
  === index.ts ===
  import styled from "styled-components";

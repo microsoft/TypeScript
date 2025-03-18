@@ -2,8 +2,6 @@
 
 === controlFlowElementAccessNoCrash1.ts ===
 interface TestTscEdit {
->TestTscEdit : TestTscEdit
-
   caption: string;
 >caption : string
 
@@ -12,8 +10,6 @@ interface TestTscEdit {
 }
 
 interface TestTscCompile {
->TestTscCompile : TestTscCompile
-
   subScenario: string;
 >subScenario : string
 
@@ -22,8 +18,6 @@ interface TestTscCompile {
 }
 
 interface VerifyTscEditDiscrepanciesInput {
->VerifyTscEditDiscrepanciesInput : VerifyTscEditDiscrepanciesInput
-
   index: number;
 >index : number
 

@@ -3,11 +3,8 @@
 === localTypeParameterInferencePriority.ts ===
 export type UnrollOnHover<O extends object> = O extends object ?
 >UnrollOnHover : UnrollOnHover<O>
->O : O
 
     { [K in keyof O]: O[K]; } :
->K : K
-
     never;
 
 
@@ -16,7 +13,6 @@ export type Schema = Record<string, unknown>;
 
 class Table<S extends Schema>  {
 >Table : Table<S>
->S : S
 
     __schema!: S;
 >__schema : S
@@ -24,7 +20,6 @@ class Table<S extends Schema>  {
     // Removing this line, removes the error 
     getRows<C extends keyof S>(): Array<UnrollOnHover<Pick<S, C>>> {
 >getRows : <C extends keyof S>() => UnrollOnHover<Pick<S, C>>[]
->C : C
 
         return null!
 >null! : null
@@ -33,17 +28,14 @@ class Table<S extends Schema>  {
 
 class ColumnSelectViewImp<S extends Schema> extends Table<S> { }
 >ColumnSelectViewImp : ColumnSelectViewImp<S>
->S : S
 >Table : Table<S>
 
 
 const ColumnSelectView1: new <S extends Schema>() => Table<UnrollOnHover<S>> = ColumnSelectViewImp;
 >ColumnSelectView1 : new <S extends Schema>() => Table<UnrollOnHover<S>>
->S : S
 >ColumnSelectViewImp : typeof ColumnSelectViewImp
 
 const ColumnSelectView2: new <S extends Schema>() => Table<UnrollOnHover<S>> = Table;
 >ColumnSelectView2 : new <S extends Schema>() => Table<UnrollOnHover<S>>
->S : S
 >Table : typeof Table
 

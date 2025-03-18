@@ -2,9 +2,6 @@
 
 === incrementOnNullAssertion.ts ===
 interface Dictionary<T> {
->Dictionary : Dictionary<T>
->T : T
-
     [myFavouriteType: string]: T | undefined
 >myFavouriteType : string
 }

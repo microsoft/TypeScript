@@ -7,8 +7,5 @@
 ->foobar : (a: typeof foo) => typeof bar
 +>foobar : (a: () => any) => () => any
  >a : () => any
-->foo : () => any
-->bar : () => any
- 
- === a.ts ===
- /*!=========
+ >foo : () => any
+ >bar : () => any

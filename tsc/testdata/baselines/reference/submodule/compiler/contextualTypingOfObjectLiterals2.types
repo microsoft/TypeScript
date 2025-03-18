@@ -2,8 +2,6 @@
 
 === contextualTypingOfObjectLiterals2.ts ===
 interface Foo {
->Foo : Foo
-
     foo: (t: string) => string;
 >foo : (t: string) => string
 >t : string

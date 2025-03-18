@@ -63,7 +63,7 @@
 +>f1 : (cb: (...args: [number, boolean, string]) => void) => void
 +>cb : (...args: [number, boolean, string]) => void
  >args : [number, boolean, string]
-->t1 : [number, boolean, string]
+ >t1 : [number, boolean, string]
  
  f1((a, b, c) => {})
  >f1((a, b, c) => {}) : void
@@ -72,7 +72,7 @@
  >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
  >a : number
  >b : boolean
-@@= skipped -15, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  
  f1((...x) => {})
  >f1((...x) => {}) : void
@@ -173,7 +173,7 @@
 +>f2 : (cb: (...args: [number, boolean, ...string[]]) => void) => void
 +>cb : (...args: [number, boolean, ...string[]]) => void
  >args : [number, boolean, ...string[]]
-->t2 : [number, boolean, ...string[]]
+ >t2 : [number, boolean, ...string[]]
  
  f2((a, b, c) => {})
  >f2((a, b, c) => {}) : void
@@ -182,7 +182,7 @@
  >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
  >a : number
  >b : boolean
-@@= skipped -15, +14 lines =@@
+@@= skipped -15, +15 lines =@@
  
  f2((...x) => {})
  >f2((...x) => {}) : void
@@ -271,7 +271,7 @@
 +>cb : (x: number, ...args: [boolean, ...string[]]) => void
  >x : number
  >args : [boolean, ...string[]]
-->t3 : [boolean, ...string[]]
+ >t3 : [boolean, ...string[]]
  
  f3((a, b, c) => {})
  >f3((a, b, c) => {}) : void
@@ -280,7 +280,7 @@
  >(a, b, c) => {} : (a: number, b: boolean, c: string) => void
  >a : number
  >b : boolean
-@@= skipped -16, +15 lines =@@
+@@= skipped -16, +16 lines =@@
  
  f3((...x) => {})
  >f3((...x) => {}) : void
@@ -315,15 +315,7 @@
  >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
  >a : number
  >b : boolean
-@@= skipped -9, +9 lines =@@
- 
- function f4<T extends any[]>(t: T) {
- >f4 : <T extends any[]>(t: T) => void
-+>T : T
- >t : T
- 
-     (function(...x){})(...t);
-@@= skipped -22, +23 lines =@@
+@@= skipped -31, +31 lines =@@
  
      (function(a, ...x){})(1, 2, ...t);
  >(function(a, ...x){})(1, 2, ...t) : void
@@ -343,14 +335,7 @@
  >x : [x: number, ...args: T]
  
      f((a, ...x) => {});
-@@= skipped -21, +21 lines =@@
- 
- declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
- >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
-+>T : T
-+>U : U
- >f : (...args: T) => U
- >args : T
+@@= skipped -26, +26 lines =@@
  >args : T
  
  let g0 = f5(() => "hello");
@@ -370,7 +355,7 @@
  >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
  >(x, y) => 42 : (x: any, y: any) => number
  >x : any
-@@= skipped -21, +23 lines =@@
+@@= skipped -16, +16 lines =@@
  >42 : 42
  
  let g2 = f5((x: number, y) => 42);
@@ -392,17 +377,7 @@
  >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
  >(x: number, y: number) => x + y : (x: number, y: number) => number
  >x : number
-@@= skipped -20, +20 lines =@@
- 
- declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
- >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
-+>A : A
-+>B : B
-+>C : C
- >f : (...args: A) => B
- >args : A
- >g : (x: B) => C
-@@= skipped -7, +10 lines =@@
+@@= skipped -27, +27 lines =@@
  >args : A
  
  let g5 = pipe(() => true, b => 42);

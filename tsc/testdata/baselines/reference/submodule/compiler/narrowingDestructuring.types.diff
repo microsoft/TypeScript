@@ -1,30 +1,6 @@
 --- old.narrowingDestructuring.types
 +++ new.narrowingDestructuring.types
-@@= skipped -9, +9 lines =@@
- 
- function func<T extends X>(value: T) {
- >func : <T extends X>(value: T) => void
-+>T : T
- >value : T
- 
-     if (value.kind === "a") {
-@@= skipped -47, +48 lines =@@
- 
- function func2<T extends Z>(value: T) {
- >func2 : <T extends Z>(value: T) => void
-+>T : T
- >value : T
- 
-     if (value.kind === "f") {
-@@= skipped -41, +42 lines =@@
- 
- function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t: T) {
- >func3 : <T extends { kind: "a"; a: string; } | { kind: "b"; b: number; }>(t: T) => void
-+>T : T
- >kind : "a"
- >a : string
- >kind : "b"
-@@= skipped -21, +22 lines =@@
+@@= skipped -118, +118 lines =@@
          const r2 = (({ kind, ...rest }) => rest)(t);
  >r2 : { a: string; }
  >(({ kind, ...rest }) => rest)(t) : { a: string; }
@@ -41,7 +17,6 @@
  function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
 ->farr : <T extends [number, string, string] | [string, number, number]>(x: T) => void
 +>farr : <T extends [string, number, number] | [number, string, string]>(x: T) => void
-+>T : T
  >x : T
  
      const [head, ...tail] = x;

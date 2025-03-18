@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface ButtonProp {
->ButtonProp : ButtonProp
-
     a: number,
 >a : number
 
@@ -60,8 +58,6 @@ class Button extends React.Component<ButtonProp, any> {
 }
 
 interface InnerButtonProp {
->InnerButtonProp : InnerButtonProp
-
 	a: number
 >a : number
 }

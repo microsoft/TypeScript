@@ -2,15 +2,11 @@
 
 === objectTypesIdentityWithPrivates3.ts ===
 interface T1 { }
->T1 : T1
-
 interface T2 { z }
->T2 : T2
 >z : any
 
 class C1<T> {
 >C1 : C1<T>
->T : T
 
     private x;
 >x : any
@@ -34,7 +30,6 @@ var c1: C1<T2>;
 
 class C3<T> {
 >C3 : C3<T>
->T : T
 
     private x: T; // This T is the difference between C3 and C1
 >x : T

@@ -39,6 +39,7 @@ class C {
 >[+s] : string
 >+s : number
 >s : string
+>s : string
 
     static [""]: number;
 >[""] : number

@@ -3,7 +3,6 @@
 === propertyAccessOnTypeParameterWithConstraints4.ts ===
 class C<T extends Date> {
 >C : C<T>
->T : T
 
     f() {
 >f : () => any
@@ -38,9 +37,6 @@ var r = (new C<Date>()).f();
 >f : () => any
 
 interface I<T extends Date> {
->I : I<T>
->T : T
-
     foo: T;
 >foo : T
 }
@@ -69,7 +65,6 @@ var a: {
 >a : <T extends Date>() => T
 
     <T extends Date>(): T;
->T : T
 }
 var r3: string = a().notHere();
 >r3 : string
@@ -94,7 +89,6 @@ var b = {
     foo: <T extends Date>(x: T): T => {
 >foo : <T extends Date>(x: T) => T
 ><T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    } : <T extends Date>(x: T) => T
->T : T
 >x : T
 
         var a = x['notHere'](); // should be string

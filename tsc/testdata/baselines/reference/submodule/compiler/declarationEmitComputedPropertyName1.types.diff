@@ -1,10 +1,7 @@
 --- old.declarationEmitComputedPropertyName1.types
 +++ new.declarationEmitComputedPropertyName1.types
-@@= skipped -4, +4 lines =@@
- 
- declare function create<T extends {}>(): T;
+@@= skipped -6, +6 lines =@@
  >create : <T extends {}>() => T
-+>T : T
  
  export const c = create<{
 ->c : { data: { ["a_b_c"]: string; ["sss"]: string; s_d: string; queryData?: string; ["foo bar"]: string; }; a_b_c: string; }
@@ -19,14 +16,7 @@
  
      ["a_b_c"]: string;
  >["a_b_c"] : string
-@@= skipped -35, +36 lines =@@
- }>();
- 
- export interface IData {
-+>IData : IData
-+
-   ["a_b_c"]: string;
- >["a_b_c"] : string
+@@= skipped -38, +38 lines =@@
  >"a_b_c" : "a_b_c"
  
    nested: {

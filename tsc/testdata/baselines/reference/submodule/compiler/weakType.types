@@ -2,8 +2,6 @@
 
 === weakType.ts ===
 interface Settings {
->Settings : Settings
-
     timeout?: number;
 >timeout : number
 
@@ -20,8 +18,6 @@ function getDefaultSettings() {
 >1000 : 1000
 }
 interface CtorOnly {
->CtorOnly : CtorOnly
-
     new(s: string): { timeout: 1000 }
 >s : string
 >timeout : 1000
@@ -80,8 +76,6 @@ type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
 >ConfigurableStartEnd : ConfigurableStartEnd
 
 interface InsertOptions {
->InsertOptions : InsertOptions
-
     prefix?: string
 >prefix : string
 
@@ -127,8 +121,6 @@ class K {
 }
 // Ctor isn't a weak type because it has a construct signature
 interface Ctor {
->Ctor : Ctor
-
     new (s: string): K
 >s : string
 

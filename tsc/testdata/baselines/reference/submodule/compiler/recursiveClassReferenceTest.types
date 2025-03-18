@@ -7,12 +7,8 @@
 
 
 declare module Sample.Thing {
->Sample : typeof Sample
->Thing : typeof Thing
 
 	export interface IWidget {
->IWidget : IWidget
-
 		getDomNode(): any;
 >getDomNode : () => any
 
@@ -28,7 +24,6 @@ declare module Sample.Thing {
 	}
 
 	export interface ICodeThing {
->ICodeThing : ICodeThing
   
   		getDomNode(): Element;
 >getDomNode : () => Element
@@ -46,8 +41,6 @@ declare module Sample.Thing {
 	}
 
 	export interface IAction {
->IAction : IAction
-
 		run(Thing:ICodeThing):boolean;
 >run : (Thing: ICodeThing) => boolean
 >Thing : ICodeThing
@@ -141,7 +134,6 @@ module Sample.Thing.Widgets {
 }
 
 interface IMode { getInitialState(): IState;} 
->IMode : IMode
 >getInitialState : () => IState
 
 class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
@@ -149,11 +141,8 @@ class AbstractMode implements IMode { public getInitialState(): IState { return 
 >getInitialState : () => IState
 
 interface IState {}
->IState : IState
 
 interface Window {
->Window : Window
-
     opener: Window;
 >opener : Window
 }

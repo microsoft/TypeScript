@@ -1,10 +1,7 @@
 --- old.baseExpressionTypeParameters.types
 +++ new.baseExpressionTypeParameters.types
-@@= skipped -4, +4 lines =@@
- 
- function base<T>() {
+@@= skipped -6, +6 lines =@@
  >base : <T>() => typeof Base
-+>T : T
  
      class Base {
 ->Base : Base
@@ -12,12 +9,11 @@
  
          static prop: T;
  >prop : T
-@@= skipped -13, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  
  class Gen<T> extends base<T>() {}  // Error, T not in scope
  >Gen : Gen<T>
 ->base<T>() : base<T>.Base
-+>T : T
 +>base<T>() : Base<T>
  >base : <T>() => typeof Base
  

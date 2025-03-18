@@ -1,25 +1,6 @@
 --- old.typeLiteralCallback.types
 +++ new.typeLiteralCallback.types
-@@= skipped -1, +1 lines =@@
- 
- === typeLiteralCallback.ts ===
- interface Foo<T> {
-+>Foo : Foo<T>
-+>T : T
-+
-     reject(arg: T): void ;
- >reject : (arg: T) => void
- >arg : T
-@@= skipped -8, +11 lines =@@
- >foo : Foo<string>
- 
- interface bar<T> {
-+>bar : bar<T>
-+>T : T
-+
-     fail(func: (arg: T) => void ): void ;
- >fail : (func: (arg: T) => void) => void
- >func : (arg: T) => void
+@@= skipped -15, +15 lines =@@
  >arg : T
  
      fail2(func: { (arg: T): void ; }): void ;

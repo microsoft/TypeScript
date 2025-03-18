@@ -1,25 +1,6 @@
 --- old.exportsAndImports3-es6.types
 +++ new.exportsAndImports3-es6.types
-@@= skipped -11, +11 lines =@@
- >C : C
- }
- export interface I {
-+>I : I
- }
- export enum E {
- >E : E
-@@= skipped -24, +25 lines =@@
- >x : any
- }
- export module N {
-+>N : any
-+
-     export interface I {
-+>I : I
-     }
- }
- export type T = number;
-@@= skipped -39, +42 lines =@@
+@@= skipped -74, +74 lines =@@
  >v : number
  >f1 : () => void
  >f : () => void

@@ -8,8 +8,6 @@ type PrivateSpecialString = string;
 >PrivateSpecialString : string
 
 export namespace N {
->N : any
-
     export type SpecialString = string;
 >SpecialString : string
 }

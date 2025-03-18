@@ -6,7 +6,6 @@ module Editor {
 
     export class List<T> {
 >List : List<T>
->T : T
 
         public next: List<T>;
 >next : List<T>
@@ -449,11 +448,9 @@ module Editor {
 
     export class ListFactory<T> {
 >ListFactory : ListFactory<T>
->T : T
 
         public MakeHead<T>(): List<T> {
 >MakeHead : <T>() => List<T>
->T : T
 
             var entry: List<T> = new List<T>(true, null);
 >entry : List<T>
@@ -481,7 +478,6 @@ module Editor {
 
         public MakeEntry<T>(data: T): List<T> {
 >MakeEntry : <T>(data: T) => List<T>
->T : T
 >data : T
 
             var entry: List<T> = new List<T>(false, data);
@@ -511,7 +507,6 @@ module Editor {
 
         public RemoveEntry<T>(entry: List<T>): List<T> {
 >RemoveEntry : <T>(entry: List<T>) => List<T>
->T : T
 >entry : List<T>
 
             if (entry == null) {

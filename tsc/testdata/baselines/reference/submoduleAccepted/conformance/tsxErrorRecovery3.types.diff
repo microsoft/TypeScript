@@ -1,11 +1,7 @@
 --- old.tsxErrorRecovery3.types
 +++ new.tsxErrorRecovery3.types
-@@= skipped -1, +1 lines =@@
- 
- === file1.tsx ===
+@@= skipped -3, +3 lines =@@
  declare namespace JSX { interface Element { } }
-+>JSX : any
-+>Element : Element
  
  <div></div>
 -><div></div><div></div> : JSX.Element

@@ -28,9 +28,3 @@
  
  === node_modules/inner/other.d.ts ===
  // esm format file
- export interface Thing {}
-+>Thing : Thing
-+
- export const x: () => Thing;
- >x : () => Thing
- 

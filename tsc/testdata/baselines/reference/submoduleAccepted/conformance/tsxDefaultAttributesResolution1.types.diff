@@ -8,10 +8,8 @@
 +>React : any
  
  interface Prop {
-+>Prop : Prop
-+
      x: boolean;
- >x : boolean
+@@= skipped -8, +8 lines =@@
  }
  class Poisoned extends React.Component<Prop, {}> {
  >Poisoned : Poisoned
@@ -32,7 +30,7 @@
  >div : any
  >div : any
      }
-@@= skipped -24, +26 lines =@@
+@@= skipped -16, +16 lines =@@
  
  // OK
  let p = <Poisoned x/>;

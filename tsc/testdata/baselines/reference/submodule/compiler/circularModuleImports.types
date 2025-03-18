@@ -2,7 +2,6 @@
 
 === circularModuleImports.ts ===
 module M
->M : any
  
 {
  

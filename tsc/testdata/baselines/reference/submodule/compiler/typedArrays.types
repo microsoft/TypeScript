@@ -742,7 +742,6 @@ function CreateTypedArraysOf2() {
 
 function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)=> number) {
 >CreateTypedArraysFromMapFn2 : <T>(obj: ArrayLike<T>, mapFn: (n: T, v: number) => number) => any[]
->T : T
 >obj : ArrayLike<T>
 >mapFn : (n: T, v: number) => number
 >n : T
@@ -1122,7 +1121,6 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 
 function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)=> number, thisArg: {}) {
 >CreateTypedArraysFromThisObj2 : <T>(obj: ArrayLike<T>, mapFn: (n: T, v: number) => number, thisArg: {}) => any[]
->T : T
 >obj : ArrayLike<T>
 >mapFn : (n: T, v: number) => number
 >n : T

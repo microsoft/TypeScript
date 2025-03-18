@@ -2,8 +2,6 @@
 
 === thisTypeInAccessorsNegative.ts ===
 interface Foo {
->Foo : Foo
-
     n: number;
 >n : number
 
@@ -11,8 +9,6 @@ interface Foo {
 >x : number
 }
 interface Bar {
->Bar : Bar
-
     wrong: "place" | "time" | "method" | "technique";
 >wrong : "method" | "place" | "technique" | "time"
 }

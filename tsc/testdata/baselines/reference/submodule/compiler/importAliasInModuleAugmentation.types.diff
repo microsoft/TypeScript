@@ -1,14 +1,6 @@
 --- old.importAliasInModuleAugmentation.types
 +++ new.importAliasInModuleAugmentation.types
-@@= skipped -10, +10 lines =@@
- >34 : 34
- 
-     export interface y { s: string }
-+>y : y
- >s : string
- }
- 
-@@= skipped -9, +10 lines =@@
+@@= skipped -19, +19 lines =@@
      export import x = A.y;
  >x : 34
  >A : typeof A

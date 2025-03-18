@@ -8,8 +8,6 @@ export const fun = (
 
     subFun: <Collection, Field extends keyof Collection>()
 >subFun : <Collection, Field extends keyof Collection>() => (Collection[Field] extends readonly (infer InnerArr)[] ? InnerArr : Collection[Field])[]
->Collection : Collection
->Field : Field
 
         => FlatArray<Collection[Field], 0>[]) => { };
 

@@ -4,15 +4,11 @@
 // Repro from #12101
 
 interface Type {
->Type : Type
-
   type: number;
 >type : number
 }
 
 interface TypeExt extends Type {
->TypeExt : TypeExt
-
   arr: Type[];
 >arr : Type[]
 }

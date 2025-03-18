@@ -1,20 +1,6 @@
 --- old.tsxEmit3.types
 +++ new.tsxEmit3.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements { }
-+>IntrinsicElements : IntrinsicElements
- }
- 
- module M {
-@@= skipped -26, +31 lines =@@
+@@= skipped -27, +27 lines =@@
  
  	// Emit M.Foo
  	Foo, <Foo />;

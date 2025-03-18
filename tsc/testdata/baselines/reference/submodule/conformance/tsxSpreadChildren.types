@@ -2,14 +2,8 @@
 
 === tsxSpreadChildren.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		[s: string]: any;
 >s : string
 	}
@@ -18,8 +12,6 @@ declare var React: any;
 >React : any
 
 interface TodoProp {
->TodoProp : TodoProp
-
     id: number;
 >id : number
 
@@ -27,8 +19,6 @@ interface TodoProp {
 >todo : string
 }
 interface TodoListProps {
->TodoListProps : TodoListProps
-
     todos: TodoProp[];
 >todos : TodoProp[]
 }

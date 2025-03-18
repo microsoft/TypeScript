@@ -1,27 +1,6 @@
 --- old.tsxCorrectlyParseLessThanComparison1.types
 +++ new.tsxCorrectlyParseLessThanComparison1.types
-@@= skipped -1, +1 lines =@@
- 
- === tsxCorrectlyParseLessThanComparison1.tsx ===
- declare module JSX {
-+>JSX : any
-+
-     interface Element {
-+>Element : Element
-+
-         div: string;
- >div : string
-     }
-@@= skipped -10, +14 lines =@@
- 
-     class Component<P, S> {
- >Component : Component<P, S>
-+>P : P
-+>S : S
- 
-         constructor(props?: P, context?: any);
- >props : P
-@@= skipped -12, +14 lines =@@
+@@= skipped -23, +23 lines =@@
  
  export class ShortDetails extends React.Component<{ id: number }, {}> {
  >ShortDetails : ShortDetails

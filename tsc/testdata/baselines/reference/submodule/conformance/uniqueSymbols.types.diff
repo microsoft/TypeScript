@@ -1,159 +1,39 @@
 --- old.uniqueSymbols.types
 +++ new.uniqueSymbols.types
-@@= skipped -79, +79 lines =@@
- const constInitToConstCallWithTypeQuery: typeof constCall = constCall;
- >constInitToConstCallWithTypeQuery : unique symbol
- >constCall : unique symbol
-->constCall : unique symbol
- 
- const constInitToConstDeclAmbientWithTypeQuery: typeof constType = constType;
- >constInitToConstDeclAmbientWithTypeQuery : unique symbol
- >constType : unique symbol
-->constType : unique symbol
- 
- // assignment from any
- // https://github.com/Microsoft/TypeScript/issues/29108
-@@= skipped -29, +27 lines =@@
+@@= skipped -108, +108 lines =@@
  
  // function return value with type query
  function funcReturnConstCallWithTypeQuery(): typeof constCall { return constCall; }
 ->funcReturnConstCallWithTypeQuery : () => typeof constCall
 +>funcReturnConstCallWithTypeQuery : () => unique symbol
  >constCall : unique symbol
-->constCall : unique symbol
+ >constCall : unique symbol
  
- // generator function yield inference
- function* genFuncYieldConstCall() { yield constCall; }
-@@= skipped -22, +21 lines =@@
+@@= skipped -22, +22 lines =@@
  
  // generator function yield with return type query
  function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
 ->genFuncYieldConstCallWithTypeQuery : () => IterableIterator<typeof constCall>
-->constCall : unique symbol
 +>genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol, any, any>
+ >constCall : unique symbol
  >yield constCall : any
  >constCall : unique symbol
- 
-@@= skipped -95, +94 lines =@@
- 
- const constInitToCReadonlyStaticCallWithTypeQuery: typeof C.readonlyStaticCall = C.readonlyStaticCall;
- >constInitToCReadonlyStaticCallWithTypeQuery : unique symbol
-->C.readonlyStaticCall : unique symbol
- >C : typeof C
-->readonlyStaticCall : unique symbol
- >C.readonlyStaticCall : unique symbol
- >C : typeof C
- >readonlyStaticCall : unique symbol
- 
- const constInitToCReadonlyStaticTypeWithTypeQuery: typeof C.readonlyStaticType = C.readonlyStaticType;
- >constInitToCReadonlyStaticTypeWithTypeQuery : unique symbol
-->C.readonlyStaticType : unique symbol
- >C : typeof C
-->readonlyStaticType : unique symbol
- >C.readonlyStaticType : unique symbol
- >C : typeof C
- >readonlyStaticType : unique symbol
- 
- const constInitToCReadonlyStaticTypeAndCallWithTypeQuery: typeof C.readonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
- >constInitToCReadonlyStaticTypeAndCallWithTypeQuery : unique symbol
-->C.readonlyStaticTypeAndCall : unique symbol
- >C : typeof C
-->readonlyStaticTypeAndCall : unique symbol
- >C.readonlyStaticTypeAndCall : unique symbol
- >C : typeof C
- >readonlyStaticTypeAndCall : unique symbol
- 
- const constInitToCReadwriteStaticCallWithTypeQuery: typeof C.readwriteStaticCall = C.readwriteStaticCall;
- >constInitToCReadwriteStaticCallWithTypeQuery : symbol
-->C.readwriteStaticCall : symbol
- >C : typeof C
-->readwriteStaticCall : symbol
- >C.readwriteStaticCall : symbol
- >C : typeof C
- >readwriteStaticCall : symbol
-@@= skipped -48, +40 lines =@@
- 
- const constInitToCReadonlyCallWithTypeQuery: typeof c.readonlyCall = c.readonlyCall;
- >constInitToCReadonlyCallWithTypeQuery : symbol
-->c.readonlyCall : symbol
- >c : C
-->readonlyCall : symbol
- >c.readonlyCall : symbol
- >c : C
- >readonlyCall : symbol
- 
- const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall = c.readwriteCall;
- >constInitToCReadwriteCallWithTypeQuery : symbol
-->c.readwriteCall : symbol
- >c : C
-->readwriteCall : symbol
- >c.readwriteCall : symbol
- >c : C
- >readwriteCall : symbol
-@@= skipped -30, +26 lines =@@
- 
- // interfaces
- interface I {
-+>I : I
-+
-     readonly readonlyType: unique symbol;
- >readonlyType : unique symbol
- }
-@@= skipped -14, +16 lines =@@
- 
- const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyType;
- >constInitToIReadonlyTypeWithTypeQuery : unique symbol
-->i.readonlyType : unique symbol
- >i : I
-->readonlyType : unique symbol
- >i.readonlyType : unique symbol
- >i : I
- >readonlyType : unique symbol
-@@= skipped -46, +44 lines =@@
- 
- const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType = l.readonlyType;
- >constInitToLReadonlyTypeWithTypeQuery : unique symbol
-->l.readonlyType : unique symbol
- >l : L
-->readonlyType : unique symbol
- >l.readonlyType : unique symbol
- >l : L
- >readonlyType : unique symbol
- 
- const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType = l.nested.readonlyNestedType;
- >constInitToLReadonlyNestedTypeWithTypeQuery : unique symbol
-->l.nested.readonlyNestedType : unique symbol
- >l.nested : { readonly readonlyNestedType: unique symbol; }
- >l : L
- >nested : { readonly readonlyNestedType: unique symbol; }
-->readonlyNestedType : unique symbol
- >l.nested.readonlyNestedType : unique symbol
- >l.nested : { readonly readonlyNestedType: unique symbol; }
- >l : L
-@@= skipped -67, +63 lines =@@
- 
- declare function f<T>(x: T): T;
- >f : <T>(x: T) => T
-+>T : T
+@@= skipped -303, +303 lines =@@
  >x : T
  
  declare function g(x: typeof s): void;
 ->g : { (x: typeof s): void; (x: typeof N.s): void; }
 +>g : { (x: unique symbol): void; (x: unique symbol): void; }
  >x : unique symbol
-->s : unique symbol
+ >s : unique symbol
  
  declare function g(x: typeof N.s): void;
 ->g : { (x: typeof s): void; (x: typeof N.s): void; }
 +>g : { (x: unique symbol): void; (x: unique symbol): void; }
  >x : unique symbol
-->N.s : unique symbol
+ >N.s : unique symbol
  >N : typeof N
-->s : unique symbol
- 
- // widening positions
- 
-@@= skipped -55, +53 lines =@@
+@@= skipped -52, +52 lines =@@
  
  // property assignments/methods
  const o2 = {
@@ -164,31 +44,7 @@
  
      a: s,
  >a : symbol
-@@= skipped -165, +165 lines =@@
- >f<typeof s>(s) : unique symbol
- >f : <T>(x: T) => T
- >s : unique symbol
-->s : unique symbol
- 
- f<typeof N.s>(N.s);
- >f<typeof N.s>(N.s) : unique symbol
- >f : <T>(x: T) => T
-->N.s : unique symbol
- >N : typeof N
-->s : unique symbol
- >N.s : unique symbol
- >N : typeof N
- >s : unique symbol
-@@= skipped -15, +12 lines =@@
- f<typeof N.s>(N["s"]);
- >f<typeof N.s>(N["s"]) : unique symbol
- >f : <T>(x: T) => T
-->N.s : unique symbol
- >N : typeof N
-->s : unique symbol
- >N["s"] : unique symbol
- >N : typeof N
- >"s" : "s"
+@@= skipped -189, +189 lines =@@
  
  g(s);
  >g(s) : void
@@ -211,7 +67,7 @@
  >N["s"] : unique symbol
  >N : typeof N
  >"s" : "s"
-@@= skipped -48, +46 lines =@@
+@@= skipped -39, +39 lines =@@
  
  // conditionals
  Math.random() * 2 ? s : "a";
@@ -238,39 +94,36 @@
  >Math.random() * 2 : number
  >Math.random() : number
  >Math.random : () => number
-@@= skipped -58, +58 lines =@@
- // contextual types
+@@= skipped -59, +59 lines =@@
  
  interface Context {
-+>Context : Context
-+
      method1(): typeof s;
 ->method1 : () => typeof s
-->s : unique symbol
 +>method1 : () => unique symbol
+ >s : unique symbol
  
      method2(): Promise<typeof s>;
 ->method2 : () => Promise<typeof s>
-->s : unique symbol
 +>method2 : () => Promise<unique symbol>
+ >s : unique symbol
  
      method3(): AsyncIterableIterator<typeof s>;
 ->method3 : () => AsyncIterableIterator<typeof s>
-->s : unique symbol
 +>method3 : () => AsyncIterableIterator<unique symbol, any, any>
+ >s : unique symbol
  
      method4(): IterableIterator<typeof s>;
 ->method4 : () => IterableIterator<typeof s>
-->s : unique symbol
 +>method4 : () => IterableIterator<unique symbol, any, any>
+ >s : unique symbol
  
      method5(p?: typeof s): typeof s;
 ->method5 : (p?: typeof s) => typeof s
 +>method5 : (p?: unique symbol) => unique symbol
  >p : unique symbol
-->s : unique symbol
-->s : unique symbol
- }
+ >s : unique symbol
+ >s : unique symbol
+@@= skipped -24, +24 lines =@@
  
  const o3: Context = {
  >o3 : Context
@@ -279,7 +132,7 @@
  
      method1() {
  >method1 : () => unique symbol
-@@= skipped -71, +67 lines =@@
+@@= skipped -46, +46 lines =@@
  // allowed when not emitting declarations
  
  const o4 = {
@@ -292,11 +145,9 @@
 ->method1 : (p: typeof s) => typeof s
 +>method1 : (p: unique symbol) => unique symbol
  >p : unique symbol
-->s : unique symbol
-->s : unique symbol
- 
-         return p;
- >p : unique symbol
+ >s : unique symbol
+ >s : unique symbol
+@@= skipped -14, +14 lines =@@
  
      },
      method2(p: I["readonlyType"]): I["readonlyType"] {
@@ -305,17 +156,16 @@
  >p : unique symbol
  
          return p;
-@@= skipped -27, +25 lines =@@
+@@= skipped -13, +13 lines =@@
  >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof ce0
  
      method1(p: typeof s): typeof s {
 ->method1 : (p: typeof s) => typeof s
 +>method1 : (p: unique symbol) => unique symbol
  >p : unique symbol
-->s : unique symbol
-->s : unique symbol
- 
-         return p;
+ >s : unique symbol
+ >s : unique symbol
+@@= skipped -9, +9 lines =@@
  >p : unique symbol
      }
      method2(p: I["readonlyType"]): I["readonlyType"] {
@@ -324,7 +174,7 @@
  >p : unique symbol
  
          return p;
-@@= skipped -18, +16 lines =@@
+@@= skipped -9, +9 lines =@@
  };
  
  function funcInferredReturnType(obj: { method(p: typeof s): void }) {
@@ -335,7 +185,7 @@
 +>obj : { method: (p: unique symbol) => void; }
 +>method : (p: unique symbol) => void
  >p : unique symbol
-->s : unique symbol
+ >s : unique symbol
  
      return obj;
 ->obj : { method(p: typeof s): void; }

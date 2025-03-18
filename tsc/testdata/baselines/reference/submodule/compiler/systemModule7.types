@@ -12,8 +12,5 @@ export module M {
 
 // filename: nonInstantiatedModule.ts
 export module M {
->M : typeof M
-
     interface I {}
->I : I
 }

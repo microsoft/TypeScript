@@ -5,11 +5,8 @@
 
 type MyMap<M extends object> = {
 >MyMap : MyMap<M>
->M : M
 
     [K in keyof M]: {
->K : K
-
         x: number
 >x : number
     }
@@ -17,12 +14,10 @@ type MyMap<M extends object> = {
 
 declare function g<T>(value?: T): void;
 >g : <T>(value?: T | undefined) => void
->T : T
 >value : T | undefined
 
 function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
 >f1 : <M extends object>(mymap: MyMap<M>, k: keyof M) => void
->M : M
 >mymap : MyMap<M>
 >k : keyof M
 
@@ -40,7 +35,6 @@ function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
 
 function f2<M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number }) {
 >f2 : <M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number; }) => void
->M : M
 >mymap : MyMap<M>
 >k : keyof M
 >z : { x: number; }

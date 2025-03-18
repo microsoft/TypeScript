@@ -152,7 +152,6 @@ export let oWithAccessor = {
 
 function prop<T>(v: T): T { return v }
 >prop : <T>(v: T) => T
->T : T
 >v : T
 >v : T
 

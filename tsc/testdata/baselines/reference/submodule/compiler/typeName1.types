@@ -2,8 +2,6 @@
 
 === typeName1.ts ===
 interface I {
->I : I
-
     k;
 >k : any
 }

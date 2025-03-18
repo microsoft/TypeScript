@@ -57,8 +57,6 @@ declare namespace M2D {
 >M2D : typeof M2D
 
 	interface Point {
->Point : Point
-
 		x: number;
 >x : number
 
@@ -102,8 +100,6 @@ declare module 'math2d' {
 
 	// Add a method to the class
 	interface Vector {
->Vector : Vector
-
 		reverse(): Math2d.Point;
 >reverse : () => Point
 >Math2d : any

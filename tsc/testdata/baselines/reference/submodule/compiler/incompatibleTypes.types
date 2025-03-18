@@ -2,8 +2,6 @@
 
 === incompatibleTypes.ts ===
 interface IFoo1 {
->IFoo1 : IFoo1
-
     p1(): number;
 >p1 : () => number
 }
@@ -20,8 +18,6 @@ class C1 implements IFoo1 { // incompatible on the return type
 }
 
 interface IFoo2 {
->IFoo2 : IFoo2
-
     p1(s:string): number;
 >p1 : (s: string) => number
 >s : string
@@ -40,8 +36,6 @@ class C2 implements IFoo2 { // incompatible on the param type
 }
 
 interface IFoo3 {
->IFoo3 : IFoo3
-
     p1: string;
 >p1 : string
 }
@@ -54,8 +48,6 @@ class C3 implements IFoo3 { // incompatible on the property type
 }
 
 interface IFoo4 {
->IFoo4 : IFoo4
-
     p1: { a: { a: string; }; b: string; };
 >p1 : { a: { a: string; }; b: string; }
 >a : { a: string; }
@@ -125,8 +117,6 @@ of1({ e: 0, f: 0 });
 >0 : 0
 
 interface IMap {
->IMap : IMap
-
  [key:string]:string;
 >key : string
 }

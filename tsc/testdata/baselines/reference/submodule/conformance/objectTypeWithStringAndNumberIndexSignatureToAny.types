@@ -21,29 +21,19 @@
 // should always be required.
 
 interface StringTo<T> {
->StringTo : StringTo<T>
->T : T
-
     [x: string]: T;
 >x : string
 }
 
 interface NumberTo<T> {
->NumberTo : NumberTo<T>
->T : T
-
     [x: number]: T;
 >x : number
 }
 
 interface StringAndNumberTo<T> extends StringTo<T>, NumberTo<T> {
->StringAndNumberTo : StringAndNumberTo<T>
->T : T
 }
 
 interface Obj {
->Obj : Obj
-
     hello: string;
 >hello : string
 
@@ -191,7 +181,6 @@ type NumberToNumber = NumberTo<number>;
 >NumberToNumber : NumberToNumber
 
 interface StringToAnyNumberToNumber extends StringTo<any>, NumberToNumber {
->StringToAnyNumberToNumber : StringToAnyNumberToNumber
 }
 
 function f3(sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) {

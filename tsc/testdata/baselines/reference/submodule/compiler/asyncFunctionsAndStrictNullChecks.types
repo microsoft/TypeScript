@@ -2,16 +2,9 @@
 
 === asyncFunctionsAndStrictNullChecks.ts ===
 declare namespace Windows.Foundation {
->Windows : any
->Foundation : any
-
     interface IPromise<TResult> {
->IPromise : IPromise<TResult>
->TResult : TResult
-
         then<U>(success?: (value: TResult) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>;
 >then : { <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; }
->U : U
 >success : (value: TResult) => IPromise<U> | undefined
 >value : TResult
 >error : (error: any) => IPromise<U> | undefined
@@ -21,7 +14,6 @@ declare namespace Windows.Foundation {
 
         then<U>(success?: (value: TResult) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>;
 >then : { <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; }
->U : U
 >success : (value: TResult) => IPromise<U> | undefined
 >value : TResult
 >error : (error: any) => U | undefined
@@ -31,7 +23,6 @@ declare namespace Windows.Foundation {
 
         then<U>(success?: (value: TResult) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>;
 >then : { <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; }
->U : U
 >success : (value: TResult) => U | undefined
 >value : TResult
 >error : (error: any) => IPromise<U> | undefined
@@ -41,7 +32,6 @@ declare namespace Windows.Foundation {
 
         then<U>(success?: (value: TResult) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>;
 >then : { <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => IPromise<U> | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => IPromise<U> | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; <U>(success?: (value: TResult) => U | undefined, error?: (error: any) => U | undefined, progress?: (progress: any) => void | undefined): IPromise<U>; }
->U : U
 >success : (value: TResult) => U | undefined
 >value : TResult
 >error : (error: any) => U | undefined
@@ -51,7 +41,6 @@ declare namespace Windows.Foundation {
 
         done<U>(success?: (value: TResult) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
 >done : <U>(success?: (value: TResult) => any | undefined, error?: (error: any) => any | undefined, progress?: (progress: any) => void | undefined) => void
->U : U
 >success : (value: TResult) => any | undefined
 >value : TResult
 >error : (error: any) => any | undefined
@@ -79,12 +68,10 @@ async function sample(promise: Windows.Foundation.IPromise<number>) {
 
 declare function resolve1<T>(value: T): Promise<T>;
 >resolve1 : <T>(value: T) => Promise<T>
->T : T
 >value : T
 
 declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
 >resolve2 : <T>(value: T) => IPromise<T>
->T : T
 >value : T
 >Windows : any
 >Foundation : any

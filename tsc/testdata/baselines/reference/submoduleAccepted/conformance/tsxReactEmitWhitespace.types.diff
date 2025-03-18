@@ -1,21 +1,6 @@
 --- old.tsxReactEmitWhitespace.types
 +++ new.tsxReactEmitWhitespace.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		[s: string]: any;
- >s : string
- 	}
-@@= skipped -18, +24 lines =@@
+@@= skipped -19, +19 lines =@@
  
  // Emit "   "
  <div>   </div>;

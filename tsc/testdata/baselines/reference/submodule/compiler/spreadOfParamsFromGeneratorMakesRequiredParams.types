@@ -3,7 +3,6 @@
 === spreadOfParamsFromGeneratorMakesRequiredParams.ts ===
 declare function call<Fn extends (...args: any[]) => any>(
 >call : <Fn extends (...args: any[]) => any>(fn: Fn, ...args: Parameters<Fn>) => any
->Fn : Fn
 >args : any[]
 
     fn: Fn,

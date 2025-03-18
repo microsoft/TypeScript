@@ -2,14 +2,10 @@
 
 === indexWithUndefinedAndNullStrictNullChecks.ts ===
 interface N {
->N : N
-
     [n: number]: string;
 >n : number
 }
 interface S {
->S : S
-
     [s: string]: number;
 >s : string
 }

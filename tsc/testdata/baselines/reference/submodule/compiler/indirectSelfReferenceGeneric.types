@@ -3,11 +3,9 @@
 === indirectSelfReferenceGeneric.ts ===
 class a<T> extends b<T> { }
 >a : a<T>
->T : T
 >b : typeof b
 
 class b<T> extends a<T> { }
 >b : b<T>
->T : T
 >a : typeof a
 

@@ -2,8 +2,6 @@
 
 === intersectionOfUnionNarrowing.ts ===
 interface X {
->X : X
-
   a?: { aProp: string };
 >a : { aProp: string; } | undefined
 >aProp : string

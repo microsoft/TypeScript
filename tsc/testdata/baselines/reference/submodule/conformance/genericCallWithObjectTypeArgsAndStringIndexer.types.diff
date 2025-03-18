@@ -1,22 +1,6 @@
 --- old.genericCallWithObjectTypeArgsAndStringIndexer.types
 +++ new.genericCallWithObjectTypeArgsAndStringIndexer.types
-@@= skipped -4, +4 lines =@@
- 
- function foo<T>(x: T) {
- >foo : <T>(x: T) => T
-+>T : T
- >x : T
- 
-     return x;
-@@= skipped -18, +19 lines =@@
- 
- function other<T>(arg: T) {
- >other : <T>(arg: T) => void
-+>T : T
- >arg : T
- 
-     var b: { [x: string]: T };
-@@= skipped -9, +10 lines =@@
+@@= skipped -31, +31 lines =@@
      var r2 = foo(b); // T
  >r2 : { [x: string]: T; }
  >foo(b) : { [x: string]: T; }
@@ -25,13 +9,7 @@
  >b : { [x: string]: T; }
  }
  
- function other2<T extends Date>(arg: T) {
- >other2 : <T extends Date>(arg: T) => void
-+>T : T
- >arg : T
- 
-     var b: { [x: string]: T };
-@@= skipped -15, +16 lines =@@
+@@= skipped -15, +15 lines =@@
      var r2 = foo(b);
  >r2 : { [x: string]: T; }
  >foo(b) : { [x: string]: T; }
@@ -40,16 +18,7 @@
  >b : { [x: string]: T; }
  
      var d: Date = r2['hm']; // ok
-@@= skipped -12, +12 lines =@@
- 
- function other3<T extends Date, U extends Date>(arg: T) {
- >other3 : <T extends Date, U extends Date>(arg: T) => void
-+>T : T
-+>U : U
- >arg : T
- 
-     var b: { [x: string]: T };
-@@= skipped -9, +11 lines =@@
+@@= skipped -21, +21 lines =@@
      var r2 = foo(b);
  >r2 : { [x: string]: T; }
  >foo(b) : { [x: string]: T; }

@@ -188,16 +188,7 @@
  >() => derived : () => Derived
  >derived : Derived
  >() => derived2 : () => Derived2
-@@= skipped -10, +10 lines =@@
- 
- function foo<T, U>(t: T, u: U) {
- >foo : <T, U>(t: T, u: U) => void
-+>T : T
-+>U : U
- >t : T
- >u : U
- 
-@@= skipped -27, +29 lines =@@
+@@= skipped -37, +37 lines =@@
  >1 : 1
  
      var e = [() => t, () => u]; // {}[]
@@ -218,16 +209,7 @@
  >() => t : () => T
  >t : T
  >() => u : () => U
-@@= skipped -19, +19 lines =@@
- 
- function foo2<T extends Base, U extends Derived>(t: T, u: U) {
- >foo2 : <T extends Base, U extends Derived>(t: T, u: U) => void
-+>T : T
-+>U : U
- >t : T
- >u : U
- 
-@@= skipped -27, +29 lines =@@
+@@= skipped -46, +46 lines =@@
  >1 : 1
  
      var e = [() => t, () => u]; // {}[]
@@ -259,16 +241,7 @@
  >t : T
  >derived : Derived
  
-@@= skipped -20, +20 lines =@@
- 
- function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
- >foo3 : <T extends Derived, U extends Derived>(t: T, u: U) => void
-+>T : T
-+>U : U
- >t : T
- >u : U
- 
-@@= skipped -27, +29 lines =@@
+@@= skipped -47, +47 lines =@@
  >1 : 1
  
      var e = [() => t, () => u]; // {}[]
@@ -289,16 +262,7 @@
  >() => t : () => T
  >t : T
  >() => u : () => U
-@@= skipped -43, +43 lines =@@
- 
- function foo4<T extends Base, U extends Base>(t: T, u: U) {
- >foo4 : <T extends Base, U extends Base>(t: T, u: U) => void
-+>T : T
-+>U : U
- >t : T
- >u : U
- 
-@@= skipped -27, +29 lines =@@
+@@= skipped -70, +70 lines =@@
  >1 : 1
  
      var e = [() => t, () => u]; // {}[]

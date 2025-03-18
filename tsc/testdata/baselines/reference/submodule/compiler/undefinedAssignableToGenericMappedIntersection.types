@@ -3,13 +3,10 @@
 === undefinedAssignableToGenericMappedIntersection.ts ===
 type Errors<T> = { [P in keyof T]: string | undefined } & {all: string | undefined};
 >Errors : Errors<T>
->T : T
->P : P
 >all : string | undefined
 
 function foo<T>() {
 >foo : <T>() => void
->T : T
 
     let obj!: Errors<T>
 >obj : Errors<T>

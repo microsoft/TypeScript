@@ -5,24 +5,17 @@
 // Before fix this code would cause infinite loop
 
 interface IObservable<T> {
->IObservable : IObservable<T>
->T : T
-
     n: IObservable<T[]>; // Needed, must be T[]
 >n : IObservable<T[]>
 }
 
 // Needed
 interface ISubject<T> extends IObservable<T> { }
->ISubject : ISubject<T>
->T : T
 
 interface Foo { x }
->Foo : Foo
 >x : any
 
 interface Bar { y }
->Bar : Bar
 >y : any
 
 var values: IObservable<Foo>;

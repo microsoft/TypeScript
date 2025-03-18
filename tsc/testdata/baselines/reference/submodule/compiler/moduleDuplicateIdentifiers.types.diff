@@ -1,22 +1,6 @@
 --- old.moduleDuplicateIdentifiers.types
 +++ new.moduleDuplicateIdentifiers.types
-@@= skipped -9, +9 lines =@@
- >42 : 42
- 
- export interface Bar {
-+>Bar : Bar
-+
- 	_brand1: any;
- >_brand1 : any
- }
- 
- export interface Bar { // Shouldn't error
-+>Bar : Bar
-+
- 	_brand2: any;
- >_brand2 : any
- }
-@@= skipped -34, +38 lines =@@
+@@= skipped -43, +43 lines =@@
  }
  
  export class Kettle { // Should error

@@ -1,15 +1,6 @@
 --- old.objectTypeWithCallSignatureHidingMembersOfFunction.types
 +++ new.objectTypeWithCallSignatureHidingMembersOfFunction.types
-@@= skipped -4, +4 lines =@@
- // no errors expected below 
- 
- interface I {
-+>I : I
-+
-     (): void;
-     apply(a: any, b?: any): void;
- >apply : (a: any, b?: any) => void
-@@= skipped -38, +40 lines =@@
+@@= skipped -42, +42 lines =@@
  >arguments : any
  
  var x: {

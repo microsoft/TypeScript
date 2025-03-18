@@ -54,11 +54,6 @@ function f2(foo: Foo2) {
 // Repro from #50716
 
 export interface GatewayPayloadStructure<O extends GatewayOpcode, T extends keyof GatewayEvents, D> {
->GatewayPayloadStructure : GatewayPayloadStructure<O, T, D>
->O : O
->T : T
->D : D
-
     op: O
 >op : O
 
@@ -76,12 +71,10 @@ export type GatewayPayload = {
 >GatewayPayload : GatewayPayload
 
     [O in GatewayOpcode]: O extends GatewayOpcode.DISPATCH
->O : O
 >GatewayOpcode : any
 
     ? {
         [T in keyof GatewayEvents]: GatewayPayloadStructure<GatewayOpcode.DISPATCH, T, GatewayEvents[T]>
->T : T
 >GatewayOpcode : any
 
     }[keyof GatewayEvents]
@@ -89,8 +82,6 @@ export type GatewayPayload = {
 }[GatewayOpcode]
 
 export interface GatewayParams {
->GatewayParams : GatewayParams
-
     [GatewayOpcode.HELLO]: { b: 1 }
 >[GatewayOpcode.HELLO] : { b: 1; }
 >GatewayOpcode.HELLO : GatewayOpcode.HELLO
@@ -148,8 +139,6 @@ export enum GatewayOpcode {
 }
 
 export interface GatewayEvents {
->GatewayEvents : GatewayEvents
-
     MESSAGE_CREATE: { a: 1 }
 >MESSAGE_CREATE : { a: 1; }
 >a : 1

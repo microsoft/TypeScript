@@ -5,13 +5,10 @@
 
 export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
 >foo : <T>(obj: T) => T extends () => infer P ? P : never
->T : T
 >obj : T
->P : P
 
 export function bar<T>(obj: T) {
 >bar : <T>(obj: T) => T extends () => infer P ? P : never
->T : T
 >obj : T
 
     return foo(obj);
@@ -22,20 +19,14 @@ export function bar<T>(obj: T) {
 
 export type BadNested<T> = { x: T extends number ? T : string };
 >BadNested : BadNested<T>
->T : T
 >x : T extends number ? T : string
 
 export declare function foo2<T>(obj: T): T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K] } ? P : never;
 >foo2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
->T : T
 >obj : T
->K : K
->P : P
->P : P
 
 export function bar2<T>(obj: T) {
 >bar2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
->T : T
 >obj : T
 
     return foo2(obj);
@@ -48,11 +39,9 @@ export function bar2<T>(obj: T) {
 
 type Weird = any extends infer U ? U : never;
 >Weird : any
->U : U
 
 type AlsoWeird = unknown extends infer U ? U : never;
 >AlsoWeird : unknown
->U : U
 
 const a: Weird = null;
 >a : any

@@ -2,15 +2,11 @@
 
 === classAbstractClinterfaceAssignability.ts ===
 interface I {
->I : I
-
     x: number;
 >x : number
 }
 
 interface IConstructor {
->IConstructor : IConstructor
-
     new (): I;
     
     y: number;
@@ -35,6 +31,7 @@ abstract class A {
 
 var AA: typeof A;
 >AA : typeof A
+>A : typeof A
 
 AA = I;
 >AA = I : IConstructor
@@ -43,6 +40,7 @@ AA = I;
 
 var AAA: typeof I;
 >AAA : IConstructor
+>I : IConstructor
 
 AAA = A;
 >AAA = A : typeof A

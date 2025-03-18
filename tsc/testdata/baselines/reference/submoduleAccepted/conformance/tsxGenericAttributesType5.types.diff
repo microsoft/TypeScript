@@ -9,7 +9,6 @@
  
  class B1<T extends { x: string }> extends React.Component<T, {}> {
  >B1 : B1<T>
-+>T : T
  >x : string
 ->React.Component : React.Component<T, {}>
 ->React : typeof React
@@ -34,7 +33,6 @@
 ->React.Component : React.Component<U, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>U : U
 +>React.Component : any
 +>React : any
 +>Component : any

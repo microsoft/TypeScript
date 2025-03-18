@@ -1,27 +1,13 @@
 --- old.nonGenericTypeReferenceWithTypeArguments.types
 +++ new.nonGenericTypeReferenceWithTypeArguments.types
-@@= skipped -6, +6 lines =@@
- >C : C
- 
- interface I { }
-+>I : I
-+
- enum E { }
- >E : E
- 
-@@= skipped -20, +22 lines =@@
- 
- function f<U>() {
+@@= skipped -28, +28 lines =@@
  >f : <U>() => void
-+>U : U
  
      class C { }
 ->C : C
 +>C : C<U>
  
      interface I { }
-+>I : I<U>
-+
      enum E { }
  >E : E
  

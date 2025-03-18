@@ -5,8 +5,6 @@ module EmptyTypes {
 >EmptyTypes : typeof EmptyTypes
 
     interface iface { }
->iface : iface
-
     class base implements iface { }
 >base : base
 
@@ -386,7 +384,6 @@ module NonEmptyTypes {
 >NonEmptyTypes : typeof NonEmptyTypes
 
     interface iface { x: string; }
->iface : iface
 >x : string
 
     class base implements iface { x: string; y: string; }

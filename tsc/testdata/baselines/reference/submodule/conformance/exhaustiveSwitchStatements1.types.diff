@@ -1,30 +1,6 @@
 --- old.exhaustiveSwitchStatements1.types
 +++ new.exhaustiveSwitchStatements1.types
-@@= skipped -139, +139 lines =@@
- // Repro from #12668
- 
- interface Square { kind: "square"; size: number; }
-+>Square : Square
- >kind : "square"
- >size : number
- 
- interface Rectangle { kind: "rectangle"; width: number; height: number; }
-+>Rectangle : Rectangle
- >kind : "rectangle"
- >width : number
- >height : number
- 
- interface Circle { kind: "circle"; radius: number; }
-+>Circle : Circle
- >kind : "circle"
- >radius : number
- 
- interface Triangle { kind: "triangle"; side: number; }
-+>Triangle : Triangle
- >kind : "triangle"
- >side : number
- 
-@@= skipped -27, +31 lines =@@
+@@= skipped -166, +166 lines =@@
  >area : any
  
      switch (s.kind) {
@@ -48,25 +24,7 @@
  
              case "square": return s.size * s.size;
  >"square" : "square"
-@@= skipped -217, +217 lines =@@
- // Repro from #20409
- 
- interface Square2 {
-+>Square2 : Square2
-+
-     kind: "square";
- >kind : "square"
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface Circle2 {
-+>Circle2 : Circle2
-+
-     kind: "circle";
- >kind : "circle"
- 
-@@= skipped -16, +18 lines =@@
+@@= skipped -241, +241 lines =@@
  >s2 : Shape2
  
      switch (s1.kind) {

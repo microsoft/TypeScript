@@ -1,14 +1,6 @@
 --- old.enumBasics.types
 +++ new.enumBasics.types
-@@= skipped -47, +47 lines =@@
- };
- var e: typeof E1;
- >e : typeof E1
-->E1 : typeof E1
- 
- // Reverse mapping of enum returns string name of property 
- var s = E1[e.A];
-@@= skipped -95, +94 lines =@@
+@@= skipped -142, +142 lines =@@
  
      A = 'foo'['foo']
  >A : E7.A

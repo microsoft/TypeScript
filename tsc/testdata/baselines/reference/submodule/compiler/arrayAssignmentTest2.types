@@ -2,8 +2,6 @@
 
 === arrayAssignmentTest2.ts ===
 interface I1 {
->I1 : I1
-
 	IM1():void[];
 >IM1 : () => void[]
 }

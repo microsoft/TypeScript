@@ -2,8 +2,6 @@
 
 === instantiatedReturnTypeContravariance.ts ===
 interface B<T> {
->B : B<T>
->T : T
 
 name: string;
 >name : string

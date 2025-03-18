@@ -1,20 +1,6 @@
 --- old.genericCallInferenceConditionalType2.types
 +++ new.genericCallInferenceConditionalType2.types
-@@= skipped -4, +4 lines =@@
- 
- type ComponentProps<T> = T extends (props: infer P) => unknown ? P : never;
- >ComponentProps : ComponentProps<T>
-+>T : T
- >props : P
-+>P : P
- 
- declare function wrapComponent<P>(
- >wrapComponent : <P>(component: (props: P) => unknown) => (props: P) => unknown
-+>P : P
- 
-   component: (props: P) => unknown,
- >component : (props: P) => unknown
-@@= skipped -13, +16 lines =@@
+@@= skipped -17, +17 lines =@@
  >props : P
  
  const WrappedComponent = wrapComponent(
@@ -28,30 +14,27 @@
 -><T extends string = "span">(props: {    as?: T | undefined;    className?: string;  }) => {    return null;  } : <T extends string = "span">(props: { as?: T | undefined; className?: string; }) => null
 ->props : { as?: T | undefined; className?: string; }
 +><T extends string = "span">(props: {    as?: T | undefined;    className?: string;  }) => {    return null;  } : <T extends string>(props: { as?: T | undefined; className?: string | undefined; }) => null
-+>T : T
 +>props : { as?: T | undefined; className?: string | undefined; }
  
      as?: T | undefined;
  >as : T | undefined
-@@= skipped -20, +21 lines =@@
+@@= skipped -20, +20 lines =@@
  );
  
  type RetrievedProps = ComponentProps<typeof WrappedComponent>;
 ->RetrievedProps : { as?: string | undefined; className?: string; }
 ->WrappedComponent : <T extends string = "span">(props: { as?: T | undefined; className?: string; }) => unknown
 +>RetrievedProps : { as?: string | undefined; className?: string | undefined; }
++>WrappedComponent : <T extends string>(props: { as?: T | undefined; className?: string | undefined; }) => unknown
  
  declare const f: <T>(f: (x: T) => unknown) => (x: T) => unknown
  >f : <T>(f: (x: T) => unknown) => (x: T) => unknown
-+>T : T
- >f : (x: T) => unknown
- >x : T
+@@= skipped -10, +10 lines =@@
  >x : T
  
  declare const g: <T extends unknown = string>(x: { foo: T }) => unknown
 ->g : <T extends unknown = string>(x: { foo: T; }) => unknown
 +>g : <T extends unknown>(x: { foo: T; }) => unknown
-+>T : T
  >x : { foo: T; }
  >foo : T
  
@@ -66,11 +49,10 @@
  
  type FirstParameter<T> = T extends (x: infer P) => unknown ? P : unknown
  >FirstParameter : FirstParameter<T>
-+>T : T
- >x : P
-+>P : P
+@@= skipped -16, +16 lines =@@
  
  type X = FirstParameter<typeof h>['foo']
  >X : unknown
 ->h : <T extends unknown = string>(x: { foo: T; }) => unknown
++>h : <T extends unknown>(x: { foo: T; }) => unknown
  

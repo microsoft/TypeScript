@@ -1,11 +1,6 @@
 --- old.typeParameterExtendingUnion1.types
 +++ new.typeParameterExtendingUnion1.types
-@@= skipped -27, +27 lines =@@
- 
- function f<T extends Cat | Dog>(a: T) {
- >f : <T extends Cat | Dog>(a: T) => void
-+>T : T
- >a : T
+@@= skipped -31, +31 lines =@@
  
      a.run();
  >a.run() : void

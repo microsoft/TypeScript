@@ -3,8 +3,6 @@
 === mismatchedExplicitTypeParameterAndArgumentType.ts ===
 function map<T, U>(xs: T[], f: (x: T) => U) {
 >map : <T, U>(xs: T[], f: (x: T) => U) => U[]
->T : T
->U : U
 >xs : T[]
 >f : (x: T) => U
 >x : T

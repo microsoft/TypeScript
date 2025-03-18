@@ -2,15 +2,12 @@
 
 === bestCommonTypeWithOptionalProperties.ts ===
 interface X { foo: string }
->X : X
 >foo : string
 
 interface Y extends X { bar?: number }
->Y : Y
 >bar : number
 
 interface Z extends X { bar: string }
->Z : Z
 >bar : string
 
 var x: X;

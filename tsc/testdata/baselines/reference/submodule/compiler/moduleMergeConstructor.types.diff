@@ -1,15 +1,6 @@
 --- old.moduleMergeConstructor.types
 +++ new.moduleMergeConstructor.types
-@@= skipped -17, +17 lines =@@
- >"foo" : typeof import("foo")
- 
-     export interface Foo {
-+>Foo : Foo
-+
-         method2(): any;
- >method2 : () => any
-     }
-@@= skipped -7, +9 lines =@@
+@@= skipped -24, +24 lines =@@
  
  === index.ts ===
  import * as foo from "foo";

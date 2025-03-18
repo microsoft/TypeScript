@@ -17,11 +17,3 @@
  
  === lit.ts ===
  class ClassMapDirective {}
-@@= skipped -19, +19 lines =@@
- 
-   <C>(class_: C) =>
- ><C>(class_: C) =>  () => ({    directive: class_,  }) : <C>(class_: C) => () => { directive: C; }
-+>C : C
- >class_ : C
- 
-   () => ({

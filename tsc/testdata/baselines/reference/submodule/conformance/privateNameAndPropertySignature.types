@@ -12,8 +12,6 @@ type A = {
 }
 
 interface B {
->B : B
-
     #foo: string;
 >#foo : string
 

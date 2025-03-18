@@ -5,12 +5,8 @@
 
 type Funcs<A, B extends Record<string, unknown>> = {
 >Funcs : Funcs<A, B>
->A : A
->B : B
 
   [K in keyof B]: {
->K : K
-
     fn: (a: A, b: B) => void;
 >fn : (a: A, b: B) => void
 >a : A
@@ -24,8 +20,6 @@ type Funcs<A, B extends Record<string, unknown>> = {
 
 declare function foo<A, B extends Record<string, unknown>>(fns: Funcs<A, B>): [A, B]
 >foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
->A : A
->B : B
 >fns : Funcs<A, B>
 
 const result = foo({

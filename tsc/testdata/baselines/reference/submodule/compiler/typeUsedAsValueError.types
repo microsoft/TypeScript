@@ -2,7 +2,6 @@
 
 === typeUsedAsValueError.ts ===
 interface Interface {
->Interface : Interface
 
 }
 

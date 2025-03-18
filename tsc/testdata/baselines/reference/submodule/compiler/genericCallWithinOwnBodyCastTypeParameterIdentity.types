@@ -2,12 +2,8 @@
 
 === genericCallWithinOwnBodyCastTypeParameterIdentity.ts ===
 interface Thenable<Value> {
->Thenable : Thenable<Value>
->Value : Value
-
     then<V>(
 >then : <V>(onFulfilled: (value: Value) => V | Thenable<V>) => Thenable<V>
->V : V
 
         onFulfilled: (value: Value) => V | Thenable<V>,
 >onFulfilled : (value: Value) => V | Thenable<V>
@@ -19,8 +15,6 @@ interface Thenable<Value> {
 const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>
 >toThenable : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
 ><Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>    (input: Input): Thenable<Result> => {        const result = fn(input)        return {            then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {                return toThenable<V, Result>(onFulfilled)(result as Result)            }        };    } : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
->Result : Result
->Input : Input
 >fn : (input: Input) => Result | Thenable<Result>
 >input : Input
 
@@ -39,7 +33,6 @@ const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Resul
 
             then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {
 >then : <V>(onFulfilled: (value: Result) => V | Thenable<V>) => Thenable<V>
->V : V
 >onFulfilled : (value: Result) => V | Thenable<V>
 >value : Result
 
@@ -57,8 +50,6 @@ const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Resul
 const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>
 >toThenableInferred : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
 ><Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>    (input: Input): Thenable<Result> => {        const result = fn(input)        return {            then(onFulfilled) {                return toThenableInferred(onFulfilled)(result as Result)            }        };    } : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
->Result : Result
->Input : Input
 >fn : (input: Input) => Result | Thenable<Result>
 >input : Input
 

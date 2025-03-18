@@ -1,15 +1,6 @@
 --- old.declarationEmitAliasExportStar.types
 +++ new.declarationEmitAliasExportStar.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
- 
- === thingB.ts ===
--
- export interface ThingB { }
-+>ThingB : ThingB
-+
- === things.ts ===
- 
+@@= skipped -7, +7 lines =@@
  export * from "./thingB";
  === index.ts ===
  import * as things from "./things";

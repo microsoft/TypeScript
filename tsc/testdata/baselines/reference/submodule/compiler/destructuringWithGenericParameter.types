@@ -3,7 +3,6 @@
 === destructuringWithGenericParameter.ts ===
 class GenericClass<T> {
 >GenericClass : GenericClass<T>
->T : T
 
     payload: T;
 >payload : T
@@ -17,7 +16,6 @@ var genericObject = new GenericClass<{ greeting: string }>();
 
 function genericFunction<T>(object: GenericClass<T>, callback: (payload: T) => void) {
 >genericFunction : <T>(object: GenericClass<T>, callback: (payload: T) => void) => void
->T : T
 >object : GenericClass<T>
 >callback : (payload: T) => void
 >payload : T

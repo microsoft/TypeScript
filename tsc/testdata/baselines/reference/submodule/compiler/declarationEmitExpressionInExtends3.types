@@ -3,7 +3,6 @@
 === declarationEmitExpressionInExtends3.ts ===
 export class ExportedClass<T> {
 >ExportedClass : ExportedClass<T>
->T : T
 
 	x: T;
 >x : T
@@ -11,8 +10,6 @@ export class ExportedClass<T> {
 
 class LocalClass<T, U> {
 >LocalClass : LocalClass<T, U>
->T : T
->U : U
 
     x: T;
 >x : T
@@ -22,22 +19,17 @@ class LocalClass<T, U> {
 }
 
 export interface ExportedInterface {
->ExportedInterface : ExportedInterface
-
     x: number;
 >x : number
 }
 
 interface LocalInterface {
->LocalInterface : LocalInterface
-
     x: number;
 >x : number
 }
 
 function getLocalClass<T>(c: T) {
 >getLocalClass : <T>(c: T) => typeof LocalClass
->T : T
 >c : T
 
     return LocalClass;
@@ -46,7 +38,6 @@ function getLocalClass<T>(c: T) {
 
 function getExportedClass<T>(c: T) {
 >getExportedClass : <T>(c: T) => typeof ExportedClass
->T : T
 >c : T
 
     return ExportedClass;

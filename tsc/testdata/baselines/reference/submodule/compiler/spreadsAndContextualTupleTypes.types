@@ -3,12 +3,10 @@
 === spreadsAndContextualTupleTypes.ts ===
 declare function fx1<T extends [string, string, string, 'a' | 'b']>(x: T): T;
 >fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
->T : T
 >x : T
 
 declare function fx2<T extends [...string[], 'a' | 'b']>(x: T): T;
 >fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
->T : T
 >x : T
 
 const t3 = ['x', 'y', 'z'] as const;
@@ -101,7 +99,6 @@ const randomID = 'id' as string;
 
 declare function foo<const T>(path: T): T;
 >foo : <T>(path: T) => T
->T : T
 >path : T
 
 const a1 = foo([...staticPath1Level, randomID, 'doc.pdf']);

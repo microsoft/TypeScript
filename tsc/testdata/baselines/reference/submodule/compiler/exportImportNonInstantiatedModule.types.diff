@@ -1,17 +1,6 @@
 --- old.exportImportNonInstantiatedModule.types
 +++ new.exportImportNonInstantiatedModule.types
-@@= skipped -1, +1 lines =@@
- 
- === exportImportNonInstantiatedModule.ts ===
- module A {
-+>A : any
-+
-     export interface I { x: number }
-+>I : I
- >x : number
- }
- 
-@@= skipped -9, +12 lines =@@
+@@= skipped -10, +10 lines =@@
  
      export import A1 = A
  >A1 : any

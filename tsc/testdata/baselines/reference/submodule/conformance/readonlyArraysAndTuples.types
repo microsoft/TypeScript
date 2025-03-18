@@ -24,7 +24,6 @@ type T30 = readonly string;  // Error
 
 type T31<T> = readonly T;  // Error
 >T31 : T
->T : T
 
 type T32 = readonly readonly string[];  // Error
 >T32 : T32

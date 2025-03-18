@@ -1,26 +1,18 @@
 --- old.generatorTypeCheck62.types
 +++ new.generatorTypeCheck62.types
-@@= skipped -1, +1 lines =@@
- 
- === generatorTypeCheck62.ts ===
- export interface StrategicState {
-+>StrategicState : StrategicState
-+
-     lastStrategyApplied?: string;
- >lastStrategyApplied : string
+@@= skipped -6, +6 lines =@@
  }
  
  export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
 ->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
 +>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T, void, any>) => (a: T) => IterableIterator<T, void, any>
-+>T : T
  >stratName : string
 ->gen : (a: T) => IterableIterator<T | undefined, void>
 +>gen : (a: T) => IterableIterator<T, void, any>
  >a : T
  >a : T
  
-@@= skipped -17, +20 lines =@@
+@@= skipped -12, +12 lines =@@
  
          for (const next of gen(state)) {
  >next : T
@@ -31,23 +23,7 @@
  >state : T
  
              if (next) {
-@@= skipped -22, +22 lines =@@
- }
- 
- export interface Strategy<T> {
-+>Strategy : Strategy<T>
-+>T : T
-+
-     (a: T): IterableIterator<T | undefined, void>;
- >a : T
- }
- 
- export interface State extends StrategicState {
-+>State : State
-+
-     foo: number;
- >foo : number
- }
+@@= skipped -33, +33 lines =@@
  
  export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: State) {
  >Nothing1 : Strategy<State>
@@ -58,7 +34,7 @@
  >"Nothing" : "Nothing"
  >function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<never, State, any>
  >state : State
-@@= skipped -24, +29 lines =@@
+@@= skipped -13, +13 lines =@@
  
  export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: State) {
  >Nothing2 : Strategy<State>

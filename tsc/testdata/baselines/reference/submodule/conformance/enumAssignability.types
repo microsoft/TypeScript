@@ -69,8 +69,6 @@ module Others {
 >ac : C
 
     interface I {
->I : I
-
         foo: string;
 >foo : string
     }
@@ -143,7 +141,6 @@ module Others {
 
     var o: <T>(x: T) => T = e;
 >o : <T>(x: T) => T
->T : T
 >x : T
 >e : E
 
@@ -157,11 +154,6 @@ module Others {
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
 >foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
->A : A
->B : B
 >x : T
 >y : U
 >z : V

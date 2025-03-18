@@ -18,7 +18,6 @@
  
  function test<P>(wrappedProps: P) {
  >test : <P>(wrappedProps: P) => void
-+>P : P
  >wrappedProps : P
  
      let MySFC = function(props: P) {

@@ -5,7 +5,6 @@
 
 function f<T extends any[]>(v: ReadonlyArray<T>) { }
 >f : <T extends any[]>(v: readonly T[]) => void
->T : T
 >v : readonly T[]
 
 f([

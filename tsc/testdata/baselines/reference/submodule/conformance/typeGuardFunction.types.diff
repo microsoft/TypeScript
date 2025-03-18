@@ -1,15 +1,6 @@
 --- old.typeGuardFunction.types
 +++ new.typeGuardFunction.types
-@@= skipped -87, +87 lines =@@
- 
- // Call signature
- interface I1 {
-+>I1 : I1
-+
-     (p1: A): p1 is C;
- >p1 : A
- }
-@@= skipped -25, +27 lines =@@
+@@= skipped -112, +112 lines =@@
  
  // Methods
  var obj: {

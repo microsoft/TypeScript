@@ -3,8 +3,6 @@
 === m7Bugs.ts ===
 // scenario 1
 interface ISomething {
->ISomething : ISomething
-
    something: number;
 >something : number
 }
@@ -18,11 +16,9 @@ var s: ISomething = <ISomething>({ });
 
 // scenario 2
 interface A { x: string; }
->A : A
 >x : string
 
 interface B extends A { }
->B : B
 
 var x: B = <B>{ };
 >x : B

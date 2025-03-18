@@ -5,7 +5,6 @@ namespace Test
 >Test : typeof Test
 {
 	export interface IFace
->IFace : IFace
 	{
 	}
 
@@ -23,7 +22,6 @@ namespace Test
 
 	export function getClass<T>() : new() => T
 >getClass : <T>() => new () => T
->T : T
 	{
 		return SomeClass as (new() => T);
 >SomeClass as (new() => T) : new () => T

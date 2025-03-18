@@ -7,11 +7,9 @@
 ->a : (x: typeof this.x) => void
 +>a : (x: number) => void
  >x : number
-->this.x : number
+ >this.x : number
  >this : this
-->x : number
- }
- 
+@@= skipped -10, +10 lines =@@
  const a = new A().a(1);
  >a : void
  >new A().a(1) : void

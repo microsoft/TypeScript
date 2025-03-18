@@ -7,8 +7,6 @@ type HowlErrorCallback = (soundId: number, error: unknown) => void;
 >error : unknown
 
 interface HowlOptions {
->HowlOptions : HowlOptions
-
   onplayerror?: HowlErrorCallback | undefined;
 >onplayerror : HowlErrorCallback | undefined
 }

@@ -1,10 +1,6 @@
 --- old.overrideBaseIntersectionMethod.types
 +++ new.overrideBaseIntersectionMethod.types
-@@= skipped -4, +4 lines =@@
- 
- type Constructor<T> = new (...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
+@@= skipped -7, +7 lines =@@
  >args : any[]
  
  const WithLocation = <T extends Constructor<Point>>(Base: T) => class extends Base {
@@ -12,14 +8,13 @@
 -><T extends Constructor<Point>>(Base: T) => class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
 +>WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
 +><T extends Constructor<Point>>(Base: T) => class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
-+>T : T
  >Base : T
 ->class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
 +>class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
  >Base : Point
  
    getLocation(): [number, number] {
-@@= skipped -54, +56 lines =@@
+@@= skipped -51, +51 lines =@@
  
  class Foo extends WithLocation(Point) {
  >Foo : Foo

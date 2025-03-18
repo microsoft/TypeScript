@@ -6,7 +6,6 @@ import a = require('./a');
 
 declare function f<T>(obj: T, key: keyof T): void;
 >f : <T>(obj: T, key: keyof T) => void
->T : T
 >obj : T
 >key : keyof T
 

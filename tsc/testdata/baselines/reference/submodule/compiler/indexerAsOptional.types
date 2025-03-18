@@ -2,8 +2,6 @@
 
 === indexerAsOptional.ts ===
 interface indexSig {
->indexSig : indexSig
-
     //Index signatures can't be optional
     [idx?: number]: any; //err
 >idx : number

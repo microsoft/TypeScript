@@ -1,15 +1,6 @@
 --- old.arrayBestCommonTypes.types
 +++ new.arrayBestCommonTypes.types
-@@= skipped -4, +4 lines =@@
- >EmptyTypes : typeof EmptyTypes
- 
-     interface iface { }
-+>iface : iface
-+
-     class base implements iface { }
- >base : base
- 
-@@= skipped -345, +347 lines =@@
+@@= skipped -349, +349 lines =@@
  >base2 : typeof base2
  
              var b1 = [baseObj, base2Obj, ifaceObj];
@@ -47,11 +38,3 @@
  >ifaceObj : iface
  >baseObj : base
  >base2Obj : base2
-@@= skipped -34, +34 lines =@@
- >NonEmptyTypes : typeof NonEmptyTypes
- 
-     interface iface { x: string; }
-+>iface : iface
- >x : string
- 
-     class base implements iface { x: string; y: string; }

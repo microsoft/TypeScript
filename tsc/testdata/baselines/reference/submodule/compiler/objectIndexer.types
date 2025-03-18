@@ -2,15 +2,11 @@
 
 === objectIndexer.ts ===
 export interface Callback {
->Callback : Callback
-
     (value: any): void;
 >value : any
 }
 
 interface IMap {
->IMap : IMap
-
     [s: string]: Callback;
 >s : string
 }

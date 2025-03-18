@@ -8,11 +8,11 @@ import moduleA = require("./aliasUsageInArray_moduleA");
 >moduleA : typeof import("aliasUsageInArray_moduleA")
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
-
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Model
+>Backbone.Model : typeof Model
 >Backbone : typeof import("aliasUsageInArray_backbone")
+>Model : typeof Model
 }
 
 var xs: IHasVisualizationModel[] = [moduleA];
@@ -22,6 +22,7 @@ var xs: IHasVisualizationModel[] = [moduleA];
 
 var xs2: typeof moduleA[] = [moduleA];
 >xs2 : typeof import("aliasUsageInArray_moduleA")[]
+>moduleA : typeof import("aliasUsageInArray_moduleA")
 >[moduleA] : typeof import("aliasUsageInArray_moduleA")[]
 >moduleA : typeof import("aliasUsageInArray_moduleA")
 

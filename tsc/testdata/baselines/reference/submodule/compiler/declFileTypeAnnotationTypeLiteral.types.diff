@@ -1,14 +1,6 @@
 --- old.declFileTypeAnnotationTypeLiteral.types
 +++ new.declFileTypeAnnotationTypeLiteral.types
-@@= skipped -5, +5 lines =@@
- }
- class g<T> {
- >g : g<T>
-+>T : T
- }
- module m {
- >m : typeof m
-@@= skipped -11, +12 lines =@@
+@@= skipped -16, +16 lines =@@
  
  // Object literal with everything
  var x: {

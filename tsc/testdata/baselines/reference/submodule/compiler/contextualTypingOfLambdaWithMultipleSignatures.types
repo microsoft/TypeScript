@@ -2,8 +2,6 @@
 
 === contextualTypingOfLambdaWithMultipleSignatures.ts ===
 interface Foo {
->Foo : Foo
-
     getFoo(n: number): void;
 >getFoo : { (n: number): void; (s: string): void; }
 >n : number

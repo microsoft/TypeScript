@@ -45,7 +45,6 @@ declare function isBar(node: Node): node is BarNode;
 
 export function visitNodes<T extends Node>(node: Document | Node, predicate: (testNode: Node) => testNode is T): void {
 >visitNodes : <T extends Node>(node: Document | Node, predicate: (testNode: Node) => testNode is T) => void
->T : T
 >node : Document | Node
 >predicate : (testNode: Node) => testNode is T
 >testNode : Node
@@ -90,7 +89,6 @@ type B = { b: string };
 
 function f1<T extends A | B>(t: T, x: A | B) {
 >f1 : <T extends A | B>(t: T, x: A | B) => void
->T : T
 >t : T
 >x : A | B
 

@@ -9,6 +9,8 @@
 ->C.g : (t: typeof C.g) => void
 +>g : (t: ???) => void
 +>t : (t: ???) => void
++>C.g : (t: ???) => void
  >C : typeof C
 ->g : (t: typeof C.g) => void
++>g : (t: ???) => void
  }

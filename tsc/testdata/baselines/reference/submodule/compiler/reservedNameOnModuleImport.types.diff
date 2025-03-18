@@ -1,11 +1,6 @@
 --- old.reservedNameOnModuleImport.types
 +++ new.reservedNameOnModuleImport.types
-@@= skipped -4, +4 lines =@@
- >test : typeof test
- 
-     module mstring { }
-+>mstring : any
- 
+@@= skipped -8, +8 lines =@@
      // Should be fine; this does not clobber any declared values.
      export import string = mstring;
  >string : any

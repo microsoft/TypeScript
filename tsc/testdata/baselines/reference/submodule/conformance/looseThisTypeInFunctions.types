@@ -2,8 +2,6 @@
 
 === looseThisTypeInFunctions.ts ===
 interface I {
->I : I
-
     n: number;
 >n : number
 
@@ -13,8 +11,6 @@ interface I {
 >m : number
 }
 interface Unused {
->Unused : Unused
-
     implicitNoThis(m: number): number;
 >implicitNoThis : (m: number) => number
 >m : number

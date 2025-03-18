@@ -13,7 +13,6 @@ type OptionsForKey = { a: { cb: (p: number) => number } } & { b: {} };
 
 declare function f<K extends Keys>(key: K, options: OptionsForKey[K]): void;
 >f : <K extends Keys>(key: K, options: OptionsForKey[K]) => void
->K : K
 >key : K
 >options : OptionsForKey[K]
 
@@ -35,7 +34,6 @@ function g<
 >g : <K extends "a" | "b">(x: { a: string; } & { b: string; }[K], y: string) => void
 
     K extends "a" | "b">(x: ({ a: string } & { b: string })[K], y: string) {
->K : K
 >x : { a: string; } & { b: string; }[K]
 >a : string
 >b : string

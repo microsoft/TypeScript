@@ -2,8 +2,6 @@
 
 === sourceMapValidationDestructuringVariableStatement.ts ===
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 

@@ -2,10 +2,7 @@
 
 === importDeclWithDeclareModifier.ts ===
 module x {
->x : any
-
     interface c {
->c : c
     }
 }
 declare export import a = x.c;

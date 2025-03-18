@@ -2,8 +2,6 @@
 
 === interfaceSubtyping.ts ===
 interface iface {
->iface : iface
-
     foo(): void;
 >foo : () => void
 }

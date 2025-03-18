@@ -2,10 +2,7 @@
 
 === useBeforeDeclaration_jsx.tsx ===
 namespace JSX {
->JSX : any
-
     export interface Element {}
->Element : Element
 }
 
 class C {

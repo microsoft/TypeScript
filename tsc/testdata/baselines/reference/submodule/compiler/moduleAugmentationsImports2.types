@@ -41,8 +41,6 @@ declare module "./a" {
 >"./a" : typeof import("a")
 
     interface A {
->A : A
-
         getB(): B;
 >getB : () => B
     }
@@ -69,8 +67,6 @@ declare module "./a" {
 >"./a" : typeof import("a")
 
     interface A {
->A : A
-
         getCls(): Cls;
 >getCls : () => Cls
     }

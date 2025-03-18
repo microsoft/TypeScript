@@ -43,8 +43,6 @@ var c = new C('a');
 >'a' : "a"
 
 interface I {
->I : I
-
     new(x: 'hi'): Derived1;
 >x : "hi"
 

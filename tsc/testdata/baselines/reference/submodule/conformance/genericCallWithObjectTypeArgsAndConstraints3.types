@@ -26,7 +26,6 @@ class Derived2 extends Base {
 
 function f<T extends Base>(a: { x: T; y: T }) {
 >f : <T extends Base>(a: { x: T; y: T; }) => T
->T : T
 >a : { x: T; y: T; }
 >x : T
 >y : T
@@ -52,8 +51,6 @@ var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is
 
 function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
 >f2 : <T extends Base, U extends { x: T; y: T; }>(a: U) => T
->T : T
->U : U
 >x : T
 >y : T
 >a : U
@@ -92,7 +89,6 @@ var r3 = f2({ x: new Derived(), y: new Derived2() }); // ok
 
 function f3<T extends Base>(y: (a: T) => T, x: T) {
 >f3 : <T extends Base>(y: (a: T) => T, x: T) => T
->T : T
 >y : (a: T) => T
 >a : T
 >x : T

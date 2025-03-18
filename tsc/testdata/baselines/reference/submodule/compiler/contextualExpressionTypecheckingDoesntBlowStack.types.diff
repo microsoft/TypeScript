@@ -1,13 +1,6 @@
 --- old.contextualExpressionTypecheckingDoesntBlowStack.types
 +++ new.contextualExpressionTypecheckingDoesntBlowStack.types
-@@= skipped -2, +2 lines =@@
- === contextualExpressionTypecheckingDoesntBlowStack.ts ===
- // repro for: https://github.com/Microsoft/TypeScript/issues/23661
- export interface IValidationError {
-+>IValidationError : IValidationError
-+
-     message: string;
- >message : string
+@@= skipped -7, +7 lines =@@
  }
  
  export default class Operation {
@@ -16,7 +9,7 @@
  
      validateParameters(parameterValues: any) : IValidationError[] | null {
  >validateParameters : (parameterValues: any) => IValidationError[] | null
-@@= skipped -68, +70 lines =@@
+@@= skipped -63, +63 lines =@@
  >result = (result || []).concat(innerResult) : IValidationError[]
  >result : IValidationError[] | null
  >(result || []).concat(innerResult) : IValidationError[]

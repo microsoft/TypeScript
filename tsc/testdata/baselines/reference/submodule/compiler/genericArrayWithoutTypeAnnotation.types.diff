@@ -1,13 +1,6 @@
 --- old.genericArrayWithoutTypeAnnotation.types
 +++ new.genericArrayWithoutTypeAnnotation.types
-@@= skipped -1, +1 lines =@@
- 
- === genericArrayWithoutTypeAnnotation.ts ===
- interface IFoo<T>{
-+>IFoo : IFoo<T>
-+>T : T
- }
- class Bar {
+@@= skipped -6, +6 lines =@@
  >Bar : Bar
  
      public getBar(foo: IFoo[]) {

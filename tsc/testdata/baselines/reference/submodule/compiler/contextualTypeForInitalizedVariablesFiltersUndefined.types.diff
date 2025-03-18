@@ -19,11 +19,12 @@
 ->fInferred : ({ a }?: { a?: number | undefined; }) => number
 ->({ a = 0 } = {}) => a : ({ a }?: { a?: number | undefined; } | undefined) => number
 +>fAnnotated : (__0?: { a?: number | undefined; }) => number
++>fInferred : (__0?: { a?: number | undefined; }) => number
 +>({ a = 0 } = {}) => a : (__0?: { a?: number | undefined; } | undefined) => number
  >a : number
  >0 : 0
  >{} : {}
-@@= skipped -17, +16 lines =@@
+@@= skipped -17, +17 lines =@@
  >t : { s: string; } | undefined
  
  function fst({ s } = t) { }

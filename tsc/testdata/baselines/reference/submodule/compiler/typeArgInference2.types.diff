@@ -1,22 +1,6 @@
 --- old.typeArgInference2.types
 +++ new.typeArgInference2.types
-@@= skipped -1, +1 lines =@@
- 
- === typeArgInference2.ts ===
- interface Item {
-+>Item : Item
-+
-     name: string;
- >name : string
- }
- 
- declare function foo<T extends Item>(x?: T, y?: T): T;
- >foo : <T extends Item>(x?: T, y?: T) => T
-+>T : T
- >x : T
- >y : T
- 
-@@= skipped -45, +48 lines =@@
+@@= skipped -46, +46 lines =@@
  >5 : 5
  
  var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error

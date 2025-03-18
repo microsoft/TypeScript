@@ -1,22 +1,6 @@
 --- old.validNullAssignments.types
 +++ new.validNullAssignments.types
-@@= skipped -14, +14 lines =@@
- 
- var e: typeof undefined = null;
- >e : any
-->undefined : undefined
- 
- e = null; // ok
- >e = null : null
-@@= skipped -32, +31 lines =@@
- >C : any
- 
- interface I { foo: string }
-+>I : I
- >foo : string
- 
- var g: I;
-@@= skipped -23, +24 lines =@@
+@@= skipped -69, +69 lines =@@
  >M : any
  
  var h: { f(): void } = null;
@@ -25,8 +9,3 @@
  >f : () => void
  
  function i<T>(a: T) {
- >i : <T>(a: T) => void
-+>T : T
- >a : T
- 
-     a = null;

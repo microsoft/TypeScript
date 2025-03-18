@@ -7,8 +7,6 @@ import * as React from "react";
 >React : any
 
 interface MyProps {
->MyProps : MyProps
-
     x: number;
 >x : number
 }

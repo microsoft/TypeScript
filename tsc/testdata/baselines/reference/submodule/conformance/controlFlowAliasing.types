@@ -926,7 +926,6 @@ class Utils {
 
   static isDefined<T>(value: T): value is NonNullable<T> {
 >isDefined : <T>(value: T) => value is NonNullable<T>
->T : T
 >value : T
 
     return value != null;

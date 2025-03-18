@@ -1,10 +1,6 @@
 --- old.objectLiteralThisWidenedOnUse.types
 +++ new.objectLiteralThisWidenedOnUse.types
-@@= skipped -1, +1 lines =@@
- 
- === objectLiteralThisWidenedOnUse.ts ===
- interface Foo { bar: boolean; }
-+>Foo : Foo
+@@= skipped -4, +4 lines =@@
  >bar : boolean
  
  var GlobalIns = {
@@ -15,7 +11,7 @@
  
    prop1: 1,
  >prop1 : number
-@@= skipped -24, +25 lines =@@
+@@= skipped -21, +21 lines =@@
      this.accept_foo(this);
  >this.accept_foo(this) : boolean
  >this.accept_foo : (foo: Foo) => boolean

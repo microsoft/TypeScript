@@ -2,8 +2,6 @@
 
 === /defs.d.ts ===
 interface A {
->A : A
-
     mNumber(): number;
 >mNumber : () => number
 }

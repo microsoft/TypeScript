@@ -1,30 +1,6 @@
 --- old.nodeModuleReexportFromDottedPath.types
 +++ new.nodeModuleReexportFromDottedPath.types
-@@= skipped -1, +1 lines =@@
- 
- === /node_modules/.prisma/client/index.d.ts ===
- export interface PrismaClientOptions {
-+>PrismaClientOptions : PrismaClientOptions
-+
-   rejectOnNotFound?: any;
- >rejectOnNotFound : any
- }
- 
- export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
- >PrismaClient : PrismaClient<T>
-+>T : T
- 
-   private fetcher;
- >fetcher : any
-@@= skipped -21, +24 lines =@@
- 
- declare const enhancePrisma: <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown };
- >enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown; }
-+>TPrismaClientCtor : TPrismaClientCtor
- >client : TPrismaClientCtor
- >enhanced : unknown
- 
-@@= skipped -10, +11 lines =@@
+@@= skipped -32, +32 lines =@@
  >PrismaClient : typeof PrismaClient
  
  export default new EnhancedPrisma();

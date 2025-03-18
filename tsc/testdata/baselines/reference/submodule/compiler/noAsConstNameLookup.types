@@ -9,12 +9,10 @@ type Store = { a: 123 }
 
 export type Cleaner = <W extends Store>(runner: FeatureRunner<W>) => Promise<any>
 >Cleaner : Cleaner
->W : W
 >runner : FeatureRunner<W>
 
 export class FeatureRunner<W extends Store> {
 >FeatureRunner : FeatureRunner<W>
->W : W
 
     private readonly cleaners: Cleaner[] = []
 >cleaners : Cleaner[]
@@ -68,7 +66,6 @@ export class FeatureRunner<W extends Store> {
 
 export class C<T> {
 >C : C<T>
->T : T
 
     f(): void {
 >f : () => void

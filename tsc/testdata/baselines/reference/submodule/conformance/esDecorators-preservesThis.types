@@ -8,7 +8,6 @@ declare class DecoratorProvider {
 
     decorate<T>(this: DecoratorProvider, v: T, ctx: DecoratorContext): T;
 >decorate : <T>(v: T, ctx: DecoratorContext) => T
->T : T
 >this : DecoratorProvider
 >v : T
 >ctx : DecoratorContext

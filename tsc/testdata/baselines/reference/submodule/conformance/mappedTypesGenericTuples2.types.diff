@@ -1,10 +1,6 @@
 --- old.mappedTypesGenericTuples2.types
 +++ new.mappedTypesGenericTuples2.types
-@@= skipped -4, +4 lines =@@
- 
- declare function getT<T>(): T;
- >getT : <T>() => T
-+>T : T
+@@= skipped -7, +7 lines =@@
  
  Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
  >Promise.all([getT<string>(), ...getT<any>()]).then((result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok}) : Promise<void>
@@ -27,7 +23,7 @@
  >(result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok} : (result: [string, ...any[]]) => void
  >result : [string, ...any[]]
  
-@@= skipped -27, +28 lines =@@
+@@= skipped -24, +24 lines =@@
    const tail = result.slice(1); // any[]
  >tail : any[]
  >result.slice(1) : any[]

@@ -8,11 +8,7 @@ function createElement(element: string, props: any, ...children: any[]): any {}
 >children : any[]
 
 namespace JSX {
->JSX : any
-
   export interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
     [key: string]: Record<string, any>;
 >key : string
   }

@@ -9,5 +9,4 @@ export declare class foo {}
 >foo : foo
 
 export interface foo {}
->foo : foo
 

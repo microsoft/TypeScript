@@ -2,10 +2,6 @@
 
 === genericCallWithTupleType.ts ===
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
-
     tuple1: [T, U];
 >tuple1 : [T, U]
 } 

@@ -5,8 +5,6 @@ module A {
 >A : typeof A
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -24,8 +22,6 @@ module A {
 >0 : 0
 
     interface Point3d extends Point {
->Point3d : Point3d
-
         z: number;
 >z : number
     }

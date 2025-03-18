@@ -11,11 +11,7 @@ X(0); // shouldn't cause a crash
 
 === file.d.ts ===
 declare namespace Foo {
->Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
-
     interface Whatever {
->Whatever : Whatever
-
         prop: any;
 >prop : any
     }

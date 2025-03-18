@@ -1,58 +1,15 @@
 --- old.instantiateContextualTypes.types
 +++ new.instantiateContextualTypes.types
-@@= skipped -3, +3 lines =@@
- // #6611
- 
- export interface A<a> {
-+>A : A<a>
-+>a : a
-+
-     value: a;
- >value : a
- }
- 
- function fn<a>(values: A<a>, value: a) : void {
- >fn : <a>(values: A<a>, value: a) => void
-+>a : a
- >values : A<a>
- >value : a
- }
-@@= skipped -27, +31 lines =@@
- // #21382
- 
- interface BaseProps<T> {
-+>BaseProps : BaseProps<T>
-+>T : T
-+
-   initialValues: T;
- >initialValues : T
- 
-@@= skipped -9, +12 lines =@@
- }
- declare class Component<P> { constructor(props: P); props: P; }
- >Component : Component<P>
-+>P : P
- >props : P
- >props : P
- 
- declare class GenericComponent<Props = {}, Values = object>
- >GenericComponent : GenericComponent<Props, Values>
-+>Props : Props
-+>Values : Values
- 
-     extends Component<Props & BaseProps<Values>> {
- >Component : Component<Props & BaseProps<Values>>
-@@= skipped -27, +30 lines =@@
+@@= skipped -66, +66 lines =@@
  // #22149
  
  declare function useStringOrNumber<T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)): void;
 ->useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)) => void
 +>useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? (s: string) => void : (n: number) => void) => void
-+>T : T
  >t : T
  >useIt : T extends string ? (s: string) => void : (n: number) => void
  >s : string
-@@= skipped -8, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  
  useStringOrNumber("", foo => {});
  >useStringOrNumber("", foo => {}) : void
@@ -61,99 +18,21 @@
  >"" : ""
  >foo => {} : (foo: string) => void
  >foo : string
-@@= skipped -9, +9 lines =@@
- 
- type ActionType<P> = string & { attachPayloadTypeHack?: P & never }
- >ActionType : ActionType<P>
-+>P : P
- >attachPayloadTypeHack : undefined
- 
- type Handler<S, P> = P extends void
- >Handler : Handler<S, P>
-+>S : S
-+>P : P
- 
-     ? (state: S) => S
- >state : S
-@@= skipped -13, +16 lines =@@
- >payload : P
- 
- interface ActionHandler<S, P> {
-+>ActionHandler : ActionHandler<S, P>
-+>S : S
-+>P : P
-+
-     actionType: ActionType<P>
- >actionType : ActionType<P>
- 
-@@= skipped -9, +13 lines =@@
- 
- declare function handler<S, P>(actionType: ActionType<P>, handler: Handler<S, P>): ActionHandler<S, P>
- >handler : <S, P>(actionType: ActionType<P>, handler: Handler<S, P>) => ActionHandler<S, P>
-+>S : S
-+>P : P
- >actionType : ActionType<P>
- >handler : Handler<S, P>
- 
- declare function createReducer<S>(
- >createReducer : <S>(defaultState: S, ...actionHandlers: ActionHandler<S, any>[]) => any
-+>S : S
- 
-         defaultState: S,
- >defaultState : S
-@@= skipped -15, +18 lines =@@
-     ): any
- 
- interface AppState {
-+>AppState : AppState
-+
-     dummy: string
- >dummy : string
- }
-@@= skipped -67, +69 lines =@@
- 
-   on<P extends keyof R>(x: P, callback: R[P]): void;
- >on : <P extends keyof R>(x: P, callback: R[P]) => void
-+>P : P
- >x : P
- >callback : R[P]
- 
-@@= skipped -24, +25 lines =@@
- 
- declare class Component<P> { 
- >Component : Component<P>
-+>P : P
- 
-   constructor(props: P);
- >props : P
- }
-     
- interface ComponentClass<P = {}> {
-+>ComponentClass : ComponentClass<P>
-+>P : P
-+
-   new (props: P): Component<P>;
- >props : P
+@@= skipped -148, +148 lines =@@
  }
  
  type CreateElementChildren<P> =
 ->CreateElementChildren : P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown
 +>CreateElementChildren : CreateElementChildren<P>
-+>P : P
  
    P extends { children?: infer C }
  >children : C | undefined
-+>C : C
- 
-   ? C extends any[]
-     ? C
-@@= skipped -22, +28 lines =@@
+@@= skipped -11, +11 lines =@@
    : unknown;
  
  declare function createElement<P extends {}>(
 ->createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
 +>createElement : <P extends {}>(type: ComponentClass<P>, ...children: CreateElementChildren<P>) => any
-+>P : P
  
    type: ComponentClass<P>,
  >type : ComponentClass<P>
@@ -167,7 +46,6 @@
  declare function createElement2<P extends {}>(
 ->createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
 +>createElement2 : <P extends {}>(type: ComponentClass<P>, child: CreateElementChildren<P>) => any
-+>P : P
  
    type: ComponentClass<P>,
  >type : ComponentClass<P>
@@ -178,7 +56,7 @@
  
  ): any;
  
-@@= skipped -29, +31 lines =@@
+@@= skipped -29, +29 lines =@@
  
  createElement(InferFunctionTypes, (foo) => "" + foo);
  >createElement(InferFunctionTypes, (foo) => "" + foo) : any
@@ -199,43 +77,7 @@
  >(foo) => "" + foo : (foo: number) => string
  >foo : number
  >"" + foo : string
-@@= skipped -15, +15 lines =@@
- 
- type InnerBox<T> = {
- >InnerBox : InnerBox<T>
-+>T : T
- 
-   value: T;
- >value : T
-@@= skipped -7, +8 lines =@@
- 
- type OuterBox<T> = {
- >OuterBox : OuterBox<T>
-+>T : T
- 
-   inner: InnerBox<T>
- >inner : InnerBox<T>
-@@= skipped -8, +9 lines =@@
- 
- type BoxConsumerFromOuterBox<T> =
- >BoxConsumerFromOuterBox : BoxConsumerFromOuterBox<T>
-+>T : T
- 
-   T extends OuterBox<infer U> ?
-+>U : U
-+
-       (box: InnerBox<U>) => void :
- >box : InnerBox<U>
- 
-@@= skipped -9, +12 lines =@@
- 
- declare function passContentsToFunc<T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>): void;
- >passContentsToFunc : <T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>) => void
-+>T : T
- >outerBox : T
- >consumer : BoxConsumerFromOuterBox<T>
- 
-@@= skipped -29, +30 lines =@@
+@@= skipped -68, +68 lines =@@
  >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		});	} : () => Promise<DooDad>
  
  		return Promise.resolve().then(() => {
@@ -288,20 +130,7 @@
  >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => "SOMETHING"
  
  			if (1 < 2) {
-@@= skipped -28, +28 lines =@@
- 
- declare function invoke<T>(f: () => T): T;
- >invoke : <T>(f: () => T) => T
-+>T : T
- >f : () => T
- 
- let xx: 0 | 1 | 2 = invoke(() => 1);
-@@= skipped -13, +14 lines =@@
- 
- declare function assignPartial<T>(target: T, partial: Partial<T>): T;
- >assignPartial : <T>(target: T, partial: Partial<T>) => T
-+>T : T
- >target : T
+@@= skipped -45, +45 lines =@@
  >partial : Partial<T>
  
  let obj = {
@@ -312,7 +141,7 @@
  
    foo(bar: string) {}
  >foo : (bar: string) => void
-@@= skipped -13, +14 lines =@@
+@@= skipped -9, +9 lines =@@
  }
  
  assignPartial(obj, { foo(...args) {} });  // args has type [string]

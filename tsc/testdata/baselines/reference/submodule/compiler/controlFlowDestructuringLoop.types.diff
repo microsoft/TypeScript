@@ -1,18 +1,6 @@
 --- old.controlFlowDestructuringLoop.types
 +++ new.controlFlowDestructuringLoop.types
-@@= skipped -3, +3 lines =@@
- // Repro from #28758
- 
- interface NumVal { val: number; }
-+>NumVal : NumVal
- >val : number
- 
- interface StrVal { val: string; }
-+>StrVal : StrVal
- >val : string
- 
- type Val = NumVal | StrVal;
-@@= skipped -14, +16 lines =@@
+@@= skipped -17, +17 lines =@@
  
      return typeof x.val === 'number';
  >typeof x.val === 'number' : boolean

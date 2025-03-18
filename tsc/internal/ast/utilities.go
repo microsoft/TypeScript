@@ -1835,6 +1835,13 @@ func IsPartOfTypeNode(node *Node) bool {
 
 func isPartOfTypeNodeInParent(node *Node) bool {
 	parent := node.Parent
+	if parent.Kind == KindTypeQuery {
+		return false
+	}
+	if parent.Kind == KindImportType {
+		return !parent.AsImportTypeNode().IsTypeOf
+	}
+
 	// Do not recursively call isPartOfTypeNode on the parent. In the example:
 	//
 	//     let a: A.B.C;
@@ -1845,10 +1852,6 @@ func isPartOfTypeNodeInParent(node *Node) bool {
 		return true
 	}
 	switch parent.Kind {
-	case KindTypeQuery:
-		return false
-	case KindImportType:
-		return !parent.AsImportTypeNode().IsTypeOf
 	case KindExpressionWithTypeArguments:
 		return isPartOfTypeExpressionWithTypeArguments(parent)
 	case KindTypeParameter:

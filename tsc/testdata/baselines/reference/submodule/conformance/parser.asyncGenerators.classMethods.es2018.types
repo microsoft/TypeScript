@@ -202,8 +202,6 @@ class C18 {
 }
 === awaitAsTypeIsOk.ts ===
 interface await {}
->await : await
-
 class C19 {
 >C19 : C19
 
@@ -216,8 +214,6 @@ class C19 {
 }
 === yieldAsTypeIsStrictError.ts ===
 interface yield {}
->yield : yield
-
 class C20 {
 >C20 : C20
 

@@ -78,9 +78,6 @@ var z2 = (<any>emptyObj)[hi];
 >hi : any
 
 interface MyMap<T> {
->MyMap : MyMap<T>
->T : T
-
     [key: string]: T;
 >key : string
 }

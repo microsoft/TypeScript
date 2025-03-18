@@ -16,126 +16,8 @@
 +>React : any
  
  interface REACT_STATICS {
-+>REACT_STATICS : REACT_STATICS
-+
      childContextTypes: true;
- >childContextTypes : true
- >true : true
-@@= skipped -57, +53 lines =@@
- }
- 
- interface KNOWN_STATICS {
-+>KNOWN_STATICS : KNOWN_STATICS
-+
-     name: true;
- >name : true
- >true : true
-@@= skipped -30, +32 lines =@@
- }
- 
- interface MEMO_STATICS {
-+>MEMO_STATICS : MEMO_STATICS
-+
-     '$$typeof': true;
- >'$$typeof' : true
- >true : true
-@@= skipped -26, +28 lines =@@
- }
- 
- interface FORWARD_REF_STATICS {
-+>FORWARD_REF_STATICS : FORWARD_REF_STATICS
-+
-     '$$typeof': true;
- >'$$typeof' : true
- >true : true
-@@= skipped -26, +28 lines =@@
- >NonReactStatics : NonReactStatics<S, C>
- 
-     S extends React.ComponentType<any>,
-+>S : S
- >React : any
- 
-     C extends {
-+>C : C
-+
-         [key: string]: true
- >key : string
- >true : true
-@@= skipped -10, +13 lines =@@
-     } = {}
-     > = {
-         [key in Exclude<
-+>key : key
-+
-             keyof S,
-             S extends React.MemoExoticComponent<any>
- >React : any
-@@= skipped -20, +22 lines =@@
- >StyledComponent : StyledComponent<C, T, O, A>
- 
-     C extends keyof JSX.IntrinsicElements | React.ComponentType<any>,
-+>C : C
- >JSX : any
- >React : any
- 
-     T extends object,
-+>T : T
-+
-     O extends object = {},
-+>O : O
-+
-     A extends keyof any = never
-+>A : A
-+
-     > = // the "string" allows this to be used as an object key
-     // I really want to avoid this if possible but it's the only way to use nesting with object styles...
-     string &
-@@= skipped -18, +25 lines =@@
- 
-     // The Component from whose props are derived
-     C extends string | React.ComponentType<any>,
-+>C : C
- >React : any
- 
-     // The Theme from the current context
-     T extends object,
-+>T : T
-+
-     // The other props added by the template
-     O extends object,
-+>O : O
-+
-     // The props that are made optional by .attrs
-     A extends keyof any
-+>A : A
-+
-     > =
-     // Distribute O if O is a union type
-     O extends object
-@@= skipped -46, +53 lines =@@
- 
- type Defaultize<P, D> = P extends any
- >Defaultize : Defaultize<P, D>
-+>P : P
-+>D : D
- 
-     ? string extends keyof P
-     ? P
-@@= skipped -10, +12 lines =@@
- 
- type ReactDefaultizedProps<C, P> = C extends { defaultProps: infer D } ? Defaultize<P, D> : P;
- >ReactDefaultizedProps : ReactDefaultizedProps<C, P>
-+>C : C
-+>P : P
- >defaultProps : D
-+>D : D
- 
- type WithChildrenIfReactComponentClass<C extends string | React.ComponentType<any>> = C extends React.ComponentClass<
- >WithChildrenIfReactComponentClass : WithChildrenIfReactComponentClass<C>
-+>C : C
- >React : any
- >React : any
- 
+@@= skipped -253, +247 lines =@@
      any
  >
      ? { children?: React.ReactNode }
@@ -150,143 +32,21 @@
  >JSX : any
  
  type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
- >WithOptionalTheme : WithOptionalTheme<P, T>
-+>P : P
- >theme : T
-+>T : T
- 
-     theme?: T;
- >theme : T
-@@= skipped -29, +35 lines =@@
- 
- type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>;
- >ForwardRefExoticBase : ForwardRefExoticBase<P>
-+>P : P
- >React : any
- >React : any
- 
-@@= skipped -7, +8 lines =@@
- >StyledComponentPropsWithAs : StyledComponentPropsWithAs<C, T, O, A, F>
- 
-     C extends string | React.ComponentType<any>,
-+>C : C
- >React : any
- 
-     T extends object,
-+>T : T
-+
-     O extends object,
-+>O : O
-+
-     A extends keyof any,
-+>A : A
-+
-     F extends string | React.ComponentType<any> = C
-+>F : F
- >React : any
- 
-     > = StyledComponentProps<C, T, O, A> & { as?: C; forwardedAs?: F };
-@@= skipped -14, +22 lines =@@
- 
- export type StyledComponentInnerOtherProps<C extends AnyStyledComponent> = C extends StyledComponent<
- >StyledComponentInnerOtherProps : StyledComponentInnerOtherProps<C>
-+>C : C
- 
-     any,
-     any,
-     infer O,
-+>O : O
-+
-     any
- >
-     ? O
-     : C extends StyledComponent<any, any, infer O>
-+>O : O
-+
-     ? O
-     : never;
- export type StyledComponentInnerAttrs<C extends AnyStyledComponent> = C extends StyledComponent<any, any, any, infer A>
- >StyledComponentInnerAttrs : StyledComponentInnerAttrs<C>
-+>C : C
-+>A : A
- 
-     ? A
-     : never;
- 
- export interface StyledComponentBase<
-+>StyledComponentBase : StyledComponentBase<C, T, O, A>
-+
-     C extends string | React.ComponentType<any>,
-+>C : C
- >React : any
- 
-     T extends object,
-+>T : T
-+
-     O extends object = {},
-+>O : O
-+
-     A extends keyof any = never
-+>A : A
-+
-     > extends ForwardRefExoticBase<StyledComponentProps<C, T, O, A>> {
-     // add our own fake call signature to implement the polymorphic 'as' prop
-     (props: StyledComponentProps<C, T, O, A> & { as?: never; forwardedAs?: never }): React.ReactElement<
-@@= skipped -34, +50 lines =@@
-         StyledComponentProps<C, T, O, A>
-     >;
-     <AsC extends string | React.ComponentType<any> = C, FAsC extends string | React.ComponentType<any> = AsC>(
-+>AsC : AsC
- >React : any
-+>FAsC : FAsC
- >React : any
- 
-         props: StyledComponentPropsWithAs<AsC, T, O, A, FAsC>,
-@@= skipped -10, +12 lines =@@
+@@= skipped -84, +84 lines =@@
  >React : any
  
      withComponent<WithC extends AnyStyledComponent>(
 ->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC_1 extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC_1): StyledComponent<WithC_1, T, O, A>; }
 +>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends any>(component: WithC): StyledComponent<WithC, T, O, A>; }
-+>WithC : WithC
  
          component: WithC,
  >component : WithC
-@@= skipped -12, +13 lines =@@
+@@= skipped -12, +12 lines =@@
          A | StyledComponentInnerAttrs<WithC>
      >;
      withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
 ->withComponent : { <WithC_1 extends AnyStyledComponent>(component: WithC_1): StyledComponent<StyledComponentInnerComponent<WithC_1>, T, O & StyledComponentInnerOtherProps<WithC_1>, A | StyledComponentInnerAttrs<WithC_1>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
 +>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends any>(component: WithC): StyledComponent<WithC, T, O, A>; }
-+>WithC : WithC
- >JSX : any
- >React : any
- 
-@@= skipped -12, +13 lines =@@
- 
- export type StyledComponentInnerComponent<C extends React.ComponentType<any>> = C extends StyledComponent<
- >StyledComponentInnerComponent : StyledComponentInnerComponent<C>
-+>C : C
- >React : any
- 
-     infer I,
-+>I : I
-+
-     any,
-     any,
-     any
- >
-     ? I
-     : C extends StyledComponent<infer I, any, any>
-+>I : I
-+
-     ? I
-     : C;
- export type StyledComponentPropsWithRef<
- >StyledComponentPropsWithRef : StyledComponentPropsWithRef<C>
- 
-     C extends keyof JSX.IntrinsicElements | React.ComponentType<any>
-+>C : C
  >JSX : any
  >React : any
  

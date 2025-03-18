@@ -2,8 +2,6 @@
 
 === /foo/test.ts ===
 interface Foo {
->Foo : Foo
-
     x: number;
 >x : number
 }

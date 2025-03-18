@@ -9,8 +9,6 @@ enum E { A }
 >A : E.A
 
 interface I0 {
->I0 : I0
-
     [x: string]: E;
 >x : string
 
@@ -150,7 +148,6 @@ var r4 = foo7(E.A);
 >A : E
 
 interface I8 { foo: string; }
->I8 : I8
 >foo : string
 
 declare function foo8(x: I8): I8;
@@ -191,7 +188,6 @@ var r4 = foo9(E.A);
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
->T : T
 >foo : T
 
 declare function foo10(x: A2<number>): A2<number>;
@@ -231,9 +227,7 @@ var r4 = foo11(E.A);
 declare function foo12(x: <T>(x: T) => T): <T>(x: T) => T;
 >foo12 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: E): E; }
 >x : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 declare function foo12(x: E): E;
@@ -281,6 +275,8 @@ module f {
 declare function foo14(x: typeof f): typeof f;
 >foo14 : { (x: typeof f): typeof f; (x: E): E; }
 >x : typeof f
+>f : typeof f
+>f : typeof f
 
 declare function foo14(x: E): E;
 >foo14 : { (x: typeof f): typeof f; (x: E): E; }

@@ -6,18 +6,15 @@
  function f<T extends A>(a: T): A & T { return a; } // Shouldn't error
 ->f : <T extends A>(a: T) => A & T
 +>f : <T extends A>(a: T) => T
-+>T : T
  >a : T
  >a : T
  
-@@= skipped -8, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >B : B
  
  function f2<T extends A, U extends B>(ab: T & U): (A | B) & T & U { return ab; } // Also shouldn't error
 ->f2 : <T extends A, U extends B>(ab: T & U) => (A | B) & T & U
 +>f2 : <T extends A, U extends B>(ab: T & U) => (1 | 2 | 3) & T & U
-+>T : T
-+>U : U
  >ab : T & U
  >ab : T & U
  

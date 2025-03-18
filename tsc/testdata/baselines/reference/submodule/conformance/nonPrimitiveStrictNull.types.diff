@@ -36,21 +36,3 @@
  >d : object | null | undefined
  >'undefined' : "undefined"
  
-@@= skipped -19, +19 lines =@@
- }
- 
- interface Proxy<T extends object> {}
-+>Proxy : Proxy<T>
-+>T : T
- 
- var x: Proxy<number>; // error
- >x : Proxy<number>
-@@= skipped -11, +13 lines =@@
- >z : Proxy<undefined>
- 
- interface Blah {
-+>Blah : Blah
-+
-   foo: number;
- >foo : number
- }

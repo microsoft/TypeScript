@@ -25,7 +25,6 @@ class C {
 
 var a1: { new <T>(x: T): T };
 >a1 : new <T>(x: T) => T
->T : T
 >x : T
 
 var b1: { new (): string };
@@ -33,7 +32,6 @@ var b1: { new (): string };
 
 var a2: { new <T>(x: T): T };
 >a2 : new <T>(x: T) => T
->T : T
 >x : T
 
 var b2: { new (x: string): number };
@@ -42,7 +40,6 @@ var b2: { new (x: string): number };
 
 var a3: { new <T>(x?: T): T };
 >a3 : new <T>(x?: T) => T
->T : T
 >x : T
 
 var b3: { new (x?: string): number };
@@ -51,7 +48,6 @@ var b3: { new (x?: string): number };
 
 var a4: { new <T>(...x: T[]): T };
 >a4 : new <T>(...x: T[]) => T
->T : T
 >x : T[]
 
 var b4: { new (...x: string[]): number };
@@ -60,7 +56,6 @@ var b4: { new (...x: string[]): number };
 
 var a5: { new <T>(x: T, y: T): T };
 >a5 : new <T>(x: T, y: T) => T
->T : T
 >x : T
 >y : T
 
@@ -71,8 +66,6 @@ var b5: { new (x: string, y: number): string };
 
 var a6: { new <T, U extends T>(x: T, y: U): T };
 >a6 : new <T, U extends T>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 

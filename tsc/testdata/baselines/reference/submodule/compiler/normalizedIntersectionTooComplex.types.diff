@@ -9,35 +9,9 @@
  === normalizedIntersectionTooComplex.ts ===
  // Repro from #30050
  
- interface Obj<T> {
-+>Obj : Obj<T>
-+>T : T
-+
- 	ref: T;
- >ref : T
- }
- interface Func<T> {
-+>Func : Func<T>
-+>T : T
-+
- 	(x: T): void;
- >x : T
- }
- type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
- >UnionToIntersection : UnionToIntersection<U>
-+>U : U
- >k : U
- >k : I
-+>I : I
- 
- type CtorOf<T> = (arg: UnionToIntersection<T>) => T;
- >CtorOf : CtorOf<T>
-+>T : T
- >arg : UnionToIntersection<T>
+@@= skipped -24, +21 lines =@@
  
  interface Big {
-+>Big : Big
-+
      "0": { common?: string; "0"?: number, ref?: Obj<Big["0"]> | Func<Big["0"]>; }
 ->"0" : { common?: string; "0"?: number; ref?: Obj<Big["0"]> | Func<Big["0"]>; }
 +>"0" : { common?: string | undefined; "0"?: number | undefined; ref?: Func<???> | Obj<???> | undefined; }
@@ -184,10 +158,7 @@
  }
  declare function getCtor<T extends keyof Big>(comp: T): CtorOf<Big[T]>
  >getCtor : <T extends keyof Big>(comp: T) => CtorOf<Big[T]>
-+>T : T
- >comp : T
- 
- declare var all: keyof Big;
+@@= skipped -115, +115 lines =@@
  >all : keyof Big
  
  const ctor = getCtor(all);

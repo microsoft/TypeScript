@@ -15,8 +15,6 @@ module TargetIsPublic {
     }
 
     interface I {
->I : I
-
         foo: string;
 >foo : string
     }
@@ -170,7 +168,6 @@ module TargetIsPublic {
     }
 
     interface I extends Base {
->I : I
     }
 
     var a: { foo: string; }

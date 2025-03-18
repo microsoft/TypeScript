@@ -69,7 +69,6 @@ function fn2(s: string, n: number): number;
 
 function fn2<T>(n: number, t: T): T;
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
->T : T
 >n : number
 >t : T
 
@@ -112,22 +111,16 @@ fn2('', 0); // OK
 // Generic overloads with differing arity called without type arguments
 function fn3<T>(n: T): string;
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
->T : T
 >n : T
 
 function fn3<T, U>(s: string, t: T, u: U): U;
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
->T : T
->U : U
 >s : string
 >t : T
 >u : U
 
 function fn3<T, U, V>(v: V, u: U, t: T): number;
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
->T : T
->U : U
->V : V
 >v : V
 >u : U
 >t : T
@@ -191,15 +184,11 @@ fn3<number, number, number, number>(); // Error
 // Generic overloads with constraints called with type arguments that satisfy the constraints
 function fn4<T extends string, U extends number>(n: T, m: U);
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
->T : T
->U : U
 >n : T
 >m : U
 
 function fn4<T extends number, U extends string>(n: T, m: U);
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
->T : T
->U : U
 >n : T
 >m : U
 

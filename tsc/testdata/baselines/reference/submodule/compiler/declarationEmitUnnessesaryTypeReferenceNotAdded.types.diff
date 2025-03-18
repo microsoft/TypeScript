@@ -23,14 +23,8 @@
  >process.argv.slice(2) : any
  >process.argv.slice : any
  >process.argv : any
-@@= skipped -23, +23 lines =@@
- 
- === /node_modules/@types/minimist/minimist.d.ts ===
- declare namespace thing {
-+>thing : (x: any) => ParsedArgs
-+
+@@= skipped -26, +26 lines =@@
      interface ParsedArgs {}
-+>ParsedArgs : ParsedArgs
  }
  declare function thing(x: any): thing.ParsedArgs;
 ->thing : (x: any) => thing.ParsedArgs

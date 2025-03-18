@@ -7,8 +7,6 @@ declare function foo(p: string): void;
 
 function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 >fn : <T extends string | undefined, U extends string>(one: T, two: U) => void
->T : T
->U : U
 >one : T
 >two : U
 

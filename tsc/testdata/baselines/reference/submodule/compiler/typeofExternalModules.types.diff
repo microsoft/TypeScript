@@ -17,6 +17,7 @@
 ->ext : typeof ext
 +>y1 : typeof import("typeofExternalModules_external")
 +>ext : typeof import("typeofExternalModules_external")
++>ext : typeof import("typeofExternalModules_external")
  
  y1 = exp;
 ->y1 = exp : typeof exp
@@ -31,6 +32,7 @@
 ->exp : typeof exp
 ->exp : typeof exp
 +>y2 : typeof D
++>exp : typeof D
 +>exp : typeof D
  
  y2 = ext;

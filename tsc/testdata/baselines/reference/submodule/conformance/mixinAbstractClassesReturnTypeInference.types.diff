@@ -1,21 +1,11 @@
 --- old.mixinAbstractClassesReturnTypeInference.types
 +++ new.mixinAbstractClassesReturnTypeInference.types
-@@= skipped -1, +1 lines =@@
- 
- === mixinAbstractClassesReturnTypeInference.ts ===
- interface Mixin1 {
-+>Mixin1 : Mixin1
-+
-     mixinMethod(): void;
- >mixinMethod : () => void
- }
-@@= skipped -12, +14 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  
  function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
 ->Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { prototype: Mixin2<any>.MixinClass; staticMixinMethod(): void; }) & TBase
 +>Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
-+>TBase : TBase
  >args : any[]
  >baseClass : TBase
  
@@ -27,7 +17,7 @@
  >baseClass : TBase
  
          mixinMethod(): void {}
-@@= skipped -17, +18 lines =@@
+@@= skipped -17, +17 lines =@@
  >staticMixinMethod : () => void
      }
      return MixinClass;

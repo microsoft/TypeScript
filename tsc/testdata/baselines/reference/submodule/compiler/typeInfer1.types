@@ -2,8 +2,6 @@
 
 === typeInfer1.ts ===
 interface ITextWriter2 {
->ITextWriter2 : ITextWriter2
-
     Write(s:string):void;
 >Write : (s: string) => void
 >s : string

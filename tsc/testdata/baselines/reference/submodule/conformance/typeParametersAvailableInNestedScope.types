@@ -3,7 +3,6 @@
 === typeParametersAvailableInNestedScope.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     data: T;
 >data : T
@@ -11,7 +10,6 @@ class C<T> {
     x = <U>(a: U) => {
 >x : <U>(a: U) => T
 ><U>(a: U) => {        var y: T;        return y;    } : <U>(a: U) => T
->U : U
 >a : U
 
         var y: T;
@@ -26,7 +24,6 @@ class C<T> {
 
         function temp<U>(a: U) {
 >temp : <U>(a: U) => T
->U : U
 >a : U
 
             var y: T;

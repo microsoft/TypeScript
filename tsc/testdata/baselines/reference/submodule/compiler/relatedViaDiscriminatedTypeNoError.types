@@ -17,7 +17,6 @@ type DiscriminatedUnion = { flag: true } | { flag: false };
 
 class A<T extends DiscriminatedUnion> {
 >A : A<T>
->T : T
 
     constructor(public model: T) { }
 >model : T

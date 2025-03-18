@@ -5,8 +5,6 @@
 
 function append<a, b extends a>(result: a[], value: b): a[] {
 >append : <a, b extends a>(result: a[], value: b) => a[]
->a : a
->b : b
 >result : a[]
 >value : b
 

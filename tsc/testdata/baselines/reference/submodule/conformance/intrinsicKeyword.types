@@ -13,19 +13,15 @@ type TE1 = (intrinsic);
 
 type TE2<intrinsic> = intrinsic;
 >TE2 : intrinsic
->intrinsic : intrinsic
 
 type TE3<T extends intrinsic> = T;
 >TE3 : T
->T : T
 
 type TE4<intrinsic extends intrinsic> = intrinsic;
 >TE4 : intrinsic
->intrinsic : intrinsic
 
 type TE5<intrinsic extends intrinsic> = (intrinsic);
 >TE5 : intrinsic
->intrinsic : intrinsic
 
 function f1() {
 >f1 : () => void

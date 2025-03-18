@@ -2,28 +2,20 @@
 
 === computedPropertyNamesContextualType7_ES6.ts ===
 interface I<T> {
->I : I<T>
->T : T
-
     [n: number]: T;
 >n : number
 }
 interface J<T> {
->J : J<T>
->T : T
-
     [s: string]: T;
 >s : string
 }
 
 declare function foo<T>(obj: I<T>): T;
 >foo : <T>(obj: I<T>) => T
->T : T
 >obj : I<T>
 
 declare function g<T>(obj: J<T>): T;
 >g : <T>(obj: J<T>) => T
->T : T
 >obj : J<T>
 
 foo({

@@ -3,7 +3,6 @@
 === typeParameterWithInvalidConstraintType.ts ===
 class A<T extends T> {
 >A : A<T>
->T : T
 
     foo() {
 >foo : () => void

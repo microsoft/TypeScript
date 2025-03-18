@@ -13,11 +13,3 @@
  >e : any
  
      return {name: 'value' };
-@@= skipped -16, +16 lines =@@
- >Widget1 : Widget1
- 
- interface Widget1 { name: string; }
-+>Widget1 : Widget1
- >name : string
- 
- === exporter.ts ===

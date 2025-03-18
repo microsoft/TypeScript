@@ -273,31 +273,3 @@
  >42 : 42
  >"hello" : "hello"
  >true : true
-@@= skipped -91, +91 lines =@@
- 
- declare const f20: <T extends unknown[]>(...args: T) => T;
- >f20 : <T extends unknown[]>(...args: T) => T
-+>T : T
- >args : T
- 
- f20(...t1);
-@@= skipped -54, +55 lines =@@
- 
- type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
- >T05 : [x: string, ...args: T]
-+>T : T
- >x : string
- >args : T
- 
-@@= skipped -8, +9 lines =@@
- 
- type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
- >P1 : P1<T>
-+>T : T
- >head : A
-+>A : A
- >tail : B
-+>B : B
- >head : A
- >tail : B
- 

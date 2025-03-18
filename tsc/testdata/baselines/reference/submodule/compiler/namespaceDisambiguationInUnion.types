@@ -2,16 +2,12 @@
 
 === namespaceDisambiguationInUnion.ts ===
 namespace Foo {
->Foo : any
-
   export type Yep = { type: "foo.yep" };
 >Yep : Yep
 >type : "foo.yep"
 }
 
 namespace Bar {
->Bar : any
-
   export type Yep = { type: "bar.yep" };
 >Yep : Yep
 >type : "bar.yep"

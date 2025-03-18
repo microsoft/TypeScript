@@ -2,8 +2,6 @@
 
 === typeSatisfaction.ts ===
 interface I1 {
->I1 : I1
-
     a: number;
 >a : number
 }
@@ -67,8 +65,6 @@ const t6 = [1, 2] satisfies [number, number];
 >2 : 2
 
 interface A {
->A : A
-
     a: string
 >a : string
 }

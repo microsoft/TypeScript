@@ -1,15 +1,6 @@
 --- old.instanceOfAssignability.types
 +++ new.instanceOfAssignability.types
-@@= skipped -1, +1 lines =@@
- 
- === instanceOfAssignability.ts ===
- interface Base {
-+>Base : Base
-+
- 	foo: string|number;
- >foo : string | number
- 
-@@= skipped -42, +44 lines =@@
+@@= skipped -43, +43 lines =@@
  >neck : any
  
  function fn1(x: Array<number>|Array<string>|boolean) {
@@ -59,16 +50,3 @@
  	}
  }
  
- interface Alpha { a }
-+>Alpha : Alpha
- >a : any
- 
- interface Beta { b }
-+>Beta : Beta
- >b : any
- 
- interface Gamma { c }
-+>Gamma : Gamma
- >c : any
- 
- class ABC { a; b; c; }

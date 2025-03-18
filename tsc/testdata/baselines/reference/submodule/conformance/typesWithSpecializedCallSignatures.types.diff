@@ -1,15 +1,6 @@
 --- old.typesWithSpecializedCallSignatures.types
 +++ new.typesWithSpecializedCallSignatures.types
-@@= skipped -45, +45 lines =@@
- >C : typeof C
- 
- interface I {
-+>I : I
-+
-     foo(x: 'hi'): Derived1;
- >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
- >x : "hi"
-@@= skipped -16, +18 lines =@@
+@@= skipped -61, +61 lines =@@
  >i : I
  
  var a: {

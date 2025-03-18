@@ -5,7 +5,6 @@
 
 declare function call<TS extends unknown[]>(
 >call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
->TS : TS
 
     handler: (...args: TS) => void,
 >handler : (...args: TS) => void

@@ -26,8 +26,6 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 >"string" : "string"
 
 interface J extends Array<Number> {
->J : J
-
     2: number;
 >2 : number
 }
@@ -74,8 +72,6 @@ var [c2, c3]: [string, string] = [...temp];  // Error
 >temp : number[]
 
 interface F {
->F : F
-
     [idx: number]: boolean
 >idx : number
 }

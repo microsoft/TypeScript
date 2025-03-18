@@ -4,7 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/55499
 
 interface Base {}
->Base : Base
 
 class C extends null {
 >C : C
@@ -16,5 +15,4 @@ class C extends null {
   }
 }
 interface C extends Base {}
->C : C
 

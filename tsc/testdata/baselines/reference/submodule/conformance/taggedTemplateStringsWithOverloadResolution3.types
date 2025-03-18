@@ -37,7 +37,6 @@ function fn2(strs: TemplateStringsArray, s: string, n: number): number;
 
 function fn2<T>(strs: TemplateStringsArray, n: number, t: T): T;
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->T : T
 >strs : TemplateStringsArray
 >n : number
 >t : T
@@ -91,14 +90,11 @@ fn2 `${ '' }${ 0 }`; // OK
 // Generic overloads with differing arity
 function fn3<T>(strs: TemplateStringsArray, n: T): string;
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->T : T
 >strs : TemplateStringsArray
 >n : T
 
 function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->T : T
->U : U
 >strs : TemplateStringsArray
 >s : string
 >t : T
@@ -106,9 +102,6 @@ function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
 
 function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->T : T
->U : U
->V : V
 >strs : TemplateStringsArray
 >v : V
 >u : U
@@ -180,16 +173,12 @@ fn3 ``; // Error
 // Generic overloads with constraints
 function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->T : T
->U : U
 >strs : TemplateStringsArray
 >n : T
 >m : U
 
 function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U);
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->T : T
->U : U
 >strs : TemplateStringsArray
 >n : T
 >m : U

@@ -3,7 +3,6 @@
 === genericWithIndexerOfTypeParameterType1.ts ===
 class LazyArray<T> {
 >LazyArray : LazyArray<T>
->T : T
 
     private objects = <{ [objectId: string]: T; }>{};
 >objects : { [objectId: string]: T; }

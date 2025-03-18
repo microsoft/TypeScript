@@ -6,8 +6,6 @@ import * as React from 'react'
 >React : any
 
 interface Props {
->Props : Props
-
     children: React.ReactElement<any>
 >children : ReactElement<any>
 >React : any

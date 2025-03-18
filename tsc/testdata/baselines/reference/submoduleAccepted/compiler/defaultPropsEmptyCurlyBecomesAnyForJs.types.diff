@@ -1,15 +1,6 @@
 --- old.defaultPropsEmptyCurlyBecomesAnyForJs.types
 +++ new.defaultPropsEmptyCurlyBecomesAnyForJs.types
-@@= skipped -2, +2 lines =@@
- === library.d.ts ===
- export class Foo<T = {}, U = {}> {
- >Foo : Foo<T, U>
-+>T : T
-+>U : U
- 
-     props: T;
- >props : T
-@@= skipped -18, +20 lines =@@
+@@= skipped -20, +20 lines =@@
  
  export class MyFoo extends Foo {
  >MyFoo : MyFoo

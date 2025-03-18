@@ -17,7 +17,6 @@ class D {
 
 class X<T> {
 >X : X<T>
->T : T
 
     x: T;
 >x : T
@@ -25,7 +24,6 @@ class X<T> {
 
 function foo<T>(t: X<T>, t2: X<T>) {
 >foo : <T>(t: X<T>, t2: X<T>) => T
->T : T
 >t : X<T>
 >t2 : X<T>
 

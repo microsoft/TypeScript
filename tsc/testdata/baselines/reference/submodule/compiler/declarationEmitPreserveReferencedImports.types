@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/declarationEmitPreserveReferencedImports.ts] ////
 
 === utils.ts ===
+
 export interface Evt { }
->Evt : Evt
 
 
 === decl.ts ===
@@ -12,7 +12,6 @@ import {Evt} from './utils'
 export const o = <T>(o: T) => () : T => null!
 >o : <T>(o: T) => () => T
 ><T>(o: T) => () : T => null! : <T>(o: T) => () => T
->T : T
 >o : T
 >() : T => null! : () => T
 >null! : never

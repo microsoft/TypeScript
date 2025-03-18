@@ -2,16 +2,12 @@
 
 === specializedInheritedConstructors1.ts ===
 interface ViewOptions<TModel> {
->ViewOptions : ViewOptions<TModel>
->TModel : TModel
-
     model: TModel;
 >model : TModel
 }
 
 class View<TModel> {
 >View : View<TModel>
->TModel : TModel
 
     constructor(options: ViewOptions<TModel>) { }
 >options : ViewOptions<TModel>

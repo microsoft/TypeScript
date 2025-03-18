@@ -6,8 +6,6 @@
  declare function foo<T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T): T;
 ->foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
 +>foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U, any, any>, fun2: (y: U) => T) => T
-+>T : T
-+>U : U
  >x : T
 ->fun : () => Iterable<(x: T) => U>
 +>fun : () => Iterable<(x: T) => U, any, any>

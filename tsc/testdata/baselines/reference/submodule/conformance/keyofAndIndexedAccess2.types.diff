@@ -9,24 +9,14 @@
  === keyofAndIndexedAccess2.ts ===
  function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
  >f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: "a", k1: "a" | "b", k2: "a" | "b" | "c") => void
-@@= skipped -79, +76 lines =@@
- 
- function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
- >f2 : <T extends { [key: string]: number; }>(a: { x: number; y: number; }, b: { [key: string]: number; }, c: T, k: keyof T) => void
-+>T : T
- >key : string
- >a : { x: number; y: number; }
- >x : number
-@@= skipped -89, +90 lines =@@
+@@= skipped -168, +165 lines =@@
  }
  
  function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
 ->f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
 ->a : { [P in K]: number; }
 +>f3 : <K extends string>(a: { [P in K]: number }, b: { [key: string]: number; }, k: K) => void
-+>K : K
 +>a : { [P in K]: number }
-+>P : P
  >b : { [key: string]: number; }
  >key : string
  >k : K
@@ -65,11 +55,8 @@
 ->f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
 ->a : { [P in K]: number; }
 +>f3b : <K extends string>(a: { [P in K]: number }, b: { [x: string]: number; }, k: K) => void
-+>K : K
 +>a : { [P in K]: number }
-+>P : P
  >b : { [x: string]: number; }
-+>P : P
  >k : K
  
      a = b;  // Error, index signature doesn't imply properties are present
@@ -89,78 +76,28 @@
  function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
 ->f4 : <K extends string>(a: { [key: string]: number; }[K], b: number) => void
 +>f4 : <K extends string>(a: number, b: number) => void
-+>K : K
  >a : number
  >key : string
  >b : number
-@@= skipped -70, +76 lines =@@
- 
- function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
- >f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) => void
-+>T : T
-+>K : K
- >obj : T
- >k1 : string
- >k2 : keyof Item
-@@= skipped -39, +41 lines =@@
+@@= skipped -109, +109 lines =@@
  >Dict : Dict
  
  function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 ->f11 : <K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) => void
 +>f11 : <K extends string>(obj: Dict, k1: string, k2: K) => void
-+>K : K
  >obj : Dict
  >k1 : string
  >k2 : K
-@@= skipped -28, +29 lines =@@
+@@= skipped -28, +28 lines =@@
  }
  
  function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
 ->f12 : <T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
 +>f12 : <T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: string, k2: keyof T, k3: K) => void
-+>T : T
-+>K : K
  >obj : T
  >k1 : string
  >k2 : keyof T
-@@= skipped -38, +40 lines =@@
- // Repro from #27895
- 
- export interface Entity {
-+>Entity : Entity
-+
-     id: number | string;
- >id : string | number
- }
- 
- export type IdOf<E extends Entity> = E['id'];
- >IdOf : IdOf<E>
-+>E : E
- 
- export interface EntityState<E extends Entity> {
-+>EntityState : EntityState<E>
-+>E : E
-+
-     ids: IdOf<E>[];
- >ids : IdOf<E>[]
- 
-@@= skipped -20, +26 lines =@@
- 
- export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
- >getAllEntities : <E extends Entity>(state: EntityState<E>) => E[]
-+>E : E
- >state : EntityState<E>
- 
-     const { ids, entities } = state;
-@@= skipped -21, +22 lines =@@
- 
- export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>): E | undefined {
- >getEntity : <E extends Entity>(id: IdOf<E>, state: EntityState<E>) => E | undefined
-+>E : E
- >id : IdOf<E>
- >state : EntityState<E>
- 
-@@= skipped -11, +12 lines =@@
+@@= skipped -90, +90 lines =@@
      if (!ids.includes(id)) {
  >!ids.includes(id) : boolean
  >ids.includes(id) : boolean
@@ -172,57 +109,16 @@
  >id : IdOf<E>
  
          return undefined;
-@@= skipped -18, +18 lines =@@
- // Repro from #30603
- 
- interface Type {
-+>Type : Type
-+
-     a: 123;
- >a : 123
- 
-@@= skipped -9, +11 lines =@@
- 
- function get123<K extends keyof Type>(): Type[K] {
- >get123 : <K extends keyof Type>() => Type[K]
-+>K : K
- 
-     return 123;  // Error
- >123 : 123
-@@= skipped -9, +10 lines =@@
- 
- type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
- >StrictExtract : StrictExtract<T, U>
-+>T : T
-+>U : U
- 
- type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
- >StrictExclude : StrictExclude<T, U>
-+>T : T
-+>U : U
- 
- type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
- >A : A<T>
-+>T : T
-+>Q : Q
-+>P : P
- 
- type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
- >B : B<T, V>
-+>T : T
-+>V : V
-+>Q : Q
- 
+@@= skipped -49, +49 lines =@@
  // Repros from #30938
  
  function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
 ->fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T["elements"][number]) => void) => void
 +>fn : <T extends { elements: string[]; } | { elements: number[]; }>(param: T, cb: (element: T["elements"][number]) => void) => void
-+>T : T
  >elements : string[]
  >elements : number[]
  >param : T
-@@= skipped -25, +36 lines =@@
+@@= skipped -12, +12 lines =@@
  >cb : (element: T["elements"][number]) => void
  >param.elements[0] : string | number
  >param.elements : string[] | number[]
@@ -235,28 +131,19 @@
  function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
 ->fn2 : <T extends Array<string>>(param: T, cb: (element: T[number]) => void) => void
 +>fn2 : <T extends string[]>(param: T, cb: (element: T[number]) => void) => void
-+>T : T
  >param : T
  >cb : (element: T[number]) => void
  >element : T[number]
-@@= skipped -22, +23 lines =@@
+@@= skipped -22, +22 lines =@@
  // Repro from #31149
  
  function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
 ->fn3 : <T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) => void
 +>fn3 : <T extends readonly string[]>(param: T, cb: (element: T[number]) => void) => void
-+>T : T
  >param : T
  >cb : (element: T[number]) => void
  >element : T[number]
-@@= skipped -15, +16 lines =@@
- 
- function fn4<K extends number>() {
- >fn4 : <K extends number>() => void
-+>K : K
- 
-     let x: Array<string>[K] = 'abc';
- >x : string[][K]
+@@= skipped -21, +21 lines =@@
  >'abc' : "abc"
  
      let y: ReadonlyArray<string>[K] = 'abc';
@@ -265,32 +152,7 @@
  >'abc' : "abc"
  }
  
-@@= skipped -39, +40 lines =@@
- 
- type Foo<T> = { [key: string]: { [K in keyof T]: K }[keyof T] };
- >Foo : Foo<T>
-+>T : T
- >key : string
-+>K : K
- 
- type Bar<T> = { [key: string]: { [K in keyof T]: [K] }[keyof T] };
- >Bar : Bar<T>
-+>T : T
- >key : string
-+>K : K
- 
- type Baz<T, Q extends Foo<T>> = { [K in keyof Q]: T[Q[K]] };
- >Baz : Baz<T, Q>
-+>T : T
-+>Q : Q
-+>K : K
- 
- type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
- >Qux : Qux<T, Q>
-+>T : T
-+>Q : Q
-+>K : K
- 
+@@= skipped -48, +48 lines =@@
  // Repro from #32038
  
  const actions = ['resizeTo', 'resizeBy'] as const;

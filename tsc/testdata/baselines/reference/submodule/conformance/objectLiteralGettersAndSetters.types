@@ -178,6 +178,7 @@ var sameType3 = { get x(): any { return undefined; }, set x(n: typeof anyVar) { 
 >undefined : undefined
 >x : any
 >n : any
+>anyVar : any
 
 var sameType4 = { get x(): Date { return undefined; }, set x(n: Date) { } };
 >sameType4 : { x: Date; }

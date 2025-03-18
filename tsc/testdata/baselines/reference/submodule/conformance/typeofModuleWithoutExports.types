@@ -18,4 +18,5 @@ module M {
 
 var r: typeof M;
 >r : typeof M
+>M : typeof M
 

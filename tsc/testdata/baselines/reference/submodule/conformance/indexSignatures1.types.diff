@@ -1,47 +1,6 @@
 --- old.indexSignatures1.types
 +++ new.indexSignatures1.types
-@@= skipped -50, +50 lines =@@
- }
- 
- interface IX { [key: `a${string}`]: string, [key: `${string}a`]: string }
-+>IX : IX
- >key : `a${string}`
- >key : `${string}a`
- 
- interface IY { [key: `a${string}a`]: string }
-+>IY : IY
- >key : `a${string}a`
- 
- function gg2(x: IX, y: IY) {
-@@= skipped -199, +201 lines =@@
- 
- type Invalid<T extends string> = {
- >Invalid : Invalid<T>
-+>T : T
- 
-     [key: 'a' | 'b' | 'c']: string;  // Error
- >key : "a" | "b" | "c"
-@@= skipped -46, +47 lines =@@
- >s4 : string & Tag1 & Tag2
- 
- interface I1 { [key: TaggedString1]: string }
-+>I1 : I1
- >key : TaggedString1
- 
- interface I2 { [key: TaggedString2]: string }
-+>I2 : I2
- >key : TaggedString2
- 
- interface I3 { [key: TaggedString1 | TaggedString2]: string }
-+>I3 : I3
- >key : TaggedString1 | TaggedString2
- 
- interface I4 { [key: TaggedString1 & TaggedString2]: string }
-+>I4 : I4
- >key : string & Tag1 & Tag2
- 
- declare let i1: I1;
-@@= skipped -382, +386 lines =@@
+@@= skipped -677, +677 lines =@@
  };
  
  const obj11 = {
@@ -63,31 +22,18 @@
  
      ['x']: 0 as const,
  >['x'] : 0
-@@= skipped -61, +61 lines =@@
- >'SomeSytePlugin' : "SomeSytePlugin"
- 
- interface Plugs {
-+>Plugs : Plugs
-+
-     [key: symbol]: (...args: any) => unknown;
- >key : symbol
- >args : any
-@@= skipped -71, +73 lines =@@
+@@= skipped -132, +132 lines =@@
  >'directive' : "directive"
  
  declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
 ->foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
 ->options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }
 +>foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
-+>TArg : TArg
-+>TRet : TRet
-+>TDir : TDir
 +>options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }
-+>x : x
  >arg : TArg
  >[directive] : TDir | undefined
  >directive : unique symbol
-@@= skipped -9, +13 lines =@@
+@@= skipped -9, +9 lines =@@
  let case1 = foo({
  >case1 : void
  >foo({    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
@@ -114,28 +60,3 @@
  >{    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: string; addOne: (x: number) => number; double: (x: number) => number; }
  
      [directive]: 'str',
-@@= skipped -41, +41 lines =@@
- 
- type PseudoDeclaration = { [key in Pseudo]: string };
- >PseudoDeclaration : PseudoDeclaration
-+>key : key
- 
- const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
- >test : PseudoDeclaration
-@@= skipped -20, +21 lines =@@
- 
- type PathsObject = { [P in FieldPattern]: object; };
- >PathsObject : PathsObject
-+>P : P
- 
- const pathObject: PathsObject = 123;  // Error
- >pathObject : PathsObject
-@@= skipped -31, +32 lines =@@
- // Repro from #44793
- 
- interface AA {
-+>AA : AA
-+
-     a?: string;
- >a : string | undefined
- 

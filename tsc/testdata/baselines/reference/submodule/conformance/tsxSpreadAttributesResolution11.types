@@ -34,8 +34,6 @@ const obj3: {y: true, overwrite: string } = {
 }
 
 interface Prop {
->Prop : Prop
-
     x: 2
 >x : 2
 

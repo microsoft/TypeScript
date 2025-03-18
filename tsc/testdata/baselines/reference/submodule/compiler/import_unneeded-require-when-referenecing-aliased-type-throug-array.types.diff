@@ -17,12 +17,3 @@
  >0 : 0
  >name : string
   
-@@= skipped -15, +15 lines =@@
- >"ITest" : typeof import("ITest")
- 
-     interface Name {
-+>Name : Name
-+
-         name: string;
- >name : string
-     }

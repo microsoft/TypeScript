@@ -2,8 +2,6 @@
 
 === errorsOnUnionsOfOverlappingObjects01.ts ===
 interface Foo {
->Foo : Foo
-
     a: string;
 >a : string
 
@@ -13,15 +11,11 @@ interface Foo {
 };
 
 interface Bar {
->Bar : Bar
-
     b: string;
 >b : string
 }
 
 interface Other {
->Other : Other
-
     totallyUnrelatedProperty: number;
 >totallyUnrelatedProperty : number
 }
@@ -89,18 +83,15 @@ h({ a: '', b: '' })
 >'' : ""
 
 interface CatDog { cat: any, dog: any }
->CatDog : CatDog
 >cat : any
 >dog : any
 
 interface ManBearPig { man: any, bear: any, pig: any }
->ManBearPig : ManBearPig
 >man : any
 >bear : any
 >pig : any
 
 interface Platypus { platypus: any }
->Platypus : Platypus
 >platypus : any
 
 type ExoticAnimal =

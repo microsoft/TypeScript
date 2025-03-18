@@ -3,7 +3,6 @@
 === typeArgumentInferenceWithClassExpression3.ts ===
 function foo<T>(x = class { prop: T }): T {
 >foo : <T>(x?: typeof (Anonymous class)) => T
->T : T
 >x : typeof (Anonymous class)
 >class { prop: T } : typeof (Anonymous class)
 >prop : T

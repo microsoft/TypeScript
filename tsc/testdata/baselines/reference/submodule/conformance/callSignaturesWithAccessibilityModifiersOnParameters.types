@@ -30,7 +30,6 @@ var f3 = (x, private y) => { }
 var f4 = <T>(public x: T, y: T) => { }
 >f4 : <T>(x: T, y: T) => void
 ><T>(public x: T, y: T) => { } : <T>(x: T, y: T) => void
->T : T
 >x : T
 >y : T
 
@@ -61,7 +60,6 @@ var f7 = (private x: string, public y: number) => { }
 var f8 = <T>(private x: T, public y: T) => { }
 >f8 : <T>(x: T, y: T) => void
 ><T>(private x: T, public y: T) => { } : <T>(x: T, y: T) => void
->T : T
 >x : T
 >y : T
 
@@ -80,14 +78,11 @@ class C {
 
     foo3<T>(public x: T, private y: T) { }
 >foo3 : <T>(x: T, y: T) => void
->T : T
 >x : T
 >y : T
 }
 
 interface I {
->I : I
-
     (private x, public y);
 >x : any
 >y : any
@@ -108,7 +103,6 @@ interface I {
 
     foo3<T>(x: T, private y: T);
 >foo3 : <T>(x: T, y: T) => any
->T : T
 >x : T
 >y : T
 }
@@ -147,7 +141,6 @@ var b = {
     b: <T>(public x: T, private y: T) => { }
 >b : <T>(x: T, y: T) => void
 ><T>(public x: T, private y: T) => { } : <T>(x: T, y: T) => void
->T : T
 >x : T
 >y : T
 }

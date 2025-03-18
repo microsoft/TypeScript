@@ -1,16 +1,11 @@
 --- old.recursiveClassBaseType.types
 +++ new.recursiveClassBaseType.types
-@@= skipped -4, +4 lines =@@
- 
- declare const p: <T>(fn: () => T) => T;
- >p : <T>(fn: () => T) => T
-+>T : T
+@@= skipped -7, +7 lines =@@
  >fn : () => T
  
  declare const Base: <T>(val: T) => { new(): T };
 ->Base : <T>(val: T) => { new (): T; }
 +>Base : <T>(val: T) => new () => T
-+>T : T
  >val : T
  
  class C extends Base({ x: p<C[]>(() => []) }) { }

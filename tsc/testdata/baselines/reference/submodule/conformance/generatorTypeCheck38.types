@@ -13,4 +13,5 @@ function* g() {
 
     var v: typeof yield;
 >v : any
+>yield : any
 }

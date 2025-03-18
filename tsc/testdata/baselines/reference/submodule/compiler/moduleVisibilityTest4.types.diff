@@ -1,20 +1,6 @@
 --- old.moduleVisibilityTest4.types
 +++ new.moduleVisibilityTest4.types
-@@= skipped -1, +1 lines =@@
- 
- === moduleVisibilityTest4.ts ===
- module M {
-+>M : any
-+
-     export type nums = number;
- >nums : number
- }
- 
- namespace N {
-+>N : any
-+
-     export type nums = number;
- >nums : number
+@@= skipped -11, +11 lines =@@
  }
  
  let a1: M.num;
@@ -23,7 +9,7 @@
  >M : any
  
  let b1: M.nums;
-@@= skipped -18, +22 lines =@@
+@@= skipped -8, +8 lines =@@
  >M : any
  
  let c1: M.bar;

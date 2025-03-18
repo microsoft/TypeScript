@@ -1,58 +1,15 @@
 --- old.reverseMappedTypeInferenceSameSource1.types
 +++ new.reverseMappedTypeInferenceSameSource1.types
-@@= skipped -2, +2 lines =@@
- === reverseMappedTypeInferenceSameSource1.ts ===
- type Action<T extends string = string> = {
- >Action : Action<T>
-+>T : T
- 
-   type: T;
- >type : T
- 
- };
- interface UnknownAction extends Action {
-+>UnknownAction : UnknownAction
-+
-   [extraProps: string]: unknown;
- >extraProps : string
- }
- type Reducer<S = any, A extends Action = UnknownAction> = (
- >Reducer : Reducer<S, A>
-+>S : S
-+>A : A
- 
-   state: S | undefined,
- >state : S | undefined
-@@= skipped -22, +27 lines =@@
- 
- type ReducersMapObject<S = any, A extends Action = UnknownAction> = {
- >ReducersMapObject : ReducersMapObject<S, A>
-+>S : S
-+>A : A
- 
-   [K in keyof S]: Reducer<S[K], A>;
-+>K : K
-+
- };
- 
- interface ConfigureStoreOptions<S = any, A extends Action = UnknownAction> {
-+>ConfigureStoreOptions : ConfigureStoreOptions<S, A>
-+>S : S
-+>A : A
-+
-   reducer: Reducer<S, A> | ReducersMapObject<S, A>;
- >reducer : Reducer<S, A> | ReducersMapObject<S, A>
+@@= skipped -34, +34 lines =@@
  }
  
  declare function configureStore<S = any, A extends Action = UnknownAction>(
 ->configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
 +>configureStore : <S, A extends Action<string>>(options: ConfigureStoreOptions<S, A>) => void
-+>S : S
-+>A : A
  
    options: ConfigureStoreOptions<S, A>,
  >options : ConfigureStoreOptions<S, A>
-@@= skipped -26, +36 lines =@@
+@@= skipped -16, +16 lines =@@
    const store1 = configureStore({ reducer });
  >store1 : void
  >configureStore({ reducer }) : void

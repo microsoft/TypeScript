@@ -5,18 +5,12 @@ declare module 'passport' {
 >'passport' : typeof import("passport")
 
     namespace passport {
->passport : PassportStatic
-
         interface Passport {
->Passport : Passport
-
             use(): this;
 >use : () => this
         }
 
         interface PassportStatic extends Passport {
->PassportStatic : PassportStatic
-
             Passport: {new(): Passport};
 >Passport : new () => Passport
         }

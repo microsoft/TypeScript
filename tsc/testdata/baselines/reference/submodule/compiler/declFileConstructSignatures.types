@@ -2,15 +2,11 @@
 
 === declFileConstructSignatures_0.ts ===
 export interface IConstructSignature {
->IConstructSignature : IConstructSignature
-
     /** This comment should appear for foo*/
     new (): string;
 }
 
 export interface IConstructSignatureWithParameters {
->IConstructSignatureWithParameters : IConstructSignatureWithParameters
-
     /** This is comment for function signature*/
     new (/** this is comment about a*/a: string,
 >a : string
@@ -21,16 +17,12 @@ export interface IConstructSignatureWithParameters {
 }
 
 export interface IConstructSignatureWithRestParameters {
->IConstructSignatureWithRestParameters : IConstructSignatureWithRestParameters
-
     new (a: string, ...rests: string[]): string;
 >a : string
 >rests : string[]
 }
 
 export interface IConstructSignatureWithOverloads {
->IConstructSignatureWithOverloads : IConstructSignatureWithOverloads
-
     new (a: string): string;
 >a : string
 
@@ -39,33 +31,23 @@ export interface IConstructSignatureWithOverloads {
 }
 
 export interface IConstructSignatureWithTypeParameters<T> {
->IConstructSignatureWithTypeParameters : IConstructSignatureWithTypeParameters<T>
->T : T
-
     /** This comment should appear for foo*/
     new (a: T): T;
 >a : T
 }
 
 export interface IConstructSignatureWithOwnTypeParametes {
->IConstructSignatureWithOwnTypeParametes : IConstructSignatureWithOwnTypeParametes
-
     new <T extends IConstructSignature>(a: T): T;
->T : T
 >a : T
 }
 
 === declFileConstructSignatures_1.ts ===
 interface IGlobalConstructSignature {
->IGlobalConstructSignature : IGlobalConstructSignature
-
     /** This comment should appear for foo*/
     new (): string;
 }
 
 interface IGlobalConstructSignatureWithParameters {
->IGlobalConstructSignatureWithParameters : IGlobalConstructSignatureWithParameters
-
     /** This is comment for function signature*/
     new (/** this is comment about a*/a: string,
 >a : string
@@ -76,7 +58,6 @@ interface IGlobalConstructSignatureWithParameters {
 }
 
 interface IGlobalConstructSignatureWithRestParameters {
->IGlobalConstructSignatureWithRestParameters : IGlobalConstructSignatureWithRestParameters
 
     new (a: string, ...rests: string[]): string;
 >a : string
@@ -85,8 +66,6 @@ interface IGlobalConstructSignatureWithRestParameters {
 }
 
 interface IGlobalConstructSignatureWithOverloads {
->IGlobalConstructSignatureWithOverloads : IGlobalConstructSignatureWithOverloads
-
     new (a: string): string;
 >a : string
 
@@ -95,18 +74,12 @@ interface IGlobalConstructSignatureWithOverloads {
 }
 
 interface IGlobalConstructSignatureWithTypeParameters<T> {
->IGlobalConstructSignatureWithTypeParameters : IGlobalConstructSignatureWithTypeParameters<T>
->T : T
-
     /** This comment should appear for foo*/
     new (a: T): T;
 >a : T
 }
 
 interface IGlobalConstructSignatureWithOwnTypeParametes {
->IGlobalConstructSignatureWithOwnTypeParametes : IGlobalConstructSignatureWithOwnTypeParametes
-
     new <T extends IGlobalConstructSignature>(a: T): T;
->T : T
 >a : T
 }

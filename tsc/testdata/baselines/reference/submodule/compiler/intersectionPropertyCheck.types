@@ -30,7 +30,6 @@ let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak objec
 
 function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
 >foo : <T extends object>(x: { a?: string | undefined; }, y: T & { a: boolean; }) => void
->T : T
 >x : { a?: string | undefined; }
 >a : string | undefined
 >y : T & { a: boolean; }
@@ -45,15 +44,12 @@ function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
 // Repro from #36637
 
 interface Test {
->Test : Test
-
   readonly hi?: string[]
 >hi : string[] | undefined
 }
 
 function test<T extends object>(value: T): Test {
 >test : <T extends object>(value: T) => Test
->T : T
 >value : T
 
   return { ...value, hi: true }

@@ -15,10 +15,12 @@ class Base {
 
     protected a: typeof x;
 >a : { foo: string; }
+>x : { foo: string; }
 
     protected b(a: typeof x) { }
 >b : (a: { foo: string; }) => void
 >a : { foo: string; }
+>x : { foo: string; }
 
     protected get c() { return x; }
 >c : { foo: string; }
@@ -27,17 +29,21 @@ class Base {
     protected set c(v: typeof x) { }
 >c : { foo: string; }
 >v : { foo: string; }
+>x : { foo: string; }
 
     protected d: (a: typeof x) => void;
 >d : (a: { foo: string; }) => void
 >a : { foo: string; }
+>x : { foo: string; }
 
     protected static r: typeof x;
 >r : { foo: string; }
+>x : { foo: string; }
 
     protected static s(a: typeof x) { }
 >s : (a: { foo: string; }) => void
 >a : { foo: string; }
+>x : { foo: string; }
 
     protected static get t() { return x; }
 >t : { foo: string; }
@@ -46,13 +52,16 @@ class Base {
     protected static set t(v: typeof x) { }
 >t : { foo: string; }
 >v : { foo: string; }
+>x : { foo: string; }
 
     protected static u: (a: typeof x) => void;
 >u : (a: { foo: string; }) => void
 >a : { foo: string; }
+>x : { foo: string; }
 
     constructor(a: typeof x) { }
 >a : { foo: string; }
+>x : { foo: string; }
 }
 
 class Derived extends Base {
@@ -61,10 +70,12 @@ class Derived extends Base {
 
     protected a: typeof y;
 >a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     protected b(a: typeof y) { }
 >b : (a: { foo: string; bar: string; }) => void
 >a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     protected get c() { return y; }
 >c : { foo: string; bar: string; }
@@ -73,17 +84,21 @@ class Derived extends Base {
     protected set c(v: typeof y) { }
 >c : { foo: string; bar: string; }
 >v : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     protected d: (a: typeof y) => void;
 >d : (a: { foo: string; bar: string; }) => void
 >a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     protected static r: typeof y;
 >r : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     protected static s(a: typeof y) { }
 >s : (a: { foo: string; bar: string; }) => void
 >a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     protected static get t() { return y; }
 >t : { foo: string; bar: string; }
@@ -92,13 +107,16 @@ class Derived extends Base {
     protected static set t(a: typeof y) { }
 >t : { foo: string; bar: string; }
 >a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     protected static u: (a: typeof y) => void;
 >u : (a: { foo: string; bar: string; }) => void
 >a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 
     constructor(a: typeof y) { super(x) }
 >a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
 >super(x) : void
 >super : typeof Base
 >x : { foo: string; }

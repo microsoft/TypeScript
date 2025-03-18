@@ -20,8 +20,6 @@ declare module "ambient" {
 
 === /types.ts ===
 interface Typey {}
->Typey : Typey
-
 export type { Typey };
 >Typey : Typey
 

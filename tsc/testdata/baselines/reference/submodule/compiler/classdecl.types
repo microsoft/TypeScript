@@ -93,7 +93,6 @@ module m1 {
 
 
     export interface ib {
->ib : ib
     }
 }
 

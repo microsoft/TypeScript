@@ -7,8 +7,6 @@ import React from 'react';
 >React : any
 
 interface BaseProps {
->BaseProps : BaseProps
-
   when?: ((value: string) => boolean) | "a" | "b";
 >when : "a" | "b" | (value: string) => boolean | undefined
 >value : string
@@ -18,12 +16,10 @@ interface BaseProps {
 }
 
 interface Props extends BaseProps {
->Props : Props
 }
 
 class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
 >FieldFeedback : FieldFeedback<P>
->P : P
 >React.Component : any
 >React : any
 >Component : any
@@ -79,7 +75,6 @@ const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 
 class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
 >FieldFeedbackBeta : FieldFeedbackBeta<P>
->P : P
 >React.Component : any
 >React : any
 >Component : any
@@ -138,8 +133,6 @@ const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
 
 interface MyPropsProps extends Props {
->MyPropsProps : MyPropsProps
-
   when: (value: string) => boolean;
 >when : (value: string) => boolean
 >value : string
@@ -147,7 +140,6 @@ interface MyPropsProps extends Props {
 
 class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedback<P> {
 >FieldFeedback2 : FieldFeedback2<P>
->P : P
 >FieldFeedback : FieldFeedback<P>
 
   static defaultProps = {

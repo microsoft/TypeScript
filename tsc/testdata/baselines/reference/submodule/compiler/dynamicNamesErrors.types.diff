@@ -1,49 +1,6 @@
 --- old.dynamicNamesErrors.types
 +++ new.dynamicNamesErrors.types
-@@= skipped -9, +9 lines =@@
- >1 : 1
- 
- interface T0 {
-+>T0 : T0
-+
-     [c0]: number;
- >[c0] : number
- >c0 : "1"
-@@= skipped -9, +11 lines =@@
- }
- 
- interface T1 {
-+>T1 : T1
-+
-     [c0]: number;
- >[c0] : number
- >c0 : "1"
- }
- 
- interface T2 {
-+>T2 : T2
-+
-     [c0]: string;
- >[c0] : string
- >c0 : "1"
- }
- 
- interface T3 {
-+>T3 : T3
-+
-     [c0]: number;
- >[c0] : number
- >c0 : "1"
-@@= skipped -58, +64 lines =@@
- >Symbol : SymbolConstructor
- 
- export interface InterfaceMemberVisibility {
-+>InterfaceMemberVisibility : InterfaceMemberVisibility
-+
-     [x]: number;
- >[x] : number
- >x : unique symbol
-@@= skipped -65, +67 lines =@@
+@@= skipped -141, +141 lines =@@
  };
  
  export const ObjectLiteralVisibility = {

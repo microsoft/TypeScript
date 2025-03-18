@@ -1,24 +1,6 @@
 --- old.parserRealSource1.types
 +++ new.parserRealSource1.types
-@@= skipped -16, +16 lines =@@
- >false : false
- 
-         export interface IDiagnosticWriter {
-+>IDiagnosticWriter : IDiagnosticWriter
-+
-             Alert(output: string): void;
- >Alert : (output: string) => void
- >output : string
-@@= skipped -65, +67 lines =@@
-     }
- 
-     export interface ILogger {
-+>ILogger : ILogger
-+
-         information(): boolean;
- >information : () => boolean
- 
-@@= skipped -293, +295 lines =@@
+@@= skipped -374, +374 lines =@@
                      result += "\\t";
  >result += "\\t" : string
  >result : string

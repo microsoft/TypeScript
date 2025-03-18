@@ -7,24 +7,29 @@
 ->Default : "module"
 ->x : error
 +>Default : "script"
++>x : any
  
  type Import = typeof import("foo", { assert: { "resolution-mode": "import" } }).x;
 ->Import : "module"
 ->x : error
 +>Import : "script"
++>x : any
  
  type Require = typeof import("foo", { assert: { "resolution-mode": "require" } }).x;
  >Require : "script"
 ->x : error
++>x : any
  
  // resolution-mode does not enforce file extension in `bundler`, just sets conditions
  type ImportRelative = typeof import("./other", { assert: { "resolution-mode": "import" } }).x;
  >ImportRelative : "other"
 ->x : error
++>x : any
  
  type RequireRelative = typeof import("./other", { assert: { "resolution-mode": "require" } }).x;
  >RequireRelative : "other"
 ->x : error
++>x : any
  
  === /other.ts ===
  export const x = "other";

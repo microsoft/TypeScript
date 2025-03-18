@@ -6,7 +6,6 @@ namespace X {
 
     export class MyPromise<T> extends Promise<T> {
 >MyPromise : MyPromise<T>
->T : T
 >Promise : Promise<T>
     }
 }

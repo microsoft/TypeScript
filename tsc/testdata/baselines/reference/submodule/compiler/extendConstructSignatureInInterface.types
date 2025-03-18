@@ -2,8 +2,6 @@
 
 === extendConstructSignatureInInterface.ts ===
 interface C {
->C : C
-
     new(x: number): C;
 >x : number
 }

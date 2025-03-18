@@ -1,12 +1,6 @@
 --- old.jsExtendsImplicitAny.types
 +++ new.jsExtendsImplicitAny.types
-@@= skipped -2, +2 lines =@@
- === /a.d.ts ===
- declare class A<T> { x: T; }
- >A : A<T>
-+>T : T
- >x : T
- 
+@@= skipped -7, +7 lines =@@
  === /b.js ===
  class B extends A {}
  >B : B

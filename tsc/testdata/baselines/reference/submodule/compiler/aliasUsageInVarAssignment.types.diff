@@ -12,15 +12,15 @@
 +>moduleA : typeof import("aliasUsageInVarAssignment_moduleA")
  
  interface IHasVisualizationModel {
-+>IHasVisualizationModel : IHasVisualizationModel
-+
      VisualizationModel: typeof Backbone.Model;
 ->VisualizationModel : typeof Backbone.Model
 ->Backbone.Model : typeof Backbone.Model
 ->Backbone : typeof Backbone
 ->Model : typeof Backbone.Model
 +>VisualizationModel : typeof Model
++>Backbone.Model : typeof Model
 +>Backbone : typeof import("aliasUsageInVarAssignment_backbone")
++>Model : typeof Model
  }
  var i: IHasVisualizationModel;
  >i : IHasVisualizationModel
@@ -29,10 +29,11 @@
 ->m : typeof moduleA
 ->moduleA : typeof moduleA
 +>m : typeof import("aliasUsageInVarAssignment_moduleA")
++>moduleA : typeof import("aliasUsageInVarAssignment_moduleA")
  >i : IHasVisualizationModel
  
  === aliasUsageInVarAssignment_backbone.ts ===
-@@= skipped -30, +29 lines =@@
+@@= skipped -30, +30 lines =@@
  
  === aliasUsageInVarAssignment_moduleA.ts ===
  import Backbone = require("./aliasUsageInVarAssignment_backbone");

@@ -1,8 +1,0 @@
---- old.parserGenericConstraint1.types
-+++ new.parserGenericConstraint1.types
-@@= skipped -2, +2 lines =@@
- === parserGenericConstraint1.ts ===
- class C<T extends number> {
- >C : C<T>
-+>T : T
- }

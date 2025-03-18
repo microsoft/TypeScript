@@ -2,8 +2,6 @@
 
 === objectMembersOnTypes.ts ===
 interface I {}
->I : I
-
 class AAA implements I { }
 >AAA : AAA
 

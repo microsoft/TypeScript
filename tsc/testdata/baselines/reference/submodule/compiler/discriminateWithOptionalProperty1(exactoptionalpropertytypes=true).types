@@ -3,7 +3,6 @@
 === discriminateWithOptionalProperty1.ts ===
 type Box<T> = { done?: false } | { done: true; value: T };
 >Box : Box<T>
->T : T
 >done : false | undefined
 >false : false
 >done : true

@@ -84,13 +84,11 @@ var b6: { fn(...a: C[]): void };
 var a7: { fn<T>(t: T): T };
 >a7 : { fn: <T>(t: T) => T; }
 >fn : <T>(t: T) => T
->T : T
 >t : T
 
 var b7: { fn<T>(t: T[]): T };
 >b7 : { fn: <T>(t: T[]) => T; }
 >fn : <T>(t: T[]) => T
->T : T
 >t : T[]
 
 // operator <

@@ -2,9 +2,6 @@
 
 === interface0.ts ===
 interface Generic<T> {
->Generic : Generic<T>
->T : T
-
     x: T;
 >x : T
 }

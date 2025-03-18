@@ -89,7 +89,6 @@ function hasNonMatchingParameterType2(x: string): x is number {
 
 function hasNonMathcingGenericType<T>(a: string): a is T[] {
 >hasNonMathcingGenericType : <T>(a: string) => a is T[]
->T : T
 >a : string
 
     return true;
@@ -271,15 +270,11 @@ class D {
 }
 
 interface I1 {
->I1 : I1
-
     new (p1: A): p1 is C;
 >p1 : A
 }
 
 interface I2 {
->I2 : I2
-
     [index: number]: p1 is C;
 >index : number
 >is : any
@@ -354,14 +349,11 @@ type Keys = 'a'|'b'|'c'
 
 type KeySet<T extends Keys> = { [k in T]: true }
 >KeySet : KeySet<T>
->T : T
->k : k
 >true : true
 
 // expected an error, since Keys doesn't have a 'd'
 declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 >hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<"d" | T>
->T : T
 >x : KeySet<T>
 
 type Foo = { 'a': string; }
@@ -373,9 +365,6 @@ type Bar = { 'a': number; }
 >'a' : number
 
 interface NeedsFoo<T extends Foo> {
->NeedsFoo : NeedsFoo<T>
->T : T
-
     foo: T;
 >foo : T
 

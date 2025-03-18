@@ -4,8 +4,6 @@
 // basic uses of optional properties without errors
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 

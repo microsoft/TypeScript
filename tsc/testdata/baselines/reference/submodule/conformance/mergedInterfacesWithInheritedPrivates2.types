@@ -16,15 +16,11 @@ class C2 {
 }
 
 interface A extends C {
->A : A
-
     y: string;
 >y : string
 }
 
 interface A extends C2 {
->A : A
-
     z: string;
 >z : string
 }

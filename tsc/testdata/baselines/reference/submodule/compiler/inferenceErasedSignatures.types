@@ -8,16 +8,12 @@ declare class SomeBaseClass {
 
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->K : K
 >key : K
 >value : this[K]
 }
 
 abstract class SomeAbstractClass<C, M, R> extends SomeBaseClass {
 >SomeAbstractClass : SomeAbstractClass<C, M, R>
->C : C
->M : M
->R : R
 >SomeBaseClass : SomeBaseClass
 
     foo!: (r?: R) => void;
@@ -49,18 +45,12 @@ class SomeClass extends SomeAbstractClass<number, string, boolean> {
 
 type CType<T> = T extends SomeAbstractClass<infer C, any, any> ? C : never;
 >CType : CType<T>
->T : T
->C : C
 
 type MType<T> = T extends SomeAbstractClass<any, infer M, any> ? M : never;
 >MType : MType<T>
->T : T
->M : M
 
 type RType<T> = T extends SomeAbstractClass<any, any, infer R> ? R : never;
 >RType : RType<T>
->T : T
->R : R
 
 type SomeClassC = CType<SomeClass>; // number
 >SomeClassC : number
@@ -74,13 +64,8 @@ type SomeClassR = RType<SomeClass>; // boolean
 // Repro from #37163
 
 interface BaseType<T1, T2>  {
->BaseType : BaseType<T1, T2>
->T1 : T1
->T2 : T2
-
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->K : K
 >key : K
 >value : this[K]
 
@@ -98,8 +83,6 @@ interface BaseType<T1, T2>  {
 }
 
 interface InheritedType extends BaseType<number, boolean> {
->InheritedType : InheritedType
-
     // This declaration shouldn't do anything...
     useT1(_: number): void
 >useT1 : (_: number) => void
@@ -108,11 +91,8 @@ interface InheritedType extends BaseType<number, boolean> {
 
 // Structural expansion of InheritedType
 interface StructuralVersion  {
->StructuralVersion : StructuralVersion
-
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->K : K
 >key : K
 >value : this[K]
 
@@ -131,8 +111,6 @@ interface StructuralVersion  {
 
 type GetT1<T> = T extends BaseType<infer U, any> ? U : never;
 >GetT1 : GetT1<T>
->T : T
->U : U
 
 type T1 = GetT1<InheritedType>; // number
 >T1 : number

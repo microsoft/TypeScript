@@ -8,7 +8,6 @@ export function bar() { }
 >bar : () => void
 
 export interface Buzz { }
->Buzz : Buzz
 
 === index.ts ===
 import {foo, bar, Buzz} from "./utils";

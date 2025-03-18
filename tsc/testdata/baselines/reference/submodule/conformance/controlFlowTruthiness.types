@@ -177,7 +177,6 @@ function f7(x: {}) {
 
 function f8<T>(x: T) {
 >f8 : <T>(x: T) => void
->T : T
 >x : T
 
     if (x) {
@@ -194,7 +193,6 @@ function f8<T>(x: T) {
 
 function f9<T extends object>(x: T) {
 >f9 : <T extends object>(x: T) => void
->T : T
 >x : T
 
     if (x) {

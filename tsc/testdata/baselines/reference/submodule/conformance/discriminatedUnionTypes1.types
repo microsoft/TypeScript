@@ -2,8 +2,6 @@
 
 === discriminatedUnionTypes1.ts ===
 interface Square {
->Square : Square
-
     kind: "square";
 >kind : "square"
 
@@ -12,8 +10,6 @@ interface Square {
 }
 
 interface Rectangle {
->Rectangle : Rectangle
-
     kind: "rectangle";
 >kind : "rectangle"
 
@@ -25,8 +21,6 @@ interface Rectangle {
 }
 
 interface Circle {
->Circle : Circle
-
     kind: "circle";
 >kind : "circle"
 

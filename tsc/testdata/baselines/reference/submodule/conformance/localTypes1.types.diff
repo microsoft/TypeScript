@@ -9,13 +9,7 @@
  
      enum E {
  >E : E
-@@= skipped -17, +17 lines =@@
- >x : E
-     }
-     interface I {
-+>I : I
-+
-         x: E;
+@@= skipped -21, +21 lines =@@
  >x : E
      }
      type A = I[];
@@ -28,7 +22,7 @@
  >[new C()] : C[]
  >new C() : C
  >C : typeof C
-@@= skipped -16, +18 lines =@@
+@@= skipped -12, +12 lines =@@
  >a[0].x = E.B : E.B
  >a[0].x : E
  >a[0] : I
@@ -55,13 +49,7 @@
  
          enum E {
  >E : E
-@@= skipped -24, +24 lines =@@
- >x : E
-         }
-         interface I {
-+>I : I
-+
-             x: E;
+@@= skipped -28, +28 lines =@@
  >x : E
          }
          type A = I[];
@@ -74,7 +62,7 @@
  >[new C()] : C[]
  >new C() : C
  >C : typeof C
-@@= skipped -16, +18 lines =@@
+@@= skipped -12, +12 lines =@@
  >a[0].x = E.B : E.B
  >a[0].x : E
  >a[0] : I
@@ -103,13 +91,7 @@
  >b : boolean
  
      if (true) {
-@@= skipped -32, +32 lines =@@
- >x : E
-             }
-             interface I {
-+>I : I
-+
-                 x: E;
+@@= skipped -36, +36 lines =@@
  >x : E
              }
              type A = I[];
@@ -122,7 +104,7 @@
  >[new C()] : C[]
  >new C() : C
  >C : typeof C
-@@= skipped -16, +18 lines =@@
+@@= skipped -12, +12 lines =@@
  >a[0].x = E.B : E.B
  >a[0].x : E
  >a[0] : I
@@ -140,13 +122,7 @@
          }
          else {
              class A {
-@@= skipped -10, +10 lines =@@
- >x : E
-             }
-             interface J {
-+>J : J
-+
-                 x: E;
+@@= skipped -14, +14 lines =@@
  >x : E
              }
              type C = J[];
@@ -159,7 +135,7 @@
  >[new A()] : A[]
  >new A() : A
  >A : typeof A
-@@= skipped -16, +18 lines =@@
+@@= skipped -12, +12 lines =@@
  >c[0].x = E.B : E.B
  >c[0].x : E
  >c[0] : J

@@ -1,22 +1,6 @@
 --- old.objectLiteralExcessProperties.types
 +++ new.objectLiteralExcessProperties.types
-@@= skipped -1, +1 lines =@@
- 
- === objectLiteralExcessProperties.ts ===
- interface Book {
-+>Book : Book
-+
-     foreword: string;
- >foreword : string
- }
- 
- interface Cover {
-+>Cover : Cover
-+
-     color?: string;
- >color : string
- }
-@@= skipped -22, +26 lines =@@
+@@= skipped -23, +23 lines =@@
  >"nope" : "nope"
  
  var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
@@ -41,22 +25,7 @@
  >{ forewarned: "still no" } : { forewarned: string; }
  >forewarned : string
  >"still no" : "still no"
- 
- interface Indexed {
-+>Indexed : Indexed
-+
-     [n: number]: Cover;
- >n : number
- }
-@@= skipped -36, +38 lines =@@
- 
- function test<T extends IFoo>() {
- >test : <T extends IFoo>() => void
-+>T : T
- 
-     // No excess property checks on generic types
-     const obj1: T = { name: "test" };
-@@= skipped -30, +31 lines =@@
+@@= skipped -66, +66 lines =@@
  
      // Excess property checks only on non-generic parts of unions
      const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };

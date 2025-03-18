@@ -7,7 +7,6 @@ module Foo {
 >Foo : typeof Foo
 
     export interface I1 { item: string; }
->I1 : I1
 >item : string
 
     export class C1 { }
@@ -24,7 +23,6 @@ class C1 implements Foo.I1 {
 
 // Allowed
 interface I2 extends Foo.I1 {
->I2 : I2
 >Foo : typeof Foo
 
 	item:string;
@@ -33,7 +31,6 @@ interface I2 extends Foo.I1 {
 
 // Negative Case
 interface I3 extends Foo.I1 {
->I3 : I3
 >Foo : typeof Foo
 
     item:number;
@@ -41,7 +38,6 @@ interface I3 extends Foo.I1 {
 }
 
 interface I4 extends Foo.I1 {
->I4 : I4
 >Foo : typeof Foo
 
     token:string;
@@ -57,11 +53,9 @@ class C2 implements I4 {
 }
 
 interface I5 extends Foo { }
->I5 : I5
 
 // Negative case
 interface I6 extends Foo.C1 { }
->I6 : I6
 >Foo : typeof Foo
 
 class C3 implements Foo.I1 { }
@@ -70,6 +64,5 @@ class C3 implements Foo.I1 { }
 
 // Negative case 
 interface Foo.I1 { }
->Foo : Foo
 >I1 : any
 

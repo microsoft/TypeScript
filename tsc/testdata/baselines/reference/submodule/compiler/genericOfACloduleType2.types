@@ -3,7 +3,6 @@
 === genericOfACloduleType2.ts ===
 class G<T>{ bar(x: T) { return x; } }
 >G : G<T>
->T : T
 >bar : (x: T) => T
 >x : T
 >x : T

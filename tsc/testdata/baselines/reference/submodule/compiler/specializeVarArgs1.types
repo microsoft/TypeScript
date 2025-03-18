@@ -2,14 +2,10 @@
 
 === specializeVarArgs1.ts ===
 interface Observable<T>{ }
->Observable : Observable<T>
->T : T
 
  
 
 interface ObservableArray<T> extends Observable<T[]>
->ObservableArray : ObservableArray<T>
->T : T
 
 {
 
@@ -23,7 +19,6 @@ interface ObservableArray<T> extends Observable<T[]>
 
 function observableArray<T>(): ObservableArray<T> { return null;}
 >observableArray : <T>() => ObservableArray<T>
->T : T
 
  
 

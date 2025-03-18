@@ -14,8 +14,6 @@ module A {
 
     export function fng<T, U>(s: T): U {
 >fng : <T, U>(s: T) => U
->T : T
->U : U
 >s : T
 
         return null;
@@ -31,8 +29,6 @@ module A {
 
     function fng2<T, U>(s: T): U {
 >fng2 : <T, U>(s: T) => U
->T : T
->U : U
 >s : T
 
         return null;
@@ -52,8 +48,6 @@ var fn = A.fn;
 
 var fng: <T, U>(s: T) => U;
 >fng : <T, U>(s: T) => U
->T : T
->U : U
 >s : T
 
 var fng = A.fng; // bug 838015

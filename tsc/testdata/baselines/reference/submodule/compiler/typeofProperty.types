@@ -2,29 +2,26 @@
 
 === typeofProperty.ts ===
 interface I1 {
->I1 : I1
-
     a: number;
 >a : number
 
     b: typeof a; // Should yield error (a is not a value)
 >b : any
+>a : any
 }
 
 interface I2 {
->I2 : I2
-
     c: typeof d; // Should yield error (d is not a value)
 >c : any
+>d : any
 
     d: string;
 >d : string
 }
 
 interface I3 {
->I3 : I3
-
     e: typeof e; // Should yield error (e is not a value)
+>e : any
 >e : any
 }
 
@@ -36,6 +33,7 @@ class C1 {
 
     b: typeof a; // Should yield error (a is not a value)
 >b : any
+>a : any
 }
 
 
@@ -44,6 +42,7 @@ class C2 {
 
     c: typeof d; // Should yield error (d is not a value)
 >c : any
+>d : any
 
     d: string;
 >d : string
@@ -54,13 +53,12 @@ class C3 {
 
     e: typeof e; // Should yield error (e is not a value)
 >e : any
+>e : any
 }
 
 
 
 interface ValidInterface {
->ValidInterface : ValidInterface
-
     x: string;
 >x : string
 }
@@ -83,11 +81,15 @@ var viInstance = vcInstance;
 
 var x1: typeof vcInstance.x; // x1: string
 >x1 : string
+>vcInstance.x : string
 >vcInstance : ValidClass
+>x : string
 
 var x2: typeof viInstance.x; // x2: string
 >x2 : string
+>viInstance.x : string
 >viInstance : ValidClass
+>x : string
 
 
 

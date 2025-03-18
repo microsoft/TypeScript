@@ -2,26 +2,18 @@
 
 === duplicateErrorClassExpression.ts ===
 interface ComplicatedTypeBase {
->ComplicatedTypeBase : ComplicatedTypeBase
-
     [s: string]: ABase;
 >s : string
 }
 interface ComplicatedTypeDerived {
->ComplicatedTypeDerived : ComplicatedTypeDerived
-
     [s: string]: ADerived;
 >s : string
 }
 interface ABase {
->ABase : ABase
-
     a: string;
 >a : string
 }
 interface ADerived {
->ADerived : ADerived
-
     b: string;
 >b : string
 }

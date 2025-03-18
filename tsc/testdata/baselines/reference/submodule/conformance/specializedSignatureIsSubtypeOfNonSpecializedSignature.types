@@ -34,7 +34,6 @@ class C {
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     foo(x: 'a');
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
@@ -55,7 +54,6 @@ class C2<T> {
 
 class C3<T extends String> {
 >C3 : C3<T>
->T : T
 
     foo(x: 'a');
 >foo : { (x: "a"): any; (x: string): any; (x: T): any; }
@@ -75,8 +73,6 @@ class C3<T extends String> {
 }
 
 interface I {
->I : I
-
     (x: 'a');
 >x : "a"
 
@@ -100,9 +96,6 @@ interface I {
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     (x: 'a');
 >x : "a"
 
@@ -126,9 +119,6 @@ interface I2<T> {
 }
 
 interface I3<T extends String> {
->I3 : I3<T>
->T : T
-
     (x: 'a');
 >x : "a"
 
@@ -186,7 +176,6 @@ var a2: {
 >x : string
 
     <T>(x: T);
->T : T
 >x : T
 
     foo(x: string);
@@ -199,7 +188,6 @@ var a2: {
 
     foo<T>(x: T);
 >foo : { (x: string): any; (x: "a"): any; <T>(x: T): any; }
->T : T
 >x : T
 }
 
@@ -210,7 +198,6 @@ var a3: {
 >x : "a"
 
     <T>(x: T);
->T : T
 >x : T
 
     (x: string);
@@ -226,7 +213,6 @@ var a3: {
 
     foo<T extends String>(x: T);
 >foo : { (x: string): any; (x: "a"): any; <T extends String>(x: T): any; }
->T : T
 >x : T
 }
 

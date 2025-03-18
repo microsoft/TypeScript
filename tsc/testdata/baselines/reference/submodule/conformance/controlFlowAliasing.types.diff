@@ -436,11 +436,3 @@
  >'str' : "str"
  
          let t: string = payload;
-@@= skipped -49, +49 lines =@@
- 
-   static isDefined<T>(value: T): value is NonNullable<T> {
- >isDefined : <T>(value: T) => value is NonNullable<T>
-+>T : T
- >value : T
- 
-     return value != null;

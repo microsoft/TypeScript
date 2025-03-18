@@ -4,8 +4,6 @@
 // an interface may have multiple bases with properties of the same name as long as the interface's implementation satisfies all base type versions
 
 interface Base1 {
->Base1 : Base1
-
     x: {
 >x : { a: string; }
 
@@ -15,8 +13,6 @@ interface Base1 {
 }
 
 interface Base2 {
->Base2 : Base2
-
     x: {
 >x : { b: string; }
 
@@ -26,8 +22,6 @@ interface Base2 {
 }
 
 interface Derived extends Base1, Base2 {
->Derived : Derived
-
     x: {
 >x : { a: string; b: string; }
 
@@ -38,8 +32,6 @@ interface Derived extends Base1, Base2 {
 }
 
 interface Derived2 extends Base1, Base2 { // error
->Derived2 : Derived2
-
     x: {
 >x : { a: string; b: number; }
 
@@ -50,12 +42,7 @@ interface Derived2 extends Base1, Base2 { // error
 }
 
 module Generic {
->Generic : any
-
     interface Base1<T> {
->Base1 : Base1<T>
->T : T
-
         x: {
 >x : { a: T; }
 
@@ -65,9 +52,6 @@ module Generic {
     }
 
     interface Base2<T> {
->Base2 : Base2<T>
->T : T
-
         x: {
 >x : { b: T; }
 
@@ -77,9 +61,6 @@ module Generic {
     }
 
     interface Derived<T> extends Base1<string>, Base2<number> {
->Derived : Derived<T>
->T : T
-
         x: {
 >x : { a: string; b: number; }
 
@@ -90,10 +71,6 @@ module Generic {
     }
 
     interface Derived2<T, U> extends Base1<T>, Base2<U> {
->Derived2 : Derived2<T, U>
->T : T
->U : U
-
         x: {
 >x : { a: T; b: U; }
 
@@ -104,13 +81,8 @@ module Generic {
     }
 
     interface Derived3<T> extends Base1<number>, Base2<number> { } // error
->Derived3 : Derived3<T>
->T : T
 
     interface Derived4<T> extends Base1<number>, Base2<number> { // error
->Derived4 : Derived4<T>
->T : T
-
         x: {
 >x : { a: T; b: T; }
 
@@ -121,9 +93,6 @@ module Generic {
     }
 
     interface Derived5<T> extends Base1<T>, Base2<T> { // error
->Derived5 : Derived5<T>
->T : T
-
         x: T;
 >x : T
     }

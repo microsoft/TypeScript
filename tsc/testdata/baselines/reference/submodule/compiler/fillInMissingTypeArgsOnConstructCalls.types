@@ -3,7 +3,6 @@
 === fillInMissingTypeArgsOnConstructCalls.ts ===
 class A<T extends Object>{
 >A : A<T>
->T : T
 
       list: T ;
 >list : T

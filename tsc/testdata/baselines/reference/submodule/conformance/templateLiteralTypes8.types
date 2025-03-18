@@ -15,7 +15,6 @@ const enum E {
 
 type Stringify<T extends string> = `${T}`;
 >Stringify : `${T}`
->T : T
 
 let z1: `${E}` = "a";
 >z1 : "a" | "b"

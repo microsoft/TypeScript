@@ -79,12 +79,7 @@
  >start : () => number
  
  interface I {
-+>I : I
-+
-     a: number;
- >a : number
- 
-@@= skipped -20, +22 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  var impl: I = mutuallyRecursive;
  >impl : I

@@ -2,8 +2,6 @@
 
 === optionalPropertiesInClasses.ts ===
 interface ifoo {
->ifoo : ifoo
-
 	x?:number;
 >x : number
 

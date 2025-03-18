@@ -1,42 +1,7 @@
 --- old.getAccessorWithImpliedReturnTypeAndFunctionClassMerge.types
 +++ new.getAccessorWithImpliedReturnTypeAndFunctionClassMerge.types
-@@= skipped -2, +2 lines =@@
- === getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
- declare function _<T>(value: Array<T>): _<T>;
- >_ : typeof _
-+>T : T
- >value : T[]
- 
- declare function _<T>(value: T): _<T>;
- >_ : typeof _
-+>T : T
- >value : T
- 
- declare module _ {
-@@= skipped -11, +13 lines =@@
- 
-     export function each<T>(
- >each : <T>(context?: any) => void
-+>T : T
- 
-         //list: List<T>,
-         //iterator: ListIterator<T, void>,
-@@= skipped -7, +8 lines =@@
- >context : any
- 
-     interface ListIterator<T, TResult> {
-+>ListIterator : ListIterator<T, TResult>
-+>T : T
-+>TResult : TResult
-+
-         (value: T, index: number, list: T[]): TResult;
- >value : T
- >index : number
-@@= skipped -9, +13 lines =@@
- 
- declare class _<T> {
+@@= skipped -31, +31 lines =@@
  >_ : _<T>
-+>T : T
  
      each(iterator: _.ListIterator<T, void>, context?: any): void;
 ->each : (iterator: _.ListIterator<T, void>, context?: any) => void

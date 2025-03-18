@@ -3,7 +3,6 @@
 === /a.d.ts ===
 declare class A<T> { x: T; }
 >A : A<T>
->T : T
 >x : T
 
 === /b.js ===

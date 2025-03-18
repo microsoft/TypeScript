@@ -3,6 +3,7 @@
 === validUndefinedAssignments.ts ===
 var x: typeof undefined;
 >x : any
+>undefined : undefined
 
 var a: number = x;
 >a : number
@@ -22,6 +23,7 @@ var d: void = x;
 
 var e: typeof undefined = x;
 >e : any
+>undefined : undefined
 >x : any
 
 e = x; // should work
@@ -42,7 +44,6 @@ f = x;
 >x : any
 
 interface I { foo: string }
->I : I
 >foo : string
 
 var g: I;
@@ -60,7 +61,6 @@ var h: { f(): void } = x;
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
->T : T
 >a : T
 
     a = x;

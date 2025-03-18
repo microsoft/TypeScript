@@ -10,10 +10,6 @@ module a.b.c {
 >d : any
 }
 module a.e.f {
->a : typeof a
->e : any
->f : any
-
       import g = b.c;
 >g : typeof c
 >b : typeof b

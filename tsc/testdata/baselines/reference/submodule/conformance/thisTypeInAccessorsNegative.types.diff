@@ -1,27 +1,15 @@
 --- old.thisTypeInAccessorsNegative.types
 +++ new.thisTypeInAccessorsNegative.types
-@@= skipped -1, +1 lines =@@
- 
- === thisTypeInAccessorsNegative.ts ===
- interface Foo {
-+>Foo : Foo
-+
-     n: number;
- >n : number
- 
-@@= skipped -7, +9 lines =@@
- >x : number
+@@= skipped -9, +9 lines =@@
  }
  interface Bar {
-+>Bar : Bar
-+
      wrong: "place" | "time" | "method" | "technique";
 ->wrong : "place" | "time" | "method" | "technique"
 +>wrong : "method" | "place" | "technique" | "time"
  }
  const mismatch = {
  >mismatch : { n: number; x: number; }
-@@= skipped -23, +25 lines =@@
+@@= skipped -22, +22 lines =@@
  >this : Bar
  >n : number
  >this.wrong = "method" : "method"

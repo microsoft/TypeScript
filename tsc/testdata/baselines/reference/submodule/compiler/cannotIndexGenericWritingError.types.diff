@@ -1,20 +1,11 @@
 --- old.cannotIndexGenericWritingError.types
 +++ new.cannotIndexGenericWritingError.types
-@@= skipped -4, +4 lines =@@
- 
- function foo<T extends Record<string | symbol, any>>(target: T, p: string | symbol) {
- >foo : <T extends Record<string | symbol, any>>(target: T, p: string | symbol) => void
-+>T : T
- >target : T
- >p : string | symbol
- 
-@@= skipped -12, +13 lines =@@
+@@= skipped -16, +16 lines =@@
  }
  
  function foo2<T extends number[] & { [s: string]: number | string }>(target: T, p: string | number) {
 ->foo2 : <T extends number[] & { [s: string]: number | string; }>(target: T, p: string | number) => void
 +>foo2 : <T extends number[] & { [s: string]: string | number; }>(target: T, p: string | number) => void
-+>T : T
  >s : string
  >target : T
  >p : string | number

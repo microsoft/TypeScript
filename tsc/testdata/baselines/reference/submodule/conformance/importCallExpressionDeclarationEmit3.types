@@ -18,12 +18,14 @@ import("./0");
 
 export var p0: Promise<typeof Zero> = import(getPath());
 >p0 : Promise<typeof import("0")>
+>Zero : typeof import("0")
 >import(getPath()) : Promise<any>
 >getPath() : string
 >getPath : () => string
 
 export var p1: Promise<typeof Zero> = import("./0");
 >p1 : Promise<typeof import("0")>
+>Zero : typeof import("0")
 >import("./0") : Promise<typeof import("0")>
 >"./0" : "./0"
 

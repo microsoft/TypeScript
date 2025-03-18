@@ -3,11 +3,9 @@
 === superCallFromClassThatDerivesFromGenericType2.ts ===
 declare class B<T> {
 >B : B<T>
->T : T
 
     m<U>(): B<U>;
 >m : <U>() => B<U>
->U : U
 }
 
 class D extends B<any> {

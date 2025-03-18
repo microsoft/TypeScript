@@ -16,7 +16,6 @@ type Params = {
 const getType = <P extends Params>(params: P) => {
 >getType : <P extends Params>(params: P) => Omit<P, "foo">
 ><P extends Params>(params: P) => {    const {        // Omit        foo,        ...rest    } = params;    return rest;} : <P extends Params>(params: P) => Omit<P, "foo">
->P : P
 >params : P
 
     const {

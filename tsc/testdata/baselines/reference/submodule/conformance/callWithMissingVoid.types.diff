@@ -1,14 +1,6 @@
 --- old.callWithMissingVoid.types
 +++ new.callWithMissingVoid.types
-@@= skipped -3, +3 lines =@@
- // From #4260
- class X<T> {
- >X : X<T>
-+>T : T
- 
-     f(t: T) {
- >f : (t: T) => { a: T; }
-@@= skipped -22, +23 lines =@@
+@@= skipped -25, +25 lines =@@
  >f : (t: void) => { a: void; }
  
  declare const xUnion: X<void | number>;
@@ -38,15 +30,7 @@
  
  declare const xAny: X<any>;
  >xAny : X<any>
-@@= skipped -47, +47 lines =@@
- 
- class MyPromise<X> {
- >MyPromise : MyPromise<X>
-+>X : X
- 
-     constructor(executor: (resolve: (value: X) => void) => void) {
- >executor : (resolve: (value: X) => void) => void
-@@= skipped -18, +19 lines =@@
+@@= skipped -65, +65 lines =@@
  >resolve : (value: void) => void
  
  new MyPromise<void | number>(resolve => resolve()); // no error
@@ -107,14 +91,7 @@
  
  
  // Spread Parameters
- 
- declare function call<TS extends unknown[]>(
- >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
-+>TS : TS
- 
-     handler: (...args: TS) => unknown,
- >handler : (...args: TS) => unknown
-@@= skipped -80, +81 lines =@@
+@@= skipped -80, +80 lines =@@
  call((x: number | void, y: number | void) => 42) // ok
  >call((x: number | void, y: number | void) => 42) : void
  >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void

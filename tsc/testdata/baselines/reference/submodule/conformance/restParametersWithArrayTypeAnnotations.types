@@ -28,8 +28,6 @@ class C {
 }
 
 interface I {
->I : I
-
     (...x: number[]);
 >x : number[]
 
@@ -99,8 +97,6 @@ class C2 {
 }
 
 interface I2 {
->I2 : I2
-
     (...x: Array<string>);
 >x : string[]
 

@@ -6,7 +6,6 @@ module A {
 
     export function B<T>(x: T) { return x; }
 >B : typeof B
->T : T
 >x : T
 >x : T
 

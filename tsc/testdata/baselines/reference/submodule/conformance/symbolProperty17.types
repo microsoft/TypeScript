@@ -2,8 +2,6 @@
 
 === symbolProperty17.ts ===
 interface I {
->I : I
-
     [Symbol.iterator]: number;
 >[Symbol.iterator] : number
 >Symbol.iterator : unique symbol

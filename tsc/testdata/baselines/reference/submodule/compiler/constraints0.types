@@ -2,23 +2,16 @@
 
 === constraints0.ts ===
 interface A {
->A : A
-
 	a: number;
 >a : number
 }
 
 interface B {
->B : B
-
 	b: string;
 >b : string
 }
 
 interface C<T extends A> {
->C : C<T>
->T : T
-
     x: T;
 >x : T
 }

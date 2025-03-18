@@ -1,15 +1,6 @@
 --- old.callSignaturesWithParameterInitializers.types
 +++ new.callSignaturesWithParameterInitializers.types
-@@= skipped -77, +77 lines =@@
- 
- // these are errors
- interface I {
-+>I : I
-+
-     (x = 1);
- >x : number
- >1 : 1
-@@= skipped -40, +42 lines =@@
+@@= skipped -117, +117 lines =@@
  
  // these are errors
  var a: {

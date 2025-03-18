@@ -206,8 +206,6 @@ function test4() {
 
 // https://github.com/microsoft/TypeScript/issues/44366
 interface Entity {
->Entity : Entity
-
     type: string;
 >type : string
 }
@@ -216,10 +214,9 @@ const ACTOR_TYPE = "actor";
 >"actor" : "actor"
 
 interface Actor extends Entity {
->Actor : Actor
-
     type: typeof ACTOR_TYPE;
 >type : "actor"
+>ACTOR_TYPE : "actor"
 }
 function isActor(entity: Entity): entity is Actor {
 >isActor : (entity: Entity) => entity is Actor

@@ -1,9 +1,8 @@
 //// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
 
 === thingB.ts ===
-export interface ThingB { }
->ThingB : ThingB
 
+export interface ThingB { }
 === things.ts ===
 
 export * from "./thingB";

@@ -577,20 +577,7 @@
  >z : { w: boolean; } | undefined
  >w : boolean
  
- interface Base {
-+>Base : Base
-+
-     f(): this is Derived;
- >f : () => this is Derived
- }
- 
- interface Derived extends Base {
-+>Derived : Derived
-+
-     x: number;
- >x : number
- }
-@@= skipped -268, +272 lines =@@
+@@= skipped -268, +268 lines =@@
  
  if (o6?.f()) {
  >o6?.f() : boolean | undefined
@@ -626,15 +613,7 @@
  
  o6.f;
  >o6.f : () => this is Derived
-@@= skipped -12, +12 lines =@@
- // asserts
- declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
- >isDefined : <T>(value: T) => asserts value is NonNullable<T>
-+>T : T
- >value : T
- 
- declare const isString: (value: unknown) => asserts value is string;
-@@= skipped -7, +8 lines =@@
+@@= skipped -19, +19 lines =@@
  >value : unknown
  
  declare const maybeIsString: undefined | ((value: unknown) => asserts value is string);
@@ -969,15 +948,7 @@
  >o?.foo : string | number | undefined
  >o : Thing | undefined
  >foo : string | number | undefined
-@@= skipped -25, +25 lines =@@
- 
- declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
- >assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
-+>T : T
- >x : T
- 
- function f30(o: Thing | undefined) {
-@@= skipped -51, +52 lines =@@
+@@= skipped -76, +76 lines =@@
  >assert(typeof o?.foo === "number") : void
  >assert : (x: unknown) => asserts x
  >typeof o?.foo === "number" : boolean
@@ -1012,16 +983,7 @@
  
          case 'circle':
  >'circle' : "circle"
-@@= skipped -86, +86 lines =@@
- // Repro from #35842
- 
- interface SomeObject {
-+>SomeObject : SomeObject
-+
-     someProperty: unknown;
- >someProperty : unknown
- }
-@@= skipped -70, +72 lines =@@
+@@= skipped -156, +156 lines =@@
  >0 : 0
  
  declare const arr: { tag: ("left" | "right") }[];

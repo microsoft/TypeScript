@@ -3,11 +3,9 @@
 === propagateNonInferrableType.ts ===
 declare function resolver<T>(): () => void;
 >resolver : <T>() => () => void
->T : T
 
 declare function wrapResolver<T>(resolverFunction: () => void): void;
 >wrapResolver : <T>(resolverFunction: () => void) => void
->T : T
 >resolverFunction : () => void
 
 wrapResolver(resolver() || []);

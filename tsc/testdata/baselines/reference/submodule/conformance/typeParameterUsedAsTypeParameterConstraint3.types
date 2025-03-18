@@ -25,11 +25,6 @@
 //}
 
 interface I<T, U, V> {
->I : I<T, U, V>
->T : T
->U : U
->V : V
-
     x: T;
 >x : T
 
@@ -41,16 +36,10 @@ interface I<T, U, V> {
 
     foo<W extends V>(x: W): T;
 >foo : <W extends V>(x: W) => T
->W : W
 >x : W
 }
 
 interface I2<V, T, U> {
->I2 : I2<V, T, U>
->V : V
->T : T
->U : U
-
     x: T;
 >x : T
 
@@ -62,7 +51,6 @@ interface I2<V, T, U> {
 
     foo<W extends V>(x: W): T;
 >foo : <W extends V>(x: W) => T
->W : W
 >x : W
 }
 

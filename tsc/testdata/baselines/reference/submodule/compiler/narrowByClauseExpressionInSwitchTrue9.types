@@ -2,8 +2,6 @@
 
 === narrowByClauseExpressionInSwitchTrue9.ts ===
 interface IProps {
->IProps : IProps
-
     one: boolean;
 >one : boolean
 }

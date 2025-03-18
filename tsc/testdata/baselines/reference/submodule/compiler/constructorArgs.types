@@ -2,8 +2,6 @@
 
 === constructorArgs.ts ===
 interface Options {
->Options : Options
-
  value: number;
 >value : number
 }

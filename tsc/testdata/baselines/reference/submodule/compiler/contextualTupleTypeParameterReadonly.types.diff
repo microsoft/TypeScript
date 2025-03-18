@@ -6,7 +6,6 @@
  declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
 ->each : <T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>) => (fn: (...args: T) => any) => void
 +>each : <T extends readonly any[]>(cases: readonly T[]) => (fn: (...args: T) => any) => void
-+>T : T
  >cases : readonly T[]
  >fn : (...args: T) => any
  >args : T
@@ -50,7 +49,7 @@
  >(a, b) => {    a;    b;} : (a: 1 | 2, b: "1" | "2") => void
  >a : 1 | 2
  >b : "1" | "2"
-@@= skipped -46, +47 lines =@@
+@@= skipped -46, +46 lines =@@
  // TODO: https://github.com/microsoft/TypeScript/issues/53255
  eacher((...args) => {
  >eacher((...args) => {    const [a, b] = args;    a;    b;}) : void

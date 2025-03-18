@@ -1,15 +1,6 @@
 --- old.exportImportCanSubstituteConstEnumForValue.types
 +++ new.exportImportCanSubstituteConstEnumForValue.types
-@@= skipped -31, +31 lines =@@
-     }
- 
-     export interface DialogResultCallback {
-+>DialogResultCallback : DialogResultCallback
-+
-         (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
- >result : DialogResult
- >MsPortalFx : any
-@@= skipped -43, +45 lines =@@
+@@= skipped -74, +74 lines =@@
       * For some reason javascript code is emitted for this re-exported const enum.
       */
      export import ReExportedEnum = Dialogs.DialogResult;

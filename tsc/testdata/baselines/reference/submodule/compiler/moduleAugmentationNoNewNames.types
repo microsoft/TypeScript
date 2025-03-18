@@ -19,12 +19,8 @@ declare module "./observable" {
 >"./observable" : typeof import("observable")
 
     interface Observable<T> {
->Observable : Observable<T>
->T : T
-
         map<U>(proj: (e:T) => U): Observable<U>
 >map : <U>(proj: (e: T) => U) => Observable<U>
->U : U
 >proj : (e: T) => U
 >e : T
     }
@@ -44,13 +40,11 @@ declare module "./observable" {
 >b : number
 
     module Z {}
->Z : any
 }
 
 === observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
->T : T
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>

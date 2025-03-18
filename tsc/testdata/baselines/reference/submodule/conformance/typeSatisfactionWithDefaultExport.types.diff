@@ -6,20 +6,14 @@
 -=== ./a.ts ===
 +=== a.ts ===
  interface Foo {
-+>Foo : Foo
-+
      a: number;
  >a : number
- }
-@@= skipped -8, +10 lines =@@
+@@= skipped -8, +8 lines =@@
  >{} satisfies Foo : {}
  >{} : {}
  
 -=== ./b.ts ===
 +=== b.ts ===
  interface Foo {
-+>Foo : Foo
-+
      a: number;
  >a : number
- }

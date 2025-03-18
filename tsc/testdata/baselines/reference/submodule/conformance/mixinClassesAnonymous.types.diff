@@ -1,14 +1,6 @@
 --- old.mixinClassesAnonymous.types
 +++ new.mixinClassesAnonymous.types
-@@= skipped -2, +2 lines =@@
- === mixinClassesAnonymous.ts ===
- type Constructor<T> = new(...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
- >args : any[]
- 
- class Base {
-@@= skipped -28, +29 lines =@@
+@@= skipped -30, +30 lines =@@
  }
  
  const Printable = <T extends Constructor<Base>>(superClass: T) => class extends superClass {
@@ -16,20 +8,18 @@
 -><T extends Constructor<Base>>(superClass: T) => class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
 +>Printable : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
 +><T extends Constructor<Base>>(superClass: T) => class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
-+>T : T
  >superClass : T
 ->class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
 +>class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
  >superClass : Base
  
      static message = "hello";
-@@= skipped -28, +29 lines =@@
+@@= skipped -28, +28 lines =@@
  }
  
  function Tagged<T extends Constructor<{}>>(superClass: T) {
 ->Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
 +>Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C<T>; prototype: C<any>; } & T
-+>T : T
  >superClass : T
  
      class C extends superClass {
@@ -38,7 +28,7 @@
  >superClass : {}
  
          _tag: string;
-@@= skipped -28, +29 lines =@@
+@@= skipped -28, +28 lines =@@
          }
      }
      return C;
@@ -158,7 +148,6 @@
 -><CT extends Constructor<object>>(Base: CT) => {    return class extends Base {        timestamp = new Date();    };} : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & CT
 +>Timestamped : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class)<CT>; prototype: (Anonymous class)<any>; } & CT
 +><CT extends Constructor<object>>(Base: CT) => {    return class extends Base {        timestamp = new Date();    };} : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class)<CT>; prototype: (Anonymous class)<any>; } & CT
-+>CT : CT
  >Base : CT
  
      return class extends Base {

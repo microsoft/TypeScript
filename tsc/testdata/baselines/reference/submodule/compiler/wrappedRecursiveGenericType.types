@@ -2,14 +2,9 @@
 
 === wrappedRecursiveGenericType.ts ===
 interface X<T> { e: T; }
->X : X<T>
->T : T
 >e : T
 
 interface A<T> {
->A : A<T>
->T : T
-
     a: B<T>;
 >a : B<T>
 
@@ -17,9 +12,6 @@ interface A<T> {
 >val : T
 }
 interface B<T> {
->B : B<T>
->T : T
-
     b: A<X<T>>;
 >b : A<X<T>>
 

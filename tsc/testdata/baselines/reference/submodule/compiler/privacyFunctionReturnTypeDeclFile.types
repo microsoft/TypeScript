@@ -10,8 +10,6 @@ export class publicClass {
 }
 
 export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
     new (): privateClass; // Error
     (): privateClass; // Error
     [x: number]: privateClass; // Error
@@ -22,8 +20,6 @@ export interface publicInterfaceWithPrivateParmeterTypes {
 }
 
 export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
     new (): publicClass;
     (): publicClass;
     [x: number]: publicClass;
@@ -34,8 +30,6 @@ export interface publicInterfaceWithPublicParmeterTypes {
 }
 
 interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
     new (): privateClass;
     (): privateClass;
     [x: number]: privateClass;
@@ -46,8 +40,6 @@ interface privateInterfaceWithPrivateParmeterTypes {
 }
 
 interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
     new (): publicClass;
     (): publicClass;
     [x: number]: publicClass;
@@ -331,8 +323,6 @@ declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
 
 export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
     new (): privateModule.publicClass; // Error
 >privateModule : any
 
@@ -401,8 +391,6 @@ export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): 
 >privateModule : any
 
 interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
     new (): privateModule.publicClass; 
 >privateModule : any
 
@@ -482,8 +470,6 @@ export module publicModule {
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (): privateClass; // Error
         (): privateClass; // Error
         [x: number]: privateClass; // Error
@@ -494,8 +480,6 @@ export module publicModule {
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
@@ -506,8 +490,6 @@ export module publicModule {
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (): privateClass;
         (): privateClass;
         [x: number]: privateClass;
@@ -518,8 +500,6 @@ export module publicModule {
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
@@ -803,8 +783,6 @@ export module publicModule {
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass; // Error
 >privateModule : any
 
@@ -873,8 +851,6 @@ export module publicModule {
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
 
@@ -955,8 +931,6 @@ module privateModule {
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (): privateClass; 
         (): privateClass; 
         [x: number]: privateClass; 
@@ -967,8 +941,6 @@ module privateModule {
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
@@ -979,8 +951,6 @@ module privateModule {
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (): privateClass;
         (): privateClass;
         [x: number]: privateClass;
@@ -991,8 +961,6 @@ module privateModule {
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
@@ -1276,8 +1244,6 @@ module privateModule {
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
 
@@ -1346,8 +1312,6 @@ module privateModule {
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
 
@@ -1421,8 +1385,6 @@ class publicClassInGlobal {
 >publicClassInGlobal : publicClassInGlobal
 }
 interface publicInterfaceWithPublicParmeterTypesInGlobal {
->publicInterfaceWithPublicParmeterTypesInGlobal : publicInterfaceWithPublicParmeterTypesInGlobal
-
     new (): publicClassInGlobal;
     (): publicClassInGlobal;
     [x: number]: publicClassInGlobal;
@@ -1521,8 +1483,6 @@ module publicModuleInGlobal {
         }
 
         export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
             new (): privateClass;
             (): privateClass;
             [x: number]: privateClass;
@@ -1533,8 +1493,6 @@ module publicModuleInGlobal {
         }
 
         export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
             new (): publicClass;
             (): publicClass;
             [x: number]: publicClass;
@@ -1545,8 +1503,6 @@ module publicModuleInGlobal {
         }
 
         interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
             new (): privateClass;
             (): privateClass;
             [x: number]: privateClass;
@@ -1557,8 +1513,6 @@ module publicModuleInGlobal {
         }
 
         interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
             new (): publicClass;
             (): publicClass;
             [x: number]: publicClass;
@@ -1842,8 +1796,6 @@ module publicModuleInGlobal {
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
 
         export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
             new (): privateModule.publicClass;
 >privateModule : any
 
@@ -1912,8 +1864,6 @@ module publicModuleInGlobal {
 >privateModule : any
 
         interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
             new (): privateModule.publicClass;
 >privateModule : any
 
@@ -1983,8 +1933,6 @@ module publicModuleInGlobal {
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (): privateClass; // Error
         (): privateClass; // Error
         [x: number]: privateClass; // Error
@@ -1995,8 +1943,6 @@ module publicModuleInGlobal {
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
@@ -2007,8 +1953,6 @@ module publicModuleInGlobal {
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (): privateClass;
         (): privateClass;
         [x: number]: privateClass;
@@ -2019,8 +1963,6 @@ module publicModuleInGlobal {
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (): publicClass;
         (): publicClass;
         [x: number]: publicClass;
@@ -2304,8 +2246,6 @@ module publicModuleInGlobal {
 >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass; // Error
 >privateModule : any
 
@@ -2374,8 +2314,6 @@ module publicModuleInGlobal {
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (): privateModule.publicClass;
 >privateModule : any
 

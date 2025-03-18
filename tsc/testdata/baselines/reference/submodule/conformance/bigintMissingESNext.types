@@ -3,8 +3,6 @@
 === bigintMissingESNext.ts ===
 declare function test<A, B extends A>(): void;
 >test : <A, B extends A>() => void
->A : A
->B : B
 
 test<{t?: string}, object>();
 >test<{t?: string}, object>() : void

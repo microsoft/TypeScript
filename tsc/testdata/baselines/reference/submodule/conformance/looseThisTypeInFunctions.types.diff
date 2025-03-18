@@ -1,12 +1,6 @@
 --- old.looseThisTypeInFunctions.types
 +++ new.looseThisTypeInFunctions.types
-@@= skipped -1, +1 lines =@@
- 
- === looseThisTypeInFunctions.ts ===
- interface I {
-+>I : I
-+
-     n: number;
+@@= skipped -5, +5 lines =@@
  >n : number
  
      explicitThis(this: this, m: number): number;
@@ -15,13 +9,7 @@
  >this : this
  >m : number
  }
- interface Unused {
-+>Unused : Unused
-+
-     implicitNoThis(m: number): number;
- >implicitNoThis : (m: number) => number
- >m : number
-@@= skipped -20, +24 lines =@@
+@@= skipped -16, +16 lines =@@
  >n : number
  
      explicitThis(this: this, m: number): number {

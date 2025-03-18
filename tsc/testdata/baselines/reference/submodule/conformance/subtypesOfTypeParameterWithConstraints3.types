@@ -5,9 +5,6 @@
 
 function f<T extends U, U, V>(t: T, u: U, v: V) {
 >f : <T extends U, U, V>(t: T, u: U, v: V) => void
->T : T
->U : U
->V : V
 >t : T
 >u : U
 >v : V

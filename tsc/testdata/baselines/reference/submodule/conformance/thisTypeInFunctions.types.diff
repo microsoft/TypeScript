@@ -36,13 +36,7 @@
  >this : void
  >m : number
  
-@@= skipped -15, +15 lines =@@
- >C : C
- 
- interface I {
-+>I : I
-+
-     a: number;
+@@= skipped -19, +19 lines =@@
  >a : number
  
      explicitVoid1(this: void): number;
@@ -77,7 +71,7 @@
  >this : { y: number; }
  >y : number
  >x : number
-@@= skipped -38, +40 lines =@@
+@@= skipped -34, +34 lines =@@
  >y : number
  }
  function justThis(this: { y: number }): number {
@@ -810,11 +804,9 @@
 ->explicitStatic : (this: typeof Base1) => number
 +>explicitStatic : () => number
  >this : typeof Base1
-->Base1 : typeof Base1
+ >Base1 : typeof Base1
  >this.y : number
- >this : typeof Base1
- >y : number
-@@= skipped -38, +37 lines =@@
+@@= skipped -38, +38 lines =@@
  >y : number
  
      polymorphic(this: this): number { return this.y; }
@@ -975,11 +967,10 @@
      call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U;
 ->call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
 +>call : <U>(...argArray: any[]) => U
-+>U : U
  >this : (...argArray: any[]) => U
  >argArray : any[]
  >argArray : any[]
-@@= skipped -30, +31 lines =@@
+@@= skipped -30, +30 lines =@@
  let n: number = f.call(12);
  >n : number
  >f.call(12) : number

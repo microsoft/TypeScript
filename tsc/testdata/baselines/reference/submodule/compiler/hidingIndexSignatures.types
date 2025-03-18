@@ -2,15 +2,11 @@
 
 === hidingIndexSignatures.ts ===
 interface A {
->A : A
-
     [a: string]: {};
 >a : string
 }
 
 interface B extends A {
->B : B
-
     [a: string]: number; // Number is not a subtype of string.  Should error.
 >a : string
 }

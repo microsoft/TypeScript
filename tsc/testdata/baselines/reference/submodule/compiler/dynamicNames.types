@@ -15,8 +15,6 @@ export const s0 = Symbol();
 >Symbol : SymbolConstructor
 
 export interface T0 {
->T0 : T0
-
     [c0]: number;
 >[c0] : number
 >c0 : "a"
@@ -92,10 +90,9 @@ namespace N {
     export const s1: typeof s0 = s0;
 >s1 : unique symbol
 >s0 : unique symbol
+>s0 : unique symbol
 
     export interface T4 {
->T4 : T4
-
         [N.c2]: number;
 >[N.c2] : number
 >N.c2 : "a"
@@ -174,10 +171,9 @@ export const c5 = 1;
 export const s2: typeof s0 = s0;
 >s2 : unique symbol
 >s0 : unique symbol
+>s0 : unique symbol
 
 interface T8 {
->T8 : T8
-
     [c4]: number;
 >[c4] : number
 >c4 : "a"
@@ -227,8 +223,6 @@ declare type T11 = {
 };
 
 interface T12 {
->T12 : T12
-
     a: number;
 >a : number
 
@@ -546,9 +540,6 @@ rI.x
 >x : "a"
 
 interface RI<T extends "a" | "b"> {
->RI : RI<T>
->T : T
-
     x: T;
 >x : T
 
@@ -569,7 +560,6 @@ rC.x
 
 declare class RC<T extends "a" | "b"> {
 >RC : RC<T>
->T : T
 
     x: T;
 >x : T

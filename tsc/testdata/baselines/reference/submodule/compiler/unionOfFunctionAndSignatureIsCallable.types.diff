@@ -9,13 +9,11 @@
  >c1 : Function
  >c2 : () => object
 ->callable : Function | (() => object)
-->c1 : Function
-->c2 : () => object
 +>callable : Function | () => object
+ >c1 : Function
+ >c2 : () => object
  
-     const a = c1();
- >a : any
-@@= skipped -18, +16 lines =@@
+@@= skipped -18, +18 lines =@@
  >c2 : () => object
  
      const c = callable();

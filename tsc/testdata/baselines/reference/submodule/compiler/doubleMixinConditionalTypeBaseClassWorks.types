@@ -8,7 +8,6 @@ type Constructor = new (...args: any[]) => {};
 const Mixin1 = <C extends Constructor>(Base: C) => class extends Base { private _fooPrivate: {}; }
 >Mixin1 : <C extends Constructor>(Base: C) => { new (...args: any[]): (Anonymous class)<C>; prototype: (Anonymous class)<any>; } & C
 ><C extends Constructor>(Base: C) => class extends Base { private _fooPrivate: {}; } : <C extends Constructor>(Base: C) => { new (...args: any[]): (Anonymous class)<C>; prototype: (Anonymous class)<any>; } & C
->C : C
 >Base : C
 >class extends Base { private _fooPrivate: {}; } : { new (...args: any[]): (Anonymous class)<C>; prototype: (Anonymous class)<any>; } & C
 >Base : {}
@@ -16,13 +15,12 @@ const Mixin1 = <C extends Constructor>(Base: C) => class extends Base { private 
 
 type FooConstructor = typeof Mixin1 extends (a: Constructor) => infer Cls ? Cls : never;
 >FooConstructor : { new (...args: any[]): (Anonymous class)<Constructor>; prototype: (Anonymous class)<any>; } & Constructor
+>Mixin1 : <C extends Constructor>(Base: C) => { new (...args: any[]): (Anonymous class)<C>; prototype: (Anonymous class)<any>; } & C
 >a : Constructor
->Cls : Cls
 
 const Mixin2 = <C extends FooConstructor>(Base: C) => class extends Base {};
 >Mixin2 : <C extends { new (...args: any[]): (Anonymous class)<Constructor>; prototype: (Anonymous class)<any>; } & Constructor>(Base: C) => { new (...args: any[]): (Anonymous class)<C>; prototype: (Anonymous class)<any>; } & C
 ><C extends FooConstructor>(Base: C) => class extends Base {} : <C extends { new (...args: any[]): (Anonymous class)<Constructor>; prototype: (Anonymous class)<any>; } & Constructor>(Base: C) => { new (...args: any[]): (Anonymous class)<C>; prototype: (Anonymous class)<any>; } & C
->C : C
 >Base : C
 >class extends Base {} : { new (...args: any[]): (Anonymous class)<C>; prototype: (Anonymous class)<any>; } & C
 >Base : (Anonymous class)<Constructor>

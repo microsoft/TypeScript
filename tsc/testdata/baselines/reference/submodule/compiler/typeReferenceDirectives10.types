@@ -6,14 +6,11 @@ import {$} from "./ref";
 >$ : any
 
 export interface A {
->A : A
-
     x: $
 >x : $
 }
 
 === /ref.d.ts ===
 export interface $ { x }
->$ : $
 >x : any
 

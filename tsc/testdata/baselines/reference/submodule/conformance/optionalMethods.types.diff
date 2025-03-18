@@ -1,15 +1,6 @@
 --- old.optionalMethods.types
 +++ new.optionalMethods.types
-@@= skipped -1, +1 lines =@@
- 
- === optionalMethods.ts ===
- interface Foo {
-+>Foo : Foo
-+
-     a: number;
- >a : number
- 
-@@= skipped -10, +12 lines =@@
+@@= skipped -11, +11 lines =@@
  >f : () => number
  
      g?(): number;

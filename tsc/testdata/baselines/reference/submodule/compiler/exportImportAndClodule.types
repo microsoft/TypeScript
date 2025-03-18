@@ -18,8 +18,6 @@ module K {
 >12 : 12
 
         export interface Point {
->Point : Point
-
             x: number;
 >x : number
 

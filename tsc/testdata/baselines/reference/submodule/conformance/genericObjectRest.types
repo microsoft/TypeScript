@@ -7,7 +7,6 @@ const a = 'a';
 
 function f1<T extends { a: string, b: number }>(obj: T) {
 >f1 : <T extends { a: string; b: number; }>(obj: T) => void
->T : T
 >a : string
 >b : number
 >obj : T
@@ -60,7 +59,6 @@ const sb = Symbol();
 
 function f2<T extends { [sa]: string, [sb]: number }>(obj: T) {
 >f2 : <T extends { [sa]: string; [sb]: number; }>(obj: T) => void
->T : T
 >[sa] : string
 >sa : unique symbol
 >[sb] : number
@@ -78,9 +76,6 @@ function f2<T extends { [sa]: string, [sb]: number }>(obj: T) {
 
 function f3<T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) {
 >f3 : <T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) => void
->T : T
->K1 : K1
->K2 : K2
 >obj : T
 >k1 : K1
 >k2 : K2
@@ -102,8 +97,6 @@ type Item = { a: string, b: number, c: boolean };
 
 function f4<K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) {
 >f4 : <K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) => void
->K1 : K1
->K2 : K2
 >obj : Item
 >k1 : K1
 >k2 : K2

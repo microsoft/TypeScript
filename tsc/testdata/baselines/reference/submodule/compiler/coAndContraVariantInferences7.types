@@ -3,7 +3,6 @@
 === coAndContraVariantInferences7.ts ===
 type Request<TSchema extends Schema> = {
 >Request : Request<TSchema>
->TSchema : TSchema
 
   query: TSchema["query"];
 >query : TSchema["query"]
@@ -17,7 +16,6 @@ type Schema = { query?: unknown; body?: unknown };
 
 declare function route<TSchema extends Schema>(obj: {
 >route : <TSchema extends Schema>(obj: { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }) => void
->TSchema : TSchema
 >obj : { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }
 
   pre: (a: TSchema) => void;

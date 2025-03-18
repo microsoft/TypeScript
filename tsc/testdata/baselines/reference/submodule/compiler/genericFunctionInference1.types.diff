@@ -11,8 +11,6 @@
  declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) => B;
 ->pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A_1 extends any[], B_1, C>(ab: (...args: A_1) => B_1, bc: (b: B_1) => C): (...args: A_1) => C; <A_1 extends any[], B_1, C, D>(ab: (...args: A_1) => B_1, bc: (b: B_1) => C, cd: (c: C) => D): (...args: A_1) => D; }
 +>pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
-+>A : A
-+>B : B
  >ab : (...args: A) => B
  >args : A
  >args : A
@@ -20,42 +18,19 @@
  declare function pipe<A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C;
 ->pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A_1 extends any[], B_1, C_1, D>(ab: (...args: A_1) => B_1, bc: (b: B_1) => C_1, cd: (c: C_1) => D): (...args: A_1) => D; }
 +>pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
-+>A : A
-+>B : B
-+>C : C
  >ab : (...args: A) => B
  >args : A
  >bc : (b: B) => C
-@@= skipped -19, +20 lines =@@
+@@= skipped -19, +15 lines =@@
  >args : A
  
  declare function pipe<A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D;
 ->pipe : { <A_1 extends any[], B_1>(ab: (...args: A_1) => B_1): (...args: A_1) => B_1; <A_1 extends any[], B_1, C_1>(ab: (...args: A_1) => B_1, bc: (b: B_1) => C_1): (...args: A_1) => C_1; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
 +>pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
-+>A : A
-+>B : B
-+>C : C
-+>D : D
  >ab : (...args: A) => B
  >args : A
  >bc : (b: B) => C
-@@= skipped -11, +15 lines =@@
- 
- declare function list<T>(a: T): T[];
- >list : <T>(a: T) => T[]
-+>T : T
- >a : T
- 
- declare function box<V>(x: V): { value: V };
- >box : <V>(x: V) => { value: V; }
-+>V : V
- >x : V
- >value : V
- 
- declare function foo<T extends { value: T }>(x: T): T;
- >foo : <T extends { value: T; }>(x: T) => T
-+>T : T
- >value : T
+@@= skipped -24, +24 lines =@@
  >x : T
  
  const f00 = pipe(list);
@@ -92,7 +67,7 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >x => list(x) : (x: any) => any[]
  >x : any
-@@= skipped -44, +47 lines =@@
+@@= skipped -31, +31 lines =@@
  >box : <V>(x: V) => { value: V; }
  
  const f04 = pipe(list, x => box(x));
@@ -191,19 +166,17 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >foo : <T extends { value: T; }>(x: T) => T
  >foo : <T extends { value: T; }>(x: T) => T
- 
+@@= skipped -15, +15 lines =@@
  const g00: <T>(x: T) => T[] = pipe(list);
  >g00 : <T>(x: T) => T[]
-+>T : T
  >x : T
 ->pipe(list) : (a: T) => T[]
 +>pipe(list) : (...args: [a: T]) => T[]
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >list : <T>(a: T) => T[]
  
- const g01: <T>(x: T) => { value: T[] } = pipe(list, box);
+@@= skipped -8, +8 lines =@@
  >g01 : <T>(x: T) => { value: T[]; }
-+>T : T
  >x : T
  >value : T[]
 ->pipe(list, box) : (a: T) => { value: T[]; }
@@ -211,10 +184,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >list : <T>(a: T) => T[]
  >box : <V>(x: V) => { value: V; }
- 
- const g02: <T>(x: T) => { value: T }[] = pipe(box, list);
+@@= skipped -9, +9 lines =@@
  >g02 : <T>(x: T) => { value: T; }[]
-+>T : T
  >x : T
  >value : T
 ->pipe(box, list) : (x: T) => { value: T; }[]
@@ -222,10 +193,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >box : <V>(x: V) => { value: V; }
  >list : <T>(a: T) => T[]
- 
- const g03: <T>(x: T) => { value: T[] } = pipe(x => list(x), box);
+@@= skipped -9, +9 lines =@@
  >g03 : <T>(x: T) => { value: T[]; }
-+>T : T
  >x : T
  >value : T[]
 ->pipe(x => list(x), box) : (x: T) => { value: T[]; }
@@ -233,11 +202,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >x => list(x) : (x: T) => T[]
  >x : T
-@@= skipped -52, +56 lines =@@
- 
- const g04: <T>(x: T) => { value: T[] } = pipe(list, x => box(x));
+@@= skipped -13, +13 lines =@@
  >g04 : <T>(x: T) => { value: T[]; }
-+>T : T
  >x : T
  >value : T[]
 ->pipe(list, x => box(x)) : (a: T) => { value: T[]; }
@@ -245,11 +211,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >list : <T>(a: T) => T[]
  >x => box(x) : (x: T[]) => { value: T[]; }
-@@= skipped -13, +14 lines =@@
- 
- const g05: <T>(x: T) => { value: T[] } = pipe(x => list(x), x => box(x))
+@@= skipped -13, +13 lines =@@
  >g05 : <T>(x: T) => { value: T[]; }
-+>T : T
  >x : T
  >value : T[]
 ->pipe(x => list(x), x => box(x)) : (x: T) => { value: T[]; }
@@ -257,11 +220,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >x => list(x) : (x: T) => T[]
  >x : T
-@@= skipped -17, +18 lines =@@
- 
- const g06: <T>(x: T) => { value: T[] } = pipe(list, pipe(box));
+@@= skipped -17, +17 lines =@@
  >g06 : <T>(x: T) => { value: T[]; }
-+>T : T
  >x : T
  >value : T[]
 ->pipe(list, pipe(box)) : (a: T) => { value: T[]; }
@@ -273,9 +233,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >box : <V>(x: V) => { value: V; }
  
- const g07: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(box));
+@@= skipped -11, +11 lines =@@
  >g07 : <T>(x: T) => { value: T[]; }
-+>T : T
  >x : T
  >value : T[]
 ->pipe(x => list(x), pipe(box)) : (x: T) => { value: T[]; }
@@ -291,9 +250,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >box : <V>(x: V) => { value: V; }
  
- const g08: <T>(x: T) => { value: T[] } = pipe(x => list(x), pipe(x => box(x)));
+@@= skipped -15, +15 lines =@@
  >g08 : <T>(x: T) => { value: T[]; }
-+>T : T
  >x : T
  >value : T[]
 ->pipe(x => list(x), pipe(x => box(x))) : (x: T) => { value: T[]; }
@@ -309,22 +267,17 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >x => box(x) : (x: T[]) => { value: T[]; }
  >x : T[]
-@@= skipped -45, +48 lines =@@
- 
+@@= skipped -18, +18 lines =@@
  const g09: <T>(x: T) => number = pipe(list, x => x.length);
  >g09 : <T>(x: T) => number
-+>T : T
  >x : T
 ->pipe(list, x => x.length) : (a: T) => number
 +>pipe(list, x => x.length) : (...args: [a: T]) => number
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >list : <T>(a: T) => T[]
  >x => x.length : (x: T[]) => number
-@@= skipped -12, +13 lines =@@
- 
- const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
+@@= skipped -13, +13 lines =@@
  >g10 : <T extends { value: T; }>(x: T) => T
-+>T : T
  >value : T
  >x : T
 ->pipe(foo) : (x: T) => T
@@ -332,9 +285,8 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >foo : <T extends { value: T; }>(x: T) => T
  
- const g12: <T extends { value: T }>(x: T) => T = pipe(foo, foo);
+@@= skipped -8, +8 lines =@@
  >g12 : <T extends { value: T; }>(x: T) => T
-+>T : T
  >value : T
  >x : T
 ->pipe(foo, foo) : (x: T) => T
@@ -342,65 +294,7 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  >foo : <T extends { value: T; }>(x: T) => T
  >foo : <T extends { value: T; }>(x: T) => T
- 
- declare function pipe2<A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D): (a: [A, C]) => [B, D];
- >pipe2 : <A, B, C, D>(ab: (a: A) => B, cd: (c: C) => D) => (a: [A, C]) => [B, D]
-+>A : A
-+>B : B
-+>C : C
-+>D : D
- >ab : (a: A) => B
- >a : A
- >cd : (c: C) => D
-@@= skipped -74, +80 lines =@@
- 
- declare function pipe3<A, B, C>(ab: (a: A) => B, ac: (a: A) => C): (a: A) => [B, C];
- >pipe3 : <A, B, C>(ab: (a: A) => B, ac: (a: A) => C) => (a: A) => [B, C]
-+>A : A
-+>B : B
-+>C : C
- >ab : (a: A) => B
- >a : A
- >ac : (a: A) => C
-@@= skipped -29, +32 lines =@@
- 
- declare function pipe4<A, B, C>(funcs: [(a: A) => B, (b: B) => C]): (a: A) => C;
- >pipe4 : <A, B, C>(funcs: [(a: A) => B, (b: B) => C]) => (a: A) => C
-+>A : A
-+>B : B
-+>C : C
- >funcs : [(a: A) => B, (b: B) => C]
- >a : A
- >b : B
-@@= skipped -23, +26 lines =@@
- 
- declare function pipe5<A, B>(f: (a: A) => B): { f: (a: A) => B };
- >pipe5 : <A, B>(f: (a: A) => B) => { f: (a: A) => B; }
-+>A : A
-+>B : B
- >f : (a: A) => B
- >a : A
- >f : (a: A) => B
-@@= skipped -13, +15 lines =@@
- 
- declare function wrap3<A, B, C>(f: (a: A, b1: B, b2: B) => C): (a: A, b1: B, b2: B) => C;
- >wrap3 : <A, B, C>(f: (a: A, b1: B, b2: B) => C) => (a: A, b1: B, b2: B) => C
-+>A : A
-+>B : B
-+>C : C
- >f : (a: A, b1: B, b2: B) => C
- >a : A
- >b1 : B
-@@= skipped -10, +13 lines =@@
- 
- declare function baz<T, U extends T>(t1: T, t2: T, u: U): [T, U];
- >baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
-+>T : T
-+>U : U
- >t1 : T
- >t2 : T
- >u : U
-@@= skipped -11, +13 lines =@@
+@@= skipped -150, +150 lines =@@
  >baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
  
  declare const list2: {
@@ -408,11 +302,8 @@
 +>list2 : { <T>(a: T): T[]; foo: string; bar: () => number; }
  
      <T>(a: T): T[];
-+>T : T
  >a : T
- 
-     foo: string;
-@@= skipped -13, +14 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  
  let f70 = pipe(list2, box);
@@ -437,24 +328,7 @@
  
  declare class Point {
  >Point : Point
-@@= skipped -29, +29 lines =@@
- 
- declare class Bag<T> {
- >Bag : Bag<T>
-+>T : T
- 
-     constructor(...args: T[]);
- >args : T[]
-@@= skipped -14, +15 lines =@@
- 
- function asFunction<A extends any[], B>(cf: new (...args: A) => B) {
- >asFunction : <A extends any[], B>(cf: new (...args: A) => B) => (...args: A) => B
-+>A : A
-+>B : B
- >cf : new (...args: A) => B
- >args : A
- 
-@@= skipped -13, +15 lines =@@
+@@= skipped -56, +56 lines =@@
  }
  
  const newPoint = asFunction(Point);
@@ -474,110 +348,7 @@
  >10 : 10
  >20 : 20
  
-@@= skipped -22, +22 lines =@@
- 
- declare class Comp<P> {
- >Comp : Comp<P>
-+>P : P
- 
-     props: P;
- >props : P
-@@= skipped -10, +11 lines =@@
- 
- type CompClass<P> = new (props: P) => Comp<P>;
- >CompClass : CompClass<P>
-+>P : P
- >props : P
- 
- declare function myHoc<P>(C: CompClass<P>): CompClass<P>;
- >myHoc : <P>(C: CompClass<P>) => CompClass<P>
-+>P : P
- >C : CompClass<P>
- 
- type GenericProps<T> = { foo: number, stuff: T };
- >GenericProps : GenericProps<T>
-+>T : T
- >foo : number
- >stuff : T
- 
- declare class GenericComp<T> extends Comp<GenericProps<T>> {}
- >GenericComp : GenericComp<T>
-+>T : T
- >Comp : Comp<GenericProps<T>>
- 
- const GenericComp2 = myHoc(GenericComp);
-@@= skipped -25, +29 lines =@@
- 
- function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }
- >mirror : <A, B>(f: (a: A) => B) => (a: A) => B
-+>A : A
-+>B : B
- >f : (a: A) => B
- >a : A
- >a : A
-@@= skipped -31, +33 lines =@@
- 
- export function keyOf<a>(value: { key: a; }): a {
- >keyOf : <a>(value: { key: a; }) => a
-+>a : a
- >value : { key: a; }
- >key : a
- 
-@@= skipped -9, +10 lines =@@
- >key : a
- }
- export interface Data {
-+>Data : Data
-+
-     key: number;
- >key : number
- 
-@@= skipped -13, +15 lines =@@
- 
- declare function toKeys<a>(values: a[], toKey: (value: a) => string): string[];
- >toKeys : <a>(values: a[], toKey: (value: a) => string) => string[]
-+>a : a
- >values : a[]
- >toKey : (value: a) => string
- >value : a
-@@= skipped -14, +15 lines =@@
- 
- function flip<a, b, c>(f: (a: a, b: b) => c): (b: b, a: a) => c {
- >flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
-+>a : a
-+>b : b
-+>c : c
- >f : (a: a, b: b) => c
- >a : a
- >b : b
-@@= skipped -17, +20 lines =@@
- }
- function zip<T, U>(x: T, y: U): [T, U] {
- >zip : <T, U>(x: T, y: U) => [T, U]
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -11, +13 lines =@@
- 
- var expected: <T, U>(y: U, x: T) => [T, U] = flip(zip);
- >expected : <T, U>(y: U, x: T) => [T, U]
-+>T : T
-+>U : U
- >y : U
- >x : T
- >flip(zip) : (b: U, a: T) => [T, U]
-@@= skipped -17, +19 lines =@@
- const map = <T, U>(transform: (t: T) => U) =>
- >map : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
- ><T, U>(transform: (t: T) => U) =>    (arr: T[]) => arr.map(transform) : <T, U>(transform: (t: T) => U) => (arr: T[]) => U[]
-+>T : T
-+>U : U
- >transform : (t: T) => U
- >t : T
- 
-@@= skipped -7, +9 lines =@@
+@@= skipped -176, +176 lines =@@
  >(arr: T[]) => arr.map(transform) : (arr: T[]) => U[]
  >arr : T[]
  >arr.map(transform) : U[]
@@ -589,34 +360,7 @@
  >transform : (t: T) => U
  
  const identityStr = (t: string) => t;
-@@= skipped -33, +33 lines =@@
- 
- function of2<a, b>(one: a, two: b): [a, b] {
- >of2 : <a, b>(one: a, two: b) => [a, b]
-+>a : a
-+>b : b
- >one : a
- >two : b
- 
-@@= skipped -19, +21 lines =@@
- 
- type Component<P> = (props: P) => {};
- >Component : Component<P>
-+>P : P
- >props : P
- 
- declare const myHoc1: <P>(C: Component<P>) => Component<P>;
- >myHoc1 : <P>(C: Component<P>) => Component<P>
-+>P : P
- >C : Component<P>
- 
- declare const myHoc2: <P>(C: Component<P>) => Component<P>;
- >myHoc2 : <P>(C: Component<P>) => Component<P>
-+>P : P
- >C : Component<P>
- 
- declare const MyComponent1: Component<{ foo: 1 }>;
-@@= skipped -15, +18 lines =@@
+@@= skipped -67, +67 lines =@@
  >foo : 1
  
  const enhance = pipe(
@@ -673,11 +417,7 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  
          x => x + 1,
-@@= skipped -36, +36 lines =@@
- 
- declare const identity: <T>(value: T) => T;
- >identity : <T>(value: T) => T
-+>T : T
+@@= skipped -39, +39 lines =@@
  >value : T
  
  const fn40 = pipe(
@@ -688,11 +428,7 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  
      getString,
-@@= skipped -29, +30 lines =@@
- 
- declare const first: <T>(ts: T[]) => T;
- >first : <T>(ts: T[]) => T
-+>T : T
+@@= skipped -29, +29 lines =@@
  >ts : T[]
  
  const fn60 = pipe(
@@ -703,7 +439,7 @@
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
  
      getArray,
-@@= skipped -21, +22 lines =@@
+@@= skipped -18, +18 lines =@@
  );
  
  const fn61 = pipe(
@@ -731,8 +467,6 @@
  declare function foo2<T, U = T>(fn: T, a?: U, b?: U): [T, U];
 ->foo2 : <T, U = T>(fn: T, a?: U, b?: U) => [T, U]
 +>foo2 : <T, U>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
-+>T : T
-+>U : U
  >fn : T
  >a : U | undefined
  >b : U | undefined
@@ -756,11 +490,3 @@
  >identity : <T>(value: T) => T
  >1 : 1
  
-@@= skipped -25, +27 lines =@@
- 
- declare function times<T>(fn: (i: number) => T): (n: number) => T[];
- >times : <T>(fn: (i: number) => T) => (n: number) => T[]
-+>T : T
- >fn : (i: number) => T
- >i : number
- >n : number

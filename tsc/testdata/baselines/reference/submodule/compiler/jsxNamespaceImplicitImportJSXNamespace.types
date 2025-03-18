@@ -3,8 +3,6 @@
 === /node_modules/preact/index.d.ts ===
 type Defaultize<Props, Defaults> =
 >Defaultize : Defaultize<Props, Defaults>
->Props : Props
->Defaults : Defaults
 
 	// Distribute over unions
 	Props extends any // Make any properties included in Default optional
@@ -13,58 +11,37 @@ type Defaultize<Props, Defaults> =
 				Pick<Props, Exclude<keyof Props, keyof Defaults>>
 		: never;
 export namespace JSXInternal {
->JSXInternal : any
-
     interface HTMLAttributes<T = {}> { }
->HTMLAttributes : HTMLAttributes<T>
->T : T
-
     interface SVGAttributes<T = {}> { }
->SVGAttributes : SVGAttributes<T>
->T : T
-
     type LibraryManagedAttributes<Component, Props> = Component extends {
 >LibraryManagedAttributes : LibraryManagedAttributes<Component, Props>
->Component : Component
->Props : Props
 
         defaultProps: infer Defaults;
 >defaultProps : Defaults
->Defaults : Defaults
     }
         ? Defaultize<Props, Defaults>
         : Props;
 
     interface IntrinsicAttributes {
->IntrinsicAttributes : IntrinsicAttributes
-
         key?: any;
 >key : any
     }
 
     interface Element extends VNode<any> { }
->Element : Element
 
     interface ElementClass extends Component<any, any> { }
->ElementClass : ElementClass
 
     interface ElementAttributesProperty {
->ElementAttributesProperty : ElementAttributesProperty
-
         props: any;
 >props : any
     }
 
     interface ElementChildrenAttribute {
->ElementChildrenAttribute : ElementChildrenAttribute
-
         children: any;
 >children : any
     }
 
     interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
         div: HTMLAttributes;
 >div : HTMLAttributes<{}>
     }
@@ -74,7 +51,6 @@ export const Fragment: unique symbol;
 
 export type ComponentType<T = {}> = {};
 >ComponentType : ComponentType<T>
->T : T
 
 export type ComponentChild = {};
 >ComponentChild : ComponentChild
@@ -84,15 +60,12 @@ export type ComponentChildren = {};
 
 export type VNode<T = {}> = {};
 >VNode : VNode<T>
->T : T
 
 export type Attributes = {};
 >Attributes : Attributes
 
 export type Component<T = {}, U = {}> = {};
 >Component : Component<T, U>
->T : T
->U : U
 
 === /node_modules/preact/jsx-runtime/index.d.ts ===
 export { Fragment } from '..';
@@ -140,7 +113,6 @@ export function jsx(
 ): VNode<any>;
 export function jsx<P>(
 >jsx : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; }
->P : P
 
     type: ComponentType<P>,
 >type : ComponentType<P>
@@ -177,7 +149,6 @@ export function jsxs(
 ): VNode<any>;
 export function jsxs<P>(
 >jsxs : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; }
->P : P
 
     type: ComponentType<P>,
 >type : ComponentType<P>
@@ -214,7 +185,6 @@ export function jsxDEV(
 ): VNode<any>;
 export function jsxDEV<P>(
 >jsxDEV : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; }
->P : P
 
     type: ComponentType<P>,
 >type : ComponentType<P>

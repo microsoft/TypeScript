@@ -24,10 +24,8 @@ var y: (x: string) => string;
 
 var y2: { <T>(x: T): T; } = <T>(x: T) => x
 >y2 : <T>(x: T) => T
->T : T
 >x : T
 ><T>(x: T) => x : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 

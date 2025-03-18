@@ -188,37 +188,37 @@
  
      a: typeof import('./mod').Thing,
 ->a : typeof Thing
-->Thing : any
 +>a : any
+ >Thing : any
  
      b: typeof import('./mod').AnotherThing,
 ->b : typeof AnotherThing
-->AnotherThing : any
 +>b : any
+ >AnotherThing : any
  
      c: typeof import('./mod').foo,
 ->c : () => number
-->foo : any
 +>c : any
+ >foo : any
  
      d: typeof import('./mod').qux,
 ->d : () => number
-->qux : any
 +>d : any
+ >qux : any
  
      e: typeof import('./mod').baz,
 ->e : () => number
-->baz : any
 +>e : any
+ >baz : any
  
      f: typeof import('./mod').buz,
- >f : any
-->buz : any
+@@= skipped -35, +35 lines =@@
+ >buz : any
  
      g: typeof import('./mod').literal,
 ->g : string
-->literal : any
 +>g : any
+ >literal : any
  
  ) {
      return a.length + b.length + c() + d() + e() + f() + g.length

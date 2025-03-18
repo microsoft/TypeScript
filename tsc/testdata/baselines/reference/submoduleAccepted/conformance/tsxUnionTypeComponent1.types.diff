@@ -8,8 +8,6 @@
 +>React : any
  
  interface ComponentProps {
-+>ComponentProps : ComponentProps
-+
      AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
 ->AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
 +>AnyComponent : any

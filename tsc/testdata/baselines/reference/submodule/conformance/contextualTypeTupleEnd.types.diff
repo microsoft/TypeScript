@@ -63,28 +63,7 @@
  
  const a0: Funcs = [];  // Error
  >a0 : Funcs
-@@= skipped -89, +89 lines =@@
- 
- export type Selector<State> = (state: State) => unknown;
- >Selector : Selector<State>
-+>State : State
- >state : State
- 
- export type SelectorTuple<State> = Selector<State>[];
- >SelectorTuple : SelectorTuple<State>
-+>State : State
- 
- export type ExampleState = {
- >ExampleState : ExampleState
-@@= skipped -18, +20 lines =@@
- 
- export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
- >createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
-+>S : S
- >selectors : [...selectors: S, f: (x: any) => any]
- >x : any
- 
-@@= skipped -38, +39 lines =@@
+@@= skipped -145, +145 lines =@@
  // Repro from #43122
  
  declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void

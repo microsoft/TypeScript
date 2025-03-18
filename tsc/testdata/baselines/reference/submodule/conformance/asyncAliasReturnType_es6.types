@@ -3,7 +3,6 @@
 === asyncAliasReturnType_es6.ts ===
 type PromiseAlias<T> = Promise<T>;
 >PromiseAlias : PromiseAlias<T>
->T : T
 
 async function f(): PromiseAlias<void> {
 >f : () => PromiseAlias<void>

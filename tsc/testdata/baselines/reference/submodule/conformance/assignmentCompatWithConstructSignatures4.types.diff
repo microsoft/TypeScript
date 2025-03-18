@@ -9,81 +9,12 @@
  >x : Base[]
  >y : Derived2[]
  
-@@= skipped -51, +51 lines =@@
- >x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
- 
-                     new <T extends Derived>(a: T): T;
-+>T : T
- >a : T
- 
-                     new <T extends Base>(a: T): T;
-+>T : T
- >a : T
- 
-                 }): any[];
-@@= skipped -10, +12 lines =@@
- >x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
- 
-                     new <T extends Derived2>(a: T): T;
-+>T : T
- >a : T
- 
-                     new <T extends Base>(a: T): T;
-+>T : T
- >a : T
- 
-                 }): any[];
-@@= skipped -10, +12 lines =@@
- 
-         var b2: new <T, U>(x: T) => U[]; 
- >b2 : new <T, U>(x: T) => U[]
-+>T : T
-+>U : U
- >x : T
- 
-         a2 = b2; // ok
-@@= skipped -14, +16 lines =@@
- 
-         var b7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
- >b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
-+>T : T
-+>U : U
-+>V : V
- >x : (arg: T) => U
- >arg : T
- >r : T
-@@= skipped -16, +19 lines =@@
- 
-         var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
- >b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
-+>T : T
-+>U : U
- >x : (arg: T) => U
- >arg : T
- >y : (arg2: { foo: number; }) => U
-@@= skipped -20, +22 lines =@@
-         
-         var b10: new <T extends Derived>(...x: T[]) => T; 
- >b10 : new <T extends Derived>(...x: T[]) => T
-+>T : T
- >x : T[]
- 
-         a10 = b10; // ok
-@@= skipped -14, +15 lines =@@
- 
-         var b11: new <T extends Derived>(x: T, y: T) => T; 
- >b11 : new <T extends Derived>(x: T, y: T) => T
-+>T : T
- >x : T
- >y : T
- 
-@@= skipped -14, +15 lines =@@
+@@= skipped -149, +149 lines =@@
  >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
  
          var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 ->b12 : new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
 +>b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
-+>T : T
  >x : Base[]
  >y : Base[]
  
@@ -105,57 +36,3 @@
  
          var b15: new <T>(x: { a: T; b: T }) => T; 
  >b15 : new <T>(x: { a: T; b: T; }) => T
-+>T : T
- >x : { a: T; b: T; }
- >a : T
- >b : T
-@@= skipped -32, +34 lines =@@
- 
-         var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
- >b15a : new <T extends Base>(x: { a: T; b: T; }) => number
-+>T : T
- >x : { a: T; b: T; }
- >a : T
- >b : T
-@@= skipped -16, +17 lines =@@
- 
-         var b16: new <T>(x: (a: T) => T) => T[];
- >b16 : new <T>(x: (a: T) => T) => T[]
-+>T : T
- >x : (a: T) => T
- >a : T
- 
-@@= skipped -15, +16 lines =@@
- 
-         var b17: new <T>(x: (a: T) => T) => any[];
- >b17 : new <T>(x: (a: T) => T) => any[]
-+>T : T
- >x : (a: T) => T
- >a : T
- 
-@@= skipped -20, +21 lines =@@
-         // target type has generic call signature
-         var a2: new <T>(x: T) => T[];
- >a2 : new <T>(x: T) => T[]
-+>T : T
- >x : T
- 
-         var b2: new <T>(x: T) => string[];
- >b2 : new <T>(x: T) => string[]
-+>T : T
- >x : T
- 
-         a2 = b2; // ok
-@@= skipped -19, +21 lines =@@
-         // target type has generic call signature
-         var a3: new <T>(x: T) => string[];
- >a3 : new <T>(x: T) => string[]
-+>T : T
- >x : T
- 
-         var b3: new <T>(x: T) => T[]; 
- >b3 : new <T>(x: T) => T[]
-+>T : T
- >x : T
- 
-         a3 = b3; // ok

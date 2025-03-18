@@ -66,8 +66,6 @@ function foo4(results: number[] | undefined) {
 }
 
 interface ThingWithOriginal {
->ThingWithOriginal : ThingWithOriginal
-
     name: string;
 >name : string
 

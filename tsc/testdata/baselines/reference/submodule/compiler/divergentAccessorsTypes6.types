@@ -4,8 +4,6 @@
 export {};
 
 interface Element {
->Element : Element
-
     get style(): CSSStyleDeclaration;
 >style : CSSStyleDeclaration
 
@@ -45,11 +43,8 @@ element.style = element.style; // error
 
 type Fail<T extends never> = T;
 >Fail : T
->T : T
 
 interface I1 {
->I1 : I1
-
     get x(): number;
 >x : number
 

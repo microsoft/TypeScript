@@ -2,8 +2,6 @@
 
 === src/lib/operators/scalar.ts ===
 export interface Scalar {
->Scalar : Scalar
-
 	(): string;
 	value: number;
 >value : number

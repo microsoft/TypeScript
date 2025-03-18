@@ -59,8 +59,6 @@ declare global {
 >global : any
 
     interface ExtFunc {
->ExtFunc : ExtFunc
-
         /**
         * comment6
         */

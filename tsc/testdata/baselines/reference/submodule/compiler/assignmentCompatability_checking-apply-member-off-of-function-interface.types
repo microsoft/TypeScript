@@ -4,8 +4,6 @@
 // 3.8.4 Assignment Compatibility 
 
 interface Applicable {
->Applicable : Applicable
-
     apply(blah: any); // also works for 'apply'
 >apply : (blah: any) => any
 >blah : any

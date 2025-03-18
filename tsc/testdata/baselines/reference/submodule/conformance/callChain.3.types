@@ -3,12 +3,10 @@
 === callChain.3.ts ===
 declare function absorb<T>(): T;
 >absorb : <T>() => T
->T : T
 
 declare const a: { m?<T>(obj: {x: T}): T } | undefined;
 >a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
 >m : <T>(obj: { x: T; }) => T | undefined
->T : T
 >obj : { x: T; }
 >x : T
 

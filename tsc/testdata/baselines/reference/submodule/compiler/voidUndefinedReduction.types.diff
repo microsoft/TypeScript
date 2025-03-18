@@ -6,11 +6,10 @@
  function isDefined<T>(value: T | undefined | null | void): value is T {
 ->isDefined : <T>(value: T | undefined | null | void) => value is T
 +>isDefined : <T>(value: void | T | null | undefined) => value is T
-+>T : T
  >value : void | T | null | undefined
  
    return value !== undefined && value !== null;
-@@= skipped -9, +10 lines =@@
+@@= skipped -9, +9 lines =@@
  >value : void | T | null | undefined
  >undefined : undefined
  >value !== null : boolean

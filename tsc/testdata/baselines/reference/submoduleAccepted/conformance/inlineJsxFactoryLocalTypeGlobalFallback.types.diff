@@ -1,33 +1,6 @@
 --- old.inlineJsxFactoryLocalTypeGlobalFallback.types
 +++ new.inlineJsxFactoryLocalTypeGlobalFallback.types
-@@= skipped -4, +4 lines =@@
- >global : any
- 
-     namespace JSX {
-+>JSX : any
-+
-         interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-             [e: string]: {};
- >e : string
-         }
-         interface Element {
-+>Element : Element
-+
-             __domBrand: void;
- >__domBrand : void
- 
-@@= skipped -15, +21 lines =@@
- >props : {}
-         }
-         interface ElementAttributesProperty { props: any; }
-+>ElementAttributesProperty : ElementAttributesProperty
- >props : any
- 
-         interface ElementChildrenAttribute { children: any; }
-+>ElementChildrenAttribute : ElementChildrenAttribute
- >children : any
+@@= skipped -26, +26 lines =@@
      }
  }
  export function dom(): JSX.Element;
@@ -36,34 +9,7 @@
  >JSX : any
  
  === renderer2.d.ts ===
- export namespace predom {
-+>predom : () => Element
-+
-     namespace JSX {
-+>JSX : any
-+
-         interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-             [e: string]: {};
- >e : string
-         }
-         interface Element {
-+>Element : Element
-+
-             __predomBrand: void;
- >__predomBrand : void
- 
-@@= skipped -28, +38 lines =@@
- >props : {}
-         }
-         interface ElementAttributesProperty { props: any; }
-+>ElementAttributesProperty : ElementAttributesProperty
- >props : any
- 
-         interface ElementChildrenAttribute { children: any; }
-+>ElementChildrenAttribute : ElementChildrenAttribute
- >children : any
+@@= skipped -28, +28 lines =@@
      }
  }
  export function predom(): predom.JSX.Element;

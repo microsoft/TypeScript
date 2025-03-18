@@ -1,22 +1,6 @@
 --- old.declarationEmitWithDefaultAsComputedName2.types
 +++ new.declarationEmitWithDefaultAsComputedName2.types
-@@= skipped -2, +2 lines =@@
- === other.ts ===
- type Experiment<Name> = {
- >Experiment : Experiment<Name>
-+>Name : Name
- 
-     name: Name;
- >name : Name
-@@= skipped -7, +8 lines =@@
- };
- declare const createExperiment: <Name extends string>(
- >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
-+>Name : Name
- 
-     options: Experiment<Name>
- >options : Experiment<Name>
-@@= skipped -18, +19 lines =@@
+@@= skipped -27, +27 lines =@@
  
  === main.ts ===
  import * as other2 from "./other";

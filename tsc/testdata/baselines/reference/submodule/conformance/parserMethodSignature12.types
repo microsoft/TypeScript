@@ -2,9 +2,6 @@
 
 === parserMethodSignature12.ts ===
 interface I {
->I : I
-
   3?<T>();
 >3 : <T>() => any
->T : T
 }

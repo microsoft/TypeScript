@@ -1,19 +1,11 @@
 --- old.classNonUniqueSymbolMethodHasSymbolIndexer.types
 +++ new.classNonUniqueSymbolMethodHasSymbolIndexer.types
-@@= skipped -13, +13 lines =@@
- }
- declare const e1: A[typeof a]; // no error, `A` has `symbol` index
- >e1 : () => number
-->a : symbol
- 
- type Constructor = new (...args: any[]) => {};
- >Constructor : Constructor
+@@= skipped -20, +20 lines =@@
  >args : any[]
  
  declare function Mix<T extends Constructor>(classish: T): T & (new (...args: any[]) => {mixed: true});
 ->Mix : <T extends Constructor>(classish: T) => T & (new (...args: any[]) => { mixed: true; })
 +>Mix : <T extends Constructor>(classish: T) => T & new (...args: any[]) => { mixed: true; }
-+>T : T
  >classish : T
  >args : any[]
  >mixed : true

@@ -3,8 +3,6 @@
 === /app.ts ===
 /// <reference types="lib" preserve="true" />
 interface A {
->A : A
-
     x: $
 >x : $
 }

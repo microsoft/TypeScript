@@ -9,12 +9,7 @@
  >kind : string
  
    if (kindCache[kind]) {
-@@= skipped -24, +24 lines =@@
- 
- function ClassFactory<TKind extends string>(kind: TKind) {
- >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
-+>TKind : TKind
- >kind : TKind
+@@= skipped -28, +28 lines =@@
  
    register(kind);
  >register(kind) : void
@@ -23,7 +18,7 @@
  >kind : TKind
  
    return class {
-@@= skipped -39, +40 lines =@@
+@@= skipped -35, +35 lines =@@
  
  export class AKind extends ClassFactory(Kinds.A) {
  >AKind : AKind

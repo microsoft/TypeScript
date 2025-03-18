@@ -6,5 +6,4 @@ class C {
 
    *foo<T>() { }
 >foo : <T>() => Generator<never, void, unknown>
->T : T
 }

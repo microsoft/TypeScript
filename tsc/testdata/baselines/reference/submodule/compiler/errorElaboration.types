@@ -4,16 +4,10 @@
 // Repro for #5712
 
 interface Ref<T> {
->Ref : Ref<T>
->T : T
-
     prop: T;
 >prop : T
 }
 interface Container<T> {
->Container : Container<T>
->T : T
-
     m1: Container<Ref<T>>;
 >m1 : Container<Ref<T>>
 
@@ -36,7 +30,6 @@ foo(a);
 
 function test(): {[A in "foo"]: A} {
 >test : () => { foo: "foo"; }
->A : A
 
   return {foo: "bar"};
 >{foo: "bar"} : { foo: "bar"; }

@@ -1,18 +1,6 @@
 --- old.restParametersOfNonArrayTypes2.types
 +++ new.restParametersOfNonArrayTypes2.types
-@@= skipped -4, +4 lines =@@
- // user defined subtypes of array do not count, all of these are errors
- 
- interface MyThing extends Array<any> { }
-+>MyThing : MyThing
-+
- interface MyThing2<T> extends Array<T> { }
-+>MyThing2 : MyThing2<T>
-+>T : T
- 
- function foo(...x: MyThing) { }
- >foo : (...x: MyThing) => void
-@@= skipped -13, +17 lines =@@
+@@= skipped -17, +17 lines =@@
  >x : MyThing
  
  var f2 = (...x: MyThing, ...y: MyThing) => { }
@@ -23,13 +11,7 @@
  >x : MyThing
  >y : MyThing
  
-@@= skipped -14, +14 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     (...x: MyThing);
+@@= skipped -18, +18 lines =@@
  >x : MyThing
  
      foo(...x: MyThing, ...y: MyThing);
@@ -45,7 +27,7 @@
  
      (...x: MyThing);
  >x : MyThing
-@@= skipped -21, +23 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  var b = {
@@ -79,13 +61,7 @@
  >x : MyThing2<string>
  >y : MyThing2<string>
  
-@@= skipped -14, +14 lines =@@
- }
- 
- interface I2 {
-+>I2 : I2
-+
-     (...x: MyThing2<string>);
+@@= skipped -18, +18 lines =@@
  >x : MyThing2<string>
  
      foo(...x: MyThing2<string>, ...y: MyThing2<string>);
@@ -101,7 +77,7 @@
  
      (...x: MyThing2<string>);
  >x : MyThing2<string>
-@@= skipped -21, +23 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  var b2 = {

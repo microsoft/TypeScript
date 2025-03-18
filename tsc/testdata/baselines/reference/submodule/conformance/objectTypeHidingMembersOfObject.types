@@ -21,8 +21,6 @@ var r1: void = c.valueOf();
 >valueOf : () => void
 
 interface I {
->I : I
-
     valueOf(): void;
 >valueOf : () => void
 }

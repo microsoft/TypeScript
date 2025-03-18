@@ -10,9 +10,6 @@ let gg: () => void = g;
 >g : (a: void) => void
 
 interface Obj<T> {
->Obj : Obj<T>
->T : T
-
     method(value: T): void;
 >method : (value: T) => void
 >value : T

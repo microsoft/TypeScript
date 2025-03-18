@@ -1,18 +1,6 @@
 --- old.inlineJsxAndJsxFragPragmaOverridesCompilerOptions.types
 +++ new.inlineJsxAndJsxFragPragmaOverridesCompilerOptions.types
-@@= skipped -4, +4 lines =@@
- >global : any
- 
-     namespace JSX {
-+>JSX : any
-+
-         interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-             [e: string]: any;
- >e : string
-         }
-@@= skipped -29, +33 lines =@@
+@@= skipped -33, +33 lines =@@
  >Fragment : () => void
  
  <><span></span></>

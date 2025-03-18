@@ -1,39 +1,6 @@
 --- old.tsxAttributeResolution12.types
 +++ new.tsxAttributeResolution12.types
-@@= skipped -1, +1 lines =@@
- 
- === react.d.ts ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
- 	}
- 	interface ElementAttributesProperty {
-+>ElementAttributesProperty : ElementAttributesProperty
-+
- 		props;
- >props : any
- 	}
- 	interface IntrinsicAttributes {
-+>IntrinsicAttributes : IntrinsicAttributes
-+
- 		ref?: string;
- >ref : string
- 	}
-@@= skipped -16, +25 lines =@@
- === file.tsx ===
- declare class Component<P, S>  {
- >Component : Component<P, S>
-+>P : P
-+>S : S
- 
- 	constructor(props?: P, context?: any);
- >props : P
-@@= skipped -22, +24 lines =@@
+@@= skipped -39, +39 lines =@@
  >callBack : () => any
  
  	render(): JSX.Element;
@@ -42,25 +9,7 @@
  >JSX : any
  
  	props: P;
-@@= skipped -15, +15 lines =@@
- 
- 
- interface ComponentClass<P> {
-+>ComponentClass : ComponentClass<P>
-+>P : P
-+
- 	new (props?: P, context?: any): Component<P, any>;
- >props : P
- >context : any
-@@= skipped -9, +12 lines =@@
- >TestMod : typeof TestMod
- 
- 	interface TestClass extends ComponentClass<{reqd: any}> {
-+>TestClass : TestClass
- >reqd : any
- 	}
- 	var Test: TestClass;
-@@= skipped -8, +9 lines =@@
+@@= skipped -32, +32 lines =@@
  
  // Errors correctly
  const T = TestMod.Test;

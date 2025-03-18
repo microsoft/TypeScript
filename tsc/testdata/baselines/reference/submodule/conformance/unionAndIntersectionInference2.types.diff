@@ -6,11 +6,10 @@
  declare function f1<T>(x: T | string): T;
 ->f1 : <T>(x: T | string) => T
 +>f1 : <T>(x: string | T) => T
-+>T : T
  >x : string | T
  
  var a1: string;
-@@= skipped -21, +22 lines =@@
+@@= skipped -21, +21 lines =@@
  
  f1(a1); // string
  >f1(a1) : string
@@ -43,8 +42,3 @@
  >e1 : string | number | boolean
  
  declare function f2<T>(x: T & { name: string }): T;
- >f2 : <T>(x: T & { name: string; }) => T
-+>T : T
- >x : T & { name: string; }
- >name : string
- 

@@ -1,14 +1,6 @@
 --- old.declarationEmitReusesLambdaParameterNodes.types
 +++ new.declarationEmitReusesLambdaParameterNodes.types
-@@= skipped -7, +7 lines =@@
- 
- export type Props<T, TThing = Whatever> = Omit<TThing, "y"> & Partial<TThing> & T;
- >Props : Props<T, TThing>
-+>T : T
-+>TThing : TThing
- 
- === index.ts ===
- import { Props } from "react-select";
+@@= skipped -13, +13 lines =@@
  >Props : any
  
  export const CustomSelect1 = <Option,>(x: Props<Option> & {}) => {}
@@ -17,13 +9,11 @@
 ->x : Omit<import("node_modules/react-select/index").Whatever, "y"> & Partial<import("node_modules/react-select/index").Whatever> & Option
 +>CustomSelect1 : <Option>(x: Omit<Whatever, "y"> & Partial<Whatever> & Option) => void
 +><Option,>(x: Props<Option> & {}) => {} : <Option>(x: Omit<Whatever, "y"> & Partial<Whatever> & Option) => void
-+>Option : Option
 +>x : Omit<Whatever, "y"> & Partial<Whatever> & Option
  
  export function CustomSelect2<Option,>(x: Props<Option> & {}) {}
 ->CustomSelect2 : <Option>(x: Props<Option> & {}) => void
 ->x : Omit<import("node_modules/react-select/index").Whatever, "y"> & Partial<import("node_modules/react-select/index").Whatever> & Option
 +>CustomSelect2 : <Option>(x: Omit<Whatever, "y"> & Partial<Whatever> & Option) => void
-+>Option : Option
 +>x : Omit<Whatever, "y"> & Partial<Whatever> & Option
  

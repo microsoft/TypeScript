@@ -33,9 +33,3 @@
  >foo : number
  
  === externalModuleExportingGenericClass_file0.ts ===
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     foo: T;
- >foo : T

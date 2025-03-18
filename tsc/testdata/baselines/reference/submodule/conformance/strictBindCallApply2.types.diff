@@ -1,10 +1,6 @@
 --- old.strictBindCallApply2.types
 +++ new.strictBindCallApply2.types
-@@= skipped -3, +3 lines =@@
- // Repro from #32964
- 
- interface Foo { blub: string };
-+>Foo : Foo
+@@= skipped -6, +6 lines =@@
  >blub : string
  
  function fn(this: Foo) {}
@@ -15,6 +11,7 @@
  type Test = ThisParameterType<typeof fn>; 
  >Test : Foo
 ->fn : (this: Foo) => void
++>fn : () => void
  
  const fb = fn.bind({ blub: "blub" });
 ->fb : () => void

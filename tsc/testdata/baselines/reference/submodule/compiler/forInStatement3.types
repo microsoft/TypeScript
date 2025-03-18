@@ -3,7 +3,6 @@
 === forInStatement3.ts ===
 function F<T>() {
 >F : <T>() => void
->T : T
 
   var expr: T;
 >expr : T

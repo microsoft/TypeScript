@@ -29,7 +29,6 @@
      class C2<T> extends Q.E2<T> { foo: T; } // error
  >C2 : C2<T>
 ->Q.E2 : typeof Q.E2
-+>T : T
 +>Q.E2 : typeof E2
  >Q : typeof Q
 ->E2 : typeof Q.E2
@@ -37,20 +36,11 @@
  >foo : T
  
      module P {
-@@= skipped -10, +11 lines =@@
- 
-         export class D2<T> extends C2<T> { bar: T; }
- >D2 : D2<T>
-+>T : T
- >C2 : typeof C2
- >bar : T
-     }
-@@= skipped -9, +10 lines =@@
+@@= skipped -19, +19 lines =@@
  
          export class E2<T> extends P.D2<T> { baz: T; }
  >E2 : E2<T>
 ->P.D2 : typeof P.D2
-+>T : T
 +>P.D2 : typeof D2
  >P : typeof P
 ->D2 : typeof P.D2

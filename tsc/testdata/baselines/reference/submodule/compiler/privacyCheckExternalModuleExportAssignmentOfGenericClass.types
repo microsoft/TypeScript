@@ -8,8 +8,6 @@ export = Bar;
 >Bar : Bar
 
 interface Bar {
->Bar : Bar
-
     foo: Foo<number>;
 >foo : Foo<number>
 }
@@ -19,7 +17,6 @@ export = Foo;
 
 class Foo<A> {
 >Foo : Foo<A>
->A : A
 
     constructor(public a: A) { }
 >a : A

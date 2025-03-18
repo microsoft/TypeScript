@@ -6,16 +6,6 @@
  class T<T> {
 ->T : globalThis.T<T>
 +>T : T<T>
-+>T : T
  
      constructor(n?: T) { }
  >n : T
-@@= skipped -21, +22 lines =@@
- };
- 
- interface nestedCtor {
-+>nestedCtor : nestedCtor
-+
-     new (): nestedCtor;
- }
- var nestedCtor: nestedCtor;

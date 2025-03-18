@@ -1,15 +1,6 @@
 --- old.strictModeReservedWord.types
 +++ new.strictModeReservedWord.types
-@@= skipped -37, +37 lines =@@
- 
-     function baz<implements, protected>() { }
- >baz : <implements, protected>() => void
-+>implements : implements
-+>protected : protected
- 
-     function barn(cb: (private, public, package) => void) { }
- >barn : (cb: (private: any, public: any, package: any) => void) => void
-@@= skipped -23, +25 lines =@@
+@@= skipped -60, +60 lines =@@
  >public : number
  
      var b: public.bar;

@@ -4,7 +4,6 @@
 // #14473
 function f<T extends number>() {
 >f : <T extends number>() => number
->T : T
 
     var t: T;
 >t : T
@@ -26,17 +25,13 @@ function f<T extends number>() {
 
 // #15501
 interface I { x: number }
->I : I
 >x : number
 
 type IdMap<T> = { [P in keyof T]: T[P] };
 >IdMap : IdMap<T>
->T : T
->P : P
 
 function g<T extends I>(i: IdMap<T>) {
 >g : <T extends I>(i: IdMap<T>) => number
->T : T
 >i : IdMap<T>
 
     const n: number = i.x;
@@ -56,8 +51,6 @@ function g<T extends I>(i: IdMap<T>) {
 // #17069
 function h<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
 >h : <T extends Record<K, number>, K extends string>(array: T[], prop: K) => number
->T : T
->K : K
 >array : T[]
 >prop : K
 

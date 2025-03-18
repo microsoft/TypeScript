@@ -151,7 +151,6 @@ function* g203() { // Generator<number, void, string>
 
 declare function f2<T>(x: T): T;
 >f2 : <T>(x: T) => T
->T : T
 >x : T
 
 function* g204() { // Generator<number, void, any>
@@ -247,7 +246,6 @@ function* g306() { // Generator<number, boolean, "hi">
 
 function* g307<T>() { // Generator<number, T, T>
 >g307 : <T>() => Generator<number, T, T>
->T : T
 
     const a: T = yield 0;
 >a : T
@@ -260,7 +258,6 @@ function* g307<T>() { // Generator<number, T, T>
 
 function* g308<T>(x: T) { // Generator<T, T, T>
 >g308 : <T>(x: T) => Generator<T, T, T>
->T : T
 >x : T
 
     const a: T = yield x;
@@ -274,9 +271,6 @@ function* g308<T>(x: T) { // Generator<T, T, T>
 
 function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
 >g309 : <T, U, V>(x: T, y: U) => Generator<T, U, V>
->T : T
->U : U
->V : V
 >x : T
 >y : U
 

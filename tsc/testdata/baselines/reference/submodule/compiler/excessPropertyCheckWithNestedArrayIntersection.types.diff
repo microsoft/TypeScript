@@ -1,35 +1,20 @@
 --- old.excessPropertyCheckWithNestedArrayIntersection.types
 +++ new.excessPropertyCheckWithNestedArrayIntersection.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === excessPropertyCheckWithNestedArrayIntersection.ts ===
  interface ValueOnlyFields {
-+>ValueOnlyFields : ValueOnlyFields
-+
      fields: Array<{
 ->fields : { value: number | null; }[]
 +>fields : { value: number; }[]
  
          value: number | null;
  >value : number
-@@= skipped -9, +11 lines =@@
-     }>;
+@@= skipped -9, +9 lines =@@
  }
  interface ValueAndKeyFields {
-+>ValueAndKeyFields : ValueAndKeyFields
-+
      fields: Array<{
 ->fields : { key: string | null; value: number | null; }[]
 +>fields : { key: string; value: number; }[]
  
          key: string | null;
  >key : string
-@@= skipped -12, +14 lines =@@
-     }>;
- }
- interface BugRepro {
-+>BugRepro : BugRepro
-+
-   dataType: ValueAndKeyFields & ValueOnlyFields;
- >dataType : ValueAndKeyFields & ValueOnlyFields
- }

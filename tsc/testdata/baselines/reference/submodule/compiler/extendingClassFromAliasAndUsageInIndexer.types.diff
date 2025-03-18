@@ -16,15 +16,15 @@
 +>moduleB : typeof import("extendingClassFromAliasAndUsageInIndexer_moduleB")
  
  interface IHasVisualizationModel {
-+>IHasVisualizationModel : IHasVisualizationModel
-+
      VisualizationModel: typeof Backbone.Model;
 ->VisualizationModel : typeof Backbone.Model
 ->Backbone.Model : typeof Backbone.Model
 ->Backbone : typeof Backbone
 ->Model : typeof Backbone.Model
 +>VisualizationModel : typeof Model
++>Backbone.Model : typeof Model
 +>Backbone : typeof import("extendingClassFromAliasAndUsageInIndexer_backbone")
++>Model : typeof Model
  }
  var moduleATyped: IHasVisualizationModel = moduleA;
  >moduleATyped : IHasVisualizationModel

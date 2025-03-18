@@ -3,7 +3,6 @@
 === circularResolvedSignature.ts ===
 declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
 >useState : <S>(initialState: () => S) => [S, (s: S) => void]
->S : S
 >initialState : () => S
 >s : S
 

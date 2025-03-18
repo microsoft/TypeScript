@@ -5,8 +5,6 @@
 // no errors expected below 
 
 interface Object {
->Object : Object
-
     [x: string]: Object;
 >x : string
 }
@@ -39,8 +37,6 @@ var r2: string = c[''];
 >'' : ""
 
 interface I {
->I : I
-
     bar: string;
 >bar : string
 

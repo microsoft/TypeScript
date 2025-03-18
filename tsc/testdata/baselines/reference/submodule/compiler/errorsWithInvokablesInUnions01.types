@@ -2,24 +2,16 @@
 
 === errorsWithInvokablesInUnions01.ts ===
 interface ConstructableA {
->ConstructableA : ConstructableA
-
   new(): { somePropA: any };
 >somePropA : any
 }
 
 interface IDirectiveLinkFn<TScope> {
->IDirectiveLinkFn : IDirectiveLinkFn<TScope>
->TScope : TScope
-
     (scope: TScope): void;
 >scope : TScope
 }
 
 interface IDirectivePrePost<TScope> {
->IDirectivePrePost : IDirectivePrePost<TScope>
->TScope : TScope
-
     pre?: IDirectiveLinkFn<TScope>;
 >pre : IDirectiveLinkFn<TScope>
 

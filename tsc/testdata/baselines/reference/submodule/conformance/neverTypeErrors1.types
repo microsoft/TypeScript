@@ -79,15 +79,11 @@ function f5() {
 // Repro from #46032
 
 interface A {
->A : A
-
     foo: "a";
 >foo : "a"
 }
 
 interface B {
->B : B
-
     foo: "b";
 >foo : "b"
 }

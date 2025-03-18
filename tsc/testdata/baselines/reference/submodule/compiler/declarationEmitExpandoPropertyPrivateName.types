@@ -2,8 +2,6 @@
 
 === a.ts ===
 interface I {}
->I : I
-
 export function f(): I { return null as I; }
 >f : () => I
 >null as I : I

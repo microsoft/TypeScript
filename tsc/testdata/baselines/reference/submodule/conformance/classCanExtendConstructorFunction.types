@@ -204,6 +204,7 @@ class Conestoga extends Wagon {
     static circle(others: (typeof Wagon)[]) {
 >circle : (others: { (numberOxen: any): void; circle: (wagons: any) => any; }[]) => number
 >others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
+>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
 
         return others.length
 >others.length : number

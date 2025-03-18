@@ -1,11 +1,6 @@
 --- old.contextuallyTypedOptionalProperty(exactoptionalpropertytypes=true).types
 +++ new.contextuallyTypedOptionalProperty(exactoptionalpropertytypes=true).types
-@@= skipped -4, +4 lines =@@
- 
- declare function match<T>(cb: (value: T) => boolean): T;
- >match : <T>(cb: (value: T) => boolean) => T
-+>T : T
- >cb : (value: T) => boolean
+@@= skipped -8, +8 lines =@@
  >value : T
  
  declare function foo(pos: { x?: number; y?: number }): boolean;
@@ -23,7 +18,7 @@
  >{ y: match(y => y > 0) } : { y: number; }
  >y : number
  >match(y => y > 0) : number
-@@= skipped -23, +24 lines =@@
+@@= skipped -19, +19 lines =@@
  >0 : 0
  
  declare function foo2(point: [number?]): boolean;

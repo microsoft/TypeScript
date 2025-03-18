@@ -1,42 +1,17 @@
 --- old.typeInferenceWithTupleType.types
 +++ new.typeInferenceWithTupleType.types
-@@= skipped -2, +2 lines =@@
- === typeInferenceWithTupleType.ts ===
- function combine<T, U>(x: T, y: U): [T, U] {
- >combine : <T, U>(x: T, y: U) => [T, U]
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -30, +32 lines =@@
- 
- function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
- >zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
-+>T : T
-+>U : U
- >array1 : T[]
- >array2 : U[]
- 
-@@= skipped -82, +84 lines =@@
- 
- declare function f1<T1, T2>(values: [T1[], T2[]]): T1;
- >f1 : <T1, T2>(values: [T1[], T2[]]) => T1
-+>T1 : T1
-+>T2 : T2
+@@= skipped -117, +117 lines =@@
  >values : [T1[], T2[]]
  
  declare function f2<T1, T2>(values: readonly [T1[], T2[]]): T1;
 ->f2 : <T1, T2>(values: readonly [T1[], T2[]]) => T1
 ->values : readonly [T1[], T2[]]
 +>f2 : <T1, T2>(values: [T1[], T2[]]) => T1
-+>T1 : T1
-+>T2 : T2
 +>values : [T1[], T2[]]
  
  let expected: "a";
  >expected : "a"
-@@= skipped -21, +25 lines =@@
+@@= skipped -18, +18 lines =@@
  >expected = f2(undefined as ["a"[], "b"[]]) : "a"
  >expected : "a"
  >f2(undefined as ["a"[], "b"[]]) : "a"

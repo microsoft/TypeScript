@@ -2,15 +2,11 @@
 
 === anyIsAssignableToVoid.ts ===
 interface P {
->P : P
-
     p: void;
 >p : void
 }
 
 interface Q extends P { // check assignability here. any is assignable to void.
->Q : Q
-
     p: any;
 >p : any
 }

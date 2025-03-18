@@ -1,25 +1,15 @@
 --- old.functionOverloadsOnGenericArity2.types
 +++ new.functionOverloadsOnGenericArity2.types
-@@= skipped -1, +1 lines =@@
- 
- === functionOverloadsOnGenericArity2.ts ===
- interface I {
-+>I : I
-+
-     then(p: string): string;
- >then : { (p: string): string; <U>(p: string): string; <U, T>(p: string): Date; }
+@@= skipped -6, +6 lines =@@
  >p : string
  
      then<U>(p: string): string;
 ->then : { (p: string): string; <U>(p: string): string; <U_1, T>(p: string): Date; }
 +>then : { (p: string): string; <U>(p: string): string; <U, T>(p: string): Date; }
-+>U : U
  >p : string
  
      then<U, T>(p: string): Date;
 ->then : { (p: string): string; <U_1>(p: string): string; <U, T>(p: string): Date; }
 +>then : { (p: string): string; <U>(p: string): string; <U, T>(p: string): Date; }
-+>U : U
-+>T : T
  >p : string
  }

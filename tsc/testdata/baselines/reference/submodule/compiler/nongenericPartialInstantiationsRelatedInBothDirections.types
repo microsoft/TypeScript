@@ -2,8 +2,6 @@
 
 === nongenericPartialInstantiationsRelatedInBothDirections.ts ===
 interface Foo {
->Foo : Foo
-
     a: number;
 >a : number
 
@@ -14,9 +12,6 @@ interface Foo {
 >bar : string
 }
 interface ObjectContaining<T> {
->ObjectContaining : ObjectContaining<T>
->T : T
-
   new (sample: Partial<T>): Partial<T>
 >sample : Partial<T>
 }

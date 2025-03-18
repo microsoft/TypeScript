@@ -2,13 +2,11 @@
 
 === prespecializedGenericMembers1.ts ===
 export interface IKitty {
->IKitty : IKitty
 
     }
 
 export class Cat<CatType extends IKitty> {
 >Cat : Cat<CatType>
->CatType : CatType
 
     constructor() {
     

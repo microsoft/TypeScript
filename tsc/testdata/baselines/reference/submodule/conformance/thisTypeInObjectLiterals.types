@@ -96,8 +96,6 @@ var i: number = mutuallyRecursive.start();
 >start : () => number
 
 interface I {
->I : I
-
     a: number;
 >a : number
 

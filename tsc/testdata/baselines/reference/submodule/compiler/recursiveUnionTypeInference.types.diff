@@ -1,20 +1,11 @@
 --- old.recursiveUnionTypeInference.types
 +++ new.recursiveUnionTypeInference.types
-@@= skipped -1, +1 lines =@@
- 
- === recursiveUnionTypeInference.ts ===
- interface Foo<T> {
-+>Foo : Foo<T>
-+>T : T
-+
-     x: T;
- >x : T
+@@= skipped -6, +6 lines =@@
  }
  
  function bar<T>(x: Foo<T> | string): T {
 ->bar : <T>(x: Foo<T> | string) => T
 +>bar : <T>(x: string | Foo<T>) => T
-+>T : T
  >x : string | Foo<T>
  
      return bar(x);

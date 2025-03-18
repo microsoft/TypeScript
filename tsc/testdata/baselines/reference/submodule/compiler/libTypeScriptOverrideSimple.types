@@ -2,7 +2,6 @@
 
 === /node_modules/@typescript/lib-dom/index.d.ts ===
 interface ABC { abc: string }
->ABC : ABC
 >abc : string
 
 === index.ts ===

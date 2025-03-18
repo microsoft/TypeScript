@@ -2,15 +2,11 @@
 
 === discriminatedUnionWithIndexSignature.ts ===
 export interface UnionAltA {
->UnionAltA : UnionAltA
-
     type?: 'text';
 >type : "text" | undefined
 }
 
 export interface UnionAltB {
->UnionAltB : UnionAltB
-
     type?: 'image' | 'video' | 'document';
 >type : "document" | "image" | "video" | undefined
 }

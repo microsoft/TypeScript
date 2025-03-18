@@ -1,15 +1,6 @@
 --- old.typePredicatesCanNarrowByDiscriminant.types
 +++ new.typePredicatesCanNarrowByDiscriminant.types
-@@= skipped -9, +9 lines =@@
- 
- declare function isOneOf<T, U extends T>(item: T, array: readonly U[]): item is U
- >isOneOf : <T, U extends T>(item: T, array: readonly U[]) => item is U
-+>T : T
-+>U : U
- >item : T
- >array : readonly U[]
- 
-@@= skipped -9, +11 lines =@@
+@@= skipped -18, +18 lines =@@
  >fruit.kind : "apple" | "banana" | "cherry"
  >fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
  >kind : "apple" | "banana" | "cherry"

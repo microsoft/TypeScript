@@ -2,25 +2,17 @@
 
 === overloadedConstructorFixesInferencesAppropriately.ts ===
 interface Box<T> {
->Box : Box<T>
->T : T
-
     v: T;
 >v : T
 }
 
 interface ErrorResult {
->ErrorResult : ErrorResult
-
     readonly error: true
 >error : true
 >true : true
 }
 
 interface AsyncLoaderProps<TResult extends {}> {
->AsyncLoaderProps : AsyncLoaderProps<TResult>
->TResult : TResult
-
     readonly asyncLoad: () => Box<TResult>;
 >asyncLoad : () => Box<TResult>
 
@@ -31,7 +23,6 @@ interface AsyncLoaderProps<TResult extends {}> {
 
 class AsyncLoader<TResult extends {}> {
 >AsyncLoader : AsyncLoader<TResult>
->TResult : TResult
 
     constructor(props: string, context: any);
 >props : string

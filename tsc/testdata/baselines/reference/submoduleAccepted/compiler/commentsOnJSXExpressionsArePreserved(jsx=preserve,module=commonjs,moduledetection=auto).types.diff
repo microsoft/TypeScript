@@ -1,15 +1,6 @@
 --- old.commentsOnJSXExpressionsArePreserved(jsx=preserve,module=commonjs,moduledetection=auto).types
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=preserve,module=commonjs,moduledetection=auto).types
-@@= skipped -2, +2 lines =@@
- === commentsOnJSXExpressionsArePreserved.tsx ===
- // file is intentionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
- namespace JSX {}
-+>JSX : any
-+
- class Component {
- >Component : Component
- 
-@@= skipped -7, +9 lines =@@
+@@= skipped -9, +9 lines =@@
  >render : () => any
  
          return <div>

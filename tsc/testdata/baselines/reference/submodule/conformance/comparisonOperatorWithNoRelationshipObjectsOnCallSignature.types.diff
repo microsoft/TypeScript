@@ -76,17 +76,15 @@
 ->a7 : { fn<T>(t: T): T; }
 +>a7 : { fn: <T>(t: T) => T; }
  >fn : <T>(t: T) => T
-+>T : T
  >t : T
  
  var b7: { fn<T>(t: T[]): T };
 ->b7 : { fn<T>(t: T[]): T; }
 +>b7 : { fn: <T>(t: T[]) => T; }
  >fn : <T>(t: T[]) => T
-+>T : T
  >t : T[]
  
- // operator <
+@@= skipped -71, +71 lines =@@
  var r1a1 = a1 < b1;
  >r1a1 : boolean
  >a1 < b1 : boolean

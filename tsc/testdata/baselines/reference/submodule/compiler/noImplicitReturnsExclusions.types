@@ -146,12 +146,8 @@ declare class HistoryItem {
 }
 
 interface Thenable<T> {
->Thenable : Thenable<T>
->T : T
-
   then<TResult>(
 >then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => TResult | Thenable<TResult> | undefined): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => void | undefined): Thenable<TResult>; }
->TResult : TResult
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : (value: T) => TResult | Thenable<TResult> | undefined
@@ -164,7 +160,6 @@ interface Thenable<T> {
   ): Thenable<TResult>;
   then<TResult>(
 >then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => TResult | Thenable<TResult> | undefined): Thenable<TResult>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult> | undefined, onrejected?: (reason: any) => void | undefined): Thenable<TResult>; }
->TResult : TResult
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : (value: T) => TResult | Thenable<TResult> | undefined
@@ -179,7 +174,6 @@ interface Thenable<T> {
 
 export declare function executeCommand<T = unknown>(
 >executeCommand : <T>(command: string, ...rest: any[]) => Thenable<T>
->T : T
 
   command: string,
 >command : string

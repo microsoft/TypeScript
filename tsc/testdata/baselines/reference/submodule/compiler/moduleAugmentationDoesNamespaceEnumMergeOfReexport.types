@@ -2,12 +2,8 @@
 
 === file.ts ===
 export namespace Root {
->Root : typeof Root
-
     // type-only NS
     export interface Foo {
->Foo : Foo
-
         x: number;
 >x : number
     }

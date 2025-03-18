@@ -1,22 +1,6 @@
 --- old.narrowByInstanceof.types
 +++ new.narrowByInstanceof.types
-@@= skipped -1, +1 lines =@@
- 
- === narrowByInstanceof.ts ===
- interface A { a: string }
-+>A : A
- >a : string
- 
- interface B { b: string }
-+>B : B
- >b : string
- 
- interface C { c: string }
-+>C : C
- >c : string
- 
- type AA = {
-@@= skipped -99, +102 lines =@@
+@@= skipped -100, +100 lines =@@
  >typeof o === "object" && o !== null && o instanceof Person : boolean
  >typeof o === "object" && o !== null : boolean
  >typeof o === "object" : boolean

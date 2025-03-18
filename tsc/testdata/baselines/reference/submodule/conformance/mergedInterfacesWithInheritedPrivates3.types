@@ -16,15 +16,11 @@ class C2 {
 }
 
 interface A extends C { // error
->A : A
-
     y: string;
 >y : string
 }
 
 interface A extends C2 { 
->A : A
-
     z: string;
 >z : string
 }
@@ -58,15 +54,11 @@ module M {
     }
 
     interface A extends C { // error, privates conflict
->A : A
-
         y: string;
 >y : string
     }
 
     interface A extends C2 {
->A : A
-
         z: string;
 >z : string
     }

@@ -19,20 +19,7 @@
  >Something : any
  
  === Something.ts ===
- export type Something<A> = { value: A }
- >Something : Something<A>
-+>A : A
- >value : A
- 
- export type SubType<A> = { value: A }
- >SubType : SubType<A>
-+>A : A
- >value : A
- 
- export declare function of<A>(value: A): Something<A>
- >of : <A>(value: A) => Something<A>
-+>A : A
- >value : A
+@@= skipped -25, +25 lines =@@
  
  === prelude.ts ===
  import * as S from "./Something"
@@ -45,6 +32,3 @@
  
  export type Something<A> = S.Something<A>
  >Something : Something<A>
-+>A : A
- >S : any
- 

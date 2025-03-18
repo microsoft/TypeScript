@@ -45,22 +45,7 @@
  >c : string
  
      declare let s: S;
-@@= skipped -157, +157 lines =@@
- >GH30170 : typeof GH30170
- 
-     interface Blue {
-+>Blue : Blue
-+
-         color: 'blue'
- >color : "blue"
-     }
-     interface Yellow {
-+>Yellow : Yellow
-+
-         color?: 'yellow',
- >color : "yellow"
-     }
-@@= skipped -12, +16 lines =@@
+@@= skipped -169, +169 lines =@@
  >val : Blue | Yellow
  
      function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
@@ -69,19 +54,7 @@
  >currentColor : "blue" | "yellow"
  
          return draw({ color: currentColor });
-@@= skipped -17, +17 lines =@@
- >GH12052 : typeof GH12052
- 
-     interface ILinearAxis { type: "linear"; }
-+>ILinearAxis : ILinearAxis
- >type : "linear"
- 
-     interface ICategoricalAxis { type: "categorical"; }
-+>ICategoricalAxis : ICategoricalAxis
- >type : "categorical"
- 
-     type IAxis = ILinearAxis | ICategoricalAxis;
-@@= skipped -43, +45 lines =@@
+@@= skipped -60, +60 lines =@@
  
      good.type = getAxisType();
  >good.type = getAxisType() : IAxisType
@@ -93,38 +66,7 @@
  >getAxisType() : IAxisType
  >getAxisType : () => IAxisType
  }
-@@= skipped -12, +12 lines =@@
- >GH18421 : typeof GH18421
- 
-     interface ThingTypeOne {
-+>ThingTypeOne : ThingTypeOne
-+
-         type: 'one';
- >type : "one"
-     }
- 
-     interface ThingTypeTwo {
-+>ThingTypeTwo : ThingTypeTwo
-+
-         type: 'two';
- >type : "two"
-     }
-@@= skipped -66, +70 lines =@@
- >GH20889 : typeof GH20889
- 
-     interface A1 {
-+>A1 : A1
-+
-         type: "A1";
- >type : "A1"
-     }
-     interface A2 {
-+>A2 : A2
-+
-         type: "A2";
- >type : "A2"
-     }
-@@= skipped -43, +47 lines =@@
+@@= skipped -121, +121 lines =@@
  
      const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
  >a : A

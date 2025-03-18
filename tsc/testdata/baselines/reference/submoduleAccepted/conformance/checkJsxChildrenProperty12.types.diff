@@ -8,12 +8,8 @@
 +>React : any
  
  interface ButtonProp {
-+>ButtonProp : ButtonProp
-+
      a: number,
- >a : number
- 
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  
  class Button extends React.Component<ButtonProp, any> {
  >Button : Button
@@ -62,15 +58,7 @@
  >div : any
  >div : any
  
-@@= skipped -27, +27 lines =@@
- }
- 
- interface InnerButtonProp {
-+>InnerButtonProp : InnerButtonProp
-+
- 	a: number
- >a : number
- }
+@@= skipped -33, +33 lines =@@
  
  class InnerButton extends React.Component<InnerButtonProp, any> {
  >InnerButton : InnerButton

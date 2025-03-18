@@ -43,11 +43,8 @@
 +>"./file1" : typeof foo
  
      interface A { a: number }
-+>A : A
  >a : number
- 
-     namespace B {
-@@= skipped -32, +33 lines =@@
+@@= skipped -32, +32 lines =@@
  
  === file3.ts ===
  import * as x from "./file1";

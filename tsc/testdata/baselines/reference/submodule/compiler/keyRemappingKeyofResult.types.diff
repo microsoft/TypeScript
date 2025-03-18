@@ -1,18 +1,7 @@
 --- old.keyRemappingKeyofResult.types
 +++ new.keyRemappingKeyofResult.types
-@@= skipped -20, +20 lines =@@
- 
- type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
- >Remapped : Remapped
-+>K : K
- 
- /* type Remapped = {
-     str: any;
-@@= skipped -28, +29 lines =@@
- // equivalently, with an unresolved generic (no `exclude` shenanigans, since conditions won't execute):
- function f<T>() {
+@@= skipped -50, +50 lines =@@
  >f : <T>() => void
-+>T : T
  
      type Orig = { [k: string]: any, str: any, [sym]: any } & T;
 ->Orig : { [k: string]: any; str: any; [sym]: any; } & T
@@ -20,17 +9,16 @@
  >k : string
  >str : any
  >[sym] : any
-@@= skipped -32, +33 lines =@@
+@@= skipped -30, +30 lines =@@
      // type Okay = string | number | typeof sym
      
      type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
 ->Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 +>Remapped : Remapped
-+>K : K
  
      /* type Remapped = {
          str: any;
-@@= skipped -9, +10 lines =@@
+@@= skipped -9, +9 lines =@@
      // no string index signature, right?
      
      type Oops = keyof Remapped;
@@ -54,10 +42,8 @@
  >"str" : "str"
  }
  
- // and another generic case with a _distributive_ mapping, to trigger a different branch in `getIndexType`
- function g<T>() {
+@@= skipped -21, +21 lines =@@
  >g : <T>() => void
-+>T : T
  
      type Orig = { [k: string]: any, str: any, [sym]: any } & T;
 ->Orig : { [k: string]: any; str: any; [sym]: any; } & T
@@ -65,27 +51,24 @@
  >k : string
  >str : any
  >[sym] : any
-@@= skipped -51, +52 lines =@@
+@@= skipped -30, +30 lines =@@
      // type Okay = string | number | typeof sym
  
      type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
 ->NonIndex : {} extends Record<T, any> ? never : T
 +>NonIndex : NonIndex<T>
-+>T : T
  
      type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
 ->DistributiveNonIndex : T extends unknown ? {} extends Record<T, any> ? never : T : never
 +>DistributiveNonIndex : DistributiveNonIndex<T>
-+>T : T
      
      type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
 ->Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 +>Remapped : Remapped
-+>K : K
  
      /* type Remapped = {
          str: any;
-@@= skipped -15, +18 lines =@@
+@@= skipped -15, +15 lines =@@
      // no string index signature, right?
      
      type Oops = keyof Remapped;

@@ -42,6 +42,8 @@ else {
 
     let e: (typeof x) | (typeof y) = c || d;
 >e : T
+>x : "bar"
+>y : T
 >c || d : T
 >c : "bar"
 >d : T

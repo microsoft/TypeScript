@@ -2,8 +2,6 @@
 
 === declFilePrivateMethodOverloads.ts ===
 interface IContext {
->IContext : IContext
-
     someMethod();
 >someMethod : () => any
 }

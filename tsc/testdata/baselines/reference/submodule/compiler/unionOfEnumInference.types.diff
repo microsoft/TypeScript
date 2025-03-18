@@ -1,19 +1,6 @@
 --- old.unionOfEnumInference.types
 +++ new.unionOfEnumInference.types
-@@= skipped -9, +9 lines =@@
- >C : Enum.C
- 
- interface Interface<T extends Enum> {
-+>Interface : Interface<T>
-+>T : T
-+
- 	type: T;
- >type : T
- }
- 
- function foo<T extends Enum>(x: Interface<T>) { }
- >foo : <T extends Enum>(x: Interface<T>) => void
-+>T : T
+@@= skipped -18, +18 lines =@@
  >x : Interface<T>
  
  function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
@@ -24,7 +11,7 @@
  >Enum : any
  >Enum : any
  >Enum : any
-@@= skipped -18, +22 lines =@@
+@@= skipped -9, +9 lines =@@
  	foo(x);
  >foo(x) : void
  >foo : <T extends Enum>(x: Interface<T>) => void

@@ -4,7 +4,6 @@
 var v = <T>() => 1;
 >v : <T>() => number
 ><T>() => 1 : <T>() => number
->T : T
 >1 : 1
 
 var v = <T>a;
@@ -15,14 +14,12 @@ var v = <T>a;
 var v = <T>(a) => 1;
 >v : <T>() => number
 ><T>(a) => 1 : <T>(a: any) => number
->T : T
 >a : any
 >1 : 1
 
 var v = <T>(a, b) => 1;
 >v : <T>() => number
 ><T>(a, b) => 1 : <T>(a: any, b: any) => number
->T : T
 >a : any
 >b : any
 >1 : 1
@@ -30,7 +27,6 @@ var v = <T>(a, b) => 1;
 var v = <T>(a = 1, b = 2) => 1;
 >v : <T>() => number
 ><T>(a = 1, b = 2) => 1 : <T>(a?: number, b?: number) => number
->T : T
 >a : number
 >1 : 1
 >b : number

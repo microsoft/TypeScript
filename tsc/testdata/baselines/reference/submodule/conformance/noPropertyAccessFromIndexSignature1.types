@@ -2,22 +2,16 @@
 
 === noPropertyAccessFromIndexSignature1.ts ===
 interface A {
->A : A
-
     foo: string
 >foo : string
 }
 
 interface B {
->B : B
-
     [k: string]: string
 >k : string
 }
 
 interface C {
->C : C
-
     foo: string
 >foo : string
 

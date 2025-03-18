@@ -3,7 +3,6 @@
 === declarationEmitTypeParamMergedWithPrivate.ts ===
 export class Test<T> {
 >Test : Test<T>
->T : T
 
     private get T(): T {
 >T : T

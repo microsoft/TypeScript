@@ -71,19 +71,3 @@
  >m : { title: string; yearReleased: number; }
  >title : undefined
  >undefined : undefined
- 
- interface Fields {
-+>Fields : Fields
-+
-     foo: number;
- >foo : number
- 
-@@= skipped -13, +15 lines =@@
- >bar : string
- }
- interface NearlyPartialFields {
-+>NearlyPartialFields : NearlyPartialFields
-+
-     foo: number | undefined;
- >foo : number | undefined
- 

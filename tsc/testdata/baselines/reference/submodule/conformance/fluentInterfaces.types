@@ -2,20 +2,14 @@
 
 === fluentInterfaces.ts ===
 interface A {
->A : A
-
     foo(): this;
 >foo : () => this
 }
 interface B extends A {
->B : B
-
     bar(): this;
 >bar : () => this
 }
 interface C extends B {
->C : C
-
     baz(): this;
 >baz : () => this
 }

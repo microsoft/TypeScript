@@ -24,13 +24,7 @@
  
  // error, 'sn' is optional in source, required in target
  
- // assignability as target
- interface Bool { b: boolean };
-+>Bool : Bool
- >b : boolean
- 
- interface Str { s: string };
-+>Str : Str
+@@= skipped -24, +24 lines =@@
  >s : string
  
  let spread = { ...{ b: true }, ...{s: "foo" } };
@@ -41,7 +35,7 @@
  >{ b: true } : { b: boolean; }
  >b : boolean
  >true : true
-@@= skipped -35, +37 lines =@@
+@@= skipped -11, +11 lines =@@
  
  spread = { s: "foo" };  // error, missing 'b'
  >spread = { s: "foo" } : { s: string; }

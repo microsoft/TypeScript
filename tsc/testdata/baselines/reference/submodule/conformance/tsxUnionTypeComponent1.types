@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface ComponentProps {
->ComponentProps : ComponentProps
-
     AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
 >AnyComponent : any
 >React : any

@@ -1,70 +1,11 @@
 --- old.functionConstraintSatisfaction2.types
 +++ new.functionConstraintSatisfaction2.types
-@@= skipped -4, +4 lines =@@
- 
- function foo<T extends Function>(x: T): T { return x; }
- >foo : <T extends Function>(x: T) => T
-+>T : T
- >x : T
- >x : T
- 
-@@= skipped -22, +23 lines =@@
- 
- function foo2<T extends (x: string) => string>(x: T): T { return x; }
- >foo2 : <T extends (x: string) => string>(x: T) => T
-+>T : T
- >x : string
- >x : T
- >x : T
-@@= skipped -17, +18 lines =@@
- 
- class C2<T> {
- >C2 : C2<T>
-+>T : T
- 
-     foo: T;
- >foo : T
-@@= skipped -7, +8 lines =@@
- 
- var b2: { new <T>(x: T): T };
- >b2 : new <T>(x: T) => T
-+>T : T
- >x : T
- 
- var r = foo2(new Function());
-@@= skipped -34, +35 lines =@@
- >foo2(<U>(x: U) => x) : <U>(x: U) => U
- >foo2 : <T extends (x: string) => string>(x: T) => T
- ><U>(x: U) => x : <U>(x: U) => U
-+>U : U
- >x : U
- >x : U
- 
-@@= skipped -8, +9 lines =@@
- >foo2(<U, V>(x: U, y: V) => x) : (x: string) => string
- >foo2 : <T extends (x: string) => string>(x: T) => T
- ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
-+>U : U
-+>V : V
- >x : U
- >y : V
- >x : U
-@@= skipped -17, +19 lines =@@
- >b2 : new <T>(x: T) => T
- 
- interface F2 extends Function { foo: string; }
-+>F2 : F2
- >foo : string
- 
- var f2: F2;
-@@= skipped -12, +13 lines =@@
+@@= skipped -121, +121 lines =@@
  >f2 : F2
  
  function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 ->fff : <T extends { (): void; }, U extends T>(x: T, y: U) => void
 +>fff : <T extends () => void, U extends T>(x: T, y: U) => void
-+>T : T
-+>U : U
  >x : T
  >y : U
  

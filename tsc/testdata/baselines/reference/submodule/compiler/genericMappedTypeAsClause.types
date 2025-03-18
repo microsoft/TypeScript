@@ -14,11 +14,8 @@ type Model = {
 
 type MappedModel<Suffix extends string> = {
 >MappedModel : MappedModel<Suffix>
->Suffix : Suffix
 
     [K in keyof Model as `${K}${Suffix}`]: Model[K];
->K : K
-
 };
 
 const foo1: MappedModel<'Foo'> = { aFoo: 'test', bFoo: 42 };
@@ -37,7 +34,6 @@ const foo2: MappedModel<'Foo'> = { bFoo: 'bar' };  // Error
 
 function f1<T extends string>() {
 >f1 : <T extends string>() => void
->T : T
 
     const x1: MappedModel<T> = 42;  // Error
 >x1 : MappedModel<T>
@@ -75,12 +71,6 @@ function f1<T extends string>() {
 
 type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
 >RemapRecord : RemapRecord<K, V>
->K : K
->V : V
->_ : _
 
 interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error
->RecordInterface2 : RecordInterface2<K, V>
->K : K
->V : V
 

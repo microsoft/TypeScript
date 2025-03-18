@@ -2,8 +2,6 @@
 
 === contextualTypeObjectSpreadExpression.ts ===
 interface I {
->I : I
-
     a: "a";
 >a : "a"
 }

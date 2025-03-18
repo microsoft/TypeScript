@@ -2,8 +2,6 @@
 
 === genericArrayWithoutTypeAnnotation.ts ===
 interface IFoo<T>{
->IFoo : IFoo<T>
->T : T
 }
 class Bar {
 >Bar : Bar

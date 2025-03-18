@@ -5,12 +5,9 @@
 
 declare function test1<T>(arg: {
 >test1 : <T>(arg: { [K in keyof T]: T[K] }) => T
->T : T
 >arg : { [K in keyof T]: T[K] }
 
   [K in keyof T]: T[K];
->K : K
-
 }): T;
 const result1 = test1(["foo", 42]);
 >result1 : [string, number]
@@ -22,12 +19,9 @@ const result1 = test1(["foo", 42]);
 
 declare function test2<T extends readonly unknown[]>(arg: {
 >test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K] }) => T
->T : T
 >arg : { [K in keyof T]: T[K] }
 
   [K in keyof T]: T[K];
->K : K
-
 }): T;
 const result2 = test2(["foo", 42]);
 >result2 : [string, number]
@@ -42,15 +36,11 @@ type Schema = Record<string, unknown> | readonly unknown[];
 
 type Definition<T> = {
 >Definition : Definition<T>
->T : T
 
   [K in keyof T]: (() => T[K]) | Definition<T[K]>;
->K : K
-
 };
 declare function create<T extends Schema>(definition: Definition<T>): T;
 >create : <T extends Schema>(definition: Definition<T>) => T
->T : T
 >definition : Definition<T>
 
 const created1 = create([() => 1, [() => ""]]);
@@ -84,8 +74,6 @@ const created2 = create({
 });
 
 interface CompilerOptions {
->CompilerOptions : CompilerOptions
-
   allowUnreachableCode?: boolean;
 >allowUnreachableCode : boolean | undefined
 
@@ -97,20 +85,14 @@ interface CompilerOptions {
 }
 type KeepLiteralStrings<T extends string[]> = {
 >KeepLiteralStrings : KeepLiteralStrings<T>
->T : T
 
   [K in keyof T]: T[K];
->K : K
-
 };
 declare function test4<T extends Record<string, string[]>>(obj: {
 >test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; } }) => T
->T : T
 >obj : { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; } }
 
   [K in keyof T & keyof CompilerOptions]: {
->K : K
-
     dependencies: KeepLiteralStrings<T[K]>;
 >dependencies : KeepLiteralStrings<T[K]>
 

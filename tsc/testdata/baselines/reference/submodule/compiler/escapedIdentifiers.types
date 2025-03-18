@@ -144,14 +144,10 @@ classType2Object2.foo2 = 2;
 
 // interfaces
 interface interfaceType1 { 
->interfaceType1 : interfaceType1
-
     bar1: number;
 >bar1 : number
 }
 interface interfaceType\u0032 { 
->interfaceType\u0032 : interfaceType2
-
     bar2: number;
 >bar2 : number
 }

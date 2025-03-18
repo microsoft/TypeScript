@@ -22,8 +22,6 @@ class D {
 }
 
 interface IB {
->IB : IB
-
     static [s: string]: number;
 >s : string
 

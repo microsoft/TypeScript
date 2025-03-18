@@ -5,8 +5,6 @@ declare namespace Foo {
 >Foo : typeof Foo
 
     export interface Bar {}
->Bar : Bar
-
     export function f(): Bar;
 >f : () => Bar
 }

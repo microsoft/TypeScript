@@ -7,12 +7,9 @@
 ->forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
 ->matched : { [key in keyof T]: key; }
 +>forceMatch : <T>(matched: { [key in keyof T]: key }) => void
-+>T : T
 +>matched : { [key in keyof T]: key }
  
    [key in keyof T]: key;
-+>key : key
-+
  }): void;
  
  forceMatch({
@@ -22,22 +19,18 @@
  >{  [testD()]: "d",} : { d: "d"; }
  
    [testD()]: "d",
-@@= skipped -20, +23 lines =@@
+@@= skipped -20, +20 lines =@@
  });
  
  declare function forceMatch2<T>(matched: {
 ->forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
 ->matched : { [key in keyof T]: ({ key }: { key: key; }) => void; }
 +>forceMatch2 : <T>(matched: { [key in keyof T]: (__0: { key: key; }) => void }) => void
-+>T : T
 +>matched : { [key in keyof T]: (__0: { key: key; }) => void }
  
    [key in keyof T]: ({ key }: { key: key }) => void;
  >key : key
- >key : key
-+>key : key
- 
- }): void;
+@@= skipped -11, +11 lines =@@
  
  forceMatch2({
  >forceMatch2({  [testD()]: ({ key }) => {},}) : void
@@ -56,19 +49,3 @@
  >key : "d"
  
  });
-@@= skipped -35, +37 lines =@@
- >Mapped : Mapped
- 
-   [prop in keyof Original]: (arg: Original[prop]) => Original[prop]
-+>prop : prop
- >arg : Original[prop]
- }
- 
-@@= skipped -8, +9 lines =@@
- ><propName extends string>(propName: propName): propName => propName : <propName extends string>(propName: propName) => propName
- >propName : propName
- >propName : propName
-+>propName : propName
- 
- const unexpectedlyFailingExample: Mapped = {
- >unexpectedlyFailingExample : Mapped

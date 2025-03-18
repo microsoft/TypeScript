@@ -33,19 +33,3 @@
  >x : string
  >x : number
  
- var e: typeof a[];
- >e : string[]
-->a : string
- 
- var e: (typeof a)[];
- >e : string[]
-->a : string
- 
- var f: (string) => string;
- >f : (string: any) => string
-@@= skipped -48, +46 lines =@@
- 
- var g: [(string), (((typeof a)))];
- >g : [string, string]
-->a : string
- 

@@ -20,6 +20,7 @@ import { create } from "package-a";
 
 export declare function invoke(): ReturnType<typeof create>;
 >invoke : () => Foo
+>create : () => Foo
 
 === workspace/packageC/index.ts ===
 import * as pkg from "package-b";

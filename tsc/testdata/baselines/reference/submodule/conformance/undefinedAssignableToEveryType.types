@@ -11,8 +11,6 @@ var ac: C;
 >ac : C
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
@@ -97,7 +95,6 @@ var n: { foo: string } = undefined;
 
 var o: <T>(x: T) => T = undefined;
 >o : <T>(x: T) => T
->T : T
 >x : T
 >undefined : undefined
 
@@ -111,9 +108,6 @@ var q: String = undefined;
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
 >x : T
 >y : U
 >z : V

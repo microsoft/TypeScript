@@ -1,21 +1,6 @@
 --- old.contextualTypeShouldBeLiteral.types
 +++ new.contextualTypeShouldBeLiteral.types
-@@= skipped -1, +1 lines =@@
- 
- === contextualTypeShouldBeLiteral.ts ===
- interface X {
-+>X : X
-+
-     type: 'x';
- >type : "x"
- 
-@@= skipped -11, +13 lines =@@
- }
- 
- interface Y {
-+>Y : Y
-+
-     type: 'y';
+@@= skipped -16, +16 lines =@@
  >type : "y"
  
      value: 'none' | 'done';
@@ -24,7 +9,7 @@
  
      method(): void;
  >method : () => void
-@@= skipped -17, +19 lines =@@
+@@= skipped -13, +13 lines =@@
  foo({
  >foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
  >foo : (bar: X | Y) => void
@@ -45,19 +30,7 @@
      }
  });
  
- interface X2 {
-+>X2 : X2
-+
-     type1: 'x';
- >type1 : "x"
- 
-@@= skipped -18, +20 lines =@@
- }
- 
- interface Y2 {
-+>Y2 : Y2
-+
-     type2: 'y';
+@@= skipped -22, +22 lines =@@
  >type2 : "y"
  
      value: 'none' | 'done';
@@ -66,7 +39,7 @@
  
      method(): void;
  >method : () => void
-@@= skipped -17, +19 lines =@@
+@@= skipped -13, +13 lines =@@
  foo2({
  >foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
  >foo2 : (bar: X2 | Y2) => void
@@ -92,40 +65,7 @@
      }
  });
  
- interface X3 {
-+>X3 : X3
-+
-     type: 'x';
- >type : "x"
- 
-@@= skipped -21, +23 lines =@@
- }
- 
- interface Y3 {
-+>Y3 : Y3
-+
-     type: 'y';
- >type : "y"
- 
-@@= skipped -33, +35 lines =@@
- 
- 
- interface LikeA {
-+>LikeA : LikeA
-+
-     x: 'x';
- >x : "x"
- 
-@@= skipped -14, +16 lines =@@
- }
- 
- interface LikeB {
-+>LikeB : LikeB
-+
-     x: 'xx';
- >x : "xx"
- 
-@@= skipped -15, +17 lines =@@
+@@= skipped -83, +83 lines =@@
  
  let xyz: LikeA | LikeB = {
  >xyz : LikeA | LikeB
@@ -134,21 +74,3 @@
  
      x: 'x',
  >x : "x"
-@@= skipped -43, +43 lines =@@
- // Repro from #29168
- 
- interface TestObject {
-+>TestObject : TestObject
-+
-   type?: 'object';
- >type : "object" | undefined
- 
-@@= skipped -13, +15 lines =@@
- }
- 
- interface TestString {
-+>TestString : TestString
-+
-   type: 'string';
- >type : "string"
- }

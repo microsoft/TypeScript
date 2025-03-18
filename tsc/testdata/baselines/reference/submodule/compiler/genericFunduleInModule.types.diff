@@ -1,14 +1,6 @@
 --- old.genericFunduleInModule.types
 +++ new.genericFunduleInModule.types
-@@= skipped -5, +5 lines =@@
- 
-     export function B<T>(x: T) { return x; }
- >B : typeof B
-+>T : T
- >x : T
- >x : T
- 
-@@= skipped -13, +14 lines =@@
+@@= skipped -18, +18 lines =@@
  }
  
  var b: A.B;

@@ -2,24 +2,18 @@
 
 === selfReferencingTypeReferenceInference.ts ===
 interface Box<T> {
->Box : Box<T>
->T : T
-
     __: T
 >__ : T
 }
 
 type Recursive<T> =
 >Recursive : Recursive<T>
->T : T
 
     | T
     | Box<Recursive<T>>
 
 type InferRecursive<T> = T extends Recursive<infer R> ? R : "never!"
 >InferRecursive : InferRecursive<T>
->T : T
->R : R
 
 // the type we are testing with
 type t1 = Box<string | Box<number | boolean>>

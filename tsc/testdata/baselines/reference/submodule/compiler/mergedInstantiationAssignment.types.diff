@@ -1,14 +1,6 @@
 --- old.mergedInstantiationAssignment.types
 +++ new.mergedInstantiationAssignment.types
-@@= skipped -4, +4 lines =@@
- 
- class GenericObject<T = number> {
- >GenericObject : GenericObject<T>
-+>T : T
- 
-   set x(x: T) {}
- >x : T
-@@= skipped -7, +8 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  const v1 = new GenericObject() as GenericObject &
@@ -28,12 +20,7 @@
  >x : number
  >432 : 432
  
- class GenericObjectWithoutSetter<T = number> {
- >GenericObjectWithoutSetter : GenericObjectWithoutSetter<T>
-+>T : T
- 
-   declare x: T;
- >x : T
+@@= skipped -12, +12 lines =@@
  }
  
  const v2 = new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &
@@ -44,7 +31,7 @@
  >new GenericObjectWithoutSetter() : GenericObjectWithoutSetter<number>
  >GenericObjectWithoutSetter : typeof GenericObjectWithoutSetter
  
-@@= skipped -24, +25 lines =@@
+@@= skipped -12, +12 lines =@@
  v2.x = 42;
  >v2.x = 42 : 42
  >v2.x : number

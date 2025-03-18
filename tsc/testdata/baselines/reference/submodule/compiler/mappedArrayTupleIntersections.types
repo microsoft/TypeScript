@@ -3,13 +3,10 @@
 === mappedArrayTupleIntersections.ts ===
 type Box<T> = { value: T };
 >Box : Box<T>
->T : T
 >value : T
 
 type Boxify<T> = { [K in keyof T]: Box<T[K]> };
 >Boxify : Boxify<T>
->T : T
->K : K
 
 type T1 = Boxify<string[]>;
 >T1 : Box<string>[]
@@ -31,15 +28,11 @@ type T5 = Boxify<string[] & { x: string }>;
 
 type MustBeArray<T extends any[]> = T;
 >MustBeArray : T
->T : T
 
 type Hmm<T extends any[]> = T extends number[] ?
 >Hmm : Hmm<T>
->T : T
 
     MustBeArray<{ [I in keyof T]: 1 }> :
->I : I
-
     never;
 
 type X = Hmm<[3, 4, 5]>;

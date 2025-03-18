@@ -1,21 +1,15 @@
 --- old.discriminateWithOptionalProperty2(exactoptionalpropertytypes=false).types
 +++ new.discriminateWithOptionalProperty2(exactoptionalpropertytypes=false).types
-@@= skipped -4, +4 lines =@@
- 
- type PromiseOrValue<T> = Promise<T> | T;
+@@= skipped -6, +6 lines =@@
  >PromiseOrValue : PromiseOrValue<T>
-+>T : T
  
  function mapAsyncIterable<T, U, R = undefined>(
 ->mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
 +>mapAsyncIterable : <T, U, R>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
-+>T : T
-+>U : U
-+>R : R
  
    iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
  >iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>
-@@= skipped -15, +19 lines =@@
+@@= skipped -13, +13 lines =@@
    const iterator = iterable[Symbol.asyncIterator]();
  >iterator : AsyncIterator<T, R, undefined>
  >iterable[Symbol.asyncIterator]() : AsyncIterator<T, R, undefined>

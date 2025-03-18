@@ -2,9 +2,6 @@
 
 === inferentialTypingUsingApparentType3.ts ===
 interface Field<T> {
->Field : Field<T>
->T : T
-
     clean(input: T): T
 >clean : (input: T) => T
 >input : T
@@ -36,8 +33,6 @@ class NumberField implements Field<number> {
 
 class ObjectField<A, T extends { [name: string]: Field<any> }> {
 >ObjectField : ObjectField<A, T>
->A : A
->T : T
 >name : string
 
     constructor(public fields: T) { }

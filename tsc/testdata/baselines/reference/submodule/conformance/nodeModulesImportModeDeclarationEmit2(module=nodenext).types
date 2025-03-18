@@ -8,7 +8,6 @@ import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" 
 >ImportInterface : any
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
->LocalInterface : LocalInterface
 
 import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
 >RequireInterface : any
@@ -19,7 +18,6 @@ import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "imp
 >Imp : any
 
 export interface Loc extends Req, Imp {}
->Loc : Loc
 
 export type { RequireInterface } from "pkg" assert { "resolution-mode": "require" };
 >RequireInterface : RequireInterface
@@ -28,6 +26,5 @@ export type { ImportInterface } from "pkg" assert { "resolution-mode": "import" 
 >ImportInterface : any
 
 === /node_modules/pkg/require.d.ts ===
-export interface RequireInterface {}
->RequireInterface : RequireInterface
 
+export interface RequireInterface {}

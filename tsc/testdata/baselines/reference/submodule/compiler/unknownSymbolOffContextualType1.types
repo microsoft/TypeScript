@@ -5,15 +5,11 @@ declare var document: Document;
 >document : Document
 
 interface Document {
->Document : Document
-
     getElementById(elementId: string): HTMLElement;
 >getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >elementId : string
 }
 interface HTMLElement {
->HTMLElement : HTMLElement
-
     isDisabled: boolean;
 >isDisabled : boolean
 }

@@ -3,8 +3,6 @@
 === typeParameterFixingWithContextSensitiveArguments5.ts ===
 function f<T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U): [T, U] { return [t1, pf2(t1)]; }
 >f : <T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U) => [T, U]
->T : T
->U : U
 >t1 : T
 >u1 : U
 >pf1 : (u2: U) => T
@@ -18,11 +16,9 @@ function f<T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U): [T, U] { r
 >t1 : T
 
 interface A { a: A; }
->A : A
 >a : A
 
 interface B extends A { b: any; }
->B : B
 >b : any
 
 var a: A, b: B;

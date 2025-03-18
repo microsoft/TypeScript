@@ -3,7 +3,6 @@
 === discriminateWithDivergentAccessors1.ts ===
 type WeirdoBox<T> =
 >WeirdoBox : WeirdoBox<T>
->T : T
 
   | { get done(): false; set done(v: T | null) }
 >done : false
@@ -34,7 +33,6 @@ if (weirdoBox.done) {
 
 type WeirdoBox2<T> =
 >WeirdoBox2 : WeirdoBox2<T>
->T : T
 
   | { get done(): false; set done(v: T | null) }
 >done : false

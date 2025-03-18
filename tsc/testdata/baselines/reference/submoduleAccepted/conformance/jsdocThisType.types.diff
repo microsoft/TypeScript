@@ -1,15 +1,6 @@
 --- old.jsdocThisType.types
 +++ new.jsdocThisType.types
-@@= skipped -1, +1 lines =@@
- 
- === /types.d.ts ===
- export interface Foo {
-+>Foo : Foo
-+
-     foo: () => void;
- >foo : () => void
- }
-@@= skipped -11, +13 lines =@@
+@@= skipped -12, +12 lines =@@
  === /a.js ===
  /** @type {import('./types').M} */
  export const f1 = function() {

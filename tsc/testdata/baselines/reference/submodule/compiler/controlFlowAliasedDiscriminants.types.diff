@@ -1,14 +1,6 @@
 --- old.controlFlowAliasedDiscriminants.types
 +++ new.controlFlowAliasedDiscriminants.types
-@@= skipped -2, +2 lines =@@
- === controlFlowAliasedDiscriminants.ts ===
- type UseQueryResult<T> = {
- >UseQueryResult : UseQueryResult<T>
-+>T : T
- 
-     isSuccess: false;
- >isSuccess : false
-@@= skipped -68, +69 lines =@@
+@@= skipped -70, +70 lines =@@
  
      data1.toExponential();  // should ok
  >data1.toExponential() : string

@@ -3,7 +3,6 @@
 === genericDerivedTypeWithSpecializedBase2.ts ===
 class A<T extends { length: number }> {
 >A : A<T>
->T : T
 >length : number
 
     x: T;
@@ -12,7 +11,6 @@ class A<T extends { length: number }> {
 
 class B<U> extends A<string> {
 >B : B<U>
->U : U
 >A : A<string>
 
     y: U;

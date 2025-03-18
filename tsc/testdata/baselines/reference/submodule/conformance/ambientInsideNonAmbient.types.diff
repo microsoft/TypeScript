@@ -8,13 +8,4 @@
 +>E : M.E
  
      export declare module M { }
-+>M : any
- }
- 
- module M2 {
-@@= skipped -21, +22 lines =@@
- >E : E
- 
-     declare module M { }
-+>M : any
  }

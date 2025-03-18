@@ -10,8 +10,6 @@
 // E.g., C1M1A1 = "Class 1, Method 1, Argument 1"
 
 interface I1 {
->I1 : I1
-
     C1M1():number;
 >C1M1 : () => number
 

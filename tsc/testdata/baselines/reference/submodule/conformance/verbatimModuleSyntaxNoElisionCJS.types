@@ -2,8 +2,6 @@
 
 === /a.ts ===
 interface I {}
->I : I
-
 export = I;
 >I : I
 
@@ -13,8 +11,6 @@ import I = require("./a");
 
 === /c.ts ===
 interface I {}
->I : I
-
 namespace I {
 >I : typeof I
 
@@ -37,8 +33,6 @@ export = J;
 
 === /e.d.ts ===
 interface I {}
->I : I
-
 export = I;
 >I : I
 

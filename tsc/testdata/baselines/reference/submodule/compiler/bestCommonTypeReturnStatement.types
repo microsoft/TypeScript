@@ -2,9 +2,6 @@
 
 === bestCommonTypeReturnStatement.ts ===
 interface IPromise<T> {
->IPromise : IPromise<T>
->T : T
-
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
 >then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise<any>
 >successCallback : (promiseValue: T) => any

@@ -103,8 +103,6 @@ c.foo2(1, 2);
 >2 : 2
 
 interface I {
->I : I
-
     (x?: number);
 >x : number
 

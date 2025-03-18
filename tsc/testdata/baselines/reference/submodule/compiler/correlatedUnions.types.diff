@@ -9,24 +9,7 @@
  === correlatedUnions.ts ===
  // Various repros from #30581
  
-@@= skipped -13, +10 lines =@@
- 
- type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = { [P in K]: {
- >UnionRecord : UnionRecord<K>
-+>K : K
-+>P : P
- 
-     kind: P,
- >kind : P
-@@= skipped -15, +17 lines =@@
- 
- function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>) {
- >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
-+>K : K
- >rec : UnionRecord<K>
- 
-     rec.f(rec.v);
-@@= skipped -40, +41 lines =@@
+@@= skipped -68, +65 lines =@@
  >v => v.toExponential() : (v: number) => string
  >v : number
  >v.toExponential() : string
@@ -38,42 +21,7 @@
  
  // --------
  
-@@= skipped -27, +27 lines =@@
- 
- type FormField<K extends keyof FieldMap> = { type: K, data: FieldMap[K] };
- >FormField : FormField<K>
-+>K : K
- >type : K
- >data : FieldMap[K]
- 
- type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
- >RenderFunc : RenderFunc<K>
-+>K : K
- >props : FieldMap[K]
- 
- type RenderFuncMap = { [K in keyof FieldMap]: RenderFunc<K> };
- >RenderFuncMap : RenderFuncMap
-+>K : K
- 
- function renderTextField(props: TextFieldData) {}
- >renderTextField : (props: TextFieldData) => void
-@@= skipped -34, +37 lines =@@
- 
- function renderField<K extends keyof FieldMap>(field: FormField<K>) {
- >renderField : <K extends keyof FieldMap>(field: FormField<K>) => void
-+>K : K
- >field : FormField<K>
- 
-     const renderFn = renderFuncs[field.type];
-@@= skipped -36, +37 lines =@@
- 
- type HandlerMap = { [P in Keys]: (x: TypeMap[P]) => void };
- >HandlerMap : HandlerMap
-+>P : P
- >x : TypeMap[P]
- 
- const handlers: HandlerMap = {
-@@= skipped -19, +20 lines =@@
+@@= skipped -116, +116 lines =@@
  >n => n.toFixed(2) : (n: number) => string
  >n : number
  >n.toFixed(2) : string
@@ -85,25 +33,16 @@
  >2 : 2
  
  };
- 
- type DataEntry<K extends Keys = Keys> = { [P in K]: {
- >DataEntry : DataEntry<K>
-+>K : K
-+>P : P
- 
-     type: P,
- >type : P
-@@= skipped -46, +48 lines =@@
+@@= skipped -46, +46 lines =@@
  ];
  
  function process<K extends Keys>(data: DataEntry<K>[]) {
 ->process : <K extends Keys>(data: DataEntry<K>[]) => void
 +>process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
-+>K : K
  >data : DataEntry<K>[]
  
      data.forEach(block => {
-@@= skipped -34, +35 lines =@@
+@@= skipped -34, +34 lines =@@
  
  process(data);
  >process(data) : void
@@ -118,24 +57,16 @@
  >[{ type: 'foo', data: 'abc' }] : { type: "foo"; data: string; }[]
  >{ type: 'foo', data: 'abc' } : { type: "foo"; data: string; }
  >type : "foo"
-@@= skipped -22, +22 lines =@@
- 
- type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, LetterMap[P]>, caller: (x: Record<P, LetterMap[P]>) => void } }[K];
- >LetterCaller : LetterCaller<K>
-+>K : K
-+>P : P
- >letter : Record<P, LetterMap[P]>
- >caller : (x: Record<P, LetterMap[P]>) => void
+@@= skipped -27, +27 lines =@@
  >x : Record<P, LetterMap[P]>
  
  function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void {
 ->call : <K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>) => void
 +>call : <K extends keyof LetterMap>(__0: LetterCaller<K>) => void
-+>K : K
  >letter : Record<K, LetterMap[K]>
  >caller : (x: Record<K, LetterMap[K]>) => void
  
-@@= skipped -40, +43 lines =@@
+@@= skipped -35, +35 lines =@@
  
  call(xx);
  >call(xx) : void
@@ -144,23 +75,7 @@
  >xx : { letter: A; caller: ACaller; } | { letter: B; caller: BCaller; }
  
  // --------
- 
- type Ev<K extends keyof DocumentEventMap> = { [P in K]: {
- >Ev : Ev<K>
-+>K : K
-+>P : P
- 
-     readonly name: P;
- >name : P
-@@= skipped -22, +24 lines =@@
- 
- function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
- >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
-+>K : K
- >events : Ev<K>[]
- 
-     for (const event of events) {
-@@= skipped -8, +9 lines =@@
+@@= skipped -30, +30 lines =@@
  
          document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
  >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
@@ -183,11 +98,10 @@
  function createEventListener<K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>): Ev<K> {
 ->createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
 +>createEventListener : <K extends keyof DocumentEventMap>(__0: Ev<K>) => Ev<K>
-+>K : K
  >name : K
  >once : boolean
  >false : false
-@@= skipped -14, +15 lines =@@
+@@= skipped -14, +14 lines =@@
  }
  
  const clickEvent = createEventListener({
@@ -246,18 +160,16 @@
 ->funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
 ->args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[P]
 +>funs : { concat: (...args: [a: string, b: string, c: string]) => void; sum: (...args: [a: number, b: number]) => void; }
-+>P : P
 +>args : ArgMap[P]
  >{        sum: (a, b) => a + b,        concat: (a, b, c) => a + b + c    } : { sum: (a: number, b: number) => number; concat: (a: string, b: string, c: string) => string; }
  
          sum: (a, b) => a + b,
-@@= skipped -29, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  >c : string
      }
      function apply<K extends Keys>(funKey: K, ...args: ArgMap[K]) {
 ->apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
 +>apply : <K extends keyof ArgMap>(funKey: K, ...args: ArgMap[K]) => void
-+>K : K
  >funKey : K
 ->args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]
 +>args : ArgMap[K]
@@ -287,7 +199,7 @@
  >'sum' : "sum"
  >1 : 1
  >2 : 2
-@@= skipped -27, +28 lines =@@
+@@= skipped -27, +27 lines =@@
      const x2 = apply('concat', 'str1', 'str2', 'str3' )
  >x2 : void
  >apply('concat', 'str1', 'str2', 'str3' ) : void
@@ -296,47 +208,13 @@
  >'concat' : "concat"
  >'str1' : "str1"
  >'str2' : "str2"
-@@= skipped -16, +16 lines =@@
- 
- type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
- >Func : Func<K>
-+>K : K
- >x : ArgMap[K]
- 
- type Funcs = { [K in keyof ArgMap]: Func<K> };
- >Funcs : Funcs
-+>K : K
- 
- function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
- >f1 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
-+>K : K
- >funcs : Funcs
- >key : K
- >arg : ArgMap[K]
-@@= skipped -21, +24 lines =@@
- 
- function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
- >f2 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
-+>K : K
- >funcs : Funcs
- >key : K
- >arg : ArgMap[K]
-@@= skipped -18, +19 lines =@@
- 
- function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
- >f3 : <K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) => void
-+>K : K
- >funcs : Funcs
- >key : K
- >arg : ArgMap[K]
-@@= skipped -17, +18 lines =@@
+@@= skipped -72, +72 lines =@@
  }
  
  function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 ->f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
 ->x : Func<"b"> | Func<"a">
 +>f4 : <K extends keyof ArgMap>(x: Func<"a"> | Func<"b">, y: Funcs[K]) => void
-+>K : K
 +>x : Func<"a"> | Func<"b">
  >y : Funcs[K]
  
@@ -347,52 +225,25 @@
  >y : Funcs[K]
  }
  
- // Repro from #47890
- 
- interface MyObj {
-+>MyObj : MyObj
-+
-     someKey: {
- >someKey : { name: string; }
- 
-@@= skipped -47, +50 lines =@@
- 
- function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
- >func : <K extends keyof MyObj>(k: K) => MyObj[K]["name"] | undefined
-+>K : K
- >k : K
- 
-     const myObj: Partial<MyObj>[K] = ref[k];
-@@= skipped -37, +38 lines =@@
- // Repro from #48157
- 
- interface Foo {
-+>Foo : Foo
-+
-     bar?: string
- >bar : string | undefined
+@@= skipped -89, +89 lines =@@
  }
  
  function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
 ->foo : <T extends keyof Foo>(prop: T, f: Required<Foo>) => void
 +>foo : <T extends "bar">(prop: T, f: Required<Foo>) => void
-+>T : T
  >prop : T
  >f : Required<Foo>
  
-@@= skipped -24, +27 lines =@@
+@@= skipped -19, +19 lines =@@
  // Repro from #48246
  
  declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
 ->makeCompleteLookupMapping : <T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
 +>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item }
-+>T : T
-+>Attr : Attr
  
      ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
  >ops : T
  >attr : Attr
-+>Item : Item
  
  const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
 ->ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
@@ -404,7 +255,7 @@
  >{ name: 'a'} : { readonly name: "a"; }
  >name : "a"
  >'a' : "a"
-@@= skipped -20, +23 lines =@@
+@@= skipped -20, +20 lines =@@
  const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
  >BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
  >makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
@@ -415,41 +266,7 @@
  >'name' : "name"
  
  type BarLookup = typeof BAR_LOOKUP;
- >BarLookup : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
-->BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
- 
- type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };
- >Baz : Baz
-+>K : K
- 
- // repro from #43982
- 
- interface Original {
-+>Original : Original
-+
-   prop1: {
- >prop1 : { subProp1: string; subProp2: string; }
- 
-@@= skipped -40, +42 lines =@@
- 
- type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
- >NestedKeyOfOriginalFor : keyof Original[T]
-+>T : T
- 
- type SameKeys<T> = {
- >SameKeys : SameKeys<T>
-+>T : T
- 
-   [K in keyof T]: {
-+>K : K
-+
-     [K2 in keyof T[K]]: number;
-+>K2 : K2
-+
-   };
- };
- 
-@@= skipped -13, +19 lines =@@
+@@= skipped -53, +53 lines =@@
  >MappedFromOriginal : SameKeys<Original>
  
  const getStringAndNumberFromOriginalAndMapped = <
@@ -459,32 +276,8 @@
 +><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
  
    K extends KeyOfOriginal,
-+>K : K
-+
    N extends NestedKeyOfOriginalFor<K>
-+>N : N
-+
- >(
-   original: Original,
- >original : Original
-@@= skipped -36, +40 lines =@@
- 
- // repro from #31675
- interface Config {
-+>Config : Config
-+
-   string: string;
- >string : string
- 
-@@= skipped -9, +11 lines =@@
- 
- function getConfigOrDefault<T extends keyof Config>(
- >getConfigOrDefault : <T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]) => Config[T]
-+>T : T
- 
-   userConfig: Partial<Config>,
- >userConfig : Partial<Config>
-@@= skipped -18, +19 lines =@@
+@@= skipped -63, +63 lines =@@
  >key : T
  
    const assertedCheck = userValue ? userValue! : defaultValue;
@@ -503,11 +296,3 @@
  }
  
  // repro from #47523
-@@= skipped -26, +26 lines =@@
- 
- function getValueConcrete<K extends keyof Foo1>(
- >getValueConcrete : <K extends keyof Foo1>(o: Partial<Foo1>, k: K) => Foo1[K] | undefined
-+>K : K
- 
-   o: Partial<Foo1>,
- >o : Partial<Foo1>

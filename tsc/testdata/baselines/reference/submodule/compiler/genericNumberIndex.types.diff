@@ -1,8 +1,0 @@
---- old.genericNumberIndex.types
-+++ new.genericNumberIndex.types
-@@= skipped -2, +2 lines =@@
- === genericNumberIndex.ts ===
- type X<I extends number> = ['a'][I];
- >X : X<I>
-+>I : I
- 

@@ -47,7 +47,9 @@ var d: D;
 
 var r1: typeof D;
 >r1 : typeof D
+>D : typeof D
 
 var r2: typeof d;
 >r2 : D
+>d : D
 

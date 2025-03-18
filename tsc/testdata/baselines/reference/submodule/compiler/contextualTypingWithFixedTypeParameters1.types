@@ -3,7 +3,6 @@
 === contextualTypingWithFixedTypeParameters1.ts ===
 var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
 >f10 : <T>(x: T, b: () => (a: T) => void, y: T) => T
->T : T
 >x : T
 >b : () => (a: T) => void
 >a : T

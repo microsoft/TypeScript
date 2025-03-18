@@ -3,7 +3,6 @@
 === wrappedAndRecursiveConstraints2.ts ===
 class C<T extends C<T>> { // error
 >C : C<T>
->T : T
 
     constructor(x: T) { }
 >x : T

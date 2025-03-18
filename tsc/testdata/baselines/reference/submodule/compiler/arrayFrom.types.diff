@@ -1,22 +1,6 @@
 --- old.arrayFrom.types
 +++ new.arrayFrom.types
-@@= skipped -4, +4 lines =@@
- // Also tests for #19682
- 
- interface A {
-+>A : A
-+
-   a: string;
- >a : string
- }
- 
- interface B {
-+>B : B
-+
-   b: string;
- >b : string
- }
-@@= skipped -24, +28 lines =@@
+@@= skipped -28, +28 lines =@@
  >0 : 0
  
  const inputARand = getEither(inputA, inputALike);
@@ -173,7 +157,6 @@
 ->getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T>
 ->in1 : Iterable<T>
 +>getEither : <T>(in1: Iterable<T, any, any>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T, any, any>
-+>T : T
 +>in1 : Iterable<T, any, any>
  >in2 : ArrayLike<T>
  

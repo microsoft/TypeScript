@@ -1,19 +1,8 @@
 --- old.internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.types
 +++ new.internalImportInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.types
-@@= skipped -10, +10 lines =@@
- >A : typeof A
- 
-     export interface X { s: string }
-+>X : X
- >s : string
- 
-     export var a = 10;
-@@= skipped -8, +9 lines =@@
- }
+@@= skipped -19, +19 lines =@@
  
  module B {
-+>B : any
-+
      import Y = A;
 ->Y : typeof Y
 ->A : Y

@@ -8,5 +8,3 @@
 +>E : import("ambientInsideNonAmbientExternalModule").E
  
  export declare module M { }
-+>M : any
-+

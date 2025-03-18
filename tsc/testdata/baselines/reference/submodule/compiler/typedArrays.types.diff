@@ -216,15 +216,7 @@
  >obj : ArrayLike<number>
  
      return typedArrays;
-@@= skipped -268, +268 lines =@@
- 
- function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)=> number) {
- >CreateTypedArraysFromMapFn2 : <T>(obj: ArrayLike<T>, mapFn: (n: T, v: number) => number) => any[]
-+>T : T
- >obj : ArrayLike<T>
- >mapFn : (n: T, v: number) => number
- >n : T
-@@= skipped -15, +16 lines =@@
+@@= skipped -283, +283 lines =@@
  >typedArrays : any[]
  >0 : 0
  >Int8Array.from(obj, mapFn) : Int8Array<ArrayBuffer>
@@ -548,15 +540,7 @@
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
  >thisArg : {}
-@@= skipped -13, +13 lines =@@
- 
- function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)=> number, thisArg: {}) {
- >CreateTypedArraysFromThisObj2 : <T>(obj: ArrayLike<T>, mapFn: (n: T, v: number) => number, thisArg: {}) => any[]
-+>T : T
- >obj : ArrayLike<T>
- >mapFn : (n: T, v: number) => number
- >n : T
-@@= skipped -16, +17 lines =@@
+@@= skipped -29, +29 lines =@@
  >typedArrays : any[]
  >0 : 0
  >Int8Array.from(obj, mapFn, thisArg) : Int8Array<ArrayBuffer>

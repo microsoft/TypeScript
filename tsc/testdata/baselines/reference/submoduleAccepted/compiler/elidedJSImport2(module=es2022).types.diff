@@ -18,23 +18,7 @@
  >Foo : any
  
  const z = new defaultFoo();
-@@= skipped -10, +10 lines =@@
- 
- === other.d.ts ===
- export interface Foo {
-+>Foo : Foo
-+
-     bar: number;
- >bar : number
- }
- 
- export default interface Bar {
-+>Bar : default
-+
-     foo: number;
- >foo : number
- }
-@@= skipped -19, +23 lines =@@
+@@= skipped -29, +29 lines =@@
  }
  
  export default class Bar {

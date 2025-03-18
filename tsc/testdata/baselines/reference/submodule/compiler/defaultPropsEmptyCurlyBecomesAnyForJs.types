@@ -3,8 +3,6 @@
 === library.d.ts ===
 export class Foo<T = {}, U = {}> {
 >Foo : Foo<T, U>
->T : T
->U : U
 
     props: T;
 >props : T

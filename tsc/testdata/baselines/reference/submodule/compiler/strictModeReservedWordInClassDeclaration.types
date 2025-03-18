@@ -2,7 +2,6 @@
 
 === strictModeReservedWordInClassDeclaration.ts ===
 interface public { }
->public : public
 
 class Foo {
 >Foo : Foo
@@ -52,8 +51,6 @@ class C {
 
 class D<public, private>{ }
 >D : D<public, private>
->public : public
->private : private
 
 class E implements public { }
 >E : E

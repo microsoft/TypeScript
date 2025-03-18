@@ -2,8 +2,6 @@
 
 === declarations.d.ts ===
 declare namespace NS {
->NS : any
-
     type R = number
 >R : number
 }

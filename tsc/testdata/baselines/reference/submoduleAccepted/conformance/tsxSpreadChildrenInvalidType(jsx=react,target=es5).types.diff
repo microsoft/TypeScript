@@ -1,36 +1,6 @@
 --- old.tsxSpreadChildrenInvalidType(jsx=react,target=es5).types
 +++ new.tsxSpreadChildrenInvalidType(jsx=react,target=es5).types
-@@= skipped -1, +1 lines =@@
- 
- === tsxSpreadChildrenInvalidType.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		[s: string]: any;
- >s : string
- 	}
-@@= skipped -10, +16 lines =@@
- >React : any
- 
- interface TodoProp {
-+>TodoProp : TodoProp
-+
-     id: number;
- >id : number
- 
-@@= skipped -7, +9 lines =@@
- >todo : string
- }
- interface TodoListProps {
-+>TodoListProps : TodoListProps
-+
-     todos: TodoProp[];
+@@= skipped -22, +22 lines =@@
  >todos : TodoProp[]
  }
  function Todo(prop: { key: number, todo: string }) {
@@ -46,7 +16,7 @@
  >div : any
  >prop.key.toString() + prop.todo : string
  >prop.key.toString() : string
-@@= skipped -25, +27 lines =@@
+@@= skipped -21, +21 lines =@@
  >div : any
  }
  function TodoList({ todos }: TodoListProps) {

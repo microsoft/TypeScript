@@ -6,17 +6,11 @@ declare namespace React {
 >React : typeof React
 
   interface ComponentClass<P> { new (): Component<P, {}>; }
->ComponentClass : ComponentClass<P>
->P : P
-
   class Component<A, B> {}
 >Component : Component<A, B>
->A : A
->B : B
 }
 declare function createComponentClass<P>(factory: () => React.ComponentClass<P>): React.ComponentClass<P>;
 >createComponentClass : <P>(factory: () => ComponentClass<P>) => ComponentClass<P>
->P : P
 >factory : () => ComponentClass<P>
 >React : any
 >React : any

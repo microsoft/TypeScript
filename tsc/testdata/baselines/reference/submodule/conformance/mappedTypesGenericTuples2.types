@@ -5,7 +5,6 @@
 
 declare function getT<T>(): T;
 >getT : <T>() => T
->T : T
 
 Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
 >Promise.all([getT<string>(), ...getT<any>()]).then((result) => {  const head = result[0]; // string  const tail = result.slice(1); // any[]  tail satisfies string[]; // ok}) : Promise<void>

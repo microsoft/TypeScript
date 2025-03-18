@@ -1,15 +1,6 @@
 --- old.objectTypeWithCallSignatureAppearsToBeFunctionType.types
 +++ new.objectTypeWithCallSignatureAppearsToBeFunctionType.types
-@@= skipped -4, +4 lines =@@
- // no errors expected below
- 
- interface I {
-+>I : I
-+
-     (): void;
- }
- 
-@@= skipped -15, +17 lines =@@
+@@= skipped -19, +19 lines =@@
  >r2b : (x: any, y?: any) => any
  >x : any
  >y : any

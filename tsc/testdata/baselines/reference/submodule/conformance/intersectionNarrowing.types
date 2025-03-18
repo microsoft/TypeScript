@@ -5,7 +5,6 @@
 
 function f1<T>(x: T & string | T & undefined) {
 >f1 : <T>(x: T & undefined | T & string) => void
->T : T
 >x : T & undefined | T & string
 
     if (x) {
@@ -18,7 +17,6 @@ function f1<T>(x: T & string | T & undefined) {
 
 function f2<T>(x: T & string | T & undefined) {
 >f2 : <T>(x: T & undefined | T & string) => void
->T : T
 >x : T & undefined | T & string
 
     if (x !== undefined) {
@@ -37,7 +35,6 @@ function f2<T>(x: T & string | T & undefined) {
 
 function f3<T>(x: T & string | T & number) {
 >f3 : <T>(x: T & string | T & number) => void
->T : T
 >x : T & string | T & number
 
     if (typeof x === "string") {
@@ -57,7 +54,6 @@ function f3<T>(x: T & string | T & number) {
 
 function f4<T>(x: T & 1 | T & 2) {
 >f4 : <T>(x: T & 1 | T & 2) => void
->T : T
 >x : T & 1 | T & 2
 
     switch (x) {
@@ -78,7 +74,6 @@ function f4<T>(x: T & 1 | T & 2) {
 
 function f5<T extends string | number>(x: T & number) {
 >f5 : <T extends string | number>(x: T & number) => void
->T : T
 >x : T & number
 
     const t1 = x === "hello";  // Should be an error

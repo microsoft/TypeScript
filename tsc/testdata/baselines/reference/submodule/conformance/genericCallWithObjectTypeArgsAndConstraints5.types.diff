@@ -1,21 +1,6 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints5.types
 +++ new.genericCallWithObjectTypeArgsAndConstraints5.types
-@@= skipped -21, +21 lines =@@
- 
- function foo<T, U extends T>(t: T, t2: U) {
- >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
-+>T : T
-+>U : U
- >t : T
- >t2 : U
- 
-@@= skipped -32, +34 lines =@@
- 
- function other<T, U extends T>() {
- >other : <T, U extends T>() => void
-+>T : T
-+>U : U
- 
+@@= skipped -57, +57 lines =@@
      var r5 = foo<T, U>(c, d); // error
  >r5 : (x: T) => U
  >foo<T, U>(c, d) : (x: T) => U

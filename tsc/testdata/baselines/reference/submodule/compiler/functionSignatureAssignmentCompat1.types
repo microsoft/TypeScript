@@ -2,15 +2,11 @@
 
 === functionSignatureAssignmentCompat1.ts ===
 interface ParserFunc {
->ParserFunc : ParserFunc
-
     (eventEmitter: number, buffer: string): void;
 >eventEmitter : number
 >buffer : string
 }
 interface Parsers {
->Parsers : Parsers
-
     raw: ParserFunc;
 >raw : ParserFunc
 

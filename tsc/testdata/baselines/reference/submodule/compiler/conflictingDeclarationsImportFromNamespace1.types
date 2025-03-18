@@ -8,12 +8,8 @@ declare module "./index" {
 >"./index" : LoDashStatic
 
     interface LoDashStatic {
->LoDashStatic : LoDashStatic
-
       pick<T extends object, U extends keyof T>(
 >pick : <T extends object, U extends keyof T>(object: T, ...props: U[]) => Pick<T, U>
->T : T
->U : U
 
         object: T,
 >object : T
@@ -45,10 +41,7 @@ declare const _: _.LoDashStatic;
 >_ : any
 
 declare namespace _ {
->_ : LoDashStatic
-
     interface LoDashStatic {}
->LoDashStatic : LoDashStatic
 }
 
 === index.ts ===

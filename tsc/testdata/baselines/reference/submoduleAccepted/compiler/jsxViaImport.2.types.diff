@@ -26,23 +26,7 @@
      }
  }
  
- === component.d.ts ===
- declare module JSX {
-+>JSX : any
-+
-   interface ElementAttributesProperty { props; }
-+>ElementAttributesProperty : ElementAttributesProperty
- >props : any
- }
- declare module React {
-@@= skipped -27, +30 lines =@@
- 
-   class Component<T, U> { }
- >Component : Component<T, U>
-+>T : T
-+>U : U
- }
- declare module "BaseComponent" {
+@@= skipped -32, +32 lines =@@
  >"BaseComponent" : typeof import("BaseComponent")
  
      export default class extends React.Component<any, {}> {

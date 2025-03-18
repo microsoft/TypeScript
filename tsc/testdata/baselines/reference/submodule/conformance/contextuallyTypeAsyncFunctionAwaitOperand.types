@@ -2,7 +2,6 @@
 
 === contextuallyTypeAsyncFunctionAwaitOperand.ts ===
 interface Obj { key: "value"; }
->Obj : Obj
 >key : "value"
 
 async function fn1(): Promise<Obj> {

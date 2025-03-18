@@ -4,7 +4,6 @@
 const validHasKey = <T extends object>(
 >validHasKey : <T extends object>(thing: T, key: string) => boolean
 ><T extends object>(  thing: T,  key: string,): boolean => {  return key in thing; // Ok} : <T extends object>(thing: T, key: string) => boolean
->T : T
 
   thing: T,
 >thing : T
@@ -23,7 +22,6 @@ const validHasKey = <T extends object>(
 const alsoValidHasKey = <T>(
 >alsoValidHasKey : <T>(thing: T, key: string) => boolean
 ><T>(  thing: T,  key: string,): boolean => {  return key in thing; // Ok (as T may be instantiated with a valid type)} : <T>(thing: T, key: string) => boolean
->T : T
 
   thing: T,
 >thing : T
@@ -41,7 +39,6 @@ const alsoValidHasKey = <T>(
 
 function invalidHasKey<T extends string | number>(
 >invalidHasKey : <T extends string | number>(thing: T, key: string) => boolean
->T : T
 
   thing: T,
 >thing : T
@@ -58,8 +55,6 @@ function invalidHasKey<T extends string | number>(
 
 function union1<T extends string | number, U extends boolean>(thing: T | U) {
 >union1 : <T extends string | number, U extends boolean>(thing: T | U) => void
->T : T
->U : U
 >thing : T | U
 
   "key" in thing; // Error (because all possible instantiations are errors)
@@ -70,8 +65,6 @@ function union1<T extends string | number, U extends boolean>(thing: T | U) {
 
 function union2<T extends object, U extends string | number>(thing: T | U) {
 >union2 : <T extends object, U extends string | number>(thing: T | U) => void
->T : T
->U : U
 >thing : T | U
 
   "key" in thing; // Error (because narrowing is possible)
@@ -94,7 +87,6 @@ function union2<T extends object, U extends string | number>(thing: T | U) {
 
 function union3<T>(thing: T | string | number) {
 >union3 : <T>(thing: string | number | T) => void
->T : T
 >thing : string | number | T
 
   "key" in thing; // Error (because narrowing is possible)
@@ -122,7 +114,6 @@ function union3<T>(thing: T | string | number) {
 
 function union4<T extends object | "hello">(thing: T) {
 >union4 : <T extends "hello" | object>(thing: T) => void
->T : T
 >thing : T
 
   "key" in thing; // Ok (because narrowing is impossible)
@@ -133,8 +124,6 @@ function union4<T extends object | "hello">(thing: T) {
 
 function union5<T extends object | string, U extends object | number>(p: T | U) {
 >union5 : <T extends string | object, U extends number | object>(p: T | U) => void
->T : T
->U : U
 >p : T | U
 
     // For consistency, this should probably not be an error, because useful
@@ -165,8 +154,6 @@ function union5<T extends object | string, U extends object | number>(p: T | U) 
 
 function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {
 >intersection1 : <T extends number, U extends 0 | 1 | 2>(thing: T & U) => void
->T : T
->U : U
 >thing : T & U
 
   "key" in thing; // Error (because all possible instantiations are errors)
@@ -177,7 +164,6 @@ function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {
 
 function intersection2<T>(thing: T & (0 | 1 | 2)) {
 >intersection2 : <T>(thing: T & (0 | 1 | 2)) => void
->T : T
 >thing : T & (0 | 1 | 2)
 
   "key" in thing; // Error (because all possible instantations are errors)

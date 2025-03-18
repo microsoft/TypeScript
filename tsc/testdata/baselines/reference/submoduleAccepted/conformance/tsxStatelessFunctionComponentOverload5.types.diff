@@ -8,37 +8,17 @@
 +>React : any
  
  export interface ClickableProps {
-+>ClickableProps : ClickableProps
-+
      children?: string;
- >children : string
- 
-@@= skipped -11, +13 lines =@@
- }
+@@= skipped -12, +12 lines =@@
  
  export interface ButtonProps extends ClickableProps {
-+>ButtonProps : ButtonProps
-+
      onClick: React.MouseEventHandler<any>;
 ->onClick : React.MouseEventHandler<any>
 +>onClick : MouseEventHandler<any>
  >React : any
  }
  
- export interface LinkProps extends ClickableProps {
-+>LinkProps : LinkProps
-+
-     to: string;
- >to : string
- }
- 
- export interface HyphenProps extends ClickableProps {
-+>HyphenProps : HyphenProps
-+
-     "data-format": string;
- >"data-format" : string
- }
-@@= skipped -51, +57 lines =@@
+@@= skipped -50, +50 lines =@@
  >obj3 : any
  
  export function MainButton(buttonProps: ButtonProps): JSX.Element;

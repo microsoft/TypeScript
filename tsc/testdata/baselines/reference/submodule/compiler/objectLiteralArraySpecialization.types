@@ -3,13 +3,9 @@
 === objectLiteralArraySpecialization.ts ===
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->T : T
 >initialValues : T[]
 
 interface MyArrayWrapper<T> {
->MyArrayWrapper : MyArrayWrapper<T>
->T : T
-
 	constructor(initialItems?: T[]);
 >constructor : (initialItems?: T[]) => any
 >initialItems : T[]

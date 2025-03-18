@@ -31,24 +31,3 @@
  
  // BigInt cannot be used as an property name
  const x = { 0n: 123 };
-@@= skipped -28, +28 lines =@@
- 
- === g.ts ===
- interface G {
-+>G : G
-+
-     2n: string;
- >2n : string
- }
- interface H {
-+>H : H
-+
-     "3n": string;
- >"3n" : string
- }
-@@= skipped -121, +125 lines =@@
- 
- type T = { [t in  Q]: string };
- >T : T
-+>t : t
- 

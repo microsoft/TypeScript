@@ -61,14 +61,10 @@ const x = { 0n: 123 };
 
 === g.ts ===
 interface G {
->G : G
-
     2n: string;
 >2n : string
 }
 interface H {
->H : H
-
     "3n": string;
 >"3n" : string
 }
@@ -186,5 +182,4 @@ type Q = 6n | 7n | 8n;
 
 type T = { [t in  Q]: string };
 >T : T
->t : t
 

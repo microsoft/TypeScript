@@ -1,9 +1,8 @@
 //// [tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2.ts] ////
 
 === exportSpecifierReferencingOuterDeclaration2_A.ts ===
+
 declare module X { export interface bar { } }
->X : any
->bar : bar
 
 === exportSpecifierReferencingOuterDeclaration2_B.ts ===
 export { X };

@@ -42,7 +42,6 @@
  declare function fn1<const T extends readonly unknown[]>(...args: T): T;
 ->fn1 : <const T extends readonly unknown[]>(...args: T) => T
 +>fn1 : <T extends readonly unknown[]>(...args: T) => T
-+>T : T
  >args : T
  
  const res1 = fn1(..."hello");
@@ -87,12 +86,7 @@
  
  // repro from #52781
  declare function foo<T extends unknown[]>(...args: T): T;
- >foo : <T extends unknown[]>(...args: T) => T
-+>T : T
- >args : T
- 
- const p1 = foo(..."hello");
-@@= skipped -64, +66 lines =@@
+@@= skipped -64, +64 lines =@@
  >foo(...itNum) : number[]
  >foo : <T extends unknown[]>(...args: T) => T
  >...itNum : number

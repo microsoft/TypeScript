@@ -2,8 +2,6 @@
 
 === logicalAssignment2.ts ===
 interface A {
->A : A
-
     foo: {
 >foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 

@@ -1,15 +1,6 @@
 --- old.controlFlowInstanceofExtendsFunction.types
 +++ new.controlFlowInstanceofExtendsFunction.types
-@@= skipped -4, +4 lines =@@
- >global : any
- 
-     interface Function {
-+>Function : Function
-+
-         now(): string;
- >now : () => string
-     }
-@@= skipped -61, +63 lines =@@
+@@= skipped -65, +65 lines =@@
  
  export const x: X | number = Math.random() > 0.5 ? new X() : 1
  >x : number | X

@@ -3,7 +3,6 @@
 === declarationEmitPromise.ts ===
 export class bluebird<T> {
 >bluebird : bluebird<T>
->T : T
 
     static all: Array<bluebird<any>>;
 >all : bluebird<any>[]
@@ -11,11 +10,6 @@ export class bluebird<T> {
 
 export async function runSampleWorks<A, B, C, D, E>(
 >runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
->A : A
->B : B
->C : C
->D : D
->E : E
 
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
 >a : bluebird<A>
@@ -51,7 +45,6 @@ export async function runSampleWorks<A, B, C, D, E>(
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->T : T
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
 >a : A
 >b : B
@@ -69,6 +62,7 @@ export async function runSampleWorks<A, B, C, D, E>(
 
     let rfunc: typeof func & {} = func as any; // <- This is the only difference
 >rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 >func as any : any
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 
@@ -78,11 +72,6 @@ export async function runSampleWorks<A, B, C, D, E>(
 
 export async function runSampleBreaks<A, B, C, D, E>(
 >runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
->A : A
->B : B
->C : C
->D : D
->E : E
 
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
 >a : bluebird<A>
@@ -118,7 +107,6 @@ export async function runSampleBreaks<A, B, C, D, E>(
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->T : T
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
 >a : A
 >b : B
@@ -136,6 +124,7 @@ export async function runSampleBreaks<A, B, C, D, E>(
 
     let rfunc: typeof func = func as any; // <- This is the only difference
 >rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
+>func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 >func as any : any
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 

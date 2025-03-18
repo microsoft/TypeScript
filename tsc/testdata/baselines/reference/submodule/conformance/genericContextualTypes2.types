@@ -3,12 +3,9 @@
 === genericContextualTypes2.ts ===
 type LowInfer<T> = T & {};
 >LowInfer : LowInfer<T>
->T : T
 
 type PartialAssigner<TContext, TKey extends keyof TContext> = (
 >PartialAssigner : PartialAssigner<TContext, TKey>
->TContext : TContext
->TKey : TKey
 
   context: TContext
 >context : TContext
@@ -17,16 +14,12 @@ type PartialAssigner<TContext, TKey extends keyof TContext> = (
 
 type PropertyAssigner<TContext> = {
 >PropertyAssigner : PropertyAssigner<TContext>
->TContext : TContext
 
   [K in keyof TContext]?: PartialAssigner<TContext, K> | TContext[K];
->K : K
-
 };
 
 type Meta<TContext> = {
 >Meta : Meta<TContext>
->TContext : TContext
 
   action: (ctx: TContext) => void
 >action : (ctx: TContext) => void
@@ -34,9 +27,6 @@ type Meta<TContext> = {
 }
 
 interface AssignAction<TContext> {
->AssignAction : AssignAction<TContext>
->TContext : TContext
-
   type: "xstate.assign";
 >type : "xstate.assign"
 
@@ -48,7 +38,6 @@ interface AssignAction<TContext> {
 
 declare function assign<TContext>(
 >assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => AssignAction<TContext>
->TContext : TContext
 
   assignment: PropertyAssigner<LowInfer<TContext>>
 >assignment : PropertyAssigner<LowInfer<TContext>>
@@ -57,7 +46,6 @@ declare function assign<TContext>(
 
 type Config<TContext> = {
 >Config : Config<TContext>
->TContext : TContext
 
   context: TContext;
 >context : TContext
@@ -69,7 +57,6 @@ type Config<TContext> = {
 
 declare function createMachine<TContext>(config: Config<TContext>): void;
 >createMachine : <TContext>(config: Config<TContext>) => void
->TContext : TContext
 >config : Config<TContext>
 
 createMachine<{ count: number }>({

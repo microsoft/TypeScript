@@ -1,18 +1,6 @@
 --- old.crashInGetTextOfComputedPropertyName.types
 +++ new.crashInGetTextOfComputedPropertyName.types
-@@= skipped -2, +2 lines =@@
- === crashInGetTextOfComputedPropertyName.ts ===
- // https://github.com/Microsoft/TypeScript/issues/29006
- export interface A { type: 'a' }
-+>A : A
- >type : "a"
- 
- export interface B { type: 'b' }
-+>B : B
- >type : "b"
- 
- export type AB = A | B
-@@= skipped -24, +26 lines =@@
+@@= skipped -26, +26 lines =@@
  >items : { [id: string]: AB; }
  
  typeof itemOk1 // pass
@@ -21,13 +9,7 @@
  >itemOk1 : AB
  
  // --- test on second level ---
- interface ObjWithItems {
-+>ObjWithItems : ObjWithItems
-+
-     items: {[s: string]: AB}
- >items : { [s: string]: AB; }
- >s : string
-@@= skipped -24, +26 lines =@@
+@@= skipped -24, +24 lines =@@
  >itemId : "some-id"
  
  typeof itemOk2 // pass

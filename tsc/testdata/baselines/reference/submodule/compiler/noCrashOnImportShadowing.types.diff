@@ -8,12 +8,8 @@
 +>B : typeof import("b")
  
  interface B {
-+>B : B
-+
      x: string;
- >x : string
- }
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  
  B.zzz;
  >B.zzz : 123

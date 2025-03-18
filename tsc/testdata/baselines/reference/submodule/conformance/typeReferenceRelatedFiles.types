@@ -8,7 +8,6 @@ declare module "fs" {
 >"fs" : typeof import("fs")
 
     interface FSWatcher {}
->FSWatcher : FSWatcher
 }
 === main.ts ===
 /// <reference types="node" />

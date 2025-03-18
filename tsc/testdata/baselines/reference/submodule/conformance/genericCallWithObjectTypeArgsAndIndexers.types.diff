@@ -1,22 +1,6 @@
 --- old.genericCallWithObjectTypeArgsAndIndexers.types
 +++ new.genericCallWithObjectTypeArgsAndIndexers.types
-@@= skipped -4, +4 lines =@@
- 
- function foo<T>(x: T) {
- >foo : <T>(x: T) => T
-+>T : T
- >x : T
- 
-     return x;
-@@= skipped -24, +25 lines =@@
- 
- function other<T extends Date>(arg: T) {
- >other : <T extends Date>(arg: T) => void
-+>T : T
- >arg : T
- 
-     var b: {
-@@= skipped -15, +16 lines =@@
+@@= skipped -43, +43 lines =@@
      var r2 = foo(b);
  >r2 : { [x: string]: Object; [x: number]: T; }
  >foo(b) : { [x: string]: Object; [x: number]: T; }

@@ -2,9 +2,6 @@
 
 === contravariantInferenceAndTypeGuard.ts ===
 interface ListItem<TData> {
->ListItem : ListItem<TData>
->TData : TData
-
     prev: ListItem<TData> | null;
 >prev : ListItem<TData> | null
 
@@ -16,9 +13,6 @@ interface ListItem<TData> {
 }
 type IteratorFn<TData, TResult, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => TResult;
 >IteratorFn : IteratorFn<TData, TResult, TContext>
->TData : TData
->TResult : TResult
->TContext : TContext
 >this : TContext
 >item : TData
 >node : ListItem<TData>
@@ -26,9 +20,6 @@ type IteratorFn<TData, TResult, TContext = List<TData>> = (this: TContext, item:
 
 type FilterFn<TData, TResult extends TData, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => item is TResult;
 >FilterFn : FilterFn<TData, TResult, TContext>
->TData : TData
->TResult : TResult
->TContext : TContext
 >this : TContext
 >item : TData
 >node : ListItem<TData>
@@ -36,23 +27,18 @@ type FilterFn<TData, TResult extends TData, TContext = List<TData>> = (this: TCo
 
 declare class List<TData> {
 >List : List<TData>
->TData : TData
 
     filter<TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>;
 >filter : { <TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>; <TResult extends TData>(fn: FilterFn<TData, TResult, List<TData>>): List<TResult>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
->TContext : TContext
->TResult : TResult
 >fn : FilterFn<TData, TResult, TContext>
 >context : TContext
 
     filter<TResult extends TData>(fn: FilterFn<TData, TResult>): List<TResult>;
 >filter : { <TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>; <TResult extends TData>(fn: FilterFn<TData, TResult, List<TData>>): List<TResult>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
->TResult : TResult
 >fn : FilterFn<TData, TResult, List<TData>>
 
     filter<TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>;
 >filter : { <TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>; <TResult extends TData>(fn: FilterFn<TData, TResult, List<TData>>): List<TResult>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
->TContext : TContext
 >fn : IteratorFn<TData, boolean, TContext>
 >context : TContext
 
@@ -61,8 +47,6 @@ declare class List<TData> {
 >fn : IteratorFn<TData, boolean, List<TData>>
 }
 interface Test {
->Test : Test
-
     a: string;
 >a : string
 }

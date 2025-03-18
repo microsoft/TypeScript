@@ -18,16 +18,7 @@
  >"foo" : "foo"
  
      let a = x;
-@@= skipped -29, +29 lines =@@
- 
-     let e: (typeof x) | (typeof y) = c || d;
- >e : T
-->x : "bar"
-->y : T
- >c || d : T
- >c : "bar"
- >d : T
-@@= skipped -9, +7 lines =@@
+@@= skipped -38, +38 lines =@@
  
  x = y;
  >x = y : T

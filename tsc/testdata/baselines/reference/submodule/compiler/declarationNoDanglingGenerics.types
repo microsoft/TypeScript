@@ -31,7 +31,6 @@ function register(kind: string): void | never {
 
 function ClassFactory<TKind extends string>(kind: TKind) {
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
->TKind : TKind
 >kind : TKind
 
   register(kind);

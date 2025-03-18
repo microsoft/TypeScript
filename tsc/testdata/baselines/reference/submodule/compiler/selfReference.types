@@ -3,7 +3,6 @@
 === selfReference.ts ===
 declare function asFunction<T>(value: T): () => T;
 >asFunction : <T>(value: T) => () => T
->T : T
 >value : T
 
 asFunction(() => { return 1; });

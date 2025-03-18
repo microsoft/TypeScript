@@ -18,12 +18,3 @@
  
  === O.d.ts ===
  declare module "Observable" {
-@@= skipped -33, +33 lines =@@
- >"Observable" : typeof import("Observable")
- 
-         interface Observable {
-+>Observable : Observable
-+
-             foo(): Cls;
- >foo : () => Cls
-         }

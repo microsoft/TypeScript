@@ -188,6 +188,7 @@
 ->use_glo_M1_public_v2_public : typeof use_glo_M1_public
 ->use_glo_M1_public : typeof use_glo_M1_public
 +>use_glo_M1_public_v2_public : typeof glo_M1_public
++>use_glo_M1_public : typeof glo_M1_public
  
      export var use_glo_M1_public_v3_public: ()=> use_glo_M1_public.c1;
 ->use_glo_M1_public_v3_public : () => use_glo_M1_public.c1
@@ -203,6 +204,7 @@
 ->use_glo_M1_public_v2_private : typeof use_glo_M1_public
 ->use_glo_M1_public : typeof use_glo_M1_public
 +>use_glo_M1_public_v2_private : typeof glo_M1_public
++>use_glo_M1_public : typeof glo_M1_public
  
      var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
 ->use_glo_M1_public_v3_private : () => use_glo_M1_public.c1
@@ -222,6 +224,7 @@
 ->use_glo_M2_public_v2_public : typeof use_glo_M2_public
 ->use_glo_M2_public : typeof use_glo_M2_public
 +>use_glo_M2_public_v2_public : typeof import("glo_M2_public")
++>use_glo_M2_public : typeof import("glo_M2_public")
  
      export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
 ->use_glo_M2_public_v3_public : () => use_glo_M2_public.c1
@@ -237,6 +240,7 @@
 ->use_glo_M2_public_v2_private : typeof use_glo_M2_public
 ->use_glo_M2_public : typeof use_glo_M2_public
 +>use_glo_M2_public_v2_private : typeof import("glo_M2_public")
++>use_glo_M2_public : typeof import("glo_M2_public")
  
      var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
 ->use_glo_M2_public_v3_private : () => use_glo_M2_public.c1
@@ -244,8 +248,6 @@
  >use_glo_M2_public : any
  
      module m2 {
-+>m2 : any
-+
          import errorImport = require("glo_M2_public");
 ->errorImport : typeof errorImport
 +>errorImport : typeof import("glo_M2_public")
@@ -257,8 +259,6 @@
 +>glo_M1_public : typeof glo_M1_public
  
          module m5 {
-+>m5 : any
-+
              import m5_errorImport = require("glo_M2_public");
 ->m5_errorImport : typeof m5_errorImport
 +>m5_errorImport : typeof import("glo_M2_public")
@@ -271,24 +271,7 @@
          }
      }
  }
-@@= skipped -77, +77 lines =@@
- >"anotherParseError" : typeof import("anotherParseError")
- 
-     module m2 {
-+>m2 : any
-+
-         declare module "abc" {
- >"abc" : typeof import("abc")
-         }
-     }
- 
-     module m2 {
-+>m2 : any
-+
-         module "abc2" {
- >"abc2" : typeof import("abc2")
-         }
-@@= skipped -19, +23 lines =@@
+@@= skipped -96, +96 lines =@@
  >m2 : typeof m2
  
      import m3 = require("use_glo_M1_public");

@@ -1,19 +1,6 @@
 --- old.assignmentCompatWithObjectMembersNumericNames.types
 +++ new.assignmentCompatWithObjectMembersNumericNames.types
-@@= skipped -18, +18 lines =@@
- >t : T
- 
- interface S2 { 1: string; bar?: string }
-+>S2 : S2
- >1 : string
- >bar : string
- 
- interface T2 { 1.0: string; baz?: string }
-+>T2 : T2
- >1.0 : string
- >baz : string
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -32, +32 lines =@@
  >t2 : T2
  
  var a: { 1.: string; bar?: string }

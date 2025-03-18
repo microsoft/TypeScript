@@ -2,8 +2,6 @@
 
 === interfaceClassMerging2.ts ===
 interface Foo {
->Foo : Foo
-
     interfaceFooMethod(): this;
 >interfaceFooMethod : () => this
 
@@ -27,8 +25,6 @@ class Foo {
 
 
 interface Bar {
->Bar : Bar
-
     interfaceBarMethod(): this;
 >interfaceBarMethod : () => this
 

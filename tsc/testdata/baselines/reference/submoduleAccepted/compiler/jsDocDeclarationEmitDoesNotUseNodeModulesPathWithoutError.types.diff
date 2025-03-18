@@ -9,12 +9,7 @@
  
  === node_modules/@lion/ajax/dist-types/types/types.d.ts ===
  export interface LionRequestInit {
-+>LionRequestInit : LionRequestInit
-+
-     body?: null | Object;
- >body : Object | null | undefined
- } 
-@@= skipped -19, +21 lines =@@
+@@= skipped -19, +19 lines =@@
       * @param {LionRequestInit} [init]
       */
      case5_unexpectedlyResolvesPathToNodeModules(init) {}

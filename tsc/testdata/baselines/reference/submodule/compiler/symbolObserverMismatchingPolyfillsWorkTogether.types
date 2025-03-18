@@ -2,14 +2,10 @@
 
 === symbolObserverMismatchingPolyfillsWorkTogether.ts ===
 interface SymbolConstructor {
->SymbolConstructor : SymbolConstructor
-
     readonly observer: symbol;
 >observer : symbol
 }
 interface SymbolConstructor {
->SymbolConstructor : SymbolConstructor
-
     readonly observer: unique symbol;
 >observer : symbol
 }

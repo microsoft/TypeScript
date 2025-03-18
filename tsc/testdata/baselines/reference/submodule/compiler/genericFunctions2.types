@@ -3,8 +3,6 @@
 === genericFunctions2.ts ===
 declare function map <T, U > (items: T[], f: (x: T) => U): U[];
 >map : <T, U>(items: T[], f: (x: T) => U) => U[]
->T : T
->U : U
 >items : T[]
 >f : (x: T) => U
 >x : T

@@ -2,8 +2,6 @@
 
 === symbolProperty35.ts ===
 interface I1 {
->I1 : I1
-
     [Symbol.toStringTag](): { x: string }
 >[Symbol.toStringTag] : () => { x: string; }
 >Symbol.toStringTag : unique symbol
@@ -12,8 +10,6 @@ interface I1 {
 >x : string
 }
 interface I2 {
->I2 : I2
-
     [Symbol.toStringTag](): { x: number }
 >[Symbol.toStringTag] : () => { x: number; }
 >Symbol.toStringTag : unique symbol
@@ -23,5 +19,3 @@ interface I2 {
 }
 
 interface I3 extends I1, I2 { }
->I3 : I3
-

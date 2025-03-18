@@ -2,11 +2,8 @@
 
 === recursiveGenericUnionType1.ts ===
 declare module Test1 {
->Test1 : any
-
     export type Container<T> = T | {
 >Container : Container<T>
->T : T
 
         [i: string]: Container<T>;
 >i : string
@@ -17,11 +14,8 @@ declare module Test1 {
 }
 
 declare module Test2 {
->Test2 : any
-
     export type Container<T> = T | {
 >Container : Container<T>
->T : T
 
         [i: string]: Container<T>;
 >i : string

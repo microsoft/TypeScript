@@ -7,7 +7,6 @@
 ->getInterfaceFromString : <T extends Kind>(options?: { type?: T; } & { type?: Kind; }) => T
 ->options : ({ type?: T; } & { type?: Kind; }) | undefined
 +>getInterfaceFromString : <T extends Kind>(options?: { type?: T | undefined; } & { type?: Kind | undefined; } | undefined) => T
-+>T : T
 +>options : { type?: T | undefined; } & { type?: Kind | undefined; } | undefined
  >type : T | undefined
  >type : Kind | undefined

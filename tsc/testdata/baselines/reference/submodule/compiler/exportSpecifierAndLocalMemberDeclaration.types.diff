@@ -1,17 +1,6 @@
 --- old.exportSpecifierAndLocalMemberDeclaration.types
 +++ new.exportSpecifierAndLocalMemberDeclaration.types
-@@= skipped -4, +4 lines =@@
- >"m2" : typeof import("m2")
- 
-     module X {
-+>X : any
-+
-         interface I { }
-+>I : I
-     }
-     function Y();
- >Y : () => any
-@@= skipped -10, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  >X : () => any
  
      function Z(): X.I;

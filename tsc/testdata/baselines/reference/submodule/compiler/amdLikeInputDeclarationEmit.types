@@ -3,7 +3,6 @@
 === typing.d.ts ===
 declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
 >define : <T>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
->T : T
 >name : string
 >modules : string[]
 >ready : (...modules: unknown[]) => T
@@ -18,7 +17,6 @@ declare module "deps/BaseClass" {
 
         static extends<A>(a: A): new () => A & BaseClass;
 >extends : <A>(a: A) => new () => A & BaseClass
->A : A
 >a : A
     }
     export = BaseClass;

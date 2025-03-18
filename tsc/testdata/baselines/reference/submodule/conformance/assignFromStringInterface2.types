@@ -2,15 +2,11 @@
 
 === assignFromStringInterface2.ts ===
 interface String {
->String : String
-
     doStuff(): string;
 >doStuff : () => string
 }
 
 interface NotString {
->NotString : NotString
-
     doStuff(): string;
 >doStuff : () => string
 

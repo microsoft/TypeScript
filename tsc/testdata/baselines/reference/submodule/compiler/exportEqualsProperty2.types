@@ -18,10 +18,7 @@ class C {
 >B : number
 }
 namespace C {
->C : typeof C
-
     export interface B { c: number }
->B : B
 >c : number
 }
 

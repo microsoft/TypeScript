@@ -8,7 +8,6 @@ enum ABC { A, B }
 
 type Gen<T extends ABC> = { v: T; } & (
 >Gen : Gen<T>
->T : T
 >v : T
   {
     v: ABC.A,
@@ -36,11 +35,8 @@ type Gen<T extends ABC> = { v: T; } & (
 //
 type Gen2<T extends ABC> = {
 >Gen2 : Gen2<T>
->T : T
 
   [Property in keyof Gen<T>]: string;
->Property : Property
-
 };
 
 // 'a' and 'b' properties required !?!?

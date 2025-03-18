@@ -1,23 +1,12 @@
 --- old.getParameterNameAtPosition.types
 +++ new.getParameterNameAtPosition.types
-@@= skipped -3, +3 lines =@@
- // Repro from #30171
- 
- interface Mock<Y extends any[]> extends Function {
-+>Mock : Mock<Y>
-+>Y : Y
-+
-     (...args: Y): any;
- >args : Y
- }
-@@= skipped -14, +17 lines =@@
+@@= skipped -17, +17 lines =@@
  >tester : Tester
  
  declare function fn<Y extends any[]>(implementation?: (...args: Y) => any): Mock<Y>;
 ->fn : <Y extends any[]>(implementation?: (...args: Y) => any) => Mock<Y>
 ->implementation : ((...args: Y) => any) | undefined
 +>fn : <Y extends any[]>(implementation?: (...args: Y) => any | undefined) => Mock<Y>
-+>Y : Y
 +>implementation : (...args: Y) => any | undefined
  >args : Y
  

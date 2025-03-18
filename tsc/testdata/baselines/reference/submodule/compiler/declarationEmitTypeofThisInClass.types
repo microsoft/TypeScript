@@ -9,5 +9,7 @@ class Foo {
 
     public bar!: typeof this.foo //Public property 'bar' of exported class has or is using private name 'this'.(4031)
 >bar : string
+>this.foo : string
 >this : this
+>foo : string
 }

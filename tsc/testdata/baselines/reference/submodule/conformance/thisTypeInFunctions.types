@@ -67,8 +67,6 @@ class D extends C { }
 >C : C
 
 interface I {
->I : I
-
     a: number;
 >a : number
 
@@ -748,6 +746,7 @@ class Base1 {
     static explicitStatic(this: typeof Base1): number { return this.y; }
 >explicitStatic : () => number
 >this : typeof Base1
+>Base1 : typeof Base1
 >this.y : number
 >this : typeof Base1
 >y : number
@@ -924,7 +923,6 @@ declare var f: {
 
     call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U;
 >call : <U>(...argArray: any[]) => U
->U : U
 >this : (...argArray: any[]) => U
 >argArray : any[]
 >argArray : any[]

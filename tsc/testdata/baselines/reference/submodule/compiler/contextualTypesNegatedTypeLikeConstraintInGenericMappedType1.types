@@ -32,8 +32,6 @@ let DEFAULT_TABS_TAG = "div" as const;
 
 type Props<TTag extends ElementType, Overrides = {}> = Omit<
 >Props : Props<TTag, Overrides>
->TTag : TTag
->Overrides : Overrides
 
   IntrinsicElements[TTag],
   keyof Overrides
@@ -42,7 +40,7 @@ type Props<TTag extends ElementType, Overrides = {}> = Omit<
 
 type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
 >TabGroupProps : TabGroupProps<TTag>
->TTag : TTag
+>DEFAULT_TABS_TAG : "div"
 
   TTag,
   {
@@ -65,10 +63,8 @@ type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
 >;
 
 interface _internal_ComponentTabGroup {
->_internal_ComponentTabGroup : _internal_ComponentTabGroup
-
   <TTag extends ElementType = typeof DEFAULT_TABS_TAG>(
->TTag : TTag
+>DEFAULT_TABS_TAG : "div"
 
     props: TabGroupProps<TTag>,
 >props : TabGroupProps<TTag>

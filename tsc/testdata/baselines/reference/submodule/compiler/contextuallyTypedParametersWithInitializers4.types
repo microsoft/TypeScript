@@ -5,10 +5,7 @@ declare function test<
 >test : <TContext, TMethods extends Record<string, (ctx: TContext, ...args: (1 | 2)[]) => unknown>>(context: TContext, methods: TMethods) => void
 
   TContext,
->TContext : TContext
-
   TMethods extends Record<string, (ctx: TContext, ...args: (1 | 2)[]) => unknown>,
->TMethods : TMethods
 >ctx : TContext
 >args : (1 | 2)[]
 

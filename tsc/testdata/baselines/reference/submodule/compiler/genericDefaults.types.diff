@@ -1,49 +1,11 @@
 --- old.genericDefaults.types
 +++ new.genericDefaults.types
-@@= skipped -1, +1 lines =@@
- 
- === genericDefaults.ts ===
- interface A { a: number; }
-+>A : A
- >a : number
- 
- interface B { b: number; }
-+>B : B
- >b : number
- 
- interface C { c: number; }
-+>C : C
- >c : number
- 
- interface D { d: number; }
-+>D : D
- >d : number
- 
- interface AB { a: number; b: number; }
-+>AB : AB
- >a : number
- >b : number
- 
- interface BC { b: number; c: number; }
-+>BC : BC
- >b : number
- >c : number
- 
-@@= skipped -58, +64 lines =@@
- // function with a type parameter without a default
- declare function f01<T>(a?: T): T;
- >f01 : <T>(a?: T) => T
-+>T : T
- >a : T
- 
- // inference
-@@= skipped -24, +25 lines =@@
+@@= skipped -83, +83 lines =@@
  
  // function with a type paramter with a default
  declare function f02<T = A>(a?: T): T;
 ->f02 : <T = A>(a?: T) => T
 +>f02 : <T>(a?: T) => T
-+>T : T
  >a : T
  
  // inference
@@ -91,7 +53,6 @@
  declare function f03<T = T>(a?: T): T;
 ->f03 : <T = T>(a?: T) => T
 +>f03 : <T>(a?: T) => T
-+>T : T
  >a : T
  
  // inference
@@ -139,8 +100,6 @@
  declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 ->f04 : <T, U = B>(a?: T, b?: U) => [T, U]
 +>f04 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -230,8 +189,6 @@
  declare function f05<T, U = T>(a?: T, b?: U): [T, U];
 ->f05 : <T, U = T>(a?: T, b?: U) => [T, U]
 +>f05 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -303,8 +260,6 @@
  declare function f06<T = A, U = T>(a?: T, b?: U): [T, U];
 ->f06 : <T = A, U = T>(a?: T, b?: U) => [T, U]
 +>f06 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -426,13 +381,10 @@
  declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 ->f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f07 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
-+>T : T
-+>U : U
-+>V : V
  >a : T
  >b : U
  >c : V
-@@= skipped -323, +334 lines =@@
+@@= skipped -323, +323 lines =@@
  // inference
  f07();
  >f07() : [unknown, B, B]
@@ -621,8 +573,6 @@
  declare function f08<T extends A, U = T>(a?: T, b?: U): [T, U];
 ->f08 : <T extends A, U = T>(a?: T, b?: U) => [T, U]
 +>f08 : <T extends A, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -694,8 +644,6 @@
  declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
 ->f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
 +>f09 : <T, U extends T>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -774,8 +722,6 @@
  declare function f10<T extends A, U extends T = T>(a?: T, b?: U): [T, U];
 ->f10 : <T extends A, U extends T = T>(a?: T, b?: U) => [T, U]
 +>f10 : <T extends A, U extends T>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -879,8 +825,6 @@
  declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
 ->f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
 +>f11 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -966,8 +910,6 @@
  declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
 ->f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
 +>f12 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -1046,8 +988,6 @@
  declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
 ->f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
 +>f13 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -1126,13 +1066,10 @@
  declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
 ->f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f14 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
-+>T : T
-+>U : U
-+>V : V
  >a : T
  >b : U
  >c : V
-@@= skipped -469, +484 lines =@@
+@@= skipped -469, +469 lines =@@
  // inference
  f14();
  >f14() : [unknown, unknown, C]
@@ -1252,8 +1189,6 @@
  declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
 ->f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
 +>f15 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -1318,13 +1253,10 @@
  declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 ->f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f16 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
-+>T : T
-+>U : U
-+>V : V
  >a : T
  >b : U
  >c : V
-@@= skipped -84, +89 lines =@@
+@@= skipped -84, +84 lines =@@
  // no inference
  f16();
  >f16() : [unknown, unknown, unknown]
@@ -1436,8 +1368,6 @@
  declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
 ->f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
 +>f17 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -1523,13 +1453,10 @@
  declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
 ->f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f18 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
-+>T : T
-+>U : U
-+>V : V
  >a : T
  >b : U
  >c : V
-@@= skipped -102, +107 lines =@@
+@@= skipped -102, +102 lines =@@
  // inference
  f18();
  >f18() : [unknown, unknown, unknown]
@@ -1665,8 +1592,6 @@
  declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
 ->f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
 +>f19 : <T, U>(a?: T, b?: U) => [T, U]
-+>T : T
-+>U : U
  >a : T
  >b : U
  
@@ -1752,13 +1677,10 @@
  declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 ->f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 +>f20 : <T, U, V>(a?: T, b?: U, c?: V) => [T, U, V]
-+>T : T
-+>U : U
-+>V : V
  >a : T
  >b : U
  >c : V
-@@= skipped -102, +107 lines =@@
+@@= skipped -102, +102 lines =@@
  // inference
  f20();
  >f20() : [unknown, unknown, C]
@@ -1865,173 +1787,12 @@
  >a : A
  >b : B
  >d : D
- 
- interface i00<T = number> { a: T; }
-+>i00 : i00<T>
-+>T : T
- >a : T
- 
- const i00c00 = (<i00>x).a;
-@@= skipped -40, +42 lines =@@
- >a : number
- 
- interface i01<T, U = T> { a: [T, U]; }
-+>i01 : i01<T, U>
-+>T : T
-+>U : U
- >a : [T, U]
- 
- const i01c00 = (<i01<number>>x).a;
-@@= skipped -19, +22 lines =@@
- >a : [number, string]
- 
- interface i02<T extends number, U = T> { a: [T, U]; }
-+>i02 : i02<T, U>
-+>T : T
-+>U : U
- >a : [T, U]
- 
- const i02c00 = (<i02<number>>x).a;
-@@= skipped -43, +46 lines =@@
- >a : [number, 1]
- 
- interface i03<T extends number, U extends T = T> { a: [T, U]; }
-+>i03 : i03<T, U>
-+>T : T
-+>U : U
- >a : [T, U]
- 
- const i03c00 = (<i03<number>>x).a;
-@@= skipped -43, +46 lines =@@
- >a : [number, 1]
- 
- interface i04 {}
-+>i04 : i04<T, U>
-+
- interface i04<T> {}
-+>i04 : i04<T, U>
-+>T : T
-+
- interface i04<T = number> {}
-+>i04 : i04<T, U>
-+>T : T
-+
- interface i04<T = number, U = string> {}
-+>i04 : i04<T, U>
-+>T : T
-+>U : U
- 
- interface i05<T = T> { a: T; }
-+>i05 : i05<T>
-+>T : T
- >a : T
- 
- const i05c00 = (<i05>x).a;
-@@= skipped -24, +37 lines =@@
- >a : number
- 
- interface i06<T = U, U = T> { a: [T, U]; }
-+>i06 : i06<T, U>
-+>T : T
-+>U : U
- >a : [T, U]
- 
- const i06c00 = (<i06>x).a;
-@@= skipped -27, +30 lines =@@
+@@= skipped -196, +196 lines =@@
  >a : [number, string]
  
  interface i07 { a: A; }
 ->a : globalThis.A
-+>i07 : i07<A>
 +>a : A
  
  interface i07<A = number> { b: A; }
-+>i07 : i07<A>
-+>A : A
  >b : A
- 
- const i07c00 = (<i07>x).a;
-@@= skipped -38, +41 lines =@@
- >b : B
- 
- interface Base01<T> { a: T; }
-+>Base01 : Base01<T>
-+>T : T
- >a : T
- 
- interface Base01Constructor { new <T = number>(a?: T): Base01<T>; }
-+>Base01Constructor : Base01Constructor
-+>T : T
- >a : T
- 
- declare const Base01: Base01Constructor;
-@@= skipped -32, +36 lines =@@
- 
- declare class Derived01<T> extends Base01<T> { }
- >Derived01 : Derived01<T>
-+>T : T
- >Base01 : Base01<T>
- 
- const Derived01c00 = new Derived01();
-@@= skipped -26, +27 lines =@@
- 
- declare class Derived02<T = string> extends Base01<T> { }
- >Derived02 : Derived02<T>
-+>T : T
- >Base01 : Base01<T>
- 
- const Derived02c00 = new Derived02();
-@@= skipped -26, +27 lines =@@
- 
- // https://github.com/Microsoft/TypeScript/issues/16211
- interface Base02 {}
-+>Base02 : Base02
-+
- interface Base02Constructor { new <T = A>(a: T): Base02 & T; }
-+>Base02Constructor : Base02Constructor
-+>T : T
- >a : T
- 
- declare const Base02: Base02Constructor;
-@@= skipped -27, +31 lines =@@
- 
- type t00<T = number> = { a: T; }
- >t00 : t00<T>
-+>T : T
- >a : T
- 
- const t00c00 = (<t00>x).a;
-@@= skipped -20, +21 lines =@@
- 
- type t01<T, U = T> = { a: [T, U]; }
- >t01 : t01<T, U>
-+>T : T
-+>U : U
- >a : [T, U]
- 
- const t01c00 = (<t01<number>>x).a;
-@@= skipped -20, +22 lines =@@
- 
- type t02<T extends number, U = T> = { a: [T, U]; }
- >t02 : t02<T, U>
-+>T : T
-+>U : U
- >a : [T, U]
- 
- const t02c00 = (<t02<number>>x).a;
-@@= skipped -44, +46 lines =@@
- 
- type t03<T extends number, U extends T = T> = { a: [T, U]; }
- >t03 : t03<T, U>
-+>T : T
-+>U : U
- >a : [T, U]
- 
- const t03c00 = (<t03<number>>x).a;
-@@= skipped -44, +46 lines =@@
- 
- // https://github.com/Microsoft/TypeScript/issues/16221
- interface SelfReference<T = SelfReference<string>> {}
-+>SelfReference : SelfReference<T>
-+>T : T
-+

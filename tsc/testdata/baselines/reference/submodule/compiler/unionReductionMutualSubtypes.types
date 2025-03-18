@@ -4,8 +4,6 @@
 // Repro from #35414
 
 interface ReturnVal {
->ReturnVal : ReturnVal
-
     something(): void;
 >something : () => void
 }

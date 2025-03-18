@@ -1,32 +1,6 @@
 --- old.tsxAttributeResolution9.types
 +++ new.tsxAttributeResolution9.types
-@@= skipped -1, +1 lines =@@
- 
- === react.d.ts ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
- 	}
- 	interface ElementAttributesProperty {
-+>ElementAttributesProperty : ElementAttributesProperty
-+
- 		props;
- >props : any
- 	}
- }
- 
- interface Props {  
-+>Props : Props
-+
-   foo: string;
- >foo : string
- }
-@@= skipped -28, +37 lines =@@
+@@= skipped -29, +29 lines =@@
  }
  
  <MyComponent foo="bar" />; // ok  

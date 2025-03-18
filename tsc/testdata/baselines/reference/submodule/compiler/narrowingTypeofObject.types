@@ -2,7 +2,6 @@
 
 === narrowingTypeofObject.ts ===
 interface F { (): string }
->F : F
 
 function test(x: number & { _foo: string }) {
 >test : (x: number & { _foo: string; }) => void

@@ -59,8 +59,6 @@ declare const cIndex: 1;
 >cIndex : 1
 
 interface Foo {
->Foo : Foo
-
     x: number | undefined;
 >x : number | undefined
 }

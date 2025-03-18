@@ -5,7 +5,6 @@
  
  === duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts ===
 +export interface IPoint {}
-+>IPoint : IPoint
  
 +export module Shapes {
 +>Shapes : typeof Shapes

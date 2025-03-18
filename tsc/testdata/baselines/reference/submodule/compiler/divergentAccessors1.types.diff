@@ -1,15 +1,6 @@
 --- old.divergentAccessors1.types
 +++ new.divergentAccessors1.types
-@@= skipped -4, +4 lines =@@
- 
- {
-     interface IHasGetSet {
-+>IHasGetSet : IHasGetSet
-+
-         get foo(): number;
- >foo : number
- 
-@@= skipped -28, +30 lines =@@
+@@= skipped -32, +32 lines =@@
  
  {
      type T_HasGetSet = {

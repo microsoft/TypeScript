@@ -1,16 +1,6 @@
 --- old.importTypeGenericArrowTypeParenthesized.types
 +++ new.importTypeGenericArrowTypeParenthesized.types
-@@= skipped -4, +4 lines =@@
- >"module" : typeof import("module")
- 
-     export interface Modifier<T> { }
-+>Modifier : Modifier<T>
-+>T : T
- 
-     export function fn<T>(x: T): Modifier<T>;
- >fn : <T>(x: T) => Modifier<T>
-+>T : T
- >x : T
+@@= skipped -11, +11 lines =@@
  }
  === index.ts ===
  import { fn } from "module";
@@ -25,7 +15,6 @@
 +>fn(<T>(x: T): T => x) : Modifier<<T>(x: T) => T>
 +>fn : <T>(x: T) => Modifier<T>
  ><T>(x: T): T => x : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
  
@@ -37,11 +26,9 @@
 +>fn(function<T>(x: T): T {  return x;}) : Modifier<<T>(x: T) => T>
 +>fn : <T>(x: T) => Modifier<T>
  >function<T>(x: T): T {  return x;} : <T>(x: T) => T
-+>T : T
  >x : T
  
-   return x;
-@@= skipped -30, +35 lines =@@
+@@= skipped -23, +23 lines =@@
  });
  
  export const works1 = fn((x: number) => x);
@@ -54,10 +41,7 @@
  >(x: number) => x : (x: number) => number
  >x : number
  >x : number
- 
- type MakeItWork = <T>(x: T) => T;
- >MakeItWork : MakeItWork
-+>T : T
+@@= skipped -12, +12 lines =@@
  >x : T
  
  export const works2 = fn<MakeItWork>(x => x);

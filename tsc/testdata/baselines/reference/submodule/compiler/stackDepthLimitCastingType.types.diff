@@ -1,15 +1,7 @@
 --- old.stackDepthLimitCastingType.types
 +++ new.stackDepthLimitCastingType.types
-@@= skipped -4, +4 lines =@@
- >global : typeof global
- 
-     interface JQueryXHR { }
-+>JQueryXHR : JQueryXHR
-+
-     class Model<T = any, E = {}> {
+@@= skipped -8, +8 lines =@@
  >Model : Model<T, E>
-+>T : T
-+>E : E
  
          initialize(attributes?: T, options?: CombinedModelConstructorOptions<E, this>): void;
 ->initialize : (attributes?: T, options?: CombinedModelConstructorOptions<E, this>) => void
@@ -17,32 +9,7 @@
  >attributes : T | undefined
  >options : CombinedModelConstructorOptions<E, this> | undefined
  
-@@= skipped -13, +17 lines =@@
- >options : any
-     }
-     interface ModelConstructorOptions<TModel extends Model = Model> {
-+>ModelConstructorOptions : ModelConstructorOptions<TModel>
-+>TModel : TModel
-+
-         collection?: Collection<TModel>;
- >collection : Collection<TModel> | undefined
-     }
-     class Collection<TModel extends Model = Model> {
- >Collection : Collection<TModel>
-+>TModel : TModel
- 
-         without(...values: TModel[]): TModel[];
- >without : (...values: TModel[]) => TModel[]
-@@= skipped -12, +16 lines =@@
-     }
-     type CombinedModelConstructorOptions<E, M extends Model<any, E> = Model> = ModelConstructorOptions<M> & E;
- >CombinedModelConstructorOptions : CombinedModelConstructorOptions<E, M>
-+>E : E
-+>M : M
- }
- 
- export {
-@@= skipped -12, +14 lines =@@
+@@= skipped -33, +33 lines =@@
  
  === node_modules/backbone-fetch-cache/index.d.ts ===
  import * as Backbone from "backbone";
@@ -54,12 +21,8 @@
 +>"backbone" : typeof import("node_modules/backbone/index")
  
      interface ModelWithCache extends Model {
-+>ModelWithCache : ModelWithCache
-+
          fetch(options?: any): JQueryXHR;
- >fetch : (options?: any) => JQueryXHR
- >options : any
-@@= skipped -17, +19 lines =@@
+@@= skipped -17, +17 lines =@@
  
  === index.ts ===
  import * as Backbone from "backbone";

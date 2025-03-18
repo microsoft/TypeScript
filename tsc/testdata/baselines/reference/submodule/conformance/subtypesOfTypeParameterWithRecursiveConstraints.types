@@ -5,14 +5,10 @@
 
 class Foo<T> { foo: T; }
 >Foo : Foo<T>
->T : T
 >foo : T
 
 function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
 >f : <T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) => void
->T : T
->U : U
->V : V
 >t : T
 >u : U
 >v : V
@@ -223,7 +219,6 @@ module M1 {
 
     class Base<T> {
 >Base : Base<T>
->T : T
 
         foo: T;
 >foo : T
@@ -231,9 +226,6 @@ module M1 {
 
     class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
 >D1 : D1<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<T>
 
         [x: string]: T;
@@ -245,9 +237,6 @@ module M1 {
 
     class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
 >D2 : D2<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<T>
 
         [x: string]: T;
@@ -259,9 +248,6 @@ module M1 {
 
     class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
 >D3 : D3<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<T>
 
         [x: string]: T;
@@ -273,9 +259,6 @@ module M1 {
 
     class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
 >D4 : D4<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<U>
 
         [x: string]: U;
@@ -287,9 +270,6 @@ module M1 {
 
     class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
 >D5 : D5<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<U>
 
         [x: string]: U;
@@ -301,9 +281,6 @@ module M1 {
 
     class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
 >D6 : D6<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<U>
 
         [x: string]: U;
@@ -315,9 +292,6 @@ module M1 {
 
     class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
 >D7 : D7<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<V>
 
         [x: string]: V;
@@ -329,9 +303,6 @@ module M1 {
 
     class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
 >D8 : D8<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<V>
 
         [x: string]: V;
@@ -343,9 +314,6 @@ module M1 {
 
     class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
 >D9 : D9<T, U, V>
->T : T
->U : U
->V : V
 >Base : Base<V>
 
         [x: string]: V;
@@ -362,7 +330,6 @@ module M2 {
 
     class Base2<T> {
 >Base2 : Base2<T>
->T : T
 
         foo: Foo<T>;
 >foo : Foo<T>
@@ -370,9 +337,6 @@ module M2 {
 
     class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
 >D1 : D1<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<T>
 
         [x: string]: T;
@@ -384,9 +348,6 @@ module M2 {
 
     class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
 >D2 : D2<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<T>
 
         [x: string]: T;
@@ -398,9 +359,6 @@ module M2 {
 
     class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
 >D3 : D3<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<T>
 
         [x: string]: T;
@@ -412,9 +370,6 @@ module M2 {
 
     class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
 >D4 : D4<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<U>
 
         [x: string]: U;
@@ -426,9 +381,6 @@ module M2 {
 
     class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
 >D5 : D5<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<U>
 
         [x: string]: U;
@@ -440,9 +392,6 @@ module M2 {
 
     class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
 >D6 : D6<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<U>
 
         [x: string]: U;
@@ -454,9 +403,6 @@ module M2 {
 
     class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
 >D7 : D7<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<V>
 
         [x: string]: V;
@@ -468,9 +414,6 @@ module M2 {
 
     class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
 >D8 : D8<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<V>
 
         [x: string]: V;
@@ -482,9 +425,6 @@ module M2 {
 
     class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
 >D9 : D9<T, U, V>
->T : T
->U : U
->V : V
 >Base2 : Base2<V>
 
         [x: string]: V;

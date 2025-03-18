@@ -2,8 +2,6 @@
 
 === narrowingRestGenericCall.ts ===
 interface Slugs {
->Slugs : Slugs
-
   foo: string;
 >foo : string
 
@@ -13,7 +11,6 @@ interface Slugs {
 
 function call<T extends object>(obj: T, cb: (val: T) => void) {
 >call : <T extends object>(obj: T, cb: (val: T) => void) => void
->T : T
 >obj : T
 >cb : (val: T) => void
 >val : T

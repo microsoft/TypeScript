@@ -16,6 +16,7 @@
 ->THREE : typeof _three
 ->_three : typeof _three
 +>THREE : typeof import("three")
++>_three : typeof import("three")
  }
  
  === test.ts ===

@@ -1,22 +1,6 @@
 --- old.destructuringInFunctionType.types
 +++ new.destructuringInFunctionType.types
-@@= skipped -1, +1 lines =@@
- 
- === destructuringInFunctionType.ts ===
- interface a { a }
-+>a : a
- >a : any
- 
- interface b { b }
-+>b : b
- >b : any
- 
- interface c { c }
-+>c : c
- >c : any
- 
- type T1 = ([a, b, c]);
-@@= skipped -54, +57 lines =@@
+@@= skipped -55, +55 lines =@@
  >c : any
  
  var v1 = ([a, b, c]) => "hello";

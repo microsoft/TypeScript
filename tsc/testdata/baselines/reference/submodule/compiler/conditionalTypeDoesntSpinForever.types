@@ -17,11 +17,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   }
   
   export interface PubSubRecord<NAME extends string, RECORD, IDENTIFIER extends Partial<RECORD>> {
->PubSubRecord : PubSubRecord<NAME, RECORD, IDENTIFIER>
->NAME : NAME
->RECORD : RECORD
->IDENTIFIER : IDENTIFIER
-
     name: NAME;
 >name : NAME
 
@@ -40,14 +35,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   type NameFieldConstructor<SO_FAR> =
 >NameFieldConstructor : NameFieldConstructor<SO_FAR>
->SO_FAR : SO_FAR
 
     SO_FAR extends {name: any} ? {} : {
 >name : any
 
       name: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {name: TYPE}>
 >name : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
->TYPE : TYPE
 >t : TYPE
 >name : TYPE
     }
@@ -55,7 +48,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   const buildNameFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildNameFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
 ><SO_FAR>(soFar: SO_FAR) => (    "name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->SO_FAR : SO_FAR
 >soFar : SO_FAR
 >(    "name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    }  ) : {} | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
 
@@ -70,7 +62,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
       name: <TYPE>(instance: TYPE = undefined) =>
 >name : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
 ><TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}> : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
->TYPE : TYPE
 >instance : TYPE
 >undefined : undefined
 
@@ -96,7 +87,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   type StoredAsConstructor<SO_FAR> =
 >StoredAsConstructor : StoredAsConstructor<SO_FAR>
->SO_FAR : SO_FAR
 
     SO_FAR extends {storedAs: any} ? {} : {
 >storedAs : any
@@ -115,7 +105,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   const buildStoredAsConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildStoredAsConstructor : <SO_FAR>(soFar: SO_FAR) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 ><SO_FAR>(soFar: SO_FAR) => (    "storedAs" in soFar ? {} : {      storedAsJsonEncodedRedisString: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,      storedAsRedisHash: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,    }  ) : <SO_FAR>(soFar: SO_FAR) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
->SO_FAR : SO_FAR
 >soFar : SO_FAR
 >(    "storedAs" in soFar ? {} : {      storedAsJsonEncodedRedisString: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,      storedAsRedisHash: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,    }  ) : {} | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 
@@ -179,7 +168,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   type IdentifierFieldConstructor<SO_FAR> =
 >IdentifierFieldConstructor : IdentifierFieldConstructor<SO_FAR>
->SO_FAR : SO_FAR
 
     SO_FAR extends {identifier: any} ? {} :
 >identifier : any
@@ -189,7 +177,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
 >identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
->TYPE : TYPE
 >t : TYPE
 >identifier : TYPE
 
@@ -198,7 +185,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   const buildIdentifierFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildIdentifierFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
 ><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->SO_FAR : SO_FAR
 >soFar : SO_FAR
 >(    "identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    }  ) : {} | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
 
@@ -220,7 +206,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
       identifier: <TYPE>(instance: TYPE = undefined) =>
 >identifier : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
 ><TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}> : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
->TYPE : TYPE
 >instance : TYPE
 >undefined : undefined
 
@@ -246,14 +231,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   type RecordFieldConstructor<SO_FAR> =
 >RecordFieldConstructor : RecordFieldConstructor<SO_FAR>
->SO_FAR : SO_FAR
 
     SO_FAR extends {record: any} ? {} : {
 >record : any
 
       record: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {record: TYPE}>
 >record : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
->TYPE : TYPE
 >t : TYPE
 >record : TYPE
     }
@@ -261,7 +244,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   const buildRecordFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildRecordFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
 ><SO_FAR>(soFar: SO_FAR) => (    "record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->SO_FAR : SO_FAR
 >soFar : SO_FAR
 >(    "record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    }  ) : {} | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
 
@@ -276,7 +258,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
       record: <TYPE>(instance: TYPE = undefined) =>
 >record : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
 ><TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}> : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
->TYPE : TYPE
 >instance : TYPE
 >undefined : undefined
 
@@ -302,7 +283,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   type MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> =
 >MaxMsToWaitBeforePublishingFieldConstructor : MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
->SO_FAR : SO_FAR
 
     SO_FAR extends {maxMsToWaitBeforePublishing: any} ? {} : {
 >maxMsToWaitBeforePublishing : any
@@ -320,7 +300,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   const buildMaxMsToWaitBeforePublishingFieldConstructor = <SO_FAR>(soFar: SO_FAR): MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> => (
 >buildMaxMsToWaitBeforePublishingFieldConstructor : <SO_FAR>(soFar: SO_FAR) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
 ><SO_FAR>(soFar: SO_FAR): MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> => (    "maxMsToWaitBeforePublishing" in soFar ? {} : {      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    }  ) as MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> : <SO_FAR>(soFar: SO_FAR) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
->SO_FAR : SO_FAR
 >soFar : SO_FAR
 >(    "maxMsToWaitBeforePublishing" in soFar ? {} : {      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    }  ) as MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> : MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
 >(    "maxMsToWaitBeforePublishing" in soFar ? {} : {      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    }  ) : {} | { maxMsToWaitBeforePublishing: (instance?: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>; neverDelayPublishing: () => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>; }
@@ -377,7 +356,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   type TypeConstructor<SO_FAR> =
 >TypeConstructor : TypeConstructor<SO_FAR>
->SO_FAR : SO_FAR
 
     SO_FAR extends {identifier: any, record: any, maxMsToWaitBeforePublishing: number, storedAs: PubSubRecordIsStoredInRedisAsA} ? {
 >identifier : any
@@ -400,7 +378,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   const buildType = <SO_FAR>(soFar: SO_FAR) => (
 >buildType : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
 ><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    }  ) : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->SO_FAR : SO_FAR
 >soFar : SO_FAR
 >(    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    }  ) : {} | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
 
@@ -452,7 +429,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   type BuildPubSubRecordType<SO_FAR> =
 >BuildPubSubRecordType : BuildPubSubRecordType<SO_FAR>
->SO_FAR : SO_FAR
 
     NameFieldConstructor<SO_FAR> &
     IdentifierFieldConstructor<SO_FAR> &
@@ -464,7 +440,6 @@ export enum PubSubRecordIsStoredInRedisAsA {
   const buildPubSubRecordType = <SO_FAR>(soFar: SO_FAR) => Object.assign(
 >buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
 ><SO_FAR>(soFar: SO_FAR) => Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) as BuildPubSubRecordType<SO_FAR> : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
->SO_FAR : SO_FAR
 >soFar : SO_FAR
 >Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) as BuildPubSubRecordType<SO_FAR> : BuildPubSubRecordType<SO_FAR>
 >Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) : any

@@ -31,27 +31,7 @@
  
  declare global {
  >global : any
- 
-   namespace FullCalendarVDom {
-+>FullCalendarVDom : typeof FullCalendarVDom
-+
-     type VNode = preact.VNode<any>;
- >VNode : VNode
- >preact : any
-@@= skipped -41, +43 lines =@@
- 
-     function useMemo<T>(factory: () => T, deps: undefined): T;
- >useMemo : <T>(factory: () => T, deps: undefined) => T
-+>T : T
- >factory : () => T
- >deps : undefined
- }
-@@= skipped -9, +10 lines =@@
- >preact : typeof import("/node_modules/preact/index")
- 
- export interface VNode<P = {}> {}
-+>VNode : VNode<P>
-+>P : P
+@@= skipped -53, +53 lines =@@
  
  === /index.tsx ===
  import FullCalendar from "@fullcalendar/react";

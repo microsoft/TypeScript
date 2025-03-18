@@ -3,7 +3,6 @@
 === privateNamesInGenericClasses.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     #foo: T;
 >#foo : T

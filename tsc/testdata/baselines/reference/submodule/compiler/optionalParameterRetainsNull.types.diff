@@ -1,11 +1,6 @@
 --- old.optionalParameterRetainsNull.types
 +++ new.optionalParameterRetainsNull.types
-@@= skipped -1, +1 lines =@@
- 
- === optionalParameterRetainsNull.ts ===
- interface Bar {  bar: number; foo: object | null;  }
-+>Bar : Bar
- >bar : number
+@@= skipped -5, +5 lines =@@
  >foo : object | null
  
  let a = {
@@ -17,7 +12,6 @@
    test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }
 ->test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
 +>test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
-+>K : K
  >a : K
  >b : Bar[K] | null | undefined
  

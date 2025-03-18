@@ -6,16 +6,13 @@
 // Mixin utilities
 export type Constructor<T = {}> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 export type PropertiesOf<T> = { [K in keyof T]: T[K] };
 >PropertiesOf : PropertiesOf<T>
->T : T
->K : K
 
 interface IApiItemConstructor extends Constructor<ApiItem>, PropertiesOf<typeof ApiItem> {}
->IApiItemConstructor : IApiItemConstructor
+>ApiItem : typeof ApiItem
 
 // Base class
 class ApiItem {
@@ -37,15 +34,12 @@ class ApiEnumMember extends ApiItem {
 
 // Mixin base class
 interface ApiItemContainerMixin extends ApiItem {
->ApiItemContainerMixin : ApiItemContainerMixin
-
   readonly members: ReadonlyArray<ApiItem>;
 >members : readonly ApiItem[]
 }
 
 function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 >ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & new (...args: any[]) => ApiItemContainerMixin
->TBaseClass : TBaseClass
 
   baseClass: TBaseClass
 >baseClass : TBaseClass

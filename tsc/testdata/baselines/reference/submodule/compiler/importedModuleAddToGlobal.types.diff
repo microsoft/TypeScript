@@ -1,11 +1,8 @@
 --- old.importedModuleAddToGlobal.types
 +++ new.importedModuleAddToGlobal.types
-@@= skipped -3, +3 lines =@@
- // Binding for an import statement in a typeref position is being added to the global scope
+@@= skipped -4, +4 lines =@@
  // Shouldn't compile b.B is not defined in C
  module A {
-+>A : any
-+
      import b = B;
 ->b : typeof b
 ->B : typeof b
@@ -25,7 +22,7 @@
  
      import a = A;
  >a : any
-@@= skipped -28, +30 lines =@@
+@@= skipped -27, +27 lines =@@
  >A : any
  
      function hello(): b.B { return null; }

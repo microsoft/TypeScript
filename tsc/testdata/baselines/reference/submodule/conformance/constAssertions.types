@@ -333,7 +333,6 @@ let q5 = <const> { x: 10, y: 20 };
 
 declare function id<T>(x: T): T;
 >id : <T>(x: T) => T
->T : T
 >x : T
 
 let e1 = v1 as const;  // Error
@@ -397,8 +396,6 @@ function ff1(x: 'foo' | 'bar', y: 1 | 2) {
 
 function ff2<T extends string, U extends string>(x: T, y: U) {
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
->T : T
->U : U
 >x : T
 >y : U
 
@@ -528,7 +525,6 @@ function ff5(verify: boolean, contentMatches: boolean) {
 
 function accessorNames<S extends string>(propName: S) {
 >accessorNames : <S extends string>(propName: S) => [`get-${S}`, `set-${S}`]
->S : S
 >propName : S
 
     return [`get-${propName}`, `set-${propName}`] as const;
@@ -548,8 +544,6 @@ const ns1 = accessorNames('foo');
 
 // repro from https://github.com/microsoft/TypeScript/issues/54374
 interface Foo54374 {
->Foo54374 : Foo54374
-
   a: 1;
 >a : 1
 

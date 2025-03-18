@@ -30,8 +30,6 @@ class MyClass {
 }
 
 interface MyClass {
->MyClass : MyClass
-
     extension1(p: number): void;
 >extension1 : (p: number) => void
 >p : number
@@ -47,7 +45,6 @@ interface MyClass {
 
 class MyGenericClass<T> {
 >MyGenericClass : MyGenericClass<T>
->T : T
 
     private p: T;
 >p : T
@@ -130,7 +127,6 @@ MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) 
 >prototype : MyClass
 >extension2 : (p: number) => void
 >function<T extends MyClass> (this: T, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : <T extends MyClass>(p: number) => void
->T : T
 >this : T
 >p : number
 
@@ -179,7 +175,6 @@ MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) 
 
 function extension3<T extends MyClass> (this: T, p: number) { 
 >extension3 : <T extends MyClass>(p: number) => void
->T : T
 >this : T
 >p : number
 
@@ -237,7 +232,6 @@ MyClass.prototype.extension3 = extension3;
 
 function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
 >extension4 : <T extends number>(p: T) => void
->T : T
 >this : MyGenericClass<T>
 >p : T
 

@@ -11,12 +11,3 @@
  >div : any
  >div : any
  
- === node_modules/@types/react/index.d.ts ===
- declare namespace JSX {
-+>JSX : any
-+
-     interface IntrinsicElements { [x: string]: any; }
-+>IntrinsicElements : IntrinsicElements
- >x : string
- }
- === node_modules/@types/react/jsx-runtime.d.ts ===

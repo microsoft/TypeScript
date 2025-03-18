@@ -8,8 +8,6 @@ module M2 {
 >M2 : typeof M2
 
     export interface A {
->A : A
-
         foo: string;
 >foo : string
     }
@@ -34,8 +32,6 @@ module M2 {
 >M2 : typeof M2
 
     export interface A {
->A : A
-
         bar: number;
 >bar : number
     }
@@ -64,8 +60,6 @@ module M2 {
 >M3 : typeof M3
 
         export interface A {
->A : A
-
             foo: string;
 >foo : string
         }
@@ -94,8 +88,6 @@ module M2 {
 >M3 : typeof M3
 
         export interface A {
->A : A
-
             bar: number;
 >bar : number
         }

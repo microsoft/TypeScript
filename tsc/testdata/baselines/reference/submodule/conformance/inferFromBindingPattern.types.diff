@@ -1,32 +1,15 @@
 --- old.inferFromBindingPattern.types
 +++ new.inferFromBindingPattern.types
-@@= skipped -2, +2 lines =@@
- === inferFromBindingPattern.ts ===
- declare function f1<T extends string>(): T;
- >f1 : <T extends string>() => T
-+>T : T
- 
- declare function f2<T extends string>(): [T];
- >f2 : <T extends string>() => [T]
-+>T : T
- 
- declare function f3<T extends string>(): { x: T };
- >f3 : <T extends string>() => { x: T; }
-+>T : T
- >x : T
- 
- let x1 = f1();         // string
-@@= skipped -27, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  // Repro from #30379
  
  function foo<T = number>(): [T] {
 ->foo : <T = number>() => [T]
 +>foo : <T>() => [T]
-+>T : T
  
  	return [42 as any]
  >[42 as any] : [any]
-@@= skipped -10, +11 lines =@@
+@@= skipped -10, +10 lines =@@
  const [x] = foo();  // [number]
  >x : number
  >foo() : [number]
@@ -36,34 +19,18 @@
  // Repro from #35291
  
  interface SelectProps<T, K> {
-+>SelectProps : SelectProps<T, K>
-+>T : T
-+>K : K
-+
    selector?: (obj: T) => K;
 ->selector : ((obj: T) => K) | undefined
 +>selector : (obj: T) => K | undefined
  >obj : T
  }
  
- type SelectResult<T, K> = [K, T];
- >SelectResult : SelectResult<T, K>
-+>T : T
-+>K : K
- 
- interface Person {
-+>Person : Person
-+
-   name: string;
- >name : string
- 
-@@= skipped -22, +30 lines =@@
+@@= skipped -22, +22 lines =@@
  }
  
  declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;
 ->selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
 +>selectJohn : <K>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
-+>K : K
  >props : SelectProps<Person, K> | undefined
  
  const [person] = selectJohn();
@@ -87,21 +54,16 @@
  
  const [personAgain, nufinspecial] = john;
  >personAgain : Person
-@@= skipped -28, +29 lines =@@
- 
- declare function makeTuple<T1>(arg: T1): [T1];
- >makeTuple : <T1>(arg: T1) => [T1]
-+>T1 : T1
+@@= skipped -31, +31 lines =@@
  >arg : T1
  
  declare function stringy<T = string>(arg?: T): T;
 ->stringy : <T = string>(arg?: T) => T
 +>stringy : <T>(arg?: T | undefined) => T
-+>T : T
  >arg : T | undefined
  
  const isStringTuple = makeTuple(stringy());  // [string]
-@@= skipped -11, +13 lines =@@
+@@= skipped -8, +8 lines =@@
  >makeTuple(stringy()) : [string]
  >makeTuple : <T1>(arg: T1) => [T1]
  >stringy() : string

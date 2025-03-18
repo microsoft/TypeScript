@@ -1,32 +1,11 @@
 --- old.mixinOverMappedTypeNoCrash.types
 +++ new.mixinOverMappedTypeNoCrash.types
-@@= skipped -2, +2 lines =@@
- === mixinOverMappedTypeNoCrash.ts ===
- export type ClassInterface<C> = {
- >ClassInterface : ClassInterface<C>
-+>C : C
- 
-     [key in keyof C]: C[key];
-+>key : key
- }
- 
- type InstanceInterface<I> = {
- >InstanceInterface : InstanceInterface<I>
-+>I : I
- 
-     new(...args: any[]): I
- >args : any[]
-@@= skipped -16, +19 lines =@@
- 
- type Constructor<I extends Object, C = any> = ClassInterface<C> & InstanceInterface<I>
+@@= skipped -20, +20 lines =@@
  >Constructor : Constructor<I, C>
-+>I : I
-+>C : C
  
  function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
 ->cloneClass : <T extends Constructor<{}>>(OriginalClass: T) => T
 +>cloneClass : <T extends Constructor<{}, any>>(OriginalClass: T) => T
-+>T : T
  >OriginalClass : T
  
      class AnotherOriginalClass extends OriginalClass {
@@ -35,7 +14,7 @@
  >OriginalClass : {}
  
          constructor(...args: any[]) {
-@@= skipped -20, +23 lines =@@
+@@= skipped -18, +18 lines =@@
          }
      }
      return AnotherOriginalClass

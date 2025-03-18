@@ -18,7 +18,6 @@ export = Widget1
 >Widget1 : Widget1
 
 interface Widget1 { name: string; }
->Widget1 : Widget1
 >name : string
 
 === exporter.ts ===

@@ -1,13 +1,6 @@
 --- old.inferredRestTypeFixedOnce.types
 +++ new.inferredRestTypeFixedOnce.types
-@@= skipped -2, +2 lines =@@
- === inferredRestTypeFixedOnce.ts ===
- function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
- >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void
-+>Args : Args
- >_ : (...args: Args) => void
- >args : Args
- 
+@@= skipped -8, +8 lines =@@
  wrap(({ cancelable } = {}) => {});
  >wrap(({ cancelable } = {}) => {}) : void
  >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void

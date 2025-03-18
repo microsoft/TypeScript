@@ -1,14 +1,6 @@
 --- old.unionReductionMutualSubtypes.types
 +++ new.unionReductionMutualSubtypes.types
-@@= skipped -3, +3 lines =@@
- // Repro from #35414
- 
- interface ReturnVal {
-+>ReturnVal : ReturnVal
-+
-     something(): void;
- >something : () => void
- }
+@@= skipped -9, +9 lines =@@
  
  const k: ReturnVal = { something() { } }
  >k : ReturnVal

@@ -7,8 +7,6 @@ class C { }
 >C : C
 
 interface I { }
->I : I
-
 enum E { }
 >E : E
 
@@ -29,14 +27,11 @@ var v4: T<string>;
 
 function f<U>() {
 >f : <U>() => void
->U : U
 
     class C { }
 >C : C<U>
 
     interface I { }
->I : I<U>
-
     enum E { }
 >E : E
 

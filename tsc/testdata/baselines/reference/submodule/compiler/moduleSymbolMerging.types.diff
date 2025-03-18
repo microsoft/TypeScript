@@ -9,10 +9,3 @@
  >A : any
  }
  
- 
- === A.ts ===
--
- module A { export interface I {} }
-+>A : typeof A
-+>I : I
- 

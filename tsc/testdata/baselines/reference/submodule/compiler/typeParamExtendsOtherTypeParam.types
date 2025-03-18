@@ -3,13 +3,9 @@
 === typeParamExtendsOtherTypeParam.ts ===
 class A<T, U extends T> { }
 >A : A<T, U>
->T : T
->U : U
 
 class B<T extends Object, U extends T> {
 >B : B<T, U>
->T : T
->U : U
 
     data: A<Object, Object>;
 >data : A<Object, Object>
@@ -63,15 +59,11 @@ var x6: B<{ a: string; b: number }, { a: string }>;
 >a : string
 
 interface I1 {
->I1 : I1
-
     a: string;
 >a : string
 }
 
 interface I2 {
->I2 : I2
-
     a: string;
 >a : string
 

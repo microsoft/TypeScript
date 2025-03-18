@@ -3,15 +3,9 @@
 === genericMemberFunction.ts ===
 export class BuildError<A, B, C>{
 >BuildError : BuildError<A, B, C>
->A : A
->B : B
->C : C
 
   public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
 >parent : <A, B extends A, C>() => FileWithErrors<A, B, C>
->A : A
->B : B
->C : C
 
     return undefined;
 >undefined : undefined
@@ -19,24 +13,15 @@ export class BuildError<A, B, C>{
 }
 export class FileWithErrors<A, B, C>{
 >FileWithErrors : FileWithErrors<A, B, C>
->A : A
->B : B
->C : C
 
   public errors<A, B extends A, C>(): BuildError<A, B, C>[] {
 >errors : <A, B extends A, C>() => BuildError<A, B, C>[]
->A : A
->B : B
->C : C
 
     return undefined;
 >undefined : undefined
   }
   public parent<A, B extends A, C>(): BuildResult<A, B, C> {
 >parent : <A, B extends A, C>() => BuildResult<A, B, C>
->A : A
->B : B
->C : C
 
     return undefined;
 >undefined : undefined
@@ -44,15 +29,9 @@ export class FileWithErrors<A, B, C>{
 }
 export class BuildResult<A, B, C>{
 >BuildResult : BuildResult<A, B, C>
->A : A
->B : B
->C : C
 
   public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
 >merge : <A, B extends A, C>(other: BuildResult<A, B, C>) => void
->A : A
->B : B
->C : C
 >other : BuildResult<A, B, C>
 
     a.b.c.d.e.f.g = 0;
@@ -78,9 +57,6 @@ export class BuildResult<A, B, C>{
 >removedFiles : any
 >forEach : any
 ><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A, B extends A, C>(each: FileWithErrors<A, B, C>) => void
->A : A
->B : B
->C : C
 >each : FileWithErrors<A, B, C>
 
       this.removeFile(each);

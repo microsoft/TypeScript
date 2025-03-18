@@ -6,11 +6,10 @@
      static m<T>(this: new () => T, strings: TemplateStringsArray | string) {
 ->m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
 +>m : <T>(strings: string | TemplateStringsArray) => T
-+>T : T
  >this : new () => T
  >strings : string | TemplateStringsArray
  
-@@= skipped -12, +13 lines =@@
+@@= skipped -12, +12 lines =@@
  
  Foo.m`test`;
  >Foo.m`test` : Foo

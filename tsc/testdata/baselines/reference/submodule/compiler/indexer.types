@@ -2,15 +2,11 @@
 
 === indexer.ts ===
 interface JQueryElement {
->JQueryElement : JQueryElement
-
     id:string;
 >id : string
 }
 
 interface JQuery {
->JQuery : JQuery
-
     [n:number]:JQueryElement;
 >n : number
 }

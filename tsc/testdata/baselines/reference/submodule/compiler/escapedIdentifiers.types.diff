@@ -70,20 +70,7 @@
  >foo2 : number
  >2 : 2
  
- // interfaces
- interface interfaceType1 { 
-+>interfaceType1 : interfaceType1
-+
-     bar1: number;
- >bar1 : number
- }
- interface interfaceType\u0032 { 
-+>interfaceType\u0032 : interfaceType2
-+
-     bar2: number;
- >bar2 : number
- }
-@@= skipped -62, +66 lines =@@
+@@= skipped -62, +62 lines =@@
  >2 : 2
  
  var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };

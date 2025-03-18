@@ -3,12 +3,10 @@
 === callOfConditionalTypeWithConcreteBranches.ts ===
 type Q<T> = number extends T ? (n: number) => void : never;
 >Q : Q<T>
->T : T
 >n : number
 
 function fn<T>(arg: Q<T>) {
 >fn : <T>(arg: Q<T>) => void
->T : T
 >arg : Q<T>
 
   // Expected: OK
@@ -42,27 +40,22 @@ fn<number>(m => m.toFixed());
 // Ensure the following real-world example that relies on substitution still works
 type ExtractParameters<T> = "parameters" extends keyof T
 >ExtractParameters : ExtractParameters<T>
->T : T
 
   // The above allows "parameters" to index `T` since all later
   // instances are actually implicitly `"parameters" & keyof T`
   ?  {
         [K in keyof T["parameters"]]: T["parameters"][K];
->K : K
-
       }[keyof T["parameters"]]
   : {};
 
 // Original example, but with inverted variance
 type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
 >Q2 : Q2<T>
->T : T
 >cb : (n: number) => void
 >n : number
 
 function fn2<T>(arg: Q2<T>) {
 >fn2 : <T>(arg: Q2<T>) => void
->T : T
 >arg : Q2<T>
 
   function useT(_arg: T): void {}
@@ -103,17 +96,14 @@ fn2<number>(m => m(42));
 
 type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void : Function;
 >X : X<V>
->V : V
 >args : any[]
 >args : Parameters<V>
 
 // vscode - another `Parameters` example
 export type AddFirstParameterToFunctions<Target> = {
 >AddFirstParameterToFunctions : AddFirstParameterToFunctions<Target>
->Target : Target
 
   [K in keyof Target]: Target[K] extends (...args: any[]) => void
->K : K
 >args : any[]
 
       ? (...args: Parameters<Target[K]>) => void

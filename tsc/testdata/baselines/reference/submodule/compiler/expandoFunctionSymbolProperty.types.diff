@@ -1,15 +1,6 @@
 --- old.expandoFunctionSymbolProperty.types
 +++ new.expandoFunctionSymbolProperty.types
-@@= skipped -8, +8 lines =@@
- >Symbol : SymbolConstructor
- 
- interface TestSymb {
-+>TestSymb : TestSymb
-+
-   (): void;
-   readonly [symb]: boolean;
- >[symb] : boolean
-@@= skipped -10, +12 lines =@@
+@@= skipped -18, +18 lines =@@
  >test : () => TestSymb
  
    function inner() {}

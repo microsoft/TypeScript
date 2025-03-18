@@ -2,28 +2,18 @@
 
 === index.tsx ===
 namespace JSX {
->JSX : any
-
     export interface Element {}
->Element : Element
 }
 
 type Props<T> = PropsBase<string> | PropsWithConvert<T>;
 >Props : Props<T>
->T : T
 
 interface PropsBase<T> {
->PropsBase : PropsBase<T>
->T : T
-
     data: T;
 >data : T
 }
 
 interface PropsWithConvert<T> extends PropsBase<T> {
->PropsWithConvert : PropsWithConvert<T>
->T : T
-
     convert: (t: T) => string;
 >convert : (t: T) => string
 >t : T
@@ -31,7 +21,6 @@ interface PropsWithConvert<T> extends PropsBase<T> {
 
 function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 >ShouldInferFromData : <T>(props: Props<T>) => Element
->T : T
 >props : Props<T>
 >JSX : any
 

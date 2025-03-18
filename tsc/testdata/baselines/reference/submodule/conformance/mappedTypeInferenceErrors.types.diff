@@ -1,23 +1,6 @@
 --- old.mappedTypeInferenceErrors.types
 +++ new.mappedTypeInferenceErrors.types
-@@= skipped -4, +4 lines =@@
- 
- type ComputedOf<T> = {
- >ComputedOf : ComputedOf<T>
-+>T : T
- 
-     [K in keyof T]: () => T[K];
-+>K : K
- }
- 
- declare function foo<P, C>(options: { props: P, computed: ComputedOf<C> } & ThisType<P & C>): void;
- >foo : <P, C>(options: { props: P; computed: ComputedOf<C>; } & ThisType<P & C>) => void
-+>P : P
-+>C : C
- >options : { props: P; computed: ComputedOf<C>; } & ThisType<P & C>
- >props : P
- >computed : ComputedOf<C>
-@@= skipped -13, +17 lines =@@
+@@= skipped -17, +17 lines =@@
  foo({
  >foo({    props: { x: 10, y: 20 },    computed: {        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    }}) : void
  >foo : <P, C>(options: { props: P; computed: ComputedOf<C>; } & ThisType<P & C>) => void

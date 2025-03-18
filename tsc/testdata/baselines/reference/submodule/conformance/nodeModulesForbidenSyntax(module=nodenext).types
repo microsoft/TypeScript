@@ -5,7 +5,6 @@
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -20,7 +19,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -35,7 +33,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -50,7 +47,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -65,7 +61,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -80,7 +75,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -95,7 +89,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -110,7 +103,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -125,7 +117,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -140,7 +131,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -155,7 +145,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined
@@ -170,7 +159,6 @@ export {x};
 const x = <T>() => <T><any>(void 0);
 >x : <T>() => T
 ><T>() => <T><any>(void 0) : <T>() => T
->T : T
 ><T><any>(void 0) : T
 ><any>(void 0) : any
 >(void 0) : undefined

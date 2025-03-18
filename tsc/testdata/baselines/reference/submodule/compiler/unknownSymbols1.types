@@ -27,7 +27,6 @@ var z = <asdf>x; // should be an error
 
 class C<T> {
 >C : C<T>
->T : T
 
     foo: asdf;
 >foo : asdf
@@ -40,7 +39,6 @@ class C2 implements asdf { }
 >C2 : C2
 
 interface I extends adsf { }
->I : I
 
 class C3 { constructor(x: any) { } }
 >C3 : C3

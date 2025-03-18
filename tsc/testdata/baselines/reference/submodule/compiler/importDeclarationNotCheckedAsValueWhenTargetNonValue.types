@@ -14,17 +14,11 @@ declare namespace dojox {
 >Val : Val
 
             interface common {
->common : common
-
                 createText: object;
 >createText : object
             }
             namespace common {
->common : any
-
                 interface createText {
->createText : createText
-
                     gfx(): string
 >gfx : () => string
                 }

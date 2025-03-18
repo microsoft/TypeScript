@@ -1,10 +1,7 @@
 --- old.narrowingTypeofFunction.types
 +++ new.narrowingTypeofFunction.types
-@@= skipped -5, +5 lines =@@
- >foo : string
- 
+@@= skipped -7, +7 lines =@@
  interface F { (): string }
-+>F : F
  
  function f1(a: (F & Meta) | string) {
 ->f1 : (a: (F & Meta) | string) => void
@@ -21,14 +18,13 @@
  >"function" : "function"
  
          a;
-@@= skipped -21, +22 lines =@@
+@@= skipped -19, +19 lines =@@
  }
  
  function f2<T>(x: (T & F) | T & string) {
 ->f2 : <T>(x: (T & F) | (T & string)) => void
 ->x : (T & F) | (T & string)
 +>f2 : <T>(x: T & string | T & F) => void
-+>T : T
 +>x : T & string | T & F
  
      if (typeof x === "function") {
@@ -40,7 +36,7 @@
  >"function" : "function"
  
          x;
-@@= skipped -25, +26 lines =@@
+@@= skipped -25, +25 lines =@@
  
      if (typeof x === "function") {
  >typeof x === "function" : boolean

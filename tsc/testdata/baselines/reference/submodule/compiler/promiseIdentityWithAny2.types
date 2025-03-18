@@ -2,22 +2,12 @@
 
 === promiseIdentityWithAny2.ts ===
 export interface IPromise<T, V> {
->IPromise : IPromise<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->U : U
->W : W
 >callback : (x: T) => IPromise<U, W>
 >x : T
 }
 interface Promise<T, V> {
->Promise : Promise<T, V>
->T : T
->V : V
-
     then(callback: (x: T) => Promise<any, any>): Promise<any, any>;
 >then : (callback: (x: T) => Promise<any, any>) => Promise<any, any>
 >callback : (x: T) => Promise<any, any>
@@ -33,26 +23,14 @@ var x: Promise<string, boolean>;
 
 
 interface IPromise2<T, V> {
->IPromise2 : IPromise2<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => IPromise2<U, W>): IPromise2<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise2<U, W>) => IPromise2<U, W>
->U : U
->W : W
 >callback : (x: T) => IPromise2<U, W>
 >x : T
 }
 interface Promise2<T, V> {
->Promise2 : Promise2<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => Promise2<string, any>): Promise2<any, any>; // Uses string instead of any!
 >then : <U, W>(callback: (x: T) => Promise2<string, any>) => Promise2<any, any>
->U : U
->W : W
 >callback : (x: T) => Promise2<string, any>
 >x : T
 }

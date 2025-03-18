@@ -1,14 +1,6 @@
 --- old.typeSatisfaction_errorLocations1.types
 +++ new.typeSatisfaction_errorLocations1.types
-@@= skipped -63, +63 lines =@@
- 
- function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
- >fn2 : <T extends { a: true; }[]>(f: (...args: T) => void) => void
-+>T : T
- >a : true
- >true : true
- >f : (...args: T) => void
-@@= skipped -70, +71 lines =@@
+@@= skipped -133, +133 lines =@@
  >"20" : "20"
  
  const tuple2 = [10, "20"] as const;

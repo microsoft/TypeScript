@@ -5,7 +5,6 @@
 
 type IsNumber<T> = T extends number ? true : false;
 >IsNumber : IsNumber<T>
->T : T
 >true : true
 >false : false
 

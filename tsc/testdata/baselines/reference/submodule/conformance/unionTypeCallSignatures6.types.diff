@@ -13,35 +13,4 @@
 +>f2 : F0 | F1
  
  interface F3 {
-+>F3 : F3
-+
    (this: A): void;
- >this : A
- 
-@@= skipped -14, +16 lines =@@
- >this : B
- }
- interface F4 {
-+>F4 : F4
-+
-   (this: C): void;
- >this : C
- 
-@@= skipped -7, +9 lines =@@
- >this : D
- }
- interface F5 {
-+>F5 : F5
-+
-   (this: C): void;
- >this : C
- 
-@@= skipped -79, +81 lines =@@
- >f3 : F1 | F6
- 
- interface F7 {
-+>F7 : F7
-+
-   (this: A & B & C): void;
- >this : A & B & C
- 

@@ -5,9 +5,6 @@ module test {
 >test : typeof test
 
     interface Array<T> {
->Array : Array<T>
->T : T
-
         foo: T;
 >foo : T
 
@@ -17,7 +14,6 @@ module test {
 
     function map<U>() {
 >map : <U>() => void
->U : U
 
         var ys: U[] = [];
 >ys : U[]

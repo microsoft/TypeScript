@@ -6,11 +6,10 @@
  function f<T extends ((p1: number) => number)[]>(p: T): T {
 ->f : <T extends ((p1: number) => number)[]>(p: T) => T
 +>f : <T extends (p1: number) => number[]>(p: T) => T
-+>T : T
  >p1 : number
  >p : T
  
-@@= skipped -9, +10 lines =@@
+@@= skipped -9, +9 lines =@@
  }
  
  var v = f([x => x]);

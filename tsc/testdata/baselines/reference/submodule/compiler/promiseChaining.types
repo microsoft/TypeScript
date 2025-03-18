@@ -3,14 +3,12 @@
 === promiseChaining.ts ===
 class Chain<T> {
 >Chain : Chain<T>
->T : T
 
     constructor(public value: T) { }
 >value : T
 
     then<S>(cb: (x: T) => S): Chain<S> {
 >then : <S>(cb: (x: T) => S) => Chain<S>
->S : S
 >cb : (x: T) => S
 >x : T
 

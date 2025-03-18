@@ -5,7 +5,6 @@
 
 declare function callIt<T>(obj: {
 >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
->T : T
 >obj : { produce: (n: number) => T; consume: (x: T) => void; }
 
     produce: (n: number) => T,
@@ -86,7 +85,6 @@ callIt({
 
 declare function callItT<T>(obj: [(n: number) => T, (x: T) => void]): void;
 >callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
->T : T
 >obj : [(n: number) => T, (x: T) => void]
 >n : number
 >x : T
@@ -121,9 +119,6 @@ callItT([_a => 0, n => n.toFixed()]);
 // Repro from #25092
 
 interface MyInterface<T> {
->MyInterface : MyInterface<T>
->T : T
-
     retrieveGeneric: (parameter: string) => T,
 >retrieveGeneric : (parameter: string) => T
 >parameter : string
@@ -136,7 +131,6 @@ interface MyInterface<T> {
 const inferTypeFn = <T>(generic: MyInterface<T>) => generic;
 >inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
 ><T>(generic: MyInterface<T>) => generic : <T>(generic: MyInterface<T>) => MyInterface<T>
->T : T
 >generic : MyInterface<T>
 >generic : MyInterface<T>
 
@@ -167,7 +161,6 @@ const myGeneric = inferTypeFn({
 
 function make<M>(o: { mutations: M,  action: (m: M) => void }) { }
 >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
->M : M
 >o : { mutations: M; action: (m: M) => void; }
 >mutations : M
 >action : (m: M) => void
@@ -201,7 +194,6 @@ make({
 
 declare function foo<A>(options: { a: A, b: (a: A) => void }): void;
 >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
->A : A
 >options : { a: A; b: (a: A) => void; }
 >a : A
 >b : (a: A) => void
@@ -258,8 +250,6 @@ foo({
 
 type Chain<R1, R2> = {
 >Chain : Chain<R1, R2>
->R1 : R1
->R2 : R2
 
     a(): R1,
 >a : () => R1
@@ -276,8 +266,6 @@ type Chain<R1, R2> = {
 
 function test<R1, R2>(foo: Chain<R1, R2>) {}
 >test : <R1, R2>(foo: Chain<R1, R2>) => void
->R1 : R1
->R2 : R2
 >foo : Chain<R1, R2>
 
 test({
@@ -338,7 +326,6 @@ test({
 
 class Wrapper<T = any> {
 >Wrapper : Wrapper<T>
->T : T
 
     public value?: T;
 >value : T | undefined
@@ -349,18 +336,12 @@ type WrappedMap = Record<string, Wrapper>;
 
 type Unwrap<D extends WrappedMap> = {
 >Unwrap : Unwrap<D>
->D : D
 
     [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
->K : K
->T : T
-
 };
 
 type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
 >MappingComponent : MappingComponent<I, O>
->I : I
->O : O
 
     setup(): { inputs: I; outputs: O };
 >setup : () => { inputs: I; outputs: O; }
@@ -375,8 +356,6 @@ type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
 
 declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
 >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
->I : I
->O : O
 >def : MappingComponent<I, O>
 
 createMappingComponent({
@@ -447,7 +426,6 @@ createMappingComponent({
 
 function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {}
 >simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
->T : T
 >props : { generator: () => T; receiver: (t: T) => any; }
 >generator : () => T
 >receiver : (t: T) => any
@@ -455,7 +433,6 @@ function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {
 
 function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => any }) {}
 >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
->T : T
 >props : { generator: (bob: any) => T; receiver: (t: T) => any; }
 >generator : (bob: any) => T
 >bob : any
@@ -464,7 +441,6 @@ function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => a
 
 function nonObject<T>(generator: (bob: any) => T, receiver: (t: T) => any) {}
 >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
->T : T
 >generator : (bob: any) => T
 >bob : any
 >receiver : (t: T) => any
@@ -532,11 +508,6 @@ nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2))
 // Repro from #48466
 
 interface Opts<TParams, TDone, TMapped> {
->Opts : Opts<TParams, TDone, TMapped>
->TParams : TParams
->TDone : TDone
->TMapped : TMapped
-
     fetch: (params: TParams, foo: number) => TDone,
 >fetch : (params: TParams, foo: number) => TDone
 >params : TParams
@@ -549,9 +520,6 @@ interface Opts<TParams, TDone, TMapped> {
 
 function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) {
 >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
->TParams : TParams
->TDone : TDone
->TMapped : TMapped
 >options : Opts<TParams, TDone, TMapped>
 
     return (params: TParams) => {
@@ -577,8 +545,6 @@ function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>
 }
 
 interface Params {
->Params : Params
-
     one: number
 >one : number
 
@@ -657,8 +623,6 @@ declare const branch:
 >branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
 
   <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
->T : T
->U : U
 >_ : { test: T; if: (t: T) => t is U; then: (u: U) => void; }
 >test : T
 >if : (t: T) => t is U
@@ -698,9 +662,6 @@ branch({
 })
 
 interface Props<T> {
->Props : Props<T>
->T : T
-
   a: (x: string) => T;
 >a : (x: string) => T
 >x : string
@@ -712,7 +673,6 @@ interface Props<T> {
 
 declare function Foo<T>(props: Props<T>): null;
 >Foo : <T>(props: Props<T>) => null
->T : T
 >props : Props<T>
 
 Foo({
@@ -746,7 +706,6 @@ Foo({
 
 declare function nested<T>(arg: {
 >nested : <T>(arg: { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }) => T
->T : T
 >arg : { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }
 
   prop: {
@@ -795,7 +754,6 @@ const resNested = nested({
 
 declare function twoConsumers<T>(arg: {
 >twoConsumers : <T>(arg: { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }) => T
->T : T
 >arg : { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }
 
   a: (arg: string) => T;
@@ -839,8 +797,6 @@ const resTwoConsumers = twoConsumers({
 
 declare function multipleProducersBeforeConsumers<T, T2>(arg: {
 >multipleProducersBeforeConsumers : <T, T2>(arg: { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }) => [T, T2]
->T : T
->T2 : T2
 >arg : { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }
 
   a: (arg: string) => T;
@@ -896,9 +852,6 @@ const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 
 declare function withConditionalExpression<T, T2, T3>(arg: {
 >withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
->T : T
->T2 : T2
->T3 : T3
 >arg : { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }
 
   a: (arg1: string) => T;
@@ -956,9 +909,6 @@ const resWithConditionalExpression = withConditionalExpression({
 
 declare function onion<T, T2, T3>(arg: {
 >onion : <T, T2, T3>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }) => [T, T2, T3]
->T : T
->T2 : T2
->T3 : T3
 >arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }
 
   a: (arg1: string) => T;
@@ -1028,10 +978,6 @@ const resOnion = onion({
 
 declare function onion2<T, T2, T3, T4>(arg: {
 >onion2 : <T, T2, T3, T4>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }) => [T, T2, T3, T4]
->T : T
->T2 : T2
->T3 : T3
->T4 : T4
 >arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }
 
   a: (arg1: string) => T;
@@ -1113,7 +1059,6 @@ const resOnion2 = onion2({
 
 declare function distant<T>(args: {
 >distant : <T>(args: { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }) => T
->T : T
 >args : { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }
 
   foo: {

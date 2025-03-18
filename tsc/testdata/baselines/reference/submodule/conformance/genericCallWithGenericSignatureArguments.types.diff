@@ -1,14 +1,6 @@
 --- old.genericCallWithGenericSignatureArguments.types
 +++ new.genericCallWithGenericSignatureArguments.types
-@@= skipped -5, +5 lines =@@
- 
- function foo<T>(a: (x: T) => T, b: (x: T) => T) {
- >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
-+>T : T
- >a : (x: T) => T
- >x : T
- >b : (x: T) => T
-@@= skipped -70, +71 lines =@@
+@@= skipped -75, +75 lines =@@
  >r4 : (x: { x: number; y?: number; }) => { x: number; y?: number; }
  >foo((x: typeof a) => a, (x: typeof b) => b) : (x: { x: number; y?: number; }) => { x: number; y?: number; }
  >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
@@ -16,14 +8,13 @@
 +>(x: typeof a) => a : (x: { x: number; y?: number; }) => { x: number; y?: number; }
  >x : { x: number; y?: number; }
  >a : { x: number; y?: number; }
-->a : { x: number; y?: number; }
+ >a : { x: number; y?: number; }
 ->(x: typeof b) => b : (x: typeof b) => { x: number; z?: number; }
 +>(x: typeof b) => b : (x: { x: number; z?: number; }) => { x: number; z?: number; }
  >x : { x: number; z?: number; }
  >b : { x: number; z?: number; }
-->b : { x: number; z?: number; }
- 
- var r5 = foo((x: typeof b) => b, (x: typeof a) => a); // typeof b => typeof b
+ >b : { x: number; z?: number; }
+@@= skipped -13, +13 lines =@@
  >r5 : (x: { x: number; z?: number; }) => { x: number; z?: number; }
  >foo((x: typeof b) => b, (x: typeof a) => a) : (x: { x: number; z?: number; }) => { x: number; z?: number; }
  >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
@@ -31,18 +22,13 @@
 +>(x: typeof b) => b : (x: { x: number; z?: number; }) => { x: number; z?: number; }
  >x : { x: number; z?: number; }
  >b : { x: number; z?: number; }
-->b : { x: number; z?: number; }
+ >b : { x: number; z?: number; }
 ->(x: typeof a) => a : (x: typeof a) => { x: number; y?: number; }
 +>(x: typeof a) => a : (x: { x: number; y?: number; }) => { x: number; y?: number; }
  >x : { x: number; y?: number; }
  >a : { x: number; y?: number; }
-->a : { x: number; y?: number; }
- 
- function other<T>(x: T) {
- >other : <T>(x: T) => void
-+>T : T
- >x : T
- 
+ >a : { x: number; y?: number; }
+@@= skipped -16, +16 lines =@@
      var r6 = foo((a: T) => a, (b: T) => b); // T => T
  >r6 : (x: T) => T
  >foo((a: T) => a, (b: T) => b) : (x: T) => T
@@ -51,7 +37,7 @@
  >(a: T) => a : (a: T) => T
  >a : T
  >a : T
-@@= skipped -40, +37 lines =@@
+@@= skipped -11, +11 lines =@@
      var r6b = foo((a) => a, (b) => b); // {} => {}
  >r6b : (x: unknown) => unknown
  >foo((a) => a, (b) => b) : (x: unknown) => unknown
@@ -60,13 +46,7 @@
  >(a) => a : (a: unknown) => unknown
  >a : unknown
  >a : unknown
-@@= skipped -11, +11 lines =@@
- 
- function other2<T extends Date>(x: T) {
- >other2 : <T extends Date>(x: T) => void
-+>T : T
- >x : T
- 
+@@= skipped -16, +16 lines =@@
      var r7 = foo((a: T) => a, (b: T) => b); // T => T
  >r7 : (x: T) => T
  >foo((a: T) => a, (b: T) => b) : (x: T) => T
@@ -75,7 +55,7 @@
  >(a: T) => a : (a: T) => T
  >a : T
  >a : T
-@@= skipped -16, +17 lines =@@
+@@= skipped -11, +11 lines =@@
      var r7b = foo((a) => a, (b) => b); // {} => {}
  >r7b : (x: unknown) => unknown
  >foo((a) => a, (b) => b) : (x: unknown) => unknown
@@ -84,21 +64,7 @@
  >(a) => a : (a: unknown) => unknown
  >a : unknown
  >a : unknown
-@@= skipped -20, +20 lines =@@
- 
- function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
- >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
-+>T : T
- >a : (x: T) => T
- >x : T
- >b : (x: T) => T
-@@= skipped -15, +16 lines =@@
- 
- function other3<T extends RegExp>(x: T) {
- >other3 : <T extends RegExp>(x: T) => void
-+>T : T
- >x : T
- 
+@@= skipped -40, +40 lines =@@
      var r8 = foo2((a: Date) => a, (b: Date) => b); // Date => Date
  >r8 : (x: Date) => Date
  >foo2((a: Date) => a, (b: Date) => b) : (x: Date) => Date

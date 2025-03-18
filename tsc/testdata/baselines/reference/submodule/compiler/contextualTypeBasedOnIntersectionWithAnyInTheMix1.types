@@ -3,41 +3,24 @@
 === contextualTypeBasedOnIntersectionWithAnyInTheMix1.ts ===
 type ComponentType<P> = (p: P) => any;
 >ComponentType : ComponentType<P>
->P : P
 >p : P
 
 type ComponentProps<C> = C extends ComponentType<infer P> ? P : never;
 >ComponentProps : ComponentProps<C>
->C : C
->P : P
 
 type Attrs<P, A extends Partial<P>> = A;
 >Attrs : A
->P : P
->A : A
 
 interface StyledFunction<
->StyledFunction : StyledFunction<C, O, A>
-
   C extends ComponentType<any>,
->C : C
-
   O extends object = {},
->O : O
-
   A extends keyof any = never,
->A : A
-
 > {
   attrs<
 >attrs : <U, NewA extends Partial<ComponentProps<C> & U> & { [others: string]: any; }>(attrs: NewA) => StyledFunction<C, O & NewA, A | keyof NewA>
 
     U,
->U : U
-
     NewA extends Partial<ComponentProps<C> & U> & {
->NewA : NewA
-
       [others: string]: any;
 >others : string
 
@@ -50,10 +33,7 @@ interface StyledFunction<
 }
 
 interface StyledInterface {
->StyledInterface : StyledInterface
-
   <C extends ComponentType<any>>(component: C): StyledFunction<C>;
->C : C
 >component : C
 }
 
@@ -61,8 +41,6 @@ declare const styled: StyledInterface;
 >styled : StyledInterface
 
 interface BaseProps {
->BaseProps : BaseProps
-
   as?: "select" | "input";
 >as : "input" | "select" | undefined
 }

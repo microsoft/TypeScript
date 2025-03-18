@@ -2,14 +2,10 @@
 
 === /types.ts ===
 export interface A {
->A : A
-
     a: number;
 >a : number
 }
 export interface B {
->B : B
-
     a: number;
 >a : number
 }

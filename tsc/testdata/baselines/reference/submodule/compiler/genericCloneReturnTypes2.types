@@ -3,7 +3,6 @@
 === genericCloneReturnTypes2.ts ===
 class MyList<T> {
 >MyList : MyList<T>
->T : T
 
     public size: number;
 >size : number

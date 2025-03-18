@@ -2,16 +2,12 @@
 
 === twoMergedInterfacesWithDifferingOverloads2.ts ===
 interface A {
->A : A
-
     (): string;
     (x: number): number;
 >x : number
 }
 
 interface A {
->A : A
-
     (x: number, y: number): boolean;
 >x : number
 >y : number
@@ -42,24 +38,17 @@ module G {
 >G : typeof G
 
     interface A<T> {
->A : A<T>
->T : T
-
         (): string;
         (x: T): T;
 >x : T
     }
 
     interface A<T> {
->A : A<T>
->T : T
-
         (x: T, y: number): T;
 >x : T
 >y : number
 
         <U>(x: U, y: T): U;
->U : U
 >x : U
 >y : T
     }

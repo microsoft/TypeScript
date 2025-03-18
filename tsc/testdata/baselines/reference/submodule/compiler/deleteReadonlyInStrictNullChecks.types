@@ -2,7 +2,6 @@
 
 === deleteReadonlyInStrictNullChecks.ts ===
 interface Function { readonly name: string; }
->Function : Function
 >name : string
 
 class Foo {}

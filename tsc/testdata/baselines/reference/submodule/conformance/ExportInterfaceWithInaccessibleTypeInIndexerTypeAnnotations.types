@@ -2,11 +2,8 @@
 
 === ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts ===
 module A {
->A : any
 
     interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -15,7 +12,6 @@ module A {
     }
 
     export interface points {
->points : points
 
         [idx: number]: Point;
 >idx : number

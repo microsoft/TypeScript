@@ -17,13 +17,19 @@ export const o = (p1: typeof nImported, p2: typeof nNotImported, p3: typeof nPri
 >o : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
 >(p1: typeof nImported, p2: typeof nNotImported, p3: typeof nPrivate) => null! as { foo: typeof nImported, bar: typeof nPrivate, baz: typeof nNotImported } : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
 >p1 : "nImported"
+>nImported : "nImported"
 >p2 : "nNotImported"
+>nNotImported : "nNotImported"
 >p3 : "private"
+>nPrivate : "private"
 >null! as { foo: typeof nImported, bar: typeof nPrivate, baz: typeof nNotImported } : { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
 >null! : never
 >foo : "nImported"
+>nImported : "nImported"
 >bar : "private"
+>nPrivate : "private"
 >baz : "nNotImported"
+>nNotImported : "nNotImported"
 
 === b.ts ===
 import { o, nImported } from "./a";

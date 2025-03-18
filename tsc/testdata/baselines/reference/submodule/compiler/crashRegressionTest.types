@@ -10,8 +10,6 @@ module MsPortal.Util.TemplateEngine {
 >"use strict" : "use strict"
  
     interface TemplateKeyValue {
->TemplateKeyValue : TemplateKeyValue
-
         [name: string]: string;
 >name : string
     }

@@ -1,14 +1,6 @@
 --- old.taggedTemplateWithoutDeclaredHelper.types
 +++ new.taggedTemplateWithoutDeclaredHelper.types
-@@= skipped -2, +2 lines =@@
- === foo.ts ===
- function id<T>(x: T) {
- >id : <T>(x: T) => T
-+>T : T
- >x : T
- 
-   return x;
-@@= skipped -12, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  >id : <T>(x: T) => T
  >`hello world` : "hello world"
  

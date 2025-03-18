@@ -139,8 +139,6 @@ var values5 = Object.values(E);                     // any[]
 >E : typeof E
 
 interface I { }
->I : I
-
 var i: I = {};
 >i : I
 >{} : {}

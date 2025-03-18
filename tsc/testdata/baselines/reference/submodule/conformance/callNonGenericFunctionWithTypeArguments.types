@@ -56,8 +56,6 @@ var r4 = (new C()).f<string>(1);
 >1 : 1
 
 interface I {
->I : I
-
     f(x: number): any;
 >f : (x: number) => any
 >x : number
@@ -94,8 +92,6 @@ var r6 = (new C2()).f<string>(1);
 >1 : 1
 
 interface I2 {
->I2 : I2
-
     f(x: number);
 >f : (x: number) => any
 >x : number

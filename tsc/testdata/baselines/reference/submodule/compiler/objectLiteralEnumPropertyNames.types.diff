@@ -1,14 +1,6 @@
 --- old.objectLiteralEnumPropertyNames.types
 +++ new.objectLiteralEnumPropertyNames.types
-@@= skipped -14, +14 lines =@@
- }
- type TestStrs = { [key in Strs]: string }
- >TestStrs : TestStrs
-+>key : key
- 
- const x: TestStrs = {
- >x : TestStrs
-@@= skipped -104, +105 lines =@@
+@@= skipped -118, +118 lines =@@
  
  const n: TestNums = {
  >n : TestNums

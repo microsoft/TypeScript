@@ -1,41 +1,6 @@
 --- old.contextuallyTypeAsyncFunctionReturnType.types
 +++ new.contextuallyTypeAsyncFunctionReturnType.types
-@@= skipped -1, +1 lines =@@
- 
- === contextuallyTypeAsyncFunctionReturnType.ts ===
- interface Obj { key: "value"; }
-+>Obj : Obj
- >key : "value"
- 
- async function fn1(): Promise<Obj> {
-@@= skipped -80, +81 lines =@@
- >this : Context
- 
- interface TestFunction {
-+>TestFunction : TestFunction
-+
-   (fn: Func): void;
- >fn : Func
- 
-@@= skipped -19, +21 lines =@@
- >test : TestFunction
- 
- interface ProcessTreeNode {
-+>ProcessTreeNode : ProcessTreeNode
-+
-   pid: number;
- >pid : number
- 
-@@= skipped -68, +70 lines =@@
- });
- 
- interface ILocalExtension {
-+>ILocalExtension : ILocalExtension
-+
-   isApplicationScoped: boolean;
- >isApplicationScoped : boolean
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -182, +182 lines =@@
  
  };
  declare function scanMetadata(

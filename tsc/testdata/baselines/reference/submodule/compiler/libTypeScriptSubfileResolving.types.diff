@@ -1,14 +1,6 @@
 --- old.libTypeScriptSubfileResolving.types
 +++ new.libTypeScriptSubfileResolving.types
-@@= skipped -4, +4 lines =@@
- // NOOP
- === /node_modules/@typescript/lib-dom/iterable.d.ts ===
- interface DOMIterable { abc: string }
-+>DOMIterable : DOMIterable
- >abc : string
- 
- === index.ts ===
-@@= skipped -13, +14 lines =@@
+@@= skipped -17, +17 lines =@@
  // This should fail because libdom has been replaced
  // by the module above ^
  window.localStorage

@@ -16,14 +16,19 @@ import * as types from './a';
 
 let A: typeof types.A;
 >A : typeof A
+>types.A : typeof A
 >types : typeof import("/a")
+>A : typeof A
 
 let B: typeof types.B;
 >B : typeof B
+>types.B : typeof B
 >types : typeof import("/a")
+>B : typeof B
 
 let t: typeof types = {
 >t : typeof import("/a")
+>types : typeof import("/a")
 >{  // error: while you can ask for `typeof types.A`,  // `typeof types` does not include `A`  A: undefined as any,  B: undefined as any,} : { A: any; B: any; }
 
   // error: while you can ask for `typeof types.A`,

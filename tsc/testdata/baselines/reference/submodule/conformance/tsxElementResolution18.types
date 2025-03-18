@@ -2,10 +2,7 @@
 
 === file1.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
 }
 
 // Error under implicit any

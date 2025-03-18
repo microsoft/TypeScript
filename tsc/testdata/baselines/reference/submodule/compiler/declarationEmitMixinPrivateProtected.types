@@ -3,7 +3,6 @@
 === first.ts ===
 declare function mix<TMix>(mixin: TMix): TMix;
 >mix : <TMix>(mixin: TMix) => TMix
->TMix : TMix
 >mixin : TMix
 
 const DisposableMixin = class {
@@ -44,7 +43,6 @@ export class Monitor extends mix(DisposableMixin) {
 === another.ts ===
 declare function mix<TMix>(mixin: TMix): TMix;
 >mix : <TMix>(mixin: TMix) => TMix
->TMix : TMix
 >mixin : TMix
 
 const DisposableMixin = class {

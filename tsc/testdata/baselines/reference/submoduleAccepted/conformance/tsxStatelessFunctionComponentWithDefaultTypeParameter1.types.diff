@@ -8,16 +8,13 @@
 +>React : any
  
  interface MyComponentProp {
-+>MyComponentProp : MyComponentProp
-+
      values: string;
- >values : string
+@@= skipped -8, +8 lines =@@
  }
  
  function MyComponent<T = MyComponentProp>(attr: T) {
 ->MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
 +>MyComponent : <T>(attr: T) => any
-+>T : T
  >attr : T
  
      return <div>attr.values</div>

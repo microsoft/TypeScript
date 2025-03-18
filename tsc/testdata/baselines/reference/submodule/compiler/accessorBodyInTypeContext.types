@@ -20,16 +20,12 @@ type B = {
 };
 
 interface X {
->X : X
-
     get foo() { return 0 }
 >foo : number
 >0 : 0
 }
 
 interface Y {
->Y : Y
-
     set foo(v: any) { }
 >foo : any
 >v : any

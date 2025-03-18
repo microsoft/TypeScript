@@ -22,7 +22,9 @@ function a(aboo1?: Foo) {
     const aboo2: { [key: string]: typeof aboo1.bar } = boo;
 >aboo2 : { [key: string]: string; }
 >key : string
+>aboo1.bar : string
 >aboo1 : Foo
+>bar : string
 >boo : Foo
 }
 
@@ -35,7 +37,9 @@ if (b) {
     const bboo: { [key: string]: typeof b.bar } = boo;
 >bboo : { [key: string]: string; }
 >key : string
+>b.bar : string
 >b : Foo
+>bar : string
 >boo : Foo
 }
 b = boo;
@@ -46,7 +50,9 @@ b = boo;
 const bboo: { [key: string]: typeof b.bar } = boo;
 >bboo : { [key: string]: string; }
 >key : string
+>b.bar : string
 >b : Foo
+>bar : string
 >boo : Foo
 
 declare let c: string | number;
@@ -61,6 +67,7 @@ if (typeof c === 'string') {
     type C = { [key: string]: typeof c };
 >C : C
 >key : string
+>c : string
 
     const boo1: C = { bar: 'works' };
 >boo1 : C

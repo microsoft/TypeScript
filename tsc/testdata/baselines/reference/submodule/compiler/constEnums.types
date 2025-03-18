@@ -208,14 +208,8 @@ const enum Comments {
 }
 
 module A {
->A : typeof A
-
     export module B {
->B : typeof B
-
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 
@@ -242,14 +236,8 @@ module A {
 }
 
 module A {
->A : typeof A
-
     export module B {
->B : typeof B
-
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 
@@ -286,14 +274,8 @@ module A {
 }
 
 module A1 {
->A1 : typeof A1
-
     export module B {
->B : typeof B
-
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 
@@ -316,8 +298,6 @@ module A2 {
 >B : typeof B
 
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 

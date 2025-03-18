@@ -7,6 +7,7 @@
 ->fn : () => typeof fn
 ->fn : () => typeof fn
 +>fn : () => ???
++>fn : () => ???
  >1 : 1
  
  var x: number = fn; // error
@@ -23,11 +24,13 @@
 ->f : () => typeof g
 ->g : () => typeof f
 +>f : () => () => ???
++>g : () => () => ???
  
  var g: () => typeof f;
 ->g : () => typeof f
 ->f : () => typeof g
 +>g : () => () => ???
++>f : () => () => ???
  
  function f1(d: typeof f1) { }
 ->f1 : (d: typeof f1) => void
@@ -35,25 +38,26 @@
 ->f1 : (d: typeof f1) => void
 +>f1 : (d: ???) => void
 +>d : (d: ???) => void
++>f1 : (d: ???) => void
  
  function f2(): typeof g2 { } 
 ->f2 : () => typeof g2
 ->g2 : () => typeof f2
 +>f2 : () => () => ???
++>g2 : () => () => ???
  
  function g2(): typeof f2 { } 
 ->g2 : () => typeof f2
 ->f2 : () => typeof g2
 +>g2 : () => () => ???
++>f2 : () => () => ???
  
  interface I<T> { }
-+>I : I<T>
-+>T : T
-+
  function f3(): I<typeof f3> { return f3; }
 ->f3 : () => I<typeof f3>
 ->f3 : () => I<typeof f3>
 ->f3 : () => I<typeof f3>
++>f3 : () => I<???>
 +>f3 : () => I<???>
 +>f3 : () => I<???>
  
@@ -71,8 +75,10 @@
 ->C.g : (t: typeof C.g) => void
 +>g : (t: ???) => void
 +>t : (t: ???) => void
++>C.g : (t: ???) => void
  >C : typeof C
 ->g : (t: typeof C.g) => void
++>g : (t: ???) => void
  }
  C.g(3); // error
  >C.g(3) : void
@@ -86,6 +92,7 @@
  var f4: () => typeof f4;
 ->f4 : () => typeof f4
 ->f4 : () => typeof f4
++>f4 : () => ???
 +>f4 : () => ???
  
  f4 = 3; // error
@@ -104,6 +111,7 @@
 ->f6 : { (): typeof f6; (a: typeof f6): () => number; }
 ->f6 : { (): typeof f6; (a: typeof f6): () => number; }
 +>f6 : { (): ???; (a: ???): () => number; }
++>f6 : { (): ???; (a: ???): () => number; }
  
  function f6(a: typeof f6): () => number;
 ->f6 : { (): typeof f6; (a: typeof f6): () => number; }
@@ -111,6 +119,7 @@
 ->f6 : { (): typeof f6; (a: typeof f6): () => number; }
 +>f6 : { (): ???; (a: ???): () => number; }
 +>a : { (): ???; (a: ???): () => number; }
++>f6 : { (): ???; (a: ???): () => number; }
  
  function f6(a?: any) { return f6; }
 ->f6 : { (): typeof f6; (a: typeof f6): () => number; }
@@ -144,6 +153,7 @@
 ->f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 ->f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 +>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
++>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
  
  declare function f7(a: typeof f7): () => number;
 ->f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
@@ -151,6 +161,7 @@
 ->f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 +>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 +>a : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
++>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
  
  declare function f7(a: number): number;
 ->f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
@@ -164,6 +175,8 @@
 ->f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 +>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 +>a : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
++>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
++>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
  
  f7("", 3); // error (arity mismatch)
 ->f7("", 3) : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; } & (() => number) & number

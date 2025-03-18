@@ -5,8 +5,6 @@
 
 function foo<T, U>(arg: { cb: (t: T) => U }) {
 >foo : <T, U>(arg: { cb: (t: T) => U; }) => U
->T : T
->U : U
 >arg : { cb: (t: T) => U; }
 >cb : (t: T) => U
 >t : T
@@ -23,7 +21,6 @@ var arg = { cb: <T>(x: T) => '' };
 >{ cb: <T>(x: T) => '' } : { cb: <T>(x: T) => string; }
 >cb : <T>(x: T) => string
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
 >x : T
 >'' : ""
 
@@ -41,7 +38,6 @@ var r2 = foo({ cb: <T>(x: T, y: T) => '' }); // error
 >{ cb: <T>(x: T, y: T) => '' } : { cb: <T>(x: T, y: T) => string; }
 >cb : <T>(x: T, y: T) => string
 ><T>(x: T, y: T) => '' : <T>(x: T, y: T) => string
->T : T
 >x : T
 >y : T
 >'' : ""
@@ -59,8 +55,6 @@ var r3 = foo({ cb: (x: string, y: number) => '' }); // error
 
 function foo2<T, U>(arg: { cb: (t: T, t2: T) => U }) {
 >foo2 : <T, U>(arg: { cb: (t: T, t2: T) => U; }) => U
->T : T
->U : U
 >arg : { cb: (t: T, t2: T) => U; }
 >cb : (t: T, t2: T) => U
 >t : T
@@ -87,7 +81,6 @@ var r5 = foo({ cb: <T>(x: T) => '' }); // {}
 >{ cb: <T>(x: T) => '' } : { cb: <T>(x: T) => string; }
 >cb : <T>(x: T) => string
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
 >x : T
 >'' : ""
 

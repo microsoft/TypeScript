@@ -1,29 +1,15 @@
 --- old.localTypes3.types
 +++ new.localTypes3.types
-@@= skipped -8, +8 lines =@@
- 
-         class C<X, Y> {
- >C : C<X, Y>
-+>X : X
-+>Y : Y
- 
-             constructor(public x: X, public y: Y) { }
- >x : X
-@@= skipped -38, +40 lines =@@
- 
-     function f<X>(x: X) {
- >f : <X>(x: X) => typeof C
-+>X : X
+@@= skipped -49, +49 lines =@@
  >x : X
  
          class C<Y> {
 ->C : C<Y>
 +>C : C<X, Y>
-+>Y : Y
  
              public x = x;
  >x : X
-@@= skipped -16, +18 lines =@@
+@@= skipped -13, +13 lines =@@
  >C : typeof C
      }
      let C = f(10);
@@ -58,13 +44,7 @@
  >y : string
  }
  
-@@= skipped -29, +29 lines =@@
- 
-     function f<X, Y>(x: X, y: Y) {
- >f : <X, Y>(x: X, y: Y) => typeof C
-+>X : X
-+>Y : Y
- >x : X
+@@= skipped -33, +33 lines =@@
  >y : Y
  
          class C {
@@ -73,7 +53,7 @@
  
              public x = x;
  >x : X
-@@= skipped -18, +20 lines =@@
+@@= skipped -14, +14 lines =@@
  >C : typeof C
      }
      let C = f(10, "hello");

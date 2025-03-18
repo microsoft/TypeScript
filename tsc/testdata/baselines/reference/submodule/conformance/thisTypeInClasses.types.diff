@@ -1,16 +1,6 @@
 --- old.thisTypeInClasses.types
 +++ new.thisTypeInClasses.types
-@@= skipped -20, +20 lines =@@
- }
- 
- interface Foo<T> {
-+>Foo : Foo<T>
-+>T : T
-+
-     x: T;
- >x : T
- 
-@@= skipped -37, +40 lines =@@
+@@= skipped -57, +57 lines =@@
  >h : Foo<this>
  
      i: Foo<this | (() => this)>;

@@ -30,7 +30,6 @@ var f3 = (x, x) => { }
 var f4 = <T>(x: T, x: T) => { }
 >f4 : <T>(x: T, x: T) => void
 ><T>(x: T, x: T) => { } : <T>(x: T, x: T) => void
->T : T
 >x : T
 >x : T
 
@@ -61,7 +60,6 @@ var f7 = (x: string, x: number) => { }
 var f8 = <T>(x: T, y: T) => { }
 >f8 : <T>(x: T, y: T) => void
 ><T>(x: T, y: T) => { } : <T>(x: T, y: T) => void
->T : T
 >x : T
 >y : T
 
@@ -80,14 +78,11 @@ class C {
 
     foo3<T>(x: T, x: T) { }
 >foo3 : <T>(x: T, x: T) => void
->T : T
 >x : T
 >x : T
 }
 
 interface I {
->I : I
-
     (x, x);
 >x : any
 >x : any
@@ -108,7 +103,6 @@ interface I {
 
     foo3<T>(x: T, x: T);
 >foo3 : <T>(x: T, x: T) => any
->T : T
 >x : T
 >x : T
 }
@@ -147,7 +141,6 @@ var b = {
     b: <T>(x: T, x: T) => { }
 >b : <T>(x: T, x: T) => void
 ><T>(x: T, x: T) => { } : <T>(x: T, x: T) => void
->T : T
 >x : T
 >x : T
 }

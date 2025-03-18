@@ -1,18 +1,6 @@
 --- old.jsxFactoryIdentifierAsParameter.types
 +++ new.jsxFactoryIdentifierAsParameter.types
-@@= skipped -1, +1 lines =@@
- 
- === test.tsx ===
- declare module JSX {
-+>JSX : any
-+
-     interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         [s: string]: any;
- >s : string
-     }
-@@= skipped -14, +18 lines =@@
+@@= skipped -15, +15 lines =@@
  >createElement : any
  
          return <div />;

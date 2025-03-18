@@ -63,8 +63,6 @@ module M {
 
 
 	export interface I {
->I : I
-
 		someMethod():number;
 >someMethod : () => number
 	}

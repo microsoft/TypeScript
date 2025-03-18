@@ -1,32 +1,15 @@
 --- old.narrowByParenthesizedSwitchExpression.types
 +++ new.narrowByParenthesizedSwitchExpression.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === narrowByParenthesizedSwitchExpression.ts ===
  interface Base {
-+>Base : Base
-+
    type: "foo" | "bar";
 ->type : "foo" | "bar"
 +>type : "bar" | "foo"
  }
  
  interface Foo extends Base {
-+>Foo : Foo
-+
-   type: "foo";
- >type : "foo"
- 
-@@= skipped -13, +17 lines =@@
- }
- 
- interface Bar extends Base {
-+>Bar : Bar
-+
-   type: "bar";
- >type : "bar"
- 
-@@= skipped -8, +10 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  
  function getV(): Foo | Bar {

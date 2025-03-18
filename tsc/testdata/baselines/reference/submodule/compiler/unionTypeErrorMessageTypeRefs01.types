@@ -2,43 +2,30 @@
 
 === unionTypeErrorMessageTypeRefs01.ts ===
 interface Foo { foo: any }
->Foo : Foo
 >foo : any
 
 interface Bar { bar: any }
->Bar : Bar
 >bar : any
 
 interface Baz { baz: any }
->Baz : Baz
 >baz : any
 
 interface Kwah { kwah: any }
->Kwah : Kwah
 >kwah : any
 
 ////////
 
 interface A<T> {
->A : A<T>
->T : T
-
     aProp: T;
 >aProp : T
 }
 
 interface B<T> {
->B : B<T>
->T : T
-
     bProp: T;
 >bProp : T
 }
 
 interface C<T> {
->C : C<T>
->T : T
-
     cProp: T;
 >cProp : T
 }
@@ -74,7 +61,6 @@ thingOfInterfaces = c;
 
 type X<T> = {
 >X : X<T>
->T : T
 
     xProp: T;
 >xProp : T
@@ -82,7 +68,6 @@ type X<T> = {
 
 type Y<T> = {
 >Y : Y<T>
->T : T
 
     yProp: T;
 >yProp : T
@@ -90,7 +75,6 @@ type Y<T> = {
 
 type Z<T> = {
 >Z : Z<T>
->T : T
 
     zProp: T;
 >zProp : T

@@ -25,15 +25,11 @@ function noReturn(): {
 }
 
 interface A1 {
->A1 : A1
-
     x: { y: number; };
 >x : { y: number; }
 >y : number
 }
 interface A2 {
->A2 : A2
-
     x: { y: string; };
 >x : { y: string; }
 >y : string

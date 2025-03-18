@@ -1,18 +1,6 @@
 --- old.asyncAwait_es5.types
 +++ new.asyncAwait_es5.types
-@@= skipped -2, +2 lines =@@
- === asyncAwait_es5.ts ===
- type MyPromise<T> = Promise<T>;
- >MyPromise : MyPromise<T>
-+>T : T
- 
- declare var MyPromise: typeof Promise;
- >MyPromise : PromiseConstructor
-->Promise : PromiseConstructor
- 
- declare var p: Promise<number>;
- >p : Promise<number>
-@@= skipped -65, +65 lines =@@
+@@= skipped -67, +67 lines =@@
  >p : Promise<number>
  
  let o = {

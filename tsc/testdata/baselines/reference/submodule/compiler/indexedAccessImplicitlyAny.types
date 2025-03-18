@@ -2,7 +2,6 @@
 
 === indexedAccessImplicitlyAny.ts ===
 interface I { foof: number };
->I : I
 >foof : number
 
 declare const i: I;

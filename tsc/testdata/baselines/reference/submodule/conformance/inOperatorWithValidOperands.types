@@ -79,7 +79,6 @@ var rb2 = x in {};
 
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
->T : T
 >t : T
 
     var rb3 = x in t;
@@ -91,8 +90,6 @@ function foo<T>(t: T) {
 
 function unionCase<T, U>(t: T | U) {
 >unionCase : <T, U>(t: T | U) => void
->T : T
->U : U
 >t : T | U
 
     var rb4 = x in t;
@@ -104,7 +101,6 @@ function unionCase<T, U>(t: T | U) {
 
 function unionCase2<T>(t: T | object) {
 >unionCase2 : <T>(t: T | object) => void
->T : T
 >t : T | object
 
     var rb5 = x in t;
@@ -115,11 +111,9 @@ function unionCase2<T>(t: T | object) {
 }
 
 interface X { x: number }
->X : X
 >x : number
 
 interface Y { y: number }
->Y : Y
 >y : number
 
 var c1: X | Y;

@@ -3,7 +3,6 @@
 === genericUnboundedTypeParamAssignability.ts ===
 function f1<T>(o: T) {
 >f1 : <T>(o: T) => void
->T : T
 >o : T
 
   o.toString(); // error
@@ -15,7 +14,6 @@ function f1<T>(o: T) {
 
 function f2<T extends {}>(o: T) {
 >f2 : <T extends {}>(o: T) => void
->T : T
 >o : T
 
   o.toString(); // no error
@@ -27,7 +25,6 @@ function f2<T extends {}>(o: T) {
 
 function f3<T extends Record<string, any>>(o: T) {
 >f3 : <T extends Record<string, any>>(o: T) => void
->T : T
 >o : T
 
   o.toString(); // no error
@@ -39,7 +36,6 @@ function f3<T extends Record<string, any>>(o: T) {
 
 function user<T>(t: T) {
 >user : <T>(t: T) => void
->T : T
 >t : T
 
   f1(t);

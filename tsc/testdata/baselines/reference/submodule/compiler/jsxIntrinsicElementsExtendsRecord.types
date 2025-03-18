@@ -2,10 +2,7 @@
 
 === index.tsx ===
 declare namespace JSX {
->JSX : any
-
   interface IntrinsicElements extends Record<string, any> {}
->IntrinsicElements : IntrinsicElements
 }
 
 <a />;

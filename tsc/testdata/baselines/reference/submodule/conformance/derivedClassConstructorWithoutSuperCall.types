@@ -20,7 +20,6 @@ class Derived extends Base {
 
 class Base2<T> {
 >Base2 : Base2<T>
->T : T
 
     x: T;
 >x : T
@@ -28,7 +27,6 @@ class Base2<T> {
 
 class Derived2<T> extends Base2<T> {
 >Derived2 : Derived2<T>
->T : T
 >Base2 : Base2<T>
 
     constructor() { // error for no super call (nested scopes don't count)
@@ -42,7 +40,6 @@ class Derived2<T> extends Base2<T> {
 
 class Derived3<T> extends Base2<T> {
 >Derived3 : Derived3<T>
->T : T
 >Base2 : Base2<T>
 
     constructor() { // error
@@ -56,7 +53,6 @@ class Derived3<T> extends Base2<T> {
 
 class Derived4<T> extends Base2<T> {
 >Derived4 : Derived4<T>
->T : T
 >Base2 : Base2<T>
 
     constructor() {

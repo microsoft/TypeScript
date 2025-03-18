@@ -7,9 +7,7 @@
 ->f : <A extends string>(p0: { [key in A]: {} | undefined; }, p1: A) => void
 ->p0 : { [key in A]: {} | undefined; }
 +>f : <A extends string>(p0: { [key in A]: {} | undefined }, p1: A) => void
-+>A : A
 +>p0 : { [key in A]: {} | undefined }
-+>key : key
  >p1 : A
  
      const v: {} = p0[p1]!;

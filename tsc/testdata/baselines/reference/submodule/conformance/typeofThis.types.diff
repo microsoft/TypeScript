@@ -1,60 +1,6 @@
 --- old.typeofThis.types
 +++ new.typeofThis.types
-@@= skipped -10, +10 lines =@@
-     constructor() {
-         var copy: typeof this.data = {};
- >copy : {}
-->this.data : {}
- >this : this
-->data : {}
- >{} : {}
-     }
- }
-@@= skipped -24, +22 lines =@@
-     constructor() {
-         var copy: typeof this.data = { foo: '' };
- >copy : { foo: string; }
-->this.data : { foo: string; }
- >this : this
-->data : { foo: string; }
- >{ foo: '' } : { foo: string; }
- >foo : string
- >'' : ""
- 
-         var foo: typeof this.data.foo = '';
- >foo : string
-->this.data.foo : string
- >this.data : { foo: string; }
- >this : this
- >data : { foo: string; }
-->foo : string
- >'' : ""
- 
-         var self: typeof this = this;
- >self : this
- >this : this
-->this : this
- 
-         self.data;
- >self.data : { foo: string; }
-@@= skipped -28, +23 lines =@@
- 
-         var str: typeof this.this = '';
- >str : string
-->this.this : string
- >this : this
-->this : string
- >'' : ""
-     }
- }
-@@= skipped -13, +11 lines =@@
- 
-     let x: typeof this.no = 1;
- >x : any
-->this.no : any
- >this : any
-->no : any
- >1 : 1
+@@= skipped -82, +82 lines =@@
  }
  
  function Test3(this: { no: number }) {
@@ -63,12 +9,7 @@
  >this : { no: number; }
  >no : number
  
-     let x: typeof this.no = 1;
- >x : number
-->this.no : number
- >this : { no: number; }
-->no : number
- >1 : 1
+@@= skipped -13, +13 lines =@@
  }
  
  function Test4(this: { no: number } | undefined) {
@@ -77,91 +18,7 @@
  >this : { no: number; } | undefined
  >no : number
  
-     let x: typeof this.no = 1;
- >x : number
-->this.no : number
- >this : { no: number; } | undefined
-->no : number
- >1 : 1
- }
- 
-@@= skipped -46, +40 lines =@@
-         // should not capture this.
-         let x: typeof this.no = 1;
- >x : number
-->this.no : number
- >this : this
-->no : number
- >1 : 1
-     }
- }
-@@= skipped -16, +14 lines =@@
- 
-         let x: typeof this.no = 1;
- >x : any
-->this.no : any
- >this : any
-->no : any
- >1 : 1
-     }
- }
-@@= skipped -16, +14 lines =@@
- 
-         let x: typeof this.no = 1;
- >x : any
-->this.no : any
- >this : any
-->no : any
- >1 : 1
-     }
- }
-@@= skipped -13, +11 lines =@@
- 
-     let x: typeof this.no = 1;
- >x : any
-->this.no : any
- >this : typeof globalThis
-->no : any
- >1 : 1
- }
- 
-@@= skipped -28, +26 lines =@@
-             const d1: typeof this = this;
- >d1 : this & Test9D1
- >this : this & Test9D1
-->this : this & Test9D1
- 
-             d1.f1();
- >d1.f1() : void
-@@= skipped -17, +16 lines =@@
-             const d2: typeof this = this;
- >d2 : this & Test9D2
- >this : this & Test9D2
-->this : this & Test9D2
- 
-             d2.f2();
- >d2.f2() : void
-@@= skipped -22, +21 lines =@@
- 
-             const no: typeof this.no = this.no;
- >no : 1
-->this.no : 1
- >this : this
-->no : 1
- >this.no : 1
- >this : this
- >no : 1
-@@= skipped -17, +15 lines =@@
- 
-             const no: typeof this.this = this.this;
- >no : 1
-->this.this : 1
- >this : this
-->this : 1
- >this.this : 1
- >this : this
- >this : 1
-@@= skipped -28, +26 lines =@@
+@@= skipped -183, +183 lines =@@
  >Test10 : Test10
  
      a?: { b?: string }
@@ -176,8 +33,10 @@
 ->a : { b?: string; } | undefined
 ->this.a : { b?: string; } | undefined
 +>a : { b?: string | undefined; } | undefined
++>this.a : { b?: string | undefined; } | undefined
  >this : this
 ->a : { b?: string; } | undefined
++>a : { b?: string | undefined; } | undefined
  >undefined as any : any
  >undefined : undefined
  
@@ -192,20 +51,22 @@
 ->a : { b?: string; }
 ->this.a : { b?: string; }
 +>a : { b?: string | undefined; }
++>this.a : { b?: string | undefined; }
  >this : this
 ->a : { b?: string; }
++>a : { b?: string | undefined; }
  >undefined as any : any
  >undefined : undefined
  
              let b: typeof this.a.b = undefined as any;
  >b : string | undefined
-->this.a.b : string | undefined
+ >this.a.b : string | undefined
 ->this.a : { b?: string; }
 +>this.a : { b?: string | undefined; }
  >this : this
 ->a : { b?: string; }
-->b : string | undefined
 +>a : { b?: string | undefined; }
+ >b : string | undefined
  >undefined as any : any
  >undefined : undefined
  
@@ -220,17 +81,16 @@
  
                  let b: typeof this.a.b = undefined as any;   // should narrow to string
  >b : string
-->this.a.b : string
+ >this.a.b : string
 ->this.a : { b?: string; }
 +>this.a : { b?: string | undefined; }
  >this : this
 ->a : { b?: string; }
-->b : string
 +>a : { b?: string | undefined; }
+ >b : string
  >undefined as any : any
  >undefined : undefined
-             }
-@@= skipped -62, +54 lines =@@
+@@= skipped -62, +62 lines =@@
  >Test11 : Test11
  
      this?: { x?: string };
@@ -246,8 +106,10 @@
 ->bar : { x?: string; } | undefined
 ->o.this : { x?: string; } | undefined
 +>bar : { x?: string | undefined; } | undefined
++>o.this : { x?: string | undefined; } | undefined
  >o : this
 ->this : { x?: string; } | undefined
++>this : { x?: string | undefined; } | undefined
  >{} : {}
  
          if (o.this && o.this.x) {
@@ -276,34 +138,3 @@
  >x : string
          }
      }
-@@= skipped -36, +34 lines =@@
- 
-         type Test = typeof this;
- >Test : this
-->this : this
-     }
- 
-     test2() { // OK
-@@= skipped -9, +8 lines =@@
-         for (;;) {}
-         type Test = typeof this;
- >Test : this
-->this : this
-     }
- 
-     test3() { // expected no compile errors
-@@= skipped -12, +11 lines =@@
- 
-         type Test = typeof this;
- >Test : this
-->this : this
-     }
- 
-     test4() { // expected no compile errors
-@@= skipped -12, +11 lines =@@
- 
-         type Test = typeof this;
- >Test : this
-->this : this
-     }
- }

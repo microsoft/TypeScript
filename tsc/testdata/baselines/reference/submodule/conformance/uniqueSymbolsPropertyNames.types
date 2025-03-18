@@ -2,8 +2,6 @@
 
 === uniqueSymbolsPropertyNames.ts ===
 interface OpTypes {
->OpTypes : OpTypes
-
   readonly equal: unique symbol;
 >equal : unique symbol
 }
@@ -34,6 +32,7 @@ const uniqueSymbol1 = Symbol.for("");
 
 function getUniqueSymbol0(): typeof uniqueSymbol0 {
 >getUniqueSymbol0 : () => unique symbol
+>uniqueSymbol0 : unique symbol
 
   return uniqueSymbol0;
 >uniqueSymbol0 : unique symbol
@@ -41,6 +40,7 @@ function getUniqueSymbol0(): typeof uniqueSymbol0 {
 
 function getUniqueSymbol1(): typeof uniqueSymbol1 {
 >getUniqueSymbol1 : () => unique symbol
+>uniqueSymbol1 : unique symbol
 
     return uniqueSymbol1;
 >uniqueSymbol1 : unique symbol

@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface Address {
->Address : Address
-
   street: string;
 >street : string
 
@@ -15,15 +13,11 @@ interface Address {
 }
 
 interface CanadianAddress extends Address {
->CanadianAddress : CanadianAddress
-
     postalCode: string;
 >postalCode : string
 }
 
 interface AmericanAddress extends Address {
->AmericanAddress : AmericanAddress
-
     zipCode: string;
 >zipCode : string
 }

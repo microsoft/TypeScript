@@ -1,23 +1,6 @@
 --- old.genericConstraint2.types
 +++ new.genericConstraint2.types
-@@= skipped -1, +1 lines =@@
- 
- === genericConstraint2.ts ===
- interface Comparable<T> {
-+>Comparable : Comparable<T>
-+>T : T
-+
-     comparer(other: T): number;
- >comparer : (other: T) => number
- >other : T
-@@= skipped -7, +10 lines =@@
- 
- function compare<T extends Comparable<T>>(x: T, y: T): number {
- >compare : <T extends Comparable<T>>(x: T, y: T) => number
-+>T : T
- >x : T
- >y : T
- 
+@@= skipped -14, +14 lines =@@
      if (x == null) return y == null ? 0 : -1;
  >x == null : boolean
  >x : T

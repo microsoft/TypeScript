@@ -6,7 +6,9 @@ function Test1() {
 
     let x: typeof this.no = 1
 >x : any
+>this.no : any
 >this : any
+>no : any
 >1 : 1
 }
 

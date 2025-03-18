@@ -111,7 +111,6 @@ function f12({ kind, payload }: Action) {
 // repro #50206
 function f13<T extends Action>({ kind, payload }: T) {
 >f13 : <T extends Action>(__0: T) => void
->T : T
 >kind : "A" | "B"
 >payload : string | number
 
@@ -141,7 +140,6 @@ function f13<T extends Action>({ kind, payload }: T) {
 
 function f14<T extends Action>(t: T) {
 >f14 : <T extends Action>(t: T) => void
->T : T
 >t : T
 
     const { kind, payload } = t;
@@ -425,34 +423,26 @@ function f40(...[kind, data]: Args) {
 // Repro from #35283
 
 interface A<T> { variant: 'a', value: T }
->A : A<T>
->T : T
 >variant : "a"
 >value : T
 
 interface B<T> { variant: 'b', value: Array<T> }
->B : B<T>
->T : T
 >variant : "b"
 >value : T[]
 
 type AB<T> = A<T> | B<T>;
 >AB : AB<T>
->T : T
 
 declare function printValue<T>(t: T): void;
 >printValue : <T>(t: T) => void
->T : T
 >t : T
 
 declare function printValueList<T>(t: Array<T>): void;
 >printValueList : <T>(t: T[]) => void
->T : T
 >t : T[]
 
 function unrefined1<T>(ab: AB<T>): void {
 >unrefined1 : <T>(ab: AB<T>) => void
->T : T
 >ab : AB<T>
 
     const { variant, value } = ab;
@@ -932,7 +922,6 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 
 type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
 >Func : Func
->T : T
 >args : T
 
 const f60: Func = (kind, payload) => {
@@ -1129,8 +1118,6 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
 // Repro from #52152
 
 interface ClientEvents {
->ClientEvents : ClientEvents
-
     warn: [message: string];
 >warn : [message: string]
 
@@ -1143,7 +1130,6 @@ declare class Client {
 
     public on<K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void): void;
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->K : K
 >event : K
 >listener : (...args: ClientEvents[K]) => void
 >args : ClientEvents[K]

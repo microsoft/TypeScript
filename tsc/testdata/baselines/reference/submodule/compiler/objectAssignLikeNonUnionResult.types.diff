@@ -1,23 +1,6 @@
 --- old.objectAssignLikeNonUnionResult.types
 +++ new.objectAssignLikeNonUnionResult.types
-@@= skipped -1, +1 lines =@@
- 
- === objectAssignLikeNonUnionResult.ts ===
- interface Interface {
-+>Interface : Interface
-+
-     field: number;
- >field : number
- }
-@@= skipped -11, +13 lines =@@
- 
- declare function assign<T, U>(target: T, source: U): T & U;
- >assign : <T, U>(target: T, source: U) => T & U
-+>T : T
-+>U : U
- >target : T
- >source : U
- 
+@@= skipped -18, +18 lines =@@
  // Displayed type: Interface & { field: number }
  // Underlying type: Something else...
  const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
@@ -28,28 +11,21 @@
  >assign : <T, U>(target: T, source: U) => T & U
  >defaultValue : Interface
  >Date.now() > 3 ? { field: 2 } : {} : { field: number; } | {}
-@@= skipped -24, +26 lines =@@
- 
- type ExtractRawComponent<T> = T extends { __raw: infer C } ? [L1: T, L2: C] : [R1: T];
- >ExtractRawComponent : ExtractRawComponent<T>
-+>T : T
+@@= skipped -21, +21 lines =@@
  >__raw : C
-+>C : C
  
  type t1 = ExtractRawComponent<typeof data1>;
 ->t1 : [R1: Interface & { field: number; }]
 ->data1 : Interface & { field: number; }
 +>t1 : [R1: Interface & ({ field: number; } | { field?: undefined; })]
++>data1 : Interface & ({ field: number; } | { field?: undefined; })
  
  // ???
  type Explode<T> = T extends { x: infer A } ? [A] : 'X';
- >Explode : Explode<T>
-+>T : T
- >x : A
-+>A : A
- 
+@@= skipped -11, +11 lines =@@
  // 'X' | [unknown] -- why?
  type e1 = Explode<typeof data1>;
  >e1 : "X"
 ->data1 : Interface & { field: number; }
++>data1 : Interface & ({ field: number; } | { field?: undefined; })
  

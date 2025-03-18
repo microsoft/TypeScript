@@ -9,5 +9,4 @@
 +>v : { : <T>() => Generator<never, void, unknown>; }
 +>{ *<T>() { } } : { : <T>() => Generator<never, void, unknown>; }
  > : <T>() => Generator<never, void, unknown>
-+>T : T
  

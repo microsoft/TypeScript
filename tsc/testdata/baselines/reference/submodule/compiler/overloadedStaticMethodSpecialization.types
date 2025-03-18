@@ -3,21 +3,17 @@
 === overloadedStaticMethodSpecialization.ts ===
 class A<T> {
 >A : A<T>
->T : T
 
     static B<S>(v: A<S>): A<S>;
 >B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
->S : S
 >v : A<S>
 
     static B<S>(v: S): A<S>;
 >B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
->S : S
 >v : S
 
     static B<S>(v: any): A<S> {
 >B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
->S : S
 >v : any
 
         return null;

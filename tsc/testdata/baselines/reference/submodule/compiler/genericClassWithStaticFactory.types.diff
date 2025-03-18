@@ -1,14 +1,6 @@
 --- old.genericClassWithStaticFactory.types
 +++ new.genericClassWithStaticFactory.types
-@@= skipped -5, +5 lines =@@
- 
-     export class List<T> {
- >List : List<T>
-+>T : T
- 
-         public next: List<T>;
- >next : List<T>
-@@= skipped -31, +32 lines =@@
+@@= skipped -36, +36 lines =@@
              var entry = this.listFactory.MakeEntry(data);
  >entry : List<T>
  >this.listFactory.MakeEntry(data) : List<T>
@@ -78,31 +70,3 @@
  >data : T
  
              return this.insertEntryBefore(entry);
-@@= skipped -18, +18 lines =@@
- 
-     export class ListFactory<T> {
- >ListFactory : ListFactory<T>
-+>T : T
- 
-         public MakeHead<T>(): List<T> {
- >MakeHead : <T>() => List<T>
-+>T : T
- 
-             var entry: List<T> = new List<T>(true, null);
- >entry : List<T>
-@@= skipped -30, +32 lines =@@
- 
-         public MakeEntry<T>(data: T): List<T> {
- >MakeEntry : <T>(data: T) => List<T>
-+>T : T
- >data : T
- 
-             var entry: List<T> = new List<T>(false, data);
-@@= skipped -29, +30 lines =@@
- 
-         public RemoveEntry<T>(entry: List<T>): List<T> {
- >RemoveEntry : <T>(entry: List<T>) => List<T>
-+>T : T
- >entry : List<T>
- 
-             if (entry == null) {

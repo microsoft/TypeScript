@@ -1,14 +1,6 @@
 --- old.exportDefaultAsyncFunction2.types
 +++ new.exportDefaultAsyncFunction2.types
-@@= skipped -2, +2 lines =@@
- === asyncawait.ts ===
- export function async<T>(...args: any[]): any { }
- >async : <T>(...args: any[]) => any
-+>T : T
- >args : any[]
- 
- export function await(...args: any[]): any { }
-@@= skipped -8, +9 lines =@@
+@@= skipped -10, +10 lines =@@
  
  === a.ts ===
  import { async, await } from 'asyncawait';

@@ -24,9 +24,6 @@ class C2 {
 }
 
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     x: T;
 >x : T
 

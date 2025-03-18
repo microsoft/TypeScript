@@ -51,49 +51,40 @@ type T16 = unknown | any;  // any
 
 type T20<T> = T & {};  // T & {}
 >T20 : T20<T>
->T : T
 
 type T21<T> = T | {};  // T | {}
 >T21 : T21<T>
->T : T
 
 type T22<T> = T & unknown;  // T
 >T22 : T
->T : T
 
 type T23<T> = T | unknown;  // unknown
 >T23 : unknown
->T : T
 
 // unknown in conditional types
 
 type T30<T> = unknown extends T ? true : false;  // Deferred
 >T30 : T30<T>
->T : T
 >true : true
 >false : false
 
 type T31<T> = T extends unknown ? true : false;  // Deferred (so it distributes)
 >T31 : T31<T>
->T : T
 >true : true
 >false : false
 
 type T32<T> = never extends T ? true : false;  // true
 >T32 : T32<T>
->T : T
 >true : true
 >false : false
 
 type T33<T> = T extends never ? true : false;  // Deferred
 >T33 : T33<T>
->T : T
 >true : true
 >false : false
 
 type T35<T> = T extends unknown ? { x: T } : false;
 >T35 : T35<T>
->T : T
 >x : T
 >false : false
 
@@ -239,8 +230,6 @@ function f20(x: unknown) {
 
 type T50<T> = { [P in keyof T]: number };
 >T50 : T50<T>
->T : T
->P : P
 
 type T51 = T50<any>;  // { [x: string]: number }
 >T51 : T50<any>
@@ -252,7 +241,6 @@ type T52 = T50<unknown>;  // {}
 
 function f21<T>(pAny: any, pNever: never, pT: T) {
 >f21 : <T>(pAny: any, pNever: never, pT: T) => void
->T : T
 >pAny : any
 >pNever : never
 >pT : T
@@ -344,7 +332,6 @@ function f22(x: unknown) {
 
 function f23<T extends unknown>(x: T) {
 >f23 : <T extends unknown>(x: T) => void
->T : T
 >x : T
 
     let y: object = x;  // Error
@@ -474,8 +461,6 @@ class C1 {
 
 function f30<T, U extends unknown>(t: T, u: U) {
 >f30 : <T, U extends unknown>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 
@@ -497,7 +482,6 @@ type Test1 = [unknown] extends [{}] ? true : false;  // false
 
 type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
 >IsDefinitelyDefined : IsDefinitelyDefined<T>
->T : T
 >true : true
 >false : false
 
@@ -506,7 +490,6 @@ type Test2 = IsDefinitelyDefined<unknown>;  // false
 
 function oops<T extends unknown>(arg: T): {} {
 >oops : <T extends unknown>(arg: T) => {}
->T : T
 >arg : T
 
     return arg;  // Error

@@ -25,7 +25,6 @@ type D = A | "foo";
 
 class List<T>
 >List : List<T>
->T : T
 {
 	private readonly items: T[] = [];
 >items : T[]
@@ -34,7 +33,6 @@ class List<T>
 
 function asList<T>(arg: T): List<T> { return new List(); }
 >asList : <T>(arg: T) => List<T>
->T : T
 >arg : T
 >new List() : List<T>
 >List : typeof List

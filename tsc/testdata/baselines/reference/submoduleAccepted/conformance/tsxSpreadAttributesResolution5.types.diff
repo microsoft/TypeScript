@@ -8,12 +8,8 @@
 +>React : any
  
  interface PoisonedProp {
-+>PoisonedProp : PoisonedProp
-+
      x: string;
- >x : string
- 
-@@= skipped -12, +14 lines =@@
+@@= skipped -12, +12 lines =@@
  
  class Poisoned extends React.Component<PoisonedProp, {}> {
  >Poisoned : Poisoned

@@ -10,8 +10,6 @@ enum Type { A, B, C }
 >C : Type.C
 
 interface PayloadStructure {
->PayloadStructure : PayloadStructure
-
     dataType: Type;
 >dataType : Type
 
@@ -20,8 +18,6 @@ interface PayloadStructure {
 }
 
 interface PayloadA extends PayloadStructure {
->PayloadA : PayloadA
-
     dataType: Type.A;
 >dataType : Type.A
 >Type : any
@@ -31,8 +27,6 @@ interface PayloadA extends PayloadStructure {
 }
 
 interface PayloadB extends PayloadStructure {
->PayloadB : PayloadB
-
     dataType: Type.B;
 >dataType : Type.B
 >Type : any
@@ -42,8 +36,6 @@ interface PayloadB extends PayloadStructure {
 }
 
 interface PayloadC extends PayloadStructure {
->PayloadC : PayloadC
-
     dataType: Type.C;
 >dataType : Type.C
 >Type : any
@@ -67,7 +59,6 @@ type MappedPayload2 = {
 >MappedPayload2 : MappedPayload2
 
     [K in Type]?: (data: (Payload & { dataType: K })["data"]) => void
->K : K
 >data : Payload & { dataType: K; }["data"]
 >dataType : K
 }
@@ -94,8 +85,6 @@ const payloads2: MappedPayload2 = {
 
 type GetPayload<P extends Payload, K extends keyof P> = P extends { dataType: K } ? P["data"] : never;
 >GetPayload : GetPayload<P, K>
->P : P
->K : K
 >dataType : K
 
 // Repro from #51161
@@ -108,7 +97,6 @@ type AnyOneof = { oneofKind: string; [k: string]: unknown } | { oneofKind: undef
 
 type AnyOneofKind<T extends AnyOneof> = T extends { oneofKind: keyof T }
 >AnyOneofKind : AnyOneofKind<T>
->T : T
 >oneofKind : keyof T
 
     ? T['oneofKind']

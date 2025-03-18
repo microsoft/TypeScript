@@ -1,12 +1,8 @@
 //// [tests/cases/compiler/unusedNamespaceInNamespace.ts] ////
 
 === unusedNamespaceInNamespace.ts ===
+
 namespace A {
->A : any
-
     namespace B { }
->B : any
-
     export namespace C {}
->C : any
 }

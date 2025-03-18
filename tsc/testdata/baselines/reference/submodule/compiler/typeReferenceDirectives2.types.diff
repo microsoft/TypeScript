@@ -1,11 +1,6 @@
 --- old.typeReferenceDirectives2.types
 +++ new.typeReferenceDirectives2.types
-@@= skipped -1, +1 lines =@@
- 
- === /app.ts ===
- interface A {
-+>A : A
-+
+@@= skipped -4, +4 lines =@@
      x: $
  >x : $
  }

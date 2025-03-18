@@ -4,7 +4,6 @@
 // once caused stack overflow
 class Vec2_T<A>
 >Vec2_T : Vec2_T<A>
->A : A
 {
     constructor(public x: A, public y: A) { }
 >x : A
@@ -12,7 +11,6 @@ class Vec2_T<A>
 
     fmap<B>(f: (a: A) => B): Vec2_T<B> {
 >fmap : <B>(f: (a: A) => B) => Vec2_T<B>
->B : B
 >f : (a: A) => B
 >a : A
 
@@ -44,7 +42,6 @@ class Vec2_T<A>
     }
     apply<B>(f: Vec2_T<(a: A) => B>): Vec2_T<B> {
 >apply : <B>(f: Vec2_T<(a: A) => B>) => Vec2_T<B>
->B : B
 >f : Vec2_T<(a: A) => B>
 >a : A
 

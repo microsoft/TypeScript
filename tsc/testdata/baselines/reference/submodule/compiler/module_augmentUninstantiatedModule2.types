@@ -6,18 +6,12 @@ declare var ng: ng.IAngularStatic;
 >ng : any
 
 declare module ng {
->ng : IAngularStatic
-
    export interface IModule {
->IModule : IModule
-
       name: string;
 >name : string
    }
 
    export interface IAngularStatic {
->IAngularStatic : IAngularStatic
-
        module: (s: string) => IModule;
 >module : (s: string) => IModule
 >s : string

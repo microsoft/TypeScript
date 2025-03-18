@@ -2,8 +2,6 @@
 
 === objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
 interface I {
->I : I
-
     (): void;
 }
 

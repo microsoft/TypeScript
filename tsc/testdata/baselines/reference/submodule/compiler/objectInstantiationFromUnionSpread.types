@@ -4,16 +4,12 @@
 // #40995
 
 interface Success {
->Success : Success
-
   isSuccess: true;
 >isSuccess : true
 >true : true
 }
 
 interface Fail {
->Fail : Fail
-
   isSuccess: false;
 >isSuccess : false
 >false : false
@@ -45,7 +41,6 @@ function f1(a: Item[]) {
 
 function f2<T>(a: Item[]) {
 >f2 : <T>(a: Item[]) => void
->T : T
 >a : Item[]
 
   a.map(item => ({ ...item })).filter(value => {});

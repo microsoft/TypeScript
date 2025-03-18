@@ -6,7 +6,6 @@
  declare function test1<T>(a: T, b: NoInfer<T> & { prop?: unknown }): void;
 ->test1 : <T>(a: T, b: NoInfer<T> & { prop?: unknown; }) => void
 +>test1 : <T>(a: T, b: T & { prop?: unknown; }) => void
-+>T : T
  >a : T
 ->b : NoInfer<T> & { prop?: unknown; }
 +>b : T & { prop?: unknown; }
@@ -22,12 +21,10 @@
  declare function test2<T1, T2>(
 ->test2 : <T1, T2>(a: T1, b: T2, c: NoInfer<T1> & NoInfer<T2>) => void
 +>test2 : <T1, T2>(a: T1, b: T2, c: T1 & T2) => void
-+>T1 : T1
-+>T2 : T2
  
    a: T1,
  >a : T1
-@@= skipped -21, +24 lines =@@
+@@= skipped -21, +21 lines =@@
  >b : T2
  
    c: NoInfer<T1> & NoInfer<T2>,
@@ -47,12 +44,10 @@
  declare function test3<T1, T2>(
 ->test3 : <T1, T2>(a: T1, b: T2, c: NoInfer<T1 & T2>) => void
 +>test3 : <T1, T2>(a: T1, b: T2, c: T1 & T2) => void
-+>T1 : T1
-+>T2 : T2
  
    a: T1,
  >a : T1
-@@= skipped -21, +23 lines =@@
+@@= skipped -21, +21 lines =@@
  >b : T2
  
    c: NoInfer<T1 & T2>,

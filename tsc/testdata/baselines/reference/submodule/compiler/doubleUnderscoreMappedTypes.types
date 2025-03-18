@@ -2,8 +2,6 @@
 
 === doubleUnderscoreMappedTypes.ts ===
 interface Properties {
->Properties : Properties
-
     property1: string;
 >property1 : string
 

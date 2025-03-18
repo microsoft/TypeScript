@@ -32,11 +32,8 @@ function fb3(a: NamedAnonymousMixed, ...args: NamedAnonymousMixed[3]) {}
 
 type ToAnonymousTuple<T extends unknown[]> = {
 >ToAnonymousTuple : ToAnonymousTuple<T>
->T : T
 
   [K in keyof T]: [K, T[K], keyof T, T];
->K : K
-
 };
 
 type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
@@ -50,11 +47,8 @@ type NamedToAnonymous = ToAnonymousTuple<[first: boolean, second: number]>;
 
 type ToMixedTuple<T extends unknown[]> = {
 >ToMixedTuple : ToMixedTuple<T>
->T : T
 
   [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
->K : K
-
 };
 
 type AnonymousToMixed = ToMixedTuple<[boolean, number]>;
@@ -78,7 +72,6 @@ type ConditionalTuple = [
 
 type AddMixedConditional<T> = [
 >AddMixedConditional : [first: boolean, null, third: T extends number ? "a" : "b", ...T extends 0 ? [fourth: "c"] : []]
->T : T
 
   first: boolean,
   null,
@@ -97,15 +90,12 @@ type AddMixedConditionalNumberPrimitive = AddMixedConditional<number>;
 
 declare function test<T extends readonly unknown[]>(
 >test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; } }]) => T
->T : T
 
   arg: [
 >arg : [...{ [K in keyof T]: { type: T[K]; } }]
 
     ...{
       [K in keyof T]: {
->K : K
-
         type: T[K];
 >type : T[K]
 

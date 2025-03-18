@@ -1,13 +1,6 @@
 --- old.collisionExportsRequireAndUninstantiatedModule.types
 +++ new.collisionExportsRequireAndUninstantiatedModule.types
-@@= skipped -1, +1 lines =@@
- 
- === collisionExportsRequireAndUninstantiatedModule.ts ===
- export module require { // no error 
-+>require : any
-+
-     export interface I {
-+>I : I
+@@= skipped -5, +5 lines =@@
      }
  }
  export function foo(): require.I {
@@ -16,12 +9,7 @@
  >require : any
  
      return null;
- }
- export module exports { // no error
-+>exports : any
-+
-     export interface I {
-+>I : I
+@@= skipped -10, +10 lines =@@
      }
  }
  export function foo2(): exports.I {

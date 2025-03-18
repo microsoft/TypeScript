@@ -1,31 +1,6 @@
 --- old.stringLiteralTypesAsTags03.types
 +++ new.stringLiteralTypesAsTags03.types
-@@= skipped -4, +4 lines =@@
- >Kind : Kind
- 
- interface Entity {
-+>Entity : Entity
-+
-     kind: Kind;
- >kind : Kind
- }
- 
- interface A extends Entity {
-+>A : A
-+
-     kind: "A";
- >kind : "A"
- 
-@@= skipped -13, +17 lines =@@
- }
- 
- interface B extends Entity {
-+>B : B
-+
-     kind: "B";
- >kind : "B"
- 
-@@= skipped -12, +14 lines =@@
+@@= skipped -29, +29 lines =@@
  // That way, we can avoid the need to look for a compatible overload
  // signature and simply check compatibility with the implementation.
  function hasKind(entity: Entity, kind: "A" | "A"): entity is A;

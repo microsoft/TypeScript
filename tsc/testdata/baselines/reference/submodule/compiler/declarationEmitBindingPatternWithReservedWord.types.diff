@@ -1,26 +1,6 @@
 --- old.declarationEmitBindingPatternWithReservedWord.types
 +++ new.declarationEmitBindingPatternWithReservedWord.types
-@@= skipped -5, +5 lines =@@
- 
- type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<
- >ConvertLocaleConfig : ConvertLocaleConfig<T>
-+>T : T
- 
-   string,
-   T
- >;
- type LocaleConfig<T extends LocaleData = LocaleData> = Record<string, Partial<T>>;
- >LocaleConfig : LocaleConfig<T>
-+>T : T
- 
- export interface GetLocalesOptions<T extends LocaleData> {
-+>GetLocalesOptions : GetLocalesOptions<T>
-+>T : T
-+
-     app: unknown;
- >app : unknown
- 
-@@= skipped -22, +27 lines =@@
+@@= skipped -27, +27 lines =@@
  }
  
  export const getLocales = <T extends LocaleData>({
@@ -28,7 +8,6 @@
 -><T extends LocaleData>({    app,    name,    default: defaultLocalesConfig,    config: userLocalesConfig = {},}: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {    return defaultLocalesConfig;} : <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
 +>getLocales : <T extends LocaleData>(__0: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
 +><T extends LocaleData>({    app,    name,    default: defaultLocalesConfig,    config: userLocalesConfig = {},}: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {    return defaultLocalesConfig;} : <T extends LocaleData>(__0: GetLocalesOptions<T>) => ConvertLocaleConfig<T>
-+>T : T
  
      app,
  >app : unknown

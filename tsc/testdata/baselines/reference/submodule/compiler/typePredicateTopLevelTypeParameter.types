@@ -33,7 +33,6 @@ const admins = ['Mike', 'Joe'].map(e => getPermissions(e));
 
 function isDefined<T>(a: T | undefined): a is T {
 >isDefined : <T>(a: T | undefined) => a is T
->T : T
 >a : T | undefined
 
     return a !== undefined;

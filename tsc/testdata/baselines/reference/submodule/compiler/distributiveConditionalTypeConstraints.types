@@ -3,13 +3,11 @@
 === distributiveConditionalTypeConstraints.ts ===
 type IsArray<T> = T extends unknown[] ? true : false;
 >IsArray : IsArray<T>
->T : T
 >true : true
 >false : false
 
 function f1<T extends object>(x: IsArray<T>) {
 >f1 : <T extends object>(x: IsArray<T>) => void
->T : T
 >x : IsArray<T>
 
     let t: true = x;   // Error
@@ -25,7 +23,6 @@ function f1<T extends object>(x: IsArray<T>) {
 
 function f2<T extends unknown[]>(x: IsArray<T>) {
 >f2 : <T extends unknown[]>(x: IsArray<T>) => void
->T : T
 >x : IsArray<T>
 
     let t: true = x;
@@ -41,7 +38,6 @@ function f2<T extends unknown[]>(x: IsArray<T>) {
 
 function f3<T extends string[]>(x: IsArray<T>) {
 >f3 : <T extends string[]>(x: IsArray<T>) => void
->T : T
 >x : IsArray<T>
 
     let t: true = x;
@@ -57,7 +53,6 @@ function f3<T extends string[]>(x: IsArray<T>) {
 
 function f4<T extends Function>(x: IsArray<T>) {
 >f4 : <T extends Function>(x: IsArray<T>) => void
->T : T
 >x : IsArray<T>
 
     let t: true = x;   // Error
@@ -73,7 +68,6 @@ function f4<T extends Function>(x: IsArray<T>) {
 
 type ZeroOf<T> =
 >ZeroOf : ZeroOf<T>
->T : T
 
     T extends null ? null :
     T extends undefined ? undefined :
@@ -86,7 +80,6 @@ type ZeroOf<T> =
 
 function f10<T extends {}>(x: ZeroOf<T>) {
 >f10 : <T extends {}>(x: ZeroOf<T>) => void
->T : T
 >x : ZeroOf<T>
 
     let t: "" | 0 | false = x;
@@ -97,13 +90,11 @@ function f10<T extends {}>(x: ZeroOf<T>) {
 
 type Foo<T> = T extends "abc" | 42 ? true : false;
 >Foo : Foo<T>
->T : T
 >true : true
 >false : false
 
 function f20<T extends string>(x: Foo<T>) {
 >f20 : <T extends string>(x: Foo<T>) => void
->T : T
 >x : Foo<T>
 
     let t: false = x;  // Error
@@ -115,21 +106,17 @@ function f20<T extends string>(x: Foo<T>) {
 // Modified repro from #30152
 
 interface A { foo(): void; }
->A : A
 >foo : () => void
 
 interface B { bar(): void; }
->B : B
 >bar : () => void
 
 interface C { foo(): void, bar(): void }
->C : C
 >foo : () => void
 >bar : () => void
 
 function test1<T extends A>(y: T extends B ? number : string) {
 >test1 : <T extends A>(y: T extends B ? number : string) => void
->T : T
 >y : T extends B ? number : string
 
     if (typeof y == 'string') {
@@ -155,7 +142,6 @@ function test1<T extends A>(y: T extends B ? number : string) {
 
 function test2<T extends A>(y: T extends B ? string : number) {
 >test2 : <T extends A>(y: T extends B ? string : number) => void
->T : T
 >y : T extends B ? string : number
 
     if (typeof y == 'string') {
@@ -181,7 +167,6 @@ function test2<T extends A>(y: T extends B ? string : number) {
 
 function test3<T extends A>(y: T extends C ? number : string) {
 >test3 : <T extends A>(y: T extends C ? number : string) => void
->T : T
 >y : T extends C ? number : string
 
     if (typeof y == 'string') {
@@ -207,7 +192,6 @@ function test3<T extends A>(y: T extends C ? number : string) {
 
 function test4<T extends A>(y: T extends C ? string : number) {
 >test4 : <T extends A>(y: T extends C ? string : number) => void
->T : T
 >y : T extends C ? string : number
 
     if (typeof y == 'string') {

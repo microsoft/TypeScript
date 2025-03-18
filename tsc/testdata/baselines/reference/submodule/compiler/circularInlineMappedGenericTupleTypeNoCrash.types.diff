@@ -1,22 +1,17 @@
 --- old.circularInlineMappedGenericTupleTypeNoCrash.types
 +++ new.circularInlineMappedGenericTupleTypeNoCrash.types
-@@= skipped -2, +2 lines =@@
- === circularInlineMappedGenericTupleTypeNoCrash.ts ===
- class Foo<Elements extends readonly unknown[]> {
+@@= skipped -4, +4 lines =@@
  >Foo : Foo<Elements>
-+>Elements : Elements
  
    public readonly elements: { [P in keyof Elements]: { bar: Elements[P] } };
 ->elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
 +>elements : { [P in keyof Elements]: { bar: Elements[P]; } }
-+>P : P
  >bar : Elements[P]
  
    public constructor(
      ...elements: { [P in keyof Elements]: { bar: Elements[P] } }
 ->elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
 +>elements : { [P in keyof Elements]: { bar: Elements[P]; } }
-+>P : P
  >bar : Elements[P]
  
    ) {
@@ -33,7 +28,7 @@
    }
  
    public add(): Foo<[...Elements, "abc"]> {
-@@= skipped -26, +29 lines =@@
+@@= skipped -24, +24 lines =@@
  >new Foo<[...Elements, "abc"]>(...this.elements, { bar: "abc" }) : Foo<[...Elements, "abc"]>
  >Foo : typeof Foo
  >...this.elements : { bar: unknown; }

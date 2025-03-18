@@ -5,13 +5,9 @@
 
 type PromiseOrValue<T> = Promise<T> | T;
 >PromiseOrValue : PromiseOrValue<T>
->T : T
 
 function mapAsyncIterable<T, U, R = undefined>(
 >mapAsyncIterable : <T, U, R>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
->T : T
->U : U
->R : R
 
   iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
 >iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>

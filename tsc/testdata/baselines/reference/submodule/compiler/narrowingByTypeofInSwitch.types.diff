@@ -9,11 +9,7 @@
  >x : Basic
  
          case 'number': assertNumber(x); return;
-@@= skipped -53, +53 lines =@@
- 
- function testExtendsUnion<T extends Basic>(x: T) {
- >testExtendsUnion : <T extends Basic>(x: T) => void
-+>T : T
+@@= skipped -56, +56 lines =@@
  >x : T
  
      switch (typeof x) {
@@ -22,7 +18,7 @@
  >x : T
  
          case 'number': assertNumber(x); return;
-@@= skipped -59, +60 lines =@@
+@@= skipped -56, +56 lines =@@
  >x : any
  
      switch (typeof x) {
@@ -49,11 +45,7 @@
  >x : Basic
  
          case 'number': assertNumber(x); return;
-@@= skipped -35, +35 lines =@@
- 
- function testExtendsExplicitDefault<T extends Basic>(x: T) {
- >testExtendsExplicitDefault : <T extends Basic>(x: T) => void
-+>T : T
+@@= skipped -38, +38 lines =@@
  >x : T
  
      switch (typeof x) {
@@ -62,11 +54,7 @@
  >x : T
  
          case 'number': assertNumber(x); return;
-@@= skipped -40, +41 lines =@@
- 
- function testExtendsImplicitDefault<T extends Basic>(x: T) {
- >testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
-+>T : T
+@@= skipped -40, +40 lines =@@
  >x : T
  
      switch (typeof x) {
@@ -75,7 +63,7 @@
  >x : T
  
          case 'number': assertNumber(x); return;
-@@= skipped -46, +47 lines =@@
+@@= skipped -43, +43 lines =@@
  >y : number
  
  function exhaustiveChecks(x: number | string | L | R): string {
@@ -107,7 +95,6 @@
  function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
 ->exhaustiveChecksGenerics : <T extends L | R | number | string>(x: T) => string
 +>exhaustiveChecksGenerics : <T extends string | number | L | R>(x: T) => string
-+>T : T
  >x : T
  
      switch (typeof x) {
@@ -126,12 +113,7 @@
  >2 : 2
  
          case 'string': return x;
-@@= skipped -39, +40 lines =@@
- 
- function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
- >multipleGeneric : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
-+>X : X
-+>Y : Y
+@@= skipped -42, +42 lines =@@
  >xy : X | Y
  
      switch (typeof xy) {
@@ -140,14 +122,12 @@
  >xy : X | Y
  
          case 'function': return [xy, xy(42)];
-@@= skipped -30, +32 lines =@@
+@@= skipped -27, +27 lines =@@
  }
  
  function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 ->multipleGenericFuse : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
 +>multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
-+>X : X
-+>Y : Y
  >xy : X | Y
  
      switch (typeof xy) {
@@ -156,7 +136,7 @@
  >xy : X | Y
  
          case 'function': return [xy, 1];
-@@= skipped -21, +23 lines =@@
+@@= skipped -21, +21 lines =@@
  
          case 'number': return [xy]
  >'number' : "number"
@@ -167,10 +147,7 @@
      }
  }
  
- function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
- >multipleGenericExhaustive : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
-+>X : X
-+>Y : Y
+@@= skipped -10, +10 lines =@@
  >xy : X | Y
  
      switch (typeof xy) {
@@ -179,7 +156,7 @@
  >xy : X | Y
  
          case 'object': return [xy, xy.y];
-@@= skipped -36, +38 lines =@@
+@@= skipped -26, +26 lines =@@
  >x : string | number | boolean
  
      switch (typeof x) {
@@ -221,12 +198,10 @@
  function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 ->keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
 +>keyofNarrowing : <S extends { [K in keyof S]: string }>(k: keyof S) => void
-+>S : S
-+>K : K
  >k : keyof S
  
      function assertKeyofS(k1: keyof S) { }
-@@= skipped -8, +10 lines =@@
+@@= skipped -8, +8 lines =@@
  >k1 : keyof S
  
      switch (typeof k) {
@@ -286,12 +261,10 @@
  function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
 ->keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
 +>keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string }>(k: keyof S) => void
-+>S : S
-+>K : K
  >k : keyof S
  
      function assertKeyofS(k1: keyof S) { }
-@@= skipped -8, +10 lines =@@
+@@= skipped -8, +8 lines =@@
  >k1 : keyof S
  
      switch (typeof k) {
@@ -306,8 +279,6 @@
  function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 ->multipleGenericFuseWithBoth : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
 +>multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
-+>X : X
-+>Y : Y
  >xy : X | Y
  
      switch (typeof xy) {
@@ -316,7 +287,7 @@
  >xy : X | Y
  
          case `function`: return [xy, 1];
-@@= skipped -21, +23 lines =@@
+@@= skipped -21, +21 lines =@@
  
          case `number`: return [xy]
  >`number` : "number"

@@ -5,20 +5,12 @@
 
 type Replace<T extends [...any], A, B> = {
 >Replace : Replace<T, A, B>
->T : T
->A : A
->B : B
 
   [K in keyof T]: T[K] extends A ? B : T[K];
->K : K
-
 };
 
 type ReplaceParams1<ARRAY extends [...any], A, B> = (
 >ReplaceParams1 : ReplaceParams1<ARRAY, A, B>
->ARRAY : ARRAY
->A : A
->B : B
 
   ...args: Replace<ARRAY, A, B>
 >args : Replace<ARRAY, A, B>

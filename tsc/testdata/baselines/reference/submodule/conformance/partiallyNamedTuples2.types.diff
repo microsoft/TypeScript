@@ -1,52 +1,6 @@
 --- old.partiallyNamedTuples2.types
 +++ new.partiallyNamedTuples2.types
-@@= skipped -2, +2 lines =@@
- === partiallyNamedTuples2.ts ===
- // https://github.com/microsoft/TypeScript/issues/55693
- interface MultiKeyMap<Keys extends readonly unknown[], Value> {
-+>MultiKeyMap : MultiKeyMap<Keys, Value>
-+>Keys : Keys
-+>Value : Value
-+
-   get<Key extends GetKeys<Keys>>(...key: Key): GetResult<Keys, Key, Value>;
- >get : <Key extends GetKeys<Keys>>(...key: Key) => GetResult<Keys, Key, Value>
-+>Key : Key
- >key : Key
- }
- type GetKeys<Keys extends readonly unknown[]> = Keys extends [
- >GetKeys : GetKeys<Keys>
-+>Keys : Keys
- 
-   ...infer Remain,
-+>Remain : Remain
-+
-   infer _,
-+>_ : _
-+
- ]
-   ? Keys | GetKeys<Remain>
-   : Keys;
-@@= skipped -16, +26 lines =@@
- >GetResult : GetResult<Id, Args, Value>
- 
-   Id extends readonly unknown[],
-+>Id : Id
-+
-   Args extends GetKeys<Id>,
-+>Args : Args
-+
-   Value,
-+>Value : Value
-+
- > = Args extends Id
-   ? Value | undefined
-   : Id extends [...Args, ...infer Rest]
-+>Rest : Rest
-+
-   ? Iterable<[...Rest, Value]>
-   : never;
- const x: MultiKeyMap<[id1: string, id2: string], object> = null!;
-@@= skipped -17, +25 lines =@@
+@@= skipped -35, +35 lines =@@
  >"abc" : "abc"
  
  const matches = x.get(id1);

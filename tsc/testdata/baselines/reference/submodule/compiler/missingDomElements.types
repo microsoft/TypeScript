@@ -2,16 +2,9 @@
 
 === missingDomElements.ts ===
 interface Element {}
->Element : Element
-
 interface EventTarget {}
->EventTarget : EventTarget
-
 interface HTMLElement {}
->HTMLElement : HTMLElement
-
 interface HTMLInputElement {}
->HTMLInputElement : HTMLInputElement
 
 ({} as any as Element).textContent;
 >({} as any as Element).textContent : any
@@ -46,11 +39,7 @@ interface HTMLInputElement {}
 >textContent : any
 
 interface HTMLElementFake {}
->HTMLElementFake : HTMLElementFake
-
 interface Node {
->Node : Node
-
     actuallyNotTheSame: number;    
 >actuallyNotTheSame : number
 

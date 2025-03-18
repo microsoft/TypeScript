@@ -1,17 +1,6 @@
 --- old.internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.types
 +++ new.internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.types
-@@= skipped -7, +7 lines =@@
- >aProp : string
- }
- module A {
-+>A : typeof A
-+
-     export interface X { s: string }
-+>X : X
- >s : string
- }
- 
-@@= skipped -12, +15 lines =@@
+@@= skipped -19, +19 lines =@@
  >1 : 1
  
      import Y = A;

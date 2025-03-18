@@ -20,10 +20,7 @@ module TypeScript {
 >TypeScript : typeof TypeScript
 
     export interface ISyntaxElement { };
->ISyntaxElement : ISyntaxElement
-
     export interface ISyntaxToken { };
->ISyntaxToken : ISyntaxToken
 
     export class PositionedElement {
 >PositionedElement : PositionedElement

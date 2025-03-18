@@ -3,7 +3,6 @@
 === ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts ===
 class clodule<T> {
 >clodule : clodule<T>
->T : T
 
     id: string;
 >id : string
@@ -22,7 +21,6 @@ module clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): T {
 >fn : <T>(x: T, y: T) => T
->T : T
 >x : T
 >y : T
 

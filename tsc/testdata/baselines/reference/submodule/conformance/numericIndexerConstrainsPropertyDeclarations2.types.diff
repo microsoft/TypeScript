@@ -1,15 +1,6 @@
 --- old.numericIndexerConstrainsPropertyDeclarations2.types
 +++ new.numericIndexerConstrainsPropertyDeclarations2.types
-@@= skipped -42, +42 lines =@@
- }
- 
- interface Foo2 {
-+>Foo2 : Foo2
-+
-     [x: number]: A;
- >x : number
- 
-@@= skipped -20, +22 lines =@@
+@@= skipped -62, +62 lines =@@
  }
  
  var a: {

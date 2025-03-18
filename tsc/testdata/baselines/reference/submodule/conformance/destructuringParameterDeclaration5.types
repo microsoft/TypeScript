@@ -4,8 +4,6 @@
 // Parameter Declaration with generic
 
 interface F { }
->F : F
-
 class Class implements F {
 >Class : Class
 
@@ -50,7 +48,6 @@ class SubD extends D {
 
 function d0<T extends Class>({x} = { x: new Class() }) { }
 >d0 : <T extends Class>(__0?: { x: Class; }) => void
->T : T
 >x : Class
 >{ x: new Class() } : { x: Class; }
 >x : Class
@@ -59,25 +56,21 @@ function d0<T extends Class>({x} = { x: new Class() }) { }
 
 function d1<T extends F>({x}: { x: F }) { }
 >d1 : <T extends F>(__0: { x: F; }) => void
->T : T
 >x : F
 >x : F
 
 function d2<T extends Class>({x}: { x: Class }) { }
 >d2 : <T extends Class>(__0: { x: Class; }) => void
->T : T
 >x : Class
 >x : Class
 
 function d3<T extends D>({y}: { y: D }) { }
 >d3 : <T extends D>(__0: { y: D; }) => void
->T : T
 >y : D
 >y : D
 
 function d4<T extends D>({y} = { y: new D() }) { }
 >d4 : <T extends D>(__0?: { y: D; }) => void
->T : T
 >y : D
 >{ y: new D() } : { y: D; }
 >y : D

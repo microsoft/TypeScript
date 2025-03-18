@@ -2,16 +2,11 @@
 
 === expandoFunctionContextualTypes.ts ===
 interface MyComponentProps {
->MyComponentProps : MyComponentProps
-
     color: "red" | "blue"
 >color : "blue" | "red"
 }
 
 interface StatelessComponent<P> {
->StatelessComponent : StatelessComponent<P>
->P : P
-
     (): any;
     defaultProps?: Partial<P>;
 >defaultProps : Partial<P>

@@ -4,6 +4,7 @@
 // forward ref ignored in a typeof
 declare let s: typeof s1;
 >s : "x"
+>s1 : "x"
 
 const s1 = "x";
 >s1 : "x"
@@ -11,7 +12,6 @@ const s1 = "x";
 
 // ignored anywhere in an interface (#35947)
 interface Foo2 { [s2]: number; }
->Foo2 : Foo2
 >[s2] : number
 >s2 : "x"
 
@@ -51,7 +51,6 @@ const s5 = "x";
 
 // or with qualified names
 interface Foo6 { [Cls1.a]: number; [Cls2.b]: number; [obj1.c]: number; [obj2.d]: number }
->Foo6 : Foo6
 >[Cls1.a] : number
 >Cls1.a : "a"
 >Cls1 : typeof Cls1

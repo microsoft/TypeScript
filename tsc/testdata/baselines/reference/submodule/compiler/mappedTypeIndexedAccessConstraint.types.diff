@@ -1,34 +1,6 @@
 --- old.mappedTypeIndexedAccessConstraint.types
 +++ new.mappedTypeIndexedAccessConstraint.types
-@@= skipped -2, +2 lines =@@
- === mappedTypeIndexedAccessConstraint.ts ===
- type Identity<T> = { [K in keyof T]: T[K] };
- >Identity : Identity<T>
-+>T : T
-+>K : K
- 
- type M0 = { a: 1, b: 2 };
- >M0 : M0
-@@= skipped -8, +10 lines =@@
- 
- type M1 = { [K in keyof Partial<M0>]: M0[K] };
- >M1 : M1
-+>K : K
- 
- type M2 = { [K in keyof Required<M1>]: M1[K] };
- >M2 : M2
-+>K : K
- 
- type M3 = { [K in keyof Identity<Partial<M0>>]: M0[K] };
- >M3 : M3
-+>K : K
- 
- function foo<K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) {
- >foo : <K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) => void
-+>K : K
- >m1 : M1[K]
- >m2 : M2[K]
- >m3 : M3[K]
+@@= skipped -25, +25 lines =@@
  
      m1.toString();  // Error
  >m1.toString() : string
@@ -80,20 +52,15 @@
  }
  
  // Repro from #57487
-@@= skipped -65, +69 lines =@@
- 
- const mapped: { [K in keyof Partial<Obj>]: Obj[K] } = {};
- >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
-+>K : K
+@@= skipped -53, +53 lines =@@
  >{} : {}
  
  const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toString();  // Error
 ->resolveMapped : <K extends keyof typeof mapped>(key: K) => string
 -><K extends keyof typeof mapped>(key: K) => mapped[key].toString() : <K extends keyof typeof mapped>(key: K) => string
-->mapped : { a?: 1 | undefined; b?: 2 | undefined; }
 +>resolveMapped : <K extends keyof Obj>(key: K) => string
 +><K extends keyof typeof mapped>(key: K) => mapped[key].toString() : <K extends keyof Obj>(key: K) => string
-+>K : K
+ >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
  >key : K
  >mapped[key].toString() : string
 ->mapped[key].toString : (radix?: number) => string
@@ -116,29 +83,21 @@
  >"foo" : "foo"
  >"12" : "12"
  >42 : 42
-@@= skipped -32, +33 lines =@@
+@@= skipped -29, +29 lines =@@
  
  type MapperArgs<K extends (typeof arr)[number]> = {
  >MapperArgs : MapperArgs<K>
 ->arr : readonly ["foo", "12", 42]
-+>K : K
++>arr : ["foo", "12", 42]
  
      v: K,
  >v : K
-@@= skipped -12, +12 lines =@@
- 
- type SetOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
- >SetOptional : SetOptional<T, K>
-+>T : T
-+>K : K
- 
- type PartMappings = SetOptional<Mappings, "foo">;
+@@= skipped -17, +17 lines =@@
  >PartMappings : PartMappings
  
  const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K] } = {
 ->mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
 +>mapper : { foo?: (o: MapperArgs<"foo">) => boolean | undefined | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
-+>K : K
  >o : MapperArgs<K>
 ->{    foo: ({ v, i }) => v.length + i > 4,    "12": ({ v, i }) => Number(v) + i,    42: ({ v, i }) => `${v}${i}`,} : { foo: ({ v, i }: MapperArgs<"foo">) => boolean; "12": ({ v, i }: MapperArgs<"12">) => number; 42: ({ v, i }: MapperArgs<42>) => string; }
 +>{    foo: ({ v, i }) => v.length + i > 4,    "12": ({ v, i }) => Number(v) + i,    42: ({ v, i }) => `${v}${i}`,} : { foo: (__0: MapperArgs<"foo">) => boolean; "12": (__0: MapperArgs<"12">) => number; 42: (__0: MapperArgs<42>) => string; }
@@ -151,7 +110,7 @@
  >v : "foo"
  >i : number
  >v.length + i > 4 : boolean
-@@= skipped -23, +26 lines =@@
+@@= skipped -18, +18 lines =@@
  >4 : 4
  
      "12": ({ v, i }) => Number(v) + i,
@@ -182,7 +141,7 @@
 ->mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
 +>resolveMapper1 : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
 +><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
-+>K : K
++>mapper : { foo?: (o: MapperArgs<"foo">) => boolean | undefined | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
  
      key: K, o: MapperArgs<K>) => mapper[key](o);  // Error
  >key : K
@@ -201,7 +160,7 @@
 ->mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
 +>resolveMapper2 : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
 +><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
-+>K : K
++>mapper : { foo?: (o: MapperArgs<"foo">) => boolean | undefined | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
  
      key: K, o: MapperArgs<K>) => mapper[key]?.(o)
  >key : K
@@ -214,18 +173,8 @@
  >key : K
  >o : MapperArgs<K>
  
-@@= skipped -55, +55 lines =@@
- >mapIntersection : { a?: number | undefined; b: number; c: number; }
- 
-     [K in keyof (Partial<Obj1> & Required<Obj2>)]: number;
-+>K : K
-+
- };
- 
- const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toString();
- >accessMapped : <K extends keyof Obj2>(key: K) => string
+@@= skipped -62, +62 lines =@@
  ><K extends keyof Obj2>(key: K) => mapIntersection[key].toString() : <K extends keyof Obj2>(key: K) => string
-+>K : K
  >key : K
  >mapIntersection[key].toString() : string
 ->mapIntersection[key].toString : (radix?: number) => string
@@ -238,11 +187,8 @@
  
  declare const resolved: { a?: number | undefined; b: number; c: number };
  >resolved : { a?: number | undefined; b: number; c: number; }
-@@= skipped -22, +25 lines =@@
- const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
- >accessResolved : <K extends keyof Obj2>(key: K) => string
+@@= skipped -17, +17 lines =@@
  ><K extends keyof Obj2>(key: K) => resolved[key].toString() : <K extends keyof Obj2>(key: K) => string
-+>K : K
  >key : K
  >resolved[key].toString() : string
 ->resolved[key].toString : (radix?: number) => string
@@ -255,13 +201,12 @@
  
  // Additional repro from #57860
  
-@@= skipped -18, +19 lines =@@
+@@= skipped -16, +16 lines =@@
  }
  
  function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
 ->test : <K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
 +>test : <K extends "prop">(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
-+>K : K
  >obj : Pick<Required<Foo> & Partial<Foo>, K>
  >key : K
  

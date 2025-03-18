@@ -37,7 +37,6 @@ function test2([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
 
 async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >myAllSettled : <T extends readonly unknown[]>(fn: () => T) => Promise<{ [K in keyof T]: [undefined, Error] | [Awaited<T[K]>, undefined] }>
->T : T
 >fn : () => T
 
   const promises = await Promise.allSettled(fn());
@@ -86,7 +85,6 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >reason : any
 
   ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] };
->K : K
 }
 
 async function test3() {

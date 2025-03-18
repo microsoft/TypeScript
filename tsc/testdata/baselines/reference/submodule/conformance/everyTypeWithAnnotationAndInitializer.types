@@ -2,8 +2,6 @@
 
 === everyTypeWithAnnotationAndInitializer.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
@@ -17,7 +15,6 @@ class C implements I {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T
@@ -113,6 +110,7 @@ var anOtherObjectLiteral: { id: number } = new C();
 var aFunction: typeof F = F;
 >aFunction : (x: string) => number
 >F : (x: string) => number
+>F : (x: string) => number
 
 var anOtherFunction: (x: string) => number = F;
 >anOtherFunction : (x: string) => number
@@ -121,12 +119,14 @@ var anOtherFunction: (x: string) => number = F;
 
 var aLambda: typeof F = (x) => 2;
 >aLambda : (x: string) => number
+>F : (x: string) => number
 >(x) => 2 : (x: string) => number
 >x : string
 >2 : 2
 
 var aModule: typeof M = M;
 >aModule : typeof M
+>M : typeof M
 >M : typeof M
 
 var aClassInModule: M.A = new M.A();
@@ -139,7 +139,9 @@ var aClassInModule: M.A = new M.A();
 
 var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';
 >aFunctionInModule : (x: number) => string
+>M.F2 : (x: number) => string
 >M : typeof M
+>F2 : (x: number) => string
 >(x) => 'this is a string' : (x: number) => string
 >x : number
 >'this is a string' : "this is a string"

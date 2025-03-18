@@ -3,6 +3,7 @@
 === circularTypeofWithVarOrFunc.ts ===
 type typeAlias1 = typeof varOfAliasedType1;
 >typeAlias1 : any
+>varOfAliasedType1 : any
 
 var varOfAliasedType1: typeAlias1;
 >varOfAliasedType1 : any
@@ -12,6 +13,7 @@ var varOfAliasedType2: typeAlias2;
 
 type typeAlias2 = typeof varOfAliasedType2;
 >typeAlias2 : any
+>varOfAliasedType2 : any
 
 function func(): typeAlias3 { return null; }
 >func : () => any
@@ -23,12 +25,11 @@ var varOfAliasedType3 = func();
 
 type typeAlias3 = typeof varOfAliasedType3;
 >typeAlias3 : any
+>varOfAliasedType3 : any
 
 // Repro from #26104
 
 interface Input {
->Input : Input
-
   a: number;
 >a : number
 
@@ -38,6 +39,7 @@ interface Input {
 
 type R = ReturnType<typeof mul>;
 >R : any
+>mul : (input: Input) => any
 
 function mul(input: Input): R {
 >mul : (input: Input) => any
@@ -57,6 +59,7 @@ function mul(input: Input): R {
 
 type R2 = ReturnType<typeof f>;
 >R2 : any
+>f : () => any
 
 function f(): R2 { return 0; }
 >f : () => any

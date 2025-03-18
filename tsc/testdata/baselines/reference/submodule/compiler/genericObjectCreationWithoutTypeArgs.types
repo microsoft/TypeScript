@@ -3,7 +3,6 @@
 === genericObjectCreationWithoutTypeArgs.ts ===
 class SS<T>{
 >SS : SS<T>
->T : T
 
 }
 

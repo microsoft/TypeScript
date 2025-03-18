@@ -2,8 +2,6 @@
 
 === file.tsx ===
 interface Context {
->Context : Context
-
     color: any;
 >color : any
 }

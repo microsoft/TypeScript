@@ -18,11 +18,3 @@
      }
  }
  
- module A {
-+>A : typeof A
-+
-     export interface B { }
-+>B : B
- }
- 
- export = A

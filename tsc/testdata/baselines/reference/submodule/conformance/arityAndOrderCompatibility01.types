@@ -2,8 +2,6 @@
 
 === arityAndOrderCompatibility01.ts ===
 interface StrNum extends Array<string|number> {
->StrNum : StrNum
-
     0: string;
 >0 : string
 

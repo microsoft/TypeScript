@@ -1,14 +1,6 @@
 --- old.inferTypePredicates.types
 +++ new.inferTypePredicates.types
-@@= skipped -169, +169 lines =@@
- 
- function isNonNullGeneric<T>(x: T) {
- >isNonNullGeneric : <T>(x: T) => x is T & ({} | undefined)
-+>T : T
- >x : T
- 
-   return x !== null;
-@@= skipped -46, +47 lines =@@
+@@= skipped -215, +215 lines =@@
  >myArray  .map((arr) => arr.list)  .filter((arr) => arr && arr.length) : (MyObj[] | undefined)[]
  >myArray  .map((arr) => arr.list)  .filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
  >myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
@@ -189,11 +181,9 @@
  >x : number | boolean
  >'number' : "number"
  >x : boolean
- 
+@@= skipped -8, +8 lines =@@
  // inferred guards in methods
  interface NumberInferrer {
-+>NumberInferrer : NumberInferrer
-+
    isNumber(x: number | string): x is number;
 ->isNumber : (x: number | string) => x is number
 +>isNumber : (x: string | number) => x is number
@@ -214,7 +204,7 @@
  >x : string | number
  >'number' : "number"
    }
-@@= skipped -35, +37 lines =@@
+@@= skipped -27, +27 lines =@@
  
  if (inf.isNumber(numOrStr)) {
  >inf.isNumber(numOrStr) : boolean
@@ -356,11 +346,9 @@
 +>foobarPred : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
 +>(fb: typeof foobar) => fb.type === "foo" : (fb: { type: "foo"; foo: number; } | { type: "bar"; bar: string; }) => fb is { type: "foo"; foo: number; }
  >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
-->foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+ >foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
  >fb.type === "foo" : boolean
- >fb.type : "bar" | "foo"
- >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
-@@= skipped -12, +11 lines =@@
+@@= skipped -12, +12 lines =@@
  
  if (foobarPred(foobar)) {
  >foobarPred(foobar) : boolean

@@ -8,7 +8,6 @@ class C { }
 
 function f1<T extends C>(v: T | string): void {
 >f1 : <T extends C>(v: string | T) => void
->T : T
 >v : string | T
 
     if (v instanceof C) {
@@ -32,8 +31,6 @@ class D { }
 
 function f2<T extends C, U extends D>(v: T | U) {
 >f2 : <T extends C, U extends D>(v: T | U) => void
->T : T
->U : U
 >v : T | U
 
     if (v instanceof C) {
@@ -58,7 +55,6 @@ class E { x: string | undefined }
 
 function f3<T extends E>(v: T | { x: string }) {
 >f3 : <T extends E>(v: T | { x: string; }) => void
->T : T
 >v : T | { x: string; }
 >x : string
 

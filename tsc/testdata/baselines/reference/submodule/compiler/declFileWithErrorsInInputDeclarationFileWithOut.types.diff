@@ -16,11 +16,3 @@
  
  === declFile.d.ts ===
  declare module M {
-@@= skipped -17, +17 lines =@@
- >f : () => any
- 
-     declare module N { }
-+>N : any
- 
-     declare class C { }
- >C : C

@@ -1,30 +1,6 @@
 --- old.recursiveGenericUnionType2.types
 +++ new.recursiveGenericUnionType2.types
-@@= skipped -1, +1 lines =@@
- 
- === recursiveGenericUnionType2.ts ===
- declare module Test1 {
-+>Test1 : any
-+
-     export type Container<T> = T | {
- >Container : Container<T>
-+>T : T
- 
-         [i: string]: Container<T>[];
- >i : string
-@@= skipped -12, +15 lines =@@
- }
- 
- declare module Test2 {
-+>Test2 : any
-+
-     export type Container<T> = T | {
- >Container : Container<T>
-+>T : T
- 
-         [i: string]: Container<T>[];
- >i : string
-@@= skipped -12, +15 lines =@@
+@@= skipped -25, +25 lines =@@
  }
  
  var x: Test1.Container<number>;

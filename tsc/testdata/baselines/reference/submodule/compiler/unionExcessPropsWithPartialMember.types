@@ -2,8 +2,6 @@
 
 === unionExcessPropsWithPartialMember.ts ===
 interface A {
->A : A
-
     unused?: string;
 >unused : string | undefined
 
@@ -12,8 +10,6 @@ interface A {
 }
 
 interface B {
->B : B
-
     x: string;
 >x : string
 

@@ -2,7 +2,6 @@
 
 === event.ts ===
 export interface Event { title: string };
->Event : Event
 >title : string
 
 === test.ts ===

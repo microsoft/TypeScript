@@ -1,26 +1,18 @@
 --- old.generatorTypeCheck63.types
 +++ new.generatorTypeCheck63.types
-@@= skipped -1, +1 lines =@@
- 
- === generatorTypeCheck63.ts ===
- export interface StrategicState {
-+>StrategicState : StrategicState
-+
-     lastStrategyApplied?: string;
- >lastStrategyApplied : string
+@@= skipped -6, +6 lines =@@
  }
  
  export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>): (a: T) => IterableIterator<T | undefined, void> {
 ->strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined, void>) => (a: T) => IterableIterator<T | undefined, void>
 +>strategy : <T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T, void, any>) => (a: T) => IterableIterator<T, void, any>
-+>T : T
  >stratName : string
 ->gen : (a: T) => IterableIterator<T | undefined, void>
 +>gen : (a: T) => IterableIterator<T, void, any>
  >a : T
  >a : T
  
-@@= skipped -17, +20 lines =@@
+@@= skipped -12, +12 lines =@@
  
          for (const next of gen(state)) {
  >next : T
@@ -31,23 +23,7 @@
  >state : T
  
              if (next) {
-@@= skipped -22, +22 lines =@@
- }
- 
- export interface Strategy<T> {
-+>Strategy : Strategy<T>
-+>T : T
-+
-     (a: T): IterableIterator<T | undefined, void>;
- >a : T
- }
- 
- export interface State extends StrategicState {
-+>State : State
-+
-     foo: number;
- >foo : number
- }
+@@= skipped -33, +33 lines =@@
  
  export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
  >Nothing : Strategy<State>
@@ -58,7 +34,7 @@
  >"Nothing" : "Nothing"
  >function* (state: State) {    yield 1; // number isn't a `State`, so this should error.    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<number, State, any>
  >state : State
-@@= skipped -28, +33 lines =@@
+@@= skipped -17, +17 lines =@@
  
  export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: State) {
  >Nothing1 : Strategy<State>

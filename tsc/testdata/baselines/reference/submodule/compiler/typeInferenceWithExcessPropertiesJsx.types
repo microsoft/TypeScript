@@ -25,7 +25,6 @@ type Translations = {
 }
 type TProps<Entry extends TranslationEntry> = {
 >TProps : TProps<Entry>
->Entry : Entry
 
     getTranslationEntry: (allTranslations: Translations) => Entry,
 >getTranslationEntry : (allTranslations: Translations) => Entry
@@ -39,7 +38,6 @@ type TProps<Entry extends TranslationEntry> = {
 
 declare function T<Entry extends TranslationEntry>(
 >T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
->Entry : Entry
 
     props: TProps<Entry>
 >props : TProps<Entry>

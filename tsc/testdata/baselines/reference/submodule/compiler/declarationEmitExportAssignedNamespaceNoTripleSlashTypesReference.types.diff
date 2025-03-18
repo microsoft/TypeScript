@@ -1,27 +1,6 @@
 --- old.declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.types
 +++ new.declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.types
-@@= skipped -4, +4 lines =@@
- >React : any
- 
- declare namespace React {
-+>React : any
-+
-     export type Component<T = any, U = {}, V = {}> = { x: T, y: U, z: V };
- >Component : Component<T, U, V>
-+>T : T
-+>U : U
-+>V : V
- >x : T
- >y : U
- >z : V
- 
-     export interface DOMAttributes<T> { }
-+>DOMAttributes : DOMAttributes<T>
-+>T : T
- }
- === node_modules/@emotion/core/index.d.ts ===
- import {
-@@= skipped -17, +24 lines =@@
+@@= skipped -21, +21 lines =@@
  export {};
  
  declare module 'react' {
@@ -29,13 +8,8 @@
 +>'react' : any
  
      interface DOMAttributes<T> {
-+>DOMAttributes : DOMAttributes<T>
-+>T : T
-+
          css?: any
- >css : any
-     }
-@@= skipped -22, +25 lines =@@
+@@= skipped -22, +22 lines =@@
  }
  === src/inferred-comp-export.ts ===
  import { getComp } from "./get-comp";

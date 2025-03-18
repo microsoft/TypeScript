@@ -5,7 +5,6 @@
 
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 class A {
@@ -26,7 +25,6 @@ class A {
 
 function mixB<T extends Constructor<{}>>(Cls: T) {
 >mixB : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
->T : T
 >Cls : T
 
     return class extends Cls {
@@ -46,7 +44,6 @@ function mixB<T extends Constructor<{}>>(Cls: T) {
 
 function mixB2<T extends Constructor<A>>(Cls: T) {
 >mixB2 : <T extends Constructor<A>>(Cls: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
->T : T
 >Cls : T
 
     return class extends Cls {
@@ -75,7 +72,6 @@ const
 
 function mixC<T extends Constructor<{}>>(Cls: T) {
 >mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
->T : T
 >Cls : T
 
     return class extends Cls {
@@ -240,7 +236,6 @@ class Person {
 
 function PersonMixin<T extends Constructor<Person>>(Base: T) {
 >PersonMixin : <T extends Constructor<Person>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
->T : T
 >Base : T
 
 	return class extends Base {

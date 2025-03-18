@@ -1,35 +1,6 @@
 --- old.templateLiteralTypes6.types
 +++ new.templateLiteralTypes6.types
-@@= skipped -17, +17 lines =@@
- 
- type Keyof<T> = keyof T & string;
- >Keyof : Keyof<T>
-+>T : T
- 
- declare function f1<
- >f1 : <Scope extends Keyof<Registry>, Event extends Keyof<Registry[Scope]>>(eventPath: `${Scope}:${Event}`) => void
- 
-   Scope extends Keyof<Registry>,
-+>Scope : Scope
-+
-   Event extends Keyof<Registry[Scope]>,
-+>Event : Event
-+
- >(eventPath: `${Scope}:${Event}`): void;
- >eventPath : `${Scope}:${Event}`
- 
-@@= skipped -13, +18 lines =@@
- >f2 : <Scope extends Keyof<Registry>, Event extends Keyof<Registry[Scope]>>(scope: Scope, event: Event) => void
- 
-   Scope extends Keyof<Registry>,
-+>Scope : Scope
-+
-   Event extends Keyof<Registry[Scope]>,
-+>Event : Event
-+
- >(scope: Scope, event: Event) {
- >scope : Scope
- >event : Event
+@@= skipped -37, +37 lines =@@
  
    f1(`${scope}:${event}`);
  >f1(`${scope}:${event}`) : void

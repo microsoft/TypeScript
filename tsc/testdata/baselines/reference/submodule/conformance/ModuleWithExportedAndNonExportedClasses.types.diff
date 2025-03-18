@@ -9,25 +9,7 @@
  
      export class A {
  >A : A
-@@= skipped -14, +14 lines =@@
- 
-     export class AG<T, U>{
- >AG : AG<T, U>
-+>T : T
-+>U : U
- 
-         id: T;
- >id : T
-@@= skipped -20, +22 lines =@@
- 
-     class AG2<T, U>{
- >AG2 : AG2<T, U>
-+>T : T
-+>U : U
- 
-         id: T;
- >id : T
-@@= skipped -17, +19 lines =@@
+@@= skipped -51, +51 lines =@@
  
  var a = new A.A();
  >a : { id: number; name: string; }

@@ -1,49 +1,6 @@
 --- old.tsxIntrinsicAttributeErrors.types
 +++ new.tsxIntrinsicAttributeErrors.types
-@@= skipped -1, +1 lines =@@
- 
- === tsxIntrinsicAttributeErrors.tsx ===
- declare namespace JSX {
-+>JSX : any
-+
-     interface Element { }
-+>Element : Element
-+
-     interface ElementClass {
-+>ElementClass : ElementClass
-+
-         render: any;
- >render : any
-     }
-     interface IntrinsicAttributes {
-+>IntrinsicAttributes : IntrinsicAttributes
-+
-         key: string | number
- >key : string | number
-     }
-     interface IntrinsicClassAttributes<T> {
-+>IntrinsicClassAttributes : IntrinsicClassAttributes<T>
-+>T : T
-+
-         ref: T
- >ref : T
-     }
-     interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         div: {
- >div : { text?: string; width?: number; }
- 
-@@= skipped -30, +43 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     new(n: string): {
- >n : string
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -45, +45 lines =@@
  >E : I
  
  <E x={10} />

@@ -14,13 +14,7 @@
  >moment : any
  
  declare namespace moment {
-+>moment : () => Moment
-+
-   interface Moment extends Object {
-+>Moment : Moment
-+
-     valueOf(): number;
- >valueOf : () => number
+@@= skipped -14, +14 lines =@@
    }
  }
  export = moment;
@@ -38,11 +32,7 @@
  
  declare module "moment" {
  >"moment" : () => Moment
- 
-     interface Moment {
-+>Moment : Moment
-+
-         tz(): string;
+@@= skipped -17, +17 lines =@@
  >tz : () => string
      }
  }

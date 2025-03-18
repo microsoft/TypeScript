@@ -17,12 +17,8 @@
 +>"react" : any
  
      interface Attributes {
-+>Attributes : Attributes
-+
          [key: `do-${string}`]: Function;
- >key : `do-${string}`
- 
-@@= skipped -21, +17 lines =@@
+@@= skipped -21, +15 lines =@@
  }
  
  export const tag = <div ns:thing="a"/>

@@ -9,15 +9,7 @@
  
      return 1;
  >1 : 1
-@@= skipped -12, +12 lines =@@
- 
- function f6<T>(x: T) {
- >f6 : <T>(x: T) => T
-+>T : T
- >x : T
- 
-     if (true) {
-@@= skipped -65, +66 lines =@@
+@@= skipped -77, +77 lines =@@
  
  // returns number => void
  function f11() {

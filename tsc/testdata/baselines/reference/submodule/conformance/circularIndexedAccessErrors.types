@@ -11,7 +11,6 @@ type T1 = {
 
 type T2<K extends "x" | "y"> = {
 >T2 : T2<K>
->K : K
 
     x: T2<K>[K];  // Error
 >x : T2<K>[K]
@@ -30,17 +29,11 @@ let x2x = x2.x;
 >x : any
 
 interface T3<T extends T3<T>> {
->T3 : T3<T>
->T : T
-
     x: T["x"];
 >x : T["x"]
 }
 
 interface T4<T extends T4<T>> {
->T4 : T4<T>
->T : T
-
     x: T4<T>["x"];  // Error
 >x : any
 }
@@ -68,14 +61,11 @@ class C2 {
 // Repro from #12627
 
 interface Foo {
->Foo : Foo
-
     hello: boolean;
 >hello : boolean
 }
 
 function foo<T extends Foo | T["hello"]>() {
 >foo : <T>() => void
->T : T
 }
 

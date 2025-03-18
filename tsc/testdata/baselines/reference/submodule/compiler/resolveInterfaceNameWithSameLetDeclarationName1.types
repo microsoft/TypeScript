@@ -2,8 +2,6 @@
 
 === resolveInterfaceNameWithSameLetDeclarationName1.ts ===
 interface bar { }
->bar : bar
-
 let bar: bar;
 >bar : bar
 

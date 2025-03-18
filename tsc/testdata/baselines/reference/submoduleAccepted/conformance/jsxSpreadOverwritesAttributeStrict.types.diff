@@ -8,12 +8,8 @@
 +>React : any
  
  interface Props {
-+>Props : Props
-+
      a: number;
- >a : number
- 
-@@= skipped -26, +28 lines =@@
+@@= skipped -26, +26 lines =@@
  >1 : 1
  
  const Foo = (props: Props) => <div>{ props.a }</div>;

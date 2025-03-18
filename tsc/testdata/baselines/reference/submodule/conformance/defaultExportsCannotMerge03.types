@@ -6,8 +6,6 @@ export default class Decl {
 }
 
 interface Decl {
->Decl : Decl
-
     p1: number;
 >p1 : number
 
@@ -16,10 +14,7 @@ interface Decl {
 }
 
 namespace Decl {
->Decl : any
-
     interface I {
->I : I
     }
 }
 

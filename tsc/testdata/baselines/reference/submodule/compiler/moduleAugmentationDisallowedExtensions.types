@@ -44,7 +44,6 @@ declare module "./observable" {
 >arr : number[]
 
     interface A { x }
->A : A
 >x : any
 
     namespace N {
@@ -84,7 +83,6 @@ export {}
 === observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
->T : T
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>

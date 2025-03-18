@@ -1,15 +1,6 @@
 --- old.mismatchedExplicitTypeParameterAndArgumentType.types
 +++ new.mismatchedExplicitTypeParameterAndArgumentType.types
-@@= skipped -2, +2 lines =@@
- === mismatchedExplicitTypeParameterAndArgumentType.ts ===
- function map<T, U>(xs: T[], f: (x: T) => U) {
- >map : <T, U>(xs: T[], f: (x: T) => U) => U[]
-+>T : T
-+>U : U
- >xs : T[]
- >f : (x: T) => U
- >x : T
-@@= skipped -37, +39 lines =@@
+@@= skipped -39, +39 lines =@@
  >(x) => x.toString() : (x: string | number) => string
  >x : string | number
  >x.toString() : string

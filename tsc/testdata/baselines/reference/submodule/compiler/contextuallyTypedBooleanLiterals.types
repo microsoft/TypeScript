@@ -5,7 +5,6 @@
 
 type Box<T> = {
 >Box : Box<T>
->T : T
 
     get: () => T,
 >get : () => T
@@ -17,7 +16,6 @@ type Box<T> = {
 
 declare function box<T>(value: T): Box<T>;
 >box : <T>(value: T) => Box<T>
->T : T
 >value : T
 
 const bn1 = box(0);  // Box<number>
@@ -47,8 +45,6 @@ const bb2: Box<boolean> = box(false);  // Error, box<false> not assignable to Bo
 // Repro from #48150
 
 interface Observable<T>
->Observable : Observable<T>
->T : T
 {
   (): T;
   (value: T): any;
@@ -57,7 +53,6 @@ interface Observable<T>
 
 declare function observable<T>(value: T): Observable<T>;
 >observable : <T>(value: T) => Observable<T>
->T : T
 >value : T
 
 const x: Observable<boolean> = observable(false);

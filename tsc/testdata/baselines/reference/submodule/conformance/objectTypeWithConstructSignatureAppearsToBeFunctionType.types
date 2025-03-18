@@ -4,8 +4,6 @@
 // no errors expected below 
 
 interface I {
->I : I
-
     new(): number;
 }
 

@@ -15,12 +15,10 @@ class Concrete extends Abstract {
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 function Mixin<TBase extends Constructor>(Base: TBase) {
 >Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
->TBase : TBase
 >Base : TBase
 
     return class extends Base {

@@ -63,8 +63,6 @@ declare module "D" {
 >"a" : any
 
         interface A {
->A : A
-
             getB(): B;
 >getB : () => B
         }
@@ -86,8 +84,6 @@ declare module "E" {
 >"a" : any
 
         interface A {
->A : A
-
             getCls(): Cls;
 >getCls : () => Cls
         }

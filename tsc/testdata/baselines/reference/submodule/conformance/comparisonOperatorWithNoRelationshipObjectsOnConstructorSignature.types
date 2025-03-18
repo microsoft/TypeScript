@@ -73,12 +73,10 @@ var b6: { new (...a: C[]): Base };
 
 var a7: { new <T>(t: T): T };
 >a7 : new <T>(t: T) => T
->T : T
 >t : T
 
 var b7: { new <T>(t: T[]): T };
 >b7 : new <T>(t: T[]) => T
->T : T
 >t : T[]
 
 // operator <

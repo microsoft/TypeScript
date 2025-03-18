@@ -1,15 +1,6 @@
 --- old.topLevelBlockExpando.types
 +++ new.topLevelBlockExpando.types
-@@= skipped -2, +2 lines =@@
- === check.ts ===
- // https://github.com/microsoft/TypeScript/issues/31972
- interface Person {
-+>Person : Person
-+
-   first: string;
- >first : string
- 
-@@= skipped -53, +55 lines =@@
+@@= skipped -55, +55 lines =@@
   * @param {Human} param used as a validation tool
   */
  function doHumanThings(param) {}

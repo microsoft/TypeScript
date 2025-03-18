@@ -2,16 +2,10 @@
 
 === moduleAndInterfaceSharingName2.ts ===
 module X {
->X : any
-
     export module Y {
->Y : any
-
         export interface Z { }
->Z : Z
     }
     export interface Y { }
->Y : Y
 }
 var z: X.Y.Z = null;
 >z : Z

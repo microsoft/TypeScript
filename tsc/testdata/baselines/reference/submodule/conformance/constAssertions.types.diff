@@ -156,15 +156,7 @@
  >1 : 1
  >2 : 2
  >3 : 3
-@@= skipped -18, +18 lines =@@
- 
- declare function id<T>(x: T): T;
- >id : <T>(x: T) => T
-+>T : T
- >x : T
- 
- let e1 = v1 as const;  // Error
-@@= skipped -50, +51 lines =@@
+@@= skipped -68, +68 lines =@@
  >t2 : "bar"
  
  function ff1(x: 'foo' | 'bar', y: 1 | 2) {
@@ -184,14 +176,7 @@
  >y : 1 | 2
  }
  
- function ff2<T extends string, U extends string>(x: T, y: U) {
- >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -31, +33 lines =@@
+@@= skipped -31, +31 lines =@@
  >'bar' : "bar"
  
  const ts2 = ff2('foo', !!true ? '0' : '1');
@@ -242,7 +227,6 @@
  function accessorNames<S extends string>(propName: S) {
 ->accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
 +>accessorNames : <S extends string>(propName: S) => [`get-${S}`, `set-${S}`]
-+>S : S
  >propName : S
  
      return [`get-${propName}`, `set-${propName}`] as const;
@@ -253,7 +237,7 @@
  >`get-${propName}` : `get-${S}`
  >propName : S
  >`set-${propName}` : `set-${S}`
-@@= skipped -13, +14 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  
  const ns1 = accessorNames('foo');
@@ -266,9 +250,3 @@
  >'foo' : "foo"
  
  // repro from https://github.com/microsoft/TypeScript/issues/54374
- interface Foo54374 {
-+>Foo54374 : Foo54374
-+
-   a: 1;
- >a : 1
- 

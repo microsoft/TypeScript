@@ -19,15 +19,11 @@ class C2 {
 }
 
 interface A extends C {
->A : A
-
     y: string;
 >y : string
 }
 
 interface A extends C2 {
->A : A
-
     z: string;
 >z : string
 }
@@ -63,7 +59,6 @@ module M {
 
     class C<T> {
 >C : C<T>
->T : T
 
         a: T;
 >a : T
@@ -71,24 +66,17 @@ module M {
 
     class C2<T> {
 >C2 : C2<T>
->T : T
 
         b: T;
 >b : T
     }
 
     interface A<T> extends C<T> {
->A : A<T>
->T : T
-
         y: T;
 >y : T
     }
 
     interface A<T> extends C2<string> {
->A : A<T>
->T : T
-
         z: T;
 >z : T
     }

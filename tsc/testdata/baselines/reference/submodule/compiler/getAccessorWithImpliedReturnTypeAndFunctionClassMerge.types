@@ -3,12 +3,10 @@
 === getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
 declare function _<T>(value: Array<T>): _<T>;
 >_ : typeof _
->T : T
 >value : T[]
 
 declare function _<T>(value: T): _<T>;
 >_ : typeof _
->T : T
 >value : T
 
 declare module _ {
@@ -16,7 +14,6 @@ declare module _ {
 
     export function each<T>(
 >each : <T>(context?: any) => void
->T : T
 
         //list: List<T>,
         //iterator: ListIterator<T, void>,
@@ -24,10 +21,6 @@ declare module _ {
 >context : any
 
     interface ListIterator<T, TResult> {
->ListIterator : ListIterator<T, TResult>
->T : T
->TResult : TResult
-
         (value: T, index: number, list: T[]): TResult;
 >value : T
 >index : number
@@ -37,7 +30,6 @@ declare module _ {
 
 declare class _<T> {
 >_ : _<T>
->T : T
 
     each(iterator: _.ListIterator<T, void>, context?: any): void;
 >each : (iterator: ListIterator<T, void>, context?: any) => void

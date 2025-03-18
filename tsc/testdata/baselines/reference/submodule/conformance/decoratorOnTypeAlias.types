@@ -3,7 +3,6 @@
 === decoratorOnTypeAlias.ts ===
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
->T : T
 >target : T
 
 @dec

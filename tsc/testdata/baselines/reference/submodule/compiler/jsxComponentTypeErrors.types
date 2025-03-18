@@ -2,17 +2,11 @@
 
 === jsxComponentTypeErrors.tsx ===
 namespace JSX {
->JSX : any
-
   export interface Element {
->Element : Element
-
     type: 'element';
 >type : "element"
   }
   export interface ElementClass {
->ElementClass : ElementClass
-
     type: 'element-class';
 >type : "element-class"
   }
@@ -20,7 +14,6 @@ namespace JSX {
 
 function FunctionComponent<T extends string>({type}: {type?: T}) {
 >FunctionComponent : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => any; }
->T : T
 >type : T | undefined
 >type : T | undefined
 

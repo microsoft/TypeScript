@@ -4,9 +4,6 @@
 // Repro from #52575
 
 export interface Event<T> {
->Event : Event<T>
->T : T
-
     callback: (response: T) => void;
 >callback : (response: T) => void
 >response : T
@@ -33,7 +30,6 @@ export type CustomEvents = {
 
 declare function emit<T extends keyof CustomEvents>(type: T, data: CustomEvents[T]): void
 >emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
->T : T
 >type : T
 >data : CustomEvents[T]
 
@@ -68,8 +64,6 @@ declare class MyCompiler {
 >compile : () => void
 }
 interface WebpackPluginInstance {
->WebpackPluginInstance : WebpackPluginInstance
-
   apply: (compiler: MyCompiler) => void;
 >apply : (compiler: MyCompiler) => void
 >compiler : MyCompiler
@@ -80,15 +74,11 @@ type WebpackPluginFunction = (this: MyCompiler, compiler: MyCompiler) => void;
 >compiler : MyCompiler
 
 interface Optimization {
->Optimization : Optimization
-
   minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
 >minimizer : (WebpackPluginFunction | WebpackPluginInstance)[] | undefined
 }
 declare const A: <T, P extends keyof T>(
 >A : <T, P extends keyof T>(obj: T, prop: P, factory: () => T[P]) => void
->T : T
->P : P
 
   obj: T,
 >obj : T

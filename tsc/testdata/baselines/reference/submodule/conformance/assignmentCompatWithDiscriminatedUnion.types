@@ -289,14 +289,10 @@ namespace GH30170 {
 >GH30170 : typeof GH30170
 
     interface Blue {
->Blue : Blue
-
         color: 'blue'
 >color : "blue"
     }
     interface Yellow {
->Yellow : Yellow
-
         color?: 'yellow',
 >color : "yellow"
     }
@@ -322,11 +318,9 @@ namespace GH12052 {
 >GH12052 : typeof GH12052
 
     interface ILinearAxis { type: "linear"; }
->ILinearAxis : ILinearAxis
 >type : "linear"
 
     interface ICategoricalAxis { type: "categorical"; }
->ICategoricalAxis : ICategoricalAxis
 >type : "categorical"
 
     type IAxis = ILinearAxis | ICategoricalAxis;
@@ -379,15 +373,11 @@ namespace GH18421 {
 >GH18421 : typeof GH18421
 
     interface ThingTypeOne {
->ThingTypeOne : ThingTypeOne
-
         type: 'one';
 >type : "one"
     }
 
     interface ThingTypeTwo {
->ThingTypeTwo : ThingTypeTwo
-
         type: 'two';
 >type : "two"
     }
@@ -449,14 +439,10 @@ namespace GH20889 {
 >GH20889 : typeof GH20889
 
     interface A1 {
->A1 : A1
-
         type: "A1";
 >type : "A1"
     }
     interface A2 {
->A2 : A2
-
         type: "A2";
 >type : "A2"
     }

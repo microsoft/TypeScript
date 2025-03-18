@@ -240,14 +240,7 @@
  >'hello' : "hello"
  }
  
- // Repro from #35414
- 
- interface ReturnVal {
-+>ReturnVal : ReturnVal
-+
-     something(): void;
- >something : () => void
- }
+@@= skipped -21, +21 lines =@@
  
  const k: ReturnVal = { something() { } }
  >k : ReturnVal

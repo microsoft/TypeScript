@@ -5,20 +5,13 @@ export = React;
 >React : any
 
 declare namespace React {
->React : any
-
     export type Component<T = any, U = {}, V = {}> = { x: T, y: U, z: V };
 >Component : Component<T, U, V>
->T : T
->U : U
->V : V
 >x : T
 >y : U
 >z : V
 
     export interface DOMAttributes<T> { }
->DOMAttributes : DOMAttributes<T>
->T : T
 }
 === node_modules/@emotion/core/index.d.ts ===
 import {
@@ -32,9 +25,6 @@ declare module 'react' {
 >'react' : any
 
     interface DOMAttributes<T> {
->DOMAttributes : DOMAttributes<T>
->T : T
-
         css?: any
 >css : any
     }

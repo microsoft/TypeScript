@@ -22,23 +22,7 @@
      }
      else {
          obj;  // Error
-@@= skipped -21, +21 lines =@@
- // Repro from #50844
- 
- interface InstanceOne {
-+>InstanceOne : InstanceOne
-+
-     one(): void
- >one : () => void
- }
- 
- interface InstanceTwo {
-+>InstanceTwo : InstanceTwo
-+
-     two(): void
- >two : () => void
- }
-@@= skipped -15, +19 lines =@@
+@@= skipped -36, +36 lines =@@
  >{} : {}
  
  const ClassOne = {} as { new(): InstanceOne } & { foo: true };

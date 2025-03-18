@@ -5,12 +5,8 @@
 
 type Meta<T, A> = {
 >Meta : Meta<T, A>
->T : T
->A : A
 
     readonly[P in keyof T]: {
->P : P
-
         value: T[P];
 >value : T[P]
 
@@ -24,8 +20,6 @@ type Meta<T, A> = {
 }
 
 interface Input {
->Input : Input
-
     x: string;
 >x : string
 

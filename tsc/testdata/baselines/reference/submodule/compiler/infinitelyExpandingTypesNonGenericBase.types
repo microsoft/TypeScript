@@ -3,7 +3,6 @@
 === infinitelyExpandingTypesNonGenericBase.ts ===
 class Functionality<V> {
 >Functionality : Functionality<V>
->V : V
 
     property: Options<V>;
 >property : Options<V>
@@ -15,7 +14,6 @@ class Base {
 
 class A<T> extends Base {
 >A : A<T>
->T : T
 >Base : Base
 
     options: Options<Functionality<T>[]>;
@@ -23,16 +21,11 @@ class A<T> extends Base {
 }
 
 interface OptionsBase<T> {
->OptionsBase : OptionsBase<T>
->T : T
-
     Options: Options<T>;
 >Options : Options<T>
 }
 
 interface Options<T> extends OptionsBase<T> {
->Options : Options<T>
->T : T
 }
 
 

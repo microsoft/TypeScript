@@ -2,12 +2,7 @@
 
 === declFileWithInternalModuleNameConflictsInExtendsClause3.ts ===
 module X.A.C {
->X : typeof X
->A : typeof A
->C : any
-
     export interface Z {
->Z : Z
     }
 }
 module X.A.B.C {
@@ -27,12 +22,6 @@ module X.A.B.C {
 }
 
 module X.A.B.C {
->X : typeof X
->A : typeof A
->B : typeof B
->C : typeof C
-
     export module A {
->A : any
     }
 }

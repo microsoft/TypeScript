@@ -5,20 +5,13 @@ declare module TypeScript {
 >TypeScript : typeof TypeScript
 
     interface IIndexable<T> {
->IIndexable : IIndexable<T>
->T : T
-
         [s: string]: T;
 >s : string
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
->T : T
 
     interface IHashTable<T> {
->IHashTable : IHashTable<T>
->T : T
-
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
 
@@ -65,7 +58,6 @@ declare module TypeScript {
     }
     class StringHashTable<T> implements IHashTable<T> {
 >StringHashTable : StringHashTable<T>
->T : T
 
         private itemCount;
 >itemCount : any
@@ -123,7 +115,6 @@ declare module TypeScript {
     }
     class IdentifierNameHashTable<T> extends StringHashTable<T> {
 >IdentifierNameHashTable : IdentifierNameHashTable<T>
->T : T
 >StringHashTable : StringHashTable<T>
 
         public getAllKeys(): string[];
@@ -173,20 +164,13 @@ declare module TypeScript {
 >TypeScript : typeof TypeScript
 
     interface IIndexable<T> {
->IIndexable : IIndexable<T>
->T : T
-
         [s: string]: T;
 >s : string
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
->T : T
 
     interface IHashTable<T> {
->IHashTable : IHashTable<T>
->T : T
-
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
 
@@ -233,7 +217,6 @@ declare module TypeScript {
     }
     class StringHashTable<T> implements IHashTable<T> {
 >StringHashTable : StringHashTable<T>
->T : T
 
         private itemCount;
 >itemCount : any
@@ -291,7 +274,6 @@ declare module TypeScript {
     }
     class IdentifierNameHashTable<T> extends StringHashTable<T> {
 >IdentifierNameHashTable : IdentifierNameHashTable<T>
->T : T
 >StringHashTable : StringHashTable<T>
 
         public getAllKeys(): string[];

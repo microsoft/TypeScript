@@ -4,16 +4,12 @@
 // #6611
 
 export interface A<a> {
->A : A<a>
->a : a
-
     value: a;
 >value : a
 }
 
 function fn<a>(values: A<a>, value: a) : void {
 >fn : <a>(values: A<a>, value: a) => void
->a : a
 >values : A<a>
 >value : a
 }
@@ -35,9 +31,6 @@ fn(handlers, value => alert(value));
 // #21382
 
 interface BaseProps<T> {
->BaseProps : BaseProps<T>
->T : T
-
   initialValues: T;
 >initialValues : T
 
@@ -47,14 +40,11 @@ interface BaseProps<T> {
 }
 declare class Component<P> { constructor(props: P); props: P; }
 >Component : Component<P>
->P : P
 >props : P
 >props : P
 
 declare class GenericComponent<Props = {}, Values = object>
 >GenericComponent : GenericComponent<Props, Values>
->Props : Props
->Values : Values
 
     extends Component<Props & BaseProps<Values>> {
 >Component : Component<Props & BaseProps<Values>>
@@ -78,7 +68,6 @@ new GenericComponent({ initialValues: 12, nextValues: val => 12 });
 
 declare function useStringOrNumber<T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)): void;
 >useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? (s: string) => void : (n: number) => void) => void
->T : T
 >t : T
 >useIt : T extends string ? (s: string) => void : (n: number) => void
 >s : string
@@ -95,13 +84,10 @@ useStringOrNumber("", foo => {});
 
 type ActionType<P> = string & { attachPayloadTypeHack?: P & never }
 >ActionType : ActionType<P>
->P : P
 >attachPayloadTypeHack : undefined
 
 type Handler<S, P> = P extends void
 >Handler : Handler<S, P>
->S : S
->P : P
 
     ? (state: S) => S
 >state : S
@@ -111,10 +97,6 @@ type Handler<S, P> = P extends void
 >payload : P
 
 interface ActionHandler<S, P> {
->ActionHandler : ActionHandler<S, P>
->S : S
->P : P
-
     actionType: ActionType<P>
 >actionType : ActionType<P>
 
@@ -124,14 +106,11 @@ interface ActionHandler<S, P> {
 
 declare function handler<S, P>(actionType: ActionType<P>, handler: Handler<S, P>): ActionHandler<S, P>
 >handler : <S, P>(actionType: ActionType<P>, handler: Handler<S, P>) => ActionHandler<S, P>
->S : S
->P : P
 >actionType : ActionType<P>
 >handler : Handler<S, P>
 
 declare function createReducer<S>(
 >createReducer : <S>(defaultState: S, ...actionHandlers: ActionHandler<S, any>[]) => any
->S : S
 
         defaultState: S,
 >defaultState : S
@@ -142,8 +121,6 @@ declare function createReducer<S>(
     ): any
 
 interface AppState {
->AppState : AppState
-
     dummy: string
 >dummy : string
 }
@@ -211,7 +188,6 @@ type O = {
 
   on<P extends keyof R>(x: P, callback: R[P]): void;
 >on : <P extends keyof R>(x: P, callback: R[P]) => void
->P : P
 >x : P
 >callback : R[P]
 
@@ -236,27 +212,21 @@ namespace N1 {
 
 declare class Component<P> { 
 >Component : Component<P>
->P : P
 
   constructor(props: P);
 >props : P
 }
     
 interface ComponentClass<P = {}> {
->ComponentClass : ComponentClass<P>
->P : P
-
   new (props: P): Component<P>;
 >props : P
 }
 
 type CreateElementChildren<P> =
 >CreateElementChildren : CreateElementChildren<P>
->P : P
 
   P extends { children?: infer C }
 >children : C | undefined
->C : C
 
   ? C extends any[]
     ? C
@@ -265,7 +235,6 @@ type CreateElementChildren<P> =
 
 declare function createElement<P extends {}>(
 >createElement : <P extends {}>(type: ComponentClass<P>, ...children: CreateElementChildren<P>) => any
->P : P
 
   type: ComponentClass<P>,
 >type : ComponentClass<P>
@@ -277,7 +246,6 @@ declare function createElement<P extends {}>(
 
 declare function createElement2<P extends {}>(
 >createElement2 : <P extends {}>(type: ComponentClass<P>, child: CreateElementChildren<P>) => any
->P : P
 
   type: ComponentClass<P>,
 >type : ComponentClass<P>
@@ -320,7 +288,6 @@ createElement2(InferFunctionTypes, [(foo) => "" + foo]);
 
 type InnerBox<T> = {
 >InnerBox : InnerBox<T>
->T : T
 
   value: T;
 >value : T
@@ -328,7 +295,6 @@ type InnerBox<T> = {
 
 type OuterBox<T> = {
 >OuterBox : OuterBox<T>
->T : T
 
   inner: InnerBox<T>
 >inner : InnerBox<T>
@@ -337,11 +303,8 @@ type OuterBox<T> = {
 
 type BoxConsumerFromOuterBox<T> =
 >BoxConsumerFromOuterBox : BoxConsumerFromOuterBox<T>
->T : T
 
   T extends OuterBox<infer U> ?
->U : U
-
       (box: InnerBox<U>) => void :
 >box : InnerBox<U>
 
@@ -349,7 +312,6 @@ type BoxConsumerFromOuterBox<T> =
 
 declare function passContentsToFunc<T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>): void;
 >passContentsToFunc : <T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>) => void
->T : T
 >outerBox : T
 >consumer : BoxConsumerFromOuterBox<T>
 
@@ -453,7 +415,6 @@ class Interesting {
 
 declare function invoke<T>(f: () => T): T;
 >invoke : <T>(f: () => T) => T
->T : T
 >f : () => T
 
 let xx: 0 | 1 | 2 = invoke(() => 1);
@@ -467,7 +428,6 @@ let xx: 0 | 1 | 2 = invoke(() => 1);
 
 declare function assignPartial<T>(target: T, partial: Partial<T>): T;
 >assignPartial : <T>(target: T, partial: Partial<T>) => T
->T : T
 >target : T
 >partial : Partial<T>
 

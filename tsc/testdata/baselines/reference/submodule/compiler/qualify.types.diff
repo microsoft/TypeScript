@@ -1,24 +1,6 @@
 --- old.qualify.types
 +++ new.qualify.types
-@@= skipped -39, +39 lines =@@
- >T : typeof T
- 
-     export interface I {
-+>I : I
-+
-         p;
- >p : any
-     }
-@@= skipped -11, +13 lines =@@
- >3 : 3
- 
-         export interface I2 {
-+>I2 : I2
-+
-             q;
- >q : any
-         }
-@@= skipped -13, +15 lines =@@
+@@= skipped -63, +63 lines =@@
  >U2 : typeof U2
  
          var z:T.U.I2=3;
@@ -27,28 +9,7 @@
  >T : any
  >U : any
  >3 : 3
-@@= skipped -11, +11 lines =@@
- >Everest : typeof Everest
- 
-     export module K1 {
-+>K1 : any
-+
-         export interface I3 {
-+>I3 : I3
-+
-             zeep;
- >zeep : any
-         }
-@@= skipped -9, +13 lines =@@
- >K2 : typeof K2
- 
-         export interface I4 {
-+>I4 : I4
-+
-             z;
- >z : any
-         }
-@@= skipped -7, +9 lines =@@
+@@= skipped -27, +27 lines =@@
  >v1 : I4
  
          var v2:K1.I3=v1;
@@ -85,15 +46,7 @@
  >K1 : any
  >v1 : I4
      }
- }
- 
- interface I {
-+>I : I
-+
-     k;
- >k : any
- }
-@@= skipped -37, +39 lines =@@
+@@= skipped -37, +37 lines =@@
  >y : I
  
  var x:T.I=y;

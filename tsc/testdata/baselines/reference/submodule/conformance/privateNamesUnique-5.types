@@ -10,7 +10,6 @@ class A {
 >#foo : number
 }
 interface A2 extends A { }
->A2 : A2
 
 class B {
 >B : B

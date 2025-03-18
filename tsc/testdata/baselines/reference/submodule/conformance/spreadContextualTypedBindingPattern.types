@@ -3,8 +3,6 @@
 === spreadContextualTypedBindingPattern.ts ===
 // #18308
 interface Person {
->Person : Person
-
   naam: string,
 >naam : string
 

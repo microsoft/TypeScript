@@ -3,7 +3,6 @@
 === tooManyTypeParameters1.ts ===
 function f<T>() { }
 >f : <T>() => void
->T : T
 
 f<string, string>();
 >f<string, string>() : void
@@ -12,7 +11,6 @@ f<string, string>();
 var x = <T>() => {};
 >x : <T>() => void
 ><T>() => {} : <T>() => void
->T : T
 
 x<number,number>();
 >x<number,number>() : void
@@ -20,7 +18,6 @@ x<number,number>();
 
 class C<T> {}
 >C : C<T>
->T : T
 
 var c = new C<Date,Date>();
 >c : C<Date>
@@ -28,9 +25,6 @@ var c = new C<Date,Date>();
 >C : typeof C
 
 interface I<T> {}
->I : I<T>
->T : T
-
 var i: I<number,number>;
 >i : any
 

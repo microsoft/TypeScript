@@ -3,8 +3,6 @@
 === intersectionWithUnionConstraint.ts ===
 function f1<T extends string | number, U extends string | number>(x: T & U) {
 >f1 : <T extends string | number, U extends string | number>(x: T & U) => void
->T : T
->U : U
 >x : T & U
 
     // Combined constraint of 'T & U' is 'string | number'
@@ -15,8 +13,6 @@ function f1<T extends string | number, U extends string | number>(x: T & U) {
 
 function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
 >f2 : <T extends string | number | undefined, U extends string | null | undefined>(x: T & U) => void
->T : T
->U : U
 >x : T & U
 
     let y1: string | number = x;     // Error
@@ -49,7 +45,6 @@ type T1 = (string | number | undefined) & (string | null | undefined);  // strin
 
 function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
 >f3 : <T extends string | number | undefined>(x: T & undefined | T & number) => void
->T : T
 >x : T & undefined | T & number
 
     const y: number | undefined = x;
@@ -59,7 +54,6 @@ function f3<T extends string | number | undefined>(x: T & (number | object | und
 
 function f4<T extends string | number>(x: T & (number | object)) {
 >f4 : <T extends string | number>(x: T & number) => void
->T : T
 >x : T & number
 
     const y: number = x;
@@ -69,8 +63,6 @@ function f4<T extends string | number>(x: T & (number | object)) {
 
 function f5<T, U extends keyof T>(x: keyof T & U) {
 >f5 : <T, U extends keyof T>(x: keyof T & U) => void
->T : T
->U : U
 >x : keyof T & U
 
     let y: keyof any = x;
@@ -82,27 +74,18 @@ function f5<T, U extends keyof T>(x: keyof T & U) {
 
 type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : NoErrorHere<K> }
 >Example : Example<T, U>
->T : T
->U : U
->K : K
 
 type UnexpectedError<T extends PropertyKey> = T
 >UnexpectedError : T
->T : T
 
 type NoErrorHere<T extends PropertyKey> = T
 >NoErrorHere : T
->T : T
 
 // Repro from #30331
 
 type a<T> = T extends Array<infer U> ? U : never;
 >a : a<T>
->T : T
->U : U
 
 type b<T> = { [K in a<T> & keyof T ]: 42 };
 >b : b<T>
->T : T
->K : K
 

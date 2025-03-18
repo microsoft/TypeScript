@@ -28,15 +28,7 @@
  
          method() { },
  >method : () => void
-@@= skipped -71, +71 lines =@@
- 
- function prop<T>(v: T): T { return v }
- >prop : <T>(v: T) => T
-+>T : T
- >v : T
- >v : T
- 
-@@= skipped -20, +21 lines =@@
+@@= skipped -91, +91 lines =@@
  >10 : 10
  }
  export const oWithComputedProperties = {

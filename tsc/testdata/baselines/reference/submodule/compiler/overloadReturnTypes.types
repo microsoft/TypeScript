@@ -44,8 +44,6 @@ function attr(nameOrMap: any, value?: string): any {
 
 
 interface IFace {
->IFace : IFace
-
 	attr(name:string):string;
 >attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
 >name : string

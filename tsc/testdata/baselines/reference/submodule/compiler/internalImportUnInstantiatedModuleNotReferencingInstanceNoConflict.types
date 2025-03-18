@@ -2,10 +2,7 @@
 
 === internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts ===
 module A {
->A : any
-
     export interface X { s: string }
->X : X
 >s : string
 }
 

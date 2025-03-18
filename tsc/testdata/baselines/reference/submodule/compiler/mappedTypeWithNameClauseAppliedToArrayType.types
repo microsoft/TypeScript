@@ -3,8 +3,6 @@
 === mappedTypeWithNameClauseAppliedToArrayType.ts ===
 type Mappy<T extends unknown[]> = { [K in keyof T as K]: T[K] };
 >Mappy : Mappy<T>
->T : T
->K : K
 
 type NotArray = Mappy<number[]>;
 >NotArray : Mappy<number[]>

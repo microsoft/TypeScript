@@ -2,8 +2,6 @@
 
 === declarationEmitThisPredicates02.ts ===
 export interface Foo {
->Foo : Foo
-
     a: string;
 >a : string
 

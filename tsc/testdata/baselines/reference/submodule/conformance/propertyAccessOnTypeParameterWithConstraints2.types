@@ -25,8 +25,6 @@ class B extends A {
 
 class C<U extends A, T extends A> {
 >C : C<U, T>
->U : U
->T : T
 
     f() {
 >f : () => string
@@ -104,10 +102,6 @@ var r1b = (new C<B, A>()).g(new B());
 >B : typeof B
 
 interface I<U extends A, T extends A> {
->I : I<U, T>
->U : U
->T : T
-
     foo: U;
 >foo : U
 }
@@ -139,17 +133,10 @@ var a: {
 >a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
 
     <U extends A, T extends A>(): U;
->U : U
->T : T
-
     <U extends A, T extends A>(x: U): U;
->U : U
->T : T
 >x : U
 
     <U extends A, T extends A>(x: U, y: T): U;
->U : U
->T : T
 >x : U
 >y : T
 }
@@ -207,8 +194,6 @@ var b = {
     foo: <U extends A, T extends A>(x: U, y: T) => {
 >foo : <U extends A, T extends A>(x: U, y: T) => string
 ><U extends A, T extends A>(x: U, y: T) => {        var a = x['foo'](); // should be string        return a + x.foo();    } : <U extends A, T extends A>(x: U, y: T) => string
->U : U
->T : T
 >x : U
 >y : T
 

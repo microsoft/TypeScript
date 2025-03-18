@@ -2,8 +2,6 @@
 
 === computedPropertyNamesContextualType2_ES6.ts ===
 interface I {
->I : I
-
     [s: string]: (x: any) => number; // Doesn't get hit
 >s : string
 >x : any

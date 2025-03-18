@@ -19,11 +19,3 @@
  
      callsCallback((name)=>{
  >callsCallback((name)=>{        this.name = name; //should not error        type T = typeof this;    }) : any
-@@= skipped -25, +25 lines =@@
- 
-         type T = typeof this;
- >T : CorrectObject
-->this : CorrectObject
- 
-     });
- }

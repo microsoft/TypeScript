@@ -1,23 +1,6 @@
 --- old.narrowingRestGenericCall.types
 +++ new.narrowingRestGenericCall.types
-@@= skipped -1, +1 lines =@@
- 
- === narrowingRestGenericCall.ts ===
- interface Slugs {
-+>Slugs : Slugs
-+
-   foo: string;
- >foo : string
- 
-@@= skipped -9, +11 lines =@@
- 
- function call<T extends object>(obj: T, cb: (val: T) => void) {
- >call : <T extends object>(obj: T, cb: (val: T) => void) => void
-+>T : T
- >obj : T
- >cb : (val: T) => void
- >val : T
-@@= skipped -17, +18 lines =@@
+@@= skipped -27, +27 lines =@@
  >call(obj, ({foo, ...rest}) => {  console.log(rest.bar);}) : void
  >call : <T extends object>(obj: T, cb: (val: T) => void) => void
  >obj : Slugs

@@ -3,7 +3,6 @@
 === unusedTypeParameterInLambda3.ts ===
 class A<T> {
 >A : A<T>
->T : T
 
     public x: T;
 >x : T
@@ -11,7 +10,5 @@ class A<T> {
 
 var y: new <T,U>(a:T)=>void;
 >y : new <T, U>(a: T) => void
->T : T
->U : U
 >a : T
 

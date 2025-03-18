@@ -16,16 +16,12 @@ function test1() {
 >stringType2 : stringType2
 
     interface Temp1 {
->Temp1 : Temp1
-
         getValue(name: stringType1): number;
 >getValue : (name: stringType1) => number
 >name : stringType1
     }
 
     interface Temp2 {
->Temp2 : Temp2
-
         getValue(name: stringType2): string;
 >getValue : (name: stringType2) => string
 >name : stringType2
@@ -49,8 +45,6 @@ function test2() {
 >test2 : () => void
 
     interface Messages {
->Messages : Messages
-
         readonly foo: (options: { [key: string]: any, b: number }) => string;
 >foo : (options: { [key: string]: any; b: number; }) => string
 >options : { [key: string]: any; b: number; }
@@ -389,8 +383,6 @@ function test5() {
 >render2 : () => void
 
         interface P1 {
->P1 : P1
-
             p?: boolean;
 >p : boolean | undefined
 
@@ -398,8 +390,6 @@ function test5() {
 >c : string | undefined
         }
         interface P2 {
->P2 : P2
-
             p?: boolean;
 >p : boolean | undefined
 

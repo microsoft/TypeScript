@@ -22,8 +22,6 @@ class D {
 
 function foo<T, U extends T>(t: T, t2: U) {
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->T : T
->U : U
 >t : T
 >t2 : U
 
@@ -105,8 +103,6 @@ var r9 = foo(() => { }, () => 1);
 
 function other<T, U extends T>() {
 >other : <T, U extends T>() => void
->T : T
->U : U
 
     var r4 = foo(c, d);
 >r4 : (x: C) => D

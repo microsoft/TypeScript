@@ -11,19 +11,3 @@
  === objectTypeWithStringIndexerHidingObjectIndexer.ts ===
  // object types can define string indexers that are more specific than the default 'any' that would be returned
  // no errors expected below 
- 
- interface Object {
-+>Object : Object
-+
-     [x: string]: Object;
- >x : string
- }
-@@= skipped -41, +38 lines =@@
- >'' : ""
- 
- interface I {
-+>I : I
-+
-     bar: string;
- >bar : string
- 

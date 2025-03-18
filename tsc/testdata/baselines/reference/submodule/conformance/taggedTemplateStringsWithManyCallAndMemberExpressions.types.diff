@@ -1,13 +1,6 @@
 --- old.taggedTemplateStringsWithManyCallAndMemberExpressions.types
 +++ new.taggedTemplateStringsWithManyCallAndMemberExpressions.types
-@@= skipped -1, +1 lines =@@
- 
- === taggedTemplateStringsWithManyCallAndMemberExpressions.ts ===
- interface I {
-+>I : I
-+
-     (strs: TemplateStringsArray, ...subs: number[]): I;
- >strs : TemplateStringsArray
+@@= skipped -6, +6 lines =@@
  >subs : number[]
  
      member: {
@@ -16,7 +9,7 @@
  
          new (s: string): {
  >s : string
-@@= skipped -26, +28 lines =@@
+@@= skipped -21, +21 lines =@@
  >new new new f `abc${ 0 }def`.member("hello")(42) === true : boolean
  >new new new f `abc${ 0 }def`.member("hello")(42) : boolean
  >new new f `abc${ 0 }def`.member("hello")(42) : new () => boolean

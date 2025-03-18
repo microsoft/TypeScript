@@ -9,23 +9,7 @@
  >cond : boolean
  >(x = 0) : 0
  >x = 0 : 0
-@@= skipped -11, +11 lines =@@
- >x : string | number
- 
- export interface NodeList {
-+>NodeList : NodeList
-+
-     length: number;
- >length : number
- }
- 
- export interface HTMLCollection {
-+>HTMLCollection : HTMLCollection
-+
-     length: number;
- >length : number
- }
-@@= skipped -33, +37 lines =@@
+@@= skipped -44, +44 lines =@@
  
      sourceObj.length;
  >sourceObj.length : number

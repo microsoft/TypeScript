@@ -16,8 +16,6 @@ declare function test1<
 >test1 : <T extends { str: ("a" | "b" | "c")[]; num: (1 | 2 | 3)[]; } & { [k: string]: any[]; }>(arg: T) => T
 
   T extends { [K in keyof TypeMap]: TypeMap[K][] } & { [k: string]: any[] },
->T : T
->K : K
 >k : string
 
 >(arg: T): T;

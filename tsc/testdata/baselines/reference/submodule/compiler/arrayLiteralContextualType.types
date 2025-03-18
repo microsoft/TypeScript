@@ -2,8 +2,6 @@
 
 === arrayLiteralContextualType.ts ===
 interface IAnimal {
->IAnimal : IAnimal
-
     name: string;
 >name : string
 }

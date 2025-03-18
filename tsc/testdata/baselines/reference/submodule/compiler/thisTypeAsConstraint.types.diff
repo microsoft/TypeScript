@@ -1,9 +1,0 @@
---- old.thisTypeAsConstraint.types
-+++ new.thisTypeAsConstraint.types
-@@= skipped -5, +5 lines =@@
- 
-   public m<T extends this>() {
- >m : <T extends this>() => void
-+>T : T
-   }
- }

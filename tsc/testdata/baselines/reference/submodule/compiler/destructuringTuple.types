@@ -13,6 +13,7 @@ const [a, b, c, ...rest] = tuple;
 
 declare var receiver: typeof tuple;
 >receiver : [boolean, number, ...string[]]
+>tuple : [boolean, number, ...string[]]
 
 [...receiver] = tuple;
 >[...receiver] = tuple : [boolean, number, ...string[]]

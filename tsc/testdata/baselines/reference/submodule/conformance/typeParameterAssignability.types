@@ -5,8 +5,6 @@
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 

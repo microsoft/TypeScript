@@ -16,6 +16,7 @@
 ->p11 : Promise<typeof defaultModule>
 ->defaultModule : typeof defaultModule
 +>p11 : Promise<typeof import("defaultPath")>
++>defaultModule : typeof import("defaultPath")
  >import(getSpecifier()) : Promise<any>
  >getSpecifier() : string
  >getSpecifier : () => string
@@ -32,6 +33,7 @@
  >getSpecifier : () => string
  >"defaulPath" : "defaulPath"
 ->defaultModule : typeof defaultModule
++>defaultModule : typeof import("defaultPath")
  
  p1.then(zero => {
  >p1.then(zero => {    return zero.foo();  // ok, zero is any}) : Promise<any>
@@ -43,13 +45,14 @@
  >zero => {    return zero.foo();  // ok, zero is any} : (zero: any) => any
  >zero : any
  
-@@= skipped -37, +35 lines =@@
+@@= skipped -37, +37 lines =@@
  >j : string
  
  var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 ->p3 : Promise<typeof defaultModule>
 ->defaultModule : typeof defaultModule
 +>p3 : Promise<typeof import("defaultPath")>
++>defaultModule : typeof import("defaultPath")
  >import(j=getSpecifier()) : Promise<any>
  >j=getSpecifier() : string
  >j : string

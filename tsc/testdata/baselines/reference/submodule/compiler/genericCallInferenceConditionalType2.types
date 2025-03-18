@@ -5,13 +5,10 @@
 
 type ComponentProps<T> = T extends (props: infer P) => unknown ? P : never;
 >ComponentProps : ComponentProps<T>
->T : T
 >props : P
->P : P
 
 declare function wrapComponent<P>(
 >wrapComponent : <P>(component: (props: P) => unknown) => (props: P) => unknown
->P : P
 
   component: (props: P) => unknown,
 >component : (props: P) => unknown
@@ -27,7 +24,6 @@ const WrappedComponent = wrapComponent(
 
   <T extends string = "span">(props: {
 ><T extends string = "span">(props: {    as?: T | undefined;    className?: string;  }) => {    return null;  } : <T extends string>(props: { as?: T | undefined; className?: string | undefined; }) => null
->T : T
 >props : { as?: T | undefined; className?: string | undefined; }
 
     as?: T | undefined;
@@ -43,17 +39,16 @@ const WrappedComponent = wrapComponent(
 
 type RetrievedProps = ComponentProps<typeof WrappedComponent>;
 >RetrievedProps : { as?: string | undefined; className?: string | undefined; }
+>WrappedComponent : <T extends string>(props: { as?: T | undefined; className?: string | undefined; }) => unknown
 
 declare const f: <T>(f: (x: T) => unknown) => (x: T) => unknown
 >f : <T>(f: (x: T) => unknown) => (x: T) => unknown
->T : T
 >f : (x: T) => unknown
 >x : T
 >x : T
 
 declare const g: <T extends unknown = string>(x: { foo: T }) => unknown
 >g : <T extends unknown>(x: { foo: T; }) => unknown
->T : T
 >x : { foo: T; }
 >foo : T
 
@@ -65,10 +60,9 @@ const h = f(g)
 
 type FirstParameter<T> = T extends (x: infer P) => unknown ? P : unknown
 >FirstParameter : FirstParameter<T>
->T : T
 >x : P
->P : P
 
 type X = FirstParameter<typeof h>['foo']
 >X : unknown
+>h : <T extends unknown>(x: { foo: T; }) => unknown
 

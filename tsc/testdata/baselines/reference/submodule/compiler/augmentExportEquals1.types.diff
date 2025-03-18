@@ -9,11 +9,3 @@
  >x : any
  
  === file1.ts ===
-@@= skipped -21, +21 lines =@@
- >"./file1" : any
- 
-     interface A { a }
-+>A : A
- >a : any
- }
- 

@@ -4,22 +4,16 @@
 // https://github.com/Microsoft/TypeScript/issues/13813
 
 interface A {
->A : A
-
     x: string
 >x : string
 }
 
 interface B {
->B : B
-
     a: A;
 >a : A
 }
 
 interface C {
->C : C
-
     c: number;
 >c : number
 }
@@ -100,7 +94,9 @@ export let obj: MyType;
 
 export const photo: typeof obj.photo = {
 >photo : { id: number; } & { url: string; }
+>obj.photo : { id: number; } & { url: string; }
 >obj : MyType
+>photo : { id: number; } & { url: string; }
 >{    id: 1,    url: '',    xyz: 1 // Great! This causes an error!} : { id: number; url: string; xyz: number; }
 
     id: 1,
@@ -151,12 +147,8 @@ export const myInstance: MyType = {
 
 export type View<T> = { [K in keyof T]: T[K] extends object ? boolean | View<T[K]> : boolean };
 >View : View<T>
->T : T
->K : K
 
 interface TypeC {
->TypeC : TypeC
-
     foo: string;
 >foo : string
 
@@ -165,8 +157,6 @@ interface TypeC {
 }
 
 interface TypeB {
->TypeB : TypeB
-
     foo: string,
 >foo : string
 
@@ -175,8 +165,6 @@ interface TypeB {
 }
 
 interface TypeA {
->TypeA : TypeA
-
     foo: string,
 >foo : string
 

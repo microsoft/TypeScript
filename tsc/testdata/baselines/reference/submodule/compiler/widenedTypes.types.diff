@@ -1,21 +1,11 @@
 --- old.widenedTypes.types
 +++ new.widenedTypes.types
-@@= skipped -38, +38 lines =@@
- 
- var x: typeof undefined = 3;
- >x : any
-->undefined : undefined
- >3 : 3
- 
- x = 3;
-@@= skipped -27, +26 lines =@@
+@@= skipped -65, +65 lines =@@
  >"" : ""
  
  var ob: { x: typeof undefined } = { x: "" };
 ->ob : { x: typeof undefined; }
 +>ob : { x: any; }
  >x : any
-->undefined : undefined
+ >undefined : undefined
  >{ x: "" } : { x: string; }
- >x : string
- >"" : ""

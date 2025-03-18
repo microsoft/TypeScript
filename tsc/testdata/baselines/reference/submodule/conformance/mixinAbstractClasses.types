@@ -2,15 +2,12 @@
 
 === mixinAbstractClasses.ts ===
 interface Mixin {
->Mixin : Mixin
-
     mixinMethod(): void;
 >mixinMethod : () => void
 }
 
 function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
 >Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & new (...args: any) => Mixin
->TBaseClass : TBaseClass
 >args : any
 >baseClass : TBaseClass
 >args : any

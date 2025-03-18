@@ -1,15 +1,6 @@
 --- old.intersectionOfUnionNarrowing.types
 +++ new.intersectionOfUnionNarrowing.types
-@@= skipped -1, +1 lines =@@
- 
- === intersectionOfUnionNarrowing.ts ===
- interface X {
-+>X : X
-+
-   a?: { aProp: string };
- >a : { aProp: string; } | undefined
- >aProp : string
-@@= skipped -20, +22 lines =@@
+@@= skipped -21, +21 lines =@@
  
  if (q.a !== undefined) {
  >q.a !== undefined : boolean

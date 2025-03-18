@@ -2,8 +2,6 @@
 
 === propertyAssignmentUseParentType1.ts ===
 interface N {
->N : N
-
     (): boolean
     num: 123;
 >num : 123

@@ -16,4 +16,5 @@ const obj = {
 
 type Q = keyof typeof obj;
 >Q : unique symbol
+>obj : { [Symbol.species]: ArrayConstructor; }
 

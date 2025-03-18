@@ -11,10 +11,7 @@ module Outer {
 >C : C
     }
     export module uninstantiated {
->uninstantiated : any
-
         export interface P { }
->P : P
     }
 }
 
@@ -30,7 +27,9 @@ import importUninst = Outer.uninstantiated;
 
 var x1: typeof importInst.C = importInst.C;
 >x1 : typeof C
+>importInst.C : typeof C
 >importInst : typeof instantiated
+>C : typeof C
 >importInst.C : typeof C
 >importInst : typeof instantiated
 >C : typeof C
@@ -43,7 +42,9 @@ var x2: importInst.C = new x1();
 
 var x3: typeof importUninst.P; // Error again
 >x3 : any
+>importUninst.P : any
 >importUninst : any
+>P : any
 
 var x4: Outer = Outer;
 >x4 : Outer
@@ -51,6 +52,7 @@ var x4: Outer = Outer;
 
 var x5: typeof importInst;
 >x5 : typeof instantiated
+>importInst : typeof instantiated
 
 x5 = Outer;
 >x5 = Outer : typeof Outer
@@ -66,9 +68,11 @@ x5 = Outer.instantiated;
 
 var x6: typeof importUninst;
 >x6 : any
+>importUninst : any
 
 var x7: typeof Outer = Outer;
 >x7 : typeof Outer
+>Outer : typeof Outer
 >Outer : typeof Outer
 
 x7 = importInst;

@@ -7,7 +7,6 @@ module Editor {
 
     export class List<T> {
 >List : List<T>
->T : T
 
         public next: List<T>;
 >next : List<T>
@@ -50,7 +49,6 @@ module Editor {
 
         public static MakeHead2<T>(): List<T> { // should not error
 >MakeHead2 : <T>() => List<T>
->T : T
 
             var entry: List<T> = new List<T>(true, null);
 >entry : List<T>
@@ -78,7 +76,6 @@ module Editor {
 
         public static MakeHead3<U>(): List<U> { // should not error
 >MakeHead3 : <U>() => List<U>
->U : U
 
             var entry: List<U> = new List<U>(true, null);
 >entry : List<U>

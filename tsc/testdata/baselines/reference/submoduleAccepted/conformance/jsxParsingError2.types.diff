@@ -1,21 +1,6 @@
 --- old.jsxParsingError2.types
 +++ new.jsxParsingError2.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		[s: string]: any;
- >s : string
- 	}
-@@= skipped -10, +16 lines =@@
+@@= skipped -11, +11 lines =@@
  === Error1.tsx ===
  // Issue error about missing span closing tag, not missing div closing tag
  let x1 = <div><span></div>;

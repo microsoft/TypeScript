@@ -40,24 +40,3 @@
  >0 : 0
  
  var a: { (x: number): number; (x: string): string; };
-@@= skipped -45, +45 lines =@@
- 
- var a2: { <T>(x: T): number; (x: string): string;};
- >a2 : { <T>(x: T): number; (x: string): string; }
-+>T : T
- >x : T
- >x : string
- 
- var b2: { <T>(x: T): number; (x: string): string; };
- >b2 : { <T>(x: T): number; (x: string): string; }
-+>T : T
- >x : T
- >x : string
- 
- var c2: { (x: number): number; <T>(x: T): any; };
- >c2 : { (x: number): number; <T>(x: T): any; }
- >x : number
-+>T : T
- >x : T
- 
- var z2 = [a2, b2, c2];

@@ -19,6 +19,7 @@ declare module "foo" {
 
     export var t: typeof C;
 >t : typeof default
+>C : typeof default
 }
 
 

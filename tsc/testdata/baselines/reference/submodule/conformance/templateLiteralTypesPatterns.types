@@ -16,8 +16,6 @@ const b: RequiresLeadingSlash = "no slash";
 
 type Protocol<T extends string, U extends string> = `${T}://${U}`;
 >Protocol : `${T}://${U}`
->T : T
->U : U
 
 function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 >download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
@@ -70,7 +68,6 @@ bools("other");
 
 type Pat<T extends string | null | undefined> = `${T}`
 >Pat : `${T}`
->T : T
 
 declare function nullishes(x: Pat<null | undefined>): void;
 >nullishes : (x: "null" | "undefined") => void
@@ -526,7 +523,6 @@ anyish = `aok`
 // Validates variance isn't measured as strictly covariant
 type AGen<T extends string | number> = {field: `a${T}`};
 >AGen : AGen<T>
->T : T
 >field : `a${T}`
 
 const shouldWork1: AGen<string> = null as any as AGen<"yes">;
@@ -583,8 +579,6 @@ var bb: `${number}` | '0';
 
 type T2S<A extends string, B extends string> = `${A}${B}`;
 >T2S : `${A}${B}`
->A : A
->B : B
 
 type S10 = `${string}`;  // string
 >S10 : string
@@ -616,8 +610,6 @@ function ff1(x: `${string}-${string}`) {
 
 export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
 >Id : `${TId}-${TId}`
->TA : TA
->TId : TId
 
 export class AA {}
 >AA : AA

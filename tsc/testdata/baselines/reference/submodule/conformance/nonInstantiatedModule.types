@@ -5,7 +5,6 @@ module M {
 >M : typeof M
 
     export interface Point { x: number; y: number }
->Point : Point
 >x : number
 >y : number
 
@@ -17,6 +16,7 @@ module M {
 // primary expression
 var m : typeof M;
 >m : typeof M
+>M : typeof M
 
 var m = M;
 >m : typeof M
@@ -59,8 +59,6 @@ module M2 {
     }
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -86,17 +84,15 @@ var p2: { Origin() : { x: number; y: number; } };
 
 var p2: typeof M2.Point;
 >p2 : { Origin: () => { x: number; y: number; }; }
+>M2.Point : typeof Point
 >M2 : typeof M2
+>Point : typeof Point
 
 module M3 {
 >M3 : typeof M3
 
     export module Utils {
->Utils : typeof Utils
-
         export interface Point {
->Point : Point
-
             x: number; y: number;
 >x : number
 >y : number

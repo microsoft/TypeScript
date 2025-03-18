@@ -26,7 +26,6 @@ class C {
 var a1: { fn<T>(x: T): T };
 >a1 : { fn: <T>(x: T) => T; }
 >fn : <T>(x: T) => T
->T : T
 >x : T
 
 var b1: { fn(): string };
@@ -36,7 +35,6 @@ var b1: { fn(): string };
 var a2: { fn<T>(x: T): T };
 >a2 : { fn: <T>(x: T) => T; }
 >fn : <T>(x: T) => T
->T : T
 >x : T
 
 var b2: { fn(x: string): number };
@@ -47,7 +45,6 @@ var b2: { fn(x: string): number };
 var a3: { fn<T>(x?: T): T };
 >a3 : { fn: <T>(x?: T) => T; }
 >fn : <T>(x?: T) => T
->T : T
 >x : T
 
 var b3: { fn(x?: string): number };
@@ -58,7 +55,6 @@ var b3: { fn(x?: string): number };
 var a4: { fn<T>(...x: T[]): T };
 >a4 : { fn: <T>(...x: T[]) => T; }
 >fn : <T>(...x: T[]) => T
->T : T
 >x : T[]
 
 var b4: { fn(...x: string[]): number };
@@ -69,7 +65,6 @@ var b4: { fn(...x: string[]): number };
 var a5: { fn<T>(x: T, y: T): T };
 >a5 : { fn: <T>(x: T, y: T) => T; }
 >fn : <T>(x: T, y: T) => T
->T : T
 >x : T
 >y : T
 
@@ -82,8 +77,6 @@ var b5: { fn(x: string, y: number): string };
 var a6: { fn<T, U extends T>(x: T, y: U): T };
 >a6 : { fn: <T, U extends T>(x: T, y: U) => T; }
 >fn : <T, U extends T>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 

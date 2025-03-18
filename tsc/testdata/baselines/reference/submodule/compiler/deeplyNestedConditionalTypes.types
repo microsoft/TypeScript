@@ -3,7 +3,6 @@
 === deeplyNestedConditionalTypes.ts ===
 type Foo<T> =
 >Foo : Foo<T>
->T : T
 
     T extends 0 ? '0' :
     T extends 1 ? '1' :

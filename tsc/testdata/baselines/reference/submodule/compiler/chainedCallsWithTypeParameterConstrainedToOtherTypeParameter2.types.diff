@@ -1,21 +1,6 @@
 --- old.chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.types
 +++ new.chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.types
-@@= skipped -2, +2 lines =@@
- === chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts ===
- class Chain<T> {
- >Chain : Chain<T>
-+>T : T
- 
-     constructor(public value: T) { }
- >value : T
- 
-     then<S extends T>(cb: (x: T) => S): Chain<S> {
- >then : <S extends T>(cb: (x: T) => S) => Chain<S>
-+>S : S
- >cb : (x: T) => S
- >x : T
- 
-@@= skipped -18, +20 lines =@@
+@@= skipped -20, +20 lines =@@
          // Ok to go down the chain, but error to climb up the chain
          (new Chain(t)).then(tt => s).then(ss => t);
  >(new Chain(t)).then(tt => s).then(ss => t) : Chain<S>
@@ -79,29 +64,7 @@
  >ss => s : (ss: S) => S
  >ss : S
  >s : S
-@@= skipped -28, +28 lines =@@
- 
- // Similar to above, but T is now constrained. Verify that the constraint is maintained across invocations
- interface I {
-+>I : I
-+
-     x: number;
- >x : number
- }
- class Chain2<T extends I> {
- >Chain2 : Chain2<T>
-+>T : T
- 
-     constructor(public value: T) { }
- >value : T
- 
-     then<S extends T>(cb: (x: T) => S): Chain2<S> {
- >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
-+>S : S
- >cb : (x: T) => S
- >x : T
- 
-@@= skipped -92, +96 lines =@@
+@@= skipped -120, +120 lines =@@
  >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x : number
  >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value : S
  >(new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s) : Chain2<S>

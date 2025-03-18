@@ -3,7 +3,6 @@
 === classAbstractGeneric.ts ===
 abstract class A<T> {
 >A : A<T>
->T : T
 
     t: T;
 >t : T
@@ -18,12 +17,10 @@ abstract class A<T> {
 
 abstract class B<T> extends A<T> {}
 >B : B<T>
->T : T
 >A : A<T>
 
 class C<T> extends A<T> {} // error -- inherits abstract methods
 >C : C<T>
->T : T
 >A : A<T>
 
 class D extends A<number> {} // error -- inherits abstract methods
@@ -32,7 +29,6 @@ class D extends A<number> {} // error -- inherits abstract methods
 
 class E<T> extends A<T> { // error -- doesn't implement bar
 >E : E<T>
->T : T
 >A : A<T>
 
     foo() { return this.t; }
@@ -44,7 +40,6 @@ class E<T> extends A<T> { // error -- doesn't implement bar
 
 class F<T> extends A<T> { // error -- doesn't implement foo
 >F : F<T>
->T : T
 >A : A<T>
 
     bar(t : T) {}
@@ -54,7 +49,6 @@ class F<T> extends A<T> { // error -- doesn't implement foo
 
 class G<T> extends A<T> {
 >G : G<T>
->T : T
 >A : A<T>
 
     foo() { return this.t; }

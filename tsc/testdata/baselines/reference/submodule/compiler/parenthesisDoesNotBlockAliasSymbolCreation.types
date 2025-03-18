@@ -3,27 +3,20 @@
 === parenthesisDoesNotBlockAliasSymbolCreation.ts ===
 export type InvalidKeys<K extends string|number|symbol> = { [P in K]? : never };
 >InvalidKeys : InvalidKeys<K>
->K : K
->P : P
 
 export type InvalidKeys2<K extends string|number|symbol> = (
 >InvalidKeys2 : InvalidKeys2<K>
->K : K
 
     { [P in K]? : never }
->P : P
-
 );
 
 export type A<T> = (
 >A : A<T>
->T : T
 
     T & InvalidKeys<"a">
 );
 export type A2<T> = (
 >A2 : A2<T>
->T : T
 
     T & InvalidKeys2<"a">
 );

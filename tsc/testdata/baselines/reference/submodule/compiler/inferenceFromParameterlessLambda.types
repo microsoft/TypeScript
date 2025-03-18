@@ -3,20 +3,13 @@
 === inferenceFromParameterlessLambda.ts ===
 function foo<T>(o: Take<T>, i: Make<T>) { }
 >foo : <T>(o: Take<T>, i: Make<T>) => void
->T : T
 >o : Take<T>
 >i : Make<T>
 
 interface Make<T> {
->Make : Make<T>
->T : T
-
     (): T;
 }
 interface Take<T> {
->Take : Take<T>
->T : T
-
     (n: T): void;
 >n : T
 }

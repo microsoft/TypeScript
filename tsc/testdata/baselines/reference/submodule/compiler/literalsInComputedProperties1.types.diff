@@ -47,13 +47,7 @@
  >4 : 4
  >toExponential : (fractionDigits?: number) => string
  
- interface A {
-+>A : A
-+
-     1:number;
- >1 : number
- 
-@@= skipped -112, +114 lines =@@
+@@= skipped -112, +112 lines =@@
  >X : X
  
      1 = 1,

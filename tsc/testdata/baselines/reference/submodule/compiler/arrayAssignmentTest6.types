@@ -5,17 +5,12 @@ module Test {
 >Test : typeof Test
 
     interface IState {
->IState : IState
     }
     interface IToken {
->IToken : IToken
-
         startIndex: number;
 >startIndex : number
     }
     interface ILineTokens {
->ILineTokens : ILineTokens
-
         tokens: IToken[];
 >tokens : IToken[]
 
@@ -23,8 +18,6 @@ module Test {
 >endState : IState
     }
     interface IMode {
->IMode : IMode
-
         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
 >line : string

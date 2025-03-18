@@ -1,44 +1,13 @@
 --- old.intersectionAsWeakTypeSource.types
 +++ new.intersectionAsWeakTypeSource.types
-@@= skipped -1, +1 lines =@@
- 
- === intersectionAsWeakTypeSource.ts ===
- interface X { x: string }
-+>X : X
- >x : string
- 
- interface Y { y: number }
-+>Y : Y
- >y : number
- 
- interface Z { z?: boolean }
-+>Z : Z
- >z : boolean
- 
- type XY = X & Y;
-@@= skipped -25, +28 lines =@@
- 
- 
- interface ViewStyle {
-+>ViewStyle : ViewStyle
-+
-     view: number
- >view : number
- 
-@@= skipped -8, +10 lines =@@
- }
- type Brand<T> = number & { __brand: T }
- >Brand : Brand<T>
-+>T : T
+@@= skipped -37, +37 lines =@@
  >__brand : T
  
  declare function create<T extends { [s: string]: ViewStyle }>(styles: T): { [P in keyof T]: Brand<T[P]> };
 ->create : <T extends { [s: string]: ViewStyle; }>(styles: T) => { [P in keyof T]: Brand<T[P]>; }
 +>create : <T extends { [s: string]: ViewStyle; }>(styles: T) => { [P in keyof T]: Brand<T[P]> }
-+>T : T
  >s : string
  >styles : T
-+>P : P
  
  const wrapped = create({ first: { view: 0, styleMedia: "???" } });
  >wrapped : { first: Brand<{ view: number; styleMedia: string; }>; }

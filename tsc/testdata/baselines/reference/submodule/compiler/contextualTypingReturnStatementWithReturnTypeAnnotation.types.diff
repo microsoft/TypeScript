@@ -1,19 +1,11 @@
 --- old.contextualTypingReturnStatementWithReturnTypeAnnotation.types
 +++ new.contextualTypingReturnStatementWithReturnTypeAnnotation.types
-@@= skipped -2, +2 lines =@@
- === contextualTypingReturnStatementWithReturnTypeAnnotation.ts ===
- type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
- >PropOfRaw : PropOfRaw<T>
-+>T : T
- 
- declare function isString(text: unknown): text is string;
- >isString : (text: unknown) => text is string
+@@= skipped -8, +8 lines =@@
  >text : unknown
  
  declare function getPropFromRaw<T>(
 ->getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
 +>getPropFromRaw : <T>(prop: "exclude" | "files" | "include" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
-+>T : T
  
    prop: "files" | "include" | "exclude" | "references",
 ->prop : "files" | "include" | "exclude" | "references"
@@ -21,7 +13,7 @@
  
    validateElement: (value: unknown) => boolean,
  >validateElement : (value: unknown) => boolean
-@@= skipped -21, +23 lines =@@
+@@= skipped -15, +15 lines =@@
  ): PropOfRaw<T>;
  
  function getSpecsFromRaw(

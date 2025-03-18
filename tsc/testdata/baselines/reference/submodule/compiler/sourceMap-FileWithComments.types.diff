@@ -1,15 +1,6 @@
 --- old.sourceMap-FileWithComments.types
 +++ new.sourceMap-FileWithComments.types
-@@= skipped -2, +2 lines =@@
- === sourceMap-FileWithComments.ts ===
- // Interface
- interface IPoint {
-+>IPoint : IPoint
-+
-     getDist(): number;
- >getDist : () => number
- }
-@@= skipped -69, +71 lines =@@
+@@= skipped -71, +71 lines =@@
  /** Local Variable */
  var p: IPoint = new Shapes.Point(3, 4);
  >p : IPoint

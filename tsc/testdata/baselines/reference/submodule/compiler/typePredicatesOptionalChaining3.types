@@ -2,14 +2,10 @@
 
 === typePredicatesOptionalChaining3.ts ===
 interface Animal {
->Animal : Animal
-
   breed?: Breed;
 >breed : Breed | undefined
 }
 interface Breed {
->Breed : Breed
-
   size?: string;
 >size : string | undefined
 }

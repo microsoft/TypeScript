@@ -1,26 +1,8 @@
 --- old.observableInferenceCanBeMade.types
 +++ new.observableInferenceCanBeMade.types
-@@= skipped -4, +4 lines =@@
- 
- declare function of<T>(a: T): Observable<T>;
- >of : <T>(a: T) => Observable<T>
-+>T : T
- >a : T
- 
- declare function from<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
- >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
-+>O : O
- >input : O
- 
- type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
- >ObservedValueOf : ObservedValueOf<O>
-+>O : O
-+>T : T
+@@= skipped -15, +15 lines =@@
  
  interface Subscribable<T> {
-+>Subscribable : Subscribable<T>
-+>T : T
-+
      subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
 ->subscribe : (next?: (value: T) => void, error?: (error: any) => void, complete?: () => void) => void
 ->next : ((value: T) => void) | undefined
@@ -35,12 +17,8 @@
  }
  type ObservableInput<T> = Subscribable<T> | Subscribable<never>;
  >ObservableInput : ObservableInput<T>
-+>T : T
- 
- 
- declare class Observable<T> implements Subscribable<T> {
+@@= skipped -15, +15 lines =@@
  >Observable : Observable<T>
-+>T : T
  
      subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
 ->subscribe : (next?: (value: T) => void, error?: (error: any) => void, complete?: () => void) => void
@@ -56,7 +34,7 @@
  }
  
  function asObservable(input: string | ObservableInput<string>): Observable<string> {
-@@= skipped -41, +50 lines =@@
+@@= skipped -15, +15 lines =@@
      return typeof input === 'string' ? of(input) : from(input)
  >typeof input === 'string' ? of(input) : from(input) : Observable<string>
  >typeof input === 'string' : boolean

@@ -2,8 +2,6 @@
 
 === instanceOfAssignability.ts ===
 interface Base {
->Base : Base
-
 	foo: string|number;
 >foo : string | number
 
@@ -165,15 +163,12 @@ function fn7(x: Array<number>|Array<string>) {
 }
 
 interface Alpha { a }
->Alpha : Alpha
 >a : any
 
 interface Beta { b }
->Beta : Beta
 >b : any
 
 interface Gamma { c }
->Gamma : Gamma
 >c : any
 
 class ABC { a; b; c; }

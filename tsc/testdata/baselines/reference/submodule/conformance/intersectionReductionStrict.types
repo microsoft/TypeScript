@@ -21,12 +21,16 @@ type T4 = 10 & number & 20;  // never
 
 type T5 = symbol & typeof sym1;  // typeof sym1
 >T5 : unique symbol
+>sym1 : unique symbol
 
 type T6 = typeof sym1 & symbol & typeof sym2;  // never
 >T6 : never
+>sym1 : unique symbol
+>sym2 : unique symbol
 
 type T7 = string & 'a' & number & 10 & symbol & typeof sym1;  // never
 >T7 : never
+>sym1 : unique symbol
 
 type T10 = string & ('a' | 'b');  // 'a' | 'b'
 >T10 : T10
@@ -143,15 +147,9 @@ type K2 = keyof A | keyof B;  // 'kind' | 'foo'
 
 type Merge1<T, U> = { [P in keyof (T & U)]: P extends keyof T ? T[P] : U[P & keyof U] }
 >Merge1 : Merge1<T, U>
->T : T
->U : U
->P : P
 
 type Merge2<T, U> = { [P in keyof T | keyof U]: P extends keyof T ? T[P] : U[P & keyof U] }
 >Merge2 : Merge2<T, U>
->T : T
->U : U
->P : P
 
 type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
 >M1 : M1
@@ -259,7 +257,6 @@ const f1 = (t: "a" | ("b" & "c")): "a" => t;
 
 type Container<Type extends string> = {
 >Container : Container<Type>
->Type : Type
 
     type: Type;
 >type : Type

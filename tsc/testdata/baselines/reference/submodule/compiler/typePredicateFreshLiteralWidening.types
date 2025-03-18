@@ -6,11 +6,8 @@ type Narrowable = string | number | bigint | boolean;
 
 type Narrow<A> = (A extends Narrowable ? A : never) | ({
 >Narrow : Narrow<A>
->A : A
 
     [K in keyof A]: Narrow<A[K]>;
->K : K
-
 });
 
 const satisfies =
@@ -18,11 +15,9 @@ const satisfies =
 
   <TWide,>() =>
 ><TWide,>() =>  <TNarrow extends TWide>(narrow: Narrow<TNarrow>) =>    narrow : <TWide>() => <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
->TWide : TWide
 
   <TNarrow extends TWide>(narrow: Narrow<TNarrow>) =>
 ><TNarrow extends TWide>(narrow: Narrow<TNarrow>) =>    narrow : <TNarrow extends TWide>(narrow: Narrow<TNarrow>) => Narrow<TNarrow>
->TNarrow : TNarrow
 >narrow : Narrow<TNarrow>
 
     narrow;
@@ -33,7 +28,6 @@ const satisfies =
 const isNotNull = <T,>(value: T | null): value is T => value !== null;
 >isNotNull : <T>(value: T | null) => value is T
 ><T,>(value: T | null): value is T => value !== null : <T>(value: T | null) => value is T
->T : T
 >value : T | null
 >value !== null : boolean
 >value : T | null

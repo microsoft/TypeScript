@@ -7,22 +7,16 @@ type IDLMemberTypes = OperationMemberType | ConstantMemberType;
 >IDLMemberTypes : IDLMemberTypes
 
 interface IDLTypeDescription {
->IDLTypeDescription : IDLTypeDescription
-
     origin: string;
 >origin : string
 }
 
 interface InterfaceType {
->InterfaceType : InterfaceType
-
     members: IDLMemberTypes[];
 >members : IDLMemberTypes[]
 }
 
 interface OperationMemberType {
->OperationMemberType : OperationMemberType
-
     type: "operation";
 >type : "operation"
 
@@ -31,8 +25,6 @@ interface OperationMemberType {
 }
 
 interface ConstantMemberType {
->ConstantMemberType : ConstantMemberType
-
     type: "const";
 >type : "const"
 
@@ -148,8 +140,6 @@ function foo(memberType: IDLMemberTypes) {
 // Repro for issue similar to #8383
 
 interface A {
->A : A
-
     kind: true;
 >kind : true
 >true : true
@@ -160,8 +150,6 @@ interface A {
 }
 
 interface B {
->B : B
-
     kind: false;
 >kind : false
 >false : false

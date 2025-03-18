@@ -1,24 +1,6 @@
 --- old.subclassWithPolymorphicThisIsAssignable.types
 +++ new.subclassWithPolymorphicThisIsAssignable.types
-@@= skipped -2, +2 lines =@@
- === subclassWithPolymorphicThisIsAssignable.ts ===
- /* taken from mongoose.Document */
- interface Document {
-+>Document : Document
-+
-     increment(): this;
- >increment : () => this
- }
- 
- /* our custom model extends the mongoose document */
- interface CustomDocument extends Document { }
-+>CustomDocument : CustomDocument
- 
- export class Example<Z extends CustomDocument> {
- >Example : Example<Z>
-+>Z : Z
- 
-     constructor() {
+@@= skipped -16, +16 lines =@@
          // types of increment not compatible??
          this.test<Z>();
  >this.test<Z>() : void
@@ -30,7 +12,3 @@
      }
  
      public test<Z extends Document>() { }
- >test : <Z extends Document>() => void
-+>Z : Z
- }
- 

@@ -3,8 +3,6 @@
 === bindingPatternContextualTypeDoesNotCauseWidening.ts ===
 declare function pick<O, T extends keyof O>(keys: T[], obj?: O): Pick<O, T>;
 >pick : <O, T extends keyof O>(keys: T[], obj?: O) => Pick<O, T>
->O : O
->T : T
 >keys : T[]
 >obj : O
 

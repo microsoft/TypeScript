@@ -5,15 +5,11 @@ import React = require('react');
 >React : any
 
 interface IUser {
->IUser : IUser
-
     Name: string;
 >Name : string
 }
 
 interface IFetchUserProps {
->IFetchUserProps : IFetchUserProps
-
     children: (user: IUser) => JSX.Element;
 >children : (user: IUser) => Element
 >user : IUser

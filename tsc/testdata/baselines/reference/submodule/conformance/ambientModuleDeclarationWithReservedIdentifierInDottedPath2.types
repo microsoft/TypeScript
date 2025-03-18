@@ -18,8 +18,6 @@ export const tabId = chrome.debugger.tabId;
 >tabId : number
 
 declare namespace test.class {}
->test : any
->class : any
 
 declare namespace debugger {} // still an error
 >declare : any

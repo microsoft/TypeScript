@@ -1,81 +1,6 @@
 --- old.inferenceExactOptionalProperties2.types
 +++ new.inferenceExactOptionalProperties2.types
-@@= skipped -2, +2 lines =@@
- === inferenceExactOptionalProperties2.ts ===
- type Values<T> = T[keyof T];
- >Values : Values<T>
-+>T : T
- 
- type EventObject = {
- >EventObject : EventObject
-@@= skipped -10, +11 lines =@@
- };
- 
- interface ActorLogic<TEvent extends EventObject> {
-+>ActorLogic : ActorLogic<TEvent>
-+>TEvent : TEvent
-+
-   transition: (ev: TEvent) => unknown;
- >transition : (ev: TEvent) => unknown
- >ev : TEvent
-@@= skipped -9, +12 lines =@@
- >UnknownActorLogic : UnknownActorLogic
- 
- interface ProvidedActor {
-+>ProvidedActor : ProvidedActor
-+
-   src: string;
- >src : string
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface ActionFunction<TActor extends ProvidedActor> {
-+>ActionFunction : ActionFunction<TActor>
-+>TActor : TActor
-+
-   (): void;
-   _out_TActor?: TActor;
- >_out_TActor : TActor | undefined
- }
- 
- interface AssignAction<TActor extends ProvidedActor> {
-+>AssignAction : AssignAction<TActor>
-+>TActor : TActor
-+
-   (): void;
-   _out_TActor?: TActor;
- >_out_TActor : TActor | undefined
- }
- 
- interface MachineConfig<TActor extends ProvidedActor> {
-+>MachineConfig : MachineConfig<TActor>
-+>TActor : TActor
-+
-   entry?: ActionFunction<TActor>;
- >entry : ActionFunction<TActor> | undefined
- }
- 
- declare function assign<TActor extends ProvidedActor>(
- >assign : <TActor extends ProvidedActor>(_: (spawn: (actor: TActor["src"]) => void) => {}) => AssignAction<TActor>
-+>TActor : TActor
- 
-   _: (spawn: (actor: TActor["src"]) => void) => {},
- >_ : (spawn: (actor: TActor["src"]) => void) => {}
-@@= skipped -28, +38 lines =@@
- 
- type ToProvidedActor<TActors extends Record<string, UnknownActorLogic>> =
- >ToProvidedActor : ToProvidedActor<TActors>
-+>TActors : TActors
- 
-   Values<{
-     [K in keyof TActors & string]: {
-+>K : K
-+
-       src: K;
- >src : K
- 
-@@= skipped -13, +16 lines =@@
+@@= skipped -70, +70 lines =@@
    }>;
  
  declare function setup<
@@ -83,8 +8,6 @@
 +>setup : <TActors extends Record<string, UnknownActorLogic>>(implementations?: { actors?: { [K in keyof TActors]: TActors[K] } | undefined; } | undefined) => { createMachine: <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void; }
  
    TActors extends Record<string, UnknownActorLogic> = {},
-+>TActors : TActors
-+
  >(implementations?: {
 ->implementations : { actors?: { [K in keyof TActors]: TActors[K]; }; } | undefined
 +>implementations : { actors?: { [K in keyof TActors]: TActors[K] } | undefined; } | undefined
@@ -92,7 +15,6 @@
    actors?: { [K in keyof TActors]: TActors[K] };
 ->actors : { [K in keyof TActors]: TActors[K]; } | undefined
 +>actors : { [K in keyof TActors]: TActors[K] } | undefined
-+>K : K
  
  }): {
    createMachine: <
@@ -100,12 +22,8 @@
 +>createMachine : <TConfig extends MachineConfig<ToProvidedActor<TActors>>>(config: TConfig) => void
  
      const TConfig extends MachineConfig<ToProvidedActor<TActors>>,
-+>TConfig : TConfig
-+
    >(
-     config: TConfig,
- >config : TConfig
-@@= skipped -28, +33 lines =@@
+@@= skipped -28, +28 lines =@@
  // example usage
  setup({
  >setup({  actors: { counter: counterLogic },}).createMachine({  entry: assign((spawn) => {    spawn("counter"); // ok    spawn("alarm"); // error    return {};  }),}) : void

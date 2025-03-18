@@ -6,8 +6,6 @@
 
 
 interface PropsType {
->PropsType : PropsType
-
     children: [string, number?] | Iterable<boolean>;
 >children : Iterable<boolean, any, any> | [string, (number | undefined)?]
 }

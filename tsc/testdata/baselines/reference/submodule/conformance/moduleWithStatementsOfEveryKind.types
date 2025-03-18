@@ -10,11 +10,9 @@ module A {
 
     class AA<T> { s: T }
 >AA : AA<T>
->T : T
 >s : T
 
     interface I { id: number }
->I : I
 >id : number
 
     class B extends AA<string> implements I { id: number }
@@ -24,7 +22,6 @@ module A {
 
     class BB<T> extends A {
 >BB : BB<T>
->T : T
 >A : A
 
         id: number;
@@ -94,11 +91,9 @@ module Y {
 
     export class AA<T> { s: T }
 >AA : AA<T>
->T : T
 >s : T
 
     export interface I { id: number }
->I : I
 >id : number
 
     export class B extends AA<string> implements I { id: number }
@@ -108,7 +103,6 @@ module Y {
 
     export class BB<T> extends A {
 >BB : BB<T>
->T : T
 >A : A
 
         id: number;

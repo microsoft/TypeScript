@@ -46,7 +46,6 @@ var r3 = foo3();
 
 function foo4<T>(x: T) {
 >foo4 : <T>(x: T) => T
->T : T
 >x : T
 
     return x;
@@ -133,8 +132,6 @@ var r8 = foo8(1);
 >1 : 1
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
@@ -200,14 +197,10 @@ var r11 = foo11();
 
 // merged declarations
 interface I2 {
->I2 : I2
-
     x: number;
 >x : number
 }
 interface I2 {
->I2 : I2
-
     y: number;
 >y : number
 }

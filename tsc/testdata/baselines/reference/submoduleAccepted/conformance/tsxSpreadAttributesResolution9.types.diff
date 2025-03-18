@@ -8,12 +8,8 @@
 +>React : any
  
  interface OptionProp {
-+>OptionProp : OptionProp
-+
      x?: 2
- >x : 2
- 
-@@= skipped -12, +14 lines =@@
+@@= skipped -12, +12 lines =@@
  
  class Opt extends React.Component<OptionProp, {}> {
  >Opt : Opt

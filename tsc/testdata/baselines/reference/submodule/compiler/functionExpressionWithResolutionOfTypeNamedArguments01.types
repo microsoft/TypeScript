@@ -2,7 +2,6 @@
 
 === functionExpressionWithResolutionOfTypeNamedArguments01.ts ===
 interface arguments {
->arguments : arguments
 }
 
 var x = function f() {

@@ -2,8 +2,6 @@
 
 === unusedMethodsInInterface.ts ===
 interface I1 {
->I1 : I1
-
     f1();
 >f1 : () => any
 

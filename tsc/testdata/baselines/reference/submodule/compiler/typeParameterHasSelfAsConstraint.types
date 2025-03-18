@@ -3,7 +3,6 @@
 === typeParameterHasSelfAsConstraint.ts ===
 function foo<T extends T>(x: T): number {
 >foo : <T>(x: T) => number
->T : T
 >x : T
 
     return x;

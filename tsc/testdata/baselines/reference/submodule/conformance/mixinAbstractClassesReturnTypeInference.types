@@ -2,8 +2,6 @@
 
 === mixinAbstractClassesReturnTypeInference.ts ===
 interface Mixin1 {
->Mixin1 : Mixin1
-
     mixinMethod(): void;
 >mixinMethod : () => void
 }
@@ -17,7 +15,6 @@ abstract class AbstractBase {
 
 function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
 >Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
->TBase : TBase
 >args : any[]
 >baseClass : TBase
 

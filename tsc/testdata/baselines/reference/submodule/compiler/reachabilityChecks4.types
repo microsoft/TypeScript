@@ -78,8 +78,6 @@ type Direction = 'LEFT' | 'RIGHT' | 'TOP' | 'BOTTOM'
 >Direction : Direction
 
 interface Transition {
->Transition : Transition
-
   behavior: Behavior
 >behavior : Behavior
 

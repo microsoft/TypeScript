@@ -1,12 +1,6 @@
 --- old.contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.types
 +++ new.contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.types
-@@= skipped -8, +8 lines =@@
- >self : Rule
- 
- interface FullRule {
-+>FullRule : FullRule
-+
-     validate: string | RegExp | Validate;
+@@= skipped -12, +12 lines =@@
  >validate : string | RegExp | Validate
  
      normalize?: (match: {x: string}) => void;

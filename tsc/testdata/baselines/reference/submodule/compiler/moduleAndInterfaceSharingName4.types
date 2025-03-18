@@ -10,11 +10,7 @@ declare module D3 {
 >Color : any
 
     module Color {
->Color : any
-
         export interface Color {
->Color : Color
-
             darker: Color;
 >darker : Color
         }

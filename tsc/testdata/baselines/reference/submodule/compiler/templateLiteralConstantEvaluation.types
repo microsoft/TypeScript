@@ -5,7 +5,6 @@
 
 function fn<T>(arg: T): T {
 >fn : <T>(arg: T) => T
->T : T
 >arg : T
 
     return arg;

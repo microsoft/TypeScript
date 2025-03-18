@@ -3,8 +3,6 @@
 === contextualExpressionTypecheckingDoesntBlowStack.ts ===
 // repro for: https://github.com/Microsoft/TypeScript/issues/23661
 export interface IValidationError {
->IValidationError : IValidationError
-
     message: string;
 >message : string
 }

@@ -2,8 +2,6 @@
 
 === declarationEmitExpandoWithGenericConstraint.ts ===
 export interface Point {
->Point : Point
-
     readonly x: number;
 >x : number
 
@@ -12,9 +10,6 @@ export interface Point {
 }
 
 export interface Rect<p extends Point> {
->Rect : Rect<p>
->p : p
-
     readonly a: p;
 >a : p
 
@@ -35,7 +30,6 @@ export const Point = (x: number, y: number): Point => ({ x, y });
 export const Rect = <p extends Point>(a: p, b: p): Rect<p> => ({ a, b });
 >Rect : <p extends Point>(a: p, b: p) => Rect<p>
 ><p extends Point>(a: p, b: p): Rect<p> => ({ a, b }) : <p extends Point>(a: p, b: p) => Rect<p>
->p : p
 >a : p
 >b : p
 >({ a, b }) : { a: p; b: p; }

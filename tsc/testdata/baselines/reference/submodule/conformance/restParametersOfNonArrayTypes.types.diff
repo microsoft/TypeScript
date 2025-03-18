@@ -11,13 +11,7 @@
  >x : Date
  >y : boolean
  
-@@= skipped -14, +14 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     (...x: string);
+@@= skipped -18, +18 lines =@@
  >x : string
  
      foo(...x: number, ...y: number);
@@ -33,7 +27,7 @@
  
      (...x: string);
  >x : string
-@@= skipped -21, +23 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  var b = {

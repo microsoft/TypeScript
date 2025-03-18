@@ -3,7 +3,6 @@
 === wrappedAndRecursiveConstraints4.ts ===
 class C<T extends { length: number }> {
 >C : C<T>
->T : T
 >length : number
 
     constructor(x: T) { }
@@ -11,12 +10,10 @@ class C<T extends { length: number }> {
 
     foo<U extends T>(x: U) {
 >foo : <U extends T>(x: U) => <V extends U>(x: V) => V
->U : U
 >x : U
 
         function bar<V extends U>(x: V) {
 >bar : <V extends U>(x: V) => V
->V : V
 >x : V
 
             return x;

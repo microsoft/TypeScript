@@ -1,25 +1,6 @@
 --- old.inferentialTypingObjectLiteralMethod2.types
 +++ new.inferentialTypingObjectLiteralMethod2.types
-@@= skipped -1, +1 lines =@@
- 
- === inferentialTypingObjectLiteralMethod2.ts ===
- interface Int<T, U> {
-+>Int : Int<T, U>
-+>T : T
-+>U : U
-+
-     [s: string]: (x: T) => U;
- >s : string
- >x : T
- }
- declare function foo<T, U>(x: T, y: Int<T, U>, z: Int<U, T>): T;
- >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
-+>T : T
-+>U : U
- >x : T
- >y : Int<T, U>
- >z : Int<U, T>
-@@= skipped -14, +20 lines =@@
+@@= skipped -15, +15 lines =@@
  >foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }) : string
  >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
  >"" : ""

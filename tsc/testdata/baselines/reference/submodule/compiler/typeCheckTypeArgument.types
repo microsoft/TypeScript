@@ -3,31 +3,24 @@
 === typeCheckTypeArgument.ts ===
 var f: <T extends UNKNOWN>() => void;
 >f : <T extends UNKNOWN>() => void
->T : T
 
 interface IFoo<T extends UNKNOWN> { }
->IFoo : IFoo<T>
->T : T
 
 class Foo<T extends UNKNOWN> { }
 >Foo : Foo<T>
->T : T
 
 function bar<T extends UNKNOWN>() { }
 >bar : <T extends UNKNOWN>() => void
->T : T
 
 class Foo2 {
 >Foo2 : Foo2
 
     method<T extends UNKNOWN>() { }
 >method : <T extends UNKNOWN>() => void
->T : T
 }
 
 (<T extends UNKNOWN>(a) => { });
 >(<T extends UNKNOWN>(a) => { }) : <T extends UNKNOWN>(a: any) => void
 ><T extends UNKNOWN>(a) => { } : <T extends UNKNOWN>(a: any) => void
->T : T
 >a : any
 

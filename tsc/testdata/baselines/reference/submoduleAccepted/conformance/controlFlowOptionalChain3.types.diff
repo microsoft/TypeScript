@@ -19,12 +19,8 @@
 +>React : any
  
  interface Foo {
-+>Foo : Foo
-+
    bar: boolean;
- >bar : boolean
- }
-@@= skipped -57, +53 lines =@@
+@@= skipped -57, +51 lines =@@
  }
  
  function Test3({ foo }: { foo: Foo | undefined }) {

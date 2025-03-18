@@ -5,7 +5,6 @@
 
 declare function filter<T>(predicate: (value: T, index: number) => boolean): T;
 >filter : <T>(predicate: (value: T, index: number) => boolean) => T
->T : T
 >predicate : (value: T, index: number) => boolean
 >value : T
 >index : number

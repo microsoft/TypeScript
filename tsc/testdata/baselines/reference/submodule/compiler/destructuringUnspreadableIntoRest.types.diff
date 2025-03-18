@@ -126,11 +126,7 @@
  >method : any
  
          rest4.method;
-@@= skipped -12, +12 lines =@@
- 
- function destructure<T extends A>(x: T) {
- >destructure : <T extends A>(x: T) => void
-+>T : T
+@@= skipped -15, +15 lines =@@
  >x : T
  
      const {                 ...rest1 } = x;
@@ -139,7 +135,7 @@
  >x : T
  
      const {                 ...rest2 } = x as A;
-@@= skipped -14, +15 lines =@@
+@@= skipped -11, +11 lines =@@
      const { publicProp: _1, ...rest3 } = x;
  >publicProp : any
  >_1 : string

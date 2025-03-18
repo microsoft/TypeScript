@@ -3,8 +3,6 @@
 === intersectionTypeInference.ts ===
 function extend<T, U>(obj1: T, obj2: U): T & U {
 >extend : <T, U>(obj1: T, obj2: U) => T & U
->T : T
->U : U
 >obj1 : T
 >obj2 : U
 
@@ -59,25 +57,17 @@ var n = x.b;
 >b : number
 
 interface A<T> {
->A : A<T>
->T : T
-
     a: T;
 >a : T
 }
 
 interface B<U> {
->B : B<U>
->U : U
-
     b: U;
 >b : U
 }
 
 function foo<T, U>(obj: A<T> & B<U>): T | U {
 >foo : <T, U>(obj: A<T> & B<U>) => T | U
->T : T
->U : U
 >obj : A<T> & B<U>
 
     return undefined;

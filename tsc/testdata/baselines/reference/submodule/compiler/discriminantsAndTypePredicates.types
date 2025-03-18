@@ -4,11 +4,9 @@
 // Repro from #10145
 
 interface A { type: 'A' }
->A : A
 >type : "A"
 
 interface B { type: 'B' }
->B : B
 >type : "B"
 
 function isA(x: A | B): x is A { return x.type === 'A'; }

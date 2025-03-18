@@ -78,8 +78,6 @@ c.foo(1);
 
 // these are errors
 interface I {
->I : I
-
     (x = 1);
 >x : number
 >1 : 1

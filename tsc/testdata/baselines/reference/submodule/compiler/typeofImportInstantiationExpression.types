@@ -2,10 +2,6 @@
 
 === input.ts ===
 interface Arg<T = any, Params extends Record<string, any> = Record<string, any>> {
->Arg : Arg<T, Params>
->T : T
->Params : Params
-
     "__is_argument__"?: true;
 >"__is_argument__" : true
 >true : true
@@ -19,8 +15,6 @@ interface Arg<T = any, Params extends Record<string, any> = Record<string, any>>
 
 export function myFunction<T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) { return (arg.params || {}) as U }
 >myFunction : <T, U extends Record<string, any>>(arg: Arg<T, U>) => U
->T : T
->U : U
 >arg : Arg<T, U>
 >(arg.params || {}) as U : U
 >(arg.params || {}) : U | {}
@@ -33,8 +27,10 @@ export function myFunction<T = any, U extends Record<string, any> = Record<strin
 === main.ts ===
 type T1 = typeof import('./input.js').myFunction;
 >T1 : <T, U extends Record<string, any>>(arg: Arg<T, U>) => U
+>myFunction : any
 
 type T2 = typeof import('./input.js').myFunction<any, { slug: 'hello' }>;
 >T2 : (arg: Arg<any, { slug: "hello"; }>) => { slug: "hello"; }
+>myFunction : any
 >slug : "hello"
 

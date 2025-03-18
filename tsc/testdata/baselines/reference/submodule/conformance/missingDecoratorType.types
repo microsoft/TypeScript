@@ -1,30 +1,15 @@
 //// [tests/cases/conformance/decorators/missingDecoratorType.ts] ////
 
 === a.ts ===
+
 interface Object { }
->Object : Object
-
 interface Array<T> { }
->Array : T[]
->T : T
-
 interface String { }
->String : String
-
 interface Boolean { }
->Boolean : Boolean
-
 interface Number { }
->Number : Number
-
 interface Function { }
->Function : Function
-
 interface RegExp { }
->RegExp : RegExp
-
 interface IArguments { }
->IArguments : IArguments
 
 === b.ts ===
 declare function dec(t, k, d);

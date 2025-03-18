@@ -1,8 +1,0 @@
---- old.typeofStrictNull.types
-+++ new.typeofStrictNull.types
-@@= skipped -5, +5 lines =@@
- 
- let b: typeof a;
- >b : number
-->a : number
- 

@@ -2,20 +2,14 @@
 
 === incorrectNumberOfTypeArgumentsDuringErrorReporting.ts ===
 interface ObjA {
->ObjA : ObjA
-
   y?:string,
 >y : string
 }
 
 interface ObjB {[key:string]:any}
->ObjB : ObjB
 >key : string
 
 interface Opts<A, B> {a:A, b:B}
->Opts : Opts<A, B>
->A : A
->B : B
 >a : A
 >b : B
 
@@ -24,18 +18,12 @@ const fn = <
 ><  A extends ObjA,  B extends ObjB = ObjB>(opts:Opts<A, B>):string => 'Z' : <A extends ObjA, B extends ObjB>(opts: Opts<A, B>) => string
 
   A extends ObjA,
->A : A
-
   B extends ObjB = ObjB
->B : B
-
 >(opts:Opts<A, B>):string => 'Z'
 >opts : Opts<A, B>
 >'Z' : "Z"
 
 interface MyObjA {
->MyObjA : MyObjA
-
   x:string,
 >x : string
 }

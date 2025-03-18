@@ -120,22 +120,3 @@
          }
      }
  }
-@@= skipped -67, +67 lines =@@
- } 
- 
- interface StatsBase<T> {
-+>StatsBase : StatsBase<T>
-+>T : T
-+
-     isDirectory(): boolean;
- >isDirectory : () => boolean
- 
-@@= skipped -8, +11 lines =@@
- }
- 
- interface Nested {
-+>Nested : Nested
-+
-     stats: StatsBase<any>;
- >stats : StatsBase<any>
- }

@@ -1,23 +1,6 @@
 --- old.assignEveryTypeToAny.types
 +++ new.assignEveryTypeToAny.types
-@@= skipped -66, +66 lines =@@
- 
- var e2: typeof undefined;
- >e2 : any
-->undefined : undefined
- 
- x = e2;
- >x = e2 : any
-@@= skipped -33, +32 lines =@@
- >f : E
- 
- interface I {
-+>I : I
-+
-     foo: string;
- >foo : string
- }
-@@= skipped -36, +38 lines =@@
+@@= skipped -135, +135 lines =@@
  >i : () => string
  
  x = { f() { return 1; } }
@@ -36,13 +19,5 @@
 ->{ f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
 +>{ f<T>(x: T) { return x; } } : { f: <T>(x: T) => T; }
  >f : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
- 
- function j<T>(a: T) {
- >j : <T>(a: T) => void
-+>T : T
- >a : T
- 
-     x = a;

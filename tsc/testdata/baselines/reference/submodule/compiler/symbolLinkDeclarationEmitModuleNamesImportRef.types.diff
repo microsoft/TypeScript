@@ -22,7 +22,4 @@
 +>styles : InterpolationValue[]
  
  === Folder/node_modules/styled-components/typings/styled-components.d.ts ===
--
- export interface InterpolationValue {}
-+>InterpolationValue : InterpolationValue
-+
+ 

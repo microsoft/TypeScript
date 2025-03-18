@@ -16,11 +16,7 @@ export class Point {
 >y : number
     }
     export module B {
->B : any
-
         export interface Id {
->Id : Id
-
             name: string;
 >name : string
         }

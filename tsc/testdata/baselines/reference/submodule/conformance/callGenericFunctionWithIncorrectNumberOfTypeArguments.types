@@ -6,8 +6,6 @@
 
 function f<T, U>(x: T, y: U): T { return null; }
 >f : <T, U>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -28,8 +26,6 @@ var r1b = f<number, string, number>(1, '');
 var f2 = <T, U>(x: T, y: U): T => { return null; }
 >f2 : <T, U>(x: T, y: U) => T
 ><T, U>(x: T, y: U): T => { return null; } : <T, U>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -49,8 +45,6 @@ var r2b = f2<number, string, number>(1, '');
 
 var f3: { <T, U>(x: T, y: U): T; }
 >f3 : <T, U>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -73,8 +67,6 @@ class C {
 
     f<T, U>(x: T, y: U): T {
 >f : <T, U>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -104,12 +96,8 @@ var r4b = (new C()).f<number, string, number>(1, '');
 >'' : ""
 
 interface I {
->I : I
-
     f<T, U>(x: T, y: U): T;
 >f : <T, U>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 }
@@ -136,8 +124,6 @@ var r5b = i.f<number, string, number>(1, '');
 
 class C2<T, U> {
 >C2 : C2<T, U>
->T : T
->U : U
 
     f(x: T, y: U): T {
 >f : (x: T, y: U) => T
@@ -170,10 +156,6 @@ var r6b = (new C2()).f<number, string, number>(1, '');
 >'' : ""
 
 interface I2<T, U> {
->I2 : I2<T, U>
->T : T
->U : U
-
     f(x: T, y: U): T;
 >f : (x: T, y: U) => T
 >x : T

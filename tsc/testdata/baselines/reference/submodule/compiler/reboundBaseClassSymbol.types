@@ -2,7 +2,6 @@
 
 === reboundBaseClassSymbol.ts ===
 interface A { a: number; }
->A : A
 >a : number
 
 module Foo {
@@ -13,6 +12,5 @@ module Foo {
 >1 : 1
 
     interface B extends A { b: string; } 
->B : B
 >b : string
 }

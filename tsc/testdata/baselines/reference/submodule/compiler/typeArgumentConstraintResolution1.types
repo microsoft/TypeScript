@@ -3,17 +3,14 @@
 === typeArgumentConstraintResolution1.ts ===
 function foo1<T extends Date>(test: T);
 >foo1 : { <T extends Date>(test: T): any; <T extends Number>(test: string): any; }
->T : T
 >test : T
 
 function foo1<T extends Number>(test: string);
 >foo1 : { <T extends Date>(test: T): any; <T extends Number>(test: string): any; }
->T : T
 >test : string
 
 function foo1<T extends String>(test: any) { }
 >foo1 : { <T extends Date>(test: T): any; <T extends Number>(test: string): any; }
->T : T
 >test : any
 
 foo1<Date>(""); // should error
@@ -25,17 +22,14 @@ foo1<Date>(""); // should error
 
 function foo2<T extends Date>(test: T): T;
 >foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
->T : T
 >test : T
 
 function foo2<T extends Number>(test: string): T; 
 >foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
->T : T
 >test : string
 
 function foo2<T extends String>(test: any): any { return null; }
 >foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
->T : T
 >test : any
 
 foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type parameter 'T extends Number'

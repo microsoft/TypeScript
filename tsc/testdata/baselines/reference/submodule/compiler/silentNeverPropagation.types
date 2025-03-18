@@ -5,7 +5,6 @@
 
 type ModuleWithState<TState> = {
 >ModuleWithState : ModuleWithState<TState>
->TState : TState
 
     state: TState;
 >state : TState
@@ -30,15 +29,11 @@ type MoreState = {
 
 declare function createModule<TState, TActions>(state: TState, actions: TActions): ModuleWithState<TState> & TActions;
 >createModule : <TState, TActions>(state: TState, actions: TActions) => ModuleWithState<TState> & TActions
->TState : TState
->TActions : TActions
 >state : TState
 >actions : TActions
 
 declare function convert<TState, TActions>(m: ModuleWithState<TState> & TActions): ModuleWithState<TState & MoreState> & TActions;
 >convert : <TState, TActions>(m: ModuleWithState<TState> & TActions) => ModuleWithState<TState & MoreState> & TActions
->TState : TState
->TActions : TActions
 >m : ModuleWithState<TState> & TActions
 
 const breaks = convert(

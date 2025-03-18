@@ -5,8 +5,6 @@
 
 function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r {
 >fold : <a, r>(values: a[], result: r, fold: (result: r, value: a) => r) => r
->a : a
->r : r
 >values : a[]
 >result : r
 >fold : (result: r, value: a) => r
@@ -31,8 +29,6 @@ function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r
 
 function append<a, b extends a>(values: a[], value: b): a[] {
 >append : <a, b extends a>(values: a[], value: b) => a[]
->a : a
->b : b
 >values : a[]
 >value : b
 

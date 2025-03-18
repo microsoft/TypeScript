@@ -19,12 +19,11 @@
 ->myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & { name: string; }>) => React.ComponentClass<P>
 ->Inner : React.ComponentClass<P & { name: string; }, any>
 +>myHigherOrderComponent : <P>(Inner: ComponentClass<P & { name: string; }>) => ComponentClass<P>
-+>P : P
 +>Inner : ComponentClass<P & { name: string; }>
  >React : any
  >name : string
  >React : any
-@@= skipped -20, +15 lines =@@
+@@= skipped -20, +14 lines =@@
      return class OuterComponent extends React.Component<P> {
  >class OuterComponent extends React.Component<P> {        render() {            return <Inner {...this.props} name="Matt"/>;        }    } : typeof OuterComponent
  >OuterComponent : typeof OuterComponent

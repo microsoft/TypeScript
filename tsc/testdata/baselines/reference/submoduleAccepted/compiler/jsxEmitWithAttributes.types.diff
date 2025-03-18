@@ -1,18 +1,6 @@
 --- old.jsxEmitWithAttributes.types
 +++ new.jsxEmitWithAttributes.types
-@@= skipped -1, +1 lines =@@
- 
- === Element.ts ===
- declare namespace JSX {
-+>JSX : any
-+
-     interface Element {
-+>Element : Element
-+
-         name: string;
- >name : string
- 
-@@= skipped -33, +37 lines =@@
+@@= skipped -34, +34 lines =@@
  >Element : typeof Element
  
      export function isElement(el: any): el is JSX.Element {

@@ -11,8 +11,6 @@ var names = ["list", "table1", "table2", "table3", "summary"];
 >"summary" : "summary"
 
 interface HTMLElement {
->HTMLElement : HTMLElement
-
     clientWidth: number;
 >clientWidth : number
 
@@ -24,8 +22,6 @@ declare var document: Document;
 >document : Document
 
 interface Document {
->Document : Document
-
     getElementById(elementId: string): HTMLElement;
 >getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >elementId : string

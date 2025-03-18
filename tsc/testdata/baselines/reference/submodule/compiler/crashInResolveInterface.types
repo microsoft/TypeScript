@@ -6,15 +6,11 @@ declare var c: C;
 >c : C
 
 interface C {
->C : C
-
     count(countTitle?: string): void;
 >count : (countTitle?: string) => void
 >countTitle : string
 }
 interface C {
->C : C
-
     log(message?: any, ...optionalParams: any[]): void;
 >log : (message?: any, ...optionalParams: any[]) => void
 >message : any
@@ -23,9 +19,6 @@ interface C {
 
 === file1.ts ===
 interface Q<T> {
->Q : Q<T>
->T : T
-
     each(action: (item: T, index: number) => void): void;
 >each : (action: (item: T, index: number) => void) => void
 >action : (item: T, index: number) => void

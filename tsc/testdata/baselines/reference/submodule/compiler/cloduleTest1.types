@@ -6,8 +6,6 @@
 >selector : string
 
   interface $ {
->$ : $
-
       addClass(className: string): $;
 >addClass : (className: string) => $
 >className : string
@@ -16,7 +14,6 @@
 >$ : typeof $
 
     export interface AjaxSettings {
->AjaxSettings : AjaxSettings
     }
     export function ajax(options: AjaxSettings) { }
 >ajax : (options: AjaxSettings) => void

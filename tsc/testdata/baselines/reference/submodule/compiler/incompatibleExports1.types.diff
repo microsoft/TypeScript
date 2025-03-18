@@ -1,18 +1,6 @@
 --- old.incompatibleExports1.types
 +++ new.incompatibleExports1.types
-@@= skipped -4, +4 lines =@@
- >"foo" : typeof import("foo")
- 
-     export interface x { a: string } 
-+>x : x
- >a : string
- 
-     interface y { a: Date }
-+>y : y
- >a : Date
- 
-     export = y;
-@@= skipped -20, +22 lines =@@
+@@= skipped -24, +24 lines =@@
      }
   
      module c {

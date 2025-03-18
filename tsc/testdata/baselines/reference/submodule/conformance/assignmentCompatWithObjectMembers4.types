@@ -35,11 +35,9 @@ module OnlyDerived {
 >t : T
 
     interface S2 { foo: Derived; }
->S2 : S2
 >foo : Derived
 
     interface T2 { foo: Derived2; }
->T2 : T2
 >foo : Derived2
 
     var s2: S2;
@@ -198,11 +196,9 @@ module WithBase {
 >t : T
 
     interface S2 { foo: Base; }
->S2 : S2
 >foo : Base
 
     interface T2 { foo: Derived2; }
->T2 : T2
 >foo : Derived2
 
     var s2: S2;

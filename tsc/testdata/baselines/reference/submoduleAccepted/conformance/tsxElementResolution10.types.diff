@@ -1,31 +1,6 @@
 --- old.tsxElementResolution10.types
 +++ new.tsxElementResolution10.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface ElementClass {
-+>ElementClass : ElementClass
-+
- 		render: any;
- >render : any
- 	}
- 	interface IntrinsicElements { }
-+>IntrinsicElements : IntrinsicElements
- }
- 
- interface Obj1type {
-+>Obj1type : Obj1type
-+
- 	new(n: string): { x: number };
- >n : string
- >x : number
-@@= skipped -17, +26 lines =@@
+@@= skipped -18, +18 lines =@@
  >Obj1 : Obj1type
  
  <Obj1 x={10} />; // Error, no render member
@@ -37,12 +12,7 @@
  >10 : 10
  
  interface Obj2type {
-+>Obj2type : Obj2type
-+
- 	(n: string): { x: number; render: any; };
- >n : string
- >x : number
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  >Obj2 : Obj2type
  
  <Obj2 x={32} render={100} />; // OK

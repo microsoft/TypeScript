@@ -24,13 +24,7 @@
  >bar : unknown
  >bar as Foo : Foo
  >bar : unknown
- 
- interface Foo extends Array<string> {}
-+>Foo : Foo
- 
- // Repros from comments in #43249
- 
-@@= skipped -19, +20 lines =@@
+@@= skipped -19, +19 lines =@@
  
      if (typeof value !== "string") {
  >typeof value !== "string" : boolean
@@ -62,11 +56,4 @@
 +>match : RegExpMatchArray | []
  
  };
- 
- function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
- >f : <Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) => void
-+>Arr : Arr
-+>D : D
- >x : FlatArray<Arr, any>
- >y : FlatArray<Arr, D>
  

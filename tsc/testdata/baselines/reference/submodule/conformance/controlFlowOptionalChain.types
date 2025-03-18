@@ -505,15 +505,11 @@ o5.x.y.z.w;
 >w : boolean
 
 interface Base {
->Base : Base
-
     f(): this is Derived;
 >f : () => this is Derived
 }
 
 interface Derived extends Base {
->Derived : Derived
-
     x: number;
 >x : number
 }
@@ -565,7 +561,6 @@ o6.f;
 // asserts
 declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
 >isDefined : <T>(value: T) => asserts value is NonNullable<T>
->T : T
 >value : T
 
 declare const isString: (value: unknown) => asserts value is string;
@@ -1690,7 +1685,6 @@ declare function assert(x: unknown): asserts x;
 
 declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
 >assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
->T : T
 >x : T
 
 function f30(o: Thing | undefined) {
@@ -1966,8 +1960,6 @@ function extractCoordinates(f: Feature): number[] {
 // Repro from #35842
 
 interface SomeObject {
->SomeObject : SomeObject
-
     someProperty: unknown;
 >someProperty : unknown
 }

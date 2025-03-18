@@ -1,25 +1,6 @@
 --- old.checkJsxChildrenProperty11.types
 +++ new.checkJsxChildrenProperty11.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface ElementAttributesProperty { props: {} }
-+>ElementAttributesProperty : ElementAttributesProperty
- >props : {}
- 
- 	interface IntrinsicElements { 
-+>IntrinsicElements : IntrinsicElements
-+
- 		div: any;
- >div : any
- 
-@@= skipped -23, +30 lines =@@
+@@= skipped -24, +24 lines =@@
  >props : {}
  
      render() {

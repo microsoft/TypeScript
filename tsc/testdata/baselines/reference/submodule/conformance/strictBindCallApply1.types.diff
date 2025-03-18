@@ -1,12 +1,6 @@
 --- old.strictBindCallApply1.types
 +++ new.strictBindCallApply1.types
-@@= skipped -15, +15 lines =@@
- 
- declare function generic<T>(x: T): T;
- >generic : <T>(x: T) => T
-+>T : T
- >x : T
- 
+@@= skipped -20, +20 lines =@@
  let f00 = foo.bind(undefined);
  >f00 : (a: number, b: string) => string
  >foo.bind(undefined) : (a: number, b: string) => string
@@ -57,7 +51,7 @@
  >undefined : undefined
  >10 : 10
  >20 : 20
-@@= skipped -42, +43 lines =@@
+@@= skipped -37, +37 lines =@@
  let f04 = overloaded.bind(undefined);  // typeof overloaded
  >f04 : { (s: string): number; (n: number): string; }
  >overloaded.bind(undefined) : { (s: string): number; (n: number): string; }
@@ -181,15 +175,7 @@
  >this : this
  >a : number
  >b : string
-@@= skipped -22, +22 lines =@@
- 
-     generic<T>(x: T): T { return x }
- >generic : <T>(x: T) => T
-+>T : T
- >x : T
- >x : T
- }
-@@= skipped -11, +12 lines =@@
+@@= skipped -33, +33 lines =@@
  >obj : {}
  
  let f10 = c.foo.bind(c);
@@ -607,7 +593,6 @@
 ->bar : <T extends unknown[]>(callback: (this: 1, ...args: T) => void) => void
 ->callback : (this: 1, ...args: T) => void
 +>bar : <T extends unknown[]>(callback: (...args: T) => void) => void
-+>T : T
 +>callback : (...args: T) => void
  >this : 1
  >args : T
@@ -637,7 +622,6 @@
 ->baz : <T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
 ->callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 +>baz : <T extends 1 | 2>(callback: (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) => void
-+>T : T
 +>callback : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
  >this : 1
  >args : T extends 1 ? [unknown] : [unknown, unknown]
@@ -663,11 +647,7 @@
  >2 : 2
  }
  
- // Repro from #32964
- class Foo<T extends unknown[]> {
- >Foo : Foo<T>
-+>T : T
- 
+@@= skipped -48, +48 lines =@@
      constructor() {
          this.fn.bind(this);
  >this.fn.bind(this) : (...args: T) => void
@@ -681,12 +661,7 @@
  >this : this
      }
  
-@@= skipped -63, +66 lines =@@
- 
- class Bar<T extends 1 | 2> {
- >Bar : Bar<T>
-+>T : T
- 
+@@= skipped -19, +19 lines =@@
      constructor() {
          this.fn.bind(this);
  >this.fn.bind(this) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void

@@ -1,22 +1,6 @@
 --- old.correctOrderOfPromiseMethod.types
 +++ new.correctOrderOfPromiseMethod.types
-@@= skipped -1, +1 lines =@@
- 
- === correctOrderOfPromiseMethod.ts ===
- interface A {
-+>A : A
-+
-     id: string
- >id : string
- }
- 
- interface B {
-+>B : B
-+
-     id: string
- >id : string
- 
-@@= skipped -30, +34 lines =@@
+@@= skipped -31, +31 lines =@@
  >resultB : B[]
  >await Promise.all([        providerA(),        providerB(),    ]) : [A[], B[]]
  >Promise.all([        providerA(),        providerB(),    ]) : Promise<[A[], B[]]>

@@ -198,12 +198,9 @@
  
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
-@@= skipped -13, +13 lines =@@
- };
+@@= skipped -14, +14 lines =@@
  === awaitAsTypeIsOk.ts ===
  interface await {}
-+>await : await
-+
  const o19 = {
 ->o19 : { f(): AsyncGenerator<never, void, unknown>; }
 ->{    async * f() {        let x: await;    }} : { f(): AsyncGenerator<never, void, unknown>; }
@@ -212,12 +209,9 @@
  
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
-@@= skipped -13, +15 lines =@@
- };
+@@= skipped -13, +13 lines =@@
  === yieldAsTypeIsOk.ts ===
  interface yield {}
-+>yield : yield
-+
  const o20 = {
 ->o20 : { f(): AsyncGenerator<never, void, unknown>; }
 ->{    async * f() {        let x: yield;    }} : { f(): AsyncGenerator<never, void, unknown>; }
@@ -226,7 +220,7 @@
  
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
-@@= skipped -13, +15 lines =@@
+@@= skipped -12, +12 lines =@@
  };
  === yieldInNestedComputedPropertyIsOk.ts ===
  const o21 = {

@@ -3,8 +3,6 @@
 === augmentedTypesModules.ts ===
 // module then var
 module m1 { }
->m1 : number
-
 var m1 = 1; // Should be allowed
 >m1 : number
 >1 : 1
@@ -28,10 +26,7 @@ var m1b = 1; // error
 >1 : 1
 
 module m1c {
->m1c : number
-
     export interface I { foo(): void; }
->I : I
 >foo : () => void
 }
 var m1c = 1; // Should be allowed
@@ -51,8 +46,6 @@ var m1d = 1; // error
 
 // module then function
 module m2 { }
->m2 : () => void
-
 function m2() { }; // ok since the module is not instantiated
 >m2 : () => void
 
@@ -82,8 +75,6 @@ module m2c { export var y = 2; }
 >2 : 2
 
 module m2d { }
->m2d : () => void
-
 declare function m2d(): void; 
 >m2d : () => void
 
@@ -91,14 +82,11 @@ declare function m2e(): void;
 >m2e : () => void
 
 module m2e { }
->m2e : () => void
 
 function m2f() { };
 >m2f : () => void
 
 module m2f { export interface I { foo(): void } } 
->m2f : () => void
->I : I
 >foo : () => void
 
 function m2g() { };
@@ -111,8 +99,6 @@ module m2g { export class C { foo() { } } }
 
 // module then class
 module m3 { }
->m3 : typeof m3
-
 class m3 { } // ok since the module is not instantiated
 >m3 : m3
 
@@ -166,8 +152,6 @@ declare class m3f { foo(): void }
 >foo : () => void
 
 module m3f { export interface I { foo(): void } }
->m3f : typeof m3f
->I : I
 >foo : () => void
 
 declare class m3g { foo(): void }
@@ -182,8 +166,6 @@ module m3g { export class C { foo() { } } }
 // module then enum
 // should be errors
 module m4 { }
->m4 : typeof m4
-
 enum m4 { }
 >m4 : m4
 
@@ -206,8 +188,6 @@ enum m4b { One }
 >One : m4b.One
 
 module m4c { interface I { foo(): void } }
->m4c : typeof m4c
->I : I
 >foo : () => void
 
 enum m4c { One }
@@ -231,8 +211,6 @@ module m5 { export var y = 2; }
 >2 : 2
 
 module m5 { export interface I { foo(): void } } // should already be reasonably well covered
->m5 : typeof m5
->I : I
 >foo : () => void
 
 // module then import

@@ -1,15 +1,6 @@
 --- old.intersectionTypeInference3.types
 +++ new.intersectionTypeInference3.types
-@@= skipped -4, +4 lines =@@
- 
- type Nominal<Kind extends string, Type> = Type & {
- >Nominal : Nominal<Kind, Type>
-+>Kind : Kind
-+>Type : Type
- 
-     [Symbol.species]: Kind;
- >[Symbol.species] : Kind
-@@= skipped -21, +23 lines =@@
+@@= skipped -25, +25 lines =@@
  const c1 = Array.from(a).concat(Array.from(b));
  >c1 : A[]
  >Array.from(a).concat(Array.from(b)) : A[]
@@ -33,10 +24,3 @@
  >b : Set<A>
  
  // Simpler repro
- 
- declare function from<T>(): T[];
- >from : <T>() => T[]
-+>T : T
- 
- const c2: ReadonlyArray<A> = from();
- >c2 : readonly A[]

@@ -1,14 +1,6 @@
 --- old.libTypeScriptOverrideSimple.types
 +++ new.libTypeScriptOverrideSimple.types
-@@= skipped -1, +1 lines =@@
- 
- === /node_modules/@typescript/lib-dom/index.d.ts ===
- interface ABC { abc: string }
-+>ABC : ABC
- >abc : string
- 
- === index.ts ===
-@@= skipped -13, +14 lines =@@
+@@= skipped -14, +14 lines =@@
  // This should fail because libdom has been replaced
  // by the module above ^
  window.localStorage

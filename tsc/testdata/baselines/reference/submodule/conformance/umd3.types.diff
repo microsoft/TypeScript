@@ -27,13 +27,3 @@
  >n : number
  
  === foo.d.ts ===
-@@= skipped -26, +26 lines =@@
- >fn : () => void
- 
- export interface Thing { n: typeof x }
-+>Thing : Thing
- >n : number
-->x : number
- 
- export as namespace Foo;
- >Foo : typeof import("foo")

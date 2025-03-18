@@ -11,6 +11,7 @@
 ->x : typeof a
 ->a : typeof a
 +>x : typeof import("importDeclarationUsedAsTypeQuery_require")
++>a : typeof import("importDeclarationUsedAsTypeQuery_require")
  
  === importDeclarationUsedAsTypeQuery_require.ts ===
  export class B {

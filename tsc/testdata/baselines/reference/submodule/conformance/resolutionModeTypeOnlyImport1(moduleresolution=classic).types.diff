@@ -22,28 +22,19 @@
 ->_Default : any
 ->Default : any
 +>_Default : "script"
++>Default : "script"
  
  type _Import = typeof Import;
 ->_Import : any
 ->Import : any
 +>_Import : "script"
++>Import : "script"
  
  type _Require = typeof Require;
 ->_Require : any
 ->Require : any
 +>_Require : "script"
++>Require : "script"
  
  // resolution-mode does not enforce file extension in `bundler`, just sets conditions
  import type { x as ImportRelative } from "./other" assert { "resolution-mode": "import" };
-@@= skipped -34, +31 lines =@@
- 
- type _ImportRelative = typeof ImportRelative;
- >_ImportRelative : "other"
-->ImportRelative : "other"
- 
- type _RequireRelative = typeof RequireRelative;
- >_RequireRelative : "other"
-->RequireRelative : "other"
- 
- export {
-   _Default,

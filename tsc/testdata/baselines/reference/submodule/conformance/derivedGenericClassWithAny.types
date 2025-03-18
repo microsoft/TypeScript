@@ -3,7 +3,6 @@
 === derivedGenericClassWithAny.ts ===
 class C<T extends number> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T
@@ -55,7 +54,6 @@ class D extends C<number> {
 // if D is a valid class definition than E is now not safe tranisitively through C
 class E<T extends string> extends D {
 >E : E<T>
->T : T
 >D : D
 
     x: T;

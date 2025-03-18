@@ -2,9 +2,6 @@
 
 === chainedSpecializationToObjectTypeLiteral.ts ===
 interface Sequence<T> {
->Sequence : Sequence<T>
->T : T
-
     each(iterator: (value: T) => void): void;
 >each : (iterator: (value: T) => void) => void
 >iterator : (value: T) => void
@@ -12,7 +9,6 @@ interface Sequence<T> {
 
     map<U>(iterator: (value: T) => U): Sequence<U>;
 >map : <U>(iterator: (value: T) => U) => Sequence<U>
->U : U
 >iterator : (value: T) => U
 >value : T
 
@@ -23,7 +19,6 @@ interface Sequence<T> {
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: T[]; }>;
 >groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: T[]; }>
->K : K
 >keySelector : (value: T) => K
 >value : T
 >key : K

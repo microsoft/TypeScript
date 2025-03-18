@@ -2,8 +2,6 @@
 
 === nonContextuallyTypedLogicalOr.ts ===
 interface Contextual {
->Contextual : Contextual
-
     dummy;
 >dummy : any
 
@@ -12,8 +10,6 @@ interface Contextual {
 }
 
 interface Ellement {
->Ellement : Ellement
-
     dummy;
 >dummy : any
 

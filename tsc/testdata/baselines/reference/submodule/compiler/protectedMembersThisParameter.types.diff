@@ -1,14 +1,6 @@
 --- old.protectedMembersThisParameter.types
 +++ new.protectedMembersThisParameter.types
-@@= skipped -16, +16 lines =@@
- 
-   wrap<T>() {
- >wrap : <T>() => void
-+>T : T
- 
-     let m = this.message;
- >m : Message
-@@= skipped -8, +9 lines =@@
+@@= skipped -24, +24 lines =@@
  >message : Message
  
      let f = function(this: T) {
@@ -25,61 +17,55 @@
  function bA<T extends A>(this: T, arg: B) {
 ->bA : <T extends A>(this: T, arg: B) => void
 +>bA : <T extends A>(arg: B) => void
-+>T : T
  >this : T
  >arg : B
  
-@@= skipped -23, +24 lines =@@
+@@= skipped -23, +23 lines =@@
  >b : () => void
  }
  function bB<T extends B>(this: T, arg: B) {
 ->bB : <T extends B>(this: T, arg: B) => void
 +>bB : <T extends B>(arg: B) => void
-+>T : T
  >this : T
  >arg : B
  
-@@= skipped -29, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  >b : () => void
  }
  function bC<T extends C>(this: T, arg: B) {
 ->bC : <T extends C>(this: T, arg: B) => void
 +>bC : <T extends C>(arg: B) => void
-+>T : T
  >this : T
  >arg : B
  
-@@= skipped -29, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  >b : () => void
  }
  function bZ<T extends Z>(this: T, arg: B) {
 ->bZ : <T extends Z>(this: T, arg: B) => void
 +>bZ : <T extends Z>(arg: B) => void
-+>T : T
  >this : T
  >arg : B
  
-@@= skipped -23, +24 lines =@@
+@@= skipped -23, +23 lines =@@
  >b : () => void
  }
  function bString<T extends string>(this: T, arg: B) {
 ->bString : <T extends string>(this: T, arg: B) => void
 +>bString : <T extends string>(arg: B) => void
-+>T : T
  >this : T
  >arg : B
  
-@@= skipped -23, +24 lines =@@
+@@= skipped -23, +23 lines =@@
  >b : () => void
  }
  function bAny<T>(this: T, arg: B) {
 ->bAny : <T>(this: T, arg: B) => void
 +>bAny : <T>(arg: B) => void
-+>T : T
  >this : T
  >arg : B
  
-@@= skipped -40, +41 lines =@@
+@@= skipped -40, +40 lines =@@
  >d1 : () => void
    }
    derived1ThisD(this: D, arg: D1) {

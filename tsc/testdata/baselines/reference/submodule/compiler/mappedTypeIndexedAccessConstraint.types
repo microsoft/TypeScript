@@ -3,8 +3,6 @@
 === mappedTypeIndexedAccessConstraint.ts ===
 type Identity<T> = { [K in keyof T]: T[K] };
 >Identity : Identity<T>
->T : T
->K : K
 
 type M0 = { a: 1, b: 2 };
 >M0 : M0
@@ -13,19 +11,15 @@ type M0 = { a: 1, b: 2 };
 
 type M1 = { [K in keyof Partial<M0>]: M0[K] };
 >M1 : M1
->K : K
 
 type M2 = { [K in keyof Required<M1>]: M1[K] };
 >M2 : M2
->K : K
 
 type M3 = { [K in keyof Identity<Partial<M0>>]: M0[K] };
 >M3 : M3
->K : K
 
 function foo<K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) {
 >foo : <K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) => void
->K : K
 >m1 : M1[K]
 >m2 : M2[K]
 >m3 : M3[K]
@@ -82,13 +76,12 @@ type Obj = {
 
 const mapped: { [K in keyof Partial<Obj>]: Obj[K] } = {};
 >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
->K : K
 >{} : {}
 
 const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toString();  // Error
 >resolveMapped : <K extends keyof Obj>(key: K) => string
 ><K extends keyof typeof mapped>(key: K) => mapped[key].toString() : <K extends keyof Obj>(key: K) => string
->K : K
+>mapped : { a?: 1 | undefined; b?: 2 | undefined; }
 >key : K
 >mapped[key].toString() : string
 >mapped[key].toString : (radix?: number | undefined) => string
@@ -115,7 +108,7 @@ type Mappings = { foo: boolean, "12": number, 42: string };
 
 type MapperArgs<K extends (typeof arr)[number]> = {
 >MapperArgs : MapperArgs<K>
->K : K
+>arr : ["foo", "12", 42]
 
     v: K,
 >v : K
@@ -127,15 +120,12 @@ type MapperArgs<K extends (typeof arr)[number]> = {
 
 type SetOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 >SetOptional : SetOptional<T, K>
->T : T
->K : K
 
 type PartMappings = SetOptional<Mappings, "foo">;
 >PartMappings : PartMappings
 
 const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K] } = {
 >mapper : { foo?: (o: MapperArgs<"foo">) => boolean | undefined | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
->K : K
 >o : MapperArgs<K>
 >{    foo: ({ v, i }) => v.length + i > 4,    "12": ({ v, i }) => Number(v) + i,    42: ({ v, i }) => `${v}${i}`,} : { foo: (__0: MapperArgs<"foo">) => boolean; "12": (__0: MapperArgs<"12">) => number; 42: (__0: MapperArgs<42>) => string; }
 
@@ -176,7 +166,7 @@ const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K]
 const resolveMapper1 = <K extends keyof typeof mapper>(
 >resolveMapper1 : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
 ><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
->K : K
+>mapper : { foo?: (o: MapperArgs<"foo">) => boolean | undefined | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
 
     key: K, o: MapperArgs<K>) => mapper[key](o);  // Error
 >key : K
@@ -190,7 +180,7 @@ const resolveMapper1 = <K extends keyof typeof mapper>(
 const resolveMapper2 = <K extends keyof typeof mapper>(
 >resolveMapper2 : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
 ><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
->K : K
+>mapper : { foo?: (o: MapperArgs<"foo">) => boolean | undefined | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
 
     key: K, o: MapperArgs<K>) => mapper[key]?.(o)
 >key : K
@@ -229,14 +219,11 @@ declare const mapIntersection: {
 >mapIntersection : { a?: number | undefined; b: number; c: number; }
 
     [K in keyof (Partial<Obj1> & Required<Obj2>)]: number;
->K : K
-
 };
 
 const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toString();
 >accessMapped : <K extends keyof Obj2>(key: K) => string
 ><K extends keyof Obj2>(key: K) => mapIntersection[key].toString() : <K extends keyof Obj2>(key: K) => string
->K : K
 >key : K
 >mapIntersection[key].toString() : string
 >mapIntersection[key].toString : (radix?: number | undefined) => string
@@ -254,7 +241,6 @@ declare const resolved: { a?: number | undefined; b: number; c: number };
 const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
 >accessResolved : <K extends keyof Obj2>(key: K) => string
 ><K extends keyof Obj2>(key: K) => resolved[key].toString() : <K extends keyof Obj2>(key: K) => string
->K : K
 >key : K
 >resolved[key].toString() : string
 >resolved[key].toString : (radix?: number | undefined) => string
@@ -274,7 +260,6 @@ type Foo = {
 
 function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
 >test : <K extends "prop">(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
->K : K
 >obj : Pick<Required<Foo> & Partial<Foo>, K>
 >key : K
 

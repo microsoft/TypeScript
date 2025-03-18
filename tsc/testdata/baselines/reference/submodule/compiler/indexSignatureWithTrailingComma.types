@@ -10,8 +10,6 @@ type A = {
 };
 
 interface B {
->B : B
-
     [key: string,]: string;
 >key : string
 }

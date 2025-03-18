@@ -3,12 +3,10 @@
 === getAndSetNotIdenticalType2.ts ===
 class A<T> { foo: T; }
 >A : A<T>
->T : T
 >foo : T
 
 class C<T> {
 >C : C<T>
->T : T
 
     data: A<T>;
 >data : A<T>

@@ -9,43 +9,7 @@
  === isomorphicMappedTypeInference.ts ===
  type Box<T> = {
  >Box : Box<T>
-+>T : T
- 
-     value: T;
- >value : T
-@@= skipped -12, +10 lines =@@
- 
- type Boxified<T> = {
- >Boxified : Boxified<T>
-+>T : T
- 
-     [P in keyof T]: Box<T[P]>;
-+>P : P
- }
- 
- function box<T>(x: T): Box<T> {
- >box : <T>(x: T) => Box<T>
-+>T : T
- >x : T
- 
-     return { value: x };
-@@= skipped -16, +19 lines =@@
- 
- function unbox<T>(x: Box<T>): T {
- >unbox : <T>(x: Box<T>) => T
-+>T : T
- >x : Box<T>
- 
-     return x.value;
-@@= skipped -10, +11 lines =@@
- 
- function boxify<T>(obj: T): Boxified<T> {
- >boxify : <T>(obj: T) => Boxified<T>
-+>T : T
- >obj : T
- 
-     let result = {} as Boxified<T>;
-@@= skipped -17, +18 lines =@@
+@@= skipped -55, +52 lines =@@
  >result : Boxified<T>
  >k : Extract<keyof T, string>
  >box(obj[k]) : Box<T[Extract<keyof T, string>]>
@@ -54,15 +18,7 @@
  >obj[k] : T[Extract<keyof T, string>]
  >obj : T
  >k : Extract<keyof T, string>
-@@= skipped -11, +11 lines =@@
- 
- function unboxify<T extends object>(obj: Boxified<T>): T {
- >unboxify : <T extends object>(obj: Boxified<T>) => T
-+>T : T
- >obj : Boxified<T>
- 
-     let result = {} as T;
-@@= skipped -17, +18 lines =@@
+@@= skipped -28, +28 lines =@@
  >result : T
  >k : Extract<keyof T, string>
  >unbox(obj[k]) : T[Extract<keyof T, string>]
@@ -71,25 +27,14 @@
  >obj[k] : Boxified<T>[Extract<keyof T, string>]
  >obj : Boxified<T>
  >k : Extract<keyof T, string>
-@@= skipped -11, +11 lines =@@
- 
- function assignBoxified<T>(obj: Boxified<T>, values: T) {
- >assignBoxified : <T>(obj: Boxified<T>, values: T) => void
-+>T : T
- >obj : Boxified<T>
- >values : T
- 
-@@= skipped -175, +176 lines =@@
+@@= skipped -186, +186 lines =@@
  }
  
  function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
 ->makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
 ->obj : { [P in K]: T; }
 +>makeRecord : <T, K extends string>(obj: { [P in K]: T }) => { [P in K]: T }
-+>T : T
-+>K : K
 +>obj : { [P in K]: T }
-+>P : P
  
      return obj;
 ->obj : { [P in K]: T; }
@@ -97,7 +42,7 @@
  }
  
  function f5(s: string) {
-@@= skipped -12, +15 lines =@@
+@@= skipped -12, +12 lines =@@
  >s : string
  
      let b = makeRecord({
@@ -119,15 +64,7 @@
  
      let x: string | number | boolean = v.a;
  >x : string | number | boolean
-@@= skipped -11, +11 lines =@@
- 
- function makeDictionary<T>(obj: { [x: string]: T }) {
- >makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
-+>T : T
- >obj : { [x: string]: T; }
- >x : string
- 
-@@= skipped -12, +13 lines =@@
+@@= skipped -23, +23 lines =@@
  >s : string
  
      let b = makeDictionary({
@@ -162,29 +99,23 @@
 ->validate : <T>(obj: { [P in keyof T]?: T[P]; }) => T
 ->obj : { [P in keyof T]?: T[P] | undefined; }
 +>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined }) => T
-+>T : T
 +>obj : { [P in keyof T]?: T[P] | undefined }
-+>P : P
  
  declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
 ->clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
 ->obj : { readonly [P in keyof T]: T[P]; }
 +>clone : <T>(obj: { readonly [P in keyof T]: T[P] }) => T
-+>T : T
 +>obj : { readonly [P in keyof T]: T[P] }
-+>P : P
  
  declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;
 ->validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P]; }) => T
 ->obj : { readonly [P in keyof T]?: T[P] | undefined; }
 +>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined }) => T
-+>T : T
 +>obj : { readonly [P in keyof T]?: T[P] | undefined }
-+>P : P
  
  type Foo = {
  >Foo : Foo
-@@= skipped -41, +47 lines =@@
+@@= skipped -41, +41 lines =@@
      let x = validate(foo);  // { a: number, readonly b: string }
  >x : { a: number; readonly b: string; }
  >validate(foo) : { a: number; readonly b: string; }
@@ -207,75 +138,7 @@
  >foo : Foo
  }
  
-@@= skipped -20, +20 lines =@@
- 
- type Func<T> = (...args: any[]) => T;
- >Func : Func<T>
-+>T : T
- >args : any[]
- 
- type Spec<T> = {
- >Spec : Spec<T>
-+>T : T
- 
-     [P in keyof T]: Func<T[P]> | Spec<T[P]> ;
-+>P : P
-+
- };
- 
- /**
-@@= skipped -15, +19 lines =@@
-  */
- declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
- >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
-+>T : T
- >obj : Spec<T>
- >args : any[]
- 
-@@= skipped -48, +49 lines =@@
- const foo = <T>(object: T, partial: Partial<T>) => object;
- >foo : <T>(object: T, partial: Partial<T>) => T
- ><T>(object: T, partial: Partial<T>) => object : <T>(object: T, partial: Partial<T>) => T
-+>T : T
- >object : T
- >partial : Partial<T>
- >object : T
-@@= skipped -35, +36 lines =@@
- 
- declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
- >f20 : <T, K extends keyof T>(obj: Pick<T, K>) => T
-+>T : T
-+>K : K
- >obj : Pick<T, K>
- 
- declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
- >f21 : <T, K extends keyof T>(obj: Pick<T, K>) => K
-+>T : T
-+>K : K
- >obj : Pick<T, K>
- 
- declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
- >f22 : <T, K extends keyof T>(obj: Boxified<Pick<T, K>>) => T
-+>T : T
-+>K : K
- >obj : Boxified<Pick<T, K>>
- 
- declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
- >f23 : <T, U extends keyof T, K extends U>(obj: Pick<T, K>) => T
-+>T : T
-+>U : U
-+>K : K
- >obj : Pick<T, K>
- 
- declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
- >f24 : <T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>) => T & U
-+>T : T
-+>U : U
-+>K : K
- >obj : Pick<T & U, K>
- 
- let x0 = f20({ foo: 42, bar: "hello" });
-@@= skipped -29, +41 lines =@@
+@@= skipped -147, +147 lines =@@
  >"hello" : "hello"
  
  let x1 = f21({ foo: 42, bar: "hello" });
@@ -286,16 +149,7 @@
  >f21 : <T, K extends keyof T>(obj: Pick<T, K>) => K
  >{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
  >foo : number
-@@= skipped -47, +47 lines =@@
- 
- function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K> {
- >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
-+>T : T
-+>K : K
- >obj : T
- >list : K[]
- 
-@@= skipped -13, +15 lines =@@
+@@= skipped -60, +60 lines =@@
  >{} : {}
  
  const o1 = getProps(myAny, ['foo', 'bar']);

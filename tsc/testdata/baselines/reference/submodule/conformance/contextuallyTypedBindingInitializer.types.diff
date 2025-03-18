@@ -1,13 +1,6 @@
 --- old.contextuallyTypedBindingInitializer.types
 +++ new.contextuallyTypedBindingInitializer.types
-@@= skipped -1, +1 lines =@@
- 
- === contextuallyTypedBindingInitializer.ts ===
- interface Show {
-+>Show : Show
-+
-     show: (x: number) => string;
- >show : (x: number) => string
+@@= skipped -6, +6 lines =@@
  >x : number
  }
  function f({ show = v => v.toString() }: Show) {}
@@ -16,7 +9,7 @@
  >show : (x: number) => string
  >v => v.toString() : (v: number) => string
  >v : number
-@@= skipped -15, +17 lines =@@
+@@= skipped -10, +10 lines =@@
  >toString : (radix?: number) => string
  
  function f2({ "show": showRename = v => v.toString() }: Show) {}
@@ -34,13 +27,7 @@
  >"show" : "show"
  >showRename : (x: number) => string
  >v => v.toString() : (v: number) => string
-@@= skipped -11, +11 lines =@@
- >toString : (radix?: number) => string
- 
- interface Nested {
-+>Nested : Nested
-+
-     nested: Show
+@@= skipped -15, +15 lines =@@
  >nested : Show
  }
  function ff({ nested = { show: v => v.toString() } }: Nested) {}
@@ -49,13 +36,7 @@
  >nested : Show
  >{ show: v => v.toString() } : { show: (v: number) => string; }
  >show : (v: number) => string
-@@= skipped -16, +18 lines =@@
- >toString : (radix?: number) => string
- 
- interface Tuples {
-+>Tuples : Tuples
-+
-     prop: [string, number];
+@@= skipped -16, +16 lines =@@
  >prop : [string, number]
  }
  function g({ prop = ["hello", 1234] }: Tuples) {}
@@ -64,11 +45,9 @@
  >prop : [string, number]
  >["hello", 1234] : [string, number]
  >"hello" : "hello"
- >1234 : 1234
+@@= skipped -8, +8 lines =@@
  
  interface StringUnion {
-+>StringUnion : StringUnion
-+
      prop: "foo" | "bar";
 ->prop : "foo" | "bar"
 +>prop : "bar" | "foo"
@@ -81,8 +60,3 @@
  >"foo" : "foo"
  
  interface StringIdentity {
-+>StringIdentity : StringIdentity
-+
-     stringIdentity(s: string): string;
- >stringIdentity : (s: string) => string
- >s : string

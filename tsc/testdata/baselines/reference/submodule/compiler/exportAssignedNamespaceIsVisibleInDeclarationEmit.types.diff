@@ -1,15 +1,6 @@
 --- old.exportAssignedNamespaceIsVisibleInDeclarationEmit.types
 +++ new.exportAssignedNamespaceIsVisibleInDeclarationEmit.types
-@@= skipped -4, +4 lines =@@
- >Foo : typeof Foo
- 
-     export interface Bar {}
-+>Bar : Bar
-+
-     export function f(): Bar;
- >f : () => Bar
- }
-@@= skipped -8, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  
  === index.ts ===
  import { f } from "./thing";

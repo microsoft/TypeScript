@@ -5,7 +5,6 @@
 
 type Maybe<T> = null | undefined | T;
 >Maybe : Maybe<T>
->T : T
 
 declare class GraphQLError extends Error {
 >GraphQLError : GraphQLError
@@ -16,16 +15,12 @@ declare class GraphQLError extends Error {
 }
 
 interface ExecutionArgs {
->ExecutionArgs : ExecutionArgs
-
   variableValues?: Maybe<{ readonly [variable: string]: unknown }>;
 >variableValues : Maybe<{ readonly [variable: string]: unknown; }>
 >variable : string
 }
 
 interface ExecutionContext {
->ExecutionContext : ExecutionContext
-
   variableValues: { [variable: string]: unknown };
 >variableValues : { [variable: string]: unknown; }
 >variable : string

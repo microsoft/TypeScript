@@ -1,15 +1,6 @@
 --- old.parserErrorRecovery_IncompleteMemberVariable2.types
 +++ new.parserErrorRecovery_IncompleteMemberVariable2.types
-@@= skipped -2, +2 lines =@@
- === parserErrorRecovery_IncompleteMemberVariable2.ts ===
- // Interface
- interface IPoint {
-+>IPoint : IPoint
-+
-     getDist(): number;
- >getDist : () => number
- }
-@@= skipped -58, +60 lines =@@
+@@= skipped -60, +60 lines =@@
  // Local variables
  var p: IPoint = new Shapes.Point(3, 4);
  >p : IPoint

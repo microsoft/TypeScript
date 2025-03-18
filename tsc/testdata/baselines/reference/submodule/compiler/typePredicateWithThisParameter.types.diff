@@ -1,21 +1,6 @@
 --- old.typePredicateWithThisParameter.types
 +++ new.typePredicateWithThisParameter.types
-@@= skipped -3, +3 lines =@@
- // Repro from #15310
- 
- interface Foo {
-+>Foo : Foo
-+
-     foo: string;
- >foo : string
- }
- interface Bar {
-+>Bar : Bar
-+
-     bar: string;
- >bar : string
- }
-@@= skipped -19, +23 lines =@@
+@@= skipped -22, +22 lines =@@
  }
  
  function isFoo2(this: void, object: {}): object is Foo {

@@ -8,6 +8,7 @@ export default (obj as typeof obj);
 >(obj as typeof obj) : RequireInterface
 >obj as typeof obj : RequireInterface
 >obj : RequireInterface
+>obj : RequireInterface
 
 === /node_modules/pkg/require.d.ts ===
 export {};
@@ -15,8 +16,6 @@ declare global {
 >global : typeof global
 
     interface RequireInterface {}
->RequireInterface : RequireInterface
-
     function getInterR(): RequireInterface;
 >getInterR : () => RequireInterface
 }

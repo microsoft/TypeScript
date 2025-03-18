@@ -1,75 +1,17 @@
 --- old.genericFunctionsAndConditionalInference.types
 +++ new.genericFunctionsAndConditionalInference.types
-@@= skipped -2, +2 lines =@@
- === genericFunctionsAndConditionalInference.ts ===
- type Boxified<T> = { [P in keyof T]: { value: T[P]} };
- >Boxified : Boxified<T>
-+>T : T
-+>P : P
- >value : T[P]
- 
- declare function unboxify<T>(obj: Boxified<T>): T;
- >unboxify : <T>(obj: Boxified<T>) => T
-+>T : T
- >obj : Boxified<T>
- 
- function foo<U, V>(obj: { u: { value: U }, v: { value: V } }) {
- >foo : <U, V>(obj: { u: { value: U; }; v: { value: V; }; }) => { u: U; v: V; }
-+>U : U
-+>V : V
- >obj : { u: { value: U; }; v: { value: V; }; }
- >u : { value: U; }
- >value : U
-@@= skipped -36, +41 lines =@@
- 
- // From #42385
- interface Targets<A> {
-+>Targets : Targets<A>
-+>A : A
-+
-     left: A
- >left : A
- 
-@@= skipped -11, +14 lines =@@
- 
- type Result<F extends Target, A> = Targets<A>[F]
- >Result : Result<F, A>
-+>F : F
-+>A : A
- 
- type LR<F extends Target, L, R> = [F] extends ["left"] ? L : R
- >LR : LR<F, L, R>
-+>F : F
-+>L : L
-+>R : R
- 
- interface Ops<F extends Target> {
-+>Ops : Ops<F>
-+>F : F
-+
-     _f: F
- >_f : F
- 
-@@= skipped -16, +24 lines =@@
- 
-     lr<I, O>(a: Result<F, I>, o: Result<F, O>): Result<F, LR<F, I, O>>
- >lr : <I, O>(a: Result<F, I>, o: Result<F, O>) => Result<F, LR<F, I, O>>
-+>I : I
-+>O : O
- >a : Result<F, I>
+@@= skipped -69, +69 lines =@@
  >o : Result<F, O>
  
      dict: <P>(p: {[k in keyof P]: Result<F, P[k]>}) => Result<F, P>
 ->dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
 ->p : { [k in keyof P]: Result<F, P[k]>; }
 +>dict : <P>(p: { [k in keyof P]: Result<F, P[k]> }) => Result<F, P>
-+>P : P
 +>p : { [k in keyof P]: Result<F, P[k]> }
-+>k : k
  }
  const left: Ops<"left"> = {} as any
  >left : Ops<"left">
-@@= skipped -18, +22 lines =@@
+@@= skipped -14, +14 lines =@@
  >{} : {}
  
  const ok = <F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)})
@@ -77,11 +19,10 @@
 -><F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)}) : <F extends Target>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
 +>ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
 +><F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)}) : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
-+>F : F
  >at : Ops<F>
  >({lr: at.lr(at.str, at.num)}) : { lr: Result<F, LR<F, string, number>>; }
  >{lr: at.lr(at.str, at.num)} : { lr: Result<F, LR<F, string, number>>; }
-@@= skipped -18, +19 lines =@@
+@@= skipped -18, +18 lines =@@
  >num : Result<F, number>
  
  const orphaned = <F extends Target>(at: Ops<F>) => at.dict(ok(at))
@@ -89,7 +30,6 @@
 -><F extends Target>(at: Ops<F>) => at.dict(ok(at)) : <F extends Target>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
 +>orphaned : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
 +><F extends Target>(at: Ops<F>) => at.dict(ok(at)) : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
-+>F : F
  >at : Ops<F>
  >at.dict(ok(at)) : Result<F, { lr: LR<F, string, number>; }>
 ->at.dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>

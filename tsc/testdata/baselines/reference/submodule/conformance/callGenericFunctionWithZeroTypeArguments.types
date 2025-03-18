@@ -5,7 +5,6 @@
 
 function f<T>(x: T): T { return null; }
 >f : <T>(x: T) => T
->T : T
 >x : T
 
 var r = f(1);
@@ -17,7 +16,6 @@ var r = f(1);
 var f2 = <T>(x: T): T => { return null; }
 >f2 : <T>(x: T) => T
 ><T>(x: T): T => { return null; } : <T>(x: T) => T
->T : T
 >x : T
 
 var r2 = f2(1);
@@ -28,7 +26,6 @@ var r2 = f2(1);
 
 var f3: { <T>(x: T): T; }
 >f3 : <T>(x: T) => T
->T : T
 >x : T
 
 var r3 = f3(1);
@@ -42,7 +39,6 @@ class C {
 
     f<T>(x: T): T {
 >f : <T>(x: T) => T
->T : T
 >x : T
 
         return null;
@@ -59,11 +55,8 @@ var r4 = (new C()).f(1);
 >1 : 1
 
 interface I {
->I : I
-
     f<T>(x: T): T;
 >f : <T>(x: T) => T
->T : T
 >x : T
 }
 var i: I;
@@ -79,7 +72,6 @@ var r5 = i.f(1);
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     f(x: T): T {
 >f : (x: T) => T
@@ -99,9 +91,6 @@ var r6 = (new C2()).f(1);
 >1 : 1
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     f(x: T): T;
 >f : (x: T) => T
 >x : T

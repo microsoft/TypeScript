@@ -1,28 +1,6 @@
 --- old.genericCallWithinOwnBodyCastTypeParameterIdentity.types
 +++ new.genericCallWithinOwnBodyCastTypeParameterIdentity.types
-@@= skipped -1, +1 lines =@@
- 
- === genericCallWithinOwnBodyCastTypeParameterIdentity.ts ===
- interface Thenable<Value> {
-+>Thenable : Thenable<Value>
-+>Value : Value
-+
-     then<V>(
- >then : <V>(onFulfilled: (value: Value) => V | Thenable<V>) => Thenable<V>
-+>V : V
- 
-         onFulfilled: (value: Value) => V | Thenable<V>,
- >onFulfilled : (value: Value) => V | Thenable<V>
-@@= skipped -13, +17 lines =@@
- const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>
- >toThenable : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
- ><Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>    (input: Input): Thenable<Result> => {        const result = fn(input)        return {            then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {                return toThenable<V, Result>(onFulfilled)(result as Result)            }        };    } : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
-+>Result : Result
-+>Input : Input
- >fn : (input: Input) => Result | Thenable<Result>
- >input : Input
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -28, +28 lines =@@
  >input : Input
  
          return {
@@ -31,20 +9,7 @@
  
              then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {
  >then : <V>(onFulfilled: (value: Result) => V | Thenable<V>) => Thenable<V>
-+>V : V
- >onFulfilled : (value: Result) => V | Thenable<V>
- >value : Result
- 
-@@= skipped -21, +22 lines =@@
- const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>
- >toThenableInferred : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
- ><Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>    (input: Input): Thenable<Result> => {        const result = fn(input)        return {            then(onFulfilled) {                return toThenableInferred(onFulfilled)(result as Result)            }        };    } : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
-+>Result : Result
-+>Input : Input
- >fn : (input: Input) => Result | Thenable<Result>
- >input : Input
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -35, +35 lines =@@
  >input : Input
  
          return {

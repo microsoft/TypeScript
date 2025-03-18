@@ -1,33 +1,6 @@
 --- old.discriminatedUnionTypes1.types
 +++ new.discriminatedUnionTypes1.types
-@@= skipped -1, +1 lines =@@
- 
- === discriminatedUnionTypes1.ts ===
- interface Square {
-+>Square : Square
-+
-     kind: "square";
- >kind : "square"
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface Rectangle {
-+>Rectangle : Rectangle
-+
-     kind: "rectangle";
- >kind : "rectangle"
- 
-@@= skipped -11, +13 lines =@@
- }
- 
- interface Circle {
-+>Circle : Circle
-+
-     kind: "circle";
- >kind : "circle"
- 
-@@= skipped -16, +18 lines =@@
+@@= skipped -36, +36 lines =@@
  
      if (s.kind === "square") {
  >s.kind === "square" : boolean

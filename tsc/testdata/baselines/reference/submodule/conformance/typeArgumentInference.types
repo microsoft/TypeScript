@@ -4,7 +4,6 @@
 // Generic call with no parameters
 function noParams<T>() { }
 >noParams : <T>() => void
->T : T
 
 noParams();
 >noParams() : void
@@ -21,7 +20,6 @@ noParams<{}>();
 // Generic call with parameters but none use type parameter type
 function noGenericParams<T>(n: string) { }
 >noGenericParams : <T>(n: string) => void
->T : T
 >n : string
 
 noGenericParams('');
@@ -42,8 +40,6 @@ noGenericParams<{}>('');
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U>(n: T, m: number) { }
 >someGenerics1 : <T, U>(n: T, m: number) => void
->T : T
->U : U
 >n : T
 >m : number
 
@@ -62,7 +58,6 @@ someGenerics1<number, {}>(3, 4);
 // Generic call with argument of function type whose parameter is of type parameter type
 function someGenerics2a<T>(n: (x: T) => void) { }
 >someGenerics2a : <T>(n: (x: T) => void) => void
->T : T
 >n : (x: T) => void
 >x : T
 
@@ -93,8 +88,6 @@ someGenerics2a<string>((n) => n.substr(0));
 
 function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
 >someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
->T : T
->U : U
 >n : (x: T, y: U) => void
 >x : T
 >y : U
@@ -132,7 +125,6 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3<T>(producer: () => T) { }
 >someGenerics3 : <T>(producer: () => T) => void
->T : T
 >producer : () => T
 
 someGenerics3(() => '');
@@ -156,8 +148,6 @@ someGenerics3<number>(() => 3);
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
 >someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
->T : T
->U : U
 >n : T
 >f : (x: U) => void
 >x : U
@@ -182,8 +172,6 @@ someGenerics4<string, number>(null, null);
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
 >someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
->U : U
->T : T
 >n : T
 >f : (x: U) => void
 >x : U
@@ -208,7 +196,6 @@ someGenerics5<string, number>(null, null);
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
 >someGenerics6 : <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->A : A
 >a : (a: A) => A
 >a : A
 >b : (b: A) => A
@@ -258,9 +245,6 @@ someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 // Generic call with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7<A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
 >someGenerics7 : <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->A : A
->B : B
->C : C
 >a : (a: A) => A
 >a : A
 >b : (b: B) => B
@@ -310,7 +294,6 @@ someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: nu
 // Generic call with argument of generic function type
 function someGenerics8<T>(n: T): T { return n; }
 >someGenerics8 : <T>(n: T) => T
->T : T
 >n : T
 >n : T
 
@@ -327,7 +310,6 @@ x<string, string, string>(null, null, null);
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9<T>(a: T, b: T, c: T): T {
 >someGenerics9 : <T>(a: T, b: T, c: T) => T
->T : T
 >a : T
 >b : T
 >c : T
@@ -365,8 +347,6 @@ var a9b: { a?: number; b?: string; };
 
 // Generic call with multiple parameters of generic type passed arguments with multiple best common types
 interface A91 {
->A91 : A91
-
     x: number;
 >x : number
 
@@ -374,8 +354,6 @@ interface A91 {
 >y : string
 }
 interface A92 {
->A92 : A92
-
     x: number;
 >x : number
 

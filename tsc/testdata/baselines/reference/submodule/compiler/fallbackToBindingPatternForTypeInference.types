@@ -3,7 +3,6 @@
 === fallbackToBindingPatternForTypeInference.ts ===
 declare function trans<T>(f: (x: T) => string): number;
 >trans : <T>(f: (x: T) => string) => number
->T : T
 >f : (x: T) => string
 >x : T
 

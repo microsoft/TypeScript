@@ -31,7 +31,6 @@ var z: number = y.test.b;
 === foo_0.ts ===
 class Foo<T extends {a: string; b:number;}>{
 >Foo : Foo<T>
->T : T
 >a : string
 >b : number
 

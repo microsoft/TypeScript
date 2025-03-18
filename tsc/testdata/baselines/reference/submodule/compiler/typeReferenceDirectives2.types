@@ -2,8 +2,6 @@
 
 === /app.ts ===
 interface A {
->A : A
-
     x: $
 >x : $
 }

@@ -8,11 +8,8 @@
 +>React : any
  
  interface OptionProp {
-+>OptionProp : OptionProp
-+
      x?: 2
- >x : 2
- }
+@@= skipped -9, +9 lines =@@
  
  class Opt extends React.Component<OptionProp, {}> {
  >Opt : Opt
@@ -33,7 +30,7 @@
  >div : any
  >div : any
      }
-@@= skipped -38, +40 lines =@@
+@@= skipped -29, +29 lines =@@
  
  // Error
  let y = <Opt {...obj} x={3}/>;

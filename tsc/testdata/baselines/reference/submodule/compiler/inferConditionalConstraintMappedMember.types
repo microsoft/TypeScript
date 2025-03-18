@@ -4,13 +4,8 @@
 // Return keyof type without string index signature
 type KeysWithoutStringIndex<T> =
 >KeysWithoutStringIndex : KeysWithoutStringIndex<T>
->T : T
 
     { [K in keyof T]: string extends K ? never : K } extends { [_ in keyof T]: infer U }
->K : K
->_ : _
->U : U
-
     ? U
     : never
 
@@ -24,7 +19,6 @@ type test = KeysWithoutStringIndex<{ [index: string]: string; foo: string; bar: 
 // KeysWithoutStringIndex<T> will always be a subset of keyof T, but is reported as unassignable
 export type RemoveIdxSgn<T> = Pick<T, KeysWithoutStringIndex<T>>
 >RemoveIdxSgn : RemoveIdxSgn<T>
->T : T
 
   // ERROR:
   // Type 'KeysWithoutStringIndex<T>' does not satisfy the constraint 'keyof T'.

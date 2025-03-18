@@ -42,13 +42,9 @@ var r = c.x === c2.x;
 
 class MyMap<K, V> {
 >MyMap : MyMap<K, V>
->K : K
->V : V
 
     constructor(private readonly Map_: { new<K, V>(): any }) {}
 >Map_ : new <K, V>() => any
->K : K
->V : V
 
     private readonly store = new this.Map_<K, V>();
 >store : any

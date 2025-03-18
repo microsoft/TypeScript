@@ -9,11 +9,3 @@
  >mustBeLast : { b: string; }
  >a : number
  >a : number
-@@= skipped -8, +8 lines =@@
- }
- function generic<T extends { x, y }>(t: T) {
- >generic : <T extends { x: any; y: any; }>(t: T) => Omit<T, "x">
-+>T : T
- >x : any
- >y : any
- >t : T

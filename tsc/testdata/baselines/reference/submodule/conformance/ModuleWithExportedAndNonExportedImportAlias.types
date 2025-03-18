@@ -2,11 +2,7 @@
 
 === ModuleWithExportedAndNonExportedImportAlias.ts ===
 module A {
->A : any
-
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -15,8 +11,6 @@ module A {
     }
 
     interface Point3d extends Point {
->Point3d : Point3d
-
         z: number;
 >z : number
     }

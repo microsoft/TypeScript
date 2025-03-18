@@ -9,6 +9,7 @@ class A3 {
 
     constructor(a: typeof A3, b: any) {
 >a : typeof A3
+>A3 : typeof A3
 >b : any
 
         A3.#method = () => {} // Error, not writable 

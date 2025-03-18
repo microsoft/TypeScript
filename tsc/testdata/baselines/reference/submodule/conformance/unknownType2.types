@@ -3,13 +3,11 @@
 === unknownType2.ts ===
 type isUnknown<T> = unknown extends T ? true : false;
 >isUnknown : isUnknown<T>
->T : T
 >true : true
 >false : false
 
 type isTrue<T extends true> = T;
 >isTrue : T
->T : T
 >true : true
 
 type SomeResponse = 'yes' | 'no' | 'idk';
@@ -96,6 +94,7 @@ if (u === symb) {
 
     const symbolAlias: typeof symb = u;
 >symbolAlias : unique symbol
+>symb : unique symbol
 >u : unique symbol
 }
 
@@ -108,6 +107,7 @@ if (!(u === 42)) {
 
     type A = isTrue<isUnknown<typeof u>>
 >A : true
+>u : unknown
 }
 
 if (u !== 42) {
@@ -117,6 +117,7 @@ if (u !== 42) {
 
     type B = isTrue<isUnknown<typeof u>>
 >B : true
+>u : unknown
 }
 
 if (u == 42) {
@@ -126,6 +127,7 @@ if (u == 42) {
 
     type C = isTrue<isUnknown<typeof u>>
 >C : true
+>u : unknown
 }
 
 if (u == true) {
@@ -135,6 +137,7 @@ if (u == true) {
 
     type D = isTrue<isUnknown<typeof u>>
 >D : true
+>u : unknown
 }
 
 if (u == Object) {
@@ -144,6 +147,7 @@ if (u == Object) {
 
     type E = isTrue<isUnknown<typeof u>>
 >E : true
+>u : unknown
 }
 
 declare const aString: string;
@@ -232,6 +236,7 @@ if (u === aUnion) {
 
     type unionDoesNotNarrow = isTrue<isUnknown<typeof u>>
 >unionDoesNotNarrow : true
+>u : unknown
 }
 
 if (u === anIntersection) {
@@ -241,6 +246,7 @@ if (u === anIntersection) {
 
     type intersectionDoesNotNarrow = isTrue<isUnknown<typeof u>>
 >intersectionDoesNotNarrow : true
+>u : unknown
 }
 
 if (u === aFunction) {
@@ -365,6 +371,7 @@ function switchTestEnum(x: unknown) {
     }
     type End = isTrue<isUnknown<typeof x>>
 >End : true
+>x : unknown
 }
 
 function switchTestCollectEnum(x: unknown) {
@@ -415,6 +422,7 @@ function switchTestCollectEnum(x: unknown) {
     }
     type End = isTrue<isUnknown<typeof x>>
 >End : true
+>x : unknown
 }
 
 function switchTestLiterals(x: unknown) {
@@ -493,6 +501,7 @@ function switchTestLiterals(x: unknown) {
 
             const anotherSymbol: typeof symb = x;
 >anotherSymbol : unique symbol
+>symb : unique symbol
 >x : unique symbol
 
             break;
@@ -507,6 +516,7 @@ function switchTestLiterals(x: unknown) {
     }
     type End = isTrue<isUnknown<typeof x>>
 >End : true
+>x : unknown
 }
 
 function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
@@ -549,6 +559,7 @@ function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
     }
     type End = isTrue<isUnknown<typeof x>>
 >End : true
+>x : unknown
 }
 
 function switchResponse(x: unknown): SomeResponse {
@@ -579,6 +590,7 @@ function switchResponse(x: unknown): SomeResponse {
     // Arguably this should be never.
     type End = isTrue<isUnknown<typeof x>>
 >End : true
+>x : unknown
 }
 
 function switchResponseWrong(x: unknown): SomeResponse {
@@ -609,6 +621,7 @@ function switchResponseWrong(x: unknown): SomeResponse {
     // Arguably this should be never.
     type End = isTrue<isUnknown<typeof x>>
 >End : true
+>x : unknown
 }
 
 // Repro from #33483

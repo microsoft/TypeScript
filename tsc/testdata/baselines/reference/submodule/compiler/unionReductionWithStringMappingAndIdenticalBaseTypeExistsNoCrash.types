@@ -22,18 +22,11 @@ declare namespace React {
     | undefined;
   type JSXElementConstructor<P> = (props: P) => ReactNode;
 >JSXElementConstructor : JSXElementConstructor<P>
->P : P
 >props : P
 
   interface ReactElement<
->ReactElement : ReactElement<P, T>
-
     P = any,
->P : P
-
     T extends string | JSXElementConstructor<any> =
->T : T
-
       | string
       | JSXElementConstructor<any>,
   > {
@@ -49,15 +42,10 @@ declare namespace React {
 
   type ComponentProps<T extends JSXElementConstructor<any>> =
 >ComponentProps : ComponentProps<T>
->T : T
 
     T extends JSXElementConstructor<infer P> ? P : never;
->P : P
 
   interface ExoticComponent<P = {}> {
->ExoticComponent : ExoticComponent<P>
->P : P
-
     (props: P): ReactNode;
 >props : P
 
@@ -67,7 +55,6 @@ declare namespace React {
 
   type LazyExoticComponent<T extends JSXElementConstructor<any>> =
 >LazyExoticComponent : LazyExoticComponent<T>
->T : T
 
     ExoticComponent<ComponentProps<T>> & {
       readonly _result: T;
@@ -79,34 +66,22 @@ declare namespace React {
 >createElement : () => void
 
   namespace JSX {
->JSX : any
-
     interface Element extends GlobalJSXElement {}
->Element : Element
-
     interface ElementChildrenAttribute
->ElementChildrenAttribute : ElementChildrenAttribute
-
       extends GlobalJSXElementChildrenAttribute {}
     type LibraryManagedAttributes<C, P> = GlobalJSXLibraryManagedAttributes<
 >LibraryManagedAttributes : LibraryManagedAttributes<C, P>
->C : C
->P : P
 
       C,
       P
     >;
     interface IntrinsicElements extends GlobalJSXIntrinsicElements {}
->IntrinsicElements : IntrinsicElements
   }
 }
 
 type ReactManagedAttributes<C, P> = C extends { defaultProps: infer D }
 >ReactManagedAttributes : ReactManagedAttributes<C, P>
->C : C
->P : P
 >defaultProps : D
->D : D
 
   ? P & D
   : P;
@@ -115,33 +90,22 @@ declare global {
 >global : any
 
   namespace JSX {
->JSX : any
-
     interface Element extends React.ReactElement<any, any> {}
->Element : Element
 >React : typeof React
 
     interface ElementChildrenAttribute {
->ElementChildrenAttribute : ElementChildrenAttribute
-
       children: {};
 >children : {}
     }
     type LibraryManagedAttributes<C, P> = C extends React.LazyExoticComponent<
 >LibraryManagedAttributes : LibraryManagedAttributes<C, P>
->C : C
->P : P
 >React : any
 
       infer T
->T : T
-
     >
       ? ReactManagedAttributes<T, P>
       : ReactManagedAttributes<C, P>;
     interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
       div: {};
 >div : {}
 
@@ -152,26 +116,20 @@ declare global {
 }
 
 interface GlobalJSXElement extends JSX.Element {}
->GlobalJSXElement : GlobalJSXElement
 >JSX : any
 
 interface GlobalJSXElementChildrenAttribute
->GlobalJSXElementChildrenAttribute : GlobalJSXElementChildrenAttribute
-
   extends JSX.ElementChildrenAttribute {}
 >JSX : any
 
 type GlobalJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<
 >GlobalJSXLibraryManagedAttributes : GlobalJSXLibraryManagedAttributes<C, P>
->C : C
->P : P
 >JSX : any
 
   C,
   P
 >;
 interface GlobalJSXIntrinsicElements extends JSX.IntrinsicElements {}
->GlobalJSXIntrinsicElements : GlobalJSXIntrinsicElements
 >JSX : any
 
 === src/index.tsx ===
@@ -180,7 +138,6 @@ import React from 'react'
 
 declare function upperFirst<T extends string>(str: T): Capitalize<T>
 >upperFirst : <T extends string>(str: T) => Capitalize<T>
->T : T
 >str : T
 
 const displayEnum = (value: string) => upperFirst(value.toLowerCase())

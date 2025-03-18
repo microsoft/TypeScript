@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface Prop {
->Prop : Prop
-
     a: number,
 >a : number
 
@@ -16,7 +14,6 @@ interface Prop {
 
 declare class MyComp<P> extends React.Component<P, {}> {
 >MyComp : MyComp<P>
->P : P
 >React.Component : any
 >React : any
 >Component : any
@@ -117,9 +114,7 @@ x= <MyComp<{}>></MyComp> // OK
 
 declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<P & P2, {}> {
 >MyComp2 : MyComp2<P, P2>
->P : P
 >a : string
->P2 : P2
 >React.Component : any
 >React : any
 >Component : any

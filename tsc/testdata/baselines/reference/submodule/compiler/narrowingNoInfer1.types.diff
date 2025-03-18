@@ -13,8 +13,6 @@
  function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
 ->map : <A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) => B[]
 +>map : <A, B>(items: readonly A[], f: (a: A) => B) => B[]
-+>A : A
-+>B : B
  >items : readonly A[]
 ->f : (a: NoInfer<A>) => B
 ->a : NoInfer<A>
@@ -66,8 +64,6 @@
  declare function test2<T1, T2>(a: T1, b: T2, cb: (thing: NoInfer<T1> | NoInfer<T2>) => void): void;
 ->test2 : <T1, T2>(a: T1, b: T2, cb: (thing: NoInfer<T1> | NoInfer<T2>) => void) => void
 +>test2 : <T1, T2>(a: T1, b: T2, cb: (thing: T1 | T2) => void) => void
-+>T1 : T1
-+>T2 : T2
  >a : T1
  >b : T2
 ->cb : (thing: NoInfer<T1> | NoInfer<T2>) => void
@@ -82,7 +78,7 @@
  >{ type: 'a' as const } : { type: "a"; }
  >type : "a"
  >'a' as const : "a"
-@@= skipped -62, +66 lines =@@
+@@= skipped -62, +62 lines =@@
  >type : "b"
  >'b' as const : "b"
  >'b' : "b"

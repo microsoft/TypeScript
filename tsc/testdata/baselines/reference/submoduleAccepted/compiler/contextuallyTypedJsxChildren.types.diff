@@ -18,45 +18,16 @@
  
  // repro from https://github.com/microsoft/TypeScript/issues/53941
  declare namespace DropdownMenu {
-+>DropdownMenu : ComponentType<Props>
-+
-   interface BaseProps {
-+>BaseProps : BaseProps
-+
-     icon: string;
- >icon : string
- 
-@@= skipped -21, +19 lines =@@
- >label : string
+@@= skipped -22, +16 lines =@@
    }
    interface PropsWithChildren extends BaseProps {
-+>PropsWithChildren : PropsWithChildren
-+
      children(props: { onClose: () => void }): JSX.Element;
 ->children : (props: { onClose: () => void; }) => JSX.Element
 +>children : (props: { onClose: () => void; }) => Element
  >props : { onClose: () => void; }
  >onClose : () => void
  >JSX : any
-@@= skipped -10, +12 lines =@@
- >controls : undefined
-   }
-   interface PropsWithControls extends BaseProps {
-+>PropsWithControls : PropsWithControls
-+
-     controls: Control[];
- >controls : Control[]
- 
-@@= skipped -7, +9 lines =@@
- >children : undefined
-   }
-   interface Control {
-+>Control : Control
-+
-     title: string;
- >title : string
-   }
-@@= skipped -7, +9 lines =@@
+@@= skipped -23, +23 lines =@@
  >Props : Props
  }
  declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;

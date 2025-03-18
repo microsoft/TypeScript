@@ -7,7 +7,6 @@ module M {
 >M : typeof M
 
     export interface Point { x: number; y: number }
->Point : Point
 >x : number
 >y : number
 
@@ -19,6 +18,7 @@ module M {
 // primary expression
 var m: typeof M;
 >m : typeof M
+>M : typeof M
 
 var m = M;
 >m : typeof M
@@ -77,6 +77,7 @@ module M2 {
 
 var m2: typeof M2;
 >m2 : typeof M2
+>M2 : typeof M2
 
 var m2 = M2;
 >m2 : typeof M2
@@ -85,7 +86,9 @@ var m2 = M2;
 // static side of the class
 var a2: typeof M2.Point;
 >a2 : typeof Point
+>M2.Point : typeof Point
 >M2 : typeof M2
+>Point : typeof Point
 
 var a2 = m2.Point;
 >a2 : typeof Point
@@ -141,6 +144,7 @@ module M3 {
 
 var m3: typeof M3;
 >m3 : typeof M3
+>M3 : typeof M3
 
 var m3 = M3;
 >m3 : typeof M3
@@ -148,7 +152,9 @@ var m3 = M3;
 
 var a3: typeof M3.Color;
 >a3 : typeof Color
+>M3.Color : typeof Color
 >M3 : typeof M3
+>Color : typeof Color
 
 var a3 = m3.Color;
 >a3 : typeof Color

@@ -9,8 +9,6 @@ namespace Instantiated {
 >1 : 1
 }
 namespace Uninstantiated {
->Uninstantiated : any
-
     export type T = number;
 >T : number
 }

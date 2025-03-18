@@ -1,15 +1,6 @@
 --- old.declarationEmitStringEnumUsedInNonlocalSpread.types
 +++ new.declarationEmitStringEnumUsedInNonlocalSpread.types
-@@= skipped -13, +13 lines =@@
- }
- 
- export interface ITest {
-+>ITest : ITest
-+
-     [TestEnum.Test1]: string;
- >[TestEnum.Test1] : string
- >TestEnum.Test1 : TestEnum.Test1
-@@= skipped -20, +22 lines =@@
+@@= skipped -33, +33 lines =@@
  >getA : () => ITest
  
          return {

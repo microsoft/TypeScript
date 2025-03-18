@@ -5,13 +5,7 @@ declare module _ {
 >_ : typeof _
 
     interface Collection<T> { }
->Collection : Collection<T>
->T : T
-
     interface List<T> extends Collection<T> {
->List : List<T>
->T : T
-
         [index: number]: T;
 >index : number
 
@@ -20,10 +14,6 @@ declare module _ {
     }
 
     interface ListIterator<T, TResult> {
->ListIterator : ListIterator<T, TResult>
->T : T
->TResult : TResult
-
         (value: T, index: number, list: T[]): TResult;
 >value : T
 >index : number
@@ -31,15 +21,11 @@ declare module _ {
     }
 
     interface Dictionary<T> extends Collection<T> {
->Dictionary : Dictionary<T>
->T : T
-
         [index: string]: T;
 >index : string
     }
     export function pluck<T extends {}>(
 >pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
->T : T
 
         list: Collection<T>,
 >list : Collection<T>
@@ -49,8 +35,6 @@ declare module _ {
 
     export function map<T, TResult>(
 >map : <T, TResult>(list: List<T>, iterator: ListIterator<T, TResult>, context?: any) => TResult[]
->T : T
->TResult : TResult
 
         list: List<T>,
 >list : List<T>
@@ -63,7 +47,6 @@ declare module _ {
 
     export function first<T>(array: List<T>): T;
 >first : <T>(array: List<T>) => T
->T : T
 >array : List<T>
 }
 
@@ -75,15 +58,11 @@ declare class View {
 }
 
 interface IData {
->IData : IData
-
     series: ISeries[];
 >series : ISeries[]
 }
 
 interface ISeries {
->ISeries : ISeries
-
     items: any[];
 >items : any[]
 

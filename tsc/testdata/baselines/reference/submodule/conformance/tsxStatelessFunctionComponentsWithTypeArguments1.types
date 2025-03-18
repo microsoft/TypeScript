@@ -6,8 +6,6 @@ import React = require('react')
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
->K : K
->V : V
 >l : { key1: K; value: V; }
 >key1 : K
 >value : V
@@ -16,8 +14,6 @@ declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.El
 // OK
 function Baz<T,U>(key1: T, value: U) {
 >Baz : <T, U>(key1: T, value: U) => void
->T : T
->U : U
 >key1 : T
 >value : U
 
@@ -43,7 +39,6 @@ function Baz<T,U>(key1: T, value: U) {
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >Link : <U>(l: { func: (arg: U) => void; }) => Element
->U : U
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U
@@ -77,9 +72,6 @@ function createLink1(func: (a: number)=>boolean) {
 }
 
 interface InferParamProp<T> {
->InferParamProp : InferParamProp<T>
->T : T
-
     values: Array<T>;
 >values : Array<T>
 
@@ -90,7 +82,6 @@ interface InferParamProp<T> {
 
 declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >InferParamComponent : <T>(attr: InferParamProp<T>) => Element
->T : T
 >attr : InferParamProp<T>
 >JSX : any
 

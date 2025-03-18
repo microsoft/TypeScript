@@ -2,14 +2,10 @@
 
 === numericIndexExpressions.ts ===
 interface Numbers1 {
->Numbers1 : Numbers1
-
     1: string;
 >1 : string
 }
 interface Strings1 {
->Strings1 : Strings1
-
     '1': string;
 >'1' : string
 }

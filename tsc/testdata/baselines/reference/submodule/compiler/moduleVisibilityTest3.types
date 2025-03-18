@@ -5,7 +5,6 @@ module _modes {
 >_modes : typeof _modes
 
  export interface IMode {
->IMode : IMode
   
  }
  

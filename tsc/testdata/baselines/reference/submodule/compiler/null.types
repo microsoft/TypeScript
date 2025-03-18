@@ -34,8 +34,6 @@ function g() {
 >3 : 3
 }
 interface I {
->I : I
-
     x:any;
 >x : any
 

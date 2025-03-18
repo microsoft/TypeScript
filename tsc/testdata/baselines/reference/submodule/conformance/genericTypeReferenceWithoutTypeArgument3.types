@@ -6,7 +6,6 @@
 
 declare class C<T> {
 >C : C<T>
->T : T
 
     foo: T;
 >foo : T
@@ -40,7 +39,6 @@ declare module M {
 
     export class E<T> { foo: T }
 >E : E<T>
->T : T
 >foo : T
 }
 
@@ -52,17 +50,14 @@ declare class D2 extends M.C { }
 
 declare class D3<T extends M.E> { }
 >D3 : D3<T>
->T : T
 >M : any
 
 declare function h<T extends C>(x: T);
 >h : <T extends any>(x: T) => any
->T : T
 >x : T
 
 declare function i<T extends M.E>(x: T);
 >i : <T extends any>(x: T) => any
->T : T
 >M : any
 >x : T
 

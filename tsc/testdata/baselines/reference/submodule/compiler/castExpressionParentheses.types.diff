@@ -9,11 +9,3 @@
  >A : any
  >x : any
  
-@@= skipped -23, +23 lines =@@
- >(<Tany>()=> {})() : void
- >(<Tany>()=> {}) : <Tany>() => void
- ><Tany>()=> {} : <Tany>() => void
-+>Tany : Tany
- 
- (<any>function foo() { })();
- >(<any>function foo() { })() : any

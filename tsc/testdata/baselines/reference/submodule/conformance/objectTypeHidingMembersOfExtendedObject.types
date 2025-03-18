@@ -17,8 +17,6 @@ class B extends A {
 }
 
 interface Object {
->Object : Object
-
     data: A;
 >data : A
 
@@ -68,8 +66,6 @@ var r1d = c['hm']; // should be 'any'
 >'hm' : "hm"
 
 interface I {
->I : I
-
     valueOf(): void;
 >valueOf : () => void
 

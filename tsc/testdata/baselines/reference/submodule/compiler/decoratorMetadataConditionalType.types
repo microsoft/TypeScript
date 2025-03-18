@@ -6,7 +6,6 @@ declare function d(): PropertyDecorator;
 
 abstract class BaseEntity<T> {
 >BaseEntity : BaseEntity<T>
->T : T
 
     @d()
 >d() : PropertyDecorator
@@ -15,7 +14,6 @@ abstract class BaseEntity<T> {
     public attributes: T extends { attributes: infer A } ? A : undefined;
 >attributes : T extends { attributes: infer A; } ? A : undefined
 >attributes : A
->A : A
 }
 class C {
 >C : C

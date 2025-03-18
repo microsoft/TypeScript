@@ -3,20 +3,14 @@
 === inferredReturnTypeIncorrectReuse1.ts ===
 export type inferPipe<t, pipe> =
 >inferPipe : inferPipe<t, pipe>
->t : t
->pipe : pipe
 
     pipe extends (In: t) => unknown ? (In: t) => ReturnType<pipe> : never
 >In : t
 >In : t
 
 interface Type<t> {
->Type : Type<t>
->t : t
-
     pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe<t, fn>>
 >pipe : <fn extends (In: t) => unknown>(fn: fn) => Type<inferPipe<t, fn>>
->fn : fn
 >In : t
 >fn : fn
 }
@@ -39,32 +33,21 @@ export const out = t.pipe(s => parseInt(s))
 
 export type inferPipe2<t, pipe> =
 >inferPipe2 : inferPipe2<t, pipe>
->t : t
->pipe : pipe
 
 	pipe extends (In: t) => unknown ?
 >In : t
 
 		(In: t) => ReturnType<pipe> extends infer n extends number ? n
 >In : t
->n : n
 
 		: ReturnType<pipe> extends infer s extends string ? s
->s : s
-
 		: ReturnType<pipe> extends infer b extends boolean ? b
->b : b
-
 		: never
 	:	never
 
 interface Type2<t> {
->Type2 : Type2<t>
->t : t
-
 	pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe2<t, fn>>
 >pipe : <fn extends (In: t) => unknown>(fn: fn) => Type<inferPipe2<t, fn>>
->fn : fn
 >In : t
 >fn : fn
 }

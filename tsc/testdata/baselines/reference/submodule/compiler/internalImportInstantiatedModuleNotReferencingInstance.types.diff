@@ -1,14 +1,6 @@
 --- old.internalImportInstantiatedModuleNotReferencingInstance.types
 +++ new.internalImportInstantiatedModuleNotReferencingInstance.types
-@@= skipped -4, +4 lines =@@
- >A : typeof A
- 
-     export interface X { s: string }
-+>X : X
- >s : string
- 
-     export var a = 10;
-@@= skipped -15, +16 lines =@@
+@@= skipped -19, +19 lines =@@
  >1 : 1
  
      import Y = A;

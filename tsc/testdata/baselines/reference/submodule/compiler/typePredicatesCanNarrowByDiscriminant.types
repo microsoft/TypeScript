@@ -10,8 +10,6 @@ declare const fruit: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
 
 declare function isOneOf<T, U extends T>(item: T, array: readonly U[]): item is U
 >isOneOf : <T, U extends T>(item: T, array: readonly U[]) => item is U
->T : T
->U : U
 >item : T
 >array : readonly U[]
 

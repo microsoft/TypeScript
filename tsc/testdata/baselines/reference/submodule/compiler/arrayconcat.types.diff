@@ -1,15 +1,6 @@
 --- old.arrayconcat.types
 +++ new.arrayconcat.types
-@@= skipped -1, +1 lines =@@
- 
- === arrayconcat.ts ===
- interface IOptions {
-+>IOptions : IOptions
-+
-     name?: string;
- >name : string
- 
-@@= skipped -43, +45 lines =@@
+@@= skipped -44, +44 lines =@@
  >this : this
  >options : IOptions[]
  >sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]

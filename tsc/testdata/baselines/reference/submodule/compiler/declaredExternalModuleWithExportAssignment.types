@@ -5,8 +5,6 @@ declare module 'connect' {
 >'connect' : typeof import("connect")
 
     interface connectModule {
->connectModule : connectModule
-
         (res, req, next): void;
 >res : any
 >req : any
@@ -14,8 +12,6 @@ declare module 'connect' {
     }
 
     interface connectExport {
->connectExport : connectExport
-
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
 >mod : connectModule

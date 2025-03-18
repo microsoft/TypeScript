@@ -1,19 +1,15 @@
 --- old.jsDeclarationsClassImplementsGenericsSerialization.types
 +++ new.jsDeclarationsClassImplementsGenericsSerialization.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === interface.ts ===
  export interface Encoder<T> {
-+>Encoder : Encoder<T>
-+>T : T
-+
      encode(value: T): Uint8Array
 ->encode : (value: T) => Uint8Array
 +>encode : (value: T) => Uint8Array<ArrayBuffer>
  >value : T
  }
  === lib.js ===
-@@= skipped -10, +13 lines =@@
+@@= skipped -9, +9 lines =@@
   * @implements {IEncoder<T>}
   */
  export class Encoder {

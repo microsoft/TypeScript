@@ -2,8 +2,6 @@
 
 === implementsInClassExpression.ts ===
 interface Foo {
->Foo : Foo
-
     doThing(): void;
 >doThing : () => void
 }

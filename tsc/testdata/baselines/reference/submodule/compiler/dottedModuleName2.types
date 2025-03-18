@@ -58,7 +58,6 @@ module A.B.C
  
  
 module M
->M : any
  
 {
  

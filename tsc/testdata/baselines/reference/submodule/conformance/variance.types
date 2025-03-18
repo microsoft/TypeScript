@@ -6,9 +6,6 @@
 // Repro from #30047
 
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
   prop: T extends unknown ? true : false;
 >prop : T extends unknown ? true : false
 >true : true
@@ -39,7 +36,6 @@ const z: Foo<number> = x;
 
 class Bar<T extends string> {
 >Bar : Bar<T>
->T : T
 
   private static instance: Bar<string>[] = [];
 >instance : Bar<string>[]

@@ -5,14 +5,11 @@
 // which could be used in an assignment check for constraint satisfaction
 
 interface AA<T extends AA<T>> // now an error due to referencing type parameter in constraint
->AA : AA<T>
->T : T
 {
     x: T
 >x : T
 }
 
 interface BB extends AA<AA<BB>>
->BB : BB
 {
 }

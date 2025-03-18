@@ -5,23 +5,16 @@ module Test {
 >Test : typeof Test
 
     interface IState {
->IState : IState
     }
     interface IToken {
->IToken : IToken
-
         startIndex: number;
 >startIndex : number
     }
     interface IStateToken extends IToken {
->IStateToken : IStateToken
-
         state: IState;
 >state : IState
     }
     interface ILineTokens {
->ILineTokens : ILineTokens
-
         tokens: IToken[];
 >tokens : IToken[]
 
@@ -29,11 +22,8 @@ module Test {
 >endState : IState
     }
     interface IAction {
->IAction : IAction
     }
     interface IMode {
->IMode : IMode
-
         onEnter(line:string, state:IState, offset:number):IAction;
 >onEnter : (line: string, state: IState, offset: number) => IAction
 >line : string

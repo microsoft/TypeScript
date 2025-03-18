@@ -2,8 +2,6 @@
 
 === slightlyIndirectedDeepObjectLiteralElaborations.ts ===
 interface Foo {
->Foo : Foo
-
     a: {
 >a : { b: { c: { d: string; }; }; }
 

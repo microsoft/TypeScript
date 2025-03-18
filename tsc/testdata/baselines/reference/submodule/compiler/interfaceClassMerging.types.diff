@@ -1,15 +1,6 @@
 --- old.interfaceClassMerging.types
 +++ new.interfaceClassMerging.types
-@@= skipped -1, +1 lines =@@
- 
- === interfaceClassMerging.ts ===
- interface Foo {
-+>Foo : Foo
-+
-     method(a: number): string;
- >method : (a: number) => string
- >a : number
-@@= skipped -92, +94 lines =@@
+@@= skipped -93, +93 lines =@@
  >2 : 2
  
  var obj: {

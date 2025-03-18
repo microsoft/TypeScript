@@ -10,23 +10,7 @@
  === intersectionsOfLargeUnions2.ts ===
  // Repro from #24233
  
-@@= skipped -10, +6 lines =@@
- >global : any
- 
-     interface ElementTagNameMap {
-+>ElementTagNameMap : ElementTagNameMap
-+
-         [index: number]: HTMLElement
- >index : number
-     }
- 
-     interface HTMLElement {
-+>HTMLElement : HTMLElement
-+
-         [index: number]: HTMLElement;
- >index : number
-     }
-@@= skipped -30, +34 lines =@@
+@@= skipped -40, +36 lines =@@
  }
    
  export function assertNodeTagName<
@@ -34,14 +18,8 @@
 +>assertNodeTagName : <T extends "animate" | "animateMotion" | "animateTransform" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feDropShadow" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "mpath" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "set" | "stop" | "svg" | "switch" | "symbol" | "text" | "textPath" | "tspan" | "use" | "view" | keyof HTMLElementTagNameMap, U extends ElementTagNameMap[T]>(node: Node | null, tagName: T) => node is U
  
      T extends keyof ElementTagNameMap,
-+>T : T
-+
      U extends ElementTagNameMap[T]>(node: Node | null, tagName: T): node is U {
-+>U : U
- >node : Node | null
- >tagName : T
- 
-@@= skipped -31, +34 lines =@@
+@@= skipped -31, +31 lines =@@
  }
    
  export function assertNodeProperty<
@@ -49,17 +27,8 @@
 +>assertNodeProperty : <T extends "animate" | "animateMotion" | "animateTransform" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feDropShadow" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "mpath" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "set" | "stop" | "svg" | "switch" | "symbol" | "text" | "textPath" | "tspan" | "use" | "view" | keyof HTMLElementTagNameMap, P extends keyof ElementTagNameMap[T], V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) => void
  
      T extends keyof ElementTagNameMap,
-+>T : T
-+
      P extends keyof ElementTagNameMap[T],
-+>P : P
-+
-     V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
-+>V : V
- >node : Node | null
- >tagName : T
- >prop : P
-@@= skipped -12, +17 lines =@@
+@@= skipped -12, +12 lines =@@
  
      if (assertNodeTagName(node, tagName)) {
  >assertNodeTagName(node, tagName) : boolean

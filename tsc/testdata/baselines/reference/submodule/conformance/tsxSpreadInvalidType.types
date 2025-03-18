@@ -2,10 +2,7 @@
 
 === a.tsx ===
 namespace JSX {
->JSX : any
-
     export interface IntrinsicElements { [key: string]: any }
->IntrinsicElements : IntrinsicElements
 >key : string
 }
 

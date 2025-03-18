@@ -29,7 +29,6 @@ declare module "./test" {
 >"./test" : any
 
   interface Abcde { b: string }
->Abcde : Abcde
 >b : string
 }
 

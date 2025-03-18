@@ -2,18 +2,12 @@
 
 === maxConstraints.ts ===
 interface Comparable<T> {
->Comparable : Comparable<T>
->T : T
-
     compareTo(other: T): number;
 >compareTo : (other: T) => number
 >other : T
 }
 interface Comparer {
->Comparer : Comparer
-
     <T extends Comparable<T>>(x: T, y: T): T;
->T : T
 >x : T
 >y : T
 }

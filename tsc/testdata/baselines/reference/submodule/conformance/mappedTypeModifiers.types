@@ -41,7 +41,6 @@ var v01: T;
 
 var v01: { [P in keyof T]: T[P] };
 >v01 : T
->P : P
 
 var v01: Pick<T, keyof T>;
 >v01 : T
@@ -54,14 +53,12 @@ var v02: TP;
 
 var v02: { [P in keyof T]?: T[P] };
 >v02 : TP
->P : P
 
 var v02: Partial<T>;
 >v02 : TP
 
 var v02: { [P in keyof TP]: TP[P] }
 >v02 : TP
->P : P
 
 var v02: Pick<TP, keyof TP>;
 >v02 : TP
@@ -71,14 +68,12 @@ var v03: TR;
 
 var v03: { readonly [P in keyof T]: T[P] };
 >v03 : TR
->P : P
 
 var v03: Readonly<T>;
 >v03 : TR
 
 var v03: { [P in keyof TR]: TR[P] }
 >v03 : TR
->P : P
 
 var v03: Pick<TR, keyof TR>;
 >v03 : TR
@@ -88,7 +83,6 @@ var v04: TPR;
 
 var v04: { readonly [P in keyof T]?: T[P] };
 >v04 : TPR
->P : P
 
 var v04: Partial<TR>;
 >v04 : TPR
@@ -104,15 +98,12 @@ var v04: Readonly<Partial<T>>;
 
 var v04: { [P in keyof TPR]: TPR[P] }
 >v04 : TPR
->P : P
 
 var v04: Pick<TPR, keyof T>;
 >v04 : TPR
 
 type Boxified<T> = { [P in keyof T]: { x: T[P] } };
 >Boxified : Boxified<T>
->T : T
->P : P
 >x : T[P]
 
 type B = { a: { x: number }, b: { x: string } };
@@ -163,7 +154,6 @@ var b01: B;
 
 var b01: { [P in keyof B]: B[P] };
 >b01 : B
->P : P
 
 var b01: Pick<B, keyof B>;
 >b01 : B
@@ -176,14 +166,12 @@ var b02: BP;
 
 var b02: { [P in keyof B]?: B[P] };
 >b02 : BP
->P : P
 
 var b02: Partial<B>;
 >b02 : BP
 
 var b02: { [P in keyof BP]: BP[P] }
 >b02 : BP
->P : P
 
 var b02: Pick<BP, keyof BP>;
 >b02 : BP
@@ -193,14 +181,12 @@ var b03: BR;
 
 var b03: { readonly [P in keyof B]: B[P] };
 >b03 : BR
->P : P
 
 var b03: Readonly<B>;
 >b03 : BR
 
 var b03: { [P in keyof BR]: BR[P] }
 >b03 : BR
->P : P
 
 var b03: Pick<BR, keyof BR>;
 >b03 : BR
@@ -210,7 +196,6 @@ var b04: BPR;
 
 var b04: { readonly [P in keyof B]?: B[P] };
 >b04 : BPR
->P : P
 
 var b04: Partial<BR>;
 >b04 : BPR
@@ -226,7 +211,6 @@ var b04: Readonly<Partial<B>>;
 
 var b04: { [P in keyof BPR]: BPR[P] }
 >b04 : BPR
->P : P
 
 var b04: Pick<BPR, keyof BPR>;
 >b04 : BPR
@@ -298,7 +282,6 @@ function f3(x: Boxified<Foo>) {
 function f4(x: { [P in keyof Foo]: Foo[P] }) {
 >f4 : (x: { [x: string]: number; prop: number; }) => void
 >x : { [x: string]: number; prop: number; }
->P : P
 
     x.prop; // ok
 >x.prop : number

@@ -1,44 +1,11 @@
 --- old.typeVariableConstraintedToAliasNotAssignableToUnion.types
 +++ new.typeVariableConstraintedToAliasNotAssignableToUnion.types
-@@= skipped -2, +2 lines =@@
- === typeVariableConstraintedToAliasNotAssignableToUnion.ts ===
- declare class TableClass<S = any> {
- >TableClass : TableClass<S>
-+>S : S
- 
-     _field: S;
- >_field : S
-@@= skipped -9, +10 lines =@@
- >Table : Table
- 
- interface Something {
-+>Something : Something
-+
-     prop: number;
- >prop : number
- }
- 
- interface SomethingElse {
-+>SomethingElse : SomethingElse
-+
-     prop2: string;
- >prop2 : string
- }
-@@= skipped -23, +27 lines =@@
- 
- function fn<T extends Table>(o: T) {
- >fn : <T extends Table>(o: T) => void
-+>T : T
- >o : T
- 
-     aBoolean = o;
-@@= skipped -24, +25 lines =@@
+@@= skipped -58, +58 lines =@@
  }
  
  function fn2<T extends TableClass>(o: T) {
 ->fn2 : <T extends TableClass>(o: T) => void
 +>fn2 : <T extends TableClass<any>>(o: T) => void
-+>T : T
  >o : T
  
      aBoolean = o;

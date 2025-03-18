@@ -23,12 +23,3 @@
  >createObjectURL : (obj: Blob | MediaSource) => string
  >blob : Blob
  
-@@= skipped -93, +93 lines =@@
- >global : any
- 
-   interface ImportMeta {
-+>ImportMeta : ImportMeta
-+
-     wellKnownProperty: { a: number, b: string, c: boolean };
- >wellKnownProperty : { a: number; b: string; c: boolean; }
- >a : number

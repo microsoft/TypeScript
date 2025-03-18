@@ -1,37 +1,26 @@
 --- old.specializationError.types
 +++ new.specializationError.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === specializationError.ts ===
  interface Promise<T> {
-+>Promise : Promise<T>
-+>T : T
-+
      then<U>(value: T): void;
 ->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(value: T): void; }
 +>then : { <TResult1, TResult2>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(value: T): void; }
-+>U : U
  >value : T
  }
  
- interface Bar {
-+>Bar : Bar
-+
-     bar(value: "Menu"): Promise<string>;
- >bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+@@= skipped -10, +10 lines =@@
  >value : "Menu"
  
      bar<T>(value: string, element: string): Promise<T>;
 ->bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T_1>(value: string): Promise<T_1>; }
 +>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
-+>T : T
  >value : string
  >element : string
  
      bar<T>(value: string): Promise<T>;
 ->bar : { (value: "Menu"): Promise<string>; <T_1>(value: string, element: string): Promise<T_1>; <T>(value: string): Promise<T>; }
 +>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
-+>T : T
  >value : string
  }
  

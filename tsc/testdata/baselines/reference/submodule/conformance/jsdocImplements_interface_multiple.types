@@ -2,14 +2,10 @@
 
 === /defs.d.ts ===
 interface Drawable {
->Drawable : Drawable
-
     draw(): number;
 >draw : () => number
 }
 interface Sizable {
->Sizable : Sizable
-
     size(): number;
 >size : () => number
 }

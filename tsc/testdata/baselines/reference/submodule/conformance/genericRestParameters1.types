@@ -177,7 +177,6 @@ f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number he
 
 declare function f10<T extends unknown[]>(...args: T): T;
 >f10 : <T extends unknown[]>(...args: T) => T
->T : T
 >args : T
 
 const x10 = f10(42, "hello", true);  // [number, string, boolean]
@@ -250,8 +249,6 @@ const x18 = f10(...ns, true);  // (string | number | boolean)[]
 
 function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >g10 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
->U : U
->V : V
 >u : U
 >v : V
 
@@ -289,7 +286,6 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 
 declare function f11<T extends (string | number | boolean)[]>(...args: T): T;
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
->T : T
 >args : T
 
 const z10 = f11(42, "hello", true);  // [42, "hello", true]
@@ -362,8 +358,6 @@ const z18 = f11(...ns, true);  // (string | number | true)[]
 
 function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >g11 : <U extends string[], V extends [number, number]>(u: U, v: V) => void
->U : U
->V : V
 >u : U
 >v : V
 
@@ -401,8 +395,6 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 
 function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
->T : T
->U : U
 >f : (...args: T) => U
 >args : T
 >args : T
@@ -416,8 +408,6 @@ function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T) {
 
 function callr<T extends unknown[], U>(args: T, f: (...args: T) => U) {
 >callr : <T extends unknown[], U>(args: T, f: (...args: T) => U) => U
->T : T
->U : U
 >args : T
 >f : (...args: T) => U
 >args : T
@@ -436,8 +426,6 @@ declare function f15(a: string, b: number): string | number;
 
 declare function f16<A, B>(a: A, b: B): A | B;
 >f16 : <A, B>(a: A, b: B) => A | B
->A : A
->B : B
 >a : A
 >b : B
 
@@ -519,9 +507,6 @@ let x32 = callr(sn, f16);  // string | number
 
 function bind<T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) {
 >bind : <T, U extends unknown[], V>(f: (x: T, ...rest: U) => V, x: T) => (...rest: U) => V
->T : T
->U : U
->V : V
 >f : (x: T, ...rest: U) => V
 >x : T
 >rest : U
@@ -661,8 +646,6 @@ g23();
 
 declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
 >f30 : <T, U extends (x: T) => any[]>(x: T, ...args: U) => U
->T : T
->U : U
 >x : T
 >x : T
 >args : U
@@ -705,22 +688,18 @@ type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => voi
 
 type T05<T> = Parameters<(...args: T[]) => void>;
 >T05 : T[]
->T : T
 >args : T[]
 
 type T06<T> = ConstructorParameters<new (...args: []) => void>;
 >T06 : []
->T : T
 >args : []
 
 type T07<T extends any[]> = Parameters<(...args: T) => void>;
 >T07 : T
->T : T
 >args : T
 
 type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
 >T08 : T
->T : T
 >args : T
 
 type T09 = Parameters<Function>;
@@ -744,11 +723,9 @@ type Record1 = {
 
 type EventType<T> = {
 >EventType : EventType<T>
->T : T
 
   emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 
 >emit : <K extends keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]) => void
->K : K
 >e : K
 >payload : T[K] extends any[] ? T[K] : [T[K]]
 }

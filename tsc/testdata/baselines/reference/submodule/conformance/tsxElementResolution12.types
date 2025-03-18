@@ -2,22 +2,14 @@
 
 === file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface ElementAttributesProperty { pr: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >pr : any
 
 	interface IntrinsicElements { }
->IntrinsicElements : IntrinsicElements
 }
 
 interface Obj1type {
->Obj1type : Obj1type
-
 	new(n: string): any;
 >n : string
 }
@@ -31,8 +23,6 @@ var Obj1: Obj1type;
 >10 : 10
 
 interface Obj2type {
->Obj2type : Obj2type
-
 	new(n: string): { q?: number; pr: any };
 >n : string
 >q : number
@@ -48,8 +38,6 @@ var Obj2: Obj2type;
 >10 : 10
 
 interface Obj3type {
->Obj3type : Obj3type
-
 	new(n: string): { x: number; };
 >n : string
 >x : number
@@ -77,8 +65,6 @@ var attributes: any;
 >{} : {}
 
 interface Obj4type {
->Obj4type : Obj4type
-
 	new(n: string): { x: number; pr: { x: number; } };
 >n : string
 >x : number

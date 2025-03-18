@@ -1,32 +1,11 @@
 --- old.awaitedTypeNoLib.types
 +++ new.awaitedTypeNoLib.types
-@@= skipped -2, +2 lines =@@
- === awaitedTypeNoLib.ts ===
- type NotPromise<T> = T extends Thenable<unknown>
- >NotPromise : NotPromise<T>
-+>T : T
- 
-   ? T
-   : T extends PromiseLike<unknown>
-@@= skipped -8, +9 lines =@@
- 
- type Receiver<T> = (value: NotPromise<T>) => void;
- >Receiver : Receiver<T>
-+>T : T
- >value : NotPromise<T>
- 
- class Thenable<T> {
- >Thenable : Thenable<T>
-+>T : T
- 
-   then(a: Receiver<T>) {}
- >then : (a: Receiver<T>) => void
+@@= skipped -20, +20 lines =@@
  >a : Receiver<T>
  
    private handleResolve<TResult>(
 ->handleResolve : <TResult>(result: NotPromise<TResult> | Thenable<NotPromise<TResult>>, resolve: Receiver<TResult>) => void
 +>handleResolve : <TResult>(result: Thenable<NotPromise<TResult>> | NotPromise<TResult>, resolve: Receiver<TResult>) => void
-+>TResult : TResult
  
      result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
 ->result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
@@ -34,7 +13,7 @@
  
      resolve: Receiver<TResult>,
  >resolve : Receiver<TResult>
-@@= skipped -21, +24 lines =@@
+@@= skipped -11, +11 lines =@@
    ) {
      if (result instanceof Thenable) {
  >result instanceof Thenable : boolean
@@ -55,10 +34,3 @@
  >resolve : Receiver<TResult>
      }
    }
- 
-   private resolvePromise<TResult>(
- >resolvePromise : <TResult>(result: Thenable<TResult>, resolve: Receiver<TResult>) => void
-+>TResult : TResult
- 
-     result: Thenable<TResult>,
- >result : Thenable<TResult>

@@ -18,7 +18,6 @@ var y:number = x.test;
 === foo_0.ts ===
 class Foo<T>{
 >Foo : Foo<T>
->T : T
 
 	test: T;
 >test : T

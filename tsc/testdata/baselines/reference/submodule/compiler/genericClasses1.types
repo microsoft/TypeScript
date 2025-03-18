@@ -3,7 +3,6 @@
 === genericClasses1.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
 	public x: T;
 >x : T

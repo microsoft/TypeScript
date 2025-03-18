@@ -18,14 +18,12 @@ class D extends C {
 
 declare function test<T extends C>(a: (t: T, t1: T) => void): T
 >test : <T extends C>(a: (t: T, t1: T) => void) => T
->T : T
 >a : (t: T, t1: T) => void
 >t : T
 >t1 : T
 
 declare function testRest<T extends C>(a: (t: T, t1: T, ...ts: T[]) => void): T
 >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
->T : T
 >a : (t: T, t1: T, ...ts: T[]) => void
 >t : T
 >t1 : T

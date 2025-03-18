@@ -9,8 +9,6 @@ declare global {
 >global : any
 
   namespace JSX {
->JSX : any
-
     // This should only use keys of JSX.IntrinsicElements.
     // Diverging here to illustrate different error messages.
     type ElementType = "div";

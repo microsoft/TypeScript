@@ -13,8 +13,8 @@
 +>() => null! as typeof v : () => "inner"
  >null! as typeof v : "inner"
  >null! : never
-->v : "inner"
- 
+ >v : "inner"
+@@= skipped -11, +11 lines =@@
      const r = f(null!)
  >r : () => "inner"
  >f(null!) : () => "inner"

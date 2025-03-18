@@ -2,9 +2,6 @@
 
 === a.ts ===
 interface BigIntIndex<E> {
->BigIntIndex : BigIntIndex<E>
->E : E
-
     [index: bigint]: E; // should error
 >index : bigint
 }

@@ -109,7 +109,6 @@ function f13(x: { a: null; b: string } | { a: string, c: number }) {
 
 function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
 >f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
->T : T
 >x : { a: 0; b: string; } | { a: T; c: number; }
 >a : 0
 >b : string
@@ -132,7 +131,6 @@ function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
 
 type Result<T> = { error?: undefined, value: T } | { error: Error };
 >Result : Result<T>
->T : T
 >error : undefined
 >value : T
 >error : Error
@@ -181,8 +179,6 @@ f15({ error: new Error("boom") });
 // Repro from #24193
 
 interface WithError {
->WithError : WithError
-
     error: Error
 >error : Error
 
@@ -191,9 +187,6 @@ interface WithError {
 }
 
 interface WithoutError<Data> {
->WithoutError : WithoutError<Data>
->Data : Data
-
     error: null
 >error : null
 
@@ -203,11 +196,9 @@ interface WithoutError<Data> {
 
 type DataCarrier<Data> = WithError | WithoutError<Data>
 >DataCarrier : DataCarrier<Data>
->Data : Data
 
 function f20<Data>(carrier: DataCarrier<Data>) {
 >f20 : <Data>(carrier: DataCarrier<Data>) => void
->Data : Data
 >carrier : DataCarrier<Data>
 
     if (carrier.error === null) {

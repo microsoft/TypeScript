@@ -1,30 +1,6 @@
 --- old.TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.types
 +++ new.TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.types
-@@= skipped -1, +1 lines =@@
- 
- === TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts ===
- module A {
-+>A : any
-+
-     export interface Point {
-+>Point : Point
-+
-         x: number;
- >x : number
- 
-@@= skipped -13, +17 lines =@@
- }
- 
- module A {
-+>A : any
-+
-     interface Point {
-+>Point : Point
-+
-         fromCarth(): Point;
- >fromCarth : () => Point
-     }
-@@= skipped -8, +12 lines =@@
+@@= skipped -22, +22 lines =@@
  
  // ensure merges as expected
  var p: { x: number; y: number; toCarth(): A.Point; };
@@ -42,13 +18,7 @@
  >A : any
  
  module X.Y.Z {
-+>X : any
-+>Y : any
-+>Z : any
-+
      export interface Line {
-+>Line : Line
-+
          new (start: A.Point, end: A.Point);
 ->start : A.Point
 +>start : Point
@@ -58,17 +28,9 @@
  >A : any
      }
  }
- 
- module X {
-+>X : any
-+
+@@= skipped -24, +24 lines =@@
      export module Y.Z {
-+>Y : any
-+>Z : any
-+
          interface Line {
-+>Line : Line
-+
              start: A.Point;
 ->start : A.Point
 +>start : Point
@@ -80,7 +42,7 @@
  >A : any
          }
      }
-@@= skipped -36, +49 lines =@@
+@@= skipped -12, +12 lines =@@
  
  // ensure merges as expected
  var l: { new (s: A.Point, e: A.Point); }

@@ -130,14 +130,10 @@ abstract class H extends E {
 }
 
 interface I {
->I : I
-
     q: number
 >q : number
 }
 interface J extends I { }
->J : J
-
 class J {
 >J : J
 

@@ -2,10 +2,7 @@
 
 === importDeclWithExportModifierAndExportAssignment.ts ===
 module x {
->x : typeof x
-
     interface c {
->c : c
     }
 }
 export import a = x.c;

@@ -3,15 +3,12 @@
 === intersectionType_useDefineForClassFields.ts ===
 type Foo<T> = {
 >Foo : Foo<T>
->T : T
 
     [k in keyof T & string]: any
->k : k
 }
 
 function bar<T>(_p: T): { new(): Foo<T> } {
 >bar : <T>(_p: T) => new () => Foo<T>
->T : T
 >_p : T
 
     return null as any;

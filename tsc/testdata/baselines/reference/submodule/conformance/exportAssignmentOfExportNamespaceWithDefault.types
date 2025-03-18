@@ -21,6 +21,7 @@ declare module "b" {
 
         var _a: typeof a;
 >_a : typeof a
+>a : typeof a
 
         export { _a as default };
 >_a : typeof a

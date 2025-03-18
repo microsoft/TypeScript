@@ -25,7 +25,6 @@ export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any);
 === /monorepo/context/src/value-promise.d.ts ===
 export type Constructor<T> = (...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 === /monorepo/context/src/bindingkey.d.ts ===
@@ -34,14 +33,12 @@ import { Constructor } from "./value-promise"
 
 export declare class BindingKey<T> {
 >BindingKey : BindingKey<T>
->T : T
 
   readonly __type: T;
 >__type : T
 
   static create<T extends Constructor<any>>(ctor: T): BindingKey<T>;
 >create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
->T : T
 >ctor : T
 }
 

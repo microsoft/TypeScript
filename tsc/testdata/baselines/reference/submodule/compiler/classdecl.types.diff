@@ -1,14 +1,6 @@
 --- old.classdecl.types
 +++ new.classdecl.types
-@@= skipped -92, +92 lines =@@
- 
- 
-     export interface ib {
-+>ib : ib
-     }
- }
- 
-@@= skipped -22, +23 lines =@@
+@@= skipped -114, +114 lines =@@
  
  class c extends m1.b {
  >c : c

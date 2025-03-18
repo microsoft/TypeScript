@@ -9,34 +9,7 @@
  
      x()?: number; // error
  >x : () => any
-@@= skipped -8, +8 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     x()?: number; // error
- >x : () => any
- >number : any
-@@= skipped -14, +16 lines =@@
- }
- 
- interface I2<T> {
-+>I2 : I2<T>
-+>T : T
-+
-     x()?: T; // error
- >x : () => any
- >T : any
-@@= skipped -7, +10 lines =@@
- 
- class C2<T> {
- >C2 : C2<T>
-+>T : T
- 
-     x()?: T; // error
- >x : () => any
-@@= skipped -8, +9 lines =@@
+@@= skipped -37, +37 lines =@@
  
  
  var b = {

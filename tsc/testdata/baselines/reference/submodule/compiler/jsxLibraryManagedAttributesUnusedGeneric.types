@@ -7,33 +7,18 @@ import React from 'react'
 
 declare const jsx: typeof React.createElement
 >jsx : any
+>React.createElement : any
 >React : any
+>createElement : any
 
 namespace jsx {
->jsx : any
-
     export namespace JSX {
->JSX : any
-
         export interface Element {}
->Element : Element
-
         export interface ElementClass {}
->ElementClass : ElementClass
-
         export interface ElementAttributesProperty {}
->ElementAttributesProperty : ElementAttributesProperty
-
         export interface ElementChildrenAttribute {}
->ElementChildrenAttribute : ElementChildrenAttribute
-
         export interface IntrinsicAttributes {}
->IntrinsicAttributes : IntrinsicAttributes
-
         export interface IntrinsicClassAttributes<T> {}
->IntrinsicClassAttributes : IntrinsicClassAttributes<T>
->T : T
-
         export type IntrinsicElements = {
 >IntrinsicElements : IntrinsicElements
 
@@ -47,13 +32,10 @@ namespace jsx {
         // Equivalent to above, but fails
         export type WithCSSProp<P> = P & { css: string }
 >WithCSSProp : WithCSSProp<P>
->P : P
 >css : string
 
         export type LibraryManagedAttributes<C, P> = WithCSSProp<P>
 >LibraryManagedAttributes : LibraryManagedAttributes<C, P>
->C : C
->P : P
 
     }
 }

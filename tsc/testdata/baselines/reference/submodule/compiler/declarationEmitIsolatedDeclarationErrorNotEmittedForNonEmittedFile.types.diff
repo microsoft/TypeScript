@@ -1,74 +1,11 @@
 --- old.declarationEmitIsolatedDeclarationErrorNotEmittedForNonEmittedFile.types
 +++ new.declarationEmitIsolatedDeclarationErrorNotEmittedForNonEmittedFile.types
-@@= skipped -1, +1 lines =@@
- 
- === node_modules/@trpc/server/internals/config.d.ts ===
- export interface RootConfig<T> {
-+>RootConfig : RootConfig<T>
-+>T : T
-+
-     prop: T;
- >prop : T
- }
- === node_modules/@trpc/server/internals/utils.d.ts ===
- export interface ErrorFormatterShape<T={}> {
-+>ErrorFormatterShape : ErrorFormatterShape<T>
-+>T : T
-+
-     prop: T;
- >prop : T
- }
- export type PickFirstDefined<TType, TPick> = undefined extends TType
- >PickFirstDefined : PickFirstDefined<TType, TPick>
-+>TType : TType
-+>TPick : TPick
- 
-   ? undefined extends TPick
-     ? never
-     : TPick
-   : TType;
- export interface ErrorFormatter<T={},U={}> {
-+>ErrorFormatter : ErrorFormatter<T, U>
-+>T : T
-+>U : U
-+
-     prop: [T, U];
- >prop : [T, U]
- }
- export interface DefaultErrorShape<T={}> {
-+>DefaultErrorShape : DefaultErrorShape<T>
-+>T : T
-+
-     prop: T;
- >prop : T
- }
- === node_modules/@trpc/server/middleware.d.ts ===
- export interface MiddlewareFunction<T={},U={}> {
-+>MiddlewareFunction : MiddlewareFunction<T, U>
-+>T : T
-+>U : U
-+
-     prop: [T, U];
- >prop : [T, U]
- }
- export interface MiddlewareBuilder<T={},U={}> {
-+>MiddlewareBuilder : MiddlewareBuilder<T, U>
-+>T : T
-+>U : U
-+
-     prop: [T, U];
- >prop : [T, U]
- }
-@@= skipped -44, +67 lines =@@
- 
- declare class TRPCBuilder<TParams> {
+@@= skipped -47, +47 lines =@@
  >TRPCBuilder : TRPCBuilder<TParams>
-+>TParams : TParams
  
      create<TOptions extends Record<string, any>>(): {
 ->create : <TOptions extends Record<string, any>>() => { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>; router: {}; }
 +>create : <TOptions extends Record<string, any>>() => { procedure: {}; middleware: <TNewParams extends Record<string, any>>(fn: MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<???, ???>>>; }>; }, TNewParams>) => MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<???, ???>>>; }>; }, TNewParams>; router: {}; }
-+>TOptions : TOptions
  
          procedure: {};
  >procedure : {}
@@ -77,7 +14,6 @@
 ->middleware : <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>) => import("./middleware").MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>
 ->fn : import("node_modules/@trpc/server/middleware").MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>; }>; }, TNewParams>
 +>middleware : <TNewParams extends Record<string, any>>(fn: MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? ??? : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>) => MiddlewareBuilder<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? ??? : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>
-+>TNewParams : TNewParams
 +>fn : MiddlewareFunction<{ _config: RootConfig<{ errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>; }>; }, TNewParams>
  
              _config: RootConfig<{
@@ -86,7 +22,7 @@
  
                  errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
  >errorShape : ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape<{}>>>>
-@@= skipped -20, +23 lines =@@
+@@= skipped -18, +18 lines =@@
              }>;
          }, TNewParams>) => import("./middleware").MiddlewareBuilder<{
              _config: RootConfig<{

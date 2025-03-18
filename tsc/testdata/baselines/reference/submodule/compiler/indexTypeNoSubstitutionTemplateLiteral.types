@@ -13,5 +13,6 @@ Foo[`b`] = function () {};
 
 type Test = keyof typeof Foo;
 >Test : "b"
+>Foo : { (): void; b: () => void; }
 
 

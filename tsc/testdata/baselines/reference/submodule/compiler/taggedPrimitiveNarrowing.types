@@ -29,7 +29,6 @@ function getHashLength(hash: Hash): number {
 
 function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number {
 >getHashLength2 : <T extends { __tag__: unknown; }>(hash: string & T) => number
->T : T
 >__tag__ : unknown
 >hash : string & T
 

@@ -5,7 +5,6 @@
 
 class List<T> {
 >List : List<T>
->T : T
 
     data: T;
 >data : T
@@ -16,7 +15,6 @@ class List<T> {
 
 class MyList<T> {
 >MyList : MyList<T>
->T : T
 
     data: T;
 >data : T
@@ -82,8 +80,6 @@ rList1 = rMyList1; // error, not nominally equal
 
 function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 >foo : <T extends List<number>, U extends MyList<number>>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 
@@ -126,8 +122,6 @@ function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 
 function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 >foo2 : <T extends U, U extends MyList<number>>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 

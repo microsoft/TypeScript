@@ -112,8 +112,6 @@ export class BrokenClass {
 
 === mymodule.ts ===
 export interface MyModel {
->MyModel : MyModel
-
     id: number;
 >id : number
 }

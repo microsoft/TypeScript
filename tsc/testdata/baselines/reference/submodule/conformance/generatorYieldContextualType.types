@@ -3,9 +3,6 @@
 === generatorYieldContextualType.ts ===
 declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
->T : T
->R : R
->S : S
 >gen : () => Generator<R, T, S>
 
 f1<0, 0, 1>(function* () {
@@ -25,9 +22,6 @@ f1<0, 0, 1>(function* () {
 
 declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>): void;
 >f2 : <T, R, S>(gen: () => AsyncGenerator<R, T, S> | Generator<R, T, S>) => void
->T : T
->R : R
->S : S
 >gen : () => AsyncGenerator<R, T, S> | Generator<R, T, S>
 
 f2<0, 0, 1>(async function* () {
@@ -67,7 +61,6 @@ namespace Directive {
 
   export function is<T>(value: Directive | T): value is Directive {
 >is : <T>(value: T | Directive) => value is Directive
->T : T
 >value : T | Directive
 
     return typeof value === "number" && Directive[value] != null;
@@ -84,8 +77,6 @@ namespace Directive {
 }
 
 interface QuickPickItem {
->QuickPickItem : QuickPickItem
-
   label: string;
 >label : string
 
@@ -103,8 +94,6 @@ interface QuickPickItem {
 }
 
 interface QuickInputStep {
->QuickInputStep : QuickInputStep
-
   placeholder?: string;
 >placeholder : string | undefined
 
@@ -116,9 +105,6 @@ interface QuickInputStep {
 }
 
 interface QuickPickStep<T extends QuickPickItem = QuickPickItem> {
->QuickPickStep : QuickPickStep<T>
->T : T
-
   placeholder?: string;
 >placeholder : string | undefined
 
@@ -142,8 +128,6 @@ type StepGenerator =
 
 type StepItemType<T> = T extends QuickPickStep<infer U>
 >StepItemType : StepItemType<T>
->T : T
->U : U
 
   ? U[]
   : T extends QuickInputStep
@@ -160,12 +144,12 @@ namespace StepResult {
 }
 type StepResult<T> = typeof StepResult.Break | T;
 >StepResult : StepResult<T>
->T : T
+>StepResult.Break : unique symbol
 >StepResult : typeof StepResult
+>Break : unique symbol
 
 type StepResultGenerator<T> =
 >StepResultGenerator : StepResultGenerator<T>
->T : T
 
   | Generator<QuickPickStep | QuickInputStep, StepResult<T>, any | undefined>
   | AsyncGenerator<
@@ -175,8 +159,6 @@ type StepResultGenerator<T> =
     >;
 type StepSelection<T> = T extends QuickPickStep<infer U>
 >StepSelection : StepSelection<T>
->T : T
->U : U
 
   ? U[] | Directive
   : T extends QuickInputStep
@@ -184,7 +166,6 @@ type StepSelection<T> = T extends QuickPickStep<infer U>
   : never;
 type PartialStepState<T = unknown> = Partial<T> & {
 >PartialStepState : PartialStepState<T>
->T : T
 
   counter: number;
 >counter : number
@@ -198,7 +179,6 @@ type PartialStepState<T = unknown> = Partial<T> & {
 };
 type StepState<T = Record<string, unknown>> = T & {
 >StepState : StepState<T>
->T : T
 
   counter: number;
 >counter : number
@@ -213,7 +193,6 @@ type StepState<T = Record<string, unknown>> = T & {
 
 function canPickStepContinue<T extends QuickPickStep>(
 >canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
->T : T
 
   _step: T,
 >_step : T
@@ -231,7 +210,6 @@ function canPickStepContinue<T extends QuickPickStep>(
 
 function createPickStep<T extends QuickPickItem>(
 >createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
->T : T
 
   step: QuickPickStep<T>
 >step : QuickPickStep<T>
@@ -245,11 +223,9 @@ function* showStep<
 >showStep : <State extends Partial<unknown> & { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
 
   State extends PartialStepState & { repo: any },
->State : State
 >repo : any
 
   Context extends { repos: any[]; title: string; status: any }
->Context : Context
 >repos : any[]
 >title : string
 >status : any
@@ -275,6 +251,7 @@ function* showStep<
   });
   const selection: StepSelection<typeof step> = yield step;
 >selection : QuickPickItem[] | Directive
+>step : QuickPickStep<QuickPickItem>
 >yield step : any
 >step : QuickPickStep<QuickPickItem>
 

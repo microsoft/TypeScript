@@ -5,9 +5,6 @@ module __test1__ {
 >__test1__ : typeof __test1__
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
->interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
->T : T
->U : U
 >one : T
 >two : U
 >obj4 : interfaceWithPublicAndOptional<number, string>
@@ -24,7 +21,6 @@ module __test2__ {
 
     export var aa:{ new <Tstring>(param: Tstring); };;
 >aa : new <Tstring>(param: Tstring) => any
->Tstring : Tstring
 >param : Tstring
 
     export var __val__aa = aa;

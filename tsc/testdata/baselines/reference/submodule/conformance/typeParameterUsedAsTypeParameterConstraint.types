@@ -5,8 +5,6 @@
 
 function foo<T, U extends T>(x: T, y: U): T {
 >foo : <T, U extends T>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -21,8 +19,6 @@ function foo<T, U extends T>(x: T, y: U): T {
 
 function foo2<U extends T, T>(x: T, y: U): T {
 >foo2 : <U extends T, T>(x: T, y: U) => T
->U : U
->T : T
 >x : T
 >y : U
 
@@ -38,8 +34,6 @@ function foo2<U extends T, T>(x: T, y: U): T {
 var f = function <T, U extends T>(x: T, y: U): T {
 >f : <T, U extends T>(x: T, y: U) => T
 >function <T, U extends T>(x: T, y: U): T {    x = y;    return y;} : <T, U extends T>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -55,8 +49,6 @@ var f = function <T, U extends T>(x: T, y: U): T {
 var f2 = function <U extends T, T>(x: T, y: U): T {
 >f2 : <U extends T, T>(x: T, y: U) => T
 >function <U extends T, T>(x: T, y: U): T {    x = y;    return y;} : <U extends T, T>(x: T, y: U) => T
->U : U
->T : T
 >x : T
 >y : U
 
@@ -72,8 +64,6 @@ var f2 = function <U extends T, T>(x: T, y: U): T {
 var f3 = <T, U extends T>(x: T, y: U): T => {
 >f3 : <T, U extends T>(x: T, y: U) => T
 ><T, U extends T>(x: T, y: U): T => {    x = y;    return y;} : <T, U extends T>(x: T, y: U) => T
->T : T
->U : U
 >x : T
 >y : U
 
@@ -89,8 +79,6 @@ var f3 = <T, U extends T>(x: T, y: U): T => {
 var f4 = <U extends T, T>(x: T, y: U): T => {
 >f4 : <U extends T, T>(x: T, y: U) => T
 ><U extends T, T>(x: T, y: U): T => {    x = y;    return y;} : <U extends T, T>(x: T, y: U) => T
->U : U
->T : T
 >x : T
 >y : U
 

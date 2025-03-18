@@ -2,12 +2,8 @@
 
 === genericInterfaceFunctionTypeParameter.ts ===
 export interface IFoo<A> { }
->IFoo : IFoo<A>
->A : A
-
 export function foo<A>(fn: (ifoo: IFoo<A>) => void) {
 >foo : <A>(fn: (ifoo: IFoo<A>) => void) => void
->A : A
 >fn : (ifoo: IFoo<A>) => void
 >ifoo : IFoo<A>
 

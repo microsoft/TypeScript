@@ -3,7 +3,6 @@
 === typeParametersAndParametersInComputedNames.ts ===
 function foo<T>(a: T) : string {
 >foo : <T>(a: T) => string
->T : T
 >a : T
 
     return "";
@@ -18,7 +17,6 @@ class A {
 >foo<T>(a) : string
 >foo : <T>(a: T) => string
 >a : any
->T : T
 >a : T
     }
 }

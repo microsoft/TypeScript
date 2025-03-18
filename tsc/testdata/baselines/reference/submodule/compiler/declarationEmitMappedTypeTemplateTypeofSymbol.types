@@ -8,13 +8,14 @@ export declare const Timestamp: {
 >Timestamp : { (Unique symbol): true; }
 
     [TKey in typeof timestampSymbol]: true;
->TKey : TKey
+>timestampSymbol : unique symbol
 >true : true
 
 };
 
 export declare function now(): typeof Timestamp;
 >now : () => { (Unique symbol): true; }
+>Timestamp : { (Unique symbol): true; }
 
 === b.ts ===
 import * as x from "./a";

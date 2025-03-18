@@ -1,27 +1,11 @@
 --- old.comparabilityTypeParametersRelatedByUnion.types
 +++ new.comparabilityTypeParametersRelatedByUnion.types
-@@= skipped -2, +2 lines =@@
- === comparabilityTypeParametersRelatedByUnion.ts ===
- class C<T> {
- >C : C<T>
-+>T : T
- 
-   constructor(readonly x: T) {}
- >x : T
- 
-   good<U extends T>(y: U) {
- >good : <U extends T>(y: U) => void
-+>U : U
- >y : U
- 
-       if (y === this.x) {}
-@@= skipped -17, +19 lines =@@
+@@= skipped -19, +19 lines =@@
    }
  
    bad<U extends T | string>(y: U) {
 ->bad : <U extends T | string>(y: U) => void
 +>bad : <U extends string | T>(y: U) => void
-+>U : U
  >y : U
  
        if (y === this.x) {}

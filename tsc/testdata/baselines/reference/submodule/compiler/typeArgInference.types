@@ -2,12 +2,8 @@
 
 === typeArgInference.ts ===
 interface I {
->I : I
-
     f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
 >f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
->T : T
->U : U
 >a1 : { a: T; b: U; }[]
 >a : T
 >b : U
@@ -19,8 +15,6 @@ interface I {
 
     g<T, U>(...arg: { a: T; b: U }[][]): { c: T; d: U };
 >g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
->T : T
->U : U
 >arg : { a: T; b: U; }[][]
 >a : T
 >b : U

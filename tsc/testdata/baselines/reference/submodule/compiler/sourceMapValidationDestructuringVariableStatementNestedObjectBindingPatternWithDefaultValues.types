@@ -9,8 +9,6 @@ declare var console: {
 >msg : string
 }
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 

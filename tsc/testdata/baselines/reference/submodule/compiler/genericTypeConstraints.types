@@ -13,7 +13,6 @@ class FooExtended { }
 
 class Bar<T extends Foo> { }
 >Bar : Bar<T>
->T : T
 
 class BarExtended extends Bar<FooExtended> {
 >BarExtended : BarExtended

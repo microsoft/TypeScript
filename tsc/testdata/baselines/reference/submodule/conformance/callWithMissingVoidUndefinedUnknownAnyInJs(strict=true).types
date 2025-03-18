@@ -18,8 +18,6 @@ declare function f4(p: any): void;
 >p : any
 
 interface I<T> { m(p: T): void; }
->I : I<T>
->T : T
 >m : (p: T) => void
 >p : T
 

@@ -1,13 +1,6 @@
 --- old.importTypeAmdBundleRewrite.types
 +++ new.importTypeAmdBundleRewrite.types
-@@= skipped -1, +1 lines =@@
- 
- === a/b/c.ts ===
- export interface Foo {
-+>Foo : Foo
-+
-     x: 12;
- >x : 12
+@@= skipped -6, +6 lines =@@
  }
  === a/inner.ts ===
  const c: import("./b/c").Foo = {x: 12};

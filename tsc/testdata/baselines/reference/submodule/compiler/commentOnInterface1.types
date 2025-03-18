@@ -1,11 +1,12 @@
 //// [tests/cases/compiler/commentOnInterface1.ts] ////
 
 === b.ts ===
+
 ///<reference path='a.ts'/>
 interface I3 {
->I3 : I3
 }
 === a.ts ===
+
 /*!=================
     Keep this pinned
    =================
@@ -13,11 +14,9 @@ interface I3 {
 
 /*! Don't keep this pinned comment */
 interface I {
->I : I
 }
 
 // Don't keep this comment.
 interface I2 {
->I2 : I2
 }
 

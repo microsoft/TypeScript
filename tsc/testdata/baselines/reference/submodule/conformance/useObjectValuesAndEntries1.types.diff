@@ -142,12 +142,7 @@
  >E : typeof E
  
  interface I { }
-+>I : I
-+
- var i: I = {};
- >i : I
- >{} : {}
-@@= skipped -21, +23 lines =@@
+@@= skipped -21, +21 lines =@@
  var entries6 = Object.entries(i);                   // [string, any][]
  >entries6 : [string, any][]
  >Object.entries(i) : [string, any][]

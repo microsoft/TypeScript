@@ -2,11 +2,9 @@
 
 === destructuringFromUnionSpread.ts ===
 interface A { a: string }
->A : A
 >a : string
 
 interface B { b: number }
->B : B
 >b : number
 
 declare const x: A | B;

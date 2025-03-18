@@ -2,8 +2,6 @@
 
 === parserIndexSignature7.ts ===
 interface I {
->I : I
-
   [a:string]
 >a : string
 }

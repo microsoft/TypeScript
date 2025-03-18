@@ -3,7 +3,6 @@
 === typeParametersInStaticProperties.ts ===
 class foo<T> {
 >foo : foo<T>
->T : T
 
     static P: T;
 >P : T

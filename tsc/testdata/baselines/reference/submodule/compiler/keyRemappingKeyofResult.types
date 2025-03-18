@@ -21,7 +21,6 @@ type Okay = Exclude<keyof Orig, never>
 
 type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
 >Remapped : Remapped
->K : K
 
 /* type Remapped = {
     str: any;
@@ -50,7 +49,6 @@ x = "str";
 // equivalently, with an unresolved generic (no `exclude` shenanigans, since conditions won't execute):
 function f<T>() {
 >f : <T>() => void
->T : T
 
     type Orig = { [k: string]: any, str: any, [sym]: any } & T;
 >Orig : Orig
@@ -84,7 +82,6 @@ function f<T>() {
     
     type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
 >Remapped : Remapped
->K : K
 
     /* type Remapped = {
         str: any;
@@ -112,7 +109,6 @@ function f<T>() {
 // and another generic case with a _distributive_ mapping, to trigger a different branch in `getIndexType`
 function g<T>() {
 >g : <T>() => void
->T : T
 
     type Orig = { [k: string]: any, str: any, [sym]: any } & T;
 >Orig : Orig
@@ -146,15 +142,12 @@ function g<T>() {
 
     type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
 >NonIndex : NonIndex<T>
->T : T
 
     type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
 >DistributiveNonIndex : DistributiveNonIndex<T>
->T : T
     
     type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
 >Remapped : Remapped
->K : K
 
     /* type Remapped = {
         str: any;

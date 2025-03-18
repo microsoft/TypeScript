@@ -2,11 +2,7 @@
 
 === externs.d.ts ===
 declare namespace MyClass {
->MyClass : typeof MyClass
-
     export interface Bar {
->Bar : Bar
-
         doer: (x: string) => void;
 >doer : (x: string) => void
 >x : string
@@ -32,6 +28,7 @@ declare global {
 
     const Foo: typeof MyClass;
 >Foo : typeof MyClass
+>MyClass : typeof MyClass
 }
 export = MyClass;
 >MyClass : MyClass

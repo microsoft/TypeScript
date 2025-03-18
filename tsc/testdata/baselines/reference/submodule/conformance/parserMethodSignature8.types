@@ -2,9 +2,6 @@
 
 === parserMethodSignature8.ts ===
 interface I {
->I : I
-
   "H"?<T>();
 >"H" : <T>() => any
->T : T
 }

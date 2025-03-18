@@ -33,8 +33,6 @@ declare module "./f1" {
 >"./f1" : typeof import("f1")
 
     interface A {
->A : A
-
         foo(): B;
 >foo : () => B
     }

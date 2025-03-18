@@ -2,8 +2,6 @@
 
 === computedPropertyNamesContextualType5_ES5.ts ===
 interface I {
->I : I
-
     [s: string]: any;
 >s : string
 

@@ -1,22 +1,6 @@
 --- old.contextuallyTypeAsyncFunctionReturnTypeFromUnion.types
 +++ new.contextuallyTypeAsyncFunctionReturnTypeFromUnion.types
-@@= skipped -4, +4 lines =@@
- 
- declare class StateMachine<T> {
- >StateMachine : StateMachine<T>
-+>T : T
- 
-   onDone: (a: T) => void;
- >onDone : (a: T) => void
-@@= skipped -8, +9 lines =@@
- 
- declare function createMachine<T>(implementations: {
- >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
-+>T : T
- >implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
- 
-   services: Record<string, () => Promise<T> | StateMachine<T>>;
-@@= skipped -11, +12 lines =@@
+@@= skipped -23, +23 lines =@@
  >createMachine<{ count: number }>({  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },}) : void
  >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
  >count : number

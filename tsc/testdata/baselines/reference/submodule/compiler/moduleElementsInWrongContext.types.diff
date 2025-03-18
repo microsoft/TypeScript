@@ -1,21 +1,7 @@
 --- old.moduleElementsInWrongContext.types
 +++ new.moduleElementsInWrongContext.types
-@@= skipped -2, +2 lines =@@
- === moduleElementsInWrongContext.ts ===
- {
-     module M { }
-+>M : any
-+
-     export namespace N {
-+>N : any
-+
-         export interface I { }
-+>I : I
-     }
- 
+@@= skipped -9, +9 lines =@@
      namespace Q.K { }
-+>Q : any
-+>K : any
  
      declare module "ambient" {
 ->"ambient" : typeof Foo
@@ -23,7 +9,7 @@
  
      }
  
-@@= skipped -45, +52 lines =@@
+@@= skipped -38, +38 lines =@@
  >I2 : any
  
      import * as Foo from "ambient";

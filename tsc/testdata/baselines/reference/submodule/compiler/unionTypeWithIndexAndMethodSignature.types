@@ -2,8 +2,6 @@
 
 === unionTypeWithIndexAndMethodSignature.ts ===
 interface Options {
->Options : Options
-
     m(x: number): void;
 >m : (x: number) => void
 >x : number

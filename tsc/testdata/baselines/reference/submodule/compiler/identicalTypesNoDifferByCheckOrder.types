@@ -2,8 +2,6 @@
 
 === identicalTypesNoDifferByCheckOrder.ts ===
 interface SomeProps {
->SomeProps : SomeProps
-
     x?: string;
 >x : string | undefined
 
@@ -18,8 +16,6 @@ type SomePropsX = Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x">;
 >SomePropsX : SomePropsX
 
 interface SomePropsClone {
->SomePropsClone : SomePropsClone
-
     x?: string;
 >x : string | undefined
 
@@ -35,18 +31,12 @@ type SomePropsCloneX = Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone
 
 type Validator<T> = {(): boolean, opt?: T};
 >Validator : Validator<T>
->T : T
 >opt : T | undefined
 
 type WeakValidationMap<T> = {[K in keyof T]?: null extends T[K] ? Validator<T[K] | null | undefined> : Validator<T[K]>};
 >WeakValidationMap : WeakValidationMap<T>
->T : T
->K : K
 
 interface FunctionComponent1<P> {
->FunctionComponent1 : FunctionComponent1<P>
->P : P
-
     (props: P & { children?: unknown }): void;
 >props : P & { children?: unknown; }
 >children : unknown
@@ -56,9 +46,6 @@ interface FunctionComponent1<P> {
 }
 
 interface FunctionComponent2<P> {
->FunctionComponent2 : FunctionComponent2<P>
->P : P
-
     (props: P & { children?: unknown }): void;
 >props : P & { children?: unknown; }
 >children : unknown

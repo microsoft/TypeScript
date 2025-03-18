@@ -1,8 +1,0 @@
---- old.typeParameterListWithTrailingComma1.types
-+++ new.typeParameterListWithTrailingComma1.types
-@@= skipped -2, +2 lines =@@
- === typeParameterListWithTrailingComma1.ts ===
- class C<T,> {
- >C : C<T>
-+>T : T
- }

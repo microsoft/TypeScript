@@ -3,11 +3,9 @@
 === declarationEmitInferredTypeAlias4.ts ===
 function f<A>() {
 >f : <A>() => Foo<A[]>
->A : A
 
     type Foo<T> = T | { x: Foo<T> };
 >Foo : Foo<T>
->T : T
 >x : Foo<T>
 
     var x: Foo<A[]>;

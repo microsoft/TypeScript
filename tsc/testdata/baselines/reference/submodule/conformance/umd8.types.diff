@@ -30,14 +30,3 @@
  
  === foo.d.ts ===
  declare class Thing {
-@@= skipped -27, +27 lines =@@
- >foo : () => number
- }
- declare namespace Thing {
-+>Thing : typeof Thing
-+
- 	interface SubThing { }
-+>SubThing : SubThing
- }
- export = Thing;
- >Thing : Thing

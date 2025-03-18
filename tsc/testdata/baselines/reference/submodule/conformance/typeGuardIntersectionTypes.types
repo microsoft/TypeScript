@@ -2,22 +2,16 @@
 
 === typeGuardIntersectionTypes.ts ===
 interface X {
->X : X
-
     x: string;
 >x : string
 }
 
 interface Y {
->Y : Y
-
     y: string;
 >y : string
 }
 
 interface Z {
->Z : Z
-
     z: string;
 >z : string
 }
@@ -76,15 +70,11 @@ function f1(obj: Object) {
 
 // two interfaces
 interface A {
->A : A
-
   a: string;
 >a : string
 }
 
 interface B {
->B : B
-
   b: string;
 >b : string
 }
@@ -128,16 +118,13 @@ declare function log(s: string): void;
 
 // Supported beast features
 interface Beast     { wings?: boolean; legs?: number }
->Beast : Beast
 >wings : boolean | undefined
 >legs : number | undefined
 
 interface Legged    { legs: number; }
->Legged : Legged
 >legs : number
 
 interface Winged    { wings: boolean; }
->Winged : Winged
 >wings : boolean
 
 // Beast feature detection via user-defined type guards

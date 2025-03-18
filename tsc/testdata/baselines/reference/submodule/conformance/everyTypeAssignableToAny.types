@@ -14,8 +14,6 @@ var ac: C;
 >ac : C
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
@@ -72,7 +70,6 @@ var n: { foo: string };
 
 var o: <T>(x: T) => T;
 >o : <T>(x: T) => T
->T : T
 >x : T
 
 var p: Number;
@@ -173,9 +170,6 @@ a = ae;
 
 function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
 >x : T
 >y : U
 >z : V

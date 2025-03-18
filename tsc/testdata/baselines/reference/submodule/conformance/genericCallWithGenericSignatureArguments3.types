@@ -6,7 +6,6 @@
 
 function foo<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
 >x : T
 >a : (x: T) => T
 >x : T
@@ -119,8 +118,6 @@ var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number
 
 function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->T : T
->U : U
 >x : T
 >a : (x: T) => U
 >x : T

@@ -3,7 +3,6 @@
 === bindingPatternCannotBeOnlyInferenceSource.ts ===
 declare function f<T>(): T;
 >f : <T>() => T
->T : T
 
 const {} = f();       // error (only in strictNullChecks)
 >f() : unknown
@@ -27,10 +26,8 @@ const [e1, e2] = f(); // error
 // Repro from #43605
 type Dispatch<A = { type: any; [extraProps: string]: any }> = { <T extends A>(action: T): T };
 >Dispatch : Dispatch<A>
->A : A
 >type : any
 >extraProps : string
->T : T
 >action : T
 
 type IFuncs = { readonly [key: string]: (...p: any) => void };
@@ -40,14 +37,10 @@ type IFuncs = { readonly [key: string]: (...p: any) => void };
 
 type IDestructuring<T extends IFuncs> = { readonly [key in keyof T]?: (...p: Parameters<T[key]>) => void };
 >IDestructuring : IDestructuring<T>
->T : T
->key : key
 >p : Parameters<T[key]>
 
 type Destructuring<T extends IFuncs, U extends IDestructuring<T>> = (dispatch: Dispatch<any>, funcs: T) => U;
 >Destructuring : Destructuring<T, U>
->T : T
->U : U
 >dispatch : Dispatch<any>
 >funcs : T
 
@@ -76,10 +69,10 @@ const funcs1 = {
 };
 type TFuncs1 = typeof funcs1;
 >TFuncs1 : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
+>funcs1 : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 
 declare function useReduxDispatch1<T extends IDestructuring<TFuncs1>>(destructuring: Destructuring<TFuncs1, T>): T;
 >useReduxDispatch1 : <T extends IDestructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }>>(destructuring: Destructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }, T>) => T
->T : T
 >destructuring : Destructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }, T>
 
 const {} = useReduxDispatch1(

@@ -6,7 +6,6 @@
  function foo<T>() {
 ->foo : <T>() => { a: T; b: any; }
 +>foo : <T>() => { a: T; b: ???; }
-+>T : T
  
      var x: {
 ->x : { a: T; b: any; }
@@ -19,6 +18,7 @@
 ->b : { a: T; b: any; }
 ->x : { a: T; b: any; }
 +>b : { a: T; b: ???; }
++>x : { a: T; b: ???; }
  
      };
      return x;
@@ -29,7 +29,6 @@
  function bar<T>() {
 ->bar : <T>() => { a: T; b: any; }
 +>bar : <T>() => { a: T; b: ???; }
-+>T : T
  
      var x: {
 ->x : { a: T; b: any; }
@@ -42,6 +41,7 @@
 ->b : { a: T; b: any; }
 ->x : { a: T; b: any; }
 +>b : { a: T; b: ???; }
++>x : { a: T; b: ???; }
  
      };
      return x;

@@ -6,7 +6,6 @@ class Foo {
 
     static m<T>(this: new () => T, strings: TemplateStringsArray | string) {
 >m : <T>(strings: string | TemplateStringsArray) => T
->T : T
 >this : new () => T
 >strings : string | TemplateStringsArray
 

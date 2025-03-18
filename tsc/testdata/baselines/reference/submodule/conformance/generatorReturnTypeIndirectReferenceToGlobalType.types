@@ -2,7 +2,6 @@
 
 === generatorReturnTypeIndirectReferenceToGlobalType.ts ===
 interface I1 extends Iterator<0, 1, 2> {}
->I1 : I1
 
 function* f1(): I1 {
 >f1 : () => I1

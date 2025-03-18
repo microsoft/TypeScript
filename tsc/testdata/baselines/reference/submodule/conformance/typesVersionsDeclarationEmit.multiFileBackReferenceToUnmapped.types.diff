@@ -31,15 +31,11 @@
  
 +=== node_modules/ext/index.d.ts ===
 +export interface A {}
-+>A : A
-+
 +export function fa(): A;
 +>fa : () => A
 +
  === node_modules/ext/other.d.ts ===
  export interface A2 {}
-+>A2 : A2
-+
  export function fa(): A2;
  >fa : () => A2
  

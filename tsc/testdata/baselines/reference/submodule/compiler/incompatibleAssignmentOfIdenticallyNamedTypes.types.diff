@@ -1,21 +1,6 @@
 --- old.incompatibleAssignmentOfIdenticallyNamedTypes.types
 +++ new.incompatibleAssignmentOfIdenticallyNamedTypes.types
-@@= skipped -1, +1 lines =@@
- 
- === incompatibleAssignmentOfIdenticallyNamedTypes.ts ===
- interface T { }
-+>T : T
-+
- declare const a: T;
- >a : T
- 
- class Foo<T> {
- >Foo : Foo<T>
-+>T : T
- 
-     x: T;
- >x : T
-@@= skipped -13, +16 lines =@@
+@@= skipped -14, +14 lines =@@
  >fn : () => void
  
          this.x = a;

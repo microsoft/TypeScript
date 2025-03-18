@@ -1,10 +1,7 @@
 --- old.missingTypeArguments2.types
 +++ new.missingTypeArguments2.types
-@@= skipped -2, +2 lines =@@
- === missingTypeArguments2.ts ===
- class A<T> { }
+@@= skipped -4, +4 lines =@@
  >A : A<T>
-+>T : T
  
  var x: () => A;
 ->x : () => A

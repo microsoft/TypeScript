@@ -2,11 +2,7 @@
 
 === declFileModuleContinuation.ts ===
 module A.C {
->A : typeof A
->C : any
-
     export interface Z {
->Z : Z
     }
 }
 

@@ -4,8 +4,6 @@
 // String indexer types constrain the types of named properties in their containing type
 
 interface MyString extends String {
->MyString : MyString
-
     foo: number;
 >foo : number
 }
@@ -83,8 +81,6 @@ class C {
 }
 
 interface I {
->I : I
-
     [x: string]: string;
 >x : string
 

@@ -28,8 +28,6 @@ class C {
 }
 
 interface I {
->I : I
-
     (x: 'hi');
 >x : "hi"
 

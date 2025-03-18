@@ -1,15 +1,6 @@
 --- old.unionTypeWithIndexAndTuple.types
 +++ new.unionTypeWithIndexAndTuple.types
-@@= skipped -1, +1 lines =@@
- 
- === unionTypeWithIndexAndTuple.ts ===
- interface I {
-+>I : I
-+
-     [index: number]: any;
- >index : number
- 
-@@= skipped -7, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >someOtherProperty : number
  }
  function f(args: ["a"] | I) { }

@@ -10,8 +10,6 @@ module TypeScript {
 >TypeScript : typeof TypeScript
 
     export interface IAstWalker {
->IAstWalker : IAstWalker
-
         walk(ast: AST, parent: AST): AST;
 >walk : (ast: AST, parent: AST) => AST
 >ast : AST
@@ -63,8 +61,6 @@ module TypeScript {
     }
 
     export interface IAstWalkCallback {
->IAstWalkCallback : IAstWalkCallback
-
         (ast: AST, parent: AST, walker: IAstWalker): AST;
 >ast : AST
 >parent : AST
@@ -72,8 +68,6 @@ module TypeScript {
     }
 
     export interface IAstWalkChildren {
->IAstWalkChildren : IAstWalkChildren
-
         (preAst: AST, parent: AST, walker: IAstWalker): void;
 >preAst : AST
 >parent : AST

@@ -1,14 +1,6 @@
 --- old.assertionTypePredicates1.types
 +++ new.assertionTypePredicates1.types
-@@= skipped -24, +24 lines =@@
- 
- declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
- >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
-+>T : T
- >value : T
- 
- function f01(x: unknown) {
-@@= skipped -15, +16 lines =@@
+@@= skipped -39, +39 lines =@@
  >assert(typeof x === "string") : void
  >assert : (value: unknown) => asserts value
  >typeof x === "string" : boolean
@@ -58,13 +50,7 @@
  >value : unknown
  >message : string | undefined
  
-     export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
- >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
-+>T : T
- >value : T
- }
- 
-@@= skipped -20, +21 lines =@@
+@@= skipped -20, +20 lines =@@
  
          Debug.assert(x);
  >Debug.assert(x) : void
@@ -164,34 +150,7 @@
  >x : unknown
  >"string" : "string"
  }
-@@= skipped -8, +8 lines =@@
- // Repro from #35940
- 
- interface Thing {
-+>Thing : Thing
-+
-     good: boolean;
- >good : boolean
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface GoodThing {
-+>GoodThing : GoodThing
-+
-     good: true;
- >good : true
- >true : true
-@@= skipped -103, +105 lines =@@
- }
- 
- interface TestPropertySignature {
-+>TestPropertySignature : TestPropertySignature
-+
-   assert: (value: unknown) => asserts value;
- >assert : (value: unknown) => asserts value
- >value : unknown
-@@= skipped -25, +27 lines =@@
+@@= skipped -144, +144 lines =@@
  >x : TestPropertySignature
  }
  function testFunctionThisParameter1(
@@ -200,16 +159,7 @@
  
    this: TestPropertySignature,
  >this : TestPropertySignature
-@@= skipped -21, +21 lines =@@
- }
- 
- interface TestMethodSignature {
-+>TestMethodSignature : TestMethodSignature
-+
-   assert(value: unknown): asserts value;
- >assert : (value: unknown) => asserts value
- >value : unknown
-@@= skipped -25, +27 lines =@@
+@@= skipped -46, +46 lines =@@
  >x : TestMethodSignature
  }
  function testFunctionThisParameter2(

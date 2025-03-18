@@ -1,36 +1,19 @@
 --- old.objectTypesIdentityWithCallSignatures3.types
 +++ new.objectTypesIdentityWithCallSignatures3.types
-@@= skipped -3, +3 lines =@@
- // object types are identical structurally
- 
- interface I {
-+>I : I
-+
-     (x: string): string;
- >x : string
- }
- 
- interface I2<T> {
-+>I2 : I2<T>
-+>T : T
-+
-     (x: T): T;
- >x : T
- }
-@@= skipped -26, +31 lines =@@
+@@= skipped -29, +29 lines =@@
  >x : any
  
  function foo3(x: typeof a);
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: (x: string) => string): any; (x: (x: string) => string): any; }
  >x : (x: string) => string
-->a : (x: string) => string
+ >a : (x: string) => string
  
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: (x: string) => string): any; (x: (x: string) => string): any; }
  >x : (x: string) => string
-->a : (x: string) => string
+ >a : (x: string) => string
  
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -41,13 +24,13 @@
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
 +>foo4 : { (x: any): any; (x: any): any; }
  >x : any
-->b : any
+ >b : any
  
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
 +>foo4 : { (x: any): any; (x: any): any; }
  >x : any
-->b : any
+ >b : any
  
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -63,7 +46,7 @@
 ->foo13 : { (x: I): any; (x: typeof a): any; }
 +>foo13 : { (x: I): any; (x: (x: string) => string): any; }
  >x : (x: string) => string
-->a : (x: string) => string
+ >a : (x: string) => string
  
  function foo13(x: any) { }
 ->foo13 : { (x: I): any; (x: typeof a): any; }
@@ -71,14 +54,14 @@
  >x : any
  
  function foo14(x: I);
-@@= skipped -53, +48 lines =@@
+@@= skipped -53, +53 lines =@@
  >x : any
  
  function foo14b(x: typeof a);
 ->foo14b : { (x: typeof a): any; (x: I2<string>): any; }
 +>foo14b : { (x: (x: string) => string): any; (x: I2<string>): any; }
  >x : (x: string) => string
-->a : (x: string) => string
+ >a : (x: string) => string
  
  function foo14b(x: I2<string>); // error
 ->foo14b : { (x: typeof a): any; (x: I2<string>): any; }

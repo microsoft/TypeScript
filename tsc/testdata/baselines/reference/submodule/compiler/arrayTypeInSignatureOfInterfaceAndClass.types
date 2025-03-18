@@ -6,11 +6,9 @@ declare module WinJS {
 
     class Promise<T> {
 >Promise : Promise<T>
->T : T
 
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
 >then : <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void) => Promise<U>
->U : U
 >success : (value: T) => Promise<U>
 >value : T
 >error : (error: any) => Promise<U>
@@ -23,9 +21,6 @@ declare module Data {
 >Data : typeof Data
 
     export interface IListItem<T> {
->IListItem : IListItem<T>
->T : T
-
         itemIndex: number;
 >itemIndex : number
 
@@ -51,9 +46,6 @@ declare module Data {
 >preventAugmentation : boolean
     }
     export interface IVirtualList<T> {
->IVirtualList : IVirtualList<T>
->T : T
-
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
 >removeIndices : (indices: number[], options?: any) => Promise<IListItem<T>[]>
@@ -63,7 +55,6 @@ declare module Data {
     }
     export class VirtualList<T> implements IVirtualList<T> {
 >VirtualList : VirtualList<T>
->T : T
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         public removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;

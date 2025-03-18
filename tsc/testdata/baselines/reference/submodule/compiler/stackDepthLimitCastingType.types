@@ -5,12 +5,8 @@ declare global {
 >global : typeof global
 
     interface JQueryXHR { }
->JQueryXHR : JQueryXHR
-
     class Model<T = any, E = {}> {
 >Model : Model<T, E>
->T : T
->E : E
 
         initialize(attributes?: T, options?: CombinedModelConstructorOptions<E, this>): void;
 >initialize : (attributes?: T | undefined, options?: CombinedModelConstructorOptions<E, this> | undefined) => void
@@ -22,15 +18,11 @@ declare global {
 >options : any
     }
     interface ModelConstructorOptions<TModel extends Model = Model> {
->ModelConstructorOptions : ModelConstructorOptions<TModel>
->TModel : TModel
-
         collection?: Collection<TModel>;
 >collection : Collection<TModel> | undefined
     }
     class Collection<TModel extends Model = Model> {
 >Collection : Collection<TModel>
->TModel : TModel
 
         without(...values: TModel[]): TModel[];
 >without : (...values: TModel[]) => TModel[]
@@ -38,8 +30,6 @@ declare global {
     }
     type CombinedModelConstructorOptions<E, M extends Model<any, E> = Model> = ModelConstructorOptions<M> & E;
 >CombinedModelConstructorOptions : CombinedModelConstructorOptions<E, M>
->E : E
->M : M
 }
 
 export {
@@ -58,8 +48,6 @@ declare module "backbone" {
 >"backbone" : typeof import("node_modules/backbone/index")
 
     interface ModelWithCache extends Model {
->ModelWithCache : ModelWithCache
-
         fetch(options?: any): JQueryXHR;
 >fetch : (options?: any) => JQueryXHR
 >options : any

@@ -5,10 +5,6 @@
 
 type Magic<X> = X extends [[infer Y, ...infer _], ...infer __] ? Y : never;
 >Magic : Magic<X>
->X : X
->Y : Y
->_ : _
->__ : __
 
 type R = Magic<[[number]]>
 >R : number
@@ -17,7 +13,6 @@ type R = Magic<[[number]]>
 
 type Recursive<Id> = {
 >Recursive : Recursive<Id>
->Id : Id
 
     id: Id
 >id : Id
@@ -28,7 +23,6 @@ type Recursive<Id> = {
 
 declare function getIds<Id>(items: readonly Recursive<Id>[]): Id[];
 >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
->Id : Id
 >items : readonly Recursive<Id>[]
 
 const items = [{
@@ -97,17 +91,14 @@ const foo2 = getIds([{
 
 type T1<T> = [number, T1<{ x: T }>];
 >T1 : T1<T>
->T : T
 >x : T
 
 type T2<T> = [42, T2<{ x: T }>];
 >T2 : T2<T>
->T : T
 >x : T
 
 function qq<U>(x: T1<U>, y: T2<U>) {
 >qq : <U>(x: T1<U>, y: T2<U>) => void
->U : U
 >x : T1<U>
 >y : T2<U>
 

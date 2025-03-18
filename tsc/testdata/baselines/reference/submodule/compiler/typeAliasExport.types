@@ -12,4 +12,5 @@ declare module "a" {
 
   export type a = typeof a;
 >a : any
+>a : any
 }

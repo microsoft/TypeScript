@@ -9,15 +9,7 @@
  
      log(msg: string): void;
  >log : (msg: string) => void
- >msg : string
- }
- interface Robot {
-+>Robot : Robot
-+
-     name: string;
- >name : string
- 
-@@= skipped -34, +36 lines =@@
+@@= skipped -34, +34 lines =@@
  >"none" : "none"
  
  function foo1(

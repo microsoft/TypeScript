@@ -7,6 +7,7 @@ export class A {
 
 	member: typeof GlobalFoo;
 >member : Foo
+>GlobalFoo : Foo
 }
 
 === ref/b.ts ===

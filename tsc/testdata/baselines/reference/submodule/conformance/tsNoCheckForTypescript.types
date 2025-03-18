@@ -10,8 +10,6 @@ export const a = 1 + {}; // This is an error, ofc, `Operator '+' cannot be appli
 >{} : {}
 
 export interface Aleph {
->Aleph : Aleph
-
     q: number;
 >q : number
 }

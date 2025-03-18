@@ -3,7 +3,6 @@
 === input.ts ===
 export type Foo<T = string> = {};
 >Foo : Foo<T>
->T : T
 
 === usage.ts ===
 import {Foo} from "./input";
@@ -11,7 +10,6 @@ import {Foo} from "./input";
 
 function bar<T>(element: Foo) {
 >bar : <T>(element: Foo) => number
->T : T
 >element : Foo
 
     return 1;

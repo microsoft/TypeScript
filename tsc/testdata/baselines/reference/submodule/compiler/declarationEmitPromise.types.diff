@@ -1,35 +1,15 @@
 --- old.declarationEmitPromise.types
 +++ new.declarationEmitPromise.types
-@@= skipped -2, +2 lines =@@
- === declarationEmitPromise.ts ===
- export class bluebird<T> {
- >bluebird : bluebird<T>
-+>T : T
- 
-     static all: Array<bluebird<any>>;
- >all : bluebird<any>[]
+@@= skipped -8, +8 lines =@@
  }
  
  export async function runSampleWorks<A, B, C, D, E>(
 ->runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>
 +>runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
-+>A : A
-+>B : B
-+>C : C
-+>D : D
-+>E : E
  
      a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
  >a : bluebird<A>
-@@= skipped -42, +48 lines =@@
-     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
- >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
- ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
-+>T : T
- >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
- >a : A
- >b : B
-@@= skipped -9, +10 lines =@@
+@@= skipped -45, +45 lines =@@
  
          f.apply(this, result);
  >f.apply(this, result) : any
@@ -41,35 +21,16 @@
  >this : any
  >result : any
  
-     let rfunc: typeof func & {} = func as any; // <- This is the only difference
- >rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
-->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
- >func as any : any
- >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
- 
-@@= skipped -17, +16 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  export async function runSampleBreaks<A, B, C, D, E>(
 ->runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>
 +>runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T>
-+>A : A
-+>B : B
-+>C : C
-+>D : D
-+>E : E
  
      a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
  >a : bluebird<A>
-@@= skipped -36, +41 lines =@@
-     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
- >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
- ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
-+>T : T
- >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
- >a : A
- >b : B
-@@= skipped -9, +10 lines =@@
+@@= skipped -45, +45 lines =@@
  
          f.apply(this, result);
  >f.apply(this, result) : any
@@ -80,10 +41,4 @@
 +>apply : (thisArg: any, argArray?: any) => any
  >this : any
  >result : any
- 
-     let rfunc: typeof func = func as any; // <- This is the only difference
- >rfunc : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
-->func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
- >func as any : any
- >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
  

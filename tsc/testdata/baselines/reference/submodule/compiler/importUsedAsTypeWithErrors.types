@@ -2,8 +2,6 @@
 
 === test.ts ===
 export interface T {
->T : T
-
     value: string
 >value : string
 }

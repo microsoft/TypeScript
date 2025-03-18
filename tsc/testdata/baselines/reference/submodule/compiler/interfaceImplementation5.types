@@ -2,8 +2,6 @@
 
 === interfaceImplementation5.ts ===
 interface I1 {
->I1 : I1
-
     getset1:number;
 >getset1 : number
 }

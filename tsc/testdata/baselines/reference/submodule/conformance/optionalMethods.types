@@ -2,8 +2,6 @@
 
 === optionalMethods.ts ===
 interface Foo {
->Foo : Foo
-
     a: number;
 >a : number
 

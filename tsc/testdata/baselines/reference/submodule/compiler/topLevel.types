@@ -2,8 +2,6 @@
 
 === topLevel.ts ===
 interface IPoint {
->IPoint : IPoint
-
     x:number;
 >x : number
 

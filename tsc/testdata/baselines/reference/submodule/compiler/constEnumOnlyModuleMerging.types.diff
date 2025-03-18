@@ -1,15 +1,6 @@
 --- old.constEnumOnlyModuleMerging.types
 +++ new.constEnumOnlyModuleMerging.types
-@@= skipped -9, +9 lines =@@
- }
- 
- module Outer {
-+>Outer : typeof Outer
-+
-     export const enum A { X }
- >A : A
- >X : A.X
-@@= skipped -9, +11 lines =@@
+@@= skipped -18, +18 lines =@@
  >B : typeof B
  
      import O = Outer;

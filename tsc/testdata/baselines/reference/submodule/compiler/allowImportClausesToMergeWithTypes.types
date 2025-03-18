@@ -10,8 +10,6 @@ export default zzz;
 
 === a.ts ===
 export default interface zzz {
->zzz : default
-
     x: string;
 >x : string
 }

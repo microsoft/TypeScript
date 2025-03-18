@@ -4,11 +4,7 @@
 // https://github.com/microsoft/TypeScript/issues/55240
 
 declare namespace JSX {
->JSX : any
-
   interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
     [k: `foo${string}`]: { prop: string };
 >k : `foo${string}`
 >prop : string

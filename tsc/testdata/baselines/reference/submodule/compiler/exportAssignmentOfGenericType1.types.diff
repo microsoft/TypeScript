@@ -25,10 +25,3 @@
  
  === exportAssignmentOfGenericType1_0.ts ===
  export = T;
-@@= skipped -21, +21 lines =@@
- 
- class T<X> { foo: X; }
- >T : T<X>
-+>X : X
- >foo : X
- 

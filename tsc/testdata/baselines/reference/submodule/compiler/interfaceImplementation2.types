@@ -2,8 +2,6 @@
 
 === interfaceImplementation2.ts ===
 interface I1 {
->I1 : I1
-
     iObj:{ };
 >iObj : {}
 

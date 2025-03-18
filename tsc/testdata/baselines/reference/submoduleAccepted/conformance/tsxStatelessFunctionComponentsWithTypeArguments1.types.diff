@@ -10,18 +10,10 @@
  declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 ->ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
 +>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
-+>K : K
-+>V : V
  >l : { key1: K; value: V; }
  >key1 : K
  >value : V
-@@= skipped -12, +14 lines =@@
- // OK
- function Baz<T,U>(key1: T, value: U) {
- >Baz : <T, U>(key1: T, value: U) => void
-+>T : T
-+>U : U
- >key1 : T
+@@= skipped -16, +16 lines =@@
  >value : U
  
      let a0 = <ComponentWithTwoAttributes key1={key1} value={value} />
@@ -56,11 +48,10 @@
  declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 ->Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
 +>Link : <U>(l: { func: (arg: U) => void; }) => Element
-+>U : U
  >l : { func: (arg: U) => void; }
  >func : (arg: U) => void
  >arg : U
-@@= skipped -37, +40 lines =@@
+@@= skipped -33, +33 lines =@@
  >a : number
  
      let o = <Link func={func} />
@@ -92,22 +83,18 @@
  }
  
  interface InferParamProp<T> {
-+>InferParamProp : InferParamProp<T>
-+>T : T
-+
      values: Array<T>;
 ->values : T[]
 +>values : Array<T>
  
      selectHandler: (selectedVal: T) => void;
  >selectHandler : (selectedVal: T) => void
-@@= skipped -17, +20 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 ->InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
 +>InferParamComponent : <T>(attr: InferParamProp<T>) => Element
-+>T : T
  >attr : InferParamProp<T>
  >JSX : any
  

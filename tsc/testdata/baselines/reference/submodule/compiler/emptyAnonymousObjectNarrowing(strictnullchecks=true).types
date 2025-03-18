@@ -36,7 +36,6 @@ else {
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
->T : T
 >x : T
 
   if (nonNull === x) {
@@ -55,7 +54,6 @@ function f1<T>(x: T) {
 
 function f2<T extends object>(x: T) {
 >f2 : <T extends object>(x: T) => void
->T : T
 >x : T
 
   if (nonNull === x) {

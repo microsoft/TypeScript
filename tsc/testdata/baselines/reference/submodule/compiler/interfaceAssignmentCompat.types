@@ -18,15 +18,11 @@ module M {
     }
 
     export interface IEye {
->IEye : IEye
-
         color:number;
 >color : number
     }
 
     export interface IFrenchEye {
->IFrenchEye : IFrenchEye
-
         coleur:number;
 >coleur : number
     }

@@ -2,14 +2,12 @@
 
 === type1.ts ===
 interface T1 {}
->T1 : T1
-
 export type { T1 }
 >T1 : T1
 
 === type2.ts ===
+
 export interface T2 {}
->T2 : T2
 
 === class3.ts ===
 export class C3 {}

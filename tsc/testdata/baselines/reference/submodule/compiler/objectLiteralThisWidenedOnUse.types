@@ -2,7 +2,6 @@
 
 === objectLiteralThisWidenedOnUse.ts ===
 interface Foo { bar: boolean; }
->Foo : Foo
 >bar : boolean
 
 var GlobalIns = {

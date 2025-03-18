@@ -3,16 +3,13 @@
 === identicalGenericConditionalsWithInferRelated.ts ===
 function f<X>(arg: X) {
 >f : <X>(arg: X) => void
->X : X
 >arg : X
 
     type Cond1 = X extends [infer A] ? A : never;
 >Cond1 : Cond1
->A : A
 
     type Cond2 = X extends [infer A] ? A : never;
 >Cond2 : Cond2
->A : A
 
     let x: Cond1 = null as any;
 >x : Cond1
@@ -36,12 +33,10 @@ function f<X>(arg: X) {
 // repro from https://github.com/microsoft/TypeScript/issues/26627
 export type Constructor<T> = new (...args: any[]) => T
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 export type MappedResult<T> =
 >MappedResult : MappedResult<T>
->T : T
 
     T extends Boolean ? boolean :
     T extends Number ? number :
@@ -50,13 +45,9 @@ export type MappedResult<T> =
 
 
 interface X {
->X : X
-
     decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never>
 >decode : <C extends Constructor<any>>(ctor: C) => MappedResult<C extends Constructor<infer T> ? T : never>
->C : C
 >ctor : C
->T : T
 }
 
 class Y implements X {
@@ -64,9 +55,7 @@ class Y implements X {
 
     decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never> {
 >decode : <C extends Constructor<any>>(ctor: C) => MappedResult<C extends Constructor<infer T> ? T : never>
->C : C
 >ctor : C
->T : T
 
         throw new Error()
 >new Error() : Error

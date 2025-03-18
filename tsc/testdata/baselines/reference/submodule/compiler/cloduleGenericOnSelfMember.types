@@ -3,7 +3,6 @@
 === cloduleGenericOnSelfMember.ts ===
 class ServiceBase<T> {
 >ServiceBase : ServiceBase<T>
->T : T
 
     field: T;
 >field : T
@@ -11,7 +10,9 @@ class ServiceBase<T> {
 class Service extends ServiceBase<typeof Service.Base> {
 >Service : Service
 >ServiceBase : ServiceBase<{ name: string; value: number; }>
+>Service.Base : { name: string; value: number; }
 >Service : typeof Service
+>Base : { name: string; value: number; }
 }
 namespace Service {
 >Service : typeof Service

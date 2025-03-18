@@ -4,18 +4,14 @@
 // Regression test for #5861
 
 interface Foo<T> { prop: T; }
->Foo : Foo<T>
->T : T
 >prop : T
 
 declare function lift<U>(value: U | Foo<U>): Foo<U>;
 >lift : <U>(value: U | Foo<U>) => Foo<U>
->U : U
 >value : U | Foo<U>
 
 function unlift<U>(value: U | Foo<U>): U {
 >unlift : <U>(value: U | Foo<U>) => U
->U : U
 >value : U | Foo<U>
 
     return lift(value).prop;

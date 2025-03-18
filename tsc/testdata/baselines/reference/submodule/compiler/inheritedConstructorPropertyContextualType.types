@@ -2,14 +2,11 @@
 
 === inheritedConstructorPropertyContextualType.ts ===
 interface State {
->State : State
-
     version: 2
 >version : 2
 }
 declare class Base<S> {
 >Base : Base<S>
->S : S
 
     state: S
 >state : S

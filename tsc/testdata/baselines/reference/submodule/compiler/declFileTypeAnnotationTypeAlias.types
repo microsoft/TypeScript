@@ -34,8 +34,6 @@ module M {
 }
 
 interface Window {
->Window : Window
-
     someMethod();
 >someMethod : () => any
 }

@@ -2,8 +2,6 @@
 
 === foo.ts ===
 interface Point {
->Point : Point
-
     x: number;
 >x : number
 
@@ -15,11 +13,7 @@ export = Point;
 
 === foo2.ts ===
 namespace Bar {
->Bar : typeof Bar
-
     export interface I {
->I : I
-
         a: string;
 >a : string
 
@@ -29,11 +23,7 @@ namespace Bar {
 }
 
 export namespace Baz {
->Baz : any
-
     export interface J {
->J : J
-
         a: number;
 >a : number
 

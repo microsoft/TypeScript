@@ -40,7 +40,6 @@
 -><Obj>(obj: Obj) => excludePrivateKeys1(obj) : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
 +>dropPrivateProps1 : <Obj>(obj: Obj) => { [K in PublicKeys1<keyof Obj>]: Obj[K] }
 +><Obj>(obj: Obj) => excludePrivateKeys1(obj) : <Obj>(obj: Obj) => { [K in PublicKeys1<keyof Obj>]: Obj[K] }
-+>Obj : Obj
  >obj : Obj
 ->excludePrivateKeys1(obj) : { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
 ->excludePrivateKeys1 : <Obj_1>(obj: Obj_1) => { [K in import("internal").PublicKeys1<keyof Obj_1>]: Obj_1[K]; }
@@ -53,7 +52,6 @@
 -><Obj>(obj: Obj) => excludePrivateKeys2(obj) : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
 +>dropPrivateProps2 : <Obj>(obj: Obj) => { [K in PublicKeys2<keyof Obj>]: Obj[K] }
 +><Obj>(obj: Obj) => excludePrivateKeys2(obj) : <Obj>(obj: Obj) => { [K in PublicKeys2<keyof Obj>]: Obj[K] }
-+>Obj : Obj
  >obj : Obj
 ->excludePrivateKeys2(obj) : { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
 ->excludePrivateKeys2 : <Obj_1>(obj: Obj_1) => { [K in keyof Obj_1 extends infer T ? T extends keyof Obj_1 ? T extends `_${string}` ? never : T : never : never]: Obj_1[K]; }
@@ -65,22 +63,11 @@
  export declare function excludePrivateKeys1<Obj>(obj: Obj): {[K in PublicKeys1<keyof Obj>]: Obj[K]};
 ->excludePrivateKeys1 : <Obj>(obj: Obj) => { [K in PublicKeys1<keyof Obj>]: Obj[K]; }
 +>excludePrivateKeys1 : <Obj>(obj: Obj) => { [K in PublicKeys1<keyof Obj>]: Obj[K] }
-+>Obj : Obj
  >obj : Obj
-+>K : K
  
  export declare function excludePrivateKeys2<Obj>(obj: Obj): {[K in PublicKeys2<keyof Obj>]: Obj[K]};
 ->excludePrivateKeys2 : <Obj>(obj: Obj) => { [K in PublicKeys2<keyof Obj>]: Obj[K]; }
 +>excludePrivateKeys2 : <Obj>(obj: Obj) => { [K in PublicKeys2<keyof Obj>]: Obj[K] }
-+>Obj : Obj
  >obj : Obj
-+>K : K
  
  export type PublicKeys1<T> = T extends `_${string}` ? never : T;
- >PublicKeys1 : PublicKeys1<T>
-+>T : T
- 
- type PublicKeys2<T>        = T extends `_${string}` ? never : T;
- >PublicKeys2 : PublicKeys2<T>
-+>T : T
- 

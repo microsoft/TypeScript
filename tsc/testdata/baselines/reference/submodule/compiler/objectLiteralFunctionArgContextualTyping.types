@@ -2,8 +2,6 @@
 
 === objectLiteralFunctionArgContextualTyping.ts ===
 interface I {
->I : I
-
     value: string;
 >value : string
 

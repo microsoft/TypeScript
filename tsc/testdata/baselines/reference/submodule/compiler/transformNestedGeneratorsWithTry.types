@@ -42,10 +42,10 @@ declare module "bluebird" {
 
     type Bluebird<T> = Promise<T>;
 >Bluebird : Bluebird<T>
->T : T
 
     const Bluebird: typeof Promise;
 >Bluebird : PromiseConstructor
+>Promise : PromiseConstructor
 
     export = Bluebird;
 >Bluebird : Bluebird<T>

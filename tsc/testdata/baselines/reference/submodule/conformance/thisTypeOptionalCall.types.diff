@@ -6,9 +6,6 @@
  function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
 ->maybeBind : <T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined) => ((...args: A) => R) | undefined
 +>maybeBind : <T, A extends any[], R>(obj: T, fn: (...args: A) => R | undefined) => (...args: A) => R | undefined
-+>T : T
-+>A : A
-+>R : R
  >obj : T
 ->fn : ((this: T, ...args: A) => R) | undefined
 +>fn : (...args: A) => R | undefined

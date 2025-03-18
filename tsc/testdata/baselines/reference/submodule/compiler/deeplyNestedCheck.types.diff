@@ -1,61 +1,15 @@
 --- old.deeplyNestedCheck.types
 +++ new.deeplyNestedCheck.types
-@@= skipped -3, +3 lines =@@
- // Repro from #14794
+@@= skipped -4, +4 lines =@@
  
  interface DataSnapshot<X = {}> {
-+>DataSnapshot : DataSnapshot<X>
-+>X : X
-+
    child(path: string): DataSnapshot;
 ->child : (path: string) => DataSnapshot
 +>child : (path: string) => DataSnapshot<{}>
  >path : string
  }
  
- interface Snapshot<T> extends DataSnapshot {
-+>Snapshot : Snapshot<T>
-+>T : T
-+
-   child<U extends Extract<keyof T, string>>(path: U): Snapshot<T[U]>;
- >child : <U extends Extract<keyof T, string>>(path: U) => Snapshot<T[U]>
-+>U : U
- >path : U
- }
- 
- // Repro from 34619
- 
- interface A { b: B[] }
-+>A : A
- >b : B[]
- 
- interface B { c: C }
-+>B : B
- >c : C
- 
- interface C { d: D[] }
-+>C : C
- >d : D[]
- 
- interface D { e: E[] }
-+>D : D
- >e : E[]
- 
- interface E { f: F[] }
-+>E : E
- >f : F[]
- 
- interface F { g: G }
-+>F : F
- >g : G
- 
- interface G { h: H[] }
-+>G : G
- >h : H[]
- 
- interface H { i: string }
-+>H : H
- >i : string
+@@= skipped -38, +38 lines =@@
  
  const x: A = {
  >x : A
@@ -79,7 +33,7 @@
  
          d: [
  >d : { e: { f: { g: { h: {}[]; }; }[]; }[]; }[]
-@@= skipped -106, +121 lines =@@
+@@= skipped -67, +67 lines =@@
  >42 : 42
  
  const a2: string[][][][][][][][][][] = [[[[[[[[[[42]]]]]]]]]];

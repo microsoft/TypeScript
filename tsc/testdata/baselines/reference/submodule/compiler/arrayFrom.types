@@ -5,15 +5,11 @@
 // Also tests for #19682
 
 interface A {
->A : A
-
   a: string;
 >a : string
 }
 
 interface B {
->B : B
-
   b: string;
 >b : string
 }
@@ -168,7 +164,6 @@ const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
 // even when the type is written as : Iterable<T>|ArrayLike<T>
 function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
 >getEither : <T>(in1: Iterable<T, any, any>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T, any, any>
->T : T
 >in1 : Iterable<T, any, any>
 >in2 : ArrayLike<T>
 

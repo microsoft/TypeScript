@@ -30,16 +30,14 @@
  declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
 ->invalidTypeParameterConstraint : <T extends unique symbol>() => void
 +>invalidTypeParameterConstraint : <T extends symbol>() => void
-+>T : T
  
  declare function invalidTypeParameterDefault<T = unique symbol>(): void;
 ->invalidTypeParameterDefault : <T = symbol>() => void
 +>invalidTypeParameterDefault : <T>() => void
-+>T : T
  
  // classes
  class InvalidClass {
-@@= skipped -38, +40 lines =@@
+@@= skipped -38, +38 lines =@@
  >invalidPropertyType : symbol
  
      invalidArgType(arg: unique symbol): void { return; }
@@ -69,16 +67,14 @@
      invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
 ->invalidTypeParameterConstraint : <T extends unique symbol>() => void
 +>invalidTypeParameterConstraint : <T extends symbol>() => void
-+>T : T
  
      invalidTypeParameterDefault<T = unique symbol>(): void { return; }
 ->invalidTypeParameterDefault : <T = symbol>() => void
 +>invalidTypeParameterDefault : <T>() => void
-+>T : T
  
      get invalidGetter(): unique symbol { return; }
  >invalidGetter : symbol
-@@= skipped -35, +37 lines =@@
+@@= skipped -35, +35 lines =@@
  >invalidStaticPropertyType : symbol
  
      static invalidStaticArgType(arg: unique symbol): void { return; }
@@ -108,22 +104,14 @@
      static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
 ->invalidStaticTypeParameterConstraint : <T extends unique symbol>() => void
 +>invalidStaticTypeParameterConstraint : <T extends symbol>() => void
-+>T : T
  
      static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
 ->invalidStaticTypeParameterDefault : <T = symbol>() => void
 +>invalidStaticTypeParameterDefault : <T>() => void
-+>T : T
  
      static get invalidStaticGetter(): unique symbol { return; }
  >invalidStaticGetter : symbol
-@@= skipped -34, +36 lines =@@
- 
- // interfaces
- interface InvalidInterface {
-+>InvalidInterface : InvalidInterface
-+
-     invalidPropertyType: unique symbol;
+@@= skipped -38, +38 lines =@@
  >invalidPropertyType : symbol
  
      invalidArgType(arg: unique symbol): void;
@@ -153,16 +141,14 @@
      invalidTypeParameterConstraint<T extends unique symbol>(): void;
 ->invalidTypeParameterConstraint : <T extends unique symbol>() => void
 +>invalidTypeParameterConstraint : <T extends symbol>() => void
-+>T : T
  
      invalidTypeParameterDefault<T = unique symbol>(): void;
 ->invalidTypeParameterDefault : <T = symbol>() => void
 +>invalidTypeParameterDefault : <T>() => void
-+>T : T
  }
  
  // type literals
-@@= skipped -37, +41 lines =@@
+@@= skipped -33, +33 lines =@@
  >invalidPropertyType : symbol
  
      invalidArgType(arg: unique symbol): void;
@@ -192,32 +178,10 @@
      invalidTypeParameterConstraint<T extends unique symbol>(): void;
 ->invalidTypeParameterConstraint : <T extends unique symbol>() => void
 +>invalidTypeParameterConstraint : <T extends symbol>() => void
-+>T : T
  
      invalidTypeParameterDefault<T = unique symbol>(): void;
 ->invalidTypeParameterDefault : <T = symbol>() => void
 +>invalidTypeParameterDefault : <T>() => void
-+>T : T
  
  };
  
-@@= skipped -32, +34 lines =@@
- 
- type InvalidAliasTypeParameterConstraint<T extends unique symbol> = never;
- >InvalidAliasTypeParameterConstraint : never
-+>T : T
- 
- type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
- >InvalidAliasTypeParameterDefault : never
-+>T : T
- 
- // type references
- declare const invalidTypeArgument: Promise<unique symbol>;
-@@= skipped -17, +19 lines =@@
- // mapped types
- declare const invalidMappedType: { [P in string]: unique symbol };
- >invalidMappedType : { [x: string]: symbol; }
-+>P : P
- 
- // unions/intersection
- declare const invalidUnion: unique symbol | unique symbol;

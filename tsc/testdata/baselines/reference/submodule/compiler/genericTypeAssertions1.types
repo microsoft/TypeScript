@@ -3,7 +3,6 @@
 === genericTypeAssertions1.ts ===
 class A<T> { foo(x: T) { }}
 >A : A<T>
->T : T
 >foo : (x: T) => void
 >x : T
 

@@ -5,31 +5,18 @@
  type _R<T> = [T] extends [{ _R: (_: infer R) => void }] ? R : never;
  >_R : _R<T>
 ->_R : (_: infer R) => void
-+>T : T
 +>_R : (_: R) => void
  >_ : R
-+>R : R
  
  type _E<T> = [T] extends [{ _E: () => infer E }] ? E : never;
  >_E : _E<T>
 ->_E : () => infer E
-+>T : T
 +>_E : () => E
-+>E : E
  
  type _A<T> = [T] extends [{ _A: () => infer A }] ? A : never;
  >_A : _A<T>
 ->_A : () => infer A
-+>T : T
 +>_A : () => A
-+>A : A
  
  interface Sync<R, E, A> {
-+>Sync : Sync<R, E, A>
-+>R : R
-+>E : E
-+>A : A
-+
    _R: (_: R) => void;
- >_R : (_: R) => void
- >_ : R

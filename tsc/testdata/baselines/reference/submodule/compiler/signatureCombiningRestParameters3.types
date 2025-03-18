@@ -2,9 +2,6 @@
 
 === signatureCombiningRestParameters3.ts ===
 interface ExtensionConfig<Options = any> {
->ExtensionConfig : ExtensionConfig<Options>
->Options : Options
-
   extendMarkSchema?:
 >extendMarkSchema : (extension: Mark<any>) => Record<string, any> | null | undefined
 
@@ -28,7 +25,6 @@ interface ExtensionConfig<Options = any> {
 
 declare class Extension<Options = any> {
 >Extension : Extension<Options>
->Options : Options
 
   type: string;
 >type : string
@@ -51,7 +47,6 @@ declare class Extension<Options = any> {
 
 declare class Node<Options = any> {
 >Node : Node<Options>
->Options : Options
 
   type: string;
 >type : string
@@ -70,9 +65,6 @@ declare class Node<Options = any> {
 }
 
 interface NodeConfig<Options = any> {
->NodeConfig : NodeConfig<Options>
->Options : Options
-
   extendMarkSchema?:
 >extendMarkSchema : (extension: Node<any>) => Record<string, any> | null | undefined
 
@@ -96,7 +88,6 @@ interface NodeConfig<Options = any> {
 
 declare class Mark<Options = any> {
 >Mark : Mark<Options>
->Options : Options
 
   options: Options;
 >options : Options
@@ -106,9 +97,6 @@ declare class Mark<Options = any> {
 }
 
 interface MarkConfig<Options = any> {
->MarkConfig : MarkConfig<Options>
->Options : Options
-
   extendMarkSchema?:
 >extendMarkSchema : (extension: Mark<any>) => Record<string, any> | null | undefined
 
@@ -141,7 +129,6 @@ declare const e: AnyExtension;
 
 type RemoveThis<T> = T extends (...args: any) => any
 >RemoveThis : RemoveThis<T>
->T : T
 >args : any
 
   ? (...args: Parameters<T>) => ReturnType<T>
@@ -151,7 +138,6 @@ type RemoveThis<T> = T extends (...args: any) => any
 
 declare function getExtensionField<T = any>(
 >getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
->T : T
 
   extension: AnyExtension,
 >extension : AnyExtension

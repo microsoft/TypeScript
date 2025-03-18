@@ -2,14 +2,8 @@
 
 === file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		test1: Attribs1;
 >test1 : Attribs1
 
@@ -18,22 +12,17 @@ declare module JSX {
 	}
 }
 interface Attribs1 {
->Attribs1 : Attribs1
-
 	x: string;
 >x : string
 }
 
 interface Attribs2 {
->Attribs2 : Attribs2
-
 	toString(): string;
 >toString : () => string
 }
 
 function make1<T extends {x: string}> (obj: T) {
 >make1 : <T extends { x: string; }>(obj: T) => any
->T : T
 >x : string
 >obj : T
 
@@ -45,7 +34,6 @@ function make1<T extends {x: string}> (obj: T) {
 
 function make2<T extends {x: number}> (obj: T) {
 >make2 : <T extends { x: number; }>(obj: T) => any
->T : T
 >x : number
 >obj : T
 
@@ -57,7 +45,6 @@ function make2<T extends {x: number}> (obj: T) {
 
 function make3<T extends {y: string}> (obj: T) {
 >make3 : <T extends { y: string; }>(obj: T) => any
->T : T
 >y : string
 >obj : T
 

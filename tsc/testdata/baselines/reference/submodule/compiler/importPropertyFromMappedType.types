@@ -9,11 +9,8 @@ declare const createHttpError: createHttpError.NamedConstructors;
 >createHttpError : any
 
 declare namespace createHttpError {
->createHttpError : NamedConstructors
-
     type NamedConstructors =  { [P in 'NotFound']: unknown;}
 >NamedConstructors : NamedConstructors
->P : P
 }
 
 === main.ts ===

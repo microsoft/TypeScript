@@ -6,10 +6,10 @@
  declare function f(p: typeof isString | typeof isNumber): void;
 ->f : (p: typeof isString | typeof isNumber) => void
 ->p : ((x: any) => x is string) | ((x: any) => x is number)
-->isString : (x: any) => x is string
-->isNumber : (x: any) => x is number
 +>f : (p: (x: any) => x is string | (x: any) => x is number) => void
 +>p : (x: any) => x is string | (x: any) => x is number
+ >isString : (x: any) => x is string
+ >isNumber : (x: any) => x is number
  
  f(isString);
  >f(isString) : void

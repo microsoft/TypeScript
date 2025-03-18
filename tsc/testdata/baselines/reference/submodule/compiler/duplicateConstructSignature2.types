@@ -2,9 +2,6 @@
 
 === duplicateConstructSignature2.ts ===
 interface I<T> {
->I : I<T>
->T : T
-
     (x: T): number;
 >x : T
 

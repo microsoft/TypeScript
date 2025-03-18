@@ -68,7 +68,6 @@ module M { // shouldnt be _M
 >m3 : typeof m3
 
         interface M {
->M : M
         }
         var p = x;
 >p : number

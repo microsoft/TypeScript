@@ -2,8 +2,6 @@
 
 === optionalPropertiesSyntax.ts ===
 interface fnSigs {
->fnSigs : fnSigs
-
     //functions signatures can be optional
     fn(): void;
 >fn : { (): void; (): void; }
@@ -16,8 +14,6 @@ interface fnSigs {
 }
 
 interface callSig {
->callSig : callSig
-
     //Call signatures can't be optional
     (): any;
     ()?: any; //err
@@ -27,8 +23,6 @@ interface callSig {
 }
 
 interface constructSig {
->constructSig : constructSig
-
     //Construct signatures can't be optional
     new (): any;
     new ()?: any; //err
@@ -39,8 +33,6 @@ interface constructSig {
 }
 
 interface propertySig {
->propertySig : propertySig
-
     //Property signatures can be optional
     prop: any;
 >prop : any
@@ -53,8 +45,6 @@ interface propertySig {
 }
 
 interface indexSig {
->indexSig : indexSig
-
     //Index signatures can't be optional
     [idx: number]: any;
 >idx : number

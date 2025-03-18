@@ -6,7 +6,6 @@
  function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T;
 ->tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 +>tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
-+>T : T
  >tempStrs : TemplateStringsArray
  >g : (x: T) => T
  >x : T
@@ -15,17 +14,15 @@
  function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T;
 ->tempFun : { <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, x: T_1): T_1; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
 +>tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
-+>T : T
  >tempStrs : TemplateStringsArray
  >g : (x: T) => T
  >x : T
-@@= skipped -16, +18 lines =@@
+@@= skipped -16, +16 lines =@@
  >x : T
  
  function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T {
 ->tempFun : { <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, x: T_1): T_1; <T_1>(tempStrs: TemplateStringsArray, g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 +>tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
-+>T : T
  >tempStrs : TemplateStringsArray
  >g : (x: T) => T
  >x : T

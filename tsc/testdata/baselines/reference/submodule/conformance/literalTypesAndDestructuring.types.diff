@@ -1,11 +1,8 @@
 --- old.literalTypesAndDestructuring.types
 +++ new.literalTypesAndDestructuring.types
-@@= skipped -62, +62 lines =@@
- // Repro from #35693
+@@= skipped -63, +63 lines =@@
  
  interface Foo {
-+>Foo : Foo
-+
    bar: 'yo' | 'ha' | undefined;
 ->bar : "yo" | "ha" | undefined
 +>bar : "ha" | "yo" | undefined

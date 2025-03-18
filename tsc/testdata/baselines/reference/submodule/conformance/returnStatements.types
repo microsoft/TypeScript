@@ -34,7 +34,6 @@ function fn8(): any { return; } // OK, eq. to 'return undefined'
 >fn8 : () => any
 
 interface I { id: number }
->I : I
 >id : number
 
 class C implements I {

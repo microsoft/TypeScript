@@ -1,8 +1,0 @@
---- old.parserGenericConstraint7.types
-+++ new.parserGenericConstraint7.types
-@@= skipped -2, +2 lines =@@
- === parserGenericConstraint7.ts ===
- class C<T extends List<List<T>>> {
- >C : C<T>
-+>T : T
- }

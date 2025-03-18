@@ -3,21 +3,15 @@
 === promiseTypeInference.ts ===
 declare class CPromise<T> {
 >CPromise : CPromise<T>
->T : T
 
     then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
 >then : <U>(success?: (value: T) => CPromise<U>) => CPromise<U>
->U : U
 >success : (value: T) => CPromise<U>
 >value : T
 }
 interface IPromise<T> {
->IPromise : IPromise<T>
->T : T
-
     then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
 >then : <U>(success?: (value: T) => IPromise<U>) => IPromise<U>
->U : U
 >success : (value: T) => IPromise<U>
 >value : T
 }

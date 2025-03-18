@@ -16,8 +16,6 @@
 +>React : any
  
  interface Props {
-+>Props : Props
-+
      children: React.ReactElement<any>
 ->children : React.ReactElement<any>
 +>children : ReactElement<any>

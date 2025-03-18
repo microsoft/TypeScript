@@ -1,27 +1,6 @@
 --- old.circularContextualMappedType.types
 +++ new.circularContextualMappedType.types
-@@= skipped -2, +2 lines =@@
- === circularContextualMappedType.ts ===
- type Func<T> = () => T;
- >Func : Func<T>
-+>T : T
- 
- type Mapped<T> = { [K in keyof T]: Func<T[K]> };
- >Mapped : Mapped<T>
-+>T : T
-+>K : K
- 
- declare function reproduce(options: number): void;
- >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
-@@= skipped -10, +13 lines =@@
- 
- declare function reproduce<T>(options: Mapped<T>): T
- >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
-+>T : T
- >options : Mapped<T>
- 
- reproduce({
-@@= skipped -17, +18 lines =@@
+@@= skipped -29, +29 lines =@@
  reproduce({
  >reproduce({  name() { return 123 }}) : { name: number; }
  >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }

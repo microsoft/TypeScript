@@ -8,11 +8,8 @@
 +>map : { A: (...args: []) => unknown; B: (...args: []) => unknown; C: (...args: [string]) => unknown; D: (...args: [number]) => unknown; }
  
    [K in T1 | keyof T2]: (...args: K extends keyof T2 ? T2[K] : []) => unknown;
-+>K : K
  >args : K extends keyof T2 ? T2[K] : []
- 
- };
-@@= skipped -12, +13 lines =@@
+@@= skipped -12, +12 lines =@@
  
  for (const [key, fn] of Object.entries(map)) {
  >key : string

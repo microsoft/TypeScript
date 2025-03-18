@@ -9,15 +9,7 @@
  
      z?: string;
  >z : string | undefined
-@@= skipped -19, +19 lines =@@
- // type guard
- function isNotNull<A>(x: A): x is NonNullable<A> {
- >isNotNull : <A>(x: A) => x is NonNullable<A>
-+>A : A
- >x : A
- 
-   return x !== null && x !== undefined;
-@@= skipped -33, +34 lines =@@
+@@= skipped -52, +52 lines =@@
  >isNotNull(x?.y?.z) : boolean
  >isNotNull : <A>(x: A) => x is NonNullable<A>
  >x?.y?.z : string | undefined

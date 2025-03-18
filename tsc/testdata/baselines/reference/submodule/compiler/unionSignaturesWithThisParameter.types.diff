@@ -7,12 +7,11 @@
 ->x : <T>(ctor: { (this: {}, v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }, t: T) => void
 ->ctor : { (this: {}, v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
 +>x : <T>(ctor: { (v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }, t: T) => void
-+>T : T
 +>ctor : { (v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
  
      (this: {}, v: T): void;
  >this : {}
-@@= skipped -22, +23 lines =@@
+@@= skipped -22, +22 lines =@@
  
      new ctor(t);
  >new ctor(t) : void

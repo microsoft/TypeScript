@@ -3,11 +3,9 @@
 === primitiveConstraints2.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
    public bar2<U extends T>(x: T, y: U): T {
 >bar2 : <U extends T>(x: T, y: U) => T
->U : U
 >x : T
 >y : U
 

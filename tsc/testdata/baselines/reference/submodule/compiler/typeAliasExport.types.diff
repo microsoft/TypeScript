@@ -1,8 +1,0 @@
---- old.typeAliasExport.types
-+++ new.typeAliasExport.types
-@@= skipped -11, +11 lines =@@
- 
-   export type a = typeof a;
- >a : any
-->a : any
- }

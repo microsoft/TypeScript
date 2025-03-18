@@ -8,41 +8,21 @@ export as namespace React;
 >React : any
 
 declare namespace React {}
->React : any
 
 declare global {
 >global : any
 
   namespace JSX {
->JSX : any
-
     interface Element {}
->Element : Element
-
     interface ElementClass {}
->ElementClass : ElementClass
-
     interface ElementAttributesProperty {}
->ElementAttributesProperty : ElementAttributesProperty
-
     interface ElementChildrenAttribute {}
->ElementChildrenAttribute : ElementChildrenAttribute
-
     type LibraryManagedAttributes<C, P> = {}
 >LibraryManagedAttributes : LibraryManagedAttributes<C, P>
->C : C
->P : P
 
     interface IntrinsicAttributes {}
->IntrinsicAttributes : IntrinsicAttributes
-
     interface IntrinsicClassAttributes<T> {}
->IntrinsicClassAttributes : IntrinsicClassAttributes<T>
->T : T
-
     interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
       div: {}
 >div : {}
     }
@@ -58,7 +38,6 @@ import 'react'
 
 type WithConditionalCSSProp<P> = 'className' extends keyof P
 >WithConditionalCSSProp : WithConditionalCSSProp<P>
->P : P
 
   ? (P extends { className?: string } ? P & { css?: string } : P)
 >className : string | undefined
@@ -84,8 +63,6 @@ type ReactJSXElementChildrenAttribute = JSX.ElementChildrenAttribute
 
 type ReactJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<C, P>
 >ReactJSXLibraryManagedAttributes : ReactJSXLibraryManagedAttributes<C, P>
->C : C
->P : P
 >JSX : any
 
 type ReactJSXIntrinsicAttributes = JSX.IntrinsicAttributes
@@ -94,7 +71,6 @@ type ReactJSXIntrinsicAttributes = JSX.IntrinsicAttributes
 
 type ReactJSXIntrinsicClassAttributes<T> = JSX.IntrinsicClassAttributes<T>
 >ReactJSXIntrinsicClassAttributes : ReactJSXIntrinsicClassAttributes<T>
->T : T
 >JSX : any
 
 type ReactJSXIntrinsicElements = JSX.IntrinsicElements
@@ -102,43 +78,25 @@ type ReactJSXIntrinsicElements = JSX.IntrinsicElements
 >JSX : any
 
 export namespace EmotionJSX {
->EmotionJSX : any
-
   interface Element extends ReactJSXElement {}
->Element : Element
-
   interface ElementClass extends ReactJSXElementClass {}
->ElementClass : ElementClass
-
   interface ElementAttributesProperty
->ElementAttributesProperty : ElementAttributesProperty
-
     extends ReactJSXElementAttributesProperty {}
   interface ElementChildrenAttribute extends ReactJSXElementChildrenAttribute {}
->ElementChildrenAttribute : ElementChildrenAttribute
 
   type LibraryManagedAttributes<C, P> = WithConditionalCSSProp<P> &
 >LibraryManagedAttributes : LibraryManagedAttributes<C, P>
->C : C
->P : P
 
     ReactJSXLibraryManagedAttributes<C, P>
 
   interface IntrinsicAttributes extends ReactJSXIntrinsicAttributes {}
->IntrinsicAttributes : IntrinsicAttributes
-
   interface IntrinsicClassAttributes<T>
->IntrinsicClassAttributes : IntrinsicClassAttributes<T>
->T : T
-
     extends ReactJSXIntrinsicClassAttributes<T> {}
 
   type IntrinsicElements = {
 >IntrinsicElements : IntrinsicElements
 
     [K in keyof ReactJSXIntrinsicElements]: ReactJSXIntrinsicElements[K] & {
->K : K
-
       css?: string
 >css : string | undefined
     }

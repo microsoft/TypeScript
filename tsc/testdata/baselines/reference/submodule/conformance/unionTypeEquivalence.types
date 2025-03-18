@@ -41,7 +41,9 @@ var BC : number | boolean;
 
 var z1: typeof AB | boolean;
 >z1 : string | number | boolean
+>AB : string | number
 
 var z1: string | typeof BC;
 >z1 : string | number | boolean
+>BC : number | boolean
 

@@ -2,18 +2,12 @@
 
 === inferentialTypingObjectLiteralMethod1.ts ===
 interface Int<T, U> {
->Int : Int<T, U>
->T : T
->U : U
-
     method(x: T): U;
 >method : (x: T) => U
 >x : T
 }
 declare function foo<T, U>(x: T, y: Int<T, U>, z: Int<U, T>): T;
 >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
->T : T
->U : U
 >x : T
 >y : Int<T, U>
 >z : Int<U, T>

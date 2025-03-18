@@ -11,13 +11,3 @@
  >NodeJS : any
  }
  
- === /node_modules/@types/node/globals.d.ts ===
--
- declare namespace NodeJS {
-+>NodeJS : any
-+
-   interface ReadableStream {}
-+>ReadableStream : ReadableStream
- }
- 
- === /node_modules/@types/node/index.d.ts ===

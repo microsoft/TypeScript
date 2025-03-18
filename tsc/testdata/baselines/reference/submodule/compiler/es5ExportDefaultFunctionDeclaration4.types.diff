@@ -7,14 +7,17 @@
 ->before : () => typeof func
 ->func : () => typeof func
 +>before : () => ???
++>func : () => ???
  
      export default function func(): typeof func;
 ->func : () => typeof func
 ->func : () => typeof func
++>func : () => ???
 +>func : () => ???
  
      var after: typeof func;
 ->after : () => typeof func
 ->func : () => typeof func
 +>after : () => ???
++>func : () => ???
  }

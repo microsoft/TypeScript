@@ -2,7 +2,6 @@
 
 === functionExpressionWithResolutionOfTypeOfSameName02.ts ===
 interface Foo {
->Foo : Foo
 }
 
 var x = function Foo() {

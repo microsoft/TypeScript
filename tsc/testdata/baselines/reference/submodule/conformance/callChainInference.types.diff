@@ -1,19 +1,15 @@
 --- old.callChainInference.types
 +++ new.callChainInference.types
-@@= skipped -3, +3 lines =@@
- // Repro from #42404
+@@= skipped -4, +4 lines =@@
  
  interface Y {
-+>Y : Y
-+
      foo<T>(this: T, arg: keyof T): void;
 ->foo : <T>(this: T, arg: keyof T) => void
 +>foo : <T>(arg: keyof T) => void
-+>T : T
  >this : T
  >arg : keyof T
  
-@@= skipped -20, +23 lines =@@
+@@= skipped -19, +19 lines =@@
  
      value?.foo("a");
  >value?.foo("a") : void

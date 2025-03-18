@@ -56,8 +56,6 @@ var r6 = c[3];
 >3 : 3
 
 interface I {
->I : I
-
     [x: number]: string;
 >x : number
 

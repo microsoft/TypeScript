@@ -2,10 +2,7 @@
 
 === genericConstructSignatureInInterface.ts ===
 interface C {
->C : C
-
     new <T>(x: T);
->T : T
 >x : T
 }
 

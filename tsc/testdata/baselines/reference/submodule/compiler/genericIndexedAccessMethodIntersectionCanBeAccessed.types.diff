@@ -1,37 +1,6 @@
 --- old.genericIndexedAccessMethodIntersectionCanBeAccessed.types
 +++ new.genericIndexedAccessMethodIntersectionCanBeAccessed.types
-@@= skipped -2, +2 lines =@@
- === genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
- type ExtendedService<T> = {
- >ExtendedService : ExtendedService<T>
-+>T : T
- 
-     [K in keyof T]: T[K] & {
-+>K : K
-+
-         __$daemonMode?: string;
- >__$daemonMode : string | undefined
- 
-@@= skipped -13, +16 lines =@@
- 
- type Service<T> = {
- >Service : Service<T>
-+>T : T
- 
-     [K in keyof T]: T[K] & {id?: string};
-+>K : K
- >id : string | undefined
- 
- };
-@@= skipped -9, +11 lines =@@
- export const createService = <T>(
- >createService : <T>(ServiceCtr: ExtendedService<T> & Service<T>) => void
- ><T>(    ServiceCtr: ExtendedService<T> & Service<T>) => {    Object.keys(ServiceCtr).forEach(key => {        const method = (ServiceCtr)[key as keyof T];        const {__$daemonMode, __$action, id} = method;    })} : <T>(ServiceCtr: ExtendedService<T> & Service<T>) => void
-+>T : T
- 
-     ServiceCtr: ExtendedService<T> & Service<T>
- >ServiceCtr : ExtendedService<T> & Service<T>
-@@= skipped -18, +19 lines =@@
+@@= skipped -42, +42 lines =@@
  >key : string
  
          const method = (ServiceCtr)[key as keyof T];

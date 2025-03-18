@@ -1,64 +1,15 @@
 --- old.reverseMappedPartiallyInferableTypes.types
 +++ new.reverseMappedPartiallyInferableTypes.types
-@@= skipped -4, +4 lines =@@
- 
- export type Prop<T> = { (): T }
- >Prop : Prop<T>
-+>T : T
- 
- export type PropType<T> = Prop<T>;
- >PropType : PropType<T>
-+>T : T
- 
- export type PropDefaultValue<T> = T;
- >PropDefaultValue : T
-+>T : T
- 
- 
- export type PropValidatorFunction<T> = (value: T) => boolean;
- >PropValidatorFunction : PropValidatorFunction<T>
-+>T : T
- >value : T
- 
- export type PropValidator<T> = PropOptions<T>;
- >PropValidator : PropValidator<T>
-+>T : T
- 
- 
- export type PropOptions<T> = {
- >PropOptions : PropOptions<T>
-+>T : T
- 
-     type: PropType<T>;
- >type : PropType<T>
-@@= skipped -34, +40 lines =@@
- 
- export type RecordPropsDefinition<T> = {
- >RecordPropsDefinition : RecordPropsDefinition<T>
-+>T : T
- 
-     [K in keyof T]: PropValidator<T[K]>
-+>K : K
- }
- export type PropsDefinition<T> = RecordPropsDefinition<T>;
- >PropsDefinition : RecordPropsDefinition<T>
-+>T : T
+@@= skipped -46, +46 lines =@@
  
  
  declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
 ->extend : <T>({ props }: { props: PropsDefinition<T>; }) => PropsDefinition<T>
 +>extend : <T>(__0: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
-+>T : T
  >props : RecordPropsDefinition<T>
  >props : RecordPropsDefinition<T>
  
- interface MyType {
-+>MyType : MyType
-+
-     valid: boolean;
- >valid : boolean
- }
-@@= skipped -20, +26 lines =@@
+@@= skipped -12, +12 lines =@@
  const r = extend({
  >r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
  >extend({    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }}) : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
@@ -67,13 +18,7 @@
  >{    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }} : { props: { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }; }
  
      props: {
-@@= skipped -78, +78 lines =@@
- 
- type Box<T> = {
- >Box : Box<T>
-+>T : T
- 
-     contents?: T;
+@@= skipped -83, +83 lines =@@
  >contents : T | undefined
  
      contains?(content: T): boolean;
@@ -82,22 +27,7 @@
  >content : T
  
  };
- 
- type Mapped<T> = {
- >Mapped : Mapped<T>
-+>T : T
- 
-     [K in keyof T]: Box<T[K]>;
-+>K : K
- }
- 
- declare function id<T>(arg: Mapped<T>): Mapped<T>;
- >id : <T>(arg: Mapped<T>) => Mapped<T>
-+>T : T
- >arg : Mapped<T>
- 
- // All properties have inferable types
-@@= skipped -44, +48 lines =@@
+@@= skipped -39, +39 lines =@@
  >obj2 : Mapped<{ foo: string; }>
  >id({    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }}) : Mapped<{ foo: string; }>
  >id : <T>(arg: Mapped<T>) => Mapped<T>
@@ -127,57 +57,3 @@
  
          contains(k) {
  >contains : (k: unknown) => boolean
-@@= skipped -24, +24 lines =@@
- 
- type Mapped1<T> = {
- >Mapped1 : Mapped1<T>
-+>T : T
- 
-     [K in keyof T]: [T[K], (arg: T) => boolean];
-+>K : K
- >arg : T
- 
- };
- 
- declare function inferMapped1<T>(arg: Mapped1<T>): void;
- >inferMapped1 : <T>(arg: Mapped1<T>) => void
-+>T : T
- >arg : Mapped1<T>
- 
- inferMapped1({
-@@= skipped -31, +34 lines =@@
- 
- type Mapped2<T> = {
- >Mapped2 : Mapped2<T>
-+>T : T
- 
-     [K in keyof T]: [T[K], unknown extends T ? unknown : (arg: T) => boolean];
-+>K : K
- >arg : T
- 
- };
- 
- declare function inferMapped2<T>(arg: Mapped2<T>): void;
- >inferMapped2 : <T>(arg: Mapped2<T>) => void
-+>T : T
- >arg : Mapped2<T>
- 
- inferMapped2({
-@@= skipped -31, +34 lines =@@
- 
- type MappedReadonly<T> = {
- >MappedReadonly : MappedReadonly<T>
-+>T : T
- 
-     readonly [K in keyof T]: readonly [T[K], (arg: T) => boolean];
-+>K : K
- >arg : T
- 
- };
- 
- declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
- >inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
-+>T : T
- >arg : MappedReadonly<T>
- 
- inferMappedReadonly({

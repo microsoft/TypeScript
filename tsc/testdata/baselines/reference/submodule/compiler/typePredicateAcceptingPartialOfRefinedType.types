@@ -4,15 +4,11 @@
 // repro #51953
 
 interface Test {
->Test : Test
-
   testy?: string;
 >testy : string | undefined
 }
 
 interface Options {
->Options : Options
-
   test: Test['testy'];
 >test : string | undefined
 }

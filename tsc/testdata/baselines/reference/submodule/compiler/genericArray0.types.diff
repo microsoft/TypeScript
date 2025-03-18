@@ -8,11 +8,3 @@
  var x:number[];
  >x : number[]
  
-@@= skipped -11, +10 lines =@@
- 
- function map<U>() {
- >map : <U>() => void
-+>U : U
- 
-     var ys: U[] = [];
- >ys : U[]

@@ -1,21 +1,12 @@
 --- old.importUsedInGenericImportResolves.types
 +++ new.importUsedInGenericImportResolves.types
-@@= skipped -1, +1 lines =@@
- 
- === test1.d.ts ===
- export interface T<P> {
-+>T : T<P>
-+>P : P
-+
-     a: P;
- >a : P
- }
-@@= skipped -11, +14 lines =@@
+@@= skipped -12, +12 lines =@@
  
  === test3.ts ===
  export const a: import("./test1").T<typeof import("./test2").theme> = null as any;
 ->a : import("test1").T<{ a: string; }>
 ->theme : error
 +>a : T<{ a: string; }>
++>theme : any
  >null as any : any
  

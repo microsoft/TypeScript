@@ -11,25 +11,7 @@
  === objectTypeHidingMembersOfExtendedObject.ts ===
  class A {
  >A : A
-@@= skipped -21, +16 lines =@@
- }
- 
- interface Object {
-+>Object : Object
-+
-     data: A;
- >data : A
- 
-@@= skipped -49, +51 lines =@@
- >'hm' : "hm"
- 
- interface I {
-+>I : I
-+
-     valueOf(): void;
- >valueOf : () => void
- 
-@@= skipped -78, +80 lines =@@
+@@= skipped -148, +143 lines =@@
  >'hm' : "hm"
  
  var b: {

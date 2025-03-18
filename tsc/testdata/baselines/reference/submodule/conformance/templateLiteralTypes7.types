@@ -4,8 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/57807
 
 interface NMap {
->NMap : NMap
-
   1: 'A'
 >1 : "A"
 
@@ -21,12 +19,10 @@ interface NMap {
 
 declare const g: <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
 >g : <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
->T : T
 >x : `${T}`
 
 type G1 = <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
 >G1 : G1
->T : T
 >x : `${T}`
 
 const g1: G1 = g; // ok
@@ -35,7 +31,6 @@ const g1: G1 = g; // ok
 
 type G2 = <T extends 1 | 2 | 3 | 4>(x: `${T}`) => NMap[T]
 >G2 : G2
->T : T
 >x : `${T}`
 
 const g2: G2 = g; // error
@@ -44,7 +39,6 @@ const g2: G2 = g; // error
 
 type G3 = <T extends 1 | 2>(x: `${T}`) => NMap[T]
 >G3 : G3
->T : T
 >x : `${T}`
 
 const g3: G3 = g; // ok

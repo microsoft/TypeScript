@@ -9,23 +9,7 @@
  }
  
  export interface Decl {
-+>Decl : Decl
-+
-     p1: number;
- >p1 : number
- 
-@@= skipped -12, +14 lines =@@
- }
- 
- export namespace Decl {
-+>Decl : any
-+
-     interface I {
-+>I : I
-     }
- }
- 
-@@= skipped -16, +19 lines =@@
+@@= skipped -28, +28 lines =@@
  >x : Entity
  
  var y: Entity.I;

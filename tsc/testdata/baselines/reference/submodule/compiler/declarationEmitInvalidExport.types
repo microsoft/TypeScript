@@ -10,5 +10,6 @@ if (false) {
 }
 export type MyClass = typeof myClass;
 >MyClass : number
+>myClass : number
 }
 

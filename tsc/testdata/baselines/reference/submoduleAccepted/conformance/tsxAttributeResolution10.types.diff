@@ -1,24 +1,6 @@
 --- old.tsxAttributeResolution10.types
 +++ new.tsxAttributeResolution10.types
-@@= skipped -1, +1 lines =@@
- 
- === react.d.ts ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
- 	}
- 	interface ElementAttributesProperty {
-+>ElementAttributesProperty : ElementAttributesProperty
-+
- 		props;
- >props : any
- 	}
-@@= skipped -27, +34 lines =@@
+@@= skipped -28, +28 lines =@@
  
  // Should be an error
  <MyComponent bar='world' />;

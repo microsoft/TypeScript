@@ -6,19 +6,13 @@
  declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 ->f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
 +>f : <T>(strs: TemplateStringsArray, ...callbacks: (x: T) => any[]) => void
-+>T : T
  >strs : TemplateStringsArray
 ->callbacks : ((x: T) => any)[]
 +>callbacks : (x: T) => any[]
  >x : T
  
  interface Stuff {
-+>Stuff : Stuff
-+
-     x: number;
- >x : number
- 
-@@= skipped -19, +22 lines =@@
+@@= skipped -19, +19 lines =@@
  export const a = f<Stuff> `
  >a : void
  >f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : void
@@ -27,22 +21,3 @@
  >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
  
      hello
-@@= skipped -31, +31 lines =@@
- 
- declare function g<Input, T, U, V>(
- >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
-+>Input : Input
-+>T : T
-+>U : U
-+>V : V
- 
-     strs: TemplateStringsArray,
- >strs : TemplateStringsArray
-@@= skipped -49, +53 lines =@@
- 
-     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
- >prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
-+>T : T
- >strs : TemplateStringsArray
- >x : (input: T) => T
- >input : T

@@ -1,38 +1,6 @@
 --- old.narrowingByDiscriminantInLoop.types
 +++ new.narrowingByDiscriminantInLoop.types
-@@= skipped -6, +6 lines =@@
- >IDLMemberTypes : IDLMemberTypes
- 
- interface IDLTypeDescription {
-+>IDLTypeDescription : IDLTypeDescription
-+
-     origin: string;
- >origin : string
- }
- 
- interface InterfaceType {
-+>InterfaceType : InterfaceType
-+
-     members: IDLMemberTypes[];
- >members : IDLMemberTypes[]
- }
- 
- interface OperationMemberType {
-+>OperationMemberType : OperationMemberType
-+
-     type: "operation";
- >type : "operation"
- 
-@@= skipped -18, +24 lines =@@
- }
- 
- interface ConstantMemberType {
-+>ConstantMemberType : ConstantMemberType
-+
-     type: "const";
- >type : "const"
- 
-@@= skipped -19, +21 lines =@@
+@@= skipped -43, +43 lines =@@
  
          if (memberType.type === "const") {
  >memberType.type === "const" : boolean
@@ -68,21 +36,3 @@
  >"const" : "const"
  
          memberType.idlType;  // string
-@@= skipped -29, +29 lines =@@
- // Repro for issue similar to #8383
- 
- interface A {
-+>A : A
-+
-     kind: true;
- >kind : true
- >true : true
-@@= skipped -10, +12 lines =@@
- }
- 
- interface B {
-+>B : B
-+
-     kind: false;
- >kind : false
- >false : false

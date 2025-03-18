@@ -1,18 +1,6 @@
 --- old.declarationEmitAliasFromIndirectFile.types
 +++ new.declarationEmitAliasFromIndirectFile.types
-@@= skipped -39, +39 lines =@@
- >LocaleKey : any
- 
- export interface FlatpickrFn {
-+>FlatpickrFn : FlatpickrFn
-+
-     l10ns: {[k in LocaleKey]?: CustomLocale } & { default: Locale };
- >l10ns : { ar?: CustomLocale; bg?: CustomLocale; } & { default: Locale; }
-+>k : k
- >default : Locale
- }
- 
-@@= skipped -17, +20 lines =@@
+@@= skipped -56, +56 lines =@@
  >{} : {}
  
  export default fp.l10ns;

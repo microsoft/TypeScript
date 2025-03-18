@@ -2,8 +2,6 @@
 
 === noIterationTypeErrorsInCFA.ts ===
 interface F {
->F : F
-
     d(): void
 >d : () => void
 }

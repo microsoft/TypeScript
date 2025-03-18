@@ -2,8 +2,6 @@
 
 === duplicateStringNamedProperty1.ts ===
 export interface Album {
->Album : Album
-
     "artist": string;
 >"artist" : string
 

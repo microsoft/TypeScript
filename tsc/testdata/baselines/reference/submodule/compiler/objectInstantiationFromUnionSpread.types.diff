@@ -1,23 +1,6 @@
 --- old.objectInstantiationFromUnionSpread.types
 +++ new.objectInstantiationFromUnionSpread.types
-@@= skipped -3, +3 lines =@@
- // #40995
- 
- interface Success {
-+>Success : Success
-+
-   isSuccess: true;
- >isSuccess : true
- >true : true
- }
- 
- interface Fail {
-+>Fail : Fail
-+
-   isSuccess: false;
- >isSuccess : false
- >false : false
-@@= skipped -19, +23 lines =@@
+@@= skipped -22, +22 lines =@@
  >a : Item[]
  
    a.map(item => ({ ...item })).filter(value => {});
@@ -47,8 +30,7 @@
  }
  
  function f2<T>(a: Item[]) {
- >f2 : <T>(a: Item[]) => void
-+>T : T
+@@= skipped -21, +21 lines =@@
  >a : Item[]
  
    a.map(item => ({ ...item })).filter(value => {});

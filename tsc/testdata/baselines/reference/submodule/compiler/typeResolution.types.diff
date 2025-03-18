@@ -43,15 +43,7 @@
  >AisIn2_3 : () => void
                      
                      // Interface reference
-@@= skipped -36, +36 lines =@@
-                 }
-             }
-             export interface InterfaceX { XisIn1_1_1(); }
-+>InterfaceX : InterfaceX
- >XisIn1_1_1 : () => any
- 
-             class NonExportedClassQ {
-@@= skipped -21, +22 lines =@@
+@@= skipped -57, +57 lines =@@
  >AisIn1_1_1 : () => void
  
                          var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
@@ -130,28 +122,3 @@
  >XisIn1_1_1 : () => any
                  }
              }
-@@= skipped -59, +59 lines =@@
- >CisIn1_2_2 : () => void
- 
-             export interface InterfaceY { YisIn1_2_2(); }
-+>InterfaceY : InterfaceY
- >YisIn1_2_2 : () => any
- 
-             interface NonExportedInterfaceQ { }
-+>NonExportedInterfaceQ : NonExportedInterfaceQ
-         }
-         
-         export interface InterfaceY { YisIn1_2(); }
-+>InterfaceY : InterfaceY
- >YisIn1_2 : () => any
-     }
-     
-@@= skipped -17, +20 lines =@@
-     }
- 
-     interface InterfaceY {
-+>InterfaceY : InterfaceY
-+
-         YisIn1();
- >YisIn1 : () => any
-     }

@@ -2,13 +2,10 @@
 
 === genericTemplateOverloadResolution.ts ===
 interface IFooFn {
->IFooFn : IFooFn
-
     (strings: TemplateStringsArray): Promise<{}>;
 >strings : TemplateStringsArray
 
     <T>(strings: TemplateStringsArray): Promise<T>;
->T : T
 >strings : TemplateStringsArray
 }
 

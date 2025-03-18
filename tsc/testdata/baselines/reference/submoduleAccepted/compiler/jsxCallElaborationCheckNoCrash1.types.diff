@@ -24,11 +24,10 @@
 -><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => React.SFC
 +>Hoc : <Tag extends Tags>(TagElement: Tag) => SFC
 +><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => SFC
-+>Tag : Tag
  
     TagElement: Tag,
  >TagElement : Tag
-@@= skipped -25, +20 lines =@@
+@@= skipped -25, +19 lines =@@
  >React : any
  
     const Component = () => <TagElement />;

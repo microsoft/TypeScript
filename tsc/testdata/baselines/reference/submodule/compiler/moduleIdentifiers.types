@@ -5,7 +5,6 @@ module M {
 >M : typeof M
 
     interface P { x: number; y: number; }
->P : P
 >x : number
 >y : number
 

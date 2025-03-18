@@ -220,8 +220,6 @@ const o18 = {
 };
 === awaitAsTypeIsOk.ts ===
 interface await {}
->await : await
-
 const o19 = {
 >o19 : { f: () => AsyncGenerator<never, void, unknown>; }
 >{    async * f() {        let x: await;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
@@ -235,8 +233,6 @@ const o19 = {
 };
 === yieldAsTypeIsOk.ts ===
 interface yield {}
->yield : yield
-
 const o20 = {
 >o20 : { f: () => AsyncGenerator<never, void, unknown>; }
 >{    async * f() {        let x: yield;    }} : { f: () => AsyncGenerator<never, void, unknown>; }

@@ -1,16 +1,11 @@
 --- old.anonClassDeclarationEmitIsAnon.types
 +++ new.anonClassDeclarationEmitIsAnon.types
-@@= skipped -19, +19 lines =@@
- 
- export type Constructor<T = {}> = new (...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
+@@= skipped -22, +22 lines =@@
  >args : any[]
  
  export function Timestamped<TBase extends Constructor>(Base: TBase) {
 ->Timestamped : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
 +>Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
-+>TBase : TBase
  >Base : TBase
  
      return class extends Base {
@@ -19,7 +14,7 @@
  >Base : {}
  
          timestamp = Date.now();
-@@= skipped -23, +25 lines =@@
+@@= skipped -20, +20 lines =@@
  === index.ts ===
  import { wrapClass, Timestamped } from "./wrapClass";
  >wrapClass : (param: any) => typeof Wrapped

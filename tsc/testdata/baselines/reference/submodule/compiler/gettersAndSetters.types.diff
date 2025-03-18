@@ -1,15 +1,6 @@
 --- old.gettersAndSetters.types
 +++ new.gettersAndSetters.types
-@@= skipped -125, +125 lines =@@
- 
- 
- interface I1 {
-+>I1 : I1
-+
-     (n:number):number;
- >n : number
- }
-@@= skipped -25, +27 lines =@@
+@@= skipped -150, +150 lines =@@
  
  if (typeof x === "string") {
  >typeof x === "string" : boolean

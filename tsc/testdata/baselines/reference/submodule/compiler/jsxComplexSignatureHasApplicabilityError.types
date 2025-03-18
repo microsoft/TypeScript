@@ -8,9 +8,6 @@ import * as React from "react";
 
 
 interface Props<T extends OptionValues> {
->Props : Props<T>
->T : T
-
     value?: Option<T> | T;
 >value : T | Option<T> | undefined
 
@@ -21,15 +18,11 @@ interface Props<T extends OptionValues> {
 
 type ExtractValueType<T> = T extends ReactSelectProps<infer U> ? U : never;
 >ExtractValueType : ExtractValueType<T>
->T : T
->U : U
 
 export type ReactSingleSelectProps<
 >ReactSingleSelectProps : ReactSingleSelectProps<WrappedProps>
 
     WrappedProps extends ReactSelectProps<any>
->WrappedProps : WrappedProps
-
 > = Overwrite<
     Omit<WrappedProps, "multi">,
     Props<ExtractValueType<WrappedProps>>
@@ -39,8 +32,6 @@ export function createReactSingleSelect<
 >createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: ComponentType<WrappedProps>) => ComponentType<ReactSingleSelectProps<WrappedProps>>
 
     WrappedProps extends ReactSelectProps<any>
->WrappedProps : WrappedProps
-
 >(
     WrappedComponent: React.ComponentType<WrappedProps>
 >WrappedComponent : ComponentType<WrappedProps>
@@ -108,18 +99,13 @@ export function createReactSingleSelect<
 // Copied from "type-zoo" version 3.4.0
 export type Omit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
 >Omit : Omit<T, K>
->T : T
->K : K
 
 export type Overwrite<T, U> = Omit<T, keyof T & keyof U> & U;
 >Overwrite : Overwrite<T, U>
->T : T
->U : U
 
 // Everything below here copied from "@types/react-select" version 1.3.4
 declare class ReactSelectClass<TValue = OptionValues> extends React.Component<ReactSelectProps<TValue>> {
 >ReactSelectClass : ReactSelectClass<TValue>
->TValue : TValue
 >React.Component : any
 >React : any
 >Component : any
@@ -134,12 +120,10 @@ declare class ReactSelectClass<TValue = OptionValues> extends React.Component<Re
 
 export type OptionComponentType<TValue = OptionValues> = React.ComponentType<OptionComponentProps<TValue>>;
 >OptionComponentType : ComponentType<OptionComponentProps<TValue>>
->TValue : TValue
 >React : any
 
 export type ValueComponentType<TValue = OptionValues> =  React.ComponentType<ValueComponentProps<TValue>>;
 >ValueComponentType : ComponentType<ValueComponentProps<TValue>>
->TValue : TValue
 >React : any
 
 export type HandlerRendererResult = JSX.Element | null | false;
@@ -150,12 +134,10 @@ export type HandlerRendererResult = JSX.Element | null | false;
 // Handlers
 export type FocusOptionHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
 >FocusOptionHandler : FocusOptionHandler<TValue>
->TValue : TValue
 >option : Option<TValue>
 
 export type SelectValueHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
 >SelectValueHandler : SelectValueHandler<TValue>
->TValue : TValue
 >option : Option<TValue>
 
 export type ArrowRendererHandler = (props: ArrowRendererProps) => HandlerRendererResult;
@@ -167,13 +149,11 @@ export type ClearRendererHandler = () => HandlerRendererResult;
 
 export type FilterOptionHandler<TValue = OptionValues> = (option: Option<TValue>, filter: string) => boolean;
 >FilterOptionHandler : FilterOptionHandler<TValue>
->TValue : TValue
 >option : Option<TValue>
 >filter : string
 
 export type FilterOptionsHandler<TValue = OptionValues> = (options: Options<TValue>, filter: string, currentValues: Options<TValue>) => Options<TValue>;
 >FilterOptionsHandler : FilterOptionsHandler<TValue>
->TValue : TValue
 >options : Options<TValue>
 >filter : string
 >currentValues : Options<TValue>
@@ -185,7 +165,6 @@ export type InputRendererHandler = (props: { [key: string]: any }) => HandlerRen
 
 export type MenuRendererHandler<TValue = OptionValues> = (props: MenuRendererProps<TValue>) => HandlerRendererResult;
 >MenuRendererHandler : MenuRendererHandler<TValue>
->TValue : TValue
 >props : MenuRendererProps<TValue>
 
 export type OnCloseHandler = () => void;
@@ -215,25 +194,21 @@ export type OnBlurHandler = React.FocusEventHandler<HTMLDivElement | HTMLInputEl
 
 export type OptionRendererHandler<TValue = OptionValues> = (option: Option<TValue>) => HandlerRendererResult;
 >OptionRendererHandler : OptionRendererHandler<TValue>
->TValue : TValue
 >option : Option<TValue>
 
 export type ValueRendererHandler<TValue = OptionValues> = (option: Option<TValue>, index?: number) => HandlerRendererResult;
 >ValueRendererHandler : ValueRendererHandler<TValue>
->TValue : TValue
 >option : Option<TValue>
 >index : number | undefined
 
 export type OnValueClickHandler<TValue = OptionValues> = (option: Option<TValue>, event: React.MouseEvent<HTMLAnchorElement>) => void;
 >OnValueClickHandler : OnValueClickHandler<TValue>
->TValue : TValue
 >option : Option<TValue>
 >event : MouseEvent<HTMLAnchorElement>
 >React : any
 
 export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Option<TValue>, options: Options<TValue>, labelKey: string, valueKey: string }) => boolean;
 >IsOptionUniqueHandler : IsOptionUniqueHandler<TValue>
->TValue : TValue
 >arg : { option: Option<TValue>; options: Options<TValue>; labelKey: string; valueKey: string; }
 >option : Option<TValue>
 >options : Options<TValue>
@@ -247,7 +222,6 @@ export type IsValidNewOptionHandler = (arg: { label: string }) => boolean;
 
 export type NewOptionCreatorHandler<TValue = OptionValues> = (arg: { label: string, labelKey: string, valueKey: string }) => Option<TValue>;
 >NewOptionCreatorHandler : NewOptionCreatorHandler<TValue>
->TValue : TValue
 >arg : { label: string; labelKey: string; valueKey: string; }
 >label : string
 >labelKey : string
@@ -264,44 +238,33 @@ export type ShouldKeyDownEventCreateNewOptionHandler = (arg: { keyCode: number }
 
 export type OnChangeSingleHandler<TValue = OptionValues> = OnChangeHandler<TValue, Option<TValue>>;
 >OnChangeSingleHandler : OnChangeSingleHandler<TValue>
->TValue : TValue
 
 export type OnChangeMultipleHandler<TValue = OptionValues> = OnChangeHandler<TValue, Options<TValue>>;
 >OnChangeMultipleHandler : OnChangeMultipleHandler<TValue>
->TValue : TValue
 
 export type OnChangeHandler<TValue = OptionValues, TOption = Option<TValue> | Options<TValue>> = (newValue: TOption | null) => void;
 >OnChangeHandler : OnChangeHandler<TValue, TOption>
->TValue : TValue
->TOption : TOption
 >newValue : TOption | null
 
 export type OnNewOptionClickHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
 >OnNewOptionClickHandler : OnNewOptionClickHandler<TValue>
->TValue : TValue
 >option : Option<TValue>
 
 export type LoadOptionsHandler<TValue = OptionValues> = LoadOptionsAsyncHandler<TValue> | LoadOptionsLegacyHandler<TValue>;
 >LoadOptionsHandler : LoadOptionsHandler<TValue>
->TValue : TValue
 
 export type LoadOptionsAsyncHandler<TValue = OptionValues> = (input: string) => Promise<AutocompleteResult<TValue>>;
 >LoadOptionsAsyncHandler : LoadOptionsAsyncHandler<TValue>
->TValue : TValue
 >input : string
 
 export type LoadOptionsLegacyHandler<TValue = OptionValues> = (input: string, callback: (err: any, result: AutocompleteResult<TValue>) => void) => void;
 >LoadOptionsLegacyHandler : LoadOptionsLegacyHandler<TValue>
->TValue : TValue
 >input : string
 >callback : (err: any, result: AutocompleteResult<TValue>) => void
 >err : any
 >result : AutocompleteResult<TValue>
 
 export interface AutocompleteResult<TValue = OptionValues> {
->AutocompleteResult : AutocompleteResult<TValue>
->TValue : TValue
-
     /** The search-results to be displayed  */
     options: Options<TValue>;
 >options : Options<TValue>
@@ -317,12 +280,8 @@ export interface AutocompleteResult<TValue = OptionValues> {
 
 export type Options<TValue = OptionValues> = Array<Option<TValue>>;
 >Options : Options<TValue>
->TValue : TValue
 
 export interface Option<TValue = OptionValues> {
->Option : Option<TValue>
->TValue : TValue
-
     /** Text for rendering */
     label?: string;
 >label : string | undefined
@@ -357,9 +316,6 @@ export type OptionValues = string | number | boolean;
 >OptionValues : OptionValues
 
 export interface MenuRendererProps<TValue = OptionValues> {
->MenuRendererProps : MenuRendererProps<TValue>
->TValue : TValue
-
     /**
      * The currently focused option; should be visible in the menu by default.
      * default {}
@@ -411,9 +367,6 @@ export interface MenuRendererProps<TValue = OptionValues> {
 }
 
 export interface OptionComponentProps<TValue = OptionValues> {
->OptionComponentProps : OptionComponentProps<TValue>
->TValue : TValue
-
     /**
      * Classname(s) to apply to the option component.
      */
@@ -495,8 +448,6 @@ export interface OptionComponentProps<TValue = OptionValues> {
 }
 
 export interface ArrowRendererProps {
->ArrowRendererProps : ArrowRendererProps
-
     /**
      * Arrow mouse down event handler.
      */
@@ -512,9 +463,6 @@ export interface ArrowRendererProps {
 }
 
 export interface ValueComponentProps<TValue = OptionValues> {
->ValueComponentProps : ValueComponentProps<TValue>
->TValue : TValue
-
     disabled: ReactSelectProps<TValue>['disabled'];
 >disabled : boolean | undefined
 
@@ -541,8 +489,6 @@ export interface ValueComponentProps<TValue = OptionValues> {
 }
 
 export interface ReactSelectProps<TValue = OptionValues> extends React.Props<ReactSelectClass<TValue>> {
->ReactSelectProps : ReactSelectProps<TValue>
->TValue : TValue
 >React : any
 
     /**

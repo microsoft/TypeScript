@@ -2,8 +2,6 @@
 
 === comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts ===
 interface I {
->I : I
-
     a: string;
 >a : string
 
@@ -12,8 +10,6 @@ interface I {
 }
 
 interface J {
->J : J
-
     a: string;
 >a : string
 }

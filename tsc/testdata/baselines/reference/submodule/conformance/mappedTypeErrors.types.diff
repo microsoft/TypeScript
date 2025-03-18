@@ -1,234 +1,73 @@
 --- old.mappedTypeErrors.types
 +++ new.mappedTypeErrors.types
-@@= skipped -1, +1 lines =@@
- 
- === mappedTypeErrors.ts ===
- interface Shape {
-+>Shape : Shape
-+
-     name: string;
- >name : string
- 
-@@= skipped -14, +16 lines =@@
- }
- 
- interface Named {
-+>Named : Named
-+
-     name: string;
- >name : string
- }
- 
- interface Point {
-+>Point : Point
-+
-     x: number;
- >x : number
- 
-@@= skipped -16, +20 lines =@@
- 
- type T00 = { [P in P]: string };  // Error
- >T00 : T00
-+>P : P
- 
- type T01 = { [P in number]: string };  // Error
- >T01 : T01
-+>P : P
- 
- type T02 = { [P in Date]: number };  // Error
- >T02 : T02
-+>P : P
- 
- type T03 = Record<Date, number>;  // Error
- >T03 : T03
-@@= skipped -33, +36 lines =@@
- 
- function f1<T>(x: T) {
- >f1 : <T>(x: T) => void
-+>T : T
- >x : T
- 
-     let y: Pick<Shape, T>;  // Error
-@@= skipped -8, +9 lines =@@
- 
- function f2<T extends string | number>(x: T) {
- >f2 : <T extends string | number>(x: T) => void
-+>T : T
- >x : T
- 
-     let y: Pick<Shape, T>;  // Error
-@@= skipped -8, +9 lines =@@
- 
- function f3<T extends keyof Shape>(x: T) {
- >f3 : <T extends keyof Shape>(x: T) => void
-+>T : T
- >x : T
- 
-     let y: Pick<Shape, T>;
-@@= skipped -7, +8 lines =@@
+@@= skipped -87, +87 lines =@@
  }
  
  function f4<T extends keyof Named>(x: T) {
 ->f4 : <T extends keyof Named>(x: T) => void
 +>f4 : <T extends "name">(x: T) => void
-+>T : T
  >x : T
  
      let y: Pick<Shape, T>;
-@@= skipped -11, +12 lines =@@
- 
- function f10<T>() {
- >f10 : <T>() => void
-+>T : T
- 
-     type K = keyof T;
+@@= skipped -16, +16 lines =@@
  >K : keyof T
  
      var x: { [P in keyof T]: T[P] };
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>P : P
  
      var x: { [Q in keyof T]: T[Q] };
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>Q : Q
  
      var x: { [R in K]: T[R] };
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>R : R
  }
  
  function f11<T>() {
  >f11 : <T>() => void
-+>T : T
  
      var x: { [P in keyof T]: T[P] };
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>P : P
  
      var x: { [P in keyof T]?: T[P] };  // Error
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>P : P
  
      var x: { readonly [P in keyof T]: T[P] };  // Error
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>P : P
  
      var x: { readonly [P in keyof T]?: T[P] };  // Error
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>P : P
  }
  
  function f12<T>() {
  >f12 : <T>() => void
-+>T : T
  
      var x: { [P in keyof T]: T[P] };
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>P : P
  
      var x: { [P in keyof T]: T[P][] };  // Error
 ->x : { [P in keyof T]: T[P]; }
 +>x : { [P in keyof T]: T[P] }
-+>P : P
  }
  
  // Check that inferences to mapped types are secondary
- 
- declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
- >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
-+>T : T
- >primary : T
- >secondary : Readonly<T>
- 
- declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
- >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
-+>T : T
- >primary : T
- >secondary : Partial<T>
- 
-@@= skipped -153, +167 lines =@@
- // Verify use of Pick<T, K> for setState functions (#12793)
- 
- interface Foo {
-+>Foo : Foo
-+
-     a: string;
- >a : string
- 
-@@= skipped -9, +11 lines =@@
- 
- function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
- >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
-+>T : T
-+>K : K
- >obj : T
- >props : Pick<T, K>
- 
-@@= skipped -82, +84 lines =@@
- 
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     state: T;
- >state : T
- 
-     setState<K extends keyof T>(props: Pick<T, K>) {
- >setState : <K extends keyof T>(props: Pick<T, K>) => void
-+>K : K
- >props : Pick<T, K>
- 
-         for (let k in props) {
-@@= skipped -111, +113 lines =@@
- 
- let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
- >x3 : { [x: string]: any; a?: number | undefined; }
-+>P : P
- >{ a: 'no' } : { a: string; }
- >a : string
- >'no' : "no"
-@@= skipped -8, +9 lines =@@
- 
- type Foo2<T, F extends keyof T> = {
+@@= skipped -360, +360 lines =@@
  >Foo2 : Foo2<T, F>
-+>T : T
-+>F : F
  
      pf: {[P in F]?: T[P]},
 ->pf : { [P in F]?: T[P] | undefined; }
 +>pf : { [P in F]?: T[P] | undefined }
-+>P : P
  
      pt: {[P in T]?: T[P]}, // note: should be in keyof T
 ->pt : { [P in T]?: T[P] | undefined; }
 +>pt : { [P in T]?: T[P] | undefined }
-+>P : P
  
  };
  type O = {x: number, y: boolean};
-@@= skipped -45, +49 lines =@@
- 
- function test1<T, K extends keyof T>(obj: Pick<T, K>) {
- >test1 : <T, K extends keyof T>(obj: Pick<T, K>) => void
-+>T : T
-+>K : K
- >obj : Pick<T, K>
- 
-     let x = obj.foo;  // Error
-@@= skipped -11, +13 lines =@@
- 
- function test2<T, K extends keyof T>(obj: Record<K, number>) {
- >test2 : <T, K extends keyof T>(obj: Record<K, number>) => void
-+>T : T
-+>K : K
- >obj : Record<K, number>
- 
-     let x = obj.foo;  // Error

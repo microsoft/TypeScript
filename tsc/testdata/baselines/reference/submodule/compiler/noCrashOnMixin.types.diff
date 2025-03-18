@@ -1,16 +1,11 @@
 --- old.noCrashOnMixin.types
 +++ new.noCrashOnMixin.types
-@@= skipped -14, +14 lines =@@
- 
- type Constructor<T = {}> = new (...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
+@@= skipped -17, +17 lines =@@
  >args : any[]
  
  function Mixin<TBase extends Constructor>(Base: TBase) {
 ->Mixin : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
 +>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
-+>TBase : TBase
  >Base : TBase
  
      return class extends Base {
@@ -19,7 +14,7 @@
  >Base : {}
  
      };
-@@= skipped -19, +21 lines =@@
+@@= skipped -16, +16 lines =@@
  
  class CrashTrigger extends Mixin(Empty) {
  >CrashTrigger : CrashTrigger

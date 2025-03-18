@@ -139,8 +139,6 @@ function f6(x: Public & Public2) {
 
 declare function Mix<T, U>(c1: T, c2: U): T & U;
 >Mix : <T, U>(c1: T, c2: U) => T & U
->T : T
->U : U
 >c1 : T
 >c2 : U
 
@@ -313,7 +311,6 @@ class C6 extends Mix(Public, Public2) {
 
 class ProtectedGeneric<T> {
 >ProtectedGeneric : ProtectedGeneric<T>
->T : T
 
 	private privateMethod() {}
 >privateMethod : () => void
@@ -324,7 +321,6 @@ class ProtectedGeneric<T> {
 
 class ProtectedGeneric2<T> {
 >ProtectedGeneric2 : ProtectedGeneric2<T>
->T : T
 
 	private privateMethod() {}
 >privateMethod : () => void

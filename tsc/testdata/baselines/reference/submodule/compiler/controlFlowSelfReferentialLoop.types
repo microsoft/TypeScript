@@ -1265,8 +1265,6 @@ export default md5;
 // Repro from #26655
 
 interface DataShape {
->DataShape : DataShape
-
   message: { id: string }
 >message : { id: string; }
 >id : string

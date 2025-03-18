@@ -1,15 +1,6 @@
 --- old.spreadsAndContextualTupleTypes.types
 +++ new.spreadsAndContextualTupleTypes.types
-@@= skipped -2, +2 lines =@@
- === spreadsAndContextualTupleTypes.ts ===
- declare function fx1<T extends [string, string, string, 'a' | 'b']>(x: T): T;
- >fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
-+>T : T
- >x : T
- 
- declare function fx2<T extends [...string[], 'a' | 'b']>(x: T): T;
- >fx2 : <T extends [...string[], "a" | "b"]>(x: T) => T
-+>T : T
+@@= skipped -9, +9 lines =@@
  >x : T
  
  const t3 = ['x', 'y', 'z'] as const;
@@ -22,7 +13,7 @@
  >'x' : "x"
  >'y' : "y"
  >'z' : "z"
-@@= skipped -28, +30 lines =@@
+@@= skipped -21, +21 lines =@@
  >fx1 : <T extends [string, string, string, "a" | "b"]>(x: T) => T
  >[...t3, 'a'] : ["x", "y", "z", "a"]
  >...t3 : "x" | "y" | "z"
@@ -85,7 +76,6 @@
  declare function foo<const T>(path: T): T;
 ->foo : <const T>(path: T) => T
 +>foo : <T>(path: T) => T
-+>T : T
  >path : T
  
  const a1 = foo([...staticPath1Level, randomID, 'doc.pdf']);
@@ -240,7 +230,7 @@
  >randomID : string
  >'folder' : "folder"
  >'subfolder' : "subfolder"
-@@= skipped -116, +117 lines =@@
+@@= skipped -116, +116 lines =@@
  >'doc.pdf' : "doc.pdf"
  
  const d2 = foo([...staticPath2Level, randomID, 'folder', 'subfolder', 'another-subfolder', 'doc.pdf']);

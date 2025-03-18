@@ -428,8 +428,6 @@ module TypeScript {
 >"__GLO" : "__GLO"
 
     export interface IAliasScopeContext {
->IAliasScopeContext : IAliasScopeContext
-
         topLevelScope: ScopeChain;
 >topLevelScope : ScopeChain
 

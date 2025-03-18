@@ -6,7 +6,6 @@
 
 function foo<T>(x: T, y: T) {
 >foo : <T>(x: T, y: T) => T
->T : T
 >x : T
 >y : T
 

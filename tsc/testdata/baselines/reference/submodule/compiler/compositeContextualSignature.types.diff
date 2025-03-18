@@ -6,7 +6,6 @@
  function f<T extends any[]>(v: ReadonlyArray<T>) { }
 ->f : <T extends any[]>(v: ReadonlyArray<T>) => void
 +>f : <T extends any[]>(v: readonly T[]) => void
-+>T : T
  >v : readonly T[]
  
  f([
@@ -22,7 +21,7 @@
  
          undefined,
  >undefined : undefined
-@@= skipped -19, +20 lines =@@
+@@= skipped -19, +19 lines =@@
  
      ],
      [

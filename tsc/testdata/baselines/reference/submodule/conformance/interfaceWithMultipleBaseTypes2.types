@@ -2,8 +2,6 @@
 
 === interfaceWithMultipleBaseTypes2.ts ===
 interface Base {
->Base : Base
-
     x: {
 >x : { a?: string; b: string; }
 
@@ -14,8 +12,6 @@ interface Base {
 }
 
 interface Base2 {
->Base2 : Base2
-
     x: {
 >x : { b: string; c?: number; }
 
@@ -26,16 +22,12 @@ interface Base2 {
 }
 
 interface Derived extends Base, Base2 {
->Derived : Derived
-
     x: { b: string }
 >x : { b: string; }
 >b : string
 }
 
 interface Derived2 extends Base, Base2 { // error
->Derived2 : Derived2
-
     x: { a: number; b: string }
 >x : { a: number; b: string; }
 >a : number
@@ -43,8 +35,6 @@ interface Derived2 extends Base, Base2 { // error
 }
 
 interface Derived3 extends Base, Base2 {
->Derived3 : Derived3
-
     x: { a: string; b: string }
 >x : { a: string; b: string; }
 >a : string

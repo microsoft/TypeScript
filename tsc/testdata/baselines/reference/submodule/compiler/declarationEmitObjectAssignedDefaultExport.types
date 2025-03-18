@@ -2,18 +2,12 @@
 
 === node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
 interface Statics {
->Statics : Statics
-
     "$$whatever": string;
 >"$$whatever" : string
 }
 declare namespace hoistNonReactStatics {
->hoistNonReactStatics : any
-
     type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
 >NonReactStatics : NonReactStatics<T>
->T : T
->X : X
 }
 export = hoistNonReactStatics;
 >hoistNonReactStatics : any
@@ -23,14 +17,8 @@ import * as hoistNonReactStatics from "hoist-non-react-statics";
 >hoistNonReactStatics : any
 
 export interface DefaultTheme {}
->DefaultTheme : DefaultTheme
-
 export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =
 >StyledComponent : StyledComponent<TTag, TTheme, TStyle, TWhatever>
->TTag : TTag
->TTheme : TTheme
->TStyle : TStyle
->TWhatever : TWhatever
 
     string
     & StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
@@ -38,12 +26,6 @@ export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle =
 >hoistNonReactStatics : any
 
 export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> {
->StyledComponentBase : StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
->TTag : TTag
->TTheme : TTheme
->TStyle : TStyle
->TWhatever : TWhatever
-
     tag: TTag;
 >tag : TTag
 
@@ -57,8 +39,6 @@ export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme,
 >whatever : TWhatever
 }
 export interface StyledInterface {
->StyledInterface : StyledInterface
-
     div: (a: TemplateStringsArray) => StyledComponent<"div">;
 >div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
 >a : TemplateStringsArray

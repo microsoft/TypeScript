@@ -6,11 +6,9 @@
  function foo<T extends string>(key: T, obj: { [_ in T]: number }) {
 ->foo : <T extends string>(key: T, obj: { [_ in T]: number; }) => void
 +>foo : <T extends string>(key: T, obj: { [_ in T]: number }) => void
-+>T : T
  >key : T
 ->obj : { [_ in T]: number; }
 +>obj : { [_ in T]: number }
-+>_ : _
  
      const { [key]: bar } = obj; // Element implicitly has an 'any' type because type '{ [_ in T]: number; }' has no index signature.
  >key : T

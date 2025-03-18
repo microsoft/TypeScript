@@ -2,8 +2,6 @@
 
 === staticMismatchBecauseOfPrototype.ts ===
 interface A {
->A : A
-
     n: number;
 >n : number
 }

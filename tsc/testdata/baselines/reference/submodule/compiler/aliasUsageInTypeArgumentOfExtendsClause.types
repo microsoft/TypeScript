@@ -8,15 +8,14 @@ import moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
 >moduleA : typeof import("aliasUsageInTypeArgumentOfExtendsClause_moduleA")
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
-
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Model
+>Backbone.Model : typeof Model
 >Backbone : typeof import("aliasUsageInTypeArgumentOfExtendsClause_backbone")
+>Model : typeof Model
 }
 class C<T extends IHasVisualizationModel> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T

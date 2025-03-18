@@ -6,7 +6,6 @@ module Generic {
 
     class C<T> {
 >C : C<T>
->T : T
 
         get y(): T {
 >y : T
@@ -36,7 +35,6 @@ module Generic {
 
     class Box<T> {
 >Box : Box<T>
->T : T
 
         #value!: T;
 >#value : T

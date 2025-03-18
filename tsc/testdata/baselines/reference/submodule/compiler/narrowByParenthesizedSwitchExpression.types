@@ -2,15 +2,11 @@
 
 === narrowByParenthesizedSwitchExpression.ts ===
 interface Base {
->Base : Base
-
   type: "foo" | "bar";
 >type : "bar" | "foo"
 }
 
 interface Foo extends Base {
->Foo : Foo
-
   type: "foo";
 >type : "foo"
 
@@ -19,8 +15,6 @@ interface Foo extends Base {
 }
 
 interface Bar extends Base {
->Bar : Bar
-
   type: "bar";
 >type : "bar"
 

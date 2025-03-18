@@ -3,9 +3,6 @@
 === destructuringParameterProperties3.ts ===
 class C1<T, U, V> {
 >C1 : C1<T, U, V>
->T : T
->U : U
->V : V
 
     constructor(private k: T, private [a, b, c]: [T,U,V]) {
 >k : T

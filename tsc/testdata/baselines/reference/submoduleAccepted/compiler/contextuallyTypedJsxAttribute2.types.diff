@@ -23,7 +23,6 @@
  function UnwrappedLink<T extends ElementType = ElementType>(
 ->UnwrappedLink : <T extends ElementType = React.ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => JSX.Element
 +>UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => any
-+>T : T
  
    props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">,
 ->props : Omit<React.ComponentPropsWithRef<React.ElementType extends T ? "a" : T>, "as">
@@ -52,7 +51,6 @@
  function UnwrappedLink2<T extends ElementType = ElementType>(
 ->UnwrappedLink2 : <T extends ElementType = React.ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T; }) => JSX.Element
 +>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => any
-+>T : T
  
    props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & {
 ->props : Omit<React.ComponentPropsWithRef<React.ElementType extends T ? "a" : T>, "as"> & { as?: T; }
@@ -60,7 +58,7 @@
  
      as?: T;
  >as : T | undefined
-@@= skipped -47, +43 lines =@@
+@@= skipped -47, +41 lines =@@
    },
  ) {
    return <a></a>;

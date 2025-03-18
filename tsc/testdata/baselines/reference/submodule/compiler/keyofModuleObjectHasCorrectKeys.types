@@ -18,7 +18,6 @@ import * as example from './example';
 
 declare function test<T>(object: T, method: keyof T): void;
 >test : <T>(object: T, method: keyof T) => void
->T : T
 >object : T
 >method : keyof T
 

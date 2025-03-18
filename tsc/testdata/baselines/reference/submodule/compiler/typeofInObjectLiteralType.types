@@ -5,4 +5,5 @@ var a: { b: number; c: typeof b }; // Should give error for attempting to use ty
 >a : { b: number; c: any; }
 >b : number
 >c : any
+>b : any
 

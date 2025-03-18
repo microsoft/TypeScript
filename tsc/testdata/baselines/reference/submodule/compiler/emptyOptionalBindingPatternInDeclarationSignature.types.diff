@@ -48,8 +48,6 @@
  }
  
  interface I1 {
-+>I1 : I1
-+
      method({}?: { x: string }): void
 ->method : ({}?: { x: string; }) => void
 +>method : (__0?: { x: string; } | undefined) => void
@@ -61,7 +59,7 @@
  >x : string
  }
  
-@@= skipped -53, +55 lines =@@
+@@= skipped -53, +53 lines =@@
  >T2 : T2
  
      method({}?: { x: string }): void

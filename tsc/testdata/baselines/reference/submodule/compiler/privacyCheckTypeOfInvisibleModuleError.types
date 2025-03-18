@@ -9,9 +9,11 @@ module Outer {
 
         export var m: typeof Inner;
 >m : typeof Inner
+>Inner : typeof Inner
     }
 
     export var f: typeof Inner;
 >f : typeof Inner
+>Inner : typeof Inner
 }
 

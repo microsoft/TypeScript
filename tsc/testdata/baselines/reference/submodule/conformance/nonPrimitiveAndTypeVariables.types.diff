@@ -1,31 +1,6 @@
 --- old.nonPrimitiveAndTypeVariables.types
 +++ new.nonPrimitiveAndTypeVariables.types
-@@= skipped -4, +4 lines =@@
- 
- type A<T, V> = { [P in keyof T]: T[P] extends V ? 1 : 0; };
- >A : A<T, V>
-+>T : T
-+>V : V
-+>P : P
- 
- type B<T, V> = { [P in keyof T]: T[P] extends V | object ? 1 : 0; };
- >B : B<T, V>
-+>T : T
-+>V : V
-+>P : P
- 
- let a: A<{ a: 0 | 1 }, 0> = { a: 0 };
- >a : A<{ a: 0 | 1; }, 0>
-@@= skipped -20, +26 lines =@@
- 
- function foo<T, U>(x: T) {
- >foo : <T, U>(x: T) => void
-+>T : T
-+>U : U
- >x : T
- 
-     let a: object = x;  // Error
-@@= skipped -7, +9 lines =@@
+@@= skipped -31, +31 lines =@@
  >x : T
  
      let b: U | object = x;  // Error

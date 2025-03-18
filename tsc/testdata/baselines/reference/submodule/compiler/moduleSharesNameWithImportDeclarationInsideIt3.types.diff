@@ -1,10 +1,6 @@
 --- old.moduleSharesNameWithImportDeclarationInsideIt3.types
 +++ new.moduleSharesNameWithImportDeclarationInsideIt3.types
-@@= skipped -14, +14 lines =@@
-         }
-     }
-     export interface I { }
-+>I : I
+@@= skipped -17, +17 lines =@@
  }
  module A.M {
  >A : typeof A
@@ -13,7 +9,7 @@
  
      import M = Z.M;
  >M : typeof M
-@@= skipped -13, +14 lines =@@
+@@= skipped -10, +10 lines =@@
      import M = Z.I;
  >M : any
  >Z : typeof Z

@@ -11,7 +11,6 @@ export class B { b!: number }
 
 export type C<T> = T;
 >C : T
->T : T
 
 export const Value = {};
 >Value : {}

@@ -48,7 +48,6 @@ function f3(x: {}) {
 
 function f4<T>(x: T) {
 >f4 : <T>(x: T) => void
->T : T
 >x : T
 
     if (typeof x === "function") {
@@ -157,8 +156,6 @@ function f12(x: { s: string } | { n: number }) {
 
 function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 >f100 : <T, K extends keyof T>(obj: T, keys: K[]) => void
->T : T
->K : K
 >obj : T
 >keys : K[]
 
@@ -191,7 +188,6 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 
 function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
 >configureStore : <S extends object>(reducer: Record<keyof S, () => void> | () => void) => void
->S : S
 >reducer : Record<keyof S, () => void> | () => void
 
     let rootReducer: () => void;

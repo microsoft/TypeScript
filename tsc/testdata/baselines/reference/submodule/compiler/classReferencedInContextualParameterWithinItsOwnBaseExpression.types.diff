@@ -1,66 +1,15 @@
 --- old.classReferencedInContextualParameterWithinItsOwnBaseExpression.types
 +++ new.classReferencedInContextualParameterWithinItsOwnBaseExpression.types
-@@= skipped -1, +1 lines =@@
- 
- === classReferencedInContextualParameterWithinItsOwnBaseExpression.ts ===
- interface Pretty<To> {
-+>Pretty : Pretty<To>
-+>To : To
-+
-   (a: To): string;
- >a : To
- }
- 
- interface Schema<A> {
-+>Schema : Schema<A>
-+>A : A
-+
-   readonly pretty?: Pretty<A>;
- >pretty : Pretty<A> | undefined
- }
- 
- interface Class<A> {
-+>Class : Class<A>
-+>A : A
-+
-   new (): A;
+@@= skipped -15, +15 lines =@@
  }
  
  declare const Class: <Self>(
 ->Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self>) => Class<OutputFrom<Fields>>
 +>Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self> | undefined) => Class<OutputFrom<Fields>>
-+>Self : Self
  
    identifier: string,
  >identifier : string
- 
- ) => <Fields>(
-+>Fields : Fields
-+
-   fields: Fields,
- >fields : Fields
- 
-@@= skipped -30, +42 lines =@@
- 
- type Type<TOutput> = {
- >Type : Type<TOutput>
-+>TOutput : TOutput
- 
-   _TOutput: TOutput;
- >_TOutput : TOutput
-@@= skipped -8, +9 lines =@@
- 
- type OutputFrom<TFields> = {
- >OutputFrom : OutputFrom<TFields>
-+>TFields : TFields
- 
-   [K in keyof TFields]: "_TOutput" extends keyof TFields[K]
-+>K : K
-+
-     ? TFields[K]["_TOutput"]
-     : never;
- };
-@@= skipped -13, +16 lines =@@
+@@= skipped -37, +37 lines =@@
  >A : A
  >Class<A>("A")(  { a: string },  {    pretty: (a) => JSON.stringify(a),  },) : OutputFrom<{ a: () => Type<string>; }>
  >Class<A>("A") : <Fields>(fields: Fields, annotations?: Schema<A> | undefined) => Class<OutputFrom<Fields>>

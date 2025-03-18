@@ -8,12 +8,8 @@
 +>React : any
  
  interface Prop {
-+>Prop : Prop
-+
      a: number,
- >a : number
- 
-@@= skipped -10, +12 lines =@@
+@@= skipped -10, +10 lines =@@
  >b : string
  
      children: JSX.Element | JSX.Element[];

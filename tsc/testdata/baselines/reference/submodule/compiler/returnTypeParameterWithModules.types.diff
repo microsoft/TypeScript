@@ -6,7 +6,6 @@
      export function reduce<A>(ar, f, e?): Array<A> {
 ->reduce : <A>(ar: any, f: any, e?: any) => Array<A>
 +>reduce : <A>(ar: any, f: any, e?: any) => A[]
-+>A : A
  >ar : any
  >f : any
  >e : any
@@ -25,7 +24,7 @@
  >ar : any
  >e ? [f, e] : [f] : any[]
  >e : any
-@@= skipped -29, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  >M2 : typeof M2
  
    import A = M1
@@ -48,12 +47,3 @@
  >arguments : IArguments
  >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
  
-     };
-     export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
- >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
-+>B : B
-+>C : C
-+>D : D
- >g : (x: B) => C
- >x : B
- >f : (x: D) => B

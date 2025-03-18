@@ -8,5 +8,4 @@
 +>a : { b: number; c: any; }
  >b : number
  >c : any
-->b : any
- 
+ >b : any

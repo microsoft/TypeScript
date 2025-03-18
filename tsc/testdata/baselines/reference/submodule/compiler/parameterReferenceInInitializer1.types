@@ -3,7 +3,6 @@
 === parameterReferenceInInitializer1.ts ===
 function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
 >fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
->a : a
 >y : Y
 >set : (y: Y, x: number) => void
 >y : Y
@@ -13,7 +12,6 @@ function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
 >undefined : undefined
 }
 interface Y { x: number }
->Y : Y
 >x : number
 
 class C {

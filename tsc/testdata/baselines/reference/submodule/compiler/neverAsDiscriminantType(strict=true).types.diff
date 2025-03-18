@@ -9,50 +9,7 @@
  >a : number
      }
  }
-@@= skipped -8, +8 lines =@@
- // Repro from #50716
- 
- export interface GatewayPayloadStructure<O extends GatewayOpcode, T extends keyof GatewayEvents, D> {
-+>GatewayPayloadStructure : GatewayPayloadStructure<O, T, D>
-+>O : O
-+>T : T
-+>D : D
-+
-     op: O
- >op : O
- 
-@@= skipped -17, +22 lines =@@
- >GatewayPayload : GatewayPayload
- 
-     [O in GatewayOpcode]: O extends GatewayOpcode.DISPATCH
-+>O : O
- >GatewayOpcode : any
- 
-     ? {
-         [T in keyof GatewayEvents]: GatewayPayloadStructure<GatewayOpcode.DISPATCH, T, GatewayEvents[T]>
-+>T : T
- >GatewayOpcode : any
- 
-     }[keyof GatewayEvents]
-@@= skipped -11, +13 lines =@@
- }[GatewayOpcode]
- 
- export interface GatewayParams {
-+>GatewayParams : GatewayParams
-+
-     [GatewayOpcode.HELLO]: { b: 1 }
- >[GatewayOpcode.HELLO] : { b: 1; }
- >GatewayOpcode.HELLO : GatewayOpcode.HELLO
-@@= skipped -57, +59 lines =@@
- }
- 
- export interface GatewayEvents {
-+>GatewayEvents : GatewayEvents
-+
-     MESSAGE_CREATE: { a: 1 }
- >MESSAGE_CREATE : { a: 1; }
- >a : 1
-@@= skipped -24, +26 lines =@@
+@@= skipped -117, +117 lines =@@
  
      if (input.t === 'MESSAGE_CREATE') {
  >input.t === 'MESSAGE_CREATE' : boolean

@@ -2,10 +2,7 @@
 
 === declarationEmitLocalClassHasRequiredDeclare.ts ===
 export declare namespace A {
->A : typeof A
-
     namespace X { }
->X : typeof X
 }
 
 class X { }
@@ -20,7 +17,6 @@ export class A {
 }
 
 export declare namespace Y {
->Y : typeof Y
 
 }
 

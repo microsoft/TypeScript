@@ -74,7 +74,6 @@ module E {
 >fn : () => void
 
     export interface I { id: number }
->I : I
 >id : number
 
     export class C { name: string }
@@ -103,7 +102,6 @@ module F {
 >fn : () => void
 
     interface I { id: number }
->I : I
 >id : number
 
     class C { name: string }

@@ -1,26 +1,6 @@
 --- old.jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.types
 +++ new.jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.types
-@@= skipped -1, +1 lines =@@
- 
- === jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx ===
- namespace JSX {
-+>JSX : any
-+
-   export interface ElementChildrenAttribute {
-+>ElementChildrenAttribute : ElementChildrenAttribute
-+
-     children: {};
- >children : {}
-   }
- }
- 
- interface Props {
-+>Props : Props
-+
-   className?: string | undefined;
- >className : string | undefined
- }
-@@= skipped -19, +25 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  
  <NoticeList className="my-notice-list">

@@ -5,8 +5,6 @@
 
 type UnNullify<T> = { [K in keyof T]: NonNullable<T[K]> };
 >UnNullify : UnNullify<T>
->T : T
->K : K
 
 type Foo = UnNullify<[a: 1, b?: 2 | undefined]>;
 >Foo : [a: 1, b?: 2 | undefined]

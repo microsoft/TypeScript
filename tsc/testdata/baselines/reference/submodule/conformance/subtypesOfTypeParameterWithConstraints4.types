@@ -9,9 +9,6 @@ class Foo { foo: number; }
 
 function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
 >f : <T extends Foo, U extends Foo, V>(t: T, u: U, v: V) => void
->T : T
->U : U
->V : V
 >t : T
 >u : U
 >v : V
@@ -116,7 +113,6 @@ function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
 
 class B1<T> {
 >B1 : B1<T>
->T : T
 
     foo: T;
 >foo : T
@@ -124,9 +120,6 @@ class B1<T> {
 
 class D1<T extends Foo, U extends Foo, V> extends B1<Foo> {
 >D1 : D1<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<Foo>
 
     [x: string]: Foo;
@@ -138,9 +131,6 @@ class D1<T extends Foo, U extends Foo, V> extends B1<Foo> {
 
 class D2<T extends Foo, U extends Foo, V> extends B1<Foo> {
 >D2 : D2<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<Foo>
 
     [x: string]: Foo;
@@ -152,9 +142,6 @@ class D2<T extends Foo, U extends Foo, V> extends B1<Foo> {
 
 class D3<T extends Foo, U extends Foo, V> extends B1<Foo> {
 >D3 : D3<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<Foo>
 
     [x: string]: Foo;
@@ -166,9 +153,6 @@ class D3<T extends Foo, U extends Foo, V> extends B1<Foo> {
 
 class D4<T extends Foo, U extends Foo, V> extends B1<T> {
 >D4 : D4<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<T>
 
     [x: string]: T;
@@ -180,9 +164,6 @@ class D4<T extends Foo, U extends Foo, V> extends B1<T> {
 
 class D5<T extends Foo, U extends Foo, V> extends B1<T> {
 >D5 : D5<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<T>
 
     [x: string]: T;
@@ -194,9 +175,6 @@ class D5<T extends Foo, U extends Foo, V> extends B1<T> {
 
 class D6<T extends Foo, U extends Foo, V> extends B1<T> {
 >D6 : D6<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<T>
 
     [x: string]: T;
@@ -208,9 +186,6 @@ class D6<T extends Foo, U extends Foo, V> extends B1<T> {
 
 class D7<T extends Foo, U extends Foo, V> extends B1<U> {
 >D7 : D7<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<U>
 
     [x: string]: U;
@@ -222,9 +197,6 @@ class D7<T extends Foo, U extends Foo, V> extends B1<U> {
 
 class D8<T extends Foo, U extends Foo, V> extends B1<U> {
 >D8 : D8<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<U>
 
     [x: string]: U;
@@ -236,9 +208,6 @@ class D8<T extends Foo, U extends Foo, V> extends B1<U> {
 
 class D9<T extends Foo, U extends Foo, V> extends B1<U> {
 >D9 : D9<T, U, V>
->T : T
->U : U
->V : V
 >B1 : B1<U>
 
     [x: string]: U;

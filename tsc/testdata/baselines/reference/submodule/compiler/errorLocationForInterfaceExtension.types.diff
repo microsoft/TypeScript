@@ -1,8 +1,0 @@
---- old.errorLocationForInterfaceExtension.types
-+++ new.errorLocationForInterfaceExtension.types
-@@= skipped -5, +5 lines =@@
- >'' : ""
- 
- interface x extends string { }
-+>x : x
- 

@@ -1,35 +1,6 @@
 --- old.genericUnboundedTypeParamAssignability.types
 +++ new.genericUnboundedTypeParamAssignability.types
-@@= skipped -2, +2 lines =@@
- === genericUnboundedTypeParamAssignability.ts ===
- function f1<T>(o: T) {
- >f1 : <T>(o: T) => void
-+>T : T
- >o : T
- 
-   o.toString(); // error
-@@= skipped -11, +12 lines =@@
- 
- function f2<T extends {}>(o: T) {
- >f2 : <T extends {}>(o: T) => void
-+>T : T
- >o : T
- 
-   o.toString(); // no error
-@@= skipped -11, +12 lines =@@
- 
- function f3<T extends Record<string, any>>(o: T) {
- >f3 : <T extends Record<string, any>>(o: T) => void
-+>T : T
- >o : T
- 
-   o.toString(); // no error
-@@= skipped -11, +12 lines =@@
- 
- function user<T>(t: T) {
- >user : <T>(t: T) => void
-+>T : T
- >t : T
+@@= skipped -39, +39 lines =@@
  
    f1(t);
  >f1(t) : void

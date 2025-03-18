@@ -1,22 +1,6 @@
 --- old.typePredicatesInUnion.types
 +++ new.typePredicatesInUnion.types
-@@= skipped -1, +1 lines =@@
- 
- === typePredicatesInUnion.ts ===
- interface A {
-+>A : A
-+
-     pred(x: {}): x is boolean;
- >pred : (x: {}) => x is boolean
- >x : {}
- }
- interface B {
-+>B : B
-+
-     pred(x: {}): x is string;
- >pred : (x: {}) => x is string
- >x : {}
-@@= skipped -20, +24 lines =@@
+@@= skipped -21, +21 lines =@@
  
      if (o.pred(x)) {
  >o.pred(x) : boolean

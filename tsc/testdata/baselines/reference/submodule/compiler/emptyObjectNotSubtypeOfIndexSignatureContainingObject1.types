@@ -4,25 +4,17 @@
 // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
 // Begin types from Lodash.
 interface Dictionary<T> {
->Dictionary : Dictionary<T>
->T : T
-
   [index: string]: T;
 >index : string
 }
 
 interface NumericDictionary<T> {
->NumericDictionary : NumericDictionary<T>
->T : T
-
   [index: number]: T;
 >index : number
 }
 
 type ObjectIterator<TObject, TResult> = (
 >ObjectIterator : ObjectIterator<TObject, TResult>
->TObject : TObject
->TResult : TResult
 
   value: TObject[keyof TObject],
 >value : TObject[keyof TObject]
@@ -37,14 +29,10 @@ type ObjectIterator<TObject, TResult> = (
 
 type DictionaryIterator<T, TResult> = ObjectIterator<Dictionary<T>, TResult>;
 >DictionaryIterator : DictionaryIterator<T, TResult>
->T : T
->TResult : TResult
 
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues<T, TResult>(
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
->T : T
->TResult : TResult
 
   obj: Dictionary<T> | NumericDictionary<T> | null | undefined,
 >obj : Dictionary<T> | NumericDictionary<T>
@@ -59,15 +47,11 @@ function mapValues<T, TResult>(
 // End types from Lodash.
 
 interface Foo {
->Foo : Foo
-
   foo: string;
 >foo : string
 }
 
 interface Bar {
->Bar : Bar
-
   bar: string;
 >bar : string
 }

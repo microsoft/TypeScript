@@ -33,15 +33,7 @@
  >"up" : "up"
  >1 : 1
  
-@@= skipped -26, +26 lines =@@
- 
- function check<T>(x: T | undefined) {
- >check : <T>(x: T | undefined) => NonNullable<T>
-+>T : T
- >x : T | undefined
- 
-     return x || error("Undefined value");
-@@= skipped -47, +48 lines =@@
+@@= skipped -73, +73 lines =@@
  
      if (typeof x === "boolean") {
  >typeof x === "boolean" : boolean

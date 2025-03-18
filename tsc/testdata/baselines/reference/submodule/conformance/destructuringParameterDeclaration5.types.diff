@@ -1,56 +1,42 @@
 --- old.destructuringParameterDeclaration5.types
 +++ new.destructuringParameterDeclaration5.types
-@@= skipped -3, +3 lines =@@
- // Parameter Declaration with generic
- 
- interface F { }
-+>F : F
-+
- class Class implements F {
- >Class : Class
- 
-@@= skipped -43, +45 lines =@@
+@@= skipped -46, +46 lines =@@
  
  
  function d0<T extends Class>({x} = { x: new Class() }) { }
 ->d0 : <T extends Class>({ x }?: { x: Class; }) => void
 +>d0 : <T extends Class>(__0?: { x: Class; }) => void
-+>T : T
  >x : Class
  >{ x: new Class() } : { x: Class; }
  >x : Class
-@@= skipped -8, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >Class : typeof Class
  
  function d1<T extends F>({x}: { x: F }) { }
 ->d1 : <T extends F>({ x }: { x: F; }) => void
 +>d1 : <T extends F>(__0: { x: F; }) => void
-+>T : T
  >x : F
  >x : F
  
  function d2<T extends Class>({x}: { x: Class }) { }
 ->d2 : <T extends Class>({ x }: { x: Class; }) => void
 +>d2 : <T extends Class>(__0: { x: Class; }) => void
-+>T : T
  >x : Class
  >x : Class
  
  function d3<T extends D>({y}: { y: D }) { }
 ->d3 : <T extends D>({ y }: { y: D; }) => void
 +>d3 : <T extends D>(__0: { y: D; }) => void
-+>T : T
  >y : D
  >y : D
  
  function d4<T extends D>({y} = { y: new D() }) { }
 ->d4 : <T extends D>({ y }?: { y: D; }) => void
 +>d4 : <T extends D>(__0?: { y: D; }) => void
-+>T : T
  >y : D
  >{ y: new D() } : { y: D; }
  >y : D
-@@= skipped -29, +33 lines =@@
+@@= skipped -29, +29 lines =@@
  
  d0({ x: 1 });
  >d0({ x: 1 }) : void

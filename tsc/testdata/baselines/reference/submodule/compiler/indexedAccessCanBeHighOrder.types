@@ -3,21 +3,15 @@
 === indexedAccessCanBeHighOrder.ts ===
 declare function get<U, Y extends keyof U>(x: U, y: Y): U[Y];
 >get : <U, Y extends keyof U>(x: U, y: Y) => U[Y]
->U : U
->Y : Y
 >x : U
 >y : Y
 
 declare function find<T, K extends keyof T>(o: T[K]): [T, K];
 >find : <T, K extends keyof T>(o: T[K]) => [T, K]
->T : T
->K : K
 >o : T[K]
 
 function impl<A, B extends keyof A>(a: A, b: B) {
 >impl : <A, B extends keyof A>(a: A, b: B) => [A, B]
->A : A
->B : B
 >a : A
 >b : B
 

@@ -3,12 +3,10 @@
 === extendsClauseAlreadySeen2.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
 }
 class D<T> extends C<number> extends C<string> {
 >D : D<T>
->T : T
 >C : C<number>
 >C : C<number>
 

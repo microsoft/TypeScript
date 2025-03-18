@@ -1,16 +1,6 @@
 --- old.declFileTypeAnnotationTupleType.types
 +++ new.declFileTypeAnnotationTupleType.types
-@@= skipped -11, +11 lines =@@
-     }
-     export class g<T> {
- >g : g<T>
-+>T : T
-     }
- }
- class g<T> {
- >g : g<T>
-+>T : T
- }
+@@= skipped -19, +19 lines =@@
  
  // Just the name
  var k: [c, m.c] = [new c(), new m.c()];

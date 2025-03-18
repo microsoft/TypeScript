@@ -2,14 +2,10 @@
 
 === accessorsOverrideProperty5.ts ===
 interface I {
->I : I
-
     p: number
 >p : number
 }
 interface B extends I { }
->B : B
-
 class B { }
 >B : B
 

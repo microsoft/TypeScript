@@ -1,11 +1,6 @@
 --- old.mappedTypeGenericWithKnownKeys.types
 +++ new.mappedTypeGenericWithKnownKeys.types
-@@= skipped -4, +4 lines =@@
- 
- function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Shape) {
- >test : <Shape extends Record<string, string>>(shape: Shape, key: keyof Shape) => void
-+>Shape : Shape
- >shape : Shape
+@@= skipped -8, +8 lines =@@
  >key : keyof Shape
  
      const obj = {} as Record<keyof Shape | "knownLiteralKey", number>;

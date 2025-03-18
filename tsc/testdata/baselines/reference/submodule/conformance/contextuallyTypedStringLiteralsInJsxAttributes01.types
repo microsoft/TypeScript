@@ -2,17 +2,11 @@
 
 === contextuallyTypedStringLiteralsInJsxAttributes01.tsx ===
 namespace JSX {
->JSX : any
-
     export interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
         span: {};
 >span : {}
     }
     export interface Element {
->Element : Element
-
 		something?: any;
 >something : any
     }

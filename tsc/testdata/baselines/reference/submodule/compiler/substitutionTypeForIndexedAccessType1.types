@@ -3,8 +3,6 @@
 === substitutionTypeForIndexedAccessType1.ts ===
 type AddPropToObject<Obj extends object, Prop extends string> = Prop extends keyof Obj
 >AddPropToObject : AddPropToObject<Obj, Prop>
->Obj : Obj
->Prop : Prop
 
   ? Obj[Prop] extends unknown[]
     ? [...Obj[Prop]]

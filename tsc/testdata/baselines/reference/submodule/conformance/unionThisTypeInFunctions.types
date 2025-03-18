@@ -2,8 +2,6 @@
 
 === unionThisTypeInFunctions.ts ===
 interface Real {
->Real : Real
-
     method(this: this, n: number): void;
 >method : (n: number) => void
 >this : this
@@ -13,8 +11,6 @@ interface Real {
 >data : string
 }
 interface Fake {
->Fake : Fake
-
     method(this: this, n: number): void;
 >method : (n: number) => void
 >this : this

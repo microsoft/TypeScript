@@ -7,8 +7,6 @@ declare module "react" {
 >"react" : any
 
     interface Attributes {
->Attributes : Attributes
-
         [key: `do-${string}`]: Function;
 >key : `do-${string}`
 

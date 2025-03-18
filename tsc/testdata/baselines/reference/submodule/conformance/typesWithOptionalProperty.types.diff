@@ -1,15 +1,6 @@
 --- old.typesWithOptionalProperty.types
 +++ new.typesWithOptionalProperty.types
-@@= skipped -3, +3 lines =@@
- // basic uses of optional properties without errors
- 
- interface I {
-+>I : I
-+
-     foo: string;
- >foo : string
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -14, +14 lines =@@
  }
  
  var a: {

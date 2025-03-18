@@ -135,7 +135,6 @@ a11([1, 2]);                              // Parameter type is number[]
 // Rest parameter with generic
 function foo<T>(...a: T[]) { }
 >foo : <T>(...a: T[]) => void
->T : T
 >a : T[]
 
 foo<number|string>("hello", 1, 2);
@@ -163,7 +162,6 @@ const enum E1 { a, b }
 
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : <T extends Number>(...a: T[]) => void
->T : T
 >a : T[]
 
 foo1(1, 2, 3, E.a);

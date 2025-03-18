@@ -11,7 +11,6 @@
  function fn<T extends Array<unknown> | undefined>(arg: T) {
 ->fn : <T extends Array<unknown> | undefined>(arg: T) => void
 +>fn : <T extends unknown[] | undefined>(arg: T) => void
-+>T : T
  >arg : T
  
      if (typeof arg !== "undefined") {
@@ -28,7 +27,7 @@
  >arg : unknown[]
  
          const n: Array<unknown> = arg;
-@@= skipped -27, +28 lines =@@
+@@= skipped -27, +27 lines =@@
  >arg : T & {}
  
          const m = [...arg];

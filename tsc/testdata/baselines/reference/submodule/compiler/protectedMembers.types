@@ -247,8 +247,6 @@ class D extends C {
 }
 
 interface E extends C {
->E : E
-
     e;
 >e : any
 }

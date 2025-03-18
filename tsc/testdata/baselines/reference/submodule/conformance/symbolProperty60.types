@@ -3,8 +3,6 @@
 === symbolProperty60.ts ===
 // https://github.com/Microsoft/TypeScript/issues/20146
 interface I1 {
->I1 : I1
-
     [Symbol.toStringTag]: string;
 >[Symbol.toStringTag] : string
 >Symbol.toStringTag : unique symbol
@@ -16,8 +14,6 @@ interface I1 {
 }
 
 interface I2 {
->I2 : I2
-
     [Symbol.toStringTag]: string;
 >[Symbol.toStringTag] : string
 >Symbol.toStringTag : unique symbol
@@ -32,8 +28,6 @@ declare const mySymbol: unique symbol;
 >mySymbol : unique symbol
 
 interface I3 {
->I3 : I3
-
     [mySymbol]: string;
 >[mySymbol] : string
 >mySymbol : unique symbol
@@ -43,8 +37,6 @@ interface I3 {
 }
 
 interface I4 {
->I4 : I4
-
     [mySymbol]: string;
 >[mySymbol] : string
 >mySymbol : unique symbol

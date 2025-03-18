@@ -1,53 +1,6 @@
 --- old.enumAssignmentCompat2.types
 +++ new.enumAssignmentCompat2.types
-@@= skipped -18, +18 lines =@@
- }
- 
- interface WStatic {
-+>WStatic : WStatic
- 
-     a: W;
- >a : W
-@@= skipped -21, +22 lines =@@
- var y: typeof W = W;
- >y : typeof W
- >W : typeof W
-->W : typeof W
- 
- var z: number = W; // error
- >z : number
-@@= skipped -14, +13 lines =@@
- 
- var b: typeof W = W.a; // error
- >b : typeof W
-->W : typeof W
- >W.a : W.a
- >W : typeof W
- >a : W.a
- 
- var c: typeof W.a = W.a;
- >c : W.a
-->W.a : W.a
- >W : typeof W
-->a : W.a
- >W.a : W.a
- >W : typeof W
- >a : W.a
- 
- var d: typeof W = 3; // error
- >d : typeof W
-->W : typeof W
- >3 : 3
- 
- var e: typeof W.a = 4;
- >e : W.a
-->W.a : W.a
- >W : typeof W
-->a : W.a
- >4 : 4
- 
- var f: WStatic = W.a; // error
-@@= skipped -54, +48 lines =@@
+@@= skipped -107, +107 lines =@@
  >a : W.a
  
  W.D;

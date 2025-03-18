@@ -1,32 +1,6 @@
 --- old.multipleInferenceContexts.types
 +++ new.multipleInferenceContexts.types
-@@= skipped -2, +2 lines =@@
- === multipleInferenceContexts.ts ===
- type ConstructorOptions<Data> =
- >ConstructorOptions : ConstructorOptions<Data>
-+>Data : Data
- 
-     & ComponentOptionsProperties<Data>
-     & ThisType<Instance<Data>>;
- 
- interface ComponentOptionsProperties<Data> {
-+>ComponentOptionsProperties : ComponentOptionsProperties<Data>
-+>Data : Data
-+
-     data: Data;
- >data : Data
- 
-@@= skipped -13, +17 lines =@@
- }
- 
- interface Instance<Data> {
-+>Instance : Instance<Data>
-+>Data : Data
-+
-     get<K extends keyof Data>(name: K): unknown;
- >get : <K extends keyof Data>(name: K) => unknown
-+>K : K
- >name : K
+@@= skipped -21, +21 lines =@@
  }
  
  declare var Moon: {
@@ -34,11 +8,8 @@
 +>Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
  
      <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
-+>Data : Data
  >options : ConstructorOptions<Data> | undefined
- 
- };
-@@= skipped -16, +21 lines =@@
+@@= skipped -10, +10 lines =@@
  const r2 = Moon({
  >r2 : Instance<{ msg: string; }>
  >Moon({    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },}) : Instance<{ msg: string; }>

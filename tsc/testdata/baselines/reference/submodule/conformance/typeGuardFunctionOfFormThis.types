@@ -69,7 +69,6 @@ else if (a.isFollower()) {
 }
 
 interface GuardInterface extends RoyalGuard {}
->GuardInterface : GuardInterface
 
 let b: GuardInterface;
 >b : GuardInterface
@@ -208,23 +207,16 @@ else if (guard.isMedic()) {
 }
 
 interface Supplies {
->Supplies : Supplies
-
     spoiled: boolean;
 >spoiled : boolean
 }
 
 interface Sundries {
->Sundries : Sundries
-
     broken: boolean;
 >broken : boolean
 }
 
 interface Crate<T> {
->Crate : Crate<T>
->T : T
-
     contents: T;
 >contents : T
 
@@ -371,8 +363,6 @@ if (mimic.isFollower()) {
 
 
 interface MimicGuardInterface {
->MimicGuardInterface : MimicGuardInterface
-
     isLeader(): this is LeadGuard;
 >isLeader : () => this is LeadGuard
 

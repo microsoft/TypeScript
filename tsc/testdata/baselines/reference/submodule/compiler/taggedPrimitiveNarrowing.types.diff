@@ -9,13 +9,7 @@
  >hash : Hash
  >"string" : "string"
  
-@@= skipped -17, +17 lines =@@
- 
- function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number {
- >getHashLength2 : <T extends { __tag__: unknown; }>(hash: string & T) => number
-+>T : T
- >__tag__ : unknown
- >hash : string & T
+@@= skipped -22, +22 lines =@@
  
      if (typeof hash !== "string") {
  >typeof hash !== "string" : boolean

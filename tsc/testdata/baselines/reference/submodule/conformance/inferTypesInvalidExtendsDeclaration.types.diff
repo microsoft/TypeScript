@@ -1,9 +1,0 @@
---- old.inferTypesInvalidExtendsDeclaration.types
-+++ new.inferTypesInvalidExtendsDeclaration.types
-@@= skipped -2, +2 lines =@@
- === inferTypesInvalidExtendsDeclaration.ts ===
- type Test<T> = T extends infer A extends B ? number : string;
- >Test : Test<T>
-+>T : T
-+>A : A
- 

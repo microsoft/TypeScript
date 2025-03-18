@@ -21,8 +21,6 @@ const m: { result: NoInfer<TaggedUnion> }[] = [];
 
 function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
 >map : <A, B>(items: readonly A[], f: (a: A) => B) => B[]
->A : A
->B : B
 >items : readonly A[]
 >f : (a: A) => B
 >a : A
@@ -63,8 +61,6 @@ const something = map(m, (_) =>
 
 declare function test2<T1, T2>(a: T1, b: T2, cb: (thing: NoInfer<T1> | NoInfer<T2>) => void): void;
 >test2 : <T1, T2>(a: T1, b: T2, cb: (thing: T1 | T2) => void) => void
->T1 : T1
->T2 : T2
 >a : T1
 >b : T2
 >cb : (thing: T1 | T2) => void

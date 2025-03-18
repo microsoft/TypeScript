@@ -2,8 +2,6 @@
 
 === translation.ts ===
 export interface Translation {
->Translation : Translation
-
   translationKey: Translation.TranslationKeyEnum;
 >translationKey : TranslationKeyEnum
 >Translation : any

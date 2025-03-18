@@ -2,10 +2,7 @@
 
 === file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { isElement; }
->Element : Element
 >isElement : any
 }
 
@@ -30,7 +27,6 @@ x1.isElement;
 var x2 = <T extends {}>() => {};
 >x2 : <T extends {}>() => void
 ><T extends {}>() => {} : <T extends {}>() => void
->T : T
 
 x2();
 >x2() : void
@@ -40,8 +36,6 @@ x2();
 var x3 = <T, T1>() => {};
 >x3 : <T, T1>() => void
 ><T, T1>() => {} : <T, T1>() => void
->T : T
->T1 : T1
 
 x3();
 >x3() : void
@@ -78,7 +72,6 @@ x5.isElement;
 var x6 = <T = string,>() => {};
 >x6 : <T>() => void
 ><T = string,>() => {} : <T>() => void
->T : T
 
 x6();
 >x6() : void

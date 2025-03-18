@@ -30,16 +30,7 @@
  
  class C1 {
  >C1 : C1
-@@= skipped -23, +23 lines =@@
- }
- 
- interface I1 {
-+>I1 : I1
-+
-     [sym](): void;  // should error
- >[sym] : () => void
- >sym : symbol
-@@= skipped -22, +24 lines =@@
+@@= skipped -45, +45 lines =@@
  
      [strUnion](): void; // should error
  >[strUnion] : () => void
@@ -67,12 +58,3 @@
  }
  
  class C3 {
-@@= skipped -24, +24 lines =@@
- }
- 
- interface I3 {
-+>I3 : I3
-+
-     [1](): void;
- >[1] : () => void
- >1 : 1

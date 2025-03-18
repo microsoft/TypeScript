@@ -7,10 +7,7 @@
 ->f1 : <K extends string, T>(obj: { [P in K]: T; }, k: K) => void
 ->obj : { [P in K]: T; }
 +>f1 : <K extends string, T>(obj: { [P in K]: T }, k: K) => void
-+>K : K
-+>T : T
 +>obj : { [P in K]: T }
-+>P : P
  >k : K
  
      const b = k in obj;
@@ -57,9 +54,7 @@
 ->f2 : <T>(obj: { [P in keyof T]: T[P]; }, k: keyof T) => void
 ->obj : { [P in keyof T]: T[P]; }
 +>f2 : <T>(obj: { [P in keyof T]: T[P] }, k: keyof T) => void
-+>T : T
 +>obj : { [P in keyof T]: T[P] }
-+>P : P
  >k : keyof T
  
      const b = k in obj;
@@ -106,10 +101,7 @@
 ->f3 : <T, K extends keyof T>(obj: { [P in K]: T[P]; }, k: K) => void
 ->obj : { [P in K]: T[P]; }
 +>f3 : <T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) => void
-+>T : T
-+>K : K
 +>obj : { [P in K]: T[P] }
-+>P : P
  >k : K
  
      const b = k in obj;

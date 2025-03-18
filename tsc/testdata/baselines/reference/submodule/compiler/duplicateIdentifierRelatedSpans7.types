@@ -7,8 +7,6 @@ declare module "someMod" {
 >"someMod" : any
 
     export interface TopLevel {
->TopLevel : TopLevel
-
         duplicate1(): number;
 >duplicate1 : () => number
 

@@ -5,15 +5,12 @@
 // no errors expected
 
 interface A { foo: number }
->A : A
 >foo : number
 
 interface B extends A { bar: string; }
->B : B
 >bar : string
 
 interface C extends B { baz: boolean; }
->C : C
 >baz : boolean
 
 var a: A;
@@ -27,9 +24,6 @@ var c: C;
 
 function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
->T : T
->U : U
->V : V
 >x : T
 >y : U
 >z : V
@@ -95,9 +89,6 @@ foo((x: number, y) => { }, (x) => { }, () => { });
 
 function foo2<T extends A, U, V>(x: T, y: U, z: V): V { return z; }
 >foo2 : <T extends A, U, V>(x: T, y: U, z: V) => V
->T : T
->U : U
->V : V
 >x : T
 >y : U
 >z : V

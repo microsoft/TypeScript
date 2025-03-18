@@ -2,15 +2,11 @@
 
 === addMoreCallSignaturesToBaseSignature2.ts ===
 interface Foo {
->Foo : Foo
-
     (bar:number): string;
 >bar : number
 }
 
 interface Bar extends Foo {
->Bar : Bar
-
     (key: string): string;
 >key : string
 }

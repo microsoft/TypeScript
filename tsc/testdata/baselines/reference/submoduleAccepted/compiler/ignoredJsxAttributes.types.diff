@@ -19,12 +19,8 @@
 +>React : any
  
  interface Props {
-+>Props : Props
-+
      foo: string;
- >foo : string
- 
-@@= skipped -22, +18 lines =@@
+@@= skipped -22, +16 lines =@@
  }
  
  declare function Yadda(props: Props): JSX.Element;

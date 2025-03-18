@@ -2,13 +2,10 @@
 
 === optionalChainWithInstantiationExpression2.ts ===
 declare interface A {
->A : A
-
     c: number;
 >c : number
 
     <T>(): T;
->T : T
 }
 
 type b = 'b type';

@@ -1,14 +1,6 @@
 --- old.inferenceOptionalPropertiesToIndexSignatures.types
 +++ new.inferenceOptionalPropertiesToIndexSignatures.types
-@@= skipped -2, +2 lines =@@
- === inferenceOptionalPropertiesToIndexSignatures.ts ===
- declare function foo<T>(obj: { [x: string]: T }): T;
- >foo : <T>(obj: { [x: string]: T; }) => T
-+>T : T
- >obj : { [x: string]: T; }
- >x : string
- 
-@@= skipped -14, +15 lines =@@
+@@= skipped -16, +16 lines =@@
  >b : number | undefined
  
  declare const x3: { a: string, b?: number };

@@ -2,26 +2,17 @@
 
 === booleanFilterAnyArray.ts ===
 interface Bullean { }
->Bullean : Bullean
-
 interface BulleanConstructor {
->BulleanConstructor : BulleanConstructor
-
     new(v1?: any): Bullean;
 >v1 : any
 
     <T>(v2?: T): v2 is T;
->T : T
 >v2 : T
 }
 
 interface Ari<T> {
->Ari : Ari<T>
->T : T
-
     filter<S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>;
 >filter : { <S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>; (cb2: (value: T) => unknown): Ari<T>; }
->S : S
 >cb1 : (value: T) => value is S
 >value : T
 

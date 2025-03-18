@@ -12,6 +12,7 @@ class C {
 
     b: typeof x; // error
 >b : any
+>x : any
 
     constructor(x) { }
 >x : any
@@ -26,6 +27,7 @@ class D {
 
     b: typeof x; // error
 >b : any
+>x : any
 
     constructor(public x) { }
 >x : any
@@ -42,7 +44,9 @@ class E {
 
     b: typeof this.x; // ok
 >b : any
+>this.x : any
 >this : this
+>x : any
 
     constructor(public x) { }
 >x : any
@@ -50,7 +54,6 @@ class E {
 
 class F<T> {
 >F : F<T>
->T : T
 
     a = this.x; // ok
 >a : T

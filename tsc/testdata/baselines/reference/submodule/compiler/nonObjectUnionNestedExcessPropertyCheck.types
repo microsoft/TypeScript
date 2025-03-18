@@ -2,8 +2,6 @@
 
 === nonObjectUnionNestedExcessPropertyCheck.ts ===
 interface IProps {
->IProps : IProps
-
     iconProp?: string;
 >iconProp : string
 
@@ -16,8 +14,6 @@ interface IProps {
 }
 
 interface INestedProps {
->INestedProps : INestedProps
-
     nestedProps?: IProps;
 >nestedProps : IProps
 }

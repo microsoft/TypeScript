@@ -23,8 +23,6 @@ module foo {
     }
  
     interface I1 {
->I1 : I1
-
         (a: string, b: string): string;
 >a : string
 >b : string
@@ -35,8 +33,6 @@ module foo {
     }
  
     interface I2 {
->I2 : I2
-
         x: string;
 >x : string
 

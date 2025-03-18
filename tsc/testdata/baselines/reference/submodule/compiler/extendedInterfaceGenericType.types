@@ -2,9 +2,6 @@
 
 === extendedInterfaceGenericType.ts ===
 interface Alpha<T> {
->Alpha : Alpha<T>
->T : T
-
     takesArgOfT(arg: T): Alpha<T>;
 >takesArgOfT : (arg: T) => Alpha<T>
 >arg : T
@@ -13,8 +10,6 @@ interface Alpha<T> {
 >makeBetaOfNumber : () => Beta<number>
 }
 interface Beta<T> extends Alpha<T> {
->Beta : Beta<T>
->T : T
 }
 
 var alpha: Alpha<number>;

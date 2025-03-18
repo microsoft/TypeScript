@@ -1,19 +1,7 @@
 --- old.privacyCheckExportAssignmentOnExportedGenericInterface1.types
 +++ new.privacyCheckExportAssignmentOnExportedGenericInterface1.types
-@@= skipped -1, +1 lines =@@
- 
- === privacyCheckExportAssignmentOnExportedGenericInterface1.ts ===
- module Foo {
-+>Foo : new () => A<Foo<string>>
-+
-     export interface A<T> {
-+>A : A<T>
-+>T : T
-     }
- }
+@@= skipped -7, +7 lines =@@
  interface Foo<T> {
-+>Foo : Foo<T>
-+>T : T
  }
  var Foo: new () => Foo.A<Foo<string>>;
 ->Foo : new () => Foo.A<Foo<string>>

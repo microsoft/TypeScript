@@ -2,17 +2,11 @@
 
 === infinitelyExpandingTypes2.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     x: Foo<Foo<T>>;
 >x : Foo<Foo<T>>
 } 
 
 interface Bar<T> extends Foo<T> {
->Bar : Bar<T>
->T : T
-
     y: string;
 >y : string
 }

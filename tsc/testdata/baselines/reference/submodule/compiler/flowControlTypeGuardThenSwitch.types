@@ -12,15 +12,11 @@ enum Kind {
 }
 
 interface Base {
->Base : Base
-
     kind: Kind;
 >kind : Kind
 }
 
 interface A extends Base {
->A : A
-
     kind: Kind.A;
 >kind : Kind.A
 >Kind : any
@@ -30,8 +26,6 @@ interface A extends Base {
 }
 
 interface B extends Base {
->B : B
-
     kind: Kind.B;
 >kind : Kind.B
 >Kind : any

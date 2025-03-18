@@ -1,35 +1,15 @@
 --- old.genericDefaultsJs.types
 +++ new.genericDefaultsJs.types
-@@= skipped -2, +2 lines =@@
- === decls.d.ts ===
- declare function f0<T>(x?: T): T;
- >f0 : <T>(x?: T) => T
-+>T : T
+@@= skipped -5, +5 lines =@@
  >x : T
  
  declare function f1<T, U = number>(x?: T): [T, U];
 ->f1 : <T, U = number>(x?: T) => [T, U]
 +>f1 : <T, U>(x?: T) => [T, U]
-+>T : T
-+>U : U
  >x : T
  
  declare class C0<T> {
- >C0 : C0<T>
-+>T : T
- 
-     y: T;
- >y : T
-@@= skipped -17, +21 lines =@@
- }
- declare class C1<T, U = number> {
- >C1 : C1<T, U>
-+>T : T
-+>U : U
- 
-     y: [T, U];
- >y : [T, U]
-@@= skipped -9, +11 lines =@@
+@@= skipped -23, +23 lines =@@
  }
  === main.js ===
  const f0_v0 = f0();

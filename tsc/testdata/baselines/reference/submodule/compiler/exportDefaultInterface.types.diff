@@ -1,10 +1,6 @@
 --- old.exportDefaultInterface.types
 +++ new.exportDefaultInterface.types
-@@= skipped -1, +1 lines =@@
- 
- === a.ts ===
- export default interface A { value: number; }
-+>A : default
+@@= skipped -4, +4 lines =@@
  >value : number
  
  var a: A;
@@ -20,7 +16,7 @@
  >value : number
  >toExponential : (fractionDigits?: number) => string
  
-@@= skipped -18, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  >A : any
  
  var a: A;

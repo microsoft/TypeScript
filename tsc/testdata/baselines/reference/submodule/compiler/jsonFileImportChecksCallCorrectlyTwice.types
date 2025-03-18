@@ -5,8 +5,6 @@ import data from "./data.json";
 >data : { foo: { bool: boolean; str: string; }[]; }
 
 interface Foo {
->Foo : Foo
-
   str: string;
 >str : string
 }

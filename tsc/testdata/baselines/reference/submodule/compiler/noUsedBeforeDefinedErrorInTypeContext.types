@@ -4,9 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/8775
 
 interface IThing<T> {
->IThing : IThing<T>
->T : T
-
     owner: T;
 >owner : T
 }
@@ -19,6 +16,7 @@ var foo = {
 >one : IThing<any>
 >{} as IThing<typeof foo> : IThing<any>
 >{} : {}
+>foo : any
 }
 
 let baz = {
@@ -29,6 +27,7 @@ let baz = {
 >two : IThing<any>
 >{} as IThing<typeof bar> : IThing<any>
 >{} : {}
+>bar : any
 }
 
 let bar = {
@@ -39,6 +38,7 @@ let bar = {
 >three : IThing<any>
 >{} as IThing<typeof bar> : IThing<any>
 >{} : {}
+>bar : any
 }
 
 const qwe = {
@@ -49,5 +49,6 @@ const qwe = {
 >four : IThing<any>
 >{} as IThing<typeof qwe> : IThing<any>
 >{} : {}
+>qwe : any
 }
 

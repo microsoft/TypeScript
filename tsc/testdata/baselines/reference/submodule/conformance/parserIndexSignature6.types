@@ -2,8 +2,6 @@
 
 === parserIndexSignature6.ts ===
 interface I {
->I : I
-
   [a:boolean]
 >a : boolean
 }

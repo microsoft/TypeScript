@@ -1,29 +1,6 @@
 --- old.contextuallyTypedObjectLiteralMethodDeclaration01.types
 +++ new.contextuallyTypedObjectLiteralMethodDeclaration01.types
-@@= skipped -1, +1 lines =@@
- 
- === contextuallyTypedObjectLiteralMethodDeclaration01.ts ===
- interface A {
-+>A : A
-+
-     numProp: number;
- >numProp : number
- }
- 
- interface B  {
-+>B : B
-+
-     strProp: string;
- >strProp : string
- }
- 
- interface Foo {
-+>Foo : Foo
-+
-     method1(arg: A): void;
- >method1 : (arg: A) => void
- >arg : A
-@@= skipped -23, +29 lines =@@
+@@= skipped -24, +24 lines =@@
  >getFoo1 : () => Foo
  
      return {

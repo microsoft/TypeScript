@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/externalModules/typeOnly/implementsClause.ts] ////
 
 === types.ts ===
+
 export interface Component {}
->Component : Component
 
 === ns.ts ===
 import type * as types from './types';

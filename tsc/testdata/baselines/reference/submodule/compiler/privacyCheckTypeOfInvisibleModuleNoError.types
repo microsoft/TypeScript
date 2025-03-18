@@ -13,5 +13,6 @@ module Outer {
 
     export var f: typeof Inner; // Since we dont unwind inner any more, it is error here
 >f : typeof Inner
+>Inner : typeof Inner
 }
 

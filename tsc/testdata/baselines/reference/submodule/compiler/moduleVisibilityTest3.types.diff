@@ -1,14 +1,6 @@
 --- old.moduleVisibilityTest3.types
 +++ new.moduleVisibilityTest3.types
-@@= skipped -4, +4 lines =@@
- >_modes : typeof _modes
- 
-  export interface IMode {
-+>IMode : IMode
-   
-  }
-  
-@@= skipped -15, +16 lines =@@
+@@= skipped -19, +19 lines =@@
  >editor : typeof editor
  
   import modes = _modes;

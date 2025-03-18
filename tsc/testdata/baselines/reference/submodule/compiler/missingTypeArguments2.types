@@ -3,7 +3,6 @@
 === missingTypeArguments2.ts ===
 class A<T> { }
 >A : A<T>
->T : T
 
 var x: () => A;
 >x : () => any

@@ -3,5 +3,4 @@
 === a.js ===
 function F<T>() { }
 >F : <T>() => void
->T : T
 

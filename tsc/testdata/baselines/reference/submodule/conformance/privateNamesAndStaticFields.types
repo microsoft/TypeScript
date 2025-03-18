@@ -51,5 +51,6 @@ class B extends A {
 // We will need a more robust solution when we support static fields
 const willErrorSomeDay: typeof A = class {}; // OK for now
 >willErrorSomeDay : typeof A
+>A : typeof A
 >class {} : typeof willErrorSomeDay
 

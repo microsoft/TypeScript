@@ -4,11 +4,8 @@
 // dot f g x = f(g(x))
 var dot: <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S;
 >dot : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S
->T : T
->S : S
 >f : (_: T) => S
 >_ : T
->U : U
 >g : (_: U) => T
 >_ : U
 >_ : U
@@ -17,12 +14,9 @@ dot = <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)
 >dot = <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)) : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (r: U) => S
 >dot : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (_: U) => S
 ><T, S>(f: (_: T) => S) => <U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)) : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (r: U) => S
->T : T
->S : S
 >f : (_: T) => S
 >_ : T
 ><U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)) : <U>(g: (_: U) => T) => (r: U) => S
->U : U
 >g : (_: U) => T
 >_ : U
 >r : U
@@ -36,7 +30,6 @@ dot = <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T): (r:U) => S => (x) => f(g(x)
 
 var id: <T>(x:T) => T;
 >id : <T>(x: T) => T
->T : T
 >x : T
 
 var r23 = dot(id)(id);

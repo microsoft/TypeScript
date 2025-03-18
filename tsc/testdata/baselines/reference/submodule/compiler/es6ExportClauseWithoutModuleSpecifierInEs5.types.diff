@@ -1,19 +1,6 @@
 --- old.es6ExportClauseWithoutModuleSpecifierInEs5.types
 +++ new.es6ExportClauseWithoutModuleSpecifierInEs5.types
-@@= skipped -4, +4 lines =@@
- >c : c
- }
- export interface i {
-+>i : i
- }
- export module m {
- >m : typeof m
-@@= skipped -13, +14 lines =@@
- >10 : 10
- 
- export module uninstantiated {
-+>uninstantiated : any
- }
+@@= skipped -21, +21 lines =@@
  
  === client.ts ===
  export { c } from "./server";

@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/declarationEmit/leaveOptionalParameterAsWritten.ts] ////
 
 === a.ts ===
+
 export interface Foo {}
->Foo : Foo
 
 === b.ts ===
 import * as a from "./a";

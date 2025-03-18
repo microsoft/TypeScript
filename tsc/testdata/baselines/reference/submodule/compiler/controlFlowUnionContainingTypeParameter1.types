@@ -5,7 +5,6 @@
 
 class TestClass<T> {
 >TestClass : TestClass<T>
->T : T
 
   typeguard(val: unknown): val is T {
 >typeguard : (val: unknown) => val is T
@@ -53,7 +52,6 @@ class TestClass<T> {
 
 class TestClass2<T extends Date> {
 >TestClass2 : TestClass2<T>
->T : T
 
   typeguard(val: unknown): val is T {
 >typeguard : (val: unknown) => val is T

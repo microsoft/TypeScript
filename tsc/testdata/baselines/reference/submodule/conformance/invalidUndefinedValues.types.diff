@@ -1,22 +1,6 @@
 --- old.invalidUndefinedValues.types
 +++ new.invalidUndefinedValues.types
-@@= skipped -2, +2 lines =@@
- === invalidUndefinedValues.ts ===
- var x: typeof undefined;
- >x : any
-->undefined : undefined
- 
- x = 1;
- >x = 1 : 1
-@@= skipped -47, +46 lines =@@
- >b : C
- 
- interface I { foo: string }
-+>I : I
- >foo : string
- 
- var c: I;
-@@= skipped -21, +22 lines =@@
+@@= skipped -70, +70 lines =@@
  >M : typeof M
  
  x = { f() { } }
@@ -28,8 +12,3 @@
  >f : () => void
  
  function f<T>(a: T) {
- >f : <T>(a: T) => void
-+>T : T
- >a : T
- 
-     x = a;

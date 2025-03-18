@@ -3,16 +3,12 @@
 === genericsWithoutTypeParameters1.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo(): T { return null }
 >foo : () => T
 }
 
 interface I<T> {
->I : I<T>
->T : T
-
     bar(): T;
 >bar : () => T
 }
@@ -58,7 +54,6 @@ var x2: { a: I } = { a: { bar() { return 1 } } };
 
 class D<T> {
 >D : D<T>
->T : T
 
     x: C;
 >x : any
@@ -68,9 +63,6 @@ class D<T> {
 }
 
 interface J<T> {
->J : J<T>
->T : T
-
     x: I;
 >x : any
 
@@ -80,11 +72,9 @@ interface J<T> {
 
 class A<T> { }
 >A : A<T>
->T : T
 
 function f<T>(x: T): A {
 >f : <T>(x: T) => any
->T : T
 >x : T
 
     return null;

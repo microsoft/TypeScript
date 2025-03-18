@@ -1,24 +1,6 @@
 --- old.importDeclarationNotCheckedAsValueWhenTargetNonValue.types
 +++ new.importDeclarationNotCheckedAsValueWhenTargetNonValue.types
-@@= skipped -13, +13 lines =@@
- >Val : Val
- 
-             interface common {
-+>common : common
-+
-                 createText: object;
- >createText : object
-             }
-             namespace common {
-+>common : any
-+
-                 interface createText {
-+>createText : createText
-+
-                     gfx(): string
- >gfx : () => string
-                 }
-@@= skipped -18, +24 lines =@@
+@@= skipped -31, +31 lines =@@
      import exp = dojox.charting.axis2d.common
  >exp : any
  >dojox : typeof dojox

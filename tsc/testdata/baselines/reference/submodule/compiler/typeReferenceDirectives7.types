@@ -9,6 +9,7 @@ export let $ = 1;
 
 export let x: typeof $;
 >x : number
+>$ : number
 
 export let y = () => x
 >y : () => number

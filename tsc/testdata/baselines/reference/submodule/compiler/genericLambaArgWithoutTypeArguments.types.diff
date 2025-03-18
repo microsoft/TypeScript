@@ -1,16 +1,6 @@
 --- old.genericLambaArgWithoutTypeArguments.types
 +++ new.genericLambaArgWithoutTypeArguments.types
-@@= skipped -1, +1 lines =@@
- 
- === genericLambaArgWithoutTypeArguments.ts ===
- interface Foo<T> {
-+>Foo : Foo<T>
-+>T : T
-+
-    x: T;
- >x : T
- }
-@@= skipped -12, +15 lines =@@
+@@= skipped -13, +13 lines =@@
  foo((arg: Foo) => { return arg.x; });
  >foo((arg: Foo) => { return arg.x; }) : any
  >foo : (a: any) => any

@@ -5,8 +5,6 @@
 
 function f1<T extends U, U>(x: T, y: U) {
 >f1 : <T extends U, U>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 
@@ -28,9 +26,6 @@ function f1<T extends U, U>(x: T, y: U) {
 // V > U > T
 function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
 >f2 : <T extends U, U extends V, V>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
 >x : T
 >y : U
 >z : V
@@ -83,8 +78,6 @@ function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
 // Date > U > T
 function f3<T extends U, U extends Date>(x: T, y: U) {
 >f3 : <T extends U, U extends Date>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 
@@ -139,7 +132,6 @@ function f3<T extends U, U extends Date>(x: T, y: U) {
 
 
 interface I1 { foo: number; }
->I1 : I1
 >foo : number
 
 class C1 { foo: number; }
@@ -148,7 +140,6 @@ class C1 { foo: number; }
 
 class C2<T> { foo: T; }
 >C2 : C2<T>
->T : T
 >foo : T
 
 enum E { A }
@@ -179,7 +170,6 @@ module c {
 
 function f4<T extends Number>(x: T) {
 >f4 : <T extends Number>(x: T) => void
->T : T
 >x : T
 
     var r0 = true ? x : null; // ok
@@ -196,6 +186,7 @@ function f4<T extends Number>(x: T) {
 
     var u: typeof undefined;
 >u : any
+>undefined : undefined
 
     var r0b = true ? u : x; // ok
 >r0b : any
@@ -214,7 +205,6 @@ function f4<T extends Number>(x: T) {
 
 function f5<T extends Number>(x: T) {
 >f5 : <T extends Number>(x: T) => void
->T : T
 >x : T
 
     var r1 = true ? 1 : x; // ok
@@ -234,7 +224,6 @@ function f5<T extends Number>(x: T) {
 
 function f6<T extends String>(x: T) {
 >f6 : <T extends String>(x: T) => void
->T : T
 >x : T
 
     var r2 = true ? '' : x; // ok
@@ -254,7 +243,6 @@ function f6<T extends String>(x: T) {
 
 function f7<T extends Boolean>(x: T) {
 >f7 : <T extends Boolean>(x: T) => void
->T : T
 >x : T
 
     var r3 = true ? true : x; // ok
@@ -274,7 +262,6 @@ function f7<T extends Boolean>(x: T) {
 
 function f8<T extends Date>(x: T) {
 >f8 : <T extends Date>(x: T) => void
->T : T
 >x : T
 
     var r4 = true ? new Date() : x; // ok
@@ -296,7 +283,6 @@ function f8<T extends Date>(x: T) {
 
 function f9<T extends RegExp>(x: T) {
 >f9 : <T extends RegExp>(x: T) => void
->T : T
 >x : T
 
     var r5 = true ? /1/ : x; // ok
@@ -316,7 +302,6 @@ function f9<T extends RegExp>(x: T) {
 
 function f10<T extends { foo: number }>(x: T) {
 >f10 : <T extends { foo: number; }>(x: T) => void
->T : T
 >foo : number
 >x : T
 
@@ -341,7 +326,6 @@ function f10<T extends { foo: number }>(x: T) {
 
 function f11<T extends () => void>(x: T) {
 >f11 : <T extends () => void>(x: T) => void
->T : T
 >x : T
 
     var r7 = true ? () => { } : x; // ok
@@ -361,8 +345,6 @@ function f11<T extends () => void>(x: T) {
 
 function f12<T extends <U>(x: U) => U>(x: T) {
 >f12 : <T extends <U>(x: U) => U>(x: T) => void
->T : T
->U : U
 >x : U
 >x : T
 
@@ -371,7 +353,6 @@ function f12<T extends <U>(x: U) => U>(x: T) {
 >true ? <T>(x: T) => { return x } : x : <T>(x: T) => T
 >true : true
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 >x : T
@@ -382,14 +363,12 @@ function f12<T extends <U>(x: U) => U>(x: T) {
 >true : true
 >x : T
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 }
 
 function f13<T extends I1>(x: T) {
 >f13 : <T extends I1>(x: T) => void
->T : T
 >x : T
 
     var i1: I1;
@@ -412,7 +391,6 @@ function f13<T extends I1>(x: T) {
 
 function f14<T extends C1>(x: T) {
 >f14 : <T extends C1>(x: T) => void
->T : T
 >x : T
 
     var c1: C1;
@@ -435,7 +413,6 @@ function f14<T extends C1>(x: T) {
 
 function f15<T extends C2<number>>(x: T) {
 >f15 : <T extends C2<number>>(x: T) => void
->T : T
 >x : T
 
     var c2: C2<number>;
@@ -458,7 +435,6 @@ function f15<T extends C2<number>>(x: T) {
 
 function f16<T extends E>(x: T) {
 >f16 : <T extends E>(x: T) => void
->T : T
 >x : T
 
     var r13 = true ? E : x; // ok
@@ -496,11 +472,12 @@ function f16<T extends E>(x: T) {
 
 function f17<T extends typeof f>(x: T) {
 >f17 : <T extends typeof f>(x: T) => void
->T : T
+>f : typeof f
 >x : T
 
     var af: typeof f;
 >af : typeof f
+>f : typeof f
 
     var r15 = true ? af : x; // ok
 >r15 : typeof f
@@ -519,11 +496,12 @@ function f17<T extends typeof f>(x: T) {
 
 function f18<T extends typeof c>(x: T) {
 >f18 : <T extends typeof c>(x: T) => void
->T : T
+>c : typeof c
 >x : T
 
     var ac: typeof c;
 >ac : typeof c
+>c : typeof c
 
     var r16 = true ? ac : x; // ok
 >r16 : typeof c
@@ -542,12 +520,10 @@ function f18<T extends typeof c>(x: T) {
 
 function f19<T>(x: T) {
 >f19 : <T>(x: T) => void
->T : T
 >x : T
 
     function f17<U extends T>(a: U) {
 >f17 : <U extends T>(a: U) => void
->U : U
 >a : U
 
         var r17 = true ? x : a; // ok
@@ -567,8 +543,6 @@ function f19<T>(x: T) {
 
     function f18<V extends U, U extends T>(a: V) {
 >f18 : <V extends U, U extends T>(a: V) => void
->V : V
->U : U
 >a : V
 
         var r18 = true ? x : a; // ok
@@ -589,7 +563,6 @@ function f19<T>(x: T) {
 
 function f20<T extends Number>(x: T) {
 >f20 : <T extends Number>(x: T) => void
->T : T
 >x : T
 
     var r19 = true ? new Object() : x; // ok
@@ -611,7 +584,6 @@ function f20<T extends Number>(x: T) {
 
 function f21<T extends Number>(x: T) {
 >f21 : <T extends Number>(x: T) => void
->T : T
 >x : T
 
     var r20 = true ? {} : x; // ok

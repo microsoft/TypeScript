@@ -2,16 +2,8 @@
 
 === node_modules/react/index.d.ts ===
 declare namespace React {
->React : any
-
     export interface DetailedHTMLProps<T, U> {}
->DetailedHTMLProps : DetailedHTMLProps<T, U>
->T : T
->U : U
-
     export interface HTMLAttributes<T> {}
->HTMLAttributes : HTMLAttributes<T>
->T : T
 }
 export = React;
 >React : any
@@ -25,26 +17,17 @@ declare module 'react' { // augment
 >'react' : any
 
     interface HTMLAttributes<T> {
->HTMLAttributes : HTMLAttributes<T>
->T : T
-
         css?: unknown;
 >css : unknown
     }
 }
 export interface StyledOtherComponentList {
->StyledOtherComponentList : StyledOtherComponentList
-
     "div": React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 >"div" : DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 >React : any
 >React : any
 }
 export interface StyledOtherComponent<A, B, C> {}
->StyledOtherComponent : StyledOtherComponent<A, B, C>
->A : A
->B : B
->C : C
 
 === node_modules/create-emotion-styled/index.d.ts ===
 

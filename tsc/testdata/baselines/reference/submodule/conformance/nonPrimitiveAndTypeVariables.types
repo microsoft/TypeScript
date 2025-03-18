@@ -5,15 +5,9 @@
 
 type A<T, V> = { [P in keyof T]: T[P] extends V ? 1 : 0; };
 >A : A<T, V>
->T : T
->V : V
->P : P
 
 type B<T, V> = { [P in keyof T]: T[P] extends V | object ? 1 : 0; };
 >B : B<T, V>
->T : T
->V : V
->P : P
 
 let a: A<{ a: 0 | 1 }, 0> = { a: 0 };
 >a : A<{ a: 0 | 1; }, 0>
@@ -31,8 +25,6 @@ let b: B<{ a: 0 | 1 }, 0> = { a: 0 };
 
 function foo<T, U>(x: T) {
 >foo : <T, U>(x: T) => void
->T : T
->U : U
 >x : T
 
     let a: object = x;  // Error

@@ -1,14 +1,6 @@
 --- old.functionExpressionContextualTyping1.types
 +++ new.functionExpressionContextualTyping1.types
-@@= skipped -31, +31 lines =@@
- 
- class Class<T> {
- >Class : Class<T>
-+>T : T
- 
-     foo() { }
- >foo : () => void
-@@= skipped -27, +28 lines =@@
+@@= skipped -58, +58 lines =@@
  //        and if all of the signatures are identical ignoring return types,
  //        then S is a signature with the same parameters and a union of the return types.
  var b1: ((s: string, w: boolean) => void) | ((s: string, w: boolean) => string);
@@ -29,8 +21,8 @@
  
  var b2: typeof a0 | ((n: number, s: string) => string);
 ->b2 : ((n: number, s: string) => number) | ((n: number, s: string) => string)
-->a0 : (n: number, s: string) => number
 +>b2 : (n: number, s: string) => number | (n: number, s: string) => string
+ >a0 : (n: number, s: string) => number
  >n : number
  >s : string
  
@@ -41,7 +33,7 @@
  >(foo, bar) => { return foo + 1; } : (foo: number, bar: string) => number
  >foo : number
  >bar : string
-@@= skipped -23, +22 lines =@@
+@@= skipped -23, +23 lines =@@
  
  b2 = (foo, bar) => { return "hello"; }
  >b2 = (foo, bar) => { return "hello"; } : (foo: number, bar: string) => string
@@ -93,11 +85,7 @@
  >(j, m) => { } : (j: any, m: any) => void
  >j : any
  >m : any
- 
- class C<T, U> {
- >C : C<T, U>
-+>T : T
-+>U : U
+@@= skipped -10, +10 lines =@@
  
      constructor() {
          var k: ((j: T, k: U) => (T|U)[]) | ((j: number,k :U) => number[]) = (j, k) => {

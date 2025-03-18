@@ -1,13 +1,6 @@
 --- old.errorForUsingPropertyOfTypeAsType01.types
 +++ new.errorForUsingPropertyOfTypeAsType01.types
-@@= skipped -4, +4 lines =@@
- >Test1 : typeof Test1
- 
-     export interface Foo {
-+>Foo : Foo
-+
-         bar: string;
- >bar : string
+@@= skipped -9, +9 lines =@@
      }
  
      var x: Foo.bar = "";
@@ -22,7 +15,7 @@
  >Test1 : any
  >Foo : any
  >"" : ""
-@@= skipped -27, +29 lines =@@
+@@= skipped -22, +22 lines =@@
      }
  
      var x: Foo.bar = "";

@@ -15,8 +15,6 @@ declare namespace React {
 >spec : any
 
     interface ClassicComponentClass {
->ClassicComponentClass : ClassicComponentClass
-
         new (props?: any): ClassicComponentClass;
 >props : any
     }
@@ -26,10 +24,7 @@ declare global {
 >global : any
 
     namespace JSX {
->JSX : any
-
         interface ElementAttributesProperty { }
->ElementAttributesProperty : ElementAttributesProperty
     }
 }
 

@@ -10,7 +10,6 @@ type X = { kind: "a", a: string } | { kind: "b", b: string }
 
 function func<T extends X>(value: T) {
 >func : <T extends X>(value: T) => void
->T : T
 >value : T
 
     if (value.kind === "a") {
@@ -58,7 +57,6 @@ type Z = { kind: "f", f: { a: number, b: string, c: number } }
 
 function func2<T extends Z>(value: T) {
 >func2 : <T extends Z>(value: T) => void
->T : T
 >value : T
 
     if (value.kind === "f") {
@@ -100,7 +98,6 @@ function func2<T extends Z>(value: T) {
 
 function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t: T) {
 >func3 : <T extends { kind: "a"; a: string; } | { kind: "b"; b: number; }>(t: T) => void
->T : T
 >kind : "a"
 >a : string
 >kind : "b"
@@ -133,7 +130,6 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 
 function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
 >farr : <T extends [string, number, number] | [number, string, string]>(x: T) => void
->T : T
 >x : T
 
     const [head, ...tail] = x;

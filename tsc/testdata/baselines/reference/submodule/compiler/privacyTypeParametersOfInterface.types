@@ -11,19 +11,14 @@ export class publicClass {
 
 class privateClassT<T> {
 >privateClassT : privateClassT<T>
->T : T
 }
 
 export class publicClassT<T> {
 >publicClassT : publicClassT<T>
->T : T
 }
 
 // TypeParameter_0_of_exported_interface_1_has_or_is_using_private_type_2
 export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters<T>
->T : T
-
     myMethod(val: T): T; // Error
 >myMethod : (val: T) => T
 >val : T
@@ -45,9 +40,6 @@ export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass
 }
 
 export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters<T>
->T : T
-
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
 >val : T
@@ -69,9 +61,6 @@ export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> 
 }
 
 interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters<T>
->T : T
-
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
 >val : T
@@ -93,9 +82,6 @@ interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
 }
 
 interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters<T>
->T : T
-
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
 >val : T
@@ -117,9 +103,6 @@ interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
 }
 
 export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
 >val : T
@@ -129,9 +112,6 @@ export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
 }
 
 interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
     myMethod(val: T): T; // No Error
 >myMethod : (val: T) => T
 >val : T

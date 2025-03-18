@@ -3,7 +3,6 @@
 === mutuallyRecursiveInference.ts ===
 class T<A> {
 >T : T<A>
->A : A
 
     a: A;
 >a : A
@@ -13,7 +12,6 @@ class T<A> {
 }
 class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {
 >L : L<RT>
->RT : RT
 >a : "a" | "b"
 >b : any
 >T : T<RT[RT["a"]]>

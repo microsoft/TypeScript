@@ -3,7 +3,6 @@
 === generativeRecursionWithTypeOf.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     static foo(x: number) { }
 >foo : (x: number) => void
@@ -19,9 +18,11 @@ module M {
     export function f(x: typeof C) {   
 >f : (x: typeof C) => C<typeof C>
 >x : typeof C
+>C : typeof C
 
         return new x<typeof x>();     
 >new x<typeof x>() : C<typeof C>
+>x : typeof C
 >x : typeof C
     }
 }

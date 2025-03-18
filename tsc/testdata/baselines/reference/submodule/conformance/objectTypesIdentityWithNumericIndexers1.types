@@ -19,15 +19,12 @@ class B {
 
 class C<T> {
 >C : C<T>
->T : T
 
     [x: number]: T;
 >x : number
 }
 
 interface I {
->I : I
-
     [x: number]: string;
 >x : number
 }
@@ -106,10 +103,12 @@ function foo2(x: any) { }
 function foo3(x: typeof a);
 >foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo3(x: any) { }
 >foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
@@ -118,10 +117,12 @@ function foo3(x: any) { }
 function foo4(x: typeof b);
 >foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo4(x: typeof b); // error
 >foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo4(x: any) { }
 >foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
@@ -194,6 +195,7 @@ function foo7(x: A);
 function foo7(x: typeof a); // error
 >foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo7(x: any) { }
 >foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }
@@ -230,6 +232,7 @@ function foo10(x: B);
 function foo10(x: typeof a); // error
 >foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo10(x: any) { }
 >foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }
@@ -242,6 +245,7 @@ function foo11(x: B);
 function foo11(x: typeof b); // error
 >foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo11(x: any) { }
 >foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }
@@ -290,6 +294,7 @@ function foo13(x: I);
 function foo13(x: typeof a); // error
 >foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo13(x: any) { }
 >foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }
@@ -302,6 +307,7 @@ function foo14(x: I);
 function foo14(x: typeof b); // error
 >foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }
 >x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo14(x: any) { }
 >foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }

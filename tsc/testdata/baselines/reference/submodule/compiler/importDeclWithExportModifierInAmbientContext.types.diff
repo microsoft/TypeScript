@@ -1,15 +1,6 @@
 --- old.importDeclWithExportModifierInAmbientContext.types
 +++ new.importDeclWithExportModifierInAmbientContext.types
-@@= skipped -4, +4 lines =@@
- >"m" : typeof import("m")
- 
-     module x {
-+>x : any
-+
-         interface c {
-+>c : c
-         }
-     }
+@@= skipped -10, +10 lines =@@
      export import a = x.c;
  >a : any
  >x : any

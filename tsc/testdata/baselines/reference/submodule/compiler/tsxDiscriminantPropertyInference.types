@@ -3,10 +3,7 @@
 === tsxDiscriminantPropertyInference.tsx ===
 // Repro from #41759
 namespace JSX {
->JSX : any
-
     export interface Element {}
->Element : Element
 }
 
 type DiscriminatorTrue = {

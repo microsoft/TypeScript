@@ -2,8 +2,6 @@
 
 === objectLiteralWithNumericPropertyName.ts ===
 interface A {
->A : A
-
     0: string;
 >0 : string
 }

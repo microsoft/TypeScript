@@ -1,32 +1,15 @@
 --- old.defaultDeclarationEmitNamedCorrectly.types
 +++ new.defaultDeclarationEmitNamedCorrectly.types
-@@= skipped -1, +1 lines =@@
- 
- === defaultDeclarationEmitNamedCorrectly.ts ===
- export interface Things<P, T> {
-+>Things : Things<P, T>
-+>P : P
-+>T : T
-+
-     p: P;
- >p : P
- 
-@@= skipped -7, +11 lines =@@
+@@= skipped -8, +8 lines =@@
  >t : T
  }
  export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
 ->make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
 +>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
-+>P : P
-+>CTor : CTor
  >x : new () => CTor & { props: P; }
  >props : P
  
-@@= skipped -9, +11 lines =@@
- }
- 
- export interface Props {
-+>Props : Props
+@@= skipped -12, +12 lines =@@
  }
  
  export default class MyComponent {

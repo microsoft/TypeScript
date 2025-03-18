@@ -6,7 +6,6 @@
 
 export class M<T> {
 >M : M<T>
->T : T
 
     field: T;
 >field : T
@@ -14,7 +13,6 @@ export class M<T> {
 
 export class N<U> extends M<U> {
 >N : N<U>
->U : U
 >M : M<U>
 
     other: U;

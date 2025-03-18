@@ -17,9 +17,13 @@ abstract class AbstractB { b: string; }
 
 type Abstracts = typeof AbstractA | typeof AbstractB;
 >Abstracts : Abstracts
+>AbstractA : typeof AbstractA
+>AbstractB : typeof AbstractB
 
 type Concretes = typeof ConcreteA | typeof ConcreteB;
 >Concretes : Concretes
+>ConcreteA : typeof ConcreteA
+>ConcreteB : typeof ConcreteB
 
 type ConcretesOrAbstracts = Concretes | Abstracts;
 >ConcretesOrAbstracts : ConcretesOrAbstracts

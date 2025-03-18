@@ -7,7 +7,6 @@ declare var OData: any;
 
 /// <reference path="file0.ts" />
 interface F { }
->F : F
 
 
 

@@ -8,8 +8,6 @@
 //  - when false, has no effect on the type of x.
 
 interface C1 {
->C1 : C1
-
     (): C1;
     prototype: C1;
 >prototype : C1
@@ -18,8 +16,6 @@ interface C1 {
 >p1 : string
 }
 interface C2 {
->C2 : C2
-
     (): C2;
     prototype: C2;
 >prototype : C2
@@ -28,8 +24,6 @@ interface C2 {
 >p2 : number
 }
 interface D1 extends C1 {
->D1 : D1
-
     prototype: D1;
 >prototype : D1
 

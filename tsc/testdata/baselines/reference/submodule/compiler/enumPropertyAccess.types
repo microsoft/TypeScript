@@ -32,7 +32,6 @@ x.toFixed(); // ok
 // Now with generics
 function fill<B extends Colors>(f: B) {
 >fill : <B extends Colors>(f: B) => void
->B : B
 >f : B
 
     f.Green; // error

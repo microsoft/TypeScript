@@ -3,8 +3,6 @@
 === errorConstructorSubtypes.ts ===
 // In Node, ErrorConstructor is augmented with extra properties. Excerpted below.
 interface ErrorConstructor {
->ErrorConstructor : ErrorConstructor
-
   captureStackTrace(targetObject: Object, constructorOpt?: Function): void;
 >captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
 >targetObject : Object

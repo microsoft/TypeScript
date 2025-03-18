@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface ComponentProps {
->ComponentProps : ComponentProps
-
     property1: string;
 >property1 : string
 
@@ -31,8 +29,6 @@ export default function Component(props: ComponentProps) {
 }
 
 interface AnotherComponentProps {
->AnotherComponentProps : AnotherComponentProps
-
     property1: string;
 >property1 : string
 

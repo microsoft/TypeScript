@@ -2,8 +2,6 @@
 
 === /types.d.ts ===
 export interface Foo {
->Foo : Foo
-
     foo: () => void;
 >foo : () => void
 }

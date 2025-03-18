@@ -1,15 +1,6 @@
 --- old.dynamicNames.types
 +++ new.dynamicNames.types
-@@= skipped -14, +14 lines =@@
- >Symbol : SymbolConstructor
- 
- export interface T0 {
-+>T0 : T0
-+
-     [c0]: number;
- >[c0] : number
- >c0 : "a"
-@@= skipped -59, +61 lines =@@
+@@= skipped -73, +73 lines =@@
  >T3 : any
  
  import * as M from "./module";
@@ -18,40 +9,7 @@
  
  namespace N {
  >N : typeof N
-@@= skipped -16, +16 lines =@@
-     export const s1: typeof s0 = s0;
- >s1 : unique symbol
- >s0 : unique symbol
-->s0 : unique symbol
- 
-     export interface T4 {
-+>T4 : T4
-+
-         [N.c2]: number;
- >[N.c2] : number
- >N.c2 : "a"
-@@= skipped -81, +82 lines =@@
- export const s2: typeof s0 = s0;
- >s2 : unique symbol
- >s0 : unique symbol
-->s0 : unique symbol
- 
- interface T8 {
-+>T8 : T8
-+
-     [c4]: number;
- >[c4] : number
- >c4 : "a"
-@@= skipped -52, +53 lines =@@
- };
- 
- interface T12 {
-+>T12 : T12
-+
-     a: number;
- >a : number
- 
-@@= skipped -85, +87 lines =@@
+@@= skipped -234, +234 lines =@@
  >M : any
  
  let t4: N.T4;
@@ -216,21 +174,3 @@
  
  // recursive declarations
  // (type parameter indirection courtesy of #20400)
-@@= skipped -30, +30 lines =@@
- >x : "a"
- 
- interface RI<T extends "a" | "b"> {
-+>RI : RI<T>
-+>T : T
-+
-     x: T;
- >x : T
- 
-@@= skipped -20, +23 lines =@@
- 
- declare class RC<T extends "a" | "b"> {
- >RC : RC<T>
-+>T : T
- 
-     x: T;
- >x : T

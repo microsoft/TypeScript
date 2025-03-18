@@ -1,12 +1,6 @@
 --- old.noIterationTypeErrorsInCFA.types
 +++ new.noIterationTypeErrorsInCFA.types
-@@= skipped -1, +1 lines =@@
- 
- === noIterationTypeErrorsInCFA.ts ===
- interface F {
-+>F : F
-+
-     d(): void
+@@= skipped -5, +5 lines =@@
  >d : () => void
  }
  export function doRemove(dds: F | F[]) {
@@ -17,7 +11,7 @@
  
      if (!Array.isArray(dds)) {
  >!Array.isArray(dds) : boolean
-@@= skipped -13, +15 lines =@@
+@@= skipped -9, +9 lines =@@
  >Array.isArray : (arg: any) => arg is any[]
  >Array : ArrayConstructor
  >isArray : (arg: any) => arg is any[]

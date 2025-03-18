@@ -55,6 +55,7 @@ const m: boolean = x.m;
 // Should be 'm'
 type M = keyof typeof x;
 >M : "m"
+>x : { m: boolean; }
 
 // Should be able to detect a failure here
 const x2 = {

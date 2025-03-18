@@ -3,14 +3,12 @@
 === comparabilityTypeParametersRelatedByUnion.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
   constructor(readonly x: T) {}
 >x : T
 
   good<U extends T>(y: U) {
 >good : <U extends T>(y: U) => void
->U : U
 >y : U
 
       if (y === this.x) {}
@@ -23,7 +21,6 @@ class C<T> {
 
   bad<U extends T | string>(y: U) {
 >bad : <U extends string | T>(y: U) => void
->U : U
 >y : U
 
       if (y === this.x) {}

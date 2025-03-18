@@ -93,19 +93,3 @@
  >[1, 2] : number[]
  >1 : 1
  >2 : 2
-@@= skipped -15, +15 lines =@@
- // Rest parameter with generic
- function foo<T>(...a: T[]) { }
- >foo : <T>(...a: T[]) => void
-+>T : T
- >a : T[]
- 
- foo<number|string>("hello", 1, 2);
-@@= skipped -27, +28 lines =@@
- 
- function foo1<T extends Number>(...a: T[]) { }
- >foo1 : <T extends Number>(...a: T[]) => void
-+>T : T
- >a : T[]
- 
- foo1(1, 2, 3, E.a);

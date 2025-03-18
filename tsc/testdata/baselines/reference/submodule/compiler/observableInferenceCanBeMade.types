@@ -5,23 +5,16 @@
 
 declare function of<T>(a: T): Observable<T>;
 >of : <T>(a: T) => Observable<T>
->T : T
 >a : T
 
 declare function from<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->O : O
 >input : O
 
 type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 >ObservedValueOf : ObservedValueOf<O>
->O : O
->T : T
 
 interface Subscribable<T> {
->Subscribable : Subscribable<T>
->T : T
-
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
 >subscribe : (next?: (value: T) => void | undefined, error?: (error: any) => void | undefined, complete?: () => void | undefined) => void
 >next : (value: T) => void | undefined
@@ -32,12 +25,10 @@ interface Subscribable<T> {
 }
 type ObservableInput<T> = Subscribable<T> | Subscribable<never>;
 >ObservableInput : ObservableInput<T>
->T : T
 
 
 declare class Observable<T> implements Subscribable<T> {
 >Observable : Observable<T>
->T : T
 
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
 >subscribe : (next?: (value: T) => void | undefined, error?: (error: any) => void | undefined, complete?: () => void | undefined) => void

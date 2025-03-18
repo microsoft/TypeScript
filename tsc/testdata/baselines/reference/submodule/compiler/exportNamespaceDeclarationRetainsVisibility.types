@@ -2,18 +2,12 @@
 
 === exportNamespaceDeclarationRetainsVisibility.ts ===
 namespace X {
->X : any
-
     interface A {
->A : A
-
         kind: 'a';
 >kind : "a"
     }
 
     interface B {
->B : B
-
         kind: 'b';
 >kind : "b"
     }

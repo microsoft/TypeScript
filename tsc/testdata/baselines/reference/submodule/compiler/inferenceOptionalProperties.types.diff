@@ -1,11 +1,6 @@
 --- old.inferenceOptionalProperties.types
 +++ new.inferenceOptionalProperties.types
-@@= skipped -2, +2 lines =@@
- === inferenceOptionalProperties.ts ===
- declare function test<T>(x: { [key: string]: T }): T;
- >test : <T>(x: { [key: string]: T; }) => T
-+>T : T
- >x : { [key: string]: T; }
+@@= skipped -6, +6 lines =@@
  >key : string
  
  declare let x1: { a?: string, b?: number };
@@ -20,7 +15,7 @@
  >a : string | undefined
  >b : number | undefined
  
-@@= skipped -17, +18 lines =@@
+@@= skipped -13, +13 lines =@@
  >y1 : string | number
  >test(x1) : string | number
  >test : <T>(x: { [key: string]: T; }) => T

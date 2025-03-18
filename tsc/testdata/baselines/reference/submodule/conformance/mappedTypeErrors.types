@@ -2,8 +2,6 @@
 
 === mappedTypeErrors.ts ===
 interface Shape {
->Shape : Shape
-
     name: string;
 >name : string
 
@@ -18,15 +16,11 @@ interface Shape {
 }
 
 interface Named {
->Named : Named
-
     name: string;
 >name : string
 }
 
 interface Point {
->Point : Point
-
     x: number;
 >x : number
 
@@ -38,15 +32,12 @@ interface Point {
 
 type T00 = { [P in P]: string };  // Error
 >T00 : T00
->P : P
 
 type T01 = { [P in number]: string };  // Error
 >T01 : T01
->P : P
 
 type T02 = { [P in Date]: number };  // Error
 >T02 : T02
->P : P
 
 type T03 = Record<Date, number>;  // Error
 >T03 : T03
@@ -74,7 +65,6 @@ type T16 = Pick<Shape, undefined>;  // Error
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
->T : T
 >x : T
 
     let y: Pick<Shape, T>;  // Error
@@ -83,7 +73,6 @@ function f1<T>(x: T) {
 
 function f2<T extends string | number>(x: T) {
 >f2 : <T extends string | number>(x: T) => void
->T : T
 >x : T
 
     let y: Pick<Shape, T>;  // Error
@@ -92,7 +81,6 @@ function f2<T extends string | number>(x: T) {
 
 function f3<T extends keyof Shape>(x: T) {
 >f3 : <T extends keyof Shape>(x: T) => void
->T : T
 >x : T
 
     let y: Pick<Shape, T>;
@@ -101,7 +89,6 @@ function f3<T extends keyof Shape>(x: T) {
 
 function f4<T extends keyof Named>(x: T) {
 >f4 : <T extends "name">(x: T) => void
->T : T
 >x : T
 
     let y: Pick<Shape, T>;
@@ -112,69 +99,55 @@ function f4<T extends keyof Named>(x: T) {
 
 function f10<T>() {
 >f10 : <T>() => void
->T : T
 
     type K = keyof T;
 >K : keyof T
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P] }
->P : P
 
     var x: { [Q in keyof T]: T[Q] };
 >x : { [P in keyof T]: T[P] }
->Q : Q
 
     var x: { [R in K]: T[R] };
 >x : { [P in keyof T]: T[P] }
->R : R
 }
 
 function f11<T>() {
 >f11 : <T>() => void
->T : T
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P] }
->P : P
 
     var x: { [P in keyof T]?: T[P] };  // Error
 >x : { [P in keyof T]: T[P] }
->P : P
 
     var x: { readonly [P in keyof T]: T[P] };  // Error
 >x : { [P in keyof T]: T[P] }
->P : P
 
     var x: { readonly [P in keyof T]?: T[P] };  // Error
 >x : { [P in keyof T]: T[P] }
->P : P
 }
 
 function f12<T>() {
 >f12 : <T>() => void
->T : T
 
     var x: { [P in keyof T]: T[P] };
 >x : { [P in keyof T]: T[P] }
->P : P
 
     var x: { [P in keyof T]: T[P][] };  // Error
 >x : { [P in keyof T]: T[P] }
->P : P
 }
 
 // Check that inferences to mapped types are secondary
 
 declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
->T : T
 >primary : T
 >secondary : Readonly<T>
 
 declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
->T : T
 >primary : T
 >secondary : Partial<T>
 
@@ -279,8 +252,6 @@ function f21() {
 // Verify use of Pick<T, K> for setState functions (#12793)
 
 interface Foo {
->Foo : Foo
-
     a: string;
 >a : string
 
@@ -290,8 +261,6 @@ interface Foo {
 
 function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 >setState : <T, K extends keyof T>(obj: T, props: Pick<T, K>) => void
->T : T
->K : K
 >obj : T
 >props : Pick<T, K>
 
@@ -374,14 +343,12 @@ setState(foo, { c: true });  // Error
 
 class C<T> {
 >C : C<T>
->T : T
 
     state: T;
 >state : T
 
     setState<K extends keyof T>(props: Pick<T, K>) {
 >setState : <K extends keyof T>(props: Pick<T, K>) => void
->K : K
 >props : Pick<T, K>
 
         for (let k in props) {
@@ -487,7 +454,6 @@ let x2: Partial<T2> = { a: 'no' }; // Error
 
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 >x3 : { [x: string]: any; a?: number | undefined; }
->P : P
 >{ a: 'no' } : { a: string; }
 >a : string
 >'no' : "no"
@@ -496,16 +462,12 @@ let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 
 type Foo2<T, F extends keyof T> = {
 >Foo2 : Foo2<T, F>
->T : T
->F : F
 
     pf: {[P in F]?: T[P]},
 >pf : { [P in F]?: T[P] | undefined }
->P : P
 
     pt: {[P in T]?: T[P]}, // note: should be in keyof T
 >pt : { [P in T]?: T[P] | undefined }
->P : P
 
 };
 type O = {x: number, y: boolean};
@@ -545,8 +507,6 @@ let f: Foo2<O, 'x'> = {
 
 function test1<T, K extends keyof T>(obj: Pick<T, K>) {
 >test1 : <T, K extends keyof T>(obj: Pick<T, K>) => void
->T : T
->K : K
 >obj : Pick<T, K>
 
     let x = obj.foo;  // Error
@@ -558,8 +518,6 @@ function test1<T, K extends keyof T>(obj: Pick<T, K>) {
 
 function test2<T, K extends keyof T>(obj: Record<K, number>) {
 >test2 : <T, K extends keyof T>(obj: Record<K, number>) => void
->T : T
->K : K
 >obj : Record<K, number>
 
     let x = obj.foo;  // Error

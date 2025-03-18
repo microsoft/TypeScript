@@ -11,6 +11,7 @@
 ->invoke : () => ReturnType<typeof create>
 ->create : () => import("workspace/packageA/foo").Foo
 +>invoke : () => Foo
++>create : () => Foo
  
  === workspace/packageC/index.ts ===
  import * as pkg from "package-b";

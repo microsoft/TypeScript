@@ -34,8 +34,6 @@ class Test1 {
 }
 
 interface Test2 {
->Test2 : Test2
-
     get foo(): string;
 >foo : string
 

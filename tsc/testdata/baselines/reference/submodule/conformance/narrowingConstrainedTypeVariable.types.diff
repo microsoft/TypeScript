@@ -6,24 +6,6 @@
  function f1<T extends C>(v: T | string): void {
 ->f1 : <T extends C>(v: T | string) => void
 +>f1 : <T extends C>(v: string | T) => void
-+>T : T
  >v : string | T
  
      if (v instanceof C) {
-@@= skipped -24, +25 lines =@@
- 
- function f2<T extends C, U extends D>(v: T | U) {
- >f2 : <T extends C, U extends D>(v: T | U) => void
-+>T : T
-+>U : U
- >v : T | U
- 
-     if (v instanceof C) {
-@@= skipped -24, +26 lines =@@
- 
- function f3<T extends E>(v: T | { x: string }) {
- >f3 : <T extends E>(v: T | { x: string; }) => void
-+>T : T
- >v : T | { x: string; }
- >x : string
- 

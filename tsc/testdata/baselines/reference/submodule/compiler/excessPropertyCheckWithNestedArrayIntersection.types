@@ -2,8 +2,6 @@
 
 === excessPropertyCheckWithNestedArrayIntersection.ts ===
 interface ValueOnlyFields {
->ValueOnlyFields : ValueOnlyFields
-
     fields: Array<{
 >fields : { value: number; }[]
 
@@ -13,8 +11,6 @@ interface ValueOnlyFields {
     }>;
 }
 interface ValueAndKeyFields {
->ValueAndKeyFields : ValueAndKeyFields
-
     fields: Array<{
 >fields : { key: string; value: number; }[]
 
@@ -27,8 +23,6 @@ interface ValueAndKeyFields {
     }>;
 }
 interface BugRepro {
->BugRepro : BugRepro
-
   dataType: ValueAndKeyFields & ValueOnlyFields;
 >dataType : ValueAndKeyFields & ValueOnlyFields
 }

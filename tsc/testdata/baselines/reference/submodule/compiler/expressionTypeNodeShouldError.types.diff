@@ -1,18 +1,6 @@
 --- old.expressionTypeNodeShouldError.types
 +++ new.expressionTypeNodeShouldError.types
-@@= skipped -8, +8 lines =@@
- 
- === string.ts ===
- interface String {
-+>String : String
-+
-     typeof<T>(x: T): T;
- >typeof : <T>(x: T) => T
-+>T : T
- >x : T
- }
- 
-@@= skipped -13, +16 lines =@@
+@@= skipped -21, +21 lines =@@
  
          const x: "".typeof(this.foo);
  >x : ""
@@ -30,19 +18,7 @@
  >(nodes.item(0)) : HTMLLIElement
  >nodes.item(0) : HTMLLIElement
  >nodes.item : (index: number) => HTMLLIElement
-@@= skipped -10, +10 lines =@@
- 
- === number.ts ===
- interface Number {
-+>Number : Number
-+
-     typeof<T>(x: T): T;
- >typeof : <T>(x: T) => T
-+>T : T
- >x : T
- }
- 
-@@= skipped -13, +16 lines =@@
+@@= skipped -23, +23 lines =@@
  
          const x: 3.141592.typeof(this.foo);
  >x : 3.141592
@@ -60,19 +36,7 @@
  >(nodes.item(0)) : HTMLLIElement
  >nodes.item(0) : HTMLLIElement
  >nodes.item : (index: number) => HTMLLIElement
-@@= skipped -10, +10 lines =@@
- 
- === boolean.ts ===
- interface Boolean {
-+>Boolean : Boolean
-+
-     typeof<T>(x: T): T;
- >typeof : <T>(x: T) => T
-+>T : T
- >x : T
- }
- 
-@@= skipped -14, +17 lines =@@
+@@= skipped -24, +24 lines =@@
          const x: false.typeof(this.foo);
  >x : false
  >false : false

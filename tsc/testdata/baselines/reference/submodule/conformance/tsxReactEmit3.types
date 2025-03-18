@@ -2,9 +2,6 @@
 
 === test.tsx ===
 declare module JSX { interface Element { } }
->JSX : any
->Element : Element
-
 declare var React: any;
 >React : any
 

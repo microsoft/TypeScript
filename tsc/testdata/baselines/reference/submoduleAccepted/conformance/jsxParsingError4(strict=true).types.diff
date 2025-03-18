@@ -1,17 +1,6 @@
 --- old.jsxParsingError4(strict=true).types
 +++ new.jsxParsingError4(strict=true).types
-@@= skipped -4, +4 lines =@@
- >React : any
- 
- declare namespace JSX {
-+>JSX : any
-+
-     interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         [k: string]: any
- >k : string
-     }
+@@= skipped -11, +11 lines =@@
  }
  
  const a = (

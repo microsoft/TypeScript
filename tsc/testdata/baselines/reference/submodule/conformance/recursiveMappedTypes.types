@@ -7,29 +7,24 @@ type Recurse = {
 >Recurse : any
 
     [K in keyof Recurse]: Recurse[K]
->K : K
 }
 
 type Recurse1 = {
 >Recurse1 : any
 
     [K in keyof Recurse2]: Recurse2[K]
->K : K
 }
 
 type Recurse2 = {
 >Recurse2 : any
 
     [K in keyof Recurse1]: Recurse1[K]
->K : K
 }
 
 // Repro from #27881
 
 export type Circular<T> = {[P in keyof T]: Circular<T>};
 >Circular : Circular<T>
->T : T
->P : P
 
 type tup = [number, number, number, number];
 >tup : tup
@@ -46,12 +41,8 @@ function foo(arg: Circular<tup>): tup {
 
 type DeepMap<T extends unknown[], R> = {
 >DeepMap : DeepMap<T, R>
->T : T
->R : R
 
   [K in keyof T]: T[K] extends unknown[] ? DeepMap<T[K], R> : R;
->K : K
-
 };
 
 type tpl = [string, [string, [string]]];
@@ -70,26 +61,18 @@ type t2 = DeepMap<arr, number>;  // number[][]
 
 type Transform<T> = { [K in keyof T]: Transform<T[K]> };
 >Transform : Transform<T>
->T : T
->K : K
 
 interface User {
->User : User
-
     avatar: string;
 >avatar : string
 }
 
 interface Guest {
->Guest : Guest
-
     displayName: string;
 >displayName : string
 }
 
 interface Product {
->Product : Product
-
     users: (User | Guest)[];
 >users : (Guest | User)[]
 }
@@ -106,13 +89,9 @@ product.users;  // (Transform<User> | Transform<Guest>)[]
 
 type Remap1<T> = { [P in keyof T]: Remap1<T[P]>; };
 >Remap1 : Remap1<T>
->T : T
->P : P
 
 type Remap2<T> = T extends object ? { [P in keyof T]: Remap2<T[P]>; } : T;
 >Remap2 : Remap2<T>
->T : T
->P : P
   
 type a = Remap1<string[]>;  // string[]
 >a : string[]
@@ -124,17 +103,11 @@ type b = Remap2<string[]>;  // string[]
 
 type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
 >NonOptionalKeys : NonOptionalKeys<T>
->T : T
->P : P
 
 type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
 >Child : Child<T>
->T : T
->P : P
 
 export interface ListWidget {
->ListWidget : ListWidget
-
     "type": "list",
 >"type" : "list"
 
@@ -166,31 +139,17 @@ x.type;
 
 export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
 >TV : TV<T, K>
->T : T
->K : K
->E : E
 
 export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
 >ObjectOrArray : ObjectOrArray<T, K>
->T : T
->K : K
 
 export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
 >ThemeValue : ThemeValue<K, ThemeType, TVal>
->K : K
->ThemeType : ThemeType
->TVal : TVal
 
     ThemeType[K] extends TVal[] ? number :
     ThemeType[K] extends Record<infer E, TVal> ? E :
->E : E
-
     ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
->F : F
 
 export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
 >Foo : Foo<T>
->T : T
->P : P
->E : E
 

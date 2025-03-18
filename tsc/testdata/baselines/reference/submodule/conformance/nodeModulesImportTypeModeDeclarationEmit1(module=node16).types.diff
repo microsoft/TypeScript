@@ -32,7 +32,5 @@
 -
 -export interface ImportInterface {}
  === /node_modules/pkg/require.d.ts ===
--
+ 
  export interface RequireInterface {}
-+>RequireInterface : RequireInterface
-+

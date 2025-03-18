@@ -12,8 +12,6 @@ var c: C;
 >c : C
 
 interface I {
->I : I
-
     fooo: string;
 >fooo : string
 }

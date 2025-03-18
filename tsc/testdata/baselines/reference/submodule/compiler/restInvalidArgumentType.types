@@ -8,7 +8,6 @@ enum E { v1, v2 };
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {
 >f : <T extends { b: string; }>(p1: T, p2: T[]) => void
->T : T
 >b : string
 >p1 : T
 >p2 : T[]
@@ -24,11 +23,9 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var mapped_generic: {[P in keyof T]: T[P]};
 >mapped_generic : { [P in keyof T]: T[P] }
->P : P
 
     var mapped: {[P in "b"]: T[P]};
 >mapped : { b: T["b"]; }
->P : P
 
     var union_generic: T | { a: number };
 >union_generic : T | { a: number; }

@@ -20,7 +20,6 @@ export module M {
 >g : () => void
 
         export interface I { }
->I : I
     }
 
     export import a = M.f;
@@ -59,7 +58,6 @@ export module M.P {
 >g : () => void
 
         export interface I { }
->I : I
     }
     export import im = M.P.f;
 >im : () => void
@@ -117,23 +115,17 @@ export module M.Q {
 >g : () => void
 
         export interface I { }
->I : I
     }
     export interface b extends M.b { } // ok
->b : b
 >M : typeof M
 
     export interface I extends M.c.I { } // ok
->I : I
 >M.c : typeof N
 >M : typeof M
 >c : typeof N
 
     export module c {
->c : any
-
         export interface I extends M.c.I { } // ok
->I : I
 >M.c : typeof N
 >M : typeof M
 >c : typeof N

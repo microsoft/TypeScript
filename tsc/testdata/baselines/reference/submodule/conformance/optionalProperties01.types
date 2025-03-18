@@ -2,8 +2,6 @@
 
 === optionalProperties01.ts ===
 interface Foo {
->Foo : Foo
-
   required1: string;
 >required1 : string
 

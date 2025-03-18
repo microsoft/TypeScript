@@ -1,11 +1,8 @@
 --- old.symbolProperty61.types
 +++ new.symbolProperty61.types
-@@= skipped -4, +4 lines =@@
- >global : any
+@@= skipped -5, +5 lines =@@
  
    interface SymbolConstructor {
-+>SymbolConstructor : SymbolConstructor
-+
      readonly obs: symbol
 ->obs : unique symbol
 +>obs : symbol
@@ -16,9 +13,11 @@
 ->observable : unique symbol
 ->Symbol.obs : unique symbol
 +>observable : symbol
++>Symbol.obs : symbol
  >Symbol : SymbolConstructor
 ->obs : unique symbol
 ->Symbol.obs : unique symbol
++>obs : symbol
 +>Symbol.obs : symbol
  >Symbol : SymbolConstructor
 ->obs : unique symbol
@@ -26,11 +25,7 @@
  
  export class MyObservable<T> {
  >MyObservable : MyObservable<T>
-+>T : T
- 
-     constructor(private _val: T) {}
- >_val : T
-@@= skipped -35, +36 lines =@@
+@@= skipped -34, +34 lines =@@
  
      [observable]() {
  >[observable] : () => this
@@ -39,11 +34,8 @@
  
          return this
  >this : this
-@@= skipped -9, +9 lines =@@
- 
- type InteropObservable<T> = {
+@@= skipped -11, +11 lines =@@
  >InteropObservable : InteropObservable<T>
-+>T : T
  
      [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
 ->[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
@@ -61,7 +53,6 @@
  function from<T>(obs: InteropObservable<T>) {
 ->from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
 +>from : <T>(obs: InteropObservable<T>) => { subscribe: (next: (val: T) => void) => void; }
-+>T : T
  >obs : InteropObservable<T>
  
      return obs[Symbol.obs]()

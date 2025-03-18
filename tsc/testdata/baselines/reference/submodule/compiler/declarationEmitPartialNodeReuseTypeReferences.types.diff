@@ -1,12 +1,6 @@
 --- old.declarationEmitPartialNodeReuseTypeReferences.types
 +++ new.declarationEmitPartialNodeReuseTypeReferences.types
-@@= skipped -7, +7 lines =@@
- >PrivateSpecialString : string
- 
- export namespace N {
-+>N : any
-+
-     export type SpecialString = string;
+@@= skipped -11, +11 lines =@@
  >SpecialString : string
  }
  export const o = (p1: SpecialString, p2: PrivateSpecialString, p3: N.SpecialString) => null! as { foo: SpecialString, bar: PrivateSpecialString, baz: N.SpecialString };
@@ -23,7 +17,7 @@
  >null! : never
  >foo : string
  >bar : string
-@@= skipped -19, +21 lines =@@
+@@= skipped -15, +15 lines =@@
  
  === b.ts ===
  import * as a from "./a";

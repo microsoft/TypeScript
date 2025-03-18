@@ -2,8 +2,6 @@
 
 === taggedTemplateStringsWithTypedTagsES6.ts ===
 interface I {
->I : I
-
     (stringParts: TemplateStringsArray, ...rest: number[]): I;
 >stringParts : TemplateStringsArray
 >rest : number[]

@@ -1,15 +1,6 @@
 --- old.enumAssignmentCompat3.types
 +++ new.enumAssignmentCompat3.types
-@@= skipped -68, +68 lines =@@
-     }
- }
- namespace Const {
-+>Const : typeof Const
-+
-     export const enum E {
- >E : E
- 
-@@= skipped -63, +65 lines =@@
+@@= skipped -131, +131 lines =@@
  }
  
  var abc: First.E;

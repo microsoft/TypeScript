@@ -89,8 +89,6 @@ var tf: [string, (x: string) => number] = ["hello", x => x.length];
 
 declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
 >ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
->T : T
->U : U
 >a : T
 >b : [T, (x: T) => U]
 >x : T
@@ -113,8 +111,6 @@ var ff1: number;
 
 function tuple2<T0, T1>(item0: T0, item1: T1): [T0, T1]{
 >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
->T0 : T0
->T1 : T1
 >item0 : T0
 >item1 : T1
 

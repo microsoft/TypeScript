@@ -2,8 +2,6 @@
 
 === abstractPropertyBasics.ts ===
 interface A {
->A : A
-
     prop: string;
 >prop : string
 

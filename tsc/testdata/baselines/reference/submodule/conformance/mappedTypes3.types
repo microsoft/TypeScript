@@ -3,7 +3,6 @@
 === mappedTypes3.ts ===
 class Box<P> {
 >Box : Box<P>
->P : P
 
     value: P;
 >value : P
@@ -11,25 +10,19 @@ class Box<P> {
 
 type Boxified<T> = {
 >Boxified : Boxified<T>
->T : T
 
     [K in keyof T]: Box<T[K]>;
->K : K
 }
 
 declare function boxify<T>(obj: T): Boxified<T>;
 >boxify : <T>(obj: T) => Boxified<T>
->T : T
 >obj : T
 
 declare function unboxify<T>(obj: Boxified<T>): T;
 >unboxify : <T>(obj: Boxified<T>) => T
->T : T
 >obj : Boxified<T>
 
 interface Bacon {
->Bacon : Bacon
-
     isPerfect: boolean;
 >isPerfect : boolean
 
@@ -38,8 +31,6 @@ interface Bacon {
 }
 
 interface BoxifiedBacon {
->BoxifiedBacon : BoxifiedBacon
-
     isPerfect: Box<boolean>;
 >isPerfect : Box<boolean>
 

@@ -1,18 +1,6 @@
 --- old.exportImportAlias.types
 +++ new.exportImportAlias.types
-@@= skipped -17, +17 lines =@@
- >y : number
-     }
-     export module B {
-+>B : any
-+
-         export interface Id {
-+>Id : Id
-+
-             name: string;
- >name : string
-         }
-@@= skipped -11, +15 lines =@@
+@@= skipped -28, +28 lines =@@
  >C : typeof C
  
      export import a = A;
@@ -77,16 +65,7 @@
  >0 : 0
  >0 : 0
  
-@@= skipped -43, +43 lines =@@
- >12 : 12
- 
-         export interface Point {
-+>Point : Point
-+
-             x: number;
- >x : number
- 
-@@= skipped -13, +15 lines =@@
+@@= skipped -56, +56 lines =@@
  >M : typeof M
  
      export import D = K.L;

@@ -6,8 +6,6 @@ type handler1 = () => void;
 >handler1 : handler1
 
 export interface I1 {
->I1 : I1
-
     getHandler: handler1;
 >getHandler : handler1
 }
@@ -21,9 +19,6 @@ type handler3 = () => void;
 >handler3 : handler3
 
 export interface I3<T extends handler3> {
->I3 : I3<T>
->T : T
-
     getHandler: T;
 >getHandler : T
 }

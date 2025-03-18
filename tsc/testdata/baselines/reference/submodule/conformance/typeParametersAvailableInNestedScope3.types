@@ -3,12 +3,10 @@
 === typeParametersAvailableInNestedScope3.ts ===
 function foo<T>(v: T) {
 >foo : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
->T : T
 >v : T
 
     function a<T>(a: T) { return a; }
 >a : <T>(a: T) => T
->T : T
 >a : T
 >a : T
 
@@ -18,12 +16,10 @@ function foo<T>(v: T) {
 
     function c<T>(v: T) {
 >c : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }
->T : T
 >v : T
 
         function a<T>(a: T) { return a; }
 >a : <T>(a: T) => T
->T : T
 >a : T
 >a : T
 

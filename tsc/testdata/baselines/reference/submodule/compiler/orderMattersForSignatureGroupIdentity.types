@@ -2,8 +2,6 @@
 
 === orderMattersForSignatureGroupIdentity.ts ===
 interface A {
->A : A
-
     (x: { s: string }): string
 >x : { s: string; }
 >s : string
@@ -14,8 +12,6 @@ interface A {
 }
 
 interface B {
->B : B
-
     (x: { s: string }): string
 >x : { s: string; }
 >s : string
@@ -26,8 +22,6 @@ interface B {
 }
 
 interface C {
->C : C
-
     (x: { n: number }): number
 >x : { n: number; }
 >n : number

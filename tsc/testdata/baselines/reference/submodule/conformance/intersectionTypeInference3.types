@@ -5,8 +5,6 @@
 
 type Nominal<Kind extends string, Type> = Type & {
 >Nominal : Nominal<Kind, Type>
->Kind : Kind
->Type : Type
 
     [Symbol.species]: Kind;
 >[Symbol.species] : Kind
@@ -45,7 +43,6 @@ const c1 = Array.from(a).concat(Array.from(b));
 
 declare function from<T>(): T[];
 >from : <T>() => T[]
->T : T
 
 const c2: ReadonlyArray<A> = from();
 >c2 : readonly A[]

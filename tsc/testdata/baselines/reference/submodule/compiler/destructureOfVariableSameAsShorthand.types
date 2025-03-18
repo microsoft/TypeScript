@@ -3,17 +3,12 @@
 === destructureOfVariableSameAsShorthand.ts ===
 // https://github.com/microsoft/TypeScript/issues/38969
 interface AxiosResponse<T = never> {
->AxiosResponse : AxiosResponse<T>
->T : T
-
     data: T;
 >data : T
 }
 
 declare function get<T = never, R = AxiosResponse<T>>(): Promise<R>;
 >get : <T, R>() => Promise<R>
->T : T
->R : R
 
 async function main() {
 >main : () => Promise<void>

@@ -5,8 +5,6 @@ declare module "foo" {
 >"foo" : typeof import("foo")
 
     interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -28,11 +26,7 @@ declare module "foo2" {
 >"foo2" : typeof import("foo2")
 
     namespace Bar {
->Bar : typeof Bar
-
         interface I {
->I : I
-
             a: string;
 >a : string
 
@@ -42,11 +36,7 @@ declare module "foo2" {
     }
 
     namespace Baz {
->Baz : any
-
         interface J {
->J : J
-
             a: number;
 >a : number
 

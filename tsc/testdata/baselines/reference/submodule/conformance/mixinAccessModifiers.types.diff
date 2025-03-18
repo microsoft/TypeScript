@@ -38,32 +38,7 @@
  >p : any
  }
  
-@@= skipped -60, +60 lines =@@
- 
- declare function Mix<T, U>(c1: T, c2: U): T & U;
- >Mix : <T, U>(c1: T, c2: U) => T & U
-+>T : T
-+>U : U
- >c1 : T
- >c2 : U
- 
-@@= skipped -172, +174 lines =@@
- 
- class ProtectedGeneric<T> {
- >ProtectedGeneric : ProtectedGeneric<T>
-+>T : T
- 
- 	private privateMethod() {}
- >privateMethod : () => void
-@@= skipped -10, +11 lines =@@
- 
- class ProtectedGeneric2<T> {
- >ProtectedGeneric2 : ProtectedGeneric2<T>
-+>T : T
- 
- 	private privateMethod() {}
- >privateMethod : () => void
-@@= skipped -9, +10 lines =@@
+@@= skipped -251, +251 lines =@@
  }
  
  function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {

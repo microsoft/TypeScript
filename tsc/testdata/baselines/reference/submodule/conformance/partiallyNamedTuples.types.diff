@@ -34,43 +34,12 @@
  >a : NamedAnonymousMixed
  >args : NamedAndAnonymous
  
- type ToAnonymousTuple<T extends unknown[]> = {
- >ToAnonymousTuple : ToAnonymousTuple<T>
-+>T : T
- 
-   [K in keyof T]: [K, T[K], keyof T, T];
-+>K : K
-+
- };
- 
- type AnonymousToAnonymous = ToAnonymousTuple<[boolean, number]>;
-@@= skipped -30, +33 lines =@@
- 
- type ToMixedTuple<T extends unknown[]> = {
- >ToMixedTuple : ToMixedTuple<T>
-+>T : T
- 
-   [K in keyof T]: [K, second: T[K], keyof T, fourth: T];
-+>K : K
-+
- };
- 
- type AnonymousToMixed = ToMixedTuple<[boolean, number]>;
-@@= skipped -25, +28 lines =@@
- 
- type AddMixedConditional<T> = [
- >AddMixedConditional : [first: boolean, null, third: T extends number ? "a" : "b", ...T extends 0 ? [fourth: "c"] : []]
-+>T : T
- 
-   first: boolean,
-   null,
-@@= skipped -17, +18 lines =@@
+@@= skipped -72, +72 lines =@@
  >AddMixedConditionalNumberPrimitive : [first: boolean, null, third: "a"]
  
  declare function test<T extends readonly unknown[]>(
 ->test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; }; }]) => T
 +>test : <T extends readonly unknown[]>(arg: [...{ [K in keyof T]: { type: T[K]; } }]) => T
-+>T : T
  
    arg: [
 ->arg : [...{ [K in keyof T]: { type: T[K]; }; }]
@@ -78,12 +47,7 @@
  
      ...{
        [K in keyof T]: {
-+>K : K
-+
-         type: T[K];
- >type : T[K]
- 
-@@= skipped -23, +26 lines =@@
+@@= skipped -23, +23 lines =@@
  const output = test(input);
  >output : [first: number, string]
  >test(input) : [first: number, string]

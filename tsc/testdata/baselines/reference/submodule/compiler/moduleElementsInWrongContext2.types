@@ -5,18 +5,11 @@ function blah () {
 >blah : { (): void; default: any; }
 
     module M { }
->M : any
-
     export namespace N {
->N : any
-
         export interface I { }
->I : I
     }
 
     namespace Q.K { }
->Q : any
->K : any
 
     declare module "ambient" {
 >"ambient" : typeof import("ambient")

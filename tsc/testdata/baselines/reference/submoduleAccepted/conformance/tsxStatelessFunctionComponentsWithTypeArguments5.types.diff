@@ -10,14 +10,10 @@
  declare function Component<U>(l: U): JSX.Element;
 ->Component : <U>(l: U) => JSX.Element
 +>Component : <U>(l: U) => Element
-+>U : U
  >l : U
  >JSX : any
  
- function createComponent<T extends { prop: number }>(arg: T) {
- >createComponent : <T extends { prop: number; }>(arg: T) => void
-+>T : T
- >prop : number
+@@= skipped -13, +13 lines =@@
  >arg : T
  
      let a1 = <Component {...arg} />;
@@ -44,7 +40,6 @@
  declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
 ->ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
 +>ComponentSpecific : <U>(l: { prop: U; }) => Element
-+>U : U
  >l : { prop: U; }
  >prop : U
  >JSX : any
@@ -52,16 +47,10 @@
  declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
 ->ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
 +>ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => Element
-+>U : U
  >l : { prop: U; "ignore-prop": number; }
  >prop : U
  >"ignore-prop" : number
-@@= skipped -41, +45 lines =@@
- 
- function Bar<T extends { prop: number }>(arg: T) {
- >Bar : <T extends { prop: number; }>(arg: T) => void
-+>T : T
- >prop : number
+@@= skipped -32, +32 lines =@@
  >arg : T
  
      let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number

@@ -1,15 +1,6 @@
 --- old.exportImportAndClodule.types
 +++ new.exportImportAndClodule.types
-@@= skipped -17, +17 lines =@@
- >12 : 12
- 
-         export interface Point {
-+>Point : Point
-+
-             x: number;
- >x : number
- 
-@@= skipped -12, +14 lines =@@
+@@= skipped -29, +29 lines =@@
  >M : typeof M
  
      export import D = K.L;

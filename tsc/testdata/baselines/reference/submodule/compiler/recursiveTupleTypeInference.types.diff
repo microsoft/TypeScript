@@ -1,42 +1,15 @@
 --- old.recursiveTupleTypeInference.types
 +++ new.recursiveTupleTypeInference.types
-@@= skipped -7, +7 lines =@@
- 
- export type F<T> = null extends T
- >F : F<T>
-+>T : T
- 
-     ? [F<NonNullable<T>>, "null"]
-     : T extends number
-@@= skipped -8, +9 lines =@@
- 
- export type G<T> = { [k in keyof T]: F<T[k]> };
- >G : G<T>
-+>T : T
-+>k : k
- 
- interface K {
-+>K : K
-+
-     b: number | null;
- >b : number | null
- }
+@@= skipped -23, +23 lines =@@
  
  const gK: { [key in keyof K]: A } = { b: ["number", "null"] };
  >gK : { b: A; }
 ->{ b: ["number", "null"] } : { b: ("number" | "null")[]; }
 ->b : ("number" | "null")[]
 ->["number", "null"] : ("number" | "null")[]
-+>key : key
 +>{ b: ["number", "null"] } : { b: ("null" | "number")[]; }
 +>b : ("null" | "number")[]
 +>["number", "null"] : ("null" | "number")[]
  >"number" : "number"
  >"null" : "null"
  
- function foo<T>(g: G<T>): T {
- >foo : <T>(g: G<T>) => T
-+>T : T
- >g : G<T>
- 
-     return {} as any;

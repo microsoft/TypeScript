@@ -3,8 +3,6 @@
 === declarationEmitExpressionInExtends2.ts ===
 class C<T, U> {
 >C : C<T, U>
->T : T
->U : U
 
     x: T;
 >x : T
@@ -15,7 +13,6 @@ class C<T, U> {
 
 function getClass<T>(c: T) {
 >getClass : <T>(c: T) => typeof C
->T : T
 >c : T
 
     return C;

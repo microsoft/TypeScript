@@ -3,7 +3,6 @@
 === emitClassDeclarationWithExtensionAndTypeArgumentInES6.ts ===
 class B<T> {
 >B : B<T>
->T : T
 
     constructor(a: T) { }
 >a : T

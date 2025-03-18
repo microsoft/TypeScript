@@ -29,15 +29,11 @@ const z = new defaultFoo();
 
 === other.d.ts ===
 export interface Foo {
->Foo : Foo
-
     bar: number;
 >bar : number
 }
 
 export default interface Bar {
->Bar : default
-
     foo: number;
 >foo : number
 }

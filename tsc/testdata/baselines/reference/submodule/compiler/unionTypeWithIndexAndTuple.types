@@ -2,8 +2,6 @@
 
 === unionTypeWithIndexAndTuple.ts ===
 interface I {
->I : I
-
     [index: number]: any;
 >index : number
 

@@ -2,8 +2,6 @@
 
 === ifDoWhileStatements.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
@@ -28,7 +26,6 @@ class C2 extends C {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T

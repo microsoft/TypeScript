@@ -6,11 +6,10 @@
  declare function dearray<T>(ara: ReadonlyArray<T>): T;
 ->dearray : <T>(ara: ReadonlyArray<T>) => T
 +>dearray : <T>(ara: readonly T[]) => T
-+>T : T
  >ara : readonly T[]
  
  type LiteralType = "foo" | "bar";
-@@= skipped -12, +13 lines =@@
+@@= skipped -12, +12 lines =@@
  let foo: LiteralType = dearray(alt);
  >foo : LiteralType
  >dearray(alt) : LiteralType

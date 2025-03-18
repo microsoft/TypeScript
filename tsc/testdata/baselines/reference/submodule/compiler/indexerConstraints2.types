@@ -64,8 +64,6 @@ type AliasedNumber = number;
 >AliasedNumber : number
 
 interface L {
->L : L
-
     [n: AliasedNumber]: A;
 >n : number
 }
@@ -74,8 +72,6 @@ type AliasedString = string;
 >AliasedString : string
 
 interface M {
->M : M
-
     [s: AliasedString]: A;
 >s : string
 }
@@ -84,8 +80,6 @@ type AliasedBoolean = boolean;
 >AliasedBoolean : boolean
 
 interface N {
->N : N
-
     [b: AliasedBoolean]: A;
 >b : boolean
 }
@@ -94,8 +88,6 @@ type IndexableUnion = "foo" | "bar";
 >IndexableUnion : IndexableUnion
 
 interface O {
->O : O
-
     [u: IndexableUnion]: A;
 >u : IndexableUnion
 }
@@ -104,8 +96,6 @@ type NonIndexableUnion = boolean | {};
 >NonIndexableUnion : NonIndexableUnion
 
 interface P {
->P : P
-
     [u: NonIndexableUnion]: A;
 >u : NonIndexableUnion
 }
@@ -114,8 +104,6 @@ type NonIndexableUnion2 = string | number;
 >NonIndexableUnion2 : NonIndexableUnion2
 
 interface Q {
->Q : Q
-
     [u: NonIndexableUnion2]: A;
 >u : NonIndexableUnion2
 }
@@ -124,15 +112,11 @@ type NonIndexableUnion3 = "foo" | 42;
 >NonIndexableUnion3 : NonIndexableUnion3
 
 interface R {
->R : R
-
     [u: NonIndexableUnion3]: A;
 >u : NonIndexableUnion3
 }
 
 interface S {
->S : S
-
     [u: "foo" | "bar"]: A;
 >u : "bar" | "foo"
 }
@@ -141,8 +125,6 @@ type Key = string;
 >Key : string
 
 interface T {
->T : T
-
     [key: Key]
 >key : string
 }

@@ -2,10 +2,6 @@
 
 === genericTypeUsedWithoutTypeArguments1.ts ===
 interface Foo<T> { }
->Foo : Foo<T>
->T : T
-
 class Bar<T> implements Foo { }
 >Bar : Bar<T>
->T : T
 

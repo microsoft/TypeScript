@@ -2,8 +2,6 @@
 
 === unionOfArraysFilterCall.ts ===
 interface Fizz {
->Fizz : Fizz
-
     id: number;
 >id : number
 
@@ -12,8 +10,6 @@ interface Fizz {
 }
 
 interface Buzz {
->Buzz : Buzz
-
     id: number;
 >id : number
 

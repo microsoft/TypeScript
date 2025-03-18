@@ -5,8 +5,6 @@
 
 function foo<T, U extends T>(t: T) {
 >foo : <T, U extends T>(t: T) => U
->T : T
->U : U
 >t : T
 
     var u: U;

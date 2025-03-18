@@ -3,22 +3,15 @@
 === dash.d.ts ===
 type ObjectIterator<TObject, TResult> = (value: TObject[keyof TObject], key: string, collection: TObject) => TResult;
 >ObjectIterator : ObjectIterator<TObject, TResult>
->TObject : TObject
->TResult : TResult
 >value : TObject[keyof TObject]
 >key : string
 >collection : TObject
 
 interface LoDashStatic {
->LoDashStatic : LoDashStatic
-
     mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
 >mapValues : <T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>) => { [P in keyof T]: TResult }
->T : T
->TResult : TResult
 >obj : T | null | undefined
 >callback : ObjectIterator<T, TResult>
->P : P
 }
 declare const _: LoDashStatic;
 >_ : LoDashStatic

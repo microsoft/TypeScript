@@ -5,17 +5,11 @@ declare global {
 >global : any
 
     namespace JSX {
->JSX : any
-
         interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
             [e: string]: {};
 >e : string
         }
         interface Element {
->Element : Element
-
             __domBrand: void;
 >__domBrand : void
 
@@ -26,11 +20,9 @@ declare global {
 >props : {}
         }
         interface ElementAttributesProperty { props: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : any
 
         interface ElementChildrenAttribute { children: any; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : any
     }
 }
@@ -40,20 +32,12 @@ export function dom(): JSX.Element;
 
 === renderer2.d.ts ===
 export namespace predom {
->predom : () => Element
-
     namespace JSX {
->JSX : any
-
         interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
             [e: string]: {};
 >e : string
         }
         interface Element {
->Element : Element
-
             __predomBrand: void;
 >__predomBrand : void
 
@@ -64,11 +48,9 @@ export namespace predom {
 >props : {}
         }
         interface ElementAttributesProperty { props: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : any
 
         interface ElementChildrenAttribute { children: any; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : any
     }
 }

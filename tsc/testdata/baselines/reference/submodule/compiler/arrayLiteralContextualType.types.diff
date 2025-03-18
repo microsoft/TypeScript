@@ -1,15 +1,6 @@
 --- old.arrayLiteralContextualType.types
 +++ new.arrayLiteralContextualType.types
-@@= skipped -1, +1 lines =@@
- 
- === arrayLiteralContextualType.ts ===
- interface IAnimal {
-+>IAnimal : IAnimal
-+
-     name: string;
- >name : string
- }
-@@= skipped -40, +42 lines =@@
+@@= skipped -41, +41 lines =@@
  foo([
  >foo([    new Giraffe(),    new Elephant()]) : void
  >foo : (animals: IAnimal[]) => void

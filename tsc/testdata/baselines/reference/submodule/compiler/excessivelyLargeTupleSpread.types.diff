@@ -11,14 +11,7 @@
  === excessivelyLargeTupleSpread.ts ===
  // #41771
  
- type BuildTuple<L extends number, T extends any[] = [any]> = 
- >BuildTuple : BuildTuple<L, T>
-+>L : L
-+>T : T
- 
-     T['length'] extends L ? T : BuildTuple<L, [...T, ...T]>;
- 
-@@= skipped -61, +58 lines =@@
+@@= skipped -61, +56 lines =@@
  >T14 : any
  
  const a0 = [0] as const;

@@ -2,8 +2,6 @@
 
 === inlinedAliasAssignableToConstraintSameAsAlias.ts ===
 interface RelationFields {
->RelationFields : RelationFields
-
   x: A;
 >x : A
 
@@ -18,8 +16,6 @@ type Name = keyof RelationFields;
 
 type ShouldA<RF extends RelationFields, N extends Name> = RF[N] extends A[]
 >ShouldA : ShouldA<RF, N>
->RF : RF
->N : N
 
   ? RF[N][0]
   : never;
@@ -40,17 +36,9 @@ class A {
 >whereRelated : <RF extends RelationFields, N extends keyof RelationFields, A1 extends A, A2 extends A>() => number
 
     RF extends RelationFields = RelationFields,
->RF : RF
-
     N extends Name = Name,
->N : N
-
     A1 extends A = RF[N] extends A[] ? RF[N][0] : never,
->A1 : A1
-
     A2 extends A = ShouldA<RF, N>
->A2 : A2
-
   >(): number {
     return 1;
 >1 : 1

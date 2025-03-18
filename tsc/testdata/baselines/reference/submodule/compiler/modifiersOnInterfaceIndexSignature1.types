@@ -2,8 +2,6 @@
 
 === modifiersOnInterfaceIndexSignature1.ts ===
 interface I {
->I : I
-
   public [a: string]: number;
 >a : string
 }

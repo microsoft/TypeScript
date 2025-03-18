@@ -4,7 +4,6 @@
 // From #4260
 class X<T> {
 >X : X<T>
->T : T
 
     f(t: T) {
 >f : (t: T) => { a: T; }
@@ -74,7 +73,6 @@ xNever.f() // error, never still expects an argument
 
 class MyPromise<X> {
 >MyPromise : MyPromise<X>
->X : X
 
     constructor(executor: (resolve: (value: X) => void) => void) {
 >executor : (resolve: (value: X) => void) => void
@@ -229,7 +227,6 @@ c(); // ok
 
 declare function call<TS extends unknown[]>(
 >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
->TS : TS
 
     handler: (...args: TS) => unknown,
 >handler : (...args: TS) => unknown

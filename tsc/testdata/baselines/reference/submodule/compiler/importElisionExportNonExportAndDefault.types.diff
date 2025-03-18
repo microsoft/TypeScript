@@ -11,11 +11,7 @@
  >{msg: "Hello World"} : { msg: string; }
  >msg : string
  >"Hello World" : "Hello World"
-@@= skipped -9, +9 lines =@@
- 
- === MyComponent.ts ===
- interface MyFunction { msg: string; }
-+>MyFunction : MyFunction
+@@= skipped -12, +12 lines =@@
  >msg : string
  
  export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${msg}"`);

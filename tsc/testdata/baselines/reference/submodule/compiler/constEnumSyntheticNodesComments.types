@@ -10,7 +10,6 @@ const enum En { A, B, C, D }
 
 function assert<T>(x: T) {
 >assert : <T>(x: T) => T
->T : T
 >x : T
 
     return x;

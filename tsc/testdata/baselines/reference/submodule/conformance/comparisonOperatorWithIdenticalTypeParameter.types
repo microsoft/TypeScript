@@ -3,7 +3,6 @@
 === comparisonOperatorWithIdenticalTypeParameter.ts ===
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
->T : T
 >t : T
 
     var r1 = t < t;

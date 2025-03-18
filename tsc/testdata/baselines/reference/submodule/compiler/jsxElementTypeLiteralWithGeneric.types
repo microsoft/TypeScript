@@ -9,15 +9,11 @@ declare global {
 >global : any
 
   namespace JSX {
->JSX : any
-
     type ElementType<P = any> =
 >ElementType : any
->P : P
 
       | {
         [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
->K : K
 >JSX : any
 >JSX : any
 

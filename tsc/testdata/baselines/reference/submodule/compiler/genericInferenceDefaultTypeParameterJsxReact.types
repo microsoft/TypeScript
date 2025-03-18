@@ -13,12 +13,10 @@ import React, { ComponentPropsWithRef, ElementType, ReactNode } from 'react';
 
 type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { children?: ReactNode };
 >ButtonBaseProps : any
->T : T
 >children : any
 
 function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 >Component : <T extends ElementType>(props: any) => any
->T : T
 >props : any
 
     return <></>;

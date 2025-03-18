@@ -5,8 +5,6 @@ declare module "foo" {
 >"foo" : typeof import("foo")
 
    namespace M {}
->M : any
-
    var M;
 >M : any
 

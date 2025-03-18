@@ -38,15 +38,11 @@ x; // string | number
 >x : string | number
 
 export interface NodeList {
->NodeList : NodeList
-
     length: number;
 >length : number
 }
 
 export interface HTMLCollection {
->HTMLCollection : HTMLCollection
-
     length: number;
 >length : number
 }

@@ -16,14 +16,12 @@ export class ActualClass extends Configurable(HiddenClass) {}
 === Configurable.ts ===
 export type Constructor<T> = {
 >Constructor : Constructor<T>
->T : T
 
     new(...args: any[]): T;
 >args : any[]
 }
 export function Configurable<T extends Constructor<{}>>(base: T): T {
 >Configurable : <T extends Constructor<{}>>(base: T) => T
->T : T
 >base : T
 
     return class extends base {

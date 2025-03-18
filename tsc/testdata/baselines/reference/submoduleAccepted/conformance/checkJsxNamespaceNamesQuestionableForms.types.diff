@@ -1,18 +1,6 @@
 --- old.checkJsxNamespaceNamesQuestionableForms.types
 +++ new.checkJsxNamespaceNamesQuestionableForms.types
-@@= skipped -1, +1 lines =@@
- 
- === checkJsxNamespaceNamesQuestionableForms.tsx ===
- declare namespace JSX {
-+>JSX : any
-+
-     interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-         'this:b': any;
- >'this:b' : any
- 
-@@= skipped -27, +31 lines =@@
+@@= skipped -28, +28 lines =@@
  ><b:c.x></b:c : any
  >b : any
  >c : any

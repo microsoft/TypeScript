@@ -3,7 +3,6 @@
 === isomorphicMappedTypeInference.ts ===
 type Box<T> = {
 >Box : Box<T>
->T : T
 
     value: T;
 >value : T
@@ -11,15 +10,12 @@ type Box<T> = {
 
 type Boxified<T> = {
 >Boxified : Boxified<T>
->T : T
 
     [P in keyof T]: Box<T[P]>;
->P : P
 }
 
 function box<T>(x: T): Box<T> {
 >box : <T>(x: T) => Box<T>
->T : T
 >x : T
 
     return { value: x };
@@ -30,7 +26,6 @@ function box<T>(x: T): Box<T> {
 
 function unbox<T>(x: Box<T>): T {
 >unbox : <T>(x: Box<T>) => T
->T : T
 >x : Box<T>
 
     return x.value;
@@ -41,7 +36,6 @@ function unbox<T>(x: Box<T>): T {
 
 function boxify<T>(obj: T): Boxified<T> {
 >boxify : <T>(obj: T) => Boxified<T>
->T : T
 >obj : T
 
     let result = {} as Boxified<T>;
@@ -70,7 +64,6 @@ function boxify<T>(obj: T): Boxified<T> {
 
 function unboxify<T extends object>(obj: Boxified<T>): T {
 >unboxify : <T extends object>(obj: Boxified<T>) => T
->T : T
 >obj : Boxified<T>
 
     let result = {} as T;
@@ -99,7 +92,6 @@ function unboxify<T extends object>(obj: Boxified<T>): T {
 
 function assignBoxified<T>(obj: Boxified<T>, values: T) {
 >assignBoxified : <T>(obj: Boxified<T>, values: T) => void
->T : T
 >obj : Boxified<T>
 >values : T
 
@@ -276,10 +268,7 @@ function f4() {
 
 function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
 >makeRecord : <T, K extends string>(obj: { [P in K]: T }) => { [P in K]: T }
->T : T
->K : K
 >obj : { [P in K]: T }
->P : P
 
     return obj;
 >obj : { [P in K]: T }
@@ -329,7 +318,6 @@ function f5(s: string) {
 
 function makeDictionary<T>(obj: { [x: string]: T }) {
 >makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
->T : T
 >obj : { [x: string]: T; }
 >x : string
 
@@ -381,21 +369,15 @@ function f6(s: string) {
 
 declare function validate<T>(obj: { [P in keyof T]?: T[P] }): T;
 >validate : <T>(obj: { [P in keyof T]?: T[P] | undefined }) => T
->T : T
 >obj : { [P in keyof T]?: T[P] | undefined }
->P : P
 
 declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
 >clone : <T>(obj: { readonly [P in keyof T]: T[P] }) => T
->T : T
 >obj : { readonly [P in keyof T]: T[P] }
->P : P
 
 declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;
 >validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined }) => T
->T : T
 >obj : { readonly [P in keyof T]?: T[P] | undefined }
->P : P
 
 type Foo = {
 >Foo : Foo
@@ -434,16 +416,12 @@ function f10(foo: Foo) {
 
 type Func<T> = (...args: any[]) => T;
 >Func : Func<T>
->T : T
 >args : any[]
 
 type Spec<T> = {
 >Spec : Spec<T>
->T : T
 
     [P in keyof T]: Func<T[P]> | Spec<T[P]> ;
->P : P
-
 };
 
 /**
@@ -453,7 +431,6 @@ type Spec<T> = {
  */
 declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
->T : T
 >obj : Spec<T>
 >args : any[]
 
@@ -502,7 +479,6 @@ var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
 const foo = <T>(object: T, partial: Partial<T>) => object;
 >foo : <T>(object: T, partial: Partial<T>) => T
 ><T>(object: T, partial: Partial<T>) => object : <T>(object: T, partial: Partial<T>) => T
->T : T
 >object : T
 >partial : Partial<T>
 >object : T
@@ -538,34 +514,22 @@ o = foo(o, {b: 9});
 
 declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
 >f20 : <T, K extends keyof T>(obj: Pick<T, K>) => T
->T : T
->K : K
 >obj : Pick<T, K>
 
 declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
 >f21 : <T, K extends keyof T>(obj: Pick<T, K>) => K
->T : T
->K : K
 >obj : Pick<T, K>
 
 declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
 >f22 : <T, K extends keyof T>(obj: Boxified<Pick<T, K>>) => T
->T : T
->K : K
 >obj : Boxified<Pick<T, K>>
 
 declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
 >f23 : <T, U extends keyof T, K extends U>(obj: Pick<T, K>) => T
->T : T
->U : U
->K : K
 >obj : Pick<T, K>
 
 declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
 >f24 : <T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>) => T & U
->T : T
->U : U
->K : K
 >obj : Pick<T & U, K>
 
 let x0 = f20({ foo: 42, bar: "hello" });
@@ -626,8 +590,6 @@ let x4 = f24({ foo: 42, bar: "hello" });
 
 function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K> {
 >getProps : <T, K extends keyof T>(obj: T, list: K[]) => Pick<T, K>
->T : T
->K : K
 >obj : T
 >list : K[]
 

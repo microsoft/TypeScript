@@ -2,8 +2,6 @@
 
 === typeVal.ts ===
 interface I {
->I : I
-
     I:number;
 >I : number
 }

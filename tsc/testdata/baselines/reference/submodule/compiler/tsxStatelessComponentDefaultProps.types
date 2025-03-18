@@ -7,8 +7,6 @@ import React from 'react';
 >React : any
 
 interface Props {
->Props : Props
-
     text: string;
 >text : string
 }

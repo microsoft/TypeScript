@@ -3,7 +3,6 @@
 === typeParametersInStaticAccessors.ts ===
 class foo<T> {
 >foo : foo<T>
->T : T
 
     static get Foo(): () => T { return null; }
 >Foo : () => T

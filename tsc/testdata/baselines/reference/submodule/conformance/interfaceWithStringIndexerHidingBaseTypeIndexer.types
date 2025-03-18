@@ -2,8 +2,6 @@
 
 === interfaceWithStringIndexerHidingBaseTypeIndexer.ts ===
 interface Base {
->Base : Base
-
     [x: string]: { a: number }
 >x : string
 >a : number
@@ -18,8 +16,6 @@ interface Base {
 }
 
 interface Derived extends Base {
->Derived : Derived
-
     [x: string]: {
 >x : string
 

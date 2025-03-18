@@ -3,14 +3,12 @@
 === chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts ===
 class Chain<T> {
 >Chain : Chain<T>
->T : T
 
     constructor(public value: T) { }
 >value : T
 
     then<S extends T>(cb: (x: T) => S): Chain<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
->S : S
 >cb : (x: T) => S
 >x : T
 
@@ -107,21 +105,17 @@ class Chain<T> {
 
 // Similar to above, but T is now constrained. Verify that the constraint is maintained across invocations
 interface I {
->I : I
-
     x: number;
 >x : number
 }
 class Chain2<T extends I> {
 >Chain2 : Chain2<T>
->T : T
 
     constructor(public value: T) { }
 >value : T
 
     then<S extends T>(cb: (x: T) => S): Chain2<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain2<S>
->S : S
 >cb : (x: T) => S
 >x : T
 

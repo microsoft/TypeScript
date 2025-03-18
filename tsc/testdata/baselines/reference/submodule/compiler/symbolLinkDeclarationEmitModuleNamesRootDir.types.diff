@@ -12,24 +12,3 @@
  >null as any : any
  
  === /monorepo/context/src/value-promise.d.ts ===
- export type Constructor<T> = (...args: any[]) => T;
- >Constructor : Constructor<T>
-+>T : T
- >args : any[]
- 
- === /monorepo/context/src/bindingkey.d.ts ===
-@@= skipped -16, +17 lines =@@
- 
- export declare class BindingKey<T> {
- >BindingKey : BindingKey<T>
-+>T : T
- 
-   readonly __type: T;
- >__type : T
- 
-   static create<T extends Constructor<any>>(ctor: T): BindingKey<T>;
- >create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
-+>T : T
- >ctor : T
- }
- 

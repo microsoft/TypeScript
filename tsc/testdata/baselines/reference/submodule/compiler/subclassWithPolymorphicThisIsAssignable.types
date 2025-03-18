@@ -3,19 +3,15 @@
 === subclassWithPolymorphicThisIsAssignable.ts ===
 /* taken from mongoose.Document */
 interface Document {
->Document : Document
-
     increment(): this;
 >increment : () => this
 }
 
 /* our custom model extends the mongoose document */
 interface CustomDocument extends Document { }
->CustomDocument : CustomDocument
 
 export class Example<Z extends CustomDocument> {
 >Example : Example<Z>
->Z : Z
 
     constructor() {
         // types of increment not compatible??
@@ -28,6 +24,5 @@ export class Example<Z extends CustomDocument> {
 
     public test<Z extends Document>() { }
 >test : <Z extends Document>() => void
->Z : Z
 }
 

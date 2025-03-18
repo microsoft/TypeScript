@@ -1,14 +1,6 @@
 --- old.discriminateWithDivergentAccessors1.types
 +++ new.discriminateWithDivergentAccessors1.types
-@@= skipped -2, +2 lines =@@
- === discriminateWithDivergentAccessors1.ts ===
- type WeirdoBox<T> =
- >WeirdoBox : WeirdoBox<T>
-+>T : T
- 
-   | { get done(): false; set done(v: T | null) }
- >done : false
-@@= skipped -24, +25 lines =@@
+@@= skipped -26, +26 lines =@@
  
    weirdoBox.value;
  >weirdoBox.value : number
@@ -17,13 +9,7 @@
  >value : number
  }
  
- type WeirdoBox2<T> =
- >WeirdoBox2 : WeirdoBox2<T>
-+>T : T
- 
-   | { get done(): false; set done(v: T | null) }
- >done : false
-@@= skipped -37, +38 lines =@@
+@@= skipped -37, +37 lines =@@
  
    weirdoBox2.value;
  >weirdoBox2.value : string | number

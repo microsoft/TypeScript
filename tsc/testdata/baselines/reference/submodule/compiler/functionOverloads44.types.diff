@@ -1,22 +1,6 @@
 --- old.functionOverloads44.types
 +++ new.functionOverloads44.types
-@@= skipped -1, +1 lines =@@
- 
- === functionOverloads44.ts ===
- interface Animal { animal }
-+>Animal : Animal
- >animal : any
- 
- interface Dog extends Animal { dog }
-+>Dog : Dog
- >dog : any
- 
- interface Cat extends Animal { cat }
-+>Cat : Cat
- >cat : any
- 
- function foo1(bar: { a:number }[]): Dog;
-@@= skipped -20, +23 lines =@@
+@@= skipped -21, +21 lines =@@
  
  function foo1([x]: { a:number | string }[]): Dog {
  >foo1 : { (bar: { a: number; }[]): Dog; (bar: { a: string; }[]): Animal; }

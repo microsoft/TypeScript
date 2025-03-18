@@ -1,59 +1,6 @@
 --- old.renamingDestructuredPropertyInFunctionType.types
 +++ new.renamingDestructuredPropertyInFunctionType.types
-@@= skipped -40, +40 lines =@@
- >F6 : F6
- >a : any
- >string : any
-->string : any
- 
- type F7 = ({ a: string, b: number }) => typeof number; // Error
- >F7 : F7
-@@= skipped -8, +7 lines =@@
- >string : any
- >b : any
- >number : any
-->number : any
- 
- type F8 = ({ a, b: number }) => typeof number; // OK
- >F8 : F8
- >a : any
- >b : any
- >number : any
-->number : any
- 
- type F9 = ([a, b, c]) => void; // OK
- >F9 : F9
-@@= skipped -47, +45 lines =@@
- >G6 : G6
- >a : any
- >string : any
-->string : any
- 
- type G7 = new ({ a: string, b: number }) => typeof number; // Error
- >G7 : G7
-@@= skipped -8, +7 lines =@@
- >string : any
- >b : any
- >number : any
-->number : any
- 
- type G8 = new ({ a, b: number }) => typeof number; // OK
- >G8 : G8
- >a : any
- >b : any
- >number : any
-->number : any
- 
- type G9 = new ([a, b, c]) => void; // OK
- >G9 : G9
-@@= skipped -54, +52 lines =@@
- >string : any
- 
- interface I {
-+>I : I
-+
-   method1(arg: number): any; // OK
- >method1 : (arg: number) => any
+@@= skipped -162, +162 lines =@@
  >arg : number
  
    method2({ a: string }): any; // Error
@@ -62,7 +9,7 @@
  >a : any
  >string : any
  
-@@= skipped -26, +28 lines =@@
+@@= skipped -21, +21 lines =@@
  
  // Below are OK but renaming should be removed from declaration emit
  function f1({ a: string }: O) { }
@@ -97,7 +44,7 @@
  >a : any
  >string : string
  >string : string
-->string : string
+ >string : string
  
  const f5 = ({ a: string, b, c }: O): typeof string => '';
 ->f5 : ({ a: string, b, c }: O) => typeof string
@@ -107,8 +54,7 @@
  >a : any
  >string : string
  >b : number
- >c : number
-->string : string
+@@= skipped -37, +37 lines =@@
  >'' : ""
  
  const obj1 = {
@@ -136,7 +82,7 @@
  >a : any
  >string : string
  >string : string
-->string : string
+@@= skipped -22, +22 lines =@@
  
  };
  function f6({ a: string = "" }: O) { }
@@ -154,7 +100,7 @@
  >a : any
  >string : string
  >"" : ""
-@@= skipped -74, +71 lines =@@
+@@= skipped -15, +15 lines =@@
  >c : number
  
  const f8 = ({ "a": string }: O) => { };
@@ -190,6 +136,3 @@
  >a : any
  >string : string
  >"" : ""
-->string : string
- >"a" : "a"
- 

@@ -147,7 +147,6 @@ type EmptyTuple = []
 >EmptyTuple : []
 
 interface MyEmptyTuple extends EmptyTuple { extraInfo?: any; }
->MyEmptyTuple : MyEmptyTuple
 >extraInfo : any
 
 const withExtra: MyEmptyTuple = []

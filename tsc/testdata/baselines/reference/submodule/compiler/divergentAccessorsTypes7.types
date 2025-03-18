@@ -3,7 +3,6 @@
 === divergentAccessorsTypes7.ts ===
 class Test<S> {
 >Test : Test<S>
->S : S
 
     constructor() {}
 

@@ -6,11 +6,10 @@
      decorate<T>(this: DecoratorProvider, v: T, ctx: DecoratorContext): T;
 ->decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
 +>decorate : <T>(v: T, ctx: DecoratorContext) => T
-+>T : T
  >this : DecoratorProvider
  >v : T
  >ctx : DecoratorContext
-@@= skipped -14, +15 lines =@@
+@@= skipped -14, +14 lines =@@
  >C : C
  
      @instance.decorate

@@ -2,23 +2,15 @@
 
 === parserGenericsInInterfaceDeclaration1.ts ===
 interface I<T> {
->I : I<T>
->T : T
-
    v: A<T>;
 >v : A<T>
 
    f1<T>(): T;
 >f1 : <T>() => T
->T : T
 
    f2?<T>(): T;
 >f2 : <T>() => T
->T : T
 
    <T>(): void;
->T : T
-
    new <T>(): void;
->T : T
 }

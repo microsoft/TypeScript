@@ -1,20 +1,6 @@
 --- old.booleanLiteralsContextuallyTypedFromUnion.types
 +++ new.booleanLiteralsContextuallyTypedFromUnion.types
-@@= skipped -1, +1 lines =@@
- 
- === booleanLiteralsContextuallyTypedFromUnion.tsx ===
- interface A { isIt: true; text: string; }
-+>A : A
- >isIt : true
- >true : true
- >text : string
- 
- interface B { isIt: false; value: number; }
-+>B : B
- >isIt : false
- >false : false
- >value : number
-@@= skipped -68, +70 lines =@@
+@@= skipped -69, +69 lines =@@
      };
  
  let Funk = (_props: ComponentProps) => <div>Hello</div>;

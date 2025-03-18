@@ -3,7 +3,6 @@
 === cyclicTypeInstantiation.ts ===
 function foo<T>() {
 >foo : <T>() => { a: T; b: ???; }
->T : T
 
     var x: {
 >x : { a: T; b: ???; }
@@ -13,6 +12,7 @@ function foo<T>() {
 
         b: typeof x;
 >b : { a: T; b: ???; }
+>x : { a: T; b: ???; }
 
     };
     return x;
@@ -21,7 +21,6 @@ function foo<T>() {
 
 function bar<T>() {
 >bar : <T>() => { a: T; b: ???; }
->T : T
 
     var x: {
 >x : { a: T; b: ???; }
@@ -31,6 +30,7 @@ function bar<T>() {
 
         b: typeof x;
 >b : { a: T; b: ???; }
+>x : { a: T; b: ???; }
 
     };
     return x;

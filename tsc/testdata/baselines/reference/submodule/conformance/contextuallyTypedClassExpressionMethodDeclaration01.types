@@ -2,22 +2,16 @@
 
 === contextuallyTypedClassExpressionMethodDeclaration01.ts ===
 interface A {
->A : A
-
     numProp: number;
 >numProp : number
 }
 
 interface B  {
->B : B
-
     strProp: string;
 >strProp : string
 }
 
 interface Foo {
->Foo : Foo
-
     method1(arg: A): void;
 >method1 : (arg: A) => void
 >arg : A

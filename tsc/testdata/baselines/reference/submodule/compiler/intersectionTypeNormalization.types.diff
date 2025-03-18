@@ -1,50 +1,6 @@
 --- old.intersectionTypeNormalization.types
 +++ new.intersectionTypeNormalization.types
-@@= skipped -1, +1 lines =@@
- 
- === intersectionTypeNormalization.ts ===
- interface A { a: string }
-+>A : A
- >a : string
- 
- interface B { b: string }
-+>B : B
- >b : string
- 
- interface C { c: string }
-+>C : C
- >c : string
- 
- interface D { d: string }
-+>D : D
- >d : string
- 
- // Identical ways of writing the same type
-@@= skipped -31, +35 lines =@@
- >x : X1
- 
- interface X { x: string }
-+>X : X
- >x : string
- 
- interface Y { y: string }
-+>Y : Y
- >y : string
- 
- // Identical ways of writing the same type
-@@= skipped -25, +27 lines =@@
- >y : Y1
- 
- interface M { m: string }
-+>M : M
- >m : string
- 
- interface N { n: string }
-+>N : N
- >n : string
- 
- // Identical ways of writing the same type
-@@= skipped -66, +68 lines =@@
+@@= skipped -123, +123 lines =@@
  
      if (value.kind === 'int') {
  >value.kind === 'int' : boolean
@@ -56,16 +12,7 @@
  >'int' : "int"
  
          return '' + value.num;
-@@= skipped -21, +21 lines =@@
- // Repro from #12535
- 
- namespace enums {
-+>enums : typeof enums
-+
-     export const enum A {
- >A : A
- 
-@@= skipped -62, +64 lines =@@
+@@= skipped -83, +83 lines =@@
  >Foo : Foo
  
      genreId: enums.Genre;

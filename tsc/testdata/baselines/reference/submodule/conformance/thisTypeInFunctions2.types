@@ -2,8 +2,6 @@
 
 === thisTypeInFunctions2.ts ===
 interface IndexedWithThis {
->IndexedWithThis : IndexedWithThis
-
     // this is a workaround for React
     init?: (this: this) => void;
 >init : () => void
@@ -19,8 +17,6 @@ interface IndexedWithThis {
 >args : any[]
 }
 interface IndexedWithoutThis {
->IndexedWithoutThis : IndexedWithoutThis
-
     // this is what React would like to write (and what they write today)
     init?: () => void;
 >init : () => void
@@ -32,8 +28,6 @@ interface IndexedWithoutThis {
 >propName : string
 }
 interface SimpleInterface {
->SimpleInterface : SimpleInterface
-
     foo(n: string);
 >foo : (n: string) => any
 >n : string

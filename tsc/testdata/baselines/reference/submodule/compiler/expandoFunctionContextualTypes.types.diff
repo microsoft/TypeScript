@@ -1,24 +1,15 @@
 --- old.expandoFunctionContextualTypes.types
 +++ new.expandoFunctionContextualTypes.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === expandoFunctionContextualTypes.ts ===
  interface MyComponentProps {
-+>MyComponentProps : MyComponentProps
-+
      color: "red" | "blue"
 ->color : "red" | "blue"
 +>color : "blue" | "red"
  }
  
  interface StatelessComponent<P> {
-+>StatelessComponent : StatelessComponent<P>
-+>P : P
-+
-     (): any;
-     defaultProps?: Partial<P>;
- >defaultProps : Partial<P>
-@@= skipped -12, +17 lines =@@
+@@= skipped -11, +11 lines =@@
  
  const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
  >MyComponent : StatelessComponent<MyComponentProps>

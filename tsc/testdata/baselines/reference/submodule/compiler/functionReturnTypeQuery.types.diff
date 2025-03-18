@@ -8,8 +8,8 @@
 +>test1 : (foo: string, bar: string) => string
  >foo : string
  >bar : string
-->foo : string
-->foo : string
+ >foo : string
+ >foo : string
  
  declare function test2({foo}: {foo: string}, bar: typeof foo): typeof foo;
 ->test2 : ({ foo }: { foo: string; }, bar: typeof foo) => typeof foo
@@ -17,6 +17,3 @@
  >foo : string
  >foo : string
  >bar : string
-->foo : string
-->foo : string
- 

@@ -1,12 +1,8 @@
 --- old.intersectionOfTypeVariableHasApparentSignatures.types
 +++ new.intersectionOfTypeVariableHasApparentSignatures.types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === intersectionOfTypeVariableHasApparentSignatures.ts ===
  interface Component<P> {
-+>Component : Component<P>
-+>P : P
-+
      props: Readonly<P> & Readonly<{ children?: {} }>;
 ->props : Readonly<P> & Readonly<{ children?: {}; }>
 +>props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
@@ -14,20 +10,13 @@
  }
  
  interface Props {
-+>Props : Props
-+
      children?: (items: {x: number}) => void
 ->children : ((items: { x: number; }) => void) | undefined
 +>children : (items: { x: number; }) => void | undefined
  >items : { x: number; }
  >x : number
  }
- 
- declare function f<T extends Props>(i: Component<T>): void;
- >f : <T extends Props>(i: Component<T>) => void
-+>T : T
- >i : Component<T>
- 
+@@= skipped -18, +18 lines =@@
  f({
  >f({    props: {        children: (({ x }) => { })    }}) : void
  >f : <T extends Props>(i: Component<T>) => void

@@ -102,7 +102,6 @@ for (var x in (<T>(x: T) => x)) { }
 >x : string
 >(<T>(x: T) => x) : <T>(x: T) => T
 ><T>(x: T) => x : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 
@@ -207,8 +206,6 @@ class B extends A {
 }
 
 interface I {
->I : I
-
     id: number;
 >id : number
 
@@ -230,7 +227,6 @@ module M {
 
     export class X<T> {
 >X : X<T>
->T : T
 
         name:string
 >name : string

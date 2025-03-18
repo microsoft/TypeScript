@@ -9,22 +9,7 @@
  >ng : any
  
  declare module ng {
-+>ng : IAngularStatic
-+
-    export interface IModule {
-+>IModule : IModule
-+
-       name: string;
- >name : string
-    }
- 
-    export interface IAngularStatic {
-+>IAngularStatic : IAngularStatic
-+
-        module: (s: string) => IModule;
- >module : (s: string) => IModule
- >s : string
-@@= skipped -17, +23 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  export = ng;

@@ -6,7 +6,6 @@
  declare function f1<T extends keyof Type = "a">(props: Type[T]): void;
 ->f1 : <T extends keyof Type = "a">(props: Type[T]) => void
 +>f1 : <T extends keyof Type>(props: Type[T]) => void
-+>T : T
  >props : Type[T]
  
  f1(event => { });

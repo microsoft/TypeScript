@@ -5,11 +5,9 @@ export module publicModule {
 >publicModule : typeof publicModule
 
     export interface publicInterfaceInPublicModule {
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
     }
 
     interface privateInterfaceInPublicModule {
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
     }
 
     class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
@@ -43,12 +41,10 @@ module privateModule {
 >privateModule : typeof privateModule
 
     export interface publicInterfaceInPrivateModule {
->publicInterfaceInPrivateModule : publicInterfaceInPrivateModule
 
     }
 
     interface privateInterfaceInPrivateModule {
->privateInterfaceInPrivateModule : privateInterfaceInPrivateModule
     }
 
     class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
@@ -75,12 +71,10 @@ module privateModule {
 }
 
 export interface publicInterface {
->publicInterface : publicInterface
 
 }
 
 interface privateInterface {
->privateInterface : privateInterface
 }
 
 class privateClassImplementingPublicInterface implements publicInterface {
@@ -110,11 +104,9 @@ module publicModuleInGlobal {
 >publicModuleInGlobal : typeof publicModuleInGlobal
 
     export interface publicInterfaceInPublicModule {
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
     }
 
     interface privateInterfaceInPublicModule {
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
     }
 
     class privateClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
@@ -131,7 +123,6 @@ module publicModuleInGlobal {
     }
 }
 interface publicInterfaceInGlobal {
->publicInterfaceInGlobal : publicInterfaceInGlobal
 }
 class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceInGlobal {
 >publicClassImplementingPublicInterfaceInGlobal : publicClassImplementingPublicInterfaceInGlobal

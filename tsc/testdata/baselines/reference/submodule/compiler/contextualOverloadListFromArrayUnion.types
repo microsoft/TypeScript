@@ -35,15 +35,11 @@ export const yThen = y.map(item => item.length);
 === three.ts ===
 // #42504
 interface ResizeObserverCallback {
->ResizeObserverCallback : ResizeObserverCallback
-
     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
 >entries : ResizeObserverEntry[]
 >observer : ResizeObserver
 }
 interface ResizeObserverCallback { // duplicate for effect
->ResizeObserverCallback : ResizeObserverCallback
-
     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
 >entries : ResizeObserverEntry[]
 >observer : ResizeObserver
@@ -62,9 +58,6 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 });
 // comment in #35501
 interface Callback<T> {
->Callback : Callback<T>
->T : T
-
     (error: null, result: T): unknown
 >error : null
 >result : T
@@ -75,16 +68,12 @@ interface Callback<T> {
 }
 
 interface Task<T> {
->Task : Task<T>
->T : T
-
     (callback: Callback<T>): unknown
 >callback : Callback<T>
 }
 
 export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
 >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
->T : T
 >tasks : Task<T>[]
 >callback : Callback<T[]>
 

@@ -28,7 +28,6 @@ function run(a: Animal) {
 
 function f<T extends Cat | Dog>(a: T) {
 >f : <T extends Cat | Dog>(a: T) => void
->T : T
 >a : T
 
     a.run();

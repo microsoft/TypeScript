@@ -1,15 +1,6 @@
 --- old.linkTagEmit1.types
 +++ new.linkTagEmit1.types
-@@= skipped -1, +1 lines =@@
- 
- === declarations.d.ts ===
- declare namespace NS {
-+>NS : any
-+
-     type R = number
- >R : number
- }
-@@= skipped -17, +19 lines =@@
+@@= skipped -18, +18 lines =@@
   * @param {number} integer {@link Z}
   */
  function computeCommonSourceDirectoryOfFilenames(integer) {

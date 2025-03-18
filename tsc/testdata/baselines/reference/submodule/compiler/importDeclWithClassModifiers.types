@@ -2,10 +2,7 @@
 
 === importDeclWithClassModifiers.ts ===
 module x {
->x : any
-
     interface c {
->c : c
     }
 }
 export public import a = x.c;

@@ -3,8 +3,6 @@
 === interfaceWithAccessibilityModifiers.ts ===
 // Errors
 interface Foo {
->Foo : Foo
-
     public a: any;
 >a : any
 

@@ -16,27 +16,16 @@
  >'1' : "1"
  
  === monorepo/pkg1/dist/index.d.ts ===
-@@= skipped -30, +30 lines =@@
- 
- export declare class MetadataAccessor<T, D extends IdType = IdType> {
- >MetadataAccessor : MetadataAccessor<T, D>
-+>T : T
-+>D : D
- 
-     readonly key: string;
- >key : string
-@@= skipped -9, +11 lines =@@
+@@= skipped -39, +39 lines =@@
  >toString : () => string
  
      static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
 ->create : <T, D extends IdType = IdType>(key: string) => MetadataAccessor<T, D>
 +>create : <T, D extends IdType>(key: string) => MetadataAccessor<T, D>
-+>T : T
-+>D : D
  >key : string
  }
  === monorepo/pkg2/dist/index.d.ts ===
-@@= skipped -8, +10 lines =@@
+@@= skipped -8, +8 lines =@@
  export * from './types';
  === monorepo/pkg2/dist/types.d.ts ===
  export {MetadataAccessor} from '@raymondfeng/pkg1';

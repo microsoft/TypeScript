@@ -27,12 +27,7 @@
  >x : {}
  >"function" : "function"
  
-@@= skipped -11, +11 lines =@@
- 
- function f4<T>(x: T) {
- >f4 : <T>(x: T) => void
-+>T : T
- >x : T
+@@= skipped -15, +15 lines =@@
  
      if (typeof x === "function") {
  >typeof x === "function" : boolean
@@ -41,7 +36,7 @@
  >x : T
  >"function" : "function"
  
-@@= skipped -20, +21 lines =@@
+@@= skipped -16, +16 lines =@@
  
      if (typeof x === "function") {
  >typeof x === "function" : boolean
@@ -105,16 +100,7 @@
  >x : { s: string; } | { n: number; }
  >"function" : "function"
  
-@@= skipped -17, +17 lines =@@
- 
- function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
- >f100 : <T, K extends keyof T>(obj: T, keys: K[]) => void
-+>T : T
-+>K : K
- >obj : T
- >keys : K[]
- 
-@@= skipped -15, +17 lines =@@
+@@= skipped -32, +32 lines =@@
  
          if (typeof item == 'function')
  >typeof item == 'function' : boolean
@@ -140,7 +126,6 @@
 ->configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
 ->reducer : Record<keyof S, () => void> | (() => void)
 +>configureStore : <S extends object>(reducer: Record<keyof S, () => void> | () => void) => void
-+>S : S
 +>reducer : Record<keyof S, () => void> | () => void
  
      let rootReducer: () => void;
@@ -155,7 +140,7 @@
  >'function' : "function"
  
          rootReducer = reducer;
-@@= skipped -26, +27 lines =@@
+@@= skipped -26, +26 lines =@@
      return typeof x === "object" && x.anything;
  >typeof x === "object" && x.anything : any
  >typeof x === "object" : boolean

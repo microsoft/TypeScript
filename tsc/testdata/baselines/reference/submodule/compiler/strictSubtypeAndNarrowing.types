@@ -95,7 +95,6 @@ const a42 = [x41, x42];
 
 declare function isFunction<T>(x: unknown): x is T;
 >isFunction : <T>(x: unknown) => x is T
->T : T
 >x : unknown
 
 type A = (...args: any) => unknown;
@@ -408,13 +407,9 @@ function ff3(value: string | string[] | { [index: number]: boolean, length: numb
 
 type DistributedKeyOf<T> = T extends unknown ? keyof T : never;
 >DistributedKeyOf : DistributedKeyOf<T>
->T : T
 
 type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unknown
 >NarrowByKeyValue : NarrowByKeyValue<ObjT, KeyT, ValueT>
->ObjT : ObjT
->KeyT : KeyT
->ValueT : ValueT
 
     ? KeyT extends keyof ObjT
         ? ValueT extends ObjT[KeyT]
@@ -425,19 +420,11 @@ type NarrowByKeyValue<ObjT, KeyT extends PropertyKey, ValueT> = ObjT extends unk
 
 type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
 >NarrowByDeepValue : NarrowByDeepValue<ObjT, DeepPathT, ValueT>
->ObjT : ObjT
->DeepPathT : DeepPathT
->ValueT : ValueT
 
     infer Head extends DistributedKeyOf<ObjT>,
->Head : Head
-
 ]
     ? NarrowByKeyValue<ObjT, Head, ValueT>
     : DeepPathT extends readonly [infer Head extends DistributedKeyOf<ObjT>, ...infer Rest]
->Head : Head
->Rest : Rest
-
     ? NarrowByKeyValue<ObjT, Head, NarrowByDeepValue<NonNullable<ObjT[Head]>, Rest, ValueT>>
     : never;
 
@@ -446,14 +433,8 @@ declare function doesValueAtDeepPathSatisfy<
 >doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
 
     ObjT extends object,
->ObjT : ObjT
-
     const DeepPathT extends ReadonlyArray<number | string>,
->DeepPathT : DeepPathT
-
     ValueT,
->ValueT : ValueT
-
 >(
     obj: ObjT,
 >obj : ObjT
@@ -537,16 +518,12 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 // Repro from #53063
 
 interface Free {
->Free : Free
-
     premium: false;
 >premium : false
 >false : false
 }
 
 interface Premium {
->Premium : Premium
-
     premium: true;
 >premium : true
 >true : true

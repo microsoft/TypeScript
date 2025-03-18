@@ -2,8 +2,6 @@
 
 === coAndContraVariantInferences3.ts ===
 interface DeprecationOptions {
->DeprecationOptions : DeprecationOptions
-
     message?: string;
 >message : string | undefined
 
@@ -16,48 +14,35 @@ interface DeprecationOptions {
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 >UnionToIntersection : UnionToIntersection<U>
->U : U
 >k : U
 >k : I
->I : I
 
 type OverloadDefinitions = { readonly [P in number]: (...args: any[]) => any; };
 >OverloadDefinitions : OverloadDefinitions
->P : P
 >args : any[]
 
 type OverloadBinder<T extends OverloadDefinitions> = (args: OverloadParameters<T>) => OverloadKeys<T> | undefined;
 >OverloadBinder : OverloadBinder<T>
->T : T
 >args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
 
 type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
 >OverloadKeys : OverloadKeys<T>
->T : T
 
 type OverloadParameters<T extends OverloadDefinitions> = Parameters<{ [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]>;
 >OverloadParameters : OverloadParameters<T>
->T : T
->P : P
 
 type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersection<T[keyof T]>;
 >OverloadFunction : OverloadFunction<T>
->T : T
 
 type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
 >OverloadBinders : OverloadBinders<T>
->T : T
->P : P
 >args : Parameters<{ [P in Extract<keyof T, number>]: T[P] }[Extract<keyof T, number>]>
 
 type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
 >OverloadDeprecations : OverloadDeprecations<T>
->T : T
->P : P
 
 declare function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>): UnionToIntersection<T[keyof T]>;
 >createOverload : <T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T> | undefined) => UnionToIntersection<T[keyof T]>
->T : T
 >name : string
 >overloads : T
 >binder : OverloadBinders<T>
@@ -65,40 +50,27 @@ declare function createOverload<T extends OverloadDefinitions>(name: string, ove
 
 declare function createBinder<T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>): OverloadBinder<T>;
 >createBinder : <T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>) => OverloadBinder<T>
->T : T
 >overloads : T
 >binder : OverloadBinders<T>
 
 interface OverloadBuilder {
->OverloadBuilder : OverloadBuilder
-
     overload<T extends OverloadDefinitions>(overloads: T): BindableOverloadBuilder<T>;
 >overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>
->T : T
 >overloads : T
 }
 
 interface BindableOverloadBuilder<T extends OverloadDefinitions> {
->BindableOverloadBuilder : BindableOverloadBuilder<T>
->T : T
-
     bind(binder: OverloadBinders<T>): BoundOverloadBuilder<T>;
 >bind : (binder: OverloadBinders<T>) => BoundOverloadBuilder<T>
 >binder : OverloadBinders<T>
 }
 
 interface FinishableOverloadBuilder<T extends OverloadDefinitions> {
->FinishableOverloadBuilder : FinishableOverloadBuilder<T>
->T : T
-
     finish(): OverloadFunction<T>;
 >finish : () => UnionToIntersection<T[keyof T]>
 }
 
 interface BoundOverloadBuilder<T extends OverloadDefinitions> extends FinishableOverloadBuilder<T> {
->BoundOverloadBuilder : BoundOverloadBuilder<T>
->T : T
-
     deprecate(deprecations: OverloadDeprecations<T>): FinishableOverloadBuilder<T>;
 >deprecate : (deprecations: OverloadDeprecations<T>) => FinishableOverloadBuilder<T>
 >deprecations : OverloadDeprecations<T>
@@ -128,46 +100,36 @@ const enum SyntaxKind {
 }
 
 interface Node {
->Node : Node
-
     kind: SyntaxKind;
 >kind : SyntaxKind
 }
 
 interface Declaration extends Node { _declarationBrand: any }
->Declaration : Declaration
 >_declarationBrand : any
 
 interface Statement extends Node { _statementBrand: any };
->Statement : Statement
 >_statementBrand : any
 
 interface Expression extends Node { _expressionBrand: any; }
->Expression : Expression
 >_expressionBrand : any
 
 interface ImportDeclaration extends Statement { kind: SyntaxKind.ImportDeclaration; }
->ImportDeclaration : ImportDeclaration
 >kind : SyntaxKind.ImportDeclaration
 >SyntaxKind : any
 
 interface Modifier extends Node { kind: SyntaxKind.Modifier; }
->Modifier : Modifier
 >kind : SyntaxKind.Modifier
 >SyntaxKind : any
 
 interface Decorator extends Node { kind: SyntaxKind.Decorator; }
->Decorator : Decorator
 >kind : SyntaxKind.Decorator
 >SyntaxKind : any
 
 interface ImportClause extends Declaration { kind: SyntaxKind.ImportClause; }
->ImportClause : ImportClause
 >kind : SyntaxKind.ImportClause
 >SyntaxKind : any
 
 interface AssertClause extends Node { kind: SyntaxKind.AssertClause; }
->AssertClause : AssertClause
 >kind : SyntaxKind.AssertClause
 >SyntaxKind : any
 
@@ -212,8 +174,6 @@ declare const updateImportDeclaration: {
 
 declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->T : T
->U : U
 >array : readonly T[]
 >callback : (element: T, index: number) => element is U
 >element : T
@@ -221,8 +181,6 @@ declare function every<T, U extends T>(array: readonly T[], callback: (element: 
 
 declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->T : T
->U : U
 >array : readonly T[] | undefined
 >callback : (element: T, index: number) => element is U
 >element : T
@@ -230,7 +188,6 @@ declare function every<T, U extends T>(array: readonly T[] | undefined, callback
 
 declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->T : T
 >array : readonly T[] | undefined
 >callback : (element: T, index: number) => boolean
 >element : T

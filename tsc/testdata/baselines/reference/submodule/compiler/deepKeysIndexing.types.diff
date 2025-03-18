@@ -1,87 +1,6 @@
 --- old.deepKeysIndexing.types
 +++ new.deepKeysIndexing.types
-@@= skipped -2, +2 lines =@@
- === deepKeysIndexing.ts ===
- // regression test from https://github.com/Microsoft/TypeScript/issues/29692
- interface DeepObject {
-+>DeepObject : DeepObject
-+
-   [k1: string]: {
- >k1 : string
- 
-@@= skipped -13, +15 lines =@@
- >keys2broken : keys2broken<O, K1>
- 
-   O extends DeepObject,
-+>O : O
-+
-   K1 extends keyof O
-+>K1 : K1
-+
- > = O[K1] extends object ? Extract<keyof O[K1], string> : never;
- 
- type keys2working<
- >keys2working : keys2working<O, K1>
- 
-   O extends DeepObject,
-+>O : O
-+
-   K1 extends keyof O
-+>K1 : K1
-+
- > = O[K1] extends object ? keyof O[K1] : never;
- 
- type keys2workaround<O extends DeepObject, K1 extends keyof O> = Extract<
- >keys2workaround : keys2workaround<O, K1>
-+>O : O
-+>K1 : K1
- 
-   O[K1] extends object ? keyof O[K1] : never,
-   string
- >;
- 
- interface Foo extends DeepObject {
-+>Foo : Foo
-+
-   a: {
- >a : { "1": 123; "2": string; "3": boolean; }
- 
-@@= skipped -35, +47 lines =@@
- 
- class Bar<O extends DeepObject> {
- >Bar : Bar<O>
-+>O : O
- 
-   broken<
- >broken : <K1 extends keyof O, K2 extends keys2broken<O, K1>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
- 
-     K1 extends keyof O,
-+>K1 : K1
-+
-     K2 extends keys2broken<O, K1>,
-+>K2 : K2
-+
-     V extends O[K1][K2]
-+>V : V
-+
-   >(k1: K1, k2: K2, value: V) {}
- >k1 : K1
- >k2 : K2
-@@= skipped -16, +23 lines =@@
- >working : <K1 extends keyof O, K2 extends keys2working<O, K1>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
- 
-     K1 extends keyof O,
-+>K1 : K1
-+
-     K2 extends keys2working<O, K1>,
-+>K2 : K2
-+
-     V extends O[K1][K2]
-+>V : V
-+
-   >(k1: K1, k2: K2, value: V) {}
- >k1 : K1
- >k2 : K2
+@@= skipped -74, +74 lines =@@
  >value : V
  
    workaround<
@@ -89,14 +8,4 @@
 +>workaround : <K1 extends keyof O, K2 extends Extract<O[K1] extends object ? keyof O[K1] : never, string>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
  
      K1 extends keyof O,
-+>K1 : K1
-+
      K2 extends keys2workaround<O, K1>,
-+>K2 : K2
-+
-     V extends O[K1][K2]
-+>V : V
-+
-   >(k1: K1, k2: K2, value: V) {}
- >k1 : K1
- >k2 : K2

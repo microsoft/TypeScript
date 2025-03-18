@@ -18,7 +18,6 @@ const bar = foo.flatMap(bar => bar as Foo);
 >bar : unknown
 
 interface Foo extends Array<string> {}
->Foo : Foo
 
 // Repros from comments in #43249
 
@@ -56,8 +55,6 @@ const repro_43249 = (value: unknown) => {
 
 function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
 >f : <Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) => void
->Arr : Arr
->D : D
 >x : FlatArray<Arr, any>
 >y : FlatArray<Arr, D>
 

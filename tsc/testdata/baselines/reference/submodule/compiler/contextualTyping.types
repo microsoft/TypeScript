@@ -3,8 +3,6 @@
 === contextualTyping.ts ===
 // DEFAULT INTERFACES
 interface IFoo {
->IFoo : IFoo
-
     n: number;
 >n : number
 
@@ -21,8 +19,6 @@ interface IFoo {
 }
 
 interface IBar {
->IBar : IBar
-
     foo: IFoo;
 >foo : IFoo
 }
@@ -273,8 +269,6 @@ c7t2[0] = <IFoo>({n: 1});
 
 // CONTEXT: Object property assignment
 interface IPlaceHolder {
->IPlaceHolder : IPlaceHolder
-
     t1: (s: string) => string;
 >t1 : (s: string) => string
 >s : string
@@ -869,12 +863,9 @@ Point.prototype = {
 };
 
 interface A { x: string; }
->A : A
 >x : string
 
 interface B extends A { }
->B : B
-
 var x: B = { };
 >x : B
 >{ } : {}

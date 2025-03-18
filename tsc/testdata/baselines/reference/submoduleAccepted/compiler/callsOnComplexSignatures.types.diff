@@ -28,8 +28,6 @@
 +>stringType2 : stringType2
  
      interface Temp1 {
-+>Temp1 : Temp1
-+
          getValue(name: stringType1): number;
 ->getValue : (name: "foo" | "bar") => number
 ->name : "foo" | "bar"
@@ -38,8 +36,6 @@
      }
  
      interface Temp2 {
-+>Temp2 : Temp2
-+
          getValue(name: stringType2): string;
 ->getValue : (name: "bar" | "baz") => string
 ->name : "bar" | "baz"
@@ -48,7 +44,7 @@
      }
  
      function test(t: Temp1 | Temp2) {
-@@= skipped -39, +37 lines =@@
+@@= skipped -39, +33 lines =@@
          const z = t.getValue("bar"); // Should be fine
  >z : string | number
  >t.getValue("bar") : string | number
@@ -60,16 +56,7 @@
  >"bar" : "bar"
      }
  }
-@@= skipped -11, +11 lines =@@
- >test2 : () => void
- 
-     interface Messages {
-+>Messages : Messages
-+
-         readonly foo: (options: { [key: string]: any, b: number }) => string;
- >foo : (options: { [key: string]: any; b: number; }) => string
- >options : { [key: string]: any; b: number; }
-@@= skipped -32, +34 lines =@@
+@@= skipped -43, +43 lines =@@
      };
  
      const test1 = (type: "foo" | "bar") =>
@@ -345,25 +332,7 @@
      }
  
      // custom components with non-subset props
-@@= skipped -30, +30 lines =@@
- >render2 : () => void
- 
-         interface P1 {
-+>P1 : P1
-+
-             p?: boolean;
- >p : boolean | undefined
- 
-@@= skipped -7, +9 lines =@@
- >c : string | undefined
-         }
-         interface P2 {
-+>P2 : P2
-+
-             p?: boolean;
- >p : boolean | undefined
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -48, +48 lines =@@
          }
  
          var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;

@@ -1,45 +1,11 @@
 --- old.mergedDeclarationExports.types
 +++ new.mergedDeclarationExports.types
-@@= skipped -2, +2 lines =@@
- === mergedDeclarationExports.ts ===
- // OK -- one is type, one is value
- interface b {}
-+>b : b
-+
- export const b = 1;
- >b : 1
- >1 : 1
-@@= skipped -9, +11 lines =@@
- >t : 0
- 
- namespace t { interface I {} }
-+>t : any
-+>I : I
-+
- export const t = 0;
- >t : 0
- >0 : 0
-@@= skipped -8, +11 lines =@@
- 
- // both types
- interface c {}
-+>c : c
-+
- export interface c {}
-+>c : c
- 
+@@= skipped -24, +24 lines =@@
  // both types (class is also value, but that doesn't matter)
  interface d {}
-+>d : d
-+
  export class d {}
 ->d : import("mergedDeclarationExports").d
 +>d : d
  
  // both namespaces
  namespace N { }
-+>N : any
-+
- export namespace N {}
-+>N : any
- 

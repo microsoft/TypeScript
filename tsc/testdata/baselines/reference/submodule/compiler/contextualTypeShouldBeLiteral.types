@@ -2,8 +2,6 @@
 
 === contextualTypeShouldBeLiteral.ts ===
 interface X {
->X : X
-
     type: 'x';
 >type : "x"
 
@@ -15,8 +13,6 @@ interface X {
 }
 
 interface Y {
->Y : Y
-
     type: 'y';
 >type : "y"
 
@@ -63,8 +59,6 @@ foo({
 });
 
 interface X2 {
->X2 : X2
-
     type1: 'x';
 >type1 : "x"
 
@@ -76,8 +70,6 @@ interface X2 {
 }
 
 interface Y2 {
->Y2 : Y2
-
     type2: 'y';
 >type2 : "y"
 
@@ -119,8 +111,6 @@ foo2({
 });
 
 interface X3 {
->X3 : X3
-
     type: 'x';
 >type : "x"
 
@@ -132,8 +122,6 @@ interface X3 {
 }
 
 interface Y3 {
->Y3 : Y3
-
     type: 'y';
 >type : "y"
 
@@ -167,8 +155,6 @@ xy;
 
 
 interface LikeA {
->LikeA : LikeA
-
     x: 'x';
 >x : "x"
 
@@ -183,8 +169,6 @@ interface LikeA {
 }
 
 interface LikeB {
->LikeB : LikeB
-
     x: 'xx';
 >x : "xx"
 
@@ -243,8 +227,6 @@ xyz;
 // Repro from #29168
 
 interface TestObject {
->TestObject : TestObject
-
   type?: 'object';
 >type : "object" | undefined
 
@@ -258,8 +240,6 @@ interface TestObject {
 }
 
 interface TestString {
->TestString : TestString
-
   type: 'string';
 >type : "string"
 }

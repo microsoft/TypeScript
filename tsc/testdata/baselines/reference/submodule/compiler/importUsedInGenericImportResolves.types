@@ -2,9 +2,6 @@
 
 === test1.d.ts ===
 export interface T<P> {
->T : T<P>
->P : P
-
     a: P;
 >a : P
 }
@@ -17,5 +14,6 @@ export declare const theme: { a: string }
 === test3.ts ===
 export const a: import("./test1").T<typeof import("./test2").theme> = null as any;
 >a : T<{ a: string; }>
+>theme : any
 >null as any : any
 

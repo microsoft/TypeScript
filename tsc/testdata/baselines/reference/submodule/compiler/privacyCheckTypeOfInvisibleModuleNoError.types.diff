@@ -1,9 +1,0 @@
---- old.privacyCheckTypeOfInvisibleModuleNoError.types
-+++ new.privacyCheckTypeOfInvisibleModuleNoError.types
-@@= skipped -12, +12 lines =@@
- 
-     export var f: typeof Inner; // Since we dont unwind inner any more, it is error here
- >f : typeof Inner
-->Inner : typeof Inner
- }
- 

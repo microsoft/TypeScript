@@ -1,15 +1,6 @@
 --- old.staticFieldWithInterfaceContext.types
 +++ new.staticFieldWithInterfaceContext.types
-@@= skipped -1, +1 lines =@@
- 
- === staticFieldWithInterfaceContext.ts ===
- interface I {
-+>I : I
-+
-     x: { a: "a" };
- >x : { a: "a"; }
- >a : "a"
-@@= skipped -107, +109 lines =@@
+@@= skipped -108, +108 lines =@@
  
  let [ c7 ]: I[] = [class { static x = { a: "a" } }];
  >c7 : I

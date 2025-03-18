@@ -1,60 +1,11 @@
 --- old.coAndContraVariantInferences6.types
 +++ new.coAndContraVariantInferences6.types
-@@= skipped -3, +3 lines =@@
- // https://github.com/microsoft/TypeScript/issues/57911
- 
- interface ExactProps {
-+>ExactProps : ExactProps
-+
-   value: "A" | "B";
- >value : "A" | "B"
- }
- interface FunctionComponent<P = {}> {
-+>FunctionComponent : FunctionComponent<P>
-+>P : P
-+
-   (props: P): ReactElement<any> | null;
- >props : P
- }
- declare class Component<P> {
- >Component : Component<P>
-+>P : P
- 
-   constructor(props: P);
- >props : P
- }
- interface ComponentClass<P = {}> {
-+>ComponentClass : ComponentClass<P>
-+>P : P
-+
-   new (props: P): Component<P>;
- >props : P
- }
- 
- interface ReactElement<
-+>ReactElement : ReactElement<T>
-+
-   T extends string | JSXElementConstructor<any> =
-+>T : T
-+
-     | string
-     | JSXElementConstructor<any>,
- > {
-@@= skipped -29, +42 lines =@@
- 
- type JSXElementConstructor<P> =
- >JSXElementConstructor : JSXElementConstructor<P>
-+>P : P
- 
-   | ((props: P) => ReactElement<any> | null)
- >props : P
-@@= skipped -8, +9 lines =@@
+@@= skipped -40, +40 lines =@@
  >props : P
  
  declare function createElementIsolated<P extends {}>(
 ->createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
 +>createElementIsolated : <P extends {}>(type: string | ComponentClass<P> | FunctionComponent<P>, props?: P | null | undefined) => void
-+>P : P
  
    type: FunctionComponent<P> | ComponentClass<P> | string,
 ->type : string | FunctionComponent<P> | ComponentClass<P>
@@ -62,7 +13,7 @@
  
    props?: P | null,
  >props : P | null | undefined
-@@= skipped -15, +16 lines =@@
+@@= skipped -15, +15 lines =@@
  
  createElementIsolated(WrapperIsolated, { value: "C" });
  >createElementIsolated(WrapperIsolated, { value: "C" }) : void

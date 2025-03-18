@@ -1,15 +1,6 @@
 --- old.narrowingConstrainedTypeParameter.types
 +++ new.narrowingConstrainedTypeParameter.types
-@@= skipped -3, +3 lines =@@
- // Repro from #10811
- 
- interface Pet {
-+>Pet : Pet
-+
-     name: string;
- >name : string
- }
-@@= skipped -10, +12 lines =@@
+@@= skipped -13, +13 lines =@@
  
      return typeof pet.name === "string";
  >typeof pet.name === "string" : boolean
@@ -18,15 +9,7 @@
  >pet.name : any
  >pet : any
  >name : any
-@@= skipped -9, +9 lines =@@
- 
- export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string): string {
- >speak : <TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string) => string
-+>TPet : TPet
- >pet : TPet
- >voice : (pet: TPet) => string
- >pet : TPet
-@@= skipped -13, +14 lines =@@
+@@= skipped -22, +22 lines =@@
          throw new Error("Expected \"pet\" to be a Pet");
  >new Error("Expected \"pet\" to be a Pet") : Error
  >Error : ErrorConstructor

@@ -4,8 +4,6 @@
 const createCacheReducer = <N extends string, QR>(
 >createCacheReducer : <N extends string, QR>(queries: { [QK in keyof QR]: any }) => (state?: { queries: QR; }) => { queries: QR; }
 ><N extends string, QR>(    queries: Cache<N, QR>["queries"],) => {    const queriesMap = {} as QR;    const initialState = {        queries: queriesMap,    };    return (state = initialState) => state;} : <N extends string, QR>(queries: { [QK in keyof QR]: any }) => (state?: { queries: QR; }) => { queries: QR; }
->N : N
->QR : QR
 
     queries: Cache<N, QR>["queries"],
 >queries : { [QK in keyof QR]: any }
@@ -36,14 +34,12 @@ const createCacheReducer = <N extends string, QR>(
 
 export type Cache<N extends string, QR> = {
 >Cache : Cache<N, QR>
->N : N
->QR : QR
 
     queries: {
 >queries : { [QK in keyof QR]: any }
 
         [QK in keyof QR]: ReturnType<typeof createCacheReducer<QR>>;
->QK : QK
+>createCacheReducer : <N extends string, QR>(queries: { [QK in keyof QR]: any }) => (state?: { queries: QR; }) => { queries: QR; }
 
     };
 };

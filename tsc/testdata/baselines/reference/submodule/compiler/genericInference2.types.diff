@@ -1,20 +1,6 @@
 --- old.genericInference2.types
 +++ new.genericInference2.types
-@@= skipped -4, +4 lines =@@
- >ko : typeof ko
- 
-        export interface Observable<T> { 
-+>Observable : Observable<T>
-+>T : T
-+
-            (): T; 
-            (value: T): any; 
- >value : T
-@@= skipped -15, +18 lines =@@
-        } 
-        export function observable<T>(value: T): Observable<T>; 
- >observable : <T>(value: T) => Observable<T>
-+>T : T
+@@= skipped -22, +22 lines =@@
  >value : T
      } 
      var o = { 
@@ -48,7 +34,7 @@
  >37 : 37
  
      }; 
-@@= skipped -27, +28 lines =@@
+@@= skipped -24, +24 lines =@@
  >x_v : number
  >o.name().length : number
  >o.name() : string

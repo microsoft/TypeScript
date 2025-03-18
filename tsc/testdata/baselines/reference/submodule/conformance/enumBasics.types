@@ -48,6 +48,7 @@ var e: {
 };
 var e: typeof E1;
 >e : typeof E1
+>E1 : typeof E1
 
 // Reverse mapping of enum returns string name of property 
 var s = E1[e.A];

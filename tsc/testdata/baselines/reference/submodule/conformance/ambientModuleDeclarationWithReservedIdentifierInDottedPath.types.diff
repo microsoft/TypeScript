@@ -12,8 +12,3 @@
  >tabId : number
  
  declare module test.class {}
-+>test : any
-+>class : any
- 
- declare module debugger {} // still an error
- >declare : any

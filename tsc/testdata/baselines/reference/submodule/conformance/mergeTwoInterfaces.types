@@ -5,15 +5,11 @@
 
 // basic case
 interface A {
->A : A
-
     foo: string;
 >foo : string
 }
 
 interface A {
->A : A
-
     bar: number;
 >bar : number
 }
@@ -35,9 +31,6 @@ var r2 = a.bar;
 
 // basic generic case
 interface B<T> {
->B : B<T>
->T : T
-
     baz: string;
 >baz : string
 
@@ -46,9 +39,6 @@ interface B<T> {
 }
 
 interface B<T> {
->B : B<T>
->T : T
-
     bar: T;
 >bar : T
 }
@@ -73,15 +63,11 @@ module M {
 >M : typeof M
 
     interface A {
->A : A
-
         foo: string;
 >foo : string
     }
 
     interface A {
->A : A
-
         bar: number;
 >bar : number
     }
@@ -103,17 +89,11 @@ module M {
 >bar : number
 
     interface B<T> {
->B : B<T>
->T : T
-
         foo: T;
 >foo : T
     }
 
     interface B<T> {
->B : B<T>
->T : T
-
         bar: T;
 >bar : T
     }

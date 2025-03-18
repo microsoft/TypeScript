@@ -73,8 +73,6 @@ module Generic {
 
     class C<T, U> {
 >C : C<T, U>
->T : T
->U : U
 
         fn() { return this; }
 >fn : () => this

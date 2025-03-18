@@ -6,6 +6,7 @@ declare class EmberObject {}
 
 type PersonType = Readonly<typeof EmberObject> &
 >PersonType : PersonType
+>EmberObject : typeof EmberObject
 
   (new (properties?: object) => {
 >properties : object | undefined

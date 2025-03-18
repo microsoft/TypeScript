@@ -3,11 +3,8 @@
 === a.ts ===
 class C<T> { a: T; }
 >C : C<T>
->T : T
 >a : T
 
 === b.ts ===
-interface C<T> { }
->C : C<T>
->T : T
 
+interface C<T> { }

@@ -17,6 +17,7 @@
 ->x : typeof a
 ->a : typeof a
 +>x : typeof import("elidingImportNames_main")
++>a : typeof import("elidingImportNames_main")
  
  import a2 = require('./elidingImportNames_main1'); // alias not used in typeof
 ->a2 : typeof a2

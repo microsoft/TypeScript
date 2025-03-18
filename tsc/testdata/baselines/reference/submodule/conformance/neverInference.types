@@ -3,7 +3,6 @@
 === neverInference.ts ===
 declare function f1<T>(x: T[]): T;
 >f1 : <T>(x: T[]) => T
->T : T
 >x : T[]
 
 let neverArray: never[] = [];
@@ -26,14 +25,10 @@ let a2 = f1(neverArray);  // never
 
 type Comparator<T> = (x: T, y: T) => number;
 >Comparator : Comparator<T>
->T : T
 >x : T
 >y : T
 
 interface LinkedList<T> {
->LinkedList : LinkedList<T>
->T : T
-
     comparator: Comparator<T>,
 >comparator : Comparator<T>
 
@@ -43,7 +38,6 @@ interface LinkedList<T> {
 
 type Node<T> = { value: T, next: Node<T> } | null
 >Node : Node<T>
->T : T
 >value : T
 >next : Node<T>
 
@@ -54,7 +48,6 @@ declare function compareNumbers(x: number, y: number): number;
 
 declare function mkList<T>(items: T[], comparator: Comparator<T>): LinkedList<T>;
 >mkList : <T>(items: T[], comparator: Comparator<T>) => LinkedList<T>
->T : T
 >items : T[]
 >comparator : Comparator<T>
 
@@ -69,7 +62,6 @@ const list: LinkedList<number> = mkList([], compareNumbers);
 
 declare function f2<a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number): void;
 >f2 : <a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number) => void
->a : a
 >as1 : a[]
 >as2 : a[]
 >cmp : (a1: a, a2: a) => number

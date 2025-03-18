@@ -9,15 +9,7 @@
  
      log(msg: string): void;
  >log : (msg: string) => void
- >msg : string
- }
- interface Robot {
-+>Robot : Robot
-+
-     name: string;
- >name : string
- 
-@@= skipped -89, +91 lines =@@
+@@= skipped -89, +89 lines =@@
      console.log(nameC);
  >console.log(nameC) : void
  >console.log : (msg: string) => void

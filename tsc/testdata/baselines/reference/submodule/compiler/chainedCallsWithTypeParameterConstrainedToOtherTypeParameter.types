@@ -3,14 +3,12 @@
 === chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts ===
 class Chain<T extends A> {
 >Chain : Chain<T>
->T : T
 
     constructor(public value: T) { }
 >value : T
 
     then<S extends T>(cb: (x: T) => S): Chain<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
->S : S
 >cb : (x: T) => S
 >x : T
 

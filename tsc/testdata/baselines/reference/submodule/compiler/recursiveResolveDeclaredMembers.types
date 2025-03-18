@@ -1,14 +1,11 @@
 //// [tests/cases/compiler/recursiveResolveDeclaredMembers.ts] ////
 
 === types.ts ===
-export interface F {
->F : F
 
+export interface F {
     (): E;
 }
 export interface D<T extends F = F> {}
->D : D<T>
->T : T
 
 === other.js ===
 

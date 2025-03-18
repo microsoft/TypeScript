@@ -1,22 +1,6 @@
 --- old.throwInEnclosingStatements.types
 +++ new.throwInEnclosingStatements.types
-@@= skipped -10, +10 lines =@@
- 
- <T>(x: T) => { throw x; }
- ><T>(x: T) => { throw x; } : <T>(x: T) => never
-+>T : T
- >x : T
- >x : T
- 
-@@= skipped -58, +59 lines =@@
- 
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     private value: T;
- >value : T
-@@= skipped -20, +21 lines =@@
+@@= skipped -88, +88 lines =@@
  }
  
  var aa = {

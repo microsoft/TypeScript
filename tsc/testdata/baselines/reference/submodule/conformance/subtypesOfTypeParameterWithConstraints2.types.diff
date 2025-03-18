@@ -1,128 +1,6 @@
 --- old.subtypesOfTypeParameterWithConstraints2.types
 +++ new.subtypesOfTypeParameterWithConstraints2.types
-@@= skipped -4, +4 lines =@@
- 
- function f1<T extends U, U>(x: T, y: U) {
- >f1 : <T extends U, U>(x: T, y: U) => void
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -21, +23 lines =@@
- // V > U > T
- function f2<T extends U, U extends V, V>(x: T, y: U, z: V) {
- >f2 : <T extends U, U extends V, V>(x: T, y: U, z: V) => void
-+>T : T
-+>U : U
-+>V : V
- >x : T
- >y : U
- >z : V
-@@= skipped -52, +55 lines =@@
- // Date > U > T
- function f3<T extends U, U extends Date>(x: T, y: U) {
- >f3 : <T extends U, U extends Date>(x: T, y: U) => void
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -54, +56 lines =@@
- 
- 
- interface I1 { foo: number; }
-+>I1 : I1
- >foo : number
- 
- class C1 { foo: number; }
-@@= skipped -8, +9 lines =@@
- 
- class C2<T> { foo: T; }
- >C2 : C2<T>
-+>T : T
- >foo : T
- 
- enum E { A }
-@@= skipped -30, +31 lines =@@
- 
- function f4<T extends Number>(x: T) {
- >f4 : <T extends Number>(x: T) => void
-+>T : T
- >x : T
- 
-     var r0 = true ? x : null; // ok
-@@= skipped -16, +17 lines =@@
- 
-     var u: typeof undefined;
- >u : any
-->undefined : undefined
- 
-     var r0b = true ? u : x; // ok
- >r0b : any
-@@= skipped -19, +18 lines =@@
- 
- function f5<T extends Number>(x: T) {
- >f5 : <T extends Number>(x: T) => void
-+>T : T
- >x : T
- 
-     var r1 = true ? 1 : x; // ok
-@@= skipped -19, +20 lines =@@
- 
- function f6<T extends String>(x: T) {
- >f6 : <T extends String>(x: T) => void
-+>T : T
- >x : T
- 
-     var r2 = true ? '' : x; // ok
-@@= skipped -19, +20 lines =@@
- 
- function f7<T extends Boolean>(x: T) {
- >f7 : <T extends Boolean>(x: T) => void
-+>T : T
- >x : T
- 
-     var r3 = true ? true : x; // ok
-@@= skipped -19, +20 lines =@@
- 
- function f8<T extends Date>(x: T) {
- >f8 : <T extends Date>(x: T) => void
-+>T : T
- >x : T
- 
-     var r4 = true ? new Date() : x; // ok
-@@= skipped -21, +22 lines =@@
- 
- function f9<T extends RegExp>(x: T) {
- >f9 : <T extends RegExp>(x: T) => void
-+>T : T
- >x : T
- 
-     var r5 = true ? /1/ : x; // ok
-@@= skipped -19, +20 lines =@@
- 
- function f10<T extends { foo: number }>(x: T) {
- >f10 : <T extends { foo: number; }>(x: T) => void
-+>T : T
- >foo : number
- >x : T
- 
-@@= skipped -24, +25 lines =@@
- 
- function f11<T extends () => void>(x: T) {
- >f11 : <T extends () => void>(x: T) => void
-+>T : T
- >x : T
- 
-     var r7 = true ? () => { } : x; // ok
-@@= skipped -19, +20 lines =@@
- 
- function f12<T extends <U>(x: U) => U>(x: T) {
- >f12 : <T extends <U>(x: U) => U>(x: T) => void
-+>T : T
-+>U : U
- >x : U
+@@= skipped -348, +348 lines =@@
  >x : T
  
      var r8 = true ? <T>(x: T) => { return x } : x; // ok
@@ -133,7 +11,6 @@
  >true : true
 -><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 +><T>(x: T) => { return x } : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
  >x : T
@@ -147,96 +24,10 @@
  >x : T
 -><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 +><T>(x: T) => { return x } : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
  }
- 
- function f13<T extends I1>(x: T) {
- >f13 : <T extends I1>(x: T) => void
-+>T : T
- >x : T
- 
-     var i1: I1;
-@@= skipped -46, +51 lines =@@
- 
- function f14<T extends C1>(x: T) {
- >f14 : <T extends C1>(x: T) => void
-+>T : T
- >x : T
- 
-     var c1: C1;
-@@= skipped -22, +23 lines =@@
- 
- function f15<T extends C2<number>>(x: T) {
- >f15 : <T extends C2<number>>(x: T) => void
-+>T : T
- >x : T
- 
-     var c2: C2<number>;
-@@= skipped -22, +23 lines =@@
- 
- function f16<T extends E>(x: T) {
- >f16 : <T extends E>(x: T) => void
-+>T : T
- >x : T
- 
-     var r13 = true ? E : x; // ok
-@@= skipped -37, +38 lines =@@
- 
- function f17<T extends typeof f>(x: T) {
- >f17 : <T extends typeof f>(x: T) => void
-->f : typeof f
-+>T : T
- >x : T
- 
-     var af: typeof f;
- >af : typeof f
-->f : typeof f
- 
-     var r15 = true ? af : x; // ok
- >r15 : typeof f
-@@= skipped -24, +23 lines =@@
- 
- function f18<T extends typeof c>(x: T) {
- >f18 : <T extends typeof c>(x: T) => void
-->c : typeof c
-+>T : T
- >x : T
- 
-     var ac: typeof c;
- >ac : typeof c
-->c : typeof c
- 
-     var r16 = true ? ac : x; // ok
- >r16 : typeof c
-@@= skipped -24, +23 lines =@@
- 
- function f19<T>(x: T) {
- >f19 : <T>(x: T) => void
-+>T : T
- >x : T
- 
-     function f17<U extends T>(a: U) {
- >f17 : <U extends T>(a: U) => void
-+>U : U
- >a : U
- 
-         var r17 = true ? x : a; // ok
-@@= skipped -23, +25 lines =@@
- 
-     function f18<V extends U, U extends T>(a: V) {
- >f18 : <V extends U, U extends T>(a: V) => void
-+>V : V
-+>U : U
- >a : V
- 
-         var r18 = true ? x : a; // ok
-@@= skipped -20, +22 lines =@@
- 
- function f20<T extends Number>(x: T) {
- >f20 : <T extends Number>(x: T) => void
-+>T : T
+@@= skipped -217, +217 lines =@@
  >x : T
  
      var r19 = true ? new Object() : x; // ok
@@ -257,11 +48,3 @@
  >true : true
  >x : T
  >new Object() : Object
-@@= skipped -21, +22 lines =@@
- 
- function f21<T extends Number>(x: T) {
- >f21 : <T extends Number>(x: T) => void
-+>T : T
- >x : T
- 
-     var r20 = true ? {} : x; // ok

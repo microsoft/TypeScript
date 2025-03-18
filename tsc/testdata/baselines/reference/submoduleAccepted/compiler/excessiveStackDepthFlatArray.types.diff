@@ -9,42 +9,10 @@
 -
  === index.tsx ===
  interface MiddlewareArray<T> extends Array<T> {}
-+>MiddlewareArray : MiddlewareArray<T>
-+>T : T
-+
  declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
- >configureStore : (options: { middleware: MiddlewareArray<any>; }) => void
- >options : { middleware: MiddlewareArray<any>; }
-@@= skipped -27, +26 lines =@@
- });
- 
- declare namespace React {
-+>React : any
-+
-   type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
- >DetailedHTMLProps : E
-+>E : E
-+>T : T
- 
-   interface HTMLAttributes<T> {
-+>HTMLAttributes : HTMLAttributes<T>
-+>T : T
-+
-     children?: ReactNode;
- >children : ReactNode
-   }
-@@= skipped -20, +27 lines =@@
- >ReactFragment : ReactFragment
- 
-   interface ReactNodeArray extends Array<ReactNode> {}
-+>ReactNodeArray : ReactNodeArray
- }
+@@= skipped -51, +47 lines =@@
  declare namespace JSX {
-+>JSX : any
-+
    interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
      ul: React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
 ->ul : React.HTMLAttributes<HTMLUListElement>
 +>ul : HTMLAttributes<HTMLUListElement>
@@ -57,7 +25,7 @@
  >React : any
  >React : any
    }
-@@= skipped -51, +56 lines =@@
+@@= skipped -47, +47 lines =@@
          <li key={category}>{category}</li> // Error about 'key' only
  ><li key={category}>{category}</li> : any
  >li : any

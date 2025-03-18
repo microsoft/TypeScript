@@ -5,10 +5,7 @@ module Test {
 >Test : typeof Test
 
     export interface MyFunc {
->MyFunc : MyFunc
-
         <T>(value1: T): T;
->T : T
 >value1 : T
     }
     export class MyClass {

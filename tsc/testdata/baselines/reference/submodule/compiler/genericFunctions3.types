@@ -2,9 +2,6 @@
 
 === genericFunctions3.ts ===
 interface Query<T> {
->Query : Query<T>
->T : T
-
     foo(x: string): Query<T[]>;
 >foo : (x: string) => Query<T[]>
 >x : string
@@ -12,12 +9,10 @@ interface Query<T> {
  
 function from<T>(arg: boolean): Query<T>; // was Error: Overload signature is not compatible with function definition.
 >from : <T>(arg: boolean) => Query<T>
->T : T
 >arg : boolean
 
 function from<T>(arg: any): Query<T> {
 >from : <T>(arg: boolean) => Query<T>
->T : T
 >arg : any
 
     return undefined;

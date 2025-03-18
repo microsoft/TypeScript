@@ -51,8 +51,6 @@ export as namespace Math2d;
 >Math2d : typeof import("node_modules/math2d/index")
 
 export interface Point {
->Point : Point
-
 	x: number;
 >x : number
 
@@ -93,8 +91,6 @@ declare module 'math2d' {
 
 	// Add a method to the class
 	interface Vector {
->Vector : Vector
-
 		reverse(): Math2d.Point;
 >reverse : () => Point
 >Math2d : any

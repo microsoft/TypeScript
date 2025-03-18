@@ -12,17 +12,16 @@ module m {
     }
     export class g<T> {
 >g : g<T>
->T : T
     }
 }
 class g<T> {
 >g : g<T>
->T : T
 }
 
 // Just the name
 function foo(): typeof c {
 >foo : () => typeof c
+>c : typeof c
 
     return c;
 >c : typeof c
@@ -37,7 +36,9 @@ function foo2() {
 // Qualified name
 function foo3(): typeof m.c {
 >foo3 : () => typeof c
+>m.c : typeof c
 >m : typeof m
+>c : typeof c
 
     return m.c;
 >m.c : typeof c
@@ -56,6 +57,7 @@ function foo4() {
 // Just the name with type arguments
 function foo5(): typeof g {
 >foo5 : () => typeof g
+>g : typeof g
 
     return g;
 >g : typeof g
@@ -70,7 +72,9 @@ function foo6() {
 // Qualified name with type arguments
 function foo7(): typeof m.g {
 >foo7 : () => typeof g
+>m.g : typeof g
 >m : typeof m
+>g : typeof g
 
     return m.g
 >m.g : typeof g

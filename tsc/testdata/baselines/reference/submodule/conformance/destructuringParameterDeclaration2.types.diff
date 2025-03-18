@@ -26,19 +26,16 @@
  >[1, 2, [["world"]], "string"] : [number, number, string[][], string]
  >1 : 1
  >2 : 2
-@@= skipped -15, +15 lines =@@
- // the parameter type is the widened form (section 3.11) of the type of the initializer expression.
+@@= skipped -16, +16 lines =@@
  
  interface F1 {
-+>F1 : F1
-+
      b0(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
 ->b0 : (z?: number, [[a, b], d, { u }]?: [[number, number], string, { u: boolean; }]) => any
 +>b0 : (z?: number, __1?: [[number, number], string, { u: boolean; }]) => any
  >z : number
  >10 : 10
  >a : number
-@@= skipped -29, +31 lines =@@
+@@= skipped -28, +28 lines =@@
  >undefined : undefined
  
  function b2([a, z, y] = [undefined, null, undefined]) { }
@@ -183,8 +180,6 @@
  >z : any
  
  interface F2 {
-+>F2 : F2
-+
      d3([a, b, c]?);
 ->d3 : ([a, b, c]?: [any, any, any]) => any
 +>d3 : (__0?: [any, any, any]) => any
@@ -205,7 +200,7 @@
  >a : any
  >b : any
  >c : any
-@@= skipped -35, +37 lines =@@
+@@= skipped -35, +35 lines =@@
  >C4 : C4
  
      d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature

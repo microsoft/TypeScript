@@ -1,11 +1,7 @@
 --- old.duplicateVarAndImport.types
 +++ new.duplicateVarAndImport.types
-@@= skipped -6, +6 lines =@@
- >a : any
- 
+@@= skipped -8, +8 lines =@@
  module M { }
-+>M : any
-+
  import a = M;
  >a : any
 ->M : error

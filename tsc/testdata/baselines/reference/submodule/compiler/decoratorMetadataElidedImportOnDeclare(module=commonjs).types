@@ -3,7 +3,6 @@
 === observable.d.ts ===
 export declare class Observable<T> {}
 >Observable : Observable<T>
->T : T
 
 === index.ts ===
 import { Observable } from './observable';

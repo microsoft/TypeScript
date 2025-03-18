@@ -1,27 +1,16 @@
 --- old.overloadResolution.types
 +++ new.overloadResolution.types
-@@= skipped -68, +68 lines =@@
- 
- function fn2<T>(n: number, t: T): T;
- >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
-+>T : T
- >n : number
- >t : T
- 
-@@= skipped -41, +42 lines =@@
+@@= skipped -109, +109 lines =@@
  
  // Generic overloads with differing arity called without type arguments
  function fn3<T>(n: T): string;
 ->fn3 : { <T>(n: T): string; <T_1, U>(s: string, t: T_1, u: U): U; <T_1, U, V>(v: V, u: U, t: T_1): number; }
 +>fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
-+>T : T
  >n : T
  
  function fn3<T, U>(s: string, t: T, u: U): U;
 ->fn3 : { <T_1>(n: T_1): string; <T, U>(s: string, t: T, u: U): U; <T_1, U_1, V>(v: V, u: U_1, t: T_1): number; }
 +>fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
-+>T : T
-+>U : U
  >s : string
  >t : T
  >u : U
@@ -29,28 +18,21 @@
  function fn3<T, U, V>(v: V, u: U, t: T): number;
 ->fn3 : { <T_1>(n: T_1): string; <T_1, U_1>(s: string, t: T_1, u: U_1): U_1; <T, U, V>(v: V, u: U, t: T): number; }
 +>fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
-+>T : T
-+>U : U
-+>V : V
  >v : V
  >u : U
  >t : T
-@@= skipped -73, +79 lines =@@
+@@= skipped -73, +73 lines =@@
  
  // Generic overloads with constraints called with type arguments that satisfy the constraints
  function fn4<T extends string, U extends number>(n: T, m: U);
 ->fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T_1 extends number, U_1 extends string>(n: T_1, m: U_1): any; }
 +>fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
-+>T : T
-+>U : U
  >n : T
  >m : U
  
  function fn4<T extends number, U extends string>(n: T, m: U);
 ->fn4 : { <T_1 extends string, U_1 extends number>(n: T_1, m: U_1): any; <T extends number, U extends string>(n: T, m: U): any; }
 +>fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
-+>T : T
-+>U : U
  >n : T
  >m : U
  

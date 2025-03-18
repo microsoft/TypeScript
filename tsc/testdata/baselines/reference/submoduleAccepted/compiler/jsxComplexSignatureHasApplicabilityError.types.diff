@@ -16,10 +16,7 @@
  
  
  interface Props<T extends OptionValues> {
-+>Props : Props<T>
-+>T : T
-+
-     value?: Option<T> | T;
+@@= skipped -15, +11 lines =@@
  >value : T | Option<T> | undefined
  
      onChange?(value: Option<T> | undefined): void;
@@ -28,20 +25,7 @@
  >value : Option<T> | undefined
  }
  
- type ExtractValueType<T> = T extends ReactSelectProps<infer U> ? U : never;
- >ExtractValueType : ExtractValueType<T>
-+>T : T
-+>U : U
- 
- export type ReactSingleSelectProps<
- >ReactSingleSelectProps : ReactSingleSelectProps<WrappedProps>
- 
-     WrappedProps extends ReactSelectProps<any>
-+>WrappedProps : WrappedProps
-+
- > = Overwrite<
-     Omit<WrappedProps, "multi">,
-     Props<ExtractValueType<WrappedProps>>
+@@= skipped -17, +17 lines =@@
  >;
  
  export function createReactSingleSelect<
@@ -49,8 +33,6 @@
 +>createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: ComponentType<WrappedProps>) => ComponentType<ReactSingleSelectProps<WrappedProps>>
  
      WrappedProps extends ReactSelectProps<any>
-+>WrappedProps : WrappedProps
-+
  >(
      WrappedComponent: React.ComponentType<WrappedProps>
 ->WrappedComponent : React.ComponentType<WrappedProps>
@@ -135,44 +117,30 @@
                      }
                  }}
              />
-@@= skipped -102, +107 lines =@@
- // Copied from "type-zoo" version 3.4.0
- export type Omit<T, K extends keyof any> = T extends any ? Pick<T, Exclude<keyof T, K>> : never;
- >Omit : Omit<T, K>
-+>T : T
-+>K : K
- 
- export type Overwrite<T, U> = Omit<T, keyof T & keyof U> & U;
- >Overwrite : Overwrite<T, U>
-+>T : T
-+>U : U
- 
+@@= skipped -77, +77 lines =@@
  // Everything below here copied from "@types/react-select" version 1.3.4
  declare class ReactSelectClass<TValue = OptionValues> extends React.Component<ReactSelectProps<TValue>> {
  >ReactSelectClass : ReactSelectClass<TValue>
 ->React.Component : React.Component<ReactSelectProps<TValue>, {}, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>TValue : TValue
 +>React.Component : any
 +>React : any
 +>Component : any
  
      focus(): void;
  >focus : () => void
-@@= skipped -20, +25 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  
  export type OptionComponentType<TValue = OptionValues> = React.ComponentType<OptionComponentProps<TValue>>;
 ->OptionComponentType : OptionComponentType<TValue>
 +>OptionComponentType : ComponentType<OptionComponentProps<TValue>>
-+>TValue : TValue
  >React : any
  
  export type ValueComponentType<TValue = OptionValues> =  React.ComponentType<ValueComponentProps<TValue>>;
 ->ValueComponentType : ValueComponentType<TValue>
 +>ValueComponentType : ComponentType<ValueComponentProps<TValue>>
-+>TValue : TValue
  >React : any
  
  export type HandlerRendererResult = JSX.Element | null | false;
@@ -181,41 +149,7 @@
  >JSX : any
  >false : false
  
- // Handlers
- export type FocusOptionHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
- >FocusOptionHandler : FocusOptionHandler<TValue>
-+>TValue : TValue
- >option : Option<TValue>
- 
- export type SelectValueHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
- >SelectValueHandler : SelectValueHandler<TValue>
-+>TValue : TValue
- >option : Option<TValue>
- 
- export type ArrowRendererHandler = (props: ArrowRendererProps) => HandlerRendererResult;
-@@= skipped -30, +34 lines =@@
- 
- export type FilterOptionHandler<TValue = OptionValues> = (option: Option<TValue>, filter: string) => boolean;
- >FilterOptionHandler : FilterOptionHandler<TValue>
-+>TValue : TValue
- >option : Option<TValue>
- >filter : string
- 
- export type FilterOptionsHandler<TValue = OptionValues> = (options: Options<TValue>, filter: string, currentValues: Options<TValue>) => Options<TValue>;
- >FilterOptionsHandler : FilterOptionsHandler<TValue>
-+>TValue : TValue
- >options : Options<TValue>
- >filter : string
- >currentValues : Options<TValue>
-@@= skipped -16, +18 lines =@@
- 
- export type MenuRendererHandler<TValue = OptionValues> = (props: MenuRendererProps<TValue>) => HandlerRendererResult;
- >MenuRendererHandler : MenuRendererHandler<TValue>
-+>TValue : TValue
- >props : MenuRendererProps<TValue>
- 
- export type OnCloseHandler = () => void;
-@@= skipped -10, +11 lines =@@
+@@= skipped -56, +56 lines =@@
  >inputValue : string
  
  export type OnInputKeyDownHandler = React.KeyboardEventHandler<HTMLDivElement | HTMLInputElement>;
@@ -238,117 +172,16 @@
  >React : any
  
  export type OptionRendererHandler<TValue = OptionValues> = (option: Option<TValue>) => HandlerRendererResult;
- >OptionRendererHandler : OptionRendererHandler<TValue>
-+>TValue : TValue
- >option : Option<TValue>
- 
- export type ValueRendererHandler<TValue = OptionValues> = (option: Option<TValue>, index?: number) => HandlerRendererResult;
- >ValueRendererHandler : ValueRendererHandler<TValue>
-+>TValue : TValue
- >option : Option<TValue>
- >index : number | undefined
- 
+@@= skipped -19, +19 lines =@@
  export type OnValueClickHandler<TValue = OptionValues> = (option: Option<TValue>, event: React.MouseEvent<HTMLAnchorElement>) => void;
  >OnValueClickHandler : OnValueClickHandler<TValue>
-+>TValue : TValue
  >option : Option<TValue>
 ->event : React.MouseEvent<HTMLAnchorElement>
 +>event : MouseEvent<HTMLAnchorElement>
  >React : any
  
  export type IsOptionUniqueHandler<TValue = OptionValues> = (arg: { option: Option<TValue>, options: Options<TValue>, labelKey: string, valueKey: string }) => boolean;
- >IsOptionUniqueHandler : IsOptionUniqueHandler<TValue>
-+>TValue : TValue
- >arg : { option: Option<TValue>; options: Options<TValue>; labelKey: string; valueKey: string; }
- >option : Option<TValue>
- >options : Options<TValue>
-@@= skipped -37, +41 lines =@@
- 
- export type NewOptionCreatorHandler<TValue = OptionValues> = (arg: { label: string, labelKey: string, valueKey: string }) => Option<TValue>;
- >NewOptionCreatorHandler : NewOptionCreatorHandler<TValue>
-+>TValue : TValue
- >arg : { label: string; labelKey: string; valueKey: string; }
- >label : string
- >labelKey : string
-@@= skipped -16, +17 lines =@@
- 
- export type OnChangeSingleHandler<TValue = OptionValues> = OnChangeHandler<TValue, Option<TValue>>;
- >OnChangeSingleHandler : OnChangeSingleHandler<TValue>
-+>TValue : TValue
- 
- export type OnChangeMultipleHandler<TValue = OptionValues> = OnChangeHandler<TValue, Options<TValue>>;
- >OnChangeMultipleHandler : OnChangeMultipleHandler<TValue>
-+>TValue : TValue
- 
- export type OnChangeHandler<TValue = OptionValues, TOption = Option<TValue> | Options<TValue>> = (newValue: TOption | null) => void;
- >OnChangeHandler : OnChangeHandler<TValue, TOption>
-+>TValue : TValue
-+>TOption : TOption
- >newValue : TOption | null
- 
- export type OnNewOptionClickHandler<TValue = OptionValues> = (option: Option<TValue>) => void;
- >OnNewOptionClickHandler : OnNewOptionClickHandler<TValue>
-+>TValue : TValue
- >option : Option<TValue>
- 
- export type LoadOptionsHandler<TValue = OptionValues> = LoadOptionsAsyncHandler<TValue> | LoadOptionsLegacyHandler<TValue>;
- >LoadOptionsHandler : LoadOptionsHandler<TValue>
-+>TValue : TValue
- 
- export type LoadOptionsAsyncHandler<TValue = OptionValues> = (input: string) => Promise<AutocompleteResult<TValue>>;
- >LoadOptionsAsyncHandler : LoadOptionsAsyncHandler<TValue>
-+>TValue : TValue
- >input : string
- 
- export type LoadOptionsLegacyHandler<TValue = OptionValues> = (input: string, callback: (err: any, result: AutocompleteResult<TValue>) => void) => void;
- >LoadOptionsLegacyHandler : LoadOptionsLegacyHandler<TValue>
-+>TValue : TValue
- >input : string
- >callback : (err: any, result: AutocompleteResult<TValue>) => void
- >err : any
- >result : AutocompleteResult<TValue>
- 
- export interface AutocompleteResult<TValue = OptionValues> {
-+>AutocompleteResult : AutocompleteResult<TValue>
-+>TValue : TValue
-+
-     /** The search-results to be displayed  */
-     options: Options<TValue>;
- >options : Options<TValue>
-@@= skipped -42, +53 lines =@@
- 
- export type Options<TValue = OptionValues> = Array<Option<TValue>>;
- >Options : Options<TValue>
-+>TValue : TValue
- 
- export interface Option<TValue = OptionValues> {
-+>Option : Option<TValue>
-+>TValue : TValue
-+
-     /** Text for rendering */
-     label?: string;
- >label : string | undefined
-@@= skipped -36, +40 lines =@@
- >OptionValues : OptionValues
- 
- export interface MenuRendererProps<TValue = OptionValues> {
-+>MenuRendererProps : MenuRendererProps<TValue>
-+>TValue : TValue
-+
-     /**
-      * The currently focused option; should be visible in the menu by default.
-      * default {}
-@@= skipped -51, +54 lines =@@
- }
- 
- export interface OptionComponentProps<TValue = OptionValues> {
-+>OptionComponentProps : OptionComponentProps<TValue>
-+>TValue : TValue
-+
-     /**
-      * Classname(s) to apply to the option component.
-      */
-@@= skipped -40, +43 lines =@@
+@@= skipped -203, +203 lines =@@
       * Callback to be invoked when this option is focused.
       */
      onFocus?: (option: Option<TValue>, event: any) => void;
@@ -383,10 +216,7 @@
  >value : TValue | TValue[]
  }
  
- export interface ArrowRendererProps {
-+>ArrowRendererProps : ArrowRendererProps
-+
-     /**
+@@= skipped -16, +16 lines =@@
       * Arrow mouse down event handler.
       */
      onMouseDown: React.MouseEventHandler<any>;
@@ -395,17 +225,7 @@
  >React : any
  
      /**
-@@= skipped -27, +29 lines =@@
- }
- 
- export interface ValueComponentProps<TValue = OptionValues> {
-+>ValueComponentProps : ValueComponentProps<TValue>
-+>TValue : TValue
-+
-     disabled: ReactSelectProps<TValue>['disabled'];
- >disabled : boolean | undefined
- 
-@@= skipped -16, +19 lines =@@
+@@= skipped -27, +27 lines =@@
  >onRemove : SelectValueHandler<TValue> | undefined
  
      placeholder: ReactSelectProps<TValue>['placeholder'];
@@ -419,13 +239,11 @@
  
  export interface ReactSelectProps<TValue = OptionValues> extends React.Props<ReactSelectClass<TValue>> {
 ->React : typeof React
-+>ReactSelectProps : ReactSelectProps<TValue>
-+>TValue : TValue
 +>React : any
  
      /**
       * text to display when `allowCreate` is true.
-@@= skipped -235, +237 lines =@@
+@@= skipped -235, +235 lines =@@
       * optional style to apply to the menu container
       */
      menuContainerStyle?: React.CSSProperties;

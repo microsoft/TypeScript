@@ -1,72 +1,6 @@
 --- old.variadicTuples2.types
 +++ new.variadicTuples2.types
-@@= skipped -36, +36 lines =@@
- 
- type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
- >Tup3 : [...T, ...U, ...V]
-+>T : T
-+>U : U
-+>V : V
- 
- type V20 = Tup3<[number], string[], [number]>;  // [number, ...string[], number]
- >V20 : [number, ...string[], number]
-@@= skipped -27, +30 lines =@@
- 
- type V30<A extends unknown[]> = Tup3<A, string[], number[]>;  // [...A, ...(string | number)[]]
- >V30 : [...A, ...(string | number)[]]
-+>A : A
- 
- type V31<A extends unknown[]> = Tup3<string[], A, number[]>;  // (string | number | A[number])[]
- >V31 : (string | number | A[number])[]
-+>A : A
- 
- type V32<A extends unknown[]> = Tup3<string[], number[], A>;  // [...(string | number)[], ...A]
- >V32 : [...(string | number)[], ...A]
-+>A : A
- 
- type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;  // [...A, string?, ...number[]]
- >V40 : [...A, (string | undefined)?, ...number[]]
-+>A : A
- 
- type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;  // [string?, ...A, ...number[]]
- >V41 : [(string | undefined)?, ...A, ...number[]]
-+>A : A
- 
- type V42<A extends unknown[]> = Tup3<[string?], number[], A>;  // [string?, ...number[], ...A]
- >V42 : [(string | undefined)?, ...number[], ...A]
-+>A : A
- 
- type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;  // [...A, ...(string | number | undefined)[]]
- >V50 : [...A, ...(string | number | undefined)[]]
-+>A : A
- 
- type V51<A extends unknown[]> = Tup3<string[], A, [number?]>;  // (string | number | A[number] | undefined)[]
- >V51 : (string | number | A[number] | undefined)[]
-+>A : A
- 
- type V52<A extends unknown[]> = Tup3<string[], [number?], A>;  // [...(string | number | undefined)[], ...A]
- >V52 : [...(string | number | undefined)[], ...A]
-+>A : A
- 
- // Assignability
- 
-@@= skipped -222, +231 lines =@@
- 
- function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) {
- >ft3 : <T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) => void
-+>T : T
- >x : [number, ...T]
- >y : [number, number]
- >z : [number, ...number[]]
-@@= skipped -37, +38 lines =@@
- 
- function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
- >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
-+>T : T
- >args : [...T, (...values: T) => void]
- >values : T
- 
-@@= skipped -19, +20 lines =@@
+@@= skipped -341, +341 lines =@@
  >values : T
  >args.slice(0, -1) as unknown as T : T
  >args.slice(0, -1) as unknown : unknown
@@ -89,32 +23,13 @@
  >x : [string, number, boolean]
  
      x;  // [string, number, boolean]
-@@= skipped -71, +71 lines =@@
- 
- declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];
- >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
-+>T : T
-+>U : U
- >t : [...unknown[], T, U]
- 
- fn1([]);  // Error
-@@= skipped -30, +32 lines =@@
- 
- declare function fn2<T, U>(t: [T, ...unknown[], U]): [T, U];
- >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
-+>T : T
-+>U : U
- >t : [T, ...unknown[], U]
- 
- fn2([]);  // Error
-@@= skipped -31, +33 lines =@@
+@@= skipped -132, +132 lines =@@
  // Repro from #39595
  
  declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
 ->foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 ->stringsAndNumber : readonly [...S, number]
 +>foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
-+>S : S
 +>stringsAndNumber : [...S, number]
  
  const a1 = foo('blah1', 1);
@@ -133,7 +48,7 @@
  >'blah1' : "blah1"
  >'blah2' : "blah2"
  >1 : 1
-@@= skipped -21, +22 lines =@@
+@@= skipped -21, +21 lines =@@
  const c1 = foo(1);  // Error
  >c1 : [string, ...string[], number]
  >foo(1) : [string, ...string[], number]

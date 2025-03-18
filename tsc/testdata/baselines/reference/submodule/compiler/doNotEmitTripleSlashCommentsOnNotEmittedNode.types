@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/doNotEmitTripleSlashCommentsOnNotEmittedNode.ts] ////
 
 === file1.ts ===
+
 /// <reference path="file0.ts" />
 interface F { }
->F : F
 
 
 === file0.ts ===

@@ -2,7 +2,6 @@
 
 === expr.ts ===
 interface I {
->I : I
 }
 
 enum E {

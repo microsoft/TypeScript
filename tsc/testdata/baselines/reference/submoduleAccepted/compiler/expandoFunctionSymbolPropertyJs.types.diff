@@ -1,15 +1,6 @@
 --- old.expandoFunctionSymbolPropertyJs.types
 +++ new.expandoFunctionSymbolPropertyJs.types
-@@= skipped -6, +6 lines =@@
- >Symbol : SymbolConstructor
- 
- export interface TestSymb {
-+>TestSymb : TestSymb
-+
-   (): void;
-   readonly [symb]: boolean;
- >[symb] : boolean
-@@= skipped -14, +16 lines =@@
+@@= skipped -20, +20 lines =@@
   * @returns {import("./types").TestSymb}
   */
  export function test() {

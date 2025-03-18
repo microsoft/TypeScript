@@ -2,8 +2,6 @@
 
 === omitTypeTestErrors01.ts ===
 interface Foo {
->Foo : Foo
-
     a: string;
 >a : string
 

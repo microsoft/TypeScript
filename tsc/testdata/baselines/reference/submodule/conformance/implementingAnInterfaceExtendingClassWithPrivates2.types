@@ -9,8 +9,6 @@ class Foo {
 }
 
 interface I extends Foo {
->I : I
-
     y: number;
 >y : number
 }
@@ -65,8 +63,6 @@ module M {
     }
 
     interface I extends Baz {
->I : I
-
         y: number;
 >y : number
     }
@@ -125,8 +121,6 @@ module M2 {
     }
 
     interface I extends Baz {
->I : I
-
         z: number;
 >z : number
     }

@@ -4,7 +4,6 @@
 // #16709
 declare function dearray<T>(ara: ReadonlyArray<T>): T;
 >dearray : <T>(ara: readonly T[]) => T
->T : T
 >ara : readonly T[]
 
 type LiteralType = "foo" | "bar";

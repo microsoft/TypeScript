@@ -5,8 +5,6 @@ declare module "highlight.js" {
 >"highlight.js" : typeof import("highlight.js")
 
   export interface HighlightAPI {
->HighlightAPI : HighlightAPI
-
     highlight(code: string): string;
 >highlight : (code: string) => string
 >code : string

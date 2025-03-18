@@ -1,13 +1,6 @@
 --- old.crashIntypeCheckObjectCreationExpression.types
 +++ new.crashIntypeCheckObjectCreationExpression.types
-@@= skipped -5, +5 lines =@@
- 
-     public injectRequestService<P0, P1, P2>(service: P0) {
- >injectRequestService : <P0, P1, P2>(service: P0) => void
-+>P0 : P0
-+>P1 : P1
-+>P2 : P2
- >service : P0
+@@= skipped -9, +9 lines =@@
  
          this.injectBuildService<number>(new X(service));
  >this.injectBuildService<number>(new X(service)) : void
@@ -19,10 +12,3 @@
  >new X(service) : any
  >X : any
  >service : P0
-     }
-     public injectBuildService<P0>(service: P0) {
- >injectBuildService : <P0>(service: P0) => void
-+>P0 : P0
- >service : P0
-     }
- }

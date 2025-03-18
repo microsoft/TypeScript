@@ -38,6 +38,7 @@ class C extends A {
 
 var r1: typeof A = B; // error
 >r1 : typeof A
+>A : typeof A
 >B : typeof B
 
 var r2: new (x: string) => A = B; // error
@@ -47,5 +48,6 @@ var r2: new (x: string) => A = B; // error
 
 var r3: typeof A = C; // ok
 >r3 : typeof A
+>A : typeof A
 >C : typeof C
 

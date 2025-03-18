@@ -94,14 +94,7 @@
  >b : number
  >c : number | undefined
  >d : number
-@@= skipped -24, +24 lines =@@
- }
- 
- interface Foo {
-+>Foo : Foo
-+
-   readonly bar?: number;
- >bar : number | undefined
+@@= skipped -29, +29 lines =@@
  }
  
  function performFoo({ bar }: Foo = {}) {
@@ -110,7 +103,7 @@
  >bar : number | undefined
  >{} : {}
  
-@@= skipped -21, +23 lines =@@
+@@= skipped -16, +16 lines =@@
  
  performFoo();
  >performFoo() : void

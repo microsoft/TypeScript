@@ -39,14 +39,7 @@
  === /node_modules/pkg/require.d.ts ===
  export {};
  declare global {
- >global : typeof global
- 
-     interface RequireInterface { _r: any; }
-+>RequireInterface : RequireInterface
- >_r : any
- 
-     function getInterR(): RequireInterface;
-@@= skipped -38, +28 lines =@@
+@@= skipped -38, +27 lines =@@
  === /sub1/uses.ts ===
  /// <reference types="pkg" preserve="true" />
  export default getInterI();

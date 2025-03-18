@@ -1,17 +1,13 @@
 --- old.callChain.3.types
 +++ new.callChain.3.types
-@@= skipped -2, +2 lines =@@
- === callChain.3.ts ===
- declare function absorb<T>(): T;
+@@= skipped -4, +4 lines =@@
  >absorb : <T>() => T
-+>T : T
  
  declare const a: { m?<T>(obj: {x: T}): T } | undefined;
 ->a : { m?<T>(obj: { x: T; }): T; } | undefined
 ->m : (<T>(obj: { x: T; }) => T) | undefined
 +>a : { m?: <T>(obj: { x: T; }) => T | undefined; } | undefined
 +>m : <T>(obj: { x: T; }) => T | undefined
-+>T : T
  >obj : { x: T; }
  >x : T
  
@@ -27,7 +23,7 @@
  >{x: 12 } : { x: number; }
  >x : number
  >12 : 12
-@@= skipped -20, +22 lines =@@
+@@= skipped -18, +18 lines =@@
  const n2: number = a?.m?.({x: absorb()}); // likewise
  >n2 : number
  >a?.m?.({x: absorb()}) : number | undefined

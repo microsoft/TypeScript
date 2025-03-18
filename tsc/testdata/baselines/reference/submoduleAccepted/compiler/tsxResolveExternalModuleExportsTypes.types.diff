@@ -14,10 +14,7 @@
  >a : any
  
  declare namespace a {
-+>a : Foo
-+
      interface Foo {}
-+>Foo : Foo
  }
  export = a;
 ->a : import("/node_modules/@types/a/index.d.ts").Foo
@@ -30,17 +27,7 @@
  
  declare module 'a' {
  >'a' : Foo
- 
-     namespace Test {}
-+>Test : any
- 
-     interface Foo {
-+>Foo : Foo
-+
-         Test: null;
- >Test : null
-     }
-@@= skipped -34, +36 lines =@@
+@@= skipped -34, +30 lines =@@
  >Test : null
  
  const Foo = (<h1></h1>);

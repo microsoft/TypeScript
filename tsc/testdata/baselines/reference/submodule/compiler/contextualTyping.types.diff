@@ -1,24 +1,6 @@
 --- old.contextualTyping.types
 +++ new.contextualTyping.types
-@@= skipped -2, +2 lines =@@
- === contextualTyping.ts ===
- // DEFAULT INTERFACES
- interface IFoo {
-+>IFoo : IFoo
-+
-     n: number;
- >n : number
- 
-@@= skipped -16, +18 lines =@@
- }
- 
- interface IBar {
-+>IBar : IBar
-+
-     foo: IFoo;
- >foo : IFoo
- }
-@@= skipped -126, +128 lines =@@
+@@= skipped -144, +144 lines =@@
  >{} : {}
  
  var c3t11: {(n: number, s: string): string;}[] = [function(n, s) { return s; }];
@@ -31,16 +13,7 @@
  >function(n, s) { return s; } : (n: number, s: string) => string
  >n : number
  >s : string
-@@= skipped -124, +124 lines =@@
- 
- // CONTEXT: Object property assignment
- interface IPlaceHolder {
-+>IPlaceHolder : IPlaceHolder
-+
-     t1: (s: string) => string;
- >t1 : (s: string) => string
- >s : string
-@@= skipped -43, +45 lines =@@
+@@= skipped -167, +167 lines =@@
  >t10 : IFoo[]
  
      t11: {(n: number, s: string): string;}[];
@@ -215,16 +188,3 @@
  >function(n, s) { return s; } : (n: number, s: string) => string
  >n : number
  >s : string
-@@= skipped -170, +170 lines =@@
- };
- 
- interface A { x: string; }
-+>A : A
- >x : string
- 
- interface B extends A { }
-+>B : B
-+
- var x: B = { };
- >x : B
- >{ } : {}

@@ -25,6 +25,7 @@ class A2 {
         let a: typeof A2 = A2;
 >a : typeof A2
 >A2 : typeof A2
+>A2 : typeof A2
 
         a.#prop;
 >a.#prop : string

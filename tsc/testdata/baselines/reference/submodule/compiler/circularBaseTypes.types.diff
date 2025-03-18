@@ -1,16 +1,6 @@
 --- old.circularBaseTypes.types
 +++ new.circularBaseTypes.types
-@@= skipped -4, +4 lines =@@
- 
- type M<T> = { value: T };
- >M : M<T>
-+>T : T
- >value : T
- 
- interface M2 extends M<M3> {};  // Error
-+>M2 : M2
-+
- type M3 = M2[keyof M2];  // Error
+@@= skipped -11, +11 lines =@@
  >M3 : any
  
  function f(m: M3) {
@@ -19,17 +9,3 @@
  >m : any
  
    return m.value;
-@@= skipped -20, +23 lines =@@
- 
- type X<T> = { [K in keyof T]: string } & { b: string };
- >X : X<T>
-+>T : T
-+>K : K
- >b : string
- 
- interface Y extends X<Y> {
-+>Y : Y
-+
-   a: "";
- >a : ""
- }

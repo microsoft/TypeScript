@@ -1,26 +1,6 @@
 --- old.exportAssignmentWithImportStatementPrivacyError.types
 +++ new.exportAssignmentWithImportStatementPrivacyError.types
-@@= skipped -1, +1 lines =@@
- 
- === exportAssignmentWithImportStatementPrivacyError.ts ===
- module m2 {
-+>m2 : any
-+
-     export interface connectModule {
-+>connectModule : connectModule
-+
-         (res, req, next): void;
- >res : any
- >req : any
- >next : any
-     }
-     export interface connectExport {
-+>connectExport : connectExport
-+
-         use: (mod: connectModule) => connectExport;
- >use : (mod: connectModule) => connectExport
- >mod : connectModule
-@@= skipped -22, +28 lines =@@
+@@= skipped -23, +23 lines =@@
  >M : typeof M
  
      export var server: {

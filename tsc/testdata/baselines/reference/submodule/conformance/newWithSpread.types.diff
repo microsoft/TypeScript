@@ -1,35 +1,6 @@
 --- old.newWithSpread.types
 +++ new.newWithSpread.types
-@@= skipped -13, +13 lines =@@
- }
- 
- interface A {
-+>A : A
-+
-     f: {
- >f : new (x: number, y: number, ...z: string[]) => any
- 
-@@= skipped -20, +22 lines =@@
- }
- 
- interface C {
-+>C : C
-+
-     "a-b": typeof B;
- >"a-b" : typeof B
-->B : typeof B
- }
- 
- interface D {
-+>D : D
-+
-     1: typeof B;
- >1 : typeof B
-->B : typeof B
- }
- 
- var a: string[];
-@@= skipped -414, +416 lines =@@
+@@= skipped -447, +447 lines =@@
  
  // Element access expression with a number
  new i["a-b"][1](1, 2, "string");

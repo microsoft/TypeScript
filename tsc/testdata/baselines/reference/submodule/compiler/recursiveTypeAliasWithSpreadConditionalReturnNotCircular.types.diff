@@ -1,57 +1,25 @@
 --- old.recursiveTypeAliasWithSpreadConditionalReturnNotCircular.types
 +++ new.recursiveTypeAliasWithSpreadConditionalReturnNotCircular.types
-@@= skipped -2, +2 lines =@@
- === recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts ===
+@@= skipped -3, +3 lines =@@
  export {}
  export interface Option<T> {
-+>Option : Option<T>
-+>T : T
-+
  	zip1<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray1<O>]>;
 ->zip1 : <O extends Array<Option<any>>>(...others: O) => Option<[T, ...UnzipOptionArray1<O>]>
 +>zip1 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray1<O>]>
-+>O : O
  >others : O
  
  	zip2<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray2<O>]>;
 ->zip2 : <O extends Array<Option<any>>>(...others: O) => Option<[T, ...UnzipOptionArray2<O>]>
 +>zip2 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray2<O>]>
-+>O : O
  >others : O
  
  	zip3<O extends Array<Option<any>>>(...others: O): Option<[T, ...UnzipOptionArray3<O>]>;
 ->zip3 : <O extends Array<Option<any>>>(...others: O) => Option<[T, ...UnzipOptionArray3<O>]>
 +>zip3 : <O extends Option<any>[]>(...others: O) => Option<[T, ...UnzipOptionArray3<O>]>
-+>O : O
  >others : O
  }
  
- type UnzipOption<T> = T extends Option<infer V> ? V : never;
- >UnzipOption : UnzipOption<T>
-+>T : T
-+>V : V
- 
- /// This doesn't work
- type UnzipOptionArray1<T> = { [k in keyof T]: T[k] extends Option<any> ? UnzipOption<T[k]> : never };
- >UnzipOptionArray1 : UnzipOptionArray1<T>
-+>T : T
-+>k : k
- 
- /// But these work
- type UnzipOptionArray2<T> = { [k in keyof T]: UnzipOption<T[k]> };
- >UnzipOptionArray2 : UnzipOptionArray2<T>
-+>T : T
-+>k : k
- 
- type UnzipOptionArray3<T> = { [k in keyof T]: T[k] extends Option<infer V> ? V : never };
- >UnzipOptionArray3 : UnzipOptionArray3<T>
-+>T : T
-+>k : k
-+>V : V
- 
- declare const opt1: Option<number>;
- >opt1 : Option<number>
-@@= skipped -39, +54 lines =@@
+@@= skipped -38, +38 lines =@@
  const zipped1 = opt1.zip1(opt2, opt3);
  >zipped1 : Option<[number, string, boolean]>
  >opt1.zip1(opt2, opt3) : Option<[number, string, boolean]>

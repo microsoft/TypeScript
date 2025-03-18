@@ -2,8 +2,6 @@
 
 === deleteExpressionMustBeOptional.ts ===
 interface Foo {
->Foo : Foo
-
     a: number
 >a : number
 
@@ -33,8 +31,6 @@ interface Foo {
 }
 
 interface AA {
->AA : AA
-
     [s: string]: number
 >s : string
 }
@@ -43,7 +39,6 @@ type BB = {
 >BB : BB
 
     [P in keyof any]: number
->P : P
 }
 
 declare const f: Foo

@@ -1,12 +1,6 @@
 --- old.uniqueSymbolsDeclarationsErrors.types
 +++ new.uniqueSymbolsDeclarationsErrors.types
-@@= skipped -4, +4 lines =@@
- >s : unique symbol
- 
- interface I { readonly readonlyType: unique symbol; }
-+>I : I
- >readonlyType : unique symbol
- 
+@@= skipped -9, +9 lines =@@
  // not allowed when emitting declarations
  
  export const obj = {
@@ -19,11 +13,9 @@
 ->method1 : (p: typeof s) => typeof s
 +>method1 : (p: unique symbol) => unique symbol
  >p : unique symbol
-->s : unique symbol
-->s : unique symbol
- 
-         return p;
- >p : unique symbol
+ >s : unique symbol
+ >s : unique symbol
+@@= skipped -14, +14 lines =@@
  
      },
      method2(p: I["readonlyType"]): I["readonlyType"] {
@@ -32,17 +24,16 @@
  >p : unique symbol
  
          return p;
-@@= skipped -32, +31 lines =@@
+@@= skipped -13, +13 lines =@@
  >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof classExpression
  
      method1(p: typeof s): typeof s {
 ->method1 : (p: typeof s) => typeof s
 +>method1 : (p: unique symbol) => unique symbol
  >p : unique symbol
-->s : unique symbol
-->s : unique symbol
- 
-         return p;
+ >s : unique symbol
+ >s : unique symbol
+@@= skipped -9, +9 lines =@@
  >p : unique symbol
      }
      method2(p: I["readonlyType"]): I["readonlyType"] {
@@ -51,7 +42,7 @@
  >p : unique symbol
  
          return p;
-@@= skipped -18, +16 lines =@@
+@@= skipped -9, +9 lines =@@
  };
  
  export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
@@ -62,7 +53,7 @@
 +>obj : { method: (p: unique symbol) => void; }
 +>method : (p: unique symbol) => void
  >p : unique symbol
-->s : unique symbol
+ >s : unique symbol
  
      return obj;
 ->obj : { method(p: typeof s): void; }
@@ -70,16 +61,3 @@
  }
  
  export interface InterfaceWithPrivateNamedProperties {
-+>InterfaceWithPrivateNamedProperties : InterfaceWithPrivateNamedProperties
-+
-     [s]: any;
- >[s] : any
- >s : unique symbol
- }
- 
- export interface InterfaceWithPrivateNamedMethods {
-+>InterfaceWithPrivateNamedMethods : InterfaceWithPrivateNamedMethods
-+
-     [s](): any;
- >[s] : () => any
- >s : unique symbol

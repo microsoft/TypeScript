@@ -16,8 +16,6 @@ class K {
 >0 : 0
 }
 interface I {
->I : I
-
     p: number;
 >p : number
 

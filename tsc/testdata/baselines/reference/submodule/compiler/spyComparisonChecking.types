@@ -2,8 +2,6 @@
 
 === spyComparisonChecking.ts ===
 interface Spy {
->Spy : Spy
-
     (...params: any[]): any;
 >params : any[]
 
@@ -23,15 +21,12 @@ interface Spy {
 
 type SpyObj<T> = T & {
 >SpyObj : SpyObj<T>
->T : T
 
     [k in keyof T]: Spy;
->k : k
 }
 
 declare function createSpyObj<T>(
 >createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
->T : T
 
     name: string, names: Array<keyof T>): SpyObj<T>;
 >name : string
@@ -39,7 +34,6 @@ declare function createSpyObj<T>(
 
 function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
 >mock : <T>(spyName: string, methodNames: (keyof T)[]) => SpyObj<T>
->T : T
 >spyName : string
 >methodNames : (keyof T)[]
 

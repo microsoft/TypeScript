@@ -5,15 +5,12 @@ import React = require('react')
 >React : any
 
 interface MyComponentProp {
->MyComponentProp : MyComponentProp
-
     values: string;
 >values : string
 }
 
 function MyComponent1<T extends MyComponentProp>(attr: T) {
 >MyComponent1 : <T extends MyComponentProp>(attr: T) => any
->T : T
 >attr : T
 
     return <div>attr.values</div>

@@ -1,9 +1,7 @@
 //// [tests/cases/compiler/unusedModuleInModule.ts] ////
 
 === unusedModuleInModule.ts ===
-module A {
->A : any
 
+module A {
     module B {}
->B : any
 }

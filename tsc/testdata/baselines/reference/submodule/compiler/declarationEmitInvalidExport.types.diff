@@ -1,9 +1,0 @@
---- old.declarationEmitInvalidExport.types
-+++ new.declarationEmitInvalidExport.types
-@@= skipped -9, +9 lines =@@
- }
- export type MyClass = typeof myClass;
- >MyClass : number
-->myClass : number
- }
- 

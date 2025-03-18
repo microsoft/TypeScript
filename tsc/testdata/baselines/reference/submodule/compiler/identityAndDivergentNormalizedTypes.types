@@ -27,13 +27,11 @@ type PostPath = ApiPost["path"];
 
 type PostBody<PATH extends PostPath> = Extract<ApiPost, { path: PATH }>["body"];
 >PostBody : PostBody<PATH>
->PATH : PATH
 >path : PATH
 
 const post = <PATH extends PostPath>(
 >post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 ><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
->PATH : PATH
 
     path: PATH,
 >path : PATH
@@ -49,7 +47,6 @@ const post = <PATH extends PostPath>(
 const tmp = <PATH extends PostPath>(
 >tmp : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
 ><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
->PATH : PATH
 
   path: PATH,
 >path : PATH
@@ -68,7 +65,6 @@ const tmp = <PATH extends PostPath>(
 
 function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {
 >fx1 : <P extends "/login" | "/user">(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
->P : P
 >x : { body: PostBody<P>; }
 >body : PostBody<P>
 >y : { body: PostBody<P>; }

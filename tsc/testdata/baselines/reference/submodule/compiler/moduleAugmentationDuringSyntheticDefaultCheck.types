@@ -12,11 +12,7 @@ declare function moment(): moment.Moment;
 >moment : any
 
 declare namespace moment {
->moment : () => Moment
-
   interface Moment extends Object {
->Moment : Moment
-
     valueOf(): number;
 >valueOf : () => number
   }
@@ -35,8 +31,6 @@ declare module "moment" {
 >"moment" : () => Moment
 
     interface Moment {
->Moment : Moment
-
         tz(): string;
 >tz : () => string
     }

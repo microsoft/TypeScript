@@ -9,13 +9,7 @@
  import '.'
  declare module '.' {
  >'.' : typeof import("index")
- 
-   type Row2<T> = {}
- >Row2 : Row2<T>
-+>T : T
- 
-   type C = { s : string }
- >C : C
+@@= skipped -13, +13 lines =@@
  >s : string
  }
  
@@ -26,8 +20,6 @@
 +>Row2 : Row2
  
 -=== ./common.d.ts ===
--
 +=== common.d.ts ===
+ 
  export interface Row2 {}
-+>Row2 : Row2
-+

@@ -5,7 +5,6 @@ module _modes {
 >_modes : typeof _modes
 
  export interface IMode {
->IMode : IMode
   
  }
  
@@ -88,8 +87,6 @@ module A1 {
 >A1 : typeof A1
 
     export interface A1I1 {}
->A1I1 : A1I1
-
     export class A1C1 {}
 >A1C1 : A1C1
 }

@@ -2,18 +2,11 @@
 
 === file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface ElementAttributesProperty { props: {} }
->ElementAttributesProperty : ElementAttributesProperty
 >props : {}
 
 	interface IntrinsicElements { 
->IntrinsicElements : IntrinsicElements
-
 		div: any;
 >div : any
 

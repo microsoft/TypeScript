@@ -5,17 +5,11 @@ module ts {
 >ts : typeof ts
 
     interface Map<T> {
->Map : Map<T>
->T : T
-
         [index: string]: T;
 >index : string
     }
 
     interface Equals<T> {
->Equals : Equals<T>
->T : T
-
         equals(other: T): boolean;
 >equals : (other: T) => boolean
 >other : T
@@ -455,7 +449,6 @@ module ts {
 
     function getProperty<T>(map: Map<T>, key: string): T {
 >getProperty : <T>(map: Map<T>, key: string) => T
->T : T
 >map : Map<T>
 >key : string
 
@@ -477,7 +470,6 @@ module ts {
 
     function hasProperty<T>(map: Map<T>, key: string): boolean {
 >hasProperty : <T>(map: Map<T>, key: string) => boolean
->T : T
 >map : Map<T>
 >key : string
 
@@ -492,7 +484,6 @@ module ts {
 
     function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
 >arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
->T : T
 >a : T[]
 >item : T
 
@@ -527,7 +518,6 @@ module ts {
 
     function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->T : T
 >a : T[]
 >b : T[]
 
@@ -573,7 +563,6 @@ module ts {
 
     function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->T : T
 >a : T[]
 >b : T[]
 

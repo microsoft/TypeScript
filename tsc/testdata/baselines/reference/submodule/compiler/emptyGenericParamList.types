@@ -3,7 +3,6 @@
 === emptyGenericParamList.ts ===
 class I<T> {}
 >I : I<T>
->T : T
 
 var x: I<>;
 >x : any

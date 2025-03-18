@@ -3,8 +3,6 @@
 === arrayFakeFlatNoCrashInferenceDeclarations.ts ===
 type BadFlatArray<Arr, Depth extends number> = {obj: {
 >BadFlatArray : { done: Arr; recur: Arr extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: InnerArr extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: InnerArr extends ??? ? ??? : InnerArr; }[???[???] extends -1 ? "done" : "recur"] : InnerArr; }[[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth] extends -1 ? "done" : "recur"] : Arr; }[Depth extends -1 ? "done" : "recur"]
->Arr : Arr
->Depth : Depth
 >obj : { done: Arr; recur: Arr extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: InnerArr extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: InnerArr extends ??? ? ??? : InnerArr; }[???[???] extends -1 ? "done" : "recur"] : InnerArr; }[[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth] extends -1 ? "done" : "recur"] : Arr; }[Depth extends -1 ? "done" : "recur"]
 
     "done": Arr,
@@ -12,7 +10,6 @@ type BadFlatArray<Arr, Depth extends number> = {obj: {
 
     "recur": Arr extends ReadonlyArray<infer InnerArr>
 >"recur" : Arr extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: InnerArr extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: InnerArr extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: ???; }[??? extends -1 ? "done" : "recur"] : InnerArr; }[[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]] extends -1 ? "done" : "recur"] : InnerArr; }[[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth] extends -1 ? "done" : "recur"] : Arr
->InnerArr : InnerArr
 
     ? BadFlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
 >-1 : -1
@@ -25,8 +22,6 @@ type BadFlatArray<Arr, Depth extends number> = {obj: {
 
 declare function flat<A, D extends number = 1>(
 >flat : <A, D extends number>(arr: A, depth?: D | undefined) => { done: A; recur: A extends readonly (infer InnerArr)[] ? { done: InnerArr; recur: InnerArr extends readonly (infer InnerArr)[] ? ???[???] : InnerArr; }[[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D] extends -1 ? "done" : "recur"] : A; }[D extends -1 ? "done" : "recur"][]
->A : A
->D : D
 
     arr: A,
 >arr : A
@@ -38,7 +33,6 @@ declare function flat<A, D extends number = 1>(
 
 function foo<T>(arr: T[], depth: number) {
 >foo : <T>(arr: T[], depth: number) => (T | (T extends readonly (infer InnerArr)[] ? InnerArr | (InnerArr extends readonly (infer InnerArr)[] ? InnerArr | (???) : InnerArr) : T))[]
->T : T
 >arr : T[]
 >depth : number
 

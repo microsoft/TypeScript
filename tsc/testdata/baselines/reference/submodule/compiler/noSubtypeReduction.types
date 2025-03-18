@@ -4,16 +4,12 @@
 // Repro from #53425
 
 export interface IA {
->IA : IA
-
     arr: { A: number; }[];
 >arr : { A: number; }[]
 >A : number
 }
 
 export interface IAB {
->IAB : IAB
-
     arr: { A: number; B: number; }[];
 >arr : { A: number; B: number; }[]
 >A : number

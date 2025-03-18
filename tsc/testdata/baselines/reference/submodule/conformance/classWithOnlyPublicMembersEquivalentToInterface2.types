@@ -35,8 +35,6 @@ class C {
 }
 
 interface I {
->I : I
-
     x: string;
 >x : string
 

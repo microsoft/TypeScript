@@ -1,42 +1,6 @@
 --- old.typeGuardNarrowsIndexedAccessOfKnownProperty1.types
 +++ new.typeGuardNarrowsIndexedAccessOfKnownProperty1.types
-@@= skipped -1, +1 lines =@@
- 
- === typeGuardNarrowsIndexedAccessOfKnownProperty1.ts ===
- interface Square {
-+>Square : Square
-+
-     ["dash-ok"]: "square";
- >["dash-ok"] : "square"
- >"dash-ok" : "dash-ok"
-@@= skipped -9, +11 lines =@@
- >"square-size" : "square-size"
- }
-  interface Rectangle {
-+>Rectangle : Rectangle
-+
-     ["dash-ok"]: "rectangle";
- >["dash-ok"] : "rectangle"
- >"dash-ok" : "dash-ok"
-@@= skipped -11, +13 lines =@@
- >height : number
- }
-  interface Circle {
-+>Circle : Circle
-+
-     ["dash-ok"]: "circle";
- >["dash-ok"] : "circle"
- >"dash-ok" : "dash-ok"
-@@= skipped -11, +13 lines =@@
- >Shape : Shape
- 
- interface Subshape {
-+>Subshape : Subshape
-+
-     "0": {
- >"0" : { sub: { under: { shape: Shape; }; }; }
- 
-@@= skipped -20, +22 lines =@@
+@@= skipped -52, +52 lines =@@
  >s : Shape
  
      switch(s['dash-ok']) {
@@ -54,25 +18,7 @@
  >s[0]["sub"].under["shape"] : Shape
  >s[0]["sub"].under : { shape: Shape; }
  >s[0]["sub"] : { under: { shape: Shape; }; }
-@@= skipped -97, +97 lines =@@
- }
- 
- interface X {
-+>X : X
-+
-     0: "xx",
- >0 : "xx"
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface Y {
-+>Y : Y
-+
-     0: "yy",
- >0 : "yy"
- 
-@@= skipped -89, +91 lines =@@
+@@= skipped -194, +194 lines =@@
  }
  
  export function g(pair: [number, string?]): string {

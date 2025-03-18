@@ -36,7 +36,6 @@ function declSpace() {
 }
 
 interface Point { x: number; y: number; }
->Point : Point
 >x : number
 >y : number
 
@@ -91,6 +90,7 @@ var p = <{ x: number; y: number; }>{ x: 0, y: undefined };
 
 var p: typeof p;
 >p : Point
+>p : Point
 
 var fn = function (s: string) { return 42; }
 >fn : (s: string) => number
@@ -119,6 +119,7 @@ var fn = <(s: string) => number> null;
 
 var fn: typeof fn;
 >fn : (s: string) => number
+>fn : (s: string) => number
 
 var a: string[]; 
 >a : string[]
@@ -144,5 +145,6 @@ var a = new Array<string>();
 >Array : ArrayConstructor
 
 var a: typeof a;
+>a : string[]
 >a : string[]
 

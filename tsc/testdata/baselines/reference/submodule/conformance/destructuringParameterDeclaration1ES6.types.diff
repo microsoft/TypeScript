@@ -54,12 +54,9 @@
  >z : any
  >x : string
  >y : any
-@@= skipped -16, +16 lines =@@
- >1 : 1
+@@= skipped -17, +17 lines =@@
  
  interface F1 {
-+>F1 : F1
-+
      b5(z, y, [, a, b], {p, m: { q, r}});
 ->b5 : (z: any, y: any, [, a, b]: [any, any, any], { p, m: { q, r } }: { p: any; m: { q: any; r: any; }; }) => any
 +>b5 : (z: any, y: any, __2: [any, any, any], __3: { m: { q: any; r: any; }; p: any; }) => any
@@ -69,7 +66,7 @@
  >a : any
  >b : any
  >p : any
-@@= skipped -14, +15 lines =@@
+@@= skipped -13, +12 lines =@@
  }
  
  function b6([a, z, y] = [undefined, null, undefined]) { }
@@ -205,12 +202,9 @@
  >[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
  >1 : 1
  >2 : 2
-@@= skipped -15, +15 lines =@@
- // or by including an initializer.
+@@= skipped -16, +16 lines =@@
  
  interface F2 {
-+>F2 : F2
-+
      d3([a, b, c]?);
 ->d3 : ([a, b, c]?: [any, any, any]) => any
 +>d3 : (__0?: [any, any, any]) => any
@@ -231,7 +225,7 @@
  >a : any
  >b : any
  >c : any
-@@= skipped -30, +32 lines =@@
+@@= skipped -29, +29 lines =@@
  >d4 : () => void
  
      e0([a, b, c]) { }

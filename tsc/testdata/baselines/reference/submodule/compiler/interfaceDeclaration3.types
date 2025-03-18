@@ -2,18 +2,15 @@
 
 === interfaceDeclaration3.ts ===
 interface I1 { item:number; }
->I1 : I1
 >item : number
 
 module M1 {
 >M1 : typeof M1
 
     interface I1 { item:string; }  
->I1 : I1
 >item : string
 
     interface I2 { item:number; }   
->I2 : I2
 >item : number
 
     class C1 implements I1 {
@@ -58,18 +55,13 @@ export module M2 {
 >M2 : typeof M2
 
     export interface I1 { item:string; }
->I1 : I1
 >item : string
 
     export interface I2 { item:string; }
->I2 : I2
 >item : string
 
     export module M3 {
->M3 : any
-
         export interface I1 { item:string; }
->I1 : I1
 >item : string
     }
     class C1 implements I1 {
@@ -118,6 +110,5 @@ class C3 implements M2.M3.I1 {
 }
 
 interface I2 extends I1 { item:string; }
->I2 : I2
 >item : string
 

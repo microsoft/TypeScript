@@ -1,13 +1,6 @@
 --- old.extendsClause.types
 +++ new.extendsClause.types
-@@= skipped -1, +1 lines =@@
- 
- === types.ts ===
- export interface I {}
-+>I : I
-+
- export class C {}
- >C : C
+@@= skipped -6, +6 lines =@@
  
  === ns.ts ===
  import type * as types from './types';
@@ -30,19 +23,13 @@
 +>I : I
  
  interface Q extends C {}
-+>Q : Q
-+
  interface R extends I {}
-+>R : R
-+
  interface S extends types.C {}
 ->types : typeof types
-+>S : S
 +>types : typeof import("types")
  
  interface T extends types.I {}
 ->types : typeof types
-+>T : T
 +>types : typeof import("types")
  
  class U extends C {} // Error

@@ -2,8 +2,6 @@
 
 === getterErrorMessageNotDuplicated.ts ===
 interface Thing {
->Thing : Thing
-
     get style(): Foo;
 >style : Foo
 
@@ -13,8 +11,6 @@ interface Thing {
 }
 
 interface Foo {
->Foo : Foo
-
     hello: string;
 >hello : string
 
@@ -23,8 +19,6 @@ interface Foo {
 }
 
 interface Bar extends Foo {
->Bar : Bar
-
     extra: any;
 >extra : any
 }

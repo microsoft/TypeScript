@@ -3,15 +3,12 @@
 === mixinOverMappedTypeNoCrash.ts ===
 export type ClassInterface<C> = {
 >ClassInterface : ClassInterface<C>
->C : C
 
     [key in keyof C]: C[key];
->key : key
 }
 
 type InstanceInterface<I> = {
 >InstanceInterface : InstanceInterface<I>
->I : I
 
     new(...args: any[]): I
 >args : any[]
@@ -22,12 +19,9 @@ type InstanceInterface<I> = {
 
 type Constructor<I extends Object, C = any> = ClassInterface<C> & InstanceInterface<I>
 >Constructor : Constructor<I, C>
->I : I
->C : C
 
 function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
 >cloneClass : <T extends Constructor<{}, any>>(OriginalClass: T) => T
->T : T
 >OriginalClass : T
 
     class AnotherOriginalClass extends OriginalClass {

@@ -15,8 +15,6 @@ class C {
 }
 
 interface I extends C {
->I : I
-
     other(x: any): any;
 >other : (x: any) => any
 >x : any

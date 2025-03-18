@@ -2,17 +2,12 @@
 
 === destructuringInitializerContextualTypeFromContext.ts ===
 interface SFC<P = {}> {
->SFC : SFC<P>
->P : P
-
     (props: P & { children?: any }): any | null;
 >props : P & { children?: any; }
 >children : any
 }
 
 interface Props {
->Props : Props
-
     name: "Apollo" | "Artemis" | "Dionysus" | "Persephone";
 >name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
 }

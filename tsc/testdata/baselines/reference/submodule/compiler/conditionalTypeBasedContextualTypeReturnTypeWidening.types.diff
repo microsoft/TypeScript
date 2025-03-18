@@ -7,14 +7,12 @@
 ->useState1 : <S>(initialState: (S extends (() => any) ? never : S) | (() => S)) => S
 ->initialState : (S extends () => any ? never : S) | (() => S)
 +>useState1 : <S>(initialState: () => S | (S extends () => any ? never : S)) => S
-+>S : S
 +>initialState : () => S | (S extends () => any ? never : S)
  
  declare function useState2<S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)): S; // Any args
 ->useState2 : <S>(initialState: (S extends ((...args: any[]) => any) ? never : S) | (() => S)) => S
 ->initialState : (S extends (...args: any[]) => any ? never : S) | (() => S)
 +>useState2 : <S>(initialState: () => S | (S extends (...args: any[]) => any ? never : S)) => S
-+>S : S
 +>initialState : () => S | (S extends (...args: any[]) => any ? never : S)
  >args : any[]
  
@@ -26,7 +24,7 @@
  >() => () => 0 : () => () => 0
  >() => 0 : () => 0
  >0 : 0
-@@= skipped -19, +21 lines =@@
+@@= skipped -19, +19 lines =@@
  const func2 = useState2(() => () => 0);
  >func2 : () => 0
  >useState2(() => () => 0) : () => 0
@@ -40,16 +38,12 @@
 ->useState3 : <S, T extends S>(initialState: (T extends (() => any) ? never : T) | (() => S)) => S
 ->initialState : (T extends () => any ? never : T) | (() => S)
 +>useState3 : <S, T extends S>(initialState: () => S | (T extends () => any ? never : T)) => S
-+>S : S
-+>T : T
 +>initialState : () => S | (T extends () => any ? never : T)
  
  declare function useState4<S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)): S; // Any args
 ->useState4 : <S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)) => S
 ->initialState : (T extends (...args: any[]) => any ? never : T) | (() => S)
 +>useState4 : <S, T extends S>(initialState: () => S | (T extends (...args: any[]) => any ? never : T)) => S
-+>S : S
-+>T : T
 +>initialState : () => S | (T extends (...args: any[]) => any ? never : T)
  >args : any[]
  
@@ -61,7 +55,7 @@
  >() => () => 0 : () => () => 0
  >() => 0 : () => 0
  >0 : 0
-@@= skipped -25, +29 lines =@@
+@@= skipped -25, +25 lines =@@
  const func4 = useState2(() => () => 0);
  >func4 : () => 0
  >useState2(() => () => 0) : () => 0

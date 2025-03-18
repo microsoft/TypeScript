@@ -34,11 +34,9 @@ declare function invalidTypePredicate(n: any): n is unique symbol;
 
 declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
 declare function invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T>() => void
->T : T
 
 // classes
 class InvalidClass {
@@ -74,11 +72,9 @@ class InvalidClass {
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     invalidTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidTypeParameterDefault : <T>() => void
->T : T
 
     get invalidGetter(): unique symbol { return; }
 >invalidGetter : symbol
@@ -111,11 +107,9 @@ class InvalidClass {
 
     static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
 >invalidStaticTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidStaticTypeParameterDefault : <T>() => void
->T : T
 
     static get invalidStaticGetter(): unique symbol { return; }
 >invalidStaticGetter : symbol
@@ -127,8 +121,6 @@ class InvalidClass {
 
 // interfaces
 interface InvalidInterface {
->InvalidInterface : InvalidInterface
-
     invalidPropertyType: unique symbol;
 >invalidPropertyType : symbol
 
@@ -153,11 +145,9 @@ interface InvalidInterface {
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T>() => void
->T : T
 }
 
 // type literals
@@ -188,11 +178,9 @@ type InvalidTypeLiteral = {
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T>() => void
->T : T
 
 };
 
@@ -202,11 +190,9 @@ type InvalidAlias = unique symbol;
 
 type InvalidAliasTypeParameterConstraint<T extends unique symbol> = never;
 >InvalidAliasTypeParameterConstraint : never
->T : T
 
 type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
 >InvalidAliasTypeParameterDefault : never
->T : T
 
 // type references
 declare const invalidTypeArgument: Promise<unique symbol>;
@@ -221,7 +207,6 @@ declare const invalidTupleType: [unique symbol];
 // mapped types
 declare const invalidMappedType: { [P in string]: unique symbol };
 >invalidMappedType : { [x: string]: symbol; }
->P : P
 
 // unions/intersection
 declare const invalidUnion: unique symbol | unique symbol;

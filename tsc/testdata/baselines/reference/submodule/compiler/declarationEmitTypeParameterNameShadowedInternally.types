@@ -4,13 +4,11 @@
 export const foo = <T,>(x: T) => {
 >foo : <T>(x: T) => <T>(y: T) => [T, T]
 ><T,>(x: T) => {	const inner = <T,>(y: T) => [x, y] as const;	return inner;} : <T>(x: T) => <T>(y: T) => [T, T]
->T : T
 >x : T
 
 	const inner = <T,>(y: T) => [x, y] as const;
 >inner : <T>(y: T) => [T, T]
 ><T,>(y: T) => [x, y] as const : <T>(y: T) => [T, T]
->T : T
 >y : T
 >[x, y] as const : [T, T]
 >[x, y] : [T, T]

@@ -1,26 +1,6 @@
 --- old.mappedTypes4.types
 +++ new.mappedTypes4.types
-@@= skipped -2, +2 lines =@@
- === mappedTypes4.ts ===
- type Box<T> = {
- >Box : Box<T>
-+>T : T
- 
- };
- 
- type Boxified<T> = {
- >Boxified : Boxified<T>
-+>T : T
- 
-     [P in keyof T]: Box<T[P]>;
-+>P : P
-+
- };
- 
- function boxify<T>(obj: T): Boxified<T> {
- >boxify : <T>(obj: T) => Boxified<T>
-+>T : T
- >obj : T
+@@= skipped -17, +17 lines =@@
  
      if (typeof obj === "object") {
  >typeof obj === "object" : boolean
@@ -29,7 +9,7 @@
  >obj : T
  >"object" : "object"
  
-@@= skipped -26, +31 lines =@@
+@@= skipped -11, +11 lines =@@
  
          for (let k in obj) {
  >k : Extract<keyof T, string>
@@ -51,39 +31,3 @@
  >obj : T & object
  >k : Extract<keyof T, string>
          }
-@@= skipped -63, +63 lines =@@
- 
- type BoxifiedWithSentinel<T, U> = {
- >BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
-+>T : T
-+>U : U
- 
-     [P in keyof T]: Box<T[P]> | U;
-+>P : P
- }
- 
- type T10 = BoxifiedWithSentinel<A | B | C, null>;
-@@= skipped -15, +18 lines =@@
- 
- type DeepReadonly<T> = {
- >DeepReadonly : DeepReadonly<T>
-+>T : T
- 
-     readonly [P in keyof T]: DeepReadonly<T[P]>;
-+>P : P
-+
- };
- 
- type Foo = {
-@@= skipped -50, +53 lines =@@
- 
- type Clone<T> = {
- >Clone : Clone<T>
-+>T : T
- 
-   [P in keyof (T & {})]: (T & {})[P];
-+>P : P
-+
- };
- type M = Clone<Z>; // M should be { a: number }
- >M : M

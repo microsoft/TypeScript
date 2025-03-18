@@ -3,8 +3,6 @@
 === parserErrorRecovery_IncompleteMemberVariable2.ts ===
 // Interface
 interface IPoint {
->IPoint : IPoint
-
     getDist(): number;
 >getDist : () => number
 }

@@ -40,7 +40,6 @@ class E {
 
 class F<T> {
 >F : F<T>
->T : T
 
     x: T;
 >x : T
@@ -55,7 +54,6 @@ class F<T> {
 
 class G<T> {
 >G : G<T>
->T : T
 
     x: T;
 >x : T

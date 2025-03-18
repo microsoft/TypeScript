@@ -1,35 +1,14 @@
 --- old.circularReferenceInReturnType2.types
 +++ new.circularReferenceInReturnType2.types
-@@= skipped -2, +2 lines =@@
- === circularReferenceInReturnType2.ts ===
- type ObjectType<Source> = {
- >ObjectType : ObjectType<Source>
-+>Source : Source
- 
-   kind: "object";
- >kind : "object"
-@@= skipped -12, +13 lines =@@
- 
- type Field<Source, Key extends string> = {
- >Field : Field<Source, Key>
-+>Source : Source
-+>Key : Key
- 
-   __key: (key: Key) => void;
- >__key : (key: Key) => void
-@@= skipped -12, +14 lines =@@
+@@= skipped -26, +26 lines =@@
  };
  
  declare const object: <Source>() => <
 ->object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string>; }>(config: { name: string; fields: Fields | (() => Fields); }) => ObjectType<Source>
 +>object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string> }>(config: { name: string; fields: Fields | () => Fields; }) => ObjectType<Source>
-+>Source : Source
  
    Fields extends {
-+>Fields : Fields
-+
      [Key in keyof Fields]: Field<Source, Key & string>;
-+>Key : Key
    }
  >(config: {
 ->config : { name: string; fields: Fields | (() => Fields); }
@@ -44,40 +23,7 @@
  
  }) => ObjectType<Source>;
  
- type InferValueFromObjectType<Type extends ObjectType<any>> =
- >InferValueFromObjectType : InferValueFromObjectType<Type>
-+>Type : Type
- 
-   Type extends ObjectType<infer Source> ? Source : never;
-+>Source : Source
- 
- type FieldResolver<Source, TType extends ObjectType<any>> = (
- >FieldResolver : FieldResolver<Source, TType>
-+>Source : Source
-+>TType : TType
- 
-   source: Source
- >source : Source
-@@= skipped -31, +39 lines =@@
- 
- type FieldFuncArgs<Source, Type extends ObjectType<any>> = {
- >FieldFuncArgs : FieldFuncArgs<Source, Type>
-+>Source : Source
-+>Type : Type
- 
-   type: Type;
- >type : Type
-@@= skipped -11, +13 lines =@@
- 
- declare const field: <Source, Type extends ObjectType<any>, Key extends string>(
- >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
-+>Source : Source
-+>Type : Type
-+>Key : Key
- 
-   field: FieldFuncArgs<Source, Type>
- >field : FieldFuncArgs<Source, Type>
-@@= skipped -14, +17 lines =@@
+@@= skipped -56, +56 lines =@@
  const A = object<Something>()({
  >A : any
  >object<Something>()({  name: "A",  fields: () => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }),}) : ObjectType<Something>

@@ -23,8 +23,6 @@ import B, {q} from "./items";
 >q : { foob: string; }
 
 interface IFoo {
->IFoo : IFoo
-
     foo: string;
 >foo : string
 }

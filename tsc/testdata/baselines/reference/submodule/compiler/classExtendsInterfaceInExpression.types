@@ -2,7 +2,6 @@
 
 === classExtendsInterfaceInExpression.ts ===
 interface A {}
->A : A
 
 function factory(a: any): {new(): Object} {
 >factory : (a: any) => new () => Object

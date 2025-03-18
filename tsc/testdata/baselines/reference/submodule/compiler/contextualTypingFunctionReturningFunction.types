@@ -2,8 +2,6 @@
 
 === contextualTypingFunctionReturningFunction.ts ===
 interface I {
->I : I
-
 	a(s: string): void;
 >a : (s: string) => void
 >s : string

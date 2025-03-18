@@ -2,8 +2,6 @@
 
 === overloadRet.ts ===
 interface I {
->I : I
-
     f(s:string):number;  
 >f : { (s: string): number; (n: number): string; }
 >s : string

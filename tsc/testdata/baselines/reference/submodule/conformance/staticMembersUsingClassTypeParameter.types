@@ -4,7 +4,6 @@
 // BUG 745747
 class C<T> {
 >C : C<T>
->T : T
 
     static x: T;
 >x : T
@@ -16,8 +15,6 @@ class C<T> {
 
 class C2<T, U> {
 >C2 : C2<T, U>
->T : T
->U : U
 
     static x: U;
 >x : U
@@ -29,7 +26,6 @@ class C2<T, U> {
 
 class C3<T extends Date> {
 >C3 : C3<T>
->T : T
 
     static x: T;
 >x : T

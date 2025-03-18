@@ -1,66 +1,12 @@
 --- old.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.types
 +++ new.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.types
-@@= skipped -7, +7 lines =@@
- 
-     foo<T>(x: T): T { return null; }
- >foo : <T>(x: T) => T
-+>T : T
- >x : T
- }
- 
- class B<U, V> {
- >B : B<U, V>
-+>U : U
-+>V : V
- 
-     foo(x: U): U { return null; }
- >foo : (x: U) => U
-@@= skipped -13, +16 lines =@@
- 
- class C<V, W, X> {
- >C : C<V, W, X>
-+>V : V
-+>W : W
-+>X : X
- 
-     foo(x: V): V { return null; }
- >foo : (x: V) => V
-@@= skipped -7, +10 lines =@@
- }
- 
- interface I<X, Y, Z, A> {
-+>I : I<X, Y, Z, A>
-+>X : X
-+>Y : Y
-+>Z : Z
-+>A : A
-+
-     foo(x: X): X;
- >foo : (x: X) => X
- >x : X
- }
- 
- interface I2 {
-+>I2 : I2
-+
-     foo<Y, Z, A, B>(x: Y): Y;
- >foo : <Y, Z, A, B>(x: Y) => Y
-+>Y : Y
-+>Z : Z
-+>A : A
-+>B : B
- >x : Y
+@@= skipped -39, +39 lines =@@
  }
  
  var a: { foo<Z, A, B, C, D>(x: Z): Z }
 ->a : { foo<Z, A, B, C, D>(x: Z): Z; }
 +>a : { foo: <Z, A, B, C, D>(x: Z) => Z; }
  >foo : <Z, A, B, C, D>(x: Z) => Z
-+>Z : Z
-+>A : A
-+>B : B
-+>C : C
-+>D : D
  >x : Z
  
  var b = { foo<A, B, C, D, E, F>(x: A) { return x; } };
@@ -69,16 +15,9 @@
 +>b : { foo: <A, B, C, D, E, F>(x: A) => A; }
 +>{ foo<A, B, C, D, E, F>(x: A) { return x; } } : { foo: <A, B, C, D, E, F>(x: A) => A; }
  >foo : <A, B, C, D, E, F>(x: A) => A
-+>A : A
-+>B : B
-+>C : C
-+>D : D
-+>E : E
-+>F : F
  >x : A
  >x : A
- 
-@@= skipped -72, +95 lines =@@
+@@= skipped -60, +60 lines =@@
  >x : any
  
  function foo3(x: typeof a);
@@ -87,6 +26,7 @@
 ->a : { foo<Z, A, B, C, D>(x: Z): Z; }
 +>foo3 : { (x: { foo: <Z, A, B, C, D>(x: Z) => Z; }): any; (x: { foo: <Z, A, B, C, D>(x: Z) => Z; }): any; }
 +>x : { foo: <Z, A, B, C, D>(x: Z) => Z; }
++>a : { foo: <Z, A, B, C, D>(x: Z) => Z; }
  
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -94,6 +34,7 @@
 ->a : { foo<Z, A, B, C, D>(x: Z): Z; }
 +>foo3 : { (x: { foo: <Z, A, B, C, D>(x: Z) => Z; }): any; (x: { foo: <Z, A, B, C, D>(x: Z) => Z; }): any; }
 +>x : { foo: <Z, A, B, C, D>(x: Z) => Z; }
++>a : { foo: <Z, A, B, C, D>(x: Z) => Z; }
  
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -106,6 +47,7 @@
 ->b : { foo<A, B, C, D, E, F>(x: A): A; }
 +>foo4 : { (x: { foo: <A, B, C, D, E, F>(x: A) => A; }): any; (x: { foo: <A, B, C, D, E, F>(x: A) => A; }): any; }
 +>x : { foo: <A, B, C, D, E, F>(x: A) => A; }
++>b : { foo: <A, B, C, D, E, F>(x: A) => A; }
  
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -113,6 +55,7 @@
 ->b : { foo<A, B, C, D, E, F>(x: A): A; }
 +>foo4 : { (x: { foo: <A, B, C, D, E, F>(x: A) => A; }): any; (x: { foo: <A, B, C, D, E, F>(x: A) => A; }): any; }
 +>x : { foo: <A, B, C, D, E, F>(x: A) => A; }
++>b : { foo: <A, B, C, D, E, F>(x: A) => A; }
  
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -120,7 +63,7 @@
  >x : any
  
  function foo5(x: A);
-@@= skipped -64, +60 lines =@@
+@@= skipped -64, +64 lines =@@
  >x : any
  
  function foo7(x: A);
@@ -134,6 +77,7 @@
 ->a : { foo<Z, A, B, C, D>(x: Z): Z; }
 +>foo7 : { (x: A): any; (x: { foo: <Z, A, B, C, D>(x: Z) => Z; }): any; }
 +>x : { foo: <Z, A, B, C, D>(x: Z) => Z; }
++>a : { foo: <Z, A, B, C, D>(x: Z) => Z; }
  
  function foo7(x: any) { }
 ->foo7 : { (x: A): any; (x: typeof a): any; }
@@ -141,7 +85,7 @@
  >x : any
  
  function foo8(x: B<string, string>);
-@@= skipped -37, +36 lines =@@
+@@= skipped -37, +37 lines =@@
  >x : any
  
  function foo10(x: B<string, boolean>);
@@ -155,6 +99,7 @@
 ->a : { foo<Z, A, B, C, D>(x: Z): Z; }
 +>foo10 : { (x: B<string, boolean>): any; (x: { foo: <Z, A, B, C, D>(x: Z) => Z; }): any; }
 +>x : { foo: <Z, A, B, C, D>(x: Z) => Z; }
++>a : { foo: <Z, A, B, C, D>(x: Z) => Z; }
  
  function foo10(x: any) { }
 ->foo10 : { (x: B<string, boolean>): any; (x: typeof a): any; }
@@ -172,6 +117,7 @@
 ->b : { foo<A, B, C, D, E, F>(x: A): A; }
 +>foo11 : { (x: B<string, boolean>): any; (x: { foo: <A, B, C, D, E, F>(x: A) => A; }): any; }
 +>x : { foo: <A, B, C, D, E, F>(x: A) => A; }
++>b : { foo: <A, B, C, D, E, F>(x: A) => A; }
  
  function foo11(x: any) { }
 ->foo11 : { (x: B<string, boolean>): any; (x: typeof b): any; }
@@ -179,7 +125,7 @@
  >x : any
  
  function foo12(x: I<B<string, number>, number, Date, string>);
-@@= skipped -50, +48 lines =@@
+@@= skipped -50, +50 lines =@@
  >x : any
  
  function foo13(x: I<string, Date, RegExp, Date>);
@@ -193,6 +139,7 @@
 ->a : { foo<Z, A, B, C, D>(x: Z): Z; }
 +>foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: { foo: <Z, A, B, C, D>(x: Z) => Z; }): any; }
 +>x : { foo: <Z, A, B, C, D>(x: Z) => Z; }
++>a : { foo: <Z, A, B, C, D>(x: Z) => Z; }
  
  function foo13(x: any) { }
 ->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: typeof a): any; }
@@ -210,6 +157,7 @@
 ->b : { foo<A, B, C, D, E, F>(x: A): A; }
 +>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { foo: <A, B, C, D, E, F>(x: A) => A; }): any; }
 +>x : { foo: <A, B, C, D, E, F>(x: A) => A; }
++>b : { foo: <A, B, C, D, E, F>(x: A) => A; }
  
  function foo14(x: any) { }
 ->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: typeof b): any; }

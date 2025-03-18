@@ -2,9 +2,6 @@
 
 === complicatedIndexesOfIntersectionsAreInferencable.ts ===
 interface FormikConfig<Values> {
->FormikConfig : FormikConfig<Values>
->Values : Values
-
     initialValues: Values;
 >initialValues : Values
 
@@ -18,8 +15,6 @@ interface FormikConfig<Values> {
 
 declare function Func<Values = object, ExtraProps = {}>(
 >Func : <Values, ExtraProps>(x: string extends "initialValues" | "validate" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "initialValues" | "validate" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>) => void
->Values : Values
->ExtraProps : ExtraProps
 
     x: (string extends "validate" | "initialValues" | keyof ExtraProps
 >x : string extends "initialValues" | "validate" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "initialValues" | "validate" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>

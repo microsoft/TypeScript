@@ -1,24 +1,6 @@
 --- old.stringIndexerConstrainsPropertyDeclarations.types
 +++ new.stringIndexerConstrainsPropertyDeclarations.types
-@@= skipped -3, +3 lines =@@
- // String indexer types constrain the types of named properties in their containing type
- 
- interface MyString extends String {
-+>MyString : MyString
-+
-     foo: number;
- >foo : number
- }
-@@= skipped -77, +79 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     [x: string]: string;
- >x : string
- 
-@@= skipped -42, +44 lines =@@
+@@= skipped -122, +122 lines =@@
  }
  
  var a: {

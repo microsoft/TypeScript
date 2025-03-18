@@ -2,7 +2,6 @@
 
 === protoAssignment.ts ===
 interface Number extends Comparable<number> {
->Number : Number
 
     compareTo(other: number);
 >compareTo : (other: number) => any

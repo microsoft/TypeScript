@@ -1,53 +1,6 @@
 --- old.discriminatedUnionTypes2.types
 +++ new.discriminatedUnionTypes2.types
-@@= skipped -108, +108 lines =@@
- 
- function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
- >f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
-+>T : T
- >x : { a: 0; b: string; } | { a: T; c: number; }
- >a : 0
- >b : string
-@@= skipped -22, +23 lines =@@
- 
- type Result<T> = { error?: undefined, value: T } | { error: Error };
- >Result : Result<T>
-+>T : T
- >error : undefined
- >value : T
- >error : Error
-@@= skipped -48, +49 lines =@@
- // Repro from #24193
- 
- interface WithError {
-+>WithError : WithError
-+
-     error: Error
- >error : Error
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface WithoutError<Data> {
-+>WithoutError : WithoutError<Data>
-+>Data : Data
-+
-     error: null
- >error : null
- 
-@@= skipped -9, +12 lines =@@
- 
- type DataCarrier<Data> = WithError | WithoutError<Data>
- >DataCarrier : DataCarrier<Data>
-+>Data : Data
- 
- function f20<Data>(carrier: DataCarrier<Data>) {
- >f20 : <Data>(carrier: DataCarrier<Data>) => void
-+>Data : Data
- >carrier : DataCarrier<Data>
- 
-     if (carrier.error === null) {
-@@= skipped -123, +125 lines =@@
+@@= skipped -318, +318 lines =@@
  
  function f(problem: abc & (b | c)) {
  >f : (problem: abc & (b | c)) => void

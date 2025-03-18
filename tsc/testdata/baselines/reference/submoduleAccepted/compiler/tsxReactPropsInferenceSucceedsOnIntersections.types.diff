@@ -19,27 +19,23 @@
  export type ButtonProps<T = {}> = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 ->ButtonProps : ButtonProps<T>
 +>ButtonProps : any
-+>T : T
  >React : any
  
      outline?: boolean;
-@@= skipped -22, +17 lines =@@
+@@= skipped -22, +16 lines =@@
  
  declare class Button<T = {}> extends React.Component<ButtonProps<T>> { }
  >Button : Button<T>
 ->React.Component : React.Component<ButtonProps<T>, {}, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>T : T
 +>React.Component : any
 +>React : any
 +>Component : any
  
  interface CustomButtonProps extends ButtonProps {
-+>CustomButtonProps : CustomButtonProps
-+
      customProp: string;
- >customProp : string
+@@= skipped -10, +10 lines =@@
  }
  
  const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;

@@ -33,57 +33,7 @@
  }
  
  module A {
-+>A : typeof A
-+
-     export module B {
-+>B : typeof B
-+
-         export module C {
-+>C : typeof C
-+
-             export const enum E {
- >E : E
- 
-@@= skipped -50, +56 lines =@@
- }
- 
- module A {
-+>A : typeof A
-+
-     export module B {
-+>B : typeof B
-+
-         export module C {
-+>C : typeof C
-+
-             export const enum E {
- >E : E
- 
-@@= skipped -38, +44 lines =@@
- }
- 
- module A1 {
-+>A1 : typeof A1
-+
-     export module B {
-+>B : typeof B
-+
-         export module C {
-+>C : typeof C
-+
-             export const enum E {
- >E : E
- 
-@@= skipped -24, +30 lines =@@
- >B : typeof B
- 
-         export module C {
-+>C : typeof C
-+
-             export const enum E {
- >E : E
- 
-@@= skipped -24, +26 lines =@@
+@@= skipped -136, +136 lines =@@
  }
  
  import I = A.B.C.E;

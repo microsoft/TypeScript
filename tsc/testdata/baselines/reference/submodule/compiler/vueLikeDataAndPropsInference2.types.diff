@@ -1,64 +1,11 @@
 --- old.vueLikeDataAndPropsInference2.types
 +++ new.vueLikeDataAndPropsInference2.types
-@@= skipped -1, +1 lines =@@
- 
- === vueLikeDataAndPropsInference2.ts ===
- interface Instance {
-+>Instance : Instance
-+
-     _instanceBrand: never
- >_instanceBrand : never
- }
- 
- type DataDef<Data, Props> = (this: Readonly<Props> & Instance) => Data
- >DataDef : DataDef<Data, Props>
-+>Data : Data
-+>Props : Props
- >this : Readonly<Props> & Instance
- 
- type PropsDefinition<T> = {
- >PropsDefinition : PropsDefinition<T>
-+>T : T
- 
-     [K in keyof T]: T[K]
-+>K : K
- }
- 
- interface Options<
-+>Options : Options<Data, PropsDef>
-+
-     Data = object | ((this: Instance) => object),
-+>Data : Data
- >this : Instance
- 
-     PropsDef = PropsDefinition<Record<string, any>>
-+>PropsDef : PropsDef
-+
-     > {
-     data?: Data
- >data : Data
-@@= skipped -32, +43 lines =@@
- 
- type WatchHandler<T> = (val: T, oldVal: T) => void;
- >WatchHandler : WatchHandler<T>
-+>T : T
- >val : T
- >oldVal : T
- 
- type ThisTypedOptions<Data, Props> =
- >ThisTypedOptions : ThisTypedOptions<Data, Props>
-+>Data : Data
-+>Props : Props
- 
-     object &
-     Options<DataDef<Data, Props>, PropsDefinition<Props>> &
+@@= skipped -44, +44 lines =@@
      ThisType<Data & Readonly<Props> & Instance>
  
  declare function test<Data, Props>(fn: ThisTypedOptions<Data, Props>): void;
 ->test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options): void; }
 +>test : { <Data, Props>(fn: ThisTypedOptions<Data, Props>): void; (fn: Options<() => object | object, PropsDefinition<Record<string, any>>>): void; }
-+>Data : Data
-+>Props : Props
  >fn : ThisTypedOptions<Data, Props>
  
  declare function test(fn: Options): void;
@@ -76,7 +23,7 @@
  
      props: {
  >props : { foo: string; }
-@@= skipped -34, +39 lines =@@
+@@= skipped -23, +23 lines =@@
      },
  
      data(): { bar: boolean } {

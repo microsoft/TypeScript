@@ -334,8 +334,6 @@ var stat = new Statics();
 >Statics : typeof Statics
 
 interface IFoo {
->IFoo : IFoo
-
     x: number;
 >x : number
 

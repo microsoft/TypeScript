@@ -22,6 +22,7 @@ namespace Test1 {
 
     type C2 = typeof Color;
 >C2 : typeof Color
+>Color : typeof Color
 
     let a1: Color.Red.toString;
 >a1 : toString
@@ -39,6 +40,7 @@ namespace Test1 {
     //let b2: (typeof Color).Red["toString"];
     let b3: (typeof Color)["Red"]["toString"];
 >b3 : (radix?: number) => string
+>Color : typeof Color
 
     let c1: C1.Red.toString;
 >c1 : toString

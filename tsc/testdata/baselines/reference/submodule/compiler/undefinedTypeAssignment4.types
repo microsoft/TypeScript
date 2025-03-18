@@ -8,8 +8,6 @@ class undefined {
 >foo : string
 }
 interface undefined {
->undefined : undefined
-
 	member: number;
 >member : number
 }
@@ -25,4 +23,5 @@ var x: undefined;
 
 var y: typeof undefined;
 >y : typeof undefined
+>undefined : typeof undefined
 

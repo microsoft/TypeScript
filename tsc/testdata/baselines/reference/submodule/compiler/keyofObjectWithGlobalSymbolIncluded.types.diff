@@ -1,8 +1,0 @@
---- old.keyofObjectWithGlobalSymbolIncluded.types
-+++ new.keyofObjectWithGlobalSymbolIncluded.types
-@@= skipped -15, +15 lines =@@
- 
- type Q = keyof typeof obj;
- >Q : unique symbol
-->obj : { [Symbol.species]: ArrayConstructor; }
- 

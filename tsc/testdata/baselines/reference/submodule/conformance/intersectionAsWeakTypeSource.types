@@ -2,15 +2,12 @@
 
 === intersectionAsWeakTypeSource.ts ===
 interface X { x: string }
->X : X
 >x : string
 
 interface Y { y: number }
->Y : Y
 >y : number
 
 interface Z { z?: boolean }
->Z : Z
 >z : boolean
 
 type XY = X & Y;
@@ -30,8 +27,6 @@ const z1: Z = xy; // error, {xy} doesn't overlap with {z}
 
 
 interface ViewStyle {
->ViewStyle : ViewStyle
-
     view: number
 >view : number
 
@@ -40,15 +35,12 @@ interface ViewStyle {
 }
 type Brand<T> = number & { __brand: T }
 >Brand : Brand<T>
->T : T
 >__brand : T
 
 declare function create<T extends { [s: string]: ViewStyle }>(styles: T): { [P in keyof T]: Brand<T[P]> };
 >create : <T extends { [s: string]: ViewStyle; }>(styles: T) => { [P in keyof T]: Brand<T[P]> }
->T : T
 >s : string
 >styles : T
->P : P
 
 const wrapped = create({ first: { view: 0, styleMedia: "???" } });
 >wrapped : { first: Brand<{ view: number; styleMedia: string; }>; }

@@ -1,24 +1,6 @@
 --- old.mergedDeclarations7.types
 +++ new.mergedDeclarations7.types
-@@= skipped -4, +4 lines =@@
- >'passport' : typeof import("passport")
- 
-     namespace passport {
-+>passport : PassportStatic
-+
-         interface Passport {
-+>Passport : Passport
-+
-             use(): this;
- >use : () => this
-         }
- 
-         interface PassportStatic extends Passport {
-+>PassportStatic : PassportStatic
-+
-             Passport: {new(): Passport};
- >Passport : new () => Passport
-         }
+@@= skipped -16, +16 lines =@@
      }
  
      const passport: passport.PassportStatic;

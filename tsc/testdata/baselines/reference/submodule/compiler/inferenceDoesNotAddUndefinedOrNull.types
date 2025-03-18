@@ -2,15 +2,10 @@
 
 === inferenceDoesNotAddUndefinedOrNull.ts ===
 interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
->NodeArray : NodeArray<T>
->T : T
 
 interface Node {
->Node : Node
-
     forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
 >forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
->T : T
 >cbNode : (node: Node) => T | undefined
 >node : Node
 >cbNodeArray : (nodes: NodeArray<Node>) => T | undefined | undefined
@@ -19,17 +14,14 @@ interface Node {
 
 declare function toArray<T>(value: T | T[]): T[];
 >toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
->T : T
 >value : T | T[]
 
 declare function toArray<T>(value: T | readonly T[]): readonly T[];
 >toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
->T : T
 >value : T | readonly T[]
 
 function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
 >flatMapChildren : <T>(node: Node, cb: (child: Node) => T | readonly T[] | undefined) => readonly T[]
->T : T
 >node : Node
 >cb : (child: Node) => T | readonly T[] | undefined
 >child : Node
@@ -74,7 +66,6 @@ function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | 
 
 function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T | null): readonly T[] {
 >flatMapChildren2 : <T>(node: Node, cb: (child: Node) => T | readonly T[] | null) => readonly T[]
->T : T
 >node : Node
 >cb : (child: Node) => T | readonly T[] | null
 >child : Node

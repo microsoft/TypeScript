@@ -7,7 +7,6 @@
 
 class B<T extends Date> {
 >B : B<T>
->T : T
 
     constructor(x: T) { return null; }
 >x : T
@@ -15,38 +14,29 @@ class B<T extends Date> {
 
 class C<T extends Date> {
 >C : C<T>
->T : T
 
     constructor(x: T) { return null; }
 >x : T
 }
 
 interface I<T extends Date> {
->I : I<T>
->T : T
-
     new(x: T): Date;
 >x : T
 }
 
 interface I2 {
->I2 : I2
-
     new<T extends Date>(x: T): RegExp;
->T : T
 >x : T
 }
 
 var a: { new<T extends Date>(x: T): T }
 >a : new <T extends Date>(x: T) => T
->T : T
 >x : T
 
 var b = { new<T extends Date>(x: T) { return null; } }; // not a construct signature, function called new
 >b : { new: <T extends Date>(x: T) => any; }
 >{ new<T extends Date>(x: T) { return null; } } : { new: <T extends Date>(x: T) => any; }
 >new : <T extends Date>(x: T) => any
->T : T
 >x : T
 
 function foo1b(x: B<Date>);
@@ -88,10 +78,12 @@ function foo2(x: any) { }
 function foo3(x: typeof a);
 >foo3 : { (x: new <T extends Date>(x: T) => T): any; (x: new <T extends Date>(x: T) => T): any; }
 >x : new <T extends Date>(x: T) => T
+>a : new <T extends Date>(x: T) => T
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: new <T extends Date>(x: T) => T): any; (x: new <T extends Date>(x: T) => T): any; }
 >x : new <T extends Date>(x: T) => T
+>a : new <T extends Date>(x: T) => T
 
 function foo3(x: any) { }
 >foo3 : { (x: new <T extends Date>(x: T) => T): any; (x: new <T extends Date>(x: T) => T): any; }
@@ -100,10 +92,12 @@ function foo3(x: any) { }
 function foo4(x: typeof b);
 >foo4 : { (x: { new: <T extends Date>(x: T) => any; }): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
 >x : { new: <T extends Date>(x: T) => any; }
+>b : { new: <T extends Date>(x: T) => any; }
 
 function foo4(x: typeof b); // error
 >foo4 : { (x: { new: <T extends Date>(x: T) => any; }): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
 >x : { new: <T extends Date>(x: T) => any; }
+>b : { new: <T extends Date>(x: T) => any; }
 
 function foo4(x: any) { }
 >foo4 : { (x: { new: <T extends Date>(x: T) => any; }): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
@@ -140,6 +134,7 @@ function foo10(x: B<Date>);
 function foo10(x: typeof a); // ok
 >foo10 : { (x: B<Date>): any; (x: new <T extends Date>(x: T) => T): any; }
 >x : new <T extends Date>(x: T) => T
+>a : new <T extends Date>(x: T) => T
 
 function foo10(x: any) { }
 >foo10 : { (x: B<Date>): any; (x: new <T extends Date>(x: T) => T): any; }
@@ -152,6 +147,7 @@ function foo11(x: B<Date>);
 function foo11(x: typeof b); // ok
 >foo11 : { (x: B<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
 >x : { new: <T extends Date>(x: T) => any; }
+>b : { new: <T extends Date>(x: T) => any; }
 
 function foo11(x: any) { }
 >foo11 : { (x: B<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
@@ -188,6 +184,7 @@ function foo13(x: I<Date>);
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I<Date>): any; (x: new <T extends Date>(x: T) => T): any; }
 >x : new <T extends Date>(x: T) => T
+>a : new <T extends Date>(x: T) => T
 
 function foo13(x: any) { }
 >foo13 : { (x: I<Date>): any; (x: new <T extends Date>(x: T) => T): any; }
@@ -200,6 +197,7 @@ function foo14(x: I<Date>);
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
 >x : { new: <T extends Date>(x: T) => any; }
+>b : { new: <T extends Date>(x: T) => any; }
 
 function foo14(x: any) { }
 >foo14 : { (x: I<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }

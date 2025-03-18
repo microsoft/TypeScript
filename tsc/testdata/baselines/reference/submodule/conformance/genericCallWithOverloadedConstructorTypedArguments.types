@@ -20,6 +20,7 @@ module NonGenericParameter {
     function foo4(cb: typeof a) {
 >foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => boolean
 >cb : { new (x: boolean): boolean; new (x: string): string; }
+>a : { new (x: boolean): boolean; new (x: string): string; }
 
         return new cb(null);
 >new cb(null) : boolean
@@ -34,7 +35,6 @@ module NonGenericParameter {
 
     var b: { new <T>(x: T): T };
 >b : new <T>(x: T) => T
->T : T
 >x : T
 
     var r2 = foo4(b);
@@ -49,7 +49,6 @@ module GenericParameter {
 
     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
->T : T
 >cb : { new (x: T): string; new (x: number): T; }
 >x : T
 >x : number
@@ -75,9 +74,7 @@ module GenericParameter {
 
     var b: { new<T>(x: T): string; new<T>(x: number): T; }
 >b : { new <T>(x: T): string; new <T>(x: number): T; }
->T : T
 >x : T
->T : T
 >x : number
 
     var r7 = foo5(b); // new any => string; new(x:number) => any
@@ -88,7 +85,6 @@ module GenericParameter {
 
     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
->T : T
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
 >x : T
 >x : T
@@ -112,7 +108,6 @@ module GenericParameter {
 
     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
->T : T
 >x : T
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
 >x : T
@@ -132,16 +127,12 @@ module GenericParameter {
 
     var c: { new <T>(x: T): string; <T>(x: number): T; }
 >c : { <T>(x: number): T; new <T>(x: T): string; }
->T : T
 >x : T
->T : T
 >x : number
 
     var c2: { new <T>(x: T): string; new<T>(x: number): T; }
 >c2 : { new <T>(x: T): string; new <T>(x: number): T; }
->T : T
 >x : T
->T : T
 >x : number
 
     var r14 = foo7(1, c); // new any => string; new(x:any, y?:any) => string

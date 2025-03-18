@@ -1,19 +1,6 @@
 --- old.moduleAugmentationImportsAndExports6.types
 +++ new.moduleAugmentationImportsAndExports6.types
-@@= skipped -29, +29 lines =@@
- >undefined : undefined
- 
- export namespace N {
-+>N : any
-+
-     export interface Ifc { a: number; }
-+>Ifc : Ifc
- >a : number
- 
-     export interface Cls { b: number; }
-+>Cls : Cls
- >b : number
- }
+@@= skipped -38, +38 lines =@@
  import I = N.Ifc;
  >I : any
  >N : any
@@ -28,11 +15,7 @@
  
  declare module "./f1" {
  >"./f1" : typeof import("f1")
- 
-     interface A {
-+>A : A
-+
-         foo(): B;
+@@= skipped -15, +15 lines =@@
  >foo : () => B
  
          bar(): I;
@@ -45,7 +28,7 @@
      }
  }
  
-@@= skipped -43, +49 lines =@@
+@@= skipped -19, +19 lines =@@
  let b = a.foo().n;
  >b : number
  >a.foo().n : number

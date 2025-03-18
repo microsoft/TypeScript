@@ -3,14 +3,11 @@
 === nestedGenericSpreadInference.ts ===
 declare function wrap<X>(x: X): { x: X };
 >wrap : <X>(x: X) => { x: X; }
->X : X
 >x : X
 >x : X
 
 declare function call<A extends unknown[], T>(x: { x: (...args: A) => T }, ...args: A): T;
 >call : <A extends unknown[], T>(x: { x: (...args: A) => T; }, ...args: A) => T
->A : A
->T : T
 >x : { x: (...args: A) => T; }
 >x : (...args: A) => T
 >args : A
@@ -24,7 +21,6 @@ const leak = call(wrap(<T>(x: T) => x), 1);
 >wrap(<T>(x: T) => x) : { x: (x: A[0]) => A[0]; }
 >wrap : <X>(x: X) => { x: X; }
 ><T>(x: T) => x : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 >1 : 1

@@ -3,15 +3,11 @@
 === genericTypeReferencesRequireTypeArgs.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
    foo(): T { return null }
 >foo : () => T
 }
 interface I<T> {
->I : I<T>
->T : T
-
    bar(): T;
 >bar : () => T
 }

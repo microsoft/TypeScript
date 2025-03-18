@@ -1,15 +1,5 @@
 --- old.importTag20.types
 +++ new.importTag20.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/jsdoc/importTag20.ts] ////
- 
- === a.ts ===
--
- export interface Foo {}
-+>Foo : Foo
- 
- === b.js ===
- /**
 @@= skipped -14, +14 lines =@@
   * @param {Foo} a
   */

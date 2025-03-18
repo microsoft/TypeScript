@@ -41,6 +41,7 @@ type F6 = ({ a: string }) => typeof string; // OK
 >F6 : F6
 >a : any
 >string : any
+>string : any
 
 type F7 = ({ a: string, b: number }) => typeof number; // Error
 >F7 : F7
@@ -48,11 +49,13 @@ type F7 = ({ a: string, b: number }) => typeof number; // Error
 >string : any
 >b : any
 >number : any
+>number : any
 
 type F8 = ({ a, b: number }) => typeof number; // OK
 >F8 : F8
 >a : any
 >b : any
+>number : any
 >number : any
 
 type F9 = ([a, b, c]) => void; // OK
@@ -93,6 +96,7 @@ type G6 = new ({ a: string }) => typeof string; // OK
 >G6 : G6
 >a : any
 >string : any
+>string : any
 
 type G7 = new ({ a: string, b: number }) => typeof number; // Error
 >G7 : G7
@@ -100,11 +104,13 @@ type G7 = new ({ a: string, b: number }) => typeof number; // Error
 >string : any
 >b : any
 >number : any
+>number : any
 
 type G8 = new ({ a, b: number }) => typeof number; // OK
 >G8 : G8
 >a : any
 >b : any
+>number : any
 >number : any
 
 type G9 = new ([a, b, c]) => void; // OK
@@ -152,8 +158,6 @@ type G13 = new ({ [2]: string }) => void; // Error
 >string : any
 
 interface I {
->I : I
-
   method1(arg: number): any; // OK
 >method1 : (arg: number) => any
 >arg : number
@@ -204,6 +208,7 @@ const f4 = function({ a: string }: O): typeof string { return string; };
 >a : any
 >string : string
 >string : string
+>string : string
 
 const f5 = ({ a: string, b, c }: O): typeof string => '';
 >f5 : (__0: O) => string
@@ -212,6 +217,7 @@ const f5 = ({ a: string, b, c }: O): typeof string => '';
 >string : string
 >b : number
 >c : number
+>string : string
 >'' : ""
 
 const obj1 = {
@@ -231,6 +237,7 @@ const obj2 = {
   method({ a: string }: O): typeof string { return string; }
 >method : (__0: O) => string
 >a : any
+>string : string
 >string : string
 >string : string
 
@@ -276,5 +283,6 @@ function f12({ a: string = "" }: O): typeof string { return "a"; }
 >a : any
 >string : string
 >"" : ""
+>string : string
 >"a" : "a"
 

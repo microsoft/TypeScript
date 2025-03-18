@@ -2,7 +2,6 @@
 
 === a.ts ===
 export default interface A { value: number; }
->A : default
 >value : number
 
 var a: A;

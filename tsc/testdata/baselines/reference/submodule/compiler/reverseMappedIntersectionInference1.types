@@ -3,11 +3,8 @@
 === reverseMappedIntersectionInference1.ts ===
 type Results<T> = {
 >Results : Results<T>
->T : T
 
   [K in keyof T]: {
->K : K
-
     data: T[K];
 >data : T[K]
 
@@ -20,11 +17,8 @@ type Results<T> = {
 
 type Errors<E> = {
 >Errors : Errors<E>
->E : E
 
   [K in keyof E]: {
->K : K
-
     error: E[K];
 >error : E[K]
 
@@ -37,8 +31,6 @@ type Errors<E> = {
 
 declare function withKeyedObj<T, E>(
 >withKeyedObj : <T, E>(arg: Results<T> & Errors<E>) => [T, E]
->T : T
->E : E
 
   arg: Results<T> & Errors<E>
 >arg : Results<T> & Errors<E>

@@ -37,8 +37,6 @@ declare module "./m1" {
 >"./m1" : typeof import("m1")
 
     interface Cls {
->Cls : Cls
-
         foo(): number;
 >foo : () => number
     }
@@ -48,8 +46,6 @@ declare module "./m1" {
 >"./m1" : typeof import("m1")
 
     interface Cls {
->Cls : Cls
-
         bar(): string;
 >bar : () => string
     }
@@ -100,8 +96,6 @@ declare module "./m1" {
 >"./m1" : typeof import("m1")
 
     interface Cls {
->Cls : Cls
-
         baz1(): C1;
 >baz1 : () => C1
     }
@@ -111,8 +105,6 @@ declare module "./m1" {
 >"./m1" : typeof import("m1")
 
     interface Cls {
->Cls : Cls
-
         baz2(): C2;
 >baz2 : () => C2
     }

@@ -1,15 +1,6 @@
 --- old.constructorWithIncompleteTypeAnnotation.types
 +++ new.constructorWithIncompleteTypeAnnotation.types
-@@= skipped -13, +13 lines =@@
- >ReadAllText : () => string
-     }
-     export interface IFile {
-+>IFile : IFile
-+
-         [index: number]: string;
- >index : number
-     }
-@@= skipped -188, +190 lines =@@
+@@= skipped -201, +201 lines =@@
  >local : number
  
              var local5 = <fs.File>null;
@@ -36,25 +27,7 @@
  >quoted2 : string
  >"'" : "'"
  
-@@= skipped -558, +558 lines =@@
-     }
- 
-     interface IF {
-+>IF : IF
-+
-         Foo(): bool;
- >Foo : () => bool
-     }
-@@= skipped -164, +166 lines =@@
- }
- 
- interface IDisposable {
-+>IDisposable : IDisposable
-+
-     Dispose(): void;
- >Dispose : () => void
- }
-@@= skipped -7, +9 lines =@@
+@@= skipped -729, +729 lines =@@
  TypeScriptAllInOne.Program.Main();
  >TypeScriptAllInOne.Program.Main() : void
  >TypeScriptAllInOne.Program.Main : (...args: string[]) => void

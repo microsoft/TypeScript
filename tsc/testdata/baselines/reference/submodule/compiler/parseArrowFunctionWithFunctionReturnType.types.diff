@@ -8,6 +8,5 @@
 -><T>(): (() => T) => null as any : <T>() => (() => T)
 +>fn : <T>() => () => T
 +><T>(): (() => T) => null as any : <T>() => () => T
-+>T : T
  >null as any : any
  

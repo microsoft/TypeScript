@@ -3,12 +3,10 @@
 === graphql-compose.d.ts ===
 export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;
 >ObjMapReadOnly : Readonly<{ [key: string]: Readonly<T>; }>
->T : T
 >key : string
 
 export type Thunk<T> = (() => T) | T;
 >Thunk : Thunk<T>
->T : T
 
 export type ComposeOutputTypeDefinition = Readonly<ObjectTypeComposer<any, any> | EnumTypeComposer>;
 >ComposeOutputTypeDefinition : ComposeOutputTypeDefinition
@@ -25,8 +23,6 @@ export class EnumTypeComposer {
 
 export class ObjectTypeComposer<TSource, TContext> {
 >ObjectTypeComposer : ObjectTypeComposer<TSource, TContext>
->TSource : TSource
->TContext : TContext
 
   public setFields(fields: ObjMapReadOnly<Resolver>): this;
 >setFields : (fields: Readonly<{ [key: string]: Readonly<Resolver>; }>) => this
@@ -34,7 +30,6 @@ export class ObjectTypeComposer<TSource, TContext> {
 
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
 >addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => this
->TResolverSource : TResolverSource
 >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >type : Thunk<ComposeOutputTypeDefinition>
 }
@@ -44,7 +39,6 @@ export class Resolver {
 
   public wrapArgs<NewContext>(
 >wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
->NewContext : NewContext
 
     cb: () => {
 >cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }

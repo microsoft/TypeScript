@@ -134,7 +134,6 @@ var C7 = class { constructor(p13: undefined) { } }
 
 declare function fn<T>();
 >fn : <T>() => any
->T : T
 
 fn<null>();
 >fn<null>() : any
@@ -146,7 +145,6 @@ fn<undefined>();
 
 declare class D<T> {}
 >D : D<T>
->T : T
 
 new D<null>();
 >new D<null>() : D<null>

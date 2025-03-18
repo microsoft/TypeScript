@@ -25,7 +25,6 @@ function fx1(x: string | number | undefined) {
 
 function fx2<T>(x: T | undefined) {
 >fx2 : <T>(x: T | undefined) => void
->T : T
 >x : T | undefined
 
     if (isFalsy(x)) {
@@ -40,7 +39,6 @@ function fx2<T>(x: T | undefined) {
 
 function fx3<T extends string | number>(x: T) {
 >fx3 : <T extends string | number>(x: T) => void
->T : T
 >x : T
 
     if (isFalsy(x)) {
@@ -99,9 +97,10 @@ declare function isXSorY(obj: unknown): obj is XS | Y;
 
 function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
 >fx5 : <T extends X>(obj: X | YS, c: typeof XS | typeof Y) => void
->T : T
 >obj : X | YS
 >c : typeof XS | typeof Y
+>XS : typeof XS
+>Y : typeof Y
 
     if (obj instanceof c) {
 >obj instanceof c : boolean
@@ -206,12 +205,10 @@ declare function isMaybeZero(value: number | null | undefined): value is 0 | nul
 
 declare function isEmptyArray<T>(value: T[]): value is [];
 >isEmptyArray : <T>(value: T[]) => value is []
->T : T
 >value : T[]
 
 declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->T : T
 >value : T[] | null | undefined
 
 const TEST_CASES = [
@@ -396,7 +393,6 @@ if (isEmpty(test)) {
 
 declare function assert<T>(value: any): asserts value is T
 >assert : <T>(value: any) => asserts value is T
->T : T
 >value : any
 
 function test1(foo: number | string | boolean) {

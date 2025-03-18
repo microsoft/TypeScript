@@ -1,18 +1,6 @@
 --- old.jsxNamespacePrefixIntrinsics.types
 +++ new.jsxNamespacePrefixIntrinsics.types
-@@= skipped -1, +1 lines =@@
- 
- === jsxNamespacePrefixIntrinsics.tsx ===
- declare namespace JSX {
-+>JSX : any
-+
-   interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-     "ns:element": {
- >"ns:element" : { "ns:attribute": string; }
- 
-@@= skipped -21, +25 lines =@@
+@@= skipped -22, +22 lines =@@
  ><ns:element ns:attribute="yep" /> : any
  >ns : any
  >element : any

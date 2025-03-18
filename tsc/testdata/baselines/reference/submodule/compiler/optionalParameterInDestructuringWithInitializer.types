@@ -199,8 +199,6 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
 }
 
 interface Foo {
->Foo : Foo
-
   readonly bar?: number;
 >bar : number | undefined
 }

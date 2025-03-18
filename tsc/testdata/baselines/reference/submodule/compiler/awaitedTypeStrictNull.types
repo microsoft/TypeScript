@@ -62,7 +62,6 @@ type TNullOrUndefined = Awaited<null | undefined>;
 >TNullOrUndefined : TNullOrUndefined
 
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
->BadPromise : BadPromise
 >then : (cb: (value: BadPromise) => void) => void
 >cb : (value: BadPromise) => void
 >value : BadPromise
@@ -71,13 +70,11 @@ type T16 = Awaited<BadPromise>; // error
 >T16 : any
 
 interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
->BadPromise1 : BadPromise1
 >then : (cb: (value: BadPromise2) => void) => void
 >cb : (value: BadPromise2) => void
 >value : BadPromise2
 
 interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
->BadPromise2 : BadPromise2
 >then : (cb: (value: BadPromise1) => void) => void
 >cb : (value: BadPromise1) => void
 >value : BadPromise1
@@ -96,11 +93,9 @@ type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
 // https://github.com/microsoft/TypeScript/issues/33562
 type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
 >MaybePromise : MaybePromise<T>
->T : T
 
 declare function MaybePromise<T>(value: T): MaybePromise<T>;
 >MaybePromise : <T>(value: T) => MaybePromise<T>
->T : T
 >value : T
 
 async function main() {
@@ -151,12 +146,10 @@ async function main() {
 // https://github.com/microsoft/TypeScript/issues/45924
 class Api<D = {}> {
 >Api : Api<D>
->D : D
 
 	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
 	async post<T = D>() { return this.request<T>(); }
 >post : <T>() => Promise<T>
->T : T
 >this.request<T>() : Promise<T>
 >this.request : <D>() => Promise<D>
 >this : this
@@ -164,7 +157,6 @@ class Api<D = {}> {
 
 	async request<D>(): Promise<D> { throw new Error(); }
 >request : <D>() => Promise<D>
->D : D
 >new Error() : Error
 >Error : ErrorConstructor
 }
@@ -173,13 +165,10 @@ declare const api: Api;
 >api : Api<{}>
 
 interface Obj { x: number }
->Obj : Obj
 >x : number
 
 async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj> {
 >fn : <T>() => Promise<T extends object ? { [K in keyof T]: Obj } : Obj>
->T : T
->K : K
 
 	// Per #45924, this was failing due to incorrect inference both above and here.
 	// Should not error.
@@ -193,6 +182,4 @@ async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj
 // helps with tests where '.types' just prints out the type alias name
 type _Expect<TActual extends TExpected, TExpected> = TActual;
 >_Expect : TActual
->TActual : TActual
->TExpected : TExpected
 

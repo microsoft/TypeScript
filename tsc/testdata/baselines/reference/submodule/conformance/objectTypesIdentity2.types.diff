@@ -1,22 +1,6 @@
 --- old.objectTypesIdentity2.types
 +++ new.objectTypesIdentity2.types
-@@= skipped -18, +18 lines =@@
- 
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     foo: T;
- >foo : T
- }
- 
- interface I {
-+>I : I
-+
-     foo: Date;
- >foo : Date
- }
-@@= skipped -63, +66 lines =@@
+@@= skipped -81, +81 lines =@@
  >x : any
  
  function foo7(x: A);
@@ -28,7 +12,7 @@
 ->foo7 : { (x: A): any; (x: typeof a): any; }
 +>foo7 : { (x: A): any; (x: { foo: RegExp; }): any; }
  >x : { foo: RegExp; }
-->a : { foo: RegExp; }
+ >a : { foo: RegExp; }
  
  function foo7(x: any) { }
 ->foo7 : { (x: A): any; (x: typeof a): any; }
@@ -36,7 +20,7 @@
  >x : any
  
  function foo8(x: B);
-@@= skipped -37, +36 lines =@@
+@@= skipped -37, +37 lines =@@
  >x : any
  
  function foo10(x: B);
@@ -48,7 +32,7 @@
 ->foo10 : { (x: B): any; (x: typeof a): any; }
 +>foo10 : { (x: B): any; (x: { foo: RegExp; }): any; }
  >x : { foo: RegExp; }
-->a : { foo: RegExp; }
+ >a : { foo: RegExp; }
  
  function foo10(x: any) { }
 ->foo10 : { (x: B): any; (x: typeof a): any; }
@@ -64,7 +48,7 @@
 ->foo11 : { (x: B): any; (x: typeof b): any; }
 +>foo11 : { (x: B): any; (x: { foo: E; }): any; }
  >x : { foo: E; }
-->b : { foo: E; }
+ >b : { foo: E; }
  
  function foo11(x: any) { }
 ->foo11 : { (x: B): any; (x: typeof b): any; }
@@ -72,7 +56,7 @@
  >x : any
  
  function foo12(x: I);
-@@= skipped -38, +36 lines =@@
+@@= skipped -38, +38 lines =@@
  >x : any
  
  function foo13(x: I);
@@ -84,7 +68,7 @@
 ->foo13 : { (x: I): any; (x: typeof a): any; }
 +>foo13 : { (x: I): any; (x: { foo: RegExp; }): any; }
  >x : { foo: RegExp; }
-->a : { foo: RegExp; }
+ >a : { foo: RegExp; }
  
  function foo13(x: any) { }
 ->foo13 : { (x: I): any; (x: typeof a): any; }
@@ -100,7 +84,7 @@
 ->foo14 : { (x: I): any; (x: typeof b): any; }
 +>foo14 : { (x: I): any; (x: { foo: E; }): any; }
  >x : { foo: E; }
-->b : { foo: E; }
+ >b : { foo: E; }
  
  function foo14(x: any) { }
 ->foo14 : { (x: I): any; (x: typeof b): any; }

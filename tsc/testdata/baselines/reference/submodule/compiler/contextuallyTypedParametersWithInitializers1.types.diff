@@ -1,30 +1,12 @@
 --- old.contextuallyTypedParametersWithInitializers1.types
 +++ new.contextuallyTypedParametersWithInitializers1.types
-@@= skipped -2, +2 lines =@@
- === contextuallyTypedParametersWithInitializers1.ts ===
- declare function id1<T>(input: T): T;
- >id1 : <T>(input: T) => T
-+>T : T
- >input : T
- 
- declare function id2<T extends (x: any) => any>(input: T): T;
- >id2 : <T extends (x: any) => any>(input: T) => T
-+>T : T
- >x : any
- >input : T
- 
- declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
- >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
-+>T : T
- >x : { foo: any; }
- >foo : any
+@@= skipped -16, +16 lines =@@
  >input : T
  
  declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 ->id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
 ->x : { foo?: number; }
 +>id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
-+>T : T
 +>x : { foo?: number | undefined; }
  >foo : number | undefined
  >input : T
@@ -32,7 +14,6 @@
  declare function id5<T extends (x?: number) => any>(input: T): T;
 ->id5 : <T extends (x?: number) => any>(input: T) => T
 +>id5 : <T extends (x?: number | undefined) => any>(input: T) => T
-+>T : T
  >x : number | undefined
  >input : T
  
@@ -93,7 +74,7 @@
  >foo : number
  >42 : 42
  >foo : number
-@@= skipped -95, +100 lines =@@
+@@= skipped -81, +81 lines =@@
  const f25 = id5(function (foo = 42) { return foo });
  >f25 : (foo?: number | undefined) => number
  >id5(function (foo = 42) { return foo }) : (foo?: number | undefined) => number
@@ -111,39 +92,7 @@
  >x : []
  >0 : 0
  
- declare function g1<T>(x: T): T;
- >g1 : <T>(x: T) => T
-+>T : T
- >x : T
- 
- declare function g2<T extends any>(x: T): T;
- >g2 : <T extends unknown>(x: T) => T
-+>T : T
- >x : T
- 
- declare function g3<T extends unknown>(x: T): T;
- >g3 : <T extends unknown>(x: T) => T
-+>T : T
- >x : T
- 
- declare function g4<T extends Function>(x: T): T;
- >g4 : <T extends Function>(x: T) => T
-+>T : T
- >x : T
- 
- declare function g5<T extends (...args: any[]) => any>(x: T): T;
- >g5 : <T extends (...args: any[]) => any>(x: T) => T
-+>T : T
- >args : any[]
- >x : T
- 
- declare function g6<T extends () => any>(x: T): T;
- >g6 : <T extends () => any>(x: T) => T
-+>T : T
- >x : T
- 
- g1((x = 1) => 0);  // number
-@@= skipped -85, +91 lines =@@
+@@= skipped -85, +85 lines =@@
  >0 : 0
  
  g6((...x) => 0);   // []
@@ -155,12 +104,7 @@
  >x : []
  >0 : 0
  
-@@= skipped -10, +10 lines =@@
- 
- function id<T>(input: T): T { return input }
- >id : <T>(input: T) => T
-+>T : T
- >input : T
+@@= skipped -14, +14 lines =@@
  >input : T
  
  function getFoo ({ foo = 42 }) {
@@ -169,7 +113,7 @@
  >foo : number
  >42 : 42
  
-@@= skipped -13, +14 lines =@@
+@@= skipped -9, +9 lines =@@
  }
  
  const newGetFoo = id(getFoo);
@@ -194,11 +138,3 @@
  >foo : number
  >42 : 42
  
-@@= skipped -23, +23 lines =@@
- 
- declare function memoize<F extends Function>(func: F): F;
- >memoize : <F extends Function>(func: F) => F
-+>F : F
- >func : F
- 
- function add(x: number, y = 0): number {

@@ -16,6 +16,5 @@ export declare const styles: import("styled-components").InterpolationValue[];
 >styles : InterpolationValue[]
 
 === Folder/node_modules/styled-components/typings/styled-components.d.ts ===
-export interface InterpolationValue {}
->InterpolationValue : InterpolationValue
 
+export interface InterpolationValue {}

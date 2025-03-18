@@ -1,24 +1,6 @@
 --- old.declarationEmitMappedTypeDistributivityPreservesConstraints.types
 +++ new.declarationEmitMappedTypeDistributivityPreservesConstraints.types
-@@= skipped -6, +6 lines =@@
- 
- type Map<T extends Fns> = { [K in keyof T]: T[K]; };
- >Map : Map<T>
-+>T : T
-+>K : K
- 
- type AllArg<T extends Fns> = { [K in keyof T]: Parameters<T[K]> };
- >AllArg : AllArg<T>
-+>T : T
-+>K : K
- 
- function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
- >fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
-+>T : T
- >x : Map<T["x"]>
- >sliceIndex : T
- 
-@@= skipped -19, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  
  === reexport.ts ===
  import test from "./types";

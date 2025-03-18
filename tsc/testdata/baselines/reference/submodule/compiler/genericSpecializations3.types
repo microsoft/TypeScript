@@ -2,9 +2,6 @@
 
 === genericSpecializations3.ts ===
 interface IFoo<T> {
->IFoo : IFoo<T>
->T : T
-
     foo(x: T): T;
 >foo : (x: T) => T
 >x : T
@@ -77,7 +74,6 @@ class StringFoo3 implements IFoo<string> { // error
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
->T : T
 >x : T
 }
 var stringFoo3: StringFoo3;

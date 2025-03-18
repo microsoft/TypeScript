@@ -12,22 +12,13 @@
 ->React.Component : React.Component<P, {}>
 ->React : typeof React
 ->Component : typeof React.Component
-+>P : P
 +>React.Component : any
 +>React : any
 +>Component : any
  
      internalProp: P;
  >internalProp : P
- }
- 
- export interface Prop {
-+>Prop : Prop
-+
-     a: number,
- >a : number
- 
-@@= skipped -26, +29 lines =@@
+@@= skipped -26, +26 lines =@@
  >Prop : any
  
  import * as React from "react";

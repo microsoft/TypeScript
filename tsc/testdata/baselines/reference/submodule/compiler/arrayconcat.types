@@ -2,8 +2,6 @@
 
 === arrayconcat.ts ===
 interface IOptions {
->IOptions : IOptions
-
     name?: string;
 >name : string
 

@@ -1,34 +1,6 @@
 --- old.contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.types
 +++ new.contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.types
-@@= skipped -2, +2 lines =@@
- === contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts ===
- type MappedOmit<T, K extends keyof any> = { [P in keyof T as Exclude<P, K>]: T[P]; }
- >MappedOmit : MappedOmit<T, K>
-+>T : T
-+>K : K
-+>P : P
- 
- type IntrinsicElements = {
- >IntrinsicElements : IntrinsicElements
-@@= skipped -32, +35 lines =@@
- 
- type Props<TTag extends ElementType, Overrides = {}> = MappedOmit<
- >Props : Props<TTag, Overrides>
-+>TTag : TTag
-+>Overrides : Overrides
- 
-   IntrinsicElements[TTag],
-   keyof Overrides
-@@= skipped -8, +10 lines =@@
- 
- type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
- >TabGroupProps : TabGroupProps<TTag>
-->DEFAULT_TABS_TAG : "div"
-+>TTag : TTag
- 
-   TTag,
-   {
-@@= skipped -8, +8 lines =@@
+@@= skipped -50, +50 lines =@@
  >defaultIndex : number | undefined
  
      onChange?: (index: number) => void;
@@ -37,15 +9,3 @@
  >index : number
  
      selectedIndex?: number;
-@@= skipped -15, +15 lines =@@
- >;
- 
- interface _internal_ComponentTabGroup {
-+>_internal_ComponentTabGroup : _internal_ComponentTabGroup
-+
-   <TTag extends ElementType = typeof DEFAULT_TABS_TAG>(
-->DEFAULT_TABS_TAG : "div"
-+>TTag : TTag
- 
-     props: TabGroupProps<TTag>,
- >props : TabGroupProps<TTag>

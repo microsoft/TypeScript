@@ -39,6 +39,4 @@ export type TypeA = {
 === Uppercased_Dir/src/types.ts ===
 export type Merge<T, U> = T & U;
 >Merge : Merge<T, U>
->T : T
->U : U
 

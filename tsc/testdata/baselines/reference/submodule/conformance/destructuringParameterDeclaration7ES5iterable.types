@@ -2,8 +2,6 @@
 
 === destructuringParameterDeclaration7ES5iterable.ts ===
 interface ISomething {
->ISomething : ISomething
-
     foo: string,
 >foo : string
 

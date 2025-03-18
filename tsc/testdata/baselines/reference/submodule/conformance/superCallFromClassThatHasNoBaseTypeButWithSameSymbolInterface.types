@@ -2,7 +2,6 @@
 
 === superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.ts ===
 interface Foo extends Array<number> {}
->Foo : Foo
 
 class Foo {
 >Foo : Foo

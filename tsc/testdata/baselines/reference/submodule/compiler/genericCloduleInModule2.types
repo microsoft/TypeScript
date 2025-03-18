@@ -6,7 +6,6 @@ module A {
 
     export class B<T> {
 >B : B<T>
->T : T
 
         foo() { }
 >foo : () => void

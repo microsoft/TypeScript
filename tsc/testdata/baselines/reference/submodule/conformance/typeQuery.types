@@ -10,4 +10,5 @@ import type { A } from './a';
 
 let AConstructor: typeof A;
 >AConstructor : typeof A
+>A : typeof A
 

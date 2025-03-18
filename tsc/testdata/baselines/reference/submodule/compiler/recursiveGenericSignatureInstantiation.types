@@ -3,7 +3,6 @@
 === recursiveGenericSignatureInstantiation.ts ===
 function f6<T>(x: T) {
 >f6 : <T>(x: T) => never
->T : T
 >x : T
 
     return f6(x);

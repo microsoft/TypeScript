@@ -9,7 +9,6 @@ const enum E { A, B, C }
 
 function foo<T extends number>(x: T) {
 >foo : <T extends number>(x: T) => void
->T : T
 >x : T
 
     var y: number = x;  // Ok
@@ -39,7 +38,6 @@ class B { b }
 
 function bar<T extends A | B>(x: T) {
 >bar : <T extends A | B>(x: T) => void
->T : T
 >x : T
 
     var y: A | B = x;  // Ok

@@ -1,13 +1,6 @@
 --- old.complicatedIndexesOfIntersectionsAreInferencable.types
 +++ new.complicatedIndexesOfIntersectionsAreInferencable.types
-@@= skipped -1, +1 lines =@@
- 
- === complicatedIndexesOfIntersectionsAreInferencable.ts ===
- interface FormikConfig<Values> {
-+>FormikConfig : FormikConfig<Values>
-+>Values : Values
-+
-     initialValues: Values;
+@@= skipped -5, +5 lines =@@
  >initialValues : Values
  
      validate?: (props: Values) => void;
@@ -16,14 +9,12 @@
  >props : Values
  
      validateOnChange?: boolean;
-@@= skipped -12, +15 lines =@@
+@@= skipped -8, +8 lines =@@
  }
  
  declare function Func<Values = object, ExtraProps = {}>(
 ->Func : <Values = object, ExtraProps = {}>(x: (string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>)) => void
 +>Func : <Values, ExtraProps>(x: string extends "initialValues" | "validate" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "initialValues" | "validate" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>) => void
-+>Values : Values
-+>ExtraProps : ExtraProps
  
      x: (string extends "validate" | "initialValues" | keyof ExtraProps
 ->x : string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>
@@ -31,7 +22,7 @@
  
          ? Readonly<FormikConfig<Values> & ExtraProps>
          : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">>
-@@= skipped -12, +14 lines =@@
+@@= skipped -12, +12 lines =@@
  
  Func({
  >Func({    initialValues: {        foo: ""    },    validate: props => {        props.foo;    }}) : void

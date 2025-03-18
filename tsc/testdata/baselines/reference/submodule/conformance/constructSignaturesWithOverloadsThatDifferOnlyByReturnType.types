@@ -12,7 +12,6 @@ class C {
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     constructor(x: T, y?: string) { }
 >x : T
@@ -20,8 +19,6 @@ class C2<T> {
 }
 
 interface I {
->I : I
-
     new(x: number, y: string): C;
 >x : number
 >y : string
@@ -32,9 +29,6 @@ interface I {
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     new (x: T, y: string): C2<number>;
 >x : T
 >y : string
@@ -44,12 +38,10 @@ interface I2<T> {
 >y : string
 
     new <T>(x: T, y: string): C2<T>;
->T : T
 >x : T
 >y : string
 
     new <T>(x: T, y: string): C; // error
->T : T
 >x : T
 >y : string
 
@@ -71,12 +63,10 @@ var b: {
 >b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C; }
 
     new <T>(x: T, y: string): C2<T>;
->T : T
 >x : T
 >y : string
 
     new <T>(x: T, y: string): C; // error
->T : T
 >x : T
 >y : string
 }

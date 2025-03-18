@@ -3,12 +3,10 @@
 === BaseClass.ts ===
 export type Constructor<T> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 export class MyBaseClass<T> {
 >MyBaseClass : MyBaseClass<T>
->T : T
 
     baseProperty: string;
 >baseProperty : string
@@ -22,15 +20,12 @@ import { Constructor, MyBaseClass } from './BaseClass';
 >MyBaseClass : typeof MyBaseClass
 
 export interface MyMixin {
->MyMixin : MyMixin
-
     mixinProperty: string;
 >mixinProperty : string
 }
 
 export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
 >MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
->T : T
 >base : T
 
     return class extends base {

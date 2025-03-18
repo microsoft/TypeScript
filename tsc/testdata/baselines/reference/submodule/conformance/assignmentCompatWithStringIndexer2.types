@@ -4,20 +4,15 @@
 // index signatures must be compatible in assignments
 
 interface Base { foo: string; }
->Base : Base
 >foo : string
 
 interface Derived extends Base { bar: string; }
->Derived : Derived
 >bar : string
 
 interface Derived2 extends Derived { baz: string; }
->Derived2 : Derived2
 >baz : string
 
 interface A {
->A : A
-
     [x: string]: Base;
 >x : string
 }
@@ -57,16 +52,11 @@ module Generics {
 >Generics : typeof Generics
 
     interface A<T extends Base> {
->A : A<T>
->T : T
-
         [x: string]: T;
 >x : string
     }
 
     interface B extends A<Base> {
->B : B
-
         [x: string]: Derived; // ok
 >x : string
     }
@@ -89,8 +79,6 @@ module Generics {
 >a1 : A<Base>
 
     interface B2 extends A<Base> {
->B2 : B2
-
         [x: string]: Derived2; // ok
 >x : string
     }
@@ -111,7 +99,6 @@ module Generics {
 
     function foo<T extends Base>() {
 >foo : <T extends Base>() => void
->T : T
 
         var b3: { [x: string]: Derived; };
 >b3 : { [x: string]: Derived; }

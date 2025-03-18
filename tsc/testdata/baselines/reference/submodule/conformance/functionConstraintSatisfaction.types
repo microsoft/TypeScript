@@ -5,13 +5,10 @@
 
 function foo<T extends Function>(x: T): T { return x; }
 >foo : <T extends Function>(x: T) => T
->T : T
 >x : T
 >x : T
 
 interface I {
->I : I
-
     (): string;
 }
 var i: I;
@@ -98,9 +95,6 @@ var r8 = foo(c);
 >c : { (): string; (x: any): string; }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     (x: T): T;
 >x : T
 }
@@ -109,7 +103,6 @@ var i2: I2<string>;
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     foo: T;
 >foo : T
@@ -117,19 +110,15 @@ class C2<T> {
 
 var a2: { <T>(x: T): T };
 >a2 : <T>(x: T) => T
->T : T
 >x : T
 
 var b2: { new <T>(x: T): T };
 >b2 : new <T>(x: T) => T
->T : T
 >x : T
 
 var c2: { <T>(x: T): T; <T>(x: T, y: T): T };
 >c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
->T : T
 >x : T
->T : T
 >x : T
 >y : T
 
@@ -138,7 +127,6 @@ var r9 = foo(<U>(x: U) => x);
 >foo(<U>(x: U) => x) : <U>(x: U) => U
 >foo : <T extends Function>(x: T) => T
 ><U>(x: U) => x : <U>(x: U) => U
->U : U
 >x : U
 >x : U
 
@@ -147,7 +135,6 @@ var r10 = foo(function <U>(x: U) { return x; });
 >foo(function <U>(x: U) { return x; }) : <U>(x: U) => U
 >foo : <T extends Function>(x: T) => T
 >function <U>(x: U) { return x; } : <U>(x: U) => U
->U : U
 >x : U
 >x : U
 
@@ -156,7 +143,6 @@ var r11 = foo(<U extends Date>(x: U) => x);
 >foo(<U extends Date>(x: U) => x) : <U extends Date>(x: U) => U
 >foo : <T extends Function>(x: T) => T
 ><U extends Date>(x: U) => x : <U extends Date>(x: U) => U
->U : U
 >x : U
 >x : U
 
@@ -165,8 +151,6 @@ var r12 = foo(<U, V>(x: U, y: V) => x);
 >foo(<U, V>(x: U, y: V) => x) : <U, V>(x: U, y: V) => U
 >foo : <T extends Function>(x: T) => T
 ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
->U : U
->V : V
 >x : U
 >y : V
 >x : U
@@ -196,7 +180,6 @@ var r16 = foo(c2);
 >c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
 
 interface F2 extends Function { foo: string; }
->F2 : F2
 >foo : string
 
 var f2: F2;
@@ -210,8 +193,6 @@ var r17 = foo(f2);
 
 function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 >foo2 : <T extends () => void, U extends () => void>(x: T, y: U) => void
->T : T
->U : U
 >x : T
 >y : U
 

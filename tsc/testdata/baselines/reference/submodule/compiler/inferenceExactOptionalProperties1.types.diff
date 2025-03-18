@@ -1,9 +1,0 @@
---- old.inferenceExactOptionalProperties1.types
-+++ new.inferenceExactOptionalProperties1.types
-@@= skipped -4, +4 lines =@@
- >Test1 : never
- >prop : undefined
- >prop : T | undefined
-+>T : T
- >false : false
- 

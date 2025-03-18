@@ -1,46 +1,31 @@
 --- old.conditionalTypeContextualTypeSimplificationsSuceeds.types
 +++ new.conditionalTypeContextualTypeSimplificationsSuceeds.types
-@@= skipped -2, +2 lines =@@
- === conditionalTypeContextualTypeSimplificationsSuceeds.ts ===
- // repro from https://github.com/Microsoft/TypeScript/issues/26395
- interface Props {
-+>Props : Props
-+
-     when: (value: string) => boolean;
- >when : (value: string) => boolean
- >value : string
+@@= skipped -8, +8 lines =@@
  }
  
  function bad<P extends Props>(
 ->bad : <P extends Props>(attrs: string extends keyof P ? { [K in keyof P]: P[K]; } : { [K in keyof P]: P[K]; }) => void
 +>bad : <P extends Props>(attrs: string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }) => void
-+>P : P
  
      attrs: string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }) { }
 ->attrs : string extends keyof P ? { [K in keyof P]: P[K]; } : { [K_1 in keyof P]: P[K_1]; }
 +>attrs : string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }
-+>K : K
-+>K : K
  
  function good1<P extends Props>(
 ->good1 : <P extends Props>(attrs: string extends keyof P ? P : { [K in keyof P]: P[K]; }) => void
 +>good1 : <P extends Props>(attrs: string extends keyof P ? P : { [K in keyof P]: P[K] }) => void
-+>P : P
  
      attrs: string extends keyof P ? P : { [K in keyof P]: P[K] }) { }
 ->attrs : string extends keyof P ? P : { [K in keyof P]: P[K]; }
 +>attrs : string extends keyof P ? P : { [K in keyof P]: P[K] }
-+>K : K
  
  function good2<P extends Props>(
 ->good2 : <P extends Props>(attrs: { [K in keyof P]: P[K]; }) => void
 +>good2 : <P extends Props>(attrs: { [K in keyof P]: P[K] }) => void
-+>P : P
  
      attrs: { [K in keyof P]: P[K] }) { }
 ->attrs : { [K in keyof P]: P[K]; }
 +>attrs : { [K in keyof P]: P[K] }
-+>K : K
  
  bad({ when: value => false });
  >bad({ when: value => false }) : void
@@ -49,7 +34,7 @@
  >{ when: value => false } : { when: (value: string) => false; }
  >when : (value: string) => false
  >value => false : (value: string) => false
-@@= skipped -34, +43 lines =@@
+@@= skipped -28, +28 lines =@@
  
  good1({ when: value => false });
  >good1({ when: value => false }) : void

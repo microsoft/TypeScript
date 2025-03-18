@@ -21,7 +21,6 @@
 -><ComposedComponentProps extends any>(    ComposedComponent: React.ComponentClass<ComposedComponentProps>,) => {    type WrapperComponentProps = ComposedComponentProps & { myProp: string };    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;    const props: ComposedComponentProps = null as any;    <WrapperComponent {...props} myProp={'1000000'} />;    <WrapperComponent {...props} myProp={1000000} />;} : <ComposedComponentProps extends unknown>(ComposedComponent: React.ComponentClass<ComposedComponentProps>) => void
 +>myHoc : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps>) => void
 +><ComposedComponentProps extends any>(    ComposedComponent: React.ComponentClass<ComposedComponentProps>,) => {    type WrapperComponentProps = ComposedComponentProps & { myProp: string };    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;    const props: ComposedComponentProps = null as any;    <WrapperComponent {...props} myProp={'1000000'} />;    <WrapperComponent {...props} myProp={1000000} />;} : <ComposedComponentProps extends unknown>(ComposedComponent: ComponentClass<ComposedComponentProps>) => void
-+>ComposedComponentProps : ComposedComponentProps
  
      ComposedComponent: React.ComponentClass<ComposedComponentProps>,
 ->ComposedComponent : React.ComponentClass<ComposedComponentProps, any>
@@ -40,7 +39,7 @@
  >React : any
  >null as any : any
  
-@@= skipped -34, +29 lines =@@
+@@= skipped -34, +28 lines =@@
  >null as any : any
  
      <WrapperComponent {...props} myProp={'1000000'} />;

@@ -18,11 +18,10 @@
 -><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
 +>test : <T>(value: T) => T
 +><T = undefined>(value: T): T => value : <T>(value: T) => T
-+>T : T
  >value : T
  >value : T
  
-@@= skipped -18, +19 lines =@@
+@@= skipped -18, +18 lines =@@
  })
  
  const fn1async = () => ({
@@ -40,27 +39,10 @@
 ->async <T = undefined>(value: T): Promise<T> => value : <T = undefined>(value: T) => Promise<T>
 +>test : <T>(value: T) => Promise<T>
 +>async <T = undefined>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
-+>T : T
  >value : T
  >value : T
  
-@@= skipped -26, +27 lines =@@
-     test: <T>(value: T): T => value,
- >test : <T>(value: T) => T
- ><T>(value: T): T => value : <T>(value: T) => T
-+>T : T
- >value : T
- >value : T
- 
-@@= skipped -18, +19 lines =@@
-     test: async <T>(value: T): Promise<T> => value,
- >test : <T>(value: T) => Promise<T>
- >async <T>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
-+>T : T
- >value : T
- >value : T
- 
-@@= skipped -10, +11 lines =@@
+@@= skipped -54, +54 lines =@@
  })
  
  const fn3 = () => ({
@@ -82,7 +64,6 @@
 -><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
 +>test : <T>(value: T) => T
 +><T = undefined>(value: T): T => value : <T>(value: T) => T
-+>T : T
  >value : T
  >value : T
  
@@ -107,7 +88,6 @@
 ->async <T = undefined>(value: T): Promise<T> => value : <T = undefined>(value: T) => Promise<T>
 +>test : <T>(value: T) => Promise<T>
 +>async <T = undefined>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
-+>T : T
  >value : T
  >value : T
  
@@ -132,7 +112,6 @@
 -><T = undefined>(value: T): T => value : <T = undefined>(value: T) => T
 +>test : <T>(value: T) => T
 +><T = undefined>(value: T): T => value : <T>(value: T) => T
-+>T : T
  >value : T
  >value : T
  
@@ -157,7 +136,6 @@
 ->async <T = undefined>(value: T): Promise<T> => value : <T = undefined>(value: T) => Promise<T>
 +>test : <T>(value: T) => Promise<T>
 +>async <T = undefined>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
-+>T : T
  >value : T
  >value : T
  

@@ -9,39 +9,14 @@
 -
  === implicitAnyGenericTypeInference.ts ===
  interface Comparer<T> {
-+>Comparer : Comparer<T>
-+>T : T
-+
      compareTo<U>(x: T, y: U): U;
- >compareTo : <U>(x: T, y: U) => U
-+>U : U
- >x : T
- >y : U
- }
-@@= skipped -35, +35 lines =@@
- 
- declare function f1<T>(cb: () => T): void;
- >f1 : <T>(cb: () => T) => void
-+>T : T
- >cb : () => T
- 
- f1(() => null);
-@@= skipped -9, +10 lines =@@
- 
- declare function f2<T>(cb: () => PromiseLike<T>): void;
- >f2 : <T>(cb: () => PromiseLike<T>) => void
-+>T : T
- >cb : () => PromiseLike<T>
- 
- f2(async () => null);
-@@= skipped -8, +9 lines =@@
+@@= skipped -52, +48 lines =@@
  >async () => null : () => Promise<any>
  
  declare function f3<T>(cb: () => Generator<T>): void;
 ->f3 : <T>(cb: () => Generator<T>) => void
 ->cb : () => Generator<T>
 +>f3 : <T>(cb: () => Generator<T, any, any>) => void
-+>T : T
 +>cb : () => Generator<T, any, any>
  
  f3(function* () { yield null; });
@@ -55,7 +30,6 @@
 ->f4 : <T>(cb: () => Generator<unknown, T>) => void
 ->cb : () => Generator<unknown, T>
 +>f4 : <T>(cb: () => Generator<unknown, T, any>) => void
-+>T : T
 +>cb : () => Generator<unknown, T, any>
  
  f4(function* () { return null; });
@@ -68,7 +42,6 @@
 ->f5 : <T>(cb: () => AsyncGenerator<T>) => void
 ->cb : () => AsyncGenerator<T>
 +>f5 : <T>(cb: () => AsyncGenerator<T, any, any>) => void
-+>T : T
 +>cb : () => AsyncGenerator<T, any, any>
  
  f5(async function* () { yield null; });
@@ -82,7 +55,6 @@
 ->f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
 ->cb : () => AsyncGenerator<unknown, T>
 +>f6 : <T>(cb: () => AsyncGenerator<unknown, T, any>) => void
-+>T : T
 +>cb : () => AsyncGenerator<unknown, T, any>
  
  f6(async function* () { return null; });

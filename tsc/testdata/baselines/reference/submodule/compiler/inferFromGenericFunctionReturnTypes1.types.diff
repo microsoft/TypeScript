@@ -1,44 +1,15 @@
 --- old.inferFromGenericFunctionReturnTypes1.types
 +++ new.inferFromGenericFunctionReturnTypes1.types
-@@= skipped -5, +5 lines =@@
- // This is a contrived class. We could do the same thing with Observables, etc.
- class SetOf<A> {
- >SetOf : SetOf<A>
-+>A : A
- 
-   _store: A[];
- >_store : A[]
-@@= skipped -20, +21 lines =@@
- 
-   transform<B>(transformer: (a: SetOf<A>) => SetOf<B>): SetOf<B> {
- >transform : <B>(transformer: (a: SetOf<A>) => SetOf<B>) => SetOf<B>
-+>B : B
- >transformer : (a: SetOf<A>) => SetOf<B>
- >a : SetOf<A>
- 
-@@= skipped -34, +35 lines =@@
- 
- function compose<A, B, C, D, E>(
- >compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
-+>A : A
-+>B : B
-+>C : C
-+>D : D
-+>E : E
- 
-   fnA: (a: SetOf<A>) => SetOf<B>, 
- >fnA : (a: SetOf<A>) => SetOf<B>
-@@= skipped -23, +28 lines =@@
+@@= skipped -82, +82 lines =@@
  /* ... etc ... */
  function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
  >compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
 ->fns : ((x: T) => T)[]
-+>T : T
 +>fns : (x: T) => T[]
  >x : T
  >x : T
  
-@@= skipped -8, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >(x: T) => fns.reduce((prev, fn) => fn(prev), x) : (x: T) => T
  >x : T
  >fns.reduce((prev, fn) => fn(prev), x) : T
@@ -51,20 +22,3 @@
  >(prev, fn) => fn(prev) : (prev: T, fn: (x: T) => T) => T
  >prev : T
  >fn : (x: T) => T
-@@= skipped -14, +14 lines =@@
- 
- function map<A, B>(fn: (a: A) => B): (s: SetOf<A>) => SetOf<B> {
- >map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
-+>A : A
-+>B : B
- >fn : (a: A) => B
- >a : A
- >s : SetOf<A>
-@@= skipped -35, +37 lines =@@
- 
- function filter<A>(predicate: (a: A) => boolean): (s: SetOf<A>) => SetOf<A> {
- >filter : <A>(predicate: (a: A) => boolean) => (s: SetOf<A>) => SetOf<A>
-+>A : A
- >predicate : (a: A) => boolean
- >a : A
- >s : SetOf<A>

@@ -2,8 +2,6 @@
 
 === parameterInitializerBeforeDestructuringEmit.ts ===
 interface Foo {
->Foo : Foo
-
     bar?: any;
 >bar : any
 

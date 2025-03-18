@@ -22,7 +22,6 @@ declare global {
 >global : typeof global
 
     interface RequireInterface { _r: any; }
->RequireInterface : RequireInterface
 >_r : any
 
     function getInterR(): RequireInterface;

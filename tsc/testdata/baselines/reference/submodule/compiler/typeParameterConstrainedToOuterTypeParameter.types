@@ -2,20 +2,12 @@
 
 === typeParameterConstrainedToOuterTypeParameter.ts ===
 interface A<T> {
->A : A<T>
->T : T
-
     <U extends T>(x: U[])
->U : U
 >x : U[]
 }
 
 interface B<T> {
->B : B<T>
->T : T
-
     <U extends T>(x: U)
->U : U
 >x : U
 }
 

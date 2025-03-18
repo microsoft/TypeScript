@@ -6,5 +6,4 @@ var n = '';
 >'' : ""
 
 interface x extends string { }
->x : x
 

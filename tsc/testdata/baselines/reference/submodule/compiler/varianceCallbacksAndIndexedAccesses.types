@@ -5,7 +5,6 @@ type Source = {
 >Source : Source
 
     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
->K : K
 >type : K
 >listener : (ev: WindowEventMap[K]) => any
 >this : Window
@@ -19,16 +18,10 @@ type Source = {
 }
 
 interface Action1<T> {
->Action1 : Action1<T>
->T : T
-
     (arg: T): void;
 >arg : T
 }
 interface MessageEventLike<T> {
->MessageEventLike : MessageEventLike<T>
->T : T
-
     source: WindowLike<T>;
 >source : WindowLike<T>
 
@@ -39,18 +32,12 @@ interface MessageEventLike<T> {
 >data : T
 }
 interface PostMessageObject<T> {
->PostMessageObject : PostMessageObject<T>
->T : T
-
     postMessage(message: T, host: string): void;
 >postMessage : (message: T, host: string) => void
 >message : T
 >host : string
 }
 interface WindowLike<T> extends PostMessageObject<T> {
->WindowLike : WindowLike<T>
->T : T
-
     addEventListener(type: "message", handler: Action1<MessageEventLike<T>>): void;
 >addEventListener : { (type: "message", handler: Action1<MessageEventLike<T>>): void; (type: string, handler: Action1<any>): void; }
 >type : "message"

@@ -1,14 +1,6 @@
 --- old.readonlyArraysAndTuples.types
 +++ new.readonlyArraysAndTuples.types
-@@= skipped -23, +23 lines =@@
- 
- type T31<T> = readonly T;  // Error
- >T31 : T
-+>T : T
- 
- type T32 = readonly readonly string[];  // Error
- >T32 : T32
-@@= skipped -8, +9 lines =@@
+@@= skipped -31, +31 lines =@@
  >T33 : T33
  
  function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {

@@ -7,8 +7,6 @@ declare function f({ a: number }): void
 >number : any
 
 interface I {
->I : I
-
     readonly n: number;
 >n : number
 }
@@ -24,14 +22,10 @@ f({ a: 1, ...i });
 >i : I
 
 interface R {
->R : R
-
     opt?: number
 >opt : number
 }
 interface L {
->L : L
-
     opt: string
 >opt : string
 }

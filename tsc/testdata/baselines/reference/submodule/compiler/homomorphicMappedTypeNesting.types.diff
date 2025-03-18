@@ -1,34 +1,10 @@
 --- old.homomorphicMappedTypeNesting.types
 +++ new.homomorphicMappedTypeNesting.types
-@@= skipped -4, +4 lines =@@
- 
- type Box<T extends string> = { v: T };
- >Box : Box<T>
-+>T : T
- >v : T
- 
- type Test<T extends string[]> = T
- >Test : T
-+>T : T
- 
- type UnboxArray<T> = {
- >UnboxArray : UnboxArray<T>
-+>T : T
- 
-     [K in keyof T]: T[K] extends Box<infer R> ? R : never;
-+>K : K
-+>R : R
-+
- };
- 
- type Identity<T> = { [K in keyof T]: T[K] };
+@@= skipped -19, +19 lines =@@
  >Identity : Identity<T>
-+>T : T
-+>K : K
  
  declare function fnBad<T extends Array<Box<string>>>(...args: T): Test<Identity<UnboxArray<T>>>;
 ->fnBad : <T extends Array<Box<string>>>(...args: T) => Test<Identity<UnboxArray<T>>>
 +>fnBad : <T extends Box<string>[]>(...args: T) => Identity<UnboxArray<T>>
-+>T : T
  >args : T
  

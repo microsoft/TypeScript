@@ -21,8 +21,6 @@ declare module "ITest" {
 >"ITest" : typeof import("ITest")
 
     interface Name {
->Name : Name
-
         name: string;
 >name : string
     }

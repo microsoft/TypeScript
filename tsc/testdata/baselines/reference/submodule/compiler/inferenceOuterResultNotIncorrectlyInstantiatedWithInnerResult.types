@@ -4,8 +4,6 @@
 // simple example
 export class Test<A, B> {
 >Test : Test<A, B>
->A : A
->B : B
 
     constructor(public a: A, public b: B) { }
 >a : A
@@ -13,7 +11,6 @@ export class Test<A, B> {
 
     test<C>(c: C): Test<B, C> {
 >test : <C>(c: C) => Test<B, C>
->C : C
 >c : C
 
         return new Test(this.b, c);
@@ -28,19 +25,13 @@ export class Test<A, B> {
 
 // complicated one
 interface Supervisor<out T> {
->Supervisor : Supervisor<T>
->T : T
-
     zip<A>(right: Supervisor<A>): Supervisor<[T, A]>;
 >zip : <A>(right: Supervisor<A>) => Supervisor<[T, A]>
->A : A
 >right : Supervisor<A>
 }
 
 export class Zip<out T0, out T1> implements Supervisor<readonly [T0, T1]> {
 >Zip : Zip<T0, T1>
->T0 : T0
->T1 : T1
 
     constructor(
         readonly left: Supervisor<T0>,
@@ -53,7 +44,6 @@ export class Zip<out T0, out T1> implements Supervisor<readonly [T0, T1]> {
 
     zip<A>(right: Supervisor<A>): Supervisor<[[T0, T1], A]> {
 >zip : <A>(right: Supervisor<A>) => Supervisor<[[T0, T1], A]>
->A : A
 >right : Supervisor<A>
 
         return new Zip(this, right);
@@ -67,12 +57,9 @@ export class Zip<out T0, out T1> implements Supervisor<readonly [T0, T1]> {
 // indirect
 type Assign<T, U> = Omit<T, keyof U> & U;
 >Assign : Assign<T, U>
->T : T
->U : U
 
 class Base<T> {
 >Base : Base<T>
->T : T
 
     constructor(public t: T) { }
 >t : T
@@ -80,7 +67,6 @@ class Base<T> {
 
 export class Foo<T> extends Base<T> {
 >Foo : Foo<T>
->T : T
 >Base : Base<T>
 
     update(): Foo<Assign<T, { x: number }>> {

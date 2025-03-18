@@ -1,18 +1,8 @@
 --- old.nonPrimitiveAndEmptyObject.types
 +++ new.nonPrimitiveAndEmptyObject.types
-@@= skipped -3, +3 lines =@@
- // Repro from #49480
- 
- export interface BarProps {
-+>BarProps : BarProps
-+
-     barProp?: string;
- >barProp : string | undefined
- }
+@@= skipped -9, +9 lines =@@
  
  export interface FooProps {
-+>FooProps : FooProps
-+
      fooProps?: BarProps & object;
 ->fooProps : (BarProps & object) | undefined
 +>fooProps : BarProps & object | undefined

@@ -3,7 +3,6 @@
 === circularReferenceInReturnType2.ts ===
 type ObjectType<Source> = {
 >ObjectType : ObjectType<Source>
->Source : Source
 
   kind: "object";
 >kind : "object"
@@ -16,8 +15,6 @@ type ObjectType<Source> = {
 
 type Field<Source, Key extends string> = {
 >Field : Field<Source, Key>
->Source : Source
->Key : Key
 
   __key: (key: Key) => void;
 >__key : (key: Key) => void
@@ -31,13 +28,9 @@ type Field<Source, Key extends string> = {
 
 declare const object: <Source>() => <
 >object : <Source>() => <Fields extends { [Key in keyof Fields]: Field<Source, Key & string> }>(config: { name: string; fields: Fields | () => Fields; }) => ObjectType<Source>
->Source : Source
 
   Fields extends {
->Fields : Fields
-
     [Key in keyof Fields]: Field<Source, Key & string>;
->Key : Key
   }
 >(config: {
 >config : { name: string; fields: Fields | () => Fields; }
@@ -52,15 +45,11 @@ declare const object: <Source>() => <
 
 type InferValueFromObjectType<Type extends ObjectType<any>> =
 >InferValueFromObjectType : InferValueFromObjectType<Type>
->Type : Type
 
   Type extends ObjectType<infer Source> ? Source : never;
->Source : Source
 
 type FieldResolver<Source, TType extends ObjectType<any>> = (
 >FieldResolver : FieldResolver<Source, TType>
->Source : Source
->TType : TType
 
   source: Source
 >source : Source
@@ -69,8 +58,6 @@ type FieldResolver<Source, TType extends ObjectType<any>> = (
 
 type FieldFuncArgs<Source, Type extends ObjectType<any>> = {
 >FieldFuncArgs : FieldFuncArgs<Source, Type>
->Source : Source
->Type : Type
 
   type: Type;
 >type : Type
@@ -82,9 +69,6 @@ type FieldFuncArgs<Source, Type extends ObjectType<any>> = {
 
 declare const field: <Source, Type extends ObjectType<any>, Key extends string>(
 >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
->Source : Source
->Type : Type
->Key : Key
 
   field: FieldFuncArgs<Source, Type>
 >field : FieldFuncArgs<Source, Type>

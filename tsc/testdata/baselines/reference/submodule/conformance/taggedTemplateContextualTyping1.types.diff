@@ -1,17 +1,11 @@
 --- old.taggedTemplateContextualTyping1.types
 +++ new.taggedTemplateContextualTyping1.types
-@@= skipped -3, +3 lines =@@
- type FuncType = (x: <T>(p: T) => T) => typeof x;
- >FuncType : FuncType
+@@= skipped -7, +7 lines =@@
  >x : <T>(p: T) => T
-+>T : T
- >p : T
-->x : <T>(p: T) => T
  
  function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
 ->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T_1>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T_1): T_1; }
 +>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
-+>T : T
  >templateStrs : TemplateStringsArray
  >f : FuncType
  >x : T
@@ -19,7 +13,6 @@
  function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
 ->tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
 +>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
-+>T : T
  >templateStrs : TemplateStringsArray
  >f : FuncType
  >h : FuncType
@@ -28,23 +21,6 @@
  function tempTag1<T>(...rest: any[]): T {
 ->tempTag1 : { <T_1>(templateStrs: TemplateStringsArray, f: FuncType, x: T_1): T_1; <T_1>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T_1): T_1; }
 +>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T; <T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T; }
-+>T : T
  >rest : any[]
  
      return undefined;
-@@= skipped -70, +73 lines =@@
- >x : <T>(p: T) => T
- >(y: <T>(p: T) => T) => { y<number>(undefined); return y } : (y: <T>(p: T) => T) => <T>(p: T) => T
- >y : <T>(p: T) => T
-+>T : T
- >p : T
- >y<number>(undefined) : number
- >y : <T>(p: T) => T
-@@= skipped -13, +14 lines =@@
- >`${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }` : string
- >(x: <T>(p: T) => T) => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
- >x : <T>(p: T) => T
-+>T : T
- >p : T
- >x<number>(undefined) : number
- >x : <T>(p: T) => T

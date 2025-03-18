@@ -1,11 +1,7 @@
 --- old.templateLiteralTypesPatterns.types
 +++ new.templateLiteralTypesPatterns.types
-@@= skipped -15, +15 lines =@@
- 
- type Protocol<T extends string, U extends string> = `${T}://${U}`;
+@@= skipped -17, +17 lines =@@
  >Protocol : `${T}://${U}`
-+>T : T
-+>U : U
  
  function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 ->download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
@@ -35,7 +31,7 @@
  >"gopher://example.com/protocol" : "gopher://example.com/protocol"
  
  const q: RequiresLeadingSlash extends string ? true : false = true;
-@@= skipped -30, +32 lines =@@
+@@= skipped -28, +28 lines =@@
  >true : true
  
  declare function bools(x: `${boolean}`): void;
@@ -65,7 +61,6 @@
  
  type Pat<T extends string | null | undefined> = `${T}`
  >Pat : `${T}`
-+>T : T
  
  declare function nullishes(x: Pat<null | undefined>): void;
 ->nullishes : (x: Pat<null | undefined>) => void
@@ -118,15 +113,7 @@
  >"other" : "other"
  
  declare function numbers(x: `${number}`): void;
-@@= skipped -477, +478 lines =@@
- // Validates variance isn't measured as strictly covariant
- type AGen<T extends string | number> = {field: `a${T}`};
- >AGen : AGen<T>
-+>T : T
- >field : `a${T}`
- 
- const shouldWork1: AGen<string> = null as any as AGen<"yes">;
-@@= skipped -38, +39 lines =@@
+@@= skipped -515, +515 lines =@@
  // Remove string literals from unions with matching template literals
  
  let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
@@ -143,25 +130,7 @@
  
  var bb: `${number}`;
  >bb : `${number}`
-@@= skipped -18, +18 lines =@@
- 
- type T2S<A extends string, B extends string> = `${A}${B}`;
- >T2S : `${A}${B}`
-+>A : A
-+>B : B
- 
- type S10 = `${string}`;  // string
- >S10 : string
-@@= skipped -31, +33 lines =@@
- 
- export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
- >Id : `${TId}-${TId}`
-+>TA : TA
-+>TId : TId
- 
- export class AA {}
- >AA : AA
-@@= skipped -8, +10 lines =@@
+@@= skipped -57, +57 lines =@@
  >BB : BB
  
      abstract get(id: Id<AA>): void;

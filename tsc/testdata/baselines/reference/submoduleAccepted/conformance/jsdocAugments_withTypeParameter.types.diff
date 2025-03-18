@@ -1,13 +1,6 @@
 --- old.jsdocAugments_withTypeParameter.types
 +++ new.jsdocAugments_withTypeParameter.types
-@@= skipped -2, +2 lines =@@
- === /a.d.ts ===
- declare class A<T> { x: T }
- >A : A<T>
-+>T : T
- >x : T
- 
- === /b.js ===
+@@= skipped -8, +8 lines =@@
  /** @augments A<number> */
  class B extends A {
  >B : B

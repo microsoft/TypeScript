@@ -2,9 +2,6 @@
 
 === reverseMappedUnionInference.ts ===
 interface AnyExtractor<Result> {
->AnyExtractor : AnyExtractor<Result>
->Result : Result
-
   matches: (node: any) => boolean;
 >matches : (node: any) => boolean
 >node : any
@@ -15,10 +12,6 @@ interface AnyExtractor<Result> {
 }
 
 interface Extractor<T, Result> {
->Extractor : Extractor<T, Result>
->T : T
->Result : Result
-
   matches: (node: unknown) => node is T;
 >matches : (node: unknown) => node is T
 >node : unknown
@@ -30,8 +23,6 @@ interface Extractor<T, Result> {
 
 declare function createExtractor<T, Result>(params: {
 >createExtractor : <T, Result>(params: { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }) => Extractor<T, Result>
->T : T
->Result : Result
 >params : { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }
 
   matcher: (node: unknown) => node is T;
@@ -45,8 +36,6 @@ declare function createExtractor<T, Result>(params: {
 }): Extractor<T, Result>;
 
 interface Identifier {
->Identifier : Identifier
-
   kind: "identifier";
 >kind : "identifier"
 
@@ -95,8 +84,6 @@ const identifierExtractor = createExtractor({
 });
 
 interface StringLiteral {
->StringLiteral : StringLiteral
-
   kind: "stringLiteral";
 >kind : "stringLiteral"
 
@@ -146,12 +133,9 @@ const stringExtractor = createExtractor({
 
 declare function unionType<Result extends readonly unknown[]>(parsers: {
 >unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]> }) => AnyExtractor<Result[number]>
->Result : Result
 >parsers : { [K in keyof Result]: AnyExtractor<Result[K]> }
 
   [K in keyof Result]: AnyExtractor<Result[K]>;
->K : K
-
 }): AnyExtractor<Result[number]>;
 
 const myUnion = unionType([identifierExtractor, stringExtractor]);

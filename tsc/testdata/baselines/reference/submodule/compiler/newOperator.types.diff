@@ -1,15 +1,6 @@
 --- old.newOperator.types
 +++ new.newOperator.types
-@@= skipped -1, +1 lines =@@
- 
- === newOperator.ts ===
- interface ifc { }
-+>ifc : ifc
-+
- // Attempting to 'new' an interface yields poor error
- var i = new ifc();
- >i : any
-@@= skipped -96, +98 lines =@@
+@@= skipped -97, +97 lines =@@
  
  // Error on union with one constructor
  declare const ctorUnion: { a: string } | (new (a: string) => void)
@@ -28,9 +19,7 @@
  declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
 ->ctorUnion2 : (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
 +>ctorUnion2 : new <T extends number>(a: T) => void | new <T>(a: string) => void
-+>T : T
  >a : T
-+>T : T
  >a : string
  
  new ctorUnion2("");
@@ -40,7 +29,7 @@
  >"" : ""
  
  module M {
-@@= skipped -35, +37 lines =@@
+@@= skipped -35, +35 lines =@@
  >S : S
  
      public get xs(): M.T[] {

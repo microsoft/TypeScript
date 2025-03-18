@@ -25,7 +25,6 @@ var c2 = new C(null); // error
 
 class D<T extends Date> {
 >D : D<T>
->T : T
 
     x = 2
 >x : number

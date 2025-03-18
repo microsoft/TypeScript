@@ -2,8 +2,6 @@
 
 === logicalAssignment3.ts ===
 interface A {
->A : A
-
     baz: 0 | 1 | 42 | undefined | ''
 >baz : "" | 0 | 1 | 42 | undefined
 }

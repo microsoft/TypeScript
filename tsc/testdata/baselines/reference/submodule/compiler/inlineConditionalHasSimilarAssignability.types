@@ -3,12 +3,9 @@
 === inlineConditionalHasSimilarAssignability.ts ===
 type MyExtract<T, U> = T extends U ? T : never
 >MyExtract : MyExtract<T, U>
->T : T
->U : U
 
 function foo<T>(a: T) {
 >foo : <T>(a: T) => void
->T : T
 >a : T
 
   const b: Extract<any[], T> = 0 as any;

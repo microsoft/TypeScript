@@ -1,15 +1,6 @@
 --- old.destructuringParameterDeclaration7ES5.types
 +++ new.destructuringParameterDeclaration7ES5.types
-@@= skipped -1, +1 lines =@@
- 
- === destructuringParameterDeclaration7ES5.ts ===
- interface ISomething {
-+>ISomething : ISomething
-+
-     foo: string,
- >foo : string
- 
-@@= skipped -8, +10 lines =@@
+@@= skipped -9, +9 lines =@@
  }
  
  function foo({}, {foo, bar}: ISomething) {}

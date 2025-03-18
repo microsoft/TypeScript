@@ -1,15 +1,6 @@
 --- old.numericStringNamedPropertyEquivalence.types
 +++ new.numericStringNamedPropertyEquivalence.types
-@@= skipped -16, +16 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     "1": number;
- >"1" : number
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -27, +27 lines =@@
  }
  
  var a: {

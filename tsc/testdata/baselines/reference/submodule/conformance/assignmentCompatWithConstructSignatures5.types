@@ -24,42 +24,33 @@ class OtherDerived extends Base { bing: string; }
 
 var a: new <T>(x: T) => T[];
 >a : new <T>(x: T) => T[]
->T : T
 >x : T
 
 var a2: new <T>(x: T) => string[];
 >a2 : new <T>(x: T) => string[]
->T : T
 >x : T
 
 var a3: new <T>(x: T) => void;
 >a3 : new <T>(x: T) => void
->T : T
 >x : T
 
 var a4: new <T, U>(x: T, y: U) => string;
 >a4 : new <T, U>(x: T, y: U) => string
->T : T
->U : U
 >x : T
 >y : U
 
 var a5: new <T, U>(x: new (arg: T) => U) => T;
 >a5 : new <T, U>(x: new (arg: T) => U) => T
->T : T
->U : U
 >x : new (arg: T) => U
 >arg : T
 
 var a6: new <T extends Base>(x: new (arg: T) => Derived) => T;
 >a6 : new <T extends Base>(x: new (arg: T) => Derived) => T
->T : T
 >x : new (arg: T) => Derived
 >arg : T
 
 var a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
 >a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
->T : T
 >x : { foo: T; }
 >foo : T
 >y : { foo: T; bar: T; }
@@ -68,14 +59,12 @@ var a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
 
 var a15: new <T>(x: { a: T; b: T }) => T[];
 >a15 : new <T>(x: { a: T; b: T; }) => T[]
->T : T
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
 var a16: new <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
->T : T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -84,12 +73,10 @@ var a17: {
 >a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }
 
     new <T extends Derived>(x: new (a: T) => T): T[];
->T : T
 >x : new (a: T) => T
 >a : T
 
     new <T extends Base>(x: new (a: T) => T): T[];        
->T : T
 >x : new (a: T) => T
 >a : T
 
@@ -101,11 +88,9 @@ var a18: {
 >x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
 
         new <T extends Derived>(a: T): T;
->T : T
 >a : T
 
         new <T extends Base>(a: T): T;
->T : T
 >a : T
 
     }): any[];
@@ -113,11 +98,9 @@ var a18: {
 >x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
 
         new <T extends Derived2>(a: T): T;
->T : T
 >a : T
 
         new <T extends Base>(a: T): T;
->T : T
 >a : T
 
     }): any[];
@@ -125,7 +108,6 @@ var a18: {
 
 var b: new <T>(x: T) => T[]; 
 >b : new <T>(x: T) => T[]
->T : T
 >x : T
 
 a = b; // ok
@@ -140,7 +122,6 @@ b = a; // ok
 
 var b2: new <T>(x: T) => string[]; 
 >b2 : new <T>(x: T) => string[]
->T : T
 >x : T
 
 a2 = b2; // ok
@@ -155,7 +136,6 @@ b2 = a2; // ok
 
 var b3: new <T>(x: T) => T; 
 >b3 : new <T>(x: T) => T
->T : T
 >x : T
 
 a3 = b3; // ok
@@ -170,8 +150,6 @@ b3 = a3; // ok
 
 var b4: new <T, U>(x: T, y: U) => string; 
 >b4 : new <T, U>(x: T, y: U) => string
->T : T
->U : U
 >x : T
 >y : U
 
@@ -187,8 +165,6 @@ b4 = a4; // ok
 
 var b5: new <T, U>(x: new (arg: T) => U) => T; 
 >b5 : new <T, U>(x: new (arg: T) => U) => T
->T : T
->U : U
 >x : new (arg: T) => U
 >arg : T
 
@@ -204,8 +180,6 @@ b5 = a5; // ok
 
 var b6: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T; 
 >b6 : new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T
->T : T
->U : U
 >x : new (arg: T) => U
 >arg : T
 
@@ -221,8 +195,6 @@ b6 = a6; // ok
 
 var b11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
 >b11 : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
->T : T
->U : U
 >x : { foo: T; }
 >foo : T
 >y : { foo: U; bar: U; }
@@ -241,8 +213,6 @@ b11 = a11; // ok
 
 var b15: new <U, V>(x: { a: U; b: V; }) => U[]; 
 >b15 : new <U, V>(x: { a: U; b: V; }) => U[]
->U : U
->V : V
 >x : { a: U; b: V; }
 >a : U
 >b : V
@@ -259,7 +229,6 @@ b15 = a15; // ok
 
 var b16: new <T>(x: { a: T; b: T }) => T[]; 
 >b16 : new <T>(x: { a: T; b: T; }) => T[]
->T : T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -276,7 +245,6 @@ b15 = a16; // ok
 
 var b17: new <T>(x: new (a: T) => T) => T[]; 
 >b17 : new <T>(x: new (a: T) => T) => T[]
->T : T
 >x : new (a: T) => T
 >a : T
 
@@ -293,7 +261,6 @@ b17 = a17; // ok
 var b18: new (x: new <T>(a: T) => T) => any[]; 
 >b18 : new (x: new <T>(a: T) => T) => any[]
 >x : new <T>(a: T) => T
->T : T
 >a : T
 
 a18 = b18; // ok

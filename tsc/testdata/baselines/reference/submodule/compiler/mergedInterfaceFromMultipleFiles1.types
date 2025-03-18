@@ -4,12 +4,9 @@
 /// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
 
 interface D { bar(): number; }
->D : D
 >bar : () => number
 
 interface C extends D {
->C : C
-
 	b(): Date;
 >b : () => Date
 }
@@ -47,12 +44,9 @@ var e: Date = c.b();
 
 === mergedInterfaceFromMultipleFiles1_0.ts ===
 interface I { foo(): string; }
->I : I
 >foo : () => string
 
 interface C extends I {
->C : C
-
 	a(): number;
 >a : () => number
 }

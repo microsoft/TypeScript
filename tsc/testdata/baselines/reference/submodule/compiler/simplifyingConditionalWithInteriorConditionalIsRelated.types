@@ -4,11 +4,9 @@
 // from https://github.com/microsoft/TypeScript/issues/30706
 type ConditionalType<T> = T extends string ? string : number;
 >ConditionalType : ConditionalType<T>
->T : T
 
 function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
 >ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
->T : T
 
     return 0 as any;
 >0 as any : any
@@ -17,7 +15,6 @@ function ConditionalOrUndefined<T>(): ConditionalType<T> | undefined {
 
 function JustConditional<T>(): ConditionalType<T> {
 >JustConditional : <T>() => ConditionalType<T>
->T : T
 
     return ConditionalOrUndefined<T>()!; // shouldn't error
 >ConditionalOrUndefined<T>()! : ConditionalType<T>
@@ -29,7 +26,6 @@ function JustConditional<T>(): ConditionalType<T> {
 // For comparison...
 function genericOrUndefined<T>(): T | undefined {
 >genericOrUndefined : <T>() => T | undefined
->T : T
 
     return 0 as any;
 >0 as any : any
@@ -38,7 +34,6 @@ function genericOrUndefined<T>(): T | undefined {
 
 function JustGeneric<T>(): T {
 >JustGeneric : <T>() => T
->T : T
 
     return genericOrUndefined<T>()!; // no error
 >genericOrUndefined<T>()! : NonNullable<T>
@@ -50,7 +45,6 @@ function JustGeneric<T>(): T {
 
 function f<T>() {
 >f : <T>() => void
->T : T
 
     type One = T extends string ? string : string;
 >One : One

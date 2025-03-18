@@ -17,10 +17,8 @@
 +>React : any
  
  interface Props {
-+>Props : Props
-+
      text: string;
- >text : string
+@@= skipped -17, +11 lines =@@
  }
  
  function BackButton(_props: Props) {
@@ -41,7 +39,7 @@
  >defaultProps : { text: string; }
  >{    text: 'Go Back',} : { text: string; }
  
-@@= skipped -37, +33 lines =@@
+@@= skipped -20, +20 lines =@@
  
  };
  let a = <BackButton />

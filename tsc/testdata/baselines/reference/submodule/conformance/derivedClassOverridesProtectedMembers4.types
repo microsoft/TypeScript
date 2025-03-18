@@ -15,6 +15,7 @@ class Base {
 
     protected a: typeof x;
 >a : { foo: string; }
+>x : { foo: string; }
 }
 
 class Derived1 extends Base {
@@ -23,6 +24,7 @@ class Derived1 extends Base {
 
     public a: typeof x;
 >a : { foo: string; }
+>x : { foo: string; }
 }
 
 class Derived2 extends Derived1 {
@@ -31,4 +33,5 @@ class Derived2 extends Derived1 {
 
     protected a: typeof x; // Error, parent was public
 >a : { foo: string; }
+>x : { foo: string; }
 }

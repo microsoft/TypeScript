@@ -3,16 +3,13 @@
 === thisConditionalOnMethodReturnOfGenericInstance.ts ===
 class A<T> {
 >A : A<T>
->T : T
 
     unmeasurableUsage!: {[K in keyof T]-?: T[K]};
 >unmeasurableUsage : { [K in keyof T]-?: T[K] }
->K : K
 }
 
 class B<T> extends A<T> {
 >B : B<T>
->T : T
 >A : A<T>
 
     method(): string | (this extends C ? undefined : null) {
@@ -25,7 +22,6 @@ class B<T> extends A<T> {
 
 class C<T = any> extends B<T> {
 >C : C<T>
->T : T
 >B : B<T>
 
     marker!: string;

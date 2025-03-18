@@ -3,11 +3,7 @@
 === lovefield-ts.d.ts ===
 // bug #27352, crashes from github.com/google/lovefield
 declare namespace lf {
->lf : any
-
   export interface Transaction {
->Transaction : Transaction
-
     attach(query: query.Builder): Promise<Array<Object>>
 >attach : (query: Builder) => Promise<Object[]>
 >query : Builder

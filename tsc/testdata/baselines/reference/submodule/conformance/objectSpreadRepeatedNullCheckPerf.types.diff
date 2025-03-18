@@ -1,15 +1,6 @@
 --- old.objectSpreadRepeatedNullCheckPerf.types
 +++ new.objectSpreadRepeatedNullCheckPerf.types
-@@= skipped -1, +1 lines =@@
- 
- === objectSpreadRepeatedNullCheckPerf.ts ===
- interface Props {
-+>Props : Props
-+
-     readonly a?: string
- >a : string | undefined
- 
-@@= skipped -84, +86 lines =@@
+@@= skipped -85, +85 lines =@@
  >config : Record<string, number>
  
      return {

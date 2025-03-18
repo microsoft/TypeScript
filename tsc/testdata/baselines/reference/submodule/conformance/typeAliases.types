@@ -49,7 +49,6 @@ var x5: T5;
 >x5 : any
 
 interface I6 { x : string }
->I6 : I6
 >x : string
 
 type T6 = I6;
@@ -113,7 +112,6 @@ var x11: T11;
 >x11 : new () => boolean
 
 interface I13 { x: string };
->I13 : I13
 >x : string
 
 type T13 = I13;
@@ -127,8 +125,6 @@ var x13_2: T13
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
 >foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
->T1 : T1
->T2 : T2
 >t1 : T1
 >t2 : I13
 

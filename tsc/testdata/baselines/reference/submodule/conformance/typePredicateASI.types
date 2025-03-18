@@ -2,8 +2,6 @@
 
 === typePredicateASI.ts ===
 interface I {
->I : I
-
     foo(callback: (a: any, b: any) => void): I
 >foo : (callback: (a: any, b: any) => void) => I
 >callback : (a: any, b: any) => void

@@ -1,15 +1,6 @@
 --- old.sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.types
 +++ new.sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.types
-@@= skipped -1, +1 lines =@@
- 
- === sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts ===
- interface Robot {
-+>Robot : Robot
-+
-     name?: string;
- >name : string
- 
-@@= skipped -7, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >skill : string
  }
  declare var console: {

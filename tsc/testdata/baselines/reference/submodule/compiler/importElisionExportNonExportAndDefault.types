@@ -14,7 +14,6 @@ MyFunction({msg: "Hello World"});
 
 === MyComponent.ts ===
 interface MyFunction { msg: string; }
->MyFunction : MyFunction
 >msg : string
 
 export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${msg}"`);

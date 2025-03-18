@@ -2,11 +2,7 @@
 
 === file.tsx ===
 declare namespace JSX {
->JSX : any
-
     interface Element {
->Element : Element
-
         render(): Element | string | false;
 >render : () => string | false | Element
 >false : false
@@ -15,7 +11,6 @@ declare namespace JSX {
 
 function SFC<T>(props: Record<string, T>) {
 >SFC : <T>(props: Record<string, T>) => string
->T : T
 >props : Record<string, T>
 
     return '';

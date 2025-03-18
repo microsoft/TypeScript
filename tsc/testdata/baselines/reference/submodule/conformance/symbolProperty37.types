@@ -2,8 +2,6 @@
 
 === symbolProperty37.ts ===
 interface I {
->I : I
-
     [Symbol.isConcatSpreadable]: string;
 >[Symbol.isConcatSpreadable] : string
 >Symbol.isConcatSpreadable : unique symbol

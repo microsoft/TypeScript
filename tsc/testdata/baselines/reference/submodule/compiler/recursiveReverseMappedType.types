@@ -5,16 +5,12 @@
 
 type Recur<T> = (
 >Recur : Recur<T>
->T : T
 
     T extends (unknown[]) ? {} : { [K in keyof T]?: Recur<T[K]> }
->K : K
-
 ) | ['marker', ...Recur<T>[]];
 
 function join<T>(l: Recur<T>[]): Recur<T> {
 >join : <T>(l: Recur<T>[]) => Recur<T>
->T : T
 >l : Recur<T>[]
 
     return ['marker', ...l];
@@ -26,7 +22,6 @@ function join<T>(l: Recur<T>[]): Recur<T> {
 
 function a<T>(l: Recur<T>[]): void {
 >a : <T>(l: Recur<T>[]) => void
->T : T
 >l : Recur<T>[]
 
     const x: Recur<T> | undefined = join(l);

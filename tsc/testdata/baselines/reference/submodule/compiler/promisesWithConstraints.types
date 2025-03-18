@@ -2,35 +2,26 @@
 
 === promisesWithConstraints.ts ===
 interface Promise<T> {
->Promise : Promise<T>
->T : T
-
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <TResult1, TResult2>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
 }
 
 interface CPromise<T extends { x: any; }> {
->CPromise : CPromise<T>
->T : T
 >x : any
 
     then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>
->U : U
 >x : any
 >cb : (x: T) => Promise<U>
 >x : T
 }
 
 interface Foo { x; }
->Foo : Foo
 >x : any
 
 interface Bar { x; y; }
->Bar : Bar
 >x : any
 >y : any
 

@@ -8,15 +8,10 @@
 +>React : any
  
  interface IUser {
-+>IUser : IUser
-+
      Name: string;
- >Name : string
- }
+@@= skipped -9, +9 lines =@@
  
  interface IFetchUserProps {
-+>IFetchUserProps : IFetchUserProps
-+
      children: (user: IUser) => JSX.Element;
 ->children : (user: IUser) => JSX.Element
 +>children : (user: IUser) => Element
@@ -59,7 +54,7 @@
  >this.state.result : any
  >this.state : any
  >this : this
-@@= skipped -48, +52 lines =@@
+@@= skipped -39, +39 lines =@@
  
  // Error
  function UserName() {

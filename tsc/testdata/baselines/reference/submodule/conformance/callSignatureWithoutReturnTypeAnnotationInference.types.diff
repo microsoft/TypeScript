@@ -1,14 +1,6 @@
 --- old.callSignatureWithoutReturnTypeAnnotationInference.types
 +++ new.callSignatureWithoutReturnTypeAnnotationInference.types
-@@= skipped -45, +45 lines =@@
- 
- function foo4<T>(x: T) {
- >foo4 : <T>(x: T) => T
-+>T : T
- >x : T
- 
-     return x;
-@@= skipped -56, +57 lines =@@
+@@= skipped -101, +101 lines =@@
  >1 : 1
  
  function foo7(x) {
@@ -31,27 +23,3 @@
  >1 : 1
  
  // object types
-@@= skipped -30, +30 lines =@@
- >1 : 1
- 
- interface I {
-+>I : I
-+
-     foo: string;
- >foo : string
- }
-@@= skipped -65, +67 lines =@@
- 
- // merged declarations
- interface I2 {
-+>I2 : I2
-+
-     x: number;
- >x : number
- }
- interface I2 {
-+>I2 : I2
-+
-     y: number;
- >y : number
- }

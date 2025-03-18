@@ -1,16 +1,6 @@
 --- old.mappedTypeGenericInstantiationPreservesHomomorphism.types
 +++ new.mappedTypeGenericInstantiationPreservesHomomorphism.types
-@@= skipped -2, +2 lines =@@
- === internal.ts ===
- export declare function usePrivateType<T extends unknown[]>(...args: T): PrivateMapped<T[any]>;
- >usePrivateType : <T extends unknown[]>(...args: T) => PrivateMapped<T[any]>
-+>T : T
- >args : T
- 
- type PrivateMapped<Obj> = {[K in keyof Obj]: Obj[K]};
- >PrivateMapped : PrivateMapped<Obj>
-+>Obj : Obj
-+>K : K
+@@= skipped -9, +9 lines =@@
  
  === api.ts ===
  import {usePrivateType} from './internal';
@@ -22,7 +12,6 @@
 -><T extends unknown[]>(...args: T) => usePrivateType(...args) : <T extends unknown[]>(...args: T) => T[any] extends infer T_1 ? { [K in keyof T_1]: T[any][K]; } : never
 +>mappedUnionWithPrivateType : <T extends unknown[]>(...args: T) => PrivateMapped<T[any]>
 +><T extends unknown[]>(...args: T) => usePrivateType(...args) : <T extends unknown[]>(...args: T) => PrivateMapped<T[any]>
-+>T : T
  >args : T
 ->usePrivateType(...args) : T[any] extends infer T_1 ? { [K in keyof T_1]: T[any][K]; } : never
 ->usePrivateType : <T_1 extends unknown[]>(...args: T_1) => T_1[any] extends infer T_2 ? { [K in keyof T_2]: T_1[any][K]; } : never

@@ -2,8 +2,6 @@
 
 === Protected8.ts ===
 interface I {
->I : I
-
    protected
 >protected : any
 

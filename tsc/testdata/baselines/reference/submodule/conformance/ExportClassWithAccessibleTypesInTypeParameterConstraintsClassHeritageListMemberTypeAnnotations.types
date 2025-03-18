@@ -42,7 +42,6 @@ module A {
 
     export class Line<TPoint extends Point>{
 >Line : Line<TPoint>
->TPoint : TPoint
 
         constructor(public start: TPoint, public end: TPoint) { }
 >start : TPoint

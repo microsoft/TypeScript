@@ -12,15 +12,15 @@
 +>moduleA : typeof import("aliasUsageInArray_moduleA")
  
  interface IHasVisualizationModel {
-+>IHasVisualizationModel : IHasVisualizationModel
-+
      VisualizationModel: typeof Backbone.Model;
 ->VisualizationModel : typeof Backbone.Model
 ->Backbone.Model : typeof Backbone.Model
 ->Backbone : typeof Backbone
 ->Model : typeof Backbone.Model
 +>VisualizationModel : typeof Model
++>Backbone.Model : typeof Model
 +>Backbone : typeof import("aliasUsageInArray_backbone")
++>Model : typeof Model
  }
  
  var xs: IHasVisualizationModel[] = [moduleA];
@@ -36,12 +36,13 @@
 ->[moduleA] : (typeof moduleA)[]
 ->moduleA : typeof moduleA
 +>xs2 : typeof import("aliasUsageInArray_moduleA")[]
++>moduleA : typeof import("aliasUsageInArray_moduleA")
 +>[moduleA] : typeof import("aliasUsageInArray_moduleA")[]
 +>moduleA : typeof import("aliasUsageInArray_moduleA")
  
  === aliasUsageInArray_backbone.ts ===
  export class Model {
-@@= skipped -34, +33 lines =@@
+@@= skipped -34, +34 lines =@@
  
  === aliasUsageInArray_moduleA.ts ===
  import Backbone = require("./aliasUsageInArray_backbone");

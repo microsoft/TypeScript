@@ -50,4 +50,5 @@ const shadowedVariable = ({ value: alias }: { value: string }): typeof value => 
 >alias : string
 >value : string
 >value : string
+>value : string
 

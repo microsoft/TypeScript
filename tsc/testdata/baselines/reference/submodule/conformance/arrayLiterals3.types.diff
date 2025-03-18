@@ -1,11 +1,8 @@
 --- old.arrayLiterals3.types
 +++ new.arrayLiterals3.types
-@@= skipped -62, +62 lines =@@
- >"string" : "string"
+@@= skipped -63, +63 lines =@@
  
  interface tup {
-+>tup : tup
-+
      0: number[]|string[];
 ->0 : number[] | string[]
 +>0 : string[] | number[]
@@ -15,11 +12,7 @@
 +>1 : string[] | number[]
  }
  interface myArray extends Array<Number> { }
-+>myArray : myArray
-+
  interface myArray2 extends Array<Number|String> { }
-+>myArray2 : myArray2
-+
  var c0: tup = [...temp2];                         // Error
  >c0 : tup
  >[...temp2] : [number[], string[]]

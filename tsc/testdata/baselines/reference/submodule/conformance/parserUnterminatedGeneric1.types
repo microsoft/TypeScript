@@ -2,8 +2,6 @@
 
 === parserUnterminatedGeneric1.ts ===
  interface IQService {
->IQService : IQService
-
         all(promises: IPromise < any > []): IPromise<
 >all : (promises: IPromise<any>[]) => IPromise
 >promises : IPromise<any>[]

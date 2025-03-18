@@ -8,6 +8,7 @@ module CallSignature {
 >foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
 >cb : (x: number) => void
 >x : number
+>cb : (x: number) => void
 
     declare function foo1(cb: any): any;
 >foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
@@ -26,7 +27,6 @@ module CallSignature {
 >foo1(<T>(x: T) => '') : (x: number) => void
 >foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
 >x : T
 >'' : ""
 
@@ -35,6 +35,7 @@ module CallSignature {
 >cb : (x: number, y: number) => void
 >x : number
 >y : number
+>cb : (x: number, y: number) => void
 
     declare function foo2(cb: any): any;
 >foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
@@ -54,7 +55,6 @@ module CallSignature {
 >foo2(<T>(x: T) => '') : (x: number, y: number) => void
 >foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
 >x : T
 >'' : ""
 }

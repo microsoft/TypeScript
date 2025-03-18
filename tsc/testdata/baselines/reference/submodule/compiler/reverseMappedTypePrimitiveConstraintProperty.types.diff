@@ -8,15 +8,13 @@
 +>test : <T extends { prop: string; nested: { nestedProp: string; }; }>(obj: { [K in keyof T]: T[K] }) => T
  
    T extends { prop: string; nested: { nestedProp: string } },
-+>T : T
  >prop : string
- >nested : { nestedProp: string; }
+@@= skipped -8, +8 lines =@@
  >nestedProp : string
  
  >(obj: { [K in keyof T]: T[K] }): T;
 ->obj : { [K in keyof T]: T[K]; }
 +>obj : { [K in keyof T]: T[K] }
-+>K : K
  
  const result = test({
  >result : { prop: "foo"; nested: { nestedProp: string; }; extra: string; }

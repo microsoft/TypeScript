@@ -2,31 +2,20 @@
 
 === jsxChildrenGenericContextualTypes.tsx ===
 namespace JSX {
->JSX : any
-
     export interface Element {}
->Element : Element
-
     export interface ElementAttributesProperty { props: {}; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : {}
 
     export interface ElementChildrenAttribute { children: {}; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : {}
 
     export interface IntrinsicAttributes {}
->IntrinsicAttributes : IntrinsicAttributes
-
     export interface IntrinsicElements { [key: string]: Element }
->IntrinsicElements : IntrinsicElements
 >key : string
 }
 const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
 >Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
 ><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
->T : T
->U : U
 >p : { prop: T; children: (t: T) => T; }
 >prop : T
 >children : (t: T) => T
@@ -84,8 +73,6 @@ const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 >Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => any
 
 interface LitProps<T> { prop: T, children: (x: this) => T }
->LitProps : LitProps<T>
->T : T
 >prop : T
 >children : (x: this) => T
 >x : this
@@ -93,7 +80,6 @@ interface LitProps<T> { prop: T, children: (x: this) => T }
 const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
 >ElemLit : <T extends string>(p: LitProps<T>) => any
 ><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => any
->T : T
 >p : LitProps<T>
 ><div></div> : any
 >div : any

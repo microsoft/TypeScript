@@ -2,15 +2,11 @@
 
 === doNotWidenAtObjectLiteralPropertyAssignment.ts ===
 interface ITestEventInterval {
->ITestEventInterval : ITestEventInterval
-
     begin: number;
 >begin : number
 }
 
 interface IIntervalTreeNode {
->IIntervalTreeNode : IIntervalTreeNode
-
     interval: ITestEventInterval;
 >interval : ITestEventInterval
 

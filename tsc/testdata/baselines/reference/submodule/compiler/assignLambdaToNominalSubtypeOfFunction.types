@@ -2,8 +2,6 @@
 
 === assignLambdaToNominalSubtypeOfFunction.ts ===
 interface IResultCallback extends Function {
->IResultCallback : IResultCallback
-
     x: number;
 >x : number
 }

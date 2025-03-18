@@ -21,13 +21,7 @@
  
  // based on: https://github.com/gcanti/fp-ts/blob/89a772e95e414acee679f42f56527606f7b61f30/src/Map.ts#L246
  interface Next<A> {
-+>Next : Next<A>
-+>A : A
-+
-     readonly done?: boolean
- >done : boolean | undefined
- 
-@@= skipped -20, +23 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  const r2: Next<number> = map.values().next(); // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
  >r2 : Next<number>

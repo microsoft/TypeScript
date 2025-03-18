@@ -73,12 +73,8 @@
 +>"a" : any
  
          interface A {
-+>A : A
-+
              getB(): B;
- >getB : () => B
-         }
-@@= skipped -21, +23 lines =@@
+@@= skipped -21, +21 lines =@@
  >"E" : typeof import("E")
  
      import {A} from "a";
@@ -93,8 +89,4 @@
 +>"a" : any
  
          interface A {
-+>A : A
-+
              getCls(): Cls;
- >getCls : () => Cls
-         }

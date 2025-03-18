@@ -1,15 +1,6 @@
 --- old.overload1.types
 +++ new.overload1.types
-@@= skipped -20, +20 lines =@@
-     }
- 
-     export interface I {
-+>I : I
-+
-         f(s:string):number;
- >f : { (s: string): number; (n: number): string; }
- >s : string
-@@= skipped -38, +40 lines =@@
+@@= skipped -58, +58 lines =@@
  }
  
  declare var x:O.I;

@@ -4,9 +4,6 @@
 // compose :: (b->c) -> (a->b) -> (a->c)
 function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
->A : A
->B : B
->C : C
 >f : (b: B) => C
 >b : B
 >g : (a: A) => B
@@ -32,7 +29,6 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 // forEach :: [a] -> (a -> ()) -> ()
 function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 >forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
->A : A
 >list : A[]
 >f : (a: A, n?: number) => void
 >a : A
@@ -62,7 +58,6 @@ function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 // filter :: (a->bool) -> [a] -> [a]
 function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 >filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
->A : A
 >f : (a: A) => boolean
 >a : A
 >ar : A[]
@@ -99,7 +94,6 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 // length :: [a] -> Num
 function length2<A>(ar: A[]): number {
 >length2 : <A>(ar: A[]) => number
->A : A
 >ar : A[]
 
     return ar.length;
@@ -111,9 +105,6 @@ function length2<A>(ar: A[]): number {
 // curry1 :: ((a,b)->c) -> (a->(b->c))
 function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 >curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
->A : A
->B : B
->C : C
 >f : (a: A, b: B) => C
 >a : A
 >b : B
@@ -154,7 +145,6 @@ var cfilter = curry1(filter);
 
 function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >countWhere_1 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
->A : A
 >pred : (a: A) => boolean
 >a : A
 >a : A[]
@@ -170,7 +160,6 @@ function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 
 function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >countWhere_2 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
->A : A
 >pred : (a: A) => boolean
 >a : A
 >a : A[]

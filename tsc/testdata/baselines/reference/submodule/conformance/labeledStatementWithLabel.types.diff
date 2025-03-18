@@ -1,22 +1,6 @@
 --- old.labeledStatementWithLabel.types
 +++ new.labeledStatementWithLabel.types
-@@= skipped -18, +18 lines =@@
- 
- label: interface I {}
- >label : any
-+>I : I
- 
- label: class C { }
- >label : any
-@@= skipped -22, +23 lines =@@
- 
- label: module M { }
- >label : any
-+>M : any
- 
- label: namespace N {}
- >label : any
-+>N : any
+@@= skipped -46, +46 lines =@@
  
  label: type T = {}
  >label : any

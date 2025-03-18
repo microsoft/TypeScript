@@ -12,18 +12,3 @@
  === conditionalTypeVarianceBigArrayConstraintsPerformance.ts ===
  /// <reference path="react16.d.ts" />
  
- type Stuff<T> =
- >Stuff : Stuff<T>
-+>T : T
- 
-     T extends keyof JSX.IntrinsicElements
- >JSX : any
-@@= skipped -21, +16 lines =@@
- 
- function F<T, U>(p1: Stuff<T>, p2: Stuff<U>) {
- >F : <T, U>(p1: Stuff<T>, p2: Stuff<U>) => void
-+>T : T
-+>U : U
- >p1 : Stuff<T>
- >p2 : Stuff<U>
- 

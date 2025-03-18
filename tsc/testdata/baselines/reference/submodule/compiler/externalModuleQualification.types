@@ -7,9 +7,6 @@ export var ID = "test";
 
 export class DiffEditor<A, B, C> {
 >DiffEditor : DiffEditor<A, B, C>
->A : A
->B : B
->C : C
 
     private previousDiffAction: NavigateAction;
 >previousDiffAction : NavigateAction

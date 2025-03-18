@@ -16,6 +16,7 @@
 ->p0 : Promise<typeof Zero>
 ->Zero : typeof Zero
 +>p0 : Promise<typeof import("0")>
++>Zero : typeof import("0")
  >import(getPath()) : Promise<any>
  >getPath() : string
  >getPath : () => string
@@ -25,6 +26,7 @@
 ->Zero : typeof Zero
 ->import("./0") : Promise<typeof Zero>
 +>p1 : Promise<typeof import("0")>
++>Zero : typeof import("0")
 +>import("./0") : Promise<typeof import("0")>
  >"./0" : "./0"
  

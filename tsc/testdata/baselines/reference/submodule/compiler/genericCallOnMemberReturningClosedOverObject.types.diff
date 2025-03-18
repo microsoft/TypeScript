@@ -6,7 +6,6 @@
  function example<T1>() {
 ->example : <T1>() => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
 +>example : <T1>() => { foo: <T2>(t2: T2) => ???; bar: (t1: T1) => ???; }
-+>T1 : T1
  
    let x = {
 ->x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
@@ -19,7 +18,6 @@
 -><T2>(t2: T2) => x : <T2>(t2: T2) => { foo: any; bar: (t1: T1) => any; }
 +>foo : <T2>(t2: T2) => { foo: ???; bar: (t1: T1) => ???; }
 +><T2>(t2: T2) => x : <T2>(t2: T2) => { foo: ???; bar: (t1: T1) => ???; }
-+>T2 : T2
  >t2 : T2
 ->x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
 +>x : { foo: <T2>(t2: T2) => ???; bar: (t1: T1) => ???; }

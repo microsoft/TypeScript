@@ -28,9 +28,11 @@ new B; // error
 var BB: typeof B = B;
 >BB : typeof B
 >B : typeof B
+>B : typeof B
 
 var AA: typeof A = BB; // error, AA is not of abstract type.
 >AA : typeof A
+>A : typeof A
 >BB : typeof B
 
 new AA;
@@ -40,6 +42,7 @@ new AA;
 function constructB(Factory : typeof B) {
 >constructB : (Factory: typeof B) => void
 >Factory : typeof B
+>B : typeof B
 
     new Factory; // error -- Factory is of type typeof B.
 >new Factory : any

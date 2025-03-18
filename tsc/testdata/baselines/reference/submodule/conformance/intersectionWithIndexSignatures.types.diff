@@ -1,16 +1,6 @@
 --- old.intersectionWithIndexSignatures.types
 +++ new.intersectionWithIndexSignatures.types
-@@= skipped -64, +64 lines =@@
- 
- type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<keyof Tgt, keyof Source>>;
- >constr : constr<Source, Tgt>
-+>Source : Source
-+>Tgt : Tgt
-+>K : K
- 
- type s = constr<{}, { [key: string]: { a: string } }>;
- >s : s
-@@= skipped -11, +14 lines =@@
+@@= skipped -75, +75 lines =@@
  
  q["asd"].a.substr(1);
  >q["asd"].a.substr(1) : string

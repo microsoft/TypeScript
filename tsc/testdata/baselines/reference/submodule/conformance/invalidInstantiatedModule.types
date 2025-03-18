@@ -18,7 +18,6 @@ module M2 {
 >M2 : typeof M2
 
     export interface Point { x: number; y: number }
->Point : Point
 >x : number
 >y : number
 

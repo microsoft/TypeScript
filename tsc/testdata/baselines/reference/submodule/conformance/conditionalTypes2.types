@@ -2,33 +2,22 @@
 
 === conditionalTypes2.ts ===
 interface Covariant<T> {
->Covariant : Covariant<T>
->T : T
-
     foo: T extends string ? T : number;
 >foo : T extends string ? T : number
 }
 
 interface Contravariant<T> {
->Contravariant : Contravariant<T>
->T : T
-
     foo: T extends string ? keyof T : number;
 >foo : T extends string ? keyof T : number
 }
 
 interface Invariant<T> {
->Invariant : Invariant<T>
->T : T
-
     foo: T extends string ? keyof T : T;
 >foo : T extends string ? keyof T : T
 }
 
 function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 >f1 : <A, B extends A>(a: Covariant<A>, b: Covariant<B>) => void
->A : A
->B : B
 >a : Covariant<A>
 >b : Covariant<B>
 
@@ -45,8 +34,6 @@ function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 
 function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 >f2 : <A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) => void
->A : A
->B : B
 >a : Contravariant<A>
 >b : Contravariant<B>
 
@@ -63,8 +50,6 @@ function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 
 function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
 >f3 : <A, B extends A>(a: Invariant<A>, b: Invariant<B>) => void
->A : A
->B : B
 >a : Invariant<A>
 >b : Invariant<B>
 
@@ -82,7 +67,6 @@ function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
 // Extract<T, Function> is a T that is known to be a Function
 function isFunction<T>(value: T): value is Extract<T, Function> {
 >isFunction : <T>(value: T) => value is Extract<T, Function>
->T : T
 >value : T
 
     return typeof value === "function";
@@ -94,7 +78,6 @@ function isFunction<T>(value: T): value is Extract<T, Function> {
 
 function getFunction<T>(item: T) {
 >getFunction : <T>(item: T) => Extract<T, Function>
->T : T
 >item : T
 
     if (isFunction(item)) {
@@ -112,7 +95,6 @@ function getFunction<T>(item: T) {
 
 function f10<T>(x: T) {
 >f10 : <T>(x: T) => void
->T : T
 >x : T
 
     if (isFunction(x)) {
@@ -182,13 +164,9 @@ declare function fooBat(x: { foo: string, bat: string }): void;
 
 type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
 >Extract2 : Extract2<T, U, V>
->T : T
->U : U
->V : V
 
 function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
 >f20 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
->T : T
 >x : Extract<Extract<T, Foo>, Bar>
 >y : Extract<T, Foo & Bar>
 >z : Extract2<T, Foo, Bar>
@@ -211,7 +189,6 @@ function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: E
 
 function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) {
 >f21 : <T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>) => void
->T : T
 >x : Extract<Extract<T, Foo>, Bar>
 >y : Extract<T, Foo & Bar>
 >z : Extract2<T, Foo, Bar>
@@ -236,7 +213,6 @@ function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: E
 
 class Opt<T> {
 >Opt : Opt<T>
->T : T
 
     toVector(): Vector<T> {
 >toVector : () => Vector<T>
@@ -248,16 +224,12 @@ class Opt<T> {
 }
 
 interface Seq<T> {
->Seq : Seq<T>
->T : T
-
     tail(): Opt<Seq<T>>;
 >tail : () => Opt<Seq<T>>
 }
 
 class Vector<T> implements Seq<T> {
 >Vector : Vector<T>
->T : T
 
     tail(): Opt<Vector<T>> {
 >tail : () => Opt<Vector<T>>
@@ -268,7 +240,6 @@ class Vector<T> implements Seq<T> {
     }
     partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->U : U
 >predicate : (v: T) => v is U
 >v : T
 
@@ -279,7 +250,6 @@ class Vector<T> implements Seq<T> {
 
     partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->U : U
 >predicate : (v: T) => boolean
 >v : T
 
@@ -290,17 +260,11 @@ class Vector<T> implements Seq<T> {
 }
 
 interface A1<T> {
->A1 : A1<T>
->T : T
-
     bat: B1<A1<T>>;
 >bat : B1<A1<T>>
 }
 
 interface B1<T> extends A1<T> {
->B1 : B1<T>
->T : T
-
     bat: B1<B1<T>>;
 >bat : B1<B1<T>>
 
@@ -322,7 +286,6 @@ declare function toString2(value: Function): string ;
 
 function foo<T>(value: T) {
 >foo : <T>(value: T) => void
->T : T
 >value : T
 
     if (isFunction(value)) {
@@ -346,72 +309,44 @@ function foo<T>(value: T) {
 
 type A<T, V, E> =
 >A : A<T, V, E>
->T : T
->V : V
->E : E
 
   T extends object
     ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: A<T[Q], V, E>; }
->Q : Q
->P : P
-
     : T extends V ? T : never;
 
 type B<T, V> =
 >B : B<T, V>
->T : T
->V : V
 
   T extends object
     ? { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: B<T[Q], V>; }
->Q : Q
->P : P
-
     : T extends V ? T : never;
 
 type C<T, V, E> =
 >C : C<T, V, E>
->T : T
->V : V
->E : E
 
   { [Q in { [P in keyof T]: T[P] extends V ? P : P; }[keyof T]]: C<T[Q], V, E>; };
->Q : Q
->P : P
 
 // Repro from #23100
 
 type A2<T, V, E> =
 >A2 : A2<T, V, E>
->T : T
->V : V
->E : E
 
     T extends object ? T extends any[] ? T : { [Q in keyof T]: A2<T[Q], V, E>; } : T;
->Q : Q
 
 type B2<T, V> =
 >B2 : B2<T, V>
->T : T
->V : V
 
     T extends object ? T extends any[] ? T : { [Q in keyof T]: B2<T[Q], V>; } : T;
->Q : Q
 
 type C2<T, V, E> =
 >C2 : C2<T, V, E>
->T : T
->V : V
->E : E
 
     T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
->Q : Q
 
 // Repro from #28654
 
 type MaybeTrue<T extends { b: boolean }> = true extends T["b"] ? "yes" : "no";
 >MaybeTrue : MaybeTrue<T>
->T : T
 >b : boolean
 >true : true
 
@@ -440,8 +375,6 @@ type Union = 'a' | 'b';
 
 type Product<A extends Union, B> = { f1: A, f2: B};
 >Product : Product<A, B>
->A : A
->B : B
 >f1 : A
 >f2 : B
 
@@ -453,8 +386,6 @@ type UnionComplement = {
 >UnionComplement : UnionComplement
 
   [K in Union]: Exclude<Union, K>
->K : K
-
 };
 type UCA = UnionComplement['a'];
 >UCA : "b"
@@ -467,8 +398,6 @@ type UnionComplementComplement = {
 >UnionComplementComplement : UnionComplementComplement
 
   [K in Union]: Exclude<Union, Exclude<Union, K>>
->K : K
-
 };
 type UCCA = UnionComplementComplement['a'];
 >UCCA : "a"
@@ -481,7 +410,6 @@ type ProductComplement = {
 >ProductComplement : ProductComplement
 
   [K in Union]: Exclude<ProductUnion, { f1: K }>
->K : K
 >f1 : K
 
 };
@@ -496,7 +424,6 @@ type ProductComplementComplement = {
 >ProductComplementComplement : ProductComplementComplement
 
   [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
->K : K
 >f1 : K
 
 };
@@ -510,9 +437,6 @@ type PCCB = ProductComplementComplement['b'];
 
 type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
 >Hmm : Hmm<T, U>
->T : T
->U : U
->K : K
 
 type What = Hmm<{}, { a: string }>
 >What : { a: number; }
@@ -537,33 +461,25 @@ exportCommand(save);
 
 declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
 >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
->TResponse : TResponse
 >functionToCall : IExportCallback<TResponse>
 
 interface IExportCallback<TResponse> {
->IExportCallback : IExportCallback<TResponse>
->TResponse : TResponse
-
 	(response: IRootResponse<TResponse>): void;
 >response : IRootResponse<TResponse>
 }
 
 type IRootResponse<TResponse> =
 >IRootResponse : IRootResponse<TResponse>
->TResponse : TResponse
 
 	TResponse extends IRecord ? IRecordResponse<TResponse> : IResponse<TResponse>;
 
 interface IRecord {
->IRecord : IRecord
-
 	readonly Id: string;
 >Id : string
 }
 
 declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
 >IRecordResponse : IRecordResponse<T>
->T : T
 
 	sendRecord(): void;
 >sendRecord : () => void
@@ -572,7 +488,6 @@ declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
 
 declare type IResponse<T> = {
 >IResponse : IResponse<T>
->T : T
 
 	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
 >sendValue : (name: GetPropertyNamesOfType<Required<T>, string>) => void
@@ -582,18 +497,12 @@ declare type IResponse<T> = {
 
 declare type GetPropertyNamesOfType<T, RestrictToType> = {
 >GetPropertyNamesOfType : GetPropertyNamesOfType<T, RestrictToType>
->T : T
->RestrictToType : RestrictToType
 
 	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
->PropertyName : PropertyName
-
 }[Extract<keyof T, string>];
 
 declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
 >GetAllPropertiesOfType : GetAllPropertiesOfType<T, RestrictToType>
->T : T
->RestrictToType : RestrictToType
 
 	T,
 	GetPropertyNamesOfType<Required<T>, RestrictToType>
@@ -607,13 +516,11 @@ declare function ff(x: Foo3<string>): void;
 
 declare function gg<T>(f: (x: Foo3<T>) => void): void;
 >gg : <T>(f: (x: Foo3<T>) => void) => void
->T : T
 >f : (x: Foo3<T>) => void
 >x : Foo3<T>
 
 type Foo3<T> = T extends number ? { n: T } : { x: T };
 >Foo3 : Foo3<T>
->T : T
 >n : T
 >x : T
 
@@ -626,12 +533,10 @@ gg(ff);
 
 type Wat<K extends string> = { x: { y: 0, z: 1 } } extends { x: { [P in K]: 0 } } ? true : false;
 >Wat : Wat<K>
->K : K
 >x : { y: 0; z: 1; }
 >y : 0
 >z : 1
 >x : { [P in K]: 0 }
->P : P
 >true : true
 >false : false
  

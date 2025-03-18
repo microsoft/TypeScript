@@ -92,8 +92,6 @@ class C1 {
 }
 
 interface I1 {
->I1 : I1
-
     [sym](): void;  // should error
 >[sym] : () => void
 >sym : symbol
@@ -152,8 +150,6 @@ class C3 {
 }
 
 interface I3 {
->I3 : I3
-
     [1](): void;
 >[1] : () => void
 >1 : 1

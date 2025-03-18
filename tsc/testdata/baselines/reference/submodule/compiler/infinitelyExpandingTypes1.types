@@ -2,9 +2,6 @@
 
 === infinitelyExpandingTypes1.ts ===
 interface List<T> {
->List : List<T>
->T : T
-
     data: T;
 >data : T
 
@@ -17,9 +14,6 @@ interface List<T> {
 
 
 interface MyList<T> {
->MyList : MyList<T>
->T : T
-
     data: T;
 >data : T
 

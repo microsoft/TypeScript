@@ -17,7 +17,6 @@ class MessageWrapper {
 
   wrap<T>() {
 >wrap : <T>() => void
->T : T
 
     let m = this.message;
 >m : Message
@@ -68,7 +67,6 @@ class Z {
 
 function bA<T extends A>(this: T, arg: B) {
 >bA : <T extends A>(arg: B) => void
->T : T
 >this : T
 >arg : B
 
@@ -92,7 +90,6 @@ function bA<T extends A>(this: T, arg: B) {
 }
 function bB<T extends B>(this: T, arg: B) {
 >bB : <T extends B>(arg: B) => void
->T : T
 >this : T
 >arg : B
 
@@ -122,7 +119,6 @@ function bB<T extends B>(this: T, arg: B) {
 }
 function bC<T extends C>(this: T, arg: B) {
 >bC : <T extends C>(arg: B) => void
->T : T
 >this : T
 >arg : B
 
@@ -152,7 +148,6 @@ function bC<T extends C>(this: T, arg: B) {
 }
 function bZ<T extends Z>(this: T, arg: B) {
 >bZ : <T extends Z>(arg: B) => void
->T : T
 >this : T
 >arg : B
 
@@ -176,7 +171,6 @@ function bZ<T extends Z>(this: T, arg: B) {
 }
 function bString<T extends string>(this: T, arg: B) {
 >bString : <T extends string>(arg: B) => void
->T : T
 >this : T
 >arg : B
 
@@ -200,7 +194,6 @@ function bString<T extends string>(this: T, arg: B) {
 }
 function bAny<T>(this: T, arg: B) {
 >bAny : <T>(arg: B) => void
->T : T
 >this : T
 >arg : B
 

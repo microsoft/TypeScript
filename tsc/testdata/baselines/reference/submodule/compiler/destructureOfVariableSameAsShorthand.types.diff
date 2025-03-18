@@ -1,25 +1,15 @@
 --- old.destructureOfVariableSameAsShorthand.types
 +++ new.destructureOfVariableSameAsShorthand.types
-@@= skipped -2, +2 lines =@@
- === destructureOfVariableSameAsShorthand.ts ===
- // https://github.com/microsoft/TypeScript/issues/38969
- interface AxiosResponse<T = never> {
-+>AxiosResponse : AxiosResponse<T>
-+>T : T
-+
-     data: T;
- >data : T
+@@= skipped -7, +7 lines =@@
  }
  
  declare function get<T = never, R = AxiosResponse<T>>(): Promise<R>;
 ->get : <T = never, R = AxiosResponse<T>>() => Promise<R>
 +>get : <T, R>() => Promise<R>
-+>T : T
-+>R : R
  
  async function main() {
  >main : () => Promise<void>
-@@= skipped -13, +18 lines =@@
+@@= skipped -8, +8 lines =@@
      // These work examples as expected
      get().then((response) => {
  >get().then((response) => {        // body is never        const body = response.data;    }) : Promise<void>

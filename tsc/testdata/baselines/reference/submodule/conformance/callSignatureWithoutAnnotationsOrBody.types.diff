@@ -1,15 +1,6 @@
 --- old.callSignatureWithoutAnnotationsOrBody.types
 +++ new.callSignatureWithoutAnnotationsOrBody.types
-@@= skipped -13, +13 lines =@@
- >1 : 1
- 
- interface I {
-+>I : I
-+
-     ();
-     f();
- >f : () => any
-@@= skipped -20, +22 lines =@@
+@@= skipped -33, +33 lines =@@
  >f : () => any
  
  var a: {

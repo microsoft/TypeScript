@@ -8,7 +8,7 @@
 +>foo1 : { (a: new (x: number) => number[]): new (x: number) => number[]; (a: any): any; }
  >a : new (x: number) => number[]
  >x : number
-->a : new (x: number) => number[]
+ >a : new (x: number) => number[]
  
  declare function foo1(a: any): any;
 ->foo1 : { (a: new (x: number) => number[]): typeof a; (a: any): any; }
@@ -20,7 +20,7 @@
 +>foo2 : { (a: new (x: number) => string[]): new (x: number) => string[]; (a: any): any; }
  >a : new (x: number) => string[]
  >x : number
-->a : new (x: number) => string[]
+ >a : new (x: number) => string[]
  
  declare function foo2(a: any): any;
 ->foo2 : { (a: new (x: number) => string[]): typeof a; (a: any): any; }
@@ -32,7 +32,7 @@
 +>foo3 : { (a: new (x: number) => void): new (x: number) => void; (a: any): any; }
  >a : new (x: number) => void
  >x : number
-->a : new (x: number) => void
+ >a : new (x: number) => void
  
  declare function foo3(a: any): any;
 ->foo3 : { (a: new (x: number) => void): typeof a; (a: any): any; }
@@ -45,7 +45,7 @@
  >a : new (x: string, y: number) => string
  >x : string
  >y : number
-->a : new (x: string, y: number) => string
+ >a : new (x: string, y: number) => string
  
  declare function foo4(a: any): any;
 ->foo4 : { (a: new (x: string, y: number) => string): typeof a; (a: any): any; }
@@ -58,7 +58,7 @@
  >a : new (x: new (arg: string) => number) => string
  >x : new (arg: string) => number
  >arg : string
-->a : new (x: new (arg: string) => number) => string
+ >a : new (x: new (arg: string) => number) => string
  
  declare function foo5(a: any): any;
 ->foo5 : { (a: new (x: new (arg: string) => number) => string): typeof a; (a: any): any; }
@@ -71,7 +71,7 @@
  >a : new (x: new (arg: Base) => Derived) => Base
  >x : new (arg: Base) => Derived
  >arg : Base
-->a : new (x: new (arg: Base) => Derived) => Base
+ >a : new (x: new (arg: Base) => Derived) => Base
  
  declare function foo6(a: any): any;
 ->foo6 : { (a: new (x: new (arg: Base) => Derived) => Base): typeof a; (a: any): any; }
@@ -84,8 +84,8 @@
  >a : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived
  >x : new (arg: Base) => Derived
  >arg : Base
- >r : Base
-->a : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived
+@@= skipped -71, +71 lines =@@
+ >a : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived
  
  declare function foo7(a: any): any;
 ->foo7 : { (a: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived): typeof a; (a: any): any; }
@@ -98,10 +98,8 @@
  >a : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
  >x : new (arg: Base) => Derived
  >arg : Base
- >y : new (arg2: Base) => Derived
- >arg2 : Base
- >r : Base
-->a : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
+@@= skipped -14, +14 lines =@@
+ >a : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
  
  declare function foo8(a: any): any;
 ->foo8 : { (a: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): typeof a; (a: any): any; }
@@ -114,10 +112,8 @@
  >a : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
  >x : new (arg: Base) => Derived
  >arg : Base
- >y : new (arg2: Base) => Derived
- >arg2 : Base
- >r : Base
-->a : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
+@@= skipped -14, +14 lines =@@
+ >a : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
  
  declare function foo9(a: any): any;
 ->foo9 : { (a: new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived): typeof a; (a: any): any; }
@@ -129,7 +125,7 @@
 +>foo10 : { (a: new (...x: Derived[]) => Derived): new (...x: Derived[]) => Derived; (a: any): any; }
  >a : new (...x: Derived[]) => Derived
  >x : Derived[]
-->a : new (...x: Derived[]) => Derived
+ >a : new (...x: Derived[]) => Derived
  
  declare function foo10(a: any): any;
 ->foo10 : { (a: new (...x: Derived[]) => Derived): typeof a; (a: any): any; }
@@ -142,10 +138,8 @@
  >a : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
  >x : { foo: string; }
  >foo : string
- >y : { foo: string; bar: string; }
- >foo : string
- >bar : string
-->a : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
+@@= skipped -24, +24 lines =@@
+ >a : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
  
  declare function foo11(a: any): any;
 ->foo11 : { (a: new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): typeof a; (a: any): any; }
@@ -160,6 +154,7 @@
  >x : Base[]
  >y : Derived2[]
 ->a : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
++>a : new (x: Base[], y: Derived2[]) => Derived[]
  
  declare function foo12(a: any): any;
 ->foo12 : { (a: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a; (a: any): any; }
@@ -174,6 +169,7 @@
  >x : Base[]
  >y : Derived[]
 ->a : new (x: Array<Base>, y: Array<Derived>) => Array<Derived>
++>a : new (x: Base[], y: Derived[]) => Derived[]
  
  declare function foo13(a: any): any;
 ->foo13 : { (a: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>): typeof a; (a: any): any; }
@@ -186,8 +182,8 @@
  >a : new (x: { a: string; b: number; }) => Object
  >x : { a: string; b: number; }
  >a : string
- >b : number
-->a : new (x: { a: string; b: number; }) => Object
+@@= skipped -34, +34 lines =@@
+ >a : new (x: { a: string; b: number; }) => Object
  
  declare function foo14(a: any): any;
 ->foo14 : { (a: new (x: { a: string; b: number; }) => Object): typeof a; (a: any): any; }
@@ -200,12 +196,9 @@
  >a : { new (x: number): number[]; new (x: string): string[]; }
  
      new (x: number): number[];
-@@= skipped -171, +157 lines =@@
- >x : string
+@@= skipped -17, +17 lines =@@
+ >a : { new (x: number): number[]; new (x: string): string[]; }
  
- }): typeof a;
-->a : { new (x: number): number[]; new (x: string): string[]; }
--
  declare function foo15(a: any): any;
 ->foo15 : { (a: { new (x: number): number[]; new (x: string): string[]; }): typeof a; (a: any): any; }
 +>foo15 : { (a: { new (x: number): number[]; new (x: string): string[]; }): { new (x: number): number[]; new (x: string): string[]; }; (a: any): any; }
@@ -217,16 +210,9 @@
  >a : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
  
      new <T extends Derived>(x: T): number[];
-+>T : T
- >x : T
+@@= skipped -17, +17 lines =@@
+ >a : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
  
-     new <U extends Base>(x: U): number[];
-+>U : U
- >x : U
- 
- }): typeof a;
-->a : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
--
  declare function foo16(a: any): any;
 ->foo16 : { (a: { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }): typeof a; (a: any): any; }
 +>foo16 : { (a: { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }): { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }; (a: any): any; }
@@ -238,12 +224,9 @@
  >a : { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }
  
      new (x: (a: number) => number): number[];
-@@= skipped -36, +34 lines =@@
- >a : string
+@@= skipped -19, +19 lines =@@
+ >a : { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }
  
- }): typeof a;
-->a : { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }
--
  declare function foo17(a: any): any;
 ->foo17 : { (a: { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }): typeof a; (a: any): any; }
 +>foo17 : { (a: { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }): { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }; (a: any): any; }
@@ -255,24 +238,16 @@
  >a : { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }
  
      new (x: {
-@@= skipped -31, +29 lines =@@
+@@= skipped -31, +31 lines =@@
+ >a : { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }
  
-     }): any[];
- }): typeof a;
-->a : { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }
--
  declare function foo18(a: any): any;
 ->foo18 : { (a: { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }): typeof a; (a: any): any; }
 +>foo18 : { (a: { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }): { new (x: { new (a: number): number; new (a: string): string; }): any[]; new (x: { new (a: boolean): boolean; new (a: Date): Date; }): any[]; }; (a: any): any; }
  >a : any
  
  var r1arg1: new <T>(x: T) => T[];
- >r1arg1 : new <T>(x: T) => T[]
-+>T : T
- >x : T
- 
- var r1arg2: new (x: number) => number[];
-@@= skipped -17, +16 lines =@@
+@@= skipped -14, +14 lines =@@
  var r1 = foo1(r1arg1); // any, return types are not subtype of first overload
  >r1 : new (x: number) => number[]
  >foo1(r1arg1) : new (x: number) => number[]
@@ -296,13 +271,7 @@
  >r1arg1 : new <T>(x: T) => T[]
  >r1arg2 : new (x: number) => number[]
  
- var r2arg1: new <T>(x: T) => string[];
- >r2arg1 : new <T>(x: T) => string[]
-+>T : T
- >x : T
- 
- var r2arg2: new (x: number) => string[];
-@@= skipped -26, +27 lines =@@
+@@= skipped -26, +26 lines =@@
  var r2 = foo2(r2arg1);
  >r2 : new (x: number) => string[]
  >foo2(r2arg1) : new (x: number) => string[]
@@ -326,13 +295,7 @@
  >r2arg2 : new (x: number) => string[]
  >r2arg1 : new <T>(x: T) => string[]
  
- var r3arg1: new <T>(x: T) => T;
- >r3arg1 : new <T>(x: T) => T
-+>T : T
- >x : T
- 
- var r3arg2: new (x: number) => void;
-@@= skipped -26, +27 lines =@@
+@@= skipped -26, +26 lines =@@
  var r3 = foo3(r3arg1);
  >r3 : new (x: number) => void
  >foo3(r3arg1) : new (x: number) => void
@@ -356,14 +319,7 @@
  >r3arg2 : new (x: number) => void
  >r3arg1 : new <T>(x: T) => T
  
- var r4arg1: new <T, U>(x: T, y: U) => T;
- >r4arg1 : new <T, U>(x: T, y: U) => T
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -28, +30 lines =@@
+@@= skipped -28, +28 lines =@@
  var r4 = foo4(r4arg1); // any
  >r4 : new (x: string, y: number) => string
  >foo4(r4arg1) : new (x: string, y: number) => string
@@ -387,14 +343,7 @@
  >r4arg2 : new (x: string, y: number) => string
  >r4arg1 : new <T, U>(x: T, y: U) => T
  
- var r5arg1: new <T, U>(x: new (arg: T) => U) => T;
- >r5arg1 : new <T, U>(x: new (arg: T) => U) => T
-+>T : T
-+>U : U
- >x : new (arg: T) => U
- >arg : T
- 
-@@= skipped -28, +30 lines =@@
+@@= skipped -28, +28 lines =@@
  var r5 = foo5(r5arg1); // any
  >r5 : new (x: new (arg: string) => number) => string
  >foo5(r5arg1) : new (x: new (arg: string) => number) => string
@@ -418,14 +367,7 @@
  >r5arg2 : new (x: new (arg: string) => number) => string
  >r5arg1 : new <T, U>(x: new (arg: T) => U) => T
  
- var r6arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T;
- >r6arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T
-+>T : T
-+>U : U
- >x : new (arg: T) => U
- >arg : T
- 
-@@= skipped -28, +30 lines =@@
+@@= skipped -28, +28 lines =@@
  var r6 = foo6(r6arg1); // any
  >r6 : new (x: new (arg: Base) => Derived) => Base
  >foo6(r6arg1) : new (x: new (arg: Base) => Derived) => Base
@@ -449,14 +391,7 @@
  >r6arg2 : new (x: new (arg: Base) => Derived) => Base
  >r6arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T
  
- var r7arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => new (r: T) => U;
- >r7arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U) => new (r: T) => U
-+>T : T
-+>U : U
- >x : new (arg: T) => U
- >arg : T
- >r : T
-@@= skipped -30, +32 lines =@@
+@@= skipped -30, +30 lines =@@
  var r7 = foo7(r7arg1); // any
  >r7 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived
  >foo7(r7arg1) : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived
@@ -480,14 +415,7 @@
  >r7arg2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived
  >r7arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U) => new (r: T) => U
  
- var r8arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: new (arg2: T) => U) => new (r: T) => U;
- >r8arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: new (arg2: T) => U) => new (r: T) => U
-+>T : T
-+>U : U
- >x : new (arg: T) => U
- >arg : T
- >y : new (arg2: T) => U
-@@= skipped -34, +36 lines =@@
+@@= skipped -34, +34 lines =@@
  var r8 = foo8(r8arg1); // any
  >r8 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
  >foo8(r8arg1) : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
@@ -511,14 +439,7 @@
  >r8arg2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
  >r8arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: new (arg2: T) => U) => new (r: T) => U
  
- var r9arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => new (r: T) => U;
- >r9arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => new (r: T) => U
-+>T : T
-+>U : U
- >x : new (arg: T) => U
- >arg : T
- >y : (arg2: { foo: string; bing: number; }) => U
-@@= skipped -36, +38 lines =@@
+@@= skipped -36, +36 lines =@@
  var r9 = foo9(r9arg1); // any
  >r9 : any
  >foo9(r9arg1) : any
@@ -542,13 +463,7 @@
  >r9arg2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
  >r9arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => new (r: T) => U
  
- var r10arg1: new <T extends Derived>(...x: T[]) => T;
- >r10arg1 : new <T extends Derived>(...x: T[]) => T
-+>T : T
- >x : T[]
- 
- var r10arg2: new (...x: Derived[]) => Derived;
-@@= skipped -26, +27 lines =@@
+@@= skipped -26, +26 lines =@@
  var r10 = foo10(r10arg1); // any
  >r10 : new (...x: Derived[]) => Derived
  >foo10(r10arg1) : new (...x: Derived[]) => Derived
@@ -572,13 +487,7 @@
  >r10arg2 : new (...x: Derived[]) => Derived
  >r10arg1 : new <T extends Derived>(...x: T[]) => T
  
- var r11arg1: new <T extends Base>(x: T, y: T) => T;
- >r11arg1 : new <T extends Base>(x: T, y: T) => T
-+>T : T
- >x : T
- >y : T
- 
-@@= skipped -31, +32 lines =@@
+@@= skipped -31, +31 lines =@@
  var r11 = foo11(r11arg1); // any
  >r11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
  >foo11(r11arg1) : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
@@ -605,7 +514,6 @@
  var r12arg1: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>;
 ->r12arg1 : new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>
 +>r12arg1 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
-+>T : T
  >x : Base[]
  >y : T
  
@@ -648,7 +556,6 @@
  var r13arg1: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T;
 ->r13arg1 : new <T extends Array<Derived>>(x: Array<Base>, y: T) => T
 +>r13arg1 : new <T extends Derived[]>(x: Base[], y: T) => T
-+>T : T
  >x : Base[]
  >y : T
  
@@ -690,11 +597,7 @@
  
  var r14arg1: new <T>(x: { a: T; b: T }) => T;
  >r14arg1 : new <T>(x: { a: T; b: T; }) => T
-+>T : T
- >x : { a: T; b: T; }
- >a : T
- >b : T
-@@= skipped -86, +89 lines =@@
+@@= skipped -86, +86 lines =@@
  var r14 = foo14(r14arg1); // any
  >r14 : any
  >foo14(r14arg1) : any
@@ -718,11 +621,7 @@
  >r14arg2 : new (x: { a: string; b: number; }) => Object
  >r14arg1 : new <T>(x: { a: T; b: T; }) => T
  
- var r15arg1: new <T>(x: T) => T[];
- >r15arg1 : new <T>(x: T) => T[]
-+>T : T
- >x : T
- 
+@@= skipped -22, +22 lines =@@
  var r15 = foo15(r15arg1); // any
  >r15 : any
  >foo15(r15arg1) : any
@@ -731,10 +630,7 @@
  >r15arg1 : new <T>(x: T) => T[]
  
  var r16arg1: new <T extends Base>(x: T) => number[];
- >r16arg1 : new <T extends Base>(x: T) => number[]
-+>T : T
- >x : T
- 
+@@= skipped -10, +10 lines =@@
  var r16 = foo16(r16arg1);
  >r16 : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
  >foo16(r16arg1) : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
@@ -743,11 +639,7 @@
  >r16arg1 : new <T extends Base>(x: T) => number[]
  
  var r17arg1: new <T>(x: (a: T) => T) => T[];
- >r17arg1 : new <T>(x: (a: T) => T) => T[]
-+>T : T
- >x : (a: T) => T
- >a : T
- 
+@@= skipped -11, +11 lines =@@
  var r17 = foo17(r17arg1); // any
  >r17 : any
  >foo17(r17arg1) : any
@@ -756,11 +648,7 @@
  >r17arg1 : new <T>(x: (a: T) => T) => T[]
  
  var r18arg1: new <T>(x: (a: T) => T) => T[];
- >r18arg1 : new <T>(x: (a: T) => T) => T[]
-+>T : T
- >x : (a: T) => T
- >a : T
- 
+@@= skipped -11, +11 lines =@@
  var r18 = foo18(r18arg1); 
  >r18 : any
  >foo18(r18arg1) : any

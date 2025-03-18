@@ -3,9 +3,6 @@
 === unusedTypeParameterInFunction3.ts ===
 function f1<X, Y, Z>() {
 >f1 : <X, Y, Z>() => void
->X : X
->Y : Y
->Z : Z
 
     var a: X;
 >a : X

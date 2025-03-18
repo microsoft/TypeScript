@@ -1,12 +1,6 @@
 --- old.implementsClause.types
 +++ new.implementsClause.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/externalModules/typeOnly/implementsClause.ts] ////
- 
- === types.ts ===
--
- export interface Component {}
-+>Component : Component
+@@= skipped -5, +5 lines =@@
  
  === ns.ts ===
  import type * as types from './types';

@@ -1,8 +1,0 @@
---- old.anyMappedTypesError.types
-+++ new.anyMappedTypesError.types
-@@= skipped -2, +2 lines =@@
- === anyMappedTypesError.ts ===
- type Foo = {[P in "bar"]};
- >Foo : Foo
-+>P : P
- 

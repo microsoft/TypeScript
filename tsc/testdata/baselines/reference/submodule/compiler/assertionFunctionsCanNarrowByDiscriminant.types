@@ -2,8 +2,6 @@
 
 === assertionFunctionsCanNarrowByDiscriminant.ts ===
 interface Cat {
->Cat : Cat
-
     type: 'cat';
 >type : "cat"
 
@@ -13,8 +11,6 @@ interface Cat {
 }
 
 interface Dog {
->Dog : Dog
-
     type: 'dog';
 >type : "dog"
 
@@ -28,7 +24,6 @@ type Animal = Cat | Dog;
 
 declare function assertEqual<T>(value: any, type: T): asserts value is T;
 >assertEqual : <T>(value: any, type: T) => asserts value is T
->T : T
 >value : any
 >type : T
 

@@ -52,8 +52,6 @@ module TypeScript {
     }
 
     export interface IHashTable {
->IHashTable : IHashTable
-
         getAllKeys(): string[];
 >getAllKeys : () => string[]
 

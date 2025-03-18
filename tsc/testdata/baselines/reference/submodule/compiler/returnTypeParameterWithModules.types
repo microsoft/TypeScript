@@ -6,7 +6,6 @@ module M1 {
 
     export function reduce<A>(ar, f, e?): Array<A> {
 >reduce : <A>(ar: any, f: any, e?: any) => A[]
->A : A
 >ar : any
 >f : any
 >e : any
@@ -52,9 +51,6 @@ module M2 {
     };
     export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
 >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
->B : B
->C : C
->D : D
 >g : (x: B) => C
 >x : B
 >f : (x: D) => B

@@ -4,8 +4,6 @@
 // Repro from #46021
 
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
->IData : IData<MenuItemVariant>
->MenuItemVariant : MenuItemVariant
 >ListItemVariant : any
 
     menuItemsVariant?: MenuItemVariant;
@@ -14,7 +12,6 @@ interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLin
 
 function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
 >Menu : <MenuItemVariant extends ListItemVariant>(data: IData<MenuItemVariant>) => any
->MenuItemVariant : MenuItemVariant
 >ListItemVariant : any
 >data : IData<MenuItemVariant>
 

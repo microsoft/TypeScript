@@ -19,17 +19,14 @@ export type MyType = Something.SubType<string>
 === Something.ts ===
 export type Something<A> = { value: A }
 >Something : Something<A>
->A : A
 >value : A
 
 export type SubType<A> = { value: A }
 >SubType : SubType<A>
->A : A
 >value : A
 
 export declare function of<A>(value: A): Something<A>
 >of : <A>(value: A) => Something<A>
->A : A
 >value : A
 
 === prelude.ts ===
@@ -41,6 +38,5 @@ export * as Something from "./Something"
 
 export type Something<A> = S.Something<A>
 >Something : Something<A>
->A : A
 >S : any
 

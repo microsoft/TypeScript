@@ -19,8 +19,6 @@ function f1() {
 >x : E
     }
     interface I {
->I : I
-
         x: E;
 >x : E
     }
@@ -69,8 +67,6 @@ function f2() {
 >x : E
         }
         interface I {
->I : I
-
             x: E;
 >x : E
         }
@@ -127,8 +123,6 @@ function f3(b: boolean) {
 >x : E
             }
             interface I {
->I : I
-
                 x: E;
 >x : E
             }
@@ -163,8 +157,6 @@ function f3(b: boolean) {
 >x : E
             }
             interface J {
->J : J
-
                 x: E;
 >x : E
             }

@@ -23,8 +23,6 @@ ps[index] = 12;
 >12 : 12
 
 interface indexErrors {
->indexErrors : indexErrors
-
     [p2?: string];
 >p2 : string
 

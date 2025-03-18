@@ -24,6 +24,7 @@
 ->t : typeof C
 ->C : typeof C
 +>t : typeof default
++>C : typeof default
  }
  
  

@@ -44,8 +44,6 @@ export class B extends A {
 }
 
 export interface I1 {
->I1 : I1
-
     register(inputClass: new(...params: any[]) => A);
 >register : { (inputClass: new (...params: any[]) => A): any; (inputClass: new (...params: any[]) => A[]): any; }
 >inputClass : new (...params: any[]) => A

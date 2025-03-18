@@ -30,16 +30,11 @@
 -=== node_modules/ext/ts3.1/index.d.ts ===
 +=== node_modules/ext/index.d.ts ===
  export interface A {}
-+>A : A
-+
  export function fa(): A;
  >fa : () => A
  
 -=== node_modules/ext/ts3.1/other.d.ts ===
 +=== node_modules/ext/other.d.ts ===
  export interface B {}
-+>B : B
-+
  export function fb(): B;
  >fb : () => B
- 

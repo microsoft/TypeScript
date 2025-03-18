@@ -9,8 +9,6 @@ declare global {
 >global : any
 
     interface  ImportAttributes {
->ImportAttributes : ImportAttributes
-
         type: "json"
 >type : "json"
     }

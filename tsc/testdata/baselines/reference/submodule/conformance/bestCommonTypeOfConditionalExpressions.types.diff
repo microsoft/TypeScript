@@ -31,12 +31,3 @@
  >true : true
  >(x: Object) => { } : (x: Object) => void
  >x : Object
-@@= skipped -24, +24 lines =@@
- 
- function foo5<T, U>(t: T, u: U): Object {
- >foo5 : <T, U>(t: T, u: U) => Object
-+>T : T
-+>U : U
- >t : T
- >u : U
- 

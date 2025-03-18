@@ -22,15 +22,10 @@ class MyClass {
 }
 === genericWithCallSignatures_0.ts ===
 interface Callable<T> {
->Callable : Callable<T>
->T : T
-
     (): T;
     (value: T): void;
 >value : T
 }
 
 interface CallableExtention<T> extends Callable<T> { }
->CallableExtention : CallableExtention<T>
->T : T
 

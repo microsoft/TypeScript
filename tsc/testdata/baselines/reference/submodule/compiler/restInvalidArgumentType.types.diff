@@ -1,28 +1,15 @@
 --- old.restInvalidArgumentType.types
 +++ new.restInvalidArgumentType.types
-@@= skipped -7, +7 lines =@@
- 
- function f<T extends { b: string }>(p1: T, p2: T[]) {
- >f : <T extends { b: string; }>(p1: T, p2: T[]) => void
-+>T : T
- >b : string
- >p1 : T
- >p2 : T[]
-@@= skipped -14, +15 lines =@@
+@@= skipped -21, +21 lines =@@
  >k : keyof T
  
      var mapped_generic: {[P in keyof T]: T[P]};
 ->mapped_generic : { [P in keyof T]: T[P]; }
 +>mapped_generic : { [P in keyof T]: T[P] }
-+>P : P
  
      var mapped: {[P in "b"]: T[P]};
  >mapped : { b: T["b"]; }
-+>P : P
- 
-     var union_generic: T | { a: number };
- >union_generic : T | { a: number; }
-@@= skipped -50, +52 lines =@@
+@@= skipped -50, +50 lines =@@
  >p1 : T
  
      var {...r2} = p2;   // OK

@@ -5,11 +5,9 @@ export module m1 {
 >m1 : typeof m1
 
     export interface m1_i_public {
->m1_i_public : m1_i_public
     }
 
     interface m1_i_private {
->m1_i_private : m1_i_private
     }
 
     export class m1_c_public {
@@ -77,11 +75,9 @@ module m2 {
 >m2 : typeof m2
 
     export interface m2_i_public {
->m2_i_public : m2_i_public
     }
 
     interface m2_i_private {
->m2_i_private : m2_i_private
     }
 
     export class m2_c_public {
@@ -145,11 +141,9 @@ module m2 {
 }
 
 export interface glo_i_public {
->glo_i_public : glo_i_public
 }
 
 interface glo_i_private {
->glo_i_private : glo_i_private
 }
 
 export class glo_c_public {

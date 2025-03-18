@@ -4,7 +4,6 @@
 // Repro from #2264
 
 interface Y { 'i am a very certain type': Y }
->Y : Y
 >'i am a very certain type' : Y
 
 var y: Y = <Y>undefined;
@@ -14,8 +13,6 @@ var y: Y = <Y>undefined;
 
 function destructure<a, r>(
 >destructure : <a, r>(something: a | Y, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
->a : a
->r : r
 
     something: a | Y,
 >something : a | Y
@@ -72,7 +69,6 @@ var result = destructure(value, text => 'string', y => 'other one'); // text: st
 
 function isVoid<a>(value: void | a): value is void {
 >isVoid : <a>(value: void | a) => value is void
->a : a
 >value : void | a
 
     return undefined;
@@ -81,7 +77,6 @@ function isVoid<a>(value: void | a): value is void {
 
 function isNonVoid<a>(value: void | a) : value is a {
 >isNonVoid : <a>(value: void | a) => value is a
->a : a
 >value : void | a
 
     return undefined;
@@ -90,7 +85,6 @@ function isNonVoid<a>(value: void | a) : value is a {
 
 function foo1<a>(value: void|a): void {
 >foo1 : <a>(value: void | a) => void
->a : a
 >value : void | a
 
     if (isVoid(value)) {
@@ -109,7 +103,6 @@ function foo1<a>(value: void|a): void {
 
 function baz1<a>(value: void|a): void {
 >baz1 : <a>(value: void | a) => void
->a : a
 >value : void | a
 
       if (isNonVoid(value)) {
@@ -130,11 +123,9 @@ function baz1<a>(value: void|a): void {
 
 type Maybe<T> = T | void;
 >Maybe : Maybe<T>
->T : T
 
 function get<U>(x: U | void): U {
 >get : <U>(x: void | U) => U
->U : U
 >x : void | U
 
    return null; // just an example
@@ -154,29 +145,22 @@ get(foo).toUpperCase(); // Ok
 // Repro from #5456
 
 interface Man {
->Man : Man
-
     walks: boolean;
 >walks : boolean
 }
 
 interface Bear {
->Bear : Bear
-
     roars: boolean;
 >roars : boolean
 }
 
 interface Pig {
->Pig : Pig
-
     oinks: boolean;
 >oinks : boolean
 }
 
 declare function pigify<T>(y: T & Bear): T & Pig;
 >pigify : <T>(y: T & Bear) => T & Pig
->T : T
 >y : T & Bear
 
 declare var mbp: Man & Bear;
@@ -199,8 +183,6 @@ pigify(mbp).walks; // Ok, mbp is treated as Man
 // Repros from #29815
 
 interface ITest {
->ITest : ITest
-
   name: 'test'
 >name : "test"
 }
@@ -233,14 +215,10 @@ const createTest = (): ITest => {
 
 declare function f1<T, U>(x: T | U): T | U;
 >f1 : <T, U>(x: T | U) => T | U
->T : T
->U : U
 >x : T | U
 
 declare function f2<T, U>(x: T, y: U): T | U;
 >f2 : <T, U>(x: T, y: U) => T | U
->T : T
->U : U
 >x : T
 >y : U
 
@@ -262,13 +240,10 @@ let x2: string = f2('a', 'b');
 const func = <T>() => {};
 >func : <T>() => void
 ><T>() => {} : <T>() => void
->T : T
 
 const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 >assign : <T, U>(a: T, b: U) => T & U
 ><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => T & U
->T : T
->U : U
 >a : T
 >b : U
 >Object.assign(a, b) : T & U

@@ -16,8 +16,6 @@ class Derived2 extends Base { private n; }
 >n : any
 
 interface Genric<T> { func(n: T[]); }
->Genric : Genric<T>
->T : T
 >func : (n: T[]) => any
 >n : T[]
 

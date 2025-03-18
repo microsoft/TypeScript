@@ -3,7 +3,6 @@
 === verbatim-declarations-parameters.ts ===
 type Map = {} & { [P in string]: any }
 >Map : { [x: string]: any; }
->P : P
 
 type MapOrUndefined = Map | undefined | "dummy"
 >MapOrUndefined : MapOrUndefined

@@ -3,7 +3,6 @@
 === staticOffOfInstance2.ts ===
 class List<T> {
 >List : List<T>
->T : T
 
     public Blah() {
 >Blah : () => void

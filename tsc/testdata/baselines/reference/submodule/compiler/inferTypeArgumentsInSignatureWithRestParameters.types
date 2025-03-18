@@ -3,7 +3,6 @@
 === inferTypeArgumentsInSignatureWithRestParameters.ts ===
 function f<T>(array: T[], ...args) { }
 >f : <T>(array: T[], ...args: any[]) => void
->T : T
 >array : T[]
 >args : any[]
 
@@ -14,13 +13,11 @@ function g(array: number[], ...args) { }
 
 function h<T>(nonarray: T, ...args) { }
 >h : <T>(nonarray: T, ...args: any[]) => void
->T : T
 >nonarray : T
 >args : any[]
 
 function i<T>(array: T[], opt?: any[]) { }
 >i : <T>(array: T[], opt?: any[]) => void
->T : T
 >array : T[]
 >opt : any[]
 

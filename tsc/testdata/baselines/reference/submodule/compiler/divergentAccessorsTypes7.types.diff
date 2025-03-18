@@ -1,12 +1,6 @@
 --- old.divergentAccessorsTypes7.types
 +++ new.divergentAccessorsTypes7.types
-@@= skipped -2, +2 lines =@@
- === divergentAccessorsTypes7.ts ===
- class Test<S> {
- >Test : Test<S>
-+>S : S
- 
-     constructor() {}
+@@= skipped -7, +7 lines =@@
  
      set value(value: string | ((item: S) => string)) {}
  >value : string
@@ -15,7 +9,7 @@
  >item : S
  
      get value(): string {
-@@= skipped -36, +37 lines =@@
+@@= skipped -31, +31 lines =@@
  
  a.value = (item) => item.property
  >a.value = (item) => item.property : (item: { property: string; }) => string

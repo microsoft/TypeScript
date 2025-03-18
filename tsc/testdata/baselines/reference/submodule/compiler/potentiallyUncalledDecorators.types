@@ -56,7 +56,6 @@ class MultiplyByTwo {
 // Other fun stuff.
 
 interface OmniDecorator extends MethodDecorator, ClassDecorator, PropertyDecorator {
->OmniDecorator : OmniDecorator
 }
 
 declare function noArgs(): OmniDecorator;

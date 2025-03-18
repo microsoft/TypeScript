@@ -9,13 +9,7 @@
  
  type Tab = [string, React.ReactNode]  // [tabName, tabContent]
  >Tab : Tab
- >React : any
- 
- interface Props {
-+>Props : Props
-+
-     children: Tab[]
- >children : Tab[]
+@@= skipped -12, +12 lines =@@
  }
  
  function TabLayout(props: Props) {

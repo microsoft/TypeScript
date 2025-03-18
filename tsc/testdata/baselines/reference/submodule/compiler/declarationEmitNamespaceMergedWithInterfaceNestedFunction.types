@@ -2,15 +2,11 @@
 
 === declarationEmitNamespaceMergedWithInterfaceNestedFunction.ts ===
 export interface Foo {
->Foo : Foo
-
     item: Bar;
 >item : Bar
 }
 
 interface Bar {
->Bar : Bar
-
     baz(): void;
 >baz : () => void
 }

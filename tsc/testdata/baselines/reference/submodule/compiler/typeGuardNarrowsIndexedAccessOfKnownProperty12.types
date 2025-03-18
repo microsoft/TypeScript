@@ -15,7 +15,6 @@ enum E {
 
 declare const m: { [K in E]: string | null };
 >m : { A: string | null; B: string | null; }
->K : K
 
 if (m[E.A] !== null) {
 >m[E.A] !== null : boolean

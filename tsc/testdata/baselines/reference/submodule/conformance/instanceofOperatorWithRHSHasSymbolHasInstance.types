@@ -2,22 +2,18 @@
 
 === instanceofOperatorWithRHSHasSymbolHasInstance.ts ===
 interface Point { x: number, y: number }
->Point : Point
 >x : number
 >y : number
 
 interface Point3D { x: number, y: number, z: number }
->Point3D : Point3D
 >x : number
 >y : number
 >z : number
 
 interface Point3D2 extends Point { z: number }
->Point3D2 : Point3D2
 >z : number
 
 interface Line { start: Point, end: Point }
->Line : Line
 >start : Point
 >end : Point
 
@@ -567,7 +563,6 @@ declare class A {
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
 >hasInstance : unique symbol
->T : T
 >this : T
 >value : unknown
 
@@ -576,7 +571,6 @@ declare class A {
 
             T extends { readonly prototype: infer U } ?
 >prototype : U
->U : U
 
                 boolean extends (U extends never ? true : false) ? // <- tests whether 'U' is 'any'
 >true : true
@@ -584,7 +578,6 @@ declare class A {
 
                     T extends (abstract new (...args: any) => infer V) ? V : {} :
 >args : any
->V : V
 
                 U :
             never :
@@ -621,7 +614,6 @@ if (obj instanceof B) {
 // https://github.com/microsoft/TypeScript/issues/56536
 
 interface HasInstanceOf { [Symbol.hasInstance](x: unknown): boolean }
->HasInstanceOf : HasInstanceOf
 >[Symbol.hasInstance] : (x: unknown) => boolean
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
@@ -644,7 +636,6 @@ lhs0 instanceof rhs14 && lhs0;
 // unions
 
 interface HasInstanceOf1 { [Symbol.hasInstance](x: unknown): x is Point }
->HasInstanceOf1 : HasInstanceOf1
 >[Symbol.hasInstance] : (x: unknown) => x is Point
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
@@ -652,7 +643,6 @@ interface HasInstanceOf1 { [Symbol.hasInstance](x: unknown): x is Point }
 >x : unknown
 
 interface HasInstanceOf2 { [Symbol.hasInstance](x: unknown): x is Line }
->HasInstanceOf2 : HasInstanceOf2
 >[Symbol.hasInstance] : (x: unknown) => x is Line
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor

@@ -1,8 +1,0 @@
---- old.typeQuery.types
-+++ new.typeQuery.types
-@@= skipped -9, +9 lines =@@
- 
- let AConstructor: typeof A;
- >AConstructor : typeof A
-->A : typeof A
- 

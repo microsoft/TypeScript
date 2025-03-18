@@ -1,15 +1,6 @@
 --- old.errorOnUnionVsObjectShouldDeeplyDisambiguate2.types
 +++ new.errorOnUnionVsObjectShouldDeeplyDisambiguate2.types
-@@= skipped -1, +1 lines =@@
- 
- === errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts ===
- interface Stuff {
-+>Stuff : Stuff
-+
-   a?: () => Promise<number[]>;
- >a : () => Promise<number[]>
- 
-@@= skipped -35, +37 lines =@@
+@@= skipped -36, +36 lines =@@
  }
  
  function foo(): Stuff | Date {

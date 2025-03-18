@@ -14,6 +14,5 @@ let y = () => x
 
 === /ref.d.ts ===
 interface $ { x }
->$ : $
 >x : any
 

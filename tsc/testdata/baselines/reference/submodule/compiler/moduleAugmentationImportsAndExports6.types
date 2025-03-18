@@ -30,14 +30,10 @@ A.prototype.foo = function () { return undefined; }
 >undefined : undefined
 
 export namespace N {
->N : any
-
     export interface Ifc { a: number; }
->Ifc : Ifc
 >a : number
 
     export interface Cls { b: number; }
->Cls : Cls
 >b : number
 }
 import I = N.Ifc;
@@ -54,8 +50,6 @@ declare module "./f1" {
 >"./f1" : typeof import("f1")
 
     interface A {
->A : A
-
         foo(): B;
 >foo : () => B
 

@@ -41,8 +41,6 @@ module clodule {
 >clodule : typeof clodule
 
     export interface Point {
->Point : Point
-
         x: number; y: number;
 >x : number
 >y : number
@@ -89,8 +87,6 @@ module fundule {
 >fundule : typeof fundule
 
     export interface Point {
->Point : Point
-
         x: number; y: number;
 >x : number
 >y : number

@@ -5,8 +5,6 @@ namespace Test1 {
 >Test1 : typeof Test1
 
     export interface Foo {
->Foo : Foo
-
         bar: string;
 >bar : string
     }

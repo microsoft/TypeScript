@@ -5,15 +5,11 @@ type Item = Item1 | Item2;
 >Item : Item
 
 interface Base {
->Base : Base
-
     bar: boolean;
 >bar : boolean
 }
 
 interface Item1 extends Base {
->Item1 : Item1
-
     kind: "A";
 >kind : "A"
 
@@ -29,8 +25,6 @@ interface Item1 extends Base {
 }
 
 interface Item2 extends Base {
->Item2 : Item2
-
     kind: "B";
 >kind : "B"
 
@@ -254,8 +248,6 @@ type Instance = StrType | NumType;
 >Instance : Instance
 
 interface StrType {
->StrType : StrType
-
     type: Types.Str;
 >type : Types.Str
 >Types : any
@@ -268,8 +260,6 @@ interface StrType {
 }
 
 interface NumType {
->NumType : NumType
-
     type: Types.Num;
 >type : Types.Num
 >Types : any
@@ -331,8 +321,6 @@ const f = (_a: string, _b: string): void => {};
 >_b : string
 
 interface A {
->A : A
-
   a?: string;
 >a : string | undefined
 
@@ -341,8 +329,6 @@ interface A {
 }
 
 interface B {
->B : B
-
   a: string;
 >a : string
 
@@ -403,15 +389,11 @@ type Multiplicative = '*' | '/';
 >Multiplicative : Multiplicative
 
 interface AdditiveObj {
->AdditiveObj : AdditiveObj
-
     key: Additive
 >key : Additive
 }
 
 interface MultiplicativeObj {
->MultiplicativeObj : MultiplicativeObj
-
     key: Multiplicative
 >key : Multiplicative
 }
@@ -524,8 +506,6 @@ function func3(value: Partial<UnionOfBar>) {
 // Repro from #30557
 
 interface TypeA {
->TypeA : TypeA
-
     Name: "TypeA";
 >Name : "TypeA"
 
@@ -534,8 +514,6 @@ interface TypeA {
 }
 
 interface TypeB {
->TypeB : TypeB
-
     Name: "TypeB";
 >Name : "TypeB"
 

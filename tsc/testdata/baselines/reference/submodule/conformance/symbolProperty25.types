@@ -2,8 +2,6 @@
 
 === symbolProperty25.ts ===
 interface I {
->I : I
-
     [Symbol.toPrimitive]: () => boolean;
 >[Symbol.toPrimitive] : () => boolean
 >Symbol.toPrimitive : unique symbol

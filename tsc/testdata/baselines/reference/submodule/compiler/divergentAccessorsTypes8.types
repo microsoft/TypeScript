@@ -4,8 +4,6 @@
 export {}
 
 interface Serializer {
->Serializer : Serializer
-
   set value(v: string | number | boolean);
 >value : string
 >v : string | number | boolean
@@ -44,8 +42,6 @@ box['value'] = "hello";
 >"hello" : "hello"
 
 interface Element {
->Element : Element
-
     get style(): CSSStyleDeclaration;
 >style : CSSStyleDeclaration
 

@@ -2,8 +2,6 @@
 
 === declFileTypeAnnotationVisibilityErrorTypeAlias.ts ===
 interface Window {
->Window : Window
-
     someMethod();
 >someMethod : () => any
 }

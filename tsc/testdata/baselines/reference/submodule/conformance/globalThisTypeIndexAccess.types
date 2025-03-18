@@ -3,4 +3,5 @@
 === globalThisTypeIndexAccess.ts ===
 declare const w_e: (typeof globalThis)["globalThis"]
 >w_e : typeof globalThis
+>globalThis : typeof globalThis
 

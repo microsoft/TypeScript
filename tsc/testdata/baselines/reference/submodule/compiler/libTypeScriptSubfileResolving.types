@@ -5,7 +5,6 @@
 // NOOP
 === /node_modules/@typescript/lib-dom/iterable.d.ts ===
 interface DOMIterable { abc: string }
->DOMIterable : DOMIterable
 >abc : string
 
 === index.ts ===

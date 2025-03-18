@@ -2,8 +2,6 @@
 
 === parserSymbolProperty1.ts ===
 interface I {
->I : I
-
     [Symbol.iterator]: string;
 >[Symbol.iterator] : string
 >Symbol.iterator : unique symbol

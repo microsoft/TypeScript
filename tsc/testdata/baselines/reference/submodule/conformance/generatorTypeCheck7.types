@@ -2,8 +2,6 @@
 
 === generatorTypeCheck7.ts ===
 interface WeirdIter extends IterableIterator<number> {
->WeirdIter : WeirdIter
-
     hello: string;
 >hello : string
 }

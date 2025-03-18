@@ -11,17 +11,13 @@
  >"./index" : LoDashStatic
  
      interface LoDashStatic {
-+>LoDashStatic : LoDashStatic
-+
        pick: <T extends object, U extends keyof T>(
 ->pick : <T extends object, U extends keyof T>(object: T, ...props: Array<U>) => Pick<T, U>
 +>pick : <T extends object, U extends keyof T>(object: T, ...props: U[]) => Pick<T, U>
-+>T : T
-+>U : U
  
          object: T,
  >object : T
-@@= skipped -21, +25 lines =@@
+@@= skipped -21, +21 lines =@@
  
  === node_modules/@types/lodash/pick.d.ts ===
  import { pick } from "./index";
@@ -48,11 +44,7 @@
  >_ : any
  
  declare namespace _ {
-+>_ : LoDashStatic
-+
-     interface LoDashStatic {}
-+>LoDashStatic : LoDashStatic
- }
+@@= skipped -23, +23 lines =@@
  
  === index.ts ===
  import * as pick from 'lodash/pick';

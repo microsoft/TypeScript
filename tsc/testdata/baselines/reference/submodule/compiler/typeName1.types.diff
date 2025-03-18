@@ -1,15 +1,6 @@
 --- old.typeName1.types
 +++ new.typeName1.types
-@@= skipped -1, +1 lines =@@
- 
- === typeName1.ts ===
- interface I {
-+>I : I
-+
-     k;
- >k : any
- }
-@@= skipped -14, +16 lines =@@
+@@= skipped -15, +15 lines =@@
  }
  
  var x1:{ f(s:string):number;f(n:number):string; }=3;

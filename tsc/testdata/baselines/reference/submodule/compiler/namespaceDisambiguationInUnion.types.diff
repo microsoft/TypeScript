@@ -1,23 +1,6 @@
 --- old.namespaceDisambiguationInUnion.types
 +++ new.namespaceDisambiguationInUnion.types
-@@= skipped -1, +1 lines =@@
- 
- === namespaceDisambiguationInUnion.ts ===
- namespace Foo {
-+>Foo : any
-+
-   export type Yep = { type: "foo.yep" };
- >Yep : Yep
- >type : "foo.yep"
- }
- 
- namespace Bar {
-+>Bar : any
-+
-   export type Yep = { type: "bar.yep" };
- >Yep : Yep
- >type : "bar.yep"
-@@= skipped -18, +22 lines =@@
+@@= skipped -19, +19 lines =@@
  >"wat.nup" : "wat.nup"
  
  const val1: Foo.Yep | Bar.Yep = x;

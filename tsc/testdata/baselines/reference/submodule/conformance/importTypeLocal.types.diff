@@ -1,39 +1,6 @@
 --- old.importTypeLocal.types
 +++ new.importTypeLocal.types
-@@= skipped -1, +1 lines =@@
- 
- === foo.ts ===
- interface Point {
-+>Point : Point
-+
-     x: number;
- >x : number
- 
-@@= skipped -11, +13 lines =@@
- 
- === foo2.ts ===
- namespace Bar {
-+>Bar : typeof Bar
-+
-     export interface I {
-+>I : I
-+
-         a: string;
- >a : string
- 
-@@= skipped -10, +14 lines =@@
- }
- 
- export namespace Baz {
-+>Baz : any
-+
-     export interface J {
-+>J : J
-+
-         a: number;
- >a : number
- 
-@@= skipped -13, +17 lines =@@
+@@= skipped -35, +35 lines =@@
  >Bar : Bar
  
      item: Bar.I;

@@ -2,9 +2,6 @@
 
 === index.tsx ===
 interface MiddlewareArray<T> extends Array<T> {}
->MiddlewareArray : MiddlewareArray<T>
->T : T
-
 declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
 >configureStore : (options: { middleware: MiddlewareArray<any>; }) => void
 >options : { middleware: MiddlewareArray<any>; }
@@ -27,17 +24,10 @@ configureStore({
 });
 
 declare namespace React {
->React : any
-
   type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
 >DetailedHTMLProps : E
->E : E
->T : T
 
   interface HTMLAttributes<T> {
->HTMLAttributes : HTMLAttributes<T>
->T : T
-
     children?: ReactNode;
 >children : ReactNode
   }
@@ -54,14 +44,9 @@ declare namespace React {
 >ReactFragment : ReactFragment
 
   interface ReactNodeArray extends Array<ReactNode> {}
->ReactNodeArray : ReactNodeArray
 }
 declare namespace JSX {
->JSX : any
-
   interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
     ul: React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
 >ul : HTMLAttributes<HTMLUListElement>
 >React : any

@@ -2,15 +2,11 @@
 
 === correctOrderOfPromiseMethod.ts ===
 interface A {
->A : A
-
     id: string
 >id : string
 }
 
 interface B {
->B : B
-
     id: string
 >id : string
 

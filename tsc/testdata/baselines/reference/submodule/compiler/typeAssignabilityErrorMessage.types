@@ -4,14 +4,10 @@
 // Example: different error code altogether
 
 interface ThroughStream {
->ThroughStream : ThroughStream
-
     a: string;
 >a : string
 }
 interface ReadStream {
->ReadStream : ReadStream
-
     f: string;
 >f : string
 
@@ -60,7 +56,6 @@ type OtherWrap = {
 }
 type Foo<T> = {
 >Foo : Foo<T>
->T : T
 
     foo: { what: T };
 >foo : { what: T; }
@@ -68,7 +63,6 @@ type Foo<T> = {
 }
 type Bar<T> = {
 >Bar : Bar<T>
->T : T
 
     foo: { what: T };
 >foo : { what: T; }

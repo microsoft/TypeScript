@@ -1,83 +1,39 @@
 --- old.genericClassesRedeclaration.types
 +++ new.genericClassesRedeclaration.types
-@@= skipped -4, +4 lines =@@
- >TypeScript : typeof TypeScript
- 
-     interface IIndexable<T> {
-+>IIndexable : IIndexable<T>
-+>T : T
-+
-         [s: string]: T;
+@@= skipped -8, +8 lines =@@
  >s : string
      }
      function createIntrinsicsObject<T>(): IIndexable<T>;
 ->createIntrinsicsObject : { <T>(): IIndexable<T>; <T_1>(): IIndexable<T_1>; }
 +>createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
-+>T : T
  
      interface IHashTable<T> {
-+>IHashTable : IHashTable<T>
-+>T : T
-+
          getAllKeys(): string[];
- >getAllKeys : { (): string[]; (): string[]; }
- 
-@@= skipped -53, +60 lines =@@
-     }
-     class StringHashTable<T> implements IHashTable<T> {
- >StringHashTable : StringHashTable<T>
-+>T : T
- 
-         private itemCount;
- >itemCount : any
-@@= skipped -57, +58 lines =@@
-     }
-     class IdentifierNameHashTable<T> extends StringHashTable<T> {
- >IdentifierNameHashTable : IdentifierNameHashTable<T>
-+>T : T
- >StringHashTable : StringHashTable<T>
- 
-         public getAllKeys(): string[];
-@@= skipped -49, +50 lines =@@
- >TypeScript : typeof TypeScript
- 
-     interface IIndexable<T> {
-+>IIndexable : IIndexable<T>
-+>T : T
-+
-         [s: string]: T;
+@@= skipped -159, +159 lines =@@
  >s : string
      }
      function createIntrinsicsObject<T>(): IIndexable<T>;
 ->createIntrinsicsObject : { <T_1>(): IIndexable<T_1>; <T>(): IIndexable<T>; }
 +>createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
-+>T : T
  
      interface IHashTable<T> {
-+>IHashTable : IHashTable<T>
-+>T : T
-+
          getAllKeys(): string[];
- >getAllKeys : { (): string[]; (): string[]; }
- 
-@@= skipped -52, +59 lines =@@
+@@= skipped -48, +48 lines =@@
  >key : string
      }
      class StringHashTable<T> implements IHashTable<T> {
 ->StringHashTable : TypeScript.StringHashTable<T>
 +>StringHashTable : StringHashTable<T>
-+>T : T
  
          private itemCount;
  >itemCount : any
-@@= skipped -57, +58 lines =@@
+@@= skipped -57, +57 lines =@@
  >key : string
      }
      class IdentifierNameHashTable<T> extends StringHashTable<T> {
 ->IdentifierNameHashTable : TypeScript.IdentifierNameHashTable<T>
 ->StringHashTable : TypeScript.StringHashTable<T>
 +>IdentifierNameHashTable : IdentifierNameHashTable<T>
-+>T : T
 +>StringHashTable : StringHashTable<T>
  
          public getAllKeys(): string[];

@@ -3,7 +3,6 @@
 === spreadTupleAccessedByTypeParameter.ts ===
 export function test<N extends number>(singletons: ["a"][], i: N) {
 >test : <N extends number>(singletons: ["a"][], i: N) => []
->N : N
 >singletons : ["a"][]
 >i : N
 

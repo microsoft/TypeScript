@@ -216,8 +216,6 @@ function f11(a: A, b: B) {
 // Repro from #35414
 
 interface ReturnVal {
->ReturnVal : ReturnVal
-
     something(): void;
 >something : () => void
 }

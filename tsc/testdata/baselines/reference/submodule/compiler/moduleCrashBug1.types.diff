@@ -1,19 +1,8 @@
 --- old.moduleCrashBug1.types
 +++ new.moduleCrashBug1.types
-@@= skipped -4, +4 lines =@@
- >_modes : typeof _modes
- 
-  export interface IMode {
-+>IMode : IMode
-   
-  }
-  
-@@= skipped -12, +13 lines =@@
- //_modes. // produces an internal error - please implement in derived class
+@@= skipped -17, +17 lines =@@
  
  module editor {
-+>editor : any
-+
   import modes = _modes;
 ->modes : typeof modes
 ->_modes : typeof modes

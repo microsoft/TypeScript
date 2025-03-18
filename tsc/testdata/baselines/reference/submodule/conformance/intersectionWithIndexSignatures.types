@@ -65,9 +65,6 @@ tb1 = sb1;  // Error
 
 type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<keyof Tgt, keyof Source>>;
 >constr : constr<Source, Tgt>
->Source : Source
->Tgt : Tgt
->K : K
 
 type s = constr<{}, { [key: string]: { a: string } }>;
 >s : s

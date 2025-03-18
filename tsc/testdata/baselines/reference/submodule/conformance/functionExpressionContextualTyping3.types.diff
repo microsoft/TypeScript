@@ -6,7 +6,6 @@
  declare function f<T>(value: T | number): void;
 ->f : <T>(value: T | number) => void
 +>f : <T>(value: number | T) => void
-+>T : T
  >value : number | T
  
  f((a: any) => "")

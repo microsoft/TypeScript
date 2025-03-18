@@ -23,12 +23,3 @@
  >connect : (name: string) => void
  
  === puppet.d.ts ===
-@@= skipped -19, +19 lines =@@
- >Puppeteer : typeof import("puppet")
- 
- export interface Keyboard {
-+>Keyboard : Keyboard
-+
-     key: string
- >key : string
- }

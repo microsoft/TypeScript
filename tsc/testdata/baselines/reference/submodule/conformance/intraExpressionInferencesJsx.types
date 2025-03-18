@@ -53,11 +53,9 @@ type Animations = {
 
 type StyleParam<T extends Animations> = Record<keyof T, string>;
 >StyleParam : StyleParam<T>
->T : T
 
 type AnimatedViewProps<T extends Animations> = {
 >AnimatedViewProps : AnimatedViewProps<T>
->T : T
 
   style: (animationsValues: StyleParam<T>) => string;
 >style : (animationsValues: StyleParam<T>) => string
@@ -71,7 +69,6 @@ type AnimatedViewProps<T extends Animations> = {
 const Component = <T extends Animations>({
 >Component : <T extends Animations>(__0: AnimatedViewProps<T>) => any
 ><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>(__0: AnimatedViewProps<T>) => any
->T : T
 
   animations,
 >animations : T
@@ -219,9 +216,6 @@ const Component = <T extends Animations>({
 // repro from #52786
 
 interface Props<T> {
->Props : Props<T>
->T : T
-
   a: (x: string) => T;
 >a : (x: string) => T
 >x : string
@@ -233,7 +227,6 @@ interface Props<T> {
 
 function Foo<T>(props: Props<T>) {
 >Foo : <T>(props: Props<T>) => any
->T : T
 >props : Props<T>
 
   return <div />;

@@ -1,14 +1,8 @@
 --- old.prototypePropertyAssignmentMergeWithInterfaceMethod.types
 +++ new.prototypePropertyAssignmentMergeWithInterfaceMethod.types
-@@= skipped -2, +2 lines =@@
- === lovefield-ts.d.ts ===
- // bug #27352, crashes from github.com/google/lovefield
+@@= skipped -4, +4 lines =@@
  declare namespace lf {
-+>lf : any
-+
    export interface Transaction {
-+>Transaction : Transaction
-+
      attach(query: query.Builder): Promise<Array<Object>>
 ->attach : (query: query.Builder) => Promise<Array<Object>>
 ->query : query.Builder
@@ -34,7 +28,7 @@
  >query : any
  
      rollback(): Promise<void>
-@@= skipped -28, +32 lines =@@
+@@= skipped -26, +26 lines =@@
  }
  === lovefield.js ===
  lf.Transaction = function() {};

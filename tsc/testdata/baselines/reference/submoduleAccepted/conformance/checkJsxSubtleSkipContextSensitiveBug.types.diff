@@ -8,25 +8,14 @@
 +>React : any
  
  interface ErrorResult { error: true }
-+>ErrorResult : ErrorResult
  >error : true
- >true : true
- 
- interface AsyncLoaderProps<TResult> {
-+>AsyncLoaderProps : AsyncLoaderProps<TResult>
-+>TResult : TResult
-+
-     readonly prop1: () => Promise<TResult>;
- >prop1 : () => Promise<TResult>
- 
-@@= skipped -17, +21 lines =@@
+@@= skipped -17, +17 lines =@@
  
  class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
  >AsyncLoader : AsyncLoader<TResult>
 ->React.Component : React.Component<AsyncLoaderProps<TResult>, {}, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>TResult : TResult
 +>React.Component : any
 +>React : any
 +>Component : any
@@ -41,7 +30,7 @@
  >success : true
  >true : true
  
-@@= skipped -20, +21 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  
  const loader = <AsyncLoader

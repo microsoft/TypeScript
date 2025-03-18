@@ -1,23 +1,16 @@
 --- old.arrayTypeOfTypeOf.types
 +++ new.arrayTypeOfTypeOf.types
-@@= skipped -8, +8 lines =@@
- 
- var xs: typeof x[];  // Not an error.  This is equivalent to Array<typeof x>
- >xs : number[]
-->x : number
- 
- var xs2: typeof Array;
- >xs2 : ArrayConstructor
-->Array : ArrayConstructor
+@@= skipped -15, +15 lines =@@
+ >Array : ArrayConstructor
  
  var xs3: typeof Array<number>;
 ->xs3 : typeof Array<number>
-->Array : ArrayConstructor
 +>xs3 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+ >Array : ArrayConstructor
  
  var xs4: typeof Array<typeof x>;
 ->xs4 : typeof Array<typeof x>
-->Array : ArrayConstructor
-->x : number
 +>xs4 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+ >Array : ArrayConstructor
+ >x : number
  

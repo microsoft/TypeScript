@@ -2,8 +2,6 @@
 
 === avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts ===
 interface Dog {
->Dog : Dog
-
     barkable: true
 >barkable : true
 >true : true

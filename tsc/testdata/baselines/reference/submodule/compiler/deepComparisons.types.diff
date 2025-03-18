@@ -10,79 +10,16 @@
  === deepComparisons.ts ===
  function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
  >f1 : <T, K1 extends keyof T, K2 extends keyof T[K1]>() => void
-+>T : T
-+>K1 : K1
-+>K2 : K2
- 
-     let v1: Extract<T, string> = 0 as any as T;  // Error
- >v1 : Extract<T, string>
-@@= skipped -28, +27 lines =@@
- 
- type Foo<T> = { x: Foo<T> };
- >Foo : Foo<T>
-+>T : T
- >x : Foo<T>
- 
- type Bar<T> = { x: Bar<T[]> };
- >Bar : Bar<T>
-+>T : T
- >x : Bar<T[]>
- 
- function f2<U>() {
- >f2 : <U>() => void
-+>U : U
- 
-     let x: Foo<U> = 0 as any as Bar<U>;  // Error, excessive stack depth
- >x : Foo<U>
-@@= skipped -18, +21 lines =@@
- 
- type Foo1<T> = { x: Foo2<T> };
- >Foo1 : Foo1<T>
-+>T : T
- >x : Foo2<T>
- 
- type Foo2<T> = { x: Foo1<T> };
- >Foo2 : Foo2<T>
-+>T : T
- >x : Foo1<T>
- 
- function f3<U>() {
- >f3 : <U>() => void
-+>U : U
- 
-     let x: Foo1<U> = 0 as any as Bar<U>;  // No error!
- >x : Foo1<U>
-@@= skipped -20, +23 lines =@@
- 
- type F<T> = {} & (
- >F : F<T>
-+>T : T
- 
-     T extends [any, ...any[]]
-         ? { [K in keyof T]?: F<T[K]> }
-+>K : K
-+
-         : T extends any[]
-             ? F<T[number]>[]
-             : T extends { [K: string]: any }
- >K : string
- 
-                 ? { [K in keyof T]?: F<T[K]> }
-+>K : K
-+
-                 : { x: string }
- >x : string
- 
+@@= skipped -81, +77 lines =@@
  );
  
  declare function f<T = any>(): F<T>;
 ->f : <T = any>() => F<T>
 +>f : <T>() => F<T>
-+>T : T
  
  function g() {
  >g : () => F<any>
-@@= skipped -23, +29 lines =@@
+@@= skipped -8, +8 lines =@@
      return f() as F<any>;
  >f() as F<any> : F<any>
  >f() : F<any>

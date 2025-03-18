@@ -101,8 +101,6 @@ function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
 >1 : 1
 
 interface F1 {
->F1 : F1
-
     b5(z, y, [, a, b], {p, m: { q, r}});
 >b5 : (z: any, y: any, __2: [any, any, any], __3: { m: { q: any; r: any; }; p: any; }) => any
 >z : any
@@ -324,8 +322,6 @@ function d0(x = 10) { }
 >10 : 10
 
 interface F2 {
->F2 : F2
-
     d3([a, b, c]?);
 >d3 : (__0?: [any, any, any]) => any
 >a : any

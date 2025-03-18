@@ -4,8 +4,6 @@
 // Repro from #35804
 
 interface ITreeItem {    
->ITreeItem : ITreeItem
-
   Parent?: this;
 >Parent : this | undefined
 }

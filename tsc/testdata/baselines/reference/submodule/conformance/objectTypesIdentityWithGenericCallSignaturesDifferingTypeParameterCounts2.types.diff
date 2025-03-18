@@ -1,54 +1,19 @@
 --- old.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.types
 +++ new.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.types
-@@= skipped -4, +4 lines =@@
- 
- 
- interface I<X, Y, Z, A> {
-+>I : I<X, Y, Z, A>
-+>X : X
-+>Y : Y
-+>Z : Z
-+>A : A
-+
-     (x: X): X;
- >x : X
- }
- 
- interface I2 {
-+>I2 : I2
-+
-     <Y, Z, A, B>(x: Y): Y;
-+>Y : Y
-+>Z : Z
-+>A : A
-+>B : B
- >x : Y
- }
- 
- var a: { <Z, A, B, C, D>(x: Z): Z }
- >a : <Z, A, B, C, D>(x: Z) => Z
-+>Z : Z
-+>A : A
-+>B : B
-+>C : C
-+>D : D
- >x : Z
- 
- function foo1(x: I<string, boolean, number, string>);
-@@= skipped -38, +55 lines =@@
+@@= skipped -42, +42 lines =@@
  >x : any
  
  function foo3(x: typeof a);
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
  >x : <Z, A, B, C, D>(x: Z) => Z
-->a : <Z, A, B, C, D>(x: Z) => Z
+ >a : <Z, A, B, C, D>(x: Z) => Z
  
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
  >x : <Z, A, B, C, D>(x: Z) => Z
-->a : <Z, A, B, C, D>(x: Z) => Z
+ >a : <Z, A, B, C, D>(x: Z) => Z
  
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -64,7 +29,7 @@
 ->foo13 : { (x: I<boolean, string, number, Date>): any; (x: typeof a): any; }
 +>foo13 : { (x: I<boolean, string, number, Date>): any; (x: <Z, A, B, C, D>(x: Z) => Z): any; }
  >x : <Z, A, B, C, D>(x: Z) => Z
-->a : <Z, A, B, C, D>(x: Z) => Z
+ >a : <Z, A, B, C, D>(x: Z) => Z
  
  function foo13(x: any) { }
 ->foo13 : { (x: I<boolean, string, number, Date>): any; (x: typeof a): any; }
@@ -72,14 +37,14 @@
  >x : any
  
  function foo14(x: I<boolean, string, number, Date>);
-@@= skipped -39, +36 lines =@@
+@@= skipped -39, +39 lines =@@
  >x : any
  
  function foo14b(x: typeof a);
 ->foo14b : { (x: typeof a): any; (x: I2): any; }
 +>foo14b : { (x: <Z, A, B, C, D>(x: Z) => Z): any; (x: I2): any; }
  >x : <Z, A, B, C, D>(x: Z) => Z
-->a : <Z, A, B, C, D>(x: Z) => Z
+ >a : <Z, A, B, C, D>(x: Z) => Z
  
  function foo14b(x: I2); // ok
 ->foo14b : { (x: typeof a): any; (x: I2): any; }

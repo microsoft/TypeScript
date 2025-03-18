@@ -4,7 +4,6 @@
 let obj: { fn?: <T>() => T } = {};
 >obj : { fn?: <T>() => T | undefined; }
 >fn : <T>() => T | undefined
->T : T
 >{} : {}
 
 obj.fn<number> = () => 1234;
@@ -19,7 +18,6 @@ obj.fn<number> = () => 1234;
 
 let getValue: <T>() => T;
 >getValue : <T>() => T
->T : T
 
 getValue<number> = () => 1234;
 >getValue<number> = () => 1234 : () => number
@@ -31,7 +29,6 @@ getValue<number> = () => 1234;
 
 let getValue2!: <T>() => T;
 >getValue2 : <T>() => T
->T : T
 
 getValue2<number> = () => 1234;
 >getValue2<number> = () => 1234 : () => number

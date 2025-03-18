@@ -1,43 +1,7 @@
 --- old.importStatementsInterfaces.types
 +++ new.importStatementsInterfaces.types
-@@= skipped -1, +1 lines =@@
- 
- === importStatementsInterfaces.ts ===
- module A {
-+>A : any
-+
-     export interface Point {
-+>Point : Point
-+
-         x: number;
- >x : number
- 
-@@= skipped -9, +13 lines =@@
-     }
- 
-     export module inA {
-+>inA : any
-+
-         export interface Point3D extends Point {
-+>Point3D : Point3D
-+
-             z: number;
- >z : number
-         }
-@@= skipped -9, +13 lines =@@
- 
- // no code gen expected
- module B {
-+>B : any
-+
-     import a = A;
+@@= skipped -42, +42 lines =@@
  >a : any
- >A : any
-@@= skipped -20, +22 lines =@@
- 
-     var m: typeof a;
- >m : any
-->a : any
  
      var p: b.Point3D;
 ->p : b.Point3D
@@ -50,7 +14,7 @@
  >{x:0, y:0, z: 0 } : { x: number; y: number; z: number; }
  >x : number
  >0 : 0
-@@= skipped -26, +25 lines =@@
+@@= skipped -23, +23 lines =@@
  >A : any
  
      var p : a.Point;

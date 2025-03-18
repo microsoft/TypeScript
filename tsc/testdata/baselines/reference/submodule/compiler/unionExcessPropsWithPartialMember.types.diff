@@ -1,24 +1,6 @@
 --- old.unionExcessPropsWithPartialMember.types
 +++ new.unionExcessPropsWithPartialMember.types
-@@= skipped -1, +1 lines =@@
- 
- === unionExcessPropsWithPartialMember.ts ===
- interface A {
-+>A : A
-+
-     unused?: string;
- >unused : string | undefined
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface B {
-+>B : B
-+
-     x: string;
- >x : string
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -23, +23 lines =@@
  >a : A
  
  ab = {...a, y: (null as any as string | undefined)}; // Should be allowed, since `y` is missing on `A`

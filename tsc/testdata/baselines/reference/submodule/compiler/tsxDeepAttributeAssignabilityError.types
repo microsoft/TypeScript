@@ -5,8 +5,6 @@ import * as React from 'react'
 >React : any
 
 interface MyProps {
->MyProps : MyProps
-
     x: string;
 >x : string
 
@@ -15,8 +13,6 @@ interface MyProps {
 }
 
 interface MyInnerProps {
->MyInnerProps : MyInnerProps
-
     value: string;
 >value : string
 }

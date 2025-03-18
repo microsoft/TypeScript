@@ -17,16 +17,3 @@
  
  declare global {
  >global : typeof global
- 
-     const foo: typeof foo;
- >foo : any
-->foo : any
- }
- 
- === foo.d.ts ===
- interface Root {
-+>Root : Root
-+
-     /**
-      * A .default property for ES6 default import compatibility
-      */

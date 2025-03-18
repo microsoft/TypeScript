@@ -9,18 +9,3 @@
  >TruffleContract : any
  >TruffleContract : any
  
-@@= skipped -10, +10 lines =@@
- >"@truffle/contract" : typeof import("@truffle/contract")
- 
-     interface ContractObject {
-+>ContractObject : ContractObject
-+
-         foo: number;
- >foo : number
-     }
-     namespace TruffleContract {
-+>TruffleContract : any
-+
-         export type Contract = ContractObject;
- >Contract : ContractObject
-     }

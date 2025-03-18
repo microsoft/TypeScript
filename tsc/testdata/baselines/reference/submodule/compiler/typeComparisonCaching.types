@@ -4,8 +4,6 @@
 // Check that we only cache results of type comparisons that are free of assumptions
 
 interface A {
->A : A
-
     p: C;
 >p : C
 
@@ -14,8 +12,6 @@ interface A {
 }
 
 interface B {
->B : B
-
     p: D;
 >p : D
 
@@ -24,15 +20,11 @@ interface B {
 }
 
 interface C {
->C : C
-
     q: A;
 >q : A
 }
 
 interface D {
->D : D
-
     q: B;
 >q : B
 }

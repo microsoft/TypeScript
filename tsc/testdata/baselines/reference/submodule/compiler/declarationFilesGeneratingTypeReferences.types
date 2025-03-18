@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/declarationFilesGeneratingTypeReferences.ts] ////
 
 === /a/node_modules/@types/jquery/index.d.ts ===
+
 interface JQuery {
->JQuery : JQuery
 
 }
 

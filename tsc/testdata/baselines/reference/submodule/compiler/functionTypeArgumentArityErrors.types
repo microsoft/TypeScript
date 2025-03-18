@@ -4,14 +4,9 @@
 // Overloaded functions with default type arguments
 declare function f1<A = any>(): void;
 >f1 : { <A>(): void; <A, B, C, D>(): void; }
->A : A
 
 declare function f1<A, B, C, D = any>(): void;
 >f1 : { <A>(): void; <A, B, C, D>(): void; }
->A : A
->B : B
->C : C
->D : D
 
 f1<number, number>();
 >f1<number, number>() : void
@@ -24,13 +19,9 @@ f1<number, number, number, number, number>();
 // Overloaded functions with no default type arguments
 declare function f2<A>(): void;
 >f2 : { <A>(): void; <A, B, C>(): void; }
->A : A
 
 declare function f2<A, B, C>(): void;
 >f2 : { <A>(): void; <A, B, C>(): void; }
->A : A
->B : B
->C : C
 
 f2<number, number>();
 >f2<number, number>() : void
@@ -55,9 +46,6 @@ f3<number>();
 // Generic function with default type parameters
 declare function f4<A, B, C = any>(): void;
 >f4 : <A, B, C>() => void
->A : A
->B : B
->C : C
 
 f4<number>();
 >f4<number>() : void
@@ -70,8 +58,6 @@ f4<number, number, number, number>();
 // Generic function with no default type arguments
 declare function f5<A, B>(): void;
 >f5 : <A, B>() => void
->A : A
->B : B
 
 f5<number>();
 >f5<number>() : void

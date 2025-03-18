@@ -34,15 +34,11 @@ class C4 {
 
 
 interface A extends C, C3 {
->A : A
-
     y: string;
 >y : string
 }
 
 interface A extends C2, C4 {
->A : A
-
     z: string;
 >z : string
 }
@@ -84,7 +80,6 @@ module M {
 
     class C<T> {
 >C : C<T>
->T : T
 
         a: T;
 >a : T
@@ -92,7 +87,6 @@ module M {
 
     class C2<T> {
 >C2 : C2<T>
->T : T
 
         b: T;
 >b : T
@@ -100,7 +94,6 @@ module M {
 
     class C3<T> {
 >C3 : C3<T>
->T : T
 
         c: T;
 >c : T
@@ -108,24 +101,17 @@ module M {
 
     class C4<T> {
 >C4 : C4<T>
->T : T
 
         d: T;
 >d : T
     }
 
     interface A<T> extends C<T>, C3<T> {
->A : A<T>
->T : T
-
         y: T;
 >y : T
     }
 
     interface A<T> extends C2<string>, C4<string> {
->A : A<T>
->T : T
-
         z: T;
 >z : T
     }

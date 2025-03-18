@@ -47,8 +47,6 @@ module Generic {
 
     class C<T,U> {
 >C : C<T, U>
->T : T
->U : U
 
         foo: T;
 >foo : T
@@ -59,8 +57,6 @@ module Generic {
 
     class D<T,U> extends C<T,U> {
 >D : D<T, U>
->T : T
->U : U
 >C : C<T, U>
 
         baz: T;

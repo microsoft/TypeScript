@@ -3,6 +3,7 @@
 === globalThisUnknown.ts ===
 declare let win: Window & typeof globalThis;
 >win : Window & typeof globalThis
+>globalThis : typeof globalThis
 
 // this access should be an error
 win.hi

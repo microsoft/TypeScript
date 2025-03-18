@@ -1,13 +1,6 @@
 --- old.decoratorOnClass7.es6.types
 +++ new.decoratorOnClass7.es6.types
-@@= skipped -2, +2 lines =@@
- === decoratorOnClass7.es6.ts ===
- declare function dec<T>(target: T): T;
- >dec : <T>(target: T) => T
-+>T : T
- >target : T
- 
- @dec
+@@= skipped -8, +8 lines =@@
  >dec : <T>(target: T) => T
  
  export default class C {
@@ -22,7 +15,7 @@
  >y : number
  
      static y = 1;
-@@= skipped -20, +21 lines =@@
+@@= skipped -14, +14 lines =@@
  }
  
  let c = new C();

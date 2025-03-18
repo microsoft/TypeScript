@@ -8,7 +8,6 @@
 -><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 +>flowtypes : <A>(b: B) => { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 +><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: Combined) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
-+>A : A
  >b : B
  
    type Combined = A & B
@@ -27,7 +26,7 @@
  
    const literal = (fn: (aPlusB: A & B) => void) => null
  >literal : (fn: (aPlusB: A & B) => void) => any
-@@= skipped -20, +21 lines =@@
+@@= skipped -20, +20 lines =@@
  >aPlusB : A & B
  
    return {combined, literal}
@@ -79,12 +78,10 @@
  declare function f<T>(a: T): { a: typeof a };
 ->f : <T>(a: T) => { a: typeof a; }
 +>f : <T>(a: T) => { a: T; }
-+>T : T
  >a : T
  >a : T
-->a : T
- 
- let n: number = f(2).a;
+ >a : T
+@@= skipped -9, +9 lines =@@
  >n : number
  >f(2).a : number
  >f(2) : { a: number; }

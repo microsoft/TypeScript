@@ -8,15 +8,14 @@ import moduleA = require("./aliasUsageInGenericFunction_moduleA");
 >moduleA : typeof import("aliasUsageInGenericFunction_moduleA")
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
-
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Model
+>Backbone.Model : typeof Model
 >Backbone : typeof import("aliasUsageInGenericFunction_backbone")
+>Model : typeof Model
 }
 function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
->T : T
 >a : IHasVisualizationModel
 >x : T
 

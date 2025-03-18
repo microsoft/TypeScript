@@ -3,8 +3,6 @@
 === genericReversingTypeParameters2.ts ===
 class BiMap<K, V> {
 >BiMap : BiMap<K, V>
->K : K
->V : V
 
     private inverseBiMap: BiMap<V, K>;
 >inverseBiMap : BiMap<V, K>

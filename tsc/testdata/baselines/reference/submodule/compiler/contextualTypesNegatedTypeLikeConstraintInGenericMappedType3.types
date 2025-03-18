@@ -3,9 +3,6 @@
 === contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts ===
 type MappedOmit<T, K extends keyof any> = { [P in keyof T as Exclude<P, K>]: T[P]; }
 >MappedOmit : MappedOmit<T, K>
->T : T
->K : K
->P : P
 
 type IntrinsicElements = {
 >IntrinsicElements : IntrinsicElements
@@ -38,8 +35,6 @@ let DEFAULT_TABS_TAG = "div" as const;
 
 type Props<TTag extends ElementType, Overrides = {}> = MappedOmit<
 >Props : Props<TTag, Overrides>
->TTag : TTag
->Overrides : Overrides
 
   IntrinsicElements[TTag],
   keyof Overrides
@@ -48,7 +43,7 @@ type Props<TTag extends ElementType, Overrides = {}> = MappedOmit<
 
 type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
 >TabGroupProps : TabGroupProps<TTag>
->TTag : TTag
+>DEFAULT_TABS_TAG : "div"
 
   TTag,
   {
@@ -71,10 +66,8 @@ type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
 >;
 
 interface _internal_ComponentTabGroup {
->_internal_ComponentTabGroup : _internal_ComponentTabGroup
-
   <TTag extends ElementType = typeof DEFAULT_TABS_TAG>(
->TTag : TTag
+>DEFAULT_TABS_TAG : "div"
 
     props: TabGroupProps<TTag>,
 >props : TabGroupProps<TTag>

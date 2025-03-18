@@ -39,6 +39,7 @@ t[3] = "";
 
 var x: typeof undefined = 3;
 >x : any
+>undefined : undefined
 >3 : 3
 
 x = 3;
@@ -67,6 +68,7 @@ u[3] = "";
 var ob: { x: typeof undefined } = { x: "" };
 >ob : { x: any; }
 >x : any
+>undefined : undefined
 >{ x: "" } : { x: string; }
 >x : string
 >"" : ""

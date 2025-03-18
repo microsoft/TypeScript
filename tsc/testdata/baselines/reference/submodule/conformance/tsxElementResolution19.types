@@ -8,10 +8,7 @@ declare module "react" {
 
 === file1.tsx ===
 declare module JSX {
->JSX : any
-
     interface Element { }
->Element : Element
 }
 export class MyClass { }
 >MyClass : MyClass

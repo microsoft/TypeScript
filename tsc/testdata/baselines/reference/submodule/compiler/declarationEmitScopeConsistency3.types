@@ -13,6 +13,7 @@ export const g = (v: "outer") => {
 >() => null! as typeof v : () => "inner"
 >null! as typeof v : "inner"
 >null! : never
+>v : "inner"
 
     const r = f(null!)
 >r : () => "inner"

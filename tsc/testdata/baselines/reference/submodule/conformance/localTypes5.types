@@ -3,25 +3,20 @@
 === localTypes5.ts ===
 function foo<A>() {
 >foo : <A>() => Y<A, number, boolean, Date, string>
->A : A
 
     class X {
 >X : X<A>
 
         m<B, C>() {
 >m : <B, C>() => Y<A, B, C, Date, string>
->B : B
->C : C
 
             return (function <D>() {
 >(function <D>() {                class Y<E> {                }                return new Y<string>();            })<Date>() : Y<A, B, C, Date, string>
 >(function <D>() {                class Y<E> {                }                return new Y<string>();            }) : <D>() => Y<A, B, C, D, string>
 >function <D>() {                class Y<E> {                }                return new Y<string>();            } : <D>() => Y<A, B, C, D, string>
->D : D
 
                 class Y<E> {
 >Y : Y<A, B, C, D, E>
->E : E
                 }
                 return new Y<string>();
 >new Y<string>() : Y<A, B, C, D, string>

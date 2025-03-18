@@ -1,12 +1,6 @@
 --- old.leaveOptionalParameterAsWritten.types
 +++ new.leaveOptionalParameterAsWritten.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/declarationEmit/leaveOptionalParameterAsWritten.ts] ////
- 
- === a.ts ===
--
- export interface Foo {}
-+>Foo : Foo
+@@= skipped -5, +5 lines =@@
  
  === b.ts ===
  import * as a from "./a";
@@ -15,7 +9,7 @@
  
  declare global {
  >global : typeof global
-@@= skipped -18, +18 lines =@@
+@@= skipped -13, +13 lines =@@
  
        export import Foo = a.Foo;
  >Foo : any

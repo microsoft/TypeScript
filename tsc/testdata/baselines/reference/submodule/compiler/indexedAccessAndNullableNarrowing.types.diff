@@ -1,52 +1,6 @@
 --- old.indexedAccessAndNullableNarrowing.types
 +++ new.indexedAccessAndNullableNarrowing.types
-@@= skipped -2, +2 lines =@@
- === indexedAccessAndNullableNarrowing.ts ===
- function f1<T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) {
- >f1 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | undefined) => void
-+>T : T
-+>K : K
- >x : T[K] | undefined
- 
-     if (x === undefined) return;
-@@= skipped -21, +23 lines =@@
- 
- function f2<T extends Record<string, any>, K extends keyof T>(x: T[K] | null) {
- >f2 : <T extends Record<string, any>, K extends keyof T>(x: T[K] | null) => void
-+>T : T
-+>K : K
- >x : T[K] | null
- 
-     if (x === null) return;
-@@= skipped -19, +21 lines =@@
- 
- function f3<T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) {
- >f3 : <T, K extends keyof T>(t: T[K], p1: Partial<T>[K] & {}, p2: Partial<T>[K] & ({} | null)) => void
-+>T : T
-+>K : K
- >t : T[K]
- >p1 : Partial<T>[K] & {}
- >p2 : Partial<T>[K] & ({} | null)
-@@= skipped -25, +27 lines =@@
- 
- declare function hasOwnProperty<T extends AnyObject>(
- >hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
-+>T : T
- 
-     object: T,
- >object : T
-@@= skipped -10, +11 lines =@@
- ): prop is keyof T;
- 
- interface Store<S = State> {
-+>Store : Store<S>
-+>S : S
-+
-     setState<K extends keyof S>(key: K, value: S[K]): void;
- >setState : <K extends keyof S>(key: K, value: S[K]) => void
-+>K : K
- >key : K
- >value : S[K]
+@@= skipped -84, +84 lines =@@
  }
  
  export function syncStoreProp<
@@ -54,18 +8,8 @@
 +>syncStoreProp : <S extends AnyObject, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
  
      S extends State,
-+>S : S
-+
      P extends Partial<S>,
-+>P : P
-+
-     K extends keyof S,
-+>K : K
-+
- >(store: Store<S>, props: P, key: K) {
- >store : Store<S>
- >props : P
-@@= skipped -36, +46 lines =@@
+@@= skipped -29, +29 lines =@@
  
      store.setState(key, value);
  >store.setState(key, value) : void

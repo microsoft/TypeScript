@@ -4,11 +4,7 @@
 // Checking basic subtype relations with construct signatures
 
 module ConstructSignature {
->ConstructSignature : any
-
     interface Base { // T
->Base : Base
-
         // M's
         new (x: number): void; // BUG 842221
 >x : number
@@ -20,8 +16,6 @@ module ConstructSignature {
 
     // S's
     interface I extends Base {
->I : I
-
         // N's
         new (x: number): number; // satisfies subtype for both of base's call signatures
 >x : number
@@ -32,8 +26,6 @@ module ConstructSignature {
     }
 
     interface Base2 { // T
->Base2 : Base2
-
         // M's
         new (x: number): number;
 >x : number
@@ -41,8 +33,6 @@ module ConstructSignature {
 
     // S's
     interface I2 extends Base2 {
->I2 : I2
-
         // N's
         new (x: number): string; // error because return types don't match
 >x : number
@@ -50,11 +40,8 @@ module ConstructSignature {
 
     // S's
     interface I3 extends Base2 {
->I3 : I3
-
         // N's
         new <T>(x: T): string; // ok, adds a new call signature
->T : T
 >x : T
     }
 }
@@ -63,8 +50,6 @@ module MemberWithConstructSignature {
 >MemberWithConstructSignature : typeof MemberWithConstructSignature
 
     interface Base { // T
->Base : Base
-
         // M's
         a: new (x: number) => void;
 >a : new (x: number) => void
@@ -77,7 +62,6 @@ module MemberWithConstructSignature {
 
         a3: new <T>(x: T) => void;
 >a3 : new <T>(x: T) => void
->T : T
 >x : T
     }
 
@@ -94,8 +78,6 @@ module MemberWithConstructSignature {
 
     // S's
     interface I extends Base {
->I : I
-
         // N's
         a: new (x: number) => number; // ok because base returns void
 >a : new (x: number) => number
@@ -108,13 +90,10 @@ module MemberWithConstructSignature {
 
         a3: new <T>(x: T) => string; // ok because base returns void
 >a3 : new <T>(x: T) => string
->T : T
 >x : T
     }
 
     interface Base2 { // T
->Base2 : Base2
-
         // M's
         a: new (x: number) => number;
 >a : new (x: number) => number
@@ -122,14 +101,11 @@ module MemberWithConstructSignature {
 
         a2: new <T>(x: T) => T;
 >a2 : new <T>(x: T) => T
->T : T
 >x : T
     }
 
     // S's
     interface I2 extends Base2 {
->I2 : I2
-
         // N's
         a: new (x: number) => string; // error because base returns non-void;
 >a : new (x: number) => string
@@ -138,12 +114,9 @@ module MemberWithConstructSignature {
 
     // S's
     interface I3 extends Base2 {
->I3 : I3
-
         // N's
         a2: new <T>(x: T) => string; // error because base returns non-void;
 >a2 : new <T>(x: T) => string
->T : T
 >x : T
     }
 }

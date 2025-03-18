@@ -3,7 +3,6 @@
 === genericTypeAliases.ts ===
 type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 >Tree : Tree<T>
->T : T
 >left : Tree<T>
 >right : Tree<T>
 
@@ -41,7 +40,6 @@ var tree: Tree<number> = {
 
 type Lazy<T> = T | (() => T);
 >Lazy : Lazy<T>
->T : T
 
 var ls: Lazy<string>;
 >ls : Lazy<string>
@@ -59,12 +57,10 @@ ls = () => "lazy";
 
 type Foo<T> = T | { x: Foo<T> };
 >Foo : Foo<T>
->T : T
 >x : Foo<T>
 
 type Bar<U> = U | { x: Bar<U> };
 >Bar : Bar<U>
->U : U
 >x : Bar<U>
 
 // Deeply instantiated generics
@@ -131,7 +127,6 @@ z = { x: { x: 42 } };
 
 type Strange<T> = string;  // Type parameter not used
 >Strange : string
->T : T
 
 var s: Strange<number>;
 >s : string
@@ -142,10 +137,6 @@ s = "hello";
 >"hello" : "hello"
 
 interface AB<A, B> {
->AB : AB<A, B>
->A : A
->B : B
-
     a: A;
 >a : A
 
@@ -155,12 +146,8 @@ interface AB<A, B> {
 
 type Pair<T> = AB<T, T>;
 >Pair : Pair<T>
->T : T
 
 interface TaggedPair<T> extends Pair<T> {
->TaggedPair : TaggedPair<T>
->T : T
-
     tag: string;
 >tag : string
 }
@@ -191,11 +178,9 @@ p.tag = "test";
 
 function f<A>() {
 >f : <A>() => Foo<A[]>
->A : A
 
     type Foo<T> = T | { x: Foo<T> };
 >Foo : Foo<T>
->T : T
 >x : Foo<T>
 
     var x: Foo<A[]>;
@@ -207,11 +192,9 @@ function f<A>() {
 
 function g<B>() {
 >g : <B>() => Bar<B[]>
->B : B
 
     type Bar<U> = U | { x: Bar<U> };
 >Bar : Bar<U>
->U : U
 >x : Bar<U>
 
     var x: Bar<B[]>;

@@ -12,10 +12,7 @@
  >"s" : "s"
  }
  
- function callN<T extends A | B>(p: T) {
- >callN : <T extends A | B>(p: T) => void
-+>T : T
- >p : T
+@@= skipped -12, +12 lines =@@
  
    p.a("s"); // Error
  >p.a("s") : string

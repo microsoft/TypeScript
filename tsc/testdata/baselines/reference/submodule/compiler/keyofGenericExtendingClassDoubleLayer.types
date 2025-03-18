@@ -3,7 +3,6 @@
 === keyofGenericExtendingClassDoubleLayer.ts ===
 class Model<Attributes = any> {
 >Model : Model<Attributes>
->Attributes : Attributes
 
     public createdAt: Date;
 >createdAt : Date
@@ -11,11 +10,9 @@ class Model<Attributes = any> {
 
 type ModelAttributes<T> = Omit<T, keyof Model>;
 >ModelAttributes : ModelAttributes<T>
->T : T
 
 class AutoModel<T> extends Model<ModelAttributes<T>> {}
 >AutoModel : AutoModel<T>
->T : T
 >Model : Model<ModelAttributes<T>>
 
 class PersonModel extends AutoModel<PersonModel> {

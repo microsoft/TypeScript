@@ -3,12 +3,10 @@
 === mixingApparentTypeOverrides.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
 
 function Tagged<T extends Constructor<{}>>(Base: T) {
 >Tagged : <T extends Constructor<{}>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
->T : T
 >Base : T
 
   return class extends Base {

@@ -6,7 +6,6 @@
 declare function f(fun: <T>(t: T) => void): void
 >f : (fun: <T>(t: T) => void) => void
 >fun : <T>(t: T) => void
->T : T
 >t : T
 
 f(t => {
@@ -17,12 +16,14 @@ f(t => {
 
     type isArray = (typeof t)[] extends string[] ? true : false;
 >isArray : isArray
+>t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
 >IsObject : IsObject
 >x : T
+>t : T
 >x : string
 >true : true
 >false : false
@@ -31,19 +32,20 @@ f(t => {
 
 const fn1: <T>(x: T) => void = t => {
 >fn1 : <T>(x: T) => void
->T : T
 >x : T
 >t => {    type isArray = (typeof t)[] extends string[] ? true : false;    type IsObject = { x: typeof t } extends { x: string } ? true : false;} : <T>(t: T) => void
 >t : T
 
     type isArray = (typeof t)[] extends string[] ? true : false;
 >isArray : isArray
+>t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
 >IsObject : IsObject
 >x : T
+>t : T
 >x : string
 >true : true
 >false : false
@@ -52,7 +54,6 @@ const fn1: <T>(x: T) => void = t => {
 
 const fn2: <T>(x: T) => void = function test(t) {
 >fn2 : <T>(x: T) => void
->T : T
 >x : T
 >function test(t) {    type isArray = (typeof t)[] extends string[] ? true : false;    type IsObject = { x: typeof t } extends { x: string } ? true : false;} : <T>(t: T) => void
 >test : <T>(t: T) => void
@@ -60,12 +61,14 @@ const fn2: <T>(x: T) => void = function test(t) {
 
     type isArray = (typeof t)[] extends string[] ? true : false;
 >isArray : isArray
+>t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
 >IsObject : IsObject
 >x : T
+>t : T
 >x : string
 >true : true
 >false : false
@@ -75,7 +78,6 @@ const fn2: <T>(x: T) => void = function test(t) {
 const obj: { f: <T>(x: T) => void } = {
 >obj : { f: <T>(x: T) => void; }
 >f : <T>(x: T) => void
->T : T
 >x : T
 >{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f: <T>(t: T) => void; }
 
@@ -85,12 +87,14 @@ const obj: { f: <T>(x: T) => void } = {
 
         type isArray = (typeof t)[] extends string[] ? true : false;
 >isArray : isArray
+>t : T
 >true : true
 >false : false
 
         type IsObject = { x: typeof t } extends { x: string } ? true : false;
 >IsObject : IsObject
 >x : T
+>t : T
 >x : string
 >true : true
 >false : false

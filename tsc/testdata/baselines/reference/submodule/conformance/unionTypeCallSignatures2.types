@@ -2,8 +2,6 @@
 
 === unionTypeCallSignatures2.ts ===
 interface A {
->A : A
-
     (x: number): number;
 >x : number
 
@@ -15,13 +13,10 @@ interface A {
 >x : Date
 
     <T>(x: T[]): T[];
->T : T
 >x : T[]
 }
 
 interface B {
->B : B
-
     (x: number): number;
 >x : number
 
@@ -32,13 +27,10 @@ interface B {
 >x : Date
 
     <T>(x: T[]): T[];
->T : T
 >x : T[]
 }
 
 interface C {
->C : C
-
     (x: string, ...y: string[]): number;
 >x : string
 >y : string[]
@@ -48,7 +40,6 @@ interface C {
 >s : string
 
     <T>(x: T[]): T[];
->T : T
 >x : T[]
 }
 

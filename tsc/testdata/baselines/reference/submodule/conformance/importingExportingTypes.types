@@ -5,8 +5,6 @@ declare module "fs" {
 >"fs" : typeof import("fs")
 
   export interface WriteFileOptions {}
->WriteFileOptions : WriteFileOptions
-
   export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
 >writeFile : (path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void) => void
 >path : string

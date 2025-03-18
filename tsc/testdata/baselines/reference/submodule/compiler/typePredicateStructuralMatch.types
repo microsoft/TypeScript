@@ -36,7 +36,6 @@ type Results = Result[];
 
 function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
->T : T
 >value : T | { data: T; }
 >data : T
 >data : T
@@ -67,7 +66,6 @@ function getResults1(value: Results | { data: Results }): Results {
 
 function isPlainResponse<T>(value: T | { data: T}): value is T {
 >isPlainResponse : <T>(value: T | { data: T; }) => value is T
->T : T
 >value : T | { data: T; }
 >data : T
 

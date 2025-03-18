@@ -6,7 +6,6 @@
 
 class C<T> {
 >C : C<T>
->T : T
 
     a: T;
 >a : T
@@ -14,7 +13,6 @@ class C<T> {
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     b: T;
 >b : T
@@ -22,7 +20,6 @@ class C2<T> {
 
 class C3<T> {
 >C3 : C3<T>
->T : T
 
     c: T;
 >c : T
@@ -30,24 +27,17 @@ class C3<T> {
 
 class C4<T> {
 >C4 : C4<T>
->T : T
 
     d: T;
 >d : T
 }
 
 interface A<T> extends C<string>, C3<string> {
->A : A<T>
->T : T
-
     y: T;
 >y : T
 }
 
 interface A<T> extends C<string>, C4<string> {
->A : A<T>
->T : T
-
     z: T;
 >z : T
 }

@@ -1,22 +1,6 @@
 --- old.allowJscheckJsTypeParameterNoCrash.types
 +++ new.allowJscheckJsTypeParameterNoCrash.types
-@@= skipped -1, +1 lines =@@
- 
- === func.ts ===
- interface ComponentOptions<V> {
-+>ComponentOptions : ComponentOptions<V>
-+>V : V
-+
-     watch: Record<string, WatchHandler<any>>;
- >watch : Record<string, WatchHandler<any>>
- }
- type WatchHandler<T> = (val: T) => void;
- >WatchHandler : WatchHandler<T>
-+>T : T
- >val : T
- 
- declare function extend(options: ComponentOptions<{}>): void;
-@@= skipped -24, +28 lines =@@
+@@= skipped -25, +25 lines =@@
  >a : void
  >vextend({  watch: {    data1(val) {      this.data2 = 1;    },    data2(val) { },  }}) : void
  >vextend : (options: ComponentOptions<{}>) => void

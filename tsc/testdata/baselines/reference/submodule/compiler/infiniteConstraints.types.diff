@@ -9,22 +9,7 @@
  === infiniteConstraints.ts ===
  // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
  
- type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
- >T1 : B
-+>B : B
-+>K : K
- >val : string
- 
- type T2<B extends { [K in keyof B]: B[Exclude<keyof B, K>]["val"] }> = B;
- >T2 : B
-+>B : B
-+>K : K
- 
- // Repros from #22950
- 
- type AProp<T extends { a: string }> = T
- >AProp : T
-+>T : T
+@@= skipped -19, +16 lines =@@
  >a : string
  
  declare function myBug<
@@ -32,13 +17,8 @@
 +>myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never }>(arg: T) => T
  
    T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
-+>T : T
-+>K : K
-+>U : U
-+
  >(arg: T): T
- >arg : T
- 
+@@= skipped -9, +9 lines =@@
  const out = myBug({obj1: {a: "test"}})
  >out : { obj1: { a: string; }; }
  >myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
@@ -47,15 +27,7 @@
  >{obj1: {a: "test"}} : { obj1: { a: string; }; }
  >obj1 : { a: string; }
  >{a: "test"} : { a: string; }
-@@= skipped -37, +43 lines =@@
- 
- type Value<V extends string = string> = Record<"val", V>;
- >Value : Value<V>
-+>V : V
- 
- declare function value<V extends string>(val: V): Value<V>;
- >value : <V extends string>(val: V) => Value<V>
-+>V : V
+@@= skipped -15, +15 lines =@@
  >val : V
  
  declare function ensureNoDuplicates<
@@ -63,15 +35,8 @@
 +>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any }>(vals: T) => void
  
    T extends {
-+>T : T
-+
      [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
-+>K : K
-+
-       ? never
-       : any
-   }
-@@= skipped -19, +25 lines =@@
+@@= skipped -13, +13 lines =@@
  const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2")});
  >noError : void
  >ensureNoDuplicates({main: value("test"), alternate: value("test2")}) : void
@@ -98,43 +63,12 @@
  >{main: value("dup"), alternate: value("dup")} : { main: Value<"dup">; alternate: Value<"dup">; }
  >main : Value<"dup">
  >value("dup") : Value<"dup">
-@@= skipped -15, +15 lines =@@
- 
- type Cond<T> = T extends number ? number : never;
+@@= skipped -17, +17 lines =@@
  >Cond : Cond<T>
-+>T : T
  
  declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
 ->function1 : <T extends { [K in keyof T]: Cond<T[K]>; }>() => T[keyof T]["foo"]
 +>function1 : <T extends { [K in keyof T]: Cond<T[K]> }>() => T[keyof T]["foo"]
-+>T : T
-+>K : K
  
  // Repro from #31823
  
- export type Prepend<Elm, T extends unknown[]> =
- >Prepend : Prepend<Elm, T>
-+>Elm : Elm
-+>T : T
- 
-   T extends unknown ?
-   ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
- >arg : Elm
- >rest : T
- >args : T2
-+>T2 : T2
- 
-   never :
-   never;
- export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
- >ExactExtract : ExactExtract<T, U>
-+>T : T
-+>U : U
- 
- type Conv<T, U = T> =
- >Conv : Conv<T, U>
-+>T : T
-+>U : U
- 
-   { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
- >0 : [T]

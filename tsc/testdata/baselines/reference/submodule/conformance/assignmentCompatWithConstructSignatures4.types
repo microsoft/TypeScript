@@ -111,11 +111,9 @@ module Errors {
 >x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
 
                     new <T extends Derived>(a: T): T;
->T : T
 >a : T
 
                     new <T extends Base>(a: T): T;
->T : T
 >a : T
 
                 }): any[];
@@ -123,11 +121,9 @@ module Errors {
 >x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
 
                     new <T extends Derived2>(a: T): T;
->T : T
 >a : T
 
                     new <T extends Base>(a: T): T;
->T : T
 >a : T
 
                 }): any[];
@@ -135,8 +131,6 @@ module Errors {
 
         var b2: new <T, U>(x: T) => U[]; 
 >b2 : new <T, U>(x: T) => U[]
->T : T
->U : U
 >x : T
 
         a2 = b2; // ok
@@ -151,9 +145,6 @@ module Errors {
 
         var b7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >b7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->T : T
->U : U
->V : V
 >x : (arg: T) => U
 >arg : T
 >r : T
@@ -170,8 +161,6 @@ module Errors {
 
         var b8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
 >b8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->T : T
->U : U
 >x : (arg: T) => U
 >arg : T
 >y : (arg2: { foo: number; }) => U
@@ -192,7 +181,6 @@ module Errors {
         
         var b10: new <T extends Derived>(...x: T[]) => T; 
 >b10 : new <T extends Derived>(...x: T[]) => T
->T : T
 >x : T[]
 
         a10 = b10; // ok
@@ -207,7 +195,6 @@ module Errors {
 
         var b11: new <T extends Derived>(x: T, y: T) => T; 
 >b11 : new <T extends Derived>(x: T, y: T) => T
->T : T
 >x : T
 >y : T
 
@@ -223,7 +210,6 @@ module Errors {
 
         var b12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
->T : T
 >x : Base[]
 >y : Base[]
 
@@ -239,7 +225,6 @@ module Errors {
 
         var b15: new <T>(x: { a: T; b: T }) => T; 
 >b15 : new <T>(x: { a: T; b: T; }) => T
->T : T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -256,7 +241,6 @@ module Errors {
 
         var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
 >b15a : new <T extends Base>(x: { a: T; b: T; }) => number
->T : T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -273,7 +257,6 @@ module Errors {
 
         var b16: new <T>(x: (a: T) => T) => T[];
 >b16 : new <T>(x: (a: T) => T) => T[]
->T : T
 >x : (a: T) => T
 >a : T
 
@@ -289,7 +272,6 @@ module Errors {
 
         var b17: new <T>(x: (a: T) => T) => any[];
 >b17 : new <T>(x: (a: T) => T) => any[]
->T : T
 >x : (a: T) => T
 >a : T
 
@@ -310,12 +292,10 @@ module Errors {
         // target type has generic call signature
         var a2: new <T>(x: T) => T[];
 >a2 : new <T>(x: T) => T[]
->T : T
 >x : T
 
         var b2: new <T>(x: T) => string[];
 >b2 : new <T>(x: T) => string[]
->T : T
 >x : T
 
         a2 = b2; // ok
@@ -331,12 +311,10 @@ module Errors {
         // target type has generic call signature
         var a3: new <T>(x: T) => string[];
 >a3 : new <T>(x: T) => string[]
->T : T
 >x : T
 
         var b3: new <T>(x: T) => T[]; 
 >b3 : new <T>(x: T) => T[]
->T : T
 >x : T
 
         a3 = b3; // ok

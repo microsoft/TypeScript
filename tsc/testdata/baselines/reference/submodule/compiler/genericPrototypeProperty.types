@@ -3,7 +3,6 @@
 === genericPrototypeProperty.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T

@@ -9,32 +9,22 @@
 // U has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in S.
 
 interface IWithNoCallSignatures {
->IWithNoCallSignatures : IWithNoCallSignatures
-
     foo: string;
 >foo : string
 }
 interface IWithCallSignatures {
->IWithCallSignatures : IWithCallSignatures
-
     (a: number): string;
 >a : number
 }
 interface IWithCallSignatures2 {
->IWithCallSignatures2 : IWithCallSignatures2
-
     (a: number): number;
 >a : number
 }
 interface IWithCallSignatures3 {
->IWithCallSignatures3 : IWithCallSignatures3
-
     (b: string): number;
 >b : string
 }
 interface IWithCallSignatures4 {
->IWithCallSignatures4 : IWithCallSignatures4
-
     (a: number): string;
 >a : number
 

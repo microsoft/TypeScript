@@ -13,6 +13,7 @@ const fInferred = ({ a = 0 } = {}) => a;
 
 const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
 >fAnnotated : (__0?: { a?: number | undefined; }) => number
+>fInferred : (__0?: { a?: number | undefined; }) => number
 >({ a = 0 } = {}) => a : (__0?: { a?: number | undefined; } | undefined) => number
 >a : number
 >0 : 0

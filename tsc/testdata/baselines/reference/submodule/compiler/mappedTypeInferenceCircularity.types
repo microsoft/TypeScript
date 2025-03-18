@@ -5,12 +5,9 @@
 
 type HTML = { [K in 'div']: Block<HTML> };
 >HTML : HTML
->K : K
 
 type Block<P> = <T>(func: HTML) => {};
 >Block : Block<P>
->P : P
->T : T
 >func : HTML
 
 declare var h: HTML;

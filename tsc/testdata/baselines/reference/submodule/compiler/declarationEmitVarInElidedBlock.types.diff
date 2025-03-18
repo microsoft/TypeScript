@@ -1,8 +1,0 @@
---- old.declarationEmitVarInElidedBlock.types
-+++ new.declarationEmitVarInElidedBlock.types
-@@= skipped -7, +7 lines =@@
- }
- export let b: typeof a;
- >b : string
-->a : string
- 

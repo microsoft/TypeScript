@@ -5,7 +5,6 @@ module M {
 >M : typeof M
 
    interface I { (i: I): I; }
->I : I
 >i : I
 
    function f(p: I) { return f };

@@ -10,9 +10,6 @@ function ExpandoMerge(n: number) {
 >n : number
 }
 namespace ExpandoMerge {
->ExpandoMerge : (n: number) => number
-
     export interface I { }
->I : I
 }
 

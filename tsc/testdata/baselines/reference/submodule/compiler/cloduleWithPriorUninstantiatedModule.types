@@ -3,11 +3,7 @@
 === cloduleWithPriorUninstantiatedModule.ts ===
 // Non-ambient & uninstantiated module.
 module Moclodule {
->Moclodule : typeof Moclodule
-
     export interface Someinterface {
->Someinterface : Someinterface
-
         foo(): void;
 >foo : () => void
     }

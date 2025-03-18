@@ -7,72 +7,14 @@
 ->foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 +>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
  >cb : { (x: boolean): boolean; (x: string): string; }
-->a : { (x: boolean): boolean; (x: string): string; }
+ >a : { (x: boolean): boolean; (x: string): string; }
  
-         return cb;
- >cb : { (x: boolean): boolean; (x: string): string; }
-@@= skipped -11, +10 lines =@@
+@@= skipped -11, +11 lines =@@
      var r3 = foo4(<T, U>(x: T) => { var r: U; return r }); // ok
  >r3 : { (x: boolean): boolean; (x: string): string; }
  >foo4(<T, U>(x: T) => { var r: U; return r }) : { (x: boolean): boolean; (x: string): string; }
 ->foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 +>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
  ><T, U>(x: T) => { var r: U; return r } : <T, U>(x: T) => U
-+>T : T
-+>U : U
  >x : T
  >r : U
- >r : U
-@@= skipped -12, +14 lines =@@
- 
-     function foo5<T>(cb: { (x: T): string; (x: number): T }) {
- >foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
-+>T : T
- >cb : { (x: T): string; (x: number): T; }
- >x : T
- >x : number
-@@= skipped -13, +14 lines =@@
- >foo5(<T>(x: T) => x) : { (x: unknown): string; (x: number): unknown; }
- >foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
- ><T>(x: T) => x : <T>(x: T) => T
-+>T : T
- >x : T
- >x : T
- 
-     function foo6<T>(cb: { (x: T): string; (x: T, y?: T): string }) {
- >foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
-+>T : T
- >cb : { (x: T): string; (x: T, y?: T): string; }
- >x : T
- >x : T
-@@= skipped -19, +21 lines =@@
- >foo6(<T>(x: T, y: T) => '') : { (x: unknown): string; (x: unknown, y?: unknown): string; }
- >foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
- ><T>(x: T, y: T) => '' : <T>(x: T, y: T) => string
-+>T : T
- >x : T
- >y : T
- >'' : ""
- 
-     function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
- >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
-+>T : T
- >x : T
- >cb : { (x: T): string; (x: T, y?: T): string; }
- >x : T
-@@= skipped -22, +24 lines =@@
- >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
- >1 : 1
- ><T>(x: T) => x : <T>(x: T) => T
-+>T : T
- >x : T
- >x : T
- 
-     var a: { <T>(x: T): number; <T>(x: number): T; }
- >a : { <T>(x: T): number; <T>(x: number): T; }
-+>T : T
- >x : T
-+>T : T
- >x : number
- 
-     var r14 = foo7(1, a); // ok

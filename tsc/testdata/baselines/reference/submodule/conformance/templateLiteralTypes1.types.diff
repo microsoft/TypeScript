@@ -10,21 +10,8 @@
  === templateLiteralTypes1.ts ===
  // Template types example from #12754
  
- const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;
- >createScopedActionType : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
- ><S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
-+>S : S
- >scope : S
- ><T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <T extends string>(type: T) => `${S}/${T}`
-+>T : T
- >type : T
- >`${scope}/${type}` as `${S}/${T}` : `${S}/${T}`
- >`${scope}/${type}` : `${S}/${T}`
-@@= skipped -33, +31 lines =@@
- 
- type EventName<S extends string> = `${S}Changed`;
+@@= skipped -35, +31 lines =@@
  >EventName : `${S}Changed`
-+>S : S
  
  type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
 ->EN1 : "FooChanged" | "BarChanged" | "BazChanged"
@@ -36,9 +23,8 @@
  
  // Primitive literal types can be spread into templates
  
- type ToString<T extends string | number | boolean | bigint> = `${T}`;
+@@= skipped -11, +11 lines =@@
  >ToString : `${T}`
-+>T : T
  
  type TS1 = ToString<'abc' | 42 | true | -1234n>;
 ->TS1 : "abc" | "true" | "42" | "-1234"
@@ -46,33 +32,12 @@
  >true : true
  >-1234n : -1234n
  >1234n : 1234n
-@@= skipped -22, +24 lines =@@
- 
- type TL1<T extends string> = `a${T}b${T}c`;
- >TL1 : `a${T}b${T}c`
-+>T : T
- 
- type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
- >TL2 : `ax${U}ybx${U}yc`
-+>U : U
- 
- type TL3 = TL2<'o'>;  // 'axoybxoyc'
- >TL3 : "axoybxoyc"
-@@= skipped -11, +13 lines =@@
- 
- type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
- >Cases : `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`
-+>T : T
- 
- type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
- >TCA1 : "BAR bar Bar bar"
-@@= skipped -10, +11 lines =@@
+@@= skipped -30, +30 lines =@@
  // Assignability
  
  function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 ->test : <T extends "foo" | "bar">(name: `get${Capitalize<T>}`) => void
 +>test : <T extends "bar" | "foo">(name: `get${Capitalize<T>}`) => void
-+>T : T
  >name : `get${Capitalize<T>}`
  
      let s1: string = name;
@@ -90,14 +55,11 @@
  function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
 ->fa1 : <T>(x: T, y: { [P in keyof T]: T[P]; }, z: { [P in keyof T & string as `p_${P}`]: T[P]; }) => void
 +>fa1 : <T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) => void
-+>T : T
  >x : T
 ->y : { [P in keyof T]: T[P]; }
 ->z : { [P in keyof T & string as `p_${P}`]: T[P]; }
 +>y : { [P in keyof T]: T[P] }
-+>P : P
 +>z : { [P in keyof T & string as `p_${P}`]: T[P] }
-+>P : P
  
      y = x;
  >y = x : T
@@ -117,14 +79,8 @@
 ->x : { [P in B as `p_${P}`]: T; }
 ->y : { [Q in A as `p_${Q}`]: U; }
 +>fa2 : <T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) => void
-+>T : T
-+>U : U
-+>A : A
-+>B : B
 +>x : { [P in B as `p_${P}`]: T }
-+>P : P
 +>y : { [Q in A as `p_${Q}`]: U }
-+>Q : Q
  
      x = y;
 ->x = y : { [Q in A as `p_${Q}`]: U; }
@@ -144,225 +100,28 @@
  }
  
  // String transformations using recursive conditional types
- 
- type Join<T extends unknown[], D extends string> =
- >Join : Join<T, D>
-+>T : T
-+>D : D
- 
-     T extends [] ? '' :
-     T extends [string | number | boolean | bigint] ? `${T[0]}` :
-     T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
-+>U : U
-+
-     string;
- 
- type TJ1 = Join<[1, 2, 3, 4], '.'>
-@@= skipped -68, +82 lines =@@
- 
- type MatchPair<S extends string> = S extends `[${infer A},${infer B}]` ? [A, B] : unknown;
- >MatchPair : MatchPair<S>
-+>S : S
-+>A : A
-+>B : B
- 
- type T20 = MatchPair<'[1,2]'>;  // ['1', '2']
- >T20 : ["1", "2"]
-@@= skipped -18, +21 lines =@@
- 
- type SnakeToCamelCase<S extends string> =
- >SnakeToCamelCase : SnakeToCamelCase<S>
-+>S : S
- 
-     S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
-+>T : T
-+>U : U
-+
-     S extends `${infer T}` ? `${Lowercase<T>}` :
-+>T : T
-+
-     SnakeToPascalCase<S>;
- 
- type SnakeToPascalCase<S extends string> =
- >SnakeToPascalCase : SnakeToPascalCase<S>
-+>S : S
- 
-     string extends S ? string :
-     S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
-+>T : T
-+>U : U
-+
-     S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
-+>T : T
-+
-     never;
- 
- type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
-@@= skipped -29, +41 lines =@@
- 
- type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer R}` ? [`${A}${B}`, R] : unknown;
- >FirstTwoAndRest : FirstTwoAndRest<S>
-+>S : S
-+>A : A
-+>B : B
-+>R : R
- 
- type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
- >T25 : ["ab", "cde"]
-@@= skipped -15, +19 lines =@@
- 
- type HexColor<S extends string> =
- >HexColor : HexColor<S>
-+>S : S
- 
-     S extends `#${infer R1}${infer R2}${infer G1}${infer G2}${infer B1}${infer B2}` ?
-+>R1 : R1
-+>R2 : R2
-+>G1 : G1
-+>G2 : G2
-+>B1 : B1
-+>B2 : B2
-+
-         [R1, R2, G1, G2, B1, B2] extends [HexDigit, HexDigit, HexDigit, HexDigit, HexDigit, HexDigit] ?
-             S :
-             never :
-@@= skipped -23, +31 lines =@@
- 
- type Trim<S extends string> =
- >Trim : Trim<S>
-+>S : S
- 
-     S extends ` ${infer T}` ? Trim<T> :
-+>T : T
-+
-     S extends `${infer T} ` ? Trim<T> :
-+>T : T
-+
-     S;
- 
- type TR1 = Trim<'xx   '>;  // 'xx'
-@@= skipped -16, +21 lines =@@
- 
- type Split<S extends string, D extends string> =
- >Split : Split<S, D>
-+>S : S
-+>D : D
- 
-     string extends S ? string[] :
-     S extends '' ? [] :
-     S extends `${infer T}${D}${infer U}` ? [T, ...Split<U, D>] :
-+>T : T
-+>U : U
-+
-     [S];
- 
- type T40 = Split<'foo', '.'>;  // ['foo']
-@@= skipped -21, +26 lines =@@
+@@= skipped -190, +190 lines =@@
  // Inference and property name paths
  
  declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2];
 ->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
 +>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
-+>T : T
-+>P0 : P0
-+>P1 : P1
-+>P2 : P2
  >obj : T
  >path : `${P0}.${P1}.${P2}`
  
  declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1];
 ->getProp : { <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}.${P2}`): T_1[P0_1][P1_1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T_1, P0_1 extends keyof T_1 & string>(obj: T_1, path: P0_1): T_1[P0_1]; (obj: object, path: string): unknown; }
 +>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
-+>T : T
-+>P0 : P0
-+>P1 : P1
  >obj : T
  >path : `${P0}.${P1}`
  
  declare function getProp<T, P0 extends keyof T & string>(obj: T, path: P0): T[P0];
 ->getProp : { <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1] & string>(obj: T_1, path: `${P0_1}.${P1}.${P2}`): T_1[P0_1][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1}`): T_1[P0_1][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
 +>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
-+>T : T
-+>P0 : P0
  >obj : T
  >path : P0
  
-@@= skipped -69, +78 lines =@@
- 
- type PropType<T, Path extends string> =
- >PropType : PropType<T, Path>
-+>T : T
-+>Path : Path
- 
-     string extends Path ? unknown :
-     Path extends keyof T ? T[Path] :
-     Path extends `${infer K}.${infer R}` ? K extends keyof T ? PropType<T[K], R> : unknown :
-+>K : K
-+>R : R
-+
-     unknown;
- 
- declare function getPropValue<T, P extends string>(obj: T, path: P): PropType<T, P>;
- >getPropValue : <T, P extends string>(obj: T, path: P) => PropType<T, P>
-+>T : T
-+>P : P
- >obj : T
- >path : P
- 
-@@= skipped -60, +67 lines =@@
- 
- type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
- >S1 : S1<T>
-+>T : T
-+>U : U
- 
- type S2<S extends string> = S;
- >S2 : S
-+>S : S
- 
- // Check that infer T declarations are validated
- 
- type TV1 = `${infer X}`;
- >TV1 : `${X}`
-+>X : X
- 
- // Batched single character inferences for lower recursion depth
- 
- type Chars<S extends string> =
- >Chars : Chars<S>
-+>S : S
- 
-     string extends S ? string[] :
-     S extends `${infer C0}${infer C1}${infer C2}${infer C3}${infer C4}${infer C5}${infer C6}${infer C7}${infer C8}${infer C9}${infer R}` ? [C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, ...Chars<R>] :
-+>C0 : C0
-+>C1 : C1
-+>C2 : C2
-+>C3 : C3
-+>C4 : C4
-+>C5 : C5
-+>C6 : C6
-+>C7 : C7
-+>C8 : C8
-+>C9 : C9
-+>R : R
-+
-     S extends `${infer C}${infer R}` ? [C, ...Chars<R>] :
-+>C : C
-+>R : R
-+
-     S extends '' ? [] :
-     never;
- 
-@@= skipped -27, +47 lines =@@
- 
- type Foo<T> = T extends `*${infer S}*` ? S : never;
- >Foo : Foo<T>
-+>T : T
-+>S : S
- 
- type TF1 = Foo<any>;      // never
- >TF1 : string
-@@= skipped -96, +98 lines =@@
+@@= skipped -252, +252 lines =@@
  >TDigits : TDigits
  
  type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  // Error
@@ -371,39 +130,7 @@
  
  // Repro from #40863
  
- type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
- >IsNegative : IsNegative<T>
-+>T : T
- >true : true
- >false : false
- 
- type AA<T extends number, Q extends number> =
- >AA : AA<T, Q>
-+>T : T
-+>Q : Q
- 
-     [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
- >true : true
-@@= skipped -27, +30 lines =@@
- 
- type PathKeys<T> =
- >PathKeys : PathKeys<T>
-+>T : T
- 
-     unknown extends T ? never :
-     T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
-@@= skipped -8, +9 lines =@@
- 
- type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
- >SubKeys : SubKeys<T, K>
-+>T : T
-+>K : K
- 
- declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
- >getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
-+>T : T
-+>P : P
- >obj : T
+@@= skipped -42, +42 lines =@@
  >path : P
  
  const obj2 = {
@@ -416,7 +143,7 @@
  
      name: 'John',
  >name : "John"
-@@= skipped -20, +24 lines =@@
+@@= skipped -13, +13 lines =@@
  >42 : 42
  
      cars: [

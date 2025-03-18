@@ -15,8 +15,6 @@ module A {
 >0 : 0
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -45,11 +43,7 @@ module X {
 >X : typeof X
 
     export module Y {
->Y : typeof Y
-
         export interface Point{
->Point : Point
-
             x: number;
 >x : number
 
@@ -82,8 +76,6 @@ module Z {
 //
 
 module a {
->a : any
-
   export type A = number;
 >A : number
 }
@@ -97,12 +89,9 @@ module b {
 >A : number
 
   export module A {}
->A : any
 }
 
 module c {
->c : any
-
   import any = b.A;
 >any : any
 >b : typeof b

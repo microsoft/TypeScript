@@ -1,14 +1,6 @@
 --- old.contextualTypeOfIndexedAccessParameter.types
 +++ new.contextualTypeOfIndexedAccessParameter.types
-@@= skipped -12, +12 lines =@@
- 
- declare function f<K extends Keys>(key: K, options: OptionsForKey[K]): void;
- >f : <K extends Keys>(key: K, options: OptionsForKey[K]) => void
-+>K : K
- >key : K
- >options : OptionsForKey[K]
- 
-@@= skipped -18, +19 lines =@@
+@@= skipped -30, +30 lines =@@
  });
  
  function g<
@@ -17,7 +9,6 @@
  
      K extends "a" | "b">(x: ({ a: string } & { b: string })[K], y: string) {
 ->x : ({ a: string; } & { b: string; })[K]
-+>K : K
 +>x : { a: string; } & { b: string; }[K]
  >a : string
  >b : string

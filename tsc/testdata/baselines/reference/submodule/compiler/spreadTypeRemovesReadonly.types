@@ -2,8 +2,6 @@
 
 === spreadTypeRemovesReadonly.ts ===
 interface ReadonlyData {
->ReadonlyData : ReadonlyData
-
     readonly value: string;
 >value : string
 }

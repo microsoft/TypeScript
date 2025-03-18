@@ -2,8 +2,6 @@
 
 === everyTypeWithInitializer.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
@@ -17,7 +15,6 @@ class C implements I {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T

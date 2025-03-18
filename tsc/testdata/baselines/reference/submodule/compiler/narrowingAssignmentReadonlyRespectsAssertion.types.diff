@@ -1,34 +1,6 @@
 --- old.narrowingAssignmentReadonlyRespectsAssertion.types
 +++ new.narrowingAssignmentReadonlyRespectsAssertion.types
-@@= skipped -3, +3 lines =@@
- // https://github.com/microsoft/TypeScript/issues/41984
- 
- interface TestCase<T extends string | number> {
-+>TestCase : TestCase<T>
-+>T : T
-+
-   readonly val1: T | ReadonlyArray<T>;
- >val1 : T | readonly T[]
- 
-@@= skipped -8, +11 lines =@@
- }
- 
- interface MultiCaseFixture<T> {
-+>MultiCaseFixture : MultiCaseFixture<T>
-+>T : T
-+
-   cases: T[];
- >cases : T[]
- }
-@@= skipped -59, +62 lines =@@
- 
- function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
- >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
-+>T : T
- >subFunc : () => T[]
- 
-   return { cases: subFunc() };
-@@= skipped -25, +26 lines =@@
+@@= skipped -95, +95 lines =@@
  >fixture : MultiCaseFixture<TestCase<string | number>>
  >cases : TestCase<string | number>[]
  >forEach : (callbackfn: (value: TestCase<string | number>, index: number, array: TestCase<string | number>[]) => void, thisArg?: any) => void

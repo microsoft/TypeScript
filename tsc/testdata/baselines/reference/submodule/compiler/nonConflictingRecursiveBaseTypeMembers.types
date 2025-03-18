@@ -2,22 +2,13 @@
 
 === nonConflictingRecursiveBaseTypeMembers.ts ===
 interface A<T> {
->A : A<T>
->T : T
-
     x: C<T>
 >x : C<T>
 }
 
 interface B<T> {
->B : B<T>
->T : T
-
     x: C<T>
 >x : C<T>
 }
 
 interface C<T> extends A<T>, B<T> { } // Should not be an error
->C : C<T>
->T : T
-

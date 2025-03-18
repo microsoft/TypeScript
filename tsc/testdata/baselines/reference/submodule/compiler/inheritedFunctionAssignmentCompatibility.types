@@ -2,7 +2,6 @@
 
 === inheritedFunctionAssignmentCompatibility.ts ===
 interface IResultCallback extends Function { }
->IResultCallback : IResultCallback
 
 function fn(cb: IResultCallback) { }
 >fn : (cb: IResultCallback) => void

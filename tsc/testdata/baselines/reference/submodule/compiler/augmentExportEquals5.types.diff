@@ -1,22 +1,6 @@
 --- old.augmentExportEquals5.types
 +++ new.augmentExportEquals5.types
-@@= skipped -1, +1 lines =@@
- 
- === express.d.ts ===
- declare module Express {
-+>Express : any
-+
-     export interface Request { }
-+>Request : Request
-+
-     export interface Response { }
-+>Response : Response
-+
-     export interface Application { }
-+>Application : Application
- }
- 
- declare module "express" {
+@@= skipped -10, +10 lines =@@
  >"express" : typeof import("express")
  
      function e(): e.Express;
@@ -29,100 +13,8 @@
 +>e : typeof e
  
          interface IRoute {
-+>IRoute : IRoute
-+
              all(...handler: RequestHandler[]): IRoute;
- >all : (...handler: RequestHandler[]) => IRoute
- >handler : RequestHandler[]
-         }
- 
-         interface IRouterMatcher<T> {
-+>IRouterMatcher : IRouterMatcher<T>
-+>T : T
-+
-             (name: string|RegExp, ...handlers: RequestHandler[]): T;
- >name : string | RegExp
- >handlers : RequestHandler[]
-         }
- 
-         interface IRouter<T> extends RequestHandler {
-+>IRouter : IRouter<T>
-+>T : T
-+
-             route(path: string): IRoute;
- >route : (path: string) => IRoute
- >path : string
-@@= skipped -38, +53 lines =@@
- >options : any
- 
-         export interface Router extends IRouter<Router> {}
-+>Router : Router
- 
-         interface Errback { (err: Error): void; }
-+>Errback : Errback
- >err : Error
- 
-         interface Request extends Express.Request {
-+>Request : Request
- >Express : any
- 
-             get (name: string): string;
-@@= skipped -13, +16 lines =@@
-         }
- 
-         interface Response extends Express.Response {
-+>Response : Response
- >Express : any
- 
-             charset: string;
-@@= skipped -7, +8 lines =@@
-         }
- 
-         interface ErrorRequestHandler {
-+>ErrorRequestHandler : ErrorRequestHandler
-+
-             (err: any, req: Request, res: Response, next: Function): any;
- >err : any
- >req : Request
-@@= skipped -8, +10 lines =@@
-         }
- 
-         interface RequestHandler {
-+>RequestHandler : RequestHandler
-+
-             (req: Request, res: Response, next: Function): any;
- >req : Request
- >res : Response
-@@= skipped -7, +9 lines =@@
-         }
- 
-         interface Handler extends RequestHandler {}
-+>Handler : Handler
- 
-         interface RequestParamHandler {
-+>RequestParamHandler : RequestParamHandler
-+
-             (req: Request, res: Response, next: Function, param: any): any;
- >req : Request
- >res : Response
-@@= skipped -10, +13 lines =@@
-         }
- 
-         interface Application extends IRouter<Application>, Express.Application {
-+>Application : Application
- >Express : any
- 
-             routes: any;
-@@= skipped -7, +8 lines =@@
-         }
- 
-         interface Express extends Application {
-+>Express : Express
-+
-             createApplication(): Application;
- >createApplication : () => Application
-         }
-@@= skipped -9, +11 lines =@@
+@@= skipped -90, +90 lines =@@
      }
  
      export = e;
@@ -131,12 +23,3 @@
  }
  
  === augmentation.ts ===
-@@= skipped -12, +12 lines =@@
- >"express" : typeof e
- 
-     interface Request {
-+>Request : Request
-+
-         id: number;
- >id : number
-     }

@@ -1,13 +1,6 @@
 --- old.genericClassesInModule.types
 +++ new.genericClassesInModule.types
-@@= skipped -5, +5 lines =@@
- 
-     export class B<T>{ }
- >B : B<T>
-+>T : T
- 
-     export class A { }
- >A : A
+@@= skipped -11, +11 lines =@@
  }
  
  var a = new Foo.B<Foo.A>();

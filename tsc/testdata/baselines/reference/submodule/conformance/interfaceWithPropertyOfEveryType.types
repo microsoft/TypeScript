@@ -20,8 +20,6 @@ enum E { A }
 >A : E.A
 
 interface Foo {
->Foo : Foo
-
     a: number;
 >a : number
 
@@ -49,7 +47,6 @@ interface Foo {
 
     i: <T>(x: T) => T;
 >i : <T>(x: T) => T
->T : T
 >x : T
 
     j: Foo;
@@ -60,9 +57,11 @@ interface Foo {
 
     l: typeof f1;
 >l : () => void
+>f1 : () => void
 
     m: typeof M;
 >m : typeof M
+>M : typeof M
 
     n: {};
 >n : {}
@@ -112,7 +111,6 @@ var a: Foo = {
     i: <T>(x: T) => x,
 >i : <T>(x: T) => T
 ><T>(x: T) => x : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 

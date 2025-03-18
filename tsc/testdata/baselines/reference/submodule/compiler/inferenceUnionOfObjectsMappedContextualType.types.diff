@@ -1,23 +1,11 @@
 --- old.inferenceUnionOfObjectsMappedContextualType.types
 +++ new.inferenceUnionOfObjectsMappedContextualType.types
-@@= skipped -12, +12 lines =@@
- 
- type RowRendererMeta<TInput extends {}> = {
- >RowRendererMeta : RowRendererMeta<TInput>
-+>TInput : TInput
- 
+@@= skipped -16, +16 lines =@@
      [key in keyof TInput]: { key: key; caption: string; formatter?: (value: TInput[key]) => string; };
  >key : key
-+>key : key
  >caption : string
 ->formatter : ((value: TInput[key]) => string) | undefined
 +>formatter : (value: TInput[key]) => string | undefined
  >value : TInput[key]
  }
  
- type RowRenderer<TInput extends {}> = RowRendererMeta<TInput>[keyof RowRendererMeta<TInput>];
- >RowRenderer : RowRenderer<TInput>
-+>TInput : TInput
- 
- const test: RowRenderer<Entity> = {
- >test : RowRenderer<Entity>

@@ -5,8 +5,6 @@ import React = require('react')
 >React : any
 
 export interface ClickableProps {
->ClickableProps : ClickableProps
-
     children?: string;
 >children : string
 
@@ -15,16 +13,12 @@ export interface ClickableProps {
 }
 
 export interface ButtonProps extends ClickableProps {
->ButtonProps : ButtonProps
-
     onClick: (k: "left" | "right") => void;
 >onClick : (k: "left" | "right") => void
 >k : "left" | "right"
 }
 
 export interface LinkProps extends ClickableProps {
->LinkProps : LinkProps
-
     goTo: "home" | "contact";
 >goTo : "contact" | "home"
 }

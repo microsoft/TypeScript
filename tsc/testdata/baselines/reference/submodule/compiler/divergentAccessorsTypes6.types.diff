@@ -1,27 +1,6 @@
 --- old.divergentAccessorsTypes6.types
 +++ new.divergentAccessorsTypes6.types
-@@= skipped -3, +3 lines =@@
- export {};
- 
- interface Element {
-+>Element : Element
-+
-     get style(): CSSStyleDeclaration;
- >style : CSSStyleDeclaration
- 
-@@= skipped -39, +41 lines =@@
- 
- type Fail<T extends never> = T;
- >Fail : T
-+>T : T
- 
- interface I1 {
-+>I1 : I1
-+
-     get x(): number;
- >x : number
- 
-@@= skipped -10, +13 lines =@@
+@@= skipped -52, +52 lines =@@
  >value : string
  }
  const o1 = {

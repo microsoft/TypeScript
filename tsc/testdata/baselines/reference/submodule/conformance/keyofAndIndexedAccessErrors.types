@@ -19,7 +19,6 @@ class Shape {
 
 type Dictionary<T> = { [x: string]: T };
 >Dictionary : Dictionary<T>
->T : T
 >x : string
 
 type T00 = keyof K0;  // Error
@@ -130,8 +129,6 @@ declare let cond: boolean;
 
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->T : T
->K : K
 >obj : T
 >key : K
 
@@ -143,8 +140,6 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 
 function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->T : T
->K : K
 >obj : T
 >key : K
 >value : T[K]
@@ -212,8 +207,6 @@ function f10(shape: Shape) {
 
 function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
 >f20 : <T, U>(x: T | U, y: T & U, k1: keyof T & keyof U, k2: keyof T & keyof U, k3: keyof T | keyof U, k4: keyof T | keyof U) => void
->T : T
->U : U
 >x : T | U
 >y : T & U
 >k1 : keyof T & keyof U
@@ -325,10 +318,6 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 // Repro from #17166
 function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >f3 : <T, K extends Extract<keyof T, string>, U extends T, J extends K>(t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]) => void
->T : T
->K : K
->U : U
->J : J
 
     t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
 >t : T
@@ -412,8 +401,6 @@ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 // The constraint of 'keyof T' is 'keyof T'
 function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
 >f4 : <T extends { [K in keyof T]: string }>(k: keyof T) => void
->T : T
->K : K
 >k : keyof T
 
     k = 42; // error
@@ -431,11 +418,8 @@ function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
 
 type UndefinedKeys<T extends Record<string, any>> = {
 >UndefinedKeys : UndefinedKeys<T>
->T : T
 
   [K in keyof T]: undefined extends T[K] ? K : never
->K : K
-
 };
 
 type MyType = {a: string, b: string | undefined}
@@ -456,8 +440,6 @@ const b1: Result1['b'] = 'b';
 
 function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 >test1 : <T extends Record<string, any>, K extends keyof T>(t: T, k: K) => void
->T : T
->K : K
 >t : T
 >k : K
 
@@ -489,8 +471,6 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 
 function f30<T, K extends keyof T>() {
 >f30 : <T, K extends keyof T>() => void
->T : T
->K : K
 
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 >x : Partial<Record<keyof T, string>>[K]
@@ -499,8 +479,6 @@ function f30<T, K extends keyof T>() {
 
 function f31<T, K extends keyof T>() {
 >f31 : <T, K extends keyof T>() => void
->T : T
->K : K
 
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 >x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]
@@ -511,7 +489,6 @@ function f31<T, K extends keyof T>() {
 
 class Test<T extends Record<string, number>> {
 >Test : Test<T>
->T : T
 
   testy: T;
 >testy : T

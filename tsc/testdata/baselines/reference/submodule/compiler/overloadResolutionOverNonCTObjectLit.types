@@ -5,8 +5,6 @@ module Bugs {
 >Bugs : typeof Bugs
 
                 export interface IToken {
->IToken : IToken
-
                                 startIndex:number;
 >startIndex : number
 
@@ -18,12 +16,9 @@ module Bugs {
                 }
                 
                 export interface IState {
->IState : IState
                 }
 
                 export interface IStateToken extends IToken {
->IStateToken : IStateToken
-
                                 state: IState;
 >state : IState
 

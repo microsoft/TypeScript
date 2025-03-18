@@ -2,8 +2,6 @@
 
 === computedPropertyNamesContextualType10_ES6.ts ===
 interface I {
->I : I
-
     [s: number]: boolean;
 >s : number
 }

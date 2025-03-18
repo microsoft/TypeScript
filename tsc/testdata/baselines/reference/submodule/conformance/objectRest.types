@@ -161,8 +161,6 @@ class Removable {
 >remainder : string
 }
 interface I {
->I : I
-
     m(): void;
 >m : () => void
 

@@ -89,8 +89,6 @@ class C {
 >tgF : any
 }
 interface I {
->I : I
-
     //Call Signature
     ();
     (): number;
@@ -257,8 +255,6 @@ module M {
 >tgF : any
     }
     interface I {
->I : I
-
         //Call Signature
         ();
         (): number;
@@ -364,11 +360,7 @@ module M {
 >C : C
 
         interface I { };
->I : I
-
         module M { };
->M : any
-
         export var eV;
 >eV : any
 
@@ -379,11 +371,7 @@ module M {
 >eC : eC
 
         export interface eI { };
->eI : eI
-
         export module eM { };
->eM : any
-
         export declare var eaV;
 >eaV : any
 
@@ -394,7 +382,6 @@ module M {
 >eaC : eaC
 
         export declare module eaM { };
->eaM : any
     }
     export var eV;
 >eV : any
@@ -467,8 +454,6 @@ module M {
 >tgF : any
     }
     export interface eI {
->eI : eI
-
         //Call Signature
         ();
         (): number;
@@ -574,11 +559,7 @@ module M {
 >C : C
 
         interface I { };
->I : I
-
         module M { };
->M : any
-
         export var eV;
 >eV : any
 
@@ -589,11 +570,7 @@ module M {
 >eC : eC
 
         export interface eI { };
->eI : eI
-
         export module eM { };
->eM : any
-
         export declare var eaV;
 >eaV : any
 
@@ -604,7 +581,6 @@ module M {
 >eaC : eaC
 
         export declare module eaM { };
->eaM : any
     }
     export declare var eaV;
 >eaV : any
@@ -689,11 +665,7 @@ module M {
 >C : C
 
         interface I { }
->I : I
-
         module M { }
->M : any
-
         export var eV;
 >eV : any
 
@@ -704,10 +676,7 @@ module M {
 >eC : eC
 
         export interface eI { }
->eI : eI
-
         export module eM { }
->eM : any
     }
 }
 export var eV;
@@ -781,8 +750,6 @@ export class eC {
 >tgF : any
 }
 export interface eI {
->eI : eI
-
     //Call Signature
     ();
     (): number;
@@ -949,8 +916,6 @@ export module eM {
 >tgF : any
     }
     interface I {
->I : I
-
         //Call Signature
         ();
         (): number;
@@ -1056,11 +1021,7 @@ export module eM {
 >C : C
 
         interface I { };
->I : I
-
         module M { };
->M : any
-
         export var eV;
 >eV : any
 
@@ -1071,11 +1032,7 @@ export module eM {
 >eC : eC
 
         export interface eI { };
->eI : eI
-
         export module eM { };
->eM : any
-
         export declare var eaV;
 >eaV : any
 
@@ -1086,7 +1043,6 @@ export module eM {
 >eaC : eaC
 
         export declare module eaM { };
->eaM : any
     }
     export var eV;
 >eV : any
@@ -1159,8 +1115,6 @@ export module eM {
 >tgF : any
     }
     export interface eI {
->eI : eI
-
         //Call Signature
         ();
         (): number;
@@ -1266,11 +1220,7 @@ export module eM {
 >C : C
 
         interface I { };
->I : I
-
         module M { };
->M : any
-
         export var eV;
 >eV : any
 
@@ -1281,11 +1231,7 @@ export module eM {
 >eC : eC
 
         export interface eI { };
->eI : eI
-
         export module eM { };
->eM : any
-
         export declare var eaV;
 >eaV : any
 
@@ -1296,7 +1242,6 @@ export module eM {
 >eaC : eaC
 
         export declare module eaM { };
->eaM : any
     }
     export declare var eaV;
 >eaV : any
@@ -1381,11 +1326,7 @@ export module eM {
 >C : C
 
         interface I { }
->I : I
-
         module M { }
->M : any
-
         export var eV;
 >eV : any
 
@@ -1396,10 +1337,7 @@ export module eM {
 >eC : eC
 
         export interface eI { }
->eI : eI
-
         export module eM { }
->eM : any
     }
 }
 export declare var eaV;
@@ -1501,8 +1439,6 @@ export declare module eaM {
 >tF : () => void
     }
     interface I {
->I : I
-
         //Call Signature
         ();
         (): number;
@@ -1605,11 +1541,7 @@ export declare module eaM {
 >C : C
 
         interface I { }
->I : I
-
         module M { }
->M : any
-
         export var eV;
 >eV : any
 
@@ -1620,11 +1552,7 @@ export declare module eaM {
 >eC : eC
 
         export interface eI { }
->eI : eI
-
         export module eM { }
->eM : any
-
         export declare var eaV
 >eaV : any
 
@@ -1635,7 +1563,6 @@ export declare module eaM {
 >eaC : eaC
 
         export declare module eaM { }
->eaM : any
     }
     export var eV;
 >eV : any
@@ -1663,8 +1590,6 @@ export declare module eaM {
 >tF : () => void
     }
     export interface eI {
->eI : eI
-
         //Call Signature
         ();
         (): number;
@@ -1770,8 +1695,6 @@ export declare module eaM {
 >C : C
 
         module M { }
->M : any
-
         export var eV;
 >eV : any
 
@@ -1782,9 +1705,6 @@ export declare module eaM {
 >eC : eC
 
         export interface eI { }
->eI : eI
-
         export module eM { }
->eM : any
     }
 }

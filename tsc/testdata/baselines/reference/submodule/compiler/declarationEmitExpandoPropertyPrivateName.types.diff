@@ -1,15 +1,6 @@
 --- old.declarationEmitExpandoPropertyPrivateName.types
 +++ new.declarationEmitExpandoPropertyPrivateName.types
-@@= skipped -1, +1 lines =@@
- 
- === a.ts ===
- interface I {}
-+>I : I
-+
- export function f(): I { return null as I; }
- >f : () => I
- >null as I : I
-@@= skipped -9, +11 lines =@@
+@@= skipped -10, +10 lines =@@
  >f : () => I
  
  export function q() {}

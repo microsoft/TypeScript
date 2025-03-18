@@ -1,33 +1,16 @@
 --- old.declFileTypeAnnotationTypeQuery.types
 +++ new.declFileTypeAnnotationTypeQuery.types
-@@= skipped -11, +11 lines =@@
-     }
-     export class g<T> {
- >g : g<T>
-+>T : T
-     }
- }
- class g<T> {
- >g : g<T>
-+>T : T
- }
- 
- // Just the name
- function foo(): typeof c {
- >foo : () => typeof c
-->c : typeof c
- 
-     return c;
- >c : typeof c
-@@= skipped -23, +24 lines =@@
+@@= skipped -34, +34 lines =@@
  
  // Qualified name
  function foo3(): typeof m.c {
 ->foo3 : () => typeof m.c
 ->m.c : typeof m.c
 +>foo3 : () => typeof c
++>m.c : typeof c
  >m : typeof m
 ->c : typeof m.c
++>c : typeof c
  
      return m.c;
 ->m.c : typeof m.c
@@ -49,21 +32,17 @@
  }
  
  // Just the name with type arguments
- function foo5(): typeof g {
- >foo5 : () => typeof g
-->g : typeof g
- 
-     return g;
- >g : typeof g
-@@= skipped -36, +33 lines =@@
+@@= skipped -36, +36 lines =@@
  
  // Qualified name with type arguments
  function foo7(): typeof m.g {
 ->foo7 : () => typeof m.g
 ->m.g : typeof m.g
 +>foo7 : () => typeof g
++>m.g : typeof g
  >m : typeof m
 ->g : typeof m.g
++>g : typeof g
  
      return m.g
 ->m.g : typeof m.g

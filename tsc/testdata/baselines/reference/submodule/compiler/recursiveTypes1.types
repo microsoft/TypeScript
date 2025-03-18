@@ -2,9 +2,6 @@
 
 === recursiveTypes1.ts ===
 interface Entity<T extends Entity<T>> {
->Entity : Entity<T>
->T : T
-
    X: T;
 >X : T
 
@@ -13,16 +10,11 @@ interface Entity<T extends Entity<T>> {
 }
 
 interface Person<U extends Person<U>> extends Entity<U> {
->Person : Person<U>
->U : U
-
 	n: number;
 >n : number
 }
 
 interface Customer extends Person<Customer> {
->Customer : Customer
-
 	s: string;
 >s : string
 }

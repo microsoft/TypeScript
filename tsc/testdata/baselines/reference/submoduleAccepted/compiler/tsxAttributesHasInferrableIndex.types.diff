@@ -1,25 +1,6 @@
 --- old.tsxAttributesHasInferrableIndex.types
 +++ new.tsxAttributesHasInferrableIndex.types
-@@= skipped -4, +4 lines =@@
- >AttributeValue : AttributeValue
- 
- interface Attributes {
-+>Attributes : Attributes
-+
-     [key: string]: AttributeValue;
- >key : string
- }
-@@= skipped -13, +15 lines =@@
- >name : string
- }
- namespace createElement.JSX {
-+>createElement : (name: string, attributes: Attributes | undefined, ...contents: string[]) => string
-+>JSX : any
-+
-     type Element = string;
- >Element : string
- }
-@@= skipped -13, +16 lines =@@
+@@= skipped -30, +30 lines =@@
  >'' : ""
  }
  const b = <Button></Button>

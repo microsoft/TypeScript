@@ -25,14 +25,12 @@
 ->ButtonBaseProps : ButtonBaseProps<T>
 ->children : React.ReactNode
 +>ButtonBaseProps : any
-+>T : T
 +>children : any
  
  function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 ->Component : <T extends ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
 ->props : ButtonBaseProps<T>
 +>Component : <T extends ElementType>(props: any) => any
-+>T : T
 +>props : any
  
      return <></>;

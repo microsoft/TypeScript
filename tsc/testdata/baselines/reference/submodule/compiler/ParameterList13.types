@@ -2,8 +2,6 @@
 
 === ParameterList13.ts ===
 interface I {
->I : I
-
     new (public x);
 >x : any
 }

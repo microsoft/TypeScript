@@ -19,7 +19,6 @@ label: enum E {}
 
 label: interface I {}
 >label : any
->I : I
 
 label: class C { }
 >label : any
@@ -42,11 +41,9 @@ label: const c = 1;
 
 label: module M { }
 >label : any
->M : any
 
 label: namespace N {}
 >label : any
->N : any
 
 label: type T = {}
 >label : any

@@ -1,51 +1,6 @@
 --- old.privacyFunctionReturnTypeDeclFile.types
 +++ new.privacyFunctionReturnTypeDeclFile.types
-@@= skipped -9, +9 lines =@@
- }
- 
- export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-     new (): privateClass; // Error
-     (): privateClass; // Error
-     [x: number]: privateClass; // Error
-@@= skipped -10, +12 lines =@@
- }
- 
- export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-     new (): publicClass;
-     (): publicClass;
-     [x: number]: publicClass;
-@@= skipped -10, +12 lines =@@
- }
- 
- interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-     new (): privateClass;
-     (): privateClass;
-     [x: number]: privateClass;
-@@= skipped -10, +12 lines =@@
- }
- 
- interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-     new (): publicClass;
-     (): publicClass;
-     [x: number]: publicClass;
-@@= skipped -283, +285 lines =@@
- >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
- 
- export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
-     new (): privateModule.publicClass; // Error
- >privateModule : any
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -333, +333 lines =@@
  >privateModule : any
  
      myMethod(): privateModule.publicClass; // Error
@@ -123,12 +78,7 @@
  >privateModule : any
  
  interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
-     new (): privateModule.publicClass; 
- >privateModule : any
- 
-@@= skipped -68, +70 lines =@@
+@@= skipped -68, +68 lines =@@
  >privateModule : any
  
      myMethod(): privateModule.publicClass;
@@ -206,52 +156,7 @@
  >privateModule : any
  
  export module publicModule {
-@@= skipped -68, +68 lines =@@
-     }
- 
-     export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-         new (): privateClass; // Error
-         (): privateClass; // Error
-         [x: number]: privateClass; // Error
-@@= skipped -10, +12 lines =@@
-     }
- 
-     export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-         new (): publicClass;
-         (): publicClass;
-         [x: number]: publicClass;
-@@= skipped -10, +12 lines =@@
-     }
- 
-     interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-         new (): privateClass;
-         (): privateClass;
-         [x: number]: privateClass;
-@@= skipped -10, +12 lines =@@
-     }
- 
-     interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-         new (): publicClass;
-         (): publicClass;
-         [x: number]: publicClass;
-@@= skipped -283, +285 lines =@@
- >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
- 
-     export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
-         new (): privateModule.publicClass; // Error
- >privateModule : any
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -392, +392 lines =@@
  >privateModule : any
  
          myMethod(): privateModule.publicClass; // Error
@@ -329,12 +234,7 @@
  >privateModule : any
  
      interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
-         new (): privateModule.publicClass;
- >privateModule : any
- 
-@@= skipped -68, +70 lines =@@
+@@= skipped -68, +68 lines =@@
  >privateModule : any
  
          myMethod(): privateModule.publicClass;
@@ -412,52 +312,7 @@
  >privateModule : any
  }
  
-@@= skipped -69, +69 lines =@@
-     }
- 
-     export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-         new (): privateClass; 
-         (): privateClass; 
-         [x: number]: privateClass; 
-@@= skipped -10, +12 lines =@@
-     }
- 
-     export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-         new (): publicClass;
-         (): publicClass;
-         [x: number]: publicClass;
-@@= skipped -10, +12 lines =@@
-     }
- 
-     interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-         new (): privateClass;
-         (): privateClass;
-         [x: number]: privateClass;
-@@= skipped -10, +12 lines =@@
-     }
- 
-     interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-         new (): publicClass;
-         (): publicClass;
-         [x: number]: publicClass;
-@@= skipped -283, +285 lines =@@
- >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
- 
-     export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
-         new (): privateModule.publicClass;
- >privateModule : any
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -393, +393 lines =@@
  >privateModule : any
  
          myMethod(): privateModule.publicClass;
@@ -499,12 +354,7 @@
  >privateModule : any
  
      interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
-         new (): privateModule.publicClass;
- >privateModule : any
- 
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  >privateModule : any
  
          myMethod(): privateModule.publicClass;
@@ -546,61 +396,7 @@
  >privateModule : any
  }
  
-@@= skipped -9, +9 lines =@@
- >publicClassInGlobal : publicClassInGlobal
- }
- interface publicInterfaceWithPublicParmeterTypesInGlobal {
-+>publicInterfaceWithPublicParmeterTypesInGlobal : publicInterfaceWithPublicParmeterTypesInGlobal
-+
-     new (): publicClassInGlobal;
-     (): publicClassInGlobal;
-     [x: number]: publicClassInGlobal;
-@@= skipped -98, +100 lines =@@
-         }
- 
-         export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-             new (): privateClass;
-             (): privateClass;
-             [x: number]: privateClass;
-@@= skipped -10, +12 lines =@@
-         }
- 
-         export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-             new (): publicClass;
-             (): publicClass;
-             [x: number]: publicClass;
-@@= skipped -10, +12 lines =@@
-         }
- 
-         interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-             new (): privateClass;
-             (): privateClass;
-             [x: number]: privateClass;
-@@= skipped -10, +12 lines =@@
-         }
- 
-         interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-             new (): publicClass;
-             (): publicClass;
-             [x: number]: publicClass;
-@@= skipped -283, +285 lines =@@
- >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
- 
-         export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
-             new (): privateModule.publicClass;
- >privateModule : any
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -431, +431 lines =@@
  >privateModule : any
  
              myMethod(): privateModule.publicClass;
@@ -642,12 +438,7 @@
  >privateModule : any
  
          interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
-             new (): privateModule.publicClass;
- >privateModule : any
- 
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  >privateModule : any
  
              myMethod(): privateModule.publicClass;
@@ -689,49 +480,7 @@
  >privateModule : any
      }
  
-     export interface publicInterfaceWithPrivateParmeterTypes {
-+>publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-+
-         new (): privateClass; // Error
-         (): privateClass; // Error
-         [x: number]: privateClass; // Error
-@@= skipped -15, +17 lines =@@
-     }
- 
-     export interface publicInterfaceWithPublicParmeterTypes {
-+>publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-+
-         new (): publicClass;
-         (): publicClass;
-         [x: number]: publicClass;
-@@= skipped -10, +12 lines =@@
-     }
- 
-     interface privateInterfaceWithPrivateParmeterTypes {
-+>privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-+
-         new (): privateClass;
-         (): privateClass;
-         [x: number]: privateClass;
-@@= skipped -10, +12 lines =@@
-     }
- 
-     interface privateInterfaceWithPublicParmeterTypes {
-+>privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-+
-         new (): publicClass;
-         (): publicClass;
-         [x: number]: publicClass;
-@@= skipped -283, +285 lines =@@
- >privateAmbientFunctionWithPublicParmeterTypes : () => publicClass
- 
-     export interface publicInterfaceWithPrivateModuleParameterTypes {
-+>publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-+
-         new (): privateModule.publicClass; // Error
- >privateModule : any
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -329, +329 lines =@@
  >privateModule : any
  
          myMethod(): privateModule.publicClass; // Error
@@ -809,12 +558,7 @@
  >privateModule : any
  
      interface privateInterfaceWithPrivateModuleParameterTypes {
-+>privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-+
-         new (): privateModule.publicClass;
- >privateModule : any
- 
-@@= skipped -68, +70 lines =@@
+@@= skipped -68, +68 lines =@@
  >privateModule : any
  
          myMethod(): privateModule.publicClass;

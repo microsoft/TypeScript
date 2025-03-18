@@ -1,20 +1,6 @@
 --- old.tsxSpreadAttributesResolution17.types
 +++ new.tsxSpreadAttributesResolution17.types
-@@= skipped -4, +4 lines =@@
- >global : any
- 
-     namespace JSX {
-+>JSX : any
-+
-         interface Element {}
-+>Element : Element
-+
-         interface ElementAttributesProperty { props: {} }
-+>ElementAttributesProperty : ElementAttributesProperty
- >props : {}
-     }
- }
-@@= skipped -15, +20 lines =@@
+@@= skipped -19, +19 lines =@@
  >Component : any
  
      render() {

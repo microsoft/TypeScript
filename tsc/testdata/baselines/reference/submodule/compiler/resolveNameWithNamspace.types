@@ -18,8 +18,6 @@ declare module "assert" {
 === ns.ts ===
 /// <reference path="node.d.ts"/>
 namespace myAssert {
->myAssert : any
-
     export type cool = 'cool'
 >cool : "cool"
 }

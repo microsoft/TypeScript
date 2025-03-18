@@ -6,4 +6,5 @@ let a: number;
 
 let b: typeof a;
 >b : number
+>a : number
 

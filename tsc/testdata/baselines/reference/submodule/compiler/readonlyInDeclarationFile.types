@@ -2,8 +2,6 @@
 
 === readonlyInDeclarationFile.ts ===
 interface Foo {
->Foo : Foo
-
     readonly x: number;
 >x : number
 

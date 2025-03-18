@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/jsdoc/importTag20.ts] ////
 
 === a.ts ===
+
 export interface Foo {}
->Foo : Foo
 
 === b.js ===
 /**

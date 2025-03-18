@@ -29,8 +29,6 @@ function Point(x, y) {
 }
 
 interface Adder {
->Adder : Adder
-
     (x: number, y: number): number;   
 >x : number
 >y : number
@@ -48,8 +46,6 @@ var add = <Adder>function(x,y) {    return x+ y;   }
 
 
 interface Adder2 {
->Adder2 : Adder2
-
     (x: number, y: number): number;   
 >x : number
 >y : number

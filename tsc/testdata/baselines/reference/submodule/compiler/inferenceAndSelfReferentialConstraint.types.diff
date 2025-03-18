@@ -1,23 +1,6 @@
 --- old.inferenceAndSelfReferentialConstraint.types
 +++ new.inferenceAndSelfReferentialConstraint.types
-@@= skipped -6, +6 lines =@@
- 
- type Test<K extends keyof any> = {
- >Test : Test<K>
-+>K : K
- 
-   [P in K | "foo"]: P extends "foo" ? true : () => any
-+>P : P
- >true : true
- }
- 
- function test<T extends Test<keyof T>>(arg: T) {
- >test : <T extends Test<keyof T>>(arg: T) => T
-+>T : T
- >arg : T
- 
-   return arg;
-@@= skipped -14, +17 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  
  const res1 = test({

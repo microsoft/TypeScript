@@ -2,11 +2,9 @@
 
 === unionTypeWithIndexedLiteralType.ts ===
 interface I { x: number; }
->I : I
 >x : number
 
 interface Idx { [index: string]: U; }
->Idx : Idx
 >index : string
 
 type U = Idx | I | "lit";

@@ -11,8 +11,6 @@ f(function () { });
 >function () { } : () => void
 
 interface foo {
->foo : foo
-
     get(handler: (bar: number)=>void): void;
 >get : (handler: (bar: number) => void) => void
 >handler : (bar: number) => void
@@ -20,8 +18,6 @@ interface foo {
 }
 
 interface baz {
->baz : baz
-
     get(callback: Function): number;
 >get : (callback: Function) => number
 >callback : Function

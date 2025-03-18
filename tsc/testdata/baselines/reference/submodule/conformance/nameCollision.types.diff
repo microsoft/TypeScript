@@ -54,12 +54,3 @@
  
      export enum Y {
  >Y : Y
-@@= skipped -18, +18 lines =@@
- >D : typeof D
- 
-     export interface D {
-+>D : D
-+
-         id: number;
- >id : number
-     }

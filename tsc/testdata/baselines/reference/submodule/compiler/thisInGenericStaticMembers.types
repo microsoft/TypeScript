@@ -8,7 +8,6 @@ class A {
 
     static one<T>(source:T, value: number): T {
 >one : <T>(source: T, value: number) => T
->T : T
 >source : T
 >value : number
 
@@ -18,7 +17,6 @@ class A {
 
     static two<T>(source: T): T {
 >two : <T>(source: T) => T
->T : T
 >source : T
 
         return this.one<T>(source, 42);

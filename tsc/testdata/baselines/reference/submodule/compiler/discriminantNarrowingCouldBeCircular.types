@@ -4,7 +4,6 @@
 // #57705, 57690
 declare function is<T>(v: T): v is T;
 >is : <T>(v: T) => v is T
->T : T
 >v : T
 
 const o: Record<string, string> | undefined = {};
@@ -95,7 +94,6 @@ function getImplicitAriaRole(element: SomeRecord) {
 
 declare function isPlainObject2<T>(
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->T : T
 
     data: unknown,
 >data : unknown

@@ -17,11 +17,7 @@ export class X {
 }
 
 export namespace X {
->X : typeof X
-
     export namespace JSX {
->JSX : any
-
         export type IntrinsicElements = {
 >IntrinsicElements : IntrinsicElements
 

@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/externalModules/typeOnly/importSpecifiers_js.ts] ////
 
 === a.ts ===
+
 export interface A {}
->A : A
 
 === a.js ===
 import { type A } from "./a";

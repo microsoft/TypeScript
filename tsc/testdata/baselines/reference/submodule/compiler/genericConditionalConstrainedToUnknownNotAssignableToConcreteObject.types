@@ -2,7 +2,6 @@
 
 === genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts ===
 interface A { x: number }
->A : A
 >x : number
 
 declare function isA(a: unknown): a is A;
@@ -11,21 +10,15 @@ declare function isA(a: unknown): a is A;
 
 type FunctionsObj<T> = {
 >FunctionsObj : FunctionsObj<T>
->T : T
 
     [K in keyof T]: () => unknown
->K : K
 }
 
 function g<
 >g : <T extends FunctionsObj<T>, M extends keyof T>(a2: ReturnType<T[M]>, x: A) => void
 
     T extends FunctionsObj<T>,
->T : T
-
     M extends keyof T
->M : M
-
 >(a2: ReturnType<T[M]>, x: A) {
 >a2 : ReturnType<T[M]>
 >x : A
@@ -42,11 +35,7 @@ function g2<
 >g2 : <T extends FunctionsObj<T>, M extends keyof T>(a2: ReturnType<T[M]>) => void
 
     T extends FunctionsObj<T>,
->T : T
-
     M extends keyof T
->M : M
-
 >(a2: ReturnType<T[M]>) {
 >a2 : ReturnType<T[M]>
 

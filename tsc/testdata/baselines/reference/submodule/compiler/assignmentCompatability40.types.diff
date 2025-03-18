@@ -1,24 +1,6 @@
 --- old.assignmentCompatability40.types
 +++ new.assignmentCompatability40.types
-@@= skipped -4, +4 lines =@@
- >__test1__ : typeof __test1__
- 
-     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
-+>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
-+>T : T
-+>U : U
- >one : T
- >two : U
- >obj4 : interfaceWithPublicAndOptional<number, string>
-@@= skipped -16, +19 lines =@@
- 
-     export           class classWithPrivate<T> { constructor(private one: T) {} }                       var x5 = new classWithPrivate(1);;
- >classWithPrivate : classWithPrivate<T>
-+>T : T
- >one : T
- >x5 : classWithPrivate<number>
- >new classWithPrivate(1) : classWithPrivate<number>
-@@= skipped -11, +12 lines =@@
+@@= skipped -31, +31 lines =@@
  >x5 : classWithPrivate<number>
  }
  __test2__.__val__x5 = __test1__.__val__obj4

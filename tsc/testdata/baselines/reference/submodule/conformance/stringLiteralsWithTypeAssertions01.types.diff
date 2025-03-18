@@ -35,4 +35,5 @@
 +>"baz" as typeof fooOrBar : "bar" | "foo"
  >"baz" : "baz"
 ->fooOrBar : "foo" | "bar"
++>fooOrBar : "bar" | "foo"
  

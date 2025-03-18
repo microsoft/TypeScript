@@ -4,15 +4,12 @@
 // Derived type indexer must be subtype of base type indexer
 
 interface Base { foo: string; }
->Base : Base
 >foo : string
 
 interface Derived extends Base { bar: string; }
->Derived : Derived
 >bar : string
 
 interface Derived2 extends Derived { baz: string; }
->Derived2 : Derived2
 >baz : string
 
 var a: A;
@@ -37,7 +34,6 @@ module Generics {
 
     class A<T extends Derived> {
 >A : A<T>
->T : T
 
         [x: string]: T;
 >x : string
@@ -45,7 +41,6 @@ module Generics {
    
     function foo<T extends Derived>() {
 >foo : <T extends Derived>() => void
->T : T
 
         var a: A<T>;
 >a : A<T>

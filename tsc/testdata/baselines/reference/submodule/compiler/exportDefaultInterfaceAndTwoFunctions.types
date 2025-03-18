@@ -2,7 +2,6 @@
 
 === exportDefaultInterfaceAndTwoFunctions.ts ===
 export default interface A { a: string; }
->A : default
 >a : string
 
 export default function() { return 1; }

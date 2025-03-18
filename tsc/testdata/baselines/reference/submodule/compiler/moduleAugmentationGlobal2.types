@@ -13,9 +13,6 @@ declare global {
 >global : any
 
     interface Array<T> {
->Array : T[]
->T : T
-
         getCountAsString(): string;
 >getCountAsString : () => string
     }

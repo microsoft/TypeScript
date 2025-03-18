@@ -1,11 +1,8 @@
 --- old.logicalAssignment2(target=es2015).types
 +++ new.logicalAssignment2(target=es2015).types
-@@= skipped -1, +1 lines =@@
- 
+@@= skipped -2, +2 lines =@@
  === logicalAssignment2.ts ===
  interface A {
-+>A : A
-+
      foo: {
 ->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
@@ -16,7 +13,7 @@
  
              baz: 0 | 1 | 42 | undefined | ''
  >baz : "" | 0 | 1 | 42 | undefined
-@@= skipped -58, +60 lines =@@
+@@= skipped -57, +57 lines =@@
  a.foo["baz"] &&= result.foo.baz
  >a.foo["baz"] &&= result.foo.baz : "" | 0 | 1 | 42 | undefined
  >a.foo["baz"] : "" | 0 | 1 | 42 | undefined

@@ -27,8 +27,6 @@ const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
 
 function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->T : T
->K : K
 >obj : T
 >key : K
 >value : T[K]
@@ -82,12 +80,13 @@ const valD = set(obj, num, num);
 // Argument of type '0' is not assignable to parameter of type "str" | "num"
 type KeyofObj = keyof typeof obj;
 >KeyofObj : "num" | "str" | 0 | unique symbol
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 
 // "str" | "num"
 type Values<T> = T[keyof T];
 >Values : Values<T>
->T : T
 
 type ValuesOfObj = Values<typeof obj>;
 >ValuesOfObj : ValuesOfObj
+>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 

@@ -6,7 +6,6 @@ function foo () {
 
     return class<T> {
 >class<T> {        static [s: string]: number        static [s: number]: 42        foo(v: T) { return v }    } : typeof (Anonymous class)
->T : T
 
         static [s: string]: number
 >s : string

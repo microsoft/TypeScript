@@ -6,7 +6,6 @@
  function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
 ->ft1 : <T extends string>(s: string, n: number, u: "foo" | "bar" | "baz", t: T) => void
 +>ft1 : <T extends string>(s: string, n: number, u: "bar" | "baz" | "foo", t: T) => void
-+>T : T
  >s : string
  >n : number
 ->u : "foo" | "bar" | "baz"
@@ -14,7 +13,7 @@
  >t : T
  
      const c1 = `abc${s}`;
-@@= skipped -19, +20 lines =@@
+@@= skipped -19, +19 lines =@@
      const c3 = `abc${u}`;
  >c3 : string
  >`abc${u}` : string
@@ -85,20 +84,7 @@
  }
  
  function ft12(s: string) {
-@@= skipped -59, +59 lines =@@
- 
- declare function widening<T>(x: T): T;
- >widening : <T>(x: T) => T
-+>T : T
- >x : T
- 
- declare function nonWidening<T extends string | number | symbol>(x: T): T;
- >nonWidening : <T extends string | number | symbol>(x: T) => T
-+>T : T
- >x : T
- 
- function ft13(s: string, cond: boolean) {
-@@= skipped -36, +38 lines =@@
+@@= skipped -95, +95 lines =@@
  >s : string
  
      let y2 = nonWidening(cond ? 'a' : `foo${s}`);
@@ -112,28 +98,13 @@
  >cond : boolean
  >'a' : "a"
  >`foo${s}` : `foo${string}`
-@@= skipped -41, +41 lines =@@
- 
- declare function g1<T>(x: T): T;
- >g1 : <T>(x: T) => T
-+>T : T
- >x : T
- 
- declare function g2<T extends string>(x: T): T;
- >g2 : <T extends string>(x: T) => T
-+>T : T
- >x : T
- 
- function ft20(s: string) {
-@@= skipped -28, +30 lines =@@
+@@= skipped -69, +69 lines =@@
  // Repro from #41631
  
  declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
 ->takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
 +>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R extends string}` ? R : unknown
-+>T : T
  >literal : T
-+>R : R
  
  const t1 = takesLiteral("foo.bar.baz"); // "baz"
  >t1 : "baz"
@@ -143,7 +114,7 @@
  >"foo.bar.baz" : "foo.bar.baz"
  
  const id2 = "foo.bar.baz";
-@@= skipped -16, +18 lines =@@
+@@= skipped -16, +16 lines =@@
  const t2 = takesLiteral(id2); // "baz"
  >t2 : "baz"
  >takesLiteral(id2) : "baz"

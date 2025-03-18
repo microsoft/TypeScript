@@ -17,16 +17,7 @@
  >ref : WeakRef<object>
  >set : Set<WeakRef<object>>
  
-@@= skipped -30, +26 lines =@@
- // Based on: https://github.com/tc39/proposal-weakrefs/blob/master/README.md#iterable-weakmaps
- export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
- >IterableWeakMap : IterableWeakMap<K, V>
-+>K : K
-+>V : V
- 
-     declare readonly [Symbol.toStringTag]: "IterableWeakMap";
- >[Symbol.toStringTag] : "IterableWeakMap"
-@@= skipped -23, +25 lines =@@
+@@= skipped -53, +49 lines =@@
  >#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
  >new FinalizationRegistry(IterableWeakMap_cleanup) : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
  >FinalizationRegistry : FinalizationRegistryConstructor

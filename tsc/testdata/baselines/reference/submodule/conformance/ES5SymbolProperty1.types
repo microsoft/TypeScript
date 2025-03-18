@@ -2,8 +2,6 @@
 
 === ES5SymbolProperty1.ts ===
 interface SymbolConstructor {
->SymbolConstructor : SymbolConstructor
-
     foo: string;
 >foo : string
 }

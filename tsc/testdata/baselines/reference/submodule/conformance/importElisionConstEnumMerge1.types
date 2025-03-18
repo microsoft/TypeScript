@@ -14,8 +14,6 @@ import { Enum } from "./enum";
 >Enum : typeof Enum
 
 namespace Enum {
->Enum : typeof Enum
-
   export type Foo = number;
 >Foo : number
 }

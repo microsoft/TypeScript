@@ -6,15 +6,10 @@
  declare function f1<A = any>(): void;
 ->f1 : { <A = any>(): void; <A_1, B, C, D = any>(): void; }
 +>f1 : { <A>(): void; <A, B, C, D>(): void; }
-+>A : A
  
  declare function f1<A, B, C, D = any>(): void;
 ->f1 : { <A_1 = any>(): void; <A, B, C, D = any>(): void; }
 +>f1 : { <A>(): void; <A, B, C, D>(): void; }
-+>A : A
-+>B : B
-+>C : C
-+>D : D
  
  f1<number, number>();
  >f1<number, number>() : void
@@ -30,26 +25,19 @@
  declare function f2<A>(): void;
 ->f2 : { <A>(): void; <A_1, B, C>(): void; }
 +>f2 : { <A>(): void; <A, B, C>(): void; }
-+>A : A
  
  declare function f2<A, B, C>(): void;
 ->f2 : { <A_1>(): void; <A, B, C>(): void; }
 +>f2 : { <A>(): void; <A, B, C>(): void; }
-+>A : A
-+>B : B
-+>C : C
  
  f2<number, number>();
  >f2<number, number>() : void
-@@= skipped -42, +51 lines =@@
+@@= skipped -42, +42 lines =@@
  
  // Generic function with default type parameters
  declare function f4<A, B, C = any>(): void;
 ->f4 : <A, B, C = any>() => void
 +>f4 : <A, B, C>() => void
-+>A : A
-+>B : B
-+>C : C
  
  f4<number>();
  >f4<number>() : void
@@ -63,9 +51,3 @@
  
  // Generic function with no default type arguments
  declare function f5<A, B>(): void;
- >f5 : <A, B>() => void
-+>A : A
-+>B : B
- 
- f5<number>();
- >f5<number>() : void

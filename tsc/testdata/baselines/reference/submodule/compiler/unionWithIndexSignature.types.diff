@@ -1,30 +1,6 @@
 --- old.unionWithIndexSignature.types
 +++ new.unionWithIndexSignature.types
-@@= skipped -1, +1 lines =@@
- 
- === unionWithIndexSignature.ts ===
- interface NumList {
-+>NumList : NumList
-+
-   kind: 'n';
- >kind : "n"
- 
-@@= skipped -7, +9 lines =@@
- >x : number
- }
- interface StrList {
-+>StrList : StrList
-+
-   kind: 's';
- >kind : "s"
- 
-@@= skipped -9, +11 lines =@@
- 
- export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
- >foo : <T extends NumList | StrList>(arr: T & (NumList | StrList)) => void
-+>T : T
- >arr : T & (NumList | StrList)
- 
+@@= skipped -22, +22 lines =@@
    let zz = arr[1];  // Error
  >zz : string | number
  >arr[1] : string | number
@@ -33,7 +9,7 @@
  >1 : 1
  }
  
-@@= skipped -15, +16 lines =@@
+@@= skipped -10, +10 lines =@@
  >TypedArray : TypedArray
  
  export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
@@ -42,12 +18,7 @@
  >a : {}
  
    return a instanceof Int32Array || a instanceof Uint8Array;
-@@= skipped -15, +15 lines =@@
- 
- export function flatten<T extends number|TypedArray>(arr: T) {
- >flatten : <T extends number | TypedArray>(arr: T) => void
-+>T : T
- >arr : T
+@@= skipped -19, +19 lines =@@
  
    if (isTypedArray(arr)) {
  >isTypedArray(arr) : boolean

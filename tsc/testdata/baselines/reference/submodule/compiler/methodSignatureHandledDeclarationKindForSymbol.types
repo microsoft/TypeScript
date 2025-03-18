@@ -2,15 +2,11 @@
 
 === methodSignatureHandledDeclarationKindForSymbol.ts ===
 interface Foo {
->Foo : Foo
-
     bold(): string;
 >bold : () => string
 }
 
 interface Foo {
->Foo : Foo
-
     bold: string;
 >bold : string
 }

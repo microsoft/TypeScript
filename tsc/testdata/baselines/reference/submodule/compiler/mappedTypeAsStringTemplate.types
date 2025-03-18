@@ -5,8 +5,6 @@
 
 function foo<T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(foox: T) { }
 >foo : <T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(foox: T) => void
->T : T
->K : K
 >foox : T
 
 const c = { x: 1 };

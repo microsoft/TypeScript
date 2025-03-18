@@ -217,6 +217,7 @@
 ->Wagon : typeof Wagon
 +>circle : (others: { (numberOxen: any): void; circle: (wagons: any) => any; }[]) => number
 +>others : { (numberOxen: any): void; circle: (wagons: any) => any; }[]
++>Wagon : { (numberOxen: any): void; circle: (wagons: any) => any; }
  
          return others.length
  >others.length : number
@@ -225,7 +226,7 @@
  >length : number
      }
  }
-@@= skipped -27, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  >drunkOO : true
  
  c.numberOxen

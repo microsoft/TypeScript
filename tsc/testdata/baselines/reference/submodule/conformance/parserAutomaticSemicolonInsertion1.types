@@ -2,8 +2,6 @@
 
 === parserAutomaticSemicolonInsertion1.ts ===
 interface I {
->I : I
-
     (): void;
 }
  

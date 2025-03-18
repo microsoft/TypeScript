@@ -33,4 +33,5 @@ let f = "baz" as typeof fooOrBar;
 >f : "bar" | "foo"
 >"baz" as typeof fooOrBar : "bar" | "foo"
 >"baz" : "baz"
+>fooOrBar : "bar" | "foo"
 

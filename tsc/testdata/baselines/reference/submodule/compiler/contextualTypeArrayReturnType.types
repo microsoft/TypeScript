@@ -2,23 +2,17 @@
 
 === contextualTypeArrayReturnType.ts ===
 interface IBookStyle {
->IBookStyle : IBookStyle
-
     initialLeftPageTransforms?: (width: number) => NamedTransform[];
 >initialLeftPageTransforms : (width: number) => NamedTransform[]
 >width : number
 }
 
 interface NamedTransform {
->NamedTransform : NamedTransform
-
     [name: string]: Transform3D;
 >name : string
 }
 
 interface Transform3D {
->Transform3D : Transform3D
-
     cachedCss: string;
 >cachedCss : string
 }

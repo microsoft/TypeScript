@@ -51,12 +51,10 @@ function gg1(x: { [key: `a${string}`]: string, [key: `${string}a`]: string }, y:
 }
 
 interface IX { [key: `a${string}`]: string, [key: `${string}a`]: string }
->IX : IX
 >key : `a${string}`
 >key : `${string}a`
 
 interface IY { [key: `a${string}a`]: string }
->IY : IY
 >key : `a${string}a`
 
 function gg2(x: IX, y: IY) {
@@ -252,7 +250,6 @@ type Conflicting = {
 
 type Invalid<T extends string> = {
 >Invalid : Invalid<T>
->T : T
 
     [key: 'a' | 'b' | 'c']: string;  // Error
 >key : "a" | "b" | "c"
@@ -299,19 +296,15 @@ declare let s4: TaggedString1 & TaggedString2;
 >s4 : string & Tag1 & Tag2
 
 interface I1 { [key: TaggedString1]: string }
->I1 : I1
 >key : TaggedString1
 
 interface I2 { [key: TaggedString2]: string }
->I2 : I2
 >key : TaggedString2
 
 interface I3 { [key: TaggedString1 | TaggedString2]: string }
->I3 : I3
 >key : TaggedString1 | TaggedString2
 
 interface I4 { [key: TaggedString1 & TaggedString2]: string }
->I4 : I4
 >key : string & Tag1 & Tag2
 
 declare let i1: I1;
@@ -785,8 +778,6 @@ const SomeSytePlugin = Symbol('SomeSytePlugin');
 >'SomeSytePlugin' : "SomeSytePlugin"
 
 interface Plugs {
->Plugs : Plugs
-
     [key: symbol]: (...args: any) => unknown;
 >key : symbol
 >args : any
@@ -859,11 +850,7 @@ const directive = Symbol('directive');
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
 >foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
->TArg : TArg
->TRet : TRet
->TDir : TDir
 >options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }
->x : x
 >arg : TArg
 >[directive] : TDir | undefined
 >directive : unique symbol
@@ -974,7 +961,6 @@ const AmIPseudo: Pseudo = '&';  // Error
 
 type PseudoDeclaration = { [key in Pseudo]: string };
 >PseudoDeclaration : PseudoDeclaration
->key : key
 
 const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
 >test : PseudoDeclaration
@@ -995,7 +981,6 @@ const path2: FieldPattern = 'two';  // Error
 
 type PathsObject = { [P in FieldPattern]: object; };
 >PathsObject : PathsObject
->P : P
 
 const pathObject: PathsObject = 123;  // Error
 >pathObject : PathsObject
@@ -1027,8 +1012,6 @@ let aid = a[id];
 // Repro from #44793
 
 interface AA {
->AA : AA
-
     a?: string;
 >a : string | undefined
 

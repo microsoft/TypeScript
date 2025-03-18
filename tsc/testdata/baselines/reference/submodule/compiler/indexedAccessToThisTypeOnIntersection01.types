@@ -2,8 +2,6 @@
 
 === indexedAccessToThisTypeOnIntersection01.ts ===
 interface A {
->A : A
-
   a: string;
 >a : string
 

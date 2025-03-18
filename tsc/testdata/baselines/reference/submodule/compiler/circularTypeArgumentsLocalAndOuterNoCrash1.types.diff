@@ -1,16 +1,8 @@
 --- old.circularTypeArgumentsLocalAndOuterNoCrash1.types
 +++ new.circularTypeArgumentsLocalAndOuterNoCrash1.types
-@@= skipped -4, +4 lines =@@
- 
- function f<_T, _S>() {
- >f : <_T, _S>() => void
-+>_T : _T
-+>_S : _S
+@@= skipped -7, +7 lines =@@
  
    interface NumArray<T extends number> extends Array<T> {}
-+>NumArray : NumArray<_T, _S, T>
-+>T : T
-+
    type X = NumArray<X extends {} ? number : number>;
 ->X : NumArray<any>
 +>X : X

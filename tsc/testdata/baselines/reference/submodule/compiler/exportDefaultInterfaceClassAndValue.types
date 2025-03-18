@@ -12,5 +12,4 @@ export default class Foo {}
 >Foo : default
 
 export default interface Foo {}
->Foo : default
 

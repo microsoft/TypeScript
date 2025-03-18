@@ -7,5 +7,7 @@ class C {
      static g(t: typeof C.g){ }
 >g : (t: ???) => void
 >t : (t: ???) => void
+>C.g : (t: ???) => void
 >C : typeof C
+>g : (t: ???) => void
 }

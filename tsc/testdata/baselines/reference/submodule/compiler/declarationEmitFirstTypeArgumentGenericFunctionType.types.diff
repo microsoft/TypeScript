@@ -1,20 +1,15 @@
 --- old.declarationEmitFirstTypeArgumentGenericFunctionType.types
 +++ new.declarationEmitFirstTypeArgumentGenericFunctionType.types
-@@= skipped -2, +2 lines =@@
- === declarationEmitFirstTypeArgumentGenericFunctionType.ts ===
- class X<A> {
+@@= skipped -4, +4 lines =@@
  >X : X<A>
-+>A : A
  }
  var prop11: X< <Tany>() => Tany >; // spaces before the first type argument
 ->prop11 : X<(<Tany>() => Tany)>
 +>prop11 : X<<Tany>() => Tany>
-+>Tany : Tany
  
  var prop12: X<(<Tany>() => Tany)>; // spaces before the first type argument
 ->prop12 : X<(<Tany>() => Tany)>
 +>prop12 : X<<Tany>() => Tany>
-+>Tany : Tany
  
  function f1() { // Inferred return type
 ->f1 : () => X<(<Tany>() => Tany)>
@@ -35,7 +30,6 @@
  function f3(): X< <Tany>() => Tany> { // written with space before type argument
 ->f3 : () => X<(<Tany>() => Tany)>
 +>f3 : () => X<<Tany>() => Tany>
-+>Tany : Tany
  
      return prop11;
 ->prop11 : X<(<Tany>() => Tany)>
@@ -44,7 +38,6 @@
  function f4(): X<(<Tany>() => Tany)> { // written type with parenthesis
 ->f4 : () => X<(<Tany>() => Tany)>
 +>f4 : () => X<<Tany>() => Tany>
-+>Tany : Tany
  
      return prop12;
 ->prop12 : X<(<Tany>() => Tany)>
@@ -52,26 +45,14 @@
  }
  class Y<A, B> {
  >Y : Y<A, B>
-+>A : A
-+>B : B
- }
- var prop2: Y<string[], <Tany>() => Tany>; // No space after second type argument
+@@= skipped -39, +39 lines =@@
  >prop2 : Y<string[], <Tany>() => Tany>
-+>Tany : Tany
- 
- var prop2: Y<string[], <Tany>() => Tany>; // space after second type argument
- >prop2 : Y<string[], <Tany>() => Tany>
-+>Tany : Tany
  
  var prop3: Y< <Tany>() => Tany, <Tany>() => Tany>; // space before first type argument
 ->prop3 : Y<(<Tany>() => Tany), <Tany>() => Tany>
 +>prop3 : Y<<Tany>() => Tany, <Tany>() => Tany>
-+>Tany : Tany
-+>Tany : Tany
  
  var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>; // parenthesized first type argument
 ->prop4 : Y<(<Tany>() => Tany), <Tany>() => Tany>
 +>prop4 : Y<<Tany>() => Tany, <Tany>() => Tany>
-+>Tany : Tany
-+>Tany : Tany
  

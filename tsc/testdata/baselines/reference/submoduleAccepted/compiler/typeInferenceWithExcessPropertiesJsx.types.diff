@@ -18,25 +18,16 @@
  
  type TranslationEntry = {
  >TranslationEntry : TranslationEntry
-@@= skipped -30, +24 lines =@@
- }
- type TProps<Entry extends TranslationEntry> = {
- >TProps : TProps<Entry>
-+>Entry : Entry
- 
-     getTranslationEntry: (allTranslations: Translations) => Entry,
- >getTranslationEntry : (allTranslations: Translations) => Entry
-@@= skipped -12, +13 lines =@@
+@@= skipped -42, +36 lines =@@
  } : {});
  
  declare function T<Entry extends TranslationEntry>(
 ->T : <Entry extends TranslationEntry>(props: TProps<Entry>) => JSX.Element
 +>T : <Entry extends TranslationEntry>(props: TProps<Entry>) => Element
-+>Entry : Entry
  
      props: TProps<Entry>
  >props : TProps<Entry>
-@@= skipped -9, +10 lines =@@
+@@= skipped -9, +9 lines =@@
  >JSX : any
  
  <T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />

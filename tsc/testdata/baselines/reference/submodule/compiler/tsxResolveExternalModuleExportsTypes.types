@@ -6,10 +6,7 @@ declare var a: a.Foo;
 >a : any
 
 declare namespace a {
->a : Foo
-
     interface Foo {}
->Foo : Foo
 }
 export = a;
 >a : Foo
@@ -22,11 +19,8 @@ declare module 'a' {
 >'a' : Foo
 
     namespace Test {}
->Test : any
 
     interface Foo {
->Foo : Foo
-
         Test: null;
 >Test : null
     }

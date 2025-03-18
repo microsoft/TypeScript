@@ -11,13 +11,7 @@
  >a : [n: "n", a: "a"]
  
      /** r rest param */
-     a: typeof a,
- >a : [n: "n", a: "a"]
-->a : [n: "n", a: "a"]
- 
- } => {
-     return null!
-@@= skipped -21, +20 lines =@@
+@@= skipped -21, +21 lines =@@
  >Symbol : SymbolConstructor
  
  export const v2 = (...a: [n: "n", a: "a"]): {
@@ -28,14 +22,3 @@
  >a : [n: "n", a: "a"]
  
      /** r rest param */
-     a: typeof a,
- >a : [n: "n", a: "a"]
-->a : [n: "n", a: "a"]
- 
-     /** module var */
-     n: typeof n,
- >n : unique symbol
-->n : unique symbol
- 
- } => {
-     return null!

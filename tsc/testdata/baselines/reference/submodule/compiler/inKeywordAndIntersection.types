@@ -33,15 +33,11 @@ function f10(obj: A & { x: string } | B) {
 // Repro from #50844
 
 interface InstanceOne {
->InstanceOne : InstanceOne
-
     one(): void
 >one : () => void
 }
 
 interface InstanceTwo {
->InstanceTwo : InstanceTwo
-
     two(): void
 >two : () => void
 }

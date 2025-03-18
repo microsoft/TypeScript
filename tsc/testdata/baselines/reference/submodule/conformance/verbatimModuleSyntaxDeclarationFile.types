@@ -2,8 +2,6 @@
 
 === type1.d.ts ===
 declare namespace NS {
->NS : any
-
     type A = object;
 >A : object
 }

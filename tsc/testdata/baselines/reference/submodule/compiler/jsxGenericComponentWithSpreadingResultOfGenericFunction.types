@@ -7,16 +7,12 @@
 
 declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T, K>;
 >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
->T : T
->K : K
 >names : readonly K[]
 >obj : T
 
 declare function omit<K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>;
 >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
->K : K
 >names : readonly K[]
->T : T
 >obj : T
 
 declare const otherProps: { bar: string, qwe: boolean }
@@ -26,7 +22,6 @@ declare const otherProps: { bar: string, qwe: boolean }
 
 declare function GenericComponent<T>(props: T): null
 >GenericComponent : <T>(props: T) => null
->T : T
 >props : T
 
 <GenericComponent {...omit(['bar'], otherProps)} />; // no error

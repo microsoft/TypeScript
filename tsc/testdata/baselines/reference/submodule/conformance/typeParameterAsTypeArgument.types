@@ -5,8 +5,6 @@
 
 function foo<T, U>(x: T, y: U) {
 >foo : <T, U>(x: T, y: U) => C<U, T>
->T : T
->U : U
 >x : T
 >y : U
 
@@ -23,18 +21,12 @@ function foo<T, U>(x: T, y: U) {
 
 class C<T, U> {
 >C : C<T, U>
->T : T
->U : U
 
     x: T;
 >x : T
 }
 
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
-
     x: C<U, T>;
 >x : C<U, T>
 }

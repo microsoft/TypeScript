@@ -1,14 +1,6 @@
 --- old.intraExpressionInferences.types
 +++ new.intraExpressionInferences.types
-@@= skipped -4, +4 lines =@@
- 
- declare function callIt<T>(obj: {
- >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
-+>T : T
- >obj : { produce: (n: number) => T; consume: (x: T) => void; }
- 
-     produce: (n: number) => T,
-@@= skipped -27, +28 lines =@@
+@@= skipped -31, +31 lines =@@
  >n => n.toFixed() : (n: number) => string
  >n : number
  >n.toFixed() : string
@@ -52,13 +44,7 @@
  
  });
  
- declare function callItT<T>(obj: [(n: number) => T, (x: T) => void]): void;
- >callItT : <T>(obj: [(n: number) => T, (x: T) => void]) => void
-+>T : T
- >obj : [(n: number) => T, (x: T) => void]
- >n : number
- >x : T
-@@= skipped -21, +22 lines =@@
+@@= skipped -21, +21 lines =@@
  >n => n.toFixed() : (n: number) => string
  >n : number
  >n.toFixed() : string
@@ -82,22 +68,7 @@
  
  // Repro from #25092
  
- interface MyInterface<T> {
-+>MyInterface : MyInterface<T>
-+>T : T
-+
-     retrieveGeneric: (parameter: string) => T,
- >retrieveGeneric : (parameter: string) => T
- >parameter : string
-@@= skipped -19, +22 lines =@@
- const inferTypeFn = <T>(generic: MyInterface<T>) => generic;
- >inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
- ><T>(generic: MyInterface<T>) => generic : <T>(generic: MyInterface<T>) => MyInterface<T>
-+>T : T
- >generic : MyInterface<T>
- >generic : MyInterface<T>
- 
-@@= skipped -20, +21 lines =@@
+@@= skipped -39, +39 lines =@@
  >generic => generic.toFixed() : (generic: number) => string
  >generic : number
  >generic.toFixed() : string
@@ -109,15 +80,7 @@
  
  });
  
-@@= skipped -10, +10 lines =@@
- 
- function make<M>(o: { mutations: M,  action: (m: M) => void }) { }
- >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
-+>M : M
- >o : { mutations: M; action: (m: M) => void; }
- >mutations : M
- >action : (m: M) => void
-@@= skipped -8, +9 lines =@@
+@@= skipped -18, +18 lines =@@
  make({
  >make({   mutations: {       foo() { }   },   action: (a) => { a.foo() }}) : void
  >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
@@ -148,15 +111,7 @@
  >foo : () => void
  
  });
-@@= skipped -25, +25 lines =@@
- 
- declare function foo<A>(options: { a: A, b: (a: A) => void }): void;
- >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
-+>A : A
- >options : { a: A; b: (a: A) => void; }
- >a : A
- >b : (a: A) => void
-@@= skipped -8, +9 lines =@@
+@@= skipped -33, +33 lines =@@
  foo({
  >foo({    a: () => { return 42 },    b(a) {},}) : void
  >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
@@ -183,52 +138,7 @@
  
      a() { return 42 },
  >a : () => 42
-@@= skipped -16, +16 lines =@@
- 
- type Chain<R1, R2> = {
- >Chain : Chain<R1, R2>
-+>R1 : R1
-+>R2 : R2
- 
-     a(): R1,
- >a : () => R1
-@@= skipped -16, +18 lines =@@
- 
- function test<R1, R2>(foo: Chain<R1, R2>) {}
- >test : <R1, R2>(foo: Chain<R1, R2>) => void
-+>R1 : R1
-+>R2 : R2
- >foo : Chain<R1, R2>
- 
- test({
-@@= skipped -60, +62 lines =@@
- 
- class Wrapper<T = any> {
- >Wrapper : Wrapper<T>
-+>T : T
- 
-     public value?: T;
- >value : T | undefined
-@@= skipped -10, +11 lines =@@
- 
- type Unwrap<D extends WrappedMap> = {
- >Unwrap : Unwrap<D>
-+>D : D
- 
-     [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
-+>K : K
-+>T : T
-+
- };
- 
- type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
- >MappingComponent : MappingComponent<I, O>
-+>I : I
-+>O : O
- 
-     setup(): { inputs: I; outputs: O };
- >setup : () => { inputs: I; outputs: O; }
-@@= skipped -13, +19 lines =@@
+@@= skipped -115, +115 lines =@@
  >outputs : O
  
      map?: (inputs: Unwrap<I>) => Unwrap<O>;
@@ -237,13 +147,7 @@
  >inputs : Unwrap<I>
  
  };
- 
- declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
- >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
-+>I : I
-+>O : O
- >def : MappingComponent<I, O>
- 
+@@= skipped -12, +12 lines =@@
  createMappingComponent({
  >createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
  >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
@@ -252,31 +156,7 @@
  
      setup() {
  >setup : () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
-@@= skipped -77, +79 lines =@@
- 
- function simplified<T>(props: { generator: () => T, receiver: (t: T) => any }) {}
- >simplified : <T>(props: { generator: () => T; receiver: (t: T) => any; }) => void
-+>T : T
- >props : { generator: () => T; receiver: (t: T) => any; }
- >generator : () => T
- >receiver : (t: T) => any
-@@= skipped -7, +8 lines =@@
- 
- function whatIWant<T>(props: { generator: (bob: any) => T, receiver: (t: T) => any }) {}
- >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
-+>T : T
- >props : { generator: (bob: any) => T; receiver: (t: T) => any; }
- >generator : (bob: any) => T
- >bob : any
-@@= skipped -8, +9 lines =@@
- 
- function nonObject<T>(generator: (bob: any) => T, receiver: (t: T) => any) {}
- >nonObject : <T>(generator: (bob: any) => T, receiver: (t: T) => any) => void
-+>T : T
- >generator : (bob: any) => T
- >bob : any
- >receiver : (t: T) => any
-@@= skipped -26, +27 lines =@@
+@@= skipped -106, +106 lines =@@
  whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) })
  >whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) }) : void
  >whatIWant : <T>(props: { generator: (bob: any) => T; receiver: (t: T) => any; }) => void
@@ -332,63 +212,7 @@
  >2 : 2
  
  // Repro from #48466
- 
- interface Opts<TParams, TDone, TMapped> {
-+>Opts : Opts<TParams, TDone, TMapped>
-+>TParams : TParams
-+>TDone : TDone
-+>TMapped : TMapped
-+
-     fetch: (params: TParams, foo: number) => TDone,
- >fetch : (params: TParams, foo: number) => TDone
- >params : TParams
-@@= skipped -53, +58 lines =@@
- 
- function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) {
- >example : <TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>) => (params: TParams) => TMapped
-+>TParams : TParams
-+>TDone : TDone
-+>TMapped : TMapped
- >options : Opts<TParams, TDone, TMapped>
- 
-     return (params: TParams) => {
-@@= skipped -25, +28 lines =@@
- }
- 
- interface Params {
-+>Params : Params
-+
-     one: number
- >one : number
- 
-@@= skipped -78, +80 lines =@@
- >branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
- 
-   <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
-+>T : T
-+>U : U
- >_ : { test: T; if: (t: T) => t is U; then: (u: U) => void; }
- >test : T
- >if : (t: T) => t is U
-@@= skipped -39, +41 lines =@@
- })
- 
- interface Props<T> {
-+>Props : Props<T>
-+>T : T
-+
-   a: (x: string) => T;
- >a : (x: string) => T
- >x : string
-@@= skipped -11, +14 lines =@@
- 
- declare function Foo<T>(props: Props<T>): null;
- >Foo : <T>(props: Props<T>) => null
-+>T : T
- >props : Props<T>
- 
- Foo({
-@@= skipped -23, +24 lines =@@
+@@= skipped -229, +229 lines =@@
  
        arg.toString();
  >arg.toString() : string
@@ -400,15 +224,7 @@
  
      },
    },
-@@= skipped -10, +10 lines =@@
- 
- declare function nested<T>(arg: {
- >nested : <T>(arg: { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }) => T
-+>T : T
- >arg : { prop: { produce: (arg1: number) => T; consume: (arg2: T) => void; }; }
- 
-   prop: {
-@@= skipped -38, +39 lines =@@
+@@= skipped -48, +48 lines =@@
  >(arg) => arg.join(",") : (arg: number[]) => string
  >arg : number[]
  >arg.join(",") : string
@@ -420,34 +236,7 @@
  >"," : ","
  
    },
-@@= skipped -10, +10 lines =@@
- 
- declare function twoConsumers<T>(arg: {
- >twoConsumers : <T>(arg: { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }) => T
-+>T : T
- >arg : { a: (arg: string) => T; consume1: (arg1: T) => void; consume2: (arg2: T) => void; }
- 
-   a: (arg: string) => T;
-@@= skipped -43, +44 lines =@@
- 
- declare function multipleProducersBeforeConsumers<T, T2>(arg: {
- >multipleProducersBeforeConsumers : <T, T2>(arg: { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }) => [T, T2]
-+>T : T
-+>T2 : T2
- >arg : { a: (arg: string) => T; b: (arg: string) => T2; consume1: (arg1: T) => void; consume2: (arg2: T2) => void; }
- 
-   a: (arg: string) => T;
-@@= skipped -55, +57 lines =@@
- 
- declare function withConditionalExpression<T, T2, T3>(arg: {
- >withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
-+>T : T
-+>T2 : T2
-+>T3 : T3
- >arg : { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }
- 
-   a: (arg1: string) => T;
-@@= skipped -20, +23 lines =@@
+@@= skipped -128, +128 lines =@@
  >resWithConditionalExpression : [string[], "first" | "two", boolean]
  >withConditionalExpression({  a: (arg) => [arg],  b: Math.random() ? (arg) => "first" as const : (arg) => "two" as const,  c: (arg) => Boolean(arg),}) : [string[], "first" | "two", boolean]
  >withConditionalExpression : <T, T2, T3>(arg: { a: (arg1: string) => T; b: (arg2: T) => T2; c: (arg2: T2) => T3; }) => [T, T2, T3]
@@ -467,17 +256,7 @@
  >Math.random() : number
  >Math.random : () => number
  >Math : Math
-@@= skipped -27, +27 lines =@@
- 
- declare function onion<T, T2, T3>(arg: {
- >onion : <T, T2, T3>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }) => [T, T2, T3]
-+>T : T
-+>T2 : T2
-+>T3 : T3
- >arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; nested2: { c: (arg2: T2) => T3; }; }; }
- 
-   a: (arg1: string) => T;
-@@= skipped -46, +49 lines =@@
+@@= skipped -73, +73 lines =@@
  >(arg) => arg.join(",") : (arg: string[]) => string
  >arg : string[]
  >arg.join(",") : string
@@ -489,18 +268,7 @@
  >"," : ","
  
      nested2: {
-@@= skipped -23, +23 lines =@@
- 
- declare function onion2<T, T2, T3, T4>(arg: {
- >onion2 : <T, T2, T3, T4>(arg: { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }) => [T, T2, T3, T4]
-+>T : T
-+>T2 : T2
-+>T3 : T3
-+>T4 : T4
- >arg : { a: (arg1: string) => T; nested: { b: (arg2: T) => T2; c: (arg3: T) => T3; nested2: { d: (arg4: T3) => T4; }; }; }
- 
-   a: (arg1: string) => T;
-@@= skipped -50, +54 lines =@@
+@@= skipped -73, +73 lines =@@
  >(arg) => arg.join(",") : (arg: string[]) => string
  >arg : string[]
  >arg.join(",") : string
@@ -512,11 +280,3 @@
  >"," : ","
  
      c: (arg) => Number(arg),
-@@= skipped -31, +31 lines =@@
- 
- declare function distant<T>(args: {
- >distant : <T>(args: { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }) => T
-+>T : T
- >args : { foo: { bar: { baz: { producer: (arg: string) => T; }; }; }; consumer: (val: T) => unknown; }
- 
-   foo: {

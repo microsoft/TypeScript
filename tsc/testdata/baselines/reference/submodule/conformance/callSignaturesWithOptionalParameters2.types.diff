@@ -1,15 +1,6 @@
 --- old.callSignaturesWithOptionalParameters2.types
 +++ new.callSignaturesWithOptionalParameters2.types
-@@= skipped -102, +102 lines =@@
- >2 : 2
- 
- interface I {
-+>I : I
-+
-     (x?: number);
- >x : number
- 
-@@= skipped -62, +64 lines =@@
+@@= skipped -164, +164 lines =@@
  >3 : 3
  
  var a: {

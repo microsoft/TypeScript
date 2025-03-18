@@ -1,14 +1,6 @@
 --- old.moduleAliasInterface.types
 +++ new.moduleAliasInterface.types
-@@= skipped -4, +4 lines =@@
- >_modes : typeof _modes
- 
-  export interface IMode {
-+>IMode : IMode
-   
-  }
-  
-@@= skipped -15, +16 lines =@@
+@@= skipped -19, +19 lines =@@
  >editor : typeof editor
  
   import modes = _modes;
@@ -74,16 +66,7 @@
  >modesOuter : any
    }
  }
-@@= skipped -11, +11 lines =@@
- >A1 : typeof A1
- 
-     export interface A1I1 {}
-+>A1I1 : A1I1
-+
-     export class A1C1 {}
- >A1C1 : A1C1
- }
-@@= skipped -8, +10 lines =@@
+@@= skipped -19, +19 lines =@@
  >B1 : typeof B1
  
      import A1Alias1 = A1;

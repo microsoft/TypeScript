@@ -185,53 +185,7 @@
  >() => "bar" : () => "bar"
  >"bar" : "bar"
  }
- 
- declare function g1<T>(x: T): T;
- >g1 : <T>(x: T) => T
-+>T : T
- >x : T
- 
- declare function g2<T>(x: T, y: T): T;
- >g2 : <T>(x: T, y: T) => T
-+>T : T
- >x : T
- >y : T
- 
- declare function g3<T, U>(x: T, y: U): T | U;
- >g3 : <T, U>(x: T, y: U) => T | U
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
- declare function g4<T>(x: T): T[];
- >g4 : <T>(x: T) => T[]
-+>T : T
- >x : T
- 
- declare function g5<T extends number>(x: T, y: T): T[];
- >g5 : <T extends number>(x: T, y: T) => T[]
-+>T : T
- >x : T
- >y : T
- 
- declare function g6<T>(x: T[]): T;
- >g6 : <T>(x: T[]) => T
-+>T : T
- >x : T[]
- 
- declare function g7<T>(x: T[]): T[];
- >g7 : <T>(x: T[]) => T[]
-+>T : T
- >x : T[]
- 
- declare function g8<T>(x: T, f: (p: T) => T): T;
- >g8 : <T>(x: T, f: (p: T) => T) => T
-+>T : T
- >x : T
- >f : (p: T) => T
- >p : T
-@@= skipped -74, +83 lines =@@
+@@= skipped -74, +74 lines =@@
  >2 : 2
  
  const x4 = g3(1, "two");  // Type 1 | "two"
@@ -242,19 +196,3 @@
  >g3 : <T, U>(x: T, y: U) => T | U
  >1 : 1
  >"two" : "two"
-@@= skipped -61, +61 lines =@@
- 
- function makeArray<T>(x: T): T[] {
- >makeArray : <T>(x: T) => T[]
-+>T : T
- >x : T
- 
-     return [x];
-@@= skipped -9, +10 lines =@@
- 
- function append<T>(a: T[], x: T): T[] {
- >append : <T>(a: T[], x: T) => T[]
-+>T : T
- >a : T[]
- >x : T
- 

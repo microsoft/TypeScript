@@ -7,8 +7,6 @@ import React from 'react';
 >React : any
 
 interface PS {
->PS : PS
-
     multi: false
 >multi : false
 >false : false
@@ -22,8 +20,6 @@ interface PS {
 }
 
 interface PM {
->PM : PM
-
     multi: true
 >multi : true
 >true : true

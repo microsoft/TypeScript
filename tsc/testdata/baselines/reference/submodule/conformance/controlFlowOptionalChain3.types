@@ -9,8 +9,6 @@ import React from "react";
 >React : any
 
 interface Foo {
->Foo : Foo
-
   bar: boolean;
 >bar : boolean
 }

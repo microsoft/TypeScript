@@ -2,8 +2,6 @@
 
 === lastPropertyInLiteralWins.ts ===
 interface Thing {
->Thing : Thing
-
     thunk: (str: string) => void;
 >thunk : (str: string) => void
 >str : string

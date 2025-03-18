@@ -1,42 +1,6 @@
 --- old.moduleAugmentationsBundledOutput1.types
 +++ new.moduleAugmentationsBundledOutput1.types
-@@= skipped -36, +36 lines =@@
- >"./m1" : typeof import("m1")
- 
-     interface Cls {
-+>Cls : Cls
-+
-         foo(): number;
- >foo : () => number
-     }
-@@= skipped -9, +11 lines =@@
- >"./m1" : typeof import("m1")
- 
-     interface Cls {
-+>Cls : Cls
-+
-         bar(): string;
- >bar : () => string
-     }
-@@= skipped -50, +52 lines =@@
- >"./m1" : typeof import("m1")
- 
-     interface Cls {
-+>Cls : Cls
-+
-         baz1(): C1;
- >baz1 : () => C1
-     }
-@@= skipped -9, +11 lines =@@
- >"./m1" : typeof import("m1")
- 
-     interface Cls {
-+>Cls : Cls
-+
-         baz2(): C2;
- >baz2 : () => C2
-     }
-@@= skipped -36, +38 lines =@@
+@@= skipped -140, +140 lines =@@
  >c.baz1().x.toExponential() : string
  >c.baz1().x.toExponential : (fractionDigits?: number) => string
  >c.baz1().x : number

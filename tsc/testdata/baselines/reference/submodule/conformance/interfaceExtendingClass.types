@@ -21,7 +21,6 @@ class Foo {
 }
 
 interface I extends Foo {
->I : I
 }
 
 var i: I;

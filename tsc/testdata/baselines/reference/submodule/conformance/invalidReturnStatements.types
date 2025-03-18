@@ -18,7 +18,6 @@ function fn7(): any {  } // should be valid: any includes void
 >fn7 : () => any
 
 interface I { id: number }
->I : I
 >id : number
 
 class C implements I {

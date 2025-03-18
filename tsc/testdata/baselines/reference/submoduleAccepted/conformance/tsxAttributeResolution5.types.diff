@@ -1,41 +1,11 @@
 --- old.tsxAttributeResolution5.types
 +++ new.tsxAttributeResolution5.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		test1: Attribs1;
- >test1 : Attribs1
- 
-@@= skipped -10, +16 lines =@@
- 	}
- }
- interface Attribs1 {
-+>Attribs1 : Attribs1
-+
- 	x: string;
- >x : string
- }
- 
- interface Attribs2 {
-+>Attribs2 : Attribs2
-+
- 	toString(): string;
- >toString : () => string
+@@= skipped -21, +21 lines =@@
  }
  
  function make1<T extends {x: string}> (obj: T) {
 ->make1 : <T extends { x: string; }>(obj: T) => JSX.Element
 +>make1 : <T extends { x: string; }>(obj: T) => any
-+>T : T
  >x : string
  >obj : T
  
@@ -49,7 +19,6 @@
  function make2<T extends {x: number}> (obj: T) {
 ->make2 : <T extends { x: number; }>(obj: T) => JSX.Element
 +>make2 : <T extends { x: number; }>(obj: T) => any
-+>T : T
  >x : number
  >obj : T
  
@@ -63,7 +32,6 @@
  function make3<T extends {y: string}> (obj: T) {
 ->make3 : <T extends { y: string; }>(obj: T) => JSX.Element
 +>make3 : <T extends { y: string; }>(obj: T) => any
-+>T : T
  >y : string
  >obj : T
  

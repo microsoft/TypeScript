@@ -112,21 +112,7 @@
  
      func1<T>(x: T): number;         // Method signature
  >func1 : <T>(x: T) => number
-+>T : T
- >x : T
- 
-     func2: <T>(x: T) => number;     // Function type literal
- >func2 : <T>(x: T) => number
-+>T : T
- >x : T
- 
-     func3: { <T>(x: T): number };   // Object type literal
- >func3 : <T>(x: T) => number
-+>T : T
- >x : T
- }
- 
-@@= skipped -36, +39 lines =@@
+@@= skipped -36, +36 lines =@@
  b2.func1 = b2.func2;
  >b2.func1 = b2.func2 : <T>(x: T) => number
  >b2.func1 : <T>(x: T) => number
@@ -200,28 +186,15 @@
      func4<T>(x: T): number;
 ->func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
 +>func4 : { <T>(x: T): number; <T>(s: T): string; }
-+>T : T
  >x : T
  
      func4<T>(s: T): string;
 ->func4 : { <T_1>(x: T_1): number; <T>(s: T): string; }
 +>func4 : { <T>(x: T): number; <T>(s: T): string; }
-+>T : T
  >s : T
  
      func5: {
- >func5 : { <T>(x: T): number; <T>(s: T): string; }
- 
-         <T>(x: T): number;
-+>T : T
- >x : T
- 
-         <T>(s: T): string;
-+>T : T
- >s : T
- 
-     };
-@@= skipped -78, +82 lines =@@
+@@= skipped -78, +78 lines =@@
  c2.func4 = c2.func5;
  >c2.func4 = c2.func5 : { <T>(x: T): number; <T>(s: T): string; }
  >c2.func4 : { <T>(x: T): number; <T>(s: T): string; }

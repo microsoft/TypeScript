@@ -10,25 +10,22 @@
 type FuncType = (x: <T>(p: T) => T) => typeof x;
 >FuncType : FuncType
 >x : <T>(p: T) => T
->T : T
 >p : T
+>x : <T>(p: T) => T
 
 function fun<T>(f: FuncType, x: T): T;
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
->T : T
 >f : FuncType
 >x : T
 
 function fun<T>(f: FuncType, g: FuncType, x: T): T;
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
->T : T
 >f : FuncType
 >g : FuncType
 >x : T
 
 function fun<T>(...rest: any[]): T {
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
->T : T
 >rest : any[]
 
     return undefined;

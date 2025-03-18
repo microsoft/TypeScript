@@ -1,65 +1,6 @@
 --- old.subtypesOfTypeParameter.types
 +++ new.subtypesOfTypeParameter.types
-@@= skipped -4, +4 lines =@@
- 
- class C3<T> {
- >C3 : C3<T>
-+>T : T
- 
-     foo: T;
- >foo : T
-@@= skipped -7, +8 lines =@@
- 
- class D1<T, U> extends C3<T> {
- >D1 : D1<T, U>
-+>T : T
-+>U : U
- >C3 : C3<T>
- 
-     foo: U; // error
-@@= skipped -8, +10 lines =@@
- 
- function f1<T, U>(x: T, y: U) {
- >f1 : <T, U>(x: T, y: U) => void
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -19, +21 lines =@@
- }
- 
- interface I1 { foo: number; }
-+>I1 : I1
- >foo : number
- 
- class C1 { foo: number; }
-@@= skipped -8, +9 lines =@@
- 
- class C2<T> { foo: T; }
- >C2 : C2<T>
-+>T : T
- >foo : T
- 
- enum E { A }
-@@= skipped -31, +32 lines =@@
- // errors throughout
- function f2<T, U>(x: T, y: U) {
- >f2 : <T, U>(x: T, y: U) => void
-+>T : T
-+>U : U
- >x : T
- >y : U
- 
-@@= skipped -17, +19 lines =@@
- 
-     var u: typeof undefined;
- >u : any
-->undefined : undefined
- 
-     var r0b = true ? u : x;
- >r0b : any
-@@= skipped -75, +74 lines =@@
+@@= skipped -169, +169 lines =@@
  >Date : DateConstructor
  
      var r5 = true ? /1/ : x;
@@ -108,7 +49,6 @@
  >true : true
 -><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 +><T>(x: T) => { return x } : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
  >x : T
@@ -122,11 +62,10 @@
  >x : T
 -><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 +><T>(x: T) => { return x } : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
  
-@@= skipped -35, +37 lines =@@
+@@= skipped -35, +35 lines =@@
  >i1 : I1
  
      var r9 = true ? i1 : x;
@@ -188,19 +127,8 @@
  >true : true
  >x : T
  >E.A : E
-@@= skipped -10, +10 lines =@@
- 
-     var af: typeof f;
- >af : typeof f
-->f : typeof f
- 
-     var r15 = true ? af : x;
- >r15 : T | typeof f
-@@= skipped -18, +17 lines =@@
- 
-     var ac: typeof c;
- >ac : typeof c
-->c : typeof c
+@@= skipped -31, +31 lines =@@
+ >c : typeof c
  
      var r16 = true ? ac : x;
 ->r16 : typeof c | T
@@ -219,10 +147,7 @@
  >true : true
  >x : T
  >ac : typeof c
- 
-     function f17<T>(a: T) {
- >f17 : <T>(a: T) => void
-+>T : T
+@@= skipped -18, +18 lines =@@
  >a : T
  
          var r17 = true ? x : a;
@@ -247,9 +172,7 @@
      }
  
      function f18<T, U extends T>(a: U) {
- >f18 : <T, U extends T>(a: U) => void
-+>T : T
-+>U : U
+@@= skipped -19, +19 lines =@@
  >a : U
  
          var r18 = true ? x : a;

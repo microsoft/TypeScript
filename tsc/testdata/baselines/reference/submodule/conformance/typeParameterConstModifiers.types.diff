@@ -6,7 +6,6 @@
  declare function f1<const T>(x: T): T;
 ->f1 : <const T>(x: T) => T
 +>f1 : <T>(x: T) => T
-+>T : T
  >x : T
  
  const x11 = f1('a');
@@ -26,7 +25,7 @@
  >['a', ['b', 'c']] : ["a", ["b", "c"]]
  >'a' : "a"
  >['b', 'c'] : ["b", "c"]
-@@= skipped -20, +21 lines =@@
+@@= skipped -20, +20 lines =@@
  >'c' : "c"
  
  const x13 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
@@ -45,8 +44,6 @@
  declare function f2<const T, U>(x: T | undefined): T;
 ->f2 : <const T, U>(x: T | undefined) => T
 +>f2 : <T, U>(x: T | undefined) => T
-+>T : T
-+>U : U
  >x : T | undefined
  
  const x21 = f2('a');
@@ -66,7 +63,7 @@
  >['a', ['b', 'c']] : ["a", ["b", "c"]]
  >'a' : "a"
  >['b', 'c'] : ["b", "c"]
-@@= skipped -20, +22 lines =@@
+@@= skipped -20, +20 lines =@@
  >'c' : "c"
  
  const x23 = f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
@@ -85,7 +82,6 @@
  declare function f3<const T>(x: T): T[];
 ->f3 : <const T>(x: T) => T[]
 +>f3 : <T>(x: T) => T[]
-+>T : T
  >x : T
  
  const x31 = f3("hello");
@@ -105,7 +101,6 @@
  declare function f4<const T>(obj: [T, T]): T;
 ->f4 : <const T>(obj: [T, T]) => T
 +>f4 : <T>(obj: [T, T]) => T
-+>T : T
  >obj : [T, T]
  
  const x41 = f4([[1, 'x'], [2, 'y']]);
@@ -118,7 +113,7 @@
  >[[1, 'x'], [2, 'y']] : [[1, "x"], [2, "y"]]
  >[1, 'x'] : [1, "x"]
  >1 : 1
-@@= skipped -34, +36 lines =@@
+@@= skipped -34, +34 lines =@@
  const x42 = f4([{ a: 1, b: 'x' }, { a: 2, b: 'y' }]);
  >x42 : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
  >f4([{ a: 1, b: 'x' }, { a: 2, b: 'y' }]) : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
@@ -133,7 +128,6 @@
  declare function f5<const T>(obj: { x: T, y: T }): T;
 ->f5 : <const T>(obj: { x: T; y: T; }) => T
 +>f5 : <T>(obj: { x: T; y: T; }) => T
-+>T : T
  >obj : { x: T; y: T; }
  >x : T
  >y : T
@@ -148,7 +142,7 @@
  >{ x: [1, 'x'], y: [2, 'y'] } : { x: [1, "x"]; y: [2, "y"]; }
  >x : [1, "x"]
  >[1, 'x'] : [1, "x"]
-@@= skipped -22, +23 lines =@@
+@@= skipped -22, +22 lines =@@
  const x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
  >x52 : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
  >f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } }) : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
@@ -163,7 +157,6 @@
  declare function f6<const T extends readonly unknown[]>(...args: T): T;
 ->f6 : <const T extends readonly unknown[]>(...args: T) => T
 +>f6 : <T extends readonly unknown[]>(...args: T) => T
-+>T : T
  >args : T
  
  const x61 = f6(1, 'b', { a: 1, b: 'x' });
@@ -176,7 +169,7 @@
  >1 : 1
  >'b' : "b"
  >{ a: 1, b: 'x' } : { a: 1; b: "x"; }
-@@= skipped -16, +17 lines =@@
+@@= skipped -16, +16 lines =@@
  >'x' : "x"
  
  const x62 = f6(...[1, 'b']);
@@ -227,19 +220,12 @@
  >true : true
  >...([1, 'b']) : string | number
  >([1, 'b']) : [number, string]
-@@= skipped -12, +12 lines =@@
- 
- class C1<const T> {
- >C1 : C1<T>
-+>T : T
- 
-     constructor(x: T) {}
+@@= skipped -17, +17 lines =@@
  >x : T
  
      foo<const U>(x: U) { return x; }
 ->foo : <const U>(x: U) => U
 +>foo : <U>(x: U) => U
-+>U : U
  >x : U
  >x : U
  }
@@ -252,7 +238,7 @@
  >C1 : typeof C1
  >{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
  >a : 1
-@@= skipped -29, +31 lines =@@
+@@= skipped -24, +24 lines =@@
  >"g" : "g"
  
  const c72 = c71.foo(['a', ['b', 'c']]);
@@ -269,18 +255,14 @@
  >['a', ['b', 'c']] : ["a", ["b", "c"]]
  >'a' : "a"
  >['b', 'c'] : ["b", "c"]
-@@= skipped -14, +14 lines =@@
- const C2 = class <const T> {}
- >C2 : typeof C2
+@@= skipped -16, +16 lines =@@
  >class <const T> {} : typeof C2
-+>T : T
  
  const fx1 = <const T>(x: T) => x;
 ->fx1 : <const T>(x: T) => T
 -><const T>(x: T) => x : <const T>(x: T) => T
 +>fx1 : <T>(x: T) => T
 +><const T>(x: T) => x : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
  
@@ -289,73 +271,28 @@
 -><const T,>(x: T) => x : <const T>(x: T) => T
 +>fx2 : <T>(x: T) => T
 +><const T,>(x: T) => x : <T>(x: T) => T
-+>T : T
  >x : T
  >x : T
  
- interface I1<const T> { x: T }  // Error
-+>I1 : I1<T>
-+>T : T
- >x : T
+@@= skipped -16, +16 lines =@@
  
  interface I2 {
-+>I2 : I2
-+
      f<const T>(x: T): T;
 ->f : <const T>(x: T) => T
 +>f : <T>(x: T) => T
-+>T : T
  >x : T
  }
  
- type T1<const T> = T;  // Error
- >T1 : T
-+>T : T
- 
- type T2 = <const T>(x: T) => T;
- >T2 : T2
-+>T : T
- >x : T
- 
- type T3 = { <const T>(x: T): T };
- >T3 : T3
-+>T : T
- >x : T
- 
- type T4 = new <const T>(x: T) => T;
- >T4 : T4
-+>T : T
- >x : T
- 
- type T5 = { new <const T>(x: T): T };
- >T5 : T5
-+>T : T
- >x : T
- 
- // Corrected repro from #51745
-@@= skipped -51, +64 lines =@@
- 
- type GetPath<T, P> =
- >GetPath : GetPath<T, P>
-+>T : T
-+>P : P
- 
-     P extends readonly [] ? T :
-     P extends readonly [infer A extends keyof T, ...infer Rest] ? GetPath<T[A], Rest> :
-+>A : A
-+>Rest : Rest
-+
+@@= skipped -39, +39 lines =@@
      never;
  
  function set<T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) {}
 ->set : <T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) => void
 +>set : <T, P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) => void
-+>T : T
-+>P : P
  >obj : T
  >path : P
  >value : GetPath<T, P>
-@@= skipped -19, +26 lines =@@
+@@= skipped -13, +13 lines =@@
  
  set(obj, ['a', 'b', 'c'], value);
  >set(obj, ['a', 'b', 'c'], value) : void
@@ -371,7 +308,6 @@
 ->inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
 ->args : readonly [unknown, ...T, unknown]
 +>inners : <T extends readonly any[]>(...args: [unknown, ...T, unknown]) => T
-+>T : T
 +>args : [unknown, ...T, unknown]
  
  const test = inners(1,2,3,4,5);
@@ -382,14 +318,13 @@
  >1 : 1
  >2 : 2
  >3 : 3
-@@= skipped -14, +15 lines =@@
+@@= skipped -14, +14 lines =@@
  >5 : 5
  
  declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
 ->inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
 ->args : readonly [unknown, ...T, unknown]
 +>inners2 : <T extends readonly any[]>(args: [unknown, ...T, unknown]) => T
-+>T : T
 +>args : [unknown, ...T, unknown]
  
  const test2 = inners2([1,2,3,4,5]);
@@ -400,18 +335,14 @@
  >[1,2,3,4,5] : [number, 2, 3, 4, number]
  >1 : 1
  >2 : 2
-@@= skipped -18, +19 lines =@@
- 
- type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T;
+@@= skipped -20, +20 lines =@@
  >NotEmpty : NotEmpty<T>
-+>T : T
  
  const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
 ->thing : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
 -><const O extends Record<string, any>>(o: NotEmpty<O>) => o : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
 +>thing : <O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
 +><const O extends Record<string, any>>(o: NotEmpty<O>) => o : <O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
-+>O : O
  >o : NotEmpty<O>
  >o : NotEmpty<O>
  
@@ -423,18 +354,14 @@
  >{ foo: '' } : { foo: ""; }
  >foo : ""
  >'' : ""
- 
- type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? never : { [K in keyof T]: T[K] };
+@@= skipped -17, +17 lines =@@
  >NotEmptyMapped : NotEmptyMapped<T>
-+>T : T
-+>K : K
  
  const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
 ->thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
 -><const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
 +>thingMapped : <O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
 +><const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o : <O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
-+>O : O
  >o : NotEmptyMapped<O>
  >o : NotEmptyMapped<O>
  
@@ -446,17 +373,16 @@
  >{ foo: '' } : { foo: ""; }
  >foo : ""
  >'' : ""
-@@= skipped -35, +40 lines =@@
+@@= skipped -16, +16 lines =@@
  // repro from https://github.com/microsoft/TypeScript/issues/55033
  
  function factory_55033_minimal<const T extends readonly unknown[]>(cb: (...args: T) => void) {
 ->factory_55033_minimal : <const T extends readonly unknown[]>(cb: (...args: T) => void) => T
 +>factory_55033_minimal : <T extends readonly unknown[]>(cb: (...args: T) => void) => T
-+>T : T
  >cb : (...args: T) => void
  >args : T
  
-@@= skipped -10, +11 lines =@@
+@@= skipped -10, +10 lines =@@
  }
  
  const test_55033_minimal = factory_55033_minimal((b: string) => {})
@@ -472,7 +398,6 @@
  function factory_55033<const T extends readonly unknown[]>(cb: (...args: T) => void) {
 ->factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 +>factory_55033 : <T extends readonly unknown[]>(cb: (...args: T) => void) => <K extends T>(...args: K) => K
-+>T : T
  >cb : (...args: T) => void
  >args : T
  
@@ -481,11 +406,10 @@
 ->call : <const K extends T>(...args: K) => K
 +>function call<const K extends T>(...args: K): K {        return {} as K;    } : <K extends T>(...args: K) => K
 +>call : <K extends T>(...args: K) => K
-+>K : K
  >args : K
  
          return {} as K;
-@@= skipped -24, +26 lines =@@
+@@= skipped -24, +24 lines =@@
  }
  
  const t1_55033 = factory_55033((a: { test: number }, b: string) => {})(
@@ -521,7 +445,6 @@
  function factory_55033_2<const T extends unknown[]>(cb: (...args: T) => void) {
 ->factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 +>factory_55033_2 : <T extends unknown[]>(cb: (...args: T) => void) => <K extends T>(...args: K) => K
-+>T : T
  >cb : (...args: T) => void
  >args : T
  
@@ -530,11 +453,10 @@
 ->call : <const K extends T>(...args: K) => K
 +>function call<const K extends T>(...args: K): K {        return {} as K;    } : <K extends T>(...args: K) => K
 +>call : <K extends T>(...args: K) => K
-+>K : K
  >args : K
  
          return {} as K;
-@@= skipped -19, +21 lines =@@
+@@= skipped -19, +19 lines =@@
  const t1_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
  >t1_55033_2 : [{ readonly test: 123; }, "some string"]
  >factory_55033_2((a: { test: number }, b: string) => {})(    { test: 123 },    "some string") : [{ readonly test: 123; }, "some string"]
@@ -562,7 +484,6 @@
  declare function fn<const T extends any[]>(...args: T): T;
 ->fn : <const T extends any[]>(...args: T) => T
 +>fn : <T extends any[]>(...args: T) => T
-+>T : T
  >args : T
  
  const a = fn("a", false);
@@ -578,13 +499,11 @@
  declare function fa1<const T extends unknown[]>(args: T): T;
 ->fa1 : <const T extends unknown[]>(args: T) => T
 +>fa1 : <T extends unknown[]>(args: T) => T
-+>T : T
  >args : T
  
  declare function fa2<const T extends readonly unknown[]>(args: T): T;
 ->fa2 : <const T extends readonly unknown[]>(args: T) => T
 +>fa2 : <T extends readonly unknown[]>(args: T) => T
-+>T : T
  >args : T
  
  fa1(["hello", 42]);
@@ -607,13 +526,11 @@
  declare function fb1<const T extends unknown[]>(...args: T): T;
 ->fb1 : <const T extends unknown[]>(...args: T) => T
 +>fb1 : <T extends unknown[]>(...args: T) => T
-+>T : T
  >args : T
  
  declare function fb2<const T extends readonly unknown[]>(...args: T): T;
 ->fb2 : <const T extends readonly unknown[]>(...args: T) => T
 +>fb2 : <T extends readonly unknown[]>(...args: T) => T
-+>T : T
  >args : T
  
  fb1("hello", 42);
@@ -634,7 +551,6 @@
  declare function fc1<const T extends unknown[]>(f: (...args: T) => void, ...args: T): T;
 ->fc1 : <const T extends unknown[]>(f: (...args: T) => void, ...args: T) => T
 +>fc1 : <T extends unknown[]>(f: (...args: T) => void, ...args: T) => T
-+>T : T
  >f : (...args: T) => void
  >args : T
  >args : T
@@ -642,7 +558,6 @@
  declare function fc2<const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T): T;
 ->fc2 : <const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T) => T
 +>fc2 : <T extends readonly unknown[]>(f: (...args: T) => void, ...args: T) => T
-+>T : T
  >f : (...args: T) => void
  >args : T
  >args : T
@@ -654,7 +569,7 @@
  >(a: string, b: number) => {} : (a: string, b: number) => void
  >a : string
  >b : number
-@@= skipped -76, +83 lines =@@
+@@= skipped -76, +76 lines =@@
  >42 : 42
  
  fc2((a: string, b: number) => {}, "hello", 42);
@@ -671,19 +586,16 @@
  declare function fd1<const T extends string[] | number[]>(args: T): T;
 ->fd1 : <const T extends string[] | number[]>(args: T) => T
 +>fd1 : <T extends string[] | number[]>(args: T) => T
-+>T : T
  >args : T
  
  declare function fd2<const T extends string[] | readonly number[]>(args: T): T;
 ->fd2 : <const T extends string[] | readonly number[]>(args: T) => T
 +>fd2 : <T extends string[] | readonly number[]>(args: T) => T
-+>T : T
  >args : T
  
  declare function fd3<const T extends readonly string[] | readonly number[]>(args: T): T;
 ->fd3 : <const T extends readonly string[] | readonly number[]>(args: T) => T
 +>fd3 : <T extends readonly string[] | readonly number[]>(args: T) => T
-+>T : T
  >args : T
  
  fd1(["hello", "world"]);
@@ -701,7 +613,7 @@
  >[1, 2, 3] : [1, 2, 3]
  >1 : 1
  >2 : 2
-@@= skipped -28, +31 lines =@@
+@@= skipped -28, +28 lines =@@
  
  fd2(["hello", "world"]);
  >fd2(["hello", "world"]) : ["hello", "world"]
@@ -742,7 +654,6 @@
  declare function fn1<const T extends { foo: unknown[] }[]>(...args: T): T;
 ->fn1 : <const T extends { foo: unknown[]; }[]>(...args: T) => T
 +>fn1 : <T extends { foo: unknown[]; }[]>(...args: T) => T
-+>T : T
  >foo : unknown[]
  >args : T
  

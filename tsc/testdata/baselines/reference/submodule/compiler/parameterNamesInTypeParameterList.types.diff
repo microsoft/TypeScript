@@ -5,64 +5,52 @@
  === parameterNamesInTypeParameterList.ts ===
  function f0<T extends typeof a>(a: T) {
 ->f0 : <T extends typeof a>(a: T) => void
-->a : any
 +>f0 : <T extends any>(a: T) => void
-+>T : T
+ >a : any
  >a : T
  
- 	a.b;
 @@= skipped -11, +11 lines =@@
  }
  
  function f1<T extends typeof a>({a}: {a:T}) {
 ->f1 : <T extends typeof a>({ a }: { a: T; }) => void
-->a : any
 +>f1 : <T extends any>(__0: { a: T; }) => void
-+>T : T
+ >a : any
  >a : T
  >a : T
- 
 @@= skipped -12, +12 lines =@@
  }
  
  function f2<T extends typeof a>([a]: T[]) {
 ->f2 : <T extends typeof a>([a]: T[]) => void
-->a : any
 +>f2 : <T extends any>(__0: T[]) => void
-+>T : T
+ >a : any
  >a : T
  
- 	a.b;
 @@= skipped -14, +14 lines =@@
  >A : A
  
  	m0<T extends typeof a>(a: T) {
 ->m0 : <T extends typeof a>(a: T) => void
-->a : any
 +>m0 : <T extends any>(a: T) => void
-+>T : T
+ >a : any
  >a : T
  
- 		a.b
 @@= skipped -10, +10 lines =@@
  >b : any
  	}
  	m1<T extends typeof a>({a}: {a:T}) {
 ->m1 : <T extends typeof a>({ a }: { a: T; }) => void
-->a : any
 +>m1 : <T extends any>(__0: { a: T; }) => void
-+>T : T
+ >a : any
  >a : T
  >a : T
- 
 @@= skipped -11, +11 lines =@@
  >b : any
  	}
  	m2<T extends typeof a>([a]: T[]) {
 ->m2 : <T extends typeof a>([a]: T[]) => void
-->a : any
 +>m2 : <T extends any>(__0: T[]) => void
-+>T : T
+ >a : any
  >a : T
  
- 		a.b

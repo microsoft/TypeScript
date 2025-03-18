@@ -2,8 +2,6 @@
 
 === symbolProperty59.ts ===
 interface I {
->I : I
-
     [Symbol.keyFor]: string;
 >[Symbol.keyFor] : string
 >Symbol.keyFor : (sym: symbol) => string

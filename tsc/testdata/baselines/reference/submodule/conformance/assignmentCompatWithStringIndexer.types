@@ -4,15 +4,12 @@
 // index signatures must be compatible in assignments
 
 interface Base { foo: string; }
->Base : Base
 >foo : string
 
 interface Derived extends Base { bar: string; }
->Derived : Derived
 >bar : string
 
 interface Derived2 extends Derived { baz: string; }
->Derived2 : Derived2
 >baz : string
 
 class A {
@@ -58,7 +55,6 @@ module Generics {
 
     class A<T extends Base> {
 >A : A<T>
->T : T
 
         [x: string]: T;
 >x : string
@@ -113,7 +109,6 @@ module Generics {
 
     function foo<T extends Base>() {
 >foo : <T extends Base>() => void
->T : T
 
         var b3: { [x: string]: Derived; };
 >b3 : { [x: string]: Derived; }

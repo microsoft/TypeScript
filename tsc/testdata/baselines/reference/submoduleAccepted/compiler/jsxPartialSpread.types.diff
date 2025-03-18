@@ -34,6 +34,7 @@
  >{} : {}
  >SelectProps : Partial<{ value?: unknown; }> | undefined
 ->Select : (p: { value?: unknown; }) => JSX.Element
++>Select : (p: { value?: unknown; }) => any
  
      return (
 ->(        <Select value={'test'} {...SelectProps} />    ) : JSX.Element

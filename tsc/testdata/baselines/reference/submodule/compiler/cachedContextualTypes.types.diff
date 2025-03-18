@@ -1,25 +1,15 @@
 --- old.cachedContextualTypes.types
 +++ new.cachedContextualTypes.types
-@@= skipped -4, +4 lines =@@
- 
- declare function createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>): R;
- >createInstance : <Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>) => R
-+>Ctor : Ctor
- >args : any[]
-+>R : R
- >ctor : Ctor
- >args : ConstructorParameters<Ctor>
+@@= skipped -10, +10 lines =@@
  
  export interface IMenuWorkbenchToolBarOptions {
-+>IMenuWorkbenchToolBarOptions : IMenuWorkbenchToolBarOptions
-+
      toolbarOptions: {
 ->toolbarOptions : { foo(bar: string): string; }
 +>toolbarOptions : { foo: (bar: string) => string; }
  
          foo(bar: string): string
  >foo : (bar: string) => string
-@@= skipped -29, +33 lines =@@
+@@= skipped -23, +23 lines =@@
  >createInstance(MenuWorkbenchToolBar, {    toolbarOptions: {        foo(bar) { return bar; }    }}) : MenuWorkbenchToolBar
  >createInstance : <Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>) => R
  >MenuWorkbenchToolBar : typeof MenuWorkbenchToolBar

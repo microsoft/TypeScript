@@ -176,7 +176,6 @@ class A {
 
 function destructure<T extends A>(x: T) {
 >destructure : <T extends A>(x: T) => void
->T : T
 >x : T
 
     const {                 ...rest1 } = x;

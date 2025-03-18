@@ -257,6 +257,7 @@ declare module "use_glo_M1_public" {
 
     export var use_glo_M1_public_v2_public: typeof use_glo_M1_public;
 >use_glo_M1_public_v2_public : typeof glo_M1_public
+>use_glo_M1_public : typeof glo_M1_public
 
     export var use_glo_M1_public_v3_public: ()=> use_glo_M1_public.c1;
 >use_glo_M1_public_v3_public : () => c1
@@ -268,6 +269,7 @@ declare module "use_glo_M1_public" {
 
     var use_glo_M1_public_v2_private: typeof use_glo_M1_public;
 >use_glo_M1_public_v2_private : typeof glo_M1_public
+>use_glo_M1_public : typeof glo_M1_public
 
     var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_private : () => c1
@@ -282,6 +284,7 @@ declare module "use_glo_M1_public" {
 
     export var use_glo_M2_public_v2_public: typeof use_glo_M2_public;
 >use_glo_M2_public_v2_public : typeof import("glo_M2_public")
+>use_glo_M2_public : typeof import("glo_M2_public")
 
     export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
 >use_glo_M2_public_v3_public : () => c1
@@ -293,22 +296,19 @@ declare module "use_glo_M1_public" {
 
     var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
 >use_glo_M2_public_v2_private : typeof import("glo_M2_public")
+>use_glo_M2_public : typeof import("glo_M2_public")
 
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
 >use_glo_M2_public_v3_private : () => c1
 >use_glo_M2_public : any
 
     module m2 {
->m2 : any
-
         //import errorImport = require("glo_M2_public");
         import nonerrorImport = glo_M1_public;
 >nonerrorImport : typeof glo_M1_public
 >glo_M1_public : typeof glo_M1_public
 
         module m5 {
->m5 : any
-
             //import m5_errorImport = require("glo_M2_public");
             import m5_nonerrorImport = glo_M1_public;
 >m5_nonerrorImport : typeof glo_M1_public
@@ -321,15 +321,11 @@ declare module "anotherParseError" {
 >"anotherParseError" : typeof import("anotherParseError")
 
     module m2 {
->m2 : any
-
         //declare module "abc" {
         //}
     }
 
     module m2 {
->m2 : any
-
         //module "abc2" {
         //}
     }

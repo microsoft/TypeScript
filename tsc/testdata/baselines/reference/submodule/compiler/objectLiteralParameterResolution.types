@@ -2,17 +2,13 @@
 
 === objectLiteralParameterResolution.ts ===
 interface Foo{
->Foo : Foo
-
     extend<T>(target: T, ...objs: any[]): T;
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
->T : T
 >target : T
 >objs : any[]
 
     extend<T>(deep: boolean, target: T, ...objs: any[]): T;
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
->T : T
 >deep : boolean
 >target : T
 >objs : any[]

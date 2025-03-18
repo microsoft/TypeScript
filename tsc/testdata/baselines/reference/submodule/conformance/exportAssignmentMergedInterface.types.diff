@@ -44,18 +44,3 @@
  >d : { x: number; y: number; }
  
  === foo_0.ts ===
- interface Foo {
-+>Foo : Foo
-+
- 	(a: string): void;
- >a : string
- 
-@@= skipped -12, +14 lines =@@
- >b : string
- }
- interface Foo {
-+>Foo : Foo
-+
- 	(a: number): number;
- >a : number
- 

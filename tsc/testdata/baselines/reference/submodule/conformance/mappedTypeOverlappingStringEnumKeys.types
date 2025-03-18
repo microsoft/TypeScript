@@ -29,8 +29,6 @@ type AnimalTypes = TerrestrialAnimalTypes | AlienAnimalTypes;
 >AnimalTypes : AnimalTypes
 
 interface TerrestrialCat {
->TerrestrialCat : TerrestrialCat
-
   type: TerrestrialAnimalTypes.CAT;
 >type : TerrestrialAnimalTypes.CAT
 >TerrestrialAnimalTypes : any
@@ -40,8 +38,6 @@ interface TerrestrialCat {
 }
 
 interface AlienCat {
->AlienCat : AlienCat
-
   type: AlienAnimalTypes.CAT
 >type : AlienAnimalTypes
 >AlienAnimalTypes : any
@@ -57,7 +53,6 @@ type CatMap = {
 >CatMap : CatMap
 
   [V in AnimalTypes]: Extract<Cats, { type: V }>[]
->V : V
 >type : V
 
 };

@@ -1,6 +1,5 @@
 //// [tests/cases/compiler/jsFileCompilationModuleSyntax.ts] ////
 
 === a.js ===
-module M { }
->M : any
 
+module M { }

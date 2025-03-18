@@ -4,35 +4,21 @@
 // Repros from #12066
 
 interface X<A> {
->X : X<A>
->A : A
-
     a: A;
 >a : A
 }
 interface Y<B> {
->Y : Y<B>
->B : B
-
     b: B;
 >b : B
 }
 type Z<A, B> = X<A> | Y<B>;
 >Z : Z<A, B>
->A : A
->B : B
 
 declare function f1<A>(): Z<A, number>;
 >f1 : <A>() => Z<A, number>
->A : A
 
 declare function f2<A, B, C, D, E>(a: A, b: B, c: C, d: D): Z<A, string[]>;
 >f2 : <A, B, C, D, E>(a: A, b: B, c: C, d: D) => Z<A, string[]>
->A : A
->B : B
->C : C
->D : D
->E : E
 >a : A
 >b : B
 >c : C

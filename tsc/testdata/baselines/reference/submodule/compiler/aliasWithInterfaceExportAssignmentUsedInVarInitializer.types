@@ -12,8 +12,6 @@ var d = b.q3;
 
 === aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts ===
 interface c {
->c : c
-
     q3: number;
 >q3 : number
 }

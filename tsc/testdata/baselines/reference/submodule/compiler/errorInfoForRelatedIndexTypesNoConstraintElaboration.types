@@ -5,9 +5,7 @@
 
 class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicElements> {
 >I : I<T1, T2>
->T1 : T1
 >JSX : any
->T2 : T2
 >JSX : any
 
     M() {

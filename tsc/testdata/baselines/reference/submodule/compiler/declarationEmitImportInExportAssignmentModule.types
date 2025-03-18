@@ -17,6 +17,7 @@ module m {
 
     export var a: typeof x;
 >a : typeof c
+>x : typeof c
 }
 export = m;
 >m : typeof m

@@ -5,18 +5,13 @@
 
 class Component<S> {
 >Component : Component<S>
->S : S
 
     setState<K extends keyof S>(state: Pick<S, K>) {}
 >setState : <K extends keyof S>(state: Pick<S, K>) => void
->K : K
 >state : Pick<S, K>
 }
 
 export interface State<T> {
->State : State<T>
->T : T
-
     a?: T;
 >a : T
 }
@@ -26,8 +21,6 @@ class Foo {}
 
 class Comp<T extends Foo, S> extends Component<S & State<T>>
 >Comp : Comp<T, S>
->T : T
->S : S
 >Component : Component<S & State<T>>
 {
     foo(a: T) {

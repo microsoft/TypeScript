@@ -3,6 +3,7 @@
 === comparisonOperatorWithOneOperandIsUndefined.ts ===
 var x: typeof undefined;
 >x : any
+>undefined : undefined
 
 enum E { a, b, c }
 >E : E
@@ -12,7 +13,6 @@ enum E { a, b, c }
 
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
->T : T
 >t : T
 
     var foo_r1 = t < x;

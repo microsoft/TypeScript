@@ -9,8 +9,6 @@ const symb = Symbol();
 >Symbol : SymbolConstructor
 
 interface TestSymb {
->TestSymb : TestSymb
-
   (): void;
   readonly [symb]: boolean;
 >[symb] : boolean

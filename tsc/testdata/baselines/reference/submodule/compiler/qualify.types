@@ -40,8 +40,6 @@ module T {
 >T : typeof T
 
     export interface I {
->I : I
-
         p;
 >p : any
     }
@@ -53,8 +51,6 @@ module T {
 >3 : 3
 
         export interface I2 {
->I2 : I2
-
             q;
 >q : any
         }
@@ -79,11 +75,7 @@ module Everest {
 >Everest : typeof Everest
 
     export module K1 {
->K1 : any
-
         export interface I3 {
->I3 : I3
-
             zeep;
 >zeep : any
         }
@@ -92,8 +84,6 @@ module Everest {
 >K2 : typeof K2
 
         export interface I4 {
->I4 : I4
-
             z;
 >z : any
         }
@@ -130,8 +120,6 @@ module Everest {
 }
 
 interface I {
->I : I
-
     k;
 >k : any
 }

@@ -2,8 +2,6 @@
 
 === derivedInterfaceCallSignature.ts ===
 interface D3SvgPath {
->D3SvgPath : D3SvgPath
-
     (data: any, index?: number): string;
 >data : any
 >index : number
@@ -31,8 +29,6 @@ interface D3SvgPath {
 }
 
 interface D3SvgArea extends D3SvgPath {
->D3SvgArea : D3SvgArea
-
     x(x: (data: any, index?: number) => number): D3SvgArea;
 >x : (x: (data: any, index?: number) => number) => D3SvgArea
 >x : (data: any, index?: number) => number

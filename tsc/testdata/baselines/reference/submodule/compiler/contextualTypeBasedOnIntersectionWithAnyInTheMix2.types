@@ -22,12 +22,9 @@ type IntrinsicElements = {
 
 type Component<Props> = (props: Props) => unknown;
 >Component : Component<Props>
->Props : Props
 >props : Props
 
 interface NestedMDXComponents {
->NestedMDXComponents : NestedMDXComponents
-
   [key: string]: Component<any>;
 >key : string
 }
@@ -36,13 +33,9 @@ type MDXComponents = NestedMDXComponents & {
 >MDXComponents : MDXComponents
 
   [Key in keyof IntrinsicElements]?: Component<IntrinsicElements[Key]>;
->Key : Key
-
 };
 
 export interface MDXProps {
->MDXProps : MDXProps
-
   components?: MDXComponents;
 >components : MDXComponents | undefined
 }

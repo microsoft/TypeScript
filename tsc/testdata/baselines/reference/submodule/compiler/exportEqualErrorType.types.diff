@@ -25,24 +25,7 @@
  >static : any
  >'foo' : "foo"
  
- === exportEqualErrorType_0.ts ===
- module server {
-+>server : { (): connectExport; foo: Date; }
-+
-     export interface connectModule {
-+>connectModule : connectModule
-+
-         (res, req, next): void;
- >res : any
- >req : any
- >next : any
-     }
-     export interface connectExport {
-+>connectExport : connectExport
-+
-         use: (mod: connectModule) => connectExport;
- >use : (mod: connectModule) => connectExport
- >mod : connectModule
+@@= skipped -29, +29 lines =@@
      }
  }
  var server: {
@@ -51,7 +34,7 @@
  
      (): server.connectExport;
  >server : any
-@@= skipped -39, +45 lines =@@
+@@= skipped -10, +10 lines =@@
  
  };
  export = server;

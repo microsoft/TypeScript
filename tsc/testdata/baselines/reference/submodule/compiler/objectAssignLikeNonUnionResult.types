@@ -2,8 +2,6 @@
 
 === objectAssignLikeNonUnionResult.ts ===
 interface Interface {
->Interface : Interface
-
     field: number;
 >field : number
 }
@@ -15,8 +13,6 @@ const defaultValue: Interface = { field: 1 };
 
 declare function assign<T, U>(target: T, source: U): T & U;
 >assign : <T, U>(target: T, source: U) => T & U
->T : T
->U : U
 >target : T
 >source : U
 
@@ -41,21 +37,19 @@ const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
 
 type ExtractRawComponent<T> = T extends { __raw: infer C } ? [L1: T, L2: C] : [R1: T];
 >ExtractRawComponent : ExtractRawComponent<T>
->T : T
 >__raw : C
->C : C
 
 type t1 = ExtractRawComponent<typeof data1>;
 >t1 : [R1: Interface & ({ field: number; } | { field?: undefined; })]
+>data1 : Interface & ({ field: number; } | { field?: undefined; })
 
 // ???
 type Explode<T> = T extends { x: infer A } ? [A] : 'X';
 >Explode : Explode<T>
->T : T
 >x : A
->A : A
 
 // 'X' | [unknown] -- why?
 type e1 = Explode<typeof data1>;
 >e1 : "X"
+>data1 : Interface & ({ field: number; } | { field?: undefined; })
 

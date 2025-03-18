@@ -4,8 +4,6 @@
 // Each pair of call signatures in these types have a duplicate signature error.
 // Identical call signatures should generate an error.
 interface I {
->I : I
-
     (x): number;
 >x : any
 
@@ -13,18 +11,13 @@ interface I {
 >x : any
 
     <T>(x: T): T;
->T : T
 >x : T
 
     <U>(x: U): U; // error
->U : U
 >x : U
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     (x: T): T;
 >x : T
 
@@ -42,10 +35,8 @@ var a: {
 >x : any
 
     <T>(x: T): T;
->T : T
 >x : T
 
     <T>(x: T): T; // error
->T : T
 >x : T
 }

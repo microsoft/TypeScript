@@ -10,8 +10,6 @@ var t2: test; // should not raise a 'container type' error
 
 === exportAssignedTypeAsTypeAnnotation_0.ts ===
 interface x {
->x : x
-
     (): Date;
     foo: string;
 >foo : string

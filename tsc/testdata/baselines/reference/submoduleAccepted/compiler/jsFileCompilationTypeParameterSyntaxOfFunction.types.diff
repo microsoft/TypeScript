@@ -1,8 +1,0 @@
---- old.jsFileCompilationTypeParameterSyntaxOfFunction.types
-+++ new.jsFileCompilationTypeParameterSyntaxOfFunction.types
-@@= skipped -2, +2 lines =@@
- === a.js ===
- function F<T>() { }
- >F : <T>() => void
-+>T : T
- 

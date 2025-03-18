@@ -2,9 +2,6 @@
 
 === interface.ts ===
 export interface Encoder<T> {
->Encoder : Encoder<T>
->T : T
-
     encode(value: T): Uint8Array
 >encode : (value: T) => Uint8Array<ArrayBuffer>
 >value : T

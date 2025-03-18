@@ -5,7 +5,6 @@ class A { }
 >A : A
 
 interface Class extends (typeof A) { }
->Class : Class
 >(typeof A) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >typeof A : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >A : typeof A

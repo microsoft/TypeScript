@@ -3,6 +3,7 @@
 === recursiveFunctionTypes.ts ===
 function fn(): typeof fn { return 1; }
 >fn : () => ???
+>fn : () => ???
 >1 : 1
 
 var x: number = fn; // error
@@ -15,25 +16,28 @@ var y: () => number = fn; // ok
 
 var f: () => typeof g;
 >f : () => () => ???
+>g : () => () => ???
 
 var g: () => typeof f;
 >g : () => () => ???
+>f : () => () => ???
 
 function f1(d: typeof f1) { }
 >f1 : (d: ???) => void
 >d : (d: ???) => void
+>f1 : (d: ???) => void
 
 function f2(): typeof g2 { } 
 >f2 : () => () => ???
+>g2 : () => () => ???
 
 function g2(): typeof f2 { } 
 >g2 : () => () => ???
+>f2 : () => () => ???
 
 interface I<T> { }
->I : I<T>
->T : T
-
 function f3(): I<typeof f3> { return f3; }
+>f3 : () => I<???>
 >f3 : () => I<???>
 >f3 : () => I<???>
 
@@ -47,7 +51,9 @@ class C {
      static g(t: typeof C.g){ }
 >g : (t: ???) => void
 >t : (t: ???) => void
+>C.g : (t: ???) => void
 >C : typeof C
+>g : (t: ???) => void
 }
 C.g(3); // error
 >C.g(3) : void
@@ -57,6 +63,7 @@ C.g(3); // error
 >3 : 3
 
 var f4: () => typeof f4;
+>f4 : () => ???
 >f4 : () => ???
 
 f4 = 3; // error
@@ -70,10 +77,12 @@ function f5() { return f5; }
 
 function f6(): typeof f6;
 >f6 : { (): ???; (a: ???): () => number; }
+>f6 : { (): ???; (a: ???): () => number; }
 
 function f6(a: typeof f6): () => number;
 >f6 : { (): ???; (a: ???): () => number; }
 >a : { (): ???; (a: ???): () => number; }
+>f6 : { (): ???; (a: ???): () => number; }
 
 function f6(a?: any) { return f6; }
 >f6 : { (): ???; (a: ???): () => number; }
@@ -97,10 +106,12 @@ f6(); // ok
 
 declare function f7(): typeof f7;
 >f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
+>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 
 declare function f7(a: typeof f7): () => number;
 >f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 >a : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
+>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 
 declare function f7(a: number): number;
 >f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
@@ -109,6 +120,8 @@ declare function f7(a: number): number;
 declare function f7(a?: typeof f7): typeof f7;
 >f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 >a : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
+>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
+>f7 : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }
 
 f7("", 3); // error (arity mismatch)
 >f7("", 3) : { (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; } & () => number & number

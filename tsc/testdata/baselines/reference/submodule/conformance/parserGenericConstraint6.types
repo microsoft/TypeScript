@@ -3,5 +3,4 @@
 === parserGenericConstraint6.ts ===
 class C<T extends List<List<T> >> {
 >C : C<T>
->T : T
 }

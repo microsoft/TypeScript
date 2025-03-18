@@ -1,62 +1,42 @@
 --- old.ipromise2.types
 +++ new.ipromise2.types
-@@= skipped -1, +1 lines =@@
- 
- === ipromise2.ts ===
+@@= skipped -3, +3 lines =@@
  declare module Windows.Foundation {
-+>Windows : any
-+>Foundation : any
-+
      export interface IPromise<T> {
-+>IPromise : IPromise<T>
-+>T : T
-+
          then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 ->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 +>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
-+>U : U
  >success : (value: T) => IPromise<U>
  >value : T
  >error : (error: any) => IPromise<U>
-@@= skipped -13, +20 lines =@@
+@@= skipped -11, +11 lines =@@
  >Foundation : any
  
          then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 ->then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 +>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
-+>U : U
  >success : (value: T) => IPromise<U>
  >value : T
  >error : (error: any) => U
-@@= skipped -11, +12 lines =@@
+@@= skipped -11, +11 lines =@@
  >Foundation : any
  
          then<U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 ->then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 +>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
-+>U : U
  >success : (value: T) => U
  >value : T
  >error : (error: any) => IPromise<U>
-@@= skipped -11, +12 lines =@@
+@@= skipped -11, +11 lines =@@
  >Foundation : any
  
          then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 ->then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
 +>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
-+>U : U
  >success : (value: T) => U
  >value : T
  >error : (error: any) => U
-@@= skipped -12, +13 lines =@@
- 
-         done<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
- >done : <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void
-+>U : U
- >success : (value: T) => any
- >value : T
- >error : (error: any) => any
-@@= skipped -13, +14 lines =@@
+@@= skipped -25, +25 lines =@@
  }
  
  var p: Windows.Foundation.IPromise<string>;

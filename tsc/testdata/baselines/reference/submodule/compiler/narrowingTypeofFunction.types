@@ -6,7 +6,6 @@ type Meta = { foo: string }
 >foo : string
 
 interface F { (): string }
->F : F
 
 function f1(a: (F & Meta) | string) {
 >f1 : (a: string | F & Meta) => void
@@ -29,7 +28,6 @@ function f1(a: (F & Meta) | string) {
 
 function f2<T>(x: (T & F) | T & string) {
 >f2 : <T>(x: T & string | T & F) => void
->T : T
 >x : T & string | T & F
 
     if (typeof x === "function") {

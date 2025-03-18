@@ -299,8 +299,6 @@ class SelfAssert {
 }
 
 interface Indexed {
->Indexed : Indexed
-
     [s: string]: any;
 >s : string
 }

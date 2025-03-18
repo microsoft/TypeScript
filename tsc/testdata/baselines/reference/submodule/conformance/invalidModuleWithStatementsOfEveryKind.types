@@ -12,7 +12,6 @@ module Y {
 
     public class BB<T> extends A {
 >BB : BB<T>
->T : T
 >A : A
 
         id: number;
@@ -25,11 +24,9 @@ module Y2 {
 
     public class AA<T> { s: T }
 >AA : AA<T>
->T : T
 >s : T
 
     public interface I { id: number }
->I : I
 >id : number
 
     public class B extends AA<string> implements I { id: number }
@@ -68,7 +65,6 @@ module YY {
 
     private class BB<T> extends A {
 >BB : BB<T>
->T : T
 >A : A
 
         id: number;
@@ -81,11 +77,9 @@ module YY2 {
 
     private class AA<T> { s: T }
 >AA : AA<T>
->T : T
 >s : T
 
     private interface I { id: number }
->I : I
 >id : number
 
     private class B extends AA<string> implements I { id: number }
@@ -125,7 +119,6 @@ module YYY {
 
     static class BB<T> extends A {
 >BB : BB<T>
->T : T
 >A : A
 
         id: number;
@@ -138,11 +131,9 @@ module YYY2 {
 
     static class AA<T> { s: T }
 >AA : AA<T>
->T : T
 >s : T
 
     static interface I { id: number }
->I : I
 >id : number
 
     static class B extends AA<string> implements I { id: number }

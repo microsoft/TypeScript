@@ -7,9 +7,7 @@
 ->conforms : <T>(source: { [K in keyof T]: (val: T[K]) => boolean; }) => (value: T) => boolean
 ->source : { [K in keyof T]: (val: T[K]) => boolean; }
 +>conforms : <T>(source: { [K in keyof T]: (val: T[K]) => boolean }) => (value: T) => boolean
-+>T : T
 +>source : { [K in keyof T]: (val: T[K]) => boolean }
-+>K : K
  >val : T[K]
  >value : T
  

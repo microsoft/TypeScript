@@ -9,8 +9,6 @@ class C {
 }
 
 interface I {
->I : I
-
     foo;
 >foo : any
 }

@@ -44,25 +44,12 @@
  
  === map.ts ===
  import { Observable } from "observable"
-@@= skipped -27, +27 lines =@@
- >"observable" : typeof import("observable")
+@@= skipped -28, +28 lines =@@
  
      interface Observable<T> {
-+>Observable : Observable<T, T>
-+>T : T
-+
          map<U>(proj: (e:T) => U): Observable<U>
 ->map : <U>(proj: (e: T) => U) => Observable<U>
 +>map : <U>(proj: (e: T) => U) => any
-+>U : U
  >proj : (e: T) => U
  >e : T
      }
-@@= skipped -19, +23 lines =@@
- 
-     class Observable<T> {
- >Observable : Observable<T>
-+>T : T
- 
-         filter(pred: (e:T) => boolean): Observable<T>;
- >filter : (pred: (e: T) => boolean) => Observable<T>

@@ -3,7 +3,6 @@
 === incrementOnTypeParameter.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     a: T;
 >a : T

@@ -2,8 +2,6 @@
 
 === declFileForInterfaceWithOptionalFunction.ts ===
 interface I {
->I : I
-
     foo? (x?);
 >foo : (x?: any) => any
 >x : any

@@ -2,12 +2,8 @@
 
 === duplicateTypeParameters3.ts ===
 interface X {
->X : X
-
 x: () => <A, A>() => void;
 >x : () => <A>() => void
->A : A
->A : A
 }
  
 

@@ -3,7 +3,6 @@
 === spreadTypeVariable.ts ===
 function f1<T extends number>(arg: T) {
 >f1 : <T extends number>(arg: T) => any
->T : T
 >arg : T
 
   return { ...arg };
@@ -13,7 +12,6 @@ function f1<T extends number>(arg: T) {
 
 function f2<T extends string[]>(arg: T) {
 >f2 : <T extends string[]>(arg: T) => T
->T : T
 >arg : T
 
   return { ...arg }
@@ -23,7 +21,6 @@ function f2<T extends string[]>(arg: T) {
 
 function f3<T extends number | string[]>(arg: T) {
 >f3 : <T extends number | string[]>(arg: T) => any
->T : T
 >arg : T
 
   return { ...arg }
@@ -33,7 +30,6 @@ function f3<T extends number | string[]>(arg: T) {
 
 function f4<T extends number | { [key: string]: any }>(arg: T) {
 >f4 : <T extends number | { [key: string]: any; }>(arg: T) => any
->T : T
 >key : string
 >arg : T
 
@@ -44,7 +40,6 @@ function f4<T extends number | { [key: string]: any }>(arg: T) {
 
 function f5<T extends string[] | { [key: string]: any }>(arg: T) {
 >f5 : <T extends string[] | { [key: string]: any; }>(arg: T) => T
->T : T
 >key : string
 >arg : T
 
@@ -55,7 +50,6 @@ function f5<T extends string[] | { [key: string]: any }>(arg: T) {
 
 function f6<T>(arg: T) {
 >f6 : <T>(arg: T) => T
->T : T
 >arg : T
 
   return { ...arg }

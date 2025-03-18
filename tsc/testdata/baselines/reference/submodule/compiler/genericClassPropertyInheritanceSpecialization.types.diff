@@ -1,65 +1,12 @@
 --- old.genericClassPropertyInheritanceSpecialization.types
 +++ new.genericClassPropertyInheritanceSpecialization.types
-@@= skipped -1, +1 lines =@@
- 
- === genericClassPropertyInheritanceSpecialization.ts ===
- interface KnockoutObservableBase<T> {
-+>KnockoutObservableBase : KnockoutObservableBase<T>
-+>T : T
-+
-     peek(): T;
- >peek : () => T
- 
-@@= skipped -9, +12 lines =@@
- }
- 
- interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
-+>KnockoutObservable : KnockoutObservable<T>
-+>T : T
-+
-     equalityComparer(a: T, b: T): boolean;
- >equalityComparer : (a: T, b: T) => boolean
- >a : T
-@@= skipped -13, +16 lines =@@
- }
- 
- interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
-+>KnockoutObservableArray : KnockoutObservableArray<T>
-+>T : T
-+
-     indexOf(searchElement: T, fromIndex?: number): number;
- >indexOf : (searchElement: T, fromIndex?: number) => number
- >searchElement : T
-@@= skipped -62, +65 lines =@@
- }
- 
- interface KnockoutObservableArrayStatic {
-+>KnockoutObservableArrayStatic : KnockoutObservableArrayStatic
-+
-     fn: KnockoutObservableArray<any>;
- >fn : KnockoutObservableArray<any>
- 
-     <T>(value?: T[]): KnockoutObservableArray<T>;
-+>T : T
- >value : T[]
- }
- 
-@@= skipped -21, +24 lines =@@
- 
-     export class Validator<TValue> {
- >Validator : Validator<TValue>
-+>TValue : TValue
- 
-         private _subscription;
- >_subscription : any
-@@= skipped -34, +35 lines =@@
+@@= skipped -140, +140 lines =@@
  
      export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
  >Validator : Validator<TValue>
 ->Portal.Controls.Validators.Validator : Portal.Controls.Validators.Validator<TValue>
 ->Portal.Controls.Validators : typeof Portal.Controls.Validators
 ->Portal.Controls : typeof Portal.Controls
-+>TValue : TValue
 +>Portal.Controls.Validators.Validator : Validator<TValue>
 +>Portal.Controls.Validators : typeof Validators
 +>Portal.Controls : typeof Controls
@@ -81,12 +28,8 @@
  >message : string
          }
      }
-@@= skipped -21, +22 lines =@@
- }
- 
+@@= skipped -23, +23 lines =@@
  interface Contract<TValue> {
-+>Contract : Contract<TValue>
-+>TValue : TValue
  
      validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>;
 ->validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
@@ -94,11 +37,8 @@
  >PortalFx : any
  >ViewModels : any
  >Controls : any
-@@= skipped -12, +14 lines =@@
- 
- class ViewModel<TValue> implements Contract<TValue> {
+@@= skipped -12, +12 lines =@@
  >ViewModel : ViewModel<TValue>
-+>TValue : TValue
  
      public validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>> = ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>();
 ->validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>

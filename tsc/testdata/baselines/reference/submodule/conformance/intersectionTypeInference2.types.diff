@@ -1,14 +1,6 @@
 --- old.intersectionTypeInference2.types
 +++ new.intersectionTypeInference2.types
-@@= skipped -2, +2 lines =@@
- === intersectionTypeInference2.ts ===
- declare function f<T>(x: { prop: T }): T;
- >f : <T>(x: { prop: T; }) => T
-+>T : T
- >x : { prop: T; }
- >prop : T
- 
-@@= skipped -9, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  >prop : number
  
  declare const b: { prop: string & number };
@@ -30,14 +22,11 @@
 ->f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
 ->obj : { [K in keyof T]: T[K]; }
 +>f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K] }, key: Key) => T[Key]
-+>T : T
-+>Key : Key
 +>obj : { [K in keyof T]: T[K] }
-+>K : K
  >key : Key
  
  declare const obj: { a: string } & { b: string };
-@@= skipped -16, +19 lines =@@
+@@= skipped -16, +16 lines =@@
  
  f2(obj, 'a');
  >f2(obj, 'a') : string

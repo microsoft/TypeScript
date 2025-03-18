@@ -8,12 +8,8 @@
 +>React : any
  
  interface Prop {
-+>Prop : Prop
-+
      a: number,
- >a : number
- 
-@@= skipped -10, +12 lines =@@
+@@= skipped -10, +10 lines =@@
  >b : string
  
      children: JSX.Element | JSX.Element[];
@@ -145,12 +141,8 @@
 +>Comp : (p: Prop) => any
  
  interface SingleChildProp {
-+>SingleChildProp : SingleChildProp
-+
      a: number,
- >a : number
- 
-@@= skipped -49, +51 lines =@@
+@@= skipped -49, +49 lines =@@
  >b : string
  
      children: JSX.Element;

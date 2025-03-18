@@ -16,11 +16,8 @@
 +>React : any
  
  interface Props {
-+>Props : Props
-+
    children: (x: number) => string;
- >children : (x: number) => string
- >x : number
+@@= skipped -17, +11 lines =@@
  }
  
  export function Blah(props: Props) {
@@ -102,8 +99,6 @@
 +>Blah : (props: Props) => any
  
  interface PropsArr {
-+>PropsArr : PropsArr
-+
    children: ((x: number) => string)[];
 ->children : ((x: number) => string)[]
 +>children : (x: number) => string[]
@@ -131,7 +126,7 @@
  
    {x => x}
  >x => x : (x: any) => any
-@@= skipped -97, +95 lines =@@
+@@= skipped -80, +80 lines =@@
  >x : any
  
  </Blah2>
@@ -183,11 +178,9 @@
  
  type Cb = (x: number) => string;
  >Cb : Cb
- >x : number
+@@= skipped -37, +37 lines =@@
  
  interface PropsMixed {
-+>PropsMixed : PropsMixed
-+
    children: Cb | Cb[];
 ->children : Cb | Cb[]
 +>children : Cb[] | Cb

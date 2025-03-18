@@ -19,6 +19,7 @@ const { foo } = getFoo()
 
 export type AliasType = typeof foo
 >AliasType : { test: number; }
+>foo : { test: number; }
 
 const { foo: renamed } = getFoo()
 >foo : any
@@ -28,6 +29,7 @@ const { foo: renamed } = getFoo()
 
 export type AliasType2 = typeof renamed
 >AliasType2 : { test: number; }
+>renamed : { test: number; }
 
 function getNested() {
 >getNested : () => { a: { b: { c: string; }; }; }
@@ -51,4 +53,5 @@ const { a: { b: { c } } } = getNested()
 
 export type AliasType3 = typeof c
 >AliasType3 : string
+>c : string
 

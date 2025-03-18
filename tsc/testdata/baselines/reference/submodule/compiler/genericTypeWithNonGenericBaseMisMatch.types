@@ -2,8 +2,6 @@
 
 === genericTypeWithNonGenericBaseMisMatch.ts ===
 interface I {
->I : I
-
 	f: (a: { a: number }) => void
 >f : (a: { a: number; }) => void
 >a : { a: number; }
@@ -11,7 +9,6 @@ interface I {
 }
 class X<T extends { a: string }> implements I {
 >X : X<T>
->T : T
 >a : string
 
 	f(a: T): void { }

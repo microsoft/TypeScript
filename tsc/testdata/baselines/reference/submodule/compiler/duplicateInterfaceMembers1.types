@@ -2,8 +2,6 @@
 
 === duplicateInterfaceMembers1.ts ===
 interface Bar {
->Bar : Bar
-
    x: number;
 >x : number
 

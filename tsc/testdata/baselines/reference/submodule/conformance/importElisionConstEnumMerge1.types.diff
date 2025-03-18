@@ -1,15 +1,6 @@
 --- old.importElisionConstEnumMerge1.types
 +++ new.importElisionConstEnumMerge1.types
-@@= skipped -13, +13 lines =@@
- >Enum : typeof Enum
- 
- namespace Enum {
-+>Enum : typeof Enum
-+
-   export type Foo = number;
- >Foo : number
- }
-@@= skipped -8, +10 lines =@@
+@@= skipped -21, +21 lines =@@
  
  === index.ts ===
  import { Enum } from "./merge";

@@ -2,11 +2,9 @@
 
 === typeMatch1.ts ===
 interface I { z; }
->I : I
 >z : any
 
 interface I2 { z; }
->I2 : I2
 >z : any
 
 var x1: { z: number; f(n: number): string; f(s: string): number; }

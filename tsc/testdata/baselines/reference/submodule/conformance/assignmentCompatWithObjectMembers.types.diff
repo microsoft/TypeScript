@@ -1,30 +1,6 @@
 --- old.assignmentCompatWithObjectMembers.types
 +++ new.assignmentCompatWithObjectMembers.types
-@@= skipped -21, +21 lines =@@
- >t : T
- 
-     interface S2 { foo: string; }
-+>S2 : S2
- >foo : string
- 
-     interface T2 { foo: string; }
-+>T2 : T2
- >foo : string
- 
-     var s2: S2;
-@@= skipped -145, +147 lines =@@
- >t : T
- 
-     interface S2 { foo: S2; }
-+>S2 : S2
- >foo : S2
- 
-     interface T2 { foo: T2; }
-+>T2 : T2
- >foo : T2
- 
-     var s2: S2;
-@@= skipped -12, +14 lines =@@
+@@= skipped -178, +178 lines =@@
  >t2 : T2
  
      var a: { foo: typeof a; }
@@ -33,6 +9,7 @@
 ->a : { foo: typeof a; }
 +>a : { foo: ???; }
 +>foo : { foo: ???; }
++>a : { foo: ???; }
  
      var b: { foo: typeof b; }
 ->b : { foo: typeof b; }
@@ -40,10 +17,11 @@
 ->b : { foo: typeof b; }
 +>b : { foo: ???; }
 +>foo : { foo: ???; }
++>b : { foo: ???; }
  
      var a2 = { foo: a2 };
  >a2 : any
-@@= skipped -57, +55 lines =@@
+@@= skipped -57, +57 lines =@@
  >t : T
  
      s2 = b;

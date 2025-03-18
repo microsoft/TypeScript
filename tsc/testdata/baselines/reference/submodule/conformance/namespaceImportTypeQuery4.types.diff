@@ -11,6 +11,7 @@
 ->t : typeof types
 ->types : typeof types
 +>t : typeof import("/a")
++>types : typeof import("/a")
  >{  A: undefined as any, // error  B: undefined as any,} : { A: any; B: any; }
  
    A: undefined as any, // error

@@ -3,7 +3,6 @@
 === awaitedTypeNoLib.ts ===
 type NotPromise<T> = T extends Thenable<unknown>
 >NotPromise : NotPromise<T>
->T : T
 
   ? T
   : T extends PromiseLike<unknown>
@@ -12,12 +11,10 @@ type NotPromise<T> = T extends Thenable<unknown>
 
 type Receiver<T> = (value: NotPromise<T>) => void;
 >Receiver : Receiver<T>
->T : T
 >value : NotPromise<T>
 
 class Thenable<T> {
 >Thenable : Thenable<T>
->T : T
 
   then(a: Receiver<T>) {}
 >then : (a: Receiver<T>) => void
@@ -25,7 +22,6 @@ class Thenable<T> {
 
   private handleResolve<TResult>(
 >handleResolve : <TResult>(result: Thenable<NotPromise<TResult>> | NotPromise<TResult>, resolve: Receiver<TResult>) => void
->TResult : TResult
 
     result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
 >result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
@@ -52,7 +48,6 @@ class Thenable<T> {
 
   private resolvePromise<TResult>(
 >resolvePromise : <TResult>(result: Thenable<TResult>, resolve: Receiver<TResult>) => void
->TResult : TResult
 
     result: Thenable<TResult>,
 >result : Thenable<TResult>

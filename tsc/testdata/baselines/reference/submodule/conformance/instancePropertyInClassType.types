@@ -76,8 +76,6 @@ module Generic {
 
     class C<T,U> {
 >C : C<T, U>
->T : T
->U : U
 
         x: T;
 >x : T

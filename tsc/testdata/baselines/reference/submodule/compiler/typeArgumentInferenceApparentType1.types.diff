@@ -7,12 +7,11 @@
 ->method : <T>(iterable: Iterable<T>) => T
 ->iterable : Iterable<T>
 +>method : <T>(iterable: Iterable<T, any, any>) => T
-+>T : T
 +>iterable : Iterable<T, any, any>
  
      return;
  }
-@@= skipped -9, +10 lines =@@
+@@= skipped -9, +9 lines =@@
  var res: string = method("test");
  >res : string
  >method("test") : string

@@ -9,37 +9,7 @@
  >aboo1 : Foo | undefined
  
      if (!aboo1) return;
-@@= skipped -10, +10 lines =@@
-     const aboo2: { [key: string]: typeof aboo1.bar } = boo;
- >aboo2 : { [key: string]: string; }
- >key : string
-->aboo1.bar : string
- >aboo1 : Foo
-->bar : string
- >boo : Foo
- }
- 
-@@= skipped -15, +13 lines =@@
-     const bboo: { [key: string]: typeof b.bar } = boo;
- >bboo : { [key: string]: string; }
- >key : string
-->b.bar : string
- >b : Foo
-->bar : string
- >boo : Foo
- }
- b = boo;
-@@= skipped -13, +11 lines =@@
- const bboo: { [key: string]: typeof b.bar } = boo;
- >bboo : { [key: string]: string; }
- >key : string
-->b.bar : string
- >b : Foo
-->bar : string
- >boo : Foo
- 
- declare let c: string | number;
-@@= skipped -10, +8 lines =@@
+@@= skipped -48, +48 lines =@@
  
  if (typeof c === 'string') {
  >typeof c === 'string' : boolean
@@ -52,7 +22,7 @@
 ->C : { [key: string]: string; }
 +>C : C
  >key : string
-->c : string
+ >c : string
  
      const boo1: C = { bar: 'works' };
 ->boo1 : { [key: string]: string; }

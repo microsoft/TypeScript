@@ -25,10 +25,7 @@ export default function parseArgs(): minimist.ParsedArgs {
 
 === /node_modules/@types/minimist/minimist.d.ts ===
 declare namespace thing {
->thing : (x: any) => ParsedArgs
-
     interface ParsedArgs {}
->ParsedArgs : ParsedArgs
 }
 declare function thing(x: any): thing.ParsedArgs;
 >thing : (x: any) => ParsedArgs

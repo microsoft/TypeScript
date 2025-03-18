@@ -2,8 +2,6 @@
 
 === a.ts ===
 interface A {}
->A : A
-
 export type { A };
 >A : A
 

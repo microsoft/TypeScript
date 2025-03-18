@@ -4,9 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/55203
 
 interface Callable<Name extends string> {
->Callable : Callable<Name>
->Name : Name
-
   (): `${Name} without id`;
   (id: number): `${Name} with id`;
 >id : number

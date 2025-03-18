@@ -85,8 +85,6 @@
    export class veraecrucis<T0, T1> extends trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus> {
  >veraecrucis : veraecrucis<T0, T1>
 ->trivirgatus.mixtus : trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus>
-+>T0 : T0
-+>T1 : T1
 +>trivirgatus.mixtus : mixtus<amicus, punicus>
  >trivirgatus : typeof trivirgatus
 ->mixtus : typeof trivirgatus.mixtus
@@ -107,7 +105,7 @@
  >panamensis : any
  >lutreolus : any
  >howi : any
-@@= skipped -36, +38 lines =@@
+@@= skipped -36, +36 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -365,8 +363,6 @@
    }
    export class albidens<T0, T1> {
  >albidens : albidens<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      mattheyi() : samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>> { var x : samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>; () => { var y = this; }; return x; }
 ->mattheyi : () => samarensis.fuscus<lavali.wilsoni, chrysaeolus.sarasinorum<Lanthanum.jugularis, imperfecta.subspinosus>>
@@ -381,7 +377,7 @@
  >samarensis : any
  >lavali : any
  >chrysaeolus : any
-@@= skipped -161, +163 lines =@@
+@@= skipped -161, +161 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -457,8 +453,6 @@
    export class oralis<T0, T1> extends caurinus.psilurus {
  >oralis : oralis<T0, T1>
 ->caurinus.psilurus : caurinus.psilurus
-+>T0 : T0
-+>T1 : T1
 +>caurinus.psilurus : psilurus
  >caurinus : typeof caurinus
 ->psilurus : typeof caurinus.psilurus
@@ -503,7 +497,7 @@
  >caurinus : any
  >gabriellae : any
  >panglima : any
-@@= skipped -61, +63 lines =@@
+@@= skipped -61, +61 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -777,8 +771,6 @@
    }
    export class gerbillus<T0, T1> {
  >gerbillus : gerbillus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      pundti() : sagitta.sicarius<dogramacii.koepckeae, caurinus.psilurus> { var x : sagitta.sicarius<dogramacii.koepckeae, caurinus.psilurus>; () => { var y = this; }; return x; }
 ->pundti : () => sagitta.sicarius<dogramacii.koepckeae, caurinus.psilurus>
@@ -1001,7 +993,7 @@
  >macrorhinos : any
  >dammermani : any
  >caurinus : any
-@@= skipped -210, +212 lines =@@
+@@= skipped -210, +210 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -1191,12 +1183,8 @@
    }
  }
  module ruatanica {
-@@= skipped -110, +110 lines =@@
- 
-   export class hector<T0, T1> {
+@@= skipped -112, +112 lines =@@
  >hector : hector<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      humulis() : julianae.steerii { var x : julianae.steerii; () => { var y = this; }; return x; }
 ->humulis : () => julianae.steerii
@@ -1224,7 +1212,7 @@
  >panamensis : any
  >ruatanica : any
  >Lanthanum : any
-@@= skipped -27, +29 lines =@@
+@@= skipped -25, +25 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -1233,12 +1221,8 @@
    }
  }
  module Lanthanum {
-@@= skipped -8, +8 lines =@@
- 
-   export class suillus<T0, T1> {
+@@= skipped -10, +10 lines =@@
  >suillus : suillus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      spilosoma() : quasiater.carolinensis { var x : quasiater.carolinensis; () => { var y = this; }; return x; }
 ->spilosoma : () => quasiater.carolinensis
@@ -1282,8 +1266,6 @@
    export class nitidus<T0, T1> extends argurus.gilbertii<lavali.thaeleri, lutreolus.punicus> {
  >nitidus : nitidus<T0, T1>
 ->argurus.gilbertii : argurus.gilbertii<lavali.thaeleri, lutreolus.punicus>
-+>T0 : T0
-+>T1 : T1
 +>argurus.gilbertii : gilbertii<thaeleri, punicus>
  >argurus : typeof argurus
 ->gilbertii : typeof argurus.gilbertii
@@ -1535,7 +1517,7 @@
  >imperfecta : any
  >julianae : any
  >ruatanica : any
-@@= skipped -239, +243 lines =@@
+@@= skipped -237, +237 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -2016,8 +1998,6 @@
    }
    export class moojeni<T0, T1> {
  >moojeni : moojeni<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      floweri() : lavali.otion { var x : lavali.otion; () => { var y = this; }; return x; }
 ->floweri : () => lavali.otion
@@ -2064,7 +2044,7 @@
  
      heaneyi() : zuluensis { var x : zuluensis; () => { var y = this; }; return x; }
  >heaneyi : () => zuluensis
-@@= skipped -222, +224 lines =@@
+@@= skipped -222, +222 lines =@@
  >x : zuluensis
  
      marchei() : panglima.amphibius<patas.uralensis, gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>> { var x : panglima.amphibius<patas.uralensis, gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>>; () => { var y = this; }; return x; }
@@ -2176,8 +2156,6 @@
    export class crenulata<T0, T1> extends trivirgatus.falconeri {
  >crenulata : crenulata<T0, T1>
 ->trivirgatus.falconeri : trivirgatus.falconeri
-+>T0 : T0
-+>T1 : T1
 +>trivirgatus.falconeri : falconeri
  >trivirgatus : typeof trivirgatus
 ->falconeri : typeof trivirgatus.falconeri
@@ -2219,7 +2197,7 @@
  >lutreolus : any
  >imperfecta : any
  >howi : any
-@@= skipped -83, +85 lines =@@
+@@= skipped -83, +83 lines =@@
  >Lanthanum : any
  >petrophilus : any
  >rionegrensis : any
@@ -2237,12 +2215,8 @@
    }
  }
  module trivirgatus {
-@@= skipped -8, +8 lines =@@
- 
-   export class tumidifrons<T0, T1> {
+@@= skipped -10, +10 lines =@@
  >tumidifrons : tumidifrons<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      nivalis() : dogramacii.kaiseri { var x : dogramacii.kaiseri; () => { var y = this; }; return x; }
 ->nivalis : () => dogramacii.kaiseri
@@ -2285,7 +2259,7 @@
  
      scherman() : oconnelli { var x : oconnelli; () => { var y = this; }; return x; }
  >scherman : () => oconnelli
-@@= skipped -40, +42 lines =@@
+@@= skipped -38, +38 lines =@@
  >x : oconnelli
  
      improvisum() : argurus.peninsulae { var x : argurus.peninsulae; () => { var y = this; }; return x; }
@@ -2351,8 +2325,6 @@
    export class mixtus<T0, T1> extends argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>> {
  >mixtus : mixtus<T0, T1>
 ->argurus.pygmaea : argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>>
-+>T0 : T0
-+>T1 : T1
 +>argurus.pygmaea : pygmaea<oreas, fundatus<carolinensis, daphaenodon>>
  >argurus : typeof argurus
 ->pygmaea : typeof argurus.pygmaea
@@ -2381,7 +2353,7 @@
  >macrorhinos : any
  >dogramacii : any
  >panglima : any
-@@= skipped -76, +78 lines =@@
+@@= skipped -76, +76 lines =@@
  >chrysaeolus : any
  >caurinus : any
  >lavali : any
@@ -2483,8 +2455,6 @@
    }
    export class lotor<T0, T1> {
  >lotor : lotor<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      balensis() : samarensis.pallidus { var x : samarensis.pallidus; () => { var y = this; }; return x; }
 ->balensis : () => samarensis.pallidus
@@ -2525,7 +2495,7 @@
  >rendalli : any
  >imperfecta : any
  >howi : any
-@@= skipped -57, +59 lines =@@
+@@= skipped -57, +57 lines =@@
  >daubentonii : any
  >julianae : any
  >julianae : any
@@ -4546,12 +4516,8 @@
    }
  }
  module argurus {
-@@= skipped -36, +36 lines =@@
- 
-   export class dauricus<T0, T1> {
+@@= skipped -38, +38 lines =@@
  >dauricus : dauricus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      chinensis() : Lanthanum.jugularis { var x : Lanthanum.jugularis; () => { var y = this; }; return x; }
 ->chinensis : () => Lanthanum.jugularis
@@ -4602,7 +4568,7 @@
  >petrophilus : any
  >quasiater : any
  >julianae : any
-@@= skipped -44, +46 lines =@@
+@@= skipped -42, +42 lines =@@
  >lavali : any
  >macrorhinos : any
  >petrophilus : any
@@ -4739,12 +4705,8 @@
    }
  }
  module nigra {
-@@= skipped -8, +8 lines =@@
- 
-   export class dolichurus<T0, T1> {
+@@= skipped -10, +10 lines =@@
  >dolichurus : dolichurus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
      solomonis() : panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>> { var x : panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>>; () => { var y = this; }; return x; }
 ->solomonis : () => panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>>
@@ -4752,7 +4714,7 @@
  >panglima : any
  >quasiater : any
  >rendalli : any
-@@= skipped -16, +18 lines =@@
+@@= skipped -14, +14 lines =@@
  >julianae : any
  >lavali : any
  >argurus : any
@@ -4879,8 +4841,6 @@
      export class amphibius<T0, T1> extends caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis> {
  >amphibius : amphibius<T0, T1>
 ->caurinus.johorensis : caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis>
-+>T0 : T0
-+>T1 : T1
 +>caurinus.johorensis : johorensis<nitidus<minutilla, sumatrana>, jugularis>
  >caurinus : typeof caurinus
 ->johorensis : typeof caurinus.johorensis
@@ -4904,7 +4864,7 @@
  >macrorhinos : any
  >rendalli : any
  >trivirgatus : any
-@@= skipped -26, +28 lines =@@
+@@= skipped -26, +26 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -4991,8 +4951,6 @@
      export class fundatus<T0, T1> extends lutreolus.schlegeli {
  >fundatus : fundatus<T0, T1>
 ->lutreolus.schlegeli : lutreolus.schlegeli
-+>T0 : T0
-+>T1 : T1
 +>lutreolus.schlegeli : schlegeli
  >lutreolus : typeof lutreolus
 ->schlegeli : typeof lutreolus.schlegeli
@@ -5021,7 +4979,7 @@
  >imperfecta : any
  >patas : any
  >gabriellae : any
-@@= skipped -96, +98 lines =@@
+@@= skipped -96, +96 lines =@@
  >daubentonii : any
  >quasiater : any
  >rionegrensis : any
@@ -5060,8 +5018,6 @@
      export class abidi<T0, T1> extends argurus.dauricus<argurus.germaini, julianae.durangae> {
  >abidi : abidi<T0, T1>
 ->argurus.dauricus : argurus.dauricus<argurus.germaini, julianae.durangae>
-+>T0 : T0
-+>T1 : T1
 +>argurus.dauricus : dauricus<germaini, durangae>
  >argurus : typeof argurus
 ->dauricus : typeof argurus.dauricus
@@ -5138,7 +5094,7 @@
  >imperfecta : any
  >julianae : any
  >howi : any
-@@= skipped -70, +72 lines =@@
+@@= skipped -70, +70 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -5259,8 +5215,6 @@
      export class himalayana<T0, T1> extends lutreolus.punicus {
  >himalayana : himalayana<T0, T1>
 ->lutreolus.punicus : lutreolus.punicus
-+>T0 : T0
-+>T1 : T1
 +>lutreolus.punicus : punicus
  >lutreolus : typeof lutreolus
 ->punicus : typeof lutreolus.punicus
@@ -5279,7 +5233,7 @@
  >argurus : any
  >lavali : any
  >argurus : any
-@@= skipped -20, +22 lines =@@
+@@= skipped -20, +20 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -5469,8 +5423,6 @@
      export class mahaganus<T0, T1> extends panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon> {
  >mahaganus : mahaganus<T0, T1>
 ->panglima.fundatus : panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>
-+>T0 : T0
-+>T1 : T1
 +>panglima.fundatus : fundatus<carolinensis, daphaenodon>
  >panglima : typeof panglima
 ->fundatus : typeof panglima.fundatus
@@ -5484,7 +5436,7 @@
  >ruatanica : any
  >julianae : any
  >macrorhinos : any
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  >caurinus : any
  >julianae : any
  >lavali : any
@@ -5622,12 +5574,8 @@
      }
  }
  module macrorhinos {
-@@= skipped -18, +18 lines =@@
- 
-     export class marmosurus<T0, T1> {
+@@= skipped -20, +20 lines =@@
  >marmosurus : marmosurus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          tansaniana(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
 ->tansaniana : () => lutreolus.punicus
@@ -5644,13 +5592,11 @@
      }
  }
  module howi {
-@@= skipped -17, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  
      export class angulatus<T0, T1> extends sagitta.stolzmanni {
  >angulatus : angulatus<T0, T1>
 ->sagitta.stolzmanni : sagitta.stolzmanni
-+>T0 : T0
-+>T1 : T1
 +>sagitta.stolzmanni : stolzmanni
  >sagitta : typeof sagitta
 ->stolzmanni : typeof sagitta.stolzmanni
@@ -5662,21 +5608,8 @@
  >howi : any
  >x : marcanoi
  >howi : any
-@@= skipped -20, +22 lines =@@
- 
-     export class nesiotes<T0, T1> {
- >nesiotes : nesiotes<T0, T1>
-+>T0 : T0
-+>T1 : T1
-     }
- }
- module nigra {
-@@= skipped -7, +9 lines =@@
- 
-     export class thalia<T0, T1> {
+@@= skipped -29, +29 lines =@@
  >thalia : thalia<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          dichotomus(): quasiater.carolinensis { var x: quasiater.carolinensis; () => { var y = this; }; return x; }
 ->dichotomus : () => quasiater.carolinensis
@@ -5704,7 +5637,7 @@
  >panamensis : any
  >trivirgatus : any
  >argurus : any
-@@= skipped -27, +29 lines =@@
+@@= skipped -25, +25 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -5845,8 +5778,6 @@
      export class inez<T0, T1> extends samarensis.pelurus<argurus.germaini, julianae.durangae> {
  >inez : inez<T0, T1>
 ->samarensis.pelurus : samarensis.pelurus<argurus.germaini, julianae.durangae>
-+>T0 : T0
-+>T1 : T1
 +>samarensis.pelurus : pelurus<germaini, durangae>
  >samarensis : typeof samarensis
 ->pelurus : typeof samarensis.pelurus
@@ -5873,7 +5804,7 @@
      }
  }
  module macrorhinos {
-@@= skipped -26, +28 lines =@@
+@@= skipped -26, +26 lines =@@
  
      export class konganensis extends imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus> {
  >konganensis : konganensis
@@ -5890,8 +5821,6 @@
      export class linulus<T0, T1> extends ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>> {
  >linulus : linulus<T0, T1>
 ->ruatanica.hector : ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>>
-+>T0 : T0
-+>T1 : T1
 +>ruatanica.hector : hector<sumatrana, pelurus<jugularis, walkeri>>
  >ruatanica : typeof ruatanica
 ->hector : typeof ruatanica.hector
@@ -5944,7 +5873,7 @@
  >rendalli : any
  >argurus : any
  >dogramacii : any
-@@= skipped -48, +50 lines =@@
+@@= skipped -48, +48 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -6050,12 +5979,8 @@
      }
  }
  module nigra {
-@@= skipped -8, +8 lines =@@
- 
-     export class gracilis<T0, T1> {
+@@= skipped -10, +10 lines =@@
  >gracilis : gracilis<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          weddellii(): nigra.dolichurus<dogramacii.aurata, julianae.steerii> { var x: nigra.dolichurus<dogramacii.aurata, julianae.steerii>; () => { var y = this; }; return x; }
 ->weddellii : () => nigra.dolichurus<dogramacii.aurata, julianae.steerii>
@@ -6087,7 +6012,7 @@
  >Lanthanum : any
  >panglima : any
  >caurinus : any
-@@= skipped -31, +33 lines =@@
+@@= skipped -29, +29 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -6273,8 +6198,6 @@
      export class pelurus<T0, T1> extends sagitta.stolzmanni {
  >pelurus : pelurus<T0, T1>
 ->sagitta.stolzmanni : sagitta.stolzmanni
-+>T0 : T0
-+>T1 : T1
 +>sagitta.stolzmanni : stolzmanni
  >sagitta : typeof sagitta
 ->stolzmanni : typeof sagitta.stolzmanni
@@ -6303,7 +6226,7 @@
  >argurus : any
  >minutus : any
  >argurus : any
-@@= skipped -27, +29 lines =@@
+@@= skipped -27, +27 lines =@@
  >julianae : any
  >lavali : any
  >argurus : any
@@ -6494,8 +6417,6 @@
      export class fuscus<T0, T1> extends macrorhinos.daphaenodon {
  >fuscus : fuscus<T0, T1>
 ->macrorhinos.daphaenodon : macrorhinos.daphaenodon
-+>T0 : T0
-+>T1 : T1
 +>macrorhinos.daphaenodon : daphaenodon
  >macrorhinos : typeof macrorhinos
 ->daphaenodon : typeof macrorhinos.daphaenodon
@@ -6572,7 +6493,7 @@
  
          sapiens(): pallidus { var x: pallidus; () => { var y = this; }; return x; }
  >sapiens : () => pallidus
-@@= skipped -109, +111 lines =@@
+@@= skipped -109, +109 lines =@@
  >x : pallidus
  
          macrocercus(): panamensis.setulosus<dogramacii.koepckeae, julianae.sumatrana> { var x: panamensis.setulosus<dogramacii.koepckeae, julianae.sumatrana>; () => { var y = this; }; return x; }
@@ -6773,8 +6694,6 @@
      }
      export class cahirinus<T0, T1> {
  >cahirinus : cahirinus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          alashanicus(): nigra.caucasica<ruatanica.americanus, argurus.peninsulae> { var x: nigra.caucasica<ruatanica.americanus, argurus.peninsulae>; () => { var y = this; }; return x; }
 ->alashanicus : () => nigra.caucasica<ruatanica.americanus, argurus.peninsulae>
@@ -6806,7 +6725,7 @@
  >trivirgatus : any
  >lavali : any
  >daubentonii : any
-@@= skipped -49, +51 lines =@@
+@@= skipped -49, +49 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -6868,8 +6787,6 @@
      export class leptoceros<T0, T1> extends caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>> {
  >leptoceros : leptoceros<T0, T1>
 ->caurinus.johorensis : caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, stolzmanni>>
-+>T0 : T0
-+>T1 : T1
 +>caurinus.johorensis : johorensis<peninsulae, arboreus<germaini, stolzmanni>>
  >caurinus : typeof caurinus
 ->johorensis : typeof caurinus.johorensis
@@ -6898,7 +6815,7 @@
  >panglima : any
  >julianae : any
  >imperfecta : any
-@@= skipped -27, +29 lines =@@
+@@= skipped -27, +27 lines =@@
  >nigra : any
  >argurus : any
  >imperfecta : any
@@ -6964,8 +6881,6 @@
      export class nigricans<T0, T1> extends sagitta.stolzmanni {
  >nigricans : nigricans<T0, T1>
 ->sagitta.stolzmanni : sagitta.stolzmanni
-+>T0 : T0
-+>T1 : T1
 +>sagitta.stolzmanni : stolzmanni
  >sagitta : typeof sagitta
 ->stolzmanni : typeof sagitta.stolzmanni
@@ -6986,22 +6901,11 @@
      }
  }
  module dammermani {
-@@= skipped -20, +22 lines =@@
- 
-     export class siberu<T0, T1> {
- >siberu : siberu<T0, T1>
-+>T0 : T0
-+>T1 : T1
-     }
- }
- module argurus {
-@@= skipped -7, +9 lines =@@
+@@= skipped -27, +27 lines =@@
  
      export class pygmaea<T0, T1> extends rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus> {
  >pygmaea : pygmaea<T0, T1>
 ->rendalli.moojeni : rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus>
-+>T0 : T0
-+>T1 : T1
 +>rendalli.moojeni : moojeni<konganensis, echinatus>
  >rendalli : typeof rendalli
 ->moojeni : typeof rendalli.moojeni
@@ -7050,13 +6954,11 @@
      }
  }
  module chrysaeolus {
-@@= skipped -42, +44 lines =@@
+@@= skipped -42, +42 lines =@@
  
      export class sarasinorum<T0, T1> extends caurinus.psilurus {
  >sarasinorum : sarasinorum<T0, T1>
 ->caurinus.psilurus : caurinus.psilurus
-+>T0 : T0
-+>T1 : T1
 +>caurinus.psilurus : psilurus
  >caurinus : typeof caurinus
 ->psilurus : typeof caurinus.psilurus
@@ -7167,12 +7069,8 @@
      }
  }
  module argurus {
-@@= skipped -92, +94 lines =@@
- 
-     export class wetmorei<T0, T1> {
+@@= skipped -94, +94 lines =@@
  >wetmorei : wetmorei<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          leucoptera(): petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina> { var x: petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina>; () => { var y = this; }; return x; }
 ->leucoptera : () => petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina>
@@ -7247,7 +7145,7 @@
  >nigra : any
  >howi : any
  >rionegrensis : any
-@@= skipped -65, +67 lines =@@
+@@= skipped -63, +63 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -7405,12 +7303,8 @@
  >argurus : any
  >x : peninsulae
  >argurus : any
-@@= skipped -106, +106 lines =@@
- 
-     export class arboreus<T0, T1> {
+@@= skipped -108, +108 lines =@@
  >arboreus : arboreus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          capreolus(): rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni> { var x: rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>; () => { var y = this; }; return x; }
 ->capreolus : () => rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>
@@ -7425,7 +7319,7 @@
  >rendalli : any
  >samarensis : any
  >Lanthanum : any
-@@= skipped -17, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -7870,12 +7764,8 @@
      }
  }
  module sagitta {
-@@= skipped -22, +22 lines =@@
- 
-     export class sicarius<T0, T1> {
+@@= skipped -24, +24 lines =@@
  >sicarius : sicarius<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          Chlorine(): samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus> { var x: samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus>; () => { var y = this; }; return x; }
 ->Chlorine : () => samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus>
@@ -7890,7 +7780,7 @@
  >samarensis : any
  >nigra : any
  >argurus : any
-@@= skipped -17, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -8145,12 +8035,8 @@
      }
  }
  module argurus {
-@@= skipped -86, +86 lines =@@
- 
-     export class gilbertii<T0, T1> {
+@@= skipped -88, +88 lines =@@
  >gilbertii : gilbertii<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          nasutus(): lavali.lepturus { var x: lavali.lepturus; () => { var y = this; }; return x; }
 ->nasutus : () => lavali.lepturus
@@ -8338,7 +8224,7 @@
      }
  }
  module petrophilus {
-@@= skipped -164, +166 lines =@@
+@@= skipped -162, +162 lines =@@
  >punicus : punicus
  
          strandi(): gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis> { var x: gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis>; () => { var y = this; }; return x; }
@@ -8636,12 +8522,8 @@
      }
  }
  module sagitta {
-@@= skipped -42, +42 lines =@@
- 
-     export class cinereus<T0, T1> {
+@@= skipped -44, +44 lines =@@
  >cinereus : cinereus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          zunigae(): rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>> { var x: rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>; () => { var y = this; }; return x; }
 ->zunigae : () => rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>
@@ -8656,7 +8538,7 @@
  >rendalli : any
  >macrorhinos : any
  >nigra : any
-@@= skipped -17, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -8839,22 +8721,11 @@
      }
  }
  module nigra {
-@@= skipped -19, +19 lines =@@
- 
-     export class caucasica<T0, T1> {
- >caucasica : caucasica<T0, T1>
-+>T0 : T0
-+>T1 : T1
-     }
- }
- module gabriellae {
-@@= skipped -7, +9 lines =@@
+@@= skipped -26, +26 lines =@@
  
      export class klossii<T0, T1> extends imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus> {
  >klossii : klossii<T0, T1>
 ->imperfecta.lasiurus : imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus>
-+>T0 : T0
-+>T1 : T1
 +>imperfecta.lasiurus : lasiurus<robustulus, psilurus>
  >imperfecta : typeof imperfecta
 ->lasiurus : typeof imperfecta.lasiurus
@@ -8862,7 +8733,7 @@
  >dogramacii : any
  >caurinus : any
      }
-@@= skipped -10, +12 lines =@@
+@@= skipped -10, +10 lines =@@
  >amicus : amicus
  
          pirrensis(): argurus.luctuosa { var x: argurus.luctuosa; () => { var y = this; }; return x; }
@@ -9054,12 +8925,8 @@
      }
  }
  module imperfecta {
-@@= skipped -8, +8 lines =@@
- 
-     export class lasiurus<T0, T1> {
+@@= skipped -10, +10 lines =@@
  >lasiurus : lasiurus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          marisae(): lavali.thaeleri { var x: lavali.thaeleri; () => { var y = this; }; return x; }
 ->marisae : () => lavali.thaeleri
@@ -9113,7 +8980,7 @@
  >panglima : any
  >dogramacii : any
  >chrysaeolus : any
-@@= skipped -47, +49 lines =@@
+@@= skipped -45, +45 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -9314,8 +9181,6 @@
      export class ciliolabrum<T0, T1> extends dogramacii.robustulus {
  >ciliolabrum : ciliolabrum<T0, T1>
 ->dogramacii.robustulus : dogramacii.robustulus
-+>T0 : T0
-+>T1 : T1
 +>dogramacii.robustulus : robustulus
  >dogramacii : typeof dogramacii
 ->robustulus : typeof dogramacii.robustulus
@@ -9334,7 +9199,7 @@
  >argurus : any
  >Lanthanum : any
  >ruatanica : any
-@@= skipped -108, +110 lines =@@
+@@= skipped -108, +108 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -9377,12 +9242,8 @@
      }
  }
  module quasiater {
-@@= skipped -36, +36 lines =@@
- 
-     export class wattsi<T0, T1> {
+@@= skipped -38, +38 lines =@@
  >wattsi : wattsi<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          lagotis(): lavali.xanthognathus { var x: lavali.xanthognathus; () => { var y = this; }; return x; }
 ->lagotis : () => lavali.xanthognathus
@@ -9416,7 +9277,7 @@
  >samarensis : any
  >rendalli : any
  >lavali : any
-@@= skipped -30, +32 lines =@@
+@@= skipped -28, +28 lines =@@
  >gabriellae : any
  >lutreolus : any
  >dogramacii : any
@@ -9447,16 +9308,11 @@
      }
  }
  module butleri {
-+>butleri : any
- }
- module petrophilus {
- >petrophilus : typeof petrophilus
+@@= skipped -20, +20 lines =@@
  
      export class sodyi<T0, T1> extends quasiater.bobrinskoi {
  >sodyi : sodyi<T0, T1>
 ->quasiater.bobrinskoi : quasiater.bobrinskoi
-+>T0 : T0
-+>T1 : T1
 +>quasiater.bobrinskoi : bobrinskoi
  >quasiater : typeof quasiater
 ->bobrinskoi : typeof quasiater.bobrinskoi
@@ -9589,7 +9445,7 @@
      }
  }
  module caurinus {
-@@= skipped -128, +131 lines =@@
+@@= skipped -108, +108 lines =@@
  
      export class megaphyllus extends imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>> {
  >megaphyllus : megaphyllus
@@ -9982,8 +9838,6 @@
      export class cor<T0, T1> extends panglima.fundatus<panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops> {
  >cor : cor<T0, T1>
 ->panglima.fundatus : panglima.fundatus<panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops>
-+>T0 : T0
-+>T1 : T1
 +>panglima.fundatus : fundatus<linulus<lotor<luctuosa, wilsoni>, beisa>, melanops>
  >panglima : typeof panglima
 ->fundatus : typeof panglima.fundatus
@@ -9991,7 +9845,7 @@
  >panamensis : any
  >trivirgatus : any
  >argurus : any
-@@= skipped -11, +13 lines =@@
+@@= skipped -11, +11 lines =@@
  >dammermani : any
  
          antinorii(): petrophilus.sodyi<quasiater.carolinensis, argurus.germaini> { var x: petrophilus.sodyi<quasiater.carolinensis, argurus.germaini>; () => { var y = this; }; return x; }
@@ -10158,12 +10012,8 @@
      }
  }
  module howi {
-@@= skipped -28, +28 lines =@@
- 
-     export class coludo<T0, T1> {
+@@= skipped -30, +30 lines =@@
  >coludo : coludo<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          bernhardi(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
 ->bernhardi : () => lutreolus.punicus
@@ -10193,7 +10043,7 @@
      }
  }
  module argurus {
-@@= skipped -27, +29 lines =@@
+@@= skipped -25, +25 lines =@@
  
      export class germaini extends gabriellae.amicus {
  >germaini : germaini
@@ -10746,12 +10596,8 @@
      }
  }
  module argurus {
-@@= skipped -86, +86 lines =@@
- 
-     export class netscheri<T0, T1> {
+@@= skipped -88, +88 lines =@@
  >netscheri : netscheri<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          gravis(): nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri> { var x: nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri>; () => { var y = this; }; return x; }
 ->gravis : () => nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri>
@@ -10766,7 +10612,7 @@
  >nigra : any
  >rendalli : any
  >trivirgatus : any
-@@= skipped -17, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -10985,8 +10831,6 @@
      export class Praseodymium<T0, T1> extends ruatanica.hector<lutreolus.punicus, gabriellae.amicus> {
  >Praseodymium : Praseodymium<T0, T1>
 ->ruatanica.hector : hector<lutreolus.punicus, gabriellae.amicus>
-+>T0 : T0
-+>T1 : T1
 +>ruatanica.hector : hector<punicus, amicus>
  >ruatanica : typeof ruatanica
  >hector : typeof hector
@@ -10999,7 +10843,7 @@
  >panglima : any
  >imperfecta : any
  >quasiater : any
-@@= skipped -15, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  >argurus : any
  >ruatanica : any
  >rionegrensis : any
@@ -11231,8 +11075,6 @@
      export class johorensis<T0, T1> extends lutreolus.punicus {
  >johorensis : johorensis<T0, T1>
 ->lutreolus.punicus : lutreolus.punicus
-+>T0 : T0
-+>T1 : T1
 +>lutreolus.punicus : punicus
  >lutreolus : typeof lutreolus
 ->punicus : typeof lutreolus.punicus
@@ -11257,7 +11099,7 @@
      }
  }
  module argurus {
-@@= skipped -26, +28 lines =@@
+@@= skipped -26, +26 lines =@@
  >luctuosa : luctuosa
  
          loriae(): rendalli.moojeni<macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>, lutreolus.punicus> { var x: rendalli.moojeni<macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>, lutreolus.punicus>; () => { var y = this; }; return x; }
@@ -11284,12 +11126,8 @@
      }
  }
  module panamensis {
-@@= skipped -8, +8 lines =@@
- 
-     export class setulosus<T0, T1> {
+@@= skipped -10, +10 lines =@@
  >setulosus : setulosus<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          duthieae(): caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata> { var x: caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata>; () => { var y = this; }; return x; }
 ->duthieae : () => caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata>
@@ -11304,7 +11142,7 @@
  >caurinus : any
  >howi : any
  >argurus : any
-@@= skipped -17, +19 lines =@@
+@@= skipped -15, +15 lines =@@
  >() => { var y = this; } : () => void
  >y : this
  >this : this
@@ -11437,12 +11275,8 @@
      }
  }
  module petrophilus {
-@@= skipped -42, +42 lines =@@
- 
-     export class rosalia<T0, T1> {
+@@= skipped -44, +44 lines =@@
  >rosalia : rosalia<T0, T1>
-+>T0 : T0
-+>T1 : T1
  
          palmeri(): panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>> { var x: panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>>; () => { var y = this; }; return x; }
 ->palmeri : () => panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>>
@@ -11450,7 +11284,7 @@
  >panglima : any
  >howi : any
  >macrorhinos : any
-@@= skipped -16, +18 lines =@@
+@@= skipped -14, +14 lines =@@
  >panglima : any
  >lavali : any
  >quasiater : any

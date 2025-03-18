@@ -7,12 +7,8 @@
 
 type Record2<K extends keyof any, T> = {
 >Record2 : Record2<K, T>
->K : K
->T : T
 
     [P in K]: T;
->P : P
-
 };
 
 function defaultRecord(x: Record<'a', string>, y: Record<string, string>) {
@@ -61,7 +57,6 @@ function mixed2(x: Record<'a', string>, y: Record2<string, string>) {
 
 function defaultRecord2<T>(x: Record<'a', T>, y: Record<string, T>) {
 >defaultRecord2 : <T>(x: Record<"a", T>, y: Record<string, T>) => void
->T : T
 >x : Record<"a", T>
 >y : Record<string, T>
 
@@ -73,7 +68,6 @@ function defaultRecord2<T>(x: Record<'a', T>, y: Record<string, T>) {
 
 function customRecord2<T>(x: Record2<'a', T>, y: Record2<string, T>) {
 >customRecord2 : <T>(x: Record2<"a", T>, y: Record2<string, T>) => void
->T : T
 >x : Record2<"a", T>
 >y : Record2<string, T>
 
@@ -85,7 +79,6 @@ function customRecord2<T>(x: Record2<'a', T>, y: Record2<string, T>) {
 
 function mixed3<T>(x: Record2<'a', T>, y: Record<string, T>) {
 >mixed3 : <T>(x: Record2<"a", T>, y: Record<string, T>) => void
->T : T
 >x : Record2<"a", T>
 >y : Record<string, T>
 
@@ -97,7 +90,6 @@ function mixed3<T>(x: Record2<'a', T>, y: Record<string, T>) {
 
 function mixed4<T>(x: Record<'a', T>, y: Record2<string, T>) {
 >mixed4 : <T>(x: Record<"a", T>, y: Record2<string, T>) => void
->T : T
 >x : Record<"a", T>
 >y : Record2<string, T>
 

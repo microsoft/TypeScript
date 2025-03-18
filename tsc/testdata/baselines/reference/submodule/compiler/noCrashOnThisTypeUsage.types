@@ -2,8 +2,6 @@
 
 === noCrashOnThisTypeUsage.ts ===
 interface IListenable {
->IListenable : IListenable
-
     changeListeners: Function[] | null
 >changeListeners : Function[] | null
 
@@ -17,14 +15,12 @@ interface IListenable {
 
 function notifyListeners<T>(listenable: IListenable, change: T) {
 >notifyListeners : <T>(listenable: IListenable, change: T) => void
->T : T
 >listenable : IListenable
 >change : T
 }
 
 export class ObservableValue<T> {
 >ObservableValue : ObservableValue<T>
->T : T
 
     constructor(
         public value: T

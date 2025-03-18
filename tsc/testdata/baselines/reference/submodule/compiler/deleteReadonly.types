@@ -2,8 +2,6 @@
 
 === deleteReadonly.ts ===
 interface A {
->A : A
-
   readonly b
 >b : any
 }
@@ -24,8 +22,6 @@ delete a.b;
 >b : any
 
 interface B {
->B : B
-
   readonly [k: string]: string
 >k : string
 }

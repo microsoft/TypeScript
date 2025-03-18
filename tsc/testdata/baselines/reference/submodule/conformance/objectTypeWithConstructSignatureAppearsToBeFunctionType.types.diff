@@ -1,15 +1,6 @@
 --- old.objectTypeWithConstructSignatureAppearsToBeFunctionType.types
 +++ new.objectTypeWithConstructSignatureAppearsToBeFunctionType.types
-@@= skipped -3, +3 lines =@@
- // no errors expected below 
- 
- interface I {
-+>I : I
-+
-     new(): number;
- }
- 
-@@= skipped -20, +22 lines =@@
+@@= skipped -23, +23 lines =@@
  >r2c : (x: any, y?: any) => any
  >x : any
  >y : any

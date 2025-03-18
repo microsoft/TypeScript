@@ -23,8 +23,6 @@ async function fAsyncExplicit(): Promise<[number, boolean]> {
 
 // https://github.com/Microsoft/TypeScript/issues/13128
 interface Obj {
->Obj : Obj
-
     stringProp: string;
 >stringProp : string
 
@@ -110,7 +108,6 @@ async function fIndexedTypeForExplicitPromiseOfAnyProp(obj: Obj): Promise<Obj["a
 
 async function fGenericIndexedTypeForStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 >fGenericIndexedTypeForStringProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["stringProp"]>
->TObj : TObj
 >obj : TObj
 
     return obj.stringProp;
@@ -121,7 +118,6 @@ async function fGenericIndexedTypeForStringProp<TObj extends Obj>(obj: TObj): Pr
 
 async function fGenericIndexedTypeForPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 >fGenericIndexedTypeForPromiseOfStringProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["stringProp"]>
->TObj : TObj
 >obj : TObj
 
     return Promise.resolve(obj.stringProp);
@@ -136,7 +132,6 @@ async function fGenericIndexedTypeForPromiseOfStringProp<TObj extends Obj>(obj: 
 
 async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 >fGenericIndexedTypeForExplicitPromiseOfStringProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["stringProp"]>
->TObj : TObj
 >obj : TObj
 
     return Promise.resolve<TObj["stringProp"]>(obj.stringProp);
@@ -151,7 +146,6 @@ async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Ob
 
 async function fGenericIndexedTypeForAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 >fGenericIndexedTypeForAnyProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["anyProp"]>
->TObj : TObj
 >obj : TObj
 
     return obj.anyProp;
@@ -162,7 +156,6 @@ async function fGenericIndexedTypeForAnyProp<TObj extends Obj>(obj: TObj): Promi
 
 async function fGenericIndexedTypeForPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 >fGenericIndexedTypeForPromiseOfAnyProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["anyProp"]>
->TObj : TObj
 >obj : TObj
 
     return Promise.resolve(obj.anyProp);
@@ -177,7 +170,6 @@ async function fGenericIndexedTypeForPromiseOfAnyProp<TObj extends Obj>(obj: TOb
 
 async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 >fGenericIndexedTypeForExplicitPromiseOfAnyProp : <TObj extends Obj>(obj: TObj) => Promise<TObj["anyProp"]>
->TObj : TObj
 >obj : TObj
 
     return Promise.resolve<TObj["anyProp"]>(obj.anyProp);
@@ -192,8 +184,6 @@ async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(
 
 async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
 >fGenericIndexedTypeForKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
->TObj : TObj
->K : K
 >obj : TObj
 >key : K
 
@@ -205,8 +195,6 @@ async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TOb
 
 async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
 >fGenericIndexedTypeForPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
->TObj : TObj
->K : K
 >obj : TObj
 >key : K
 
@@ -222,8 +210,6 @@ async function fGenericIndexedTypeForPromiseOfKProp<TObj extends Obj, K extends 
 
 async function fGenericIndexedTypeForExplicitPromiseOfKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
 >fGenericIndexedTypeForExplicitPromiseOfKProp : <TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K) => Promise<TObj[K]>
->TObj : TObj
->K : K
 >obj : TObj
 >key : K
 

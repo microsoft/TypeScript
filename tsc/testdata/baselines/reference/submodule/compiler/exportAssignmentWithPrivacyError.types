@@ -2,16 +2,12 @@
 
 === exportAssignmentWithPrivacyError.ts ===
 interface connectmodule {
->connectmodule : connectmodule
-
     (res, req, next): void;
 >res : any
 >req : any
 >next : any
 }
 interface connectexport {
->connectexport : connectexport
-
     use: (mod: connectmodule) => connectexport;
 >use : (mod: connectmodule) => connectexport
 >mod : connectmodule

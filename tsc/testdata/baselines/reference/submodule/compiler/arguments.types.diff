@@ -1,34 +1,26 @@
 --- old.arguments.types
 +++ new.arguments.types
-@@= skipped -23, +23 lines =@@
- >arguments : any
+@@= skipped -24, +24 lines =@@
  
  interface I {
-+>I : I
-+
      method(args: typeof arguments): void;
 ->method : (args: typeof arguments) => void
 +>method : (args: any) => void
  >args : any
-->arguments : any
+ >arguments : any
  
      fn: (args: typeof arguments) => void;
 ->fn : (args: typeof arguments) => void
 +>fn : (args: any) => void
  >args : any
-->arguments : any
+ >arguments : any
  
-     (args: typeof arguments): void;
- >args : any
-->arguments : any
- 
-     new (args: typeof arguments): void;
- >args : any
-->arguments : any
+@@= skipped -18, +18 lines =@@
+ >arguments : any
  
      construct: new (args: typeof arguments) => void;
 ->construct : new (args: typeof arguments) => void
 +>construct : new (args: any) => void
  >args : any
-->arguments : any
+ >arguments : any
  }

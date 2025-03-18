@@ -59,12 +59,8 @@ declare module "observable" {
 >"observable" : typeof import("observable")
 
     interface Observable<T> {
->Observable : Observable<T, T>
->T : T
-
         map<U>(proj: (e:T) => U): Observable<U>
 >map : <U>(proj: (e: T) => U) => any
->U : U
 >proj : (e: T) => U
 >e : T
     }
@@ -82,7 +78,6 @@ declare module "observable" {
 
     class Observable<T> {
 >Observable : Observable<T>
->T : T
 
         filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>

@@ -20,7 +20,6 @@ class Derived extends Base {
 }
 class BaseCollection<T extends Base> {
 >BaseCollection : BaseCollection<T>
->T : T
 
     constructor(f: () => T) {
 >f : () => T
@@ -50,7 +49,6 @@ class Thing {
 
 class ComponentCollection<T> {
 >ComponentCollection : ComponentCollection<T>
->T : T
 
     private static sortComponents(p: Foo) {
 >sortComponents : (p: Foo) => GenericType<string>
@@ -96,7 +94,6 @@ class Foo {
 
 class GenericType<T> {
 >GenericType : GenericType<T>
->T : T
 
     constructor(parent: FooBase) { }
 >parent : FooBase

@@ -27,7 +27,6 @@ declare module "./file1" {
 >"./file1" : any
 
     interface A { a }
->A : A
 >a : any
 }
 

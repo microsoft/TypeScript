@@ -12,7 +12,6 @@ type AOrBObj = { name: "A" | "B" };
 
 type Generic<T extends AObjOrBObj> = T;
 >Generic : T
->T : T
 
 type T = Generic<AOrBObj>;
 >T : AOrBObj

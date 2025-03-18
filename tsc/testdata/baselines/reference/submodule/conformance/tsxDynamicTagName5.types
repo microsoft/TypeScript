@@ -6,8 +6,6 @@ declare module 'react' {
 
 	class Component<T, U> { }
 >Component : Component<T, U>
->T : T
->U : U
 }
 
 === app.tsx ===

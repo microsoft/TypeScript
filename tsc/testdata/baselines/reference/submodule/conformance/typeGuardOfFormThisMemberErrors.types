@@ -59,8 +59,6 @@ namespace Test {
 >children : FileSystemObject[]
 	}
 	export interface Networked {
->Networked : Networked
-
 		host: string;
 >host : string
 	}

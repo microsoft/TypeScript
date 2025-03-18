@@ -17,8 +17,6 @@ const t: keyof EventList = p012
 
 === eventList.ts ===
 export interface EventList {
->EventList : EventList
-
     p0: [];
 >p0 : []
 }
@@ -28,8 +26,6 @@ declare module './index' {
 >'./index' : typeof import("index")
 
     interface EventList {
->EventList : EventList
-
         p1: []
 >p1 : []
     }
@@ -42,8 +38,6 @@ declare module './index' {
 >'./index' : typeof import("index")
 
     interface EventList {
->EventList : EventList
-
         p2: []
 >p2 : []
     }

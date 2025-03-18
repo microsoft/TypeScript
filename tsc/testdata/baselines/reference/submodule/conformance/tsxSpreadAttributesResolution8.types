@@ -30,8 +30,6 @@ const obj3 = {
 }
 
 interface Prop {
->Prop : Prop
-
     x: number
 >x : number
 

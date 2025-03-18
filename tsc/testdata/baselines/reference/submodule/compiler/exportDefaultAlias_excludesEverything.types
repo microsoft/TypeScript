@@ -2,11 +2,7 @@
 
 === exportDefaultAlias_excludesEverything.ts ===
 export default interface A {}
->A : default
-
 interface B {}
->B : B
-
 export default B;
 >B : B
 

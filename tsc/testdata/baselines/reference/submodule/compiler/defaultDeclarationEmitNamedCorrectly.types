@@ -2,10 +2,6 @@
 
 === defaultDeclarationEmitNamedCorrectly.ts ===
 export interface Things<P, T> {
->Things : Things<P, T>
->P : P
->T : T
-
     p: P;
 >p : P
 
@@ -14,8 +10,6 @@ export interface Things<P, T> {
 }
 export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
 >make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
->P : P
->CTor : CTor
 >x : new () => CTor & { props: P; }
 >props : P
 
@@ -24,7 +18,6 @@ export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor>
 }
 
 export interface Props {
->Props : Props
 }
 
 export default class MyComponent {

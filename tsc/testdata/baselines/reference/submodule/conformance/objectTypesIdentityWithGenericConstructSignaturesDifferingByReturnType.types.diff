@@ -1,42 +1,6 @@
 --- old.objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.types
 +++ new.objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.types
-@@= skipped -6, +6 lines =@@
- 
- class B<T> {
- >B : B<T>
-+>T : T
- 
-     constructor(x: T) { return null; }
- >x : T
-@@= skipped -7, +8 lines =@@
- 
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     constructor(x: T) { return null; }
- >x : T
- }
- 
- interface I<T> {
-+>I : I<T>
-+>T : T
-+
-     new(x: T): Date;
- >x : T
- }
- 
- interface I2 {
-+>I2 : I2
-+
-     new<T>(x: T): RegExp;
-+>T : T
- >x : T
- }
- 
- var a: { new<T>(x: T): T }
- >a : new <T>(x: T) => T
-+>T : T
+@@= skipped -33, +33 lines =@@
  >x : T
  
  var b = { new<T>(x: T): T { return null; } }; // not a construct signature, function called new
@@ -45,24 +9,22 @@
 +>b : { new: <T>(x: T) => T; }
 +>{ new<T>(x: T): T { return null; } } : { new: <T>(x: T) => T; }
  >new : <T>(x: T) => T
-+>T : T
  >x : T
  
- function foo1b(x: B<string>);
-@@= skipped -62, +71 lines =@@
+@@= skipped -42, +42 lines =@@
  >x : any
  
  function foo3(x: typeof a);
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: new <T>(x: T) => T): any; (x: new <T>(x: T) => T): any; }
  >x : new <T>(x: T) => T
-->a : new <T>(x: T) => T
+ >a : new <T>(x: T) => T
  
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 +>foo3 : { (x: new <T>(x: T) => T): any; (x: new <T>(x: T) => T): any; }
  >x : new <T>(x: T) => T
-->a : new <T>(x: T) => T
+ >a : new <T>(x: T) => T
  
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -75,6 +37,7 @@
 ->b : { "new"<T>(x: T): T; }
 +>foo4 : { (x: { new: <T>(x: T) => T; }): any; (x: { new: <T>(x: T) => T; }): any; }
 +>x : { new: <T>(x: T) => T; }
++>b : { new: <T>(x: T) => T; }
  
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -82,6 +45,7 @@
 ->b : { "new"<T>(x: T): T; }
 +>foo4 : { (x: { new: <T>(x: T) => T; }): any; (x: { new: <T>(x: T) => T; }): any; }
 +>x : { new: <T>(x: T) => T; }
++>b : { new: <T>(x: T) => T; }
  
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -92,7 +56,7 @@
 ->foo5 : { (x: typeof a): number; (x: typeof b): string; }
 +>foo5 : { (x: new <T>(x: T) => T): number; (x: { new: <T>(x: T) => T; }): string; }
  >x : new <T>(x: T) => T
-->a : new <T>(x: T) => T
+ >a : new <T>(x: T) => T
  
  function foo5(x: typeof b): string; // ok
 ->foo5 : { (x: typeof a): number; (x: typeof b): string; }
@@ -100,6 +64,7 @@
 ->b : { "new"<T>(x: T): T; }
 +>foo5 : { (x: new <T>(x: T) => T): number; (x: { new: <T>(x: T) => T; }): string; }
 +>x : { new: <T>(x: T) => T; }
++>b : { new: <T>(x: T) => T; }
  
  function foo5(x: any): any { }
 ->foo5 : { (x: typeof a): number; (x: typeof b): string; }
@@ -107,7 +72,7 @@
  >x : any
  
  function foo8(x: B<string>);
-@@= skipped -66, +60 lines =@@
+@@= skipped -66, +66 lines =@@
  >x : any
  
  function foo10(x: B<string>);
@@ -119,7 +84,7 @@
 ->foo10 : { (x: B<string>): any; (x: typeof a): any; }
 +>foo10 : { (x: B<string>): any; (x: new <T>(x: T) => T): any; }
  >x : new <T>(x: T) => T
-->a : new <T>(x: T) => T
+ >a : new <T>(x: T) => T
  
  function foo10(x: any) { }
 ->foo10 : { (x: B<string>): any; (x: typeof a): any; }
@@ -137,6 +102,7 @@
 ->b : { "new"<T>(x: T): T; }
 +>foo11 : { (x: B<string>): any; (x: { new: <T>(x: T) => T; }): any; }
 +>x : { new: <T>(x: T) => T; }
++>b : { new: <T>(x: T) => T; }
  
  function foo11(x: any) { }
 ->foo11 : { (x: B<string>): any; (x: typeof b): any; }
@@ -144,7 +110,7 @@
  >x : any
  
  function foo12(x: I<string>);
-@@= skipped -50, +48 lines =@@
+@@= skipped -50, +50 lines =@@
  >x : any
  
  function foo13(x: I<string>);
@@ -156,7 +122,7 @@
 ->foo13 : { (x: I<string>): any; (x: typeof a): any; }
 +>foo13 : { (x: I<string>): any; (x: new <T>(x: T) => T): any; }
  >x : new <T>(x: T) => T
-->a : new <T>(x: T) => T
+ >a : new <T>(x: T) => T
  
  function foo13(x: any) { }
 ->foo13 : { (x: I<string>): any; (x: typeof a): any; }
@@ -174,6 +140,7 @@
 ->b : { "new"<T>(x: T): T; }
 +>foo14 : { (x: I<string>): any; (x: { new: <T>(x: T) => T; }): any; }
 +>x : { new: <T>(x: T) => T; }
++>b : { new: <T>(x: T) => T; }
  
  function foo14(x: any) { }
 ->foo14 : { (x: I<string>): any; (x: typeof b): any; }

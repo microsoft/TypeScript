@@ -3,7 +3,6 @@
 === arrayLiteralsWithRecursiveGenerics.ts ===
 class List<T> {
 >List : List<T>
->T : T
 
     data: T;
 >data : T
@@ -14,7 +13,6 @@ class List<T> {
 
 class DerivedList<U> extends List<U> {
 >DerivedList : DerivedList<U>
->U : U
 >List : List<U>
 
     foo: U;
@@ -25,7 +23,6 @@ class DerivedList<U> extends List<U> {
 
 class MyList<T> {
 >MyList : MyList<T>
->T : T
 
     data: T;
 >data : T

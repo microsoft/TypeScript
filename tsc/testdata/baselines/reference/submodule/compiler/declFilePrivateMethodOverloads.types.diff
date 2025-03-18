@@ -1,15 +1,6 @@
 --- old.declFilePrivateMethodOverloads.types
 +++ new.declFilePrivateMethodOverloads.types
-@@= skipped -1, +1 lines =@@
- 
- === declFilePrivateMethodOverloads.ts ===
- interface IContext {
-+>IContext : IContext
-+
-     someMethod();
- >someMethod : () => any
- }
-@@= skipped -7, +9 lines =@@
+@@= skipped -8, +8 lines =@@
  >c1 : c1
  
      private _forEachBindingContext(bindingContext: IContext, fn: (bindingContext: IContext) => void);

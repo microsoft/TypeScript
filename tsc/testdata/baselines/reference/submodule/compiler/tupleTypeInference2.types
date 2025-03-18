@@ -5,11 +5,9 @@
 
 type A<R> = [R] | [R, string];
 >A : A<R>
->R : R
 
 declare function f<T>(x: A<T>): T;
 >f : <T>(x: A<T>) => T
->T : T
 >x : A<T>
 
 f([undefined, ''] as [never, string]); // T: never
@@ -32,13 +30,9 @@ f([undefined, ''] as [void, string]); // T: void
 
 type B<R, S> = [R] | [R, S];
 >B : B<R, S>
->R : R
->S : S
 
 declare function g<T, U>(f: B<T, U>): U;
 >g : <T, U>(f: B<T, U>) => U
->T : T
->U : U
 >f : B<T, U>
 
 g([[]] as [void[]]); // U: {}
@@ -50,13 +44,9 @@ g([[]] as [void[]]); // U: {}
 
 type C<R, S> = [R[]] | [R[], S];
 >C : C<R, S>
->R : R
->S : S
 
 declare function h<T, U>(f: C<T, U>): U;
 >h : <T, U>(f: C<T, U>) => U
->T : T
->U : U
 >f : C<T, U>
 
 h([[]] as [void[]]); // U: {}
@@ -70,11 +60,9 @@ h([[]] as [void[]]); // U: {}
 
 type C2<R> = [R[]] | [R[], void];
 >C2 : C2<R>
->R : R
 
 declare function h2<T>(f: C2<T>): T;
 >h2 : <T>(f: C2<T>) => T
->T : T
 >f : C2<T>
 
 h2([[]] as [never[]]); // T: never

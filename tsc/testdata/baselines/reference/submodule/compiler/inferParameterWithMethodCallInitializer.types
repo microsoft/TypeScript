@@ -23,6 +23,7 @@ class Example {
 >this.getNumber : () => number
 >this : this
 >getNumber : () => number
+>a : number
 
         return a;
 >a : number

@@ -6,11 +6,9 @@
 // Via #56620
 class Base<U> { }
 >Base : Base<U>
->U : U
 
 export class C2<T> extends Base<unknown> {
 >C2 : C2<T>
->T : T
 >Base : Base<unknown>
 
     T: number;
@@ -43,7 +41,6 @@ class Leg { }
 
 class Foo<t> extends Leg {
 >Foo : Foo<t>
->t : t
 >Leg : Leg
 
     t = {} as t
@@ -65,7 +62,6 @@ class BaseClass { }
 
 class Item<data> extends BaseClass {
 >Item : Item<data>
->data : data
 >BaseClass : BaseClass
 
     data: data;

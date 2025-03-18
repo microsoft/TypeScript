@@ -2,23 +2,17 @@
 
 === augmentedTypeBracketAccessIndexSignature.ts ===
 interface Foo { a }
->Foo : Foo
 >a : any
 
 interface Bar { b }
->Bar : Bar
 >b : any
 
 interface Object {
->Object : Object
-
     [n: number]: Foo;
 >n : number
 }
 
 interface Function {
->Function : Function
-
     [n: number]: Bar;
 >n : number
 }

@@ -15,7 +15,6 @@ class C {
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     x?: T;
 >x : T

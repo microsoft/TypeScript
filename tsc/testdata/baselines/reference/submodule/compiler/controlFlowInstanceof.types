@@ -212,8 +212,6 @@ function foo(x: A | undefined) {
 // Y is assignable to X, but not a subtype of X
 
 interface X {
->X : X
-
     x?: string;
 >x : string | undefined
 }

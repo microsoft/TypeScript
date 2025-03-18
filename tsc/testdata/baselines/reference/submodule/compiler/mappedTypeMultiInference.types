@@ -2,20 +2,15 @@
 
 === mappedTypeMultiInference.ts ===
 interface Style {
->Style : Style
-
     flashy: any;
 >flashy : any
 }
 
 declare function mergeStyleSets<K extends string>(
 >mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style }[]) => { [P in K]: Style }
->K : K
 
     ...cssSets: { [P in K]?: Style }[]): { [P in K]: Style };
 >cssSets : { [P in K]?: Style }[]
->P : P
->P : P
 
 // Expected:
 //   let x: {

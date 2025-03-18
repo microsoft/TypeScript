@@ -1,14 +1,6 @@
 --- old.inferenceOfNullableObjectTypesWithCommonBase.types
 +++ new.inferenceOfNullableObjectTypesWithCommonBase.types
-@@= skipped -2, +2 lines =@@
- === inferenceOfNullableObjectTypesWithCommonBase.ts ===
- function equal<T>(a: T, b: T) { }
- >equal : <T>(a: T, b: T) => void
-+>T : T
- >a : T
- >b : T
- 
-@@= skipped -135, +136 lines =@@
+@@= skipped -137, +137 lines =@@
  >equal : <T>(a: T, b: T) => void
  >v as string : string
  >v : never

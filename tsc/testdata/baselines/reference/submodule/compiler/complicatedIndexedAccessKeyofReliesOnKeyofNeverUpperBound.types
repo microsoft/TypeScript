@@ -2,8 +2,6 @@
 
 === complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts ===
 interface TextChannel {
->TextChannel : TextChannel
-
     id: string;
 >id : string
 
@@ -15,8 +13,6 @@ interface TextChannel {
 }
 
 interface EmailChannel {
->EmailChannel : EmailChannel
-
     id: string;
 >id : string
 
@@ -33,25 +29,18 @@ type Channel = TextChannel | EmailChannel;
 export type ChannelType = Channel extends { type: infer R } ? R : never;
 >ChannelType : "email" | "text"
 >type : R
->R : R
 
 type Omit<T, K extends keyof T> = Pick<
 >Omit : Omit<T, K>
->T : T
->K : K
 
     T,
     ({ [P in keyof T]: P } & { [P in K]: never } & { [x: string]: never })[keyof T]
->P : P
->P : P
 >x : string
 
 >;
 
 type ChannelOfType<T extends ChannelType, A = Channel> = A extends { type: T }
 >ChannelOfType : ChannelOfType<T, A>
->T : T
->A : A
 >type : T
 
     ? A
@@ -60,7 +49,6 @@ type ChannelOfType<T extends ChannelType, A = Channel> = A extends { type: T }
 
 export type NewChannel<T extends Channel> = Pick<T, 'type'> &
 >NewChannel : NewChannel<T>
->T : T
 
     Partial<Omit<T, 'type' | 'id'>> & { localChannelId: string };
 >localChannelId : string
@@ -68,7 +56,6 @@ export type NewChannel<T extends Channel> = Pick<T, 'type'> &
 
 export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<ChannelOfType<T>> {
 >makeNewChannel : <T extends "email" | "text">(type: T) => NewChannel<ChannelOfType<T, EmailChannel> | ChannelOfType<T, TextChannel>>
->T : T
 >type : T
 
     const localChannelId = `blahblahblah`;

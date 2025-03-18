@@ -2,9 +2,6 @@
 
 === foo.ts ===
 interface Point<T> {
->Point : Point<T>
->T : T
-
     x: number;
 >x : number
 
@@ -19,12 +16,7 @@ export = Point;
 
 === foo2.ts ===
 namespace Bar {
->Bar : typeof Bar
-
     export interface I<T> {
->I : I<T>
->T : T
-
         a: string;
 >a : string
 
@@ -37,12 +29,7 @@ namespace Bar {
 }
 
 export namespace Baz {
->Baz : any
-
     export interface J<T> {
->J : J<T>
->T : T
-
         a: number;
 >a : number
 
@@ -56,7 +43,6 @@ export namespace Baz {
 
 class Bar<T> {
 >Bar : Bar<T>
->T : T
 
     item: Bar.I<T>;
 >item : I<T>
@@ -99,7 +85,6 @@ export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12}
 
 export class Bar2<T> {
 >Bar2 : Bar2<T>
->T : T
 
     item: {a: string, b: number, c: object, data: T};
 >item : { a: string; b: number; c: object; data: T; }

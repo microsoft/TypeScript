@@ -6,23 +6,18 @@ type Types = 'boolean' | 'unknown' | 'string';
 
 type Properties<T extends { [key: string]: Types }> = {
 >Properties : Properties<T>
->T : T
 >key : string
 
     readonly [key in keyof T]: T[key] extends 'boolean' ? boolean : T[key] extends 'string' ? string : unknown
->key : key
 }
 
 type AnyCtor<P extends object> = new (...a: any[]) => P
 >AnyCtor : AnyCtor<P>
->P : P
 >a : any[]
 
 declare function classWithProperties<T extends { [key: string]: Types }, P extends object>(properties: T, klass: AnyCtor<P>): {
 >classWithProperties : <T extends { [key: string]: Types; }, P extends object>(properties: T, klass: AnyCtor<P>) => { new (): P & Properties<T>; prototype: P & Properties<T>; }
->T : T
 >key : string
->P : P
 >properties : T
 >klass : AnyCtor<P>
 

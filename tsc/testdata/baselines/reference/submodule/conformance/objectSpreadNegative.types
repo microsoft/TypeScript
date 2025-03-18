@@ -59,11 +59,9 @@ let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumbe
 
 // assignability as target
 interface Bool { b: boolean };
->Bool : Bool
 >b : boolean
 
 interface Str { s: string };
->Str : Str
 >s : string
 
 let spread = { ...{ b: true }, ...{s: "foo" } };

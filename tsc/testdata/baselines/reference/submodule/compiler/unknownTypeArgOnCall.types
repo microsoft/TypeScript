@@ -3,11 +3,9 @@
 === unknownTypeArgOnCall.ts ===
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
   public clone<U>() {
 >clone : <U>() => any
->U : U
 
    return null;
    }

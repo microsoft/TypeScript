@@ -4,9 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/41984
 
 interface TestCase<T extends string | number> {
->TestCase : TestCase<T>
->T : T
-
   readonly val1: T | ReadonlyArray<T>;
 >val1 : T | readonly T[]
 
@@ -15,9 +12,6 @@ interface TestCase<T extends string | number> {
 }
 
 interface MultiCaseFixture<T> {
->MultiCaseFixture : MultiCaseFixture<T>
->T : T
-
   cases: T[];
 >cases : T[]
 }
@@ -77,7 +71,6 @@ function subDataFunc(): TestCase<string | number>[] {
 
 function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
 >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
->T : T
 >subFunc : () => T[]
 
   return { cases: subFunc() };

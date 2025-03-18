@@ -1,18 +1,7 @@
 --- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).types
 +++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmitErrors1.ts] ////
- 
- === /node_modules/pkg/import.d.ts ===
--
- export interface ImportInterface {}
--=== /node_modules/pkg/require.d.ts ===
-+>ImportInterface : ImportInterface
- 
-+=== /node_modules/pkg/require.d.ts ===
+@@= skipped -7, +7 lines =@@
  export interface RequireInterface {}
-+>RequireInterface : RequireInterface
-+
  === /index.ts ===
  export type LocalInterface =
 ->LocalInterface : LocalInterface
@@ -40,7 +29,7 @@
  >null as any : any
  
  === /other.ts ===
-@@= skipped -37, +39 lines =@@
+@@= skipped -30, +30 lines =@@
  
      & import("pkg", {"resolution-mode": "import"}).ImportInterface;
  >import("pkg", {"resolution-mode": "import"}).ImportInterface : any

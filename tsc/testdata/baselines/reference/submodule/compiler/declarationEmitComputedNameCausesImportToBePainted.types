@@ -7,8 +7,6 @@ export const Key = Symbol();
 >Symbol : SymbolConstructor
 
 export interface Context {
->Context : Context
-
   [Key]: string;
 >[Key] : string
 >Key : unique symbol

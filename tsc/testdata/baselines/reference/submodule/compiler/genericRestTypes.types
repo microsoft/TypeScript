@@ -7,11 +7,9 @@
 // Removes the first element from a tuple
 type Tail<T extends any[]> = ((...args: T) => any) extends ((head: any, ...tail: infer U) => any) ? U : never;
 >Tail : Tail<T>
->T : T
 >args : T
 >head : any
 >tail : U
->U : U
 
 type MyFunctionType = (foo: number, bar: string) => boolean;
 >MyFunctionType : MyFunctionType
@@ -24,7 +22,6 @@ type Explicit = (...args: Tail<Parameters<MyFunctionType>>) => ReturnType<MyFunc
 
 type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
 >Bind1 : Bind1<T>
->T : T
 >head : any
 >tail : any[]
 >args : Tail<Parameters<T>>
@@ -34,7 +31,6 @@ type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
 
 function assignmentWithComplexRest<T extends any[]>() {
 >assignmentWithComplexRest : <T extends any[]>() => void
->T : T
 
     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
 >fn1 : (x: string, ...rest: T) => void
@@ -53,7 +49,6 @@ function assignmentWithComplexRest<T extends any[]>() {
 
 function assignmentWithComplexRest2<T extends any[]>() {
 >assignmentWithComplexRest2 : <T extends any[]>() => void
->T : T
 
     const fn1: (cb: (x: string, ...rest: T) => void) => void = (cb) => {};
 >fn1 : (cb: (x: string, ...rest: T) => void) => void
@@ -72,7 +67,6 @@ function assignmentWithComplexRest2<T extends any[]>() {
 
 function assignmentWithComplexRest3<T extends any[]>() {
 >assignmentWithComplexRest3 : <T extends any[]>() => void
->T : T
 
     const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
 >fn1 : (x: string, ...rest: T) => void

@@ -2,13 +2,8 @@
 
 === objectTypesIdentityWithComplexConstraints.ts ===
 interface A {
->A : A
-
       <T extends {
->T : T
-
             <S extends A>(x: T, y: S): void
->S : S
 >x : T
 >y : S
 
@@ -18,10 +13,7 @@ interface A {
 }
 
 interface B {
->B : B
-
       <U extends B>(x: U, y: U): void
->U : U
 >x : U
 >y : U
 }

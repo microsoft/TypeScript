@@ -2,8 +2,6 @@
 
 === objectTypeWithConstructSignatureHidingMembersOfFunction.ts ===
 interface I {
->I : I
-
     new(): number;
     apply(a: any, b?: any): void;
 >apply : (a: any, b?: any) => void

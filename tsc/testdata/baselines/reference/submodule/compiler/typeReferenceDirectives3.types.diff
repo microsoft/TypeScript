@@ -1,17 +1,7 @@
 --- old.typeReferenceDirectives3.types
 +++ new.typeReferenceDirectives3.types
-@@= skipped -3, +3 lines =@@
- /// <reference types="lib" preserve="true" />
- /// <reference path="ref.d.ts" />
- interface A {
-+>A : A
-+
-     x: () => $
- >x : () => $
- }
- === /ref.d.ts ===
+@@= skipped -10, +10 lines =@@
  interface $ { x }
-+>$ : $
  >x : any
  
 -=== /types/lib/index.d.ts ===

@@ -1,68 +1,17 @@
 --- old.reverseMappedUnionInference.types
 +++ new.reverseMappedUnionInference.types
-@@= skipped -1, +1 lines =@@
- 
- === reverseMappedUnionInference.ts ===
- interface AnyExtractor<Result> {
-+>AnyExtractor : AnyExtractor<Result>
-+>Result : Result
-+
-   matches: (node: any) => boolean;
- >matches : (node: any) => boolean
- >node : any
-@@= skipped -10, +13 lines =@@
- }
- 
- interface Extractor<T, Result> {
-+>Extractor : Extractor<T, Result>
-+>T : T
-+>Result : Result
-+
-   matches: (node: unknown) => node is T;
- >matches : (node: unknown) => node is T
- >node : unknown
-@@= skipped -11, +15 lines =@@
- 
- declare function createExtractor<T, Result>(params: {
- >createExtractor : <T, Result>(params: { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }) => Extractor<T, Result>
-+>T : T
-+>Result : Result
- >params : { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }
- 
-   matcher: (node: unknown) => node is T;
-@@= skipped -13, +15 lines =@@
- }): Extractor<T, Result>;
- 
- interface Identifier {
-+>Identifier : Identifier
-+
-   kind: "identifier";
- >kind : "identifier"
- 
-@@= skipped -48, +50 lines =@@
- });
- 
- interface StringLiteral {
-+>StringLiteral : StringLiteral
-+
-   kind: "stringLiteral";
- >kind : "stringLiteral"
- 
-@@= skipped -48, +50 lines =@@
+@@= skipped -131, +131 lines =@@
  });
  
  declare function unionType<Result extends readonly unknown[]>(parsers: {
 ->unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]>; }) => AnyExtractor<Result[number]>
 ->parsers : { [K in keyof Result]: AnyExtractor<Result[K]>; }
 +>unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]> }) => AnyExtractor<Result[number]>
-+>Result : Result
 +>parsers : { [K in keyof Result]: AnyExtractor<Result[K]> }
  
    [K in keyof Result]: AnyExtractor<Result[K]>;
-+>K : K
-+
  }): AnyExtractor<Result[number]>;
- 
+@@= skipped -9, +9 lines =@@
  const myUnion = unionType([identifierExtractor, stringExtractor]);
  >myUnion : AnyExtractor<{ node: Identifier; kind: "identifier"; value: string; } | { node: StringLiteral; kind: "string"; value: string; }>
  >unionType([identifierExtractor, stringExtractor]) : AnyExtractor<{ node: Identifier; kind: "identifier"; value: string; } | { node: StringLiteral; kind: "string"; value: string; }>

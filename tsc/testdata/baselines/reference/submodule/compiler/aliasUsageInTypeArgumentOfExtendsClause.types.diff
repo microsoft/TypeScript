@@ -12,23 +12,19 @@
 +>moduleA : typeof import("aliasUsageInTypeArgumentOfExtendsClause_moduleA")
  
  interface IHasVisualizationModel {
-+>IHasVisualizationModel : IHasVisualizationModel
-+
      VisualizationModel: typeof Backbone.Model;
 ->VisualizationModel : typeof Backbone.Model
 ->Backbone.Model : typeof Backbone.Model
 ->Backbone : typeof Backbone
 ->Model : typeof Backbone.Model
 +>VisualizationModel : typeof Model
++>Backbone.Model : typeof Model
 +>Backbone : typeof import("aliasUsageInTypeArgumentOfExtendsClause_backbone")
++>Model : typeof Model
  }
  class C<T extends IHasVisualizationModel> {
  >C : C<T>
-+>T : T
- 
-     x: T;
- >x : T
-@@= skipped -23, +24 lines =@@
+@@= skipped -23, +23 lines =@@
  >C : C<IHasVisualizationModel>
  
      x = moduleA;

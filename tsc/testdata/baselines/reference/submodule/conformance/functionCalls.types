@@ -34,8 +34,6 @@ anyVar<Window>(undefined);
 
 // Invoke function call on value of a subtype of Function with no call signatures with no type arguments
 interface SubFunc extends Function {
->SubFunc : SubFunc
-
     prop: number;
 >prop : number
 }

@@ -5,26 +5,20 @@
 
 declare class Base<T> {
 >Base : Base<T>
->T : T
 
     someProp: T;
 >someProp : T
 
     method<U extends unknown[]>(x: { [K in keyof U]: U[K] }): Base<U>;
 >method : <U extends unknown[]>(x: { [K in keyof U]: U[K] }) => Base<U>
->U : U
 >x : { [K in keyof U]: U[K] }
->K : K
 }
 
 declare class Derived<T> extends Base<T> {
 >Derived : Derived<T>
->T : T
 >Base : Base<T>
 
     method<V extends unknown[]>(x: { [K in keyof V]: V[K] }): Base<V>;
 >method : <V extends unknown[]>(x: { [K in keyof V]: V[K] }) => Base<V>
->V : V
 >x : { [K in keyof V]: V[K] }
->K : K
 }

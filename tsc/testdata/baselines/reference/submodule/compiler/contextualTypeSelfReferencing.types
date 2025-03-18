@@ -5,20 +5,16 @@
 
 type narrow<def> = def extends string
 >narrow : narrow<def>
->def : def
 
   ? def
   : def extends [unknown, ...unknown[]]
   ? def
   : {
       [k in keyof def]: narrow<def[k]>;
->k : k
-
     };
 
 declare const parse: <def>(def: narrow<def>) => def;
 >parse : <def>(def: narrow<def>) => def
->def : def
 >def : narrow<def>
 
 const result = parse([{ a: "foo" }]);

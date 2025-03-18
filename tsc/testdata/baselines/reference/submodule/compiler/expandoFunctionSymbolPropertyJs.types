@@ -7,8 +7,6 @@ export const symb = Symbol();
 >Symbol : SymbolConstructor
 
 export interface TestSymb {
->TestSymb : TestSymb
-
   (): void;
   readonly [symb]: boolean;
 >[symb] : boolean

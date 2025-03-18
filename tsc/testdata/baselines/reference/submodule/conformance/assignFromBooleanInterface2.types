@@ -2,15 +2,11 @@
 
 === assignFromBooleanInterface2.ts ===
 interface Boolean {
->Boolean : Boolean
-
     doStuff(): string;
 >doStuff : () => string
 }
 
 interface NotBoolean {
->NotBoolean : NotBoolean
-
     doStuff(): string;
 >doStuff : () => string
 }

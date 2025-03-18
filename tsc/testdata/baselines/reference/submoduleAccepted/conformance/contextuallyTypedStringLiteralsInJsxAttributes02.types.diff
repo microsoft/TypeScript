@@ -8,25 +8,10 @@
 +>React : any
  
  export interface ClickableProps {
-+>ClickableProps : ClickableProps
-+
      children?: string;
- >children : string
- 
-@@= skipped -11, +13 lines =@@
- }
- 
- export interface ButtonProps extends ClickableProps {
-+>ButtonProps : ButtonProps
-+
-     onClick: (k: "left" | "right") => void;
- >onClick : (k: "left" | "right") => void
- >k : "left" | "right"
- }
+@@= skipped -18, +18 lines =@@
  
  export interface LinkProps extends ClickableProps {
-+>LinkProps : LinkProps
-+
      goTo: "home" | "contact";
 ->goTo : "home" | "contact"
 +>goTo : "contact" | "home"
@@ -50,7 +35,7 @@
  >props : ButtonProps | LinkProps
  >JSX : any
  
-@@= skipped -31, +35 lines =@@
+@@= skipped -24, +24 lines =@@
  >props : ButtonProps | LinkProps
  
      if(linkProps.goTo) {

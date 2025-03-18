@@ -1,22 +1,6 @@
 --- old.emptyAnonymousObjectNarrowing(strictnullchecks=false).types
 +++ new.emptyAnonymousObjectNarrowing(strictnullchecks=false).types
-@@= skipped -35, +35 lines =@@
- 
- function f1<T>(x: T) {
- >f1 : <T>(x: T) => void
-+>T : T
- >x : T
- 
-   if (nonNull === x) {
-@@= skipped -18, +19 lines =@@
- 
- function f2<T extends object>(x: T) {
- >f2 : <T extends object>(x: T) => void
-+>T : T
- >x : T
- 
-   if (nonNull === x) {
-@@= skipped -17, +18 lines =@@
+@@= skipped -70, +70 lines =@@
  }
  
  declare let union: "xyz" | { a: string } | undefined;

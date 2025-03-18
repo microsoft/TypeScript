@@ -6,8 +6,6 @@
  export function safeInvoke<A1, R>(
 ->safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
 +>safeInvoke : <A1, R>(func: (arg1: A1) => R | null | undefined, arg1: A1) => R | undefined
-+>A1 : A1
-+>R : R
  
      func: ((arg1: A1) => R) | null | undefined,
 ->func : ((arg1: A1) => R) | null | undefined
@@ -15,7 +13,7 @@
  >arg1 : A1
  
      arg1: A1
-@@= skipped -11, +13 lines =@@
+@@= skipped -11, +11 lines =@@
  
  ): R | undefined {
      if (func) {
@@ -24,12 +22,9 @@
  
          return func(arg1);
  >func(arg1) : R
-@@= skipped -14, +14 lines =@@
- }
+@@= skipped -15, +15 lines =@@
  
  interface Props {
-+>Props : Props
-+
      onFoo?(value: string): boolean;
 ->onFoo : ((value: string) => boolean) | undefined
 +>onFoo : (value: string) => boolean | undefined
@@ -41,10 +36,7 @@
  >value : string
  }
  
- function bad<P extends Props>(props: Readonly<P>) {
- >bad : <P extends Props>(props: Readonly<P>) => void
-+>P : P
- >props : Readonly<P>
+@@= skipped -14, +14 lines =@@
  
      safeInvoke(props.onFoo, "blah");
  >safeInvoke(props.onFoo, "blah") : boolean | undefined

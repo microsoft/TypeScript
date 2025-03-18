@@ -3,7 +3,6 @@
 === reverseMappedTypeIntersectionConstraint.ts ===
 type StateConfig<TAction extends string> = {
 >StateConfig : StateConfig<TAction>
->TAction : TAction
 
   entry?: TAction
 >entry : TAction | undefined
@@ -25,14 +24,9 @@ declare function createMachine<
 >createMachine : <TConfig extends StateConfig<TAction>, TAction extends string>(config: { [K in keyof TConfig & (keyof StateConfig<any>)]: TConfig[K] }) => [TAction, TConfig]
 
   TConfig extends StateConfig<TAction>,
->TConfig : TConfig
-
   TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
->TAction : TAction
-
 >(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K] }): [TAction, TConfig];
 >config : { [K in keyof TConfig & (keyof StateConfig<any>)]: TConfig[K] }
->K : K
 
 const inferredParams1 = createMachine({
 >inferredParams1 : ["foo", StateConfig<"foo">]
@@ -100,11 +94,8 @@ const inferredParams2 = createMachine({
 const checkType = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
 >checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => { [K in keyof U & keyof T]: U[K] }
 ><T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => { [K in keyof U & keyof T]: U[K] }
->T : T
 ><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => { [K in keyof U & keyof T]: U[K] }
->U : U
 >value : { [K in keyof U & keyof T]: U[K] }
->K : K
 >value : { [K in keyof U & keyof T]: U[K] }
 
 const checked = checkType<{x: number, y: string}>()({
@@ -137,8 +128,6 @@ checked;
 // -----------------------------------------------------------------------------------------
 
 interface Stuff {
->Stuff : Stuff
-
     field: number;
 >field : number
 
@@ -148,9 +137,7 @@ interface Stuff {
 
 function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K] } ): T {
 >doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & (keyof Stuff)]: T[K] }) => T
->T : T
 >s : { [K in keyof T & (keyof Stuff)]: T[K] }
->K : K
 
     if(Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -183,9 +170,7 @@ doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
 
 function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
 >doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & (keyof Stuff)]: T[K] }[]) => T[]
->T : T
 >arr : { [K in keyof T & (keyof Stuff)]: T[K] }[]
->K : K
 
     if(Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean
@@ -229,9 +214,7 @@ type XNumber = { x: number }
 
 declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
 >foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K] }) => void
->T : T
 >props : { [K in keyof T & "x"]: T[K] }
->K : K
 
 function bar(props: {x: number, y: string}) {
 >bar : (props: { x: number; y: string; }) => void
@@ -273,9 +256,7 @@ type NoErrWithOptProps = { x: number, y?: string }
 
 declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & (keyof NoErrWithOptProps)]: T[K] }) => void
->T : T
 >props : { [K in keyof T & (keyof NoErrWithOptProps)]: T[K] }
->K : K
 
 baz({x: 1});
 >baz({x: 1}) : void
@@ -316,8 +297,6 @@ baz({x: 1, y: 'foo', z: 123});
 // -----------------------------------------------------------------------------------------
 
 interface WithNestedProp {
->WithNestedProp : WithNestedProp
-
   prop: string;
 >prop : string
 
@@ -331,9 +310,7 @@ interface WithNestedProp {
 
 declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
 >withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & (keyof WithNestedProp)]: T[K] }) => T
->T : T
 >props : { [K in keyof T & (keyof WithNestedProp)]: T[K] }
->K : K
 
 const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 >wnp : { prop: "foo"; nested: { prop: string; }; }
@@ -353,18 +330,13 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 
 type IsLiteralString<T extends string> = string extends T ? false : true;
 >IsLiteralString : IsLiteralString<T>
->T : T
 >false : false
 >true : true
 
 type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
 >DeepWritable : DeepWritable<T>
->T : T
->K : K
 
 interface ProvidedActor {
->ProvidedActor : ProvidedActor
-
   src: string;
 >src : string
 
@@ -374,9 +346,7 @@ interface ProvidedActor {
 
 type DistributeActors<TActor> = TActor extends { src: infer TSrc }
 >DistributeActors : DistributeActors<TActor>
->TActor : TActor
 >src : TSrc
->TSrc : TSrc
 
   ? {
       src: TSrc;
@@ -385,9 +355,6 @@ type DistributeActors<TActor> = TActor extends { src: infer TSrc }
   : never;
 
 interface MachineConfig<TActor extends ProvidedActor> {
->MachineConfig : MachineConfig<TActor>
->TActor : TActor
-
   types?: {
 >types : { actors?: TActor | undefined; } | undefined
 
@@ -409,26 +376,20 @@ interface MachineConfig<TActor extends ProvidedActor> {
 
 type NoExtra<T> = {
 >NoExtra : NoExtra<T>
->T : T
 
   [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
->K : K
 }
 
 declare function createXMachine<
 >createXMachine : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor>(config: { [K in (keyof MachineConfig<any>) & keyof TConfig]: TConfig[K] }) => TConfig
 
   const TConfig extends MachineConfig<TActor>,
->TConfig : TConfig
-
   TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
->TActor : TActor
 >types : { actors: ProvidedActor; }
 >actors : ProvidedActor
 
 >(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
 >config : { [K in (keyof MachineConfig<any>) & keyof TConfig]: TConfig[K] }
->K : K
 
 const child = () => Promise.resolve("foo");
 >child : () => any
@@ -458,6 +419,7 @@ const config = createXMachine({
 
       logic: typeof child;
 >logic : () => any
+>child : () => any
 
     };
   },

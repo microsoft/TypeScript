@@ -2,11 +2,7 @@
 
 === classImplementsImportedInterface.ts ===
 module M1 {
->M1 : any
-
     export interface I {
->I : I
-
         foo();
 >foo : () => any
     }

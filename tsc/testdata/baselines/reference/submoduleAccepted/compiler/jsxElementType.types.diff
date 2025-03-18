@@ -24,33 +24,16 @@
  
    | React.ReactElement<any>
  >React : any
-@@= skipped -33, +27 lines =@@
- // // React.JSXElementConstructor but it now can return React nodes from function components.
- type NewReactJSXElementConstructor<P> =
- >NewReactJSXElementConstructor : NewReactJSXElementConstructor<P>
-+>P : P
- 
-   | ((props: P) => React18ReactNode)
- >props : P
-@@= skipped -12, +13 lines =@@
- >global : any
- 
-   namespace JSX {
-+>JSX : any
-+
-     type ElementType = string | NewReactJSXElementConstructor<any>;
- >ElementType : ElementType
+@@= skipped -50, +44 lines =@@
  
      interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
        ['my-custom-element']: React.DOMAttributes<unknown>;
 ->['my-custom-element'] : React.DOMAttributes<unknown>
 +>['my-custom-element'] : DOMAttributes<unknown>
  >'my-custom-element' : "my-custom-element"
  >React : any
      }
-@@= skipped -17, +21 lines =@@
+@@= skipped -12, +12 lines =@@
  >title : string
  
  const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
@@ -324,12 +307,9 @@
  >my-undeclared-custom-element : any
  
  // Highlighting various ecosystem compat issues
- // react-native-gesture-handler
+@@= skipped -36, +36 lines =@@
  // https://github.com/software-mansion/react-native-gesture-handler/blob/79017e5e7cc2e82e6467851f870920ff836ee04f/src/components/GestureComponents.tsx#L139-L146
  interface ReactNativeFlatListProps<Item> {}
-+>ReactNativeFlatListProps : ReactNativeFlatListProps<Item>
-+>Item : Item
-+
  function ReactNativeFlatList(
 ->ReactNativeFlatList : (props: {}, ref: React.ForwardedRef<typeof ReactNativeFlatList>) => null
 +>ReactNativeFlatList : (props: {}, ref: ForwardedRef<???>) => null
@@ -342,6 +322,7 @@
 +>ref : ForwardedRef<(props: {}, ref: ForwardedRef<???>) => null>
  >React : any
 ->ReactNativeFlatList : (props: {}, ref: React.ForwardedRef<typeof ReactNativeFlatList>) => null
++>ReactNativeFlatList : (props: {}, ref: ForwardedRef<???>) => null
  
  ) {
    return null;
@@ -356,7 +337,6 @@
  function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 ->f1 : <T extends (props: {}) => React.ReactElement<any>>(Component: T) => JSX.Element
 +>f1 : <T extends (props: {}) => ReactElement<any>>(Component: T) => any
-+>T : T
  >props : {}
  >React : any
  >Component : T
@@ -381,17 +361,7 @@
  
  declare global {
  >global : any
- 
-     namespace JSX {
-+>JSX : any
-+
-       interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
-           ['a:b']: { a: string };
- >['a:b'] : { a: string; }
- >'a:b' : "a:b"
-@@= skipped -88, +95 lines =@@
+@@= skipped -52, +52 lines =@@
  }
  
  <a:b a="accepted" />;

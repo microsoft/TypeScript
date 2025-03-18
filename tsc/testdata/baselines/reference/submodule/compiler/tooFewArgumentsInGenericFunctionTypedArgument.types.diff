@@ -1,28 +1,11 @@
 --- old.tooFewArgumentsInGenericFunctionTypedArgument.types
 +++ new.tooFewArgumentsInGenericFunctionTypedArgument.types
-@@= skipped -1, +1 lines =@@
- 
- === tooFewArgumentsInGenericFunctionTypedArgument.ts ===
- interface Collection<T, U> {
-+>Collection : Collection<T, U>
-+>T : T
-+>U : U
-+
-     length: number;
- >length : number
- 
-@@= skipped -14, +18 lines =@@
- >y : U
+@@= skipped -16, +16 lines =@@
  }
  interface Combinators {
-+>Combinators : Combinators
-+
      map<T, U, V>(c: Collection<T,U>, f: (x: T, y: U) => V): Collection<T, V>;
 ->map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; }
 +>map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
-+>T : T
-+>U : U
-+>V : V
  >c : Collection<T, U>
  >f : (x: T, y: U) => V
  >x : T
@@ -31,8 +14,6 @@
      map<T, U>(c: Collection<T,U>, f: (x: T, y: U) => any): Collection<any, any>;
 ->map : { <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
 +>map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
-+>T : T
-+>U : U
  >c : Collection<T, U>
  >f : (x: T, y: U) => any
  >x : T

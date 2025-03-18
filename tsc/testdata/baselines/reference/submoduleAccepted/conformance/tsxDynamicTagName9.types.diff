@@ -1,12 +1,6 @@
 --- old.tsxDynamicTagName9.types
 +++ new.tsxDynamicTagName9.types
-@@= skipped -5, +5 lines =@@
- 
- 	class Component<T, U> { }
- >Component : Component<T, U>
-+>T : T
-+>U : U
- }
+@@= skipped -9, +9 lines =@@
  
  === app.tsx ===
  import * as React from 'react';
@@ -24,7 +18,7 @@
  
    _tagName: "div" = 'div';
  >_tagName : "div"
-@@= skipped -20, +22 lines =@@
+@@= skipped -16, +16 lines =@@
  >render : () => any
  
      return (

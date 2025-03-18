@@ -1,14 +1,6 @@
 --- old.contextualSignatureInstantiation3.types
 +++ new.contextualSignatureInstantiation3.types
-@@= skipped -2, +2 lines =@@
- === contextualSignatureInstantiation3.ts ===
- function map<T, U>(items: T[], f: (x: T) => U): U[]{
- >map : <T, U>(items: T[], f: (x: T) => U) => U[]
-+>T : T
-+>U : U
- >items : T[]
- >f : (x: T) => U
- >x : T
+@@= skipped -8, +8 lines =@@
  
      return items.map(f);
  >items.map(f) : U[]
@@ -20,17 +12,3 @@
  >f : (x: T) => U
  }
  
- function identity<T>(x: T) {
- >identity : <T>(x: T) => T
-+>T : T
- >x : T
- 
-     return x;
-@@= skipped -22, +25 lines =@@
- 
- function singleton<T>(x: T) {
- >singleton : <T>(x: T) => T[]
-+>T : T
- >x : T
- 
-     return [x];

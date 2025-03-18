@@ -40,8 +40,6 @@ class Foo {
 }
 
 interface Foo2 {
->Foo2 : Foo2
-
     [x: string]: A;
 >x : string
 

@@ -2,9 +2,6 @@
 
 === genericWithCallSignatureReturningSpecialization.ts ===
 interface B<T> {
->B : B<T>
->T : T
-
     f(): B<number>;
 >f : () => B<number>
 

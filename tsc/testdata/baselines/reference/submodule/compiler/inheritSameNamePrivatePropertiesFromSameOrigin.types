@@ -16,8 +16,6 @@ class C2 extends B { }
 >B : B
 
 interface A extends C, C2 { // ok
->A : A
-
     y: string;
 >y : string
 }

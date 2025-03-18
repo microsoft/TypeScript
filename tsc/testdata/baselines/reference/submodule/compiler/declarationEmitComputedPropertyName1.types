@@ -5,7 +5,6 @@
 
 declare function create<T extends {}>(): T;
 >create : <T extends {}>() => T
->T : T
 
 export const c = create<{
 >c : { data: { a_b_c: string; sss: string; s_d: string; queryData?: string | undefined; ["foo bar"]: string; }; a_b_c: string; }
@@ -41,8 +40,6 @@ export const c = create<{
 }>();
 
 export interface IData {
->IData : IData
-
   ["a_b_c"]: string;
 >["a_b_c"] : string
 >"a_b_c" : "a_b_c"

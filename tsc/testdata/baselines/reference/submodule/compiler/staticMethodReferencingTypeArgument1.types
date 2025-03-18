@@ -6,7 +6,6 @@ module Editor {
 
     export class List<T> {
 >List : List<T>
->T : T
 
         next: List<T>;
 >next : List<T>

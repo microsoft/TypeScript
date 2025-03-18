@@ -20,8 +20,6 @@ declare module "./a" {
 >"./a" : typeof import("a")
 
     interface A {
->A : A
-
         run();
 >run : () => any
     }

@@ -5,8 +5,6 @@
 // no errors expected below
 
 interface I {
->I : I
-
     (): void;
 }
 

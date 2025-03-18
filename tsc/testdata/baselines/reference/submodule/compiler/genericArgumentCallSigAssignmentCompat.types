@@ -2,13 +2,7 @@
 
 === genericArgumentCallSigAssignmentCompat.ts ===
 module Underscore {
->Underscore : any
-
     export interface Iterator<T, U> {
->Iterator : Iterator<T, U>
->T : T
->U : U
-
         (value: T, index: any, list: any): U;
 >value : T
 >index : any
@@ -16,18 +10,14 @@ module Underscore {
     }
  
     export interface Static {
->Static : Static
-
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
 >all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
->T : T
 >list : T[]
 >iterator : Iterator<T, boolean>
 >context : any
 
         identity<T>(value: T): T;
 >identity : <T>(value: T) => T
->T : T
 >value : T
     }
 }

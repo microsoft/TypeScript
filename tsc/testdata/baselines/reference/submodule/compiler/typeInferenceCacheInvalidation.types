@@ -5,16 +5,11 @@
 
 type Callback<TFoo, TBar> = (foo: TFoo, bar: TBar) => any
 >Callback : Callback<TFoo, TBar>
->TFoo : TFoo
->TBar : TBar
 >foo : TFoo
 >bar : TBar
 
 declare function example<TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(
 >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
->TFoo : TFoo
->TBar : TBar
->TCallback : TCallback
 
     foo: TFoo,
 >foo : TFoo

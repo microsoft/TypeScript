@@ -2,15 +2,12 @@
 
 === functionOverloads44.ts ===
 interface Animal { animal }
->Animal : Animal
 >animal : any
 
 interface Dog extends Animal { dog }
->Dog : Dog
 >dog : any
 
 interface Cat extends Animal { cat }
->Cat : Cat
 >cat : any
 
 function foo1(bar: { a:number }[]): Dog;

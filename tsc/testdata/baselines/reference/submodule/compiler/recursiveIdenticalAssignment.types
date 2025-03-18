@@ -2,17 +2,11 @@
 
 === recursiveIdenticalAssignment.ts ===
 interface A<T> {
->A : A<T>
->T : T
-
     x: A<T>
 >x : A<T>
 }
 
 interface B<T extends B<B<T>>> { // error, constraint referencing itself
->B : B<T>
->T : T
-
     x: B<T>
 >x : B<T>
 }

@@ -5,8 +5,6 @@
 
 type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 >Getters : Getters<T>
->T : T
->P : P
 
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
 >TG1 : TG1
@@ -19,15 +17,11 @@ type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
 
 type PropDef<K extends keyof any, T> = { name: K, type: T };
 >PropDef : PropDef<K, T>
->K : K
->T : T
 >name : K
 >type : T
 
 type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: P['type'] };
 >TypeFromDefs : TypeFromDefs<T>
->T : T
->P : P
 
 type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
 >TP1 : TP1
@@ -50,8 +44,6 @@ type TA2 = Getters<[number, boolean]>;
 
 type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 >Methods : Methods<T>
->T : T
->P : P
 
 type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | number }>;
 >TM1 : Methods<{ foo: () => number; bar: (x: string) => boolean; baz: string | number; }>
@@ -64,8 +56,6 @@ type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | numbe
 
 type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 >DoubleProp : DoubleProp<T>
->T : T
->P : P
 
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
 >TD1 : TD1
@@ -77,7 +67,6 @@ type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
 
 type TD3<U> = keyof DoubleProp<U>; // keyof DoubleProp<U>
 >TD3 : keyof DoubleProp<U>
->U : U
 
 type TD4 = TD3<{ a: string, b: number }>;  // 'a1' | 'a2' | 'b1' | 'b2'
 >TD4 : "a1" | "a2" | "b1" | "b2"
@@ -88,16 +77,11 @@ type TD4 = TD3<{ a: string, b: number }>;  // 'a1' | 'a2' | 'b1' | 'b2'
 
 type Lazyify<T> = {
 >Lazyify : Lazyify<T>
->T : T
 
     [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
->K : K
-
 };
 
 interface Person {
->Person : Person
-
     readonly name: string;
 >name : string
 
@@ -120,12 +104,8 @@ type Example = {foo: string, bar: number};
 
 type PickByValueType<T, U> = {
 >PickByValueType : PickByValueType<T, U>
->T : T
->U : U
 
   [K in keyof T as T[K] extends U ? K : never]: T[K]
->K : K
-
 };
 
 type T1 = PickByValueType<Example, string>;
@@ -150,8 +130,6 @@ const e2: T2 = "foo";
 // Repro from #41133
 
 interface Car {
->Car : Car
-
     name: string;
 >name : string
 
@@ -166,8 +144,6 @@ interface Car {
 }
 
 interface Engine {
->Engine : Engine
-
     manufacturer: string;
 >manufacturer : string
 
@@ -176,8 +152,6 @@ interface Engine {
 }
 
 interface Wheel {
->Wheel : Wheel
-
     type: "summer" | "winter";
 >type : "summer" | "winter"
 
@@ -190,8 +164,6 @@ type Primitive = string | number | boolean;
 
 type OnlyPrimitives<T> = { [K in keyof T as T[K] extends Primitive ? K : never]: T[K] };
 >OnlyPrimitives : OnlyPrimitives<T>
->T : T
->K : K
 
 let primitiveCar: OnlyPrimitives<Car>;  // { name: string; seats: number; }
 >primitiveCar : OnlyPrimitives<Car>
@@ -201,7 +173,6 @@ let keys: keyof OnlyPrimitives<Car>;  //  "name" | "seats"
 
 type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
 >KeysOfPrimitives : keyof OnlyPrimitives<T>
->T : T
 
 let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
 >carKeys : "name" | "seats"
@@ -210,38 +181,22 @@ let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
 
 type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
 >Equal : Equal<A, B>
->A : A
->B : B
->T : T
->T : T
 >true : true
 >false : false
 
 type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
 >If : If<Cond, Then, Else>
->Cond : Cond
->Then : Then
->Else : Else
 >true : true
 
 type GetKey<S, V> = keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any };
 >GetKey : keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any }
->S : S
->V : V
->TP : TP
 >true : true
 
 type GetKeyWithIf<S, V> = keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
 >GetKeyWithIf : keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any }
->S : S
->V : V
->TP : TP
 
 type GetObjWithIf<S, V> = { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
 >GetObjWithIf : GetObjWithIf<S, V>
->S : S
->V : V
->TP : TP
 
 type Task = {
 >Task : Task
@@ -281,13 +236,8 @@ type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
 
 type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
 >KeysExtendedBy : keyof { [K in keyof T as U extends T[K] ? K : never]: T[K] }
->T : T
->U : U
->K : K
 
 interface M {
->M : M
-
     a: boolean;
 >a : boolean
 
@@ -318,75 +268,44 @@ type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
 
 type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
 >TS0 : keyof { [P in keyof T as P]: string }
->T : T
->P : P
 
 type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
 >TS1 : keyof { [P in keyof T as Extract<P, "a" | "b" | "c">]: string }
->T : T
->P : P
 
 type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
 >TS2 : keyof { [P in keyof T as P & ("a" | "b" | "c")]: string }
->T : T
->P : P
 
 type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
 >TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string }
->T : T
->P : P
 
 type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
 >TS4 : keyof { [P in keyof T as NameMap[P & (keyof NameMap)]]: string }
->T : T
->P : P
 
 type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
 >TS5 : keyof { [P in keyof T & (keyof NameMap) as NameMap[P]]: string }
->T : T
->P : P
 
 type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
 >TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string }
->T : T
->U : U
->V : V
->K : K
 
 // Non-distributive, won't be simplified
 
 type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
 >TN0 : keyof { [P in keyof T as T[P] extends number ? P : never]: string }
->T : T
->P : P
 
 type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
 >TN1 : keyof { [P in keyof T as number extends T[P] ? P : never]: string }
->T : T
->P : P
 
 type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
 >TN2 : keyof { [P in keyof T as "a" extends P ? "x" : "y"]: string }
->T : T
->P : P
 
 type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
 >TN3 : keyof { [P in keyof T as Exclude<Exclude<Exclude<P, "c">, "b">, "a">]: string }
->T : T
->P : P
 
 type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
 >TN4 : keyof { [K in keyof T as K extends U ? T[K] : never extends T[K] ? K : never]: string }
->T : T
->U : U
->K : K
 
 type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
 >TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string }
->T : T
->U : U
->K : K
->P : P
 >true : true
 
 // repro from https://github.com/microsoft/TypeScript/issues/55129
@@ -417,22 +336,17 @@ type Fruit =
     };
 type Result1<T extends {name: string | number; color: string | number }> = {
 >Result1 : Result1<T>
->T : T
 >name : string | number
 >color : string | number
 
   [Key in T as `${Key['name']}:${Key['color']}`]: unknown
->Key : Key
-
 }; 
 type Result2<T extends {name: string | number; color: string | number }> = keyof {
 >Result2 : keyof { [Key in T as `${Key["name"]}:${Key["color"]}`]: unknown }
->T : T
 >name : string | number
 >color : string | number
 
   [Key in T as `${Key['name']}:${Key['color']}`]: unknown
->Key : Key
 }
 type Test1 = keyof Result1<Fruit> // "apple:red" | "banana:yellow" | "orange:orange"
 >Test1 : "apple:red" | "banana:yellow" | "orange:orange"

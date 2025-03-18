@@ -6,6 +6,5 @@ class C {
 
    set foo<T>(v) { }
 >foo : any
->T : T
 >v : any
 }

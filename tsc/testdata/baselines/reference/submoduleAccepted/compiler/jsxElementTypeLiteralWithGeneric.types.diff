@@ -19,20 +19,13 @@
  >global : any
  
    namespace JSX {
-+>JSX : any
-+
      type ElementType<P = any> =
 ->ElementType : ElementType<P>
 +>ElementType : any
-+>P : P
  
        | {
          [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K]
-+>K : K
- >JSX : any
- >JSX : any
- 
-@@= skipped -34, +32 lines =@@
+@@= skipped -34, +28 lines =@@
  
  // should be fine - `ElementType` accepts `div`
  let a = <div />;

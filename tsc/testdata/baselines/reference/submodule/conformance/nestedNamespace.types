@@ -13,7 +13,6 @@ import type * as a from './a';
 >a : typeof import("a")
 
 interface B extends a.types.A {}
->B : B
 >a.types : typeof types
 >a : typeof import("a")
 >types : typeof types

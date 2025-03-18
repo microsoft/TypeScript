@@ -1,15 +1,6 @@
 --- old.expandoFunctionExpressionsWithDynamicNames2.types
 +++ new.expandoFunctionExpressionsWithDynamicNames2.types
-@@= skipped -6, +6 lines =@@
- >Symbol : SymbolConstructor
- 
- interface Foo {
-+>Foo : Foo
-+
-   (): void;
-   [mySymbol]: true;
- >[mySymbol] : true
-@@= skipped -8, +10 lines =@@
+@@= skipped -14, +14 lines =@@
  }
  const foo: Foo = () => {};
  >foo : Foo
@@ -18,16 +9,7 @@
  
  foo[mySymbol] = true;
  >foo[mySymbol] = true : true
-@@= skipped -10, +10 lines =@@
- >true : true
- 
- interface Bar {
-+>Bar : Bar
-+
-   (): void;
-   test: true;
- >test : true
-@@= skipped -12, +14 lines =@@
+@@= skipped -22, +22 lines =@@
  
  const bar: Bar = () => {};
  >bar : Bar

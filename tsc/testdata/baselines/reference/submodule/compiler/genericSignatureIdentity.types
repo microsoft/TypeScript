@@ -10,7 +10,6 @@ var x: {
 >x : <T extends Date>(x: T) => T
 
     <T extends Date>(x: T): T;
->T : T
 >x : T
 
 };
@@ -19,7 +18,6 @@ var x: {
 >x : <T extends Date>(x: T) => T
 
     <T extends number>(x: T): T;
->T : T
 >x : T
 
 };
@@ -28,7 +26,6 @@ var x: {
 >x : <T extends Date>(x: T) => T
 
     <T>(x: T): T;
->T : T
 >x : T
 
 };
@@ -37,7 +34,6 @@ var x: {
 >x : <T extends Date>(x: T) => T
 
     <T>(x: any): any;
->T : T
 >x : any
 
 };

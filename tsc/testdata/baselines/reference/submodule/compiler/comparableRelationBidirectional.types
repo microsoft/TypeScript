@@ -22,22 +22,16 @@ enum AutomationMode {
 }
 
 interface ThemePreset {
->ThemePreset : ThemePreset
-
     id: string;
 >id : string
 }
 
 interface Automation {
->Automation : Automation
-
     mode: AutomationMode;
 >mode : AutomationMode
 }
 
 interface UserSettings {
->UserSettings : UserSettings
-
     presets: ThemePreset[];
 >presets : ThemePreset[]
 
@@ -46,8 +40,6 @@ interface UserSettings {
 }
 
 interface ExtensionData {
->ExtensionData : ExtensionData
-
     settings: UserSettings;
 >settings : UserSettings
 }

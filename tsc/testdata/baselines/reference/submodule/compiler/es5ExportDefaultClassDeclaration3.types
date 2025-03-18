@@ -26,5 +26,6 @@ var after: C = new C();
 var t: typeof C = C;
 >t : typeof default
 >C : typeof default
+>C : typeof default
 
 

@@ -1,11 +1,8 @@
 --- old.varArgsOnConstructorTypes.types
 +++ new.varArgsOnConstructorTypes.types
-@@= skipped -43, +43 lines =@@
- }
+@@= skipped -44, +44 lines =@@
  
  export interface I1 {
-+>I1 : I1
-+
      register(inputClass: new(...params: any[]) => A);
 ->register : { (inputClass: new (...params: any[]) => A): any; (inputClass: { new (...params: any[]): A; }[]): any; }
 +>register : { (inputClass: new (...params: any[]) => A): any; (inputClass: new (...params: any[]) => A[]): any; }
@@ -20,7 +17,7 @@
  >params : any[]
  }
  
-@@= skipped -17, +19 lines =@@
+@@= skipped -16, +16 lines =@@
  
  reg.register(B);
  >reg.register(B) : any

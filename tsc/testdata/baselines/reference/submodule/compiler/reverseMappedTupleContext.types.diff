@@ -7,12 +7,9 @@
 ->test1 : <T>(arg: { [K in keyof T]: T[K]; }) => T
 ->arg : { [K in keyof T]: T[K]; }
 +>test1 : <T>(arg: { [K in keyof T]: T[K] }) => T
-+>T : T
 +>arg : { [K in keyof T]: T[K] }
  
    [K in keyof T]: T[K];
-+>K : K
-+
  }): T;
  const result1 = test1(["foo", 42]);
  >result1 : [string, number]
@@ -27,12 +24,9 @@
 ->test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
 ->arg : { [K in keyof T]: T[K]; }
 +>test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K] }) => T
-+>T : T
 +>arg : { [K in keyof T]: T[K] }
  
    [K in keyof T]: T[K];
-+>K : K
-+
  }): T;
  const result2 = test2(["foo", 42]);
  >result2 : [string, number]
@@ -42,55 +36,18 @@
  >["foo", 42] : [string, number]
  >"foo" : "foo"
  >42 : 42
-@@= skipped -32, +38 lines =@@
- 
- type Definition<T> = {
- >Definition : Definition<T>
-+>T : T
- 
-   [K in keyof T]: (() => T[K]) | Definition<T[K]>;
-+>K : K
-+
- };
- declare function create<T extends Schema>(definition: Definition<T>): T;
- >create : <T extends Schema>(definition: Definition<T>) => T
-+>T : T
- >definition : Definition<T>
- 
- const created1 = create([() => 1, [() => ""]]);
-@@= skipped -38, +42 lines =@@
- });
- 
- interface CompilerOptions {
-+>CompilerOptions : CompilerOptions
-+
-   allowUnreachableCode?: boolean;
- >allowUnreachableCode : boolean | undefined
- 
-@@= skipped -11, +13 lines =@@
- }
- type KeepLiteralStrings<T extends string[]> = {
- >KeepLiteralStrings : KeepLiteralStrings<T>
-+>T : T
- 
+@@= skipped -85, +85 lines =@@
    [K in keyof T]: T[K];
-+>K : K
-+
  };
  declare function test4<T extends Record<string, string[]>>(obj: {
 ->test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
 ->obj : { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }
 +>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; } }) => T
-+>T : T
 +>obj : { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; } }
  
    [K in keyof T & keyof CompilerOptions]: {
-+>K : K
-+
      dependencies: KeepLiteralStrings<T[K]>;
- >dependencies : KeepLiteralStrings<T[K]>
- 
-@@= skipped -16, +22 lines =@@
+@@= skipped -12, +12 lines =@@
  const result4 = test4({
  >result4 : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
  >test4({  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },}) : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }

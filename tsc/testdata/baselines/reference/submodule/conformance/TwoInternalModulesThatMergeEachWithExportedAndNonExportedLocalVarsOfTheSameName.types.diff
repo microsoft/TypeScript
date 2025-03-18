@@ -1,23 +1,6 @@
 --- old.TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.types
 +++ new.TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.types
-@@= skipped -4, +4 lines =@@
- >A : typeof A
- 
-     export interface Point {
-+>Point : Point
-+
-         x: number;
- >x : number
- 
-@@= skipped -12, +14 lines =@@
- 
-         export function mirror<T extends Point>(p: T) {
- >mirror : <T extends Point>(p: T) => { x: number; y: number; }
-+>T : T
- >p : T
- 
-             return { x: p.y, y: p.x };
-@@= skipped -59, +60 lines =@@
+@@= skipped -75, +75 lines =@@
  
  var o = A.Origin;
  >o : { x: number; y: number; }

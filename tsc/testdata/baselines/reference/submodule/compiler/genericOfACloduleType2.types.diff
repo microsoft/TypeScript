@@ -1,14 +1,6 @@
 --- old.genericOfACloduleType2.types
 +++ new.genericOfACloduleType2.types
-@@= skipped -2, +2 lines =@@
- === genericOfACloduleType2.ts ===
- class G<T>{ bar(x: T) { return x; } }
- >G : G<T>
-+>T : T
- >bar : (x: T) => T
- >x : T
- >x : T
-@@= skipped -38, +39 lines =@@
+@@= skipped -40, +40 lines =@@
  >N : typeof N
  
      var g2 = new G<M.C>()

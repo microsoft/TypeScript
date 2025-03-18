@@ -102,7 +102,6 @@ for (x of a) {
 
 type AOrArrA<T> = T | T[];
 >AOrArrA : AOrArrA<T>
->T : T
 
 const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
 >arr : AOrArrA<{ x?: "ok"; }>

@@ -5,12 +5,11 @@
  
  function fill<B extends typeof A>(f: B) {
 ->fill : <B extends typeof A>(f: B) => void
-->A : { '': number; }
 +>fill : <B extends { '': number; }>(f: B) => void
-+>B : B
+ >A : { '': number; }
  >f : B
  
- } 
+@@= skipped -8, +8 lines =@@
  
  fill(32);
  >fill(32) : void

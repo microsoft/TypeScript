@@ -27,7 +27,6 @@ class B {
 
 type T<X extends { x: any }> = Pick<X, 'x'>;
 >T : T<X>
->X : X
 >x : any
 
 type C = T<A>;

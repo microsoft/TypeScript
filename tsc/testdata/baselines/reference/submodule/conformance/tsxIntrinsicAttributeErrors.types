@@ -2,33 +2,20 @@
 
 === tsxIntrinsicAttributeErrors.tsx ===
 declare namespace JSX {
->JSX : any
-
     interface Element { }
->Element : Element
-
     interface ElementClass {
->ElementClass : ElementClass
-
         render: any;
 >render : any
     }
     interface IntrinsicAttributes {
->IntrinsicAttributes : IntrinsicAttributes
-
         key: string | number
 >key : string | number
     }
     interface IntrinsicClassAttributes<T> {
->IntrinsicClassAttributes : IntrinsicClassAttributes<T>
->T : T
-
         ref: T
 >ref : T
     }
     interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
         div: {
 >div : { text?: string; width?: number; }
 
@@ -45,8 +32,6 @@ declare namespace JSX {
 }
 
 interface I {
->I : I
-
     new(n: string): {
 >n : string
 

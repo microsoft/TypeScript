@@ -1,14 +1,6 @@
 --- old.syntaxErrors.types
 +++ new.syntaxErrors.types
-@@= skipped -2, +2 lines =@@
- === dummyType.d.ts ===
- declare class C<T> { t: T }
- >C : C<T>
-+>T : T
- >t : T
- 
- === badTypeArguments.js ===
-@@= skipped -8, +9 lines =@@
+@@= skipped -10, +10 lines =@@
  // @ts-ignore
  /** @param {C.<number,>} skipped */
  function f(x, y, skipped) {

@@ -1,45 +1,6 @@
 --- old.controlFlowGenericTypes.types
 +++ new.controlFlowGenericTypes.types
-@@= skipped -2, +2 lines =@@
- === controlFlowGenericTypes.ts ===
- function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
- >f1 : <T extends string | undefined>(x: T, y: { a: T; }, z: [T]) => string
-+>T : T
- >x : T
- >y : { a: T; }
- >a : T
-@@= skipped -59, +60 lines =@@
- 
- function f2<T>(x: Extract<T, string | undefined> | null): string {
- >f2 : <T>(x: Extract<T, string | undefined> | null) => string
-+>T : T
- >x : Extract<T, string | undefined> | null
- 
-     if (x) {
-@@= skipped -21, +22 lines =@@
- }
- 
- interface Box<T> {
-+>Box : Box<T>
-+>T : T
-+
-     item: T;
- >item : T
- }
-@@= skipped -14, +17 lines =@@
- 
- declare function unbox<T>(x: Box<T>): T;
- >unbox : <T>(x: Box<T>) => T
-+>T : T
- >x : Box<T>
- 
- function g1<T extends Box<T> | undefined>(x: T) {
- >g1 : <T extends Box<T> | undefined>(x: T) => void
-+>T : T
- >x : T
- 
-     if (isBox(x)) {
-@@= skipped -13, +15 lines =@@
+@@= skipped -109, +109 lines =@@
  
          unbox(x);
  >unbox(x) : T
@@ -48,14 +9,7 @@
  >x : Box<T>
      }
  }
- 
- function g2<T extends Box<T> | undefined>(x: T) {
- >g2 : <T extends Box<T> | undefined>(x: T) => void
-+>T : T
- >x : T
- 
-     if (!isUndefined(x)) {
-@@= skipped -17, +18 lines =@@
+@@= skipped -17, +17 lines =@@
  
          unbox(x);
  >unbox(x) : T
@@ -64,14 +18,7 @@
  >x : Box<T>
      }
  }
- 
- function g3<T extends Box<T> | undefined>(x: T) {
- >g3 : <T extends Box<T> | undefined>(x: T) => void
-+>T : T
- >x : T
- 
-     if (!isBox(x)) {
-@@= skipped -17, +18 lines =@@
+@@= skipped -17, +17 lines =@@
  
          unbox(x);  // Error
  >unbox(x) : T
@@ -80,14 +27,7 @@
  >x : undefined
      }
  }
- 
- function g4<T extends Box<T> | undefined>(x: T) {
- >g4 : <T extends Box<T> | undefined>(x: T) => void
-+>T : T
- >x : T
- 
-     if (isUndefined(x)) {
-@@= skipped -16, +17 lines =@@
+@@= skipped -16, +16 lines =@@
  
          unbox(x);  // Error
  >unbox(x) : unknown
@@ -96,176 +36,32 @@
  >x : undefined
      }
  }
-@@= skipped -13, +13 lines =@@
- 
- export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
- >bounceAndTakeIfA : <AB extends "A" | "B">(value: AB) => AB
-+>AB : AB
- >value : AB
- 
-     if (value === 'A') {
-@@= skipped -78, +79 lines =@@
- const fn2 = <T extends MyUnion>(value: T): MyUnion => {
- >fn2 : <T extends MyUnion>(value: T) => MyUnion
- ><T extends MyUnion>(value: T): MyUnion => {    value.foo;  // Error    if ('foo' in value) {        value.foo;    }    if (value.tag === 'B') {        value.foo;    }} : <T extends MyUnion>(value: T) => MyUnion
-+>T : T
- >value : T
- 
-     value.foo;  // Error
-@@= skipped -57, +58 lines =@@
- 
- function notWorking<T extends Union>(object: T) {
- >notWorking : <T extends Union>(object: T) => void
-+>T : T
- >object : T
- 
-     if (!object.testable) return;
-@@= skipped -18, +19 lines =@@
- // Repro from #42939
- 
- interface A {
-+>A : A
-+
-     a: number | null;
- >a : number | null
- 
+@@= skipped -172, +172 lines =@@
  };
  
  function get<K extends keyof A>(key: K, obj: A): number {
 ->get : <K extends keyof A>(key: K, obj: A) => number
 +>get : <K extends "a">(key: K, obj: A) => number
-+>K : K
  >key : K
  >obj : A
  
-@@= skipped -32, +35 lines =@@
- 
- class EventEmitter<ET> {
+@@= skipped -28, +28 lines =@@
  >EventEmitter : EventEmitter<ET>
-+>ET : ET
  
      off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
 ->off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
 ->args : [K, number] | [unknown, string]
 +>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
-+>K : K
 +>args : [unknown, string] | [K, number]
  }
  function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
  >once : <ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET) => void
-+>ET : ET
-+>T : T
- >emittingObject : T
- >eventName : keyof ET
- 
-@@= skipped -25, +29 lines =@@
- >off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
- >eventName as typeof eventName : keyof ET
- >eventName : keyof ET
-->eventName : keyof ET
- >0 : 0
- }
- 
-@@= skipped -10, +9 lines =@@
- 
- function fx1<T, K extends keyof T>(obj: T, key: K) {
- >fx1 : <T, K extends keyof T>(obj: T, key: K) => void
-+>T : T
-+>K : K
- >obj : T
- >key : K
- 
-@@= skipped -20, +22 lines =@@
- 
- function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
- >fx2 : <T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) => void
-+>T : T
-+>K : K
- >obj : T
- >key : K
- 
-@@= skipped -20, +22 lines =@@
- 
- function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
- >fx3 : <T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) => void
-+>T : T
-+>K : K
- >obj : T
- >key : K
- 
-@@= skipped -24, +26 lines =@@
- >TableBaseEnum : TableBaseEnum<PublicSpec, InternalSpec>
- 
-     PublicSpec extends Record<keyof InternalSpec, any>,
-+>PublicSpec : PublicSpec
-+
-     InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
-+>InternalSpec : InternalSpec
-+
-     m() {
- >m : () => void
- 
-@@= skipped -46, +50 lines =@@
- 
- function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
- >f10 : <T extends { a: string; } | undefined>(x: T, y: Partial<T>) => void
-+>T : T
- >a : string
- >x : T
- >y : Partial<T>
-@@= skipped -12, +13 lines =@@
- 
- type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
- >SqlInsertSet : SqlInsertSet<T>
-+>T : T
-+>P : P
- 
- class SqlTable<T> {
- >SqlTable : SqlTable<T>
-+>T : T
- 
-     protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
- >validateRow : (_row: Partial<SqlInsertSet<T>>) => void
-@@= skipped -24, +27 lines =@@
- // Repro from #46495
- 
- interface Button {
-+>Button : Button
-+
-     type: "button";
- >type : "button"
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface Checkbox {
-+>Checkbox : Checkbox
-+
-     type: "checkbox";
- >type : "checkbox"
- 
-@@= skipped -12, +14 lines =@@
- 
- function update<T extends Control, K extends keyof T>(control : T | undefined, key: K, value: T[K]): void {
- >update : <T extends Control, K extends keyof T>(control: T | undefined, key: K, value: T[K]) => void
-+>T : T
-+>K : K
- >control : T | undefined
- >key : K
- >value : T[K]
-@@= skipped -22, +24 lines =@@
- 
- type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
- >Column : Column<T>
-+>T : T
- >id : string | number | undefined
- >id : T
+@@= skipped -226, +226 lines =@@
  >title : string | undefined
  
  function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
 ->getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
 +>getColumnProperty : <T>(column: Column<T>, key: "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })) => Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
-+>T : T
  >column : Column<T>
 ->key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
 +>key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })

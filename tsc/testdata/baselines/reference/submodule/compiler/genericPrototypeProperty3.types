@@ -10,7 +10,6 @@ class BaseEvent {
 
 class MyEvent<T> extends BaseEvent { // T is instantiated to any in the prototype, which is assignable to {}
 >MyEvent : MyEvent<T>
->T : T
 >BaseEvent : BaseEvent
 
     target: T;

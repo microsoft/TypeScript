@@ -209,8 +209,6 @@ var r2 = c.as;
 >as : any
 
 interface I {
->I : I
-
     abstract;
 >abstract : any
 

@@ -9,43 +9,7 @@
  
  import { funciton } from "./decl"; // error
  >funciton : () => void
-@@= skipped -22, +22 lines =@@
- >1 : 1
- 
- export interface I {} // ok
-+>I : I
-+
- export type { T }; // ok
- >T : typeof import("/decl")
- 
- export namespace JustTypes {
-+>JustTypes : any
-+
-     export type T = number;
- >T : number
- }
-@@= skipped -15, +19 lines =@@
- >1 : 1
- }
- export default interface Default {} // sketchy, but ok
-+>Default : default
- 
- === /main2.ts ===
- export interface I {}
-+>I : I
-+
- export = { x: 1 };
- >{ x: 1 } : { x: number; }
- >x : number
-@@= skipped -17, +20 lines =@@
- >1 : 1
- 
-     export interface I {}
-+>I : I
- }
- export = ns;
- >ns : typeof ns
-@@= skipped -10, +11 lines =@@
+@@= skipped -64, +64 lines =@@
  
  === /main5.ts ===
  export default class C {} // error
@@ -54,8 +18,3 @@
  
  === /main6.ts ===
  interface I {}
-+>I : I
-+
- export default I; // error
- >I : I
- 

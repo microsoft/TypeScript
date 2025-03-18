@@ -9,11 +9,9 @@ export async function drainStream(stream: NodeJS.ReadableStream): Promise<void> 
 }
 
 === /node_modules/@types/node/globals.d.ts ===
-declare namespace NodeJS {
->NodeJS : any
 
+declare namespace NodeJS {
   interface ReadableStream {}
->ReadableStream : ReadableStream
 }
 
 === /node_modules/@types/node/index.d.ts ===

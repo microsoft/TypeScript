@@ -5,19 +5,15 @@
 
 type TV0<T extends unknown[]> = [string, ...T];
 >TV0 : [string, ...T]
->T : T
 
 type TV1<T extends unknown[]> = [string, ...T, number];
 >TV1 : [string, ...T, number]
->T : T
 
 type TV2<T extends unknown[]> = [string, ...T, number, ...T];
 >TV2 : [string, ...T, number, ...T]
->T : T
 
 type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
 >TV3 : [string, ...T, ...number[], ...T]
->T : T
 
 // Normalization
 
@@ -46,8 +42,6 @@ type TN7 = TV1<never>;
 
 function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) {
 >tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [1, ...T, 2, ...U, 3]
->T : T
->U : U
 >t : [...T]
 >u : [...U]
 
@@ -75,8 +69,6 @@ const t2 = tup2(['hello'], [10, true]);
 
 function concat<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]): [...T, ...U] {
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
->T : T
->U : U
 >t : [...T]
 >u : [...U]
 
@@ -129,8 +121,6 @@ const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, nu
 
 function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) {
 >concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
->T : T
->U : U
 >t : T
 >u : U
 
@@ -229,13 +219,11 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 
 declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
->T : T
 >x : number
 >args : [...T, number]
 
 function foo4<U extends unknown[]>(u: U) {
 >foo4 : <U extends unknown[]>(u: U) => void
->U : U
 >u : U
 
     foo3(1, 2);
@@ -271,22 +259,18 @@ function foo4<U extends unknown[]>(u: U) {
 
 declare function ft1<T extends unknown[]>(t: T): T;
 >ft1 : <T extends unknown[]>(t: T) => T
->T : T
 >t : T
 
 declare function ft2<T extends unknown[]>(t: T): readonly [...T];
 >ft2 : <T extends unknown[]>(t: T) => [...T]
->T : T
 >t : T
 
 declare function ft3<T extends unknown[]>(t: [...T]): T;
 >ft3 : <T extends unknown[]>(t: [...T]) => T
->T : T
 >t : [...T]
 
 declare function ft4<T extends unknown[]>(t: [...T]): readonly [...T];
 >ft4 : <T extends unknown[]>(t: [...T]) => [...T]
->T : T
 >t : [...T]
 
 ft1(['hello', 42]);  // (string | number)[]
@@ -321,7 +305,6 @@ ft4(['hello', 42]);  // readonly [string, number]
 
 function f0<T extends unknown[]>(t: [string, ...T], n: number) {
 >f0 : <T extends unknown[]>(t: [string, ...T], n: number) => void
->T : T
 >t : [string, ...T]
 >n : number
 
@@ -352,7 +335,6 @@ function f0<T extends unknown[]>(t: [string, ...T], n: number) {
 
 function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
 >f1 : <T extends unknown[]>(t: [string, ...T, number], n: number) => void
->T : T
 >t : [string, ...T, number]
 >n : number
 
@@ -385,7 +367,6 @@ function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
 
 function f2<T extends unknown[]>(t: [string, ...T]) {
 >f2 : <T extends unknown[]>(t: [string, ...T]) => void
->T : T
 >t : [string, ...T]
 
     let [...ax] = t;  // [string, ...T]
@@ -406,7 +387,6 @@ function f2<T extends unknown[]>(t: [string, ...T]) {
 
 function f3<T extends unknown[]>(t: [string, ...T, number]) {
 >f3 : <T extends unknown[]>(t: [string, ...T, number]) => void
->T : T
 >t : [string, ...T, number]
 
     let [...ax] = t;  // [string, ...T, number]
@@ -429,26 +409,20 @@ function f3<T extends unknown[]>(t: [string, ...T, number]) {
 
 type Arrayify<T> = { [P in keyof T]: T[P][] };
 >Arrayify : Arrayify<T>
->T : T
->P : P
 
 type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;  // [string[], (number | undefined)[]?, Arrayify<U>, ...boolean[][]]
 >TM1 : [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
->U : U
 
 type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;  // [string?, Partial<T>, number?]
 >TP1 : [(string | undefined)?, ...Partial<T>, (number | undefined)?]
->T : T
 
 type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;  // [string?, Partial<T>, ...(number | undefined)[]]
 >TP2 : [(string | undefined)?, ...Partial<T>, ...(number | undefined)[]]
->T : T
 
 // Reverse mapping through mapped type applied to variadic tuple type
 
 declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;
 >fm1 : <T extends unknown[]>(t: [string[], number[], ...Arrayify<T>]) => T
->T : T
 >t : [string[], number[], ...Arrayify<T>]
 
 let tm1 = fm1([['abc'], [42], [true], ['def']]);  // [boolean, string]
@@ -469,14 +443,11 @@ let tm1 = fm1([['abc'], [42], [true], ['def']]);  // [boolean, string]
 
 declare function fx1<T extends unknown[]>(a: string, ...args: T): T;
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
->T : T
 >a : string
 >args : T
 
 function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >gx1 : <U extends unknown[], V extends readonly unknown[]>(u: U, v: V) => void
->U : U
->V : V
 >u : U
 >v : V
 
@@ -516,14 +487,11 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 
 declare function fx2<T extends readonly unknown[]>(a: string, ...args: T): T;
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
->T : T
 >a : string
 >args : T
 
 function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >gx2 : <U extends unknown[], V extends readonly unknown[]>(u: U, v: V) => void
->U : U
->V : V
 >u : U
 >v : V
 
@@ -565,8 +533,6 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 
 function f10<T extends string[], U extends T>(x: [string, ...unknown[]], y: [string, ...T], z: [string, ...U]) {
 >f10 : <T extends string[], U extends T>(x: [string, ...unknown[]], y: [string, ...T], z: [string, ...U]) => void
->T : T
->U : U
 >x : [string, ...unknown[]]
 >y : [string, ...T]
 >z : [string, ...U]
@@ -607,7 +573,6 @@ function f10<T extends string[], U extends T>(x: [string, ...unknown[]], y: [str
 
 function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 >f11 : <T extends unknown[]>(t: T, m: [...T], r: [...T]) => void
->T : T
 >t : T
 >m : [...T]
 >r : [...T]
@@ -645,7 +610,6 @@ function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 
 function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 >f12 : <T extends readonly unknown[]>(t: T, m: [...T], r: [...T]) => void
->T : T
 >t : T
 >m : [...T]
 >r : [...T]
@@ -683,8 +647,6 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
 
 function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
 >f13 : <T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) => void
->T : T
->U : U
 >t0 : T
 >t1 : [...T]
 >t2 : [...U]
@@ -722,8 +684,6 @@ function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
 
 function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
 >f14 : <T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) => void
->T : T
->U : U
 >t0 : T
 >t1 : [...T]
 >t2 : [...U]
@@ -761,8 +721,6 @@ function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [.
 
 function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
 >f15 : <T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) => void
->T : T
->U : U
 >k0 : keyof T
 >k1 : keyof [...T]
 >k2 : keyof [...U]
@@ -818,7 +776,6 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 
 function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
 >ft16 : <T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
->T : T
 >x : [unknown, unknown]
 >y : [...T, ...T]
 
@@ -830,7 +787,6 @@ function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
 
 function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
 >ft17 : <T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
->T : T
 >x : [unknown, unknown]
 >y : [...T, ...T]
 
@@ -842,7 +798,6 @@ function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) 
 
 function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
 >ft18 : <T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) => void
->T : T
 >x : [unknown, unknown]
 >y : [...T, ...T]
 
@@ -856,30 +811,22 @@ function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
 
 type First<T extends readonly unknown[]> =
 >First : First<T>
->T : T
 
     T extends readonly [unknown, ...unknown[]] ? T[0] :
     T[0] | undefined;
 
 type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
 >DropFirst : DropFirst<T>
->T : T
->U : U
 
 type Last<T extends readonly unknown[]> =
 >Last : Last<T>
->T : T
 
     T extends readonly [...unknown[], infer U] ? U :
->U : U
-
     T extends readonly [unknown, ...unknown[]] ? T[number] :
     T[number] | undefined;
 
 type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 >DropLast : DropLast<T>
->T : T
->U : U
 
 type T00 = First<[number, symbol, string]>;
 >T00 : number
@@ -1089,9 +1036,6 @@ type R36 = DropLast<readonly []>;
 
 function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) {
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->T : T
->U : U
->R : R
 >f : (...args: [...T, ...U]) => R
 >args : [...T, ...U]
 >a : T
@@ -1229,9 +1173,6 @@ const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
 
 function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) {
 >curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) => R
->T : T
->U : U
->R : R
 >f : (...args: [...T, ...U]) => R
 >args : [...T, ...U]
 >t : [...T]
@@ -1276,7 +1217,6 @@ curry2(fn10, ['hello'], [42, true]);
 
 declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
 >ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
->T : T
 >t1 : [...T]
 >t2 : [...T, (number | undefined)?]
 
@@ -1328,8 +1268,6 @@ ft(['a', 'b'], ['c', 'd', 42])
 
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
 >call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
->T : T
->R : R
 >args : [...T, (...args: T) => R]
 >args : T
 
@@ -1356,12 +1294,10 @@ call(...sa, (...x) => 42);
 
 declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
 >f20 : <T extends unknown[]>(args: [...T, (number | undefined)?]) => T
->T : T
 >args : [...T, (number | undefined)?]
 
 function f21<U extends string[]>(args: [...U, number?]) {
 >f21 : <U extends string[]>(args: [...U, (number | undefined)?]) => void
->U : U
 >args : [...U, (number | undefined)?]
 
     let v1 = f20(args);  // U
@@ -1389,17 +1325,14 @@ function f21<U extends string[]>(args: [...U, number?]) {
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
 >f22 : { <T extends unknown[]>(args: [...T, number]): T; <T extends unknown[]>(args: [...T]): T; }
->T : T
 >args : [...T, number]
 
 declare function f22<T extends unknown[] = []>(args: [...T]): T;
 >f22 : { <T extends unknown[]>(args: [...T, number]): T; <T extends unknown[]>(args: [...T]): T; }
->T : T
 >args : [...T]
 
 function f23<U extends string[]>(args: [...U, number]) {
 >f23 : <U extends string[]>(args: [...U, number]) => void
->U : U
 >args : [...U, number]
 
     let v1 = f22(args);  // U
@@ -1428,19 +1361,12 @@ function f23<U extends string[]>(args: [...U, number]) {
 // Repro from #39327
 
 interface Desc<A extends unknown[], T> {
->Desc : Desc<A, T>
->A : A
->T : T
-
     readonly f: (...args: A) => T;
 >f : (...args: A) => T
 >args : A
 
     bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
 >bind : <T extends unknown[], U extends unknown[], R>(...args: T) => Desc<[...U], R>
->T : T
->U : U
->R : R
 >this : Desc<[...T, ...U], R>
 >args : T
 }
@@ -1475,8 +1401,6 @@ declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z
 
 function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
 >callApi : <T extends unknown[], U>(method: (...args: [...T, object]) => U) => (...args: [...T]) => U
->T : T
->U : U
 >method : (...args: [...T, object]) => U
 >args : [...T, object]
 
@@ -1527,11 +1451,9 @@ type U3 = [...[string, number], boolean];
 
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 >ToStringLength1 : `${T["length"]}`
->T : T
 
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 >ToStringLength2 : `${[...T]["length"]}`
->T : T
 
 type AnyArr = [...any];
 >AnyArr : any[]

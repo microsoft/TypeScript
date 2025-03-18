@@ -2,8 +2,6 @@
 
 === reservedNamesInAliases.ts ===
 interface I {}
->I : I
-
 type any = I;
 >any : I
 

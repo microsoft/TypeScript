@@ -15,8 +15,6 @@ class A {
 }
 
 interface B {
->B : B
-
     foo: number;
 >foo : number
 }

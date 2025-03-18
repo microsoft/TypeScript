@@ -53,8 +53,6 @@ declare module "Map" {
 >"Observable" : typeof import("Observable")
 
         interface Observable {
->Observable : Observable
-
             foo(): Cls;
 >foo : () => Cls
         }
@@ -73,8 +71,6 @@ declare module "Map" {
 >"Observable" : typeof import("Observable")
 
         interface Observable {
->Observable : Observable
-
             foo2(): Cls2;
 >foo2 : () => Cls2
         }

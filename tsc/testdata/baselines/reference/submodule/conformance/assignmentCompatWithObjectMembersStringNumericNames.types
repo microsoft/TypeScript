@@ -22,12 +22,10 @@ module JustStrings {
 >t : T
 
     interface S2 { '1': string; bar?: string }
->S2 : S2
 >'1' : string
 >bar : string
 
     interface T2 { '1.0': string; baz?: string }
->T2 : T2
 >'1.0' : string
 >baz : string
 
@@ -173,12 +171,10 @@ module NumbersAndStrings {
 >t : T
 
     interface S2 { '1': string; bar?: string }
->S2 : S2
 >'1' : string
 >bar : string
 
     interface T2 { 1.0: string; baz?: string }
->T2 : T2
 >1.0 : string
 >baz : string
 

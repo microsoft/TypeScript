@@ -2,14 +2,10 @@
 
 === server.ts ===
 export interface I {
->I : I
-
     prop: string;
 >prop : string
 }
 export interface I2 {
->I2 : I2
-
     prop2: string;
 >prop2 : string
 }

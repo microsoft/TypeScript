@@ -315,23 +315,17 @@ const obj: Union = {
 // Repro from #34611
 
 interface IValue {
->IValue : IValue
-
   value: string
 >value : string
 }
 
 interface StringKeys {
->StringKeys : StringKeys
-
     [propertyName: string]: IValue;
 >propertyName : string
 
 };
 
 interface NumberKeys {
->NumberKeys : NumberKeys
-
     [propertyName: number]: IValue;
 >propertyName : number
 }
@@ -373,21 +367,16 @@ const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Er
 // Repro from #33732
 
 interface I1 {
->I1 : I1
-
     prop1: string;
 >prop1 : string
 }
 
 interface I2 {
->I2 : I2
-
     prop2: string;
 >prop2 : string
 }
 
 interface I3 extends Record<string, string> {
->I3 : I3
 
 }
 

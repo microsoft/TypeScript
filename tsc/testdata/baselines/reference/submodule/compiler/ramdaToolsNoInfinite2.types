@@ -12,18 +12,14 @@ declare module "Any/Kind" {
 
     export type Kind<A extends any> = Extends<A, Function> extends 1 ? 'function' : Extends<A, List> extends 1 ? 'array' : Extends<A, object> extends 1 ? 'object' : Extends<A, string> extends 1 ? 'string' : Extends<A, number> extends 1 ? 'number' : Extends<A, boolean> extends 1 ? 'boolean' : 'unknown';
 >Kind : Kind<A>
->A : A
 }
 declare module "Any/Compute" {
 >"Any/Compute" : typeof import("Any/Compute")
 
     export type Compute<A extends any> = A extends Function ? A : {
 >Compute : Compute<A>
->A : A
 
         [K in keyof A]: A[K];
->K : K
-
     } & {};
 }
 declare module "Object/Pick" {
@@ -34,23 +30,15 @@ declare module "Object/Pick" {
 
     type __Pick<O extends object, K extends keyof O> = {
 >__Pick : { [P in K]: O[P] }
->O : O
->K : K
 
         [P in K]: O[P];
->P : P
-
     } & {};
 
     export type _Pick<O extends object, K extends Key> = __Pick<O, keyof O & K>;
 >_Pick : _Pick<O, K>
->O : O
->K : K
 
     export type Pick<O extends object, K extends Key> = O extends unknown ? _Pick<O, K & keyof O> : never;
 >Pick : Pick<O, K>
->O : O
->K : K
 }
 declare module "Object/Keys" {
 >"Object/Keys" : typeof import("Object/Keys")
@@ -61,7 +49,6 @@ declare module "Object/Keys" {
 
     export type Keys<O extends object> = UKeys<O>;
 >Keys : Keys<O>
->O : O
 }
 declare module "Object/Omit" {
 >"Object/Omit" : typeof import("Object/Omit")
@@ -80,13 +67,9 @@ declare module "Object/Omit" {
 
     export type _Omit<O extends object, K extends Key> = _Pick<O, Exclude<Keys<O>, K>>;
 >_Omit : _Omit<O, K>
->O : O
->K : K
 
     export type Omit<O extends object, K extends Key> = O extends unknown ? _Omit<O, K> : never;
 >Omit : Omit<O, K>
->O : O
->K : K
 }
 declare module "Object/At" {
 >"Object/At" : typeof import("Object/At")
@@ -99,19 +82,12 @@ declare module "Object/At" {
 
     type AtStrict<O extends object, K extends Key> = [K & keyof O] extends [never] ? never : O[K & keyof O];
 >AtStrict : AtStrict<O, K>
->O : O
->K : K
 
     type AtLoose<O extends object, K extends Key> = O extends unknown ? AtStrict<O, K> : never;
 >AtLoose : AtLoose<O, K>
->O : O
->K : K
 
     export type At<O extends object, K extends Key, strict extends Boolean = 1> = {
 >At : At<O, K, strict>
->O : O
->K : K
->strict : strict
 
         1: AtStrict<O, K>;
 >1 : AtStrict<O, K>
@@ -141,7 +117,6 @@ declare module "Boolean/Not" {
 
     export type Not<B extends Boolean> = {
 >Not : Not<B>
->B : B
 
         0: 1;
 >0 : 1
@@ -165,8 +140,6 @@ declare module "Union/Has" {
 
     export type Has<U extends Union, U1 extends Union> = Not<Extends<Exclude<U1, U>, U1>>;
 >Has : Has<U, U1>
->U : U
->U1 : U1
 }
 declare module "Union/Union" {
 >"Union/Union" : typeof import("Union/Union")
@@ -182,8 +155,6 @@ declare module "Union/Exclude" {
 
     export type Exclude<U extends Union, M extends Union> = U extends M ? never : U;
 >Exclude : Exclude<U, M>
->U : U
->M : M
 }
 declare module "Any/_Internal" {
 >"Any/_Internal" : typeof import("Any/_Internal")
@@ -196,7 +167,6 @@ declare module "Any/_Internal" {
 
     export type NumberOf<N extends any> = N extends number ? _NumberOf<N> : N;
 >NumberOf : NumberOf<N>
->N : N
 }
 declare module "Any/Implements" {
 >"Any/Implements" : typeof import("Any/Implements")
@@ -206,8 +176,6 @@ declare module "Any/Implements" {
 
     export type Implements<A1 extends any, A2 extends any> = Extends<A1, A2> extends 1 ? 1 : 0;
 >Implements : Implements<A1, A2>
->A1 : A1
->A2 : A2
 }
 declare module "Any/Key" {
 >"Any/Key" : typeof import("Any/Key")
@@ -226,7 +194,6 @@ declare module "Union/Keys" {
 
     export type Keys<U extends Union> = (U extends unknown ? keyof U : never) & Key;
 >Keys : Keys<U>
->U : U
 }
 declare module "List/ObjectOf" {
 >"List/ObjectOf" : typeof import("List/ObjectOf")
@@ -245,11 +212,9 @@ declare module "List/ObjectOf" {
 
     export type _ObjectOf<L extends object> = Has<keyof L, keyof List> extends 1 ? number extends At<L, 'length'> ? _Omit<L, Exclude<keyof any[], number>> : _Omit<L, keyof any[]> : L;
 >_ObjectOf : _ObjectOf<L>
->L : L
 
     export type ObjectOf<L extends object> = L extends unknown ? _ObjectOf<L> : never;
 >ObjectOf : ObjectOf<L>
->L : L
 }
 declare module "List/Keys" {
 >"List/Keys" : typeof import("List/Keys")
@@ -266,7 +231,6 @@ declare module "List/Keys" {
 
     export type Keys<L extends List> = Exclude<UKeys<L>, keyof any[]> | number;
 >Keys : Keys<L>
->L : L
 }
 declare module "Object/Merge" {
 >"Object/Merge" : typeof import("Object/Merge")
@@ -288,25 +252,15 @@ declare module "Object/Merge" {
 
     export type MergeFlat<O extends object, O1 extends object> = Compute<O & _Omit<O1, keyof O>>;
 >MergeFlat : MergeFlat<O, O1>
->O : O
->O1 : O1
 
     export type MergeDeep<O, O1> = (Kind<(O | O1)> extends 'object' ? MergeFlat<O & {}, O1 & {}> extends infer M ? {
 >MergeDeep : MergeDeep<O, O1>
->O : O
->O1 : O1
->M : M
 
         [K in keyof M]: MergeDeep<M[K], At<O1 & {}, K>>;
->K : K
-
     } & {} : never : O);
 
     export type Merge<O extends object, O1 extends object, depth extends Depth = 'flat'> = {
 >Merge : Merge<O, O1, depth>
->O : O
->O1 : O1
->depth : depth
 
         'flat': MergeFlat<O, O1>;
 >'flat' : Compute<O & _Omit<O1, keyof O>>
@@ -327,7 +281,6 @@ declare module "Union/NonNullable" {
 
     export type NonNullable<U extends Union> = Exclude<U, undefined | null>;
 >NonNullable : NonNullable<U>
->U : U
 }
 declare module "Object/ListOf" {
 >"Object/ListOf" : typeof import("Object/ListOf")
@@ -361,16 +314,9 @@ declare module "Object/ListOf" {
 
     type PickIfEntry<O extends object, LN extends List, I extends Iteration> = Key<I> extends keyof O ? _Append<LN, O[Cast<Key<I>, keyof O>]> : LN;
 >PickIfEntry : PickIfEntry<O, LN, I>
->O : O
->LN : LN
->I : I
 
     type __ListOf<O extends object, K, LN extends List = [], I extends Iteration = IterationOf<'0'>> = {
 >__ListOf : __ListOf<O, K, LN, I>
->O : O
->K : K
->LN : LN
->I : I
 
         0: __ListOf<O, Exclude<K, Key<I>>, PickIfEntry<O, LN, I>, Next<I>>;
 >0 : __ListOf<O, Exclude<K, Key<I>>, PickIfEntry<O, LN, I>, Next<I>>
@@ -382,12 +328,9 @@ declare module "Object/ListOf" {
 
     export type _ListOf<O extends object> = __ListOf<O, keyof O> extends infer X ? Cast<X, List> : never;
 >_ListOf : _ListOf<O>
->O : O
->X : X
 
     export type ListOf<O extends object> = O extends unknown ? _ListOf<O> : never;
 >ListOf : ListOf<O>
->O : O
 }
 declare module "Object/NonNullable" {
 >"Object/NonNullable" : typeof import("Object/NonNullable")
@@ -416,26 +359,18 @@ declare module "Object/NonNullable" {
 
     export type NonNullableFlat<O> = {
 >NonNullableFlat : { [K in keyof O]: NonNullable<O[K]> }
->O : O
 
         [K in keyof O]: UNonNullable<O[K]>;
->K : K
-
     } & {};
 
     export type NonNullableDeep<O> = {
 >NonNullableDeep : NonNullableDeep<O>
->O : O
 
         [K in keyof O]: NonNullableDeep<UNonNullable<O[K]>>;
->K : K
-
     };
 
     type NonNullablePart<O extends object, depth extends Depth> = {
 >NonNullablePart : NonNullablePart<O, depth>
->O : O
->depth : depth
 
         'flat': NonNullableFlat<O>;
 >'flat' : { [K in keyof O]: Exclude<O[K], null | undefined> }
@@ -447,9 +382,6 @@ declare module "Object/NonNullable" {
 
     export type NonNullable<O extends object, K extends Key = Key, depth extends Depth = 'flat'> = {
 >NonNullable : NonNullable<O, K, depth>
->O : O
->K : K
->depth : depth
 
         1: NonNullablePart<O, depth>;
 >1 : NonNullablePart<O, depth>
@@ -464,12 +396,8 @@ declare module "Object/Overwrite" {
 
     export type Overwrite<O extends object, O1 extends object> = {
 >Overwrite : { [K in keyof O]: K extends keyof O1 ? O1[K] : O[K] }
->O : O
->O1 : O1
 
         [K in keyof O]: K extends keyof O1 ? O1[K] : O[K];
->K : K
-
     } & {};
 }
 declare module "Number/_Internal" {
@@ -553,12 +481,9 @@ declare module "List/Prepend" {
 
     export type Prepend<L extends List, A extends any> = ((head: A, ...args: L) => any) extends ((...args: infer U) => any) ? U : L;
 >Prepend : [head: A, ...args: L]
->L : L
->A : A
 >head : A
 >args : L
 >args : U
->U : U
 }
 declare module "List/_Internal" {
 >"List/_Internal" : typeof import("List/_Internal")
@@ -571,7 +496,6 @@ declare module "List/_Internal" {
 
     export type Naked<L extends List> = Overwrite<Required<L>, L>;
 >Naked : { [K in keyof L]: K extends keyof L ? L[K] : Required<L>[K] }
->L : L
 }
 declare module "List/Tail" {
 >"List/Tail" : typeof import("List/Tail")
@@ -581,11 +505,9 @@ declare module "List/Tail" {
 
     export type Tail<L extends List> = ((...t: L) => any) extends ((head: any, ...tail: infer LTail) => any) ? LTail : never;
 >Tail : Tail<L>
->L : L
 >t : L
 >head : any
 >tail : LTail
->LTail : LTail
 }
 declare module "Iteration/Format" {
 >"Iteration/Format" : typeof import("Iteration/Format")
@@ -598,8 +520,6 @@ declare module "Iteration/Format" {
 
     export type Format<I extends Iteration, fmt extends Formats> = {
 >Format : Format<I, fmt>
->I : I
->fmt : fmt
 
         's': I[2];
 >'s' : I[2]
@@ -620,7 +540,6 @@ declare module "Iteration/Pos" {
 
     export type Pos<I extends Iteration> = Format<I, 'n'>;
 >Pos : I[3]
->I : I
 }
 declare module "List/Append" {
 >"List/Append" : typeof import("List/Append")
@@ -633,13 +552,9 @@ declare module "List/Append" {
 
     export type _Append<L extends List, A extends any> = _Concat<L, [A]>;
 >_Append : _Append<L, A>
->L : L
->A : A
 
     export type Append<L extends List, A extends any> = L extends unknown ? A extends unknown ? _Append<L, A> : never : never;
 >Append : Append<L, A>
->L : L
->A : A
 }
 declare module "List/Reverse" {
 >"List/Reverse" : typeof import("List/Reverse")
@@ -676,9 +591,6 @@ declare module "List/Reverse" {
 
     type __Reverse<L extends List, LO extends List, I extends Iteration = IterationOf<'0'>> = {
 >__Reverse : __Reverse<L, LO, I>
->L : L
->LO : LO
->I : I
 
         0: __Reverse<L, Prepend<LO, L[Pos<I>]>, Next<I>>;
 >0 : __Reverse<L, [head: L[Pos<I>], ...args: LO], Next<I>>
@@ -690,14 +602,9 @@ declare module "List/Reverse" {
 
     export type _Reverse<L extends List, LO extends List = []> = __Reverse<Naked<L>, LO> extends infer X ? Cast<X, List> : never;
 >_Reverse : _Reverse<L, LO>
->L : L
->LO : LO
->X : X
 
     export type Reverse<L extends List, LO extends List = []> = L extends unknown ? LO extends unknown ? _Reverse<L, LO> : never : never;
 >Reverse : Reverse<L, LO>
->L : L
->LO : LO
 }
 declare module "List/Concat" {
 >"List/Concat" : typeof import("List/Concat")
@@ -710,13 +617,9 @@ declare module "List/Concat" {
 
     export type _Concat<L extends List, L1 extends List> = _Reverse<_Reverse<L>, L1>;
 >_Concat : _Concat<L, L1>
->L : L
->L1 : L1
 
     export type Concat<L extends List, L1 extends List> = L extends unknown ? L1 extends L1 ? _Concat<L, L1> : never : never;
 >Concat : Concat<L, L1>
->L : L
->L1 : L1
 }
 declare module "List/Drop" {
 >"List/Drop" : typeof import("List/Drop")
@@ -759,8 +662,6 @@ declare module "List/Drop" {
 
     type DropForth<L extends List, N extends Iteration> = {
 >DropForth : DropForth<L, N>
->L : L
->N : N
 
         0: DropForth<Tail<L>, Prev<N>>;
 >0 : DropForth<Tail<L>, Prev<N>>
@@ -772,10 +673,6 @@ declare module "List/Drop" {
 
     type DropBack<L extends List, N extends Iteration, I extends Iteration = Prev<N>, LN extends List = []> = {
 >DropBack : DropBack<L, N, I, LN>
->L : L
->N : N
->I : I
->LN : LN
 
         0: DropBack<L, N, Prev<I>, Prepend<LN, L[Pos<I>]>>;
 >0 : DropBack<L, N, Prev<I>, [head: L[Pos<I>], ...args: LN]>
@@ -789,9 +686,6 @@ declare module "List/Drop" {
 
     type __Drop<L extends List, N extends Iteration, way extends Way = '->'> = {
 >__Drop : __Drop<L, N, way>
->L : L
->N : N
->way : way
 
         '->': DropForth<L, N>;
 >'->' : DropForth<L, N>
@@ -803,16 +697,9 @@ declare module "List/Drop" {
 
     export type _Drop<L extends List, N extends Number, way extends Way = '->'> = __Drop<Naked<L>, IterationOf<N>, way> extends infer X ? Cast<X, List> : never;
 >_Drop : _Drop<L, N, way>
->L : L
->N : N
->way : way
->X : X
 
     export type Drop<L extends List, N extends Number, way extends Way = '->'> = L extends unknown ? N extends unknown ? _Drop<L, N, way> : never : never;
 >Drop : Drop<L, N, way>
->L : L
->N : N
->way : way
 }
 declare module "List/Length" {
 >"List/Length" : typeof import("List/Length")
@@ -828,8 +715,6 @@ declare module "List/Length" {
 
     export type Length<L extends List, fmt extends Formats = 'n'> = {
 >Length : Length<L, fmt>
->L : L
->fmt : fmt
 
         's': NumberOf<L['length']>;
 >'s' : NumberOf<L["length"]>
@@ -850,15 +735,12 @@ declare module "Iteration/Next" {
 
     export type Next<I extends Iteration> = IterationMap[I[1]];
 >Next : Next<I>
->I : I
 }
 declare module "Any/Cast" {
 >"Any/Cast" : typeof import("Any/Cast")
 
     export type Cast<A1 extends any, A2 extends any> = A1 extends A2 ? A1 : A2;
 >Cast : Cast<A1, A2>
->A1 : A1
->A2 : A2
 }
 declare module "Function/Parameters" {
 >"Function/Parameters" : typeof import("Function/Parameters")
@@ -868,9 +750,7 @@ declare module "Function/Parameters" {
 
     export type Parameters<F extends Function> = F extends ((...args: infer L) => any) ? L : never;
 >Parameters : Parameters<F>
->F : F
 >args : L
->L : L
 }
 declare module "Function/Return" {
 >"Function/Return" : typeof import("Function/Return")
@@ -880,9 +760,7 @@ declare module "Function/Return" {
 
     export type Return<F extends Function> = F extends ((...args: any[]) => infer R) ? R : never;
 >Return : Return<F>
->F : F
 >args : any[]
->R : R
 }
 declare module "Iteration/Prev" {
 >"Iteration/Prev" : typeof import("Iteration/Prev")
@@ -895,7 +773,6 @@ declare module "Iteration/Prev" {
 
     export type Prev<I extends Iteration> = IterationMap[I[0]];
 >Prev : Prev<I>
->I : I
 }
 declare module "Number/NumberOf" {
 >"Number/NumberOf" : typeof import("Number/NumberOf")
@@ -914,16 +791,12 @@ declare module "Number/NumberOf" {
 
     export type _NumberOf<N extends number> = {
 >_NumberOf : _NumberOf<N>
->N : N
 
         [K in keyof IterationMap]: Pos<IterationMap[K]> extends N ? Key<IterationMap[K]> : never;
->K : K
-
     }[keyof IterationMap];
 
     export type NumberOf<N extends number> = N extends Numbers['number']['all'] ? _NumberOf<N> : string;
 >NumberOf : NumberOf<N>
->N : N
 }
 declare module "Object/_Internal" {
 >"Object/_Internal" : typeof import("Object/_Internal")
@@ -936,11 +809,8 @@ declare module "Object/_Internal" {
 
     export type Empty<O extends object> = {
 >Empty : Empty<O>
->O : O
 
         [K in keyof O]: undefined;
->K : K
-
     };
 }
 declare module "Iteration/IterationOf" {
@@ -1282,7 +1152,6 @@ declare module "Iteration/IterationOf" {
 
     export type IterationOf<N extends Number> = N extends keyof IterationMap ? IterationMap[N] : IterationMap['__'];
 >IterationOf : IterationOf<N>
->N : N
 }
 declare module "Iteration/Iteration" {
 >"Iteration/Iteration" : typeof import("Iteration/Iteration")
@@ -1304,7 +1173,6 @@ declare module "Iteration/Key" {
 
     export type Key<I extends Iteration> = Format<I, 's'>;
 >Key : I[2]
->I : I
 }
 declare module "List/NonNullable" {
 >"List/NonNullable" : typeof import("List/NonNullable")
@@ -1342,9 +1210,6 @@ declare module "List/NonNullable" {
 
     export type NonNullable<L extends List, K extends Key = Key, depth extends Depth = 'flat'> = {
 >NonNullable : NonNullable<L, K, depth>
->L : L
->K : K
->depth : depth
 
         1: Cast<ONonNullable<L, Key, depth>, List>;
 >1 : Cast<NonNullable<L, Key, depth>, List>
@@ -1362,11 +1227,9 @@ declare module "Any/Type" {
 
     export type Type<A extends any, Id extends string> = A & {
 >Type : Type<A, Id>
->A : A
->Id : Id
 
         [K in typeof symbol]: Id;
->K : K
+>symbol : unique symbol
 
     };
 }
@@ -1384,7 +1247,6 @@ declare module "List/List" {
 
     export type List<A = any> = ReadonlyArray<A>;
 >List : List<A>
->A : A
 }
 declare module "Function/Function" {
 >"Function/Function" : typeof import("Function/Function")
@@ -1393,10 +1255,6 @@ declare module "Function/Function" {
 >List : any
 
     export interface Function<P extends List = any, R extends any = any> {
->Function : Function<P, R>
->P : P
->R : R
-
         (...args: P): R;
 >args : P
     }
@@ -1406,8 +1264,6 @@ declare module "Any/Extends" {
 
     export type Extends<A1 extends any, A2 extends any> = [A1] extends [never] ? 0 : A1 extends A2 ? 1 : 0;
 >Extends : Extends<A1, A2>
->A1 : A1
->A2 : A2
 }
 
 declare module "Function/Curry" {
@@ -1466,17 +1322,9 @@ declare module "Function/Curry" {
 
     type GapOf<L1 extends List, L2 extends List, LN extends List, I extends Iteration = IterationOf<'0'>> = L1[Pos<I>] extends x ? _Append<LN, L2[Pos<I>]> : LN;
 >GapOf : GapOf<L1, L2, LN, I>
->L1 : L1
->L2 : L2
->LN : LN
->I : I
 
     type _GapsOf<L1 extends List, L2 extends List, LN extends List = [], I extends Iteration = IterationOf<'0'>> = {
 >_GapsOf : _GapsOf<L1, L2, LN, I>
->L1 : L1
->L2 : L2
->LN : LN
->I : I
 
         0: _GapsOf<L1, L2, GapOf<L1, L2, LN, I>, Next<I>>;
 >0 : _GapsOf<L1, L2, GapOf<L1, L2, LN, I>, Next<I>>
@@ -1488,26 +1336,16 @@ declare module "Function/Curry" {
 
     type GapsOf<L1 extends List, L2 extends List> = _GapsOf<L1, L2> extends infer X ? Cast<X, List> : never;
 >GapsOf : GapsOf<L1, L2>
->L1 : L1
->L2 : L2
->X : X
 
     type Gaps<L extends List> = NonNullable<{
 >Gaps : Gaps<L>
->L : L
 
         [K in keyof L]?: L[K] | x;
->K : K
-
     }>;
 
     export type Curry<F extends Function> = <L extends List>(...args: Cast<L, Gaps<Parameters<F>>>) => GapsOf<L, Parameters<F>> extends infer G ? Length<Cast<G, List>> extends infer L ? L extends 0 ? Return<F> : L extends 1 ? Curry<(...args: Cast<G, List>) => Return<F>> & ((...args: Cast<G, List>) => Return<F>) : Curry<(...args: Cast<G, List>) => Return<F>> : never : never;
 >Curry : Curry<F>
->F : F
->L : L
 >args : Cast<L, Gaps<Parameters<F>>>
->G : G
->L : L
 >args : Cast<G, List>
 >args : Cast<G, List>
 >args : Cast<G, List>

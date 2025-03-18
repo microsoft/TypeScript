@@ -2,10 +2,6 @@
 
 === classExtendingClassLikeType.ts ===
 interface Base<T, U> {
->Base : Base<T, U>
->T : T
->U : U
-
     x: T;
 >x : T
 
@@ -20,24 +16,18 @@ class D0 extends Base<string, string> {
 }
 
 interface BaseConstructor {
->BaseConstructor : BaseConstructor
-
     new (x: string, y: string): Base<string, string>;
 >x : string
 >y : string
 
     new <T>(x: T): Base<T, T>;
->T : T
 >x : T
 
     new <T>(x: T, y: T): Base<T, T>;
->T : T
 >x : T
 >y : T
 
     new <T, U>(x: T, y: U): Base<T, U>;
->T : T
->U : U
 >x : T
 >y : U
 }
@@ -142,8 +132,6 @@ class D4 extends getBase() <string, string, string> {
 }
 
 interface BadBaseConstructor {
->BadBaseConstructor : BadBaseConstructor
-
     new (x: string): Base<string, string>;
 >x : string
 

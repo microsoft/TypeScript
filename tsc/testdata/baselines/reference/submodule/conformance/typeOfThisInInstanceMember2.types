@@ -3,7 +3,6 @@
 === typeOfThisInInstanceMember2.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     x = this;
 >x : this

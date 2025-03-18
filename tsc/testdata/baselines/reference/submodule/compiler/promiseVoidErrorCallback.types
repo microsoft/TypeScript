@@ -2,22 +2,16 @@
 
 === promiseVoidErrorCallback.ts ===
 interface T1 {
->T1 : T1
-
     __t1: string;
 >__t1 : string
 }
 
 interface T2 {
->T2 : T2
-
     __t2: string;
 >__t2 : string
 }
 
 interface T3 {
->T3 : T3
-
     __t3: string;
 >__t3 : string
 }

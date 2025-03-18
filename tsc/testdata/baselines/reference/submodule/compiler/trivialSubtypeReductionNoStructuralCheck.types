@@ -26,8 +26,6 @@ export class Wizard {
 }
 
 export interface WizardStepProps {
->WizardStepProps : WizardStepProps
-
   wizard?: Wizard;
 >wizard : Wizard | undefined
 }

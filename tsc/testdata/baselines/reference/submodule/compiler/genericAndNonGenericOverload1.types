@@ -2,14 +2,10 @@
 
 === genericAndNonGenericOverload1.ts ===
 interface callable2<T> {
->callable2 : callable2<T>
->T : T
-
     (a: T): T;
 >a : T
 
     <Z>(a: T): Z;
->Z : Z
 >a : T
 }
 var c2: callable2<number>;

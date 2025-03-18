@@ -2,15 +2,11 @@
 
 === moduleVisibilityTest4.ts ===
 module M {
->M : any
-
     export type nums = number;
 >nums : number
 }
 
 namespace N {
->N : any
-
     export type nums = number;
 >nums : number
 }

@@ -392,10 +392,6 @@ o[strEnumKey];
 
 
 interface MyMap<K, T> {
->MyMap : MyMap<K, T>
->K : K
->T : T
-
   get(key: K): T;
 >get : (key: K) => T
 >key : K
@@ -407,7 +403,6 @@ interface MyMap<K, T> {
 }
 
 interface Dog { bark(): void; }
->Dog : Dog
 >bark : () => void
 
 let rover: Dog = { bark() {} };
@@ -426,8 +421,6 @@ map[rover] = "Rover";
 >"Rover" : "Rover"
 
 interface I {
->I : I
-
   prop: MyMap<string, string>
 >prop : MyMap<string, string>
 }

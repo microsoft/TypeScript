@@ -1,10 +1,6 @@
 --- old.recursiveIdenticalOverloadResolution.types
 +++ new.recursiveIdenticalOverloadResolution.types
-@@= skipped -4, +4 lines =@@
- >M : typeof M
- 
-    interface I { (i: I): I; }
-+>I : I
+@@= skipped -7, +7 lines =@@
  >i : I
  
     function f(p: I) { return f };

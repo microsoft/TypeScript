@@ -1,14 +1,6 @@
 --- old.invalidInstantiatedModule.types
 +++ new.invalidInstantiatedModule.types
-@@= skipped -17, +17 lines =@@
- >M2 : typeof M2
- 
-     export interface Point { x: number; y: number }
-+>Point : Point
- >x : number
- >y : number
- 
-@@= skipped -13, +14 lines =@@
+@@= skipped -30, +30 lines =@@
  >M2 : typeof M2
  
  var p: m.Point; // Error

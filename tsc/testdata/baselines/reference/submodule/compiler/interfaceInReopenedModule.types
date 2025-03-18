@@ -2,7 +2,6 @@
 
 === interfaceInReopenedModule.ts ===
 module m {
->m : typeof m
 }
 
 // In second instance of same module, exported interface is not visible
@@ -10,8 +9,6 @@ module m {
 >m : typeof m
 
     interface f {}
->f : f
-
     export class n { 
 >n : n
 

@@ -91,8 +91,6 @@ module m1 {
         }
 
         export interface i3 {
->i3 : i3
-
             f55(): string;
 >f55 : () => string
         }
@@ -103,8 +101,6 @@ module m1 {
     }
 
     interface i {
->i : i
-
         x: number;
 >x : number
     }
@@ -170,18 +166,12 @@ module m2 {
 }
 
 module mglo5 {
->mglo5 : any
-
     export interface i5 {
->i5 : i5
-
         f1(): string;
 >f1 : () => string
     }
 
     interface i6 {
->i6 : i6
-
         f6(): number;
 >f6 : () => number
     }

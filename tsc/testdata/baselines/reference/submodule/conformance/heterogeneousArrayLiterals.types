@@ -258,8 +258,6 @@ module WithContextualType {
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 
@@ -306,8 +304,6 @@ function foo<T, U>(t: T, u: U) {
 
 function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >foo2 : <T extends Base, U extends Derived>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 
@@ -378,8 +374,6 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 
 function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 >foo3 : <T extends Derived, U extends Derived>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 
@@ -450,8 +444,6 @@ function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 
 function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >foo4 : <T extends Base, U extends Base>(t: T, u: U) => void
->T : T
->U : U
 >t : T
 >u : U
 

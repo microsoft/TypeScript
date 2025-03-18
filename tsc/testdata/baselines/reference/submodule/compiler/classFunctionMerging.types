@@ -15,8 +15,6 @@ declare class Foo {
 >x : string
 }
 declare namespace Foo {
->Foo : typeof Foo
-
     export type Inst = number;
 >Inst : number
 }

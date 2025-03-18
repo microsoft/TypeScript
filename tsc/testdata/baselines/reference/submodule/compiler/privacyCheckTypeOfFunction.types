@@ -6,6 +6,7 @@ function foo() {
 }
 export var x: typeof foo;
 >x : () => void
+>foo : () => void
 
 export var b = foo;
 >b : () => void

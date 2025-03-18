@@ -29,11 +29,3 @@
  
  === node_modules/inner/other.d.ts ===
  import { Thing } from "./private.js"
-@@= skipped -22, +22 lines =@@
- >x : () => Thing
- 
- === node_modules/inner/private.d.ts ===
--
- export interface Thing {} // not exported in export map, inaccessible under new module modes
-+>Thing : Thing
-+

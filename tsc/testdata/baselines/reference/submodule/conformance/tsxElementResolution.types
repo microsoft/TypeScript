@@ -2,11 +2,7 @@
 
 === tsxElementResolution.tsx ===
 declare namespace JSX {
->JSX : any
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		foundFirst: { x: string };
 >foundFirst : { x: string; }
 >x : string

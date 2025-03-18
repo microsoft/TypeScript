@@ -2,27 +2,18 @@
 
 === moduledecl.ts ===
 module a {
->a : any
 }
 
 module b.a {
->b : any
->a : any
 }
 
 module c.a.b {
->c : any
->a : any
->b : any
-
     import ma = a;
 >ma : any
 >a : any
 }
 
 module mImport {
->mImport : any
-
     import d = a;
 >d : any
 >a : any
@@ -79,8 +70,6 @@ module m0 {
     }
 
     interface i1 {
->i1 : i1
-
         () : Object;
         [n: number]: c1;
 >n : number
@@ -171,8 +160,6 @@ module m1 {
     }
 
     export interface i1 {
->i1 : i1
-
         () : Object;
         [n: number]: c1;
 >n : number
@@ -402,8 +389,6 @@ declare module mAmbient {
 >aVar : C
 
     interface B {
->B : B
-
         x: number;
 >x : number
 
@@ -440,8 +425,6 @@ declare module mAmbient {
 >aVar : C
 
         interface B {
->B : B
-
             x: number;
 >x : number
 

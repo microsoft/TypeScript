@@ -2,19 +2,13 @@
 
 === jsxContainsOnlyTriviaWhiteSpacesNotCountedAsChild.tsx ===
 namespace JSX {
->JSX : any
-
   export interface ElementChildrenAttribute {
->ElementChildrenAttribute : ElementChildrenAttribute
-
     children: {};
 >children : {}
   }
 }
 
 interface Props {
->Props : Props
-
   className?: string | undefined;
 >className : string | undefined
 }

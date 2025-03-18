@@ -3,7 +3,6 @@
 === iteratorSpreadInCall9.ts ===
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     constructor(...s: T[]) { }
 >s : T[]

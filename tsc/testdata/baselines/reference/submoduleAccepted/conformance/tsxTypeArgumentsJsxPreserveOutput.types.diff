@@ -9,17 +9,7 @@
  
  type TypeProps = { foo?: boolean; };
  >TypeProps : TypeProps
- >foo : boolean
- 
- interface InterfaceProps { foo?: boolean; }
-+>InterfaceProps : InterfaceProps
- >foo : boolean
- 
- function Foo<T>() {
- >Foo : <T>() => any
-+>T : T
- 
-     return null;
+@@= skipped -16, +16 lines =@@
  }
  
  <>

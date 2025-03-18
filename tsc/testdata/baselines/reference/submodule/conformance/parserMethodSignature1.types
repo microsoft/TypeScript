@@ -2,8 +2,6 @@
 
 === parserMethodSignature1.ts ===
 interface I {
->I : I
-
   A();
 >A : () => any
 }

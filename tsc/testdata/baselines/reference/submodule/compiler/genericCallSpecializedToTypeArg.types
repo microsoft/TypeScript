@@ -3,7 +3,6 @@
 === genericCallSpecializedToTypeArg.ts ===
 function dupe<T>(x: T): T {
 >dupe : <T>(x: T) => T
->T : T
 >x : T
 
   return x;
@@ -11,7 +10,6 @@ function dupe<T>(x: T): T {
 }
 function dupeAndGetDist<U>(x: U): U {
 >dupeAndGetDist : <U>(x: U) => U
->U : U
 >x : U
 
   var y = dupe(x); //<-- dupe has incorrect type here

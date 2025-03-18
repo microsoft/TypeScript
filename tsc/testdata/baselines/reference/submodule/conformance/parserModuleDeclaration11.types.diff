@@ -1,15 +1,6 @@
 --- old.parserModuleDeclaration11.types
 +++ new.parserModuleDeclaration11.types
-@@= skipped -4, +4 lines =@@
- >string : typeof string
- 
-     interface X { }
-+>X : X
-+
-     export function foo(s: string);
- >foo : (s: string) => any
- >s : string
-@@= skipped -12, +14 lines =@@
+@@= skipped -16, +16 lines =@@
  >"abc" : "abc"
  
  var x: string.X;

@@ -3,7 +3,6 @@
 === nonGenericClassExtendingGenericClassWithAny.ts ===
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     t: T;
 >t : T

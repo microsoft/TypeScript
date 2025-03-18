@@ -196,7 +196,6 @@ export module TopLevelModule1 {
                 }
             }
             export interface InterfaceX { XisIn1_1_1(); }
->InterfaceX : InterfaceX
 >XisIn1_1_1 : () => any
 
             class NonExportedClassQ {
@@ -315,15 +314,12 @@ export module TopLevelModule1 {
 >CisIn1_2_2 : () => void
 
             export interface InterfaceY { YisIn1_2_2(); }
->InterfaceY : InterfaceY
 >YisIn1_2_2 : () => any
 
             interface NonExportedInterfaceQ { }
->NonExportedInterfaceQ : NonExportedInterfaceQ
         }
         
         export interface InterfaceY { YisIn1_2(); }
->InterfaceY : InterfaceY
 >YisIn1_2 : () => any
     }
     
@@ -335,8 +331,6 @@ export module TopLevelModule1 {
     }
 
     interface InterfaceY {
->InterfaceY : InterfaceY
-
         YisIn1();
 >YisIn1 : () => any
     }

@@ -17,5 +17,4 @@ export default function foo(value: string | number): string | number {
 >1 : 1
 }
 export default interface Foo {}
->Foo : default
 

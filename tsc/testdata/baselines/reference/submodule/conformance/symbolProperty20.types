@@ -2,8 +2,6 @@
 
 === symbolProperty20.ts ===
 interface I {
->I : I
-
     [Symbol.iterator]: (s: string) => string;
 >[Symbol.iterator] : (s: string) => string
 >Symbol.iterator : unique symbol

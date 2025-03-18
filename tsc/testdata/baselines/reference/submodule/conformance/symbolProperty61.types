@@ -5,8 +5,6 @@ declare global {
 >global : any
 
   interface SymbolConstructor {
->SymbolConstructor : SymbolConstructor
-
     readonly obs: symbol
 >obs : symbol
   }
@@ -14,14 +12,15 @@ declare global {
 
 const observable: typeof Symbol.obs = Symbol.obs
 >observable : symbol
+>Symbol.obs : symbol
 >Symbol : SymbolConstructor
+>obs : symbol
 >Symbol.obs : symbol
 >Symbol : SymbolConstructor
 >obs : symbol
 
 export class MyObservable<T> {
 >MyObservable : MyObservable<T>
->T : T
 
     constructor(private _val: T) {}
 >_val : T
@@ -50,7 +49,6 @@ export class MyObservable<T> {
 
 type InteropObservable<T> = {
 >InteropObservable : InteropObservable<T>
->T : T
 
     [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
 >[Symbol.obs] : () => { subscribe: (next: (val: T) => void) => void; }
@@ -64,7 +62,6 @@ type InteropObservable<T> = {
 
 function from<T>(obs: InteropObservable<T>) {
 >from : <T>(obs: InteropObservable<T>) => { subscribe: (next: (val: T) => void) => void; }
->T : T
 >obs : InteropObservable<T>
 
     return obs[Symbol.obs]()

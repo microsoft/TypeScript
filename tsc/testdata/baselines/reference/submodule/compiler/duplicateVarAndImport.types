@@ -7,8 +7,6 @@ var a;
 >a : any
 
 module M { }
->M : any
-
 import a = M;
 >a : any
 >M : any

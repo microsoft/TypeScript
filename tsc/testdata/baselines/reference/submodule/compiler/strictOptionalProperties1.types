@@ -502,8 +502,6 @@ const y: { foo: number } = { foo: 123, ...x };
 // Index signatures and strict optional properties
 
 interface Test {
->Test : Test
-
     [key: string]: string;
 >key : string
 
@@ -546,7 +544,6 @@ declare let tx4: [(string | undefined)?];
 
 declare function f11<T>(x: { p?: T }): T;
 >f11 : <T>(x: { p?: T | undefined; }) => T
->T : T
 >x : { p?: T | undefined; }
 >p : T | undefined
 
@@ -572,7 +569,6 @@ f11(ox4);  // string | undefined
 
 declare function f12<T>(x: [T?]): T;
 >f12 : <T>(x: [(T | undefined)?]) => T
->T : T
 >x : [(T | undefined)?]
 
 f12(tx1);  // string
@@ -597,7 +593,6 @@ f12(tx4);  // string | undefined
 
 declare function f13<T>(x: Partial<T>): T;
 >f13 : <T>(x: Partial<T>) => T
->T : T
 >x : Partial<T>
 
 f13(ox1);  // { p: string }
@@ -644,11 +639,9 @@ f13(tx4);  // [string | undefined]
 
 type Undefinable<T> = T | undefined;
 >Undefinable : Undefinable<T>
->T : T
 
 function expectNotUndefined<T>(value: Undefinable<T>): T {
 >expectNotUndefined : <T>(value: Undefinable<T>) => T
->T : T
 >value : Undefinable<T>
 
     if (value === undefined) {
@@ -666,8 +659,6 @@ function expectNotUndefined<T>(value: Undefinable<T>): T {
 }
 
 interface Bar {
->Bar : Bar
-
     bar?: number;
 >bar : number | undefined
 }
@@ -695,8 +686,6 @@ declare function bb(input: number): void;
 >input : number
 
 interface U1 {
->U1 : U1
-
     name: string
 >name : string
 
@@ -704,8 +693,6 @@ interface U1 {
 >email : string | number | undefined
 }
 interface U2 {
->U2 : U2
-
     name: string
 >name : string
 
@@ -798,15 +785,11 @@ a = e;  // Error
 // Repro from #46004
 
 interface PropsFromReact {
->PropsFromReact : PropsFromReact
-
     onClick?: () => void;
 >onClick : () => void | undefined
 }
 
 interface PropsFromMaterialUI {
->PropsFromMaterialUI : PropsFromMaterialUI
-
     onClick?: (() => void) | undefined;
 >onClick : () => void | undefined
 }
@@ -815,8 +798,6 @@ type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
 >TheTypeFromMaterialUI : TheTypeFromMaterialUI
 
 interface NavBottomListItem extends TheTypeFromMaterialUI {
->NavBottomListItem : NavBottomListItem
-
     value: string;
 >value : string
 }

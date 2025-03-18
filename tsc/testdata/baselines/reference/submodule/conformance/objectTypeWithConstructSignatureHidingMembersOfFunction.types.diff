@@ -1,15 +1,6 @@
 --- old.objectTypeWithConstructSignatureHidingMembersOfFunction.types
 +++ new.objectTypeWithConstructSignatureHidingMembersOfFunction.types
-@@= skipped -1, +1 lines =@@
- 
- === objectTypeWithConstructSignatureHidingMembersOfFunction.ts ===
- interface I {
-+>I : I
-+
-     new(): number;
-     apply(a: any, b?: any): void;
- >apply : (a: any, b?: any) => void
-@@= skipped -38, +40 lines =@@
+@@= skipped -39, +39 lines =@@
  >arguments : any
  
  var x: {

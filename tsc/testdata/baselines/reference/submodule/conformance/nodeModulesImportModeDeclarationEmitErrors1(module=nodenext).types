@@ -17,12 +17,10 @@ import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" asser
 >Req2 : any
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
->LocalInterface : LocalInterface
 
 
 
 
 === /node_modules/pkg/require.d.ts ===
-export interface RequireInterface {}
->RequireInterface : RequireInterface
 
+export interface RequireInterface {}

@@ -15,8 +15,6 @@ var a: {
 
 function foo4<T, U>(cb: (x: T) => U) {
 >foo4 : <T, U>(cb: (x: T) => U) => U
->T : T
->U : U
 >cb : (x: T) => U
 >x : T
 
@@ -37,11 +35,9 @@ var b: {
 >b : { <T>(x: boolean): T; <T>(x: T): any; }
 
     <T>(x: boolean): T;
->T : T
 >x : boolean
 
     <T>(x: T): any;
->T : T
 >x : T
 }
 

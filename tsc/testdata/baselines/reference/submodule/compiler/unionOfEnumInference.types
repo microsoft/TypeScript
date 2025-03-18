@@ -10,16 +10,12 @@ enum Enum { A, B, C }
 >C : Enum.C
 
 interface Interface<T extends Enum> {
->Interface : Interface<T>
->T : T
-
 	type: T;
 >type : T
 }
 
 function foo<T extends Enum>(x: Interface<T>) { }
 >foo : <T extends Enum>(x: Interface<T>) => void
->T : T
 >x : Interface<T>
 
 function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {

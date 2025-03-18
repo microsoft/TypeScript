@@ -6,8 +6,6 @@
 
 function foo<T, U extends T>(x: T, y: U): U { return y; }
 >foo : <T, U extends T>(x: T, y: U) => U
->T : T
->U : U
 >x : T
 >y : U
 >y : U
@@ -27,14 +25,10 @@ var r = foo({}, 1);
 >1 : 1
 
 interface A {
->A : A
-
     foo: string;
 >foo : string
 }
 interface B extends A {
->B : B
-
     bar: number;
 >bar : number
 }
@@ -66,8 +60,6 @@ var r3 = foo({ x: 1 }, { x: 2, y: 3 });
 
 function foo2<T, U extends { length: T }>(x: T, y: U) { return y; }
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
->T : T
->U : U
 >length : T
 >x : T
 >y : U

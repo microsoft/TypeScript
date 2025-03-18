@@ -5,7 +5,6 @@
 
 class clodule1<T>{
 >clodule1 : clodule1<T>
->T : T
 
     id: string;
 >id : string
@@ -24,7 +23,6 @@ module clodule1 {
 
 class clodule2<T>{
 >clodule2 : clodule2<T>
->T : T
 
     id: string;
 >id : string
@@ -41,7 +39,6 @@ module clodule2 {
 
     class D<U extends T>{
 >D : D<U>
->U : U
 
         id: string;
 >id : string
@@ -53,7 +50,6 @@ module clodule2 {
 
 class clodule3<T>{
 >clodule3 : clodule3<T>
->T : T
 
     id: string;
 >id : string
@@ -74,7 +70,6 @@ module clodule3 {
 
 class clodule4<T>{
 >clodule4 : clodule4<T>
->T : T
 
     id: string;
 >id : string

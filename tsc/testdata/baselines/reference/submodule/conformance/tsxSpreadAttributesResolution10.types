@@ -5,8 +5,6 @@ import React = require('react');
 >React : any
 
 interface OptionProp {
->OptionProp : OptionProp
-
     x?: 2
 >x : 2
 }

@@ -11,19 +11,7 @@
  >() => 1 : () => number
  >1 : 1
  
-@@= skipped -86, +86 lines =@@
- >"string" : "string"
- 
- interface myArray extends Array<Number> { }
-+>myArray : myArray
-+
- interface myArray2 extends Array<Number|String> { }
-+>myArray2 : myArray2
-+
- var d0 = [1, true, ...temp, ];  // has type (string|number|boolean)[]
- >d0 : (string | number | boolean)[]
- >[1, true, ...temp, ] : (string | number | boolean)[]
-@@= skipped -48, +52 lines =@@
+@@= skipped -134, +134 lines =@@
  >a3 : number[]
  
  var d7 = [...a4];

@@ -3,8 +3,6 @@
 === genericCallWithoutArgs.ts ===
 function f<X, Y>(x: X, y: Y) {
 >f : <X, Y>(x: X, y: Y) => void
->X : X
->Y : Y
 >x : X
 >y : Y
 }

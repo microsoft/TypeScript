@@ -1,9 +1,0 @@
---- old.unusedTypeParameters_infer.types
-+++ new.unusedTypeParameters_infer.types
-@@= skipped -2, +2 lines =@@
- === unusedTypeParameters_infer.ts ===
- type Length<T> = T extends ArrayLike<infer U> ? number : never;
- >Length : Length<T>
-+>T : T
-+>U : U
- 

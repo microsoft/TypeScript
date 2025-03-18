@@ -1,15 +1,6 @@
 --- old.fatArrowSelf.types
 +++ new.fatArrowSelf.types
-@@= skipped -4, +4 lines =@@
- >Events : typeof Events
- 
-     export interface ListenerCallback {
-+>ListenerCallback : ListenerCallback
-+
-         (value:any):void;
- >value : any
-     }
-@@= skipped -21, +23 lines =@@
+@@= skipped -25, +25 lines =@@
  >EventEmitterConsummer : EventEmitterConsummer
  
          constructor (private emitter: Events.EventEmitter) { }

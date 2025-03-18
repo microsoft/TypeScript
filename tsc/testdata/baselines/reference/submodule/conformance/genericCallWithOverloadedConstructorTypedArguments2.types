@@ -20,6 +20,7 @@ module NonGenericParameter {
     function foo4(cb: typeof a) {
 >foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => { new (x: boolean): boolean; new (x: string): string; }
 >cb : { new (x: boolean): boolean; new (x: string): string; }
+>a : { new (x: boolean): boolean; new (x: string): string; }
 
         return cb;
 >cb : { new (x: boolean): boolean; new (x: string): string; }
@@ -27,8 +28,6 @@ module NonGenericParameter {
 
     var b: { new <T, U>(x: T): U }
 >b : new <T, U>(x: T) => U
->T : T
->U : U
 >x : T
 
     var r3 = foo4(b); // ok
@@ -43,7 +42,6 @@ module GenericParameter {
 
     function foo5<T>(cb: { new(x: T): string; new(x: number): T }) {
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
->T : T
 >cb : { new (x: T): string; new (x: number): T; }
 >x : T
 >x : number
@@ -54,7 +52,6 @@ module GenericParameter {
 
     var a: { new <T>(x: T): T };
 >a : new <T>(x: T) => T
->T : T
 >x : T
 
     var r6 = foo5(a); // ok
@@ -65,7 +62,6 @@ module GenericParameter {
 
     function foo6<T>(cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
->T : T
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
 >x : T
 >x : T
@@ -77,7 +73,6 @@ module GenericParameter {
 
     var b: { new <T>(x: T, y: T): string };
 >b : new <T>(x: T, y: T) => string
->T : T
 >x : T
 >y : T
 
@@ -89,7 +84,6 @@ module GenericParameter {
 
     function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
->T : T
 >x : T
 >cb : { new (x: T): string; new (x: T, y?: T): string; }
 >x : T
@@ -109,9 +103,7 @@ module GenericParameter {
 
     var c: { new<T>(x: T): number; new<T>(x: number): T; }
 >c : { new <T>(x: T): number; new <T>(x: number): T; }
->T : T
 >x : T
->T : T
 >x : number
 
     var r14 = foo7(1, c); // ok

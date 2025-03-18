@@ -39,8 +39,6 @@ a0([1, 2, [["world"]], "string"]);  // Error
 // the parameter type is the widened form (section 3.11) of the type of the initializer expression.
 
 interface F1 {
->F1 : F1
-
     b0(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
 >b0 : (z?: number, __1?: [[number, number], string, { u: boolean; }]) => any
 >z : number
@@ -218,8 +216,6 @@ function d2({x, y, z}?) { }  // Error, binding pattern can't be optional in impl
 >z : any
 
 interface F2 {
->F2 : F2
-
     d3([a, b, c]?);
 >d3 : (__0?: [any, any, any]) => any
 >a : any

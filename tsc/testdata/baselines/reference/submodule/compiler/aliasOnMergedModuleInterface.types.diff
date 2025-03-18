@@ -24,19 +24,9 @@
  >foo : any
  >foo.bar("hello") : any
  >foo.bar : any
-@@= skipped -23, +23 lines =@@
- >"foo" : typeof import("foo")
- {
-     module B {
-+>B : any
-+
-         export interface A {
-+>A : A
-         }
+@@= skipped -28, +28 lines =@@
      }
      interface B {
-+>B : B
-+
          bar(name: string): B.A;
 ->bar : (name: string) => B.A
 +>bar : (name: string) => A

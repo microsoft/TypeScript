@@ -8,7 +8,6 @@ type Kind = "one" | "two" | "three";
 
 declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
 >getInterfaceFromString : <T extends Kind>(options?: { type?: T | undefined; } & { type?: Kind | undefined; } | undefined) => T
->T : T
 >options : { type?: T | undefined; } & { type?: Kind | undefined; } | undefined
 >type : T | undefined
 >type : Kind | undefined

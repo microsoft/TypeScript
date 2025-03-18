@@ -1001,8 +1001,6 @@ export declare module "use_glo_M1_public" {
 >use_glo_M2_public : any
 
     module m2 {
->m2 : any
-
         import errorImport = require("glo_M2_public");
 >errorImport : any
 
@@ -1011,8 +1009,6 @@ export declare module "use_glo_M1_public" {
 >glo_M1_public : typeof glo_M1_public
 
         module m5 {
->m5 : any
-
             import m5_errorImport = require("glo_M2_public");
 >m5_errorImport : any
 
@@ -1079,8 +1075,6 @@ declare module "use_glo_M3_private" {
 >use_glo_M4_private : any
 
     module m2 {
->m2 : any
-
         import errorImport = require("glo_M4_private");
 >errorImport : any
 
@@ -1089,8 +1083,6 @@ declare module "use_glo_M3_private" {
 >glo_M3_private : typeof glo_M3_private
 
         module m5 {
->m5 : any
-
             import m5_errorImport = require("glo_M4_private");
 >m5_errorImport : any
 
@@ -1105,16 +1097,12 @@ declare module "anotherParseError" {
 >"anotherParseError" : any
 
     module m2 {
->m2 : any
-
         declare module "abc" {
 >"abc" : typeof import("abc")
         }
     }
 
     module m2 {
->m2 : any
-
         module "abc2" {
 >"abc2" : typeof import("abc2")
         }
@@ -1128,16 +1116,12 @@ declare export module "anotherParseError2" {
 >"anotherParseError2" : any
 
     module m2 {
->m2 : any
-
         declare module "abc" {
 >"abc" : typeof import("abc")
         }
     }
 
     module m2 {
->m2 : any
-
         module "abc2" {
 >"abc2" : typeof import("abc2")
         }

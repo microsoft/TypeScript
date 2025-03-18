@@ -14,15 +14,7 @@
  >0 : 0
  
  === file.d.ts ===
- declare namespace Foo {
-+>Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
-+
-     interface Whatever {
-+>Whatever : Whatever
-+
-         prop: any;
- >prop : any
-     }
+@@= skipped -16, +16 lines =@@
  }
  
  declare function Foo(opts?: Foo.Whatever): void;

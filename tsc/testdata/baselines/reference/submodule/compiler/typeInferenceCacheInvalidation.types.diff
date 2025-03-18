@@ -1,23 +1,6 @@
 --- old.typeInferenceCacheInvalidation.types
 +++ new.typeInferenceCacheInvalidation.types
-@@= skipped -4, +4 lines =@@
- 
- type Callback<TFoo, TBar> = (foo: TFoo, bar: TBar) => any
- >Callback : Callback<TFoo, TBar>
-+>TFoo : TFoo
-+>TBar : TBar
- >foo : TFoo
- >bar : TBar
- 
- declare function example<TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(
- >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
-+>TFoo : TFoo
-+>TBar : TBar
-+>TCallback : TCallback
- 
-     foo: TFoo,
- >foo : TFoo
-@@= skipped -39, +44 lines =@@
+@@= skipped -43, +43 lines =@@
  >'42' : "42"
  
  example(42, (foo, bar) => ({

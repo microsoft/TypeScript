@@ -39,6 +39,7 @@ function shadowedVariable({ value: alias }: { value: string }): typeof value { r
 >alias : string
 >value : string
 >value : string
+>value : string
 
 function notReferenced({ name: alias }: Named) {
 >notReferenced : (__0: Named) => void
@@ -74,6 +75,7 @@ function referencedInSignarture({ name: alias }: Named): typeof alias {
 >referencedInSignarture : (__0: Named) => string
 >name : any
 >alias : string
+>alias : string
 
     return alias;
 >alias : string
@@ -84,6 +86,7 @@ function referencedInSignartureKeyword({ function: alias }: { function: string }
 >function : any
 >alias : string
 >function : string
+>alias : string
 
     return null!;
 >null! : null
@@ -97,6 +100,7 @@ function referencedInInferredType({ name: alias }: Named) {
     type Named2 = { name: typeof alias }
 >Named2 : Named2
 >name : string
+>alias : string
 
     return null! as Named2
 >null! as Named2 : Named2
@@ -111,6 +115,7 @@ function referencedInNestedFunction({ name: alias }: Named) {
     return function(p: typeof alias) {
 >function(p: typeof alias) {    } : (p: string) => void
 >p : string
+>alias : string
 
     }
 }
@@ -121,6 +126,7 @@ function referencedNestedAlias({ p: { name: alias } }: { p: Named }): typeof ali
 >name : any
 >alias : string
 >p : Named
+>alias : string
 
 	return alias;
 >alias : string
@@ -131,6 +137,7 @@ function referencedArrayAlias([a, b, { name: alias }]: Named[]): typeof alias {
 >a : Named
 >b : Named
 >name : any
+>alias : string
 >alias : string
 
 	return alias;
@@ -218,6 +225,7 @@ class ReferencedInSignartureClass {
 >name : any
 >alias : string
 >p : string
+>alias : string
 
 		console.log(alias);
 >console.log(alias) : void
@@ -231,11 +239,13 @@ class ReferencedInSignartureClass {
 >name : any
 >alias : string
 >o : string
+>alias : string
         
     }
 	mReturnType({ name: alias }: Named): typeof alias {
 >mReturnType : (__0: Named) => string
 >name : any
+>alias : string
 >alias : string
 
         return null!
@@ -244,6 +254,7 @@ class ReferencedInSignartureClass {
 	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias> {
 >mRerturnTypeNested : (__0: Named) => string
 >name : any
+>alias : string
 >alias : string
 
         return null!
@@ -254,6 +265,7 @@ class ReferencedInSignartureClass {
 >name : any
 >alias : string
 >p : string
+>alias : string
 
         return null!
 >null! : null
@@ -269,12 +281,14 @@ let referencedInSignartureReturnTypeFnType: ({ name: alias }: Named) => typeof a
 >referencedInSignartureReturnTypeFnType : (__0: Named) => string
 >name : any
 >alias : string
+>alias : string
 
 let referencedInSignartureParamTypeFnType: ({ name: alias }: Named, p: typeof alias) => void;
 >referencedInSignartureParamTypeFnType : (__0: Named, p: string) => void
 >name : any
 >alias : string
 >p : string
+>alias : string
 
 let notReferencedCtorType: new ({ name: alias }: Named) => void;
 >notReferencedCtorType : new (__0: Named) => void
@@ -285,17 +299,17 @@ let referencedInSignartureReturnTypeCtorType: new ({ name: alias }: Named) => ty
 >referencedInSignartureReturnTypeCtorType : new (__0: Named) => string
 >name : any
 >alias : string
+>alias : string
 
 let referencedInSignartureParamTypeCtorType: new  ({ name: alias }: Named, p: typeof alias) => void;
 >referencedInSignartureParamTypeCtorType : new (__0: Named, p: string) => void
 >name : any
 >alias : string
 >p : string
+>alias : string
 
 
 interface NotReferencedInterface {
->NotReferencedInterface : NotReferencedInterface
-
 	({ name: alias }: Named): void
 >name : any
 >alias : string
@@ -316,24 +330,26 @@ interface NotReferencedInterface {
 }
 
 interface ReferencedInSignartureInterface {
->ReferencedInSignartureInterface : ReferencedInSignartureInterface
-
 	({ name: alias }: Named, p: typeof alias): void
 >name : any
 >alias : string
 >p : string
+>alias : string
 
 	({ name: alias }: Named): typeof alias
 >name : any
+>alias : string
 >alias : string
 	
 	new ({ name: alias }: Named, p: typeof alias): void
 >name : any
 >alias : string
 >p : string
+>alias : string
 
 	new ({ name: alias }: Named): typeof alias
 >name : any
+>alias : string
 >alias : string
 
 	set x({ name: alias }: Named & { o: typeof alias })
@@ -341,15 +357,18 @@ interface ReferencedInSignartureInterface {
 >name : any
 >alias : string
 >o : string
+>alias : string
 
 	mReturnType({ name: alias }: Named): typeof alias;
 >mReturnType : (__0: Named) => string
 >name : any
 >alias : string
+>alias : string
 
 	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
 >mRerturnTypeNested : (__0: Named) => string
 >name : any
+>alias : string
 >alias : string
 
     mParameter({ name: alias }: Named, p: typeof alias);
@@ -357,4 +376,5 @@ interface ReferencedInSignartureInterface {
 >name : any
 >alias : string
 >p : string
+>alias : string
 }

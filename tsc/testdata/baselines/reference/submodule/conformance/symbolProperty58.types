@@ -2,8 +2,6 @@
 
 === symbolProperty58.ts ===
 interface SymbolConstructor {
->SymbolConstructor : SymbolConstructor
-
     foo: string;
 >foo : string
 }

@@ -2,8 +2,6 @@
 
 === assignToModule.ts ===
 module A {}
->A : any
-
 A = undefined; // invalid LHS
 >A = undefined : undefined
 >A : any

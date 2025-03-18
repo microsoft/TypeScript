@@ -3,7 +3,6 @@
 === thisTypeInTypePredicate.ts ===
 declare function filter<S>(f: (this: void, x: any) => x is S): S[];
 >filter : <S>(f: (x: any) => x is S) => S[]
->S : S
 >f : (x: any) => x is S
 >this : void
 >x : any

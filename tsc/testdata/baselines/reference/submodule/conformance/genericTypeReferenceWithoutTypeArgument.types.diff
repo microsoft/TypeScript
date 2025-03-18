@@ -1,14 +1,6 @@
 --- old.genericTypeReferenceWithoutTypeArgument.types
 +++ new.genericTypeReferenceWithoutTypeArgument.types
-@@= skipped -5, +5 lines =@@
- 
- class C<T> {
- >C : C<T>
-+>T : T
- 
-     foo: T;
- >foo : T
-@@= skipped -9, +10 lines =@@
+@@= skipped -14, +14 lines =@@
  >c : any
  
  var a: { x: C };
@@ -51,20 +43,7 @@
  >x : any
  >y : any
  >y : any
-@@= skipped -26, +26 lines =@@
- }
- 
- interface I extends C {}
-+>I : I
- 
- module M {
- >M : typeof M
- 
-     export class E<T> { foo: T }
- >E : E<T>
-+>T : T
- >foo : T
- }
+@@= skipped -37, +37 lines =@@
  
  class D2 extends M.E { }
  >D2 : D2
@@ -76,23 +55,17 @@
  
  class D3<T extends M.E> { }
  >D3 : D3<T>
-+>T : T
- >M : any
- 
- interface I2 extends M.E { }
-+>I2 : I2
+@@= skipped -12, +12 lines =@@
  >M : typeof M
  
  function h<T extends C>(x: T) { }
 ->h : <T extends C>(x: T) => void
 +>h : <T extends any>(x: T) => void
-+>T : T
  >x : T
  
  function i<T extends M.E>(x: T) { }
 ->i : <T extends M.E>(x: T) => void
 +>i : <T extends any>(x: T) => void
-+>T : T
  >M : any
  >x : T
  

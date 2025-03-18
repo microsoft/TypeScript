@@ -10,8 +10,6 @@ export class publicClass {
 }
 
 export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
     new (param: privateClass): publicClass; // Error
 >param : privateClass
 
@@ -24,8 +22,6 @@ export interface publicInterfaceWithPrivateParmeterTypes {
 }
 
 export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
     new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -38,8 +34,6 @@ export interface publicInterfaceWithPublicParmeterTypes {
 }
 
 interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
     new (param: privateClass): privateClass;
 >param : privateClass
 
@@ -52,8 +46,6 @@ interface privateInterfaceWithPrivateParmeterTypes {
 }
 
 interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
     new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -203,8 +195,6 @@ declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClas
 >param : publicClass
 
 export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
     new (param: privateModule.publicClass): publicClass; // Error
 >param : publicClass
 >privateModule : any
@@ -251,8 +241,6 @@ export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(par
 >privateModule : any
 
 interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
     new (param: privateModule.publicClass): publicClass;
 >param : publicClass
 >privateModule : any
@@ -311,8 +299,6 @@ export module publicModule {
 
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (param: privateClass): publicClass; // Error
 >param : privateClass
 
@@ -325,8 +311,6 @@ export module publicModule {
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -339,8 +323,6 @@ export module publicModule {
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (param: privateClass): privateClass;
 >param : privateClass
 
@@ -353,8 +335,6 @@ export module publicModule {
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -504,8 +484,6 @@ export module publicModule {
 >param : publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (param: privateModule.publicClass): publicClass; // Error
 >param : publicClass
 >privateModule : any
@@ -552,8 +530,6 @@ export module publicModule {
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (param: privateModule.publicClass): publicClass;
 >param : publicClass
 >privateModule : any
@@ -613,8 +589,6 @@ module privateModule {
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (param: privateClass): publicClass;
 >param : privateClass
 
@@ -627,8 +601,6 @@ module privateModule {
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -641,8 +613,6 @@ module privateModule {
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (param: privateClass): privateClass;
 >param : privateClass
 
@@ -655,8 +625,6 @@ module privateModule {
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -806,8 +774,6 @@ module privateModule {
 >param : publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (param: privateModule.publicClass): publicClass;
 >param : publicClass
 >privateModule : any
@@ -854,8 +820,6 @@ module privateModule {
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (param: privateModule.publicClass): publicClass;
 >param : publicClass
 >privateModule : any
@@ -907,8 +871,6 @@ class publicClassInGlobal {
 >publicClassInGlobal : publicClassInGlobal
 }
 interface publicInterfaceWithPublicParmeterTypesInGlobal {
->publicInterfaceWithPublicParmeterTypesInGlobal : publicInterfaceWithPublicParmeterTypesInGlobal
-
     new (param: publicClassInGlobal): publicClassInGlobal;
 >param : publicClassInGlobal
 
@@ -975,8 +937,6 @@ module publicModuleInGlobal {
         }
 
         export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
             new (param: privateClass): publicClass;
 >param : privateClass
 
@@ -989,8 +949,6 @@ module publicModuleInGlobal {
         }
 
         export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
             new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -1003,8 +961,6 @@ module publicModuleInGlobal {
         }
 
         interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
             new (param: privateClass): privateClass;
 >param : privateClass
 
@@ -1017,8 +973,6 @@ module publicModuleInGlobal {
         }
 
         interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
             new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -1168,8 +1122,6 @@ module publicModuleInGlobal {
 >param : publicClass
 
         export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
             new (param: privateModule.publicClass): publicClass;
 >param : publicClass
 >privateModule : any
@@ -1216,8 +1168,6 @@ module publicModuleInGlobal {
 >privateModule : any
 
         interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
             new (param: privateModule.publicClass): publicClass;
 >param : publicClass
 >privateModule : any
@@ -1265,8 +1215,6 @@ module publicModuleInGlobal {
     }
 
     export interface publicInterfaceWithPrivateParmeterTypes {
->publicInterfaceWithPrivateParmeterTypes : publicInterfaceWithPrivateParmeterTypes
-
         new (param: privateClass): publicClass; // Error
 >param : privateClass
 
@@ -1279,8 +1227,6 @@ module publicModuleInGlobal {
     }
 
     export interface publicInterfaceWithPublicParmeterTypes {
->publicInterfaceWithPublicParmeterTypes : publicInterfaceWithPublicParmeterTypes
-
         new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -1293,8 +1239,6 @@ module publicModuleInGlobal {
     }
 
     interface privateInterfaceWithPrivateParmeterTypes {
->privateInterfaceWithPrivateParmeterTypes : privateInterfaceWithPrivateParmeterTypes
-
         new (param: privateClass): privateClass;
 >param : privateClass
 
@@ -1307,8 +1251,6 @@ module publicModuleInGlobal {
     }
 
     interface privateInterfaceWithPublicParmeterTypes {
->privateInterfaceWithPublicParmeterTypes : privateInterfaceWithPublicParmeterTypes
-
         new (param: publicClass): publicClass;
 >param : publicClass
 
@@ -1458,8 +1400,6 @@ module publicModuleInGlobal {
 >param : publicClass
 
     export interface publicInterfaceWithPrivateModuleParameterTypes {
->publicInterfaceWithPrivateModuleParameterTypes : publicInterfaceWithPrivateModuleParameterTypes
-
         new (param: privateModule.publicClass): publicClass; // Error
 >param : publicClass
 >privateModule : any
@@ -1506,8 +1446,6 @@ module publicModuleInGlobal {
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
->privateInterfaceWithPrivateModuleParameterTypes : privateInterfaceWithPrivateModuleParameterTypes
-
         new (param: privateModule.publicClass): publicClass;
 >param : publicClass
 >privateModule : any

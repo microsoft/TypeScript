@@ -3,17 +3,12 @@
 === mappedTypeUnionConstraintInferences.ts ===
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 >Omit : Omit<T, K>
->T : T
->K : K
 
 export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
 >PartialProperties : PartialProperties<T, K>
->T : T
->K : K
 
 export function doSomething_Actual<T extends {
 >doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
->T : T
 
     prop: string;
 >prop : string
@@ -23,7 +18,6 @@ export function doSomething_Actual<T extends {
 
     const x: { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; } = null as any;
 >x : { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
->P : P
 >null as any : any
 
     return x;
@@ -31,14 +25,12 @@ export function doSomething_Actual<T extends {
 }
 export declare function doSomething_Expected<T extends {
 >doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P] }
->T : T
 
     prop: string;
 >prop : string
 
 }>(a: T): { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; };
 >a : T
->P : P
 
 export let a = doSomething_Actual({ prop: "test" });
 >a : { prop?: string; }

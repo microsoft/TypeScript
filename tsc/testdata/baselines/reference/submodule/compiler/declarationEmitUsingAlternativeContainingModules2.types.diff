@@ -1,82 +1,6 @@
 --- old.declarationEmitUsingAlternativeContainingModules2.types
 +++ new.declarationEmitUsingAlternativeContainingModules2.types
-@@= skipped -4, +4 lines =@@
- >QueryKey : QueryKey
- 
- interface Register {}
-+>Register : Register
- 
- type DefaultError = Register extends {
- >DefaultError : Error
- 
-   defaultError: infer TError;
- >defaultError : TError
-+>TError : TError
- }
-   ? TError
-   : Error;
- 
- type ShouldRetryFunction<TError = DefaultError> = (
- >ShouldRetryFunction : ShouldRetryFunction<TError>
-+>TError : TError
- 
-   failureCount: number,
- >failureCount : number
-@@= skipped -22, +25 lines =@@
- ) => boolean;
- type RetryValue<TError> = boolean | number | ShouldRetryFunction<TError>;
- >RetryValue : RetryValue<TError>
-+>TError : TError
- 
- type QueryFunctionContext<
- >QueryFunctionContext : QueryFunctionContext<TQueryKey, TPageParam>
- 
-   TQueryKey extends QueryKey = QueryKey,
-+>TQueryKey : TQueryKey
-+
-   TPageParam = never,
-+>TPageParam : TPageParam
-+
- > = [TPageParam] extends [never]
-   ? {
-       queryKey: TQueryKey;
-@@= skipped -24, +29 lines =@@
- >QueryFunction : QueryFunction<T, TQueryKey, TPageParam>
- 
-   T = unknown,
-+>T : T
-+
-   TQueryKey extends QueryKey = QueryKey,
-+>TQueryKey : TQueryKey
-+
-   TPageParam = never,
-+>TPageParam : TPageParam
-+
- > = (context: QueryFunctionContext<TQueryKey, TPageParam>) => T | Promise<T>;
- >context : QueryFunctionContext<TQueryKey, TPageParam>
- 
- interface QueryOptions<
-+>QueryOptions : QueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam>
-+
-   TQueryFnData = unknown,
-+>TQueryFnData : TQueryFnData
-+
-   TError = DefaultError,
-+>TError : TError
-+
-   TData = TQueryFnData,
-+>TData : TData
-+
-   TQueryKey extends QueryKey = QueryKey,
-+>TQueryKey : TQueryKey
-+
-   TPageParam = never,
-+>TPageParam : TPageParam
-+
- > {
-   retry?: RetryValue<TError>;
- >retry : RetryValue<TError> | undefined
-@@= skipped -25, +43 lines =@@
+@@= skipped -75, +75 lines =@@
  >initialData : TData | undefined
  
    initialDataUpdatedAt?: number | (() => number | undefined);
@@ -85,30 +9,7 @@
  }
  
  interface QueryObserverOptions<
-+>QueryObserverOptions : QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey, TPageParam>
-+
-   TQueryFnData = unknown,
-+>TQueryFnData : TQueryFnData
-+
-   TError = DefaultError,
-+>TError : TError
-+
-   TData = TQueryFnData,
-+>TData : TData
-+
-   TQueryData = TQueryFnData,
-+>TQueryData : TQueryData
-+
-   TQueryKey extends QueryKey = QueryKey,
-+>TQueryKey : TQueryKey
-+
-   TPageParam = never,
-+>TPageParam : TPageParam
-+
- > extends QueryOptions<
-     TQueryFnData,
-     TError,
-@@= skipped -24, +38 lines =@@
+@@= skipped -24, +24 lines =@@
  >refetchInterval : number | undefined
  
    select?: (data: TQueryData) => TData;
@@ -117,144 +18,16 @@
  >data : TQueryData
  }
  
-@@= skipped -8, +8 lines =@@
- >UseQueryOptions : UseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>
- 
-   TQueryFnData = unknown,
-+>TQueryFnData : TQueryFnData
-+
-   TError = DefaultError,
-+>TError : TError
-+
-   TData = TQueryFnData,
-+>TData : TData
-+
-   TQueryData = TQueryFnData,
-+>TQueryData : TQueryData
-+
-   TQueryKey extends QueryKey = QueryKey,
-+>TQueryKey : TQueryKey
-+
- > = {
-   [Property in keyof QueryObserverOptions<
-+>Property : Property
-+
-     TQueryFnData,
-     TError,
-     TData,
-@@= skipped -24, +36 lines =@@
- >UndefinedInitialQueryOptions : UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>
- 
-   TQueryFnData = unknown,
-+>TQueryFnData : TQueryFnData
-+
-   TError = DefaultError,
-+>TError : TError
-+
-   TData = TQueryFnData,
-+>TData : TData
-+
-   TQueryKey extends QueryKey = QueryKey,
-+>TQueryKey : TQueryKey
-+
- > = UseQueryOptions<TQueryFnData, TError, TData, TQueryFnData, TQueryKey> & {
-   initialData?: undefined;
- >initialData : undefined
-@@= skipped -10, +18 lines =@@
- };
- 
- interface QueryObserverBaseResult<TData = unknown, TError = DefaultError> {
-+>QueryObserverBaseResult : QueryObserverBaseResult<TData, TError>
-+>TData : TData
-+>TError : TError
-+
-   data: TData | undefined;
- >data : TData | undefined
- 
-@@= skipped -65, +69 lines =@@
- }
- 
- interface QueryObserverSuccessResult<TData = unknown, TError = DefaultError>
-+>QueryObserverSuccessResult : QueryObserverSuccessResult<TData, TError>
-+>TData : TData
-+>TError : TError
-+
-   extends QueryObserverBaseResult<TData, TError> {
-   data: TData;
- >data : TData
-@@= skipped -35, +39 lines =@@
- >DefinedQueryObserverResult : DefinedQueryObserverResult<TData, TError>
- 
-   TData = unknown,
-+>TData : TData
-+
-   TError = DefaultError,
-+>TError : TError
-+
- > = QueryObserverSuccessResult<TData, TError>;
- type QueryObserverResult<
- >QueryObserverResult : QueryObserverResult<TData, TError>
- 
-   TData = unknown,
-+>TData : TData
-+
-   TError = DefaultError,
-+>TError : TError
-+
- > = DefinedQueryObserverResult<TData, TError>;
- 
- type ToRef<T> = {
- >ToRef : ToRef<T>
-+>T : T
- 
-   value: T;
- >value : T
-@@= skipped -21, +30 lines =@@
- >UseBaseQueryReturnType : UseBaseQueryReturnType<TData, TError, Result>
- 
-   TData,
-+>TData : TData
-+
-   TError,
-+>TError : TError
-+
-   Result = QueryObserverResult<TData, TError>,
-+>Result : Result
-+
- > = {
-   [K in keyof Result]: K extends
-+>K : K
-+
-     | "fetchNextPage"
-     | "fetchPreviousPage"
-     | "refetch"
-@@= skipped -17, +25 lines =@@
- 
- type UseQueryReturnType<TData, TError> = UseBaseQueryReturnType<TData, TError>;
+@@= skipped -182, +182 lines =@@
  >UseQueryReturnType : UseQueryReturnType<TData, TError>
-+>TData : TData
-+>TError : TError
  
  declare function useQuery<
 ->useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
 +>useQuery : <TQueryFnData, TError, TData, TQueryKey extends QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
  
    TQueryFnData = unknown,
-+>TQueryFnData : TQueryFnData
-+
    TError = DefaultError,
-+>TError : TError
-+
-   TData = TQueryFnData,
-+>TData : TData
-+
-   TQueryKey extends QueryKey = QueryKey,
-+>TQueryKey : TQueryKey
-+
- >(
-   options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
- >options : UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>
-@@= skipped -17, +27 lines =@@
+@@= skipped -15, +15 lines =@@
  export { type UseQueryReturnType as b, useQuery as u };
  >UseQueryReturnType : any
  >b : any
@@ -279,15 +52,7 @@
  
  const baseUrl = 'https://api.publicapis.org/'
  >baseUrl : "https://api.publicapis.org/"
- >'https://api.publicapis.org/' : "https://api.publicapis.org/"
- 
- interface IEntry {
-+>IEntry : IEntry
-+
-   API: string
- >API : string
- 
-@@= skipped -51, +53 lines =@@
+@@= skipped -51, +51 lines =@@
  
      return fetch(baseUrl + 'entries')
  >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err)) : Promise<any>

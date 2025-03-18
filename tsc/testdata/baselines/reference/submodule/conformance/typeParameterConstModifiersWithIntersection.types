@@ -4,8 +4,6 @@
 // https://github.com/microsoft/TypeScript/issues/55778
 
 interface Config<T1 extends { type: string }> {
->Config : Config<T1>
->T1 : T1
 >type : string
 
   useIt: T1;
@@ -16,12 +14,9 @@ declare function test<
 >test : <T1 extends { type: string; }, TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
 
   T1 extends { type: string },
->T1 : T1
 >type : string
 
   const TConfig extends Config<T1>,
->TConfig : TConfig
-
 >(config: { produceThing: T1 } & TConfig): TConfig;
 >config : { produceThing: T1; } & TConfig
 >produceThing : T1

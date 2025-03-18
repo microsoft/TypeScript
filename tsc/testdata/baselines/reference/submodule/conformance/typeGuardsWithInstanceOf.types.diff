@@ -1,14 +1,6 @@
 --- old.typeGuardsWithInstanceOf.types
 +++ new.typeGuardsWithInstanceOf.types
-@@= skipped -1, +1 lines =@@
- 
- === typeGuardsWithInstanceOf.ts ===
- interface I { global: string; }
-+>I : I
- >global : string
- 
- var result!: I;
-@@= skipped -23, +24 lines =@@
+@@= skipped -24, +24 lines =@@
  } else if (!result.global) {
  >!result.global : boolean
  >result.global : any
@@ -17,25 +9,16 @@
  >global : any
  }
  
- // Repro from #31155
- 
- interface OnChanges {
-+>OnChanges : OnChanges
-+
-     onChanges(changes: Record<string, unknown>): void
- >onChanges : (changes: Record<string, unknown>) => void
- >changes : Record<string, unknown>
+@@= skipped -13, +13 lines =@@
  }
  interface Validator {
-+>Validator : Validator
-+
      validate(): null | Record<string, unknown>;
 ->validate : () => null | Record<string, unknown>
 +>validate : () => Record<string, unknown> | null
  }
  
  class C {
-@@= skipped -43, +47 lines =@@
+@@= skipped -30, +30 lines =@@
  >v : C
      }
      v // Validator & Partial<OnChanges> via subtype reduction

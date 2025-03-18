@@ -10,36 +10,16 @@
  === divideAndConquerIntersections.ts ===
  type QQ<T extends string[]> =
  >QQ : QQ<T>
-+>T : T
- 
-     & ("a" | T[0])
-     & ("b" | T[1])
-@@= skipped -31, +28 lines =@@
- // Repro from #57863
- 
- export interface Update {
-+>Update : Update
-+
-     update_id: number;
- >update_id : number
- 
-@@= skipped -78, +80 lines =@@
- 
- type FilterFunction<U extends Update, V extends U> = (up: U) => up is V;
- >FilterFunction : FilterFunction<U, V>
-+>U : U
-+>V : V
+@@= skipped -112, +108 lines =@@
  >up : U
  
  export function matchFilter<U extends Update, Q extends FilterQuery>(
 ->matchFilter : <U extends Update, Q extends FilterQuery>(filter: Q | Q[]) => FilterFunction<U, Filter<U, Q>>
 +>matchFilter : <U extends Update, Q extends "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query">(filter: Q | Q[]) => FilterFunction<U, PerformQuery<U, Combine<L1Fragment<Q>, Q>>>
-+>U : U
-+>Q : Q
  
      filter: Q | Q[],
  >filter : Q | Q[]
-@@= skipped -16, +20 lines =@@
+@@= skipped -13, +13 lines =@@
  >console : Console
  >log : (...data: any[]) => void
  >"Matching" : "Matching"
@@ -61,59 +41,8 @@
  
  /** Narrow down an update object based on a filter query */
  export type Filter<U extends Update, Q extends FilterQuery> = PerformQuery<
- >Filter : Filter<U, Q>
-+>U : U
-+>Q : Q
- 
-     U,
-     RunQuery<Q>
-@@= skipped -13, +15 lines =@@
- // generate an object structure that can be intersected with updates to narrow them down
- type RunQuery<Q extends string> = Combine<L1Fragment<Q>, Q>;
- >RunQuery : RunQuery<Q>
-+>Q : Q
- 
- // maps each part of the filter query to Record<"key", object>
- type L1Fragment<Q extends string> = Q extends unknown ? Record<Q, object>
- >L1Fragment : L1Fragment<Q>
-+>Q : Q
- 
-     : never;
- // define all other fields from query as keys with value `undefined`
- type Combine<U, K extends string> = U extends unknown
- >Combine : Combine<U, K>
-+>U : U
-+>K : K
- 
-     ? U & Partial<Record<Exclude<K, keyof U>, undefined>>
-     : never;
-@@= skipped -17, +21 lines =@@
- // and then using these values to override the actual update
- type PerformQuery<U extends Update, R extends object> = R extends unknown
- >PerformQuery : PerformQuery<U, R>
-+>U : U
-+>R : R
- 
-     ? FilteredEvent<U, Update & R>
-     : never;
-@@= skipped -7, +9 lines =@@
- // narrow down an update by intersecting it with a different update
- type FilteredEvent<E extends Update, U extends Update> =
- >FilteredEvent : FilteredEvent<E, U>
-+>E : E
-+>U : U
- 
-     & E
-     & Omit<U, "update_id">;
- 
- type Middleware<U extends Update> = (ctx: U) => unknown | Promise<unknown>;
- >Middleware : Middleware<U>
-+>U : U
- >ctx : U
- 
- class EventHub<U extends Update> {
+@@= skipped -49, +49 lines =@@
  >EventHub : EventHub<U>
-+>U : U
  
      use(...middleware: Array<Middleware<U>>): EventHub<U> {
 ->use : (...middleware: Array<Middleware<U>>) => EventHub<U>
@@ -121,17 +50,16 @@
  >middleware : Middleware<U>[]
  
          console.log("Adding", middleware.length, "generic handlers");
-@@= skipped -30, +34 lines =@@
+@@= skipped -18, +18 lines =@@
  >this : this
      }
      on<Q extends FilterQuery>(
 ->on : <Q extends FilterQuery>(filter: Q | Q[], ...middleware: Array<Middleware<Filter<U, Q>>>) => EventHub<Filter<U, Q>>
 +>on : <Q extends "callback_query" | "channel_post" | "chat_boost" | "chat_join_request" | "chat_member" | "chosen_inline_result" | "edited_channel_post" | "edited_message" | "inline_query" | "message" | "message_reaction" | "message_reaction_count" | "my_chat_member" | "poll" | "poll_answer" | "pre_checkout_query" | "removed_chat_boost" | "shipping_query">(filter: Q | Q[], ...middleware: Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]) => EventHub<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>
-+>Q : Q
  
          filter: Q | Q[],
  >filter : Q | Q[]
-@@= skipped -20, +21 lines =@@
+@@= skipped -20, +20 lines =@@
  >middleware : Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]
  >length : number
  >"handlers for" : "handlers for"

@@ -13,17 +13,3 @@
  >SubModule : any
  >m : any
  >m3 : any
-@@= skipped -14, +14 lines =@@
- >"SubModule" : typeof import("SubModule")
- 
-     export module m {
-+>m : any
-+
-         export module m3 {
-+>m3 : any
-+
-             interface c {
-+>c : c
-             }
-         }
-     }

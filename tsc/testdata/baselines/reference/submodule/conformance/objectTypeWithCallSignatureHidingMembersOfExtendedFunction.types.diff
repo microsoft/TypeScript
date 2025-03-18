@@ -1,24 +1,6 @@
 --- old.objectTypeWithCallSignatureHidingMembersOfExtendedFunction.types
 +++ new.objectTypeWithCallSignatureHidingMembersOfExtendedFunction.types
-@@= skipped -4, +4 lines =@@
- // no errors expected below 
- 
- interface Function {
-+>Function : Function
-+
-     data: number;
- >data : number
- 
-@@= skipped -8, +10 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     (): void;
-     apply(a: any, b?: any): void;
- >apply : (a: any, b?: any) => void
-@@= skipped -44, +46 lines =@@
+@@= skipped -56, +56 lines =@@
  >data : number
  
  var r1e = i['hm']; // should be Object

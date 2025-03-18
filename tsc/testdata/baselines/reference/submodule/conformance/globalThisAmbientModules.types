@@ -16,15 +16,16 @@ namespace valueModule { export var val = 1 }
 >1 : 1
 
 namespace namespaceModule { export type typ = 1 }
->namespaceModule : any
 >typ : 1
 
 // should error
 type GlobalBad1 = (typeof globalThis)["\"ambientModule\""]
 >GlobalBad1 : any
+>globalThis : typeof globalThis
 
 type GlobalOk1 = (typeof globalThis)["valueModule"]
 >GlobalOk1 : typeof valueModule
+>globalThis : typeof globalThis
 
 type GlobalOk2 = globalThis.namespaceModule.typ
 >GlobalOk2 : 1
@@ -33,5 +34,6 @@ type GlobalOk2 = globalThis.namespaceModule.typ
 
 const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
 >bad1 : any
+>globalThis : typeof globalThis
 >'ambientModule' : "ambientModule"
 

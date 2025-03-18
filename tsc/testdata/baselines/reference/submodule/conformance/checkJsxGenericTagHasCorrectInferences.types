@@ -5,9 +5,6 @@ import * as React from "react";
 >React : any
 
 interface BaseProps<T> {
->BaseProps : BaseProps<T>
->T : T
-
   initialValues: T;
 >initialValues : T
 
@@ -17,8 +14,6 @@ interface BaseProps<T> {
 }
 declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
 >GenericComponent : GenericComponent<Props, Values>
->Props : Props
->Values : Values
 >React.Component : any
 >React : any
 >Component : any

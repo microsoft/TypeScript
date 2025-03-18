@@ -2,10 +2,7 @@
 
 === classExpressionWithResolutionOfNamespaceOfSameName01.ts ===
 namespace C {
->C : any
-
     export interface type {
->type : type
     }
 }
 

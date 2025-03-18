@@ -1,12 +1,7 @@
 --- old.declarationEmitNameConflictsWithAlias.types
 +++ new.declarationEmitNameConflictsWithAlias.types
-@@= skipped -1, +1 lines =@@
- 
- === declarationEmitNameConflictsWithAlias.ts ===
+@@= skipped -3, +3 lines =@@
  export module C { export interface I { } }
-+>C : any
-+>I : I
-+
  export import v = C;
  >v : any
 ->C : error
@@ -16,9 +11,6 @@
  >M : typeof M
  
      export module C { export interface I { } }
-+>C : any
-+>I : I
-+
      export var w: v.I; // Gets emitted as C.I, which is the wrong interface
 ->w : v.I
 +>w : I

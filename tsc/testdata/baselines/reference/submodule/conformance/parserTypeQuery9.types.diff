@@ -1,8 +1,0 @@
---- old.parserTypeQuery9.types
-+++ new.parserTypeQuery9.types
-@@= skipped -2, +2 lines =@@
- === parserTypeQuery9.ts ===
- var s: typeof A[];
- >s : any[]
-->A : any
- 

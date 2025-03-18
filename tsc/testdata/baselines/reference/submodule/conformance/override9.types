@@ -2,8 +2,6 @@
 
 === override9.ts ===
 interface B {
->B : B
-
     foo (): void
 >foo : () => void
 
@@ -12,8 +10,6 @@ interface B {
 }
 
 interface D extends B {
->D : D
-
     foo (): void;
 >foo : () => void
 

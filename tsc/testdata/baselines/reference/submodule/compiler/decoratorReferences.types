@@ -18,7 +18,6 @@ type T = number;
 
 class C<T> {
 >C : C<T>
->T : T
 
     @y(null as T) // <-- y should resolve to the function declaration, not the parameter; T should resolve to the type parameter of the class
 >y(null as T) : any

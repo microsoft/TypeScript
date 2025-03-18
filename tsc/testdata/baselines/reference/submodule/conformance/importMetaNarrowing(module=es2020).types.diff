@@ -7,7 +7,6 @@
 ->global : any
 ->foo : (() => void) | undefined
 +>global : typeof global
-+>ImportMeta : ImportMeta
 +>foo : () => void | undefined
  
  if (import.meta.foo) {

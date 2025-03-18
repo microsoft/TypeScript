@@ -4,27 +4,21 @@
 // Repro from #14557
 
 interface IData<T> {
->IData : IData<T>
->T : T
-
     content: T;
 >content : T
 }
 
 type Data<T> = {
 >Data : Data<T>
->T : T
 
     get: <K extends keyof T>(prop: K) => T[K];
 >get : <K extends keyof T>(prop: K) => T[K]
->K : K
 >prop : K
 
 };
 
 class Parent<M> {
 >Parent : Parent<M>
->M : M
 
     constructor(private data: Data<M>) {}
 >data : Data<M>
@@ -41,7 +35,6 @@ class Parent<M> {
 
 export class Foo<C> extends Parent<IData<C>> {
 >Foo : Foo<C>
->C : C
 >Parent : Parent<IData<C>>
 
     getContent(): C {
@@ -61,8 +54,6 @@ export class Foo<C> extends Parent<IData<C>> {
 
 export class Bar<C, T extends IData<C>> extends Parent<T> {
 >Bar : Bar<C, T>
->C : C
->T : T
 >Parent : Parent<T>
 
     getContent(): C {
@@ -84,8 +75,6 @@ export class Bar<C, T extends IData<C>> extends Parent<T> {
 
 function foo<C, T extends { content: C }>(x: C, y: T['content']) {
 >foo : <C, T extends { content: C; }>(x: C, y: T["content"]) => void
->C : C
->T : T
 >content : C
 >x : C
 >y : T["content"]

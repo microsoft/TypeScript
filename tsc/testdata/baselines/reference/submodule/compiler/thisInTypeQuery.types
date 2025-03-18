@@ -47,7 +47,9 @@ class MyClass {
 
         type Key = keyof typeof this.map;
 >Key : "my_key"
+>this.map : { my_key: string; }
 >this : this
+>map : { my_key: string; }
 
         this.map[params.a.key as Key];
 >this.map[params.a.key as Key] : string
@@ -80,6 +82,7 @@ class C {
 
       type T0 = typeof this;
 >T0 : this
+>this : this
     }
   }
 }

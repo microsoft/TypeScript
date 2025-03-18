@@ -42,55 +42,13 @@
  
  f1("foo", 10);  // Error
  >f1("foo", 10) : void
-@@= skipped -60, +60 lines =@@
- // Repro from #26110
- 
- interface CoolArray<E> extends Array<E> { 
-+>CoolArray : CoolArray<E>
-+>E : E
-+
-     hello: number;
- >hello : number
- }
- 
- declare function foo<T extends any[]>(cb: (...args: T) => void): void;
- >foo : <T extends any[]>(cb: (...args: T) => void) => void
-+>T : T
- >cb : (...args: T) => void
- >args : T
- 
-@@= skipped -25, +29 lines =@@
- 
- function bar<T extends any[]>(...args: T): T {
- >bar : <T extends any[]>(...args: T) => T
-+>T : T
- >args : T
- 
-     return args;
-@@= skipped -22, +23 lines =@@
- 
- declare function baz<T>(...args: CoolArray<T>): void;
- >baz : <T>(...args: CoolArray<T>) => void
-+>T : T
- >args : CoolArray<T>
- 
- declare const ca: CoolArray<number>;
-@@= skipped -30, +31 lines =@@
- 
- declare function hmm<A extends [] | [number, string]>(...args: A): void;
- >hmm : <A extends [] | [number, string]>(...args: A) => void
-+>A : A
- >args : A
- 
- hmm(); // okay, A = []
-@@= skipped -67, +68 lines =@@
+@@= skipped -204, +204 lines =@@
  >ff1 : (...rest: [string, string] | [string, number]) => void
  
  function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
 ->ff3 : <A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
 ->s1 : (...args: [x: string, ...rest: A | [number]]) => void
 +>ff3 : <A extends unknown[]>(s1: (...args: [x: string, number] | [x: string, ...rest: A]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
-+>A : A
 +>s1 : (...args: [x: string, number] | [x: string, ...rest: A]) => void
  >args : [x: string, number] | [x: string, ...rest: A]
  >s2 : (x: string, ...rest: A | [number]) => void

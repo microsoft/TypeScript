@@ -3,7 +3,6 @@
 === emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts ===
 class B<T> {
 >B : B<T>
->T : T
 
     x: T;
 >x : T

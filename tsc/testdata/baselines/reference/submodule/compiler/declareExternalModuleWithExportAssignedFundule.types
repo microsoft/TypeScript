@@ -15,7 +15,6 @@ declare module "express" {
 >express : typeof express
 
         export interface ExpressServer {
->ExpressServer : ExpressServer
 
             enable(name: string): ExpressServer;
 >enable : (name: string) => ExpressServer

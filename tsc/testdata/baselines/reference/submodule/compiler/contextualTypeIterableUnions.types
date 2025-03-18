@@ -3,8 +3,6 @@
 === contextualTypeIterableUnions.ts ===
 declare class DMap<K, V>  {
 >DMap : DMap<K, V>
->K : K
->V : V
 
   constructor(iterable: Iterable<[K, V]> | undefined);
 >iterable : Iterable<[K, V], any, any> | undefined

@@ -10,8 +10,6 @@ const c1 = 1;
 >1 : 1
 
 interface T0 {
->T0 : T0
-
     [c0]: number;
 >[c0] : number
 >c0 : "1"
@@ -21,24 +19,18 @@ interface T0 {
 }
 
 interface T1 {
->T1 : T1
-
     [c0]: number;
 >[c0] : number
 >c0 : "1"
 }
 
 interface T2 {
->T2 : T2
-
     [c0]: string;
 >[c0] : string
 >c0 : "1"
 }
 
 interface T3 {
->T3 : T3
-
     [c0]: number;
 >[c0] : number
 >c0 : "1"
@@ -85,8 +77,6 @@ const w = Symbol();
 >Symbol : SymbolConstructor
 
 export interface InterfaceMemberVisibility {
->InterfaceMemberVisibility : InterfaceMemberVisibility
-
     [x]: number;
 >[x] : number
 >x : unique symbol

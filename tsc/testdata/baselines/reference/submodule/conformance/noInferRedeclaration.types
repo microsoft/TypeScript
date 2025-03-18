@@ -4,7 +4,6 @@
 export const f = <T>(x: T, y: NoInfer<T>) => x;
 >f : <T>(x: T, y: T) => T
 ><T>(x: T, y: NoInfer<T>) => x : <T>(x: T, y: T) => T
->T : T
 >x : T
 >y : T
 >x : T
@@ -15,7 +14,6 @@ import { f } from "./a";
 
 type NoInfer<T> = T & number;
 >NoInfer : NoInfer<T>
->T : T
 
 export const g = f;
 >g : <T>(x: T, y: T) => T

@@ -1,22 +1,6 @@
 --- old.declFileTypeAnnotationUnionType.types
 +++ new.declFileTypeAnnotationUnionType.types
-@@= skipped -17, +17 lines =@@
-     }
-     export class g<T> {
- >g : g<T>
-+>T : T
- 
-         private r: string;
- >r : string
-@@= skipped -7, +8 lines =@@
- }
- class g<T> {
- >g : g<T>
-+>T : T
- 
-     private s: string;
- >s : string
-@@= skipped -7, +8 lines =@@
+@@= skipped -31, +31 lines =@@
  
  // Just the name
  var k: c | m.c = new c() || new m.c();

@@ -1,12 +1,6 @@
 --- old.tsxExternalModuleEmit1.types
 +++ new.tsxExternalModuleEmit1.types
-@@= skipped -5, +5 lines =@@
- 
- 	class Component<T, U> { }
- >Component : Component<T, U>
-+>T : T
-+>U : U
- }
+@@= skipped -9, +9 lines =@@
  
  === app.tsx ===
  import * as React from 'react';
@@ -15,7 +9,7 @@
  
  // Should see var button_1 = require('./button') here
  import { Button } from './button';
-@@= skipped -12, +14 lines =@@
+@@= skipped -8, +8 lines =@@
  
  export class App extends React.Component<any, any> {
  >App : App

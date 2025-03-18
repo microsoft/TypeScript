@@ -5,7 +5,6 @@
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
->T : T
 >x : T
 
     return x;
@@ -30,7 +29,6 @@ var r = foo(a);
 
 function other<T extends Date>(arg: T) {
 >other : <T extends Date>(arg: T) => void
->T : T
 >arg : T
 
     var b: {

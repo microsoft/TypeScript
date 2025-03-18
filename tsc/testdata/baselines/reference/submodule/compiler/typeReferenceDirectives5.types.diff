@@ -1,19 +1,16 @@
 --- old.typeReferenceDirectives5.types
 +++ new.typeReferenceDirectives5.types
-@@= skipped -5, +5 lines =@@
- >$ : any
+@@= skipped -6, +6 lines =@@
  
  export interface A {
-+>A : A
-+
      x: typeof $;
 ->x : { x: number; }
 ->$ : { x: number; }
 +>x : any
++>$ : any
  }
  === /ref.d.ts ===
  export interface $ { x }
-+>$ : $
  >x : any
  
 -=== /types/lib/index.d.ts ===

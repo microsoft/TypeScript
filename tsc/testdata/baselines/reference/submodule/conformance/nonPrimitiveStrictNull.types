@@ -162,8 +162,6 @@ if (typeof d === 'undefined') {
 }
 
 interface Proxy<T extends object> {}
->Proxy : Proxy<T>
->T : T
 
 var x: Proxy<number>; // error
 >x : Proxy<number>
@@ -175,8 +173,6 @@ var z: Proxy<undefined>; // error
 >z : Proxy<undefined>
 
 interface Blah {
->Blah : Blah
-
   foo: number;
 >foo : number
 }

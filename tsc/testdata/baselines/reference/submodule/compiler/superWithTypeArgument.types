@@ -8,7 +8,6 @@ class C {
 
 class D<T> extends C {
 >D : D<T>
->T : T
 >C : C
 
     constructor() {

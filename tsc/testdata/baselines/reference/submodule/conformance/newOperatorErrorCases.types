@@ -15,7 +15,6 @@ class C1 {
 
 class T<T> {
 >T : T<T>
->T : T
 
     constructor(n?: T) { }
 >n : T
@@ -36,8 +35,6 @@ var anyCtor1: {
 };
 
 interface nestedCtor {
->nestedCtor : nestedCtor
-
     new (): nestedCtor;
 }
 var nestedCtor: nestedCtor;

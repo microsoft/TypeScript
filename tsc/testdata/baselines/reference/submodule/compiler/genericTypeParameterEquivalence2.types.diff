@@ -1,16 +1,6 @@
 --- old.genericTypeParameterEquivalence2.types
 +++ new.genericTypeParameterEquivalence2.types
-@@= skipped -3, +3 lines =@@
- // compose :: (b->c) -> (a->b) -> (a->c)
- function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
- >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
-+>A : A
-+>B : B
-+>C : C
- >f : (b: B) => C
- >b : B
- >g : (a: A) => B
-@@= skipped -14, +17 lines =@@
+@@= skipped -17, +17 lines =@@
  >f(g.apply(null, a)) : C
  >f : (b: B) => C
  >g.apply(null, a) : any
@@ -22,23 +12,7 @@
  >a : A
  
      };
-@@= skipped -11, +11 lines =@@
- // forEach :: [a] -> (a -> ()) -> ()
- function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
- >forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
-+>A : A
- >list : A[]
- >f : (a: A, n?: number) => void
- >a : A
-@@= skipped -29, +30 lines =@@
- // filter :: (a->bool) -> [a] -> [a]
- function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
- >filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
-+>A : A
- >f : (a: A) => boolean
- >a : A
- >ar : A[]
-@@= skipped -10, +11 lines =@@
+@@= skipped -50, +50 lines =@@
  
      forEach(ar, (el) => {
  >forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void
@@ -47,32 +21,7 @@
  >ar : A[]
  >(el) => {        if (f(el)) {            ret.push(el);        }    } : (el: A) => void
  >el : A
-@@= skipped -26, +26 lines =@@
- // length :: [a] -> Num
- function length2<A>(ar: A[]): number {
- >length2 : <A>(ar: A[]) => number
-+>A : A
- >ar : A[]
- 
-     return ar.length;
-@@= skipped -11, +12 lines =@@
- // curry1 :: ((a,b)->c) -> (a->(b->c))
- function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
- >curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
-+>A : A
-+>B : B
-+>C : C
- >f : (a: A, b: B) => C
- >a : A
- >b : B
-@@= skipped -40, +43 lines =@@
- 
- function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
- >countWhere_1 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
-+>A : A
- >pred : (a: A) => boolean
- >a : A
- >a : A[]
+@@= skipped -83, +83 lines =@@
  
      return compose(length2, cfilter(pred));
  >compose(length2, cfilter(pred)) : (a: A[]) => number
@@ -86,13 +35,7 @@
  >pred : (a: A) => boolean
  }
  
- function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
- >countWhere_2 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
-+>A : A
- >pred : (a: A) => boolean
- >a : A
- >a : A[]
-@@= skipped -22, +24 lines =@@
+@@= skipped -16, +16 lines =@@
      var where = cfilter(pred);
  >where : (bx: A[]) => A[]
  >cfilter(pred) : (bx: A[]) => A[]

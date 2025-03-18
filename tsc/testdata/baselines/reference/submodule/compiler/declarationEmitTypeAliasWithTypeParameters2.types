@@ -3,18 +3,12 @@
 === declarationEmitTypeAliasWithTypeParameters2.ts ===
 export type Bar<X, Y, Z> = () => [X, Y, Z];
 >Bar : Bar<X, Y, Z>
->X : X
->Y : Y
->Z : Z
 
 export type Baz<M, N> = Bar<M, string, N>;
 >Baz : Baz<M, N>
->M : M
->N : N
 
 export type Baa<Y> = Baz<boolean, Y>;
 >Baa : Baa<Y>
->Y : Y
 
 export const y = (x: Baa<number>) => 1
 >y : (x: Baa<number>) => number

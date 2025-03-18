@@ -22,8 +22,6 @@ module A {
 
 // no code gen expected
 module B {
->B : any
-
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 >a : typeof A
 >A : typeof A
@@ -39,6 +37,7 @@ module C {
 
     var m: typeof a;
 >m : typeof A
+>a : typeof A
 
     var p: a.Point;
 >p : Point

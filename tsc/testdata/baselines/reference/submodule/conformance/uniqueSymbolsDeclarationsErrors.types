@@ -5,7 +5,6 @@ declare const s: unique symbol;
 >s : unique symbol
 
 interface I { readonly readonlyType: unique symbol; }
->I : I
 >readonlyType : unique symbol
 
 // not allowed when emitting declarations
@@ -17,6 +16,8 @@ export const obj = {
     method1(p: typeof s): typeof s {
 >method1 : (p: unique symbol) => unique symbol
 >p : unique symbol
+>s : unique symbol
+>s : unique symbol
 
         return p;
 >p : unique symbol
@@ -38,6 +39,8 @@ export const classExpression = class {
     method1(p: typeof s): typeof s {
 >method1 : (p: unique symbol) => unique symbol
 >p : unique symbol
+>s : unique symbol
+>s : unique symbol
 
         return p;
 >p : unique symbol
@@ -56,22 +59,19 @@ export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 >obj : { method: (p: unique symbol) => void; }
 >method : (p: unique symbol) => void
 >p : unique symbol
+>s : unique symbol
 
     return obj;
 >obj : { method: (p: unique symbol) => void; }
 }
 
 export interface InterfaceWithPrivateNamedProperties {
->InterfaceWithPrivateNamedProperties : InterfaceWithPrivateNamedProperties
-
     [s]: any;
 >[s] : any
 >s : unique symbol
 }
 
 export interface InterfaceWithPrivateNamedMethods {
->InterfaceWithPrivateNamedMethods : InterfaceWithPrivateNamedMethods
-
     [s](): any;
 >[s] : () => any
 >s : unique symbol

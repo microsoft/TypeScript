@@ -8,12 +8,8 @@
 +>React : any
  
  interface ComponentProps {
-+>ComponentProps : ComponentProps
-+
      property1: string;
- >property1 : string
- 
-@@= skipped -11, +13 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  export default function Component(props: ComponentProps) {
@@ -38,14 +34,7 @@
  
      );
  }
- 
- interface AnotherComponentProps {
-+>AnotherComponentProps : AnotherComponentProps
-+
-     property1: string;
- >property1 : string
- 
-@@= skipped -28, +30 lines =@@
+@@= skipped -28, +28 lines =@@
  }
  
  function AnotherComponent({ property1 }: AnotherComponentProps) {

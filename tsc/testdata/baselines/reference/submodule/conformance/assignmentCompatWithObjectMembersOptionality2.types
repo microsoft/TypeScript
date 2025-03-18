@@ -23,8 +23,6 @@ module TargetHasOptional {
 
     // targets
     interface C {
->C : C
-
         opt?: Base
 >opt : Base
     }
@@ -37,6 +35,7 @@ module TargetHasOptional {
 
     var b: typeof a = { opt: new Base() }
 >b : { opt?: Base; }
+>a : { opt?: Base; }
 >{ opt: new Base() } : { opt: Base; }
 >opt : Base
 >new Base() : Base
@@ -44,20 +43,14 @@ module TargetHasOptional {
 
     // sources
     interface D {
->D : D
-
         other: Base;
 >other : Base
     }
     interface E {
->E : E
-
         other: Derived;
 >other : Derived
     }
     interface F {
->F : F
-
         other?: Derived;
 >other : Derived
     }
@@ -143,8 +136,6 @@ module SourceHasOptional {
 
     // targets
     interface C {
->C : C
-
         opt: Base
 >opt : Base
     }
@@ -164,20 +155,14 @@ module SourceHasOptional {
 
     // sources
     interface D {
->D : D
-
         other?: Base;
 >other : Base
     }
     interface E {
->E : E
-
         other?: Derived;
 >other : Derived
     }
     interface F {
->F : F
-
         other: Derived;
 >other : Derived
     }

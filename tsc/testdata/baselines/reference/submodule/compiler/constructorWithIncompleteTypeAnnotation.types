@@ -14,8 +14,6 @@ declare module "fs" {
 >ReadAllText : () => string
     }
     export interface IFile {
->IFile : IFile
-
         [index: number]: string;
 >index : number
     }
@@ -798,8 +796,6 @@ module TypeScriptAllInOne {
     }
 
     interface IF {
->IF : IF
-
         Foo(): bool;
 >Foo : () => bool
     }
@@ -964,8 +960,6 @@ enum Fruit {
 }
 
 interface IDisposable {
->IDisposable : IDisposable
-
     Dispose(): void;
 >Dispose : () => void
 }

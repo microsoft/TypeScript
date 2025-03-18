@@ -15,6 +15,7 @@ var r0 = true ? null : null;
 
 var u: typeof undefined;
 >u : any
+>undefined : undefined
 
 var r0b = true ? u : null;
 >r0b : any
@@ -123,7 +124,6 @@ var r8 = true ? <T>(x: T) => { return x } : null;
 >true ? <T>(x: T) => { return x } : null : <T>(x: T) => T
 >true : true
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 
@@ -132,12 +132,10 @@ var r8b = true ? null : <T>(x: T) => { return x }; // type parameters not identi
 >true ? null : <T>(x: T) => { return x } : <T>(x: T) => T
 >true : true
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
 >x : T
 
 interface I1 { foo: number; }
->I1 : I1
 >foo : number
 
 var i1: I1;
@@ -176,7 +174,6 @@ var r10 = true ? null : c1;
 
 class C2<T> { foo: T; }
 >C2 : C2<T>
->T : T
 >foo : T
 
 var c2: C2<number>;
@@ -238,6 +235,7 @@ module f {
 }
 var af: typeof f;
 >af : typeof f
+>f : typeof f
 
 var r15 = true ? af : null;
 >r15 : typeof f
@@ -264,6 +262,7 @@ module c {
 }
 var ac: typeof c;
 >ac : typeof c
+>c : typeof c
 
 var r16 = true ? ac : null;
 >r16 : typeof c
@@ -279,7 +278,6 @@ var r16 = true ? null : ac;
 
 function f17<T>(x: T) {
 >f17 : <T>(x: T) => void
->T : T
 >x : T
 
     var r17 = true ? x : null;
@@ -297,8 +295,6 @@ function f17<T>(x: T) {
 
 function f18<T, U>(x: U) {
 >f18 : <T, U>(x: U) => void
->T : T
->U : U
 >x : U
 
     var r18 = true ? x : null;

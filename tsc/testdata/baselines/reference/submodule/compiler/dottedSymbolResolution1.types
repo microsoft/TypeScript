@@ -2,15 +2,12 @@
 
 === dottedSymbolResolution1.ts ===
 interface JQuery {
->JQuery : JQuery
-
     find(selector: string): JQuery;
 >find : (selector: string) => JQuery
 >selector : string
 }
 
 interface JQueryStatic {
->JQueryStatic : JQueryStatic
     
     (selector: string): JQuery;
 >selector : string

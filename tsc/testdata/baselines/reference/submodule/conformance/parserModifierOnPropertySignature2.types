@@ -2,8 +2,6 @@
 
 === parserModifierOnPropertySignature2.ts ===
 interface Foo{
->Foo : Foo
-
     public
 >public : any
 

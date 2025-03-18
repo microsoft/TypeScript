@@ -17,34 +17,26 @@
 +>React : any
  
  interface BaseProps {
-+>BaseProps : BaseProps
-+
    when?: ((value: string) => boolean) | "a" | "b";
 ->when : "a" | "b" | ((value: string) => boolean) | undefined
 +>when : "a" | "b" | (value: string) => boolean | undefined
  >value : string
  
    error?: boolean;
-@@= skipped -21, +17 lines =@@
- }
- 
- interface Props extends BaseProps {
-+>Props : Props
- }
+@@= skipped -25, +19 lines =@@
  
  class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
  >FieldFeedback : FieldFeedback<P>
 ->React.Component : React.Component<P, {}, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>P : P
 +>React.Component : any
 +>React : any
 +>Component : any
  
    static defaultProps = {
  >defaultProps : { when: () => boolean; }
-@@= skipped -20, +22 lines =@@
+@@= skipped -16, +16 lines =@@
    };
  
    render() {
@@ -106,14 +98,13 @@
 ->React.Component : React.Component<P, {}, any>
 ->React : typeof React
 ->Component : typeof React.Component
-+>P : P
 +>React.Component : any
 +>React : any
 +>Component : any
  
    static defaultProps: BaseProps = {
  >defaultProps : BaseProps
-@@= skipped -44, +45 lines =@@
+@@= skipped -44, +44 lines =@@
    };
  
    render() {
@@ -177,20 +168,7 @@
  >FieldFeedbackBeta : typeof FieldFeedbackBeta
  
  interface MyPropsProps extends Props {
-+>MyPropsProps : MyPropsProps
-+
-   when: (value: string) => boolean;
- >when : (value: string) => boolean
- >value : string
-@@= skipped -38, +40 lines =@@
- 
- class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedback<P> {
- >FieldFeedback2 : FieldFeedback2<P>
-+>P : P
- >FieldFeedback : FieldFeedback<P>
- 
-   static defaultProps = {
-@@= skipped -14, +15 lines =@@
+@@= skipped -52, +52 lines =@@
    };
  
    render() {

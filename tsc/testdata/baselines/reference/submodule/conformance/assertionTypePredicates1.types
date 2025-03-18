@@ -25,7 +25,6 @@ declare function assertIsArrayOfStrings(value: unknown): asserts value is string
 
 declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->T : T
 >value : T
 
 function f01(x: unknown) {
@@ -279,7 +278,6 @@ namespace Debug {
 
     export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->T : T
 >value : T
 }
 
@@ -649,8 +647,6 @@ function f20(x: unknown) {
 // Repro from #35940
 
 interface Thing {
->Thing : Thing
-
     good: boolean;
 >good : boolean
 
@@ -659,8 +655,6 @@ interface Thing {
 }
 
 interface GoodThing {
->GoodThing : GoodThing
-
     good: true;
 >good : true
 >true : true
@@ -764,8 +758,6 @@ class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclarati
 }
 
 interface TestPropertySignature {
->TestPropertySignature : TestPropertySignature
-
   assert: (value: unknown) => asserts value;
 >assert : (value: unknown) => asserts value
 >value : unknown
@@ -812,8 +804,6 @@ function testFunctionThisParameter1(
 }
 
 interface TestMethodSignature {
->TestMethodSignature : TestMethodSignature
-
   assert(value: unknown): asserts value;
 >assert : (value: unknown) => asserts value
 >value : unknown

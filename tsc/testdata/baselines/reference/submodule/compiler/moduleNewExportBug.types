@@ -5,8 +5,6 @@ module mod1 {
 >mod1 : typeof mod1
 
 	interface mInt {
->mInt : mInt
-
 		new (bar:any):any;
 >bar : any
 

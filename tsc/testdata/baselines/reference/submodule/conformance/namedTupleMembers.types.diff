@@ -1,22 +1,6 @@
 --- old.namedTupleMembers.types
 +++ new.namedTupleMembers.types
-@@= skipped -93, +93 lines =@@
- 
- export type Func<T extends any[]> = (...x: T) => void;
- >Func : Func<T>
-+>T : T
- >x : T
- 
- export const func = null as any as Func<SegmentAnnotated>;
-@@= skipped -9, +10 lines =@@
- 
- export function useState<T>(initial: T): [value: T, setter: (T) => void] {
- >useState : <T>(initial: T) => [value: T, setter: (T: any) => void]
-+>T : T
- >initial : T
- >T : any
- 
-@@= skipped -12, +13 lines =@@
+@@= skipped -114, +114 lines =@@
  >Iter : Iter
  
  export function readSegment([length, count]: [number, number]) {}
@@ -30,22 +14,7 @@
  >null as any as Parameters<typeof readSegment>[0] : [number, number]
  >null as any : any
 ->readSegment : ([length, count]: [number, number]) => void
++>readSegment : (__0: [number, number]) => void
  
  export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
  >RecursiveTupleA : RecursiveTupleA
-@@= skipped -48, +47 lines =@@
- 
- declare function f<T extends any[]>(...x: T): T;
- >f : <T extends any[]>(...x: T) => T
-+>T : T
- >x : T
- 
- declare function g(elem: object, index: number): object;
-@@= skipped -9, +10 lines =@@
- 
- declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
- >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
-+>T : T
- >args : any[]
- >x : T
- 

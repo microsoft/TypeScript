@@ -6,10 +6,13 @@ declare module "bar" {
 
     var before: typeof func;
 >before : () => ???
+>func : () => ???
 
     export default function func(): typeof func;
+>func : () => ???
 >func : () => ???
 
     var after: typeof func;
 >after : () => ???
+>func : () => ???
 }

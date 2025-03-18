@@ -3,7 +3,6 @@
 === typeArgumentInferenceApparentType1.ts ===
 function method<T>(iterable: Iterable<T>): T {
 >method : <T>(iterable: Iterable<T, any, any>) => T
->T : T
 >iterable : Iterable<T, any, any>
 
     return;

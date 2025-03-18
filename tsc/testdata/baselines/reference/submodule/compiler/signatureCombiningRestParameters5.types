@@ -27,11 +27,7 @@ declare function test2<
 >test2 : <A extends readonly unknown[], B extends readonly unknown[]>(c: (...args: A) => void, d: (...args: B) => void, e: (arg: (...args: A) => void | (...args: B) => void) => void) => void
 
   A extends readonly unknown[],
->A : A
-
   B extends readonly unknown[],
->B : B
-
 >(
   c: (...args: A) => void,
 >c : (...args: A) => void
@@ -44,6 +40,8 @@ declare function test2<
   e: (arg: typeof c | typeof d) => void,
 >e : (arg: (...args: A) => void | (...args: B) => void) => void
 >arg : (...args: A) => void | (...args: B) => void
+>c : (...args: A) => void
+>d : (...args: B) => void
 
 ): void;
 

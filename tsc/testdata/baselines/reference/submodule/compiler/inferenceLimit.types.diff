@@ -92,12 +92,3 @@
  
        });
      });
-@@= skipped -36, +36 lines =@@
- 
- === mymodule.ts ===
- export interface MyModel {
-+>MyModel : MyModel
-+
-     id: number;
- >id : number
- }

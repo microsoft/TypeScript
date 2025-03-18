@@ -1,33 +1,15 @@
 --- old.contextSensitiveReturnTypeInference.types
 +++ new.contextSensitiveReturnTypeInference.types
-@@= skipped -3, +3 lines =@@
- // Repro from #34849
- 
- interface IData {
-+>IData : IData
-+
-   bar: boolean
- >bar : boolean
- }
- 
- declare function test<TDependencies>(
- >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
-+>TDependencies : TDependencies
- 
-   getter: (deps: TDependencies, data: IData) => any,
- >getter : (deps: TDependencies, data: IData) => any
-@@= skipped -61, +64 lines =@@
+@@= skipped -64, +64 lines =@@
  >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
  
    (deps: typeof DEPS, data) => ({
 ->(deps: typeof DEPS, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }) : (deps: typeof DEPS, data: IData) => { fn1: () => number; fn2: boolean; }
 +>(deps: typeof DEPS, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }) : (deps: { foo: number; }, data: IData) => { fn1: () => number; fn2: boolean; }
  >deps : { foo: number; }
-->DEPS : { foo: number; }
+ >DEPS : { foo: number; }
  >data : IData
- >({    fn1: function() { return deps.foo },    fn2: data.bar  }) : { fn1: () => number; fn2: boolean; }
- >{    fn1: function() { return deps.foo },    fn2: data.bar  } : { fn1: () => number; fn2: boolean; }
-@@= skipped -61, +60 lines =@@
+@@= skipped -61, +61 lines =@@
  >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
  
    (deps, data) => {

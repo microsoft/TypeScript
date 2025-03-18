@@ -2,8 +2,6 @@
 
 === file1.ts ===
 export namespace Library {
->Library : any
-
     export type Bar = { a: number };
 >Bar : Bar
 >a : number

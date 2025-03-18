@@ -9,8 +9,6 @@ export const SYM = Symbol('a unique symbol');
 >'a unique symbol' : "a unique symbol"
 
 export interface I {
->I : I
-
   [SYM]: 'sym';
 >[SYM] : "sym"
 >SYM : unique symbol

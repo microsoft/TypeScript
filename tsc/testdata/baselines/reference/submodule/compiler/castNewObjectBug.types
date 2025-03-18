@@ -2,8 +2,6 @@
 
 === castNewObjectBug.ts ===
 interface Foo { }
->Foo : Foo
-
 var xx = <Foo> new Object();
 >xx : Foo
 ><Foo> new Object() : Foo

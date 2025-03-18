@@ -2,9 +2,6 @@
 
 === genericInstantiationEquivalentToObjectLiteral.ts ===
 interface Pair<T1, T2> { first: T1; second: T2; }
->Pair : Pair<T1, T2>
->T1 : T1
->T2 : T2
 >first : T1
 >second : T2
 
@@ -28,14 +25,10 @@ y = x;
 
 declare function f<T, U>(x: Pair<T, U>);
 >f : <T, U>(x: Pair<T, U>) => any
->T : T
->U : U
 >x : Pair<T, U>
 
 declare function f2<T, U>(x: { first: T; second: U; });
 >f2 : <T, U>(x: { first: T; second: U; }) => any
->T : T
->U : U
 >x : { first: T; second: U; }
 >first : T
 >second : U

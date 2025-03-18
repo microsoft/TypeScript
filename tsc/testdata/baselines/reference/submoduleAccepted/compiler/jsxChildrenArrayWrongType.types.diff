@@ -1,11 +1,8 @@
 --- old.jsxChildrenArrayWrongType.types
 +++ new.jsxChildrenArrayWrongType.types
-@@= skipped -6, +6 lines =@@
- // target is ES5, so no `Iterable` type is present.
+@@= skipped -7, +7 lines =@@
  
  interface PropsType {
-+>PropsType : PropsType
-+
      children: [string, number] | boolean[];
 ->children : [string, number] | boolean[]
 +>children : boolean[] | [string, number]

@@ -158,7 +158,6 @@ function testUnion(x: Basic) {
 
 function testExtendsUnion<T extends Basic>(x: T) {
 >testExtendsUnion : <T extends Basic>(x: T) => void
->T : T
 >x : T
 
     switch (typeof x) {
@@ -356,7 +355,6 @@ function testUnionImplicitDefault(x: Basic) {
 
 function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >testExtendsExplicitDefault : <T extends Basic>(x: T) => void
->T : T
 >x : T
 
     switch (typeof x) {
@@ -397,7 +395,6 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
->T : T
 >x : T
 
     switch (typeof x) {
@@ -479,7 +476,6 @@ function exhaustiveChecks(x: number | string | L | R): string {
 
 function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
 >exhaustiveChecksGenerics : <T extends string | number | L | R>(x: T) => string
->T : T
 >x : T
 
     switch (typeof x) {
@@ -518,8 +514,6 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 
 function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGeneric : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->X : X
->Y : Y
 >xy : X | Y
 
     switch (typeof xy) {
@@ -551,8 +545,6 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 
 function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 >multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
->X : X
->Y : Y
 >xy : X | Y
 
     switch (typeof xy) {
@@ -580,8 +572,6 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
 function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGenericExhaustive : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->X : X
->Y : Y
 >xy : X | Y
 
     switch (typeof xy) {
@@ -780,8 +770,6 @@ function unknownNarrowing(x: unknown) {
 
 function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowing : <S extends { [K in keyof S]: string }>(k: keyof S) => void
->S : S
->K : K
 >k : keyof S
 
     function assertKeyofS(k1: keyof S) { }
@@ -1054,8 +1042,6 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 
 function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string }>(k: keyof S) => void
->S : S
->K : K
 >k : keyof S
 
     function assertKeyofS(k1: keyof S) { }
@@ -1099,8 +1085,6 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 
 function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 >multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
->X : X
->Y : Y
 >xy : X | Y
 
     switch (typeof xy) {

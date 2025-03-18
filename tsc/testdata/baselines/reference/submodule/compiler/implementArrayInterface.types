@@ -3,7 +3,6 @@
 === implementArrayInterface.ts ===
 declare class MyArray<T> implements Array<T> {
 >MyArray : MyArray<T>
->T : T
 
     toString(): string;
 >toString : () => string
@@ -13,7 +12,6 @@ declare class MyArray<T> implements Array<T> {
 
     concat<U extends T[]>(...items: U[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
->U : U
 >items : U[]
 
     concat(...items: T[]): T[];
@@ -98,7 +96,6 @@ declare class MyArray<T> implements Array<T> {
 
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
 >map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
->U : U
 >callbackfn : (value: T, index: number, array: T[]) => U
 >value : T
 >index : number
@@ -124,7 +121,6 @@ declare class MyArray<T> implements Array<T> {
 
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->U : U
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
 >previousValue : U
 >currentValue : T
@@ -143,7 +139,6 @@ declare class MyArray<T> implements Array<T> {
 
     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 >reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->U : U
 >callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
 >previousValue : U
 >currentValue : T

@@ -3,7 +3,6 @@
 === superWithGenericSpecialization.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T
@@ -11,7 +10,6 @@ class C<T> {
 
 class D<T> extends C<string> {
 >D : D<T>
->T : T
 >C : C<string>
 
     y: T;

@@ -9,8 +9,6 @@ class Foo {
 }
 
 interface I extends Foo {
->I : I
-
     y: number;
 >y : number
 }

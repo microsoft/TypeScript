@@ -2,8 +2,6 @@
 
 === /types.ts ===
 export default interface Foo {
->Foo : default
-
     a: number;
 >a : number
 }

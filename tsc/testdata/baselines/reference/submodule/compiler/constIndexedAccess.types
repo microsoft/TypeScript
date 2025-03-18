@@ -12,8 +12,6 @@ const enum numbers {
 }
 
 interface indexAccess {
->indexAccess : indexAccess
-
     0: string;
 >0 : string
 

@@ -2,16 +2,12 @@
 
 === baseTypeAfterDerivedType.ts ===
 interface Derived extends Base {
->Derived : Derived
-
     method(...args: any[]): void;
 >method : (...args: any[]) => void
 >args : any[]
 }
 
 interface Base {
->Base : Base
-
     method(...args: any[]): void;
 >method : (...args: any[]) => void
 >args : any[]
@@ -26,8 +22,6 @@ class Derived2 implements Base2 {
 }
 
 interface Base2 {
->Base2 : Base2
-
     method(...args: any[]): void;
 >method : (...args: any[]) => void
 >args : any[]

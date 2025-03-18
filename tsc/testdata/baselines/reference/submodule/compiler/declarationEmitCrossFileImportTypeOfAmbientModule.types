@@ -13,6 +13,7 @@ import { Foo } from "@namespace/component";
 
 export declare const item: typeof Foo;
 >item : typeof Foo
+>Foo : typeof Foo
 
 === packages/secondpackage/index.ts ===
 import { item } from "../somepackage";

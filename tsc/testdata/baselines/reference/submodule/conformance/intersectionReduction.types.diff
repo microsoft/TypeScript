@@ -1,23 +1,6 @@
 --- old.intersectionReduction.types
 +++ new.intersectionReduction.types
-@@= skipped -20, +20 lines =@@
- 
- type T5 = symbol & typeof sym1;  // typeof sym1
- >T5 : unique symbol
-->sym1 : unique symbol
- 
- type T6 = typeof sym1 & symbol & typeof sym2;  // never
- >T6 : never
-->sym1 : unique symbol
-->sym2 : unique symbol
- 
- type T7 = string & 'a' & number & 10 & symbol & typeof sym1;  // never
- >T7 : never
-->sym1 : unique symbol
- 
- type T10 = string & ('a' | 'b');  // 'a' | 'b'
- >T10 : T10
-@@= skipped -83, +79 lines =@@
+@@= skipped -103, +103 lines =@@
  >foo : number
  
  declare let ab: A & B;
@@ -62,19 +45,8 @@
  
  type K1 = keyof (A & B);  // string | number | symbol
  >K1 : string | number | symbol
-@@= skipped -13, +13 lines =@@
- 
- type Merge1<T, U> = { [P in keyof (T & U)]: P extends keyof T ? T[P] : U[P & keyof U] }
- >Merge1 : Merge1<T, U>
-+>T : T
-+>U : U
-+>P : P
- 
- type Merge2<T, U> = { [P in keyof T | keyof U]: P extends keyof T ? T[P] : U[P & keyof U] }
+@@= skipped -18, +18 lines =@@
  >Merge2 : Merge2<T, U>
-+>T : T
-+>U : U
-+>P : P
  
  type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
 ->M1 : never
@@ -82,15 +54,7 @@
  >a : 1
  >b : 2
  >a : 2
-@@= skipped -37, +43 lines =@@
- 
- declare function f10<T>(x: { foo: T }): T;
- >f10 : <T>(x: { foo: T; }) => T
-+>T : T
- >x : { foo: T; }
- >foo : T
- 
-@@= skipped -7, +8 lines =@@
+@@= skipped -39, +39 lines =@@
  >a1 : A | D
  
  declare let a2: A | D & E;
@@ -119,12 +83,7 @@
  >t : "a"
  >t : "a"
  
- type Container<Type extends string> = {
- >Container : Container<Type>
-+>Type : Type
- 
-     type: Type;
- >type : Type
+@@= skipped -13, +13 lines =@@
  }
  
  const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t;
@@ -161,22 +120,7 @@
  
  // Repro from #38549
  
- interface A2 {
-+>A2 : A2
-+
-     kind: "A";
- >kind : "A"
- 
-@@= skipped -43, +46 lines =@@
- }
- 
- interface B2 {
-+>B2 : B2
-+
-     kind: "B";
- >kind : "B"
- 
-@@= skipped -8, +10 lines =@@
+@@= skipped -38, +38 lines =@@
  }
  
  declare const shouldBeB: (A2 | B2) & B2;
@@ -190,8 +134,7 @@
  
  function inGeneric<T extends A2 | B2>(alsoShouldBeB: T & B2) {
  >inGeneric : <T extends A2 | B2>(alsoShouldBeB: T & B2) => void
-+>T : T
- >alsoShouldBeB : T & B2
+@@= skipped -12, +12 lines =@@
  
      const b: B2 = alsoShouldBeB;
  >b : B2
@@ -200,19 +143,7 @@
  }
  
  // Repro from #38542
- 
- interface ABI {
-+>ABI : ABI
-+
-     kind: 'a' | 'b';
- >kind : "a" | "b"
- }
-@@= skipped -36, +39 lines =@@
- 
- function bar<T extends CA | CB>(x: T & CA) {
- >bar : <T extends CA | CB>(x: T & CA) => void
-+>T : T
- >x : T & CA
+@@= skipped -28, +28 lines =@@
  
      let ab: ABI = x;
  >ab : ABI

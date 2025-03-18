@@ -10,7 +10,6 @@ const fn1 = () => ({
     test: <T = undefined>(value: T): T => value,
 >test : <T>(value: T) => T
 ><T = undefined>(value: T): T => value : <T>(value: T) => T
->T : T
 >value : T
 >value : T
 
@@ -29,7 +28,6 @@ const fn1async = () => ({
     test: async <T = undefined>(value: T): Promise<T> => value,
 >test : <T>(value: T) => Promise<T>
 >async <T = undefined>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
->T : T
 >value : T
 >value : T
 
@@ -48,7 +46,6 @@ const fn2 = () => ({
     test: <T>(value: T): T => value,
 >test : <T>(value: T) => T
 ><T>(value: T): T => value : <T>(value: T) => T
->T : T
 >value : T
 >value : T
 
@@ -67,7 +64,6 @@ const fn2async = () => ({
     test: async <T>(value: T): Promise<T> => value,
 >test : <T>(value: T) => Promise<T>
 >async <T>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
->T : T
 >value : T
 >value : T
 
@@ -90,7 +86,6 @@ const fn3 = () => ({
     test: <T = undefined>(value: T): T => value,
 >test : <T>(value: T) => T
 ><T = undefined>(value: T): T => value : <T>(value: T) => T
->T : T
 >value : T
 >value : T
 
@@ -109,7 +104,6 @@ const fn3async = () => ({
     test: async <T = undefined>(value: T): Promise<T> => value,
 >test : <T>(value: T) => Promise<T>
 >async <T = undefined>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
->T : T
 >value : T
 >value : T
 
@@ -128,7 +122,6 @@ const fn4 = () => ({
     test: <T = undefined>(value: T): T => value,
 >test : <T>(value: T) => T
 ><T = undefined>(value: T): T => value : <T>(value: T) => T
->T : T
 >value : T
 >value : T
 
@@ -147,7 +140,6 @@ const fn4async = () => ({
     test: async <T = undefined>(value: T): Promise<T> => value,
 >test : <T>(value: T) => Promise<T>
 >async <T = undefined>(value: T): Promise<T> => value : <T>(value: T) => Promise<T>
->T : T
 >value : T
 >value : T
 

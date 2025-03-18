@@ -9,28 +9,7 @@
  >foo : unknown
  >'string' : "string"
  >Array.isArray(foo) === false : boolean
-@@= skipped -61, +61 lines =@@
- 
- // https://github.com/microsoft/TypeScript/issues/44366
- interface Entity {
-+>Entity : Entity
-+
-     type: string;
- >type : string
- }
-@@= skipped -8, +10 lines =@@
- >"actor" : "actor"
- 
- interface Actor extends Entity {
-+>Actor : Actor
-+
-     type: typeof ACTOR_TYPE;
- >type : "actor"
-->ACTOR_TYPE : "actor"
- }
- function isActor(entity: Entity): entity is Actor {
- >isActor : (entity: Entity) => entity is Actor
-@@= skipped -61, +62 lines =@@
+@@= skipped -130, +130 lines =@@
  
      return typeof x === "function";
  >typeof x === "function" : boolean

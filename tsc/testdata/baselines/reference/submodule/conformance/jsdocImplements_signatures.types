@@ -2,8 +2,6 @@
 
 === /defs.d.ts ===
 interface Sig {
->Sig : Sig
-
     [index: string]: string
 >index : string
 }

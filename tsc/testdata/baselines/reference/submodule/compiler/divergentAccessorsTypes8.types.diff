@@ -1,24 +1,6 @@
 --- old.divergentAccessorsTypes8.types
 +++ new.divergentAccessorsTypes8.types
-@@= skipped -3, +3 lines =@@
- export {}
- 
- interface Serializer {
-+>Serializer : Serializer
-+
-   set value(v: string | number | boolean);
- >value : string
- >v : string | number | boolean
-@@= skipped -38, +40 lines =@@
- >"hello" : "hello"
- 
- interface Element {
-+>Element : Element
-+
-     get style(): CSSStyleDeclaration;
- >style : CSSStyleDeclaration
- 
-@@= skipped -278, +280 lines =@@
+@@= skipped -319, +319 lines =@@
    }
    set prop1(s: "hello" | boolean) {}
  >prop1 : "hello"

@@ -3,7 +3,6 @@
 === intersectionTypeInference2.ts ===
 declare function f<T>(x: { prop: T }): T;
 >f : <T>(x: { prop: T; }) => T
->T : T
 >x : { prop: T; }
 >prop : T
 
@@ -30,10 +29,7 @@ f(b);  // never
 
 declare function f2<T, Key extends keyof T>(obj: {[K in keyof T]: T[K]}, key: Key): T[Key];
 >f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K] }, key: Key) => T[Key]
->T : T
->Key : Key
 >obj : { [K in keyof T]: T[K] }
->K : K
 >key : Key
 
 declare const obj: { a: string } & { b: string };

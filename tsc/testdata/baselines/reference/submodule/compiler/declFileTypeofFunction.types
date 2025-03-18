@@ -4,10 +4,12 @@
 function f(n: typeof f): string;
 >f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 >n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
+>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 
 function f(n: typeof g): string;
 >f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 >n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
+>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 
 function f() { return undefined; }
 >f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
@@ -16,16 +18,19 @@ function f() { return undefined; }
 function g(n: typeof g): number;
 >g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 >n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
+>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 
 function g(n: typeof f): number;
 >g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 >n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
+>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 
 function g() { return undefined; }
 >g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 >undefined : undefined
 
 var b: () => typeof b;
+>b : () => ???
 >b : () => ???
 
 function b1() {
@@ -37,11 +42,13 @@ function b1() {
 
 function foo(): typeof foo {
 >foo : () => ???
+>foo : () => ???
 
     return null;
 }
 var foo1: typeof foo;
 >foo1 : () => ???
+>foo : () => ???
 
 var foo2 = foo;
 >foo2 : () => ???

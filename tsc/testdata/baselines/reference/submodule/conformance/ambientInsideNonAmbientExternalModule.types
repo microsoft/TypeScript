@@ -14,5 +14,3 @@ export declare enum E { }
 >E : import("ambientInsideNonAmbientExternalModule").E
 
 export declare module M { }
->M : any
-

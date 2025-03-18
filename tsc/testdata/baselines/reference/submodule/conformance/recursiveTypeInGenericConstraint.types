@@ -3,7 +3,6 @@
 === recursiveTypeInGenericConstraint.ts ===
 class G<T> {
 >G : G<T>
->T : T
 
     x: G<G<T>>; // infinitely expanding type reference
 >x : G<G<T>>
@@ -11,7 +10,6 @@ class G<T> {
 
 class Foo<T extends G<T>> { // error, constraint referencing itself
 >Foo : Foo<T>
->T : T
 
     bar: T;
 >bar : T
@@ -19,7 +17,6 @@ class Foo<T extends G<T>> { // error, constraint referencing itself
 
 class D<T> {
 >D : D<T>
->T : T
 
     x: G<G<T>>; 
 >x : G<G<T>>

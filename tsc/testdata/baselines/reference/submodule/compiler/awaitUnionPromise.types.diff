@@ -1,16 +1,6 @@
 --- old.awaitUnionPromise.types
 +++ new.awaitUnionPromise.types
-@@= skipped -6, +6 lines =@@
- >AsyncEnumeratorDone : AsyncEnumeratorDone
- 
- interface IAsyncEnumerator<T> {
-+>IAsyncEnumerator : IAsyncEnumerator<T>
-+>T : T
-+
-     next1(): Promise<T | AsyncEnumeratorDone>;
- >next1 : () => Promise<T | AsyncEnumeratorDone>
- 
-@@= skipped -31, +34 lines =@@
+@@= skipped -37, +37 lines =@@
      let b = await x.next2();
  >b : number | AsyncEnumeratorDone
  >await x.next2() : number | AsyncEnumeratorDone

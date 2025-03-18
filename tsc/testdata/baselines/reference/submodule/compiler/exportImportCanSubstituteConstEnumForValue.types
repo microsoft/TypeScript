@@ -32,8 +32,6 @@ module MsPortalFx.ViewModels.Dialogs {
     }
 
     export interface DialogResultCallback {
->DialogResultCallback : DialogResultCallback
-
         (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
 >result : DialogResult
 >MsPortalFx : any

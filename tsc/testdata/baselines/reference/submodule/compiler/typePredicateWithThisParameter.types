@@ -4,14 +4,10 @@
 // Repro from #15310
 
 interface Foo {
->Foo : Foo
-
     foo: string;
 >foo : string
 }
 interface Bar {
->Bar : Bar
-
     bar: string;
 >bar : string
 }

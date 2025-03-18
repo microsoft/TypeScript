@@ -1,111 +1,59 @@
 --- old.recursiveTypesUsedAsFunctionParameters.types
 +++ new.recursiveTypesUsedAsFunctionParameters.types
-@@= skipped -2, +2 lines =@@
- === recursiveTypesUsedAsFunctionParameters.ts ===
- class List<T> {
- >List : List<T>
-+>T : T
- 
-     data: T;
- >data : T
-@@= skipped -10, +11 lines =@@
- 
- class MyList<T> {
- >MyList : MyList<T>
-+>T : T
- 
-     data: T;
- >data : T
-@@= skipped -10, +11 lines =@@
- 
- function foo<T>(x: List<T>);
- >foo : { <T>(x: List<T>): any; <U>(x: List<U>): any; }
-+>T : T
- >x : List<T>
- 
- function foo<U>(x: List<U>); // error, duplicate
- >foo : { <T>(x: List<T>): any; <U>(x: List<U>): any; }
-+>U : U
+@@= skipped -29, +29 lines =@@
  >x : List<U>
  
  function foo<T>(x: List<T>) {
 ->foo : { <T_1>(x: List<T_1>): any; <U>(x: List<U>): any; }
 +>foo : { <T>(x: List<T>): any; <U>(x: List<U>): any; }
-+>T : T
  >x : List<T>
  }
  
- function foo2<T>(x: List<T>);
- >foo2 : { <T>(x: List<T>): any; <U>(x: MyList<U>): any; }
-+>T : T
- >x : List<T>
- 
- function foo2<U>(x: MyList<U>); // ok, nominally compared with first overload
- >foo2 : { <T>(x: List<T>): any; <U>(x: MyList<U>): any; }
-+>U : U
+@@= skipped -13, +13 lines =@@
  >x : MyList<U>
  
  function foo2<T>(x: any) {
 ->foo2 : { <T_1>(x: List<T_1>): any; <U>(x: MyList<U>): any; }
 +>foo2 : { <T>(x: List<T>): any; <U>(x: MyList<U>): any; }
-+>T : T
  >x : any
  }
  
- function other<T extends List<U>, U>() {
- >other : <T extends List<U>, U>() => void
-+>T : T
-+>U : U
- 
-     // error but wrong error
-     // BUG 838247
-     function foo3<V>(x: T);
- >foo3 : <V>(x: T) => any
-+>V : V
+@@= skipped -14, +14 lines =@@
  >x : T
  
      function foo3<V>(x: MyList<V>) { }
 ->foo3 : <V_1>(x: T) => any
 +>foo3 : <V>(x: T) => any
-+>V : V
  >x : MyList<V>
  
      // should be error
-     // BUG 838247
-     function foo4<V>(x: T);
- >foo4 : <V>(x: T) => any
-+>V : V
+@@= skipped -10, +10 lines =@@
  >x : T
  
      function foo4<V>(x: List<V>) { }
 ->foo4 : <V_1>(x: T) => any
 +>foo4 : <V>(x: T) => any
-+>V : V
  >x : List<V>
  
      // ok
      function foo5<V>(x: T): string;
 ->foo5 : { <V>(x: T): string; <V_1>(x: List<V_1>): number; <V_1>(x: MyList<V_1>): boolean; }
 +>foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
-+>V : V
  >x : T
  
      function foo5<V>(x: List<V>): number;
 ->foo5 : { <V_1>(x: T): string; <V>(x: List<V>): number; <V_1>(x: MyList<V_1>): boolean; }
 +>foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
-+>V : V
  >x : List<V>
  
      function foo5<V>(x: MyList<V>): boolean;
 ->foo5 : { <V_1>(x: T): string; <V_1>(x: List<V_1>): number; <V>(x: MyList<V>): boolean; }
 +>foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
-+>V : V
  >x : MyList<V>
  
      function foo5<V>(x: any): any { return null; }
 ->foo5 : { <V_1>(x: T): string; <V_1>(x: List<V_1>): number; <V_1>(x: MyList<V_1>): boolean; }
 +>foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
-+>V : V
  >x : any
  
      var list: List<string>;

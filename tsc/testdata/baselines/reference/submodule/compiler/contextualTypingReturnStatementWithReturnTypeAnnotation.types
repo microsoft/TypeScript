@@ -3,7 +3,6 @@
 === contextualTypingReturnStatementWithReturnTypeAnnotation.ts ===
 type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
 >PropOfRaw : PropOfRaw<T>
->T : T
 
 declare function isString(text: unknown): text is string;
 >isString : (text: unknown) => text is string
@@ -11,7 +10,6 @@ declare function isString(text: unknown): text is string;
 
 declare function getPropFromRaw<T>(
 >getPropFromRaw : <T>(prop: "exclude" | "files" | "include" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
->T : T
 
   prop: "files" | "include" | "exclude" | "references",
 >prop : "exclude" | "files" | "include" | "references"

@@ -23,7 +23,6 @@ class D {
 
 class E<T> {
 >E : E<T>
->T : T
 
     foo(x: T);
 >foo : (x: T) => any
@@ -36,7 +35,6 @@ class E<T> {
 
 class F<T> {
 >F : F<T>
->T : T
 
     static foo(x: number);
 >foo : (x: number) => any

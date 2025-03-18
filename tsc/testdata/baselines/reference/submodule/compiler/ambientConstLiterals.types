@@ -3,7 +3,6 @@
 === ambientConstLiterals.ts ===
 function f<T>(x: T): T {
 >f : <T>(x: T) => T
->T : T
 >x : T
 
     return x;

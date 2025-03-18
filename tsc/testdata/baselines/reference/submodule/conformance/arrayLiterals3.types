@@ -63,8 +63,6 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >"string" : "string"
 
 interface tup {
->tup : tup
-
     0: number[]|string[];
 >0 : string[] | number[]
 
@@ -72,11 +70,7 @@ interface tup {
 >1 : string[] | number[]
 }
 interface myArray extends Array<Number> { }
->myArray : myArray
-
 interface myArray2 extends Array<Number|String> { }
->myArray2 : myArray2
-
 var c0: tup = [...temp2];                         // Error
 >c0 : tup
 >[...temp2] : [number[], string[]]

@@ -5,30 +5,24 @@
 
 export type Prop<T> = { (): T }
 >Prop : Prop<T>
->T : T
 
 export type PropType<T> = Prop<T>;
 >PropType : PropType<T>
->T : T
 
 export type PropDefaultValue<T> = T;
 >PropDefaultValue : T
->T : T
 
 
 export type PropValidatorFunction<T> = (value: T) => boolean;
 >PropValidatorFunction : PropValidatorFunction<T>
->T : T
 >value : T
 
 export type PropValidator<T> = PropOptions<T>;
 >PropValidator : PropValidator<T>
->T : T
 
 
 export type PropOptions<T> = {
 >PropOptions : PropOptions<T>
->T : T
 
     type: PropType<T>;
 >type : PropType<T>
@@ -45,25 +39,19 @@ export type PropOptions<T> = {
 
 export type RecordPropsDefinition<T> = {
 >RecordPropsDefinition : RecordPropsDefinition<T>
->T : T
 
     [K in keyof T]: PropValidator<T[K]>
->K : K
 }
 export type PropsDefinition<T> = RecordPropsDefinition<T>;
 >PropsDefinition : RecordPropsDefinition<T>
->T : T
 
 
 declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
 >extend : <T>(__0: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
->T : T
 >props : RecordPropsDefinition<T>
 >props : RecordPropsDefinition<T>
 
 interface MyType {
->MyType : MyType
-
     valid: boolean;
 >valid : boolean
 }
@@ -149,7 +137,6 @@ r.notResolved.required
 
 type Box<T> = {
 >Box : Box<T>
->T : T
 
     contents?: T;
 >contents : T | undefined
@@ -162,15 +149,12 @@ type Box<T> = {
 
 type Mapped<T> = {
 >Mapped : Mapped<T>
->T : T
 
     [K in keyof T]: Box<T[K]>;
->K : K
 }
 
 declare function id<T>(arg: Mapped<T>): Mapped<T>;
 >id : <T>(arg: Mapped<T>) => Mapped<T>
->T : T
 >arg : Mapped<T>
 
 // All properties have inferable types
@@ -251,17 +235,14 @@ const obj3 = id({
 
 type Mapped1<T> = {
 >Mapped1 : Mapped1<T>
->T : T
 
     [K in keyof T]: [T[K], (arg: T) => boolean];
->K : K
 >arg : T
 
 };
 
 declare function inferMapped1<T>(arg: Mapped1<T>): void;
 >inferMapped1 : <T>(arg: Mapped1<T>) => void
->T : T
 >arg : Mapped1<T>
 
 inferMapped1({
@@ -285,17 +266,14 @@ inferMapped1({
 
 type Mapped2<T> = {
 >Mapped2 : Mapped2<T>
->T : T
 
     [K in keyof T]: [T[K], unknown extends T ? unknown : (arg: T) => boolean];
->K : K
 >arg : T
 
 };
 
 declare function inferMapped2<T>(arg: Mapped2<T>): void;
 >inferMapped2 : <T>(arg: Mapped2<T>) => void
->T : T
 >arg : Mapped2<T>
 
 inferMapped2({
@@ -319,17 +297,14 @@ inferMapped2({
 
 type MappedReadonly<T> = {
 >MappedReadonly : MappedReadonly<T>
->T : T
 
     readonly [K in keyof T]: readonly [T[K], (arg: T) => boolean];
->K : K
 >arg : T
 
 };
 
 declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
 >inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
->T : T
 >arg : MappedReadonly<T>
 
 inferMappedReadonly({

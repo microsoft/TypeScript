@@ -5,7 +5,6 @@
 
 type EnvFunction = <T>() => T;
 >EnvFunction : EnvFunction
->T : T
 
 type SimpleType = string | Promise<SimpleType>;
 >SimpleType : SimpleType

@@ -1,53 +1,6 @@
 --- old.recursiveTypesWithTypeof.types
 +++ new.recursiveTypesWithTypeof.types
-@@= skipped -3, +3 lines =@@
- // The following are errors because of circular references
- var c: typeof c;
- >c : any
-->c : any
- 
- var c: any;
- >c : any
- 
- var d: typeof e;
- >d : any
-->e : any
- 
- var d: any;
- >d : any
- 
- var e: typeof d;
- >e : any
-->d : any
- 
- var e: any;
- >e : any
- 
- interface Foo<T> { }
-+>Foo : Foo<T>
-+>T : T
-+
- var f: Array<typeof f>;
- >f : any
-->f : any
- 
- var f: any;
- >f : any
- 
- var f2: Foo<typeof f2>;
- >f2 : any
-->f2 : any
- 
- var f2: any;
- >f2 : any
- 
- var f3: Foo<typeof f3>[];
- >f3 : any
-->f3 : any
- 
- var f3: any;
- >f3 : any
-@@= skipped -44, +41 lines =@@
+@@= skipped -47, +47 lines =@@
  // None of these declarations should have any errors!
  // Truly recursive types
  var g: { x: typeof g; };
@@ -56,6 +9,7 @@
 ->g : { x: typeof g; }
 +>g : { x: ???; }
 +>x : { x: ???; }
++>g : { x: ???; }
  
  var g: typeof g.x;
 ->g : { x: typeof g; }
@@ -63,11 +17,14 @@
 ->g : { x: typeof g; }
 ->x : { x: typeof g; }
 +>g : { x: ???; }
++>g.x : { x: ???; }
 +>g : { x: ???; }
++>x : { x: ???; }
  
  var h: () => typeof h;
 ->h : () => typeof h
 ->h : () => typeof h
++>h : () => ???
 +>h : () => ???
  
  var h = h();
@@ -85,6 +42,8 @@
 ->x : (x: typeof i) => typeof x
 +>i : (x: ???) => ???
 +>x : (x: ???) => ???
++>i : (x: ???) => ???
++>x : (x: ???) => ???
  
  var i = i(i);
 ->i : (x: typeof i) => typeof x
@@ -100,7 +59,7 @@
 ->j : <T extends typeof j>(x: T) => T
 ->j : <T extends typeof j>(x: T) => T
 +>j : <T extends ???>(x: T) => T
-+>T : T
++>j : <T extends ???>(x: T) => T
  >x : T
  
  var j = j(j);
@@ -118,6 +77,7 @@
 ->h2 : new () => typeof h2
 ->h2 : new () => typeof h2
 +>h2 : new () => ???
++>h2 : new () => ???
  
  var h2 = new h2();
 ->h2 : new () => typeof h2
@@ -132,6 +92,8 @@
 ->x : new (x: typeof i2) => typeof x
 ->i2 : new (x: typeof i2) => typeof x
 ->x : new (x: typeof i2) => typeof x
++>i2 : new (x: ???) => ???
++>x : new (x: ???) => ???
 +>i2 : new (x: ???) => ???
 +>x : new (x: ???) => ???
  
@@ -149,7 +111,7 @@
 ->j2 : new <T extends typeof j2>(x: T) => T
 ->j2 : new <T extends typeof j2>(x: T) => T
 +>j2 : new <T extends ???>(x: T) => T
-+>T : T
++>j2 : new <T extends ???>(x: T) => T
  >x : T
  
  var j2 = new j2(j2);
@@ -168,8 +130,10 @@
 +>k : { [n: number]: ???; [s: string]: ???; }
  >n : number
 ->k : { [n: number]: any; [s: string]: any; }
++>k : { [n: number]: ???; [s: string]: ???; }
  >s : string
 ->k : { [n: number]: any; [s: string]: any; }
++>k : { [n: number]: ???; [s: string]: ???; }
  
  var k = k[0];
 ->k : { [n: number]: any; [s: string]: any; }
@@ -197,6 +161,7 @@
 ->hy1 : { x: typeof hy1; }[]
 +>hy1 : { x: ???; }[]
 +>x : { x: ???; }[]
++>hy1 : { x: ???; }[]
  
  var hy1 = hy1[0].x;
 ->hy1 : { x: typeof hy1; }[]
@@ -217,6 +182,7 @@
 ->hy2 : { x: Array<typeof hy2>; }
 +>hy2 : { x: ???[]; }
 +>x : { x: ???; }[]
++>hy2 : { x: ???[]; }
  
  var hy2 = hy2.x[0];
 ->hy2 : { x: Array<typeof hy2>; }
@@ -232,16 +198,3 @@
  >0 : 0
  
  interface Foo2<T, U> { }
-+>Foo2 : Foo2<T, U>
-+>T : T
-+>U : U
- 
- // This one should be an error because the first type argument is not contained inside a type literal
- var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
- >hy3 : any
-->hy3 : any
- >x : any
-->hy3 : any
- 
- var hy3: any;
- >hy3 : any

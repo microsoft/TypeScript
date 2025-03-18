@@ -11,11 +11,7 @@ module M {
 >E : E
 
     export interface I1 {}
->I1 : I1
-
     interface I2 {}
->I2 : I2
-
     export class D {
 >D : D
 

@@ -5,29 +5,21 @@ module WinJS {
 >WinJS : typeof WinJS
 
     export interface ValueCallback {
->ValueCallback : ValueCallback
-
         (value: any): any;
 >value : any
     }
 
     export interface EventCallback {
->EventCallback : EventCallback
-
         (value: any): void;
 >value : any
     }
 
     export interface ErrorCallback {
->ErrorCallback : ErrorCallback
-
         (error: any): any;
 >error : any
     }
 
     export interface ProgressCallback {
->ProgressCallback : ProgressCallback
-
         (progress: any): any;
 >progress : any
     }
@@ -94,7 +86,6 @@ module WinJS {
 
     export declare class TPromise<V> {
 >TPromise : TPromise<V>
->V : V
 
         constructor(init: (complete: (value: V) => void, error: (err: any) => void, progress: ProgressCallback) => void, oncancel?: any);
 >init : (complete: (value: V) => void, error: (err: any) => void, progress: ProgressCallback) => void
@@ -107,7 +98,6 @@ module WinJS {
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
 >then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
->U : U
 >success : (value: V) => TPromise<U>
 >value : V
 >error : (err: any) => TPromise<U>
@@ -116,7 +106,6 @@ module WinJS {
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
 >then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
->U : U
 >success : (value: V) => TPromise<U>
 >value : V
 >error : (err: any) => U
@@ -125,7 +114,6 @@ module WinJS {
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
 >then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
->U : U
 >success : (value: V) => U
 >value : V
 >error : (err: any) => TPromise<U>
@@ -134,7 +122,6 @@ module WinJS {
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
 >then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
->U : U
 >success : (value: V) => U
 >value : V
 >error : (err: any) => U
@@ -154,7 +141,6 @@ module WinJS {
 
         public static as<ValueType>(value: ValueType): TPromise<ValueType>;
 >as : <ValueType>(value: ValueType) => TPromise<ValueType>
->ValueType : ValueType
 >value : ValueType
 
         public static timeout(delay: number): TPromise<void>;
@@ -163,23 +149,18 @@ module WinJS {
 
         public static join<ValueType>(promises: TPromise<ValueType>[]): TPromise<ValueType[]>;
 >join : <ValueType>(promises: TPromise<ValueType>[]) => TPromise<ValueType[]>
->ValueType : ValueType
 >promises : TPromise<ValueType>[]
 
         public static any<ValueType>(promises: TPromise<ValueType>[]): TPromise<ValueType>;
 >any : <ValueType>(promises: TPromise<ValueType>[]) => TPromise<ValueType>
->ValueType : ValueType
 >promises : TPromise<ValueType>[]
 
         public static wrapError<ValueType>(error: any): TPromise<ValueType>;
 >wrapError : <ValueType>(error: any) => TPromise<ValueType>
->ValueType : ValueType
 >error : any
     }
 
     export interface IXHROptions {
->IXHROptions : IXHROptions
-
         type?: string;
 >type : string
 
@@ -208,11 +189,7 @@ module WinJS {
 }
 
 module Services {
->Services : any
-
     export interface IRequestService {
->IRequestService : IRequestService
-
         /**
          * Returns the URL that can be used to access the provided service. The optional second argument can
          * be provided to narrow down the request URL to a specific file system resource. The third argument
@@ -254,11 +231,7 @@ module Errors {
 }
 
 module Files {
->Files : any
-
     export interface IUploadResult {
->IUploadResult : IUploadResult
-
         stat: string;
 >stat : string
 
@@ -268,8 +241,6 @@ module Files {
 }
 
 interface XMLHttpRequest {
->XMLHttpRequest : XMLHttpRequest
-
     status: number;
 >status : number
 

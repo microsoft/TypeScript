@@ -2,8 +2,6 @@
 
 === /node_modules/@types/node/index.d.ts ===
 interface Error2 {
->Error2 : Error2
-
     stack2: string;
 >stack2 : string
 }

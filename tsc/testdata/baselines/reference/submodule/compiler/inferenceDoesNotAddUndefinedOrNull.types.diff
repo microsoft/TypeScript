@@ -1,19 +1,11 @@
 --- old.inferenceDoesNotAddUndefinedOrNull.types
 +++ new.inferenceDoesNotAddUndefinedOrNull.types
-@@= skipped -1, +1 lines =@@
- 
- === inferenceDoesNotAddUndefinedOrNull.ts ===
- interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
-+>NodeArray : NodeArray<T>
-+>T : T
+@@= skipped -4, +4 lines =@@
  
  interface Node {
-+>Node : Node
-+
      forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
 ->forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined
 +>forEachChild : <T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined | undefined) => T | undefined
-+>T : T
  >cbNode : (node: Node) => T | undefined
  >node : Node
 ->cbNodeArray : ((nodes: NodeArray<Node>) => T | undefined) | undefined
@@ -24,26 +16,23 @@
  declare function toArray<T>(value: T | T[]): T[];
 ->toArray : { <T>(value: T | T[]): T[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
 +>toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
-+>T : T
  >value : T | T[]
  
  declare function toArray<T>(value: T | readonly T[]): readonly T[];
 ->toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T>(value: T | readonly T[]): readonly T[]; }
 +>toArray : { <T>(value: T | T[]): T[]; <T>(value: T | readonly T[]): readonly T[]; }
-+>T : T
  >value : T | readonly T[]
  
  function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
 ->flatMapChildren : <T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined) => readonly T[]
 +>flatMapChildren : <T>(node: Node, cb: (child: Node) => T | readonly T[] | undefined) => readonly T[]
-+>T : T
  >node : Node
 ->cb : (child: Node) => readonly T[] | T | undefined
 +>cb : (child: Node) => T | readonly T[] | undefined
  >child : Node
  
      const result: T[] = [];
-@@= skipped -30, +38 lines =@@
+@@= skipped -27, +27 lines =@@
  
      node.forEachChild(child => {
  >node.forEachChild(child => {        const value = cb(child);        if (value !== undefined) {            result.push(...toArray(value));        }    }) : void | undefined
@@ -80,14 +69,13 @@
  function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T | null): readonly T[] {
 ->flatMapChildren2 : <T>(node: Node, cb: (child: Node) => readonly T[] | T | null) => readonly T[]
 +>flatMapChildren2 : <T>(node: Node, cb: (child: Node) => T | readonly T[] | null) => readonly T[]
-+>T : T
  >node : Node
 ->cb : (child: Node) => readonly T[] | T | null
 +>cb : (child: Node) => T | readonly T[] | null
  >child : Node
  
      const result: T[] = [];
-@@= skipped -11, +12 lines =@@
+@@= skipped -11, +11 lines =@@
  
      node.forEachChild(child => {
  >node.forEachChild(child => {        const value = cb(child);        if (value !== null) {            result.push(...toArray(value));        }    }) : void | undefined

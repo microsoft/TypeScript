@@ -11,13 +11,7 @@
  >x : any[]
  >y : any[]
  
-@@= skipped -14, +14 lines =@@
- }
- 
- interface I {
-+>I : I
-+
-     (...x);
+@@= skipped -18, +18 lines =@@
  >x : any[]
  
      foo(...x, ...y);
@@ -33,7 +27,7 @@
  
      (...x);
  >x : any[]
-@@= skipped -21, +23 lines =@@
+@@= skipped -17, +17 lines =@@
  }
  
  var b = {

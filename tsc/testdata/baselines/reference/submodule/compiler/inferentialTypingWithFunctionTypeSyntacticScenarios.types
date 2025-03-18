@@ -3,15 +3,12 @@
 === inferentialTypingWithFunctionTypeSyntacticScenarios.ts ===
 declare function map<T, U>(array: T, func: (x: T) => U): U;
 >map : <T, U>(array: T, func: (x: T) => U) => U
->T : T
->U : U
 >array : T
 >func : (x: T) => U
 >x : T
 
 declare function identity<V>(y: V): V;
 >identity : <V>(y: V) => V
->V : V
 >y : V
 
 var s: string;
@@ -59,9 +56,8 @@ s = map("", (() => identity)());
 
 // construct
 interface IdentityConstructor {
->IdentityConstructor : IdentityConstructor
-
     new (): typeof identity;
+>identity : <V>(y: V) => V
 }
 var ic: IdentityConstructor;
 >ic : IdentityConstructor
@@ -97,6 +93,7 @@ s = map("", <typeof identity>identity);
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >"" : ""
 ><typeof identity>identity : <V>(y: V) => V
+>identity : <V>(y: V) => V
 >identity : <V>(y: V) => V
 
 // parenthesized expression

@@ -2,7 +2,6 @@
 
 === typeGuardNarrowsIndexedAccessOfKnownProperty10.ts ===
 interface Foo { bar: any; }
->Foo : Foo
 >bar : any
 
 const bar: { [id: string]: number } = {};

@@ -35,13 +35,3 @@
  
  === foo.d.ts ===
  export var x: number;
-@@= skipped -31, +31 lines =@@
- >fn : () => void
- 
- export interface Thing { n: typeof x }
-+>Thing : Thing
- >n : number
-->x : number
- 
- export as namespace Foo;
- >Foo : typeof import("foo")

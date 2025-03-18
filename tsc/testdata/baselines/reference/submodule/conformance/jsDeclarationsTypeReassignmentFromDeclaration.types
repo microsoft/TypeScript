@@ -2,8 +2,6 @@
 
 === /some-mod.d.ts ===
 interface Item {
->Item : Item
-
     x: string;
 >x : string
 }

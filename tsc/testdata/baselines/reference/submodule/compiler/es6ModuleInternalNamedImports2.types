@@ -11,8 +11,6 @@ export module M {
 
     // interface
     export interface M_I { }
->M_I : M_I
-
     //calss
     export class M_C { }
 >M_C : M_C
@@ -24,8 +22,6 @@ export module M {
 
     // uninstantiated module
     export module M_MU { }
->M_MU : any
-
     // function
     export function M_F() { }
 >M_F : () => void

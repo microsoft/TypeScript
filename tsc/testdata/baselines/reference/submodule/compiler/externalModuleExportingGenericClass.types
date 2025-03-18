@@ -26,7 +26,6 @@ var v3: number = (new a<number>()).foo;
 === externalModuleExportingGenericClass_file0.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo: T;
 >foo : T

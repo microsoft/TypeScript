@@ -48,11 +48,9 @@ type Keys = keyof EMap
 
 type EPlusFallback<C> = C extends Keys ? EMap[C] : "unrecognised event";
 >EPlusFallback : EPlusFallback<C>
->C : C
 
 type VirtualEvent<T extends string> = { bivarianceHack(event: EPlusFallback<Lowercase<T>>): any; }['bivarianceHack'];
 >VirtualEvent : (event: EPlusFallback<Lowercase<T>>) => any
->T : T
 >bivarianceHack : (event: EPlusFallback<Lowercase<T>>) => any
 >event : EPlusFallback<Lowercase<T>>
 
@@ -63,7 +61,6 @@ declare const _virtualOn: (eventQrl: VirtualEvent<Keys>) => void;
 export const virtualOn = <T extends string>(eventQrl: VirtualEvent<T>) => {
 >virtualOn : <T extends string>(eventQrl: (event: EPlusFallback<Lowercase<T>>) => any) => void
 ><T extends string>(eventQrl: VirtualEvent<T>) => {    _virtualOn(eventQrl);} : <T extends string>(eventQrl: (event: EPlusFallback<Lowercase<T>>) => any) => void
->T : T
 >eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
 
     _virtualOn(eventQrl);

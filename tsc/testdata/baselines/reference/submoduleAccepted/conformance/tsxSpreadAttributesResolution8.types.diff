@@ -9,16 +9,7 @@
  
  const obj = {};
  >obj : {}
-@@= skipped -28, +28 lines =@@
- }
- 
- interface Prop {
-+>Prop : Prop
-+
-     x: number
- >x : number
- 
-@@= skipped -12, +14 lines =@@
+@@= skipped -40, +40 lines =@@
  
  class OverWriteAttr extends React.Component<Prop, {}> {
  >OverWriteAttr : OverWriteAttr

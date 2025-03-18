@@ -2,7 +2,6 @@
 
 === instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
 interface I extends Function { }
->I : I
 
 var x: any;
 >x : any

@@ -1,15 +1,6 @@
 --- old.usingDeclarationsWithObjectLiterals1.types
 +++ new.usingDeclarationsWithObjectLiterals1.types
-@@= skipped -1, +1 lines =@@
- 
- === usingDeclarationsWithObjectLiterals1.ts ===
- interface MyDisposable {
-+>MyDisposable : MyDisposable
-+
-   value: number;
- >value : number
- 
-@@= skipped -12, +14 lines =@@
+@@= skipped -13, +13 lines =@@
  
  {
    using _ = { [Symbol.dispose]() {} };
@@ -40,16 +31,7 @@
  >[Symbol.dispose] : () => void
  >Symbol.dispose : unique symbol
  >Symbol : SymbolConstructor
-@@= skipped -12, +12 lines =@@
- }
- 
- interface MyAsyncDisposable {
-+>MyAsyncDisposable : MyAsyncDisposable
-+
-   value: number;
- >value : number
- 
-@@= skipped -14, +16 lines =@@
+@@= skipped -26, +26 lines =@@
  >f : () => Promise<void>
    {
      await using _ = { async [Symbol.asyncDispose]() {} };

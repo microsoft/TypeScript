@@ -23,8 +23,6 @@ declare module m {
 >x : any
 
     interface I {
->I : I
-
         foo(); // error
 >foo : () => any
 

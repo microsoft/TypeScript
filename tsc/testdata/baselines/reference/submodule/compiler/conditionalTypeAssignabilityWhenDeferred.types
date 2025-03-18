@@ -3,26 +3,16 @@
 === conditionalTypeAssignabilityWhenDeferred.ts ===
 export type FilterPropsByType<T, TT> = {
 >FilterPropsByType : FilterPropsByType<T, TT>
->T : T
->TT : TT
 
   [K in keyof T]: T[K] extends TT ? K : never
->K : K
-
 }[keyof T];
 
 function select<
 >select : <T extends string | number, TList extends object, TValueProp extends FilterPropsByType<TList, T>>(property: T, list: TList[], valueProp: TValueProp) => void
 
   T extends string | number,
->T : T
-
   TList extends object,
->TList : TList
-
   TValueProp extends FilterPropsByType<TList, T>
->TValueProp : TValueProp
-
 >(property: T, list: TList[], valueProp: TValueProp) {}
 >property : T
 >list : TList[]
@@ -30,7 +20,6 @@ function select<
 
 export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
 >func : <XX extends string>(x: XX, tipos: { value: XX; }[]) => void
->XX : XX
 >x : XX
 >tipos : { value: XX; }[]
 >value : XX
@@ -45,7 +34,6 @@ export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
 
 declare function onlyNullablePlease<T extends null extends T ? any : never>(
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
->T : T
 
   value: T
 >value : T
@@ -56,8 +44,6 @@ declare function onlyNullablePlease2<
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
 
   T extends [null] extends [T] ? any : never
->T : T
-
 >(value: T): void;
 >value : T
 
@@ -89,7 +75,6 @@ onlyNullablePlease2(y); // error as expected
 
 function f<T>(t: T) {
 >f : <T>(t: T) => void
->T : T
 >t : T
 
   var x: T | null = Math.random() > 0.5 ? null : t;
@@ -116,7 +101,6 @@ function f<T>(t: T) {
 
 function f2<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) {
 >f2 : <T>(t1: { x: T; y: T; }, t2: T extends T ? { x: T; y: T; } : never) => void
->T : T
 >t1 : { x: T; y: T; }
 >x : T
 >y : T
@@ -137,12 +121,10 @@ function f2<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) {
 
 type Foo<T> = T extends true ? string : "a";
 >Foo : Foo<T>
->T : T
 >true : true
 
 function test<T>(x: Foo<T>, s: string) {
 >test : <T>(x: Foo<T>, s: string) => void
->T : T
 >x : Foo<T>
 >s : string
 
@@ -160,14 +142,12 @@ function test<T>(x: Foo<T>, s: string) {
 // #26933
 type Distributive<T> = T extends { a: number } ? { a: number } : { b: number };
 >Distributive : Distributive<T>
->T : T
 >a : number
 >a : number
 >b : number
 
 function testAssignabilityToConditionalType<T>() {
 >testAssignabilityToConditionalType : <T>() => void
->T : T
 
   const o = { a: 1, b: 2 };
 >o : { a: number; b: number; }
@@ -212,7 +192,6 @@ function testAssignabilityToConditionalType<T>() {
   // Infer type parameters: no good
   const o2: [T] extends [[infer U]] ? U : { b: number } = o;
 >o2 : [T] extends [[infer U]] ? U : { b: number; }
->U : U
 >b : number
 >o : { a: number; b: number; }
 
@@ -248,18 +227,13 @@ function testAssignabilityToConditionalType<T>() {
 
 type Wrapped<T> = { ___secret: T };
 >Wrapped : Wrapped<T>
->T : T
 >___secret : T
 
 type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
 >Unwrap : Unwrap<T>
->T : T
->U : U
 
 declare function set<T, K extends keyof T>(
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
->T : T
->K : K
 
   obj: T,
 >obj : T
@@ -300,16 +274,13 @@ set(new Foo2(), "prop", "hi"); // <-- typechecks
 
 type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any]
 >InferBecauseWhyNot : InferBecauseWhyNot<T>
->T : T
 >p : P1
->P1 : P1
 
   ? P1 | T
   : never;
 
 function f3<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
 >f3 : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNot<Q>
->Q : Q
 >arg : any
 >x : Q
 
@@ -319,16 +290,13 @@ function f3<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
 
 type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any
 >InferBecauseWhyNotDistributive : InferBecauseWhyNotDistributive<T>
->T : T
 >p : P1
->P1 : P1
 
   ? P1 | T
   : never;
 
 function f4<Q extends (arg: any) => any>(
 >f4 : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNotDistributive<Q>
->Q : Q
 >arg : any
 
   x: Q

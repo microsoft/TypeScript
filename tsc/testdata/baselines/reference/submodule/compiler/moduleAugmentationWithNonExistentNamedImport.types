@@ -18,7 +18,6 @@ declare global {
 >global : any
 
     namespace Bar { }
->Bar : any
 }
 
 === bar.d.ts ===

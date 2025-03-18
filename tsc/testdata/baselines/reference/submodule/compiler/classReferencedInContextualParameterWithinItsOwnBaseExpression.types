@@ -2,38 +2,26 @@
 
 === classReferencedInContextualParameterWithinItsOwnBaseExpression.ts ===
 interface Pretty<To> {
->Pretty : Pretty<To>
->To : To
-
   (a: To): string;
 >a : To
 }
 
 interface Schema<A> {
->Schema : Schema<A>
->A : A
-
   readonly pretty?: Pretty<A>;
 >pretty : Pretty<A> | undefined
 }
 
 interface Class<A> {
->Class : Class<A>
->A : A
-
   new (): A;
 }
 
 declare const Class: <Self>(
 >Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self> | undefined) => Class<OutputFrom<Fields>>
->Self : Self
 
   identifier: string,
 >identifier : string
 
 ) => <Fields>(
->Fields : Fields
-
   fields: Fields,
 >fields : Fields
 
@@ -44,7 +32,6 @@ declare const Class: <Self>(
 
 type Type<TOutput> = {
 >Type : Type<TOutput>
->TOutput : TOutput
 
   _TOutput: TOutput;
 >_TOutput : TOutput
@@ -53,11 +40,8 @@ type Type<TOutput> = {
 
 type OutputFrom<TFields> = {
 >OutputFrom : OutputFrom<TFields>
->TFields : TFields
 
   [K in keyof TFields]: "_TOutput" extends keyof TFields[K]
->K : K
-
     ? TFields[K]["_TOutput"]
     : never;
 };

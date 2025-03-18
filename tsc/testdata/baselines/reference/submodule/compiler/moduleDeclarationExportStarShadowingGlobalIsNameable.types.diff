@@ -1,34 +1,6 @@
 --- old.moduleDeclarationExportStarShadowingGlobalIsNameable.types
 +++ new.moduleDeclarationExportStarShadowingGlobalIsNameable.types
-@@= skipped -5, +5 lines =@@
- 
- === model/account.ts ===
- export interface Account {
-+>Account : Account
-+
-     myAccNum: number;
- >myAccNum : number
- }
- interface Account2 {
-+>Account2 : Account2
-+
-     myAccNum: number;
- >myAccNum : number
- }
-@@= skipped -16, +20 lines =@@
- >global : any
- 
-     interface Account {
-+>Account : Account
-+
-         someProp: number;
- >someProp : number
-     }
-     interface Acc {
-+>Acc : Acc
-+
-         someProp: number;
- >someProp : number
+@@= skipped -30, +30 lines =@@
      }
  }
  import * as model from "./model";

@@ -9,7 +9,9 @@ class Foo {}
 function maker (value: string): typeof maker.Bar {
 >maker : typeof maker
 >value : string
+>maker.Bar : typeof Bar
 >maker : typeof maker
+>Bar : typeof Bar
 
     return maker.Bar;
 >maker.Bar : typeof Bar

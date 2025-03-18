@@ -67,8 +67,6 @@ var r5 = c3<number>(); // error
 >c3 : C2
 
 interface I {
->I : I
-
     (number): number;
 >number : any
 }
@@ -82,9 +80,6 @@ var r6 = z<string>(1); // error
 >1 : 1
 
 interface callable2<T> {
->callable2 : callable2<T>
->T : T
-
     (a: T): T;
 >a : T
 }
@@ -98,9 +93,6 @@ c4<number>(1);
 >1 : 1
 
 interface callable3<T> {
->callable3 : callable3<T>
->T : T
-
     (a: T): T;
 >a : T
 }

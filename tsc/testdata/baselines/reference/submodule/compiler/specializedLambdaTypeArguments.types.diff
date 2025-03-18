@@ -1,15 +1,11 @@
 --- old.specializedLambdaTypeArguments.types
 +++ new.specializedLambdaTypeArguments.types
-@@= skipped -2, +2 lines =@@
- === specializedLambdaTypeArguments.ts ===
- class X<A> {
+@@= skipped -4, +4 lines =@@
  >X : X<A>
-+>A : A
  
  	prop: X< <Tany>() => Tany >;
 ->prop : X<(<Tany>() => Tany)>
 +>prop : X<<Tany>() => Tany>
-+>Tany : Tany
  }
  var a: X<boolean>;
  >a : X<boolean>

@@ -1,21 +1,6 @@
 --- old.tsxEmit2.types
 +++ new.tsxEmit2.types
-@@= skipped -1, +1 lines =@@
- 
- === file.tsx ===
- declare module JSX {
-+>JSX : any
-+
- 	interface Element { }
-+>Element : Element
-+
- 	interface IntrinsicElements {
-+>IntrinsicElements : IntrinsicElements
-+
- 		[s: string]: any;
- >s : string
- 	}
-@@= skipped -13, +19 lines =@@
+@@= skipped -14, +14 lines =@@
  >p3 : any
  
  var spreads1 = <div {...p1}>{p2}</div>;

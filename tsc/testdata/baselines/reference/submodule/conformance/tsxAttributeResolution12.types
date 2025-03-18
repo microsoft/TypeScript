@@ -2,23 +2,14 @@
 
 === react.d.ts ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
 	}
 	interface ElementAttributesProperty {
->ElementAttributesProperty : ElementAttributesProperty
-
 		props;
 >props : any
 	}
 	interface IntrinsicAttributes {
->IntrinsicAttributes : IntrinsicAttributes
-
 		ref?: string;
 >ref : string
 	}
@@ -27,8 +18,6 @@ declare module JSX {
 === file.tsx ===
 declare class Component<P, S>  {
 >Component : Component<P, S>
->P : P
->S : S
 
 	constructor(props?: P, context?: any);
 >props : P
@@ -66,9 +55,6 @@ declare class Component<P, S>  {
 
 
 interface ComponentClass<P> {
->ComponentClass : ComponentClass<P>
->P : P
-
 	new (props?: P, context?: any): Component<P, any>;
 >props : P
 >context : any
@@ -78,7 +64,6 @@ declare module TestMod {
 >TestMod : typeof TestMod
 
 	interface TestClass extends ComponentClass<{reqd: any}> {
->TestClass : TestClass
 >reqd : any
 	}
 	var Test: TestClass;

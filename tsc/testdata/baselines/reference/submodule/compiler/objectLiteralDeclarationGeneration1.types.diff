@@ -1,8 +1,0 @@
---- old.objectLiteralDeclarationGeneration1.types
-+++ new.objectLiteralDeclarationGeneration1.types
-@@= skipped -2, +2 lines =@@
- === objectLiteralDeclarationGeneration1.ts ===
- class y<T extends {}>{ }
- >y : y<T>
-+>T : T
- 

@@ -12,6 +12,7 @@ import exp = require('./typeofAmbientExternalModules_1');
 var y1: typeof ext = ext;
 >y1 : typeof import("typeofAmbientExternalModules_0")
 >ext : typeof import("typeofAmbientExternalModules_0")
+>ext : typeof import("typeofAmbientExternalModules_0")
 
 y1 = exp;
 >y1 = exp : typeof D
@@ -20,6 +21,7 @@ y1 = exp;
 
 var y2: typeof exp = exp;
 >y2 : typeof D
+>exp : typeof D
 >exp : typeof D
 
 y2 = ext;

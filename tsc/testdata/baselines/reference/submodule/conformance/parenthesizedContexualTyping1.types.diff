@@ -6,7 +6,6 @@
  function fun<T>(g: (x: T) => T, x: T): T;
 ->fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 +>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
-+>T : T
  >g : (x: T) => T
  >x : T
  >x : T
@@ -14,17 +13,15 @@
  function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;
 ->fun : { <T_1>(g: (x: T_1) => T_1, x: T_1): T_1; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 +>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
-+>T : T
  >g : (x: T) => T
  >x : T
  >h : (y: T) => T
-@@= skipped -14, +16 lines =@@
+@@= skipped -14, +14 lines =@@
  >x : T
  
  function fun<T>(g: (x: T) => T, x: T): T {
 ->fun : { <T_1>(g: (x: T_1) => T_1, x: T_1): T_1; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 +>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
-+>T : T
  >g : (x: T) => T
  >x : T
  >x : T

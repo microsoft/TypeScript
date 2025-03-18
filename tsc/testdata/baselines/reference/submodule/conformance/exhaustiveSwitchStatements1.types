@@ -140,23 +140,19 @@ function g(e: E): number {
 // Repro from #12668
 
 interface Square { kind: "square"; size: number; }
->Square : Square
 >kind : "square"
 >size : number
 
 interface Rectangle { kind: "rectangle"; width: number; height: number; }
->Rectangle : Rectangle
 >kind : "rectangle"
 >width : number
 >height : number
 
 interface Circle { kind: "circle"; radius: number; }
->Circle : Circle
 >kind : "circle"
 >radius : number
 
 interface Triangle { kind: "triangle"; side: number; }
->Triangle : Triangle
 >kind : "triangle"
 >side : number
 
@@ -471,8 +467,6 @@ const doSomethingWithLevel = (level: Level) => {
 // Repro from #20409
 
 interface Square2 {
->Square2 : Square2
-
     kind: "square";
 >kind : "square"
 
@@ -481,8 +475,6 @@ interface Square2 {
 }
 
 interface Circle2 {
->Circle2 : Circle2
-
     kind: "circle";
 >kind : "circle"
 
