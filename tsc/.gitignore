@@ -192,3 +192,5 @@ custom-gcl.hash
 .DS_Store
 
 .idea
+
+!testdata/submoduleAccepted.txt

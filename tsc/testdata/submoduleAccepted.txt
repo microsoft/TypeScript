@@ -1,0 +1,1 @@
+# Diff files to instead write to submoduleAccepted as "accepted" changes.

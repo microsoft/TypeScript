@@ -337,7 +337,11 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 
 		defer testutil.RecoverAndFail(t, "Panic on creating error baseline for test "+c.filename)
 		files := core.Concatenate(c.tsConfigFiles, core.Concatenate(c.toBeCompiled, c.otherFiles))
-		tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{Subfolder: suiteName, IsSubmodule: isSubmodule})
+		tsbaseline.DoErrorBaseline(t, c.configuredName, files, c.result.Diagnostics, c.result.Options.Pretty.IsTrue(), baseline.Options{
+			Subfolder:           suiteName,
+			IsSubmodule:         isSubmodule,
+			IsSubmoduleAccepted: len(c.result.Program.UnsupportedExtensions()) != 0, // TODO(jakebailey): read submoduleAccepted.txt
+		})
 	})
 }
 
