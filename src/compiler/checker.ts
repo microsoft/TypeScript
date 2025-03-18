@@ -541,7 +541,6 @@ import {
     isEnumLiteralExpression,
     isEnumMember,
     isEnumTypeAnnotation,
-    isEnumTypeReference,
     isExclusivelyTypeOnlyImportOrExport,
     isExpandoPropertyDeclaration,
     isExportAssignment,
@@ -16712,8 +16711,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return links.resolvedType = checkExpressionCached(node.parent.expression);
             }
             // `var MyEnum: enum = { FirstValue: 1, SecondValue: 2 }` should resolve to a union of the enum values.
-            if (isEnumTypeReference(node) && isVariableDeclaration(node.parent) && node.parent.initializer && isEnumLiteralExpression(node.parent.initializer)) {
-                return links.resolvedType = checkExpressionCached(node.parent.initializer);
+            if (node.parent && isEnumLiteralDeclaration(node.parent)) {
+                return links.resolvedType = checkExpressionCached((node.parent as VariableDeclaration).initializer as Expression);
             }
             let symbol: Symbol | undefined;
             let type: Type | undefined;
@@ -44140,7 +44139,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkClassNameCollisionWithObject(name);
             }
         }
-        else if (isEnumDeclaration(node) || (isVariableDeclaration(node) && node.initializer && isEnumLiteralExpression(node.initializer))) {
+        else if (isEnumDeclaration(node) || isEnumLiteralDeclaration(node)) {
             checkTypeNameIsReserved(name, Diagnostics.Enum_name_cannot_be_0);
         }
     }
