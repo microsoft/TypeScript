@@ -371,6 +371,10 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.VerbatimModuleSyntax = parseTristate(value)
 	case "version":
 		allOptions.Version = parseTristate(value)
+	case "help":
+		allOptions.Help = parseTristate(value)
+	case "all":
+		allOptions.All = parseTristate(value)
 	case "maxNodeModuleJsDepth":
 		allOptions.MaxNodeModuleJsDepth = parseNumber(value)
 	case "skipLibCheck":

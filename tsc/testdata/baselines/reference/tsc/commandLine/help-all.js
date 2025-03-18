@@ -3,11 +3,14 @@ currentDirectory::/home/src/workspaces/project
 useCaseSensitiveFileNames::true
 Input::--help --all
 
-ExitStatus:: 1
+ExitStatus:: 0
 
 ParsedCommandLine::{
     "parsedConfig": {
-        "compilerOptions": {},
+        "compilerOptions": {
+            "help": true,
+            "all": true
+        },
         "watchOptions": {
             "watchInterval": null,
             "watchFile": 0,
@@ -29,5 +32,5 @@ ParsedCommandLine::{
     "compileOnSave": null
 }
 Output::
-Version 7.0.0-dev
+No output
 

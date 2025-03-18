@@ -17,8 +17,8 @@ func GetNameMapFromList(optDecls []*CommandLineOption) *NameMap {
 	shortOptionNames := map[string]string{}
 	for _, option := range optDecls {
 		optionsNames.Set(strings.ToLower(option.Name), option)
-		if option.shortName != "" {
-			shortOptionNames[option.shortName] = option.Name
+		if option.ShortName != "" {
+			shortOptionNames[option.ShortName] = option.Name
 		}
 	}
 	return &NameMap{

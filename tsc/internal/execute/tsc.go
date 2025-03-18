@@ -34,16 +34,22 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 		return ExitStatusDiagnosticsPresent_OutputsSkipped, nil
 	}
 
-	if commandLine.CompilerOptions().Init.IsTrue() ||
-		// commandLine.CompilerOptions().Help != nil ||
-		// commandLine.CompilerOptions().All != nil ||
-		commandLine.CompilerOptions().Watch.IsTrue() && commandLine.CompilerOptions().ListFilesOnly.IsTrue() {
+	if commandLine.CompilerOptions().Init.IsTrue() {
 		return ExitStatusNotImplemented, nil
 	}
 
 	if commandLine.CompilerOptions().Version.IsTrue() {
 		printVersion(sys)
 		return ExitStatusSuccess, nil
+	}
+
+	if commandLine.CompilerOptions().Help.IsTrue() || commandLine.CompilerOptions().All.IsTrue() {
+		printHelp(sys, commandLine)
+		return ExitStatusSuccess, nil
+	}
+
+	if commandLine.CompilerOptions().Watch.IsTrue() && commandLine.CompilerOptions().ListFilesOnly.IsTrue() {
+		return ExitStatusNotImplemented, nil
 	}
 
 	if commandLine.CompilerOptions().Project != "" {
@@ -76,7 +82,7 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 			reportDiagnostic(ast.NewCompilerDiagnostic(diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, tspath.NormalizePath(sys.GetCurrentDirectory())))
 		} else {
 			printVersion(sys)
-			// print help
+			printHelp(sys, commandLine)
 		}
 		return ExitStatusDiagnosticsPresent_OutputsSkipped, nil
 	}

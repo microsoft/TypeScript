@@ -19,7 +19,7 @@ const (
 )
 
 type CommandLineOption struct {
-	Name, shortName string
+	Name, ShortName string
 	Kind            CommandLineOptionKind
 
 	// used in parsing
@@ -30,7 +30,7 @@ type CommandLineOption struct {
 	// used in output
 	Description              *diagnostics.Message
 	DefaultValueDescription  any
-	showInSimplifiedHelpView bool
+	ShowInSimplifiedHelpView bool
 
 	// used in output in serializing and generate tsconfig
 	Category *diagnostics.Message
