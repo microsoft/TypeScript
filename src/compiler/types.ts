@@ -1883,6 +1883,14 @@ export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
     readonly initializer?: Expression;             // Optional initializer
 }
 
+export interface EnumLiteralDeclaration extends VariableDeclaration {
+    readonly kind: SyntaxKind.VariableDeclaration;
+    readonly parent: VariableDeclarationList;
+    readonly name: BindingName;
+    readonly type: TypeReferenceNode;
+    readonly initializer: EnumLiteralExpression;
+}
+
 /** @internal */
 export type InitializedVariableDeclaration = VariableDeclaration & { readonly initializer: Expression; };
 

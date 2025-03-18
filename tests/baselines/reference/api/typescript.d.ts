@@ -4529,6 +4529,13 @@ declare namespace ts {
         readonly type?: TypeNode;
         readonly initializer?: Expression;
     }
+    interface EnumLiteralDeclaration extends VariableDeclaration {
+        readonly kind: SyntaxKind.VariableDeclaration;
+        readonly parent: VariableDeclarationList;
+        readonly name: BindingName;
+        readonly type: TypeReferenceNode;
+        readonly initializer: EnumLiteralExpression;
+    }
     interface VariableDeclarationList extends Node {
         readonly kind: SyntaxKind.VariableDeclarationList;
         readonly parent: VariableStatement | ForStatement | ForOfStatement | ForInStatement;
@@ -8740,7 +8747,7 @@ declare namespace ts {
     function isNullishCoalesce(node: Node): boolean;
     function isConstTypeReference(node: Node): boolean;
     function isEnumTypeReference(node: Node): boolean;
-    function isEnumLiteralDeclaration(node: Node): boolean;
+    function isEnumLiteralDeclaration(node: Node): node is EnumLiteralDeclaration;
     function isEnumTypeAnnotation(node: Node): boolean;
     function skipPartiallyEmittedExpressions(node: Expression): Expression;
     function skipPartiallyEmittedExpressions(node: Node): Node;

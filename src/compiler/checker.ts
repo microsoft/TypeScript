@@ -16712,7 +16712,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // `var MyEnum: enum = { FirstValue: 1, SecondValue: 2 }` should resolve to a union of the enum values.
             if (node.parent && isEnumLiteralDeclaration(node.parent)) {
-                return links.resolvedType = checkExpressionCached((node.parent as VariableDeclaration).initializer as Expression);
+                return links.resolvedType = checkExpressionCached(node.parent.initializer);
             }
             let symbol: Symbol | undefined;
             let type: Type | undefined;

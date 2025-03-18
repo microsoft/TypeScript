@@ -56,6 +56,7 @@ import {
     EntityName,
     entityNameToString,
     EnumDeclaration,
+    EnumLiteralDeclaration,
     every,
     ExportAssignment,
     ExportDeclaration,
@@ -1431,7 +1432,7 @@ export function isEnumTypeReference(node: Node): boolean {
     return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
         node.typeName.escapedText === "enum" && !node.typeArguments;
 }
-export function isEnumLiteralDeclaration(node: Node): boolean {
+export function isEnumLiteralDeclaration(node: Node): node is EnumLiteralDeclaration {
     return isVariableDeclaration(node) && hasType(node) && isEnumTypeReference(node.type!) && hasInitializer(node) && isEnumLiteralExpression(node.initializer!);
 }
 
