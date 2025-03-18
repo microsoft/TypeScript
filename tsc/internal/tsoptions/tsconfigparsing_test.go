@@ -480,6 +480,21 @@ var parseJsonConfigFileTests = []struct {
 			allFileList:    map[string]string{"/app.ts": ""},
 		}},
 	},
+	{
+		title: "reports errors for wrong type option and invalid enum value",
+		input: []testConfig{{
+			jsonText: `{
+			    "compilerOptions": {
+				"target": "invalid value",
+				"removeComments": "should be a boolean",
+				"moduleResolution": "invalid value"
+			    }
+			}`,
+			configFileName: "tsconfig.json",
+			basePath:       "/",
+			allFileList:    map[string]string{"/app.ts": ""},
+		}},
+	},
 }
 
 var tsconfigWithExtends = `{
@@ -702,7 +717,7 @@ func TestParseSrcCompiler(t *testing.T) {
 
 	opts := parseConfigFileContent.CompilerOptions()
 	assert.DeepEqual(t, opts, &core.CompilerOptions{
-		Lib:                        []string{"es2020"},
+		Lib:                        []string{"lib.es2020.d.ts"},
 		ModuleKind:                 core.ModuleKindNodeNext,
 		ModuleResolution:           core.ModuleResolutionKindNodeNext,
 		NewLine:                    core.NewLineKindLF,

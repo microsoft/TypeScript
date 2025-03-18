@@ -20,7 +20,7 @@ configFileName:: tsconfig.json
 CompilerOptions::
 {
   "lib": [
-    "es5"
+    "lib.es5.d.ts"
   ],
   "configFilePath": "/apath/tsconfig.json"
 }

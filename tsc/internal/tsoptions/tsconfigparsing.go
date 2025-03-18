@@ -139,15 +139,7 @@ func parseOwnConfigOfJsonSourceFile(
 		}
 		if parentOption != nil && parentOption.Name != "undefined" && value != nil {
 			if option != nil && option.Name != "" {
-				commandLineOptionEnumMapVal := option.EnumMap()
-				if commandLineOptionEnumMapVal != nil {
-					val, ok := commandLineOptionEnumMapVal.Get(strings.ToLower(value.(string)))
-					if ok {
-						propertySetErrors = append(propertySetErrors, ParseCompilerOptions(option.Name, val, options)...)
-					}
-				} else {
-					propertySetErrors = append(propertySetErrors, ParseCompilerOptions(option.Name, value, options)...)
-				}
+				propertySetErrors = append(propertySetErrors, ParseCompilerOptions(option.Name, value, options)...)
 			} else if keyText != "" {
 				if parentOption.ElementOptions != nil {
 					// !!! TODO: support suggestion
@@ -276,8 +268,7 @@ func isCompilerOptionsValue(option *CommandLineOption, value any) bool {
 			return reflect.TypeOf(value) == orderedMapType
 		}
 		if option.Kind == "enum" && reflect.TypeOf(value).Kind() == reflect.String {
-			_, ok := option.EnumMap().Get(strings.ToLower(value.(string)))
-			return ok || (option.DeprecatedKeys() != nil && option.DeprecatedKeys().Has(strings.ToLower(value.(string))))
+			return true
 		}
 	}
 	return false
@@ -376,18 +367,19 @@ func convertJsonOption(
 		}
 	}
 	if isCompilerOptionsValue(opt, value) {
-		optType := opt.Kind
-		if optType == "list" {
+		switch opt.Kind {
+		case CommandLineOptionTypeList:
 			return convertJsonOptionOfListType(opt, value, basePath, propertyAssignment, valueExpression, sourceFile) // as ArrayLiteralExpression | undefined
-		} else if optType == "listOrElement" {
+		case CommandLineOptionTypeListOrElement:
 			if reflect.TypeOf(value).Kind() == reflect.Slice {
 				return convertJsonOptionOfListType(opt, value, basePath, propertyAssignment, valueExpression, sourceFile)
 			} else {
 				return convertJsonOption(opt.Elements(), value, basePath, propertyAssignment, valueExpression, sourceFile)
 			}
-		} else if !(reflect.TypeOf(optType).Kind() == reflect.String) {
+		case CommandLineOptionTypeEnum:
 			return convertJsonOptionOfEnumType(opt, value.(string), valueExpression, sourceFile)
 		}
+
 		validatedValue, errors := validateJsonOptionValue(opt, value, valueExpression, sourceFile)
 		if len(errors) > 0 || validatedValue == nil {
 			return validatedValue, errors
