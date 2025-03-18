@@ -28,8 +28,8 @@ func (c *converters) toLspRange(fileName string, textRange core.TextRange) (lspr
 	}
 
 	return lsproto.Range{
-		Start: positionToLineAndCharacter(scriptInfo, core.TextPos(textRange.Pos())),
-		End:   positionToLineAndCharacter(scriptInfo, core.TextPos(textRange.End())),
+		Start: c.positionToLineAndCharacter(scriptInfo, core.TextPos(textRange.Pos())),
+		End:   c.positionToLineAndCharacter(scriptInfo, core.TextPos(textRange.End())),
 	}, nil
 }
 
@@ -39,8 +39,8 @@ func (c *converters) fromLspRange(textRange lsproto.Range, fileName string) (cor
 		return core.TextRange{}, fmt.Errorf("no script info found for %s", fileName)
 	}
 	return core.NewTextRange(
-		int(lineAndCharacterToPosition(scriptInfo, textRange.Start)),
-		int(lineAndCharacterToPosition(scriptInfo, textRange.End)),
+		int(c.lineAndCharacterToPosition(scriptInfo, textRange.Start)),
+		int(c.lineAndCharacterToPosition(scriptInfo, textRange.End)),
 	), nil
 }
 
@@ -123,12 +123,12 @@ func (c *converters) toLspDiagnostic(diagnostic *ast.Diagnostic) (lsproto.Diagno
 	}, nil
 }
 
-func (c *converters) lineAndCharacterToPosition(lineAndCharacter lsproto.Position, fileName string) (int, error) {
+func (c *converters) lineAndCharacterToPositionForFile(lineAndCharacter lsproto.Position, fileName string) (int, error) {
 	scriptInfo := c.projectService.GetScriptInfo(fileName)
 	if scriptInfo == nil {
 		return 0, fmt.Errorf("no script info found for %s", fileName)
 	}
-	return int(lineAndCharacterToPosition(scriptInfo, lineAndCharacter)), nil
+	return int(c.lineAndCharacterToPosition(scriptInfo, lineAndCharacter)), nil
 }
 
 func languageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
@@ -192,7 +192,7 @@ func fileNameToDocumentUri(fileName string) lsproto.DocumentUri {
 	return lsproto.DocumentUri("file://" + fileName)
 }
 
-func lineAndCharacterToPosition(scriptInfo *project.ScriptInfo, lineAndCharacter lsproto.Position) core.TextPos {
+func (c *converters) lineAndCharacterToPosition(scriptInfo *project.ScriptInfo, lineAndCharacter lsproto.Position) core.TextPos {
 	// UTF-8/16 0-indexed line and character to UTF-8 offset
 
 	lineMap := scriptInfo.LineMapLSP()
@@ -205,7 +205,7 @@ func lineAndCharacterToPosition(scriptInfo *project.ScriptInfo, lineAndCharacter
 	}
 
 	start := lineMap.LineStarts[line]
-	if lineMap.AsciiOnly {
+	if lineMap.AsciiOnly || c.positionEncoding == lsproto.PositionEncodingKindUTF8 {
 		return start + char
 	}
 
@@ -224,7 +224,7 @@ func lineAndCharacterToPosition(scriptInfo *project.ScriptInfo, lineAndCharacter
 	return start + utf8Char
 }
 
-func positionToLineAndCharacter(scriptInfo *project.ScriptInfo, position core.TextPos) lsproto.Position {
+func (c *converters) positionToLineAndCharacter(scriptInfo *project.ScriptInfo, position core.TextPos) lsproto.Position {
 	// UTF-8 offset to UTF-8/16 0-indexed line and character
 
 	lineMap := scriptInfo.LineMapLSP()
@@ -237,7 +237,7 @@ func positionToLineAndCharacter(scriptInfo *project.ScriptInfo, position core.Te
 	start := lineMap.LineStarts[line]
 
 	var character core.TextPos
-	if lineMap.AsciiOnly {
+	if lineMap.AsciiOnly || c.positionEncoding == lsproto.PositionEncodingKindUTF8 {
 		character = position - start
 	} else {
 		// We need to rescan the text as UTF-16 to find the character offset.

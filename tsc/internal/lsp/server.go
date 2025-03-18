@@ -336,7 +336,7 @@ func (s *Server) handleDocumentDiagnostic(req *lsproto.RequestMessage) error {
 func (s *Server) handleHover(req *lsproto.RequestMessage) error {
 	params := req.Params.(*lsproto.HoverParams)
 	file, project := s.getFileAndProject(params.TextDocument.Uri)
-	pos, err := s.converters.lineAndCharacterToPosition(params.Position, file.FileName())
+	pos, err := s.converters.lineAndCharacterToPositionForFile(params.Position, file.FileName())
 	if err != nil {
 		return s.sendError(req.ID, err)
 	}
@@ -355,7 +355,7 @@ func (s *Server) handleHover(req *lsproto.RequestMessage) error {
 func (s *Server) handleDefinition(req *lsproto.RequestMessage) error {
 	params := req.Params.(*lsproto.DefinitionParams)
 	file, project := s.getFileAndProject(params.TextDocument.Uri)
-	pos, err := s.converters.lineAndCharacterToPosition(params.Position, file.FileName())
+	pos, err := s.converters.lineAndCharacterToPositionForFile(params.Position, file.FileName())
 	if err != nil {
 		return s.sendError(req.ID, err)
 	}
