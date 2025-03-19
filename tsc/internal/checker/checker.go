@@ -13576,7 +13576,27 @@ func (c *Checker) getTargetOfModuleDefault(moduleSymbol *ast.Symbol, node *ast.N
 }
 
 func (c *Checker) reportNonDefaultExport(moduleSymbol *ast.Symbol, node *ast.Node) {
-	// !!!
+	if moduleSymbol.Exports != nil && moduleSymbol.Exports[node.Symbol().Name] != nil {
+		c.error(node, diagnostics.Module_0_has_no_default_export_Did_you_mean_to_use_import_1_from_0_instead, c.symbolToString(moduleSymbol), c.symbolToString(node.Symbol()))
+	} else {
+		diagnostic := c.error(node.Name(), diagnostics.Module_0_has_no_default_export, c.symbolToString(moduleSymbol))
+		var exportStar *ast.Symbol
+		if moduleSymbol.Exports != nil {
+			exportStar = moduleSymbol.Exports[ast.InternalSymbolNameExportStar]
+		}
+		if exportStar != nil {
+			defaultExport := core.Find(exportStar.Declarations, func(decl *ast.Declaration) bool {
+				if !(ast.IsExportDeclaration(decl) && decl.AsExportDeclaration().ModuleSpecifier != nil) {
+					return false
+				}
+				resolvedExternalModuleName := c.resolveExternalModuleName(decl, decl.AsExportDeclaration().ModuleSpecifier, false /*ignoreErrors*/)
+				return resolvedExternalModuleName != nil && resolvedExternalModuleName.Exports[ast.InternalSymbolNameDefault] != nil
+			})
+			if defaultExport != nil {
+				diagnostic.AddRelatedInfo(createDiagnosticForNode(defaultExport, diagnostics.X_export_Asterisk_does_not_re_export_a_default))
+			}
+		}
+	}
 }
 
 func (c *Checker) resolveExportByName(moduleSymbol *ast.Symbol, name string, sourceNode *ast.Node, dontResolveAlias bool) *ast.Symbol {
@@ -13773,31 +13793,29 @@ func (c *Checker) isOnlyImportableAsDefault(usage *ast.Node, resolvedModule *ast
 }
 
 func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symbol, dontResolveAlias bool, usage *ast.Node) bool {
-	// !!!
-	// var usageMode ResolutionMode
-	// if file != nil {
-	// 	usageMode = c.getEmitSyntaxForModuleSpecifierExpression(usage)
-	// }
-	// if file != nil && usageMode != core.ModuleKindNone {
-	// 	targetMode := host.getImpliedNodeFormatForEmit(file)
-	// 	if usageMode == core.ModuleKindESNext && targetMode == core.ModuleKindCommonJS && core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
-	// 		// In Node.js, CommonJS modules always have a synthetic default when imported into ESM
-	// 		return true
-	// 	}
-	// 	if usageMode == core.ModuleKindESNext && targetMode == core.ModuleKindESNext {
-	// 		// No matter what the `module` setting is, if we're confident that both files
-	// 		// are ESM, there cannot be a synthetic default.
-	// 		return false
-	// 	}
-	// }
+	var usageMode core.ResolutionMode
+	if file != nil {
+		usageMode = c.getEmitSyntaxForModuleSpecifierExpression(usage)
+	}
+	if file != nil && usageMode != core.ModuleKindNone {
+		targetMode := c.program.GetImpliedNodeFormatForEmit(file.AsSourceFile())
+		if usageMode == core.ModuleKindESNext && targetMode == core.ModuleKindCommonJS && core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
+			// In Node.js, CommonJS modules always have a synthetic default when imported into ESM
+			return true
+		}
+		if usageMode == core.ModuleKindESNext && targetMode == core.ModuleKindESNext {
+			// No matter what the `module` setting is, if we're confident that both files
+			// are ESM, there cannot be a synthetic default.
+			return false
+		}
+	}
 	if !c.allowSyntheticDefaultImports {
 		return false
 	}
 	// Declaration files (and ambient modules)
 	if file == nil || file.AsSourceFile().IsDeclarationFile {
 		// Definitely cannot have a synthetic default if they have a syntactic default member specified
-		defaultExportSymbol := c.resolveExportByName(moduleSymbol, ast.InternalSymbolNameDefault /*sourceNode*/, nil /*dontResolveAlias*/, true)
-		// Dont resolve alias because we want the immediately exported symbol's declaration
+		defaultExportSymbol := c.resolveExportByName(moduleSymbol, ast.InternalSymbolNameDefault /*sourceNode*/, nil /*dontResolveAlias*/, true) // Dont resolve alias because we want the immediately exported symbol's declaration
 		if defaultExportSymbol != nil && core.Some(defaultExportSymbol.Declarations, isSyntacticDefault) {
 			return false
 		}
@@ -13814,7 +13832,12 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symb
 		return true
 	}
 	// TypeScript files never have a synthetic default (as they are always emitted with an __esModule marker) _unless_ they contain an export= statement
-	return hasExportAssignmentSymbol(moduleSymbol)
+	if !ast.IsInJSFile(file) {
+		return hasExportAssignmentSymbol(moduleSymbol)
+	}
+
+	// JS files have a synthetic default if they do not contain ES2015+ module syntax (export = is not valid in js) _and_ do not have an __esModule marker
+	return !ast.IsExternalModule(file.AsSourceFile()) && c.resolveExportByName(moduleSymbol, "__esModule", nil /*sourceNode*/, dontResolveAlias) == nil
 }
 
 func (c *Checker) getEmitSyntaxForModuleSpecifierExpression(usage *ast.Node) core.ResolutionMode {

@@ -1,0 +1,14 @@
+a.ts(1,8): error TS1192: Module '"b"' has no default export.
+
+
+==== a.ts (1 errors) ====
+    import Namespace from "./b";
+           ~~~~~~~~~
+!!! error TS1192: Module '"b"' has no default export.
+    export var x = new Namespace.Foo();
+    
+==== b.ts (0 errors) ====
+    export class Foo {
+    	member: string;
+    }
+    

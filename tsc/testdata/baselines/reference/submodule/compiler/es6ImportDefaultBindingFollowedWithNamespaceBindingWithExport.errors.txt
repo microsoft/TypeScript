@@ -1,11 +1,14 @@
 client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(1,15): error TS1192: Module '"server"' has no default export.
 
 
 ==== server.ts (0 errors) ====
     export var a = 10;
     
-==== client.ts (1 errors) ====
+==== client.ts (2 errors) ====
     export import defaultBinding, * as nameSpaceBinding  from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
+                  ~~~~~~~~~~~~~~
+!!! error TS1192: Module '"server"' has no default export.
     export var x: number = nameSpaceBinding.a;

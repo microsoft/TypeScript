@@ -1,10 +1,13 @@
+src/foo.mts(1,8): error TS1192: Module '"src/a"' has no default export.
 src/foo.mts(6,4): error TS2339: Property 'default' does not exist on type 'typeof import("src/a")'.
 
 
 ==== src/a.cts (0 errors) ====
     export const a: number = 1;
-==== src/foo.mts (1 errors) ====
+==== src/foo.mts (2 errors) ====
     import d, {a} from './a.cjs';
+           ~
+!!! error TS1192: Module '"src/a"' has no default export.
     import * as ns from './a.cjs';
     export {d, a, ns};
     

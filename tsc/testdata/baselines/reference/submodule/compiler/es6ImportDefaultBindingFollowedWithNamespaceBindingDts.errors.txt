@@ -1,0 +1,11 @@
+client.ts(1,8): error TS1192: Module '"server"' has no default export.
+
+
+==== server.ts (0 errors) ====
+    export class a { }
+    
+==== client.ts (1 errors) ====
+    import defaultBinding, * as nameSpaceBinding  from "./server";
+           ~~~~~~~~~~~~~~
+!!! error TS1192: Module '"server"' has no default export.
+    export var x = new nameSpaceBinding.a();
