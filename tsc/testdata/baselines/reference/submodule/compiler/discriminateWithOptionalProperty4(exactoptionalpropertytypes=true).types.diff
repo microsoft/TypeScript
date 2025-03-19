@@ -5,7 +5,7 @@
  
    const z = a ? { a } : { b: ["there"] };
 ->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
-+>z : { a: string[]; b?: undefined; } | { a?: undefined; b: string[]; }
++>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
  >a ? { a } : { b: ["there"] } : { a: string[]; } | { b: string[]; }
  >a : string[] | undefined
  >{ a } : { a: string[]; }
@@ -14,24 +14,16 @@
  >z.a //    ? z.a.toString()    : z.b.toString() : string
  >z.a : string[] | undefined
 ->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
-+>z : { a: string[]; b?: undefined; } | { a?: undefined; b: string[]; }
++>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
  >a : string[] | undefined
  
      ? z.a.toString()
- >z.a.toString() : string
- >z.a.toString : () => string
- >z.a : string[]
-->z : { a: string[]; b?: never; }
-+>z : { a: string[]; b?: undefined; }
- >a : string[]
- >toString : () => string
- 
 @@= skipped -15, +15 lines =@@
  >z.b.toString() : string
  >z.b.toString : () => string
  >z.b : string[]
 ->z : { b: string[]; a?: never; }
-+>z : { a?: undefined; b: string[]; }
++>z : { a?: never; b: string[]; }
  >b : string[]
  >toString : () => string
  
@@ -40,7 +32,7 @@
  >b : string[]
  >a : undefined
 ->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
-+>z : { a: string[]; b?: undefined; } | { a?: undefined; b: string[]; }
++>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
  
    zWorkAround.a ? zWorkAround.a.toString() : zWorkAround.b.toString();
  >zWorkAround.a ? zWorkAround.a.toString() : zWorkAround.b.toString() : string
@@ -49,19 +41,19 @@
  >"a" in z : boolean
  >"a" : "a"
 ->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
-+>z : { a: string[]; b?: undefined; } | { a?: undefined; b: string[]; }
++>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
  >z.a.toString() : string
  >z.a.toString : () => string
  >z.a : string[]
 ->z : { a: string[]; b?: never; } | { b: string[]; a?: never; }
-+>z : { a: string[]; b?: undefined; } | { a?: undefined; b: string[]; }
++>z : { a: string[]; b?: never; } | { a?: never; b: string[]; }
  >a : string[]
  >toString : () => string
  >z.b.toString() : string
  >z.b.toString : () => string
  >z.b : string[]
 ->z : { b: string[]; a?: never; }
-+>z : { a?: undefined; b: string[]; }
++>z : { a?: never; b: string[]; }
  >b : string[]
  >toString : () => string
  }

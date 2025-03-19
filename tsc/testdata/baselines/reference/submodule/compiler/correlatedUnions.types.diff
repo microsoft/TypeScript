@@ -243,29 +243,15 @@
  
      ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
  >ops : T
- >attr : Attr
- 
- const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
-->ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
-->[{ name: 'a'}, {name: 'b'}] as const : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
-->[{ name: 'a'}, {name: 'b'}] : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
-+>ALL_BARS : [{ readonly name: "a"; }, { readonly name: "b"; }]
-+>[{ name: 'a'}, {name: 'b'}] as const : [{ readonly name: "a"; }, { readonly name: "b"; }]
-+>[{ name: 'a'}, {name: 'b'}] : [{ readonly name: "a"; }, { readonly name: "b"; }]
- >{ name: 'a'} : { readonly name: "a"; }
- >name : "a"
- >'a' : "a"
 @@= skipped -20, +20 lines =@@
  const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
  >BAR_LOOKUP : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
  >makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
 ->makeCompleteLookupMapping : <T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
-->ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
 +>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item }
-+>ALL_BARS : [{ readonly name: "a"; }, { readonly name: "b"; }]
+ >ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
  >'name' : "name"
  
- type BarLookup = typeof BAR_LOOKUP;
 @@= skipped -53, +53 lines =@@
  >MappedFromOriginal : SameKeys<Original>
  

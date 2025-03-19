@@ -5,7 +5,7 @@
  
  declare function createZodEnum<U extends string, T extends Readonly<[U, ...U[]]>>(values: T): ZodEnum<Writeable<T>>;
 ->createZodEnum : <U extends string, T extends Readonly<[U, ...U[]]>>(values: T) => ZodEnum<Writeable<T>>
-+>createZodEnum : <U extends string, T extends [U, ...U[]]>(values: T) => ZodEnum<Writeable<T>>
++>createZodEnum : <U extends string, T extends readonly [U, ...U[]]>(values: T) => ZodEnum<Writeable<T>>
  >values : T
  
  // https://github.com/microsoft/TypeScript/issues/53359#issuecomment-1475390607

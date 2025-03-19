@@ -14,16 +14,7 @@
      return coercedVariableValues.errors;
  >coercedVariableValues.errors : readonly GraphQLError[]
 ->coercedVariableValues : { errors: ReadonlyArray<GraphQLError>; coerced?: never; }
-+>coercedVariableValues : { errors: readonly GraphQLError[]; coerced?: undefined; }
++>coercedVariableValues : { errors: readonly GraphQLError[]; coerced?: never; }
  >errors : readonly GraphQLError[]
    }
  
-@@= skipped -10, +10 lines =@@
-     variableValues: coercedVariableValues.coerced,
- >variableValues : { [variable: string]: unknown; }
- >coercedVariableValues.coerced : { [variable: string]: unknown; }
-->coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: never; }
-+>coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: undefined; }
- >coerced : { [variable: string]: unknown; }
- 
-   };

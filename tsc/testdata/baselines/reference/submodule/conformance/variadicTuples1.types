@@ -41,13 +41,13 @@ type TN7 = TV1<never>;
 // Variadics in array literals
 
 function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) {
->tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [1, ...T, 2, ...U, 3]
+>tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => readonly [1, ...T, 2, ...U, 3]
 >t : [...T]
 >u : [...U]
 
     return [1, ...t, 2, ...u, 3] as const;
->[1, ...t, 2, ...u, 3] as const : [1, ...T, 2, ...U, 3]
->[1, ...t, 2, ...u, 3] : [1, ...T, 2, ...U, 3]
+>[1, ...t, 2, ...u, 3] as const : readonly [1, ...T, 2, ...U, 3]
+>[1, ...t, 2, ...u, 3] : readonly [1, ...T, 2, ...U, 3]
 >1 : 1
 >...t : T[number]
 >t : [...T]
@@ -58,9 +58,9 @@ function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) {
 }
 
 const t2 = tup2(['hello'], [10, true]);
->t2 : [1, string, 2, number, boolean, 3]
->tup2(['hello'], [10, true]) : [1, string, 2, number, boolean, 3]
->tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [1, ...T, 2, ...U, 3]
+>t2 : readonly [1, string, 2, number, boolean, 3]
+>tup2(['hello'], [10, true]) : readonly [1, string, 2, number, boolean, 3]
+>tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => readonly [1, ...T, 2, ...U, 3]
 >['hello'] : [string]
 >'hello' : "hello"
 >[10, true] : [number, true]
@@ -136,13 +136,13 @@ const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 
 >tc5 : (1 | 2 | 3 | 4 | 5 | 6)[]
 >concat2([1, 2, 3] as const, [4, 5, 6] as const) : (1 | 2 | 3 | 4 | 5 | 6)[]
 >concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
->[1, 2, 3] as const : [1, 2, 3]
->[1, 2, 3] : [1, 2, 3]
+>[1, 2, 3] as const : readonly [1, 2, 3]
+>[1, 2, 3] : readonly [1, 2, 3]
 >1 : 1
 >2 : 2
 >3 : 3
->[4, 5, 6] as const : [4, 5, 6]
->[4, 5, 6] : [4, 5, 6]
+>[4, 5, 6] as const : readonly [4, 5, 6]
+>[4, 5, 6] : readonly [4, 5, 6]
 >4 : 4
 >5 : 5
 >6 : 6
@@ -262,7 +262,7 @@ declare function ft1<T extends unknown[]>(t: T): T;
 >t : T
 
 declare function ft2<T extends unknown[]>(t: T): readonly [...T];
->ft2 : <T extends unknown[]>(t: T) => [...T]
+>ft2 : <T extends unknown[]>(t: T) => readonly [...T]
 >t : T
 
 declare function ft3<T extends unknown[]>(t: [...T]): T;
@@ -270,7 +270,7 @@ declare function ft3<T extends unknown[]>(t: [...T]): T;
 >t : [...T]
 
 declare function ft4<T extends unknown[]>(t: [...T]): readonly [...T];
->ft4 : <T extends unknown[]>(t: [...T]) => [...T]
+>ft4 : <T extends unknown[]>(t: [...T]) => readonly [...T]
 >t : [...T]
 
 ft1(['hello', 42]);  // (string | number)[]
@@ -282,7 +282,7 @@ ft1(['hello', 42]);  // (string | number)[]
 
 ft2(['hello', 42]);  // readonly (string | number)[]
 >ft2(['hello', 42]) : readonly (string | number)[]
->ft2 : <T extends unknown[]>(t: T) => [...T]
+>ft2 : <T extends unknown[]>(t: T) => readonly [...T]
 >['hello', 42] : (string | number)[]
 >'hello' : "hello"
 >42 : 42
@@ -295,8 +295,8 @@ ft3(['hello', 42]);  // [string, number]
 >42 : 42
 
 ft4(['hello', 42]);  // readonly [string, number]
->ft4(['hello', 42]) : [string, number]
->ft4 : <T extends unknown[]>(t: [...T]) => [...T]
+>ft4(['hello', 42]) : readonly [string, number]
+>ft4 : <T extends unknown[]>(t: [...T]) => readonly [...T]
 >['hello', 42] : [string, number]
 >'hello' : "hello"
 >42 : 42
@@ -411,7 +411,7 @@ type Arrayify<T> = { [P in keyof T]: T[P][] };
 >Arrayify : Arrayify<T>
 
 type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;  // [string[], (number | undefined)[]?, Arrayify<U>, ...boolean[][]]
->TM1 : [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
+>TM1 : readonly [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
 
 type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;  // [string?, Partial<T>, number?]
 >TP1 : [(string | undefined)?, ...Partial<T>, (number | undefined)?]
@@ -572,10 +572,10 @@ function f10<T extends string[], U extends T>(x: [string, ...unknown[]], y: [str
 // to [...T] when T is constrained to a mutable array or tuple type.
 
 function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
->f11 : <T extends unknown[]>(t: T, m: [...T], r: [...T]) => void
+>f11 : <T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) => void
 >t : T
 >m : [...T]
->r : [...T]
+>r : readonly [...T]
 
     t = m;
 >t = m : [...T]
@@ -583,9 +583,9 @@ function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 >m : [...T]
 
     t = r;  // Error
->t = r : [...T]
+>t = r : readonly [...T]
 >t : T
->r : [...T]
+>r : readonly [...T]
 
     m = t;
 >m = t : T
@@ -593,26 +593,26 @@ function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 >t : T
 
     m = r;  // Error
->m = r : [...T]
+>m = r : readonly [...T]
 >m : [...T]
->r : [...T]
+>r : readonly [...T]
 
     r = t;
 >r = t : T
->r : [...T]
+>r : readonly [...T]
 >t : T
 
     r = m;
 >r = m : [...T]
->r : [...T]
+>r : readonly [...T]
 >m : [...T]
 }
 
 function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) {
->f12 : <T extends readonly unknown[]>(t: T, m: [...T], r: [...T]) => void
+>f12 : <T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) => void
 >t : T
 >m : [...T]
->r : [...T]
+>r : readonly [...T]
 
     t = m;
 >t = m : [...T]
@@ -620,9 +620,9 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
 >m : [...T]
 
     t = r;  // Error
->t = r : [...T]
+>t = r : readonly [...T]
 >t : T
->r : [...T]
+>r : readonly [...T]
 
     m = t;  // Error
 >m = t : T
@@ -630,18 +630,18 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
 >t : T
 
     m = r;  // Error
->m = r : [...T]
+>m = r : readonly [...T]
 >m : [...T]
->r : [...T]
+>r : readonly [...T]
 
     r = t;
 >r = t : T
->r : [...T]
+>r : readonly [...T]
 >t : T
 
     r = m;
 >r = m : [...T]
->r : [...T]
+>r : readonly [...T]
 >m : [...T]
 }
 

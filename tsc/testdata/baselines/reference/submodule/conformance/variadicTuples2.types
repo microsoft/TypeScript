@@ -517,20 +517,20 @@ fn2([1, 'abc', true]);  // [number, boolean]
 // Repro from #39595
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
->foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
->stringsAndNumber : [...S, number]
+>foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
+>stringsAndNumber : readonly [...S, number]
 
 const a1 = foo('blah1', 1);
 >a1 : ["blah1", number]
 >foo('blah1', 1) : ["blah1", number]
->foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+>foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >'blah1' : "blah1"
 >1 : 1
 
 const b1 = foo('blah1', 'blah2', 1);
 >b1 : ["blah1", "blah2", number]
 >foo('blah1', 'blah2', 1) : ["blah1", "blah2", number]
->foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+>foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >'blah1' : "blah1"
 >'blah2' : "blah2"
 >1 : 1
@@ -538,20 +538,20 @@ const b1 = foo('blah1', 'blah2', 1);
 const c1 = foo(1);  // Error
 >c1 : [string, ...string[], number]
 >foo(1) : [string, ...string[], number]
->foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+>foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >1 : 1
 
 const d1 = foo(1, 2);  // Error
 >d1 : [string, ...string[], number]
 >foo(1, 2) : [string, ...string[], number]
->foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+>foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >1 : 1
 >2 : 2
 
 const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 >e1 : [string, ...string[], number]
 >foo('blah1', 'blah2', 1, 2, 3) : [string, ...string[], number]
->foo : <S extends [string, ...string[]]>(...stringsAndNumber: [...S, number]) => [...S, number]
+>foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >'blah1' : "blah1"
 >'blah2' : "blah2"
 >1 : 1

@@ -114,8 +114,8 @@ declare function isBuzz(x: unknown): x is Buzz;
 ([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5);
 >([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5) : (Buzz | Fizz)[]
 >([] as [Fizz] | readonly [Buzz?]).filter : { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; } | { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; }
->([] as [Fizz] | readonly [Buzz?]) : [Fizz] | [Buzz?]
->[] as [Fizz] | readonly [Buzz?] : [Fizz] | [Buzz?]
+>([] as [Fizz] | readonly [Buzz?]) : [Fizz] | readonly [Buzz?]
+>[] as [Fizz] | readonly [Buzz?] : [Fizz] | readonly [Buzz?]
 >[] : []
 >filter : { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; } | { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; }
 >item => item?.id < 5 : (item: Buzz | Fizz) => boolean

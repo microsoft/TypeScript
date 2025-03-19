@@ -26,8 +26,8 @@ export default [{ foo: 1 + 1 }];
 
 === d.ts ===
 export default [{ foo: 1 + 1 }] as const;
->[{ foo: 1 + 1 }] as const : [{ readonly foo: number; }]
->[{ foo: 1 + 1 }] : [{ readonly foo: number; }]
+>[{ foo: 1 + 1 }] as const : readonly [{ readonly foo: number; }]
+>[{ foo: 1 + 1 }] : readonly [{ readonly foo: number; }]
 >{ foo: 1 + 1 } : { readonly foo: number; }
 >foo : number
 >1 + 1 : number
@@ -36,8 +36,8 @@ export default [{ foo: 1 + 1 }] as const;
 
 === e.ts ===
 export default [{ foo: 1 + 1 }] as const;
->[{ foo: 1 + 1 }] as const : [{ readonly foo: number; }]
->[{ foo: 1 + 1 }] : [{ readonly foo: number; }]
+>[{ foo: 1 + 1 }] as const : readonly [{ readonly foo: number; }]
+>[{ foo: 1 + 1 }] : readonly [{ readonly foo: number; }]
 >{ foo: 1 + 1 } : { readonly foo: number; }
 >foo : number
 >1 + 1 : number

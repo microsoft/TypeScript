@@ -12197,6 +12197,15 @@ func (c *Checker) hasEmptyObjectIntersection(t *Type) bool {
 	})
 }
 
+func (c *Checker) getExactOptionalUnassignableProperties(source *Type, target *Type) []*ast.Symbol {
+	if isTupleType(source) && isTupleType(target) {
+		return nil
+	}
+	return core.Filter(c.getPropertiesOfType(target), func(targetProp *ast.Symbol) bool {
+		return c.isExactOptionalPropertyMismatch(c.getTypeOfPropertyOfType(source, targetProp.Name), c.getTypeOfSymbol(targetProp))
+	})
+}
+
 func (c *Checker) isExactOptionalPropertyMismatch(source *Type, target *Type) bool {
 	return source != nil && target != nil && c.maybeTypeOfKind(source, TypeFlagsUndefined) && c.containsMissingType(target)
 }
@@ -16448,7 +16457,7 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 	var types []*Type
 	for _, declaration := range symbol.Declarations {
 		if ast.IsBinaryExpression(declaration) {
-			types = core.AppendIfUnique(types, c.getWidenedLiteralType(c.checkExpressionCached(declaration.AsBinaryExpression().Right)))
+			types = core.AppendIfUnique(types, c.checkExpressionForMutableLocation(declaration.AsBinaryExpression().Right, CheckModeNormal))
 		}
 	}
 	return c.getWidenedType(c.getUnionType(types))
@@ -16914,10 +16923,10 @@ func (c *Checker) tryGetNameFromType(t *Type) (name string, ok bool) {
 	case t.flags&TypeFlagsUniqueESSymbol != 0:
 		return t.AsUniqueESSymbolType().name, true
 	case t.flags&TypeFlagsStringLiteral != 0:
-		s := t.AsLiteralType().value.(string)
+		s := getStringLiteralValue(t)
 		return s, true
 	case t.flags&TypeFlagsNumberLiteral != 0:
-		s := t.AsLiteralType().value.(jsnum.Number).String()
+		s := getNumberLiteralValue(t).String()
 		return s, true
 	default:
 		return "", false
@@ -17243,7 +17252,7 @@ func (c *Checker) isApplicableIndexType(source *Type, target *Type) bool {
 	// signature applies to types assignable to 'number', `${number}` and numeric string literal types.
 	return c.isTypeAssignableTo(source, target) ||
 		target == c.stringType && c.isTypeAssignableTo(source, c.numberType) ||
-		target == c.numberType && (source == c.numericStringType || source.flags&TypeFlagsStringLiteral != 0 && isNumericLiteralName(source.AsLiteralType().value.(string)))
+		target == c.numberType && (source == c.numericStringType || source.flags&TypeFlagsStringLiteral != 0 && isNumericLiteralName(getStringLiteralValue(source)))
 }
 
 func (c *Checker) resolveStructuredTypeMembers(t *Type) *StructuredType {
@@ -19336,7 +19345,7 @@ func (c *Checker) combineUnionOrIntersectionMemberSignatures(left *Signature, ri
 	} else {
 		leftSignatures = []*Signature{left}
 	}
-	result.composite = &CompositeSignature{isUnion: true, signatures: append(leftSignatures, right)}
+	result.composite = &CompositeSignature{isUnion: isUnion, signatures: append(leftSignatures, right)}
 	if paramMapper != nil {
 		if left.composite != nil && left.composite.isUnion == isUnion && left.mapper != nil {
 			result.mapper = c.combineTypeMappers(left.mapper, paramMapper)
@@ -23549,6 +23558,9 @@ func (c *Checker) mapTypeEx(t *Type, f func(*Type) *Type, noReductions bool) *Ty
 		}
 	}
 	if changed {
+		if len(mappedTypes) == 0 {
+			return nil
+		}
 		return c.getUnionTypeEx(slices.Clone(mappedTypes), core.IfElse(noReductions, UnionReductionNone, UnionReductionLiteral), nil /*alias*/, nil /*origin*/)
 	}
 	return t
@@ -25151,6 +25163,11 @@ func (c *Checker) getSuggestionForNonexistentIndexSignature(objectType *Type, ex
 	return suggestion + "." + suggestedMethod
 }
 
+func (c *Checker) getSuggestedTypeForNonexistentStringLiteralType(source *Type, target *Type) *Type {
+	candidates := core.Filter(target.Types(), func(t *Type) bool { return t.flags&TypeFlagsStringLiteral != 0 })
+	return core.GetSpellingSuggestion(getStringLiteralValue(source), candidates, getStringLiteralValue)
+}
+
 func getIndexNodeForAccessExpression(accessNode *ast.Node) *ast.Node {
 	switch accessNode.Kind {
 	case ast.KindElementAccessExpression:
@@ -26541,8 +26558,8 @@ func (c *Checker) getDefinitelyFalsyPartOfType(t *Type) *Type {
 		return c.zeroBigIntType
 	case t == c.regularFalseType || t == c.falseType ||
 		t.flags&(TypeFlagsVoid|TypeFlagsUndefined|TypeFlagsNull|TypeFlagsAnyOrUnknown) != 0 ||
-		t.flags&TypeFlagsStringLiteral != 0 && t.AsLiteralType().value.(string) == "" ||
-		t.flags&TypeFlagsNumberLiteral != 0 && t.AsLiteralType().value.(jsnum.Number) == 0 ||
+		t.flags&TypeFlagsStringLiteral != 0 && getStringLiteralValue(t) == "" ||
+		t.flags&TypeFlagsNumberLiteral != 0 && getNumberLiteralValue(t) == 0 ||
 		t.flags&TypeFlagsBigIntLiteral != 0 && isZeroBigInt(t):
 		return t
 	}
@@ -27224,7 +27241,7 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 	case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand.
 		// If the binary operator has a symbol, this is an assignment declaration and there is no contextual type.
-		if node == binary.Right && binary.Symbol == nil {
+		if node == binary.Right && (binary.Symbol == nil || c.canGetContextualTypeForAssignmentDeclaration(binary.Left)) {
 			return c.getContextualTypeFromAssignmentTarget(binary.Left)
 		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
@@ -27244,6 +27261,15 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 		}
 	}
 	return nil
+}
+
+func (c *Checker) canGetContextualTypeForAssignmentDeclaration(node *ast.Node) bool {
+	// Node is the left operand of an assignment declaration (a binary expression with a symbol assigned by the
+	// binder) of the form 'F.id = expr' or 'F[xxx] = expr'. If 'F' is declared as a variable with a type annotation,
+	// we can obtain a contextual type from the annotated type without triggering a circularity. Otherwise, the
+	// assignment declaration has no contextual type.
+	symbol := c.getResolvedSymbol(node.Expression())
+	return symbol.ValueDeclaration != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration) && symbol.ValueDeclaration.Type() != nil
 }
 
 func (c *Checker) getContextualTypeFromAssignmentTarget(node *ast.Node) *Type {
@@ -28338,7 +28364,7 @@ func (c *Checker) getTypeFactsWorker(t *Type, callerOnlyNeeds TypeFacts) TypeFac
 		}
 		return TypeFactsStringFacts
 	case flags&(TypeFlagsStringLiteral|TypeFlagsTemplateLiteral) != 0:
-		isEmpty := flags&TypeFlagsStringLiteral != 0 && t.AsLiteralType().value.(string) == ""
+		isEmpty := flags&TypeFlagsStringLiteral != 0 && getStringLiteralValue(t) == ""
 		if c.strictNullChecks {
 			if isEmpty {
 				return TypeFactsEmptyStringStrictFacts
@@ -28355,7 +28381,7 @@ func (c *Checker) getTypeFactsWorker(t *Type, callerOnlyNeeds TypeFacts) TypeFac
 		}
 		return TypeFactsNumberFacts
 	case flags&TypeFlagsNumberLiteral != 0:
-		isZero := t.AsLiteralType().value.(jsnum.Number) == 0
+		isZero := getNumberLiteralValue(t) == 0
 		if c.strictNullChecks {
 			if isZero {
 				return TypeFactsZeroNumberStrictFacts
@@ -28478,7 +28504,7 @@ func (c *Checker) getIntersectionTypeFacts(t *Type, callerOnlyNeeds TypeFacts) T
 }
 
 func isZeroBigInt(t *Type) bool {
-	return t.AsLiteralType().value.(jsnum.PseudoBigInt).Base10Value == "0"
+	return getBigIntLiteralValue(t).Base10Value == "0"
 }
 
 func (c *Checker) isFunctionObjectType(t *Type) bool {

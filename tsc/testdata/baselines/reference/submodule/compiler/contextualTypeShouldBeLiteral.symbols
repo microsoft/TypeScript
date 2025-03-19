@@ -106,6 +106,8 @@ foo2({
 
         this;
         this.value;
+>this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
+>value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
     }
 });
 

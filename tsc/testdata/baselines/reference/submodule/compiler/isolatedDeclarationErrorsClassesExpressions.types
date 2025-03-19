@@ -35,9 +35,9 @@ export class Mix extends id(Base) {
 }
 
 export const classes = [class {}, class{}] as const
->classes : [typeof (Anonymous class), typeof (Anonymous class)]
->[class {}, class{}] as const : [typeof (Anonymous class), typeof (Anonymous class)]
->[class {}, class{}] : [typeof (Anonymous class), typeof (Anonymous class)]
+>classes : readonly [typeof (Anonymous class), typeof (Anonymous class)]
+>[class {}, class{}] as const : readonly [typeof (Anonymous class), typeof (Anonymous class)]
+>[class {}, class{}] : readonly [typeof (Anonymous class), typeof (Anonymous class)]
 >class {} : typeof (Anonymous class)
 >class{} : typeof (Anonymous class)
 

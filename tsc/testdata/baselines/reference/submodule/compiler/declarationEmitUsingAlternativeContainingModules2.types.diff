@@ -95,41 +95,7 @@
  >(err) => console.log(err) : (err: any) => void
  >err : any
  >console.log(err) : void
-@@= skipped -12, +12 lines =@@
- }
- 
- const entryKeys = {
-->entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
-->{  all: ['entries'] as const,  list: () => [...entryKeys.all, 'list'] as const} : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
-+>entryKeys : { all: ["entries"]; list: () => ["entries", "list"]; }
-+>{  all: ['entries'] as const,  list: () => [...entryKeys.all, 'list'] as const} : { all: ["entries"]; list: () => ["entries", "list"]; }
- 
-   all: ['entries'] as const,
-->all : readonly ["entries"]
-->['entries'] as const : readonly ["entries"]
-->['entries'] : readonly ["entries"]
-+>all : ["entries"]
-+>['entries'] as const : ["entries"]
-+>['entries'] : ["entries"]
- >'entries' : "entries"
- 
-   list: () => [...entryKeys.all, 'list'] as const
-->list : () => readonly ["entries", "list"]
-->() => [...entryKeys.all, 'list'] as const : () => readonly ["entries", "list"]
-->[...entryKeys.all, 'list'] as const : readonly ["entries", "list"]
-->[...entryKeys.all, 'list'] : readonly ["entries", "list"]
-+>list : () => ["entries", "list"]
-+>() => [...entryKeys.all, 'list'] as const : () => ["entries", "list"]
-+>[...entryKeys.all, 'list'] as const : ["entries", "list"]
-+>[...entryKeys.all, 'list'] : ["entries", "list"]
- >...entryKeys.all : "entries"
-->entryKeys.all : readonly ["entries"]
-->entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
-->all : readonly ["entries"]
-+>entryKeys.all : ["entries"]
-+>entryKeys : { all: ["entries"]; list: () => ["entries", "list"]; }
-+>all : ["entries"]
- >'list' : "list"
+@@= skipped -34, +34 lines =@@
  }
  
  export const useEntries = () => {
@@ -144,23 +110,11 @@
 ->{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: readonly ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: IEntry[]) => IEntry[]; }
 +>useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  }) : any
 +>useQuery : any
-+>{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: any) => any; }
++>{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: readonly ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: any) => any; }
  
      queryKey: entryKeys.list(),
-->queryKey : readonly ["entries", "list"]
-->entryKeys.list() : readonly ["entries", "list"]
-->entryKeys.list : () => readonly ["entries", "list"]
-->entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
-->list : () => readonly ["entries", "list"]
-+>queryKey : ["entries", "list"]
-+>entryKeys.list() : ["entries", "list"]
-+>entryKeys.list : () => ["entries", "list"]
-+>entryKeys : { all: ["entries"]; list: () => ["entries", "list"]; }
-+>list : () => ["entries", "list"]
- 
-     queryFn: testApi.getEntries,
- >queryFn : () => Promise<IEntry[]>
-@@= skipped -44, +44 lines =@@
+ >queryKey : readonly ["entries", "list"]
+@@= skipped -22, +22 lines =@@
  >getEntries : () => Promise<IEntry[]>
  
      select: (data) => data.slice(0, 10)

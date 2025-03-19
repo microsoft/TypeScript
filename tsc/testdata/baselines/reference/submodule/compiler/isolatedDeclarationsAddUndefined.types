@@ -8,9 +8,9 @@ export class Bar {
 >Bar : Bar
 
     c? = [2 as N] as const;
->c : [1] | undefined
->[2 as N] as const : [1]
->[2 as N] : [1]
+>c : readonly [1] | undefined
+>[2 as N] as const : readonly [1]
+>[2 as N] : readonly [1]
 >2 as N : 1
 >2 : 2
 

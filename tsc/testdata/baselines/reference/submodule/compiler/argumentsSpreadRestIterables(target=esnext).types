@@ -52,16 +52,16 @@ const res2 = fn1(...itNum);
 >itNum : Iterable<number, any, any>
 
 const res3 = fn1(true, ..."hello");
->res3 : [true, ...string[]]
->fn1(true, ..."hello") : [true, ...string[]]
+>res3 : readonly [true, ...string[]]
+>fn1(true, ..."hello") : readonly [true, ...string[]]
 >fn1 : <T extends readonly unknown[]>(...args: T) => T
 >true : true
 >..."hello" : string
 >"hello" : "hello"
 
 const res4 = fn1(true, ...itNum);
->res4 : [true, ...number[]]
->fn1(true, ...itNum) : [true, ...number[]]
+>res4 : readonly [true, ...number[]]
+>fn1(true, ...itNum) : readonly [true, ...number[]]
 >fn1 : <T extends readonly unknown[]>(...args: T) => T
 >true : true
 >...itNum : number

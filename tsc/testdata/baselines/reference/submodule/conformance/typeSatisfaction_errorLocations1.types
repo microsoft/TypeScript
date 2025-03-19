@@ -134,9 +134,9 @@ fn3(10, ...([10, "20"] satisfies number[]));
 >"20" : "20"
 
 const tuple2 = [10, "20"] as const;
->tuple2 : [10, "20"]
->[10, "20"] as const : [10, "20"]
->[10, "20"] : [10, "20"]
+>tuple2 : readonly [10, "20"]
+>[10, "20"] as const : readonly [10, "20"]
+>[10, "20"] : readonly [10, "20"]
 >10 : 10
 >"20" : "20"
 
@@ -145,9 +145,9 @@ fn3(10, ...(tuple2 satisfies number[]));
 >fn3 : (...args: unknown[]) => void
 >10 : 10
 >...(tuple2 satisfies number[]) : "20" | 10
->(tuple2 satisfies number[]) : [10, "20"]
->tuple2 satisfies number[] : [10, "20"]
->tuple2 : [10, "20"]
+>(tuple2 satisfies number[]) : readonly [10, "20"]
+>tuple2 satisfies number[] : readonly [10, "20"]
+>tuple2 : readonly [10, "20"]
 
 declare function fn4(...args: number[]): void;
 >fn4 : (...args: number[]) => void
@@ -165,9 +165,9 @@ fn4(10, ...(["10", "20"] satisfies readonly string[]));
 >"20" : "20"
 
 const tuple3 = ["10", "20"] as const;
->tuple3 : ["10", "20"]
->["10", "20"] as const : ["10", "20"]
->["10", "20"] : ["10", "20"]
+>tuple3 : readonly ["10", "20"]
+>["10", "20"] as const : readonly ["10", "20"]
+>["10", "20"] : readonly ["10", "20"]
 >"10" : "10"
 >"20" : "20"
 
@@ -176,9 +176,9 @@ fn4(10, ...(tuple3 satisfies readonly string[]));
 >fn4 : (...args: number[]) => void
 >10 : 10
 >...(tuple3 satisfies readonly string[]) : "10" | "20"
->(tuple3 satisfies readonly string[]) : ["10", "20"]
->tuple3 satisfies readonly string[] : ["10", "20"]
->tuple3 : ["10", "20"]
+>(tuple3 satisfies readonly string[]) : readonly ["10", "20"]
+>tuple3 satisfies readonly string[] : readonly ["10", "20"]
+>tuple3 : readonly ["10", "20"]
 
 function fn5(): number {
 >fn5 : () => number

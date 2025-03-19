@@ -101,12 +101,12 @@ foo2({
 >method : () => void
 
         this;
->this : never
+>this : X2 | Y2
 
         this.value;
->this.value : any
->this : never
->value : any
+>this.value : string
+>this : X2 | Y2
+>value : string
     }
 });
 

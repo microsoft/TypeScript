@@ -86,5 +86,5 @@ type R1<T> = readonly [...unknown[], T];  // readonly [...unknown[], T]
 >R1 : R1<T>
 
 type R2<T> = Readonly<[...unknown[], T]>;  // readonly [...unknown[], T]
->R2 : [...unknown[], T]
+>R2 : readonly [...unknown[], T]
 

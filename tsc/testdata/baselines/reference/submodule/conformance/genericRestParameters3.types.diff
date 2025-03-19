@@ -1,48 +1,6 @@
 --- old.genericRestParameters3.types
 +++ new.genericRestParameters3.types
-@@= skipped -24, +24 lines =@@
- >t1 : [string] | [number, boolean]
- 
- declare const t2: readonly [string] | [number, boolean];
-->t2 : [number, boolean] | readonly [string]
-+>t2 : [number, boolean] | [string]
- 
- declare const t3: [string] | readonly [number, boolean];
-->t3 : [string] | readonly [number, boolean]
-+>t3 : [string] | [number, boolean]
- 
- declare const t4: readonly [string] | readonly [number, boolean];
-->t4 : readonly [string] | readonly [number, boolean]
-+>t4 : [string] | [number, boolean]
- 
- f1("foo", "abc");
- >f1("foo", "abc") : void
-@@= skipped -33, +33 lines =@@
- >f1 : (x: string, ...args: [string] | [number, boolean]) => void
- >"foo" : "foo"
- >...t2 : string | number | boolean
-->t2 : [number, boolean] | readonly [string]
-+>t2 : [number, boolean] | [string]
- 
- f1("foo", ...t3);
- >f1("foo", ...t3) : void
- >f1 : (x: string, ...args: [string] | [number, boolean]) => void
- >"foo" : "foo"
- >...t3 : string | number | boolean
-->t3 : [string] | readonly [number, boolean]
-+>t3 : [string] | [number, boolean]
- 
- f1("foo", ...t4);
- >f1("foo", ...t4) : void
- >f1 : (x: string, ...args: [string] | [number, boolean]) => void
- >"foo" : "foo"
- >...t4 : string | number | boolean
-->t4 : readonly [string] | readonly [number, boolean]
-+>t4 : [string] | [number, boolean]
- 
- f1("foo", 10);  // Error
- >f1("foo", 10) : void
-@@= skipped -204, +204 lines =@@
+@@= skipped -261, +261 lines =@@
  >ff1 : (...rest: [string, string] | [string, number]) => void
  
  function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {

@@ -2,23 +2,23 @@
 
 === mapConstructorOnReadonlyTuple.ts ===
 const pairs = [[{}, 1], [{}, 2]] as const;
->pairs : [[{}, 1], [{}, 2]]
->[[{}, 1], [{}, 2]] as const : [[{}, 1], [{}, 2]]
->[[{}, 1], [{}, 2]] : [[{}, 1], [{}, 2]]
->[{}, 1] : [{}, 1]
+>pairs : readonly [readonly [{}, 1], readonly [{}, 2]]
+>[[{}, 1], [{}, 2]] as const : readonly [readonly [{}, 1], readonly [{}, 2]]
+>[[{}, 1], [{}, 2]] : readonly [readonly [{}, 1], readonly [{}, 2]]
+>[{}, 1] : readonly [{}, 1]
 >{} : {}
 >1 : 1
->[{}, 2] : [{}, 2]
+>[{}, 2] : readonly [{}, 2]
 >{} : {}
 >2 : 2
 
 new Map(pairs);
 >new Map(pairs) : Map<{}, 1 | 2>
 >Map : MapConstructor
->pairs : [[{}, 1], [{}, 2]]
+>pairs : readonly [readonly [{}, 1], readonly [{}, 2]]
 
 new WeakMap(pairs);
 >new WeakMap(pairs) : WeakMap<{}, 1 | 2>
 >WeakMap : WeakMapConstructor
->pairs : [[{}, 1], [{}, 2]]
+>pairs : readonly [readonly [{}, 1], readonly [{}, 2]]
 

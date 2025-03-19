@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -errorsForCallAndAssignmentAreSimilar.ts(11,11): error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
 -errorsForCallAndAssignmentAreSimilar.ts(16,11): error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
-+errorsForCallAndAssignmentAreSimilar.ts(11,11): error TS2322: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'.
-+errorsForCallAndAssignmentAreSimilar.ts(16,11): error TS2322: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'.
++errorsForCallAndAssignmentAreSimilar.ts(11,11): error TS2820: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'. Did you mean '"hddvd"'?
++errorsForCallAndAssignmentAreSimilar.ts(16,11): error TS2820: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'. Did you mean '"hddvd"'?
  
  
  ==== errorsForCallAndAssignmentAreSimilar.ts (2 errors) ====
@@ -13,7 +13,7 @@
              { kind: "hdpvd", }
                ~~~~
 -!!! error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
-+!!! error TS2322: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'.
++!!! error TS2820: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'. Did you mean '"hddvd"'?
  !!! related TS6500 errorsForCallAndAssignmentAreSimilar.ts:3:13: The expected type comes from property 'kind' which is declared here on type 'Disc'
          ]);
      
@@ -22,7 +22,7 @@
              { kind: "hdpvd", }
                ~~~~
 -!!! error TS2820: Type '"hdpvd"' is not assignable to type '"hddvd" | "bluray"'. Did you mean '"hddvd"'?
-+!!! error TS2322: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'.
++!!! error TS2820: Type '"hdpvd"' is not assignable to type '"bluray" | "hddvd"'. Did you mean '"hddvd"'?
  !!! related TS6500 errorsForCallAndAssignmentAreSimilar.ts:3:13: The expected type comes from property 'kind' which is declared here on type 'Disc'
          ];
      }

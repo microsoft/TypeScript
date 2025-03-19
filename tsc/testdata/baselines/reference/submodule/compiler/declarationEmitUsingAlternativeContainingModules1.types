@@ -385,24 +385,24 @@ const testApi = {
 }
 
 const entryKeys = {
->entryKeys : { all: ["entries"]; list: () => ["entries", "list"]; }
->{  all: ['entries'] as const,  list: () => [...entryKeys.all, 'list'] as const} : { all: ["entries"]; list: () => ["entries", "list"]; }
+>entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
+>{  all: ['entries'] as const,  list: () => [...entryKeys.all, 'list'] as const} : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
 
   all: ['entries'] as const,
->all : ["entries"]
->['entries'] as const : ["entries"]
->['entries'] : ["entries"]
+>all : readonly ["entries"]
+>['entries'] as const : readonly ["entries"]
+>['entries'] : readonly ["entries"]
 >'entries' : "entries"
 
   list: () => [...entryKeys.all, 'list'] as const
->list : () => ["entries", "list"]
->() => [...entryKeys.all, 'list'] as const : () => ["entries", "list"]
->[...entryKeys.all, 'list'] as const : ["entries", "list"]
->[...entryKeys.all, 'list'] : ["entries", "list"]
+>list : () => readonly ["entries", "list"]
+>() => [...entryKeys.all, 'list'] as const : () => readonly ["entries", "list"]
+>[...entryKeys.all, 'list'] as const : readonly ["entries", "list"]
+>[...entryKeys.all, 'list'] : readonly ["entries", "list"]
 >...entryKeys.all : "entries"
->entryKeys.all : ["entries"]
->entryKeys : { all: ["entries"]; list: () => ["entries", "list"]; }
->all : ["entries"]
+>entryKeys.all : readonly ["entries"]
+>entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
+>all : readonly ["entries"]
 >'list' : "list"
 }
 
@@ -413,14 +413,14 @@ export const useEntries = () => {
   return useQuery({
 >useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  }) : any
 >useQuery : any
->{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: any) => any; }
+>{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: readonly ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: any) => any; }
 
     queryKey: entryKeys.list(),
->queryKey : ["entries", "list"]
->entryKeys.list() : ["entries", "list"]
->entryKeys.list : () => ["entries", "list"]
->entryKeys : { all: ["entries"]; list: () => ["entries", "list"]; }
->list : () => ["entries", "list"]
+>queryKey : readonly ["entries", "list"]
+>entryKeys.list() : readonly ["entries", "list"]
+>entryKeys.list : () => readonly ["entries", "list"]
+>entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
+>list : () => readonly ["entries", "list"]
 
     queryFn: testApi.getEntries,
 >queryFn : () => Promise<IEntry[]>

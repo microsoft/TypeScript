@@ -93,9 +93,9 @@ const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toS
 // Additional repro from #57487
 
 const arr = ["foo", "12", 42] as const;
->arr : ["foo", "12", 42]
->["foo", "12", 42] as const : ["foo", "12", 42]
->["foo", "12", 42] : ["foo", "12", 42]
+>arr : readonly ["foo", "12", 42]
+>["foo", "12", 42] as const : readonly ["foo", "12", 42]
+>["foo", "12", 42] : readonly ["foo", "12", 42]
 >"foo" : "foo"
 >"12" : "12"
 >42 : 42
@@ -108,7 +108,7 @@ type Mappings = { foo: boolean, "12": number, 42: string };
 
 type MapperArgs<K extends (typeof arr)[number]> = {
 >MapperArgs : MapperArgs<K>
->arr : ["foo", "12", 42]
+>arr : readonly ["foo", "12", 42]
 
     v: K,
 >v : K

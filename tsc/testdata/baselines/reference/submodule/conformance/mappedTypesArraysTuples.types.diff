@@ -1,15 +1,6 @@
 --- old.mappedTypesArraysTuples.types
 +++ new.mappedTypesArraysTuples.types
-@@= skipped -76, +76 lines =@@
- >T50 : readonly string[]
- 
- type T51 = Readonly<[number, number]>;
-->T51 : readonly [number, number]
-+>T51 : [number, number]
- 
- type T52 = Partial<Readonly<string[]>>;
- >T52 : readonly (string | undefined)[]
-@@= skipped -67, +67 lines =@@
+@@= skipped -143, +143 lines =@@
  >x21 : (number | undefined)[]
  
  declare let x22: { a: number | undefined, b?: string[] };

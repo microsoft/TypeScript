@@ -1,8 +1,0 @@
---- old.parserUnparsedTokenCrash2.errors.txt
-+++ new.parserUnparsedTokenCrash2.errors.txt
-@@= skipped -26, +26 lines =@@
-     
-     
- !!! error TS1005: '}' expected.
--!!! related TS1007 parserUnparsedTokenCrash2.ts:1:41: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.

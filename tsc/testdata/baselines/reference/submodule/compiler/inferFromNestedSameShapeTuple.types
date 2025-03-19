@@ -26,28 +26,28 @@ declare function getIds<Id>(items: readonly Recursive<Id>[]): Id[];
 >items : readonly Recursive<Id>[]
 
 const items = [{
->items : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const satisfies readonly Recursive<string>[] : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
->{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }
+>items : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const satisfies readonly Recursive<string>[] : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+>{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }
 
     id: 'a',
 >id : "a"
 >'a' : "a"
 
     children: [{
->children : [{ readonly id: "b"; readonly children: []; }]
->[{        id: 'b',        children: []    }] : [{ readonly id: "b"; readonly children: []; }]
->{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: []; }
+>children : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+>[{        id: 'b',        children: []    }] : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+>{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: readonly []; }
 
         id: 'b',
 >id : "b"
 >'b' : "b"
 
         children: []
->children : []
->[] : []
+>children : readonly []
+>[] : readonly []
 
     }]
 }] as const satisfies readonly Recursive<string>[]
@@ -56,33 +56,33 @@ const foo = getIds(items)
 >foo : ("a" | "b")[]
 >getIds(items) : ("a" | "b")[]
 >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
->items : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
+>items : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
 
 // variant with a fresh argument
 const foo2 = getIds([{
 >foo2 : ("a" | "b")[]
 >getIds([{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const) : ("a" | "b")[]
 >getIds : <Id>(items: readonly Recursive<Id>[]) => Id[]
->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
->[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : [{ readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }]
->{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: [{ readonly id: "b"; readonly children: []; }]; }
+>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] as const : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+>[{    id: 'a',    children: [{        id: 'b',        children: []    }]}] : readonly [{ readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }]
+>{    id: 'a',    children: [{        id: 'b',        children: []    }]} : { readonly id: "a"; readonly children: readonly [{ readonly id: "b"; readonly children: readonly []; }]; }
 
     id: 'a',
 >id : "a"
 >'a' : "a"
 
     children: [{
->children : [{ readonly id: "b"; readonly children: []; }]
->[{        id: 'b',        children: []    }] : [{ readonly id: "b"; readonly children: []; }]
->{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: []; }
+>children : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+>[{        id: 'b',        children: []    }] : readonly [{ readonly id: "b"; readonly children: readonly []; }]
+>{        id: 'b',        children: []    } : { readonly id: "b"; readonly children: readonly []; }
 
         id: 'b',
 >id : "b"
 >'b' : "b"
 
         children: []
->children : []
->[] : []
+>children : readonly []
+>[] : readonly []
 
     }]
 }] as const)

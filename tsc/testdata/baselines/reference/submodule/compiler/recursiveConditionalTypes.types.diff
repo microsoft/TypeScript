@@ -81,7 +81,7 @@
 +>value : { readonly value: { readonly value: ???; }; }
 +>{ get value() { return this; } } : { readonly value: { readonly value: ???; }; }
 +>value : { readonly value: ???; }
-+>this : never
++>this : { readonly value: ???; } | RecBox<{ readonly value: { readonly value: ???; }; }>
  
  // Inference from nested instantiations of same generic types
  

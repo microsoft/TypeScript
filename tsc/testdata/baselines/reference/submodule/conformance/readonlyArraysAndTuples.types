@@ -32,11 +32,11 @@ type T33 = readonly Array<string>;  // Error
 >T33 : T33
 
 function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
->f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: [string, string]) => void
+>f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => void
 >ma : string[]
 >ra : readonly string[]
 >mt : [string, string]
->rt : [string, string]
+>rt : readonly [string, string]
 
     ma = ra;  // Error
 >ma = ra : readonly string[]
@@ -49,9 +49,9 @@ function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: reado
 >mt : [string, string]
 
     ma = rt;  // Error
->ma = rt : [string, string]
+>ma = rt : readonly [string, string]
 >ma : string[]
->rt : [string, string]
+>rt : readonly [string, string]
 
     ra = ma;
 >ra = ma : string[]
@@ -64,9 +64,9 @@ function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: reado
 >mt : [string, string]
 
     ra = rt;
->ra = rt : [string, string]
+>ra = rt : readonly [string, string]
 >ra : readonly string[]
->rt : [string, string]
+>rt : readonly [string, string]
 
     mt = ma;  // Error
 >mt = ma : string[]
@@ -79,60 +79,60 @@ function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: reado
 >ra : readonly string[]
 
     mt = rt;  // Error
->mt = rt : [string, string]
+>mt = rt : readonly [string, string]
 >mt : [string, string]
->rt : [string, string]
+>rt : readonly [string, string]
 
     rt = ma;  // Error
 >rt = ma : string[]
->rt : [string, string]
+>rt : readonly [string, string]
 >ma : string[]
 
     rt = ra;  // Error
 >rt = ra : readonly string[]
->rt : [string, string]
+>rt : readonly [string, string]
 >ra : readonly string[]
 
     rt = mt;
 >rt = mt : [string, string]
->rt : [string, string]
+>rt : readonly [string, string]
 >mt : [string, string]
 }
 
 declare var v: readonly[number, number, ...number[]];
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 
 v[0] = 1;        // Error
 >v[0] = 1 : 1
 >v[0] : any
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 >0 : 0
 >1 : 1
 
 v[1] = 1;        // Error
 >v[1] = 1 : 1
 >v[1] : any
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 >1 : 1
 >1 : 1
 
 v[2] = 1;        // Error
 >v[2] = 1 : 1
 >v[2] : number
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 >2 : 2
 >1 : 1
 
 delete v[2];     // Error
 >delete v[2] : boolean
 >v[2] : number
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 >2 : 2
 
 v[0 + 1] = 1;    // Error
 >v[0 + 1] = 1 : 1
 >v[0 + 1] : number
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 >0 + 1 : number
 >0 : 0
 >1 : 1
@@ -141,7 +141,7 @@ v[0 + 1] = 1;    // Error
 v[0 + 2] = 1;    // Error
 >v[0 + 2] = 1 : 1
 >v[0 + 2] : number
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 >0 + 2 : number
 >0 : 0
 >2 : 2
@@ -150,7 +150,7 @@ v[0 + 2] = 1;    // Error
 delete v[0 + 1]; // Error
 >delete v[0 + 1] : boolean
 >v[0 + 1] : number
->v : [number, number, ...number[]]
+>v : readonly [number, number, ...number[]]
 >0 + 1 : number
 >0 : 0
 >1 : 1

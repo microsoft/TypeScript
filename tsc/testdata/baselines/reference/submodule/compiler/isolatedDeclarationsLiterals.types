@@ -2,9 +2,9 @@
 
 === file1.ts ===
 export const constObject = {
->constObject : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
->{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    array: [1, -1, 1n, -1n],    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** Value Of "1" */    oneStrDoubleQuote: "1",    /** Value Of '1' */    oneStrSingleQuote: '1',    /** Value Of `1` */    oneStrTemplate: `1`,    /** A method */    method(): void {    },} as const : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
->{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    array: [1, -1, 1n, -1n],    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** Value Of "1" */    oneStrDoubleQuote: "1",    /** Value Of '1' */    oneStrSingleQuote: '1',    /** Value Of `1` */    oneStrTemplate: `1`,    /** A method */    method(): void {    },} : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
+>constObject : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: readonly [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
+>{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    array: [1, -1, 1n, -1n],    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** Value Of "1" */    oneStrDoubleQuote: "1",    /** Value Of '1' */    oneStrSingleQuote: '1',    /** Value Of `1` */    oneStrTemplate: `1`,    /** A method */    method(): void {    },} as const : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: readonly [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
+>{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    array: [1, -1, 1n, -1n],    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** Value Of "1" */    oneStrDoubleQuote: "1",    /** Value Of '1' */    oneStrSingleQuote: '1',    /** Value Of `1` */    oneStrTemplate: `1`,    /** A method */    method(): void {    },} : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: readonly [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
 
     /** Value Of 1 */
     one: 1,
@@ -34,8 +34,8 @@ export const constObject = {
 >1 : 1
 
     array: [1, -1, 1n, -1n],
->array : [1, -1, 1n, -1n]
->[1, -1, 1n, -1n] : [1, -1, 1n, -1n]
+>array : readonly [1, -1, 1n, -1n]
+>[1, -1, 1n, -1n] : readonly [1, -1, 1n, -1n]
 >1 : 1
 >-1 : -1
 >1 : 1

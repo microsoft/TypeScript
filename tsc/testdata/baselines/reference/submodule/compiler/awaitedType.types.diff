@@ -57,20 +57,7 @@
  >args : T
  
    return result;
-@@= skipped -56, +56 lines =@@
- 
- {
-   const promises = [Promise.resolve(0)] as const
-->promises : readonly [Promise<number>]
-->[Promise.resolve(0)] as const : readonly [Promise<number>]
-->[Promise.resolve(0)] : readonly [Promise<number>]
-+>promises : [Promise<number>]
-+>[Promise.resolve(0)] as const : [Promise<number>]
-+>[Promise.resolve(0)] : [Promise<number>]
- >Promise.resolve(0) : Promise<number>
- >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
- >Promise : PromiseConstructor
-@@= skipped -11, +11 lines =@@
+@@= skipped -67, +67 lines =@@
  
    Promise.all(promises).then((results) => {
  >Promise.all(promises).then((results) => {    const first = results[0]    const second = results[1] // error  }) : Promise<void>
@@ -81,10 +68,9 @@
 +>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
  >Promise : PromiseConstructor
 ->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
-->promises : readonly [Promise<number>]
-->then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 +>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
-+>promises : [Promise<number>]
+ >promises : readonly [Promise<number>]
+->then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 +>then : <TResult1, TResult2>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >(results) => {    const first = results[0]    const second = results[1] // error  } : (results: [number]) => void
  >results : [number]

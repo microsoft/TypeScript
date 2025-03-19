@@ -5,9 +5,9 @@
 // #Repro from #30839
 
 let point = [3, 4] as const;
->point : [3, 4]
->[3, 4] as const : [3, 4]
->[3, 4] : [3, 4]
+>point : readonly [3, 4]
+>[3, 4] as const : readonly [3, 4]
+>[3, 4] : readonly [3, 4]
 >3 : 3
 >4 : 4
 
@@ -33,7 +33,7 @@ function distanceFromOrigin([x, y]: [number, number]) {
 distanceFromOrigin(point);
 >distanceFromOrigin(point) : number
 >distanceFromOrigin : (__0: [number, number]) => number
->point : [3, 4]
+>point : readonly [3, 4]
 
 declare function arryFn(x: number[]): void;
 >arryFn : (x: number[]) => void
@@ -42,7 +42,7 @@ declare function arryFn(x: number[]): void;
 arryFn(point);
 >arryFn(point) : void
 >arryFn : (x: number[]) => void
->point : [3, 4]
+>point : readonly [3, 4]
 
 declare function arryFn2(x: Array<number>): void;
 >arryFn2 : (x: number[]) => void
@@ -51,7 +51,7 @@ declare function arryFn2(x: Array<number>): void;
 arryFn2(point);
 >arryFn2(point) : void
 >arryFn2 : (x: number[]) => void
->point : [3, 4]
+>point : readonly [3, 4]
 
 declare const a: readonly number[];
 >a : readonly number[]
@@ -78,22 +78,22 @@ arryFn2(c);
 >c : readonly number[]
 
 const t1: readonly [1] = [1];
->t1 : [1]
+>t1 : readonly [1]
 >[1] : [1]
 >1 : 1
 
 const t2: readonly [] = t1;
->t2 : []
->t1 : [1]
+>t2 : readonly []
+>t1 : readonly [1]
 
 const t3: readonly [1] = [1];
->t3 : [1]
+>t3 : readonly [1]
 >[1] : [1]
 >1 : 1
 
 const t4: [] = t3;
 >t4 : []
->t3 : [1]
+>t3 : readonly [1]
 
 const t5: [1] = [1];
 >t5 : [1]
@@ -101,7 +101,7 @@ const t5: [1] = [1];
 >1 : 1
 
 const t6: readonly [] = t5;
->t6 : []
+>t6 : readonly []
 >t5 : [1]
 
 const t7: [1] = [1];
@@ -150,22 +150,22 @@ const a8: boolean[] = a7;
 >a7 : number[]
 
 const ta1: readonly [1] = [1];
->ta1 : [1]
+>ta1 : readonly [1]
 >[1] : [1]
 >1 : 1
 
 const ta2: readonly boolean[] = ta1;
 >ta2 : readonly boolean[]
->ta1 : [1]
+>ta1 : readonly [1]
 
 const ta3: readonly [1] = [1];
->ta3 : [1]
+>ta3 : readonly [1]
 >[1] : [1]
 >1 : 1
 
 const ta4: number[] = ta3;
 >ta4 : number[]
->ta3 : [1]
+>ta3 : readonly [1]
 
 const ta5: [1] = [1];
 >ta5 : [1]
@@ -191,7 +191,7 @@ const at1: readonly number[] = [1];
 >1 : 1
 
 const at2: readonly [1] = at1;
->at2 : [1]
+>at2 : readonly [1]
 >at1 : readonly number[]
 
 const at3: readonly number[] = [1];
@@ -209,7 +209,7 @@ const at5: number[] = [1];
 >1 : 1
 
 const at6: readonly [1] = at5;
->at6 : [1]
+>at6 : readonly [1]
 >at5 : number[]
 
 const at7: number[] = [1];

@@ -4,7 +4,7 @@
 // repro from #52494
 
 declare const someVal: Required<{
->someVal : Required<{ fn?: (key: string) => string | null | undefined; }>
+>someVal : Required<{ fn?: (key: string) => string | null; }>
 
     fn?(key: string): string | null;
 >fn : (key: string) => string | null | undefined
@@ -14,12 +14,12 @@ declare const someVal: Required<{
 someVal.fn("");
 >someVal.fn("") : string | null
 >someVal.fn : (key: string) => string | null
->someVal : Required<{ fn?: (key: string) => string | null | undefined; }>
+>someVal : Required<{ fn?: (key: string) => string | null; }>
 >fn : (key: string) => string | null
 >"" : ""
 
 declare const someVal2: Required<{
->someVal2 : Required<{ fn?: (key: string) => string | null | undefined; }>
+>someVal2 : Required<{ fn?: (key: string) => string | null; }>
 
     fn?: (key: string) => string | null;
 >fn : (key: string) => string | null | undefined
@@ -29,7 +29,7 @@ declare const someVal2: Required<{
 someVal2.fn("");
 >someVal2.fn("") : string | null
 >someVal2.fn : (key: string) => string | null
->someVal2 : Required<{ fn?: (key: string) => string | null | undefined; }>
+>someVal2 : Required<{ fn?: (key: string) => string | null; }>
 >fn : (key: string) => string | null
 >"" : ""
 

@@ -1,30 +1,6 @@
 --- old.isolatedDeclarationErrorsExpressions.types
 +++ new.isolatedDeclarationErrorsExpressions.types
-@@= skipped -219, +219 lines =@@
- >3 : 3
- 
- export let arrConst = [1, 2, 3] as const;
-->arrConst : readonly [1, 2, 3]
-->[1, 2, 3] as const : readonly [1, 2, 3]
-->[1, 2, 3] : readonly [1, 2, 3]
-+>arrConst : [1, 2, 3]
-+>[1, 2, 3] as const : [1, 2, 3]
-+>[1, 2, 3] : [1, 2, 3]
- >1 : 1
- >2 : 2
- >3 : 3
- 
- export let arrWithSpread = [1, 2, 3, ...arr] as const;
-->arrWithSpread : readonly [1, 2, 3, ...number[]]
-->[1, 2, 3, ...arr] as const : readonly [1, 2, 3, ...number[]]
-->[1, 2, 3, ...arr] : readonly [1, 2, 3, ...number[]]
-+>arrWithSpread : [1, 2, 3, ...number[]]
-+>[1, 2, 3, ...arr] as const : [1, 2, 3, ...number[]]
-+>[1, 2, 3, ...arr] : [1, 2, 3, ...number[]]
- >1 : 1
- >2 : 2
- >3 : 3
-@@= skipped -322, +322 lines =@@
+@@= skipped -541, +541 lines =@@
  >1 : 1
  
  export const [, , b = 1]: [number, number, number | undefined] = [0, 1, 2];

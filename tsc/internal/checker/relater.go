@@ -4697,11 +4697,21 @@ func (r *Relater) reportRelationError(message *diagnostics.Message, source *Type
 		}
 	}
 	if message == nil {
-		if r.relation == r.c.comparableRelation {
+		switch {
+		case r.relation == r.c.comparableRelation:
 			message = diagnostics.Type_0_is_not_comparable_to_type_1
-		} else if sourceType == targetType {
+		case sourceType == targetType:
 			message = diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated
-		} else {
+		case r.c.exactOptionalPropertyTypes && len(r.c.getExactOptionalUnassignableProperties(source, target)) != 0:
+			message = diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+		default:
+			if source.flags&TypeFlagsStringLiteral != 0 && target.flags&TypeFlagsUnion != 0 {
+				suggestedType := r.c.getSuggestedTypeForNonexistentStringLiteralType(source, target)
+				if suggestedType != nil {
+					r.reportError(diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, generalizedSourceType, targetType, r.c.TypeToString(suggestedType))
+					return
+				}
+			}
 			message = diagnostics.Type_0_is_not_assignable_to_type_1
 		}
 	}

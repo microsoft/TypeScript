@@ -85,16 +85,7 @@
  }
  
  function foo2(bar: X2 | Y2) { }
-@@= skipped -42, +42 lines =@@
- 
-         this;
-         this.value;
-->this.value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
-->value : Symbol(value, Decl(contextualTypeShouldBeLiteral.ts, 25, 15), Decl(contextualTypeShouldBeLiteral.ts, 31, 15))
-     }
- });
- 
-@@= skipped -9, +7 lines =@@
+@@= skipped -51, +51 lines =@@
  >X3 : Symbol(X3, Decl(contextualTypeShouldBeLiteral.ts, 45, 3))
  
      type: 'x';

@@ -3,22 +3,22 @@ readonlyArraysAndTuples.ts(10,15): error TS1354: 'readonly' type modifier is onl
 readonlyArraysAndTuples.ts(11,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
 readonlyArraysAndTuples.ts(12,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
 readonlyArraysAndTuples.ts(15,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
-readonlyArraysAndTuples.ts(17,5): error TS4104: The type '[string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+readonlyArraysAndTuples.ts(17,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 readonlyArraysAndTuples.ts(21,5): error TS2322: Type 'string[]' is not assignable to type '[string, string]'.
   Target requires 2 element(s) but source may have fewer.
 readonlyArraysAndTuples.ts(22,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
-readonlyArraysAndTuples.ts(23,5): error TS4104: The type '[string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
-readonlyArraysAndTuples.ts(24,5): error TS2322: Type 'string[]' is not assignable to type '[string, string]'.
+readonlyArraysAndTuples.ts(23,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
+readonlyArraysAndTuples.ts(24,5): error TS2322: Type 'string[]' is not assignable to type 'readonly [string, string]'.
   Target requires 2 element(s) but source may have fewer.
-readonlyArraysAndTuples.ts(25,5): error TS2322: Type 'readonly string[]' is not assignable to type '[string, string]'.
+readonlyArraysAndTuples.ts(25,5): error TS2322: Type 'readonly string[]' is not assignable to type 'readonly [string, string]'.
   Target requires 2 element(s) but source may have fewer.
 readonlyArraysAndTuples.ts(30,3): error TS2540: Cannot assign to '0' because it is a read-only property.
 readonlyArraysAndTuples.ts(31,3): error TS2540: Cannot assign to '1' because it is a read-only property.
-readonlyArraysAndTuples.ts(32,1): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
-readonlyArraysAndTuples.ts(33,8): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
-readonlyArraysAndTuples.ts(34,1): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
-readonlyArraysAndTuples.ts(35,1): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
-readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
+readonlyArraysAndTuples.ts(32,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+readonlyArraysAndTuples.ts(33,8): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+readonlyArraysAndTuples.ts(34,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+readonlyArraysAndTuples.ts(35,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
+readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
 
 
 ==== readonlyArraysAndTuples.ts (18 errors) ====
@@ -50,7 +50,7 @@ readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type '[number
         ma = mt;
         ma = rt;  // Error
         ~~
-!!! error TS4104: The type '[string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+!!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
         ra = ma;
         ra = mt;
         ra = rt;
@@ -63,14 +63,14 @@ readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type '[number
 !!! error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
         mt = rt;  // Error
         ~~
-!!! error TS4104: The type '[string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
+!!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
         rt = ma;  // Error
         ~~
-!!! error TS2322: Type 'string[]' is not assignable to type '[string, string]'.
+!!! error TS2322: Type 'string[]' is not assignable to type 'readonly [string, string]'.
 !!! error TS2322:   Target requires 2 element(s) but source may have fewer.
         rt = ra;  // Error
         ~~
-!!! error TS2322: Type 'readonly string[]' is not assignable to type '[string, string]'.
+!!! error TS2322: Type 'readonly string[]' is not assignable to type 'readonly [string, string]'.
 !!! error TS2322:   Target requires 2 element(s) but source may have fewer.
         rt = mt;
     }
@@ -84,17 +84,17 @@ readonlyArraysAndTuples.ts(36,8): error TS2542: Index signature in type '[number
 !!! error TS2540: Cannot assign to '1' because it is a read-only property.
     v[2] = 1;        // Error
     ~~~~
-!!! error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
     delete v[2];     // Error
            ~~~~
-!!! error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
     v[0 + 1] = 1;    // Error
     ~~~~~~~~
-!!! error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
     v[0 + 2] = 1;    // Error
     ~~~~~~~~
-!!! error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
     delete v[0 + 1]; // Error
            ~~~~~~~~
-!!! error TS2542: Index signature in type '[number, number, ...number[]]' only permits reading.
+!!! error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
     

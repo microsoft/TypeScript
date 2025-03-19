@@ -192,8 +192,8 @@ declare function f4<const T extends readonly unknown[]>(...args: T): T;
 >args : T
 
 const x41 = f4(...[1, 'foo'])
->x41 : [number, string]
->f4(...[1, 'foo']) : [number, string]
+>x41 : readonly [number, string]
+>f4(...[1, 'foo']) : readonly [number, string]
 >f4 : <T extends readonly unknown[]>(...args: T) => T
 >...[1, 'foo'] : string | number
 >[1, 'foo'] : [number, string]
@@ -201,8 +201,8 @@ const x41 = f4(...[1, 'foo'])
 >'foo' : "foo"
 
 const x42 = f4(true, ...[1, 'foo'])
->x42 : [true, number, string]
->f4(true, ...[1, 'foo']) : [true, number, string]
+>x42 : readonly [true, number, string]
+>f4(true, ...[1, 'foo']) : readonly [true, number, string]
 >f4 : <T extends readonly unknown[]>(...args: T) => T
 >true : true
 >...[1, 'foo'] : string | number
@@ -211,8 +211,8 @@ const x42 = f4(true, ...[1, 'foo'])
 >'foo' : "foo"
 
 const x43 = f4(...([1, 'foo']))
->x43 : [number, string]
->f4(...([1, 'foo'])) : [number, string]
+>x43 : readonly [number, string]
+>f4(...([1, 'foo'])) : readonly [number, string]
 >f4 : <T extends readonly unknown[]>(...args: T) => T
 >...([1, 'foo']) : string | number
 >([1, 'foo']) : [number, string]
@@ -221,8 +221,8 @@ const x43 = f4(...([1, 'foo']))
 >'foo' : "foo"
 
 const x44 = f4(true, ...([1, 'foo']))
->x44 : [true, number, string]
->f4(true, ...([1, 'foo'])) : [true, number, string]
+>x44 : readonly [true, number, string]
+>f4(true, ...([1, 'foo'])) : readonly [true, number, string]
 >f4 : <T extends readonly unknown[]>(...args: T) => T
 >true : true
 >...([1, 'foo']) : string | number

@@ -73,26 +73,7 @@
  
  // Additional repro from #57487
  
- const arr = ["foo", "12", 42] as const;
-->arr : readonly ["foo", "12", 42]
-->["foo", "12", 42] as const : readonly ["foo", "12", 42]
-->["foo", "12", 42] : readonly ["foo", "12", 42]
-+>arr : ["foo", "12", 42]
-+>["foo", "12", 42] as const : ["foo", "12", 42]
-+>["foo", "12", 42] : ["foo", "12", 42]
- >"foo" : "foo"
- >"12" : "12"
- >42 : 42
-@@= skipped -29, +29 lines =@@
- 
- type MapperArgs<K extends (typeof arr)[number]> = {
- >MapperArgs : MapperArgs<K>
-->arr : readonly ["foo", "12", 42]
-+>arr : ["foo", "12", 42]
- 
-     v: K,
- >v : K
-@@= skipped -17, +17 lines =@@
+@@= skipped -46, +46 lines =@@
  >PartMappings : PartMappings
  
  const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K] } = {

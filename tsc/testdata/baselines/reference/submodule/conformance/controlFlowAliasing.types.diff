@@ -70,70 +70,25 @@
  >obj.x : string | number
  >obj : { readonly x: string | number; }
  >x : string | number
-@@= skipped -25, +25 lines =@@
- }
- 
- function f17(obj: readonly [string | number]) {
-->f17 : (obj: readonly [string | number]) => void
-->obj : readonly [string | number]
-+>f17 : (obj: [string | number]) => void
-+>obj : [string | number]
- 
+@@= skipped -31, +31 lines =@@
      const isString = typeof obj[0] === 'string';
  >isString : boolean
  >typeof obj[0] === 'string' : boolean
 ->typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 +>typeof obj[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >obj[0] : string | number
-->obj : readonly [string | number]
-+>obj : [string | number]
+ >obj : readonly [string | number]
  >0 : 0
- >'string' : "string"
- 
-@@= skipped -18, +18 lines =@@
-         let s: string = obj[0];
- >s : string
- >obj[0] : string
-->obj : readonly [string | number]
-+>obj : [string | number]
- >0 : 0
-     }
- }
- 
- function f18(obj: readonly [string | number]) {
-->f18 : (obj: readonly [string | number]) => void
-->obj : readonly [string | number]
-+>f18 : (obj: [string | number]) => void
-+>obj : [string | number]
- 
+@@= skipped -24, +24 lines =@@
      const isString = typeof obj[0] === 'string';
  >isString : boolean
  >typeof obj[0] === 'string' : boolean
 ->typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 +>typeof obj[0] : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >obj[0] : string | number
-->obj : readonly [string | number]
-+>obj : [string | number]
+ >obj : readonly [string | number]
  >0 : 0
- >'string' : "string"
- 
-     obj = [42];
- >obj = [42] : [number]
-->obj : readonly [string | number]
-+>obj : [string | number]
- >[42] : [number]
- >42 : 42
- 
-@@= skipped -30, +30 lines =@@
-         let s: string = obj[0];  // Not narrowed because of is assigned in function body
- >s : string
- >obj[0] : string | number
-->obj : readonly [string | number]
-+>obj : [string | number]
- >0 : 0
-     }
- }
-@@= skipped -16, +16 lines =@@
+@@= skipped -34, +34 lines =@@
      const isFoo = obj.kind === 'foo';
  >isFoo : boolean
  >obj.kind === 'foo' : boolean

@@ -48,24 +48,7 @@
  
      type2: 'y',
  >type2 : "y"
-@@= skipped -14, +14 lines =@@
- >method : () => void
- 
-         this;
-->this : X2 | Y2
-+>this : never
- 
-         this.value;
-->this.value : string
-->this : X2 | Y2
-->value : string
-+>this.value : any
-+>this : never
-+>value : any
-     }
- });
- 
-@@= skipped -83, +83 lines =@@
+@@= skipped -97, +97 lines =@@
  
  let xyz: LikeA | LikeB = {
  >xyz : LikeA | LikeB

@@ -8,7 +8,7 @@ declare let a: { a: string };
 >a : string
 
 declare let b: { a?: string };
->b : { a?: string | undefined; }
+>b : { a?: string; }
 >a : string | undefined
 
 declare let c: { a: string | undefined };
@@ -34,7 +34,7 @@ let b1 = { a: 123, ...b };  // string | number
 >{ a: 123, ...b } : { a: string | number; }
 >a : number
 >123 : 123
->b : { a?: string | undefined; }
+>b : { a?: string; }
 
 let c1 = { a: 123, ...c };  // string | undefined (Error)
 >c1 : { a: string | undefined; }
@@ -66,10 +66,10 @@ let b2 = { a: 123, ...(t ? b : {}) };  // string | number
 >{ a: 123, ...(t ? b : {}) } : { a: string | number; }
 >a : number
 >123 : 123
->(t ? b : {}) : { a?: string | undefined; }
->t ? b : {} : { a?: string | undefined; }
+>(t ? b : {}) : { a?: string; }
+>t ? b : {} : { a?: string; }
 >t : boolean
->b : { a?: string | undefined; }
+>b : { a?: string; }
 >{} : {}
 
 let c2 = { a: 123, ...(t ? c : {}) };  // string | number | undefined

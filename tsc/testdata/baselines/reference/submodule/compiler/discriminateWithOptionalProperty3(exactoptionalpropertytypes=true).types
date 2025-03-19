@@ -74,7 +74,7 @@ export function buildExecutionContext(
 
     return coercedVariableValues.errors;
 >coercedVariableValues.errors : readonly GraphQLError[]
->coercedVariableValues : { errors: readonly GraphQLError[]; coerced?: undefined; }
+>coercedVariableValues : { errors: readonly GraphQLError[]; coerced?: never; }
 >errors : readonly GraphQLError[]
   }
 
@@ -84,7 +84,7 @@ export function buildExecutionContext(
     variableValues: coercedVariableValues.coerced,
 >variableValues : { [variable: string]: unknown; }
 >coercedVariableValues.coerced : { [variable: string]: unknown; }
->coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: undefined; }
+>coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: never; }
 >coerced : { [variable: string]: unknown; }
 
   };

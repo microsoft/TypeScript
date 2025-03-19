@@ -62,22 +62,18 @@
 +>itNum : Iterable<number, any, any>
  
  const res3 = fn1(true, ..."hello");
-->res3 : readonly [true, ...string[]]
-->fn1(true, ..."hello") : readonly [true, ...string[]]
+ >res3 : readonly [true, ...string[]]
+ >fn1(true, ..."hello") : readonly [true, ...string[]]
 ->fn1 : <const T extends readonly unknown[]>(...args: T) => T
-+>res3 : [true, ...string[]]
-+>fn1(true, ..."hello") : [true, ...string[]]
 +>fn1 : <T extends readonly unknown[]>(...args: T) => T
  >true : true
  >..."hello" : string
  >"hello" : "hello"
- 
+@@= skipped -42, +42 lines =@@
  const res4 = fn1(true, ...itNum);
-->res4 : readonly [true, ...number[]]
-->fn1(true, ...itNum) : readonly [true, ...number[]]
+ >res4 : readonly [true, ...number[]]
+ >fn1(true, ...itNum) : readonly [true, ...number[]]
 ->fn1 : <const T extends readonly unknown[]>(...args: T) => T
-+>res4 : [true, ...number[]]
-+>fn1(true, ...itNum) : [true, ...number[]]
 +>fn1 : <T extends readonly unknown[]>(...args: T) => T
  >true : true
  >...itNum : number
@@ -86,7 +82,7 @@
  
  // repro from #52781
  declare function foo<T extends unknown[]>(...args: T): T;
-@@= skipped -64, +64 lines =@@
+@@= skipped -22, +22 lines =@@
  >foo(...itNum) : number[]
  >foo : <T extends unknown[]>(...args: T) => T
  >...itNum : number

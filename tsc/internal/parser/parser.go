@@ -6353,6 +6353,9 @@ func tagNamesAreEquivalent(lhs *ast.Expression, rhs *ast.Expression) bool {
 func attachFileToDiagnostics(diagnostics []*ast.Diagnostic, file *ast.SourceFile) []*ast.Diagnostic {
 	for _, d := range diagnostics {
 		d.SetFile(file)
+		for _, r := range d.RelatedInformation() {
+			r.SetFile(file)
+		}
 	}
 	return diagnostics
 }

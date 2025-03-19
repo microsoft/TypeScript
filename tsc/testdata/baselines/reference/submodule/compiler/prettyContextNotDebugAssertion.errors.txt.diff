@@ -8,17 +8,10 @@
 +[7m [0m [91m~[0m
  
 -  [96mindex.ts[0m:[93m1[0m:[93m11[0m
--    [7m1[0m if (true) {
--    [7m [0m [96m          ~[0m
++  [96mindex.ts[0m:[93m1[0m:[93m11[0m - The parser expected to find a '}' to match the '{' token here.
+     [7m1[0m if (true) {
+     [7m [0m [96m          ~[0m
 -    The parser expected to find a '}' to match the '{' token here.
  
  
  ==== index.ts (1 errors) ====
-@@= skipped -13, +9 lines =@@
-     
-     
- !!! error TS1005: '}' expected.
--!!! related TS1007 index.ts:1:11: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
- Found 1 error in index.ts[90m:2[0m
- 

@@ -81,6 +81,6 @@ const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
 >Promise : PromiseConstructor
 >all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
->undefined as readonly ["a", "b", "c"] : ["a", "b", "c"]
+>undefined as readonly ["a", "b", "c"] : readonly ["a", "b", "c"]
 >undefined : undefined
 

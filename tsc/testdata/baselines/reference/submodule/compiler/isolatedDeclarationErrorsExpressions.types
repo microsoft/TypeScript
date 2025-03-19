@@ -220,17 +220,17 @@ export let arr = [1, 2, 3];
 >3 : 3
 
 export let arrConst = [1, 2, 3] as const;
->arrConst : [1, 2, 3]
->[1, 2, 3] as const : [1, 2, 3]
->[1, 2, 3] : [1, 2, 3]
+>arrConst : readonly [1, 2, 3]
+>[1, 2, 3] as const : readonly [1, 2, 3]
+>[1, 2, 3] : readonly [1, 2, 3]
 >1 : 1
 >2 : 2
 >3 : 3
 
 export let arrWithSpread = [1, 2, 3, ...arr] as const;
->arrWithSpread : [1, 2, 3, ...number[]]
->[1, 2, 3, ...arr] as const : [1, 2, 3, ...number[]]
->[1, 2, 3, ...arr] : [1, 2, 3, ...number[]]
+>arrWithSpread : readonly [1, 2, 3, ...number[]]
+>[1, 2, 3, ...arr] as const : readonly [1, 2, 3, ...number[]]
+>[1, 2, 3, ...arr] : readonly [1, 2, 3, ...number[]]
 >1 : 1
 >2 : 2
 >3 : 3

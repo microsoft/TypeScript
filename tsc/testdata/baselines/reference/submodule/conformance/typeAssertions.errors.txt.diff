@@ -63,21 +63,8 @@
  !!! related TS2728 typeAssertions.ts:21:13: 'q' is declared here.
      someOther = <SomeOther>someOther;
      
-@@= skipped -35, +31 lines =@@
- !!! error TS2304: Cannot find name 'is'.
-                     ~~~~~~
- !!! error TS1005: ')' expected.
--!!! related TS1007 typeAssertions.ts:44:3: The parser expected to find a ')' to match the '(' token here.
-+!!! related TS1007: The parser expected to find a ')' to match the '(' token here.
-                     ~~~~~~
- !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
-                                                    ~
-@@= skipped -16, +16 lines =@@
- !!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
-                                             ~~
- !!! error TS1005: ')' expected.
--!!! related TS1007 typeAssertions.ts:48:3: The parser expected to find a ')' to match the '(' token here.
-+!!! related TS1007: The parser expected to find a ')' to match the '(' token here.
+@@= skipped -54, +50 lines =@@
+ !!! related TS1007 typeAssertions.ts:48:3: The parser expected to find a ')' to match the '(' token here.
                                              ~~
  !!! error TS2304: Cannot find name 'is'.
 +                                            ~~~

@@ -10,37 +10,7 @@
  === variadicTuples1.ts ===
  // Variadics in tuple types
  
-@@= skipped -44, +40 lines =@@
- // Variadics in array literals
- 
- function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) {
-->tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => readonly [1, ...T, 2, ...U, 3]
-+>tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [1, ...T, 2, ...U, 3]
- >t : [...T]
- >u : [...U]
- 
-     return [1, ...t, 2, ...u, 3] as const;
-->[1, ...t, 2, ...u, 3] as const : readonly [1, ...T, 2, ...U, 3]
-->[1, ...t, 2, ...u, 3] : readonly [1, ...T, 2, ...U, 3]
-+>[1, ...t, 2, ...u, 3] as const : [1, ...T, 2, ...U, 3]
-+>[1, ...t, 2, ...u, 3] : [1, ...T, 2, ...U, 3]
- >1 : 1
- >...t : T[number]
- >t : [...T]
-@@= skipped -17, +17 lines =@@
- }
- 
- const t2 = tup2(['hello'], [10, true]);
-->t2 : readonly [1, string, 2, number, boolean, 3]
-->tup2(['hello'], [10, true]) : readonly [1, string, 2, number, boolean, 3]
-->tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => readonly [1, ...T, 2, ...U, 3]
-+>t2 : [1, string, 2, number, boolean, 3]
-+>tup2(['hello'], [10, true]) : [1, string, 2, number, boolean, 3]
-+>tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [1, ...T, 2, ...U, 3]
- >['hello'] : [string]
- >'hello' : "hello"
- >[10, true] : [number, true]
-@@= skipped -75, +75 lines =@@
+@@= skipped -136, +132 lines =@@
  }
  
  const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]
@@ -49,68 +19,9 @@
 +>tc5 : (1 | 2 | 3 | 4 | 5 | 6)[]
 +>concat2([1, 2, 3] as const, [4, 5, 6] as const) : (1 | 2 | 3 | 4 | 5 | 6)[]
  >concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
-->[1, 2, 3] as const : readonly [1, 2, 3]
-->[1, 2, 3] : readonly [1, 2, 3]
-+>[1, 2, 3] as const : [1, 2, 3]
-+>[1, 2, 3] : [1, 2, 3]
- >1 : 1
- >2 : 2
- >3 : 3
-->[4, 5, 6] as const : readonly [4, 5, 6]
-->[4, 5, 6] : readonly [4, 5, 6]
-+>[4, 5, 6] as const : [4, 5, 6]
-+>[4, 5, 6] : [4, 5, 6]
- >4 : 4
- >5 : 5
- >6 : 6
-@@= skipped -129, +129 lines =@@
- >t : T
- 
- declare function ft2<T extends unknown[]>(t: T): readonly [...T];
-->ft2 : <T extends unknown[]>(t: T) => readonly [...T]
-+>ft2 : <T extends unknown[]>(t: T) => [...T]
- >t : T
- 
- declare function ft3<T extends unknown[]>(t: [...T]): T;
-@@= skipped -8, +8 lines =@@
- >t : [...T]
- 
- declare function ft4<T extends unknown[]>(t: [...T]): readonly [...T];
-->ft4 : <T extends unknown[]>(t: [...T]) => readonly [...T]
-+>ft4 : <T extends unknown[]>(t: [...T]) => [...T]
- >t : [...T]
- 
- ft1(['hello', 42]);  // (string | number)[]
-@@= skipped -12, +12 lines =@@
- 
- ft2(['hello', 42]);  // readonly (string | number)[]
- >ft2(['hello', 42]) : readonly (string | number)[]
-->ft2 : <T extends unknown[]>(t: T) => readonly [...T]
-+>ft2 : <T extends unknown[]>(t: T) => [...T]
- >['hello', 42] : (string | number)[]
- >'hello' : "hello"
- >42 : 42
-@@= skipped -13, +13 lines =@@
- >42 : 42
- 
- ft4(['hello', 42]);  // readonly [string, number]
-->ft4(['hello', 42]) : readonly [string, number]
-->ft4 : <T extends unknown[]>(t: [...T]) => readonly [...T]
-+>ft4(['hello', 42]) : [string, number]
-+>ft4 : <T extends unknown[]>(t: [...T]) => [...T]
- >['hello', 42] : [string, number]
- >'hello' : "hello"
- >42 : 42
-@@= skipped -116, +116 lines =@@
- >Arrayify : Arrayify<T>
- 
- type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boolean[]]>;  // [string[], (number | undefined)[]?, Arrayify<U>, ...boolean[][]]
-->TM1 : readonly [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
-+>TM1 : [string[], ((number | undefined)[] | undefined)?, ...Arrayify<U>, ...boolean[][]]
- 
- type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;  // [string?, Partial<T>, number?]
- >TP1 : [(string | undefined)?, ...Partial<T>, (number | undefined)?]
-@@= skipped -11, +11 lines =@@
+ >[1, 2, 3] as const : readonly [1, 2, 3]
+ >[1, 2, 3] : readonly [1, 2, 3]
+@@= skipped -289, +289 lines =@@
  // Reverse mapping through mapped type applied to variadic tuple type
  
  declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;
@@ -126,100 +37,7 @@
  >[['abc'], [42], [true], ['def']] : [string[], number[], true[], string[]]
  >['abc'] : string[]
  >'abc' : "abc"
-@@= skipped -150, +150 lines =@@
- // to [...T] when T is constrained to a mutable array or tuple type.
- 
- function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
-->f11 : <T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) => void
-+>f11 : <T extends unknown[]>(t: T, m: [...T], r: [...T]) => void
- >t : T
- >m : [...T]
-->r : readonly [...T]
-+>r : [...T]
- 
-     t = m;
- >t = m : [...T]
-@@= skipped -11, +11 lines =@@
- >m : [...T]
- 
-     t = r;  // Error
-->t = r : readonly [...T]
-+>t = r : [...T]
- >t : T
-->r : readonly [...T]
-+>r : [...T]
- 
-     m = t;
- >m = t : T
-@@= skipped -10, +10 lines =@@
- >t : T
- 
-     m = r;  // Error
-->m = r : readonly [...T]
-+>m = r : [...T]
- >m : [...T]
-->r : readonly [...T]
-+>r : [...T]
- 
-     r = t;
- >r = t : T
-->r : readonly [...T]
-+>r : [...T]
- >t : T
- 
-     r = m;
- >r = m : [...T]
-->r : readonly [...T]
-+>r : [...T]
- >m : [...T]
- }
- 
- function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) {
-->f12 : <T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) => void
-+>f12 : <T extends readonly unknown[]>(t: T, m: [...T], r: [...T]) => void
- >t : T
- >m : [...T]
-->r : readonly [...T]
-+>r : [...T]
- 
-     t = m;
- >t = m : [...T]
-@@= skipped -27, +27 lines =@@
- >m : [...T]
- 
-     t = r;  // Error
-->t = r : readonly [...T]
-+>t = r : [...T]
- >t : T
-->r : readonly [...T]
-+>r : [...T]
- 
-     m = t;  // Error
- >m = t : T
-@@= skipped -10, +10 lines =@@
- >t : T
- 
-     m = r;  // Error
-->m = r : readonly [...T]
-+>m = r : [...T]
- >m : [...T]
-->r : readonly [...T]
-+>r : [...T]
- 
-     r = t;
- >r = t : T
-->r : readonly [...T]
-+>r : [...T]
- >t : T
- 
-     r = m;
- >r = m : [...T]
-->r : readonly [...T]
-+>r : [...T]
- >m : [...T]
- }
- 
-@@= skipped -431, +431 lines =@@
+@@= skipped -639, +639 lines =@@
  >0 : 0
  
  const c0 = curry(fn1);  // (a: number, b: string, c: boolean, d: string[]) => number

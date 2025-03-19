@@ -542,9 +542,9 @@ async function mainFindMany() {
 
 {
   const promises = [Promise.resolve(0)] as const
->promises : [Promise<number>]
->[Promise.resolve(0)] as const : [Promise<number>]
->[Promise.resolve(0)] : [Promise<number>]
+>promises : readonly [Promise<number>]
+>[Promise.resolve(0)] as const : readonly [Promise<number>]
+>[Promise.resolve(0)] : readonly [Promise<number>]
 >Promise.resolve(0) : Promise<number>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
@@ -558,7 +558,7 @@ async function mainFindMany() {
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
 >Promise : PromiseConstructor
 >all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>; }
->promises : [Promise<number>]
+>promises : readonly [Promise<number>]
 >then : <TResult1, TResult2>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >(results) => {    const first = results[0]    const second = results[1] // error  } : (results: [number]) => void
 >results : [number]

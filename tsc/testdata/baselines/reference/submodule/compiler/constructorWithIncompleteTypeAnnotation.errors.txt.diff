@@ -33,16 +33,7 @@
                        ~
  !!! error TS1005: ';' expected.
      
-@@= skipped -17, +15 lines =@@
-                     if (retValue != 0 ^=  {
-                                       ~~
- !!! error TS1005: ')' expected.
--!!! related TS1007 constructorWithIncompleteTypeAnnotation.ts:22:20: The parser expected to find a ')' to match the '(' token here.
-+!!! related TS1007: The parser expected to find a ')' to match the '(' token here.
-                                           ~
-     
-     
-@@= skipped -100, +100 lines =@@
+@@= skipped -117, +115 lines =@@
                  var undef = undefined;
      
                  var  _\uD4A5\u7204\uC316\uE59F  = local;

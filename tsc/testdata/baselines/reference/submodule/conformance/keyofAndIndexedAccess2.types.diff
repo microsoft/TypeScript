@@ -152,24 +152,13 @@
  >'abc' : "abc"
  }
  
-@@= skipped -48, +48 lines =@@
- // Repro from #32038
- 
- const actions = ['resizeTo', 'resizeBy'] as const;
-->actions : readonly ["resizeTo", "resizeBy"]
-->['resizeTo', 'resizeBy'] as const : readonly ["resizeTo", "resizeBy"]
-->['resizeTo', 'resizeBy'] : readonly ["resizeTo", "resizeBy"]
-+>actions : ["resizeTo", "resizeBy"]
-+>['resizeTo', 'resizeBy'] as const : ["resizeTo", "resizeBy"]
-+>['resizeTo', 'resizeBy'] : ["resizeTo", "resizeBy"]
- >'resizeTo' : "resizeTo"
+@@= skipped -55, +55 lines =@@
  >'resizeBy' : "resizeBy"
  
  for (const action of actions) {
 ->action : "resizeTo" | "resizeBy"
-->actions : readonly ["resizeTo", "resizeBy"]
 +>action : "resizeBy" | "resizeTo"
-+>actions : ["resizeTo", "resizeBy"]
+ >actions : readonly ["resizeTo", "resizeBy"]
  
  	window[action] = (x, y) => {
  >window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void

@@ -1,19 +1,6 @@
 --- old.isolatedDeclarationsAddUndefined.types
 +++ new.isolatedDeclarationsAddUndefined.types
-@@= skipped -7, +7 lines =@@
- >Bar : Bar
- 
-     c? = [2 as N] as const;
-->c : readonly [1] | undefined
-->[2 as N] as const : readonly [1]
-->[2 as N] : readonly [1]
-+>c : [1] | undefined
-+>[2 as N] as const : [1]
-+>[2 as N] : [1]
- >2 as N : 1
- >2 : 2
- 
-@@= skipped -22, +22 lines =@@
+@@= skipped -29, +29 lines =@@
  
  === file2.ts ===
  export function foo(p = (ip = 10, v: number): void => {}): void{

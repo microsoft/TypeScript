@@ -33,24 +33,24 @@ const c = { [bigNum]: 789 };
 >789 : 789
 
 const arr = [1, 2, 3] as const;
->arr : [1, 2, 3]
->[1, 2, 3] as const : [1, 2, 3]
->[1, 2, 3] : [1, 2, 3]
+>arr : readonly [1, 2, 3]
+>[1, 2, 3] as const : readonly [1, 2, 3]
+>[1, 2, 3] : readonly [1, 2, 3]
 >1 : 1
 >2 : 2
 >3 : 3
 
 const { 0: d } = arr;
 >d : 1
->arr : [1, 2, 3]
+>arr : readonly [1, 2, 3]
 
 const { "0": e } = arr;
 >e : 1
->arr : [1, 2, 3]
+>arr : readonly [1, 2, 3]
 
 const { 0n: f } = arr; // bigint should give an index error
 >f : any
->arr : [1, 2, 3]
+>arr : readonly [1, 2, 3]
 
 // BigInt cannot be used as an property name
 const x = { 0n: 123 };

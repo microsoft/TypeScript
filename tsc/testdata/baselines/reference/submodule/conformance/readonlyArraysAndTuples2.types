@@ -20,11 +20,11 @@ type T21 = readonly [number, number];
 >T21 : T21
 
 declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): readonly [string, string];
->f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: [string, string]) => [string, string]
+>f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => readonly [string, string]
 >ma : string[]
 >ra : readonly string[]
 >mt : [string, string]
->rt : [string, string]
+>rt : readonly [string, string]
 
 declare const someDec: any;
 >someDec : any
@@ -43,7 +43,7 @@ class A {
 >someDec : any
 
   k: readonly [string, number] = ['foo', 42];
->k : [string, number]
+>k : readonly [string, number]
 >['foo', 42] : [string, number]
 >'foo' : "foo"
 >42 : 42

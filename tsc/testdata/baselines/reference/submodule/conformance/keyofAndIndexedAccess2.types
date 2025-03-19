@@ -545,15 +545,15 @@ type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
 // Repro from #32038
 
 const actions = ['resizeTo', 'resizeBy'] as const;
->actions : ["resizeTo", "resizeBy"]
->['resizeTo', 'resizeBy'] as const : ["resizeTo", "resizeBy"]
->['resizeTo', 'resizeBy'] : ["resizeTo", "resizeBy"]
+>actions : readonly ["resizeTo", "resizeBy"]
+>['resizeTo', 'resizeBy'] as const : readonly ["resizeTo", "resizeBy"]
+>['resizeTo', 'resizeBy'] : readonly ["resizeTo", "resizeBy"]
 >'resizeTo' : "resizeTo"
 >'resizeBy' : "resizeBy"
 
 for (const action of actions) {
 >action : "resizeBy" | "resizeTo"
->actions : ["resizeTo", "resizeBy"]
+>actions : readonly ["resizeTo", "resizeBy"]
 
 	window[action] = (x, y) => {
 >window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void

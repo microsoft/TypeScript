@@ -20,7 +20,7 @@ function test1<T extends [number] | [string]>(args: T) {
 }
 
 function test2<T extends [number] | readonly [string]>(args: T) {
->test2 : <T extends [number] | [string]>(args: T) => void
+>test2 : <T extends [number] | readonly [string]>(args: T) => void
 >args : T
 
   const arr: any[] = [] as HomomorphicMappedType<T> // error

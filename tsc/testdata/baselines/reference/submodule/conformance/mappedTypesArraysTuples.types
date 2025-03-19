@@ -77,7 +77,7 @@ type T50 = Readonly<string[]>;
 >T50 : readonly string[]
 
 type T51 = Readonly<[number, number]>;
->T51 : [number, number]
+>T51 : readonly [number, number]
 
 type T52 = Partial<Readonly<string[]>>;
 >T52 : readonly (string | undefined)[]

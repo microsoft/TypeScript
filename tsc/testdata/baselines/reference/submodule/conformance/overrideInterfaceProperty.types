@@ -8,7 +8,7 @@ interface Mup<K, V> {
 interface MupConstructor {
     new(): Mup<any, any>;
     new<K, V>(entries?: readonly (readonly [K, V])[] | null): Mup<K, V>;
->entries : readonly [K, V][]
+>entries : readonly readonly [K, V][]
 
     readonly prototype: Mup<any, any>;
 >prototype : Mup<any, any>

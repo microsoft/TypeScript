@@ -75,16 +75,7 @@
      // missing assert:
      export type LocalInterface =
          & import("pkg", {"resolution-mode": "require"}).RequireInterface
-@@= skipped -19, +23 lines =@@
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                          ~~~~~~~~~~~~~~~~~
- !!! error TS1005: 'with' expected.
--!!! related TS1007 /other.ts:3:21: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                                           ~
- !!! error TS1005: ';' expected.
-                                                      ~
-@@= skipped -12, +12 lines =@@
+@@= skipped -31, +35 lines =@@
                                                          ~~~~~~~~~~~~~~~~
  !!! error TS2304: Cannot find name 'RequireInterface'.
          & import("pkg", {"resolution-mode": "import"}).ImportInterface;
@@ -98,24 +89,7 @@
      
      export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
                                       ~~~~~~~~~~~~~~~
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                                                     ~~~~~~~~~~~~~~~~~
- !!! error TS1005: 'with' expected.
--!!! related TS1007 /other.ts:6:48: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                                                                      ~
- !!! error TS1005: ';' expected.
-                                                                                 ~
-@@= skipped -30, +32 lines =@@
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                                                     ~~~~~~~~~~~~~~~~~
- !!! error TS1005: 'with' expected.
--!!! related TS1007 /other.ts:7:48: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                                                                      ~
- !!! error TS1005: ';' expected.
-                                                                                ~
-@@= skipped -35, +35 lines =@@
+@@= skipped -65, +67 lines =@@
  !!! error TS1455: `resolution-mode` is the only valid key for type import assertions.
                                                                                    ~~~~~~~~~~~~~~~
  !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
@@ -124,16 +98,7 @@
      // Array instead of object-y thing
      export type LocalInterface =
          & import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface
-@@= skipped -8, +8 lines =@@
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                         ~
- !!! error TS1005: '{' expected.
--!!! related TS1007 /other3.ts:3:21: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
-                                                           ~
-@@= skipped -10, +10 lines =@@
+@@= skipped -18, +18 lines =@@
                                                              ~~~~~~~~~~~~~~~~
  !!! error TS2304: Cannot find name 'RequireInterface'.
          & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
@@ -147,21 +112,7 @@
      
      export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
                                       ~~~~~~~~~~~~~
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                                                    ~
- !!! error TS1005: '{' expected.
--!!! related TS1007 /other3.ts:6:48: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
-                                                                                                        ~
-@@= skipped -20, +22 lines =@@
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                                                    ~
- !!! error TS1005: '{' expected.
--!!! related TS1007 /other3.ts:7:48: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@@= skipped -25, +27 lines =@@
  !!! error TS2538: Type '{ "resolution-mode": "import"; }' cannot be used as an index type.
                                                                                                       ~
  !!! error TS1005: ',' expected.
@@ -170,16 +121,7 @@
      // Indirected assertion objecty-thing - not allowed
      type Asserts1 = { assert: {"resolution-mode": "require"} };
      type Asserts2 = { assert: {"resolution-mode": "import"} };
-@@= skipped -16, +16 lines =@@
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                         ~~~~~~~~
- !!! error TS1005: '{' expected.
--!!! related TS1007 /other4.ts:6:21: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                         ~~~~~~~~
- !!! error TS2448: Block-scoped variable 'Asserts1' used before its declaration.
- !!! related TS2728 /other4.ts:9:48: 'Asserts1' is declared here.
-@@= skipped -12, +12 lines =@@
+@@= skipped -23, +23 lines =@@
  !!! error TS2448: Block-scoped variable 'RequireInterface' used before its declaration.
  !!! related TS2728 /other4.ts:9:58: 'RequireInterface' is declared here.
          & import("pkg", Asserts2).ImportInterface;
@@ -194,20 +136,3 @@
      
      export const a = (null as any as import("pkg", Asserts1).RequireInterface);
                                       ~~~~~~~~~~~~~
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                                                    ~~~~~~~~
- !!! error TS1005: '{' expected.
--!!! related TS1007 /other4.ts:9:48: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                                                            ~
- !!! error TS1005: ',' expected.
-                                                             ~
-@@= skipped -23, +25 lines =@@
- !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-                                                    ~~~~~~~~
- !!! error TS1005: '{' expected.
--!!! related TS1007 /other4.ts:10:48: The parser expected to find a '}' to match the '{' token here.
-+!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
-                                                            ~
- !!! error TS1005: ',' expected.
-                                                             ~

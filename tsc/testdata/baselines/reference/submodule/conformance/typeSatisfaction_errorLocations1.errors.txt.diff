@@ -28,7 +28,7 @@
  typeSatisfaction_errorLocations1.ts(29,18): error TS2322: Type 'string' is not assignable to type 'number'.
 -typeSatisfaction_errorLocations1.ts(31,20): error TS1360: Type 'readonly [10, "20"]' does not satisfy the expected type 'number[]'.
 -  The type 'readonly [10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
-+typeSatisfaction_errorLocations1.ts(31,20): error TS4104: The type '[10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
++typeSatisfaction_errorLocations1.ts(31,20): error TS4104: The type 'readonly [10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
  typeSatisfaction_errorLocations1.ts(34,9): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
  typeSatisfaction_errorLocations1.ts(36,9): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
  typeSatisfaction_errorLocations1.ts(39,3): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -69,7 +69,7 @@
                         ~~~~~~~~~
 -!!! error TS1360: Type 'readonly [10, "20"]' does not satisfy the expected type 'number[]'.
 -!!! error TS1360:   The type 'readonly [10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
-+!!! error TS4104: The type '[10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
++!!! error TS4104: The type 'readonly [10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
      
      declare function fn4(...args: number[]): void;
      fn4(10, ...(["10", "20"] satisfies readonly string[]));

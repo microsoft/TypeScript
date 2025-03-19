@@ -118,7 +118,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                          ~~~~~~~~~~~~~~~~~
 !!! error TS1005: 'with' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other.ts:3:21: The parser expected to find a '}' to match the '{' token here.
                                           ~
 !!! error TS1005: ';' expected.
                                                      ~
@@ -142,7 +142,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                     ~~~~~~~~~~~~~~~~~
 !!! error TS1005: 'with' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other.ts:6:48: The parser expected to find a '}' to match the '{' token here.
                                                                      ~
 !!! error TS1005: ';' expected.
                                                                                 ~
@@ -162,7 +162,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                     ~~~~~~~~~~~~~~~~~
 !!! error TS1005: 'with' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other.ts:7:48: The parser expected to find a '}' to match the '{' token here.
                                                                      ~
 !!! error TS1005: ';' expected.
                                                                                ~
@@ -205,7 +205,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                         ~
 !!! error TS1005: '{' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other3.ts:3:21: The parser expected to find a '}' to match the '{' token here.
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
                                                           ~
@@ -227,7 +227,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                    ~
 !!! error TS1005: '{' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other3.ts:6:48: The parser expected to find a '}' to match the '{' token here.
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
                                                                                                        ~
@@ -237,7 +237,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                    ~
 !!! error TS1005: '{' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other3.ts:7:48: The parser expected to find a '}' to match the '{' token here.
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2538: Type '{ "resolution-mode": "import"; }' cannot be used as an index type.
                                                                                                      ~
@@ -253,7 +253,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                         ~~~~~~~~
 !!! error TS1005: '{' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other4.ts:6:21: The parser expected to find a '}' to match the '{' token here.
                         ~~~~~~~~
 !!! error TS2448: Block-scoped variable 'Asserts1' used before its declaration.
 !!! related TS2728 /other4.ts:9:48: 'Asserts1' is declared here.
@@ -278,7 +278,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                    ~~~~~~~~
 !!! error TS1005: '{' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other4.ts:9:48: The parser expected to find a '}' to match the '{' token here.
                                                            ~
 !!! error TS1005: ',' expected.
                                                             ~
@@ -290,7 +290,7 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                    ~~~~~~~~
 !!! error TS1005: '{' expected.
-!!! related TS1007: The parser expected to find a '}' to match the '{' token here.
+!!! related TS1007 /other4.ts:10:48: The parser expected to find a '}' to match the '{' token here.
                                                            ~
 !!! error TS1005: ',' expected.
                                                             ~

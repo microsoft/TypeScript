@@ -18,8 +18,8 @@
 ->obj2.default : RequireInterface
 ->obj2 : typeof obj2
 ->default : RequireInterface
-+>[obj1, obj2.default] as const : [any, any]
-+>[obj1, obj2.default] : [any, any]
++>[obj1, obj2.default] as const : readonly [any, any]
++>[obj1, obj2.default] : readonly [any, any]
 +>obj1 : any
 +>obj2.default : any
 +>obj2 : RequireInterface

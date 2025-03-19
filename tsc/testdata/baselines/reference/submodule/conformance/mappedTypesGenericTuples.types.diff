@@ -1,9 +1,0 @@
---- old.mappedTypesGenericTuples.types
-+++ new.mappedTypesGenericTuples.types
-@@= skipped -85, +85 lines =@@
- >R1 : R1<T>
- 
- type R2<T> = Readonly<[...unknown[], T]>;  // readonly [...unknown[], T]
-->R2 : readonly [...unknown[], T]
-+>R2 : [...unknown[], T]
- 
