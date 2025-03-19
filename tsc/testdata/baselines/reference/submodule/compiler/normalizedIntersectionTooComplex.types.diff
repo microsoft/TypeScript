@@ -1,15 +1,6 @@
 --- old.normalizedIntersectionTooComplex.types
 +++ new.normalizedIntersectionTooComplex.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/normalizedIntersectionTooComplex.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === normalizedIntersectionTooComplex.ts ===
- // Repro from #30050
- 
-@@= skipped -24, +21 lines =@@
+@@= skipped -21, +21 lines =@@
  
  interface Big {
      "0": { common?: string; "0"?: number, ref?: Obj<Big["0"]> | Func<Big["0"]>; }

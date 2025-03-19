@@ -1,18 +1,6 @@
 --- old.largeTupleTypes.types
 +++ new.largeTupleTypes.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/largeTupleTypes.ts] ////
- 
--=== Performance Stats ===
--Assignability cache: 1,000
--Type Count: 25,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
- === largeTupleTypes.ts ===
- // Repro from #54491
- 
-@@= skipped -32, +26 lines =@@
+@@= skipped -26, +26 lines =@@
  >ArrayValidator : ArrayValidator<T, I>
  
      lengthRange<S extends number, E extends number>(start: S, endBefore: E): ArrayValidator<Exclude<ExpandSmallerTuples<UnshiftTuple<[...Tuple<I, E>]>>, ExpandSmallerTuples<UnshiftTuple<[...Tuple<I, S>]>>>>;

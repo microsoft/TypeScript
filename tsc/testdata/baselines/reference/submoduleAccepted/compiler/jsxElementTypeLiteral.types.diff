@@ -1,14 +1,6 @@
 --- old.jsxElementTypeLiteral.types
 +++ new.jsxElementTypeLiteral.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxElementTypeLiteral.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === jsxElementTypeLiteral.tsx ===
  /// <reference path="react16.d.ts" />
  import * as React from "react";
@@ -17,7 +9,7 @@
  
  declare global {
  >global : any
-@@= skipped -23, +17 lines =@@
+@@= skipped -15, +15 lines =@@
  
  // should be fine - `ElementType` accepts `div`
  let a = <div />;

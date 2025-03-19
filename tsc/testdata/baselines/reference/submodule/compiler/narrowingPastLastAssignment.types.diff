@@ -1,16 +1,6 @@
 --- old.narrowingPastLastAssignment.types
 +++ new.narrowingPastLastAssignment.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/narrowingPastLastAssignment.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === narrowingPastLastAssignment.ts ===
- function action(f: Function) {}
- >action : (f: Function) => void
-@@= skipped -70, +66 lines =@@
+@@= skipped -66, +66 lines =@@
  
      };
      let o = {

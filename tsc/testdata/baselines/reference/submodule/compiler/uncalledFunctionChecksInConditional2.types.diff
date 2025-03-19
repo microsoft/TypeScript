@@ -1,15 +1,6 @@
 --- old.uncalledFunctionChecksInConditional2.types
 +++ new.uncalledFunctionChecksInConditional2.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === uncalledFunctionChecksInConditional2.ts ===
- {
-   const perf = window.performance
-@@= skipped -13, +10 lines =@@
+@@= skipped -10, +10 lines =@@
    // Simplified
    if (
      perf &&

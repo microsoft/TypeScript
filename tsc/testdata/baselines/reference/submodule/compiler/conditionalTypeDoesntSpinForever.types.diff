@@ -1,16 +1,6 @@
 --- old.conditionalTypeDoesntSpinForever.types
 +++ new.conditionalTypeDoesntSpinForever.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/conditionalTypeDoesntSpinForever.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500 -> 5,000
--
- === conditionalTypeDoesntSpinForever.ts ===
- // A *self-contained* demonstration of the problem follows...
- // Test this by running `tsc --target es6` on the command-line, rather than through another build tool such as Gulp, Webpack, etc.
-@@= skipped -71, +67 lines =@@
+@@= skipped -67, +67 lines =@@
          buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>
  >buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}> : BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
  >buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) : BuildPubSubRecordType<SO_FAR & { name: TYPE; }>

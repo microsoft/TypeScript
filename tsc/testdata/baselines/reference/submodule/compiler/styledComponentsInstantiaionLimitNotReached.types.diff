@@ -1,14 +1,6 @@
 --- old.styledComponentsInstantiaionLimitNotReached.types
 +++ new.styledComponentsInstantiaionLimitNotReached.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
- 
--=== Performance Stats ===
--Assignability cache: 10,000
--Type Count: 25,000
--Instantiation count: 250,000 -> 500,000
--Symbol count: 100,000
--
+@@= skipped -2, +2 lines =@@
  === styledComponentsInstantiaionLimitNotReached.ts ===
  /// <reference path="react16.d.ts" />
  import * as React from "react";
@@ -17,7 +9,7 @@
  
  interface REACT_STATICS {
      childContextTypes: true;
-@@= skipped -253, +247 lines =@@
+@@= skipped -245, +245 lines =@@
      any
  >
      ? { children?: React.ReactNode }

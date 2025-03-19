@@ -1,16 +1,6 @@
 --- old.variadicTuples1.types
 +++ new.variadicTuples1.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === variadicTuples1.ts ===
- // Variadics in tuple types
- 
-@@= skipped -136, +132 lines =@@
+@@= skipped -132, +132 lines =@@
  }
  
  const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]

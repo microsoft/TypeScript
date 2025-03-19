@@ -1,17 +1,6 @@
 --- old.tailRecursiveConditionalTypes.types
 +++ new.tailRecursiveConditionalTypes.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/tailRecursiveConditionalTypes.ts] ////
- 
--=== Performance Stats ===
--Type Count: 25,000
--Instantiation count: 25,000
--Symbol count: 50,000
--
- === tailRecursiveConditionalTypes.ts ===
- type Trim<S extends string> =
- >Trim : Trim<S>
-@@= skipped -27, +22 lines =@@
+@@= skipped -22, +22 lines =@@
      S extends `${infer Char}${infer Rest}` ? GetCharsRec<Rest, Char | Acc> : Acc;
  
  type T20 = GetChars<'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'>;

@@ -1,12 +1,7 @@
 --- old.genericFunctionInference1.types
 +++ new.genericFunctionInference1.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/genericFunctionInference1.ts] ////
+@@= skipped -1, +1 lines =@@
  
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
  === genericFunctionInference1.ts ===
  declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) => B;
 ->pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A_1 extends any[], B_1, C>(ab: (...args: A_1) => B_1, bc: (b: B_1) => C): (...args: A_1) => C; <A_1 extends any[], B_1, C, D>(ab: (...args: A_1) => B_1, bc: (b: B_1) => C, cd: (c: C) => D): (...args: A_1) => D; }
@@ -21,7 +16,7 @@
  >ab : (...args: A) => B
  >args : A
  >bc : (b: B) => C
-@@= skipped -19, +15 lines =@@
+@@= skipped -14, +14 lines =@@
  >args : A
  
  declare function pipe<A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D;

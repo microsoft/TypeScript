@@ -1,15 +1,6 @@
 --- old.conditionalTypes1.types
 +++ new.conditionalTypes1.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 1,000
--
- === conditionalTypes1.ts ===
- type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
- >T00 : T00
-@@= skipped -175, +172 lines =@@
+@@= skipped -172, +172 lines =@@
  >T20 : T20
  
  type T21 = TypeName<any>;  // "string" | "number" | "boolean" | "undefined" | "function" | "object"

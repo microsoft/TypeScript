@@ -1,16 +1,6 @@
 --- old.flatArrayNoExcessiveStackDepth.types
 +++ new.flatArrayNoExcessiveStackDepth.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts] ////
- 
--=== Performance Stats ===
--Type Count: 2,500
--Instantiation count: 5,000
--
- === flatArrayNoExcessiveStackDepth.ts ===
- // Repro from #43493
- 
-@@= skipped -12, +8 lines =@@
+@@= skipped -8, +8 lines =@@
  const bar = foo.flatMap(bar => bar as Foo);
  >bar : string[]
  >foo.flatMap(bar => bar as Foo) : string[]

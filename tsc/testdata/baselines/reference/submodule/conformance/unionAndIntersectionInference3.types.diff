@@ -1,16 +1,6 @@
 --- old.unionAndIntersectionInference3.types
 +++ new.unionAndIntersectionInference3.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === unionAndIntersectionInference3.ts ===
- // Repro from #30720
- 
-@@= skipped -10, +6 lines =@@
+@@= skipped -6, +6 lines =@@
  >Maybe : Maybe<T>
  
  declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];

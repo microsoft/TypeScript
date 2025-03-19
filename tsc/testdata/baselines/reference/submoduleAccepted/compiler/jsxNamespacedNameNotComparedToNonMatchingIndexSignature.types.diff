@@ -1,15 +1,6 @@
 --- old.jsxNamespacedNameNotComparedToNonMatchingIndexSignature.types
 +++ new.jsxNamespacedNameNotComparedToNonMatchingIndexSignature.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 5,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
- === jsxNamespacedNameNotComparedToNonMatchingIndexSignature.tsx ===
+@@= skipped -3, +3 lines =@@
  /// <reference path="react16.d.ts" />
  
  declare module "react" {
@@ -18,7 +9,7 @@
  
      interface Attributes {
          [key: `do-${string}`]: Function;
-@@= skipped -21, +15 lines =@@
+@@= skipped -12, +12 lines =@@
  }
  
  export const tag = <div ns:thing="a"/>

@@ -1,15 +1,6 @@
 --- old.inferFromGenericFunctionReturnTypes3.types
 +++ new.inferFromGenericFunctionReturnTypes3.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === inferFromGenericFunctionReturnTypes3.ts ===
- // Repros from #5487
- 
-@@= skipped -101, +98 lines =@@
+@@= skipped -98, +98 lines =@@
  
  interface FolderContentItem {
      type: 'folder' | 'file';

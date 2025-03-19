@@ -1,16 +1,6 @@
 --- old.templateLiteralTypes4.types
 +++ new.templateLiteralTypes4.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/literal/templateLiteralTypes4.ts] ////
- 
--=== Performance Stats ===
--Assignability cache: 1,000
--Instantiation count: 1,000
--
- === templateLiteralTypes4.ts ===
- // infer from number
- type TNumber0 = "100" extends `${infer N extends number}` ? N : never; // 100
-@@= skipped -441, +437 lines =@@
+@@= skipped -437, +437 lines =@@
  >name : string
  
      readonly type: "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" | "u64" | "f32" | "f64";

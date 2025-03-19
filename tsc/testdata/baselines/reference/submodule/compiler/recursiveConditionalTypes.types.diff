@@ -1,17 +1,6 @@
 --- old.recursiveConditionalTypes.types
 +++ new.recursiveConditionalTypes.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
- 
--=== Performance Stats ===
--Type Count: 500,000
--Instantiation count: 500,000
--Symbol count: 1,000,000
--
- === recursiveConditionalTypes.ts ===
- // Awaiting promises
- 
-@@= skipped -18, +13 lines =@@
+@@= skipped -13, +13 lines =@@
  >MyPromise : MyPromise<T>
  
      then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;

@@ -1,17 +1,6 @@
 --- old.jsxGenericComponentWithSpreadingResultOfGenericFunction.types
 +++ new.jsxGenericComponentWithSpreadingResultOfGenericFunction.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
- === jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx ===
- /// <reference path="react16.d.ts" />
- 
+@@= skipped -5, +5 lines =@@
  // repro #51577
  
  declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T, K>;
@@ -26,7 +15,7 @@
  >names : readonly K[]
  >obj : T
  
-@@= skipped -30, +24 lines =@@
+@@= skipped -19, +19 lines =@@
  >props : T
  
  <GenericComponent {...omit(['bar'], otherProps)} />; // no error

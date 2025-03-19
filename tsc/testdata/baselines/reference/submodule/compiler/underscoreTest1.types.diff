@@ -1,15 +1,6 @@
 --- old.underscoreTest1.types
 +++ new.underscoreTest1.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/underscoreTest1.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === underscoreTest1_underscoreTests.ts ===
- /// <reference path="underscoreTest1_underscore.ts" />
- 
-@@= skipped -15, +12 lines =@@
+@@= skipped -12, +12 lines =@@
  _.each([1, 2, 3], (num) => alert(num.toString()));
  >_.each([1, 2, 3], (num) => alert(num.toString())) : void
  >_.each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }

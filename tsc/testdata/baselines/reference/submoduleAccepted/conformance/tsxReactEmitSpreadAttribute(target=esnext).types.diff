@@ -1,15 +1,6 @@
 --- old.tsxReactEmitSpreadAttribute(target=esnext).types
 +++ new.tsxReactEmitSpreadAttribute(target=esnext).types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/jsx/tsxReactEmitSpreadAttribute.ts] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 5,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
- === test.tsx ===
+@@= skipped -3, +3 lines =@@
  /// <reference path="react16.d.ts" />
  
  export function T1(a: any) {
@@ -43,7 +34,7 @@
  >"T2" : "T2"
  >a : any
  >b : any
-@@= skipped -37, +31 lines =@@
+@@= skipped -28, +28 lines =@@
  }
  
  export function T3(a: any, b: any) {

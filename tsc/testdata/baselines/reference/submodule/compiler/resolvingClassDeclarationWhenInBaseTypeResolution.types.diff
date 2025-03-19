@@ -1,14 +1,6 @@
 --- old.resolvingClassDeclarationWhenInBaseTypeResolution.types
 +++ new.resolvingClassDeclarationWhenInBaseTypeResolution.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
- 
--=== Performance Stats ===
--Type Count: 2,500
--
- === resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
- module rionegrensis {
- >rionegrensis : typeof rionegrensis
+@@= skipped -5, +5 lines =@@
  
    export class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
  >caniventer : caniventer
@@ -20,7 +12,7 @@
  >petrophilus : any
  >julianae : any
  
-@@= skipped -23, +20 lines =@@
+@@= skipped -15, +15 lines =@@
  >x : caniventer
  
      uchidai() : lavali.xanthognathus { var x : lavali.xanthognathus; () => { var y = this; }; return x; }

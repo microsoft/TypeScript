@@ -1,16 +1,6 @@
 --- old.implicitAnyGenericTypeInference.types
 +++ new.implicitAnyGenericTypeInference.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/implicitAnyGenericTypeInference.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === implicitAnyGenericTypeInference.ts ===
- interface Comparer<T> {
-     compareTo<U>(x: T, y: U): U;
-@@= skipped -52, +48 lines =@@
+@@= skipped -48, +48 lines =@@
  >async () => null : () => Promise<any>
  
  declare function f3<T>(cb: () => Generator<T>): void;

@@ -1,13 +1,6 @@
 --- old.jsxComplexSignatureHasApplicabilityError.types
 +++ new.jsxComplexSignatureHasApplicabilityError.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === jsxComplexSignatureHasApplicabilityError.tsx ===
+@@= skipped -3, +3 lines =@@
  /// <reference path="react16.d.ts" />
  
  import * as React from "react";
@@ -16,7 +9,7 @@
  
  
  interface Props<T extends OptionValues> {
-@@= skipped -15, +11 lines =@@
+@@= skipped -8, +8 lines =@@
  >value : T | Option<T> | undefined
  
      onChange?(value: Option<T> | undefined): void;

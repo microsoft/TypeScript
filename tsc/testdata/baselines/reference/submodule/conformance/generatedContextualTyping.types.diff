@@ -1,15 +1,6 @@
 --- old.generatedContextualTyping.types
 +++ new.generatedContextualTyping.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === generatedContextualTyping.ts ===
- class Base { private p; }
- >Base : Base
-@@= skipped -1056, +1053 lines =@@
+@@= skipped -1053, +1053 lines =@@
  >d2 : Derived2
  
  function x124(parm: { (): Base[]; } = () => [d1, d2]) { }

@@ -1,15 +1,6 @@
 --- old.declarationsAndAssignments.types
 +++ new.declarationsAndAssignments.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
- 
--=== Performance Stats ===
--Type Count: 500 -> 1,000
--
- === declarationsAndAssignments.ts ===
- function f0() {
- >f0 : () => void
-@@= skipped -33, +30 lines =@@
+@@= skipped -30, +30 lines =@@
  >"hello" : "hello"
  
      var [,, x] = [0, 1, 2];

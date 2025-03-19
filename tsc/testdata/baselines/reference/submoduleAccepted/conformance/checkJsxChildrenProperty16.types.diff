@@ -1,17 +1,6 @@
 --- old.checkJsxChildrenProperty16.types
 +++ new.checkJsxChildrenProperty16.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/jsx/checkJsxChildrenProperty16.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
- === checkJsxChildrenProperty16.tsx ===
- /// <reference path="react16.d.ts" />
- 
+@@= skipped -5, +5 lines =@@
  // repro from #53493
  
  import React = require('react');
@@ -20,7 +9,7 @@
  
  export type Props =
  >Props : Props
-@@= skipped -34, +28 lines =@@
+@@= skipped -23, +23 lines =@@
      };
  
  export declare function Foo(props: Props): JSX.Element;

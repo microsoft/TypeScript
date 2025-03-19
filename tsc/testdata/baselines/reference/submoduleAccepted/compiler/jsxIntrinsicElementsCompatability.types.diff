@@ -1,14 +1,6 @@
 --- old.jsxIntrinsicElementsCompatability.types
 +++ new.jsxIntrinsicElementsCompatability.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === jsxIntrinsicElementsCompatability.tsx ===
  /// <reference path="react16.d.ts" />
  import * as React from "react";

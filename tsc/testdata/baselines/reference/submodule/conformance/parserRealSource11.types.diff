@@ -1,15 +1,6 @@
 --- old.parserRealSource11.types
 +++ new.parserRealSource11.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === parserRealSource11.ts ===
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
-@@= skipped -719, +716 lines =@@
+@@= skipped -716, +716 lines =@@
  >name : string
  >charAt : (pos: number) => string
  >i : number

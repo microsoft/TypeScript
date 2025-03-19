@@ -1,16 +1,6 @@
 --- old.declarationEmitHigherOrderRetainedGenerics.types
 +++ new.declarationEmitHigherOrderRetainedGenerics.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/declarationEmitHigherOrderRetainedGenerics.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500 -> 5,000
--
- === declarationEmitHigherOrderRetainedGenerics.ts ===
- export interface TypeLambda {
-     readonly In: unknown
-@@= skipped -114, +110 lines =@@
+@@= skipped -110, +110 lines =@@
  >F : F
  
          readonly In: Types.Contravariant<In>

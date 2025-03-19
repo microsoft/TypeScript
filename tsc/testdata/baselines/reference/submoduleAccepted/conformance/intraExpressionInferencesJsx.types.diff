@@ -1,18 +1,6 @@
 --- old.intraExpressionInferencesJsx.types
 +++ new.intraExpressionInferencesJsx.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesJsx.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
- === intraExpressionInferencesJsx.tsx ===
- /// <reference path="react16.d.ts" />
- 
-@@= skipped -43, +37 lines =@@
+@@= skipped -37, +37 lines =@@
  
      | ({ kind: "a"; func?(): Partial<A> } & A)
  >kind : "a"

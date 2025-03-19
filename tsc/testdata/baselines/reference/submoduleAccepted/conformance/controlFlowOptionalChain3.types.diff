@@ -1,17 +1,6 @@
 --- old.controlFlowOptionalChain3.types
 +++ new.controlFlowOptionalChain3.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/controlFlow/controlFlowOptionalChain3.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
- === controlFlowOptionalChain3.tsx ===
- /// <reference path="react16.d.ts" />
- 
+@@= skipped -5, +5 lines =@@
  // https://github.com/microsoft/TypeScript/issues/56482
  
  import React from "react";
@@ -20,7 +9,7 @@
  
  interface Foo {
    bar: boolean;
-@@= skipped -57, +51 lines =@@
+@@= skipped -46, +46 lines =@@
  }
  
  function Test3({ foo }: { foo: Foo | undefined }) {

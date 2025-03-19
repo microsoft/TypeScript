@@ -1,12 +1,7 @@
 --- old.jsxInferenceProducesLiteralAsExpected.types
 +++ new.jsxInferenceProducesLiteralAsExpected.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
+@@= skipped -1, +1 lines =@@
  
--=== Performance Stats ===
--Type Count: 2,500
--Instantiation count: 2,500
--
  === jsxInferenceProducesLiteralAsExpected.tsx ===
  import React = require("react");
 ->React : typeof React
@@ -14,7 +9,7 @@
  
  type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
  >FunctionPropertyNames : FunctionPropertyNames<T>
-@@= skipped -33, +29 lines =@@
+@@= skipped -28, +28 lines =@@
  >foo : FunctionPropertyNames<T>
  }
  function Test<T>(props: TestProps<T>) { return <></>; }

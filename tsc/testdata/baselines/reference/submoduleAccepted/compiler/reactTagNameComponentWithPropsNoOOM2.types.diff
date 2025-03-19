@@ -1,15 +1,6 @@
 --- old.reactTagNameComponentWithPropsNoOOM2.types
 +++ new.reactTagNameComponentWithPropsNoOOM2.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM2.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 5,000
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 100,000
--
- === reactTagNameComponentWithPropsNoOOM2.tsx ===
+@@= skipped -3, +3 lines =@@
  /// <reference path="react16.d.ts" />
  
  import * as React from "react";
@@ -22,7 +13,7 @@
  >React : any
  
  const classes = "";
-@@= skipped -20, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >"" : ""
  
  const rest: React.HTMLAttributes<HTMLElement> = {};

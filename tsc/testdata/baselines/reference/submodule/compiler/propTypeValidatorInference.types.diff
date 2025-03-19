@@ -1,15 +1,6 @@
 --- old.propTypeValidatorInference.types
 +++ new.propTypeValidatorInference.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/propTypeValidatorInference.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 2,500
--
- === node_modules/prop-types/index.d.ts ===
- export const nominalTypeHack: unique symbol;
- >nominalTypeHack : unique symbol
-@@= skipped -79, +76 lines =@@
+@@= skipped -76, +76 lines =@@
  
  === file.ts ===
  import * as PropTypes from "prop-types";

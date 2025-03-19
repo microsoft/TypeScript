@@ -1,14 +1,6 @@
 --- old.tsxUnionMemberChecksFilterDataProps.types
 +++ new.tsxUnionMemberChecksFilterDataProps.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/tsxUnionMemberChecksFilterDataProps.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 5,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === tsxUnionMemberChecksFilterDataProps.tsx ===
  /// <reference path="react16.d.ts" />
  import React, { ReactElement } from "react";
@@ -22,7 +14,7 @@
  >props : { fixed?: boolean; } | { value?: number; }
  >fixed : boolean
  >value : number
-@@= skipped -24, +18 lines =@@
+@@= skipped -16, +16 lines =@@
  >value : number
  
  const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);

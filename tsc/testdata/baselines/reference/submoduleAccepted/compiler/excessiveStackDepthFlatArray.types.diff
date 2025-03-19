@@ -1,16 +1,6 @@
 --- old.excessiveStackDepthFlatArray.types
 +++ new.excessiveStackDepthFlatArray.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/excessiveStackDepthFlatArray.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === index.tsx ===
- interface MiddlewareArray<T> extends Array<T> {}
- declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
-@@= skipped -51, +47 lines =@@
+@@= skipped -47, +47 lines =@@
  declare namespace JSX {
    interface IntrinsicElements {
      ul: React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;

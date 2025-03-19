@@ -1,16 +1,6 @@
 --- old.generatorYieldContextualType.types
 +++ new.generatorYieldContextualType.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/generators/generatorYieldContextualType.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === generatorYieldContextualType.ts ===
- declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
- >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
-@@= skipped -24, +20 lines =@@
+@@= skipped -20, +20 lines =@@
  });
  
  declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>): void;

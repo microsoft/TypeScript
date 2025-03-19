@@ -1,15 +1,6 @@
 --- old.keyofAndIndexedAccess2.types
 +++ new.keyofAndIndexedAccess2.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === keyofAndIndexedAccess2.ts ===
- function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
- >f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: "a", k1: "a" | "b", k2: "a" | "b" | "c") => void
-@@= skipped -168, +165 lines =@@
+@@= skipped -165, +165 lines =@@
  }
  
  function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {

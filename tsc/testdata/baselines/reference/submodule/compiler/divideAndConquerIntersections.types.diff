@@ -1,16 +1,6 @@
 --- old.divideAndConquerIntersections.types
 +++ new.divideAndConquerIntersections.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/divideAndConquerIntersections.ts] ////
- 
--=== Performance Stats ===
--Type Count: 2,500
--Instantiation count: 10,000
--
- === divideAndConquerIntersections.ts ===
- type QQ<T extends string[]> =
- >QQ : QQ<T>
-@@= skipped -112, +108 lines =@@
+@@= skipped -108, +108 lines =@@
  >up : U
  
  export function matchFilter<U extends Update, Q extends FilterQuery>(

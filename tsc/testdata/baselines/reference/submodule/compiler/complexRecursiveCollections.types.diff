@@ -1,18 +1,6 @@
 --- old.complexRecursiveCollections.types
 +++ new.complexRecursiveCollections.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/complexRecursiveCollections.ts] ////
- 
--=== Performance Stats ===
--Assignability cache: 10,000
--Type Count: 50,000
--Instantiation count: 100,000
--Symbol count: 100,000
--
- === complex.ts ===
- interface Ara<T> { t: T }
- >t : T
-@@= skipped -27, +21 lines =@@
+@@= skipped -21, +21 lines =@@
  
      // these seem necessary to push it over the top for memory usage
      reduce<R>(reducer: (reduction: R, value: V, key: K, iter: this) => R, initialReduction: R, context?: any): R;

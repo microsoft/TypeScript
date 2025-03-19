@@ -1,14 +1,6 @@
 --- old.spellingSuggestionJSXAttribute.types
 +++ new.spellingSuggestionJSXAttribute.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 5,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === spellingSuggestionJSXAttribute.tsx ===
  /// <reference path="react16.d.ts" />
  import * as React from "react";
@@ -17,7 +9,7 @@
  
  function MyComp2(props: { className?: string, htmlFor?: string }) {
  >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
-@@= skipped -21, +15 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
  >MyComp : MyComp

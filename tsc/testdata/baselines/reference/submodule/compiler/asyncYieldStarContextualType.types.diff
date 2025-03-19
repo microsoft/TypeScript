@@ -1,16 +1,6 @@
 --- old.asyncYieldStarContextualType.types
 +++ new.asyncYieldStarContextualType.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/asyncYieldStarContextualType.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
- === asyncYieldStarContextualType.ts ===
- // https://github.com/microsoft/TypeScript/issues/57903
- interface Result<T, E> {
-@@= skipped -47, +43 lines =@@
+@@= skipped -43, +43 lines =@@
  >test1 : Result<Author, "NOT_FOUND_AUTHOR">
  >await authorPromise.then(mapper) : Result<Author, "NOT_FOUND_AUTHOR">
  >authorPromise.then(mapper) : Promise<Result<Author, "NOT_FOUND_AUTHOR">>

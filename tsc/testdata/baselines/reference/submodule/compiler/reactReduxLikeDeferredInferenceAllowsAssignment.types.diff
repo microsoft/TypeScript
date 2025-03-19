@@ -1,15 +1,6 @@
 --- old.reactReduxLikeDeferredInferenceAllowsAssignment.types
 +++ new.reactReduxLikeDeferredInferenceAllowsAssignment.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 2,500
--
- === reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
- declare class Component<P> {
- >Component : Component<P>
-@@= skipped -14, +11 lines =@@
+@@= skipped -11, +11 lines =@@
  >context : any
  
    readonly props: Readonly<P> & Readonly<{ children?: {} }>;

@@ -1,15 +1,6 @@
 --- old.infiniteConstraints.types
 +++ new.infiniteConstraints.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/infiniteConstraints.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 2,500
--
- === infiniteConstraints.ts ===
- // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
- 
-@@= skipped -19, +16 lines =@@
+@@= skipped -16, +16 lines =@@
  >a : string
  
  declare function myBug<

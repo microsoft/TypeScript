@@ -1,15 +1,6 @@
 --- old.jsxIssuesErrorWhenTagExpectsTooManyArguments.types
 +++ new.jsxIssuesErrorWhenTagExpectsTooManyArguments.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 5,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
- === jsxIssuesErrorWhenTagExpectsTooManyArguments.tsx ===
+@@= skipped -3, +3 lines =@@
  /// <reference path="react16.d.ts" />
  
  import * as React from "react";
@@ -18,7 +9,7 @@
  
  interface MyProps {
      x: number;
-@@= skipped -17, +11 lines =@@
+@@= skipped -8, +8 lines =@@
  }
  
  function MyComp4(props: MyProps, context: any, bad: any, verybad: any) {

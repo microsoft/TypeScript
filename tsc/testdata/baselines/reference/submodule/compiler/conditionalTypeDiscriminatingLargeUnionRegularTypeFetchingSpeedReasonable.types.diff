@@ -1,18 +1,6 @@
 --- old.conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.types
 +++ new.conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts] ////
- 
--=== Performance Stats ===
--Strict subtype cache: 2,500
--Assignability cache: 10,000
--Type Count: 10,000
--Instantiation count: 100,000
--
- === conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts ===
- type BigUnion =
- >BigUnion : BigUnion
-@@= skipped -16019, +16013 lines =@@
+@@= skipped -16013, +16013 lines =@@
  >ChildrenOf : ChildrenOf<T>
  
  export function makeThing<T extends BigUnion['name']>(

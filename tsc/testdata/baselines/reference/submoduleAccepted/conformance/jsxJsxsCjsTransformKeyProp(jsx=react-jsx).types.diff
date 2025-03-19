@@ -1,18 +1,6 @@
 --- old.jsxJsxsCjsTransformKeyProp(jsx=react-jsx).types
 +++ new.jsxJsxsCjsTransformKeyProp(jsx=react-jsx).types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyProp.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
- === jsxJsxsCjsTransformKeyProp.tsx ===
- /// <reference path="react16.d.ts" />
- const props = { answer: 42 }
-@@= skipped -14, +8 lines =@@
+@@= skipped -8, +8 lines =@@
  >42 : 42
  
  const a = <div key="foo" {...props}>text</div>;

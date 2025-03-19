@@ -1,16 +1,6 @@
 --- old.templateLiteralTypes1.types
 +++ new.templateLiteralTypes1.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/literal/templateLiteralTypes1.ts] ////
- 
--=== Performance Stats ===
--Type Count: 10,000
--Instantiation count: 2,500
--
- === templateLiteralTypes1.ts ===
- // Template types example from #12754
- 
-@@= skipped -35, +31 lines =@@
+@@= skipped -31, +31 lines =@@
  >EventName : `${S}Changed`
  
  type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;

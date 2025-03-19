@@ -1,13 +1,6 @@
 --- old.promisePermutations2.types
 +++ new.promisePermutations2.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/promisePermutations2.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 2,500 -> 10,000
--
- === promisePermutations2.ts ===
- // same as promisePermutations but without the same overloads in Promise<T>
+@@= skipped -4, +4 lines =@@
  
  interface Promise<T> {
      then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
@@ -16,7 +9,7 @@
  >success : (value: T) => U
  >value : T
  >error : (error: any) => U
-@@= skipped -27, +24 lines =@@
+@@= skipped -20, +20 lines =@@
  
  interface IPromise<T> {
      then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>;

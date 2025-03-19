@@ -1,15 +1,6 @@
 --- old.awaitedType.types
 +++ new.awaitedType.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/awaitedType.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 25,000
--
- === awaitedType.ts ===
- type T1 = Awaited<number>;
- >T1 : number
-@@= skipped -122, +119 lines =@@
+@@= skipped -119, +119 lines =@@
      ] = await Promise.all([
  >await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
  >Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>

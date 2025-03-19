@@ -1,16 +1,6 @@
 --- old.deepComparisons.types
 +++ new.deepComparisons.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/deepComparisons.ts] ////
- 
--=== Performance Stats ===
--Type Count: 2,500
--Instantiation count: 2,500
--
- === deepComparisons.ts ===
- function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
- >f1 : <T, K1 extends keyof T, K2 extends keyof T[K1]>() => void
-@@= skipped -81, +77 lines =@@
+@@= skipped -77, +77 lines =@@
  );
  
  declare function f<T = any>(): F<T>;

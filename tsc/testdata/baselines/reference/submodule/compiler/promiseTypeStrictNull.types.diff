@@ -1,15 +1,6 @@
 --- old.promiseTypeStrictNull.types
 +++ new.promiseTypeStrictNull.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/promiseTypeStrictNull.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 2,500 -> 5,000
--
- === promiseTypeStrictNull.ts ===
- declare var p: Promise<boolean>;
- >p : Promise<boolean>
-@@= skipped -34, +31 lines =@@
+@@= skipped -31, +31 lines =@@
  }
  
  async function C() {

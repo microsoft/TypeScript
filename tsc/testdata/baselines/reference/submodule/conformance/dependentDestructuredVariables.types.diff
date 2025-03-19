@@ -1,16 +1,6 @@
 --- old.dependentDestructuredVariables.types
 +++ new.dependentDestructuredVariables.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
- 
--=== Performance Stats ===
--Type Count: 2,500
--Instantiation count: 5,000
--
- === dependentDestructuredVariables.ts ===
- type Action =
- >Action : Action
-@@= skipped -16, +12 lines =@@
+@@= skipped -12, +12 lines =@@
  >payload : string
  
  function f10({ kind, payload }: Action) {

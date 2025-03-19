@@ -1,14 +1,6 @@
 --- old.jsxFragmentFactoryNoUnusedLocals.types
 +++ new.jsxFragmentFactoryNoUnusedLocals.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 5,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === jsxFragmentFactoryNoUnusedLocals.tsx ===
  /// <reference path="react16.d.ts" />
  import { Fragment, createElement } from "react"
@@ -19,7 +11,7 @@
  
  type CounterProps = {
  >CounterProps : CounterProps
-@@= skipped -19, +13 lines =@@
+@@= skipped -11, +11 lines =@@
  }
  
  export function Counter({ count = 0 }: CounterProps) {

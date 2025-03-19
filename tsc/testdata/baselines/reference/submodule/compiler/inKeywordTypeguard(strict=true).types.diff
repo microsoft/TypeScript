@@ -1,15 +1,6 @@
 --- old.inKeywordTypeguard(strict=true).types
 +++ new.inKeywordTypeguard(strict=true).types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/inKeywordTypeguard.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === inKeywordTypeguard.ts ===
- class A { a: string; }
- >A : A
-@@= skipped -444, +441 lines =@@
+@@= skipped -441, +441 lines =@@
  >window : Window & typeof globalThis
  
          window.ontouchstart

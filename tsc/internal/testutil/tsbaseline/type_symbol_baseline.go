@@ -61,10 +61,23 @@ func DoTypeAndSymbolBaseline(
 			var sb strings.Builder
 			sb.Grow(len(s))
 
+			perfStats := false
 			for line := range strings.SplitSeq(s, "\n") {
 				if isTypeBaselineNodeReuseLine(line) {
 					continue
 				}
+
+				if !perfStats && strings.HasPrefix(line, "=== Performance Stats ===") {
+					perfStats = true
+					continue
+				} else if perfStats {
+					if strings.HasPrefix(line, "=== ") {
+						perfStats = false
+					} else {
+						continue
+					}
+				}
+
 				sb.WriteString(line)
 				sb.WriteString("\n")
 			}

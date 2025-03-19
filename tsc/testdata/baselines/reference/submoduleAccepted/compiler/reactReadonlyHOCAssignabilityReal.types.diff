@@ -1,14 +1,6 @@
 --- old.reactReadonlyHOCAssignabilityReal.types
 +++ new.reactReadonlyHOCAssignabilityReal.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === reactReadonlyHOCAssignabilityReal.tsx ===
  /// <reference path="react16.d.ts" />
  import * as React from "react";
@@ -23,7 +15,7 @@
  >React : any
  >name : string
  >React : any
-@@= skipped -20, +14 lines =@@
+@@= skipped -12, +12 lines =@@
      return class OuterComponent extends React.Component<P> {
  >class OuterComponent extends React.Component<P> {        render() {            return <Inner {...this.props} name="Matt"/>;        }    } : typeof OuterComponent
  >OuterComponent : typeof OuterComponent

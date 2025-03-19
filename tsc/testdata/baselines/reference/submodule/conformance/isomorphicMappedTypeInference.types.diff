@@ -1,15 +1,6 @@
 --- old.isomorphicMappedTypeInference.types
 +++ new.isomorphicMappedTypeInference.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 2,500
--
- === isomorphicMappedTypeInference.ts ===
- type Box<T> = {
- >Box : Box<T>
-@@= skipped -55, +52 lines =@@
+@@= skipped -52, +52 lines =@@
  >result : Boxified<T>
  >k : Extract<keyof T, string>
  >box(obj[k]) : Box<T[Extract<keyof T, string>]>

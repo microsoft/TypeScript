@@ -1,12 +1,7 @@
 --- old.tsxResolveExternalModuleExportsTypes.types
 +++ new.tsxResolveExternalModuleExportsTypes.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/tsxResolveExternalModuleExportsTypes.ts] ////
+@@= skipped -1, +1 lines =@@
  
--=== Performance Stats ===
--Type Count: 2,500
--Instantiation count: 1,000
--
  === /node_modules/@types/a/index.d.ts ===
  declare var a: a.Foo;
 ->a : import("/node_modules/@types/a/index.d.ts").Foo
@@ -27,7 +22,7 @@
  
  declare module 'a' {
  >'a' : Foo
-@@= skipped -34, +30 lines =@@
+@@= skipped -29, +29 lines =@@
  >Test : null
  
  const Foo = (<h1></h1>);

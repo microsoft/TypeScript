@@ -1,18 +1,6 @@
 --- old.errorInfoForRelatedIndexTypesNoConstraintElaboration.types
 +++ new.errorInfoForRelatedIndexTypesNoConstraintElaboration.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/errorInfoForRelatedIndexTypesNoConstraintElaboration.ts] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 250,000
--Symbol count: 100,000
--
- === errorInfoForRelatedIndexTypesNoConstraintElaboration.ts ===
- /// <reference path="react16.d.ts" />
- 
-@@= skipped -17, +11 lines =@@
+@@= skipped -11, +11 lines =@@
  >M : () => void
  
          let c1: JSX.IntrinsicElements[T1] = {};

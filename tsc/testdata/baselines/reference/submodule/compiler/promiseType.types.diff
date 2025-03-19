@@ -1,15 +1,6 @@
 --- old.promiseType.types
 +++ new.promiseType.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/promiseType.ts] ////
- 
--=== Performance Stats ===
--Instantiation count: 2,500 -> 5,000
--
- === promiseType.ts ===
- declare var p: Promise<boolean>;
- >p : Promise<boolean>
-@@= skipped -34, +31 lines =@@
+@@= skipped -31, +31 lines =@@
  }
  
  async function C() {

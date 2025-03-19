@@ -1,15 +1,6 @@
 --- old.correlatedUnions.types
 +++ new.correlatedUnions.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/correlatedUnions.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === correlatedUnions.ts ===
- // Various repros from #30581
- 
-@@= skipped -68, +65 lines =@@
+@@= skipped -65, +65 lines =@@
  >v => v.toExponential() : (v: number) => string
  >v : number
  >v.toExponential() : string

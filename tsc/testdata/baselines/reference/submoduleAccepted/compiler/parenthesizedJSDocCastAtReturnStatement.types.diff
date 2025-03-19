@@ -1,12 +1,6 @@
 --- old.parenthesizedJSDocCastAtReturnStatement.types
 +++ new.parenthesizedJSDocCastAtReturnStatement.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/parenthesizedJSDocCastAtReturnStatement.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--Instantiation count: 2,500
--
+@@= skipped -2, +2 lines =@@
  === index.js ===
  /** @type {Map<string, string | Set<string>>} */
  const cache = new Map()
@@ -15,7 +9,7 @@
  >new Map() : Map<any, any>
  >Map : MapConstructor
  
-@@= skipped -15, +11 lines =@@
+@@= skipped -9, +9 lines =@@
   * @returns {() => string}
   */
  const getStringGetter = (key) => {

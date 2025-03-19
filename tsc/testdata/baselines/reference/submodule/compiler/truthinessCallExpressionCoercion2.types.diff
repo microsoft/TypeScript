@@ -1,15 +1,6 @@
 --- old.truthinessCallExpressionCoercion2.types
 +++ new.truthinessCallExpressionCoercion2.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/truthinessCallExpressionCoercion2.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === truthinessCallExpressionCoercion2.ts ===
- declare class A {
- >A : A
-@@= skipped -18, +15 lines =@@
+@@= skipped -15, +15 lines =@@
  }
  
  function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {

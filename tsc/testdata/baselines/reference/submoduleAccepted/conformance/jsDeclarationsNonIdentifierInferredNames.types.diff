@@ -1,14 +1,6 @@
 --- old.jsDeclarationsNonIdentifierInferredNames.types
 +++ new.jsDeclarationsNonIdentifierInferredNames.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.ts] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 5,000
--Instantiation count: 50,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === jsDeclarationsNonIdentifierInferredNames.jsx ===
  /// <reference path="react16.d.ts" />
  import * as React from "react";

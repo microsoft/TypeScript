@@ -1,16 +1,6 @@
 --- old.multiline.types
 +++ new.multiline.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/directives/multiline.tsx] ////
- 
--=== Performance Stats ===
--Type Count: 2,500
--Instantiation count: 2,500
--
- === a.ts ===
- export const texts: string[] = [];
- >texts : string[]
-@@= skipped -37, +33 lines =@@
+@@= skipped -33, +33 lines =@@
  
  === b.tsx ===
  import * as React from "react";

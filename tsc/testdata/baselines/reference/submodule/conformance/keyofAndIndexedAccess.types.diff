@@ -1,15 +1,6 @@
 --- old.keyofAndIndexedAccess.types
 +++ new.keyofAndIndexedAccess.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts] ////
- 
--=== Performance Stats ===
--Type Count: 1,000
--
- === keyofAndIndexedAccess.ts ===
- class Shape {
- >Shape : Shape
-@@= skipped -41, +38 lines =@@
+@@= skipped -38, +38 lines =@@
  >Options : Options
  
      visible: "yes" | "no";

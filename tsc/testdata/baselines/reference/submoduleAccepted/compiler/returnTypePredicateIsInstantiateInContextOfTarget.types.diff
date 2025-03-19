@@ -1,14 +1,6 @@
 --- old.returnTypePredicateIsInstantiateInContextOfTarget.types
 +++ new.returnTypePredicateIsInstantiateInContextOfTarget.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/returnTypePredicateIsInstantiateInContextOfTarget.tsx] ////
- 
--=== Performance Stats ===
--Assignability cache: 2,500
--Type Count: 10,000
--Instantiation count: 100,000
--Symbol count: 50,000
--
+@@= skipped -2, +2 lines =@@
  === returnTypePredicateIsInstantiateInContextOfTarget.tsx ===
  /// <reference path="react16.d.ts" />
  import * as React from "react";
@@ -26,7 +18,7 @@
  >isAny : <T>(obj: any) => obj is T
  >obj : any
  
-@@= skipped -40, +34 lines =@@
+@@= skipped -32, +32 lines =@@
  }
  
  const TestRender = () => <TestComponent />;
