@@ -233,6 +233,11 @@ func (p *Program) GetTypeChecker() *checker.Checker {
 	return p.checkers[0]
 }
 
+func (p *Program) GetTypeCheckers() []*checker.Checker {
+	p.createCheckers()
+	return p.checkers
+}
+
 // Return a checker for the given file. We may have multiple checkers in concurrent scenarios and this
 // method returns the checker that was tasked with checking the file. Note that it isn't possible to mix
 // types obtained from different checkers, so only non-type data (such as diagnostics or string

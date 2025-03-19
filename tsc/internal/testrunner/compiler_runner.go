@@ -2,6 +2,7 @@ package runner
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -9,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/testutil"
@@ -18,6 +20,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
+	"gotest.tools/v3/assert"
 )
 
 var (
@@ -183,6 +186,8 @@ func (r *CompilerBaselineRunner) runSingleConfigTest(t *testing.T, testName stri
 	compilerTest.verifyJavaScriptOutput(t, r.testSuitName, r.isSubmodule)
 	compilerTest.verifyTypesAndSymbols(t, r.testSuitName, r.isSubmodule)
 	// !!! Verify all baselines
+
+	compilerTest.verifyUnionOrdering(t)
 }
 
 type compilerFileBasedTest struct {
@@ -413,4 +418,28 @@ func createHarnessTestFile(unit *testUnit, currentDirectory string) *harnessutil
 		UnitName: tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory),
 		Content:  unit.content,
 	}
+}
+
+func (c *compilerTest) verifyUnionOrdering(t *testing.T) {
+	t.Run("union ordering", func(t *testing.T) {
+		for _, c := range c.result.Program.GetTypeCheckers() {
+			for union := range c.UnionTypes() {
+				types := union.Types()
+
+				reversed := slices.Clone(types)
+				slices.Reverse(reversed)
+				slices.SortFunc(reversed, checker.CompareTypes)
+				assert.Assert(t, slices.Equal(reversed, types), "compareTypes does not sort union types consistently")
+
+				shuffled := slices.Clone(types)
+				rng := rand.New(rand.NewPCG(1234, 5678))
+
+				for range 10 {
+					rng.Shuffle(len(shuffled), func(i, j int) { shuffled[i], shuffled[j] = shuffled[j], shuffled[i] })
+					slices.SortFunc(shuffled, checker.CompareTypes)
+					assert.Assert(t, slices.Equal(shuffled, types), "compareTypes does not sort union types consistently")
+				}
+			}
+		}
+	})
 }
