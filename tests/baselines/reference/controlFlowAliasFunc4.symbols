@@ -1,0 +1,85 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasFunc4.ts ===
+declare interface Foo { 
+>Foo : Symbol(Foo, Decl(controlFlowAliasFunc4.ts, 0, 0))
+
+    readonly a?: { b: { readonly c: {"1":true, "2": true} }};
+>a : Symbol(Foo.a, Decl(controlFlowAliasFunc4.ts, 0, 23))
+>b : Symbol(b, Decl(controlFlowAliasFunc4.ts, 1, 18))
+>c : Symbol(c, Decl(controlFlowAliasFunc4.ts, 1, 23))
+>"1" : Symbol("1", Decl(controlFlowAliasFunc4.ts, 1, 37))
+>"2" : Symbol("2", Decl(controlFlowAliasFunc4.ts, 1, 46))
+
+    readonly boo?: { readonly bop?: {foo:()=>"1"}};
+>boo : Symbol(Foo.boo, Decl(controlFlowAliasFunc4.ts, 1, 61))
+>bop : Symbol(bop, Decl(controlFlowAliasFunc4.ts, 2, 20))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 2, 37))
+
+    readonly bar?: { foo:()=>"2"};
+>bar : Symbol(Foo.bar, Decl(controlFlowAliasFunc4.ts, 2, 51))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 3, 20))
+
+    foo:()=>number[];
+>foo : Symbol(Foo.foo, Decl(controlFlowAliasFunc4.ts, 3, 34))
+}
+declare const obj:undefined|Foo;
+>obj : Symbol(obj, Decl(controlFlowAliasFunc4.ts, 6, 13))
+>Foo : Symbol(Foo, Decl(controlFlowAliasFunc4.ts, 0, 0))
+
+const is1 = obj?.boo?.bop?.foo();
+>is1 : Symbol(is1, Decl(controlFlowAliasFunc4.ts, 7, 5))
+>obj?.boo?.bop?.foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 2, 37))
+>obj?.boo?.bop : Symbol(bop, Decl(controlFlowAliasFunc4.ts, 2, 20))
+>obj?.boo : Symbol(Foo.boo, Decl(controlFlowAliasFunc4.ts, 1, 61))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc4.ts, 6, 13))
+>boo : Symbol(Foo.boo, Decl(controlFlowAliasFunc4.ts, 1, 61))
+>bop : Symbol(bop, Decl(controlFlowAliasFunc4.ts, 2, 20))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 2, 37))
+
+const is2 = obj?.bar?.foo();
+>is2 : Symbol(is2, Decl(controlFlowAliasFunc4.ts, 8, 5))
+>obj?.bar?.foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 3, 20))
+>obj?.bar : Symbol(Foo.bar, Decl(controlFlowAliasFunc4.ts, 2, 51))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc4.ts, 6, 13))
+>bar : Symbol(Foo.bar, Decl(controlFlowAliasFunc4.ts, 2, 51))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 3, 20))
+
+const isn = obj?.foo();
+>isn : Symbol(isn, Decl(controlFlowAliasFunc4.ts, 9, 5))
+>obj?.foo : Symbol(Foo.foo, Decl(controlFlowAliasFunc4.ts, 3, 34))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc4.ts, 6, 13))
+>foo : Symbol(Foo.foo, Decl(controlFlowAliasFunc4.ts, 3, 34))
+
+if (is1){
+>is1 : Symbol(is1, Decl(controlFlowAliasFunc4.ts, 7, 5))
+
+    let x = obj.boo.bop.foo();
+>x : Symbol(x, Decl(controlFlowAliasFunc4.ts, 11, 7))
+>obj.boo.bop.foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 2, 37))
+>obj.boo.bop : Symbol(bop, Decl(controlFlowAliasFunc4.ts, 2, 20))
+>obj.boo : Symbol(Foo.boo, Decl(controlFlowAliasFunc4.ts, 1, 61))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc4.ts, 6, 13))
+>boo : Symbol(Foo.boo, Decl(controlFlowAliasFunc4.ts, 1, 61))
+>bop : Symbol(bop, Decl(controlFlowAliasFunc4.ts, 2, 20))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 2, 37))
+}
+if (is2){
+>is2 : Symbol(is2, Decl(controlFlowAliasFunc4.ts, 8, 5))
+
+    let x = obj.bar.foo();
+>x : Symbol(x, Decl(controlFlowAliasFunc4.ts, 14, 7))
+>obj.bar.foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 3, 20))
+>obj.bar : Symbol(Foo.bar, Decl(controlFlowAliasFunc4.ts, 2, 51))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc4.ts, 6, 13))
+>bar : Symbol(Foo.bar, Decl(controlFlowAliasFunc4.ts, 2, 51))
+>foo : Symbol(foo, Decl(controlFlowAliasFunc4.ts, 3, 20))
+}
+if (isn){
+>isn : Symbol(isn, Decl(controlFlowAliasFunc4.ts, 9, 5))
+
+    let x = obj.foo();
+>x : Symbol(x, Decl(controlFlowAliasFunc4.ts, 17, 7))
+>obj.foo : Symbol(Foo.foo, Decl(controlFlowAliasFunc4.ts, 3, 34))
+>obj : Symbol(obj, Decl(controlFlowAliasFunc4.ts, 6, 13))
+>foo : Symbol(Foo.foo, Decl(controlFlowAliasFunc4.ts, 3, 34))
+}
+
