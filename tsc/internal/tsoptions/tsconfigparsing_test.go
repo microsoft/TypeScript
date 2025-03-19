@@ -658,7 +658,7 @@ func printFS(output io.Writer, files vfs.FS, root string) error {
 			if content, ok := files.ReadFile(path); !ok {
 				return fmt.Errorf("failed to read file %s", path)
 			} else {
-				if _, err := output.Write([]byte(fmt.Sprintf("//// [%s]\r\n%s\r\n\r\n", path, content))); err != nil {
+				if _, err := fmt.Fprintf(output, "//// [%s]\r\n%s\r\n\r\n", path, content); err != nil {
 					return err
 				}
 			}

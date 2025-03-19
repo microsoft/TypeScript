@@ -67,7 +67,7 @@ func newResolutionCache[T comparable](
 ) *resolutionCache[T] {
 	return &resolutionCache[T]{
 		perDirectoryResolutionCache:    newPerDirectoryResolutionCache[T](currentDirectory, useCaseSensitiveFileNames, options, optionsToRedirectsKey),
-		nonRelativeNameResolutionCache: newNonRelativeNameResolutionCache[T](currentDirectory, useCaseSensitiveFileNames, options, getResolvedFileName, optionsToRedirectsKey),
+		nonRelativeNameResolutionCache: newNonRelativeNameResolutionCache(currentDirectory, useCaseSensitiveFileNames, options, getResolvedFileName, optionsToRedirectsKey),
 		isReadonly:                     isReadonly,
 	}
 }

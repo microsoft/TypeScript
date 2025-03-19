@@ -180,8 +180,8 @@ var commandLineOptionEnumMap = map[string]*collections.OrderedMap[string, any]{
 
 // CommandLineOption.DeprecatedKeys()
 var commandLineOptionDeprecated = map[string]*core.Set[string]{
-	"moduleResolution": core.NewSetFromItems[string]("node", "classic", "node10"),
-	"target":           core.NewSetFromItems[string]("es3"),
+	"moduleResolution": core.NewSetFromItems("node", "classic", "node10"),
+	"target":           core.NewSetFromItems("es3"),
 }
 
 // todo: revisit to see if this can be improved
