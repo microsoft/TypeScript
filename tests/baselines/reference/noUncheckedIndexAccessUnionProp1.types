@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/noUncheckedIndexAccessUnionProp1.ts] ////
+
+=== noUncheckedIndexAccessUnionProp1.ts ===
+// https://github.com/microsoft/TypeScript/issues/61225
+
+const nums: { [k: string]: number } = Math.random() < 0.5 ? { a: 1 } : { b: 2 };
+>nums : { [k: string]: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : string
+>  : ^^^^^^
+>Math.random() < 0.5 ? { a: 1 } : { b: 2 } : { a: number; } | { b: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>{ b: 2 } : { b: number; }
+>         : ^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const str = { a: "hello" };
+>str : { a: string; }
+>    : ^^^^^^^^^^^^^^
+>{ a: "hello" } : { a: string; }
+>               : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const hmm = Math.random() < 0.5 ? nums.a : str.a;
+>hmm : string | number | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? nums.a : str.a : string | number | undefined
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>nums.a : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>nums : { [k: string]: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>str.a : string
+>      : ^^^^^^
+>str : { a: string; }
+>    : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+
+const wha = (Math.random() < 0.5 ? nums : str).a;
+>wha : string | number | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(Math.random() < 0.5 ? nums : str).a : string | number | undefined
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(Math.random() < 0.5 ? nums : str) : { [k: string]: number; } | { a: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? nums : str : { [k: string]: number; } | { a: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>nums : { [k: string]: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>str : { a: string; }
+>    : ^^^^^^^^^^^^^^
+>a : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
