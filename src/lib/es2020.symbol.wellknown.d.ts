@@ -28,5 +28,5 @@ interface String {
      * returns an iterable of matches containing the results of that search.
      * @param regexp An object that supports being matched against.
      */
-    matchAll(matcher: { [Symbol.matchAll](str: string): RegExpStringIterator<RegExpMatchArray> }): RegExpStringIterator<RegExpExecArray>;
+    matchAll(matcher: { [Symbol.matchAll](str: string): RegExpStringIterator<RegExpMatchArray>; }): RegExpStringIterator<RegExpExecArray>;
 }
