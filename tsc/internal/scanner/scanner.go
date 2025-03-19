@@ -389,6 +389,9 @@ func (s *Scanner) errorAt(diagnostic *diagnostics.Message, pos int, length int, 
 	}
 }
 
+// NOTE: even though this returns a rune, it only decodes the current byte.
+// It must be checked against utf8.RuneSelf to verify that a call to charAndSize
+// is not needed.
 func (s *Scanner) char() rune {
 	if s.pos < len(s.text) {
 		return rune(s.text[s.pos])
@@ -396,6 +399,7 @@ func (s *Scanner) char() rune {
 	return -1
 }
 
+// NOTE: this returns a rune, but only decodes the byte at the offset.
 func (s *Scanner) charAt(offset int) rune {
 	if s.pos+offset < len(s.text) {
 		return rune(s.text[s.pos+offset])
@@ -443,14 +447,33 @@ func (s *Scanner) Scan() ast.Kind {
 	for {
 		s.tokenStart = s.pos
 		ch := s.char()
+
 		switch ch {
 		case '\t', '\v', '\f', ' ':
 			s.pos++
-			continue
+			if s.skipTrivia {
+				continue
+			}
+			for {
+				ch, size := s.charAndSize()
+				if !stringutil.IsWhiteSpaceSingleLine(ch) {
+					break
+				}
+				s.pos += size
+			}
+			s.token = ast.KindWhitespaceTrivia
 		case '\n', '\r':
 			s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
-			s.pos++
-			continue
+			if s.skipTrivia {
+				s.pos++
+				continue
+			}
+			if ch == '\r' && s.charAt(1) == '\n' {
+				s.pos += 2
+			} else {
+				s.pos++
+			}
+			s.token = ast.KindNewLineTrivia
 		case '!':
 			if s.charAt(1) == '=' {
 				if s.charAt(2) == '=' {
@@ -518,9 +541,8 @@ func (s *Scanner) Scan() ast.Kind {
 					(s.tokenFlags&ast.TokenFlagsPrecedingLineBreak) != 0 {
 					s.tokenFlags |= ast.TokenFlagsPrecedingJSDocLeadingAsterisks
 					continue
-				} else {
-					s.token = ast.KindAsteriskToken
 				}
+				s.token = ast.KindAsteriskToken
 			}
 		case '+':
 			if s.charAt(1) == '=' {
@@ -558,60 +580,72 @@ func (s *Scanner) Scan() ast.Kind {
 				s.token = ast.KindDotToken
 			}
 		case '/':
+			// Single-line comment
 			if s.charAt(1) == '/' {
 				s.pos += 2
+
 				for {
-					if ch := s.char(); ch < utf8.RuneSelf {
-						if ch < 0 || ch == '\r' || ch == '\n' {
-							break
-						}
-						s.pos++
-					} else {
-						ch, size := s.charAndSize()
-						if stringutil.IsLineBreak(ch) {
-							break
-						}
-						s.pos += size
+					ch1, size := s.charAndSize()
+					if size == 0 || stringutil.IsLineBreak(ch1) {
+						break
 					}
+					s.pos += size
 				}
+
 				s.processCommentDirective(s.tokenStart, s.pos, false)
-				continue
+
+				if s.skipTrivia {
+					continue
+				}
+				s.token = ast.KindSingleLineCommentTrivia
+				return s.token
 			}
+			// Multi-line comment
 			if s.charAt(1) == '*' {
 				s.pos += 2
-				lastline := s.tokenStart
 				isJSDoc := s.char() == '*' && s.charAt(1) != '/'
+
+				commentClosed := false
+				lastLineStart := s.tokenStart
 				for {
-					ch = s.char()
-					if ch < utf8.RuneSelf {
-						if ch < 0 {
-							s.error(diagnostics.Asterisk_Slash_expected)
-							break
-						}
-						if ch == '*' && s.charAt(1) == '/' {
-							s.pos += 2
-							break
-						}
-						s.pos++
-						if ch == '\r' || ch == '\n' {
-							lastline = s.pos
-							s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
-						}
-					} else {
-						commentCh, size := s.charAndSize()
-						s.pos += size
-						if stringutil.IsLineBreak(commentCh) {
-							lastline = s.pos
-							s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
-						}
+					ch1, size := s.charAndSize()
+					if size == 0 {
+						break
+					}
+
+					if ch1 == '*' && s.charAt(1) == '/' {
+						s.pos += 2
+						commentClosed = true
+						break
+					}
+
+					s.pos += size
+
+					if stringutil.IsLineBreak(ch1) {
+						lastLineStart = s.pos
+						s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
 					}
 				}
+
 				if isJSDoc && s.shouldParseJSDoc() {
 					s.tokenFlags |= ast.TokenFlagsPrecedingJSDocComment
 				}
 
-				s.processCommentDirective(lastline, s.pos, true)
-				continue
+				s.processCommentDirective(lastLineStart, s.pos, true)
+
+				if !commentClosed {
+					s.error(diagnostics.Asterisk_Slash_expected)
+				}
+
+				if s.skipTrivia {
+					continue
+				}
+
+				if !commentClosed {
+					s.tokenFlags |= ast.TokenFlagsUnterminated
+				}
+				s.token = ast.KindMultiLineCommentTrivia
+				return s.token
 			}
 			if s.charAt(1) == '=' {
 				s.pos += 2
@@ -854,7 +888,22 @@ func (s *Scanner) Scan() ast.Kind {
 			}
 			if stringutil.IsWhiteSpaceSingleLine(ch) {
 				s.pos += size
-				continue
+
+				// If we get here and it's not 0x0085 (nextLine), then we're handling non-ASCII whitespace.
+				// Handle skipTrivia like we do in the space case above.
+				if ch == 0x0085 || s.skipTrivia {
+					continue
+				}
+
+				for {
+					ch, size = s.charAndSize()
+					if !stringutil.IsWhiteSpaceSingleLine(ch) {
+						break
+					}
+					s.pos += size
+				}
+				s.token = ast.KindWhitespaceTrivia
+				return s.token
 			}
 			if stringutil.IsLineBreak(ch) {
 				s.tokenFlags |= ast.TokenFlagsPrecedingLineBreak
