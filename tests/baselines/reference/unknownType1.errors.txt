@@ -22,13 +22,14 @@ unknownType1.ts(143,29): error TS2698: Spread types may only be created from obj
 unknownType1.ts(144,29): error TS2698: Spread types may only be created from object types.
 unknownType1.ts(150,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 unknownType1.ts(156,14): error TS2700: Rest types may only be created from object types.
+unknownType1.ts(156,20): error TS18046: 'x' is of type 'unknown'.
 unknownType1.ts(162,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 unknownType1.ts(170,9): error TS2322: Type 'T' is not assignable to type '{}'.
 unknownType1.ts(171,9): error TS2322: Type 'U' is not assignable to type '{}'.
 unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
 
 
-==== unknownType1.ts (27 errors) ====
+==== unknownType1.ts (28 errors) ====
     // In an intersection everything absorbs unknown
     
     type T00 = unknown & null;  // null
@@ -232,6 +233,8 @@ unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
         let { ...a } = x;  // Error
                  ~
 !!! error TS2700: Rest types may only be created from object types.
+                       ~
+!!! error TS18046: 'x' is of type 'unknown'.
     }
     
     // Class properties of type unknown don't need definite assignment
