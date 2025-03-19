@@ -27,7 +27,7 @@
         "tsserver": "./bin/tsserver"
     },
     "engines": {
-        "node": ">=14.17"
+        "node": ">=20.19.0 <21 || >=22.12.0"
     },
     "files": [
         "bin",
