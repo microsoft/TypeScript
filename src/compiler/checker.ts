@@ -47345,7 +47345,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && !inAmbientContext
                 && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))
             ) {
-                if (compilerOptions.erasableSyntaxOnly) {
+                if (compilerOptions.erasableSyntaxOnly || ((node.flags & NodeFlags.Namespace) === NodeFlags.None)) {
                     error(node.name, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
                 }
 
